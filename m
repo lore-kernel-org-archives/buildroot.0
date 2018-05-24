@@ -1,45 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 24 May 2018 22:39:43 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/nasm: bump
- version to 2.13.03
-Message-ID: <20180524210450.DD2B9825E9@busybox.osuosl.org>
+Date: Thu, 24 May 2018 22:59:29 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] busybox: S10mdev: fix
+ module autoloading
+Message-ID: <20180524210451.4A2958197A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13d94d01434ed643b92811042f83dab1a9f0c865
+commit: https://git.buildroot.net/buildroot/commit/?id=a43f5f19397f89209d77aebeaa2d5bec671412a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Commit b4fc5a180c (package/busybox: support spaces in module aliases in
+mdev) changed the mdev coldplugging to handle sysfs path elements and
+modalias values containing spaces.  This unfortunately doesn't work as was
+recently reported:
+
+http://lists.busybox.net/pipermail/buildroot/2018-May/220903.html
+
+The problem is that sort -z also expects the fields of the input files to be
+zero terminated, which is not the case for modalias sysfs entries.
+
+So drop the -z option to sort.  Spaces in modalias entries could be handled
+with the xargs -d '\n' option, but that is unfortunately not supported by
+the busybox applet.  Instead, use tr to convert newlines to zeros so we can
+use xargs -0.
+
+Reported-by: Daniel Palmer <daniel@0x0f.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ee8d397a25dd7dfadeb74522336a9c5e990db454)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 61717b7b3ef9c6c39f4adcbbb5dced3096f0ed08)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nasm/nasm.hash | 2 +-
- package/nasm/nasm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/S10mdev | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
-index 260e5d7bc4..db5b857193 100644
---- a/package/nasm/nasm.hash
-+++ b/package/nasm/nasm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 8ac3235f49a6838ff7a8d7ef7c19a4430d0deecc0c2d3e3e237b5e9f53291757  nasm-2.13.02.tar.xz
-+sha256 812ecfb0dcbc5bd409aaa8f61c7de94c5b8752a7b00c632883d15b2ed6452573  nasm-2.13.03.tar.xz
- sha256 1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index ee3fd9c542..76bcca3bbf 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NASM_VERSION = 2.13.02
-+NASM_VERSION = 2.13.03
- NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
- NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2-Clause
+diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+index 63ca955b1c..7075b77016 100644
+--- a/package/busybox/S10mdev
++++ b/package/busybox/S10mdev
+@@ -9,7 +9,8 @@ case "$1" in
+ 	echo /sbin/mdev >/proc/sys/kernel/hotplug
+ 	/sbin/mdev -s
+ 	# coldplug modules
+-	find /sys/ -name modalias -print0 | xargs -0 sort -u -z | xargs -0 modprobe -abq
++	find /sys/ -name modalias -print0 | xargs -0 sort -u | tr '\n' '\0' | \
++	    xargs -0 modprobe -abq
+ 	;;
+   stop)
+ 	;;
