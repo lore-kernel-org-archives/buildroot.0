@@ -1,77 +1,183 @@
-From: Min Xu <xuminready@gmail.com>
-Date: Thu, 24 May 2018 10:12:04 -0700
-Subject: [Buildroot] [PATCH] Add new packge Shadowsocks-libev v3.1.3
-Message-ID: <20180524171204.5959-1-xuminready@gmail.com>
+From: Vincent Prince <vincent.prince.fr@gmail.com>
+Date: Thu, 24 May 2018 19:13:54 +0200
+Subject: [Buildroot] Fwd: [PATCH] package/utp_com: Tool used to send
+ commands to hardware via NXP's UTP protocol.
+In-Reply-To: <1526975064-12266-1-git-send-email-vincent.prince.fr@gmail.com>
+References: <1526975064-12266-1-git-send-email-vincent.prince.fr@gmail.com>
+Message-ID: <CAB2nKc-2tEC91=N9+gZyb=ysZDYSBp3aW8uWJ4c13F_CSSJz+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Min Xu <xuminready@gmail.com>
+---------- Forwarded message ----------
+From: Vincent Prince <vincent.prince.fr@gmail.com>
+Date: 2018-05-22 9:44 GMT+02:00
+Subject: [Buildroot][PATCH] package/utp_com: Tool used to send commands to
+hardware via NXP's UTP protocol.
+To: buildroot at buildroot.org
+Cc: Vincent Prince <vincent.prince.fr@gmail.com>
+
+
+Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
 ---
- package/Config.in                              |  1 +
- package/shadowsocks-libev/Config.in            | 12 ++++++++++++
- package/shadowsocks-libev/shadowsocks-libev.mk | 20 ++++++++++++++++++++
- 3 files changed, 33 insertions(+)
- create mode 100644 package/shadowsocks-libev/Config.in
- create mode 100644 package/shadowsocks-libev/shadowsocks-libev.mk
+ package/Config.in                                  |  1 +
+ package/Config.in.host                             |  1 +
+ .../0001-Fix-Makefile-for-crosscompilation.patch   | 33
+++++++++++++++++++++++
+ package/utp_com/Config.in                          |  8 ++++++
+ package/utp_com/Config.in.host                     |  7 +++++
+ package/utp_com/utp_com.hash                       |  2 ++
+ package/utp_com/utp_com.mk                         | 28 ++++++++++++++++++
+ 7 files changed, 80 insertions(+)
+ create mode 100644 package/utp_com/0001-Fix-Makefile-for-crosscompilation.
+patch
+ create mode 100644 package/utp_com/Config.in
+ create mode 100644 package/utp_com/Config.in.host
+ create mode 100644 package/utp_com/utp_com.hash
+ create mode 100644 package/utp_com/utp_com.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index ecee493..1427665 100644
+index fa175b7..3cf53ed 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1846,6 +1846,7 @@ endif
- 	source "package/samba4/Config.in"
- 	source "package/sconeserver/Config.in"
- 	source "package/ser2net/Config.in"
-+        source "package/shadowsocks-libev/Config.in"
- 	source "package/shairport-sync/Config.in"
- 	source "package/shellinabox/Config.in"
- 	source "package/smcroute/Config.in"
-diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+@@ -199,6 +199,7 @@ menu "Filesystem and flash utilities"
+        source "package/sshfs/Config.in"
+        source "package/sunxi-tools/Config.in"
+        source "package/unionfs/Config.in"
++       source "package/utp_com/Config.in"
+        source "package/xfsprogs/Config.in"
+ endmenu
+
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 199a8e9..60abd76 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -56,6 +56,7 @@ menu "Host utilities"
+        source "package/ti-cgt-pru/Config.in.host"
+        source "package/uboot-tools/Config.in.host"
+        source "package/util-linux/Config.in.host"
++       source "package/utp_com/Config.in.host"
+        source "package/vboot-utils/Config.in.host"
+        source "package/xorriso/Config.in.host"
+        source "package/zip/Config.in.host"
+diff --git a/package/utp_com/0001-Fix-Makefile-for-crosscompilation.patch
+b/package/utp_com/0001-Fix-Makefile-for-crosscompilation.patch
 new file mode 100644
-index 0000000..78fd35a
+index 0000000..d1b7110
 --- /dev/null
-+++ b/package/shadowsocks-libev/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SHADOWSOCKS_LIBEV
-+        bool "shadowsocks-libev"
-+        select BR2_PACKAGE_LIBSODIUM
-+        select BR2_PACKAGE_MBEDTLS
-+        select BR2_PACKAGE_PCRE
-+        select BR2_PACKAGE_C_ARES
-+        select BR2_PACKAGE_LIBEV
-+        help
-+          Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
-+          embedded devices and low-end boxes.
++++ b/package/utp_com/0001-Fix-Makefile-for-crosscompilation.patch
+@@ -0,0 +1,33 @@
++From 548885c843e2d26c02631e6df69f50cfa686dde3 Mon Sep 17 00:00:00 2001
++From: Vincent Prince <vincent.prince.fr@gmail.com>
++Date: Wed, 16 May 2018 10:02:10 +0200
++Subject: [PATCH] Makefile: Allow variables override for cross-compilation
 +
-+          https://github.com/shadowsocks/shadowsocks-libev
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
++Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
++---
++ makefile | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/makefile b/makefile
++index 7e19fe5..8517e38 100644
++--- a/makefile
+++++ b/makefile
++@@ -1,10 +1,10 @@
++-CC=gcc
++-CFLAGS=-I. -Wall -O2
++-DEPS=
++-OBJ=utp_com.o
+++CC ?= gcc
+++CFLAGS ?= -I. -Wall -O2
+++DEPS ?=
+++OBJ ?= utp_com.o
++
++ %.o: %.c $(DEPS)
++       $(CC) -c -o $@ $< $(CFLAGS)
++
++ utp_com: $(OBJ)
++-      gcc -o $@ $^ $(CFLAGS)
+++      $(CC) -o $@ $^ $(CFLAGS)
++--
++2.7.4
++
+diff --git a/package/utp_com/Config.in b/package/utp_com/Config.in
 new file mode 100644
-index 0000000..1c7f76a
+index 0000000..e45555b
 --- /dev/null
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -0,0 +1,20 @@
-+################################################################################
++++ b/package/utp_com/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_UTP_COM
++       bool "utp_com"
++       select BR2_PACKAGE_SG3_UTILS
++       help
++               This package is used to send commands to hardware
++               via Freescale's UTP protocol.
++
++               https://github.com/ixonos/utp_com
+diff --git a/package/utp_com/Config.in.host b/package/utp_com/Config.in.host
+new file mode 100644
+index 0000000..3e5319e
+--- /dev/null
++++ b/package/utp_com/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_UTP_COM
++       bool "host utp_com"
++       help
++               This package is used to send commands to hardware
++               via Freescale's UTP protocol.
++
++               https://github.com/ixonos/utp_com
+diff --git a/package/utp_com/utp_com.hash b/package/utp_com/utp_com.hash
+new file mode 100644
+index 0000000..0346b1a
+--- /dev/null
++++ b/package/utp_com/utp_com.hash
+@@ -0,0 +1,2 @@
++# locally computed
++sha256  4176452866381fd53fe11951f59a933410734a97050b6ce7eae9df2937165b70
+utp_com-7fe590fef812561cceb08aaa10b64e9bac8f542f.tar.gz
+diff --git a/package/utp_com/utp_com.mk b/package/utp_com/utp_com.mk
+new file mode 100644
+index 0000000..6fa94f2
+--- /dev/null
++++ b/package/utp_com/utp_com.mk
+@@ -0,0 +1,28 @@
++###########################################################
+#####################
 +#
-+# SHADOWSOCKS_LIBEV
++# utp_com
 +#
-+################################################################################
++###########################################################
+#####################
 +
-+SHADOWSOCKS_LIBEV_VERSION = 3.1.3
-+SHADOWSOCKS_LIBEV_SOURCE = shadowsocks-libev-$(SHADOWSOCKS_LIBEV_VERSION).tar.gz
-+SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
-+SHADOWSOCKS_LIBEV_LICENSE = GPLv3
-+SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf
-+SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING
-+SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
-+SHADOWSOCKS_LIBEV_CONF_ENV = PCRECONFIG=$(STAGING_DIR)/usr/bin/pcre-config
-+SHADOWSOCKS_LIBEV_DEPENDENCIES += pcre
-+SHADOWSOCKS_LIBEV_CONF_OPTS = --disable-documentation --with-pcre=$(STAGING_DIR)/usr/bin/
++UTP_COM_VERSION = 7fe590fef812561cceb08aaa10b64e9bac8f542f
++UTP_COM_SITE = $(call github,ixonos,utp_com,$(UTP_COM_VERSION))
++UTP_COM_LICENSE = GPL-2.0+
++UTP_COM_LICENSE_FILES = LICENSE
++UTP_COM_DEPENDENCIES = sg3_utils
 +
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++define UTP_COM_BUILD_CMDS
++       $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) CFLAGS="$(TARGET_CFLAGS)
+-I$(STAGING_DIR)/usr/include"
++endef
++define HOST_UTP_COM_BUILD_CMDS
++       $(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) CFLAGS="$(HOST_CFLAGS)
+-I$(HOST_DIR)/usr/include"
++endef
 +
++define UTP_COM_INSTALL_TARGET_CMDS
++       $(INSTALL) -m 755 $(@D)/utp_com $(TARGET_DIR)/usr/bin/utp_com
++endef
++define HOST_UTP_COM_INSTALL_CMDS
++       $(INSTALL) -m 755 $(@D)/utp_com $(HOST_DIR)/usr/bin/utp_com
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-2.11.0
+2.7.4
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180524/cf82de70/attachment.html>
