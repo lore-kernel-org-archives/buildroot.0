@@ -1,49 +1,71 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 25 May 2018 06:30:43 +0300
-Subject: [Buildroot] [PATCH] busybox: bump to version 1.28.4
-Message-ID: <639c37891c154c228613534c0333f49c805ac2b6.1527219043.git.baruch@tkos.co.il>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 24 May 2018 22:49:07 -0500
+Subject: [Buildroot] [PATCH] utils/genrandconfig: filter microblaze GCC
+ < 8 bug
+In-Reply-To: <CANQCQpaB5E1pQn+xttcWJFMgGWd7G0t477kUfd02SwkVc3hkMg@mail.gmail.com>
+References: <1527112426-21842-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180524133029.1a7a22e9@windsurf>
+ <CANQCQpaB5E1pQn+xttcWJFMgGWd7G0t477kUfd02SwkVc3hkMg@mail.gmail.com>
+Message-ID: <CANQCQpZfqWK4zaq_4hUZkzhX2WvdWwKGzRKsXPJ0NhubWQDfng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes to dpkg and nsenter.
+Thomas,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/busybox/busybox.hash | 8 ++++----
- package/busybox/busybox.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Thu, May 24, 2018 at 10:14 PM, Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+> Thomas,
+>
+> On Thu, May 24, 2018 at 6:30 AM, Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> Hello Matt,
+>>
+>> On Wed, 23 May 2018 16:53:46 -0500, Matt Weber wrote:
+>
+>>  - gcc bug #85180, which affects gcc 6.x and gcc 7.x, but is fixed in
+>>    gcc 8.x. It affects packages such as flare-engine, boost and
+>>    gst-ffmpeg.
+>>
+>>    So, for this one, rather than autobuilder exception, I would like to
+>>    see something like this:
+>>
+>> config BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+>>         bool
+>>         default y if BR2_microblaze
+>>
+>> and we'll adjust this with a "depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8"
+>> when gcc 8.x support is added in Buildroot.
+>>
+>> flare-engine is not selected by any package (flare-game depends on
+>> flare-engine).
+>>
+>> gst-ffmpeg is not selected by any package.
+>>
+>> boost has lots of reverse dependencies however. But perhaps we can nail
+>> down the specific boost sub-option(s) that exhibit the problem, and
+>> only add the gcc bug dependency on those suboptions?
+>
+> Sure, I'll take a look.
 
-diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
-index 8537ceb4b712..066817aefb95 100644
---- a/package/busybox/busybox.hash
-+++ b/package/busybox/busybox.hash
-@@ -1,7 +1,7 @@
--# From https://busybox.net/downloads/busybox-1.28.3.tar.bz2.sign
--md5 82e5ad09ae4a07c266fc179492b51757  busybox-1.28.3.tar.bz2
--sha1 64b47e83dccc5db7fe4ca596b28c9b901a136fe3  busybox-1.28.3.tar.bz2
-+# From https://busybox.net/downloads/busybox-1.28.4.tar.bz2.sign
-+md5 5661d013c9ef7cc31a453640c320f56b  busybox-1.28.4.tar.bz2
-+sha1 acd0558a659b795da1dfbd7e0ed5353d6836fa37  busybox-1.28.4.tar.bz2
- 
- # Locally calculated
--sha256 ad0d22033f23e696f9a71a4c2f9210194dda39b024a79151f4ac278995332a6e  busybox-1.28.3.tar.bz2
-+sha256 e3c14a3699dc7e82fed397392957afc78e37bdf25398ac38ead6e84621b2ae6a  busybox-1.28.4.tar.bz2
- sha256	bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548	LICENSE
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 75fe7e137b97..ba5a16b5b7ce 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BUSYBOX_VERSION = 1.28.3
-+BUSYBOX_VERSION = 1.28.4
- BUSYBOX_SITE = http://www.busybox.net/downloads
- BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
- BUSYBOX_LICENSE = GPL-2.0
--- 
-2.17.0
+Looks like it doesn't really matter what you enable/disable for boost
+options as it's when the bjam tool is getting called that it gets
+stuck.  I  can start to look at all the reverse dependencies
+tomorrow....
+
+(output from when I kill the bjam process)
+2018-05-24T22:39:43 common.copy stage/lib/libboost_thread.so.1.66.0
+2018-05-24T22:39:43 ln-UNIX stage/lib/libboost_thread.so
+2018-05-24T22:40:06 /bin/sh: line 1: 22677 Terminated
+PATH="/accts/mlweber1/rc-buildroot/output/host/bin:/accts/mlweber1/rc-buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+./bjam -j65 -q --user-config=/accts/mlweber1/rc-buildroot/output/build/boost-1.66.0/user-config.jam
+toolset=gcc threading=multi abi=sysv variant=release link=shared
+runtime-link=shared -d+1 --ignore-site-config --layout=system
+2018-05-24T22:40:06 make: ***
+[/accts/mlweber1/rc-buildroot/output/build/boost-1.66.0/.stamp_built]
+Error 143
+
+Matt
