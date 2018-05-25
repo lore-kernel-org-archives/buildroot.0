@@ -1,85 +1,110 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 May 2018 19:03:55 +0200
-Subject: [Buildroot] [git commit] package/bash-completion: fix a parallel
- build issue
-Message-ID: <20180525170340.170EC827E7@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 25 May 2018 19:13:43 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-05-17
+In-Reply-To: <20180518194512.1acb5de3@gmx.net>
+References: <20180518060019.6D04C207AC@mail.bootlin.com>
+ <20180518194512.1acb5de3@gmx.net>
+Message-ID: <CAPi7W80_ayAf2XQ=vFdCHDS9BBA6ygNe8uurxAAb5DpbWWUVSA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1755c8784bf9f54e25b320edb464c7cdebf94fe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Peter and all,
 
-The STAGING_DIR/usr/share/bash-completion/completions directory is not
-created yet.
+2018-05-18 19:45 GMT+02:00 Peter Seiderer <ps.report@gmx.net>:
 
-Fixed by:
-https://github.com/scop/bash-completion/commit/ee6b37ad7ff5b309cbb9b886a871252abd9398fa
+> Hello,
+>
+> On Fri, 18 May 2018 08:00:19 +0200 (CEST), Thomas Petazzoni <
+> thomas.petazzoni at bootlin.com> wrote:
+>
+> > Hello,
+> >
+> > Build statistics for 2018-05-17
+> > ===============================
+> [...]
+> > Results for branch 'master'
+> > ===========================
+>
+>
+> >      powerpc |                log4cplus-2.0.0 | NOK |
+> http://autobuild.buildroot.net/results/61de5206016437174cbd2
+> 69eb74aafaf0446862f |
+>
+> The first error is:
+>
+>         src/connectorthread.cxx: In member function 'virtual void
+> log4cplus::helpers::ConnectorThread::run()':
+>         src/connectorthread.cxx:92:13: error: 'sleep_for' is not a member
+> of 'std::this_thread'
 
-Fixes:
-http://autobuild.buildroot.org/results/7ee/7eea0f512695605714cf2d8c971778d4784b4c75/build-end.log
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-Makefile.am-Use-install-data-hook-not-in.patch | 35 ++++++++++++++++++++++
- package/bash-completion/bash-completion.mk         |  3 ++
- 2 files changed, 38 insertions(+)
+> with the given toolchain:
+>
+>         BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/t
+> oolchains/tarballs/powerpc-ctng_e500v2-linux-gnuspe.tar.xz"
+>         BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="powerpc-ctng_e500v2-li
+> nux-gnuspe"
+>         BR2_TOOLCHAIN_EXTERNAL_GCC_4_7=y
+>
+> which can be worked around by ([1], [2]):
+>
+>         diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/
+> log4cplus.mk
+>         index 890d2ee8f5..241e10a14f 100644
+>         --- a/package/log4cplus/log4cplus.mk
+>         +++ b/package/log4cplus/log4cplus.mk
+>         @@ -11,4 +11,6 @@ LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause,
+> BSD-like (threadpool)
+>          LOG4CPLUS_LICENSE_FILES = LICENSE
+>          LOG4CPLUS_INSTALL_STAGING = YES
+>
+>         +LOG4CPLUS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS)
+> -D_GLIBCXX_USE_NANOSLEEP"
+>
+This solution is not recommended (see https://gcc.gnu.org/
+bugzilla/show_bug.cgi?id=52680).
 
-diff --git a/package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch b/package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
-new file mode 100644
-index 0000000000..4d01eb6eea
---- /dev/null
-+++ b/package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
-@@ -0,0 +1,35 @@
-+From f9a1dfe7a3d0f35474b3f4ded05e3d97be5017bf Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Ville=20Skytt=C3=A4?= <ville.skytta@iki.fi>
-+Date: Fri, 25 May 2018 17:38:59 +0200
-+Subject: [PATCH] completions/Makefile.am: Use install-data-hook, not
-+ install-data-local
-+
-+-hook is run after the main rule, while -local might end up before.
-+https://www.gnu.org/software/automake/manual/html_node/Extending.html#index-hook-targets
-+
-+Closes #212
-+
-+[backported from ee6b37ad7ff5b309cbb9b886a871252abd9398fa]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ completions/Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/completions/Makefile.am b/completions/Makefile.am
-+index e442a9e..5c49796 100644
-+--- a/completions/Makefile.am
-++++ b/completions/Makefile.am
-+@@ -993,8 +993,8 @@ symlinks: $(targetdir) $(DATA)
-+ all-local: targetdir = .
-+ all-local: symlinks
-+ 
-+-install-data-local: targetdir = $(DESTDIR)$(bashcompdir)
-+-install-data-local: symlinks
-++install-data-hook: targetdir = $(DESTDIR)$(bashcompdir)
-++install-data-hook: symlinks
-+ 
-+ check-local:
-+ 	ret=0
-+-- 
-+2.7.4
-+
-diff --git a/package/bash-completion/bash-completion.mk b/package/bash-completion/bash-completion.mk
-index 9976918648..c43fb15cd0 100644
---- a/package/bash-completion/bash-completion.mk
-+++ b/package/bash-completion/bash-completion.mk
-@@ -10,6 +10,9 @@ BASH_COMPLETION_SOURCE = bash-completion-$(BASH_COMPLETION_VERSION).tar.xz
- BASH_COMPLETION_LICENSE = GPL-2.0
- BASH_COMPLETION_LICENSE_FILES = COPYING
- 
-+# 0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
-+BASH_COMPLETION_AUTORECONF = YES
-+
- # Install bash-completion.pc file
- BASH_COMPLETION_INSTALL_STAGING = YES
- 
+>         +
+>          $(eval $(autotools-package))
+>
+>
+> The next error is:
+>
+>         src/hierarchy.cxx: In member function 'log4cplus::Logger
+> log4cplus::Hierarchy::getInstanceImpl(const tstring&,
+> log4cplus::spi::LoggerFactory&)':
+>         src/hierarchy.cxx:291:36: error: 'log4cplus::Hierarchy::LoggerMap'
+> has no member named 'emplace'
+>
+> which is std::map::emplace, according to [3] not available in gcc-4.7, but
+> from
+> gcc-4.8 on wards...
+>
+> What to do? Bump existing BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 dependency to
+> BR2_TOOLCHAIN_GCC_AT_LEAST_4_8?
+>
+I agree with you, we should bump to BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 as
+sleep_for is also always defined since gcc 4.8 (see
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=52680).
+
+>
+> Regards,
+> Peter
+>
+>
+> [1] https://stackoverflow.com/questions/4438084/stdthis-threadsl
+> eep-for-and-gcc
+> [2] https://stackoverflow.com/questions/12523122/what-is-glibcxx
+> -use-nanosleep-all-about
+> [3] https://stackoverflow.com/questions/24389014/stdmap-emplace-gcc-4-8-2
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180525/a19f44e4/attachment.html>
