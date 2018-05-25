@@ -1,42 +1,84 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 May 2018 16:22:11 +0200
-Subject: [Buildroot] [git commit] cjson: bump to version 1.7.7
-Message-ID: <20180525142057.1F96C82715@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri, 25 May 2018 17:58:46 +0200
+Subject: [Buildroot] [PATCH] package/bash-completion: fix a parallel build
+ issue
+Message-ID: <1527263926-26561-1-git-send-email-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c57dc0469f7e32182932e5937f61f82b01a743a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The STAGING_DIR/usr/share/bash-completion/completions directory is not
+created yet.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixed by:
+https://github.com/scop/bash-completion/commit/ee6b37ad7ff5b309cbb9b886a871252abd9398fa
+
+Fixes:
+http://autobuild.buildroot.org/results/7ee/7eea0f512695605714cf2d8c971778d4784b4c75/build-end.log
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-Makefile.am-Use-install-data-hook-not-in.patch | 35 ++++++++++++++++++++++
+ package/bash-completion/bash-completion.mk         |  3 ++
+ 2 files changed, 38 insertions(+)
+ create mode 100644 package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index fd511afe6c..278484bdd3 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 d1ca2665b34fea164a877637b4ad1624aa23390fe75de91b88e18c5d6ec91978  cjson-v1.7.6.tar.gz
-+sha256 6eb9d852a97ffbe149e747f54d63e39a674fa248bb24902a14c079803067949a  cjson-v1.7.7.tar.gz
- sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index fabfe5df3b..e91ce9b4b2 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch b/package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
+new file mode 100644
+index 0000000..4d01eb6
+--- /dev/null
++++ b/package/bash-completion/0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
+@@ -0,0 +1,35 @@
++From f9a1dfe7a3d0f35474b3f4ded05e3d97be5017bf Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Ville=20Skytt=C3=A4?= <ville.skytta@iki.fi>
++Date: Fri, 25 May 2018 17:38:59 +0200
++Subject: [PATCH] completions/Makefile.am: Use install-data-hook, not
++ install-data-local
++
++-hook is run after the main rule, while -local might end up before.
++https://www.gnu.org/software/automake/manual/html_node/Extending.html#index-hook-targets
++
++Closes #212
++
++[backported from ee6b37ad7ff5b309cbb9b886a871252abd9398fa]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ completions/Makefile.am | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/completions/Makefile.am b/completions/Makefile.am
++index e442a9e..5c49796 100644
++--- a/completions/Makefile.am
+++++ b/completions/Makefile.am
++@@ -993,8 +993,8 @@ symlinks: $(targetdir) $(DATA)
++ all-local: targetdir = .
++ all-local: symlinks
++ 
++-install-data-local: targetdir = $(DESTDIR)$(bashcompdir)
++-install-data-local: symlinks
+++install-data-hook: targetdir = $(DESTDIR)$(bashcompdir)
+++install-data-hook: symlinks
++ 
++ check-local:
++ 	ret=0
++-- 
++2.7.4
++
+diff --git a/package/bash-completion/bash-completion.mk b/package/bash-completion/bash-completion.mk
+index 9976918..c43fb15 100644
+--- a/package/bash-completion/bash-completion.mk
++++ b/package/bash-completion/bash-completion.mk
+@@ -10,6 +10,9 @@ BASH_COMPLETION_SOURCE = bash-completion-$(BASH_COMPLETION_VERSION).tar.xz
+ BASH_COMPLETION_LICENSE = GPL-2.0
+ BASH_COMPLETION_LICENSE_FILES = COPYING
  
--CJSON_VERSION = v1.7.6
-+CJSON_VERSION = v1.7.7
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
++# 0001-completions-Makefile.am-Use-install-data-hook-not-in.patch
++BASH_COMPLETION_AUTORECONF = YES
++
+ # Install bash-completion.pc file
+ BASH_COMPLETION_INSTALL_STAGING = YES
+ 
+-- 
+2.7.4
