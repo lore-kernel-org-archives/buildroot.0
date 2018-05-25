@@ -1,28 +1,21 @@
-From: =?utf-8?B?SsOpcsO0bWU=?= Oufella <jerome.oufella@savoirfairelinux.com>
-Date: Fri, 25 May 2018 12:10:19 -0400 (EDT)
-Subject: [Buildroot] [PATCH 1/1] qt-webkit-kiosk: bump to version
- 1.99.7-4-ga7720e5
-In-Reply-To: <871sdzaffz.fsf@dell.be.48ers.dk>
-References: <20180523134608.11936-1-jerome.oufella@savoirfairelinux.com>
- <871sdzaffz.fsf@dell.be.48ers.dk>
-Message-ID: <315982481.5006503.1527264619894.JavaMail.zimbra@savoirfairelinux.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 May 2018 18:11:58 +0200
+Subject: [Buildroot] [PATCH 1/1] python-websockets: bump to version 5.0
+In-Reply-To: <20180523215829.8300-1-joseph.kogut@gmail.com> (Joseph Kogut's
+ message of "Wed, 23 May 2018 14:58:29 -0700")
+References: <20180523215829.8300-1-joseph.kogut@gmail.com>
+Message-ID: <87wovr90kx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
 
------ On May 25, 2018, at 12:05 PM, Peter Korsgaard peter at korsgaard.com wrote:
+ > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 
-> Does that mean that this should go to main (and hence the 2018.05
-> release) or to next?
+Committed to next, thanks.
 
-Peter,
-
-I think main is fine because the impact is minimal, and it fixes the build with
-modern gcc versions.
-
-Best regards,
-
-Jerome Oufella
+-- 
+Bye, Peter Korsgaard
