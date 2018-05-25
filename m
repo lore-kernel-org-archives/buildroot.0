@@ -1,40 +1,57 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 24 May 2018 23:14:43 +0200
-Subject: [Buildroot] [PATCH 1/1] cjson: bump to version 1.7.7
-Message-ID: <20180524211443.3320-1-fontaine.fabrice@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 24 May 2018 22:14:31 -0500
+Subject: [Buildroot] [PATCH] utils/genrandconfig: filter microblaze GCC
+ < 8 bug
+In-Reply-To: <20180524133029.1a7a22e9@windsurf>
+References: <1527112426-21842-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180524133029.1a7a22e9@windsurf>
+Message-ID: <CANQCQpaB5E1pQn+xttcWJFMgGWd7G0t477kUfd02SwkVc3hkMg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cjson/cjson.hash | 2 +-
- package/cjson/cjson.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thomas,
 
-diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
-index fd511afe6c..278484bdd3 100644
---- a/package/cjson/cjson.hash
-+++ b/package/cjson/cjson.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 d1ca2665b34fea164a877637b4ad1624aa23390fe75de91b88e18c5d6ec91978  cjson-v1.7.6.tar.gz
-+sha256 6eb9d852a97ffbe149e747f54d63e39a674fa248bb24902a14c079803067949a  cjson-v1.7.7.tar.gz
- sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
-diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
-index fabfe5df3b..e91ce9b4b2 100644
---- a/package/cjson/cjson.mk
-+++ b/package/cjson/cjson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CJSON_VERSION = v1.7.6
-+CJSON_VERSION = v1.7.7
- CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
- CJSON_INSTALL_STAGING = YES
- CJSON_LICENSE = MIT
--- 
-2.14.1
+On Thu, May 24, 2018 at 6:30 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Matt,
+>
+> On Wed, 23 May 2018 16:53:46 -0500, Matt Weber wrote:
+
+>  - gcc bug #85180, which affects gcc 6.x and gcc 7.x, but is fixed in
+>    gcc 8.x. It affects packages such as flare-engine, boost and
+>    gst-ffmpeg.
+>
+>    So, for this one, rather than autobuilder exception, I would like to
+>    see something like this:
+>
+> config BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+>         bool
+>         default y if BR2_microblaze
+>
+> and we'll adjust this with a "depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8"
+> when gcc 8.x support is added in Buildroot.
+>
+> flare-engine is not selected by any package (flare-game depends on
+> flare-engine).
+>
+> gst-ffmpeg is not selected by any package.
+>
+> boost has lots of reverse dependencies however. But perhaps we can nail
+> down the specific boost sub-option(s) that exhibit the problem, and
+> only add the gcc bug dependency on those suboptions?
+
+Sure, I'll take a look.
+
+>
+> Any reason for not using this solution ?
+>
+
+No firm reason, I can definitely refactor to use this approach.  The
+only reason why we leaned this way is BR2_TOOLCHAIN_GCC_AT_LEAST_8 not
+being defined yet.
+
+Matt
