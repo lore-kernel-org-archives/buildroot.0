@@ -1,48 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 12:32:08 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi3_64_defconfig: add
- support for rpi3b+
-Message-ID: <20180602101011.EA9DA7FACD@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 May 2018 18:03:51 +0200
+Subject: [Buildroot] [git commit] package: add python-webob
+Message-ID: <20180602101013.50BFD8199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbb45f6d7f937e503900a04ff920320c411d8f34
+commit: https://git.buildroot.net/buildroot/commit/?id=c1bf88ba10f458650aff2dcccb613b68db60b945
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The kernel now includes the rpi3b+ device tree for aarch64
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
- configs/raspberrypi3_64_defconfig              | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/python-webob/Config.in         |  9 +++++++++
+ package/python-webob/python-webob.hash |  5 +++++
+ package/python-webob/python-webob.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
 
-diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
-index c5f86527d0..0d0ca750a7 100644
---- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
-+++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
-@@ -2,6 +2,7 @@ image boot.vfat {
-   vfat {
-     files = {
-       "bcm2710-rpi-3-b.dtb",
-+      "bcm2710-rpi-3-b-plus.dtb",
-       "bcm2837-rpi-3-b.dtb",
-       "rpi-firmware/bootcode.bin",
-       "rpi-firmware/cmdline.txt",
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 1a6e378e2c..3d74815fc2 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -16,7 +16,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 78c356fed9..63d554bf28 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1493,6 +1493,7 @@ F:	package/python-ipaddr/
+ F:	package/python-pam/
+ F:	package/python-psutil/
+ F:	package/python-texttable/
++F:	package/python-webob/
+ F:	package/python-websocket-client/
+ F:	package/triggerhappy/
  
- # Build the DTB from the kernel sources
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2837-rpi-3-b"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2837-rpi-3-b"
- 
- BR2_PACKAGE_RPI_FIRMWARE=y
- # BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
+diff --git a/package/Config.in b/package/Config.in
+index b66f27a083..277186becb 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -969,6 +969,7 @@ menu "External python modules"
+ 	source "package/python-watchdog/Config.in"
+ 	source "package/python-wcwidth/Config.in"
+ 	source "package/python-web2py/Config.in"
++	source "package/python-webob/Config.in"
+ 	source "package/python-webpy/Config.in"
+ 	source "package/python-websocket-client/Config.in"
+ 	source "package/python-websockets/Config.in"
+diff --git a/package/python-webob/Config.in b/package/python-webob/Config.in
+new file mode 100644
+index 0000000000..fe77723f95
+--- /dev/null
++++ b/package/python-webob/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_WEBOB
++	bool "python-webob"
++	select BR2_PACKAGE_PYTHON_HASHLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
++	help
++	  WSGI request and response object.
++
++	  http://webob.org/
+diff --git a/package/python-webob/python-webob.hash b/package/python-webob/python-webob.hash
+new file mode 100644
+index 0000000000..41e8af34fe
+--- /dev/null
++++ b/package/python-webob/python-webob.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/WebOb/json
++md5	afea95e4f08330a0529ae33137caf4f0  WebOb-1.8.1.tar.gz
++sha256	54f35073d2fdcddd7a98c2a1dedeede49739150737164a787220f30283139ba6  WebOb-1.8.1.tar.gz
++# Locally computed sha256 checksums
++sha256	27bc4919e7e9e6b6cda40644517ca74d32203e32fba89ef832aba1ed93e457b3  docs/license.txt
+diff --git a/package/python-webob/python-webob.mk b/package/python-webob/python-webob.mk
+new file mode 100644
+index 0000000000..fdf4793898
+--- /dev/null
++++ b/package/python-webob/python-webob.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-webob
++#
++################################################################################
++
++PYTHON_WEBOB_VERSION = 1.8.1
++PYTHON_WEBOB_SOURCE = WebOb-$(PYTHON_WEBOB_VERSION).tar.gz
++PYTHON_WEBOB_SITE = https://files.pythonhosted.org/packages/ea/93/675ec37b631c823877718164b74fc057203c8979fd771bf60f711d64550b
++PYTHON_WEBOB_SETUP_TYPE = setuptools
++PYTHON_WEBOB_LICENSE = MIT
++PYTHON_WEBOB_LICENSE_FILES = docs/license.txt
++
++$(eval $(python-package))
