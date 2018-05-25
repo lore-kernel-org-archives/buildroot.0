@@ -1,25 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 May 2018 08:40:21 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: update datacom email addresses
-In-Reply-To: <20180523165504.27677-1-casantos@datacom.ind.br> (Carlos Santos's
- message of "Wed, 23 May 2018 13:55:04 -0300")
-References: <20180523165504.27677-1-casantos@datacom.ind.br>
-Message-ID: <87r2m09r1m.fsf@dell.be.48ers.dk>
+Date: Fri, 25 May 2018 08:38:15 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.16.11
+Message-ID: <20180525063945.2207A82632@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.ind.br> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c3d9cfae39f16d39208f799c04e9048097485b80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Carlos Santos <casantos@datacom.com.br>
- > We are moving from datacom.ind.br to datacom.com.br. The old domain will
- > still be valid for an undefined period (probably forever).
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 29c8c7e4f2..f114b39cf4 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.16.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.16.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
