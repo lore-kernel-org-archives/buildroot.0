@@ -1,65 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 21:38:48 +0200
-Subject: [Buildroot] [git commit] libqrencode: bump to version 4.0.0
-Message-ID: <20180602101014.1A98B836B8@busybox.osuosl.org>
+Date: Fri, 25 May 2018 18:03:56 +0200
+Subject: [Buildroot] [git commit] package: add python-request-id
+Message-ID: <20180602101013.5C1278199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e4dd94dec988557c07bc7c30f12acf5e5a61489
+commit: https://git.buildroot.net/buildroot/commit/?id=4b8b834e36c8f2b936998c1db85f6a45c73151f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Use new --with[out]-png option
-- Add hash for license file
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libqrencode/libqrencode.hash |  7 +++++--
- package/libqrencode/libqrencode.mk   | 10 ++++++++--
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-request-id/Config.in              |  7 +++++++
+ package/python-request-id/python-request-id.hash |  5 +++++
+ package/python-request-id/python-request-id.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
-diff --git a/package/libqrencode/libqrencode.hash b/package/libqrencode/libqrencode.hash
-index 8c94ccd35d..1418413135 100644
---- a/package/libqrencode/libqrencode.hash
-+++ b/package/libqrencode/libqrencode.hash
-@@ -1,2 +1,5 @@
--# From http://fukuchi.org/works/qrencode/qrencode-3.4.2.tar.gz.sha1
--sha1	7daaad61f333ff6cdabfb0d925c3ab668d16dee2	qrencode-3.4.2.tar.gz
-+# From http://fukuchi.org/works/qrencode/qrencode-4.0.0.tar.gz.sha
-+sha512	fdbcee3ef90abf780dcbe495cef3e6ac5449a4a0aaa87d1a1a4f71d97fe6d96974d8132f7e227133cddb5ab73600e968821634752fc0d75113ca0959aae9a5d0	qrencode-4.0.0.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 63d554bf28..3c2c032980 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1492,6 +1492,7 @@ F:	package/python-functools32/
+ F:	package/python-ipaddr/
+ F:	package/python-pam/
+ F:	package/python-psutil/
++F:	package/python-request-id/
+ F:	package/python-texttable/
+ F:	package/python-webob/
+ F:	package/python-websocket-client/
+diff --git a/package/Config.in b/package/Config.in
+index 277186becb..6cd19ec97f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -914,6 +914,7 @@ menu "External python modules"
+ 	source "package/python-raven/Config.in"
+ 	source "package/python-reentry/Config.in"
+ 	source "package/python-remi/Config.in"
++	source "package/python-request-id/Config.in"
+ 	source "package/python-requests/Config.in"
+ 	source "package/python-requests-oauthlib/Config.in"
+ 	source "package/python-requests-toolbelt/Config.in"
+diff --git a/package/python-request-id/Config.in b/package/python-request-id/Config.in
+new file mode 100644
+index 0000000000..39b5456d00
+--- /dev/null
++++ b/package/python-request-id/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_REQUEST_ID
++	bool "python-request-id"
++	select BR2_PACKAGE_PYTHON_WEBOB # runtime
++	help
++	  Attach a unique identifier to every WSGI request.
 +
-+# Hash for license file:
-+sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING
-diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
-index 8f17b895e0..62ca2ed11d 100644
---- a/package/libqrencode/libqrencode.mk
-+++ b/package/libqrencode/libqrencode.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQRENCODE_VERSION = 3.4.2
-+LIBQRENCODE_VERSION = 4.0.0
- LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
- LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
- LIBQRENCODE_DEPENDENCIES = host-pkgconf
-@@ -18,9 +18,15 @@ else
- LIBQRENCODE_CONF_OPTS += --disable-thread-safety
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+LIBQRENCODE_CONF_OPTS += --with-png
-+LIBQRENCODE_DEPENDENCIES += libpng
-+else
-+LIBQRENCODE_CONF_OPTS += --without-png
-+endif
++	  https://github.com/mmerickel/request_id
+diff --git a/package/python-request-id/python-request-id.hash b/package/python-request-id/python-request-id.hash
+new file mode 100644
+index 0000000000..f412502b94
+--- /dev/null
++++ b/package/python-request-id/python-request-id.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/request-id/json
++md5	29cdbb13f26c0e944e58cfbebfc52085  request-id-0.3.1.tar.gz
++sha256	4c8adff44ad6779305d5493f780400aff5ff5139e98d622379c0e0797b58d812  request-id-0.3.1.tar.gz
++# Locally computed sha256 checksums
++sha256	2d65d17b4df34f184557b8031df05e4c264d2fa6b82e560be074967eff3b326c  LICENSE.txt
+diff --git a/package/python-request-id/python-request-id.mk b/package/python-request-id/python-request-id.mk
+new file mode 100644
+index 0000000000..96601b9750
+--- /dev/null
++++ b/package/python-request-id/python-request-id.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-request-id
++#
++################################################################################
 +
- ifeq ($(BR2_PACKAGE_LIBQRENCODE_TOOLS),y)
- LIBQRENCODE_CONF_OPTS += --with-tools=yes
--LIBQRENCODE_DEPENDENCIES += libpng
- else
- LIBQRENCODE_CONF_OPTS += --with-tools=no
- endif
++PYTHON_REQUEST_ID_VERSION = 0.3.1
++PYTHON_REQUEST_ID_SOURCE = request-id-$(PYTHON_REQUEST_ID_VERSION).tar.gz
++PYTHON_REQUEST_ID_SITE = https://files.pythonhosted.org/packages/2e/d4/bbe8cdd41012ba54d453452837101cecbb4151866b8aab6ca1ffb00d398c
++PYTHON_REQUEST_ID_SETUP_TYPE = setuptools
++PYTHON_REQUEST_ID_LICENSE = MIT
++PYTHON_REQUEST_ID_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
