@@ -1,27 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 May 2018 18:05:36 +0200
-Subject: [Buildroot] [PATCH 1/1] qt-webkit-kiosk: bump to version
- 1.99.7-4-ga7720e5
-In-Reply-To: <20180523134608.11936-1-jerome.oufella@savoirfairelinux.com>
- (=?utf-8?B?IkrDqXLDtG1l?= Oufella"'s message of "Wed, 23 May 2018 09:46:08
- -0400")
-References: <20180523134608.11936-1-jerome.oufella@savoirfairelinux.com>
-Message-ID: <871sdzaffz.fsf@dell.be.48ers.dk>
+Date: Fri, 25 May 2018 18:03:56 +0200
+Subject: [Buildroot] [git commit branch/next] package: add python-request-id
+Message-ID: <20180525160546.9B37A7F89B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?r?me" == J?r?me Oufella <jerome.oufella@savoirfairelinux.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4b8b834e36c8f2b936998c1db85f6a45c73151f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > This brings localstorage support in the app, plus a fix for the build
- > issue logged at [1].
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-request-id/Config.in              |  7 +++++++
+ package/python-request-id/python-request-id.hash |  5 +++++
+ package/python-request-id/python-request-id.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
- > [1] http://autobuild.buildroot.net/results/f29fa8ef055fe0d41db5944974272530d02ecd29/
-
-Does that mean that this should go to main (and hence the 2018.05
-release) or to next?
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 63d554bf28..3c2c032980 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1492,6 +1492,7 @@ F:	package/python-functools32/
+ F:	package/python-ipaddr/
+ F:	package/python-pam/
+ F:	package/python-psutil/
++F:	package/python-request-id/
+ F:	package/python-texttable/
+ F:	package/python-webob/
+ F:	package/python-websocket-client/
+diff --git a/package/Config.in b/package/Config.in
+index 277186becb..6cd19ec97f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -914,6 +914,7 @@ menu "External python modules"
+ 	source "package/python-raven/Config.in"
+ 	source "package/python-reentry/Config.in"
+ 	source "package/python-remi/Config.in"
++	source "package/python-request-id/Config.in"
+ 	source "package/python-requests/Config.in"
+ 	source "package/python-requests-oauthlib/Config.in"
+ 	source "package/python-requests-toolbelt/Config.in"
+diff --git a/package/python-request-id/Config.in b/package/python-request-id/Config.in
+new file mode 100644
+index 0000000000..39b5456d00
+--- /dev/null
++++ b/package/python-request-id/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_REQUEST_ID
++	bool "python-request-id"
++	select BR2_PACKAGE_PYTHON_WEBOB # runtime
++	help
++	  Attach a unique identifier to every WSGI request.
++
++	  https://github.com/mmerickel/request_id
+diff --git a/package/python-request-id/python-request-id.hash b/package/python-request-id/python-request-id.hash
+new file mode 100644
+index 0000000000..f412502b94
+--- /dev/null
++++ b/package/python-request-id/python-request-id.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/request-id/json
++md5	29cdbb13f26c0e944e58cfbebfc52085  request-id-0.3.1.tar.gz
++sha256	4c8adff44ad6779305d5493f780400aff5ff5139e98d622379c0e0797b58d812  request-id-0.3.1.tar.gz
++# Locally computed sha256 checksums
++sha256	2d65d17b4df34f184557b8031df05e4c264d2fa6b82e560be074967eff3b326c  LICENSE.txt
+diff --git a/package/python-request-id/python-request-id.mk b/package/python-request-id/python-request-id.mk
+new file mode 100644
+index 0000000000..96601b9750
+--- /dev/null
++++ b/package/python-request-id/python-request-id.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-request-id
++#
++################################################################################
++
++PYTHON_REQUEST_ID_VERSION = 0.3.1
++PYTHON_REQUEST_ID_SOURCE = request-id-$(PYTHON_REQUEST_ID_VERSION).tar.gz
++PYTHON_REQUEST_ID_SITE = https://files.pythonhosted.org/packages/2e/d4/bbe8cdd41012ba54d453452837101cecbb4151866b8aab6ca1ffb00d398c
++PYTHON_REQUEST_ID_SETUP_TYPE = setuptools
++PYTHON_REQUEST_ID_LICENSE = MIT
++PYTHON_REQUEST_ID_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
