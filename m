@@ -1,79 +1,55 @@
-From: Vincent Prince <vincent.prince.fr@gmail.com>
-Date: Fri, 25 May 2018 20:24:58 +0200
-Subject: [Buildroot] [PATCH] package/nss-myhostname: Add package
-In-Reply-To: <87sh6f8y8t.fsf@dell.be.48ers.dk>
-References: <1527168341-29387-1-git-send-email-vincent.prince.fr@gmail.com>
- <87sh6f8y8t.fsf@dell.be.48ers.dk>
-Message-ID: <CAB2nKc8k8qc2=9vON1vzyJ0LwNAAkyLFm=kYUVahkwoLkQR7oA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 25 May 2018 22:42:58 +0200
+Subject: [Buildroot] [PATCH 0/2] package/binutils+elf2flt: fix for noMMU
+ targets
+Message-ID: <cover.1527280948.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hello All!
 
-I'll send V2 on monday with:
-  - patch split
-  - DEVELOPERS
-  - fix indentation
-  - sha256 sig
-  - AUTORECONF removed
+TL;DR: gcc gets confused by our symlinks trick that we use to fix the
+rpath handling. We replace symlinks with script wrappers instead.
 
-nsswitch.conf resolve hosts in entries order, so it is important that it
-resides after files and before the other entries.
-Sed command comes from Yocto recipe
-https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-support/nss-myhostname/nss-myhostname_0.3.bb
+See the first commit for the whole story.
 
-Best regards,
-Vincent
+Fixes: #11031.
 
 
+Regards,
+Yann E. MORIN.
 
-2018-05-25 19:02 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
 
-> >>>>> "Vincent" == Vincent Prince <vincent.prince.fr@gmail.com> writes:
->
->  > Also fix nss-mdns hook to work with nss-myhostname
->
->  > Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
->
-> Thanks for you contribution! Can you please split this in two patches,
-> E.G. one to change nss-mdns and one to add nss-myhostname?
->
-> Also please add an entries to the DEVELOPERS file and run
-> ./utils/check-package on your new files, I see a number of strange
-> indentation issues.
->
-> While you are at it, please also add a sha256 hash for the license file.
->
->  > +
->  > +NSS_MYHOSTNAME_VERSION = 0.3
->  > +NSS_MYHOSTNAME_SITE = http://0pointer.de/lennart/
-> projects/nss-myhostname
->  > +NSS_MYHOSTNAME_LICENSE = LGPL-2.1
->  > +NSS_MYHOSTNAME_LICENSE_FILES = LICENSE
->  > +NSS_MYHOSTNAME_AUTORECONF = YES
->
-> Why? Does the tarball not contain a configure script?
->
-> > +
->  > +define MYHOSTNAME_SET_NSSWITCH
->  > +    $(SED) '/^hosts:/s/\s*\<myhostname\>//' \
->  > +            -e 's/\(^hosts:.*\)\(\<files\>\)\(.*\)\(\<dns\>\)\(.*\)/\1\2
-> myhostname \3\4\5/' -r $(TARGET_DIR)/etc/nsswitch.conf
->  > +endef
->
-> Doesn't nss-myhostname just need to go to the end of the file?
-> E.G. something like:
->
->      grep -qw myhostname $(TARGET_DIR)/etc/nsswwitch.conf || \
->           $(SED) '/\(^hosts:.*\)/\1 myhostname/'
-> $(TARGET_DIR)/etc/nsswitch.conf
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180525/c8c9a336/attachment.html>
+The following changes since commit 2c57dc0469f7e32182932e5937f61f82b01a743a
+
+  cjson: bump to version 1.7.7 (2018-05-25 16:22:11 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 59b3d35d7c805ebee29dc7185ea63e55aca768ca
+
+  package/elf2flt: replace hard-links with script wrappers to fix rpath (2018-05-25 22:24:32 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      package/binutils: switch from symlinks to script wrappers
+      package/elf2flt: replace hard-links with script wrappers to fix rpath
+
+ package/binutils/binutils.mk |  9 ++++++---
+ package/elf2flt/elf2flt.mk   | 17 +++++++++++++++++
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
