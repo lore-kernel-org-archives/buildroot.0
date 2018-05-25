@@ -1,39 +1,22 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 25 May 2018 14:29:19 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-05-24
-In-Reply-To: <20180525060009.E646D20D84@mail.bootlin.com>
-References: <20180525060009.E646D20D84@mail.bootlin.com>
-Message-ID: <5a56c6c8-aa97-63f0-160f-7b8d14220650@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 25 May 2018 16:17:51 +0200
+Subject: [Buildroot] [PATCH] busybox: bump to version 1.28.4
+In-Reply-To: <639c37891c154c228613534c0333f49c805ac2b6.1527219043.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 25 May 2018 06:30:43 +0300")
+References: <639c37891c154c228613534c0333f49c805ac2b6.1527219043.git.baruch@tkos.co.il>
+Message-ID: <87muwnakfk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Le 25/05/2018 ? 08:00, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> Results for branch 'master'
-> ===========================
-> 
-> Classification of failures by reason
-> ------------------------------------
-> 
->            bash-completion-2.8 | 1 
-> 
-> Detail of failures
-> ------------------
-> 
->          arm |            bash-completion-2.8 | NOK | http://autobuild.buildroot.net/results/7eea0f512695605714cf2d8c971778d4784b4c75 | ORPH
+ > Fixes to dpkg and nsenter.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-It's a parallel build issue.
-The STAGING_DIR/usr/share/bash-completion/completions directory is not created yet.
+Committed, thanks.
 
-Reported upstream:
-https://github.com/scop/bash-completion/issues/212
-
-Best regards,
-Romain
+-- 
+Bye, Peter Korsgaard
