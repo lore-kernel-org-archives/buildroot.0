@@ -1,53 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 May 2018 08:40:14 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: update datacom email addresses
-Message-ID: <20180525063945.3584582632@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri, 25 May 2018 14:29:19 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-05-24
+In-Reply-To: <20180525060009.E646D20D84@mail.bootlin.com>
+References: <20180525060009.E646D20D84@mail.bootlin.com>
+Message-ID: <5a56c6c8-aa97-63f0-160f-7b8d14220650@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1dbb441cccae52c68e1c732be206d3968c0e521
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi All,
 
-We are moving from datacom.ind.br to datacom.com.br. The old domain will
-still be valid for an undefined period (probably forever).
+Le 25/05/2018 ? 08:00, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> Results for branch 'master'
+> ===========================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+>            bash-completion-2.8 | 1 
+> 
+> Detail of failures
+> ------------------
+> 
+>          arm |            bash-completion-2.8 | NOK | http://autobuild.buildroot.net/results/7eea0f512695605714cf2d8c971778d4784b4c75 | ORPH
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+It's a parallel build issue.
+The STAGING_DIR/usr/share/bash-completion/completions directory is not created yet.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index efd331d20e..f24ef2752e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -404,7 +404,7 @@ F:	package/pps-tools/
- N:	Carlo Caione <carlo.caione@gmail.com>
- F:	package/sunxi-boards/
- 
--N:	Carlos Santos <casantos@datacom.ind.br>
-+N:	Carlos Santos <casantos@datacom.com.br>
- F:	package/gtest/
- F:	package/libpam-radius-auth/
- F:	package/libpam-tacplus/
-@@ -1596,7 +1596,7 @@ F:	package/libhttpparser/
- N:	Rhys Williams <github@wilberforce.co.nz>
- F:	package/lirc-tools/
- 
--N:	Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
-+N:	Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
- F:	package/atop/
- 
- N:	Ricardo Martincoski <ricardo.martincoski@gmail.com>
-@@ -1929,7 +1929,7 @@ F:	package/wayland/
- F:	package/weston/
- F:	toolchain/
- 
--N:	Tiago Brusamarello <tiago.brusamarello@datacom.ind.br>
-+N:	Tiago Brusamarello <tiago.brusamarello@datacom.com.br>
- F:	package/aer-inject/
- 
- N:	Timo Ketola <timo.ketola@exertus.fi>
+Reported upstream:
+https://github.com/scop/bash-completion/issues/212
+
+Best regards,
+Romain
