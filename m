@@ -1,51 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 25 May 2018 19:02:26 +0200
-Subject: [Buildroot] [PATCH] package/nss-myhostname: Add package
-In-Reply-To: <1527168341-29387-1-git-send-email-vincent.prince.fr@gmail.com>
- (Vincent Prince's message of "Thu, 24 May 2018 15:25:41 +0200")
-References: <1527168341-29387-1-git-send-email-vincent.prince.fr@gmail.com>
-Message-ID: <87sh6f8y8t.fsf@dell.be.48ers.dk>
+Date: Fri, 25 May 2018 19:04:49 +0200
+Subject: [Buildroot] [PATCH] package/bash-completion: fix a parallel
+ build issue
+In-Reply-To: <1527263926-26561-1-git-send-email-romain.naour@smile.fr> (Romain
+ Naour's message of "Fri, 25 May 2018 17:58:46 +0200")
+References: <1527263926-26561-1-git-send-email-romain.naour@smile.fr>
+Message-ID: <87o9h38y4u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vincent" == Vincent Prince <vincent.prince.fr@gmail.com> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
 
- > Also fix nss-mdns hook to work with nss-myhostname
+ > The STAGING_DIR/usr/share/bash-completion/completions directory is not
+ > created yet.
 
- > Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
+ > Fixed by:
+ > https://github.com/scop/bash-completion/commit/ee6b37ad7ff5b309cbb9b886a871252abd9398fa
 
-Thanks for you contribution! Can you please split this in two patches,
-E.G. one to change nss-mdns and one to add nss-myhostname?
+ > Fixes:
+ > http://autobuild.buildroot.org/results/7ee/7eea0f512695605714cf2d8c971778d4784b4c75/build-end.log
 
-Also please add an entries to the DEVELOPERS file and run
-./utils/check-package on your new files, I see a number of strange
-indentation issues.
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-While you are at it, please also add a sha256 hash for the license file.
-
- > +
- > +NSS_MYHOSTNAME_VERSION = 0.3
- > +NSS_MYHOSTNAME_SITE = http://0pointer.de/lennart/projects/nss-myhostname
- > +NSS_MYHOSTNAME_LICENSE = LGPL-2.1
- > +NSS_MYHOSTNAME_LICENSE_FILES = LICENSE
- > +NSS_MYHOSTNAME_AUTORECONF = YES
-
-Why? Does the tarball not contain a configure script?
-
-> +
- > +define MYHOSTNAME_SET_NSSWITCH
- > +    $(SED) '/^hosts:/s/\s*\<myhostname\>//' \
- > +		-e 's/\(^hosts:.*\)\(\<files\>\)\(.*\)\(\<dns\>\)\(.*\)/\1\2 myhostname \3\4\5/' -r $(TARGET_DIR)/etc/nsswitch.conf
- > +endef
-
-Doesn't nss-myhostname just need to go to the end of the file?
-E.G. something like:
-
-     grep -qw myhostname $(TARGET_DIR)/etc/nsswwitch.conf || \
-          $(SED) '/\(^hosts:.*\)/\1 myhostname/' $(TARGET_DIR)/etc/nsswitch.conf
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
