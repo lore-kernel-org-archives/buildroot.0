@@ -1,41 +1,49 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 27 May 2018 22:30:25 +0200
-Subject: [Buildroot] [PATCH v2 for-next 1/4] toolchain: add gcc 8 entry
-Message-ID: <20180527203028.26146-1-romain.naour@gmail.com>
+Date: Sun, 27 May 2018 22:30:27 +0200
+Subject: [Buildroot] [PATCH v2 for-next 3/4] toolchain-external: add gcc 8
+ entry
+In-Reply-To: <20180527203028.26146-1-romain.naour@gmail.com>
+References: <20180527203028.26146-1-romain.naour@gmail.com>
+Message-ID: <20180527203028.26146-3-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to add gcc 8 support for internal and external toolchain in
-follow-up commits, introduce BR2_TOOLCHAIN_GCC_AT_LEAST_8 symbol.
+This patch allow to use an external toolchain based on gcc 8.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../toolchain-external/toolchain-external-custom/Config.in.options  | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 77f95ee1c3..064bd4c28c 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -404,10 +404,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	bool
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 55370e967a..2ef1126740 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -27,6 +27,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
  
-+config BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+	bool
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ choice
+ 	bool "External toolchain gcc version"
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_8   if BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_5   if BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+@@ -37,8 +38,13 @@ choice
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_8
++	bool "8.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
 +
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_GCC_AT_LEAST
- 	string
-+	default "8"	if BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	default "7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	default "6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	default "5"	if BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
+ 	bool "7.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_6
 -- 
 2.14.3
