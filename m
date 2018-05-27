@@ -1,46 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 May 2018 22:48:57 +0200
-Subject: [Buildroot] [PATCH] fs: ensure hard links in TARGET_DIR are
- correctly copied for filesystem input
-Message-ID: <20180527204857.6081-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 27 May 2018 20:51:10 +0000
+Subject: [Buildroot] [Bug 11046] Git package binaries are ~180MB (compared
+ to ~20MB in stable branches).
+In-Reply-To: <bug-11046-163@https.bugs.busybox.net/>
+References: <bug-11046-163@https.bugs.busybox.net/>
+Message-ID: <bug-11046-163-UKs9uYKHk4@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes #11046
+https://bugs.busybox.net/show_bug.cgi?id=11046
 
-Commit bb2a57a17a7 (fs: run packages' filesystem hooks in a copy of target/)
-changed the file system logic to run file system hooks from packages on a
-copy of TARGET_DIR, and finally use this copy as input for the file system
-generation.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-This copy was done with rsync, which by default does not preserve hard
-links, leading to an expansion of the file system images when hard links are
-present.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
 
-Fix it by passing the -H option to rsync (preserve hard links).
+--- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> ---
+This was indeed caused by a recent change to make a copy of output/target
+before running the file system hooks and generate file systems, and this copy
+used rsync without the -H (preserve hard links) option.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
-Alternatively we can use 'cp -a' instead of rsync.
+I have sent a patch to fix it:
+http://patchwork.ozlabs.org/patch/921203/
 
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/common.mk b/fs/common.mk
-index 9baf367729..abf35418cb 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -71,7 +71,7 @@ $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
- 	@$(call MESSAGE,"Generating common rootfs tarball")
- 	rm -rf $(FS_DIR)
- 	mkdir -p $(FS_DIR)
--	rsync -au $(BASE_TARGET_DIR)/ $(TARGET_DIR)
-+	rsync -auH $(BASE_TARGET_DIR)/ $(TARGET_DIR)
- 	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
- 	echo "set -e" >> $(FAKEROOT_SCRIPT)
- 	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
