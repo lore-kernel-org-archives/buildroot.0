@@ -1,45 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 18:44:26 +0200
-Subject: [Buildroot] [git commit] phidgetwebservice: bump to version
- 2.1.8.20170607
-Message-ID: <20180602101012.C8F277FA8E@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 May 2018 22:05:35 +0200
+Subject: [Buildroot] [git commit] board: amarula: vyasa: Give raw space for
+ falcon mode
+Message-ID: <20180602101013.91C278199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=743ac2d53b1a263054a815e1e9c8b184adbf250d
+commit: https://git.buildroot.net/buildroot/commit/?id=82d882eef0939ff98622dc8ec1ae724ae65befbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+RK3288 Vyasa board support falcon mode in U-Boot and SD layout start from
+16MB offset for args and 17MB for uImage. So give full u-boot partition
+space as 30M so-that it can occupy bigger uImage file and doesn't overlap
+rootfs partition.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Peter: use # as comment character, clarify comment wording]
+Reported-by: Shyam Saini <shyam@amarulasolutions.com>
+Tested-by: Shyam Saini <shyam@amarulasolutions.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Shyam saini <shyam@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/phidgetwebservice/phidgetwebservice.hash | 3 ++-
- package/phidgetwebservice/phidgetwebservice.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ board/amarula/vyasa/genimage.cfg | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/phidgetwebservice/phidgetwebservice.hash b/package/phidgetwebservice/phidgetwebservice.hash
-index 7cd85da79a..e369049c1c 100644
---- a/package/phidgetwebservice/phidgetwebservice.hash
-+++ b/package/phidgetwebservice/phidgetwebservice.hash
-@@ -1,2 +1,3 @@
- # locally computed
--sha256  e8add82fd41d9cb274b88ee369a1f7366e35f85abcfcabb9e2a383574bb779c5  phidgetwebservice_2.1.8.20140319.tar.gz
-+sha256  904af15ecd13ae4e807ed8af181e3a4521e59f8f3791be0aa4ceb1afdbf764a2  phidgetwebservice_2.1.8.20170607.tar.gz
-+sha256  ea8af5e789cb2d4e9b10bce3874982ade163b749b6bfbdb32e2df21c4d106de1  COPYING
-diff --git a/package/phidgetwebservice/phidgetwebservice.mk b/package/phidgetwebservice/phidgetwebservice.mk
-index 36c0185e72..bdcc388b26 100644
---- a/package/phidgetwebservice/phidgetwebservice.mk
-+++ b/package/phidgetwebservice/phidgetwebservice.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/amarula/vyasa/genimage.cfg b/board/amarula/vyasa/genimage.cfg
+index fa41de3672..e7076679da 100644
+--- a/board/amarula/vyasa/genimage.cfg
++++ b/board/amarula/vyasa/genimage.cfg
+@@ -12,6 +12,7 @@ image sdcard.img {
+ 		in-partition-table = "no"
+ 		image = "u-boot-dtb.img"
+ 		offset = 8M
++		size = 30M # falcon mode: args @ 16M args, uImage @ 17M
+ 	}
  
--PHIDGETWEBSERVICE_VERSION = 2.1.8.20140319
-+PHIDGETWEBSERVICE_VERSION = 2.1.8.20170607
- PHIDGETWEBSERVICE_SOURCE = phidgetwebservice_$(PHIDGETWEBSERVICE_VERSION).tar.gz
- PHIDGETWEBSERVICE_SITE = http://www.phidgets.com/downloads/libraries
- PHIDGETWEBSERVICE_DEPENDENCIES = libphidget
+ 	partition rootfs {
