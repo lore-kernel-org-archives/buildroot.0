@@ -1,46 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 May 2018 19:01:22 +0200
-Subject: [Buildroot] [git commit branch/next] wireguard: bump version to
- 0.0.20180524
-Message-ID: <20180527170712.C43818267F@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 27 May 2018 17:37:30 +0000
+Subject: [Buildroot] [Bug 11046] Git package binaries are ~180MB (compared
+ to ~20MB in stable branches).
+In-Reply-To: <bug-11046-163@https.bugs.busybox.net/>
+References: <bug-11046-163@https.bugs.busybox.net/>
+Message-ID: <bug-11046-163-eSUtbOfM3D@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6b9d59f61b9084b1ae09e26e4bac5d6a1729cf6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+https://bugs.busybox.net/show_bug.cgi?id=11046
 
-Contains a number of fixes, including fixes for building with GCC 8.
+--- Comment #2 from Paul Stewart <paulstewartis@gmail.com> ---
+(In reply to Arnout Vandecappelle from comment #1)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The post scripts only run if they are called out in the config, right?  Either
+way, none of my scripts do anything with git.  I can definitely reproduce with
+the attached, minimal, config.
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 6cfc7bb9f0..7701424e4e 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-April/002697.html
--sha256 b58cd2acf9e8d3fe9044c06c0056bd74da1f5673a456f011d36eee3f6fb1da16  WireGuard-0.0.20180420.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-May/002914.html
-+sha256 57614239c1f1a99a367f2c816153acda5bffada66a3b8e3b8215f1625784abc9  WireGuard-0.0.20180524.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 20162e1d0f..ee68dc5580 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20180420
-+WIREGUARD_VERSION = 0.0.20180524
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+The binaries are normal in target/usr/libexec/git-core. So I think you're on
+the right track.
+
+What's the best way for me to determine: "if the copies are made during the
+install of git itself, or during the target-finalize step, or maybe even during
+rootfs generation"?
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
