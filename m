@@ -1,42 +1,46 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 27 May 2018 22:30:28 +0200
-Subject: [Buildroot] [PATCH v2 for-next 4/4] package/gcc: switch to gcc 6.x
- as the default
-In-Reply-To: <20180527203028.26146-1-romain.naour@gmail.com>
-References: <20180527203028.26146-1-romain.naour@gmail.com>
-Message-ID: <20180527203028.26146-4-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 May 2018 22:48:57 +0200
+Subject: [Buildroot] [PATCH] fs: ensure hard links in TARGET_DIR are
+ correctly copied for filesystem input
+Message-ID: <20180527204857.6081-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even if gcc 6 is still maintained for some time (gcc 6.5 is pending),
-switch to gcc 7.x since it has been released since 2017-05-02 and
-gcc 8.x is available since 2018-05-02.
+Fixes #11046
 
-We have been having toolchains in the autobuilders with gcc
-7.x for a while, so the vast majority of the problems should have
-already been solved.
+Commit bb2a57a17a7 (fs: run packages' filesystem hooks in a copy of target/)
+changed the file system logic to run file system hooks from packages on a
+copy of TARGET_DIR, and finally use this copy as input for the file system
+generation.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+This copy was done with rsync, which by default does not preserve hard
+links, leading to an expansion of the file system images when hard links are
+present.
+
+Fix it by passing the -H option to rsync (preserve hard links).
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/Config.in.host | 2 +-
+Alternatively we can use 'cp -a' instead of rsync.
+
+ fs/common.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 59a93595cc..982be26b38 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -4,7 +4,7 @@ choice
- 	prompt "GCC compiler Version"
- 	default BR2_GCC_VERSION_ARC if BR2_arc
- 	default BR2_GCC_VERSION_OR1K if BR2_or1k
--	default BR2_GCC_VERSION_6_X
-+	default BR2_GCC_VERSION_7_X
- 	help
- 	  Select the version of gcc you wish to use.
- 
+diff --git a/fs/common.mk b/fs/common.mk
+index 9baf367729..abf35418cb 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -71,7 +71,7 @@ $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+ 	@$(call MESSAGE,"Generating common rootfs tarball")
+ 	rm -rf $(FS_DIR)
+ 	mkdir -p $(FS_DIR)
+-	rsync -au $(BASE_TARGET_DIR)/ $(TARGET_DIR)
++	rsync -auH $(BASE_TARGET_DIR)/ $(TARGET_DIR)
+ 	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
+ 	echo "set -e" >> $(FAKEROOT_SCRIPT)
+ 	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
 -- 
-2.14.3
+2.11.0
