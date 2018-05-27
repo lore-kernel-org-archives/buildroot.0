@@ -1,192 +1,98 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 26 May 2018 10:17:50 +0200
-Subject: [Buildroot] [git commit branch/next] toolchain: Bump ARC tools to
- arc-2018.03-rc2
-Message-ID: <20180526081653.06439826B3@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 27 May 2018 08:00:12 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-05-26
+Message-ID: <20180527060012.C01472073D@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aaabe8fc04006b15bb5f9aaf08ac07603fcf7fe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-This commit bumps ARC toolchain to arc-2018.03-rc2, which
-includes significant changes since arc-2018.03-rc1.
-We want to test how new toolchain-rc2 builds packages,
-so we can make fixes before release of toolcain.
-This makes us closer to toolchain release which will be in a few weeks.
+Build statistics for 2018-05-26
+===============================
 
-Please note that it is a release candidate
-and it might contain some breakages,
-please don't use it for production builds.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  11 |   2 |   0 |  13 |
+      master | 203 |  29 |   3 | 235 |
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/binutils/Config.in.host                                       | 2 +-
- .../{arc-2018.03-rc1 => arc-2018.03-rc2}/0002-ld-makefile.patch       | 0
- .../0003-check-ldrunpath-length.patch                                 | 0
- .../0004-add-sysroot-fix-from-bug-3049.patch                          | 0
- .../0005-poison-system-directories.patch                              | 0
- package/binutils/binutils.hash                                        | 2 +-
- package/binutils/binutils.mk                                          | 4 ++--
- package/gcc/Config.in.host                                            | 2 +-
- .../gcc/{arc-2018.03-rc1 => arc-2018.03-rc2}/0100-uclibc-conf.patch   | 0
- .../0860-cilk-fix-build-without-wchar.patch                           | 0
- .../{arc-2018.03-rc1 => arc-2018.03-rc2}/0900-remove-selftests.patch  | 0
- package/gcc/gcc.hash                                                  | 2 +-
- package/gdb/Config.in.host                                            | 2 +-
- package/gdb/gdb.hash                                                  | 2 +-
- package/glibc/glibc.hash                                              | 2 +-
- package/glibc/glibc.mk                                                | 2 +-
- 16 files changed, 10 insertions(+), 10 deletions(-)
+Results for branch '2018.02.x'
+==============================
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 22478d917a..03b228168f 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -24,7 +24,7 @@ endchoice
- 
- config BR2_BINUTILS_VERSION
- 	string
--	default "arc-2018.03-rc1"	if BR2_BINUTILS_VERSION_ARC
-+	default "arc-2018.03-rc2"	if BR2_BINUTILS_VERSION_ARC
- 	default "2.28.1"	if BR2_BINUTILS_VERSION_2_28_X
- 	default "2.29.1"	if BR2_BINUTILS_VERSION_2_29_X
- 	default "2.30"		if BR2_BINUTILS_VERSION_2_30_X
-diff --git a/package/binutils/arc-2018.03-rc1/0002-ld-makefile.patch b/package/binutils/arc-2018.03-rc2/0002-ld-makefile.patch
-similarity index 100%
-rename from package/binutils/arc-2018.03-rc1/0002-ld-makefile.patch
-rename to package/binutils/arc-2018.03-rc2/0002-ld-makefile.patch
-diff --git a/package/binutils/arc-2018.03-rc1/0003-check-ldrunpath-length.patch b/package/binutils/arc-2018.03-rc2/0003-check-ldrunpath-length.patch
-similarity index 100%
-rename from package/binutils/arc-2018.03-rc1/0003-check-ldrunpath-length.patch
-rename to package/binutils/arc-2018.03-rc2/0003-check-ldrunpath-length.patch
-diff --git a/package/binutils/arc-2018.03-rc1/0004-add-sysroot-fix-from-bug-3049.patch b/package/binutils/arc-2018.03-rc2/0004-add-sysroot-fix-from-bug-3049.patch
-similarity index 100%
-rename from package/binutils/arc-2018.03-rc1/0004-add-sysroot-fix-from-bug-3049.patch
-rename to package/binutils/arc-2018.03-rc2/0004-add-sysroot-fix-from-bug-3049.patch
-diff --git a/package/binutils/arc-2018.03-rc1/0005-poison-system-directories.patch b/package/binutils/arc-2018.03-rc2/0005-poison-system-directories.patch
-similarity index 100%
-rename from package/binutils/arc-2018.03-rc1/0005-poison-system-directories.patch
-rename to package/binutils/arc-2018.03-rc2/0005-poison-system-directories.patch
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index ebe1f2ee24..c938222804 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -4,4 +4,4 @@ sha512  d748d22306477d60d921078804d21943248c23fca0707aac9b016a352c01c75ca69e8262
- sha512  e747ea20d8d79fcd21b9d9f6695059caa7189d60f19256da398e34b789fea9a133c32b192e9693b5828d27683739b0198431bf8b3e39fb3b04884cf89d9aa839  binutils-2.30.tar.xz
- 
- # Locally calculated (fetched from Github)
--sha512  7b8c4a5ec38a234b3ca097ce38e0e60628561251085fc83a614c8cf476eec53ca77ab34088987c80ce79772d5e2cc513b28a7df45f3dc5d0d3a82296e1f6474f  binutils-arc-2018.03-rc1.tar.gz
-+sha512  c9d41001bd41d96f1cd78748c1e8df9715aab1158c0a1c9c90a2010e335c357d0d6816202b7fcf7c7d8d4a65e25920b0b35af6a59edd0d29fd9edddd8be95a48  binutils-arc-2018.03-rc2.tar.gz
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index b24e4334c2..be9e652e10 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -9,13 +9,13 @@
- BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
- ifeq ($(BINUTILS_VERSION),)
- ifeq ($(BR2_arc),y)
--BINUTILS_VERSION = arc-2018.03-rc1
-+BINUTILS_VERSION = arc-2018.03-rc2
- else
- BINUTILS_VERSION = 2.29.1
- endif
- endif # BINUTILS_VERSION
- 
--ifeq ($(BINUTILS_VERSION),arc-2018.03-rc1)
-+ifeq ($(BINUTILS_VERSION),arc-2018.03-rc2)
- BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
- BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
- BINUTILS_FROM_GIT = y
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 7c08fb3596..00e72db032 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -73,7 +73,7 @@ config BR2_GCC_VERSION
- 	default "5.5.0"     if BR2_GCC_VERSION_5_X
- 	default "6.4.0"     if BR2_GCC_VERSION_6_X
- 	default "7.3.0"     if BR2_GCC_VERSION_7_X
--	default "arc-2018.03-rc1" if BR2_GCC_VERSION_ARC
-+	default "arc-2018.03-rc2" if BR2_GCC_VERSION_ARC
- 	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
- 
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/arc-2018.03-rc1/0100-uclibc-conf.patch b/package/gcc/arc-2018.03-rc2/0100-uclibc-conf.patch
-similarity index 100%
-rename from package/gcc/arc-2018.03-rc1/0100-uclibc-conf.patch
-rename to package/gcc/arc-2018.03-rc2/0100-uclibc-conf.patch
-diff --git a/package/gcc/arc-2018.03-rc1/0860-cilk-fix-build-without-wchar.patch b/package/gcc/arc-2018.03-rc2/0860-cilk-fix-build-without-wchar.patch
-similarity index 100%
-rename from package/gcc/arc-2018.03-rc1/0860-cilk-fix-build-without-wchar.patch
-rename to package/gcc/arc-2018.03-rc2/0860-cilk-fix-build-without-wchar.patch
-diff --git a/package/gcc/arc-2018.03-rc1/0900-remove-selftests.patch b/package/gcc/arc-2018.03-rc2/0900-remove-selftests.patch
-similarity index 100%
-rename from package/gcc/arc-2018.03-rc1/0900-remove-selftests.patch
-rename to package/gcc/arc-2018.03-rc2/0900-remove-selftests.patch
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index d9a651b547..817d04e390 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -8,6 +8,6 @@ sha512  02c60e54527c7adf584798d5251f8a0b80c93d5deafce82501b2c28e6692e0bd783927bb
- sha512  ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19c19921b0cdf6d05483faede8287bb9ea120c0d1559449a70e602c8d4  gcc-7.3.0.tar.xz
- 
- # Locally calculated (fetched from Github)
--sha512  16e5f9d1637be9a099a996074dc43803803497965c1eab6c0057f10d193d30dcc405ad852df82c4f8c61b195195ee797b788ba0b235d7b03e4410806ac5f94bc  gcc-arc-2018.03-rc1.tar.gz
-+sha512  a0faf2bb34f6c72b6460c6432639d89915cfc63456cfdf016896b3ef075655b2e9f26e745d841bbc38e776bc7a3729359cca88f1e4fb83489fa6775a3ccb55b8  gcc-arc-2018.03-rc2.tar.gz
- # Locally calculated (fetched from Github)
- sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index e8dd09e61c..0011966d88 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -74,7 +74,7 @@ endif
- # If cross-gdb is not enabled, the latest working version is chosen.
- config BR2_GDB_VERSION
- 	string
--	default "arc-2018.03-rc1-gdb" if BR2_arc
-+	default "arc-2018.03-rc2-gdb" if BR2_arc
- 	default "7.10.1"   if BR2_GDB_VERSION_7_10
- 	default "7.11.1"   if BR2_GDB_VERSION_7_11 || !BR2_PACKAGE_HOST_GDB
- 	default "7.12.1"   if BR2_GDB_VERSION_7_12
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index a2af7b35d9..cfbaac40f6 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -5,4 +5,4 @@ sha512  0ac8d0a495103611ef41167a08313a010dce6ca4c6d827cbe8558a0c1a1a8a6bfa53f1b7
- sha512  5eb328910033f0918058be2f92caebf1e8dfc6caa3c730d99d621627e53de3c1b43761c2f683d53555893253c2f06768cbf56cdea051a3d291ffb6cfae87b5e1	gdb-8.0.1.tar.xz
- 
- # Locally calculated (fetched from Github)
--sha512  975f0e09c9fd3ba1ca6aefdeb2da4b2804802606518c0cfdf7abe07c83a61341c1af5c2d2ddfd55ba6112fed420dedc529bc484d0c25b289bbed05edc99d0e72 	gdb-arc-2018.03-rc1-gdb.tar.gz
-+sha512  0c58dd3e8fff8b51a459aba78f4acd1beaa3427e00a63a7242827f22c6af157e4aea91ab754cdc021e0075a5bf2b70df903dba67dbff2415fd0f82c8aab99087 	gdb-arc-2018.03-rc2-gdb.tar.gz
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 5a90e612b9..f19fa92af4 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,7 +1,7 @@
- # Locally calculated (fetched from Github)
- sha256  a74489d14f4017bee6a6c6fe76f1de0dbf7d66c8695116de5aadd141c4757892     glibc-glibc-2.27.tar.gz
- # Locally calculated (fetched from Github)
--sha256  d88f60081285b639122a49425e5fcf8c8cbb0f05efde7a3cb206089fae53c232     glibc-arc-2018.03-rc1.tar.gz
-+sha256  ddc63360393ab88ab6a4a0c81d33481f34c5a9ebd758eec2e6bb35385058b4cb     glibc-arc-2018.03-rc2.tar.gz
- 
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index c1c5ac687f..5711ede6d0 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- ifeq ($(BR2_arc),y)
--GLIBC_VERSION =  arc-2018.03-rc1
-+GLIBC_VERSION =  arc-2018.03-rc2
- GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VERSION))
- else
- # Generate version string using:
+Classification of failures by reason
+------------------------------------
+
+              host-cmake-3.8.2 | 1 
+                   libnss-3.33 | 1 
+
+
+Detail of failures
+------------------
+
+      mipsel |               host-cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/62b7fade1f9521c717b817ff921e0f9e75fa69c8 |     
+        i686 |                    libnss-3.33 | NOK | http://autobuild.buildroot.net/results/6686559d959595691c11c7a3d138675d954e1073 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                    quota-4.01 | 7 
+                  autofs-5.1.4 | 5 
+                  samba4-4.8.1 | 4 
+                     php-7.2.5 | 2 
+qt-webkit-kiosk-34efddb0bf0... | 2 
+                       unknown | 2 
+                host-libsodium | 1 
+           host-protobuf-3.4.1 | 1 
+                    links-2.14 | 1 
+               log4cplus-2.0.0 | 1 
+openvmtools-5a9033ddfa95786... | 1 
+                   qt53d-5.6.3 | 1 
+             qt5location-5.6.3 | 1 
+             qt5wayland-5.10.1 | 1 
+          usb_modeswitch-2.5.2 | 1 
+                      x265-2.7 | 1 
+
+
+Detail of failures
+------------------
+
+microblazeel |                   autofs-5.1.4 | NOK | http://autobuild.buildroot.net/results/899670d0075b6c27b21f468dffd7297b315f2bca |     
+     aarch64 |                   autofs-5.1.4 | NOK | http://autobuild.buildroot.net/results/6e4edd5d26b0844b141f5b86b63e0204ef103e1b |     
+    mips64el |                   autofs-5.1.4 | NOK | http://autobuild.buildroot.net/results/37cc487fbf7b910337402ac905b582545359df58 |     
+    mips64el |                   autofs-5.1.4 | NOK | http://autobuild.buildroot.net/results/7c92df6a81b74d0a62e8be5011dc84ba6dc950cb |     
+         arm |                   autofs-5.1.4 | NOK | http://autobuild.buildroot.net/results/5c976a47a44bb8bc7ccedee409cfc3278a2d8a8e |     
+        i686 |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/706786c6b8d6b0e26998e09cc414eac6ada948ce |     
+         arm |            host-protobuf-3.4.1 | NOK | http://autobuild.buildroot.net/results/a69e0d63b40133d109d46904f8f6b4288c381e27 |     
+     powerpc |                     links-2.14 | NOK | http://autobuild.buildroot.net/results/034d98fa2823c15739662eae7c90bc056c9c2cd2 | ORPH
+     powerpc |                log4cplus-2.0.0 | NOK | http://autobuild.buildroot.net/results/46b56d7b082335c1473dc094e0e0bd812b8d42bf |     
+      x86_64 | openvmtools-5a9033ddfa95786... | NOK | http://autobuild.buildroot.net/results/7f42bf59aa942487919671abdd6f9b87e7e0b063 |     
+         arc |                      php-7.2.5 | NOK | http://autobuild.buildroot.net/results/24e6ecf763b252fcc1f3ea2d65fd03c4218355c1 | ORPH
+         arm |                      php-7.2.5 | NOK | http://autobuild.buildroot.net/results/024539c2076ac5c93896c19a311e3fe0deaa33b2 | ORPH
+         arm | qt-webkit-kiosk-34efddb0bf0... | NOK | http://autobuild.buildroot.net/results/e34b7d4e5f03b1d1a3fcff08e8ee718c6c61991d |     
+     aarch64 | qt-webkit-kiosk-34efddb0bf0... | NOK | http://autobuild.buildroot.net/results/7f65d9898d4c1ae438b124a787cdda19e2019ad0 |     
+         arm |                    qt53d-5.6.3 | NOK | http://autobuild.buildroot.net/results/0ff5eaf91da16ad06c1542fb6a0f20847d4684f5 |     
+     powerpc |              qt5location-5.6.3 | NOK | http://autobuild.buildroot.net/results/b17dd6921c5b1f3560d065d3baac4d651d9aea54 |     
+         arm |              qt5wayland-5.10.1 | NOK | http://autobuild.buildroot.net/results/1b0e51d1b38c6ce6c6eb287fdd463288baad2465 |     
+      mipsel |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/c93d8edacd8e3f80acb52c7cf43bdad59493d4e9 |     
+         arm |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/8d8800b3deb7e304fdd5103b4fad38ba0c44c931 |     
+         arm |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/7467fc501de7951f167aa05ec476b6967c47de28 |     
+         arc |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/2f2f84476433299d295eb2473cdb85dd1d494dcf |     
+        mips |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/0f9b172d52a0c873acb52e649df32e5260b324e8 |     
+ powerpc64le |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/d0303af0a3fa404ad68b579a984ec9dfdbfd486d |     
+ powerpc64le |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/ec52e9826b14c8f1d41900a38e9fcdb83abf812b |     
+      x86_64 |                   samba4-4.8.1 | NOK | http://autobuild.buildroot.net/results/f734f40275db6757a213bbba1d47c1e928d0b09e |     
+         arm |                   samba4-4.8.1 | NOK | http://autobuild.buildroot.net/results/e565df39307f64efe2e72921b1deab5ccd9b3b31 |     
+         arm |                   samba4-4.8.1 | NOK | http://autobuild.buildroot.net/results/fa6939cb6e07cafa8d7512a1d0afcd43ce623141 |     
+        mips |                   samba4-4.8.1 | NOK | http://autobuild.buildroot.net/results/4c33ab6c292107fc49ed9376ba09b94f0d94bd03 |     
+    mips64el |                        unknown | TIM | http://autobuild.buildroot.net/results/5bb3c1a0be4836d99fcc533b115eb921ef700ff2 |     
+      x86_64 |                        unknown | TIM | http://autobuild.buildroot.net/results/23d1034b33d0354de15de2ec4a8ccd0603e8db78 |     
+microblazeel |           usb_modeswitch-2.5.2 | NOK | http://autobuild.buildroot.net/results/d264530ba27808a237a901ce2feb863a16e3e410 | ORPH
+         arm |                       x265-2.7 | NOK | http://autobuild.buildroot.net/results/f02703c41c00bae376df55c16292b14cbc29ac07 |     
+
+
+-- 
+http://autobuild.buildroot.net
