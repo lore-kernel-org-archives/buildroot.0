@@ -1,134 +1,149 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 May 2018 17:35:10 +0200
-Subject: [Buildroot] [PATCH 0/2] package/binutils+elf2flt: fix for noMMU
- targets
-In-Reply-To: <db85fdbc-8767-4ada-bdab-872202ee5ce2@mind.be>
-References: <cover.1527280948.git.yann.morin.1998@free.fr>
- <db85fdbc-8767-4ada-bdab-872202ee5ce2@mind.be>
-Message-ID: <20180527153510.GB2965@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 27 May 2018 17:47:42 +0200
+Subject: [Buildroot] [PATCH] Add new packge Shadowsocks-libev v3.1.3
+In-Reply-To: <20180524171204.5959-1-xuminready@gmail.com>
+References: <20180524171204.5959-1-xuminready@gmail.com>
+Message-ID: <57349f19-8017-8f29-f44c-dd085f38c132@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+ Hi Min,
 
-On 2018-05-27 16:34 +0200, Arnout Vandecappelle spake thusly:
-> On 25-05-18 22:42, Yann E. MORIN wrote:
-> > Hello All!
-> > 
-> > TL;DR: gcc gets confused by our symlinks trick that we use to fix the
-> > rpath handling. We replace symlinks with script wrappers instead.
+ Thank you for your contributions. There are several problems with your patch,
+could you fix them and resubmit?
+
+ First of all, the subject line should be:
+
+shadowsocks-libev: new package
+
+On 24-05-18 19:12, Min Xu wrote:
+> Signed-off-by: Min Xu <xuminready@gmail.com>
+> ---
+>  package/Config.in                              |  1 +
+>  package/shadowsocks-libev/Config.in            | 12 ++++++++++++
+>  package/shadowsocks-libev/shadowsocks-libev.mk | 20 ++++++++++++++++++++
+
+ Please also add a hash file, containing a hash for the tarball and for all
+license files.
+
+>  3 files changed, 33 insertions(+)
+>  create mode 100644 package/shadowsocks-libev/Config.in
+>  create mode 100644 package/shadowsocks-libev/shadowsocks-libev.mk
 > 
->  So maybe, instead of laying hacks upon hacks, we should go back to the drawing
-> board on the rpath handling? I would feel a lot more comfortable if we could
-> just fix fix-rpath instead of playing the whack-a-mole game of workarounds in
-> packages.
+> diff --git a/package/Config.in b/package/Config.in
+> index ecee493..1427665 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1846,6 +1846,7 @@ endif
+>  	source "package/samba4/Config.in"
+>  	source "package/sconeserver/Config.in"
+>  	source "package/ser2net/Config.in"
+> +        source "package/shadowsocks-libev/Config.in"
 
-Well, we're not really playing whack-a-mole, because the isue is only
-about packages that install hardlinks in two locations, because of the
-bin/TUPLE-foo and TUPLE/bin/foo "duplication".
+ Indentation should be with tabs.
 
-The only ones doing such a thing AFAIK are binutils and elf2flt.
+ Similar problems exist elsewhere as well. Please use the utils/check-package
+script to find such mistakes.
 
-gcc installs hardlinks, but in the same directory. The tools it installs
-in a TUPLE-named directory are not hardlinks.
+>  	source "package/shairport-sync/Config.in"
+>  	source "package/shellinabox/Config.in"
+>  	source "package/smcroute/Config.in"
+> diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+> new file mode 100644
+> index 0000000..78fd35a
+> --- /dev/null
+> +++ b/package/shadowsocks-libev/Config.in
+> @@ -0,0 +1,12 @@
+> +config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+> +        bool "shadowsocks-libev"
+> +        select BR2_PACKAGE_LIBSODIUM
+> +        select BR2_PACKAGE_MBEDTLS
+> +        select BR2_PACKAGE_PCRE
+> +        select BR2_PACKAGE_C_ARES
+> +        select BR2_PACKAGE_LIBEV
 
->  I don't see a full solution yet, but basically I think that we should
-> - detect when an executable has multiple hardlinks;
-> - detect if it has already been "fixed" in this fix-rpath run;
-> - if so, clone the file before fixing it proper.
+ Please keep the select lines alphabetical. So c-ares should be first.
 
-What did you mean by "clone" in this context? Remove the hardlinks and
-replace them by a copy of the file?
+> +        help
+> +          Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
+> +          embedded devices and low-end boxes.
+> +
+> +          https://github.com/shadowsocks/shadowsocks-libev
+> diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+> new file mode 100644
+> index 0000000..1c7f76a
+> --- /dev/null
+> +++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# SHADOWSOCKS_LIBEV
 
->  The weak point is: if we clone, there may be some hardlinks that actually could
-> still be reused as hardlinks. So you'd have to detect them first.
+ This should be lower case.
 
-Sorry, I don't follow you here. If we replaced hardlinks with actual
-copies, how come we'd still have hardlinks?
+> +#
+> +################################################################################
+> +
+> +SHADOWSOCKS_LIBEV_VERSION = 3.1.3
+> +SHADOWSOCKS_LIBEV_SOURCE = shadowsocks-libev-$(SHADOWSOCKS_LIBEV_VERSION).tar.gz
 
->  Alternatively we could consider that this is anyway only about the host tree,
-> which is normally the smallest of the three trees (when you exclude external
-> toolchain). So maybe we should just always clone for the host tree.
+ This is the default so you can omit it.
 
-I'm afraid that detecting hardlinks will not be cheap, even when we
-exclude staging/ (which is a sub-dir of host/) from the search...
+> +SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+> +SHADOWSOCKS_LIBEV_LICENSE = GPLv3
 
->  I realize we're very close to the release, but I still think that always
-> cloning is probably the safest way to do it.
+ Use SPDX tags, so GPL-3.0.
 
-Do we envision other impacted packages? I don't think so. Really,
-binutils and elf2flt really seem to be the only two packages impacted
-by the problem.
+ It looks to me like it has 'or later' everywhere, so GPL-3.0+.
 
-That we missed the noMMU and elf2flt cases previously is just an
-oversight on our part...
+ It looks like it includes additional libraries under different licenses. So it
+should be (I think, please check)
 
-Then. if I am wrong, we're still talking about only two packages for
-now, and they only break because of the ARC archtecture, for which we
-use bleeding-edge tools that require we have libfl.so. Two. Single.
-Packages. We've always refused to add infra when only very few packages
-were impacted.
+SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), \
+	BSD-3-Clause (libcork, libipset)
 
-Or were you suggesting that we do not add infra, but we replace the
-current two hacks (Thomas' symlinks or my script wrappers) by an actual
-copy, still just for binutils and elf2flt? In which case we would not
-loose time detecting hard-links in a generic way, obviously.
+Note that murmur2 is public domain and doesn't need to be mentioned.
 
-Regards,
-Yann E. MORIN.
+ Also the LICENSE_FILES should immediately follow it, and include the license
+files for all of these:
 
->  Regards,
->  Arnout
-> 
-> > 
-> > See the first commit for the whole story.
-> > 
-> > Fixes: #11031.
-> > 
-> > 
-> > Regards,
-> > Yann E. MORIN.
-> > 
-> > 
-> > The following changes since commit 2c57dc0469f7e32182932e5937f61f82b01a743a
-> > 
-> >   cjson: bump to version 1.7.7 (2018-05-25 16:22:11 +0200)
-> > 
-> > 
-> > are available in the git repository at:
-> > 
-> >   git://git.buildroot.org/~ymorin/git/buildroot.git
-> > 
-> > for you to fetch changes up to 59b3d35d7c805ebee29dc7185ea63e55aca768ca
-> > 
-> >   package/elf2flt: replace hard-links with script wrappers to fix rpath (2018-05-25 22:24:32 +0200)
-> > 
-> > 
-> > ----------------------------------------------------------------
-> > Yann E. MORIN (2):
-> >       package/binutils: switch from symlinks to script wrappers
-> >       package/elf2flt: replace hard-links with script wrappers to fix rpath
-> > 
-> >  package/binutils/binutils.mk |  9 ++++++---
-> >  package/elf2flt/elf2flt.mk   | 17 +++++++++++++++++
-> >  2 files changed, 23 insertions(+), 3 deletions(-)
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/COPYING libcork/COPYING
+
+(libipset is a bit problematic because it doesn't have a license file in the
+tarball. The git repo does have it, though, and it's identical to the one lin
+libcork as far as I can tell.)
+
+ Also please add hashes for all these files.
+
+
+> +SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf
+
+ You need to specify all build dependencies here, alphabetically. So:
+
+SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
+
+
+> +SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING
+> +SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
+> +SHADOWSOCKS_LIBEV_CONF_ENV = PCRECONFIG=$(STAGING_DIR)/usr/bin/pcre-config
+> +SHADOWSOCKS_LIBEV_DEPENDENCIES += pcre
+> +SHADOWSOCKS_LIBEV_CONF_OPTS = --disable-documentation --with-pcre=$(STAGING_DIR)/usr/bin/
+> +
+> +$(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+
+ You should only add a host version of the package if it is needed for something.
+
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
