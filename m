@@ -1,32 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 27 May 2018 23:27:41 +0200
-Subject: [Buildroot] [git commit] libtirpc: use rpcgen from host-nfs-utils
-Message-ID: <20180527213342.A395C8284A@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 27 May 2018 23:39:57 +0200
+Subject: [Buildroot] [PATCH] fs: ensure hard links in TARGET_DIR are
+ correctly copied for filesystem input
+In-Reply-To: <20180527204857.6081-1-peter@korsgaard.com>
+References: <20180527204857.6081-1-peter@korsgaard.com>
+Message-ID: <20180527213957.GE2965@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0965080fbcaf9e3f168a799cce0eefbc76c8e5a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Drop the patch adding local rpcgen. Instead use the host-nfs-utils
-provided rpcgen. Update the patch "Automatically generate XDR header
-files from .x sources using" to use external rpcgen.
+On 2018-05-27 22:48 +0200, Peter Korsgaard spake thusly:
+> Fixes #11046
+> 
+> Commit bb2a57a17a7 (fs: run packages' filesystem hooks in a copy of target/)
+> changed the file system logic to run file system hooks from packages on a
+> copy of TARGET_DIR, and finally use this copy as input for the file system
+> generation.
+> 
+> This copy was done with rsync, which by default does not preserve hard
+> links, leading to an expansion of the file system images when hard links are
+> present.
+> 
+> Fix it by passing the -H option to rsync (preserve hard links).
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Renumber the other patches.
+Not sure how I was not able to reproduce the issue. But the rsync docs
+say we should use it, so:
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...Add-rpcgen-program-from-nfs-utils-sources.patch | 6508 --------------------
- ...y-generate-XDR-header-files-from-.x-sour.patch} |   35 +-
- ...-files-needed-to-build-rpcbind-on-top-of.patch} |    0
- ...005-Disable-DES-authentification-support.patch} |    0
- ...h => 0006-include-stdint.h-for-uintptr_t.patch} |    0
- package/libtirpc/libtirpc.mk                       |    1 +
- 6 files changed, 18 insertions(+), 6526 deletions(-)
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Patch is too large, so refusing to show it
+Regards,
+Yann E. MORIN.
+
+> ---
+> Alternatively we can use 'cp -a' instead of rsync.
+> 
+>  fs/common.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index 9baf367729..abf35418cb 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -71,7 +71,7 @@ $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+>  	@$(call MESSAGE,"Generating common rootfs tarball")
+>  	rm -rf $(FS_DIR)
+>  	mkdir -p $(FS_DIR)
+> -	rsync -au $(BASE_TARGET_DIR)/ $(TARGET_DIR)
+> +	rsync -auH $(BASE_TARGET_DIR)/ $(TARGET_DIR)
+>  	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
+>  	echo "set -e" >> $(FAKEROOT_SCRIPT)
+>  	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+> -- 
+> 2.11.0
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
