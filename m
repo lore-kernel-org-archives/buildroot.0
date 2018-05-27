@@ -1,32 +1,77 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 27 May 2018 20:51:10 +0000
-Subject: [Buildroot] [Bug 11046] Git package binaries are ~180MB (compared
- to ~20MB in stable branches).
-In-Reply-To: <bug-11046-163@https.bugs.busybox.net/>
-References: <bug-11046-163@https.bugs.busybox.net/>
-Message-ID: <bug-11046-163-UKs9uYKHk4@https.bugs.busybox.net/>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 27 May 2018 22:54:55 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-sgx-*: bump from SDK 02.00 to SDK
+ 04.00
+In-Reply-To: <CABhNV23aBnMSVT5a41eopYk6H0ek7-==NF0EuN_QUc_71vDbvw@mail.gmail.com>
+References: <1527175458-16091-1-git-send-email-tolvupostur@gmail.com>
+ <CABhNV23aBnMSVT5a41eopYk6H0ek7-==NF0EuN_QUc_71vDbvw@mail.gmail.com>
+Message-ID: <5cc76bb8-f92b-ab5d-71bf-c41c0e96930c@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11046
+Hi Einar,
 
-Peter Korsgaard <jacmet@uclibc.org> changed:
+Le 24/05/2018 ? 17:38, Einar J?n a ?crit?:
+> Hi,
+> 
+> Just to explain this one. The ti-sgx-* drivers are very old, but
+> nothing is using them except beaglebone_qt5_defconfig.
+> I bumped beaglebone_qt5_defconfig to the same level as
+> beaglebone_defconfig (the SDK 4.00 version in
+> http://www.ti.com/tool/PROCESSOR-SDK-AM335X)
+> 
+> The ti-sdx-* drivers have been bumped to the same SDK 4.00 version.
+> The  ti-sdx-um has a dependency on a new package ti-sdx-libgdm, which
+> in turn depends on wayland.
+> 
+> This again gives QT a valid EGL backend for beaglebone_qt5.
+> 
+> Let me know if this should be done differently.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+Thanks for this patch. We will need it soon in order to remove the gcc 5
+dependency in beaglebone_qt5 defconfig.
 
---- Comment #4 from Peter Korsgaard <jacmet@uclibc.org> ---
-This was indeed caused by a recent change to make a copy of output/target
-before running the file system hooks and generate file systems, and this copy
-used rsync without the -H (preserve hard links) option.
+I'm not sure if we must bump all packages related to the TI SDK or bump all
+packages one by one to ease the review.
 
-I have sent a patch to fix it:
-http://patchwork.ozlabs.org/patch/921203/
+This patch add a new ti-sgx-libgbm package, it should be added in a separate patch.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Also, BR2_PACKAGE_TI_SGX_KM_AM4430 and BR2_PACKAGE_TI_SGX_KM_AM5430 symbols are
+removed. It must be handled in Config.in.legacy.
+
+Why S80ti-sgx is removed ?
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> Einar J?n
+> 
+> On 24 May 2018 at 17:24, Einar Jon Gunnarsson <tolvupostur@gmail.com> wrote:
+>> Added new package ti-sgx-libgbm
+>> Fixed build and added license file hashes.
+>>
+>> Bumped beaglebone_qt5 to same level as beaglebone
+>>
+>> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+>> ---
+>>  ...nux-4.1-sgx.fragment => linux-4.9-sgx.fragment} |  0
+>>  configs/beaglebone_qt5_defconfig                   | 14 +++++------
+>>  package/Config.in                                  |  1 +
+>>  package/ti-sgx-demos/ti-sgx-demos.hash             |  3 ++-
+>>  package/ti-sgx-demos/ti-sgx-demos.mk               | 20 ++++++++++++---
+>>  package/ti-sgx-km/Config.in                        | 17 +++++--------
+>>  package/ti-sgx-km/ti-sgx-km.hash                   |  3 ++-
+>>  package/ti-sgx-km/ti-sgx-km.mk                     | 22 ++++++++--------
+>>  package/ti-sgx-libgbm/Config.in                    |  9 +++++++
+>>  package/ti-sgx-libgbm/ti-sgx-libgbm.hash           |  3 +++
+>>  package/ti-sgx-libgbm/ti-sgx-libgbm.mk             | 17 +++++++++++++
+>>  package/ti-sgx-um/Config.in                        |  3 ++-
+>>  package/ti-sgx-um/S80ti-sgx                        | 14 -----------
+>>  package/ti-sgx-um/powervr.ini                      |  4 +--
+>>  package/ti-sgx-um/ti-sgx-um.hash                   |  3 ++-
+>>  package/ti-sgx-um/ti-sgx-um.mk                     | 29 ++++++++++++++++------
