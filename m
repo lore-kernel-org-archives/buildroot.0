@@ -1,69 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 27 May 2018 23:39:57 +0200
-Subject: [Buildroot] [PATCH] fs: ensure hard links in TARGET_DIR are
- correctly copied for filesystem input
-In-Reply-To: <20180527204857.6081-1-peter@korsgaard.com>
-References: <20180527204857.6081-1-peter@korsgaard.com>
-Message-ID: <20180527213957.GE2965@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 May 2018 23:42:04 +0200
+Subject: [Buildroot] [PATCH 1/1] libcurl: fix build with ssh2 and static
+ mbedtls
+In-Reply-To: <20180521114108.20916-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 21 May 2018 13:41:08 +0200")
+References: <20180521114108.20916-1-fontaine.fabrice@gmail.com>
+Message-ID: <87bmd0n5cj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On 2018-05-27 22:48 +0200, Peter Korsgaard spake thusly:
-> Fixes #11046
-> 
-> Commit bb2a57a17a7 (fs: run packages' filesystem hooks in a copy of target/)
-> changed the file system logic to run file system hooks from packages on a
-> copy of TARGET_DIR, and finally use this copy as input for the file system
-> generation.
-> 
-> This copy was done with rsync, which by default does not preserve hard
-> links, leading to an expansion of the file system images when hard links are
-> present.
-> 
-> Fix it by passing the -H option to rsync (preserve hard links).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > The ssh2 pkg-config file could contain the following lines when build
+ > with a static version of mbedtls:
+ >    Libs: -L${libdir} -lssh2 /xxx/libmbedcrypto.a
+ >    Libs.private: /xxx/libmbedcrypto.a
 
-Not sure how I was not able to reproduce the issue. But the rsync docs
-say we should use it, so:
+ > This static mbedtls library must be used to correctly detect ssh2
+ > support and this library must be copied in libcurl.pc otherwise
+ > compilation of any application (such as upmpdcli) with libcurl will fail
+ > when trying to found mbedtls functions included in libssh2.
+ > So, replace pkg-config --libs-only-l by pkg-config --libs.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/43e24b22a77f616d6198c10435dcc23cc3b9088a
 
-Regards,
-Yann E. MORIN.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-> ---
-> Alternatively we can use 'cp -a' instead of rsync.
-> 
->  fs/common.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 9baf367729..abf35418cb 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -71,7 +71,7 @@ $(ROOTFS_COMMON_TAR): $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
->  	@$(call MESSAGE,"Generating common rootfs tarball")
->  	rm -rf $(FS_DIR)
->  	mkdir -p $(FS_DIR)
-> -	rsync -au $(BASE_TARGET_DIR)/ $(TARGET_DIR)
-> +	rsync -auH $(BASE_TARGET_DIR)/ $(TARGET_DIR)
->  	echo '#!/bin/sh' > $(FAKEROOT_SCRIPT)
->  	echo "set -e" >> $(FAKEROOT_SCRIPT)
->  	echo "chown -h -R 0:0 $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-> -- 
-> 2.11.0
-> 
+Committed, thanks. Please submit the patch upstream.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
