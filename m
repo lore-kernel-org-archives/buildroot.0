@@ -1,77 +1,69 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 27 May 2018 22:54:55 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-sgx-*: bump from SDK 02.00 to SDK
- 04.00
-In-Reply-To: <CABhNV23aBnMSVT5a41eopYk6H0ek7-==NF0EuN_QUc_71vDbvw@mail.gmail.com>
-References: <1527175458-16091-1-git-send-email-tolvupostur@gmail.com>
- <CABhNV23aBnMSVT5a41eopYk6H0ek7-==NF0EuN_QUc_71vDbvw@mail.gmail.com>
-Message-ID: <5cc76bb8-f92b-ab5d-71bf-c41c0e96930c@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 27 May 2018 23:01:10 +0200
+Subject: [Buildroot] [PATCH 0/2] package/binutils+elf2flt: fix for noMMU
+ targets
+In-Reply-To: <20180527153510.GB2965@scaer> (Yann E. MORIN's message of "Sun,
+ 27 May 2018 17:35:10 +0200")
+References: <cover.1527280948.git.yann.morin.1998@free.fr>
+ <db85fdbc-8767-4ada-bdab-872202ee5ce2@mind.be>
+ <20180527153510.GB2965@scaer>
+Message-ID: <87zi0kn78p.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Einar,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Le 24/05/2018 ? 17:38, Einar J?n a ?crit?:
-> Hi,
-> 
-> Just to explain this one. The ti-sgx-* drivers are very old, but
-> nothing is using them except beaglebone_qt5_defconfig.
-> I bumped beaglebone_qt5_defconfig to the same level as
-> beaglebone_defconfig (the SDK 4.00 version in
-> http://www.ti.com/tool/PROCESSOR-SDK-AM335X)
-> 
-> The ti-sdx-* drivers have been bumped to the same SDK 4.00 version.
-> The  ti-sdx-um has a dependency on a new package ti-sdx-libgdm, which
-> in turn depends on wayland.
-> 
-> This again gives QT a valid EGL backend for beaglebone_qt5.
-> 
-> Let me know if this should be done differently.
+Hi,
 
-Thanks for this patch. We will need it soon in order to remove the gcc 5
-dependency in beaglebone_qt5 defconfig.
+ >> I don't see a full solution yet, but basically I think that we should
+ >> - detect when an executable has multiple hardlinks;
+ >> - detect if it has already been "fixed" in this fix-rpath run;
+ >> - if so, clone the file before fixing it proper.
 
-I'm not sure if we must bump all packages related to the TI SDK or bump all
-packages one by one to ease the review.
+ > What did you mean by "clone" in this context? Remove the hardlinks and
+ > replace them by a copy of the file?
 
-This patch add a new ti-sgx-libgbm package, it should be added in a separate patch.
+Yes, I guess that was what Arnout meant. "break" the hard link and
+duplicate the file content.
 
-Also, BR2_PACKAGE_TI_SGX_KM_AM4430 and BR2_PACKAGE_TI_SGX_KM_AM5430 symbols are
-removed. It must be handled in Config.in.legacy.
+ >> Alternatively we could consider that this is anyway only about the host tree,
+ >> which is normally the smallest of the three trees (when you exclude external
+ >> toolchain). So maybe we should just always clone for the host tree.
 
-Why S80ti-sgx is removed ?
+ > I'm afraid that detecting hardlinks will not be cheap, even when we
+ > exclude staging/ (which is a sub-dir of host/) from the search...
 
-Best regards,
-Romain
+Just detecting hard linked files should be easy (E.G. st_nlink > 1 when
+stat'ing). Figuring out where the other hard links are is indeed hard,
+but we afaik don't need to know that.
 
-> 
-> Best regards,
-> Einar J?n
-> 
-> On 24 May 2018 at 17:24, Einar Jon Gunnarsson <tolvupostur@gmail.com> wrote:
->> Added new package ti-sgx-libgbm
->> Fixed build and added license file hashes.
->>
->> Bumped beaglebone_qt5 to same level as beaglebone
->>
->> Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
->> ---
->>  ...nux-4.1-sgx.fragment => linux-4.9-sgx.fragment} |  0
->>  configs/beaglebone_qt5_defconfig                   | 14 +++++------
->>  package/Config.in                                  |  1 +
->>  package/ti-sgx-demos/ti-sgx-demos.hash             |  3 ++-
->>  package/ti-sgx-demos/ti-sgx-demos.mk               | 20 ++++++++++++---
->>  package/ti-sgx-km/Config.in                        | 17 +++++--------
->>  package/ti-sgx-km/ti-sgx-km.hash                   |  3 ++-
->>  package/ti-sgx-km/ti-sgx-km.mk                     | 22 ++++++++--------
->>  package/ti-sgx-libgbm/Config.in                    |  9 +++++++
->>  package/ti-sgx-libgbm/ti-sgx-libgbm.hash           |  3 +++
->>  package/ti-sgx-libgbm/ti-sgx-libgbm.mk             | 17 +++++++++++++
->>  package/ti-sgx-um/Config.in                        |  3 ++-
->>  package/ti-sgx-um/S80ti-sgx                        | 14 -----------
->>  package/ti-sgx-um/powervr.ini                      |  4 +--
->>  package/ti-sgx-um/ti-sgx-um.hash                   |  3 ++-
->>  package/ti-sgx-um/ti-sgx-um.mk                     | 29 ++++++++++++++++------
+
+ >> I realize we're very close to the release, but I still think that always
+ >> cloning is probably the safest way to do it.
+
+ > Do we envision other impacted packages? I don't think so. Really,
+ > binutils and elf2flt really seem to be the only two packages impacted
+ > by the problem.
+
+ > That we missed the noMMU and elf2flt cases previously is just an
+ > oversight on our part...
+
+ > Then. if I am wrong, we're still talking about only two packages for
+ > now, and they only break because of the ARC archtecture, for which we
+ > use bleeding-edge tools that require we have libfl.so. Two. Single.
+ > Packages. We've always refused to add infra when only very few packages
+ > were impacted.
+
+ > Or were you suggesting that we do not add infra, but we replace the
+ > current two hacks (Thomas' symlinks or my script wrappers) by an actual
+ > copy, still just for binutils and elf2flt? In which case we would not
+ > loose time detecting hard-links in a generic way, obviously.
+
+I can follow Arnout, but I think the script wrappers (or simply copies
+of the binaries) is good enough for 2018.05.
+
+-- 
+Bye, Peter Korsgaard
