@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 May 2018 23:30:34 +0200
-Subject: [Buildroot] [PATCH] package/corkscrew: new package
-In-Reply-To: <1524751837-32018-1-git-send-email-angelo@amarulasolutions.com>
-References: <1524751837-32018-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180528233034.246de8e9@windsurf.home>
+Date: Mon, 28 May 2018 23:31:12 +0200
+Subject: [Buildroot] [PATCH 1/1] abootimg: new package
+In-Reply-To: <20180428151255.70f316a6@windsurf>
+References: <1522846449-22363-1-git-send-email-julien.boibessot@free.fr>
+ <20180428151255.70f316a6@windsurf>
+Message-ID: <20180528233112.677d6b5e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 26 Apr 2018 16:10:37 +0200, Angelo Compagnucci wrote:
-> Corkscrew is a tool for tunneling SSH through HTTP proxies
+On Sat, 28 Apr 2018 15:12:55 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/Config.in                |  1 +
->  package/corkscrew/Config.in      |  7 +++++++
->  package/corkscrew/corkscrew.hash |  2 ++
->  package/corkscrew/corkscrew.mk   | 13 +++++++++++++
->  4 files changed, 23 insertions(+)
->  create mode 100644 package/corkscrew/Config.in
->  create mode 100644 package/corkscrew/corkscrew.hash
->  create mode 100644 package/corkscrew/corkscrew.mk
+> On Wed,  4 Apr 2018 14:54:09 +0200, julien.boibessot at free.fr wrote:
+> 
+> > +ABOOTIMG_VERSION = 7e127fee6a3981f6b0a50ce9910267cd501e09d4
+> > +ABOOTIMG_SITE = $(call github,ggrandou,abootimg,$(ABOOTIMG_VERSION))
+> > +ABOOTIMG_LICENSE = GPLv2  
+> 
+> The proper encoding for this license is GPL-2.0, and in fact the
+> license is GPLv2 or later, so the correct value here was GPL-2.0+.
+> 
+> Applied with this fixed. Thanks!
 
-I've applied to next, but after adding an entry in the DEVELOPERS
-file, and the hash of the license file.
+I now realize this patch (and commit) lacked the addition to the
+DEVELOPERS file. Would you mind sending a follow-up patch to add
+yourself as a developer for this new package ?
 
 Thanks!
 
