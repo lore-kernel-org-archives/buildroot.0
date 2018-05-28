@@ -1,59 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 22:34:39 +0200
-Subject: [Buildroot] [git commit] package/elf2flt: replace hard-links with
- copies to fix rpath
-Message-ID: <20180528203623.D9BBC7FE9D@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 28 May 2018 22:41:02 +0200
+Subject: [Buildroot] [PATCH v2] toolchain: GCC bug 85180
+In-Reply-To: <CANQCQpZTLyWT29JqqAYz0RsGwA-mWBNFZ_0qapkEqiG3GisEww@mail.gmail.com>
+References: <1527521710-3889-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180528212932.297eadf7@windsurf.home>
+ <CANQCQpZCxiHy34M-V3Suf+N+C=EgAYPTwSYd7RBRVCc11hZssg@mail.gmail.com>
+ <CANQCQpZTLyWT29JqqAYz0RsGwA-mWBNFZ_0qapkEqiG3GisEww@mail.gmail.com>
+Message-ID: <20180528224102.423ce611@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b37069340010f4d26c3baa741f2dc996014b7c66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Do for elf2flt what we did for binutils: replace the hardlinks (which
-break rpath handling) with copies of the individaul tools.
+On Mon, 28 May 2018 15:05:44 -0500, Matthew Weber wrote:
 
-See previous commit (package/binutils: switch from symlinks to copies
-and commit f9cffb6af4 (binutils: replace hard-links with soft-links to
-fix rpath) for the complete story.
+> > I tried O0/1/2 without luck.  I just checked though that they were
+> > actually being used in the verbose boost output and turns out boost is
+> > forcing a O3 as the last O value in the flags.  So there's a bug....
+> > I'll see if I can reasonably fix that  and retest.
+> >  
+> 
+> Looks like there is a bjam property which can be set.  Is this
+> something we want tweak?  I did a quick test after applying the patch
+> below and the build was successful.
+> 
+> --- a/package/boost/boost.mk
+> +++ b/package/boost/boost.mk
+> @@ -90,6 +90,7 @@ endif
+> 
+>  BOOST_OPTS += toolset=gcc \
+>              threading=multi \
+> +             optimization=off \
+>              abi=$(BOOST_ABI) \
+>              variant=$(if $(BR2_ENABLE_DEBUG),debug,release)
+> 
+> 
+> I updated per the patch below (O3) and the build failed.  So it does
+> look like disabling optimization works around the problem.  What's
+> your thought going forward?  I can retest the other two packages to
+> see if no optimization fixes them too?
 
-Fixes: #11031.
+Thanks for doing all those tests! Yes, it would be nice to retest if
+the other packages can be built without optimizations. If that's the
+case, we can simply disable optimizations for Microblaze for those few
+packages. It's less annoying that having those additional dependencies
+that we have to propagate to reverse dependencies.
 
-Reported-by: Christophe Priouzeau <christophe.priouzeau@st.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/elf2flt/elf2flt.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Thanks!
 
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index 995dfedebd..557f94d338 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -29,4 +29,20 @@ endif
- 
- HOST_ELF2FLT_CONF_ENV = LIBS="$(HOST_ELF2FLT_LIBS)"
- 
-+# Hardlinks between binaries in different directories cause a problem
-+# with rpath fixup, so we de-hardlink those binaries, and replace them
-+# with copies instead. Note that elf2flt will rename ld to ld.real
-+# before installing its own ld, but we already took care of the
-+# original ld from binutils so that it is already de-hardlinked. So
-+# ld is now the one from elf2flt, and we want to de-hardlinke it.
-+ELF2FLT_TOOLS = elf2flt flthdr ld
-+define HOST_ELF2FLT_FIXUP_HARDLINKS
-+	$(foreach tool,$(ELF2FLT_TOOLS),\
-+		rm -f $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool) && \
-+		cp -a $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-$(tool) \
-+			$(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool)
-+	)
-+endef
-+HOST_ELF2FLT_POST_INSTALL_HOOKS += HOST_ELF2FLT_FIXUP_HARDLINKS
-+
- $(eval $(host-autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
