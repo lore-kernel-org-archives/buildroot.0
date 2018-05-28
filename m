@@ -1,50 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:14:55 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] wget: security bump to
- version 1.19.5
-Message-ID: <20180528142834.6FCED805EE@busybox.osuosl.org>
+Date: Mon, 28 May 2018 16:12:14 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] toolchain/buildroot: fix
+ default of C library choice
+Message-ID: <20180528142834.51B9C805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cb41540ae18e8ce858066393b9ea2d1fe82d134
+commit: https://git.buildroot.net/buildroot/commit/?id=91bc7e042f741c42a740ac49b7f9ef1c9526f57b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes CVE-2018-0494: cookie injection vulnerability.
+The BR2_TOOLCHAIN_UCLIBC symbol doesn't exist, it was meant to be
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cc39457fb9e1f569ca4958374046d5d99fcc50cf)
+(cherry picked from commit d0527483fae228c31c3bb36aeba347c0a8df4eba)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wget/wget.hash | 4 ++--
- package/wget/wget.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/toolchain-buildroot/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index ab0d1d1dfd..eee4a5194e 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/wget/wget-1.19.4.tar.lz.sig
--sha256 2fc0ffb965a8dc8f1e4a89cbe834c0ae7b9c22f559ebafc84c7874ad1866559a  wget-1.19.4.tar.lz
-+# https://ftp.gnu.org/gnu/wget/wget-1.19.5.tar.lz.sig
-+sha256 29fbe6f3d5408430c572a63fe32bd43d5860f32691173dfd84edc06869edca75  wget-1.19.5.tar.lz
- # Locally calculated
- sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 23e4c8acca..72a73cce79 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index 9668f8d41a..3f576297aa 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -22,7 +22,7 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
  
--WGET_VERSION = 1.19.4
-+WGET_VERSION = 1.19.5
- WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+ choice
+ 	prompt "C library"
+-	default BR2_TOOLCHAIN_UCLIBC
++	default BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+ 	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_powerpc64
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
