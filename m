@@ -1,51 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:07:01 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/xen: force
- location of init scripts
-Message-ID: <20180528142834.344D4805EE@busybox.osuosl.org>
+Date: Mon, 28 May 2018 16:14:55 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] wget: security bump to
+ version 1.19.5
+Message-ID: <20180528142834.6FCED805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f24d5edea6d69886f5529951b4845b999b60d6e9
+commit: https://git.buildroot.net/buildroot/commit/?id=2cb41540ae18e8ce858066393b9ea2d1fe82d134
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The Xen configure scripts looks at the build host to decide where to
-install the Sys-V startup scripts, and that location differs between
-various distros.
+Fixes CVE-2018-0494: cookie injection vulnerability.
 
-Force the location.
-
-Fixes:
-    http://autobuild.buildroot.org/results/869/869829ab086e824d164c5c5ec7f087ed83993be6/
-    http://autobuild.buildroot.org/results/336/3360e5a9e3d007b4ed77345b5fe93b2dacb6ad49/
-    http://autobuild.buildroot.org/results/29e/29e308ce3cc9c83497ba1c1f98fcda3f48fd03c4/
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Alistair Francis <alistair@alistair23.me>
-Reviewed-by: Alistair Francis <alistair@alistair23.me>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 366e42c2cf60ecf9640ad7a57dcbe5d9d287dc02)
+(cherry picked from commit cc39457fb9e1f569ca4958374046d5d99fcc50cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xen/xen.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/wget/wget.hash | 4 ++--
+ package/wget/wget.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index 8ba2b9d5c2..1b741a90f6 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -17,7 +17,9 @@ else ifeq ($(ARCH),arm)
- XEN_ARCH = arm32
- endif
+diff --git a/package/wget/wget.hash b/package/wget/wget.hash
+index ab0d1d1dfd..eee4a5194e 100644
+--- a/package/wget/wget.hash
++++ b/package/wget/wget.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/wget/wget-1.19.4.tar.lz.sig
+-sha256 2fc0ffb965a8dc8f1e4a89cbe834c0ae7b9c22f559ebafc84c7874ad1866559a  wget-1.19.4.tar.lz
++# https://ftp.gnu.org/gnu/wget/wget-1.19.5.tar.lz.sig
++sha256 29fbe6f3d5408430c572a63fe32bd43d5860f32691173dfd84edc06869edca75  wget-1.19.5.tar.lz
+ # Locally calculated
+ sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/wget/wget.mk b/package/wget/wget.mk
+index 23e4c8acca..72a73cce79 100644
+--- a/package/wget/wget.mk
++++ b/package/wget/wget.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--XEN_CONF_OPTS = --disable-ocamltools
-+XEN_CONF_OPTS = \
-+	--disable-ocamltools \
-+	--with-initddir=/etc/init.d
- 
- XEN_CONF_ENV = PYTHON=$(HOST_DIR)/bin/python2
- XEN_MAKE_ENV = \
+-WGET_VERSION = 1.19.4
++WGET_VERSION = 1.19.5
+ WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
+ WGET_SITE = $(BR2_GNU_MIRROR)/wget
+ WGET_DEPENDENCIES = host-pkgconf
