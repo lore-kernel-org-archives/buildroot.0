@@ -1,63 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 May 2018 21:45:18 +0200
-Subject: [Buildroot] [PATCH 2/2 v2] package/elf2flt: replace hard-links with
- copies to fix rpath
-In-Reply-To: <cover.1527536710.git.yann.morin.1998@free.fr>
-References: <cover.1527536710.git.yann.morin.1998@free.fr>
-Message-ID: <99b5f16248ada22680df533f78869bcf552e06d9.1527536710.git.yann.morin.1998@free.fr>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 28 May 2018 14:50:05 -0500
+Subject: [Buildroot] [PATCH v2] toolchain: GCC bug 85180
+In-Reply-To: <20180528212932.297eadf7@windsurf.home>
+References: <1527521710-3889-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180528212932.297eadf7@windsurf.home>
+Message-ID: <CANQCQpZCxiHy34M-V3Suf+N+C=EgAYPTwSYd7RBRVCc11hZssg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Do for elf2flt what we did for binutils: replace the hardlinks (which
-break rpath handling) with copies of the individaul tools.
+Thomas,
 
-See previous commit (package/binutils: switch from symlinks to copies
-and commit f9cffb6af4 (binutils: replace hard-links with soft-links to
-fix rpath) for the complete story.
+On Mon, May 28, 2018 at 2:29 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Mon, 28 May 2018 10:35:10 -0500, Matt Weber wrote:
+> > Works around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+> > which is an issue where the Microblaze archtecture had code that
+> > caused a infinite recursion while optimizing in versions of GCC
+> > less then 8.x.  More BR discussion can be found on this thread.
+> > http://buildroot-busybox.2317881.n4.nabble.com/autobuild-buildroot-net-Build-results-for-2018-04-25-td192721.html
+> >
+> > Resolves:
+> > http://autobuild.buildroot.net/results/b42d68c66d8ea035845a28c5530ef0682fd95713 (boost)
+> > http://autobuild.buildroot.net/results/af976a4805fb8b3f0c17a8e3a1f901b2255caa0b (flare-engine)
+> > http://autobuild.buildroot.net/results/d20/d20700bd538ba1e9d45ab8a61ecbbba1a320ef38 (gst-ffmpeg)
+> >
+> > CC: Romain Naour <romain.naour@gmail.com>
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>
+> Thanks for your work on this!
+>
+> So, only boost-fiber is affected inside the boost package ?
 
-Fixes: #11031.
+Correct, I dissected it back to parts of boost would fail but when
+built without fiber enabled they were fine.
 
-Reported-by: Christophe Priouzeau <christophe.priouzeau@st.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+>
+> And passing -O0 or -O2 instead of -Os doesn't work around the problem ?
+>
 
----
-Changes v1 -> v2:
-  - use copies, not shell wrappers  (Arnout)
----
- package/elf2flt/elf2flt.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+I tried O0/1/2 without luck.  I just checked though that they were
+actually being used in the verbose boost output and turns out boost is
+forcing a O3 as the last O value in the flags.  So there's a bug....
+I'll see if I can reasonably fix that  and retest.
 
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index 995dfedebd..557f94d338 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -29,4 +29,20 @@ endif
- 
- HOST_ELF2FLT_CONF_ENV = LIBS="$(HOST_ELF2FLT_LIBS)"
- 
-+# Hardlinks between binaries in different directories cause a problem
-+# with rpath fixup, so we de-hardlink those binaries, and replace them
-+# with copies instead. Note that elf2flt will rename ld to ld.real
-+# before installing its own ld, but we already took care of the
-+# original ld from binutils so that it is already de-hardlinked. So
-+# ld is now the one from elf2flt, and we want to de-hardlinke it.
-+ELF2FLT_TOOLS = elf2flt flthdr ld
-+define HOST_ELF2FLT_FIXUP_HARDLINKS
-+	$(foreach tool,$(ELF2FLT_TOOLS),\
-+		rm -f $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool) && \
-+		cp -a $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-$(tool) \
-+			$(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool)
-+	)
-+endef
-+HOST_ELF2FLT_POST_INSTALL_HOOKS += HOST_ELF2FLT_FIXUP_HARDLINKS
-+
- $(eval $(host-autotools-package))
--- 
-2.14.1
+Matt
