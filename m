@@ -1,55 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:20:10 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] cifs-utils:
- unconditionally disable PIE
-Message-ID: <20180528142834.7F0A9805EE@busybox.osuosl.org>
+Date: Mon, 28 May 2018 16:19:49 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] lynx: add patch to fix
+ static link issue
+Message-ID: <20180528142834.77CAC805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=474f86150ff7ba99d51357ca0ff7500f574904f4
+commit: https://git.buildroot.net/buildroot/commit/?id=9413d2ea2f9eab072509e4bb1e25f213acc49dd4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-PIE support in Buildroot should be enabled via the global option
-BR2_RELRO_FULL option, and not done on a per-package basis, therefore
-PIE should unconditionally be disabled in the cifs-utils package.
+The lynx package incorrectly uses target LDFLAGS to build a host tool,
+which causes a problem when we do a statically link build for the
+target, on a host machine that doesn't support static linking.
 
-This has the added side-effect that it works around a binutils bug on
-SPARC causing the linker to segfault when PIE is enabled:
-
-sparc-linux-gcc -Wall -Wextra -D_FORTIFY_SOURCE=2 -fpie -pie -Wl,-z,relro,-z,now -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -o mount.cifs mount.cifs.o mtab.o resolve_host.o util.o  -lcap-ng
-collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
-
-This issue will reappear when we start testing BR2_RELRO_FULL in the
-autobuilders, but in the mean time it avoids the problem.
+A simple patch fixes the problematic makefile, and it has been
+submitted upstream on the project mailing list.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/a5342890f39bdccae1324e7d3dbe0eab1aad28e5/
+  http://autobuild.buildroot.net/results/38ba2531eeeb4a7985eddd2df8bfaf0b56e6a687/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 85f9d0893476911dc8757893a281b55d2dc06309)
+(cherry picked from commit 9113c0cbbaa9da796fef744700425eeff34f77b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cifs-utils/cifs-utils.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ ...s-don-t-build-host-tools-with-target-LDFL.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 9044fdf83c..9343e3ea89 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -13,9 +13,9 @@ CIFS_UTILS_LICENSE_FILES = COPYING
- CIFS_UTILS_AUTORECONF = YES
- CIFS_UTILS_DEPENDENCIES = host-pkgconf
- 
--ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
--CIFS_UTILS_CONF_OPTS += --disable-pie
--endif
-+# Let's disable PIE unconditionally. We want PIE to be enabled only by
-+# the global BR2_RELRO_FULL option.
-+CIFS_UTILS_CONF_OPTS = --disable-pie
- 
- ifeq ($(BR2_PACKAGE_KEYUTILS),y)
- CIFS_UTILS_DEPENDENCIES += keyutils
+diff --git a/package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch b/package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch
+new file mode 100644
+index 0000000000..cc057cee13
+--- /dev/null
++++ b/package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch
+@@ -0,0 +1,41 @@
++From bb47abe9e7996147f6b7b325f5c9b2143abf8f13 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Mon, 7 May 2018 22:00:52 +0200
++Subject: [PATCH] src/chrtrans: don't build host tools with target LDFLAGS
++
++In a cross-compilation context, the LDFLAGS variable contains linker
++flags used when building things for the target. However, the makeuctb
++tool is built for the host machine, and therefore should not use the
++same LDFLAGS as the target, which is why BUILD_LDFLAGS exist.
++
++Using LDFLAGS when building a tool for the host can cause problems
++when some flags in LDFLAGS are not supported by the host machine. For
++example, if you're linking statically lynx for the target, but the
++build machine does not support static linking:
++
++gcc -I../.. -I../../src -I../../src/chrtrans -I../../WWW/Library/Implementation -I../../     -static  -o makeuctb makeuctb.o
++/usr/bin/ld: cannot find -lc
++collect2: error: ld returned 1 exit status
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream-status: submitted on the mailing list
++---
++ src/chrtrans/makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/chrtrans/makefile.in b/src/chrtrans/makefile.in
++index aab358f..6e0ef03 100644
++--- a/src/chrtrans/makefile.in
+++++ b/src/chrtrans/makefile.in
++@@ -123,7 +123,7 @@ OBJS		= makeuctb$o
++ C_SRC		= $(OBJS:$o=.c)
++ 
++ $(MAKEUCTB) : $(OBJS)
++-	$(BUILD_CC) $(CC_OPTS) $(LDFLAGS) $(BUILD_LDFLAGS) -o $@ $(OBJS) $(INTLLIB) $(BUILD_LIBS)
+++	$(BUILD_CC) $(CC_OPTS) $(BUILD_LDFLAGS) -o $@ $(OBJS) $(INTLLIB) $(BUILD_LIBS)
++ 
++ makeuctb$o : $(srcdir)/UCkd.h $(srcdir)/makeuctb.c
++ 
++-- 
++2.14.3
++
