@@ -1,46 +1,48 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 28 May 2018 20:18:05 +0200
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 5.1.0
-Message-ID: <1527531485-24693-1-git-send-email-angelo@amarulasolutions.com>
+From: Waldemar Brodkorb <wbx@openadk.org>
+Date: Mon, 28 May 2018 20:19:53 +0200
+Subject: [Buildroot] [PATCH v2] poppler: link with libatomic when needed
+Message-ID: <20180528181953.GA23287@waldemar-brodkorb.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps python-pillow to version 5.1.0.
+Following errors might occur on architectures required to use gcc libatomics:
+sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+This is often the case for sparcv8 32 bit toolchains.
+
+See 55a9d6d55888b04ec6c476399e5b98a2412995f5 and 03f6e005e6a9617767b24a9026da9477848020cc.
+
+Fixes:
+  http://autobuild.buildroot.net/results/64a96663a48ab644bc03c9a3ec2d6a644119dee6
+  http://autobuild.buildroot.net/results/82e85e12478fc1972b70ad728ed7c1554920c9e3
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/python-pillow/python-pillow.hash | 5 ++---
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ v1 -> v2:
+   - more verbose commit message
+   - move code to generic section
+   - use LDFLAGS instead of CXXFLAGS, LIBS are ignored.
+---
+ package/poppler/poppler.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index d8c083b..463b562 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,3 +1,2 @@
--# md5 from https://pypi.python.org/pypi/pillow/json, sha256 locally computed
--md5 11e5e2046cf41586716a6042d89abeeb  Pillow-4.2.1.tar.gz
--sha256 c724f65870e545316f9e82e4c6d608ab5aa9dd82d5185e5b2e72119378740073  Pillow-4.2.1.tar.gz
-+# sha256 from https://pypi.org/project/Pillow/5.1.0/#files
-+sha256 cee9bc75bff455d317b6947081df0824a8f118de2786dc3d74a3503fd631f4ef  Pillow-5.1.0.tar.gz
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 8407c99..dbce3fb 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index 5946cbe..bad61a6 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -14,6 +14,10 @@ POPPLER_INSTALL_STAGING = YES
+ POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
+ 	--enable-xpdf-headers
  
--PYTHON_PILLOW_VERSION = 4.2.1
-+PYTHON_PILLOW_VERSION = 5.1.0
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://pypi.python.org/packages/55/aa/f7f983fb72710a9daa4b3374b7c160091d3f94f5c09221f9336ade9027f3
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/89/b8/2f49bf71cbd0e9485bb36f72d438421b69b7356180695ae10bd4fd3066f5
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++POPPLER_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
++endif
++
+ ifeq ($(BR2_PACKAGE_CAIRO),y)
+ POPPLER_CONF_OPTS += --enable-cairo-output
+ POPPLER_DEPENDENCIES += cairo
 -- 
-2.7.4
+2.1.4
