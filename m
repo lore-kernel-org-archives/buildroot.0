@@ -1,167 +1,115 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 28 May 2018 17:35:11 +0200
-Subject: [Buildroot] [PATCH] package/libapparmor: new package
-Message-ID: <1527521711-17270-1-git-send-email-angelo@amarulasolutions.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 28 May 2018 10:35:10 -0500
+Subject: [Buildroot] [PATCH v2] toolchain: GCC bug 85180
+Message-ID: <1527521710-3889-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds libapparmor and it's related tools.
+Works around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+which is an issue where the Microblaze archtecture had code that
+caused a infinite recursion while optimizing in versions of GCC
+less then 8.x.  More BR discussion can be found on this thread.
+http://buildroot-busybox.2317881.n4.nabble.com/autobuild-buildroot-net-Build-results-for-2018-04-25-td192721.html
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Resolves:
+http://autobuild.buildroot.net/results/b42d68c66d8ea035845a28c5530ef0682fd95713 (boost)
+http://autobuild.buildroot.net/results/af976a4805fb8b3f0c17a8e3a1f901b2255caa0b (flare-engine)
+http://autobuild.buildroot.net/results/d20/d20700bd538ba1e9d45ab8a61ecbbba1a320ef38 (gst-ffmpeg)
+
+CC: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/Config.in                    |  1 +
- package/libapparmor/Config.in        | 57 ++++++++++++++++++++++++++++++++++++
- package/libapparmor/libapparmor.hash |  2 ++
- package/libapparmor/libapparmor.mk   | 53 +++++++++++++++++++++++++++++++++
- 4 files changed, 113 insertions(+)
- create mode 100644 package/libapparmor/Config.in
- create mode 100644 package/libapparmor/libapparmor.hash
- create mode 100644 package/libapparmor/libapparmor.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index ecee493..834e898 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1590,6 +1590,7 @@ endif
- endmenu
+Changes
+v1 - > v2
+[Thomas P
+ - Switched from doing a autobuilder filter to a toolchain bug.
+   Note, a "depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8" will be needed
+   once GCC8 merges.
+---
+ package/boost/Config.in                | 4 ++++
+ package/flare-engine/Config.in         | 4 ++++
+ package/gstreamer/gst-ffmpeg/Config.in | 4 ++++
+ toolchain/Config.in                    | 5 +++++
+ 4 files changed, 17 insertions(+)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 0755d9c..ec0e19c 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -104,12 +104,16 @@ config BR2_PACKAGE_BOOST_FIBER
+ 	# mips support uses the "pause" instruction, only available
+ 	# since mips32r2/mips64r2.
+ 	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+ 	help
+ 	  C++11 userland threads library.
  
- menu "Security"
-+	source "package/libapparmor/Config.in"
- 	source "package/libselinux/Config.in"
- 	source "package/libsemanage/Config.in"
- 	source "package/libsepol/Config.in"
-diff --git a/package/libapparmor/Config.in b/package/libapparmor/Config.in
-new file mode 100644
-index 0000000..edc624b
---- /dev/null
-+++ b/package/libapparmor/Config.in
-@@ -0,0 +1,57 @@
-+config BR2_PACKAGE_LIBAPPARMOR
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	depends on BR2_USE_WCHAR
-+	bool "libapparmor"
-+	help
-+	  AppArmor is an effective and easy-to-use Linux application
-+	  security system. AppArmor proactively protects the operating
-+	  system and applications from external or internal threats,
-+	  even zero-day attacks, by enforcing good behavior and
-+	  preventing even unknown application flaws from being exploited.
-+	  AppArmor security policies completely define what system
-+	  resources individual applications can access, and with what
-+	  privileges. A number of default policies are included with
-+	  AppArmor, and using a combination of advanced static analysis
-+	  and learning-based tools, AppArmor policies for even very
-+	  complex applications can be deployed successfully in a
-+	  matter of hours.
+ comment "boost-fiber needs a toolchain w/ NPTL"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
++comment "boost-fiber needs a toolchain not affected by GCC bug 85180"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85180
 +
-+	  http://wiki.apparmor.net
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 	bool "boost-filesystem"
+ 	help
+diff --git a/package/flare-engine/Config.in b/package/flare-engine/Config.in
+index cdcb018..e299a6b 100644
+--- a/package/flare-engine/Config.in
++++ b/package/flare-engine/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_FLARE_ENGINE
+ 	bool "flare-engine"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS # SDL2
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+ 	select BR2_PACKAGE_SDL2
+ 	select BR2_PACKAGE_SDL2_IMAGE
+ 	select BR2_PACKAGE_SDL2_MIXER
+@@ -17,3 +18,6 @@ config BR2_PACKAGE_FLARE_ENGINE
+ 
+ comment "flare-engine needs a toolchain w/ C++, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
 +
-+comment "AppArmor needs a glibc w/ wchar"
-+	depends on !BR2_USE_WCHAR
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
++comment "flare-engine needs a toolchain not affected by GCC bug 85180"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
+index 32bfdd5..1e95d01 100644
+--- a/package/gstreamer/gst-ffmpeg/Config.in
++++ b/package/gstreamer/gst-ffmpeg/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_GST_FFMPEG
+ 	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+ 	# triggers https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65151 on sh
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_sh
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+ 	help
+ 	  GStreamer plugin containing one plugin with a set of
+@@ -28,3 +29,6 @@ endif
+ 
+ comment "gst-ffmpeg needs a toolchain w/ gcc >= 5"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5 && BR2_sh
 +
-+if BR2_PACKAGE_LIBAPPARMOR
++comment "gst-ffmpeg needs a toolchain not affected by GCC bug 85180"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 2479a65..61424ec 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -84,6 +84,11 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	default y if BR2_m68k_cf5208
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
++config BR2_TOOLCHAIN_HAS_GCC_BUG_85180
++	bool
++	default y if BR2_microblaze
 +
-+config BR2_PACKAGE_LIBAPPARMOR_APACHE
-+	depends on BR2_PACKAGE_APACHE
-+	bool "Apache mod_apparmor"
-+	help
-+	  AppArmor module for Apache
-+
-+config BR2_PACKAGE_LIBAPPARMOR_BINUTILS
-+	bool "AppArmor binutils"
-+	default y
-+	help
-+	  AppArmor binary utilities
-+
-+config BR2_PACKAGE_LIBAPPARMOR_PAM
-+	depends on BR2_PACKAGE_LINUX_PAM
-+	bool "AppArmor PAM"
-+	help
-+	  AppArmor module for Linux PAM
-+
-+config BR2_PACKAGE_LIBAPPARMOR_PROFILES
-+	bool "AppArmor profiles"
-+	default y
-+	help
-+	  Apparmor profiles
-+
-+config BR2_PACKAGE_LIBAPPARMOR_UTILS
-+	bool "AppArmor utils"
-+	default y
-+	help
-+	  AppArmor utilities
-+
-+endif
-diff --git a/package/libapparmor/libapparmor.hash b/package/libapparmor/libapparmor.hash
-new file mode 100644
-index 0000000..f19a13c
---- /dev/null
-+++ b/package/libapparmor/libapparmor.hash
-@@ -0,0 +1,2 @@
-+# locally computed
-+sha256  49f0b65a60c1eb5b7b4316023811bf1785875567e0e0c4c8a26cb1f1c3ac5858  apparmor-2.13.tar.gz
-diff --git a/package/libapparmor/libapparmor.mk b/package/libapparmor/libapparmor.mk
-new file mode 100644
-index 0000000..73a2adb
---- /dev/null
-+++ b/package/libapparmor/libapparmor.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# libapparmor
-+#
-+################################################################################
-+
-+LIBAPPARMOR_BASE_VERSION = 2.13
-+LIBAPPARMOR_VERSION = $(LIBAPPARMOR_BASE_VERSION).0
-+LIBAPPARMOR_SOURCE = apparmor-$(LIBAPPARMOR_BASE_VERSION).tar.gz
-+LIBAPPARMOR_SITE = https://launchpad.net/apparmor/$(LIBAPPARMOR_BASE_VERSION)/$(LIBAPPARMOR_VERSION)/+download
-+LIBAPPARMOR_LICENSE = GPL-2.0
-+LIBAPPARMOR_LICENSE_FILES = LICENSE
-+LIBAPPARMOR_SUBDIR = libraries/libapparmor
-+LIBAPPARMOR_AUTORECONF = YES
-+LIBAPPARMOR_INSTALL_STAGING = YES
-+LIBAPPARMOR_CONF_OPTS = --enable-static --enable-man-pages=no
-+
-+LIBAPPARMOR_DEPENDENCIES += \
-+	$(if $(BR2_PACKAGE_APPARMOR_APACHE),apache) \
-+	$(if $(BR2_PACKAGE_APPARMOR_PAM),linux-pam) \
-+
-+APPARMOR_DIRS = parser \
-+	$(if $(BR2_PACKAGE_APPARMOR_APACHE),changehat/mod_apparmor) \
-+	$(if $(BR2_PACKAGE_APPARMOR_BINUTILS),binutils) \
-+	$(if $(BR2_PACKAGE_APPARMOR_PAM),changehat/pam_apparmor) \
-+	$(if $(BR2_PACKAGE_APPARMOR_PROFILES),profiles) \
-+	$(if $(BR2_PACKAGE_APPARMOR_UTILS),utils)
-+
-+APPARMOR_BUILD_OPTS += \
-+	$(if $(BR2_PACKAGE_APPARMOR_APACHE),APXS=$(STAGING_DIR)/usr/bin/apxs)
-+
-+define APPARMOR_BUILD_CMDS
-+	$(foreach d,$(APPARMOR_DIRS),
-+		### AppArmor building $d ###
-+		$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-+		$(LIBAPPARMOR_MAKE) -C $(@D)/$(d) $(APPARMOR_BUILD_OPTS)
-+	)
-+endef
-+
-+LIBAPPARMOR_POST_INSTALL_STAGING_HOOKS += APPARMOR_BUILD_CMDS
-+
-+define APPARMOR_INSTALL_TARGET_CMDS
-+	$(foreach d,$(APPARMOR_DIRS),
-+		### AppArmor installing $d ###
-+		$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-+		$(LIBAPPARMOR_MAKE) -C $(@D)/$(d) DESTDIR=$(TARGET_DIR) \
-+		$(APPARMOR_BUILD_OPTS) install
-+	)
-+endef
-+
-+LIBAPPARMOR_POST_INSTALL_TARGET_HOOKS += APPARMOR_INSTALL_TARGET_CMDS
-+
-+$(eval $(autotools-package))
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85862
+ # An infinite loop exists in the find_base_term() logic of 6.x
+ # on microblaze.  http://autobuild.buildroot.net/results/158e8ebb39713e1b436a5cc1a1916f46c30694df/
 -- 
-2.7.4
+1.9.1
