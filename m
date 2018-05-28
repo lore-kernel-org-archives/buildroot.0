@@ -1,26 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:24:27 +0200
-Subject: [Buildroot] [PATCH v2,1/1] libcap: only install shared version
-In-Reply-To: <20180509084305.18797-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 9 May 2018 10:43:05 +0200")
-References: <20180509084305.18797-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lgc3yi1w.fsf@dell.be.48ers.dk>
+Date: Mon, 28 May 2018 16:24:54 +0200
+Subject: [Buildroot] [PATCH] package/xen: force location of init scripts
+In-Reply-To: <20180513165923.31057-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 13 May 2018 18:59:23 +0200")
+References: <20180513165923.31057-1-yann.morin.1998@free.fr>
+Message-ID: <87h8mryi15.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > If BR2_SHARED_LIBS is set, only install shared version of library
- > (continue to build both libraries through all target as there is no
- > libcap.so target but only a libcap.so.$(VERSION).$(MINOR))
+ > The Xen configure scripts looks at the build host to decide where to
+ > install the Sys-V startup scripts, and that location differs between
+ > various distros.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Thomas Petazzoni):
- >  - Update to have a clearer approach
+ > Force the location.
+
+ > Fixes:
+ >     http://autobuild.buildroot.org/results/869/869829ab086e824d164c5c5ec7f087ed83993be6/
+ >     http://autobuild.buildroot.org/results/336/3360e5a9e3d007b4ed77345b5fe93b2dacb6ad49/
+ >     http://autobuild.buildroot.org/results/29e/29e308ce3cc9c83497ba1c1f98fcda3f48fd03c4/
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Cc: Alistair Francis <alistair@alistair23.me>
 
 Committed to 2018.02.x, thanks.
 
