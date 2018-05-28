@@ -1,52 +1,113 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Mon, 28 May 2018 12:42:31 +0000
-Subject: [Buildroot] [arc-buildroot] Re: [PATCH] toolchain: Bump ARC
- tools to arc-2018.03-rc2
-In-Reply-To: <87vab8ymu5.fsf@dell.be.48ers.dk>
-References: <20180525180701.24796-1-Evgeniy.Didin@synopsys.com>
- <877enq96f5.fsf@dell.be.48ers.dk>
- <90d3e805ed43935439cc662364db4166d5193748.camel@synopsys.com>
- <87vab8ymu5.fsf@dell.be.48ers.dk>
-Message-ID: <e69e5772e211bd27d92c0b65bbcb27828ad3d8bd.camel@synopsys.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 28 May 2018 14:47:30 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/nss-myhostname: Add package
+In-Reply-To: <1527496298-29730-2-git-send-email-vincent.prince.fr@gmail.com>
+ (Vincent Prince's message of "Mon, 28 May 2018 10:31:38 +0200")
+References: <1527496298-29730-1-git-send-email-vincent.prince.fr@gmail.com>
+ <1527496298-29730-2-git-send-email-vincent.prince.fr@gmail.com>
+Message-ID: <87muwkymjh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Vincent" == Vincent Prince <vincent.prince.fr@gmail.com> writes:
 
-On Mon, 2018-05-28 at 14:41 +0200, Peter Korsgaard wrote:
-> > > > > > "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
-> 
->  > Hi Peter,
->  > On Sat, 2018-05-26 at 10:18 +0200, Peter Korsgaard wrote:
->  >> > > > > > "Evgeniy" == Evgeniy Didin <Evgeniy.Didin@synopsys.com> writes:
->  >> 
->  >> > This commit bumps ARC toolchain to arc-2018.03-rc2, which
->  >> > includes significant changes since arc-2018.03-rc1.
->  >> > We want to test how new toolchain-rc2 builds packages,
->  >> > so we can make fixes before release of toolcain.
->  >> > This makes us closer to toolchain release which will be in a few weeks.
->  >> 
->  >> > Please note that it is a release candidate
->  >> > and it might contain some breakages, 
->  >> > please don't use it for production builds.
->  >> 
->  >> > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
->  >> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->  >> > Cc: arc-buildroot at synopsys.com
->  >> 
->  >> Committed to next, thanks.
-> 
->  > Maybe it worth applying to the current master as this is a change of
->  > RC1 (e have today in master) to RC2 that only has a couple fixes on top
->  > of RC1. I.e. it is supposed to bring stability in the release but not
->  > introduce new features etc.
-> 
-> Ok, that wasn't clear from the commit message. I can apply it on master
-> as well if you prefer.
+ > Note sed command comes from Yocto recipe here:
+ > https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-support/nss-myhostname/nss-myhostname_0.3.bb
 
-It would be good to have in master so pls go ahead and apply it there.
+ > Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
+ > ---
+ >  DEVELOPERS                                 |  3 +++
+ >  package/Config.in                          |  1 +
+ >  package/nss-myhostname/Config.in           | 11 +++++++++++
+ >  package/nss-myhostname/nss-myhostname.hash |  3 +++
+ >  package/nss-myhostname/nss-myhostname.mk   | 20 ++++++++++++++++++++
+ >  5 files changed, 38 insertions(+)
+ >  create mode 100644 package/nss-myhostname/Config.in
+ >  create mode 100644 package/nss-myhostname/nss-myhostname.hash
+ >  create mode 100644 package/nss-myhostname/nss-myhostname.mk
 
--Alexey
+ > diff --git a/DEVELOPERS b/DEVELOPERS
+ > index 41e1b54..88c9a71 100644
+ > --- a/DEVELOPERS
+ > +++ b/DEVELOPERS
+ > @@ -1813,6 +1813,9 @@ F:	package/openmpi/
+ >  F:	package/pinentry/
+ >  F:	package/trinity/
+ 
+ > +N:	Vincent Prince <vincent.prince.fr@gmail.com>
+ > +F:	package/nss-myhostname/
+ > +
+ >  N:	Vincent Stehl? <vincent.stehle@laposte.net>
+ >  F:	package/i7z/
+ >  F:	package/msr-tools/
+ > diff --git a/package/Config.in b/package/Config.in
+ > index 3cf53ed..3ac0d63 100644
+ > --- a/package/Config.in
+ > +++ b/package/Config.in
+ > @@ -1426,6 +1426,7 @@ menu "Networking"
+ >  	source "package/neon/Config.in"
+ >  	source "package/norm/Config.in"
+ >  	source "package/nss-mdns/Config.in"
+ > +	source "package/nss-myhostname/Config.in"
+ >  	source "package/nss-pam-ldapd/Config.in"
+ >  	source "package/omniorb/Config.in"
+ >  	source "package/openldap/Config.in"
+ > diff --git a/package/nss-myhostname/Config.in b/package/nss-myhostname/Config.in
+ > new file mode 100644
+ > index 0000000..549e167
+ > --- /dev/null
+ > +++ b/package/nss-myhostname/Config.in
+ > @@ -0,0 +1,11 @@
+ > +config BR2_PACKAGE_NSS_MYHOSTNAME
+ > +	bool "nss-myhostname"
+ > +	depends on BR2_TOOLCHAIN_USES_GLIBC
+ > +	depends on !BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+ > +	help
+ > +	  Name Service Switch module for resolving the local hostname
+ > +
+ > +	  http://0pointer.de/lennart/projects/nss-myhostname
+ > +
+ > +comment "nss-myhostname needs a glibc toolchain"
+ > +	depends on !BR2_TOOLCHAIN_USES_GLIBC
+ > diff --git a/package/nss-myhostname/nss-myhostname.hash b/package/nss-myhostname/nss-myhostname.hash
+ > new file mode 100644
+ > index 0000000..dfa531c
+ > --- /dev/null
+ > +++ b/package/nss-myhostname/nss-myhostname.hash
+ > @@ -0,0 +1,3 @@
+ > +# locally computed
+ > +sha256  2ba744ea8d578d1c57c85884e94a3042ee17843a5294434d3a7f6c4d67e7caf2 nss-myhostname-0.3.tar.gz
+ > +sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861 LICENSE
+ > diff --git a/package/nss-myhostname/nss-myhostname.mk b/package/nss-myhostname/nss-myhostname.mk
+ > new file mode 100644
+ > index 0000000..435c380
+ > --- /dev/null
+ > +++ b/package/nss-myhostname/nss-myhostname.mk
+ > @@ -0,0 +1,20 @@
+ > +################################################################################
+ > +#
+ > +## nss-myhostname
+ > +#
+ > +################################################################################
+ > +
+ > +NSS_MYHOSTNAME_VERSION = 0.3
+ > +NSS_MYHOSTNAME_SITE = http://0pointer.de/lennart/projects/nss-myhostname
+ > +NSS_MYHOSTNAME_LICENSE = LGPL-2.1+
+ > +NSS_MYHOSTNAME_LICENSE_FILES = LICENSE
+ > +
+ > +define MYHOSTNAME_SET_NSSWITCH
+ > +	$(SED) '/^hosts:/s/\s*\<myhostname\>//' \
+ > +		-E -e 's,(^hosts:.*)(\<files\>)(.*)(\<dns\>)(.*),\1\2 myhostname \3\4\5,' \
+ > +		$(TARGET_DIR)/etc/nsswitch.conf
+
+I would still like to understand why this order is needed. The website
+example and documentation says to add it as a fallback at the very end
+of the hosts: line:
+
+http://0pointer.de/lennart/projects/nss-myhostname/
+
+-- 
+Bye, Peter Korsgaard
