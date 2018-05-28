@@ -1,100 +1,125 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:12:42 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/attr: fix install
-Message-ID: <20180528142834.590FB805EE@busybox.osuosl.org>
+Date: Mon, 28 May 2018 15:48:08 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] support/dependencies:
+ check that PATH does not contain CWD
+Message-ID: <20180528142833.D8100822ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bc0033d5e18772a65d7bc65b873d716ef04453d
+commit: https://git.buildroot.net/buildroot/commit/?id=312d6d0cf52a92d74a9637eece0901de12042c88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Do not overwrite destination file if it exists.
+A person on IRC reported a build failure with the util-linux package,
+looking like this:
 
-Fixes: #10986
+for I in uname26 linux32 linux64        ; do \
+	cd /home/aep/consulting/chargery/tracker/output/target/usr/bin && ln -sf setarch $I ; \
+done
+[...]
+/bin/sh: line 1: ./ln: cannot execute binary file: Exec format error
+/bin/sh: line 1: ./ln: cannot execute binary file: Exec format error
+/bin/sh: line 1: ./ln: cannot execute binary file: Exec format error
 
-Reported-by: mzweerspenko+bugzilla at gmail.com
+The issue was an empty path in the PATH variable, which means "current
+working directory", causing a "ln" binary built by util-linux for the
+target to be used instead of the system-provided "ln".
+
+We already check a number of things in the PATH and LD_LIBRARY_PATH
+variables in support/dependencies/dependencies.sh, but we were not
+checking that PATH did not contain an empty path.
+
+This commit fixes that and takes this opportunity to simplify the test
+code for PATH and LD_LIBRARY_PATH.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: mzweerspenko+bugzilla at gmail.com
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Thomas: improve commit log.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 28d8f8dfd5b10748b009377445d710abef6b8502)
+
+(cherry picked from commit 72703d02b96bb1f7f94f705d3a7199599b1bc980)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-all-use-install-1-to-install-executables.patch | 67 ++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ support/dependencies/dependencies.sh | 59 ++++++++++++++----------------------
+ 1 file changed, 23 insertions(+), 36 deletions(-)
 
-diff --git a/package/attr/0004-all-use-install-1-to-install-executables.patch b/package/attr/0004-all-use-install-1-to-install-executables.patch
-new file mode 100644
-index 0000000000..ef59bb797c
---- /dev/null
-+++ b/package/attr/0004-all-use-install-1-to-install-executables.patch
-@@ -0,0 +1,67 @@
-+From 4187e60ab52cac3ed36036a354977310dab68dcb Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Tue, 8 May 2018 15:16:10 +0200
-+Subject: [PATCH] all: use install(1) to install executables
-+
-+When the destination file already exists, the current install script
-+will overwrite it with the new executable.
-+
-+However, when the existing executable is a symlink or hardlink to
-+something else, like busybox, this effectively overwrites that something
-+with the new executable, and thus replaces busybox and all its applets
-+with the code for either of the three commands.
-+
-+We fix that by simply calling install(1). install(1) is sufficiently
-+widespread that we don't bother checking for it, as this is just a
-+workaround while waiting for the version bump that will eventually fix
-+it for good.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ attr/Makefile     | 4 ++--
-+ getfattr/Makefile | 4 ++--
-+ setfattr/Makefile | 4 ++--
-+ 3 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/attr/Makefile b/attr/Makefile
-+index 1c467e8..326dd7e 100644
-+--- a/attr/Makefile
-++++ b/attr/Makefile
-+@@ -29,6 +29,6 @@ default: $(LTCOMMAND)
-+ include $(BUILDRULES)
-+ 
-+ install: default
-+-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
-+-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
-++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
-++
-+ install-dev install-lib:
-+diff --git a/getfattr/Makefile b/getfattr/Makefile
-+index 91d3df2..f913172 100644
-+--- a/getfattr/Makefile
-++++ b/getfattr/Makefile
-+@@ -30,6 +30,6 @@ default: $(LTCOMMAND)
-+ include $(BUILDRULES)
-+ 
-+ install: default
-+-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
-+-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
-++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
-++
-+ install-dev install-lib:
-+diff --git a/setfattr/Makefile b/setfattr/Makefile
-+index d55461b..26dc5d8 100644
-+--- a/setfattr/Makefile
-++++ b/setfattr/Makefile
-+@@ -30,6 +30,6 @@ default: $(LTCOMMAND)
-+ include $(BUILDRULES)
-+ 
-+ install: default
-+-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
-+-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
-++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
-++
-+ install-dev install-lib:
-+-- 
-+2.14.1
-+
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 985b1d863b..f98678973b 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -11,27 +11,30 @@ if test $? != 0 ; then
+ 	exit 1
+ fi
+ 
+-# sanity check for CWD in LD_LIBRARY_PATH
+-# try not to rely on egrep..
+-if test -n "$LD_LIBRARY_PATH" ; then
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep '::' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':TRiGGER_end' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$LD_LIBRARY_PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
+-	if test $? = 0; then
+-		echo
+-		echo "You seem to have the current working directory in your"
+-		echo "LD_LIBRARY_PATH environment variable. This doesn't work."
+-		exit 1;
+-	fi
+-fi;
++# Sanity check for CWD in LD_LIBRARY_PATH
++case ":${LD_LIBRARY_PATH:-unset}:" in
++(*::*|*:.:*)
++	echo
++	echo "You seem to have the current working directory in your"
++	echo "LD_LIBRARY_PATH environment variable. This doesn't work."
++	exit 1
++	;;
++esac
+ 
+-# PATH should not contain a newline, otherwise it fails in spectacular ways
+-# as soon as PATH is referenced in a package rule
+-case "${PATH}" in
++# Sanity check for CWD in PATH. Having the current working directory
++# in the PATH makes various packages (e.g. toolchain, coreutils...)
++# build process break.
++# PATH should not contain a newline, otherwise it fails in spectacular
++# ways as soon as PATH is referenced in a package rule
++# An empty PATH is technically possible, but in practice we would not
++# even arrive here if that was the case.
++case ":${PATH:-unset}:" in
++(*::*|*:.:*)
++	echo
++	echo "You seem to have the current working directory in your"
++	echo "PATH environment variable. This doesn't work."
++	exit 1
++	;;
+ (*"
+ "*)	printf "\n"
+ 	# Break the '\n' sequence, or a \n is printed (which is not what we want).
+@@ -41,22 +44,6 @@ case "${PATH}" in
+ 	;;
+ esac
+ 
+-# sanity check for CWD in PATH. Having the current working directory
+-# in the PATH makes the toolchain build process break.
+-# try not to rely on egrep..
+-if test -n "$PATH" ; then
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.:' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep ':\.TRiGGER_end' >/dev/null 2>&1 ||
+-	echo TRiGGER_start"$PATH"TRiGGER_end | grep 'TRiGGER_start\.TRiGGER_end' >/dev/null 2>&1
+-	if test $? = 0; then
+-		echo
+-		echo "You seem to have the current working directory in your"
+-		echo "PATH environment variable. This doesn't work."
+-		exit 1;
+-	fi
+-fi;
+-
+ if test -n "$PERL_MM_OPT" ; then
+ 	echo
+ 	echo "You have PERL_MM_OPT defined because Perl local::lib"
