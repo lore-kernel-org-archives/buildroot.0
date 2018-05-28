@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 May 2018 22:53:34 +0200
-Subject: [Buildroot] [PATCH v3 4/5] uboot: zynqmp: generate SPL image
- with PMUFW binary
-In-Reply-To: <1525364617-23633-5-git-send-email-luca@lucaceresoli.net>
+Date: Mon, 28 May 2018 22:55:19 +0200
+Subject: [Buildroot] [PATCH v3 5/5] configs: add Xilinx ZCU106 board
+ (ZynqMP SoC)
+In-Reply-To: <1525364617-23633-6-git-send-email-luca@lucaceresoli.net>
 References: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
- <1525364617-23633-5-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20180528225334.6a2f42d6@windsurf.home>
+ <1525364617-23633-6-git-send-email-luca@lucaceresoli.net>
+Message-ID: <20180528225519.426a45f9@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,51 +14,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  3 May 2018 18:23:36 +0200, Luca Ceresoli wrote:
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index cbb899515181..266e42698d1b 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -276,6 +276,21 @@ endef
->  
->  ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
->  
-> +UBOOT_ZYNQMP_PMUFW = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PMUFW))
-> +
-> +ifneq ($(UBOOT_ZYNQMP_PMUFW),)
-> +UBOOT_EXTRA_DOWNLOADS += $(UBOOT_ZYNQMP_PMUFW)
-> +BR_NO_CHECK_HASH_FOR += $(notdir $(UBOOT_ZYNQMP_PMUFW))
-> +define UBOOT_ZYNQMP_KCONFIG_FIXUP
-> +	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"board/xilinx/zynqmp/pmufw.bin",$(@D)/.config)
-> +endef
-> +define UBOOT_ZYNQMP_COPY_PMUFW
-> +	$(INSTALL) -D -m 0644 $(UBOOT_DL_DIR)/$(notdir $(UBOOT_ZYNQMP_PMUFW)) \
-> +		$(@D)/board/xilinx/zynqmp/pmufw.bin
-> +endef
+On Thu,  3 May 2018 18:23:37 +0200, Luca Ceresoli wrote:
 
-I'm wondering if your solution that consists in copying the PMU
-firmware to the U-Boot source directory and then using that location in
-the U-Boot configuration is better, or if we should simply make the
-U-Boot configuration point to the location in $(UBOOT_DL_DIR), i.e:
+> diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+> new file mode 100644
+> index 000000000000..36643b2f4cdd
+> --- /dev/null
+> +++ b/configs/zynqmp_zcu106_defconfig
+> @@ -0,0 +1,31 @@
+> +BR2_aarch64=y
+> +BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2017.4"
+> +BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
 
-$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,$(UBOOT_DL_DIR)/$(notdir $(UBOOT_ZYNQMP_PMUFW)),$(@D)/.config)
-
-I'm not saying we _must_ do this, I'm wondering if it isn't simpler.
-
-> +define UBOOT_KCONFIG_FIXUP_CMDS
-> +	$(UBOOT_ZYNQMP_KCONFIG_FIXUP)
-> +endef
-
-This obviously won't work with a non-kconfig capable U-Boot version,
-though admittedly ZynqMP support is sufficiently new in upstream U-Boot
-that we're pretty much guaranteed that someone trying to build for
-ZynqMP will have a kconfig-capable U-Boot. But to be sure, perhaps the
-BR2_TARGET_UBOOT_ZYNQMP_PMUFW should have a "depends on
-BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG" ?
+Shouldn't we specify an explicit version for ATF, just like it's done
+for U-Boot and Linux ?
 
 Best regards,
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
