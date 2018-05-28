@@ -1,75 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:22:15 +0200
-Subject: [Buildroot] [PATCHv2] docs/manual: using a branch name as
- FOO_VERSION does not work
-In-Reply-To: <20180511155058.26875-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Fri, 11 May 2018 17:50:58 +0200")
-References: <20180511155058.26875-1-yann.morin.1998@free.fr>
-Message-ID: <877ennzwq0.fsf@dell.be.48ers.dk>
+Date: Mon, 28 May 2018 16:23:16 +0200
+Subject: [Buildroot] [PATCH v3 1/1] python-websockets: backport fix for
+ upstream issue #350
+In-Reply-To: <20180510221712.13031-1-joseph.kogut@gmail.com> (Joseph Kogut's
+ message of "Thu, 10 May 2018 15:17:12 -0700")
+References: <20180507221823.6364-1-joseph.kogut@gmail.com>
+ <20180510221712.13031-1-joseph.kogut@gmail.com>
+Message-ID: <8736ybzwob.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
 
- > For various reasons, we've always suggested users to avoid using a
- > branch as version string for their packages, because it does not work
- > as a they would expect:
+ > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+ > Changes v2 -> v3:
+ > 	- Fix missing Signed-off-by for included patch (suggested by
+ > 	  Baruch)
+ > 	- Fix patch naming (suggested by Baruch) 
 
- >   - it is not reproducible, because the branch may change between two
- >     builds that are done at different times;
-
- >   - it does not even follow the branch, as Buildroot anyway generates
- >     a local tarball, which it will reuse on subsequent builds.
- >     Furthermore, since we fetch and not pull, any existing local branch
- >     is not updated.
-
- > Yet, until recently, using a branch name would just work (with the
- > above limitations): the git tree was cloned, the branch checked out,
- > and the tarball created.
-
- > But with the advent of the git caching, using a branch name does not
- > work anymore. Indeed, we now do a git-fetch, and that does not create
- > local master branch. So we can't check out master, because it does not
- > exist locally. And for other branches, as noticed above, the local
- > branch does not get udpated to the remote one.
-
- > Furthermore, the local branches are only created by chance, again as a
- > side-effect of trying to fetch the "special refs".
-
- > So, we can't say that we reliably support the use of a branch name.
-
- > Update the manual to state that using a branch does not work. Remove
- > the 'stable' example, as it looked like the name of a stable branch;
- > instead, replace it with a version string that ressemble a tag.
-
- > Fix the layout of the manual by making the version examples an actual
- > bulleted list.
-
- > Note: the above is only entirely true for git. For Mercurial, CVS and
- > subversion, the status may be mixed, but nonetheless, using branches is
- > still a bad idea, if at least because it is not reproducible, and
- > because Buildroot does not even follow the branch. So, we do not
- > differentiate between the various SCMs, and just flatly state that using
- > a branch name is not supported.
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
-
- > ---
  > Changes v1 -> v2:
- >   - enhance commit log with additional details  (Ricardo)
- >   - blurb about
- >   - typoes in commit log  (Ricardo)
+ > 	- Include patch locally (suggested by Thomas)
 
-Committed to 2018.02.x, thanks. While we do not have the reworked
-download support (and hence the issue that triggered this), we should
-still not recommend people to use branch names as versions.
+Committed to 2018.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
