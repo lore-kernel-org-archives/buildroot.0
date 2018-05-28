@@ -1,44 +1,139 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 28 May 2018 20:37:06 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-web2py: bump to version
- R-2.16.1
-In-Reply-To: <1527532626-18321-1-git-send-email-angelo@amarulasolutions.com>
-References: <1527532626-18321-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1527532626-18321-2-git-send-email-angelo@amarulasolutions.com>
+From: Vincent Prince <vincent.prince.fr@gmail.com>
+Date: Mon, 28 May 2018 21:06:32 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/nss-myhostname: Add package
+In-Reply-To: <87muwkymjh.fsf@dell.be.48ers.dk>
+References: <1527496298-29730-1-git-send-email-vincent.prince.fr@gmail.com>
+ <1527496298-29730-2-git-send-email-vincent.prince.fr@gmail.com>
+ <87muwkymjh.fsf@dell.be.48ers.dk>
+Message-ID: <CAB2nKc-MykyOLQpa3P3DiBpQ3nPucg9TeTNL-k3RbMyOBieDOQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps python-web2py to version R-2.16.1.
+Things are not clear on nss-myhostname usage, you can check at
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756224 discussion
+and also this commit
+http://git.nomeata.de/?p=libnss-myhostname.git;a=commit;h=5104d7f0045df55ee8be526e8c84078750e1e0ed
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/python-web2py/python-web2py.hash | 2 +-
- package/python-web2py/python-web2py.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+It seems to work great for me and everyone using it in Yocto & Debian with
+this setting, it means not so many people as it is now integrated in
+systemd.
 
-diff --git a/package/python-web2py/python-web2py.hash b/package/python-web2py/python-web2py.hash
-index adc7bc5..d23da1e 100644
---- a/package/python-web2py/python-web2py.hash
-+++ b/package/python-web2py/python-web2py.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 e432e051ebb826b77835bda03ddb16364b37d137b37ac33005b6ac0fd5d56280  python-web2py-R-2.15.4.tar.gz
-+sha256 d9ed52676e9becd53d2d73a849dea3d55b8b61231abf3428cf516dcc0083d451  python-web2py-R-2.16.1.tar.gz
-diff --git a/package/python-web2py/python-web2py.mk b/package/python-web2py/python-web2py.mk
-index 9ad5a77..1e02fb7 100644
---- a/package/python-web2py/python-web2py.mk
-+++ b/package/python-web2py/python-web2py.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_WEB2PY_VERSION = R-2.15.4
-+PYTHON_WEB2PY_VERSION = R-2.16.1
- PYTHON_WEB2PY_SITE = $(call github,web2py,web2py,$(PYTHON_WEB2PY_VERSION))
- PYTHON_WEB2PY_LICENSE = LGPL-3.0
- PYTHON_WEB2PY_LICENSE_FILES = LICENSE
--- 
-2.7.4
+
+2018-05-28 14:47 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+
+> >>>>> "Vincent" == Vincent Prince <vincent.prince.fr@gmail.com> writes:
+>
+>  > Note sed command comes from Yocto recipe here:
+>  > https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/
+> recipes-support/nss-myhostname/nss-myhostname_0.3.bb
+>
+>  > Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
+>  > ---
+>  >  DEVELOPERS                                 |  3 +++
+>  >  package/Config.in                          |  1 +
+>  >  package/nss-myhostname/Config.in           | 11 +++++++++++
+>  >  package/nss-myhostname/nss-myhostname.hash |  3 +++
+>  >  package/nss-myhostname/nss-myhostname.mk   | 20 ++++++++++++++++++++
+>  >  5 files changed, 38 insertions(+)
+>  >  create mode 100644 package/nss-myhostname/Config.in
+>  >  create mode 100644 package/nss-myhostname/nss-myhostname.hash
+>  >  create mode 100644 package/nss-myhostname/nss-myhostname.mk
+>
+>  > diff --git a/DEVELOPERS b/DEVELOPERS
+>  > index 41e1b54..88c9a71 100644
+>  > --- a/DEVELOPERS
+>  > +++ b/DEVELOPERS
+>  > @@ -1813,6 +1813,9 @@ F:     package/openmpi/
+>  >  F:  package/pinentry/
+>  >  F:  package/trinity/
+>
+>  > +N:  Vincent Prince <vincent.prince.fr@gmail.com>
+>  > +F:  package/nss-myhostname/
+>  > +
+>  >  N:  Vincent Stehl? <vincent.stehle@laposte.net>
+>  >  F:  package/i7z/
+>  >  F:  package/msr-tools/
+>  > diff --git a/package/Config.in b/package/Config.in
+>  > index 3cf53ed..3ac0d63 100644
+>  > --- a/package/Config.in
+>  > +++ b/package/Config.in
+>  > @@ -1426,6 +1426,7 @@ menu "Networking"
+>  >      source "package/neon/Config.in"
+>  >      source "package/norm/Config.in"
+>  >      source "package/nss-mdns/Config.in"
+>  > +    source "package/nss-myhostname/Config.in"
+>  >      source "package/nss-pam-ldapd/Config.in"
+>  >      source "package/omniorb/Config.in"
+>  >      source "package/openldap/Config.in"
+>  > diff --git a/package/nss-myhostname/Config.in b/package/nss-myhostname/
+> Config.in
+>  > new file mode 100644
+>  > index 0000000..549e167
+>  > --- /dev/null
+>  > +++ b/package/nss-myhostname/Config.in
+>  > @@ -0,0 +1,11 @@
+>  > +config BR2_PACKAGE_NSS_MYHOSTNAME
+>  > +    bool "nss-myhostname"
+>  > +    depends on BR2_TOOLCHAIN_USES_GLIBC
+>  > +    depends on !BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+>  > +    help
+>  > +      Name Service Switch module for resolving the local hostname
+>  > +
+>  > +      http://0pointer.de/lennart/projects/nss-myhostname
+>  > +
+>  > +comment "nss-myhostname needs a glibc toolchain"
+>  > +    depends on !BR2_TOOLCHAIN_USES_GLIBC
+>  > diff --git a/package/nss-myhostname/nss-myhostname.hash
+> b/package/nss-myhostname/nss-myhostname.hash
+>  > new file mode 100644
+>  > index 0000000..dfa531c
+>  > --- /dev/null
+>  > +++ b/package/nss-myhostname/nss-myhostname.hash
+>  > @@ -0,0 +1,3 @@
+>  > +# locally computed
+>  > +sha256  2ba744ea8d578d1c57c85884e94a3042ee17843a5294434d3a7f6c4d67e7caf2
+> nss-myhostname-0.3.tar.gz
+>  > +sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861
+> LICENSE
+>  > diff --git a/package/nss-myhostname/nss-myhostname.mk
+> b/package/nss-myhostname/nss-myhostname.mk
+>  > new file mode 100644
+>  > index 0000000..435c380
+>  > --- /dev/null
+>  > +++ b/package/nss-myhostname/nss-myhostname.mk
+>  > @@ -0,0 +1,20 @@
+>  > +###########################################################
+> #####################
+>  > +#
+>  > +## nss-myhostname
+>  > +#
+>  > +###########################################################
+> #####################
+>  > +
+>  > +NSS_MYHOSTNAME_VERSION = 0.3
+>  > +NSS_MYHOSTNAME_SITE = http://0pointer.de/lennart/
+> projects/nss-myhostname
+>  > +NSS_MYHOSTNAME_LICENSE = LGPL-2.1+
+>  > +NSS_MYHOSTNAME_LICENSE_FILES = LICENSE
+>  > +
+>  > +define MYHOSTNAME_SET_NSSWITCH
+>  > +    $(SED) '/^hosts:/s/\s*\<myhostname\>//' \
+>  > +            -E -e 's,(^hosts:.*)(\<files\>)(.*)(\<dns\>)(.*),\1\2
+> myhostname \3\4\5,' \
+>  > +            $(TARGET_DIR)/etc/nsswitch.conf
+>
+> I would still like to understand why this order is needed. The website
+> example and documentation says to add it as a fallback at the very end
+> of the hosts: line:
+>
+> http://0pointer.de/lennart/projects/nss-myhostname/
+>
+> --
+> Bye, Peter Korsgaard
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180528/d3edcceb/attachment.html>
