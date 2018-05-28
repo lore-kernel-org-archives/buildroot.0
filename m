@@ -1,187 +1,253 @@
 From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Mon, 28 May 2018 22:42:27 +0530
-Subject: [Buildroot] [PATCH 2/2] board: amarula: a64-relic: Add WiFi support
-In-Reply-To: <20180528171227.8352-1-jagan@amarulasolutions.com>
-References: <20180528171227.8352-1-jagan@amarulasolutions.com>
-Message-ID: <20180528171227.8352-2-jagan@amarulasolutions.com>
+Date: Mon, 28 May 2018 22:42:26 +0530
+Subject: [Buildroot] [PATCH 1/2] board: amarula: Add A64-Relic support
+Message-ID: <20180528171227.8352-1-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Amarula A64-Relic board has AP6330 WiFi/BT combo, but does
-not have ethernet port. So it makes sense to enable wireless
-networking by default:
-- add broadcom wireless firmware package to image
-- add basic wireless tools to image
-- add rootfs overlay with proper NVRAM file for on-board AP6330 chip
-- add init script to load modules
-- update readme.txt to test wifi
+Add initial support for Amarula A64-Relic board
+with below features:
+- U-Boot 2018.05
+- Linux 4.17.0-rc6
+- Default packages from buildroot
 
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
- board/amarula/a64-relic/readme.txt                 |  9 +++
- .../rootfs_overlay/etc/init.d/S02-modload          | 12 ++++
- .../rootfs_overlay/etc/modules-load.d/modules.conf |  1 +
- .../lib/firmware/brcm/brcmfmac4330-sdio.txt        | 83 ++++++++++++++++++++++
- configs/amarula_a64_relic_defconfig                | 12 ++++
- 5 files changed, 117 insertions(+)
- create mode 100755 board/amarula/a64-relic/rootfs_overlay/etc/init.d/S02-modload
- create mode 100644 board/amarula/a64-relic/rootfs_overlay/etc/modules-load.d/modules.conf
- create mode 100644 board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+ .gitlab-ci.yml                         |  1 +
+ DEVELOPERS                             |  1 +
+ board/amarula/a64-relic/extlinux.conf  |  4 +++
+ board/amarula/a64-relic/genimage.cfg   | 39 ++++++++++++++++++++++
+ board/amarula/a64-relic/post-build.sh  |  4 +++
+ board/amarula/a64-relic/readme.txt     | 60 ++++++++++++++++++++++++++++++++++
+ board/amarula/a64-relic/uboot.fragment |  3 ++
+ configs/amarula_a64_relic_defconfig    | 47 ++++++++++++++++++++++++++
+ 8 files changed, 159 insertions(+)
+ create mode 100644 board/amarula/a64-relic/extlinux.conf
+ create mode 100644 board/amarula/a64-relic/genimage.cfg
+ create mode 100755 board/amarula/a64-relic/post-build.sh
+ create mode 100644 board/amarula/a64-relic/readme.txt
+ create mode 100644 board/amarula/a64-relic/uboot.fragment
+ create mode 100644 configs/amarula_a64_relic_defconfig
 
-diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
-index 534ed32e7b..18824e1669 100644
---- a/board/amarula/a64-relic/readme.txt
-+++ b/board/amarula/a64-relic/readme.txt
-@@ -57,4 +57,13 @@ GPT:
-   $ fastboot -i 0x1f3a flash esp boot.vfat
-   $ fastboot -i 0x1f3a flash system rootfs.ext2
- 
-+WiFi
-+====
-+
-+ # wpa_passphrase ACCESSPOINTNAME >> /etc/wpa_supplicant.conf
-+   (type password and enter)
-+ # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
-+ # udhcpc -i wlan0
-+ # ping google.com
-+
- Enjoy!
-diff --git a/board/amarula/a64-relic/rootfs_overlay/etc/init.d/S02-modload b/board/amarula/a64-relic/rootfs_overlay/etc/init.d/S02-modload
-new file mode 100755
-index 0000000000..81d85ce01c
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index e80491cdde..9663105462 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -79,6 +79,7 @@ acmesystems_aria_g25_128mb_defconfig: *defconfig
+ acmesystems_aria_g25_256mb_defconfig: *defconfig
+ acmesystems_arietta_g25_128mb_defconfig: *defconfig
+ acmesystems_arietta_g25_256mb_defconfig: *defconfig
++amarula_a64_relic_defconfig: *defconfig
+ amarula_vyasa_rk3288_defconfig: *defconfig
+ arcturus_ucls1012a_defconfig: *defconfig
+ arcturus_ucp1020_defconfig: *defconfig
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f24ef2752e..1a893bda9d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -863,6 +863,7 @@ F:	board/amarula/
+ F:	board/asus/
+ F:	board/bananapi/
+ F:	board/engicam/
++F:	configs/amarula_a64_relic_defconfig
+ F:	configs/amarula_vyasa_rk3288_defconfig
+ F:	configs/asus_tinker_rk3288_defconfig
+ F:	board/friendlyarm/nanopi-a64/
+diff --git a/board/amarula/a64-relic/extlinux.conf b/board/amarula/a64-relic/extlinux.conf
+new file mode 100644
+index 0000000000..9f469846bc
 --- /dev/null
-+++ b/board/amarula/a64-relic/rootfs_overlay/etc/init.d/S02-modload
-@@ -0,0 +1,12 @@
-+#!/bin/sh
-+#
-+
-+load_modules()
-+{
-+	while IFS= read -r line; do
-+		modprobe -a $line
-+	done < "/etc/modules-load.d/modules.conf"
++++ b/board/amarula/a64-relic/extlinux.conf
+@@ -0,0 +1,4 @@
++label linux-4.17.0-rc3
++  kernel /Image
++  devicetree /sun50i-a64-amarula-relic.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p4 rootwait
+diff --git a/board/amarula/a64-relic/genimage.cfg b/board/amarula/a64-relic/genimage.cfg
+new file mode 100644
+index 0000000000..259c269e54
+--- /dev/null
++++ b/board/amarula/a64-relic/genimage.cfg
+@@ -0,0 +1,39 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"Image",
++			"sun50i-a64-amarula-relic.dtb",
++			"extlinux"
++		}
++	}
++	size = 64M
 +}
 +
-+load_modules
-+echo "Loading modules: OK"
-diff --git a/board/amarula/a64-relic/rootfs_overlay/etc/modules-load.d/modules.conf b/board/amarula/a64-relic/rootfs_overlay/etc/modules-load.d/modules.conf
-new file mode 100644
-index 0000000000..a86ef4c668
---- /dev/null
-+++ b/board/amarula/a64-relic/rootfs_overlay/etc/modules-load.d/modules.conf
-@@ -0,0 +1 @@
-+brcmfmac
-diff --git a/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-new file mode 100644
-index 0000000000..d095f24c26
---- /dev/null
-+++ b/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-@@ -0,0 +1,83 @@
-+#AP6330_NVRAM_V1.0_20121130
-+#Sample variables file for BCM94330 SD FC AGB board
-+manfid=0x2d0
-+prodid=0x0547
-+vendid=0x14e4
-+devid=0x4360
-+boardtype=0x05e1
-+boardrev=0x1202
-+boardflags=0x0080200
-+nocrc=1
-+xtalfreq=26000
-+boardnum=22
-+macaddr=00:90:4c:c5:12:38
-+ag0=254
-+aa2g=1
-+ccode=ALL
-+pa0itssit=0x20
-+pa0b0=5587
-+pa0b1=-633
-+pa0b2=-158
-+rssismf2g=0xa
-+rssismc2g=0x3
-+rssisav2g=0x7
-+#rssi params for 5GHz
-+rssismf5g=0x4
-+rssismc5g=0x3
-+rssisav5g=0x7
-+#PA parameters for lower a-band
-+pa1lob0=4748
-+pa1lob1=-566
-+pa1lob2=-180
-+#PA parameters for midband
-+pa1b0=4762
-+pa1b1=-593
-+pa1b2=-172
-+#PA parameters for high band
-+#pa1hib0=4596
-+pa1hib0=4666
-+pa1hib1=-619
-+pa1hib2=-163
-+rxpo5g=0
-+maxp2ga0=74
-+maxp5ga0=66
-+maxp5gla0=66
-+maxp5gha0=66
-+# 2.4G Tx Power offsets
-+cck2gpo=0x2222
-+ofdm2gpo=0x44444444
-+mcs2gpo0=0x6666
-+mcs2gpo1=0x6666
-+# 5G Tx Power offsets
-+ofdm5gpo=0x44444444
-+ofdm5glpo=0x44444444
-+ofdm5ghpo=0x44444444
-+mcs5gpo0=0x6666
-+mcs5gpo1=0x6666
-+mcs5glpo0=0x6666
-+mcs5glpo1=0x6666
-+mcs5ghpo0=0x6666
-+mcs5ghpo1=0x6666
-+sromrev=3
-+il0macaddr=00:90:4c:c5:12:38
-+wl0id=0x431b
-+cckPwrOffset=4
-+swctrlmap_2g=0x44844484,0x42824282,0x40804484,0x18282,0x1ff
-+triso5g=0
-+swctrlmap_5g=0x00100010,0x20202020,0x20202020,0x14202,0x0f0
-+rfreg033=0x19
-+rfreg033_cck=0x1f
-+dacrate2g=160
-+dacrate5g=160
-+txalpfbyp2g=1
-+bphyscale=17
-+cckPwrIdxCorr=-15
-+pacalidx2g=50
-+#pacalidx5g=20
-+noise_cal_ref_2g=53
-+noise_cal_po_2g=0
-+noise_cal_ref_5g=52
-+noise_cal_po_5g=5,0,0
-+# 4330 OOB parameter: High level trigger
-+muxenab=0x10
++image sdcard.img {
++	hdimage {
++	}
 +
++	partition spl {
++		in-partition-table = "no"
++		image = "sunxi-spl.bin"
++		offset = 8192
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot.itb"
++		offset = 40K
++		size = 1M # 1MB - 40K
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/amarula/a64-relic/post-build.sh b/board/amarula/a64-relic/post-build.sh
+new file mode 100755
+index 0000000000..ec20fca7d9
+--- /dev/null
++++ b/board/amarula/a64-relic/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
+new file mode 100644
+index 0000000000..534ed32e7b
+--- /dev/null
++++ b/board/amarula/a64-relic/readme.txt
+@@ -0,0 +1,60 @@
++Amarula A64 Relic
++================
++
++Amarula A64-Relic is A64 based IoT device, which support
++- Allwinner A64 Cortex-A53
++- Mali-400MP2 GPU
++- AXP803 PMIC
++- 1GB DDR3 RAM
++- 8GB eMMC
++- AP6330 Wifi/BLE
++- MIPI-DSI
++- CSI: OV5640 sensor
++- USB OTG
++- 12V DC power supply
++
++Build
++=====
++
++  $ make amarula_a64_relic_defconfig
++
++  $ make
++
++build files at output/images/:
++  - sunxi-spl.bin
++  - u-boot.itb
++  - Image
++  - sun50i-a64-amarula-relic.dtb
++  - boot.vfat
++  - rootfs.ext2
++  - sdcard.img
++
++Write eMMC
++=========
++
++Open minicom with ttyUSBx with 115200N8 and power-on board.
++
++Stay in U-Boot and write images on eMMC
++
++DOS:
++
++  => mmc dev 1
++  => ums 0 mmc 1
++
++  host
++  $ dd if=sdcard.img of=/dev/sdx
++  $ sync
++
++GPT:
++
++  => mmc dev 1
++  => gpt write mmc 1 $partitions
++  => fastboot 0
++
++  host
++  $ fastboot -i 0x1f3a flash loader1 spl/sunxi-spl.bin
++  $ fastboot -i 0x1f3a flash loader2 u-boot.itb
++  $ fastboot -i 0x1f3a flash esp boot.vfat
++  $ fastboot -i 0x1f3a flash system rootfs.ext2
++
++Enjoy!
+diff --git a/board/amarula/a64-relic/uboot.fragment b/board/amarula/a64-relic/uboot.fragment
+new file mode 100644
+index 0000000000..7b204598bc
+--- /dev/null
++++ b/board/amarula/a64-relic/uboot.fragment
+@@ -0,0 +1,3 @@
++# A64-Relic need few user-defined configs enable on top of
++# uboot mainline default defconfig
++CONFIG_CMD_USB_MASS_STORAGE=y
 diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
-index 07f1a72363..d1da97ed5c 100644
---- a/configs/amarula_a64_relic_defconfig
+new file mode 100644
+index 0000000000..07f1a72363
+--- /dev/null
 +++ b/configs/amarula_a64_relic_defconfig
-@@ -45,3 +45,15 @@ BR2_PACKAGE_HOST_MTOOLS=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/amarula/a64-relic/genimage.cfg"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/amarula/a64-relic/post-build.sh"
-+BR2_ROOTFS_OVERLAY="board/amarula/a64-relic/rootfs_overlay"
+@@ -0,0 +1,47 @@
++BR2_aarch64=y
++BR2_cortex_a53=y
++BR2_ARM_FPU_VFPV4=y
 +
-+# wireless firmware
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
++# Linux headers same as kernel, a 4.16 series
++BR2_KERNEL_HEADERS_4_16=y
 +
-+# wireless tools
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
++# Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,amarula,u-boot-amarula,a64-relic)/u-boot-amarula_a64-relic.tar.gz"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="amarula_a64_relic"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
++BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/amarula/a64-relic/uboot.fragment"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,amarula,linux-amarula,a64-relic)/linux-amarula_a64-relic.tar.gz"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-amarula-relic"
++
++# Filesystem
++BR2_TARGET_GENERIC_ISSUE="Welcome to Amarula A64-Relic"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/amarula/a64-relic/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/amarula/a64-relic/post-build.sh"
 -- 
 2.14.3
