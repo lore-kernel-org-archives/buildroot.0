@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 22:35:58 +0200
-Subject: [Buildroot] [PATCH 1/2 v2] package/binutils: switch from
- symlinks to copies to fix rpath
-In-Reply-To: <f8694045b93e9233e65eeb22e7557959a1a8d47e.1527536710.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 28 May 2018 21:45:17 +0200")
+Date: Mon, 28 May 2018 22:36:05 +0200
+Subject: [Buildroot] [PATCH 2/2 v2] package/elf2flt: replace hard-links
+ with copies to fix rpath
+In-Reply-To: <99b5f16248ada22680df533f78869bcf552e06d9.1527536710.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 28 May 2018 21:45:18 +0200")
 References: <cover.1527536710.git.yann.morin.1998@free.fr>
- <f8694045b93e9233e65eeb22e7557959a1a8d47e.1527536710.git.yann.morin.1998@free.fr>
-Message-ID: <87muwjv7pt.fsf@dell.be.48ers.dk>
+ <99b5f16248ada22680df533f78869bcf552e06d9.1527536710.git.yann.morin.1998@free.fr>
+Message-ID: <87in77v7pm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +15,16 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Commit f9cffb6af464 (binutils: replace hard-links with soft-links to fix
- > rpath) has a side effect that when we build for a noMMU target, elf2flt
- > will in turn replace some of the programs installed by binutils, with
- > its own wrappers.
+ > Do for elf2flt what we did for binutils: replace the hardlinks (which
+ > break rpath handling) with copies of the individaul tools.
 
- > For example, it will rename host/TUPLE/bin/ld to ld.real, and add its
- > own wrapper in place of the original. It does the same for
- > host/bin/TUPLE-ld and host/bin/TUPLE-ld.real.
-
- > However, we had already made ld a symlink to ../../bin/TUPLE-ld, so
- > host/TUPLE/bin/ld.real will still point to host/bin/TUPLE-ld when we
- > want it to point to ld.real instead...
-
- > This ultimately confuses gcc later on.
-
- > Of course, the culprit is also elf2flt, which also installs similar
- > hardlinks that would ultimately exhibit the same rpath issue as the
- > one fixed by f9cffb6af464. Note: we haven't had an issue so far with
- > that, because those tools installed by elf2flt only link with libz,
- > which is most often present on the host system. So, all seem well,
- > but is nonetheless broken; this will be fixed in a subsequent commit.
-
- > But back on topic. If we were to fix elf2flt with similar symlinks,
- > gcc still gets confused. The underlying reason for this confusion is
- > not entirely clear, though... It looks like something is trying to
- > dereference symlinks and gets confused by the result somehow...
-
- > So, in an attempt to restore some sanity in all this mess, we try to
- > restore the previous behaviour, we no longer use symlinks but just copy
- > the individual tools.
+ > See previous commit (package/binutils: switch from symlinks to copies
+ > and commit f9cffb6af4 (binutils: replace hard-links with soft-links to
+ > fix rpath) for the complete story.
 
  > Fixes: #11031.
 
+ > Reported-by: Christophe Priouzeau <christophe.priouzeau@st.com>
  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  > Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
