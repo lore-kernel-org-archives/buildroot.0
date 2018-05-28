@@ -1,62 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 May 2018 22:45:01 +0200
-Subject: [Buildroot] [PATCH 6/8] ti-sgx-km: rename options to have
- proper prefix
-In-Reply-To: <4299684e-6356-dcf3-a35d-9fb9ef6606bb@mind.be>
-References: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
- <20180513190737.26079-7-thomas.petazzoni@bootlin.com>
- <20180513193140.GJ22130@scaer>
- <e477cbd2-f662-b196-0c2c-f6959e42e983@mind.be>
- <20180516090052.21e0af47@windsurf>
- <fb6a5c78-7556-4110-b52b-ea6cef274c88@mind.be>
- <87wovwiuai.fsf@dell.be.48ers.dk>
- <4299684e-6356-dcf3-a35d-9fb9ef6606bb@mind.be>
-Message-ID: <20180528204501.GL2965@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 28 May 2018 22:41:59 +0200
+Subject: [Buildroot] [git commit branch/next] arm-trusted-firmware: generate
+ atf-uboot.ub image of bl31.bin
+Message-ID: <20180528204453.89837812DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=61447331bd5540b1d720fe06fdbec85ec297aaaf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2018-05-22 12:42 +0200, Arnout Vandecappelle spake thusly:
-> On 21-05-18 23:16, Peter Korsgaard wrote:
-> >>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> > 
-> >  > On 16-05-18 09:00, Thomas Petazzoni wrote:
-> >  >> Hello,
-> >  >> 
-> >  >> On Tue, 15 May 2018 23:52:33 +0200, Arnout Vandecappelle wrote:
-> >  >> 
-> >  >>>> What is nice with this solution, is that we have the new choice that is
-> >  >>>> right near the legacy option so we can chek it, and it automatically
-> >  >>>> gets the old setting.
-> >  >>>> 
-> >  >>>> But I am not too convinced, however, because we do not usually use the
-> >  >>>> name of a choice elsewhere...  
-> >  >>> 
-> >  >>> Legacy is pretty special anyway. I do think it's worthwhile it to do this properly.
-> >  >>
-> >  >> Is this an Acked-by to the approach this patch series has taken in
-> >  >> terms of handling the Config.in choice option renaming ?
-> > 
-> >  >  Er, no, it's a NACK. I *do* think it's worthwhile to properly select the new
-> >  > option.
+U-Boot SPL for the Xilinx ZynqMP SoCs needs ATF in this format to load
+it.
 
-Yeah, but as we've gone without support for legacy choices so far
-(almost 6 years now), I don't think this is an urgent matter.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/arm-trusted-firmware/Config.in               |  8 ++++++++
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 21 +++++++++++++++++++++
+ 2 files changed, 29 insertions(+)
 
-Next time, maybe I'll just shut up instead of suggesting sophisticated
-and imaginative solutions. ;-P
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 7aef87cb74..885d93e62f 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -71,6 +71,14 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
+ 	  typically used on platforms where another bootloader (e.g
+ 	  U-Boot) encapsulates ATF BL31.
+ 
++config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT
++	bool "Build BL31 U-Boot image"
++	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
++	help
++	  Generates a U-Boot image named atf-uboot.ub containing
++	  bl31.bin.  This is used for example by the Xilinx version of
++	  U-Boot SPL to load ATF on the ZynqMP SoC.
++
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33
+ 	bool "Use U-Boot as BL33"
+ 	depends on BR2_TARGET_UBOOT
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 212bb5049f..054a000a1d 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -75,15 +75,36 @@ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31),y)
+ ARM_TRUSTED_FIRMWARE_MAKE_TARGETS += bl31
+ endif
+ 
++ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT),y)
++define ARM_TRUSTED_FIRMWARE_BL31_UBOOT_BUILD
++# Get the entry point address from the elf.
++	BASE_ADDR=$$($(TARGET_READELF) -h $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31/bl31.elf | \
++	             sed -r '/^  Entry point address:\s*(.*)/!d; s//\1/') && \
++	$(HOST_DIR)/bin/mkimage \
++		-A arm64 -O arm-trusted-firmware -C none \
++		-a $${BASE_ADDR} -e $${BASE_ADDR} \
++		-d $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/bl31.bin \
++		$(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub
++endef
++define ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL
++	$(INSTALL) -m 0644 $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/atf-uboot.ub \
++		$(BINARIES_DIR)/atf-uboot.ub
++endef
++ARM_TRUSTED_FIRMWARE_MAKE_OPTS += RESET_TO_BL31=1
++ARM_TRUSTED_FIRMWARE_DEPENDENCIES += host-uboot-tools
++endif
++
+ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
+ 	$(ARM_TRUSTED_FIRMWARE_BUILD_FIPTOOL)
+ 	$(TARGET_CONFIGURE_OPTS) \
+ 		$(MAKE) -C $(@D) $(ARM_TRUSTED_FIRMWARE_MAKE_OPTS) \
+ 			$(ARM_TRUSTED_FIRMWARE_MAKE_TARGETS)
++	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_BUILD)
+ endef
+ 
+ define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
++	$(ARM_TRUSTED_FIRMWARE_BL31_UBOOT_INSTALL)
+ endef
+ 
+ # Configuration check
