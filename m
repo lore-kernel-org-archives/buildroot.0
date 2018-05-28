@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:29:37 +0200
-Subject: [Buildroot] [PATCH] lynx: add patch to fix static link issue
-In-Reply-To: <20180507200617.2527-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Mon, 7 May 2018 22:06:17 +0200")
-References: <20180507200617.2527-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87in77x38u.fsf@dell.be.48ers.dk>
+Date: Mon, 28 May 2018 16:29:51 +0200
+Subject: [Buildroot] [PATCH] cifs-utils: unconditionally disable PIE
+In-Reply-To: <20180507202034.28715-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Mon, 7 May 2018 22:20:34 +0200")
+References: <20180507202034.28715-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87efhvx38g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,22 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > The lynx package incorrectly uses target LDFLAGS to build a host tool,
- > which causes a problem when we do a statically link build for the
- > target, on a host machine that doesn't support static linking.
+ > PIE support in Buildroot should be enabled via the global option
+ > BR2_RELRO_FULL option, and not done on a per-package basis, therefore
+ > PIE should unconditionally be disabled in the cifs-utils package.
 
- > A simple patch fixes the problematic makefile, and it has been
- > submitted upstream on the project mailing list.
+ > This has the added side-effect that it works around a binutils bug on
+ > SPARC causing the linker to segfault when PIE is enabled:
+
+ > sparc-linux-gcc -Wall -Wextra -D_FORTIFY_SOURCE=2 -fpie -pie -Wl,-z,relro,-z,now -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os    -o mount.cifs mount.cifs.o mtab.o resolve_host.o util.o  -lcap-ng
+ > collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
+
+ > This issue will reappear when we start testing BR2_RELRO_FULL in the
+ > autobuilders, but in the mean time it avoids the problem.
 
  > Fixes:
 
- >   http://autobuild.buildroot.net/results/38ba2531eeeb4a7985eddd2df8bfaf0b56e6a687/
+ >   http://autobuild.buildroot.net/results/a5342890f39bdccae1324e7d3dbe0eab1aad28e5/
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
