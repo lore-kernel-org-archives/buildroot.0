@@ -1,58 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 May 2018 22:41:02 +0200
-Subject: [Buildroot] [PATCH v2] toolchain: GCC bug 85180
-In-Reply-To: <CANQCQpZTLyWT29JqqAYz0RsGwA-mWBNFZ_0qapkEqiG3GisEww@mail.gmail.com>
-References: <1527521710-3889-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20180528212932.297eadf7@windsurf.home>
- <CANQCQpZCxiHy34M-V3Suf+N+C=EgAYPTwSYd7RBRVCc11hZssg@mail.gmail.com>
- <CANQCQpZTLyWT29JqqAYz0RsGwA-mWBNFZ_0qapkEqiG3GisEww@mail.gmail.com>
-Message-ID: <20180528224102.423ce611@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 28 May 2018 22:45:01 +0200
+Subject: [Buildroot] [PATCH 6/8] ti-sgx-km: rename options to have
+ proper prefix
+In-Reply-To: <4299684e-6356-dcf3-a35d-9fb9ef6606bb@mind.be>
+References: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
+ <20180513190737.26079-7-thomas.petazzoni@bootlin.com>
+ <20180513193140.GJ22130@scaer>
+ <e477cbd2-f662-b196-0c2c-f6959e42e983@mind.be>
+ <20180516090052.21e0af47@windsurf>
+ <fb6a5c78-7556-4110-b52b-ea6cef274c88@mind.be>
+ <87wovwiuai.fsf@dell.be.48ers.dk>
+ <4299684e-6356-dcf3-a35d-9fb9ef6606bb@mind.be>
+Message-ID: <20180528204501.GL2965@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Arnout, Peter, All,
 
-On Mon, 28 May 2018 15:05:44 -0500, Matthew Weber wrote:
+On 2018-05-22 12:42 +0200, Arnout Vandecappelle spake thusly:
+> On 21-05-18 23:16, Peter Korsgaard wrote:
+> >>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> > 
+> >  > On 16-05-18 09:00, Thomas Petazzoni wrote:
+> >  >> Hello,
+> >  >> 
+> >  >> On Tue, 15 May 2018 23:52:33 +0200, Arnout Vandecappelle wrote:
+> >  >> 
+> >  >>>> What is nice with this solution, is that we have the new choice that is
+> >  >>>> right near the legacy option so we can chek it, and it automatically
+> >  >>>> gets the old setting.
+> >  >>>> 
+> >  >>>> But I am not too convinced, however, because we do not usually use the
+> >  >>>> name of a choice elsewhere...  
+> >  >>> 
+> >  >>> Legacy is pretty special anyway. I do think it's worthwhile it to do this properly.
+> >  >>
+> >  >> Is this an Acked-by to the approach this patch series has taken in
+> >  >> terms of handling the Config.in choice option renaming ?
+> > 
+> >  >  Er, no, it's a NACK. I *do* think it's worthwhile to properly select the new
+> >  > option.
 
-> > I tried O0/1/2 without luck.  I just checked though that they were
-> > actually being used in the verbose boost output and turns out boost is
-> > forcing a O3 as the last O value in the flags.  So there's a bug....
-> > I'll see if I can reasonably fix that  and retest.
-> >  
-> 
-> Looks like there is a bjam property which can be set.  Is this
-> something we want tweak?  I did a quick test after applying the patch
-> below and the build was successful.
-> 
-> --- a/package/boost/boost.mk
-> +++ b/package/boost/boost.mk
-> @@ -90,6 +90,7 @@ endif
-> 
->  BOOST_OPTS += toolset=gcc \
->              threading=multi \
-> +             optimization=off \
->              abi=$(BOOST_ABI) \
->              variant=$(if $(BR2_ENABLE_DEBUG),debug,release)
-> 
-> 
-> I updated per the patch below (O3) and the build failed.  So it does
-> look like disabling optimization works around the problem.  What's
-> your thought going forward?  I can retest the other two packages to
-> see if no optimization fixes them too?
+Yeah, but as we've gone without support for legacy choices so far
+(almost 6 years now), I don't think this is an urgent matter.
 
-Thanks for doing all those tests! Yes, it would be nice to retest if
-the other packages can be built without optimizations. If that's the
-case, we can simply disable optimizations for Microblaze for those few
-packages. It's less annoying that having those additional dependencies
-that we have to propagate to reverse dependencies.
+Next time, maybe I'll just shut up instead of suggesting sophisticated
+and imaginative solutions. ;-P
 
-Thanks!
+Regards,
+Yann E. MORIN.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
