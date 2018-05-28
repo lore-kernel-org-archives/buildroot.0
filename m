@@ -1,99 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:13:58 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/acl: fix install
-Message-ID: <20180528142834.605BF805EE@busybox.osuosl.org>
+Date: Mon, 28 May 2018 16:08:15 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/jamvm: restrict
+ on what MIPS procs are allowed
+Message-ID: <20180528142834.42E99805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=587d5b58bf60cb10c52c69ca08104605a1e159c3
+commit: https://git.buildroot.net/buildroot/commit/?id=3097ef767615cabaa8cf60cdcf70a5d4f333fb9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Do not overwrite destination file if it exists.
+jamvm uses deprecated opcodes to store/load words from the FPU
+coprocessor registers, and in so doing, expects those registers
+to be 32-bit.
 
-Simliar to bug #10986.
+Thus, restrict the conditions under which jamvm is available
+under mips.
+
+Fixes:
+    http://autobuild.buildroot.org/results/f76/f76e10e4c1ce25b42fb2e5d2012adf2eaf1b2fe1/
+    http://autobuild.buildroot.org/results/162/162d0e41dc9bc6d6f6594ccee0cb4217067fc71f/
+    ...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: mzweerspenko+bugzilla at gmail.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c3e62d39844b28b59650747e59e86a21d71f05c8)
+(cherry picked from commit 67974fe6da0dc346ad40f6b7d373a05aa0b1e1f9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-all-use-install-1-to-install-executables.patch | 67 ++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ package/jamvm/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/acl/0003-all-use-install-1-to-install-executables.patch b/package/acl/0003-all-use-install-1-to-install-executables.patch
-new file mode 100644
-index 0000000000..9640dd866d
---- /dev/null
-+++ b/package/acl/0003-all-use-install-1-to-install-executables.patch
-@@ -0,0 +1,67 @@
-+From d3bd7b29b79147b4155e78a8ea06ded98b91f92a Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Tue, 8 May 2018 15:23:57 +0200
-+Subject: [PATCH] all: use install(1) to install executables
-+
-+When the destination file already exists, the current install script
-+will overwrite it with the new executable.
-+
-+However, when the existing executable is a symlink or hardlink to
-+something else, like busybox, this effectively overwrites that something
-+with the new executable, and thus replaces busybox and all its applets
-+with the code for either of the three commands.
-+
-+We fix that by simply calling install(1). install(1) is sufficiently
-+widespread that we don't bother checking for it, as tis is just a
-+workaround while waiting for the version bump that will eventually fix
-+it for good.
-+
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+---
-+ chacl/Makefile   | 4 ++--
-+ getfacl/Makefile | 4 ++--
-+ setfacl/Makefile | 4 ++--
-+ 3 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/chacl/Makefile b/chacl/Makefile
-+index 33858d6..c857329 100644
-+--- a/chacl/Makefile
-++++ b/chacl/Makefile
-+@@ -30,6 +30,6 @@ default: $(LTCOMMAND)
-+ include $(BUILDRULES)
-+ 
-+ install: default
-+-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
-+-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
-++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
-++
-+ install-dev install-lib:
-+diff --git a/getfacl/Makefile b/getfacl/Makefile
-+index 7fbafda..8ac63e0 100644
-+--- a/getfacl/Makefile
-++++ b/getfacl/Makefile
-+@@ -31,6 +31,6 @@ default: $(LTCOMMAND)
-+ include $(BUILDRULES)
-+ 
-+ install: default
-+-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
-+-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
-++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
-++
-+ install-dev install-lib:
-+diff --git a/setfacl/Makefile b/setfacl/Makefile
-+index c44e7c0..eea2ede 100644
-+--- a/setfacl/Makefile
-++++ b/setfacl/Makefile
-+@@ -31,6 +31,6 @@ default: $(LTCOMMAND)
-+ include $(BUILDRULES)
-+ 
-+ install: default
-+-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
-+-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
-++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
-++
-+ install-dev install-lib:
-+-- 
-+2.14.1
-+
+diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
+index 51d5da03b8..7717ccaadb 100644
+--- a/package/jamvm/Config.in
++++ b/package/jamvm/Config.in
+@@ -2,7 +2,8 @@ config BR2_PACKAGE_JAMVM_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_arm || BR2_armeb
+ 	default y if BR2_i386 || BR2_x86_64
+-	default y if BR2_mips || BR2_mipsel
++	default y if (BR2_mips || BR2_mipsel) \
++		&& (BR2_MIPS_FP32_MODE_32 || BR2_MIPS_SOFT_FLOAT)
+ 	default y if BR2_powerpc
+ 
+ config BR2_PACKAGE_JAMVM
