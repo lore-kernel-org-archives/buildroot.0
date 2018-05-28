@@ -1,92 +1,91 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 May 2018 23:20:19 +0200
-Subject: [Buildroot] [PATCH] package/dash: fix parallel build issue
-Message-ID: <20180528212019.31614-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 28 May 2018 23:27:14 +0200
+Subject: [Buildroot] [git commit branch/next] package/corkscrew: new package
+Message-ID: <20180528212722.8CCCF811C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-    http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
-    http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
-    http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
-    [...]
+commit: https://git.buildroot.net/buildroot/commit/?id=f6f2feec458460d18b10734d59f9c6a35244ff94
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Reported-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Baruch Siach <baruch@tkos.co.il>
+Corkscrew is a tool for tunneling SSH through HTTP proxies
+
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+[Thomas: add hash for license file, add entry in DEVELOPERS file.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dash/0003-BUILD-fix-parallel-build.patch | 60 ++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/dash/0003-BUILD-fix-parallel-build.patch
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/corkscrew/Config.in      |  7 +++++++
+ package/corkscrew/corkscrew.hash |  3 +++
+ package/corkscrew/corkscrew.mk   | 13 +++++++++++++
+ 5 files changed, 25 insertions(+)
 
-diff --git a/package/dash/0003-BUILD-fix-parallel-build.patch b/package/dash/0003-BUILD-fix-parallel-build.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3c2c032980..d2da9a2f80 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -143,6 +143,7 @@ N:	Andy Kennedy <andy.kennedy@adtran.com>
+ F:	package/libunwind/
+ 
+ N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
++F:	package/corkscrew/
+ F:	package/i2c-tools/
+ F:	package/mono/
+ F:	package/mono-gtksharp3/
+diff --git a/package/Config.in b/package/Config.in
+index 6cd19ec97f..6a1606e568 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1699,6 +1699,7 @@ menu "Networking applications"
+ 	source "package/connman/Config.in"
+ 	source "package/connman-gtk/Config.in"
+ 	source "package/conntrack-tools/Config.in"
++	source "package/corkscrew/Config.in"
+ 	source "package/crda/Config.in"
+ 	source "package/ctorrent/Config.in"
+ 	source "package/cups/Config.in"
+diff --git a/package/corkscrew/Config.in b/package/corkscrew/Config.in
 new file mode 100644
-index 0000000000..4f86c639a4
+index 0000000000..1266f86e7e
 --- /dev/null
-+++ b/package/dash/0003-BUILD-fix-parallel-build.patch
-@@ -0,0 +1,60 @@
-+From 26d549e46161fd2280066dd538b957920a9cb765 Mon Sep 17 00:00:00 2001
-+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Date: Mon, 28 May 2018 22:56:37 +0200
-+Subject: [PATCH] [BUILD] fix parallel build
++++ b/package/corkscrew/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_CORKSCREW
++	bool "corkscrew"
++	help
++	  Corkscrew is a tool for tunneling SSH through HTTP proxies,
++	  but... you might find another use for it.
 +
-+When neither token.h nor token_var.h exist, and we are building in
-+parallel, it is possible that make will spawn two mktokens at roughly
-+the same time, because of two different rules, one that needs token.h ad
-+another that need token_vars.h.
++	  https://github.com/bryanpkc/corkscrew
+diff --git a/package/corkscrew/corkscrew.hash b/package/corkscrew/corkscrew.hash
+new file mode 100644
+index 0000000000..5a580d1343
+--- /dev/null
++++ b/package/corkscrew/corkscrew.hash
+@@ -0,0 +1,3 @@
++# sha256 locally computed
++sha256  ba28a7d123fe607b87ff9d399b33e7549d9ef1a13ae3b61e8f61982e8ae5571d  corkscrew-a94f745b40077172b8fe7d77e2d583b9cf900281.tar.gz
++sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/corkscrew/corkscrew.mk b/package/corkscrew/corkscrew.mk
+new file mode 100644
+index 0000000000..13612d4448
+--- /dev/null
++++ b/package/corkscrew/corkscrew.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# corkscrew
++#
++################################################################################
 +
-+For example, make can have a dependency chain toward just token.h, from
-+syntax.c, and another dependency chain toweard token_vars.h from the
-+generic BUILT_SOURCES.
++CORKSCREW_VERSION = a94f745b40077172b8fe7d77e2d583b9cf900281
++CORKSCREW_SITE = $(call github,bryanpkc,corkscrew,$(CORKSCREW_VERSION))
++CORKSCREW_LICENSE = GPL-2.0
++CORKSCREW_LICENSE_FILES = COPYING
++CORKSCREW_AUTORECONF = YES
 +
-+So, make will "quickly" decide that it needs token.h, then spawn
-+mktoken. A bit later, while that mktoken still runs but hasn't yet
-+created token_vars.h, make will need it, and thus spawn a second
-+mktoken.
-+
-+While the second one runs, the first terminates. However, the token.h it
-+had generated has been in the meantime overwritten by the second mktoken
-+that is still generating it, and token.h is still empty.
-+
-+But make proceeds to the rule that required token.h in the first place,
-+and the still-empty token.h gets icluded from a C file, and the build
-+fails because of missing defines.
-+
-+For example:
-+    http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/build-end.log
-+
-+Fix that by serialising both headers.
-+
-+Reported-by: Baruch Siach <baruch@tkos.co.il>
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+Cc: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: sent, should show soon up on:
-+    https://www.mail-archive.com/dash at vger.kernel.org/
-+
-+---
-+ src/Makefile.am | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 46399c7..5bf5a52 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -44,7 +44,8 @@ EXTRA_DIST = \
-+ 	mktokens mkbuiltins builtins.def.in mkinit.c \
-+ 	mknodes.c nodetypes nodes.c.pat mksyntax.c mksignames.c
-+ 
-+-token.h token_vars.h: mktokens
-++token_vars.h: token.h
-++token.h: mktokens
-+ 	$(SHELL) $^
-+ 
-+ builtins.def: builtins.def.in $(top_builddir)/config.h
-+-- 
-+2.14.1
-+
--- 
-2.14.1
++$(eval $(autotools-package))
