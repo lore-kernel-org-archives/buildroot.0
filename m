@@ -1,41 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:01:10 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{9,
- 14, 16}.x series
-Message-ID: <20180528142833.F1ADA822ED@busybox.osuosl.org>
+Date: Mon, 28 May 2018 16:04:22 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/apr-util: add
+ optional support for openldap
+Message-ID: <20180528142834.0DCEA822ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72e02c9f2878cce1f42a5085ce1d669e795b1172
+commit: https://git.buildroot.net/buildroot/commit/?id=fbee8477abf703a66c611ec7e3cf41c073301998
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-[Peter: drop 4.16.x change]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+apr-util contains optional support for openldap:
+
+$ ls -1 output/target/usr/lib/apr-util-1/apr_ldap*
+output/target/usr/lib/apr-util-1/apr_ldap-1.so
+output/target/usr/lib/apr-util-1/apr_ldap.la
+output/target/usr/lib/apr-util-1/apr_ldap.so
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit aeb55c2b363870738f9e7e928868d379a21d6112)
+(cherry picked from commit 134968c6c80fd9767e8731c821d690e53cd7f3da)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/apr-util/apr-util.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7d579325aa..70e3a07d46 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -243,11 +243,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.131"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.98"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.9.99"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.39"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.40"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/apr-util/apr-util.mk b/package/apr-util/apr-util.mk
+index 22f1913865..973194b915 100644
+--- a/package/apr-util/apr-util.mk
++++ b/package/apr-util/apr-util.mk
+@@ -47,6 +47,16 @@ else
+ APR_UTIL_CONF_OPTS += --without-sqlite3
+ endif
+ 
++ifeq ($(BR2_PACKAGE_OPENLDAP),y)
++APR_UTIL_CONF_OPTS += \
++	--with-ldap \
++	--with-ldap-include="$(STAGING_DIR)/usr/include/" \
++	--with-ldap-lib="$(STAGING_DIR)/usr/lib"
++APR_UTIL_DEPENDENCIES += openldap
++else
++APR_UTIL_CONF_OPTS += --without-ldap
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ APR_UTIL_CONF_OPTS += --with-crypto --with-openssl="$(STAGING_DIR)/usr"
+ APR_UTIL_DEPENDENCIES += openssl
