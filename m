@@ -1,90 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 15:49:25 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] docs/manual: using a
- branch name as FOO_VERSION does not work
-Message-ID: <20180528142833.E01E782A8B@busybox.osuosl.org>
+Date: Mon, 28 May 2018 16:12:42 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/attr: fix install
+Message-ID: <20180528142834.590FB805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e5c7cbde01191ee86a7511711578914eed503a2
+commit: https://git.buildroot.net/buildroot/commit/?id=7bc0033d5e18772a65d7bc65b873d716ef04453d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-For various reasons, we've always suggested users to avoid using a
-branch as version string for their packages, because it does not work
-as a they would expect:
+Do not overwrite destination file if it exists.
 
-  - it is not reproducible, because the branch may change between two
-    builds that are done at different times;
+Fixes: #10986
 
-  - it does not even follow the branch, as Buildroot anyway generates
-    a local tarball, which it will reuse on subsequent builds.
-    Furthermore, since we fetch and not pull, any existing local branch
-    is not updated.
-
-Yet, until recently, using a branch name would just work (with the
-above limitations): the git tree was cloned, the branch checked out,
-and the tarball created.
-
-But with the advent of the git caching, using a branch name does not
-work anymore. Indeed, we now do a git-fetch, and that does not create
-a local master branch. So we can't check out master, because it does
-not exist locally. And for other branches, as noticed above, the local
-branch does not get udpated to the remote one.
-
-Furthermore, the local branches are only created by chance, again as a
-side-effect of trying to fetch the "special refs".
-
-So, we can't say that we reliably support the use of a branch name.
-
-Update the manual to state that using a branch does not work. Remove
-the 'stable' example, as it looked like the name of a stable branch;
-instead, replace it with a version string that ressemble a tag.
-
-Fix the layout of the manual by making the version examples an actual
-bulleted list.
-
-Note: the above is only entirely true for git. For Mercurial, CVS and
-subversion, the status may be mixed, but nonetheless, using branches is
-still a bad idea, if at least because it is not reproducible, and
-because Buildroot does not even follow the branch. So, we do not
-differentiate between the various SCMs, and just flatly state that using
-a branch name is not supported.
-
+Reported-by: mzweerspenko+bugzilla at gmail.com
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: mzweerspenko+bugzilla at gmail.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 970cb26ec22e165c9b1fea27a85cfe5762096b19)
+(cherry picked from commit 28d8f8dfd5b10748b009377445d710abef6b8502)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-generic.txt | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ ...-all-use-install-1-to-install-executables.patch | 67 ++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 521d6d50c7..ff8de69d0f 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -197,12 +197,12 @@ information is (assuming the package name is +libfoo+) :
- * +LIBFOO_VERSION+, mandatory, must contain the version of the
-   package. Note that if +HOST_LIBFOO_VERSION+ doesn't exist, it is
-   assumed to be the same as +LIBFOO_VERSION+. It can also be a
--  revision number, branch or tag for packages that are fetched
--  directly from their revision control system. +
--  Examples: +
--    +LIBFOO_VERSION = 0.1.2+ +
--    +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+ +
--    +LIBFOO_VERSION = stable+
-+  revision number or a tag for packages that are fetched directly
-+  from their version control system. Do not use a branch name as
-+  version; it does not work. Examples:
-+  ** a version for a release tarball: +LIBFOO_VERSION = 0.1.2+
-+  ** a sha1 for a git tree: +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+
-+  ** a tag for a git tree +LIBFOO_VERSION = v0.1.2+
- 
- * +LIBFOO_SOURCE+ may contain the name of the tarball of the package,
-   which Buildroot will use to download the tarball from
+diff --git a/package/attr/0004-all-use-install-1-to-install-executables.patch b/package/attr/0004-all-use-install-1-to-install-executables.patch
+new file mode 100644
+index 0000000000..ef59bb797c
+--- /dev/null
++++ b/package/attr/0004-all-use-install-1-to-install-executables.patch
+@@ -0,0 +1,67 @@
++From 4187e60ab52cac3ed36036a354977310dab68dcb Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Tue, 8 May 2018 15:16:10 +0200
++Subject: [PATCH] all: use install(1) to install executables
++
++When the destination file already exists, the current install script
++will overwrite it with the new executable.
++
++However, when the existing executable is a symlink or hardlink to
++something else, like busybox, this effectively overwrites that something
++with the new executable, and thus replaces busybox and all its applets
++with the code for either of the three commands.
++
++We fix that by simply calling install(1). install(1) is sufficiently
++widespread that we don't bother checking for it, as this is just a
++workaround while waiting for the version bump that will eventually fix
++it for good.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ attr/Makefile     | 4 ++--
++ getfattr/Makefile | 4 ++--
++ setfattr/Makefile | 4 ++--
++ 3 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/attr/Makefile b/attr/Makefile
++index 1c467e8..326dd7e 100644
++--- a/attr/Makefile
+++++ b/attr/Makefile
++@@ -29,6 +29,6 @@ default: $(LTCOMMAND)
++ include $(BUILDRULES)
++ 
++ install: default
++-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
++-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
+++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
+++
++ install-dev install-lib:
++diff --git a/getfattr/Makefile b/getfattr/Makefile
++index 91d3df2..f913172 100644
++--- a/getfattr/Makefile
+++++ b/getfattr/Makefile
++@@ -30,6 +30,6 @@ default: $(LTCOMMAND)
++ include $(BUILDRULES)
++ 
++ install: default
++-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
++-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
+++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
+++
++ install-dev install-lib:
++diff --git a/setfattr/Makefile b/setfattr/Makefile
++index d55461b..26dc5d8 100644
++--- a/setfattr/Makefile
+++++ b/setfattr/Makefile
++@@ -30,6 +30,6 @@ default: $(LTCOMMAND)
++ include $(BUILDRULES)
++ 
++ install: default
++-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
++-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
+++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
+++
++ install-dev install-lib:
++-- 
++2.14.1
++
