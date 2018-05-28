@@ -1,48 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 14:41:06 +0200
-Subject: [Buildroot] [arc-buildroot] Re: [PATCH] toolchain: Bump ARC
- tools to arc-2018.03-rc2
-In-Reply-To: <90d3e805ed43935439cc662364db4166d5193748.camel@synopsys.com>
- (Alexey Brodkin's message of "Mon, 28 May 2018 08:54:10 +0000")
-References: <20180525180701.24796-1-Evgeniy.Didin@synopsys.com>
- <877enq96f5.fsf@dell.be.48ers.dk>
- <90d3e805ed43935439cc662364db4166d5193748.camel@synopsys.com>
-Message-ID: <87vab8ymu5.fsf@dell.be.48ers.dk>
+Date: Mon, 28 May 2018 14:41:57 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/nss-mdns: Fix hook from
+ post-install to finalize
+In-Reply-To: <1527496298-29730-1-git-send-email-vincent.prince.fr@gmail.com>
+ (Vincent Prince's message of "Mon, 28 May 2018 10:31:37 +0200")
+References: <1527496298-29730-1-git-send-email-vincent.prince.fr@gmail.com>
+Message-ID: <87r2lwymsq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+>>>>> "Vincent" == Vincent Prince <vincent.prince.fr@gmail.com> writes:
 
- > Hi Peter,
- > On Sat, 2018-05-26 at 10:18 +0200, Peter Korsgaard wrote:
- >> > > > > > "Evgeniy" == Evgeniy Didin <Evgeniy.Didin@synopsys.com> writes:
- >> 
- >> > This commit bumps ARC toolchain to arc-2018.03-rc2, which
- >> > includes significant changes since arc-2018.03-rc1.
- >> > We want to test how new toolchain-rc2 builds packages,
- >> > so we can make fixes before release of toolcain.
- >> > This makes us closer to toolchain release which will be in a few weeks.
- >> 
- >> > Please note that it is a release candidate
- >> > and it might contain some breakages, 
- >> > please don't use it for production builds.
- >> 
- >> > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
- >> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- >> > Cc: arc-buildroot at synopsys.com
- >> 
- >> Committed to next, thanks.
 
- > Maybe it worth applying to the current master as this is a change of
- > RC1 (e have today in master) to RC2 that only has a couple fixes on top
- > of RC1. I.e. it is supposed to bring stability in the release but not
- > introduce new features etc.
+Please describe _WHY_ this is done and not just state what the change is
+you are making - Thanks.
 
-Ok, that wasn't clear from the commit message. I can apply it on master
-as well if you prefer.
+> Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
+ > ---
+ >  package/nss-mdns/nss-mdns.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
+
+ > diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/nss-mdns.mk
+ > index 407b942..ee666c7 100644
+ > --- a/package/nss-mdns/nss-mdns.mk
+ > +++ b/package/nss-mdns/nss-mdns.mk
+ > @@ -17,6 +17,6 @@ define NSS_MDNS_INSTALL_CONFIG
+ >  		$(TARGET_DIR)/etc/nsswitch.conf
+ >  endef
+ 
+ > -NSS_MDNS_POST_INSTALL_TARGET_HOOKS += NSS_MDNS_INSTALL_CONFIG
+ > +NSS_MDNS_TARGET_FINALIZE_HOOKS += NSS_MDNS_INSTALL_CONFIG
+ 
+ >  $(eval $(autotools-package))
+ > -- 
+ > 2.7.4
+
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
