@@ -1,63 +1,131 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 May 2018 22:07:55 +0200
-Subject: [Buildroot] [PATCH] binutils: replace hard-links with
- soft-links to fix rpath
-In-Reply-To: <87h8mwbw7r.fsf@dell.be.48ers.dk>
-References: <20180422122350.16293-1-thomas.petazzoni@bootlin.com>
- <87h8mwbw7r.fsf@dell.be.48ers.dk>
-Message-ID: <20180528200755.GG2965@scaer>
+Date: Mon, 28 May 2018 22:23:51 +0200
+Subject: [Buildroot] [PATCH] package/utp_com: Tool used to send commands
+ to hardware via NXP's UTP protocol.
+In-Reply-To: <1526975064-12266-1-git-send-email-vincent.prince.fr@gmail.com>
+References: <1526975064-12266-1-git-send-email-vincent.prince.fr@gmail.com>
+Message-ID: <20180528202351.GH2965@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Vincent, All,
 
-On 2018-05-24 23:05 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> 
->  > binutils installs its binaries both as bin/<tuple>-<tool> and as
->  > <tuple>/bin/<tool>, and hardlinks are used to reduce disk space
->  > consumption. This causes a problem for host-binutils with our rpath
->  > fixing logic done by "make sdk".
-> 
->  > Indeed, the fix-rpath script starts by fixing up the rpath of
->  > bin/<tuple>-<tool>, and sets the RPATH to $ORIGIN/../lib/. Then
->  > fix-rpath moves on to <tuple>/bin/<tool>, and doesn't find the library
->  > the tool depends on, and clears the RPATH. The result is that the
->  > binutils tool are not usable.
-> 
->  > Note that this is only visible currently on the ARC architecture,
->  > because on this architecture, binutils is fetched from git, which
->  > causes host-flex to be built, and some binutils tools to use the libfl
->  > shared library. Therefore, the binutils tools don't use just the
->  > standard C library (which is provided by the system) but also libfl
->  > from $(HOST_DIR)/lib, and therefore if the RPATH isn't set correctly,
->  > those tools don't work properly.
-> 
->  > In order to address this, this comit adds a post-install hook to
->  > host-binutils that replaces those hard links by symbolic links. It is
->  > worth mentioning that library loading and RPATH usage occurs *after*
->  > resolving the symbolic links, which makes this solution work.
-> 
->  > Fixes:
-> 
->  >   http://autobuild.buildroot.net/results/b2562b05d397d4e1ffe0f8d2f4ce4c84ab6feae1/
-> 
->  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> Committed to 2018.02.x, thanks.
+Thanks for this contribution! :-)
 
-As discussed on IRC, and so you don't forget, this will require further
-backporting of fixes for bug #11031 when they are applied to master:
-    https://patchwork.ozlabs.org/patch/921680/
-    https://patchwork.ozlabs.org/patch/921681/
+Here's just a very rough and very quick review because I spotted a few
+minor issues...
 
-;-p
+On 2018-05-22 09:44 +0200, Vincent Prince spake thusly:
+> Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
+[--SNIP--]
+> diff --git a/package/utp_com/Config.in b/package/utp_com/Config.in
+> new file mode 100644
+> index 0000000..e45555b
+> --- /dev/null
+> +++ b/package/utp_com/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_UTP_COM
+> +	bool "utp_com"
+> +	select BR2_PACKAGE_SG3_UTILS
+> +	help
+> +		This package is used to send commands to hardware
+> +		via Freescale's UTP protocol.
+> +
+> +		https://github.com/ixonos/utp_com
+
+Indentation of the help text should be 1 TAB and 2 spaces, not 2 TABs.
+
+> diff --git a/package/utp_com/Config.in.host b/package/utp_com/Config.in.host
+> new file mode 100644
+> index 0000000..3e5319e
+> --- /dev/null
+> +++ b/package/utp_com/Config.in.host
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_HOST_UTP_COM
+> +	bool "host utp_com"
+> +	help
+> +		This package is used to send commands to hardware
+> +		via Freescale's UTP protocol.
+> +
+> +		https://github.com/ixonos/utp_com
+
+Indentation of the help text should be 1 TAB and 2 spaces, not 2 TABs.
+
+[--SNIP--]
+> diff --git a/package/utp_com/utp_com.mk b/package/utp_com/utp_com.mk
+> new file mode 100644
+> index 0000000..6fa94f2
+> --- /dev/null
+> +++ b/package/utp_com/utp_com.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# utp_com
+> +#
+> +################################################################################
+> +
+> +UTP_COM_VERSION = 7fe590fef812561cceb08aaa10b64e9bac8f542f
+> +UTP_COM_SITE = $(call github,ixonos,utp_com,$(UTP_COM_VERSION))
+> +UTP_COM_LICENSE = GPL-2.0+
+> +UTP_COM_LICENSE_FILES = LICENSE
+> +UTP_COM_DEPENDENCIES = sg3_utils
+> +
+> +define UTP_COM_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include"
+> +endef
+
+Please add separatig lines between the various macros. Also, please
+group the target commands together and the host commands together:
+
+    define UTP_COM_BUILD_CMDS
+        Blabla
+    endef
+
+    define UTP_COM_INSTALL_TARGET_CMDS
+        Blabla
+    endef
+
+    define HOST_UTP_COM_BUILD_CMDS
+        Blabla
+    endef
+
+    define HOST_UTP_COM_INSTALL_CMDS
+        Blabla
+    endef
+
+> +define HOST_UTP_COM_BUILD_CMDS
+> +	$(HOST_CONFIGURE_OPTS) $(MAKE) -C $(@D) CFLAGS="$(HOST_CFLAGS) -I$(HOST_DIR)/usr/include"
+
+We've dropped use of "/usr" as a sub-dir of $(HOST_DIR) now, so includes
+are to be found directly in $(HOST_DIR)/include
+
+> +endef
+> +
+> +define UTP_COM_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -m 755 $(@D)/utp_com $(TARGET_DIR)/usr/bin/utp_com
+> +endef
+> +define HOST_UTP_COM_INSTALL_CMDS
+> +	$(INSTALL) -m 755 $(@D)/utp_com $(HOST_DIR)/usr/bin/utp_com
+
+Ditto, no "/usr" anymore, so install directly in $(HOST_DIR)/bin/utp_com
 
 Regards,
 Yann E. MORIN.
+
+> +endef
+> +
+> +$(eval $(generic-package))
+> +$(eval $(host-generic-package))
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
