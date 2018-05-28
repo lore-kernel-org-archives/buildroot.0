@@ -1,48 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:08:15 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/jamvm: restrict
- on what MIPS procs are allowed
-Message-ID: <20180528142834.42E99805EE@busybox.osuosl.org>
+Date: Mon, 28 May 2018 16:10:48 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] cups-filters: fix avahi
+ dependency
+Message-ID: <20180528142834.4A0B2805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3097ef767615cabaa8cf60cdcf70a5d4f333fb9f
+commit: https://git.buildroot.net/buildroot/commit/?id=d431200be3b3ea7446e4b48a6fd809fe54918e82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-jamvm uses deprecated opcodes to store/load words from the FPU
-coprocessor registers, and in so doing, expects those registers
-to be 32-bit.
-
-Thus, restrict the conditions under which jamvm is available
-under mips.
+avahi support requires avahi-client, which needs avahi-daemon and dbus
 
 Fixes:
-    http://autobuild.buildroot.org/results/f76/f76e10e4c1ce25b42fb2e5d2012adf2eaf1b2fe1/
-    http://autobuild.buildroot.org/results/162/162d0e41dc9bc6d6f6594ccee0cb4217067fc71f/
-    ...
+ - http://autobuild.buildroot.net/results/5c326bb56199000eb0e53a4d0f3c6c13be71cda0
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 67974fe6da0dc346ad40f6b7d373a05aa0b1e1f9)
+(cherry picked from commit dad6f570af5b7d2ef800c6dc55316933bd4b1803)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jamvm/Config.in | 3 ++-
+ package/cups-filters/cups-filters.mk | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/jamvm/Config.in b/package/jamvm/Config.in
-index 51d5da03b8..7717ccaadb 100644
---- a/package/jamvm/Config.in
-+++ b/package/jamvm/Config.in
-@@ -2,7 +2,8 @@ config BR2_PACKAGE_JAMVM_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_arm || BR2_armeb
- 	default y if BR2_i386 || BR2_x86_64
--	default y if BR2_mips || BR2_mipsel
-+	default y if (BR2_mips || BR2_mipsel) \
-+		&& (BR2_MIPS_FP32_MODE_32 || BR2_MIPS_SOFT_FLOAT)
- 	default y if BR2_powerpc
+diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+index 6d05aa7e31..bb1213526d 100644
+--- a/package/cups-filters/cups-filters.mk
++++ b/package/cups-filters/cups-filters.mk
+@@ -40,7 +40,8 @@ else
+ CUPS_FILTERS_CONF_OPTS += --disable-dbus
+ endif
  
- config BR2_PACKAGE_JAMVM
+-ifeq ($(BR2_PACKAGE_AVAHI),y)
++# avahi support requires avahi-client, which needs avahi-daemon and dbus
++ifeq ($(BR2_PACKAGE_AVAHI_DAEMON)$(BR2_PACKAGE_DBUS),yy)
+ CUPS_FILTERS_DEPENDENCIES += avahi
+ CUPS_FILTERS_CONF_OPTS += --enable-avahi
+ else
