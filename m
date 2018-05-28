@@ -1,139 +1,58 @@
 From: Vincent Prince <vincent.prince.fr@gmail.com>
-Date: Mon, 28 May 2018 21:06:32 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/nss-myhostname: Add package
-In-Reply-To: <87muwkymjh.fsf@dell.be.48ers.dk>
+Date: Mon, 28 May 2018 21:08:43 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/nss-mdns: Fix hook from
+ post-install to finalize
+In-Reply-To: <87r2lwymsq.fsf@dell.be.48ers.dk>
 References: <1527496298-29730-1-git-send-email-vincent.prince.fr@gmail.com>
- <1527496298-29730-2-git-send-email-vincent.prince.fr@gmail.com>
- <87muwkymjh.fsf@dell.be.48ers.dk>
-Message-ID: <CAB2nKc-MykyOLQpa3P3DiBpQ3nPucg9TeTNL-k3RbMyOBieDOQ@mail.gmail.com>
+ <87r2lwymsq.fsf@dell.be.48ers.dk>
+Message-ID: <CAB2nKc9vFwp_E1RSJ=GVLo2isqXdOFCE7qmhsKgy8RpnhYRNsw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Things are not clear on nss-myhostname usage, you can check at
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756224 discussion
-and also this commit
-http://git.nomeata.de/?p=libnss-myhostname.git;a=commit;h=5104d7f0045df55ee8be526e8c84078750e1e0ed
+I though it was obvious without explication :)
 
-It seems to work great for me and everyone using it in Yocto & Debian with
-this setting, it means not so many people as it is now integrated in
-systemd.
+I'll send a V3 to explain the _why_.
 
-
-2018-05-28 14:47 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+2018-05-28 14:41 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
 
 > >>>>> "Vincent" == Vincent Prince <vincent.prince.fr@gmail.com> writes:
 >
->  > Note sed command comes from Yocto recipe here:
->  > https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/
-> recipes-support/nss-myhostname/nss-myhostname_0.3.bb
 >
->  > Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
+> Please describe _WHY_ this is done and not just state what the change is
+> you are making - Thanks.
+>
+> > Signed-off-by: Vincent Prince <vincent.prince.fr@gmail.com>
 >  > ---
->  >  DEVELOPERS                                 |  3 +++
->  >  package/Config.in                          |  1 +
->  >  package/nss-myhostname/Config.in           | 11 +++++++++++
->  >  package/nss-myhostname/nss-myhostname.hash |  3 +++
->  >  package/nss-myhostname/nss-myhostname.mk   | 20 ++++++++++++++++++++
->  >  5 files changed, 38 insertions(+)
->  >  create mode 100644 package/nss-myhostname/Config.in
->  >  create mode 100644 package/nss-myhostname/nss-myhostname.hash
->  >  create mode 100644 package/nss-myhostname/nss-myhostname.mk
+>  >  package/nss-mdns/nss-mdns.mk | 2 +-
+>  >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
->  > diff --git a/DEVELOPERS b/DEVELOPERS
->  > index 41e1b54..88c9a71 100644
->  > --- a/DEVELOPERS
->  > +++ b/DEVELOPERS
->  > @@ -1813,6 +1813,9 @@ F:     package/openmpi/
->  >  F:  package/pinentry/
->  >  F:  package/trinity/
+>  > diff --git a/package/nss-mdns/nss-mdns.mk b/package/nss-mdns/
+> nss-mdns.mk
+>  > index 407b942..ee666c7 100644
+>  > --- a/package/nss-mdns/nss-mdns.mk
+>  > +++ b/package/nss-mdns/nss-mdns.mk
+>  > @@ -17,6 +17,6 @@ define NSS_MDNS_INSTALL_CONFIG
+>  >              $(TARGET_DIR)/etc/nsswitch.conf
+>  >  endef
 >
->  > +N:  Vincent Prince <vincent.prince.fr@gmail.com>
->  > +F:  package/nss-myhostname/
->  > +
->  >  N:  Vincent Stehl? <vincent.stehle@laposte.net>
->  >  F:  package/i7z/
->  >  F:  package/msr-tools/
->  > diff --git a/package/Config.in b/package/Config.in
->  > index 3cf53ed..3ac0d63 100644
->  > --- a/package/Config.in
->  > +++ b/package/Config.in
->  > @@ -1426,6 +1426,7 @@ menu "Networking"
->  >      source "package/neon/Config.in"
->  >      source "package/norm/Config.in"
->  >      source "package/nss-mdns/Config.in"
->  > +    source "package/nss-myhostname/Config.in"
->  >      source "package/nss-pam-ldapd/Config.in"
->  >      source "package/omniorb/Config.in"
->  >      source "package/openldap/Config.in"
->  > diff --git a/package/nss-myhostname/Config.in b/package/nss-myhostname/
-> Config.in
->  > new file mode 100644
->  > index 0000000..549e167
->  > --- /dev/null
->  > +++ b/package/nss-myhostname/Config.in
->  > @@ -0,0 +1,11 @@
->  > +config BR2_PACKAGE_NSS_MYHOSTNAME
->  > +    bool "nss-myhostname"
->  > +    depends on BR2_TOOLCHAIN_USES_GLIBC
->  > +    depends on !BR2_PACKAGE_SYSTEMD_MYHOSTNAME
->  > +    help
->  > +      Name Service Switch module for resolving the local hostname
->  > +
->  > +      http://0pointer.de/lennart/projects/nss-myhostname
->  > +
->  > +comment "nss-myhostname needs a glibc toolchain"
->  > +    depends on !BR2_TOOLCHAIN_USES_GLIBC
->  > diff --git a/package/nss-myhostname/nss-myhostname.hash
-> b/package/nss-myhostname/nss-myhostname.hash
->  > new file mode 100644
->  > index 0000000..dfa531c
->  > --- /dev/null
->  > +++ b/package/nss-myhostname/nss-myhostname.hash
->  > @@ -0,0 +1,3 @@
->  > +# locally computed
->  > +sha256  2ba744ea8d578d1c57c85884e94a3042ee17843a5294434d3a7f6c4d67e7caf2
-> nss-myhostname-0.3.tar.gz
->  > +sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861
-> LICENSE
->  > diff --git a/package/nss-myhostname/nss-myhostname.mk
-> b/package/nss-myhostname/nss-myhostname.mk
->  > new file mode 100644
->  > index 0000000..435c380
->  > --- /dev/null
->  > +++ b/package/nss-myhostname/nss-myhostname.mk
->  > @@ -0,0 +1,20 @@
->  > +###########################################################
-> #####################
->  > +#
->  > +## nss-myhostname
->  > +#
->  > +###########################################################
-> #####################
->  > +
->  > +NSS_MYHOSTNAME_VERSION = 0.3
->  > +NSS_MYHOSTNAME_SITE = http://0pointer.de/lennart/
-> projects/nss-myhostname
->  > +NSS_MYHOSTNAME_LICENSE = LGPL-2.1+
->  > +NSS_MYHOSTNAME_LICENSE_FILES = LICENSE
->  > +
->  > +define MYHOSTNAME_SET_NSSWITCH
->  > +    $(SED) '/^hosts:/s/\s*\<myhostname\>//' \
->  > +            -E -e 's,(^hosts:.*)(\<files\>)(.*)(\<dns\>)(.*),\1\2
-> myhostname \3\4\5,' \
->  > +            $(TARGET_DIR)/etc/nsswitch.conf
+>  > -NSS_MDNS_POST_INSTALL_TARGET_HOOKS += NSS_MDNS_INSTALL_CONFIG
+>  > +NSS_MDNS_TARGET_FINALIZE_HOOKS += NSS_MDNS_INSTALL_CONFIG
 >
-> I would still like to understand why this order is needed. The website
-> example and documentation says to add it as a fallback at the very end
-> of the hosts: line:
+>  >  $(eval $(autotools-package))
+>  > --
+>  > 2.7.4
 >
-> http://0pointer.de/lennart/projects/nss-myhostname/
+>  > _______________________________________________
+>  > buildroot mailing list
+>  > buildroot at busybox.net
+>  > http://lists.busybox.net/mailman/listinfo/buildroot
 >
 > --
 > Bye, Peter Korsgaard
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180528/d3edcceb/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180528/3ba3d30f/attachment.html>
