@@ -1,52 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 May 2018 22:55:19 +0200
-Subject: [Buildroot] [PATCH v3 5/5] configs: add Xilinx ZCU106 board
- (ZynqMP SoC)
-In-Reply-To: <1525364617-23633-6-git-send-email-luca@lucaceresoli.net>
-References: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
- <1525364617-23633-6-git-send-email-luca@lucaceresoli.net>
-Message-ID: <20180528225519.426a45f9@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 28 May 2018 20:58:45 +0000
+Subject: [Buildroot] [Bug 11031] ld-elf2flt: host/bin/ld.real': execvp: No
+ such file or directory
+In-Reply-To: <bug-11031-163@https.bugs.busybox.net/>
+References: <bug-11031-163@https.bugs.busybox.net/>
+Message-ID: <bug-11031-163-OOxTWNB5GR@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11031
 
-On Thu,  3 May 2018 18:23:37 +0200, Luca Ceresoli wrote:
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-> diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-> new file mode 100644
-> index 000000000000..36643b2f4cdd
-> --- /dev/null
-> +++ b/configs/zynqmp_zcu106_defconfig
-> @@ -0,0 +1,31 @@
-> +BR2_aarch64=y
-> +BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
-> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2017.4"
-> +BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +# BR2_TARGET_ROOTFS_TAR is not set
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|---                         |FIXED
 
-Shouldn't we specify an explicit version for ATF, just like it's done
-for U-Boot and Linux ?
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed by:
+https://git.buildroot.org/buildroot/commit/?id=bb0164a8b191e5cbf656a4a6b4c5491d4fc167b6
 
-Best regards,
+and
 
-Thomas
+https://git.buildroot.org/buildroot/commit/?id=b37069340010f4d26c3baa741f2dc996014b7c66
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
