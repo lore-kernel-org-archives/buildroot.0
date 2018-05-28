@@ -1,40 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 20:20:46 +0200
-Subject: [Buildroot] [git commit] chrony: S49chrony: support a defaults file
-Message-ID: <20180602101013.9AEA48199C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 28 May 2018 22:55:58 +0200
+Subject: [Buildroot] [git commit] libnice: add gstreamer support
+Message-ID: <20180602101013.C8E5F8199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9977053659cdc098b35ef0e9762707a53838209e
+commit: https://git.buildroot.net/buildroot/commit/?id=689c083f571e0c88463a451cb4e64c1470b67afb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For specifying custom options to chrony.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/chrony/S49chrony | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/libnice/libnice.mk | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/package/chrony/S49chrony b/package/chrony/S49chrony
-index 6215acc4aa..5abb3b2582 100755
---- a/package/chrony/S49chrony
-+++ b/package/chrony/S49chrony
-@@ -2,12 +2,14 @@
- #
- # Start chrony
- 
-+[ -r /etc/default/chrony ] && . /etc/default/chrony
+diff --git a/package/libnice/libnice.mk b/package/libnice/libnice.mk
+index e023728f44..49c29f9a60 100644
+--- a/package/libnice/libnice.mk
++++ b/package/libnice/libnice.mk
+@@ -10,8 +10,19 @@ LIBNICE_LICENSE = MPL-1.1 or LGPL-2.1
+ LIBNICE_LICENSE_FILES = COPYING COPYING.MPL COPYING.LGPL
+ LIBNICE_DEPENDENCIES = gnutls libglib2 host-pkgconf
+ LIBNICE_INSTALL_STAGING = YES
+-LIBNICE_CONF_OPTS = \
+-	--without-gstreamer \
+-	--without-gstreamer-0.10
 +
- [ -f /etc/chrony.conf ] || exit 0
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++LIBNICE_CONF_OPTS += --with-gstreamer-0.10
++LIBNICE_DEPENDENCIES += gst-plugins-base
++else
++LIBNICE_CONF_OPTS += --without-gstreamer-0.10
++endif
++
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
++LIBNICE_CONF_OPTS += --with-gstreamer
++LIBNICE_DEPENDENCIES += gst1-plugins-base
++else
++LIBNICE_CONF_OPTS += --without-gstreamer
++endif
  
- case "$1" in
-   start)
- 	printf "Starting chrony: "
--	chronyd && echo "OK" || echo "FAIL"
-+	chronyd $CHRONY_ARGS && echo "OK" || echo "FAIL"
- 	;;
-   stop)
- 	printf "Stopping chrony: "
+ $(eval $(autotools-package))
