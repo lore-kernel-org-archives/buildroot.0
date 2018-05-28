@@ -1,50 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 28 May 2018 16:14:43 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] wget: bump to version
- 1.19.4
-Message-ID: <20180528142834.681F0805EE@busybox.osuosl.org>
+Date: Mon, 28 May 2018 16:13:58 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/acl: fix install
+Message-ID: <20180528142834.605BF805EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edb27f38a019be683903b70b4b238782ec887754
+commit: https://git.buildroot.net/buildroot/commit/?id=587d5b58bf60cb10c52c69ca08104605a1e159c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Update license hash; s/http/https/ of in-text URLs.
+Do not overwrite destination file if it exists.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Simliar to bug #10986.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: mzweerspenko+bugzilla at gmail.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 56057835f6b92f9a547892478ea2bf0165006602)
+(cherry picked from commit c3e62d39844b28b59650747e59e86a21d71f05c8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wget/wget.hash | 5 +++--
- package/wget/wget.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ ...-all-use-install-1-to-install-executables.patch | 67 ++++++++++++++++++++++
+ 1 file changed, 67 insertions(+)
 
-diff --git a/package/wget/wget.hash b/package/wget/wget.hash
-index 0048557946..ab0d1d1dfd 100644
---- a/package/wget/wget.hash
-+++ b/package/wget/wget.hash
-@@ -1,4 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256 d59a745ad2c522970660bb30d38601f9457b151b322e01fa20a5a0da0f55df07  wget-1.19.2.tar.lz
-+# https://ftp.gnu.org/gnu/wget/wget-1.19.4.tar.lz.sig
-+sha256 2fc0ffb965a8dc8f1e4a89cbe834c0ae7b9c22f559ebafc84c7874ad1866559a  wget-1.19.4.tar.lz
- # Locally calculated
--sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256 e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 3fee8e1b0c..23e4c8acca 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WGET_VERSION = 1.19.2
-+WGET_VERSION = 1.19.4
- WGET_SOURCE = wget-$(WGET_VERSION).tar.lz
- WGET_SITE = $(BR2_GNU_MIRROR)/wget
- WGET_DEPENDENCIES = host-pkgconf
+diff --git a/package/acl/0003-all-use-install-1-to-install-executables.patch b/package/acl/0003-all-use-install-1-to-install-executables.patch
+new file mode 100644
+index 0000000000..9640dd866d
+--- /dev/null
++++ b/package/acl/0003-all-use-install-1-to-install-executables.patch
+@@ -0,0 +1,67 @@
++From d3bd7b29b79147b4155e78a8ea06ded98b91f92a Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Tue, 8 May 2018 15:23:57 +0200
++Subject: [PATCH] all: use install(1) to install executables
++
++When the destination file already exists, the current install script
++will overwrite it with the new executable.
++
++However, when the existing executable is a symlink or hardlink to
++something else, like busybox, this effectively overwrites that something
++with the new executable, and thus replaces busybox and all its applets
++with the code for either of the three commands.
++
++We fix that by simply calling install(1). install(1) is sufficiently
++widespread that we don't bother checking for it, as tis is just a
++workaround while waiting for the version bump that will eventually fix
++it for good.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ chacl/Makefile   | 4 ++--
++ getfacl/Makefile | 4 ++--
++ setfacl/Makefile | 4 ++--
++ 3 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/chacl/Makefile b/chacl/Makefile
++index 33858d6..c857329 100644
++--- a/chacl/Makefile
+++++ b/chacl/Makefile
++@@ -30,6 +30,6 @@ default: $(LTCOMMAND)
++ include $(BUILDRULES)
++ 
++ install: default
++-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
++-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
+++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
+++
++ install-dev install-lib:
++diff --git a/getfacl/Makefile b/getfacl/Makefile
++index 7fbafda..8ac63e0 100644
++--- a/getfacl/Makefile
+++++ b/getfacl/Makefile
++@@ -31,6 +31,6 @@ default: $(LTCOMMAND)
++ include $(BUILDRULES)
++ 
++ install: default
++-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
++-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
+++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
+++
++ install-dev install-lib:
++diff --git a/setfacl/Makefile b/setfacl/Makefile
++index c44e7c0..eea2ede 100644
++--- a/setfacl/Makefile
+++++ b/setfacl/Makefile
++@@ -31,6 +31,6 @@ default: $(LTCOMMAND)
++ include $(BUILDRULES)
++ 
++ install: default
++-	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
++-	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
+++	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
+++
++ install-dev install-lib:
++-- 
++2.14.1
++
