@@ -1,71 +1,61 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 28 May 2018 22:36:05 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-05-21
-In-Reply-To: <20180528202840.GI2965@scaer>
-References: <20180522060038.2D49D20828@mail.bootlin.com>
- <20180522151741.6uqpst3wexs33yh6@tarshish>
- <20180528202840.GI2965@scaer>
-Message-ID: <20180528203605.GJ2965@scaer>
+Date: Mon, 28 May 2018 22:37:43 +0200
+Subject: [Buildroot] [RFC] [PATCH v2 2/2] support/kconfig: Bump to
+ kconfig from Linux 4.17-rc2
+In-Reply-To: <dcf8150e-1eb1-ba10-09e6-d3eb0bffaf2b@mind.be>
+References: <20180509164412.31596-1-petr.vorel@gmail.com>
+ <20180509164412.31596-2-petr.vorel@gmail.com>
+ <20180519230311.6a3652fd@windsurf> <20180520142311.GA3453@scaer>
+ <20180520143139.GA14607@x230> <20180520144141.GB3453@scaer>
+ <20180520165009.56b44d9b@windsurf>
+ <dcf8150e-1eb1-ba10-09e6-d3eb0bffaf2b@mind.be>
+Message-ID: <20180528203743.GK2965@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Arnout, Thomas, All,
 
-On 2018-05-28 22:28 +0200, Yann E. MORIN spake thusly:
-> On 2018-05-22 18:17 +0300, Baruch Siach spake thusly:
-> > On Tue, May 22, 2018 at 08:00:38AM +0200, Thomas Petazzoni wrote:
-> > >       mipsel |                   dash-0.5.9.1 | NOK | http://autobuild.buildroot.net/results/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb | ORPH
+On 2018-05-22 23:22 +0200, Arnout Vandecappelle spake thusly:
+> On 20-05-18 16:50, Thomas Petazzoni wrote:
+> > Hello,
 > > 
-> > /bin/sh mktokens
-> > /bin/sh mktokens
-> > /bin/sh mkbuiltins builtins.def
-> > /usr/bin/gcc -I. -I..   -g -O2 -Wall    -o mksyntax mksyntax.c
-> > In file included from mksyntax.c:43:0:
-> > parser.h: In function 'parser_eof':
-> > parser.h:100:37: error: 'TEOF' undeclared (first use in this function)
-> >   return tokpushback && lasttoken == TEOF;
-> >                                      ^
+> > On Sun, 20 May 2018 16:41:41 +0200, Yann E. MORIN wrote:
 > > 
-> > I could not reproduce this one here. Might be a parallel build issue, where 
-> > token.h (the generated header that defines TEOF) exists but is still empty 
-> > when mksyntax.c compiles. Maybe the two invocations of mktokens are racing 
-> > against each other. But I can't see why mktokens runs twice.
+> >> I initially did not reply further to this part, becuase I seem to
+> >> remember that there was a change in behavious with certain versions of
+> >> flex/bison, that made the output change drastically, and I was afraid we
+> >> could be bitten by this...
+> >>
+> >> But in the end, this is not a problem, because we would not care to
+> >> mix-n-match files built with different versions of said tools, as they
+> >> would be those from the distro, always, and never those we ship, since
+> >> we would no longer ship them.
+> >>
+> >> And eventually, I now remember that the issue was with gperf changing
+> >> its API (a function prototype changed), and that was causing pain. But
+> >> now, kconfig no longer uses gperf to start with, so no incompatibility
+> >> anymore anyway.
+> >>
+> >> Which would allow us to drop the dependency of linux on host-{flex,bison}
+> >> that we had to add recently.
 > > 
-> > Another option is that the content of token.h is not generated correctly for 
-> > some reason.
-> > 
-> > The autobuilder recorded[1] a few occurrences of the same failure (all error 
-> > from January and before) not only on your machine.
-> > [1] http://autobuild.buildroot.net/?reason=dash-0.5.9.1
+> > If we start relying on the system-installed flex and bison, then we
+> > should remove host-flex and host-bison entirely, not only for the linux
+> > package. The question is whether bison and flex both behave in a
+> > reasonably similar way regardless of which version is used.
 > 
-> Well, I have no idea. Lemme get a look at the code...
+>  I briefly looked at this in Paris, and it became clear very quickly that even a
+> minor change in the bison version would give a completely different .c file. If
+> this is a source file that will be built for the target, it's going to be a
+> major reproducibility-killer. So I don't think we can remove host-bison and
+> host-flex.
 
-Actually, that's pretty obvious. src/Makefile.am contains this rule:
-
-    token.h token_vars.h: mktokens
-        $(SHELL) $^
-
-So, when neither header exist, it can happen that make needs those at
-about the same time, it will spawn mktoken twice. And when the first
-finishes, the second might still be running, and the files are still
-empty by the time a gcc tries to #include them.
-
-It is pretty easy to "fix" this in either one of two possibilities.
-
-The first, simple one, is to build with $(MAKE1).
-
-The second, the cleanest one, is to make the Makefile.am parallel-safe,
-using something like:
-
-    token_vars.h: token.h
-    token.h: mktokens
-        $(SHELL) $^
-
-Or something similar...
+We're only talking about dropping the need for host-flex and host-bison
+for the kconfig stuff. In this case, we don;t care that the user
+generates C code one way or another: it's only a host tool...
 
 Regards,
 Yann E. MORIN.
