@@ -1,38 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 21:17:25 +0200
-Subject: [Buildroot] [git commit branch/next] usbutils: lsusb.py is for
- python 3.x only
-Message-ID: <20180529194155.2559B811AA@busybox.osuosl.org>
+Date: Tue, 29 May 2018 21:38:48 +0200
+Subject: [Buildroot] [git commit branch/next] libqrencode: bump to version
+ 4.0.0
+Message-ID: <20180529194155.370E38028C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78b9f9c393e58590d8e416fb0ac34b947cab0bad
+commit: https://git.buildroot.net/buildroot/commit/?id=4e4dd94dec988557c07bc7c30f12acf5e5a61489
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-usbutils version 010 converted the lsusb.py script to Python 3. Keep the
-lsusb.py script on target only when Python 3.x is enabled.
+- Use new --with[out]-png option
+- Add hash for license file
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/usbutils/usbutils.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libqrencode/libqrencode.hash |  7 +++++--
+ package/libqrencode/libqrencode.mk   | 10 ++++++++--
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index 98b7894ae7..43322e4a65 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -16,8 +16,8 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- USBUTILS_DEPENDENCIES += busybox
+diff --git a/package/libqrencode/libqrencode.hash b/package/libqrencode/libqrencode.hash
+index 8c94ccd35d..1418413135 100644
+--- a/package/libqrencode/libqrencode.hash
++++ b/package/libqrencode/libqrencode.hash
+@@ -1,2 +1,5 @@
+-# From http://fukuchi.org/works/qrencode/qrencode-3.4.2.tar.gz.sha1
+-sha1	7daaad61f333ff6cdabfb0d925c3ab668d16dee2	qrencode-3.4.2.tar.gz
++# From http://fukuchi.org/works/qrencode/qrencode-4.0.0.tar.gz.sha
++sha512	fdbcee3ef90abf780dcbe495cef3e6ac5449a4a0aaa87d1a1a4f71d97fe6d96974d8132f7e227133cddb5ab73600e968821634752fc0d75113ca0959aae9a5d0	qrencode-4.0.0.tar.gz
++
++# Hash for license file:
++sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING
+diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
+index 8f17b895e0..62ca2ed11d 100644
+--- a/package/libqrencode/libqrencode.mk
++++ b/package/libqrencode/libqrencode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBQRENCODE_VERSION = 3.4.2
++LIBQRENCODE_VERSION = 4.0.0
+ LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
+ LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
+ LIBQRENCODE_DEPENDENCIES = host-pkgconf
+@@ -18,9 +18,15 @@ else
+ LIBQRENCODE_CONF_OPTS += --disable-thread-safety
  endif
  
--# Nice lsusb.py script only if there's python
--ifeq ($(BR2_PACKAGE_PYTHON),)
-+# Nice lsusb.py script only if there's python 3.x
-+ifeq ($(BR2_PACKAGE_PYTHON3),)
- define USBUTILS_REMOVE_PYTHON
- 	rm -f $(TARGET_DIR)/usr/bin/lsusb.py
- endef
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++LIBQRENCODE_CONF_OPTS += --with-png
++LIBQRENCODE_DEPENDENCIES += libpng
++else
++LIBQRENCODE_CONF_OPTS += --without-png
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBQRENCODE_TOOLS),y)
+ LIBQRENCODE_CONF_OPTS += --with-tools=yes
+-LIBQRENCODE_DEPENDENCIES += libpng
+ else
+ LIBQRENCODE_CONF_OPTS += --with-tools=no
+ endif
