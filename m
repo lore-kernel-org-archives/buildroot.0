@@ -1,203 +1,132 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 19 May 2018 22:44:21 +0200
-Subject: [Buildroot] [git commit] configs/snps_arc*_defconfig: update u-boot
- version
-Message-ID: <20180602101011.632D97FADE@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 May 2018 21:35:27 +0200
+Subject: [Buildroot] [git commit] libpwquality: bump to version 1.4.0
+Message-ID: <20180602101014.120798199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89d9ca945c2ac673a7e75cf8e4b44fae8c0d3c85
+commit: https://git.buildroot.net/buildroot/commit/?id=a853849e4d50ef7e126a1da524be37aeb878a6de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With this commit we update u-boot version to 2018.05 for
-Synopsys boards. U-boot version 2018.05 was released recently
-and includes significant changes for ARC boards:
- * Fix for compile-time warning for AXS10x
- * Add support of platform-specific commands for HSDK
- * Add support for on-board SPI flash on HSDK
+- Remove both patches (already in version)
+- Add hash for license file
 
-Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-axs103-Clean-up-smp_kick_all_cpus.patch   | 48 ---------------
- ...ort-slave-core-kick-start-on-axs103-v1.1-.patch | 72 ----------------------
- configs/snps_arc700_axs101_defconfig               |  2 +-
- configs/snps_archs38_axs103_defconfig              |  3 +-
- configs/snps_archs38_hsdk_defconfig                |  2 +-
- 5 files changed, 3 insertions(+), 124 deletions(-)
+ ...ith-disable-nls-on-platforms-without-libi.patch | 47 ----------------------
+ ...leak-in-settings-when-using-bad-word-list.patch | 26 ------------
+ package/libpwquality/libpwquality.hash             |  3 +-
+ package/libpwquality/libpwquality.mk               |  2 +-
+ 4 files changed, 3 insertions(+), 75 deletions(-)
 
-diff --git a/board/synopsys/axs10x/patches/u-boot/0001-axs103-Clean-up-smp_kick_all_cpus.patch b/board/synopsys/axs10x/patches/u-boot/0001-axs103-Clean-up-smp_kick_all_cpus.patch
+diff --git a/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch b/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
 deleted file mode 100644
-index 7af878d813..0000000000
---- a/board/synopsys/axs10x/patches/u-boot/0001-axs103-Clean-up-smp_kick_all_cpus.patch
+index 3bae15c221..0000000000
+--- a/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
 +++ /dev/null
-@@ -1,48 +0,0 @@
--From ee5a5a51780bcb17e5240335ddfa9c98a0e6f890 Mon Sep 17 00:00:00 2001
--From: Alexey Brodkin <abrodkin@synopsys.com>
--Date: Thu, 30 Mar 2017 19:18:30 +0300
--Subject: [PATCH] axs103: Clean-up smp_kick_all_cpus()
+@@ -1,47 +0,0 @@
+-From fd1694c9d85666a39fe39e76518581b1ccd5a6c5 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
+-Date: Thu, 2 Feb 2017 11:16:49 +0100
+-Subject: [PATCH] Fix build with --disable-nls on platforms without libintl
+- included in libc.
 -
-- * Rely on default pulse polarity value
-- * Don't mess with "multicore" value as it doesn't affect execution
+-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
 -
--In essence we now do a bare minimal stuff:
-- 1) Select HS38x2_1 with CORE_SEL=1 bits
-- 2) Select "manual" core start (via CREG) with START_MODE=0
-- 3) Generate cpu_start pulse with START=1
--
--Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
--Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
 ----
-- board/synopsys/axs10x/axs10x.c | 12 +++++-------
-- 1 file changed, 5 insertions(+), 7 deletions(-)
 -
--diff --git a/board/synopsys/axs10x/axs10x.c b/board/synopsys/axs10x/axs10x.c
--index a5e774b2cf7b..57c790220f71 100644
----- a/board/synopsys/axs10x/axs10x.c
--+++ b/board/synopsys/axs10x/axs10x.c
--@@ -61,16 +61,14 @@ void smp_kick_all_cpus(void)
+-Status: accepted upstream, not yet released.
+-
+-diff --git a/src/pwmake.c b/src/pwmake.c
+-index 5b8cfb8..81f7cd3 100644
+---- a/src/pwmake.c
+-+++ b/src/pwmake.c
+-@@ -33,9 +33,11 @@ main(int argc, char *argv[])
+-         int bits;
+-         void *auxerror;
+- 
+-+#ifdef ENABLE_NLS
+-         setlocale(LC_ALL, "");
+-         bindtextdomain("libpwquality", "/usr/share/locale");
+-         textdomain("libpwquality");
+-+#endif
+- 
+-         if (argc != 2) {
+-                 usage(basename(argv[0]));
+-diff --git a/src/pwscore.c b/src/pwscore.c
+-index 219a175..24c13f2 100644
+---- a/src/pwscore.c
+-+++ b/src/pwscore.c
+-@@ -34,9 +34,11 @@ main(int argc, char *argv[])
+-         size_t len;
+-         char *user = NULL;
+- 
+-+#ifdef ENABLE_NLS
+-         setlocale(LC_ALL, "");
+-         bindtextdomain("libpwquality", "/usr/share/locale");
+-         textdomain("libpwquality");
+-+#endif
+- 
+-         if (argc > 2) {
+-                 usage(basename(argv[0]));
+--- 
+-2.9.3
+-
+diff --git a/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch b/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
+deleted file mode 100644
+index 1b4f24264c..0000000000
+--- a/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From b1f2f1f71894fa0af92041fb4d5b6146101d63e5 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
+-Date: Thu, 2 Feb 2017 11:17:26 +0100
+-Subject: [PATCH] Fix memory leak in settings when using bad word list.
+-
+-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+-
+----
+-
+-Status: accepted upstream, not yet released.
+-
+-diff --git a/src/settings.c b/src/settings.c
+-index 5c38b30..4b026b1 100644
+---- a/src/settings.c
+-+++ b/src/settings.c
+-@@ -46,6 +46,7 @@ pwquality_free_settings(pwquality_settings_t *pwq)
 - {
-- /* CPU start CREG */
-- #define AXC003_CREG_CPU_START	0xF0001400
---
-- /* Bits positions in CPU start CREG */
-- #define BITS_START	0
---#define BITS_POLARITY	8
--+#define BITS_START_MODE	4
-- #define BITS_CORE_SEL	9
---#define BITS_MULTICORE	12
---
---#define CMD	(1 << BITS_MULTICORE) | (1 << BITS_CORE_SEL) | \
---		(1 << BITS_POLARITY) | (1 << BITS_START)
-- 
---	writel(CMD, (void __iomem *)AXC003_CREG_CPU_START);
--+	int cmd = readl((void __iomem *)AXC003_CREG_CPU_START);
--+	cmd |= (1 << BITS_CORE_SEL) | (1 << BITS_START);
--+	cmd &= ~(1 << BITS_START_MODE);
--+	writel(cmd, (void __iomem *)AXC003_CREG_CPU_START);
+-         if (pwq) {
+-                 free(pwq->dict_path);
+-+                free(pwq->bad_words);
+-                 free(pwq);
+-         }
 - }
-- #endif
 --- 
--2.7.4
+-2.9.3
 -
-diff --git a/board/synopsys/axs10x/patches/u-boot/0002-axs103-Support-slave-core-kick-start-on-axs103-v1.1-.patch b/board/synopsys/axs10x/patches/u-boot/0002-axs103-Support-slave-core-kick-start-on-axs103-v1.1-.patch
-deleted file mode 100644
-index 0fcc0e630f..0000000000
---- a/board/synopsys/axs10x/patches/u-boot/0002-axs103-Support-slave-core-kick-start-on-axs103-v1.1-.patch
-+++ /dev/null
-@@ -1,72 +0,0 @@
--From a5fa3b17cb10ce020f8b7fe6a26c45d75f55b481 Mon Sep 17 00:00:00 2001
--From: Alexey Brodkin <abrodkin@synopsys.com>
--Date: Fri, 31 Mar 2017 11:14:35 +0300
--Subject: [PATCH] axs103: Support slave core kick-start on axs103 v1.1
-- firmware
--
--In axs103 v1.1 procedure to kick-start slave cores has changed quite a bit
--compared to previous implementation.
--
--In particular:
-- * We used to have a generic START bit for all cores selected by CORE_SEL
--   mask. But now we don't touch CORE_SEL at all because we have a dedicated
--   START bit for each core:
--     bit 0: Core 0 (master)
--     bit 1: Core 1 (slave)
-- * Now there's no need to select "manual" mode of core start
--
--Additional challenge for us is how to tell which axs103 firmware we're
--dealing with. For now we'll rely on ARC core version which was bumped
--from 2.1c to 3.0.
--
--Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
--Signed-off-by: Vlad Zakharov <vzakhar@synopsys.com>
-----
-- board/synopsys/axs10x/axs10x.c | 23 +++++++++++++++++++++--
-- 1 file changed, 21 insertions(+), 2 deletions(-)
--
--diff --git a/board/synopsys/axs10x/axs10x.c b/board/synopsys/axs10x/axs10x.c
--index 57c790220f71..e6b69da3da7f 100644
----- a/board/synopsys/axs10x/axs10x.c
--+++ b/board/synopsys/axs10x/axs10x.c
--@@ -7,6 +7,7 @@
-- #include <common.h>
-- #include <dwmmc.h>
-- #include <malloc.h>
--+#include <asm/arcregs.h>
-- #include "axs10x.h"
-- 
-- DECLARE_GLOBAL_DATA_PTR;
--@@ -66,9 +67,27 @@ void smp_kick_all_cpus(void)
-- #define BITS_START_MODE	4
-- #define BITS_CORE_SEL	9
-- 
--+/*
--+ * In axs103 v1.1 START bits semantics has changed quite a bit.
--+ * We used to have a generic START bit for all cores selected by CORE_SEL mask.
--+ * But now we don't touch CORE_SEL at all because we have a dedicated START bit
--+ * for each core:
--+ *     bit 0: Core 0 (master)
--+ *     bit 1: Core 1 (slave)
--+ */
--+#define BITS_START_CORE1	1
--+
--+#define ARCVER_HS38_3_0	0x53
--+
--+	int core_family = read_aux_reg(ARC_AUX_IDENTITY) & 0xff;
-- 	int cmd = readl((void __iomem *)AXC003_CREG_CPU_START);
---	cmd |= (1 << BITS_CORE_SEL) | (1 << BITS_START);
---	cmd &= ~(1 << BITS_START_MODE);
--+
--+	if (core_family < ARCVER_HS38_3_0) {
--+		cmd |= (1 << BITS_CORE_SEL) | (1 << BITS_START);
--+		cmd &= ~(1 << BITS_START_MODE);
--+	} else {
--+		cmd |= (1 << BITS_START_CORE1);
--+	}
-- 	writel(cmd, (void __iomem *)AXC003_CREG_CPU_START);
-- }
-- #endif
---- 
--2.7.4
--
-diff --git a/configs/snps_arc700_axs101_defconfig b/configs/snps_arc700_axs101_defconfig
-index 8a4814286e..2a71ff3896 100644
---- a/configs/snps_arc700_axs101_defconfig
-+++ b/configs/snps_arc700_axs101_defconfig
-@@ -22,6 +22,6 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs101"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/snps_archs38_axs103_defconfig b/configs/snps_archs38_axs103_defconfig
-index 11069a5d9d..1ad79eb406 100644
---- a/configs/snps_archs38_axs103_defconfig
-+++ b/configs/snps_archs38_axs103_defconfig
-@@ -23,7 +23,6 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.01"
--BR2_TARGET_UBOOT_PATCH="board/synopsys/axs10x/patches/u-boot"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="axs103"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-diff --git a/configs/snps_archs38_hsdk_defconfig b/configs/snps_archs38_hsdk_defconfig
-index 40aed984db..4c337e5ce7 100644
---- a/configs/snps_archs38_hsdk_defconfig
-+++ b/configs/snps_archs38_hsdk_defconfig
-@@ -31,7 +31,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/synopsys/hsdk/genimage.cfg"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="hsdk"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_ELF=y
+diff --git a/package/libpwquality/libpwquality.hash b/package/libpwquality/libpwquality.hash
+index 0e3f9e30fd..97490f818a 100644
+--- a/package/libpwquality/libpwquality.hash
++++ b/package/libpwquality/libpwquality.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	74d2ea90e103323c1f2d6a6cc9617cdae6877573eddb31aaf31a40f354cc2d2a	libpwquality-1.3.0.tar.bz2
++sha256	1de6ff046cf2172d265a2cb6f8da439d894f3e4e8157b056c515515232fade6b	libpwquality-1.4.0.tar.bz2
++sha256	aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baee	COPYING
+diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
+index 697af0b0b2..59b0e955fd 100644
+--- a/package/libpwquality/libpwquality.mk
++++ b/package/libpwquality/libpwquality.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPWQUALITY_VERSION = 1.3.0
++LIBPWQUALITY_VERSION = 1.4.0
+ LIBPWQUALITY_SOURCE = libpwquality-$(LIBPWQUALITY_VERSION).tar.bz2
+ LIBPWQUALITY_SITE = https://github.com/libpwquality/libpwquality/releases/download/libpwquality-$(LIBPWQUALITY_VERSION)
+ LIBPWQUALITY_LICENSE = BSD-3-Clause or GPL-2.0+
