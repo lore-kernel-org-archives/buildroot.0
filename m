@@ -1,67 +1,55 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Tue, 29 May 2018 17:27:36 +0200
-Subject: [Buildroot] [PATCH v7 1/3] package/libclc: new package
-In-Reply-To: <20180528223314.7e634387@windsurf.home>
-References: <20180504114603.10135-1-valentin.korenblit@smile.fr>
- <20180504114603.10135-2-valentin.korenblit@smile.fr>
- <20180528223314.7e634387@windsurf.home>
-Message-ID: <73c4ab94-1348-e56e-9405-86a1d550cdc5@smile.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 29 May 2018 18:28:03 +0300
+Subject: [Buildroot] [PATCH 2018.02.x] glibc: security bump to latest 2.26
+ branch
+Message-ID: <a6279b2229c08c70e5e970d214264b102a240cc2.1527607683.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixed issues are listed in the 2.26 branch NEWS file:
 
-On 28/05/2018 22:33, Thomas Petazzoni wrote:
-> Hello Valentin,
->
-> On Fri,  4 May 2018 13:46:01 +0200, Valentin Korenblit wrote:
->> Given that clc headers are being installed to a non-standard location, it is
->> necessary to specify this path in Mesa's configure.ac. Otherwise, pkg-config
->> will output the absolute path to these headers located in STAGING_DIR, which
->> will cause a runtime error when calling clBuildProgram.
-> It's not clear to me why the mesa3d patch needs to be within this
-> commit. Why isn't it introduced as part of PATCH 2/3, when you enable
-> libclc support in mesa3d ?
+  CVE-2017-18269: An SSE2-based memmove implementation for the i386
+  architecture could corrupt memory.  Reported by Max Horn.
 
-You're right, I'll move that to the next patch
+  CVE-2018-11236: Very long pathname arguments to realpath function could
+  result in an integer overflow and buffer overflow.  Reported by Alexey
+  Izbyshev.
 
-> If mesa3d has a build issue because it misdetects libclc as soon as it
-> is available, then perhaps an explicit --disable-opencl in mesa3d.mk
-> added as a preliminary patch would avoid the problem.
+  CVE-2018-11237: The mempcpy implementation for the Intel Xeon Phi
+  architecture could write beyond the target buffer, resulting in a buffer
+  overflow.  Reported by Andreas Schwab.
 
-Perfect, I haven't thought about that.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/glibc/glibc.hash | 2 +-
+ package/glibc/glibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->> diff --git a/package/libclc/libclc.hash b/package/libclc/libclc.hash
->> new file mode 100644
->> index 0000000000..c5bf5a668c
->> --- /dev/null
->> +++ b/package/libclc/libclc.hash
->> @@ -0,0 +1,3 @@
->> +# locally calculated
->> +sha256 e2f1f294f93695f2d1f87ccb9760231b435702dd0c27abeb38baa97186674d9e  libclc-00236279a293b3737dee08c14f25923a889d2795.tar.gz
-> Are you sure about this hash ? I don't get the same hash here:
->
-> ERROR: libclc-00236279a293b3737dee08c14f25923a889d2795.tar.gz has wrong sha256 hash:
-> ERROR: expected: e2f1f294f93695f2d1f87ccb9760231b435702dd0c27abeb38baa97186674d9e
-> ERROR: got     : 00a8de040b33e68ab7eb9cc94cb7f8a16aa56ce2ae0dadd03decc7f51eb4f674
-
-I've just updated the package to a more recent commit, also its hash.
-
->> +# C++ compiler is used to build a small tool (prepare-builtins) for the host.
->> +# It must be built with the C++ compiler from the host
->> +LIBCLC_CONF_OPTS = --with-llvm-config=$(HOST_DIR)/usr/bin/llvm-config \
->> +	--prefix="/usr" \
->> +	--includedir="/usr/share" \
->> +	--pkgconfigdir="/usr/lib/pkgconfig" \
-> Nit: double quotes are probably not needed around those arguments.
-
-I'll remove them.
-
-> Thomas
-
-Best regards and thanks for the review,
-
-Valentin
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index 3dab1e151692..890f523fd917 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated (fetched from Github)
+-sha256  00fbc845678a96f4acc574c4bda4be76506ecd8bafb2d08c58bfa3507625c81a     glibc-glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98.tar.gz
++sha256  1e18aee61dc51a5aaf7bfcb65ed01894aa82c3d3f7b9a01f20d59cd9db2f082b     glibc-glibc-2.26-160-g4df8479e6b3baf365bd4eedbba922b73471e5d73.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 0351433e6a09..562f0258d5a5 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+-GLIBC_VERSION = glibc-2.26-146-gd300041c533a3d837c9f37a099bcc95466860e98
++GLIBC_VERSION = glibc-2.26-160-g4df8479e6b3baf365bd4eedbba922b73471e5d73
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+-- 
+2.17.0
