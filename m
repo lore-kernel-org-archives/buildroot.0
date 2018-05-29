@@ -1,86 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 19:06:07 +0200
-Subject: [Buildroot] [git commit] arch/arm: add option for FPv4 FPU
-Message-ID: <20180602101012.E3FF48055B@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 May 2018 08:52:39 +0200
+Subject: [Buildroot] [git commit] package/ca-certificates: bump version to
+ 20180409
+Message-ID: <20180602101013.E07328199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09c6e28233230a84932591699d802b1b6677f7cf
+commit: https://git.buildroot.net/buildroot/commit/?id=8b03b2a6648db9978a3c89a41fda558035510e0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The FPv4-SP FPU is a single-precision FPU with 16 double registers [0]
-[1]. It is only available for cortex-m4 cores, and is known to gcc as
-fpv4-sp-d16 (note that there is no leading 'v') since gcc-4.5 [2].
+Update Mozilla certificate authority bundle to version 2.22.
 
-[0] https://en.wikipedia.org/wiki/ARM_Cortex-M#Cortex-M4
-[1] https://developer.arm.com/docs/ddi0439/latest/floating-point-unit
-[2] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=639cb7b789a54bf78d6ae5e2644450f5eb1837a6
+The following certificate authorities were added (+):
+  + "GDCA TrustAUTH R5 ROOT"
+  + "SSL.com EV Root Certification Authority ECC"
+  + "SSL.com EV Root Certification Authority RSA R2"
+  + "SSL.com Root Certification Authority ECC"
+  + "SSL.com Root Certification Authority RSA"
+  + "TrustCor ECA-1"
+  + "TrustCor RootCert CA-1"
+  + "TrustCor RootCert CA-2"
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The following certificate authorities were removed (-):
+  - "ACEDICOM Root"
+  - "AddTrust Low-Value Services Root"
+  - "AddTrust Public Services Root"
+  - "AddTrust Qualified Certificates Root"
+  - "CA Disig Root R1"
+  - "CNNIC ROOT"
+  - "Camerfirma Chambers of Commerce Root"
+  - "Camerfirma Global Chambersign Root"
+  - "Certinomis - Autorit?? Racine"
+  - "Certum Root CA"
+  - "China Internet Network Information Center EV Certificates Root"
+  - "Comodo Secure Services root"
+  - "Comodo Trusted Services root"
+  - "DST ACES CA X6"
+  - "GeoTrust Global CA 2"
+  - "PSCProcert"
+  - "Security Communication EV RootCA1"
+  - "Swisscom Root CA 1"
+  - "Swisscom Root CA 2"
+  - "Swisscom Root EV CA 2"
+  - "TURKTRUST Certificate Services Provider Root 2007"
+  - "TUBITAK UEKAE Kok Sertifika Hizmet Saglayicisi - Surum 3"
+  - "UTN USERFirst Hardware Root CA"
+
+Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- arch/Config.in.arm | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ package/ca-certificates/ca-certificates.hash | 4 ++--
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index c2f3f8d9a3..e6950cccca 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -40,6 +40,15 @@ config BR2_ARM_CPU_HAS_VFPV4
- 	bool
- 	select BR2_ARM_CPU_HAS_VFPV3
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 00296e2a8c..8100dde357 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,3 +1,3 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   4c093ceee1f1428d5aa7e9a5324b92961c0c0f06                         ca-certificates_20170717.tar.xz
+-sha256 e487639b641fa75445174734dd6e9d600373e3248b3d86a7e3c6d0f6977decd2 ca-certificates_20170717.tar.xz
++sha1   edf0ec04b02fcbc90cc65906ff83fb042894a3b7                         ca-certificates_20180409.tar.xz
++sha256 7af6f5bfc619fd29cbf0258c1d95107c38ce840ad6274e343e1e0d971fc72b51 ca-certificates_20180409.tar.xz
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index cb0e961465..c19d37788b 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+# FPv4 is always optional
-+config BR2_ARM_CPU_MAYBE_HAS_FPV4
-+	bool
-+	select BR2_ARM_CPU_MAYBE_HAS_FPU
-+
-+config BR2_ARM_CPU_HAS_FPV4
-+	bool
-+	select BR2_ARM_CPU_HAS_FPU
-+
- config BR2_ARM_CPU_HAS_FP_ARMV8
- 	bool
- 	select BR2_ARM_CPU_HAS_VFPV4
-@@ -460,6 +469,7 @@ config BR2_ARM_ENABLE_NEON
- config BR2_ARM_ENABLE_VFP
- 	bool "Enable VFP extension support"
- 	depends on BR2_ARM_CPU_MAYBE_HAS_FPU
-+	select BR2_ARM_CPU_HAS_FPV4 if BR2_ARM_CPU_MAYBE_HAS_FPV4
- 	select BR2_ARM_CPU_HAS_VFPV4 if BR2_ARM_CPU_MAYBE_HAS_VFPV4
- 	select BR2_ARM_CPU_HAS_VFPV3 if BR2_ARM_CPU_MAYBE_HAS_VFPV3
- 	select BR2_ARM_CPU_HAS_VFPV2 if BR2_ARM_CPU_MAYBE_HAS_VFPV2
-@@ -526,6 +536,7 @@ endchoice
- choice
- 	prompt "Floating point strategy"
- 	default BR2_ARM_FPU_FP_ARMV8 if BR2_ARM_CPU_HAS_FP_ARMV8
-+	default BR2_ARM_FPU_FPV4D16 if BR2_ARM_CPU_HAS_FPV4
- 	default BR2_ARM_FPU_VFPV4D16 if BR2_ARM_CPU_HAS_VFPV4
- 	default BR2_ARM_FPU_VFPV3D16 if BR2_ARM_CPU_HAS_VFPV3
- 	default BR2_ARM_FPU_VFPV2 if BR2_ARM_CPU_HAS_VFPV2
-@@ -636,6 +647,14 @@ config BR2_ARM_FPU_NEON_VFPV4
- 	  example on Cortex-A5 and Cortex-A7, support for VFPv4 and
- 	  NEON is optional.
- 
-+config BR2_ARM_FPU_FPV4D16
-+	bool "FPv4-D16"
-+	depends on BR2_ARM_CPU_HAS_FPV4
-+	help
-+	  This option allows to use the FPv4-SP (single precision)
-+	  floating point unit, as available in some ARMv7m processors
-+	  (Cortex-M4).
-+
- config BR2_ARM_FPU_FP_ARMV8
- 	bool "FP-ARMv8"
- 	depends on BR2_ARM_CPU_HAS_FP_ARMV8
-@@ -768,6 +787,7 @@ config BR2_GCC_TARGET_FPU
- 	default "vfpv4-d16"	if BR2_ARM_FPU_VFPV4D16
- 	default "neon"		if BR2_ARM_FPU_NEON
- 	default "neon-vfpv4"	if BR2_ARM_FPU_NEON_VFPV4
-+	default "fpv4-sp-d16"   if BR2_ARM_FPU_FPV4D16
- 	default "fp-armv8"	if BR2_ARM_FPU_FP_ARMV8
- 	default "neon-fp-armv8"	if BR2_ARM_FPU_NEON_FP_ARMV8
- 	depends on BR2_arm || BR2_armeb
+-CA_CERTIFICATES_VERSION = 20170717
++CA_CERTIFICATES_VERSION = 20180409
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20170814T210836Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20180411T111033Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl
+ # ca-certificates can be built with either python 2 or python 3
+ # but it must be at least python 2.7
