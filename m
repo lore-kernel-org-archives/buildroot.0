@@ -1,132 +1,63 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 29 May 2018 19:20:55 +0200
-Subject: [Buildroot] [PATCH 1/1] libpwquality: bump to version 1.4.0
-Message-ID: <20180529172055.9429-1-fontaine.fabrice@gmail.com>
+Date: Tue, 29 May 2018 19:22:37 +0200
+Subject: [Buildroot] [PATCH 1/1] libqrencode: bump to version 4.0.0
+Message-ID: <20180529172237.9488-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove both patches (already in version)
+- Use new --with[out]-png option
 - Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ith-disable-nls-on-platforms-without-libi.patch | 47 ----------------------
- ...leak-in-settings-when-using-bad-word-list.patch | 26 ------------
- package/libpwquality/libpwquality.hash             |  3 +-
- package/libpwquality/libpwquality.mk               |  2 +-
- 4 files changed, 3 insertions(+), 75 deletions(-)
- delete mode 100644 package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
- delete mode 100644 package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
+ package/libqrencode/libqrencode.hash |  7 +++++--
+ package/libqrencode/libqrencode.mk   | 10 ++++++++--
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch b/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
-deleted file mode 100644
-index 3bae15c221..0000000000
---- a/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From fd1694c9d85666a39fe39e76518581b1ccd5a6c5 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
--Date: Thu, 2 Feb 2017 11:16:49 +0100
--Subject: [PATCH] Fix build with --disable-nls on platforms without libintl
-- included in libc.
--
--Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
--
-----
--
--Status: accepted upstream, not yet released.
--
--diff --git a/src/pwmake.c b/src/pwmake.c
--index 5b8cfb8..81f7cd3 100644
----- a/src/pwmake.c
--+++ b/src/pwmake.c
--@@ -33,9 +33,11 @@ main(int argc, char *argv[])
--         int bits;
--         void *auxerror;
-- 
--+#ifdef ENABLE_NLS
--         setlocale(LC_ALL, "");
--         bindtextdomain("libpwquality", "/usr/share/locale");
--         textdomain("libpwquality");
--+#endif
-- 
--         if (argc != 2) {
--                 usage(basename(argv[0]));
--diff --git a/src/pwscore.c b/src/pwscore.c
--index 219a175..24c13f2 100644
----- a/src/pwscore.c
--+++ b/src/pwscore.c
--@@ -34,9 +34,11 @@ main(int argc, char *argv[])
--         size_t len;
--         char *user = NULL;
-- 
--+#ifdef ENABLE_NLS
--         setlocale(LC_ALL, "");
--         bindtextdomain("libpwquality", "/usr/share/locale");
--         textdomain("libpwquality");
--+#endif
-- 
--         if (argc > 2) {
--                 usage(basename(argv[0]));
---- 
--2.9.3
--
-diff --git a/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch b/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
-deleted file mode 100644
-index 1b4f24264c..0000000000
---- a/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From b1f2f1f71894fa0af92041fb4d5b6146101d63e5 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
--Date: Thu, 2 Feb 2017 11:17:26 +0100
--Subject: [PATCH] Fix memory leak in settings when using bad word list.
--
--Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
--
-----
--
--Status: accepted upstream, not yet released.
--
--diff --git a/src/settings.c b/src/settings.c
--index 5c38b30..4b026b1 100644
----- a/src/settings.c
--+++ b/src/settings.c
--@@ -46,6 +46,7 @@ pwquality_free_settings(pwquality_settings_t *pwq)
-- {
--         if (pwq) {
--                 free(pwq->dict_path);
--+                free(pwq->bad_words);
--                 free(pwq);
--         }
-- }
---- 
--2.9.3
--
-diff --git a/package/libpwquality/libpwquality.hash b/package/libpwquality/libpwquality.hash
-index 0e3f9e30fd..97490f818a 100644
---- a/package/libpwquality/libpwquality.hash
-+++ b/package/libpwquality/libpwquality.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	74d2ea90e103323c1f2d6a6cc9617cdae6877573eddb31aaf31a40f354cc2d2a	libpwquality-1.3.0.tar.bz2
-+sha256	1de6ff046cf2172d265a2cb6f8da439d894f3e4e8157b056c515515232fade6b	libpwquality-1.4.0.tar.bz2
-+sha256	aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baee	COPYING
-diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
-index 697af0b0b2..59b0e955fd 100644
---- a/package/libpwquality/libpwquality.mk
-+++ b/package/libpwquality/libpwquality.mk
+diff --git a/package/libqrencode/libqrencode.hash b/package/libqrencode/libqrencode.hash
+index 8c94ccd35d..1418413135 100644
+--- a/package/libqrencode/libqrencode.hash
++++ b/package/libqrencode/libqrencode.hash
+@@ -1,2 +1,5 @@
+-# From http://fukuchi.org/works/qrencode/qrencode-3.4.2.tar.gz.sha1
+-sha1	7daaad61f333ff6cdabfb0d925c3ab668d16dee2	qrencode-3.4.2.tar.gz
++# From http://fukuchi.org/works/qrencode/qrencode-4.0.0.tar.gz.sha
++sha512	fdbcee3ef90abf780dcbe495cef3e6ac5449a4a0aaa87d1a1a4f71d97fe6d96974d8132f7e227133cddb5ab73600e968821634752fc0d75113ca0959aae9a5d0	qrencode-4.0.0.tar.gz
++
++# Hash for license file:
++sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING
+diff --git a/package/libqrencode/libqrencode.mk b/package/libqrencode/libqrencode.mk
+index 8f17b895e0..62ca2ed11d 100644
+--- a/package/libqrencode/libqrencode.mk
++++ b/package/libqrencode/libqrencode.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPWQUALITY_VERSION = 1.3.0
-+LIBPWQUALITY_VERSION = 1.4.0
- LIBPWQUALITY_SOURCE = libpwquality-$(LIBPWQUALITY_VERSION).tar.bz2
- LIBPWQUALITY_SITE = https://github.com/libpwquality/libpwquality/releases/download/libpwquality-$(LIBPWQUALITY_VERSION)
- LIBPWQUALITY_LICENSE = BSD-3-Clause or GPL-2.0+
+-LIBQRENCODE_VERSION = 3.4.2
++LIBQRENCODE_VERSION = 4.0.0
+ LIBQRENCODE_SOURCE = qrencode-$(LIBQRENCODE_VERSION).tar.gz
+ LIBQRENCODE_SITE = http://fukuchi.org/works/qrencode
+ LIBQRENCODE_DEPENDENCIES = host-pkgconf
+@@ -18,9 +18,15 @@ else
+ LIBQRENCODE_CONF_OPTS += --disable-thread-safety
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++LIBQRENCODE_CONF_OPTS += --with-png
++LIBQRENCODE_DEPENDENCIES += libpng
++else
++LIBQRENCODE_CONF_OPTS += --without-png
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBQRENCODE_TOOLS),y)
+ LIBQRENCODE_CONF_OPTS += --with-tools=yes
+-LIBQRENCODE_DEPENDENCIES += libpng
+ else
+ LIBQRENCODE_CONF_OPTS += --with-tools=no
+ endif
 -- 
 2.14.1
