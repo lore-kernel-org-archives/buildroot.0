@@ -1,152 +1,80 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 29 May 2018 22:33:20 +0200
-Subject: [Buildroot] [PATCH 1/1] aircrack-ng: bump to version 1.2
-In-Reply-To: <87d0xe5k7x.fsf@dell.be.48ers.dk>
-References: <20180529171409.8794-1-fontaine.fabrice@gmail.com>
- <87d0xe5k7x.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W80yN0QhXSk8C7WGcr83hcdbebkWAJMGs6t6zTzcUpdLag@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 29 May 2018 22:45:25 +0200
+Subject: [Buildroot] [PATCH v3 3/5] uboot: zynqmp: allow to use custom
+ psu_init files
+In-Reply-To: <20180528224912.539b05f6@windsurf.home>
+References: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
+ <1525364617-23633-4-git-send-email-luca@lucaceresoli.net>
+ <20180528224912.539b05f6@windsurf.home>
+Message-ID: <a61417d4-fa49-cbbb-c51f-a88f72dcb30e@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+Hi Thomas,
 
-2018-05-29 21:34 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+On 28/05/2018 22:49, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu,  3 May 2018 18:23:35 +0200, Luca Ceresoli wrote:
+> 
+>> +ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
+>> +
+>> +ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_DIR)),)
+> 
+> It'd be nice to have an intermediate UBOOT_ZYNQMP_PSU_INIT_DIR variable
+> instead of calculating its qstripped value twice.
+> 
+>> +define UBOOT_ZYNQMP_COPY_PSU_INIT
+>> +# In U-Boot's board/xilinx/zynqmp/Makefile the bundled psu_init_gpl.c
+>> +# has precedence over ours if placed in a subdir whose name matches
+>> +# CONFIG_DEFAULT_DEVICE_TREE. Delete them all to be sure we use ours.
+>> +	rm -f $(@D)/board/xilinx/zynqmp/*/psu_init*.[ch]
+>> +	cp $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_DIR))/psu_init_gpl.[ch] \
+>> +	   $(@D)/board/xilinx/zynqmp/
+> 
+> However, the bigger question is why do we need this in the first
+> place ? This is in fact just patching the U-Boot source code. Why not
+> use a patch instead ? Aren't people in general anyway going to have
+> their own custom U-Boot Git tree, in which they will version control
+> their psu_init files ?
 
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > - Remove patch (already in version)
->  > - Add three patches (first one sent and merged upstream, second and
->  >   third patchs retrieved upstream)
->  > - Move to autotools-package
->  > - Remove workaround for static handling of pthread as it isn't needed
->  >   anymore
->  > - Remove deactivation of libnl in static build as it isn't needed
->  >   anymore
->  > - Update workaround for static handling of libpcap
->  > - Add hash for license file
->
-> [snip]
->
-> > +++ b/package/aircrack-ng/Config.in
->  > @@ -3,9 +3,7 @@ config BR2_PACKAGE_AIRCRACK_NG
->  >      depends on BR2_USE_MMU # uses fork()
->  >      depends on BR2_TOOLCHAIN_HAS_THREADS
->  >      depends on BR2_INSTALL_LIBSTDCPP
->  > -    # libnl has issues when linking statically
->  > -    # they need fixing in libnl itself
->  > -    select BR2_PACKAGE_LIBNL if !BR2_STATIC_LIBS
->  > +    select BR2_PACKAGE_LIBNL
->
-> Looking at the m4 files, it looks as if libnl is supposed to be
-> optional. If so, then we shouldn't force it here.
->
-Indeed, but libnl is set in the Requirements section of the Readme.md (and
-not in the "Optional stuff" section) and it was selected since version
-1.2-rc1 so I didn't know what to do.
-But you're right, I will make it optional.
+Of course course having a custom U-Boot tree with these files versioned
+is a valid workflow, which does not need the present patch. But there
+are other valid use cases.
 
->
->  >      select BR2_PACKAGE_OPENSSL
->
-> It also looks as if libgcrypt can be used instead of openssl.
->
->  >      select BR2_PACKAGE_ZLIB
->
-> And zlib looks to be optional as well.
->
-For libgcrypt and zlib, I have additional patches but I can put everything
-in a single patch if you prefer.
+> Since this really looks like a specialized patching step, I'm not sure
+> it really makes sense to add this. Unless you can convince me
+> otherwise :-)
 
->
-> > +++ b/package/aircrack-ng/aircrack-ng.mk
->  > @@ -4,69 +4,42 @@
->  >  #
->  >  ############################################################
-> ####################
->
->  > -AIRCRACK_NG_VERSION = 1.2-rc4
->  > +AIRCRACK_NG_VERSION = 1.2
->  >  AIRCRACK_NG_SITE = http://download.aircrack-ng.org
->  >  AIRCRACK_NG_LICENSE = GPL-2.0+
->  >  AIRCRACK_NG_LICENSE_FILES = LICENSE
->  > -AIRCRACK_NG_DEPENDENCIES = openssl zlib host-pkgconf
->  > +AIRCRACK_NG_DEPENDENCIES = \
->  > +    libnl \
->  > +    openssl \
->  > +    $(if $(BR2_PACKAGE_PCRE),pcre) \
->  > +    zlib \
->  > +    host-pkgconf
->  > +AIRCRACK_NG_AUTORECONF = YES
->  >  # Enable buddy-ng, easside-ng, tkiptun-ng, wesside-ng
->  > -AIRCRACK_NG_MAKE_OPTS = unstable=true
->  > -
->  > -# Account for libpthread in static
->  > -AIRCRACK_NG_LDFLAGS = $(TARGET_LDFLAGS) \
->  > -    $(if $(BR2_STATIC_LIBS),-lpthread -lz)
->  > -
->  > -# libnl support has issues when building static
->  > -ifeq ($(BR2_STATIC_LIBS),y)
->  > -AIRCRACK_NG_MAKE_OPTS += libnl=false
->  > -else
->  > -AIRCRACK_NG_MAKE_OPTS += libnl=true
->  > -AIRCRACK_NG_DEPENDENCIES += libnl
->  > -endif
->  > +AIRCRACK_NG_CONF_OPTS = --with-experimental
->
-> Is this the replacement for unstable=true? According to the m4 files,
-> this defaults to off.
->
-Yes, this is the replacement for unstable. What do you mean by it defaults
-to off? Do you want me to disable experimental features?
-As a side note, unstable has been replaced by experimental since 1.2-rc2 (
-https://github.com/aircrack-ng/aircrack-ng/tree/1.2-rc2) so this is
-currently "broken".
+The psu_init files are special because they contain
+automatically-generated code to configure the SoC peripherals: enable
+devices, set pinmuxes etc, which is not otherwise done at runtime. Have
+a look at a few examples: [0] [1].
 
->
->
->  >  ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
->  > -AIRCRACK_NG_MAKE_OPTS += STACK_PROTECTOR=true
->  > +AIRCRACK_NG_CONF_OPTS += --with-opt
->  >  else
->  > -AIRCRACK_NG_MAKE_OPTS += STACK_PROTECTOR=false
->  > +AIRCRACK_NG_CONF_OPTS += --without-opt
->
-> Hmm, --with-opt seems to be related to adding -O3 to CFLAGS or not:
->
-> AC_ARG_WITH(opt,
->     [AS_HELP_STRING([--without-opt],
->         [disable -O3 optimizations])])
->
-> AS_IF([test "x$enable_code_coverage" = "xno"], [
->     case $with_opt in
->         yes | "")
->             AX_CHECK_COMPILE_FLAG([-O3], [
->                 AX_APPEND_FLAG(-O3, [opt_[]_AC_LANG_ABBREV[]flags])
->             ])
->         ;;
->     esac
-> ])
->
-Yes, --without-opt will disable O3 but also the stack protector (see
-Readme.md and second patch).
+This file will change whenever the hardware *or* the configuration
+changes (e.g. to enable peripherals).
 
->
-> There also seems to be a check for ethtool. This by default looks if
-> ethtool is available in the path on the host. We should detect if
-> BR2_PACKAGE_ETHTOOL is enabled and point it to it.
->
-Yes, ethtool is needed for airmon-ng, I will update my patch to manage it.
+It is perfectly fine if one wants to use a mainline U-Boot release or a
+Xilinx release, unmodified, that works fine... *except* for the psu_init
+file. With your proposed workflow all users will be forced to use a
+custom git tree, just because they have a slightly different psu_init
+file. With my patch these users can just use a "standard" U-Boot
+(downloaded straight from the Internet), throw a psu_init file in their
+Buildroot boards/ dir and change their Buildroot config to point to it.
 
->
-> --
-> Bye, Peter Korsgaard
->
-Best Regards,
+Even though it's technically code, you can consider the psu_init
+somewhat like a configuration file.
 
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180529/1ff4c56e/attachment.html>
+Did I convince you? :-)
+
+[0]
+http://git.denx.de/?p=u-boot.git;a=blob;f=board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c;h=fcd6a46ad9ffa0da06c4f0a67c2397aa4128ca29;hb=HEAD
+[1]
+http://git.denx.de/?p=u-boot.git;a=blob;f=board/xilinx/zynqmp/zynqmp-zcu102-revA/psu_init_gpl.c;h=5f21c4747584815ba86e50a36906b6c1fe8af1ca;hb=HEAD
+
+Regards,
+-- 
+Luca
