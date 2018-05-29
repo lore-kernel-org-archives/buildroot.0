@@ -1,70 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 29 May 2018 23:42:43 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-sgx-*: bump from SDK 02.00 to SDK
- 04.00
-In-Reply-To: <CABhNV22Fv+QjYta+XhH5mixGPK5R0sOnMv=R3+4qpV+iqGegzg@mail.gmail.com>
-References: <1527175458-16091-1-git-send-email-tolvupostur@gmail.com>
- <CABhNV23aBnMSVT5a41eopYk6H0ek7-==NF0EuN_QUc_71vDbvw@mail.gmail.com>
- <5cc76bb8-f92b-ab5d-71bf-c41c0e96930c@gmail.com>
- <CABhNV22Fv+QjYta+XhH5mixGPK5R0sOnMv=R3+4qpV+iqGegzg@mail.gmail.com>
-Message-ID: <20180529234243.699648ec@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 May 2018 23:48:01 +0200
+Subject: [Buildroot] [PATCH 1/1] aircrack-ng: bump to version 1.2
+In-Reply-To: <CAPi7W80yN0QhXSk8C7WGcr83hcdbebkWAJMGs6t6zTzcUpdLag@mail.gmail.com>
+ (Fabrice Fontaine's message of "Tue, 29 May 2018 22:33:20 +0200")
+References: <20180529171409.8794-1-fontaine.fabrice@gmail.com>
+ <87d0xe5k7x.fsf@dell.be.48ers.dk>
+ <CAPi7W80yN0QhXSk8C7WGcr83hcdbebkWAJMGs6t6zTzcUpdLag@mail.gmail.com>
+Message-ID: <87efhu3zhq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Mon, 28 May 2018 14:20:44 +0200, Einar J?n wrote:
+Hi,
 
-> > I'm not sure if we must bump all packages related to the TI SDK or bump all
-> > packages one by one to ease the review.  
-> 
-> I did this in a single commit since any split (except a standalone
-> ti-sgx-libgbm) would be a commit with a broken build. The places I?ve
-> worked for for the last 5 years hate those.
+ >> Looking at the m4 files, it looks as if libnl is supposed to be
+ >> optional. If so, then we shouldn't force it here.
+ >> 
+ > Indeed, but libnl is set in the Requirements section of the Readme.md (and
+ > not in the "Optional stuff" section) and it was selected since version
+ > 1.2-rc1 so I didn't know what to do.
+ > But you're right, I will make it optional.
 
-We definitely want a bisectable patch series, where everything works
-between each commit.
+Ok, great.
 
-> > Also, BR2_PACKAGE_TI_SGX_KM_AM4430 and BR2_PACKAGE_TI_SGX_KM_AM5430
-> > symbols are
-> > removed. It must be handled in Config.in.legacy.  
-> 
-> 
-> True. I didn?t think of that since none of the defconfigs use it. I can see
-> that now there is a legacy patch for the _KM addition.
-> Also, the new _KM addition to these keywords makes these parameters a bit
-> weird, because it is used in both ti-sgx-km and ti-sgx-um.
+ >> 
+ >> >      select BR2_PACKAGE_OPENSSL
+ >> 
+ >> It also looks as if libgcrypt can be used instead of openssl.
+ >> 
+ >> >      select BR2_PACKAGE_ZLIB
+ >> 
+ >> And zlib looks to be optional as well.
+ >> 
+ > For libgcrypt and zlib, I have additional patches but I can put everything
+ > in a single patch if you prefer.
 
-I don't see where those renamed symbols are used in ti-sgx-um. The
-symbols that have been renamed are:
+It is OK to handle those in followup patches, they were also
+unconditional in the earlier version.
 
-  BR2_PACKAGE_TI_SGX_AM335X
-  BR2_PACKAGE_TI_SGX_AM437X
-  BR2_PACKAGE_TI_SGX_AM4430
-  BR2_PACKAGE_TI_SGX_AM5430
 
-> > Why S80ti-sgx is removed ?
-> >  
-> 
-> Because it is both unneeded and obsolete.
-> The current repo of ti-sgx-um has 3 subfolders, one for each
-> BR2_PACKAGE_TI_SGX_KM_AMxxx option. Each one has a sysV init file (called
-> rc-???) that is very different from the one I deleted.
-> Now I simply rename rc-??? to S80ti-sgx in the post-hook that previously
-> copied it from package/ti-sgx-um.
+ >> > +AIRCRACK_NG_CONF_OPTS = --with-experimental
+ >> 
+ >> Is this the replacement for unstable=true? According to the m4 files,
+ >> this defaults to off.
+ >> 
+ > Yes, this is the replacement for unstable. What do you mean by it defaults
+ > to off? Do you want me to disable experimental features?
 
-Is the init script provided by upstream reasonably compatible with
-Buildroot requirements (it should work with Busybox, etc.) ? We very
-often have our own init scripts to make sure they are compatible with
-Buildroot-generated systems.
+What I mean is that it is off by default if you don't pass
+--with-experimental:
 
-Best regards,
+AC_ARG_WITH(experimental,
+    [AS_HELP_STRING([--with-experimental=[[yes|no]]], [use experimental features of Aircrack-ng, [default=no]])])
 
-Thomas
+case $with_experimental in
+    yes)
+        EXPERIMENTAL=yes
+        ;;
+    *)
+        EXPERIMENTAL=no
+        ;;
+esac
+
+
+> As a side note, unstable has been replaced by experimental since 1.2-rc2 (
+ > https://github.com/aircrack-ng/aircrack-ng/tree/1.2-rc2) so this is
+ > currently "broken".
+
+Gaah :/
+
+
+ >> Hmm, --with-opt seems to be related to adding -O3 to CFLAGS or not:
+ >> 
+ >> AC_ARG_WITH(opt,
+ >> [AS_HELP_STRING([--without-opt],
+ >> [disable -O3 optimizations])])
+ >> 
+ >> AS_IF([test "x$enable_code_coverage" = "xno"], [
+ >> case $with_opt in
+ >> yes | "")
+ >> AX_CHECK_COMPILE_FLAG([-O3], [
+ >> AX_APPEND_FLAG(-O3, [opt_[]_AC_LANG_ABBREV[]flags])
+ >> ])
+ >> ;;
+ >> esac
+ >> ])
+ >> 
+ > Yes, --without-opt will disable O3 but also the stack protector (see
+ > Readme.md and second patch).
+
+Hmm, OK - A bit odd that it is linked to -O3 - But ok.
+
+ >> There also seems to be a check for ethtool. This by default looks if
+ >> ethtool is available in the path on the host. We should detect if
+ >> BR2_PACKAGE_ETHTOOL is enabled and point it to it.
+ >> 
+ > Yes, ethtool is needed for airmon-ng, I will update my patch to manage it.
+
+Great, thanks!
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
