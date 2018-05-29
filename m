@@ -1,42 +1,142 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Tue, 29 May 2018 23:52:57 +0200
-Subject: [Buildroot] [PATCH v3 for-next 5/5] package/gcc: switch to gcc 6.x
- as the default
-In-Reply-To: <20180529215257.17686-1-romain.naour@gmail.com>
-References: <20180529215257.17686-1-romain.naour@gmail.com>
-Message-ID: <20180529215257.17686-5-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 29 May 2018 23:56:32 +0200
+Subject: [Buildroot] [PATCH 1/1] aircrack-ng: bump to version 1.2
+In-Reply-To: <87efhu3zhq.fsf@dell.be.48ers.dk>
+References: <20180529171409.8794-1-fontaine.fabrice@gmail.com>
+ <87d0xe5k7x.fsf@dell.be.48ers.dk>
+ <CAPi7W80yN0QhXSk8C7WGcr83hcdbebkWAJMGs6t6zTzcUpdLag@mail.gmail.com>
+ <87efhu3zhq.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W83Y8i1LxgX5Bwexb+qZpkr=9LjDrKqBjpVFtK81d2j5Vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even if gcc 6 is still maintained for some time (gcc 6.5 is pending),
-switch to gcc 7.x since it has been released since 2017-05-02 and
-gcc 8.x is available since 2018-05-02.
+Dear Peter,
 
-We have been having toolchains in the autobuilders with gcc
-7.x for a while, so the vast majority of the problems should have
-already been solved.
+2018-05-29 23:48 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcc/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+> Hi,
+>
+>  >> Looking at the m4 files, it looks as if libnl is supposed to be
+>  >> optional. If so, then we shouldn't force it here.
+>  >>
+>  > Indeed, but libnl is set in the Requirements section of the Readme.md
+> (and
+>  > not in the "Optional stuff" section) and it was selected since version
+>  > 1.2-rc1 so I didn't know what to do.
+>  > But you're right, I will make it optional.
+>
+> Ok, great.
+>
+>  >>
+>  >> >      select BR2_PACKAGE_OPENSSL
+>  >>
+>  >> It also looks as if libgcrypt can be used instead of openssl.
+>  >>
+>  >> >      select BR2_PACKAGE_ZLIB
+>  >>
+>  >> And zlib looks to be optional as well.
+>  >>
+>  > For libgcrypt and zlib, I have additional patches but I can put
+> everything
+>  > in a single patch if you prefer.
+>
+> It is OK to handle those in followup patches, they were also
+> unconditional in the earlier version.
+>
+I already merged them in a single patch, I have also added the duma
+optional dependency, see v2 but I can split them if you prefer in v3
+tomorrow ;-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 09d88fc929..c9a20f6d77 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -4,7 +4,7 @@ choice
- 	prompt "GCC compiler Version"
- 	default BR2_GCC_VERSION_ARC if BR2_arc
- 	default BR2_GCC_VERSION_OR1K if BR2_or1k
--	default BR2_GCC_VERSION_6_X
-+	default BR2_GCC_VERSION_7_X
- 	help
- 	  Select the version of gcc you wish to use.
- 
--- 
-2.14.3
+>
+>
+>  >> > +AIRCRACK_NG_CONF_OPTS = --with-experimental
+>  >>
+>  >> Is this the replacement for unstable=true? According to the m4 files,
+>  >> this defaults to off.
+>  >>
+>  > Yes, this is the replacement for unstable. What do you mean by it
+> defaults
+>  > to off? Do you want me to disable experimental features?
+>
+> What I mean is that it is off by default if you don't pass
+> --with-experimental:
+>
+> AC_ARG_WITH(experimental,
+>     [AS_HELP_STRING([--with-experimental=[[yes|no]]], [use experimental
+> features of Aircrack-ng, [default=no]])])
+>
+> case $with_experimental in
+>     yes)
+>         EXPERIMENTAL=yes
+>         ;;
+>     *)
+>         EXPERIMENTAL=no
+>         ;;
+> esac
+>
+OK
+
+>
+>
+> > As a side note, unstable has been replaced by experimental since 1.2-rc2
+> (
+>  > https://github.com/aircrack-ng/aircrack-ng/tree/1.2-rc2) so this is
+>  > currently "broken".
+>
+> Gaah :/
+>
+Do you want me to send a small patch to fix this on master?
+
+>
+>
+>  >> Hmm, --with-opt seems to be related to adding -O3 to CFLAGS or not:
+>  >>
+>  >> AC_ARG_WITH(opt,
+>  >> [AS_HELP_STRING([--without-opt],
+>  >> [disable -O3 optimizations])])
+>  >>
+>  >> AS_IF([test "x$enable_code_coverage" = "xno"], [
+>  >> case $with_opt in
+>  >> yes | "")
+>  >> AX_CHECK_COMPILE_FLAG([-O3], [
+>  >> AX_APPEND_FLAG(-O3, [opt_[]_AC_LANG_ABBREV[]flags])
+>  >> ])
+>  >> ;;
+>  >> esac
+>  >> ])
+>  >>
+>  > Yes, --without-opt will disable O3 but also the stack protector (see
+>  > Readme.md and second patch).
+>
+> Hmm, OK - A bit odd that it is linked to -O3 - But ok.
+>
+>  >> There also seems to be a check for ethtool. This by default looks if
+>  >> ethtool is available in the path on the host. We should detect if
+>  >> BR2_PACKAGE_ETHTOOL is enabled and point it to it.
+>  >>
+>  > Yes, ethtool is needed for airmon-ng, I will update my patch to manage
+> it.
+>
+> Great, thanks!
+>
+After more investigations, it seems that ethtool is only a runtime
+dependency of airmon-ng script which is always installed on target
+(ETHTOOL_FOUND is only used in configure.ac).
+So, we don't have to add a dependency to the ethtool package or to set the
+ETHTOOL variable except to have the correct display in the configure log.
+
+>
+> --
+> Bye, Peter Korsgaard
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180529/fc7b0a66/attachment.html>
