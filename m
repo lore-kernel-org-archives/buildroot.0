@@ -1,178 +1,57 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Tue, 29 May 2018 16:29:50 +0200
-Subject: [Buildroot] [PATCH] package/clang: fix for host-clang binaries
-Message-ID: <20180529142950.30025-1-valentin.korenblit@smile.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 29 May 2018 17:37:54 +0300
+Subject: [Buildroot] [PATCH v2] glibc: security bump to latest 2.27 branch
+Message-ID: <e76f9b170cf1376b2b1603aa2e4503091f2771d9.1527604674.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch fixes the following error when trying to execute clang compiler
-(host-variant):
+Fixed issues are listed in the 2.27 branch NEWS file:
 
-CommandLine Error: Option 'x86-use-base-pointer' registered more than once!
-LLVM ERROR: inconsistency in registered CommandLine options
+  CVE-2017-18269: An SSE2-based memmove implementation for the i386
+  architecture could corrupt memory.  Reported by Max Horn.
 
-The same happens for the other binaries, such as clang-format:
+  CVE-2018-11236: Very long pathname arguments to realpath function could
+  result in an integer overflow and buffer overflow.  Reported by Alexey
+  Izbyshev.
 
-./clang-format
-: CommandLine Error: Option 'help-list' registered more than once!
-LLVM ERROR: inconsistency in registered CommandLine options
+  CVE-2018-11237: The mempcpy implementation for the Intel Xeon Phi
+  architecture could write beyond the target buffer, resulting in a buffer
+  overflow.  Reported by Andreas Schwab.
 
-Clang binaries are tools, and given that DLLVM_LINK_LLVM_DYLIB is set,
-they are linked against libLLVM.so. The problem is that binaries are
-also linking against some LLVM static libraries, resulting in the error
-shown above. However, it is not the same case for libclang, which is also
-a tool but links only against libLLVM.so.
-
-To fix this problem, remove static linking of clang binaries against
-LLVM libraries.
-
-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
+v2: Format the version string as described in the comment (Peter)
+---
+ package/glibc/glibc.hash | 2 +-
+ package/glibc/glibc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Currently there is no package in Buildroot that needs host-clang compiler. 
-This error was found when trying to build libclc (WIP) after having applied:
-http://lists.busybox.net/pipermail/buildroot/2018-May/221386.html
-
- ...ng-binaries-from-linking-against-LLVM-sta.patch | 128 +++++++++++++++++++++
- 1 file changed, 128 insertions(+)
- create mode 100644 package/clang/0001-Prevent-clang-binaries-from-linking-against-LLVM-sta.patch
-
-diff --git a/package/clang/0001-Prevent-clang-binaries-from-linking-against-LLVM-sta.patch b/package/clang/0001-Prevent-clang-binaries-from-linking-against-LLVM-sta.patch
-new file mode 100644
-index 0000000000..10370cc230
---- /dev/null
-+++ b/package/clang/0001-Prevent-clang-binaries-from-linking-against-LLVM-sta.patch
-@@ -0,0 +1,128 @@
-+From 7e8dc6f5d11b8717dd40ac7d2c9137c4c7cefd1d Mon Sep 17 00:00:00 2001
-+From: Valentin Korenblit <valentin.korenblit@smile.fr>
-+Date: Tue, 29 May 2018 14:34:15 +0200
-+Subject: [PATCH] Prevent clang binaries from linking against LLVM static libs
-+
-+Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
-+---
-+ tools/c-index-test/CMakeLists.txt          |  4 ----
-+ tools/clang-check/CMakeLists.txt           |  6 ------
-+ tools/clang-format/CMakeLists.txt          |  2 --
-+ tools/clang-format/fuzzer/CMakeLists.txt   |  2 --
-+ tools/clang-import-test/CMakeLists.txt     |  5 -----
-+ tools/clang-offload-bundler/CMakeLists.txt |  2 --
-+ tools/clang-rename/CMakeLists.txt          |  5 -----
-+ tools/driver/CMakeLists.txt                | 18 ------------------
-+ 8 files changed, 44 deletions(-)
-+
-+diff --git a/tools/c-index-test/CMakeLists.txt b/tools/c-index-test/CMakeLists.txt
-+index ad990e010e..a71e7a49bc 100644
-+--- a/tools/c-index-test/CMakeLists.txt
-++++ b/tools/c-index-test/CMakeLists.txt
-+@@ -1,7 +1,3 @@
-+-set(LLVM_LINK_COMPONENTS
-+-  support
-+-)
-+-
-+ add_clang_executable(c-index-test
-+   c-index-test.c
-+   core_main.cpp
-+diff --git a/tools/clang-check/CMakeLists.txt b/tools/clang-check/CMakeLists.txt
-+index 04151a8e03..a2753c08f2 100644
-+--- a/tools/clang-check/CMakeLists.txt
-++++ b/tools/clang-check/CMakeLists.txt
-+@@ -1,9 +1,3 @@
-+-set( LLVM_LINK_COMPONENTS
-+-  ${LLVM_TARGETS_TO_BUILD}
-+-  Option
-+-  Support
-+-  )
-+-
-+ add_clang_executable(clang-check
-+   ClangCheck.cpp
-+   )
-+diff --git a/tools/clang-format/CMakeLists.txt b/tools/clang-format/CMakeLists.txt
-+index a13633eaef..bdee9b8f68 100644
-+--- a/tools/clang-format/CMakeLists.txt
-++++ b/tools/clang-format/CMakeLists.txt
-+@@ -1,5 +1,3 @@
-+-set(LLVM_LINK_COMPONENTS support)
-+-
-+ add_clang_tool(clang-format
-+   ClangFormat.cpp
-+   )
-+diff --git a/tools/clang-format/fuzzer/CMakeLists.txt b/tools/clang-format/fuzzer/CMakeLists.txt
-+index c7772fcb2f..484d1b9446 100644
-+--- a/tools/clang-format/fuzzer/CMakeLists.txt
-++++ b/tools/clang-format/fuzzer/CMakeLists.txt
-+@@ -1,5 +1,3 @@
-+-set(LLVM_LINK_COMPONENTS support)
-+-
-+ add_clang_executable(clang-format-fuzzer
-+   EXCLUDE_FROM_ALL
-+   ClangFormatFuzzer.cpp
-+diff --git a/tools/clang-import-test/CMakeLists.txt b/tools/clang-import-test/CMakeLists.txt
-+index bd4919694a..bcfab77cde 100644
-+--- a/tools/clang-import-test/CMakeLists.txt
-++++ b/tools/clang-import-test/CMakeLists.txt
-+@@ -1,8 +1,3 @@
-+-set(LLVM_LINK_COMPONENTS
-+-  core
-+-  support
-+-)
-+-
-+ if(NOT CLANG_BUILT_STANDALONE)
-+   set(tablegen_deps intrinsics_gen)
-+ endif()
-+diff --git a/tools/clang-offload-bundler/CMakeLists.txt b/tools/clang-offload-bundler/CMakeLists.txt
-+index 6161d08ae5..17fcd5a1fe 100644
-+--- a/tools/clang-offload-bundler/CMakeLists.txt
-++++ b/tools/clang-offload-bundler/CMakeLists.txt
-+@@ -1,5 +1,3 @@
-+-set(LLVM_LINK_COMPONENTS BitWriter Core Object Support)
-+-
-+ if(NOT CLANG_BUILT_STANDALONE)
-+   set(tablegen_deps intrinsics_gen)
-+ endif()
-+diff --git a/tools/clang-rename/CMakeLists.txt b/tools/clang-rename/CMakeLists.txt
-+index 771e3bdea6..f6a4f49f7a 100644
-+--- a/tools/clang-rename/CMakeLists.txt
-++++ b/tools/clang-rename/CMakeLists.txt
-+@@ -1,8 +1,3 @@
-+-set(LLVM_LINK_COMPONENTS
-+-  Option
-+-  Support
-+-  )
-+-
-+ add_clang_executable(clang-rename ClangRename.cpp)
-+ 
-+ target_link_libraries(clang-rename
-+diff --git a/tools/driver/CMakeLists.txt b/tools/driver/CMakeLists.txt
-+index 901b6d62e4..bf41f04141 100644
-+--- a/tools/driver/CMakeLists.txt
-++++ b/tools/driver/CMakeLists.txt
-+@@ -1,21 +1,3 @@
-+-set( LLVM_LINK_COMPONENTS
-+-  ${LLVM_TARGETS_TO_BUILD}
-+-  Analysis
-+-  CodeGen
-+-  Core
-+-  IPO
-+-  InstCombine
-+-  Instrumentation
-+-  MC
-+-  MCParser
-+-  ObjCARCOpts
-+-  Option
-+-  ScalarOpts
-+-  Support
-+-  TransformUtils
-+-  Vectorize
-+-  )
-+-
-+ option(CLANG_PLUGIN_SUPPORT "Build clang with plugin support" ON)
-+ 
-+ # Support plugins. This must be before add_clang_executable as it reads
-+-- 
-+2.14.3
-+
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index f19fa92af4cd..1fab3a245cea 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  a74489d14f4017bee6a6c6fe76f1de0dbf7d66c8695116de5aadd141c4757892     glibc-glibc-2.27.tar.gz
++sha256  33189b3f10c88730a1f686fac794bc01f31765f12ffd75bc5e8a0f2a690d217a     glibc-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e.tar.gz
+ # Locally calculated (fetched from Github)
+ sha256  ddc63360393ab88ab6a4a0c81d33481f34c5a9ebd758eec2e6bb35385058b4cb     glibc-arc-2018.03-rc2.tar.gz
+ 
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 717182b05256..8e82eaa1eebb 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
+-GLIBC_VERSION = glibc-2.27
++GLIBC_VERSION = glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
 -- 
-2.14.3
+2.17.0
