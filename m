@@ -1,41 +1,31 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 29 May 2018 14:49:29 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/stm32f469: force usage of
- BINUTILS 2.28.x
-In-Reply-To: <1527595765-23055-2-git-send-email-christophe.priouzeau@st.com>
-References: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
- <1527595765-23055-2-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <9875052f-e652-4bc0-9cc7-7c4ebdcfdf56@smile.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 29 May 2018 12:50:08 +0000
+Subject: [Buildroot] [Bug 11051] runtime issue on STM32 with usage of
+ binutils 2.29.x
+In-Reply-To: <bug-11051-163@https.bugs.busybox.net/>
+References: <bug-11051-163@https.bugs.busybox.net/>
+Message-ID: <bug-11051-163-5qpWJFHCRf@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 29/05/2018 ? 14:09, Christophe PRIOUZEAU a ?crit?:
-> Due to runtime issue with the usage of BINUTILS 2.29.x,
-> we need to use the version 2.28.x
-> 
-> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+https://bugs.busybox.net/show_bug.cgi?id=11051
 
-Fixes: #11051
+--- Comment #2 from Christophe Priouzeau <christophe.priouzeau@st.com> ---
+Thanks for the information.
 
-Acked-by: Romain Naour <romain.naour@smile.fr>
+I have made the test by changing the version of binutils and we doesn't see the
+issue at runtime.
 
-> ---
->  configs/stm32f469_disco_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
-> index 8b77d8c..e5cacaf 100644
-> --- a/configs/stm32f469_disco_defconfig
-> +++ b/configs/stm32f469_disco_defconfig
-> @@ -2,6 +2,7 @@ BR2_arm=y
->  BR2_cortex_m4=y
->  BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
->  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
-> +BR2_BINUTILS_VERSION_2_28_X=y
->  BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> 
+I have pushed to patch for updating the configuration of stm32 on buildroot: 
+patch 1: http://patchwork.ozlabs.org/patch/922037/
+patch 2: http://patchwork.ozlabs.org/patch/922049/
+
+Thanks for your help and your reactivity.
+Chritophe Priouzeau
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
