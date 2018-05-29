@@ -1,41 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 21:44:48 +0200
-Subject: [Buildroot] [PATCHv2] package/dash: don't build in paralle
-In-Reply-To: <20180529174237.16902-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Tue, 29 May 2018 19:42:37 +0200")
-References: <20180529174237.16902-1-yann.morin.1998@free.fr>
-Message-ID: <87muwi4573.fsf@dell.be.48ers.dk>
+Date: Tue, 29 May 2018 21:43:43 +0200
+Subject: [Buildroot] [git commit] log4cplus: needs gcc >= 4.8
+Message-ID: <20180529194327.DBF6582A09@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f5d68512c2ff6b197f9f49432505b016a637f35a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > dash has races in its Makefile, but upstream is not too keen in fixing
- > those, and just suggests that dash not be built in parallel:
+log4cplus needs std::map::emplace
 
- >     https://www.mail-archive.com/dash at vger.kernel.org/msg01675.html
+Fixes:
+ - http://autobuild.buildroot.net/results/ef0d8d7fae835ff555202f6de320945226ec00bf
 
-:/
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/log4cplus/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > Fixes:
- >     http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
- >     http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
- >     http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
- >     [...]
-
- > Reported-by: Baruch Siach <baruch@tkos.co.il>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Baruch Siach <baruch@tkos.co.il>
-
- > ---
- > Changes v1 -> v2:
- >   - disable parallel build instead of trying to fix it, since upstream
- >     suggest so.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/log4cplus/Config.in b/package/log4cplus/Config.in
+index fd224dd270..cd5476a086 100644
+--- a/package/log4cplus/Config.in
++++ b/package/log4cplus/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_LOG4CPLUS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	help
+ 	  log4cplus is a simple to use C++ logging API providing
+@@ -13,9 +13,9 @@ config BR2_PACKAGE_LOG4CPLUS
+ 
+ 	  http://sourceforge.net/projects/log4cplus
+ 
+-comment "log4cplus needs a toolchain w/ C++, wchar, threads, gcc >= 4.7"
++comment "log4cplus needs a toolchain w/ C++, wchar, threads, gcc >= 4.8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+-		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ comment "log4cplus needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
