@@ -1,77 +1,84 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 May 2018 19:31:46 +0200
-Subject: [Buildroot] [PATCH] package/ti-sgx-km: properly handle legacy for
- renamed options
-Message-ID: <20180529173146.13512-1-yann.morin.1998@free.fr>
+Date: Tue, 29 May 2018 19:37:58 +0200
+Subject: [Buildroot] [PATCH] package/dash: fix parallel build issue
+In-Reply-To: <20180529025302.ciikalsiya7yvowf@tarshish>
+References: <20180528212019.31614-1-yann.morin.1998@free.fr>
+ <20180529025302.ciikalsiya7yvowf@tarshish>
+Message-ID: <20180529173758.GB8360@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit b54c5464cc (ti-sgx-km: rename options to have proper prefix)
-forgot to add defaults from legacy options, and notices that legacy
-options are still referenced).
+Baruch, All,
 
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Config.in.legacy            | 4 ++++
- package/ti-sgx-km/Config.in | 4 ++++
- 2 files changed, 8 insertions(+)
+On 2018-05-29 05:53 +0300, Baruch Siach spake thusly:
+> On Mon, May 28, 2018 at 11:20:19PM +0200, Yann E. MORIN wrote:
+> > Fixes:
+> >     http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
+> >     http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
+> >     http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
+> >     [...]
+> > 
+> > Reported-by: Baruch Siach <baruch@tkos.co.il>
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Baruch Siach <baruch@tkos.co.il>
+> > ---
+[--SNIP--]
+> > + src/Makefile.am | 3 ++-
+> 
+> This requires AUTORECONF, right?
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index e7b0316a4f..c62d87de01 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -169,6 +169,7 @@ config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF
- 	  BR2_PACKAGE_MEDIAART_BACKEND_QT has been renamed to
- 	  BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
- 
-+# Note: BR2_PACKAGE_TI_SGX_AM335X is still referenced from package/ti-sgx-km/Config.in
- config BR2_PACKAGE_TI_SGX_AM335X
- 	bool "ti-sgx-km AM335X option renamed"
- 	select BR2_LEGACY
-@@ -177,6 +178,7 @@ config BR2_PACKAGE_TI_SGX_AM335X
- 	  BR2_PACKAGE_TI_SGX_AM335X has been renamed to
- 	  BR2_PACKAGE_TI_SGX_KM_AM335X.
- 
-+# Note: BR2_PACKAGE_TI_SGX_AM437X is still referenced from package/ti-sgx-km/Config.in
- config BR2_PACKAGE_TI_SGX_AM437X
- 	bool "ti-sgx-km AM437X option renamed"
- 	select BR2_LEGACY
-@@ -185,6 +187,7 @@ config BR2_PACKAGE_TI_SGX_AM437X
- 	  BR2_PACKAGE_TI_SGX_AM437X has been renamed to
- 	  BR2_PACKAGE_TI_SGX_KM_AM437X.
- 
-+# Note: BR2_PACKAGE_TI_SGX_AM4430 is still referenced from package/ti-sgx-km/Config.in
- config BR2_PACKAGE_TI_SGX_AM4430
- 	bool "ti-sgx-km AM4430 option renamed"
- 	select BR2_LEGACY
-@@ -193,6 +196,7 @@ config BR2_PACKAGE_TI_SGX_AM4430
- 	  BR2_PACKAGE_TI_SGX_AM4430 has been renamed to
- 	  BR2_PACKAGE_TI_SGX_KM_AM4430.
- 
-+# Note: BR2_PACKAGE_TI_SGX_AM5430 is still referenced from package/ti-sgx-km/Config.in
- config BR2_PACKAGE_TI_SGX_AM5430
- 	bool "ti-sgx-km AM5430 option renamed"
- 	select BR2_LEGACY
-diff --git a/package/ti-sgx-km/Config.in b/package/ti-sgx-km/Config.in
-index db3d3f9ddd..348efdeb82 100644
---- a/package/ti-sgx-km/Config.in
-+++ b/package/ti-sgx-km/Config.in
-@@ -20,6 +20,10 @@ if BR2_PACKAGE_TI_SGX_KM
- 
- choice
- 	prompt "Target"
-+	default BR2_PACKAGE_TI_SGX_KM_AM335X if BR2_PACKAGE_TI_SGX_AM335X # legacy
-+	default BR2_PACKAGE_TI_SGX_KM_AM437X if BR2_PACKAGE_TI_SGX_AM437X # legacy
-+	default BR2_PACKAGE_TI_SGX_KM_AM4430 if BR2_PACKAGE_TI_SGX_AM4430 # legacy
-+	default BR2_PACKAGE_TI_SGX_KM_AM5430 if BR2_PACKAGE_TI_SGX_AM5430 # legacy
- 	default BR2_PACKAGE_TI_SGX_KM_AM335X
- 	help
- 	  Select the SOC for which you would like to install drivers.
+Oh dang, another case where I git commit --amend but forgot to git add
+first...
+
+> We have a patch from Peter that touches the 
+> Makefile.in version of the same file. If you add AUTORECONF you would also 
+> have to to convert Peter's patch to Makefile.am, otherwise your patch 
+> overwrites his changes. See my upstream submission from last week at
+> 
+>   https://www.spinics.net/lists/dash/msg01629.html
+
+Yeah, but I am withdrawing entirely this patch of mione, because
+upstream does not like it and said that we should not build dash in
+parallel;
+
+    https://www.mail-archive.com/dash at vger.kernel.org/msg01675.html
+
+So I'll just spin another patch disabling parallel build for dash.
+
+Regards,
+Yann E. MORIN.
+
+> > + 1 file changed, 2 insertions(+), 1 deletion(-)
+> > +
+> > +diff --git a/src/Makefile.am b/src/Makefile.am
+> > +index 46399c7..5bf5a52 100644
+> > +--- a/src/Makefile.am
+> > ++++ b/src/Makefile.am
+> > +@@ -44,7 +44,8 @@ EXTRA_DIST = \
+> > + 	mktokens mkbuiltins builtins.def.in mkinit.c \
+> > + 	mknodes.c nodetypes nodes.c.pat mksyntax.c mksignames.c
+> > + 
+> > +-token.h token_vars.h: mktokens
+> > ++token_vars.h: token.h
+> > ++token.h: mktokens
+> > + 	$(SHELL) $^
+> > + 
+> > + builtins.def: builtins.def.in $(top_builddir)/config.h
+> 
+> baruch
+> 
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
