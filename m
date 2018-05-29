@@ -1,29 +1,46 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue, 29 May 2018 23:22:15 +0200
-Subject: [Buildroot] [PATCH v3 0/4] Linux custom logo
-Message-ID: <1527628939-7389-1-git-send-email-angelo@amarulasolutions.com>
+Date: Tue, 29 May 2018 23:22:16 +0200
+Subject: [Buildroot] [PATCH v3 1/4] package/imagemagick: add host package
+In-Reply-To: <1527628939-7389-1-git-send-email-angelo@amarulasolutions.com>
+References: <1527628939-7389-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1527628939-7389-2-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series is only a resend cause some patches went missing meanwhile
-patchwork was buggy.
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-Angelo Compagnucci (4):
-  package/imagemagick: add host package
-  linux: add custom linux logo
-  docs/images: adding default buildroot linux logo
-  configs: add linux boot logo to raspberrypi3 defconfig
+This patch add the host package for imagemagick.
+It comes with a minimal selection of configure options to
+compile fast, it's indeed only used to convert
+the image file for the custom linux logo.
 
- configs/raspberrypi3_defconfig             |   1 +
- docs/website/images/logo_linux_clut224.png | Bin 0 -> 6825 bytes
- linux/Config.in                            |   8 ++++++++
- linux/linux.mk                             |  15 +++++++++++++++
- package/imagemagick/imagemagick.mk         |  11 +++++++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 docs/website/images/logo_linux_clut224.png
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/imagemagick/imagemagick.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 1165438..c319589 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -143,4 +143,15 @@ else
+ IMAGEMAGICK_CONF_OPTS += --without-bzlib
+ endif
+ 
++HOST_IMAGEMAGICK_CONF_OPTS = \
++	--with-jpeg \
++	--with-png \
++	--with-zlib
++
++HOST_IMAGEMAGICK_DEPENDENCIES = \
++	host-libjpeg \
++	host-libpng \
++	host-zlib
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.7.4
