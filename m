@@ -1,71 +1,83 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 08:50:44 +0200
-Subject: [Buildroot] [PATCH 1/2] package/ca-certificates: don't hash
- certificates.crt
-In-Reply-To: <20180506161944.7451-1-martin@barkynet.com> (Martin Bark's
- message of "Sun, 6 May 2018 17:19:43 +0100")
-References: <20180506161944.7451-1-martin@barkynet.com>
-Message-ID: <87a7sjuf97.fsf@dell.be.48ers.dk>
+From: Min Xu <xuminready@gmail.com>
+Date: Mon, 28 May 2018 23:55:39 -0700
+Subject: [Buildroot] [PATCH] shadowsocks-libev: new package
+Message-ID: <20180529065539.7263-1-xuminready@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
+Signed-off-by: Min Xu <xuminready@gmail.com>
+---
+ package/Config.in                                |  1 +
+ package/shadowsocks-libev/Config.in              | 12 ++++++++++++
+ package/shadowsocks-libev/shadowsocks-libev.hash |  2 ++
+ package/shadowsocks-libev/shadowsocks-libev.mk   | 16 ++++++++++++++++
+ 4 files changed, 31 insertions(+)
+ create mode 100644 package/shadowsocks-libev/Config.in
+ create mode 100644 package/shadowsocks-libev/shadowsocks-libev.hash
+ create mode 100644 package/shadowsocks-libev/shadowsocks-libev.mk
 
- > Copy certificates.crt to /etc/ssl/certs after we run c_rehash to
- > prevent it getting hashed by mistake.
-
-What is the effect of running c_rehash on it? Just an extra symlink or
-any functional difference?
-
- > Signed-off-by: Martin Bark <martin@barkynet.com>
- > ---
- >  package/ca-certificates/ca-certificates.mk | 8 +++++++-
- >  1 file changed, 7 insertions(+), 1 deletion(-)
-
- > diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
- > index cb0e961465..b99e6f47ca 100644
- > --- a/package/ca-certificates/ca-certificates.mk
- > +++ b/package/ca-certificates/ca-certificates.mk
- > @@ -30,14 +30,20 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
- 
- >  	# Create symlinks to certificates under /etc/ssl/certs
- >  	# and generate the bundle
- > +	rm -f $(@D)/ca-certificates.crt
- >  	cd $(TARGET_DIR) ;\
- >  	for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
- >  		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
- > -		cat $$i >>etc/ssl/certs/ca-certificates.crt ;\
- > +		cat $$i >>$(@D)/ca-certificates.crt ;\
- >  	done
-
-Alternatively we could redirect the entire for loop to the bundle, E.G.
-
-done > $(@D)/ca-certificates.crt
-
-While this seems like an improvement for when ca-certificates-reinstall
-is run, I'm not sure what the relation is to $SUBJECT?
-
-
- >  	# Create symlinks to the certificates by their hash values
- >  	$(HOST_DIR)/bin/c_rehash $(TARGET_DIR)/etc/ssl/certs
- > +
- > +	# Install the certificates bundle we just created
- > +	$(INSTALL) -D -m 644 $(@D)/ca-certificates.crt \
- > +		$(TARGET_DIR)/etc/ssl/certs/ca-certificates.crt
- > +
- >  endef
- 
- >  $(eval $(generic-package))
- > -- 
- > 2.17.0
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/Config.in b/package/Config.in
+index ecee493..9bfb2cf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1846,6 +1846,7 @@ endif
+ 	source "package/samba4/Config.in"
+ 	source "package/sconeserver/Config.in"
+ 	source "package/ser2net/Config.in"
++	source "package/shadowsocks-libev/Config.in"
+ 	source "package/shairport-sync/Config.in"
+ 	source "package/shellinabox/Config.in"
+ 	source "package/smcroute/Config.in"
+diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+new file mode 100644
+index 0000000..7c3c037
+--- /dev/null
++++ b/package/shadowsocks-libev/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_SHADOWSOCKS_LIBEV
++	bool "shadowsocks-libev"
++	select BR2_PACKAGE_C_ARES
++	select BR2_PACKAGE_LIBEV
++	select BR2_PACKAGE_LIBSODIUM
++	select BR2_PACKAGE_MBEDTLS
++	select BR2_PACKAGE_PCRE
++	help
++	  Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
++	  embedded devices and low-end boxes.
++
++	  https://github.com/shadowsocks/shadowsocks-libev
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+new file mode 100644
+index 0000000..07f10f4
+--- /dev/null
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256 58fb438d2cfe33cfa6ac8c50e587e2138c50e59a4b943f88d22883bf2e192a96  shadowsocks-libev-3.1.3.tar.gz
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+new file mode 100644
+index 0000000..b711754
+--- /dev/null
++++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# shadowsocks-libev
++#
++################################################################################
++
++SHADOWSOCKS_LIBEV_VERSION = 3.1.3
++SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
++SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, MIT(c-ares), BSD-2-Clause or GPL-2.0+(libev), ISC(libsodium), Apache-2.0(mbedtls), BSD-3-Clause(pcre)
++SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING c-ares/COPYING libev/COPYING libsodium/COPYING mbedtls/COPYING pcre/COPYING
++SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
++SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
++SHADOWSOCKS_LIBEV_CONF_ENV = PCRECONFIG=$(STAGING_DIR)/usr/bin/pcre-config
++SHADOWSOCKS_LIBEV_CONF_OPTS = --disable-documentation --with-pcre=$(STAGING_DIR)/usr/bin/
++
++$(eval $(autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.11.0
