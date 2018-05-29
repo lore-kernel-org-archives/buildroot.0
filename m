@@ -1,60 +1,55 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Tue, 29 May 2018 11:40:46 +0100
-Subject: [Buildroot] [PATCH 1/2] package/ca-certificates: don't hash
- certificates.crt
-In-Reply-To: <87sh6a7ozz.fsf@dell.be.48ers.dk>
-References: <20180506161944.7451-1-martin@barkynet.com>
- <87a7sjuf97.fsf@dell.be.48ers.dk>
- <CAFGQKxf5Nn5AKMJ6-n8Ue_qvoE-O9x09yoC9T1nbz5OOp5781g@mail.gmail.com>
- <87sh6a7ozz.fsf@dell.be.48ers.dk>
-Message-ID: <CAFGQKxdUvbWSbiEtkSOad=Vtx7Y0fAmPMFi_Sz2NKmDWiK2jsw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 29 May 2018 12:44:28 +0200
+Subject: [Buildroot] [RFC] [PATCH v2 2/2] support/kconfig: Bump to
+ kconfig from Linux 4.17-rc2
+In-Reply-To: <20180528203743.GK2965@scaer>
+References: <20180509164412.31596-1-petr.vorel@gmail.com>
+ <20180509164412.31596-2-petr.vorel@gmail.com>
+ <20180519230311.6a3652fd@windsurf> <20180520142311.GA3453@scaer>
+ <20180520143139.GA14607@x230> <20180520144141.GB3453@scaer>
+ <20180520165009.56b44d9b@windsurf>
+ <dcf8150e-1eb1-ba10-09e6-d3eb0bffaf2b@mind.be> <20180528203743.GK2965@scaer>
+Message-ID: <67a166b0-1466-8bd9-86be-3a8f3d7a4079@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
-
-On 29 May 2018 at 11:08, Peter Korsgaard <peter@korsgaard.com> wrote:
-
-> >>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
->
->  > Peter,
->  > On 29 May 2018 at 07:50, Peter Korsgaard <peter@korsgaard.com> wrote:
->
->  >> >>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
->  >>
->  >> > Copy certificates.crt to /etc/ssl/certs after we run c_rehash to
->  >> > prevent it getting hashed by mistake.
->  >>
->  >> What is the effect of running c_rehash on it? Just an extra symlink or
->  >> any functional difference?
->  >>
->
->  > c_rehash hashes certificates.crt by mistake and that symlink clashes
-> with
->  > one of the CA certificates.  The end result is one of the hashes
->  > incorrectly points to certificates.crt instead of the CA certificate.  I
->  > noticed this during testing because i checked /etc/ssl/certs was the
-> same
->  > as under ubuntu.
->
-> Ok, can you rework the commit message with these details (and perhaps
-> the for loop change) and resubmit? Thanks!
->
-
-Will do
-
-Thanks
-
-Martin
 
 
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180529/9cf889bf/attachment.html>
+On 28-05-18 22:37, Yann E. MORIN wrote:
+> Arnout, Thomas, All,
+> 
+> On 2018-05-22 23:22 +0200, Arnout Vandecappelle spake thusly:
+>> On 20-05-18 16:50, Thomas Petazzoni wrote:
+[snip]
+>>> If we start relying on the system-installed flex and bison, then we
+>>> should remove host-flex and host-bison entirely, not only for the linux
+>>> package. The question is whether bison and flex both behave in a
+>>> reasonably similar way regardless of which version is used.
+>>
+>>  I briefly looked at this in Paris, and it became clear very quickly that even a
+>> minor change in the bison version would give a completely different .c file. If
+>> this is a source file that will be built for the target, it's going to be a
+>> major reproducibility-killer. So I don't think we can remove host-bison and
+>> host-flex.
+> 
+> We're only talking about dropping the need for host-flex and host-bison
+> for the kconfig stuff. In this case, we don;t care that the user
+> generates C code one way or another: it's only a host tool...
+
+ I was replying to Thomas's "we should remove host-flex and host-bison
+entirely". Yes we can rely on system-installed flex and bison for kconfig, but
+we can't rely on that for target packages, e.g. target dtc.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
