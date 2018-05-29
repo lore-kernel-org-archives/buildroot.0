@@ -1,46 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 21:43:59 +0200
-Subject: [Buildroot] [git commit] package/dash: don't build in paralle
-Message-ID: <20180529194327.E926E7F92D@busybox.osuosl.org>
+Date: Tue, 29 May 2018 21:46:06 +0200
+Subject: [Buildroot] [PATCH] git: security bump to version 2.16.4
+In-Reply-To: <5fabe2e591bd4f1a6932850641f47e214c8cd667.1527615519.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 29 May 2018 20:38:39 +0300")
+References: <5fabe2e591bd4f1a6932850641f47e214c8cd667.1527615519.git.baruch@tkos.co.il>
+Message-ID: <87in76454x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50d443cbf72fc7940c2970b309de535004173966
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-dash has races in its Makefile, but upstream is not too keen in fixing
-those, and just suggests that dash not be built in parallel:
+ > Forward port of security fixes from the 2.13.7 release. The 2.13.7
+ > release notes say this:
 
-    https://www.mail-archive.com/dash at vger.kernel.org/msg01675.html
+ >  * Submodule "names" come from the untrusted .gitmodules file, but we
+ >    blindly append them to $GIT_DIR/modules to create our on-disk repo
+ >    paths. This means you can do bad things by putting "../" into the
+ >    name. We now enforce some rules for submodule names which will cause
+ >    Git to ignore these malicious names (CVE-2018-11235).
 
-Fixes:
-    http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
-    http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
-    http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
-    [...]
+ >    Credit for finding this vulnerability and the proof of concept from
+ >    which the test script was adapted goes to Etienne Stalmans.
 
-Reported-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dash/dash.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ >  * It was possible to trick the code that sanity-checks paths on NTFS
+ >    into reading random piece of memory (CVE-2018-11233).
 
-diff --git a/package/dash/dash.mk b/package/dash/dash.mk
-index 9a26ebb642..80f0ea8cf3 100644
---- a/package/dash/dash.mk
-+++ b/package/dash/dash.mk
-@@ -9,6 +9,9 @@ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
- DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
- DASH_LICENSE_FILES = COPYING
- 
-+# dash does not build in parallel
-+DASH_MAKE = $(MAKE1)
-+
- ifeq ($(BR2_PACKAGE_LIBEDIT),y)
- DASH_DEPENDENCIES += libedit host-pkgconf
- DASH_CONF_OPTS += --with-libedit
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
