@@ -1,57 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 May 2018 20:38:39 +0300
-Subject: [Buildroot] [PATCH] git: security bump to version 2.16.4
-Message-ID: <5fabe2e591bd4f1a6932850641f47e214c8cd667.1527615519.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 29 May 2018 19:42:37 +0200
+Subject: [Buildroot] [PATCHv2] package/dash: don't build in paralle
+Message-ID: <20180529174237.16902-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Forward port of security fixes from the 2.13.7 release. The 2.13.7
-release notes say this:
+dash has races in its Makefile, but upstream is not too keen in fixing
+those, and just suggests that dash not be built in parallel:
 
- * Submodule "names" come from the untrusted .gitmodules file, but we
-   blindly append them to $GIT_DIR/modules to create our on-disk repo
-   paths. This means you can do bad things by putting "../" into the
-   name. We now enforce some rules for submodule names which will cause
-   Git to ignore these malicious names (CVE-2018-11235).
+    https://www.mail-archive.com/dash at vger.kernel.org/msg01675.html
 
-   Credit for finding this vulnerability and the proof of concept from
-   which the test script was adapted goes to Etienne Stalmans.
+Fixes:
+    http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
+    http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
+    http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
+    [...]
 
- * It was possible to trick the code that sanity-checks paths on NTFS
-   into reading random piece of memory (CVE-2018-11233).
+Reported-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v1 -> v2:
+  - disable parallel build instead of trying to fix it, since upstream
+    suggest so.
+---
+ package/dash/dash.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/git/git.hash b/package/git/git.hash
-index fea1a1e904dd..4bcc5ee5d39d 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,4 +1,4 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 d65d99e9e5b081c1f14ea018973806e942a2eb7d0da2ebc01bd2525adee62d48  git-2.16.3.tar.xz
-+sha256 6e69b0e9c487e5da52a14d4829f0b6a28b2c18a0bb6fb67c0dc8b5b5658bd532  git-2.16.4.tar.xz
- sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 2115e04e3115..ac7b8f2e8c08 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 9a26ebb642..80f0ea8cf3 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -9,6 +9,9 @@ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+ DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
  
--GIT_VERSION = 2.16.3
-+GIT_VERSION = 2.16.4
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
++# dash does not build in parallel
++DASH_MAKE = $(MAKE1)
++
+ ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+ DASH_DEPENDENCIES += libedit host-pkgconf
+ DASH_CONF_OPTS += --with-libedit
 -- 
-2.17.0
+2.14.1
