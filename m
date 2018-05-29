@@ -1,13 +1,16 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 May 2018 18:28:03 +0300
-Subject: [Buildroot] [PATCH 2018.02.x] glibc: security bump to latest 2.26
- branch
-Message-ID: <a6279b2229c08c70e5e970d214264b102a240cc2.1527607683.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 May 2018 17:48:46 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] glibc: security bump to
+ latest 2.26 branch
+Message-ID: <20180529154722.B95A182BC1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8db468af4c8735299013b13fffb5eb9acb0f359c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixed issues are listed in the 2.26 branch NEWS file:
 
@@ -23,13 +26,14 @@ Fixed issues are listed in the 2.26 branch NEWS file:
   overflow.  Reported by Andreas Schwab.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/glibc/glibc.hash | 2 +-
  package/glibc/glibc.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 3dab1e151692..890f523fd917 100644
+index 3dab1e1516..890f523fd9 100644
 --- a/package/glibc/glibc.hash
 +++ b/package/glibc/glibc.hash
 @@ -1,4 +1,4 @@
@@ -39,7 +43,7 @@ index 3dab1e151692..890f523fd917 100644
  # Locally calculated (fetched from Github)
  sha256  5aa9adeac09727db0b8a52794186563771e74d70410e9fd86431e339953fd4bb     glibc-arc-2017.09-release.tar.gz
 diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 0351433e6a09..562f0258d5a5 100644
+index 0351433e6a..562f0258d5 100644
 --- a/package/glibc/glibc.mk
 +++ b/package/glibc/glibc.mk
 @@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
@@ -51,5 +55,3 @@ index 0351433e6a09..562f0258d5a5 100644
  # Upstream doesn't officially provide an https download link.
  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
  # sometimes the connection times out. So use an unofficial github mirror.
--- 
-2.17.0
