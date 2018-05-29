@@ -1,35 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 May 2018 19:12:14 +0300
-Subject: [Buildroot] [PATCH next] usbutils: lsusb.py is for python 3.x only
-Message-ID: <5c1f4f9f8c6ed89fc685baf21cf6f5641087839c.1527610334.git.baruch@tkos.co.il>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Tue, 29 May 2018 16:49:14 +0000
+Subject: [Buildroot] [git commit branch/2018.02.x] util-linux: add two
+ upstream patches to fix blocking on getrandom() with recent kernels
+In-Reply-To: <20180528074724.D400282A4A@busybox.osuosl.org>
+References: <20180528074724.D400282A4A@busybox.osuosl.org>
+Message-ID: <1527612552.31570.109.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-usbutils version 010 converted the lsusb.py script to Python 3. Keep the
-lsusb.py script on target only when Python 3.x is enabled.
+On Mon, 2018-05-28 at 09:48 +0200, Peter Korsgaard wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=c4d86707cd67817496fa7a904b73b2538ad4058c
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+> 
+> As part of the fix for CVE-2018-1108 (kernel drivers before version 4.17-rc1
+> are vulnerable to a weakness in the Linux kernel's implementation of random
+> seed data.  Programs, early in the boot sequence, could use the data
+> allocated for the seed before it was sufficiently generated), the kernel
+> random number generator initialization routine was changed.  See the
+> project-zero writeup for more details:
+> 
+> https://bugs.chromium.org/p/project-zero/issues/detail?id=1559
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/usbutils/usbutils.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+What's ironic here is that due to the kernel's random data not being
+good enough, after waiting a full second, util-linux falls back to
+random data that is even worse.
 
-diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
-index 98b7894ae774..43322e4a654b 100644
---- a/package/usbutils/usbutils.mk
-+++ b/package/usbutils/usbutils.mk
-@@ -16,8 +16,8 @@ ifeq ($(BR2_PACKAGE_BUSYBOX),y)
- USBUTILS_DEPENDENCIES += busybox
- endif
- 
--# Nice lsusb.py script only if there's python
--ifeq ($(BR2_PACKAGE_PYTHON),)
-+# Nice lsusb.py script only if there's python 3.x
-+ifeq ($(BR2_PACKAGE_PYTHON3),)
- define USBUTILS_REMOVE_PYTHON
- 	rm -f $(TARGET_DIR)/usr/bin/lsusb.py
- endef
--- 
-2.17.0
+If one looks at the system as a whole, I think rather than "fix" CVE-
+2018-1108 what has really happened is that a kernel problem has been
+traded for an even worse userspace problem.
