@@ -1,23 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 21:44:06 +0200
-Subject: [Buildroot] [PATCH 1/1] log4cplus: needs gcc >= 4.8
-In-Reply-To: <20180529171929.9326-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 29 May 2018 19:19:29 +0200")
-References: <20180529171929.9326-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r2lu4589.fsf@dell.be.48ers.dk>
+Date: Tue, 29 May 2018 21:44:48 +0200
+Subject: [Buildroot] [PATCHv2] package/dash: don't build in paralle
+In-Reply-To: <20180529174237.16902-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Tue, 29 May 2018 19:42:37 +0200")
+References: <20180529174237.16902-1-yann.morin.1998@free.fr>
+Message-ID: <87muwi4573.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > log4cplus needs std::map::emplace
+ > dash has races in its Makefile, but upstream is not too keen in fixing
+ > those, and just suggests that dash not be built in parallel:
+
+ >     https://www.mail-archive.com/dash at vger.kernel.org/msg01675.html
+
+:/
+
  > Fixes:
- >  - http://autobuild.buildroot.net/results/ef0d8d7fae835ff555202f6de320945226ec00bf
+ >     http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
+ >     http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
+ >     http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
+ >     [...]
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Reported-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Baruch Siach <baruch@tkos.co.il>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - disable parallel build instead of trying to fix it, since upstream
+ >     suggest so.
 
 Committed, thanks.
 
