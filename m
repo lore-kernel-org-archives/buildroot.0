@@ -1,57 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 May 2018 17:37:54 +0300
-Subject: [Buildroot] [PATCH v2] glibc: security bump to latest 2.27 branch
-Message-ID: <e76f9b170cf1376b2b1603aa2e4503091f2771d9.1527604674.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 29 May 2018 16:58:45 +0200
+Subject: [Buildroot] Buildroot 2018.05-rc3 released
+In-Reply-To: <1527599917.2053.2.camel@rovoreed.com> (Mike Davies's message of
+ "Tue, 29 May 2018 14:18:37 +0100")
+References: <87efhvufjm.fsf@dell.be.48ers.dk>
+ <1527599917.2053.2.camel@rovoreed.com>
+Message-ID: <87fu2a7bkq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixed issues are listed in the 2.27 branch NEWS file:
+>>>>> "Mike" == Mike Davies <busybox_mail@rovoreed.com> writes:
 
-  CVE-2017-18269: An SSE2-based memmove implementation for the i386
-  architecture could corrupt memory.  Reported by Max Horn.
+ > ca-certificates fails to build. Though I see there is some discussion
+ > on the list, I'm unsure if it is connected to the build failing.
+ > My real build needs a lot more stuff, but it can be trimmed down to
+ > this for it to fail...
 
-  CVE-2018-11236: Very long pathname arguments to realpath function could
-  result in an integer overflow and buffer overflow.  Reported by Alexey
-  Izbyshev.
+ > tar -xzf /home/mike/Downloads/buildroot-2018.05-rc3.tar.gz
+ > cd b*3
+ > make raspberrypi3_64_defconfig
+ > make menuconfig
+ > Target Packages->Libraries->Crypto->CA Certificates
+ > make
 
-  CVE-2018-11237: The mempcpy implementation for the Intel Xeon Phi
-  architecture could write beyond the target buffer, resulting in a buffer
-  overflow.  Reported by Andreas Schwab.
+ > PATH="/home/mike/work/pi/buildroot-2018.05-rc3/output/host/bin:/home/mike/work/pi/buildroot-2018.05-rc3/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/home/mike/bin:/sbin:/home/mike/.local/bin:/home/mike/bin:/home/mike/bin:/sbin" /usr/bin/make -j9 -C /home/mike/work/pi/buildroot-2018.05-rc3/output/build/ca-certificates-20170717 all
+ > for dir in mozilla; do \
+ >   /usr/bin/make -C $dir all; \
+ > done
+ > python certdata2pem.py
+ > Traceback (most recent call last):
+ >   File "certdata2pem.py", line 23, in <module>
+ >     import base64
+ >   File "/home/mike/work/pi/buildroot-2018.05-rc3/output/host/lib64/python2.7/base64.py", line 9, in <module>
+ >     import struct
+ >   File "/home/mike/work/pi/buildroot-2018.05-rc3/output/host/lib64/python2.7/struct.py", line 1, in <module>
+ >     from _struct import *
+ > ImportError: /home/mike/work/pi/buildroot-2018.05-rc3/output/host/lib64/python2.7/lib-dynload/_struct.so: undefined symbol: PyUnicodeUCS2_AsEncodedString
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2: Format the version string as described in the comment (Peter)
----
- package/glibc/glibc.hash | 2 +-
- package/glibc/glibc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hmm, strange. Nothing has really changed to host-python recently. Is
+this a new regression since 2018.05-rc2? What host OS are you using?
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index f19fa92af4cd..1fab3a245cea 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  a74489d14f4017bee6a6c6fe76f1de0dbf7d66c8695116de5aadd141c4757892     glibc-glibc-2.27.tar.gz
-+sha256  33189b3f10c88730a1f686fac794bc01f31765f12ffd75bc5e8a0f2a690d217a     glibc-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e.tar.gz
- # Locally calculated (fetched from Github)
- sha256  ddc63360393ab88ab6a4a0c81d33481f34c5a9ebd758eec2e6bb35385058b4cb     glibc-arc-2018.03-rc2.tar.gz
- 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 717182b05256..8e82eaa1eebb 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
--GLIBC_VERSION = glibc-2.27
-+GLIBC_VERSION = glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
 -- 
-2.17.0
+Bye, Peter Korsgaard
