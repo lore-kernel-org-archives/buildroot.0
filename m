@@ -1,37 +1,45 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue, 29 May 2018 23:22:19 +0200
-Subject: [Buildroot] [PATCH v3 4/4] configs: add linux boot logo to
- raspberrypi3 defconfig
-In-Reply-To: <1527628939-7389-1-git-send-email-angelo@amarulasolutions.com>
-References: <1527628939-7389-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1527628939-7389-5-git-send-email-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 29 May 2018 23:32:19 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/stm32f429: force usage of
+ BINUTILS 2.28.x
+In-Reply-To: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
+References: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <20180529233219.0eca0f54@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Hello Christophe,
 
-This patch adds a custom boot up logo to the raspberrypi3
-defconfig.
+On Tue, 29 May 2018 12:09:27 +0000, Christophe PRIOUZEAU wrote:
+> Due to runtime issue with the usage of BINUTILS 2.29.x,
+> we need to use the version 2.28.x
+> 
+> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- configs/raspberrypi3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+I know those patches have been committed, but I'd like to say I'm not
+totally happy with them: to me, they don't implement the right approach.
 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 45a76be..ed3d28d 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -13,6 +13,7 @@ BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c117a8bccf37bfba323065b566cf999ed4629a4a)/linux-c117a8bccf37bfba323065b566cf999ed4629a4a.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-+BR2_LINUX_KERNEL_CUSTOMLOGO_PATH="docs/images/logo_linux_clut224.png"
- 
- # Build the DTB from the kernel sources
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+Your patches only fix specifically the STM32 defconfigs. Any other
+Buildroot user doing Cortex-M4 stuff, for other platforms, will fall
+into the same binutils issue.
+
+So in fact the proposal that was made back in April at
+http://lists.busybox.net/pipermail/buildroot/2018-April/219223.html was
+in the end better.
+
+I still don't like the fact that we are forced to use an old binutils
+version, because we are ultimately going to drop support for binutils
+2.28 in the future, and if the issue isn't fixed in newer binutils
+versions, we are going to have a problem. But regardless of that,
+fixing the defconfigs is really not the correct solution here I believe.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
