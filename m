@@ -1,12 +1,12 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 29 May 2018 22:45:25 +0200
-Subject: [Buildroot] [PATCH v3 3/5] uboot: zynqmp: allow to use custom
- psu_init files
-In-Reply-To: <20180528224912.539b05f6@windsurf.home>
+Date: Tue, 29 May 2018 22:46:21 +0200
+Subject: [Buildroot] [PATCH v3 4/5] uboot: zynqmp: generate SPL image
+ with PMUFW binary
+In-Reply-To: <20180528225334.6a2f42d6@windsurf.home>
 References: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
- <1525364617-23633-4-git-send-email-luca@lucaceresoli.net>
- <20180528224912.539b05f6@windsurf.home>
-Message-ID: <a61417d4-fa49-cbbb-c51f-a88f72dcb30e@lucaceresoli.net>
+ <1525364617-23633-5-git-send-email-luca@lucaceresoli.net>
+ <20180528225334.6a2f42d6@windsurf.home>
+Message-ID: <1bf2fe55-ed5c-fd97-e203-46b913204770@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,66 +15,63 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On 28/05/2018 22:49, Thomas Petazzoni wrote:
+On 28/05/2018 22:53, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Thu,  3 May 2018 18:23:35 +0200, Luca Ceresoli wrote:
-> 
->> +ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
+> On Thu,  3 May 2018 18:23:36 +0200, Luca Ceresoli wrote:
+>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+>> index cbb899515181..266e42698d1b 100644
+>> --- a/boot/uboot/uboot.mk
+>> +++ b/boot/uboot/uboot.mk
+>> @@ -276,6 +276,21 @@ endef
+>>  
+>>  ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
+>>  
+>> +UBOOT_ZYNQMP_PMUFW = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PMUFW))
 >> +
->> +ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_DIR)),)
+>> +ifneq ($(UBOOT_ZYNQMP_PMUFW),)
+>> +UBOOT_EXTRA_DOWNLOADS += $(UBOOT_ZYNQMP_PMUFW)
+>> +BR_NO_CHECK_HASH_FOR += $(notdir $(UBOOT_ZYNQMP_PMUFW))
+>> +define UBOOT_ZYNQMP_KCONFIG_FIXUP
+>> +	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"board/xilinx/zynqmp/pmufw.bin",$(@D)/.config)
+>> +endef
+>> +define UBOOT_ZYNQMP_COPY_PMUFW
+>> +	$(INSTALL) -D -m 0644 $(UBOOT_DL_DIR)/$(notdir $(UBOOT_ZYNQMP_PMUFW)) \
+>> +		$(@D)/board/xilinx/zynqmp/pmufw.bin
+>> +endef
 > 
-> It'd be nice to have an intermediate UBOOT_ZYNQMP_PSU_INIT_DIR variable
-> instead of calculating its qstripped value twice.
+> I'm wondering if your solution that consists in copying the PMU
+> firmware to the U-Boot source directory and then using that location in
+> the U-Boot configuration is better, or if we should simply make the
+> U-Boot configuration point to the location in $(UBOOT_DL_DIR), i.e:
 > 
->> +define UBOOT_ZYNQMP_COPY_PSU_INIT
->> +# In U-Boot's board/xilinx/zynqmp/Makefile the bundled psu_init_gpl.c
->> +# has precedence over ours if placed in a subdir whose name matches
->> +# CONFIG_DEFAULT_DEVICE_TREE. Delete them all to be sure we use ours.
->> +	rm -f $(@D)/board/xilinx/zynqmp/*/psu_init*.[ch]
->> +	cp $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_DIR))/psu_init_gpl.[ch] \
->> +	   $(@D)/board/xilinx/zynqmp/
+> $(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,$(UBOOT_DL_DIR)/$(notdir $(UBOOT_ZYNQMP_PMUFW)),$(@D)/.config)
 > 
-> However, the bigger question is why do we need this in the first
-> place ? This is in fact just patching the U-Boot source code. Why not
-> use a patch instead ? Aren't people in general anyway going to have
-> their own custom U-Boot Git tree, in which they will version control
-> their psu_init files ?
+> I'm not saying we _must_ do this, I'm wondering if it isn't simpler.
 
-Of course course having a custom U-Boot tree with these files versioned
-is a valid workflow, which does not need the present patch. But there
-are other valid use cases.
+This would definitely be better, but it wouldn't work because the U-Boot
+makefile looks for $(srctree)/$(CONFIG_BOOT_INIT_FILE), not just
+$(CONFIG_BOOT_INIT_FILE). So the file must be relative to
+$(@D)/board/xilinx/zynqmp/, i.e. $(srctree).
 
-> Since this really looks like a specialized patching step, I'm not sure
-> it really makes sense to add this. Unless you can convince me
-> otherwise :-)
+Of course this could be fixed in U-Boot...
 
-The psu_init files are special because they contain
-automatically-generated code to configure the SoC peripherals: enable
-devices, set pinmuxes etc, which is not otherwise done at runtime. Have
-a look at a few examples: [0] [1].
+>> +define UBOOT_KCONFIG_FIXUP_CMDS
+>> +	$(UBOOT_ZYNQMP_KCONFIG_FIXUP)
+>> +endef
+> 
+> This obviously won't work with a non-kconfig capable U-Boot version,
+> though admittedly ZynqMP support is sufficiently new in upstream U-Boot
+> that we're pretty much guaranteed that someone trying to build for
+> ZynqMP will have a kconfig-capable U-Boot.
 
-This file will change whenever the hardware *or* the configuration
-changes (e.g. to enable peripherals).
+Indeed.
 
-It is perfectly fine if one wants to use a mainline U-Boot release or a
-Xilinx release, unmodified, that works fine... *except* for the psu_init
-file. With your proposed workflow all users will be forced to use a
-custom git tree, just because they have a slightly different psu_init
-file. With my patch these users can just use a "standard" U-Boot
-(downloaded straight from the Internet), throw a psu_init file in their
-Buildroot boards/ dir and change their Buildroot config to point to it.
+> But to be sure, perhaps the
+> BR2_TARGET_UBOOT_ZYNQMP_PMUFW should have a "depends on
+> BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG" ?
 
-Even though it's technically code, you can consider the psu_init
-somewhat like a configuration file.
+Ok, that can be done anyway, no problem.
 
-Did I convince you? :-)
-
-[0]
-http://git.denx.de/?p=u-boot.git;a=blob;f=board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c;h=fcd6a46ad9ffa0da06c4f0a67c2397aa4128ca29;hb=HEAD
-[1]
-http://git.denx.de/?p=u-boot.git;a=blob;f=board/xilinx/zynqmp/zynqmp-zcu102-revA/psu_init_gpl.c;h=5f21c4747584815ba86e50a36906b6c1fe8af1ca;hb=HEAD
-
-Regards,
 -- 
 Luca
