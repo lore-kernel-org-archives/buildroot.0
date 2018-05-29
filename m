@@ -1,15 +1,16 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 29 May 2018 12:44:28 +0200
-Subject: [Buildroot] [RFC] [PATCH v2 2/2] support/kconfig: Bump to
- kconfig from Linux 4.17-rc2
-In-Reply-To: <20180528203743.GK2965@scaer>
-References: <20180509164412.31596-1-petr.vorel@gmail.com>
- <20180509164412.31596-2-petr.vorel@gmail.com>
- <20180519230311.6a3652fd@windsurf> <20180520142311.GA3453@scaer>
- <20180520143139.GA14607@x230> <20180520144141.GB3453@scaer>
- <20180520165009.56b44d9b@windsurf>
- <dcf8150e-1eb1-ba10-09e6-d3eb0bffaf2b@mind.be> <20180528203743.GK2965@scaer>
-Message-ID: <67a166b0-1466-8bd9-86be-3a8f3d7a4079@mind.be>
+Date: Tue, 29 May 2018 12:45:42 +0200
+Subject: [Buildroot] [PATCH 6/8] ti-sgx-km: rename options to have
+ proper prefix
+In-Reply-To: <20180528204501.GL2965@scaer>
+References: <20180513190737.26079-1-thomas.petazzoni@bootlin.com>
+ <20180513190737.26079-7-thomas.petazzoni@bootlin.com>
+ <20180513193140.GJ22130@scaer> <e477cbd2-f662-b196-0c2c-f6959e42e983@mind.be>
+ <20180516090052.21e0af47@windsurf>
+ <fb6a5c78-7556-4110-b52b-ea6cef274c88@mind.be>
+ <87wovwiuai.fsf@dell.be.48ers.dk>
+ <4299684e-6356-dcf3-a35d-9fb9ef6606bb@mind.be> <20180528204501.GL2965@scaer>
+Message-ID: <c932fafd-d7a1-9249-5d51-c6e4e7a45f0c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,33 +19,48 @@ To: buildroot@busybox.net
 
 
 
-On 28-05-18 22:37, Yann E. MORIN wrote:
-> Arnout, Thomas, All,
+On 28-05-18 22:45, Yann E. MORIN wrote:
+> Arnout, Peter, All,
 > 
-> On 2018-05-22 23:22 +0200, Arnout Vandecappelle spake thusly:
->> On 20-05-18 16:50, Thomas Petazzoni wrote:
-[snip]
->>> If we start relying on the system-installed flex and bison, then we
->>> should remove host-flex and host-bison entirely, not only for the linux
->>> package. The question is whether bison and flex both behave in a
->>> reasonably similar way regardless of which version is used.
->>
->>  I briefly looked at this in Paris, and it became clear very quickly that even a
->> minor change in the bison version would give a completely different .c file. If
->> this is a source file that will be built for the target, it's going to be a
->> major reproducibility-killer. So I don't think we can remove host-bison and
->> host-flex.
+> On 2018-05-22 12:42 +0200, Arnout Vandecappelle spake thusly:
+>> On 21-05-18 23:16, Peter Korsgaard wrote:
+>>>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>
+>>>  > On 16-05-18 09:00, Thomas Petazzoni wrote:
+>>>  >> Hello,
+>>>  >> 
+>>>  >> On Tue, 15 May 2018 23:52:33 +0200, Arnout Vandecappelle wrote:
+>>>  >> 
+>>>  >>>> What is nice with this solution, is that we have the new choice that is
+>>>  >>>> right near the legacy option so we can chek it, and it automatically
+>>>  >>>> gets the old setting.
+>>>  >>>> 
+>>>  >>>> But I am not too convinced, however, because we do not usually use the
+>>>  >>>> name of a choice elsewhere...  
+>>>  >>> 
+>>>  >>> Legacy is pretty special anyway. I do think it's worthwhile it to do this properly.
+>>>  >>
+>>>  >> Is this an Acked-by to the approach this patch series has taken in
+>>>  >> terms of handling the Config.in choice option renaming ?
+>>>
+>>>  >  Er, no, it's a NACK. I *do* think it's worthwhile to properly select the new
+>>>  > option.
 > 
-> We're only talking about dropping the need for host-flex and host-bison
-> for the kconfig stuff. In this case, we don;t care that the user
-> generates C code one way or another: it's only a host tool...
+> Yeah, but as we've gone without support for legacy choices so far
+> (almost 6 years now), I don't think this is an urgent matter.
 
- I was replying to Thomas's "we should remove host-flex and host-bison
-entirely". Yes we can rely on system-installed flex and bison for kconfig, but
-we can't rely on that for target packages, e.g. target dtc.
+ Excuse me? Have you read lines 19-59 of Config.in.legacy?
 
  Regards,
  Arnout
+
+> 
+> Next time, maybe I'll just shut up instead of suggesting sophisticated
+> and imaginative solutions. ;-P
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
