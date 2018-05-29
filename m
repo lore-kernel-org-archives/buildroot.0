@@ -1,112 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 29 May 2018 05:53:02 +0300
-Subject: [Buildroot] [PATCH] package/dash: fix parallel build issue
-In-Reply-To: <20180528212019.31614-1-yann.morin.1998@free.fr>
-References: <20180528212019.31614-1-yann.morin.1998@free.fr>
-Message-ID: <20180529025302.ciikalsiya7yvowf@tarshish>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Tue, 29 May 2018 00:43:49 -0300
+Subject: [Buildroot] [PATCH v3 5/7] support/dockerfile: install flake8
+References: <20180528194429.GF2965@scaer>
+Message-ID: <5b0ccc753f59_1c272ab87ea319a052883@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello,
 
-On Mon, May 28, 2018 at 11:20:19PM +0200, Yann E. MORIN wrote:
-> Fixes:
->     http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
->     http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
->     http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
->     [...]
+On Mon, May 28, 2018 at 04:44 PM, Yann E. MORIN wrote:
+
+[snip]
+> Why do we even use pip to install those? Can't we just rely on the
+> verions actually packaged in the distro instead? I.e.
 > 
-> Reported-by: Baruch Siach <baruch@tkos.co.il>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/dash/0003-BUILD-fix-parallel-build.patch | 60 ++++++++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 package/dash/0003-BUILD-fix-parallel-build.patch
+>     apt-get install python-configobj python-configparser etc...
 > 
-> diff --git a/package/dash/0003-BUILD-fix-parallel-build.patch b/package/dash/0003-BUILD-fix-parallel-build.patch
-> new file mode 100644
-> index 0000000000..4f86c639a4
-> --- /dev/null
-> +++ b/package/dash/0003-BUILD-fix-parallel-build.patch
-> @@ -0,0 +1,60 @@
-> +From 26d549e46161fd2280066dd538b957920a9cb765 Mon Sep 17 00:00:00 2001
-> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +Date: Mon, 28 May 2018 22:56:37 +0200
-> +Subject: [PATCH] [BUILD] fix parallel build
-> +
-> +When neither token.h nor token_var.h exist, and we are building in
-> +parallel, it is possible that make will spawn two mktokens at roughly
-> +the same time, because of two different rules, one that needs token.h ad
-> +another that need token_vars.h.
-> +
-> +For example, make can have a dependency chain toward just token.h, from
-> +syntax.c, and another dependency chain toweard token_vars.h from the
-> +generic BUILT_SOURCES.
-> +
-> +So, make will "quickly" decide that it needs token.h, then spawn
-> +mktoken. A bit later, while that mktoken still runs but hasn't yet
-> +created token_vars.h, make will need it, and thus spawn a second
-> +mktoken.
-> +
-> +While the second one runs, the first terminates. However, the token.h it
-> +had generated has been in the meantime overwritten by the second mktoken
-> +that is still generating it, and token.h is still empty.
-> +
-> +But make proceeds to the rule that required token.h in the first place,
-> +and the still-empty token.h gets icluded from a C file, and the build
-> +fails because of missing defines.
-> +
-> +For example:
-> +    http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/build-end.log
-> +
-> +Fix that by serialising both headers.
-> +
-> +Reported-by: Baruch Siach <baruch@tkos.co.il>
-> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> +Cc: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +Upstream status: sent, should show soon up on:
-> +    https://www.mail-archive.com/dash at vger.kernel.org/
+> Of course, provided that the module is indeed packaged in the distro...
+> As far as I can see, there should be everything we need, no?
 
-I could not find it there at the moment, but it's on spinics now:
+Indeed. Yes.
 
-  https://www.spinics.net/lists/dash/msg01639.html
+> The only two for which I have a doubt are bzr (python-bzrlib) and
+> mercurial (python-hglib); all the others are in stretch-20171210.
 
-> +
-> +---
-> + src/Makefile.am | 3 ++-
+Don't worry about these. They were probably installed by the apt-get command,
+pip only listed them.
 
-This requires AUTORECONF, right? We have a patch from Peter that touches the 
-Makefile.in version of the same file. If you add AUTORECONF you would also 
-have to to convert Peter's patch to Makefile.am, otherwise your patch 
-overwrites his changes. See my upstream submission from last week at
+> But if we apt-get install python-flake8, then it should bring all its
+> dependencies I guess:
 
-  https://www.spinics.net/lists/dash/msg01629.html
+Yes. We don't even need to install python-pip.
 
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/src/Makefile.am b/src/Makefile.am
-> +index 46399c7..5bf5a52 100644
-> +--- a/src/Makefile.am
-> ++++ b/src/Makefile.am
-> +@@ -44,7 +44,8 @@ EXTRA_DIST = \
-> + 	mktokens mkbuiltins builtins.def.in mkinit.c \
-> + 	mknodes.c nodetypes nodes.c.pat mksyntax.c mksignames.c
-> + 
-> +-token.h token_vars.h: mktokens
-> ++token_vars.h: token.h
-> ++token.h: mktokens
-> + 	$(SHELL) $^
-> + 
-> + builtins.def: builtins.def.in $(top_builddir)/config.h
+[snip]
+> Note that I don't care if stretch packages a different version than what
+> we curently have; I'd prefer that we use the distro-packaged versions,
+> since we know that apt-get *is* reproducible as we use a fixed version
+> of the distro.
 
-baruch
+OK. Simple and effective solution.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Notice we will be downgrading flake8 from
+3.5.0 (mccabe: 0.6.1, pycodestyle: 2.3.1, pyflakes: 1.6.0) from 2017-10-23
+to
+3.2.1 (pyflakes: 1.3.0, pycodestyle: 2.2.0, mccabe: 0.5.3) from 2016-11-21
+
+Anyone curious can see the changelog here:
+http://flake8.pycqa.org/en/latest/release-notes/index.html#x-release-series
+
+>> Are you preparing a patch?
+> 
+> When we agree on the directions, yes I can.
+
+Reproducible images with less code and less maintenance effort in exchange of
+using a not-so-bleeding-edge version. Makes sense to me.
+
+I am only in doubt how future-proof is this solution, if some day we will
+*need* a new version, i.e. to something related to Python3 in 2020 (it's only a
+wild guess!, I don't know any current limitation, I don't know the internals of
+flake8).
+But then probably debian will have a newer version of flake8, so we can update
+the stretch version. And we can always go back to using pip if really needed.
+
+
+Regards,
+Ricardo
