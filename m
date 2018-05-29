@@ -1,53 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 08:44:29 +0200
-Subject: [Buildroot] Buildroot 2018.05-rc3 released
-Message-ID: <87efhvufjm.fsf@dell.be.48ers.dk>
+Date: Tue, 29 May 2018 08:52:49 +0200
+Subject: [Buildroot] [PATCH 2/2] package/ca-certificates: bump version
+ to 20180409
+In-Reply-To: <20180506161944.7451-2-martin@barkynet.com> (Martin Bark's
+ message of "Sun, 6 May 2018 17:19:44 +0100")
+References: <20180506161944.7451-1-martin@barkynet.com>
+ <20180506161944.7451-2-martin@barkynet.com>
+Message-ID: <876037uf5q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "Martin" == Martin Bark <martin@barkynet.com> writes:
 
-Buildroot 2018.05-rc3 is released - Go download it at:
+ > Update Mozilla certificate authority bundle to version 2.22.
+ > The following certificate authorities were added (+):
+ >   + "GDCA TrustAUTH R5 ROOT"
+ >   + "SSL.com EV Root Certification Authority ECC"
+ >   + "SSL.com EV Root Certification Authority RSA R2"
+ >   + "SSL.com Root Certification Authority ECC"
+ >   + "SSL.com Root Certification Authority RSA"
+ >   + "TrustCor ECA-1"
+ >   + "TrustCor RootCert CA-1"
+ >   + "TrustCor RootCert CA-2"
 
-http://buildroot.net/downloads/buildroot-2018.05-rc3.tar.gz
+ > The following certificate authorities were removed (-):
+ >   - "ACEDICOM Root"
+ >   - "AddTrust Low-Value Services Root"
+ >   - "AddTrust Public Services Root"
+ >   - "AddTrust Qualified Certificates Root"
+ >   - "CA Disig Root R1"
+ >   - "CNNIC ROOT"
+ >   - "Camerfirma Chambers of Commerce Root"
+ >   - "Camerfirma Global Chambersign Root"
+ >   - "Certinomis - Autorit? Racine"
+ >   - "Certum Root CA"
+ >   - "China Internet Network Information Center EV Certificates Root"
+ >   - "Comodo Secure Services root"
+ >   - "Comodo Trusted Services root"
+ >   - "DST ACES CA X6"
+ >   - "GeoTrust Global CA 2"
+ >   - "PSCProcert"
+ >   - "Security Communication EV RootCA1"
+ >   - "Swisscom Root CA 1"
+ >   - "Swisscom Root CA 2"
+ >   - "Swisscom Root EV CA 2"
+ >   - "TURKTRUST Certificate Services Provider Root 2007"
+ >   - "TUBITAK UEKAE Kok Sertifika Hizmet Saglayicisi - Surum 3"
+ >   - "UTN USERFirst Hardware Root CA"
 
-or
+ > Signed-off-by: Martin Bark <martin@barkynet.com>
 
-http://buildroot.net/downloads/buildroot-2018.05-rc3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.net/buildroot
-
-Another week, another release candidate.
-
-Please give it a spin and report any problems to the mailing list or
-bug tracker. Many thanks to the people contributing to this release:
-
-git shortlog -sn 2018.05-rc2..
-    10  Baruch Siach
-     5  Fabio Estevam
-     2  Fabrice Fontaine
-     2  Peter Korsgaard
-     2  Yann E. MORIN
-     1  Angelo Compagnucci
-     1  Arnout Vandecappelle (Essensium/Mind)
-     1  Carlos Santos
-     1  Evgeniy Didin
-     1  J?r?me Oufella
-     1  Matt Weber
-     1  Romain Naour
-     1  Waldemar Brodkorb
-
-For more details, see the CHANGES file:
-
-http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.05-rc3
-
-Expect the final 2018.05 release by a day or two, unless something
-critical shows up.
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
