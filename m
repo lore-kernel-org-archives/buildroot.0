@@ -1,34 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 09:37:29 +0200
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <20180509202254.GA9837@scaer> (Yann E. MORIN's message of "Wed, 9
- May 2018 22:22:54 +0200")
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
- <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
- <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
- <1fdbacbd-e80f-8735-89c8-2ca92224ee9a@mind.be>
- <20180509202254.GA9837@scaer>
-Message-ID: <871sdu9akm.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 29 May 2018 07:42:09 +0000
+Subject: [Buildroot] [Bug 11051] New: runtime issue on STM32 with usage of
+ binutils 2.29.x
+Message-ID: <bug-11051-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+https://bugs.busybox.net/show_bug.cgi?id=11051
 
-Hi,
+            Bug ID: 11051
+           Summary: runtime issue on STM32 with usage of binutils 2.29.x
+           Product: buildroot
+           Version: 2018.02
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: christophe.priouzeau at st.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
- >> Would you like to prepare a patch introducing the python-based approach? It
- >> should be two patches: the first one introducing the python script in mkusers,
- >> the second one removing the mkpasswd package.
+Since the default usage of binutils 2.29.x, on stm32 we have an issue at
+runtime.
 
- > Sorry, I am not too convinced that writing our own tool is good...
+Error seen at runtime:
+[    1.460000] Unhandled exception: IPSR = 00000006 LR = fffffff1
+[    1.460000] CPU: 0 PID: 1 Comm: init Tainted: G        W       4.11.0 #2
+[    1.460000] Hardware name: STM32 (Device Tree Support)
+[    1.460000] task: 00822000 task.stack: 00828000
+[    1.460000] PC is at ret_fast_syscall+0x2/0x4a
+[    1.460000] LR is at tty_ioctl+0x327/0x7e4
+[    1.460000] pc : [<08009942>]    lr : [<080c1013>]    psr: 4000000b
+[    1.460000] sp : 00829fa8  ip : 0000001c  fp : 00a95600
+[    1.460000] r10: 00000000  r9 : 00828000  r8 : 08009ae0
+[    1.460000] r7 : 00000036  r6 : 00adcee0  r5 : 00000000  r4 : 00adcf3c
+[    1.460000] r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : 00000000
+[    1.460000] xPSR: 4000000b
+[    1.460000] CPU: 0 PID: 1 Comm: init Tainted: G        W       4.11.0 #2
+[    1.460000] Hardware name: STM32 (Device Tree Support)
+[    1.460000] [<0800bdc5>] (unwind_backtrace) from [<0800b153>]
+(show_stack+0xb/0xc)
+[    1.460000] [<0800b153>] (show_stack) from [<0800b717>]
+(__invalid_entry+0x4b/0x4c)
 
-Me neither. Another alternative is to build host-busybox and use the
-mkpasswd applet with the built in crypt routines (ENABLE_USE_BB_CRYPT).
+
+After a bisect, the issue are present since this commit : 
+37e1e6cf6d133afeed1be98c5d5542cd00664efb package/binutils: switch to use 2.29.x
+as the default version
+
+How to reproduce:
+  git clone git://git.buildroot.net/buildroot
+  cd buildroot
+  git checkout -b work 2018.05-rc3
+  make stm32f469_disco_defconfig
+  make 
+  ./board/stmicroelectronics/stm32f469-disco/flash.sh output/
+
+Regards
+Christophe Priouzeau
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
