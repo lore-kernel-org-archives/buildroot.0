@@ -1,71 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 20:47:36 +0200
-Subject: [Buildroot] Buildroot 2018.05-rc3 released
-In-Reply-To: <1527615682.2053.4.camel@rovoreed.com> (Mike Davies's message of
- "Tue, 29 May 2018 18:41:22 +0100")
-References: <87efhvufjm.fsf@dell.be.48ers.dk>
- <1527599917.2053.2.camel@rovoreed.com>
- <87fu2a7bkq.fsf@dell.be.48ers.dk>
- <1527615682.2053.4.camel@rovoreed.com>
-Message-ID: <87po1e5mev.fsf@dell.be.48ers.dk>
+Date: Tue, 29 May 2018 21:15:32 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] util-linux: add two
+ upstream patches to fix blocking on getrandom() with recent kernels
+In-Reply-To: <1527612552.31570.109.camel@impinj.com> (Trent Piepho's message
+ of "Tue, 29 May 2018 16:49:14 +0000")
+References: <20180528074724.D400282A4A@busybox.osuosl.org>
+ <1527612552.31570.109.camel@impinj.com>
+Message-ID: <87lgc25l4b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Davies <busybox_mail@rovoreed.com> writes:
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
- > Thanks for the reply.
- > Exactly the same error in 2018.05-rc2.
-
- > I have not tried it anything more recent than buildroot-2017.08 (so
- > that's a long time ago)
-
- > I am surprised no-one else has picked up on this.
-
- > If I select Python as a package to install on my target, then it builds
- > OK - but I don't want Python on my target.
-
- > For now, I guess a workaround is to select Python, and delete it in a
- > pre-image script.
-
-That is odd. The presence or not of python for the target shouldn't have
-any effect on host-python. You do not mean python3 for the target, do
-you?
-
-
- >> ?> ca-certificates fails to build. Though I see there is some
- >> discussion
- >> ?> on the list, I'm unsure if it is connected to the build failing.
- >> ?> My real build needs a lot more stuff, but it can be trimmed down
- >> to
- >> ?> this for it to fail...
+ > On Mon, 2018-05-28 at 09:48 +0200, Peter Korsgaard wrote:
+ >> commit: https://git.buildroot.net/buildroot/commit/?id=c4d86707cd67817496fa7a904b73b2538ad4058c
+ >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
  >> 
- >> ?> tar -xzf /home/mike/Downloads/buildroot-2018.05-rc3.tar.gz
- >> ?> cd b*3
- >> ?> make raspberrypi3_64_defconfig
- >> ?> make menuconfig
- >> ?> Target Packages->Libraries->Crypto->CA Certificates
- >> ?> make
+ >> As part of the fix for CVE-2018-1108 (kernel drivers before version 4.17-rc1
+ >> are vulnerable to a weakness in the Linux kernel's implementation of random
+ >> seed data.  Programs, early in the boot sequence, could use the data
+ >> allocated for the seed before it was sufficiently generated), the kernel
+ >> random number generator initialization routine was changed.  See the
+ >> project-zero writeup for more details:
+ >> 
+ >> https://bugs.chromium.org/p/project-zero/issues/detail?id=1559
 
-I tried it here and it builds without issues:
+ > What's ironic here is that due to the kernel's random data not being
+ > good enough, after waiting a full second, util-linux falls back to
+ > random data that is even worse.
 
-..
->>>   Executing post-image script board/raspberrypi3-64/post-image.sh
-vfat(boot.vfat): adding file 'bcm2710-rpi-3-b.dtb' as 'bcm2710-rpi-3-b.dtb' ...
-vfat(boot.vfat): adding file 'bcm2837-rpi-3-b.dtb' as 'bcm2837-rpi-3-b.dtb' ...
-vfat(boot.vfat): adding file 'rpi-firmware/bootcode.bin' as 'rpi-firmware/bootcode.bin' ...
-vfat(boot.vfat): adding file 'rpi-firmware/cmdline.txt' as 'rpi-firmware/cmdline.txt' ...
-vfat(boot.vfat): adding file 'rpi-firmware/config.txt' as 'rpi-firmware/config.txt' ...
-vfat(boot.vfat): adding file 'rpi-firmware/fixup.dat' as 'rpi-firmware/fixup.dat' ...
-vfat(boot.vfat): adding file 'rpi-firmware/start.elf' as 'rpi-firmware/start.elf' ...
-vfat(boot.vfat): adding file 'Image' as 'Image' ...
-hdimage(sdcard.img): adding partition 'boot' (in MBR) from 'boot.vfat' ...
-hdimage(sdcard.img): adding partition 'rootfs' (in MBR) from 'rootfs.ext4' ...
-hdimage(sdcard.img): writing MBR
+ > If one looks at the system as a whole, I think rather than "fix" CVE-
+ > 2018-1108 what has really happened is that a kernel problem has been
+ > traded for an even worse userspace problem.
 
-What Linux distribution/version are you using?
+It probably doesn't matter hugely for libuuid, but yes - I also do find
+it somewhat odd that these changes have been added to the stable trees
+considering the breakage to existing user space setups they are causing.
 
 -- 
 Bye, Peter Korsgaard
