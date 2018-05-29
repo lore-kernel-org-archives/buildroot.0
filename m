@@ -1,84 +1,57 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 29 May 2018 19:37:58 +0200
-Subject: [Buildroot] [PATCH] package/dash: fix parallel build issue
-In-Reply-To: <20180529025302.ciikalsiya7yvowf@tarshish>
-References: <20180528212019.31614-1-yann.morin.1998@free.fr>
- <20180529025302.ciikalsiya7yvowf@tarshish>
-Message-ID: <20180529173758.GB8360@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 29 May 2018 20:38:39 +0300
+Subject: [Buildroot] [PATCH] git: security bump to version 2.16.4
+Message-ID: <5fabe2e591bd4f1a6932850641f47e214c8cd667.1527615519.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Forward port of security fixes from the 2.13.7 release. The 2.13.7
+release notes say this:
 
-On 2018-05-29 05:53 +0300, Baruch Siach spake thusly:
-> On Mon, May 28, 2018 at 11:20:19PM +0200, Yann E. MORIN wrote:
-> > Fixes:
-> >     http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
-> >     http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
-> >     http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
-> >     [...]
-> > 
-> > Reported-by: Baruch Siach <baruch@tkos.co.il>
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Baruch Siach <baruch@tkos.co.il>
-> > ---
-[--SNIP--]
-> > + src/Makefile.am | 3 ++-
-> 
-> This requires AUTORECONF, right?
+ * Submodule "names" come from the untrusted .gitmodules file, but we
+   blindly append them to $GIT_DIR/modules to create our on-disk repo
+   paths. This means you can do bad things by putting "../" into the
+   name. We now enforce some rules for submodule names which will cause
+   Git to ignore these malicious names (CVE-2018-11235).
 
-Oh dang, another case where I git commit --amend but forgot to git add
-first...
+   Credit for finding this vulnerability and the proof of concept from
+   which the test script was adapted goes to Etienne Stalmans.
 
-> We have a patch from Peter that touches the 
-> Makefile.in version of the same file. If you add AUTORECONF you would also 
-> have to to convert Peter's patch to Makefile.am, otherwise your patch 
-> overwrites his changes. See my upstream submission from last week at
-> 
->   https://www.spinics.net/lists/dash/msg01629.html
+ * It was possible to trick the code that sanity-checks paths on NTFS
+   into reading random piece of memory (CVE-2018-11233).
 
-Yeah, but I am withdrawing entirely this patch of mione, because
-upstream does not like it and said that we should not build dash in
-parallel;
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-    https://www.mail-archive.com/dash at vger.kernel.org/msg01675.html
-
-So I'll just spin another patch disabling parallel build for dash.
-
-Regards,
-Yann E. MORIN.
-
-> > + 1 file changed, 2 insertions(+), 1 deletion(-)
-> > +
-> > +diff --git a/src/Makefile.am b/src/Makefile.am
-> > +index 46399c7..5bf5a52 100644
-> > +--- a/src/Makefile.am
-> > ++++ b/src/Makefile.am
-> > +@@ -44,7 +44,8 @@ EXTRA_DIST = \
-> > + 	mktokens mkbuiltins builtins.def.in mkinit.c \
-> > + 	mknodes.c nodetypes nodes.c.pat mksyntax.c mksignames.c
-> > + 
-> > +-token.h token_vars.h: mktokens
-> > ++token_vars.h: token.h
-> > ++token.h: mktokens
-> > + 	$(SHELL) $^
-> > + 
-> > + builtins.def: builtins.def.in $(top_builddir)/config.h
-> 
-> baruch
-> 
-> -- 
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-
+diff --git a/package/git/git.hash b/package/git/git.hash
+index fea1a1e904dd..4bcc5ee5d39d 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,4 +1,4 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 d65d99e9e5b081c1f14ea018973806e942a2eb7d0da2ebc01bd2525adee62d48  git-2.16.3.tar.xz
++sha256 6e69b0e9c487e5da52a14d4829f0b6a28b2c18a0bb6fb67c0dc8b5b5658bd532  git-2.16.4.tar.xz
+ sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 2115e04e3115..ac7b8f2e8c08 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GIT_VERSION = 2.16.3
++GIT_VERSION = 2.16.4
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.0
