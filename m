@@ -1,35 +1,46 @@
-From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Date: Tue, 29 May 2018 12:09:27 +0000
-Subject: [Buildroot] [PATCH 2/2] configs/stm32f469: force usage of BINUTILS
- 2.28.x
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 29 May 2018 14:39:59 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/stm32f429: force usage of
+ BINUTILS 2.28.x
 In-Reply-To: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
 References: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <1527595765-23055-2-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <42437f2b-2d35-fa5c-c695-fb29031c8cc9@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to runtime issue with the usage of BINUTILS 2.29.x,
-we need to use the version 2.28.x
+Hi Christophe,
 
-Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
----
- configs/stm32f469_disco_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Le 29/05/2018 ? 14:09, Christophe PRIOUZEAU a ?crit?:
+> Due to runtime issue with the usage of BINUTILS 2.29.x,
+> we need to use the version 2.28.x
+> 
+> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+> ---
+>  configs/stm32f429_disco_defconfig | 1 +
 
-diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
-index 8b77d8c..e5cacaf 100644
---- a/configs/stm32f469_disco_defconfig
-+++ b/configs/stm32f469_disco_defconfig
-@@ -2,6 +2,7 @@ BR2_arm=y
- BR2_cortex_m4=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
-+BR2_BINUTILS_VERSION_2_28_X=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--- 
-2.7.4
+Thanks for the patch!
+
+The defconfig stm32f469_disco is also affected by this issue.
+Binutils version must be updated as well.
+
+Best regards,
+Romain
+
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
+> index 5237e9a..fc167d0 100644
+> --- a/configs/stm32f429_disco_defconfig
+> +++ b/configs/stm32f429_disco_defconfig
+> @@ -2,6 +2,7 @@ BR2_arm=y
+>  BR2_cortex_m4=y
+>  BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+> +BR2_BINUTILS_VERSION_2_28_X=y
+>  BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
+>  BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> 
