@@ -1,44 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 28 May 2018 22:34:21 +0200
-Subject: [Buildroot] [git commit] arm-trusted-firmware: simplify release dir
- path
-Message-ID: <20180602101013.B4F4C836DA@busybox.osuosl.org>
+Date: Wed, 30 May 2018 21:45:28 +0200
+Subject: [Buildroot] [git commit] package/gcc: switch to gcc 6.x as the
+ default
+Message-ID: <20180602101014.70D4D8199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=895f04ebff3b301a0e1ae6f62b6b12b2c3869c7c
+commit: https://git.buildroot.net/buildroot/commit/?id=ce67f68882f14ac5c7bd5cfefe5bb18f856756d7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The path to the binary images is very long. Since we are about to make
-a larger use of it, let's use a variable to make it somewhat shorter.
+Even if gcc 6 is still maintained for some time (gcc 6.5 is pending),
+switch to gcc 7.x since it has been released since 2017-05-02 and
+gcc 8.x is available since 2018-05-02.
 
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+We have been having toolchains in the autobuilders with gcc
+7.x for a while, so the vast majority of the problems should have
+already been solved.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/gcc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 4bac916e31..212bb5049f 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -25,6 +25,7 @@ endif
- ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES = YES
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 09d88fc929..c9a20f6d77 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -4,7 +4,7 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_OR1K if BR2_or1k
+-	default BR2_GCC_VERSION_6_X
++	default BR2_GCC_VERSION_7_X
+ 	help
+ 	  Select the version of gcc you wish to use.
  
- ARM_TRUSTED_FIRMWARE_PLATFORM = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM))
-+ARM_TRUSTED_FIRMWARE_IMG_DIR = $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release
- 
- ARM_TRUSTED_FIRMWARE_MAKE_OPTS += \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
-@@ -82,7 +83,7 @@ define ARM_TRUSTED_FIRMWARE_BUILD_CMDS
- endef
- 
- define ARM_TRUSTED_FIRMWARE_INSTALL_IMAGES_CMDS
--	cp -dpf $(@D)/build/$(ARM_TRUSTED_FIRMWARE_PLATFORM)/release/*.bin $(BINARIES_DIR)/
-+	cp -dpf $(ARM_TRUSTED_FIRMWARE_IMG_DIR)/*.bin $(BINARIES_DIR)/
- endef
- 
- # Configuration check
