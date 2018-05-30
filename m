@@ -1,89 +1,217 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 22:20:35 +0200
-Subject: [Buildroot] [git commit branch/next] enlightenment: convert to
- pkg-meson infra
-Message-ID: <20180530202336.2BFEB83497@busybox.osuosl.org>
+Date: Wed, 30 May 2018 21:58:08 +0200
+Subject: [Buildroot] [git commit branch/next] pkg-meson: new infrastructure
+Message-ID: <20180530202335.D33BF8351F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25179df46f2eeec8b17a2e930ab681015f8ebd12
+commit: https://git.buildroot.net/buildroot/commit/?id=91f7f381063c3d1dba36ff47ab31fe404a03042c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Add a new infrastructure to ease the development of packages that use Meson as
+their build system.
+
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+[Thomas:
+ - move global variables definition outside of the inner-meson-package
+   macro
+ - for consistency, remove double quote around value passed to meson
+   in the host configure step.
+ - minor formatting fixes.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/enlightenment/enlightenment.mk | 30 ++++++------------------------
- 1 file changed, 6 insertions(+), 24 deletions(-)
+ DEVELOPERS           |   1 +
+ package/Makefile.in  |   1 +
+ package/pkg-meson.mk | 160 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 162 insertions(+)
 
-diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
-index 480e9e9da8..5bc1c5d6de 100644
---- a/package/enlightenment/enlightenment.mk
-+++ b/package/enlightenment/enlightenment.mk
-@@ -13,14 +13,10 @@ ENLIGHTENMENT_LICENSE_FILES = COPYING
- ENLIGHTENMENT_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-efl \
--	host-meson \
- 	efl \
- 	xcb-util-keysyms
- 
--ENLIGHTENMENT_MESON_OPTS += \
--	--prefix=/usr \
--	--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
--	--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
-+ENLIGHTENMENT_CONF_OPTS = \
- 	-Dedje-cc=$(HOST_DIR)/bin/edje_cc \
- 	-Deet=$(HOST_DIR)/bin/eet \
- 	-Deldbus-codegen=$(HOST_DIR)/bin/eldbus-codegen \
-@@ -30,38 +26,24 @@ ENLIGHTENMENT_MESON_OPTS += \
- ENLIGHTENMENT_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--ENLIGHTENMENT_MESON_OPTS += -Dsystemd=true
-+ENLIGHTENMENT_CONF_OPTS += -Dsystemd=true
- ENLIGHTENMENT_DEPENDENCIES += systemd
- else
--ENLIGHTENMENT_MESON_OPTS += -Dsystemd=false
-+ENLIGHTENMENT_CONF_OPTS += -Dsystemd=false
- endif
- 
- # alsa backend needs mixer support
- ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
--ENLIGHTENMENT_MESON_OPTS += -Dmixer=true
-+ENLIGHTENMENT_CONF_OPTS += -Dmixer=true
- ENLIGHTENMENT_DEPENDENCIES += alsa-lib
- else
--ENLIGHTENMENT_MESON_OPTS += -Dmixer=false
-+ENLIGHTENMENT_CONF_OPTS += -Dmixer=false
- endif
- 
- ifeq ($(BR2_PACKAGE_XKEYBOARD_CONFIG),y)
- ENLIGHTENMENT_DEPENDENCIES += xkeyboard-config
- endif
- 
--define ENLIGHTENMENT_CONFIGURE_CMDS
--	rm -rf $(@D)/build
--	mkdir -p $(@D)/build
--	$(TARGET_MAKE_ENV) meson $(ENLIGHTENMENT_MESON_OPTS) $(@D) $(@D)/build
--endef
--
--define ENLIGHTENMENT_BUILD_CMDS
--	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
--endef
--
--define ENLIGHTENMENT_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
--endef
--
- define ENLIGHTENMENT_REMOVE_DOCUMENTATION
- 	rm -rf $(TARGET_DIR)/usr/share/enlightenment/doc/
- 	rm -f $(TARGET_DIR)/usr/share/enlightenment/COPYING
-@@ -69,4 +51,4 @@ define ENLIGHTENMENT_REMOVE_DOCUMENTATION
- endef
- ENLIGHTENMENT_POST_INSTALL_TARGET_HOOKS += ENLIGHTENMENT_REMOVE_DOCUMENTATION
- 
--$(eval $(generic-package))
-+$(eval $(meson-package))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d2da9a2f80..a8b98407c3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -578,6 +578,7 @@ F:	package/hicolor-icon-theme/
+ F:	package/jemalloc/
+ F:	package/meson/
+ F:	package/ninja/
++F:	package/pkg-meson.mk
+ F:	package/rust-bin/
+ F:	package/rust/
+ F:	package/s6/
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 4325f7b3a9..a268016cdf 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -447,3 +447,4 @@ include package/pkg-rebar.mk
+ include package/pkg-kernel-module.mk
+ include package/pkg-waf.mk
+ include package/pkg-golang.mk
++include package/pkg-meson.mk
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+new file mode 100644
+index 0000000000..507e686068
+--- /dev/null
++++ b/package/pkg-meson.mk
+@@ -0,0 +1,160 @@
++################################################################################
++# Meson package infrastructure
++#
++# This file implements an infrastructure that eases development of
++# package .mk files for Meson packages. It should be used for all
++# packages that use Meson as their build system.
++#
++# See the Buildroot documentation for details on the usage of this
++# infrastructure
++#
++# In terms of implementation, this Meson infrastructure requires
++# the .mk file to only specify metadata information about the
++# package: name, version, download URL, etc.
++#
++# We still allow the package .mk file to override what the different
++# steps are doing, if needed. For example, if <PKG>_BUILD_CMDS is
++# already defined, it is used as the list of commands to perform to
++# build the package, instead of the default Meson behaviour. The
++# package can also define some post operation hooks.
++#
++################################################################################
++
++#
++# Pass PYTHONNOUSERSITE environment variable when invoking Meson or Ninja, so
++# $(HOST_DIR)/bin/python3 will not look for Meson modules in
++# $HOME/.local/lib/python3.x/site-packages
++#
++MESON		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/meson
++NINJA		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/ninja
++NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
++
++################################################################################
++# inner-meson-package -- defines how the configuration, compilation and
++# installation of a Meson package should be done, implements a few hooks to
++# tune the build process and calls the generic package infrastructure to
++# generate the necessary make targets
++#
++#  argument 1 is the lowercase package name
++#  argument 2 is the uppercase package name, including a HOST_ prefix
++#             for host packages
++#  argument 3 is the uppercase package name, without the HOST_ prefix
++#             for host packages
++#  argument 4 is the type (target or host)
++################################################################################
++
++define inner-meson-package
++
++$(2)_CONF_ENV		?=
++$(2)_CONF_OPTS		?=
++$(2)_NINJA_ENV		?=
++$(2)_SRCDIR		= $$($(2)_DIR)/$$($(2)_SUBDIR)
++
++#
++# Configure step. Only define it if not already defined by the package
++# .mk file. And take care of the differences between host and target
++# packages.
++#
++ifndef $(2)_CONFIGURE_CMDS
++ifeq ($(4),target)
++
++# Configure package for target
++#
++#
++define $(2)_CONFIGURE_CMDS
++	rm -rf $$($$(PKG)_SRCDIR)/build
++	mkdir -p $$($$(PKG)_SRCDIR)/build
++	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
++		--prefix=/usr \
++		--libdir=lib \
++		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
++		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
++		--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
++		$$($$(PKG)_CONF_OPTS) \
++		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
++endef
++else
++
++# Configure package for host
++define $(2)_CONFIGURE_CMDS
++	rm -rf $$($$(PKG)_SRCDIR)/build
++	mkdir -p $$($$(PKG)_SRCDIR)/build
++	$$(HOST_CONFIGURE_OPTS) \
++	$$($$(PKG)_CONF_ENV) $$(MESON) \
++		--prefix=$$(HOST_DIR) \
++		--libdir=lib \
++		--sysconfdir=$$(HOST_DIR)/etc \
++		--localstatedir=$$(HOST_DIR)/var \
++		--default-library=shared \
++		--buildtype=release \
++		$$($$(PKG)_CONF_OPTS) \
++		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
++endef
++endif
++endif
++
++$(2)_DEPENDENCIES += host-meson
++
++#
++# Build step. Only define it if not already defined by the package .mk
++# file.
++#
++ifndef $(2)_BUILD_CMDS
++ifeq ($(4),target)
++define $(2)_BUILD_CMDS
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
++		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
++endef
++else
++define $(2)_BUILD_CMDS
++	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
++		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
++endef
++endif
++endif
++
++#
++# Host installation step. Only define it if not already defined by the
++# package .mk file.
++#
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
++		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
++endef
++endif
++
++#
++# Staging installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_STAGING_CMDS
++define $(2)_INSTALL_STAGING_CMDS
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) \
++		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
++endef
++endif
++
++#
++# Target installation step. Only define it if not already defined by
++# the package .mk file.
++#
++ifndef $(2)_INSTALL_TARGET_CMDS
++define $(2)_INSTALL_TARGET_CMDS
++	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) \
++		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
++endef
++endif
++
++# Call the generic package infrastructure to generate the necessary
++# make targets
++$(call inner-generic-package,$(1),$(2),$(3),$(4))
++
++endef
++
++################################################################################
++# meson-package -- the target generator macro for Meson packages
++################################################################################
++
++meson-package = $(call inner-meson-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-meson-package = $(call inner-meson-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
