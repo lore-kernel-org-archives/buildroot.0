@@ -1,36 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 May 2018 17:31:19 +0200
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <871sdu9akm.fsf@dell.be.48ers.dk>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
- <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
- <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
- <1fdbacbd-e80f-8735-89c8-2ca92224ee9a@mind.be>
- <20180509202254.GA9837@scaer> <871sdu9akm.fsf@dell.be.48ers.dk>
-Message-ID: <20180530153119.GA2592@scaer>
+Date: Wed, 30 May 2018 17:36:18 +0200
+Subject: [Buildroot] [PATCH v3 5/7] support/dockerfile: install flake8
+In-Reply-To: <5b0ccc753f59_1c272ab87ea319a052883@ultri5.mail>
+References: <20180528194429.GF2965@scaer>
+ <5b0ccc753f59_1c272ab87ea319a052883@ultri5.mail>
+Message-ID: <20180530153618.GB2592@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Ricardo, All,
 
-On 2018-05-29 09:37 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->  >> Would you like to prepare a patch introducing the python-based approach? It
->  >> should be two patches: the first one introducing the python script in mkusers,
->  >> the second one removing the mkpasswd package.
+On 2018-05-29 00:43 -0300, Ricardo Martincoski spake thusly:
+> On Mon, May 28, 2018 at 04:44 PM, Yann E. MORIN wrote:
+> > Why do we even use pip to install those? Can't we just rely on the
+> > verions actually packaged in the distro instead? I.e.
+[--SNIP--]
+> >> Are you preparing a patch?
+> > When we agree on the directions, yes I can.
 > 
->  > Sorry, I am not too convinced that writing our own tool is good...
-> 
-> Me neither. Another alternative is to build host-busybox and use the
-> mkpasswd applet with the built in crypt routines (ENABLE_USE_BB_CRYPT).
+> Reproducible images with less code and less maintenance effort in exchange of
+> using a not-so-bleeding-edge version. Makes sense to me.
 
-Yeah, I like that idea more. Plus, we can get known-reproducible
-behaviour for other applets, should we need to add that.
+OK, so I'll send a patch to implement this soilution.
+
+Thanks! :-)
+
+> I am only in doubt how future-proof is this solution, if some day we will
+> *need* a new version, i.e. to something related to Python3 in 2020 (it's only a
+> wild guess!, I don't know any current limitation, I don't know the internals of
+> flake8).
+> But then probably debian will have a newer version of flake8, so we can update
+> the stretch version. And we can always go back to using pip if really needed.
+
+Yes, then we can update to a newer version of the distro.
+
+There was also a wild suggestion that we provide more Docker images,
+for each of the mainstream distros.
+
+Because sometimes, build issues only occur on some distros and not
+others, e.g. arch-linux, which uses musl, sometimes break the build of
+some host packages, and it is difficult to diagnose and fix...
+
+I was also looking into providing additional Dockerfiles for additional
+distros. I'll get this in the same series. Soon. Sooooon.... ;-)
 
 Regards,
 Yann E. MORIN.
