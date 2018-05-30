@@ -1,59 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 May 2018 08:20:20 +0200
-Subject: [Buildroot] [PATCH 1/1] aircrack-ng: bump to version 1.2
-In-Reply-To: <CAPi7W83Y8i1LxgX5Bwexb+qZpkr=9LjDrKqBjpVFtK81d2j5Vg@mail.gmail.com>
- (Fabrice Fontaine's message of "Tue, 29 May 2018 23:56:32 +0200")
-References: <20180529171409.8794-1-fontaine.fabrice@gmail.com>
- <87d0xe5k7x.fsf@dell.be.48ers.dk>
- <CAPi7W80yN0QhXSk8C7WGcr83hcdbebkWAJMGs6t6zTzcUpdLag@mail.gmail.com>
- <87efhu3zhq.fsf@dell.be.48ers.dk>
- <CAPi7W83Y8i1LxgX5Bwexb+qZpkr=9LjDrKqBjpVFtK81d2j5Vg@mail.gmail.com>
-Message-ID: <8736y94qcb.fsf@dell.be.48ers.dk>
+Date: Wed, 30 May 2018 08:22:50 +0200
+Subject: [Buildroot] custom skeleton question
+In-Reply-To: <7C5724A9-4880-4ED6-A49F-D306AD2ADE5B@stask.net> (Liam
+ Staskawicz's message of "Tue, 29 May 2018 21:32:53 -0700")
+References: <85B790C7-22DB-4715-A360-5D229877EB00@stask.net>
+ <874liq5k2q.fsf@dell.be.48ers.dk>
+ <7C5724A9-4880-4ED6-A49F-D306AD2ADE5B@stask.net>
+Message-ID: <87y3g13bnp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Liam" == Liam Staskawicz <liam@stask.net> writes:
 
 Hi,
 
- >> It is OK to handle those in followup patches, they were also
- >> unconditional in the earlier version.
+ >>> I'd like to create a custom rootfs skeleton based on Ubuntu Base
+ >>> (https://wiki.ubuntu.com/Base) via the existing skeleton-custom
+ >>> package, but rather than ship the entire skeleton in my repo, i'd like
+ >>> to download it (either as a step in another custom package or
+ >>> otherwise).
  >> 
- > I already merged them in a single patch, I have also added the duma
- > optional dependency, see v2 but I can split them if you prefer in v3
- > tomorrow ;-)
-
-It is probably ok in a single patch, thanks.
-
- >> > As a side note, unstable has been replaced by experimental since 1.2-rc2
- >> (
- >> > https://github.com/aircrack-ng/aircrack-ng/tree/1.2-rc2) so this is
- >> > currently "broken".
+ >> Doesn't this "base" already contain a number of libraries and programs?
+ >> I don't quite see how this fits in Buildroot.
  >> 
- >> Gaah :/
+ >>> Given that BR2_ROOTFS_SKELETON_CUSTOM_PATH is evaluated at kconfig
+ >>> time, I don't see the best way to supply this value from another
+ >>> package.
  >> 
- > Do you want me to send a small patch to fix this on master?
-
-Hmm, so this means that we have been building without the experimental
-support for more than 1 year without anybody complaining? Then I would
-prefer to keep it like that on master and maybe consider if we shouldn't
-make it a Config.in option to enable or not for next?
-
- >> > Yes, ethtool is needed for airmon-ng, I will update my patch to manage
- >> it.
+ >>> Is there a recommended approach to supply this value more dynamically?
  >> 
- >> Great, thanks!
- >> 
- > After more investigations, it seems that ethtool is only a runtime
- > dependency of airmon-ng script which is always installed on target
- > (ETHTOOL_FOUND is only used in configure.ac).
- > So, we don't have to add a dependency to the ethtool package or to set the
- > ETHTOOL variable except to have the correct display in the configure log.
+ >> Instead of using it as a rootfs skeleton you could perhaps create a
+ >> package to download such a "base" and extract it on top of the default
+ >> skeleton?
 
-Ahh, ok.
+ > Thanks for the response. I can indeed investigate overlaying it on the
+ > default skeleton - mainly wanted to confirm I was not missing an
+ > intended way to use the existing skeleton-custom mechanism with a more
+ > dynamically supplied custom path. Thank you.
+
+Ok - But again, if the Ubuntu base image contains a bunch of prebuilt
+binaries and library you may very well end up with odd errors if you try
+to merge them with Buildroot.
+
+What are you trying to achieve here?
 
 -- 
 Bye, Peter Korsgaard
