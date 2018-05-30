@@ -1,35 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 May 2018 17:52:57 +0200
-Subject: [Buildroot] [sources.buildroot.net] listing not available
-In-Reply-To: <CAL3OuNxjyRhG2c3-fBakZ7iSd+Vf+KqrKBdOSwzDrcNM_ajGqw@mail.gmail.com>
- (Bruno N.'s message of "Wed, 30 May 2018 14:43:07 +0200")
-References: <CAL3OuNxjyRhG2c3-fBakZ7iSd+Vf+KqrKBdOSwzDrcNM_ajGqw@mail.gmail.com>
-Message-ID: <87po1d2l9i.fsf@dell.be.48ers.dk>
+Date: Wed, 30 May 2018 17:53:44 +0200
+Subject: [Buildroot] [git commit] Update for 2018.05-rc3
+In-Reply-To: <915d90b3-9392-b6c7-a917-e3904533380e@andin.de> (Andreas
+ Naumann's message of "Wed, 30 May 2018 15:43:59 +0200")
+References: <20180528210228.9130F822F3@busybox.osuosl.org>
+ <915d90b3-9392-b6c7-a917-e3904533380e@andin.de>
+Message-ID: <87lgc12l87.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bruno" == Bruno N <belgarath116@gmail.com> writes:
+>>>>> "Andreas" == Andreas Naumann <dev@andin.de> writes:
 
- > Hello,
- > I have make a copy of the repository http://sources.buildroot.net for an
- > offline computer.
- > Since some week i can't update my copy because the website don't list
- > available packages.
- > (I was using "wget --mirror" to make the copy)
+ > Hi
+ > Am 28.05.2018 um 23:02 schrieb Peter Korsgaard:
+ >> diff --git a/docs/website/news.html b/docs/website/news.html
+ >> index c14b108d1c..b89e6e27ed 100644
+ >> --- a/docs/website/news.html
+ >> +++ b/docs/website/news.html
+ >> @@ -9,6 +9,28 @@
+ >> <h2>News</h2>
+ >> <ul class="timeline">
+ >> +  <li>
+ >> +    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+ >> +    <div class="timeline-panel">
+ >> +      <div class="timeline-heading">
+ >> +	<h4 class="timeline-title">2018.05-rc3 released</h4>
+ >> +	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>28 May 2018</small></p>
+ >> +      </div>
+ >> +      <div class="timeline-body">
+ >> +	<p>Release candidate 3 is out with more cleanups and security
+ >> +	  / build fixes. See
+ >> +	  the <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.05-rc3">CHANGES</a>
+ >> +	  file for details.</p>
+ >> +	<p>Head to the <a href="/downloads/">downloads page</a> to
+ >> +	  pick up
+ >> +	  the <a href="/downloads/buildroot-2018.02-rc5.tar.bz2">2018.02-rc5
 
- > Is it possible to have the list of packages again ? (with something like
- > the apache's mod_dir)
+ > Just noticed this typo looking at the website. should be 05-rc3 right?
 
-Does it really make sense to make a copy of everything? This is
-currently > 160GB.
-
-> Or maybe are they an other way to make a copy of the repository ?
-
-If you just want to make sure you have downloaded everything needed to
-build a specific configuration then you can use 'make source'
+Ehh yes, I'll fix that - Thanks!
 
 -- 
 Bye, Peter Korsgaard
