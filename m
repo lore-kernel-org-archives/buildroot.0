@@ -1,44 +1,45 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 30 May 2018 15:31:58 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{1, 4, 9, 14,
- 16}.x series
-In-Reply-To: <1527705118-12307-1-git-send-email-festevam@gmail.com>
-References: <1527705118-12307-1-git-send-email-festevam@gmail.com>
-Message-ID: <1527705118-12307-2-git-send-email-festevam@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 May 2018 21:36:44 +0200
+Subject: [Buildroot] [git commit branch/next] kexec: bump to version v2.0.17
+Message-ID: <20180530193522.D52E98348A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=df2497336d14b17edfec6462caf1b9bafbe5d032
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 74ea33c..b99b36e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -249,14 +249,14 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
--	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.133"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.103"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.134"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.104"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.44"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.46"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
--	default "4.16.12"	if BR2_KERNEL_HEADERS_4_16
-+	default "4.16.13"	if BR2_KERNEL_HEADERS_4_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
--- 
-2.7.4
+Also add license hash for "make legal-info".
+
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kexec/kexec.hash | 4 +++-
+ package/kexec/kexec.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index eaa9d7b96e..24294909ee 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,2 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256 5b103351ad752c9badd1d65b00eb6de4bce579f944f4df4e3ef3a755ba567010 kexec-tools-2.0.16.tar.xz
++sha256 504c816b769da573167b63f3b6d4fce3740f231c98d8db0c4fda47a4b90482a9 kexec-tools-2.0.17.tar.xz
++# locally calculated
++sha256 fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7 COPYING
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 3ce1ed2eac..b0f4367ddd 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KEXEC_VERSION = 2.0.16
++KEXEC_VERSION = 2.0.17
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
