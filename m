@@ -1,41 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 22:41:34 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/stm32f429: force usage of
- BINUTILS 2.28.x
-In-Reply-To: <a478a326-805a-0b80-2df6-4779211fdfd9@mind.be>
-References: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
- <20180529233219.0eca0f54@windsurf.home>
- <98410cef-37c3-0450-9142-e1df5df34eaa@st.com>
- <20180530174257.616403f2@windsurf.home>
- <a478a326-805a-0b80-2df6-4779211fdfd9@mind.be>
-Message-ID: <20180530224134.0b87b6ad@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 May 2018 22:43:03 +0200
+Subject: [Buildroot] [PATCH v3 3/5] uboot: zynqmp: allow to use custom
+ psu_init files
+In-Reply-To: <a61417d4-fa49-cbbb-c51f-a88f72dcb30e@lucaceresoli.net>
+References: <1525364617-23633-1-git-send-email-luca@lucaceresoli.net>
+ <1525364617-23633-4-git-send-email-luca@lucaceresoli.net>
+ <20180528224912.539b05f6@windsurf.home>
+ <a61417d4-fa49-cbbb-c51f-a88f72dcb30e@lucaceresoli.net>
+Message-ID: <cbd8c4a2-c772-5c90-c10e-0ad4e1f8fc7f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed, 30 May 2018 22:35:50 +0200, Arnout Vandecappelle wrote:
 
->  How about:
+On 29-05-18 22:45, Luca Ceresoli wrote:
+> Hi Thomas,
 > 
-> 1. Applying http://patchwork.ozlabs.org/patch/898748/, so the default is still
-> 2.28, but the user can choose another version.
-> 2. Reverting these two patches (no longer needed).
-> 3. Add a conditional warning to linux/Config.in that an unpatched kernel will
-> fail to boot.
-> 4. Eventually, add the patch that fixes the kernel to the stm32* defconfigs.
+> On 28/05/2018 22:49, Thomas Petazzoni wrote:
+[snip]
+>> Since this really looks like a specialized patching step, I'm not sure
+>> it really makes sense to add this. Unless you can convince me
+>> otherwise :-)
+> 
+> The psu_init files are special because they contain
+> automatically-generated code to configure the SoC peripherals: enable
+> devices, set pinmuxes etc, which is not otherwise done at runtime. Have
+> a look at a few examples: [0] [1].
+ Regards,
+ Arnout
+> 
+> This file will change whenever the hardware *or* the configuration
+> changes (e.g. to enable peripherals).
+> 
+> It is perfectly fine if one wants to use a mainline U-Boot release or a
+> Xilinx release, unmodified, that works fine... *except* for the psu_init
+> file. With your proposed workflow all users will be forced to use a
+> custom git tree, just because they have a slightly different psu_init
+> file. With my patch these users can just use a "standard" U-Boot
+> (downloaded straight from the Internet), throw a psu_init file in their
+> Buildroot boards/ dir and change their Buildroot config to point to it.
+> 
+> Even though it's technically code, you can consider the psu_init
+> somewhat like a configuration file.
 
-Sounds like a good plan to me.
+ Yeah, I guess you could say it's a kind of dts but as a .c file instead of a
+.dts file. Right?
 
-Christophe, do you think you can provide the patches implementing this ?
+> 
+> Did I convince you? :-)
 
-Best regards,
+ You convinced me :-)
 
-Thomas
+ Regards,
+ Arnout
+
+> 
+> [0]
+> http://git.denx.de/?p=u-boot.git;a=blob;f=board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c;h=fcd6a46ad9ffa0da06c4f0a67c2397aa4128ca29;hb=HEAD
+> [1]
+> http://git.denx.de/?p=u-boot.git;a=blob;f=board/xilinx/zynqmp/zynqmp-zcu102-revA/psu_init_gpl.c;h=5f21c4747584815ba86e50a36906b6c1fe8af1ca;hb=HEAD
+> 
+> Regards,
+> 
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
