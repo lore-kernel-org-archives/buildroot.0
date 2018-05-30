@@ -1,132 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 21:35:27 +0200
-Subject: [Buildroot] [git commit] libpwquality: bump to version 1.4.0
-Message-ID: <20180602101014.120798199C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 May 2018 22:19:20 +0200
+Subject: [Buildroot] [git commit] meson: prevent RPATH stripping
+Message-ID: <20180602101014.8C82B8199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a853849e4d50ef7e126a1da524be37aeb878a6de
+commit: https://git.buildroot.net/buildroot/commit/?id=7a23af4773665d2ee40e2d4e525746ebe38456dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove both patches (already in version)
-- Add hash for license file
+By default, Meson strips RPATH from the executable it builds [1,2],
+unless explicitly set via install_rpath.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This will make support/scripts/check-host-rpath fail when building the
+host variant of a Meson-based package.
+
+So add a patch to prevent RPATH from being stripped if install_rpath is
+not set and notify user about it.
+
+[1] https://github.com/mesonbuild/meson/issues/2567
+[2] https://github.com/mesonbuild/meson/issues/314#issuecomment-157658562
+
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ith-disable-nls-on-platforms-without-libi.patch | 47 ----------------------
- ...leak-in-settings-when-using-bad-word-list.patch | 26 ------------
- package/libpwquality/libpwquality.hash             |  3 +-
- package/libpwquality/libpwquality.mk               |  2 +-
- 4 files changed, 3 insertions(+), 75 deletions(-)
+ ...y-fix-RPATH-if-install_rpath-is-not-empty.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch b/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
-deleted file mode 100644
-index 3bae15c221..0000000000
---- a/package/libpwquality/0001-Fix-build-with-disable-nls-on-platforms-without-libi.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From fd1694c9d85666a39fe39e76518581b1ccd5a6c5 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
--Date: Thu, 2 Feb 2017 11:16:49 +0100
--Subject: [PATCH] Fix build with --disable-nls on platforms without libintl
-- included in libc.
--
--Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
--
-----
--
--Status: accepted upstream, not yet released.
--
--diff --git a/src/pwmake.c b/src/pwmake.c
--index 5b8cfb8..81f7cd3 100644
----- a/src/pwmake.c
--+++ b/src/pwmake.c
--@@ -33,9 +33,11 @@ main(int argc, char *argv[])
--         int bits;
--         void *auxerror;
-- 
--+#ifdef ENABLE_NLS
--         setlocale(LC_ALL, "");
--         bindtextdomain("libpwquality", "/usr/share/locale");
--         textdomain("libpwquality");
--+#endif
-- 
--         if (argc != 2) {
--                 usage(basename(argv[0]));
--diff --git a/src/pwscore.c b/src/pwscore.c
--index 219a175..24c13f2 100644
----- a/src/pwscore.c
--+++ b/src/pwscore.c
--@@ -34,9 +34,11 @@ main(int argc, char *argv[])
--         size_t len;
--         char *user = NULL;
-- 
--+#ifdef ENABLE_NLS
--         setlocale(LC_ALL, "");
--         bindtextdomain("libpwquality", "/usr/share/locale");
--         textdomain("libpwquality");
--+#endif
-- 
--         if (argc > 2) {
--                 usage(basename(argv[0]));
---- 
--2.9.3
--
-diff --git a/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch b/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
-deleted file mode 100644
-index 1b4f24264c..0000000000
---- a/package/libpwquality/0002-Fix-memory-leak-in-settings-when-using-bad-word-list.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From b1f2f1f71894fa0af92041fb4d5b6146101d63e5 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
--Date: Thu, 2 Feb 2017 11:17:26 +0100
--Subject: [PATCH] Fix memory leak in settings when using bad word list.
--
--Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
--
-----
--
--Status: accepted upstream, not yet released.
--
--diff --git a/src/settings.c b/src/settings.c
--index 5c38b30..4b026b1 100644
----- a/src/settings.c
--+++ b/src/settings.c
--@@ -46,6 +46,7 @@ pwquality_free_settings(pwquality_settings_t *pwq)
-- {
--         if (pwq) {
--                 free(pwq->dict_path);
--+                free(pwq->bad_words);
--                 free(pwq);
--         }
-- }
---- 
--2.9.3
--
-diff --git a/package/libpwquality/libpwquality.hash b/package/libpwquality/libpwquality.hash
-index 0e3f9e30fd..97490f818a 100644
---- a/package/libpwquality/libpwquality.hash
-+++ b/package/libpwquality/libpwquality.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256	74d2ea90e103323c1f2d6a6cc9617cdae6877573eddb31aaf31a40f354cc2d2a	libpwquality-1.3.0.tar.bz2
-+sha256	1de6ff046cf2172d265a2cb6f8da439d894f3e4e8157b056c515515232fade6b	libpwquality-1.4.0.tar.bz2
-+sha256	aa44d09f651bf99b56253187c7778a240740c767d28453ab7fdc9804c842baee	COPYING
-diff --git a/package/libpwquality/libpwquality.mk b/package/libpwquality/libpwquality.mk
-index 697af0b0b2..59b0e955fd 100644
---- a/package/libpwquality/libpwquality.mk
-+++ b/package/libpwquality/libpwquality.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPWQUALITY_VERSION = 1.3.0
-+LIBPWQUALITY_VERSION = 1.4.0
- LIBPWQUALITY_SOURCE = libpwquality-$(LIBPWQUALITY_VERSION).tar.bz2
- LIBPWQUALITY_SITE = https://github.com/libpwquality/libpwquality/releases/download/libpwquality-$(LIBPWQUALITY_VERSION)
- LIBPWQUALITY_LICENSE = BSD-3-Clause or GPL-2.0+
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+new file mode 100644
+index 0000000000..03c1944258
+--- /dev/null
++++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+@@ -0,0 +1,32 @@
++From 53e4920038d5562b7b672fec8b9469fc02eef4ad Mon Sep 17 00:00:00 2001
++From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++Date: Thu, 10 May 2018 21:57:49 +0200
++Subject: [PATCH] Only fix RPATH if install_rpath is not empty
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ mesonbuild/scripts/meson_install.py | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/mesonbuild/scripts/meson_install.py b/mesonbuild/scripts/meson_install.py
++index 013f2a00..f7ff1dcc 100644
++--- a/mesonbuild/scripts/meson_install.py
+++++ b/mesonbuild/scripts/meson_install.py
++@@ -368,7 +368,13 @@ def install_targets(d):
++                     printed_symlink_error = True
++         if os.path.isfile(outname):
++             try:
++-                depfixer.fix_rpath(outname, install_rpath, False)
+++                # Buildroot check-host-rpath script expects RPATH
+++                # But if install_rpath is empty, it will stripped.
+++                # So, preserve it in this case
+++                if install_rpath:
+++                    depfixer.fix_rpath(outname, install_rpath, False)
+++                else:
+++                    print("Skipping RPATH fixing")
++             except SystemExit as e:
++                 if isinstance(e.code, int) and e.code == 0:
++                     pass
++-- 
++2.14.3
++
