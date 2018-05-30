@@ -1,39 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 May 2018 00:18:50 +0200
-Subject: [Buildroot] [git commit] package/openvmtools: depend on
- host-nfs-utils
-Message-ID: <20180530221804.DEFFE83645@busybox.osuosl.org>
+Date: Thu, 31 May 2018 00:17:56 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.16.13
+Message-ID: <20180530221804.D740F83645@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b02b8210acb18773f2c4b26cfc11d1f9bc4fb88
+commit: https://git.buildroot.net/buildroot/commit/?id=754bf0d07ab9a4cbd103abeb061dff6dd867f2f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host-nfs-utils provides the host rpcgen utility. This fixes the build on
-recent Fedora systems that removed rpcgen from the glibc package.
-
-Fixes:
-http://autobuild.buildroot.net/results/e21/e219b8bacb52bb661eb6663b82f549ed941f26fe
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openvmtools/openvmtools.mk | 2 +-
+ linux/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
-index cc71324ff0..9501ef3361 100644
---- a/package/openvmtools/openvmtools.mk
-+++ b/package/openvmtools/openvmtools.mk
-@@ -17,7 +17,7 @@ OPENVMTOOLS_CONF_OPTS = --with-dnet \
- 	--without-gtkmm --without-kernel-modules \
- 	--disable-deploypkg --without-xerces
- OPENVMTOOLS_CONF_ENV += CUSTOM_DNET_CPPFLAGS=" "
--OPENVMTOOLS_DEPENDENCIES = libglib2 libdnet
-+OPENVMTOOLS_DEPENDENCIES = host-nfs-utils libglib2 libdnet
+diff --git a/linux/Config.in b/linux/Config.in
+index b1691fe153..73a3299b8f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -116,7 +116,7 @@ endif
  
- # When libfuse is available, openvmtools can build vmblock-fuse, so
- # make sure that libfuse gets built first
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.16.12" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.16.13" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
