@@ -1,45 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 21:36:44 +0200
-Subject: [Buildroot] [git commit branch/next] kexec: bump to version v2.0.17
-Message-ID: <20180530193522.D52E98348A@busybox.osuosl.org>
+Date: Wed, 30 May 2018 21:36:57 +0200
+Subject: [Buildroot] [PATCH] kexec: bump to version v2.0.17
+In-Reply-To: <20180530171048.25293-1-casantos@datacom.ind.br>
+References: <20180530171048.25293-1-casantos@datacom.ind.br>
+Message-ID: <20180530213657.1b2702b3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df2497336d14b17edfec6462caf1b9bafbe5d032
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Also add license hash for "make legal-info".
+On Wed, 30 May 2018 14:10:48 -0300, Carlos Santos wrote:
+> Also add license hash for "make legal-info".
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+> ---
+>  package/kexec/kexec.hash | 4 +++-
+>  package/kexec/kexec.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kexec/kexec.hash | 4 +++-
- package/kexec/kexec.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index eaa9d7b96e..24294909ee 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256 5b103351ad752c9badd1d65b00eb6de4bce579f944f4df4e3ef3a755ba567010 kexec-tools-2.0.16.tar.xz
-+sha256 504c816b769da573167b63f3b6d4fce3740f231c98d8db0c4fda47a4b90482a9 kexec-tools-2.0.17.tar.xz
-+# locally calculated
-+sha256 fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7 COPYING
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 3ce1ed2eac..b0f4367ddd 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KEXEC_VERSION = 2.0.16
-+KEXEC_VERSION = 2.0.17
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
