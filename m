@@ -1,69 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 22:19:20 +0200
-Subject: [Buildroot] [git commit branch/next] meson: prevent RPATH stripping
-Message-ID: <20180530202335.E2CF28351F@busybox.osuosl.org>
+Date: Wed, 30 May 2018 22:20:27 +0200
+Subject: [Buildroot] [git commit branch/next] mpd-mpc: convert to pkg-meson
+ infra
+Message-ID: <20180530202336.1279C8351F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a23af4773665d2ee40e2d4e525746ebe38456dd
+commit: https://git.buildroot.net/buildroot/commit/?id=166949e5dd8c70826613fb366a860caf60f35778
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-By default, Meson strips RPATH from the executable it builds [1,2],
-unless explicitly set via install_rpath.
-
-This will make support/scripts/check-host-rpath fail when building the
-host variant of a Meson-based package.
-
-So add a patch to prevent RPATH from being stripped if install_rpath is
-not set and notify user about it.
-
-[1] https://github.com/mesonbuild/meson/issues/2567
-[2] https://github.com/mesonbuild/meson/issues/314#issuecomment-157658562
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...y-fix-RPATH-if-install_rpath-is-not-empty.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/mpd-mpc/mpd-mpc.mk | 26 ++------------------------
+ 1 file changed, 2 insertions(+), 24 deletions(-)
 
-diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-new file mode 100644
-index 0000000000..03c1944258
---- /dev/null
-+++ b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-@@ -0,0 +1,32 @@
-+From 53e4920038d5562b7b672fec8b9469fc02eef4ad Mon Sep 17 00:00:00 2001
-+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+Date: Thu, 10 May 2018 21:57:49 +0200
-+Subject: [PATCH] Only fix RPATH if install_rpath is not empty
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ mesonbuild/scripts/meson_install.py | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/mesonbuild/scripts/meson_install.py b/mesonbuild/scripts/meson_install.py
-+index 013f2a00..f7ff1dcc 100644
-+--- a/mesonbuild/scripts/meson_install.py
-++++ b/mesonbuild/scripts/meson_install.py
-+@@ -368,7 +368,13 @@ def install_targets(d):
-+                     printed_symlink_error = True
-+         if os.path.isfile(outname):
-+             try:
-+-                depfixer.fix_rpath(outname, install_rpath, False)
-++                # Buildroot check-host-rpath script expects RPATH
-++                # But if install_rpath is empty, it will stripped.
-++                # So, preserve it in this case
-++                if install_rpath:
-++                    depfixer.fix_rpath(outname, install_rpath, False)
-++                else:
-++                    print("Skipping RPATH fixing")
-+             except SystemExit as e:
-+                 if isinstance(e.code, int) and e.code == 0:
-+                     pass
-+-- 
-+2.14.3
-+
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+index 942530a561..0666339ff9 100644
+--- a/package/mpd-mpc/mpd-mpc.mk
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -10,28 +10,6 @@ MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
+ MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ MPD_MPC_LICENSE = GPL-2.0+
+ MPD_MPC_LICENSE_FILES = COPYING
+-MPD_MPC_DEPENDENCIES = host-meson host-pkgconf libmpdclient
++MPD_MPC_DEPENDENCIES = host-pkgconf libmpdclient
+ 
+-MPD_MPC_CONF_OPTS += \
+-	--prefix=/usr \
+-	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
+-	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
+-
+-MPD_MPC_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+-
+-define MPD_MPC_CONFIGURE_CMDS
+-	rm -rf $(@D)/build
+-	mkdir -p $(@D)/build
+-	$(TARGET_MAKE_ENV) meson $(MPD_MPC_CONF_OPTS) $(@D) $(@D)/build
+-endef
+-
+-define MPD_MPC_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) ninja $(MPD_MPC_NINJA_OPTS) -C $(@D)/build
+-endef
+-
+-define MPD_MPC_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja $(MPD_MPC_NINJA_OPTS) \
+-		-C $(@D)/build install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(meson-package))
