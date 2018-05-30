@@ -1,42 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 16:11:14 +0200
-Subject: [Buildroot] [git commit] lftp: switch from libidn to libidn2
-Message-ID: <20180602101012.67847836B8@busybox.osuosl.org>
+Date: Wed, 30 May 2018 21:36:44 +0200
+Subject: [Buildroot] [git commit] kexec: bump to version v2.0.17
+Message-ID: <20180602101014.35D0F8199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa406bb94bcf65846e2ba2a38a7480ac418e7183
+commit: https://git.buildroot.net/buildroot/commit/?id=df2497336d14b17edfec6462caf1b9bafbe5d032
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libidn has been removed since 4.8.1 (August 2017):
-https://github.com/lavv17/lftp/commit/731abec393f3deff490c77d1d55eb7219bc6b556
+Also add license hash for "make legal-info".
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lftp/lftp.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/kexec/kexec.hash | 4 +++-
+ package/kexec/kexec.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
-index e1ca0533ee..68f3dfce2c 100644
---- a/package/lftp/lftp.mk
-+++ b/package/lftp/lftp.mk
-@@ -41,11 +41,11 @@ else
- LFTP_CONF_OPTS += --without-openssl
- endif
+diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
+index eaa9d7b96e..24294909ee 100644
+--- a/package/kexec/kexec.hash
++++ b/package/kexec/kexec.hash
+@@ -1,2 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
+-sha256 5b103351ad752c9badd1d65b00eb6de4bce579f944f4df4e3ef3a755ba567010 kexec-tools-2.0.16.tar.xz
++sha256 504c816b769da573167b63f3b6d4fce3740f231c98d8db0c4fda47a4b90482a9 kexec-tools-2.0.17.tar.xz
++# locally calculated
++sha256 fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7 COPYING
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index 3ce1ed2eac..b0f4367ddd 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_LIBIDN),y)
--LFTP_DEPENDENCIES += libidn
--LFTP_CONF_OPTS += --with-libidn=$(STAGING_DIR)/usr
-+ifeq ($(BR2_PACKAGE_LIBIDN2),y)
-+LFTP_DEPENDENCIES += libidn2
-+LFTP_CONF_OPTS += --with-libidn2=$(STAGING_DIR)/usr
- else
--LFTP_CONF_OPTS += --without-libidn
-+LFTP_CONF_OPTS += --without-libidn2
- endif
- 
- # Remove /usr/share/lftp
+-KEXEC_VERSION = 2.0.16
++KEXEC_VERSION = 2.0.17
+ KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
+ KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
+ KEXEC_LICENSE = GPL-2.0
