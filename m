@@ -1,133 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 20 May 2018 16:01:28 +0200
-Subject: [Buildroot] [git commit] libidn2: new package
-Message-ID: <20180602101012.41E687FACD@busybox.osuosl.org>
+Date: Wed, 30 May 2018 23:24:18 +0200
+Subject: [Buildroot] [git commit] package/python-pillow: bump to version
+ 5.1.0
+Message-ID: <20180602101014.DA5AB836B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffb85a4a16df94e4980057a194e5fdc3c8332e32
+commit: https://git.buildroot.net/buildroot/commit/?id=243627efbd53241127b6384a47ac89f2d73226e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Libidn2 is an implementation of the IDNA2008 + TR46
-specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
-TR 46).
+This patch bumps python-pillow to version 5.1.0.
 
-http://www.gnu.org/software/libidn/
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Thomas:
- - Use positive logic to test the BR2_PACKAGE_LIBIDN2_BINARY
-   condition.
- - Put the definition of LIBIDN2_REMOVE_BINARY inside the
-   BR2_PACKAGE_LIBIDN2_BINARY condition, as suggested by Arnout.
- - Adjust license details: library is under GPL-2.0+ or LGPL-3.0+,
-   while the command line tool is under GPL-3.0+.]
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/libidn2/Config.in    | 17 +++++++++++++++++
- package/libidn2/libidn2.hash |  8 ++++++++
- package/libidn2/libidn2.mk   | 30 ++++++++++++++++++++++++++++++
- 5 files changed, 57 insertions(+)
+ package/python-pillow/python-pillow.hash | 5 ++---
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f9531944a3..978ba9625c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -689,6 +689,7 @@ F:	package/libglib2/
- F:	package/libgtk2/
- F:	package/libgtk3/
- F:	package/libidn/
-+F:	package/libidn2/
- F:	package/libjpeg/
- F:	package/libmatroska/
- F:	package/libmpdclient/
-diff --git a/package/Config.in b/package/Config.in
-index 71a380bc3f..6c0583a745 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1411,6 +1411,7 @@ menu "Networking"
- 	source "package/libgsasl/Config.in"
- 	source "package/libhttpparser/Config.in"
- 	source "package/libidn/Config.in"
-+	source "package/libidn2/Config.in"
- 	source "package/libiscsi/Config.in"
- 	source "package/libkrb5/Config.in"
- 	source "package/libldns/Config.in"
-diff --git a/package/libidn2/Config.in b/package/libidn2/Config.in
-new file mode 100644
-index 0000000000..38b1378990
---- /dev/null
-+++ b/package/libidn2/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_LIBIDN2
-+	bool "libidn2"
-+	help
-+	  Libidn2 is an implementation of the IDNA2008 + TR46
-+	  specifications (RFC 5890, RFC 5891, RFC 5892, RFC 5893,
-+	  TR 46).
-+
-+	  http://www.gnu.org/software/libidn/
-+
-+if BR2_PACKAGE_LIBIDN2
-+
-+config BR2_PACKAGE_LIBIDN2_BINARY
-+	bool "idn2 binary"
-+	help
-+	  Install idn2 command line tool
-+
-+endif
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-new file mode 100644
-index 0000000000..980f78f50d
---- /dev/null
-+++ b/package/libidn2/libidn2.hash
-@@ -0,0 +1,8 @@
-+# From Calculated locally after checking signature
-+sha256	644b6b03b285fb0ace02d241d59483d98bc462729d8bb3608d5cad5532f3d2f0	libidn2-2.0.4.tar.gz
-+
-+# Hash for license files:
-+sha256	4fa501e804195b4136c9cec4bc510365b8cbaf4bc075d6401a77ae0213370457	COPYING
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
-+sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768	COPYING.LESSERv3
-+sha256	01d621eef165cf4d3d3dbb737aa0699178d94c6f18cf87e9dde6db3ca7790f46	COPYING.unicode
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-new file mode 100644
-index 0000000000..d47913b2eb
---- /dev/null
-+++ b/package/libidn2/libidn2.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# libidn2
-+#
-+################################################################################
-+
-+LIBIDN2_VERSION = 2.0.4
-+LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
-+LIBIDN2_LICENSE := GPL-2.0+ or LGPL-3.0+ (library)
-+LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
-+LIBIDN2_DEPENDENCIES = \
-+	host-pkgconf \
-+	$(TARGET_NLS_DEPENDENCIES) \
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
-+LIBIDN2_INSTALL_STAGING = YES
-+
-+ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
-+LIBIDN2_DEPENDENCIES += libunistring
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBIDN2_BINARY),)
-+define LIBIDN2_REMOVE_BINARY
-+	rm -f $(TARGET_DIR)/usr/bin/idn2
-+endef
-+LIBIDN2_POST_INSTALL_TARGET_HOOKS += LIBIDN2_REMOVE_BINARY
-+else
-+LIBIDN2_LICENSE := $(LIBIDN2_LICENSE), GPL-3.0+ (program)
-+endif
-+
-+$(eval $(autotools-package))
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index d8c083b4f5..463b5620ce 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,3 +1,2 @@
+-# md5 from https://pypi.python.org/pypi/pillow/json, sha256 locally computed
+-md5 11e5e2046cf41586716a6042d89abeeb  Pillow-4.2.1.tar.gz
+-sha256 c724f65870e545316f9e82e4c6d608ab5aa9dd82d5185e5b2e72119378740073  Pillow-4.2.1.tar.gz
++# sha256 from https://pypi.org/project/Pillow/5.1.0/#files
++sha256 cee9bc75bff455d317b6947081df0824a8f118de2786dc3d74a3503fd631f4ef  Pillow-5.1.0.tar.gz
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 79d6a77cad..c9b3e316f9 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PILLOW_VERSION = 4.2.1
++PYTHON_PILLOW_VERSION = 5.1.0
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_SITE = https://pypi.python.org/packages/55/aa/f7f983fb72710a9daa4b3374b7c160091d3f94f5c09221f9336ade9027f3
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/89/b8/2f49bf71cbd0e9485bb36f72d438421b69b7356180695ae10bd4fd3066f5
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
