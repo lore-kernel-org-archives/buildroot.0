@@ -1,72 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 22:20:02 +0200
-Subject: [Buildroot] [git commit] systemd: convert to pkg-meson infra
-Message-ID: <20180602101014.9CBA6836B8@busybox.osuosl.org>
+Date: Wed, 30 May 2018 22:20:27 +0200
+Subject: [Buildroot] [git commit] mpd-mpc: convert to pkg-meson infra
+Message-ID: <20180602101014.B1CF38199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebcf58ad07da318904399fad3f304c7e91195b66
+commit: https://git.buildroot.net/buildroot/commit/?id=166949e5dd8c70826613fb366a860caf60f35778
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/systemd/systemd.mk | 32 +++-----------------------------
- 1 file changed, 3 insertions(+), 29 deletions(-)
+ package/mpd-mpc/mpd-mpc.mk | 26 ++------------------------
+ 1 file changed, 2 insertions(+), 24 deletions(-)
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 8f7a9fa93c..82d0e1a027 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -12,7 +12,6 @@ SYSTEMD_INSTALL_STAGING = YES
- SYSTEMD_DEPENDENCIES = \
- 	host-gperf \
- 	host-intltool \
--	host-meson \
- 	kmod \
- 	libcap \
- 	util-linux
-@@ -26,10 +25,6 @@ SYSTEMD_DEPENDENCIES += busybox
- endif
+diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
+index 942530a561..0666339ff9 100644
+--- a/package/mpd-mpc/mpd-mpc.mk
++++ b/package/mpd-mpc/mpd-mpc.mk
+@@ -10,28 +10,6 @@ MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
+ MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
+ MPD_MPC_LICENSE = GPL-2.0+
+ MPD_MPC_LICENSE_FILES = COPYING
+-MPD_MPC_DEPENDENCIES = host-meson host-pkgconf libmpdclient
++MPD_MPC_DEPENDENCIES = host-pkgconf libmpdclient
  
- SYSTEMD_CONF_OPTS += \
+-MPD_MPC_CONF_OPTS += \
 -	--prefix=/usr \
--	--libdir='/usr/lib' \
 -	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
--	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf \
- 	-Drootlibdir='/usr/lib' \
- 	-Dblkid=true \
- 	-Dman=false \
-@@ -403,28 +398,7 @@ define SYSTEMD_INSTALL_INIT_SYSTEMD
- 	$(SYSTEMD_INSTALL_NETWORK_CONFS)
- endef
- 
--SYSTEMD_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
-+SYSTEMD_CONF_ENV = $(HOST_UTF8_LOCALE_ENV)
-+SYSTEMD_NINJA_ENV = $(HOST_UTF8_LOCALE_ENV)
- 
--SYSTEMD_ENV = $(TARGET_MAKE_ENV) $(HOST_UTF8_LOCALE_ENV)
+-	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
 -
--define SYSTEMD_CONFIGURE_CMDS
+-MPD_MPC_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+-
+-define MPD_MPC_CONFIGURE_CMDS
 -	rm -rf $(@D)/build
 -	mkdir -p $(@D)/build
--	$(SYSTEMD_ENV) meson $(SYSTEMD_CONF_OPTS) $(@D) $(@D)/build
+-	$(TARGET_MAKE_ENV) meson $(MPD_MPC_CONF_OPTS) $(@D) $(@D)/build
 -endef
 -
--define SYSTEMD_BUILD_CMDS
--	$(SYSTEMD_ENV) ninja $(SYSTEMD_NINJA_OPTS) -C $(@D)/build
+-define MPD_MPC_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) ninja $(MPD_MPC_NINJA_OPTS) -C $(@D)/build
 -endef
 -
--define SYSTEMD_INSTALL_TARGET_CMDS
--	$(SYSTEMD_ENV) DESTDIR=$(TARGET_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
--		-C $(@D)/build install
--endef
--
--define SYSTEMD_INSTALL_STAGING_CMDS
--	$(SYSTEMD_ENV) DESTDIR=$(STAGING_DIR) ninja $(SYSTEMD_NINJA_OPTS) \
+-define MPD_MPC_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja $(MPD_MPC_NINJA_OPTS) \
 -		-C $(@D)/build install
 -endef
 -
