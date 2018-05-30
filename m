@@ -1,81 +1,90 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 30 May 2018 22:29:58 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: bump CodeSourcery NIOSII to
- 2018.05
-Message-ID: <20180530202958.8993-1-romain.naour@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 May 2018 22:35:50 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/stm32f429: force usage of
+ BINUTILS 2.28.x
+In-Reply-To: <20180530174257.616403f2@windsurf.home>
+References: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
+ <20180529233219.0eca0f54@windsurf.home>
+ <98410cef-37c3-0450-9142-e1df5df34eaa@st.com>
+ <20180530174257.616403f2@windsurf.home>
+Message-ID: <a478a326-805a-0b80-2df6-4779211fdfd9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Re-add BR2_TOOLCHAIN_HAS_SSP since the toolchain support SSP.
 
-Tested with qemu_nios2_10m50_defconfig and Qemu 2.10.1-3.fc27 release.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- .../toolchain-external-codesourcery-niosII/Config.in        | 13 +++++++------
- .../toolchain-external-codesourcery-niosII.hash             | 10 +++++-----
- .../toolchain-external-codesourcery-niosII.mk               |  2 +-
- 3 files changed, 13 insertions(+), 12 deletions(-)
+On 30-05-18 17:42, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 30 May 2018 15:24:19 +0000, Christophe PRIOUZEAU wrote:
+> 
+>>   I know that my patches are not a durable solution.
+>>   My concern are to have a solution for stm32  and not keep
+>> this state on which stm32 board doesn't boot.
+> 
+> Hence my proposal to generalize your change so that it covers all
+> Cortex-M platforms and not just the STM32 defconfigs.
+> 
+> Your solution is not even generic enough for STM32: it only makes the
+> STM32 defconfigs work. But if:
+> 
+>  - Someone uses the defconfig and changes the binutils version to 2.29,
+>    it won't work anymore.
+> 
+>  - Someone creates his own defconfig for another custom STM32 platform
+>    and uses binutils 2.29, it won't work.
+> 
+> So I repeat that the change of the defconfigs is the bad solution. If
+> binutils 2.29 really doesn't work for Cortex-M platforms, the fix is to
+> change the binutils package to exclude 2.29+ from being selected on
+> Cortex-M platforms.
 
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-index 4ac9c95c86..9d785a4b6b 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/Config.in
-@@ -1,16 +1,17 @@
- config BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII
--	bool "Sourcery CodeBench Nios-II 2017.05"
-+	bool "Sourcery CodeBench Nios-II 2018.05"
- 	depends on BR2_nios2
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_SSP
- 	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	select BR2_INSTALL_LIBSTDCPP
- 	select BR2_HOSTARCH_NEEDS_IA32_LIBS
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_7
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	help
- 	  Sourcery CodeBench toolchain for the Nios-II architecture,
--	  from Mentor Graphics. It uses gcc 6.3, binutils 2.26,
--	  glibc 2.25, gdb 7.11 and kernel headers 4.7.
-+	  from Mentor Graphics. It uses gcc 7.3, binutils 2.28,
-+	  glibc 2.27, gdb 8.0.1 and kernel headers 4.15.5.
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash
-index 3643f921b3..518e677f31 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.hash
-@@ -1,6 +1,6 @@
--# From https://sourcery.mentor.com/GNUToolchain/release3302
--md5 54b7f7056c2159f3a9ddeca8ca775ed1 sourceryg++-2017.05-4-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
--md5 529a7fecf33d0d113a446413b9d1e173 sourceryg++-2017.05-4-nios2-linux-gnu.src.tar.bz2
-+# From https://sourcery.mentor.com/GNUToolchain/release3374
-+md5 4f536b3b9b4e00f483e82e304c0a27ae sourceryg++-2018.05-5-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+md5 be42ab83da2e8db7b73dc890c2549570 sourceryg++-2018.05-5-nios2-linux-gnu.src.tar.bz2
- # Locally calculated
--sha256 3f0307da3c0770b7cc3ed4a845038e6e438d3e3a96ce880f9a86b3d35f948a07  sourceryg++-2017.05-4-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
--sha256 6e65878d0453708ee19098d3d68985bda244938d35999f3859915a2f5574fa08  sourceryg++-2017.05-4-nios2-linux-gnu.src.tar.bz2
-+sha256 c19afb432b5b23f8d5d639831d3a423a3ea3c9cc62e0015020d20ea2eb36dd1b  sourceryg++-2018.05-5-nios2-linux-gnu-i686-pc-linux-gnu.tar.bz2
-+sha256 d73a6364106dd62352711f932d3be8e97fdaaa548995678b5d38d9f21e22437a  sourceryg++-2018.05-5-nios2-linux-gnu.src.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-index dfa4ea4258..cb0fe760ff 100644
---- a/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-+++ b/toolchain/toolchain-external/toolchain-external-codesourcery-niosII/toolchain-external-codesourcery-niosII.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION = 2017.05-4
-+TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION = 2018.05-5
- 
- TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SITE = https://sourcery.mentor.com/public/gnu_toolchain/$(TOOLCHAIN_EXTERNAL_PREFIX)
- TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_SOURCE = sourceryg++-$(TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII_VERSION)-$(TOOLCHAIN_EXTERNAL_PREFIX)-i686-pc-linux-gnu.tar.bz2
+ Since we can assume that broken packages will eventually get patched (or that
+we can patch them ourselves in Buildroot), the problem is just with the kernel,
+right? But the kernel may also have been patched. I really don't feel
+comfortable to make it impossible for the user to build the toolchain he wants
+when there is in fact no need to impose that limitation...
+
+ How about:
+
+1. Applying http://patchwork.ozlabs.org/patch/898748/, so the default is still
+2.28, but the user can choose another version.
+2. Reverting these two patches (no longer needed).
+3. Add a conditional warning to linux/Config.in that an unpatched kernel will
+fail to boot.
+4. Eventually, add the patch that fixes the kernel to the stm32* defconfigs.
+
+
+ Regards,
+ Arnout
+
+>>   For the long term solution, I have seen a patch on the kernel
+>> to correct the issue around 'adr pseudo instruction'.
+>> Patch: https://patchwork.kernel.org/patch/10072631/
+>> "arm: ensure symbol is a thumb symbol in new binutils".
+>> This patch are not merged on the kernel, I have tested it on top
+>> of kernel 4.11(buildroot config) and kernel 4.17-rc5, the patch
+>> work correctly, we are able to perform a  complete boot.
+>> I need to continue my test to see if this patch is sufficient.
+> 
+> Thanks for working on this upstream with the kernel people.
+> 
+> However, we'll of course still have the "gap" that any kernel before
+> the one having your fix will be broken with binutils 2.29+. I don't
+> think there anything we can do about this though.
+> 
+> Best regards,
+> 
+> Thomas
+> 
+
 -- 
-2.14.3
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
