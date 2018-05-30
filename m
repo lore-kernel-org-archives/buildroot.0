@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 21:36:44 +0200
-Subject: [Buildroot] [git commit] kexec: bump to version v2.0.17
-Message-ID: <20180602101014.35D0F8199C@busybox.osuosl.org>
+Date: Wed, 30 May 2018 21:45:19 +0200
+Subject: [Buildroot] [git commit] toolchain-external: add gcc 8 entry
+Message-ID: <20180602101014.6741F8199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df2497336d14b17edfec6462caf1b9bafbe5d032
+commit: https://git.buildroot.net/buildroot/commit/?id=86220d0973bbf24113fa57368bf2d8bbc57e98a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add license hash for "make legal-info".
+This patch allows to use an external toolchain based on gcc 8.
 
-Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kexec/kexec.hash | 4 +++-
- package/kexec/kexec.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ .../toolchain-external/toolchain-external-custom/Config.in.options  | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index eaa9d7b96e..24294909ee 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256 5b103351ad752c9badd1d65b00eb6de4bce579f944f4df4e3ef3a755ba567010 kexec-tools-2.0.16.tar.xz
-+sha256 504c816b769da573167b63f3b6d4fce3740f231c98d8db0c4fda47a4b90482a9 kexec-tools-2.0.17.tar.xz
-+# locally calculated
-+sha256 fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7 COPYING
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 3ce1ed2eac..b0f4367ddd 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 55370e967a..2ef1126740 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -27,6 +27,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
  
--KEXEC_VERSION = 2.0.16
-+KEXEC_VERSION = 2.0.17
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
+ choice
+ 	bool "External toolchain gcc version"
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_8   if BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_5   if BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+@@ -37,8 +38,13 @@ choice
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_8
++	bool "8.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
++
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
+ 	bool "7.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_6
