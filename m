@@ -1,58 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 May 2018 17:42:32 +0200
-Subject: [Buildroot] Buildroot 2018.05-rc3 released
-In-Reply-To: <1527674917.2072.2.camel@rovoreed.com> (Mike Davies's message of
- "Wed, 30 May 2018 11:08:37 +0100")
-References: <87efhvufjm.fsf@dell.be.48ers.dk>
- <1527599917.2053.2.camel@rovoreed.com>
- <87fu2a7bkq.fsf@dell.be.48ers.dk>
- <1527615682.2053.4.camel@rovoreed.com>
- <87po1e5mev.fsf@dell.be.48ers.dk>
- <1527674917.2072.2.camel@rovoreed.com>
-Message-ID: <87tvqp2lqv.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 May 2018 17:42:57 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/stm32f429: force usage of
+ BINUTILS 2.28.x
+In-Reply-To: <98410cef-37c3-0450-9142-e1df5df34eaa@st.com>
+References: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
+ <20180529233219.0eca0f54@windsurf.home>
+ <98410cef-37c3-0450-9142-e1df5df34eaa@st.com>
+Message-ID: <20180530174257.616403f2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mike" == Mike Davies <busybox_mail@rovoreed.com> writes:
+Hello,
 
-Please keep the discussion on the buildroot list, thanks.
+On Wed, 30 May 2018 15:24:19 +0000, Christophe PRIOUZEAU wrote:
 
- >> ?> If I select Python as a package to install on my target, then it
- >> builds
- >> ?> OK - but I don't want Python on my target.
- >> 
- >> ?> For now, I guess a workaround is to select Python, and delete it
- >> in a
- >> ?> pre-image script.
- >> 
- >> That is odd. The presence or not of python for the target shouldn't
- >> have
- >> any effect on host-python. You do not mean python3 for the target, do
- >> you?
+>   I know that my patches are not a durable solution.
+>   My concern are to have a solution for stm32  and not keep
+> this state on which stm32 board doesn't boot.
 
- > Yes, sorry, I mean Python3 for the target. I also have ".pyc compiled
- > sources only", core python3 modules??--->?[*] unicodedata module, ?core
- > python3 modules??--->?(none)?
+Hence my proposal to generalize your change so that it covers all
+Cortex-M platforms and not just the STM32 defconfigs.
 
-Ok, interesting. Enabling python3 for the target means that our host
-python becomes python3, so the certdata2pem.py step in ca-certificates
-is executed with host-python3.
+Your solution is not even generic enough for STM32: it only makes the
+STM32 defconfigs work. But if:
 
+ - Someone uses the defconfig and changes the binutils version to 2.29,
+   it won't work anymore.
 
->> What Linux distribution/version are you using?
+ - Someone creates his own defconfig for another custom STM32 platform
+   and uses binutils 2.29, it won't work.
 
- > The Linux distribution/version I am building on is Fedora Red Hat 25
- > ...
+So I repeat that the change of the defconfigs is the bad solution. If
+binutils 2.29 really doesn't work for Cortex-M platforms, the fix is to
+change the binutils package to exclude 2.29+ from being selected on
+Cortex-M platforms.
 
- > [mike at modron ~]$ uname -a
- > Linux modron 4.9.14-200.fc25.x86_64 #1 SMP Mon Mar 13 19:26:40 UTC 2017
- > x86_64 x86_64 x86_64 GNU/Linux
+>   For the long term solution, I have seen a patch on the kernel
+> to correct the issue around 'adr pseudo instruction'.
+> Patch: https://patchwork.kernel.org/patch/10072631/
+> "arm: ensure symbol is a thumb symbol in new binutils".
+> This patch are not merged on the kernel, I have tested it on top
+> of kernel 4.11(buildroot config) and kernel 4.17-rc5, the patch
+> work correctly, we are able to perform a  complete boot.
+> I need to continue my test to see if this patch is sufficient.
 
-Ok, I'm on Debian. Thomas, you are using Fedora now, right? Can you give
-ca-certificates a try?
+Thanks for working on this upstream with the kernel people.
 
+However, we'll of course still have the "gap" that any kernel before
+the one having your fix will be broken with binutils 2.29+. I don't
+think there anything we can do about this though.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
