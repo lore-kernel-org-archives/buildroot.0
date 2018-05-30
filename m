@@ -1,51 +1,213 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 May 2018 08:22:50 +0200
-Subject: [Buildroot] custom skeleton question
-In-Reply-To: <7C5724A9-4880-4ED6-A49F-D306AD2ADE5B@stask.net> (Liam
- Staskawicz's message of "Tue, 29 May 2018 21:32:53 -0700")
-References: <85B790C7-22DB-4715-A360-5D229877EB00@stask.net>
- <874liq5k2q.fsf@dell.be.48ers.dk>
- <7C5724A9-4880-4ED6-A49F-D306AD2ADE5B@stask.net>
-Message-ID: <87y3g13bnp.fsf@dell.be.48ers.dk>
+From: xu min <xuminready@gmail.com>
+Date: Wed, 30 May 2018 00:50:31 -0700
+Subject: [Buildroot] [PATCH] Add new packge Shadowsocks-libev v3.1.3
+In-Reply-To: <CAMpS7mTuypCrb9NXeF86mKLi_BA8ZxZHtu12pX9JJA3iR-Y18A@mail.gmail.com>
+References: <20180524171204.5959-1-xuminready@gmail.com>
+ <57349f19-8017-8f29-f44c-dd085f38c132@mind.be>
+ <CAMpS7mTuypCrb9NXeF86mKLi_BA8ZxZHtu12pX9JJA3iR-Y18A@mail.gmail.com>
+Message-ID: <CAMpS7mRk1Fe8i71vLp1x1eDgMXN+fUAXg1k39LhJMECiATPkJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Liam" == Liam Staskawicz <liam@stask.net> writes:
+Hi Arnout,
 
-Hi,
+I just notice my last submit still miss libbloom/COPYING
+libcork/COPYING, ipset/COPYING. Please discard my last submit. I'll
+resubmit a new one tomorrow. Sorry about that.
 
- >>> I'd like to create a custom rootfs skeleton based on Ubuntu Base
- >>> (https://wiki.ubuntu.com/Base) via the existing skeleton-custom
- >>> package, but rather than ship the entire skeleton in my repo, i'd like
- >>> to download it (either as a step in another custom package or
- >>> otherwise).
- >> 
- >> Doesn't this "base" already contain a number of libraries and programs?
- >> I don't quite see how this fits in Buildroot.
- >> 
- >>> Given that BR2_ROOTFS_SKELETON_CUSTOM_PATH is evaluated at kconfig
- >>> time, I don't see the best way to supply this value from another
- >>> package.
- >> 
- >>> Is there a recommended approach to supply this value more dynamically?
- >> 
- >> Instead of using it as a rootfs skeleton you could perhaps create a
- >> package to download such a "base" and extract it on top of the default
- >> skeleton?
+MinXu
 
- > Thanks for the response. I can indeed investigate overlaying it on the
- > default skeleton - mainly wanted to confirm I was not missing an
- > intended way to use the existing skeleton-custom mechanism with a more
- > dynamically supplied custom path. Thank you.
+On Tue, May 29, 2018 at 12:02 AM, xu min <xuminready@gmail.com> wrote:
 
-Ok - But again, if the Ubuntu base image contains a bunch of prebuilt
-binaries and library you may very well end up with odd errors if you try
-to merge them with Buildroot.
+> Hi Arnout,
+>
+> Thank you so much for your help. This is my first contributions. I think I
+> fixed all the problem. My new submit is here: https://patchwork.
+> ozlabs.org/patch/921864/
+> Thanks.
+>
+> MinXu
+>
+> On Sun, May 27, 2018 at 8:47 AM, Arnout Vandecappelle <arnout@mind.be>
+> wrote:
+>
+>>  Hi Min,
+>>
+>>  Thank you for your contributions. There are several problems with your
+>> patch,
+>> could you fix them and resubmit?
+>>
+>>  First of all, the subject line should be:
+>>
+>> shadowsocks-libev: new package
+>>
+>> On 24-05-18 19:12, Min Xu wrote:
+>> > Signed-off-by: Min Xu <xuminready@gmail.com>
+>> > ---
+>> >  package/Config.in                              |  1 +
+>> >  package/shadowsocks-libev/Config.in            | 12 ++++++++++++
+>> >  package/shadowsocks-libev/shadowsocks-libev.mk | 20
+>> ++++++++++++++++++++
+>>
+>>  Please also add a hash file, containing a hash for the tarball and for
+>> all
+>> license files.
+>>
+>> >  3 files changed, 33 insertions(+)
+>> >  create mode 100644 package/shadowsocks-libev/Config.in
+>> >  create mode 100644 package/shadowsocks-libev/shadowsocks-libev.mk
+>> >
+>> > diff --git a/package/Config.in b/package/Config.in
+>> > index ecee493..1427665 100644
+>> > --- a/package/Config.in
+>> > +++ b/package/Config.in
+>> > @@ -1846,6 +1846,7 @@ endif
+>> >       source "package/samba4/Config.in"
+>> >       source "package/sconeserver/Config.in"
+>> >       source "package/ser2net/Config.in"
+>> > +        source "package/shadowsocks-libev/Config.in"
+>>
+>>  Indentation should be with tabs.
+>>
+>>  Similar problems exist elsewhere as well. Please use the
+>> utils/check-package
+>> script to find such mistakes.
+>>
+>> >       source "package/shairport-sync/Config.in"
+>> >       source "package/shellinabox/Config.in"
+>> >       source "package/smcroute/Config.in"
+>> > diff --git a/package/shadowsocks-libev/Config.in
+>> b/package/shadowsocks-libev/Config.in
+>> > new file mode 100644
+>> > index 0000000..78fd35a
+>> > --- /dev/null
+>> > +++ b/package/shadowsocks-libev/Config.in
+>> > @@ -0,0 +1,12 @@
+>> > +config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+>> > +        bool "shadowsocks-libev"
+>> > +        select BR2_PACKAGE_LIBSODIUM
+>> > +        select BR2_PACKAGE_MBEDTLS
+>> > +        select BR2_PACKAGE_PCRE
+>> > +        select BR2_PACKAGE_C_ARES
+>> > +        select BR2_PACKAGE_LIBEV
+>>
+>>  Please keep the select lines alphabetical. So c-ares should be first.
+>>
+>> > +        help
+>> > +          Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
+>> > +          embedded devices and low-end boxes.
+>> > +
+>> > +          https://github.com/shadowsocks/shadowsocks-libev
+>> > diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk
+>> b/package/shadowsocks-libev/shadowsocks-libev.mk
+>> > new file mode 100644
+>> > index 0000000..1c7f76a
+>> > --- /dev/null
+>> > +++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+>> > @@ -0,0 +1,20 @@
+>> > +###########################################################
+>> #####################
+>> > +#
+>> > +# SHADOWSOCKS_LIBEV
+>>
+>>  This should be lower case.
+>>
+>> > +#
+>> > +###########################################################
+>> #####################
+>> > +
+>> > +SHADOWSOCKS_LIBEV_VERSION = 3.1.3
+>> > +SHADOWSOCKS_LIBEV_SOURCE = shadowsocks-libev-$(SHADOWSOCK
+>> S_LIBEV_VERSION).tar.gz
+>>
+>>  This is the default so you can omit it.
+>>
+>> > +SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks
+>> /shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+>> > +SHADOWSOCKS_LIBEV_LICENSE = GPLv3
+>>
+>>  Use SPDX tags, so GPL-3.0.
+>>
+>>  It looks to me like it has 'or later' everywhere, so GPL-3.0+.
+>>
+>>  It looks like it includes additional libraries under different licenses.
+>> So it
+>> should be (I think, please check)
+>>
+>> SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), \
+>>         BSD-3-Clause (libcork, libipset)
+>>
+>> Note that murmur2 is public domain and doesn't need to be mentioned.
+>>
+>>  Also the LICENSE_FILES should immediately follow it, and include the
+>> license
+>> files for all of these:
+>>
+>> SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/COPYING
+>> libcork/COPYING
+>>
+>> (libipset is a bit problematic because it doesn't have a license file in
+>> the
+>> tarball. The git repo does have it, though, and it's identical to the one
+>> lin
+>> libcork as far as I can tell.)
+>>
+>>  Also please add hashes for all these files.
+>>
+>>
+>> > +SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf
+>>
+>>  You need to specify all build dependencies here, alphabetically. So:
+>>
+>> SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium
+>> mbedtls pcre
+>>
+>>
+>> > +SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING
+>> > +SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
+>> > +SHADOWSOCKS_LIBEV_CONF_ENV = PCRECONFIG=$(STAGING_DIR)/usr/
+>> bin/pcre-config
+>> > +SHADOWSOCKS_LIBEV_DEPENDENCIES += pcre
+>> > +SHADOWSOCKS_LIBEV_CONF_OPTS = --disable-documentation
+>> --with-pcre=$(STAGING_DIR)/usr/bin/
+>> > +
+>> > +$(eval $(autotools-package))
+>> > +$(eval $(host-autotools-package))
+>>
+>>  You should only add a host version of the package if it is needed for
+>> something.
+>>
+>>  Regards,
+>>  Arnout
+>>
+>> --
+>> Arnout Vandecappelle                          arnout at mind be
+>> Senior Embedded Software Architect            +32-16-286500
+>> Essensium/Mind                                http://www.mind.be
+>> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+>> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>>
+>
+>
+>
+> --
+>
+> *Best Regards*
+>
+> *XuMin's Ready?*
+>
 
-What are you trying to achieve here?
+
 
 -- 
-Bye, Peter Korsgaard
+
+*Best Regards*
+
+*XuMin's Ready?*
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180530/d0690684/attachment.html>
