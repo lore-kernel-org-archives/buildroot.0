@@ -1,176 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 21:59:05 +0200
-Subject: [Buildroot] [git commit] docs/manual: document pkg-meson infra
-Message-ID: <20180602101014.840088199C@busybox.osuosl.org>
+Date: Wed, 30 May 2018 23:24:13 +0200
+Subject: [Buildroot] [git commit] package/python-can: bump to version 2.1.0
+Message-ID: <20180602101014.D027F836B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12e56136e24b76d153950afe27e13bbf5f11eebc
+commit: https://git.buildroot.net/buildroot/commit/?id=8519dea4b91b61cf7767c281a68e8a0c46fdc9d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update documentation about adding meson-based packages with instructions for
-using pkg-meson infrastructure.
+This patch bumps python-can to version 2.1.0.
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-meson.txt | 117 ++++++++++++++++------------------
- 1 file changed, 56 insertions(+), 61 deletions(-)
+ package/python-can/python-can.hash | 4 ++--
+ package/python-can/python-can.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-index f8aa08fa91..c52fe10506 100644
---- a/docs/manual/adding-packages-meson.txt
-+++ b/docs/manual/adding-packages-meson.txt
-@@ -1,18 +1,18 @@
- // -*- mode:doc; -*-
- // vim: set syntax=asciidoc:
+diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+index bd19d194b6..8a70bb42b7 100644
+--- a/package/python-can/python-can.hash
++++ b/package/python-can/python-can.hash
+@@ -1,3 +1,3 @@
+ # md5 from https://pypi.python.org/pypi/python-can/json, sha256 locally computed
+-md5     f653aecf8b9034bbba32cc04ca6a7b6d  python-can-1.5.2.tar.gz
+-sha256  edabb426e6cd11c2dc7a98980340135aa0eb02143b0d51bf14e3e6178c131cc3  python-can-1.5.2.tar.gz
++md5     3310f0aa2a8492d0ff614ecf636ec8a8  python-can-2.1.0.tar.gz
++sha256  4a5c01dd67feeda35f88e6c12ea14ac8cabd426b9be0cc5f9fd083fe90a9dbfc  python-can-2.1.0.tar.gz
+diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+index a271baea00..9a7e903303 100644
+--- a/package/python-can/python-can.mk
++++ b/package/python-can/python-can.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--=== Integration of Meson-based packages
-+=== Infrastructure for Meson-based packages
- 
- [[meson-package-tutorial]]
- 
- ==== +meson-package+ tutorial
- 
- http://mesonbuild.com[Meson] is an open source build system meant to be both
--extremely fast, and, even more importantly, as user friendly as possible.
-+extremely fast, and, even more importantly, as user friendly as possible. It
-+uses https://ninja-build.org[Ninja] as a companion tool to perform the actual
-+build operations.
- 
--Buildroot does not (yet) provide a dedicated package infrastructure for
--meson-based packages. So, we will explain how to write a +.mk+ file for such a
--package. Let's start with an example:
-+Let's see how to write a +.mk+ file for a Meson-based package, with an example:
- 
- ------------------------------
- 01: ################################################################################
-@@ -28,74 +28,69 @@ package. Let's start with an example:
- 11: FOO_LICENSE_FILES = COPYING
- 12: FOO_INSTALL_STAGING = YES
- 13:
--14: FOO_DEPENDENCIES = host-meson host-pkgconf bar
-+14: FOO_DEPENDENCIES = host-pkgconf bar
- 15:
--16: FOO_CONF_OPTS += \
--17: 	--prefix=/usr \
--18: 	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
--19: 	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
--20:
--21: FOO_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
-+16: ifeq ($(BR2_PACKAGE_BAZ),y)
-+17: FOO_CONF_OPTS += -Dbaz=true
-+18: FOO_DEPENDENCIES += baz
-+19: else
-+20: FOO_CONF_OPTS += -Dbaz=false
-+21: endif
- 22:
--23: ifeq ($(BR2_PACKAGE_BAZ),y)
--24: FOO_CONF_OPTS += -Dbaz
--25: endif
--26:
--27: define FOO_CONFIGURE_CMDS
--28: 	rm -rf $(@D)/build
--29: 	mkdir -p $(@D)/build
--30: 	$(TARGET_MAKE_ENV) meson $(FOO_CONF_OPTS) $(@D) $(@D)/build
--31: endef
--32:
--33: define FOO_BUILD_CMDS
--34: 	$(TARGET_MAKE_ENV) ninja $(FOO_NINJA_OPTS) -C $(@D)/build
--35: endef
--36:
--37: define FOO_INSTALL_TARGET_CMDS
--38: 	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja $(FOO_NINJA_OPTS) \
--39: 		-C $(@D)/build install
--40: endef
--41:
--42: define FOO_INSTALL_STAGING_CMDS
--43: 	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) ninja $(FOO_NINJA_OPTS) \
--44: 		-C $(@D)/build install
--45: endef
--46:
--47: $(eval $(generic-package))
-+23: $(eval $(meson-package))
- --------------------------------
- 
- The Makefile starts with the definition of the standard variables for package
- declaration (lines 7 to 11).
- 
--As seen in line 47, it is based on the
--xref:generic-package-tutorial[+generic-package+ infrastructure]. So, it defines
--the variables required by this particular infrastructure, where Meson and its
--companion tool, Ninja, are invoked:
-+On line line 23, we invoke the +meson-package+ macro that generates all the
-+Makefile rules that actually allows the package to be built.
- 
--* +FOO_CONFIGURE_CMDS+: the build directory required by Meson is created, and
--  Meson is invoked to generate the Ninja build file. The options required to
--  configure the cross-compilation of the package are passed via
--  +FOO_CONF_OPTS+.
-+In the example, +host-pkgconf+ and +bar+ are declared as dependencies in
-++FOO_DEPENDENCIES+ at line 14 because the Meson build file of +foo+ uses
-+`pkg-config` to determine the compilation flags and libraries of package +bar+.
- 
--* +FOO_BUILD_CMDS+: Ninja is invoked to perform the build.
-+Note that it is not necessary to add +host-meson+ in the +FOO_DEPENDENCIES+
-+variable of a package, since this basic dependency is automatically added as
-+needed by the Meson package infrastructure.
- 
--* +FOO_INSTALL_TARGET_CMDS+: Ninja is invoked to install the files generated
--  during the build step in the target directory.
--
--* +FOO_INSTALL_STAGING_CMDS+: Ninja is invoked to install the files generated
--  during the build step in the staging directory, as +FOO_INSTALL_STAGING+ is
--  set to "YES".
--
--In order to have Meson available for the build, +FOO_DEPENDENCIES+ needs to
--contain +host-meson+. In the example, +host-pkgconf+ and +bar+ are also
--declared as dependencies because the Meson build file of +foo+ uses `pkg-config`
--to determine the compilation flags and libraries of package +bar+.
--
--If the "baz" package is selected, then support for the "baz" feature in "foo"
--is activated by adding +-Dbaz+ to +FOO_CONF_OPTS+, as specified in the
--+meson_options.txt+ file in "foo" source tree.
-+If the "baz" package is selected, then support for the "baz" feature in "foo" is
-+activated by adding +-Dbaz=true+ to +FOO_CONF_OPTS+ at line 17, as specified in
-+the +meson_options.txt+ file in "foo" source tree. The "baz" package is also
-+added to +FOO_DEPENDENCIES+. Note that the support for +baz+ is explicitly
-+disabled at line 20, if the package is not selected.
- 
- To sum it up, to add a new meson-based package, the Makefile example can be
- copied verbatim then edited to replace all occurences of +FOO+ with the
- uppercase name of the new package and update the values of the standard
- variables.
-+
-+[[meson-package-reference]]
-+
-+==== +meson-package+ reference
-+
-+The main macro of the Meson package infrastructure is +meson-package+. It is
-+similar to the +generic-package+ macro. The ability to have target and host
-+packages is also available, with the +host-meson-package+ macro.
-+
-+Just like the generic infrastructure, the Meson infrastructure works by defining
-+a number of variables before calling the +meson-package+ macro.
-+
-+First, all the package metadata information variables that exist in the generic
-+infrastructure also exist in the Meson infrastructure: +FOO_VERSION+,
-++FOO_SOURCE+, +FOO_PATCH+, +FOO_SITE+, +FOO_SUBDIR+, +FOO_DEPENDENCIES+,
-++FOO_INSTALL_STAGING+, +FOO_INSTALL_TARGET+.
-+
-+A few additional variables, specific to the Meson infrastructure, can also be
-+defined. Many of them are only useful in very specific cases, typical packages
-+will therefore only use a few of them.
-+
-+* +FOO_CONF_ENV+, to specify additional environment variables to pass to
-+  +meson+ for the configuration step. By default, empty.
-+
-+* +FOO_CONF_OPTS+, to specify additional options to pass to +meson+ for the
-+  configuration step. By default, empty.
-+
-+* +FOO_NINJA_ENV+, to specify additional environment variables to pass to
-+  +ninja+, meson companion tool in charge of the build operations. By default,
-+  empty.
+-PYTHON_CAN_VERSION = 1.5.2
+-PYTHON_CAN_SITE = https://pypi.python.org/packages/a1/b1/80f023e2b728c7ebccbf989aec777f3add3dd4cee650573ce5d38132a07c
++PYTHON_CAN_VERSION = 2.1.0
++PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/04/87/0d5b0f2f4e5d7f64a44f74b7f0bc1668457e6aa7e90b04ad15c3b9a44411
+ PYTHON_CAN_LICENSE = LGPL-3.0
+ PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+ PYTHON_CAN_SETUP_TYPE = setuptools
