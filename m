@@ -1,15 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 May 2018 18:45:28 +0200
-Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
- host
-In-Reply-To: <20180530153119.GA2592@scaer>
-References: <20180502090508.12893-1-chemobejk@gmail.com>
- <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
- <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
- <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
- <1fdbacbd-e80f-8735-89c8-2ca92224ee9a@mind.be> <20180509202254.GA9837@scaer>
- <871sdu9akm.fsf@dell.be.48ers.dk> <20180530153119.GA2592@scaer>
-Message-ID: <c55c7a49-77e9-f174-5c90-c8baa950d7da@mind.be>
+Date: Wed, 30 May 2018 18:56:53 +0200
+Subject: [Buildroot] [PATCHv2] package/dash: don't build in paralle
+In-Reply-To: <20180529174237.16902-1-yann.morin.1998@free.fr>
+References: <20180529174237.16902-1-yann.morin.1998@free.fr>
+Message-ID: <d14836cd-20e4-ba04-0290-49394dc2783c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,37 +12,74 @@ To: buildroot@busybox.net
 
 
 
-On 30-05-18 17:31, Yann E. MORIN wrote:
-> Peter, All,
+On 29-05-18 19:42, Yann E. MORIN wrote:
+> dash has races in its Makefile, but upstream is not too keen in fixing
+> those, and just suggests that dash not be built in parallel:
 > 
-> On 2018-05-29 09:37 +0200, Peter Korsgaard spake thusly:
->>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
->>  >> Would you like to prepare a patch introducing the python-based approach? It
->>  >> should be two patches: the first one introducing the python script in mkusers,
->>  >> the second one removing the mkpasswd package.
->>
->>  > Sorry, I am not too convinced that writing our own tool is good...
+>     https://www.mail-archive.com/dash at vger.kernel.org/msg01675.html
 
- If I understand correctly, you don't want to write our own tool because "don't
-roll your own security"...
+ Herbert's comment was:
 
->>
->> Me neither. Another alternative is to build host-busybox and use the
->> mkpasswd applet with the built in crypt routines (ENABLE_USE_BB_CRYPT).
-> 
-> Yeah, I like that idea more. Plus, we can get known-reproducible
-> behaviour for other applets, should we need to add that.
+    Until there is a good solution to rules with multiple targets,
+    perhaps we should just disable parallel building in dash.
 
- ... and you'd rather replace it with the busybox implementation that uses a
-homegrown hash of getpid() + monotonic_us() as the salt?
+ Fortunately, there is a good solution: pattern rules. From the info page:
 
- The whois stuff at least uses /dev/urandom to generate the salt...
+    Pattern rules may have more than one target.  Unlike normal rules,
+    this does not act as many different rules with the same prerequisites
+    and recipe.  If a pattern rule has multiple targets, 'make' knows that
+    the rule's recipe is responsible for making all of the targets.  The
+    recipe is executed only once to make all the targets.
 
- Or maybe that was your point, eliminate randomness to get known-reproducible
-behaviour?
+
+ So a pattern rule like:
+
+%token.h %token_vars.h: %mktokens
+	$(SHELL) $^
+
+should do the trick.
+
+ I think this is a GNU make extension, however. I don't know if that's
+acceptable for upstream. I can imagine that they want to support bsdmake.
 
  Regards,
  Arnout
+
+
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
+>     http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
+>     http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
+>     [...]
+> 
+> Reported-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Baruch Siach <baruch@tkos.co.il>
+> 
+> ---
+> Changes v1 -> v2:
+>   - disable parallel build instead of trying to fix it, since upstream
+>     suggest so.
+> ---
+>  package/dash/dash.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+> index 9a26ebb642..80f0ea8cf3 100644
+> --- a/package/dash/dash.mk
+> +++ b/package/dash/dash.mk
+> @@ -9,6 +9,9 @@ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+>  DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+>  DASH_LICENSE_FILES = COPYING
+>  
+> +# dash does not build in parallel
+> +DASH_MAKE = $(MAKE1)
+> +
+>  ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+>  DASH_DEPENDENCIES += libedit host-pkgconf
+>  DASH_CONF_OPTS += --with-libedit
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
