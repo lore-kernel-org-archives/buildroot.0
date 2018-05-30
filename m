@@ -1,22 +1,41 @@
-From: Enoch W. <ixew@hotmail.com>
-Date: Wed, 30 May 2018 00:31:14 +0000
-Subject: [Buildroot] get initial entropy from the host
-Message-ID: <CO2PR01MB1976C4D602E26FDF0D121DEFCC6C0@CO2PR01MB1976.prod.exchangelabs.com>
+From: Liam Staskawicz <liam@stask.net>
+Date: Tue, 29 May 2018 21:32:53 -0700
+Subject: [Buildroot] custom skeleton question
+In-Reply-To: <874liq5k2q.fsf@dell.be.48ers.dk>
+References: <85B790C7-22DB-4715-A360-5D229877EB00@stask.net>
+ <874liq5k2q.fsf@dell.be.48ers.dk>
+Message-ID: <7C5724A9-4880-4ED6-A49F-D306AD2ADE5B@stask.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,?
 
-Thanks for making Linux so easy to build [that is, when it works ;-) ]
+> On May 29, 2018, at 12:38 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+> 
+>>>>>> "Liam" == Liam Staskawicz <liam@stask.net> writes:
+> 
+>> I'd like to create a custom rootfs skeleton based on Ubuntu Base
+>> (https://wiki.ubuntu.com/Base) via the existing skeleton-custom
+>> package, but rather than ship the entire skeleton in my repo, i'd like
+>> to download it (either as a step in another custom package or
+>> otherwise).
+> 
+> Doesn't this "base" already contain a number of libraries and programs?
+> I don't quite see how this fits in Buildroot.
+> 
+>> Given that BR2_ROOTFS_SKELETON_CUSTOM_PATH is evaluated at kconfig
+>> time, I don't see the best way to supply this value from another
+>> package.
+> 
+>> Is there a recommended approach to supply this value more dynamically?
+> 
+> Instead of using it as a rootfs skeleton you could perhaps create a
+> package to download such a "base" and extract it on top of the default
+> skeleton?
 
-package/initscripts/init.d/S20urandom doesn't have readily available entropy on its first boot.
-May I suggest initializing /dev/urandom from host generated random-seed. I do it now via my board post-build.sh as follows.
-IMHO it should be done as standard.
+Thanks for the response. I can indeed investigate overlaying it on the default skeleton - mainly wanted to confirm I was not missing an intended way to use the existing skeleton-custom mechanism with a more dynamically supplied custom path. Thank you.
 
-umask 077
-dd if=/dev/urandom of=${TARGET_DIR}/etc/random-seed count=1
-
-Thanks, Enoch.
+Best,
+Liam
