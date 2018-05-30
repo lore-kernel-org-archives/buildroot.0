@@ -1,74 +1,88 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 29 May 2018 21:42:04 +0200
-Subject: [Buildroot] [git commit] conntrack-tools: bump to version 1.4.5
-Message-ID: <20180602101014.23C128199C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 30 May 2018 22:20:35 +0200
+Subject: [Buildroot] [git commit] enlightenment: convert to pkg-meson infra
+Message-ID: <20180602101014.BCF148199C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3057380b9417fce6f1da6c0ab33da70909e93fb
+commit: https://git.buildroot.net/buildroot/commit/?id=25179df46f2eeec8b17a2e930ab681015f8ebd12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop the musl workaround. musl can handle the suppression of conflicting
-kernel headers definitions.
-
-Add license file hash.
-
-This bump fixes compatibility with newer versions of
-libnetfilter_conntrack.
-
-Fixes:
-http://autobuild.buildroot.net/results/0ae/0aee137c9977e0fb33e7e557b75481780b90edcc/
-http://autobuild.buildroot.net/results/9c1/9c178ec5ad84224a385c3184f09ea9b65867a302/
-http://autobuild.buildroot.net/results/5e1/5e1ea89e01a9cc13bd384c97903e1726df6d2228/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/conntrack-tools/conntrack-tools.hash |  7 ++++---
- package/conntrack-tools/conntrack-tools.mk   | 11 +----------
- 2 files changed, 5 insertions(+), 13 deletions(-)
+ package/enlightenment/enlightenment.mk | 30 ++++++------------------------
+ 1 file changed, 6 insertions(+), 24 deletions(-)
 
-diff --git a/package/conntrack-tools/conntrack-tools.hash b/package/conntrack-tools/conntrack-tools.hash
-index 9d6817721d..cd95a06dc1 100644
---- a/package/conntrack-tools/conntrack-tools.hash
-+++ b/package/conntrack-tools/conntrack-tools.hash
-@@ -1,3 +1,4 @@
--# From ftp://ftp.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.4.tar.bz2.{md5sum,sha1sum}
--md5	acd9e0b27cf16ae3092ba900e4d7560e	conntrack-tools-1.4.4.tar.bz2
--sha1	25b36fb6832373ef899bade3b82adf5382b9a05b	conntrack-tools-1.4.4.tar.bz2
-+# From https://netfilter.org/projects/conntrack-tools/downloads.html
-+sha256 36c6d99c7684851d4d72e75bd07ff3f0ff1baaf4b6f069eb7244990cd1a9a462  conntrack-tools-1.4.5.tar.bz2
-+# Locally calculated
-+sha256 91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-diff --git a/package/conntrack-tools/conntrack-tools.mk b/package/conntrack-tools/conntrack-tools.mk
-index 2f4ea5f2ae..77fcb52956 100644
---- a/package/conntrack-tools/conntrack-tools.mk
-+++ b/package/conntrack-tools/conntrack-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/enlightenment/enlightenment.mk b/package/enlightenment/enlightenment.mk
+index 480e9e9da8..5bc1c5d6de 100644
+--- a/package/enlightenment/enlightenment.mk
++++ b/package/enlightenment/enlightenment.mk
+@@ -13,14 +13,10 @@ ENLIGHTENMENT_LICENSE_FILES = COPYING
+ ENLIGHTENMENT_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	host-efl \
+-	host-meson \
+ 	efl \
+ 	xcb-util-keysyms
  
--CONNTRACK_TOOLS_VERSION = 1.4.4
-+CONNTRACK_TOOLS_VERSION = 1.4.5
- CONNTRACK_TOOLS_SOURCE = conntrack-tools-$(CONNTRACK_TOOLS_VERSION).tar.bz2
- CONNTRACK_TOOLS_SITE = http://www.netfilter.org/projects/conntrack-tools/files
- CONNTRACK_TOOLS_DEPENDENCIES = host-pkgconf \
-@@ -15,15 +15,6 @@ CONNTRACK_TOOLS_LICENSE_FILES = COPYING
+-ENLIGHTENMENT_MESON_OPTS += \
+-	--prefix=/usr \
+-	--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+-	--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
++ENLIGHTENMENT_CONF_OPTS = \
+ 	-Dedje-cc=$(HOST_DIR)/bin/edje_cc \
+ 	-Deet=$(HOST_DIR)/bin/eet \
+ 	-Deldbus-codegen=$(HOST_DIR)/bin/eldbus-codegen \
+@@ -30,38 +26,24 @@ ENLIGHTENMENT_MESON_OPTS += \
+ ENLIGHTENMENT_INSTALL_STAGING = YES
  
- CONNTRACK_TOOLS_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+-ENLIGHTENMENT_MESON_OPTS += -Dsystemd=true
++ENLIGHTENMENT_CONF_OPTS += -Dsystemd=true
+ ENLIGHTENMENT_DEPENDENCIES += systemd
+ else
+-ENLIGHTENMENT_MESON_OPTS += -Dsystemd=false
++ENLIGHTENMENT_CONF_OPTS += -Dsystemd=false
+ endif
  
--# Some of conntrack-tools source files include both linux/in.h (via
--# linux/netfilter.h for kernel headers >= 4.2) and netinet/in.h, which
--# causes some symbol conflicts when musl is used. Defining __GLIBC__
--# works around that issue since the kernel headers are prepared to
--# avoid redefinition of certain symbols when they see __GLIBC__.
--ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--CONNTRACK_TOOLS_CFLAGS += -D__GLIBC__
--endif
+ # alsa backend needs mixer support
+ ifeq ($(BR2_PACKAGE_ALSA_LIB)$(BR2_PACKAGE_ALSA_LIB_MIXER),yy)
+-ENLIGHTENMENT_MESON_OPTS += -Dmixer=true
++ENLIGHTENMENT_CONF_OPTS += -Dmixer=true
+ ENLIGHTENMENT_DEPENDENCIES += alsa-lib
+ else
+-ENLIGHTENMENT_MESON_OPTS += -Dmixer=false
++ENLIGHTENMENT_CONF_OPTS += -Dmixer=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_XKEYBOARD_CONFIG),y)
+ ENLIGHTENMENT_DEPENDENCIES += xkeyboard-config
+ endif
+ 
+-define ENLIGHTENMENT_CONFIGURE_CMDS
+-	rm -rf $(@D)/build
+-	mkdir -p $(@D)/build
+-	$(TARGET_MAKE_ENV) meson $(ENLIGHTENMENT_MESON_OPTS) $(@D) $(@D)/build
+-endef
 -
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- CONNTRACK_TOOLS_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
- CONNTRACK_TOOLS_DEPENDENCIES += libtirpc host-pkgconf
+-define ENLIGHTENMENT_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) ninja -C $(@D)/build
+-endef
+-
+-define ENLIGHTENMENT_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja -C $(@D)/build install
+-endef
+-
+ define ENLIGHTENMENT_REMOVE_DOCUMENTATION
+ 	rm -rf $(TARGET_DIR)/usr/share/enlightenment/doc/
+ 	rm -f $(TARGET_DIR)/usr/share/enlightenment/COPYING
+@@ -69,4 +51,4 @@ define ENLIGHTENMENT_REMOVE_DOCUMENTATION
+ endef
+ ENLIGHTENMENT_POST_INSTALL_TARGET_HOOKS += ENLIGHTENMENT_REMOVE_DOCUMENTATION
+ 
+-$(eval $(generic-package))
++$(eval $(meson-package))
