@@ -1,94 +1,114 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 30 May 2018 23:07:38 +0200
-Subject: [Buildroot] [PATCH v2] toolchain: GCC bug 85180
-In-Reply-To: <CANQCQpbxzzgaJQ-TVMK=vT=gsDV2NS3Ta-bVXLK1_M2-bfz2=A@mail.gmail.com>
-References: <1527521710-3889-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20180528212932.297eadf7@windsurf.home>
- <CANQCQpZCxiHy34M-V3Suf+N+C=EgAYPTwSYd7RBRVCc11hZssg@mail.gmail.com>
- <CANQCQpZTLyWT29JqqAYz0RsGwA-mWBNFZ_0qapkEqiG3GisEww@mail.gmail.com>
- <20180528224102.423ce611@windsurf.home>
- <CANQCQpbxzzgaJQ-TVMK=vT=gsDV2NS3Ta-bVXLK1_M2-bfz2=A@mail.gmail.com>
-Message-ID: <9b0b794c-16e0-460c-32be-38ee2ce79949@mind.be>
+From: Joel Carlson <joelsoncarl@gmail.com>
+Date: Wed, 30 May 2018 15:14:08 -0600
+Subject: [Buildroot] [PATCH v3 1/1] flatcc: new package
+Message-ID: <1527714848-31074-1-git-send-email-joel.carlson@cosmicaes.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This adds flatcc as a new package, pulling v0.5.1 from github. flatcc
+has both a host tool (the compiler), and libraries for the target.
 
+Signed-off-by: Joel Carlson <joel.carlson@cosmicaes.com>
 
-On 28-05-18 23:41, Matthew Weber wrote:
-> Thomas,
-> 
-> On Mon, May 28, 2018 at 3:41 PM, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->> Hello,
->>
->> On Mon, 28 May 2018 15:05:44 -0500, Matthew Weber wrote:
->>
->>>> I tried O0/1/2 without luck.  I just checked though that they were
->>>> actually being used in the verbose boost output and turns out boost is
->>>> forcing a O3 as the last O value in the flags.  So there's a bug....
->>>> I'll see if I can reasonably fix that  and retest.
->>>>
->>>
->>> Looks like there is a bjam property which can be set.  Is this
->>> something we want tweak?  I did a quick test after applying the patch
->>> below and the build was successful.
->>>
->>> --- a/package/boost/boost.mk
->>> +++ b/package/boost/boost.mk
->>> @@ -90,6 +90,7 @@ endif
->>>
->>>  BOOST_OPTS += toolset=gcc \
->>>              threading=multi \
->>> +             optimization=off \
->>>              abi=$(BOOST_ABI) \
->>>              variant=$(if $(BR2_ENABLE_DEBUG),debug,release)
->>>
->>>
->>> I updated per the patch below (O3) and the build failed.  So it does
->>> look like disabling optimization works around the problem.  What's
->>> your thought going forward?  I can retest the other two packages to
->>> see if no optimization fixes them too?
->>
->> Thanks for doing all those tests! Yes, it would be nice to retest if
->> the other packages can be built without optimizations. If that's the
->> case, we can simply disable optimizations for Microblaze for those few
->> packages. It's less annoying that having those additional dependencies
->> that we have to propagate to reverse dependencies.
->>
-> 
-> Looks like all 3 can build when optimization is set to 0 (off).
-> However none of them use the flag we provide and hardcode to either
-> O2/3 (I had to manually rework the packages to set the O0 for
-> testing).  Assuming this GCC bug patch is probably the way to go at
-> this point?
-> 
-> Is this something that would be resolved when/if we rework the gcc
-> wrapper and how we manage flags?
+---
+First time submitting a patch, so please bear with me.
+This is a follow-up to a patch from 2016 that did not get in.
+My understanding is since I'm not the original submitter, I can't mark
+the old patch as superseded.
 
- I think that for optimisation (and debug, and ssp, ...) flags it should be
-possible for packages to disable them. Some packages may not work at some
-optimisation levels, or they need debug info for some reason, or ... I think
-that if we put the optimisation flags inside the wrapper, it will be very hard
-for packages to override them. In particular, I think there are some
-combinations (e.g. '-Os -O2') that have a different effect than having an
-optimisation option by itself. So putting the optimisation options inside the
-wrapper may not be the right thing to do.
+v2: https://patchwork.ozlabs.org/patch/617306/
+Changes v2 -> v3:
+  - Updated to v0.5.1 of flatcc
+  - Removed patches and shared/static magic, as upstream seems to work
 
- Also, if a package explicitly passes some optimisation flag, like boost is
-doing here, whatever we do in the wrapper is not going to have any effect
-(because the externally passed options come after the wrapper options). So
-putting it in the wrapper is definitely not a silver bullet.
+Signed-off-by: Joel Carlson <joel.carlson@cosmicaes.com>
+---
+ package/Config.in          |  1 +
+ package/flatcc/Config.in   |  8 ++++++++
+ package/flatcc/flatcc.hash |  2 ++
+ package/flatcc/flatcc.mk   | 35 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+)
+ create mode 100644 package/flatcc/Config.in
+ create mode 100644 package/flatcc/flatcc.hash
+ create mode 100644 package/flatcc/flatcc.mk
 
- Regards,
- Arnout
-
+diff --git a/package/Config.in b/package/Config.in
+index ecee493..4de10b1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1501,6 +1501,7 @@ menu "Other"
+ 	source "package/fftw/Config.in"
+ 	source "package/flann/Config.in"
+ 	source "package/flatbuffers/Config.in"
++	source "package/flatcc/Config.in"
+ 	source "package/gconf/Config.in"
+ 	source "package/gflags/Config.in"
+ 	source "package/glibmm/Config.in"
+diff --git a/package/flatcc/Config.in b/package/flatcc/Config.in
+new file mode 100644
+index 0000000..6273f2b
+--- /dev/null
++++ b/package/flatcc/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_FLATCC
++	bool "flatcc"
++	help
++	  flatcc is C language implementation of Google Flatbuffers. It
++	  consists of both a library for the target as well as a
++	  flatbuffer compiler tool for the host.
++
++	  https://github.com/dvidelabs/flatcc
+diff --git a/package/flatcc/flatcc.hash b/package/flatcc/flatcc.hash
+new file mode 100644
+index 0000000..357d8b7
+--- /dev/null
++++ b/package/flatcc/flatcc.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256	8c4560ca32e3c555716d9363bed469e2c60e0f443ec32bc08e7abfe681e25ca9  flatcc-v0.5.1.tar.gz
+diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
+new file mode 100644
+index 0000000..60745b4
+--- /dev/null
++++ b/package/flatcc/flatcc.mk
+@@ -0,0 +1,35 @@
++################################################################################
++#
++# FLATCC
++#
++################################################################################
++
++FLATCC_VERSION = v0.5.1
++FLATCC_SITE =$(call github,dvidelabs,flatcc,$(FLATCC_VERSION))
++FLATCC_LICENSE = Apache-2.0
++FLATCC_LICENSE_FILES = LICENSE
++FLATCC_INSTALL_STAGING = YES
++FLATCC_DEPENDENCIES = host-flatcc
++
++# Disable build of tests and samples
++FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
++HOST_FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
++
++# Enable install targets
++FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
++HOST_FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
++
++define FLATCC_HOST_REMOVE_LIBS_AND_HEADERS
++	rm $(HOST_DIR)/lib/libflatcc*
++	rm -fr $(HOST_DIR)/include/flatcc/
++endef
++
++define FLATCC_TARGET_REMOVE_FLATCC_COMPILER
++	rm $(TARGET_DIR)/usr/bin/flatcc
++endef
++
++HOST_FLATCC_POST_INSTALL_HOOKS += FLATCC_HOST_REMOVE_LIBS_AND_HEADERS
++FLATCC_POST_INSTALL_TARGET_HOOKS += FLATCC_TARGET_REMOVE_FLATCC_COMPILER
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
