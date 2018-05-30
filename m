@@ -1,52 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 30 May 2018 18:15:03 +0200
-Subject: [Buildroot] Buildroot 2018.05-rc3 released
-In-Reply-To: <20180530180026.77e1dfac@windsurf.home> (Thomas Petazzoni's
- message of "Wed, 30 May 2018 18:00:26 +0200")
-References: <87efhvufjm.fsf@dell.be.48ers.dk>
- <1527599917.2053.2.camel@rovoreed.com>
- <87fu2a7bkq.fsf@dell.be.48ers.dk>
- <1527615682.2053.4.camel@rovoreed.com>
- <87po1e5mev.fsf@dell.be.48ers.dk>
- <1527674917.2072.2.camel@rovoreed.com>
- <87tvqp2lqv.fsf@dell.be.48ers.dk>
- <20180530180026.77e1dfac@windsurf.home>
-Message-ID: <87efht2k8o.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 30 May 2018 18:24:20 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/stm32f429: force usage of
+ BINUTILS 2.28.x
+In-Reply-To: <5d5e71dc-66ad-3a09-9e1e-863df0de89f2@gezedo.com>
+References: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
+ <20180529233219.0eca0f54@windsurf.home>
+ <5d5e71dc-66ad-3a09-9e1e-863df0de89f2@gezedo.com>
+Message-ID: <20180530162420.GC2592@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Laurent, All,
 
-Hi,
+On 2018-05-30 14:12 +0200, Laurent GONZALEZ spake thusly:
+> On 29/05/2018 23:32, Thomas Petazzoni wrote:
+> > On Tue, 29 May 2018 12:09:27 +0000, Christophe PRIOUZEAU wrote:
+> > So in fact the proposal that was made back in April at
+> > http://lists.busybox.net/pipermail/buildroot/2018-April/219223.html was
+> > in the end better.
+> Similarly, one can argue that this patch impacts every software, whereas
+> only linux kernel is not compatible with newer binutils.
 
- >> Ok, interesting. Enabling python3 for the target means that our host
- >> python becomes python3,
+That's not true, as other packages have been reportedly broken as well,
+namely libavcodec and openssl (at least):
+    http://lists.infradead.org/pipermail/linux-arm-kernel/2017-November/543467.html
 
- > Yes that is expected.
+So, it's not just about the kernel; virtually any package that has some
+ARM/Thumb assembly is impacted.
 
-Yes, but that could conceptually explain why Mike sees a difference in
-behaviour.
+But once those packages are fixed upstream, well eventually get an
+updated version in Buildroot, which fixes that issue, and in the end,
+only the kernel wil end up being impacted (because there are so many
+older kernels out there in the wild...).
 
- >> > The Linux distribution/version I am building on is Fedora Red Hat 25
- >> > ...  
- >> 
- >> > [mike at modron ~]$ uname -a
- >> > Linux modron 4.9.14-200.fc25.x86_64 #1 SMP Mon Mar 13 19:26:40 UTC 2017
- >> > x86_64 x86_64 x86_64 GNU/Linux  
- >> 
- >> Ok, I'm on Debian. Thomas, you are using Fedora now, right? Can you give
- >> ca-certificates a try?
+Regards,
+Yann E. MORIN.
 
- > It builds fine here: http://code.bulix.org/092xcg-342074?raw
-
-Thanks, just like on my machine and the autobuilders.
-
-Mike, there must be something odd going on with your machine. I'm afraid
-you will have to debug it further yourself. Maybe try running
-certdata2pem.py manually?
+> Using this kernel patch may help to only fix what need to be fixed:
+> 
+> http://lists.infradead.org/pipermail/linux-arm-kernel/2018-March/565390.html
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
