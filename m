@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 22:26:57 +0200
-Subject: [Buildroot] [PATCH v3 for-next 1/5] arch: add
- BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-In-Reply-To: <20180529215257.17686-1-romain.naour@gmail.com>
-References: <20180529215257.17686-1-romain.naour@gmail.com>
-Message-ID: <20180530222657.29aba33b@windsurf.home>
+Date: Wed, 30 May 2018 22:27:51 +0200
+Subject: [Buildroot] [RFC PATCH v2 0/8] Add pkg-meson infrastructure
+In-Reply-To: <20180515195159.6694-1-eric.le.bihan.dev@free.fr>
+References: <20180515195159.6694-1-eric.le.bihan.dev@free.fr>
+Message-ID: <20180530222751.07b6e016@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 29 May 2018 23:52:53 +0200, Romain Naour wrote:
-> This new symbol will be used by architectures introduced with gcc 8 and
-> by external toolchains based on gcc 8.
-> 
-> [1] https://gcc.gnu.org/gcc-8/changes.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  arch/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+On Tue, 15 May 2018 21:51:51 +0200, Eric Le Bihan wrote:
 
-Thanks, I've applied this series to the next branch!
+> Eric Le Bihan (8):
+>   pkg-meson: new infrastructure
+>   docs/manual: document pkg-meson infra
+>   meson: prevent RPATH stripping
+>   libmpdclient: convert to pkg-meson infra
+>   systemd: convert to pkg-meson infra
+>   ncmpc: convert to pkg-meson infra
+>   mpd-mpc: convert to pkg-meson infra
+>   enlightenment: convert to pkg-meson infra
+
+Thanks, I've applied this patch series to the next branch. I've made a
+few changes on PATCH 1/8, I'll comment on this patch.
+
+Thanks a lot for this work!
 
 Thomas
 -- 
