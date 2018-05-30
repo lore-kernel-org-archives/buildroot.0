@@ -1,55 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 30 May 2018 22:20:27 +0200
-Subject: [Buildroot] [git commit branch/next] mpd-mpc: convert to pkg-meson
- infra
-Message-ID: <20180530202336.1279C8351F@busybox.osuosl.org>
+Date: Wed, 30 May 2018 22:26:57 +0200
+Subject: [Buildroot] [PATCH v3 for-next 1/5] arch: add
+ BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+In-Reply-To: <20180529215257.17686-1-romain.naour@gmail.com>
+References: <20180529215257.17686-1-romain.naour@gmail.com>
+Message-ID: <20180530222657.29aba33b@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=166949e5dd8c70826613fb366a860caf60f35778
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mpd-mpc/mpd-mpc.mk | 26 ++------------------------
- 1 file changed, 2 insertions(+), 24 deletions(-)
+On Tue, 29 May 2018 23:52:53 +0200, Romain Naour wrote:
+> This new symbol will be used by architectures introduced with gcc 8 and
+> by external toolchains based on gcc 8.
+> 
+> [1] https://gcc.gnu.org/gcc-8/changes.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  arch/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
-index 942530a561..0666339ff9 100644
---- a/package/mpd-mpc/mpd-mpc.mk
-+++ b/package/mpd-mpc/mpd-mpc.mk
-@@ -10,28 +10,6 @@ MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
- MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
- MPD_MPC_LICENSE = GPL-2.0+
- MPD_MPC_LICENSE_FILES = COPYING
--MPD_MPC_DEPENDENCIES = host-meson host-pkgconf libmpdclient
-+MPD_MPC_DEPENDENCIES = host-pkgconf libmpdclient
- 
--MPD_MPC_CONF_OPTS += \
--	--prefix=/usr \
--	--buildtype $(if $(BR2_ENABLE_DEBUG),debug,release) \
--	--cross-file $(HOST_DIR)/etc/meson/cross-compilation.conf
--
--MPD_MPC_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
--
--define MPD_MPC_CONFIGURE_CMDS
--	rm -rf $(@D)/build
--	mkdir -p $(@D)/build
--	$(TARGET_MAKE_ENV) meson $(MPD_MPC_CONF_OPTS) $(@D) $(@D)/build
--endef
--
--define MPD_MPC_BUILD_CMDS
--	$(TARGET_MAKE_ENV) ninja $(MPD_MPC_NINJA_OPTS) -C $(@D)/build
--endef
--
--define MPD_MPC_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) ninja $(MPD_MPC_NINJA_OPTS) \
--		-C $(@D)/build install
--endef
--
--$(eval $(generic-package))
-+$(eval $(meson-package))
+Thanks, I've applied this series to the next branch!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
