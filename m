@@ -1,56 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 May 2018 18:24:20 +0200
-Subject: [Buildroot] [PATCH 1/2] configs/stm32f429: force usage of
- BINUTILS 2.28.x
-In-Reply-To: <5d5e71dc-66ad-3a09-9e1e-863df0de89f2@gezedo.com>
-References: <1527595765-23055-1-git-send-email-christophe.priouzeau@st.com>
- <20180529233219.0eca0f54@windsurf.home>
- <5d5e71dc-66ad-3a09-9e1e-863df0de89f2@gezedo.com>
-Message-ID: <20180530162420.GC2592@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 30 May 2018 18:45:28 +0200
+Subject: [Buildroot] [PATCH] host-mkpasswd: fix crash on Fedora 28 build
+ host
+In-Reply-To: <20180530153119.GA2592@scaer>
+References: <20180502090508.12893-1-chemobejk@gmail.com>
+ <20180503215631.6f62e406@windsurf> <20180503200415.GC2453@scaer>
+ <CAOJ2eMeJQhQUrZoqXnXy_NwwUo6O5c6nzdmJttC+T4wE_NSE=Q@mail.gmail.com>
+ <CAF7Xa=2FFzbnC8O7JRWCQrQN3ZA3ffNR=3v8c=nXFe+4Uzmc+w@mail.gmail.com>
+ <1fdbacbd-e80f-8735-89c8-2ca92224ee9a@mind.be> <20180509202254.GA9837@scaer>
+ <871sdu9akm.fsf@dell.be.48ers.dk> <20180530153119.GA2592@scaer>
+Message-ID: <c55c7a49-77e9-f174-5c90-c8baa950d7da@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Laurent, All,
 
-On 2018-05-30 14:12 +0200, Laurent GONZALEZ spake thusly:
-> On 29/05/2018 23:32, Thomas Petazzoni wrote:
-> > On Tue, 29 May 2018 12:09:27 +0000, Christophe PRIOUZEAU wrote:
-> > So in fact the proposal that was made back in April at
-> > http://lists.busybox.net/pipermail/buildroot/2018-April/219223.html was
-> > in the end better.
-> Similarly, one can argue that this patch impacts every software, whereas
-> only linux kernel is not compatible with newer binutils.
 
-That's not true, as other packages have been reportedly broken as well,
-namely libavcodec and openssl (at least):
-    http://lists.infradead.org/pipermail/linux-arm-kernel/2017-November/543467.html
-
-So, it's not just about the kernel; virtually any package that has some
-ARM/Thumb assembly is impacted.
-
-But once those packages are fixed upstream, well eventually get an
-updated version in Buildroot, which fixes that issue, and in the end,
-only the kernel wil end up being impacted (because there are so many
-older kernels out there in the wild...).
-
-Regards,
-Yann E. MORIN.
-
-> Using this kernel patch may help to only fix what need to be fixed:
+On 30-05-18 17:31, Yann E. MORIN wrote:
+> Peter, All,
 > 
-> http://lists.infradead.org/pipermail/linux-arm-kernel/2018-March/565390.html
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> On 2018-05-29 09:37 +0200, Peter Korsgaard spake thusly:
+>>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>  >> Would you like to prepare a patch introducing the python-based approach? It
+>>  >> should be two patches: the first one introducing the python script in mkusers,
+>>  >> the second one removing the mkpasswd package.
+>>
+>>  > Sorry, I am not too convinced that writing our own tool is good...
+
+ If I understand correctly, you don't want to write our own tool because "don't
+roll your own security"...
+
+>>
+>> Me neither. Another alternative is to build host-busybox and use the
+>> mkpasswd applet with the built in crypt routines (ENABLE_USE_BB_CRYPT).
+> 
+> Yeah, I like that idea more. Plus, we can get known-reproducible
+> behaviour for other applets, should we need to add that.
+
+ ... and you'd rather replace it with the busybox implementation that uses a
+homegrown hash of getpid() + monotonic_us() as the salt?
+
+ The whois stuff at least uses /dev/urandom to generate the salt...
+
+ Or maybe that was your point, eliminate randomness to get known-reproducible
+behaviour?
+
+ Regards,
+ Arnout
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
