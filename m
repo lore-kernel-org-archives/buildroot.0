@@ -1,59 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 30 May 2018 17:36:18 +0200
-Subject: [Buildroot] [PATCH v3 5/7] support/dockerfile: install flake8
-In-Reply-To: <5b0ccc753f59_1c272ab87ea319a052883@ultri5.mail>
-References: <20180528194429.GF2965@scaer>
- <5b0ccc753f59_1c272ab87ea319a052883@ultri5.mail>
-Message-ID: <20180530153618.GB2592@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 30 May 2018 17:42:32 +0200
+Subject: [Buildroot] Buildroot 2018.05-rc3 released
+In-Reply-To: <1527674917.2072.2.camel@rovoreed.com> (Mike Davies's message of
+ "Wed, 30 May 2018 11:08:37 +0100")
+References: <87efhvufjm.fsf@dell.be.48ers.dk>
+ <1527599917.2053.2.camel@rovoreed.com>
+ <87fu2a7bkq.fsf@dell.be.48ers.dk>
+ <1527615682.2053.4.camel@rovoreed.com>
+ <87po1e5mev.fsf@dell.be.48ers.dk>
+ <1527674917.2072.2.camel@rovoreed.com>
+Message-ID: <87tvqp2lqv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+>>>>> "Mike" == Mike Davies <busybox_mail@rovoreed.com> writes:
 
-On 2018-05-29 00:43 -0300, Ricardo Martincoski spake thusly:
-> On Mon, May 28, 2018 at 04:44 PM, Yann E. MORIN wrote:
-> > Why do we even use pip to install those? Can't we just rely on the
-> > verions actually packaged in the distro instead? I.e.
-[--SNIP--]
-> >> Are you preparing a patch?
-> > When we agree on the directions, yes I can.
-> 
-> Reproducible images with less code and less maintenance effort in exchange of
-> using a not-so-bleeding-edge version. Makes sense to me.
+Please keep the discussion on the buildroot list, thanks.
 
-OK, so I'll send a patch to implement this soilution.
+ >> ?> If I select Python as a package to install on my target, then it
+ >> builds
+ >> ?> OK - but I don't want Python on my target.
+ >> 
+ >> ?> For now, I guess a workaround is to select Python, and delete it
+ >> in a
+ >> ?> pre-image script.
+ >> 
+ >> That is odd. The presence or not of python for the target shouldn't
+ >> have
+ >> any effect on host-python. You do not mean python3 for the target, do
+ >> you?
 
-Thanks! :-)
+ > Yes, sorry, I mean Python3 for the target. I also have ".pyc compiled
+ > sources only", core python3 modules??--->?[*] unicodedata module, ?core
+ > python3 modules??--->?(none)?
 
-> I am only in doubt how future-proof is this solution, if some day we will
-> *need* a new version, i.e. to something related to Python3 in 2020 (it's only a
-> wild guess!, I don't know any current limitation, I don't know the internals of
-> flake8).
-> But then probably debian will have a newer version of flake8, so we can update
-> the stretch version. And we can always go back to using pip if really needed.
+Ok, interesting. Enabling python3 for the target means that our host
+python becomes python3, so the certdata2pem.py step in ca-certificates
+is executed with host-python3.
 
-Yes, then we can update to a newer version of the distro.
 
-There was also a wild suggestion that we provide more Docker images,
-for each of the mainstream distros.
+>> What Linux distribution/version are you using?
 
-Because sometimes, build issues only occur on some distros and not
-others, e.g. arch-linux, which uses musl, sometimes break the build of
-some host packages, and it is difficult to diagnose and fix...
+ > The Linux distribution/version I am building on is Fedora Red Hat 25
+ > ...
 
-I was also looking into providing additional Dockerfiles for additional
-distros. I'll get this in the same series. Soon. Sooooon.... ;-)
+ > [mike at modron ~]$ uname -a
+ > Linux modron 4.9.14-200.fc25.x86_64 #1 SMP Mon Mar 13 19:26:40 UTC 2017
+ > x86_64 x86_64 x86_64 GNU/Linux
 
-Regards,
-Yann E. MORIN.
+Ok, I'm on Debian. Thomas, you are using Fedora now, right? Can you give
+ca-certificates a try?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
