@@ -1,27 +1,49 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 31 May 2018 08:59:30 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-05-30
-In-Reply-To: <20180531060010.26380206F6@mail.bootlin.com>
-References: <20180531060010.26380206F6@mail.bootlin.com>
-Message-ID: <CANQCQpZTUFsn6NjBdyhr-72JPDEw2VLQFv6mPpqNQexJe0F7Tw@mail.gmail.com>
+From: Mike Davies <busybox_mail@rovoreed.com>
+Date: Thu, 31 May 2018 15:52:49 +0100
+Subject: [Buildroot] Buildroot 2018.05-rc3 released
+In-Reply-To: <87efht2k8o.fsf@dell.be.48ers.dk>
+References: <87efhvufjm.fsf@dell.be.48ers.dk>
+ <1527599917.2053.2.camel@rovoreed.com> <87fu2a7bkq.fsf@dell.be.48ers.dk>
+ <1527615682.2053.4.camel@rovoreed.com> <87po1e5mev.fsf@dell.be.48ers.dk>
+ <1527674917.2072.2.camel@rovoreed.com> <87tvqp2lqv.fsf@dell.be.48ers.dk>
+ <20180530180026.77e1dfac@windsurf.home> <87efht2k8o.fsf@dell.be.48ers.dk>
+Message-ID: <1527778369.2065.4.camel@rovoreed.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, May 31, 2018 at 1:00 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Build statistics for 2018-05-30
+On Wed, 2018-05-30 at 18:15 +0200, Peter Korsgaard wrote:
 
-> microblazeel |                          boost | TIM | http://autobuild.buildroot.net/results/a3aba71758feedac643fb00ea7ba6e23e1170b24 |
+> 
+> Mike, there must be something odd going on with your machine. I'm
+> afraid
+> you will have to debug it further yourself. Maybe try running
+> certdata2pem.py manually?
 
 
-Looks like I missed a case where python was enabled and boost is built
-for the Microblaze GCC bug.  I'll take a look.
+OK, well, it seems to be that when host_python is being configured, the
+configure script has not got the option...
 
-Matt
+--enable-unicode=ucs4
+
+and it's not got that because python.mk uses a symbol
+BR2_PACKAGE_PYTHON_UCS4 to decide whether to add that option to
+HOST_PYTHON_CONF_OPTS
+
+I do not have?BR2_PACKAGE_PYTHON_UCS4 in my .config file.
+
+[mike at modron buildroot-2018.05-rc3]$ cat .config | grep PYTHON
+# BR2_PACKAGE_MICROPYTHON is not set
+# BR2_PACKAGE_HOST_PYTHON_CYTHON is not set
+# BR2_PACKAGE_HOST_PYTHON_LXML is not set
+# BR2_PACKAGE_HOST_PYTHON_SIX is not set
+# BR2_PACKAGE_HOST_PYTHON_XLRD is not set
+# BR2_PACKAGE_PYTHON_PYXML is not set
+[mike at modron buildroot-2018.05-rc3]$?
+
+I do not know the implications of simply moving --enable-unicode=ucs4
+to the list of HOST_PYTHON_CONF_OPTS at the start of python.mk.
+
+Mike
