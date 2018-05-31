@@ -1,81 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 31 May 2018 14:42:13 +0200
-Subject: [Buildroot] [PATCH v2 4/4] linux: config.in: add comment for
- Arm Cortex-M
-In-Reply-To: <38f70f97-178d-b5a7-4eed-25735bf5df06@st.com>
-References: <1527761825-26682-4-git-send-email-christophe.priouzeau@st.com>
- <1527768578-1351-1-git-send-email-christophe.priouzeau@st.com>
- <1527768578-1351-4-git-send-email-christophe.priouzeau@st.com>
- <20180531142028.60408581@windsurf>
- <38f70f97-178d-b5a7-4eed-25735bf5df06@st.com>
-Message-ID: <20180531144213.7bc0116a@windsurf>
+From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
+Date: Thu, 31 May 2018 13:21:32 +0000
+Subject: [Buildroot] [PATCH v3 1/4] Revert "configs/stm32f429: force usage
+ of binutils 2.28.x"
+Message-ID: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This reverts commit cbe43fd417d77f846f1ca47cdacd51a73be1aaec.
 
-On Thu, 31 May 2018 12:36:06 +0000, Christophe PRIOUZEAU wrote:
-> On 05/31/2018 02:20 PM, Thomas Petazzoni wrote:
-> > Hello Christophe,
-> >
-> > Thanks for coming up with a patch series for this issue.
-> >
-> > On Thu, 31 May 2018 12:09:42 +0000, Christophe PRIOUZEAU wrote:  
-> >> When binutils > 2.28 are selected on Arm Cortex-M cpu,
-> >> linux kernel does not boot due to a new implementation
-> >> of 'adr pseudo instruction' on binutils.
-> >>
-> >> Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
-> >>
-> >> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
-> >> ---
-> >> Changes v1 -> v2
-> >>   - correct depends on for comment
-> >>
-> >>   linux/Config.in | 4 ++++
-> >>   1 file changed, 4 insertions(+)
-> >>
-> >> diff --git a/linux/Config.in b/linux/Config.in
-> >> index 73a3299..04d4548 100644
-> >> --- a/linux/Config.in
-> >> +++ b/linux/Config.in
-> >> @@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
-> >>   
-> >>   if BR2_LINUX_KERNEL
-> >>   
-> >> +comment "Linux kernel will not boot with binutils >= 2.29"
-> >> +	depends on !BR2_ARMV7M  
-> > So this comment will never appear on ARMv7M, which is exactly the
-> > opposite of what we want. Did you test this ? Did you verify that the
-> > comment actually appears when expected ?  
-> Ok, I have made a bad copy/paste from the proposition of Arnoult and is
-> why the depends of !BR2_ARMV7M are always true (it's not defined), the 
-> correct
-> tag are "BR2_ARM_CPU_ARMV7M".
-> Sorry, I started to send a new series.
+Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+---
+ configs/stm32f429_disco_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-This was indeed one problem. But the other problem is that the
-condition is inverted, it should be:
-
-	depends on <we are on ARMv7M>
-
-and not:
-
-	depends on !<we are on ARMv7M>
-
-Indeed, we want the comment to be visible when we are on ARMv7M, and
-invisible in all other cases.
-
-Please test your change by running menuconfig and making sure that the
-comment is visible vs. invisible as expected.
-
-Thanks!
-
-Thomas
+diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
+index fc167d0..5237e9a 100644
+--- a/configs/stm32f429_disco_defconfig
++++ b/configs/stm32f429_disco_defconfig
+@@ -2,7 +2,6 @@ BR2_arm=y
+ BR2_cortex_m4=y
+ BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+-BR2_BINUTILS_VERSION_2_28_X=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
