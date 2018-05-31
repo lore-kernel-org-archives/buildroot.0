@@ -1,42 +1,41 @@
 From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
 Date: Thu, 31 May 2018 10:17:09 +0000
-Subject: [Buildroot] [PATCH 3/4] package/binutils: Cortex-M targets require
- version <2.29
+Subject: [Buildroot] [PATCH 4/4] linux: config.in: add comment for Arm
+ Cortex-M
 In-Reply-To: <1527761825-26682-1-git-send-email-christophe.priouzeau@st.com>
 References: <1527761825-26682-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <1527761825-26682-3-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <1527761825-26682-4-git-send-email-christophe.priouzeau@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Laurent GONZALEZ <br22@gezedo.com>
+When binutils > 2.28 are selected on Arm Cortex-M cpu,
+linux kernel does not boot due to a new implementation
+of 'adr pseudo instruction' on binutils.
 
-binutils 2.29 changed the implementation of adr pseudo instruction
-it breaks linux kernel and impacts Cortex-M targets (eg. stm32)
+Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
 
-Signed-off-by: Laurent GONZALEZ <br22@gezedo.com>
 Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 ---
- package/binutils/Config.in.host | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ linux/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 03b2281..9a4caad 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -2,8 +2,9 @@ comment "Binutils Options"
+diff --git a/linux/Config.in b/linux/Config.in
+index 73a3299..fbd886c 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
  
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
--	default BR2_BINUTILS_VERSION_ARC if BR2_arc
-+	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
-+	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc && !BR2_ARM_CPU_ARMV7M
-+	default BR2_BINUTILS_VERSION_ARC if BR2_arc && !BR2_ARM_CPU_ARMV7M
- 	help
- 	  Select the version of binutils you wish to use.
+ if BR2_LINUX_KERNEL
  
++comment "Linux kernel will not boot with binutils >= 2.29"
++	depends on !BR2_ARMV7M
++	depends on BR2_BINUTILS_VERSION_2_28_X
++
+ # Packages that need to have a kernel with support for loadable modules,
+ # but do not use the kernel-modules infrastructure, should select that
+ # option.
 -- 
 2.7.4
