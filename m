@@ -1,43 +1,35 @@
 From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
 Date: Thu, 31 May 2018 12:09:41 +0000
-Subject: [Buildroot] [PATCH v2 3/4] package/binutils: Cortex-M targets
- require version <2.29
+Subject: [Buildroot] [PATCH v2 2/4] Revert "configs/stm32f469: force usage
+ of binutils 2.28.x"
 In-Reply-To: <1527768578-1351-1-git-send-email-christophe.priouzeau@st.com>
 References: <1527761825-26682-4-git-send-email-christophe.priouzeau@st.com>
  <1527768578-1351-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <1527768578-1351-3-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <1527768578-1351-2-git-send-email-christophe.priouzeau@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Laurent GONZALEZ <br22@gezedo.com>
+This reverts commit 12049cc8b8972a9d0f1e27f1382cc5752d45312f.
 
-binutils 2.29 changed the implementation of adr pseudo instruction
-it breaks linux kernel and impacts Cortex-M targets (eg. stm32)
-
-Signed-off-by: Laurent GONZALEZ <br22@gezedo.com>
 Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 ---
- package/binutils/Config.in.host | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ configs/stm32f469_disco_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 03b2281..9a4caad 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -2,8 +2,9 @@ comment "Binutils Options"
- 
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
--	default BR2_BINUTILS_VERSION_ARC if BR2_arc
-+	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
-+	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc && !BR2_ARM_CPU_ARMV7M
-+	default BR2_BINUTILS_VERSION_ARC if BR2_arc && !BR2_ARM_CPU_ARMV7M
- 	help
- 	  Select the version of binutils you wish to use.
- 
+diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
+index e5cacaf..8b77d8c 100644
+--- a/configs/stm32f469_disco_defconfig
++++ b/configs/stm32f469_disco_defconfig
+@@ -2,7 +2,6 @@ BR2_arm=y
+ BR2_cortex_m4=y
+ BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+-BR2_BINUTILS_VERSION_2_28_X=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -- 
 2.7.4
