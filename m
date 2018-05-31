@@ -1,35 +1,94 @@
-From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Date: Thu, 31 May 2018 12:09:41 +0000
-Subject: [Buildroot] [PATCH v2 2/4] Revert "configs/stm32f469: force usage
- of binutils 2.28.x"
-In-Reply-To: <1527768578-1351-1-git-send-email-christophe.priouzeau@st.com>
-References: <1527761825-26682-4-git-send-email-christophe.priouzeau@st.com>
- <1527768578-1351-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <1527768578-1351-2-git-send-email-christophe.priouzeau@st.com>
+From: Scott Fan <fancp2007@gmail.com>
+Date: Thu, 31 May 2018 20:18:11 +0800
+Subject: [Buildroot] [git commit] linux: don't override HOSTCC for
+ kconfig
+In-Reply-To: <20180517185315.5CE54887BA@busybox.osuosl.org>
+References: <20180517185315.5CE54887BA@busybox.osuosl.org>
+Message-ID: <CAFkzVZbGianV+ARoPw66jey7DLGWQqMqg=GY=CdPjCvJ+fOJZg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 12049cc8b8972a9d0f1e27f1382cc5752d45312f.
+I think it should be also committed to the 2018.02.x branch.
 
-Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
----
- configs/stm32f469_disco_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+Thanks.
 
-diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
-index e5cacaf..8b77d8c 100644
---- a/configs/stm32f469_disco_defconfig
-+++ b/configs/stm32f469_disco_defconfig
-@@ -2,7 +2,6 @@ BR2_arm=y
- BR2_cortex_m4=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
--BR2_BINUTILS_VERSION_2_28_X=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--- 
-2.7.4
+
+On Fri, May 18, 2018, 02:54 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
+
+> commit:
+> https://git.buildroot.net/buildroot/commit/?id=6d3d09e23213e88c14f2ddc883700499315a41bc
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Kconfig uses either pkg-config or hard-coded /usr/include paths to find
+> the ncurses or ncursesw library. If ncursesw is found, it will include
+> <ncursesw.h>. Since Buildroot's host-ncurses doesn't install a .pc file,
+> and linux.mk anyway doesn't pass the pkg-config options to find the host
+> pkg-config files, Kconfig will always find the system's ncursesw.h.
+>
+> However, since commit dde090c299 (linux: fix passing of host CFLAGS and
+> LDFLAGS) HOST_LDFLAGS is passed to the linux build system. Thus, if
+> host-ncurses was already built before 'make linux-menuconfig' is called,
+> the build will pick up libncurses from the host directory, which is NOT
+> widechar. Thus, two different ncurses configurations are mixed into the
+> final mconf program. This will result in serious breakage in the
+> rendering of the menus (lots of @ and question mark characters).
+>
+> As a workaround (suggested by Yann), don't pass HOST_CFLAGS and
+> HOST_LDFLAGS when running kconfig commands. For kconfig, we should never
+> need host packages anyway. This way, the kconfig calls will always use
+> the system's ncurses and never our host-ncurses.
+>
+> Note that the same problem could pop up for other kconfig packages as
+> well if we ever pass HOST_CFLAGS/HOST_LDFLAGS to them. We could force
+> HOSTCC=$(HOSTCC) directly in kconfig-package. However, for now there
+> are no other packages that exhibit this problem, so this can be
+> revisited when they do.
+>
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: David De Grave <david.degrave@essensium.com>
+> Cc: Scott Fan <fancp2007@gmail.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  linux/linux.mk | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index b6b91391b6..6b5f5344ed 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -235,7 +235,14 @@ LINUX_KCONFIG_FILE = $(call
+> qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
+>  endif
+>  LINUX_KCONFIG_FRAGMENT_FILES = $(call
+> qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
+>  LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+> -LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
+> +
+> +# LINUX_MAKE_FLAGS overrides HOSTCC to allow the kernel build to find our
+> +# host-openssl and host-libelf. However, this triggers a bug in the
+> kconfig
+> +# build script that causes it to build with /usr/include/ncurses.h (which
+> is
+> +# typically wchar) but link with $(HOST_DIR)/lib/libncurses.so (which is
+> not).
+> +# We don't actually need any host-package for kconfig, so remove the
+> HOSTCC
+> +# override again.
+> +LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS) HOSTCC="$(HOSTCC)"
+>
+>  # If no package has yet set it, set it from the Kconfig option
+>  LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180531/5cc41956/attachment.html>
