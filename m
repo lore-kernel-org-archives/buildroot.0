@@ -1,91 +1,100 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 31 May 2018 22:18:22 +0200
-Subject: [Buildroot] Buildroot 2018.05-rc3 released
-In-Reply-To: <1527791404.2065.8.camel@rovoreed.com>
-References: <87efhvufjm.fsf@dell.be.48ers.dk>
- <1527599917.2053.2.camel@rovoreed.com> <87fu2a7bkq.fsf@dell.be.48ers.dk>
- <1527615682.2053.4.camel@rovoreed.com> <87po1e5mev.fsf@dell.be.48ers.dk>
- <1527674917.2072.2.camel@rovoreed.com> <87tvqp2lqv.fsf@dell.be.48ers.dk>
- <20180530180026.77e1dfac@windsurf.home> <87efht2k8o.fsf@dell.be.48ers.dk>
- <1527778369.2065.4.camel@rovoreed.com> <20180531172600.3cc0568e@windsurf>
- <1527791404.2065.8.camel@rovoreed.com>
-Message-ID: <ab40f635-f541-ab68-77c9-1a8dc7f749d0@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 31 May 2018 22:37:45 +0200
+Subject: [Buildroot] [PATCH RFC] linux: disable attribute alias with gcc >=
+ 8.1
+Message-ID: <20180531203745.4799-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+gcc-8 started warning about function aliases that have a non-matching
+prototype. This seems rather useful in general, but it causes tons of
+warnings in the Linux kernel, where we rely on abusing those aliases
+for system call entry points, in order to sanitze the arguments passed
+from user space in registers.
 
+See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
 
-On 31-05-18 20:30, Mike Davies wrote:
-> On Thu, 2018-05-31 at 17:26 +0200, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Thu, 31 May 2018 15:52:49 +0100, Mike Davies wrote:
-[snip]
->>> I do not know the implications of simply moving --enable-
->>> unicode=ucs4
->>> to the list of HOST_PYTHON_CONF_OPTS at the start of python.mk.
->>
->> But why would UCS4 support be required for you to build ca-
->> certificates
->> and not on other systems ?
->>
->> My test build had BR2_PACKAGE_PYTHON_UCS4 disabled, so
->> --enable-unicode=ucs4 was also not passed when building host-python.
->>
-> 
-> Why it builds OK for others and not me, then, sorry, I don't know.
-> 
-> When I build ca-certificates I saw that host-python was complaining
-> about undefined symbol: PyUnicodeUCS2_AsEncodedString, so I fiddled
-> about with the parameters to the host python configure script, noted
-> that if I force the host python configure with --enable-unicode=ucs4
-> then it works. If I change that to --enable-unicode=ucs2 or --enable-
-> unicode then it fails the same.
-> 
-> I'm not a Python programmer. This PC does not have Python on it at all,
+Add a new conditional patch that disable the attribute-alias warning
+introduced by gcc-8 by adding -Wno-attribute-alias to KBUILD_CFLAGS.
 
- I doubt that: the dependencies.sh script checks that there is a "python"
-executable in PATH, and the check-uniq-files script that is called at the end of
-the build is also a Python script.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
 
-> and it only gets dragged in by buildroot to build ca-certificates.
-> Maybe that is something to do with it.
-> 
-> Let's not waste any more time on it.
+Fixes most of build errors reported by toolchains-builder on Gitlab.
+https://gitlab.com/free-electrons/toolchains-builder/pipelines/22921464
+---
+ ...e-attribute-alias-for-gcc-8.1.patch.conditional | 33 ++++++++++++++++++++++
+ linux/linux.mk                                     | 14 +++++++++
+ 2 files changed, 47 insertions(+)
+ create mode 100644 linux/0002-Makefile-disable-attribute-alias-for-gcc-8.1.patch.conditional
 
- Well, this may happen to other people as well, so it would be good to get to
-the bottom of it.
-
- Let's see if we can find where the problem is. Can you do
-
-readelf -d output/host/bin/python
-
-readelf -W -s output/host/lib/libpython2.7.so | \
-  grep PyUnicodeUCS._AsEncodedString
-
-readelf -W -s output/build/host-python-2.7.14/Objects/unicodeobject.o | \
-  grep PyUnicodeUCS._AsEncodedString
-
-
-
- Regards,
- Arnout
-
-> 
-> Mike
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/linux/0002-Makefile-disable-attribute-alias-for-gcc-8.1.patch.conditional b/linux/0002-Makefile-disable-attribute-alias-for-gcc-8.1.patch.conditional
+new file mode 100644
+index 0000000000..23ce8a12b5
+--- /dev/null
++++ b/linux/0002-Makefile-disable-attribute-alias-for-gcc-8.1.patch.conditional
+@@ -0,0 +1,33 @@
++From f238848ce07b9b033847278ccafabc817634e650 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Thu, 31 May 2018 20:56:37 +0200
++Subject: [PATCH] Makefile: disable attribute-alias for gcc >= 8.1
++
++gcc-8 started warning about function aliases that have a non-matching
++prototype. This seems rather useful in general, but it causes tons of
++warnings in the Linux kernel, where we rely on abusing those aliases
++for system call entry points, in order to sanitze the arguments passed
++from user space in registers.
++
++See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ Makefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Makefile b/Makefile
++index 56ba070..b54e19a6 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -641,6 +641,7 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning,frame-address,)
++ KBUILD_CFLAGS	+= $(call cc-disable-warning, format-truncation)
++ KBUILD_CFLAGS	+= $(call cc-disable-warning, format-overflow)
++ KBUILD_CFLAGS	+= $(call cc-disable-warning, int-in-bool-context)
+++KBUILD_CFLAGS	+= $(call cc-disable-warning, attribute-alias)
++ 
++ ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
++ KBUILD_CFLAGS	+= $(call cc-option,-Oz,-Os)
++-- 
++2.7.4
++
+diff --git a/linux/linux.mk b/linux/linux.mk
+index b6b91391b6..3af72f819e 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -226,6 +226,20 @@ define LINUX_TRY_PATCH_TIMECONST
+ endef
+ LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
+ 
++# gcc-8 started warning about function aliases that have a non-matching prototype.
++# This seems rather useful in general, but it causes tons of warnings in the Linux kernel,
++# where we rely on abusing those aliases for system call entry points, in order to sanitze
++# the arguments passed from user space in registers.
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
++define LINUX_TRY_PATCH_NO_ATTRIBUTE_ALIAS
++	@if patch -p1 --dry-run -f -s -d $(@D) <$(LINUX_PKGDIR)/0002-Makefile-disable-attribute-alias-for-gcc-8.1.patch.conditional >/dev/null ; then \
++		$(APPLY_PATCHES) $(@D) $(LINUX_PKGDIR) 0002-Makefile-disable-attribute-alias-for-gcc-8.1.patch.conditional ; \
++	fi
++endef
++LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_NO_ATTRIBUTE_ALIAS
++endif
++
+ ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
+ LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
+ else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.14.3
