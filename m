@@ -1,41 +1,34 @@
 From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Date: Thu, 31 May 2018 10:17:09 +0000
-Subject: [Buildroot] [PATCH 4/4] linux: config.in: add comment for Arm
- Cortex-M
+Date: Thu, 31 May 2018 10:17:08 +0000
+Subject: [Buildroot] [PATCH 2/4] Revert "configs/stm32f469: force usage of
+ binutils 2.28.x"
 In-Reply-To: <1527761825-26682-1-git-send-email-christophe.priouzeau@st.com>
 References: <1527761825-26682-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <1527761825-26682-4-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <1527761825-26682-2-git-send-email-christophe.priouzeau@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When binutils > 2.28 are selected on Arm Cortex-M cpu,
-linux kernel does not boot due to a new implementation
-of 'adr pseudo instruction' on binutils.
-
-Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
+This reverts commit 12049cc8b8972a9d0f1e27f1382cc5752d45312f.
 
 Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 ---
- linux/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ configs/stm32f469_disco_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 73a3299..fbd886c 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
- 
- if BR2_LINUX_KERNEL
- 
-+comment "Linux kernel will not boot with binutils >= 2.29"
-+	depends on !BR2_ARMV7M
-+	depends on BR2_BINUTILS_VERSION_2_28_X
-+
- # Packages that need to have a kernel with support for loadable modules,
- # but do not use the kernel-modules infrastructure, should select that
- # option.
+diff --git a/configs/stm32f469_disco_defconfig b/configs/stm32f469_disco_defconfig
+index e5cacaf..8b77d8c 100644
+--- a/configs/stm32f469_disco_defconfig
++++ b/configs/stm32f469_disco_defconfig
+@@ -2,7 +2,6 @@ BR2_arm=y
+ BR2_cortex_m4=y
+ BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f469-disco/patches"
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
+-BR2_BINUTILS_VERSION_2_28_X=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
 -- 
 2.7.4
