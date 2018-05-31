@@ -1,44 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 31 May 2018 19:29:59 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{1, 4, 9, 14,
- 16}.x series
-Message-ID: <20180531172901.5BE9183672@busybox.osuosl.org>
+Date: Thu, 31 May 2018 19:31:46 +0200
+Subject: [Buildroot] custom skeleton question
+In-Reply-To: <676099E7-4BB5-4A00-91A2-B880D4308A08@stask.net> (Liam
+ Staskawicz's message of "Wed, 30 May 2018 23:02:57 -0700")
+References: <85B790C7-22DB-4715-A360-5D229877EB00@stask.net>
+ <874liq5k2q.fsf@dell.be.48ers.dk>
+ <7C5724A9-4880-4ED6-A49F-D306AD2ADE5B@stask.net>
+ <87y3g13bnp.fsf@dell.be.48ers.dk>
+ <676099E7-4BB5-4A00-91A2-B880D4308A08@stask.net>
+Message-ID: <87o9gv20l9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f038e6b30a20a387ba3c80912dd15b3d2023078
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Liam" == Liam Staskawicz <liam@stask.net> writes:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Hi,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 74ea33c5b7..b99b36e83d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -249,14 +249,14 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
--	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.133"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.103"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
-+	default "4.4.134"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.104"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.44"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.46"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
--	default "4.16.12"	if BR2_KERNEL_HEADERS_4_16
-+	default "4.16.13"	if BR2_KERNEL_HEADERS_4_16
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ >> Ok - But again, if the Ubuntu base image contains a bunch of prebuilt
+ >> binaries and library you may very well end up with odd errors if you try
+ >> to merge them with Buildroot.
+ >> 
+ >> What are you trying to achieve here?
+
+ > Your advice makes sense :)
+
+Good ;)
+
+ > I am mainly trying to make an incremental transition from a system
+ > based on ubuntu to one based on buildroot. My first step is providing
+ > a similar userspace to the current system while transitioning the
+ > kernel build and packaging to buildroot. Subsequently, I plan to more
+ > completely isolate the userspace such that it can ship with a pure
+ > buildroot rootfs.
+
+ > So, while this is not strictly an ideal use of buildroot, it's a helpful stepping stone.
+
+Ok, as long as you are aware of the potential pitfalls.
+
+-- 
+Bye, Peter Korsgaard
