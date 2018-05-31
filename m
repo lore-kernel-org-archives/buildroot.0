@@ -1,48 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 31 May 2018 19:08:19 +0200
-Subject: [Buildroot] [PATCH 1/1] jpeg-turbo: add license details
-Message-ID: <20180531170819.3403-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 31 May 2018 19:29:13 +0200
+Subject: [Buildroot] [PATCH] xen: security bump to version 4.10.1
+In-Reply-To: <20180530221713.20890-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 31 May 2018 00:17:13 +0200")
+References: <20180530221713.20890-1-peter@korsgaard.com>
+Message-ID: <87wovj20pi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- jpeg-turbo is covered by 3 licenses: IJG (libjpeg),
-  BSD-3-Clause (TurboJPEG) and Zlib (SIMD)
-- Add README.ijg
-- Add hash for license files
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jpeg-turbo/jpeg-turbo.hash | 2 ++
- package/jpeg-turbo/jpeg-turbo.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ > The 4.10.1 version brings a large number of fixes:
+ > https://www.xenproject.org/downloads/xen-archives/xen-project-410-series/xen-4101.html
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index 320bbb2a94..11b323b8bf 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -3,3 +3,5 @@ sha1 e788f6defa58b4393a5e1685c018f3b962971457  libjpeg-turbo-1.5.2.tar.gz
- md5 6b4923e297a7eaa255f08511017a8818  libjpeg-turbo-1.5.2.tar.gz
- # Locally computed
- sha256 9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528  libjpeg-turbo-1.5.2.tar.gz
-+sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
-+sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index bb1278f8b2..d52ab916e0 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -7,8 +7,8 @@
- JPEG_TURBO_VERSION = 1.5.2
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
--JPEG_TURBO_LICENSE = jpeg-license (BSD-3-Clause-like)
--JPEG_TURBO_LICENSE_FILES = LICENSE.md
-+JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
-+JPEG_TURBO_LICENSE_FILES = LICENSE.md README.ijg
- JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_PROVIDES = jpeg
- JPEG_TURBO_DEPENDENCIES = host-pkgconf
+ > Including a number of security fixes:
+
+ > XSA-252: DoS via non-preemptable L3/L4 pagetable freeing (CVE-2018-7540)
+ > XSA-253: x86: memory leak with MSR emulation (CVE-2018-5244)
+ > XSA-254: Information leak via side effects of speculative execution
+ > 	 (CVE-2017-5753 CVE-2017-5715 CVE-2017-5754)
+ > XSA-255: grant table v2 -> v1 transition may crash Xen (CVE-2018-7541)
+ > XSA-256: x86 PVH guest without LAPIC may DoS the host (CVE-2018-7542)
+ > XSA-258: Information leak via crafted user-supplied CDROM (CVE-2018-10472)
+ > XSA-259: x86: PV guest may crash Xen with XPTI (CVE-2018-10471)
+
+ > Also add a hash for the license file while we are at it.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
