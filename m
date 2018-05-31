@@ -1,32 +1,48 @@
 From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Date: Thu, 31 May 2018 13:21:32 +0000
-Subject: [Buildroot] [PATCH v3 1/4] Revert "configs/stm32f429: force usage
- of binutils 2.28.x"
-Message-ID: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
+Date: Thu, 31 May 2018 13:21:34 +0000
+Subject: [Buildroot] [PATCH v3 4/4] linux: config.in: add comment for Arm
+ Cortex-M
+In-Reply-To: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
+References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit cbe43fd417d77f846f1ca47cdacd51a73be1aaec.
+When binutils > 2.28 are selected on Arm Cortex-M cpu,
+linux kernel does not boot due to a new implementation
+of 'adr pseudo instruction' on binutils.
+
+Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
 
 Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 ---
- configs/stm32f429_disco_defconfig | 1 -
- 1 file changed, 1 deletion(-)
+Changes v1 -> v2
+ - correct depends on for comment
 
-diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
-index fc167d0..5237e9a 100644
---- a/configs/stm32f429_disco_defconfig
-+++ b/configs/stm32f429_disco_defconfig
-@@ -2,7 +2,6 @@ BR2_arm=y
- BR2_cortex_m4=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
--BR2_BINUTILS_VERSION_2_28_X=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+Changes v2 -> v3
+ - use correct TAG BR2_ARM_CPU_ARMV7M
+ - invert depends for BR2_ARM_CPU_ARMV7M
+
+ linux/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index 73a3299..b5957b6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
+ 
+ if BR2_LINUX_KERNEL
+ 
++comment "Linux kernel will not boot with binutils >= 2.29"
++	depends on BR2_ARM_CPU_ARMV7M
++	depends on !BR2_BINUTILS_VERSION_2_28_X
++
+ # Packages that need to have a kernel with support for loadable modules,
+ # but do not use the kernel-modules infrastructure, should select that
+ # option.
 -- 
 2.7.4
