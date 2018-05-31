@@ -1,61 +1,92 @@
-From: Mike Davies <busybox_mail@rovoreed.com>
-Date: Thu, 31 May 2018 08:56:17 +0100
-Subject: [Buildroot] Buildroot 2018.05-rc3 released
-In-Reply-To: <87efht2k8o.fsf@dell.be.48ers.dk>
-References: <87efhvufjm.fsf@dell.be.48ers.dk>
- <1527599917.2053.2.camel@rovoreed.com> <87fu2a7bkq.fsf@dell.be.48ers.dk>
- <1527615682.2053.4.camel@rovoreed.com> <87po1e5mev.fsf@dell.be.48ers.dk>
- <1527674917.2072.2.camel@rovoreed.com> <87tvqp2lqv.fsf@dell.be.48ers.dk>
- <20180530180026.77e1dfac@windsurf.home> <87efht2k8o.fsf@dell.be.48ers.dk>
-Message-ID: <1527753377.2065.1.camel@rovoreed.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 31 May 2018 07:58:24 +0000
+Subject: [Buildroot] [Bug 11056] New: Compiling a file that uses libdrm
+ headers fails with: fatal error: drm.h: No such file or directory
+Message-ID: <bug-11056-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 2018-05-30 at 18:15 +0200, Peter Korsgaard wrote:
-> > > > > > "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > > > > > writes:
-> 
-> Hi,
-> 
-> ?>> Ok, interesting. Enabling python3 for the target means that our
-> host
-> ?>> python becomes python3,
-> 
-> ?> Yes that is expected.
-> 
-> Yes, but that could conceptually explain why Mike sees a difference
-> in
-> behaviour.
-> 
-> ?>> > The Linux distribution/version I am building on is Fedora Red
-> Hat 25
-> ?>> > ...??
-> ?>>?
-> ?>> > [mike at modron ~]$ uname -a
-> ?>> > Linux modron 4.9.14-200.fc25.x86_64 #1 SMP Mon Mar 13 19:26:40
-> UTC 2017
-> ?>> > x86_64 x86_64 x86_64 GNU/Linux??
-> ?>>?
-> ?>> Ok, I'm on Debian. Thomas, you are using Fedora now, right? Can
-> you give
-> ?>> ca-certificates a try?
-> 
-> ?> It builds fine here: http://code.bulix.org/092xcg-342074?raw
-> 
-> Thanks, just like on my machine and the autobuilders.
-> 
-> Mike, there must be something odd going on with your machine. I'm
-> afraid
-> you will have to debug it further yourself. Maybe try running
-> certdata2pem.py manually?
+https://bugs.busybox.net/show_bug.cgi?id=11056
 
+            Bug ID: 11056
+           Summary: Compiling a file that uses libdrm headers fails with:
+                    fatal error: drm.h: No such file or directory
+           Product: buildroot
+           Version: 2018.02.1
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: ciro.santilli at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-OK. I shall try to debug this myself.
+Test setup:
+https://github.com/cirosantilli/buildroot/tree/b388a47239bceb5abfe45b5ab4cdc44bdc837f7a
+which has very shallow patches on top of master commit
+545567a8fc3eaac197c089c4ea905675d8d3dab9 which is ahead of 2018.05-rc1 then run
+with:
 
-I have also noted the locale of my final built system is weird. Maybe
-it's all related.
+```
+./run
+./run-aarch64
+```
 
-Mike
+Build fails for both x86 and aarch64 with:
+
+```
+>>> hello 1.0 Building
+/usr/bin/make -j8
+CC="/home/ciro/bak/git/buildroot/output/host/bin/aarch64-buildroot-linux-uclibc-gcc"
+LD="/home/ciro/bak/git/buildroot/output/host/bin/aarch64-buildroot-linux-uclibc-ld"
+-C /home/ciro/bak/git/bu
+ildroot/output/build/hello-1.0
+/home/ciro/bak/git/buildroot/output/host/bin/aarch64-buildroot-linux-uclibc-gcc
+-o 'hello' 'hello.c'
+In file included from hello.c:2:0:
+/home/ciro/bak/git/buildroot/output/host/aarch64-buildroot-linux-uclibc/sysroot/usr/include/xf86drm.h:40:17:
+fatal error: drm.h: No such file or directory
+ #include <drm.h>
+                 ^
+```
+
+for the file:
+
+```
+#include <stdio.h>
+#include <xf86drm.h>
+#include <xf86drmMode.h>
+
+int main(void) {
+    puts("hello");
+}
+
+```
+
+If I remove:
+
+```
+#include <xf86drm.h>
+#include <xf86drmMode.h>
+```
+
+which are provided by libdrm, then it works.
+
+Likely something obvious to those familiar with it.
+
+Can we add an appropriate DEPENDS or SELECTS to the Config.in?
+
+My goal is to later run:
+https://github.com/dvdhrm/docs/blob/master/drm-howto/modeset.c to learn DRM. I
+know that there must be further settings missing since I don't have /dev/dri on
+aarch64, but I do on x86.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
