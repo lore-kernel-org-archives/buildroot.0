@@ -1,119 +1,91 @@
-From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
-Date: Thu, 31 May 2018 22:39:45 +0200
-Subject: [Buildroot] [PATCH 1/1] ti-sgx-*: bump from SDK 02.00 to SDK
- 04.00
-In-Reply-To: <20180530164923.6cce569c@windsurf.home>
-References: <1527175458-16091-1-git-send-email-tolvupostur@gmail.com>
- <CABhNV23aBnMSVT5a41eopYk6H0ek7-==NF0EuN_QUc_71vDbvw@mail.gmail.com>
- <5cc76bb8-f92b-ab5d-71bf-c41c0e96930c@gmail.com>
- <CABhNV22Fv+QjYta+XhH5mixGPK5R0sOnMv=R3+4qpV+iqGegzg@mail.gmail.com>
- <20180529234243.699648ec@windsurf.home>
- <CABhNV22Le5eOW9A8LHXS+TJQSishWPS0WPZN2z9r=GkGfMa6xQ@mail.gmail.com>
- <20180530164923.6cce569c@windsurf.home>
-Message-ID: <CABhNV23Ydu+oGfM=zYEbhhgT1e-Rv2igLBdP55Kf2pC4=QmhjQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 31 May 2018 23:16:19 +0200
+Subject: [Buildroot] Fwd: [PATCH] arm: ensure symbol is a thumb symbol
+ in new binutils
+In-Reply-To: <254af731-459b-1f1d-2d93-27c5a91e7bfb@redhat.com>
+References: <20171121172751.29545-1-Jason@zx2c4.com>
+ <20171121173857.GJ31757@n2100.armlinux.org.uk>
+ <CAHmME9quDFbdOR9hKRz-Px=Mh3FvYEyhVrs4V_+JT+GjDajMrA@mail.gmail.com>
+ <20171121174942.GK31757@n2100.armlinux.org.uk>
+ <CAHmME9oMTNJFnOwfhu26QSRSP92Axbc-+v9cCPsTKxekZvGvxg@mail.gmail.com>
+ <20171123103518.GL31757@n2100.armlinux.org.uk>
+ <CAHmME9qBxgDV-HGeqj75ohr=4Bf+TD73PcC0DUqTRh5PTOKyhQ@mail.gmail.com>
+ <20171123140228.GP31757@n2100.armlinux.org.uk>
+ <CAKv+Gu8TJi8qSWAkL231WhQkWxK+vSQm2tnQn_qN-2wdFaNaEA@mail.gmail.com>
+ <765227b5-981d-0cea-c831-73cfe2f58721@redhat.com>
+ <aaf57bb5-13e6-852c-0f67-f72aedef0e79@gmail.com>
+ <254af731-459b-1f1d-2d93-27c5a91e7bfb@redhat.com>
+Message-ID: <1e9b8ffd-cc1d-2c39-e34a-d1e33f49a645@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 30 May 2018 at 16:49, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> Hello Einar,
->
-> Please don't reply just to me, keep the mailing list in Cc. Thanks!
->
-> On Wed, 30 May 2018 16:21:49 +0200, Einar J?n wrote:
->
->> > We definitely want a bisectable patch series, where everything works
->> > between each commit.
+Hi Nick,
+
+Le 31/05/2018 ? 15:00, Nick Clifton a ?crit?:
+> Hi Romain,
+> 
+>>>   https://sourceware.org/bugzilla/show_bug.cgi?id=21458
 >>
->> I could do these a patchset:
->> Beaglebone_qt5 bump
->> package/ti-sgx-km bump
->> package/ti-sgx-um bump
->> package/ti-sgx-demos bump
->> new package ti-sgx-libgbm
->>
->> Is that preferred, or just the buildable:
->> ti-sgx and Beaglebone_qt5 bump
->> new package ti-sgx-libgbm
->
-> This doesn't work because your ti-sgx-um package update has:
->
->         select BR2_PACKAGE_TI_SGX_LIBGBM
->
-> which implies it requires ti-sgx-libgbm to exist first.
->
-> Here it was you should do instead:
->
->         ti-sgx-libgbm: new package
->         ti-sgx-{um,km}: bump version
->         configs/beablebone_qt5: update this
->         configs/beablebone_qt5: update that
+>> What's the status of this bug?
+> 
+> It was sidelined. :-(  Sorry.
 
-I've spent too much time with git - My order meant the git history
-order, committing the new package first, and beaglebone last.
+No problem :-)
 
-> Indeed, in beaglebone_qt5_defconfig, you're doing lots of changes that
-> are completely unrelated to ti-sgx stuff: updating U-Boot, adding
-> Qt5Wayland, adding am335x-bonegreen in the list of DTs, etc.
+> 
+>> Some users reported a runtime issue with the linux kernel boot for Cortex-M
+>> target: https://bugs.buildroot.org/show_bug.cgi?id=11051
+> 
+> I think that part of the problem is that the kernel people are 
+> asking for the (adr affecting part of the) patch to be reverted, 
+> but they have not suggested a way to address the issue raised in
+> the PR.  (From comment #6 onwards).
 
-True. ti-sgx requires a 4.9 kernel, which beaglebone_defconfig has.
-I think the only reason why beaglebone_qt5 was not bumped up to kernel
-4.9 with beaglebone was that
-the ti-sgx would have been broken. So bumping the other changes to
-match seemed to make sense.
-After this commit beaglebone_qt5_defconfig is bumped to the same level
-as beaglebone_defconfig.
-Qt5Wayland is added because wayland is a new dependency pulled in by libgbm.
+Yes, but it's a very difficult topic.
+Did you have some feedback from ARM ?
 
->
->> From my committed package/ti-sgx-km/ti-sgx-km.mk, with line numbers
->>     22 ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM335X),y)
->>     23 TI_SGX_KM_MAKE_ENV += TARGET_PRODUCT=ti335x
->>     24 else ifeq ($(BR2_PACKAGE_TI_KM_SGX_AM437X),y)
->>     25 TI_SGX_KM_MAKE_ENV += TARGET_PRODUCT=ti437x
->>     26 endif
->>
->>  From my committed package/ti-sgx-um/ti-sgx-um.mk
->>     19 ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM335X),y)
->>     20 TI_SGX_UM_MAKE_ENV += TARGET_PRODUCT=ti335x
->>     21 else ifeq ($(BR2_PACKAGE_TI_SGX_KM_AM437X),y)
->>     22 TI_SGX_UM_MAKE_ENV += TARGET_PRODUCT=ti437x
->>     23 endif
->
-> These lines don't exist in the ti-sgx-um package in the current master
-> branch. So I don't see where the problem is.
+> 
+> One thing that did occur to me is that the adr handling code
+> in the assembler does not check to see if the bottom bit has 
+> already been set, so maybe this is part of the problem.  Are
+> you able to test out an assembler patch and see if it makes
+> a difference ?  
 
-Yep. these are only in my new commit.
-In the current master, ti-sgx-km.mk uses these variables to choose a
-target subfolder,
-but ti-sgx-um had the same code for all target products. This has
-changed in both repos,
-and now they have only 3 targets, instead of 4 earlier.
+I'm not able to test this patch but I'm adding Christophe Priouzeau in Cc.
+He use a stm32f429 system.
 
->
-> Just base your patches on the current master branch, and use the new
-> name of the Config.in options.
+Christophe, it would be great if you can test this patch with your toolchain
+based on Binutils 2.29.
 
-OK. I'll send in a new patchset tomorrow.
+> 
+> diff --git a/gas/config/tc-arm.c b/gas/config/tc-arm.c
+> index dbaf1627bb..c682ceabd3 100644
+> --- a/gas/config/tc-arm.c
+> +++ b/gas/config/tc-arm.c
+> @@ -8423,7 +8423,7 @@ do_adr (void)
+>        && inst.reloc.exp.X_add_symbol != NULL
+>        && S_IS_DEFINED (inst.reloc.exp.X_add_symbol)
+>        && THUMB_IS_FUNC (inst.reloc.exp.X_add_symbol))
+> -    inst.reloc.exp.X_add_number += 1;
+> +    inst.reloc.exp.X_add_number |= 1;
+>  }
+>  
+>  /* This is a pseudo-op of the form "adrl rd, label" to be converted
+> 
+> If that does not help, then I think that the only thing to do is
+> to add a command line option to control the behaviour of the ADR
+> pseudo-op and a configure time switch to set the default for this
+> option.
 
--- 
-Regards
-Einar J?n
+Ok, let's see the test result.
 
->> Perfectly compatible with busybox. I'm using it myself.
->> It's just a /bin/sh script with args "start"|stop|reload|restart,
->> calling modprobe/rmmod wrappers in local functions load_pvr and unload_pvr.
->> It does call  echo "Loaded PowerVR consumer services." instead of the standard
->> printf "Loading PowerVR consumer services:"  + OK/FAIL
->
-> OK, fair enough then.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Thanks for your time,
+Romain
+
+> 
+> Cheers
+>   Nick
+> 
