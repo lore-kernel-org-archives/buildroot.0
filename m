@@ -1,42 +1,27 @@
-From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Date: Thu, 31 May 2018 13:21:33 +0000
-Subject: [Buildroot] [PATCH v3 3/4] package/binutils: Cortex-M targets
- require version <2.29
-In-Reply-To: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
-References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 31 May 2018 08:59:30 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-05-30
+In-Reply-To: <20180531060010.26380206F6@mail.bootlin.com>
+References: <20180531060010.26380206F6@mail.bootlin.com>
+Message-ID: <CANQCQpZTUFsn6NjBdyhr-72JPDEw2VLQFv6mPpqNQexJe0F7Tw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Laurent GONZALEZ <br22@gezedo.com>
+On Thu, May 31, 2018 at 1:00 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Build statistics for 2018-05-30
 
-binutils 2.29 changed the implementation of adr pseudo instruction
-it breaks linux kernel and impacts Cortex-M targets (eg. stm32)
+> microblazeel |                          boost | TIM | http://autobuild.buildroot.net/results/a3aba71758feedac643fb00ea7ba6e23e1170b24 |
 
-Signed-off-by: Laurent GONZALEZ <br22@gezedo.com>
-Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
----
- package/binutils/Config.in.host | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 03b2281..9a4caad 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -2,8 +2,9 @@ comment "Binutils Options"
- 
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
--	default BR2_BINUTILS_VERSION_ARC if BR2_arc
-+	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
-+	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc && !BR2_ARM_CPU_ARMV7M
-+	default BR2_BINUTILS_VERSION_ARC if BR2_arc && !BR2_ARM_CPU_ARMV7M
- 	help
- 	  Select the version of binutils you wish to use.
- 
--- 
-2.7.4
+Looks like I missed a case where python was enabled and boost is built
+for the Microblaze GCC bug.  I'll take a look.
+
+Matt
