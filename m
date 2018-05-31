@@ -1,91 +1,63 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Thu, 31 May 2018 23:16:19 +0200
-Subject: [Buildroot] Fwd: [PATCH] arm: ensure symbol is a thumb symbol
- in new binutils
-In-Reply-To: <254af731-459b-1f1d-2d93-27c5a91e7bfb@redhat.com>
-References: <20171121172751.29545-1-Jason@zx2c4.com>
- <20171121173857.GJ31757@n2100.armlinux.org.uk>
- <CAHmME9quDFbdOR9hKRz-Px=Mh3FvYEyhVrs4V_+JT+GjDajMrA@mail.gmail.com>
- <20171121174942.GK31757@n2100.armlinux.org.uk>
- <CAHmME9oMTNJFnOwfhu26QSRSP92Axbc-+v9cCPsTKxekZvGvxg@mail.gmail.com>
- <20171123103518.GL31757@n2100.armlinux.org.uk>
- <CAHmME9qBxgDV-HGeqj75ohr=4Bf+TD73PcC0DUqTRh5PTOKyhQ@mail.gmail.com>
- <20171123140228.GP31757@n2100.armlinux.org.uk>
- <CAKv+Gu8TJi8qSWAkL231WhQkWxK+vSQm2tnQn_qN-2wdFaNaEA@mail.gmail.com>
- <765227b5-981d-0cea-c831-73cfe2f58721@redhat.com>
- <aaf57bb5-13e6-852c-0f67-f72aedef0e79@gmail.com>
- <254af731-459b-1f1d-2d93-27c5a91e7bfb@redhat.com>
-Message-ID: <1e9b8ffd-cc1d-2c39-e34a-d1e33f49a645@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 31 May 2018 23:28:01 +0200
+Subject: [Buildroot] wireshark failure (was: [autobuild.buildroot.net] Build
+ results for 2018-05-29)
+In-Reply-To: <20180530060038.E361F20D99@mail.bootlin.com>
+References: <20180530060038.E361F20D99@mail.bootlin.com>
+Message-ID: <85e276a9-676f-168f-898c-8605adc0aa51@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nick,
+ Hi all,
 
-Le 31/05/2018 ? 15:00, Nick Clifton a ?crit?:
-> Hi Romain,
-> 
->>>   https://sourceware.org/bugzilla/show_bug.cgi?id=21458
->>
->> What's the status of this bug?
-> 
-> It was sidelined. :-(  Sorry.
+On 30-05-18 08:00, Thomas Petazzoni wrote:
+>          arm |               wireshark-2.2.14 | NOK | http://autobuild.buildroot.net/results/7384adae1e15ef8361fe60d6119f9c0bf925b26b | ORPH
 
-No problem :-)
+ wireshark + qt5 + gcc6+ has been failing since November 11 last year
+http://autobuild.buildroot.net/results/6326b6fdebc5ed56b60f45c231edce07b3ac801e
+with
+In file included from
+/accts/mlweber1/instance-2/output/host/opt/ext-toolchain/x86_64-amd-linux-gnu/include/c++/6.2.0/bits/stl_algo.h:59:0,
+...
+/accts/mlweber1/instance-2/output/host/opt/ext-toolchain/x86_64-amd-linux-gnu/include/c++/6.2.0/cstdlib:75:25:
+fatal error: stdlib.h: No such file or directory
+ #include_next <stdlib.h>
 
-> 
->> Some users reported a runtime issue with the linux kernel boot for Cortex-M
->> target: https://bugs.buildroot.org/show_bug.cgi?id=11051
-> 
-> I think that part of the problem is that the kernel people are 
-> asking for the (adr affecting part of the) patch to be reverted, 
-> but they have not suggested a way to address the issue raised in
-> the PR.  (From comment #6 onwards).
+ This is because gcc 6 has started providing stdlib.h itself, but wireshark
+changes all -I options into -isystem which makes the include_next not find
+stdlib.h any more. (Note, I have not found out why it didn't fail before
+November 11; the autobuilders were already using GCC6, and wireshark itself was
+bumped months before...).
 
-Yes, but it's a very difficult topic.
-Did you have some feedback from ARM ?
+ There are two possible solutions for this:
 
-> 
-> One thing that did occur to me is that the adr handling code
-> in the assembler does not check to see if the bottom bit has 
-> already been set, so maybe this is part of the problem.  Are
-> you able to test out an assembler patch and see if it makes
-> a difference ?  
+1. Revert upstream commit 67d9daa65b9d "autotools: Fix extra-compiler-warnings
+for system headers". It's a rather big commit, though, and it doesn't revert
+cleanly.
 
-I'm not able to test this patch but I'm adding Christophe Priouzeau in Cc.
-He use a stm32f429 system.
+2. Switch to CMake, which anyway has to happen at some point since newer
+releases have dropped autotools.
 
-Christophe, it would be great if you can test this patch with your toolchain
-based on Binutils 2.29.
+ I've started doing the latter, but it turns out that the CMake infrastructure
+no longer supports GTK2. So, that would also imply removing GTK2 support from
+wireshark.
 
-> 
-> diff --git a/gas/config/tc-arm.c b/gas/config/tc-arm.c
-> index dbaf1627bb..c682ceabd3 100644
-> --- a/gas/config/tc-arm.c
-> +++ b/gas/config/tc-arm.c
-> @@ -8423,7 +8423,7 @@ do_adr (void)
->        && inst.reloc.exp.X_add_symbol != NULL
->        && S_IS_DEFINED (inst.reloc.exp.X_add_symbol)
->        && THUMB_IS_FUNC (inst.reloc.exp.X_add_symbol))
-> -    inst.reloc.exp.X_add_number += 1;
-> +    inst.reloc.exp.X_add_number |= 1;
->  }
->  
->  /* This is a pseudo-op of the form "adrl rd, label" to be converted
-> 
-> If that does not help, then I think that the only thing to do is
-> to add a command line option to control the behaviour of the ADR
-> pseudo-op and a configure time switch to set the default for this
-> option.
+ Since we're just before the 2018.05 release, and since this should also be
+backported to 2018.02, I wasn't sure whether that was acceptable...
 
-Ok, let's see the test result.
+ Basically, it's choosing between supporting GTK2, or supporting QT5 + GCC6, or
+a possibly very complicated configure.ac + Makefile.am patch.
 
-Thanks for your time,
-Romain
+ Regards,
+ Arnout
 
-> 
-> Cheers
->   Nick
-> 
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
