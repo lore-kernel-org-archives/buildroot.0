@@ -1,102 +1,48 @@
-From: Joel Carlson <joel.carlson@cosmicaes.com>
-Date: Thu, 31 May 2018 11:04:29 -0600
-Subject: [Buildroot] [PATCH v4 1/1] flatcc: new package
-Message-ID: <1527786269-11147-1-git-send-email-joel.carlson@cosmicaes.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 31 May 2018 19:08:19 +0200
+Subject: [Buildroot] [PATCH 1/1] jpeg-turbo: add license details
+Message-ID: <20180531170819.3403-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds flatcc as a new package, pulling v0.5.1 from github. flatcc
-has both a host tool (the compiler), and libraries for the target.
+- jpeg-turbo is covered by 3 licenses: IJG (libjpeg),
+  BSD-3-Clause (TurboJPEG) and Zlib (SIMD)
+- Add README.ijg
+- Add hash for license files
 
-Signed-off-by: Steve deRosier <steve.derosier@lairdtech.com>
-Signed-off-by: Joel Carlson <joel.carlson@cosmicaes.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v3 -> v4
-  - Put back in Sob line of original submitter (suggested by Arnout)
-  - Removed pruning of host files (suggested by Arnout)
----
- package/Config.in          |  1 +
- package/flatcc/Config.in   |  8 ++++++++
- package/flatcc/flatcc.hash |  2 ++
- package/flatcc/flatcc.mk   | 29 +++++++++++++++++++++++++++++
- 4 files changed, 40 insertions(+)
- create mode 100644 package/flatcc/Config.in
- create mode 100644 package/flatcc/flatcc.hash
- create mode 100644 package/flatcc/flatcc.mk
+ package/jpeg-turbo/jpeg-turbo.hash | 2 ++
+ package/jpeg-turbo/jpeg-turbo.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index ecee493..4de10b1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1501,6 +1501,7 @@ menu "Other"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
- 	source "package/flatbuffers/Config.in"
-+	source "package/flatcc/Config.in"
- 	source "package/gconf/Config.in"
- 	source "package/gflags/Config.in"
- 	source "package/glibmm/Config.in"
-diff --git a/package/flatcc/Config.in b/package/flatcc/Config.in
-new file mode 100644
-index 0000000..6273f2b
---- /dev/null
-+++ b/package/flatcc/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_FLATCC
-+	bool "flatcc"
-+	help
-+	  flatcc is C language implementation of Google Flatbuffers. It
-+	  consists of both a library for the target as well as a
-+	  flatbuffer compiler tool for the host.
-+
-+	  https://github.com/dvidelabs/flatcc
-diff --git a/package/flatcc/flatcc.hash b/package/flatcc/flatcc.hash
-new file mode 100644
-index 0000000..357d8b7
---- /dev/null
-+++ b/package/flatcc/flatcc.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	8c4560ca32e3c555716d9363bed469e2c60e0f443ec32bc08e7abfe681e25ca9  flatcc-v0.5.1.tar.gz
-diff --git a/package/flatcc/flatcc.mk b/package/flatcc/flatcc.mk
-new file mode 100644
-index 0000000..51995d4
---- /dev/null
-+++ b/package/flatcc/flatcc.mk
-@@ -0,0 +1,29 @@
-+################################################################################
-+#
-+# FLATCC
-+#
-+################################################################################
-+
-+FLATCC_VERSION = v0.5.1
-+FLATCC_SITE =$(call github,dvidelabs,flatcc,$(FLATCC_VERSION))
-+FLATCC_LICENSE = Apache-2.0
-+FLATCC_LICENSE_FILES = LICENSE
-+FLATCC_INSTALL_STAGING = YES
-+FLATCC_DEPENDENCIES = host-flatcc
-+
-+# Disable build of tests and samples
-+FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
-+HOST_FLATCC_CONF_OPTS += -DFLATCC_TEST=OFF
-+
-+# Enable install targets
-+FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
-+HOST_FLATCC_CONF_OPTS += -DFLATCC_INSTALL=ON
-+
-+define FLATCC_TARGET_REMOVE_FLATCC_COMPILER
-+	rm $(TARGET_DIR)/usr/bin/flatcc
-+endef
-+
-+FLATCC_POST_INSTALL_TARGET_HOOKS += FLATCC_TARGET_REMOVE_FLATCC_COMPILER
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index 320bbb2a94..11b323b8bf 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -3,3 +3,5 @@ sha1 e788f6defa58b4393a5e1685c018f3b962971457  libjpeg-turbo-1.5.2.tar.gz
+ md5 6b4923e297a7eaa255f08511017a8818  libjpeg-turbo-1.5.2.tar.gz
+ # Locally computed
+ sha256 9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528  libjpeg-turbo-1.5.2.tar.gz
++sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
++sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index bb1278f8b2..d52ab916e0 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -7,8 +7,8 @@
+ JPEG_TURBO_VERSION = 1.5.2
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+-JPEG_TURBO_LICENSE = jpeg-license (BSD-3-Clause-like)
+-JPEG_TURBO_LICENSE_FILES = LICENSE.md
++JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
++JPEG_TURBO_LICENSE_FILES = LICENSE.md README.ijg
+ JPEG_TURBO_INSTALL_STAGING = YES
+ JPEG_TURBO_PROVIDES = jpeg
+ JPEG_TURBO_DEPENDENCIES = host-pkgconf
 -- 
-2.7.4
+2.14.1
