@@ -1,30 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Jun 2018 16:46:54 +0200
-Subject: [Buildroot] [arc-buildroot] snps_archs38_hsdk_defconfig fails
- to build
-In-Reply-To: <9aac68795624d5d0c785e9039e64147554ae2f40.camel@synopsys.com>
- (Alexey Brodkin's message of "Fri, 1 Jun 2018 10:13:56 +0000")
-References: <20180601112008.05171019@windsurf>
- <9aac68795624d5d0c785e9039e64147554ae2f40.camel@synopsys.com>
-Message-ID: <876032zhr5.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 Jun 2018 17:39:42 +0200
+Subject: [Buildroot] [PATCH v3 4/4] linux: config.in: add comment for
+ Arm Cortex-M
+In-Reply-To: <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
+References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
+ <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <20180601153942.GA3841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+Christophe, All,
 
-Hi,
+On 2018-05-31 13:21 +0000, Christophe PRIOUZEAU spake thusly:
+> When binutils > 2.28 are selected on Arm Cortex-M cpu,
+> linux kernel does not boot due to a new implementation
+> of 'adr pseudo instruction' on binutils.
+> 
+> Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
+> 
+> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+> ---
+> Changes v1 -> v2
+>  - correct depends on for comment
+> 
+> Changes v2 -> v3
+>  - use correct TAG BR2_ARM_CPU_ARMV7M
+>  - invert depends for BR2_ARM_CPU_ARMV7M
+> 
+>  linux/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index 73a3299..b5957b6 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
+>  
+>  if BR2_LINUX_KERNEL
+>  
+> +comment "Linux kernel will not boot with binutils >= 2.29"
+> +	depends on BR2_ARM_CPU_ARMV7M
 
- > Right that update definitely fixes the problem.
- > But if you want a cleaner solution we may just bump Linux kernel version to v4.14.13
- > where this fix was backported or maybe even v4.14.47 which is the most recent release
- > of 4.14 series.
+So, my understanding was that the build in Thuimb mode was what was
+causing the issue, rather than the actual architecture.
 
- > Let me know what is your preference and we'll act accordingly.
+So, if one has (say) a Cortex-A9, and decides to build in Thumb mode, as
+well as build its kernel in Thumb mode, wouldn't that also trigger the
+issue as well?
 
-Great, can you please send a bump to 4.14.47? Thanks.
+Regards,
+Yann E. MORIN.
+
+> +	depends on !BR2_BINUTILS_VERSION_2_28_X
+> +
+>  # Packages that need to have a kernel with support for loadable modules,
+>  # but do not use the kernel-modules infrastructure, should select that
+>  # option.
+> -- 
+> 2.7.4
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
