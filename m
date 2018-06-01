@@ -1,32 +1,16 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 Jun 2018 14:57:40 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-05-31
-In-Reply-To: <CANQCQpYU-oO=SbYo=eDyunMLTdiYJoCt0JmsOvOZ_uovcwRUwA@mail.gmail.com>
-References: <20180601060027.2921620828@mail.bootlin.com>
- <CANQCQpYU-oO=SbYo=eDyunMLTdiYJoCt0JmsOvOZ_uovcwRUwA@mail.gmail.com>
-Message-ID: <20180601145740.2134738e@windsurf>
+From: Stefan Becker <chemobejk@gmail.com>
+Date: Fri,  1 Jun 2018 15:58:58 +0300
+Subject: [Buildroot] [PATCH proposal/next] replace host-mkpasswd
+In-Reply-To: <c55c7a49-77e9-f174-5c90-c8baa950d7da@mind.be>
+References: <c55c7a49-77e9-f174-5c90-c8baa950d7da@mind.be>
+Message-ID: <20180601125900.26400-1-chemobejk@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As discussed in the mail thread add a host variant of busybox that
+provides the "mkpasswd" tool for the build.
 
-On Fri, 1 Jun 2018 07:48:35 -0500, Matthew Weber wrote:
-
-> >      sparc64 |                 protobuf-3.5.1 | NOK | http://autobuild.buildroot.net/results/5480a6087a5a782505cec88f797116d8679df3ac |
-> >      sparc64 |                 protobuf-3.5.1 | NOK | http://autobuild.buildroot.net/results/982f727495c1d3524685015c34b1cbb1e0bbb4b0 |  
-> 
-> Looks like a known issue and has been patched on the master branch. I
-> left a note on the pull request asking about plans for the 3.5.1.x
-> release.  https://github.com/google/protobuf/pull/3955
-
-Well, why don't we simply backport this patch ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Rough first draft that probably requires some polishing.
