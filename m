@@ -1,56 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Jun 2018 16:31:05 +0200
-Subject: [Buildroot] [sources.buildroot.net] listing not available
-In-Reply-To: <CAL3OuNx_2RnrVJikft_iYbah_eGTgqYFJPsobqyOFnkfSD_eyQ@mail.gmail.com>
- (Bruno N.'s message of "Thu, 31 May 2018 10:07:03 +0200")
-References: <CAL3OuNxjyRhG2c3-fBakZ7iSd+Vf+KqrKBdOSwzDrcNM_ajGqw@mail.gmail.com>
- <87po1d2l9i.fsf@dell.be.48ers.dk>
- <CAL3OuNx_2RnrVJikft_iYbah_eGTgqYFJPsobqyOFnkfSD_eyQ@mail.gmail.com>
-Message-ID: <87tvqmzihi.fsf@dell.be.48ers.dk>
+Date: Fri, 01 Jun 2018 16:36:02 +0200
+Subject: [Buildroot] [PATCH v3 3/4] package/binutils: Cortex-M targets
+ require version <2.29
+In-Reply-To: <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
+ (Christophe PRIOUZEAU's message of "Thu, 31 May 2018 13:21:33 +0000")
+References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
+ <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <87muwezi99.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bruno" == Bruno N <belgarath116@gmail.com> writes:
+>>>>> "Christophe" == Christophe PRIOUZEAU <christophe.priouzeau@st.com> writes:
 
-Hi,
+ > From: Laurent GONZALEZ <br22@gezedo.com>
+ > binutils 2.29 changed the implementation of adr pseudo instruction
+ > it breaks linux kernel and impacts Cortex-M targets (eg. stm32)
 
- >> > Or maybe are they an other way to make a copy of the repository ?
- >> 
- >> If you just want to make sure you have downloaded everything needed to
- >> build a specific configuration then you can use 'make source'
- >> 
- >> --
- >> Bye, Peter Korsgaard
- >> 
+ > Signed-off-by: Laurent GONZALEZ <br22@gezedo.com>
+ > Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+ > ---
+ >  package/binutils/Config.in.host | 5 +++--
+ >  1 file changed, 3 insertions(+), 2 deletions(-)
 
- > I'm not the only user of this offline repository
- > This way :
- >  - Doing a 'make source' on the offline computer, put the list on USB key,
- > donwload need pakages on usb key, put packages on offline repository
- > look longer than :
- >  - Download everything on usb key and put it on offline repository
+ > diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+ > index 03b2281..9a4caad 100644
+ > --- a/package/binutils/Config.in.host
+ > +++ b/package/binutils/Config.in.host
+ > @@ -2,8 +2,9 @@ comment "Binutils Options"
+ 
+ >  choice
+ >  	prompt "Binutils Version"
+ > -	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
+ > -	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+ > +	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
+ > +	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc && !BR2_ARM_CPU_ARMV7M
+ > +	default BR2_BINUTILS_VERSION_ARC if BR2_arc && !BR2_ARM_CPU_ARMV7M
 
-If you have a >160GB USB key. The problem is that "everything" also
-includes all the older package versions, so you will be downloading way
-too much to ever be useful. I'm not sure our mirror hosting would like
-lots of people to grab all 160GB. We are currently at ~25GB/day as it is.
+kconfig will use the first available default line, so it is enough to
+simply add:
 
- > The second reason i download all the repository is, if another user build
- > with different package he dont need to ask me to download them from the
- > website and put it on the offline repository.
- > Downloading all the repository is not a very elegant way .... but i dont
- > have tool like 'apt-mirror' for buildroot.
- > Maybe there is a way to donwload all packages related to an buildroot
- > release?
+default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
 
-Sorry, there isn't. You can configure buildroot to the architecture you
-need and then run make allyespackageconfig; make source to download the
-default version of all packages available for that architecture, but it
-will not handle packages with version selection or packages only
-available on other architectures.
+In front of the others. Committed with that fixed, thanks.
 
 -- 
 Bye, Peter Korsgaard
