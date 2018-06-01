@@ -1,25 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Jun 2018 16:42:05 +0200
-Subject: [Buildroot] [PATCH v3 2/4] Revert "configs/stm32f469: force
- usage of binutils 2.28.x"
-In-Reply-To: <1527772887-31616-2-git-send-email-christophe.priouzeau@st.com>
- (Christophe PRIOUZEAU's message of "Thu, 31 May 2018 13:21:33 +0000")
-References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
- <1527772887-31616-2-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <87a7sezhz6.fsf@dell.be.48ers.dk>
+Date: Fri, 1 Jun 2018 16:19:52 +0200
+Subject: [Buildroot] [git commit] libjpeg: use SPDX short identifier
+Message-ID: <20180601144051.0C33D7FF2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christophe" == Christophe PRIOUZEAU <christophe.priouzeau@st.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1350678212495925e9800772a82ed6a5894d2da7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This reverts commit 12049cc8b8972a9d0f1e27f1382cc5752d45312f.
- > Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+Use IJG instead of jpeg-license
 
-Committed after extending the commit message with a description of why
-this can now be reverted, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libjpeg/libjpeg.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
+index edda2a5a1b..ab09881fc1 100644
+--- a/package/libjpeg/libjpeg.mk
++++ b/package/libjpeg/libjpeg.mk
+@@ -7,7 +7,7 @@
+ LIBJPEG_VERSION = 9c
+ LIBJPEG_SITE = http://www.ijg.org/files
+ LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
+-LIBJPEG_LICENSE = jpeg-license (BSD-3-Clause-like)
++LIBJPEG_LICENSE = IJG
+ LIBJPEG_LICENSE_FILES = README
+ LIBJPEG_INSTALL_STAGING = YES
+ LIBJPEG_PROVIDES = jpeg
