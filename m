@@ -1,10 +1,11 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Fri, 1 Jun 2018 10:13:56 +0000
-Subject: [Buildroot] [arc-buildroot] snps_archs38_hsdk_defconfig fails
- to build
-In-Reply-To: <20180601112008.05171019@windsurf>
-References: <20180601112008.05171019@windsurf>
-Message-ID: <9aac68795624d5d0c785e9039e64147554ae2f40.camel@synopsys.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 1 Jun 2018 12:14:23 +0200
+Subject: [Buildroot] [PATCH 2/2] package/expect: download tarball
+ instead of cvs
+In-Reply-To: <20180601110915.39e20638@windsurf>
+References: <20180531070520.24242-1-arnout@mind.be>
+ <20180531070520.24242-2-arnout@mind.be> <20180601110915.39e20638@windsurf>
+Message-ID: <3344e256-f19a-457d-d4e7-9daf6d82a714@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,32 +14,69 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-On Fri, 2018-06-01 at 11:20 +0200, Thomas Petazzoni wrote:
-> Hello ARC Maintainers,
+Le 01/06/2018 ? 11:09, Thomas Petazzoni a ?crit?:
+> Hello,
 > 
-> The snps_archs38_hsdk_defconfig fails to build in the master branch.
-> See the log at:
+> On Thu, 31 May 2018 09:05:20 +0200, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
 > 
->   https://urldefense.proofpoint.com/v2/url?u=https-3A__gitlab.com_buildroot.org_buildroot_-2D_jobs_71727022&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74r
-> KOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=v-IUwcSvja4Y9JWwF8Cl2kmhg_NWZccI7bTCk1aIGLY&s=aGScLUTXH9MKxcsln3Nvd6jhd-0pgHGgi2sKbMLNUdA&e=
+>> diff --git a/package/expect/expect.hash b/package/expect/expect.hash
+>> new file mode 100644
+>> index 0000000000..c89f323906
+>> --- /dev/null
+>> +++ b/package/expect/expect.hash
+>> @@ -0,0 +1,4 @@
+>> +# From https://sourceforge.net/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz.SHA256
+>> +sha256  c520717b7195944a69ce1492ec82ca0ac3f3baf060804e6c5ee6d505ea512be9  expect5.45.3.tar.gz
+>> +# Locally calculated
+>> +sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
+>> diff --git a/package/expect/expect.mk b/package/expect/expect.mk
+>> index d78ff6c208..ccde33a71b 100644
+>> --- a/package/expect/expect.mk
+>> +++ b/package/expect/expect.mk
+>> @@ -4,12 +4,13 @@
+>>  #
+>>  ################################################################################
+>>  
+>> -# Version 5.45.3
+>> -EXPECT_VERSION = 2014-05-02
+>> -EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
+>> +EXPECT_VERSION = 5.45.3
+>> +EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
+>> +EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
+>>  EXPECT_LICENSE = Public domain
+>>  EXPECT_LICENSE_FILES = README
 > 
-> Could you look into this and provide a patch to fix this problem ?
+> Romain's autobuiler is not happy with this:
+> 
+>   http://autobuild.buildroot.net/results/dd2/dd29953f28577674070717cbb5feba8e12aad8e3/build-end.log
+> 
+> it downloads some html file. But the same URL downloaded here provides
+> the correct tarball.
 
-So indeed that problem happens with newer GCC and we have a fix for that
-in the kernel since v4.15, see
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=79435ac78d160e4c245544d457850a56f805ac0d
+$ sha256sum instance-?/dl/expect-*
+2b1833202a2371812e9faf67eb0127871b9bd53720e52460552e165534fbde88
+instance-1/dl/expect-2014-05-02.tar.gz
+48c7a5d2a2081384fb42aaac5eedbec6b5511aa02398611b4d4f6754053990e9
+instance-2/dl/expect-2014-05-02.tar.gz
 
-> Perhaps it is fixed by
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__git.buildroot.org_buildroot_commit_configs-3Fh-3Dnext-26id-3D63bf9e71d6153f5a8e73e191cff8ff39f4
-> 09026b&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=v-
-> IUwcSvja4Y9JWwF8Cl2kmhg_NWZccI7bTCk1aIGLY&s=E57p1GTPhH9rlFCuAjINxo8UxnUEouAW9R8KbSDQj94&e=
-> which is just in next ?
+$ ls -lt instance-?/dl/expect-2014-05-02.tar.gz
+-rw-r--r--. 2 naourr naourr 635868 25 mai   01:12
+instance-1/dl/expect-2014-05-02.tar.gz
+-rw-r--r--. 1 naourr naourr 636242 25 avril 11:44
+instance-2/dl/expect-2014-05-02.tar.gz
 
-Right that update definitely fixes the problem.
-But if you want a cleaner solution we may just bump Linux kernel version to v4.14.13
-where this fix was backported or maybe even v4.14.47 which is the most recent release
-of 4.14 series.
+So, it seems Buildroot generated an archive named expect-2014-05-02.tar.gz after
+downloading from cvs. Unfortunately, it's the same as the new upstream archive...
 
-Let me know what is your preference and we'll act accordingly.
+Note: tar --version
+tar (GNU tar) 1.30
 
--Alexey
+I'll remove the wrong (old) archive.
+
+Best regards,
+Romain
+
+> 
+> Thomas
+> 
