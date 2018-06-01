@@ -1,66 +1,59 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jun 2018 17:42:09 +0200
-Subject: [Buildroot] [PATCH v3 3/4] package/binutils: Cortex-M targets
- require version <2.29
-In-Reply-To: <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
-References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
- <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <20180601154209.GB3841@scaer>
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Date: Fri,  1 Jun 2018 17:41:58 +0200
+Subject: [Buildroot] [PATCH 1/3] libgit2: Do not use a bundled zlib.
+Message-ID: <20180601154200.22088-1-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christophe, All,
+libgit2 depends on zlib.  If libgit2's build system does not find a
+system zlib, then it compiles a bundled version of it.
 
-On 2018-05-31 13:21 +0000, Christophe PRIOUZEAU spake thusly:
-> From: Laurent GONZALEZ <br22@gezedo.com>
-> 
-> binutils 2.29 changed the implementation of adr pseudo instruction
-> it breaks linux kernel and impacts Cortex-M targets (eg. stm32)
-> 
-> Signed-off-by: Laurent GONZALEZ <br22@gezedo.com>
-> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
-> ---
->  package/binutils/Config.in.host | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-> index 03b2281..9a4caad 100644
-> --- a/package/binutils/Config.in.host
-> +++ b/package/binutils/Config.in.host
-> @@ -2,8 +2,9 @@ comment "Binutils Options"
->  
->  choice
->  	prompt "Binutils Version"
-> -	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
-> -	default BR2_BINUTILS_VERSION_ARC if BR2_arc
-> +	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
+Force a dependency on zlib to avoid building this bundled version.
 
-Again, isn't it the fact that a Thumb-mode compilation is attempted, so
-we'd trigger the same issue when building in Thumb mode for (e.g.) a
-cortex-a CPU as well?
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ package/libgit2/Config.in  | 1 +
+ package/libgit2/libgit2.mk | 7 ++-----
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-Regards,
-Yann E. MORIN.
-
-> +	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc && !BR2_ARM_CPU_ARMV7M
-> +	default BR2_BINUTILS_VERSION_ARC if BR2_arc && !BR2_ARM_CPU_ARMV7M
->  	help
->  	  Select the version of binutils you wish to use.
->  
-> -- 
-> 2.7.4
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/libgit2/Config.in b/package/libgit2/Config.in
+index 24a1f3b5a9..53ba4d4245 100644
+--- a/package/libgit2/Config.in
++++ b/package/libgit2/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBGIT2
+ 	bool "libgit2"
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  libgit2 is a portable, pure C implementation of the Git core
+ 	  methods provided as a linkable library with a solid API,
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 277a8d46ac..fcace39290 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -16,6 +16,8 @@ LIBGIT2_CONF_OPTS = \
+ 	-DUSE_ICONV=ON \
+ 	-DTHREADSAFE=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
+ 
++LIBGIT2_DEPENDENCIES = zlib
++
+ # If libiconv is available (for !locale toolchains), then we can use
+ # it for iconv support. Note that USE_ICONV=ON is still correct even
+ # without libiconv because (1) most toolchain have iconv support
+@@ -25,11 +27,6 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ LIBGIT2_DEPENDENCIES += libiconv
+ endif
+ 
+-# No option to explicitly enable/disable zlib
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-LIBGIT2_DEPENDENCIES += zlib
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+ LIBGIT2_DEPENDENCIES += libssh2
+ LIBGIT2_CONF_OPTS += -DUSE_SSH=ON
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.0
