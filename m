@@ -1,59 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 1 Jun 2018 16:27:39 +0200
-Subject: [Buildroot] wireshark failure
-In-Reply-To: <87y3fyzitn.fsf@dell.be.48ers.dk>
-References: <20180530060038.E361F20D99@mail.bootlin.com>
- <85e276a9-676f-168f-898c-8605adc0aa51@mind.be>
- <87y3fyzitn.fsf@dell.be.48ers.dk>
-Message-ID: <20180601162739.6ff0e13b@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 01 Jun 2018 16:31:05 +0200
+Subject: [Buildroot] [sources.buildroot.net] listing not available
+In-Reply-To: <CAL3OuNx_2RnrVJikft_iYbah_eGTgqYFJPsobqyOFnkfSD_eyQ@mail.gmail.com>
+ (Bruno N.'s message of "Thu, 31 May 2018 10:07:03 +0200")
+References: <CAL3OuNxjyRhG2c3-fBakZ7iSd+Vf+KqrKBdOSwzDrcNM_ajGqw@mail.gmail.com>
+ <87po1d2l9i.fsf@dell.be.48ers.dk>
+ <CAL3OuNx_2RnrVJikft_iYbah_eGTgqYFJPsobqyOFnkfSD_eyQ@mail.gmail.com>
+Message-ID: <87tvqmzihi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Bruno" == Bruno N <belgarath116@gmail.com> writes:
 
-On Fri, 01 Jun 2018 16:23:48 +0200, Peter Korsgaard wrote:
+Hi,
 
->  >  This is because gcc 6 has started providing stdlib.h itself, but wireshark
->  > changes all -I options into -isystem which makes the include_next not find
->  > stdlib.h any more. (Note, I have not found out why it didn't fail before
->  > November 11; the autobuilders were already using GCC6, and wireshark itself was
->  > bumped months before...).  
-> 
->  >  There are two possible solutions for this:  
-> 
->  > 1. Revert upstream commit 67d9daa65b9d "autotools: Fix extra-compiler-warnings
->  > for system headers". It's a rather big commit, though, and it doesn't revert
->  > cleanly.  
-> 
->  > 2. Switch to CMake, which anyway has to happen at some point since newer
->  > releases have dropped autotools.  
-> 
->  >  I've started doing the latter, but it turns out that the CMake infrastructure
->  > no longer supports GTK2. So, that would also imply removing GTK2 support from
->  > wireshark.  
-> 
->  >  Since we're just before the 2018.05 release, and since this should also be
->  > backported to 2018.02, I wasn't sure whether that was acceptable...  
-> 
->  >  Basically, it's choosing between supporting GTK2, or supporting QT5 + GCC6, or
->  > a possibly very complicated configure.ac + Makefile.am patch.  
-> 
-> Hmm, neither of which sounds very appealing. I think dropping gtk2
-> support is probably the least bad option, so lets go for cmake.
+ >> > Or maybe are they an other way to make a copy of the repository ?
+ >> 
+ >> If you just want to make sure you have downloaded everything needed to
+ >> build a specific configuration then you can use 'make source'
+ >> 
+ >> --
+ >> Bye, Peter Korsgaard
+ >> 
 
-I agree that this is the option that makes the most sense, because it's
-the one that is future proof, as they are dropping autotools support.
-gtk2 is fairly old by now, I don't think it's a big deal to drop
-support for it, especially in the context of Buildroot where people are
-unlikely to build wireshark for its GUI support.
+ > I'm not the only user of this offline repository
+ > This way :
+ >  - Doing a 'make source' on the offline computer, put the list on USB key,
+ > donwload need pakages on usb key, put packages on offline repository
+ > look longer than :
+ >  - Download everything on usb key and put it on offline repository
 
-Best regards,
+If you have a >160GB USB key. The problem is that "everything" also
+includes all the older package versions, so you will be downloading way
+too much to ever be useful. I'm not sure our mirror hosting would like
+lots of people to grab all 160GB. We are currently at ~25GB/day as it is.
 
-Thomas
+ > The second reason i download all the repository is, if another user build
+ > with different package he dont need to ask me to download them from the
+ > website and put it on the offline repository.
+ > Downloading all the repository is not a very elegant way .... but i dont
+ > have tool like 'apt-mirror' for buildroot.
+ > Maybe there is a way to donwload all packages related to an buildroot
+ > release?
+
+Sorry, there isn't. You can configure buildroot to the architecture you
+need and then run make allyespackageconfig; make source to download the
+default version of all packages available for that architecture, but it
+will not handle packages with version selection or packages only
+available on other architectures.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
