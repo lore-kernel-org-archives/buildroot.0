@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Jun 2018 16:36:02 +0200
-Subject: [Buildroot] [PATCH v3 3/4] package/binutils: Cortex-M targets
- require version <2.29
-In-Reply-To: <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
- (Christophe PRIOUZEAU's message of "Thu, 31 May 2018 13:21:33 +0000")
+Date: Fri, 01 Jun 2018 16:39:49 +0200
+Subject: [Buildroot] [PATCH v3 4/4] linux: config.in: add comment for
+ Arm Cortex-M
+In-Reply-To: <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
+ (Christophe PRIOUZEAU's message of "Thu, 31 May 2018 13:21:34 +0000")
 References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
- <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <87muwezi99.fsf@dell.be.48ers.dk>
+ <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <87in72zi2y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,40 @@ To: buildroot@busybox.net
 
 >>>>> "Christophe" == Christophe PRIOUZEAU <christophe.priouzeau@st.com> writes:
 
- > From: Laurent GONZALEZ <br22@gezedo.com>
- > binutils 2.29 changed the implementation of adr pseudo instruction
- > it breaks linux kernel and impacts Cortex-M targets (eg. stm32)
+ > When binutils > 2.28 are selected on Arm Cortex-M cpu,
+ > linux kernel does not boot due to a new implementation
+ > of 'adr pseudo instruction' on binutils.
 
- > Signed-off-by: Laurent GONZALEZ <br22@gezedo.com>
+ > Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
+
  > Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
  > ---
- >  package/binutils/Config.in.host | 5 +++--
- >  1 file changed, 3 insertions(+), 2 deletions(-)
+ > Changes v1 -> v2
+ >  - correct depends on for comment
 
- > diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
- > index 03b2281..9a4caad 100644
- > --- a/package/binutils/Config.in.host
- > +++ b/package/binutils/Config.in.host
- > @@ -2,8 +2,9 @@ comment "Binutils Options"
+ > Changes v2 -> v3
+ >  - use correct TAG BR2_ARM_CPU_ARMV7M
+ >  - invert depends for BR2_ARM_CPU_ARMV7M
+
+ >  linux/Config.in | 4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > diff --git a/linux/Config.in b/linux/Config.in
+ > index 73a3299..b5957b6 100644
+ > --- a/linux/Config.in
+ > +++ b/linux/Config.in
+ > @@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
  
- >  choice
- >  	prompt "Binutils Version"
- > -	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
- > -	default BR2_BINUTILS_VERSION_ARC if BR2_arc
- > +	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
- > +	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc && !BR2_ARM_CPU_ARMV7M
- > +	default BR2_BINUTILS_VERSION_ARC if BR2_arc && !BR2_ARM_CPU_ARMV7M
+ >  if BR2_LINUX_KERNEL
+ 
+ > +comment "Linux kernel will not boot with binutils >= 2.29"
 
-kconfig will use the first available default line, so it is enough to
-simply add:
+The hope is still that this may be fixed in newer Linux kernel versions
+so I changed it to the less strong:
 
-default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
+Linux kernel may fail to boot with binutils >= 2.29
 
-In front of the others. Committed with that fixed, thanks.
+And committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
