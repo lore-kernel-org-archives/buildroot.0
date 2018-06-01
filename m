@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Jun 2018 16:39:49 +0200
-Subject: [Buildroot] [PATCH v3 4/4] linux: config.in: add comment for
- Arm Cortex-M
-In-Reply-To: <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
- (Christophe PRIOUZEAU's message of "Thu, 31 May 2018 13:21:34 +0000")
+Date: Fri, 01 Jun 2018 16:41:51 +0200
+Subject: [Buildroot] [PATCH v3 1/4] Revert "configs/stm32f429: force
+ usage of binutils 2.28.x"
+In-Reply-To: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
+ (Christophe PRIOUZEAU's message of "Thu, 31 May 2018 13:21:32 +0000")
 References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
- <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <87in72zi2y.fsf@dell.be.48ers.dk>
+Message-ID: <87efhqzhzk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,40 +14,11 @@ To: buildroot@busybox.net
 
 >>>>> "Christophe" == Christophe PRIOUZEAU <christophe.priouzeau@st.com> writes:
 
- > When binutils > 2.28 are selected on Arm Cortex-M cpu,
- > linux kernel does not boot due to a new implementation
- > of 'adr pseudo instruction' on binutils.
-
- > Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
-
+ > This reverts commit cbe43fd417d77f846f1ca47cdacd51a73be1aaec.
  > Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
- > ---
- > Changes v1 -> v2
- >  - correct depends on for comment
 
- > Changes v2 -> v3
- >  - use correct TAG BR2_ARM_CPU_ARMV7M
- >  - invert depends for BR2_ARM_CPU_ARMV7M
-
- >  linux/Config.in | 4 ++++
- >  1 file changed, 4 insertions(+)
-
- > diff --git a/linux/Config.in b/linux/Config.in
- > index 73a3299..b5957b6 100644
- > --- a/linux/Config.in
- > +++ b/linux/Config.in
- > @@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
- 
- >  if BR2_LINUX_KERNEL
- 
- > +comment "Linux kernel will not boot with binutils >= 2.29"
-
-The hope is still that this may be fixed in newer Linux kernel versions
-so I changed it to the less strong:
-
-Linux kernel may fail to boot with binutils >= 2.29
-
-And committed, thanks.
+Committed after extending the commit message with a description of why
+this can now be reverted, thanks.
 
 -- 
 Bye, Peter Korsgaard
