@@ -1,61 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 1 Jun 2018 13:12:56 +0200
-Subject: [Buildroot] qt-4.8.7 ICE on powerpc [was:
- [autobuild.buildroot.net] Build results for 2018-05-31]
-In-Reply-To: <20180601110638.5c41eacf@windsurf>
-References: <20180601060027.2921620828@mail.bootlin.com>
- <a3c7791c-7502-5ce2-9677-355105fd23ec@mind.be>
- <20180601110638.5c41eacf@windsurf>
-Message-ID: <bd26e178-b204-056d-3646-7ececd9964d5@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  1 Jun 2018 14:44:38 +0300
+Subject: [Buildroot] [PATCH next] ipset: bump to version 6.38
+Message-ID: <647837acc524873a1f7f7cc7b2539a1cc0cdf71e.1527853478.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/ipset/ipset.hash | 6 +++---
+ package/ipset/ipset.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-
-On 01-06-18 11:06, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 1 Jun 2018 09:58:01 +0200, Arnout Vandecappelle wrote:
->> On 01-06-18 08:00, Thomas Petazzoni wrote:
->>>      powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/cebd1d3d013d40bf71bf20696c28818f58d9533a | ORPH  
->>
->>  This one has also been failing for a *long* time. It is caused by
->> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818
-> 
-> Doesn't this bug report claims that the issue has been fixed in gcc
-> 6.x... but still the autobuild failure happens with a gcc 6.x based
-> toolchain ?
-
- Well, a single bug report sometimes contains multiple bugs :-). Apparently part
-of the problem was only fixed in GCC7.2, and it's possible that some part is not
-fixed yet.
-
-
- Regards,
- Arnout
-
-> 
->>  Should we introduce a BR2_TOOLCHAIN_HAS_GCC_BUG_60818 here? However, AFAICS
->> it's only Qt4 that is failing, so maybe an autobuild exclusion is more
->> appropriate in this case.
-> 
-> I continue to prefer the BR2_TOOLCHAIN_HAS_GCC_BUG_xyz approach. There
-> are only two packages that select BR2_PACKAGE_QT, and those packages in
-> turn don't have any reverse dependencies. So it's not a big deal to
-> propagate a BR2_TOOLCHAIN_HAS_GCC_BUG_xyz option.
-> 
-> Best regards,
-> 
-> Thomas
-> 
-
+diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
+index 9185d94d857f..f41111c02297 100644
+--- a/package/ipset/ipset.hash
++++ b/package/ipset/ipset.hash
+@@ -1,6 +1,6 @@
+-# From http://ftp.netfilter.org/pub/ipset/ipset-6.36.tar.bz2.md5sum.txt
+-md5 fda041afefd581464e445b87beeb0681  ipset-6.36.tar.bz2
++# From http://ftp.netfilter.org/pub/ipset/ipset-6.38.tar.bz2.md5sum.txt
++md5 0e5d9c85f6b78e7dff0c996e2900574b  ipset-6.38.tar.bz2
+ # Calculated based on the hash above
+-sha256 22224a90dc6c7d97b7a7addedd0740c3841e3d9a7ff8c8d2123bae0c3620d30d  ipset-6.36.tar.bz2
++sha256 ceef625ba31fe0aaa422926c7231a819de0b07644c02c17ebdd3022a29e3e244  ipset-6.38.tar.bz2
+ # Locally calculated
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
+index e9f8165fabe9..3ec9448941ec 100644
+--- a/package/ipset/ipset.mk
++++ b/package/ipset/ipset.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPSET_VERSION = 6.36
++IPSET_VERSION = 6.38
+ IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
+ IPSET_SITE = http://ipset.netfilter.org
+ IPSET_DEPENDENCIES = libmnl host-pkgconf
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.17.0
