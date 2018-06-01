@@ -1,59 +1,73 @@
 From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Fri,  1 Jun 2018 17:41:59 +0200
-Subject: [Buildroot] [PATCH 2/3] libgit2: Bump version to 0.27.1
+Date: Fri,  1 Jun 2018 17:42:00 +0200
+Subject: [Buildroot] [PATCH 3/3] libgit2: Fix build with LibreSSL 2.7
 In-Reply-To: <20180601154200.22088-1-nicolas.cavallari@green-communications.fr>
 References: <20180601154200.22088-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20180601154200.22088-2-nicolas.cavallari@green-communications.fr>
+Message-ID: <20180601154200.22088-3-nicolas.cavallari@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a security vulnerability similar to git's CVE-2018-11235
-
-This release changes some configuration options, so tweak them
-accordingly.
+By using an patch from upstream's master branch.
 
 Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 ---
- package/libgit2/libgit2.hash | 2 +-
- package/libgit2/libgit2.mk   | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-Fix-build-with-LibreSSL-2.7.patch    | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
 
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index cc09af3627..43d8f9930e 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	6a62393e0ceb37d02fe0d5707713f504e7acac9006ef33da1e88960bd78b6eac  libgit2-v0.26.0.tar.gz
-+sha256	837b11927bc5f64e7f9ab0376f57cfe3ca5aa52ffd2007ac41184b21124fb086  libgit2-v0.27.1.tar.gz
- sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index fcace39290..8b7b9f6d77 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGIT2_VERSION = v0.26.0
-+LIBGIT2_VERSION = v0.27.1
- LIBGIT2_SITE = $(call github,libgit2,libgit2,$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = GPL-2.0 with linking exception
- LIBGIT2_LICENSE_FILES = COPYING
-@@ -36,9 +36,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBGIT2_DEPENDENCIES += openssl
--LIBGIT2_CONF_OPTS += -DUSE_OPENSSL=ON
-+LIBGIT2_CONF_OPTS += -DUSE_HTTPS=OpenSSL
- else
--LIBGIT2_CONF_OPTS += -DUSE_OPENSSL=OFF
-+LIBGIT2_CONF_OPTS += -DUSE_HTTPS=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
+diff --git a/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch b/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
+new file mode 100644
+index 0000000000..f0be0f0d2f
+--- /dev/null
++++ b/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
+@@ -0,0 +1,45 @@
++From 7490d449b518115a1ae86b01397e95c38e39cff1 Mon Sep 17 00:00:00 2001
++From: Bernard Spil <brnrd@FreeBSD.org>
++Date: Mon, 2 Apr 2018 20:00:07 +0200
++Subject: [PATCH] Fix build with LibreSSL 2.7
++
++LibreSSL 2.7 adds OpenSSL 1.1 API
++
++Signed-off-by: Bernard Spil <brnrd@FreeBSD.org>
++Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
++---
++ src/streams/openssl.c | 3 ++-
++ src/streams/openssl.h | 3 ++-
++ 2 files changed, 4 insertions(+), 2 deletions(-)
++
++diff --git a/src/streams/openssl.c b/src/streams/openssl.c
++index 9cbb2746f..adcb7f14e 100644
++--- a/src/streams/openssl.c
+++++ b/src/streams/openssl.c
++@@ -104,7 +104,8 @@ int git_openssl_stream_global_init(void)
++ 	ssl_opts |= SSL_OP_NO_COMPRESSION;
++ #endif
++ 
++-#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
++ 	SSL_load_error_strings();
++ 	OpenSSL_add_ssl_algorithms();
++ #else
++diff --git a/src/streams/openssl.h b/src/streams/openssl.h
++index 2bbad7c68..44329ec90 100644
++--- a/src/streams/openssl.h
+++++ b/src/streams/openssl.h
++@@ -31,7 +31,8 @@ extern int git_openssl__set_cert_location(const char *file, const char *path);
++ 
++ 
++ 
++-# if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+++# if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+++     (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
++ 
++ GIT_INLINE(BIO_METHOD*) BIO_meth_new(int type, const char *name)
++ {
++-- 
++2.17.0
++
 -- 
 2.17.0
