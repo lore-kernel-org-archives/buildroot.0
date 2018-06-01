@@ -1,50 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 1 Jun 2018 16:19:59 +0200
-Subject: [Buildroot] [git commit] jpeg-turbo: add license details
-Message-ID: <20180601144051.17DB983686@busybox.osuosl.org>
+Date: Fri, 01 Jun 2018 16:46:54 +0200
+Subject: [Buildroot] [arc-buildroot] snps_archs38_hsdk_defconfig fails
+ to build
+In-Reply-To: <9aac68795624d5d0c785e9039e64147554ae2f40.camel@synopsys.com>
+ (Alexey Brodkin's message of "Fri, 1 Jun 2018 10:13:56 +0000")
+References: <20180601112008.05171019@windsurf>
+ <9aac68795624d5d0c785e9039e64147554ae2f40.camel@synopsys.com>
+Message-ID: <876032zhr5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca668476b3aa0ce42e7ffb79f484c5eadbcc99d2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
-- jpeg-turbo is covered by 3 licenses: IJG (libjpeg),
-  BSD-3-Clause (TurboJPEG) and Zlib (SIMD)
-- Add README.ijg
-- Add hash for license files
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/jpeg-turbo/jpeg-turbo.hash | 2 ++
- package/jpeg-turbo/jpeg-turbo.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ > Right that update definitely fixes the problem.
+ > But if you want a cleaner solution we may just bump Linux kernel version to v4.14.13
+ > where this fix was backported or maybe even v4.14.47 which is the most recent release
+ > of 4.14 series.
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index 320bbb2a94..11b323b8bf 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -3,3 +3,5 @@ sha1 e788f6defa58b4393a5e1685c018f3b962971457  libjpeg-turbo-1.5.2.tar.gz
- md5 6b4923e297a7eaa255f08511017a8818  libjpeg-turbo-1.5.2.tar.gz
- # Locally computed
- sha256 9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528  libjpeg-turbo-1.5.2.tar.gz
-+sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
-+sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index bb1278f8b2..d52ab916e0 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -7,8 +7,8 @@
- JPEG_TURBO_VERSION = 1.5.2
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
--JPEG_TURBO_LICENSE = jpeg-license (BSD-3-Clause-like)
--JPEG_TURBO_LICENSE_FILES = LICENSE.md
-+JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
-+JPEG_TURBO_LICENSE_FILES = LICENSE.md README.ijg
- JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_PROVIDES = jpeg
- JPEG_TURBO_DEPENDENCIES = host-pkgconf
+ > Let me know what is your preference and we'll act accordingly.
+
+Great, can you please send a bump to 4.14.47? Thanks.
+
+-- 
+Bye, Peter Korsgaard
