@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 1 Jun 2018 17:39:42 +0200
-Subject: [Buildroot] [PATCH v3 4/4] linux: config.in: add comment for
- Arm Cortex-M
-In-Reply-To: <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
+Date: Fri, 1 Jun 2018 17:42:09 +0200
+Subject: [Buildroot] [PATCH v3 3/4] package/binutils: Cortex-M targets
+ require version <2.29
+In-Reply-To: <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
 References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
- <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
-Message-ID: <20180601153942.GA3841@scaer>
+ <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
+Message-ID: <20180601154209.GB3841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,50 +15,41 @@ To: buildroot@busybox.net
 Christophe, All,
 
 On 2018-05-31 13:21 +0000, Christophe PRIOUZEAU spake thusly:
-> When binutils > 2.28 are selected on Arm Cortex-M cpu,
-> linux kernel does not boot due to a new implementation
-> of 'adr pseudo instruction' on binutils.
+> From: Laurent GONZALEZ <br22@gezedo.com>
 > 
-> Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
+> binutils 2.29 changed the implementation of adr pseudo instruction
+> it breaks linux kernel and impacts Cortex-M targets (eg. stm32)
 > 
+> Signed-off-by: Laurent GONZALEZ <br22@gezedo.com>
 > Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 > ---
-> Changes v1 -> v2
->  - correct depends on for comment
+>  package/binutils/Config.in.host | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> Changes v2 -> v3
->  - use correct TAG BR2_ARM_CPU_ARMV7M
->  - invert depends for BR2_ARM_CPU_ARMV7M
-> 
->  linux/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index 73a3299..b5957b6 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
+> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+> index 03b2281..9a4caad 100644
+> --- a/package/binutils/Config.in.host
+> +++ b/package/binutils/Config.in.host
+> @@ -2,8 +2,9 @@ comment "Binutils Options"
 >  
->  if BR2_LINUX_KERNEL
->  
-> +comment "Linux kernel will not boot with binutils >= 2.29"
-> +	depends on BR2_ARM_CPU_ARMV7M
+>  choice
+>  	prompt "Binutils Version"
+> -	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
+> -	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+> +	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
 
-So, my understanding was that the build in Thuimb mode was what was
-causing the issue, rather than the actual architecture.
-
-So, if one has (say) a Cortex-A9, and decides to build in Thumb mode, as
-well as build its kernel in Thumb mode, wouldn't that also trigger the
-issue as well?
+Again, isn't it the fact that a Thumb-mode compilation is attempted, so
+we'd trigger the same issue when building in Thumb mode for (e.g.) a
+cortex-a CPU as well?
 
 Regards,
 Yann E. MORIN.
 
-> +	depends on !BR2_BINUTILS_VERSION_2_28_X
-> +
->  # Packages that need to have a kernel with support for loadable modules,
->  # but do not use the kernel-modules infrastructure, should select that
->  # option.
+> +	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc && !BR2_ARM_CPU_ARMV7M
+> +	default BR2_BINUTILS_VERSION_ARC if BR2_arc && !BR2_ARM_CPU_ARMV7M
+>  	help
+>  	  Select the version of binutils you wish to use.
+>  
 > -- 
 > 2.7.4
 > _______________________________________________
