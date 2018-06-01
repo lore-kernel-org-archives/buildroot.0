@@ -1,105 +1,336 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  1 Jun 2018 22:29:51 +0200
-Subject: [Buildroot] [PATCH 1/1] cairo: bump to version 1.15.12
-Message-ID: <20180601202951.23002-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 01 Jun 2018 22:51:58 +0200
+Subject: [Buildroot] Buildroot 2018.05 released
+Message-ID: <87fu26xma9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove second patch (LTO support removed since 1.14.0 in August 2014:
-  https://cgit.freedesktop.org/cairo/commit/?id=c7ff9bb32e20679d6da4e8a2856be716e5bd9e12
-- Add hash for license files
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cairo/0002-fix-gcc-49-build.patch | 38 -------------------------------
- package/cairo/cairo.hash                  | 11 ++++++---
- package/cairo/cairo.mk                    |  5 ++--
- 3 files changed, 10 insertions(+), 44 deletions(-)
- delete mode 100644 package/cairo/0002-fix-gcc-49-build.patch
+Buildroot 2018.05 is released - Go download it at:
 
-diff --git a/package/cairo/0002-fix-gcc-49-build.patch b/package/cairo/0002-fix-gcc-49-build.patch
-deleted file mode 100644
-index 112c9ea053..0000000000
---- a/package/cairo/0002-fix-gcc-49-build.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--Fix build with gcc 4.9
--
--cairo fails to build with gcc 4.9 due to a bad interaction of cairo
--modules with the LTO mechanism. The suggested workaround is to pass
---ffat-lto-objects. See
--https://bugs.freedesktop.org/show_bug.cgi?id=77060 for the upstream
--bug report, and
--https://bugs.archlinux.org/task/40313?project=1&openedfrom=-1+week for
--the ArchLinux bug report.
--
--This patch passes -ffat-lto-objects when gcc understands this option,
--in order to provide compatibility with gcc versions older than 4.8,
--which did not provide this option, but are anyway unaffected by the
--issue.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/configure.ac
--===================================================================
----- a/configure.ac
--+++ b/configure.ac
--@@ -37,6 +37,16 @@
-- m4_include(build/configure.ac.pthread)  dnl checks for pthreads
-- AC_CACHE_SAVE
-- 
--+old_cflags=$CFLAGS
--+CFLAGS=-ffat-lto-objects
--+AC_MSG_CHECKING([whether CC supports -ffat-lto-objects])
--+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])],
--+    [AC_MSG_RESULT([yes])]
--+    [LTO_CFLAGS=-ffat-lto-objects],
--+    [AC_MSG_RESULT([no])]
--+)
--+CFLAGS="${old_CFLAGS} ${LTO_CFLAGS}"
--+
-- dnl ===========================================================================
-- 
-- AC_CHECK_LIB(z, compress,
-diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
-index f3aa01f2cd..795a2eeea5 100644
---- a/package/cairo/cairo.hash
-+++ b/package/cairo/cairo.hash
-@@ -1,4 +1,9 @@
--# From http://cairographics.org/releases/cairo-1.14.10.tar.xz.sha1
--sha1	28c59d85d6b790c21b8b59ece73a6a1dda28d69a	cairo-1.14.10.tar.xz
-+# From https://www.cairographics.org/snapshots/cairo-1.15.12.tar.xz.sha1
-+sha1	4e64c6a48789edb4c60bc3fa95bd3992cc388b88	cairo-1.15.12.tar.xz
- # Calculated based on the hash above
--sha256	7e87878658f2c9951a14fc64114d4958c0e65ac47530b8ac3078b2ce41b66a09	cairo-1.14.10.tar.xz
-+sha256	7623081b94548a47ee6839a7312af34e9322997806948b6eec421a8c6d0594c9	cairo-1.15.12.tar.xz
-+
-+# Hash for license files:
-+sha256	67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf	COPYING
-+sha256	9e9e8608c4cdda51a78cc3a385f4ec9a2e4c96d5ecad74ac8bca5fca3e563b7d	COPYING-LGPL-2.1
-+sha256	53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f	COPYING-MPL-1.1
-diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
-index 9749056776..6dffff4b81 100644
---- a/package/cairo/cairo.mk
-+++ b/package/cairo/cairo.mk
-@@ -4,13 +4,12 @@
- #
- ################################################################################
- 
--CAIRO_VERSION = 1.14.10
-+CAIRO_VERSION = 1.15.12
- CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
- CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
- CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
--CAIRO_SITE = http://cairographics.org/releases
-+CAIRO_SITE = http://cairographics.org/snapshots
- CAIRO_INSTALL_STAGING = YES
--CAIRO_AUTORECONF = YES
- 
- # relocation truncated to fit: R_68K_GOT16O
- ifeq ($(BR2_m68k_cf),y)
+http://buildroot.net/downloads/buildroot-2018.05.tar.gz
+
+or
+
+http://buildroot.net/downloads/buildroot-2018.05.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker.
+
+This was another big development cycle with more than 1400 changes all
+over the tree and more than 100 unique contributors! I'm very happy to
+see so many "new" people next to the "oldtimers".
+
+Of noteworthy new features/changes we have:
+
+  Toolchain: glibc bumped to 2.27, musl bumped to 1.1.19,
+  uClibc-ng 1.0.30, Linux kernel headers bumped to 4.16.x.
+
+  Architecture: support for the Blackfin architecture has been
+  removed, as it was removed from Linux upstream, poorly
+  maintained in binutils/gdb, and abandoned by Analog Devices.
+
+  Numerous packages updated to have hashes for their license
+  files.
+
+  Systemd can now be built with uClibc toolchains.
+
+  Linux: addition of BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF and
+  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL to support building Linux
+  kernel configurations that need libelf on the host or openssl
+  on the host.
+
+  Rpcgen for the host is built when needed to support distributions no
+  longer shipping rpcgen with glibc (E.G. recent Fedora).
+
+  Coding style:
+
+  - all Python scripts are now verified with flake8
+  - check-package extended to check all Config.in and .mk files
+    in tree, not only the ones in package/
+
+  Infrastructure:
+
+  - The download infrastructure has seen a major overhaul, with
+    the main visible new feature being Git caching: a package
+    fetched from Git no longer needs to be re-cloned entirely
+    everytime its version is changed. Anoter visible change is
+    that the download folder now has subfolders per package. See
+    http://lists.busybox.net/pipermail/buildroot/2018-April/217923.html
+    for more details about those changes.
+
+  - The logic that generates the root filesystem images has been
+    reworked, with the main goal of allowing several filesystem
+    images to be produced in parallel, also a requirement for
+    top-level parallel build. Now, a .tar filesystem image is
+    always created, and re-extracted in a private directory to
+    create each format-specific filesystem image.
+
+  - A new package infrastructure was introduced for Go-based
+    packages: golang-package.
+
+  - Dependencies on extraction tools are now handled as proper
+    per-package dependencies, using
+    <pkg>_EXTRACT_DEPENDENCIES. Beyond a cleanup, this is also a
+    preparation step for top-level parallel build support.
+
+  - When a file being downloaded is part of a package with a
+    .hash file, but there is no hash listed for this file, the
+    file is now preserved in the download directory rather than
+    removed. This helps when updating a package, as it gives the
+    ability to easily calculate the hash of the file.
+
+  - Addition of '<pkg>-show-recursive-depends' and
+    '<pkg>-show-recursive-rdepends' make targets, to
+    respectively display the recursive list of dependencies and
+    the recursive list of reverse dependencies of a given
+    package.
+
+  - The /etc/shells file is now automatically generated with the
+    list of shell programs installed on the system.
+
+  - Addition of -Ofast optimization level as an available
+    option.
+
+  Major updates: Go updated to 1.10, Erlang bumped to 20.3, Qt5
+  bumped to 5.10.1.
+
+  New packages: 18xx-ti-utils, abootimg, bluez-alsa, brotli,
+  chipmunk, clang, docker-compose, docker-proxy, flare-engine,
+  flare-game, gst1-interpipe, gstreamer1-editing-services,
+  hackrf, i2pd, imx-alsa-plugins, imx-mkimage, libcdio-paranoia,
+  libkrb5, llvm, pixiewps, python-backports-ssl-match-hostname,
+  python-cached-property, python-cython, python-docker,
+  python-dockerpty, python-docker-pycreds,
+  python-flask-sqlalchemy, python-functools32, python-influxdb,
+  python-json-models, python-libusb1, python-networkx,
+  python-psycopg2, python-pymodbus, python-sqlalchemy,
+  python-subprocess32, python-texttable,
+  python-websocket-client, python-yieldfrom, quotatool, reaver,
+  snort, sunxi-mali-mainline, sunxi-mali-mainline-driver, tk,
+  tpm2-abrmd, tpm2-tools, tpm2-tss, udftools, vte, woff2.
+
+  New defconfigs: ARC HS Development Kit, Arcturus ucls1012a,
+  Freescale i.MX6UL EVK (with vendor kernel), Freescale i.MX6
+  SoloLite EVK (with vendor kernel), Freescale i.MX31 3Stack,
+  Freescale i.MX8Q EVK Freescale p1025twr, Freescale t1040d4rdb,
+  Qemu PPC64 E5500, SolidRun ClearFog Base, Tinker RK3288, Vyasa
+  RK3288,
+
+And the usual package version updates and bug fixes. See the CHANGES
+file for details:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.05
+
+Many thanks to the people contributing to this release:
+
+git shortlog -s -n 2018.02..
+
+   222	Fabrice Fontaine
+   157	Thomas Petazzoni
+   125	Bernd Kuhls
+   120	Baruch Siach
+    86	Peter Korsgaard
+    75	Yann E. MORIN
+    62	Fabio Estevam
+    60	Carlos Santos
+    50	Ricardo Martincoski
+    42	Romain Naour
+    24	J?rg Krause
+    21	Adam Duskett
+    18	Maxime Hadjinlian
+    17	Valentin Korenblit
+    16	Peter Seiderer
+    13	Asaf Kahlon
+    11	Eric Le Bihan
+    11	Erik Larsson
+    11	Ga?l PORTAY
+    11	Joshua Henderson
+    11	Martin Bark
+    10	Angelo Compagnucci
+    10	Arnout Vandecappelle (Essensium/Mind)
+    10	Waldemar Brodkorb
+    10	Yegor Yefremov
+     9	Matt Weber
+     8	Andr? Hentschel
+     8	Francois Perrad
+     8	Stefan Becker
+     7	Adrian Perez de Castro
+     7	Rahul Bedarkar
+     6	Danomi Manchego
+     6	Ryan Coe
+     5	Anssi Hannula
+     5	Christophe PRIOUZEAU
+     5	Giulio Benetti
+     5	Joseph Kogut
+     4	Anisse Astier
+     4	Evgeniy Didin
+     4	Guillaume W. Bres
+     4	Jan Kundr?t
+     4	John Keeping
+     4	Marcin Niestroj
+     4	Petr Vorel
+     4	Vincent Stehl?
+     3	Alex Baldwin
+     3	Alexander Mukhin
+     3	Chris Lesiak
+     3	Christian Stewart
+     3	Christopher McCrory
+     3	Jared Bents
+     3	Marcus Folkesson
+     3	Sven Haardiek
+     3	Timo Ketola
+     3	Vivien Didelot
+     2	Alex Suykov
+     2	Alexey Brodkin
+     2	Bartosz Golaszewski
+     2	Chris Brandt
+     2	Eugene Tarassov
+     2	Florian La Roche
+     2	George Redivo
+     2	Jagan Teki
+     2	James Byrne
+     2	James Knight
+     2	Jerzy Grzegorek
+     2	Julien BOIBESSOT
+     2	Lothar Felten
+     2	Luca Ceresoli
+     2	Martin Kepplinger
+     2	Olivier Schonken
+     2	Rafal Susz
+     2	Sergey Matyukevich
+     2	Stefan S?rensen
+     1	Alexander Dahl
+     1	Alistair Francis
+     1	Andre Renaud
+     1	Antoine Tenart
+     1	Bartosz Bilas
+     1	Blomme, Maarten
+     1	Calin Crisan
+     1	Cam Hutchison
+     1	Ciro Santilli
+     1	Dagg Stompler
+     1	David Barbion
+     1	Ezequiel Garcia
+     1	Falco Hyfing
+     1	Gwenhael Goavec-Merou
+     1	Jaap Crezee
+     1	Jason A. Donenfeld
+     1	Jason Pruitt
+     1	Jeremy Rosen
+     1	Jim Brennan
+     1	Joel Stanley
+     1	Jonas Zaddach
+     1	Julien Boibessot
+     1	Julien Corjon
+     1	J?r?me Oufella
+     1	Laurent GONZALEZ
+     1	Lionel Flandrin
+     1	Manfred Schlaegl
+     1	Micha? Kalbarczyk
+     1	Nicolas Cavallari
+     1	Oleksandr Zhadan
+     1	Prasanthi Chellakumar
+     1	Romain Reignier
+     1	Sasha Shyrokov
+     1	Scott Fan
+     1	Sergio Prado
+     1	Simon van der Veldt
+     1	Stefan Fr?berg
+     1	Steve Kenton
+     1	Tarek El-Sherbiny
+     1	Thomas De Schampheleire
+     1	Trent Piepho
+     1	Yves Deweerdt
+
+And a special thanks to our patch reviewers:
+
+git log 2018.02.. | grep -Ei '(reviewed|acked)-by:' | \
+    sed 's/.*by: //' | sort | uniq -c | sort -n -r
+
+     94 "Yann E. MORIN" <yann.morin.1998@free.fr>
+     27 Yegor Yefremov <yegorslists@googlemail.com>
+     13 Ricardo Martincoski <ricardo.martincoski@gmail.com>
+      4 Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+      4 Sam Voss <sam.voss@rockwellcollins.com>
+      4 Romain Naour <romain.naour@smile.fr>
+      4 Luca Ceresoli <luca@lucaceresoli.net>
+      3 Samuel Martin <s.martin49@gmail.com>
+      3 Romain Naour <romain.naour@gmail.com>
+      3 Petr Vorel <petr.vorel@gmail.com>
+      3 Olivier Schonken <olivier.schonken@gmail.com>
+      3 Matt Weber <matthew.weber@rockwellcollins.com>
+      2 Valentin Korenblit <valentin.korenblit@smile.fr>
+      2 Peter Seiderer <ps.report@gmx.net>
+      2 Gary Bisson <gary.bisson@boundarydevices.com>
+      2 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+      2 Adrian Perez de Castro <aperez@igalia.com>
+      1 "Yann E. MORIN" <yann.morin.1998@free.fr>o
+      1 Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+      1 Rahul Bedarkar <rahulbedarkar89@gmail.com>
+      1 Peter Korsgaard <peter@korsgaard.com>
+      1 Maxime Ripard <maxime.ripard@free-electrons.com>
+      1 Martin Hicks <mort@bork.org>
+      1 J?rg Krause <joerg.krause@embedded.rocks>
+      1 Jan Kundr?t <jan.kundrat@cesnet.cz>
+      1 Fabio Estevam <festevam@gmail.com>
+      1 Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+      1 Carlos Santos <casantos@datacom.ind.br>
+      1 Bernd Kuhls <bernd.kuhls@t-online.de>
+      1 Baruch Siach <baruch@tkos.co.il>
+      1 Alistair Francis <alistair@alistair23.me>
+
+Once again our autobuilders have helped us fix a huge amount of build
+issues. Thanks to all the people reviewing failures and fixing issues:
+
+for i in $(git log --format=%H 2018.02..); do \
+    git show --quiet $i | grep -q http://autobuild && \
+    git show --quiet --format="%an" $i ; done | sort | uniq -c | \
+        sort -rn -k1
+     47 Baruch Siach
+     30 Thomas Petazzoni
+     30 Fabrice Fontaine
+     13 Yann E. MORIN
+      8 Romain Naour
+      8 Peter Korsgaard
+      7 Carlos Santos
+      6 Bernd Kuhls
+      3 Valentin Korenblit
+      3 Matt Weber
+      3 Adrian Perez de Castro
+      3 Adam Duskett
+      2 Waldemar Brodkorb
+      2 Ryan Coe
+      2 Peter Seiderer
+      2 Guillaume W. Bres
+      2 Erik Larsson
+      2 Asaf Kahlon
+      2 Arnout Vandecappelle (Essensium/Mind)
+      2 Alex Baldwin
+      1 Stefan Becker
+      1 Olivier Schonken
+      1 Maxime Hadjinlian
+      1 J?r?me Oufella
+      1 Ga?l PORTAY
+      1 Danomi Manchego
+      1 Angelo Compagnucci
+      1 Alistair Francis
+
+The next release will be 2018.08. Expect the first release candidate at
+the beginning of August and the final release at the end of the month.
+
+This release will be supported with security and other important fixes
+until 2018.08 is out. If you need longer support then consider using our
+long term support release (2018.02.x) instead which will be supported
+until 2019.02.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
