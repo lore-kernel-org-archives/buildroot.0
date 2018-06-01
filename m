@@ -1,99 +1,82 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 1 Jun 2018 12:53:40 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 1 Jun 2018 13:08:39 +0200
 Subject: [Buildroot] [PATCH 2/2] package/expect: download tarball
  instead of cvs
-In-Reply-To: <3344e256-f19a-457d-d4e7-9daf6d82a714@gmail.com>
+In-Reply-To: <20180601110915.39e20638@windsurf>
 References: <20180531070520.24242-1-arnout@mind.be>
  <20180531070520.24242-2-arnout@mind.be> <20180601110915.39e20638@windsurf>
- <3344e256-f19a-457d-d4e7-9daf6d82a714@gmail.com>
-Message-ID: <93fbb28c-d6a0-83da-39bd-3e9a6692bb78@gmail.com>
+Message-ID: <fcf0a77a-b84a-402e-d6fb-892d1f37851f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 01/06/2018 ? 12:14, Romain Naour a ?crit?:
-> Hi Thomas,
+
+
+On 01-06-18 11:09, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Le 01/06/2018 ? 11:09, Thomas Petazzoni a ?crit?:
->> Hello,
->>
->> On Thu, 31 May 2018 09:05:20 +0200, Arnout Vandecappelle
->> (Essensium/Mind) wrote:
->>
->>> diff --git a/package/expect/expect.hash b/package/expect/expect.hash
->>> new file mode 100644
->>> index 0000000000..c89f323906
->>> --- /dev/null
->>> +++ b/package/expect/expect.hash
->>> @@ -0,0 +1,4 @@
->>> +# From https://sourceforge.net/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz.SHA256
->>> +sha256  c520717b7195944a69ce1492ec82ca0ac3f3baf060804e6c5ee6d505ea512be9  expect5.45.3.tar.gz
->>> +# Locally calculated
->>> +sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
->>> diff --git a/package/expect/expect.mk b/package/expect/expect.mk
->>> index d78ff6c208..ccde33a71b 100644
->>> --- a/package/expect/expect.mk
->>> +++ b/package/expect/expect.mk
->>> @@ -4,12 +4,13 @@
->>>  #
->>>  ################################################################################
->>>  
->>> -# Version 5.45.3
->>> -EXPECT_VERSION = 2014-05-02
->>> -EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
->>> +EXPECT_VERSION = 5.45.3
->>> +EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
->>> +EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
->>>  EXPECT_LICENSE = Public domain
->>>  EXPECT_LICENSE_FILES = README
->>
->> Romain's autobuiler is not happy with this:
->>
->>   http://autobuild.buildroot.net/results/dd2/dd29953f28577674070717cbb5feba8e12aad8e3/build-end.log
->>
->> it downloads some html file. But the same URL downloaded here provides
->> the correct tarball.
+> On Thu, 31 May 2018 09:05:20 +0200, Arnout Vandecappelle
+> (Essensium/Mind) wrote:
 > 
-> $ sha256sum instance-?/dl/expect-*
-> 2b1833202a2371812e9faf67eb0127871b9bd53720e52460552e165534fbde88
-> instance-1/dl/expect-2014-05-02.tar.gz
-> 48c7a5d2a2081384fb42aaac5eedbec6b5511aa02398611b4d4f6754053990e9
-> instance-2/dl/expect-2014-05-02.tar.gz
+>> diff --git a/package/expect/expect.hash b/package/expect/expect.hash
+>> new file mode 100644
+>> index 0000000000..c89f323906
+>> --- /dev/null
+>> +++ b/package/expect/expect.hash
+>> @@ -0,0 +1,4 @@
+>> +# From https://sourceforge.net/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz.SHA256
+>> +sha256  c520717b7195944a69ce1492ec82ca0ac3f3baf060804e6c5ee6d505ea512be9  expect5.45.3.tar.gz
+>> +# Locally calculated
+>> +sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
+>> diff --git a/package/expect/expect.mk b/package/expect/expect.mk
+>> index d78ff6c208..ccde33a71b 100644
+>> --- a/package/expect/expect.mk
+>> +++ b/package/expect/expect.mk
+>> @@ -4,12 +4,13 @@
+>>  #
+>>  ################################################################################
+>>  
+>> -# Version 5.45.3
+>> -EXPECT_VERSION = 2014-05-02
+>> -EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
+>> +EXPECT_VERSION = 5.45.3
+>> +EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
+>> +EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
+>>  EXPECT_LICENSE = Public domain
+>>  EXPECT_LICENSE_FILES = README
 > 
-> $ ls -lt instance-?/dl/expect-2014-05-02.tar.gz
-> -rw-r--r--. 2 naourr naourr 635868 25 mai   01:12
-> instance-1/dl/expect-2014-05-02.tar.gz
-> -rw-r--r--. 1 naourr naourr 636242 25 avril 11:44
-> instance-2/dl/expect-2014-05-02.tar.gz
+> Romain's autobuiler is not happy with this:
 > 
-> So, it seems Buildroot generated an archive named expect-2014-05-02.tar.gz after
-> downloading from cvs. Unfortunately, it's the same as the new upstream archive...
+>   http://autobuild.buildroot.net/results/dd2/dd29953f28577674070717cbb5feba8e12aad8e3/build-end.log
+> 
+> it downloads some html file. But the same URL downloaded here provides
+> the correct tarball.
 
-Sorry, the new archive is expect5.45.3.tar.gz
+ Yeah, in Romain's autobuilder it is redirected to
 
-I downloaded this archive using a make source on this machine without any issue.
+https://sourceforge.net/#!/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz
 
-sha256sum dl/expect/expect5.45.3.tar.gz
-c520717b7195944a69ce1492ec82ca0ac3f3baf060804e6c5ee6d505ea512be9
-dl/expect/expect5.45.3.tar.gz
+while locally I get
 
-It's maybe a sourceforge issue (again).
+https://sourceforge.net/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz/download
 
-Best regards,
-Romain
+which is the right one...
+
+
+ Regards,
+ Arnout
+
 
 > 
-> Note: tar --version
-> tar (GNU tar) 1.30
+> Thomas
 > 
-> I'll remove the wrong (old) archive.
-> 
-> Best regards,
-> Romain
-> 
->>
->> Thomas
->>
-> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
