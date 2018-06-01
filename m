@@ -1,71 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 01 Jun 2018 19:17:05 +0200
-Subject: [Buildroot] [PATCH v3 3/4] package/binutils: Cortex-M targets
- require version <2.29
-In-Reply-To: <20180601154209.GB3841@scaer> (Yann E. MORIN's message of "Fri, 1
- Jun 2018 17:42:09 +0200")
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 1 Jun 2018 19:21:00 +0200
+Subject: [Buildroot] [PATCH v3 4/4] linux: config.in: add comment for
+ Arm Cortex-M
+In-Reply-To: <20180601153942.GA3841@scaer>
 References: <1527772887-31616-1-git-send-email-christophe.priouzeau@st.com>
- <1527772887-31616-3-git-send-email-christophe.priouzeau@st.com>
- <20180601154209.GB3841@scaer>
-Message-ID: <87sh66xw8e.fsf@dell.be.48ers.dk>
+ <1527772887-31616-4-git-send-email-christophe.priouzeau@st.com>
+ <20180601153942.GA3841@scaer>
+Message-ID: <20180601172100.GA9702@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Christophe, All,
 
- > Christophe, All,
- > On 2018-05-31 13:21 +0000, Christophe PRIOUZEAU spake thusly:
- >> From: Laurent GONZALEZ <br22@gezedo.com>
- >> 
- >> binutils 2.29 changed the implementation of adr pseudo instruction
- >> it breaks linux kernel and impacts Cortex-M targets (eg. stm32)
- >> 
- >> Signed-off-by: Laurent GONZALEZ <br22@gezedo.com>
- >> Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
- >> ---
- >> package/binutils/Config.in.host | 5 +++--
- >> 1 file changed, 3 insertions(+), 2 deletions(-)
- >> 
- >> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
- >> index 03b2281..9a4caad 100644
- >> --- a/package/binutils/Config.in.host
- >> +++ b/package/binutils/Config.in.host
- >> @@ -2,8 +2,9 @@ comment "Binutils Options"
- >> 
- >> choice
- >> prompt "Binutils Version"
- >> -	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
- >> -	default BR2_BINUTILS_VERSION_ARC if BR2_arc
- >> +	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
+On 2018-06-01 17:39 +0200, Yann E. MORIN spake thusly:
+> On 2018-05-31 13:21 +0000, Christophe PRIOUZEAU spake thusly:
+> > When binutils > 2.28 are selected on Arm Cortex-M cpu,
+> > linux kernel does not boot due to a new implementation
+> > of 'adr pseudo instruction' on binutils.
+> > 
+> > Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
+[--SNIP--]
+> > diff --git a/linux/Config.in b/linux/Config.in
+> > index 73a3299..b5957b6 100644
+> > --- a/linux/Config.in
+> > +++ b/linux/Config.in
+> > @@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
+> >  
+> >  if BR2_LINUX_KERNEL
+> >  
+> > +comment "Linux kernel will not boot with binutils >= 2.29"
+> > +	depends on BR2_ARM_CPU_ARMV7M
+> 
+> So, my understanding was that the build in Thuimb mode was what was
+> causing the issue, rather than the actual architecture.
+> 
+> So, if one has (say) a Cortex-A9, and decides to build in Thumb mode, as
+> well as build its kernel in Thumb mode, wouldn't that also trigger the
+> issue as well?
 
- > Again, isn't it the fact that a Thumb-mode compilation is attempted, so
- > we'd trigger the same issue when building in Thumb mode for (e.g.) a
- > cortex-a CPU as well?
+So, with Peter, we've attemped various tests, all based of our
+qemu_arm_vexpress_defconfig, with the followingf results:
 
-Yes, it looks like you are right. Lacking hardware at hand I did a test
-build of qemu_arm_vexpress:
+  - defconfig with no change, ie.e arm mode with binutils 2.29: OK
 
-default, E.G. binutils 2.29, ARM instructions: OK
-2.28, THUMB2_KERNEL / BR2_ARM_INSTRUCTIONS_THUMB2: OK
-2.29, THUMB2_KERNEL / BR2_ARM_INSTRUCTIONS_THUMB2: FAIL
+  - defconfig with just Thumb mode and kernel in Thumb2, still with
+    binutils 2.29: KO
 
-It crashes in init:
+  - defconfig with Thumb mode, kernel in Thumb2, and binutils 2.28: OK
 
-devtmpfs: mounted
-Freeing unused kernel memory: 1024K
-Internal error: Oops - undefined instruction: 0 [#1] SMP THUMB2
-Modules linked in:
-CPU: 0 PID: 1 Comm: init Not tainted 4.16.7 #1
-Hardware name: ARM-Versatile Express
-PC is at ret_fast_syscall+0x4/0x62
+So, it really is thumb mode and binutils 2.29 that is at fault, not just
+armv7m.
 
-See https://pastebin.com/VdtBWEgi for the complete boot log.
+I'm cooking the patch right now, theres a good smell around; baking is
+on good tracks... ;-)
 
-So I guess we should change the BR2_ARM_CPU_ARMV7M to
-BR2_ARM_INSTRUCTIONS_THUMB2.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
