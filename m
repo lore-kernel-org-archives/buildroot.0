@@ -1,73 +1,36 @@
-From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Date: Fri,  1 Jun 2018 17:42:00 +0200
-Subject: [Buildroot] [PATCH 3/3] libgit2: Fix build with LibreSSL 2.7
-In-Reply-To: <20180601154200.22088-1-nicolas.cavallari@green-communications.fr>
-References: <20180601154200.22088-1-nicolas.cavallari@green-communications.fr>
-Message-ID: <20180601154200.22088-3-nicolas.cavallari@green-communications.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 01 Jun 2018 17:52:46 +0200
+Subject: [Buildroot] [git commit branch/next] configs/socrates_cyclone5:
+ change over to current upstream releases
+In-Reply-To: <20180601112206.5e6eff0f@windsurf> (Thomas Petazzoni's message of
+ "Fri, 1 Jun 2018 11:22:06 +0200")
+References: <20180528194941.1136A82854@busybox.osuosl.org>
+ <20180601112206.5e6eff0f@windsurf>
+Message-ID: <871sdqzepd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By using an patch from upstream's master branch.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
----
- .../0001-Fix-build-with-LibreSSL-2.7.patch    | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
+ > Peter,
+ > On Mon, 28 May 2018 21:50:47 +0200, Thomas Petazzoni wrote:
+ >> commit: https://git.buildroot.net/buildroot/commit/?id=ef94c736ec460e56b82a5a45819f7adce787d488
+ >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+ >> 
+ >> Since all cyclone5 development changes are upstream, change over to an
+ >> upstream release of the Linux kernel and u-boot for buildroot.
+ >> 
+ >> Signed-off-by: Florian La Roche <Florian.LaRoche@googlemail.com>
+ >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch b/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
-new file mode 100644
-index 0000000000..f0be0f0d2f
---- /dev/null
-+++ b/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
-@@ -0,0 +1,45 @@
-+From 7490d449b518115a1ae86b01397e95c38e39cff1 Mon Sep 17 00:00:00 2001
-+From: Bernard Spil <brnrd@FreeBSD.org>
-+Date: Mon, 2 Apr 2018 20:00:07 +0200
-+Subject: [PATCH] Fix build with LibreSSL 2.7
-+
-+LibreSSL 2.7 adds OpenSSL 1.1 API
-+
-+Signed-off-by: Bernard Spil <brnrd@FreeBSD.org>
-+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-+---
-+ src/streams/openssl.c | 3 ++-
-+ src/streams/openssl.h | 3 ++-
-+ 2 files changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/streams/openssl.c b/src/streams/openssl.c
-+index 9cbb2746f..adcb7f14e 100644
-+--- a/src/streams/openssl.c
-++++ b/src/streams/openssl.c
-+@@ -104,7 +104,8 @@ int git_openssl_stream_global_init(void)
-+ 	ssl_opts |= SSL_OP_NO_COMPRESSION;
-+ #endif
-+ 
-+-#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
-++    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
-+ 	SSL_load_error_strings();
-+ 	OpenSSL_add_ssl_algorithms();
-+ #else
-+diff --git a/src/streams/openssl.h b/src/streams/openssl.h
-+index 2bbad7c68..44329ec90 100644
-+--- a/src/streams/openssl.h
-++++ b/src/streams/openssl.h
-+@@ -31,7 +31,8 @@ extern int git_openssl__set_cert_location(const char *file, const char *path);
-+ 
-+ 
-+ 
-+-# if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
-++# if OPENSSL_VERSION_NUMBER < 0x10100000L || \
-++     (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
-+ 
-+ GIT_INLINE(BIO_METHOD*) BIO_meth_new(int type, const char *name)
-+ {
-+-- 
-+2.17.0
-+
+ > I have applied this patch to next, but in fact I believe it should have
+ > gone into master, as it should fix the build of the socrates_cyclone5
+ > defconfig: https://gitlab.com/buildroot.org/buildroot/-/jobs/71727024.
+
+Ok, cherry picked for master as well, thanks.
+
 -- 
-2.17.0
+Bye, Peter Korsgaard
