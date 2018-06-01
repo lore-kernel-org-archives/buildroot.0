@@ -1,34 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 1 Jun 2018 21:43:06 +0200
-Subject: [Buildroot] [git commit] linux: reword binutils 2.29+ comment
-Message-ID: <20180601194225.E4E4683732@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 01 Jun 2018 19:54:53 +0000
+Subject: [Buildroot] [Bug 11051] runtime issue on STM32 with usage of
+ binutils 2.29.x
+In-Reply-To: <bug-11051-163@https.bugs.busybox.net/>
+References: <bug-11051-163@https.bugs.busybox.net/>
+Message-ID: <bug-11051-163-Bw4a2jgrpl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d937f908f12f80349089e60e418afbb714e86f7e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11051
 
-This issue only applies to kernels built with CONFIG_THUMB2=y, so reword the
-comment to make that more clear.
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c29b1f6c88..58d2286685 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -8,7 +8,7 @@ config BR2_LINUX_KERNEL
- 
- if BR2_LINUX_KERNEL
- 
--comment "Linux kernel may fail to boot with binutils >= 2.29"
-+comment "Linux kernel in thumb mode may be broken with binutils >= 2.29"
- 	depends on BR2_arm || BR2_armeb
- 	depends on !BR2_BINUTILS_VERSION_2_28_X
- 
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
+Fixed by making ARM thumb builds default to binutils 2.28.x and display a
+warning message in the Linux config:
+
+https://git.buildroot.org/buildroot/commit/?id=17f352acdebd4a825903807f8a2d60ebea223afb
+https://git.buildroot.org/buildroot/commit/?id=3dbc5a62798d0f804a9a931b5dbd1c3a2a419ab2
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
