@@ -1,51 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 1 Jun 2018 16:40:11 +0200
-Subject: [Buildroot] [git commit] Revert "configs/stm32f429: force usage of
- binutils 2.28.x"
-Message-ID: <20180601144051.3B0D37FF2B@busybox.osuosl.org>
+Date: Fri, 1 Jun 2018 16:19:59 +0200
+Subject: [Buildroot] [git commit] jpeg-turbo: add license details
+Message-ID: <20180601144051.17DB983686@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=371b45fe4aaf8ba5ad46223d947cf7f9b851785f
+commit: https://git.buildroot.net/buildroot/commit/?id=ca668476b3aa0ce42e7ffb79f484c5eadbcc99d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit cbe43fd417d77f846f1ca47cdacd51a73be1aaec.
+- jpeg-turbo is covered by 3 licenses: IJG (libjpeg),
+  BSD-3-Clause (TurboJPEG) and Zlib (SIMD)
+- Add README.ijg
+- Add hash for license files
 
-Now that the binutils default has been changed for ARMv7M, this is no longer
-needed.
-
-Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/stm32f429_disco_defconfig | 1 -
- linux/Config.in                   | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.hash | 2 ++
+ package/jpeg-turbo/jpeg-turbo.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/configs/stm32f429_disco_defconfig b/configs/stm32f429_disco_defconfig
-index fc167d0270..5237e9adb5 100644
---- a/configs/stm32f429_disco_defconfig
-+++ b/configs/stm32f429_disco_defconfig
-@@ -2,7 +2,6 @@ BR2_arm=y
- BR2_cortex_m4=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f429-disco/patches"
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
--BR2_BINUTILS_VERSION_2_28_X=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-diff --git a/linux/Config.in b/linux/Config.in
-index b5957b61d3..bffb52fd18 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -8,7 +8,7 @@ config BR2_LINUX_KERNEL
- 
- if BR2_LINUX_KERNEL
- 
--comment "Linux kernel will not boot with binutils >= 2.29"
-+comment "Linux kernel may fail to boot with binutils >= 2.29"
- 	depends on BR2_ARM_CPU_ARMV7M
- 	depends on !BR2_BINUTILS_VERSION_2_28_X
- 
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index 320bbb2a94..11b323b8bf 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -3,3 +3,5 @@ sha1 e788f6defa58b4393a5e1685c018f3b962971457  libjpeg-turbo-1.5.2.tar.gz
+ md5 6b4923e297a7eaa255f08511017a8818  libjpeg-turbo-1.5.2.tar.gz
+ # Locally computed
+ sha256 9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528  libjpeg-turbo-1.5.2.tar.gz
++sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
++sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index bb1278f8b2..d52ab916e0 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -7,8 +7,8 @@
+ JPEG_TURBO_VERSION = 1.5.2
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+-JPEG_TURBO_LICENSE = jpeg-license (BSD-3-Clause-like)
+-JPEG_TURBO_LICENSE_FILES = LICENSE.md
++JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
++JPEG_TURBO_LICENSE_FILES = LICENSE.md README.ijg
+ JPEG_TURBO_INSTALL_STAGING = YES
+ JPEG_TURBO_PROVIDES = jpeg
+ JPEG_TURBO_DEPENDENCIES = host-pkgconf
