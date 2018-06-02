@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:51 -0000
-Subject: [Buildroot] [git commit] package/perl-mailtools: bump version to
- 2.20
-Message-ID: <20180602101009.BA34F836B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] firmware-imx: bump to version 7.4
+Message-ID: <20180602101010.17E017FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dc663fd875aa96262a8f2a3a3850a2035b2fd52
+commit: https://git.buildroot.net/buildroot/commit/?id=40e99050c81a9885789aa8b0b64a013ddedda190
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added license hash.
+This update includes GA version of the DDR training binaries for i.MX8M.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-mailtools/perl-mailtools.hash | 6 ++++--
- package/perl-mailtools/perl-mailtools.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 2 +-
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-mailtools/perl-mailtools.hash b/package/perl-mailtools/perl-mailtools.hash
-index cb33453ecd..9fb91cbd26 100644
---- a/package/perl-mailtools/perl-mailtools.hash
-+++ b/package/perl-mailtools/perl-mailtools.hash
-@@ -1,3 +1,5 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    a00b9d3c3dec64bd15de8c50f1b73d05 MailTools-2.19.tar.gz
--sha256 c17ed702efea8eab56fe92961c07cd4980cee26ca6f13aff2688dc8af69c5e1a MailTools-2.19.tar.gz
-+md5    53e9d35256c3fd7cef0e4a24b15e9512 MailTools-2.20.tar.gz
-+sha256 f55606f7a9cc342ee9d5f996e2b6a4c0047e2ee47cd88c3250ecf0d0c5fb3196 MailTools-2.20.tar.gz
-+# Locally computed
-+sha256 734d5b1bd212de832aea99e94c98d56217ea9519d900a29c0547538f596a9b26  README
-diff --git a/package/perl-mailtools/perl-mailtools.mk b/package/perl-mailtools/perl-mailtools.mk
-index 75079f9e8b..ae595bbfcf 100644
---- a/package/perl-mailtools/perl-mailtools.mk
-+++ b/package/perl-mailtools/perl-mailtools.mk
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index ca8556fa21..dd0e13a7cf 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 3e107d83ed2367c9565250d6ff3903cc604bf4d9aa505391260ead0f51ceb8d9  firmware-imx-7.2.bin
++sha256 8a8ec439d014e928f42c49bab1c382914ec5b4f1041df28e5d687eb194bd07ab  firmware-imx-7.4.bin
+ sha256 faf01d10e484879247963eb97d96622a980232e22a35e487dfe53b13708b686a  EULA
+ sha256 0f34f6175247762e2e1c38319aadf657a53f00ce124e569dfc61b30451549e7a  COPYING
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index 351496a7a7..b9756fc2bf 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAILTOOLS_VERSION = 2.19
-+PERL_MAILTOOLS_VERSION = 2.20
- PERL_MAILTOOLS_SOURCE = MailTools-$(PERL_MAILTOOLS_VERSION).tar.gz
- PERL_MAILTOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MA/MARKOV
- PERL_MAILTOOLS_DEPENDENCIES = perl-timedate
+-FIRMWARE_IMX_VERSION = 7.2
++FIRMWARE_IMX_VERSION = 7.4
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
+ 
