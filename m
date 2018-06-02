@@ -1,42 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 02 Jun 2018 10:11:51 -0000
-Subject: [Buildroot] [git commit] libostree: bump to version 2018.5
-Message-ID: <20180602101010.04FB87FADE@busybox.osuosl.org>
+Date: Sat, 02 Jun 2018 10:11:52 -0000
+Subject: [Buildroot] [git commit] libhdhomerun: bump to version 20180327
+Message-ID: <20180602101010.5F2DF7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2c2e7a9f992460f5b6133fd5a2188e92df33cc2
+commit: https://git.buildroot.net/buildroot/commit/?id=3587331f53d464ec2f9af432e61bc51b7f007dd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Add hash for license file
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libostree/libostree.hash | 2 +-
- package/libostree/libostree.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libhdhomerun/libhdhomerun.hash | 3 ++-
+ package/libhdhomerun/libhdhomerun.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
-index 1f0e9ce95f..9ee0c7bdb2 100644
---- a/package/libostree/libostree.hash
-+++ b/package/libostree/libostree.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 f5b1e083ed630fd32a263731fe9595ecdd07cfd5cba3e354931f481c4181de1c  libostree-2018.4.tar.xz
-+sha256 ad0f5a0e7a7f22f87c72b318b2cfdbe8cf908a1a469ec94eb72984bbb3690261  libostree-2018.5.tar.xz
- sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index ba6379d7e7..ddb230517b 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
+diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
+index 0938889d88..ed972ddfc1 100644
+--- a/package/libhdhomerun/libhdhomerun.hash
++++ b/package/libhdhomerun/libhdhomerun.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 0cb392231961fab6c226c69012503e2ebe46ac0f13512689bd37d6cf9ee838a1  libhdhomerun_20170930.tgz
++sha256 d91fd3782f9a0834242f7110c44067647843602f8e95052045250b7c229ccbd5  libhdhomerun_20180327.tgz
++sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
+index 10aff88e6a..5e32370a9d 100644
+--- a/package/libhdhomerun/libhdhomerun.mk
++++ b/package/libhdhomerun/libhdhomerun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOSTREE_VERSION = 2018.4
-+LIBOSTREE_VERSION = 2018.5
- LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
- LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
- 
+-LIBHDHOMERUN_VERSION = 20170930
++LIBHDHOMERUN_VERSION = 20180327
+ LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
+ LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
+ LIBHDHOMERUN_LICENSE = LGPL-2.1+
