@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:51 -0000
-Subject: [Buildroot] [git commit] package/perl-uri: bump version to 1.74
-Message-ID: <20180602101009.A3DC87FADE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libusb: bump to version 1.0.22
+Message-ID: <20180602101009.CEF7B836B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e025497175b3ef36b738601b017bb0706e5c134c
+commit: https://git.buildroot.net/buildroot/commit/?id=ced4daef825d2c763fab78a4c5bdaa5a2fe12886
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added license hash.
+Add license file hash.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-uri/perl-uri.hash | 6 ++++--
- package/perl-uri/perl-uri.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/libusb/libusb.hash | 3 ++-
+ package/libusb/libusb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
-index 5f27230e5e..c8bf47d437 100644
---- a/package/perl-uri/perl-uri.hash
-+++ b/package/perl-uri/perl-uri.hash
-@@ -1,3 +1,5 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    37d44a08e599aa945b32a9434ffe00a5 URI-1.73.tar.gz
--sha256 cca7ab4a6f63f3ccaacae0f2e1337e8edf84137e73f18548ec7d659f23efe413 URI-1.73.tar.gz
-+md5    892f7183b178af40f205ba37128225db URI-1.74.tar.gz
-+sha256 a9c254f45f89cb1dd946b689dfe433095404532a4543bdaab0b71ce0fdcdd53d URI-1.74.tar.gz
-+# Locally computed
-+sha256 65cd6f88516a30f56fd4e0080fb78ea69424fc89067470dc994e4abfba08664e  LICENSE
-diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
-index 690a0eb8c7..10a5bb8bda 100644
---- a/package/perl-uri/perl-uri.mk
-+++ b/package/perl-uri/perl-uri.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
+index 0415aab509..7e9d2a2ad2 100644
+--- a/package/libusb/libusb.hash
++++ b/package/libusb/libusb.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 7dce9cce9a81194b7065ee912bcd55eeffebab694ea403ffb91b67db66b1824b  libusb-1.0.21.tar.bz2
++sha256 75aeb9d59a4fdb800d329a545c2e6799f732362193b465ea198f2aa275518157  libusb-1.0.22.tar.bz2
++sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index f0bb9e3335..8d7aed1619 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PERL_URI_VERSION = 1.73
-+PERL_URI_VERSION = 1.74
- PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
- PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_URI_LICENSE = Artistic or GPL-1.0+
+ LIBUSB_VERSION_MAJOR = 1.0
+-LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).21
++LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).22
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
+ LIBUSB_LICENSE = LGPL-2.1+
