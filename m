@@ -1,44 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:52 -0000
-Subject: [Buildroot] [git commit] libhdhomerun: bump to version 20180327
-Message-ID: <20180602101010.5F2DF7FADE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] uhubctl: bump to version 2.0.0
+Message-ID: <20180602101009.F00917FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3587331f53d464ec2f9af432e61bc51b7f007dd5
+commit: https://git.buildroot.net/buildroot/commit/?id=c817be894728ee496881ee0a72c2fadef1761fdd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+Add license file hash.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libhdhomerun/libhdhomerun.hash | 3 ++-
- package/libhdhomerun/libhdhomerun.mk   | 2 +-
+ package/uhubctl/uhubctl.hash | 3 ++-
+ package/uhubctl/uhubctl.mk   | 2 +-
  2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
-index 0938889d88..ed972ddfc1 100644
---- a/package/libhdhomerun/libhdhomerun.hash
-+++ b/package/libhdhomerun/libhdhomerun.hash
+diff --git a/package/uhubctl/uhubctl.hash b/package/uhubctl/uhubctl.hash
+index 6afee905bf..3724f3fbf9 100644
+--- a/package/uhubctl/uhubctl.hash
++++ b/package/uhubctl/uhubctl.hash
 @@ -1,2 +1,3 @@
  # Locally computed
--sha256 0cb392231961fab6c226c69012503e2ebe46ac0f13512689bd37d6cf9ee838a1  libhdhomerun_20170930.tgz
-+sha256 d91fd3782f9a0834242f7110c44067647843602f8e95052045250b7c229ccbd5  libhdhomerun_20180327.tgz
-+sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
-index 10aff88e6a..5e32370a9d 100644
---- a/package/libhdhomerun/libhdhomerun.mk
-+++ b/package/libhdhomerun/libhdhomerun.mk
+-sha256 dfc85571ad86a071bf7a0db7cadf97a870e628777e47176520de6866b4f042b6 uhubctl-047bb1e392efd3e0ea5d5caf351e20761e12cd44.tar.gz
++sha256 4c31278b2c03e5be5a696c3088bc86cf2557a70e00f697799c163aba18e3c40e uhubctl-v2.0.0.tar.gz
++sha256 3260a6cd23e2677be1fa0815785cd5fa499d363a033f58cc299e12220662d486 LICENSE
+diff --git a/package/uhubctl/uhubctl.mk b/package/uhubctl/uhubctl.mk
+index 74845001ba..3d2adb347e 100644
+--- a/package/uhubctl/uhubctl.mk
++++ b/package/uhubctl/uhubctl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBHDHOMERUN_VERSION = 20170930
-+LIBHDHOMERUN_VERSION = 20180327
- LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
- LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
- LIBHDHOMERUN_LICENSE = LGPL-2.1+
+-UHUBCTL_VERSION = 047bb1e392efd3e0ea5d5caf351e20761e12cd44
++UHUBCTL_VERSION = v2.0.0
+ UHUBCTL_SITE = $(call github,mvp,uhubctl,$(UHUBCTL_VERSION))
+ UHUBCTL_LICENSE = GPL-2.0
+ UHUBCTL_LICENSE_FILES = LICENSE
