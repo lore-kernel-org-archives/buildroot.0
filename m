@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 02 Jun 2018 12:44:21 +0200
-Subject: [Buildroot] [PATCH next] sysstat: bump to version 11.6.3
-In-Reply-To: <c3a5c093b77c6661dc5de16fc4756b691a4212a7.1527840404.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 1 Jun 2018 11:06:44 +0300")
-References: <c3a5c093b77c6661dc5de16fc4756b691a4212a7.1527840404.git.baruch@tkos.co.il>
-Message-ID: <87y3fxwjqy.fsf@dell.be.48ers.dk>
+Date: Sat, 02 Jun 2018 12:44:25 +0200
+Subject: [Buildroot] [PATCH next] ipset: bump to version 6.38
+In-Reply-To: <647837acc524873a1f7f7cc7b2539a1cc0cdf71e.1527853478.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 1 Jun 2018 14:44:38 +0300")
+References: <647837acc524873a1f7f7cc7b2539a1cc0cdf71e.1527853478.git.baruch@tkos.co.il>
+Message-ID: <87tvqlwjqu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
