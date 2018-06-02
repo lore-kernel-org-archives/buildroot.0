@@ -1,42 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:59 -0000
-Subject: [Buildroot] [git commit] package/tzdata: bump version to 2018e
-Message-ID: <20180602101010.B9DBD7FADE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] busybox: remove musl specific tweaks
+Message-ID: <20180602101010.6885C7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=878a197210f2860e8fb8c3fe181dc2b60d46e6d4
+commit: https://git.buildroot.net/buildroot/commit/?id=e0a8b910f66531421dde1f20ba9aac604dc24e86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Busybox build fine under current musl using its provided shadow
+passwords and utmp/wtmp support.
+
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tzdata/tzdata.hash | 4 ++--
- package/tzdata/tzdata.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/busybox/busybox.mk | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
-index cfcd49ef26..6a0ea17ce9 100644
---- a/package/tzdata/tzdata.hash
-+++ b/package/tzdata/tzdata.hash
-@@ -1,2 +1,2 @@
--# From http://mm.icann.org/pipermail/tz-announce/2018-January/000048.html
--sha512 0575c87c9ffcde7b7f62b0df928d8a0e8d93f832b5ef7227b3d8431686f851f1fd5372c7e768f2979830352433b31df7f3979a00c28ea3973a3a0987ebbfb835	tzdata2018c.tar.gz
-+# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
-+sha512 d059fcd381b2f6ecdafcd68fdd2a00451d1bf9b1affeb164ae7cabca2e022d499e77f0706ec3f3091b8e84c2211aa66da6c90937108771f1bf070cfebc105cae	tzdata2018e.tar.gz
-diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
-index 28323e84e7..e20c946208 100644
---- a/package/tzdata/tzdata.mk
-+++ b/package/tzdata/tzdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 60a55a2c78..7033c4304a 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -156,21 +156,6 @@ define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+ endef
+ endif
  
--TZDATA_VERSION = 2018c
-+TZDATA_VERSION = 2018e
- TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
- TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
- TZDATA_STRIP_COMPONENTS = 0
+-# We also need to use internal shadow password functions when using
+-# the musl C library, since some of them are not yet implemented by
+-# musl.
+-#
+-# Do not use utmp/wmtp support. wmtp support is not available in musl,
+-# and utmp support is not sufficient for Busybox.
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-define BUSYBOX_MUSL_TWEAKS
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_PWD_GRP,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_SHADOW,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_UTMP,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_WTMP,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-endif
+-
+ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
+ 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+@@ -293,7 +278,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
+ 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
+-	$(BUSYBOX_MUSL_TWEAKS)
+ endef
+ 
+ define BUSYBOX_CONFIGURE_CMDS
