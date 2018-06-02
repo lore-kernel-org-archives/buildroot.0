@@ -1,72 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Jun 2018 00:19:33 +0200
-Subject: [Buildroot] [PATCH 3/4] support/testing: fix python syntax
+Date: Sun,  3 Jun 2018 00:19:34 +0200
+Subject: [Buildroot] [PATCH 4/4] support/docker: use the distro-provided
+ flake8
 In-Reply-To: <cover.1527977964.git.yann.morin.1998@free.fr>
 References: <cover.1527977964.git.yann.morin.1998@free.fr>
-Message-ID: <141e1e33fdf6b4601677642ab64e7d76969ca96a.1527977964.git.yann.morin.1998@free.fr>
+Message-ID: <ff32083db8641c38fa6d02f731870583b24c4dab.1527977964.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We're about to switch to using the flake8 from the distro, and that one
-uncovers two more issues that the previously used pip-provided one did
-not catch:
+Currently, we install flake8 and its dependencies via pip. We
+tried to be reproducible by pinning the version of those python
+packages, but we did forget quite a few of them, and thus some
+dependencies for flake8 are installed as uncontrolled versions.
 
-  - 'print' is now a function,
-  - exceptions need to be caught-assigned with the 'as' keyword,
+Furthermore, before we install flake8 and its dependencies, we
+forcibly update pip, setuptools, and wheels packages to their
+latest versions. This explicitly breaks reproducibility.
 
-Additionally, old-style "%s"%() formatting is deprecated.
+While we could enforce a specific version of all those packages
+and still grab them from PyPI, we can simply grab them from the
+distribution-provided packages instead.
 
-Fix those three issues.
+Since we're using a pinned versiomn of stretch, this already
+guarantees we'll reproducibily get the same versions over and
+over again. Besides, we just need to list flake8 as a package to
+install to automatically get all its dependencies (again, in a
+reproducible way).
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- support/testing/infra/__init__.py | 6 +++---
- support/testing/infra/basetest.py | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ support/docker/Dockerfile | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
-index b03e891771..a9352a652b 100644
---- a/support/testing/infra/__init__.py
-+++ b/support/testing/infra/__init__.py
-@@ -34,17 +34,17 @@ def download(dldir, filename):
-         os.makedirs(dldir)
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 4f08a54f06..57c9ef78fa 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -29,6 +29,7 @@ RUN apt-get install -y --no-install-recommends \
+         cpio \
+         cvs \
+         file \
++        flake8 \
+         g++-multilib \
+         git \
+         libc6:i386 \
+@@ -47,14 +48,6 @@ RUN apt-get install -y --no-install-recommends \
+     apt-get -y autoremove && \
+     apt-get -y clean
  
-     tmpfile = tempfile.mktemp(dir=dldir)
--    print "Downloading to {}".format(tmpfile)
-+    print("Downloading to {}".format(tmpfile))
- 
-     try:
-         url_fh = urlopen(os.path.join(ARTIFACTS_URL, filename))
-         with open(tmpfile, "w+") as tmpfile_fh:
-             tmpfile_fh.write(url_fh.read())
--    except (HTTPError, URLError), err:
-+    except (HTTPError, URLError) as err:
-         os.unlink(tmpfile)
-         raise err
- 
--    print "Renaming from %s to %s" % (tmpfile, finalpath)
-+    print("Renaming from {0} to {1}".format(tmpfile, finalpath))
-     os.rename(tmpfile, finalpath)
-     return finalpath
- 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index f3f13ad97f..5014fefafa 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -46,8 +46,8 @@ class BRTest(unittest.TestCase):
-         self.config += "\nBR2_JLEVEL={}\n".format(self.jlevel)
- 
-     def show_msg(self, msg):
--        print "{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
--                                    self.testname, msg)
-+        print("{} {:40s} {}".format(datetime.datetime.now().strftime("%H:%M:%S"),
-+                                    self.testname, msg))
- 
-     def setUp(self):
-         self.show_msg("Starting")
+-# For check-flake8
+-RUN python -m pip install --upgrade pip setuptools wheel && \
+-    pip install -q \
+-        flake8==3.5.0 \
+-        mccabe==0.6.1 \
+-        pycodestyle==2.3.1 \
+-        pyflakes==1.6.0
+-
+ # To be able to generate a toolchain with locales, enable one UTF-8 locale
+ RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
+     /usr/sbin/locale-gen
 -- 
 2.14.1
