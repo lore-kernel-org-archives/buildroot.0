@@ -1,87 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 02 Jun 2018 10:11:57 -0000
-Subject: [Buildroot] [git commit] gqrx: bump to version 2.11.4
-Message-ID: <20180602101010.4DEF07FADE@busybox.osuosl.org>
+Date: Sat, 02 Jun 2018 10:11:58 -0000
+Subject: [Buildroot] [git commit] libnetfilter_conntrack: bump to version
+ 1.0.7
+Message-ID: <20180602101010.9F12F7F9D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd82d624b5b92a330ccbcfa1131ae0ea7ab9c9d8
+commit: https://git.buildroot.net/buildroot/commit/?id=2499c489930f904d545e7fd83d09a296d58c0c36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hashes for license files, and drop the patch that was a backport
-from an upstream commit.
+Add hash for license file
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gqrx/0001-fix_compilation_in_gcc-6.patch | 34 ------------------------
- package/gqrx/gqrx.hash                           |  4 ++-
- package/gqrx/gqrx.mk                             |  2 +-
- 3 files changed, 4 insertions(+), 36 deletions(-)
+ package/libnetfilter_conntrack/libnetfilter_conntrack.hash | 8 +++++---
+ package/libnetfilter_conntrack/libnetfilter_conntrack.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/gqrx/0001-fix_compilation_in_gcc-6.patch b/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-deleted file mode 100644
-index 22ec1effe9..0000000000
---- a/package/gqrx/0001-fix_compilation_in_gcc-6.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From e6baaee4968345a53e977f593362267a91041cff Mon Sep 17 00:00:00 2001
--From: Valentin Ochs <a@0au.de>
--Date: Fri, 21 Oct 2016 20:12:50 +0200
--Subject: [PATCH] Cosmetic & readability changes
--
--Backport patch from
--https://github.com/csete/gqrx/commit/e6baaee4968345a53e977f593362267a91041cff
--
--Fix compilation in gcc-6
--
--Signed-off-by: Valentin Ochs <a@0au.de>
--Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-----
--diff --git a/src/qtgui/plotter.cpp b/src/qtgui/plotter.cpp
--index e491632..b877546 100644
----- a/src/qtgui/plotter.cpp
--+++ b/src/qtgui/plotter.cpp
--@@ -1336,8 +1336,11 @@ void CPlotter::drawOverlay()
-- #endif
-- 
--             int level = 0;
---            for (; level < nLevels && tagEnd[level] > x; level++);
---                level %= nLevels;
--+            while(level < nLevels && tagEnd[level] > x)
--+                level++;
--+            
--+            if(level == nLevels)
--+                level = 0;
-- 
--             tagEnd[level] = x + nameWidth + slant - 1;
--             m_BookmarkTags.append(qMakePair<QRect, qint64>(QRect(x, level * levelHeight, nameWidth + slant, fontHeight), bookmarks[i].frequency));
---- 
--2.10.2
--
-diff --git a/package/gqrx/gqrx.hash b/package/gqrx/gqrx.hash
-index bb52a616d7..7c1fc9852f 100644
---- a/package/gqrx/gqrx.hash
-+++ b/package/gqrx/gqrx.hash
-@@ -1,2 +1,4 @@
- # Locally calculated:
--sha256 2736a963dac4051ca8ae91a440ee6643ef7d26c9de5b9c83a369d5fc9328d453  gqrx-v2.6.1.tar.gz
-+sha256 c4e836c552dc99bf383ca84b2ddc0c67e3d05b073676318e2a011bcd463303ef  gqrx-v2.11.4.tar.gz
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256 7cc22ce5ee61df62e427ec43b8130de149edee3cafb5af4f18d59b6dc3958faf  LICENSE-CTK
-diff --git a/package/gqrx/gqrx.mk b/package/gqrx/gqrx.mk
-index 2a7651c252..b51bb23eaf 100644
---- a/package/gqrx/gqrx.mk
-+++ b/package/gqrx/gqrx.mk
+diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.hash b/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
+index de9d1d3fcf..dd236cd3dc 100644
+--- a/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
++++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.hash
+@@ -1,3 +1,5 @@
+-# From ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/libnetfilter_conntrack-1.0.6.tar.bz2.{md5sum,sha1sum}
+-md5	7139c5f408dd9606ffecfd5dcda8175b	libnetfilter_conntrack-1.0.6.tar.bz2
+-sha1	015f985a8e171889a67769ba02d070eca53bac07	libnetfilter_conntrack-1.0.6.tar.bz2
++# From ftp://ftp.netfilter.org/pub/libnetfilter_conntrack/libnetfilter_conntrack-1.0.7.tar.bz2.sha256sum
++sha256	33685351e29dff93cc21f5344b6e628e41e32b9f9e567f4bec0478eb41f989b6	libnetfilter_conntrack-1.0.7.tar.bz2
++
++# Hash for license file:
++sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	COPYING
+diff --git a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
+index 2e9f6b7a64..40b74fe92d 100644
+--- a/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
++++ b/package/libnetfilter_conntrack/libnetfilter_conntrack.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GQRX_VERSION = v2.6.1
-+GQRX_VERSION = v2.11.4
- GQRX_SITE = $(call github,csete,gqrx,$(GQRX_VERSION))
- GQRX_LICENSE = GPL-3.0+, Apache-2.0
- GQRX_LICENSE_FILES = COPYING LICENSE-CTK
+-LIBNETFILTER_CONNTRACK_VERSION = 1.0.6
++LIBNETFILTER_CONNTRACK_VERSION = 1.0.7
+ LIBNETFILTER_CONNTRACK_SOURCE = libnetfilter_conntrack-$(LIBNETFILTER_CONNTRACK_VERSION).tar.bz2
+ LIBNETFILTER_CONNTRACK_SITE = http://www.netfilter.org/projects/libnetfilter_conntrack/files
+ LIBNETFILTER_CONNTRACK_INSTALL_STAGING = YES
