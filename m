@@ -1,29 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 02 Jun 2018 12:40:11 +0200
-Subject: [Buildroot] [PATCH] configs/snps_archs38_hsdk: bump linux
- version to 4.14.47
-In-Reply-To: <20180602090559.32331-1-Evgeniy.Didin@synopsys.com> (Evgeniy
- Didin's message of "Sat, 2 Jun 2018 12:05:59 +0300")
-References: <20180602090559.32331-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <8736y5xyic.fsf@dell.be.48ers.dk>
+Date: Sat, 02 Jun 2018 12:44:21 +0200
+Subject: [Buildroot] [PATCH next] sysstat: bump to version 11.6.3
+In-Reply-To: <c3a5c093b77c6661dc5de16fc4756b691a4212a7.1527840404.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 1 Jun 2018 11:06:44 +0300")
+References: <c3a5c093b77c6661dc5de16fc4756b691a4212a7.1527840404.git.baruch@tkos.co.il>
+Message-ID: <87y3fxwjqy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Evgeniy" == Evgeniy Didin <Evgeniy.Didin@synopsys.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > This patch updates Linux kernel version to 4.14.47 for HSDK board.
- > Fixes:
- >  https://gitlab.com/buildroot.org/buildroot/-/jobs/71727022
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Cc: arc-buildroot at synopsys.com
-
-Committed to 2018.05.x, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
