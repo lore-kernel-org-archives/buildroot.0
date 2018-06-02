@@ -1,47 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 02 Jun 2018 10:11:52 -0000
-Subject: [Buildroot] [git commit] mtd: bump to version 2.0.2
-Message-ID: <20180602101010.2BCEC836B8@busybox.osuosl.org>
+Date: Sat, 02 Jun 2018 10:11:54 -0000
+Subject: [Buildroot] [git commit] package/zic: bump version to 2018e
+Message-ID: <20180602101010.B16797FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea7218774624d6d3dfe76d1e2f1e6a5dab446dce
+commit: https://git.buildroot.net/buildroot/commit/?id=83b97af9b52ded0be6430b0337c61b4ab1ae6032
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add license file hash.
-
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mtd/mtd.hash | 5 +++--
- package/mtd/mtd.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/zic/zic.hash | 4 ++--
+ package/zic/zic.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
-index c452654bfb..4bd0cda097 100644
---- a/package/mtd/mtd.hash
-+++ b/package/mtd/mtd.hash
-@@ -1,3 +1,4 @@
- # Locally calculated after checking pgp signature
--# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.1.tar.bz2.asc
--sha256	312baa0446e4e728ceb413c53533e41e547d1c13ffa0752b2f879fd289fc2f63	mtd-utils-2.0.1.tar.bz2
-+# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.2.tar.bz2.asc
-+sha256	fb3de61be8e932abb424e8ea3c30298f553d5f970ad158a737bb303bbf9660b8	mtd-utils-2.0.2.tar.bz2
-+sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 7094aad89e..83bd6a6ae9 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index df578fe1b3..6b7994731c 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,2 @@
+-# From http://mm.icann.org/pipermail/tz-announce/2018-January/000048.html
+-sha512 21988e876479e38661d41ea4c7b5218ba14b979739d7ba8d49a2d343bb9f37c654056ab21c046a6652715f012e4ca33c4aa109b1ec3ac5d0244dd3a7ea9ed6d2	tzcode2018c.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
++sha512 4a245cae2d0922b24539a94cf4a8ccc2bba1ee696e0aaefecb41c7c8d78724a7fcea6039909336177b8b26fec8fc47719e3e56ca9839dbaf52f9a4fec84d4717	tzcode2018e.tar.gz
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index aba8bc5b3f..224b7ab407 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MTD_VERSION = 2.0.1
-+MTD_VERSION = 2.0.2
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
- MTD_LICENSE = GPL-2.0
+-ZIC_VERSION = 2018c
++ZIC_VERSION = 2018e
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = http://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
