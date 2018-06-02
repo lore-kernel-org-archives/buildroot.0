@@ -1,45 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:59 -0000
-Subject: [Buildroot] [git commit] package/libuio: bump to 0.2.8
-Message-ID: <20180602101010.D4CFE7FADE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tzdata: bump version to 2018e
+Message-ID: <20180602101010.B9DBD7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc8c206026028edb4747df9b8f032b206ccdba6c
+commit: https://git.buildroot.net/buildroot/commit/?id=878a197210f2860e8fb8c3fe181dc2b60d46e6d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-After years of inactivity, several bugfixes and features are merged
-
-Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libuio/libuio.hash | 2 +-
- package/libuio/libuio.mk   | 4 ++--
+ package/tzdata/tzdata.hash | 4 ++--
+ package/tzdata/tzdata.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libuio/libuio.hash b/package/libuio/libuio.hash
-index 6afe7dea8b..ce2f86ee19 100644
---- a/package/libuio/libuio.hash
-+++ b/package/libuio/libuio.hash
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index cfcd49ef26..6a0ea17ce9 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
 @@ -1,2 +1,2 @@
- # Locally calculated
--sha256 57f9617f75d20f7912b270568cffdf098fe9d0c1ca690c002e949be8424aa4e6 libuio-940861de278cb794bf9d775b76a4d1d4f9108607.tar.gz
-+sha256 1494375bd493ef1a1b868ce2cbc7d29f3f9f692c21f70689eae28566e56f2c15 libuio-ca28ff0f69d89a789a47552c72db5a43d280710b.tar.gz
-diff --git a/package/libuio/libuio.mk b/package/libuio/libuio.mk
-index 8f72253add..13429ec0f1 100644
---- a/package/libuio/libuio.mk
-+++ b/package/libuio/libuio.mk
-@@ -4,8 +4,8 @@
+-# From http://mm.icann.org/pipermail/tz-announce/2018-January/000048.html
+-sha512 0575c87c9ffcde7b7f62b0df928d8a0e8d93f832b5ef7227b3d8431686f851f1fd5372c7e768f2979830352433b31df7f3979a00c28ea3973a3a0987ebbfb835	tzdata2018c.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
++sha512 d059fcd381b2f6ecdafcd68fdd2a00451d1bf9b1affeb164ae7cabca2e022d499e77f0706ec3f3091b8e84c2211aa66da6c90937108771f1bf070cfebc105cae	tzdata2018e.tar.gz
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index 28323e84e7..e20c946208 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--# v0.2.7
--LIBUIO_VERSION = 940861de278cb794bf9d775b76a4d1d4f9108607
-+# v0.2.8
-+LIBUIO_VERSION = ca28ff0f69d89a789a47552c72db5a43d280710b
- LIBUIO_SITE = $(call github,Linutronix,libuio,$(LIBUIO_VERSION))
- LIBUIO_LICENSE = LGPL-2.1 (library), GPL-2.0 (programs)
- LIBUIO_LICENSE_FILES = COPYING
+-TZDATA_VERSION = 2018c
++TZDATA_VERSION = 2018e
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
