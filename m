@@ -1,45 +1,72 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:52 -0000
-Subject: [Buildroot] [git commit] dbus: bump to version 1.12.8
-Message-ID: <20180602101009.DB7107FADE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: remove
+ BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+Message-ID: <20180602101010.7990D7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d25bdbeec96a8d064de72a0cd8db62b97f426ff
+commit: https://git.buildroot.net/buildroot/commit/?id=561433f8f23b19a303ff9d6e0358693a9b125931
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Commit b9882925a4 (toolchain: introduce
+BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS) added this symbol to identify
+Blackfin toolchains without shadow passwords support. We no longer
+support Blackfin.
+
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus/dbus.hash | 4 ++--
- package/dbus/dbus.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/Config.in                                                  | 5 -----
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 3 ---
+ 2 files changed, 8 deletions(-)
 
-diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
-index 66fce31461..91d270eb13 100644
---- a/package/dbus/dbus.hash
-+++ b/package/dbus/dbus.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.6.tar.gz.asc
--sha256	621b902a07badec16c9e43eda43903cd0e1e69e11b13143da71c1889b062f116  dbus-1.12.6.tar.gz
-+# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.8.tar.gz.asc
-+sha256	e2dc99e7338303393b6663a98320aba6a63421bcdaaf571c8022f815e5896eb3  dbus-1.12.8.tar.gz
- # Locally calculated
- sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
-diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
-index 8771412be4..8cf4367bf2 100644
---- a/package/dbus/dbus.mk
-+++ b/package/dbus/dbus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 121ddb4fa4..77f95ee1c3 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -15,7 +15,6 @@ config BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	select BR2_TOOLCHAIN_SUPPORTS_PIE
  
--DBUS_VERSION = 1.12.6
-+DBUS_VERSION = 1.12.8
- DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
- DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
- DBUS_LICENSE_FILES = COPYING
+ config BR2_TOOLCHAIN_USES_UCLIBC
+@@ -43,7 +42,6 @@ choice
+ config BR2_TOOLCHAIN_BUILDROOT
+ 	bool "Buildroot toolchain"
+ 	depends on BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
+-	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 
+ config BR2_TOOLCHAIN_EXTERNAL
+ 	bool "External toolchain"
+@@ -108,9 +106,6 @@ config BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+ config BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	bool
+ 
+-config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+-	bool
+-
+ config BR2_TOOLCHAIN_HAS_SSP
+ 	bool
+ 
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 65d94d0adf..55370e967a 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -277,9 +277,6 @@ choice
+ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
+ 	bool "uClibc/uClibc-ng"
+ 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
+-	# For the time being, we assume that all custom external
+-	# toolchains have shadow password support.
+-	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
+ 	help
+ 	  Select this option if your external toolchain uses the
+ 	  uClibc (available from http://www.uclibc.org/)
