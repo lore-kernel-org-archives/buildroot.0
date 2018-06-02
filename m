@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Jun 2018 22:27:57 +0200
-Subject: [Buildroot] [PATCH 1/1] lxc: bump to version 3.0.1
-In-Reply-To: <20180602181631.15522-1-fontaine.fabrice@gmail.com>
-References: <20180602181631.15522-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180602222757.2a13494b@windsurf.home>
+Date: Sat, 2 Jun 2018 22:28:03 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mesa3d: fix typo in file hash
+In-Reply-To: <20180602161504.8610-1-romain.naour@gmail.com>
+References: <20180602161504.8610-1-romain.naour@gmail.com>
+Message-ID: <20180602222803.1445dc74@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  2 Jun 2018 20:16:31 +0200, Fabrice Fontaine wrote:
-> Remove both patches (already in version)
+On Sat,  2 Jun 2018 18:15:03 +0200, Romain Naour wrote:
+> Fix typo introduced with the bump to 18.0.4.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Commit f18ca0e7bb0e522846296139cdf0f8039d7dca1c
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  ...ools-lxc_monitor-include-missing-stddef.h.patch | 40 ------------
->  ...tion-with-static-libcap-and-shared-gnutls.patch | 73 ----------------------
->  package/lxc/lxc.hash                               |  2 +-
->  package/lxc/lxc.mk                                 |  2 +-
->  4 files changed, 2 insertions(+), 115 deletions(-)
->  delete mode 100644 package/lxc/0001-lxc-tools-lxc_monitor-include-missing-stddef.h.patch
->  delete mode 100644 package/lxc/0002-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
+>  package/mesa3d/mesa3d.hash | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Both applied. Thanks!
 
 Thomas
 -- 
