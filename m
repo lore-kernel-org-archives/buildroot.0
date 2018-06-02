@@ -1,21 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:51 -0000
-Subject: [Buildroot] [git commit] dbus-glib: Bump to version 0.110
-Message-ID: <20180602101009.75EC0836B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-net-http: bump version to 6.18
+Message-ID: <20180602101009.96063836DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c08451a4ae8dc33dfbe463ce959bf2108bdecdd
+commit: https://git.buildroot.net/buildroot/commit/?id=27eff884fa822bf96897c0e5b1118a6daa541188
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Added license hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dbus-glib/dbus-glib.hash | 2 +-
- package/dbus-glib/dbus-glib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl-net-http/perl-net-http.hash | 6 ++++--
+ package/perl-net-http/perl-net-http.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/perl-net-http/perl-net-http.hash b/package/perl-net-http/perl-net-http.hash
+index ff59a0d9d3..21cd6308f2 100644
+--- a/package/perl-net-http/perl-net-http.hash
++++ b/package/perl-net-http/perl-net-http.hash
+@@ -1,3 +1,5 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    068fa02fd3c8a5b63316025b5a24844c Net-HTTP-6.17.tar.gz
+-sha256 1e8624b1618dc6f7f605f5545643ebb9b833930f4d7485d4124aa2f2f26d1611 Net-HTTP-6.17.tar.gz
++md5    6da11a7db0e933b7684148e1fb32006a Net-HTTP-6.18.tar.gz
++sha256 7e42df2db7adce3e0eb4f78b88c450f453f5380f120fd5411232e03374ba951c Net-HTTP-6.18.tar.gz
++# Locally computed
++sha256 49fbcc80e17295888b909176a0029f275a8c17b6cbfaf8867fe571ebe9a9ca79  LICENSE
+diff --git a/package/perl-net-http/perl-net-http.mk b/package/perl-net-http/perl-net-http.mk
+index f13614e346..12bd50f848 100644
+--- a/package/perl-net-http/perl-net-http.mk
++++ b/package/perl-net-http/perl-net-http.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_NET_HTTP_VERSION = 6.17
++PERL_NET_HTTP_VERSION = 6.18
+ PERL_NET_HTTP_SOURCE = Net-HTTP-$(PERL_NET_HTTP_VERSION).tar.gz
+ PERL_NET_HTTP_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_NET_HTTP_DEPENDENCIES = perl-uri
