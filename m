@@ -1,46 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 02 Jun 2018 10:11:58 -0000
-Subject: [Buildroot] [git commit] zstd: bump to version 1.3.4
-Message-ID: <20180602101010.8B4CE7FADE@busybox.osuosl.org>
+Date: Sat, 02 Jun 2018 10:11:59 -0000
+Subject: [Buildroot] [git commit] package/libuio: bump to 0.2.8
+Message-ID: <20180602101010.D4CFE7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c32dc466a377b2ae8d52dbc131e668e6872b46c
+commit: https://git.buildroot.net/buildroot/commit/?id=bc8c206026028edb4747df9b8f032b206ccdba6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+After years of inactivity, several bugfixes and features are merged
+
+Signed-off-by: Martijn de Gouw <martijn.de.gouw@prodrive-technologies.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zstd/zstd.hash | 2 +-
- package/zstd/zstd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libuio/libuio.hash | 2 +-
+ package/libuio/libuio.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
-index 51e5fc245c..f7aadfb5db 100644
---- a/package/zstd/zstd.hash
-+++ b/package/zstd/zstd.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 a77c47153ee7de02626c5b2a097005786b71688be61e9fb81806a011f90b297b zstd-v1.3.3.tar.gz
-+sha256 92e41b6e8dd26bbd46248e8aa1d86f1551bc221a796277ae9362954f26d605a9 zstd-v1.3.4.tar.gz
- 
- # License files (locally computed as well)
- sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index c74c8f24b6..4915cee07d 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libuio/libuio.hash b/package/libuio/libuio.hash
+index 6afe7dea8b..ce2f86ee19 100644
+--- a/package/libuio/libuio.hash
++++ b/package/libuio/libuio.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 57f9617f75d20f7912b270568cffdf098fe9d0c1ca690c002e949be8424aa4e6 libuio-940861de278cb794bf9d775b76a4d1d4f9108607.tar.gz
++sha256 1494375bd493ef1a1b868ce2cbc7d29f3f9f692c21f70689eae28566e56f2c15 libuio-ca28ff0f69d89a789a47552c72db5a43d280710b.tar.gz
+diff --git a/package/libuio/libuio.mk b/package/libuio/libuio.mk
+index 8f72253add..13429ec0f1 100644
+--- a/package/libuio/libuio.mk
++++ b/package/libuio/libuio.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--ZSTD_VERSION = v1.3.3
-+ZSTD_VERSION = v1.3.4
- ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
- ZSTD_INSTALL_STAGING = YES
- ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
+-# v0.2.7
+-LIBUIO_VERSION = 940861de278cb794bf9d775b76a4d1d4f9108607
++# v0.2.8
++LIBUIO_VERSION = ca28ff0f69d89a789a47552c72db5a43d280710b
+ LIBUIO_SITE = $(call github,Linutronix,libuio,$(LIBUIO_VERSION))
+ LIBUIO_LICENSE = LGPL-2.1 (library), GPL-2.0 (programs)
+ LIBUIO_LICENSE_FILES = COPYING
