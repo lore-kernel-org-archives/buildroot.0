@@ -1,68 +1,55 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 2 Jun 2018 16:19:41 +0200
-Subject: [Buildroot] [PATCH RFC] linux: disable attribute alias with gcc
- >= 8.1
-In-Reply-To: <20180601231238.3db86d56@windsurf>
-References: <20180531203745.4799-1-romain.naour@gmail.com>
- <20180601231238.3db86d56@windsurf>
-Message-ID: <cf18b203-bc44-f874-1d1b-d4a7a00bf440@gmail.com>
+Date: Sat,  2 Jun 2018 16:34:07 +0200
+Subject: [Buildroot] [PATCH v2] linux: disable attribute alias with gcc >=
+ 8.1
+Message-ID: <20180602143407.20985-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+gcc-8 started warning about function aliases that have a non-matching
+prototype. This seems rather useful in general, but it causes tons of
+warnings in the Linux kernel, where we rely on abusing those aliases
+for system call entry points, in order to sanitze the arguments passed
+from user space in registers.
 
-Le 01/06/2018 ? 23:12, Thomas Petazzoni a ?crit?:
-> Hello Romain,
-> 
-> On Thu, 31 May 2018 22:37:45 +0200, Romain Naour wrote:
->> gcc-8 started warning about function aliases that have a non-matching
->> prototype. This seems rather useful in general, but it causes tons of
->> warnings in the Linux kernel, where we rely on abusing those aliases
->> for system call entry points, in order to sanitze the arguments passed
->> from user space in registers.
->>
->> See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
->>
->> Add a new conditional patch that disable the attribute-alias warning
->> introduced by gcc-8 by adding -Wno-attribute-alias to KBUILD_CFLAGS.
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->> ---
->>
->> Fixes most of build errors reported by toolchains-builder on Gitlab.
->> https://gitlab.com/free-electrons/toolchains-builder/pipelines/22921464
-> 
-> Thanks, but unfortunately, it doesn't fix a lot of those build errors,
-> because your patch doesn't apply as soon as the Linux kernel version is
-> a bit different.
-> 
-> For example, if you take qemu_mips32r2el_malta_defconfig, which builds
-> a 4.11.3 kernel, your patch doesn't apply, and so the bug appears.
-> 
-> So instead, I would like to suggest something like this:
-> 
-> ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
-> LINUX_MAKE_ENV += KCFLAGS=-Wno-attribute-alias
-> endif
-> 
-> which works without any patch, and therefore works with potentially all
-> kernel versions.
+See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
 
-Thanks for KCFLAGS, I missed it and tried to use KBUILD_CFLAGS directly...
-I wanted to not override KBUILD_CFLAGS from linux.mk to not lose CFLAGS defined
-in the Makefile, that is why I use an conditional patch (which is not great).
+Disable the attribute-alias warning introduced by gcc-8 by adding
+-Wno-attribute-alias to KCFLAGS.
 
-I'll resend a v2.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+v2: use KCFLAGS instead of KBUILD_CFLAGS (ThomasP)
 
-Best regards,
-Romain
+Fixes most of build errors reported by toolchains-builder on Gitlab.
+https://gitlab.com/free-electrons/toolchains-builder/pipelines/22921464
+---
+ linux/linux.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-> 
-> Best regards,
-> 
-> Thomas
-> 
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6b5f5344ed..f6cf005196 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -121,6 +121,15 @@ LINUX_MAKE_ENV += \
+ 	KBUILD_BUILD_TIMESTAMP="$(shell LC_ALL=C date -d @$(SOURCE_DATE_EPOCH))"
+ endif
+ 
++# gcc-8 started warning about function aliases that have a non-matching prototype.
++# This seems rather useful in general, but it causes tons of warnings in the Linux kernel,
++# where we rely on abusing those aliases for system call entry points, in order to sanitze
++# the arguments passed from user space in registers.
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
++LINUX_MAKE_ENV += KCFLAGS=-Wno-attribute-alias
++endif
++
+ # Get the real Linux version, which tells us where kernel modules are
+ # going to be installed in the target filesystem.
+ LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+-- 
+2.14.3
