@@ -1,72 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:52 -0000
-Subject: [Buildroot] [git commit] toolchain: remove
- BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
-Message-ID: <20180602101010.7990D7FADE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cifs-utils: bump to version 6.8
+Message-ID: <20180602101010.818DB7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=561433f8f23b19a303ff9d6e0358693a9b125931
+commit: https://git.buildroot.net/buildroot/commit/?id=6ff41f264cb1858b3f530b1e079d4858c04a1295
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit b9882925a4 (toolchain: introduce
-BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS) added this symbol to identify
-Blackfin toolchains without shadow passwords support. We no longer
-support Blackfin.
+- Remove patch (already in version)
+- Add hash for license file
 
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/Config.in                                                  | 5 -----
- .../toolchain-external/toolchain-external-custom/Config.in.options   | 3 ---
- 2 files changed, 8 deletions(-)
+ ...001-mount.cifs-Remove-data_blob.h-include.patch | 32 ----------------------
+ package/cifs-utils/cifs-utils.hash                 |  5 +++-
+ package/cifs-utils/cifs-utils.mk                   |  2 +-
+ 3 files changed, 5 insertions(+), 34 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 121ddb4fa4..77f95ee1c3 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -15,7 +15,6 @@ config BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 	select BR2_TOOLCHAIN_SUPPORTS_PIE
- 
- config BR2_TOOLCHAIN_USES_UCLIBC
-@@ -43,7 +42,6 @@ choice
- config BR2_TOOLCHAIN_BUILDROOT
- 	bool "Buildroot toolchain"
- 	depends on BR2_ARCH_HAS_TOOLCHAIN_BUILDROOT
--	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 
- config BR2_TOOLCHAIN_EXTERNAL
- 	bool "External toolchain"
-@@ -108,9 +106,6 @@ config BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- config BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	bool
- 
--config BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
--	bool
+diff --git a/package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch b/package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch
+deleted file mode 100644
+index 6536076577..0000000000
+--- a/package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 272d523a57a4e8791d625a479128613be5e401f5 Mon Sep 17 00:00:00 2001
+-From: Thomas Witt <pyromaniac@exherbo.org>
+-Date: Wed, 15 Mar 2017 20:20:44 +0000
+-Subject: [PATCH] mount.cifs: Remove data_blob.h include
 -
- config BR2_TOOLCHAIN_HAS_SSP
- 	bool
+-data_blob.h includes talloc.h from libtalloc, but that is only marked as
+-a dependency for cifs.upcall. No symbols from that header are used by
+-cifs.mount, so remove it to avoid the libtalloc dependency
+-
+-Signed-off-by: Thomas Witt <pyromaniac@exherbo.org>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Patch status: upstream commit 272d523a57a4
+-
+- mount.cifs.c | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/mount.cifs.c b/mount.cifs.c
+-index 13b71ef50303..2612feb4d591 100644
+---- a/mount.cifs.c
+-+++ b/mount.cifs.c
+-@@ -61,7 +61,6 @@
+- #include "mount.h"
+- #include "util.h"
+- #include "resolve_host.h"
+--#include "data_blob.h"
+- 
+- #ifndef MS_MOVE 
+- #define MS_MOVE 8192 
+--- 
+-2.11.0
+-
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index ebc9c43e72..fda1573eeb 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	b2f21612474ab012e75accd167aab607a0614ff67efb56ea0f36789fa785cfab	cifs-utils-6.7.tar.bz2
++sha256	e7d1f6050c43f21f82cd77e288eb756755effd22f0c310fc2c525df9d41dff79	cifs-utils-6.8.tar.bz2
++
++# Hash for license file:
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 9044fdf83c..199e8422d5 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 65d94d0adf..55370e967a 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -277,9 +277,6 @@ choice
- config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_UCLIBC
- 	bool "uClibc/uClibc-ng"
- 	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
--	# For the time being, we assume that all custom external
--	# toolchains have shadow password support.
--	select BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS
- 	help
- 	  Select this option if your external toolchain uses the
- 	  uClibc (available from http://www.uclibc.org/)
+-CIFS_UTILS_VERSION = 6.7
++CIFS_UTILS_VERSION = 6.8
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPL-3.0+
