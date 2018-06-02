@@ -1,178 +1,171 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  2 Jun 2018 18:15:04 +0200
-Subject: [Buildroot] [PATCH 2/2] package/{mesa3d,
- mesa3d-headers}: bump version to 18.1.1
-In-Reply-To: <20180602161504.8610-1-romain.naour@gmail.com>
-References: <20180602161504.8610-1-romain.naour@gmail.com>
-Message-ID: <20180602161504.8610-2-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  2 Jun 2018 20:16:31 +0200
+Subject: [Buildroot] [PATCH 1/1] lxc: bump to version 3.0.1
+Message-ID: <20180602181631.15522-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Rebase the two patches on 18.1.1.
-Convert 0001-musl.patch to git patch.
+Remove both patches (already in version)
 
-See:
-https://lists.freedesktop.org/archives/mesa-dev/2018-June/196523.html
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk           |  2 +-
- package/mesa3d/0001-musl.patch                     | 26 +++++++++++++++--
- ...ac-invert-order-for-wayland-scanner-check.patch | 34 +++++++++++-----------
- package/mesa3d/mesa3d.hash                         | 10 +++----
- package/mesa3d/mesa3d.mk                           |  2 +-
- 5 files changed, 47 insertions(+), 27 deletions(-)
+ ...ools-lxc_monitor-include-missing-stddef.h.patch | 40 ------------
+ ...tion-with-static-libcap-and-shared-gnutls.patch | 73 ----------------------
+ package/lxc/lxc.hash                               |  2 +-
+ package/lxc/lxc.mk                                 |  2 +-
+ 4 files changed, 2 insertions(+), 115 deletions(-)
+ delete mode 100644 package/lxc/0001-lxc-tools-lxc_monitor-include-missing-stddef.h.patch
+ delete mode 100644 package/lxc/0002-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 18c98a7f9e..1ce30f7dcf 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.0.4
-+MESA3D_HEADERS_VERSION = 18.1.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/0001-musl.patch b/package/mesa3d/0001-musl.patch
-index 8f7ba773aa..44c7f5b96d 100644
---- a/package/mesa3d/0001-musl.patch
-+++ b/package/mesa3d/0001-musl.patch
-@@ -1,12 +1,29 @@
--Fix musl build
-+From 25e20c2e288e1d482f479eca863bc4aaa374b782 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 22 Apr 2018 15:58:38 +0200
-+Subject: [PATCH] Fix musl build
-+
-+Fix musl build when svga gallium driver is enabled.
-+
-+In file included from vmw_fence.c:34:0:
-+vmw_screen.h:100:4: error: unknown type name ?dev_t?
-+    dev_t device;
-+    ^~~~~
- 
- Downloaded from
- http://git.alpinelinux.org/cgit/aports/plain/main/mesa/musl-fixes.patch
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Romain: rebase on 18.1]
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ src/gallium/winsys/svga/drm/vmw_screen.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
- 
----- ./src/gallium/winsys/svga/drm/vmw_screen.h.orig
--+++ ./src/gallium/winsys/svga/drm/vmw_screen.h
-+diff --git a/src/gallium/winsys/svga/drm/vmw_screen.h b/src/gallium/winsys/svga/drm/vmw_screen.h
-+index f21cabb51f..20d03f8b53 100644
-+--- a/src/gallium/winsys/svga/drm/vmw_screen.h
-++++ b/src/gallium/winsys/svga/drm/vmw_screen.h
- @@ -34,7 +34,7 @@
-  #ifndef VMW_SCREEN_H_
-  #define VMW_SCREEN_H_
-@@ -16,3 +33,6 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  #include "pipe/p_compiler.h"
-  #include "pipe/p_state.h"
-  
-+-- 
-+2.14.3
-+
-diff --git a/package/mesa3d/0002-configure.ac-invert-order-for-wayland-scanner-check.patch b/package/mesa3d/0002-configure.ac-invert-order-for-wayland-scanner-check.patch
-index bfb6376555..337ad642a5 100644
---- a/package/mesa3d/0002-configure.ac-invert-order-for-wayland-scanner-check.patch
-+++ b/package/mesa3d/0002-configure.ac-invert-order-for-wayland-scanner-check.patch
-@@ -1,4 +1,4 @@
--From 11a759c33160db6e887e7640071ba84482e6164f Mon Sep 17 00:00:00 2001
-+From ef96bac7cbbb11b98606864ead0f731dd5b71d5a Mon Sep 17 00:00:00 2001
- From: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Date: Thu, 17 Nov 2016 15:36:54 -0300
- Subject: [PATCH] configure.ac: invert order for wayland-scanner check
-@@ -13,32 +13,32 @@ pkg-config.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--[Romain: rebase on 17.3.1]
-+[Romain: rebase on 18.1]
- Signed-off-by: Romain Naour <romain.naour@gmail.com>
- ---
-  configure.ac | 8 ++++----
-  1 file changed, 4 insertions(+), 4 deletions(-)
- 
- diff --git a/configure.ac b/configure.ac
--index ee03d6f582..786b7214b9 100644
-+index f1fbdcc6c7..dcf87e7dd6 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1695,11 +1695,11 @@ if test "x$with_platforms" = xauto; then
--     with_platforms=$with_egl_platforms
-- fi
-+@@ -1796,11 +1796,11 @@ for plat in $platforms; do
-+         PKG_CHECK_MODULES([WAYLAND_PROTOCOLS], [wayland-protocols >= $WAYLAND_PROTOCOLS_REQUIRED])
-+         WAYLAND_PROTOCOLS_DATADIR=`$PKG_CONFIG --variable=pkgdatadir wayland-protocols`
-  
---PKG_CHECK_MODULES([WAYLAND_SCANNER], [wayland-scanner],
---        WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`,
---        WAYLAND_SCANNER='')
--+AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
-- if test "x$WAYLAND_SCANNER" = x; then
---    AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner], [:])
--+	PKG_CHECK_MODULES([WAYLAND_SCANNER], [wayland-scanner],
--+		WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`,
--+		WAYLAND_SCANNER='')
-- fi
-+-        PKG_CHECK_MODULES([WAYLAND_SCANNER], [wayland-scanner],
-+-                          WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`,
-+-                          WAYLAND_SCANNER='')
-++        AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
-+         if test "x$WAYLAND_SCANNER" = x; then
-+-            AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner], [:])
-++		PKG_CHECK_MODULES([WAYLAND_SCANNER], [wayland-scanner],
-++			WAYLAND_SCANNER=`$PKG_CONFIG --variable=wayland_scanner wayland-scanner`,
-++			WAYLAND_SCANNER='')
-+         fi
-  
-- PKG_CHECK_EXISTS([wayland-protocols >= $WAYLAND_PROTOCOLS_REQUIRED], [have_wayland_protocols=yes], [have_wayland_protocols=no])
-+         if test "x$WAYLAND_SCANNER" = "x:"; then
- -- 
- 2.14.3
- 
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index b6ce272c1c..fb72f4f683 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-May/000429.html
--md5 ef525adaff7f31bedd4c5134bc313da9  mesa-18.0.4.tar.xz
--sha1 4bbee07d8eb42625f215f49d39a657fabdc2f29d  mesa-18.0.4.tar.xz
--sha256 1f3bcfe7cef0a5c20dae2b41df5d7e0a985e06be0183fa4d43b6068fcba2920f  mesa-18.0.4.tar.xz
--sha512 f9a14be46c209661ceb318add1611481445d13b47e95c7a5d2a5e5ecfdd5d2c3fa9c2b16b30035bbb8d61ccc7cb65bfa6698ac8b040273e5ab045a951a67752c  mesa-18.0.4.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-dev/2018-June/196523.html
-+md5 063468c930ff61d211ece0191874fa95  mesa-18.1.1.tar.xz
-+sha1 60d6b58f8f119b3731de587bdad30c1ecbb52678  mesa-18.1.1.tar.xz
-+sha256 d3312a2ede5aac14a47476b208b8e3a401367838330197c4588ab8ad420d7781  mesa-18.1.1.tar.xz
-+sha512 7783adc1ec7a1c3d092acfcca6b4ba19450c15a7f0d7f41fbf25e482236615d79ce24afe60959066ea7aa851df4f74fa3c569fa6d847ea79e6bfe046b8c65e90  mesa-18.1.1.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 a75ee0cec909515ff80a3ec07155b7fb0aafe8051abe1f0e45d5c4c5e2539366  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 1b2fca1f90..a323747e61 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/lxc/0001-lxc-tools-lxc_monitor-include-missing-stddef.h.patch b/package/lxc/0001-lxc-tools-lxc_monitor-include-missing-stddef.h.patch
+deleted file mode 100644
+index 525d5d72b0..0000000000
+--- a/package/lxc/0001-lxc-tools-lxc_monitor-include-missing-stddef.h.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 77d407537f57c3fb92787bdda1eeaec7941d344f Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Fri, 20 Apr 2018 12:26:33 +0200
+-Subject: [PATCH] lxc/tools/lxc_monitor: include missing <stddef.h>
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-lxc_monitor.c uses offsetof(), so it should include
+-<stddef.h>. Otherwise the build fails with the musl C library:
+-
+-tools/lxc_monitor.c: In function ???lxc_abstract_unix_connect???:
+-tools/lxc_monitor.c:324:9: warning: implicit declaration of function ???offsetof??? [-Wimplicit-function-declaration]
+-         offsetof(struct sockaddr_un, sun_path) + len + 1);
+-         ^~~~~~~~
+-tools/lxc_monitor.c:324:18: error: expected expression before ???struct???
+-         offsetof(struct sockaddr_un, sun_path) + len + 1);
+-                  ^~~~~~
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream-status: https://github.com/lxc/lxc/pull/2285
+----
+- src/lxc/tools/lxc_monitor.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/lxc/tools/lxc_monitor.c b/src/lxc/tools/lxc_monitor.c
+-index 72dca8e2..c60e14ff 100644
+---- a/src/lxc/tools/lxc_monitor.c
+-+++ b/src/lxc/tools/lxc_monitor.c
+-@@ -30,6 +30,7 @@
+- #include <libgen.h>
+- #include <poll.h>
+- #include <regex.h>
+-+#include <stddef.h>
+- #include <stdio.h>
+- #include <stdlib.h>
+- #include <string.h>
+--- 
+-2.14.3
+-
+diff --git a/package/lxc/0002-Fix-compilation-with-static-libcap-and-shared-gnutls.patch b/package/lxc/0002-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
+deleted file mode 100644
+index 04837b3eef..0000000000
+--- a/package/lxc/0002-Fix-compilation-with-static-libcap-and-shared-gnutls.patch
++++ /dev/null
+@@ -1,73 +0,0 @@
+-From 49bc916b1daa79cffe38fae32059bcdd985c8c8e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 7 Apr 2018 15:48:46 +0200
+-Subject: [PATCH] Fix compilation with static libcap and shared gnutls
+-
+-Commit c06ed219c47098f34485d408410b6ecc94a40877 has broken
+-compilation with a static libcap and a shared gnutls.
+-This results in a build failure on init_lxc_static if gnutls is
+-a shared library as init_lxc_static is built with -all-static option
+-(see src/lxc/Makefile.am) and AC_CHECK_LIB adds gnutls to LIBS.
+-
+-This commit fix the issue by removing default behavior of AC_CHECK_LIB
+-and handling manually GNUTLS_LIBS and HAVE_LIBGNUTLS
+-
+-Fixes:
+- - http://autobuild.buildroot.net/results/b655d6853c25a195df28d91512b3ffb6c654fc90
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream-status: https://github.com/lxc/lxc/commit/49bc916b1daa79cffe38fae32059bcdd985c8c8e
+----
+- configure.ac        | 2 +-
+- src/lxc/Makefile.am | 8 ++++++--
+- 2 files changed, 7 insertions(+), 3 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 50c99836..2467bb54 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -263,7 +263,7 @@ AM_CONDITIONAL([ENABLE_GNUTLS], [test "x$enable_gnutls" = "xyes"])
+- 
+- AM_COND_IF([ENABLE_GNUTLS],
+- 	[AC_CHECK_HEADER([gnutls/gnutls.h],[],[AC_MSG_ERROR([You must install the GnuTLS development package in order to compile lxc])])
+--	AC_CHECK_LIB([gnutls], [gnutls_hash_fast],[],[AC_MSG_ERROR([You must install the GnuTLS development package in order to compile lxc])])
+-+	AC_CHECK_LIB([gnutls], [gnutls_hash_fast],[true],[AC_MSG_ERROR([You must install the GnuTLS development package in order to compile lxc])])
+- 	AC_SUBST([GNUTLS_LIBS], [-lgnutls])])
+- 
+- # SELinux
+-diff --git a/src/lxc/Makefile.am b/src/lxc/Makefile.am
+-index c8d76836..0662d83d 100644
+---- a/src/lxc/Makefile.am
+-+++ b/src/lxc/Makefile.am
+-@@ -175,6 +175,10 @@ if ENABLE_APPARMOR
+- AM_CFLAGS += -DHAVE_APPARMOR
+- endif
+- 
+-+if ENABLE_GNUTLS
+-+AM_CFLAGS += -DHAVE_LIBGNUTLS
+-+endif
+-+
+- if ENABLE_SELINUX
+- AM_CFLAGS += -DHAVE_SELINUX
+- endif
+-@@ -196,7 +200,7 @@ liblxc_la_LDFLAGS = \
+- 	-Wl,-soname,liblxc.so.$(firstword $(subst ., , at LXC_ABI@)) \
+- 	-version-info @LXC_ABI_MAJOR@
+- 
+--liblxc_la_LIBADD = $(CAP_LIBS) $(SELINUX_LIBS) $(SECCOMP_LIBS)
+-+liblxc_la_LIBADD = $(CAP_LIBS) $(GNUTLS_LIBS) $(SELINUX_LIBS) $(SECCOMP_LIBS)
+- 
+- bin_SCRIPTS=
+- 
+-@@ -243,7 +247,7 @@ AM_LDFLAGS = -Wl,-E
+- if ENABLE_RPATH
+- AM_LDFLAGS += -Wl,-rpath -Wl,$(libdir)
+- endif
+--LDADD=liblxc.la @CAP_LIBS@ @SELINUX_LIBS@ @SECCOMP_LIBS@
+-+LDADD=liblxc.la @CAP_LIBS@ @GNUTLS_LIBS@ @SELINUX_LIBS@ @SECCOMP_LIBS@
+- 
+- if ENABLE_TOOLS
+- lxc_attach_SOURCES = tools/lxc_attach.c tools/arguments.c tools/tool_utils.c
+--- 
+-2.14.1
+-
+diff --git a/package/lxc/lxc.hash b/package/lxc/lxc.hash
+index e2f9108507..f46b1e1f5e 100644
+--- a/package/lxc/lxc.hash
++++ b/package/lxc/lxc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	6230224c27f050201b372b18a9f39cd220ed584899c5f0cf73c6b313dabc8d8a	lxc-3.0.0.tar.gz
++sha256	45986c49be1c048fa127bd3e7ea1bd3347e25765c008a09a2e4c233151a2d5db	lxc-3.0.1.tar.gz
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
+diff --git a/package/lxc/lxc.mk b/package/lxc/lxc.mk
+index 5a7038f88f..d1487e0e59 100644
+--- a/package/lxc/lxc.mk
++++ b/package/lxc/lxc.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.0.4
-+MESA3D_VERSION = 18.1.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-LXC_VERSION = 3.0.0
++LXC_VERSION = 3.0.1
+ LXC_SITE = https://linuxcontainers.org/downloads/lxc
+ LXC_LICENSE = LGPL-2.1+
+ LXC_LICENSE_FILES = COPYING
 -- 
-2.14.3
+2.14.1
