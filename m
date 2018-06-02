@@ -1,31 +1,22 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 2 Jun 2018 22:28:03 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mesa3d: fix typo in file hash
-In-Reply-To: <20180602161504.8610-1-romain.naour@gmail.com>
-References: <20180602161504.8610-1-romain.naour@gmail.com>
-Message-ID: <20180602222803.1445dc74@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 02 Jun 2018 22:30:14 +0200
+Subject: [Buildroot] [PATCH 1/1] monit: bump to version 5.25.2
+In-Reply-To: <20180602181659.17927-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Sat, 2 Jun 2018 21:16:59 +0300")
+References: <20180602181659.17927-1-asafka7@gmail.com>
+Message-ID: <878t7xvsmh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-On Sat,  2 Jun 2018 18:15:03 +0200, Romain Naour wrote:
-> Fix typo introduced with the bump to 18.0.4.
-> 
-> Commit f18ca0e7bb0e522846296139cdf0f8039d7dca1c
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/mesa3d/mesa3d.hash | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+ > Bump the version and add hash for COPYING
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-Both applied. Thanks!
+Committed, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
