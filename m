@@ -1,55 +1,106 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat,  2 Jun 2018 16:34:07 +0200
-Subject: [Buildroot] [PATCH v2] linux: disable attribute alias with gcc >=
- 8.1
-Message-ID: <20180602143407.20985-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  2 Jun 2018 16:43:15 +0200
+Subject: [Buildroot] [PATCH 1/1] librtas: bump to version 2.0.1
+Message-ID: <20180602144315.32208-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc-8 started warning about function aliases that have a non-matching
-prototype. This seems rather useful in general, but it causes tons of
-warnings in the Linux kernel, where we rely on abusing those aliases
-for system call entry points, in order to sanitze the arguments passed
-from user space in registers.
+- Switch site to github
+- Move to autotools infrastructure
+- Remove patch (not needed anymore)
+- Since version 1.4 (January 2016), license is now LGPL-2.1+
+- Add hash for license file
 
-See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
-
-Disable the attribute-alias warning introduced by gcc-8 by adding
--Wno-attribute-alias to KCFLAGS.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-v2: use KCFLAGS instead of KBUILD_CFLAGS (ThomasP)
+ ...0001-librtas-install-librtas.so.1-symlink.patch | 31 ----------------------
+ package/librtas/librtas.hash                       |  3 ++-
+ package/librtas/librtas.mk                         | 24 +++++------------
+ 3 files changed, 9 insertions(+), 49 deletions(-)
+ delete mode 100644 package/librtas/0001-librtas-install-librtas.so.1-symlink.patch
 
-Fixes most of build errors reported by toolchains-builder on Gitlab.
-https://gitlab.com/free-electrons/toolchains-builder/pipelines/22921464
----
- linux/linux.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6b5f5344ed..f6cf005196 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -121,6 +121,15 @@ LINUX_MAKE_ENV += \
- 	KBUILD_BUILD_TIMESTAMP="$(shell LC_ALL=C date -d @$(SOURCE_DATE_EPOCH))"
- endif
+diff --git a/package/librtas/0001-librtas-install-librtas.so.1-symlink.patch b/package/librtas/0001-librtas-install-librtas.so.1-symlink.patch
+deleted file mode 100644
+index 2150c3f508..0000000000
+--- a/package/librtas/0001-librtas-install-librtas.so.1-symlink.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-Add a line to the librtas Makefile to create librtas.so.1 when
+-performing "make install".
+-
+-Without this patch programs linked with librtas will fail at run time:
+-
+-error while loading shared libraries: librtas.so.1: cannot open shared
+-object file: No such file or directory
+-
+-A patch has been submitted upstream so it is likely that this patch
+-can be dropped after the next release of librtas.
+-
+-Signed-off-by: Sam Bobroff <sam.bobroff@au1.ibm.com>
+----
+- librtas_src/Makefile |    1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/librtas_src/Makefile b/librtas_src/Makefile
+-index 3a10222..deba29d 100644
+---- a/librtas_src/Makefile
+-+++ b/librtas_src/Makefile
+-@@ -33,6 +33,7 @@ install:
+- 	@$(call install_lib,$(LIBRTAS),$(DESTDIR))
+- 	@$(call install_inc,$(HEADERS),$(DESTDIR))
+- 	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME)
+-+	@ln -sf $(LIBRTAS) $(DESTDIR)/$(LIB_DIR)$(call is_lib64,$(LIBRTAS))/$(LIBRTAS_SONAME).1
+- 
+- uninstall:
+- 	@$(call uninstall_lib,$(LIBRTAS),$(DESTDIR))
+--- 
+-1.7.10.4
+-
+diff --git a/package/librtas/librtas.hash b/package/librtas/librtas.hash
+index c81b583147..0f3d902226 100644
+--- a/package/librtas/librtas.hash
++++ b/package/librtas/librtas.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 d5f2951b0934ffbd82bebf26acfa103cc21d89f4c90c7c41472acf7b4ec6d907 librtas-1.3.13.tar.gz
++sha256 a79fd9cdb2f03e7401027fb80a07f14e29b86cc2d363126d527b211fea85d025 librtas-v2.0.1.tar.gz
++sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c COPYING.LESSER
+diff --git a/package/librtas/librtas.mk b/package/librtas/librtas.mk
+index 46c4cb4bb7..f89394a6af 100644
+--- a/package/librtas/librtas.mk
++++ b/package/librtas/librtas.mk
+@@ -4,22 +4,12 @@
+ #
+ ################################################################################
  
-+# gcc-8 started warning about function aliases that have a non-matching prototype.
-+# This seems rather useful in general, but it causes tons of warnings in the Linux kernel,
-+# where we rely on abusing those aliases for system call entry points, in order to sanitze
-+# the arguments passed from user space in registers.
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
-+ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
-+LINUX_MAKE_ENV += KCFLAGS=-Wno-attribute-alias
-+endif
-+
- # Get the real Linux version, which tells us where kernel modules are
- # going to be installed in the target filesystem.
- LINUX_VERSION_PROBED = `$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+-LIBRTAS_VERSION = 1.3.13
+-LIBRTAS_SITE = http://downloads.sourceforge.net/project/librtas
+-LIBRTAS_LICENSE = Common Public License Version 1.0
+-LIBRTAS_LICENSE_FILES = COPYRIGHT
++LIBRTAS_VERSION = v2.0.1
++LIBRTAS_SITE = $(call github,ibm-power-utilities,librtas,$(LIBRTAS_VERSION))
++LIBRTAS_LICENSE = LGPL-2.1+
++LIBRTAS_LICENSE_FILES = COPYING.LESSER
+ LIBRTAS_INSTALL_STAGING = YES
++# From git
++LIBRTAS_AUTORECONF = YES
+ 
+-define LIBRTAS_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+-endef
+-
+-define LIBRTAS_INSTALL_STAGING_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+-endef
+-
+-define LIBRTAS_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+-endef
+-
+-$(eval $(generic-package))
++$(eval $(autotools-package))
 -- 
-2.14.3
+2.14.1
