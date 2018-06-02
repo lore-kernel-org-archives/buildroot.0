@@ -1,53 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:52 -0000
-Subject: [Buildroot] [git commit] tmux: bump to version 2.7
-Message-ID: <20180602101009.E75BE7FADE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs: amarula: vyasa: bump u-boot
+ version to v2018.11
+Message-ID: <20180602101010.32EA5836DA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb790df07ec490b2083abc346f381bc7f8c605b0
+commit: https://git.buildroot.net/buildroot/commit/?id=5f00f966197836d1baab19f932c3ba74537cee24
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add COPYING to license files.
+bump the U-Boot stable version to v2018.11
 
-Update README hash; contest change unrelated to license.
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Shyam Saini <shyam@amarulasolutions.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tmux/tmux.hash | 5 +++--
- package/tmux/tmux.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ configs/amarula_vyasa_rk3288_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
-index 752bbb4516..27a3ccaaeb 100644
---- a/package/tmux/tmux.hash
-+++ b/package/tmux/tmux.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
--sha256 b17cd170a94d7b58c0698752e1f4f263ab6dc47425230df7e53a6435cc7cd7e8  tmux-2.6.tar.gz
--sha256 94e2b1feb1202d3308cc7ab7ec42278d24f10562394bdf269f44649327c8198f  README
-+sha256 9ded7d100313f6bc5a87404a4048b3745d61f2332f99ec1400a7c4ed9485d452  tmux-2.7.tar.gz
-+sha256 59ad3f5d323cb6b97bb3882c454e6176519cd580b2d4db43c5161517385569f1  README
-+sha256 ce75f1345a76c93bd0f413d1b93ff1baa0669f34a7242779a00c1b862b4f813a  COPYING
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index e380227475..deae99717b 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--TMUX_VERSION = 2.6
-+TMUX_VERSION = 2.7
- TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
- TMUX_LICENSE = ISC
--TMUX_LICENSE_FILES = README
-+TMUX_LICENSE_FILES = README COPYING
- TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
- 
- # Add /usr/bin/tmux to /etc/shells otherwise some login tools like dropbear
+diff --git a/configs/amarula_vyasa_rk3288_defconfig b/configs/amarula_vyasa_rk3288_defconfig
+index ccaab9551e..88fb6abbec 100644
+--- a/configs/amarula_vyasa_rk3288_defconfig
++++ b/configs/amarula_vyasa_rk3288_defconfig
+@@ -10,7 +10,7 @@ BR2_KERNEL_HEADERS_4_14=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="vyasa-rk3288"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
