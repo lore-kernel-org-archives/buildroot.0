@@ -1,87 +1,65 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  2 Jun 2018 21:30:08 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] aircrack-ng: fix build on powerpc64 with libgcrypt
-Message-ID: <20180602193008.31633-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat,  2 Jun 2018 22:52:20 +0300
+Subject: [Buildroot] [PATCH] libnss: remove upstream patch
+Message-ID: <ffa3247006ac91b78cf3fca059ad1f00035b0d16.1527969140.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Retrieved patch from upstream:
-https://github.com/aircrack-ng/aircrack-ng/issues/1874
+The merge of the next branch failed to remove an upstream applied patch.
 
 Fixes:
- - http://autobuild.buildroot.net/results/3d92343342b51e710765866d6dd9383d26ba98e7
+http://autobuild.buildroot.net/results/31f/31fe428584ada680f30d11e5d1abfbc533c0a70e/
+http://autobuild.buildroot.net/results/bb2/bb25363497dfd7fd5f8a81c28110fab87d5c2dc8/
+http://autobuild.buildroot.net/results/70a/70adacf85154d2a663808cf0db69849b6a490457/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-Changes v1 -> v2:
-- Fix typo in title: aircrack-ng instead of arcrack-ng
+ ...d-stringop-truncation-warning-r-fran.patch | 33 -------------------
+ 1 file changed, 33 deletions(-)
+ delete mode 100644 package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
 
- ...compilation-with-gcrypt-on-some-platforms.patch | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 package/aircrack-ng/0004-Fixed-compilation-with-gcrypt-on-some-platforms.patch
-
-diff --git a/package/aircrack-ng/0004-Fixed-compilation-with-gcrypt-on-some-platforms.patch b/package/aircrack-ng/0004-Fixed-compilation-with-gcrypt-on-some-platforms.patch
-new file mode 100644
-index 0000000000..b32f29f800
---- /dev/null
-+++ b/package/aircrack-ng/0004-Fixed-compilation-with-gcrypt-on-some-platforms.patch
-@@ -0,0 +1,53 @@
-+From 208c0d4810f24e03b4def637ebe130f8777ef3e1 Mon Sep 17 00:00:00 2001
-+From: Mister X <3520734+Mister-X-@users.noreply.github.com>
-+Date: Sat, 5 May 2018 00:28:30 +0000
-+Subject: [PATCH] Fixed compilation with gcrypt on some platforms.
-+
-+Retrieved from upstream: https://github.com/aircrack-ng/aircrack-ng/commit/208c0d4810f24e03b4def637ebe130f8777ef3e1
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/gcrypt-openssl-wrapper.h | 13 +++++++++++++
-+ src/md5.h                    |  6 +++++-
-+ 2 files changed, 18 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/gcrypt-openssl-wrapper.h b/src/gcrypt-openssl-wrapper.h
-+index 79a0376e..db3e0462 100644
-+--- a/src/gcrypt-openssl-wrapper.h
-++++ b/src/gcrypt-openssl-wrapper.h
-+@@ -82,5 +82,18 @@
-+                                                                 gcry_md_get_algo_dlen (algo));  \
-+                                                             gcry_md_close(mdh); \
-+                                                         } while (0)
-++// MD5
-++#define MD5_CTX                                         gcry_md_hd_t
-++#define MD5_Init(ctx)                                   gcry_md_open(ctx, GCRY_MD_MD5, 0)
-++#define MD5_Update(ctx, data, len)                      gcry_md_write(*ctx, data, len)
-++    // HMAC_Update(ctx, data, len)
-++#define MD5_Final(ctx, md)                              do  { \
-++                                                            memcpy(   md,  \
-++                                                                gcry_md_read(*(gcry_md_hd_t*)ctx, GCRY_MD_MD5), \
-++                                                                gcry_md_get_algo_dlen(gcry_md_get_algo(*(gcry_md_hd_t*)ctx)) \
-++                                                            ); \
-++                                                            gcry_md_close(*(gcry_md_hd_t*)ctx); \
-++                                                        } while (0)
-++
-+ // http://tumblr.spantz.org/post/214737529/the-use-of-do-while-0-in-c-macros
-+ #endif // _GCRYPT_OPENSSL_WRAPPER_H
-+diff --git a/src/md5.h b/src/md5.h
-+index e9edeb81..d8d3d6b3 100644
-+--- a/src/md5.h
-++++ b/src/md5.h
-+@@ -61,7 +61,11 @@ typedef unsigned int MD5_u32plus;
-+ 
-+ #include "arch.h"
-+ #ifdef SIMD_PARA_MD5
-+-#include <openssl/md5.h>
-++    #ifndef USE_GCRYPT
-++        #include <openssl/md5.h>
-++    #else
-++        #include "gcrypt-openssl-wrapper.h"
-++    #endif
-+ #endif
-+ 
-+ #endif /* _MD5_H */
+diff --git a/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
+deleted file mode 100644
+index c14880b11770..000000000000
+--- a/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From f0ce70989526fc9a0223398c99ea0d09777ea5df Mon Sep 17 00:00:00 2001
+-From: Martin Thomson <martin.thomson@gmail.com>
+-Date: Thu, 15 Feb 2018 16:34:02 +1100
+-Subject: [PATCH] Bug 1438426 - Avoid stringop-truncation warning, r=franziskus
+-
+---HG--
+-extra : rebase_source : 4ea1630d0da0ce3523309e3da33ee50961682242
+-
+-Upstream-commit: https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
+-[Thomas: edited after git format-patch to add the nss/ prefix needed
+-for the patch to apply properly on the source code extracted by the
+-tarball.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- nss/coreconf/nsinstall/pathsub.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/nss/coreconf/nsinstall/pathsub.c b/nss/coreconf/nsinstall/pathsub.c
+-index a42a9f30a..c31a946f0 100644
+---- a/nss/coreconf/nsinstall/pathsub.c
+-+++ b/nss/coreconf/nsinstall/pathsub.c
+-@@ -212,7 +212,7 @@ reversepath(char *inpath, char *name, int len, char *outpath)
+- 	    xchdir("..");
+- 	} else {
+- 	    cp -= 3;
+--	    strncpy(cp, "../", 3);
+-+	    memcpy(cp, "../", 3);
+- 	    xchdir(buf);
+- 	}
+-     }
+--- 
+-2.14.3
+-
 -- 
-2.14.1
+2.17.1
