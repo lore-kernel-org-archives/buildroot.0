@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  2 Jun 2018 21:27:38 +0200
-Subject: [Buildroot] [PATCH 1/1] arcrack-ng: fix build on powerpc64 with
- libgcrypt
-Message-ID: <20180602192738.31543-1-fontaine.fabrice@gmail.com>
+Date: Sat,  2 Jun 2018 21:30:08 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] aircrack-ng: fix build on powerpc64 with libgcrypt
+Message-ID: <20180602193008.31633-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,6 +17,9 @@ Fixes:
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+- Fix typo in title: aircrack-ng instead of arcrack-ng
+
  ...compilation-with-gcrypt-on-some-platforms.patch | 53 ++++++++++++++++++++++
  1 file changed, 53 insertions(+)
  create mode 100644 package/aircrack-ng/0004-Fixed-compilation-with-gcrypt-on-some-platforms.patch
