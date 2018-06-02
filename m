@@ -1,47 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 2 Jun 2018 12:43:54 +0200
-Subject: [Buildroot] [git commit] ipset: bump to version 6.38
-Message-ID: <20180602104305.1A47183463@busybox.osuosl.org>
+Date: Sat, 2 Jun 2018 12:43:38 +0200
+Subject: [Buildroot] [git commit] sysstat: bump to version 11.6.3
+Message-ID: <20180602104305.1094F83463@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcebf84c9ea430c75f52c28ef75e3f03b56dac17
+commit: https://git.buildroot.net/buildroot/commit/?id=2e0e7b90fc2d33f102b68e156a63c7abb325a9e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ipset/ipset.hash | 6 +++---
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sysstat/sysstat.hash | 4 ++--
+ package/sysstat/sysstat.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index 9185d94d85..f41111c022 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,6 +1,6 @@
--# From http://ftp.netfilter.org/pub/ipset/ipset-6.36.tar.bz2.md5sum.txt
--md5 fda041afefd581464e445b87beeb0681  ipset-6.36.tar.bz2
-+# From http://ftp.netfilter.org/pub/ipset/ipset-6.38.tar.bz2.md5sum.txt
-+md5 0e5d9c85f6b78e7dff0c996e2900574b  ipset-6.38.tar.bz2
- # Calculated based on the hash above
--sha256 22224a90dc6c7d97b7a7addedd0740c3841e3d9a7ff8c8d2123bae0c3620d30d  ipset-6.36.tar.bz2
-+sha256 ceef625ba31fe0aaa422926c7231a819de0b07644c02c17ebdd3022a29e3e244  ipset-6.38.tar.bz2
+diff --git a/package/sysstat/sysstat.hash b/package/sysstat/sysstat.hash
+index a35631076a..3bbefac189 100644
+--- a/package/sysstat/sysstat.hash
++++ b/package/sysstat/sysstat.hash
+@@ -1,5 +1,5 @@
+ # From: http://sebastien.godard.pagesperso-orange.fr/download.html
+-sha1 2eb3d20016084c9e6ff94c9b2f3b2ada7e8d26c6  sysstat-11.6.1.tar.xz
++sha1 5300345489e455ac62547b072bb8531414758fdf  sysstat-11.6.3.tar.xz
  # Locally calculated
- sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index e9f8165fab..3ec9448941 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
+-sha256 4b2a2cfa8c8fe6ae0155e168ed9a7066caebc3ecb903b0e64a9ede28ecb68fcb  sysstat-11.6.1.tar.xz
++sha256 54b306a1634e39710767936d4d1be17e8b65062aa04c837b41479c4b28b511bd  sysstat-11.6.3.tar.xz
+ sha256 db296f2f7f35bca3a174efb0eb392b3b17bd94b341851429a3dff411b1c2fc73  COPYING
+diff --git a/package/sysstat/sysstat.mk b/package/sysstat/sysstat.mk
+index bdc0610ea3..490e8f1b28 100644
+--- a/package/sysstat/sysstat.mk
++++ b/package/sysstat/sysstat.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPSET_VERSION = 6.36
-+IPSET_VERSION = 6.38
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+-SYSSTAT_VERSION = 11.6.1
++SYSSTAT_VERSION = 11.6.3
+ SYSSTAT_SOURCE = sysstat-$(SYSSTAT_VERSION).tar.xz
+ SYSSTAT_SITE = http://pagesperso-orange.fr/sebastien.godard
+ SYSSTAT_CONF_OPTS = --disable-file-attr --disable-sensors
