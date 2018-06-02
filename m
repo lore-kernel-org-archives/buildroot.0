@@ -1,57 +1,135 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 2 Jun 2018 17:44:59 +0200
-Subject: [Buildroot] [PATCH 1/1] librtas: bump to version 2.0.1
-In-Reply-To: <CAPi7W815UOMcksm06w0H9x4zm9syEPXJsOheEo9tsog0pQpRgA@mail.gmail.com>
-References: <20180602144315.32208-1-fontaine.fabrice@gmail.com>
- <590fcbde-207a-9ae0-d27a-65332e36fbfc@gmail.com>
- <CAPi7W815UOMcksm06w0H9x4zm9syEPXJsOheEo9tsog0pQpRgA@mail.gmail.com>
-Message-ID: <3ceb070b-e676-0ec8-07a5-b1718580c35b@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  2 Jun 2018 18:07:37 +0200
+Subject: [Buildroot] [PATCH 1/1] librtlsdr: fix static build
+Message-ID: <20180602160737.11623-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+When bumping to version 0.5.4, first patch was wrongly removed.
+Put back an enhanced version of this patch (sent upstream)
 
-Le 02/06/2018 ? 17:25, Fabrice Fontaine a ?crit?:
-> Dear Romain,
-> 
-> 2018-06-02 16:56 GMT+02:00 Romain Naour <romain.naour@gmail.com
-> <mailto:romain.naour@gmail.com>>:
-> 
->     Hi Fabrice,
-> 
->     Le 02/06/2018 ? 16:43, Fabrice Fontaine a ?crit?:
->     > - Switch site to github
->     > - Move to autotools infrastructure
->     > - Remove patch (not needed anymore)
->     > - Since version 1.4 (January 2016), license is now LGPL-2.1+
->     > - Add hash for license file
->     > 
->     > Signed-off-by: Fabrice Fontaine <fontaine.fabrice at gmail.com <mailto:fontaine.fabrice@gmail.com>>
-> 
->     Did you check if powerpc-utils with rtas still build with this new version ?
-> 
-> Yes, powerpc-utils still builds with this new version.
+Fixes:
+ - http://autobuild.buildroot.net/results/bea78bf580be6fe109b827b72af9587c5324daad
 
-Ok, thanks for checking :)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...01-disable_shared_library_target_in_build.patch | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
+ create mode 100644 package/librtlsdr/0001-disable_shared_library_target_in_build.patch
 
-> By the way, this new version of librtas is quite old (July 2016) and
-> powerpc-utils is up to date in buildroot (September 2017).
-
-Indeed, there is no activity except one commit in July 2017 in next branch.
-
-Best regards,
-Romain
-
-> 
->     IIRC, librtas package has been added by Sam Bobroff to be used with
->     powerpc-utils.
-> 
->     Best regards,
->     Romain
-> 
-> Best Regards,
-> 
-> Fabrice
+diff --git a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
+new file mode 100644
+index 0000000000..b9f53d2393
+--- /dev/null
++++ b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
+@@ -0,0 +1,105 @@
++From d47e3aed12414be59bf77177c93853ec4b24d705 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 2 Jun 2018 16:53:36 +0200
++Subject: [PATCH] disable shared library target in build
++
++Disable shared library target if BUILD_SHARED_LIBS if OFF.
++
++Patch retrieved from
++https://git.buildroot.net/buildroot/tree/package/librtlsdr/0001-disable_shared_library_target_in_build.patch?h=2018.05
++
++Patch has been updated to work with 0.5.4 and to be able to keep current
++behavior of building shared and static version of library if
++BUILD_SHARED_LIBS and BUILD_STATIC_LIBS are both set.
++Moreover, if BUILD_STATIC_LIBS is OFF, only shared version of library
++will be install.
++
++[Upstream status: https://github.com/steve-m/librtlsdr/pull/46]
++
++Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/CMakeLists.txt | 24 ++++++++++++++++--------
++ 1 file changed, 16 insertions(+), 8 deletions(-)
++
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index 07d64ab..2b7cbae 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -47,16 +47,22 @@ ENDIF(MSVC)
++ ########################################################################
++ # Setup shared library variant
++ ########################################################################
+++option(BUILD_SHARED_LIBS "Build shared library" ON)
+++if(BUILD_SHARED_LIBS)
++ add_library(rtlsdr_shared SHARED ${rtlsdr_srcs})
++ target_link_libraries(rtlsdr_shared ${LIBUSB_LIBRARIES})
++ set_target_properties(rtlsdr_shared PROPERTIES DEFINE_SYMBOL "rtlsdr_EXPORTS")
++ set_target_properties(rtlsdr_shared PROPERTIES OUTPUT_NAME rtlsdr)
++ set_target_properties(rtlsdr_shared PROPERTIES SOVERSION ${MAJOR_VERSION})
++ set_target_properties(rtlsdr_shared PROPERTIES VERSION ${LIBVER})
+++list(APPEND rtlsdr_lib rtlsdr_shared)
+++endif()
++ 
++ ########################################################################
++ # Setup static library variant
++ ########################################################################
+++option(BUILD_STATIC_LIBS "Build static library" ON)
+++if(BUILD_STATIC_LIBS)
++ add_library(rtlsdr_static STATIC ${rtlsdr_srcs})
++ target_link_libraries(rtlsdr_static ${LIBUSB_LIBRARIES})
++ set_property(TARGET rtlsdr_static APPEND PROPERTY COMPILE_DEFINITIONS "rtlsdr_STATIC" )
++@@ -64,6 +70,8 @@ if(NOT WIN32)
++ # Force same library filename for static and shared variants of the library
++ set_target_properties(rtlsdr_static PROPERTIES OUTPUT_NAME rtlsdr)
++ endif()
+++list(APPEND rtlsdr_lib rtlsdr_static)
+++endif()
++ 
++ ########################################################################
++ # Setup libraries used in executables
++@@ -91,33 +99,33 @@ add_executable(rtl_fm rtl_fm.c)
++ add_executable(rtl_eeprom rtl_eeprom.c)
++ add_executable(rtl_adsb rtl_adsb.c)
++ add_executable(rtl_power rtl_power.c)
++-set(INSTALL_TARGETS rtlsdr_shared rtlsdr_static rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
+++set(INSTALL_TARGETS ${rtlsdr_lib} rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
++ 
++-target_link_libraries(rtl_sdr rtlsdr_shared convenience_static
+++target_link_libraries(rtl_sdr ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_tcp rtlsdr_shared convenience_static
+++target_link_libraries(rtl_tcp ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_test rtlsdr_shared convenience_static
+++target_link_libraries(rtl_test ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_fm rtlsdr_shared convenience_static
+++target_link_libraries(rtl_fm ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_eeprom rtlsdr_shared convenience_static
+++target_link_libraries(rtl_eeprom ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_adsb rtlsdr_shared convenience_static
+++target_link_libraries(rtl_adsb ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-target_link_libraries(rtl_power rtlsdr_shared convenience_static
+++target_link_libraries(rtl_power ${rtlsdr_lib} convenience_static
++     ${LIBUSB_LIBRARIES}
++     ${CMAKE_THREAD_LIBS_INIT}
++ )
++-- 
++2.14.1
++
+-- 
+2.14.1
