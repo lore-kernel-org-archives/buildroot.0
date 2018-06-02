@@ -1,48 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:54 -0000
-Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.92
-Message-ID: <20180602101010.3D1A67FADE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] core/pkg-infra: add missing step hooks
+Message-ID: <20180602101010.9571C7FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d64dd8c78c3a74d3c3329688087c2f50ae5f3d71
+commit: https://git.buildroot.net/buildroot/commit/?id=048a7258eb7b4b2d95e923a9eb11b0b355448cff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also call the step hooks from the three steps they are currently not
+called in:
+  - download,
+  - actual download (when main archive is not the real source, like
+    external toolchains),
+  - rsync (for local or override-srcdir).
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libdrm/libdrm.hash | 10 +++++-----
- package/libdrm/libdrm.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/pkg-generic.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
-index bc15ecf79f..52624b6a02 100644
---- a/package/libdrm/libdrm.hash
-+++ b/package/libdrm/libdrm.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002853.html
--md5 23d87cda92700b710a37d9b8edaa9f54  libdrm-2.4.91.tar.bz2
--sha1 44e42ce3cd41666e343ba393c73f6f1ad9fe1e74  libdrm-2.4.91.tar.bz2
--sha256 634a0ed0cc1eff06f48674b1da81aafa661a9f001e7a4f43dde81076886dc800  libdrm-2.4.91.tar.bz2
--sha512 07578c00c121ba37033db7172590e26d1545f81c242bbce2cfb7fb904bde504822c275d6468e5c5d20360d0046ae73d9b058aa0459ba35eb11927141cc998772  libdrm-2.4.91.tar.bz2
-+# From https://lists.freedesktop.org/archives/dri-devel/2018-May/176249.html
-+md5 f9b00d985f82d0be6ecc20c799acc89e  libdrm-2.4.92.tar.bz2
-+sha1 aad04c8e35cd3ab589ff085b20f75ba43e086647  libdrm-2.4.92.tar.bz2
-+sha256 e9e48fdb4de139dc4d9880aa1473158a16ff6aff63d14341367bd30a51ff39fa  libdrm-2.4.92.tar.bz2
-+sha512 9b75584d8957d298125884d490b74c0a641725d17088ba47f3dc2ec9d06519d8387eb464c024ee11712b31b17fb84e1a9a52bd4ebc7c316beb7d2f8711dc9eb2  libdrm-2.4.92.tar.bz2
-diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-index 8f533d72d7..06b1144616 100644
---- a/package/libdrm/libdrm.mk
-+++ b/package/libdrm/libdrm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8a3b5f90a9..387762b094 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -132,6 +132,7 @@ endif
  
--LIBDRM_VERSION = 2.4.91
-+LIBDRM_VERSION = 2.4.92
- LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
- LIBDRM_SITE = https://dri.freedesktop.org/libdrm
- LIBDRM_LICENSE = MIT
+ # Retrieve the archive
+ $(BUILD_DIR)/%/.stamp_downloaded:
++	@$(call step_start,download)
+ 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ # Only show the download message if it isn't already downloaded
+ 	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
+@@ -143,12 +144,15 @@ $(BUILD_DIR)/%/.stamp_downloaded:
+ 	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
+ 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)mkdir -p $(@D)
++	@$(call step_end,download)
+ 	$(Q)touch $@
+ 
+ # Retrieve actual source archive, e.g. for prebuilt external toolchains
+ $(BUILD_DIR)/%/.stamp_actual_downloaded:
++	@$(call step_start,actual-download)
+ 	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL))
+ 	$(Q)mkdir -p $(@D)
++	@$(call step_end,actual-download)
+ 	$(Q)touch $@
+ 
+ # Unpack the archive
+@@ -167,11 +171,13 @@ $(BUILD_DIR)/%/.stamp_extracted:
+ # Rsync the source directory if the <pkg>_OVERRIDE_SRCDIR feature is
+ # used.
+ $(BUILD_DIR)/%/.stamp_rsynced:
++	@$(call step_start,rsync)
+ 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+ 	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
++	@$(call step_end,rsync)
+ 	$(Q)touch $@
+ 
+ # Patch
