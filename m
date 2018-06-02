@@ -1,20 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 02 Jun 2018 12:36:50 +0200
-Subject: [Buildroot] [PATCH] perl-libwww-perl: fix SITE
-In-Reply-To: <20180601162438.22975-1-francois.perrad@gadz.org> (Francois
- Perrad's message of "Fri, 1 Jun 2018 18:24:38 +0200")
-References: <20180601162438.22975-1-francois.perrad@gadz.org>
-Message-ID: <87bmctxynx.fsf@dell.be.48ers.dk>
+Date: Sat, 02 Jun 2018 12:38:03 +0200
+Subject: [Buildroot] [PATCH 1/1] cairo: bump to version 1.15.12
+In-Reply-To: <20180601202951.23002-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 1 Jun 2018 22:29:51 +0200")
+References: <20180601202951.23002-1-fontaine.fabrice@gmail.com>
+Message-ID: <877enhxylw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > see http://autobuild.buildroot.net/results/6f7745010ca589876a24d522bc0cb4a0dca26768/
- > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ > - Remove second patch (LTO support removed since 1.14.0 in August 2014:
+ >   https://cgit.freedesktop.org/cairo/commit/?id=c7ff9bb32e20679d6da4e8a2856be716e5bd9e12
+ > - Add hash for license files
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
