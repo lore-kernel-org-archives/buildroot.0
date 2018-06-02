@@ -1,70 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 02 Jun 2018 10:11:54 -0000
-Subject: [Buildroot] [git commit] core/pkg-infra: add missing step hooks
-Message-ID: <20180602101010.9571C7FADE@busybox.osuosl.org>
+Date: Sat, 02 Jun 2018 10:11:55 -0000
+Subject: [Buildroot] [git commit] busybox: remove shadow passwords config
+ tweaks
+Message-ID: <20180602101010.70FD07FADE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=048a7258eb7b4b2d95e923a9eb11b0b355448cff
+commit: https://git.buildroot.net/buildroot/commit/?id=9e11eaa82f4d8dd832811212d52ae11dcf85c97f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also call the step hooks from the three steps they are currently not
-called in:
-  - download,
-  - actual download (when main archive is not the real source, like
-    external toolchains),
-  - rsync (for local or override-srcdir).
+These configuration tweaks were added for compatibility with Blackfin
+toolchains that bundled a uClibc version without shadow passwords
+support. Blackfin is gone, so this is no longer needed.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pkg-generic.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/busybox/busybox.mk | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 8a3b5f90a9..387762b094 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -132,6 +132,7 @@ endif
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 7033c4304a..75fe7e137b 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -148,14 +148,6 @@ define BUSYBOX_PREFER_STATIC
+ endef
+ endif
  
- # Retrieve the archive
- $(BUILD_DIR)/%/.stamp_downloaded:
-+	@$(call step_start,download)
- 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- # Only show the download message if it isn't already downloaded
- 	$(Q)for p in $($(PKG)_ALL_DOWNLOADS); do \
-@@ -143,12 +144,15 @@ $(BUILD_DIR)/%/.stamp_downloaded:
- 	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
- 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)mkdir -p $(@D)
-+	@$(call step_end,download)
- 	$(Q)touch $@
- 
- # Retrieve actual source archive, e.g. for prebuilt external toolchains
- $(BUILD_DIR)/%/.stamp_actual_downloaded:
-+	@$(call step_start,actual-download)
- 	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL))
- 	$(Q)mkdir -p $(@D)
-+	@$(call step_end,actual-download)
- 	$(Q)touch $@
- 
- # Unpack the archive
-@@ -167,11 +171,13 @@ $(BUILD_DIR)/%/.stamp_extracted:
- # Rsync the source directory if the <pkg>_OVERRIDE_SRCDIR feature is
- # used.
- $(BUILD_DIR)/%/.stamp_rsynced:
-+	@$(call step_start,rsync)
- 	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
- 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
- 	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
-+	@$(call step_end,rsync)
- 	$(Q)touch $@
- 
- # Patch
+-# Disable shadow passwords support if unsupported by the C library
+-ifeq ($(BR2_TOOLCHAIN_HAS_SHADOW_PASSWORDS),)
+-define BUSYBOX_INTERNAL_SHADOW_PASSWORDS
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_PWD_GRP,$(BUSYBOX_BUILD_CONFIG))
+-	$(call KCONFIG_ENABLE_OPT,CONFIG_USE_BB_SHADOW,$(BUSYBOX_BUILD_CONFIG))
+-endef
+-endif
+-
+ define BUSYBOX_INSTALL_UDHCPC_SCRIPT
+ 	if grep -q CONFIG_UDHCPC=y $(@D)/.config; then \
+ 		$(INSTALL) -m 0755 -D package/busybox/udhcpc.script \
+@@ -273,7 +265,6 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_MDEV)
+ 	$(BUSYBOX_SET_CRYPT_SHA)
+ 	$(BUSYBOX_LINUX_PAM)
+-	$(BUSYBOX_INTERNAL_SHADOW_PASSWORDS)
+ 	$(BUSYBOX_SET_INIT)
+ 	$(BUSYBOX_SET_WATCHDOG)
+ 	$(BUSYBOX_SET_SELINUX)
