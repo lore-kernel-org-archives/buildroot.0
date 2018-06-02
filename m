@@ -1,59 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sun,  3 Jun 2018 00:19:31 +0200
-Subject: [Buildroot] [PATCH 0/4] support/docker: make the image more
- reproducible
-Message-ID: <cover.1527977964.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/4] support/docker: run apt-get update and
+ apt-get install in two RUNs
+In-Reply-To: <cover.1527977964.git.yann.morin.1998@free.fr>
+References: <cover.1527977964.git.yann.morin.1998@free.fr>
+Message-ID: <5d55cfc92761a84d7b10aae602b05c147b56f95e.1527977964.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+In commit 7517aef4d (support/docker: limit the number of layers),
+we reduced the number of layers by coalescing multiple RUN commands
+into less commands.
 
-Currently, the base test image is not entirely reproducible, because we
-install packages from PyPI without specifying all the versions of all
-the packages we install from there.
+In doing so, we especially coalesced "apt-get update" with "apt-get
+install".
 
-Instead of relying on a third-party to provide packages, just use those
-from te distribution, because we are using a pinned version and thus we
-will always get the same packages from the distro.
+However, the distribution we used is a pinned version of stretch, so
+we know that running apt-get update will always yield the same apt
+database.
 
+If we split the two apt-get commands, then we can re-use any local
+intermediate image when we need to update the list of packages to
+install; this helps quite a bit when testing the docker files over
+and over again, with just slight variants in the packages list.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/docker/Dockerfile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-
-The following changes since commit 6a29c8ae3ee2f2ef1a7bdac48fa96d29d9e9b62f
-
-  librsync: bump to version 2.0.2 (2018-06-02 16:06:02 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to ff32083db8641c38fa6d02f731870583b24c4dab
-
-  support/docker: use the distro-provided flake8 (2018-06-02 23:27:15 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      support/docker: run apt-get update and apt-get install in two RUNs
-      support/docker: sort the list of installed packages
-      support/testing: fix python syntax
-      support/docker: use the distro-provided flake8
-
- support/docker/Dockerfile         | 40 +++++++++++++++++++++++----------------
- support/testing/infra/__init__.py |  6 +++---
- support/testing/infra/basetest.py |  4 ++--
- 3 files changed, 29 insertions(+), 21 deletions(-)
-
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index f01ac25f93..8c525f7cf1 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -20,8 +20,8 @@ COPY apt-sources.list /etc/apt/sources.list
+ 
+ # The container has no package lists, so need to update first
+ RUN dpkg --add-architecture i386 && \
+-    apt-get update -y && \
+-    apt-get install -y --no-install-recommends \
++    apt-get update -y
++RUN apt-get install -y --no-install-recommends \
+         build-essential cmake libc6:i386 g++-multilib \
+         bc ca-certificates file locales rsync \
+         cvs bzr git mercurial subversion wget \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
