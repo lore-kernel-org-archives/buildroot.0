@@ -1,67 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Jun 2018 00:19:34 +0200
-Subject: [Buildroot] [PATCH 4/4] support/docker: use the distro-provided
- flake8
+Date: Sun,  3 Jun 2018 00:19:32 +0200
+Subject: [Buildroot] [PATCH 2/4] support/docker: sort the list of installed
+ packages
 In-Reply-To: <cover.1527977964.git.yann.morin.1998@free.fr>
 References: <cover.1527977964.git.yann.morin.1998@free.fr>
-Message-ID: <ff32083db8641c38fa6d02f731870583b24c4dab.1527977964.git.yann.morin.1998@free.fr>
+Message-ID: <ed5028f2849286aef3ec10937f4fe7d03a2137b8.1527977964.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we install flake8 and its dependencies via pip. We
-tried to be reproducible by pinning the version of those python
-packages, but we did forget quite a few of them, and thus some
-dependencies for flake8 are installed as uncontrolled versions.
+As suggested in the docker best practices [0], order the package list
+alphabetically, and list only one package per line.
 
-Furthermore, before we install flake8 and its dependencies, we
-forcibly update pip, setuptools, and wheels packages to their
-latest versions. This explicitly breaks reproducibility.
+This will be much usefull later, we need to update the list of installed
+packages, like adding new ones for example.
 
-While we could enforce a specific version of all those packages
-and still grab them from PyPI, we can simply grab them from the
-distribution-provided packages instead.
-
-Since we're using a pinned versiomn of stretch, this already
-guarantees we'll reproducibily get the same versions over and
-over again. Besides, we just need to list flake8 as a package to
-install to automatically get all its dependencies (again, in a
-reproducible way).
+[0] https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#sort-multi-line-arguments
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- support/docker/Dockerfile | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ support/docker/Dockerfile | 27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
 diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 4f08a54f06..57c9ef78fa 100644
+index 8c525f7cf1..4f08a54f06 100644
 --- a/support/docker/Dockerfile
 +++ b/support/docker/Dockerfile
-@@ -29,6 +29,7 @@ RUN apt-get install -y --no-install-recommends \
-         cpio \
-         cvs \
-         file \
-+        flake8 \
-         g++-multilib \
-         git \
-         libc6:i386 \
-@@ -47,14 +48,6 @@ RUN apt-get install -y --no-install-recommends \
+@@ -22,13 +22,28 @@ COPY apt-sources.list /etc/apt/sources.list
+ RUN dpkg --add-architecture i386 && \
+     apt-get update -y
+ RUN apt-get install -y --no-install-recommends \
+-        build-essential cmake libc6:i386 g++-multilib \
+-        bc ca-certificates file locales rsync \
+-        cvs bzr git mercurial subversion wget \
+-        cpio unzip \
++        bc \
++        build-essential \
++        bzr \
++        ca-certificates \
++        cpio \
++        cvs \
++        file \
++        g++-multilib \
++        git \
++        libc6:i386 \
+         libncurses5-dev \
+-        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
+-        python-pip && \
++        locales \
++        mercurial \
++        python-nose2 \
++        python-pexpect \
++        qemu-system-arm \
++        qemu-system-x86 \
++        rsync \
++        subversion \
++        unzip \
++        wget \
++        && \
      apt-get -y autoremove && \
      apt-get -y clean
  
--# For check-flake8
--RUN python -m pip install --upgrade pip setuptools wheel && \
--    pip install -q \
--        flake8==3.5.0 \
--        mccabe==0.6.1 \
--        pycodestyle==2.3.1 \
--        pyflakes==1.6.0
--
- # To be able to generate a toolchain with locales, enable one UTF-8 locale
- RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
-     /usr/sbin/locale-gen
 -- 
 2.14.1
