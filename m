@@ -1,86 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 02 Jun 2018 10:11:52 -0000
-Subject: [Buildroot] [git commit] cifs-utils: bump to version 6.8
-Message-ID: <20180602101010.818DB7FADE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] mtd: bump to version 2.0.2
+Message-ID: <20180602101010.2BCEC836B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ff41f264cb1858b3f530b1e079d4858c04a1295
+commit: https://git.buildroot.net/buildroot/commit/?id=ea7218774624d6d3dfe76d1e2f1e6a5dab446dce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove patch (already in version)
-- Add hash for license file
+Add license file hash.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...001-mount.cifs-Remove-data_blob.h-include.patch | 32 ----------------------
- package/cifs-utils/cifs-utils.hash                 |  5 +++-
- package/cifs-utils/cifs-utils.mk                   |  2 +-
- 3 files changed, 5 insertions(+), 34 deletions(-)
+ package/mtd/mtd.hash | 5 +++--
+ package/mtd/mtd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch b/package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch
-deleted file mode 100644
-index 6536076577..0000000000
---- a/package/cifs-utils/0001-mount.cifs-Remove-data_blob.h-include.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 272d523a57a4e8791d625a479128613be5e401f5 Mon Sep 17 00:00:00 2001
--From: Thomas Witt <pyromaniac@exherbo.org>
--Date: Wed, 15 Mar 2017 20:20:44 +0000
--Subject: [PATCH] mount.cifs: Remove data_blob.h include
--
--data_blob.h includes talloc.h from libtalloc, but that is only marked as
--a dependency for cifs.upcall. No symbols from that header are used by
--cifs.mount, so remove it to avoid the libtalloc dependency
--
--Signed-off-by: Thomas Witt <pyromaniac@exherbo.org>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: upstream commit 272d523a57a4
--
-- mount.cifs.c | 1 -
-- 1 file changed, 1 deletion(-)
--
--diff --git a/mount.cifs.c b/mount.cifs.c
--index 13b71ef50303..2612feb4d591 100644
----- a/mount.cifs.c
--+++ b/mount.cifs.c
--@@ -61,7 +61,6 @@
-- #include "mount.h"
-- #include "util.h"
-- #include "resolve_host.h"
---#include "data_blob.h"
-- 
-- #ifndef MS_MOVE 
-- #define MS_MOVE 8192 
---- 
--2.11.0
--
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index ebc9c43e72..fda1573eeb 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -1,2 +1,5 @@
+diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
+index c452654bfb..4bd0cda097 100644
+--- a/package/mtd/mtd.hash
++++ b/package/mtd/mtd.hash
+@@ -1,3 +1,4 @@
  # Locally calculated after checking pgp signature
--sha256	b2f21612474ab012e75accd167aab607a0614ff67efb56ea0f36789fa785cfab	cifs-utils-6.7.tar.bz2
-+sha256	e7d1f6050c43f21f82cd77e288eb756755effd22f0c310fc2c525df9d41dff79	cifs-utils-6.8.tar.bz2
-+
-+# Hash for license file:
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 9044fdf83c..199e8422d5 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
+-# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.1.tar.bz2.asc
+-sha256	312baa0446e4e728ceb413c53533e41e547d1c13ffa0752b2f879fd289fc2f63	mtd-utils-2.0.1.tar.bz2
++# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.2.tar.bz2.asc
++sha256	fb3de61be8e932abb424e8ea3c30298f553d5f970ad158a737bb303bbf9660b8	mtd-utils-2.0.2.tar.bz2
++sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 7094aad89e..83bd6a6ae9 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CIFS_UTILS_VERSION = 6.7
-+CIFS_UTILS_VERSION = 6.8
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPL-3.0+
+-MTD_VERSION = 2.0.1
++MTD_VERSION = 2.0.2
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
+ MTD_LICENSE = GPL-2.0
