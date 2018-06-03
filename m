@@ -1,55 +1,38 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  3 Jun 2018 10:11:33 +0200
-Subject: [Buildroot] [PATCH 1/2] host-perl-autodie: new package
-Message-ID: <20180603081134.1933-1-fontaine.fabrice@gmail.com>
+Date: Sun,  3 Jun 2018 10:11:34 +0200
+Subject: [Buildroot] [PATCH 2/2] whois: add host-perl-autodie dependency
+In-Reply-To: <20180603081134.1933-1-fontaine.fabrice@gmail.com>
+References: <20180603081134.1933-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180603081134.1933-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Replace functions with ones that succeed or die with lexical scope
-
-https://metacpan.org/release/autodie
+Fixes:
+ - http://autobuild.buildroot.net/results/5d13bd7df9596b3bdf1a720962d1ad09af752769
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/perl-autodie/perl-autodie.hash |  6 ++++++
- package/perl-autodie/perl-autodie.mk   | 13 +++++++++++++
- 2 files changed, 19 insertions(+)
- create mode 100644 package/perl-autodie/perl-autodie.hash
- create mode 100644 package/perl-autodie/perl-autodie.mk
+ package/whois/whois.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/perl-autodie/perl-autodie.hash b/package/perl-autodie/perl-autodie.hash
-new file mode 100644
-index 0000000000..7eb157c73a
---- /dev/null
-+++ b/package/perl-autodie/perl-autodie.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    2739e6599a2aa47601fe91b2a27b29d9 autodie-2.29.tar.gz
-+sha256 f5b77917e7004179c93ff8511c8a4c1ea19df3da6379f78b55b57791c45229bf autodie-2.29.tar.gz
-+
-+# computed by scancpan
-+sha256 d03cbb6193f7c27bcdce8464624624275cdbde207a94896c4ebb3bac1f9f5c5c LICENSE
-diff --git a/package/perl-autodie/perl-autodie.mk b/package/perl-autodie/perl-autodie.mk
-new file mode 100644
-index 0000000000..dbe458854b
---- /dev/null
-+++ b/package/perl-autodie/perl-autodie.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-autodie
-+#
-+################################################################################
-+
-+PERL_AUTODIE_VERSION = 2.29
-+PERL_AUTODIE_SOURCE = autodie-$(PERL_AUTODIE_VERSION).tar.gz
-+PERL_AUTODIE_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PJ/PJF
-+PERL_AUTODIE_LICENSE = Artistic or GPL-1.0+
-+PERL_AUTODIE_LICENSE_FILES = LICENSE
-+
-+$(eval $(host-perl-package))
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 5cd7cde7fd..c1461b1f3b 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -8,7 +8,10 @@ WHOIS_VERSION = 5.3.0
+ WHOIS_SITE = http://snapshot.debian.org/archive/debian/20180121T094839Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+-WHOIS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) $(TARGET_NLS_DEPENDENCIES)
++WHOIS_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_BUSYBOX),busybox) \
++	host-perl-autodie \
++	$(TARGET_NLS_DEPENDENCIES)
+ WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+ WHOIS_MAKE_OPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
+ 	LIBS="$(WHOIS_EXTRA_LIBS)"
 -- 
 2.14.1
