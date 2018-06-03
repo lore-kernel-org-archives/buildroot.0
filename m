@@ -1,9 +1,8 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 03 Jun 2018 01:21:46 -0300
-Subject: [Buildroot] [PATCH 2/4] support/docker: sort the list of
- installed packages
-References: <ed5028f2849286aef3ec10937f4fe7d03a2137b8.1527977964.git.yann.morin.1998@free.fr>
-Message-ID: <5b136cda73b5f_208c3fee3611587852799@ultri5.mail>
+Date: Sun, 03 Jun 2018 01:24:37 -0300
+Subject: [Buildroot] [PATCH 3/4] support/testing: fix python syntax
+References: <141e1e33fdf6b4601677642ab64e7d76969ca96a.1527977964.git.yann.morin.1998@free.fr>
+Message-ID: <5b136d851dd0e_208c3fee360e65a052968@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +13,32 @@ Hello,
 
 On Sat, Jun 02, 2018 at 07:19 PM, Yann E. MORIN wrote:
 
+> We're about to switch to using the flake8 from the distro, and that one
+> uncovers two more issues that the previously used pip-provided one did
+> not catch:
+
+See my comments to patch 4. What generates more warnings is the fact that we
+start using Python3 interpreter to call flake8.
+
+We can call this patch a step towards Python 3 support for the test infra.
+
 [snip]
->  RUN apt-get install -y --no-install-recommends \
-> -        build-essential cmake libc6:i386 g++-multilib \
-> -        bc ca-certificates file locales rsync \
-> -        cvs bzr git mercurial subversion wget \
-> -        cpio unzip \
-> +        bc \
-> +        build-essential \
-> +        bzr \
-> +        ca-certificates \
-> +        cpio \
-> +        cvs \
-> +        file \
-> +        g++-multilib \
-> +        git \
-> +        libc6:i386 \
->          libncurses5-dev \
-> -        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
-> -        python-pip && \
+> ---
+>  support/testing/infra/__init__.py | 6 +++---
+>  support/testing/infra/basetest.py | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-With only patches 1 and 2 applied the 'docker build' command will fail:
-/usr/bin/python: No module named pip
+By running one of below commands (after the others from .gitlab-ci.yml) I get:
+$ python3 -m flake8 --statistics --count $(cat files.processed)
+$ flake8 --statistics --count $(cat files.processed)
 
-This removal should be part of patch 4.
+support/testing/infra/basetest.py:49:28: E999 SyntaxError: invalid syntax
+support/testing/infra/__init__.py:37:29: E999 SyntaxError: invalid syntax
+support/testing/run-tests:44:29: E999 SyntaxError: invalid syntax
+3     E999 SyntaxError: invalid syntax
+3
 
-> +        locales \
-> +        mercurial \
-> +        python-nose2 \
-> +        python-pexpect \
-> +        qemu-system-arm \
-> +        qemu-system-x86 \
-> +        rsync \
-> +        subversion \
-> +        unzip \
-> +        wget \
-> +        && \
-
-We usually don't put && in a separate line.
-I am not really against it if no one else complains.
+So it seems support/testing/run-tests also needs to be changed.
 
 
 Regards,
