@@ -1,33 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 3 Jun 2018 20:42:01 +0200
-Subject: [Buildroot] [PATCH 1/1] libraw1394: bump to version 2.1.2
-In-Reply-To: <20180530202211.25190-1-fontaine.fabrice@gmail.com>
-References: <20180530202211.25190-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180603204201.31fa0665@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  3 Jun 2018 21:19:31 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself to some packages
+Message-ID: <20180603191931.6529-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add my entry to cairo, liboping, libpfm4, libraw, libraw1394, libroxml,
+librsvg, librsync, mbedtls and oprofile
 
-On Wed, 30 May 2018 22:22:11 +0200, Fabrice Fontaine wrote:
-> - Remove patches (already in version)
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...build-the-CLOCK_MONOTONIC_RAW-test-condit.patch | 38 ----------------------
->  package/libraw1394/libraw1394.hash                 |  4 +--
->  package/libraw1394/libraw1394.mk                   |  3 +-
->  3 files changed, 3 insertions(+), 42 deletions(-)
->  delete mode 100644 package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ DEVELOPERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1dc3dd5c2c..1a8440759e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -674,6 +674,7 @@ F:	package/alljoyn-base/
+ F:	package/alljoyn-tcl/
+ F:	package/alljoyn-tcl-base/
+ F:	package/boinc/
++F:	package/cairo/
+ F:	package/flatbuffers/
+ F:	package/gtksourceview/
+ F:	package/gssdp/
+@@ -703,12 +704,21 @@ F:	package/libmatroska/
+ F:	package/libmpdclient/
+ F:	package/libnetfilter_conntrack/
+ F:	package/libnetfilter_queue/
++F:	package/liboping/
++F:	package/libpfm4/
++F:	package/libraw/
++F:	package/libraw1394/
++F:	package/libroxml/
++F:	package/librsvg/
++F:	package/librsync/
+ F:	package/libupnp/
+ F:	package/libupnp18/
++F:	package/mbedtls/
+ F:	package/minissdpd/
+ F:	package/motion/
+ F:	package/mutt/
+ F:	package/ncmpc/
++F:	package/oprofile/
+ F:	package/pcmanfm/
+ F:	package/rygel/
+ F:	package/safeclib/
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
