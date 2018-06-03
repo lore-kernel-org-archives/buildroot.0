@@ -1,95 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 3 Jun 2018 20:39:59 +0200
-Subject: [Buildroot] [git commit] libraw1394: bump to version 2.1.2
-Message-ID: <20180603183910.6698980F9F@busybox.osuosl.org>
+Date: Sun, 3 Jun 2018 20:40:05 +0200
+Subject: [Buildroot] [git commit] libroxml: bump to version 3.0.1
+Message-ID: <20180603183910.6F54480F9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=938b7bb816a950b2cd55bfcdc9ff22aed5bd4122
+commit: https://git.buildroot.net/buildroot/commit/?id=407fb2fe202aaeb273e4986dc88c30596a7fe8db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove patches (already in version)
-- Add hash for license file
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...build-the-CLOCK_MONOTONIC_RAW-test-condit.patch | 38 ----------------------
- package/libraw1394/libraw1394.hash                 |  4 +--
- package/libraw1394/libraw1394.mk                   |  3 +-
- 3 files changed, 3 insertions(+), 42 deletions(-)
+ package/libroxml/libroxml.hash | 3 ++-
+ package/libroxml/libroxml.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch b/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
-deleted file mode 100644
-index b87ef715de..0000000000
---- a/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 94c66ade15d7fc468b52c72dfe76a8c10b1910a7 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Fri, 12 Feb 2016 10:13:45 +0100
--Subject: [PATCH] testlibraw: build the CLOCK_MONOTONIC_RAW test conditionally
--
--CLOCK_MONOTONIC_RAW is a somewhat recent addition, and some older
--toolchains/kernels may not have the support for it. Therefore, we
--build the part of the test that uses CLOCK_MONOTONIC_RAW only when
--this definition is available.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- tools/testlibraw.c | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/tools/testlibraw.c b/tools/testlibraw.c
--index d8a0702..ae37157 100644
----- a/tools/testlibraw.c
--+++ b/tools/testlibraw.c
--@@ -211,6 +211,7 @@ read_cycle_timer(raw1394handle_t handle)
-- 	printf("    local time from CLOCK_MONOTONIC: %lld us\n",
-- 	       (unsigned long long)local_time);
-- 
--+#if defined(CLOCK_MONOTONIC_RAW)
-- 	retval = raw1394_read_cycle_timer_and_clock(handle, &ct, &local_time,
-- 						    CLOCK_MONOTONIC_RAW);
-- 	if (retval < 0) {
--@@ -221,6 +222,7 @@ read_cycle_timer(raw1394handle_t handle)
-- 	       ct >> 25, (ct >> 12) & 0x1fff, ct & 0xfff);
-- 	printf("    local time from CLOCK_MONOTONIC_RAW: %lld us\n",
-- 	       (unsigned long long)local_time);
--+#endif
-- }
-- 
-- int test_card(int card)
---- 
--2.6.4
--
-diff --git a/package/libraw1394/libraw1394.hash b/package/libraw1394/libraw1394.hash
-index b785995db1..9a44ab7d41 100644
---- a/package/libraw1394/libraw1394.hash
-+++ b/package/libraw1394/libraw1394.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/libs/ieee1394/sha256sums.asc
--sha256	1bab9780189f9d1eb4e973df12679c04f979c21e024240fc98e536ff5b680ee9	libraw1394-2.1.1.tar.xz
-+sha256	03ccc69761d22c7deb1127fc301010dd13e70e44bb7134b8ff0d07590259a55e  	libraw1394-2.1.2.tar.xz
- # Locally computed
--sha256	39369c65fbed7fccc2e6d8e645f258f101c414107d67238f10996e6c2009f20d	fix-types.patch
-+sha256	5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509	COPYING.LIB
-diff --git a/package/libraw1394/libraw1394.mk b/package/libraw1394/libraw1394.mk
-index 73517ed2f5..7aa4a3ae01 100644
---- a/package/libraw1394/libraw1394.mk
-+++ b/package/libraw1394/libraw1394.mk
-@@ -4,10 +4,9 @@
+diff --git a/package/libroxml/libroxml.hash b/package/libroxml/libroxml.hash
+index 32482e65de..897030ed73 100644
+--- a/package/libroxml/libroxml.hash
++++ b/package/libroxml/libroxml.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	1da8f20b530eba4409f2b217587d2f1281ff5d9ba45b24aeac71b94c6c621b78	libroxml-2.3.0.tar.gz
++sha256	b55fd616a2be4e9747173b8dfa4bbab64f5ddfafd7d7a529aa91ab7755bc0ce6	libroxml-3.0.1.tar.gz
++sha256	fe11466c265ad0a6c3896ea113af9403c0a8372b1fdd78712db64f0f1bac6387	License.txt
+diff --git a/package/libroxml/libroxml.mk b/package/libroxml/libroxml.mk
+index 5582b387d4..fef3c2795f 100644
+--- a/package/libroxml/libroxml.mk
++++ b/package/libroxml/libroxml.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBRAW1394_VERSION = 2.1.1
-+LIBRAW1394_VERSION = 2.1.2
- LIBRAW1394_SOURCE = libraw1394-$(LIBRAW1394_VERSION).tar.xz
- LIBRAW1394_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ieee1394
--LIBRAW1394_PATCH = http://git.alpinelinux.org/cgit/aports/plain/main/libraw1394/fix-types.patch
- LIBRAW1394_INSTALL_STAGING = YES
- LIBRAW1394_LICENSE = LGPL-2.1+
- LIBRAW1394_LICENSE_FILES = COPYING.LIB
+-LIBROXML_VERSION = 2.3.0
+-LIBROXML_SITE = http://download.libroxml.net/pool/v2.x
++LIBROXML_VERSION = 3.0.1
++LIBROXML_SITE = http://download.libroxml.net/pool/v3.x
+ LIBROXML_INSTALL_STAGING = YES
+ LIBROXML_LICENSE = LGPL-2.1+ with static link exception
+ LIBROXML_LICENSE_FILES = License.txt
