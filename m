@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 3 Jun 2018 20:25:58 +0200
-Subject: [Buildroot] [PATCH 1/1] zmqpp: depends on exception_ptr
-In-Reply-To: <20180603101114.12722-1-fontaine.fabrice@gmail.com>
-References: <20180603101114.12722-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180603202558.712a1495@windsurf>
+Date: Sun, 3 Jun 2018 20:26:15 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: update my e-mail address
+In-Reply-To: <1527973873-1036-1-git-send-email-zgyarmati@zgyarmati.de>
+References: <1527973873-1036-1-git-send-email-zgyarmati@zgyarmati.de>
+Message-ID: <20180603202615.4c7497f1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jun 2018 12:11:14 +0200, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.net/results/20475346bfcb0cff019ad2e98a0e0ab432a6e5bf
+On Sat,  2 Jun 2018 23:11:13 +0200, Zoltan Gyarmati wrote:
+> From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 > ---
->  package/zmqpp/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
+>  DEVELOPERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
