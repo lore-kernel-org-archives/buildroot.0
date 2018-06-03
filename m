@@ -1,157 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 3 Jun 2018 20:22:08 +0200
-Subject: [Buildroot] [git commit] librtlsdr: fix static build
-Message-ID: <20180603182101.F173E83889@busybox.osuosl.org>
+Date: Sun, 3 Jun 2018 20:23:12 +0200
+Subject: [Buildroot] [PATCH v2,1/1] librtlsdr: fix static build
+In-Reply-To: <20180603141751.5723-1-fontaine.fabrice@gmail.com>
+References: <20180603141751.5723-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180603202312.23f4e3eb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ff035839eef68eb16e90ae70c3e70dc7f57cae5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-When bumping to version 0.5.4, first patch was wrongly removed.
-Put back an enhanced version of this patch (sent upstream)
+On Sun,  3 Jun 2018 16:17:51 +0200, Fabrice Fontaine wrote:
+> When bumping to version 0.5.4, first patch was wrongly removed.
+> Put back an enhanced version of this patch (sent upstream)
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/bea78bf580be6fe109b827b72af9587c5324daad
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - Set -DBUILD_STATIC_LIBS as it is not done by pkg-cmake
 
-Fixes:
- - http://autobuild.buildroot.net/results/bea78bf580be6fe109b827b72af9587c5324daad
+Applied to master, thanks.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...01-disable_shared_library_target_in_build.patch | 105 +++++++++++++++++++++
- package/librtlsdr/librtlsdr.mk                     |   9 ++
- 2 files changed, 114 insertions(+)
-
-diff --git a/package/librtlsdr/0001-disable_shared_library_target_in_build.patch b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
-new file mode 100644
-index 0000000000..b9f53d2393
---- /dev/null
-+++ b/package/librtlsdr/0001-disable_shared_library_target_in_build.patch
-@@ -0,0 +1,105 @@
-+From d47e3aed12414be59bf77177c93853ec4b24d705 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 2 Jun 2018 16:53:36 +0200
-+Subject: [PATCH] disable shared library target in build
-+
-+Disable shared library target if BUILD_SHARED_LIBS if OFF.
-+
-+Patch retrieved from
-+https://git.buildroot.net/buildroot/tree/package/librtlsdr/0001-disable_shared_library_target_in_build.patch?h=2018.05
-+
-+Patch has been updated to work with 0.5.4 and to be able to keep current
-+behavior of building shared and static version of library if
-+BUILD_SHARED_LIBS and BUILD_STATIC_LIBS are both set.
-+Moreover, if BUILD_STATIC_LIBS is OFF, only shared version of library
-+will be install.
-+
-+[Upstream status: https://github.com/steve-m/librtlsdr/pull/46]
-+
-+Signed-off-by: Yuvaraj Patil <yuvaraj.patil@wipro.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/CMakeLists.txt | 24 ++++++++++++++++--------
-+ 1 file changed, 16 insertions(+), 8 deletions(-)
-+
-+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-+index 07d64ab..2b7cbae 100644
-+--- a/src/CMakeLists.txt
-++++ b/src/CMakeLists.txt
-+@@ -47,16 +47,22 @@ ENDIF(MSVC)
-+ ########################################################################
-+ # Setup shared library variant
-+ ########################################################################
-++option(BUILD_SHARED_LIBS "Build shared library" ON)
-++if(BUILD_SHARED_LIBS)
-+ add_library(rtlsdr_shared SHARED ${rtlsdr_srcs})
-+ target_link_libraries(rtlsdr_shared ${LIBUSB_LIBRARIES})
-+ set_target_properties(rtlsdr_shared PROPERTIES DEFINE_SYMBOL "rtlsdr_EXPORTS")
-+ set_target_properties(rtlsdr_shared PROPERTIES OUTPUT_NAME rtlsdr)
-+ set_target_properties(rtlsdr_shared PROPERTIES SOVERSION ${MAJOR_VERSION})
-+ set_target_properties(rtlsdr_shared PROPERTIES VERSION ${LIBVER})
-++list(APPEND rtlsdr_lib rtlsdr_shared)
-++endif()
-+ 
-+ ########################################################################
-+ # Setup static library variant
-+ ########################################################################
-++option(BUILD_STATIC_LIBS "Build static library" ON)
-++if(BUILD_STATIC_LIBS)
-+ add_library(rtlsdr_static STATIC ${rtlsdr_srcs})
-+ target_link_libraries(rtlsdr_static ${LIBUSB_LIBRARIES})
-+ set_property(TARGET rtlsdr_static APPEND PROPERTY COMPILE_DEFINITIONS "rtlsdr_STATIC" )
-+@@ -64,6 +70,8 @@ if(NOT WIN32)
-+ # Force same library filename for static and shared variants of the library
-+ set_target_properties(rtlsdr_static PROPERTIES OUTPUT_NAME rtlsdr)
-+ endif()
-++list(APPEND rtlsdr_lib rtlsdr_static)
-++endif()
-+ 
-+ ########################################################################
-+ # Setup libraries used in executables
-+@@ -91,33 +99,33 @@ add_executable(rtl_fm rtl_fm.c)
-+ add_executable(rtl_eeprom rtl_eeprom.c)
-+ add_executable(rtl_adsb rtl_adsb.c)
-+ add_executable(rtl_power rtl_power.c)
-+-set(INSTALL_TARGETS rtlsdr_shared rtlsdr_static rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
-++set(INSTALL_TARGETS ${rtlsdr_lib} rtl_sdr rtl_tcp rtl_test rtl_fm rtl_eeprom rtl_adsb rtl_power)
-+ 
-+-target_link_libraries(rtl_sdr rtlsdr_shared convenience_static
-++target_link_libraries(rtl_sdr ${rtlsdr_lib} convenience_static
-+     ${LIBUSB_LIBRARIES}
-+     ${CMAKE_THREAD_LIBS_INIT}
-+ )
-+-target_link_libraries(rtl_tcp rtlsdr_shared convenience_static
-++target_link_libraries(rtl_tcp ${rtlsdr_lib} convenience_static
-+     ${LIBUSB_LIBRARIES}
-+     ${CMAKE_THREAD_LIBS_INIT}
-+ )
-+-target_link_libraries(rtl_test rtlsdr_shared convenience_static
-++target_link_libraries(rtl_test ${rtlsdr_lib} convenience_static
-+     ${LIBUSB_LIBRARIES}
-+     ${CMAKE_THREAD_LIBS_INIT}
-+ )
-+-target_link_libraries(rtl_fm rtlsdr_shared convenience_static
-++target_link_libraries(rtl_fm ${rtlsdr_lib} convenience_static
-+     ${LIBUSB_LIBRARIES}
-+     ${CMAKE_THREAD_LIBS_INIT}
-+ )
-+-target_link_libraries(rtl_eeprom rtlsdr_shared convenience_static
-++target_link_libraries(rtl_eeprom ${rtlsdr_lib} convenience_static
-+     ${LIBUSB_LIBRARIES}
-+     ${CMAKE_THREAD_LIBS_INIT}
-+ )
-+-target_link_libraries(rtl_adsb rtlsdr_shared convenience_static
-++target_link_libraries(rtl_adsb ${rtlsdr_lib} convenience_static
-+     ${LIBUSB_LIBRARIES}
-+     ${CMAKE_THREAD_LIBS_INIT}
-+ )
-+-target_link_libraries(rtl_power rtlsdr_shared convenience_static
-++target_link_libraries(rtl_power ${rtlsdr_lib} convenience_static
-+     ${LIBUSB_LIBRARIES}
-+     ${CMAKE_THREAD_LIBS_INIT}
-+ )
-+-- 
-+2.14.1
-+
-diff --git a/package/librtlsdr/librtlsdr.mk b/package/librtlsdr/librtlsdr.mk
-index 02b3d31fd9..ba8a1af104 100644
---- a/package/librtlsdr/librtlsdr.mk
-+++ b/package/librtlsdr/librtlsdr.mk
-@@ -11,6 +11,15 @@ LIBRTLSDR_LICENSE_FILES = COPYING
- LIBRTLSDR_INSTALL_STAGING = YES
- LIBRTLSDR_DEPENDENCIES = libusb
- 
-+# BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBRTLSDR_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+LIBRTLSDRCONF_OPTS += -DBUILD_STATIC_LIBS=ON
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+LIBRTLSDR_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- LIBRTLSDR_CONF_OPTS += -DINSTALL_UDEV_RULES=ON
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
