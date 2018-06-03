@@ -1,44 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  3 Jun 2018 21:31:26 +0200
-Subject: [Buildroot] [PATCH 1/1] php-amqp: selects openssl
-Message-ID: <20180603193126.7582-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun,  3 Jun 2018 23:31:00 +0200
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.15
+Message-ID: <20180603213100.1635-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-php-amqp needs a rabbitmq-c with openssl support:
-https://github.com/pdezwart/php-amqp/issues/310
+Fixes the following security issues:
 
-Fixes:
- - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b45dcf1fad05
+CVE-2018-11362: LDSS dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-25.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+CVE-2018-11357: Multiple dissectors could consume excessive memory
+https://www.wireshark.org/security/wnpa-sec-2018-28.html
+
+CVE-2018-11356: DNS dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-29.html
+
+CVE-2018-11360: GSM A DTAP dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-30.html
+
+CVE-2018-11358: Q.931 dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-31.html
+
+CVE-2018-11359: Multiple dissectors could crash
+https://www.wireshark.org/security/wnpa-sec-2018-33.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php-amqp/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php-amqp/Config.in b/package/php-amqp/Config.in
-index 0aa2021f5a..cf32ec10b2 100644
---- a/package/php-amqp/Config.in
-+++ b/package/php-amqp/Config.in
-@@ -1,12 +1,14 @@
- config BR2_PACKAGE_PHP_AMQP
- 	bool "php-amqp"
- 	depends on BR2_PACKAGE_PHP
-+	depends on !BR2_STATIC_LIBS # rabbitmq-c: amqp_ssl_socket.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # rabbitmq-c
-+	select BR2_PACKAGE_OPENSSL # rabbitmq-c: amqp_ssl_socket.h
- 	select BR2_PACKAGE_RABBITMQ_C
- 	help
- 	  Communicate with any AMQP compliant server.
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 2b44cc0757..4b9c646fa9 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,4 +1,4 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.14.txt
+-sha256 e7a3d4f9bbde20ea5ee09103f9f6dba38e3666dfe1d6a6a1c004602b5fac378b  wireshark-2.2.14.tar.bz2
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.15.txt
++sha256 d73583e9282d47c42b69fc3a1ac9cafb6047d1305f5027d4cf18e95922d11844  wireshark-2.2.15.tar.bz2
+ # Locally calculated
+ sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index ad475803b7..c9a4ef202d 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://pecl.php.net/package/amqp
- 
--comment "php-amqp needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "php-amqp needs a toolchain w/ dynamic library, threads"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
+-WIRESHARK_VERSION = 2.2.14
++WIRESHARK_VERSION = 2.2.15
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 -- 
-2.14.1
+2.11.0
