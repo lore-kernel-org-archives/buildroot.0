@@ -1,76 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Jun 2018 11:08:22 +0200
-Subject: [Buildroot] [PATCH 5/5] support/docker: update to python3-flavoured
- flake8
-In-Reply-To: <cover.1528016895.git.yann.morin.1998@free.fr>
-References: <cover.1528016895.git.yann.morin.1998@free.fr>
-Message-ID: <ed69b61801983e7f424b062eb586669b6d59a969.1528016895.git.yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  3 Jun 2018 12:11:14 +0200
+Subject: [Buildroot] [PATCH 1/1] zmqpp: depends on exception_ptr
+Message-ID: <20180603101114.12722-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We are currently using python2-flavoured flake8, but the way to the
-future is with python3. Besides, the python3-flavoured flake8 catches
-more problems.
+Fixes:
+ - http://autobuild.buildroot.net/results/20475346bfcb0cff019ad2e98a0e0ab432a6e5bf
 
-So, we leap into the future and switch to using python3's flake8.
-
-Future, here we come! ;-)
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .gitlab-ci.yml            | 2 +-
- .gitlab-ci.yml.in         | 2 +-
- support/docker/Dockerfile | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/zmqpp/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index e80491cdde..4e111b48bd 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -37,7 +37,7 @@ check-flake8:
-         - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-         - sort -u files.txt | tee files.processed
-     script:
--        - python -m flake8 --statistics --count $(cat files.processed)
-+        - python3 -m flake8 --statistics --count $(cat files.processed)
-     after_script:
-         - wc -l files.processed
+diff --git a/package/zmqpp/Config.in b/package/zmqpp/Config.in
+index b9d4dcfd64..e9209543a6 100644
+--- a/package/zmqpp/Config.in
++++ b/package/zmqpp/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_ZMQPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # zeromq
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_ZEROMQ
+ 	help
+ 	  C++ binding for zeromq (ZeroMQ, 0MQ, zmq).
+@@ -17,6 +18,9 @@ comment "zmqpp needs a toolchain w/ C++, NPTL, gcc >= 4.7"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
  
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index fb2650c5ce..bfe1eeccec 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -37,7 +37,7 @@ check-flake8:
-         - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-         - sort -u files.txt | tee files.processed
-     script:
--        - python -m flake8 --statistics --count $(cat files.processed)
-+        - python3 -m flake8 --statistics --count $(cat files.processed)
-     after_script:
-         - wc -l files.processed
++comment "zmqpp needs exception_ptr"
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
+ if BR2_PACKAGE_ZMQPP
  
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 8d40aeecdf..57c9ef78fa 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -29,13 +29,13 @@ RUN apt-get install -y --no-install-recommends \
-         cpio \
-         cvs \
-         file \
-+        flake8 \
-         g++-multilib \
-         git \
-         libc6:i386 \
-         libncurses5-dev \
-         locales \
-         mercurial \
--        python-flake8 \
-         python-nose2 \
-         python-pexpect \
-         qemu-system-arm \
+ config BR2_PACKAGE_ZMQPP_CLIENT
 -- 
 2.14.1
