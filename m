@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 3 Jun 2018 20:31:39 +0200
-Subject: [Buildroot] [PATCH 1/5] support/docker: run apt-get update and
- apt-get install in two RUNs
-In-Reply-To: <474022096f189332bf42c3da6e299b85f252efed.1528016895.git.yann.morin.1998@free.fr>
-References: <cover.1528016895.git.yann.morin.1998@free.fr>
- <474022096f189332bf42c3da6e299b85f252efed.1528016895.git.yann.morin.1998@free.fr>
-Message-ID: <20180603203139.0ed74065@windsurf>
+Date: Sun, 3 Jun 2018 20:34:34 +0200
+Subject: [Buildroot] [PATCH next] package/imx-mkimage: update hash
+In-Reply-To: <1527791628-7336-1-git-send-email-karl.erik.larsson@gmail.com>
+References: <1527791628-7336-1-git-send-email-karl.erik.larsson@gmail.com>
+Message-ID: <20180603203434.4b27b335@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jun 2018 11:08:18 +0200, Yann E. MORIN wrote:
-> In commit 7517aef4d (support/docker: limit the number of layers),
-> we reduced the number of layers by coalescing multiple RUN commands
-> into less commands.
+On Thu, 31 May 2018 20:33:48 +0200, Erik Larsson wrote:
+> Due to an update in the tar logic, see commit 6e2f5d0254 (download/git: fix
+> transform regexp for older tar versions ) - This hash needs to be updated.
 > 
-> In doing so, we especially coalesced "apt-get update" with "apt-get
-> install".
+> Fixes:
 > 
-> However, the distribution we used is a pinned version of stretch, so
-> we know that running apt-get update will always yield the same apt
-> database.
+>   http://autobuild.buildroot.net/results/1ff53d2b6b9927403c44447a5c8d3d6b3b2bfe33/
 > 
-> If we split the two apt-get commands, then we can re-use any local
-> intermediate image when we need to update the list of packages to
-> install; this helps quite a bit when testing the docker files over
-> and over again, with just slight variants in the packages list.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
->  support/docker/Dockerfile | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Erik Larsson <karl.erik.larsson@gmail.com>
 
-Applied to master, thanks.
+Next has been merged back into master, and this problem had already
+been fixed in master, therefore this patch is not needed anymore. I've
+marked it as Not Applicable in our patch tracking system.
+
+Thanks,
 
 Thomas
 -- 
