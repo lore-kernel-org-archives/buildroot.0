@@ -1,38 +1,75 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  3 Jun 2018 10:11:34 +0200
-Subject: [Buildroot] [PATCH 2/2] whois: add host-perl-autodie dependency
-In-Reply-To: <20180603081134.1933-1-fontaine.fabrice@gmail.com>
-References: <20180603081134.1933-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180603081134.1933-2-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  3 Jun 2018 11:08:19 +0200
+Subject: [Buildroot] [PATCH 0/5] support/docker: make the image more
+ reproducible
+Message-ID: <cover.1528016895.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/5d13bd7df9596b3bdf1a720962d1ad09af752769
+Hello All!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/whois/whois.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Currently, the base test image is not entirely reproducible, because we
+install packages from PyPI without specifying all the versions of all
+the packages we install from there.
 
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 5cd7cde7fd..c1461b1f3b 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -8,7 +8,10 @@ WHOIS_VERSION = 5.3.0
- WHOIS_SITE = http://snapshot.debian.org/archive/debian/20180121T094839Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- # take precedence over busybox implementation
--WHOIS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) $(TARGET_NLS_DEPENDENCIES)
-+WHOIS_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_BUSYBOX),busybox) \
-+	host-perl-autodie \
-+	$(TARGET_NLS_DEPENDENCIES)
- WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
- WHOIS_MAKE_OPTS = CC="$(TARGET_CC)" CFLAGS="$(TARGET_CFLAGS)" \
- 	LIBS="$(WHOIS_EXTRA_LIBS)"
+Instead of relying on a third-party to provide packages, just use those
+from the distribution, because we are using a pinned version and thus
+we will always get the same packages from the distro.
+
+Eventually, we also update to a python3-flavoured flake8, as that
+catches even more issues. Those issues are also fixed. Note that, even
+if we decide against switching to a python3 flake8, we can still apply
+patch 4, to fix the issues that it reported.
+
+The result of using this series can be seen at:
+    https://gitlab.com/ymorin/buildroot-ci/pipelines/23095050
+
+If/when this series is applied, I'll regenerate and updalod the new
+buildroot/base image, and send a furhter patch to use it from our
+gitlab-ci.yml.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 6a29c8ae3ee2f2ef1a7bdac48fa96d29d9e9b62f
+
+  librsync: bump to version 2.0.2 (2018-06-02 16:06:02 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to ed69b61801983e7f424b062eb586669b6d59a969
+
+  support/docker: update to python3-flavoured flake8 (2018-06-03 10:55:23 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      support/docker: run apt-get update and apt-get install in two RUNs
+      support/docker: sort the list of installed packages
+      support/docker: use the distro-provided flake8
+      support/testing: fix python syntax
+      support/docker: update to python3-flavoured flake8
+
+ .gitlab-ci.yml                    |  2 +-
+ .gitlab-ci.yml.in                 |  2 +-
+ support/docker/Dockerfile         | 40 +++++++++++++++++++++++----------------
+ support/testing/infra/__init__.py |  6 +++---
+ support/testing/infra/basetest.py |  4 ++--
+ support/testing/run-tests         | 26 ++++++++++++-------------
+ 6 files changed, 44 insertions(+), 36 deletions(-)
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
