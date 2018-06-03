@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 03 Jun 2018 01:20:11 -0300
-Subject: [Buildroot] [PATCH 1/4] support/docker: run apt-get update and
- apt-get install in two RUNs
-References: <5d55cfc92761a84d7b10aae602b05c147b56f95e.1527977964.git.yann.morin.1998@free.fr>
-Message-ID: <5b136c7b72b9c_208c3fee3607128c525f4@ultri5.mail>
+Date: Sun, 03 Jun 2018 01:21:46 -0300
+Subject: [Buildroot] [PATCH 2/4] support/docker: sort the list of
+ installed packages
+References: <ed5028f2849286aef3ec10937f4fe7d03a2137b8.1527977964.git.yann.morin.1998@free.fr>
+Message-ID: <5b136cda73b5f_208c3fee3611587852799@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,35 +14,45 @@ Hello,
 
 On Sat, Jun 02, 2018 at 07:19 PM, Yann E. MORIN wrote:
 
-> In commit 7517aef4d (support/docker: limit the number of layers),
-> we reduced the number of layers by coalescing multiple RUN commands
-> into less commands.
-> 
-> In doing so, we especially coalesced "apt-get update" with "apt-get
-> install".
+[snip]
+>  RUN apt-get install -y --no-install-recommends \
+> -        build-essential cmake libc6:i386 g++-multilib \
+> -        bc ca-certificates file locales rsync \
+> -        cvs bzr git mercurial subversion wget \
+> -        cpio unzip \
+> +        bc \
+> +        build-essential \
+> +        bzr \
+> +        ca-certificates \
+> +        cpio \
+> +        cvs \
+> +        file \
+> +        g++-multilib \
+> +        git \
+> +        libc6:i386 \
+>          libncurses5-dev \
+> -        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
+> -        python-pip && \
 
-That is exactly what is recommended in the 'best practices':
-https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#run
-"Always combine RUN apt-get update with apt-get install in the same RUN
-statement."
+With only patches 1 and 2 applied the 'docker build' command will fail:
+/usr/bin/python: No module named pip
 
-But the 'gotchas' used to justify the recommendation don't apply in our case,
-as you describe below.
+This removal should be part of patch 4.
 
-> However, the distribution we used is a pinned version of stretch, so
-> we know that running apt-get update will always yield the same apt
-> database.
-> 
-> If we split the two apt-get commands, then we can re-use any local
-> intermediate image when we need to update the list of packages to
-> install; this helps quite a bit when testing the docker files over
-> and over again, with just slight variants in the packages list.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +        locales \
+> +        mercurial \
+> +        python-nose2 \
+> +        python-pexpect \
+> +        qemu-system-arm \
+> +        qemu-system-x86 \
+> +        rsync \
+> +        subversion \
+> +        unzip \
+> +        wget \
+> +        && \
 
-[I use docker only with the buildroot image, so my experience is limited, but
- for what it's worth]
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+We usually don't put && in a separate line.
+I am not really against it if no one else complains.
 
 
 Regards,
