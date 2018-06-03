@@ -1,114 +1,41 @@
-From: Ciro Santilli <ciro.santilli@gmail.com>
-Date: Sun, 3 Jun 2018 18:23:20 +0100
-Subject: [Buildroot] Can eigen be used with pkg-config?
-Message-ID: <CAFXrp_d7LU6fmhfDT2SWw2mMDO3uzKPG6fR75M43CSrUcf4zvw@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun,  3 Jun 2018 20:28:24 +0300
+Subject: [Buildroot] [PATCH] cifs-utils: disable man page generation
+Message-ID: <cfb08d3dc87c476e1d0f7a826a9aee914017fb67.1528046904.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Likely me learning how to build packages rather than a bug, but there goes.
+Buildroot does not generate documentation for target.
 
-Using: https://github.com/cirosantilli/buildroot/tree/eigen which contains:
+This fixes the build on hosts where the rst2man command does not support
+the --syntax-highlight parameter.
 
-```
-CXXFLAGS_EXTRA = $(shell $(PKG_CONFIG) --cflags eigen3)
+Fixes:
+http://autobuild.buildroot.net/results/265/2655c0e1fa3ad0a10b4aed39a17feead94e47bfb/
+http://autobuild.buildroot.net/results/92d/92d7c608f717bbfe01ecfb9bc9604cb303d8594c/
+http://autobuild.buildroot.net/results/4b9/4b95404a89a595ca9c1e3df912169e9d36ff2bd7/
 
-hello: hello.cpp
-$(CXX) $(CXXFLAGS) $(CXXFLAGS_EXTRA) -o '$@' '$<' $(LIBS)
-```
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/cifs-utils/cifs-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-and:
-
-```
-$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-```
-
-build with:
-
-```
-outdir="output/qemu_x86_64_defconfig"
-make O="$outdir" "$defconfig"
-printf "
-BR2_CCACHE=y
-BR2_PACKAGE_HOST_QEMU=y
-BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE=n
-BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-BR2_PACKAGE_HOST_QEMU_VDE2=y
-BR2_PACKAGE_HELLO=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-${2:-}
-" >> "${outdir}/.config"
-make O="$outdir" olddefconfig
-time make O="$outdir" BR2_JLEVEL="$(nproc)"
-HOST_QEMU_OPTS='--enable-sdl --with-sdlabi=2.0' hello-reconfigure all
-```
-
-and it fails with:
-
-```
->>> hello 1.0 Building
-/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/x86_64-buildroot-linux-uclibc/sysroot"
-INTLTOOL_PERL=/usr/bin/perl
-/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/bin/x86_64-buildroot-linux-uclibc-g++
--D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
--I/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/eigen3
-  -o 'hello' 'hello.c
-pp'
-hello.cpp:3:23: fatal error: Eigen/Dense: No such file or directory
- #include <Eigen/Dense>
-                       ^
-```
-
-But if I do a direct:
-
-```
-CXXFLAGS_EXTRA = $(shell $(PKG_CONFIG) --cflags eigen3)
-```
-
-it works.
-
-`output/qemu_x86_64_defconfig/host/x86_64-buildroot-linux-uclibc/sysroot/usr/lib/pkgconfig/eigen3.pc/eigen3.pc`
-contains:
-
-```
-prefix=@CMAKE_INSTALL_PREFIX@
-exec_prefix=${prefix}
-
-Name: Eigen3
-Description: A C++ template library for linear algebra: vectors,
-matrices, and related algorithms
-Requires:
-Version: 3.3.4
-Libs:
-Cflags: -I/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/eigen3
-```
-
-which is the correct path. But if I do:
-
-```
-/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/bin/pkg-config
---cflags eigen3
-```
-
-it gives the same wrong path:
-
-```
--I/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/bin/../x86_64-buildroot-linux-uclibc/sysroot/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/eigen3
-
-```
-
-This path contains at the end the correct path:
-
-```
-/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/x86_64-buildroot-linux-uclibc/sysroot/usr/include/eigen3
-```
-
-but it is prefixed with:
-
-```
-/home/ciro/bak/git/buildroot/output/qemu_x86_64_defconfig/host/bin/../x86_64-buildroot-linux-uclibc/sysroot
-```
-
-which must be the `CMAKE_INSTALL_PREFIX`.
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index bfbdd56923b3..3456cd919857 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -15,7 +15,7 @@ CIFS_UTILS_DEPENDENCIES = host-pkgconf
+ 
+ # Let's disable PIE unconditionally. We want PIE to be enabled only by
+ # the global BR2_RELRO_FULL option.
+-CIFS_UTILS_CONF_OPTS = --disable-pie
++CIFS_UTILS_CONF_OPTS = --disable-pie --disable-man
+ 
+ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
+ CIFS_UTILS_DEPENDENCIES += keyutils
+-- 
+2.17.1
