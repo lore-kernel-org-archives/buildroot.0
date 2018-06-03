@@ -1,29 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 3 Jun 2018 20:26:15 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: update my e-mail address
-In-Reply-To: <1527973873-1036-1-git-send-email-zgyarmati@zgyarmati.de>
-References: <1527973873-1036-1-git-send-email-zgyarmati@zgyarmati.de>
-Message-ID: <20180603202615.4c7497f1@windsurf>
+Date: Sun, 3 Jun 2018 20:26:10 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: update my e-mail address
+Message-ID: <20180603182442.8044083864@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0a0812db05ee5585e52f88d4cb9bbb5b68e9e5e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  2 Jun 2018 23:11:13 +0200, Zoltan Gyarmati wrote:
-> From: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
-> 
-> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-> ---
->  DEVELOPERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 413f37f1c3..1dc3dd5c2c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2098,7 +2098,7 @@ F:	package/x11r7/xapp_xinput-calibrator/
+ F:	package/zlog/
+ F:	utils/scanpypi
+ 
+-N:	Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
++N:	Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+ F:	package/crudini/
+ F:	package/grantlee/
+ F:	package/proj/
