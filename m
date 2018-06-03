@@ -1,69 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 3 Jun 2018 20:37:35 +0200
-Subject: [Buildroot] [PATCH v3 2/2] shadowsocks-libev: bump to version
- 3.2.0 add a patch for libipset licence add hashes for the license files Fix
- shadowsocks-libev.mk
-In-Reply-To: <20180530221315.19012-2-xuminready@gmail.com>
-References: <20180530221315.19012-1-xuminready@gmail.com>
- <20180530221315.19012-2-xuminready@gmail.com>
-Message-ID: <20180603203735.6b123022@windsurf>
+Date: Sun, 3 Jun 2018 20:39:59 +0200
+Subject: [Buildroot] [git commit] libraw1394: bump to version 2.1.2
+Message-ID: <20180603183910.6698980F9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+commit: https://git.buildroot.net/buildroot/commit/?id=938b7bb816a950b2cd55bfcdc9ff22aed5bd4122
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this contribution!
+- Remove patches (already in version)
+- Add hash for license file
 
-On Wed, 30 May 2018 15:13:14 -0700, Min Xu wrote:
-> Signed-off-by: Min Xu <xuminready@gmail.com>
-> ---
->  .../0001-docs-add-BSD-3-Clause-licence.patch       | 52 ++++++++++++++++++++++
->  package/shadowsocks-libev/shadowsocks-libev.hash   |  8 +++-
->  package/shadowsocks-libev/shadowsocks-libev.mk     |  9 ++--
->  3 files changed, 63 insertions(+), 6 deletions(-)
->  create mode 100644 package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...build-the-CLOCK_MONOTONIC_RAW-test-condit.patch | 38 ----------------------
+ package/libraw1394/libraw1394.hash                 |  4 +--
+ package/libraw1394/libraw1394.mk                   |  3 +-
+ 3 files changed, 3 insertions(+), 42 deletions(-)
 
-All those changes should be part of the patch adding the
-shadowsocks-libev package. If you're not familiar with Git, then look
-at using "git rebase --interactive", it allows you to rewrite the
-commit history.
-
-In your case, you would have to do:
-
-$ git rebase --interactive HEAD~2
-
-This opens up your text editor, with two lines, one for each of your
-two commits. On the second line, change the "pick" word for "fixup",
-and exit your text editor.
-
-This will rewrite the two commits by merging the second one into the
-first one.
-
-> diff --git a/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-> new file mode 100644
-> index 0000000..64dda02
-> --- /dev/null
-> +++ b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-> @@ -0,0 +1,52 @@
-> +From 0047295445c499e010706598c50f1bff8b0d632c Mon Sep 17 00:00:00 2001
-> +From: Min Xu <xuminready@gmail.com>
-> +Date: Wed, 30 May 2018 13:16:12 -0700
-> +Subject: [PATCH] docs: add BSD-3-Clause licence
-> +
-> +add missing licence for shadowsocks-libev/libipset
-> +
-> +Signed-off-by: Min Xu <xuminready@gmail.com>
-
-I'm not sure it makes a lot of sense to add a patch adding the license
-file, especially if the patch is not blessed by upstream.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch b/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
+deleted file mode 100644
+index b87ef715de..0000000000
+--- a/package/libraw1394/0001-testlibraw-build-the-CLOCK_MONOTONIC_RAW-test-condit.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 94c66ade15d7fc468b52c72dfe76a8c10b1910a7 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Fri, 12 Feb 2016 10:13:45 +0100
+-Subject: [PATCH] testlibraw: build the CLOCK_MONOTONIC_RAW test conditionally
+-
+-CLOCK_MONOTONIC_RAW is a somewhat recent addition, and some older
+-toolchains/kernels may not have the support for it. Therefore, we
+-build the part of the test that uses CLOCK_MONOTONIC_RAW only when
+-this definition is available.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- tools/testlibraw.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/tools/testlibraw.c b/tools/testlibraw.c
+-index d8a0702..ae37157 100644
+---- a/tools/testlibraw.c
+-+++ b/tools/testlibraw.c
+-@@ -211,6 +211,7 @@ read_cycle_timer(raw1394handle_t handle)
+- 	printf("    local time from CLOCK_MONOTONIC: %lld us\n",
+- 	       (unsigned long long)local_time);
+- 
+-+#if defined(CLOCK_MONOTONIC_RAW)
+- 	retval = raw1394_read_cycle_timer_and_clock(handle, &ct, &local_time,
+- 						    CLOCK_MONOTONIC_RAW);
+- 	if (retval < 0) {
+-@@ -221,6 +222,7 @@ read_cycle_timer(raw1394handle_t handle)
+- 	       ct >> 25, (ct >> 12) & 0x1fff, ct & 0xfff);
+- 	printf("    local time from CLOCK_MONOTONIC_RAW: %lld us\n",
+- 	       (unsigned long long)local_time);
+-+#endif
+- }
+- 
+- int test_card(int card)
+--- 
+-2.6.4
+-
+diff --git a/package/libraw1394/libraw1394.hash b/package/libraw1394/libraw1394.hash
+index b785995db1..9a44ab7d41 100644
+--- a/package/libraw1394/libraw1394.hash
++++ b/package/libraw1394/libraw1394.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/libs/ieee1394/sha256sums.asc
+-sha256	1bab9780189f9d1eb4e973df12679c04f979c21e024240fc98e536ff5b680ee9	libraw1394-2.1.1.tar.xz
++sha256	03ccc69761d22c7deb1127fc301010dd13e70e44bb7134b8ff0d07590259a55e  	libraw1394-2.1.2.tar.xz
+ # Locally computed
+-sha256	39369c65fbed7fccc2e6d8e645f258f101c414107d67238f10996e6c2009f20d	fix-types.patch
++sha256	5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509	COPYING.LIB
+diff --git a/package/libraw1394/libraw1394.mk b/package/libraw1394/libraw1394.mk
+index 73517ed2f5..7aa4a3ae01 100644
+--- a/package/libraw1394/libraw1394.mk
++++ b/package/libraw1394/libraw1394.mk
+@@ -4,10 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBRAW1394_VERSION = 2.1.1
++LIBRAW1394_VERSION = 2.1.2
+ LIBRAW1394_SOURCE = libraw1394-$(LIBRAW1394_VERSION).tar.xz
+ LIBRAW1394_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ieee1394
+-LIBRAW1394_PATCH = http://git.alpinelinux.org/cgit/aports/plain/main/libraw1394/fix-types.patch
+ LIBRAW1394_INSTALL_STAGING = YES
+ LIBRAW1394_LICENSE = LGPL-2.1+
+ LIBRAW1394_LICENSE_FILES = COPYING.LIB
