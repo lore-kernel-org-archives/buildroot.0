@@ -1,9 +1,7 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 03 Jun 2018 01:50:05 -0300
-Subject: [Buildroot] [PATCH 4/4] support/docker: use the distro-provided
- flake8
-References: <ff32083db8641c38fa6d02f731870583b24c4dab.1527977964.git.yann.morin.1998@free.fr>
-Message-ID: <5b13737d81720_208c3fee360b101c5315@ultri5.mail>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun,  3 Jun 2018 08:00:27 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-06-02
+Message-ID: <20180603060027.3FE2420890@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,132 +10,83 @@ To: buildroot@busybox.net
 
 Hello,
 
-+ Thomas DS, who first mentioned flake8 in the mailing list.
+Build statistics for 2018-06-02
+===============================
 
-On Sat, Jun 02, 2018 at 07:19 PM, Yann E. MORIN wrote:
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  27 |   1 |   0 |  28 |
+   2018.05.x |   8 |   0 |   0 |   8 |
+      master | 192 |  32 |   0 | 224 |
 
-> Currently, we install flake8 and its dependencies via pip. We
-> tried to be reproducible by pinning the version of those python
-> packages, but we did forget quite a few of them, and thus some
-> dependencies for flake8 are installed as uncontrolled versions.
-> 
-> Furthermore, before we install flake8 and its dependencies, we
-> forcibly update pip, setuptools, and wheels packages to their
-> latest versions. This explicitly breaks reproducibility.
+Results for branch '2018.02.x'
+==============================
 
-Sorry about this mess, created in:
-"14aa15a5a5 support/dockerfile: install flake8"
+Classification of failures by reason
+------------------------------------
 
-> 
-> While we could enforce a specific version of all those packages
-> and still grab them from PyPI, we can simply grab them from the
-> distribution-provided packages instead.
-> 
-> Since we're using a pinned versiomn of stretch, this already
-
-s/versiomn/version/
-
-> guarantees we'll reproducibily get the same versions over and
-
-s/reproducibily/reproducibly/
-
-> over again. Besides, we just need to list flake8 as a package to
-> install to automatically get all its dependencies (again, in a
-> reproducible way).
-
-IMO it would be good to explicitly state here that this patch actually
-downgrades flake8.
-http://lists.busybox.net/pipermail/buildroot/2018-May/222376.html
-
-Again, in this trade-off, using this simple approach makes sense to me because:
- - we get reproducible docker images with simple and easily maintainable code
-   in the dockerfile;
- - I am not aware of any serious limitation of this old version, the release
-   notes for a version in the between mentions 'Dramatically improve the
-   performance' but we have a limited number of scripts and running on Gitlab
-   for all of them still takes less than 5 minutes;
- - we will eventually upgrade flake8 version again when we bump stretch version
-   and it contains a new version of flake8.
-
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
->  support/docker/Dockerfile | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-> index 4f08a54f06..57c9ef78fa 100644
-> --- a/support/docker/Dockerfile
-> +++ b/support/docker/Dockerfile
-> @@ -29,6 +29,7 @@ RUN apt-get install -y --no-install-recommends \
->          cpio \
->          cvs \
->          file \
-> +        flake8 \
-
-This package installs the Python3 version.
-python-flake8 installs the Python2 version.
-
-Using the Python3 version has following consequences:
-
-1) .gitlab-ci.yml* would need to be changed, otherwise the job fails:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/72023274
-
-2) It seems flake8 detects when the Python3 interpreter is in use and enable
-more warnings (causing the need of patch 3).
-
-It seems using the Python3 version *is* an improvement as it will reduce the
-burden when migrating everything to Python3 becomes unavoidable.
-And also it doesn't have a big impact as we can still keep scripts
-back-compatible to Python2.6 when we want. We want that for those scripts that
-can run during the build and therefore on old distros. AFAIK we only need to
-use in those cases:
-from __future__ import foo
-
-*But* I think this change (starting to use the Python3 version of flake8)
-belongs to a separate patch.
-
->          g++-multilib \
->          git \
->          libc6:i386 \
-> @@ -47,14 +48,6 @@ RUN apt-get install -y --no-install-recommends \
->      apt-get -y autoremove && \
->      apt-get -y clean
->  
-> -# For check-flake8
-> -RUN python -m pip install --upgrade pip setuptools wheel && \
-
-The removal of python-pip from 'apt-get install' should be done in this patch.
-
-> -    pip install -q \
-> -        flake8==3.5.0 \
-> -        mccabe==0.6.1 \
-> -        pycodestyle==2.3.1 \
-> -        pyflakes==1.6.0
-> -
->  # To be able to generate a toolchain with locales, enable one UTF-8 locale
->  RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
->      /usr/sbin/locale-gen
-> -- 
-> 2.14.1
-
-So I propose these patches for a new iteration:
-
-1) support/docker: run apt-get update and apt-get install in two RUNs
-   as-is
-2) support/docker: sort the list of installed packages
-   without removing python-pip
-3) support/docker: use the distro-provided flake8
-   current patch 4, but using python-flake8 and removing python-pip
-
-Note: you could stop on patch 3 if you want.
-
-4) support/testing: fix python syntax
-   current patch 3, fixing one more script
-5) support/docker: use flake8 from Python 3
-   new patch, changing python-flake8 to flake8 and changing .gitlab-ci.yml*
+                  autofs-5.1.4 | 1 
 
 
-Regards,
-Ricardo
+Detail of failures
+------------------
+
+       nios2 |                   autofs-5.1.4 | NOK | http://autobuild.buildroot.net/results/6fd4d1b4eb498e388d31431e5084314697b71f7b |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                   libnss-3.37 | 19
+               aircrack-ng-1.2 | 2 
+              librtlsdr-v0.5.4 | 2 
+         python-websockets-5.0 | 2 
+                    efl-1.20.7 | 1 
+             host-dfu-util-0.9 | 1 
+                libmpeg2-0.5.1 | 1 
+               mono-legal-info | 1 
+package/mono/mono.mk:63: mo... | 1 
+                      qt-4.8.7 | 1 
+                     znc-1.7.0 | 1 
+
+
+Detail of failures
+------------------
+
+   powerpc64 |                aircrack-ng-1.2 | NOK | http://autobuild.buildroot.net/results/3d92343342b51e710765866d6dd9383d26ba98e7 |     
+     powerpc |                aircrack-ng-1.2 | NOK | http://autobuild.buildroot.net/results/ab36e30b3a62543f1e824dea3c922a75f7a9db1c |     
+      x86_64 |                     efl-1.20.7 | NOK | http://autobuild.buildroot.net/results/af26ded35a4764e4c48840376708a06932580bf5 |     
+        mips |              host-dfu-util-0.9 | NOK | http://autobuild.buildroot.net/results/844b935c4b400fac1a7df2182d76028c42e3b03b | ORPH
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/9d893bd6ab3121ddb39c0a4f0c7e26837ac923c1 | ORPH
+         arm |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/1ea7a1f6a53aabb627dfad48790b40132a184623 |     
+         arm |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/1809c273402acdaaae51d8a9c05ddd254c63016d |     
+    mips64el |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/bcdcaf05fc293e6bfe9078697f48229788403522 |     
+     powerpc |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/d939b62cd588a121a1b2e3f2fb6530e790c34f54 |     
+         arm |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/8370cefdec82a416c716f52e24a90e5e1d723e38 |     
+        m68k |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/672fbfb1c64ad254b4e22bbded4435d8ba251a5c |     
+     powerpc |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/5b2c4936e342bea11196959c7b4acd4b060f87d5 |     
+    mips64el |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/2c159101868ee591671748e217434b94e1a42161 |     
+     aarch64 |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/2b4c0d16b1d1b2e4adde1c1cc06ba9eab8a4fba1 |     
+ powerpc64le |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/47adf8e9d51ab130baee78a2dd87f24f433e58c1 |     
+         arm |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/b05097ef139aea0c769fa5234da99ba87778bba9 |     
+   powerpc64 |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/6e47bd5cba3ede35158f00429663653c43e68fca |     
+    mips64el |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/19d21a39dde495c9012c36854bec803dad737f77 |     
+     powerpc |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/70adacf85154d2a663808cf0db69849b6a490457 |     
+      x86_64 |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/bb25363497dfd7fd5f8a81c28110fab87d5c2dc8 |     
+         arm |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/31fe428584ada680f30d11e5d1abfbc533c0a70e |     
+      mipsel |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/3d5d3f759c52452a12b0cf6e8c98c40527ccad4b |     
+        mips |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/1ae9f136ed91bfae6e3f87ce3e8ea1e0fc1d41f5 |     
+         arm |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/344d14cd2ca6c7af0e63484621125c355db20ede |     
+         arm |               librtlsdr-v0.5.4 | NOK | http://autobuild.buildroot.net/results/a8613e9ef1656df1f55d5ccc4facd396f6f8a2f9 |     
+         arm |               librtlsdr-v0.5.4 | NOK | http://autobuild.buildroot.net/results/bea78bf580be6fe109b827b72af9587c5324daad |     
+         arm |                mono-legal-info | NOK | http://autobuild.buildroot.net/results/8b66c460997d4c5315d10b507531704dafc6ce98 |     
+      x86_64 | package/mono/mono.mk:63: mo... | NOK | http://autobuild.buildroot.net/results/95c03c142233e60eba6f8d3faee9752c65f7eae2 |     
+        mips |          python-websockets-5.0 | NOK | http://autobuild.buildroot.net/results/1059b06d55bace393ad5e60ab230446f321aabbe |     
+        mips |          python-websockets-5.0 | NOK | http://autobuild.buildroot.net/results/9bd0a9ffc0afdf9811e73be9711064e89747d05b |     
+         arm |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/61153dea70d2006a29ec7af880bf904249f4788a | ORPH
+         arm |                      znc-1.7.0 | NOK | http://autobuild.buildroot.net/results/d06176f00109ad0707032b0d76fe94f1d414106c |     
+
+
+-- 
+http://autobuild.buildroot.net
