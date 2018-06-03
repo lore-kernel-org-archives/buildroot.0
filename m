@@ -1,68 +1,120 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  3 Jun 2018 00:19:32 +0200
-Subject: [Buildroot] [PATCH 2/4] support/docker: sort the list of installed
- packages
-In-Reply-To: <cover.1527977964.git.yann.morin.1998@free.fr>
-References: <cover.1527977964.git.yann.morin.1998@free.fr>
-Message-ID: <ed5028f2849286aef3ec10937f4fe7d03a2137b8.1527977964.git.yann.morin.1998@free.fr>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Sat,  2 Jun 2018 23:21:45 -0300
+Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
+ extraction
+Message-ID: <20180603022145.14222-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested in the docker best practices [0], order the package list
-alphabetically, and list only one package per line.
+Since commit 118534fe54b (fs: use a common tarball as base for the other
+filesystems) Buildroot creates a .tar filesystem image and re-extracts
+it in a private directory to create each format-specific image. Add an
+option to pass extra arguments to tar when that commom root image is
+extracted.
 
-This will be much usefull later, we need to update the list of installed
-packages, like adding new ones for example.
+This option is useful when the root filesystem is volatile (e.g. initrd)
+or read-only but a read-write subtree is still necessary for persistent
+data modified by programs as they run.
 
-[0] https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#sort-multi-line-arguments
+For example, one can pass "--exclude='./var/lib/*'" to exclude that path
+from the rootfs image and use a post-fakeroot script to make a separate
+filesystem image for /var/lib.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
- support/docker/Dockerfile | 27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+Additional explanation
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 8c525f7cf1..4f08a54f06 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -22,13 +22,28 @@ COPY apt-sources.list /etc/apt/sources.list
- RUN dpkg --add-architecture i386 && \
-     apt-get update -y
- RUN apt-get install -y --no-install-recommends \
--        build-essential cmake libc6:i386 g++-multilib \
--        bc ca-certificates file locales rsync \
--        cvs bzr git mercurial subversion wget \
--        cpio unzip \
-+        bc \
-+        build-essential \
-+        bzr \
-+        ca-certificates \
-+        cpio \
-+        cvs \
-+        file \
-+        g++-multilib \
-+        git \
-+        libc6:i386 \
-         libncurses5-dev \
--        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
--        python-pip && \
-+        locales \
-+        mercurial \
-+        python-nose2 \
-+        python-pexpect \
-+        qemu-system-arm \
-+        qemu-system-x86 \
-+        rsync \
-+        subversion \
-+        unzip \
-+        wget \
-+        && \
-     apt-get -y autoremove && \
-     apt-get -y clean
+This change solves a real-life problem of my current project. Before
+buildroot 2018.05 I had to use a trickier approach:
+
+1. Add a post-fakeroot script to
+   1.1. Create a filesystem image (ext4) from $(TARGET_DIR)/var/lib.
+   1.2. Move $(TARGET_DIR)/var/lib to a backup path under $(BUILD_DIR).
+   1.3. Create an empty $(TARGET_DIR)/var/lib.
+2. Add a post-image script to
+   2.1. Copy the rootfs and /var/lib images to the disk image.
+   2.2. Remove the empty $(TARGET_DIR)/var/lib.
+   2.3. Restore $(TARGET_DIR)/var/lib from the backup path.
+
+That solution is fragile: if something goes wrong during the execution
+of the post-image script it can lead to a cripled $(TARGET_DIR) with an
+empty var/lib subdir. Rebuilding a package without restoring the backup
+can easily cause a kaboom and force me to run a lengthy clean build.
+
+I added some protection mechanisms to stop the build if a stale /var/lib
+backup is found but quite frankly the whole thing stinks.
+
+The solution with custom extraction arguments, OTOH, is bullet-proof
+because it does not change $(TARGET_DIR), so it is always safe to run
+dirty builds.
+---
+ docs/manual/customize-rootfs.txt | 10 ++++++++++
+ fs/Config.in                     | 13 +++++++++++++
+ fs/common.mk                     |  3 ++-
+ 3 files changed, 25 insertions(+), 1 deletion(-)
+
+diff --git a/docs/manual/customize-rootfs.txt b/docs/manual/customize-rootfs.txt
+index bb6d8da6bf..6dd9365723 100644
+--- a/docs/manual/customize-rootfs.txt
++++ b/docs/manual/customize-rootfs.txt
+@@ -121,6 +121,16 @@ This method is not recommended because it duplicates the entire
+   skeleton, which prevents taking advantage of the fixes or improvements
+   brought to the default skeleton in later Buildroot releases.
  
++Rootfs tarball extraction arguments (+BR2_ROOTFS_COMMON_UNTAR_ARGS+)::
+++
++Buildroot creates a .tar filesystem image and re-extracts it in a private
++ directory to create each format-specific image. Use this option to pass
++ extra arguments to tar when the commom root image is extracted.
+++
++For example, you can pass "--exclude=\'./var/lib/*\'" to exclude that path from
++ the rootfs image and use a post-fakeroot script (see below) to create a
++ separate filesystem image for '/var/lib'.
++
+ Post-fakeroot scripts (+BR2_ROOTFS_POST_FAKEROOT_SCRIPT+)::
+ +
+ When aggregating the final images, some parts of the process requires
+diff --git a/fs/Config.in b/fs/Config.in
+index c25b01c3de..74487b1172 100644
+--- a/fs/Config.in
++++ b/fs/Config.in
+@@ -1,5 +1,18 @@
+ menu "Filesystem images"
+ 
++config BR2_ROOTFS_COMMON_UNTAR_ARGS
++	string "Rootfs tarball extraction arguments"
++	help
++	  Buildroot creates a .tar filesystem image and re-extracts it
++	  in a private directory to create each format-specific image.
++	  Use this option to pass extra arguments to tar when the commom
++	  root image is extracted.
++
++	  For example, you can pass "--exclude='./var/lib/*'" to exclude
++	  that path from the rootfs image and use a post-fakeroot script
++	  (see BR2_ROOTFS_POST_FAKEROOT_SCRIPT) to create a separate
++	  filesystem image for /var/lib.
++
+ source "fs/axfs/Config.in"
+ source "fs/cloop/Config.in"
+ source "fs/cpio/Config.in"
+diff --git a/fs/common.mk b/fs/common.mk
+index abf35418cb..33ad1ab2a9 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -50,9 +50,10 @@ define ROOTFS_COMMON_TAR_CMD
+ endef
+ 
+ # Command to extract the common tarball into the per-rootfs target directory
++ROOTFS_COMMON_UNTAR_ARGS = $(call qstrip,$(BR2_ROOTFS_COMMON_UNTAR_ARGS))
+ define ROOTFS_COMMON_UNTAR_CMD
+ 	mkdir -p $(TARGET_DIR)
+-	tar xf $(ROOTFS_COMMON_TAR) -C $(TARGET_DIR)
++	tar xf $(ROOTFS_COMMON_TAR) -C $(TARGET_DIR) $(ROOTFS_COMMON_UNTAR_ARGS)
+ endef
+ 
+ .PHONY: rootfs-common
 -- 
-2.14.1
+2.17.0
