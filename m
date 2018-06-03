@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 3 Jun 2018 20:23:12 +0200
-Subject: [Buildroot] [PATCH v2,1/1] librtlsdr: fix static build
-In-Reply-To: <20180603141751.5723-1-fontaine.fabrice@gmail.com>
-References: <20180603141751.5723-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180603202312.23f4e3eb@windsurf>
+Date: Sun, 3 Jun 2018 20:23:26 +0200
+Subject: [Buildroot] [PATCH] cifs-utils: disable man page generation
+In-Reply-To: <cfb08d3dc87c476e1d0f7a826a9aee914017fb67.1528046904.git.baruch@tkos.co.il>
+References: <cfb08d3dc87c476e1d0f7a826a9aee914017fb67.1528046904.git.baruch@tkos.co.il>
+Message-ID: <20180603202326.068ea540@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jun 2018 16:17:51 +0200, Fabrice Fontaine wrote:
-> When bumping to version 0.5.4, first patch was wrongly removed.
-> Put back an enhanced version of this patch (sent upstream)
+On Sun,  3 Jun 2018 20:28:24 +0300, Baruch Siach wrote:
+> Buildroot does not generate documentation for target.
+> 
+> This fixes the build on hosts where the rst2man command does not support
+> the --syntax-highlight parameter.
 > 
 > Fixes:
->  - http://autobuild.buildroot.net/results/bea78bf580be6fe109b827b72af9587c5324daad
+> http://autobuild.buildroot.net/results/265/2655c0e1fa3ad0a10b4aed39a17feead94e47bfb/
+> http://autobuild.buildroot.net/results/92d/92d7c608f717bbfe01ecfb9bc9604cb303d8594c/
+> http://autobuild.buildroot.net/results/4b9/4b95404a89a595ca9c1e3df912169e9d36ff2bd7/
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
-> Changes v1 -> v2:
->  - Set -DBUILD_STATIC_LIBS as it is not done by pkg-cmake
+>  package/cifs-utils/cifs-utils.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
