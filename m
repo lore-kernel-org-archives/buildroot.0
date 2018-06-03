@@ -1,62 +1,111 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun,  3 Jun 2018 23:31:00 +0200
-Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.15
-Message-ID: <20180603213100.1635-1-peter@korsgaard.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 03 Jun 2018 20:21:59 -0300
+Subject: [Buildroot] [PATCH 2/5] support/docker: sort the list of
+ installed packages
+References: <49308956156142d6dab6b7917fcd8429f155ffa5.1528016895.git.yann.morin.1998@free.fr>
+Message-ID: <5b147817c2d6_4a712ad8ec78fccc8903e@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hello,
 
-CVE-2018-11362: LDSS dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-25.html
+Nit: you forgot to use -v2 with format-patch.
 
-CVE-2018-11357: Multiple dissectors could consume excessive memory
-https://www.wireshark.org/security/wnpa-sec-2018-28.html
+On Sun, Jun 03, 2018 at 06:08 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
-CVE-2018-11356: DNS dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-29.html
+> As suggested in the docker best practices [0], order the package list
+> alphabetically, and list only one package per line.
+> 
+> This will be much usefull later, we need to update the list of installed
+> packages, like adding new ones for example.
+> 
+> [0] https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#sort-multi-line-arguments
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> 
 
-CVE-2018-11360: GSM A DTAP dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-30.html
+'git am' automatically removes this empty line.
 
-CVE-2018-11358: Q.931 dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-31.html
+> ---
+> Changes v1 -> v2:
+>   - don't drop python-pip yet  (Ricardo)
+> ---
+>  support/docker/Dockerfile | 28 ++++++++++++++++++++++------
+>  1 file changed, 22 insertions(+), 6 deletions(-)
+> 
+> diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+> index 8c525f7cf1..fe9e643a34 100644
+> --- a/support/docker/Dockerfile
+> +++ b/support/docker/Dockerfile
+> @@ -22,13 +22,29 @@ COPY apt-sources.list /etc/apt/sources.list
+>  RUN dpkg --add-architecture i386 && \
+>      apt-get update -y
+>  RUN apt-get install -y --no-install-recommends \
+> -        build-essential cmake libc6:i386 g++-multilib \
 
-CVE-2018-11359: Multiple dissectors could crash
-https://www.wireshark.org/security/wnpa-sec-2018-33.html
+I missed that when reviewing the first iteration...
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> -        bc ca-certificates file locales rsync \
+> -        cvs bzr git mercurial subversion wget \
+> -        cpio unzip \
+> +        bc \
+> +        build-essential \
+> +        bzr \
+> +        ca-certificates \
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 2b44cc0757..4b9c646fa9 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.14.txt
--sha256 e7a3d4f9bbde20ea5ee09103f9f6dba38e3666dfe1d6a6a1c004602b5fac378b  wireshark-2.2.14.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.15.txt
-+sha256 d73583e9282d47c42b69fc3a1ac9cafb6047d1305f5027d4cf18e95922d11844  wireshark-2.2.15.tar.bz2
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index ad475803b7..c9a4ef202d 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIRESHARK_VERSION = 2.2.14
-+WIRESHARK_VERSION = 2.2.15
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
--- 
-2.11.0
+'cmake' was removed by mistake.
+
+Obviously, since host-cmake will be built when needed, it should not make any
+current or upcoming test case to fail. I actually tested with the current test
+cases (still running while I write this):
+https://gitlab.com/RicardoMartincoski/buildroot/pipelines/23112714
+I didn't checked if any current test case is already requiring cmake.
+
+But removing cmake will make any test case that needs it to take longer to run,
+as the version seems suitable to be used:
+
+br-user at b976f947b114:~$ cmake --version
+cmake version 3.7.2
+
+The build of host-cmake is probably already covered by the autobuilders.
+And if we want to have a test case in the test infra for this the best way IMO
+is to write a specific test for it.
+
+> +        cpio \
+> +        cvs \
+> +        file \
+> +        g++-multilib \
+> +        git \
+> +        libc6:i386 \
+>          libncurses5-dev \
+> -        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
+> -        python-pip && \
+> +        locales \
+> +        mercurial \
+> +        python-nose2 \
+> +        python-pexpect \
+> +        python-pip \
+> +        qemu-system-arm \
+> +        qemu-system-x86 \
+> +        rsync \
+> +        subversion \
+> +        unzip \
+> +        wget \
+> +        && \
+>      apt-get -y autoremove && \
+>      apt-get -y clean
+>  
+> -- 
+> 2.14.1
+
+[I am not against using && in a separate line as we discussed in
+ http://lists.busybox.net/pipermail/buildroot/2018-June/222901.html .
+ With cmake added back to the list please add]
+ Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+Regards,
+Ricardo
