@@ -1,184 +1,73 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Jun 2018 16:55:07 +0200
-Subject: [Buildroot] [BALENA PATCH] balena : New Package
-In-Reply-To: <3551d854-8b04-370c-27ca-53394858a921@savronik.com.tr>
-References: <3551d854-8b04-370c-27ca-53394858a921@savronik.com.tr>
-Message-ID: <20180604165507.4df4e009@windsurf>
+From: Bob Beckett <bbeckett@netvu.org.uk>
+Date: Mon, 4 Jun 2018 15:59:29 +0100
+Subject: [Buildroot] [PATCH 1/2] git: fix handling of git repos using
+ master as version
+In-Reply-To: <20180604163302.2d529afd@windsurf>
+References: <1528119150-28659-1-git-send-email-bbeckett@netvu.org.uk>
+ <20180604163302.2d529afd@windsurf>
+Message-ID: <CAESO2E+hb8=2vfAstXvYeG05L6ELKMHcYCGkoHRukptkrDhZHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Refik,
+Is this philosophy set in stone? I can conceive of useful situations where
+branches are preferable.
+During large projects, where the rootfs is being developed at the same time
+as some custom packages,
+it is quite useful to have a branch as the target. Usually, I just do a
+dirclean and delete the tar when I know
+something has changed.
 
-Thanks a lot for your contribution! I believe it's your first Buildroot
-contribution, so congratulations :-)
+If you wanted to make it more predictable, then maybe name the tar based on
+the version (branch name in this case) plus the sha, this way new tar
+packages would be created if the branch advances and also if a tag (or
+other supported refspec) changes via a rebase etc.
 
-The first comment is that you should sent your patch using "git
-send-email". Because you didn't do that, your patch has been horribly
-rewrapped by your e-mail client, and it cannot be applied.
+The particular thing I like to avoid is multiple version bumps in the
+package spec and tags in the package source repos during development. When
+many people are working on package project, expecting them all to take time
+to publish tags for every little change gets unrealistic.
 
-The second thing, less important, is that the [BALENA PATCH] subject
-prefix is not necessary, just [PATCH] is sufficient or more precisely
-[PATCHv2] for your next iteration.
+The question I would ask is is there any harm in supporting that if it can
+be done reliably and predictably?
 
-The title should be:
+Anyway, if this design is locked down, then I will just maintain this patch
+locally for us to use :)
 
-	balena: new package
+Thanks
 
-which is almost the same as what you did, but without the space
-before :, and lower case.
+Bob
 
-On Mon, 4 Jun 2018 17:22:37 +0300, Refik Tuzakl? wrote:
->  ?package/Config.in????????? |? 1 +
->  ?package/balena/Config.in?? | 16 +++++++++++
->  ?package/balena/balena.hash |? 2 ++
->  ?package/balena/balena.mk?? | 68 
-> ++++++++++++++++++++++++++++++++++++++++++++++
 
-Please add an entry in the DEVELOPERS file for this package.
+On Mon, Jun 4, 2018 at 3:33 PM, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-> +??? source "package/balena/Config.in"
->  ???? source "package/bootutils/Config.in"
-
-Indentation is wrong here, but maybe it's an artefact of not sending
-with git send-email.
-
-> diff --git a/package/balena/Config.in b/package/balena/Config.in
-> new file mode 100644
-> index 0000000..2904d2a
-> --- /dev/null
-> +++ b/package/balena/Config.in
-> @@ -0,0 +1,16 @@
-> +config BR2_PACKAGE_BALENA
-> +??? bool "balena"
-> +??? depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +??? depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +??? depends on BR2_TOOLCHAIN_HAS_THREADS
-> +??? depends on BR2_INIT_SYSTEMD
-> +??? select BR2_PACKAGE_LVM2
-> +??? select BR2_PACKAGE_LVM2_STANDARD_INSTALL
-
-You need to propagate the dependencies of lvm2 here:
-
-        depends on BR2_TOOLCHAIN_HAS_THREADS
-        depends on BR2_USE_MMU # needs fork()
-        depends on !BR2_STATIC_LIBS # It fails to build statically
-
-> +??? help
-> +??? ? Moby-based Container Engine for Embedded, IoT, and Edge uses
-> +
-> +??? ? https://github.com/resin-os/balena
-> +
-> +
-
-Only one empty line here.
-
-> +comment "balena needs systemd"
-> +??? depends on !BR2_INIT_SYSTEMD
-
-Also, please run check-package to make sure the indentation is correct.
-
-> +BALENA_LICENSE = Apache-2.0
-> +BALENA_LICENSE_FILES = LICENSE
-> +
-> +BALENA_DEPENDENCIES = host-go host-pkgconf systemd lvm2
-
-Drop the host-go dependency, it's not needed because you're using the
-golang-package infrastructure.
-
-> +BALENA_GOPATH = "$(@D)/.gopath"
-
-I believe this is not needed, it's taken care of by the golang-package
-infrastructure.
-
-> +BALENA_VERSION_DIR = 17.06.0-dev
-
-Ditto, should not be needed.
-
-> +BALENA_BUILD_TARGETS = balena
-
-This one is OK.
-
-> +BALENA_INSTALL_BINS = $(TARGET_DIR)/usr/bin/$(target)
-
-This one doesn't make sense because $(target) is empty. Instead list
-the binaries to be installed.
-
-> +BALENA_CONFIGURE_ENV = GOPATH=${BALENA_GOPATH} \
-> +??? $(TARGET_MAKE_ENV) \
-> +??? $(HOST_GO_TARGET_ENV) \
-> +??? DOCKER_GITCOMMIT=${BALENA_COMMIT} \
-> +??? DOCKER_BUILDTAGS='exclude_graphdriver_btrfs exclude_graphdirver_zfs 
-> exclude_graphdriver_devicemapper'
-
-None of that should be needed with the golang-package infrastructure.
-Look at the docker-engine package for an example.
-
-> +
-> +BALENA_MAKE_ENV = GOPATH=$(BALENA_GOPATH) \
-> +??? $(TARGET_MAKE_ENV) \
-> +??? $(HOST_GO_TARGET_ENV)
-
-Same.
-
-> +
-> +BALENA_GLDFLAGS += -extldflags '-static'
-
-Same.
-
-> +
-> +define BALENA_CONFIGURE_CMDS
-> +??? mkdir -p $(BALENA_GOPATH)/src/github.com/docker
-> +??? ln -fs $(@D) $(BALENA_GOPATH)/src/github.com/docker/docker
-
-Not needed with the golang-package infrastructure.
-
-> +??? cd $(@D) && \
-> +??? ??? $(BALENA_CONFIGURE_ENV) \
-> +??? ??? bash ./hack/make.sh dynbinary-balena
-
-Do this in a POST_CONFIGURE_HOOKS.
-
-> +define BALENA_BUILD_CMDS
-> +??? $(foreach target,$(BALENA_BUILD_TARGETS), \
-> +??? ??? cd $(BALENA_GOPATH)/src/github.com/docker/docker/cmd/mobynit; \
-> +??? ??? $(BALENA_MAKE_ENV) \
-> +??? ??? $(HOST_DIR)/bin/go build -v\
-> +??? ??? ??? -ldflags "$(BALENA_GLDFLAGS)"
-> +??? )
-> +endef
-
-Not needed, it should be done by the golang-package infrastructure.
-
-> +
-> +define BALENA_INSTALL_TARGET_CMDS
-> +??? $(foreach target,$(BALENA_BUILD_TARGETS), \
-> +??? ??? $(INSTALL) -D -m 0755 
-> $(@D)/bundles/17.06.0-dev/dynbinary-balena/$(target) $(BALENA_INSTALL_BINS)
-> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balenad
-> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-containerd
-> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-containerd-shim
-> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-containerd-ctr
-> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-runc
-> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-proxy
-> +??? )
-
-Same.
-
-Basically, I have the feeling that you created this package as a
-generic-package originally, and then quickly converted it to
-golang-package. But the golang-package infrastructure greatly
-simplifies Go packages, so you should really leverage the features of
-the golang-package infrastructure.
-
-Could you rework this package to use golang-package more effectively ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Hello,
+>
+> On Mon,  4 Jun 2018 14:32:29 +0100, Robert Beckett wrote:
+> > Since changing to git init followed by fetch to initialise
+> > git cache, when using master branch as the target version
+> > for a package, git refuses to fetch in to currently checkout
+> > out branch or master.
+>
+> I think we don't want to support using branches as Git versions, as it
+> doesn't make sense, because it won't behave as the user expects.
+>
+> If you use a branch as _VERSION for a package, Buildroot will only
+> download once, and never update to newer commits in this branch,
+> because it will already have a cached tarball in its DL_DIR.
+>
+> So I'm not sure we want to add some code to support a use case that we
+> don't want support :-)
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180604/8f042d7f/attachment.html>
