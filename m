@@ -1,116 +1,156 @@
-From: Henrique Marks <henrique.marks@datacom.ind.br>
-Date: Mon, 4 Jun 2018 14:22:49 -0300 (BRT)
-Subject: [Buildroot] [PATCH 1/2] git: fix handling of git repos using
- master as version
-In-Reply-To: <CAESO2EKCoO3rZjLHnag3Ag-_WnMSgHcWbv8tnPW0z8GQ89azGA@mail.gmail.com>
-References: <1528119150-28659-1-git-send-email-bbeckett@netvu.org.uk>
- <20180604163302.2d529afd@windsurf>
- <CAESO2E+hb8=2vfAstXvYeG05L6ELKMHcYCGkoHRukptkrDhZHQ@mail.gmail.com>
- <20180604154433.GA3700@scaer>
- <CAESO2EJ7pwkrsrmarwBkpS7SswumuepmCYo01x2j0xpMmhGUCg@mail.gmail.com>
- <20180604165210.GA23325@g751.home>
- <CAESO2EKCoO3rZjLHnag3Ag-_WnMSgHcWbv8tnPW0z8GQ89azGA@mail.gmail.com>
-Message-ID: <963979267.1048960.1528132969041.JavaMail.zimbra@datacom.com.br>
+From: Mike Davies <busybox_mail@rovoreed.com>
+Date: Mon, 04 Jun 2018 19:51:34 +0100
+Subject: [Buildroot] Buildroot 2018.05-rc3 released
+In-Reply-To: <ab40f635-f541-ab68-77c9-1a8dc7f749d0@mind.be>
+References: <87efhvufjm.fsf@dell.be.48ers.dk>
+ <1527599917.2053.2.camel@rovoreed.com> <87fu2a7bkq.fsf@dell.be.48ers.dk>
+ <1527615682.2053.4.camel@rovoreed.com> <87po1e5mev.fsf@dell.be.48ers.dk>
+ <1527674917.2072.2.camel@rovoreed.com> <87tvqp2lqv.fsf@dell.be.48ers.dk>
+ <20180530180026.77e1dfac@windsurf.home> <87efht2k8o.fsf@dell.be.48ers.dk>
+ <1527778369.2065.4.camel@rovoreed.com> <20180531172600.3cc0568e@windsurf>
+ <1527791404.2065.8.camel@rovoreed.com>
+ <ab40f635-f541-ab68-77c9-1a8dc7f749d0@mind.be>
+Message-ID: <1528138294.2054.3.camel@rovoreed.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All, 
+On Thu, 2018-05-31 at 22:18 +0200, Arnout Vandecappelle wrote:
+> 
+> 
+> ?Well, this may happen to other people as well, so it would be good
+> to get to the bottom of it.
+> 
+> ?Let's see if we can find where the problem is. Can you do
+> 
+> readelf -d output/host/bin/python
 
-> De: "Bob Beckett" <bbeckett@netvu.org.uk>
-> Para: "Gary Bisson" <gary.bisson@boundarydevices.com>
-> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, "Thomas Petazzoni"
-> <thomas.petazzoni@bootlin.com>, "buildroot" <buildroot@buildroot.org>
-> Enviadas: Segunda-feira, 4 de junho de 2018 13:54:30
-> Assunto: Re: [Buildroot] [PATCH 1/2] git: fix handling of git repos using master
-> as version
+[mike at modron buildroot-2018.05]$ readelf -d output/host/bin/python
 
-> On Mon, Jun 4, 2018 at 5:52 PM, Gary Bisson < [
-> mailto:gary.bisson at boundarydevices.com | gary.bisson at boundarydevices.com ] >
-> wrote:
+Dynamic section at offset 0xdc0 contains 30 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libpython2.7.so.1.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libutil.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000001d (RUNPATH)            Library runpath: [/home/mike/work/pi/buildroot-2018.05/output/host/lib]
+ 0x000000000000000c (INIT)               0x4006a8
+ 0x000000000000000d (FINI)               0x400864
+ 0x0000000000000019 (INIT_ARRAY)         0x600da8
+ 0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0x600db0
+ 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0x400298
+ 0x0000000000000005 (STRTAB)             0x4004c0
+ 0x0000000000000006 (SYMTAB)             0x4002f8
+ 0x000000000000000a (STRSZ)              345 (bytes)
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000015 (DEBUG)              0x0
+ 0x0000000000000003 (PLTGOT)             0x601000
+ 0x0000000000000002 (PLTRELSZ)           24 (bytes)
+ 0x0000000000000014 (PLTREL)             RELA
+ 0x0000000000000017 (JMPREL)             0x400690
+ 0x0000000000000007 (RELA)               0x400660
+ 0x0000000000000008 (RELASZ)             48 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x000000006ffffffe (VERNEED)            0x400640
+ 0x000000006fffffff (VERNEEDNUM)         1
+ 0x000000006ffffff0 (VERSYM)             0x40061a
+ 0x0000000000000000 (NULL)               0x0
+[mike at modron buildroot-2018.05]$ 
 
->> Hi Bob
+> readelf -W -s output/host/lib/libpython2.7.so | \
+> ? grep PyUnicodeUCS._AsEncodedString
 
->> On Mon, Jun 04, 2018 at 05:32:41PM +0100, Bob Beckett wrote:
->> > Thanks for the more in depth explanation.
 
->> > I agree with all of the reasons outlined for the purpose of being purely a
->> > reproducible build manager, which buildroot only ever aimed to be.
+[mike at modron buildroot-2018.05]$ readelf -W -s output/host/lib/libpython2.7.so | grep PyUnicodeUCS._AsEncodedString
+  1374: 00000000000dcbe0   308 FUNC    GLOBAL DEFAULT   12 PyUnicodeUCS2_AsEncodedString
+  4961: 00000000000dcbe0   308 FUNC    GLOBAL DEFAULT   12 PyUnicodeUCS2_AsEncodedString
+[mike at modron buildroot-2018.05]$ 
 
->> > However, people do use it during development, and with a reasonably large
->> > number of custom packages all in development at the same time, using the
->> > _OVERRIDE_SRCDIR method to test latest versions of multiple packages
->> > becomes very unwieldy.
->> > My solution so far has been to point the version at the branch that active
->> > development is taking place on, and removing the build directories and
->> > packages for the specific projects each time.
->> > When I am not the one doing the development on each package's source, but
->> > am developing the rootfs, this means I dont have to manually keep updating
->> > my local git repositories for each project.
->> > Once each package has hit their first release version, they do get tagged
->> > and the release branch for the project's BR2_EXTERNAL directory gets
->> > updated with those versions, and each version thereafter, but the
->> > development branch for the external directory persistently stays on the
->> > development branch head for each package.
 
->> > Regarding not knowing the sha before a checkout, would git ls-remote not
->> > suffice for this? e.g.
+> readelf -W -s output/build/host-python-2.7.14/Objects/unicodeobject.o 
+> | \
+> ? grep PyUnicodeUCS._AsEncodedString
+> 
 
->> > $ git ls-remote git at gitlab.com:adhlinux/buildroot/buildroot.git master
->> > 407fb2fe202aaeb273e4986dc88c30596a7fe8db refs/heads/master
->> > 407fb2fe202aaeb273e4986dc88c30596a7fe8db refs/remotes/upstream/master
+[mike at modron buildroot-2018.05]$ readelf -W -s output/build/host-python-2.7.14/Objects/unicodeobject.o | grep PyUnicodeUCS._AsEncodedString
+   482: 000000000000f680   308 FUNC    GLOBAL DEFAULT    1 PyUnicodeUCS2_AsEncodedString
+[mike at modron buildroot-2018.05]$ 
 
->> Yes 'ls-remote' is actually a good option. You could have the following
->> package version during development:
->> FOO_VERSION = $(shell git ls-remote URL branch | awk '{ print $$1 }')
 
->> Then it would pick up any change automatically until you finish your dev
->> and change the FOO_VERSION to a proper ID.
+Now, if I understand these dumps correctly, the symbol is there, but
+this new release still fails to build ca-certificates ...
 
-> Thats actually a cracking idea. I like it (and I'm not sure why I didnt think of
-> it when suggesting it for detecting outdated named head versions :) )
+>>> ca-certificates 20170717 Patching
+>>> ca-certificates 20170717 Configuring
+>>> ca-certificates 20170717 Building
+PATH="/home/mike/work/pi/buildroot-2018.05/output/host/bin:/home/mike/work/pi/buildroot-2018.05/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/home/mike/bin:/sbin:/home/mike/.local/bin:/home/mike/bin:/home/mike/bin:/sbin" /usr/bin/make -j9 -C /home/mike/work/pi/buildroot-2018.05/output/build/ca-certificates-20170717 all
+for dir in mozilla; do \
+  /usr/bin/make -C $dir all; \
+done
+python certdata2pem.py
+Traceback (most recent call last):
+  File "certdata2pem.py", line 23, in <module>
+    import base64
+  File "/home/mike/work/pi/buildroot-2018.05/output/host/lib64/python2.7/base64.py", line 9, in <module>
+    import struct
+  File "/home/mike/work/pi/buildroot-2018.05/output/host/lib64/python2.7/struct.py", line 1, in <module>
+    from _struct import *
+ImportError: /home/mike/work/pi/buildroot-2018.05/output/host/lib64/python2.7/lib-dynload/_struct.so: undefined symbol: PyUnicodeUCS2_AsEncodedString
+Makefile:6: recipe for target 'all' failed
+make[3]: *** [all] Error 1
+Makefile:9: recipe for target 'all' failed
+make[2]: *** [all] Error 2
+package/pkg-generic.mk:223: recipe for target '/home/mike/work/pi/buildroot-2018.05/output/build/ca-certificates-20170717/.stamp_built' failed
+make[1]: *** [/home/mike/work/pi/buildroot-2018.05/output/build/ca-certificates-20170717/.stamp_built] Error 2
+Makefile:79: recipe for target '_all' failed
+make: *** [_all] Error 2
+[mike at modron buildroot-2018.05]$ 
 
->> > It would allow you to check for changes in sha without doing a new fetch.
+I hope this is of some help, because I'm even more confused now. The
+symbol really is undefined in _struct.so, so why isn't it picking it up
+from libpython.2.7.so, because if I understand the following dumps it
+should.
 
->> > Oh well, not to worry. Ill keep it as a local patch, as I suspect I am
->> > treading old ground of "buildroot is not a development platform" (Ive seen
->> > this discussion come up multiple times before).
+[mike at modron buildroot-2018.05]$ readelf -d output/host/lib64/python2.7/lib-dynload/_struct.so
 
->> Yes that will most likely not be included inside BR infrastructure but that
->> should be a perfectly fine option for your custom package.
+Dynamic section at offset 0x8db8 contains 27 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libpython2.7.so.1.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000001d (RUNPATH)            Library runpath: [/home/mike/work/pi/buildroot-2018.05/output/host/lib]
+ 0x000000000000000c (INIT)               0x2538
+ 0x000000000000000d (FINI)               0x74e4
+ 0x0000000000000019 (INIT_ARRAY)         0x208d98
+ 0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0x208da0
+ 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0x1f0
+ 0x0000000000000005 (STRTAB)             0xa28
+ 0x0000000000000006 (SYMTAB)             0x230
+ 0x000000000000000a (STRSZ)              1533 (bytes)
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000003 (PLTGOT)             0x209000
+ 0x0000000000000002 (PLTRELSZ)           1488 (bytes)
+ 0x0000000000000014 (PLTREL)             RELA
+ 0x0000000000000017 (JMPREL)             0x1f68
+ 0x0000000000000007 (RELA)               0x1110
+ 0x0000000000000008 (RELASZ)             3672 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x000000006ffffffe (VERNEED)            0x10d0
+ 0x000000006fffffff (VERNEEDNUM)         1
+ 0x000000006ffffff0 (VERSYM)             0x1026
+ 0x000000006ffffff9 (RELACOUNT)          138
+ 0x0000000000000000 (NULL)               0x0
+[mike at modron buildroot-2018.05]$ readelf -W -s output/host/lib64/python2.7/lib-dynload/_struct.so | grep PyUnicodeUCS._AsEncodedString
+    62: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND PyUnicodeUCS2_AsEncodedString
+   217: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND PyUnicodeUCS2_AsEncodedString
+[mike at modron buildroot-2018.05]$ 
 
->> Regards,
->> Gary
-
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-We use buildroot for development AND for integration. 
-
-For development, you take your code, download the source and use OVERRIDE_SRCDIR as Thomas described. It works just fine. 
-
-For integration, every developer submits the working code to a Robot, that puts the SHA in the version field in the .mk file. 
-
-No use for branches, because sometimes the HEAD of the branch is not suitable either for development or integration. 
-
-But, just to make a point about differences when using buildroot this way: we are not too much interested in instrumenting buildroot, with those scripts that check the files, because they affect development (pkg-rebuild) and integration (overall time). 
-
-So, to please both the project and people using it for development/integration, i think the ideal would be to have the choice of not instrumenting a build, preferably on defconfigs. 
-
-Just to point an important (and noticeable) difference when you are developing with buildroot. 
-
-Regards, 
-
--- 
-Dr. Henrique Marks 
-henrique.marks at datacom.ind.br 
-R. Am?rica, 1000 - Eldorado do Sul - RS 
-CEP: 92990-000 - Brasil 
-Fone: +55 51 3933 3000 - Ramal 3466 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180604/8d2fa0f2/attachment.html>
+Mike
