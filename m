@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Jun 2018 21:58:44 +0200
-Subject: [Buildroot] [PATCH 1/1] libserial: bump to version 0.6rc3
-In-Reply-To: <20180603192907.7490-1-fontaine.fabrice@gmail.com>
-References: <20180603192907.7490-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180604215844.38da01bc@windsurf>
+Date: Mon, 4 Jun 2018 21:59:10 +0200
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.15
+In-Reply-To: <20180603213100.1635-1-peter@korsgaard.com>
+References: <20180603213100.1635-1-peter@korsgaard.com>
+Message-ID: <20180604215910.0158d37f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  3 Jun 2018 21:29:07 +0200, Fabrice Fontaine wrote:
-> - Move site to github
-> - Remove first patch and use --without-python instead
-> - Remove second patch (patch has been merged in 2015:
->   https://github.com/crayzeewulf/libserial/commit/47ca0621ccd2100e4ba0d7f4e2a861d14f05f63c)
-> - Add new patch to disable tests
-> - Update license to LGPL-2.0+ and add COPYING.LESSER and LICENSE.txt:
->   https://github.com/crayzeewulf/libserial/commit/6f716c4d79bb31a0c21f3ee9680111c633ac4840
+On Sun,  3 Jun 2018 23:31:00 +0200, Peter Korsgaard wrote:
+> Fixes the following security issues:
+> 
+> CVE-2018-11362: LDSS dissector crash
+> https://www.wireshark.org/security/wnpa-sec-2018-25.html
+> 
+> CVE-2018-11357: Multiple dissectors could consume excessive memory
+> https://www.wireshark.org/security/wnpa-sec-2018-28.html
+> 
+> CVE-2018-11356: DNS dissector crash
+> https://www.wireshark.org/security/wnpa-sec-2018-29.html
+> 
+> CVE-2018-11360: GSM A DTAP dissector crash
+> https://www.wireshark.org/security/wnpa-sec-2018-30.html
+> 
+> CVE-2018-11358: Q.931 dissector crash
+> https://www.wireshark.org/security/wnpa-sec-2018-31.html
+> 
+> CVE-2018-11359: Multiple dissectors could crash
+> https://www.wireshark.org/security/wnpa-sec-2018-33.html
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/wireshark/wireshark.hash | 4 ++--
+>  package/wireshark/wireshark.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-There's an issue with this: the COPYING.LESSER license text contains
-the text of LGPL-3.0, not LGPL-2.0, which is a bit weird.
-
-Could you check with upstream if they could fix this ?
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
