@@ -1,155 +1,102 @@
-From: Min Xu <xuminready@gmail.com>
-Date: Mon,  4 Jun 2018 00:16:26 -0700
-Subject: [Buildroot] [PATCH] shadowsocks-libev: new package
-Message-ID: <20180604071626.17528-1-xuminready@gmail.com>
+From: xu min <xuminready@gmail.com>
+Date: Mon, 4 Jun 2018 00:30:08 -0700
+Subject: [Buildroot] [PATCH v3 2/2] shadowsocks-libev: bump to version
+ 3.2.0 add a patch for libipset licence add hashes for the license files Fix
+ shadowsocks-libev.mk
+In-Reply-To: <20180603203735.6b123022@windsurf>
+References: <20180530221315.19012-1-xuminready@gmail.com>
+ <20180530221315.19012-2-xuminready@gmail.com>
+ <20180603203735.6b123022@windsurf>
+Message-ID: <CAMpS7mTCpgZyfQa_mkBtL1_nbJVy=kftJvyQEXpvahB0h+26bA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
-embedded devices and low-end boxes.
+Hi Thomas,
 
-https://github.com/shadowsocks/shadowsocks-libev
+Thank you for your help. I merged 2 patches into 1. And resubmitted my new
+patch. https://patchwork.ozlabs.org/patch/924855/
 
-A patch for BSD-3-Clause licence for libipset is added. It's from libipset's git repo.
+Please notice, the shadowsocks-libev tarball does not include libipset's
+license, I add a patch for its license which I found from libipset's git
+repo. https://github.com/shadowsocks/ipset/
 
-Signed-off-by: Min Xu <xuminready@gmail.com>
----
- package/Config.in                                  |  1 +
- .../0001-docs-add-BSD-3-Clause-licence.patch       | 52 ++++++++++++++++++++++
- package/shadowsocks-libev/Config.in                | 12 +++++
- package/shadowsocks-libev/shadowsocks-libev.hash   |  8 ++++
- package/shadowsocks-libev/shadowsocks-libev.mk     | 15 +++++++
- 5 files changed, 88 insertions(+)
- create mode 100644 package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
- create mode 100644 package/shadowsocks-libev/Config.in
- create mode 100644 package/shadowsocks-libev/shadowsocks-libev.hash
- create mode 100644 package/shadowsocks-libev/shadowsocks-libev.mk
+This is my first contributions to Buildroot using patchwork and git. Thank
+you for your help.
 
-diff --git a/package/Config.in b/package/Config.in
-index ecee493..9bfb2cf 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1846,6 +1846,7 @@ endif
- 	source "package/samba4/Config.in"
- 	source "package/sconeserver/Config.in"
- 	source "package/ser2net/Config.in"
-+	source "package/shadowsocks-libev/Config.in"
- 	source "package/shairport-sync/Config.in"
- 	source "package/shellinabox/Config.in"
- 	source "package/smcroute/Config.in"
-diff --git a/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-new file mode 100644
-index 0000000..64dda02
---- /dev/null
-+++ b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-@@ -0,0 +1,52 @@
-+From 0047295445c499e010706598c50f1bff8b0d632c Mon Sep 17 00:00:00 2001
-+From: Min Xu <xuminready@gmail.com>
-+Date: Wed, 30 May 2018 13:16:12 -0700
-+Subject: [PATCH] docs: add BSD-3-Clause licence
-+
-+add missing licence for shadowsocks-libev/libipset
-+
-+Signed-off-by: Min Xu <xuminready@gmail.com>
-+---
-+ libipset/LICENSE.txt | 30 ++++++++++++++++++++++++++++++
-+ 1 file changed, 30 insertions(+)
-+ create mode 100644 libipset/LICENSE.txt
-+
-+diff --git a/libipset/LICENSE.txt b/libipset/LICENSE.txt
-+new file mode 100644
-+index 0000000..cff38df
-+--- /dev/null
-++++ b/libipset/LICENSE.txt
-+@@ -0,0 +1,30 @@
-++Copyright ? 2009-2013, RedJack, LLC.
-++All rights reserved.
-++
-++Redistribution and use in source and binary forms, with or without
-++modification, are permitted provided that the following conditions are
-++met:
-++
-++  ? Redistributions of source code must retain the above copyright
-++    notice, this list of conditions and the following disclaimer.
-++
-++  ? Redistributions in binary form must reproduce the above copyright
-++    notice, this list of conditions and the following disclaimer in
-++    the documentation and/or other materials provided with the
-++    distribution.
-++
-++  ? Neither the name of RedJack Software, LLC nor the names of its
-++    contributors may be used to endorse or promote products derived
-++    from this software without specific prior written permission.
-++
-++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-++"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-++LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-++A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT
-++HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-++SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-++LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-++DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-++THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-++OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+-- 
-+2.11.0
-+
-diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
-new file mode 100644
-index 0000000..7c3c037
---- /dev/null
-+++ b/package/shadowsocks-libev/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SHADOWSOCKS_LIBEV
-+	bool "shadowsocks-libev"
-+	select BR2_PACKAGE_C_ARES
-+	select BR2_PACKAGE_LIBEV
-+	select BR2_PACKAGE_LIBSODIUM
-+	select BR2_PACKAGE_MBEDTLS
-+	select BR2_PACKAGE_PCRE
-+	help
-+	  Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
-+	  embedded devices and low-end boxes.
-+
-+	  https://github.com/shadowsocks/shadowsocks-libev
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
-new file mode 100644
-index 0000000..e8be8a8
---- /dev/null
-+++ b/package/shadowsocks-libev/shadowsocks-libev.hash
-@@ -0,0 +1,8 @@
-+# Locally computed
-+sha256 5521cf623a07fd1e393528516a83acd2b66c5d4bb4535a52662806a6a060c606 shadowsocks-libev-3.2.0.tar.gz
-+
-+# License files, locally calculated
-+sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
-+sha256 c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
-+sha256 4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
-+sha256 4b3adc9ce620fa868f1dda328203dbccbd3e9f5fbafb49c581edc386a504ee1a  libipset/LICENSE.txt
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
-new file mode 100644
-index 0000000..ddb2880
---- /dev/null
-+++ b/package/shadowsocks-libev/shadowsocks-libev.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# shadowsocks-libev
-+#
-+################################################################################
-+
-+SHADOWSOCKS_LIBEV_VERSION = 3.2.0
-+SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
-+SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause(libbloom), BSD-3-Clause(libcork, libipset)
-+SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING libipset/LICENSE.txt
-+SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
-+SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
-+SHADOWSOCKS_LIBEV_CONF_OPTS = --disable-documentation --with-pcre=$(STAGING_DIR)/usr
-+
-+$(eval $(autotools-package))
+MinXu
+
+On Sun, Jun 3, 2018 at 11:37 AM, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> Hello!
+>
+> Thanks for this contribution!
+>
+> On Wed, 30 May 2018 15:13:14 -0700, Min Xu wrote:
+> > Signed-off-by: Min Xu <xuminready@gmail.com>
+> > ---
+> >  .../0001-docs-add-BSD-3-Clause-licence.patch       | 52
+> ++++++++++++++++++++++
+> >  package/shadowsocks-libev/shadowsocks-libev.hash   |  8 +++-
+> >  package/shadowsocks-libev/shadowsocks-libev.mk     |  9 ++--
+> >  3 files changed, 63 insertions(+), 6 deletions(-)
+> >  create mode 100644 package/shadowsocks-libev/
+> 0001-docs-add-BSD-3-Clause-licence.patch
+>
+> All those changes should be part of the patch adding the
+> shadowsocks-libev package. If you're not familiar with Git, then look
+> at using "git rebase --interactive", it allows you to rewrite the
+> commit history.
+>
+> In your case, you would have to do:
+>
+> $ git rebase --interactive HEAD~2
+>
+> This opens up your text editor, with two lines, one for each of your
+> two commits. On the second line, change the "pick" word for "fixup",
+> and exit your text editor.
+>
+> This will rewrite the two commits by merging the second one into the
+> first one.
+>
+> > diff --git a/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
+> b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
+> > new file mode 100644
+> > index 0000000..64dda02
+> > --- /dev/null
+> > +++ b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
+> > @@ -0,0 +1,52 @@
+> > +From 0047295445c499e010706598c50f1bff8b0d632c Mon Sep 17 00:00:00 2001
+> > +From: Min Xu <xuminready@gmail.com>
+> > +Date: Wed, 30 May 2018 13:16:12 -0700
+> > +Subject: [PATCH] docs: add BSD-3-Clause licence
+> > +
+> > +add missing licence for shadowsocks-libev/libipset
+> > +
+> > +Signed-off-by: Min Xu <xuminready@gmail.com>
+>
+> I'm not sure it makes a lot of sense to add a patch adding the license
+> file, especially if the patch is not blessed by upstream.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+
+
+
 -- 
-2.11.0
+
+*Best Regards*
+
+*XuMin's Ready?*
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180604/bc304c10/attachment.html>
