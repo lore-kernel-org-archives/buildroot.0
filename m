@@ -1,43 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  4 Jun 2018 22:56:31 +0200
-Subject: [Buildroot] [PATCH 1/1] boinc: bump to version 7.10.2
-Message-ID: <20180604205631.1550-1-fontaine.fabrice@gmail.com>
+Date: Mon,  4 Jun 2018 22:57:06 +0200
+Subject: [Buildroot] [PATCH 1/1] libsecret: bump to version 0.18.6
+Message-ID: <20180604205706.1633-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Add hash for license file
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libsecret/libsecret.hash | 7 +++++--
+ package/libsecret/libsecret.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index 564096c745..8dc0575dd3 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 5c77752a5cbb69b2dc0343c5aea331f2ec73410d9f33f5f50867e4071e799609  boinc-7.10.1.tar.gz
-+sha256 aacce87543354c8aeaf8a2f8d4885ab25f994dbaa8a372adf8a3d5d5854a97df  boinc-7.10.2.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 04aacc2c3d..09407cf8f0 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -4,8 +4,8 @@
- #
+diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
+index a637cbecf4..808b1741f3 100644
+--- a/package/libsecret/libsecret.hash
++++ b/package/libsecret/libsecret.hash
+@@ -1,2 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.5.sha256sum
+-sha256	9ce7bd8dd5831f2786c935d82638ac428fa085057cc6780aba0e39375887ccb3	libsecret-0.18.5.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.6.sha256sum
++sha256	5efbc890ba41a323ffe0599cd260fd12bd8eb62a04aa1bd1b2762575d253d66f	libsecret-0.18.6.tar.xz
++
++# Hash for license file:
++sha256	a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b	COPYING
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index 111b553f2c..adc7c508df 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BOINC_VERSION_MAJOR = 7.10
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
-+BOINC_VERSION_MAJOR = 7
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).10.2
- # client_release can be used to build the Client and Manager but not the Server
- # part. The Server currently has no versioning (see
- # https://github.com/BOINC/boinc/pull/1798).
+ LIBSECRET_VERSION_MAJOR = 0.18
+-LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).5
++LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).6
+ LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
+ LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+ LIBSECRET_INSTALL_STAGING = YES
 -- 
 2.14.1
