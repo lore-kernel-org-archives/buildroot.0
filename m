@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Jun 2018 00:07:25 +0200
-Subject: [Buildroot] [PATCH] shadowsocks-libev: new package
-In-Reply-To: <20180604160030.GC3700@scaer>
-References: <20180604071626.17528-1-xuminready@gmail.com>
- <20180604120908.0f340f5e@windsurf> <20180604160030.GC3700@scaer>
-Message-ID: <eec280ce-26b9-ea7b-20dd-60c5882c2bd8@mind.be>
+Date: Tue, 5 Jun 2018 00:10:30 +0200
+Subject: [Buildroot] [PATCHv2] linux: may fail to boot for binutils
+ 2.29+ even without armv7m
+In-Reply-To: <20180601180157.759-1-yann.morin.1998@free.fr>
+References: <20180601180157.759-1-yann.morin.1998@free.fr>
+Message-ID: <b3672758-0d2b-51cd-7eac-cc06158a995b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +13,59 @@ To: buildroot@busybox.net
 
 
 
-On 04-06-18 18:00, Yann E. MORIN wrote:
-> Min, Thomas, All,
+On 01-06-18 20:01, Yann E. MORIN wrote:
+> Commit f13477b (linux: config.in: add comment for Arm Cortex-M) added a
+> comment so that the user that the linux kernel may miscompile with
+> binutils 2.29+, when the target is an armv7m CPU.
 > 
-> On 2018-06-04 12:09 +0200, Thomas Petazzoni spake thusly:
->> On Mon,  4 Jun 2018 00:16:26 -0700, Min Xu wrote:
-> [--SNIP--]
->>> diff --git a/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
->>> new file mode 100644
->>> index 0000000..64dda02
->>> --- /dev/null
->>> +++ b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
->>> @@ -0,0 +1,52 @@
->>> +From 0047295445c499e010706598c50f1bff8b0d632c Mon Sep 17 00:00:00 2001
->>> +From: Min Xu <xuminready@gmail.com>
->>> +Date: Wed, 30 May 2018 13:16:12 -0700
->>> +Subject: [PATCH] docs: add BSD-3-Clause licence
->>> +
->>> +add missing licence for shadowsocks-libev/libipset
->>> +
->>> +Signed-off-by: Min Xu <xuminready@gmail.com>
->>
->> I'm still not entirely convinced by a patch adding a license file. It
->> would definitely be useful to convince upstream to add this license
->> file, but I'm not sure we want to carry patches in Buildroot adding
->> license files.
->>
->> Peter, Arnout, Yann, any comment on this ?
+> However, the real trigger is a compilation in thumb2 mode, which happens
+> to be the only option for armv7m CPUs.
 > 
-> I agree with Thomas here: do not add a license file ourselves (unless we
-> backport an upstream commit, in which case the patch should say so).
+> We can't know whether the kernel will be built in arm or thumb2 mode,
+> though, because we do not have that information: it is only available in
+> the Linux' .config file, which we don;t have access to at the time we
+> run our menuconfig.
+> 
+> So, relax the conditions under which the comment is made, so that it
+> appears as soon as binutils are >= 2.29 (i.e. not 2.28, which is the
+> oldest we support) for ARM CPUs.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
+> Cc: Laurent GONZALEZ <br22@gezedo.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> 
+> ---
+> Changes v1 -> v2:
+>   - only applicable to ARM CPUs.  (Peter)
+> ---
+>  linux/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/linux/Config.in b/linux/Config.in
+> index bffb52fd18..c29b1f6c88 100644
+> --- a/linux/Config.in
+> +++ b/linux/Config.in
+> @@ -9,7 +9,7 @@ config BR2_LINUX_KERNEL
+>  if BR2_LINUX_KERNEL
+>  
+>  comment "Linux kernel may fail to boot with binutils >= 2.29"
+> -	depends on BR2_ARM_CPU_ARMV7M
+> +	depends on BR2_arm || BR2_armeb
 
- This is actually the situation here. However, since the license file is
-identical to the existing one in the libcork directory, it's not so important IMO.
+ I have a bit of a problem with this patch. IMO it's rather unlikely that people
+build the kernel in THUMB mode on non-M CPUs. But now we're always showing this
+warning. I think it will confuse a number of people, and I don't think it's very
+likely that it will actually help anyone.
 
  Regards,
  Arnout
 
-> 
-> If the package does not have a license file, then just include a source
-> file, preferrably a prominent one like main.c or whatever.
-> 
-> And above all, better no information that bad information. So, don;t add
-> the license file.
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->>> +SHADOWSOCKS_LIBEV_VERSION = 3.2.0
->>> +SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
->>> +SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause(libbloom), BSD-3-Clause(libcork, libipset)
->>> +SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING libipset/LICENSE.txt
->>> +SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
->>> +SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
->>> +SHADOWSOCKS_LIBEV_CONF_OPTS = --disable-documentation --with-pcre=$(STAGING_DIR)/usr
->>
->> --disable-documentation is already passed by the autotools-package
->> infrastructure, so it isn't needed.
->>
->> Besides those minor issues, the rest looks good to me. Thanks!
->>
->> Thomas
->> -- 
->> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
+>  	depends on !BR2_BINUTILS_VERSION_2_28_X
+>  
+>  # Packages that need to have a kernel with support for loadable modules,
 > 
 
 -- 
