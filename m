@@ -1,48 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Jun 2018 12:12:48 +0200
-Subject: [Buildroot] [PATCH 1/1] php-amqp: selects openssl
-In-Reply-To: <CAPi7W82tVic4+M663rJ8V-rTQh-=MhMPdgBgmWgr5nzcJvcO1g@mail.gmail.com>
-References: <20180603193126.7582-1-fontaine.fabrice@gmail.com>
- <20180604065939.326bf279@windsurf>
- <CAPi7W82tVic4+M663rJ8V-rTQh-=MhMPdgBgmWgr5nzcJvcO1g@mail.gmail.com>
-Message-ID: <20180604121248.4eedd40c@windsurf>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Mon,  4 Jun 2018 09:48:25 -0300
+Subject: [Buildroot] [PATCH 1/4] toolchain: add 4.17.x choice for headers
+Message-ID: <1528116508-12103-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ toolchain/Config.in                                                  | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-On Mon, 4 Jun 2018 07:25:05 +0200, Fabrice Fontaine wrote:
-
-> > We've had php-amqp since October 2016 and the last version bump is from
-> > May 2017, i.e a year ago. What has changed that makes php-amqp now
-> > require OpenSSL support in rabbitmq-c ?
-> >  
-> SSL connection supports in php-amqp was added in 1.8.0beta2:
-> https://github.com/pdezwart/php-amqp/commit/83defa18d958503a395e928d4669a23041014b2e
-> .
-> So it was introduced in buildroot by the bump to version 1.9.0 in May 2017.
-> In autobuilders, we have three errors with php-amqp:
-> http://autobuild.buildroot.net/?reason=php-amqp-1.9.0.
-> The three errors are all related to SSL and the older one is from February
-> 2018 but I suppose that autobuilder results are deleted after some time?
-
-No, autobuilder results are never deleted.
-
-Except in October 2017, when I had a hard disk crash, and we lost all
-the autobuilder results that we had back then. But since October 2017,
-all autobuilder results are there.
-
-Strange that this problem did not occur more often. Only 3 times since
-October 2017. But OK, it happened once in February 2018, once in May
-2018 and more recently in June.
-
-Best regards,
-
-Thomas
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 3936fc4..3a53a32 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -336,10 +336,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+ 
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 	default "4.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+ 	default "4.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+ 	default "4.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 2ef1126..6a9921c 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -123,6 +123,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_17
++	bool "4.17.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16
+ 	bool "4.16.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
