@@ -1,60 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Jun 2018 22:45:35 +0200
-Subject: [Buildroot] [git commit] libgit2: do not use a bundled zlib
-Message-ID: <20180604205102.E4F6C83914@busybox.osuosl.org>
+Date: Mon, 4 Jun 2018 22:46:17 +0200
+Subject: [Buildroot] [git commit] libgit2: bump version to 0.27.1
+Message-ID: <20180604205102.EE2858399A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15c3ffabeaa6bbf26749f7667cbe53eca56c00a0
+commit: https://git.buildroot.net/buildroot/commit/?id=d1e383d365c0eeb327312823e67c3c2ae92e0e8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libgit2 depends on zlib. If libgit2's build system does not find a
-system zlib, then it compiles a bundled version of it, which is not
-really great. So instead, add zlib as a mandatory dependency.
+Fixes a security vulnerability similar to git's CVE-2018-11235
+
+This release changes some configuration options, so tweak them
+accordingly.
 
 Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libgit2/Config.in  | 1 +
- package/libgit2/libgit2.mk | 7 ++-----
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libgit2/Config.in b/package/libgit2/Config.in
-index 24a1f3b5a9..53ba4d4245 100644
---- a/package/libgit2/Config.in
-+++ b/package/libgit2/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBGIT2
- 	bool "libgit2"
-+	select BR2_PACKAGE_ZLIB
- 	help
- 	  libgit2 is a portable, pure C implementation of the Git core
- 	  methods provided as a linkable library with a solid API,
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index cc09af3627..43d8f9930e 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	6a62393e0ceb37d02fe0d5707713f504e7acac9006ef33da1e88960bd78b6eac  libgit2-v0.26.0.tar.gz
++sha256	837b11927bc5f64e7f9ab0376f57cfe3ca5aa52ffd2007ac41184b21124fb086  libgit2-v0.27.1.tar.gz
+ sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
 diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 277a8d46ac..fcace39290 100644
+index fcace39290..8b7b9f6d77 100644
 --- a/package/libgit2/libgit2.mk
 +++ b/package/libgit2/libgit2.mk
-@@ -16,6 +16,8 @@ LIBGIT2_CONF_OPTS = \
- 	-DUSE_ICONV=ON \
- 	-DTHREADSAFE=$(if $(BR2_TOOLCHAIN_HAS_THREADS),ON,OFF)
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+LIBGIT2_DEPENDENCIES = zlib
-+
- # If libiconv is available (for !locale toolchains), then we can use
- # it for iconv support. Note that USE_ICONV=ON is still correct even
- # without libiconv because (1) most toolchain have iconv support
-@@ -25,11 +27,6 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
- LIBGIT2_DEPENDENCIES += libiconv
+-LIBGIT2_VERSION = v0.26.0
++LIBGIT2_VERSION = v0.27.1
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception
+ LIBGIT2_LICENSE_FILES = COPYING
+@@ -36,9 +36,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBGIT2_DEPENDENCIES += openssl
+-LIBGIT2_CONF_OPTS += -DUSE_OPENSSL=ON
++LIBGIT2_CONF_OPTS += -DUSE_HTTPS=OpenSSL
+ else
+-LIBGIT2_CONF_OPTS += -DUSE_OPENSSL=OFF
++LIBGIT2_CONF_OPTS += -DUSE_HTTPS=OFF
  endif
  
--# No option to explicitly enable/disable zlib
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--LIBGIT2_DEPENDENCIES += zlib
--endif
--
- ifeq ($(BR2_PACKAGE_LIBSSH2),y)
- LIBGIT2_DEPENDENCIES += libssh2
- LIBGIT2_CONF_OPTS += -DUSE_SSH=ON
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
