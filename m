@@ -1,44 +1,48 @@
 From: Robert Beckett <bbeckett@netvu.org.uk>
-Date: Mon,  4 Jun 2018 14:32:29 +0100
-Subject: [Buildroot] [PATCH 1/2] git: fix handling of git repos using master
- as version
-Message-ID: <1528119150-28659-1-git-send-email-bbeckett@netvu.org.uk>
+Date: Mon,  4 Jun 2018 14:32:30 +0100
+Subject: [Buildroot] [PATCH 2/2] dl-wrapper: Fix support for URIs containing
+ '+'
+In-Reply-To: <1528119150-28659-1-git-send-email-bbeckett@netvu.org.uk>
+References: <1528119150-28659-1-git-send-email-bbeckett@netvu.org.uk>
+Message-ID: <1528119150-28659-2-git-send-email-bbeckett@netvu.org.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since changing to git init followed by fetch to initialise
-git cache, when using master branch as the target version
-for a package, git refuses to fetch in to currently checkout
-out branch or master.
+'+' is a valid character in a url. The current dl-wrapper gets the
+URI scheme by dropping everything after the last '+' character, with
+the intension of finding 'git' from e.g. 'git+https://uri'.
 
-git init always creates a master branch, so this will always
-be an issue for any package targeting master.
-Add -u option to git fetch command to allow it to ignore that
-check. We know that it is okay to overwrite master as we know that
-it either contains nothing after the initial git init command, or
-is tracking the remote master after a successful fetch.
-We always want it to overwrite it.
+If a uri has a '+' anywhere in it, it ends up using too much of the
+string as a scheme, and fails to match the handler properly.
+
+An example of where this form of URI is used is when using deploy tokens
+in gitlab. It uses a form like https://<username>:<password>@gitlab.com/<group>/<repo.git>
+where username for deploy token is of the form 'gitlab+deploy-token-<number>'.
+
+Use the %% operator to search backwards until the last '+' character when
+dropping the rest of the string as we know that the first '+'
+in the string should be the scheme.
 
 Signed-off-by: Robert Beckett <bbeckett@netvu.org.uk>
 ---
- support/download/git | 2 +-
+ support/download/dl-wrapper | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/download/git b/support/download/git
-index 11bb52c..c33e692 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -122,7 +122,7 @@ _git fetch origin -t
- # below, if there is an issue anyway. Since most of the cset we're gonna
- # have to clone are not such special refs, consign the output to oblivion
- # so as not to alarm unsuspecting users, but still trace it as a warning.
--if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-+if ! _git fetch -u origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-     printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
- fi
- 
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 8d6365e..4059c37 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -88,7 +88,7 @@ main() {
+     download_and_check=0
+     rc=1
+     for uri in "${uris[@]}"; do
+-        backend=${uri%+*}
++        backend=${uri%%+*}
+         case "${backend}" in
+             git|svn|cvs|bzr|file|scp|hg) ;;
+             *) backend="wget" ;;
 -- 
 2.7.4
