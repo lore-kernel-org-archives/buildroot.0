@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Jun 2018 12:09:08 +0200
-Subject: [Buildroot] [PATCH] shadowsocks-libev: new package
-In-Reply-To: <20180604071626.17528-1-xuminready@gmail.com>
-References: <20180604071626.17528-1-xuminready@gmail.com>
-Message-ID: <20180604120908.0f340f5e@windsurf>
+Date: Mon, 4 Jun 2018 12:12:48 +0200
+Subject: [Buildroot] [PATCH 1/1] php-amqp: selects openssl
+In-Reply-To: <CAPi7W82tVic4+M663rJ8V-rTQh-=MhMPdgBgmWgr5nzcJvcO1g@mail.gmail.com>
+References: <20180603193126.7582-1-fontaine.fabrice@gmail.com>
+ <20180604065939.326bf279@windsurf>
+ <CAPi7W82tVic4+M663rJ8V-rTQh-=MhMPdgBgmWgr5nzcJvcO1g@mail.gmail.com>
+Message-ID: <20180604121248.4eedd40c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,62 +14,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  4 Jun 2018 00:16:26 -0700, Min Xu wrote:
-> Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
-> embedded devices and low-end boxes.
-> 
-> https://github.com/shadowsocks/shadowsocks-libev
-> 
-> A patch for BSD-3-Clause licence for libipset is added. It's from libipset's git repo.
-> 
-> Signed-off-by: Min Xu <xuminready@gmail.com>
+On Mon, 4 Jun 2018 07:25:05 +0200, Fabrice Fontaine wrote:
 
-Thanks for this new iteration!
+> > We've had php-amqp since October 2016 and the last version bump is from
+> > May 2017, i.e a year ago. What has changed that makes php-amqp now
+> > require OpenSSL support in rabbitmq-c ?
+> >  
+> SSL connection supports in php-amqp was added in 1.8.0beta2:
+> https://github.com/pdezwart/php-amqp/commit/83defa18d958503a395e928d4669a23041014b2e
+> .
+> So it was introduced in buildroot by the bump to version 1.9.0 in May 2017.
+> In autobuilders, we have three errors with php-amqp:
+> http://autobuild.buildroot.net/?reason=php-amqp-1.9.0.
+> The three errors are all related to SSL and the older one is from February
+> 2018 but I suppose that autobuilder results are deleted after some time?
 
->  package/Config.in                                  |  1 +
->  .../0001-docs-add-BSD-3-Clause-licence.patch       | 52 ++++++++++++++++++++++
->  package/shadowsocks-libev/Config.in                | 12 +++++
->  package/shadowsocks-libev/shadowsocks-libev.hash   |  8 ++++
->  package/shadowsocks-libev/shadowsocks-libev.mk     | 15 +++++++
->  5 files changed, 88 insertions(+)
+No, autobuilder results are never deleted.
 
-Could you add an entry in the DEVELOPERS file for this new package, so
-that you can be notified when there are build issues ?
+Except in October 2017, when I had a hard disk crash, and we lost all
+the autobuilder results that we had back then. But since October 2017,
+all autobuilder results are there.
 
-> diff --git a/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-> new file mode 100644
-> index 0000000..64dda02
-> --- /dev/null
-> +++ b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-> @@ -0,0 +1,52 @@
-> +From 0047295445c499e010706598c50f1bff8b0d632c Mon Sep 17 00:00:00 2001
-> +From: Min Xu <xuminready@gmail.com>
-> +Date: Wed, 30 May 2018 13:16:12 -0700
-> +Subject: [PATCH] docs: add BSD-3-Clause licence
-> +
-> +add missing licence for shadowsocks-libev/libipset
-> +
-> +Signed-off-by: Min Xu <xuminready@gmail.com>
+Strange that this problem did not occur more often. Only 3 times since
+October 2017. But OK, it happened once in February 2018, once in May
+2018 and more recently in June.
 
-I'm still not entirely convinced by a patch adding a license file. It
-would definitely be useful to convince upstream to add this license
-file, but I'm not sure we want to carry patches in Buildroot adding
-license files.
-
-Peter, Arnout, Yann, any comment on this ?
-
-> +SHADOWSOCKS_LIBEV_VERSION = 3.2.0
-> +SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
-> +SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause(libbloom), BSD-3-Clause(libcork, libipset)
-> +SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING libipset/LICENSE.txt
-> +SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
-> +SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
-> +SHADOWSOCKS_LIBEV_CONF_OPTS = --disable-documentation --with-pcre=$(STAGING_DIR)/usr
-
---disable-documentation is already passed by the autotools-package
-infrastructure, so it isn't needed.
-
-Besides those minor issues, the rest looks good to me. Thanks!
+Best regards,
 
 Thomas
 -- 
