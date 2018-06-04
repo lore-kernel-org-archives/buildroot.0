@@ -1,43 +1,44 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon,  4 Jun 2018 09:48:28 -0300
-Subject: [Buildroot] [PATCH 4/4] configs/mx53loco: Bump to 4.17 kernel
-In-Reply-To: <1528116508-12103-1-git-send-email-festevam@gmail.com>
-References: <1528116508-12103-1-git-send-email-festevam@gmail.com>
-Message-ID: <1528116508-12103-4-git-send-email-festevam@gmail.com>
+From: Robert Beckett <bbeckett@netvu.org.uk>
+Date: Mon,  4 Jun 2018 14:32:29 +0100
+Subject: [Buildroot] [PATCH 1/2] git: fix handling of git repos using master
+ as version
+Message-ID: <1528119150-28659-1-git-send-email-bbeckett@netvu.org.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/mx53loco_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Since changing to git init followed by fetch to initialise
+git cache, when using master branch as the target version
+for a package, git refuses to fetch in to currently checkout
+out branch or master.
 
-diff --git a/configs/mx53loco_defconfig b/configs/mx53loco_defconfig
-index ae56fca..b42b280 100644
---- a/configs/mx53loco_defconfig
-+++ b/configs/mx53loco_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
+git init always creates a master branch, so this will always
+be an issue for any package targeting master.
+Add -u option to git fetch command to allow it to ignore that
+check. We know that it is okay to overwrite master as we know that
+it either contains nothing after the initial git init command, or
+is tracking the remote master after a successful fetch.
+We always want it to overwrite it.
+
+Signed-off-by: Robert Beckett <bbeckett@netvu.org.uk>
+---
+ support/download/git | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/download/git b/support/download/git
+index 11bb52c..c33e692 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -122,7 +122,7 @@ _git fetch origin -t
+ # below, if there is an issue anyway. Since most of the cset we're gonna
+ # have to clone are not such special refs, consign the output to oblivion
+ # so as not to alarm unsuspecting users, but still trace it as a warning.
+-if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
++if ! _git fetch -u origin "'${cset}:${cset}'" >/dev/null 2>&1; then
+     printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
+ fi
  
--# Linux headers same as kernel, a 4.16 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
-+# Linux headers same as kernel, a 4.17 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -28,7 +28,7 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx53-qsb imx53-qsrb"
 -- 
 2.7.4
