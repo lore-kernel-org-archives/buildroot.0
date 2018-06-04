@@ -1,54 +1,80 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  4 Jun 2018 22:59:48 +0200
-Subject: [Buildroot] [PATCH 1/1] rabbitmq-c: bump to version 0.9.0
-Message-ID: <20180604205948.1833-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Jun 2018 23:04:57 +0200
+Subject: [Buildroot] [PATCH 1/2] host-perl-autodie: new package
+In-Reply-To: <20180603081134.1933-1-fontaine.fabrice@gmail.com>
+References: <20180603081134.1933-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180604230457.13d4e185@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/rabbitmq-c/rabbitmq-c.hash | 3 ++-
- package/rabbitmq-c/rabbitmq-c.mk   | 7 ++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+On Sun,  3 Jun 2018 10:11:33 +0200, Fabrice Fontaine wrote:
+> Replace functions with ones that succeed or die with lexical scope
+> 
+> https://metacpan.org/release/autodie
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/perl-autodie/perl-autodie.hash |  6 ++++++
+>  package/perl-autodie/perl-autodie.mk   | 13 +++++++++++++
+>  2 files changed, 19 insertions(+)
+>  create mode 100644 package/perl-autodie/perl-autodie.hash
+>  create mode 100644 package/perl-autodie/perl-autodie.mk
 
-diff --git a/package/rabbitmq-c/rabbitmq-c.hash b/package/rabbitmq-c/rabbitmq-c.hash
-index 45e8cbd822..0af88774e6 100644
---- a/package/rabbitmq-c/rabbitmq-c.hash
-+++ b/package/rabbitmq-c/rabbitmq-c.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 d8ed9dcb49903d83d79d7b227da35ef68c60e5e0b08d0fc1fb4e4dc577b8802b rabbitmq-c-v0.8.0.tar.gz
-+sha256 316c0d156452b488124806911a62e0c2aa8a546d38fc8324719cd29aaa493024 rabbitmq-c-v0.9.0.tar.gz
-+sha256 94a12c906acb31a66c2c8a6c1b6e46cab52bc5694c5ada2a06d86b05d3d3f422 LICENSE-MIT
-diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
-index d496a4c09b..a3c4f8219f 100644
---- a/package/rabbitmq-c/rabbitmq-c.mk
-+++ b/package/rabbitmq-c/rabbitmq-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RABBITMQ_C_VERSION = v0.8.0
-+RABBITMQ_C_VERSION = v0.9.0
- RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,$(RABBITMQ_C_VERSION))
- RABBITMQ_C_LICENSE = MIT
- RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
-@@ -13,6 +13,11 @@ RABBITMQ_C_CONF_OPTS = \
- 	-DBUILD_API_DOCS=OFF \
- 	-DBUILD_TOOLS_DOCS=OFF
- 
-+# Before CMake 3.10, passing THREADS_PTHREAD_ARG=OFF was needed to
-+# disable a try_run() call in the FindThreads tests, which caused a
-+# build failure when cross-compiling.
-+RABBITMQ_C_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-+
- # BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
- ifeq ($(BR2_STATIC_LIBS),y)
- RABBITMQ_C_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+This series doesn't fix the problem for me. Indeed, whois seems to be
+using /usr/bin/perl explicitly, so it doesn't find the perl-autodie
+built by Buildroot:
+
+>>> host-perl-autodie 2.29 Extracting
+>>> host-perl-autodie 2.29 Patching
+>>> host-perl-autodie 2.29 Configuring
+>>> host-perl-autodie 2.29 Building
+>>> host-perl-autodie 2.29 Installing to host directory
+>>> whois 5.3.0 Extracting
+/home/buildroot/output/host/bin/xzcat /home/buildroot/buildroot/dl/whois/whois_5.3.0.tar.xz | /home/buildroot/output/host/bin/tar --strip-components=1 -C /home/buildroot/output/build/whois-5.3.0   -xf -
+>>> whois 5.3.0 Patching
+>>> whois 5.3.0 Configuring
+>>> whois 5.3.0 Building
+PATH="/home/buildroot/output/host/bin:/home/buildroot/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" /usr/bin/make -j5 CC="/home/buildroot/output/host/bin/arm-linux-gcc" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os " LIBS="" Makefile.depend whois mkpasswd -C /home/buildroot/output/build/whois-5.3.0
+/home/buildroot/output/host/bin/arm-linux-gcc   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -MM -MG *.c > Makefile.depend
+make[2]: 'Makefile.depend' is up to date.
+/usr/bin/perl make_version_h.pl debian/changelog > version.h
+/usr/bin/perl make_ip_del.pl < ip_del_list > ip_del.h
+/usr/bin/perl make_ip6_del.pl < ip6_del_list > ip6_del.h
+/usr/bin/perl make_as_del.pl < as_del_list > as_del.h
+/usr/bin/perl make_as32_del.pl < as32_del_list > as32_del.h
+Can't locate autodie.pm in @INC (you may need to install the autodie module) (@INC contains: /home/buildroot/output/host/lib/perl /usr/local/lib64/perl5 /usr/local/share/perl5 /usr/lib64/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib64/perl5 /usr/share/perl5) at make_version_h.pl line 5.
+BEGIN failed--compilation aborted at make_version_h.pl line 5.
+make[2]: *** [Makefile:82: version.h] Error 2
+make[2]: *** Deleting file 'version.h'
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [package/pkg-generic.mk:232: /home/buildroot/output/build/whois-5.3.0/.stamp_built] Error 2
+make: *** [Makefile:16: _all] Error 2
+
+The second issue that I have is I'm not sure we want to add host-perl
+as a dependency of whois (and that's what your series is indirectly
+doing). host-perl is a pretty heavy dependency. I see three
+possibilities here:
+
+ - Keep it as you do, with perl-autodie using the host-perl-package
+   infrastructure, which means adding a host-perl dependency to the
+   dependency chain of whois.
+
+ - Implement perl-autodie like libxml-parser-perl, i.e explicitly avoid
+   using host-perl-package to avoid the host-perl dependency.
+
+ - Add a requirement on perl-autodie to be installed system-wide in
+   support/dependencies/dependencies.sh, like we're already doing for a
+   few other Perl packages.
+
+Best regards,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
