@@ -1,34 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Jun 2018 23:46:27 +0200
-Subject: [Buildroot] [PATCH 1/2] host-perl-autodie: new package
-In-Reply-To: <CAPi7W83DNMjUBWrXYbfy_bdz0FaT_yR_i+Ym1zD8Chckfm4ZWg@mail.gmail.com>
-References: <20180603081134.1933-1-fontaine.fabrice@gmail.com>
- <20180604230457.13d4e185@windsurf>
- <CAPi7W83DNMjUBWrXYbfy_bdz0FaT_yR_i+Ym1zD8Chckfm4ZWg@mail.gmail.com>
-Message-ID: <20180604234627.2b7ba981@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Jun 2018 00:07:25 +0200
+Subject: [Buildroot] [PATCH] shadowsocks-libev: new package
+In-Reply-To: <20180604160030.GC3700@scaer>
+References: <20180604071626.17528-1-xuminready@gmail.com>
+ <20180604120908.0f340f5e@windsurf> <20180604160030.GC3700@scaer>
+Message-ID: <eec280ce-26b9-ea7b-20dd-60c5882c2bd8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Mon, 4 Jun 2018 23:34:34 +0200, Fabrice Fontaine wrote:
 
-> Second or third solution are definitely better than first one. Which one do
-> yo prefer?
-> Perhaps, the second option is better, I don't know if all our users run the
-> dependencies.sh script?
+On 04-06-18 18:00, Yann E. MORIN wrote:
+> Min, Thomas, All,
+> 
+> On 2018-06-04 12:09 +0200, Thomas Petazzoni spake thusly:
+>> On Mon,  4 Jun 2018 00:16:26 -0700, Min Xu wrote:
+> [--SNIP--]
+>>> diff --git a/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
+>>> new file mode 100644
+>>> index 0000000..64dda02
+>>> --- /dev/null
+>>> +++ b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
+>>> @@ -0,0 +1,52 @@
+>>> +From 0047295445c499e010706598c50f1bff8b0d632c Mon Sep 17 00:00:00 2001
+>>> +From: Min Xu <xuminready@gmail.com>
+>>> +Date: Wed, 30 May 2018 13:16:12 -0700
+>>> +Subject: [PATCH] docs: add BSD-3-Clause licence
+>>> +
+>>> +add missing licence for shadowsocks-libev/libipset
+>>> +
+>>> +Signed-off-by: Min Xu <xuminready@gmail.com>
+>>
+>> I'm still not entirely convinced by a patch adding a license file. It
+>> would definitely be useful to convince upstream to add this license
+>> file, but I'm not sure we want to carry patches in Buildroot adding
+>> license files.
+>>
+>> Peter, Arnout, Yann, any comment on this ?
+> 
+> I agree with Thomas here: do not add a license file ourselves (unless we
+> backport an upstream commit, in which case the patch should say so).
 
-dependencies.sh is run by Buildroot at the beginning of every build,
-and if it fails to find a required dependency, the build doesn't even
-start.
+ This is actually the situation here. However, since the license file is
+identical to the existing one in the libcork directory, it's not so important IMO.
 
-Best regards,
+ Regards,
+ Arnout
 
-Thomas
+> 
+> If the package does not have a license file, then just include a source
+> file, preferrably a prominent one like main.c or whatever.
+> 
+> And above all, better no information that bad information. So, don;t add
+> the license file.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>>> +SHADOWSOCKS_LIBEV_VERSION = 3.2.0
+>>> +SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
+>>> +SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause(libbloom), BSD-3-Clause(libcork, libipset)
+>>> +SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING libipset/LICENSE.txt
+>>> +SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
+>>> +SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
+>>> +SHADOWSOCKS_LIBEV_CONF_OPTS = --disable-documentation --with-pcre=$(STAGING_DIR)/usr
+>>
+>> --disable-documentation is already passed by the autotools-package
+>> infrastructure, so it isn't needed.
+>>
+>> Besides those minor issues, the rest looks good to me. Thanks!
+>>
+>> Thomas
+>> -- 
+>> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+>> Embedded Linux and Kernel engineering
+>> https://bootlin.com
+> 
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
