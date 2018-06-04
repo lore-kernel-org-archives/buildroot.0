@@ -1,39 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Jun 2018 21:49:58 +0200
-Subject: [Buildroot] [PATCH v2,1/1] php-amqp: selects openssl
-In-Reply-To: <20180604170329.32233-1-fontaine.fabrice@gmail.com>
-References: <20180604170329.32233-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180604214958.1e2d6f42@windsurf>
+Date: Mon, 4 Jun 2018 21:51:07 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself to some packages
+Message-ID: <20180604195239.DF2BD80749@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b61bf77263ba5fd770a056d89ef4072e896189ea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  4 Jun 2018 19:03:29 +0200, Fabrice Fontaine wrote:
-> Since version 1.8.0, php-amqp needs a rabbitmq-c with openssl support:
-> https://github.com/pdezwart/php-amqp/issues/310
-> 
-> SSL support is disabled in rabbitmq-c if BR2_STATIC_LIBS is set however
-> don't add an unneeded !BR2_STATIC_LIBS dependency in Config.in as all
-> PHP External Extensions depends on !BR2_STATIC_LIBS
-> (see package/Config.in)
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b45dcf1fad05
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Baruch Siach and Thomas Petazzoni):
->  - Remove unneeded !BR2_STATIC_LIBS in Config.in as all PHP External
->    Extensions depends on !BR2_STATIC_LIBS (see package/Config.in)
+Add my entry to cairo, liboping, libpfm4, libraw, libraw1394, libroxml,
+librsvg, librsync, mbedtls and oprofile
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1dc3dd5c2c..1a8440759e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -674,6 +674,7 @@ F:	package/alljoyn-base/
+ F:	package/alljoyn-tcl/
+ F:	package/alljoyn-tcl-base/
+ F:	package/boinc/
++F:	package/cairo/
+ F:	package/flatbuffers/
+ F:	package/gtksourceview/
+ F:	package/gssdp/
+@@ -703,12 +704,21 @@ F:	package/libmatroska/
+ F:	package/libmpdclient/
+ F:	package/libnetfilter_conntrack/
+ F:	package/libnetfilter_queue/
++F:	package/liboping/
++F:	package/libpfm4/
++F:	package/libraw/
++F:	package/libraw1394/
++F:	package/libroxml/
++F:	package/librsvg/
++F:	package/librsync/
+ F:	package/libupnp/
+ F:	package/libupnp18/
++F:	package/mbedtls/
+ F:	package/minissdpd/
+ F:	package/motion/
+ F:	package/mutt/
+ F:	package/ncmpc/
++F:	package/oprofile/
+ F:	package/pcmanfm/
+ F:	package/rygel/
+ F:	package/safeclib/
