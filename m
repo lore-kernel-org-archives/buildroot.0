@@ -1,44 +1,32 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  4 Jun 2018 19:03:29 +0200
-Subject: [Buildroot] [PATCH v2,1/1] php-amqp: selects openssl
-Message-ID: <20180604170329.32233-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 4 Jun 2018 19:07:56 +0200
+Subject: [Buildroot] [PATCH 1/1] php-amqp: selects openssl
+In-Reply-To: <CAPi7W83ga+ka61W2azDuj8AyFuUwefxnRpTpXO1-J3nSqb6ebg@mail.gmail.com>
+References: <20180603193126.7582-1-fontaine.fabrice@gmail.com>
+ <20180604023205.3lnutkenz44k5hv4@tarshish>
+ <CAPi7W805OOA9thXKA6-o9u-wLDBLAdVkDu_nJ_eX6ps7N=qE7A@mail.gmail.com>
+ <20180604054314.tf5kdhxwpqxfejor@tarshish>
+ <CAPi7W83ga+ka61W2azDuj8AyFuUwefxnRpTpXO1-J3nSqb6ebg@mail.gmail.com>
+Message-ID: <20180604190756.5a04bc02@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 1.8.0, php-amqp needs a rabbitmq-c with openssl support:
-https://github.com/pdezwart/php-amqp/issues/310
+Hello,
 
-SSL support is disabled in rabbitmq-c if BR2_STATIC_LIBS is set however
-don't add an unneeded !BR2_STATIC_LIBS dependency in Config.in as all
-PHP External Extensions depends on !BR2_STATIC_LIBS
-(see package/Config.in)
+On Mon, 4 Jun 2018 18:50:53 +0200, Fabrice Fontaine wrote:
 
-Fixes:
- - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b45dcf1fad05
+> Static linking with openssl works with my old cmake (version 3.5.1 released
+> in May 2016).
+> Thomas, the autobuilders results from May 2017 are not available anymore,
+> which version of cmake had an issue?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Baruch Siach and Thomas Petazzoni):
- - Remove unneeded !BR2_STATIC_LIBS in Config.in as all PHP External
-   Extensions depends on !BR2_STATIC_LIBS (see package/Config.in)
+Is this a question for me ? If so, I have absolutely no idea :-)
 
- package/php-amqp/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/php-amqp/Config.in b/package/php-amqp/Config.in
-index 0aa2021f5a..dc779f0ee0 100644
---- a/package/php-amqp/Config.in
-+++ b/package/php-amqp/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PHP_AMQP
- 	bool "php-amqp"
- 	depends on BR2_PACKAGE_PHP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # rabbitmq-c
-+	select BR2_PACKAGE_OPENSSL # rabbitmq-c: amqp_ssl_socket.h
- 	select BR2_PACKAGE_RABBITMQ_C
- 	help
- 	  Communicate with any AMQP compliant server.
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
