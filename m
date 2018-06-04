@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 4 Jun 2018 22:00:08 +0200
-Subject: [Buildroot] [PATCH 2/2] dl-wrapper: Fix support for URIs
- containing '+'
-In-Reply-To: <1528119150-28659-2-git-send-email-bbeckett@netvu.org.uk>
-References: <1528119150-28659-1-git-send-email-bbeckett@netvu.org.uk>
- <1528119150-28659-2-git-send-email-bbeckett@netvu.org.uk>
-Message-ID: <20180604220008.563afc4b@windsurf>
+Date: Mon, 4 Jun 2018 21:50:02 +0200
+Subject: [Buildroot] [PATCH 1/1] libnss: fix build without int128
+In-Reply-To: <20180604170926.372-1-fontaine.fabrice@gmail.com>
+References: <20180604170926.372-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180604215002.7ce9094c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +12,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  4 Jun 2018 14:32:30 +0100, Robert Beckett wrote:
-> '+' is a valid character in a url. The current dl-wrapper gets the
-> URI scheme by dropping everything after the last '+' character, with
-> the intension of finding 'git' from e.g. 'git+https://uri'.
+On Mon,  4 Jun 2018 19:09:26 +0200, Fabrice Fontaine wrote:
+> Patch retrieved from upstream, more info here:
+> https://bugzilla.mozilla.org/show_bug.cgi?format=default&id=1459739
 > 
-> If a uri has a '+' anywhere in it, it ends up using too much of the
-> string as a scheme, and fails to match the handler properly.
+> Fixes:
+>  - http://autobuild.buildroot.net/results/093113829d7ce19d578a920e76caa10822774139
 > 
-> An example of where this form of URI is used is when using deploy tokens
-> in gitlab. It uses a form like https://<username>:<password>@gitlab.com/<group>/<repo.git>
-> where username for deploy token is of the form 'gitlab+deploy-token-<number>'.
-> 
-> Use the %% operator to search backwards until the last '+' character when
-> dropping the rest of the string as we know that the first '+'
-> in the string should be the scheme.
-> 
-> Signed-off-by: Robert Beckett <bbeckett@netvu.org.uk>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  support/download/dl-wrapper | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...r-c-when-not-building-with-int128-support.patch | 143 +++++++++++++++++++++
+>  1 file changed, 143 insertions(+)
+>  create mode 100644 package/libnss/0003-Bug-1432455-Build-FStar-c-when-not-building-with-int128-support.patch
 
 Applied to master, thanks.
 
