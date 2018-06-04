@@ -1,73 +1,115 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 4 Jun 2018 18:00:30 +0200
-Subject: [Buildroot] [PATCH] shadowsocks-libev: new package
-In-Reply-To: <20180604120908.0f340f5e@windsurf>
-References: <20180604071626.17528-1-xuminready@gmail.com>
- <20180604120908.0f340f5e@windsurf>
-Message-ID: <20180604160030.GC3700@scaer>
+Date: Mon, 4 Jun 2018 18:11:15 +0200
+Subject: [Buildroot] [PATCH 2/5] support/docker: sort the list of
+ installed packages
+In-Reply-To: <5b147817c2d6_4a712ad8ec78fccc8903e@ultri5.mail>
+References: <49308956156142d6dab6b7917fcd8429f155ffa5.1528016895.git.yann.morin.1998@free.fr>
+ <5b147817c2d6_4a712ad8ec78fccc8903e@ultri5.mail>
+Message-ID: <20180604161115.GD3700@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Min, Thomas, All,
+Ricardo, All,
 
-On 2018-06-04 12:09 +0200, Thomas Petazzoni spake thusly:
-> On Mon,  4 Jun 2018 00:16:26 -0700, Min Xu wrote:
+On 2018-06-03 20:21 -0300, Ricardo Martincoski spake thusly:
+> Nit: you forgot to use -v2 with format-patch.
+
+Yeah. I renamed the branch locally before re-pushing, and in doing so I
+lost the metadata associated with the old one, so the iteration version
+got lost...
+
+> On Sun, Jun 03, 2018 at 06:08 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 [--SNIP--]
-> > diff --git a/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-> > new file mode 100644
-> > index 0000000..64dda02
-> > --- /dev/null
-> > +++ b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-> > @@ -0,0 +1,52 @@
-> > +From 0047295445c499e010706598c50f1bff8b0d632c Mon Sep 17 00:00:00 2001
-> > +From: Min Xu <xuminready@gmail.com>
-> > +Date: Wed, 30 May 2018 13:16:12 -0700
-> > +Subject: [PATCH] docs: add BSD-3-Clause licence
-> > +
-> > +add missing licence for shadowsocks-libev/libipset
-> > +
-> > +Signed-off-by: Min Xu <xuminready@gmail.com>
+> > diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+> > index 8c525f7cf1..fe9e643a34 100644
+> > --- a/support/docker/Dockerfile
+> > +++ b/support/docker/Dockerfile
+> > @@ -22,13 +22,29 @@ COPY apt-sources.list /etc/apt/sources.list
+> >  RUN dpkg --add-architecture i386 && \
+> >      apt-get update -y
+> >  RUN apt-get install -y --no-install-recommends \
+> > -        build-essential cmake libc6:i386 g++-multilib \
 > 
-> I'm still not entirely convinced by a patch adding a license file. It
-> would definitely be useful to convince upstream to add this license
-> file, but I'm not sure we want to carry patches in Buildroot adding
-> license files.
+> I missed that when reviewing the first iteration...
 > 
-> Peter, Arnout, Yann, any comment on this ?
+> > -        bc ca-certificates file locales rsync \
+> > -        cvs bzr git mercurial subversion wget \
+> > -        cpio unzip \
+> > +        bc \
+> > +        build-essential \
+> > +        bzr \
+> > +        ca-certificates \
+> 
+> 'cmake' was removed by mistake.
 
-I agree with Thomas here: do not add a license file ourselves (unless we
-backport an upstream commit, in which case the patch should say so).
+Sag mir wo, das cmake ist; wo ist es geblieben?
+Sag mir wo, das cmake ist; was ist geschehen?
 
-If the package does not have a license file, then just include a source
-file, preferrably a prominent one like main.c or whatever.
+> Obviously, since host-cmake will be built when needed, it should not make any
+> current or upcoming test case to fail. I actually tested with the current test
+> cases (still running while I write this):
+> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/23112714
+> I didn't checked if any current test case is already requiring cmake.
+> 
+> But removing cmake will make any test case that needs it to take longer to run,
+> as the version seems suitable to be used:
+> 
+> br-user at b976f947b114:~$ cmake --version
+> cmake version 3.7.2
+> 
+> The build of host-cmake is probably already covered by the autobuilders.
+> And if we want to have a test case in the test infra for this the best way IMO
+> is to write a specific test for it.
 
-And above all, better no information that bad information. So, don;t add
-the license file.
+Nah, this is definitely an oversight on my side; we want to keep cmake
+installed in the distro.
+
+And even if did not (but we do!), this should be a separate patch anyway.
+
+> > +        cpio \
+> > +        cvs \
+> > +        file \
+> > +        g++-multilib \
+> > +        git \
+> > +        libc6:i386 \
+> >          libncurses5-dev \
+> > -        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
+> > -        python-pip && \
+> > +        locales \
+> > +        mercurial \
+> > +        python-nose2 \
+> > +        python-pexpect \
+> > +        python-pip \
+> > +        qemu-system-arm \
+> > +        qemu-system-x86 \
+> > +        rsync \
+> > +        subversion \
+> > +        unzip \
+> > +        wget \
+> > +        && \
+> >      apt-get -y autoremove && \
+> >      apt-get -y clean
+> >  
+> > -- 
+> > 2.14.1
+> 
+> [I am not against using && in a separate line as we discussed in
+>  http://lists.busybox.net/pipermail/buildroot/2018-June/222901.html .
+
+Yeah... I haven't found a better solution, except moving the && at the
+begining of the next line, in which case we'd have to do it everywhere
+else...
+
+>  With cmake added back to the list please add]
+>  Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
-
-> > +SHADOWSOCKS_LIBEV_VERSION = 3.2.0
-> > +SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$(SHADOWSOCKS_LIBEV_VERSION)
-> > +SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause(libbloom), BSD-3-Clause(libcork, libipset)
-> > +SHADOWSOCKS_LIBEV_LICENSE_FILES = COPYING libbloom/LICENSE libcork/COPYING libipset/LICENSE.txt
-> > +SHADOWSOCKS_LIBEV_DEPENDENCIES = host-pkgconf c-ares libev libsodium mbedtls pcre
-> > +SHADOWSOCKS_LIBEV_INSTALL_STAGING = YES
-> > +SHADOWSOCKS_LIBEV_CONF_OPTS = --disable-documentation --with-pcre=$(STAGING_DIR)/usr
-> 
-> --disable-documentation is already passed by the autotools-package
-> infrastructure, so it isn't needed.
-> 
-> Besides those minor issues, the rest looks good to me. Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
