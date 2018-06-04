@@ -1,48 +1,54 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Mon, 4 Jun 2018 10:40:43 +0200
-Subject: [Buildroot] Include Host Architecture in LLVM_TARGETS_TO_BUILD
-In-Reply-To: <CAMWSM7ibg=mXZdcWopiHA7zUUAubyredT2o=3-N_uEyATQ1bMA@mail.gmail.com>
-References: <CAMWSM7ibg=mXZdcWopiHA7zUUAubyredT2o=3-N_uEyATQ1bMA@mail.gmail.com>
-Message-ID: <ec6add44-61d1-6518-8bbb-8138343201e0@smile.fr>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Mon, 4 Jun 2018 11:52:35 +0200
+Subject: [Buildroot] [PATCH 3/3] weston: add weston-imx variant when
+ using imx-gpu-viv
+In-Reply-To: <a461da37-e484-57b9-be4d-f91ffbea9cae@mind.be>
+References: <20180516155201.10279-1-gary.bisson@boundarydevices.com>
+ <20180516155201.10279-4-gary.bisson@boundarydevices.com>
+ <2d58cd37-effa-a5bf-5f9b-6d1e143062db@mind.be>
+ <20180517130810.GA6584@g751.home>
+ <a461da37-e484-57b9-be4d-f91ffbea9cae@mind.be>
+Message-ID: <20180604095235.GA25676@g751.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Joseph,
+Hi Arnout
 
-On 01/06/2018 21:28, Joseph Kogut wrote:
-> Hi Valentin,
->
-> I'm using the Clang compiler frontend to LLVM that you added to
-> Buildroot (thanks!), and the package that I'm working on building
-> requires Clang to support the host architecture, as well as the
-> target.
+On Thu, May 17, 2018 at 11:19:18PM +0200, Arnout Vandecappelle wrote:
+> 
+> 
+> On 17-05-18 15:08, Gary Bisson wrote:
+> > Hi Arnout,
+> > 
+> > On Wed, May 16, 2018 at 11:24:17PM +0200, Arnout Vandecappelle wrote:
+> >>
+> >>
+> >> On 16-05-18 17:52, Gary Bisson wrote:
+> [snip]
+> >>> +ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
+> >>> +ifeq ($(BR2_PACKAGE_IMX_GPU_G2D),y)
+> >>
+> >> WESTON_CONF_OPTS += --enable-imxg2d
+> > 
+> > Ok, I forgot you wanted that --enable-xxx options to be explicit
+> > although it ends up in the 'unrecognized options'.
+> 
+>  So I took a look at the configure.ac, and of course they got it wrong;
+> --enable-imxg2d will disable it. So your patch was correct.
+> 
+>  Reading documentation is apparently difficult :-)
 
-We currently don't support using Clang as a toolchain component.
-libLLVM and libclang are instaled on the target so they can be used
-by other packages. Buildroot does not provide a way to choose between
-gcc or clang to compile a package, so your packaging should search
-for host-clang explicitly.
+Haha, thanks for checking.
 
-This topic was discussed during the meeting in February:
+>  Since I'm not entirely convinced of the config option myself anyway:
+> 
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-https://elinux.org/Buildroot:DeveloperDaysFOSDEM2018#LLVM.2FClang
+Thomas, I've seen you applied the rest of the series, do you have any
+objection about that patch?
 
-> I was wondering if you knew of a way to detect and enable the host
-> architecture for LLVM, as I think enabling all supported architectures
-> would be wasteful.
-
-As you say, we control the backends that are going to be built in
-lib/Target by using LLVM_TARGETS_TO_BUILD. In your case you could
-append $(call qstrip,$(BR2_HOSTARCH)) in HOST_LLVM_CONF_OPTS.
-However, be careful because if your host architecture is x86_64 you'll
-need to pass "X86" as both backends share the code in lib/Target/X86.
-
-> Best regards,
-> Joseph
-
-Best regards,
-
-Valentin
+Regards,
+Gary
