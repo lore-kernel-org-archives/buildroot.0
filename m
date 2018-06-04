@@ -1,55 +1,78 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 4 Jun 2018 07:25:05 +0200
+Date: Mon, 4 Jun 2018 07:30:37 +0200
 Subject: [Buildroot] [PATCH 1/1] php-amqp: selects openssl
-In-Reply-To: <20180604065939.326bf279@windsurf>
+In-Reply-To: <20180604023205.3lnutkenz44k5hv4@tarshish>
 References: <20180603193126.7582-1-fontaine.fabrice@gmail.com>
- <20180604065939.326bf279@windsurf>
-Message-ID: <CAPi7W82tVic4+M663rJ8V-rTQh-=MhMPdgBgmWgr5nzcJvcO1g@mail.gmail.com>
+ <20180604023205.3lnutkenz44k5hv4@tarshish>
+Message-ID: <CAPi7W805OOA9thXKA6-o9u-wLDBLAdVkDu_nJ_eX6ps7N=qE7A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Dear Baruch,
 
-2018-06-04 6:59 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+2018-06-04 4:32 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
 
-> Hello,
+> Hi Fabrice,
 >
-> On Sun,  3 Jun 2018 21:31:26 +0200, Fabrice Fontaine wrote:
+> On Sun, Jun 03, 2018 at 09:31:26PM +0200, Fabrice Fontaine wrote:
 > > php-amqp needs a rabbitmq-c with openssl support:
 > > https://github.com/pdezwart/php-amqp/issues/310
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b4
+> 5dcf1fad05
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  package/php-amqp/Config.in | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/package/php-amqp/Config.in b/package/php-amqp/Config.in
+> > index 0aa2021f5a..cf32ec10b2 100644
+> > --- a/package/php-amqp/Config.in
+> > +++ b/package/php-amqp/Config.in
+> > @@ -1,12 +1,14 @@
+> >  config BR2_PACKAGE_PHP_AMQP
+> >       bool "php-amqp"
+> >       depends on BR2_PACKAGE_PHP
+> > +     depends on !BR2_STATIC_LIBS # rabbitmq-c: amqp_ssl_socket.h
 >
-> We've had php-amqp since October 2016 and the last version bump is from
-> May 2017, i.e a year ago. What has changed that makes php-amqp now
-> require OpenSSL support in rabbitmq-c ?
+> Why is this needed? rabbitmq-c does not depend on !BR2_STATIC_LIBS.
 >
-SSL connection supports in php-amqp was added in 1.8.0beta2:
-https://github.com/pdezwart/php-amqp/commit/83defa18d958503a395e928d4669a23041014b2e
-.
-So it was introduced in buildroot by the bump to version 1.9.0 in May 2017.
-In autobuilders, we have three errors with php-amqp:
-http://autobuild.buildroot.net/?reason=php-amqp-1.9.0.
-The three errors are all related to SSL and the older one is from February
-2018 but I suppose that autobuilder results are deleted after some time?
+This is needed because openssl supports in rabbitmq-c has been disabled in
+static mode since May 2017: http://patchwork.ozlabs.org/patch/762183.
+But perhaps it would be better to make all rabbitmq-c depends on
+!BR2_STATIC_LIBS as suggested by Peter back in May 2017.
 
 >
-> Is this an issue that was always occurring, but we never fixed ? Is it
-> a new issue ? If so, why does it suddenly started to happen ?
-
-
-> Thanks!
+> >       depends on BR2_TOOLCHAIN_HAS_THREADS # rabbitmq-c
+> > +     select BR2_PACKAGE_OPENSSL # rabbitmq-c: amqp_ssl_socket.h
+> >       select BR2_PACKAGE_RABBITMQ_C
+> >       help
+> >         Communicate with any AMQP compliant server.
+> >
+> >         http://pecl.php.net/package/amqp
+> >
+> > -comment "php-amqp needs a toolchain w/ threads"
+> > -     depends on !BR2_TOOLCHAIN_HAS_THREADS
+> > +comment "php-amqp needs a toolchain w/ dynamic library, threads"
+> > +     depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 >
-> Thomas
+> baruch
+>
 > --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+> Systems
+> =}------------------------------------------------ooO--U--
+> Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 >
 Best Regards,
 
 Fabrice
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180604/c0364cc1/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180604/29baad23/attachment.html>
