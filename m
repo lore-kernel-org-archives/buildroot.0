@@ -1,102 +1,48 @@
-From: xu min <xuminready@gmail.com>
-Date: Mon, 4 Jun 2018 00:30:08 -0700
-Subject: [Buildroot] [PATCH v3 2/2] shadowsocks-libev: bump to version
- 3.2.0 add a patch for libipset licence add hashes for the license files Fix
- shadowsocks-libev.mk
-In-Reply-To: <20180603203735.6b123022@windsurf>
-References: <20180530221315.19012-1-xuminready@gmail.com>
- <20180530221315.19012-2-xuminready@gmail.com>
- <20180603203735.6b123022@windsurf>
-Message-ID: <CAMpS7mTCpgZyfQa_mkBtL1_nbJVy=kftJvyQEXpvahB0h+26bA@mail.gmail.com>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Mon, 4 Jun 2018 10:40:43 +0200
+Subject: [Buildroot] Include Host Architecture in LLVM_TARGETS_TO_BUILD
+In-Reply-To: <CAMWSM7ibg=mXZdcWopiHA7zUUAubyredT2o=3-N_uEyATQ1bMA@mail.gmail.com>
+References: <CAMWSM7ibg=mXZdcWopiHA7zUUAubyredT2o=3-N_uEyATQ1bMA@mail.gmail.com>
+Message-ID: <ec6add44-61d1-6518-8bbb-8138343201e0@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi Joseph,
 
-Thank you for your help. I merged 2 patches into 1. And resubmitted my new
-patch. https://patchwork.ozlabs.org/patch/924855/
+On 01/06/2018 21:28, Joseph Kogut wrote:
+> Hi Valentin,
+>
+> I'm using the Clang compiler frontend to LLVM that you added to
+> Buildroot (thanks!), and the package that I'm working on building
+> requires Clang to support the host architecture, as well as the
+> target.
 
-Please notice, the shadowsocks-libev tarball does not include libipset's
-license, I add a patch for its license which I found from libipset's git
-repo. https://github.com/shadowsocks/ipset/
+We currently don't support using Clang as a toolchain component.
+libLLVM and libclang are instaled on the target so they can be used
+by other packages. Buildroot does not provide a way to choose between
+gcc or clang to compile a package, so your packaging should search
+for host-clang explicitly.
 
-This is my first contributions to Buildroot using patchwork and git. Thank
-you for your help.
+This topic was discussed during the meeting in February:
 
-MinXu
+https://elinux.org/Buildroot:DeveloperDaysFOSDEM2018#LLVM.2FClang
 
-On Sun, Jun 3, 2018 at 11:37 AM, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+> I was wondering if you knew of a way to detect and enable the host
+> architecture for LLVM, as I think enabling all supported architectures
+> would be wasteful.
 
-> Hello!
->
-> Thanks for this contribution!
->
-> On Wed, 30 May 2018 15:13:14 -0700, Min Xu wrote:
-> > Signed-off-by: Min Xu <xuminready@gmail.com>
-> > ---
-> >  .../0001-docs-add-BSD-3-Clause-licence.patch       | 52
-> ++++++++++++++++++++++
-> >  package/shadowsocks-libev/shadowsocks-libev.hash   |  8 +++-
-> >  package/shadowsocks-libev/shadowsocks-libev.mk     |  9 ++--
-> >  3 files changed, 63 insertions(+), 6 deletions(-)
-> >  create mode 100644 package/shadowsocks-libev/
-> 0001-docs-add-BSD-3-Clause-licence.patch
->
-> All those changes should be part of the patch adding the
-> shadowsocks-libev package. If you're not familiar with Git, then look
-> at using "git rebase --interactive", it allows you to rewrite the
-> commit history.
->
-> In your case, you would have to do:
->
-> $ git rebase --interactive HEAD~2
->
-> This opens up your text editor, with two lines, one for each of your
-> two commits. On the second line, change the "pick" word for "fixup",
-> and exit your text editor.
->
-> This will rewrite the two commits by merging the second one into the
-> first one.
->
-> > diff --git a/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-> b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-> > new file mode 100644
-> > index 0000000..64dda02
-> > --- /dev/null
-> > +++ b/package/shadowsocks-libev/0001-docs-add-BSD-3-Clause-licence.patch
-> > @@ -0,0 +1,52 @@
-> > +From 0047295445c499e010706598c50f1bff8b0d632c Mon Sep 17 00:00:00 2001
-> > +From: Min Xu <xuminready@gmail.com>
-> > +Date: Wed, 30 May 2018 13:16:12 -0700
-> > +Subject: [PATCH] docs: add BSD-3-Clause licence
-> > +
-> > +add missing licence for shadowsocks-libev/libipset
-> > +
-> > +Signed-off-by: Min Xu <xuminready@gmail.com>
->
-> I'm not sure it makes a lot of sense to add a patch adding the license
-> file, especially if the patch is not blessed by upstream.
->
+As you say, we control the backends that are going to be built in
+lib/Target by using LLVM_TARGETS_TO_BUILD. In your case you could
+append $(call qstrip,$(BR2_HOSTARCH)) in HOST_LLVM_CONF_OPTS.
+However, be careful because if your host architecture is x86_64 you'll
+need to pass "X86" as both backends share the code in lib/Target/X86.
+
 > Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
+> Joseph
 
+Best regards,
 
-
--- 
-
-*Best Regards*
-
-*XuMin's Ready?*
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180604/bc304c10/attachment.html>
+Valentin
