@@ -1,169 +1,126 @@
 From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Tue,  5 Jun 2018 14:57:45 +0530
-Subject: [Buildroot] [PATCH v2 2/2] board: amarula: a64-relic: Add WiFi
- support
-In-Reply-To: <20180605092745.26198-1-jagan@amarulasolutions.com>
-References: <20180605092745.26198-1-jagan@amarulasolutions.com>
-Message-ID: <20180605092745.26198-2-jagan@amarulasolutions.com>
+Date: Tue,  5 Jun 2018 15:06:32 +0530
+Subject: [Buildroot] [PATCH] board: orangepi: zero-plus2: bump linux to v4.16
+Message-ID: <20180605093632.26724-1-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Amarula A64-Relic board has AP6330 WiFi/BT combo, but does
-not have ethernet port. So it makes sense to enable wireless
-networking by default:
-- add broadcom wireless firmware package to image
-- add basic wireless tools to image
-- add rootfs overlay with proper NVRAM file for on-board AP6330 chip
-- add mdev to image to enable module autoloading
-- update readme.txt to test wifi
+Bump linux as well headers to v4.16 version, this
+eventually drop the wifi patch since it has been
+merged to Linux v4.16.
 
 Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
-Changes for v2:
-- drop init scripts for module loading
-- add mdev for module autoloading
+ ...64-dts-orange-pi-zero-plus2-enable-ap6212.patch | 73 ----------------------
+ configs/orangepi_zero_plus2_defconfig              |  5 +-
+ 2 files changed, 2 insertions(+), 76 deletions(-)
+ delete mode 100644 board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch
 
- board/amarula/a64-relic/readme.txt                 |  9 +++
- .../lib/firmware/brcm/brcmfmac4330-sdio.txt        | 83 ++++++++++++++++++++++
- configs/amarula_a64_relic_defconfig                | 13 ++++
- 3 files changed, 105 insertions(+)
- create mode 100644 board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-
-diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
-index 5d8ae65112..4e99ffb585 100644
---- a/board/amarula/a64-relic/readme.txt
-+++ b/board/amarula/a64-relic/readme.txt
-@@ -72,6 +72,15 @@ mounting on host with the help of 'ums' in U-Boot.
-     => mmc dev 1
-     => ums 0 mmc 1
+diff --git a/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch b/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch
+deleted file mode 100644
+index 282e2171f2..0000000000
+--- a/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch
++++ /dev/null
+@@ -1,73 +0,0 @@
+-From: Sergey Matyukevich <geomatsi@gmail.com>
+-Date: Sun, 11 Feb 2018 16:21:43 +0300
+-Subject: [PATCH] arm64: dts: orange-pi-zero-plus2: enable AP6212a WiFi/BT combo
+-
+-Enable AP6212a WiFi/BT combo chip on orange-pi-zero-plus2 board:
+-- WiFi SDIO interface is connected to MMC1
+-- WiFi REG_ON pin connected to gpio PA9: attach to mmc-pwrseq
+-- WiFi HOST_WAKE pin connected to gpio PL7
+-- BT is connected to UART1
+-
+-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+-Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+----
+- .../allwinner/sun50i-h5-orangepi-zero-plus2.dts    | 32 ++++++++++++++++++++++
+- 1 file changed, 32 insertions(+)
+-
+-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-index a42fd79a62a3..d415b7b67cce 100644
+---- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
+-@@ -64,6 +64,13 @@
+- 		regulator-min-microvolt = <3300000>;
+- 		regulator-max-microvolt = <3300000>;
+- 	};
+-+
+-+	wifi_pwrseq: wifi_pwrseq {
+-+		compatible = "mmc-pwrseq-simple";
+-+		pinctrl-names = "default";
+-+		reset-gpios = <&pio 0 9 GPIO_ACTIVE_LOW>; /* PA9 */
+-+		post-power-on-delay-ms = <200>;
+-+	};
+- };
+- 
+- &mmc0 {
+-@@ -75,6 +82,25 @@
+- 	status = "okay";
+- };
+- 
+-+&mmc1 {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&mmc1_pins_a>;
+-+	vmmc-supply = <&reg_vcc3v3>;
+-+	vqmmc-supply = <&reg_vcc3v3>;
+-+	mmc-pwrseq = <&wifi_pwrseq>;
+-+	bus-width = <4>;
+-+	non-removable;
+-+	status = "okay";
+-+
+-+	brcmf: wifi at 1 {
+-+		reg = <1>;
+-+		compatible = "brcm,bcm4329-fmac";
+-+		interrupt-parent = <&r_pio>;
+-+		interrupts = <0 7 IRQ_TYPE_LEVEL_LOW>;	/* PL7 */
+-+		interrupt-names = "host-wake";
+-+	};
+-+};
+-+
+- &mmc2 {
+- 	pinctrl-names = "default";
+- 	pinctrl-0 = <&mmc2_8bit_pins>;
+-@@ -90,3 +116,9 @@
+- 	pinctrl-0 = <&uart0_pins_a>;
+- 	status = "okay";
+- };
+-+
+-+&uart1 {
+-+	pinctrl-names = "default";
+-+	pinctrl-0 = <&uart1_pins>, <&uart1_rts_cts_pins>;
+-+	status = "okay";
+-+};
+--- 
+-2.16.1
+-
+diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+index 5ca6cf0fe2..8c83b3acd1 100644
+--- a/configs/orangepi_zero_plus2_defconfig
++++ b/configs/orangepi_zero_plus2_defconfig
+@@ -2,9 +2,8 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
  
-+WiFi
-+====
-+
-+ # wpa_passphrase ACCESSPOINTNAME >> /etc/wpa_supplicant.conf
-+   (type password and enter)
-+ # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
-+ # udhcpc -i wlan0
-+ # ping google.com
-+
- --
- Jagan Teki <jagan@amarulasolutions.com>
- 05-Jun-2018
-diff --git a/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-new file mode 100644
-index 0000000000..d095f24c26
---- /dev/null
-+++ b/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-@@ -0,0 +1,83 @@
-+#AP6330_NVRAM_V1.0_20121130
-+#Sample variables file for BCM94330 SD FC AGB board
-+manfid=0x2d0
-+prodid=0x0547
-+vendid=0x14e4
-+devid=0x4360
-+boardtype=0x05e1
-+boardrev=0x1202
-+boardflags=0x0080200
-+nocrc=1
-+xtalfreq=26000
-+boardnum=22
-+macaddr=00:90:4c:c5:12:38
-+ag0=254
-+aa2g=1
-+ccode=ALL
-+pa0itssit=0x20
-+pa0b0=5587
-+pa0b1=-633
-+pa0b2=-158
-+rssismf2g=0xa
-+rssismc2g=0x3
-+rssisav2g=0x7
-+#rssi params for 5GHz
-+rssismf5g=0x4
-+rssismc5g=0x3
-+rssisav5g=0x7
-+#PA parameters for lower a-band
-+pa1lob0=4748
-+pa1lob1=-566
-+pa1lob2=-180
-+#PA parameters for midband
-+pa1b0=4762
-+pa1b1=-593
-+pa1b2=-172
-+#PA parameters for high band
-+#pa1hib0=4596
-+pa1hib0=4666
-+pa1hib1=-619
-+pa1hib2=-163
-+rxpo5g=0
-+maxp2ga0=74
-+maxp5ga0=66
-+maxp5gla0=66
-+maxp5gha0=66
-+# 2.4G Tx Power offsets
-+cck2gpo=0x2222
-+ofdm2gpo=0x44444444
-+mcs2gpo0=0x6666
-+mcs2gpo1=0x6666
-+# 5G Tx Power offsets
-+ofdm5gpo=0x44444444
-+ofdm5glpo=0x44444444
-+ofdm5ghpo=0x44444444
-+mcs5gpo0=0x6666
-+mcs5gpo1=0x6666
-+mcs5glpo0=0x6666
-+mcs5glpo1=0x6666
-+mcs5ghpo0=0x6666
-+mcs5ghpo1=0x6666
-+sromrev=3
-+il0macaddr=00:90:4c:c5:12:38
-+wl0id=0x431b
-+cckPwrOffset=4
-+swctrlmap_2g=0x44844484,0x42824282,0x40804484,0x18282,0x1ff
-+triso5g=0
-+swctrlmap_5g=0x00100010,0x20202020,0x20202020,0x14202,0x0f0
-+rfreg033=0x19
-+rfreg033_cck=0x1f
-+dacrate2g=160
-+dacrate5g=160
-+txalpfbyp2g=1
-+bphyscale=17
-+cckPwrIdxCorr=-15
-+pacalidx2g=50
-+#pacalidx5g=20
-+noise_cal_ref_2g=53
-+noise_cal_po_2g=0
-+noise_cal_ref_5g=52
-+noise_cal_po_5g=5,0,0
-+# 4330 OOB parameter: High level trigger
-+muxenab=0x10
-+
-diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
-index 44e8e5be13..f5d568862b 100644
---- a/configs/amarula_a64_relic_defconfig
-+++ b/configs/amarula_a64_relic_defconfig
-@@ -41,6 +41,19 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/amarula/a64-relic/genimage.cfg"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/amarula/a64-relic/post-build.sh"
-+BR2_ROOTFS_OVERLAY="board/amarula/a64-relic/rootfs_overlay"
-+
-+# wireless firmware
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
-+
-+# wireless tools
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+-BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero-plus2/patches"
+ BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
+ 
+ # Firmware
+@@ -33,7 +32,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
 -- 
 2.14.3
