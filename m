@@ -1,45 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 18:50:49 +0200
-Subject: [Buildroot] [git commit] skeleton: PAGER without blank and unset at
- end of for loop
-Message-ID: <20180605164929.7524783B44@busybox.osuosl.org>
+Date: Tue, 5 Jun 2018 18:50:11 +0200
+Subject: [Buildroot] [git commit] busybox: fix usage string in S01logging
+Message-ID: <20180605164929.60BA7810E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=903b8446a8db2aff042cdefd398d3598023bed0c
+commit: https://git.buildroot.net/buildroot/commit/?id=c7963858ed64bfc1b0b257c41e0058b684810632
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The PAGER environment variable is including a blank character at the
-end. Remove this.
-A for loop has been unsetting the variable inside the loop, this is only
-needed once at the end of the loop.
+In busybox fix the S01logging usage text to
+document the "reload" target.
 
 Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- system/skeleton/etc/profile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/S01logging | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
-index 3a97427fdf..1255d23ff4 100644
---- a/system/skeleton/etc/profile
-+++ b/system/skeleton/etc/profile
-@@ -8,7 +8,7 @@ if [ "$PS1" ]; then
- 	fi
- fi
+diff --git a/package/busybox/S01logging b/package/busybox/S01logging
+index 4632a4cc99..fcb3e7d236 100644
+--- a/package/busybox/S01logging
++++ b/package/busybox/S01logging
+@@ -33,7 +33,7 @@ case "$1" in
+ 	start
+ 	;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart|reload}"
+ 	exit 1
+ esac
  
--export PAGER='/bin/more '
-+export PAGER='/bin/more'
- export EDITOR='/bin/vi'
- 
- # Source configuration files from /etc/profile.d
-@@ -16,5 +16,5 @@ for i in /etc/profile.d/*.sh ; do
- 	if [ -r "$i" ]; then
- 		. $i
- 	fi
--	unset i
- done
-+unset i
