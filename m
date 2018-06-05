@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 18:50:11 +0200
-Subject: [Buildroot] [git commit] busybox: fix usage string in S01logging
-Message-ID: <20180605164929.60BA7810E3@busybox.osuosl.org>
+Date: Tue, 5 Jun 2018 18:50:22 +0200
+Subject: [Buildroot] [git commit] busybox: reduce number of mkdir calls in
+ inittab
+Message-ID: <20180605164929.6994D83B2E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7963858ed64bfc1b0b257c41e0058b684810632
+commit: https://git.buildroot.net/buildroot/commit/?id=13dbe73782c3555b382ea8ebd9cda34ac9ef5744
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In busybox fix the S01logging usage text to
-document the "reload" target.
+The default busybox inittab does two separate mkdir calls
+to create /dev/pts and /dev/shm. Reduce this to call mkdir
+only once for both directories.
 
 Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/busybox/S01logging | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/busybox/inittab | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-index 4632a4cc99..fcb3e7d236 100644
---- a/package/busybox/S01logging
-+++ b/package/busybox/S01logging
-@@ -33,7 +33,7 @@ case "$1" in
- 	start
- 	;;
-   *)
--	echo "Usage: $0 {start|stop|restart}"
-+	echo "Usage: $0 {start|stop|restart|reload}"
- 	exit 1
- esac
- 
+diff --git a/package/busybox/inittab b/package/busybox/inittab
+index ef58c32f0d..7cd203de0b 100644
+--- a/package/busybox/inittab
++++ b/package/busybox/inittab
+@@ -16,8 +16,7 @@
+ # Startup the system
+ ::sysinit:/bin/mount -t proc proc /proc
+ ::sysinit:/bin/mount -o remount,rw /
+-::sysinit:/bin/mkdir -p /dev/pts
+-::sysinit:/bin/mkdir -p /dev/shm
++::sysinit:/bin/mkdir -p /dev/pts /dev/shm
+ ::sysinit:/bin/mount -a
+ null::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
+ null::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
