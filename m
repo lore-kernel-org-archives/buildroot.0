@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 18:48:51 +0200
-Subject: [Buildroot] [PATCH] e2fsprogs: bump to version 1.44.2
-In-Reply-To: <1f17a0353652d55e763625f5b3d0d1c5bd67500a.1528201849.git.baruch@tkos.co.il>
-References: <1f17a0353652d55e763625f5b3d0d1c5bd67500a.1528201849.git.baruch@tkos.co.il>
-Message-ID: <20180605184851.1d984d6d@windsurf>
+Date: Tue, 5 Jun 2018 18:49:11 +0200
+Subject: [Buildroot] [PATCH] libusb: fix clock_gettime librt dependency
+ check
+In-Reply-To: <8cd6b40c6debfeb4861bc79b899417a01466e962.1528198930.git.baruch@tkos.co.il>
+References: <8cd6b40c6debfeb4861bc79b899417a01466e962.1528198930.git.baruch@tkos.co.il>
+Message-ID: <20180605184911.35062398@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  5 Jun 2018 15:30:49 +0300, Baruch Siach wrote:
-> Update license file hash; FSF address update.
+On Tue,  5 Jun 2018 14:42:10 +0300, Baruch Siach wrote:
+> The detection of the librt dependency of clock_gettime in glibc before
+> 2.17 is broken. We do not support glibc older than 2.17 for target, but
+> we still need to support hosts using old glibc. Add a patch fixing that.
 > 
+> Should fix (host-imx-usb-loader):
+> http://autobuild.buildroot.net/results/0a1/0a156449e5f38a6092ab9c88e3e3f5ea9abc0f03/
+> http://autobuild.buildroot.net/results/347/347f1b9bce2f0854e8ca6d49b9a9b3fa55de24b1/
+> http://autobuild.buildroot.net/results/f6a/f6a3a62909ccb500ca122ec3f03119d7706fb88a/
+> 
+> Cc: Adam Duskett <aduskett@gmail.com>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/e2fsprogs/e2fsprogs.hash | 6 +++---
->  package/e2fsprogs/e2fsprogs.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  ...x-detection-of-clock_gettime-library.patch | 36 +++++++++++++++++++
+>  package/libusb/libusb.mk                      |  2 ++
+>  2 files changed, 38 insertions(+)
+>  create mode 100644 package/libusb/0001-configure.ac-fix-detection-of-clock_gettime-library.patch
 
 Applied to master, thanks.
 
