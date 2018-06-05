@@ -1,37 +1,44 @@
 From: Florian La Roche <F.LaRoche@pilz.de>
-Date: Tue, 5 Jun 2018 15:47:09 +0200
-Subject: [Buildroot] [PATCH 1/1] busybox: reduce number of mkdir calls in
- inittab
-Message-ID: <20180605134709.24381-1-F.LaRoche@pilz.de>
+Date: Tue, 5 Jun 2018 15:47:45 +0200
+Subject: [Buildroot] [PATCH 1/1] skeleton: PAGER without blank and unset at
+ end of for loop
+Message-ID: <20180605134745.24435-1-F.LaRoche@pilz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The default busybox inittab does two separate mkdir calls
-to create /dev/pts and /dev/shm. Reduce this to call mkdir
-only once for both directories.
+The PAGER environment variable is including a blank character at the
+end. Remove this.
+A for loop has been unsetting the variable inside the loop, this is only
+needed once at the end of the loop.
 
 Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
 ---
- package/busybox/inittab | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ system/skeleton/etc/profile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/inittab b/package/busybox/inittab
-index ef58c32f0d..7cd203de0b 100644
---- a/package/busybox/inittab
-+++ b/package/busybox/inittab
-@@ -16,8 +16,7 @@
- # Startup the system
- ::sysinit:/bin/mount -t proc proc /proc
- ::sysinit:/bin/mount -o remount,rw /
--::sysinit:/bin/mkdir -p /dev/pts
--::sysinit:/bin/mkdir -p /dev/shm
-+::sysinit:/bin/mkdir -p /dev/pts /dev/shm
- ::sysinit:/bin/mount -a
- null::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
- null::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
+diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+index 3a97427fdf..1255d23ff4 100644
+--- a/system/skeleton/etc/profile
++++ b/system/skeleton/etc/profile
+@@ -8,7 +8,7 @@ if [ "$PS1" ]; then
+ 	fi
+ fi
+ 
+-export PAGER='/bin/more '
++export PAGER='/bin/more'
+ export EDITOR='/bin/vi'
+ 
+ # Source configuration files from /etc/profile.d
+@@ -16,5 +16,5 @@ for i in /etc/profile.d/*.sh ; do
+ 	if [ -r "$i" ]; then
+ 		. $i
+ 	fi
+-	unset i
+ done
++unset i
 -- 
 2.17.0
 
