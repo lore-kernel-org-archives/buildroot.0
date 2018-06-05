@@ -1,10 +1,16 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 07:51:52 +0200
-Subject: [Buildroot] [PATCH 4/5] support/testing: fix python syntax
-In-Reply-To: <5b15f2a8ada6e_5c1a3f8e3808bab469742@ultri5.mail>
-References: <2ae621feecea77223421234eaef0de7032c841d1.1528016895.git.yann.morin.1998@free.fr>
- <5b15f2a8ada6e_5c1a3f8e3808bab469742@ultri5.mail>
-Message-ID: <20180605075152.1c1ea069@windsurf>
+Date: Tue, 5 Jun 2018 07:53:44 +0200
+Subject: [Buildroot] [PATCH 1/2] git: fix handling of git repos using
+ master as version
+In-Reply-To: <37ce9be2-db77-c8e4-08a3-b70b4fc895c4@mind.be>
+References: <1528119150-28659-1-git-send-email-bbeckett@netvu.org.uk>
+ <20180604163302.2d529afd@windsurf>
+ <CAESO2E+hb8=2vfAstXvYeG05L6ELKMHcYCGkoHRukptkrDhZHQ@mail.gmail.com>
+ <20180604154433.GA3700@scaer>
+ <CAESO2EJ7pwkrsrmarwBkpS7SswumuepmCYo01x2j0xpMmhGUCg@mail.gmail.com>
+ <20180604165210.GA23325@g751.home>
+ <37ce9be2-db77-c8e4-08a3-b70b4fc895c4@mind.be>
+Message-ID: <20180605075344.670b31d5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +19,27 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 04 Jun 2018 23:17:12 -0300, Ricardo Martincoski wrote:
+On Tue, 5 Jun 2018 00:19:41 +0200, Arnout Vandecappelle wrote:
 
-> This patch also do:
->   - add indices in format string
+> >> $ git ls-remote git at gitlab.com:adhlinux/buildroot/buildroot.git master
+> >> 407fb2fe202aaeb273e4986dc88c30596a7fe8db    refs/heads/master
+> >> 407fb2fe202aaeb273e4986dc88c30596a7fe8db    refs/remotes/upstream/master  
+> > 
+> > Yes 'ls-remote' is actually a good option.   
 > 
-> We currently do that only for check-uniq-files.
-> Everywhere else we use '{}' instead of '{0}' when possible, as this is not
-> really needed for Python 3 when we use each arguments once in the same order
-> they are passed to format().
-> 
-> BUT... looking at "62fa5e17cb support/scripts/check-uniq-files: add indices in
-> format string" maybe it would be good to adopt a simplistic policy of always
-> using indices in format string, as it seems to be compatible to Python >= 2.6
-> and then we don't need to think about whether the script will be used during
-> the build (and therefore need to support old distros) or not when reviewing.
-> 
-> Thoughts?
+>  It's a bit racy though. By the time you do the actual fetch, the remote branch
+> may already have been updated by someone else.
 
-I am not sure it is useful (and realistic) to have all our Python
-scripts compatible with Python 2.6. This puts a pretty hard constraint
-which might be annoying down the road. So Python scripts involved in
-the build itself should definitely be compatible with Python 2.6, but
-all the utility Python scripts around that are not essential for the
-build, I don't think we should enforce this constraint.
+And ?
+
+Even if you get the latest commit in the branch, by the time the build
+is finished, someone might have pushed some other changes.
+
+There's nothing racy here: you are going to build the latest commit at
+the moment of git ls-remote. There might obviously be further commits
+made later on, either during the build or after the build. Whether
+those commits were made right between ls-remote and the actual build,
+or during the build, or after the build doesn't really matter.
 
 Best regards,
 
