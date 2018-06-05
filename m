@@ -1,29 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 18:32:23 +0200
-Subject: [Buildroot] [git commit] mono: add hashes for license files
-Message-ID: <20180605163105.8ACE780DE2@busybox.osuosl.org>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Tue, 5 Jun 2018 09:35:51 -0700
+Subject: [Buildroot] [PATCHv2 proposal/next 2/3] build: replace
+ host-mkpasswd with host-busybox
+In-Reply-To: <20180605161546.GE2503@scaer>
+References: <20180601125900.26400-1-chemobejk@gmail.com>
+ <20180601133053.27552-1-chemobejk@gmail.com>
+ <20180601133053.27552-3-chemobejk@gmail.com>
+ <48945091-d169-18ba-31d0-a51c64e9a918@mind.be>
+ <935950713.1169230.1528197779003.JavaMail.zimbra@datacom.com.br>
+ <20180605161546.GE2503@scaer>
+Message-ID: <CALURroS4t3V6GWnZSs6GEcAFrf1=KvfU036dskH6aEM4fQXn8w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8594bef06bb1e680137bf1963a3d63363a47415
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Sorry for top post, on mobile.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mono/mono.hash | 3 +++
- 1 file changed, 3 insertions(+)
+What about using openssl?
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index 47e34424ad..2cde7b6b21 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,2 +1,5 @@
- # sha256 locally computed
- sha256 f0636baa0c1399805526142e799cb697ddccf736e506cf1a30a870eaa2830a89  mono-5.12.0.226.tar.bz2
-+sha256 3b40a54878b5ac2767a764bd082f8772ab27c03b9da9c7328c4c4935725556f7  LICENSE
-+sha256 fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
-+sha256 2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
+https://www.openssl.org/docs/manmaster/man1/openssl-passwd.html
+
+On Tue, Jun 5, 2018, 9:15 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+
+> Carlos, All,
+>
+> On 2018-06-05 08:22 -0300, Carlos Santos spake thusly:
+> > > From: "Arnout Vandecappelle" <arnout@mind.be>
+> > > To: "Stefan Becker" <chemobejk@gmail.com>, "buildroot" <
+> buildroot at buildroot.org>
+> > > Cc: "Yann Morin" <yann.morin.1998@free.fr>, "Thomas Petazzoni" <
+> thomas.petazzoni at bootlin.com>
+> > > Sent: Monday, June 4, 2018 7:21:10 PM
+> > > Subject: Re: [Buildroot] [PATCHv2 proposal/next 2/3] build: replace
+> host-mkpasswd with host-busybox
+> >
+> > > On 01-06-18 15:30, Stefan Becker wrote:
+> > >> host-mkpasswd was a fork from whois to provide a host version of
+> > >> mkpasswd for the build. This has caused a maintenance headache.
+> > >>
+> > >> Replace it with host-busybox which can provide "mkpasswd"
+> functionality
+> > >> from own source code. That causes less hassle for different build
+> > >> platforms.
+> > >
+> > > Just to be clear: does everybody agree that it is a good idea to use
+> > > weakly-random numbers as salt, rather than real random numbers like
+> whois does?
+> >
+> > Wouldn't it be better to add a host version of the whois package that
+> > installs mkpasswd, only?
+>
+> That's what I initially suggested, but whois' mkpasswd uses some
+> optional glibc features, which have been disabled in some distros,
+> like Fedora28, which can then no longer build our mkpasswd. And our
+> own mkasswd is an extract from way back then, when we did not have
+> the whois package in busybox.
+>
+> So, switching to host-whois is not an imporovement over the current
+> situation.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180605/dde121ac/attachment.html>
