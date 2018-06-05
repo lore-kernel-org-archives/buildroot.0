@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 09:59:38 +0200
-Subject: [Buildroot] [PATCH v2] audit: do not remove file installed by
- netplug
-In-Reply-To: <20180605020842.12761-1-casantos@datacom.com.br>
-References: <20180605020842.12761-1-casantos@datacom.com.br>
-Message-ID: <20180605095938.1050e3d8@windsurf>
+Date: Tue, 5 Jun 2018 09:59:41 +0200
+Subject: [Buildroot] [PATCH] netplug: look for init script
+ configurations at /etc/default/
+In-Reply-To: <20180605022459.13790-1-casantos@datacom.com.br>
+References: <20180605022459.13790-1-casantos@datacom.com.br>
+Message-ID: <20180605095941.3134902b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  4 Jun 2018 23:08:42 -0300, Carlos Santos wrote:
-> The package recipe uses a post-install hook to remove useless files from
-> $(TARGET_DIR)/etc/rc.d/init.d and $(TARGET_DIR)/etc/sysconfig. This may
-> damage packages that install useful files on those directories (such as
-> netplug, which installs $(TARGET_DIR)/etc/rc.d/init.d/netplugd).
+On Mon,  4 Jun 2018 23:24:59 -0300, Carlos Santos wrote:
+> We are working to make all sysvinit scripts conformant to a pattern and
+> /etc/default/ seems to be a good choice, since 34 packages already get
+> optional configurations from files at that directory.
 > 
-> In the future[1] we will reorganize the init scripts and possibly get
-> rid of /etc/rc.d and /etc/sysconfig but for the moment let's restrict
-> the file removal to those installed by audit.
-> 
-> 1. http://lists.busybox.net/pipermail/buildroot/2018-May/221549.html
+> netplug still installs an init script at /etc/rc.d/init.d/.  This will
+> be fixed in a future patch that will refactor the init scripts.
 > 
 > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 > ---
-> Changes v1->v2
->   - Remove file from /etc/rc.d/init.d/, not /etc/rc.d/
-> ---
->  package/audit/audit.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/netplug/S29netplug | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
