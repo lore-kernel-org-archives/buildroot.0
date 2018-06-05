@@ -1,47 +1,266 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  5 Jun 2018 11:11:08 +0200
-Subject: [Buildroot] [PATCH] package/mono> fixing licenses hashes
-Message-ID: <1528189868-4119-1-git-send-email-angelo@amarulasolutions.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Tue,  5 Jun 2018 14:57:44 +0530
+Subject: [Buildroot] [PATCH v2 1/2] board: amarula: Add A64-Relic support
+Message-ID: <20180605092745.26198-1-jagan@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds hashes for the licensing files and removes a file
-no more present.
+Add initial support for Amarula A64-Relic board
+with below features:
+- U-Boot 2018.07-rc1
+- Linux 4.17.0-rc6
+- Default packages from buildroot
 
-Fixes:
-http://autobuild.buildroot.net/results/c69e55a3f7539ff65aaf57c96f52ebea7e456e48/
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
 ---
- package/mono/mono.hash | 3 +++
- package/mono/mono.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+Changes for v2:
+- Use mainline U-Boot
+- Drop uboot.fragment since the UMS used for developement,
+  so note it on readme.txt how to use.
+- format the 'Write eMMC' steps suggested by Arnout.
+- fix fastboot steps in readme.txt
+- add offset in genimage.cfg for boot partition instead of size
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index 47e3442..2cde7b6 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,2 +1,5 @@
- # sha256 locally computed
- sha256 f0636baa0c1399805526142e799cb697ddccf736e506cf1a30a870eaa2830a89  mono-5.12.0.226.tar.bz2
-+sha256 3b40a54878b5ac2767a764bd082f8772ab27c03b9da9c7328c4c4935725556f7  LICENSE
-+sha256 fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
-+sha256 2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index 2d60fc6..d1fe9bb 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -8,7 +8,7 @@ MONO_VERSION = 5.12.0.226
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
--MONO_LICENSE_FILES = LICENSE mcs/COPYING eglib/COPYING \
-+MONO_LICENSE_FILES = LICENSE mcs/COPYING \
- 	external/Newtonsoft.Json/Tools/7-zip/copying.txt
- MONO_INSTALL_STAGING = YES
- 
+ .gitlab-ci.yml                        |  1 +
+ DEVELOPERS                            |  1 +
+ board/amarula/a64-relic/extlinux.conf |  4 ++
+ board/amarula/a64-relic/genimage.cfg  | 39 ++++++++++++++++++
+ board/amarula/a64-relic/post-build.sh |  4 ++
+ board/amarula/a64-relic/readme.txt    | 77 +++++++++++++++++++++++++++++++++++
+ configs/amarula_a64_relic_defconfig   | 46 +++++++++++++++++++++
+ 7 files changed, 172 insertions(+)
+ create mode 100644 board/amarula/a64-relic/extlinux.conf
+ create mode 100644 board/amarula/a64-relic/genimage.cfg
+ create mode 100755 board/amarula/a64-relic/post-build.sh
+ create mode 100644 board/amarula/a64-relic/readme.txt
+ create mode 100644 configs/amarula_a64_relic_defconfig
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index e80491cdde..9663105462 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -79,6 +79,7 @@ acmesystems_aria_g25_128mb_defconfig: *defconfig
+ acmesystems_aria_g25_256mb_defconfig: *defconfig
+ acmesystems_arietta_g25_128mb_defconfig: *defconfig
+ acmesystems_arietta_g25_256mb_defconfig: *defconfig
++amarula_a64_relic_defconfig: *defconfig
+ amarula_vyasa_rk3288_defconfig: *defconfig
+ arcturus_ucls1012a_defconfig: *defconfig
+ arcturus_ucp1020_defconfig: *defconfig
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f24ef2752e..1a893bda9d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -863,6 +863,7 @@ F:	board/amarula/
+ F:	board/asus/
+ F:	board/bananapi/
+ F:	board/engicam/
++F:	configs/amarula_a64_relic_defconfig
+ F:	configs/amarula_vyasa_rk3288_defconfig
+ F:	configs/asus_tinker_rk3288_defconfig
+ F:	board/friendlyarm/nanopi-a64/
+diff --git a/board/amarula/a64-relic/extlinux.conf b/board/amarula/a64-relic/extlinux.conf
+new file mode 100644
+index 0000000000..9f469846bc
+--- /dev/null
++++ b/board/amarula/a64-relic/extlinux.conf
+@@ -0,0 +1,4 @@
++label linux-4.17.0-rc3
++  kernel /Image
++  devicetree /sun50i-a64-amarula-relic.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p4 rootwait
+diff --git a/board/amarula/a64-relic/genimage.cfg b/board/amarula/a64-relic/genimage.cfg
+new file mode 100644
+index 0000000000..871412dee7
+--- /dev/null
++++ b/board/amarula/a64-relic/genimage.cfg
+@@ -0,0 +1,39 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"Image",
++			"sun50i-a64-amarula-relic.dtb",
++			"extlinux"
++		}
++	}
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition spl {
++		in-partition-table = "no"
++		image = "sunxi-spl.bin"
++		offset = 8192
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot.itb"
++		offset = 40K
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++		offset = 1M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/amarula/a64-relic/post-build.sh b/board/amarula/a64-relic/post-build.sh
+new file mode 100755
+index 0000000000..ec20fca7d9
+--- /dev/null
++++ b/board/amarula/a64-relic/post-build.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++BOARD_DIR="$(dirname $0)"
++
++install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
+new file mode 100644
+index 0000000000..5d8ae65112
+--- /dev/null
++++ b/board/amarula/a64-relic/readme.txt
+@@ -0,0 +1,77 @@
++Amarula A64 Relic
++================
++
++Amarula A64-Relic is A64 based IoT device, which support
++- Allwinner A64 Cortex-A53
++- Mali-400MP2 GPU
++- AXP803 PMIC
++- 1GB DDR3 RAM
++- 8GB eMMC
++- AP6330 Wifi/BLE
++- MIPI-DSI
++- CSI: OV5640 sensor
++- USB OTG
++- 12V DC power supply
++
++Build
++=====
++
++  $ make amarula_a64_relic_defconfig
++
++  $ make
++
++build files at output/images/:
++  - sunxi-spl.bin
++  - u-boot.itb
++  - Image
++  - sun50i-a64-amarula-relic.dtb
++  - boot.vfat
++  - rootfs.ext4
++  - sdcard.img
++
++Write eMMC
++=========
++
++The board comes with an operating system preloaded on the eMMC.
++To replace it with the Buildroot-built system, take the following
++steps
++
++1. Connect the board UART with host and open minicom(ttyUSBx/115200N8)
++
++2. Supply 12V DC for power-on the board.
++
++3. Interrupt U-Boot by pressing enter
++
++4. Create GPT partitions
++  => mmc dev 1
++  => gpt write mmc 1 $partitions
++
++5. Connect the board USB-OTG with USB slot on the host.
++
++6. Initiate fastboot
++  => fastboot 0
++
++7. Write images from host onto eMMC using fastboot
++
++  $ output/images
++  $ fastboot -i 0x1f3a flash loader1 sunxi-spl.bin
++  $ fastboot -i 0x1f3a flash loader2 u-boot.itb
++  $ fastboot -i 0x1f3a flash esp boot.vfat
++  $ fastboot -i 0x1f3a flash system rootfs.ext4
++
++Update eMMC during Development
++==============================
++
++In order to avoid image packing with specified file-system every time
++during development, it better to alter the data in the partition by
++mounting on host with the help of 'ums' in U-Boot.
++
++1. Build U-Boot with CONFIG_CMD_USB_MASS_STORAGE=y
++
++2. Follow all 6 steps from 'Write eMMC' and mount eMMC on host
++    => mmc dev 1
++    => ums 0 mmc 1
++
++--
++Jagan Teki <jagan@amarulasolutions.com>
++05-Jun-2018
+diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
+new file mode 100644
+index 0000000000..44e8e5be13
+--- /dev/null
++++ b/configs/amarula_a64_relic_defconfig
+@@ -0,0 +1,46 @@
++BR2_aarch64=y
++BR2_cortex_a53=y
++BR2_ARM_FPU_VFPV4=y
++
++# Linux headers same as kernel, a 4.16 series
++BR2_KERNEL_HEADERS_4_16=y
++
++# Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07-rc1"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="amarula_a64_relic"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,amarula,linux-amarula,a64-relic)/linux-amarula_a64-relic.tar.gz"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-amarula-relic"
++
++# Filesystem
++BR2_TARGET_GENERIC_ISSUE="Welcome to Amarula A64-Relic"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/amarula/a64-relic/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/amarula/a64-relic/post-build.sh"
 -- 
-2.7.4
+2.14.3
