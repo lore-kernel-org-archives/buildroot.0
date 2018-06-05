@@ -1,127 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 18:47:56 +0200
-Subject: [Buildroot] [git commit] configs/orangepi_zero_plus2: bump linux to
- v4.16
-Message-ID: <20180605164638.B962A811C1@busybox.osuosl.org>
+Date: Tue, 5 Jun 2018 18:48:08 +0200
+Subject: [Buildroot] [git commit] btrfs-progs: bump to version 4.16.1
+Message-ID: <20180605164638.C1660811C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bfeef622291697d25dafd5836bef6bbbd277240
+commit: https://git.buildroot.net/buildroot/commit/?id=3bb11b80252607a99a7a79455d900f60f8fcab25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump linux as well headers to v4.16 version, this eventually drop the
-wifi patch since it has been merged to Linux v4.16.
+Drop upstream patch.
 
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...64-dts-orange-pi-zero-plus2-enable-ap6212.patch | 73 ----------------------
- configs/orangepi_zero_plus2_defconfig              |  5 +-
- 2 files changed, 2 insertions(+), 76 deletions(-)
+ .../0003-btrfs.static-needs-libbtrfsutil.patch     | 39 ----------------------
+ package/btrfs-progs/btrfs-progs.hash               |  2 +-
+ package/btrfs-progs/btrfs-progs.mk                 |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
 
-diff --git a/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch b/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch
+diff --git a/package/btrfs-progs/0003-btrfs.static-needs-libbtrfsutil.patch b/package/btrfs-progs/0003-btrfs.static-needs-libbtrfsutil.patch
 deleted file mode 100644
-index 282e2171f2..0000000000
---- a/board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch
+index 30ab75ae57..0000000000
+--- a/package/btrfs-progs/0003-btrfs.static-needs-libbtrfsutil.patch
 +++ /dev/null
-@@ -1,73 +0,0 @@
--From: Sergey Matyukevich <geomatsi@gmail.com>
--Date: Sun, 11 Feb 2018 16:21:43 +0300
--Subject: [PATCH] arm64: dts: orange-pi-zero-plus2: enable AP6212a WiFi/BT combo
+@@ -1,39 +0,0 @@
+-From 5023fdf9a4524106ef6fe1d0fdd75ade16dec62c Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Tue, 10 Apr 2018 22:56:31 +0300
+-Subject: [PATCH] btrfs.static: needs libbtrfsutil
 -
--Enable AP6212a WiFi/BT combo chip on orange-pi-zero-plus2 board:
--- WiFi SDIO interface is connected to MMC1
--- WiFi REG_ON pin connected to gpio PA9: attach to mmc-pwrseq
--- WiFi HOST_WAKE pin connected to gpio PL7
--- BT is connected to UART1
+-Add libbtrfsutil objects to btrfs.static link command. This fixes static
+-build failure:
 -
--Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
--Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
+-utils.static.o: In function `parse_qgroupid':
+-utils.c:(.text.parse_qgroupid+0xb0): undefined reference to `btrfs_util_is_subvolume'
+-props.static.o: In function `prop_read_only':
+-props.c:(.text.prop_read_only+0x70): undefined reference to `btrfs_util_set_subvolume_read_only'
+-...
+-Makefile:457: recipe for target 'btrfs.static' failed
+-make[1]: *** [btrfs.static] Error 1
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- .../allwinner/sun50i-h5-orangepi-zero-plus2.dts    | 32 ++++++++++++++++++++++
-- 1 file changed, 32 insertions(+)
+-Upstream status: https://patchwork.kernel.org/patch/10333795/
 -
--diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
--index a42fd79a62a3..d415b7b67cce 100644
----- a/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
--+++ b/arch/arm64/boot/dts/allwinner/sun50i-h5-orangepi-zero-plus2.dts
--@@ -64,6 +64,13 @@
-- 		regulator-min-microvolt = <3300000>;
-- 		regulator-max-microvolt = <3300000>;
-- 	};
--+
--+	wifi_pwrseq: wifi_pwrseq {
--+		compatible = "mmc-pwrseq-simple";
--+		pinctrl-names = "default";
--+		reset-gpios = <&pio 0 9 GPIO_ACTIVE_LOW>; /* PA9 */
--+		post-power-on-delay-ms = <200>;
--+	};
-- };
+- Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 5ba76d2eee40..9b97c36a44a5 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -453,7 +453,7 @@ btrfs: btrfs.o $(objects) $(cmds_objects) $(libs_static)
+- 	@echo "    [LD]     $@"
+- 	$(Q)$(CC) -o $@ $^ $(LDFLAGS) $(LIBS) $(LIBS_COMP)
 - 
-- &mmc0 {
--@@ -75,6 +82,25 @@
-- 	status = "okay";
-- };
+--btrfs.static: btrfs.static.o $(static_objects) $(static_cmds_objects) $(static_libbtrfs_objects)
+-+btrfs.static: btrfs.static.o $(static_objects) $(static_cmds_objects) $(static_libbtrfs_objects) $(libbtrfsutil_objects)
+- 	@echo "    [LD]     $@"
+- 	$(Q)$(CC) -o $@ $^ $(STATIC_LDFLAGS) $(STATIC_LIBS) $(STATIC_LIBS_COMP)
 - 
--+&mmc1 {
--+	pinctrl-names = "default";
--+	pinctrl-0 = <&mmc1_pins_a>;
--+	vmmc-supply = <&reg_vcc3v3>;
--+	vqmmc-supply = <&reg_vcc3v3>;
--+	mmc-pwrseq = <&wifi_pwrseq>;
--+	bus-width = <4>;
--+	non-removable;
--+	status = "okay";
--+
--+	brcmf: wifi at 1 {
--+		reg = <1>;
--+		compatible = "brcm,bcm4329-fmac";
--+		interrupt-parent = <&r_pio>;
--+		interrupts = <0 7 IRQ_TYPE_LEVEL_LOW>;	/* PL7 */
--+		interrupt-names = "host-wake";
--+	};
--+};
--+
-- &mmc2 {
-- 	pinctrl-names = "default";
-- 	pinctrl-0 = <&mmc2_8bit_pins>;
--@@ -90,3 +116,9 @@
-- 	pinctrl-0 = <&uart0_pins_a>;
-- 	status = "okay";
-- };
--+
--+&uart1 {
--+	pinctrl-names = "default";
--+	pinctrl-0 = <&uart1_pins>, <&uart1_rts_cts_pins>;
--+	status = "okay";
--+};
 --- 
--2.16.1
+-2.16.3
 -
-diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
-index 5ca6cf0fe2..8c83b3acd1 100644
---- a/configs/orangepi_zero_plus2_defconfig
-+++ b/configs/orangepi_zero_plus2_defconfig
-@@ -2,9 +2,8 @@ BR2_aarch64=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_VFPV4=y
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 79aee129f7..71793d1c68 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 f3e0ec4864b7b89db1a6a36fa48bf8a9217117714a04b13c84d0fea1eac154b2  btrfs-progs-v4.16.tar.xz
++sha256 013403fb67b17975b21408fa9eb7523b0ecf94f84f8a4397cf972e8e254d2246  btrfs-progs-v4.16.1.tar.xz
+ # Locally computed
+ sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+ sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index ec2eae707c..b4cc839352 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero-plus2/patches"
- BR2_ROOTFS_OVERLAY="board/orangepi/orangepi-zero-plus2/rootfs_overlay"
- 
- # Firmware
-@@ -33,7 +32,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/orangepi/orangepi-zero-plus2/boot.cmd
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-h5-orangepi-zero-plus2"
+-BTRFS_PROGS_VERSION = 4.16
++BTRFS_PROGS_VERSION = 4.16.1
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
