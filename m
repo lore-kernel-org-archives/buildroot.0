@@ -1,47 +1,51 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon,  4 Jun 2018 23:08:42 -0300
-Subject: [Buildroot] [PATCH v2] audit: do not remove file installed by
- netplug
-Message-ID: <20180605020842.12761-1-casantos@datacom.com.br>
+Date: Mon,  4 Jun 2018 23:11:56 -0300
+Subject: [Buildroot] [PATCH] netplug: look for init script configurations at
+ /etc/default/
+Message-ID: <20180605021156.13668-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The package recipe uses a post-install hook to remove useless files from
-$(TARGET_DIR)/etc/rc.d/init.d and $(TARGET_DIR)/etc/sysconfig. This may
-damage packages that install useful files on those directories (such as
-netplug, which installs $(TARGET_DIR)/etc/rc.d/init.d/netplugd).
+We are working to make all sysvinit scripts conformant to a pattern and
+/etc/default/ seems to be a good choice, since 34 packages already get
+optional configurations from files at that directory.
 
-In the future[1] we will reorganize the init scripts and possibly get
-rid of /etc/rc.d and /etc/sysconfig but for the moment let's restrict
-the file removal to those installed by audit.
-
-1. http://lists.busybox.net/pipermail/buildroot/2018-May/221549.html
+netplug still installs an init script at /etc/rc.d/init.d/.  This will
+be fixed in a future patch that will refactor the init scripts.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
-Changes v1->v2
-  - Remove file from /etc/rc.d/init.d/, not /etc/rc.d/
----
- package/audit/audit.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/netplug/S29netplug | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index f5aa00d2f0..2f6e6653b3 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -51,8 +51,8 @@ define AUDIT_INSTALL_INIT_SYSTEMD
- endef
+diff --git a/package/netplug/S29netplug b/package/netplug/S29netplug
+index 03422499d6..04cac9f07c 100755
+--- a/package/netplug/S29netplug
++++ b/package/netplug/S29netplug
+@@ -22,8 +22,8 @@ elif [ -f /etc/rc.d/init.d/functions ]; then
+ fi
  
- define AUDIT_INSTALL_CLEANUP
--	$(RM) -rf $(TARGET_DIR)/etc/rc.d
--	$(RM) -rf $(TARGET_DIR)/etc/sysconfig
-+	$(RM) $(TARGET_DIR)/etc/rc.d/init.d/auditd
-+	$(RM) $(TARGET_DIR)/etc/sysconfig/auditd
- endef
- AUDIT_POST_INSTALL_TARGET_HOOKS += AUDIT_INSTALL_CLEANUP
+ # Source networking configuration.
+-if [ -f /etc/sysconfig/network ]; then
+-	. /etc/sysconfig/network
++if [ -f /etc/default/network ]; then
++	. /etc/default/network
  
+ 	# Check that networking is up.
+ 	[ ${NETWORKING} = "no" ] && exit 0
+@@ -32,8 +32,8 @@ elif [ ! -f /etc/network/interfaces ]; then
+ 	exit 0
+ fi
+ 
+-if [ -f /etc/sysconfig/netplugd ]; then
+-    . /etc/sysconfig/netplugd
++if [ -f /etc/default/netplugd ]; then
++    . /etc/default/netplugd
+ fi
+ 
+ # See how we were called.
 -- 
 2.17.0
