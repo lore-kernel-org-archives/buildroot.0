@@ -1,322 +1,254 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 10:17:05 +0200
-Subject: [Buildroot] [git commit] python-websockets: bump to version 5.0.1
-Message-ID: <20180605081524.5D8E682208@busybox.osuosl.org>
+From: =?UTF-8?Q?Refik_Tuzakl=c4=b1?= <refik.tuzakli@savronik.com.tr>
+Date: Tue, 5 Jun 2018 11:20:57 +0300
+Subject: [Buildroot] [BALENA PATCH] balena : New Package
+In-Reply-To: <20180604165507.4df4e009@windsurf>
+References: <3551d854-8b04-370c-27ca-53394858a921@savronik.com.tr>
+ <20180604165507.4df4e009@windsurf>
+Message-ID: <13335b5c-0ab9-c990-ce0a-9a09661335ec@savronik.com.tr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=413fb2af727100b5c0842b856405a93f5528ccc3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-Remove upstream patch.
+Thanks for feedback.
 
-Fixes:
-http://autobuild.buildroot.net/results/0b59939faaefc12cd7da4f26ab86659ac031b008/
-http://autobuild.buildroot.net/results/c0196693cfdbf10b429c5c03684d5308a68c8509/
+On 04-06-2018 17:55, Thomas Petazzoni wrote:
+> Hello Refik,
+>
+> Thanks a lot for your contribution! I believe it's your first Buildroot
+> contribution, so congratulations :-)
+>
+> The first comment is that you should sent your patch using "git
+> send-email". Because you didn't do that, your patch has been horribly
+> rewrapped by your e-mail client, and it cannot be applied.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...Fix-behavior-of-recv-in-the-CLOSING-state.patch | 261 ---------------------
- package/python-websockets/python-websockets.hash   |   4 +-
- package/python-websockets/python-websockets.mk     |   4 +-
- 3 files changed, 4 insertions(+), 265 deletions(-)
+I tried to send this patch via git send-email but I have problem with my 
+ssl certificate as below;
 
-diff --git a/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch b/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
-deleted file mode 100644
-index cb97b36bde..0000000000
---- a/package/python-websockets/0001-Fix-behavior-of-recv-in-the-CLOSING-state.patch
-+++ /dev/null
-@@ -1,261 +0,0 @@
--From 402059e4a46a764632eba8a669f5b012f173ee7b Mon Sep 17 00:00:00 2001
--From: Aymeric Augustin <aymeric.augustin@m4x.org>
--Date: Tue, 1 May 2018 17:05:05 +0200
--Subject: [PATCH] Fix behavior of recv() in the CLOSING state.
--
--The behavior wasn't tested correctly: in some test cases, the connection
--had already moved to the CLOSED state, where the close code and reason
--are already known.
--
--Refactor half_close_connection_{local,remote} to allow multiple runs of
--the event loop while remaining in the CLOSING state. Refactor affected
--tests accordingly.
--
--I verified that all tests in the CLOSING state were behaving is intended
--by inserting debug statements in recv/send/ping/pong and running:
--
--$ PYTHONASYNCIODEBUG=1 python -m unittest -v websockets.test_protocol.{Client,Server}Tests.test_{recv,send,ping,pong}_on_closing_connection_{local,remote}
--
--Fix #317, #327, #350, #357.
--
--Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-----
-- websockets/protocol.py      | 10 ++---
-- websockets/test_protocol.py | 78 +++++++++++++++++++++++++++++--------
-- 2 files changed, 66 insertions(+), 22 deletions(-)
--
--diff --git a/websockets/protocol.py b/websockets/protocol.py
--index f8121a1..7583fe9 100644
----- a/websockets/protocol.py
--+++ b/websockets/protocol.py
--@@ -303,7 +303,7 @@ class WebSocketCommonProtocol(asyncio.StreamReaderProtocol):
--         # Don't yield from self.ensure_open() here because messages could be
--         # received before the closing frame even if the connection is closing.
-- 
---        # Wait for a message until the connection is closed
--+        # Wait for a message until the connection is closed.
--         next_message = asyncio_ensure_future(
--             self.messages.get(), loop=self.loop)
--         try:
--@@ -315,15 +315,15 @@ class WebSocketCommonProtocol(asyncio.StreamReaderProtocol):
--             next_message.cancel()
--             raise
-- 
---        # Now there's no need to yield from self.ensure_open(). Either a
---        # message was received or the connection was closed.
---
--         if next_message in done:
--             return next_message.result()
--         else:
--             next_message.cancel()
--             if not self.legacy_recv:
---                raise ConnectionClosed(self.close_code, self.close_reason)
--+                assert self.state in [State.CLOSING, State.CLOSED]
--+                # Wait until the connection is closed to raise
--+                # ConnectionClosed with the correct code and reason.
--+                yield from self.ensure_open()
-- 
--     @asyncio.coroutine
--     def send(self, data):
--diff --git a/websockets/test_protocol.py b/websockets/test_protocol.py
--index 70348fb..bfd4e3b 100644
----- a/websockets/test_protocol.py
--+++ b/websockets/test_protocol.py
--@@ -105,7 +105,7 @@ class CommonTests:
--         self.loop.call_soon(self.loop.stop)
--         self.loop.run_forever()
-- 
---    def make_drain_slow(self, delay=3 * MS):
--+    def make_drain_slow(self, delay=MS):
--         # Process connection_made in order to initialize self.protocol.writer.
--         self.run_loop_once()
-- 
--@@ -174,6 +174,8 @@ class CommonTests:
--         # Empty the outgoing data stream so we can make assertions later on.
--         self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
-- 
--+        assert self.protocol.state is State.CLOSED
--+
--     def half_close_connection_local(self, code=1000, reason='close'):
--         """
--         Start a closing handshake but do not complete it.
--@@ -181,31 +183,56 @@ class CommonTests:
--         The main difference with `close_connection` is that the connection is
--         left in the CLOSING state until the event loop runs again.
-- 
--+        The current implementation returns a task that must be awaited or
--+        cancelled, else asyncio complains about destroying a pending task.
--+
--         """
--         close_frame_data = serialize_close(code, reason)
---        # Trigger the closing handshake from the local side.
---        self.ensure_future(self.protocol.close(code, reason))
--+        # Trigger the closing handshake from the local endpoint.
--+        close_task = self.ensure_future(self.protocol.close(code, reason))
--         self.run_loop_once()    # wait_for executes
--         self.run_loop_once()    # write_frame executes
--         # Empty the outgoing data stream so we can make assertions later on.
--         self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
---        # Prepare the response to the closing handshake from the remote side.
---        self.loop.call_soon(
---            self.receive_frame, Frame(True, OP_CLOSE, close_frame_data))
---        self.loop.call_soon(self.receive_eof_if_client)
--+
--+        assert self.protocol.state is State.CLOSING
--+
--+        # Complete the closing sequence at 1ms intervals so the test can run
--+        # at each point even it goes back to the event loop several times.
--+        self.loop.call_later(
--+            MS, self.receive_frame, Frame(True, OP_CLOSE, close_frame_data))
--+        self.loop.call_later(2 * MS, self.receive_eof_if_client)
--+
--+        # This task must be awaited or cancelled by the caller.
--+        return close_task
-- 
--     def half_close_connection_remote(self, code=1000, reason='close'):
--         """
---        Receive a closing handshake.
--+        Receive a closing handshake but do not complete it.
-- 
--         The main difference with `close_connection` is that the connection is
--         left in the CLOSING state until the event loop runs again.
-- 
--         """
--+        # On the server side, websockets completes the closing handshake and
--+        # closes the TCP connection immediately. Yield to the event loop after
--+        # sending the close frame to run the test while the connection is in
--+        # the CLOSING state.
--+        if not self.protocol.is_client:
--+            self.make_drain_slow()
--+
--         close_frame_data = serialize_close(code, reason)
---        # Trigger the closing handshake from the remote side.
--+        # Trigger the closing handshake from the remote endpoint.
--         self.receive_frame(Frame(True, OP_CLOSE, close_frame_data))
---        self.receive_eof_if_client()
--+        self.run_loop_once()    # read_frame executes
--+        # Empty the outgoing data stream so we can make assertions later on.
--+        self.assertOneFrameSent(True, OP_CLOSE, close_frame_data)
--+
--+        assert self.protocol.state is State.CLOSING
--+
--+        # Complete the closing sequence at 1ms intervals so the test can run
--+        # at each point even it goes back to the event loop several times.
--+        self.loop.call_later(2 * MS, self.receive_eof_if_client)
-- 
--     def process_invalid_frames(self):
--         """
--@@ -335,11 +362,13 @@ class CommonTests:
--         self.assertEqual(data, b'tea')
-- 
--     def test_recv_on_closing_connection_local(self):
---        self.half_close_connection_local()
--+        close_task = self.half_close_connection_local()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.recv())
-- 
--+        self.loop.run_until_complete(close_task)    # cleanup
--+
--     def test_recv_on_closing_connection_remote(self):
--         self.half_close_connection_remote()
-- 
--@@ -421,24 +450,29 @@ class CommonTests:
--         self.assertNoFrameSent()
-- 
--     def test_send_on_closing_connection_local(self):
---        self.half_close_connection_local()
--+        close_task = self.half_close_connection_local()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.send('foobar'))
--+
--         self.assertNoFrameSent()
-- 
--+        self.loop.run_until_complete(close_task)    # cleanup
--+
--     def test_send_on_closing_connection_remote(self):
--         self.half_close_connection_remote()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.send('foobar'))
---        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
--+
--+        self.assertNoFrameSent()
-- 
--     def test_send_on_closed_connection(self):
--         self.close_connection()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.send('foobar'))
--+
--         self.assertNoFrameSent()
-- 
--     # Test the ping coroutine.
--@@ -466,24 +500,29 @@ class CommonTests:
--         self.assertNoFrameSent()
-- 
--     def test_ping_on_closing_connection_local(self):
---        self.half_close_connection_local()
--+        close_task = self.half_close_connection_local()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.ping())
--+
--         self.assertNoFrameSent()
-- 
--+        self.loop.run_until_complete(close_task)    # cleanup
--+
--     def test_ping_on_closing_connection_remote(self):
--         self.half_close_connection_remote()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.ping())
---        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
--+
--+        self.assertNoFrameSent()
-- 
--     def test_ping_on_closed_connection(self):
--         self.close_connection()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.ping())
--+
--         self.assertNoFrameSent()
-- 
--     # Test the pong coroutine.
--@@ -506,24 +545,29 @@ class CommonTests:
--         self.assertNoFrameSent()
-- 
--     def test_pong_on_closing_connection_local(self):
---        self.half_close_connection_local()
--+        close_task = self.half_close_connection_local()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.pong())
--+
--         self.assertNoFrameSent()
-- 
--+        self.loop.run_until_complete(close_task)    # cleanup
--+
--     def test_pong_on_closing_connection_remote(self):
--         self.half_close_connection_remote()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.pong())
---        self.assertOneFrameSent(True, OP_CLOSE, serialize_close(1000, 'close'))
--+
--+        self.assertNoFrameSent()
-- 
--     def test_pong_on_closed_connection(self):
--         self.close_connection()
-- 
--         with self.assertRaises(ConnectionClosed):
--             self.loop.run_until_complete(self.protocol.pong())
--+
--         self.assertNoFrameSent()
-- 
--     # Test the protocol's logic for acknowledging pings with pongs.
---- 
--2.17.0
--
-diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
-index 2805e8a534..0fbe144173 100644
---- a/package/python-websockets/python-websockets.hash
-+++ b/package/python-websockets/python-websockets.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/websockets/json
--md5	fde30398f43401731ba38340a7031ab0  websockets-5.0.tar.gz
--sha256	4ea90a598b546233a4c61bef98db4171ac30f1302826729af30001ac1f471098  websockets-5.0.tar.gz
-+md5	cd2f92f07bca588acd9238b18f6cfbcf  websockets-5.0.1.tar.gz
-+sha256	a49d315db5a7a19d55422e1678e8a1c3b9661d7296bef3179fa620cf80b12674  websockets-5.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256	2cd4d416e432ca7fda2c103b38b852f8d3cb327d70c3db44410b9fe97e6c4d73  LICENSE
-diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
-index f7f2caaf0b..0e225b90f1 100644
---- a/package/python-websockets/python-websockets.mk
-+++ b/package/python-websockets/python-websockets.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_WEBSOCKETS_VERSION = 5.0
-+PYTHON_WEBSOCKETS_VERSION = 5.0.1
- PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
--PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/0d/ea/0cc41f9ab63b4af08840a667b047d6fab6406aebb076932ef877a4511f78
-+PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/4b/c6/026da2eeed75a49dd0b72a0c7ed6ee5cb2943e396ca9753eabff7359b27b
- PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
- PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
- PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
+STARTTLS failed! SSL connect attempt failed with unknown error 
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate 
+verify failed at /usr/lib/git-core/git-send-email line 1241.
+
+When I solve problem, I will use this tool instead of sending via direct 
+e-mail.
+
+>
+> The second thing, less important, is that the [BALENA PATCH] subject
+> prefix is not necessary, just [PATCH] is sufficient or more precisely
+> [PATCHv2] for your next iteration.
+>
+> The title should be:
+>
+> 	balena: new package
+>
+> which is almost the same as what you did, but without the space
+> before :, and lower case.
+OK
+>
+> On Mon, 4 Jun 2018 17:22:37 +0300, Refik Tuzakl? wrote:
+>>   ?package/Config.in????????? |? 1 +
+>>   ?package/balena/Config.in?? | 16 +++++++++++
+>>   ?package/balena/balena.hash |? 2 ++
+>>   ?package/balena/balena.mk?? | 68
+>> ++++++++++++++++++++++++++++++++++++++++++++++
+> Please add an entry in the DEVELOPERS file for this package.
+OK
+>
+>> +??? source "package/balena/Config.in"
+>>   ???? source "package/bootutils/Config.in"
+> Indentation is wrong here, but maybe it's an artefact of not sending
+> with git send-email.
+At my local patch file, I can not see this typo but I will take care of it.
+>
+>> diff --git a/package/balena/Config.in b/package/balena/Config.in
+>> new file mode 100644
+>> index 0000000..2904d2a
+>> --- /dev/null
+>> +++ b/package/balena/Config.in
+>> @@ -0,0 +1,16 @@
+>> +config BR2_PACKAGE_BALENA
+>> +??? bool "balena"
+>> +??? depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+>> +??? depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+>> +??? depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +??? depends on BR2_INIT_SYSTEMD
+>> +??? select BR2_PACKAGE_LVM2
+>> +??? select BR2_PACKAGE_LVM2_STANDARD_INSTALL
+> You need to propagate the dependencies of lvm2 here:
+>
+>          depends on BR2_TOOLCHAIN_HAS_THREADS
+>          depends on BR2_USE_MMU # needs fork()
+>          depends on !BR2_STATIC_LIBS # It fails to build statically
+OK
+>
+>> +??? help
+>> +??? ? Moby-based Container Engine for Embedded, IoT, and Edge uses
+>> +
+>> +??? ? https://github.com/resin-os/balena
+>> +
+>> +
+> Only one empty line here.
+OK
+>
+>> +comment "balena needs systemd"
+>> +??? depends on !BR2_INIT_SYSTEMD
+> Also, please run check-package to make sure the indentation is correct.
+OK
+>
+>> +BALENA_LICENSE = Apache-2.0
+>> +BALENA_LICENSE_FILES = LICENSE
+>> +
+>> +BALENA_DEPENDENCIES = host-go host-pkgconf systemd lvm2
+> Drop the host-go dependency, it's not needed because you're using the
+> golang-package infrastructure.
+OK
+>
+>> +BALENA_GOPATH = "$(@D)/.gopath"
+> I believe this is not needed, it's taken care of by the golang-package
+> infrastructure.
+OK
+>
+>> +BALENA_VERSION_DIR = 17.06.0-dev
+> Ditto, should not be needed.
+OK
+>
+>> +BALENA_BUILD_TARGETS = balena
+> This one is OK.
+>
+>> +BALENA_INSTALL_BINS = $(TARGET_DIR)/usr/bin/$(target)
+> This one doesn't make sense because $(target) is empty. Instead list
+> the binaries to be installed.
+OK
+>
+>> +BALENA_CONFIGURE_ENV = GOPATH=${BALENA_GOPATH} \
+>> +??? $(TARGET_MAKE_ENV) \
+>> +??? $(HOST_GO_TARGET_ENV) \
+>> +??? DOCKER_GITCOMMIT=${BALENA_COMMIT} \
+>> +??? DOCKER_BUILDTAGS='exclude_graphdriver_btrfs exclude_graphdirver_zfs
+>> exclude_graphdriver_devicemapper'
+> None of that should be needed with the golang-package infrastructure.
+> Look at the docker-engine package for an example.
+I thought so but when I remove one of them, it crashes while 
+configuring. Even it is balena package, it needs some docker parameters.
+>
+>> +
+>> +BALENA_MAKE_ENV = GOPATH=$(BALENA_GOPATH) \
+>> +??? $(TARGET_MAKE_ENV) \
+>> +??? $(HOST_GO_TARGET_ENV)
+> Same.
+>
+>> +
+>> +BALENA_GLDFLAGS += -extldflags '-static'
+> Same.
+>
+>> +
+>> +define BALENA_CONFIGURE_CMDS
+>> +??? mkdir -p $(BALENA_GOPATH)/src/github.com/docker
+>> +??? ln -fs $(@D) $(BALENA_GOPATH)/src/github.com/docker/docker
+> Not needed with the golang-package infrastructure.
+golang-package does ;
+
+mkdir -p $(@D)/_gopath/src/github.com/resin-os/
+ln -sf $(@D) $(@D)/_gopath/src/github.com/resin-os/balena
+
+but balena needs ;
+mkdir -p $(@D)/.gopath/src/github.com/docker
+ln -fs $(@D) $(@D)/.gopath/src/github.com/docker/docker
+
+I think this caused by package itself. I am not a developer of balena, I 
+can ask this issue to balena developers
+
+>
+>> +??? cd $(@D) && \
+>> +??? ??? $(BALENA_CONFIGURE_ENV) \
+>> +??? ??? bash ./hack/make.sh dynbinary-balena
+> Do this in a POST_CONFIGURE_HOOKS.
+OK
+>
+>> +define BALENA_BUILD_CMDS
+>> +??? $(foreach target,$(BALENA_BUILD_TARGETS), \
+>> +??? ??? cd $(BALENA_GOPATH)/src/github.com/docker/docker/cmd/mobynit; \
+>> +??? ??? $(BALENA_MAKE_ENV) \
+>> +??? ??? $(HOST_DIR)/bin/go build -v\
+>> +??? ??? ??? -ldflags "$(BALENA_GLDFLAGS)"
+>> +??? )
+>> +endef
+> Not needed, it should be done by the golang-package infrastructure.
+build directory is
+
+$(BALENA_GOPATH)/src/github.com/docker/docker/cmd/mobynit
+
+I guess buildroot looks $(BALENA_GOPATH)/src/github.com/resin-io/balena/cmd/balena
+Am I right?
+
+>
+>> +
+>> +define BALENA_INSTALL_TARGET_CMDS
+>> +??? $(foreach target,$(BALENA_BUILD_TARGETS), \
+>> +??? ??? $(INSTALL) -D -m 0755
+>> $(@D)/bundles/17.06.0-dev/dynbinary-balena/$(target) $(BALENA_INSTALL_BINS)
+>> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balenad
+>> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-containerd
+>> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-containerd-shim
+>> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-containerd-ctr
+>> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-runc
+>> +??? ??? ln -sf balena $(TARGET_DIR)/usr/bin/balena-proxy
+>> +??? )
+> Same.
+build step creates
+
+$(BALENA_GOPATH)/src/github.com/docker/docker/cmd/mobynit/mobynit
+
+but we need
+
+$(@D)/bundles/17.06.0-dev/dynbinary-balena/balena
+
+>
+> Basically, I have the feeling that you created this package as a
+> generic-package originally, and then quickly converted it to
+> golang-package. But the golang-package infrastructure greatly
+> simplifies Go packages, so you should really leverage the features of
+> the golang-package infrastructure.
+>
+> Could you rework this package to use golang-package more effectively ?
+>
+> Thanks a lot!
+>
+> Thomas
+I check docker-engine before converting to golang package. Also I took 
+balena_git.bb file on meta-resin as a reference for cross-compile 
+procedure from Yocto Projects. If I can I want to rework on this package 
+with your help.
+
+Cheers,
+
+Refik Tuzakl?
+Embedded Software Engineer
+IT and Simulation Group
+
+Savronik A.?.
+
+Organize Sanayi B?lgesi
+
+20. Cadde No: 19 26110
+
+Eski?ehir Turkey
+
+Tel?? : (+90 222) 236 1590
+
+Faks: (+90 222) 236 1589
+
+www.savronik.com.tr
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180605/f9c9d606/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: refik_tuzakli.vcf
+Type: text/x-vcard
+Size: 4 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180605/f9c9d606/attachment.vcf>
