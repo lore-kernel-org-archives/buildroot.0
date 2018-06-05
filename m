@@ -1,38 +1,76 @@
-From: Laurent GONZALEZ <br22@gezedo.com>
-Date: Tue, 5 Jun 2018 09:23:11 +0200
-Subject: [Buildroot] [PATCHv2] linux: may fail to boot for binutils
- 2.29+ even without armv7m
-In-Reply-To: <20180605074932.668ae4e7@windsurf>
-References: <20180601180157.759-1-yann.morin.1998@free.fr>
- <b3672758-0d2b-51cd-7eac-cc06158a995b@mind.be>
- <20180605074932.668ae4e7@windsurf>
-Message-ID: <b6e193cb-d79d-3758-859a-e8c80933947f@gezedo.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Jun 2018 09:33:44 +0200
+Subject: [Buildroot] [PATCH v2] package/mender: new package
+In-Reply-To: <CAAhKrJ04tvAMGuhPsTjPo-56FvD+Pt0BRBuKysveTTLMHoM1Tg@mail.gmail.com>
+References: <CAAhKrJ04tvAMGuhPsTjPo-56FvD+Pt0BRBuKysveTTLMHoM1Tg@mail.gmail.com>
+Message-ID: <20180605093344.23db50a9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/06/2018 07:49, Thomas Petazzoni wrote:
-> Hello,
->
-> On Tue, 5 Jun 2018 00:10:30 +0200, Arnout Vandecappelle wrote:
->
->>>  comment "Linux kernel may fail to boot with binutils >= 2.29"
->>> -	depends on BR2_ARM_CPU_ARMV7M
->>> +	depends on BR2_arm || BR2_armeb  
->>  I have a bit of a problem with this patch. IMO it's rather unlikely that people
->> build the kernel in THUMB mode on non-M CPUs.
-> Are you sure ? There is definitely support for building a Thumb2 kernel
-> on ARMv7-A, and I think it's a popular way to reduce a bit the size of
-> the kernel, no?
-I gently remember the list that we can alternatively fix the kernel with a patch.
+Hello,
 
-This solution will allow any version of binutils to work with any version of the kernel, and can be easily reverted.
+On Mon, 4 Jun 2018 15:37:52 -0600, Dan Walkes wrote:
 
-What about using:
+> Thanks for providing this patch.  I'm also interested in buildroot
+> support for mender.
 
-http://lists.infradead.org/pipermail/linux-arm-kernel/2018-March/565390.html
+Great! Thanks for your comments and feedback on the Mender integration,
+definitely useful.
 
---
-Laurent
+> I expect it's just that they only test integration with systemd and
+> systemd is not a requirement.  See the comment at [1] from Mirza Krak
+> on the Mender dev team.
+> 
+> > Mender does not have a hard-requirement on systemd (BR2_INIT_SYSTEMD),  there is only a conveniently provided systemd service by default.  
+> 
+> I've started with the patch at [2], then made a few small changes to
+> get the package running on an x86 qemu virtual machine with default
+> sysv init scripts.  See the project at [3] and branch at [4] for
+> details.
+
+Great. Perhaps I could merge Angelo's patch, and you could send
+follow-up patch improving it, such as providing non-systemd
+integration ?
+
+> For some reason I don't understand, I needed to add a step to
+> specifically install the binary after the golang build, it wasn't
+> happening by default for me.  See the patch at [5].
+> 
+> I've noticed the current mender patches do not have support for
+> mender-artifact today.  In order to build the mender artifact utility
+> I think I'd need to build a host golang package based on mender
+> artifact [6] but it looks like only target packages are currently
+> supported today with pkg-golang buildroot [7], is that correct?  How
+> should I build the mender-artifact utility for the host?
+
+The pkg-golang infrastructure should probably be extended to build host
+packages as well. So far it wasn't needed, but if it's needed, then
+let's do it.
+
+>  What would
+> be the correct way to invoke the mender-artifact utility to actually
+> generate the artifact?  Would this be done through a custom post-image
+> script?
+
+Yes, that's generally the idea for tools that generate some kind of
+firmware image.
+
+> Has work already started on mender-artifact support in another patch
+> or on a branch somewhere?
+
+Everything submitted to the Buildroot mailing list is recorded in our
+patch tracking system
+(https://patchwork.ozlabs.org/project/buildroot/list/). And no, there's
+no work on mender-artifact support that has been submitted, at least
+not that I remember.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
