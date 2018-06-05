@@ -1,14 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 10:14:33 +0200
-Subject: [Buildroot] [git commit] php-amqp: bump to version 1.9.3
-Message-ID: <20180605081447.530458399D@busybox.osuosl.org>
+Date: Tue, 5 Jun 2018 10:14:32 +0200
+Subject: [Buildroot] [git commit] libsecret: bump to version 0.18.6
+Message-ID: <20180605081447.4AC668399D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d4303383c8f7bf1dc892be9df07346130a68802
+commit: https://git.buildroot.net/buildroot/commit/?id=3b053f9b5c0235ffc692df9b1e59a4f97a1f0e26
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add hash for license file
@@ -16,29 +16,32 @@ Add hash for license file
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php-amqp/php-amqp.hash | 3 ++-
- package/php-amqp/php-amqp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libsecret/libsecret.hash | 7 +++++--
+ package/libsecret/libsecret.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/php-amqp/php-amqp.hash b/package/php-amqp/php-amqp.hash
-index 4b3b19726f..10b16f1b48 100644
---- a/package/php-amqp/php-amqp.hash
-+++ b/package/php-amqp/php-amqp.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 f45831d498b8fa47a151c31f6abdc0530aa6eabda6e2e10514aca3bdc76a5098  amqp-1.9.0.tgz
-+sha256 c79e52db33bf907dad7da8f350dbdf2937b0679a3dc44fb2a941efb6d4808da9  amqp-1.9.3.tgz
-+sha256 ecd004e9ae3fcf54896b562d5e8008e36041f2620076effd58e5f4187299cee8  LICENSE
-diff --git a/package/php-amqp/php-amqp.mk b/package/php-amqp/php-amqp.mk
-index 6a8c52c4cf..e9de4825a9 100644
---- a/package/php-amqp/php-amqp.mk
-+++ b/package/php-amqp/php-amqp.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
+index a637cbecf4..808b1741f3 100644
+--- a/package/libsecret/libsecret.hash
++++ b/package/libsecret/libsecret.hash
+@@ -1,2 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.5.sha256sum
+-sha256	9ce7bd8dd5831f2786c935d82638ac428fa085057cc6780aba0e39375887ccb3	libsecret-0.18.5.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.6.sha256sum
++sha256	5efbc890ba41a323ffe0599cd260fd12bd8eb62a04aa1bd1b2762575d253d66f	libsecret-0.18.6.tar.xz
++
++# Hash for license file:
++sha256	a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b	COPYING
+diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
+index 111b553f2c..adc7c508df 100644
+--- a/package/libsecret/libsecret.mk
++++ b/package/libsecret/libsecret.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--PHP_AMQP_VERSION = 1.9.0
-+PHP_AMQP_VERSION = 1.9.3
- PHP_AMQP_SOURCE = amqp-$(PHP_AMQP_VERSION).tgz
- PHP_AMQP_SITE = https://pecl.php.net/get
- PHP_AMQP_CONF_OPTS = --with-php-config=$(STAGING_DIR)/usr/bin/php-config \
+ LIBSECRET_VERSION_MAJOR = 0.18
+-LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).5
++LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).6
+ LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
+ LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
+ LIBSECRET_INSTALL_STAGING = YES
