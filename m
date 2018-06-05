@@ -1,30 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 22:15:22 +0200
-Subject: [Buildroot] [PATCH 1/1] libsoxr: bump to version 0.1.3
-In-Reply-To: <20180605194121.32234-1-fontaine.fabrice@gmail.com>
-References: <20180605194121.32234-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180605221522.5e3fdc41@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Jun 2018 22:37:39 +0200
+Subject: [Buildroot] [BUILDROOT][PATCHv2 1/3] balena: new package
+In-Reply-To: <4ce7101b-167a-2c0e-80a3-e678eb660844@savronik.com.tr>
+References: <651f579d-07ad-afc4-4515-0061016dfc02@savronik.com.tr>
+ <4ce7101b-167a-2c0e-80a3-e678eb660844@savronik.com.tr>
+Message-ID: <0cdc4548-ab59-105f-71cb-2314401c88ab@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue,  5 Jun 2018 21:41:21 +0200, Fabrice Fontaine wrote:
-> Add hash for license files
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libsoxr/libsoxr.hash | 8 +++++---
->  package/libsoxr/libsoxr.mk   | 2 +-
->  2 files changed, 6 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+On 05-06-18 15:26, Refik Tuzakl? wrote:
+> +define BALENA_MAKE_DYNBINARY_BALENA
+> +??? cd $(@D) && \
+> +??? ??? $(BALENA_CONFIGURE_ENV) \
+> +??? ??? bash ./hack/make.sh dynbinary-balena
 
-Thomas
+ I think this is where it goes wrong. This hack/make.sh script is also present
+in docker-engine, but we don't use it. Instead, docker-engine uses the
+hack/make/.go-autogen script.
+
+ Regards,
+ Arnout
+
+> +endef
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
