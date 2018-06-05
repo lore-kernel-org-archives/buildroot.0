@@ -1,79 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 09:57:35 +0200
-Subject: [Buildroot] [PATCH 1/2] git: fix handling of git repos using
- master as version
-In-Reply-To: <b474912f-1e1c-7329-bdbe-6305225529a8@mind.be>
-References: <1528119150-28659-1-git-send-email-bbeckett@netvu.org.uk>
- <20180604163302.2d529afd@windsurf>
- <CAESO2E+hb8=2vfAstXvYeG05L6ELKMHcYCGkoHRukptkrDhZHQ@mail.gmail.com>
- <20180604182339.5513583b@windsurf>
- <CAESO2EJ6ivZvCjKek8da3hJWjkzgP_L2Myjbc05o0Z7Z_=nkOw@mail.gmail.com>
- <b474912f-1e1c-7329-bdbe-6305225529a8@mind.be>
-Message-ID: <20180605095735.62e563bf@windsurf>
+Date: Tue, 5 Jun 2018 09:58:37 +0200
+Subject: [Buildroot] [git commit] netplug: look for init script
+ configurations in /etc/default/
+Message-ID: <20180605075721.F2D0280404@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4adaa581b27dc27298eb7cc421ee8f530f88e18e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 5 Jun 2018 00:18:39 +0200, Arnout Vandecappelle wrote:
+We are working to make all sysvinit scripts conformant to a pattern and
+/etc/default/ seems to be a good choice, since 34 packages already get
+optional configurations from files at that directory.
 
-> On 04-06-18 18:51, Bob Beckett wrote:
-> > Maybe a variable _IN_DEVELOPMENT or something could be added to a package's
-> > makefile to indicate that the version is always considered out of date, and
-> > should be re-fetched.  
-> 
->  We're never going to consider something *always* out of date, I think. We might
-> only consider it out-of-date when you do an explicit foo-rebuild.
+netplug still installs an init script at /etc/rc.d/init.d/.  This will
+be fixed in a future patch that will refactor the init scripts.
 
-Well, never say "never" :-)
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/netplug/S29netplug | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-During the development phase, if you have 50 or 100 in-house
-components, it may be annoying to do a "foo-rebuild" for all of them in
-order to get their latest version. But this can probably be resolved by
-having a custom target (implemented locally by people who want that)
-that triggers the rebuild of all packages they are interested in.
-
-> > That way development branches for package specs could have the package spec
-> > committed with that, while release branches do not and are expected to have a
-> > non-branch version specifier.
-> > 
-> > With this strategy you would be acknowledging that you are not getting
-> > reproducibility, but you are still getting reliable builds (the 2 reasons I use
-> > buildroot).
-> > The test for taint would then be to check if any packages have an
-> > _IN_DEVELOPMENT variable set.  
-> 
->  I'm not so fond of the _IN_DEVELOPMENT idea. What I like more is to extend
-> _OVERRIDE_SRCDIR to support repositories in addition to local files. It would
-> then check out directly into the build directory, without passing through DL_DIR
-> or a tarball.
-> 
->  This would probably be a rather complicated change however.
-
-Is it that complicated to add a:
-
-	cd $(pkg_OVERRIDE_SRCDIR); git pull
-
-before doing the rsync of the source code ? Of course, we don't want to
-do this unconditionally as soon as <pkg>_OVERRIDE_SRCDIR is set, so
-perhaps a separate boolean variable is needed.
-
-> > Given the current state, if you specify a branch of master, you get a warning
-> > that it doesnt appear to be a special version, but that is all, and the package
-> > doesnt build at all as it failed to get the source in the first place> I think if there is going to be an enforcement of not using branches, then the
-> > build should probably fail in a more explicit way e.g. check to see if the
-> > version is a branch. If it is, then fail the build with a message telling the
-> > user that branches are not to be used as versions  
-> 
->  I completely agree with this one, we should simply fail on branches.
-
-Agreed.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/netplug/S29netplug b/package/netplug/S29netplug
+index 03422499d6..04cac9f07c 100755
+--- a/package/netplug/S29netplug
++++ b/package/netplug/S29netplug
+@@ -22,8 +22,8 @@ elif [ -f /etc/rc.d/init.d/functions ]; then
+ fi
+ 
+ # Source networking configuration.
+-if [ -f /etc/sysconfig/network ]; then
+-	. /etc/sysconfig/network
++if [ -f /etc/default/network ]; then
++	. /etc/default/network
+ 
+ 	# Check that networking is up.
+ 	[ ${NETWORKING} = "no" ] && exit 0
+@@ -32,8 +32,8 @@ elif [ ! -f /etc/network/interfaces ]; then
+ 	exit 0
+ fi
+ 
+-if [ -f /etc/sysconfig/netplugd ]; then
+-    . /etc/sysconfig/netplugd
++if [ -f /etc/default/netplugd ]; then
++    . /etc/default/netplugd
+ fi
+ 
+ # See how we were called.
