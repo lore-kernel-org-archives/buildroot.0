@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 07:49:32 +0200
-Subject: [Buildroot] [PATCHv2] linux: may fail to boot for binutils
- 2.29+ even without armv7m
-In-Reply-To: <b3672758-0d2b-51cd-7eac-cc06158a995b@mind.be>
-References: <20180601180157.759-1-yann.morin.1998@free.fr>
- <b3672758-0d2b-51cd-7eac-cc06158a995b@mind.be>
-Message-ID: <20180605074932.668ae4e7@windsurf>
+Date: Tue, 5 Jun 2018 07:51:52 +0200
+Subject: [Buildroot] [PATCH 4/5] support/testing: fix python syntax
+In-Reply-To: <5b15f2a8ada6e_5c1a3f8e3808bab469742@ultri5.mail>
+References: <2ae621feecea77223421234eaef0de7032c841d1.1528016895.git.yann.morin.1998@free.fr>
+ <5b15f2a8ada6e_5c1a3f8e3808bab469742@ultri5.mail>
+Message-ID: <20180605075152.1c1ea069@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,33 +13,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 5 Jun 2018 00:10:30 +0200, Arnout Vandecappelle wrote:
+On Mon, 04 Jun 2018 23:17:12 -0300, Ricardo Martincoski wrote:
 
-> >  comment "Linux kernel may fail to boot with binutils >= 2.29"
-> > -	depends on BR2_ARM_CPU_ARMV7M
-> > +	depends on BR2_arm || BR2_armeb  
+> This patch also do:
+>   - add indices in format string
 > 
->  I have a bit of a problem with this patch. IMO it's rather unlikely that people
-> build the kernel in THUMB mode on non-M CPUs.
+> We currently do that only for check-uniq-files.
+> Everywhere else we use '{}' instead of '{0}' when possible, as this is not
+> really needed for Python 3 when we use each arguments once in the same order
+> they are passed to format().
+> 
+> BUT... looking at "62fa5e17cb support/scripts/check-uniq-files: add indices in
+> format string" maybe it would be good to adopt a simplistic policy of always
+> using indices in format string, as it seems to be compatible to Python >= 2.6
+> and then we don't need to think about whether the script will be used during
+> the build (and therefore need to support old distros) or not when reviewing.
+> 
+> Thoughts?
 
-Are you sure ? There is definitely support for building a Thumb2 kernel
-on ARMv7-A, and I think it's a popular way to reduce a bit the size of
-the kernel, no?
-
-> But now we're always showing this
-> warning. I think it will confuse a number of people, and I don't think it's very
-> likely that it will actually help anyone.
-
-Actually the warning should not have a:
-
-	depends on BR2_arm || BR2_armeb
-
-but instead a:
-
-	depends on BR2_ARM_INSTRUCTIONS_THUMB || BR2_ARM_INSTRUCTIONS_THUMB2
-
-because that's actually what we do in binutils to decide whether we
-want to fall back on binutils 2.28 by default or not.
+I am not sure it is useful (and realistic) to have all our Python
+scripts compatible with Python 2.6. This puts a pretty hard constraint
+which might be annoying down the road. So Python scripts involved in
+the build itself should definitely be compatible with Python 2.6, but
+all the utility Python scripts around that are not essential for the
+build, I don't think we should enforce this constraint.
 
 Best regards,
 
