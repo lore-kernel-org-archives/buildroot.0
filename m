@@ -1,76 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 5 Jun 2018 22:06:39 +0200
-Subject: [Buildroot] [PATCH 1/1] More complete usage string.
-In-Reply-To: <20180605123959.21925-1-F.LaRoche@pilz.de>
-References: <20180605123959.21925-1-F.LaRoche@pilz.de>
-Message-ID: <e3d565da-4f03-65d8-dca2-dc5c0e195911@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 5 Jun 2018 22:07:02 +0200
+Subject: [Buildroot] [PATCH 1/1] cc-tool: depends on
+ BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <20180605181514.2081-1-fontaine.fabrice@gmail.com>
+References: <20180605181514.2081-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180605220702.303ee975@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- [+ Carlos who is working on init scripts]
+Hello Fabrice,
 
-On 05-06-18 14:39, Florian La Roche wrote:
-> More complete usage string for the logging service.
+On Tue,  5 Jun 2018 20:15:14 +0200, Fabrice Fontaine wrote:
+> options_description class from boost's program_options needs
+> __sync_fetch_and_add_4 / __sync_fetch_and_sub_4:
 > 
+> Extract from config.log:
+> /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libboost_program_options.a(options_description.o):
+> In function
+> `boost::program_options::options_description_easy_init::operator()(char
+> const*, boost::program_options::value_semantic const*, char const*)':
+> options_description.cpp:(.text+0x4240): undefined reference to
+> `__sync_fetch_and_add_4'
+> options_description.cpp:(.text+0x42ca): undefined reference to
+> `__sync_fetch_and_sub_4'
+> options_description.cpp:(.text+0x42d8): undefined reference to
+> `__sync_fetch_and_sub_4
 > 
-> Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
-> ---
->  package/busybox/S01logging | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Fixes:
+>  - http://autobuild.buildroot.net/results/5677a3fd96217cbb0966063de048401cf1ccf16b
 > 
-> diff --git a/package/busybox/S01logging b/package/busybox/S01logging
-> index 4632a4cc99..fcb3e7d236 100644
-> --- a/package/busybox/S01logging
-> +++ b/package/busybox/S01logging
-> @@ -33,7 +33,7 @@ case "$1" in
->  	start
->  	;;
->    *)
-> -	echo "Usage: $0 {start|stop|restart}"
-> +	echo "Usage: $0 {start|stop|restart|reload}"
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- For this one, we should perhaps first decide on what we want to do in general
-with the init scripts. Do we want to define a reload target? And if we do, and
-it is equal to the restart target, do we want to have it in the help text?
+I am not super convinced by this analysis, because:
 
- First some statistics. We currently have:
+ (1) It really is the boost program options library that needs those
+     sync builtins. So if it really needs, the dependency should be
+     added on BR2_PACKAGE_BOOST_PROGRAM_OPTIONS, and then propagated to
+     all packages that select this, which includes BR2_PACKAGE_CC_TOOL,
+     but not only.
 
-- 109 init scripts
--  75 define 'reload', 12 define 'force-reload', 6 both (so 81 total)
--  63 define 'reload' as 'restart'
--   7 define 'reload' as something else
-- 107 provide help text
--  31 provide help text for 'reload'
--  13 of the 63 that define reload == restart provide help text for reload
--   7 of the 7 that define reload != restart provide help text for reload
+ (2) Boost can use other built-ins than __sync builtins. For example on
+     SPARC, BR2_TOOLCHAIN_HAS_SYNC_4 is false, but cc-tool builds just
+     fine. It's because SPARC with recent compilers have
+     BR2_TOOLCHAIN_HAS_ATOMIC that is true, and Boost uses __atomic
+     builtins.
 
+ (3) Boost has an emulated atomic operation implementation (which uses
+     locks) which I believe should have been used here if neither
+     __sync nor __atomic builtins are available. But it wasn't used
+     either. Why ?
 
- So my proposal for the "norm" would be:
+See boost/atomic/detail/ for the different implementations of atomic
+operations in Boost.
 
-- always defines reload
-- only document reload if reload != restart
-- decide what to do with force-reload later
+The problem is that with the crazyness of the bjam build system, I've
+never been able to figure out Boost decides which atomic implementation
+to use. If you figure that out, I'll owe you one beer at the next
+conference :-)
 
- Carlos, what do you think?
+Best regards,
 
-
- In short, I would not apply this patch.
-
- Regards,
- Arnout
-
->  	exit 1
->  esac
->  
-> 
-
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
