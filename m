@@ -1,49 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 18:48:08 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: bump to version 1.44.2
-Message-ID: <20180605164638.C903F811C1@busybox.osuosl.org>
+Date: Tue, 5 Jun 2018 18:48:26 +0200
+Subject: [Buildroot] [PATCH] board: orangepi: zero-plus2: bump linux to
+ v4.16
+In-Reply-To: <20180605093632.26724-1-jagan@amarulasolutions.com>
+References: <20180605093632.26724-1-jagan@amarulasolutions.com>
+Message-ID: <20180605184826.280555d1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8b78099f25696a8197d3be519a93ab35b45e301
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Update license file hash; FSF address update.
+On Tue,  5 Jun 2018 15:06:32 +0530, Jagan Teki wrote:
+> Bump linux as well headers to v4.16 version, this
+> eventually drop the wifi patch since it has been
+> merged to Linux v4.16.
+> 
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
+>  ...64-dts-orange-pi-zero-plus2-enable-ap6212.patch | 73 ----------------------
+>  configs/orangepi_zero_plus2_defconfig              |  5 +-
+>  2 files changed, 2 insertions(+), 76 deletions(-)
+>  delete mode 100644 board/orangepi/orangepi-zero-plus2/patches/linux/linux-0001-arm64-dts-orange-pi-zero-plus2-enable-ap6212.patch
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/e2fsprogs/e2fsprogs.hash | 6 +++---
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 60498db8e4..65a6e199c9 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,6 +1,6 @@
--# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.44.1/sha256sums.asc
--sha256 0ca164c1c87724df904c918b2d7051ef989b51de725db66c67514dbe6dd2b9ef  e2fsprogs-1.44.1.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.44.2/sha256sums.asc
-+sha256 8324cf0b6e81805a741d94087b00e99f7e16144f1ee5a413709a1fa6948b126c  e2fsprogs-1.44.2.tar.xz
- # Locally calculated
--sha256 680f852df303874fe9c722283a7da571ae9a0477768df8af1e363298e2adc51e  NOTICE
-+sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
- sha256 47182fe6631a32f271a15bbe210751b3825b7199f588879aac7d4804fc8b4b8f  lib/et/internal.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index ce7736c1cd..316546a8d7 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--E2FSPROGS_VERSION = 1.44.1
-+E2FSPROGS_VERSION = 1.44.2
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
