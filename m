@@ -1,7 +1,8 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon,  4 Jun 2018 22:35:07 -0300
-Subject: [Buildroot] [PATCH] audit: do not remove file installed by netplug
-Message-ID: <20180605013507.9672-1-casantos@datacom.com.br>
+Date: Mon,  4 Jun 2018 23:08:42 -0300
+Subject: [Buildroot] [PATCH v2] audit: do not remove file installed by
+ netplug
+Message-ID: <20180605020842.12761-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,11 +22,14 @@ the file removal to those installed by audit.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
+Changes v1->v2
+  - Remove file from /etc/rc.d/init.d/, not /etc/rc.d/
+---
  package/audit/audit.mk | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index f5aa00d2f0..067490d607 100644
+index f5aa00d2f0..2f6e6653b3 100644
 --- a/package/audit/audit.mk
 +++ b/package/audit/audit.mk
 @@ -51,8 +51,8 @@ define AUDIT_INSTALL_INIT_SYSTEMD
@@ -34,7 +38,7 @@ index f5aa00d2f0..067490d607 100644
  define AUDIT_INSTALL_CLEANUP
 -	$(RM) -rf $(TARGET_DIR)/etc/rc.d
 -	$(RM) -rf $(TARGET_DIR)/etc/sysconfig
-+	$(RM) $(TARGET_DIR)/etc/rc.d/auditd
++	$(RM) $(TARGET_DIR)/etc/rc.d/init.d/auditd
 +	$(RM) $(TARGET_DIR)/etc/sysconfig/auditd
  endef
  AUDIT_POST_INSTALL_TARGET_HOOKS += AUDIT_INSTALL_CLEANUP
