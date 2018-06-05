@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Refik_Tuzakl=c4=b1?= <refik.tuzakli@savronik.com.tr>
-Date: Tue, 5 Jun 2018 11:20:57 +0300
+Date: Tue, 5 Jun 2018 11:21:27 +0300
 Subject: [Buildroot] [BALENA PATCH] balena : New Package
 In-Reply-To: <20180604165507.4df4e009@windsurf>
 References: <3551d854-8b04-370c-27ca-53394858a921@savronik.com.tr>
  <20180604165507.4df4e009@windsurf>
-Message-ID: <13335b5c-0ab9-c990-ce0a-9a09661335ec@savronik.com.tr>
+Message-ID: <1cd65e4e-af03-0ab9-aedc-76678d749a37@savronik.com.tr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -244,11 +244,11 @@ Faks: (+90 222) 236 1589
 www.savronik.com.tr
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180605/f9c9d606/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180605/76614371/attachment.html>
 -------------- next part --------------
 A non-text attachment was scrubbed...
 Name: refik_tuzakli.vcf
 Type: text/x-vcard
 Size: 4 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180605/f9c9d606/attachment.vcf>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180605/76614371/attachment.vcf>
