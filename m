@@ -1,90 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 15:28:19 +0200
-Subject: [Buildroot] [BUILDROOT][PATCHv2 1/3] balena: new package
-In-Reply-To: <651f579d-07ad-afc4-4515-0061016dfc02@savronik.com.tr>
-References: <651f579d-07ad-afc4-4515-0061016dfc02@savronik.com.tr>
-Message-ID: <20180605152819.6950ef99@windsurf>
+From: Florian La Roche <F.LaRoche@pilz.de>
+Date: Tue, 5 Jun 2018 15:46:52 +0200
+Subject: [Buildroot] [PATCH 1/1] busybox: fix usage string in S01logging
+Message-ID: <20180605134652.24330-1-F.LaRoche@pilz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Refik,
+In busybox fix the S01logging usage text to
+document the "reload" target.
 
-On Tue, 5 Jun 2018 16:16:17 +0300, Refik Tuzakl? wrote:
->  From 65b90eefab3fd936b5eec0e3004e5ec370c7d3b9 Mon Sep 17 00:00:00 2001
-> From: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
-> Date: Tue, 5 Jun 2018 15:58:39 +0300
-> Subject: [PATCHv2 1/3] balena new package v2
-> 
-> 
-> This patch adds balena; Moby-based Container Engine for Embedded, IoT, 
-> and Edge uses.
-> 
-> Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
+Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
+---
+ package/busybox/S01logging | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for this new iteration. Unfortunately, it is now sent with
-Thunderbird, so it is still badly line wrapped.
-
-> diff --git a/package/balena/Config.in b/package/balena/Config.in
-> new file mode 100644
-> index 0000000..1323cf2
-> --- /dev/null
-> +++ b/package/balena/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_BALENA
-> +??? bool "balena"
-> +??? depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +??? depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +??? depends on BR2_TOOLCHAIN_HAS_THREADS
-> +??? depends on BR2_INIT_SYSTEMD
-> +??? depends on BR2_TOOLCHAIN_HAS_THREADS
-> +??? depends on BR2_USE_MMU # needs fork()
-> +??? depends on !BR2_STATIC_LIBS # It fails to build statically
-
-You need a Kconfig comment for the thread and static library
-dependencies. Look at what other packages are doing for this.
-
-> +BALENA_VERSION = 17.06-resin
-> +BALENA_COMMIT = 73136d1985f28a34705f537e90636cf208734048
-> +BALENA_SITE = $(call github,resin-os,balena,$(BALENA_VERSION))
-> +
-> +BALENA_LICENSE = Apache-2.0
-> +BALENA_LICENSE_FILES = LICENSE
-> +
-> +BALENA_DEPENDENCIES = host-pkgconf systemd lvm2
-> +
-> +BALENA_GOPATH = $(@D)/_gopath
-
-I still believe this is not needed.
-
-> +
-> +BALENA_CONFIGURE_ENV = GOPATH=${BALENA_GOPATH} \
-> +??? $(TARGET_MAKE_ENV) \
-> +??? $(HOST_GO_TARGET_ENV) \
-> +??? DOCKER_GITCOMMIT=${BALENA_COMMIT} \
-> +??? DOCKER_BUILDTAGS='exclude_graphdriver_btrfs exclude_graphdirver_zfs 
-> exclude_graphdriver_devicemapper'
-
-Ditto, this is not needed.
-
-> +BALENA_MAKE_ENV = GOPATH=$(BALENA_GOPATH)
-
-Same.
-
-> +BALENA_LDFLAGS += -extldflags '-static'
-
-Same.
-
-All this stuff is done by the golang-package infrastructure. I suggest
-that you read package/pkg-golang.mk so that you can get a feeling of
-what the golang-package infrastructure already does for you.
-
-Thanks!
-
-Thomas
+diff --git a/package/busybox/S01logging b/package/busybox/S01logging
+index 4632a4cc99..fcb3e7d236 100644
+--- a/package/busybox/S01logging
++++ b/package/busybox/S01logging
+@@ -33,7 +33,7 @@ case "$1" in
+ 	start
+ 	;;
+   *)
+-	echo "Usage: $0 {start|stop|restart}"
++	echo "Usage: $0 {start|stop|restart|reload}"
+ 	exit 1
+ esac
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.0
+
+Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
+Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
+Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
+Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
+This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
+Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
+We do care about the environment! - Please consider the environment before printing this e-mail.
