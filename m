@@ -1,486 +1,261 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 22:10:39 +0200
-Subject: [Buildroot] [git commit] libbsd: bump to version 0.9.1
-Message-ID: <20180605201321.A6C3783C46@busybox.osuosl.org>
+Date: Tue, 5 Jun 2018 22:10:46 +0200
+Subject: [Buildroot] [git commit] libstrophe: bump to version 0.9.2
+Message-ID: <20180605201321.AF04B83C47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64aec332bf4eada6df9453d60c17460e6c17dd39
+commit: https://git.buildroot.net/buildroot/commit/?id=d2c7f8438068c4175daab02af93d710494abb56d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patches.
+- Remove first patch (already in version, see
+  https://github.com/strophe/libstrophe/pull/59)
+- Use --without-xml (fixed by
+  https://github.com/strophe/libstrophe/commit/3b55c20879aabad2f1b601b141d73c157972708d)
+- Add hash for license files
 
-Add a patch fixing build with musl libc.
-
-Update the list of licenses based on the content of COPYING. The
-BSD-5-Clause license is not listed by SPDX, but that is its name in the
-COPYING file.
-
-Update the license file hash: new licenses, dates update, reformat.
-
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...n-declaration-protection-for-glibc-alread.patch |  80 -------
- .../0001-flopen-fix-build-with-musl-libc.patch     |  40 ++++
- .../0002-Fix-build-for-openrisc-with-uClibc.patch  |  48 -----
- .../0003-Handle-systems-missing-sys-cdefs.h.patch  | 230 ---------------------
- package/libbsd/libbsd.hash                         |   6 +-
- package/libbsd/libbsd.mk                           |   5 +-
- 6 files changed, 46 insertions(+), 363 deletions(-)
+ .../libstrophe/0001-Namespace-SHA-functions.patch  | 189 ---------------------
+ ...nfable.patch => 0001-make-autoreconfable.patch} |   0
+ package/libstrophe/libstrophe.hash                 |   4 +-
+ package/libstrophe/libstrophe.mk                   |   6 +-
+ 4 files changed, 5 insertions(+), 194 deletions(-)
 
-diff --git a/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch b/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
+diff --git a/package/libstrophe/0001-Namespace-SHA-functions.patch b/package/libstrophe/0001-Namespace-SHA-functions.patch
 deleted file mode 100644
-index fdf45bdef6..0000000000
---- a/package/libbsd/0001-Fix-function-declaration-protection-for-glibc-alread.patch
+index 8c3451bbac..0000000000
+--- a/package/libstrophe/0001-Namespace-SHA-functions.patch
 +++ /dev/null
-@@ -1,80 +0,0 @@
--From 1f8a3f7bccfc84b195218ad0086ebd57049c3490 Mon Sep 17 00:00:00 2001
--From: Guillem Jover <guillem@hadrons.org>
--Date: Tue, 6 Mar 2018 01:39:45 +0100
--Subject: [PATCH] Fix function declaration protection for glibc already
-- providing them
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,189 +0,0 @@
+-From b08766c8e46956daba010044b00c97f78b598780 Mon Sep 17 00:00:00 2001
+-From: Michael Santos <michael.santos@gmail.com>
+-Date: Sun, 24 May 2015 10:55:02 -0400
+-Subject: [PATCH] Namespace SHA functions
 -
--On non-glibc based systems we cannot unconditionally use the
--__GLIBC_PREREQ macro as it gets expanded before evaluation. Instead,
--if it is undefined, define it to 0.
+-Fix statically linking against libstrophe by renaming the internal SHA
+-functions:
 -
--We should also always declare these functions on non-glibc based
--systems. And on systems with a new enough glibc, which provides these
--functions, we should still provide the declarations if _GNU_SOURCE
--is *not* defined.
+-https://github.com/strophe/libstrophe/issues/40
 -
--Backported from:
--https://cgit.freedesktop.org/libbsd/patch/?id=1f8a3f7bccfc84b195218ad0086ebd57049c3490
+-Although the same function names are used by libstrophe and OpenSSL,
+-the signatures and contexts of the SHA functions differ, resulting in
+-a segfault if the OpenSSL versions are substituted.
 -
--Reported-by: J??rg Krause <joerg.krause@embedded.rocks>
--Signed-off-by: Guillem Jover <guillem@hadrons.org>
--Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+-[Upstream commit: https://github.com/msantos/libstrophe/commit/b08766c8e46956daba010044b00c97f78b598780]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- include/bsd/stdlib.h    | 3 ++-
-- include/bsd/string.h    | 3 ++-
-- include/bsd/sys/cdefs.h | 8 ++++++++
-- 3 files changed, 12 insertions(+), 2 deletions(-)
+- src/auth.c  |  8 ++++----
+- src/scram.c | 22 +++++++++++-----------
+- src/sha1.c  | 30 +++++++++++++++---------------
+- src/sha1.h  |  6 +++---
+- 4 files changed, 33 insertions(+), 33 deletions(-)
 -
--diff --git a/include/bsd/stdlib.h b/include/bsd/stdlib.h
--index 8d33d1f..a5b063c 100644
----- a/include/bsd/stdlib.h
--+++ b/include/bsd/stdlib.h
--@@ -71,7 +71,8 @@ int sradixsort(const unsigned char **base, int nmemb,
--                const unsigned char *table, unsigned endbyte);
+-diff --git a/src/auth.c b/src/auth.c
+-index b06f18c..3506977 100644
+---- a/src/auth.c
+-+++ b/src/auth.c
+-@@ -1187,10 +1187,10 @@ int _handle_component_auth(xmpp_conn_t * const conn)
+-     /*??Feed the session id and passphrase to the algorithm.
+-      * We need to compute SHA1(session_id + passphrase)
+-      */
+--    SHA1_Init(&mdctx);
+--    SHA1_Update(&mdctx, (uint8_t*)conn->stream_id, strlen(conn->stream_id));
+--    SHA1_Update(&mdctx, (uint8_t*)conn->pass, strlen(conn->pass));
+--    SHA1_Final(&mdctx, md_value);
+-+    xmpp_SHA1_Init(&mdctx);
+-+    xmpp_SHA1_Update(&mdctx, (uint8_t*)conn->stream_id, strlen(conn->stream_id));
+-+    xmpp_SHA1_Update(&mdctx, (uint8_t*)conn->pass, strlen(conn->pass));
+-+    xmpp_SHA1_Final(&mdctx, md_value);
 - 
-- void *reallocf(void *ptr, size_t size);
---#if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 26)
--+#if !defined(__GLIBC__) || \
--+    (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 26) || !defined(_GNU_SOURCE)))
-- void *reallocarray(void *ptr, size_t nmemb, size_t size);
-- #endif
+-     digest = xmpp_alloc(conn->ctx, 2*sizeof(md_value)+1);
+-     if (digest) {
+-diff --git a/src/scram.c b/src/scram.c
+-index 5cce168..6e420e1 100644
+---- a/src/scram.c
+-+++ b/src/scram.c
+-@@ -37,9 +37,9 @@ static void SHA1(const uint8_t* data, size_t len,
+-                  uint8_t digest[SHA1_DIGEST_SIZE])
+- {
+-     SHA1_CTX ctx;
+--    SHA1_Init(&ctx);
+--    SHA1_Update(&ctx, data, len);
+--    SHA1_Final(&ctx, digest);
+-+    xmpp_SHA1_Init(&ctx);
+-+    xmpp_SHA1_Update(&ctx, data, len);
+-+    xmpp_SHA1_Final(&ctx, digest);
+- }
 - 
--diff --git a/include/bsd/string.h b/include/bsd/string.h
--index 29097f6..f987fee 100644
----- a/include/bsd/string.h
--+++ b/include/bsd/string.h
--@@ -46,7 +46,8 @@ size_t strlcat(char *dst, const char *src, size_t siz);
-- char *strnstr(const char *str, const char *find, size_t str_len);
-- void strmode(mode_t mode, char *str);
+- static void HMAC_SHA1(const uint8_t *key, size_t key_len,
+-@@ -66,15 +66,15 @@ static void HMAC_SHA1(const uint8_t *key, size_t key_len,
+-         key_opad[i] = key_pad[i] ^ opad;
+-     }
 - 
---#if defined(_GNU_SOURCE) && defined(__GLIBC__) && !__GLIBC_PREREQ(2, 25)
--+#if !defined(__GLIBC__) || \
--+    (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 25) || !defined(_GNU_SOURCE)))
-- void explicit_bzero(void *buf, size_t len);
-- #endif
-- __END_DECLS
--diff --git a/include/bsd/sys/cdefs.h b/include/bsd/sys/cdefs.h
--index b4c8f30..d1cc419 100644
----- a/include/bsd/sys/cdefs.h
--+++ b/include/bsd/sys/cdefs.h
--@@ -58,6 +58,14 @@
-- #endif
-- #endif
+--    SHA1_Init(&ctx);
+--    SHA1_Update(&ctx, key_ipad, BLOCK_SIZE);
+--    SHA1_Update(&ctx, text, len);
+--    SHA1_Final(&ctx, sha_digest);
+-+    xmpp_SHA1_Init(&ctx);
+-+    xmpp_SHA1_Update(&ctx, key_ipad, BLOCK_SIZE);
+-+    xmpp_SHA1_Update(&ctx, text, len);
+-+    xmpp_SHA1_Final(&ctx, sha_digest);
 - 
--+/*
--+ * On non-glibc based systems, we cannot unconditionally use the
--+ * __GLIBC_PREREQ macro as it gets expanded before evaluation.
--+ */
--+#ifndef __GLIBC_PREREQ
--+#define __GLIBC_PREREQ(maj, min) 0
--+#endif
--+
-- /*
--  * Some kFreeBSD headers expect those macros to be set for sanity checks.
--  */
---- 
--2.16.2
--
-diff --git a/package/libbsd/0001-flopen-fix-build-with-musl-libc.patch b/package/libbsd/0001-flopen-fix-build-with-musl-libc.patch
-new file mode 100644
-index 0000000000..6f0aeffed7
---- /dev/null
-+++ b/package/libbsd/0001-flopen-fix-build-with-musl-libc.patch
-@@ -0,0 +1,40 @@
-+From 8575450b9c1226fc38196b29e33c67f2b58cacf5 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 5 Jun 2018 19:18:47 +0300
-+Subject: [PATCH] flopen: fix build with musl libc
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Commit 993828d84ee (Add flopenat() function from FreeBSD) dropped the
-+fcntl.h header. This breaks the build with musl libc:
-+
-+flopen.c: In function ???vflopenat???:
-+flopen.c:60:14: error: ???O_CREAT??? undeclared (first use in this function)
-+  if (flags & O_CREAT) {
-+              ^~~~~~~
-+
-+Restore the fcntl.h header include to fix the build.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: sent to libbsd at lists.freedesktop.org
-+
-+ src/flopen.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/flopen.c b/src/flopen.c
-+index b9972c94ec90..ff20d074445b 100644
-+--- a/src/flopen.c
-++++ b/src/flopen.c
-+@@ -32,6 +32,7 @@
-+ #include <sys/stat.h>
-+ 
-+ #include <errno.h>
-++#include <fcntl.h>
-+ #include <stdarg.h>
-+ #include <unistd.h>
-+ 
-+-- 
-+2.17.1
-+
-diff --git a/package/libbsd/0002-Fix-build-for-openrisc-with-uClibc.patch b/package/libbsd/0002-Fix-build-for-openrisc-with-uClibc.patch
-deleted file mode 100644
-index 1b28df5a8b..0000000000
---- a/package/libbsd/0002-Fix-build-for-openrisc-with-uClibc.patch
-+++ /dev/null
-@@ -1,48 +0,0 @@
--From aa902671bf1e0e808fd994bd6b403d70af7ab6dd Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 3 Apr 2018 20:02:14 +0300
--Subject: [PATCH] Fix build for openrisc with uClibc
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--uClibc defines EM_OR1K instead of EM_OPENRISC for the OpenRISC ELF
--e_machine ID. Use EM_OR1K when EM_OPENRISC is not defined.
--
--This fixes the following build failure:
--
--In file included from nlist.c:44:0:
--nlist.c: In function ???__elf_is_okay__???:
--local-elf.h:224:23: error: ???EM_OPENRISC??? undeclared (first use in this function)
-- #define ELF_TARG_MACH EM_OPENRISC
--                       ^
--nlist.c:77:26: note: in expansion of macro ???ELF_TARG_MACH???
--   if (ehdr->e_machine == ELF_TARG_MACH &&
--                          ^
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: sent to libbsd at lists.freedesktop.org
--
-- src/local-elf.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/local-elf.h b/src/local-elf.h
--index 1faf182f87d7..79f7d026f6c9 100644
----- a/src/local-elf.h
--+++ b/src/local-elf.h
--@@ -221,7 +221,11 @@
+--    SHA1_Init(&ctx);
+--    SHA1_Update(&ctx, key_opad, BLOCK_SIZE);
+--    SHA1_Update(&ctx, sha_digest, SHA1_DIGEST_SIZE);
+--    SHA1_Final(&ctx, digest);
+-+    xmpp_SHA1_Init(&ctx);
+-+    xmpp_SHA1_Update(&ctx, key_opad, BLOCK_SIZE);
+-+    xmpp_SHA1_Update(&ctx, sha_digest, SHA1_DIGEST_SIZE);
+-+    xmpp_SHA1_Final(&ctx, digest);
+- }
 - 
-- #elif defined(__or1k__)
+- static void SCRAM_SHA1_Hi(const uint8_t *text, size_t len,
+-diff --git a/src/sha1.c b/src/sha1.c
+-index 9af4f04..b60b325 100644
+---- a/src/sha1.c
+-+++ b/src/sha1.c
+-@@ -202,7 +202,7 @@ static void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64])
 - 
--+#if defined(EM_OPENRISC)
-- #define ELF_TARG_MACH	EM_OPENRISC
--+#else
--+#define ELF_TARG_MACH	EM_OR1K
--+#endif
-- #define ELF_TARG_CLASS	ELFCLASS32
-- #define ELF_TARG_DATA	ELFDATA2MSB
 - 
---- 
--2.16.3
--
-diff --git a/package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch b/package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch
-deleted file mode 100644
-index 2cf7a5f09f..0000000000
---- a/package/libbsd/0003-Handle-systems-missing-sys-cdefs.h.patch
-+++ /dev/null
-@@ -1,230 +0,0 @@
--From 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd Mon Sep 17 00:00:00 2001
--From: Guillem Jover <guillem@hadrons.org>
--Date: Tue, 6 Mar 2018 01:41:35 +0100
--Subject: [PATCH] Handle systems missing <sys/cdefs.h>
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--This is a non-portable header, and we cannot expect it to be provided by
--the system libc (e.g. musl). We just need and rely on declaration that
--we have defined ourselves in our own <bsd/sys/cdefs.h>. So we switch to
--only ever assume that.
--
--Fixes: https://bugs.freedesktop.org/105281
--
--Backported from: 11ec8f1e5dfa1c10e0c9fb94879b6f5b96ba52dd
--
--Signed-off-by: Guillem Jover <guillem@hadrons.org>
--Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-----
-- include/bsd/libutil.h        | 4 ++++
-- include/bsd/md5.h            | 4 ++++
-- include/bsd/nlist.h          | 4 ++++
-- include/bsd/readpassphrase.h | 4 ++++
-- include/bsd/stdlib.h         | 4 ++++
-- include/bsd/string.h         | 4 ++++
-- include/bsd/stringlist.h     | 5 +++++
-- include/bsd/sys/queue.h      | 4 ++++
-- include/bsd/sys/tree.h       | 4 ++++
-- include/bsd/timeconv.h       | 4 ++++
-- include/bsd/vis.h            | 4 ++++
-- include/bsd/wchar.h          | 4 ++++
-- 12 files changed, 49 insertions(+)
--
--diff --git a/include/bsd/libutil.h b/include/bsd/libutil.h
--index 45b3b15..ccca29a 100644
----- a/include/bsd/libutil.h
--+++ b/include/bsd/libutil.h
--@@ -40,7 +40,11 @@
-- #define LIBBSD_LIBUTIL_H
+- /* SHA1Init - Initialize new context */
+--void SHA1_Init(SHA1_CTX* context)
+-+void xmpp_SHA1_Init(SHA1_CTX* context)
+- {
+-     /* SHA1 initialization constants */
+-     context->state[0] = 0x67452301;
+-@@ -215,7 +215,7 @@ void SHA1_Init(SHA1_CTX* context)
 - 
-- #include <features.h>
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- #include <sys/types.h>
-- #include <stdint.h>
-- #include <stdio.h>
--diff --git a/include/bsd/md5.h b/include/bsd/md5.h
--index 5f3ae46..bf36a30 100644
----- a/include/bsd/md5.h
--+++ b/include/bsd/md5.h
--@@ -27,7 +27,11 @@ typedef struct MD5Context {
-- 	uint8_t buffer[MD5_BLOCK_LENGTH];	/* input buffer */
-- } MD5_CTX;
 - 
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- #include <sys/types.h>
+- /* Run your data through this. */
+--void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
+-+void xmpp_SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
+- {
+-     size_t i, j;
 - 
-- __BEGIN_DECLS
--diff --git a/include/bsd/nlist.h b/include/bsd/nlist.h
--index cb297e8..8767117 100644
----- a/include/bsd/nlist.h
--+++ b/include/bsd/nlist.h
--@@ -27,7 +27,11 @@
-- #ifndef LIBBSD_NLIST_H
-- #define LIBBSD_NLIST_H
+-@@ -244,7 +244,7 @@ void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
 - 
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
 - 
-- struct nlist {
-- 	union {
--diff --git a/include/bsd/readpassphrase.h b/include/bsd/readpassphrase.h
--index 14744b8..5eb8021 100644
----- a/include/bsd/readpassphrase.h
--+++ b/include/bsd/readpassphrase.h
--@@ -31,7 +31,11 @@
-- #define RPP_SEVENBIT    0x10		/* Strip the high bit from input. */
-- #define RPP_STDIN       0x20		/* Read from stdin, not /dev/tty */
+- /* Add padding and return the message digest. */
+--void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
+-+void xmpp_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
+- {
+-     uint32_t i;
+-     uint8_t  finalcount[8];
+-@@ -253,11 +253,11 @@ void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE])
+-         finalcount[i] = (unsigned char)((context->count[(i >= 4 ? 0 : 1)]
+-          >> ((3-(i & 3)) * 8) ) & 255);  /* Endian independent */
+-     }
+--    SHA1_Update(context, (uint8_t *)"\200", 1);
+-+    xmpp_SHA1_Update(context, (uint8_t *)"\200", 1);
+-     while ((context->count[0] & 504) != 448) {
+--        SHA1_Update(context, (uint8_t *)"\0", 1);
+-+        xmpp_SHA1_Update(context, (uint8_t *)"\0", 1);
+-     }
+--    SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
+-+    xmpp_SHA1_Update(context, finalcount, 8);  /* Should cause a SHA1_Transform() */
+-     for (i = 0; i < SHA1_DIGEST_SIZE; i++) {
+-         digest[i] = (uint8_t)
+-          ((context->state[i>>2] >> ((3-(i & 3)) * 8) ) & 255);
+-@@ -300,12 +300,12 @@ FILE* file;
+-             return(-1);
+-         }
+-     } 
+--    SHA1_Init(&context);
+-+    xmpp_SHA1_Init(&context);
+-     while (!feof(file)) {  /* note: what if ferror(file) */
+-         i = fread(buffer, 1, 16384, file);
+--        SHA1_Update(&context, buffer, i);
+-+        xmpp_SHA1_Update(&context, buffer, i);
+-     }
+--    SHA1_Final(&context, digest);
+-+    xmpp_SHA1_Final(&context, digest);
+-     fclose(file);
+-     for (i = 0; i < SHA1_DIGEST_SIZE/4; i++) {
+-         for (j = 0; j < 4; j++) {
+-@@ -358,9 +358,9 @@ int main(int argc, char** argv)
+-     fprintf(stdout, "verifying SHA-1 implementation... ");
+-     
+-     for (k = 0; k < 2; k++){ 
+--        SHA1_Init(&context);
+--        SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
+--        SHA1_Final(&context, digest);
+-+        xmpp_SHA1_Init(&context);
+-+        xmpp_SHA1_Update(&context, (uint8_t*)test_data[k], strlen(test_data[k]));
+-+        xmpp_SHA1_Final(&context, digest);
+- 	digest_to_hex(digest, output);
 - 
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- #include <sys/types.h>
+-         if (strcmp(output, test_results[k])) {
+-@@ -372,10 +372,10 @@ int main(int argc, char** argv)
+-         }    
+-     }
+-     /* million 'a' vector we feed separately */
+--    SHA1_Init(&context);
+-+    xmpp_SHA1_Init(&context);
+-     for (k = 0; k < 1000000; k++)
+--        SHA1_Update(&context, (uint8_t*)"a", 1);
+--    SHA1_Final(&context, digest);
+-+        xmpp_SHA1_Update(&context, (uint8_t*)"a", 1);
+-+    xmpp_SHA1_Final(&context, digest);
+-     digest_to_hex(digest, output);
+-     if (strcmp(output, test_results[2])) {
+-         fprintf(stdout, "FAIL\n");
+-diff --git a/src/sha1.h b/src/sha1.h
+-index 10266cb..7ff48d7 100644
+---- a/src/sha1.h
+-+++ b/src/sha1.h
+-@@ -23,9 +23,9 @@ typedef struct {
 - 
-- __BEGIN_DECLS
--diff --git a/include/bsd/stdlib.h b/include/bsd/stdlib.h
--index ebc9638..8d33d1f 100644
----- a/include/bsd/stdlib.h
--+++ b/include/bsd/stdlib.h
--@@ -42,7 +42,11 @@
-- #ifndef LIBBSD_STDLIB_H
-- #define LIBBSD_STDLIB_H
+- #define SHA1_DIGEST_SIZE 20
 - 
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- #include <sys/stat.h>
-- #include <stdint.h>
+--void SHA1_Init(SHA1_CTX* context);
+--void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len);
+--void SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE]);
+-+void xmpp_SHA1_Init(SHA1_CTX* context);
+-+void xmpp_SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len);
+-+void xmpp_SHA1_Final(SHA1_CTX* context, uint8_t digest[SHA1_DIGEST_SIZE]);
 - 
--diff --git a/include/bsd/string.h b/include/bsd/string.h
--index 6798bf6..29097f6 100644
----- a/include/bsd/string.h
--+++ b/include/bsd/string.h
--@@ -33,7 +33,11 @@
-- #ifndef LIBBSD_STRING_H
-- #define LIBBSD_STRING_H
-- 
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- #include <sys/types.h>
-- 
-- __BEGIN_DECLS
--diff --git a/include/bsd/stringlist.h b/include/bsd/stringlist.h
--index ff30cac..dd71496 100644
----- a/include/bsd/stringlist.h
--+++ b/include/bsd/stringlist.h
--@@ -31,7 +31,12 @@
-- 
-- #ifndef LIBBSD_STRINGLIST_H
-- #define LIBBSD_STRINGLIST_H
--+
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- #include <sys/types.h>
-- 
-- /*
--diff --git a/include/bsd/sys/queue.h b/include/bsd/sys/queue.h
--index 4a94ea7..ac00026 100644
----- a/include/bsd/sys/queue.h
--+++ b/include/bsd/sys/queue.h
--@@ -33,7 +33,11 @@
-- #ifndef LIBBSD_SYS_QUEUE_H
-- #define LIBBSD_SYS_QUEUE_H
-- 
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- 
-- /*
--  * This file defines four types of data structures: singly-linked lists,
--diff --git a/include/bsd/sys/tree.h b/include/bsd/sys/tree.h
--index 628bec0..325b382 100644
----- a/include/bsd/sys/tree.h
--+++ b/include/bsd/sys/tree.h
--@@ -30,7 +30,11 @@
-- #ifndef LIBBSD_SYS_TREE_H
-- #define LIBBSD_SYS_TREE_H
-- 
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- 
-- /*
--  * This file defines data structures for different types of trees:
--diff --git a/include/bsd/timeconv.h b/include/bsd/timeconv.h
--index e2a2c55..a426bd3 100644
----- a/include/bsd/timeconv.h
--+++ b/include/bsd/timeconv.h
--@@ -41,7 +41,11 @@
-- #ifndef LIBBSD_TIMECONV_H
-- #define LIBBSD_TIMECONV_H
-- 
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- #include <stdint.h>
-- #include <time.h>
-- 
--diff --git a/include/bsd/vis.h b/include/bsd/vis.h
--index 970dfdd..ab5430c 100644
----- a/include/bsd/vis.h
--+++ b/include/bsd/vis.h
--@@ -72,7 +72,11 @@
--  */
-- #define	UNVIS_END	1	/* no more characters */
-- 
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- 
-- __BEGIN_DECLS
-- char	*vis(char *, int, int, int);
--diff --git a/include/bsd/wchar.h b/include/bsd/wchar.h
--index 33a500e..7216503 100644
----- a/include/bsd/wchar.h
--+++ b/include/bsd/wchar.h
--@@ -40,7 +40,11 @@
-- #define LIBBSD_WCHAR_H
-- 
-- #include <stddef.h>
--+#ifdef LIBBSD_OVERLAY
-- #include <sys/cdefs.h>
--+#else
--+#include <bsd/sys/cdefs.h>
--+#endif
-- #include <sys/types.h>
-- 
-- __BEGIN_DECLS
---- 
--2.17.0
--
-diff --git a/package/libbsd/libbsd.hash b/package/libbsd/libbsd.hash
-index 133df90cb9..93af3944ae 100644
---- a/package/libbsd/libbsd.hash
-+++ b/package/libbsd/libbsd.hash
-@@ -1,3 +1,3 @@
--# From https://lists.freedesktop.org/archives/libbsd/2018-January/000166.html
--sha256	f548f10e5af5a08b1e22889ce84315b1ebe41505b015c9596bad03fd13a12b31	libbsd-0.8.7.tar.xz
--sha256	0b6cedd686394f9c811a6a9fd314d68ab4738475ad3d9df61154259fa649a2a7	COPYING
-+# From https://lists.freedesktop.org/archives/libbsd/2018-May/000190.html
-+sha256	56d835742327d69faccd16955a60b6dcf30684a8da518c4eca0ac713b9e0a7a4	libbsd-0.9.1.tar.xz
-+sha256	df6d8e1b5b3a5b06376c658c8ad3afc82687f1c0e0404cec4738ad14b2675708	COPYING
-diff --git a/package/libbsd/libbsd.mk b/package/libbsd/libbsd.mk
-index e211389ec7..2d78b8c5f3 100644
---- a/package/libbsd/libbsd.mk
-+++ b/package/libbsd/libbsd.mk
-@@ -4,10 +4,11 @@
+- #ifdef __cplusplus
+- }
+diff --git a/package/libstrophe/0002-make-autoreconfable.patch b/package/libstrophe/0001-make-autoreconfable.patch
+similarity index 100%
+rename from package/libstrophe/0002-make-autoreconfable.patch
+rename to package/libstrophe/0001-make-autoreconfable.patch
+diff --git a/package/libstrophe/libstrophe.hash b/package/libstrophe/libstrophe.hash
+index 6a2d99706b..72eb386520 100644
+--- a/package/libstrophe/libstrophe.hash
++++ b/package/libstrophe/libstrophe.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+-sha256 08f4a85ef419a8bdf08b6afa8f7b2a0e5e180fdc9c16cede81af672ec10e21e7  libstrophe-0.8.8.tar.gz
++sha256 158145bc1565a5fd0bbd7f57e3e15d768e58b8a460897ab5918a5a689d67ae6f  libstrophe-0.9.2.tar.gz
++sha256 82476f36ffd5e895a176013c0812166ba7b7d99f3d536fc7f5ed2e33e9f74a08  MIT-LICENSE.txt
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-LICENSE.txt
+diff --git a/package/libstrophe/libstrophe.mk b/package/libstrophe/libstrophe.mk
+index 4b5a10a558..7445caa67f 100644
+--- a/package/libstrophe/libstrophe.mk
++++ b/package/libstrophe/libstrophe.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBSD_VERSION = 0.8.7
-+LIBBSD_VERSION = 0.9.1
- LIBBSD_SOURCE = libbsd-$(LIBBSD_VERSION).tar.xz
- LIBBSD_SITE = https://archive.hadrons.org/software/libbsd
--LIBBSD_LICENSE = BSD-3-Clause, MIT
-+LIBBSD_LICENSE = BSD-2-Clause, BSD-3-Clause, BSD-4-Clause, BSD-5-Clause, \
-+		MIT, ISC, Beerware
- LIBBSD_LICENSE_FILES = COPYING
- LIBBSD_INSTALL_STAGING = YES
+-LIBSTROPHE_VERSION = 0.8.8
++LIBSTROPHE_VERSION = 0.9.2
+ LIBSTROPHE_SITE = $(call github,strophe,libstrophe,$(LIBSTROPHE_VERSION))
+ LIBSTROPHE_DEPENDENCIES = openssl host-pkgconf
+ # Doesn't ship configure
+@@ -14,9 +14,7 @@ LIBSTROPHE_LICENSE_FILES = MIT-LICENSE.txt GPL-LICENSE.txt
+ LIBSTROPHE_INSTALL_STAGING = YES
  
+ ifeq ($(BR2_PACKAGE_EXPAT),y)
+-# Passing --without-libxml2 doesn't work, due to how AC_ARG_WITH is
+-# used in configure.ac. As long as --with-libxml2 is *not* passed, the
+-# configure script assumes expat should be used.
++LIBSTROPHE_CONF_OPTS += --without-libxml2
+ LIBSTROPHE_DEPENDENCIES += expat
+ else
+ LIBSTROPHE_CONF_OPTS += --with-libxml2
