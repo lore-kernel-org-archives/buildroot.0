@@ -1,45 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 10:14:30 +0200
-Subject: [Buildroot] [git commit] boinc: bump to version 7.10.2
-Message-ID: <20180605081447.40F248399D@busybox.osuosl.org>
+Date: Tue, 5 Jun 2018 10:14:34 +0200
+Subject: [Buildroot] [git commit] rabbitmq-c: bump to version 0.9.0
+Message-ID: <20180605081447.5B5B88399D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f058dcdff290aea00d0fc95134cf68fdd35e710
+commit: https://git.buildroot.net/buildroot/commit/?id=6b8447fa68052f5d6531de73e77847fc911ff0d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/boinc/boinc.hash | 2 +-
- package/boinc/boinc.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/rabbitmq-c/rabbitmq-c.hash | 3 ++-
+ package/rabbitmq-c/rabbitmq-c.mk   | 7 ++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/boinc/boinc.hash b/package/boinc/boinc.hash
-index 564096c745..8dc0575dd3 100644
---- a/package/boinc/boinc.hash
-+++ b/package/boinc/boinc.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 5c77752a5cbb69b2dc0343c5aea331f2ec73410d9f33f5f50867e4071e799609  boinc-7.10.1.tar.gz
-+sha256 aacce87543354c8aeaf8a2f8d4885ab25f994dbaa8a372adf8a3d5d5854a97df  boinc-7.10.2.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  COPYING.LESSER
-diff --git a/package/boinc/boinc.mk b/package/boinc/boinc.mk
-index 04aacc2c3d..09407cf8f0 100644
---- a/package/boinc/boinc.mk
-+++ b/package/boinc/boinc.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/rabbitmq-c/rabbitmq-c.hash b/package/rabbitmq-c/rabbitmq-c.hash
+index 45e8cbd822..0af88774e6 100644
+--- a/package/rabbitmq-c/rabbitmq-c.hash
++++ b/package/rabbitmq-c/rabbitmq-c.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 d8ed9dcb49903d83d79d7b227da35ef68c60e5e0b08d0fc1fb4e4dc577b8802b rabbitmq-c-v0.8.0.tar.gz
++sha256 316c0d156452b488124806911a62e0c2aa8a546d38fc8324719cd29aaa493024 rabbitmq-c-v0.9.0.tar.gz
++sha256 94a12c906acb31a66c2c8a6c1b6e46cab52bc5694c5ada2a06d86b05d3d3f422 LICENSE-MIT
+diff --git a/package/rabbitmq-c/rabbitmq-c.mk b/package/rabbitmq-c/rabbitmq-c.mk
+index d496a4c09b..a3c4f8219f 100644
+--- a/package/rabbitmq-c/rabbitmq-c.mk
++++ b/package/rabbitmq-c/rabbitmq-c.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BOINC_VERSION_MAJOR = 7.10
--BOINC_VERSION = $(BOINC_VERSION_MAJOR).1
-+BOINC_VERSION_MAJOR = 7
-+BOINC_VERSION = $(BOINC_VERSION_MAJOR).10.2
- # client_release can be used to build the Client and Manager but not the Server
- # part. The Server currently has no versioning (see
- # https://github.com/BOINC/boinc/pull/1798).
+-RABBITMQ_C_VERSION = v0.8.0
++RABBITMQ_C_VERSION = v0.9.0
+ RABBITMQ_C_SITE = $(call github,alanxz,rabbitmq-c,$(RABBITMQ_C_VERSION))
+ RABBITMQ_C_LICENSE = MIT
+ RABBITMQ_C_LICENSE_FILES = LICENSE-MIT
+@@ -13,6 +13,11 @@ RABBITMQ_C_CONF_OPTS = \
+ 	-DBUILD_API_DOCS=OFF \
+ 	-DBUILD_TOOLS_DOCS=OFF
+ 
++# Before CMake 3.10, passing THREADS_PTHREAD_ARG=OFF was needed to
++# disable a try_run() call in the FindThreads tests, which caused a
++# build failure when cross-compiling.
++RABBITMQ_C_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
++
+ # BUILD_SHARED_LIBS is handled in pkg-cmake.mk as it is a generic cmake variable
+ ifeq ($(BR2_STATIC_LIBS),y)
+ RABBITMQ_C_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
