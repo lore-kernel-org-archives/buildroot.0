@@ -1,70 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 22:07:02 +0200
-Subject: [Buildroot] [PATCH 1/1] cc-tool: depends on
- BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <20180605181514.2081-1-fontaine.fabrice@gmail.com>
-References: <20180605181514.2081-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180605220702.303ee975@windsurf>
+Date: Tue, 5 Jun 2018 22:09:36 +0200
+Subject: [Buildroot] [git commit] oprofile: fix musl build
+Message-ID: <20180605200809.8969183C1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=6f84d52bb402d60ab53bc9ba185a540d61a2a4ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  5 Jun 2018 20:15:14 +0200, Fabrice Fontaine wrote:
-> options_description class from boost's program_options needs
-> __sync_fetch_and_add_4 / __sync_fetch_and_sub_4:
-> 
-> Extract from config.log:
-> /home/rclinux/rc-buildroot-test/scripts/instance-0/output/host/m68k-buildroot-uclinux-uclibc/sysroot/usr/lib/libboost_program_options.a(options_description.o):
-> In function
-> `boost::program_options::options_description_easy_init::operator()(char
-> const*, boost::program_options::value_semantic const*, char const*)':
-> options_description.cpp:(.text+0x4240): undefined reference to
-> `__sync_fetch_and_add_4'
-> options_description.cpp:(.text+0x42ca): undefined reference to
-> `__sync_fetch_and_sub_4'
-> options_description.cpp:(.text+0x42d8): undefined reference to
-> `__sync_fetch_and_sub_4
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/5677a3fd96217cbb0966063de048401cf1ccf16b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add patch to replace undeclared basename call by op_basename
 
-I am not super convinced by this analysis, because:
+Fixes:
+ - http://autobuild.buildroot.net/results/39ba30f4ec94e176e3d5d5b5ced37a0aa030cc5a
 
- (1) It really is the boost program options library that needs those
-     sync builtins. So if it really needs, the dependency should be
-     added on BR2_PACKAGE_BOOST_PROGRAM_OPTIONS, and then propagated to
-     all packages that select this, which includes BR2_PACKAGE_CC_TOOL,
-     but not only.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...archive-replace-basename-with-op_basename.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
- (2) Boost can use other built-ins than __sync builtins. For example on
-     SPARC, BR2_TOOLCHAIN_HAS_SYNC_4 is false, but cc-tool builds just
-     fine. It's because SPARC with recent compilers have
-     BR2_TOOLCHAIN_HAS_ATOMIC that is true, and Boost uses __atomic
-     builtins.
-
- (3) Boost has an emulated atomic operation implementation (which uses
-     locks) which I believe should have been used here if neither
-     __sync nor __atomic builtins are available. But it wasn't used
-     either. Why ?
-
-See boost/atomic/detail/ for the different implementations of atomic
-operations in Boost.
-
-The problem is that with the crazyness of the bjam build system, I've
-never been able to figure out Boost decides which atomic implementation
-to use. If you figure that out, I'll owe you one beer at the next
-conference :-)
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch b/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
+new file mode 100644
+index 0000000000..a2b580dad7
+--- /dev/null
++++ b/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
+@@ -0,0 +1,34 @@
++From 5da92e18a538c630cb06a3dbb2affd9bfc128901 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 5 Jun 2018 13:31:34 +0200
++Subject: [PATCH] oparchive: replace basename with op_basename
++
++Use op_basename instead of basename in oparchive function.
++This seems to be the intended use as there is no include on libgen.h for
++the standard basename and the argument is a const char* instead of a
++char*.
++
++Fixes:
++ - http://autobuild.buildroot.net/results/06fbff267063e09f7bc06adb08c896f861ecdb1d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ pp/oparchive.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/pp/oparchive.cpp b/pp/oparchive.cpp
++index 6221e148..274152ba 100644
++--- a/pp/oparchive.cpp
+++++ b/pp/oparchive.cpp
++@@ -261,7 +261,7 @@ int oparchive(options::spec const & spec)
++ 		/* determine the session name of sample file */
++ 		int offset = sample_name.find('{');
++ 		string base_samples_dir = sample_name.substr(0, offset-1);
++-		string session = basename(base_samples_dir.c_str());
+++		string session = op_basename(base_samples_dir.c_str());
++ 		/* Get rid of the the archive_path from the name */
++ 		string sample_base = sample_name.substr(offset);
++ 		string sample_archive_file = dest_samples_dir + "/" + session + "/" + sample_base;
++-- 
++2.14.1
++
