@@ -1,112 +1,76 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 5 Jun 2018 21:50:13 +0200
-Subject: [Buildroot] [PATCH v3] package/mender: new package
-In-Reply-To: <1525425719-28459-1-git-send-email-angelo@amarulasolutions.com>
-References: <1525425719-28459-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180605215013.476d22ca@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 5 Jun 2018 22:06:39 +0200
+Subject: [Buildroot] [PATCH 1/1] More complete usage string.
+In-Reply-To: <20180605123959.21925-1-F.LaRoche@pilz.de>
+References: <20180605123959.21925-1-F.LaRoche@pilz.de>
+Message-ID: <e3d565da-4f03-65d8-dca2-dc5c0e195911@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ [+ Carlos who is working on init scripts]
 
-On Fri,  4 May 2018 11:21:59 +0200, Angelo Compagnucci wrote:
-> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+On 05-06-18 14:39, Florian La Roche wrote:
+> More complete usage string for the logging service.
 > 
-> This patch add mender, an open source over-the-air (OTA) software
-> updater for embedded Linux devices.
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
+> ---
+>  package/busybox/S01logging | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/busybox/S01logging b/package/busybox/S01logging
+> index 4632a4cc99..fcb3e7d236 100644
+> --- a/package/busybox/S01logging
+> +++ b/package/busybox/S01logging
+> @@ -33,7 +33,7 @@ case "$1" in
+>  	start
+>  	;;
+>    *)
+> -	echo "Usage: $0 {start|stop|restart}"
+> +	echo "Usage: $0 {start|stop|restart|reload}"
 
-I went ahead and applied this to master, but after doing some changes.
-I was a bit surprised by one of the changes I had to do though, because
-it clearly outlined that the package was not properly tested. See below
-for details.
+ For this one, we should perhaps first decide on what we want to do in general
+with the init scripts. Do we want to define a reload target? And if we do, and
+it is equal to the restart target, do we want to have it in the help text?
 
->  package/Config.in                        |  1 +
->  package/mender/Config.in                 | 13 ++++++++
->  package/mender/mender-device-identity    | 52 ++++++++++++++++++++++++++++++++
->  package/mender/mender-inventory-hostinfo | 21 +++++++++++++
->  package/mender/mender-inventory-network  | 47 +++++++++++++++++++++++++++++
->  package/mender/mender.conf               | 14 +++++++++
->  package/mender/mender.hash               |  2 ++
->  package/mender/mender.mk                 | 34 +++++++++++++++++++++
->  package/mender/mender.service            | 15 +++++++++
->  package/mender/server.crt                | 22 ++++++++++++++
->  package/mender/tenant.conf               |  0
->  11 files changed, 221 insertions(+)
+ First some statistics. We currently have:
 
-An entry in the DEVELOPERS file was missing, so I've added it.
+- 109 init scripts
+-  75 define 'reload', 12 define 'force-reload', 6 both (so 81 total)
+-  63 define 'reload' as 'restart'
+-   7 define 'reload' as something else
+- 107 provide help text
+-  31 provide help text for 'reload'
+-  13 of the 63 that define reload == restart provide help text for reload
+-   7 of the 7 that define reload != restart provide help text for reload
 
-> diff --git a/package/mender/Config.in b/package/mender/Config.in
-> new file mode 100644
-> index 0000000..183930d
-> --- /dev/null
-> +++ b/package/mender/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_MENDER
-> +	bool "mender"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
-This dependency was lacking the corresponding Config.in comment, so
-I've added it.
+ So my proposal for the "norm" would be:
 
-> +	depends on BR2_INIT_SYSTEMD
+- always defines reload
+- only document reload if reload != restart
+- decide what to do with force-reload later
 
-Since systemd is not a build dependency nor even a runtime dependency,
-I've dropped this dependency.
+ Carlos, what do you think?
 
-> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-> new file mode 100644
-> index 0000000..6a4c995
-> --- /dev/null
-> +++ b/package/mender/mender.mk
-> @@ -0,0 +1,34 @@
-> +################################################################################
-> +#
-> +# mender
-> +#
-> +################################################################################
-> +
-> +MENDER_VERSION = 1.4.0
-> +MENDER_SOURCE = mender-$(MENDER_VERSION).tar.gz
-> +MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
-> +
-> +define MENDER_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0644 package/mender/mender.conf \
-> +		$(TARGET_DIR)/etc/mender/mender.conf
-> +	$(INSTALL) -D -m 0644 package/mender/tenant.conf \
-> +		$(TARGET_DIR)/etc/mender/tenant.conf
-> +	$(INSTALL) -D -m 0644 package/mender/server.crt \
-> +		$(TARGET_DIR)/etc/mender/server.crt
-> +	$(INSTALL) -D -m 0755 package/mender/mender-device-identity \
-> +		$(TARGET_DIR)/var/share/mender/identity/mender-device-identity
-> +	$(INSTALL) -D -m 0755 package/mender/mender-inventory-network \
-> +		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-network
-> +	$(INSTALL) -D -m 0755 package/mender/mender-inventory-hostinfo \
-> +		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-hostinfo
-> +endef
 
-Because you override the install target commands here, the mender
-binary is not installed at all to the target! I'm not sure how you
-tested this, as it obviously doesn't work: usr/bin/mender is not
-installed to the target.
+ In short, I would not apply this patch.
 
-I've fixed this by using a post install hook instead, so that the
-default target installation logic of golang-package is preserved.
+ Regards,
+ Arnout
 
-Thanks for this contribution! I'm looking forward to seeing the
-additional patches from Dan to integrate Mender in a non-systemd
-configuration.
+>  	exit 1
+>  esac
+>  
+> 
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
