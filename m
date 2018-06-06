@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Jun 2018 22:11:15 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself as maintainer of
- abootimg
-In-Reply-To: <1528305592-8485-1-git-send-email-julien.boibessot@free.fr>
-References: <1528305592-8485-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20180606221115.4e54215f@windsurf>
+Date: Wed, 6 Jun 2018 22:11:23 +0200
+Subject: [Buildroot] [PATCH 1/1] libucl: bump to version 0.8.1
+In-Reply-To: <20180606194550.3852-1-fontaine.fabrice@gmail.com>
+References: <20180606194550.3852-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180606221123.79004c2d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  6 Jun 2018 19:19:52 +0200, julien.boibessot at free.fr wrote:
-> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+On Wed,  6 Jun 2018 21:45:50 +0200, Fabrice Fontaine wrote:
+> Add hash for license file
 > 
-> I forgot to do it while submitting this package [1]. Thanks Thomas
-> for pointing it.
-> 
-> [1] https://git.buildroot.net/buildroot/commit/package/abootimg?id=43bafa748fbb5439856b9de1667db93c43ddd21f
-> 
-> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
+>  package/libucl/libucl.hash | 3 ++-
+>  package/libucl/libucl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
