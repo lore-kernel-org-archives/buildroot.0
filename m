@@ -1,42 +1,53 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  6 Jun 2018 21:45:50 +0200
-Subject: [Buildroot] [PATCH 1/1] libucl: bump to version 0.8.1
-Message-ID: <20180606194550.3852-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 6 Jun 2018 21:55:32 +0200
+Subject: [Buildroot] [PATCH] bump 3.2.x and 4.{4, 9, 14, 16}.x series
+In-Reply-To: <1528247080-7847-1-git-send-email-festevam@gmail.com>
+References: <1528247080-7847-1-git-send-email-festevam@gmail.com>
+Message-ID: <20180606215532.1eb9e5c5@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Hello Fabio,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libucl/libucl.hash | 3 ++-
- package/libucl/libucl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+patch subject should be 'linux-heades: bump 3.2.x and 4.{4, 9, 14, 16}.x series'
+(with package prefix)...
 
-diff --git a/package/libucl/libucl.hash b/package/libucl/libucl.hash
-index bd2ca13bf3..8d4a796e22 100644
---- a/package/libucl/libucl.hash
-+++ b/package/libucl/libucl.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 2f69995c7f8320350f56c1183c395cc4a2a958331f22d60b7839a117c9c601e1  libucl-0.7.3.tar.gz
-+sha256 a6397e179672f0e8171a0f9a2cfc37e01432b357fd748b13f4394436689d24ef  libucl-0.8.1.tar.gz
-+sha256 1bf976835764c1d827e07472a0a75adb098682df56681878af05fc0db7439b03  COPYING
-diff --git a/package/libucl/libucl.mk b/package/libucl/libucl.mk
-index 39a7ed3cc7..087fea683d 100644
---- a/package/libucl/libucl.mk
-+++ b/package/libucl/libucl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUCL_VERSION = 0.7.3
-+LIBUCL_VERSION = 0.8.1
- LIBUCL_SITE = $(call github,vstakhov,libucl,$(LIBUCL_VERSION))
- LIBUCL_INSTALL_STAGING = YES
- LIBUCL_AUTORECONF = YES
--- 
-2.14.1
+Regards,
+Peter
+
+On Tue,  5 Jun 2018 22:04:40 -0300, Fabio Estevam <festevam@gmail.com> wrote:
+
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  package/linux-headers/Config.in.host | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+> index f6229c0..f56d85b 100644
+> --- a/package/linux-headers/Config.in.host
+> +++ b/package/linux-headers/Config.in.host
+> @@ -256,16 +256,16 @@ endchoice
+>  
+>  config BR2_DEFAULT_KERNEL_HEADERS
+>  	string
+> -	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+> +	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+>  	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+> -	default "4.4.134"	if BR2_KERNEL_HEADERS_4_4
+> -	default "4.9.104"	if BR2_KERNEL_HEADERS_4_9
+> +	default "4.4.135"	if BR2_KERNEL_HEADERS_4_4
+> +	default "4.9.106"	if BR2_KERNEL_HEADERS_4_9
+>  	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+>  	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+>  	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+>  	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+> -	default "4.14.46"	if BR2_KERNEL_HEADERS_4_14
+> +	default "4.14.48"	if BR2_KERNEL_HEADERS_4_14
+>  	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+> -	default "4.16.13"	if BR2_KERNEL_HEADERS_4_16
+> +	default "4.16.14"	if BR2_KERNEL_HEADERS_4_16
+>  	default "4.17"		if BR2_KERNEL_HEADERS_4_17
+>  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
