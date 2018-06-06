@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Jun 2018 07:52:00 +0200
-Subject: [Buildroot] [BUILDROOT][PATCHv2 1/3] balena: new package
-In-Reply-To: <5350eb85-bc35-bc0b-c173-b354bfb18fb4@savronik.com.tr>
-References: <651f579d-07ad-afc4-4515-0061016dfc02@savronik.com.tr>
- <20180605152819.6950ef99@windsurf>
- <5350eb85-bc35-bc0b-c173-b354bfb18fb4@savronik.com.tr>
-Message-ID: <20180606075200.67262f61@windsurf>
+Date: Wed, 6 Jun 2018 07:58:02 +0200
+Subject: [Buildroot] [PATCH] libbsd: bump to version 0.9.1
+In-Reply-To: <20180606040131.drvicwte22lzicad@sapphire.tkos.co.il>
+References: <f54e614d6b4a1de2ab39e843ed6266828faecd15.1528222775.git.baruch@tkos.co.il>
+ <20180605221634.3a53fa0b@windsurf>
+ <20180606040131.drvicwte22lzicad@sapphire.tkos.co.il>
+Message-ID: <20180606075802.3f397dd9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 6 Jun 2018 08:26:28 +0300, Refik Tuzakl? wrote:
+On Wed, 6 Jun 2018 07:01:31 +0300, Baruch Siach wrote:
 
-> >> +BALENA_LDFLAGS += -extldflags '-static'  
-> > Same.  
-> I think we need it because in the pkg-golang. mk there is if clause 
-> about it;
-> ifeq ($(BR2_STATIC_LIBS),y)
-> $(2)_LDFLAGS += -extldflags '-static'
-> endif
-> in our dependencies BR2_STATIC_LIBS should be "n"
+> > because the license text itself refers to Peter Wemm.  
+> 
+> The libbsd COPYING fine appends the copyright holder to a number of common 
+> licenses like BSD-3-clause-John-Birrell and BSD-4-clause-Niels-Provos. That's 
+> probably because each COPYING entry lists specific files with their copyright 
+> holders.
 
-Why is -extldflags '-static' needed when BR2_STATIC_LIBS is disabled ?
-It shouldn't be necessary.
+Correct.
+
+> We usually only use the SPDX identifier string. So I don't think 
+> there is a reason to do that for this license.
+
+Well, normally an SPDX identifier string refers to a specific version
+of the license. If the license text is different (even for subtle
+reasons), the SPDX identifier string should probably be different.
+
+> > Yocto is really using a longer list of licenses:
+> > https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-support/libbsd/libbsd_0.8.7.bb  
+> 
+> The full list is only in a comment, AFAICS. 
+
+True, indeed, I had missed that.
+
+> The actual effective line is 
+> rather shorter than what we have following this patch:
+> 
+> LICENSE = "BSD-4-Clause & ISC & PD"
+
+I also think it is good enough. But I wanted to point out that the
+licensing is in fact a bit more complicated. I personally don't see the
+need of having a more detailed LIBBSD_LICENSE description, but I wanted
+to point this out so that others can comment on this (Arnout, Yann,
+Peter).
 
 Best regards,
 
