@@ -1,26 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 05 Jun 2018 21:45:12 +0000
-Subject: [Buildroot] [Bug 11066] x11r7 X11 S40xorg leads to a black screen
- on QEMU x86 but startx works
-In-Reply-To: <bug-11066-163@https.bugs.busybox.net/>
-References: <bug-11066-163@https.bugs.busybox.net/>
-Message-ID: <bug-11066-163-FTVkA2yRdQ@https.bugs.busybox.net/>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue,  5 Jun 2018 22:04:40 -0300
+Subject: [Buildroot] [PATCH] bump 3.2.x and 4.{4, 9, 14, 16}.x series
+Message-ID: <1528247080-7847-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11066
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- Comment #2 from Ciro Santilli <ciro.santilli@gmail.com> ---
-If I manually do the command that S40xorg would be doing after removing it,
-i.e.:
-
-/usr/bin/Xorg:0.0 vt01 -s 0 -noreset -allowMouseOpenFail
-
-the screen also goes black.
-
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f6229c0..f56d85b 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -256,16 +256,16 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.134"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.104"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.135"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.106"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.46"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.48"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+-	default "4.16.13"	if BR2_KERNEL_HEADERS_4_16
++	default "4.16.14"	if BR2_KERNEL_HEADERS_4_16
+ 	default "4.17"		if BR2_KERNEL_HEADERS_4_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
