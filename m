@@ -1,24 +1,37 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Wed, 6 Jun 2018 14:14:17 -0300 (BRT)
-Subject: [Buildroot] swapoff, but no swapon in initab
-Message-ID: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Wed,  6 Jun 2018 19:19:52 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself as maintainer of
+ abootimg
+Message-ID: <1528305592-8485-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-I'm working on a product that needs a swap partition and noticed that
-both package/{busybox,sysvinit}/inittab invoke "swapoff -a" in their
-shutdown sequences but do not invoke "swapon -a". Is this intentional
-or the swapon call is missing (e.g. right after "mount -a")?
+I forgot to do it while submitting this package [1]. Thanks Thomas
+for pointing it.
 
-BTW, what about systemd?
+[1] https://git.buildroot.net/buildroot/commit/package/abootimg?id=43bafa748fbb5439856b9de1667db93c43ddd21f
 
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 32fa08f..c7c798d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1029,6 +1029,7 @@ F:	package/tegrarcm/
+ N:	Julien Boibessot <julien.boibessot@armadeus.com>
+ F:	board/armadeus/
+ F:	configs/armadeus*
++F:	package/abootimg/
+ F:	package/gpm/
+ F:	package/lbreakout2/
+ F:	package/libcddb/
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-Rua Am?rica, 1000 - Eldorado do Sul, RS, Brasil - 92990-000
-casantos at datacom.com.br          +55 51 3933.3000 ext. 3627
-http://www.datacom.ind.br
+2.1.4
