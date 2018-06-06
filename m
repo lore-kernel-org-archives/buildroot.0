@@ -1,37 +1,32 @@
-From: julien.boibessot at free.fr <julien.boibessot@free.fr>
-Date: Wed,  6 Jun 2018 19:19:52 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself as maintainer of
- abootimg
-Message-ID: <1528305592-8485-1-git-send-email-julien.boibessot@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Jun 2018 20:49:52 +0200
+Subject: [Buildroot] Cannot build C++ internal toolchain using uclibc-ng
+In-Reply-To: <CAPa8UMePbuAEUCFMvYadN+n-zJN2c-N6B9RXL==BffbDLqww9g@mail.gmail.com>
+References: <CAPa8UMePbuAEUCFMvYadN+n-zJN2c-N6B9RXL==BffbDLqww9g@mail.gmail.com>
+Message-ID: <20180606204952.58f73809@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Hello,
 
-I forgot to do it while submitting this package [1]. Thanks Thomas
-for pointing it.
+On Wed, 6 Jun 2018 17:41:53 +0200, Michele Bucca wrote:
 
-[1] https://git.buildroot.net/buildroot/commit/package/abootimg?id=43bafa748fbb5439856b9de1667db93c43ddd21f
+> My host system is Debian Jessie 8.10 x86_64
+> I attach my .config file: what can I do to fix the iissue?
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+Is this what you have after a complete rebuild ? Make sure you have the
+same error after doing "make clean; make".
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 32fa08f..c7c798d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1029,6 +1029,7 @@ F:	package/tegrarcm/
- N:	Julien Boibessot <julien.boibessot@armadeus.com>
- F:	board/armadeus/
- F:	configs/armadeus*
-+F:	package/abootimg/
- F:	package/gpm/
- F:	package/lbreakout2/
- F:	package/libcddb/
+See https://buildroot.org/downloads/manual/manual.html#full-rebuild for
+more details.
+
+Best regards,
+
+Thomas
 -- 
-2.1.4
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
