@@ -1,77 +1,112 @@
-From: Michele Bucca <michele.bucca@gmail.com>
-Date: Wed, 6 Jun 2018 22:29:33 +0200
-Subject: [Buildroot] Cannot build C++ internal toolchain using uclibc-ng
-In-Reply-To: <20180606204952.58f73809@windsurf>
-References: <CAPa8UMePbuAEUCFMvYadN+n-zJN2c-N6B9RXL==BffbDLqww9g@mail.gmail.com>
- <20180606204952.58f73809@windsurf>
-Message-ID: <CAPa8UMezPR1Wuh43Pbt_RAVXFmRCCDRu=Yn1V4s-YpdE2fLA-g@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  6 Jun 2018 22:33:55 +0200
+Subject: [Buildroot] [PATCH 1/1] libseccomp: bump to version 2.3.3
+Message-ID: <20180606203355.17461-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-06-06 20:49 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
-> Hello,
->
-> On Wed, 6 Jun 2018 17:41:53 +0200, Michele Bucca wrote:
->
->> My host system is Debian Jessie 8.10 x86_64
->> I attach my .config file: what can I do to fix the iissue?
->
-> Is this what you have after a complete rebuild ? Make sure you have the
-> same error after doing "make clean; make".
->
-> See https://buildroot.org/downloads/manual/manual.html#full-rebuild for
-> more details.
->
+- Update patch and sent it upstream
+- Remove LIBSECCOMP_FIXUP_M4_DIR (not needed anymore)
+- Add hash for license file
 
-Yes, it shows the same error [1]. By the way here's  the output of a
-clean build that I've made with the commands :
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libseccomp/0001-remove-static.patch | 41 +++++++++++++++++------------
+ package/libseccomp/libseccomp.hash          |  3 ++-
+ package/libseccomp/libseccomp.mk            |  8 +-----
+ 3 files changed, 27 insertions(+), 25 deletions(-)
 
-make clean
-LC_ALL=C make
-
-[1] https://pastebin.com/Z6vUVmRE
-
-my config is the following:
-
-BR2_x86_i686=y
-BR2_KERNEL_HEADERS_4_15=y
-BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_TARGET_GENERIC_PASSWD_SHA256=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_DEFCONFIG="i386"
-BR2_PACKAGE_LIBERATION=y
-BR2_PACKAGE_XORG7=y
-BR2_PACKAGE_XSERVER_XORG_SERVER=y
-BR2_PACKAGE_XAPP_SETXKBMAP=y
-BR2_PACKAGE_XAPP_TWM=y
-BR2_PACKAGE_XAPP_XCALC=y
-BR2_PACKAGE_XAPP_XCLIPBOARD=y
-BR2_PACKAGE_XAPP_XCLOCK=y
-BR2_PACKAGE_XAPP_XEDIT=y
-BR2_PACKAGE_XAPP_XINIT=y
-BR2_PACKAGE_XAPP_XINPUT=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD=y
-BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_CIRRUS=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV=y
-BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA=y
-BR2_PACKAGE_XTERM=y
-BR2_TARGET_ROOTFS_INITRAMFS=y
-BR2_TARGET_ROOTFS_ISO9660=y
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_TARGET_SYSLINUX=y
-
-
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/libseccomp/0001-remove-static.patch b/package/libseccomp/0001-remove-static.patch
+index 6fd81f96d5..9f0ac210c7 100644
+--- a/package/libseccomp/0001-remove-static.patch
++++ b/package/libseccomp/0001-remove-static.patch
+@@ -1,24 +1,28 @@
+-Do not force static link, it breaks build with
+-# BR2_STATIC_LIBS is not set
++From 8632287cf6863b580340f846ac14adf2609abdb0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 2 Jun 2018 13:45:22 +0200
++Subject: [PATCH] remove static
++
++Do not force static link of tools, it breaks build with:
+ BR2_SHARED_LIBS=y
+ 
++Patch retrieved from
++https://git.buildroot.net/buildroot/tree/package/libseccomp/0001-remove-static.patch
++and slighly updated to work with 2.3.3
++
++[Upstream status: https://github.com/seccomp/libseccomp/pull/121]
++
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tools/Makefile.am | 2 --
++ 1 file changed, 2 deletions(-)
+ 
+-diff -uNr libseccomp-2.2.0.org/tests/Makefile.am libseccomp-2.2.0/tests/Makefile.am
+---- libseccomp-2.2.0.org/tests/Makefile.am	2015-02-11 21:57:11.000000000 +0100
+-+++ libseccomp-2.2.0/tests/Makefile.am	2015-03-29 16:03:49.668946652 +0200
+-@@ -16,7 +16,6 @@
+- # along with this library; if not, see <http://www.gnu.org/licenses>.
+- #
+- 
+--AM_LDFLAGS = -static
+- LDADD = util.la ../src/libseccomp.la
+- 
+- check_LTLIBRARIES = util.la
+-diff -uNr libseccomp-2.2.0.org/tools/Makefile.am libseccomp-2.2.0/tools/Makefile.am
+---- libseccomp-2.2.0.org/tools/Makefile.am	2015-02-11 21:57:11.000000000 +0100
+-+++ libseccomp-2.2.0/tools/Makefile.am	2015-03-29 16:03:46.164992302 +0200
+-@@ -33,8 +33,6 @@
++diff --git a/tools/Makefile.am b/tools/Makefile.am
++index 70b4aed..ef74270 100644
++--- a/tools/Makefile.am
+++++ b/tools/Makefile.am
++@@ -35,8 +35,6 @@ scmp_bpf_disasm_SOURCES = scmp_bpf_disasm.c bpf.h util.h
+  scmp_bpf_sim_SOURCES = scmp_bpf_sim.c bpf.h util.h
+  
+  scmp_sys_resolver_LDADD = ../src/libseccomp.la
+@@ -27,3 +31,6 @@ diff -uNr libseccomp-2.2.0.org/tools/Makefile.am libseccomp-2.2.0/tools/Makefile
+ -scmp_arch_detect_LDFLAGS = -static
+  scmp_bpf_disasm_LDADD = util.la
+  scmp_bpf_sim_LDADD = util.la
++-- 
++2.14.1
++
+diff --git a/package/libseccomp/libseccomp.hash b/package/libseccomp/libseccomp.hash
+index ef390ff562..0362ce9ba4 100644
+--- a/package/libseccomp/libseccomp.hash
++++ b/package/libseccomp/libseccomp.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 09864282ae579c34bd5ef75ef3487200adfecaa51f5cffc7c7ad1ed2f89f5d6c libseccomp-v2.3.1.tar.gz
++sha256 5a52495207f00d1254707f11226e17c16ec53f5038d65bbabf1892873fa2fe5b libseccomp-v2.3.3.tar.gz
++sha256 102900208eef27b766380135906d431dba87edaa7ec6aa72e6ebd3dd67f3a97b LICENSE
+diff --git a/package/libseccomp/libseccomp.mk b/package/libseccomp/libseccomp.mk
+index 9a241a5513..afa2d36122 100644
+--- a/package/libseccomp/libseccomp.mk
++++ b/package/libseccomp/libseccomp.mk
+@@ -4,17 +4,11 @@
+ #
+ ################################################################################
+ 
+-LIBSECCOMP_VERSION = v2.3.1
++LIBSECCOMP_VERSION = v2.3.3
+ LIBSECCOMP_SITE = $(call github,seccomp,libseccomp,$(LIBSECCOMP_VERSION))
+ LIBSECCOMP_LICENSE = LGPL-2.1
+ LIBSECCOMP_LICENSE_FILES = LICENSE
+ LIBSECCOMP_INSTALL_STAGING = YES
+ LIBSECCOMP_AUTORECONF = YES
+ 
+-# Needed for autoreconf to work properly, see ./autogen.sh
+-define LIBSECCOMP_FIXUP_M4_DIR
+-	mkdir $(@D)/m4
+-endef
+-LIBSECCOMP_POST_EXTRACT_HOOKS += LIBSECCOMP_FIXUP_M4_DIR
+-
+ $(eval $(autotools-package))
+-- 
+2.14.1
