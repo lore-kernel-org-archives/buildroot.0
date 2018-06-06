@@ -1,44 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Jun 2018 22:06:10 +0200
-Subject: [Buildroot] [git commit] libucl: bump to version 0.8.1
-Message-ID: <20180606200855.1A0BF80279@busybox.osuosl.org>
+Date: Wed, 6 Jun 2018 22:06:03 +0200
+Subject: [Buildroot] [git commit] whois: bump to version 5.3.1
+Message-ID: <20180606200855.1175A80279@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b778f48d7310706b18feda1b4d87e91b3136ad21
+commit: https://git.buildroot.net/buildroot/commit/?id=5c572b92034cfe359579e1fbc4e13dd02f838417
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libucl/libucl.hash | 3 ++-
- package/libucl/libucl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/whois/whois.hash | 4 ++--
+ package/whois/whois.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libucl/libucl.hash b/package/libucl/libucl.hash
-index bd2ca13bf3..8d4a796e22 100644
---- a/package/libucl/libucl.hash
-+++ b/package/libucl/libucl.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 2f69995c7f8320350f56c1183c395cc4a2a958331f22d60b7839a117c9c601e1  libucl-0.7.3.tar.gz
-+sha256 a6397e179672f0e8171a0f9a2cfc37e01432b357fd748b13f4394436689d24ef  libucl-0.8.1.tar.gz
-+sha256 1bf976835764c1d827e07472a0a75adb098682df56681878af05fc0db7439b03  COPYING
-diff --git a/package/libucl/libucl.mk b/package/libucl/libucl.mk
-index 39a7ed3cc7..087fea683d 100644
---- a/package/libucl/libucl.mk
-+++ b/package/libucl/libucl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/whois/whois.hash b/package/whois/whois.hash
+index 635066c5e3..e69b95d999 100644
+--- a/package/whois/whois.hash
++++ b/package/whois/whois.hash
+@@ -1,5 +1,5 @@
+-# From http://snapshot.debian.org/archive/debian/20180121T094839Z/pool/main/w/whois/whois_5.3.0.dsc
+-sha256	4d789c403bfb5833c8ae168a5f31be70e34b045bd5d95a54c82a27b0ff135723	whois_5.3.0.tar.xz
++# From http://snapshot.debian.org/archive/debian/20180522T155750Z/pool/main/w/whois/whois_5.3.1.dsc
++sha256	ef4ead31306a388d9c8c83d67f56c94ed8b4c85e94f60baea2f5b1660445893e	whois_5.3.1.tar.xz
+ 
+ # Hash for license file:
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/whois/whois.mk b/package/whois/whois.mk
+index 5cd7cde7fd..c9203d8c0d 100644
+--- a/package/whois/whois.mk
++++ b/package/whois/whois.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBUCL_VERSION = 0.7.3
-+LIBUCL_VERSION = 0.8.1
- LIBUCL_SITE = $(call github,vstakhov,libucl,$(LIBUCL_VERSION))
- LIBUCL_INSTALL_STAGING = YES
- LIBUCL_AUTORECONF = YES
+-WHOIS_VERSION = 5.3.0
+-WHOIS_SITE = http://snapshot.debian.org/archive/debian/20180121T094839Z/pool/main/w/whois
++WHOIS_VERSION = 5.3.1
++WHOIS_SITE = http://snapshot.debian.org/archive/debian/20180522T155750Z/pool/main/w/whois
+ WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
+ # take precedence over busybox implementation
+ WHOIS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox) $(TARGET_NLS_DEPENDENCIES)
