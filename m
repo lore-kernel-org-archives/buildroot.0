@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Jun 2018 22:11:18 +0200
-Subject: [Buildroot] [PATCH 1/1] whois: bump to version 5.3.1
-In-Reply-To: <20180606193903.3245-1-fontaine.fabrice@gmail.com>
-References: <20180606193903.3245-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180606221118.3d9f3e8f@windsurf>
+Date: Wed, 6 Jun 2018 22:12:43 +0200
+Subject: [Buildroot] [PATCH] imx-usb-loader: propagate libusb dependency
+In-Reply-To: <41228b9c0becd39927b2f2714e8e980a372c319d.1528315479.git.baruch@tkos.co.il>
+References: <41228b9c0becd39927b2f2714e8e980a372c319d.1528315479.git.baruch@tkos.co.il>
+Message-ID: <20180606221243.2555b064@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  6 Jun 2018 21:39:03 +0200, Fabrice Fontaine wrote:
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Wed,  6 Jun 2018 23:04:39 +0300, Baruch Siach wrote:
+> Avoid select of libusb when the toolchain does not support threads.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/a21/a212ee3e5ec174f4e6e7d582f777325dac035bfd/
+> 
+> Cc: Adam Duskett <aduskett@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  package/whois/whois.hash | 4 ++--
->  package/whois/whois.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  package/imx-usb-loader/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Applied to master, thanks.
+I'm wondering how I could have missed that during the review. Thanks
+for pointing it out and proposing a patch to fix it! Applied!
+
+Best regards,
 
 Thomas
 -- 
