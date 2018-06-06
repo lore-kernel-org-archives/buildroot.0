@@ -1,25 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 06 Jun 2018 14:49:19 +0000
-Subject: [Buildroot] [Bug 11066] x11r7 X11 S40xorg leads to a black screen
- on QEMU x86 but startx works
-In-Reply-To: <bug-11066-163@https.bugs.busybox.net/>
-References: <bug-11066-163@https.bugs.busybox.net/>
-Message-ID: <bug-11066-163-io5uX5aOZs@https.bugs.busybox.net/>
+From: Jaap Crezee <jaap@jcz.nl>
+Date: Wed, 6 Jun 2018 17:29:57 +0200
+Subject: [Buildroot] scanpypi tool python error - local variable 'download'
+ referenced before assignment
+Message-ID: <55bf291b-22cf-b254-d04c-e7bf017f85be@jcz.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11066
+Hi all,
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |bernd.kuhls at t-online.de
-                   |.org                        |
+Is this a known issue?
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+[jaap at jaap /data/work/htc/git/buildroot_development ]$ git log -1
+commit f3d114a1effd8a6ef773bee14fe49ea6d8d7c350 (HEAD, tag: 2018.05)
+Author: Peter Korsgaard <peter@korsgaard.com>
+Date:   Fri Jun 1 22:22:57 2018 +0200
+
+    Update for 2018.05
+
+    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[jaap at jaap /data/work/htc/git/buildroot_development ]$ ./utils/scanpypi azure-iothub-device-client
+buildroot package name for azure-iothub-device-client: python-azure-iothub-device-client
+Package: python-azure-iothub-device-client
+Fetching package azure-iothub-device-client
+Traceback (most recent call last):
+  File "./utils/scanpypi", line 716, in <module>
+    main()
+  File "./utils/scanpypi", line 648, in main
+    package.download_package()
+  File "./utils/scanpypi", line 217, in download_package
+    if download.__class__ == six.moves.urllib.error.HTTPError:
+UnboundLocalError: local variable 'download' referenced before assignment
+[jaap at jaap /data/work/htc/git/buildroot_development ]$
+
+regards,
+
+
+Jaap
