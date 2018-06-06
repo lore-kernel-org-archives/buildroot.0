@@ -1,31 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 06 Jun 2018 19:43:34 +0000
-Subject: [Buildroot] [Bug 11071] Building postgresql package on Debian 9.4
- x64 for armel target fails
-In-Reply-To: <bug-11071-163@https.bugs.busybox.net/>
-References: <bug-11071-163@https.bugs.busybox.net/>
-Message-ID: <bug-11071-163-u5jMox1NnG@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  6 Jun 2018 21:45:50 +0200
+Subject: [Buildroot] [PATCH 1/1] libucl: bump to version 0.8.1
+Message-ID: <20180606194550.3852-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11071
+Add hash for license file
 
---- Comment #10 from Peter Seiderer <ps.report@gmx.net> ---
-(In reply to Peter Seiderer from comment #9)
-..and for consistency with the other options (or buildroot style) the
-else branch:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libucl/libucl.hash | 3 ++-
+ package/libucl/libucl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-ifeq ($(BR2_PACKAGE_LIBXML2),y)
-POSTGRESQL_DEPENDENCIES += libxml2
-POSTGRESQL_CONF_OPTS += --with-libxml
-POSTGRESQL_CONF_ENV += XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
-else
-POSTGRESQL_CONF_OPTS += --without-libxml
-endif
-
+diff --git a/package/libucl/libucl.hash b/package/libucl/libucl.hash
+index bd2ca13bf3..8d4a796e22 100644
+--- a/package/libucl/libucl.hash
++++ b/package/libucl/libucl.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 2f69995c7f8320350f56c1183c395cc4a2a958331f22d60b7839a117c9c601e1  libucl-0.7.3.tar.gz
++sha256 a6397e179672f0e8171a0f9a2cfc37e01432b357fd748b13f4394436689d24ef  libucl-0.8.1.tar.gz
++sha256 1bf976835764c1d827e07472a0a75adb098682df56681878af05fc0db7439b03  COPYING
+diff --git a/package/libucl/libucl.mk b/package/libucl/libucl.mk
+index 39a7ed3cc7..087fea683d 100644
+--- a/package/libucl/libucl.mk
++++ b/package/libucl/libucl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUCL_VERSION = 0.7.3
++LIBUCL_VERSION = 0.8.1
+ LIBUCL_SITE = $(call github,vstakhov,libucl,$(LIBUCL_VERSION))
+ LIBUCL_INSTALL_STAGING = YES
+ LIBUCL_AUTORECONF = YES
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
