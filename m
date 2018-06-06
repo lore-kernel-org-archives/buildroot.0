@@ -1,53 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 6 Jun 2018 21:55:32 +0200
-Subject: [Buildroot] [PATCH] bump 3.2.x and 4.{4, 9, 14, 16}.x series
-In-Reply-To: <1528247080-7847-1-git-send-email-festevam@gmail.com>
-References: <1528247080-7847-1-git-send-email-festevam@gmail.com>
-Message-ID: <20180606215532.1eb9e5c5@gmx.net>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed,  6 Jun 2018 23:04:39 +0300
+Subject: [Buildroot] [PATCH] imx-usb-loader: propagate libusb dependency
+Message-ID: <41228b9c0becd39927b2f2714e8e980a372c319d.1528315479.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabio,
+Avoid select of libusb when the toolchain does not support threads.
 
-patch subject should be 'linux-heades: bump 3.2.x and 4.{4, 9, 14, 16}.x series'
-(with package prefix)...
+Fixes:
+http://autobuild.buildroot.net/results/a21/a212ee3e5ec174f4e6e7d582f777325dac035bfd/
 
-Regards,
-Peter
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/imx-usb-loader/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On Tue,  5 Jun 2018 22:04:40 -0300, Fabio Estevam <festevam@gmail.com> wrote:
-
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  package/linux-headers/Config.in.host | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-> index f6229c0..f56d85b 100644
-> --- a/package/linux-headers/Config.in.host
-> +++ b/package/linux-headers/Config.in.host
-> @@ -256,16 +256,16 @@ endchoice
->  
->  config BR2_DEFAULT_KERNEL_HEADERS
->  	string
-> -	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
-> +	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
->  	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
-> -	default "4.4.134"	if BR2_KERNEL_HEADERS_4_4
-> -	default "4.9.104"	if BR2_KERNEL_HEADERS_4_9
-> +	default "4.4.135"	if BR2_KERNEL_HEADERS_4_4
-> +	default "4.9.106"	if BR2_KERNEL_HEADERS_4_9
->  	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
->  	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
->  	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
->  	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
-> -	default "4.14.46"	if BR2_KERNEL_HEADERS_4_14
-> +	default "4.14.48"	if BR2_KERNEL_HEADERS_4_14
->  	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
-> -	default "4.16.13"	if BR2_KERNEL_HEADERS_4_16
-> +	default "4.16.14"	if BR2_KERNEL_HEADERS_4_16
->  	default "4.17"		if BR2_KERNEL_HEADERS_4_17
->  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/imx-usb-loader/Config.in b/package/imx-usb-loader/Config.in
+index 6f083f34d12a..1cc0dd8c25e7 100644
+--- a/package/imx-usb-loader/Config.in
++++ b/package/imx-usb-loader/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_IMX_USB_LOADER
+ 	bool "imx-usb-loader"
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  This package contains tools to download and execute code
+@@ -7,3 +8,6 @@ config BR2_PACKAGE_IMX_USB_LOADER
+ 	  Serial Download Protocol.
+ 
+ 	  https://github.com/boundarydevices/imx_usb_loader
++
++comment "imx-usb-loader needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+-- 
+2.17.1
