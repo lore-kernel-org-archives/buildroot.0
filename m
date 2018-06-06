@@ -1,41 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed,  6 Jun 2018 23:04:39 +0300
-Subject: [Buildroot] [PATCH] imx-usb-loader: propagate libusb dependency
-Message-ID: <41228b9c0becd39927b2f2714e8e980a372c319d.1528315479.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 6 Jun 2018 22:05:57 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself as maintainer of
+ abootimg
+Message-ID: <20180606200855.0977F83D82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Avoid select of libusb when the toolchain does not support threads.
+commit: https://git.buildroot.net/buildroot/commit/?id=d5843f90a55a8ce65bbb80a9ade9c96e91d8695f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/a21/a212ee3e5ec174f4e6e7d582f777325dac035bfd/
+I forgot to do it while submitting this package [1]. Thanks Thomas
+for pointing it.
 
-Cc: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+[1] https://git.buildroot.net/buildroot/commit/package/abootimg?id=43bafa748fbb5439856b9de1667db93c43ddd21f
+
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/imx-usb-loader/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/imx-usb-loader/Config.in b/package/imx-usb-loader/Config.in
-index 6f083f34d12a..1cc0dd8c25e7 100644
---- a/package/imx-usb-loader/Config.in
-+++ b/package/imx-usb-loader/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_IMX_USB_LOADER
- 	bool "imx-usb-loader"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	select BR2_PACKAGE_LIBUSB
- 	help
- 	  This package contains tools to download and execute code
-@@ -7,3 +8,6 @@ config BR2_PACKAGE_IMX_USB_LOADER
- 	  Serial Download Protocol.
- 
- 	  https://github.com/boundarydevices/imx_usb_loader
-+
-+comment "imx-usb-loader needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
--- 
-2.17.1
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 32fa08f5c3..c7c798d020 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1029,6 +1029,7 @@ F:	package/tegrarcm/
+ N:	Julien Boibessot <julien.boibessot@armadeus.com>
+ F:	board/armadeus/
+ F:	configs/armadeus*
++F:	package/abootimg/
+ F:	package/gpm/
+ F:	package/lbreakout2/
+ F:	package/libcddb/
