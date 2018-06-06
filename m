@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 6 Jun 2018 22:11:23 +0200
-Subject: [Buildroot] [PATCH 1/1] libucl: bump to version 0.8.1
-In-Reply-To: <20180606194550.3852-1-fontaine.fabrice@gmail.com>
-References: <20180606194550.3852-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180606221123.79004c2d@windsurf>
+Date: Wed, 6 Jun 2018 22:11:18 +0200
+Subject: [Buildroot] [PATCH 1/1] whois: bump to version 5.3.1
+In-Reply-To: <20180606193903.3245-1-fontaine.fabrice@gmail.com>
+References: <20180606193903.3245-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180606221118.3d9f3e8f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  6 Jun 2018 21:45:50 +0200, Fabrice Fontaine wrote:
-> Add hash for license file
-> 
+On Wed,  6 Jun 2018 21:39:03 +0200, Fabrice Fontaine wrote:
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libucl/libucl.hash | 3 ++-
->  package/libucl/libucl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  package/whois/whois.hash | 4 ++--
+>  package/whois/whois.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
