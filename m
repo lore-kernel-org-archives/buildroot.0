@@ -1,54 +1,81 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 6 Jun 2018 07:01:31 +0300
-Subject: [Buildroot] [PATCH] libbsd: bump to version 0.9.1
-In-Reply-To: <20180605221634.3a53fa0b@windsurf>
-References: <f54e614d6b4a1de2ab39e843ed6266828faecd15.1528222775.git.baruch@tkos.co.il>
- <20180605221634.3a53fa0b@windsurf>
-Message-ID: <20180606040131.drvicwte22lzicad@sapphire.tkos.co.il>
+From: =?UTF-8?Q?Refik_Tuzakl=c4=b1?= <refik.tuzakli@savronik.com.tr>
+Date: Wed, 6 Jun 2018 08:26:28 +0300
+Subject: [Buildroot] [BUILDROOT][PATCHv2 1/3] balena: new package
+In-Reply-To: <20180605152819.6950ef99@windsurf>
+References: <651f579d-07ad-afc4-4515-0061016dfc02@savronik.com.tr>
+ <20180605152819.6950ef99@windsurf>
+Message-ID: <5350eb85-bc35-bc0b-c173-b354bfb18fb4@savronik.com.tr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello
 
-On Tue, Jun 05, 2018 at 10:16:34PM +0200, Thomas Petazzoni wrote:
-> On Tue,  5 Jun 2018 21:19:35 +0300, Baruch Siach wrote:
-> > Drop upstream patches.
-> > 
-> > Add a patch fixing build with musl libc.
-> > 
-> > Update the list of licenses based on the content of COPYING. The
-> > BSD-5-Clause license is not listed by SPDX, but that is its name in the
-> > COPYING file.
-> 
-> The license seems to really be
-> 
-> BSD-5-clause-Peter-Wemm
-> 
-> because the license text itself refers to Peter Wemm.
 
-The libbsd COPYING fine appends the copyright holder to a number of common 
-licenses like BSD-3-clause-John-Birrell and BSD-4-clause-Niels-Provos. That's 
-probably because each COPYING entry lists specific files with their copyright 
-holders. We usually only use the SPDX identifier string. So I don't think 
-there is a reason to do that for this license.
-
-> Yocto is really using a longer list of licenses:
-> https://git.yoctoproject.org/cgit.cgi/poky/plain/meta/recipes-support/libbsd/libbsd_0.8.7.bb
-
-The full list is only in a comment, AFAICS. The actual effective line is 
-rather shorter than what we have following this patch:
-
-LICENSE = "BSD-4-Clause & ISC & PD"
-
-> For now I've applied your patch, because it's definitely not worse
-> than what we have, but perhaps we want to make it even better.
-
-baruch
+On 05-06-2018 16:28, Thomas Petazzoni wrote:
+> Hello Refik,
+>
+> On Tue, 5 Jun 2018 16:16:17 +0300, Refik Tuzakl? wrote:
+>>   From 65b90eefab3fd936b5eec0e3004e5ec370c7d3b9 Mon Sep 17 00:00:00 2001
+>> From: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
+>> Date: Tue, 5 Jun 2018 15:58:39 +0300
+>> Subject: [PATCHv2 1/3] balena new package v2
+>>
+>>
+>> This patch adds balena; Moby-based Container Engine for Embedded, IoT,
+>> and Edge uses.
+>>
+>> Signed-off-by: Refik Tuzakli <refik.tuzakli@savronik.com.tr>
+> Thanks for this new iteration. Unfortunately, it is now sent with
+> Thunderbird, so it is still badly line wrapped.
+I am really sorry for this I can not solve the problem about SSL 
+Certificate.
+>> +BALENA_LDFLAGS += -extldflags '-static'
+> Same.
+I think we need it because in the pkg-golang. mk there is if clause 
+about it;
+ifeq ($(BR2_STATIC_LIBS),y)
+$(2)_LDFLAGS += -extldflags '-static'
+endif
+in our dependencies BR2_STATIC_LIBS should be "n"
+>
+> All this stuff is done by the golang-package infrastructure. I suggest
+> that you read package/pkg-golang.mk so that you can get a feeling of
+> what the golang-package infrastructure already does for you.
+>
+> Thanks!
+>
+> Thomas
+Thanks a lot
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+
+Refik Tuzakl?
+Embedded Software Engineer
+IT and Simulation Group
+
+Savronik A.?.
+
+Organize Sanayi B?lgesi
+
+20. Cadde No: 19 26110
+
+Eski?ehir Turkey
+
+Tel   : (+90 222) 236 1590
+
+Faks: (+90 222) 236 1589
+www.savronik.com.tr
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180606/a61b7064/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: refik_tuzakli.vcf
+Type: text/x-vcard
+Size: 4 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180606/a61b7064/attachment.vcf>
