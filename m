@@ -1,58 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 7 Jun 2018 23:48:39 +0200
-Subject: [Buildroot] qt-4.8.7 ICE on powerpc [was:
- [autobuild.buildroot.net] Build results for 2018-05-31]
-In-Reply-To: <20180601142401.63697c3b@windsurf>
-References: <20180601060027.2921620828@mail.bootlin.com>
- <a3c7791c-7502-5ce2-9677-355105fd23ec@mind.be>
- <20180601110638.5c41eacf@windsurf>
- <bd26e178-b204-056d-3646-7ececd9964d5@mind.be>
- <20180601142401.63697c3b@windsurf>
-Message-ID: <ab7f66ca-8e03-2b77-0a33-81934133c6f0@mind.be>
+From: Min Xu <xuminready@gmail.com>
+Date: Thu,  7 Jun 2018 16:01:44 -0700
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add dependency on
+ BR2_TOOLCHAIN_HAS_SYNC_4
+Message-ID: <20180607230144.387-1-xuminready@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+To fixup linking errors:
+"undefined reference to `__sync_val_compare_and_swap_4'"
+Fixes
+http://autobuild.buildroot.net/results/d00c5f9e1e7a6a40fac5763a06977b351b7875da
+http://autobuild.buildroot.net/results/0612f2dc09a8763fdf2111ee8d0c223c8531262a
 
+reference: https://git.buildroot.org/buildroot/commit/?id=7c77d965bdcd301c2644004140faec613c1ee202
 
-On 01-06-18 14:24, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 1 Jun 2018 13:12:56 +0200, Arnout Vandecappelle wrote:
-> 
->>> On Fri, 1 Jun 2018 09:58:01 +0200, Arnout Vandecappelle wrote:  
->>>> On 01-06-18 08:00, Thomas Petazzoni wrote:  
->>>>>      powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/cebd1d3d013d40bf71bf20696c28818f58d9533a | ORPH    
->>>>
->>>>  This one has also been failing for a *long* time. It is caused by
->>>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818  
->>>
->>> Doesn't this bug report claims that the issue has been fixed in gcc
->>> 6.x... but still the autobuild failure happens with a gcc 6.x based
->>> toolchain ?  
->>
->>  Well, a single bug report sometimes contains multiple bugs :-). Apparently part
->> of the problem was only fixed in GCC7.2, and it's possible that some part is not
->> fixed yet.
-> 
-> If a single bug report contains multiple bugs, then our
-> BR2_TOOLCHAIN_GCC_HAS_BUG_xyz naming has a serious problem :-)
-> 
-> Is this specific Qt4 issue resolved with gcc 7.x ? Some testing on this
-> would be nice.
+Signed-off-by: Min Xu <xuminready@gmail.com>
+---
+ package/shadowsocks-libev/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
- Since this is about Qt4 which is EOL since 3 years, perhaps we can just exclude
-Qt4 entirely for powerpc? I think powerpc with UI is rather rare anyway...
-
- Regards,
- Arnout
-
+diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+index d02e5a93ef..c914ed778b 100644
+--- a/package/shadowsocks-libev/Config.in
++++ b/package/shadowsocks-libev/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+ 	bool "shadowsocks-libev"
++	# uses __sync_val_compare_and_swap_4
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_C_ARES
+ 	select BR2_PACKAGE_LIBEV
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.11.0
