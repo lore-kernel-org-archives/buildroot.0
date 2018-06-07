@@ -1,32 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jun 2018 15:24:50 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-06-06
-In-Reply-To: <20180607060042.ED12520964@mail.bootlin.com>
-References: <20180607060042.ED12520964@mail.bootlin.com>
-Message-ID: <20180607152450.2295d37e@windsurf>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu,  7 Jun 2018 15:32:04 +0200
+Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.20
+Message-ID: <20180607133204.20676-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Thu,  7 Jun 2018 08:00:42 +0200 (CEST), Thomas Petazzoni wrote:
-
-> microblazeel |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/31bb140f0c15c4301ae033b6a6adaccdbed23bc8 |     
->         or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/2212a2ee8a1f6e73f77977f1dcbe11f950059380 |     
-> microblazeel |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/27a8bf3d33ff31b2c40e9a978126bffa1fc4d69e |     
-
-This is a problem with the copy of the double-conversion library in
-Qt5. I have asked to the upstream double-conversion library how to add
-support for Microblaze and OpenRISC:
-
-  https://github.com/google/double-conversion/issues/73
-
-Thomas
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index d6e66216cf..6eb384e763 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  6a582dc2ae90b94ff3853f9ffd7d80b2c2b5fe2e2c35cb1da0b36f3f3dfad434  mpd-0.20.18.tar.xz
++sha256  a9e458c6e07cdf62649de7722e1e5a7f13aa82eeb397bfbbebc07cf5cf273584  mpd-0.20.20.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index d41ffe1571..a0bbc7222a 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MPD_VERSION_MAJOR = 0.20
+-MPD_VERSION = $(MPD_VERSION_MAJOR).18
++MPD_VERSION = $(MPD_VERSION_MAJOR).20
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
