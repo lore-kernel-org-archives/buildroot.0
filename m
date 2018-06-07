@@ -1,48 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jun 2018 16:03:32 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add myself to init-related
- packages
-Message-ID: <20180607140257.44B5B87054@busybox.osuosl.org>
+Date: Thu, 7 Jun 2018 16:03:35 +0200
+Subject: [Buildroot] [git commit] mpd: bump to version 0.20.20
+Message-ID: <20180607140257.54F4986E96@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41a365d40bf8f391a9af2ac9c7a18bfff97f35f9
+commit: https://git.buildroot.net/buildroot/commit/?id=65163ac929e16256a0ffb7510721e83720d04a5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm working on improving the sysvinit scripts, so it's advisable to keep
-an eye on them.
-
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c7c798d020..c1ab83ebd3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -408,11 +408,20 @@ N:	Carlo Caione <carlo.caione@gmail.com>
- F:	package/sunxi-boards/
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index d6e66216cf..6eb384e763 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  6a582dc2ae90b94ff3853f9ffd7d80b2c2b5fe2e2c35cb1da0b36f3f3dfad434  mpd-0.20.18.tar.xz
++sha256  a9e458c6e07cdf62649de7722e1e5a7f13aa82eeb397bfbbebc07cf5cf273584  mpd-0.20.20.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index d41ffe1571..a0bbc7222a 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- N:	Carlos Santos <casantos@datacom.com.br>
-+F:	package/busybox/
- F:	package/gtest/
-+F:	package/initscripts/
- F:	package/libpam-radius-auth/
- F:	package/libpam-tacplus/
- F:	package/modem-manager/
- F:	package/perl-file-util/
-+F:	package/skeleton-custom/
-+F:	package/skeleton-init-common/
-+F:	package/skeleton-init-none/
-+F:	package/skeleton-init-systemd/
-+F:	package/skeleton-init-sysv/
-+F:	package/skeleton/
-+F:	package/sysvinit/
- F:	package/util-linux/
- F:	package/tpm2-abrmd/
- F:	package/tpm2-tools/
+ MPD_VERSION_MAJOR = 0.20
+-MPD_VERSION = $(MPD_VERSION_MAJOR).18
++MPD_VERSION = $(MPD_VERSION_MAJOR).20
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf boost
