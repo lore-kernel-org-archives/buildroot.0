@@ -1,17 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 7 Jun 2018 23:29:01 +0200
-Subject: [Buildroot] [PATCHv2 proposal/next 2/3] build: replace
- host-mkpasswd with host-busybox
-In-Reply-To: <20180605165039.GA29058@scaer>
-References: <20180601125900.26400-1-chemobejk@gmail.com>
- <20180601133053.27552-1-chemobejk@gmail.com>
- <20180601133053.27552-3-chemobejk@gmail.com>
- <48945091-d169-18ba-31d0-a51c64e9a918@mind.be>
- <935950713.1169230.1528197779003.JavaMail.zimbra@datacom.com.br>
- <20180605161546.GE2503@scaer>
- <CALURroS4t3V6GWnZSs6GEcAFrf1=KvfU036dskH6aEM4fQXn8w@mail.gmail.com>
- <20180605165039.GA29058@scaer>
-Message-ID: <69845f53-8c5f-910a-58b2-57bf5c0e38e3@mind.be>
+Date: Thu, 7 Jun 2018 23:48:39 +0200
+Subject: [Buildroot] qt-4.8.7 ICE on powerpc [was:
+ [autobuild.buildroot.net] Build results for 2018-05-31]
+In-Reply-To: <20180601142401.63697c3b@windsurf>
+References: <20180601060027.2921620828@mail.bootlin.com>
+ <a3c7791c-7502-5ce2-9677-355105fd23ec@mind.be>
+ <20180601110638.5c41eacf@windsurf>
+ <bd26e178-b204-056d-3646-7ececd9964d5@mind.be>
+ <20180601142401.63697c3b@windsurf>
+Message-ID: <ab7f66ca-8e03-2b77-0a33-81934133c6f0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,29 +17,38 @@ To: buildroot@busybox.net
 
 
 
-On 05-06-18 18:50, Yann E. MORIN wrote:
-> Christopher, All,
+On 01-06-18 14:24, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On 2018-06-05 09:35 -0700, Christopher McCrory spake thusly:
->> Sorry for top post, on mobile.
->> What about using openssl?
->> [1]https://www.openssl.org/docs/manmaster/man1/openssl-passwd.html
+> On Fri, 1 Jun 2018 13:12:56 +0200, Arnout Vandecappelle wrote:
 > 
-> Since we do not require that openssl be installed on the build machine,
-> we'd have to build our own one. We do have a host-openssl package, but
-> it takes quite a bit of time to build: on my relativelty fast laptop,
-> it adds about 32s to the build time. This is a pretty big hit...
+>>> On Fri, 1 Jun 2018 09:58:01 +0200, Arnout Vandecappelle wrote:  
+>>>> On 01-06-18 08:00, Thomas Petazzoni wrote:  
+>>>>>      powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/cebd1d3d013d40bf71bf20696c28818f58d9533a | ORPH    
+>>>>
+>>>>  This one has also been failing for a *long* time. It is caused by
+>>>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818  
+>>>
+>>> Doesn't this bug report claims that the issue has been fixed in gcc
+>>> 6.x... but still the autobuild failure happens with a gcc 6.x based
+>>> toolchain ?  
+>>
+>>  Well, a single bug report sometimes contains multiple bugs :-). Apparently part
+>> of the problem was only fixed in GCC7.2, and it's possible that some part is not
+>> fixed yet.
 > 
-> So, not an option IMHO...
+> If a single bug report contains multiple bugs, then our
+> BR2_TOOLCHAIN_GCC_HAS_BUG_xyz naming has a serious problem :-)
+> 
+> Is this specific Qt4 issue resolved with gcc 7.x ? Some testing on this
+> would be nice.
 
- So, not whois, not busybox, not openssl... What about python, which we anyway
-require to be installed on the host? I remember that someone has posted a
-one-liner that would do the job :-P
+ Since this is about Qt4 which is EOL since 3 years, perhaps we can just exclude
+Qt4 entirely for powerpc? I think powerpc with UI is rather rare anyway...
 
  Regards,
  Arnout
 
-[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
