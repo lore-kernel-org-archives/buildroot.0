@@ -1,38 +1,50 @@
-From: Sam Lancia <sam@gpsm.co.uk>
-Date: Thu, 7 Jun 2018 08:51:07 +0100
-Subject: [Buildroot] [PATCH 1/1] docker-containerd: add missing binary
- symlink
-Message-ID: <CAGDkrv6D9avg7ps9j3PfBEwYNL-vNTQe2v-782A8u30Y6zB_fw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 7 Jun 2018 10:26:46 +0200
+Subject: [Buildroot] Cannot build C++ internal toolchain using uclibc-ng
+In-Reply-To: <CAPa8UMe7aWfRX+gRg=TawdqRaLj3CDee-gJ6Cn0w2aVdE9BkZA@mail.gmail.com>
+References: <CAPa8UMePbuAEUCFMvYadN+n-zJN2c-N6B9RXL==BffbDLqww9g@mail.gmail.com>
+ <20180606204952.58f73809@windsurf>
+ <CAPa8UMezPR1Wuh43Pbt_RAVXFmRCCDRu=Yn1V4s-YpdE2fLA-g@mail.gmail.com>
+ <20180606231532.5982164d@windsurf>
+ <CAPa8UMe7aWfRX+gRg=TawdqRaLj3CDee-gJ6Cn0w2aVdE9BkZA@mail.gmail.com>
+Message-ID: <20180607102646.0a6ab073@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In 2dccb4f2fefd8a0dbda65dd0f7537f811e920b13,
-"/usr/bin/docker-containerd" was removed without replacing it with a
-symlink
+Hello,
 
-https://bugs.busybox.net/show_bug.cgi?id=11076
+On Wed, 6 Jun 2018 23:24:06 +0200, Michele Bucca wrote:
 
-Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
----
- package/docker-containerd/docker-containerd.mk | 1 +
- 1 file changed, 1 insertion(+)
+> >> make clean
+> >> LC_ALL=C make
+> >>
+> >> [1] https://pastebin.com/Z6vUVmRE
+> >>  
+> >
+> > What Linux distribution and version of this distribution are you using
+> > as the host system ?  
+> 
+> My host system is Debian Jessie 8.10 x86_64 Updated just today with
+> latest packages from the repos
 
-diff --git a/package/docker-containerd/docker-containerd.mk
-b/package/docker-containerd/docker-containerd.mk
-index 88e27b5ed4..09e89f1aba 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -21,6 +21,7 @@ DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
- define DOCKER_CONTAINERD_INSTALL_SYMLINKS
-  ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
-  ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
-+ ln -fs containerd $(TARGET_DIR)/usr/bin/docker-containerd
- endef
+I built your exact defconfig in a Docker container that has Debian
+Jessie 8.10 installed, and it worked just fine for me. I only had an
+issue way after the toolchain build, when building the kernel, because
+your defconfig lacks:
 
- DOCKER_CONTAINERD_POST_INSTALL_TARGET_HOOKS +=
-DOCKER_CONTAINERD_INSTALL_SYMLINKS
+  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+
+But other than that, it builds fine. So I suspect there is something
+wrong/special in your environment. As I can't reproduce, you'll have to
+investigate a bit yourself I'm afraid.
+
+Best regards,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
