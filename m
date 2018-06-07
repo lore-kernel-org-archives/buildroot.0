@@ -1,15 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jun 2018 15:11:28 +0200
-Subject: [Buildroot] [PATCH] toolchain: GCC bug 85862
-In-Reply-To: <647b5badffcc071f204e324a62cfc8dc@230ruedubac.fr>
-References: <1526934582-53824-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20180522230033.0daffecb@windsurf>
- <21765fd8-362a-0534-69d9-4a2b9d197121@gmail.com>
- <CANQCQpbT7m4H6gFjPg5BNssOzUqHsBQRnNpDhH_y5t3-x-gS0g@mail.gmail.com>
- <e1330fb2-8262-d2c9-433d-d3d22b574f72@gmail.com>
- <CANQCQpazxbnb4dcvtPdoXCLL5enKTKucDhPeG50Dhho9c6Xuvg@mail.gmail.com>
- <647b5badffcc071f204e324a62cfc8dc@230ruedubac.fr>
-Message-ID: <20180607151128.2ca5e5ea@windsurf>
+Date: Thu, 7 Jun 2018 15:24:50 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-06-06
+In-Reply-To: <20180607060042.ED12520964@mail.bootlin.com>
+References: <20180607060042.ED12520964@mail.bootlin.com>
+Message-ID: <20180607152450.2295d37e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,32 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 07 Jun 2018 14:43:46 +0200, davidb wrote:
+On Thu,  7 Jun 2018 08:00:42 +0200 (CEST), Thomas Petazzoni wrote:
 
-> Regarding the commit id bd03966d4ebeb284ac3afb5f3b8cba13da2b9983 that 
-> disables qt5webengine when the bug 85862 can be triggered on microblaze 
-> arch, I can't enable qt5webengine when selecting QT5 Latest version 
-> (5.10) and x86_64 arch.
-> 
-> I think the test about the bug should be inverted:
-> 
-> diff --git a/package/qt5/qt5webengine/Config.in 
-> b/package/qt5/qt5webengine/Config.in
-> index 38486c6dcf..744d659567 100644
-> --- a/package/qt5/qt5webengine/Config.in
-> +++ b/package/qt5/qt5webengine/Config.in
-> @@ -31,7 +31,7 @@ config BR2_PACKAGE_QT5WEBENGINE
->          depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
->          depends on BR2_HOST_GCC_AT_LEAST_4_8 # qt5base-icu
->          depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5base-icu
-> -       depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || 
-> BR2_PACKAGE_QT5_VERSION_5_6 # libnss
-> +       depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || 
-> BR2_PACKAGE_QT5_VERSION_5_6 # libnss
+> microblazeel |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/31bb140f0c15c4301ae033b6a6adaccdbed23bc8 |     
+>         or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/2212a2ee8a1f6e73f77977f1dcbe11f950059380 |     
+> microblazeel |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/27a8bf3d33ff31b2c40e9a978126bffa1fc4d69e |     
 
-Gah, indeed! Could you send a patch to fix this ?
+This is a problem with the copy of the double-conversion library in
+Qt5. I have asked to the upstream double-conversion library how to add
+support for Microblaze and OpenRISC:
 
-Thanks!
+  https://github.com/google/double-conversion/issues/73
 
 Thomas
 -- 
