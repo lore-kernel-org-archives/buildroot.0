@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jun 2018 16:10:10 +0200
-Subject: [Buildroot] [PATCH] netplug: prevent starting multiple
- instances of netplugd
-In-Reply-To: <20180607013641.22701-1-casantos@datacom.com.br>
-References: <20180607013641.22701-1-casantos@datacom.com.br>
-Message-ID: <20180607161010.01d1361c@windsurf>
+Date: Thu, 7 Jun 2018 16:18:10 +0200
+Subject: [Buildroot] Can we still opt to shallow clone in git?
+In-Reply-To: <CABKM0pBVG=JptKYBv-dRfhwAkmKCQm09sqLaG44jUyZhE2gPaw@mail.gmail.com>
+References: <CABKM0pCD6pJ3-o9OyhGfpkRyk4cVsKhc+AwqojkzzRvnJvvUSQ@mail.gmail.com>
+ <20180607084112.347c5203@windsurf>
+ <CABKM0pBVG=JptKYBv-dRfhwAkmKCQm09sqLaG44jUyZhE2gPaw@mail.gmail.com>
+Message-ID: <20180607161810.365544bd@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  6 Jun 2018 22:36:41 -0300, Carlos Santos wrote:
-> Executing "/etc/init.d/S29netplug start" multiple times resulted in
-> multiple instances of netplugd.
-> 
-> Pass "-p /var/run/netplug.pid" to netplugd, so it creates the PID file
-> that start-stop-daemon needs to know that netplugd is already running.
-> Also use the pid file to stop netplugd, instead of the daemon name.
-> 
-> Fixes https://bugs.busybox.net/show_bug.cgi?id=10661
-> 
-> Reported-by: Joachim Krueger <mail2k@web.de>
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
->  package/netplug/S29netplug | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Please keep the Buildroot mailing list in Cc. Thanks!
 
-Applied to master, thanks.
+On Thu, 7 Jun 2018 22:03:13 +0800, qlb1234 wrote:
+
+> In my use case, using whatever is in a branch is still useful. I don't know
+> if you or someone else removed it on purpose or unintentionally. Say if I
+> provide a patch that brings back this feature, will you consider accepting
+> it?
+
+Using branch names as versions for Git-fetched packages was never
+supported. Because:
+
+ (1) It breaks the principle of reproducibility: the state of the
+     source code you will build depends on when you do the build.
+
+ (2) It doesn't do what you expect, because Buildroot will cache in
+     DL_DIR a tarball named <package>-master.tar.gz, and will never
+     re-fetch from the Git repository. To force it to refetch, you have
+     to manually remove this cached tarball.
+
+See also the thread at
+http://lists.busybox.net/pipermail/buildroot/2018-June/222961.html,
+where we have been discussing exactly this topic a few days ago.
+
+I still think there are some useful use cases for this, and that we
+should support it somehow, but it's not clear how it should be done yet.
+
+Best regards,
 
 Thomas
 -- 
