@@ -1,34 +1,35 @@
-From: David Barbion <david.barbion@ext.leroymerlin.fr>
-Date: Thu,  7 Jun 2018 15:45:28 +0200
-Subject: [Buildroot] [PATCH 1/1] fix qtwebengine enable condition
-Message-ID: <20180607134528.7098-1-david.barbion@ext.leroymerlin.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 07 Jun 2018 15:28:59 +0000
+Subject: [Buildroot] [Bug 9411] MUSL build with RT Error relocating
+ /lib/libgcc_s.so.1: __cpu_indicator_init: symbol not found
+In-Reply-To: <bug-9411-163@https.bugs.busybox.net/>
+References: <bug-9411-163@https.bugs.busybox.net/>
+Message-ID: <bug-9411-163-4nqKBqDj5e@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: David Barbion <david.barbion@ext.leroymerlin.fr>
----
- package/qt5/qt5webengine/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+https://bugs.busybox.net/show_bug.cgi?id=9411
 
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 38486c6dcf..744d659567 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -31,7 +31,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # qt5base-icu
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5base-icu
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
+
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+This problem has been fixed in upstream gcc as of commit
+6e6c7fc1e15525a10f48d4f5ac2edd853e2f5cb7, which was part of 7.x.
+
+It was backported to the gcc 6.x branch as of commit
+0fbe404007e6ef32d4d95c74a6c84b9166946ca3, available since gcc 6.3.0.
+
+And the problem didn't exist in gcc 6.x. Therefore, I'm happy to say that this
+problem seems to be fixed.
+
 -- 
-2.17.1
-
-
-
-Ce message et toutes les pi?ces jointes sont ?tablis ? l'attention exclusive de leurs destinataires et sont confidentiels. Si vous recevez ce message par erreur, merci de le d?truire et d'en avertir imm?diatement l'exp?diteur. L'internet ne permettant pas d'assurer l'int?grit? de ce message, le contenu de ce message ne repr?sente en aucun cas un engagement de la part de Leroy Merlin.
+You are receiving this mail because:
+You are on the CC list for the bug.
