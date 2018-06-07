@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jun 2018 16:10:02 +0200
-Subject: [Buildroot] [PATCH] opusfile: bump to version 0.10
-In-Reply-To: <20180607133931.11228-1-joerg.krause@embedded.rocks>
-References: <20180607133931.11228-1-joerg.krause@embedded.rocks>
-Message-ID: <20180607161002.493d817c@windsurf>
+Date: Thu, 7 Jun 2018 16:10:10 +0200
+Subject: [Buildroot] [PATCH] netplug: prevent starting multiple
+ instances of netplugd
+In-Reply-To: <20180607013641.22701-1-casantos@datacom.com.br>
+References: <20180607013641.22701-1-casantos@datacom.com.br>
+Message-ID: <20180607161010.01d1361c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  7 Jun 2018 15:39:31 +0200, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+On Wed,  6 Jun 2018 22:36:41 -0300, Carlos Santos wrote:
+> Executing "/etc/init.d/S29netplug start" multiple times resulted in
+> multiple instances of netplugd.
+> 
+> Pass "-p /var/run/netplug.pid" to netplugd, so it creates the PID file
+> that start-stop-daemon needs to know that netplugd is already running.
+> Also use the pid file to stop netplugd, instead of the daemon name.
+> 
+> Fixes https://bugs.busybox.net/show_bug.cgi?id=10661
+> 
+> Reported-by: Joachim Krueger <mail2k@web.de>
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 > ---
->  package/opusfile/opusfile.hash | 2 +-
->  package/opusfile/opusfile.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/netplug/S29netplug | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
