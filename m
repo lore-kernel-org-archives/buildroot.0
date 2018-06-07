@@ -1,50 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jun 2018 16:18:10 +0200
-Subject: [Buildroot] Can we still opt to shallow clone in git?
-In-Reply-To: <CABKM0pBVG=JptKYBv-dRfhwAkmKCQm09sqLaG44jUyZhE2gPaw@mail.gmail.com>
-References: <CABKM0pCD6pJ3-o9OyhGfpkRyk4cVsKhc+AwqojkzzRvnJvvUSQ@mail.gmail.com>
- <20180607084112.347c5203@windsurf>
- <CABKM0pBVG=JptKYBv-dRfhwAkmKCQm09sqLaG44jUyZhE2gPaw@mail.gmail.com>
-Message-ID: <20180607161810.365544bd@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 07 Jun 2018 14:21:53 +0000
+Subject: [Buildroot] [Bug 10661] /etc/init.d/S29netplug starts multiple
+ instances of netplugd
+In-Reply-To: <bug-10661-163@https.bugs.busybox.net/>
+References: <bug-10661-163@https.bugs.busybox.net/>
+Message-ID: <bug-10661-163-c910eRfzyF@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10661
 
-Please keep the Buildroot mailing list in Cc. Thanks!
+Carlos Santos <casantos@datacom.com.br> changed:
 
-On Thu, 7 Jun 2018 22:03:13 +0800, qlb1234 wrote:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|FIXED                       |TEST-REQUEST
 
-> In my use case, using whatever is in a branch is still useful. I don't know
-> if you or someone else removed it on purpose or unintentionally. Say if I
-> provide a patch that brings back this feature, will you consider accepting
-> it?
+--- Comment #3 from Carlos Santos <casantos@datacom.com.br> ---
+(In reply to Carlos Santos from comment #2)
 
-Using branch names as versions for Git-fetched packages was never
-supported. Because:
+Applied to master (commit 3c6a5bdd3ed94f97afe2db9123d7117f85f654ce). Please
+test it and change the bug status to VERIFIED on success; otherwise report
+additional findings and change the status to REOPENED.
 
- (1) It breaks the principle of reproducibility: the state of the
-     source code you will build depends on when you do the build.
-
- (2) It doesn't do what you expect, because Buildroot will cache in
-     DL_DIR a tarball named <package>-master.tar.gz, and will never
-     re-fetch from the Git repository. To force it to refetch, you have
-     to manually remove this cached tarball.
-
-See also the thread at
-http://lists.busybox.net/pipermail/buildroot/2018-June/222961.html,
-where we have been discussing exactly this topic a few days ago.
-
-I still think there are some useful use cases for this, and that we
-should support it somehow, but it's not clear how it should be done yet.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
