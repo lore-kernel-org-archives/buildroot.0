@@ -1,43 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jun 2018 15:47:53 +0200
-Subject: [Buildroot] [git commit] docker-containerd: add missing
- docker-containerd symlink
-Message-ID: <20180607134724.9181086D41@busybox.osuosl.org>
+Date: Thu, 7 Jun 2018 15:50:29 +0200
+Subject: [Buildroot] [PATCH 1/1] docker-containerd: add missing binary
+ symlink
+In-Reply-To: <CAGDkrv6D9avg7ps9j3PfBEwYNL-vNTQe2v-782A8u30Y6zB_fw@mail.gmail.com>
+References: <CAGDkrv6D9avg7ps9j3PfBEwYNL-vNTQe2v-782A8u30Y6zB_fw@mail.gmail.com>
+Message-ID: <20180607155029.20e88589@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ded50f69c691e4b4a391ee23ec466abaad4bed99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Prior to commit 2dccb4f2fefd8a0dbda65dd0f7537f811e920b13
-("package/docker-containerd: convert to golang infrastructure"), the
-containerd binary was installed as docker-containerd. Following the
-conversion to the golang package infrastructure, the binary is now
-installed as "containerd", which breaks some use cases.
+Thanks for this contribution!
 
-Let's add a symlink link docker-containerd -> containerd to fix such
-use cases.
+On Thu, 7 Jun 2018 08:51:07 +0100, Sam Lancia wrote:
+> In 2dccb4f2fefd8a0dbda65dd0f7537f811e920b13,
+> "/usr/bin/docker-containerd" was removed without replacing it with a
+> symlink
+> 
+> https://bugs.busybox.net/show_bug.cgi?id=11076
+> 
+> Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
+> ---
+>  package/docker-containerd/docker-containerd.mk | 1 +
+>  1 file changed, 1 insertion(+)
 
-Fixes: https://bugs.busybox.net/show_bug.cgi?id=11076
+Your patch was not applicable as-is, because it has been modified on
+the way by your e-mail client. I've fixed this up because it was a
+simple patch, but for future patches, it would be nice if you could use
+"git send-email" to send the patches.
 
-Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/docker-containerd/docker-containerd.mk | 1 +
- 1 file changed, 1 insertion(+)
+I've improved a bit the commit log, and applied your patch to master.
+Thanks!
 
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 88e27b5ed4..09e89f1aba 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -21,6 +21,7 @@ DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
- define DOCKER_CONTAINERD_INSTALL_SYMLINKS
- 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
- 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
-+	ln -fs containerd $(TARGET_DIR)/usr/bin/docker-containerd
- endef
- 
- DOCKER_CONTAINERD_POST_INSTALL_TARGET_HOOKS += DOCKER_CONTAINERD_INSTALL_SYMLINKS
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
