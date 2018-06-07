@@ -1,43 +1,45 @@
-From: Michele Bucca <michele.bucca@gmail.com>
-Date: Wed, 6 Jun 2018 23:24:06 +0200
-Subject: [Buildroot] Cannot build C++ internal toolchain using uclibc-ng
-In-Reply-To: <20180606231532.5982164d@windsurf>
-References: <CAPa8UMePbuAEUCFMvYadN+n-zJN2c-N6B9RXL==BffbDLqww9g@mail.gmail.com>
- <20180606204952.58f73809@windsurf>
- <CAPa8UMezPR1Wuh43Pbt_RAVXFmRCCDRu=Yn1V4s-YpdE2fLA-g@mail.gmail.com>
- <20180606231532.5982164d@windsurf>
-Message-ID: <CAPa8UMe7aWfRX+gRg=TawdqRaLj3CDee-gJ6Cn0w2aVdE9BkZA@mail.gmail.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Wed,  6 Jun 2018 21:15:47 -0300
+Subject: [Buildroot] [PATCH] DEVELOPERS: add myself to init-related packages
+Message-ID: <20180607001547.3721-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-06-06 23:15 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
-> Hello,
->
-> On Wed, 6 Jun 2018 22:29:33 +0200, Michele Bucca wrote:
->
->> Yes, it shows the same error [1]. By the way here's  the output of a
->> clean build that I've made with the commands :
->>
->> make clean
->> LC_ALL=C make
->>
->> [1] https://pastebin.com/Z6vUVmRE
->>
->
-> What Linux distribution and version of this distribution are you using
-> as the host system ?
+I'm working on improving the sysvinit scripts, so it's advisable to keep
+an eye on them.
 
-My host system is Debian Jessie 8.10 x86_64 Updated just today with
-latest packages from the repos
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ DEVELOPERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c7c798d020..c1ab83ebd3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -408,11 +408,20 @@ N:	Carlo Caione <carlo.caione@gmail.com>
+ F:	package/sunxi-boards/
+ 
+ N:	Carlos Santos <casantos@datacom.com.br>
++F:	package/busybox/
+ F:	package/gtest/
++F:	package/initscripts/
+ F:	package/libpam-radius-auth/
+ F:	package/libpam-tacplus/
+ F:	package/modem-manager/
+ F:	package/perl-file-util/
++F:	package/skeleton-custom/
++F:	package/skeleton-init-common/
++F:	package/skeleton-init-none/
++F:	package/skeleton-init-systemd/
++F:	package/skeleton-init-sysv/
++F:	package/skeleton/
++F:	package/sysvinit/
+ F:	package/util-linux/
+ F:	package/tpm2-abrmd/
+ F:	package/tpm2-tools/
+-- 
+2.17.0
