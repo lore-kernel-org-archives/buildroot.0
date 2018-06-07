@@ -1,10 +1,17 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 7 Jun 2018 23:16:21 +0200
-Subject: [Buildroot] scanpypi tool python error - local variable
- 'download' referenced before assignment
-In-Reply-To: <55bf291b-22cf-b254-d04c-e7bf017f85be@jcz.nl>
-References: <55bf291b-22cf-b254-d04c-e7bf017f85be@jcz.nl>
-Message-ID: <660c6058-1507-be7a-8cda-87fc741b8ed1@mind.be>
+Date: Thu, 7 Jun 2018 23:29:01 +0200
+Subject: [Buildroot] [PATCHv2 proposal/next 2/3] build: replace
+ host-mkpasswd with host-busybox
+In-Reply-To: <20180605165039.GA29058@scaer>
+References: <20180601125900.26400-1-chemobejk@gmail.com>
+ <20180601133053.27552-1-chemobejk@gmail.com>
+ <20180601133053.27552-3-chemobejk@gmail.com>
+ <48945091-d169-18ba-31d0-a51c64e9a918@mind.be>
+ <935950713.1169230.1528197779003.JavaMail.zimbra@datacom.com.br>
+ <20180605161546.GE2503@scaer>
+ <CALURroS4t3V6GWnZSs6GEcAFrf1=KvfU036dskH6aEM4fQXn8w@mail.gmail.com>
+ <20180605165039.GA29058@scaer>
+Message-ID: <69845f53-8c5f-910a-58b2-57bf5c0e38e3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,58 +20,29 @@ To: buildroot@busybox.net
 
 
 
-On 06-06-18 17:29, Jaap Crezee wrote:
-> Hi all,
+On 05-06-18 18:50, Yann E. MORIN wrote:
+> Christopher, All,
 > 
+> On 2018-06-05 09:35 -0700, Christopher McCrory spake thusly:
+>> Sorry for top post, on mobile.
+>> What about using openssl?
+>> [1]https://www.openssl.org/docs/manmaster/man1/openssl-passwd.html
 > 
-> Is this a known issue?
+> Since we do not require that openssl be installed on the build machine,
+> we'd have to build our own one. We do have a host-openssl package, but
+> it takes quite a bit of time to build: on my relativelty fast laptop,
+> it adds about 32s to the build time. This is a pretty big hit...
 > 
-> [jaap at jaap /data/work/htc/git/buildroot_development ]$ git log -1
-> commit f3d114a1effd8a6ef773bee14fe49ea6d8d7c350 (HEAD, tag: 2018.05)
-> Author: Peter Korsgaard <peter@korsgaard.com>
-> Date:   Fri Jun 1 22:22:57 2018 +0200
-> 
->     Update for 2018.05
-> 
->     Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> [jaap at jaap /data/work/htc/git/buildroot_development ]$ ./utils/scanpypi azure-iothub-device-client
-> buildroot package name for azure-iothub-device-client: python-azure-iothub-device-client
-> Package: python-azure-iothub-device-client
-> Fetching package azure-iothub-device-client
-> Traceback (most recent call last):
->   File "./utils/scanpypi", line 716, in <module>
->     main()
->   File "./utils/scanpypi", line 648, in main
->     package.download_package()
->   File "./utils/scanpypi", line 217, in download_package
->     if download.__class__ == six.moves.urllib.error.HTTPError:
-> UnboundLocalError: local variable 'download' referenced before assignment
-> [jaap at jaap /data/work/htc/git/buildroot_development ]$
+> So, not an option IMHO...
 
- This happens because the metadata doesn't contain urls.
-
- scanpypi is not at all robust against unexpected metadata contents. I think we
-should add some exception handling there that just prints the metadata (or the
-relevant parts of it), and continues with other packages (in case it's a
-dependency of the package that was requested).
-
- Yegor?
+ So, not whois, not busybox, not openssl... What about python, which we anyway
+require to be installed on the host? I remember that someone has posted a
+one-liner that would do the job :-P
 
  Regards,
  Arnout
 
-
-> 
-> regards,
-> 
-> 
-> Jaap
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+[snip]
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
