@@ -1,7 +1,7 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  7 Jun 2018 15:32:04 +0200
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.20
-Message-ID: <20180607133204.20676-1-joerg.krause@embedded.rocks>
+Date: Thu,  7 Jun 2018 15:39:31 +0200
+Subject: [Buildroot] [PATCH] opusfile: bump to version 0.10
+Message-ID: <20180607133931.11228-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
+ package/opusfile/opusfile.hash | 2 +-
+ package/opusfile/opusfile.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index d6e66216cf..6eb384e763 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  6a582dc2ae90b94ff3853f9ffd7d80b2c2b5fe2e2c35cb1da0b36f3f3dfad434  mpd-0.20.18.tar.xz
-+sha256  a9e458c6e07cdf62649de7722e1e5a7f13aa82eeb397bfbbebc07cf5cf273584  mpd-0.20.20.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index d41ffe1571..a0bbc7222a 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/opusfile/opusfile.hash b/package/opusfile/opusfile.hash
+index 59e08192f5..f1fcf5f9d6 100644
+--- a/package/opusfile/opusfile.hash
++++ b/package/opusfile/opusfile.hash
+@@ -1,5 +1,5 @@
+ # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
+-sha256 f75fb500e40b122775ac1a71ad80c4477698842a8fe9da4a1b4a1a9f16e4e979  opusfile-0.9.tar.gz
++sha256 48e03526ba87ef9cf5f1c47b5ebe3aa195bd89b912a57060c36184a6cd19412f  opusfile-0.10.tar.gz
+ 
+ # Hash for license file
+ sha256 0267ae795ab744c4e0f9c45e249440fdf2e75dac8c804f36066b28649bf74aaf  COPYING
+diff --git a/package/opusfile/opusfile.mk b/package/opusfile/opusfile.mk
+index 186288ddff..0cfe623941 100644
+--- a/package/opusfile/opusfile.mk
++++ b/package/opusfile/opusfile.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_VERSION_MAJOR = 0.20
--MPD_VERSION = $(MPD_VERSION_MAJOR).18
-+MPD_VERSION = $(MPD_VERSION_MAJOR).20
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+-OPUSFILE_VERSION = 0.9
++OPUSFILE_VERSION = 0.10
+ OPUSFILE_SITE = https://downloads.xiph.org/releases/opus
+ OPUSFILE_DEPENDENCIES = host-pkgconf libogg opus
+ OPUSFILE_LICENSE = BSD-3-Clause
 -- 
 2.17.1
