@@ -1,38 +1,70 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 7 Jun 2018 11:26:17 -0500
-Subject: [Buildroot] [PATCH 1/1] fix qtwebengine enable condition
-In-Reply-To: <20180607134528.7098-1-david.barbion@ext.leroymerlin.fr>
-References: <20180607134528.7098-1-david.barbion@ext.leroymerlin.fr>
-Message-ID: <CANQCQpaV-PG7ShizN5vgdDhUC+V5LRx4bhdXRTEU6992rcV-iQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 7 Jun 2018 19:25:42 +0200
+Subject: [Buildroot] [PATCH 1/2] host-cargo: select host-rustc
+In-Reply-To: <20180607180250.0df17b2f@windsurf>
+References: <20180606202501.14535-1-fontaine.fabrice@gmail.com>
+ <20180607180250.0df17b2f@windsurf>
+Message-ID: <CAPi7W82UXsaV3cEcsytooYkuELeXYEGBjMo4UyMa_r5mJfZsDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David,
+Dear Thomas,
 
-2018-06-07 8:45 GMT-05:00 David Barbion <david.barbion@ext.leroymerlin.fr>:
-> Signed-off-by: David Barbion <david.barbion@ext.leroymerlin.fr>
-> ---
->  package/qt5/qt5webengine/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+2018-06-07 18:02 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+
+> Hello,
 >
-> diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-> index 38486c6dcf..744d659567 100644
-> --- a/package/qt5/qt5webengine/Config.in
-> +++ b/package/qt5/qt5webengine/Config.in
-> @@ -31,7 +31,7 @@ config BR2_PACKAGE_QT5WEBENGINE
->         depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
->         depends on BR2_HOST_GCC_AT_LEAST_4_8 # qt5base-icu
->         depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5base-icu
-> -       depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
-> +       depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
->         depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
->         depends on BR2_USE_WCHAR # libglib2
->         depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
+> On Wed,  6 Jun 2018 22:25:00 +0200, Fabrice Fontaine wrote:
+> > Buildroot documentation specifies that cargo-based package should only
+> > depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS and selects
+> > BR2_PACKAGE_HOST_CARGO but this does not work as host-cargo depends on
+> > BR2_PACKAGE_HAS_HOST_RUSTC which is selected only when host-rustc is
+> > selected.
+>
+> What "does not work" exactly ?
+>
+> Yes, you end up with host-rust being built as a dependency of
+> host-cargo, while BR2_PACKAGE_HOST_RUST is not enabled.
+>
+> But for host packages, we currently don't enforce that their
+> Config.in.host option is enabled when the package is built.
+>
+> So, which problem have you encountered ?
+>
+I got the following warning when I selected librsvg without this patch
+because I added a "select BR2_PACKAGE_HOST_CARGO" in librsvg/Config.in as
+specified in
+https://buildroot.org/downloads/manual/manual.html#_integration_of_cargo_based_packages
+:
+warning: (BR2_PACKAGE_LIBRSVG) selects BR2_PACKAGE_HOST_CARGO which has
+unmet direct dependencies (BR2_PACKAGE_HAS_HOST_RUSTC)
+
+But thanks to Baruch review of my second patch, I understand that it is not
+needed to add this select.
+However, I think that documentation should be updated to remove this
+select, I will send a patch to update
+./docs/manual/adding-packages-cargo.txt if it's ok with you.
+
+>
+> I agree that your patch makes sense (it's better to have the
+> Config.in.host option enabled when the corresponding host package is
+> going to be built), but I don't see where the *problem* is, so I'd like
+> to understand before applying.
+>
+> Thanks!
+>
+> Thomas
 > --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+Best Regards,
 
-Oops, sorry about the bug :-)
-
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180607/0807ba99/attachment.html>
