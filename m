@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jun 2018 16:09:59 +0200
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.20
-In-Reply-To: <20180607133204.20676-1-joerg.krause@embedded.rocks>
-References: <20180607133204.20676-1-joerg.krause@embedded.rocks>
-Message-ID: <20180607160959.4c57eb58@windsurf>
+Date: Thu, 7 Jun 2018 16:10:08 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add myself to init-related
+ packages
+In-Reply-To: <20180607001547.3721-1-casantos@datacom.com.br>
+References: <20180607001547.3721-1-casantos@datacom.com.br>
+Message-ID: <20180607161008.79d86760@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  7 Jun 2018 15:32:04 +0200, J?rg Krause wrote:
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+On Wed,  6 Jun 2018 21:15:47 -0300, Carlos Santos wrote:
+> I'm working on improving the sysvinit scripts, so it's advisable to keep
+> an eye on them.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 > ---
->  package/mpd/mpd.hash | 2 +-
->  package/mpd/mpd.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  DEVELOPERS | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 
 Applied to master, thanks.
 
