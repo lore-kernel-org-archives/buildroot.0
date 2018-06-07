@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 7 Jun 2018 23:12:48 +0200
-Subject: [Buildroot] swapoff, but no swapon in initab
-In-Reply-To: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
-References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
-Message-ID: <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
+Date: Thu, 7 Jun 2018 23:16:21 +0200
+Subject: [Buildroot] scanpypi tool python error - local variable
+ 'download' referenced before assignment
+In-Reply-To: <55bf291b-22cf-b254-d04c-e7bf017f85be@jcz.nl>
+References: <55bf291b-22cf-b254-d04c-e7bf017f85be@jcz.nl>
+Message-ID: <660c6058-1507-be7a-8cda-87fc741b8ed1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +13,57 @@ To: buildroot@busybox.net
 
 
 
-On 06-06-18 19:14, Carlos Santos wrote:
-> Hi,
+On 06-06-18 17:29, Jaap Crezee wrote:
+> Hi all,
 > 
-> I'm working on a product that needs a swap partition and noticed that
-> both package/{busybox,sysvinit}/inittab invoke "swapoff -a" in their
-> shutdown sequences but do not invoke "swapon -a". Is this intentional
-> or the swapon call is missing (e.g. right after "mount -a")?
+> 
+> Is this a known issue?
+> 
+> [jaap at jaap /data/work/htc/git/buildroot_development ]$ git log -1
+> commit f3d114a1effd8a6ef773bee14fe49ea6d8d7c350 (HEAD, tag: 2018.05)
+> Author: Peter Korsgaard <peter@korsgaard.com>
+> Date:   Fri Jun 1 22:22:57 2018 +0200
+> 
+>     Update for 2018.05
+> 
+>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> [jaap at jaap /data/work/htc/git/buildroot_development ]$ ./utils/scanpypi azure-iothub-device-client
+> buildroot package name for azure-iothub-device-client: python-azure-iothub-device-client
+> Package: python-azure-iothub-device-client
+> Fetching package azure-iothub-device-client
+> Traceback (most recent call last):
+>   File "./utils/scanpypi", line 716, in <module>
+>     main()
+>   File "./utils/scanpypi", line 648, in main
+>     package.download_package()
+>   File "./utils/scanpypi", line 217, in download_package
+>     if download.__class__ == six.moves.urllib.error.HTTPError:
+> UnboundLocalError: local variable 'download' referenced before assignment
+> [jaap at jaap /data/work/htc/git/buildroot_development ]$
 
- It has been like that since
+ This happens because the metadata doesn't contain urls.
 
-commit ffde94bd2ca21542ae0b4518348f8e986b9d92e0 (tag: 0_0)
-Author: Eric Andersen <andersen@codepoet.org>
-Date:   Sat Dec 22 01:56:11 2001
+ scanpypi is not at all robust against unexpected metadata contents. I think we
+should add some exception handling there that just prints the metadata (or the
+relevant parts of it), and continues with other packages (in case it's a
+dependency of the package that was requested).
 
-    Initial revision
-
-so whatever reason there was, it is lost in the mists of time.
-
- IMO I think it's pointless (the kernel will freeze swap accesses before
-shutdown) and possibly wrong (swap to file should be disabled before the
-corresponding filesystem is unmounted).
-
-
- Anyway, the proper way to handle swap is by adding it to fstab, no? I just
-checked and busybox seems to support it.
+ Yegor?
 
  Regards,
  Arnout
 
 
-> BTW, what about systemd?
-
+> 
+> regards,
+> 
+> 
+> Jaap
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
