@@ -1,52 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 7 Jun 2018 16:03:33 +0200
-Subject: [Buildroot] [git commit] netplug: prevent starting multiple
- instances of netplugd
-Message-ID: <20180607140257.4C03086E96@busybox.osuosl.org>
+Date: Thu, 7 Jun 2018 16:03:32 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself to init-related
+ packages
+Message-ID: <20180607140257.44B5B87054@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c6a5bdd3ed94f97afe2db9123d7117f85f654ce
+commit: https://git.buildroot.net/buildroot/commit/?id=41a365d40bf8f391a9af2ac9c7a18bfff97f35f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Executing "/etc/init.d/S29netplug start" multiple times resulted in
-multiple instances of netplugd.
+I'm working on improving the sysvinit scripts, so it's advisable to keep
+an eye on them.
 
-Pass "-p /var/run/netplug.pid" to netplugd, so it creates the PID file
-that start-stop-daemon needs to know that netplugd is already running.
-Also use the pid file to stop netplugd, instead of the daemon name.
-
-Fixes https://bugs.busybox.net/show_bug.cgi?id=10661
-
-Reported-by: Joachim Krueger <mail2k@web.de>
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netplug/S29netplug | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/netplug/S29netplug b/package/netplug/S29netplug
-index 04cac9f07c..66459061b3 100755
---- a/package/netplug/S29netplug
-+++ b/package/netplug/S29netplug
-@@ -41,7 +41,7 @@ case "$1" in
-   start)
- 	# Start daemon.
- 	printf "Starting network plug daemon: "
--	start-stop-daemon -S -q -p /var/run/netplugd.pid -x /sbin/netplugd ${NETPLUGDARGS}
-+	start-stop-daemon -S -q -x /sbin/netplugd -- -p /var/run/netplugd.pid ${NETPLUGDARGS}
- 	RETVAL=$?
- 	echo
- 	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/netplugd
-@@ -49,7 +49,7 @@ case "$1" in
-   stop)
- 	# Stop daemon.
- 	printf "Shutting down network plug daemon: "
--	start-stop-daemon -K -n netplugd
-+	start-stop-daemon -K -q -p /var/run/netplugd.pid
- 	RETVAL=$?
- 	echo
- 	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/netplugd
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c7c798d020..c1ab83ebd3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -408,11 +408,20 @@ N:	Carlo Caione <carlo.caione@gmail.com>
+ F:	package/sunxi-boards/
+ 
+ N:	Carlos Santos <casantos@datacom.com.br>
++F:	package/busybox/
+ F:	package/gtest/
++F:	package/initscripts/
+ F:	package/libpam-radius-auth/
+ F:	package/libpam-tacplus/
+ F:	package/modem-manager/
+ F:	package/perl-file-util/
++F:	package/skeleton-custom/
++F:	package/skeleton-init-common/
++F:	package/skeleton-init-none/
++F:	package/skeleton-init-systemd/
++F:	package/skeleton-init-sysv/
++F:	package/skeleton/
++F:	package/sysvinit/
+ F:	package/util-linux/
+ F:	package/tpm2-abrmd/
+ F:	package/tpm2-tools/
