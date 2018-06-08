@@ -1,42 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Jun 2018 19:05:55 +0200
-Subject: [Buildroot] [PATCH 1/1] tinyxml2: bump to version 6.2.0
-Message-ID: <20180608170555.5226-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 8 Jun 2018 19:13:03 +0200
+Subject: [Buildroot] [PATCHv2 proposal/next 2/3] build: replace
+ host-mkpasswd with host-busybox
+In-Reply-To: <CAOJ2eMeFnmAdFiiCePrAAh0tQQnk7L42VLN5MUy7CHitop2prw@mail.gmail.com>
+References: <20180601125900.26400-1-chemobejk@gmail.com>
+ <20180601133053.27552-1-chemobejk@gmail.com>
+ <20180601133053.27552-3-chemobejk@gmail.com>
+ <48945091-d169-18ba-31d0-a51c64e9a918@mind.be>
+ <935950713.1169230.1528197779003.JavaMail.zimbra@datacom.com.br>
+ <20180605161546.GE2503@scaer>
+ <CALURroS4t3V6GWnZSs6GEcAFrf1=KvfU036dskH6aEM4fQXn8w@mail.gmail.com>
+ <20180605165039.GA29058@scaer>
+ <69845f53-8c5f-910a-58b2-57bf5c0e38e3@mind.be>
+ <CAOJ2eMeFnmAdFiiCePrAAh0tQQnk7L42VLN5MUy7CHitop2prw@mail.gmail.com>
+Message-ID: <20180608171303.GA2090@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Stefan, Arnout, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/tinyxml2/tinyxml2.hash | 3 ++-
- package/tinyxml2/tinyxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+On 2018-06-08 14:40 +0300, Stefan Becker spake thusly:
+> On Fri, Jun 8, 2018 at 12:29 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >  So, not whois, not busybox, not openssl... What about python, which we anyway
+> > require to be installed on the host? I remember that someone has posted a
+> > one-liner that would do the job :-P
 
-diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
-index e5e4d238ab..5f38546466 100644
---- a/package/tinyxml2/tinyxml2.hash
-+++ b/package/tinyxml2/tinyxml2.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 14b38ef25cc136d71339ceeafb4856bb638d486614103453eccd323849267f20  tinyxml2-4.0.1.tar.gz
-+sha256 cdf0c2179ae7a7931dba52463741cf59024198bbf9673bf08415bcb46344110f  tinyxml2-6.2.0.tar.gz
-+sha256 8b2ab0b6ffb86798a2512f45fcf50a3b04b3516782d2e3fb30ebf55dc18c7cce  readme.md
-diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
-index e289ca9cf0..9439c5cb80 100644
---- a/package/tinyxml2/tinyxml2.mk
-+++ b/package/tinyxml2/tinyxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TINYXML2_VERSION = 4.0.1
-+TINYXML2_VERSION = 6.2.0
- TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
- TINYXML2_LICENSE = Zlib
- TINYXML2_LICENSE_FILES = readme.md
+Well, I'd still prefer we had a script, and especially I did not like
+that it would read the random bytes from stdin, when python provides a
+proper random abstraction:
+
+    import os
+    os.urandom(64) # 64 random bytes
+
+This is even portable, using various backends on various OSes... Then
+your previous proposal becomes acceptable. Now. ;-)
+
+> Because a python one-liner is not enough. F.ex. from support/scripts/mkuser:
+> 
+>    # Encode a password
+>    encode_password() {
+>        local passwd="${1}"
+> 
+>        mkpasswd -m "${PASSWD_METHOD}" "${passwd}"
+>    }
+
+Well, that one is an internal script of oours (I wrote it), so we can
+very well change it to use another tool without problem.
+
+> i.e. you need at least a python script with mkpasswd-compatible
+> command line parameters.
+
+Ideally, a mkpasswd-compatible tool would be nice, but as long as we use
+it internally, we don't care much, in fact.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
