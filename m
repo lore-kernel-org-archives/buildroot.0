@@ -1,106 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  8 Jun 2018 06:16:22 +0300
-Subject: [Buildroot] [PATCH] trinity: fix build with kernel headers v4.17+
-Message-ID: <57101a03a5f14bf5f213424f34826197e3dddf38.1528427782.git.baruch@tkos.co.il>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 8 Jun 2018 07:25:25 +0200
+Subject: [Buildroot] scanpypi tool python error - local variable
+ 'download' referenced before assignment
+In-Reply-To: <660c6058-1507-be7a-8cda-87fc741b8ed1@mind.be>
+References: <55bf291b-22cf-b254-d04c-e7bf017f85be@jcz.nl>
+ <660c6058-1507-be7a-8cda-87fc741b8ed1@mind.be>
+Message-ID: <CAGm1_kuKXEY6CwKozVJxejXHp4AK6D55aRkNN53WrWBeuOYRwQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kernel v4.17 removed the linux/irda.h header. Add a patch to skip the
-irda test when the header is missing.
+Hi all,
 
-Fixes:
-http://autobuild.buildroot.net/results/39d/39d131048d6eb3cd4d802dae462116f7728c41fd/
-http://autobuild.buildroot.net/results/af2/af2288711d1a0939a06ea51e65ed32d39e395e2b/
-http://autobuild.buildroot.net/results/41f/41fead6d53dba2539ba246f682973e0b5967f3d0/
+On Thu, Jun 7, 2018 at 11:16 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 06-06-18 17:29, Jaap Crezee wrote:
+>> Hi all,
+>>
+>>
+>> Is this a known issue?
+>>
+>> [jaap at jaap /data/work/htc/git/buildroot_development ]$ git log -1
+>> commit f3d114a1effd8a6ef773bee14fe49ea6d8d7c350 (HEAD, tag: 2018.05)
+>> Author: Peter Korsgaard <peter@korsgaard.com>
+>> Date:   Fri Jun 1 22:22:57 2018 +0200
+>>
+>>     Update for 2018.05
+>>
+>>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>> [jaap at jaap /data/work/htc/git/buildroot_development ]$ ./utils/scanpypi azure-iothub-device-client
+>> buildroot package name for azure-iothub-device-client: python-azure-iothub-device-client
+>> Package: python-azure-iothub-device-client
+>> Fetching package azure-iothub-device-client
+>> Traceback (most recent call last):
+>>   File "./utils/scanpypi", line 716, in <module>
+>>     main()
+>>   File "./utils/scanpypi", line 648, in main
+>>     package.download_package()
+>>   File "./utils/scanpypi", line 217, in download_package
+>>     if download.__class__ == six.moves.urllib.error.HTTPError:
+>> UnboundLocalError: local variable 'download' referenced before assignment
+>> [jaap at jaap /data/work/htc/git/buildroot_development ]$
+>
+>  This happens because the metadata doesn't contain urls.
+>
+>  scanpypi is not at all robust against unexpected metadata contents. I think we
+> should add some exception handling there that just prints the metadata (or the
+> relevant parts of it), and continues with other packages (in case it's a
+> dependency of the package that was requested).
+>
+>  Yegor?
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...-fix-build-with-kernel-headers-v4.17.patch | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch
+I'll take care about this.
 
-diff --git a/package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch b/package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch
-new file mode 100644
-index 000000000000..89aa4219c2c7
---- /dev/null
-+++ b/package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch
-@@ -0,0 +1,73 @@
-+From 5431126ac94bf81743852493a041e80e82918741 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Fri, 8 Jun 2018 06:05:26 +0300
-+Subject: [PATCH] configure: fix build with kernel headers v4.17+
-+
-+Kernel v4.17 removed the linux/irda.h header. Skip the irda test when
-+this header is missing.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/kernelslacker/trinity/pull/25
-+
-+ configure        | 1 +
-+ net/proto-irda.c | 6 +++++-
-+ net/protocols.c  | 2 ++
-+ 3 files changed, 8 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index c0166af33048..944c8cf77d1b 100755
-+--- a/configure
-++++ b/configure
-+@@ -316,6 +316,7 @@ fi
-+ check_header linux/caif/caif_socket.h USE_CAIF
-+ check_header linux/fsmap.h USE_FSMAP
-+ check_header linux/if_alg.h USE_IF_ALG
-++check_header linux/irda.h USE_IRDA
-+ check_header linux/rds.h USE_RDS
-+ check_header linux/vfio.h USE_VFIO
-+ check_header drm/drm.h USE_DRM
-+diff --git a/net/proto-irda.c b/net/proto-irda.c
-+index 02d51bcd2ee0..264e36dfa040 100644
-+--- a/net/proto-irda.c
-++++ b/net/proto-irda.c
-+@@ -4,13 +4,15 @@
-+ #include <sys/un.h>
-+ /* old irda.h does not include something which defines sa_family_t */
-+ #include <netinet/in.h>
-+-#include <linux/irda.h>
-+ #include <stdlib.h>
-+ #include "net.h"
-+ #include "random.h"
-+ #include "utils.h"	// RAND_ARRAY
-+ #include "compat.h"
-+ 
-++#ifdef USE_IRDA
-++#include <linux/irda.h>
-++
-+ static void irda_gen_sockaddr(struct sockaddr **addr, socklen_t *addrlen)
-+ {
-+ 	struct sockaddr_irda *irda;
-+@@ -53,3 +55,5 @@ const struct netproto proto_irda = {
-+ 	.valid_triplets = irda_triplets,
-+ 	.nr_triplets = ARRAY_SIZE(irda_triplets),
-+ };
-++
-++#endif
-+diff --git a/net/protocols.c b/net/protocols.c
-+index 90a60affedca..87acf85c707f 100644
-+--- a/net/protocols.c
-++++ b/net/protocols.c
-+@@ -26,7 +26,9 @@ const struct protoptr net_protocols[TRINITY_PF_MAX] = {
-+ #ifdef USE_RDS
-+ 	[PF_RDS] = { .proto = &proto_rds },
-+ #endif
-++#ifdef USE_IRDA
-+ 	[PF_IRDA] = { .proto = &proto_irda },
-++#endif
-+ 	[PF_LLC] = { .proto = &proto_llc },
-+ 	[PF_CAN] = { .proto = &proto_can },
-+ 	[PF_TIPC] = { .proto = &proto_tipc },
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+Yegor
