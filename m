@@ -1,36 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jun 2018 16:19:28 +0200
+Date: Fri, 08 Jun 2018 16:22:22 +0200
 Subject: [Buildroot] [PATCHv2] linux: may fail to boot for binutils
  2.29+ even without armv7m
-In-Reply-To: <b3672758-0d2b-51cd-7eac-cc06158a995b@mind.be> (Arnout
- Vandecappelle's message of "Tue, 5 Jun 2018 00:10:30 +0200")
+In-Reply-To: <20180605152911.GB2503@scaer> (Yann E. MORIN's message of "Tue, 5
+ Jun 2018 17:29:11 +0200")
 References: <20180601180157.759-1-yann.morin.1998@free.fr>
  <b3672758-0d2b-51cd-7eac-cc06158a995b@mind.be>
-Message-ID: <878t7pcqdr.fsf@dell.be.48ers.dk>
+ <20180605074932.668ae4e7@windsurf> <20180605152911.GB2503@scaer>
+Message-ID: <874lidcq8x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
 Hi,
 
- >> comment "Linux kernel may fail to boot with binutils >= 2.29"
- >> -	depends on BR2_ARM_CPU_ARMV7M
- >> +	depends on BR2_arm || BR2_armeb
+ > But as you can see in the commit log that introduced this change, what
+ > you suggest is not correct, because it is also very valid that you have
+ > a arm-mode userland running on a thumb-mode kernel (as Peter initially
+ > pointed out on IRC).
 
- >  I have a bit of a problem with this patch. IMO it's rather unlikely that people
- > build the kernel in THUMB mode on non-M CPUs. But now we're always showing this
- > warning. I think it will confuse a number of people, and I don't think it's very
- > likely that it will actually help anyone.
+ > So, the kernel warning should not be about he userland mode.
 
-Why is it unlikely? Thumb(2) generates smaller code, so I could
-certainly think of use cases where it could be useful (and have used it
-myself in the past).
+ > And 'BR2_ARM_INSTRUCTIONS_THUMB || BR2_ARM_INSTRUCTIONS_THUMB2'
+ > represent the userland mode, while we have, from our kconfig, no way to
+ > know the kernel mode, because that is in the kernel .config file, which
+ > we only get late.
 
-But Ok, maybe the warning should have mentioned thumb.
+ > As such, the only way is to depend on arm || armeb.
+
+Or alternatively on
+
+BR2_ARM_CPU_HAS_THUMB || BR2_ARM_CPU_HAS_THUMB2
+
+But ok, either of those are true for most ARM cores.
 
 -- 
 Bye, Peter Korsgaard
