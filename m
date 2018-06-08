@@ -1,41 +1,73 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  8 Jun 2018 12:42:21 +0300
-Subject: [Buildroot] [PATCH] libedit: bump to version 20180525-3.1
-Message-ID: <dfc2fd05b10fa7e1cf1b46d9f80c6fb091222776.1528450941.git.baruch@tkos.co.il>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 8 Jun 2018 11:45:00 +0200
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add dependency on
+ BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <20180607230144.387-1-xuminready@gmail.com>
+References: <20180607230144.387-1-xuminready@gmail.com>
+Message-ID: <630c76ca-9a08-115d-5c32-85567237d012@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/libedit/libedit.hash | 2 +-
- package/libedit/libedit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Hi Min,
 
-diff --git a/package/libedit/libedit.hash b/package/libedit/libedit.hash
-index e8136df9c49d..3a5cdbac95c9 100644
---- a/package/libedit/libedit.hash
-+++ b/package/libedit/libedit.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 91f2d90fbd2a048ff6dad7131d9a39e690fd8a8fd982a353f1333dd4017dd4be libedit-20170329-3.1.tar.gz
-+sha256 c41bea8fd140fb57ba67a98ec1d8ae0b8ffa82f4aba9c35a87e5a9499e653116 libedit-20180525-3.1.tar.gz
- sha256 9da6c9c74987a36c84302982799d17d2f748ba1c1c0c471425716173c1d07649 COPYING
-diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
-index bbdc871b35b8..a4b32e05eb33 100644
---- a/package/libedit/libedit.mk
-+++ b/package/libedit/libedit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBEDIT_VERSION = 20170329-3.1
-+LIBEDIT_VERSION = 20180525-3.1
- LIBEDIT_SITE = http://www.thrysoee.dk/editline
- LIBEDIT_INSTALL_STAGING = YES
- LIBEDIT_DEPENDENCIES = ncurses
+ Thank you for your speedy reaction!
+
+On 08-06-18 01:01, Min Xu wrote:
+> To fixup linking errors:
+> "undefined reference to `__sync_val_compare_and_swap_4'"
+> Fixes
+> http://autobuild.buildroot.net/results/d00c5f9e1e7a6a40fac5763a06977b351b7875da
+> http://autobuild.buildroot.net/results/0612f2dc09a8763fdf2111ee8d0c223c8531262a
+> 
+> reference: https://git.buildroot.org/buildroot/commit/?id=7c77d965bdcd301c2644004140faec613c1ee202
+
+ No need for this - it's actually confusing, I thought you meant that the
+dependency was indirect due to libuv (as is the case in that commit).
+
+> Signed-off-by: Min Xu <xuminready@gmail.com>
+> ---
+>  package/shadowsocks-libev/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+> index d02e5a93ef..c914ed778b 100644
+> --- a/package/shadowsocks-libev/Config.in
+> +++ b/package/shadowsocks-libev/Config.in
+> @@ -1,5 +1,7 @@
+>  config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+>  	bool "shadowsocks-libev"
+> +	# uses __sync_val_compare_and_swap_4
+
+ It actually uses the __sync_val_compare_and_swap macro, so the actual function
+that is called depends on sizeof(int) and sizeof(void*)...
+
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+
+ ... so I think we also need
+
+	depends on BR2_TOOLCHAIN_HAS_SYNC_8 if BR2_ARCH_IS_64
+
+although in practice of course all 64-bit arches have sync_8.
+
+ BTW I checked, it really needs sync, it can't use atomics.
+
+ Oh, and I also noticed that it seems to unconditionally require pthreads.
+
+ Regards,
+ Arnout
+
+>  	depends on BR2_USE_MMU # fork()
+>  	select BR2_PACKAGE_C_ARES
+>  	select BR2_PACKAGE_LIBEV
+> 
+
 -- 
-2.17.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
