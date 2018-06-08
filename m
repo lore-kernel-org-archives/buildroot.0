@@ -1,59 +1,41 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 8 Jun 2018 08:38:19 -0300 (BRT)
-Subject: [Buildroot] swapoff, but no swapon in initab
-In-Reply-To: <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
-References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
- <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
-Message-ID: <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
+From: Stefan Becker <chemobejk@gmail.com>
+Date: Fri, 8 Jun 2018 14:40:10 +0300
+Subject: [Buildroot] [PATCHv2 proposal/next 2/3] build: replace
+ host-mkpasswd with host-busybox
+In-Reply-To: <69845f53-8c5f-910a-58b2-57bf5c0e38e3@mind.be>
+References: <20180601125900.26400-1-chemobejk@gmail.com>
+ <20180601133053.27552-1-chemobejk@gmail.com>
+ <20180601133053.27552-3-chemobejk@gmail.com>
+ <48945091-d169-18ba-31d0-a51c64e9a918@mind.be>
+ <935950713.1169230.1528197779003.JavaMail.zimbra@datacom.com.br>
+ <20180605161546.GE2503@scaer>
+ <CALURroS4t3V6GWnZSs6GEcAFrf1=KvfU036dskH6aEM4fQXn8w@mail.gmail.com>
+ <20180605165039.GA29058@scaer> <69845f53-8c5f-910a-58b2-57bf5c0e38e3@mind.be>
+Message-ID: <CAOJ2eMeFnmAdFiiCePrAAh0tQQnk7L42VLN5MUy7CHitop2prw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>
-> Sent: Thursday, June 7, 2018 6:12:48 PM
-> Subject: Re: [Buildroot] swapoff, but no swapon in initab
+Hi Arnout, All,
 
-> On 06-06-18 19:14, Carlos Santos wrote:
->> Hi,
->> 
->> I'm working on a product that needs a swap partition and noticed that
->> both package/{busybox,sysvinit}/inittab invoke "swapoff -a" in their
->> shutdown sequences but do not invoke "swapon -a". Is this intentional
->> or the swapon call is missing (e.g. right after "mount -a")?
-> 
-> It has been like that since
-> 
-> commit ffde94bd2ca21542ae0b4518348f8e986b9d92e0 (tag: 0_0)
-> Author: Eric Andersen <andersen@codepoet.org>
-> Date:   Sat Dec 22 01:56:11 2001
-> 
->    Initial revision
-> 
-> so whatever reason there was, it is lost in the mists of time.
-> 
-> IMO I think it's pointless (the kernel will freeze swap accesses before
-> shutdown) and possibly wrong (swap to file should be disabled before the
-> corresponding filesystem is unmounted).
-> 
-> 
-> Anyway, the proper way to handle swap is by adding it to fstab, no? I just
-> checked and busybox seems to support it.
+On Fri, Jun 8, 2018 at 12:29 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>  So, not whois, not busybox, not openssl... What about python, which we anyway
+> require to be installed on the host? I remember that someone has posted a
+> one-liner that would do the job :-P
 
-The point here is that I'd like to avoid adding yet another init script
-just to call swap{on,off} in its st{art,op} phase. A "swapon -a" in
-inittab would inspect /etc/fstab, as stated in the man page:
+Because a python one-liner is not enough. F.ex. from support/scripts/mkuser:
 
-  "All devices marked as ``swap'' in /etc/fstab are made available,
-   except for those with the ``noauto'' option. Devices that are
-   already being used as swap are silently skipped."
+   # Encode a password
+   encode_password() {
+       local passwd="${1}"
 
-So even if the system already has such init script (e.g. from a
-rootfs ovelay) a second call would be harmless.
+       mkpasswd -m "${PASSWD_METHOD}" "${passwd}"
+   }
 
--- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+i.e. you need at least a python script with mkpasswd-compatible
+command line parameters.
+
+Regards, Stefan
