@@ -1,37 +1,139 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jun 2018 18:22:11 +0200
-Subject: [Buildroot] qt-4.8.7 ICE on powerpc [was:
- [autobuild.buildroot.net] Build results for 2018-05-31]
-In-Reply-To: <ab7f66ca-8e03-2b77-0a33-81934133c6f0@mind.be> (Arnout
- Vandecappelle's message of "Thu, 7 Jun 2018 23:48:39 +0200")
-References: <20180601060027.2921620828@mail.bootlin.com>
- <a3c7791c-7502-5ce2-9677-355105fd23ec@mind.be>
- <20180601110638.5c41eacf@windsurf>
- <bd26e178-b204-056d-3646-7ececd9964d5@mind.be>
- <20180601142401.63697c3b@windsurf>
- <ab7f66ca-8e03-2b77-0a33-81934133c6f0@mind.be>
-Message-ID: <87muw55jv0.fsf@dell.be.48ers.dk>
+Date: Fri,  8 Jun 2018 18:44:34 +0200
+Subject: [Buildroot] [PATCH] mariadb: security bump version to 10.1.33
+Message-ID: <20180608164434.18857-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Release notes: https://mariadb.com/kb/en/mariadb-10133-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10133-changelog/
 
-Hi,
+Fixes the following security vulnerabilities:
 
- >> If a single bug report contains multiple bugs, then our
- >> BR2_TOOLCHAIN_GCC_HAS_BUG_xyz naming has a serious problem :-)
- >> 
- >> Is this specific Qt4 issue resolved with gcc 7.x ? Some testing on this
- >> would be nice.
+CVE-2018-2782 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server.  Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
 
- >  Since this is about Qt4 which is EOL since 3 years, perhaps we can just exclude
- > Qt4 entirely for powerpc? I think powerpc with UI is rather rare anyway...
+CVE-2018-2784 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server.  Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
 
-Or perhaps simply get rid of Qt4? It is still available in 2018.02.x,
-and we should probably get rid of it before 2019.02.
+CVE-2018-2787 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server.  Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server as well as unauthorized update, insert or
+delete access to some of MySQL Server accessible data.
 
+CVE-2018-2766 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server.  Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
+
+CVE-2018-2755 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Replication).  Supported versions that are affected
+are 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
+exploit vulnerability allows unauthenticated attacker with logon to the
+infrastructure where MySQL Server executes to compromise MySQL Server.
+Successful attacks require human interaction from a person other than the
+attacker and while the vulnerability is in MySQL Server, attacks may
+significantly impact additional products.  Successful attacks of this
+vulnerability can result in takeover of MySQL Server.
+
+CVE-2018-2819 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.5.59 and
+prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server.  Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2817 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server.  Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2761 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Client programs).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
+exploit vulnerability allows unauthenticated attacker with network access
+via multiple protocols to compromise MySQL Server.  Successful attacks of
+this vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2781 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+vulnerability allows high privileged attacker with network access via
+multiple protocols to compromise MySQL Server.  Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2771 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Locking).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
+exploit vulnerability allows high privileged attacker with network access
+via multiple protocols to compromise MySQL Server.  Successful attacks of
+this vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2813 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server.  Successful attacks of this
+vulnerability can result in unauthorized read access to a subset of MySQL
+Server accessible data.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index b8b2dde374..7eea62ab7b 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.32/
+-sha256 0e2aae6a6a190d07c8e36e87dd43377057fa82651ca3c583462563f3e9369096  mariadb-10.1.32.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.33/
++sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 391655fb0a..ce846d9cda 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.32
++MARIADB_VERSION = 10.1.33
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
 -- 
-Bye, Peter Korsgaard
+2.11.0
