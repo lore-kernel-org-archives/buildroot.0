@@ -1,22 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jun 2018 21:24:49 +0200
-Subject: [Buildroot] [PATCH 1/1] tinymembench: bump to version 0.4
-In-Reply-To: <20180608171623.12720-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 8 Jun 2018 19:16:23 +0200")
-References: <20180608171623.12720-1-fontaine.fabrice@gmail.com>
-Message-ID: <87a7s55bem.fsf@dell.be.48ers.dk>
+Date: Fri, 08 Jun 2018 21:25:22 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/imx6ulpico: Bump kernel and
+ U-Boot
+In-Reply-To: <1528478784-7892-1-git-send-email-festevam@gmail.com> (Fabio
+ Estevam's message of "Fri, 8 Jun 2018 14:26:23 -0300")
+References: <1528478784-7892-1-git-send-email-festevam@gmail.com>
+Message-ID: <87602t5bdp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > - Use LICENSE instead of main.c in TINYMEMBENCH_LICENSE_FILES
- > - Add hash for license file
+ > Bump kernel to version 4.17 and U-Boot to 2018.05.
+ > As the imx_v6_v7_defconfig in 4.17 already selects the
+ > CONFIG_CFG80211_WEXT option, the linux.fragment can
+ > be simply removed.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed, thanks.
 
