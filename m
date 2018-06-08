@@ -1,73 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 8 Jun 2018 19:34:28 +0200
-Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
- extraction
-In-Reply-To: <5675dcb9-67cc-d09e-6c5b-de0522996a20@mind.be>
-References: <20180603022145.14222-1-casantos@datacom.com.br>
- <20180605172345.GB29058@scaer>
- <625048322.1426556.1528289177741.JavaMail.zimbra@datacom.com.br>
- <20180606185136.GA2537@scaer>
- <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
- <1148643526.1795245.1528413126545.JavaMail.zimbra@datacom.com.br>
- <5675dcb9-67cc-d09e-6c5b-de0522996a20@mind.be>
-Message-ID: <20180608173428.GE2090@scaer>
+From: Joel Carlson <joelsoncarl@gmail.com>
+Date: Fri,  8 Jun 2018 13:21:05 -0600
+Subject: [Buildroot] [PATCH 1/1] flatcc: fix gcc8 compilation
+Message-ID: <1528485665-16141-1-git-send-email-JoelsonCarl@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+gcc8 issues errors for uses of strncpy where the NULL terminator may not
+be copied. This patches flatcc to fix those instances.
 
-On 2018-06-08 09:48 +0200, Arnout Vandecappelle spake thusly:
-> On 08-06-18 01:12, Carlos Santos wrote:
-[--SNIP--]
-> > BTW, it took me some time to understand the dual personality of TARGET_DIR
-> > in fs/common.mk and the role of BASE_TARGET_DIR. Then I found the line in
-> > the top Makefile with
-> > 
-> >   TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
-> > 
-> > I understand that this trick avoids changing fs/*/*.mk replacing each
-> > reference to TARGET_DIR by a ROOTFS_<FOO>_TARGET_DIR but it reduces
-> > the readability a lot. I'm compelled to restore it to how it was prior
-> > to commit 7e9870ce32d.
-> 
->  The same (or a similar) trick will be applied to the normal packages for
-> per-package host/staging/target (which is ultimately needed for top-level
-> parallel build). If we want to avoid it there, we would have to change 785
-> package.mk files, and also many package definitions in BR2_EXTERNALs that we
-> don't control...
-> 
->  That said, I would also prefer to use explicit $(FOO)_TARGET_DIR variables. But
-> doing so *will* require legacy handling.
-> 
->  Maybe we should indeed use explicit ROOTFS_$(ROOTFS)_TARGET_DIR in our rootfs
-> definitions, document that that is the one to use, and wait a year or two before
-> deprecating TARGET_DIR entirely.
-> 
->  Yann?
+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
 
-Well, It is really cumbersome to have to prefix that directory with the
-package name or the rootfs name... TARGET_DIR is just plainly easy to
-use.
+---
+Upstream is aware of the issue (see [1]), so this patch may get dropped when a
+new version of flatcc is released and we bump to it.
 
-Especially since we would break a long-established variable name.
+[1] https://github.com/dvidelabs/flatcc/pull/86
+---
+ package/flatcc/0001-gcc8-strncpy-errors.patch | 71 +++++++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/flatcc/0001-gcc8-strncpy-errors.patch
 
-And it is not the only variable that changes its content based on the
-current package: $(@D) and $(@) et al. Yes, they are make special
-variables, but so?
-
-In the end, I still fail to see the problem. But I am usual pretty
-stubborn, so... ;-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/flatcc/0001-gcc8-strncpy-errors.patch b/package/flatcc/0001-gcc8-strncpy-errors.patch
+new file mode 100644
+index 0000000..bf7d35b
+--- /dev/null
++++ b/package/flatcc/0001-gcc8-strncpy-errors.patch
+@@ -0,0 +1,71 @@
++Fix compilation with gcc8
++
++gcc8 issues errors for uses of strncpy where the NULL terminator may not be
++copied.
++
++Upstream is aware of the issue, and it is possible this patch may be removed
++when the version is bumped in the future.
++
++Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
++
++diff --git a/include/flatcc/reflection/flatbuffers_common_reader.h b/include/flatcc/reflection/flatbuffers_common_reader.h
++index faa7a9f..b86ffbc 100644
++--- a/include/flatcc/reflection/flatbuffers_common_reader.h
+++++ b/include/flatcc/reflection/flatbuffers_common_reader.h
++@@ -433,7 +433,12 @@ static inline T N ## _ ## NK(N ## _struct_t t) { return t ? &(t->NK) : 0; }
++ /* If fid is null, the function returns true without testing as buffer is not expected to have any id. */
++ static inline int flatbuffers_has_identifier(const void *buffer, const char *fid)
++ { flatbuffers_thash_t id, id2 = 0; if (fid == 0) { return 1; };
++-  strncpy((char *)&id2, fid, sizeof(id2));
+++  const char *s;
+++  unsigned int i;
+++  for (s = fid, i = 0; i < sizeof(id2); ++i) {
+++    ((char *)&id2)[i] = *s;
+++    s += *s != 0;
+++  }
++   /* Identifier strings are always considered little endian. */
++   id2 = __flatbuffers_thash_cast_from_le(id2);
++   id = __flatbuffers_thash_read_from_pe(((flatbuffers_uoffset_t *)buffer) + 1);
++diff --git a/src/runtime/json_printer.c b/src/runtime/json_printer.c
++index 8fe2483..5baceb2 100644
++--- a/src/runtime/json_printer.c
+++++ b/src/runtime/json_printer.c
++@@ -1013,6 +1013,8 @@ static int accept_header(flatcc_json_printer_t * ctx,
++         const void *buf, size_t bufsiz, const char *fid)
++ {
++     flatbuffers_thash_t id, id2 = 0;
+++    const char *s;
+++    unsigned int i;
++ 
++     if (buf == 0 || bufsiz < offset_size + FLATBUFFERS_IDENTIFIER_SIZE) {
++         RAISE_ERROR(bad_input);
++@@ -1020,7 +1022,10 @@ static int accept_header(flatcc_json_printer_t * ctx,
++         return 0;
++     }
++     if (fid != 0) {
++-        strncpy((char *)&id2, fid, FLATBUFFERS_IDENTIFIER_SIZE);
+++        for (s = fid, i = 0; i < sizeof(id2); ++i) {
+++            ((char *)&id2)[i] = *s;
+++            s += *s != 0;
+++        }
++         id2 = __flatbuffers_thash_cast_from_le(id2);
++         id = __flatbuffers_thash_read_from_pe((uint8_t *)buf + offset_size);
++         if (!(id2 == 0 || id == id2)) {
++diff --git a/src/runtime/verifier.c b/src/runtime/verifier.c
++index 68dbc1b..0733ff0 100644
++--- a/src/runtime/verifier.c
+++++ b/src/runtime/verifier.c
++@@ -111,7 +111,12 @@ static inline uoffset_t read_uoffset(const void *p, uoffset_t base)
++ static inline thash_t read_thash_identifier(const char *identifier)
++ {
++     flatbuffers_thash_t id = 0;
++-    strncpy((char *)&id, identifier, sizeof(id));
+++    const char *s;
+++    unsigned int i;
+++    for (s = identifier, i = 0; i < sizeof(id); ++i) {
+++        ((char *)&id)[i] = *s;
+++        s += *s != 0;
+++    }
++     return __flatbuffers_thash_cast_from_le(id);
++ }
++ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
