@@ -1,139 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  8 Jun 2018 18:44:34 +0200
-Subject: [Buildroot] [PATCH] mariadb: security bump version to 10.1.33
-Message-ID: <20180608164434.18857-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  8 Jun 2018 19:05:55 +0200
+Subject: [Buildroot] [PATCH 1/1] tinyxml2: bump to version 6.2.0
+Message-ID: <20180608170555.5226-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://mariadb.com/kb/en/mariadb-10133-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10133-changelog/
+Add hash for license file
 
-Fixes the following security vulnerabilities:
-
-CVE-2018-2782 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
-prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server.  Successful attacks of this vulnerability can result in
-unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server.
-
-CVE-2018-2784 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
-prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server.  Successful attacks of this vulnerability can result in
-unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server.
-
-CVE-2018-2787 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
-prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server.  Successful attacks of this vulnerability can result in
-unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server as well as unauthorized update, insert or
-delete access to some of MySQL Server accessible data.
-
-CVE-2018-2766 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
-prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server.  Successful attacks of this vulnerability can result in
-unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server.
-
-CVE-2018-2755 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Replication).  Supported versions that are affected
-are 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
-exploit vulnerability allows unauthenticated attacker with logon to the
-infrastructure where MySQL Server executes to compromise MySQL Server.
-Successful attacks require human interaction from a person other than the
-attacker and while the vulnerability is in MySQL Server, attacks may
-significantly impact additional products.  Successful attacks of this
-vulnerability can result in takeover of MySQL Server.
-
-CVE-2018-2819 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.5.59 and
-prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server.  Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2817 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server.  Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2761 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Client programs).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
-exploit vulnerability allows unauthenticated attacker with network access
-via multiple protocols to compromise MySQL Server.  Successful attacks of
-this vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2781 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
-vulnerability allows high privileged attacker with network access via
-multiple protocols to compromise MySQL Server.  Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2771 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Locking).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
-exploit vulnerability allows high privileged attacker with network access
-via multiple protocols to compromise MySQL Server.  Successful attacks of
-this vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2813 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server.  Successful attacks of this
-vulnerability can result in unauthorized read access to a subset of MySQL
-Server accessible data.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tinyxml2/tinyxml2.hash | 3 ++-
+ package/tinyxml2/tinyxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index b8b2dde374..7eea62ab7b 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.32/
--sha256 0e2aae6a6a190d07c8e36e87dd43377057fa82651ca3c583462563f3e9369096  mariadb-10.1.32.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.33/
-+sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 391655fb0a..ce846d9cda 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
+diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
+index e5e4d238ab..5f38546466 100644
+--- a/package/tinyxml2/tinyxml2.hash
++++ b/package/tinyxml2/tinyxml2.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 14b38ef25cc136d71339ceeafb4856bb638d486614103453eccd323849267f20  tinyxml2-4.0.1.tar.gz
++sha256 cdf0c2179ae7a7931dba52463741cf59024198bbf9673bf08415bcb46344110f  tinyxml2-6.2.0.tar.gz
++sha256 8b2ab0b6ffb86798a2512f45fcf50a3b04b3516782d2e3fb30ebf55dc18c7cce  readme.md
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
+index e289ca9cf0..9439c5cb80 100644
+--- a/package/tinyxml2/tinyxml2.mk
++++ b/package/tinyxml2/tinyxml2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MARIADB_VERSION = 10.1.32
-+MARIADB_VERSION = 10.1.33
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+-TINYXML2_VERSION = 4.0.1
++TINYXML2_VERSION = 6.2.0
+ TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
+ TINYXML2_LICENSE = Zlib
+ TINYXML2_LICENSE_FILES = readme.md
 -- 
-2.11.0
+2.14.1
