@@ -1,55 +1,106 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 7 Jun 2018 20:12:06 -0300 (BRT)
-Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
- extraction
-In-Reply-To: <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
-References: <20180603022145.14222-1-casantos@datacom.com.br>
- <20180605172345.GB29058@scaer>
- <625048322.1426556.1528289177741.JavaMail.zimbra@datacom.com.br>
- <20180606185136.GA2537@scaer> <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
-Message-ID: <1148643526.1795245.1528413126545.JavaMail.zimbra@datacom.com.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  8 Jun 2018 06:16:22 +0300
+Subject: [Buildroot] [PATCH] trinity: fix build with kernel headers v4.17+
+Message-ID: <57101a03a5f14bf5f213424f34826197e3dddf38.1528427782.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Yann Morin" <yann.morin.1998@free.fr>, "DATACOM" <casantos@datacom.com.br>
-> Cc: "Thomas De Schampheleire" <thomas.de_schampheleire@nokia.com>, "buildroot" <buildroot@buildroot.org>
-> Sent: Thursday, June 7, 2018 6:03:48 PM
-> Subject: Re: [Buildroot] [PATCH] fs: allow extra arguments to common tarball extraction
+Kernel v4.17 removed the linux/irda.h header. Add a patch to skip the
+irda test when the header is missing.
 
-> On 06-06-18 20:51, Yann E. MORIN wrote:
->> But my position has always been consistent on this topic: the images
->> that Buildroot generates only ever covers just "basic" situations, using
->> a single-filesystem layout. Anything that needs to do a multi-filesystem
->> layout should be done as a new filesystem. Doing it in a new filesystem
->> is much more flexible than whatever kconfig option we may ever add. And
->> since we already have this wonderful flexibility, I don't think it makes
->> sense to add a new option that duplicates only a very limited subset of
->> that flexibility. That duplication is not good, IMNSHO...
-> 
-> There is (in my even less humble opinion) one way that we can solve this
-> generically: by adding a genimage filesystem. genimage is able to create
-> separate filesystem images for subtrees. so it can cover many use cases in a
-> generic way.
+Fixes:
+http://autobuild.buildroot.net/results/39d/39d131048d6eb3cd4d802dae462116f7728c41fd/
+http://autobuild.buildroot.net/results/af2/af2288711d1a0939a06ea51e65ed32d39e395e2b/
+http://autobuild.buildroot.net/results/41f/41fead6d53dba2539ba246f682973e0b5967f3d0/
 
-I'm already working on a patch to convert inner-rootfs into a generic
-inner-filesystem macro. I will submit it for comments soon.
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...-fix-build-with-kernel-headers-v4.17.patch | 73 +++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+ create mode 100644 package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch
 
-BTW, it took me some time to understand the dual personality of TARGET_DIR
-in fs/common.mk and the role of BASE_TARGET_DIR. Then I found the line in
-the top Makefile with
-
-  TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
-
-I understand that this trick avoids changing fs/*/*.mk replacing each
-reference to TARGET_DIR by a ROOTFS_<FOO>_TARGET_DIR but it reduces
-the readability a lot. I'm compelled to restore it to how it was prior
-to commit 7e9870ce32d.
-
+diff --git a/package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch b/package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch
+new file mode 100644
+index 000000000000..89aa4219c2c7
+--- /dev/null
++++ b/package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch
+@@ -0,0 +1,73 @@
++From 5431126ac94bf81743852493a041e80e82918741 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 8 Jun 2018 06:05:26 +0300
++Subject: [PATCH] configure: fix build with kernel headers v4.17+
++
++Kernel v4.17 removed the linux/irda.h header. Skip the irda test when
++this header is missing.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/kernelslacker/trinity/pull/25
++
++ configure        | 1 +
++ net/proto-irda.c | 6 +++++-
++ net/protocols.c  | 2 ++
++ 3 files changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index c0166af33048..944c8cf77d1b 100755
++--- a/configure
+++++ b/configure
++@@ -316,6 +316,7 @@ fi
++ check_header linux/caif/caif_socket.h USE_CAIF
++ check_header linux/fsmap.h USE_FSMAP
++ check_header linux/if_alg.h USE_IF_ALG
+++check_header linux/irda.h USE_IRDA
++ check_header linux/rds.h USE_RDS
++ check_header linux/vfio.h USE_VFIO
++ check_header drm/drm.h USE_DRM
++diff --git a/net/proto-irda.c b/net/proto-irda.c
++index 02d51bcd2ee0..264e36dfa040 100644
++--- a/net/proto-irda.c
+++++ b/net/proto-irda.c
++@@ -4,13 +4,15 @@
++ #include <sys/un.h>
++ /* old irda.h does not include something which defines sa_family_t */
++ #include <netinet/in.h>
++-#include <linux/irda.h>
++ #include <stdlib.h>
++ #include "net.h"
++ #include "random.h"
++ #include "utils.h"	// RAND_ARRAY
++ #include "compat.h"
++ 
+++#ifdef USE_IRDA
+++#include <linux/irda.h>
+++
++ static void irda_gen_sockaddr(struct sockaddr **addr, socklen_t *addrlen)
++ {
++ 	struct sockaddr_irda *irda;
++@@ -53,3 +55,5 @@ const struct netproto proto_irda = {
++ 	.valid_triplets = irda_triplets,
++ 	.nr_triplets = ARRAY_SIZE(irda_triplets),
++ };
+++
+++#endif
++diff --git a/net/protocols.c b/net/protocols.c
++index 90a60affedca..87acf85c707f 100644
++--- a/net/protocols.c
+++++ b/net/protocols.c
++@@ -26,7 +26,9 @@ const struct protoptr net_protocols[TRINITY_PF_MAX] = {
++ #ifdef USE_RDS
++ 	[PF_RDS] = { .proto = &proto_rds },
++ #endif
+++#ifdef USE_IRDA
++ 	[PF_IRDA] = { .proto = &proto_irda },
+++#endif
++ 	[PF_LLC] = { .proto = &proto_llc },
++ 	[PF_CAN] = { .proto = &proto_can },
++ 	[PF_TIPC] = { .proto = &proto_tipc },
++-- 
++2.17.1
++
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.17.1
