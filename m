@@ -1,84 +1,182 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri,  8 Jun 2018 08:00:54 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-06-07
-Message-ID: <20180608060054.590A020DB3@mail.bootlin.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  8 Jun 2018 09:21:57 +0300
+Subject: [Buildroot] [PATCH] elfutils: security bump to version 0.171
+Message-ID: <ba51f7d0e34a8951b7c4b153f3b0e41a9a123199.1528438917.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes CVE-2018-8769: buffer over-read in the ebl_dynamic_tag_name
+function of libebl/ebldynamictagname.c because SYMTAB_SHNDX is
+unsupported.
 
-Build statistics for 2018-06-07
-===============================
+Drop the po/ disable patch; not needed anymore.
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  25 |   3 |   0 |  28 |
-   2018.05.x |  26 |   0 |   0 |  26 |
-      master | 219 |  20 |   0 | 239 |
+Drop the __mempcpy compatibility patch; __mempcpy is not used anymore.
 
-Results for branch '2018.02.x'
-==============================
+Refresh the -Werror removal patch; still needed, unfortunately.
 
-Classification of failures by reason
-------------------------------------
+Renumber the remaining patches.
 
-                   libnss-3.33 | 2 
-                    quota-4.01 | 1 
+Add GPLv3 license file.
 
+Add license files hash.
 
-Detail of failures
-------------------
+Cc: Stefan Fr?berg <stefan.froberg@petroprogram.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...able-disable-progs-configure-option.patch} |  0
+ ...mplementation-of-the-fts_-functions.patch} |  0
+ ...-Werror-conditional-to-BUILD_WERROR.patch} | 10 +++----
+ package/elfutils/0004-disable-po.patch        | 24 -----------------
+ package/elfutils/0006-memcpy-def.patch        | 26 -------------------
+ package/elfutils/elfutils.hash                |  8 ++++--
+ package/elfutils/elfutils.mk                  |  4 +--
+ 7 files changed, 13 insertions(+), 59 deletions(-)
+ rename package/elfutils/{0002-disable-progs.patch => 0001-Add-a-enable-disable-progs-configure-option.patch} (100%)
+ rename package/elfutils/{0003-fts.patch => 0002-Add-an-implementation-of-the-fts_-functions.patch} (100%)
+ rename package/elfutils/{0005-really-make-werror-conditional-to-build-werror.patch => 0003-Really-make-Werror-conditional-to-BUILD_WERROR.patch} (80%)
+ delete mode 100644 package/elfutils/0004-disable-po.patch
+ delete mode 100644 package/elfutils/0006-memcpy-def.patch
 
- powerpc64le |                    libnss-3.33 | NOK | http://autobuild.buildroot.net/results/949fbfd581530b2fb9725d360a37fac8741ea26b |     
-    mips64el |                    libnss-3.33 | NOK | http://autobuild.buildroot.net/results/a8dc80eabca799ce48231a9cf20a0d8616f62b7e |     
-   powerpc64 |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/caba48b3d2b43e27511ec7843c46a57d3c7a04c3 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-            host-flatcc-v0.5.1 | 4 
-                libmpeg2-0.5.1 | 3 
-                   trinity-1.8 | 3 
-               mono-5.12.0.226 | 2 
-                   libnss-3.37 | 1 
-              mjpegtools-2.1.0 | 1 
-pixiewps-9e5bdc6c86c8487b2a... | 1 
-                protobuf-3.5.1 | 1 
-                      qt-4.8.7 | 1 
-                qt5base-5.10.1 | 1 
-               qt5webkit-5.9.1 | 1 
-triggerhappy-b8228880661293... | 1 
-
-
-Detail of failures
-------------------
-
-   powerpc64 |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/01164e2b88b5c26de893fd46765746ae73f29246 |     
-         arm |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/ba9724ba121f18d37a5768a8be1ddc1da69f781b |     
-microblazeel |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/8aa326212dc59ce88d6b5461cb196473f47b56a0 |     
-      mipsel |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/28d3ec4dd4d656b9eac476d5822d8a5cd386c57c |     
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/8544d0f34b3ccf77843f48ffb4894782fb5a68b0 | ORPH
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/0369135e20ec6a9e7376a7062ca36e0917cf6941 | ORPH
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/585b06994962a0587062ae0ba73d318fa13c9fb3 | ORPH
-         arm |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/fd64ee3486f9045dfbd83908b8f06ef62c0d9781 |     
-     powerpc |               mjpegtools-2.1.0 | NOK | http://autobuild.buildroot.net/results/e2508995f42fef23810fa72466451a0598657e6c |     
-      mipsel |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/09f7a2172f4f71fa3cfeb6e69a274e297763e778 |     
-        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/05c5c81ddacc190e324f9edaf4965b895c386306 |     
-     powerpc | pixiewps-9e5bdc6c86c8487b2a... | NOK | http://autobuild.buildroot.net/results/d9f0311538c8db1196839e36af3f6ef4e403be2b |     
-     sparc64 |                 protobuf-3.5.1 | NOK | http://autobuild.buildroot.net/results/1767c29a5b8a8d4e9585149301c272858d161126 |     
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/89ab525989738ac21443c878f01f2a4a178d05e8 | ORPH
-        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/9161f1222cb39d4bc95195865c91541b0c19ff40 |     
-      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/f3512db384043d865e3e38290e94d4d05e2c5be6 |     
-         arm | triggerhappy-b8228880661293... | NOK | http://autobuild.buildroot.net/results/8986234e18891ee075443879445f602542e24e5a |     
-         arm |                    trinity-1.8 | NOK | http://autobuild.buildroot.net/results/af2288711d1a0939a06ea51e65ed32d39e395e2b |     
-         arm |                    trinity-1.8 | NOK | http://autobuild.buildroot.net/results/39d131048d6eb3cd4d802dae462116f7728c41fd |     
-         arm |                    trinity-1.8 | NOK | http://autobuild.buildroot.net/results/7f600c2b57326da316f3410069ccddbabb37edfd |     
-
-
+diff --git a/package/elfutils/0002-disable-progs.patch b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+similarity index 100%
+rename from package/elfutils/0002-disable-progs.patch
+rename to package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+diff --git a/package/elfutils/0003-fts.patch b/package/elfutils/0002-Add-an-implementation-of-the-fts_-functions.patch
+similarity index 100%
+rename from package/elfutils/0003-fts.patch
+rename to package/elfutils/0002-Add-an-implementation-of-the-fts_-functions.patch
+diff --git a/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch b/package/elfutils/0003-Really-make-Werror-conditional-to-BUILD_WERROR.patch
+similarity index 80%
+rename from package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch
+rename to package/elfutils/0003-Really-make-Werror-conditional-to-BUILD_WERROR.patch
+index a7017d6e88c2..21ffa7f31b35 100644
+--- a/package/elfutils/0005-really-make-werror-conditional-to-build-werror.patch
++++ b/package/elfutils/0003-Really-make-Werror-conditional-to-BUILD_WERROR.patch
+@@ -1,4 +1,4 @@
+-From 1d8f27d73df6369b19ddd6732960df0d4fdec338 Mon Sep 17 00:00:00 2001
++From 2688a0238eaf825d6659c16c012db0c16f07e197 Mon Sep 17 00:00:00 2001
+ From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ Date: Mon, 29 May 2017 23:24:42 +0300
+ Subject: [PATCH] Really make -Werror conditional to BUILD_WERROR
+@@ -20,17 +20,17 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+  1 file changed, 1 deletion(-)
+ 
+ diff --git a/config/eu.am b/config/eu.am
+-index 8fe1e259f9e2..c5a6209a4e04 100644
++index c2cc349ce876..99b368e09060 100644
+ --- a/config/eu.am
+ +++ b/config/eu.am
+-@@ -71,7 +71,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
++@@ -73,7 +73,6 @@ AM_CFLAGS = -std=gnu99 -Wall -Wshadow -Wformat=2 \
+  	    -Wold-style-definition -Wstrict-prototypes \
+  	    $(LOGICAL_OP_WARNING) $(DUPLICATED_COND_WARNING) \
+  	    $(NULL_DEREFERENCE_WARNING) $(IMPLICIT_FALLTHROUGH_WARNING) \
+ -	    $(if $($(*F)_no_Werror),,-Werror) \
+  	    $(if $($(*F)_no_Wunused),,-Wunused -Wextra) \
+  	    $(if $($(*F)_no_Wstack_usage),,$(STACK_USAGE_WARNING)) \
+- 	    $($(*F)_CFLAGS)
++ 	    $(if $($(*F)_no_Wpacked_not_aligned),-Wno-packed-not-aligned,) \
+ -- 
+-2.11.0
++2.17.1
+ 
+diff --git a/package/elfutils/0004-disable-po.patch b/package/elfutils/0004-disable-po.patch
+deleted file mode 100644
+index c45c5804632b..000000000000
+--- a/package/elfutils/0004-disable-po.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Disable the build of the po/ directory
+-
+-Building the po/ directory complains that the scripts in there have
+-been generated with gettext 0.17, while we use gettext 0.18 in
+-Buildroot. Since we don't care that much about po files anyway, just
+-disable the build of this directory.
+-
+-Based on the former patch by Thomas Petazzoni.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-diff -rup a/Makefile.am b/Makefile.am
+---- a/Makefile.am	2014-11-07 15:14:39.018060884 +0000
+-+++ b/Makefile.am	2014-11-07 15:30:02.864918229 +0000
+-@@ -28,7 +28,7 @@ endif
+-
+- # Add doc back when we have some real content.
+- SUBDIRS = config m4 lib libelf libebl libdwelf libdwfl libdw libcpu libasm \
+--	  backends $(PROGS_SUBDIR) po tests
+-+	  backends $(PROGS_SUBDIR) tests
+-
+- EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
+-	     COPYING COPYING-GPLV2 COPYING-LGPLV3
+diff --git a/package/elfutils/0006-memcpy-def.patch b/package/elfutils/0006-memcpy-def.patch
+deleted file mode 100644
+index 509482774c77..000000000000
+--- a/package/elfutils/0006-memcpy-def.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Provide a compatibility alias __memcpy
+-
+-For some reason, libelf uses the internal glibc alias __memcpy, which
+-doesn't exist in uClibc. Add a manual alias so that the build can
+-proceed with uClibc.
+-
+-Based on the former patch by Thomas Petazzoni.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-
+-diff -rup a/libelf/libelf.h b/libelf/libelf.h
+---- a/libelf/libelf.h	2014-08-27 10:25:17.000000000 +0100
+-+++ b/libelf/libelf.h	2014-11-07 15:13:08.743508221 +0000
+-@@ -34,6 +34,11 @@
+- /* Get the ELF types.  */
+- #include <elf.h>
+-
+-+#ifndef _LIBC
+-+#ifndef __mempcpy
+-+#define __mempcpy mempcpy
+-+#endif
+-+#endif
+-
+- /* Known translation types.  */
+- typedef enum
+diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+index 76b6dc64588d..dc321e935988 100644
+--- a/package/elfutils/elfutils.hash
++++ b/package/elfutils/elfutils.hash
+@@ -1,2 +1,6 @@
+-# From https://sourceware.org/elfutils/ftp/0.169/sha512.sum
+-sha512 0a81a20bb2aff533d035d6b76f1403437b2e11bce390db57e34b8c26e4b9b3150346d83dddcbfbbdc58063f046ca3223508dba35c6ce88e375d201e7a777a8b9  elfutils-0.169.tar.bz2
++# From https://sourceware.org/elfutils/ftp/0.171/sha512.sum
++sha512 777be2d63ca9b11440bf358a33428d9ca974e2612a880934156c9f7194af596ed627c1ed2d48dbd47a3761c94913b8f39565f9dcb6b62c92bf229f04c96d5ee3  elfutils-0.171.tar.bz2
++# Locally calculated
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING-LGPLV3
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 5570a3b37fea..5eaaaeadadb5 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-ELFUTILS_VERSION = 0.169
++ELFUTILS_VERSION = 0.171
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+ ELFUTILS_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
+-ELFUTILS_LICENSE_FILES = COPYING-GPLV2 COPYING-LGPLV3
++ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
+ ELFUTILS_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
+ HOST_ELFUTILS_DEPENDENCIES = host-zlib host-bzip2 host-xz
+ 
 -- 
-http://autobuild.buildroot.net
+2.17.1
