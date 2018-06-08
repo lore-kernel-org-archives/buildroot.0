@@ -1,73 +1,46 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 8 Jun 2018 11:45:00 +0200
-Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add dependency on
- BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <20180607230144.387-1-xuminready@gmail.com>
-References: <20180607230144.387-1-xuminready@gmail.com>
-Message-ID: <630c76ca-9a08-115d-5c32-85567237d012@mind.be>
+From: Antoine Tenart <antoine.tenart@bootlin.com>
+Date: Fri,  8 Jun 2018 12:23:07 +0200
+Subject: [Buildroot] [PATCH] package/cryptodev-linux: bump to the latest
+ version (f60aa0)
+Message-ID: <20180608102307.15912-1-antoine.tenart@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Min,
+Bumps the cryptodev-linux package to the latest version available, which
+contains some fixes and allows to use cryptodev-linux with a recent
+kernel (v4.17).
 
- Thank you for your speedy reaction!
+The patch bumps the version and update the locally calculated hash.
 
-On 08-06-18 01:01, Min Xu wrote:
-> To fixup linking errors:
-> "undefined reference to `__sync_val_compare_and_swap_4'"
-> Fixes
-> http://autobuild.buildroot.net/results/d00c5f9e1e7a6a40fac5763a06977b351b7875da
-> http://autobuild.buildroot.net/results/0612f2dc09a8763fdf2111ee8d0c223c8531262a
-> 
-> reference: https://git.buildroot.org/buildroot/commit/?id=7c77d965bdcd301c2644004140faec613c1ee202
+Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+---
+ package/cryptodev-linux/cryptodev-linux.hash | 2 +-
+ package/cryptodev-linux/cryptodev-linux.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- No need for this - it's actually confusing, I thought you meant that the
-dependency was indirect due to libuv (as is the case in that commit).
-
-> Signed-off-by: Min Xu <xuminready@gmail.com>
-> ---
->  package/shadowsocks-libev/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
-> index d02e5a93ef..c914ed778b 100644
-> --- a/package/shadowsocks-libev/Config.in
-> +++ b/package/shadowsocks-libev/Config.in
-> @@ -1,5 +1,7 @@
->  config BR2_PACKAGE_SHADOWSOCKS_LIBEV
->  	bool "shadowsocks-libev"
-> +	# uses __sync_val_compare_and_swap_4
-
- It actually uses the __sync_val_compare_and_swap macro, so the actual function
-that is called depends on sizeof(int) and sizeof(void*)...
-
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-
- ... so I think we also need
-
-	depends on BR2_TOOLCHAIN_HAS_SYNC_8 if BR2_ARCH_IS_64
-
-although in practice of course all 64-bit arches have sync_8.
-
- BTW I checked, it really needs sync, it can't use atomics.
-
- Oh, and I also noticed that it seems to unconditionally require pthreads.
-
- Regards,
- Arnout
-
->  	depends on BR2_USE_MMU # fork()
->  	select BR2_PACKAGE_C_ARES
->  	select BR2_PACKAGE_LIBEV
-> 
-
+diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
+index 48d608e1270c..ad7cb615e60b 100644
+--- a/package/cryptodev-linux/cryptodev-linux.hash
++++ b/package/cryptodev-linux/cryptodev-linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 90a4c5e46d7d5fcc0c6155f1add824e73c27de9b1ff0b7fe2017a104cf9398dd cryptodev-linux-0a54e38b264d9a3bed74c642a61b88191660d0f8.tar.gz
++sha256 994ed2f715dd3786f534d5215ae7ae4735b84cff28ea41080ff3501bf1503944 cryptodev-linux-f60aa08c63fc02780554a0a12180a478ca27d49f.tar.gz
+diff --git a/package/cryptodev-linux/cryptodev-linux.mk b/package/cryptodev-linux/cryptodev-linux.mk
+index dacb29dab8ae..028f7b1df488 100644
+--- a/package/cryptodev-linux/cryptodev-linux.mk
++++ b/package/cryptodev-linux/cryptodev-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRYPTODEV_LINUX_VERSION = 0a54e38b264d9a3bed74c642a61b88191660d0f8
++CRYPTODEV_LINUX_VERSION = f60aa08c63fc02780554a0a12180a478ca27d49f
+ CRYPTODEV_LINUX_SITE = $(call github,cryptodev-linux,cryptodev-linux,$(CRYPTODEV_LINUX_VERSION))
+ CRYPTODEV_LINUX_INSTALL_STAGING = YES
+ CRYPTODEV_LINUX_LICENSE = GPL-2.0+
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.17.1
