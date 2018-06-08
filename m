@@ -1,80 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 8 Jun 2018 09:48:26 +0200
-Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
- extraction
-In-Reply-To: <1148643526.1795245.1528413126545.JavaMail.zimbra@datacom.com.br>
-References: <20180603022145.14222-1-casantos@datacom.com.br>
- <20180605172345.GB29058@scaer>
- <625048322.1426556.1528289177741.JavaMail.zimbra@datacom.com.br>
- <20180606185136.GA2537@scaer> <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
- <1148643526.1795245.1528413126545.JavaMail.zimbra@datacom.com.br>
-Message-ID: <5675dcb9-67cc-d09e-6c5b-de0522996a20@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri,  8 Jun 2018 12:42:21 +0300
+Subject: [Buildroot] [PATCH] libedit: bump to version 20180525-3.1
+Message-ID: <dfc2fd05b10fa7e1cf1b46d9f80c6fb091222776.1528450941.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/libedit/libedit.hash | 2 +-
+ package/libedit/libedit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-On 08-06-18 01:12, Carlos Santos wrote:
->> From: "Arnout Vandecappelle" <arnout@mind.be>
->> To: "Yann Morin" <yann.morin.1998@free.fr>, "DATACOM" <casantos@datacom.com.br>
->> Cc: "Thomas De Schampheleire" <thomas.de_schampheleire@nokia.com>, "buildroot" <buildroot@buildroot.org>
->> Sent: Thursday, June 7, 2018 6:03:48 PM
->> Subject: Re: [Buildroot] [PATCH] fs: allow extra arguments to common tarball extraction
-> 
->> On 06-06-18 20:51, Yann E. MORIN wrote:
->>> But my position has always been consistent on this topic: the images
->>> that Buildroot generates only ever covers just "basic" situations, using
->>> a single-filesystem layout. Anything that needs to do a multi-filesystem
->>> layout should be done as a new filesystem. Doing it in a new filesystem
->>> is much more flexible than whatever kconfig option we may ever add. And
->>> since we already have this wonderful flexibility, I don't think it makes
->>> sense to add a new option that duplicates only a very limited subset of
->>> that flexibility. That duplication is not good, IMNSHO...
->>
->> There is (in my even less humble opinion) one way that we can solve this
->> generically: by adding a genimage filesystem. genimage is able to create
->> separate filesystem images for subtrees. so it can cover many use cases in a
->> generic way.
-> 
-> I'm already working on a patch to convert inner-rootfs into a generic
-> inner-filesystem macro. I will submit it for comments soon.
-> 
-> BTW, it took me some time to understand the dual personality of TARGET_DIR
-> in fs/common.mk and the role of BASE_TARGET_DIR. Then I found the line in
-> the top Makefile with
-> 
->   TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
-> 
-> I understand that this trick avoids changing fs/*/*.mk replacing each
-> reference to TARGET_DIR by a ROOTFS_<FOO>_TARGET_DIR but it reduces
-> the readability a lot. I'm compelled to restore it to how it was prior
-> to commit 7e9870ce32d.
-
- The same (or a similar) trick will be applied to the normal packages for
-per-package host/staging/target (which is ultimately needed for top-level
-parallel build). If we want to avoid it there, we would have to change 785
-package.mk files, and also many package definitions in BR2_EXTERNALs that we
-don't control...
-
- That said, I would also prefer to use explicit $(FOO)_TARGET_DIR variables. But
-doing so *will* require legacy handling.
-
- Maybe we should indeed use explicit ROOTFS_$(ROOTFS)_TARGET_DIR in our rootfs
-definitions, document that that is the one to use, and wait a year or two before
-deprecating TARGET_DIR entirely.
-
- Yann?
-
- Regards,
- Arnout
-
+diff --git a/package/libedit/libedit.hash b/package/libedit/libedit.hash
+index e8136df9c49d..3a5cdbac95c9 100644
+--- a/package/libedit/libedit.hash
++++ b/package/libedit/libedit.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 91f2d90fbd2a048ff6dad7131d9a39e690fd8a8fd982a353f1333dd4017dd4be libedit-20170329-3.1.tar.gz
++sha256 c41bea8fd140fb57ba67a98ec1d8ae0b8ffa82f4aba9c35a87e5a9499e653116 libedit-20180525-3.1.tar.gz
+ sha256 9da6c9c74987a36c84302982799d17d2f748ba1c1c0c471425716173c1d07649 COPYING
+diff --git a/package/libedit/libedit.mk b/package/libedit/libedit.mk
+index bbdc871b35b8..a4b32e05eb33 100644
+--- a/package/libedit/libedit.mk
++++ b/package/libedit/libedit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEDIT_VERSION = 20170329-3.1
++LIBEDIT_VERSION = 20180525-3.1
+ LIBEDIT_SITE = http://www.thrysoee.dk/editline
+ LIBEDIT_INSTALL_STAGING = YES
+ LIBEDIT_DEPENDENCIES = ncurses
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.17.1
