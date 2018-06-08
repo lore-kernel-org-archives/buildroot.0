@@ -1,15 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 8 Jun 2018 21:58:17 +0200
+Date: Fri, 8 Jun 2018 21:59:55 +0200
 Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
  extraction
-In-Reply-To: <20180608173428.GE2090@scaer>
+In-Reply-To: <20180608171941.GC2090@scaer>
 References: <20180603022145.14222-1-casantos@datacom.com.br>
  <20180605172345.GB29058@scaer>
  <625048322.1426556.1528289177741.JavaMail.zimbra@datacom.com.br>
  <20180606185136.GA2537@scaer> <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
- <1148643526.1795245.1528413126545.JavaMail.zimbra@datacom.com.br>
- <5675dcb9-67cc-d09e-6c5b-de0522996a20@mind.be> <20180608173428.GE2090@scaer>
-Message-ID: <b9477842-1454-1ac4-3676-8c62b667db0a@mind.be>
+ <20180608171941.GC2090@scaer>
+Message-ID: <5f35f9b5-e308-3fff-138d-07f7b814fdd1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,70 +17,43 @@ To: buildroot@busybox.net
 
 
 
-On 08-06-18 19:34, Yann E. MORIN wrote:
+On 08-06-18 19:19, Yann E. MORIN wrote:
 > Arnout, All,
 > 
-> On 2018-06-08 09:48 +0200, Arnout Vandecappelle spake thusly:
->> On 08-06-18 01:12, Carlos Santos wrote:
-> [--SNIP--]
->>> BTW, it took me some time to understand the dual personality of TARGET_DIR
->>> in fs/common.mk and the role of BASE_TARGET_DIR. Then I found the line in
->>> the top Makefile with
->>>
->>>   TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
->>>
->>> I understand that this trick avoids changing fs/*/*.mk replacing each
->>> reference to TARGET_DIR by a ROOTFS_<FOO>_TARGET_DIR but it reduces
->>> the readability a lot. I'm compelled to restore it to how it was prior
->>> to commit 7e9870ce32d.
+> On 2018-06-07 23:03 +0200, Arnout Vandecappelle spake thusly:
+>> On 06-06-18 20:51, Yann E. MORIN wrote:
+>>> But my position has always been consistent on this topic: the images
+>>> that Buildroot generates only ever covers just "basic" situations, using
+>>> a single-filesystem layout. Anything that needs to do a multi-filesystem
+>>> layout should be done as a new filesystem. Doing it in a new filesystem
+>>> is much more flexible than whatever kconfig option we may ever add. And
+>>> since we already have this wonderful flexibility, I don't think it makes
+>>> sense to add a new option that duplicates only a very limited subset of
+>>> that flexibility. That duplication is not good, IMNSHO...
 >>
->>  The same (or a similar) trick will be applied to the normal packages for
->> per-package host/staging/target (which is ultimately needed for top-level
->> parallel build). If we want to avoid it there, we would have to change 785
->> package.mk files, and also many package definitions in BR2_EXTERNALs that we
->> don't control...
+>>  There is (in my even less humble opinion) one way that we can solve this
+>> generically: by adding a genimage filesystem. genimage is able to create
+>> separate filesystem images for subtrees. so it can cover many use cases in a
+>> generic way.
 >>
->>  That said, I would also prefer to use explicit $(FOO)_TARGET_DIR variables. But
->> doing so *will* require legacy handling.
->>
->>  Maybe we should indeed use explicit ROOTFS_$(ROOTFS)_TARGET_DIR in our rootfs
->> definitions, document that that is the one to use, and wait a year or two before
->> deprecating TARGET_DIR entirely.
->>
->>  Yann?
+>>  There are probably a few gotchas, but I still believe it should be possible.
 > 
-> Well, It is really cumbersome to have to prefix that directory with the
-> package name or the rootfs name... TARGET_DIR is just plainly easy to
-> use.d
+> Like tweaking the /etc/fstab accordingly, which genimage does not do on
+> its own?
 
- I don't agree with that - we use FOO_SOME_VARIABLE all over the place in
-package foo, so using FOO_TARGET_DIR feels quite natural to me.
-
-> Especially since we would break a long-established variable name.
-
- That's the worst reason ever :-) Except that indeed there should be a (long)
-transition period where the old name is still supported, but we don't use it
-internally.
-
-
-> And it is not the only variable that changes its content based on the
-> current package: $(@D) and $(@) et al. Yes, they are make special
-> variables, but so?
-
- That makes a huge difference - people know those variables.
-
- And anyway, I wouldn't mind to use $(FOO_BUILD_DIR) instead of $(@D). I think
-that is easier for people to understand. $(@D) just happens to work because the
-stamp files are created in the build directory, which IMO is an implementation
-detail that shouldn't leak into the packages.
+ No, we don't want to tweak fstab. There is no way to know if you want things to
+be mounted in that particular way, and whether it should be mounted
+automatically, and if some flags are needed, and so on.
 
 
  Regards,
  Arnout
 
 
-> In the end, I still fail to see the problem. But I am usual pretty
-> stubborn, so... ;-)
+> So this "genimage fs" would not be so complex, but not so obvious either,
+> to write, as we'd need to have some additional script that does the fstab
+> tweaking... Probably that info would have to be scrapped out of the
+> genimage.cfg file.
 > 
 > Regards,
 > Yann E. MORIN.
