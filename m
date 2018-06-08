@@ -1,47 +1,55 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  8 Jun 2018 19:16:23 +0200
-Subject: [Buildroot] [PATCH 1/1] tinymembench: bump to version 0.4
-Message-ID: <20180608171623.12720-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 8 Jun 2018 19:19:41 +0200
+Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
+ extraction
+In-Reply-To: <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
+References: <20180603022145.14222-1-casantos@datacom.com.br>
+ <20180605172345.GB29058@scaer>
+ <625048322.1426556.1528289177741.JavaMail.zimbra@datacom.com.br>
+ <20180606185136.GA2537@scaer>
+ <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
+Message-ID: <20180608171941.GC2090@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Use LICENSE instead of main.c in TINYMEMBENCH_LICENSE_FILES
-- Add hash for license file
+Arnout, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/tinymembench/tinymembench.hash | 3 ++-
- package/tinymembench/tinymembench.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+On 2018-06-07 23:03 +0200, Arnout Vandecappelle spake thusly:
+> On 06-06-18 20:51, Yann E. MORIN wrote:
+> > But my position has always been consistent on this topic: the images
+> > that Buildroot generates only ever covers just "basic" situations, using
+> > a single-filesystem layout. Anything that needs to do a multi-filesystem
+> > layout should be done as a new filesystem. Doing it in a new filesystem
+> > is much more flexible than whatever kconfig option we may ever add. And
+> > since we already have this wonderful flexibility, I don't think it makes
+> > sense to add a new option that duplicates only a very limited subset of
+> > that flexibility. That duplication is not good, IMNSHO...
+> 
+>  There is (in my even less humble opinion) one way that we can solve this
+> generically: by adding a genimage filesystem. genimage is able to create
+> separate filesystem images for subtrees. so it can cover many use cases in a
+> generic way.
+> 
+>  There are probably a few gotchas, but I still believe it should be possible.
 
-diff --git a/package/tinymembench/tinymembench.hash b/package/tinymembench/tinymembench.hash
-index 813a1df429..59ca70dcb2 100644
---- a/package/tinymembench/tinymembench.hash
-+++ b/package/tinymembench/tinymembench.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 e8cfcf0817eb8430f736426bc7557273765cef0e8002a17cca51645114e723b7  tinymembench-v0.3.tar.gz
-+sha256 e37a2682065b2778f2fa7f22bd59472f5ca2191be48503952ae020b8f023f23d  tinymembench-v0.4.tar.gz
-+sha256 8ba473aced4630aee2808efe17b53e904a9d68a9b3361de491717f9a4e75da39  LICENSE
-diff --git a/package/tinymembench/tinymembench.mk b/package/tinymembench/tinymembench.mk
-index ab479d64e3..b2ccc749fe 100644
---- a/package/tinymembench/tinymembench.mk
-+++ b/package/tinymembench/tinymembench.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--TINYMEMBENCH_VERSION = v0.3
-+TINYMEMBENCH_VERSION = v0.4
- TINYMEMBENCH_SITE = $(call github,ssvb,tinymembench,$(TINYMEMBENCH_VERSION))
- TINYMEMBENCH_LICENSE = MIT
--TINYMEMBENCH_LICENSE_FILES = main.c
-+TINYMEMBENCH_LICENSE_FILES = LICENSE
- 
- define TINYMEMBENCH_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+Like tweaking the /etc/fstab accordingly, which genimage does not do on
+its own?
+
+So this "genimage fs" would not be so complex, but not so obvious either,
+to write, as we'd need to have some additional script that does the fstab
+tweaking... Probably that info would have to be scrapped out of the
+genimage.cfg file.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
