@@ -1,28 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jun 2018 21:25:50 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/imx7dpico: Bump kernel and
- U-Boot
-In-Reply-To: <1528478784-7892-2-git-send-email-festevam@gmail.com> (Fabio
- Estevam's message of "Fri, 8 Jun 2018 14:26:24 -0300")
-References: <1528478784-7892-1-git-send-email-festevam@gmail.com>
- <1528478784-7892-2-git-send-email-festevam@gmail.com>
-Message-ID: <871sdh5bcx.fsf@dell.be.48ers.dk>
+Date: Fri, 8 Jun 2018 21:23:07 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9}.x series
+Message-ID: <20180608192414.CA54D87FDA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=690c08b696997d3eb06d3a699f2ce763067c4613
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bump kernel to version 4.17 and U-Boot to 2018.05.
- > As the dtb file has been renamed in mainline, make the necessary
- > adjustments in U-Boot environment and also in
- > BR2_LINUX_KERNEL_INTREE_DTS_NAME.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f56d85b2da..5f6c834b71 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -258,8 +258,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.135"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.106"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.136"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.107"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
