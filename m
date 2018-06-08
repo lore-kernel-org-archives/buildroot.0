@@ -1,9 +1,10 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Fri,  8 Jun 2018 15:59:27 -0700
-Subject: [Buildroot] [RFC PATCH 3/8] at-spi2-atk: new package
+Date: Fri,  8 Jun 2018 15:59:28 -0700
+Subject: [Buildroot] [RFC PATCH 4/8] libgtk3: remove patch to disable
+ atk-bridge support
 In-Reply-To: <20180608225932.13127-1-joseph.kogut@gmail.com>
 References: <20180608225932.13127-1-joseph.kogut@gmail.com>
-Message-ID: <20180608225932.13127-4-joseph.kogut@gmail.com>
+Message-ID: <20180608225932.13127-5-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,83 +13,88 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/at-spi2-atk/Config.in        |  5 +++++
- package/at-spi2-atk/at-spi2-atk.hash |  4 ++++
- package/at-spi2-atk/at-spi2-atk.mk   | 17 +++++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/at-spi2-atk/Config.in
- create mode 100644 package/at-spi2-atk/at-spi2-atk.hash
- create mode 100644 package/at-spi2-atk/at-spi2-atk.mk
+ package/libgtk3/0003-disable-atk-bridge.patch | 45 -------------------
+ package/libgtk3/Config.in                     |  1 +
+ package/libgtk3/libgtk3.mk                    |  3 +-
+ 3 files changed, 3 insertions(+), 46 deletions(-)
+ delete mode 100644 package/libgtk3/0003-disable-atk-bridge.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 31c651b938..568f47d242 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -955,6 +955,7 @@ F:	board/qemu/ppc64le-pseries/
- F:	configs/qemu_ppc64le_pseries_defconfig
+diff --git a/package/libgtk3/0003-disable-atk-bridge.patch b/package/libgtk3/0003-disable-atk-bridge.patch
+deleted file mode 100644
+index c92174f400..0000000000
+--- a/package/libgtk3/0003-disable-atk-bridge.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-Remove atk-bridge support.
+-
+-atk-bridge doesn't seem useful for now in Buildroot and requires to
+-add two new packages just for it: at-spi2-core and at-spi2-atk.
+-
+-Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+-
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1349,11 +1349,7 @@
+- # Check for Accessibility Toolkit flags
+- ########################################
+-
+--if test x$enable_x11_backend = xyes; then
+--   ATK_PACKAGES="atk atk-bridge-2.0"
+--else
+--   ATK_PACKAGES="atk"
+--fi
+-+ATK_PACKAGES="atk"
+-
+- PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
+-
+---- a/gtk/a11y/gtkaccessibility.c
+-+++ b/gtk/a11y/gtkaccessibility.c
+-@@ -37,10 +37,6 @@
+- #include <gtk/gtkcombobox.h>
+- #include <gtk/gtkaccessible.h>
+-
+--#ifdef GDK_WINDOWING_X11
+--#include <atk-bridge.h>
+--#endif
+--
+- static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
+-                                          guint                  n_param_values,
+-                                          const GValue          *param_values,
+-@@ -987,9 +983,5 @@
+-   _gtk_accessibility_override_atk_util ();
+-   do_window_event_initialization ();
+-
+--#ifdef GDK_WINDOWING_X11
+--  atk_bridge_adaptor_init (NULL, NULL);
+--#endif
+--
+-   atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
+- }
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index 12e64707bd..f14b9deaf8 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -20,6 +20,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
+ 		BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_ATK
++	select BR2_PACKAGE_AT_SPI2_ATK
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PS
+ 	select BR2_PACKAGE_CAIRO_PDF
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index 1b85d00aae..e3c3dc5237 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -26,7 +26,8 @@ LIBGTK3_CONF_OPTS = \
+ LIBGTK3_MAKE_OPTS = \
+ 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
  
- N:	Joseph Kogut <joseph.kogut@gmail.com>
-+F:	package/at-spi2-atk/
- F:	package/at-spi2-core/
- F:	package/gconf/
- F:	package/libnss/
-diff --git a/package/Config.in b/package/Config.in
-index 692b422911..c2e619b317 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1128,6 +1128,7 @@ endmenu
+-LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pixbuf libepoxy
++LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk at-spi2-atk libglib2 \
++		       cairo pango gdk-pixbuf libepoxy
  
- menu "Graphics"
- 	source "package/assimp/Config.in"
-+	source "package/at-spi2-atk/Config.in"
- 	source "package/at-spi2-core/Config.in"
- 	source "package/atk/Config.in"
- 	source "package/atkmm/Config.in"
-diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
-new file mode 100644
-index 0000000000..b354c77ffe
---- /dev/null
-+++ b/package/at-spi2-atk/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_AT_SPI2_ATK
-+	bool "at-spi2-atk"
-+	select BR2_PACKAGE_AT_SPI2_CORE
-+	help
-+	  The At-Spi2 Atk package contains a library that bridges ATK to At-Spi2 D-Bus service.
-diff --git a/package/at-spi2-atk/at-spi2-atk.hash b/package/at-spi2-atk/at-spi2-atk.hash
-new file mode 100644
-index 0000000000..6f7d68ab87
---- /dev/null
-+++ b/package/at-spi2-atk/at-spi2-atk.hash
-@@ -0,0 +1,4 @@
-+# locally calculated
-+sha256 61891f0abae1689f6617a963105a3f1dcdab5970c4a36ded9c79a7a544b16a6e  at-spi2-atk-2.26.2.tar.xz
-+sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
-+
-diff --git a/package/at-spi2-atk/at-spi2-atk.mk b/package/at-spi2-atk/at-spi2-atk.mk
-new file mode 100644
-index 0000000000..a3bccbb0d9
---- /dev/null
-+++ b/package/at-spi2-atk/at-spi2-atk.mk
-@@ -0,0 +1,17 @@
-+###############################################################################
-+#
-+# at-spi2-atk
-+#
-+###############################################################################
-+
-+AT_SPI2_ATK_VERSION_MAJOR = 2.26
-+AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
-+AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
-+AT_SPI2_ATK_SITE =  http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
-+ATK_LICENSE = LGPL-2.0+
-+ATK_LICENSE_FILES = COPYING
-+AT_SPI2_ATK_INSTALL_STAGING = YES
-+AT_SPI2_ATK_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
-+AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
-+
-+$(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ LIBGTK3_DEPENDENCIES += fontconfig xlib_libX11 xlib_libXext xlib_libXrender xlib_libXi
 -- 
 2.17.1
