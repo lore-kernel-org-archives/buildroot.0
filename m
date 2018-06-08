@@ -1,30 +1,108 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 08 Jun 2018 16:33:15 +0200
-Subject: [Buildroot] [PATCH] package/cryptodev-linux: bump to the latest
- version (f60aa0)
-In-Reply-To: <20180608102307.15912-1-antoine.tenart@bootlin.com> (Antoine
- Tenart's message of "Fri, 8 Jun 2018 12:23:07 +0200")
-References: <20180608102307.15912-1-antoine.tenart@bootlin.com>
-Message-ID: <87in6tbb6c.fsf@dell.be.48ers.dk>
+Date: Fri, 8 Jun 2018 16:28:37 +0200
+Subject: [Buildroot] [git commit] trinity: fix build with kernel headers
+ v4.17+
+Message-ID: <20180608143153.BF47E87F4B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Antoine" == Antoine Tenart <antoine.tenart@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f56814faa87fa06331fe15e52784040b06d3dead
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Bumps the cryptodev-linux package to the latest version available, which
- > contains some fixes and allows to use cryptodev-linux with a recent
- > kernel (v4.17).
+Kernel v4.17 removed the linux/irda.h header. Add a patch to skip the
+irda test when the header is missing.
 
- > The patch bumps the version and update the locally calculated hash.
+Fixes:
+http://autobuild.buildroot.net/results/39d/39d131048d6eb3cd4d802dae462116f7728c41fd/
+http://autobuild.buildroot.net/results/af2/af2288711d1a0939a06ea51e65ed32d39e395e2b/
+http://autobuild.buildroot.net/results/41f/41fead6d53dba2539ba246f682973e0b5967f3d0/
 
- > Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...igure-fix-build-with-kernel-headers-v4.17.patch | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-Committed, thanks.
-
-It would be good if you could also add a hash for the COPYING file.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch b/package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch
+new file mode 100644
+index 0000000000..89aa4219c2
+--- /dev/null
++++ b/package/trinity/0003-configure-fix-build-with-kernel-headers-v4.17.patch
+@@ -0,0 +1,73 @@
++From 5431126ac94bf81743852493a041e80e82918741 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Fri, 8 Jun 2018 06:05:26 +0300
++Subject: [PATCH] configure: fix build with kernel headers v4.17+
++
++Kernel v4.17 removed the linux/irda.h header. Skip the irda test when
++this header is missing.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/kernelslacker/trinity/pull/25
++
++ configure        | 1 +
++ net/proto-irda.c | 6 +++++-
++ net/protocols.c  | 2 ++
++ 3 files changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index c0166af33048..944c8cf77d1b 100755
++--- a/configure
+++++ b/configure
++@@ -316,6 +316,7 @@ fi
++ check_header linux/caif/caif_socket.h USE_CAIF
++ check_header linux/fsmap.h USE_FSMAP
++ check_header linux/if_alg.h USE_IF_ALG
+++check_header linux/irda.h USE_IRDA
++ check_header linux/rds.h USE_RDS
++ check_header linux/vfio.h USE_VFIO
++ check_header drm/drm.h USE_DRM
++diff --git a/net/proto-irda.c b/net/proto-irda.c
++index 02d51bcd2ee0..264e36dfa040 100644
++--- a/net/proto-irda.c
+++++ b/net/proto-irda.c
++@@ -4,13 +4,15 @@
++ #include <sys/un.h>
++ /* old irda.h does not include something which defines sa_family_t */
++ #include <netinet/in.h>
++-#include <linux/irda.h>
++ #include <stdlib.h>
++ #include "net.h"
++ #include "random.h"
++ #include "utils.h"	// RAND_ARRAY
++ #include "compat.h"
++ 
+++#ifdef USE_IRDA
+++#include <linux/irda.h>
+++
++ static void irda_gen_sockaddr(struct sockaddr **addr, socklen_t *addrlen)
++ {
++ 	struct sockaddr_irda *irda;
++@@ -53,3 +55,5 @@ const struct netproto proto_irda = {
++ 	.valid_triplets = irda_triplets,
++ 	.nr_triplets = ARRAY_SIZE(irda_triplets),
++ };
+++
+++#endif
++diff --git a/net/protocols.c b/net/protocols.c
++index 90a60affedca..87acf85c707f 100644
++--- a/net/protocols.c
+++++ b/net/protocols.c
++@@ -26,7 +26,9 @@ const struct protoptr net_protocols[TRINITY_PF_MAX] = {
++ #ifdef USE_RDS
++ 	[PF_RDS] = { .proto = &proto_rds },
++ #endif
+++#ifdef USE_IRDA
++ 	[PF_IRDA] = { .proto = &proto_irda },
+++#endif
++ 	[PF_LLC] = { .proto = &proto_llc },
++ 	[PF_CAN] = { .proto = &proto_can },
++ 	[PF_TIPC] = { .proto = &proto_tipc },
++-- 
++2.17.1
++
