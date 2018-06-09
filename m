@@ -1,137 +1,189 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 9 Jun 2018 23:16:09 +0200
-Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <20180609210607.13259-1-yann.morin.1998@free.fr>
-References: <20180609210607.13259-1-yann.morin.1998@free.fr>
-Message-ID: <20180609211609.GA419@scaer>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Sat, 9 Jun 2018 19:20:03 -0300 (BRT)
+Subject: [Buildroot] [PATCH] docs/manual: document filesystems
+In-Reply-To: <20180609094647.21460-1-yann.morin.1998@free.fr>
+References: <20180609094647.21460-1-yann.morin.1998@free.fr>
+Message-ID: <1806912659.2037633.1528582803656.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+> From: "Yann Morin" <yann.morin.1998@free.fr>
+> To: "buildroot" <buildroot@buildroot.org>
+> Cc: "Yann Morin" <yann.morin.1998@free.fr>, "Thomas De Schampheleire" <patrickdepinguin@gmail.com>, "DATACOM"
+> <casantos@datacom.com.br>, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> Sent: Saturday, June 9, 2018 6:46:47 AM
+> Subject: [PATCH] docs/manual: document filesystems
 
-On 2018-06-09 23:06 +0200, Yann E. MORIN spake thusly:
-> Currently, the wording in the manual instructs the user to generate
-> tarball from "the contents of the +output/host+ directory".
+[...]
 > 
-> This is pretty confusing, because taken literally, this would amount to
-> runing a command like:
-> 
->     tar cf my-sdk.tar -C output/host/ .
-> 
-> This creates a tarbomb [0], which is very bad practice, because when
+> diff --git a/docs/manual/adding-filesystems.txt
+> b/docs/manual/adding-filesystems.txt
+> new file mode 100644
+> index 0000000000..4731526c0f
+> --- /dev/null
+> +++ b/docs/manual/adding-filesystems.txt
+> @@ -0,0 +1,119 @@
+> +// -*- mode:doc; -*-
+> +// vim: set syntax=asciidoc:
+> +
+> +=== Infrastructure for filesystems
 
-I forgot to add the reference to the tarbomb:
-    https://en.wikipedia.org/wiki/Tar_(computing)#Tarbomb
+Shouldn't this be a separate chapter instead of a section of packages?
+Filesystems are different from packages, regardless the syntactical
+similarities in the configurations and recipe files. See also the
+comment below about the hooks section.
 
-Regards,
-Yann E. MORIN.
+> +
+> +As for packages, Buildroot provides an infrastructure to build
+> +filesystems.
+> +
+> +The filesystem infrastructure follows a carefully-crafted sequence:
+> +
+> +1. Assemble an intermediate, internal tarball from the +target/+
+> +   directory:
+> +  * create users and groups,
+> +  * set the correct rights on files,
+> +  * create device nodes,
+> +  * create the intermediate tarball;
+> +2. Then for each filesystem:
+> +  * extract the intermediate tarball to a filesystem-specific
+> +    +$(TARGET_DIR)+,
+> +  * execute the filesystem pre-gen hooks (see below),
+> +  * optionally, touch everything to a specific date, for reproducibility,
+> +  * execute the filesystem commands,
+> +  * execute the filesystem post-gen hooks (see below),
+> +  * remove the filesystem-specific +$(TARGET_DIR)+;
+> +3. Remove the intermediate tarball.
+> +
+> +[[filesystem-tutorial]]
+> +==== +filesystem+ tutorial
+> +
+> +Let's look at an example filesytem. First and foremost, like for a
+> +package, create a directory named from your filesystem, e.g. +foo+.
+> +
+> +Then, create a +Config.in+ file describing the menuconfig entries
+> +for the filesystem. Be sure to have that +Config.in+ included from
+> ++fs/Config.in+ (or from the +Config.in+ of your *br2-external* tree).
+> +For example:
+> +
+> +----
+> +01: config BR2_TARGET_ROOTFS_FOO
+> +02: 	bool "foo root filesystem"
+> +03: 	help
+> +04: 	  Build a foo root filesystem.
+> +05:
+> +06: if BR2_TARGET_ROOTFS_FOO
+> +07:
+> +08: config BR2_TARGET_ROOTFS_FOO_FORMAT_BAR
+> +09: 	bool "bar format"
+> +10: 	help
+> +11: 	  Enable the bar format.
+> +12:
+> +13: endif
+> +----
+> +
+> +Then, in the same directory, create a +foo.mk+ file describing how
+> +to actually assemble the filesystem image from the content of
+> ++$(TARGET_DIR)+. Be sure that this +.mk+ file is included in the
+> +Makefile code (automatic for built-in filesystems, not for filesystems
+> +in a *br2-external* tree.) For example:
+> +
+> +----
+> +01:
+> ################################################################################
+> +02: #
+> +03: # foo filesystem
+> +04: #
+> +05:
+> ################################################################################
+> +06:
+> +07: ROOTFS_FOO_DEPENDENCIES = host-foo-utils
+> +08:
+> +09: ifeq ($(BR2_TARGET_ROOTFS_FOO_FORMAT_BAR),y)
+> +10: ROOTFS_FOO_OPTS = --format=bar
+> +11: else
+> +12: ROOTFS_FOO_OPTS = --format=foo
+> +13: endif
+> +14:
+> +15: define ROOTFS_FOO_CMD
+> +16: 	$(HOST_DIR)/bin/mkfs.foo \
+> +17: 		--root-dir=$(TARGET_DIR) \
+> +18: 		--option-foo --option-bar \
+> +19: 		$(ROOTFS_FOO_OPTS) \
+> +20: 		--output-file=$(@)
+> +21: endef
+> +22:
+> +23: $(eval $(rootfs))
+> +----
+> +
+> +On line 7, we specify the dependencies on packages needed to build the
+> +filesystem. Usually, those dependencies are one or more host-packages
+> +that provide the filesystem generator.
+> +
+> +On lines 9 to 13, we define a conditional set of options, depending on
+> +the user's choice.
+> +
+> +On lines 15 to 21, we define the actual command that will generate the
+> +filesystem image.
+> +
+> +Finally, on line 23, we invoke the +rootfs+ macro that generates all the
+> +Makefile rules that actually allow the filesystem to be built.
+> +
+> +[[filesystem-reference]]
+> +==== +filesystem+ reference
+> +
+> +If one compares a package with a filesystem, one may notice that the
+> +variables for a filesystem start with the prefix +ROOTFS_+, when the
+> +variables for packages have no prefix.
+> +
+> +There is a single macro that a filesystem may set:
+> +
+> +* +ROOTFS_FOO_CMD+ contains the commands to execute to actually
+> +  generate the filesystem iamge from the content of the +$(TARGET_DIR)+
+> +  directory.
+> +
+> +Additionally, like for packages, there are a set of hooks; see
+> +xref:hooks[] for details.
 
-> extracted, it creates mutiple files in the current directory.
-> 
-> One one really want to do, is create a tarball of the host/ directory,
-> with something like:
-> 
->     tar cf my-sdk.tar -C output host/
-> 
-> However, this is not much better, because the top-most dirdctory would
-> have a very common name, host/, which is pretty easy to get conflict
-> with.
-> 
-> So, we fix that mess by creating the archive ourselves, giving it and
-> the top-most directory a recogniseable name, based on the target tuple
-> and the Buildroot version.
-> 
-> Since this is an output file, we located it in the images/ directory.
-> 
-> Update the manual accordignly.
-> 
-> Speaking of the manual.. It was referring to "output/host/", but that
-> is only valid for in-tree builds. For out-of-tree builds, this is just
-> "host/". To avoid confusion, use the name of the vairiable $(HOST_DIR),
-> which, fortunately, happens to be valid in both cases.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Stefan Becker <chemobejk@gmail.com>
-> ---
->  Makefile                                  |  7 ++++++-
->  docs/manual/using-buildroot-toolchain.txt | 26 +++++++++++++++++---------
->  2 files changed, 23 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index 4b998bdb65..3f460f8d92 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -574,13 +574,18 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->  world: target-post-image
->  
->  .PHONY: sdk
-> -sdk: world
-> +sdk: world $(BR2_TAR_HOST_DEPENDENCY)
->  	@$(call MESSAGE,"Rendering the SDK relocatable")
->  	$(TOPDIR)/support/scripts/fix-rpath host
->  	$(TOPDIR)/support/scripts/fix-rpath staging
->  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
->  	mkdir -p $(HOST_DIR)/share/buildroot
->  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-> +	$(Q)mkdir -p $(BINARIES_DIR)
-> +	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
-> +		-C $(HOST_DIR) \
-> +		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
-> +		.
->  
->  # Populating the staging with the base directories is handled by the skeleton package
->  $(STAGING_DIR):
-> diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-> index 3246dc2411..d1490b4c38 100644
-> --- a/docs/manual/using-buildroot-toolchain.txt
-> +++ b/docs/manual/using-buildroot-toolchain.txt
-> @@ -12,15 +12,23 @@ The toolchain generated by Buildroot is located by default in
->  +output/host/bin/+ to your PATH environment variable and then to
->  use +ARCH-linux-gcc+, +ARCH-linux-objdump+, +ARCH-linux-ld+, etc.
->  
-> -It is possible to relocate the toolchain, this allows to distribute
-> -the toolchain to other developers to build applications for your
-> -target. To achieve this:
-> +Alternatively, Buildroot can also export the toolchain and all the
-> +development files of all selected packages, as an SDK, by running the
-> +command +make sdk+. This generates a tarball of the content of the host
-> +directory +$(HOST_DIR)+, named +buildroot-sdk.<TARGET-TUPLE>-<BR-VERSION>.tar.gz+
-> +and located in the output directory +$(BINARIES_DIR)+.
->  
-> -* run +make sdk+, which prepares the toolchain to be relocatable;
-> -* tarball the contents of the +output/host+ directory;
-> -* distribute the resulting tarball.
-> +This tarball can then be distributed to application developpers, when
-> +they want to develop their applications that are not (yet) packaged as
-> +a Buildroot package.
->  
-> -Once the toolchain is installed to the new location, the user must run
-> -the +relocate-sdk.sh+ script to make sure all paths are updated with
-> -the new location.
-> +Upon extracting the SDK tarball, the user must run the script
-> ++relocate-sdk.sh+, to make sure all paths are updated with the new
-> +location.
->  
-> +.Note
-> +This SDK can not be re-used as an external toolchain, because it
-> +contains pre-built libraries that could be conflicting with the ones
-> +packaged in Buildroot (e.g. when an old SDK would be re-used with a
-> +newer Buildroot version), unless it was built from a configuration
-> +with no package enabled.
-> -- 
-> 2.14.1
-> 
+There are two fundamental differences between packages and filesystem
+images:
+
+Filesystem images are always rebuilt and installed while packages are
+built/installed once and rebuilt/re-installed only on explicit calls
+to "make pkg-name-{reconfigure,rebuild,reinstall}".
+
+Packages are supposed to install, remove or modify files in the global
+$(TARGET_DIR) hierarchy. Genarating filesystem images do not modify the
+contents of the global $(TARGET_DIR) and user-provided rootfs extensions
+must not do this.
+
+[Side note: we could add an optional "paranoid mode" config which would
+trigger a checksum generation/checking right before/after the creation
+of the rootfs images.] 
+
+> +And here is a list of variables that may be used (but may *not* be set):
+
+"must" not be set.
+
+> +
+> +* +$(TARGET_DIR)+ is the directory containing the +target/+ directory.
+> +
+> +* +$(@)+ is the filename where to store the filesystem image into.
+> diff --git a/docs/manual/adding-packages-hooks.txt
+> b/docs/manual/adding-packages-hooks.txt
+> index 0ce79f8907..34d5801169 100644
+> --- a/docs/manual/adding-packages-hooks.txt
+> +++ b/docs/manual/adding-packages-hooks.txt
+
+Consider moving the hooks section to a separate chapter if you put the
+filesystem text in a separate chapter too.
+
+[...]
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
