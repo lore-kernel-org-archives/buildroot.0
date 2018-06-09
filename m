@@ -1,23 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 09 Jun 2018 16:40:46 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: update email for flatcc
-In-Reply-To: <1528486059-16566-1-git-send-email-JoelsonCarl@gmail.com> (Joel
- Carlson's message of "Fri, 8 Jun 2018 13:27:39 -0600")
-References: <1528486059-16566-1-git-send-email-JoelsonCarl@gmail.com>
-Message-ID: <87wov89g5t.fsf@dell.be.48ers.dk>
+Date: Sat, 09 Jun 2018 16:41:00 +0200
+Subject: [Buildroot] [PATCH 1/1] jansson: bump to version 2.11
+In-Reply-To: <20180608215744.3360-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 8 Jun 2018 23:57:44 +0200")
+References: <20180608215744.3360-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sh5w9g5f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joel" == Joel Carlson <joelsoncarl@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
- > ---
- > I am having trouble with my work email and the mailing list, so I am going to
- > use my personal email for all buildroot submissions/work going forward.
-
+ > Add hash for license file
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
