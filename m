@@ -1,45 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Jun 2018 16:34:30 +0200
-Subject: [Buildroot] [git commit] package/tor: bump version to 0.3.3.6
-Message-ID: <20180609144025.DE6FF8777C@busybox.osuosl.org>
+Date: Sat, 9 Jun 2018 16:35:01 +0200
+Subject: [Buildroot] [git commit] package/libvorbis: add upstream security
+ patch to fix CVE-2017-14160
+Message-ID: <20180609144025.E640C8777B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8b2c6f71783ff45b2d1153df291fa5519b50568
+commit: https://git.buildroot.net/buildroot/commit/?id=dc7f8715746d50d3a7db36211d5da6c68020eb18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes:
-https://blog.torproject.org/tor-0336-released-new-stable-series
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...fix-bounds-check-on-very-low-sample-rates.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 2841d4099a..ca015a8dc0 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 60df77c31dcf94fdd686c8ca8c34f3b70243b33a7344ecc0b719d5ca2617cbee  tor-0.3.2.10.tar.gz
-+sha256 99bc59f6dbf395894de12f3a83b3251a82dfd93dc7f6d3afcbbd80f6111433b7  tor-0.3.3.6.tar.gz
- sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 4a1a48357f..f7af718b9b 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOR_VERSION = 0.3.2.10
-+TOR_VERSION = 0.3.3.6
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+diff --git a/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch b/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
+new file mode 100644
+index 0000000000..e84f3d4799
+--- /dev/null
++++ b/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
+@@ -0,0 +1,28 @@
++From: Thomas Daede <daede003@umn.edu>
++Date: Wed, 9 May 2018 21:56:59 +0000 (-0700)
++Subject: CVE-2017-14160: fix bounds check on very low sample rates.
++X-Git-Url: https://git.xiph.org/?p=vorbis.git;a=commitdiff_plain;h=018ca26dece618457dd13585cad52941193c4a25
++
++CVE-2017-14160: fix bounds check on very low sample rates.
++
++Downloaded from upstream commit
++https://git.xiph.org/?p=vorbis.git;a=commitdiff;h=018ca26dece618457dd13585cad52941193c4a25
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++
++diff --git a/lib/psy.c b/lib/psy.c
++index 422c6f1..1310123 100644
++--- a/lib/psy.c
+++++ b/lib/psy.c
++@@ -602,8 +602,9 @@ static void bark_noise_hybridmp(int n,const long *b,
++   for (i = 0, x = 0.f;; i++, x += 1.f) {
++ 
++     lo = b[i] >> 16;
++-    if( lo>=0 ) break;
++     hi = b[i] & 0xffff;
+++    if( lo>=0 ) break;
+++    if( hi>=n ) break;
++ 
++     tN = N[hi] + N[-lo];
++     tX = X[hi] - X[-lo];
