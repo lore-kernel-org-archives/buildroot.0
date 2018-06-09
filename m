@@ -1,21 +1,59 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 09 Jun 2018 13:38:24 +0000
-Subject: [Buildroot] [Bug 10856] openblas on qemu_x86_64_defconfig fails
- with "sgemm_kernel.o: No such file or directory"
-In-Reply-To: <bug-10856-163@https.bugs.busybox.net/>
-References: <bug-10856-163@https.bugs.busybox.net/>
-Message-ID: <bug-10856-163-85KimZ4r3L@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  9 Jun 2018 15:58:20 +0200
+Subject: [Buildroot] [PATCH 1/1] pixiewps: fix static linking with uclibc-ng
+Message-ID: <20180609135820.2002-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10856
+Fixes following linking error with uClibc-ng:
+/home/peko/autobuild/instance-0/output/host/lib/gcc/powerpc-buildroot-linux-uclibc/7.3.0/libgcc.a(unwind-dw2-fde-dip.o):
+In function `_Unwind_Find_FDE':
+/home/peko/autobuild/instance-0/output/build/host-gcc-final-7.3.0/build/powerpc-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde-dip.c:469:
+undefined reference to `dl_iterate_phdr'
+collect2: error: ld returned 1 exit status
 
---- Comment #2 from Ciro Santilli <ciro.santilli@gmail.com> ---
-Thanks, fix confirmed.
+Since uClibc-ng 1.0.18 a circular dependency between libc and libgcc
+exist, when static linking is used. It can be resolved by the compiler
+when -static is correctly passed in the linking step.
 
+So rework a little bit how variables are passed by using
+PIXIEWPS_MAKE_OPTS and TARGET_CONFIGURE_OPTS
+
+Fixes:
+ - http://autobuild.buildroot.net/results/d9f0311538c8db1196839e36af3f6ef4e403be2b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/pixiewps/pixiewps.mk | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/package/pixiewps/pixiewps.mk b/package/pixiewps/pixiewps.mk
+index 95a253ab83..56d15a0bbf 100644
+--- a/package/pixiewps/pixiewps.mk
++++ b/package/pixiewps/pixiewps.mk
+@@ -9,13 +9,17 @@ PIXIEWPS_SITE = $(call github,wiire-a,pixiewps,$(PIXIEWPS_VERSION))
+ PIXIEWPS_LICENSE = GPL-3.0+
+ PIXIEWPS_LICENSE_FILES = LICENSE.md
+ 
++PIXIEWPS_MAKE_OPTS = \
++	$(TARGET_CONFIGURE_OPTS) \
++	PREFIX=/usr
++
+ define PIXIEWPS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(PIXIEWPS_MAKE_OPTS) -C $(@D)
+ endef
+ 
+ define PIXIEWPS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) \
+-		PREFIX=/usr -C $(@D) install
++	$(TARGET_MAKE_ENV) $(MAKE) $(PIXIEWPS_MAKE_OPTS) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
