@@ -1,47 +1,94 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 8 Jun 2018 21:58:42 -0300 (BRT)
+Date: Fri, 8 Jun 2018 22:06:42 -0300 (BRT)
 Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
  extraction
-In-Reply-To: <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
+In-Reply-To: <20180608172651.GD2090@scaer>
 References: <20180603022145.14222-1-casantos@datacom.com.br>
  <20180605172345.GB29058@scaer>
  <625048322.1426556.1528289177741.JavaMail.zimbra@datacom.com.br>
  <20180606185136.GA2537@scaer> <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
-Message-ID: <1697965583.2026245.1528505922702.JavaMail.zimbra@datacom.com.br>
+ <1148643526.1795245.1528413126545.JavaMail.zimbra@datacom.com.br>
+ <20180608172651.GD2090@scaer>
+Message-ID: <216846375.2026283.1528506402383.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "Yann Morin" <yann.morin.1998@free.fr>, "DATACOM" <casantos@datacom.com.br>
-> Cc: "Thomas De Schampheleire" <thomas.de_schampheleire@nokia.com>, "buildroot" <buildroot@buildroot.org>
-> Sent: Thursday, June 7, 2018 6:03:48 PM
+> From: "Yann Morin" <yann.morin.1998@free.fr>
+> To: "DATACOM" <casantos@datacom.com.br>
+> Cc: "Arnout Vandecappelle" <arnout@mind.be>, "Thomas De Schampheleire" <thomas.de_schampheleire@nokia.com>, "buildroot"
+> <buildroot@buildroot.org>
+> Sent: Friday, June 8, 2018 2:26:51 PM
 > Subject: Re: [Buildroot] [PATCH] fs: allow extra arguments to common tarball extraction
 
-> On 06-06-18 20:51, Yann E. MORIN wrote:
->> But my position has always been consistent on this topic: the images
->> that Buildroot generates only ever covers just "basic" situations, using
->> a single-filesystem layout. Anything that needs to do a multi-filesystem
->> layout should be done as a new filesystem. Doing it in a new filesystem
->> is much more flexible than whatever kconfig option we may ever add. And
->> since we already have this wonderful flexibility, I don't think it makes
->> sense to add a new option that duplicates only a very limited subset of
->> that flexibility. That duplication is not good, IMNSHO...
+> Carlos, All,
 > 
-> There is (in my even less humble opinion) one way that we can solve this
-> generically: by adding a genimage filesystem. genimage is able to create
-> separate filesystem images for subtrees. so it can cover many use cases in a
-> generic way.
+> On 2018-06-07 20:12 -0300, Carlos Santos spake thusly:
+>> > From: "Arnout Vandecappelle" <arnout@mind.be>
+>> > To: "Yann Morin" <yann.morin.1998@free.fr>, "DATACOM" <casantos@datacom.com.br>
+>> > Cc: "Thomas De Schampheleire" <thomas.de_schampheleire@nokia.com>, "buildroot"
+>> > <buildroot@buildroot.org>
+>> > Sent: Thursday, June 7, 2018 6:03:48 PM
+>> > Subject: Re: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
+>> > extraction
+>> 
+>> > On 06-06-18 20:51, Yann E. MORIN wrote:
+>> >> But my position has always been consistent on this topic: the images
+>> >> that Buildroot generates only ever covers just "basic" situations, using
+>> >> a single-filesystem layout. Anything that needs to do a multi-filesystem
+>> >> layout should be done as a new filesystem. Doing it in a new filesystem
+>> >> is much more flexible than whatever kconfig option we may ever add. And
+>> >> since we already have this wonderful flexibility, I don't think it makes
+>> >> sense to add a new option that duplicates only a very limited subset of
+>> >> that flexibility. That duplication is not good, IMNSHO...
+>> > 
+>> > There is (in my even less humble opinion) one way that we can solve this
+>> > generically: by adding a genimage filesystem. genimage is able to create
+>> > separate filesystem images for subtrees. so it can cover many use cases in a
+>> > generic way.
+>> 
+>> I'm already working on a patch to convert inner-rootfs into a generic
+>> inner-filesystem macro. I will submit it for comments soon.
 > 
-> There are probably a few gotchas, but I still believe it should be possible.
+> Why do you need to do so? You can use the 'rootfs' macro, as I already
+> explained, and for which I have already sent a patch to add it to the
+> manual:
+> 
+>    https://patchwork.ozlabs.org/patch/926425/
 
-Genimage is unable to deal with GPT partitioning, which is much better
-to use with UEFI BIOS. I dropped it in favour of a custom script that
-creates an empty disk image file using sfdisk to partition it using a
-file containing the partitioning scheme. Then it reads the start offset
-an size of each partition and dumps the corresponding FS image there.
+I've seen your patch and will review it as soon as possible.
+
+>> BTW, it took me some time to understand the dual personality of TARGET_DIR
+>> in fs/common.mk and the role of BASE_TARGET_DIR. Then I found the line in
+>> the top Makefile with
+>> 
+>>   TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
+>> 
+>> I understand that this trick avoids changing fs/*/*.mk replacing each
+>> reference to TARGET_DIR by a ROOTFS_<FOO>_TARGET_DIR but it reduces
+>> the readability a lot. I'm compelled to restore it to how it was prior
+>> to commit 7e9870ce32d.
+> 
+> But if you revert that, then TARGET_DIR points to the original target/
+> directory, which does *not* contain the completely-finalised content.
+
+I pass TARGET_DIR=$(ROOTFS_COMMON_TARGET_DIR) in the environment to
+each post-fakeroot script to mimic the previous behavior, since the
+scripts may take it from the environment variable instead of from the
+first argument. Anyway, this chaneg is not critical and can be postponed
+tu reduce the fuzz.
+ 
+> Please see the commits around that one for the full picture:
+> 
+>    git log --oneline 14d43aea0a..543107d390
+> 
+> And see the cover-letter that explains the motivations behind all those
+> changes:
+> 
+>    http://lists.busybox.net/pipermail/buildroot/2018-March/215450.html
+
 
 -- 
 Carlos Santos (Casantos) - DATACOM, P&D
