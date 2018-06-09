@@ -1,74 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat,  9 Jun 2018 16:31:32 +0200
-Subject: [Buildroot] [PATCH] orangepi_pc_defconfig: bump linux to 4.17,
- u-boot to 2018.05
-Message-ID: <20180609143132.27879-1-peter@korsgaard.com>
+Date: Sat, 09 Jun 2018 16:34:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.8.2
+In-Reply-To: <20180609081025.25558-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 9 Jun 2018 10:10:25 +0200")
+References: <20180609081025.25558-1-bernd.kuhls@t-online.de>
+Message-ID: <87muw4av0g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-4.17 brings support for HDMI out, but sunxi_defconfig hasn't been updated to
-enable the drivers - So add a kernel fragment to enable them.
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Likewise, analog audio has been supported since 4.10, but the driver isn't
-enabled in sunxi_defconfig, so enable it in the fragment.
+ > Release notes: https://www.samba.org/samba/history/samba-4.8.2.html
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- board/orangepi/orangepi-pc/linux.fragment |  3 +++
- configs/orangepi_pc_defconfig             | 11 ++++++-----
- 2 files changed, 9 insertions(+), 5 deletions(-)
- create mode 100644 board/orangepi/orangepi-pc/linux.fragment
+Committed, thanks.
 
-diff --git a/board/orangepi/orangepi-pc/linux.fragment b/board/orangepi/orangepi-pc/linux.fragment
-new file mode 100644
-index 0000000000..cdd522452a
---- /dev/null
-+++ b/board/orangepi/orangepi-pc/linux.fragment
-@@ -0,0 +1,3 @@
-+CONFIG_DRM_SUN8I_DW_HDMI=y
-+CONFIG_SUN8I_DE2_CCU=y
-+CONFIG_SND_SUN8I_CODEC_ANALOG=y
-diff --git a/configs/orangepi_pc_defconfig b/configs/orangepi_pc_defconfig
-index aa559e743e..05199af53b 100644
---- a/configs/orangepi_pc_defconfig
-+++ b/configs/orangepi_pc_defconfig
-@@ -1,14 +1,17 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_PC"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi PC"
- BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-pc/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-pc/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-h3-orangepi-pc"
- BR2_TARGET_ROOTFS_EXT2=y
-@@ -17,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-@@ -29,5 +32,3 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
--BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-pc/genimage.cfg"
 -- 
-2.11.0
+Bye, Peter Korsgaard
