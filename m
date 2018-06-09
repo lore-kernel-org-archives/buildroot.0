@@ -1,96 +1,93 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 8 Jun 2018 22:06:42 -0300 (BRT)
-Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
- extraction
-In-Reply-To: <20180608172651.GD2090@scaer>
-References: <20180603022145.14222-1-casantos@datacom.com.br>
- <20180605172345.GB29058@scaer>
- <625048322.1426556.1528289177741.JavaMail.zimbra@datacom.com.br>
- <20180606185136.GA2537@scaer> <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
- <1148643526.1795245.1528413126545.JavaMail.zimbra@datacom.com.br>
- <20180608172651.GD2090@scaer>
-Message-ID: <216846375.2026283.1528506402383.JavaMail.zimbra@datacom.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat,  9 Jun 2018 08:00:11 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-06-08
+Message-ID: <20180609060011.F389C207CA@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann Morin" <yann.morin.1998@free.fr>
-> To: "DATACOM" <casantos@datacom.com.br>
-> Cc: "Arnout Vandecappelle" <arnout@mind.be>, "Thomas De Schampheleire" <thomas.de_schampheleire@nokia.com>, "buildroot"
-> <buildroot@buildroot.org>
-> Sent: Friday, June 8, 2018 2:26:51 PM
-> Subject: Re: [Buildroot] [PATCH] fs: allow extra arguments to common tarball extraction
+Hello,
 
-> Carlos, All,
-> 
-> On 2018-06-07 20:12 -0300, Carlos Santos spake thusly:
->> > From: "Arnout Vandecappelle" <arnout@mind.be>
->> > To: "Yann Morin" <yann.morin.1998@free.fr>, "DATACOM" <casantos@datacom.com.br>
->> > Cc: "Thomas De Schampheleire" <thomas.de_schampheleire@nokia.com>, "buildroot"
->> > <buildroot@buildroot.org>
->> > Sent: Thursday, June 7, 2018 6:03:48 PM
->> > Subject: Re: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
->> > extraction
->> 
->> > On 06-06-18 20:51, Yann E. MORIN wrote:
->> >> But my position has always been consistent on this topic: the images
->> >> that Buildroot generates only ever covers just "basic" situations, using
->> >> a single-filesystem layout. Anything that needs to do a multi-filesystem
->> >> layout should be done as a new filesystem. Doing it in a new filesystem
->> >> is much more flexible than whatever kconfig option we may ever add. And
->> >> since we already have this wonderful flexibility, I don't think it makes
->> >> sense to add a new option that duplicates only a very limited subset of
->> >> that flexibility. That duplication is not good, IMNSHO...
->> > 
->> > There is (in my even less humble opinion) one way that we can solve this
->> > generically: by adding a genimage filesystem. genimage is able to create
->> > separate filesystem images for subtrees. so it can cover many use cases in a
->> > generic way.
->> 
->> I'm already working on a patch to convert inner-rootfs into a generic
->> inner-filesystem macro. I will submit it for comments soon.
-> 
-> Why do you need to do so? You can use the 'rootfs' macro, as I already
-> explained, and for which I have already sent a patch to add it to the
-> manual:
-> 
->    https://patchwork.ozlabs.org/patch/926425/
+Build statistics for 2018-06-08
+===============================
 
-I've seen your patch and will review it as soon as possible.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  31 |   2 |   0 |  33 |
+   2018.05.x |  28 |   1 |   0 |  29 |
+      master | 207 |  19 |   0 | 226 |
 
->> BTW, it took me some time to understand the dual personality of TARGET_DIR
->> in fs/common.mk and the role of BASE_TARGET_DIR. Then I found the line in
->> the top Makefile with
->> 
->>   TARGET_DIR = $(if $(ROOTFS),$(ROOTFS_$(ROOTFS)_TARGET_DIR),$(BASE_TARGET_DIR))
->> 
->> I understand that this trick avoids changing fs/*/*.mk replacing each
->> reference to TARGET_DIR by a ROOTFS_<FOO>_TARGET_DIR but it reduces
->> the readability a lot. I'm compelled to restore it to how it was prior
->> to commit 7e9870ce32d.
-> 
-> But if you revert that, then TARGET_DIR points to the original target/
-> directory, which does *not* contain the completely-finalised content.
+Results for branch '2018.02.x'
+==============================
 
-I pass TARGET_DIR=$(ROOTFS_COMMON_TARGET_DIR) in the environment to
-each post-fakeroot script to mimic the previous behavior, since the
-scripts may take it from the environment variable instead of from the
-first argument. Anyway, this chaneg is not critical and can be postponed
-tu reduce the fuzz.
- 
-> Please see the commits around that one for the full picture:
-> 
->    git log --oneline 14d43aea0a..543107d390
-> 
-> And see the cover-letter that explains the motivations behind all those
-> changes:
-> 
->    http://lists.busybox.net/pipermail/buildroot/2018-March/215450.html
+Classification of failures by reason
+------------------------------------
+
+                  autofs-5.1.4 | 1 
+                   libnss-3.33 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                   autofs-5.1.4 | NOK | http://autobuild.buildroot.net/results/0c6ab4d145c99d45f4580e9fdbaefc095dc86b2c |     
+         arm |                    libnss-3.33 | NOK | http://autobuild.buildroot.net/results/4e4bbb484cda541fe35c8337faab2c517880b65d |     
+
+Results for branch '2018.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+               qt5webkit-5.9.1 | 1 
+
+
+Detail of failures
+------------------
+
+      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/d00b3c8d798adccfb8c866930cea96f2ff68ae49 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+            host-flatcc-v0.5.1 | 7 
+               mono-5.12.0.226 | 3 
+                qt5base-5.10.1 | 2 
+       shadowsocks-libev-3.2.0 | 2 
+                   libnss-3.37 | 1 
+                  mender-1.4.0 | 1 
+                   trinity-1.8 | 1 
+           uboot-tools-2018.05 | 1 
+              wireshark-2.2.15 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/121d08351b0e3feda4028d39bb672aafb5b9ffcf |     
+      x86_64 |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/f64bcf6b9046375200cc35429bd3d90f948a696d |     
+    mips64el |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/f40ba7011be13f1e0668da7689b111abc23f0636 |     
+     powerpc |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/6ea30eb4e76cc0f2c7a92156475234a57b4ae4f5 |     
+         arm |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/da005cc2e99fc00bfa327a2e103d213f2c1437f9 |     
+    mips64el |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/6e89f33bf3edb419611c8659bc9dc1102d600635 |     
+         arm |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/5bc351c27d8ecba6eb3d5b04135e9c0b06c91f5d |     
+         arm |                    libnss-3.37 | NOK | http://autobuild.buildroot.net/results/698500a92688c50e9cc71cf82c0848cb4adb81ad |     
+ powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/bf43b393e10815bfe207f5bb35ad03d134095c52 |     
+      mipsel |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/1ad659039e1c390062fcc239b9ef8ebe136f012c |     
+        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/07a5432698c4dd607be7952aa7d63f4c89ae9fee |     
+      mipsel |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/5ce7016d1891692a5cc1e75d0a849c6c14d7b6f3 |     
+        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/19101924df7b661653a62f020ad17d127d22bc37 |     
+microblazeel |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/1804f89362ad328b4cbca15ba0ffa6b6d15cbca4 |     
+       sparc |        shadowsocks-libev-3.2.0 | NOK | http://autobuild.buildroot.net/results/4810526381e15a194767753d324875bfbf5e3dde |     
+       sparc |        shadowsocks-libev-3.2.0 | NOK | http://autobuild.buildroot.net/results/9cb76805c2f2952aa434d143831ee03c7d43aa52 |     
+         arm |                    trinity-1.8 | NOK | http://autobuild.buildroot.net/results/ee1d66836621898bc5e0474e7be19fe1a1922ddc |     
+         arm |            uboot-tools-2018.05 | NOK | http://autobuild.buildroot.net/results/18b3d76f7d2a78b17569ce43fc69dbef13dedf77 |     
+       nios2 |               wireshark-2.2.15 | NOK | http://autobuild.buildroot.net/results/cc1f1aae8d12493b34f4f691a15f0a687bcad8e8 | ORPH
 
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+http://autobuild.buildroot.net
