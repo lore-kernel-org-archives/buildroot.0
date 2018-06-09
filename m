@@ -1,92 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Jun 2018 16:39:16 +0200
-Subject: [Buildroot] [git commit] json-c: bump to version 0.13.1
-Message-ID: <20180609144025.EE0AC8777A@busybox.osuosl.org>
+Date: Sat,  9 Jun 2018 18:02:29 +0200
+Subject: [Buildroot] [PATCH] libvncserver: add upstream security fix for
+ CVE-2018-7225
+Message-ID: <20180609160229.8741-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba819ad3b91b94a03de4c509d4f0d182585af845
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes CVE-2018-7225 - An issue was discovered in LibVNCServer through
+0.9.11.  rfbProcessClientNormalMessage() in rfbserver.c does not sanitize
+msg.cct.length, leading to access to uninitialized and potentially sensitive
+data or possibly unspecified other impact (e.g., an integer overflow) via
+specially crafted VNC packets.
 
-Drop patch, issue has been properly fixed by:
-https://github.com/json-c/json-c/commit/0f814e52dd22ee959a29ffcce36923aff62147b3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../json-c/0001-configure.ac-remove-Werror.patch   | 32 ----------------------
- package/json-c/json-c.hash                         |  2 +-
- package/json-c/json-c.mk                           |  5 +---
- 3 files changed, 2 insertions(+), 37 deletions(-)
+ ...0001-Limit-client-cut-text-length-to-1-MB.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
 
-diff --git a/package/json-c/0001-configure.ac-remove-Werror.patch b/package/json-c/0001-configure.ac-remove-Werror.patch
-deleted file mode 100644
-index e877671519..0000000000
---- a/package/json-c/0001-configure.ac-remove-Werror.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 79d862ccaabc6620ce4b2783a44d6014ae837df9 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Sun, 31 Dec 2017 00:01:37 +0200
--Subject: [PATCH] configure.ac: remove -Werror
--
--The unconditional _REENTRANT macro causes a warning when building with a
--no-threads toolchain. Remove -Werror to fix the build.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Patch status: not upstreamable
--Issue reported upstream: https://github.com/json-c/json-c/issues/396
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 024c5aa0d687..74caa4d99e15 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -165,7 +165,7 @@ AS_IF([test "x$enable_Bsymbolic" = "xcheck"],
-- AS_IF([test "x$enable_Bsymbolic" = "xyes"], [JSON_BSYMBOLIC_LDFLAGS=-Wl[,]-Bsymbolic-functions])
-- AC_SUBST(JSON_BSYMBOLIC_LDFLAGS)
-- 
---AX_APPEND_COMPILE_FLAGS([-Wall -Werror -Wcast-qual -Wno-error=deprecated-declarations])
--+AX_APPEND_COMPILE_FLAGS([-Wall -Wcast-qual -Wno-error=deprecated-declarations])
-- AX_APPEND_COMPILE_FLAGS([-Wextra -Wwrite-string -Wno-unused-parameter])
-- AX_APPEND_COMPILE_FLAGS([-D_GNU_SOURCE -D_REENTRANT])
-- 
---- 
--2.15.1
--
-diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
-index 41e614d6dc..0e03007476 100644
---- a/package/json-c/json-c.hash
-+++ b/package/json-c/json-c.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/json-c/json-c/wiki
--sha256 0316780be9ad16c42d7c26b015a784fd5df4b0909fef0aba51cfb13e492ac24d  json-c-0.13.tar.gz
-+sha256 b87e608d4d3f7bfdd36ef78d56d53c74e66ab278d318b71e6002a369d36f4873  json-c-0.13.1.tar.gz
- # Locally calculated
- sha256 74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index 450ee8b27b..57d8c35dd5 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -4,14 +4,11 @@
- #
- ################################################################################
- 
--JSON_C_VERSION = 0.13
-+JSON_C_VERSION = 0.13.1
- JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
- JSON_C_INSTALL_STAGING = YES
- JSON_C_LICENSE = MIT
- JSON_C_LICENSE_FILES = COPYING
- 
--# Patching configure.ac
--JSON_C_AUTORECONF = YES
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch b/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
+new file mode 100644
+index 0000000000..84a537640d
+--- /dev/null
++++ b/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
+@@ -0,0 +1,65 @@
++From 28afb6c537dc82ba04d5f245b15ca7205c6dbb9c Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
++Date: Mon, 26 Feb 2018 13:48:00 +0100
++Subject: [PATCH] Limit client cut text length to 1 MB
++
++This patch constrains a client cut text length to 1 MB. Otherwise
++a client could make server allocate 2 GB of memory and that seems to
++be to much to classify it as a denial of service.
++
++The limit also prevents from an integer overflow followed by copying
++an uninitilized memory when processing msg.cct.length value larger
++than SIZE_MAX or INT_MAX - sz_rfbClientCutTextMsg.
++
++This patch also corrects accepting length value of zero (malloc(0) is
++interpreted on differnet systems differently).
++
++CVE-2018-7225
++<https://github.com/LibVNC/libvncserver/issues/218>
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libvncserver/rfbserver.c | 20 +++++++++++++++++++-
++ 1 file changed, 19 insertions(+), 1 deletion(-)
++
++diff --git a/libvncserver/rfbserver.c b/libvncserver/rfbserver.c
++index 116c488..4fc4d9d 100644
++--- a/libvncserver/rfbserver.c
+++++ b/libvncserver/rfbserver.c
++@@ -88,6 +88,8 @@
++ #include <errno.h>
++ /* strftime() */
++ #include <time.h>
+++/* PRIu32 */
+++#include <inttypes.h>
++ 
++ #ifdef LIBVNCSERVER_WITH_WEBSOCKETS
++ #include "rfbssl.h"
++@@ -2575,7 +2577,23 @@ rfbProcessClientNormalMessage(rfbClientPtr cl)
++ 
++ 	msg.cct.length = Swap32IfLE(msg.cct.length);
++ 
++-	str = (char *)malloc(msg.cct.length);
+++	/* uint32_t input is passed to malloc()'s size_t argument,
+++	 * to rfbReadExact()'s int argument, to rfbStatRecordMessageRcvd()'s int
+++	 * argument increased of sz_rfbClientCutTextMsg, and to setXCutText()'s int
+++	 * argument. Here we impose a limit of 1 MB so that the value fits
+++	 * into all of the types to prevent from misinterpretation and thus
+++	 * from accessing uninitialized memory (CVE-2018-7225) and also to
+++	 * prevent from a denial-of-service by allocating to much memory in
+++	 * the server. */
+++	if (msg.cct.length > 1<<20) {
+++	    rfbLog("rfbClientCutText: too big cut text length requested: %" PRIu32 "\n",
+++		    msg.cct.length);
+++	    rfbCloseClient(cl);
+++	    return;
+++	}
+++
+++	/* Allow zero-length client cut text. */
+++	str = (char *)calloc(msg.cct.length ? msg.cct.length : 1, 1);
++ 	if (str == NULL) {
++ 		rfbLogPerror("rfbProcessClientNormalMessage: not enough memory");
++ 		rfbCloseClient(cl);
++-- 
++2.11.0
++
+-- 
+2.11.0
