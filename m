@@ -1,90 +1,142 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Jun 2018 16:40:18 +0200
-Subject: [Buildroot] [git commit] pugixml: bump to version 1.9
-Message-ID: <20180609144026.09B1B8777A@busybox.osuosl.org>
+Date: Sat, 9 Jun 2018 16:41:30 +0200
+Subject: [Buildroot] [git commit] mariadb: security bump version to 10.1.33
+Message-ID: <20180609144026.2AB2B8634B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1567b603704b17e84648e2d55e2f65cf793a157
+commit: https://git.buildroot.net/buildroot/commit/?id=5fbacdd59fd43c47f7031922e9fbae4d316a296f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove patch (already in version)
-- Add hash for license file
+Release notes: https://mariadb.com/kb/en/mariadb-10133-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10133-changelog/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes the following security vulnerabilities:
+
+CVE-2018-2782 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server.  Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
+
+CVE-2018-2784 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server.  Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
+
+CVE-2018-2787 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server.  Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server as well as unauthorized update, insert or
+delete access to some of MySQL Server accessible data.
+
+CVE-2018-2766 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
+privileged attacker with network access via multiple protocols to compromise
+MySQL Server.  Successful attacks of this vulnerability can result in
+unauthorized ability to cause a hang or frequently repeatable crash
+(complete DOS) of MySQL Server.
+
+CVE-2018-2755 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Replication).  Supported versions that are affected
+are 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
+exploit vulnerability allows unauthenticated attacker with logon to the
+infrastructure where MySQL Server executes to compromise MySQL Server.
+Successful attacks require human interaction from a person other than the
+attacker and while the vulnerability is in MySQL Server, attacks may
+significantly impact additional products.  Successful attacks of this
+vulnerability can result in takeover of MySQL Server.
+
+CVE-2018-2819 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB).  Supported versions that are affected are 5.5.59 and
+prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server.  Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2817 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server.  Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2761 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Client programs).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
+exploit vulnerability allows unauthenticated attacker with network access
+via multiple protocols to compromise MySQL Server.  Successful attacks of
+this vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2781 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Optimizer).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+vulnerability allows high privileged attacker with network access via
+multiple protocols to compromise MySQL Server.  Successful attacks of this
+vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2771 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Locking).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
+exploit vulnerability allows high privileged attacker with network access
+via multiple protocols to compromise MySQL Server.  Successful attacks of
+this vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2018-2813 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: DDL).  Supported versions that are affected are
+5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+vulnerability allows low privileged attacker with network access via
+multiple protocols to compromise MySQL Server.  Successful attacks of this
+vulnerability can result in unauthorized read access to a subset of MySQL
+Server accessible data.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Ryan Coe <bluemrp9@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-check-cxx_long_long_type-existence.patch  | 33 ----------------------
- package/pugixml/pugixml.hash                       |  3 +-
- package/pugixml/pugixml.mk                         |  4 +--
- 3 files changed, 3 insertions(+), 37 deletions(-)
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pugixml/0001-check-cxx_long_long_type-existence.patch b/package/pugixml/0001-check-cxx_long_long_type-existence.patch
-deleted file mode 100644
-index a53c84a29a..0000000000
---- a/package/pugixml/0001-check-cxx_long_long_type-existence.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 6cfd9c14ced26c8220f7f7ea99610cbdbfb9eba7 Mon Sep 17 00:00:00 2001
--From: Theo Debrouwere <theo.debrouwere@skynet.be>
--Date: Mon, 12 Sep 2016 09:38:56 +0200
--Subject: [PATCH] Bugfix: check if cxx_long_long_type is present before
-- applying it.
--
--Check if cxx_long_long_type is present in the list of compiler features
--before adding it as a target_compile_feature.
--
--Patch was backported from
--https://github.com/zeux/pugixml/commit/4dbb5646196a4a3cc94097f1473ef11d1d44df11
--
--Signed-off-by: Theo Debrouwere <theo.debrouwere@skynet.be>
-----
-- scripts/CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
--index 40a7ab0..6403753 100644
----- a/scripts/CMakeLists.txt
--+++ b/scripts/CMakeLists.txt
--@@ -26,7 +26,7 @@ else()
-- endif()
-- 
-- # Enable C++11 long long for compilers that are capable of it
---if(NOT ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} STRLESS 3.1)
--+if(NOT ${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} STRLESS 3.1 AND ";${CMAKE_CXX_COMPILE_FEATURES};" MATCHES ";cxx_long_long_type;")
-- 	target_compile_features(pugixml PUBLIC cxx_long_long_type)
-- endif()
-- 
---- 
--2.9.3
--
-diff --git a/package/pugixml/pugixml.hash b/package/pugixml/pugixml.hash
-index 9007f7cae6..fb6566dabf 100644
---- a/package/pugixml/pugixml.hash
-+++ b/package/pugixml/pugixml.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256  fbe10d46f61d769f7d92a296102e4e2bd3ee16130f11c5b10a1aae590ea1f5ca  pugixml-1.7.tar.gz
-+sha256  d156d35b83f680e40fd6412c4455fdd03544339779134617b9b28d19e11fdba6  pugixml-1.9.tar.gz
-+sha256  5f2318fdea73711b4761fd395462a51dc7d4626088ebaa41732b598821ac935a  readme.txt
-diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-index 2e4f0ce561..e5188e5f53 100644
---- a/package/pugixml/pugixml.mk
-+++ b/package/pugixml/pugixml.mk
-@@ -4,12 +4,10 @@
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index b8b2dde374..7eea62ab7b 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.32/
+-sha256 0e2aae6a6a190d07c8e36e87dd43377057fa82651ca3c583462563f3e9369096  mariadb-10.1.32.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.33/
++sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 391655fb0a..ce846d9cda 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PUGIXML_VERSION = 1.7
-+PUGIXML_VERSION = 1.9
- PUGIXML_SITE = http://github.com/zeux/pugixml/releases/download/v$(PUGIXML_VERSION)
- PUGIXML_LICENSE = MIT
- PUGIXML_LICENSE_FILES = readme.txt
- PUGIXML_INSTALL_STAGING = YES
- 
--PUGIXML_SUBDIR = scripts
--
- $(eval $(cmake-package))
+-MARIADB_VERSION = 10.1.32
++MARIADB_VERSION = 10.1.33
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
