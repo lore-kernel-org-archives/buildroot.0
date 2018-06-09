@@ -1,22 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 09 Jun 2018 16:39:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvorbis: add upstream
- security patch to fix CVE-2017-14160
-In-Reply-To: <20180609084337.16238-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 9 Jun 2018 10:43:37 +0200")
-References: <20180609084337.16238-1-bernd.kuhls@t-online.de>
-Message-ID: <87efhgaut1.fsf@dell.be.48ers.dk>
+Date: Sat, 09 Jun 2018 16:39:23 +0200
+Subject: [Buildroot] [PATCH 1/1] json-c: bump to version 0.13.1
+In-Reply-To: <20180609084139.16732-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 9 Jun 2018 10:41:39 +0200")
+References: <20180609084139.16732-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7s4ausk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Drop patch, issue has been properly fixed by:
+ > https://github.com/json-c/json-c/commit/0f814e52dd22ee959a29ffcce36923aff62147b3
 
-Hmm, interesting that this didn't made it to the 1.3.6 release.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
