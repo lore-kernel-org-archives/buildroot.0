@@ -1,32 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Jun 2018 16:40:44 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: update email for flatcc
-Message-ID: <20180609144026.112C48777A@busybox.osuosl.org>
+Date: Sat, 9 Jun 2018 16:34:30 +0200
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.3.3.6
+Message-ID: <20180609144025.DE6FF8777C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8779224f2b59a74c80e11bc59738460e3127d41c
+commit: https://git.buildroot.net/buildroot/commit/?id=d8b2c6f71783ff45b2d1153df291fa5519b50568
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+Release notes:
+https://blog.torproject.org/tor-0336-released-new-stable-series
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c1ab83ebd3..d5345f47f3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -959,7 +959,7 @@ F:	package/batctl/
- N:	Jeremy Rosen <jeremy.rosen@openwide.fr>
- F:	package/fxload/
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index 2841d4099a..ca015a8dc0 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 60df77c31dcf94fdd686c8ca8c34f3b70243b33a7344ecc0b719d5ca2617cbee  tor-0.3.2.10.tar.gz
++sha256 99bc59f6dbf395894de12f3a83b3251a82dfd93dc7f6d3afcbbd80f6111433b7  tor-0.3.3.6.tar.gz
+ sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 4a1a48357f..f7af718b9b 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Joel Carlson <joel.carlson@cosmicaes.com>
-+N:	Joel Carlson <JoelsonCarl@gmail.com>
- F:	package/flatcc/
- 
- N:	Joel Stanley <joel@jms.id.au>
+-TOR_VERSION = 0.3.2.10
++TOR_VERSION = 0.3.3.6
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
