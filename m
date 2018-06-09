@@ -1,85 +1,116 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  9 Jun 2018 21:55:22 +0200
-Subject: [Buildroot] [PATCH 1/1] libtirpc: bump to version 1.0.3
-Message-ID: <20180609195522.1958-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  9 Jun 2018 23:06:07 +0200
+Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
+Message-ID: <20180609210607.13259-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove 0006-include-stdint.h-for-uintptr_t.patch (already in version)
-- Add hash for license file
+Currently, the wording in the manual instructs the user to generate
+tarball from "the contents of the +output/host+ directory".
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This is pretty confusing, because taken literally, this would amount to
+runing a command like:
+
+    tar cf my-sdk.tar -C output/host/ .
+
+This creates a tarbomb [0], which is very bad practice, because when
+extracted, it creates mutiple files in the current directory.
+
+One one really want to do, is create a tarball of the host/ directory,
+with something like:
+
+    tar cf my-sdk.tar -C output host/
+
+However, this is not much better, because the top-most dirdctory would
+have a very common name, host/, which is pretty easy to get conflict
+with.
+
+So, we fix that mess by creating the archive ourselves, giving it and
+the top-most directory a recogniseable name, based on the target tuple
+and the Buildroot version.
+
+Since this is an output file, we located it in the images/ directory.
+
+Update the manual accordignly.
+
+Speaking of the manual.. It was referring to "output/host/", but that
+is only valid for in-tree builds. For out-of-tree builds, this is just
+"host/". To avoid confusion, use the name of the vairiable $(HOST_DIR),
+which, fortunately, happens to be valid in both cases.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Stefan Becker <chemobejk@gmail.com>
 ---
- .../0006-include-stdint.h-for-uintptr_t.patch      | 31 ----------------------
- package/libtirpc/libtirpc.hash                     |  5 ++--
- package/libtirpc/libtirpc.mk                       |  2 +-
- 3 files changed, 4 insertions(+), 34 deletions(-)
- delete mode 100644 package/libtirpc/0006-include-stdint.h-for-uintptr_t.patch
+ Makefile                                  |  7 ++++++-
+ docs/manual/using-buildroot-toolchain.txt | 26 +++++++++++++++++---------
+ 2 files changed, 23 insertions(+), 10 deletions(-)
 
-diff --git a/package/libtirpc/0006-include-stdint.h-for-uintptr_t.patch b/package/libtirpc/0006-include-stdint.h-for-uintptr_t.patch
-deleted file mode 100644
-index 62031613d6..0000000000
---- a/package/libtirpc/0006-include-stdint.h-for-uintptr_t.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From 18f8a605e176f0362da22fd1203eb7cedb136aaf Mon Sep 17 00:00:00 2001
--From: Khem Raj <raj.khem@gmail.com>
--Date: Tue, 20 Jun 2017 22:06:35 +0200
--Subject: [PATCH] include stdint.h for uintptr_t
--
--Fixes
--| ../../libtirpc-1.0.1/src/xdr_sizeof.c:93:13: error: 'uintptr_t' undeclared (first use in this function); did you mean '__intptr_t'?
--|   if (len < (uintptr_t)xdrs->x_base) {
--|              ^~~~~~~~~
--
--Signed-off-by: Khem Raj <raj.khem@gmail.com>
--Signed-off-by: Dmitrii Kolesnichenko <dmitrii@synopsys.com>
-----
-- src/xdr_sizeof.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/xdr_sizeof.c b/src/xdr_sizeof.c
--index d23fbd1..79d6707 100644
----- a/src/xdr_sizeof.c
--+++ b/src/xdr_sizeof.c
--@@ -39,6 +39,7 @@
-- #include <rpc/xdr.h>
-- #include <sys/types.h>
-- #include <stdlib.h>
--+#include <stdint.h>
-- #include "un-namespace.h"
-- 
-- /* ARGSUSED */
---- 
--2.9.4
--
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 35ac6a2278..643a5d2050 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
-@@ -1,4 +1,5 @@
- # From sourceforge's info on download page:
--sha1 2a8dc0e6eecc45be6597c8287b1d8e15cbee46e3  libtirpc-1.0.2.tar.bz2
-+sha1 48adb32dc7c3b73c66f001c239da76b8398abf11  libtirpc-1.0.3.tar.bz2
- # Locally computed
--sha256 723c5ce92706cbb601a8db09110df1b4b69391643158f20ff587e20e7c5f90f5  libtirpc-1.0.2.tar.bz2
-+sha256 86c3a78fc1bddefa96111dd233124c703b22a78884203c55c3e06b3be6a0fd5e  libtirpc-1.0.3.tar.bz2
-+sha256 17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 319b78c3f0..36f9f7ef21 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Makefile b/Makefile
+index 4b998bdb65..3f460f8d92 100644
+--- a/Makefile
++++ b/Makefile
+@@ -574,13 +574,18 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ world: target-post-image
  
--LIBTIRPC_VERSION = 1.0.2
-+LIBTIRPC_VERSION = 1.0.3
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3-Clause
+ .PHONY: sdk
+-sdk: world
++sdk: world $(BR2_TAR_HOST_DEPENDENCY)
+ 	@$(call MESSAGE,"Rendering the SDK relocatable")
+ 	$(TOPDIR)/support/scripts/fix-rpath host
+ 	$(TOPDIR)/support/scripts/fix-rpath staging
+ 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+ 	mkdir -p $(HOST_DIR)/share/buildroot
+ 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
++	$(Q)mkdir -p $(BINARIES_DIR)
++	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
++		-C $(HOST_DIR) \
++		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
++		.
+ 
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
+index 3246dc2411..d1490b4c38 100644
+--- a/docs/manual/using-buildroot-toolchain.txt
++++ b/docs/manual/using-buildroot-toolchain.txt
+@@ -12,15 +12,23 @@ The toolchain generated by Buildroot is located by default in
+ +output/host/bin/+ to your PATH environment variable and then to
+ use +ARCH-linux-gcc+, +ARCH-linux-objdump+, +ARCH-linux-ld+, etc.
+ 
+-It is possible to relocate the toolchain, this allows to distribute
+-the toolchain to other developers to build applications for your
+-target. To achieve this:
++Alternatively, Buildroot can also export the toolchain and all the
++development files of all selected packages, as an SDK, by running the
++command +make sdk+. This generates a tarball of the content of the host
++directory +$(HOST_DIR)+, named +buildroot-sdk.<TARGET-TUPLE>-<BR-VERSION>.tar.gz+
++and located in the output directory +$(BINARIES_DIR)+.
+ 
+-* run +make sdk+, which prepares the toolchain to be relocatable;
+-* tarball the contents of the +output/host+ directory;
+-* distribute the resulting tarball.
++This tarball can then be distributed to application developpers, when
++they want to develop their applications that are not (yet) packaged as
++a Buildroot package.
+ 
+-Once the toolchain is installed to the new location, the user must run
+-the +relocate-sdk.sh+ script to make sure all paths are updated with
+-the new location.
++Upon extracting the SDK tarball, the user must run the script
+++relocate-sdk.sh+, to make sure all paths are updated with the new
++location.
+ 
++.Note
++This SDK can not be re-used as an external toolchain, because it
++contains pre-built libraries that could be conflicting with the ones
++packaged in Buildroot (e.g. when an old SDK would be re-used with a
++newer Buildroot version), unless it was built from a configuration
++with no package enabled.
 -- 
 2.14.1
