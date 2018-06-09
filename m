@@ -1,59 +1,141 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  9 Jun 2018 15:58:20 +0200
-Subject: [Buildroot] [PATCH 1/1] pixiewps: fix static linking with uclibc-ng
-Message-ID: <20180609135820.2002-1-fontaine.fabrice@gmail.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Sat, 9 Jun 2018 07:15:44 -0700
+Subject: [Buildroot] [PATCH] mariadb: security bump version to 10.1.33
+In-Reply-To: <20180608164434.18857-1-peter@korsgaard.com>
+References: <20180608164434.18857-1-peter@korsgaard.com>
+Message-ID: <e8ebdee6-173c-1ce4-9308-dcce20ae6827@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes following linking error with uClibc-ng:
-/home/peko/autobuild/instance-0/output/host/lib/gcc/powerpc-buildroot-linux-uclibc/7.3.0/libgcc.a(unwind-dw2-fde-dip.o):
-In function `_Unwind_Find_FDE':
-/home/peko/autobuild/instance-0/output/build/host-gcc-final-7.3.0/build/powerpc-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde-dip.c:469:
-undefined reference to `dl_iterate_phdr'
-collect2: error: ld returned 1 exit status
-
-Since uClibc-ng 1.0.18 a circular dependency between libc and libgcc
-exist, when static linking is used. It can be resolved by the compiler
-when -static is correctly passed in the linking step.
-
-So rework a little bit how variables are passed by using
-PIXIEWPS_MAKE_OPTS and TARGET_CONFIGURE_OPTS
-
-Fixes:
- - http://autobuild.buildroot.net/results/d9f0311538c8db1196839e36af3f6ef4e403be2b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/pixiewps/pixiewps.mk | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/package/pixiewps/pixiewps.mk b/package/pixiewps/pixiewps.mk
-index 95a253ab83..56d15a0bbf 100644
---- a/package/pixiewps/pixiewps.mk
-+++ b/package/pixiewps/pixiewps.mk
-@@ -9,13 +9,17 @@ PIXIEWPS_SITE = $(call github,wiire-a,pixiewps,$(PIXIEWPS_VERSION))
- PIXIEWPS_LICENSE = GPL-3.0+
- PIXIEWPS_LICENSE_FILES = LICENSE.md
- 
-+PIXIEWPS_MAKE_OPTS = \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	PREFIX=/usr
-+
- define PIXIEWPS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) $(PIXIEWPS_MAKE_OPTS) -C $(@D)
- endef
- 
- define PIXIEWPS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) \
--		PREFIX=/usr -C $(@D) install
-+	$(TARGET_MAKE_ENV) $(MAKE) $(PIXIEWPS_MAKE_OPTS) -C $(@D) \
-+		DESTDIR=$(TARGET_DIR) install
- endef
- 
- $(eval $(generic-package))
--- 
-2.14.1
+On 06/08/2018 09:44 AM, Peter Korsgaard wrote:
+> Release notes: https://mariadb.com/kb/en/mariadb-10133-release-notes/
+> Changelog: https://mariadb.com/kb/en/mariadb-10133-changelog/
+>
+> Fixes the following security vulnerabilities:
+>
+> CVE-2018-2782 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+> prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
+> privileged attacker with network access via multiple protocols to compromise
+> MySQL Server.  Successful attacks of this vulnerability can result in
+> unauthorized ability to cause a hang or frequently repeatable crash
+> (complete DOS) of MySQL Server.
+>
+> CVE-2018-2784 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+> prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
+> privileged attacker with network access via multiple protocols to compromise
+> MySQL Server.  Successful attacks of this vulnerability can result in
+> unauthorized ability to cause a hang or frequently repeatable crash
+> (complete DOS) of MySQL Server.
+>
+> CVE-2018-2787 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+> prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
+> privileged attacker with network access via multiple protocols to compromise
+> MySQL Server.  Successful attacks of this vulnerability can result in
+> unauthorized ability to cause a hang or frequently repeatable crash
+> (complete DOS) of MySQL Server as well as unauthorized update, insert or
+> delete access to some of MySQL Server accessible data.
+>
+> CVE-2018-2766 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
+> prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
+> privileged attacker with network access via multiple protocols to compromise
+> MySQL Server.  Successful attacks of this vulnerability can result in
+> unauthorized ability to cause a hang or frequently repeatable crash
+> (complete DOS) of MySQL Server.
+>
+> CVE-2018-2755 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: Server: Replication).  Supported versions that are affected
+> are 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
+> exploit vulnerability allows unauthenticated attacker with logon to the
+> infrastructure where MySQL Server executes to compromise MySQL Server.
+> Successful attacks require human interaction from a person other than the
+> attacker and while the vulnerability is in MySQL Server, attacks may
+> significantly impact additional products.  Successful attacks of this
+> vulnerability can result in takeover of MySQL Server.
+>
+> CVE-2018-2819 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: InnoDB).  Supported versions that are affected are 5.5.59 and
+> prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+> vulnerability allows low privileged attacker with network access via
+> multiple protocols to compromise MySQL Server.  Successful attacks of this
+> vulnerability can result in unauthorized ability to cause a hang or
+> frequently repeatable crash (complete DOS) of MySQL Server.
+>
+> CVE-2018-2817 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: Server: DDL).  Supported versions that are affected are
+> 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+> vulnerability allows low privileged attacker with network access via
+> multiple protocols to compromise MySQL Server.  Successful attacks of this
+> vulnerability can result in unauthorized ability to cause a hang or
+> frequently repeatable crash (complete DOS) of MySQL Server.
+>
+> CVE-2018-2761 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: Client programs).  Supported versions that are affected are
+> 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
+> exploit vulnerability allows unauthenticated attacker with network access
+> via multiple protocols to compromise MySQL Server.  Successful attacks of
+> this vulnerability can result in unauthorized ability to cause a hang or
+> frequently repeatable crash (complete DOS) of MySQL Server.
+>
+> CVE-2018-2781 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: Server: Optimizer).  Supported versions that are affected are
+> 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+> vulnerability allows high privileged attacker with network access via
+> multiple protocols to compromise MySQL Server.  Successful attacks of this
+> vulnerability can result in unauthorized ability to cause a hang or
+> frequently repeatable crash (complete DOS) of MySQL Server.
+>
+> CVE-2018-2771 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: Server: Locking).  Supported versions that are affected are
+> 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
+> exploit vulnerability allows high privileged attacker with network access
+> via multiple protocols to compromise MySQL Server.  Successful attacks of
+> this vulnerability can result in unauthorized ability to cause a hang or
+> frequently repeatable crash (complete DOS) of MySQL Server.
+>
+> CVE-2018-2813 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: Server: DDL).  Supported versions that are affected are
+> 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
+> vulnerability allows low privileged attacker with network access via
+> multiple protocols to compromise MySQL Server.  Successful attacks of this
+> vulnerability can result in unauthorized read access to a subset of MySQL
+> Server accessible data.
+>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+>   package/mariadb/mariadb.hash | 4 ++--
+>   package/mariadb/mariadb.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+> index b8b2dde374..7eea62ab7b 100644
+> --- a/package/mariadb/mariadb.hash
+> +++ b/package/mariadb/mariadb.hash
+> @@ -1,5 +1,5 @@
+> -# From https://downloads.mariadb.org/mariadb/10.1.32/
+> -sha256 0e2aae6a6a190d07c8e36e87dd43377057fa82651ca3c583462563f3e9369096  mariadb-10.1.32.tar.gz
+> +# From https://downloads.mariadb.org/mariadb/10.1.33/
+> +sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
+>   
+>   # Hash for license files
+>   sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+> index 391655fb0a..ce846d9cda 100644
+> --- a/package/mariadb/mariadb.mk
+> +++ b/package/mariadb/mariadb.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -MARIADB_VERSION = 10.1.32
+> +MARIADB_VERSION = 10.1.33
+>   MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+>   MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+>   # Tarball no longer contains LGPL license text
