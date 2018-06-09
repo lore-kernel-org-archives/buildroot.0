@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Jun 2018 16:41:15 +0200
-Subject: [Buildroot] [git commit] aubio: bump to version 0.4.6
-Message-ID: <20180609144026.21FEE8634B@busybox.osuosl.org>
+Date: Sat, 9 Jun 2018 16:40:57 +0200
+Subject: [Buildroot] [git commit] jansson: bump to version 2.11
+Message-ID: <20180609144026.197F28777A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc90a068d794cbb281c819c8ba46dd1f881efa9d
+commit: https://git.buildroot.net/buildroot/commit/?id=14b3352b2b64b488286abfef47c9af90dec4cba4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Add hash for license file
@@ -16,32 +16,29 @@ Add hash for license file
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/aubio/aubio.hash | 7 +++++--
- package/aubio/aubio.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/jansson/jansson.hash | 3 ++-
+ package/jansson/jansson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/aubio/aubio.hash b/package/aubio/aubio.hash
-index b4233aee72..edb63f0769 100644
---- a/package/aubio/aubio.hash
-+++ b/package/aubio/aubio.hash
-@@ -1,2 +1,5 @@
--# From https://aubio.org/pub/aubio-0.4.5.tar.bz2.sha256
--sha256 70c2804e6f4fbf0ebc0fb9ac8cc9d465ef4a4d438311c074c9a7364e98827af6  aubio-0.4.5.tar.bz2
-+# From https://aubio.org/pub/aubio-0.4.6.tar.bz2.sha256
-+sha256 bdc73be1f007218d3ea6d2a503b38a217815a0e2ccc4ed441f6e850ed5d47cfb  aubio-0.4.6.tar.bz2
-+
-+# Hash for license file:
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/aubio/aubio.mk b/package/aubio/aubio.mk
-index 2a09ebb3b5..b0cc8b899e 100644
---- a/package/aubio/aubio.mk
-+++ b/package/aubio/aubio.mk
+diff --git a/package/jansson/jansson.hash b/package/jansson/jansson.hash
+index 7a04586c70..e169b229cb 100644
+--- a/package/jansson/jansson.hash
++++ b/package/jansson/jansson.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256	78215ad1e277b42681404c1d66870097a50eb084be9d771b1d15576575cf6447	jansson-2.10.tar.gz
++sha256	6e85f42dabe49a7831dbdd6d30dca8a966956b51a9a50ed534b82afc3fa5b2f4	jansson-2.11.tar.gz
++sha256	3034b2319f8c053995e8c8abf11b76418a3a8836cd769e5b3f0b6b13bfa00ec4	LICENSE
+diff --git a/package/jansson/jansson.mk b/package/jansson/jansson.mk
+index 9771434c89..920008757b 100644
+--- a/package/jansson/jansson.mk
++++ b/package/jansson/jansson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AUBIO_VERSION = 0.4.5
-+AUBIO_VERSION = 0.4.6
- AUBIO_SITE = https://aubio.org/pub
- AUBIO_SOURCE = aubio-$(AUBIO_VERSION).tar.bz2
- AUBIO_LICENSE = GPL-3.0+
+-JANSSON_VERSION = 2.10
++JANSSON_VERSION = 2.11
+ JANSSON_SITE = http://www.digip.org/jansson/releases
+ JANSSON_LICENSE = MIT
+ JANSSON_LICENSE_FILES = LICENSE
