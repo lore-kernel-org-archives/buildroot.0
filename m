@@ -1,56 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 9 Jun 2018 16:39:41 +0200
-Subject: [Buildroot] [git commit] json-glib: bump to version 1.4.2
-Message-ID: <20180609144026.01F0A8777A@busybox.osuosl.org>
+Date: Sat, 9 Jun 2018 16:40:44 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: update email for flatcc
+Message-ID: <20180609144026.112C48777A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d32f7f6fe577e483d39440722e3245d64bcbec9
+commit: https://git.buildroot.net/buildroot/commit/?id=8779224f2b59a74c80e11bc59738460e3127d41c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Switch to meson-package
-- Add hash for license file
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/json-glib/json-glib.hash | 7 +++++--
- package/json-glib/json-glib.mk   | 6 +++---
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
-index 2f190ab934..fae4df36d4 100644
---- a/package/json-glib/json-glib.hash
-+++ b/package/json-glib/json-glib.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.2/json-glib-1.2.8.sha256sum
--sha256 fd55a9037d39e7a10f0db64309f5f0265fa32ec962bf85066087b83a2807f40a  json-glib-1.2.8.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/json-glib/1.4/json-glib-1.4.2.sha256sum
-+sha256 2d7709a44749c7318599a6829322e081915bdc73f5be5045882ed120bb686dc8  json-glib-1.4.2.tar.xz
-+
-+# Hash for license file:
-+sha256 a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index 5ee43d9a12..77c0c45323 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c1ab83ebd3..d5345f47f3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -959,7 +959,7 @@ F:	package/batctl/
+ N:	Jeremy Rosen <jeremy.rosen@openwide.fr>
+ F:	package/fxload/
  
--JSON_GLIB_VERSION_MAJOR = 1.2
--JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).8
-+JSON_GLIB_VERSION_MAJOR = 1.4
-+JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).2
- JSON_GLIB_SITE = http://ftp.gnome.org/pub/GNOME/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
- JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
- JSON_GLIB_LICENSE = LGPL-2.1+
-@@ -17,4 +17,4 @@ JSON_GLIB_DEPENDENCIES = \
- 	host-pkgconf \
- 	libglib2
+-N:	Joel Carlson <joel.carlson@cosmicaes.com>
++N:	Joel Carlson <JoelsonCarl@gmail.com>
+ F:	package/flatcc/
  
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+ N:	Joel Stanley <joel@jms.id.au>
