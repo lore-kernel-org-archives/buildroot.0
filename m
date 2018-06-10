@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 10 Jun 2018 23:21:15 +0200
-Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <20180609210607.13259-1-yann.morin.1998@free.fr>
-References: <20180609210607.13259-1-yann.morin.1998@free.fr>
-Message-ID: <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
+Date: Sun, 10 Jun 2018 23:26:31 +0200
+Subject: [Buildroot] [PATCH] docs/manual: document filesystems
+In-Reply-To: <20180610083544.GC2471@scaer>
+References: <20180609094647.21460-1-yann.morin.1998@free.fr>
+ <1806912659.2037633.1528582803656.JavaMail.zimbra@datacom.com.br>
+ <20180610081217.GB2471@scaer> <20180610083544.GC2471@scaer>
+Message-ID: <6ae94404-f520-e719-680d-686baf6f9659@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,153 +14,59 @@ To: buildroot@busybox.net
 
 
 
-On 09-06-18 23:06, Yann E. MORIN wrote:
-[snip]
-> So, we fix that mess by creating the archive ourselves, giving it and
-> the top-most directory a recogniseable name, based on the target tuple
-                           recognisable
-> and the Buildroot version.
-
- Great idea!
-
-> Since this is an output file, we located it in the images/ directory.
+On 10-06-18 10:35, Yann E. MORIN wrote:
+> Carlos, Arnout, All,
 > 
-> Update the manual accordignly.
-                    accordingly
+> On 2018-06-10 10:12 +0200, Yann E. MORIN spake thusly:
+>> On 2018-06-09 19:20 -0300, Carlos Santos spake thusly:
+> [--SNIP--]
+>>> Packages are supposed to install, remove or modify files in the global
+>>> $(TARGET_DIR) hierarchy.
 > 
-> Speaking of the manual.. It was referring to "output/host/", but that
-> is only valid for in-tree builds. For out-of-tree builds, this is just
-> "host/". To avoid confusion, use the name of the vairiable $(HOST_DIR),
-                                                   variable
-
-> which, fortunately, happens to be valid in both cases.
-
- Small nit about this part: this is the "user" section of the manual, and
-HOST_DIR hasn't been introduced there. So I'm not so sure that HOST_DIR is such
-an improvement. If you want to be fully accurate, you could use "output/host or
-$(O)/host".
-
- Alternatively, we could introduce HOST_DIR (and STAGING and TARGET probably) in
-the O= section in common-usage.txt.
-
-
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Stefan Becker <chemobejk@gmail.com>
-> ---
->  Makefile                                  |  7 ++++++-
->  docs/manual/using-buildroot-toolchain.txt | 26 +++++++++++++++++---------
->  2 files changed, 23 insertions(+), 10 deletions(-)
+> I forgot to say that this will no longer be true when we (eventually)
+> introduce the top-level parallel build, because, as Arnout already said,
+> each package will install in its own, private copy of TARGET_DIR, not
+> only that, but also its private STAGING_DIR and HOST_DIR as well.
 > 
-> diff --git a/Makefile b/Makefile
-> index 4b998bdb65..3f460f8d92 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -574,13 +574,18 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->  world: target-post-image
->  
->  .PHONY: sdk
-> -sdk: world
-> +sdk: world $(BR2_TAR_HOST_DEPENDENCY)
->  	@$(call MESSAGE,"Rendering the SDK relocatable")
->  	$(TOPDIR)/support/scripts/fix-rpath host
->  	$(TOPDIR)/support/scripts/fix-rpath staging
->  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
->  	mkdir -p $(HOST_DIR)/share/buildroot
->  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-> +	$(Q)mkdir -p $(BINARIES_DIR)
-> +	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
+> One thing that Arnout suggested, is to (mostly) get rid of TARGET_DIR,
+> in favour of a package-prefix FOO_TARGET_DIR (amd similarly for
+> filesystems).
+> 
+> However I still don't think that is a good idea, because that would
+> allow packages to easily find and write into another package's
+> TARGET_DIR. Using a single TARGET_DIR, instead, will make it harder
+> (but not impossible, agreed).
 
- Wouldn't it make more sense to make a .xz, or perhaps a .bz2? Although, that
-probably gives a significant hit to the build time. But since it's explicit in
-'make sdk' I don't mind that much.
-
-> +		-C $(HOST_DIR) \
-> +		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
-
- Perhaps move that "buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)" into a
-variable?
-
- And let's do some bikeshedding about the name... I don't like the . between sdk
-and the tuple. Also, I think it's better if sdk is at the beginning instead of
-buildroot. Or maybe even the tuple, that comes closer to how you invoke the
-compiler itself. Finally, Debian uses _ to distinguish the different parts in
-their .deb filenames, because both the package name and the version usually
-contain dashes and it may be hard to distinguish afterwards. So, I propose:
-
-$(GNU_TARGET_NAME)_sdk-buildroot-$(BR2_VERSION_FULL).
-
-> +		.
-
- It's a really stupid nit, but I don't like this single . isolated on a line,
-because it's so easy to miss. So perhaps you could make it:
-
-	--transform=... \
-	-C $(HOST_DIR) .
-
-(I also like the -C to be just before the files argument).
-
->  
->  # Populating the staging with the base directories is handled by the skeleton package
->  $(STAGING_DIR):
-> diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-> index 3246dc2411..d1490b4c38 100644
-> --- a/docs/manual/using-buildroot-toolchain.txt
-> +++ b/docs/manual/using-buildroot-toolchain.txt
-> @@ -12,15 +12,23 @@ The toolchain generated by Buildroot is located by default in
->  +output/host/bin/+ to your PATH environment variable and then to
->  use +ARCH-linux-gcc+, +ARCH-linux-objdump+, +ARCH-linux-ld+, etc.
->  
-> -It is possible to relocate the toolchain, this allows to distribute
-> -the toolchain to other developers to build applications for your
-> -target. To achieve this:
-> +Alternatively, Buildroot can also export the toolchain and all the
-> +development files of all selected packages, as an SDK, by running the
-> +command +make sdk+. This generates a tarball of the content of the host
-> +directory +$(HOST_DIR)+, named +buildroot-sdk.<TARGET-TUPLE>-<BR-VERSION>.tar.gz+
-> +and located in the output directory +$(BINARIES_DIR)+.
->  
-> -* run +make sdk+, which prepares the toolchain to be relocatable;
-> -* tarball the contents of the +output/host+ directory;
-> -* distribute the resulting tarball.
-> +This tarball can then be distributed to application developpers, when
-                                                       developers
-
-> +they want to develop their applications that are not (yet) packaged as
-> +a Buildroot package.
->  
-> -Once the toolchain is installed to the new location, the user must run
-> -the +relocate-sdk.sh+ script to make sure all paths are updated with
-> -the new location.
-> +Upon extracting the SDK tarball, the user must run the script
-> ++relocate-sdk.sh+, to make sure all paths are updated with the new
-
- Maybe make it explicit that this script is included at the top directory of the
-SDK.
+ How does the definition of TARGET_DIR have any influence on how fs/foo/foo.mk
+uses ROOTFS_BAR_TARGET_DIR?
 
 
-> +location.
->  
-> +.Note
-> +This SDK can not be re-used as an external toolchain, because it
-> +contains pre-built libraries that could be conflicting with the ones
-> +packaged in Buildroot (e.g. when an old SDK would be re-used with a
-> +newer Buildroot version), unless it was built from a configuration
-> +with no package enabled.
+> Ditto filesystems.
+> 
+> So I believe we still want to keep a context-specific TARGET_DIR. It is
+> easier to use,
 
- This part really should be a separate patch, it has nothing to do with the SDK
-tarball. Also, I disagree with the statement: it is perfectly usable as an
-external toolchain. The problem is: any library packages included in the SDK are
-not going to be used by the new Buildroot build. There is no chance of conflict,
-though, since the external toolchain logic only copies over the required libraries.
+ TARGET_DIR is only marginally easier to use than FOO_TARGET_DIR...
+
+
+> it is more stable,
+
+ ???
+
+ You actually may have a point here, but I don't understand it.
+
+> we can update it at will
+
+ We can also update the definition of FOO_TARGET_DIR at will.
+
+
+, and it makes it harder for packages and filesystems to do weird stuff.
+
+ No it doesn't.
+
 
  Regards,
  Arnout
-
-
-> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
