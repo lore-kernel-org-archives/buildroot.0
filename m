@@ -1,49 +1,89 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 10 Jun 2018 10:15:52 +0300
-Subject: [Buildroot] Initramfs
-In-Reply-To: <2C6957468785C14D8F47AB016E1D8F4B158FA7C2@hasmsx107.ger.corp.intel.com>
-References: <2C6957468785C14D8F47AB016E1D8F4B158FA7C2@hasmsx107.ger.corp.intel.com>
-Message-ID: <20180610071552.ym7c6xb4j3aa6vlh@sapphire.tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Jun 2018 09:47:27 +0200
+Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
+In-Reply-To: <20180610080315.11cf122b@windsurf>
+References: <20180609210607.13259-1-yann.morin.1998@free.fr>
+ <20180610080315.11cf122b@windsurf>
+Message-ID: <20180610074727.GA2471@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gil,
+Thomas, All,
 
-On Sun, Jun 10, 2018 at 07:00:06AM +0000, Montag, Gil wrote:
-> I have few questions regarding the use of initramfs in my system:
+On 2018-06-10 08:03 +0200, Thomas Petazzoni spake thusly:
+> On Sat,  9 Jun 2018 23:06:07 +0200, Yann E. MORIN wrote:
+[--SNIP--]
+> > So, we fix that mess by creating the archive ourselves, giving it and
+> remove the final "and"
+
+Here, 'it' refers to 'the archive' listed just before. We want to give
+'the archive' and 'the top-most directory'. So, this is really valid
+english grammar. ;-)
+
+I'll rephrase to avoid confusion:
+
+    So, we fix that mess by giving the top-most directory a
+    recogniseable name, based on the target tuple and the Buildroot
+    version, which we also use as the name of the archive (suffixed
+    with the usual +.tar.gz+.)
+
+> > the top-most directory a recogniseable name, based on the target tuple
+> > and the Buildroot version.
+> > 
+> > Since this is an output file, we located it in the images/ directory.
+> located -> locate
+> or maybe "place", "store" ?
+
+OK.
+
+> >  .PHONY: sdk
+> > -sdk: world
+> > +sdk: world $(BR2_TAR_HOST_DEPENDENCY)
+> >  	@$(call MESSAGE,"Rendering the SDK relocatable")
+> >  	$(TOPDIR)/support/scripts/fix-rpath host
+> >  	$(TOPDIR)/support/scripts/fix-rpath staging
+> >  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+> >  	mkdir -p $(HOST_DIR)/share/buildroot
+> >  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+> > +	$(Q)mkdir -p $(BINARIES_DIR)
+> > +	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
+> > +		-C $(HOST_DIR) \
+> > +		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
+> > +		.
 > 
-> 1.       Please correct me if I'm wrong:
+> Generally, I am fine with the principle, I believe it indeed makes
+> sense to provide a tarball that is ready to use.
 > 
-> -          When I enable the initramfs option, buildroot creates for me the 
-> same rootfs that was created before (e.g. ext2),  just instead of making it 
-> a file to be later unpacked into a storage device (e.g. rootfs.ext2) it will 
-> pack it  in a cpio archieve, and have the kernel build use it to build a 
-> kernel image that already contains it inside.
+> I was a bit concerned about backward compatibility behavior for people
+> already using "make sdk". But in fact your change is fine from this
+> point of view: if people have scripts today that run "make sdk" and
+> create a tarball from output/host, they will still work fine.
 > 
-> -          I don't need to enable ext2 file system anymore
+> > -It is possible to relocate the toolchain, this allows to distribute
+> > -the toolchain to other developers to build applications for your
+> > -target. To achieve this:
+> > +Alternatively, Buildroot can also export the toolchain and all the
+> > +development files of all selected packages,
+> 
+> "all the development files" -> "the development files", otherwise the
+> repetition of "all" is a bit annoying.
 
-Correct. Though usually initramfs is only used as a first stage filesystem. 
-Scripts running from initramfs locate the persistent storage and mount it. But 
-there are plenty of use cases of initramfs only setup.
+ACK.
 
-> 2.       If I want to add anything to the rootfs created this way, should I 
-> do it in the same way as I did before - e.g. with rootfs overlay?
+> Looks good otherwise. Thanks!
 
-Correct.
+OK, thanks for the review! :-)
 
-> 3.       Kernel image (bzImage in my case) is expected to grow bigger than 
-> it was before by the amount of the size of the rootfs.cpio.gz  file created 
-> in output/images
-
-That depends on how you configured initramfs compression in your kernel. 
-Different compression algorithms give different compressed image sizes.
-
-baruch
+Regards,
+Yann E. MORIN.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
