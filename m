@@ -1,119 +1,87 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 10 Jun 2018 08:07:52 +0300
-Subject: [Buildroot] [PATCH 1/1] flatcc: fix gcc8 compilation
-In-Reply-To: <1528485665-16141-1-git-send-email-JoelsonCarl@gmail.com>
-References: <1528485665-16141-1-git-send-email-JoelsonCarl@gmail.com>
-Message-ID: <20180610050752.jmelbkorsc3ejzbn@sapphire.tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 10 Jun 2018 08:00:20 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-06-09
+Message-ID: <20180610060020.41274207AD@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Joel,
+Hello,
 
-On Fri, Jun 08, 2018 at 01:21:05PM -0600, Joel Carlson wrote:
-> gcc8 issues errors for uses of strncpy where the NULL terminator may not
-> be copied. This patches flatcc to fix those instances.
-> 
-> Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-> 
-> ---
-> Upstream is aware of the issue (see [1]), so this patch may get dropped when a
-> new version of flatcc is released and we bump to it.
-> 
-> [1] https://github.com/dvidelabs/flatcc/pull/86
+Build statistics for 2018-06-09
+===============================
 
-As the upstream maintainer noted in that pull request, this is not a correct 
-fix. Upstream commit c0df0b6fca4fa6b should fix the issue. I'll give it a try 
-later today, if you don't beat me to it.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  33 |   3 |   0 |  36 |
+   2018.05.x |  29 |   0 |   0 |  29 |
+      master | 269 |  21 |   0 | 290 |
 
-baruch
+Results for branch '2018.02.x'
+==============================
 
-> ---
->  package/flatcc/0001-gcc8-strncpy-errors.patch | 71 +++++++++++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 package/flatcc/0001-gcc8-strncpy-errors.patch
-> 
-> diff --git a/package/flatcc/0001-gcc8-strncpy-errors.patch b/package/flatcc/0001-gcc8-strncpy-errors.patch
-> new file mode 100644
-> index 0000000..bf7d35b
-> --- /dev/null
-> +++ b/package/flatcc/0001-gcc8-strncpy-errors.patch
-> @@ -0,0 +1,71 @@
-> +Fix compilation with gcc8
-> +
-> +gcc8 issues errors for uses of strncpy where the NULL terminator may not be
-> +copied.
-> +
-> +Upstream is aware of the issue, and it is possible this patch may be removed
-> +when the version is bumped in the future.
-> +
-> +Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-> +
-> +diff --git a/include/flatcc/reflection/flatbuffers_common_reader.h b/include/flatcc/reflection/flatbuffers_common_reader.h
-> +index faa7a9f..b86ffbc 100644
-> +--- a/include/flatcc/reflection/flatbuffers_common_reader.h
-> ++++ b/include/flatcc/reflection/flatbuffers_common_reader.h
-> +@@ -433,7 +433,12 @@ static inline T N ## _ ## NK(N ## _struct_t t) { return t ? &(t->NK) : 0; }
-> + /* If fid is null, the function returns true without testing as buffer is not expected to have any id. */
-> + static inline int flatbuffers_has_identifier(const void *buffer, const char *fid)
-> + { flatbuffers_thash_t id, id2 = 0; if (fid == 0) { return 1; };
-> +-  strncpy((char *)&id2, fid, sizeof(id2));
-> ++  const char *s;
-> ++  unsigned int i;
-> ++  for (s = fid, i = 0; i < sizeof(id2); ++i) {
-> ++    ((char *)&id2)[i] = *s;
-> ++    s += *s != 0;
-> ++  }
-> +   /* Identifier strings are always considered little endian. */
-> +   id2 = __flatbuffers_thash_cast_from_le(id2);
-> +   id = __flatbuffers_thash_read_from_pe(((flatbuffers_uoffset_t *)buffer) + 1);
-> +diff --git a/src/runtime/json_printer.c b/src/runtime/json_printer.c
-> +index 8fe2483..5baceb2 100644
-> +--- a/src/runtime/json_printer.c
-> ++++ b/src/runtime/json_printer.c
-> +@@ -1013,6 +1013,8 @@ static int accept_header(flatcc_json_printer_t * ctx,
-> +         const void *buf, size_t bufsiz, const char *fid)
-> + {
-> +     flatbuffers_thash_t id, id2 = 0;
-> ++    const char *s;
-> ++    unsigned int i;
-> + 
-> +     if (buf == 0 || bufsiz < offset_size + FLATBUFFERS_IDENTIFIER_SIZE) {
-> +         RAISE_ERROR(bad_input);
-> +@@ -1020,7 +1022,10 @@ static int accept_header(flatcc_json_printer_t * ctx,
-> +         return 0;
-> +     }
-> +     if (fid != 0) {
-> +-        strncpy((char *)&id2, fid, FLATBUFFERS_IDENTIFIER_SIZE);
-> ++        for (s = fid, i = 0; i < sizeof(id2); ++i) {
-> ++            ((char *)&id2)[i] = *s;
-> ++            s += *s != 0;
-> ++        }
-> +         id2 = __flatbuffers_thash_cast_from_le(id2);
-> +         id = __flatbuffers_thash_read_from_pe((uint8_t *)buf + offset_size);
-> +         if (!(id2 == 0 || id == id2)) {
-> +diff --git a/src/runtime/verifier.c b/src/runtime/verifier.c
-> +index 68dbc1b..0733ff0 100644
-> +--- a/src/runtime/verifier.c
-> ++++ b/src/runtime/verifier.c
-> +@@ -111,7 +111,12 @@ static inline uoffset_t read_uoffset(const void *p, uoffset_t base)
-> + static inline thash_t read_thash_identifier(const char *identifier)
-> + {
-> +     flatbuffers_thash_t id = 0;
-> +-    strncpy((char *)&id, identifier, sizeof(id));
-> ++    const char *s;
-> ++    unsigned int i;
-> ++    for (s = identifier, i = 0; i < sizeof(id); ++i) {
-> ++        ((char *)&id)[i] = *s;
-> ++        s += *s != 0;
-> ++    }
-> +     return __flatbuffers_thash_cast_from_le(id);
-> + }
-> + 
+Classification of failures by reason
+------------------------------------
+
+          host-faketime-v0.9.6 | 1 
+                    mpv-0.27.2 | 1 
+                    quota-4.01 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |           host-faketime-v0.9.6 | NOK | http://autobuild.buildroot.net/results/40c2a6329a14167de0480795ff0cb44d7dff2af1 | ORPH
+         arm |                     mpv-0.27.2 | NOK | http://autobuild.buildroot.net/results/99da55a946380f034ad8441e34fa4b9abd4921f0 |     
+         arc |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/978ce51f631f67fff15ea813d8ce9d2bd0175618 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+            host-flatcc-v0.5.1 | 6 
+                 opencv3-3.3.0 | 3 
+                qt5base-5.10.1 | 2 
+               aircrack-ng-1.2 | 1 
+                libmpeg2-0.5.1 | 1 
+                  mender-1.4.0 | 1 
+                 mesa3d-18.1.1 | 1 
+              mjpegtools-2.1.0 | 1 
+               mono-5.12.0.226 | 1 
+                protobuf-3.5.1 | 1 
+               qt5webkit-5.9.1 | 1 
+                  samba4-4.8.1 | 1 
+       shadowsocks-libev-3.2.0 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                aircrack-ng-1.2 | NOK | http://autobuild.buildroot.net/results/ace1e0218acafd641c3d4bc6cc2e3264fd159900 |     
+microblazeel |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/2fb09bf9035c027aa58e4988f6abc2ec456c70ed |     
+    mips64el |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/cb6d0361ccfb1ac1f15f0ceff6ff251eb781c9b4 |     
+         arm |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/b0fad59043cbcc2ce2d58c54577d10219642958c |     
+      mipsel |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/cc00979da3d00187e93ef92fdaa0e743f39e4c30 |     
+ powerpc64le |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/1636ec6ddad92add95f42451d941156451c6d936 |     
+       sparc |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/66d07002c20b77507e60c236fbb9be78e0216136 |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/b4bfddceeb0fe0020de5419548daad7ee2058427 | ORPH
+ powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/27ffa84f09270d9108d687cc6edf520350867c5c |     
+      x86_64 |                  mesa3d-18.1.1 | NOK | http://autobuild.buildroot.net/results/ccd07150e459b2b2caba6e561ecc6eae60c83ef5 |     
+     powerpc |               mjpegtools-2.1.0 | NOK | http://autobuild.buildroot.net/results/8a1c30a9c08f76a09c1d6130ec088d2c82dc55dd |     
+      mipsel |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/33f7056a2da883d3b1e1d6a4cb776695fd8c1a31 |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/9416c5fb7c16ba2c6fcb930a3a6347f6d40f1c45 |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/f8e70791485653e6c433e271bcb2812212a9e372 |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/6f48aa9821e4fa5184ed583916013caadc0704c2 |     
+     sparc64 |                 protobuf-3.5.1 | NOK | http://autobuild.buildroot.net/results/6c05d9920422ffacb0819b4046c7ba3fb4dfc02a |     
+        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/c7eb81fd70b1dcc35985af69e2196caa8f07fac9 |     
+        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/95f22d805f16864e8e922ff3a14de98136a8351c |     
+      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/00c64e227dd3fc35a606d462fc915632ccd65a65 |     
+      mipsel |                   samba4-4.8.1 | NOK | http://autobuild.buildroot.net/results/7a5a2faed4ee50b0a7bb2cbe0af4b4ef42306c3c |     
+       sparc |        shadowsocks-libev-3.2.0 | NOK | http://autobuild.buildroot.net/results/552b09ffe951c429422529c895f4c3ec723cf5ab |     
+
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+http://autobuild.buildroot.net
