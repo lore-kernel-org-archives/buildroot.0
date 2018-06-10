@@ -1,88 +1,156 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jun 2018 17:44:58 +0200
-Subject: [Buildroot] [PATCH 2/2 v3] support/docker: use the distro-provided
- flake8
-In-Reply-To: <cover.1528645489.git.yann.morin.1998@free.fr>
-References: <cover.1528645489.git.yann.morin.1998@free.fr>
-Message-ID: <720ecb41c6c51f66f6b4dda7663c1e16edb2fabb.1528645489.git.yann.morin.1998@free.fr>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 10 Jun 2018 18:33:00 +0200
+Subject: [Buildroot] [PATCH] SSP: disable ssp support on microblaze
+Message-ID: <20180610163300.6440-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we install flake8 and its dependencies via pip. We
-tried to be reproducible by pinning the version of those python
-packages, but we did forget quite a few of them, and thus some
-dependencies for flake8 are installed as uncontrolled versions.
+As reported by [1], SSP support is missing in the Buildroot toolchain
+for microblaze even if it's requested by selecting
+BR2_TOOLCHAIN_HAS_SSP config option.
 
-Furthermore, before we install flake8 and its dependencies, we
-forcibly update pip, setuptools, and wheels packages to their
-latest versions. This explicitly breaks reproducibility.
+In Buildroot, we are using libssp provided by the C library (Glibc,
+musl, uClibc-ng) when available. We are not using libssp from gcc.
 
-While we could enforce a specific version of all those packages
-and still grab them from PyPI, we can simply grab them from the
-distribution-provided packages instead.
+So for a microblaze glibc based toolchain, the SSP support is enabled
+unconditionally by a select BR2_TOOLCHAIN_HAS_SSP.
 
-Since we're using a pinned version of stretch, this already
-guarantees we'll reproducibly get the same versions over and
-over again. Besides, we just need to list flake8 as a package to
-install to automatically get all its dependencies (again, in a
-reproducible way).
+BR2_microblazeel=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_KERNEL_HEADERS_4_14=y
+BR2_BINUTILS_VERSION_2_30_X=y
+BR2_GCC_VERSION_8_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
 
-This has the slight unfortunate drawback of downgrading flake8
-to version 3.2.1, from version 3.5.0, as well as downgrading a
-few of flake8's dependencies, as noticed by Ricardo:
-    http://lists.busybox.net/pipermail/buildroot/2018-May/222376.html
+While building the toolchain, we are building host-binutils which
+provide "as" (assembler) and host-gcc-initial wich provide a
+minimal cross gcc (C only cross-compiler without any C library).
+When SSP support is requested, gcc_cv_libc_provides_ssp=yes is
+added to the make command line (see [2] for full details)
 
-However, as Ricardo said, there isn't "any serious limitation of
-this old version, the release notes for a version in the between
-mentions 'Dramatically improve the performance' but we have a
-limited number of scripts and running on Gitlab for all of them
-still takes less than 5 minutes".
+With this setting, the SSP support is requested but it's not available
+in the end and the toochain build succeed.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Acked-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+When the microblaze toolchain is imported to Biuldroot (2018.05) as
+external toolchain with BR2_TOOLCHAIN_EXTERNAL_HAS_SSP set, the build
+stop with :
+"SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP"
 
+The test is doing the following command line:
+
+echo 'void main(){}' | [...]/host/bin/microblazeel-linux-gcc.br_real -Werror -fstack-protector -x c - -o [...]/build/.br-toolchain-test.tmp
+cc1: error: -fstack-protector not supported for this target [-Werror]
+
+When we look at the gcc-final log file (config.log) we can see this
+error several time when using the minimal gcc (from host-gcc-initial).
+So Why the minimal gcc doesn't support SSP?
+
+When we look at the gcc-initial log file (config.log) we can see an
+error with 'as':
+
+configure:23194: checking assembler for cfi directives
+configure:23209: [...]microblazeel-buildroot-linux-gnu/bin/as    -o conftest.o conftest.s >&5
+conftest.s: Assembler messages:
+conftest.s:2: Error: CFI is not supported for this target
+conftest.s:3: Error: CFI is not supported for this target
+conftest.s:4: Error: CFI is not supported for this target
+conftest.s:5: Error: CFI is not supported for this target
+conftest.s:6: Error: CFI is not supported for this target
+conftest.s:7: Error: CFI is not supported for this target
+configure:23212: $? = 1
+configure: failed program was
+    .text
+    .cfi_startproc
+    .cfi_offset 0, 0
+    .cfi_same_value 1
+    .cfi_def_cfa 1, 2
+    .cfi_escape 1, 2, 3, 4, 5
+    .cfi_endproc
+
+This is the only relevant difference compared to a nios2 toolchain where
+libssp is enabled and available (nios2 is an example).
+
+"CFI" stand for "Control Flow Integrity" and it seems that SSP support
+requires CFI target support (see [3] for some explanation).
+
+The SSP support seems to depends on CFI support, but the toolchain
+infrastructure is not detailed enough to handle the CFI dependency.
+
+In the other hand, microblaze is the only architecture where CFI support
+is missing.
+
+Disable SSP support for microblaze entirely.
+
+Fixes:
+https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006389
+
+[1] https://gitlab.com/free-electrons/toolchains-builder/issues/1
+[2] https://git.buildroot.net/buildroot/tree/package/gcc/gcc.mk?h=2018.05#n275
+[3] https://grsecurity.net/rap_faq.php
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> v2:
-  - improve commit log to mention downgrading of flake8  (Ricardo)
-  - correctly use python2's version of flake8, not python3's  (Ricardo)
-  - fix typoes  (Ricardo)
----
- support/docker/Dockerfile | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ package/glibc/Config.in  | 3 ++-
+ package/musl/Config.in   | 3 ++-
+ package/uclibc/Config.in | 1 +
+ toolchain/Config.in      | 3 +++
+ 4 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index bebd861dc1..36cd3b28a4 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -36,9 +36,9 @@ RUN apt-get install -y --no-install-recommends \
-         libncurses5-dev \
-         locales \
-         mercurial \
-+        python-flake8 \
-         python-nose2 \
-         python-pexpect \
--        python-pip \
-         qemu-system-arm \
-         qemu-system-x86 \
-         rsync \
-@@ -49,14 +49,6 @@ RUN apt-get install -y --no-install-recommends \
-     apt-get -y autoremove && \
-     apt-get -y clean
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 57a2e833d2..7adf76699d 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_GLIBC
+ 	bool
+ 	default y
+ 	select BR2_PACKAGE_LINUX_HEADERS
+-	select BR2_TOOLCHAIN_HAS_SSP
++	# SSP not supported on microblaze
++	select BR2_TOOLCHAIN_HAS_SSP if !BR2_microblaze
  
--# For check-flake8
--RUN python -m pip install --upgrade pip setuptools wheel && \
--    pip install -q \
--        flake8==3.5.0 \
--        mccabe==0.6.1 \
--        pycodestyle==2.3.1 \
--        pyflakes==1.6.0
--
- # To be able to generate a toolchain with locales, enable one UTF-8 locale
- RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
-     /usr/sbin/locale-gen
+ endif
+diff --git a/package/musl/Config.in b/package/musl/Config.in
+index bedc50cd45..4e0d6f4ef1 100644
+--- a/package/musl/Config.in
++++ b/package/musl/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_MUSL
+ 	depends on BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_LINUX_HEADERS
+ 	# SSP broken on i386/ppc: http://www.openwall.com/lists/musl/2016/12/04/2
+-	select BR2_TOOLCHAIN_HAS_SSP if !(BR2_i386 || BR2_powerpc)
++	# SSP not supported on microblaze
++	select BR2_TOOLCHAIN_HAS_SSP if !(BR2_i386 || BR2_microblaze || BR2_powerpc)
+ 	# Compatibility headers: cdefs.h, queue.h
+ 	select BR2_PACKAGE_MUSL_COMPAT_HEADERS
+diff --git a/package/uclibc/Config.in b/package/uclibc/Config.in
+index a566881852..0161954076 100644
+--- a/package/uclibc/Config.in
++++ b/package/uclibc/Config.in
+@@ -70,6 +70,7 @@ config BR2_PTHREAD_DEBUG
+ 
+ config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
+ 	bool "Enable stack protection support"
++	depends on !BR2_microblaze # SSP not supported on microblaze
+ 	select BR2_TOOLCHAIN_HAS_SSP
+ 	help
+ 	  Enable stack smashing protection support using GCCs
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 3a53a32a6d..1bf71a6d52 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -122,6 +122,9 @@ config BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+ config BR2_TOOLCHAIN_HAS_SSP
+ 	bool
++	# SSP support require CFI architecture support.
++	# https://gitlab.com/free-electrons/toolchains-builder/issues/1
++	depends on !BR2_microblaze # missing CFI support in "gas"
+ 
+ config BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	bool
 -- 
-2.14.1
+2.14.4
