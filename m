@@ -1,36 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Jun 2018 15:49:05 +0200
-Subject: [Buildroot] [PATCH 1/1] pixiewps: fix static linking with
- uclibc-ng
-In-Reply-To: <20180609135820.2002-1-fontaine.fabrice@gmail.com>
-References: <20180609135820.2002-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180610154905.096c55e6@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 10 Jun 2018 15:54:34 +0200
+Subject: [Buildroot] [PATCH 1/1] libwebsockets: add optional libevent
+ dependency
+Message-ID: <20180610135434.27878-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+libevent is supported since 2.3.0
 
-On Sat,  9 Jun 2018 15:58:20 +0200, Fabrice Fontaine wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libwebsockets/libwebsockets.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> +PIXIEWPS_MAKE_OPTS = \
-> +	$(TARGET_CONFIGURE_OPTS) \
-> +	PREFIX=/usr
-
-Why are you introducing PIXIEWPS_MAKE_OPTS instead of using
-TARGET_CONFIGURE_OPTS directly ?
-
-Indeed your change also has the consequence of passing PREFIX=/usr at
-build time. Is this necessary ? This seems like an unrelated change.
-
-By the way, are you on IRC ?
-
-Best regards,
-
-Thomas
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 28fd183393..81e398bedd 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -35,6 +35,13 @@ else
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBEVENT),y)
++LIBWEBSOCKETS_DEPENDENCIES += libevent
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=ON
++else
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUV),y)
+ LIBWEBSOCKETS_DEPENDENCIES += libuv
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBUV=ON
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
