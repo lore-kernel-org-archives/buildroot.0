@@ -1,51 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Jun 2018 15:58:29 +0200
-Subject: [Buildroot] [git commit] rustc: drop BR2_PACKAGE_HAS_HOST_RUSTC
-Message-ID: <20180610135723.4A30A8447E@busybox.osuosl.org>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Sun, 10 Jun 2018 10:03:16 -0400
+Subject: [Buildroot] [PATCH] libusb: add an option to compile examples
+Message-ID: <20180610140316.7125-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9962368a90516fa90625be58319b486f960afa1c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This commit drops the option BR2_PACKAGE_HAS_HOST_RUSTC, which is no
-longer used following commit bd425f716f0a92ef627f7287869d88ca408fe55e
-("host-cargo: select host-rustc").
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 ---
- package/rustc/Config.in.host | 5 -----
- 1 file changed, 5 deletions(-)
+ package/libusb/Config.in |  7 +++++++
+ package/libusb/libusb.mk | 11 +++++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
-index 84a8e0f90b..2ae8f89d3f 100644
---- a/package/rustc/Config.in.host
-+++ b/package/rustc/Config.in.host
-@@ -46,7 +46,6 @@ config BR2_PACKAGE_HOST_RUST
- 	depends on BR2_HOST_GCC_AT_LEAST_4_7 # required by LLVM
- 	# triggers ICE on trunc_int_for_mode, at explow.c:56
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_aarch64
--	select BR2_PACKAGE_HAS_HOST_RUSTC
- 	help
- 	  This package will build the compiler for the host as well as
- 	  two flavors of the standard library: one for the host, another
-@@ -61,16 +60,12 @@ comment "host-rust needs host gcc >= 4.7"
+diff --git a/package/libusb/Config.in b/package/libusb/Config.in
+index 5238588aa8..d31a717fdf 100644
+--- a/package/libusb/Config.in
++++ b/package/libusb/Config.in
+@@ -6,5 +6,12 @@ config BR2_PACKAGE_LIBUSB
  
- config BR2_PACKAGE_HOST_RUST_BIN
- 	bool "host rust (pre-built)"
--	select BR2_PACKAGE_HAS_HOST_RUSTC
- 	help
- 	  This package will install pre-built versions of the compiler
- 	  for the host and the Rust standard library for the target.
+ 	  http://libusb.info/
  
- endchoice
++if BR2_PACKAGE_LIBUSB
++
++config BR2_PACKAGE_LIBUSB_EXAMPLES
++	bool "build libusb examples"
++
++endif
++
+ comment "libusb needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index aee3622f8d..89ec91bb42 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -25,5 +25,16 @@ else
+ LIBUSB_CONF_OPTS += --disable-udev
+ endif
  
--config BR2_PACKAGE_HAS_HOST_RUSTC
--	bool
--
- config BR2_PACKAGE_PROVIDES_HOST_RUSTC
- 	string
- 	default "host-rust" if BR2_PACKAGE_HOST_RUST
++ifeq ($(BR2_PACKAGE_LIBUSB_EXAMPLES),y)
++LIBUSB_CONF_OPTS += --enable-examples-build
++define LIBUSB_INSTALL_TARGET_EXAMPLES
++	for example in listdevs xusb fxload hotplugtest testlibusb dpfp dpfp_threaded sam3u_benchmark ; do \
++		[ -x $(@D)/examples/$${example} ] || continue; \
++		cp -dpfr $(@D)/examples/$${example} $(TARGET_DIR)/usr/bin; \
++	done
++endef
++LIBUSB_POST_INSTALL_TARGET_HOOKS += LIBUSB_INSTALL_TARGET_EXAMPLES
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.17.1
