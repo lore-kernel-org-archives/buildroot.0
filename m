@@ -1,35 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Jun 2018 12:53:36 +0200
-Subject: [Buildroot] [PATCH] docs/manual: document filesystems
-In-Reply-To: <20180610081217.GB2471@scaer>
-References: <20180609094647.21460-1-yann.morin.1998@free.fr>
- <1806912659.2037633.1528582803656.JavaMail.zimbra@datacom.com.br>
- <20180610081217.GB2471@scaer>
-Message-ID: <20180610125336.76c28b84@windsurf>
+Date: Sun, 10 Jun 2018 13:21:41 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself for sqlite
+Message-ID: <20180610111948.F04A887779@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0aa611fd0ee8b9260cafba1e3fa721e1b226a8bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 10 Jun 2018 10:12:17 +0200, Yann E. MORIN wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-> I also wondered about that.
-> 
-> But I was a bit wary of creating another chapter just for filesystems.
-> 
-> And notice that in the package chapter, we also talk about the
-> 'asciidoc-document' infra, which is already not a package infra.
-> 
-> I'd like input from others. Thomas, Peter, Arnout?
-
-The section about packages is already very long, so I wouldn't mind
-seeing other sections being created outside of it.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d5345f47f3..eaf64ede61 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -371,6 +371,7 @@ F:	package/python-slob/
+ F:	package/rtmpdump/
+ F:	package/samba4/
+ F:	package/softether/
++F:	package/sqlite/
+ F:	package/taglib/
+ F:	package/tinyxml2/
+ F:	package/tor/
