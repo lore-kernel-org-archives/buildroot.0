@@ -1,56 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Jun 2018 16:43:53 +0200
-Subject: [Buildroot] [git commit] mender: fix check-package warnings
-Message-ID: <20180610144221.31AA7846DF@busybox.osuosl.org>
+Date: Sun, 10 Jun 2018 16:45:26 +0200
+Subject: [Buildroot] [PATCH] docs/manual: always point to the correct
+ license file
+In-Reply-To: <20180602080101.23051-1-yann.morin.1998@free.fr>
+References: <20180602080101.23051-1-yann.morin.1998@free.fr>
+Message-ID: <20180610164526.39af76ed@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12b70acb82acfa4925a8436a31a668ac92a58d1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
+On Sat,  2 Jun 2018 10:01:01 +0200, Yann E. MORIN wrote:
+> The manual is GPL-2, and points to the COPYING file in the repository.
+> When we do a rendering of the manual for a specific version, that URL
+> is currently always poitning to the latest version of the COPYING file.
+> 
+> If we ever have to change the content of that file (e.g. to add a new
+> exception, more clarifications, a license change, or whatever), then
+> an old manual would point to that newer version, which would then be
+> incorrect.
+> 
+> Include the sha1 of the commit in the URL, so that the manual always
+> point to the tree at the time the manual was rendered, not the time
+> it is consulted. Contrary to the informative text above, use the full
+> sha1, not the shortened one.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  docs/manual/manual.txt | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-package/mender/Config.in:7: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-package/mender/Config.in:8: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-package/mender/mender.mk:8: remove default value of _SOURCE variable (http://nightly.buildroot.org/#generic-package-reference)
+To be honest, I am not sure how likely it is that the COPYING file ever
+changes. The copyright is owned by all the authors of the project, so a
+license change would be very difficult to do.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mender/Config.in | 8 ++++----
- package/mender/mender.mk | 1 -
- 2 files changed, 4 insertions(+), 5 deletions(-)
+But anyway, since the change was there and is pretty simple, I've
+applied. Thanks!
 
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-index 61a20cfd8a..e461857486 100644
---- a/package/mender/Config.in
-+++ b/package/mender/Config.in
-@@ -4,10 +4,10 @@ config BR2_PACKAGE_MENDER
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	help
--	  Mender is an open source over-the-air (OTA) software updater for
--	  embedded Linux devices. Mender comprises a client running at the
--	  embedded device, as well as a server that manages deployments
--	  across many devices.
-+	  Mender is an open source over-the-air (OTA) software updater
-+	  for embedded Linux devices. Mender comprises a client
-+	  running at the embedded device, as well as a server that
-+	  manages deployments across many devices.
- 
- 	  https://github.com/mendersoftware/mender
- 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index ab0078e0cc..695b5e7a91 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -5,7 +5,6 @@
- ################################################################################
- 
- MENDER_VERSION = 1.4.0
--MENDER_SOURCE = mender-$(MENDER_VERSION).tar.gz
- MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
- 
- define MENDER_INSTALL_CONFIG_FILES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
