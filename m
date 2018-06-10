@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Jun 2018 15:57:55 +0200
-Subject: [Buildroot] [git commit] host-cargo: select host-rustc
-Message-ID: <20180610135723.419C08447E@busybox.osuosl.org>
+Date: Sun, 10 Jun 2018 15:58:29 +0200
+Subject: [Buildroot] [git commit] rustc: drop BR2_PACKAGE_HAS_HOST_RUSTC
+Message-ID: <20180610135723.4A30A8447E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd425f716f0a92ef627f7287869d88ca408fe55e
+commit: https://git.buildroot.net/buildroot/commit/?id=9962368a90516fa90625be58319b486f960afa1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot documentation specifies that cargo-based package should only
-depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS and selects
-BR2_PACKAGE_HOST_CARGO but this fails with the following error:
+This commit drops the option BR2_PACKAGE_HAS_HOST_RUSTC, which is no
+longer used following commit bd425f716f0a92ef627f7287869d88ca408fe55e
+("host-cargo: select host-rustc").
 
-warning: (BR2_PACKAGE_LIBRSVG) selects BR2_PACKAGE_HOST_CARGO which has
-unmet direct dependencies (BR2_PACKAGE_HAS_HOST_RUSTC)
-
-Indeed, host-cargo depends on
-BR2_PACKAGE_HAS_HOST_RUSTC which is selected only when host-rustc is
-selected.
-
-So instead of having to select both cargo and rustc in each cargo-based
-package, replace BR2_PACKAGE_HAS_HOST_RUSTC dependency by
-BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS and select
-BR2_PACKAGE_HOST_RUSTC
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cargo/Config.in.host | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/rustc/Config.in.host | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/cargo/Config.in.host b/package/cargo/Config.in.host
-index 0f1ca305c6..c33c6851f2 100644
---- a/package/cargo/Config.in.host
-+++ b/package/cargo/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_CARGO
- 	bool "host cargo"
--	depends on BR2_PACKAGE_HAS_HOST_RUSTC
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
+diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+index 84a8e0f90b..2ae8f89d3f 100644
+--- a/package/rustc/Config.in.host
++++ b/package/rustc/Config.in.host
+@@ -46,7 +46,6 @@ config BR2_PACKAGE_HOST_RUST
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_7 # required by LLVM
+ 	# triggers ICE on trunc_int_for_mode, at explow.c:56
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_aarch64
+-	select BR2_PACKAGE_HAS_HOST_RUSTC
  	help
- 	  Cargo is the package manager for the Rust programming
- 	  language.
+ 	  This package will build the compiler for the host as well as
+ 	  two flavors of the standard library: one for the host, another
+@@ -61,16 +60,12 @@ comment "host-rust needs host gcc >= 4.7"
+ 
+ config BR2_PACKAGE_HOST_RUST_BIN
+ 	bool "host rust (pre-built)"
+-	select BR2_PACKAGE_HAS_HOST_RUSTC
+ 	help
+ 	  This package will install pre-built versions of the compiler
+ 	  for the host and the Rust standard library for the target.
+ 
+ endchoice
+ 
+-config BR2_PACKAGE_HAS_HOST_RUSTC
+-	bool
+-
+ config BR2_PACKAGE_PROVIDES_HOST_RUSTC
+ 	string
+ 	default "host-rust" if BR2_PACKAGE_HOST_RUST
