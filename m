@@ -1,52 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jun 2018 14:09:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpg123: security bump to version
- 1.25.10
-Message-ID: <20180610120910.17574-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 10 Jun 2018 14:10:45 +0200
+Subject: [Buildroot] [git commit] package/dtv-scan-tables: bump version
+Message-ID: <20180610120848.5CA988633E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 1.25.4 fixes CVE-2017-9545, for details see release notes:
-http://www.mpg123.org/cgi-bin/news.cgi
-
-Added upstream hashes.
+commit: https://git.buildroot.net/buildroot/commit/?id=2cc2a63ea107eb36d1b45860983ecd9b959ddae0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpg123/mpg123.hash | 8 +++++---
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/dtv-scan-tables/dtv-scan-tables.hash | 2 +-
+ package/dtv-scan-tables/dtv-scan-tables.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index cbab6f3ee9..22db5bca3c 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,5 +1,7 @@
--# Locally calculated after checking pgp signature
--sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
--
-+# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.10/
-+sha1 604784ddbcfe282bffdc595d1d45c677c7cf381f  mpg123-1.25.10.tar.bz2
-+md5 ea32caa61d41d8be797f0b04a1b43ad9  mpg123-1.25.10.tar.bz2
-+# Locally calculated
-+sha256 6c1337aee2e4bf993299851c70b7db11faec785303cfca3a5c3eb5f329ba7023  mpg123-1.25.10.tar.bz2
- # License file
- sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 01923d7990..dd2d39d978 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.hash b/package/dtv-scan-tables/dtv-scan-tables.hash
+index 1aa6bd59fa..29d0c4cc54 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.hash
++++ b/package/dtv-scan-tables/dtv-scan-tables.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 7ded9b437fc3345bbd13a6c1c446c54d0e24d2d337e5abda223adb6362916d8c  dtv-scan-tables-07b18ecef17493ac0908a2e112eae3fe269da7fa.tar.gz
++sha256 7860092725f07ac6f974415e9f06a2763710d308b0817f7c3641aaf4b902ccc5  dtv-scan-tables-c2b6af67f7d8620acbf052fc754ec831ed2188ba.tar.gz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+ sha256 4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index b7f82562f2..fe0a310817 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MPG123_VERSION = 1.25.2
-+MPG123_VERSION = 1.25.10
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_CONF_OPTS = --disable-lfs-alias
--- 
-2.17.1
+-DTV_SCAN_TABLES_VERSION = 07b18ecef17493ac0908a2e112eae3fe269da7fa
++DTV_SCAN_TABLES_VERSION = c2b6af67f7d8620acbf052fc754ec831ed2188ba
+ DTV_SCAN_TABLES_SITE = http://git.linuxtv.org/cgit.cgi/dtv-scan-tables.git
+ DTV_SCAN_TABLES_SITE_METHOD = git
+ 
