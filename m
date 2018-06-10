@@ -1,60 +1,133 @@
-From: Min Xu <xuminready@gmail.com>
-Date: Sun, 10 Jun 2018 01:01:04 -0700
-Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: fix sync handling
-Message-ID: <20180610080104.10059-1-xuminready@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 10 Jun 2018 10:12:17 +0200
+Subject: [Buildroot] [PATCH] docs/manual: document filesystems
+In-Reply-To: <1806912659.2037633.1528582803656.JavaMail.zimbra@datacom.com.br>
+References: <20180609094647.21460-1-yann.morin.1998@free.fr>
+ <1806912659.2037633.1528582803656.JavaMail.zimbra@datacom.com.br>
+Message-ID: <20180610081217.GB2471@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To fixup linking errors:
-"undefined reference to `__sync_val_compare_and_swap_4'"
-Fixes
-http://autobuild.buildroot.net/results/552b09ffe951c429422529c895f4c3ec723cf5ab
+Carlos, All,
 
-http://autobuild.buildroot.net/results/4810526381e15a194767753d324875bfbf5e3dde
-http://autobuild.buildroot.net/results/9cb76805c2f2952aa434d143831ee03c7d43aa52
+Thanks for the review! :-)
 
-http://autobuild.buildroot.net/results/d00c5f9e1e7a6a40fac5763a06977b351b7875da
-http://autobuild.buildroot.net/results/0612f2dc09a8763fdf2111ee8d0c223c8531262a
+On 2018-06-09 19:20 -0300, Carlos Santos spake thusly:
+> > From: "Yann Morin" <yann.morin.1998@free.fr>
+[--SNIP--]
+> > diff --git a/docs/manual/adding-filesystems.txt
+> > b/docs/manual/adding-filesystems.txt
+> > new file mode 100644
+> > index 0000000000..4731526c0f
+> > --- /dev/null
+> > +++ b/docs/manual/adding-filesystems.txt
+> > @@ -0,0 +1,119 @@
+> > +// -*- mode:doc; -*-
+> > +// vim: set syntax=asciidoc:
+> > +
+> > +=== Infrastructure for filesystems
+> 
+> Shouldn't this be a separate chapter instead of a section of packages?
+> Filesystems are different from packages, regardless the syntactical
+> similarities in the configurations and recipe files. See also the
+> comment below about the hooks section.
 
-delete unused hash info.
+I also wondered about that.
 
-Signed-off-by: Min Xu <xuminready@gmail.com>
----
- package/shadowsocks-libev/Config.in              | 10 ++++++++++
- package/shadowsocks-libev/shadowsocks-libev.hash |  1 -
- 2 files changed, 10 insertions(+), 1 deletion(-)
+But I was a bit wary of creating another chapter just for filesystems.
 
-diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
-index d02e5a93ef..1ec4f35bf3 100644
---- a/package/shadowsocks-libev/Config.in
-+++ b/package/shadowsocks-libev/Config.in
-@@ -1,5 +1,15 @@
-+# It requires __sync_*() intrinsics:
-+# the 4-byte ones on 32 bits architectures, and the 4-byte and 8-byte
-+#   one on 64 bits architecture
-+config BR2_PACKAGE_SHADOWSOCKS_LIBEV_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_ARCH_IS_64
-+	default y if BR2_TOOLCHAIN_HAS_SYNC_4 && BR2_TOOLCHAIN_HAS_SYNC_8 && BR2_ARCH_IS_64
-+
- config BR2_PACKAGE_SHADOWSOCKS_LIBEV
- 	bool "shadowsocks-libev"
-+	depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_C_ARES
- 	select BR2_PACKAGE_LIBEV
-diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
-index e8be8a8a71..fffe9fddf0 100644
---- a/package/shadowsocks-libev/shadowsocks-libev.hash
-+++ b/package/shadowsocks-libev/shadowsocks-libev.hash
-@@ -5,4 +5,3 @@ sha256 5521cf623a07fd1e393528516a83acd2b66c5d4bb4535a52662806a6a060c606 shadowso
- sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
- sha256 c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
- sha256 4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
--sha256 4b3adc9ce620fa868f1dda328203dbccbd3e9f5fbafb49c581edc386a504ee1a  libipset/LICENSE.txt
+And notice that in the package chapter, we also talk about the
+'asciidoc-document' infra, which is already not a package infra.
+
+I'd like input from others. Thomas, Peter, Arnout?
+
+[--SNIP--]
+> There are two fundamental differences between packages and filesystem
+> images:
+> 
+> Filesystem images are always rebuilt and installed while packages are
+> built/installed once and rebuilt/re-installed only on explicit calls
+> to "make pkg-name-{reconfigure,rebuild,reinstall}".
+
+ACK, good point. I'll add this to the first section, that explains the
+infra.
+
+> Packages are supposed to install, remove or modify files in the global
+> $(TARGET_DIR) hierarchy.
+
+Well, in the first part of this patch, I added a description of the
+sequence, making it obvious (or so I hoped) that indeed filesystems were
+acting on a transient copy:
+
+    2.  Then for each filesystem:
+      * extract the intermediate tarball to a filesystem-specific $(TARGET_DIR),
+      [...]
+      * remove the filesystem-specific $(TARGET_DIR);
+
+> Genarating filesystem images do not modify the
+> contents of the global $(TARGET_DIR) and user-provided rootfs extensions
+> must not do this.
+
+Why do you insist on modifying the global target/ directory from your
+filesystem? If you do that, and build two or more filesystems [*], they
+might each try to modify target/ is incompatible ways, and this is not
+even safe, concurrency-wise (e.g. ony may try to archive the content of
+/var while another is doing a rm -rf on it.)
+
+The filesystem infra has been changed to provide each filesystem a copy
+of the target/ directory, so that each filesystem can do their own
+tweaks without impacting the others, without the need to be idempotent,
+and allowing filesystems to be run in parallel.
+
+I have still not seen a *compelling* reason to let filesystems muck in
+the original target/ directory.
+
+[*] Buildroot terminology, like BR2_TARGET_ROOTFS_SQUASHFS=y and
+BR2_TARGET_ROOTFS_ISO9660=y at the same time.
+
+> [Side note: we could add an optional "paranoid mode" config which would
+> trigger a checksum generation/checking right before/after the creation
+> of the rootfs images.] 
+
+Not needed, since there is no reason to let them do.
+
+> > +And here is a list of variables that may be used (but may *not* be set):
+> "must" not be set.
+
+https://www.merriam-webster.com/dictionary/may
+
+4. : SHALL, MUST ? used in law where the sense, purpose, or policy
+     requires this interpretation
+
+(yes, I tend to use a pedant or/and archaic english. ;-])
+
+> > +* +$(TARGET_DIR)+ is the directory containing the +target/+ directory.
+> > +
+> > +* +$(@)+ is the filename where to store the filesystem image into.
+> > diff --git a/docs/manual/adding-packages-hooks.txt
+> > b/docs/manual/adding-packages-hooks.txt
+> > index 0ce79f8907..34d5801169 100644
+> > --- a/docs/manual/adding-packages-hooks.txt
+> > +++ b/docs/manual/adding-packages-hooks.txt
+> 
+> Consider moving the hooks section to a separate chapter if you put the
+> filesystem text in a separate chapter too.
+
+If others agreee that the filesystem infra requires its own chapter,
+then I will, yes.
+
+Thanks again for the review! :-)
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
