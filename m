@@ -1,57 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Jun 2018 13:24:47 +0200
-Subject: [Buildroot] [git commit] package/wireless-regdb: bump version to
- 2018.05.31
-Message-ID: <20180610120714.4C1A9880A1@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 10 Jun 2018 14:09:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpg123: security bump to version
+ 1.25.10
+Message-ID: <20180610120910.17574-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54917abdd74158298fd848a58117c796c641a130
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Version 1.25.4 fixes CVE-2017-9545, for details see release notes:
+http://www.mpg123.org/cgi-bin/news.cgi
 
-Added license hash, updated project URL, old site is dead.
+Added upstream hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireless-regdb/Config.in           | 2 +-
- package/wireless-regdb/wireless-regdb.hash | 4 +++-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ package/mpg123/mpg123.hash | 8 +++++---
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
-index d9c7b8d2d1..0c9896deb9 100644
---- a/package/wireless-regdb/Config.in
-+++ b/package/wireless-regdb/Config.in
-@@ -6,4 +6,4 @@ config BR2_PACKAGE_WIRELESS_REGDB
- 	  Wireless regulatory database for CRDA. The database lists the
- 	  allowed radio frequencies for each local jurisdiction.
- 
--	  http://linuxwireless.org/en/developers/Regulatory
-+	  https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index 4163609d17..65ae735cb5 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256	371eafa3b26ece916ef83aca02c4bed2e54099eb5b8c6d22d3a4358dce6535b9	wireless-regdb-2017.03.07.tar.xz
-+sha256 e1dfbc3b97771373077f430c3c05082fae883145b37db5b2cfd12c56676fbe7b  wireless-regdb-2018.05.31.tar.xz
-+# Locally computed
-+sha256 678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 9d7a375461..e9283a00e2 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index cbab6f3ee9..22db5bca3c 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,5 +1,7 @@
+-# Locally calculated after checking pgp signature
+-sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
+-
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.10/
++sha1 604784ddbcfe282bffdc595d1d45c677c7cf381f  mpg123-1.25.10.tar.bz2
++md5 ea32caa61d41d8be797f0b04a1b43ad9  mpg123-1.25.10.tar.bz2
++# Locally calculated
++sha256 6c1337aee2e4bf993299851c70b7db11faec785303cfca3a5c3eb5f329ba7023  mpg123-1.25.10.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 01923d7990..dd2d39d978 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIRELESS_REGDB_VERSION = 2017.03.07
-+WIRELESS_REGDB_VERSION = 2018.05.31
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+-MPG123_VERSION = 1.25.2
++MPG123_VERSION = 1.25.10
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
+-- 
+2.17.1
