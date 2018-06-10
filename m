@@ -1,69 +1,92 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jun 2018 12:29:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nvidia-driver: bump version to
- 390.67
-Message-ID: <20180610102946.13837-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 10 Jun 2018 12:47:51 +0200
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: fix sync handling
+In-Reply-To: <20180610080104.10059-1-xuminready@gmail.com>
+References: <20180610080104.10059-1-xuminready@gmail.com>
+Message-ID: <20180610124751.73cb5263@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash, adjusted upstream library names.
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/nvidia-driver/nvidia-driver.hash |  5 +++--
- package/nvidia-driver/nvidia-driver.mk   | 10 +++++-----
- 2 files changed, 8 insertions(+), 7 deletions(-)
+On Sun, 10 Jun 2018 01:01:04 -0700, Min Xu wrote:
+> To fixup linking errors:
+> "undefined reference to `__sync_val_compare_and_swap_4'"
+> Fixes
+> http://autobuild.buildroot.net/results/552b09ffe951c429422529c895f4c3ec723cf5ab
+> 
+> http://autobuild.buildroot.net/results/4810526381e15a194767753d324875bfbf5e3dde
+> http://autobuild.buildroot.net/results/9cb76805c2f2952aa434d143831ee03c7d43aa52
+> 
+> http://autobuild.buildroot.net/results/d00c5f9e1e7a6a40fac5763a06977b351b7875da
+> http://autobuild.buildroot.net/results/0612f2dc09a8763fdf2111ee8d0c223c8531262a
+> 
+> delete unused hash info.
+> 
+> Signed-off-by: Min Xu <xuminready@gmail.com>
+> ---
+>  package/shadowsocks-libev/Config.in              | 10 ++++++++++
+>  package/shadowsocks-libev/shadowsocks-libev.hash |  1 -
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+> index d02e5a93ef..1ec4f35bf3 100644
+> --- a/package/shadowsocks-libev/Config.in
+> +++ b/package/shadowsocks-libev/Config.in
+> @@ -1,5 +1,15 @@
+> +# It requires __sync_*() intrinsics:
+> +# the 4-byte ones on 32 bits architectures, and the 4-byte and 8-byte
+> +#   one on 64 bits architecture
+> +config BR2_PACKAGE_SHADOWSOCKS_LIBEV_ARCH_SUPPORTS
+> +	bool
+> +	default y if BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_ARCH_IS_64
+> +	default y if BR2_TOOLCHAIN_HAS_SYNC_4 && BR2_TOOLCHAIN_HAS_SYNC_8 && BR2_ARCH_IS_64
 
-diff --git a/package/nvidia-driver/nvidia-driver.hash b/package/nvidia-driver/nvidia-driver.hash
-index e05b8f04d5..79ac052610 100644
---- a/package/nvidia-driver/nvidia-driver.hash
-+++ b/package/nvidia-driver/nvidia-driver.hash
-@@ -1,3 +1,4 @@
- # Locally computed
--sha256 3b70587582220ab1102bcb8386f206f89e6b146856af41f16eaa5910e54ef8fd  NVIDIA-Linux-x86-384.69.run
--sha256 a7b7984fc532be17c262bc4353e279824ae63625d8ae9f1016cb66d199b97650  NVIDIA-Linux-x86_64-384.69.run
-+sha256 6f4af70ee3d03ed31c497a5d555164c56057b53ecedfc0d2c8de4b0b90728805  NVIDIA-Linux-x86-390.67.run
-+sha256 6df2ca1a7420b6751bcaf257d321b14f4e5f7ca54d77a43514912a3792ece65a  NVIDIA-Linux-x86_64-390.67.run
-+sha256 bd28b0c5aeeb00eb11d3ec6f6f3449d4b3a40100914258332734a53527997526  LICENSE
-diff --git a/package/nvidia-driver/nvidia-driver.mk b/package/nvidia-driver/nvidia-driver.mk
-index 404fa881ec..a595aed4f7 100644
---- a/package/nvidia-driver/nvidia-driver.mk
-+++ b/package/nvidia-driver/nvidia-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NVIDIA_DRIVER_VERSION = 384.69
-+NVIDIA_DRIVER_VERSION = 390.67
- NVIDIA_DRIVER_SUFFIX = $(if $(BR2_x86_64),_64)
- NVIDIA_DRIVER_SITE = http://download.nvidia.com/XFree86/Linux-x86$(NVIDIA_DRIVER_SUFFIX)/$(NVIDIA_DRIVER_VERSION)
- NVIDIA_DRIVER_SOURCE = NVIDIA-Linux-x86$(NVIDIA_DRIVER_SUFFIX)-$(NVIDIA_DRIVER_VERSION).run
-@@ -46,19 +46,19 @@ NVIDIA_DRIVER_LIBS_GL = \
- 	libGLX_nvidia.so.$(NVIDIA_DRIVER_VERSION)
- 
- NVIDIA_DRIVER_LIBS_EGL = \
--	libEGL.so.1 \
-+	libEGL.so.1.1.0 \
- 	libGLdispatch.so.0 \
- 	libEGL_nvidia.so.$(NVIDIA_DRIVER_VERSION)
- 
- NVIDIA_DRIVER_LIBS_GLES = \
--	libGLESv1_CM.so.1 \
--	libGLESv2.so.2 \
-+	libGLESv1_CM.so.1.2.0 \
-+	libGLESv2.so.2.1.0 \
- 	libGLESv1_CM_nvidia.so.$(NVIDIA_DRIVER_VERSION) \
- 	libGLESv2_nvidia.so.$(NVIDIA_DRIVER_VERSION)
- 
- NVIDIA_DRIVER_LIBS_MISC = \
- 	libnvidia-eglcore.so.$(NVIDIA_DRIVER_VERSION) \
--	libnvidia-egl-wayland.so.1.0.1 \
-+	libnvidia-egl-wayland.so.1.0.2 \
- 	libnvidia-glcore.so.$(NVIDIA_DRIVER_VERSION) \
- 	libnvidia-glsi.so.$(NVIDIA_DRIVER_VERSION) \
- 	tls/libnvidia-tls.so.$(NVIDIA_DRIVER_VERSION) \
+This could perhaps be written a bit more simply:
+
+config BR2_PACKAGE_SHADOWSOCKS_LIBEV_ARCH_SUPPORTS
+	bool
+	default y
+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+	depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR2_ARCH_IS_64
+
+>  config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+>  	bool "shadowsocks-libev"
+> +	depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+
+What is this new NPTL thread dependency ? It isn't described in the
+commit log.
+
+>  	depends on BR2_USE_MMU # fork()
+>  	select BR2_PACKAGE_C_ARES
+>  	select BR2_PACKAGE_LIBEV
+> diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+> index e8be8a8a71..fffe9fddf0 100644
+> --- a/package/shadowsocks-libev/shadowsocks-libev.hash
+> +++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+> @@ -5,4 +5,3 @@ sha256 5521cf623a07fd1e393528516a83acd2b66c5d4bb4535a52662806a6a060c606 shadowso
+>  sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
+>  sha256 c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
+>  sha256 4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
+> -sha256 4b3adc9ce620fa868f1dda328203dbccbd3e9f5fbafb49c581edc386a504ee1a  libipset/LICENSE.txt
+
+It would be good to do separate patches for separate changes:
+
+ - Adding the NPTL thread dependency (don't forgot to add a Config.in
+   comment for it)
+
+ - Adding the __sync related dependency
+
+ - Drop the useless hash.
+
+Thanks!
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
