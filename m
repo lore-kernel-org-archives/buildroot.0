@@ -1,56 +1,45 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Sun, 10 Jun 2018 10:03:16 -0400
-Subject: [Buildroot] [PATCH] libusb: add an option to compile examples
-Message-ID: <20180610140316.7125-1-gael.portay@savoirfairelinux.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 10 Jun 2018 16:18:51 +0200
+Subject: [Buildroot] [PATCH v3,1/2] host-cargo: select host-rustc
+In-Reply-To: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
+References: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180610161851.2acb3a98@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
- package/libusb/Config.in |  7 +++++++
- package/libusb/libusb.mk | 11 +++++++++++
- 2 files changed, 18 insertions(+)
+Hello,
 
-diff --git a/package/libusb/Config.in b/package/libusb/Config.in
-index 5238588aa8..d31a717fdf 100644
---- a/package/libusb/Config.in
-+++ b/package/libusb/Config.in
-@@ -6,5 +6,12 @@ config BR2_PACKAGE_LIBUSB
- 
- 	  http://libusb.info/
- 
-+if BR2_PACKAGE_LIBUSB
-+
-+config BR2_PACKAGE_LIBUSB_EXAMPLES
-+	bool "build libusb examples"
-+
-+endif
-+
- comment "libusb needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index aee3622f8d..89ec91bb42 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -25,5 +25,16 @@ else
- LIBUSB_CONF_OPTS += --disable-udev
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBUSB_EXAMPLES),y)
-+LIBUSB_CONF_OPTS += --enable-examples-build
-+define LIBUSB_INSTALL_TARGET_EXAMPLES
-+	for example in listdevs xusb fxload hotplugtest testlibusb dpfp dpfp_threaded sam3u_benchmark ; do \
-+		[ -x $(@D)/examples/$${example} ] || continue; \
-+		cp -dpfr $(@D)/examples/$${example} $(TARGET_DIR)/usr/bin; \
-+	done
-+endef
-+LIBUSB_POST_INSTALL_TARGET_HOOKS += LIBUSB_INSTALL_TARGET_EXAMPLES
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+On Sun, 10 Jun 2018 15:38:56 +0200, Fabrice Fontaine wrote:
+> Buildroot documentation specifies that cargo-based package should only
+> depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS and selects
+> BR2_PACKAGE_HOST_CARGO but this fails with the following error:
+> 
+> warning: (BR2_PACKAGE_LIBRSVG) selects BR2_PACKAGE_HOST_CARGO which has
+> unmet direct dependencies (BR2_PACKAGE_HAS_HOST_RUSTC)
+> 
+> Indeed, host-cargo depends on
+> BR2_PACKAGE_HAS_HOST_RUSTC which is selected only when host-rustc is
+> selected.
+> 
+> So instead of having to select both cargo and rustc in each cargo-based
+> package, replace BR2_PACKAGE_HAS_HOST_RUSTC dependency by
+> BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS and select
+> BR2_PACKAGE_HOST_RUSTC
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v2 -> v3 (after review of Thomas Petazzoni)
+>  - Give more details on what does not work in commit log
+
+Applied to master, thanks. I have also applied a follow-up patch that
+removes BR2_PACKAGE_HAS_HOST_RUSTC entirely, since it was no longer
+used anywhere.
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
