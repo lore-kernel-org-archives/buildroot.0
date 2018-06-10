@@ -1,36 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jun 2018 22:10:21 +0200
-Subject: [Buildroot] [PATCH 4/4] package/asterisk: add optional dependency
- to speexdsp
+Date: Sun, 10 Jun 2018 22:10:19 +0200
+Subject: [Buildroot] [PATCH 2/4] package/speex: add optional dependency to
+ speexdsp
 In-Reply-To: <20180610201021.24027-1-bernd.kuhls@t-online.de>
 References: <20180610201021.24027-1-bernd.kuhls@t-online.de>
-Message-ID: <20180610201021.24027-4-bernd.kuhls@t-online.de>
+Message-ID: <20180610201021.24027-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/9f6/9f61192382ea4b57b0f0548626968752363bb13f/
+Quoting speex release notes from https://www.speex.org
+
+"Speex 1.2rc2 and SpeexDSP 1.2rc2 are out
+ December 6, 2014
+ This release splits the speex codec library and the speex DSP library
+ into separate source trees."
+
+After bumping speex to 1.2.0 DSP support is provided by speexdsp.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/asterisk/asterisk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/speex/speex.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index f2f210b524..430b122655 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -229,7 +229,7 @@ else
- ASTERISK_CONF_OPTS += --without-ssl
- endif
+diff --git a/package/speex/speex.mk b/package/speex/speex.mk
+index c6b46e0eb3..522f8cc09c 100644
+--- a/package/speex/speex.mk
++++ b/package/speex/speex.mk
+@@ -13,6 +13,10 @@ SPEEX_DEPENDENCIES = host-pkgconf libogg
+ SPEEX_CONF_OPTS = \
+ 	--enable-fixed-point
  
--ifeq ($(BR2_PACKAGE_SPEEX),y)
-+ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
- ASTERISK_DEPENDENCIES += speex
- ASTERISK_CONF_OPTS += --with-speex --with-speexdsp
- else
++ifeq ($(BR2_PACKAGE_SPEEXDSP),y)
++SPEEX_DEPENDENCIES += speexdsp
++endif
++
+ ifeq ($(BR2_PACKAGE_SPEEX_ARM4),y)
+ SPEEX_CONF_OPTS += --enable-arm4-asm
+ endif
 -- 
 2.17.1
