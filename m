@@ -1,55 +1,31 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Sun, 10 Jun 2018 18:08:49 -0400
-Subject: [Buildroot] [PATCH v2] libusb: add an option to compile examples
-Message-ID: <20180610220849.15558-1-gael.portay@savoirfairelinux.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 10 Jun 2018 20:23:05 -0300
+Subject: [Buildroot] [PATCH 1/2 v3] support/docker: sort the list of
+ installed packages
+References: <31dc2172ac9fba9527eec403868e3dc82c6f7ce8.1528645489.git.yann.morin.1998@free.fr>
+Message-ID: <5b1db2d939b1c_5fc53fa25a012638164d0@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
- package/libusb/Config.in |  7 +++++++
- package/libusb/libusb.mk | 10 ++++++++++
- 2 files changed, 17 insertions(+)
+Hello,
 
-diff --git a/package/libusb/Config.in b/package/libusb/Config.in
-index 5238588aa8..d31a717fdf 100644
---- a/package/libusb/Config.in
-+++ b/package/libusb/Config.in
-@@ -6,5 +6,12 @@ config BR2_PACKAGE_LIBUSB
- 
- 	  http://libusb.info/
- 
-+if BR2_PACKAGE_LIBUSB
-+
-+config BR2_PACKAGE_LIBUSB_EXAMPLES
-+	bool "build libusb examples"
-+
-+endif
-+
- comment "libusb needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
-index aee3622f8d..2cad3dec7f 100644
---- a/package/libusb/libusb.mk
-+++ b/package/libusb/libusb.mk
-@@ -25,5 +25,15 @@ else
- LIBUSB_CONF_OPTS += --disable-udev
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBUSB_EXAMPLES),y)
-+LIBUSB_CONF_OPTS += --enable-examples-build
-+define LIBUSB_INSTALL_TARGET_EXAMPLES
-+	for example in listdevs xusb fxload hotplugtest testlibusb dpfp dpfp_threaded sam3u_benchmark oopps ; do \
-+		cp -dpfr $(@D)/examples/$${example} $(TARGET_DIR)/usr/bin; \
-+	done
-+endef
-+LIBUSB_POST_INSTALL_TARGET_HOOKS += LIBUSB_INSTALL_TARGET_EXAMPLES
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
--- 
-2.11.0
+On Sun, Jun 10, 2018 at 12:44 PM, Yann E. MORIN wrote:
+
+> As suggested in the docker best practices [0], order the package list
+> alphabetically, and list only one package per line.
+> 
+> This will be much usefull later, we need to update the list of installed
+> packages, like adding new ones for example.
+> 
+> [0] https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#sort-multi-line-arguments
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+
+Regards,
+Ricardo
