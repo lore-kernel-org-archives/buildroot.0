@@ -1,89 +1,60 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jun 2018 09:47:27 +0200
-Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <20180610080315.11cf122b@windsurf>
-References: <20180609210607.13259-1-yann.morin.1998@free.fr>
- <20180610080315.11cf122b@windsurf>
-Message-ID: <20180610074727.GA2471@scaer>
+From: Min Xu <xuminready@gmail.com>
+Date: Sun, 10 Jun 2018 01:01:04 -0700
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: fix sync handling
+Message-ID: <20180610080104.10059-1-xuminready@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+To fixup linking errors:
+"undefined reference to `__sync_val_compare_and_swap_4'"
+Fixes
+http://autobuild.buildroot.net/results/552b09ffe951c429422529c895f4c3ec723cf5ab
 
-On 2018-06-10 08:03 +0200, Thomas Petazzoni spake thusly:
-> On Sat,  9 Jun 2018 23:06:07 +0200, Yann E. MORIN wrote:
-[--SNIP--]
-> > So, we fix that mess by creating the archive ourselves, giving it and
-> remove the final "and"
+http://autobuild.buildroot.net/results/4810526381e15a194767753d324875bfbf5e3dde
+http://autobuild.buildroot.net/results/9cb76805c2f2952aa434d143831ee03c7d43aa52
 
-Here, 'it' refers to 'the archive' listed just before. We want to give
-'the archive' and 'the top-most directory'. So, this is really valid
-english grammar. ;-)
+http://autobuild.buildroot.net/results/d00c5f9e1e7a6a40fac5763a06977b351b7875da
+http://autobuild.buildroot.net/results/0612f2dc09a8763fdf2111ee8d0c223c8531262a
 
-I'll rephrase to avoid confusion:
+delete unused hash info.
 
-    So, we fix that mess by giving the top-most directory a
-    recogniseable name, based on the target tuple and the Buildroot
-    version, which we also use as the name of the archive (suffixed
-    with the usual +.tar.gz+.)
+Signed-off-by: Min Xu <xuminready@gmail.com>
+---
+ package/shadowsocks-libev/Config.in              | 10 ++++++++++
+ package/shadowsocks-libev/shadowsocks-libev.hash |  1 -
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-> > the top-most directory a recogniseable name, based on the target tuple
-> > and the Buildroot version.
-> > 
-> > Since this is an output file, we located it in the images/ directory.
-> located -> locate
-> or maybe "place", "store" ?
-
-OK.
-
-> >  .PHONY: sdk
-> > -sdk: world
-> > +sdk: world $(BR2_TAR_HOST_DEPENDENCY)
-> >  	@$(call MESSAGE,"Rendering the SDK relocatable")
-> >  	$(TOPDIR)/support/scripts/fix-rpath host
-> >  	$(TOPDIR)/support/scripts/fix-rpath staging
-> >  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
-> >  	mkdir -p $(HOST_DIR)/share/buildroot
-> >  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-> > +	$(Q)mkdir -p $(BINARIES_DIR)
-> > +	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
-> > +		-C $(HOST_DIR) \
-> > +		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
-> > +		.
-> 
-> Generally, I am fine with the principle, I believe it indeed makes
-> sense to provide a tarball that is ready to use.
-> 
-> I was a bit concerned about backward compatibility behavior for people
-> already using "make sdk". But in fact your change is fine from this
-> point of view: if people have scripts today that run "make sdk" and
-> create a tarball from output/host, they will still work fine.
-> 
-> > -It is possible to relocate the toolchain, this allows to distribute
-> > -the toolchain to other developers to build applications for your
-> > -target. To achieve this:
-> > +Alternatively, Buildroot can also export the toolchain and all the
-> > +development files of all selected packages,
-> 
-> "all the development files" -> "the development files", otherwise the
-> repetition of "all" is a bit annoying.
-
-ACK.
-
-> Looks good otherwise. Thanks!
-
-OK, thanks for the review! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+index d02e5a93ef..1ec4f35bf3 100644
+--- a/package/shadowsocks-libev/Config.in
++++ b/package/shadowsocks-libev/Config.in
+@@ -1,5 +1,15 @@
++# It requires __sync_*() intrinsics:
++# the 4-byte ones on 32 bits architectures, and the 4-byte and 8-byte
++#   one on 64 bits architecture
++config BR2_PACKAGE_SHADOWSOCKS_LIBEV_ARCH_SUPPORTS
++	bool
++	default y if BR2_TOOLCHAIN_HAS_SYNC_4 && !BR2_ARCH_IS_64
++	default y if BR2_TOOLCHAIN_HAS_SYNC_4 && BR2_TOOLCHAIN_HAS_SYNC_8 && BR2_ARCH_IS_64
++
+ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+ 	bool "shadowsocks-libev"
++	depends on BR2_PACKAGE_SHADOWSOCKS_LIBEV_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_C_ARES
+ 	select BR2_PACKAGE_LIBEV
+diff --git a/package/shadowsocks-libev/shadowsocks-libev.hash b/package/shadowsocks-libev/shadowsocks-libev.hash
+index e8be8a8a71..fffe9fddf0 100644
+--- a/package/shadowsocks-libev/shadowsocks-libev.hash
++++ b/package/shadowsocks-libev/shadowsocks-libev.hash
+@@ -5,4 +5,3 @@ sha256 5521cf623a07fd1e393528516a83acd2b66c5d4bb4535a52662806a6a060c606 shadowso
+ sha256 736883f97d44dbec288bb82819f18f4f86d02ae3192f6a9abefa00db76bace41  COPYING
+ sha256 c41a4bc2c4c43e4daa3051e77e31b2d5c8500498afaeac6d831d55a4bb8de3fb  libbloom/LICENSE
+ sha256 4fa2ada54f8c0410ec243265378242ffe862386d5ac517f8dd30a1911d25ae93  libcork/COPYING
+-sha256 4b3adc9ce620fa868f1dda328203dbccbd3e9f5fbafb49c581edc386a504ee1a  libipset/LICENSE.txt
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
