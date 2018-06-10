@@ -1,48 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jun 2018 17:07:59 +0200
-Subject: [Buildroot] [PATCH] docs/manual: document filesystems
-In-Reply-To: <1789748625.2040845.1528637888756.JavaMail.zimbra@datacom.com.br>
-References: <20180609094647.21460-1-yann.morin.1998@free.fr>
- <1806912659.2037633.1528582803656.JavaMail.zimbra@datacom.com.br>
- <20180610081217.GB2471@scaer>
- <1789748625.2040845.1528637888756.JavaMail.zimbra@datacom.com.br>
-Message-ID: <20180610150759.GE2471@scaer>
+Date: Sun, 10 Jun 2018 17:44:55 +0200
+Subject: [Buildroot] [PATCH 0/2 v3] support/docker: make the image more
+ reproducible
+Message-ID: <cover.1528645489.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Hello All!
 
-On 2018-06-10 10:38 -0300, Carlos Santos spake thusly:
-> > From: "Yann Morin" <yann.morin.1998@free.fr>
-> >> Genarating filesystem images do not modify the
-> >> contents of the global $(TARGET_DIR) and user-provided rootfs extensions
-> >> must not do this.
-[--SNIP--]
-> > Why do you insist on modifying the global target/ directory from your
-> > filesystem? If you do that, and build two or more filesystems [*], they
-> > might each try to modify target/ is incompatible ways, and this is not
-> > even safe, concurrency-wise (e.g. ony may try to archive the content of
-> > /var while another is doing a rm -rf on it.)
-> 
-> I never intended to modify the global $(TARGET_DIR).
+Currently, the base test image is not entirely reproducible, because we
+install packages from PyPI without specifying all the versions of all
+the packages we install from there.
 
-Sorry, I mis-interpreted your comment above, as "user-provided rootfs []
-must not do this" to which I appended in my head "but that is exactly
-what I want to do in my case."
+Instead of relying on a third-party to provide packages, just use those
+from the distribution, because we are using a pinned version and thus
+we will always get the same packages from the distro.
 
-I'm sorry, I should be more careful in my interpretations in the future.
+If/when this series is applied, I'll regenerate and updalod the new
+buildroot/base image, and send a furhter patch to use it from our
+gitlab-ci.yml.
 
-So, I'll take that as a hint to further improve the section that
-explains how filesystems are generated, to more carefully describe and
-explain the sequence.
-
-Thanks again for the feedback! :-)
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 12b70acb82acfa4925a8436a31a668ac92a58d1d
+
+  mender: fix check-package warnings (2018-06-10 16:43:53 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 720ecb41c6c51f66f6b4dda7663c1e16edb2fabb
+
+  support/docker: use the distro-provided flake8 (2018-06-10 17:41:00 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      support/docker: sort the list of installed packages
+      support/docker: use the distro-provided flake8
+
+ support/docker/Dockerfile | 37 +++++++++++++++++++++++--------------
+ 1 file changed, 23 insertions(+), 14 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
