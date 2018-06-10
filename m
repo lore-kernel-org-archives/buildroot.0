@@ -1,60 +1,50 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 10 Jun 2018 20:05:32 +0200
-Subject: [Buildroot] [PATCH 1/1] libtirpc: fix musl build
-Message-ID: <20180610180532.19164-1-fontaine.fabrice@gmail.com>
+Date: Sun, 10 Jun 2018 20:11:04 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] pixiewps: fix static linking with uclibc-ng
+Message-ID: <20180610181104.19619-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't redefine existing typedef (u_char, u_long, ...) on musl
+Fixes following linking error with uClibc-ng:
+/home/peko/autobuild/instance-0/output/host/lib/gcc/powerpc-buildroot-linux-uclibc/7.3.0/libgcc.a(unwind-dw2-fde-dip.o):
+In function `_Unwind_Find_FDE':
+/home/peko/autobuild/instance-0/output/build/host-gcc-final-7.3.0/build/powerpc-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde-dip.c:469:
+undefined reference to `dl_iterate_phdr'
+collect2: error: ld returned 1 exit status
+
+Since uClibc-ng 1.0.18 a circular dependency between libc and libgcc
+exist, when static linking is used. It can be resolved by the compiler
+when -static is correctly passed in the linking step.
+
+So use TARGET_CONFIGURE_OPTS to pass CC as well as LDFLAGS to make
 
 Fixes:
- - http://autobuild.buildroot.net/results/dbc07e383605a84eb19a2fd1899668612212518a
+ - http://autobuild.buildroot.net/results/d9f0311538c8db1196839e36af3f6ef4e403be2b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- .../libtirpc/0006-rpc-types.h-fix-musl-build.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/libtirpc/0006-rpc-types.h-fix-musl-build.patch
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Remove PIXIEWPS_MAKE_OPTS to use directly TARGET_CONFIGURE_OPTS
 
-diff --git a/package/libtirpc/0006-rpc-types.h-fix-musl-build.patch b/package/libtirpc/0006-rpc-types.h-fix-musl-build.patch
-new file mode 100644
-index 0000000000..d4bcd80991
---- /dev/null
-+++ b/package/libtirpc/0006-rpc-types.h-fix-musl-build.patch
-@@ -0,0 +1,31 @@
-+From 238f0a870f577e8fffd92820e1c1a88d4fc6d35f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 10 Jun 2018 19:48:21 +0200
-+Subject: [PATCH] rpc/types.h: fix musl build
-+
-+Don't redefine existing typedef (u_char, u_long, ...) on musl
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/dbc07e383605a84eb19a2fd1899668612212518a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tirpc/rpc/types.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/tirpc/rpc/types.h b/tirpc/rpc/types.h
-+index f069efa..0153a5c 100644
-+--- a/tirpc/rpc/types.h
-++++ b/tirpc/rpc/types.h
-+@@ -66,7 +66,7 @@ typedef   int32_t rpc_inline_t;
-+ #define mem_free(ptr, bsize)	free(ptr)
-+ 
-+ 
-+-#if defined __APPLE_CC__ || defined __FreeBSD__
-++#if defined __APPLE_CC__ || defined __FreeBSD__ || !defined (__GLIBC__)
-+ # define __u_char_defined
-+ # define __daddr_t_defined
-+ #endif
-+-- 
-+2.14.1
-+
+ package/pixiewps/pixiewps.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pixiewps/pixiewps.mk b/package/pixiewps/pixiewps.mk
+index 95a253ab83..1f84bbeb34 100644
+--- a/package/pixiewps/pixiewps.mk
++++ b/package/pixiewps/pixiewps.mk
+@@ -10,7 +10,7 @@ PIXIEWPS_LICENSE = GPL-3.0+
+ PIXIEWPS_LICENSE_FILES = LICENSE.md
+ 
+ define PIXIEWPS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
+ define PIXIEWPS_INSTALL_TARGET_CMDS
 -- 
 2.14.1
