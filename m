@@ -1,44 +1,30 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jun 2018 22:10:19 +0200
-Subject: [Buildroot] [PATCH 2/4] package/speex: add optional dependency to
- speexdsp
-In-Reply-To: <20180610201021.24027-1-bernd.kuhls@t-online.de>
-References: <20180610201021.24027-1-bernd.kuhls@t-online.de>
-Message-ID: <20180610201021.24027-2-bernd.kuhls@t-online.de>
+Date: Sun, 10 Jun 2018 22:12:34 +0200
+Subject: [Buildroot] [PATCH 2/2] package/speex: bump version to 1.2.0
+References: <20180610101024.5035-1-bernd.kuhls@t-online.de>
+ <20180610101024.5035-2-bernd.kuhls@t-online.de>
+Message-ID: <iad0vexgtp.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quoting speex release notes from https://www.speex.org
+Am Sun, 10 Jun 2018 12:10:24 +0200 schrieb Bernd Kuhls:
 
-"Speex 1.2rc2 and SpeexDSP 1.2rc2 are out
- December 6, 2014
- This release splits the speex codec library and the speex DSP library
- into separate source trees."
+> Added upstream md5 & locally computed license hashes, rebased patch,
+> updated SPEEX_SITE.
 
-After bumping speex to 1.2.0 DSP support is provided by speexdsp.
+Hi,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/speex/speex.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+this commit broke freeswitch and asterisk due to the split of the DSP 
+library into its own package speexdsp, sent new series to fix the problem:
 
-diff --git a/package/speex/speex.mk b/package/speex/speex.mk
-index c6b46e0eb3..522f8cc09c 100644
---- a/package/speex/speex.mk
-+++ b/package/speex/speex.mk
-@@ -13,6 +13,10 @@ SPEEX_DEPENDENCIES = host-pkgconf libogg
- SPEEX_CONF_OPTS = \
- 	--enable-fixed-point
- 
-+ifeq ($(BR2_PACKAGE_SPEEXDSP),y)
-+SPEEX_DEPENDENCIES += speexdsp
-+endif
-+
- ifeq ($(BR2_PACKAGE_SPEEX_ARM4),y)
- SPEEX_CONF_OPTS += --enable-arm4-asm
- endif
--- 
-2.17.1
+http://patchwork.ozlabs.org/patch/927405/
+http://patchwork.ozlabs.org/patch/927407/
+http://patchwork.ozlabs.org/patch/927404/
+http://patchwork.ozlabs.org/patch/927406/
+
+Regards, Bernd
+
+PS: patchworks did not recognize the patches as a series.
