@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Jun 2018 13:25:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wireless-regdb: bump version to
- 2018.05.31
-In-Reply-To: <20180610093048.29478-1-bernd.kuhls@t-online.de>
-References: <20180610093048.29478-1-bernd.kuhls@t-online.de>
-Message-ID: <20180610132520.6b66b81f@windsurf>
+Date: Sun, 10 Jun 2018 13:25:41 +0200
+Subject: [Buildroot] [PATCH 1/2] package/speex: use pkgconf to detect
+ libogg
+In-Reply-To: <20180610101024.5035-1-bernd.kuhls@t-online.de>
+References: <20180610101024.5035-1-bernd.kuhls@t-online.de>
+Message-ID: <20180610132541.7247cb15@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 10 Jun 2018 11:30:48 +0200, Bernd Kuhls wrote:
-> Added license hash, updated project URL, old site is dead.
+On Sun, 10 Jun 2018 12:10:23 +0200, Bernd Kuhls wrote:
+> Upstream removed with-ogg-* configure options and switched to pkgconf
+> to detect libogg back in 2014:
+> https://git.xiph.org/?p=speex.git;a=commitdiff;h=e1b1eeabce815283c5bbc42016a9d6a11eda2866
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/wireless-regdb/Config.in           | 2 +-
->  package/wireless-regdb/wireless-regdb.hash | 4 +++-
->  package/wireless-regdb/wireless-regdb.mk   | 2 +-
->  3 files changed, 5 insertions(+), 3 deletions(-)
+>  package/speex/speex.mk | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 
-Applied to master, thanks.
+Both applied, thanks. Could you try to resubmit the Thumb2 patch to
+speex upstream ?
+
+Thanks!
 
 Thomas
 -- 
