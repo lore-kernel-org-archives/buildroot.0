@@ -1,80 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 10 Jun 2018 23:46:59 +0200
-Subject: [Buildroot] swapoff, but no swapon in initab
-In-Reply-To: <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
-References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
- <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
- <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
-Message-ID: <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
+From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sun, 10 Jun 2018 18:05:37 -0400
+Subject: [Buildroot] [PATCH] libusb: add an option to compile examples
+In-Reply-To: <20180610172544.zcw4dsa4ngzgpsv2@tarshish>
+References: <20180610140316.7125-1-gael.portay@savoirfairelinux.com>
+ <20180610143529.xpleqn3dg5gmufpd@sapphire.tkos.co.il>
+ <20180610163620.k7mtdvg3bin7crad@archlinux>
+ <20180610172544.zcw4dsa4ngzgpsv2@tarshish>
+Message-ID: <20180610220537.qwajrkfb7vrduvil@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Baruch,
 
-
-On 08-06-18 13:38, Carlos Santos wrote:
->> From: "Arnout Vandecappelle" <arnout@mind.be>
->> To: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>
->> Sent: Thursday, June 7, 2018 6:12:48 PM
->> Subject: Re: [Buildroot] swapoff, but no swapon in initab
+On Sun, Jun 10, 2018 at 08:25:44PM +0300, Baruch Siach wrote:
+> (...)
+Hi Ga?l,
 > 
->> On 06-06-18 19:14, Carlos Santos wrote:
->>> Hi,
->>>
->>> I'm working on a product that needs a swap partition and noticed that
->>> both package/{busybox,sysvinit}/inittab invoke "swapoff -a" in their
->>> shutdown sequences but do not invoke "swapon -a". Is this intentional
->>> or the swapon call is missing (e.g. right after "mount -a")?
->>
->> It has been like that since
->>
->> commit ffde94bd2ca21542ae0b4518348f8e986b9d92e0 (tag: 0_0)
->> Author: Eric Andersen <andersen@codepoet.org>
->> Date:   Sat Dec 22 01:56:11 2001
->>
->>    Initial revision
->>
->> so whatever reason there was, it is lost in the mists of time.
->>
->> IMO I think it's pointless (the kernel will freeze swap accesses before
->> shutdown) and possibly wrong (swap to file should be disabled before the
->> corresponding filesystem is unmounted).
->>
->>
->> Anyway, the proper way to handle swap is by adding it to fstab, no? I just
->> checked and busybox seems to support it.
+> On Sun, Jun 10, 2018 at 12:36:20PM -0400, Ga?l PORTAY wrote:
+> > On Sun, Jun 10, 2018 at 05:35:29PM +0300, Baruch Siach wrote:
+> > > > diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+> > > > index aee3622f8d..89ec91bb42 100644
+> > > > --- a/package/libusb/libusb.mk
+> > > > +++ b/package/libusb/libusb.mk
+> > > > @@ -25,5 +25,16 @@ else
+> > > >  LIBUSB_CONF_OPTS += --disable-udev
+> > > >  endif
+> > > >  
+> > > > +ifeq ($(BR2_PACKAGE_LIBUSB_EXAMPLES),y)
+> > > > +LIBUSB_CONF_OPTS += --enable-examples-build
+> > > > +define LIBUSB_INSTALL_TARGET_EXAMPLES
+> > > > +	for example in listdevs xusb fxload hotplugtest testlibusb dpfp dpfp_threaded sam3u_benchmark ; do \
+> > > > +		[ -x $(@D)/examples/$${example} ] || continue; \
+> > > 
+> > > Why is this file presence check needed?
+> > 
+> > Because, some of the examples are compiled under HAVE_xxx condition.
+> > 
+> > See the extract of examples/Makefile.am below.
+> > 
+> > 	noinst_PROGRAMS = listdevs xusb fxload hotplugtest testlibusb
+> > 	
+> > 	if HAVE_SIGACTION
+> > 	noinst_PROGRAMS += dpfp
+> > 	
+> > 	if THREADS_POSIX
+> > 	dpfp_threaded_CFLAGS = $(AM_CFLAGS)
+> > 	noinst_PROGRAMS += dpfp_threaded
+> > 	endif
+> > 	
+> > 	sam3u_benchmark_SOURCES = sam3u_benchmark.c
+> > 	noinst_PROGRAMS += sam3u_benchmark
+> > 	endif
 > 
-> The point here is that I'd like to avoid adding yet another init script
-> just to call swap{on,off} in its st{art,op} phase. A "swapon -a" in
-> inittab would inspect /etc/fstab, as stated in the man page:
-
- Ah, yes, I thought mount -a would do that.
-
+> All Buildroot libcs support sigaction. Also, libusb depends on threads 
+> support, so THREADS_POSIX is always true in Buildroot.
 > 
->   "All devices marked as ``swap'' in /etc/fstab are made available,
->    except for those with the ``noauto'' option. Devices that are
->    already being used as swap are silently skipped."
-
- So bottom line: it would make sense to add a swapon -a to the default inittabs
-(both busybox and sysv).
-
- For system, BTW, I would expect it would already do the right thing based on
-fstab, no?
-
- Regards,
- Arnout
-
-> 
-> So even if the system already has such init script (e.g. from a
-> rootfs ovelay) a second call would be harmless.
+> So I think this check is not needed.
 > 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Okay, I will send a v2 without this check.
