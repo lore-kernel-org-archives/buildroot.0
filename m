@@ -1,72 +1,142 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 10 Jun 2018 23:26:31 +0200
-Subject: [Buildroot] [PATCH] docs/manual: document filesystems
-In-Reply-To: <20180610083544.GC2471@scaer>
-References: <20180609094647.21460-1-yann.morin.1998@free.fr>
- <1806912659.2037633.1528582803656.JavaMail.zimbra@datacom.com.br>
- <20180610081217.GB2471@scaer> <20180610083544.GC2471@scaer>
-Message-ID: <6ae94404-f520-e719-680d-686baf6f9659@mind.be>
+Date: Sun, 10 Jun 2018 23:37:14 +0200
+Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add dependency on
+ BR2_TOOLCHAIN_HAS_SYNC_4
+In-Reply-To: <CAMpS7mRvt1Mpt0faz7kMetV92XwYTojD_aFx1iZ-UGSJ8gbq1A@mail.gmail.com>
+References: <20180607230144.387-1-xuminready@gmail.com>
+ <630c76ca-9a08-115d-5c32-85567237d012@mind.be>
+ <CAMpS7mRvt1Mpt0faz7kMetV92XwYTojD_aFx1iZ-UGSJ8gbq1A@mail.gmail.com>
+Message-ID: <54fd78a4-e5ca-35d9-f41b-e60462411628@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ [Please keep the mailing list in Cc when replying.]
+ [Please don't top-post, but reply in-line like I do below.]
 
-
-On 10-06-18 10:35, Yann E. MORIN wrote:
-> Carlos, Arnout, All,
+On 10-06-18 10:18, xu min wrote:
+> Hi Arnout?Vandecappelle,
 > 
-> On 2018-06-10 10:12 +0200, Yann E. MORIN spake thusly:
->> On 2018-06-09 19:20 -0300, Carlos Santos spake thusly:
-> [--SNIP--]
->>> Packages are supposed to install, remove or modify files in the global
->>> $(TARGET_DIR) hierarchy.
+> Thank ?you for your help. Shadowsocks doesn't depends on libuv. But I found
+> libuv had the same linking error. It fixed by add?dependents on
+> BR2_TOOLCHAIN_HAS_SYNC_4. So I add the link as reference. I already delete it
+> from my the latest patch.?
 > 
-> I forgot to say that this will no longer be true when we (eventually)
-> introduce the top-level parallel build, because, as Arnout already said,
-> each package will install in its own, private copy of TARGET_DIR, not
-> only that, but also its private STAGING_DIR and HOST_DIR as well.
+> I found?openal: fix atomic
+> handling:?https://git.busybox.net/buildroot/tree/package/openal/Config.in. I did
+> the similar way to fix the problems in my latest patch. Plus add?depends on
+> BR2_TOOLCHAIN_HAS_THREADS_NPTL.
 > 
-> One thing that Arnout suggested, is to (mostly) get rid of TARGET_DIR,
-> in favour of a package-prefix FOO_TARGET_DIR (amd similarly for
-> filesystems).
-> 
-> However I still don't think that is a good idea, because that would
-> allow packages to easily find and write into another package's
-> TARGET_DIR. Using a single TARGET_DIR, instead, will make it harder
-> (but not impossible, agreed).
+> Please review my last patch. https://patchwork.ozlabs.org/patch/927318/
+> Thank you.
+> MinXu
+> PS:
+> What's the difference between BR2_TOOLCHAIN_HAS_THREADS_NPTL and
+> BR2_TOOLCHAIN_HAS_THREADS?
 
- How does the definition of TARGET_DIR have any influence on how fs/foo/foo.mk
-uses ROOTFS_BAR_TARGET_DIR?
-
-
-> Ditto filesystems.
-> 
-> So I believe we still want to keep a context-specific TARGET_DIR. It is
-> easier to use,
-
- TARGET_DIR is only marginally easier to use than FOO_TARGET_DIR...
+ uClibc has several threads implementations. NPTL is "native threads", i.e. a
+thread is a lightweigth Linux process. But it's not available on all platforms.
+Some code depends on this, e.g. it relies on threads having different PIDs. But
+this is not often the case. So usually, you just need BR2_TOOLCHAIN_HAS_THREADS.
 
 
-> it is more stable,
+> What's the difference between?sync and?atomics? How did you find out?it really
+> needs sync, it can't use atomics?
 
- ???
+ _SYNC_* are the atomics builtins in GCC (i.e. the __sync_* functions). Packages
+can use either these functions, or the atomics library that is included in GCC
+(but which needs -latomic), or libatomic_ops. So it depends on the package which
+of these it uses. In the case of libcork, it only uses the sync functions.
 
- You actually may have a point here, but I don't understand it.
-
-> we can update it at will
-
- We can also update the definition of FOO_TARGET_DIR at will.
-
-
-, and it makes it harder for packages and filesystems to do weird stuff.
-
- No it doesn't.
-
+ Oh BTW, it would also be good to mention in the commit message and in the
+comment in Config.in that it is libcork that needs this.
 
  Regards,
  Arnout
+
+
+> 
+> 
+> 
+> On Fri, Jun 8, 2018 at 2:45 AM Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> wrote:
+> 
+>     ?Hi Min,
+> 
+>     ?Thank you for your speedy reaction!
+> 
+>     On 08-06-18 01:01, Min Xu wrote:
+>     > To fixup linking errors:
+>     > "undefined reference to `__sync_val_compare_and_swap_4'"
+>     > Fixes
+>     >
+>     http://autobuild.buildroot.net/results/d00c5f9e1e7a6a40fac5763a06977b351b7875da
+>     >
+>     http://autobuild.buildroot.net/results/0612f2dc09a8763fdf2111ee8d0c223c8531262a
+>     >
+>     > reference:
+>     https://git.buildroot.org/buildroot/commit/?id=7c77d965bdcd301c2644004140faec613c1ee202
+> 
+>     ?No need for this - it's actually confusing, I thought you meant that the
+>     dependency was indirect due to libuv (as is the case in that commit).
+> 
+>     > Signed-off-by: Min Xu <xuminready at gmail.com <mailto:xuminready@gmail.com>>
+>     > ---
+>     >? package/shadowsocks-libev/Config.in | 2 ++
+>     >? 1 file changed, 2 insertions(+)
+>     >
+>     > diff --git a/package/shadowsocks-libev/Config.in
+>     b/package/shadowsocks-libev/Config.in
+>     > index d02e5a93ef..c914ed778b 100644
+>     > --- a/package/shadowsocks-libev/Config.in
+>     > +++ b/package/shadowsocks-libev/Config.in
+>     > @@ -1,5 +1,7 @@
+>     >? config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+>     >? ? ? ?bool "shadowsocks-libev"
+>     > +? ? ?# uses __sync_val_compare_and_swap_4
+> 
+>     ?It actually uses the __sync_val_compare_and_swap macro, so the actual function
+>     that is called depends on sizeof(int) and sizeof(void*)...
+> 
+>     > +? ? ?depends on BR2_TOOLCHAIN_HAS_SYNC_4
+> 
+>     ?... so I think we also need
+> 
+>     ? ? ? ? depends on BR2_TOOLCHAIN_HAS_SYNC_8 if BR2_ARCH_IS_64
+> 
+>     although in practice of course all 64-bit arches have sync_8.
+> 
+>     ?BTW I checked, it really needs sync, it can't use atomics.
+> 
+>     ?Oh, and I also noticed that it seems to unconditionally require pthreads.
+> 
+>     ?Regards,
+>     ?Arnout
+> 
+>     >? ? ? ?depends on BR2_USE_MMU # fork()
+>     >? ? ? ?select BR2_PACKAGE_C_ARES
+>     >? ? ? ?select BR2_PACKAGE_LIBEV
+>     >
+> 
+>     -- 
+>     Arnout Vandecappelle? ? ? ? ? ? ? ? ? ? ? ? ? arnout at mind be
+>     Senior Embedded Software Architect? ? ? ? ? ? +32-16-286500
+>     Essensium/Mind? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? http://www.mind.be
+>     G.Geenslaan 9, 3001 Leuven, Belgium? ? ? ? ? ?BE 872 984 063 RPR Leuven
+>     LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+>     GPG fingerprint:? 7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> 
+> 
+> 
+> -- 
+> *
+> *
+> *Best Regards*
+> *
+> *
+> *XuMin's Ready?*
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
