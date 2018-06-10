@@ -1,11 +1,10 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Sun, 10 Jun 2018 13:44:45 -0700
-Subject: [Buildroot] [RFC PATCH v2 5/9] llvm: add config to build backend
- for host arch
+Date: Sun, 10 Jun 2018 13:44:43 -0700
+Subject: [Buildroot] [RFC PATCH v2 3/9] at-spi2-atk: new package
 In-Reply-To: <20180610204449.13646-1-joseph.kogut@gmail.com>
 References: <20180608225932.13127-1-joseph.kogut@gmail.com>
  <20180610204449.13646-1-joseph.kogut@gmail.com>
-Message-ID: <20180610204449.13646-7-joseph.kogut@gmail.com>
+Message-ID: <20180610204449.13646-5-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,45 +13,83 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/llvm/Config.in | 9 +++++++++
- package/llvm/llvm.mk   | 5 +++++
- 2 files changed, 14 insertions(+)
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/at-spi2-atk/Config.in        |  5 +++++
+ package/at-spi2-atk/at-spi2-atk.hash |  4 ++++
+ package/at-spi2-atk/at-spi2-atk.mk   | 17 +++++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/at-spi2-atk/Config.in
+ create mode 100644 package/at-spi2-atk/at-spi2-atk.hash
+ create mode 100644 package/at-spi2-atk/at-spi2-atk.mk
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 83e94660eb..e9c461b92f 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -11,6 +11,15 @@ config BR2_PACKAGE_LLVM_TARGET_ARCH
- 	default "ARM" if BR2_arm || BR2_armeb
- 	default "X86" if BR2_i386 || BR2_x86_64
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 31c651b938..568f47d242 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -955,6 +955,7 @@ F:	board/qemu/ppc64le-pseries/
+ F:	configs/qemu_ppc64le_pseries_defconfig
  
-+config BR2_PACKAGE_LLVM_HOST_ARCH
-+	string
-+	default "AArch64" if BR2_HOSTARCH="aarch64"
-+	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
-+	default "ARM" if BR2_HOSTARCH = "arm"
-+
-+config BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH
-+	bool
-+
- config BR2_PACKAGE_LLVM
- 	bool "llvm"
- 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 3abf428989..04e99eb5b4 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -59,6 +59,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
- LLVM_TARGETS_TO_BUILD += AMDGPU
- endif
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
++F:	package/at-spi2-atk/
+ F:	package/at-spi2-core/
+ F:	package/gconf/
+ F:	package/libnss/
+diff --git a/package/Config.in b/package/Config.in
+index 692b422911..c2e619b317 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1128,6 +1128,7 @@ endmenu
  
-+# Build backend for host architecture
-+ifeq ($(BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH),y)
-+LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_LLVM_HOST_ARCH))
-+endif
+ menu "Graphics"
+ 	source "package/assimp/Config.in"
++	source "package/at-spi2-atk/Config.in"
+ 	source "package/at-spi2-core/Config.in"
+ 	source "package/atk/Config.in"
+ 	source "package/atkmm/Config.in"
+diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
+new file mode 100644
+index 0000000000..b354c77ffe
+--- /dev/null
++++ b/package/at-spi2-atk/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_AT_SPI2_ATK
++	bool "at-spi2-atk"
++	select BR2_PACKAGE_AT_SPI2_CORE
++	help
++	  The At-Spi2 Atk package contains a library that bridges ATK to At-Spi2 D-Bus service.
+diff --git a/package/at-spi2-atk/at-spi2-atk.hash b/package/at-spi2-atk/at-spi2-atk.hash
+new file mode 100644
+index 0000000000..6f7d68ab87
+--- /dev/null
++++ b/package/at-spi2-atk/at-spi2-atk.hash
+@@ -0,0 +1,4 @@
++# locally calculated
++sha256 61891f0abae1689f6617a963105a3f1dcdab5970c4a36ded9c79a7a544b16a6e  at-spi2-atk-2.26.2.tar.xz
++sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
 +
- # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
- LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
- 
+diff --git a/package/at-spi2-atk/at-spi2-atk.mk b/package/at-spi2-atk/at-spi2-atk.mk
+new file mode 100644
+index 0000000000..a3bccbb0d9
+--- /dev/null
++++ b/package/at-spi2-atk/at-spi2-atk.mk
+@@ -0,0 +1,17 @@
++###############################################################################
++#
++# at-spi2-atk
++#
++###############################################################################
++
++AT_SPI2_ATK_VERSION_MAJOR = 2.26
++AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
++AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
++AT_SPI2_ATK_SITE =  http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
++ATK_LICENSE = LGPL-2.0+
++ATK_LICENSE_FILES = COPYING
++AT_SPI2_ATK_INSTALL_STAGING = YES
++AT_SPI2_ATK_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
++AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
++
++$(eval $(autotools-package))
 -- 
 2.17.1
