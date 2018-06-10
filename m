@@ -1,36 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jun 2018 22:15:09 +0200
-Subject: [Buildroot] [PATCH v2 5/5] package/linphone: needs speexdsp
-In-Reply-To: <20180610201509.30546-1-bernd.kuhls@t-online.de>
-References: <20180610201509.30546-1-bernd.kuhls@t-online.de>
-Message-ID: <20180610201509.30546-5-bernd.kuhls@t-online.de>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 10 Jun 2018 22:39:09 +0200
+Subject: [Buildroot] xtensa: qemu_xtensa_lx60 issue with gcc 8.1
+Message-ID: <8d26aa17-fe18-2f56-8eb0-d32073ad099b@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/956/956b8cffa0a35a417763ad72bb7c8e8a8b2fe6b0/
+Hello Max,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: initial revision
+We recently added gcc 8.1 in Buildroot and checked if all qemu configs are able
+to boot correctly:
 
- package/linphone/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+https://gitlab.com/free-electrons/toolchains-builder/pipelines/23083553
 
-diff --git a/package/linphone/Config.in b/package/linphone/Config.in
-index 2504ca2b49..06eb059cfd 100644
---- a/package/linphone/Config.in
-+++ b/package/linphone/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LINPHONE
- 	depends on BR2_USE_MMU # libeXosip2
- 	select BR2_PACKAGE_LIBEXOSIP2
- 	select BR2_PACKAGE_SPEEX
-+	select BR2_PACKAGE_SPEEXDSP
- 	help
- 	  Linphone is an internet phone or Voice Over IP phone (VoIP).
- 
--- 
-2.17.1
+Unfortunately the qemu_xtensa_lx60 config doesn't boot using a toolchain with
+gcc 8.1, binutils 2.30, uclibc-ng 1.0.30 and a kernel 4.16.7.
+
+See: https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006443
+
+I'm able to reproduce the issue and fallback to gcc 7.3 allow to boot the system
+on Qemu. So it seems really related to the gcc version.
+
+Do you have any clue ?
+
+Best regards,
+Romain
