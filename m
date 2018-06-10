@@ -1,7 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Jun 2018 08:00:20 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-06-09
-Message-ID: <20180610060020.41274207AD@mail.bootlin.com>
+Date: Sun, 10 Jun 2018 08:03:15 +0200
+Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
+In-Reply-To: <20180609210607.13259-1-yann.morin.1998@free.fr>
+References: <20180609210607.13259-1-yann.morin.1998@free.fr>
+Message-ID: <20180610080315.11cf122b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,78 +12,122 @@ To: buildroot@busybox.net
 
 Hello,
 
-Build statistics for 2018-06-09
-===============================
+On Sat,  9 Jun 2018 23:06:07 +0200, Yann E. MORIN wrote:
+> Currently, the wording in the manual instructs the user to generate
+> tarball from "the contents of the +output/host+ directory".
+> 
+> This is pretty confusing, because taken literally, this would amount to
+> runing a command like:
+> 
+>     tar cf my-sdk.tar -C output/host/ .
+> 
+> This creates a tarbomb [0], which is very bad practice, because when
+> extracted, it creates mutiple files in the current directory.
+> 
+> One one really want to do, is create a tarball of the host/ directory,
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  33 |   3 |   0 |  36 |
-   2018.05.x |  29 |   0 |   0 |  29 |
-      master | 269 |  21 |   0 | 290 |
+"One one"
 
-Results for branch '2018.02.x'
-==============================
+> with something like:
+> 
+>     tar cf my-sdk.tar -C output host/
+> 
+> However, this is not much better, because the top-most dirdctory would
 
-Classification of failures by reason
-------------------------------------
+directory
 
-          host-faketime-v0.9.6 | 1 
-                    mpv-0.27.2 | 1 
-                    quota-4.01 | 1 
+> have a very common name, host/, which is pretty easy to get conflict
+> with.
+> 
+> So, we fix that mess by creating the archive ourselves, giving it and
 
+remove the final "and"
 
-Detail of failures
-------------------
+> the top-most directory a recogniseable name, based on the target tuple
+> and the Buildroot version.
+> 
+> Since this is an output file, we located it in the images/ directory.
 
-         arm |           host-faketime-v0.9.6 | NOK | http://autobuild.buildroot.net/results/40c2a6329a14167de0480795ff0cb44d7dff2af1 | ORPH
-         arm |                     mpv-0.27.2 | NOK | http://autobuild.buildroot.net/results/99da55a946380f034ad8441e34fa4b9abd4921f0 |     
-         arc |                     quota-4.01 | NOK | http://autobuild.buildroot.net/results/978ce51f631f67fff15ea813d8ce9d2bd0175618 |     
+located -> locate
 
-Results for branch 'master'
-===========================
+or maybe "place", "store" ?
 
-Classification of failures by reason
-------------------------------------
+> 
+> Update the manual accordignly.
 
-            host-flatcc-v0.5.1 | 6 
-                 opencv3-3.3.0 | 3 
-                qt5base-5.10.1 | 2 
-               aircrack-ng-1.2 | 1 
-                libmpeg2-0.5.1 | 1 
-                  mender-1.4.0 | 1 
-                 mesa3d-18.1.1 | 1 
-              mjpegtools-2.1.0 | 1 
-               mono-5.12.0.226 | 1 
-                protobuf-3.5.1 | 1 
-               qt5webkit-5.9.1 | 1 
-                  samba4-4.8.1 | 1 
-       shadowsocks-libev-3.2.0 | 1 
+accordingly
 
+> 
+> Speaking of the manual.. It was referring to "output/host/", but that
+> is only valid for in-tree builds. For out-of-tree builds, this is just
+> "host/". To avoid confusion, use the name of the vairiable $(HOST_DIR),
 
-Detail of failures
-------------------
+variable
 
-     powerpc |                aircrack-ng-1.2 | NOK | http://autobuild.buildroot.net/results/ace1e0218acafd641c3d4bc6cc2e3264fd159900 |     
-microblazeel |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/2fb09bf9035c027aa58e4988f6abc2ec456c70ed |     
-    mips64el |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/cb6d0361ccfb1ac1f15f0ceff6ff251eb781c9b4 |     
-         arm |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/b0fad59043cbcc2ce2d58c54577d10219642958c |     
-      mipsel |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/cc00979da3d00187e93ef92fdaa0e743f39e4c30 |     
- powerpc64le |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/1636ec6ddad92add95f42451d941156451c6d936 |     
-       sparc |             host-flatcc-v0.5.1 | NOK | http://autobuild.buildroot.net/results/66d07002c20b77507e60c236fbb9be78e0216136 |     
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/b4bfddceeb0fe0020de5419548daad7ee2058427 | ORPH
- powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/27ffa84f09270d9108d687cc6edf520350867c5c |     
-      x86_64 |                  mesa3d-18.1.1 | NOK | http://autobuild.buildroot.net/results/ccd07150e459b2b2caba6e561ecc6eae60c83ef5 |     
-     powerpc |               mjpegtools-2.1.0 | NOK | http://autobuild.buildroot.net/results/8a1c30a9c08f76a09c1d6130ec088d2c82dc55dd |     
-      mipsel |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/33f7056a2da883d3b1e1d6a4cb776695fd8c1a31 |     
-     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/9416c5fb7c16ba2c6fcb930a3a6347f6d40f1c45 |     
-     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/f8e70791485653e6c433e271bcb2812212a9e372 |     
-     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/6f48aa9821e4fa5184ed583916013caadc0704c2 |     
-     sparc64 |                 protobuf-3.5.1 | NOK | http://autobuild.buildroot.net/results/6c05d9920422ffacb0819b4046c7ba3fb4dfc02a |     
-        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/c7eb81fd70b1dcc35985af69e2196caa8f07fac9 |     
-        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/95f22d805f16864e8e922ff3a14de98136a8351c |     
-      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/00c64e227dd3fc35a606d462fc915632ccd65a65 |     
-      mipsel |                   samba4-4.8.1 | NOK | http://autobuild.buildroot.net/results/7a5a2faed4ee50b0a7bb2cbe0af4b4ef42306c3c |     
-       sparc |        shadowsocks-libev-3.2.0 | NOK | http://autobuild.buildroot.net/results/552b09ffe951c429422529c895f4c3ec723cf5ab |     
+> which, fortunately, happens to be valid in both cases.
 
+>  .PHONY: sdk
+> -sdk: world
+> +sdk: world $(BR2_TAR_HOST_DEPENDENCY)
+>  	@$(call MESSAGE,"Rendering the SDK relocatable")
+>  	$(TOPDIR)/support/scripts/fix-rpath host
+>  	$(TOPDIR)/support/scripts/fix-rpath staging
+>  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+>  	mkdir -p $(HOST_DIR)/share/buildroot
+>  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+> +	$(Q)mkdir -p $(BINARIES_DIR)
+> +	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
+> +		-C $(HOST_DIR) \
+> +		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
+> +		.
 
+Generally, I am fine with the principle, I believe it indeed makes
+sense to provide a tarball that is ready to use.
+
+I was a bit concerned about backward compatibility behavior for people
+already using "make sdk". But in fact your change is fine from this
+point of view: if people have scripts today that run "make sdk" and
+create a tarball from output/host, they will still work fine.
+
+> -It is possible to relocate the toolchain, this allows to distribute
+> -the toolchain to other developers to build applications for your
+> -target. To achieve this:
+> +Alternatively, Buildroot can also export the toolchain and all the
+> +development files of all selected packages,
+
+"all the development files" -> "the development files", otherwise the
+repetition of "all" is a bit annoying.
+
+> as an SDK, by running the
+> +command +make sdk+. This generates a tarball of the content of the host
+> +directory +$(HOST_DIR)+, named +buildroot-sdk.<TARGET-TUPLE>-<BR-VERSION>.tar.gz+
+> +and located in the output directory +$(BINARIES_DIR)+.
+>  
+> -* run +make sdk+, which prepares the toolchain to be relocatable;
+> -* tarball the contents of the +output/host+ directory;
+> -* distribute the resulting tarball.
+> +This tarball can then be distributed to application developpers, when
+> +they want to develop their applications that are not (yet) packaged as
+> +a Buildroot package.
+>  
+> -Once the toolchain is installed to the new location, the user must run
+> -the +relocate-sdk.sh+ script to make sure all paths are updated with
+> -the new location.
+> +Upon extracting the SDK tarball, the user must run the script
+> ++relocate-sdk.sh+, to make sure all paths are updated with the new
+> +location.
+>  
+> +.Note
+> +This SDK can not be re-used as an external toolchain, because it
+> +contains pre-built libraries that could be conflicting with the ones
+> +packaged in Buildroot (e.g. when an old SDK would be re-used with a
+> +newer Buildroot version), unless it was built from a configuration
+> +with no package enabled.
+
+Looks good otherwise. Thanks!
+
+Thomas Petazzoni
 -- 
-http://autobuild.buildroot.net
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
