@@ -1,47 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 10 Jun 2018 14:14:21 +0200
-Subject: [Buildroot] [git commit] package/fdk-aac: bump version to 0.1.6
-Message-ID: <20180610121237.B481188075@busybox.osuosl.org>
+Date: Sun, 10 Jun 2018 14:14:34 +0200
+Subject: [Buildroot] [git commit] package/mpg123: security bump to version
+ 1.25.10
+Message-ID: <20180610121237.BD22988075@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=687c7e5e481478f672697e5f272955fde28d1adb
+commit: https://git.buildroot.net/buildroot/commit/?id=cb67c1d55b7b58d542ec1c4d0311543f40d5d0a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added upstream and license hashes.
+Version 1.25.4 fixes CVE-2017-9545, for details see release notes:
+http://www.mpg123.org/cgi-bin/news.cgi
+
+Added upstream hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fdk-aac/fdk-aac.hash | 6 +++++-
- package/fdk-aac/fdk-aac.mk   | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/mpg123/mpg123.hash | 8 +++++---
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/fdk-aac/fdk-aac.hash b/package/fdk-aac/fdk-aac.hash
-index cd2e868488..db0f0d535c 100644
---- a/package/fdk-aac/fdk-aac.hash
-+++ b/package/fdk-aac/fdk-aac.hash
-@@ -1,2 +1,6 @@
-+# From https://sourceforge.net/projects/opencore-amr/files/fdk-aac/
-+sha1 574103e24fe45b3b89a92cc6a7a9d260c483b9e0  fdk-aac-0.1.6.tar.gz
-+md5 13c04c5f4f13f4c7414c95d7fcdea50f  fdk-aac-0.1.6.tar.gz
- # Locally computed:
--sha256  2164592a67b467e5b20fdcdaf5bd4c50685199067391c6fcad4fa5521c9b4dd7  fdk-aac-0.1.5.tar.gz
-+sha256 aab61b42ac6b5953e94924c73c194f08a86172d63d39c5717f526ca016bed3ad  fdk-aac-0.1.6.tar.gz
-+sha256 40b9ad8a1c630853bffc51bb5a46adf5c457afcc7c70d66d2ef919b1f14ccb4e  NOTICE
-diff --git a/package/fdk-aac/fdk-aac.mk b/package/fdk-aac/fdk-aac.mk
-index 0c9662ef32..72ae553c26 100644
---- a/package/fdk-aac/fdk-aac.mk
-+++ b/package/fdk-aac/fdk-aac.mk
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index cbab6f3ee9..22db5bca3c 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,5 +1,7 @@
+-# Locally calculated after checking pgp signature
+-sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
+-
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.10/
++sha1 604784ddbcfe282bffdc595d1d45c677c7cf381f  mpg123-1.25.10.tar.bz2
++md5 ea32caa61d41d8be797f0b04a1b43ad9  mpg123-1.25.10.tar.bz2
++# Locally calculated
++sha256 6c1337aee2e4bf993299851c70b7db11faec785303cfca3a5c3eb5f329ba7023  mpg123-1.25.10.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 01923d7990..dd2d39d978 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FDK_AAC_VERSION = 0.1.5
-+FDK_AAC_VERSION = 0.1.6
- FDK_AAC_SITE = http://downloads.sourceforge.net/project/opencore-amr/fdk-aac
- FDK_AAC_LICENSE = fdk-aac license
- FDK_AAC_LICENSE_FILES = NOTICE
+-MPG123_VERSION = 1.25.2
++MPG123_VERSION = 1.25.10
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
