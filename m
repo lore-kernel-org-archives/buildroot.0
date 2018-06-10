@@ -1,58 +1,60 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 10 Jun 2018 20:02:14 +0200
-Subject: [Buildroot] [PATCH 1/1] pixiewps: fix static linking with
- uclibc-ng
-In-Reply-To: <20180610154905.096c55e6@windsurf>
-References: <20180609135820.2002-1-fontaine.fabrice@gmail.com>
- <20180610154905.096c55e6@windsurf>
-Message-ID: <CAPi7W81Zy39Zb7zN1GF0TcpBARMXz3CYdKpL+WvUJ7zEGnDzAg@mail.gmail.com>
+Date: Sun, 10 Jun 2018 20:05:32 +0200
+Subject: [Buildroot] [PATCH 1/1] libtirpc: fix musl build
+Message-ID: <20180610180532.19164-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Don't redefine existing typedef (u_char, u_long, ...) on musl
 
-2018-06-10 15:49 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+Fixes:
+ - http://autobuild.buildroot.net/results/dbc07e383605a84eb19a2fd1899668612212518a
 
-> Hello,
->
-> On Sat,  9 Jun 2018 15:58:20 +0200, Fabrice Fontaine wrote:
->
-> > +PIXIEWPS_MAKE_OPTS = \
-> > +     $(TARGET_CONFIGURE_OPTS) \
-> > +     PREFIX=/usr
->
-> Why are you introducing PIXIEWPS_MAKE_OPTS instead of using
-> TARGET_CONFIGURE_OPTS directly ?
->
-I wanted to use this new variable to pass future options such as OPENSSL
-but you're right this is not needed for this fix.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../libtirpc/0006-rpc-types.h-fix-musl-build.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/libtirpc/0006-rpc-types.h-fix-musl-build.patch
 
->
-> Indeed your change also has the consequence of passing PREFIX=/usr at
-> build time. Is this necessary ? This seems like an unrelated change.
->
-No it's not necessary, I will send a v2 of this patch.
-
->
-> By the way, are you on IRC ?
->
-Nope, but I can join if needed.
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180610/d34c81bc/attachment.html>
+diff --git a/package/libtirpc/0006-rpc-types.h-fix-musl-build.patch b/package/libtirpc/0006-rpc-types.h-fix-musl-build.patch
+new file mode 100644
+index 0000000000..d4bcd80991
+--- /dev/null
++++ b/package/libtirpc/0006-rpc-types.h-fix-musl-build.patch
+@@ -0,0 +1,31 @@
++From 238f0a870f577e8fffd92820e1c1a88d4fc6d35f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 10 Jun 2018 19:48:21 +0200
++Subject: [PATCH] rpc/types.h: fix musl build
++
++Don't redefine existing typedef (u_char, u_long, ...) on musl
++
++Fixes:
++ - http://autobuild.buildroot.net/results/dbc07e383605a84eb19a2fd1899668612212518a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tirpc/rpc/types.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/tirpc/rpc/types.h b/tirpc/rpc/types.h
++index f069efa..0153a5c 100644
++--- a/tirpc/rpc/types.h
+++++ b/tirpc/rpc/types.h
++@@ -66,7 +66,7 @@ typedef   int32_t rpc_inline_t;
++ #define mem_free(ptr, bsize)	free(ptr)
++ 
++ 
++-#if defined __APPLE_CC__ || defined __FreeBSD__
+++#if defined __APPLE_CC__ || defined __FreeBSD__ || !defined (__GLIBC__)
++ # define __u_char_defined
++ # define __daddr_t_defined
++ #endif
++-- 
++2.14.1
++
+-- 
+2.14.1
