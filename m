@@ -1,48 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 10 Jun 2018 11:04:41 +0200
-Subject: [Buildroot] [PATCH 1/2] package/sqlite: bump version to 3.24.0
-Message-ID: <20180610090442.23425-1-bernd.kuhls@t-online.de>
+Date: Sun, 10 Jun 2018 11:16:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pngquant: bump version to 2.12.0
+Message-ID: <20180610091656.21446-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://www.sqlite.org/releaselog/3_24_0.html
-https://www.sqlite.org/releaselog/3_23_1.html
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
+ package/pngquant/pngquant.hash | 4 ++--
+ package/pngquant/pngquant.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 2aac7dc1d3..73a7ae6f11 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From http://www.sqlite.org/download.html
--sha1 2fb24ec12001926d5209d2da90d252b9825366ac  sqlite-autoconf-3220000.tar.gz
-+sha1 da68915e3563b5244cbcdb6c7e20fb35559bcfc6  sqlite-autoconf-3240000.tar.gz
- # Calculated based on the hash above
--sha256 2824ab1238b706bc66127320afbdffb096361130e23291f26928a027b885c612  sqlite-autoconf-3220000.tar.gz
-+sha256 d9d14e88c6fb6d68de9ca0d1f9797477d82fc3aed613558f87ffbdbbc5ceb74a  sqlite-autoconf-3240000.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 5ae17e17f6..15cfea48a0 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
+diff --git a/package/pngquant/pngquant.hash b/package/pngquant/pngquant.hash
+index a279100eca..f525e466c3 100644
+--- a/package/pngquant/pngquant.hash
++++ b/package/pngquant/pngquant.hash
+@@ -1,5 +1,5 @@
+ # From https://pngquant.org/releases.html
+-sha1 be140ec83c571b19219b639f2671b2316a2acaa1  pngquant-2.11.7-src.tar.gz
++sha1 f57ce0112e86ac966c55270ccf5971deff241d4f  pngquant-2.12.0-src.tar.gz
+ # Locally computed
+-sha256 d70b46c3335c7abf21944aced2d9d2b54819ab84ed1a140b354d5e8cc9f0fb0a  pngquant-2.11.7-src.tar.gz
++sha256 0e540c64bb58c05f2a05b4eaf1d3d165f0d3278500f15abfeac47f93f8fa8fa8  pngquant-2.12.0-src.tar.gz
+ sha256 e4f467f7abf860b4e620f5f60fdd88bc3a63a0fdb98a481fb002b5e511c9b826  COPYRIGHT
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index 20e5e763fb..26c293bec3 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITE_VERSION = 3220000
-+SQLITE_VERSION = 3240000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = http://www.sqlite.org/2018
- SQLITE_LICENSE = Public domain
+-PNGQUANT_VERSION = 2.11.7
++PNGQUANT_VERSION = 2.12.0
+ PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
+ PNGQUANT_SITE = https://pngquant.org
+ PNGQUANT_LICENSE = GPL-3.0+
 -- 
 2.17.1
