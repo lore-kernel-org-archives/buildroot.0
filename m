@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 10 Jun 2018 23:45:11 +0200
-Subject: [Buildroot] Initramfs
-In-Reply-To: <20180610071552.ym7c6xb4j3aa6vlh@sapphire.tkos.co.il>
-References: <2C6957468785C14D8F47AB016E1D8F4B158FA7C2@hasmsx107.ger.corp.intel.com>
- <20180610071552.ym7c6xb4j3aa6vlh@sapphire.tkos.co.il>
-Message-ID: <a03f82fc-c9c8-f6c5-12a9-288290e415fe@mind.be>
+Date: Sun, 10 Jun 2018 23:46:59 +0200
+Subject: [Buildroot] swapoff, but no swapon in initab
+In-Reply-To: <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
+References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
+ <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
+ <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
+Message-ID: <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +14,61 @@ To: buildroot@busybox.net
 
 
 
-On 10-06-18 09:15, Baruch Siach wrote:
-> Hi Gil,
+On 08-06-18 13:38, Carlos Santos wrote:
+>> From: "Arnout Vandecappelle" <arnout@mind.be>
+>> To: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>
+>> Sent: Thursday, June 7, 2018 6:12:48 PM
+>> Subject: Re: [Buildroot] swapoff, but no swapon in initab
 > 
-> On Sun, Jun 10, 2018 at 07:00:06AM +0000, Montag, Gil wrote:
->> I have few questions regarding the use of initramfs in my system:
+>> On 06-06-18 19:14, Carlos Santos wrote:
+>>> Hi,
+>>>
+>>> I'm working on a product that needs a swap partition and noticed that
+>>> both package/{busybox,sysvinit}/inittab invoke "swapoff -a" in their
+>>> shutdown sequences but do not invoke "swapon -a". Is this intentional
+>>> or the swapon call is missing (e.g. right after "mount -a")?
 >>
->> 1.       Please correct me if I'm wrong:
+>> It has been like that since
 >>
->> -          When I enable the initramfs option, buildroot creates for me the 
->> same rootfs that was created before (e.g. ext2),  just instead of making it 
->> a file to be later unpacked into a storage device (e.g. rootfs.ext2) it will 
->> pack it  in a cpio archieve, and have the kernel build use it to build a 
->> kernel image that already contains it inside.
-
- To be precise, Buildroot creates a tarball out of output/target, and that
-tarball is used to generate the different filesystems. So the initramfs is not
-derived from the ext2, and it is created exactly the same independent of which
-other filesystems you select.
-
+>> commit ffde94bd2ca21542ae0b4518348f8e986b9d92e0 (tag: 0_0)
+>> Author: Eric Andersen <andersen@codepoet.org>
+>> Date:   Sat Dec 22 01:56:11 2001
 >>
->> -          I don't need to enable ext2 file system anymore
+>>    Initial revision
+>>
+>> so whatever reason there was, it is lost in the mists of time.
+>>
+>> IMO I think it's pointless (the kernel will freeze swap accesses before
+>> shutdown) and possibly wrong (swap to file should be disabled before the
+>> corresponding filesystem is unmounted).
+>>
+>>
+>> Anyway, the proper way to handle swap is by adding it to fstab, no? I just
+>> checked and busybox seems to support it.
 > 
-> Correct. Though usually initramfs is only used as a first stage filesystem. 
-> Scripts running from initramfs locate the persistent storage and mount it. But 
-> there are plenty of use cases of initramfs only setup.
+> The point here is that I'd like to avoid adding yet another init script
+> just to call swap{on,off} in its st{art,op} phase. A "swapon -a" in
+> inittab would inspect /etc/fstab, as stated in the man page:
 
- Well, actually, the initramfs created by Buildroot is not really suitable as a
-first stage filesystem, it is really intended for an initramfs-only setup.
+ Ah, yes, I thought mount -a would do that.
 
 > 
->> 2.       If I want to add anything to the rootfs created this way, should I 
->> do it in the same way as I did before - e.g. with rootfs overlay?
-> 
-> Correct.
-> 
->> 3.       Kernel image (bzImage in my case) is expected to grow bigger than 
->> it was before by the amount of the size of the rootfs.cpio.gz  file created 
->> in output/images
-> 
-> That depends on how you configured initramfs compression in your kernel. 
-> Different compression algorithms give different compressed image sizes.
+>   "All devices marked as ``swap'' in /etc/fstab are made available,
+>    except for those with the ``noauto'' option. Devices that are
+>    already being used as swap are silently skipped."
 
- To be precise: what gets linked into the kernel is the uncompressed
-rootfs.cpio. So choosing a compression algorithm for the cpio rootfs has no
-impact on the bzImage size. The initramfs is then compressed together with the
-rest of the kernel (vmlinux) to create the bzImage. So it uses the same
-compression mode as the kernel (CONFIG_KERNEL_GZIP, CONFIG_KERNEL_BZIP2, ...).
+ So bottom line: it would make sense to add a swapon -a to the default inittabs
+(both busybox and sysv).
 
- The compression levels you select for the initrd (CONFIG_RD_GZIP,
-CONFIG_RD_BZIP2, ...) are only relevant for an external initrd, not linked into
-the kernel.
+ For system, BTW, I would expect it would already do the right thing based on
+fstab, no?
 
  Regards,
  Arnout
 
 > 
-> baruch
+> So even if the system already has such init script (e.g. from a
+> rootfs ovelay) a second call would be harmless.
 > 
 
 -- 
