@@ -1,232 +1,101 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 10 Jun 2018 15:38:57 +0200
-Subject: [Buildroot] [PATCH v3,2/2] librsvg: bump to version 2.42.5
-In-Reply-To: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
-References: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180610133857.4737-2-fontaine.fabrice@gmail.com>
+Date: Sun, 10 Jun 2018 15:42:44 +0200
+Subject: [Buildroot] [PATCH 1/1] mosquitto: bump to version 1.5
+Message-ID: <20180610134244.5369-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Add a dependency to host-cargo
-- Add a patch to set RUST_TARGET
-- Add a dependency to BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-- Forward this dependency to efl svg, enlightment, gst-plugins-bad and
-  gst1-plugins-bad
-- Add hash for license file
+Remove patch (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v2 -> v3 (after review of Thomas Petazzoni)
- - Put back select BR2_PACKAGE_HOST_CARGO in Config.in (even if it is
-   not needed) as well as first patch
+ ...01-websockets.c-unbreak-build-without-TLS.patch | 49 ----------------------
+ package/mosquitto/mosquitto.hash                   |  2 +-
+ package/mosquitto/mosquitto.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 51 deletions(-)
+ delete mode 100644 package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
 
-Changes v1 -> v2 (after review of Baruch Siach and Thomas Petazzoni):
- - Remove unneeded select BR2_PACKAGE_HOST_CARGO from Config.in and so
-   remove the first patch of the patch's serie
- - Forward BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS to gst-plugins-bad and
-   gst1-plugins-bad
-
- package/efl/Config.in                              |  1 +
- package/enlightenment/Config.in                    |  2 +
- package/gstreamer/gst-plugins-bad/Config.in        |  1 +
- package/gstreamer1/gst1-plugins-bad/Config.in      |  1 +
- .../librsvg/0001-Add-RUST_TARGET-variable.patch    | 57 ++++++++++++++++++++++
- package/librsvg/Config.in                          |  3 ++
- package/librsvg/librsvg.hash                       |  7 ++-
- package/librsvg/librsvg.mk                         | 12 +++--
- 8 files changed, 78 insertions(+), 6 deletions(-)
- create mode 100644 package/librsvg/0001-Add-RUST_TARGET-variable.patch
-
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index cfb803c6df..b9b285d8da 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -289,6 +289,7 @@ config BR2_PACKAGE_EFL_LIBRAW
+diff --git a/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch b/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
+deleted file mode 100644
+index e977fae56c..0000000000
+--- a/package/mosquitto/0001-websockets.c-unbreak-build-without-TLS.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 4822aa97da80a86033ec6e4a8b2f4ad0911235cf Mon Sep 17 00:00:00 2001
+-From: Peter Korsgaard <peter@korsgaard.com>
+-Date: Sat, 3 Mar 2018 11:04:47 +0100
+-Subject: [PATCH] websockets.c: unbreak build without TLS
+-
+-Commit 7943072b1f3b (Fix use_identity_as_username not working on websockets
+-clients) added code which unconditionally accesses mosq-ssl, breaking the
+-build when TLS support is disabled.
+-
+-Fix it by guarding this logic inside #ifdef WITH_TLS.
+-
+-[Upstream: https://dev.eclipse.org/mhonarc/lists/mosquitto-dev/msg01813.html]
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- src/websockets.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/websockets.c b/src/websockets.c
+-index d4d7961..a796f0a 100644
+---- a/src/websockets.c
+-+++ b/src/websockets.c
+-@@ -201,12 +201,14 @@ static int callback_mqtt(struct libwebsocket_context *context,
+- 				mosq->ws_context = context;
+- #endif
+- 				mosq->wsi = wsi;
+-+#ifdef WITH_TLS
+- 				if(in){
+- 					mosq->ssl = (SSL *)in;
+- 					if(!mosq->listener->ssl_ctx){
+- 						mosq->listener->ssl_ctx = SSL_get_SSL_CTX(mosq->ssl);
+- 					}
+- 				}
+-+#endif
+- 				u->mosq = mosq;
+- 			}else{
+- 				return -1;
+-@@ -240,7 +242,9 @@ static int callback_mqtt(struct libwebsocket_context *context,
+- 					mosq->pollfd_index = -1;
+- 				}
+- 				mosq->wsi = NULL;
+-+#ifdef WITH_TLS
+- 				mosq->ssl = NULL;
+-+#endif
+- 				do_disconnect(db, mosq);
+- 			}
+- 			break;
+--- 
+-2.11.0
+-
+diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
+index 91c855cb4e..87ddad9578 100644
+--- a/package/mosquitto/mosquitto.hash
++++ b/package/mosquitto/mosquitto.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking gpg signature
+-sha256 7d3b3e245a3b4ec94b05678c8199c806359737949f4cfe0bf936184f6ca89a83  mosquitto-1.4.15.tar.gz
++sha256 80c9606a906c736fe582b67bdfb650ee45239fea058fe34927f81277d3486e21  mosquitto-1.5.tar.gz
  
- config BR2_PACKAGE_EFL_SVG
- 	bool "SVG loader"
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # librsvg
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
- 	select BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO
-diff --git a/package/enlightenment/Config.in b/package/enlightenment/Config.in
-index d1dee25f86..892da79b4d 100644
---- a/package/enlightenment/Config.in
-+++ b/package/enlightenment/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_ENLIGHTENMENT
- 	bool "enlightenment"
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # efl svg -> librsvg
- 	# libevas-generic-loaders-svg -> librsvg -> glib2 / pango
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -29,6 +30,7 @@ config BR2_PACKAGE_ENLIGHTENMENT
- 	  http://www.enlightenment.org/
- 
- comment "enlightenment needs udev /dev management and a toolchain w/ wchar, C++, threads"
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_EFL && BR2_PACKAGE_XORG7 && BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_PACKAGE_HAS_UDEV
-diff --git a/package/gstreamer/gst-plugins-bad/Config.in b/package/gstreamer/gst-plugins-bad/Config.in
-index 7bbd56a602..6bedbefa41 100644
---- a/package/gstreamer/gst-plugins-bad/Config.in
-+++ b/package/gstreamer/gst-plugins-bad/Config.in
-@@ -297,6 +297,7 @@ config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_OPUS
- 
- config BR2_PACKAGE_GST_PLUGINS_BAD_PLUGIN_RSVG
- 	bool "rsvg"
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # librsvg
- 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
- 	select BR2_PACKAGE_LIBRSVG
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 7e166e43a1..5f93f5d1aa 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -643,6 +643,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPUS
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RSVG
- 	bool "rsvg"
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # librsvg
- 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
- 	select BR2_PACKAGE_LIBRSVG
-diff --git a/package/librsvg/0001-Add-RUST_TARGET-variable.patch b/package/librsvg/0001-Add-RUST_TARGET-variable.patch
-new file mode 100644
-index 0000000000..2807c2423f
---- /dev/null
-+++ b/package/librsvg/0001-Add-RUST_TARGET-variable.patch
-@@ -0,0 +1,57 @@
-+From 2bef718d1ade8dd20f431ac2eef9fdf58d96842f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 1 Jun 2018 20:58:25 +0200
-+Subject: [PATCH] Add RUST_TARGET variable
-+
-+Add RUST_TARGET environment variable through AC_ARG_VAR to allow the
-+user to override the rust target name. Indeed, using $host when
-+cross-compiling is not always the good option especially when vendor
-+part of target is not set to unknown but to another value such as
-+buildroot.
-+Indeed, in this case aarch64-buildroot-linux-gnu won't be recognised as
-+a valid target by rust/cargo.
-+
-+[Upstream status: merged (https://github.com/GNOME/librsvg/commit/f0b76ab6f003b8e05d4caab2b6d844e97b97796f)]
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile.am  | 2 +-
-+ configure.ac | 7 ++++++-
-+ 2 files changed, 7 insertions(+), 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index f21b58e2..0b5b906f 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -136,7 +136,7 @@ CARGO_RELEASE_ARGS=--release
-+ endif
-+ 
-+ if CROSS_COMPILING
-+-CARGO_TARGET_ARGS=--target=$(host)
-++CARGO_TARGET_ARGS=--target=$(RUST_TARGET)
-+ endif
-+ 
-+ CARGO_VERBOSE = $(cargo_verbose_$(V))
-+diff --git a/configure.ac b/configure.ac
-+index c9666757..50ca9f0f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -286,9 +286,14 @@ else
-+ fi
-+ AM_CONDITIONAL([DEBUG_RELEASE], [test "x$debug_release" = "xyes"])
-+ 
-++AC_ARG_VAR(RUST_TARGET, [Set rust target (default=$host)])
-++if test "x$RUST_TARGET" == x; then
-++	RUST_TARGET=$host
-++fi
-++
-+ AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
-+ if test "x$cross_compiling" = "xyes" ; then
-+-	RUST_TARGET_SUBDIR="$host/$RUST_TARGET_SUBDIR"
-++	RUST_TARGET_SUBDIR="$RUST_TARGET/$RUST_TARGET_SUBDIR"
-+ fi
-+ AC_SUBST([RUST_TARGET_SUBDIR])
-+ 
-+-- 
-+2.14.1
-+
-diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
-index ffb0287dbd..45919c7d51 100644
---- a/package/librsvg/Config.in
-+++ b/package/librsvg/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LIBRSVG
- 	bool "librsvg"
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
-@@ -8,6 +9,7 @@ config BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_GDK_PIXBUF
-+	select BR2_PACKAGE_HOST_CARGO
- 	select BR2_PACKAGE_LIBCROCO
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBXML2
-@@ -19,6 +21,7 @@ config BR2_PACKAGE_LIBRSVG
- 	  https://wiki.gnome.org/Projects/LibRsvg
- 
- comment "librsvg needs a toolchain w/ wchar, threads, C++"
-+	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/librsvg/librsvg.hash b/package/librsvg/librsvg.hash
-index 6f4b07423a..dce918d0ce 100644
---- a/package/librsvg/librsvg.hash
-+++ b/package/librsvg/librsvg.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.40/librsvg-2.40.20.sha256sum
--sha256	cff4dd3c3b78bfe99d8fcfad3b8ba1eee3289a0823c0e118d78106be6b84c92b	librsvg-2.40.20.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/librsvg/2.42/librsvg-2.42.5.sha256sum
-+sha256	d4dd51a492a2022c07dec385e22947190fe70410928c471934ff3399f20935ec	librsvg-2.42.5.tar.xz
-+
-+# Hash for license file:
-+sha256	d7bf9d064ac3e5840f9dd02422b7eeec4f1fd03f37fadbd043602be5e882304f	COPYING.LIB
-diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-index 4f563ce6db..037e1fbc14 100644
---- a/package/librsvg/librsvg.mk
-+++ b/package/librsvg/librsvg.mk
-@@ -4,18 +4,22 @@
+ # License files
+ sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
+diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+index ec5fc02f9f..993da2f925 100644
+--- a/package/mosquitto/mosquitto.mk
++++ b/package/mosquitto/mosquitto.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRSVG_VERSION_MAJOR = 2.40
--LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).20
-+LIBRSVG_VERSION_MAJOR = 2.42
-+LIBRSVG_VERSION = $(LIBRSVG_VERSION_MAJOR).5
- LIBRSVG_SITE = http://ftp.gnome.org/pub/gnome/sources/librsvg/$(LIBRSVG_VERSION_MAJOR)
- LIBRSVG_SOURCE = librsvg-$(LIBRSVG_VERSION).tar.xz
- LIBRSVG_INSTALL_STAGING = YES
- LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools --enable-introspection=no
- HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
--LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
-+LIBRSVG_DEPENDENCIES = cairo host-cargo host-gdk-pixbuf gdk-pixbuf libcroco libglib2 libxml2 pango \
- 	$(if $(BR2_PACKAGE_LIBGTK3),libgtk3)
--HOST_LIBRSVG_DEPENDENCIES = host-cairo host-gdk-pixbuf host-libcroco host-libglib2 host-libxml2 host-pango
-+HOST_LIBRSVG_DEPENDENCIES = host-cairo host-cargo host-gdk-pixbuf host-libcroco host-libglib2 host-libxml2 host-pango
- LIBRSVG_LICENSE = LGPL-2.0+
- LIBRSVG_LICENSE_FILES = COPYING.LIB
- 
-+# We're patching configure.ac
-+LIBRSVG_AUTORECONF = YES
-+LIBRSVG_CONF_ENV = RUST_TARGET=$(RUSTC_TARGET_NAME)
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-MOSQUITTO_VERSION = 1.4.15
++MOSQUITTO_VERSION = 1.5
+ MOSQUITTO_SITE = https://mosquitto.org/files/source
+ MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
+ MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
 -- 
 2.14.1
