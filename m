@@ -1,11 +1,10 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Sun, 10 Jun 2018 13:44:44 -0700
-Subject: [Buildroot] [RFC PATCH v2 4/9] libgtk3: remove patch to disable
- atk-bridge support
+Date: Sun, 10 Jun 2018 13:44:47 -0700
+Subject: [Buildroot] [RFC PATCH v2 7/9] clang: bump to version 6.0.0
 In-Reply-To: <20180610204449.13646-1-joseph.kogut@gmail.com>
 References: <20180608225932.13127-1-joseph.kogut@gmail.com>
  <20180610204449.13646-1-joseph.kogut@gmail.com>
-Message-ID: <20180610204449.13646-6-joseph.kogut@gmail.com>
+Message-ID: <20180610204449.13646-9-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,88 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/libgtk3/0003-disable-atk-bridge.patch | 45 -------------------
- package/libgtk3/Config.in                     |  1 +
- package/libgtk3/libgtk3.mk                    |  3 +-
- 3 files changed, 3 insertions(+), 46 deletions(-)
- delete mode 100644 package/libgtk3/0003-disable-atk-bridge.patch
+ package/clang/clang.hash | 2 +-
+ package/clang/clang.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgtk3/0003-disable-atk-bridge.patch b/package/libgtk3/0003-disable-atk-bridge.patch
-deleted file mode 100644
-index c92174f400..0000000000
---- a/package/libgtk3/0003-disable-atk-bridge.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--Remove atk-bridge support.
--
--atk-bridge doesn't seem useful for now in Buildroot and requires to
--add two new packages just for it: at-spi2-core and at-spi2-atk.
--
--Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
--
----- a/configure.ac
--+++ b/configure.ac
--@@ -1349,11 +1349,7 @@
-- # Check for Accessibility Toolkit flags
-- ########################################
--
---if test x$enable_x11_backend = xyes; then
---   ATK_PACKAGES="atk atk-bridge-2.0"
---else
---   ATK_PACKAGES="atk"
---fi
--+ATK_PACKAGES="atk"
--
-- PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
--
----- a/gtk/a11y/gtkaccessibility.c
--+++ b/gtk/a11y/gtkaccessibility.c
--@@ -37,10 +37,6 @@
-- #include <gtk/gtkcombobox.h>
-- #include <gtk/gtkaccessible.h>
--
---#ifdef GDK_WINDOWING_X11
---#include <atk-bridge.h>
---#endif
---
-- static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
--                                          guint                  n_param_values,
--                                          const GValue          *param_values,
--@@ -987,9 +983,5 @@
--   _gtk_accessibility_override_atk_util ();
--   do_window_event_initialization ();
--
---#ifdef GDK_WINDOWING_X11
---  atk_bridge_adaptor_init (NULL, NULL);
---#endif
---
--   atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
-- }
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index 12e64707bd..f14b9deaf8 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -20,6 +20,7 @@ config BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
- 		BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_ATK
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PS
- 	select BR2_PACKAGE_CAIRO_PDF
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 1b85d00aae..e3c3dc5237 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -26,7 +26,8 @@ LIBGTK3_CONF_OPTS = \
- LIBGTK3_MAKE_OPTS = \
- 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
+diff --git a/package/clang/clang.hash b/package/clang/clang.hash
+index bf54f9bb53..600c3cc9a4 100644
+--- a/package/clang/clang.hash
++++ b/package/clang/clang.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 fa9ce9724abdb68f166deea0af1f71ca0dfa9af8f7e1261f2cae63c280282800  cfe-5.0.2.src.tar.xz
++sha256 e07d6dd8d9ef196cfc8e8bb131cbd6a2ed0b1caf1715f9d05b0f0eeaddb6df32  cfe-6.0.0.src.tar.xz
+ sha256 de4c79665f0f5688b0ace17cba6f8e0343925bb95e0949d66d47bbd4527310d6 LICENSE.TXT
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index dc086c6eed..f828bac72a 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pixbuf libepoxy
-+LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk at-spi2-atk libglib2 \
-+		       cairo pango gdk-pixbuf libepoxy
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
- LIBGTK3_DEPENDENCIES += fontconfig xlib_libX11 xlib_libXext xlib_libXrender xlib_libXi
+-CLANG_VERSION = 5.0.2
++CLANG_VERSION = 6.0.0
+ CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
+ CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
+ CLANG_LICENSE = NCSA
 -- 
 2.17.1
