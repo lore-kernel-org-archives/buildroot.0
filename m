@@ -1,59 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 10 Jun 2018 17:04:00 +0200
-Subject: [Buildroot] [PATCH] docs/manual: always point to the correct
- license file
-In-Reply-To: <20180610164526.39af76ed@windsurf>
-References: <20180602080101.23051-1-yann.morin.1998@free.fr>
- <20180610164526.39af76ed@windsurf>
-Message-ID: <20180610150400.GD2471@scaer>
+Date: Sun, 10 Jun 2018 17:07:59 +0200
+Subject: [Buildroot] [PATCH] docs/manual: document filesystems
+In-Reply-To: <1789748625.2040845.1528637888756.JavaMail.zimbra@datacom.com.br>
+References: <20180609094647.21460-1-yann.morin.1998@free.fr>
+ <1806912659.2037633.1528582803656.JavaMail.zimbra@datacom.com.br>
+ <20180610081217.GB2471@scaer>
+ <1789748625.2040845.1528637888756.JavaMail.zimbra@datacom.com.br>
+Message-ID: <20180610150759.GE2471@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Carlos, All,
 
-On 2018-06-10 16:45 +0200, Thomas Petazzoni spake thusly:
-> On Sat,  2 Jun 2018 10:01:01 +0200, Yann E. MORIN wrote:
-> > The manual is GPL-2, and points to the COPYING file in the repository.
-> > When we do a rendering of the manual for a specific version, that URL
-> > is currently always poitning to the latest version of the COPYING file.
-> > 
-> > If we ever have to change the content of that file (e.g. to add a new
-> > exception, more clarifications, a license change, or whatever), then
-> > an old manual would point to that newer version, which would then be
-> > incorrect.
-> > 
-> > Include the sha1 of the commit in the URL, so that the manual always
-> > point to the tree at the time the manual was rendered, not the time
-> > it is consulted. Contrary to the informative text above, use the full
-> > sha1, not the shortened one.
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> > Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> > ---
-> >  docs/manual/manual.txt | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
+On 2018-06-10 10:38 -0300, Carlos Santos spake thusly:
+> > From: "Yann Morin" <yann.morin.1998@free.fr>
+> >> Genarating filesystem images do not modify the
+> >> contents of the global $(TARGET_DIR) and user-provided rootfs extensions
+> >> must not do this.
+[--SNIP--]
+> > Why do you insist on modifying the global target/ directory from your
+> > filesystem? If you do that, and build two or more filesystems [*], they
+> > might each try to modify target/ is incompatible ways, and this is not
+> > even safe, concurrency-wise (e.g. ony may try to archive the content of
+> > /var while another is doing a rm -rf on it.)
 > 
-> To be honest, I am not sure how likely it is that the COPYING file ever
-> changes. The copyright is owned by all the authors of the project, so a
-> license change would be very difficult to do.
+> I never intended to modify the global $(TARGET_DIR).
 
-Well, that is for cases where we would add a new exclusion clause (e.g.
-like we have for the patches we carry), or whatever change we may have
-in this file. Any such change is in fact a license change of the works
-as a whole, even when such a change is comp[atible with the existing
-license clauses.
+Sorry, I mis-interpreted your comment above, as "user-provided rootfs []
+must not do this" to which I appended in my head "but that is exactly
+what I want to do in my case."
 
-For example, if I were to rewrite the manual entirely from scratch,
-without re-using parts of the current one, and decided to put that
-work under CC-BY-SA-3.0 instead of GPL-2.0, then we would add an
-exception for the manual. That exception would be invalid for manuals
-rendered from current versions of Buildroot.
+I'm sorry, I should be more careful in my interpretations in the future.
 
-For example. ;-]
+So, I'll take that as a hint to further improve the section that
+explains how filesystems are generated, to more carefully describe and
+explain the sequence.
+
+Thanks again for the feedback! :-)
 
 Regards,
 Yann E. MORIN.
