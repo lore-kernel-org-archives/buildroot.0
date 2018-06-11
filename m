@@ -1,60 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:08:58 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] pkg-generic: error out
- with 'local' site method and no _SITE
-Message-ID: <20180611211537.760BB8832D@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 22:57:19 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/transmission:
+ remove BR2_PACKAGE_TRANSMISSION_REMOTE
+Message-ID: <20180611211537.06F778832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=619a722394a78baebb8c706b769ccfadd9c52a7b
+commit: https://git.buildroot.net/buildroot/commit/?id=079773ed15f2c1bd0fc4d23836387dcdfc536469
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The 'local' site method is easily confused with the 'file' site method,
-making people create packages like this:
+Commit 6e223241e1bb58a27eb890291f9f5c1fcc6a0818 ("Add Transmission
+package"), which added the transmission package, introduced a
+BR2_PACKAGE_TRANSMISSION_REMOTE Config.in option, supposedly matching
+the --enable-remote/--disable-remote transmission option.
 
-    FOO_SITE_METHOD = local
-    FOO_SOURCE = foo.tar.gz
+However, transmission as of version 2.33 packaged by this initial
+commit, did not have a --enable-remote/--disable-remote option, and it
+was apparently never part of transmission.
 
-    $(eval $(generic-package))
+Therefore, this commit removes this useless option. Since the
+transmission-remote tool is automatically built when the daemon is
+enabled, the Config.in.legacy handling selects
+BR2_PACKAGE_TRANSMISSION_DAEMON.
 
-Due to the intricacies of the generic package infra, this does not
-cause an error; instead, the foo.tar.gz tarball that happens to be
-present in the download directory will be used. This behaviour differs
-greatly from what is specified in the manual.
-
-Instead, error out immediately if a package specifies the 'local' site
-method but does not specify a _SITE.
-
-We check for _OVERRIDE_SRCDIR rather than checking for _SITE, just
-after _OVERRIDE_SRCDIR has been set to _SITE. Indeed, a package that
-sets _OVERRIDE_SRCDIR but not _SITE currently works correctly. There is
-no reason to make it fail.
-
-See also
-https://stackoverflow.com/questions/50364655/including-patches-to-build-root
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 775929c988db0197363a3c6f693fc3928bdb43de)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 79a678d7745bc3f3b5f361a7e3f25f39c3f1568b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ Config.in.legacy                     | 11 +++++++++++
+ package/transmission/Config.in       |  5 -----
+ package/transmission/transmission.mk |  6 ------
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index d635516734..a689dde4d2 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -510,6 +510,9 @@ ifeq ($$($(2)_SITE_METHOD),local)
- ifeq ($$($(2)_OVERRIDE_SRCDIR),)
- $(2)_OVERRIDE_SRCDIR = $$($(2)_SITE)
- endif
-+ifeq ($$($(2)_OVERRIDE_SRCDIR),)
-+$$(error $(1) has local site method, but `$(2)_SITE` is not defined)
-+endif
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 60f9148234..40f39e3a0b 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -145,6 +145,17 @@ endif
+ ###############################################################################
+ comment "Legacy options removed in 2018.02"
+ 
++config BR2_PACKAGE_TRANSMISSION_REMOTE
++	bool "transmission remote tool option removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_TRANSMISSION_DAEMON
++	help
++	  Upstream does not provide a separate configure option for
++	  the tool transmission-remote, it is built when the
++	  transmission daemon has been enabled. Therefore, Buildroot
++	  has automatically enabled BR2_PACKAGE_TRANSMISSION_DAEMON
++	  for you.
++
+ config BR2_KERNEL_HEADERS_3_4
+ 	bool "kernel headers version 3.4.x are no longer supported"
+ 	select BR2_KERNEL_HEADERS_4_1
+diff --git a/package/transmission/Config.in b/package/transmission/Config.in
+index 2110e52ac6..dac4d1b330 100644
+--- a/package/transmission/Config.in
++++ b/package/transmission/Config.in
+@@ -32,11 +32,6 @@ config BR2_PACKAGE_TRANSMISSION_DAEMON
+ 	help
+ 	  Install transmission daemon.
+ 
+-config BR2_PACKAGE_TRANSMISSION_REMOTE
+-	bool "transmission-remote"
+-	help
+-	  Install transmission remote management tool.
+-
+ config BR2_PACKAGE_TRANSMISSION_GTK
+ 	bool "transmission-gtk"
+ 	depends on BR2_PACKAGE_LIBGTK3 && BR2_SYSTEM_ENABLE_NLS
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index f10fa190c8..65add0d8c0 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -75,12 +75,6 @@ else
+ TRANSMISSION_CONF_OPTS += --disable-daemon
  endif
  
- ifndef $(2)_LICENSE
+-ifeq ($(BR2_PACKAGE_TRANSMISSION_REMOTE),y)
+-TRANSMISSION_CONF_OPTS += --enable-remote
+-else
+-TRANSMISSION_CONF_OPTS += --disable-remote
+-endif
+-
+ ifeq ($(BR2_PACKAGE_TRANSMISSION_GTK),y)
+ TRANSMISSION_CONF_OPTS += --with-gtk
+ TRANSMISSION_DEPENDENCIES += libgtk3
