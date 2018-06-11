@@ -1,24 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 21:39:50 +0200
-Subject: [Buildroot] [PATCH 2/2] triggerhappy: add optional dependency
- on systemd
-In-Reply-To: <2d163bcde561552e4e69fae382b2422ebe92dbf8.1528741488.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 11 Jun 2018 21:24:48 +0300")
-References: <d94eeb035e53af51d450c8e49b03e01cce0dfa1a.1528741488.git.baruch@tkos.co.il>
- <2d163bcde561552e4e69fae382b2422ebe92dbf8.1528741488.git.baruch@tkos.co.il>
-Message-ID: <87tvq9cdtl.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 21:41:06 +0200
+Subject: [Buildroot] [PATCH] orangepi_pc_defconfig: bump linux to 4.17,
+ u-boot to 2018.05
+In-Reply-To: <20180609143132.27879-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sat, 9 Jun 2018 16:31:32 +0200")
+References: <20180609143132.27879-1-peter@korsgaard.com>
+Message-ID: <87po0xcdrh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > triggerhappy can use systemd for socket activation.
- >
- > Cc: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > 4.17 brings support for HDMI out, but sunxi_defconfig hasn't been updated to
+ > enable the drivers - So add a kernel fragment to enable them.
+
+ > Likewise, analog audio has been supported since 4.10, but the driver isn't
+ > enabled in sunxi_defconfig, so enable it in the fragment.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
