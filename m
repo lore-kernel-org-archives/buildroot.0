@@ -1,26 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:13:57 +0200
-Subject: [Buildroot] [PATCH] libcoap: needs host-pkgconf
-In-Reply-To: <05abd27599f212ded7d70da32f47585784d3cc1a.1527221246.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 25 May 2018 07:07:26 +0300")
-References: <05abd27599f212ded7d70da32f47585784d3cc1a.1527221246.git.baruch@tkos.co.il>
-Message-ID: <87sh5t9gbu.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:14:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/asterisk: Fix issues building
+ without SSL
+In-Reply-To: <20180514062519.655-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 14 May 2018 08:25:19 +0200")
+References: <20180514062519.655-1-bernd.kuhls@t-online.de>
+Message-ID: <87o9gh9gbb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > The libcoap configure script uses pkg-config.
- > Fixes:
- > http://autobuild.buildroot.net/results/746/746c6dcbf3f941c7baa5b382bd264d830d839be1/
- > http://autobuild.buildroot.net/results/d98/d9840a22ae5eb6572b6641b93f8beadc27d2abb5/
- > http://autobuild.buildroot.net/results/905/905f122213ad9623ea5dd9d32c352efd151319f3/
+ > Fixes
+ > http://autobuild.buildroot.net/results/7d0/7d069dd5629e406cecd17bacfa818e7c8e6b2064/
 
- > Cc: Joris Lijssens <joris.lijssens@gmail.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2018.02.x, thanks.
 
