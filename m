@@ -1,23 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 21:35:59 +0200
-Subject: [Buildroot] [PATCH 1/1] yaml-cpp: disable tests
-In-Reply-To: <20180611045144.18669-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 11 Jun 2018 06:51:44 +0200")
-References: <20180611045144.18669-1-fontaine.fabrice@gmail.com>
-Message-ID: <87bmchdskg.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 21:37:02 +0200
+Subject: [Buildroot] [PATCH] gnupg2: security bump to version 2.2.8
+In-Reply-To: <a618f70f53764800a03a9dc414bc6b8fb77459f4.1528732392.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 11 Jun 2018 18:53:12 +0300")
+References: <a618f70f53764800a03a9dc414bc6b8fb77459f4.1528732392.git.baruch@tkos.co.il>
+Message-ID: <877en5dsip.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > fork is used in tests so build fails without MMU
- > Fixes:
- > - http://autobuild.buildroot.net/results/3cb7c4d93e466c6eef69aacd0e561a9fb569e69b
+ > Fixes CVE-2018-12020: Unsanitized file names might cause injection of
+ > terminal control characters into the status output of gnupg.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
