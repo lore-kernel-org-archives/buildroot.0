@@ -1,50 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 21:41:20 +0200
-Subject: [Buildroot] [git commit] configs/orangepi_lite: Bump kernel and
- U-Boot versions
-Message-ID: <20180611194200.15D0688285@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 21:37:36 +0200
+Subject: [Buildroot] [git commit] triggerhappy: use target pkg-config
+Message-ID: <20180611194200.01CA388285@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b0bc52cdd254966bb909b88ef4e94486f361a95
+commit: https://git.buildroot.net/buildroot/commit/?id=b4a7145b0b98fb37ee649e293a6a81785df67837
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump kernel to version 4.17 and U-Boot to 2018.05.
+triggerhappy uses pkg-config to detect the systemd library. Make sure it
+uses the target pkg-config, not the host one.
 
-Signed-off-by: Jan Kraval <jan.kraval@gmail.com>
+Fixes build failure when the host has systemd pkg-config files:
+
+.../host/bin/arm-linux-gcc -static  th-cmd.o cmdsocket.o  -lsystemd -o th-cmd
+.../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lsystemd
+
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/orangepi_lite_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/triggerhappy/triggerhappy.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/configs/orangepi_lite_defconfig b/configs/orangepi_lite_defconfig
-index 1e5fca8677..109861f21c 100644
---- a/configs/orangepi_lite_defconfig
-+++ b/configs/orangepi_lite_defconfig
-@@ -1,12 +1,12 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
- BR2_TARGET_GENERIC_HOSTNAME="OrangePi_Lite"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Orange Pi Lite"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/orangepi/orangepi-lite/linux-extras.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -21,7 +21,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_lite"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/package/triggerhappy/triggerhappy.mk b/package/triggerhappy/triggerhappy.mk
+index 9f74c486f1..4c39ab5e5d 100644
+--- a/package/triggerhappy/triggerhappy.mk
++++ b/package/triggerhappy/triggerhappy.mk
+@@ -8,9 +8,11 @@ TRIGGERHAPPY_VERSION = b822888066129350e51ad79f1cf307fa38dae4f7
+ TRIGGERHAPPY_SITE = $(call github,wertarbyte,triggerhappy,$(TRIGGERHAPPY_VERSION))
+ TRIGGERHAPPY_LICENSE = GPL-3.0+
+ TRIGGERHAPPY_LICENSE_FILES = COPYING
++TRIGGERHAPPY_DEPENDENCIES = host-pkgconf
+ 
+ define TRIGGERHAPPY_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) thd th-cmd
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) PKGCONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++		-C $(@D) thd th-cmd
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
