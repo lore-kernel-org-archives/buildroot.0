@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:17:16 +0200
-Subject: [Buildroot] [PATCH] faketime: add patch to disable -Werror
-In-Reply-To: <20180517215153.23753-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 17 May 2018 23:51:53 +0200")
-References: <20180517215153.23753-1-thomas.petazzoni@bootlin.com>
-Message-ID: <87lgbl81lv.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:17:29 +0200
+Subject: [Buildroot] [PATCH 1/2] ltrace: remove bogus comment in
+ Config.in file
+In-Reply-To: <20180519205502.23746-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 19 May 2018 22:55:01 +0200")
+References: <20180519205502.23746-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87h8m981li.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > faketime currently doesn't build on host machines that use gcc 8.x due
- > to stricter checks done by gcc, and the fact that it is built with
- > -Werror.
+ > In commit dfaa18af00dfcff71a0159adaafb0880e58fa6a1 ("ltrace: disable
+ > on mips/mipsel"), ltrace was disabled on mips/mipsel due to build
+ > issues, and a comment was added in the Config.in file to explain that
+ > even though ltrace has mips/mipsel support, it isn't enabled because
+ > it doesn't build.
 
- > As a simple stop-gap measure, this commit patches the faketime
- > Makefile to not use -Werror anymore.
+ > Then, in commit d23cce19c299e3010ba2dca84ab4ad35eff3cdbb ("ltrace:
+ > enable for mips/mipsel"), the build of ltrace on mips/mipsel was
+ > re-enabled, because it has been fixed upstream.
 
- > The actual fixes for the gcc 8.x issues have been submitted upstream
- > at https://github.com/wolfcw/libfaketime/pull/161, but disabling
- > -Werror is a much smaller fix.
+ > However, the comment in the Config.in comment was not removed in this
+ > commit. Due to this, we have a comment that says "we don't allow
+ > enabling ltrace on mips/mipsel" and the line right below precisely
+ > allows to enable ltrace on mips/mipsel.
 
- > Also, it is worth mentioning that removing -Werror makes the existing
- > patch 0001-Disable-the-non-null-compare-warning-error.patch (which was
- > just disabling one specific warning). We nonetheless keep this patch
- > around as it is a backport from upstream.
-
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/bd223dfa1c4baa68e427d4941bd2e9917e22da84/
+ > Fix this inconsistency by removing the no longer valid comment.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
