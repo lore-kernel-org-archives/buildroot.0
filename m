@@ -1,22 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:16:18 +0200
-Subject: [Buildroot] [PATCH 1/1] zmqpp: fix build with or1k and gcc < 6
-In-Reply-To: <20180504182119.28294-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 4 May 2018 20:21:19 +0200")
-References: <20180504182119.28294-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736xt9g7x.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:16:31 +0200
+Subject: [Buildroot] [PATCH] wavpack: add upstream security fixes
+In-Reply-To: <20180521132720.17915-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 21 May 2018 15:27:20 +0200")
+References: <20180521132720.17915-1-peter@korsgaard.com>
+Message-ID: <87y3fl81n4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.net/results/523e58eefba7ef23a09ef53160da22190ccbb098
+ > Fixes the following security issues:
+ > CVE-2018-10536: An issue was discovered in WavPack 5.1.0 and earlier.  The
+ > WAV parser component contains a vulnerability that allows writing to memory
+ > because ParseRiffHeaderConfig in riff.c does not reject multiple format
+ > chunks.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > CVE-2018-10537: An issue was discovered in WavPack 5.1.0 and earlier.  The
+ > W64 parser component contains a vulnerability that allows writing to memory
+ > because ParseWave64HeaderConfig in wave64.c does not reject multiple format
+ > chunks.
+
+ > CVE-2018-10538: An issue was discovered in WavPack 5.1.0 and earlier for WAV
+ > input.  Out-of-bounds writes can occur because ParseRiffHeaderConfig in
+ > riff.c does not validate the sizes of unknown chunks before attempting
+ > memory allocation, related to a lack of integer-overflow protection within a
+ > bytes_to_copy calculation and subsequent malloc call, leading to
+ > insufficient memory allocation.
+
+ > CVE-2018-10539: An issue was discovered in WavPack 5.1.0 and earlier for
+ > DSDiff input.  Out-of-bounds writes can occur because
+ > ParseDsdiffHeaderConfig in dsdiff.c does not validate the sizes of unknown
+ > chunks before attempting memory allocation, related to a lack of
+ > integer-overflow protection within a bytes_to_copy calculation and
+ > subsequent malloc call, leading to insufficient memory allocation.
+
+ > CVE-2018-10540: An issue was discovered in WavPack 5.1.0 and earlier for W64
+ > input.  Out-of-bounds writes can occur because ParseWave64HeaderConfig in
+ > wave64.c does not validate the sizes of unknown chunks before attempting
+ > memory allocation, related to a lack of integer-overflow protection within a
+ > bytes_to_copy calculation and subsequent malloc call, leading to
+ > insufficient memory allocation.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2018.02.x, thanks.
 
