@@ -1,23 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:14:16 +0200
-Subject: [Buildroot] [PATCH 1/1] package/asterisk: Fix issues building
- without SSL
-In-Reply-To: <20180514062519.655-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 14 May 2018 08:25:19 +0200")
-References: <20180514062519.655-1-bernd.kuhls@t-online.de>
-Message-ID: <87o9gh9gbb.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:15:01 +0200
+Subject: [Buildroot] [PATCH 2/4] package/transmission: fix systemd
+ support
+In-Reply-To: <20180520153155.1af6c039@windsurf> (Thomas Petazzoni's message of
+ "Sun, 20 May 2018 15:31:55 +0200")
+References: <20180502060540.11628-1-bernd.kuhls@t-online.de>
+ <20180502060540.11628-2-bernd.kuhls@t-online.de>
+ <20180520153155.1af6c039@windsurf>
+Message-ID: <87fu1t9ga2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes
- > http://autobuild.buildroot.net/results/7d0/7d069dd5629e406cecd17bacfa818e7c8e6b2064/
+ > Hello,
+ > On Wed,  2 May 2018 08:05:38 +0200, Bernd Kuhls wrote:
+ >> Patch 0005-libsystemd.patch backports an upstream commit which renames
+ >> the systemd configure option.
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> ---
+ >> package/transmission/transmission.mk | 4 ++--
+ >> 1 file changed, 2 insertions(+), 2 deletions(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > The order of the patches in your patch series is not very good. Indeed,
+ > patches 2/4, 3/4 and 4/4 are fixing problems that exist *today* in
+ > Buildroot, with the current version of transmission being packaged.
+ > Therefore, they should appear first in the series, before the bump.
+
+ > This is even more relevant right now, as patches 2/4, 3/4 and 4/4
+ > should be applied to master, while patch 1/4 is only for next.
+
+ > So, I've applied this patch to master, after fixing the commit log to
+ > mention 0006-libsystemd.patch, since the patch is named this way in
+ > master.
 
 Committed to 2018.02.x, thanks.
 
