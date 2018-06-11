@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:12:10 +0200
-Subject: [Buildroot] [PATCH] linux: don't override HOSTCC for kconfig
-In-Reply-To: <20180517123921.16086-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Thu, 17 May 2018 14:39:21 +0200")
-References: <20180517123921.16086-1-arnout@mind.be>
-Message-ID: <87in6pauz9.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:12:35 +0200
+Subject: [Buildroot] [PATCH v3] pkg-generic: error out with 'local' site
+ method and no _SITE
+In-Reply-To: <20180523090108.16009-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Wed, 23 May 2018 11:01:08 +0200")
+References: <20180523090108.16009-1-arnout@mind.be>
+Message-ID: <87efhdauyk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +14,34 @@ To: buildroot@busybox.net
 
 >>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Kconfig uses either pkg-config or hard-coded /usr/include paths to find
- > the ncurses or ncursesw library. If ncursesw is found, it will include
- > <ncursesw.h>. Since Buildroot's host-ncurses doesn't install a .pc file,
- > and linux.mk anyway doesn't pass the pkg-config options to find the host
- > pkg-config files, Kconfig will always find the system's ncursesw.h.
+ > The 'local' site method is easily confused with the 'file' site method,
+ > making people create packages like this:
 
- > However, since commit dde090c299 (linux: fix passing of host CFLAGS and
- > LDFLAGS) HOST_LDFLAGS is passed to the linux build system. Thus, if
- > host-ncurses was already built before 'make linux-menuconfig' is called,
- > the build will pick up libncurses from the host directory, which is NOT
- > widechar. Thus, two different ncurses configurations are mixed into the
- > final mconf program. This will result in serious breakage in the
- > rendering of the menus (lots of @ and question mark characters).
+ >     FOO_SITE_METHOD = local
+ >     FOO_SOURCE = foo.tar.gz
 
- > As a workaround (suggested by Yann), don't pass HOST_CFLAGS and
- > HOST_LDFLAGS when running kconfig commands. For kconfig, we should never
- > need host packages anyway. This way, the kconfig calls will always use
- > the system's ncurses and never our host-ncurses.
+ >     $(eval $(generic-package))
 
- > Note that the same problem could pop up for other kconfig packages as
- > well if we ever pass HOST_CFLAGS/HOST_LDFLAGS to them. We could force
- > HOSTCC=$(HOSTCC) directly in kconfig-package. However, for now there
- > are no other packages that exhibit this problem, so this can be
- > revisited when they do.
+ > Due to the intricacies of the generic package infra, this does not
+ > cause an error; instead, the foo.tar.gz tarball that happens to be
+ > present in the download directory will be used. This behaviour differs
+ > greatly from what is specified in the manual.
+
+ > Instead, error out immediately if a package specifies the 'local' site
+ > method but does not specify a _SITE.
+
+ > We check for _OVERRIDE_SRCDIR rather than checking for _SITE, just
+ > after _OVERRIDE_SRCDIR has been set to _SITE. Indeed, a package that
+ > sets _OVERRIDE_SRCDIR but not _SITE currently works correctly. There is
+ > no reason to make it fail.
+
+ > See also
+ > https://stackoverflow.com/questions/50364655/including-patches-to-build-root
 
  > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Cc: David De Grave <david.degrave@essensium.com>
- > Cc: Scott Fan <fancp2007@gmail.com>
- > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
  > ---
- > v3: override LINUX_KCONFIG_OPTS instead of building host-ncurses with
- >     wchar
+ > v3: error about _SITE, not about _SITE_METHOD (Thomas)
+ > v2: explain in commit message why we check for _OVERRIDE_SRCDIR
 
 Committed to 2018.02.x, thanks.
 
