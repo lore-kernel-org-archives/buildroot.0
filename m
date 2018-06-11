@@ -1,39 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:05:05 +0200
-Subject: [Buildroot] [PATCH] flatcc: fix build with gcc 8
-In-Reply-To: <0cccebf8e88b355751c465a74916eef6edecb090.1528655298.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 10 Jun 2018 21:28:18 +0300")
-References: <0cccebf8e88b355751c465a74916eef6edecb090.1528655298.git.baruch@tkos.co.il>
-Message-ID: <87zi01ay32.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 22:05:36 +0200
+Subject: [Buildroot] [git commit] triggerhappy: add optional dependency on
+ systemd
+Message-ID: <20180611200413.B30D4882B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2b88def5db35fc3f3b4e68c664c230bba33f0bb3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > gcc 8 enables a strncpy() warning. This breaks the build of flatcc that
- > enables -Werror. Add upstream patch fixing the issue.
+triggerhappy can use systemd for socket activation.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/0e3/0e3a959855fad5899db184f7d2c960c89df03672/
- > http://autobuild.buildroot.net/results/d2c/d2c03bc253bdf135b0f31f3d1e6fd33f7d37d64b/
- > http://autobuild.buildroot.net/results/163/1636ec6ddad92add95f42451d941156451c6d936/
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/triggerhappy/triggerhappy.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Cc: Joel Carlson <JoelsonCarl@gmail.com>
- > Cc: Mikkel Fahn?e J?rgensen <mikkel@dvide.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
-How about disabling Werror to workaround such issues in the future. From
-CMakeLists.txt:
-
-# -Werror is only set for some compiler versions that are believed to
-# to not generate any warnings. If the assumption breaks, disable
-# this option if the warning is not significant.
-option (FLATCC_ALLOW_WERROR "allow -Werror to be configured" ON)
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/triggerhappy/triggerhappy.mk b/package/triggerhappy/triggerhappy.mk
+index 4c39ab5e5d..7c4bf40476 100644
+--- a/package/triggerhappy/triggerhappy.mk
++++ b/package/triggerhappy/triggerhappy.mk
+@@ -10,6 +10,10 @@ TRIGGERHAPPY_LICENSE = GPL-3.0+
+ TRIGGERHAPPY_LICENSE_FILES = COPYING
+ TRIGGERHAPPY_DEPENDENCIES = host-pkgconf
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++TRIGGERHAPPY_DEPENDENCIES += systemd
++endif
++
+ define TRIGGERHAPPY_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) PKGCONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		-C $(@D) thd th-cmd
