@@ -1,69 +1,30 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 11 Jun 2018 22:19:09 +0200
-Subject: [Buildroot] [PATCH 1/1] postgresql --with-libxml configure
- option added
-In-Reply-To: <549ffe67-ad9f-b607-6735-09faa86f0b09@gmx.de>
-References: <549ffe67-ad9f-b607-6735-09faa86f0b09@gmx.de>
-Message-ID: <20180611221909.662ad5ad@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Jun 2018 22:19:53 +0200
+Subject: [Buildroot] [PATCH 1/1] mosquitto: bump to version 1.5
+In-Reply-To: <20180610134244.5369-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 10 Jun 2018 15:42:44 +0200")
+References: <20180610134244.5369-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r2ldaxee.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Daniel,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Fri, 8 Jun 2018 08:46:42 +0200, Daniel Deterding <daniel.deterding@gmx.de> wrote:
+ > Remove patch (already in version)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-> The postgresql package is now built with --with-libxml if 
-> BR2_PACKAGE_LIBXML2 is selected to allow the use of XML functions in 
-> postgresql.
+How much have you tested this? I haven't followed the discussion on
+mosquitto-dev in a lot of details, but apparently there is an unresolved
+crash issue:
 
-Minor nit, maybe add:
+https://github.com/eclipse/mosquitto/issues/505
 
-  Fixes https://bugs.busybox.net/show_bug.cgi?id=11071
+And a compilation issue caused by a variable name change:
 
-> 
-> Signed-off-by: Daniel Deterding <dde@innovaphone.com>
+https://github.com/eclipse/mosquitto/pull/810
 
-Thanks for the patch, you can add my
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-But I believe your email did not yet hit the mailing list/patchwork
-(I did not find it there [1], [2])...
-
-Regards,
-Peter
-
-[1] http://lists.busybox.net/pipermail/buildroot/2018-June/date.html
-[2] https://patchwork.ozlabs.org/project/buildroot/list/
-
-> ---
->  ?package/postgresql/postgresql.mk | 8 ++++++++
->  ?1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/postgresql/postgresql.mk 
-> b/package/postgresql/postgresql.mk
-> index 94b3e60e59..0940873686 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -70,6 +70,14 @@ else
->  ?POSTGRESQL_CONF_OPTS += --without-ldap
->  ?endif
-> 
-> +ifeq ($(BR2_PACKAGE_LIBXML2),y)
-> +POSTGRESQL_DEPENDENCIES += libxml2
-> +POSTGRESQL_CONF_OPTS += --with-libxml
-> +POSTGRESQL_CONF_ENV += XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
-> +else
-> +POSTGRESQL_CONF_OPTS += --without-libxml
-> +endif
-> +
->  ?define POSTGRESQL_USERS
->  ??????? postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL 
-> Server
->  ?endef
-> --
-> 2.11.0
-> 
-> 
+-- 
+Bye, Peter Korsgaard
