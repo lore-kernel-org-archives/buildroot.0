@@ -1,78 +1,66 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Mon, 11 Jun 2018 11:06:47 +0200
-Subject: [Buildroot] [RFC PATCH v3 5/9] llvm: add config to build
- backend for host arch
-In-Reply-To: <20180610205417.13963-6-joseph.kogut@gmail.com>
-References: <20180610204449.13646-1-joseph.kogut@gmail.com>
- <20180610205417.13963-1-joseph.kogut@gmail.com>
- <20180610205417.13963-6-joseph.kogut@gmail.com>
-Message-ID: <2deecd74-3cb2-e397-551c-263765682c8d@smile.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 11 Jun 2018 09:35:10 +0000
+Subject: [Buildroot] [Bug 11086] New: download/git submodule breaks on
+ symlinked dl folder
+Message-ID: <bug-11086-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Joseph,
+https://bugs.busybox.net/show_bug.cgi?id=11086
 
-On 10/06/2018 22:54, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->   package/llvm/Config.in | 9 +++++++++
->   package/llvm/llvm.mk   | 5 +++++
->   2 files changed, 14 insertions(+)
->
-> diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-> index 83e94660eb..e9c461b92f 100644
-> --- a/package/llvm/Config.in
-> +++ b/package/llvm/Config.in
-> @@ -11,6 +11,15 @@ config BR2_PACKAGE_LLVM_TARGET_ARCH
->   	default "ARM" if BR2_arm || BR2_armeb
->   	default "X86" if BR2_i386 || BR2_x86_64
->   
-> +config BR2_PACKAGE_LLVM_HOST_ARCH
-> +	string
-> +	default "AArch64" if BR2_HOSTARCH="aarch64"
-> +	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
-> +	default "ARM" if BR2_HOSTARCH = "arm"
-> +
-> +config BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH
-> +	bool
-> +
+            Bug ID: 11086
+           Summary: download/git submodule breaks on symlinked dl folder
+           Product: buildroot
+           Version: 2018.05
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: posted at heine.so
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-I think we could rename this option BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH
-and make it user-selectable:
+Hi,
 
-config BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH
-	bool "Build backend for host architecture"
+I'm not sure if this should be actually considered a bug but maybe this is
+something which should be mentioned in the documentation.
 
->   config BR2_PACKAGE_LLVM
->   	bool "llvm"
->   	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> index 3abf428989..04e99eb5b4 100644
-> --- a/package/llvm/llvm.mk
-> +++ b/package/llvm/llvm.mk
-> @@ -59,6 +59,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
->   LLVM_TARGETS_TO_BUILD += AMDGPU
->   endif
->   
-> +# Build backend for host architecture
-> +ifeq ($(BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH),y)
-> +LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_LLVM_HOST_ARCH))
-> +endif
-> +
+I have been symlinking the /dl folder of Buildroot to keep a central cache of
+downloads (I now know `export BR2_DL_DIR` might be better). This was no problem
+before but I ran into a problem with a git download which uses a submodule. 
 
-The only problem I see here is that we are going to build the backend for
-the host architecture also for the target, which is not necessary. Maybe
-we can use another variable like HOST_LLVM_TARGETS_TO_BUILD. This will
-break the compatibility of llvm-config for host and target when passing
---targets-built but I don't think this should be a problem.
+So my structure is like this
 
->   # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
->   LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
->   
+/foo/buildroot-2018.05
+/foo/dl
 
-Best regards,
+the BR folder contains a symlink to the dl folder (doesn't matter if relativ or
+absolute)
 
-Valentin
+the checkout of the submodule fails with
+fatal: Could not chdir to
+'../../../../../../../../dl/my_project/git/dep/my_submodule': No such file or
+directory
+
+If I compare paths I notice one too many '../' in this. which relates to the dl
+folder being one folder higher than the dl folder in BR.
+
+(the entry in .git/modules/dep/my_submodule/config contains the false relative
+worktree)
+
+I imagine this would require some decent fiddeling to fix. So maybe a note
+mentioning "you should no symlink the dl folder, use BR2_DL_DIR" would be
+helpful.
+
+Regards,
+Michael
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
