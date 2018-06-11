@@ -1,35 +1,35 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 11 Jun 2018 22:53:27 +0300
-Subject: [Buildroot] [PATCH 2/2] triggerhappy: add optional dependency
- on systemd
-In-Reply-To: <87tvq9cdtl.fsf@dell.be.48ers.dk>
-References: <d94eeb035e53af51d450c8e49b03e01cce0dfa1a.1528741488.git.baruch@tkos.co.il>
- <2d163bcde561552e4e69fae382b2422ebe92dbf8.1528741488.git.baruch@tkos.co.il>
- <87tvq9cdtl.fsf@dell.be.48ers.dk>
-Message-ID: <20180611195327.pjlhb2gmpxszx5mb@tarshish>
+From: Joel Carlson <joelsoncarl@gmail.com>
+Date: Mon, 11 Jun 2018 13:54:04 -0600
+Subject: [Buildroot] [PATCH] flatcc: fix build with gcc 8
+In-Reply-To: <0cccebf8e88b355751c465a74916eef6edecb090.1528655298.git.baruch@tkos.co.il>
+References: <0cccebf8e88b355751c465a74916eef6edecb090.1528655298.git.baruch@tkos.co.il>
+Message-ID: <CAAjKBV8M0WE6VdP06zRSgjXQCiVH+HwgGbNAP8iZxd6U7ttQVQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Baruch,
 
-On Mon, Jun 11, 2018 at 09:39:50PM +0200, Peter Korsgaard wrote:
-> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
->  > triggerhappy can use systemd for socket activation.
->  >
->  > Cc: Peter Korsgaard <peter@korsgaard.com>
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> 
-> Committed, thanks.
+Thanks for making this - it is a better solution to use the actual
+commit from upstream than what I previously submitted.
 
-Not in master as of d06d70d28db37 (modem-manager: update to version 1.8.0).
+On Sun, Jun 10, 2018 at 12:28 PM, Baruch Siach <baruch@tkos.co.il> wrote:
+> gcc 8 enables a strncpy() warning. This breaks the build of flatcc that
+> enables -Werror. Add upstream patch fixing the issue.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/0e3/0e3a959855fad5899db184f7d2c960c89df03672/
+> http://autobuild.buildroot.net/results/d2c/d2c03bc253bdf135b0f31f3d1e6fd33f7d37d64b/
+> http://autobuild.buildroot.net/results/163/1636ec6ddad92add95f42451d941156451c6d936/
+>
+> Cc: Joel Carlson <JoelsonCarl@gmail.com>
+> Cc: Mikkel Fahn?e J?rgensen <mikkel@dvide.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-baruch
+Reviewed-by: Joel Carlson <JoelsonCarl@gmail.com>
+Tested-by: Joel Carlson <JoelsonCarl@gmail.com>
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+I did a compile-test with i386 and aarch64 using a buildroot gcc 8.1.0
+toolchain.
