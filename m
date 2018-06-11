@@ -1,53 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:59:48 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] ltrace: remove bogus
- comment in Config.in file
-Message-ID: <20180611211537.0E3B38832D@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 23:05:41 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{9,
+ 14, 16}.x series
+Message-ID: <20180611211537.5719E8832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c1326c6534883e6e39f2da8c8d8ae56e2b088be
+commit: https://git.buildroot.net/buildroot/commit/?id=e8e53ec7c4d4ebdf3805ed6c6dc9792447774c59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-In commit dfaa18af00dfcff71a0159adaafb0880e58fa6a1 ("ltrace: disable
-on mips/mipsel"), ltrace was disabled on mips/mipsel due to build
-issues, and a comment was added in the Config.in file to explain that
-even though ltrace has mips/mipsel support, it isn't enabled because
-it doesn't build.
-
-Then, in commit d23cce19c299e3010ba2dca84ab4ad35eff3cdbb ("ltrace:
-enable for mips/mipsel"), the build of ltrace on mips/mipsel was
-re-enabled, because it has been fixed upstream.
-
-However, the comment in the Config.in comment was not removed in this
-commit. Due to this, we have a comment that says "we don't allow
-enabling ltrace on mips/mipsel" and the line right below precisely
-allows to enable ltrace on mips/mipsel.
-
-Fix this inconsistency by removing the no longer valid comment.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0f711e71c21f23c98d56ec8ea8a1778f049a2d1e)
+[Peter: drop 4.16.x change]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9e40a2d405128c22c4240fba3d66b2129789d0e3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ltrace/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
-index 4d5fb723d6..3a46b6a4f6 100644
---- a/package/ltrace/Config.in
-+++ b/package/ltrace/Config.in
-@@ -3,10 +3,6 @@ config BR2_PACKAGE_LTRACE
- 	depends on BR2_USE_WCHAR # elfutils
- 	depends on !BR2_STATIC_LIBS # elfutils
- 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
--	# ltrace normally has mips/mipsel support, but it's currently
--	# broken (error: 'struct ltelf' has no member named
--	# 'relplt_count'). Issue reported upstream at
--	# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756764.
- 	depends on (BR2_i386 || BR2_arm || BR2_mips || BR2_mipsel \
- 		|| BR2_powerpc || BR2_sparc || BR2_x86_64 || BR2_xtensa)
- 	select BR2_PACKAGE_ELFUTILS
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index fb58097428..bd910d2f2f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -243,11 +243,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.131"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.101"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.102"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.42"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.43"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
