@@ -1,43 +1,38 @@
-From: Min Xu <xuminready@gmail.com>
-Date: Mon, 11 Jun 2018 11:18:23 -0700
-Subject: [Buildroot] [PATCH v2 3/3] shadowsocks-libev: Adding the __sync
- related dependency
-In-Reply-To: <20180611181823.2722-1-xuminready@gmail.com>
-References: <20180611181823.2722-1-xuminready@gmail.com>
-Message-ID: <20180611181823.2722-3-xuminready@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 11 Jun 2018 21:24:48 +0300
+Subject: [Buildroot] [PATCH 2/2] triggerhappy: add optional dependency on
+ systemd
+In-Reply-To: <d94eeb035e53af51d450c8e49b03e01cce0dfa1a.1528741488.git.baruch@tkos.co.il>
+References: <d94eeb035e53af51d450c8e49b03e01cce0dfa1a.1528741488.git.baruch@tkos.co.il>
+Message-ID: <2d163bcde561552e4e69fae382b2422ebe92dbf8.1528741488.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To fixup libcork linking errors:
-"undefined reference to `__sync_val_compare_and_swap_4'"
-Fixes
-http://autobuild.buildroot.net/results/552b09ffe951c429422529c895f4c3ec723cf5ab
+triggerhappy can use systemd for socket activation.
 
-http://autobuild.buildroot.net/results/4810526381e15a194767753d324875bfbf5e3dde
-http://autobuild.buildroot.net/results/9cb76805c2f2952aa434d143831ee03c7d43aa52
-
-http://autobuild.buildroot.net/results/d00c5f9e1e7a6a40fac5763a06977b351b7875da
-http://autobuild.buildroot.net/results/0612f2dc09a8763fdf2111ee8d0c223c8531262a
-
-Signed-off-by: Min Xu <xuminready@gmail.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/shadowsocks-libev/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/triggerhappy/triggerhappy.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
-index 82c88e9..972e329 100644
---- a/package/shadowsocks-libev/Config.in
-+++ b/package/shadowsocks-libev/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_SHADOWSOCKS_LIBEV
- 	bool "shadowsocks-libev"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # for libcork
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR2_ARCH_IS_64 # for libcork
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # require pthreads
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_C_ARES
+diff --git a/package/triggerhappy/triggerhappy.mk b/package/triggerhappy/triggerhappy.mk
+index 4c39ab5e5d4e..7c4bf4047650 100644
+--- a/package/triggerhappy/triggerhappy.mk
++++ b/package/triggerhappy/triggerhappy.mk
+@@ -10,6 +10,10 @@ TRIGGERHAPPY_LICENSE = GPL-3.0+
+ TRIGGERHAPPY_LICENSE_FILES = COPYING
+ TRIGGERHAPPY_DEPENDENCIES = host-pkgconf
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++TRIGGERHAPPY_DEPENDENCIES += systemd
++endif
++
+ define TRIGGERHAPPY_BUILD_CMDS
+ 	$(MAKE) $(TARGET_CONFIGURE_OPTS) PKGCONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 		-C $(@D) thd th-cmd
 -- 
-2.11.0
+2.17.1
