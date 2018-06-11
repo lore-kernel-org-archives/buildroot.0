@@ -1,43 +1,36 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 11 Jun 2018 21:24:47 +0300
-Subject: [Buildroot] [PATCH 1/2] triggerhappy: use target pkg-config
-Message-ID: <d94eeb035e53af51d450c8e49b03e01cce0dfa1a.1528741488.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 11 Jun 2018 21:01:25 +0200
+Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
+In-Reply-To: <1528737656.28705.131.camel@impinj.com>
+References: <20180609210607.13259-1-yann.morin.1998@free.fr>
+ <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
+ <1528737656.28705.131.camel@impinj.com>
+Message-ID: <20180611210125.108ff027@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-triggerhappy uses pkg-config to detect the systemd library. Make sure it
-uses the target pkg-config, not the host one.
+Hello,
 
-Fixes build failure when the host has systemd pkg-config files:
+On Mon, 11 Jun 2018 17:20:57 +0000, Trent Piepho wrote:
 
-.../host/bin/arm-linux-gcc -static  th-cmd.o cmdsocket.o  -lsystemd -o th-cmd
-.../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lsystemd
+> Is the problem with using this tarball apparent?  The dockerfile needs
+> to be hand edited on every single build to use the correct path to the
+> SDK.
+> 
+> I've already added a "sdk-tar" to my external.mk to do this, but used
+> the tarbomb approach.  While annoying for those who extract it in their
+> home dir, it's much easier to use in an automated processes since there
+> is no unknown path name component.
 
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/triggerhappy/triggerhappy.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+You want to use the --strip-components=1 option of tar, which Buildroot
+is already using when extracting the tarballs of upstream packages into
+the output/build/<package>-<version>/ directories.
 
-diff --git a/package/triggerhappy/triggerhappy.mk b/package/triggerhappy/triggerhappy.mk
-index 9f74c486f10e..4c39ab5e5d4e 100644
---- a/package/triggerhappy/triggerhappy.mk
-+++ b/package/triggerhappy/triggerhappy.mk
-@@ -8,9 +8,11 @@ TRIGGERHAPPY_VERSION = b822888066129350e51ad79f1cf307fa38dae4f7
- TRIGGERHAPPY_SITE = $(call github,wertarbyte,triggerhappy,$(TRIGGERHAPPY_VERSION))
- TRIGGERHAPPY_LICENSE = GPL-3.0+
- TRIGGERHAPPY_LICENSE_FILES = COPYING
-+TRIGGERHAPPY_DEPENDENCIES = host-pkgconf
- 
- define TRIGGERHAPPY_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) thd th-cmd
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) PKGCONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+		-C $(@D) thd th-cmd
- endef
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
