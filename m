@@ -1,44 +1,33 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon, 11 Jun 2018 03:00:14 -0300
-Subject: [Buildroot] [PATCH 2/4] sysvinit: add an inittab entry to activate
- swap
-In-Reply-To: <20180611060016.20755-1-casantos@datacom.com.br>
-References: <20180611060016.20755-1-casantos@datacom.com.br>
-Message-ID: <20180611060016.20755-3-casantos@datacom.com.br>
+Date: Mon, 11 Jun 2018 03:00:12 -0300
+Subject: [Buildroot] [PATCH 0/4] synchronize initab files and enable swap on
+ startup
+Message-ID: <20180611060016.20755-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There is a call to swapoff in the shutdown sequence, so call "swapon -a"
-on startup. As stated in the swapon man page,
+* Apply to sysvinit a modification made for busybox in commit e9db8122fb
+  (reduce number of mkdir calls in inittab).
 
-   All devices marked as "swap" in /etc/fstab are made available, except
-   for those with the "noauto" option. Devices that are already being
-   used as swap are silently skipped.
+* Activate swap on system startup. This still requires a swap entry in
+  /etc/inittab, which must be provided by the user.
 
-So even if the system has some init script to start/stop swap (e.g. from
-a rootfs ovelay) calling swapon/swapoff would be harmless.
+* Synchronize the custom inittab used on Synopsis boards with the one in
+  the busybox package.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- package/sysvinit/inittab | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Carlos Santos (4):
+  sysvinit: reduce number of mkdir calls in inittab
+  sysvinit: add an inittab entry to activate swap
+  busybox: add an inittab entry to activate swap
+  board/synopsys: synchronize custom inittab with BusyBox' one
 
-diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
-index 2ca253ad6c..a31471031f 100644
---- a/package/sysvinit/inittab
-+++ b/package/sysvinit/inittab
-@@ -7,7 +7,8 @@ id:3:initdefault:
- si0::sysinit:/bin/mount -t proc proc /proc
- si1::sysinit:/bin/mount -o remount,rw /
- si2::sysinit:/bin/mkdir -p /dev/pts /dev/shm
--si4::sysinit:/bin/mount -a
-+si3::sysinit:/bin/mount -a
-+si4::sysinit:/sbin/swapon -a
- si5::sysinit:/bin/ln -sf /proc/self/fd /dev/fd 2>/dev/null
- si6::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin 2>/dev/null
- si7::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout 2>/dev/null
+ board/synopsys/axs10x/fs-overlay/etc/inittab | 16 ++++++++++------
+ package/busybox/inittab                      |  1 +
+ package/sysvinit/inittab                     |  6 +++---
+ 3 files changed, 14 insertions(+), 9 deletions(-)
+
 -- 
 2.17.0
