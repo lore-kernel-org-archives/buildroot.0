@@ -1,72 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:50:06 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] mbedtls: security bump to
- version 2.7.3
-Message-ID: <20180611211536.D2EC28832D@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 23:01:26 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{9,
+ 14, 16}.x series
+Message-ID: <20180611211537.235738832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15cd7278412c36dcc51a53f28a1f4c09c829dba5
+commit: https://git.buildroot.net/buildroot/commit/?id=5886f699b40e46c8f270dff09ed584de4229d061
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Extract from release announcement:
-
-- (2.9, 2.7, 2.1) Fixed an issue in the X.509 module which could lead
-to a buffer overread during certificate validation. Additionally, the
-issue could also lead to unnecessary callback checks being made or to
-some validation checks to be omitted. The overread could be triggered
-remotely, while the other issues would require a non DER-compliant
-certificate to be correctly signed by a trusted CA, or a trusted CA with
-a non DER-compliant certificate. Found by luocm. Fixes #825.
-
-- (2.9, 2.7, 2.1) Fixed the buffer length assertion in the
-ssl_parse_certificate_request() function which could lead to an
-arbitrary overread of the message buffer. The overreads could be caused
-by receiving a malformed algorithms section which was too short. In
-builds with debug output, this overread data was output with the debug
-data.
-
-- (2.9, 2.7, 2.1) Fixed a client-side bug in the validation of the
-server's ciphersuite choice which could potentially lead to the client
-accepting a ciphersuite it didn't offer or a ciphersuite that could not
-be used with the TLS or DTLS version chosen by the server. This could
-lead to corruption of internal data structures for some configurations.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a335d32a5f31dec4f23c89ce9f496fac6eba3d69)
+[Peter: drop 4.16.x change]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1d8afca9c69dc5246736d20d6e6ed266ccb70387)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mbedtls/mbedtls.hash | 6 +++---
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index f5331bed15..16f03fb7d8 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,5 +1,5 @@
--# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.8.0-2.7.2-and-2.1.11-released
--sha1	e36d7cbdc2ed0a5d5659385840e8fbb4d351234e	mbedtls-2.7.2-apache.tgz
--sha256	fd38c2bb5fbe1ffd3e7fdcdd71130986f2010f25b3a5575eb8ded0dd3bc573d7	mbedtls-2.7.2-apache.tgz
-+# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.9.0-2.7.3-and-2.1.12-released
-+sha1	8352f6713a9ee695f6f19e893c0e85941af71967	mbedtls-2.7.3-apache.tgz
-+sha256	05282af7d95fedb2430c248ffe3081646800b8dae9071f8da11a07100963d765	mbedtls-2.7.3-apache.tgz
- # Locally calculated
- sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index ca44ee3713..e6012dcb3f 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MBEDTLS_SITE = https://tls.mbed.org/code/releases
--MBEDTLS_VERSION = 2.7.2
-+MBEDTLS_VERSION = 2.7.3
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
- MBEDTLS_CONF_OPTS = \
- 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 70e3a07d46..fb58097428 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -243,11 +243,11 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.131"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.99"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.101"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.40"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.42"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
