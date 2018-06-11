@@ -1,56 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 21:59:35 +0200
-Subject: [Buildroot] [git commit] x265: fix build
-Message-ID: <20180611200413.A4C50882B3@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 11 Jun 2018 22:07:49 +0200
+Subject: [Buildroot] [RFC v3 1/3] libopenssl: bump version to 1.1.0h
+In-Reply-To: <0470f9f2-f90d-c19d-ee47-c97d393ced05@gmail.com>
+References: <20180508195431.19944-1-ps.report@gmx.net>
+ <0470f9f2-f90d-c19d-ee47-c97d393ced05@gmail.com>
+Message-ID: <20180611220749.24b8d3c9@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba2ee2306b4d9c737630aae2898284c486f163ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Ryan,
 
-Add upstream patch fixing missing function argument issue.
+On Sat, 9 Jun 2018 07:22:00 -0700, Ryan Coe <bluemrp9@gmail.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/caa/caaaa5dc428c12ce7137194589153313911b000f/
-http://autobuild.buildroot.net/results/741/741d8bacbe12e2f40047e30f7765039a88d1ce8f/
-http://autobuild.buildroot.net/results/2c3/2c3f5b18efe5f42e1ab5269e106b9200690330af/
+> Peter, All,
+> 
+> On 05/08/2018 12:54 PM, Peter Seiderer wrote:
+> > - remove all parallel build patches (openssl build-system changed)
+> >
+> > - rebased 0001-Dont-waste-time-building-manpages-if-we-re-not-going.patch
+> >    to apply to Configurations/unix-Makefile.tmpl (Makefile template)
+> >
+> > - replaced 0002-cryptodev-Fix-issue-with-signature-generation.patch with
+> >    upstream version
+> >
+> > - rebased 0003-Reproducible-build-do-not-leak-compiler-path.patch to
+> >    apply to crypto/build.info (Makefile template)
+> >
+> > - fix musl/uclibc build failure, use '-DOPENSSL_NO_ASYNC'
+> >
+> > - remove legacy enable-tlsext configure option
+> >
+> > - change legacy INSTALL_PREFIX to DESTDIR
+> >
+> > - remove 'libraries gets installed read only, so strip fails'
+> >    workaround (not needed anymore)
+> >
+> > - change engine directory from /usr/lib/engines to
+> >    /usr/lib/engines-1.1
+> >
+> > - change license file hash, no license change, only the following
+> >    hint was removed:
+> >
+> >      Actually both licenses are BSD-style Open Source licenses.
+> >      In case of any license issues related to OpenSSL please
+> >      contact openssl-core at openssl.org.
+> >
+> > - fix host-libopenssl compile setting rpath as decribed in
+> >    libopenssl-1.1.0h/NOTES.UNIX
+> >
+> > - add 0004-Revert-util-dofile.pl-only-quote-stuff-that-actually.patch
+> >    to fix build of ca-certificates (see [1])
+> >
+> > [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=894282
+> >
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>  
+> Tested-by: Ryan Coe <bluemrp9@gmail.com>
+> 
+> I have tested this on my x86_64 and arm builds.? I did find that MariaDB 
+> 10.1.x is not compatible with this version.? I think it would be 
+> appropriate to bump it to 10.2.x as it resolves the build issue.
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x265/0002-fix-build-error-on-ppc64le.patch | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+Many thanks for testing and the mariadb version bump suggestion, will
+add it to the next patch set iteration...
 
-diff --git a/package/x265/0002-fix-build-error-on-ppc64le.patch b/package/x265/0002-fix-build-error-on-ppc64le.patch
-new file mode 100644
-index 0000000000..ca034477eb
---- /dev/null
-+++ b/package/x265/0002-fix-build-error-on-ppc64le.patch
-@@ -0,0 +1,23 @@
-+# HG changeset patch
-+# User Jayashree <jayashree.c@multicorewareinc.com>
-+# Date 1527224165 -19800
-+# Node ID 4504219210793536d921ee4e0b3058698c630bf4
-+# Parent  cc2c5e46f3c87d27e3602af30b06ba6a0fbe2704
-+Fix build error on on ppc64le
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+
-+Upstream status: commit 450421921
-+
-+diff --git a/source/common/param.cpp b/source/common/param.cpp
-+--- a/source/common/param.cpp
-++++ b/source/common/param.cpp
-+@@ -633,7 +633,7 @@
-+         if (bValueWasNull)
-+             p->cpuid = atobool(value);
-+         else
-+-            p->cpuid = parseCpuName(value, bError);
-++            p->cpuid = parseCpuName(value, bError, false);
-+ #endif
-+     }
-+     OPT("fps")
+Regards,
+Peter
