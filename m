@@ -1,58 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:53:37 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] zmqpp: fix build with
- or1k and gcc < 6
-Message-ID: <20180611211536.DA18C8832D@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 22:40:29 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libnss: backport upstream
+ patch to fix build with gcc 8.x
+Message-ID: <20180611211536.AADE68832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9902742bccd3a1fc6d75fd06e3b67aa4f4e230bd
+commit: https://git.buildroot.net/buildroot/commit/?id=48633704fc246bb6c4b92d5ab528fb9c12faffc9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Use CONFIG variable to disable optimizations when or1k and gcc < 6 are
-detected otherwise set CONFIG to release or debug depending on
-BR2_ENABLE_DEBUG
+This commit backports upstream patch
+https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
+to our libnss package to fix the build with gcc 8.x.
 
 Fixes:
- - http://autobuild.buildroot.net/results/523e58eefba7ef23a09ef53160da22190ccbb098
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  http://autobuild.buildroot.net/results/1ca35171200286fa032b24606aaa50de6a2d449e/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7ab59879c798b56fb0dc203a8d55df712709a34f)
+(cherry picked from commit 45cf64ca0c0070151e4321e218e20cae5d730797)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zmqpp/zmqpp.mk | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ ...-Avoid-stringop-truncation-warning-r-fran.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/zmqpp/zmqpp.mk b/package/zmqpp/zmqpp.mk
-index f576527463..e57f7de4ea 100644
---- a/package/zmqpp/zmqpp.mk
-+++ b/package/zmqpp/zmqpp.mk
-@@ -12,6 +12,15 @@ ZMQPP_LICENSE = MPL-2.0
- ZMQPP_LICENSE_FILES = LICENSE
- ZMQPP_MAKE_OPTS = LD="$(TARGET_CXX)" BUILD_PATH=./build PREFIX=/usr
- ZMQPP_LDFLAGS = $(TARGET_LDFLAGS) -lpthread
-+ZMQPP_CONFIG = $(if $(BR2_ENABLE_DEBUG),debug,release)
+diff --git a/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
+new file mode 100644
+index 0000000000..c14880b117
+--- /dev/null
++++ b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
+@@ -0,0 +1,33 @@
++From f0ce70989526fc9a0223398c99ea0d09777ea5df Mon Sep 17 00:00:00 2001
++From: Martin Thomson <martin.thomson@gmail.com>
++Date: Thu, 15 Feb 2018 16:34:02 +1100
++Subject: [PATCH] Bug 1438426 - Avoid stringop-truncation warning, r=franziskus
 +
-+# gcc bug internal compiler error: in merge_overlapping_regs, at
-+# regrename.c:304. This bug is fixed since gcc 6.
-+# By setting CONFIG to empty, all optimizations such as -funroll-loops
-+# -ffast-math -finline-functions -fomit-frame-pointer are disabled
-+ifeq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
-+ZMQPP_CONFIG =
-+endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- ZMQPP_LDFLAGS += -latomic
-@@ -31,7 +40,7 @@ endif
- 
- define ZMQPP_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		LDFLAGS="$(ZMQPP_LDFLAGS)" \
-+		CONFIG=$(ZMQPP_CONFIG) LDFLAGS="$(ZMQPP_LDFLAGS)" \
- 		$(ZMQPP_MAKE_OPTS) $(if $(BR2_PACKAGE_ZMQPP_CLIENT),client,library) -C $(@D)
- endef
- 
++--HG--
++extra : rebase_source : 4ea1630d0da0ce3523309e3da33ee50961682242
++
++Upstream-commit: https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
++[Thomas: edited after git format-patch to add the nss/ prefix needed
++for the patch to apply properly on the source code extracted by the
++tarball.]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ nss/coreconf/nsinstall/pathsub.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/nss/coreconf/nsinstall/pathsub.c b/nss/coreconf/nsinstall/pathsub.c
++index a42a9f30a..c31a946f0 100644
++--- a/nss/coreconf/nsinstall/pathsub.c
+++++ b/nss/coreconf/nsinstall/pathsub.c
++@@ -212,7 +212,7 @@ reversepath(char *inpath, char *name, int len, char *outpath)
++ 	    xchdir("..");
++ 	} else {
++ 	    cp -= 3;
++-	    strncpy(cp, "../", 3);
+++	    memcpy(cp, "../", 3);
++ 	    xchdir(buf);
++ 	}
++     }
++-- 
++2.14.3
++
