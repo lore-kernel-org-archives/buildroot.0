@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:01:28 +0200
-Subject: [Buildroot] [PATCH] x265: fix build
-In-Reply-To: <2fc39171f4e4ed1f1efdb0f88a8ff5c446fd44ec.1528656288.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 10 Jun 2018 21:44:48 +0300")
-References: <2fc39171f4e4ed1f1efdb0f88a8ff5c446fd44ec.1528656288.git.baruch@tkos.co.il>
-Message-ID: <878t7lcctj.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 22:01:59 +0200
+Subject: [Buildroot] [PATCH] znc: fix build without openssl
+In-Reply-To: <c809ed2649c492c5cd3bd30fd9d50c38858fe7c7.1528657762.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 10 Jun 2018 22:09:22 +0300")
+References: <c809ed2649c492c5cd3bd30fd9d50c38858fe7c7.1528657762.git.baruch@tkos.co.il>
+Message-ID: <874li9ccso.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Add upstream patch fixing missing function argument issue.
+ > Add a patch to include <memory> unconditionally.
  > Fixes:
- > http://autobuild.buildroot.net/results/caa/caaaa5dc428c12ce7137194589153313911b000f/
- > http://autobuild.buildroot.net/results/741/741d8bacbe12e2f40047e30f7765039a88d1ce8f/
- > http://autobuild.buildroot.net/results/2c3/2c3f5b18efe5f42e1ab5269e106b9200690330af/
+ > http://autobuild.buildroot.net/results/4c3/4c3d9f6f5214052b7eda4c7bbfabe5b463080b12/
+ > http://autobuild.buildroot.net/results/d06/d06176f00109ad0707032b0d76fe94f1d414106c/
 
  > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
