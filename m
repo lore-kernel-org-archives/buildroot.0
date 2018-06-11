@@ -1,47 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:12:35 +0200
-Subject: [Buildroot] [PATCH v3] pkg-generic: error out with 'local' site
- method and no _SITE
-In-Reply-To: <20180523090108.16009-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Wed, 23 May 2018 11:01:08 +0200")
-References: <20180523090108.16009-1-arnout@mind.be>
-Message-ID: <87efhdauyk.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:12:53 +0200
+Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.60.0
+In-Reply-To: <c80a6fad0f71e02beda054135fc6e2e2f4ed2a0f.1526612436.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 18 May 2018 06:00:36 +0300")
+References: <c80a6fad0f71e02beda054135fc6e2e2f4ed2a0f.1526612436.git.baruch@tkos.co.il>
+Message-ID: <87a7s1auy2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The 'local' site method is easily confused with the 'file' site method,
- > making people create packages like this:
+ > Drop upstream patch.
+ > This release fixes the security issues listed below.
 
- >     FOO_SITE_METHOD = local
- >     FOO_SOURCE = foo.tar.gz
+ > CVE-2018-1000300: curl might overflow a heap based memory buffer when
+ > closing down an FTP connection with very long server command replies.
 
- >     $(eval $(generic-package))
+ >   https://curl.haxx.se/docs/adv_2018-82c2.html
 
- > Due to the intricacies of the generic package infra, this does not
- > cause an error; instead, the foo.tar.gz tarball that happens to be
- > present in the download directory will be used. This behaviour differs
- > greatly from what is specified in the manual.
+ > CVE-2018-1000301: curl can be tricked into reading data beyond the end
+ > of a heap based buffer used to store downloaded content.
 
- > Instead, error out immediately if a package specifies the 'local' site
- > method but does not specify a _SITE.
+ >   https://curl.haxx.se/docs/adv_2018-b138.html
 
- > We check for _OVERRIDE_SRCDIR rather than checking for _SITE, just
- > after _OVERRIDE_SRCDIR has been set to _SITE. Indeed, a package that
- > sets _OVERRIDE_SRCDIR but not _SITE currently works correctly. There is
- > no reason to make it fail.
-
- > See also
- > https://stackoverflow.com/questions/50364655/including-patches-to-build-root
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > ---
- > v3: error about _SITE, not about _SITE_METHOD (Thomas)
- > v2: explain in commit message why we check for _OVERRIDE_SRCDIR
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x, thanks.
 
