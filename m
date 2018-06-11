@@ -1,66 +1,104 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 11 Jun 2018 09:35:10 +0000
-Subject: [Buildroot] [Bug 11086] New: download/git submodule breaks on
- symlinked dl folder
-Message-ID: <bug-11086-163@https.bugs.busybox.net/>
+From: Jared Bents <jared.bents@rockwellcollins.com>
+Date: Mon, 11 Jun 2018 07:55:54 -0500
+Subject: [Buildroot] [PATCH 1/1] modem-manager: update to version 1.8.0
+Message-ID: <1528721754-42854-1-git-send-email-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11086
+Update to modem manager 1.8.0 which does not require udev.
+Added option to build without udev but if udev exists in
+the build, it will default to build with libgudev.
 
-            Bug ID: 11086
-           Summary: download/git submodule breaks on symlinked dl folder
-           Product: buildroot
-           Version: 2018.05
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: posted at heine.so
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+---
+ package/modem-manager/Config.in          | 17 +++++++++++------
+ package/modem-manager/modem-manager.hash |  2 +-
+ package/modem-manager/modem-manager.mk   | 11 +++++++++--
+ 3 files changed, 21 insertions(+), 9 deletions(-)
 
-Hi,
-
-I'm not sure if this should be actually considered a bug but maybe this is
-something which should be mentioned in the documentation.
-
-I have been symlinking the /dl folder of Buildroot to keep a central cache of
-downloads (I now know `export BR2_DL_DIR` might be better). This was no problem
-before but I ran into a problem with a git download which uses a submodule. 
-
-So my structure is like this
-
-/foo/buildroot-2018.05
-/foo/dl
-
-the BR folder contains a symlink to the dl folder (doesn't matter if relativ or
-absolute)
-
-the checkout of the submodule fails with
-fatal: Could not chdir to
-'../../../../../../../../dl/my_project/git/dep/my_submodule': No such file or
-directory
-
-If I compare paths I notice one too many '../' in this. which relates to the dl
-folder being one folder higher than the dl folder in BR.
-
-(the entry in .git/modules/dep/my_submodule/config contains the false relative
-worktree)
-
-I imagine this would require some decent fiddeling to fix. So maybe a note
-mentioning "you should no symlink the dl folder, use BR2_DL_DIR" would be
-helpful.
-
-Regards,
-Michael
-
+diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
+index 215449a..aacd3cd 100644
+--- a/package/modem-manager/Config.in
++++ b/package/modem-manager/Config.in
+@@ -1,12 +1,10 @@
+ config BR2_PACKAGE_MODEM_MANAGER
+ 	bool "modemmanager"
+-	depends on BR2_PACKAGE_HAS_UDEV
+-	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_USE_WCHAR # libglib2 and gnutls
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
+ 	depends on BR2_USE_MMU # dbus
+ 	select BR2_PACKAGE_DBUS # runtime dependency
+ 	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_LIBGUDEV
+ 	help
+ 	  ModemManager is a DBus-activated daemon which controls mobile
+ 	  broadband (2G/3G/4G) devices and connections.
+@@ -26,9 +24,16 @@ config BR2_PACKAGE_MODEM_MANAGER_LIBQMI
+ 	select BR2_PACKAGE_LIBQMI
+ 	help
+ 	  This option enables support for QMI protocol
++
++config BR2_PACKAGE_MODEM_MANAGER_UDEV
++	bool "Use udev"
++	default y if BR2_PACKAGE_HAS_UDEV
++	select BR2_PACKAGE_LIBGUDEV
++	help
++	  This option allows support for builds without udev. If udev
++	  is not included, say N.
+ endif
+ 
+-comment "modemmanager needs udev /dev management and a toolchain w/ wchar, threads"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_PACKAGE_HAS_UDEV
++comment "modemmanager needs a toolchain w/ wchar, threads"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 8531330..77a8c2d 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  eefb7615c2c7ebc994abfc2782bfa9e798643a633362b40db96f7f61706a6283  ModemManager-1.6.12.tar.xz
++sha256  18abe34421aa3b52ff47d4ba93aa282f8f8944717dd644a5c0c81eeeac9c7eb1  ModemManager-1.8.0.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index fe4a7a9..195c65e 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-MODEM_MANAGER_VERSION = 1.6.12
++MODEM_MANAGER_VERSION = 1.8.0
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+ MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
+-MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2 libgudev
++MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2
+ MODEM_MANAGER_INSTALL_STAGING = YES
+ MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
+ 
+@@ -20,6 +20,13 @@ else
+ MODEM_MANAGER_CONF_OPTS += --without-qmi
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MODEM_MANAGER_UDEV),y)
++MODEM_MANAGER_DEPENDENCIES += libgudev
++MODEM_MANAGER_CONF_OPTS += --with-udev
++else
++MODEM_MANAGER_CONF_OPTS += --without-udev
++endif
++
+ ifeq ($(BR2_PACKAGE_MODEM_MANAGER_LIBMBIM),y)
+ MODEM_MANAGER_DEPENDENCIES += libmbim
+ MODEM_MANAGER_CONF_OPTS += --with-mbim
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+1.9.1
