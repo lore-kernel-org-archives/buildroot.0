@@ -1,42 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:07:23 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libcoap: needs
- host-pkgconf
-Message-ID: <20180611211537.5E4E08832F@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 23:08:33 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.4.x
+ series
+Message-ID: <20180611211537.6DBA68832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3782766df2d3e970ab90043af4e1635491b65009
+commit: https://git.buildroot.net/buildroot/commit/?id=efc613d6b139d7ab7a8662c7cb42838ccc69ebeb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The libcoap configure script uses pkg-config.
-
-Fixes:
-http://autobuild.buildroot.net/results/746/746c6dcbf3f941c7baa5b382bd264d830d839be1/
-http://autobuild.buildroot.net/results/d98/d9840a22ae5eb6572b6641b93f8beadc27d2abb5/
-http://autobuild.buildroot.net/results/905/905f122213ad9623ea5dd9d32c352efd151319f3/
-
-Cc: Joris Lijssens <joris.lijssens@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 861103a1ad48460ef33357c703b39336e4a07d82)
+(cherry picked from commit 9ee9adc747762347fe9e17d544bc5bc7b032e24c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcoap/libcoap.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index 31a6822dd3..4f87886ba0 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -9,6 +9,7 @@ LIBCOAP_SITE = $(call github,obgm,libcoap,$(LIBCOAP_VERSION))
- LIBCOAP_INSTALL_STAGING = YES
- LIBCOAP_LICENSE = GPL-2.0+ or BSD-2-Clause
- LIBCOAP_LICENSE_FILES = COPYING LICENSE.GPL LICENSE.BSD
-+LIBCOAP_DEPENDENCIES = host-pkgconf
- LIBCOAP_CONF_OPTS = --disable-examples
- LIBCOAP_AUTORECONF = YES
- 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index bee86d1388..65e0556f88 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -242,7 +242,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.51"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.131"	if BR2_KERNEL_HEADERS_4_4
++	default "4.4.133"	if BR2_KERNEL_HEADERS_4_4
+ 	default "4.9.103"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
