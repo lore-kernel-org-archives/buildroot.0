@@ -1,11 +1,13 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:14:54 +0200
-Subject: [Buildroot] [git commit] package/transmission: remove
- BR2_PACKAGE_TRANSMISSION_REMOTE
-In-Reply-To: <20180520134322.84EE081320@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 20 May 2018 15:38:46 +0200")
-References: <20180520134322.84EE081320@busybox.osuosl.org>
-Message-ID: <87k1r59ga9.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:15:08 +0200
+Subject: [Buildroot] [PATCH 3/4] package/transmission: fix inotify
+ configure option
+In-Reply-To: <20180520153705.0f864601@windsurf> (Thomas Petazzoni's message of
+ "Sun, 20 May 2018 15:37:05 +0200")
+References: <20180502060540.11628-1-bernd.kuhls@t-online.de>
+ <20180502060540.11628-3-bernd.kuhls@t-online.de>
+ <20180520153705.0f864601@windsurf>
+Message-ID: <87bmch9g9v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,25 +16,15 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=79a678d7745bc3f3b5f361a7e3f25f39c3f1568b
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
- > Commit 6e223241e1bb58a27eb890291f9f5c1fcc6a0818 ("Add Transmission
- > package"), which added the transmission package, introduced a
- > BR2_PACKAGE_TRANSMISSION_REMOTE Config.in option, supposedly matching
- > the --enable-remote/--disable-remote transmission option.
-
- > However, transmission as of version 2.33 packaged by this initial
- > commit, did not have a --enable-remote/--disable-remote option, and it
- > was apparently never part of transmission.
-
- > Therefore, this commit removes this useless option. Since the
- > transmission-remote tool is automatically built when the daemon is
- > enabled, the Config.in.legacy handling selects
- > BR2_PACKAGE_TRANSMISSION_DAEMON.
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Hello,
+ > On Wed,  2 May 2018 08:05:39 +0200, Bernd Kuhls wrote:
+ >> The configure option is really called --with-inotify:
+ >> https://github.com/transmission/transmission/blob/2.9x/configure.ac#L211
+ >> 
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ >> ---
+ >> package/transmission/transmission.mk | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
 
 Committed to 2018.02.x, thanks.
 
