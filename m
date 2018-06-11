@@ -1,7 +1,7 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 11 Jun 2018 18:53:12 +0300
-Subject: [Buildroot] [PATCH] gnupg2: security bump to version 2.2.8
-Message-ID: <a618f70f53764800a03a9dc414bc6b8fb77459f4.1528732392.git.baruch@tkos.co.il>
+Date: Mon, 11 Jun 2018 19:08:43 +0300
+Subject: [Buildroot] [PATCH] gnupg: security bump to version 1.4.23
+Message-ID: <8c0af0af39244f35c59dc5d9fb92f9369b831088.1528733323.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,40 +11,34 @@ To: buildroot@busybox.net
 Fixes CVE-2018-12020: Unsanitized file names might cause injection of
 terminal control characters into the status output of gnupg.
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gnupg/gnupg.hash | 4 ++--
+ package/gnupg/gnupg.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index f5cc95cb1b4c..f5890c5e2aa1 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,6 +1,6 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000424.html
--sha1 e222cda63409a86992369df8976f6c7511e10ea0  gnupg-2.2.7.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000425.html
-+sha1 d87553a125832ea90e8aeb3ceeecf24f88de56fb  gnupg-2.2.8.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.7.tar.bz2.sig
--sha256 d95b361ee6ef7eff86af40c8c72bf9313736ac9f7010d6604d78bf83818e976e  gnupg-2.2.7.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.8.tar.bz2.sig
-+sha256 777b4cb8ced21965a5053d4fa20fe11484f0a478f3d011cef508a1a49db50dcd  gnupg-2.2.8.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 0823921b0b14..3151860f3779 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
+diff --git a/package/gnupg/gnupg.hash b/package/gnupg/gnupg.hash
+index abd76cde9c5e..3bacdf6563f3 100644
+--- a/package/gnupg/gnupg.hash
++++ b/package/gnupg/gnupg.hash
+@@ -1,3 +1,3 @@
+ # Locally computed based on signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-1.4.22.tar.bz2.sig
+-sha256	9594a24bec63a21568424242e3f198b9d9828dea5ff0c335e47b06f835f930b4	gnupg-1.4.22.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-1.4.23.tar.bz2.sig
++sha256	c9462f17e651b6507848c08c430c791287cd75491f8b5a8b50c6ed46b12678ba	gnupg-1.4.23.tar.bz2
+diff --git a/package/gnupg/gnupg.mk b/package/gnupg/gnupg.mk
+index 3ff202b709d9..ac9047894d4d 100644
+--- a/package/gnupg/gnupg.mk
++++ b/package/gnupg/gnupg.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.7
-+GNUPG2_VERSION = 2.2.8
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-GNUPG_VERSION = 1.4.22
++GNUPG_VERSION = 1.4.23
+ GNUPG_SOURCE = gnupg-$(GNUPG_VERSION).tar.bz2
+ GNUPG_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG_LICENSE = GPL-3.0+
 -- 
 2.17.1
