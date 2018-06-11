@@ -1,38 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:45:46 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] nfs-utils: update
- homepage link
-Message-ID: <20180611211536.C295B8832D@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 22:37:15 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] exim: do not link
+ buildconfig with $(LIBS)
+Message-ID: <20180611211536.A2D648832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fd0f9c985fff0b70dec74e7086e774d7de6cd0d
+commit: https://git.buildroot.net/buildroot/commit/?id=f8d62365739143ce3120e241be6953c7f6d1248e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The linux-nfs project switched to a new homepage. Update the help text
-link.
+The existing patch 0001-Build-buildconfig-for-the-host.patch changes
+the exim build system to use the host compiler to build the
+"buildconfig" program instead of the cross-compiler.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+However, it still uses $(LIBS) which lists the target libraries to
+link with, which shouldn't be used. Since buildconfig doesn't use any
+library beyond the C library, we can simply drop using $(LIBS).
+
+This will fix build failures of exim on Fedora 28, where libnsl is no
+longer provided by the C library, causing build failures such as:
+
+/usr/bin/gcc buildconfig.c
+/usr/bin/ld: cannot find -lnsl
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/ac78fe18657558b3c12c03c08bf1081d7c06ca85/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0d7757110a18addce7f4885f6c509f9a275215cb)
+(cherry picked from commit b872d829d092059ae8d5e86115d1515164d01a74)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nfs-utils/Config.in | 2 +-
+ package/exim/0001-Build-buildconfig-for-the-host.patch | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index 4e139363fc..055b711f0d 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_NFS_UTILS
- 	help
- 	  The NFS Linux kernel server.
- 
--	  http://sourceforge.net/projects/nfs
-+	  http://linux-nfs.org/
- 
- if BR2_PACKAGE_NFS_UTILS
- 
+diff --git a/package/exim/0001-Build-buildconfig-for-the-host.patch b/package/exim/0001-Build-buildconfig-for-the-host.patch
+index a926fbdab3..87eb527974 100644
+--- a/package/exim/0001-Build-buildconfig-for-the-host.patch
++++ b/package/exim/0001-Build-buildconfig-for-the-host.patch
+@@ -17,7 +17,7 @@ index 29a6ad3..420ba60 100644
+ -	@echo "$(CC) buildconfig.c"
+ -	$(FE)$(CC) $(CFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
+ +	@echo "$(HOSTCC) buildconfig.c"
+-+	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
+++	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c
+  
+  
+  # Target for the exicyclog utility script
