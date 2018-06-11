@@ -1,30 +1,34 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Mon, 11 Jun 2018 15:12:16 -0400
-Subject: [Buildroot] Using a bootlin toolchain with buildroot
-In-Reply-To: <CAF_dkJDwfTvVHmSVgi4mo=2u=-Yj-__3e7rqsOyUXppLPeysEQ@mail.gmail.com>
-References: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
- <20180406210215.6c276c4f@windsurf.home>
- <CAF_dkJBUm=iYA_WPm3eJ1KGN6aKJKVS+PoYdJnnWax-xivKJWw@mail.gmail.com>
- <20180407084321.1e68cc90@windsurf.home>
- <CAF_dkJDwfTvVHmSVgi4mo=2u=-Yj-__3e7rqsOyUXppLPeysEQ@mail.gmail.com>
-Message-ID: <CAF_dkJAH5u3g_rQYaUVzCnUMyeMTMZrRbo0KDnOt6pVQtwvb-g@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 11 Jun 2018 21:28:05 +0200
+Subject: [Buildroot] [PATCH] orangepi_pc_defconfig: bump linux to 4.17,
+ u-boot to 2018.05
+In-Reply-To: <20180610141609.6c07bdd3@windsurf> (Thomas Petazzoni's message of
+ "Sun, 10 Jun 2018 14:16:09 +0200")
+References: <20180609143132.27879-1-peter@korsgaard.com>
+ <20180610141609.6c07bdd3@windsurf>
+Message-ID: <87fu1tdsxm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi All,
-Remember this thread from last April?
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Suppose I wanted to generate and host my own prebuilt toolchain.
-Suppose I really liked the existing
-armv7-eabihf--musl--stable-2018.02-2 toolchain, but I really wanted to
-use 4.9 kernel headers instead of 4.1.  How would I generate and
-archive the toolchain for my own use?
+ > Hello,
+ > On Sat,  9 Jun 2018 16:31:32 +0200, Peter Korsgaard wrote:
 
-And, as long as I have your attention, what is the difference between
-the 2018.02-1 and 2018.02-2 toolchains anyway?  They seem to have the
-same set of GCC, GDB, Linux headers, library, and binutils versions.
+ >> @@ -29,5 +32,3 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ >> BR2_PACKAGE_HOST_GENIMAGE=y
+ >> BR2_PACKAGE_HOST_MTOOLS=y
+ >> BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ >> -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ >> -BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/orangepi/orangepi-pc/genimage.cfg"
 
---wpd
+ > It's not clear why you're dropping genimage support. Is this a mistake ?
+
+Ehh, it is not removed, just moved further above, as the defconfig
+wasn't in the order used by safedefconfig.
+
+-- 
+Bye, Peter Korsgaard
