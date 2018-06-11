@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:13:08 +0200
-Subject: [Buildroot] [PATCH] nfs-utils: update homepage link
-In-Reply-To: <90d930421b2b41efab868f3e3990c6bd175e2756.1526643781.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 18 May 2018 14:43:01 +0300")
-References: <90d930421b2b41efab868f3e3990c6bd175e2756.1526643781.git.baruch@tkos.co.il>
-Message-ID: <87602pauxn.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:13:23 +0200
+Subject: [Buildroot] [PATCH] procps-ng: security bump to version 3.3.15
+In-Reply-To: <91aa34326a9720369e4291afea525bd4260677c6.1527099544.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 23 May 2018 21:19:04 +0300")
+References: <91aa34326a9720369e4291afea525bd4260677c6.1527099544.git.baruch@tkos.co.il>
+Message-ID: <871sddaux8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +13,18 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The linux-nfs project switched to a new homepage. Update the help text
- > link.
+ > Drop upstream patch.
+ > This release fixes the issues listed below.
+
+ > CVE-2018-1122: Local privilege escalation in top
+
+ > CVE-2018-1123: Denial of service in ps
+
+ > CVE-2018-1124: Local privilege escalation in libprocps
+
+ > CVE-2018-1125: Stack buffer overflow in pgrep
+
+ > CVE-2018-1126: Integer overflow in proc/alloc
 
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
