@@ -1,51 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:16:31 +0200
-Subject: [Buildroot] [PATCH] wavpack: add upstream security fixes
-In-Reply-To: <20180521132720.17915-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 21 May 2018 15:27:20 +0200")
-References: <20180521132720.17915-1-peter@korsgaard.com>
-Message-ID: <87y3fl81n4.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:16:56 +0200
+Subject: [Buildroot] [git commit] exim: do not link buildconfig with
+ $(LIBS)
+In-Reply-To: <20180517201720.DE36588E63@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Thu, 17 May 2018 22:16:25 +0200")
+References: <20180517201720.DE36588E63@busybox.osuosl.org>
+Message-ID: <87tvq981mf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes the following security issues:
- > CVE-2018-10536: An issue was discovered in WavPack 5.1.0 and earlier.  The
- > WAV parser component contains a vulnerability that allows writing to memory
- > because ParseRiffHeaderConfig in riff.c does not reject multiple format
- > chunks.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=b872d829d092059ae8d5e86115d1515164d01a74
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > CVE-2018-10537: An issue was discovered in WavPack 5.1.0 and earlier.  The
- > W64 parser component contains a vulnerability that allows writing to memory
- > because ParseWave64HeaderConfig in wave64.c does not reject multiple format
- > chunks.
+ > The existing patch 0001-Build-buildconfig-for-the-host.patch changes
+ > the exim build system to use the host compiler to build the
+ > "buildconfig" program instead of the cross-compiler.
 
- > CVE-2018-10538: An issue was discovered in WavPack 5.1.0 and earlier for WAV
- > input.  Out-of-bounds writes can occur because ParseRiffHeaderConfig in
- > riff.c does not validate the sizes of unknown chunks before attempting
- > memory allocation, related to a lack of integer-overflow protection within a
- > bytes_to_copy calculation and subsequent malloc call, leading to
- > insufficient memory allocation.
+ > However, it still uses $(LIBS) which lists the target libraries to
+ > link with, which shouldn't be used. Since buildconfig doesn't use any
+ > library beyond the C library, we can simply drop using $(LIBS).
 
- > CVE-2018-10539: An issue was discovered in WavPack 5.1.0 and earlier for
- > DSDiff input.  Out-of-bounds writes can occur because
- > ParseDsdiffHeaderConfig in dsdiff.c does not validate the sizes of unknown
- > chunks before attempting memory allocation, related to a lack of
- > integer-overflow protection within a bytes_to_copy calculation and
- > subsequent malloc call, leading to insufficient memory allocation.
+ > This will fix build failures of exim on Fedora 28, where libnsl is no
+ > longer provided by the C library, causing build failures such as:
 
- > CVE-2018-10540: An issue was discovered in WavPack 5.1.0 and earlier for W64
- > input.  Out-of-bounds writes can occur because ParseWave64HeaderConfig in
- > wave64.c does not validate the sizes of unknown chunks before attempting
- > memory allocation, related to a lack of integer-overflow protection within a
- > bytes_to_copy calculation and subsequent malloc call, leading to
- > insufficient memory allocation.
+ > /usr/bin/gcc buildconfig.c
+ > /usr/bin/ld: cannot find -lnsl
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/ac78fe18657558b3c12c03c08bf1081d7c06ca85/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2018.02.x, thanks.
 
