@@ -1,55 +1,78 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon, 11 Jun 2018 03:00:16 -0300
-Subject: [Buildroot] [PATCH 4/4] board/synopsys: synchronize custom inittab
- with BusyBox' one
-In-Reply-To: <20180611060016.20755-1-casantos@datacom.com.br>
-References: <20180611060016.20755-1-casantos@datacom.com.br>
-Message-ID: <20180611060016.20755-5-casantos@datacom.com.br>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Mon, 11 Jun 2018 11:06:47 +0200
+Subject: [Buildroot] [RFC PATCH v3 5/9] llvm: add config to build
+ backend for host arch
+In-Reply-To: <20180610205417.13963-6-joseph.kogut@gmail.com>
+References: <20180610204449.13646-1-joseph.kogut@gmail.com>
+ <20180610205417.13963-1-joseph.kogut@gmail.com>
+ <20180610205417.13963-6-joseph.kogut@gmail.com>
+Message-ID: <2deecd74-3cb2-e397-551c-263765682c8d@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply modifications made in recent commits:
+Hi Joseph,
 
-- 456ea9871e busybox: add /dev/std{in, out, err} symlinks to inittab
-- 13dbe73782 busybox: reduce number of mkdir calls in inittab
-- 8a89d290d4 busybox: add an inittab entry to activate swap
+On 10/06/2018 22:54, Joseph Kogut wrote:
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>   package/llvm/Config.in | 9 +++++++++
+>   package/llvm/llvm.mk   | 5 +++++
+>   2 files changed, 14 insertions(+)
+>
+> diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+> index 83e94660eb..e9c461b92f 100644
+> --- a/package/llvm/Config.in
+> +++ b/package/llvm/Config.in
+> @@ -11,6 +11,15 @@ config BR2_PACKAGE_LLVM_TARGET_ARCH
+>   	default "ARM" if BR2_arm || BR2_armeb
+>   	default "X86" if BR2_i386 || BR2_x86_64
+>   
+> +config BR2_PACKAGE_LLVM_HOST_ARCH
+> +	string
+> +	default "AArch64" if BR2_HOSTARCH="aarch64"
+> +	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
+> +	default "ARM" if BR2_HOSTARCH = "arm"
+> +
+> +config BR2_PACKAGE_HOST_LLVM_ENABLE_HOST_ARCH
+> +	bool
+> +
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
-This change was tested on a VM, only. I don't have a Synopsys board.
----
- board/synopsys/axs10x/fs-overlay/etc/inittab | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+I think we could rename this option BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH
+and make it user-selectable:
 
-diff --git a/board/synopsys/axs10x/fs-overlay/etc/inittab b/board/synopsys/axs10x/fs-overlay/etc/inittab
-index 43bacc6580..7412a27366 100644
---- a/board/synopsys/axs10x/fs-overlay/etc/inittab
-+++ b/board/synopsys/axs10x/fs-overlay/etc/inittab
-@@ -14,12 +14,16 @@
- # process   == program to run
- 
- # Startup the system
--null::sysinit:/bin/mount -t proc proc /proc
--null::sysinit:/bin/mount -o remount,rw /
--null::sysinit:/bin/mkdir -p /dev/pts
--null::sysinit:/bin/mkdir -p /dev/shm
--null::sysinit:/bin/mount -a
--null::sysinit:/bin/hostname -F /etc/hostname
-+::sysinit:/bin/mount -t proc proc /proc
-+::sysinit:/bin/mount -o remount,rw /
-+::sysinit:/bin/mkdir -p /dev/pts /dev/shm
-+::sysinit:/bin/mount -a
-+::sysinit:/sbin/swapon -a
-+null::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
-+null::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
-+null::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
-+null::sysinit:/bin/ln -sf /proc/self/fd/2 /dev/stderr
-+::sysinit:/bin/hostname -F /etc/hostname
- # now run any rc scripts
- ::sysinit:/etc/init.d/rcS
- 
--- 
-2.17.0
+config BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH
+	bool "Build backend for host architecture"
+
+>   config BR2_PACKAGE_LLVM
+>   	bool "llvm"
+>   	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index 3abf428989..04e99eb5b4 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -59,6 +59,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+>   LLVM_TARGETS_TO_BUILD += AMDGPU
+>   endif
+>   
+> +# Build backend for host architecture
+> +ifeq ($(BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH),y)
+> +LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_LLVM_HOST_ARCH))
+> +endif
+> +
+
+The only problem I see here is that we are going to build the backend for
+the host architecture also for the target, which is not necessary. Maybe
+we can use another variable like HOST_LLVM_TARGETS_TO_BUILD. This will
+break the compatibility of llvm-config for host and target when passing
+--targets-built but I don't think this should be a problem.
+
+>   # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+>   LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+>   
+
+Best regards,
+
+Valentin
