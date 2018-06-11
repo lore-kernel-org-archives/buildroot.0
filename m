@@ -1,48 +1,50 @@
-From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Mon, 11 Jun 2018 10:57:44 -0400
-Subject: [Buildroot] [PATCH 1/1] fix qtwebengine enable condition
-In-Reply-To: <20180607134528.7098-1-david.barbion@ext.leroymerlin.fr>
-References: <20180607134528.7098-1-david.barbion@ext.leroymerlin.fr>
-Message-ID: <20180611145744.2s667vhfspxgv34g@archlinux>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 11 Jun 2018 18:53:12 +0300
+Subject: [Buildroot] [PATCH] gnupg2: security bump to version 2.2.8
+Message-ID: <a618f70f53764800a03a9dc414bc6b8fb77459f4.1528732392.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David,
+Fixes CVE-2018-12020: Unsanitized file names might cause injection of
+terminal control characters into the status output of gnupg.
 
-On Thu, Jun 07, 2018 at 03:45:28PM +0200, David Barbion wrote:
-> Signed-off-by: David Barbion <david.barbion@ext.leroymerlin.fr>
-> ---
->  package/qt5/qt5webengine/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-> index 38486c6dcf..744d659567 100644
-> --- a/package/qt5/qt5webengine/Config.in
-> +++ b/package/qt5/qt5webengine/Config.in
-> @@ -31,7 +31,7 @@ config BR2_PACKAGE_QT5WEBENGINE
->  	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
->  	depends on BR2_HOST_GCC_AT_LEAST_4_8 # qt5base-icu
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5base-icu
-> -	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
-> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Good catch.
-
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
->  	depends on BR2_USE_WCHAR # libglib2
->  	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
-> -- 
-> 2.17.1
-
-Do you mind to reword the first line of your commit message to start
-with the name of the affected package and a colon?
-
-Something like:
-
-	qt5webengine: fix...
-
-Regards,
-Gael
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index f5cc95cb1b4c..f5890c5e2aa1 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000424.html
+-sha1 e222cda63409a86992369df8976f6c7511e10ea0  gnupg-2.2.7.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000425.html
++sha1 d87553a125832ea90e8aeb3ceeecf24f88de56fb  gnupg-2.2.8.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.7.tar.bz2.sig
+-sha256 d95b361ee6ef7eff86af40c8c72bf9313736ac9f7010d6604d78bf83818e976e  gnupg-2.2.7.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.8.tar.bz2.sig
++sha256 777b4cb8ced21965a5053d4fa20fe11484f0a478f3d011cef508a1a49db50dcd  gnupg-2.2.8.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 0823921b0b14..3151860f3779 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.2.7
++GNUPG2_VERSION = 2.2.8
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
+-- 
+2.17.1
