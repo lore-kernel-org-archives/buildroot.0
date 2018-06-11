@@ -1,41 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:55:20 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/transmission: fix
- systemd support
-Message-ID: <20180611211536.EA39D8832D@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 23:00:02 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] ltrace: fix visibility of
+ Config.in comment
+Message-ID: <20180611211537.1BA3881173@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e3e52d303aefeb16b00cfbffece9ba8b6b30013
+commit: https://git.buildroot.net/buildroot/commit/?id=add9745f5bffd96bf58a26f26a3f7ca169168973
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Patch 0006-libsystemd.patch backports an upstream commit which renames
-the systemd configure option.
+The BR2_PACKAGE_LTRACE option has some architecture dependencies, but
+those architecture dependencies are not taken into account for the
+Config.in comment.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+To fix this, this commit introduces a BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
+hidden boolean that gets used by both the BR2_PACKAGE_LTRACE option
+and the Config.in comment.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b27bcedccbecaecfbbfdb69ba5c24f1f0e3fc064)
+(cherry picked from commit af72a42b0af3588919efe88301e622b683098d8e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/transmission/transmission.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/ltrace/Config.in | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index 4e78604fdb..32e8e70789 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
-@@ -49,9 +49,9 @@ TRANSMISSION_CONF_OPTS += --enable-daemon
+diff --git a/package/ltrace/Config.in b/package/ltrace/Config.in
+index 3a46b6a4f6..2defbe28a0 100644
+--- a/package/ltrace/Config.in
++++ b/package/ltrace/Config.in
+@@ -1,10 +1,20 @@
++config BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
++	bool
++	default y if BR2_arm
++	default y if BR2_i386
++	default y if BR2_mips
++	default y if BR2_mipsel
++	default y if BR2_powerpc
++	default y if BR2_sparc
++	default y if BR2_x86_64
++	default y if BR2_xtensa
++
+ config BR2_PACKAGE_LTRACE
+ 	bool "ltrace"
+ 	depends on BR2_USE_WCHAR # elfutils
+ 	depends on !BR2_STATIC_LIBS # elfutils
+ 	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+-	depends on (BR2_i386 || BR2_arm || BR2_mips || BR2_mipsel \
+-		|| BR2_powerpc || BR2_sparc || BR2_x86_64 || BR2_xtensa)
++	depends on BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_ELFUTILS
+ 	help
+ 	  Debugging program which runs a specified command until it
+@@ -15,5 +25,6 @@ config BR2_PACKAGE_LTRACE
+ 	  http://ltrace.org
  
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- TRANSMISSION_DEPENDENCIES += systemd
--TRANSMISSION_CONF_OPTS += --with-systemd-daemon
-+TRANSMISSION_CONF_OPTS += --with-systemd
- else
--TRANSMISSION_CONF_OPTS += --without-systemd-daemon
-+TRANSMISSION_CONF_OPTS += --without-systemd
- endif
- 
- define TRANSMISSION_USERS
+ comment "ltrace needs a uClibc or glibc toolchain w/ wchar, dynamic library"
++	depends on BR2_PACKAGE_LTRACE_ARCH_SUPPORTS
+ 	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS \
+ 		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
