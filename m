@@ -1,71 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:36:07 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux: don't override
- HOSTCC for kconfig
-Message-ID: <20180611211536.9A5568832F@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 23:08:58 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] pkg-generic: error out
+ with 'local' site method and no _SITE
+Message-ID: <20180611211537.760BB8832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06ae66a6e343037992ca0d805c4160fe2ae00824
+commit: https://git.buildroot.net/buildroot/commit/?id=619a722394a78baebb8c706b769ccfadd9c52a7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Kconfig uses either pkg-config or hard-coded /usr/include paths to find
-the ncurses or ncursesw library. If ncursesw is found, it will include
-<ncursesw.h>. Since Buildroot's host-ncurses doesn't install a .pc file,
-and linux.mk anyway doesn't pass the pkg-config options to find the host
-pkg-config files, Kconfig will always find the system's ncursesw.h.
+The 'local' site method is easily confused with the 'file' site method,
+making people create packages like this:
 
-However, since commit dde090c299 (linux: fix passing of host CFLAGS and
-LDFLAGS) HOST_LDFLAGS is passed to the linux build system. Thus, if
-host-ncurses was already built before 'make linux-menuconfig' is called,
-the build will pick up libncurses from the host directory, which is NOT
-widechar. Thus, two different ncurses configurations are mixed into the
-final mconf program. This will result in serious breakage in the
-rendering of the menus (lots of @ and question mark characters).
+    FOO_SITE_METHOD = local
+    FOO_SOURCE = foo.tar.gz
 
-As a workaround (suggested by Yann), don't pass HOST_CFLAGS and
-HOST_LDFLAGS when running kconfig commands. For kconfig, we should never
-need host packages anyway. This way, the kconfig calls will always use
-the system's ncurses and never our host-ncurses.
+    $(eval $(generic-package))
 
-Note that the same problem could pop up for other kconfig packages as
-well if we ever pass HOST_CFLAGS/HOST_LDFLAGS to them. We could force
-HOSTCC=$(HOSTCC) directly in kconfig-package. However, for now there
-are no other packages that exhibit this problem, so this can be
-revisited when they do.
+Due to the intricacies of the generic package infra, this does not
+cause an error; instead, the foo.tar.gz tarball that happens to be
+present in the download directory will be used. This behaviour differs
+greatly from what is specified in the manual.
+
+Instead, error out immediately if a package specifies the 'local' site
+method but does not specify a _SITE.
+
+We check for _OVERRIDE_SRCDIR rather than checking for _SITE, just
+after _OVERRIDE_SRCDIR has been set to _SITE. Indeed, a package that
+sets _OVERRIDE_SRCDIR but not _SITE currently works correctly. There is
+no reason to make it fail.
+
+See also
+https://stackoverflow.com/questions/50364655/including-patches-to-build-root
 
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: David De Grave <david.degrave@essensium.com>
-Cc: Scott Fan <fancp2007@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6d3d09e23213e88c14f2ddc883700499315a41bc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 775929c988db0197363a3c6f693fc3928bdb43de)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/pkg-generic.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 0c78d824e1..701d7ee1ae 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -235,7 +235,14 @@ LINUX_KCONFIG_FILE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE))
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index d635516734..a689dde4d2 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -510,6 +510,9 @@ ifeq ($$($(2)_SITE_METHOD),local)
+ ifeq ($$($(2)_OVERRIDE_SRCDIR),)
+ $(2)_OVERRIDE_SRCDIR = $$($(2)_SITE)
  endif
- LINUX_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES))
- LINUX_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
--LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS)
-+
-+# LINUX_MAKE_FLAGS overrides HOSTCC to allow the kernel build to find our
-+# host-openssl and host-libelf. However, this triggers a bug in the kconfig
-+# build script that causes it to build with /usr/include/ncurses.h (which is
-+# typically wchar) but link with $(HOST_DIR)/lib/libncurses.so (which is not).
-+# We don't actually need any host-package for kconfig, so remove the HOSTCC
-+# override again.
-+LINUX_KCONFIG_OPTS = $(LINUX_MAKE_FLAGS) HOSTCC="$(HOSTCC)"
++ifeq ($$($(2)_OVERRIDE_SRCDIR),)
++$$(error $(1) has local site method, but `$(2)_SITE` is not defined)
++endif
+ endif
  
- # If no package has yet set it, set it from the Kconfig option
- LINUX_NEEDS_MODULES ?= $(BR2_LINUX_NEEDS_MODULES)
+ ifndef $(2)_LICENSE
