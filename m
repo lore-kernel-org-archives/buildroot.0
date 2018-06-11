@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:13:41 +0200
-Subject: [Buildroot] [PATCH] lrzsz: install symlinks for XMODEM and
- YMODEM
-In-Reply-To: <22856a59ac4af71690638f10f2117cd83c853928.1527184278.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 24 May 2018 20:51:18 +0300")
-References: <22856a59ac4af71690638f10f2117cd83c853928.1527184278.git.baruch@tkos.co.il>
-Message-ID: <87wov59gca.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:13:57 +0200
+Subject: [Buildroot] [PATCH] libcoap: needs host-pkgconf
+In-Reply-To: <05abd27599f212ded7d70da32f47585784d3cc1a.1527221246.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 25 May 2018 07:07:26 +0300")
+References: <05abd27599f212ded7d70da32f47585784d3cc1a.1527221246.git.baruch@tkos.co.il>
+Message-ID: <87sh5t9gbu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,10 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > This sets the protocol choice according to the program invocation name.
- > That is the common lrzsz installation practice.
+ > The libcoap configure script uses pkg-config.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/746/746c6dcbf3f941c7baa5b382bd264d830d839be1/
+ > http://autobuild.buildroot.net/results/d98/d9840a22ae5eb6572b6641b93f8beadc27d2abb5/
+ > http://autobuild.buildroot.net/results/905/905f122213ad9623ea5dd9d32c352efd151319f3/
 
- > Cc: Matthew Starr <mstarr@hedonline.com>
+ > Cc: Joris Lijssens <joris.lijssens@gmail.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x, thanks.
