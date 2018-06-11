@@ -1,52 +1,88 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:37:15 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] exim: do not link
- buildconfig with $(LIBS)
-Message-ID: <20180611211536.A2D648832D@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 22:35:15 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/asterisk: Fix
+ issues building without SSL
+Message-ID: <20180611211536.9323C8832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8d62365739143ce3120e241be6953c7f6d1248e
+commit: https://git.buildroot.net/buildroot/commit/?id=a02c6dd82df1d6ae01968918a4c0d870fef66ea4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The existing patch 0001-Build-buildconfig-for-the-host.patch changes
-the exim build system to use the host compiler to build the
-"buildconfig" program instead of the cross-compiler.
+Fixes
+http://autobuild.buildroot.net/results/7d0/7d069dd5629e406cecd17bacfa818e7c8e6b2064/
 
-However, it still uses $(LIBS) which lists the target libraries to
-link with, which shouldn't be used. Since buildconfig doesn't use any
-library beyond the C library, we can simply drop using $(LIBS).
-
-This will fix build failures of exim on Fedora 28, where libnsl is no
-longer provided by the C library, causing build failures such as:
-
-/usr/bin/gcc buildconfig.c
-/usr/bin/ld: cannot find -lnsl
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ac78fe18657558b3c12c03c08bf1081d7c06ca85/
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b872d829d092059ae8d5e86115d1515164d01a74)
+(cherry picked from commit c27ed9f618e1d28459868402dad32bd1f48f99e4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/0001-Build-buildconfig-for-the-host.patch | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...006-build-fix-issues-building-without-ssl.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/exim/0001-Build-buildconfig-for-the-host.patch b/package/exim/0001-Build-buildconfig-for-the-host.patch
-index a926fbdab3..87eb527974 100644
---- a/package/exim/0001-Build-buildconfig-for-the-host.patch
-+++ b/package/exim/0001-Build-buildconfig-for-the-host.patch
-@@ -17,7 +17,7 @@ index 29a6ad3..420ba60 100644
- -	@echo "$(CC) buildconfig.c"
- -	$(FE)$(CC) $(CFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
- +	@echo "$(HOSTCC) buildconfig.c"
--+	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c $(LIBS)
-++	$(FE)$(HOSTCC) $(HOSTCFLAGS) $(INCLUDE) -o buildconfig buildconfig.c
-  
-  
-  # Target for the exicyclog utility script
+diff --git a/package/asterisk/0006-build-fix-issues-building-without-ssl.patch b/package/asterisk/0006-build-fix-issues-building-without-ssl.patch
+new file mode 100644
+index 0000000000..b02031e5ab
+--- /dev/null
++++ b/package/asterisk/0006-build-fix-issues-building-without-ssl.patch
+@@ -0,0 +1,57 @@
++From 999e0c17d7e4139d36730752a34fbfde18a4f9f1 Mon Sep 17 00:00:00 2001
++From: Corey Farrell <git@cfware.com>
++Date: Sun, 19 Nov 2017 14:52:59 -0500
++Subject: [PATCH] Build: Fix issues building without SSL.
++
++* Fix conditional in libasteriskssl.
++* Use variables produced by configure to link the SSL and uuid libraries
++  into libasteriskpj.so instead of hard-coding them.
++
++ASTERISK-27431
++
++Change-Id: I3977931fd3ef8c4e4376349ccddb354eb839b58d
++
++Downloaded from upstream master branch
++https://github.com/asterisk/asterisk/commit/999e0c17d7e4139d36730752a34fbfde18a4f9f1
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ main/Makefile         | 4 ++--
++ main/libasteriskssl.c | 2 +-
++ 2 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/main/Makefile b/main/Makefile
++index 08d1f65580e..c724e2012b0 100644
++--- a/main/Makefile
+++++ b/main/Makefile
++@@ -273,7 +273,7 @@ endif
++ 
++ $(ASTPJ_LIB).$(ASTPJ_SO_VERSION): _ASTLDFLAGS+=-Wl,-soname=$(ASTPJ_LIB).$(ASTPJ_SO_VERSION) $(PJ_LDFLAGS)
++ $(ASTPJ_LIB).$(ASTPJ_SO_VERSION): _ASTCFLAGS+=-fPIC -DAST_MODULE=\"asteriskpj\" -DAST_NOT_MODULE $(PJ_CFLAGS)
++-$(ASTPJ_LIB).$(ASTPJ_SO_VERSION): LIBS+=$(PJPROJECT_LDLIBS) -lssl -lcrypto -luuid -lm -lpthread $(RT_LIB)
+++$(ASTPJ_LIB).$(ASTPJ_SO_VERSION): LIBS+=$(PJPROJECT_LDLIBS) $(OPENSSL_LIB) $(UUID_LIB) -lm -lpthread $(RT_LIB)
++ ifeq ($(GNU_LD),1)
++     $(ASTPJ_LIB).$(ASTPJ_SO_VERSION): SO_SUPPRESS_SYMBOLS=-Wl,--version-script,libasteriskpj.exports,--warn-common
++ endif
++@@ -298,7 +298,7 @@ ASTPJ_LIB:=libasteriskpj.dylib
++ # /lib or /usr/lib
++ $(ASTPJ_LIB): _ASTLDFLAGS+=-dynamiclib -install_name $(ASTLIBDIR)/$(ASTPJ_LIB) $(PJ_LDFLAGS)
++ $(ASTPJ_LIB): _ASTCFLAGS+=-fPIC -DAST_MODULE=\"asteriskpj\" $(PJ_CFLAGS) -DAST_NOT_MODULE
++-$(ASTPJ_LIB): LIBS+=$(PJPROJECT_LIBS)  -lssl -lcrypto -luuid -lm -lpthread $(RT_LIB)
+++$(ASTPJ_LIB): LIBS+=$(PJPROJECT_LIBS)  $(OPENSSL_LIB) $(UUID_LIB) -lm -lpthread $(RT_LIB)
++ $(ASTPJ_LIB): SOLINK=$(DYLINK)
++ 
++ # Special rules for building a shared library (not a dynamically loadable module)
++diff --git a/main/libasteriskssl.c b/main/libasteriskssl.c
++index 8b19e247da9..e2e256f8ffe 100644
++--- a/main/libasteriskssl.c
+++++ b/main/libasteriskssl.c
++@@ -37,7 +37,7 @@
++ #endif
++ 
++ #if defined(HAVE_OPENSSL) && \
++-	!defined(OPENSSL_VERSION_NUMBER) || OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+++	(!defined(OPENSSL_VERSION_NUMBER) || OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER))
++ 
++ #include <dlfcn.h>
++ 
