@@ -1,10 +1,10 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon, 11 Jun 2018 03:00:15 -0300
-Subject: [Buildroot] [PATCH 3/4] busybox: add an inittab entry to activate
+Date: Mon, 11 Jun 2018 03:00:14 -0300
+Subject: [Buildroot] [PATCH 2/4] sysvinit: add an inittab entry to activate
  swap
 In-Reply-To: <20180611060016.20755-1-casantos@datacom.com.br>
 References: <20180611060016.20755-1-casantos@datacom.com.br>
-Message-ID: <20180611060016.20755-4-casantos@datacom.com.br>
+Message-ID: <20180611060016.20755-3-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -23,20 +23,22 @@ a rootfs ovelay) calling swapon/swapoff would be harmless.
 
 Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
- package/busybox/inittab | 1 +
- 1 file changed, 1 insertion(+)
+ package/sysvinit/inittab | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/busybox/inittab b/package/busybox/inittab
-index 7cd203de0b..ff1725c775 100644
---- a/package/busybox/inittab
-+++ b/package/busybox/inittab
-@@ -18,6 +18,7 @@
- ::sysinit:/bin/mount -o remount,rw /
- ::sysinit:/bin/mkdir -p /dev/pts /dev/shm
- ::sysinit:/bin/mount -a
-+::sysinit:/sbin/swapon -a
- null::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
- null::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
- null::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
+diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+index 2ca253ad6c..a31471031f 100644
+--- a/package/sysvinit/inittab
++++ b/package/sysvinit/inittab
+@@ -7,7 +7,8 @@ id:3:initdefault:
+ si0::sysinit:/bin/mount -t proc proc /proc
+ si1::sysinit:/bin/mount -o remount,rw /
+ si2::sysinit:/bin/mkdir -p /dev/pts /dev/shm
+-si4::sysinit:/bin/mount -a
++si3::sysinit:/bin/mount -a
++si4::sysinit:/sbin/swapon -a
+ si5::sysinit:/bin/ln -sf /proc/self/fd /dev/fd 2>/dev/null
+ si6::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin 2>/dev/null
+ si7::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout 2>/dev/null
 -- 
 2.17.0
