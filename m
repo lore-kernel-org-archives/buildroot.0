@@ -1,65 +1,55 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun, 10 Jun 2018 20:48:34 -0300 (BRT)
-Subject: [Buildroot] [PATCH] fs: allow extra arguments to common tarball
- extraction
-In-Reply-To: <20180608210641.GF2090@scaer>
-References: <20180603022145.14222-1-casantos@datacom.com.br>
- <20180605172345.GB29058@scaer>
- <625048322.1426556.1528289177741.JavaMail.zimbra@datacom.com.br>
- <20180606185136.GA2537@scaer> <81235112-f5f8-dbed-ac99-7942c003b898@mind.be>
- <20180608171941.GC2090@scaer> <5f35f9b5-e308-3fff-138d-07f7b814fdd1@mind.be>
- <20180608210641.GF2090@scaer>
-Message-ID: <2108507643.2044026.1528674514845.JavaMail.zimbra@datacom.com.br>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 10 Jun 2018 17:53:07 -0700
+Subject: [Buildroot] xtensa: qemu_xtensa_lx60 issue with gcc 8.1
+In-Reply-To: <CAMo8Bf+TYADAm93CKCAxrFUBtwEf4hgcKZ3_SbriUgC5Tu80Cg@mail.gmail.com>
+References: <8d26aa17-fe18-2f56-8eb0-d32073ad099b@gmail.com>
+ <CAMo8Bf+TYADAm93CKCAxrFUBtwEf4hgcKZ3_SbriUgC5Tu80Cg@mail.gmail.com>
+Message-ID: <CAMo8Bf+XNMhRSkdQbN6Kd3oDOjuQSg-HUJLRNynZ_YOiXaf2QQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann Morin" <yann.morin.1998@free.fr>
-> To: "Arnout Vandecappelle" <arnout@mind.be>
-> Cc: "DATACOM" <casantos@datacom.com.br>, "Thomas De Schampheleire" <thomas.de_schampheleire@nokia.com>, "buildroot"
-> <buildroot@buildroot.org>
-> Sent: Friday, June 8, 2018 6:06:41 PM
-> Subject: Re: [Buildroot] [PATCH] fs: allow extra arguments to common tarball extraction
+On Sun, Jun 10, 2018 at 1:46 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
+> On Sun, Jun 10, 2018 at 1:39 PM, Romain Naour <romain.naour@gmail.com> wrote:
+>> Hello Max,
+>>
+>> We recently added gcc 8.1 in Buildroot and checked if all qemu configs are able
+>> to boot correctly:
+>>
+>> https://gitlab.com/free-electrons/toolchains-builder/pipelines/23083553
+>>
+>> Unfortunately the qemu_xtensa_lx60 config doesn't boot using a toolchain with
+>> gcc 8.1, binutils 2.30, uclibc-ng 1.0.30 and a kernel 4.16.7.
+>>
+>> See: https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006443
+>>
+>> I'm able to reproduce the issue and fallback to gcc 7.3 allow to boot the system
+>> on Qemu. So it seems really related to the gcc version.
+>>
+>> Do you have any clue ?
+>
+> Not yet, but let me look at it. Thanks for the report.
 
-> Arnout, Carlos, All,
-[...]
-> And as an example of a split-var filesytem, see the attached br2-external
-> tree. It ultimagtely creates $(BINARIES_DIR)/rootfs.meh, a squashfs
-> image of /) and $(BINARIES_DIR)/rootfs.meh-var.tar, a tarball of /var.
-> The only missing pieve is the runtime startup scripts that will format
-> the on-board partition, extact /var.tar in there, and mount it.
+I've tracked it down to the following fragment in the _dl_get_ready_to_run
+in ld-uClibc.so
 
-Thanks for your example. I transformed it on an example of what I'm
-attempting to achieve. Please use the contents of the attached file as
-a br2_external and use the defconfig contained there; then run
+    419f:       f0c1b2          addi    a11, a1, -16
+    41a2:       1ba9            s32i.n  a10, a11, 4
+    41a4:       0bc9            s32i.n  a12, a11, 0
+    41a6:       5127f2          l32i    a15, a7, 0x144
+    41a9:       1765b2          s32i    a11, a5, 92
+    41ac:       4e2782          l32i    a8, a7, 0x138
+    41af:       146af2          s32i    a15, a10, 80
+    41b2:       001b10          movsp   a1, a11
 
-    $ make rootfs-cpio rootfs-var-{lib,log}-ext4
-
-It will create three image files files under $(BINARIES_DIR): rootfs.cpio,
-rootfs.var-lib.ext4 and rootfs.var-log-ext4.
-
-If you apply on buildroot the patch contained there the names will be
-rootfs.cpio, rootfs-var-lib.ext4 and rootfs-var-log.ext4, which looks
-better, IMO.
-
-Extracting rootfs.common.tar for rootfs-var-log-ext4 is a waste of time
-and disk space, since it creates an empty filesystem. Perhaps we could
-add a BR2_TARGET_ROOTFS_<FOO>_START_EMPTY knob for filesystems that
-populate $(TARGET_DIR) by themselves.
-
-The example does not install a /etc/fstab with entries for /var/lib and
-/var/log but of it would be necessary in a real system, of course.
+It looks clearly wrong to me: a region on stack allocated with alloca
+is used before the stack pointer is updated. Looks like an issue with
+xtensa gcc backend. Perhaps related to this one:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65416
+Let me try to fix it.
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: br2-multi-fs.tar.xz
-Type: application/x-xz-compressed-tar
-Size: 3780 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180610/2beefde8/attachment.bin>
+Thanks.
+-- Max
