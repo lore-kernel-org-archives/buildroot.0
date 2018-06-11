@@ -1,55 +1,67 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Sun, 10 Jun 2018 17:53:07 -0700
-Subject: [Buildroot] xtensa: qemu_xtensa_lx60 issue with gcc 8.1
-In-Reply-To: <CAMo8Bf+TYADAm93CKCAxrFUBtwEf4hgcKZ3_SbriUgC5Tu80Cg@mail.gmail.com>
-References: <8d26aa17-fe18-2f56-8eb0-d32073ad099b@gmail.com>
- <CAMo8Bf+TYADAm93CKCAxrFUBtwEf4hgcKZ3_SbriUgC5Tu80Cg@mail.gmail.com>
-Message-ID: <CAMo8Bf+XNMhRSkdQbN6Kd3oDOjuQSg-HUJLRNynZ_YOiXaf2QQ@mail.gmail.com>
+From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Sun, 10 Jun 2018 22:48:24 -0400
+Subject: [Buildroot] [PATCH v2] libusb: add an option to compile examples
+In-Reply-To: <20180610220849.15558-1-gael.portay@savoirfairelinux.com>
+References: <20180610220849.15558-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20180611024824.7mvsemzpkb5ko254@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 10, 2018 at 1:46 PM, Max Filippov <jcmvbkbc@gmail.com> wrote:
-> On Sun, Jun 10, 2018 at 1:39 PM, Romain Naour <romain.naour@gmail.com> wrote:
->> Hello Max,
->>
->> We recently added gcc 8.1 in Buildroot and checked if all qemu configs are able
->> to boot correctly:
->>
->> https://gitlab.com/free-electrons/toolchains-builder/pipelines/23083553
->>
->> Unfortunately the qemu_xtensa_lx60 config doesn't boot using a toolchain with
->> gcc 8.1, binutils 2.30, uclibc-ng 1.0.30 and a kernel 4.16.7.
->>
->> See: https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006443
->>
->> I'm able to reproduce the issue and fallback to gcc 7.3 allow to boot the system
->> on Qemu. So it seems really related to the gcc version.
->>
->> Do you have any clue ?
->
-> Not yet, but let me look at it. Thanks for the report.
+With the missing changelog...
 
-I've tracked it down to the following fragment in the _dl_get_ready_to_run
-in ld-uClibc.so
+On Sun, Jun 10, 2018 at 06:08:49PM -0400, Ga?l PORTAY wrote:
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> ---
+>  package/libusb/Config.in |  7 +++++++
+>  package/libusb/libusb.mk | 10 ++++++++++
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/package/libusb/Config.in b/package/libusb/Config.in
+> index 5238588aa8..d31a717fdf 100644
+> --- a/package/libusb/Config.in
+> +++ b/package/libusb/Config.in
+> @@ -6,5 +6,12 @@ config BR2_PACKAGE_LIBUSB
+>  
+>  	  http://libusb.info/
+>  
+> +if BR2_PACKAGE_LIBUSB
+> +
+> +config BR2_PACKAGE_LIBUSB_EXAMPLES
+> +	bool "build libusb examples"
+> +
+> +endif
+> +
+>  comment "libusb needs a toolchain w/ threads"
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS
+> diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+> index aee3622f8d..2cad3dec7f 100644
+> --- a/package/libusb/libusb.mk
+> +++ b/package/libusb/libusb.mk
+> @@ -25,5 +25,15 @@ else
+>  LIBUSB_CONF_OPTS += --disable-udev
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_LIBUSB_EXAMPLES),y)
+> +LIBUSB_CONF_OPTS += --enable-examples-build
+> +define LIBUSB_INSTALL_TARGET_EXAMPLES
+> +	for example in listdevs xusb fxload hotplugtest testlibusb dpfp dpfp_threaded sam3u_benchmark oopps ; do \
+> +		cp -dpfr $(@D)/examples/$${example} $(TARGET_DIR)/usr/bin; \
+> +	done
+> +endef
+> +LIBUSB_POST_INSTALL_TARGET_HOOKS += LIBUSB_INSTALL_TARGET_EXAMPLES
+> +endif
+> +
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> -- 
+> 2.11.0
+> 
 
-    419f:       f0c1b2          addi    a11, a1, -16
-    41a2:       1ba9            s32i.n  a10, a11, 4
-    41a4:       0bc9            s32i.n  a12, a11, 0
-    41a6:       5127f2          l32i    a15, a7, 0x144
-    41a9:       1765b2          s32i    a11, a5, 92
-    41ac:       4e2782          l32i    a8, a7, 0x138
-    41af:       146af2          s32i    a15, a10, 80
-    41b2:       001b10          movsp   a1, a11
+Changes since v1:
+ - remove presence check.
 
-It looks clearly wrong to me: a region on stack allocated with alloca
-is used before the stack pointer is updated. Looks like an issue with
-xtensa gcc backend. Perhaps related to this one:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65416
-Let me try to fix it.
-
--- 
-Thanks.
--- Max
+Regards,
+Gael
