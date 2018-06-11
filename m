@@ -1,68 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:40:29 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libnss: backport upstream
- patch to fix build with gcc 8.x
-Message-ID: <20180611211536.AADE68832D@busybox.osuosl.org>
+Date: Mon, 11 Jun 2018 22:55:29 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/transmission: fix
+ inotify configure option
+Message-ID: <20180611211536.F22E08832D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48633704fc246bb6c4b92d5ab528fb9c12faffc9
+commit: https://git.buildroot.net/buildroot/commit/?id=e7c5ad5d1a8399e58e2d131e834efb1064e42cae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-This commit backports upstream patch
-https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
-to our libnss package to fix the build with gcc 8.x.
+The configure option is really called --with-inotify:
+https://github.com/transmission/transmission/blob/2.9x/configure.ac#L211
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/1ca35171200286fa032b24606aaa50de6a2d449e/
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 45cf64ca0c0070151e4321e218e20cae5d730797)
+(cherry picked from commit acadbe6393e360d4b77195ec61bbe8b48d668c85)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-Avoid-stringop-truncation-warning-r-fran.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/transmission/transmission.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
-new file mode 100644
-index 0000000000..c14880b117
---- /dev/null
-+++ b/package/libnss/0004-Bug-1438426-Avoid-stringop-truncation-warning-r-fran.patch
-@@ -0,0 +1,33 @@
-+From f0ce70989526fc9a0223398c99ea0d09777ea5df Mon Sep 17 00:00:00 2001
-+From: Martin Thomson <martin.thomson@gmail.com>
-+Date: Thu, 15 Feb 2018 16:34:02 +1100
-+Subject: [PATCH] Bug 1438426 - Avoid stringop-truncation warning, r=franziskus
-+
-+--HG--
-+extra : rebase_source : 4ea1630d0da0ce3523309e3da33ee50961682242
-+
-+Upstream-commit: https://github.com/nss-dev/nss/commit/f0ce70989526fc9a0223398c99ea0d09777ea5df
-+[Thomas: edited after git format-patch to add the nss/ prefix needed
-+for the patch to apply properly on the source code extracted by the
-+tarball.]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ nss/coreconf/nsinstall/pathsub.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/nss/coreconf/nsinstall/pathsub.c b/nss/coreconf/nsinstall/pathsub.c
-+index a42a9f30a..c31a946f0 100644
-+--- a/nss/coreconf/nsinstall/pathsub.c
-++++ b/nss/coreconf/nsinstall/pathsub.c
-+@@ -212,7 +212,7 @@ reversepath(char *inpath, char *name, int len, char *outpath)
-+ 	    xchdir("..");
-+ 	} else {
-+ 	    cp -= 3;
-+-	    strncpy(cp, "../", 3);
-++	    memcpy(cp, "../", 3);
-+ 	    xchdir(buf);
-+ 	}
-+     }
-+-- 
-+2.14.3
-+
+diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
+index 32e8e70789..f10fa190c8 100644
+--- a/package/transmission/transmission.mk
++++ b/package/transmission/transmission.mk
+@@ -16,7 +16,7 @@ TRANSMISSION_DEPENDENCIES = \
+ 	zlib
+ TRANSMISSION_AUTORECONF = YES
+ TRANSMISSION_CONF_OPTS = \
+-	--disable-libnotify \
++	--without-inotify \
+ 	--enable-lightweight
+ TRANSMISSION_LICENSE = GPL-2.0 or GPL-3.0 with OpenSSL exception
+ TRANSMISSION_LICENSE_FILES = COPYING
