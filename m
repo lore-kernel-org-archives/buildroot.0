@@ -1,13 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 23:15:01 +0200
-Subject: [Buildroot] [PATCH 2/4] package/transmission: fix systemd
- support
-In-Reply-To: <20180520153155.1af6c039@windsurf> (Thomas Petazzoni's message of
- "Sun, 20 May 2018 15:31:55 +0200")
-References: <20180502060540.11628-1-bernd.kuhls@t-online.de>
- <20180502060540.11628-2-bernd.kuhls@t-online.de>
- <20180520153155.1af6c039@windsurf>
-Message-ID: <87fu1t9ga2.fsf@dell.be.48ers.dk>
+Date: Mon, 11 Jun 2018 23:14:54 +0200
+Subject: [Buildroot] [git commit] package/transmission: remove
+ BR2_PACKAGE_TRANSMISSION_REMOTE
+In-Reply-To: <20180520134322.84EE081320@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sun, 20 May 2018 15:38:46 +0200")
+References: <20180520134322.84EE081320@busybox.osuosl.org>
+Message-ID: <87k1r59ga9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,27 +14,25 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Hello,
- > On Wed,  2 May 2018 08:05:38 +0200, Bernd Kuhls wrote:
- >> Patch 0005-libsystemd.patch backports an upstream commit which renames
- >> the systemd configure option.
- >> 
- >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- >> ---
- >> package/transmission/transmission.mk | 4 ++--
- >> 1 file changed, 2 insertions(+), 2 deletions(-)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=79a678d7745bc3f3b5f361a7e3f25f39c3f1568b
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The order of the patches in your patch series is not very good. Indeed,
- > patches 2/4, 3/4 and 4/4 are fixing problems that exist *today* in
- > Buildroot, with the current version of transmission being packaged.
- > Therefore, they should appear first in the series, before the bump.
+ > Commit 6e223241e1bb58a27eb890291f9f5c1fcc6a0818 ("Add Transmission
+ > package"), which added the transmission package, introduced a
+ > BR2_PACKAGE_TRANSMISSION_REMOTE Config.in option, supposedly matching
+ > the --enable-remote/--disable-remote transmission option.
 
- > This is even more relevant right now, as patches 2/4, 3/4 and 4/4
- > should be applied to master, while patch 1/4 is only for next.
+ > However, transmission as of version 2.33 packaged by this initial
+ > commit, did not have a --enable-remote/--disable-remote option, and it
+ > was apparently never part of transmission.
 
- > So, I've applied this patch to master, after fixing the commit log to
- > mention 0006-libsystemd.patch, since the patch is named this way in
- > master.
+ > Therefore, this commit removes this useless option. Since the
+ > transmission-remote tool is automatically built when the daemon is
+ > enabled, the Config.in.legacy handling selects
+ > BR2_PACKAGE_TRANSMISSION_DAEMON.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2018.02.x, thanks.
 
