@@ -1,36 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 11 Jun 2018 22:11:27 +0200
-Subject: [Buildroot] [PATCH 2/2] triggerhappy: add optional dependency
- on systemd
-In-Reply-To: <20180611195327.pjlhb2gmpxszx5mb@tarshish> (Baruch Siach's
- message of "Mon, 11 Jun 2018 22:53:27 +0300")
-References: <d94eeb035e53af51d450c8e49b03e01cce0dfa1a.1528741488.git.baruch@tkos.co.il>
- <2d163bcde561552e4e69fae382b2422ebe92dbf8.1528741488.git.baruch@tkos.co.il>
- <87tvq9cdtl.fsf@dell.be.48ers.dk>
- <20180611195327.pjlhb2gmpxszx5mb@tarshish>
-Message-ID: <87vaapaxsg.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 11 Jun 2018 22:19:09 +0200
+Subject: [Buildroot] [PATCH 1/1] postgresql --with-libxml configure
+ option added
+In-Reply-To: <549ffe67-ad9f-b607-6735-09faa86f0b09@gmx.de>
+References: <549ffe67-ad9f-b607-6735-09faa86f0b09@gmx.de>
+Message-ID: <20180611221909.662ad5ad@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Hello Daniel,
 
- > Hi Peter,
- > On Mon, Jun 11, 2018 at 09:39:50PM +0200, Peter Korsgaard wrote:
- >> >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
- >> 
- >> > triggerhappy can use systemd for socket activation.
- >> >
- >> > Cc: Peter Korsgaard <peter@korsgaard.com>
- >> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- >> 
- >> Committed, thanks.
+On Fri, 8 Jun 2018 08:46:42 +0200, Daniel Deterding <daniel.deterding@gmx.de> wrote:
 
- > Not in master as of d06d70d28db37 (modem-manager: update to version 1.8.0).
+> The postgresql package is now built with --with-libxml if 
+> BR2_PACKAGE_LIBXML2 is selected to allow the use of XML functions in 
+> postgresql.
 
-It is now ;)
+Minor nit, maybe add:
 
--- 
-Bye, Peter Korsgaard
+  Fixes https://bugs.busybox.net/show_bug.cgi?id=11071
+
+> 
+> Signed-off-by: Daniel Deterding <dde@innovaphone.com>
+
+Thanks for the patch, you can add my
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+But I believe your email did not yet hit the mailing list/patchwork
+(I did not find it there [1], [2])...
+
+Regards,
+Peter
+
+[1] http://lists.busybox.net/pipermail/buildroot/2018-June/date.html
+[2] https://patchwork.ozlabs.org/project/buildroot/list/
+
+> ---
+>  ?package/postgresql/postgresql.mk | 8 ++++++++
+>  ?1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/postgresql/postgresql.mk 
+> b/package/postgresql/postgresql.mk
+> index 94b3e60e59..0940873686 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -70,6 +70,14 @@ else
+>  ?POSTGRESQL_CONF_OPTS += --without-ldap
+>  ?endif
+> 
+> +ifeq ($(BR2_PACKAGE_LIBXML2),y)
+> +POSTGRESQL_DEPENDENCIES += libxml2
+> +POSTGRESQL_CONF_OPTS += --with-libxml
+> +POSTGRESQL_CONF_ENV += XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
+> +else
+> +POSTGRESQL_CONF_OPTS += --without-libxml
+> +endif
+> +
+>  ?define POSTGRESQL_USERS
+>  ??????? postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL 
+> Server
+>  ?endef
+> --
+> 2.11.0
+> 
+> 
