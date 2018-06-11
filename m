@@ -1,70 +1,60 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Mon, 11 Jun 2018 17:20:57 +0000
-Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
-References: <20180609210607.13259-1-yann.morin.1998@free.fr>
- <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
-Message-ID: <1528737656.28705.131.camel@impinj.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 11 Jun 2018 10:54:06 -0700
+Subject: [Buildroot] [RFC PATCH v3 5/9] llvm: add config to build
+ backend for host arch
+In-Reply-To: <2deecd74-3cb2-e397-551c-263765682c8d@smile.fr>
+References: <20180610204449.13646-1-joseph.kogut@gmail.com>
+ <20180610205417.13963-1-joseph.kogut@gmail.com>
+ <20180610205417.13963-6-joseph.kogut@gmail.com>
+ <2deecd74-3cb2-e397-551c-263765682c8d@smile.fr>
+Message-ID: <CAMWSM7gUGDSrtqfNXkmBEGF_vw_75x22LyVzX8jx9s86pQkVdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 2018-06-10 at 23:21 +0200, Arnout Vandecappelle wrote:
->  
-> >  .PHONY: sdk
-> > -sdk: world
-> > +sdk: world $(BR2_TAR_HOST_DEPENDENCY)
-> >  	@$(call MESSAGE,"Rendering the SDK relocatable")
-> >  	$(TOPDIR)/support/scripts/fix-rpath host
-> >  	$(TOPDIR)/support/scripts/fix-rpath staging
-> >  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
-> >  	mkdir -p $(HOST_DIR)/share/buildroot
-> >  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-> > +	$(Q)mkdir -p $(BINARIES_DIR)
-> > +	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
-> 
->  Wouldn't it make more sense to make a .xz, or perhaps a .bz2? Although, that
-> probably gives a significant hit to the build time. But since it's explicit in
-> 'make sdk' I don't mind that much.
-> 
+Hi Valentin,
 
-I'm using the SDK with Docker.  It can add tar.gz files into the
-container, but now tar.xz.  Having to recompress the archive would be a
-significant increase in build time.
+On Mon, Jun 11, 2018 at 2:06 AM, Valentin Korenblit
+<valentin.korenblit@smile.fr> wrote:
+> Hi Joseph,
+>
+> On 10/06/2018 22:54, Joseph Kogut wrote:
 
+<snip>
 
-> > +		-C $(HOST_DIR) \
-> > +		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
-> 
->  Perhaps move that "buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)" into a
-> variable?
+>>   +# Build backend for host architecture
+>> +ifeq ($(BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH),y)
+>> +LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_LLVM_HOST_ARCH))
+>> +endif
+>> +
+>
+>
+> The only problem I see here is that we are going to build the backend for
+> the host architecture also for the target, which is not necessary. Maybe
+> we can use another variable like HOST_LLVM_TARGETS_TO_BUILD. This will
+> break the compatibility of llvm-config for host and target when passing
+> --targets-built but I don't think this should be a problem.
+>
 
-So having extracted an SDK, in an automated CI script, how does one use
-it?  I'll add it to the Docker container:
+Looking at the Makefile again, it seems to me that
+HOST_LLVM_TARGETS_TO_BUILD would always be a superset of
+LLVM_TARGETS_TO_BUILD. What do you think about naming it
+HOST_LLVM_ADDTL_TARGETS_TO_BUILD, appending only additional
+architecture backends to be built for host-llvm, and and appending it
+to LLVM_TARGETS_TO_BUILD in HOST_LLVM_CONF_OPTS?
 
-ARG sdk_file
-ENV SDK=/mnt/sdk
-ADD --chown=user:user ${sdk_file} ${SDK}
+That way, if a backend is enabled for the target, it's also always
+enabled for the host, but the host package can enable additional backends
+that the target package will not build.
 
-Now it needs to be relocated.  Something like:
-
-RUN cd ${SDK}/buildroot-sdk.arm-buildroot-linux-gnueabihf-2018.02-00035-ge588bdd3e8 && ./relocate-sdk.sh
-
-Is the problem with using this tarball apparent?  The dockerfile needs
-to be hand edited on every single build to use the correct path to the
-SDK.
-
-I've already added a "sdk-tar" to my external.mk to do this, but used
-the tarbomb approach.  While annoying for those who extract it in their
-home dir, it's much easier to use in an automated processes since there
-is no unknown path name component.
-
-It is good if archives that are going to be used in an automated
-process do not contain unpredictable path names!
-
-Now one might say that I can just make a tarball with a different
-process.  But that would mean creating two SDK tarballs, since there is
-no way to prep the host dir for making a SDK tar without also making
-the tarball.  That's a significant amount of wasted time.
+>>   # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+>>   LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+>>
+>
+>
+> Best regards,
+>
+> Valentin
+>
