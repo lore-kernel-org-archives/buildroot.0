@@ -1,48 +1,104 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 12 Jun 2018 21:33:46 +0200
-Subject: [Buildroot] ARC toolchain build failure
-Message-ID: <20180612213346.64dd8095@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 12 Jun 2018 21:47:51 +0200
+Subject: [Buildroot] [PATCH v3,2/2] librsvg: bump to version 2.42.5
+In-Reply-To: <874li88p8t.fsf@dell.be.48ers.dk>
+References: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
+ <20180610133857.4737-2-fontaine.fabrice@gmail.com>
+ <20180610162547.6a5d946c@windsurf>
+ <874li88p8t.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W82Dpby1yZCmpzG7_MXm=c3xeowOt3tHyW_gPYbnTA2NXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Peter,
 
-When trying to build an ARC toolchain with the following defconfig:
+2018-06-12 8:58 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
 
-BR2_arcle=y
-BR2_archs38=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_KERNEL_HEADERS_4_14=y
-BR2_BINUTILS_VERSION_2_30_X=y
-BR2_GCC_VERSION_8_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_PACKAGE_HOST_GDB=y
-BR2_INIT_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_GDB=y
-# BR2_TARGET_ROOTFS_TAR is not set
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>
+>  > Hello,
+>  > On Sun, 10 Jun 2018 15:38:57 +0200, Fabrice Fontaine wrote:
+>  >> - Add a dependency to host-cargo
+>  >> - Add a patch to set RUST_TARGET
+>  >> - Add a dependency to BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+>  >> - Forward this dependency to efl svg, enlightment, gst-plugins-bad and
+>  >> gst1-plugins-bad
+>  >> - Add hash for license file
+>  >>
+>  >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+>  > I've applied, after fixing the gst-plugins-bad and gst1-plugins-bad
+>  > packages, in which you forgot to propagate the new dependency to the
+>  > existing Config.in comments.
+>
+>  > Generally speaking, I find it a bit annoying that those packages start
+>  > using Rust. Not because I have anything against Rust, but because:
+>
+>  >  (1) It limits the support to a much smaller set of architectures. For
+>  >      example, it is not longer possible to build librsvg or its reverse
+>  >      dependencies on ARMv5 platforms.
+>
+>  >  (2) It adds a fair amount of build time.
+>
+>  > But well, if that's upstream decision, there's not much we can do
+>  > against it.
+>
+> This also causes a number of issues for host-librsvg (which is a
+> dependency of libgtk3 and midori) when building for architectures not
+> supported by rust:
+>
+The issue isn't related to libgtk3 and midori as this build fails (
+http://autobuild.buildroot.net/results/f33/f335ed517b402c094ed3b10a3da4cdc23620dbd6/defconfig)
+even if these packages are not selected.
 
-It fails with:
+I'm not an expert in virtual package but it seems we try to build
+host-rustc even if BR2_PACKAGE_HOST_RUSTC is not selected by the user
+(which is allowed).
 
-/opt/arcle-hs38--glibc--bleeding-edge-2018.05-1/lib/gcc/arc-buildroot-linux-gnu/8.1.0/../../../../arc-buildroot-linux-gnu/bin/ld: /opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/libKSC.so symbol number 14 references nonexistent SHT_SYMTAB_SHNDX section
-/opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/libKSC.so: error adding symbols: No error
-collect2: error: ld returned 1 exit status
-extra-module.mk:8: recipe for target '/opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/ISO-2022-KR.so' failed
-make[3]: *** [/opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/ISO-2022-KR.so] Error 1
+The issue is that BR2_PACKAGE_PROVIDES_HOST_RUSTC is not defined if
+BR2_PACKAGE_HOST_RUSTC is not set (see rustc/Config.in.host).
+Moreover, we define it like this:
 
-During the glibc build. See
-https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006369
-for more context.
+ config BR2_PACKAGE_PROVIDES_HOST_RUSTC
+        string
+        default "host-rust" if BR2_PACKAGE_HOST_RUST
+        default "host-rust-bin" if BR2_PACKAGE_HOST_RUST_BIN
 
-Are you aware of this issue ? Any fix ?
+As a result, if the user does not select host-rust or host-rust-bin, then
+there is no provider for host-rustc.
 
-Thanks!
+I would like your advice on this point, should we change this definition
+like this:
+ config BR2_PACKAGE_PROVIDES_HOST_RUSTC
+        string
+        default "host-rust" if BR2_PACKAGE_HOST_RUST
+        default "host-rust-bin" if !BR2_PACKAGE_HOST_RUST
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+or do you prefer:
+
+config BR2_PACKAGE_PROVIDES_HOST_RUSTC
+        string
+        default "host-rust" if BR2_PACKAGE_HOST_RUST
+        default "host-rust-bin" if BR2_PACKAGE_HOST_RUST_BIN
+        default "host-rust-bin" if !BR2_PACKAGE_HOST_RUST ||
+!BR2_PACKAGE_HOST_RUST
+
+Indeed, HOST_RUST_BIN doesn't have any dependencies
+
+>
+> http://autobuild.buildroot.net/?reason=host-rustc
+>
+> Care to take a look at propagating these new dependencies here?
+>
+> --
+> Bye, Peter Korsgaard
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180612/5f989c6f/attachment.html>
