@@ -1,53 +1,47 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 12 Jun 2018 17:02:18 +0200
-Subject: [Buildroot] [PATCH 1/4] imx-gpu-viv: bump to version 6.2.4.p1.2
-In-Reply-To: <20180612150221.31792-1-gary.bisson@boundarydevices.com>
-References: <20180612150221.31792-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180612150221.31792-2-gary.bisson@boundarydevices.com>
+Date: Tue, 12 Jun 2018 17:02:17 +0200
+Subject: [Buildroot] [PATCH 0/4] imx: graphics packages update to 6.2.4.p1.2
+Message-ID: <20180612150221.31792-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No changelog was provided by NXP but we can assume it's the latest and
-therefore the greatest.
+Hi all,
 
-What is known, is that that same version worked both ARM and ARM64.
-The support for the latter will be added in a follow-up patch.
+This series bumps the version of the i.MX graphics packages.
 
-This package has been tested with X11, Framebuffer and Wayland
-back-ends:
- # cd /usr/share/examples/viv_samples/vdk/
- # ./tutorial7
- # gmem_info
- ... display memory use per PID ...
+This version is the first one that applies to both 32-bit and 64-bit
+i.MX processors so aarch64 support was added.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 2 +-
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+As explained in the second commit, i.MX8 platforms only have Wayland as
+possible graphical back-end (no more fb or x11) so a new variable was
+created to hide those options. Not sure if it is the most elegant option
+but it does the job for now.
 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-index 894bc90dae..3b54eec099 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-@@ -1 +1 @@
--sha256	4f93a4412c93ca5959aa2437bfed2ecbaf983b5b272be5977f76a967de5db150  imx-gpu-viv-6.2.2.p0-aarch32.bin
-+sha256	dddadd164bede4793409ccfb636324dd73862c33458db66a5860f126bada25dc  imx-gpu-viv-6.2.4.p1.2-aarch32.bin
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index a339c22978..35ff9d457c 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_GPU_VIV_VERSION = 6.2.2.p0-aarch32
-+IMX_GPU_VIV_VERSION = 6.2.4.p1.2-aarch32
- IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
- 
+And yes, g2d is only available for 32-bit platforms right now.
+
+Let me know if you have any question/remark.
+
+Regards,
+Gary
+
+Gary Bisson (4):
+  imx-gpu-viv: bump to version 6.2.4.p1.2
+  imx-gpu-viv: enable package for 64-bit i.MX processors
+  imx-gpu-g2d: bump to version 6.2.4.p1.2
+  kernel-module-imx-gpu-viv: bump to version 6.2.4.p1.2
+
+ package/freescale-imx/Config.in                        |  7 ++++++-
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash     |  2 +-
+ package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk       |  2 +-
+ package/freescale-imx/imx-gpu-viv/Config.in            | 10 +++++++++-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash     |  3 ++-
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk       |  6 +++++-
+ .../kernel-module-imx-gpu-viv.hash                     |  2 +-
+ .../kernel-module-imx-gpu-viv.mk                       |  2 +-
+ 8 files changed, 26 insertions(+), 8 deletions(-)
+
 -- 
 2.17.1
