@@ -1,37 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 12 Jun 2018 07:20:46 +0000
-Subject: [Buildroot] [Bug 10861] Package batman_adv Makefile is missing
- include header directory
-In-Reply-To: <bug-10861-163@https.bugs.busybox.net/>
-References: <bug-10861-163@https.bugs.busybox.net/>
-Message-ID: <bug-10861-163-NBY2Mjp0Dz@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Jun 2018 11:06:13 +0200
+Subject: [Buildroot] swapoff, but no swapon in initab
+In-Reply-To: <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 10 Jun 2018 23:46:59 +0200")
+References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
+ <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
+ <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
+ <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
+Message-ID: <87zi0074sa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=10861
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
---- Comment #2 from Miltiadis Koutsokeras <miltos.koutsokeras@iccs.gr> ---
-I need to go back in my Git repo and find the exact defconfig of that period
-and strip it down to the minimal reproducing case. It has changed since then.
+Hi,
 
-Apart from that I'm quite confident that your minimal defconfig differs from
-mine in these:
+ >> "All devices marked as ``swap'' in /etc/fstab are made available,
+ >> except for those with the ``noauto'' option. Devices that are
+ >> already being used as swap are silently skipped."
 
-1) We do not use the upstream Linux kernel, we use this:
-https://github.com/linux4sam/linux-at91.git, version 4.4 (tag linux4sam_5.5)
-and 4.9 (tag linux4sam_5.7) were tested.
+ >  So bottom line: it would make sense to add a swapon -a to the default inittabs
+ > (both busybox and sysv).
 
-2) We use a Buildroot generated toolchain.
-
-3) Custom Linux kernel configuration (got to find specific version from Git
-repo).
-
-Thank you for your time, I will come back with more info and a minimal
-defconfig that reproduces the problem.
+Don't we then end up with an ugly error message / somewhat needlessly bloat
+everyones busybox config for the (very common) situation where swap is
+not used and disabled in the kernel?
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
