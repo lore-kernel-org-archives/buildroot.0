@@ -1,11 +1,15 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Jun 2018 15:30:47 +0200
-Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <1528737656.28705.131.camel@impinj.com>
-References: <20180609210607.13259-1-yann.morin.1998@free.fr>
- <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
- <1528737656.28705.131.camel@impinj.com>
-Message-ID: <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
+Date: Tue, 12 Jun 2018 15:34:21 +0200
+Subject: [Buildroot] swapoff, but no swapon in initab
+In-Reply-To: <87in6o6u5n.fsf@dell.be.48ers.dk>
+References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
+ <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
+ <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
+ <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
+ <87zi0074sa.fsf@dell.be.48ers.dk>
+ <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
+ <87in6o6u5n.fsf@dell.be.48ers.dk>
+Message-ID: <598a385a-5693-8fff-876c-550063645a50@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,92 +18,52 @@ To: buildroot@busybox.net
 
 
 
-On 11-06-18 19:20, Trent Piepho wrote:
-> On Sun, 2018-06-10 at 23:21 +0200, Arnout Vandecappelle wrote:
->>  
->>>  .PHONY: sdk
->>> -sdk: world
->>> +sdk: world $(BR2_TAR_HOST_DEPENDENCY)
->>>  	@$(call MESSAGE,"Rendering the SDK relocatable")
->>>  	$(TOPDIR)/support/scripts/fix-rpath host
->>>  	$(TOPDIR)/support/scripts/fix-rpath staging
->>>  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
->>>  	mkdir -p $(HOST_DIR)/share/buildroot
->>>  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
->>> +	$(Q)mkdir -p $(BINARIES_DIR)
->>> +	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
->>
->>  Wouldn't it make more sense to make a .xz, or perhaps a .bz2? Although, that
->> probably gives a significant hit to the build time. But since it's explicit in
->> 'make sdk' I don't mind that much.
->>
+On 12-06-18 14:55, Peter Korsgaard wrote:
+>>>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
 > 
-> I'm using the SDK with Docker.  It can add tar.gz files into the
-> container, but now tar.xz.  Having to recompress the archive would be a
-> significant increase in build time.
-
- Duh. Calling tar inside the container explicitly, rather than letting docker to
-the extract directly, isn't too much of a problem either, no?
-
+> Hi,
 > 
+>  >> >  So bottom line: it would make sense to add a swapon -a to the default inittabs
+>  >> > (both busybox and sysv).
+>  >> 
+>  >> Don't we then end up with an ugly error message / somewhat needlessly bloat
+>  >> everyones busybox config for the (very common) situation where swap is
+>  >> not used and disabled in the kernel?
 > 
->>> +		-C $(HOST_DIR) \
->>> +		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
->>
->>  Perhaps move that "buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)" into a
->> variable?
+>  > A "swapon -a" does nothing if a swap entry is not found in /etc/fstab,
+>  > so there is no error message. Conversely, a "swapoff -a" does nothing
+>  > if a mounted swap is not found but I did not test if it issues some
+>  > error message due to a failing system call when swap is disabled in
+>  > the kernel. I will run some tests and submit an additional patch, if
+>  > necessary.
 > 
-> So having extracted an SDK, in an automated CI script, how does one use
-> it?  I'll add it to the Docker container:
+> It does not:
 > 
-> ARG sdk_file
-> ENV SDK=/mnt/sdk
-> ADD --chown=user:user ${sdk_file} ${SDK}
-
- My docker-fu is not too great, but you can do something similar to expose the
-tarball directly, and then do
-
-RUN tar -xf ${sdk_file} --strip-components=1
-
-no?
-
-
-> Now it needs to be relocated.  Something like:
+> grep CONFIG_SWAP .config
+> # CONFIG_SWAP is not set
 > 
-> RUN cd ${SDK}/buildroot-sdk.arm-buildroot-linux-gnueabihf-2018.02-00035-ge588bdd3e8 && ./relocate-sdk.sh
-
- Here you could to
-
-RUN cd ${SDK}/buildroot-sdk.*/ && ./relocate-sdk.sh
-
+> # swapon -a ; echo $?
+> 0
 > 
-> Is the problem with using this tarball apparent?  The dockerfile needs
-> to be hand edited on every single build to use the correct path to the
-> SDK.
-> 
-> I've already added a "sdk-tar" to my external.mk to do this, but used
-> the tarbomb approach.  While annoying for those who extract it in their
-> home dir, it's much easier to use in an automated processes since there
-> is no unknown path name component.
-> 
-> It is good if archives that are going to be used in an automated
-> process do not contain unpredictable path names!
-> 
-> Now one might say that I can just make a tarball with a different
-> process.  But that would mean creating two SDK tarballs, since there is
-> no way to prep the host dir for making a SDK tar without also making
-> the tarball.  That's a significant amount of wasted time.
+> But it does require people to add swapon/swapoff to their busybox config
+> even if they aren't using swap, otherwise they would get error messages
 
- That's what Thomas proposed in his last mail, and I agree it's not great.
-
- That said, if you're building an SDK, it's probably because you're not changing
-it too often. As long as you're developing the Buildroot OS itself, there's
-generally no point generating the SDK. If you really are closely co-developing
-your application and the Buildroot OS, you're probably better of including the
-application as a package rather than building it externally.
+ I think if people start customizing the busybox config and remove stuff from
+it, then it's only reasonable that they also modify the default inittab. Swapon
+and swapoff are both enabled in our busybox.config and busybox-minimal.config.
 
  Regards,
  Arnout
+
+> at bootup/shutdown (I know they already get it at shutdown, but an
+> orderly shutdown is a lot more rare than bootup).
+> 
+> But ok, the swapon/swapoff applet is very small, so I guess that is OK.
+> 
+> size util-linux/swaponoff.o
+>    text    data     bss     dec     hex filename
+>     597       0       0     597     255 util-linux/swaponoff.o
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
