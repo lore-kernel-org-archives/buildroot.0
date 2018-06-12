@@ -1,54 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jun 2018 08:58:58 +0200
-Subject: [Buildroot] [PATCH v3,2/2] librsvg: bump to version 2.42.5
-In-Reply-To: <20180610162547.6a5d946c@windsurf> (Thomas Petazzoni's message of
- "Sun, 10 Jun 2018 16:25:47 +0200")
-References: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
- <20180610133857.4737-2-fontaine.fabrice@gmail.com>
- <20180610162547.6a5d946c@windsurf>
-Message-ID: <874li88p8t.fsf@dell.be.48ers.dk>
+From: David Barbion <david.barbion@ext.leroymerlin.fr>
+Date: Tue, 12 Jun 2018 08:04:44 +0200
+Subject: [Buildroot] [PATCH 1/1] fix qtwebengine enable condition
+In-Reply-To: <20180611145744.2s667vhfspxgv34g@archlinux>
+References: <20180607134528.7098-1-david.barbion@ext.leroymerlin.fr>
+ <20180611145744.2s667vhfspxgv34g@archlinux>
+Message-ID: <5af8d5cd-2062-50db-c3b8-351921ecc986@ext.leroymerlin.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hi,
 
- > Hello,
- > On Sun, 10 Jun 2018 15:38:57 +0200, Fabrice Fontaine wrote:
- >> - Add a dependency to host-cargo
- >> - Add a patch to set RUST_TARGET
- >> - Add a dependency to BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- >> - Forward this dependency to efl svg, enlightment, gst-plugins-bad and
- >> gst1-plugins-bad
- >> - Add hash for license file
- >> 
- >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Le 11/06/2018 ? 16:57, Ga?l PORTAY a ?crit?:
+> David,
+>
+> On Thu, Jun 07, 2018 at 03:45:28PM +0200, David Barbion wrote:
+>> Signed-off-by: David Barbion <david.barbion@ext.leroymerlin.fr>
+>> ---
+>>  package/qt5/qt5webengine/Config.in | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+>> index 38486c6dcf..744d659567 100644
+>> --- a/package/qt5/qt5webengine/Config.in
+>> +++ b/package/qt5/qt5webengine/Config.in
+>> @@ -31,7 +31,7 @@ config BR2_PACKAGE_QT5WEBENGINE
+>>  	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
+>>  	depends on BR2_HOST_GCC_AT_LEAST_4_8 # qt5base-icu
+>>  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5base-icu
+>> -	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
+>> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
+> Good catch.
+>
+>>  	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
+>>  	depends on BR2_USE_WCHAR # libglib2
+>>  	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
+>> -- 
+>> 2.17.1
+> Do you mind to reword the first line of your commit message to start
+> with the name of the affected package and a colon?
+>
+> Something like:
+>
+> 	qt5webengine: fix...
+Sure :)
+Just made it.
 
- > I've applied, after fixing the gst-plugins-bad and gst1-plugins-bad
- > packages, in which you forgot to propagate the new dependency to the
- > existing Config.in comments.
+David.
+>
+> Regards,
+> Gael
 
- > Generally speaking, I find it a bit annoying that those packages start
- > using Rust. Not because I have anything against Rust, but because:
 
- >  (1) It limits the support to a much smaller set of architectures. For
- >      example, it is not longer possible to build librsvg or its reverse
- >      dependencies on ARMv5 platforms.
 
- >  (2) It adds a fair amount of build time.
-
- > But well, if that's upstream decision, there's not much we can do
- > against it.
-
-This also causes a number of issues for host-librsvg (which is a
-dependency of libgtk3 and midori) when building for architectures not
-supported by rust:
-
-http://autobuild.buildroot.net/?reason=host-rustc
-
-Care to take a look at propagating these new dependencies here?
-
--- 
-Bye, Peter Korsgaard
+Ce message et toutes les pi?ces jointes sont ?tablis ? l'attention exclusive de leurs destinataires et sont confidentiels. Si vous recevez ce message par erreur, merci de le d?truire et d'en avertir imm?diatement l'exp?diteur. L'internet ne permettant pas d'assurer l'int?grit? de ce message, le contenu de ce message ne repr?sente en aucun cas un engagement de la part de Leroy Merlin.
