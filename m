@@ -1,35 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jun 2018 22:21:44 +0200
-Subject: [Buildroot] [git commit] f2fs-tools: update homepage link
-Message-ID: <20180612202315.7B22F883BA@busybox.osuosl.org>
+Date: Tue, 12 Jun 2018 22:24:29 +0200
+Subject: [Buildroot] [git commit] f2fs-tools: add selinux and libblk
+ optional dependencies
+Message-ID: <20180612202315.8A7438844E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a74a41d834042ec1f2651cfd4adc23e21c8a8a22
+commit: https://git.buildroot.net/buildroot/commit/?id=e2a92d114b12c7bd28f6061e9066e915b1a7bd56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-As noted in the sourceforge page, the project is not using sourceforge
-anymore. Use the gitweb summary page instead.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/f2fs-tools/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/f2fs-tools/f2fs-tools.mk | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
-index f0630e99c6..e373096380 100644
---- a/package/f2fs-tools/Config.in
-+++ b/package/f2fs-tools/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_F2FS_TOOLS
- 	help
- 	  Tools for Flash-Friendly File System (F2FS)
+diff --git a/package/f2fs-tools/f2fs-tools.mk b/package/f2fs-tools/f2fs-tools.mk
+index 333a2cf7d4..1736dc4ead 100644
+--- a/package/f2fs-tools/f2fs-tools.mk
++++ b/package/f2fs-tools/f2fs-tools.mk
+@@ -15,4 +15,18 @@ F2FS_TOOLS_INSTALL_STAGING = YES
+ F2FS_TOOLS_LICENSE = GPL-2.0
+ F2FS_TOOLS_LICENSE_FILES = COPYING
  
--	  http://sourceforge.net/projects/f2fs-tools/
-+	  https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
- 
- comment "f2fs-tools needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++F2FS_TOOLS_CONF_OPTS += --with-selinux
++F2FS_TOOLS_DEPENDENCIES += libselinux
++else
++F2FS_TOOLS_CONF_OPTS += --without-selinux
++endif
++
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBBLKID),y)
++# util-linux is a dependency already, no need to list it again
++F2FS_TOOLS_CONF_OPTS += --with-blkid
++else
++F2FS_TOOLS_CONF_OPTS += --without-blkid
++endif
++
+ $(eval $(autotools-package))
