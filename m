@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jun 2018 14:56:58 +0200
-Subject: [Buildroot] [PATCH 2/4] sysvinit: add an inittab entry to
+Date: Tue, 12 Jun 2018 14:58:59 +0200
+Subject: [Buildroot] [PATCH 3/4] busybox: add an inittab entry to
  activate swap
-In-Reply-To: <20180611060016.20755-3-casantos@datacom.com.br> (Carlos Santos's
- message of "Mon, 11 Jun 2018 03:00:14 -0300")
+In-Reply-To: <20180611060016.20755-4-casantos@datacom.com.br> (Carlos Santos's
+ message of "Mon, 11 Jun 2018 03:00:15 -0300")
 References: <20180611060016.20755-1-casantos@datacom.com.br>
- <20180611060016.20755-3-casantos@datacom.com.br>
-Message-ID: <87efhc6u3p.fsf@dell.be.48ers.dk>
+ <20180611060016.20755-4-casantos@datacom.com.br>
+Message-ID: <87a7s06u0c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -25,7 +25,9 @@ To: buildroot@busybox.net
  > So even if the system has some init script to start/stop swap (e.g. from
  > a rootfs ovelay) calling swapon/swapoff would be harmless.
 
- > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+I guess an explicit swapon <device> after swapon -a (with an entry for
+<device> in /etc/fstab) will fail with an error message, but OK - That
+is easy to fix if that happens.
 
 Committed, thanks.
 
