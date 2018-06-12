@@ -1,59 +1,48 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Tue, 12 Jun 2018 22:25:57 +0300
-Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <20180612210124.18e1f168@windsurf>
-References: <20180609210607.13259-1-yann.morin.1998@free.fr>
- <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
- <1528737656.28705.131.camel@impinj.com>
- <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
- <1528825657.28705.168.camel@impinj.com>
- <CAOJ2eMd6vMsXRDSwNRBT1cK2S2i2kBhpqdMvkv9tqUoPTcYhrw@mail.gmail.com>
- <20180612210124.18e1f168@windsurf>
-Message-ID: <CAOJ2eMfh5-dqjRxrZhhBv6yQj6k1jgstnDSWqtsy4LG+UuVmBw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Jun 2018 21:33:46 +0200
+Subject: [Buildroot] ARC toolchain build failure
+Message-ID: <20180612213346.64dd8095@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, All,
+Hello,
 
-On Tue, Jun 12, 2018 at 10:01 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> I believe one of the reason we all like and use Buildroot is because of
-> its simplicity. And simplicity is a very difficult thing to preserve:
+When trying to build an ARC toolchain with the following defconfig:
 
-IMHO this change is the very opposite of "preserving simplicity". It
-adds unwanted things to the buildroot build. The unwanted things might
-even be unusable for existing users of "sdk".
+BR2_arcle=y
+BR2_archs38=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_KERNEL_HEADERS_4_14=y
+BR2_BINUTILS_VERSION_2_30_X=y
+BR2_GCC_VERSION_8_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_HOST_GDB=y
+BR2_INIT_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_GDB=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-Please don't get me wrong. I'm not against the SDK tarball itself.
+It fails with:
 
-But I'm against building something for naught. If the tarball turns
-out to be unusable I get slower buildroot builds. Which in turns will
-force me to extract what "original sdk without tarball" was doing out
-of buildroot makefile and hard-code it into my build script. And then
-I can remove "sdk" from the buildroot make command. I fail to see how
-that is simpler.
+/opt/arcle-hs38--glibc--bleeding-edge-2018.05-1/lib/gcc/arc-buildroot-linux-gnu/8.1.0/../../../../arc-buildroot-linux-gnu/bin/ld: /opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/libKSC.so symbol number 14 references nonexistent SHT_SYMTAB_SHNDX section
+/opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/libKSC.so: error adding symbols: No error
+collect2: error: ld returned 1 exit status
+extra-module.mk:8: recipe for target '/opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/ISO-2022-KR.so' failed
+make[3]: *** [/opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/ISO-2022-KR.so] Error 1
 
-If you don't offer a way to specify the generated tarball name, fine.
-Then I won't use sdk-tarball at all, even if the tarball itself would
-be usable in our downstream integration. Or I could come up with a way
-to "guess" the build artefact name in my build script and symlink it
-to the wanted build artefact name (again, I fail to see how this is
-simpler).
+During the glibc build. See
+https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006369
+for more context.
 
-I don't understand why "sdk-tarball: sdk" is not an acceptable
-solution. It would be much simpler.
+Are you aware of this issue ? Any fix ?
 
-Regards, Stefan
+Thanks!
 
-PS: just to be complete, this is what my current build script does
-after "make all sdk" has been completed:
-
-    (cd output/host && tar -cvJf ../host.tar.xz *)
-
-The collected build artefact is "host.tar.xz". AFAIR that name can't
-be changed dynamically without breaking the automatic downstream build
-flow in Jenkins.
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
