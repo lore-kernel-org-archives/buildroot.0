@@ -1,33 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jun 2018 11:06:13 +0200
-Subject: [Buildroot] swapoff, but no swapon in initab
-In-Reply-To: <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be> (Arnout
- Vandecappelle's message of "Sun, 10 Jun 2018 23:46:59 +0200")
-References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
- <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
- <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
- <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
-Message-ID: <87zi0074sa.fsf@dell.be.48ers.dk>
+Date: Tue, 12 Jun 2018 11:10:06 +0200
+Subject: [Buildroot] [PATCH v2 1/1] libnss: bump to version 3.37.3
+In-Reply-To: <20180611233618.29360-1-joseph.kogut@gmail.com> (Joseph Kogut's
+ message of "Mon, 11 Jun 2018 16:36:18 -0700")
+References: <20180611214225.22966-1-joseph.kogut@gmail.com>
+ <20180611233618.29360-1-joseph.kogut@gmail.com>
+Message-ID: <87vaao74lt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
 
-Hi,
+ > Fixes:
+ > http://autobuild.buildroot.net/results/fd64ee3486f9045dfbd83908b8f06ef62c0d9781/
+ > http://autobuild.buildroot.net/results/698500a92688c50e9cc71cf82c0848cb4adb81ad/
+ > http://autobuild.buildroot.net/results/adaa2f79b202cb01ae57fa0cdb0eac9c07b22ea2/
+ > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+ > ---
 
- >> "All devices marked as ``swap'' in /etc/fstab are made available,
- >> except for those with the ``noauto'' option. Devices that are
- >> already being used as swap are silently skipped."
+ > Changes v1 -> v2:
+ > 	- Remove patch merged upstream
 
- >  So bottom line: it would make sense to add a swapon -a to the default inittabs
- > (both busybox and sysv).
-
-Don't we then end up with an ugly error message / somewhat needlessly bloat
-everyones busybox config for the (very common) situation where swap is
-not used and disabled in the kernel?
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
