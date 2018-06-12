@@ -1,47 +1,47 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Tue, 12 Jun 2018 17:02:17 +0200
-Subject: [Buildroot] [PATCH 0/4] imx: graphics packages update to 6.2.4.p1.2
-Message-ID: <20180612150221.31792-1-gary.bisson@boundarydevices.com>
+Date: Tue, 12 Jun 2018 17:02:21 +0200
+Subject: [Buildroot] [PATCH 4/4] kernel-module-imx-gpu-viv: bump to version
+ 6.2.4.p1.2
+In-Reply-To: <20180612150221.31792-1-gary.bisson@boundarydevices.com>
+References: <20180612150221.31792-1-gary.bisson@boundarydevices.com>
+Message-ID: <20180612150221.31792-5-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+This package has been tested with the following commands:
+ # modprobe galcore
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
 
-This series bumps the version of the i.MX graphics packages.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash    | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This version is the first one that applies to both 32-bit and 64-bit
-i.MX processors so aarch64 support was added.
-
-As explained in the second commit, i.MX8 platforms only have Wayland as
-possible graphical back-end (no more fb or x11) so a new variable was
-created to hide those options. Not sure if it is the most elegant option
-but it does the job for now.
-
-And yes, g2d is only available for 32-bit platforms right now.
-
-Let me know if you have any question/remark.
-
-Regards,
-Gary
-
-Gary Bisson (4):
-  imx-gpu-viv: bump to version 6.2.4.p1.2
-  imx-gpu-viv: enable package for 64-bit i.MX processors
-  imx-gpu-g2d: bump to version 6.2.4.p1.2
-  kernel-module-imx-gpu-viv: bump to version 6.2.4.p1.2
-
- package/freescale-imx/Config.in                        |  7 ++++++-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash     |  2 +-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk       |  2 +-
- package/freescale-imx/imx-gpu-viv/Config.in            | 10 +++++++++-
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash     |  3 ++-
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk       |  6 +++++-
- .../kernel-module-imx-gpu-viv.hash                     |  2 +-
- .../kernel-module-imx-gpu-viv.mk                       |  2 +-
- 8 files changed, 26 insertions(+), 8 deletions(-)
-
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index c6204aff0e..3ed7ca2dd9 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256	35db597ae0dd8e9e80511e5e9d882a01e4c178b83ffc192c8dd6a1a35859aa13  kernel-module-imx-gpu-viv-3b9e057f29853fd29364aa666328a92b807007d7.tar.gz
++sha256	ad910b7d36dc433bbbe85808d278312e9199635aaa5d00097b70ffab11bde9e6  kernel-module-imx-gpu-viv-86354002bea77acd9ce1812712e9d8485b377ec8.tar.gz
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 2e6744c4f9..c76a5ee386 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = 3b9e057f29853fd29364aa666328a92b807007d7
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 86354002bea77acd9ce1812712e9d8485b377ec8
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
 -- 
 2.17.1
