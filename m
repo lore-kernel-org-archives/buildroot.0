@@ -1,33 +1,123 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 12 Jun 2018 20:40:48 +0300
-Subject: [Buildroot] [PATCH 1/3] f2fs-tools: update homepage link
-Message-ID: <e2de174cc828db7318acd88ebc64f751411e8458.1528825250.git.baruch@tkos.co.il>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Tue, 12 Jun 2018 17:47:38 +0000
+Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
+In-Reply-To: <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
+References: <20180609210607.13259-1-yann.morin.1998@free.fr>
+ <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
+ <1528737656.28705.131.camel@impinj.com>
+ <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
+Message-ID: <1528825657.28705.168.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As noted in the sourceforge page, the project is not using sourceforge
-anymore. Use the gitweb summary page instead.
+On Tue, 2018-06-12 at 15:30 +0200, Arnout Vandecappelle wrote:
+> 
+> On 11-06-18 19:20, Trent Piepho wrote:
+> > On Sun, 2018-06-10 at 23:21 +0200, Arnout Vandecappelle wrote:
+> > >  
+> > > >  .PHONY: sdk
+> > > > -sdk: world
+> > > > +sdk: world $(BR2_TAR_HOST_DEPENDENCY)
+> > > >  	@$(call MESSAGE,"Rendering the SDK relocatable")
+> > > >  	$(TOPDIR)/support/scripts/fix-rpath host
+> > > >  	$(TOPDIR)/support/scripts/fix-rpath staging
+> > > >  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+> > > >  	mkdir -p $(HOST_DIR)/share/buildroot
+> > > >  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+> > > > +	$(Q)mkdir -p $(BINARIES_DIR)
+> > > > +	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
+> > > 
+> > >  Wouldn't it make more sense to make a .xz, or perhaps a .bz2? Although, that
+> > > probably gives a significant hit to the build time. But since it's explicit in
+> > > 'make sdk' I don't mind that much.
+> > > 
+> > 
+> > I'm using the SDK with Docker.  It can add tar.gz files into the
+> > container, but now tar.xz.  Having to recompress the archive would be a
+> > significant increase in build time.
+> 
+>  Duh. Calling tar inside the container explicitly, rather than letting docker to
+> the extract directly, isn't too much of a problem either, no?
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/f2fs-tools/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I believe COPY + RUN ends up being more layers than just ADD.  Though
+current docker supports xz and bz2 so it would work to use a better
+compression.
 
-diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
-index f0630e99c6d3..e373096380be 100644
---- a/package/f2fs-tools/Config.in
-+++ b/package/f2fs-tools/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_F2FS_TOOLS
- 	help
- 	  Tools for Flash-Friendly File System (F2FS)
- 
--	  http://sourceforge.net/projects/f2fs-tools/
-+	  https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
- 
- comment "f2fs-tools needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
--- 
-2.17.1
+But, in the tests I've done on our vsphere system, using gz was still
+fastest.  I'm more interested in making the CI process faster than in
+saving disk space.
+
+> 
+> > > > +		-C $(HOST_DIR) \
+> > > > +		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
+> > > 
+> > >  Perhaps move that "buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)" into a
+> > > variable?
+> > 
+> > So having extracted an SDK, in an automated CI script, how does one use
+> > it?  I'll add it to the Docker container:
+> > 
+> > ARG sdk_file
+> > ENV SDK=/mnt/sdk
+> > ADD --chown=user:user ${sdk_file} ${SDK}
+> 
+>  My docker-fu is not too great, but you can do something similar to expose the
+> tarball directly, and then do
+> 
+> RUN tar -xf ${sdk_file} --strip-components=1
+> 
+> no?
+
+It would be more like:
+
+RUN dnf install -y tar
+ARG sdk_file
+ENV SDK=/mnt/sdk
+COPY ${sdk_file} ${SDK}
+RUN tar -xf ${SDK}/${sdk_file} -C ${SDK} --strip-components=1 --owner user:user
+RUN rm ${SDK}/${sdk_file}
+
+decompress option needs to be specified to tar, based on the compressor used.
+
+This uses more layers.
+
+
+> > Now it needs to be relocated.  Something like:
+> > 
+> > RUN cd ${SDK}/buildroot-sdk.arm-buildroot-linux-gnueabihf-2018.02-00035-ge588bdd3e8 && ./relocate-sdk.sh
+> 
+>  Here you could to
+> 
+> RUN cd ${SDK}/buildroot-sdk.*/ && ./relocate-sdk.sh
+
+Assumes only one directory will match the pattern.  Would also require
+the user of the SDK to do the same thing, assume the only directory in
+${SDK} is the one they want and use a shell wildcard expansion to find
+it.  Which I admit could work, though I think it's a kludge.  I needed
+to do the same thing to find the sysroot location and compiler prefix
+inside the SDK, and I think that's a kludge too, and wish buildroot put
+a pointer in a known location in the sdk to where things in unknown
+locations (sysroot) are.  But I haven't gotten around to making a patch
+to do that yet.
+
+>  That said, if you're building an SDK, it's probably because you're not changing
+> it too often. As long as you're developing the Buildroot OS itself, there's
+> generally no point generating the SDK. If you really are closely co-developing
+> your application and the Buildroot OS, you're probably better of including the
+> application as a package rather than building it externally.
+
+The latter, both the SDK and the applications using the SDK change very
+ frequently.  Which is why I'm so concerned about speed.
+
+While the applications are buildroot packages as well, there are
+downsides to doing development that way.  So they exist as stand alone
+packages that can be compiled outside of buildroot.  No different than
+any other package in buildroot in that regard.
+
+But how to build a package stand alone in a CI process, in an
+environment than can build it correctly, and also closely tracks the
+image buildroot will make for the final product?  Use the buildroot
+SDK!  So that's what I'm using it for.
