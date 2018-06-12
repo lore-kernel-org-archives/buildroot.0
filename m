@@ -1,34 +1,54 @@
-From: David Barbion <david.barbion@ext.leroymerlin.fr>
-Date: Tue, 12 Jun 2018 08:02:53 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5webengine: fix enable condition
-Message-ID: <20180612060253.5142-1-david.barbion@ext.leroymerlin.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Jun 2018 08:58:58 +0200
+Subject: [Buildroot] [PATCH v3,2/2] librsvg: bump to version 2.42.5
+In-Reply-To: <20180610162547.6a5d946c@windsurf> (Thomas Petazzoni's message of
+ "Sun, 10 Jun 2018 16:25:47 +0200")
+References: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
+ <20180610133857.4737-2-fontaine.fabrice@gmail.com>
+ <20180610162547.6a5d946c@windsurf>
+Message-ID: <874li88p8t.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: David Barbion <david.barbion@ext.leroymerlin.fr>
----
- package/qt5/qt5webengine/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 38486c6dcf..744d659567 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -31,7 +31,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # qt5base-icu
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5base-icu
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
+ > Hello,
+ > On Sun, 10 Jun 2018 15:38:57 +0200, Fabrice Fontaine wrote:
+ >> - Add a dependency to host-cargo
+ >> - Add a patch to set RUST_TARGET
+ >> - Add a dependency to BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ >> - Forward this dependency to efl svg, enlightment, gst-plugins-bad and
+ >> gst1-plugins-bad
+ >> - Add hash for license file
+ >> 
+ >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+ > I've applied, after fixing the gst-plugins-bad and gst1-plugins-bad
+ > packages, in which you forgot to propagate the new dependency to the
+ > existing Config.in comments.
+
+ > Generally speaking, I find it a bit annoying that those packages start
+ > using Rust. Not because I have anything against Rust, but because:
+
+ >  (1) It limits the support to a much smaller set of architectures. For
+ >      example, it is not longer possible to build librsvg or its reverse
+ >      dependencies on ARMv5 platforms.
+
+ >  (2) It adds a fair amount of build time.
+
+ > But well, if that's upstream decision, there's not much we can do
+ > against it.
+
+This also causes a number of issues for host-librsvg (which is a
+dependency of libgtk3 and midori) when building for architectures not
+supported by rust:
+
+http://autobuild.buildroot.net/?reason=host-rustc
+
+Care to take a look at propagating these new dependencies here?
+
 -- 
-2.17.1
-
-
-
-Ce message et toutes les pi?ces jointes sont ?tablis ? l'attention exclusive de leurs destinataires et sont confidentiels. Si vous recevez ce message par erreur, merci de le d?truire et d'en avertir imm?diatement l'exp?diteur. L'internet ne permettant pas d'assurer l'int?grit? de ce message, le contenu de ce message ne repr?sente en aucun cas un engagement de la part de Leroy Merlin.
+Bye, Peter Korsgaard
