@@ -1,123 +1,67 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Tue, 12 Jun 2018 17:47:38 +0000
-Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
-References: <20180609210607.13259-1-yann.morin.1998@free.fr>
- <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
- <1528737656.28705.131.camel@impinj.com>
- <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
-Message-ID: <1528825657.28705.168.camel@impinj.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 12 Jun 2018 19:59:34 +0200
+Subject: [Buildroot] [PATCH 1/1] mosquitto: bump to version 1.5
+In-Reply-To: <87r2ldaxee.fsf@dell.be.48ers.dk>
+References: <20180610134244.5369-1-fontaine.fabrice@gmail.com>
+ <87r2ldaxee.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W82Lz4-TPxS24=M7fpGBLEAJ5jWmbHpSrNeVWEmAfCqi4A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2018-06-12 at 15:30 +0200, Arnout Vandecappelle wrote:
-> 
-> On 11-06-18 19:20, Trent Piepho wrote:
-> > On Sun, 2018-06-10 at 23:21 +0200, Arnout Vandecappelle wrote:
-> > >  
-> > > >  .PHONY: sdk
-> > > > -sdk: world
-> > > > +sdk: world $(BR2_TAR_HOST_DEPENDENCY)
-> > > >  	@$(call MESSAGE,"Rendering the SDK relocatable")
-> > > >  	$(TOPDIR)/support/scripts/fix-rpath host
-> > > >  	$(TOPDIR)/support/scripts/fix-rpath staging
-> > > >  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
-> > > >  	mkdir -p $(HOST_DIR)/share/buildroot
-> > > >  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-> > > > +	$(Q)mkdir -p $(BINARIES_DIR)
-> > > > +	$(TAR) czf $(BINARIES_DIR)/buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL).tar.gz \
-> > > 
-> > >  Wouldn't it make more sense to make a .xz, or perhaps a .bz2? Although, that
-> > > probably gives a significant hit to the build time. But since it's explicit in
-> > > 'make sdk' I don't mind that much.
-> > > 
-> > 
-> > I'm using the SDK with Docker.  It can add tar.gz files into the
-> > container, but now tar.xz.  Having to recompress the archive would be a
-> > significant increase in build time.
-> 
->  Duh. Calling tar inside the container explicitly, rather than letting docker to
-> the extract directly, isn't too much of a problem either, no?
+Dear Peter,
 
-I believe COPY + RUN ends up being more layers than just ADD.  Though
-current docker supports xz and bz2 so it would work to use a better
-compression.
+2018-06-11 22:19 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
 
-But, in the tests I've done on our vsphere system, using gz was still
-fastest.  I'm more interested in making the CI process faster than in
-saving disk space.
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > Remove patch (already in version)
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> How much have you tested this?
 
-> 
-> > > > +		-C $(HOST_DIR) \
-> > > > +		--transform='s#^\.#buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)#' \
-> > > 
-> > >  Perhaps move that "buildroot-sdk.$(GNU_TARGET_NAME)-$(BR2_VERSION_FULL)" into a
-> > > variable?
-> > 
-> > So having extracted an SDK, in an automated CI script, how does one use
-> > it?  I'll add it to the Docker container:
-> > 
-> > ARG sdk_file
-> > ENV SDK=/mnt/sdk
-> > ADD --chown=user:user ${sdk_file} ${SDK}
-> 
->  My docker-fu is not too great, but you can do something similar to expose the
-> tarball directly, and then do
-> 
-> RUN tar -xf ${sdk_file} --strip-components=1
-> 
-> no?
-
-It would be more like:
-
-RUN dnf install -y tar
-ARG sdk_file
-ENV SDK=/mnt/sdk
-COPY ${sdk_file} ${SDK}
-RUN tar -xf ${SDK}/${sdk_file} -C ${SDK} --strip-components=1 --owner user:user
-RUN rm ${SDK}/${sdk_file}
-
-decompress option needs to be specified to tar, based on the compressor used.
-
-This uses more layers.
+I have tested it and it seems to work, mosquitto was starting, basic
+publish / subscribe was ok.
 
 
-> > Now it needs to be relocated.  Something like:
-> > 
-> > RUN cd ${SDK}/buildroot-sdk.arm-buildroot-linux-gnueabihf-2018.02-00035-ge588bdd3e8 && ./relocate-sdk.sh
-> 
->  Here you could to
-> 
-> RUN cd ${SDK}/buildroot-sdk.*/ && ./relocate-sdk.sh
+> I haven't followed the discussion on
+> mosquitto-dev in a lot of details, but apparently there is an unresolved
+> crash issue:
+>
+> https://github.com/eclipse/mosquitto/issues/505
 
-Assumes only one directory will match the pattern.  Would also require
-the user of the SDK to do the same thing, assume the only directory in
-${SDK} is the one they want and use a shell wildcard expansion to find
-it.  Which I admit could work, though I think it's a kludge.  I needed
-to do the same thing to find the sysroot location and compiler prefix
-inside the SDK, and I think that's a kludge too, and wish buildroot put
-a pointer in a known location in the sdk to where things in unknown
-locations (sysroot) are.  But I haven't gotten around to making a patch
-to do that yet.
+This issue is indeed still present in v1.5.
+The following steps leads to a crash on the broker:
 
->  That said, if you're building an SDK, it's probably because you're not changing
-> it too often. As long as you're developing the Buildroot OS itself, there's
-> generally no point generating the SDK. If you really are closely co-developing
-> your application and the Buildroot OS, you're probably better of including the
-> application as a package rather than building it externally.
+   - connect
+   - subscribe to topic/a
+   - subscribe to topic/b
+   - unsubscribe from topic/a
+   - disconnect
 
-The latter, both the SDK and the applications using the SDK change very
- frequently.  Which is why I'm so concerned about speed.
+PR #531 fixes the issue but was not merged perhaps because there is a
+conflict in src/database.c that was not fixed. I will send a v2 of my patch
+to fix this issue.
 
-While the applications are buildroot packages as well, there are
-downsides to doing development that way.  So they exist as stand alone
-packages that can be compiled outside of buildroot.  No different than
-any other package in buildroot in that regard.
+>
+>
+> And a compilation issue caused by a variable name change:
+>
+> https://github.com/eclipse/mosquitto/pull/810
 
-But how to build a package stand alone in a CI process, in an
-environment than can build it correctly, and also closely tracks the
-image buildroot will make for the final product?  Use the buildroot
-SDK!  So that's what I'm using it for.
+I didn't encounter this issue because WITH_WRAP is always set to OFF in our
+builds.
+
+>
+>
+> --
+> Bye, Peter Korsgaard
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180612/f69902c4/attachment.html>
