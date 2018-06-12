@@ -1,88 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jun 2018 15:03:36 +0200
-Subject: [Buildroot] [git commit] hiawatha: bump to version 10.8.1
-Message-ID: <20180612130229.0227280049@busybox.osuosl.org>
+Date: Tue, 12 Jun 2018 15:03:15 +0200
+Subject: [Buildroot] [git commit] lighttpd: bump to version 1.4.49
+Message-ID: <20180612130228.EF01880049@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e46cecf2d43656009f2ff77e36ba4020576fbe27
+commit: https://git.buildroot.net/buildroot/commit/?id=b94ddb8d5d1cc74eaf47d3272c2313860d96430d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patch.
-
-Add license file hash.
-
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-cmake-allow-build-without-c.patch         | 34 ----------------------
- package/hiawatha/hiawatha.hash                     |  3 +-
- package/hiawatha/hiawatha.mk                       |  2 +-
- 3 files changed, 3 insertions(+), 36 deletions(-)
+ package/lighttpd/lighttpd.hash | 4 ++--
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/hiawatha/0001-cmake-allow-build-without-c.patch b/package/hiawatha/0001-cmake-allow-build-without-c.patch
-deleted file mode 100644
-index d264d621c8..0000000000
---- a/package/hiawatha/0001-cmake-allow-build-without-c.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 784e46afd7530f3010726ba73cc1a81059eae8bf Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Mon, 5 Jun 2017 13:26:18 +0200
--Subject: [PATCH] cmake: allow build without c++
--
--By default cmake also searches for a c++ compiler:
--https://cmake.org/cmake/help/v3.7/command/project.html
--"By default C and CXX are enabled if no language options are given."
--
--This patch restricts the compiler to C to fix a build error detected
--by the buildroot autobuilders:
--http://autobuild.buildroot.net/results/c04/c04ff29b83c020573add597c355c57a6d9c9761d/build-end.log
--
--Patch sent upstream: https://github.com/hsleisink/hiawatha/pull/30
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 4f28d76..e8051fc 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -1,5 +1,5 @@
-- cmake_minimum_required(VERSION 3.0)
---project(Hiawatha VERSION 10.6)
--+project(Hiawatha VERSION 10.6 LANGUAGES C)
-- 
-- # Compiler
-- set(CMAKE_C_FLAGS "-O2 -Wall -Wextra ${CMAKE_C_FLAGS}")
---- 
--2.11.0
--
-diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
-index 3ec11cc21a..7d98c01bf7 100644
---- a/package/hiawatha/hiawatha.hash
-+++ b/package/hiawatha/hiawatha.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 813d1cd0e0..c99e240c7b 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From http://www.lighttpd.net/
+-sha256 0f8ad5aac7529d7b948b9d7e8cd0b4a9e177309d85d6bf6516e28e6e40d74f36  lighttpd-1.4.48.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.49.sha256sum
++sha256 aedf49d7127d9e4c0ea56618e9e945a17674dc46a37ac7990120f87dd939ce09  lighttpd-1.4.49.tar.xz
  # Locally calculated
--sha256 0cf014ae214be1bf6244c46c25e66805987c948837a4e37f9dede570de49bdeb  hiawatha-10.6.tar.gz
-+sha256 0f013afc71284bab7267b0d80a51133a8fd4248575dbcbabf338cf826095cda8  hiawatha-10.8.1.tar.gz
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
-index 4dde25459d..776efc1dcf 100644
---- a/package/hiawatha/hiawatha.mk
-+++ b/package/hiawatha/hiawatha.mk
-@@ -4,7 +4,7 @@
- #
+ sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 592f547434..c565fed4ff 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--HIAWATHA_VERSION = 10.6
-+HIAWATHA_VERSION = 10.8.1
- HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
- HIAWATHA_DEPENDENCIES = zlib
- HIAWATHA_LICENSE = GPL-2.0
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).48
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).49
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
