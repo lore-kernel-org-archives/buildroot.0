@@ -1,44 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jun 2018 16:50:27 +0200
-Subject: [Buildroot] swapoff, but no swapon in initab
-In-Reply-To: <598a385a-5693-8fff-876c-550063645a50@mind.be> (Arnout
- Vandecappelle's message of "Tue, 12 Jun 2018 15:34:21 +0200")
-References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
- <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
- <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
- <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
- <87zi0074sa.fsf@dell.be.48ers.dk>
- <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
- <87in6o6u5n.fsf@dell.be.48ers.dk>
- <598a385a-5693-8fff-876c-550063645a50@mind.be>
-Message-ID: <87sh5s5aa4.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 12 Jun 2018 14:53:47 +0000
+Subject: [Buildroot] [Bug 11096] New: Upgrade from glibc 2.26 to 2.27 broke
+ some locales (ru_RU in particular)
+Message-ID: <bug-11096-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+https://bugs.busybox.net/show_bug.cgi?id=11096
 
- >> But it does require people to add swapon/swapoff to their busybox config
- >> even if they aren't using swap, otherwise they would get error messages
+            Bug ID: 11096
+           Summary: Upgrade from glibc 2.26 to 2.27 broke some locales
+                    (ru_RU in particular)
+           Product: buildroot
+           Version: 2018.05
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: major
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: psycho_dk at mail.ru
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
- >  I think if people start customizing the busybox config and remove stuff from
- > it, then it's only reasonable that they also modify the default
- > inittab.
+Created attachment 7646
+  --> https://bugs.busybox.net/attachment.cgi?id=7646&action=edit
+glibc downgrade patch
 
-Correct.
+glibc 2.27 updated some locale definitions (added alt_mon, ab_lat_mon
+descriptions). See release notes:
+https://sourceware.org/ml/libc-announce/2018/msg00000.html.
 
- > Swaponand swapoff are both enabled in our busybox.config and busybox-minimal.config.
+Buildroot uses host's localedef for locale compilation. It's foreign utility
+for glibc (from eglibc) and it doesn't support new descriptions. It cause error
+in the final stage:
 
-Hmm, does swap work on nommu? I would guess not. Looking at the kernel
-option:
+> for locale in ru_RU.UTF-8 ; do inputfile=`echo ${locale} | cut -f1 -d'.'` ; charmap=`echo ${locale} | cut -f2 -d'.' -s` ; if test -z "${charmap}" ; then charmap="UTF-8" ; fi ; echo "Generating locale ${inputfile}.${charmap}" ; I18NPATH=/home/hoxnox/devel/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/share/i18n:/usr/share/i18n /home/hoxnox/devel/buildroot/output/host/bin/localedef --prefix=/home/hoxnox/devel/buildroot/output/target --"little"-endian -i ${inputfile} -f ${charmap} ${locale} ; done
+> Generating locale ru_RU.UTF-8
+> /home/hoxnox/devel/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/ru_RU:125: LC_TIME: syntax error
+> /home/hoxnox/devel/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/ru_RU:149: LC_TIME: syntax error
 
-git grep -A3 'config SWAP' init/Kconfig
-init/Kconfig:config SWAP
-init/Kconfig-   bool "Support for paging of anonymous memory (swap)"
-init/Kconfig-   depends on MMU && BLOCK
-init/Kconfig-   default y
+
+It's also the cause of no locale support by libc in the target system.
+
+Downgrading to glibc-2.26 solves the problem (see attachment), but is not the
+solution.
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
