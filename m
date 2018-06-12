@@ -1,48 +1,43 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 12 Jun 2018 08:52:25 -0300 (BRT)
-Subject: [Buildroot] swapoff, but no swapon in initab
-In-Reply-To: <87zi0074sa.fsf@dell.be.48ers.dk>
-References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
- <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
- <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
- <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
- <87zi0074sa.fsf@dell.be.48ers.dk>
-Message-ID: <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 12 Jun 2018 15:11:51 +0300
+Subject: [Buildroot] [PATCH] lighttpd: bump to version 1.4.49
+Message-ID: <f97c0e3ca6357ba2fc23a255cdc6173577beb913.1528805511.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Peter Korsgaard" <peter@korsgaard.com>
-> To: "Arnout Vandecappelle" <arnout@mind.be>
-> Cc: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>
-> Sent: Tuesday, June 12, 2018 6:06:13 AM
-> Subject: Re: swapoff, but no swapon in initab
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/lighttpd/lighttpd.hash | 4 ++--
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
-> >> "All devices marked as ``swap'' in /etc/fstab are made available,
-> >> except for those with the ``noauto'' option. Devices that are
-> >> already being used as swap are silently skipped."
-> 
-> >  So bottom line: it would make sense to add a swapon -a to the default inittabs
-> > (both busybox and sysv).
-> 
-> Don't we then end up with an ugly error message / somewhat needlessly bloat
-> everyones busybox config for the (very common) situation where swap is
-> not used and disabled in the kernel?
-
-A "swapon -a" does nothing if a swap entry is not found in /etc/fstab,
-so there is no error message. Conversely, a "swapoff -a" does nothing
-if a mounted swap is not found but I did not test if it issues some
-error message due to a failing system call when swap is disabled in
-the kernel. I will run some tests and submit an additional patch, if
-necessary.
-
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 813d1cd0e04c..c99e240c7bd0 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,4 +1,4 @@
+-# From http://www.lighttpd.net/
+-sha256 0f8ad5aac7529d7b948b9d7e8cd0b4a9e177309d85d6bf6516e28e6e40d74f36  lighttpd-1.4.48.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.49.sha256sum
++sha256 aedf49d7127d9e4c0ea56618e9e945a17674dc46a37ac7990120f87dd939ce09  lighttpd-1.4.49.tar.xz
+ # Locally calculated
+ sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 592f5474349e..c565fed4ff47 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).48
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).49
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.17.1
