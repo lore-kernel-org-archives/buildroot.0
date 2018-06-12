@@ -1,44 +1,43 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jun 2018 11:22:34 +0200
-Subject: [Buildroot] [git commit] sysvinit: reduce number of mkdir calls in
- inittab
-Message-ID: <20180612092203.0CC4588071@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 12 Jun 2018 09:25:51 +0000
+Subject: [Buildroot] [Bug 11091] New: BR2_PRIMARY_SITE doesn't work (wget is
+ selected every time as backend)
+Message-ID: <bug-11091-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc267db6ab4d54ed3ddb582774fb51ef64332649
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11091
 
-The default sysvinit inittab does two separate mkdir calls to create
-/dev/pts and /dev/shm. Reduce this to call mkdir only once for both
-directories.
+            Bug ID: 11091
+           Summary: BR2_PRIMARY_SITE doesn't work (wget is selected every
+                    time as backend)
+           Product: buildroot
+           Version: 2018.05
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: t.prueckl at hainzl.at
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-This removes id "si3" but keeps ids "si4".."si9" intact rather than
-renumbering them. This would just increase the turmoil without any
-practical effect.
+Created attachment 7631
+  --> https://bugs.busybox.net/attachment.cgi?id=7631&action=edit
+Patch to fix the descripted issue
 
-Based on commit e9db8122fb, by Florian La Roche <F.LaRoche@pilz.de>.
+The Download doesn't work if the BR2_PRIMARY_SITE isn't a http url.
+In my case if use a 'file://' url to get the files from a mounted directory.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sysvinit/inittab | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Reason: the "|urlencode" is appended to the backend type.
+In the file "support/download/dl-wrapper" this string isn't removed when
+selecting the backend.
 
-diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
-index 7eaef59d9e..2ca253ad6c 100644
---- a/package/sysvinit/inittab
-+++ b/package/sysvinit/inittab
-@@ -6,8 +6,7 @@ id:3:initdefault:
- 
- si0::sysinit:/bin/mount -t proc proc /proc
- si1::sysinit:/bin/mount -o remount,rw /
--si2::sysinit:/bin/mkdir -p /dev/pts
--si3::sysinit:/bin/mkdir -p /dev/shm
-+si2::sysinit:/bin/mkdir -p /dev/pts /dev/shm
- si4::sysinit:/bin/mount -a
- si5::sysinit:/bin/ln -sf /proc/self/fd /dev/fd 2>/dev/null
- si6::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin 2>/dev/null
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
