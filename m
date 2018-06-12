@@ -1,67 +1,30 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 12 Jun 2018 19:59:34 +0200
-Subject: [Buildroot] [PATCH 1/1] mosquitto: bump to version 1.5
-In-Reply-To: <87r2ldaxee.fsf@dell.be.48ers.dk>
-References: <20180610134244.5369-1-fontaine.fabrice@gmail.com>
- <87r2ldaxee.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W82Lz4-TPxS24=M7fpGBLEAJ5jWmbHpSrNeVWEmAfCqi4A@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 12 Jun 2018 15:04:53 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.17.1
+Message-ID: <1528826694-13498-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-2018-06-11 22:19 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
-
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > Remove patch (already in version)
->  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> How much have you tested this?
-
-I have tested it and it seems to work, mosquitto was starting, basic
-publish / subscribe was ok.
-
-
-> I haven't followed the discussion on
-> mosquitto-dev in a lot of details, but apparently there is an unresolved
-> crash issue:
->
-> https://github.com/eclipse/mosquitto/issues/505
-
-This issue is indeed still present in v1.5.
-The following steps leads to a crash on the broker:
-
-   - connect
-   - subscribe to topic/a
-   - subscribe to topic/b
-   - unsubscribe from topic/a
-   - disconnect
-
-PR #531 fixes the issue but was not merged perhaps because there is a
-conflict in src/database.c that was not fixed. I will send a v2 of my patch
-to fix this issue.
-
->
->
-> And a compilation issue caused by a variable name change:
->
-> https://github.com/eclipse/mosquitto/pull/810
-
-I didn't encounter this issue because WITH_WRAP is always set to OFF in our
-builds.
-
->
->
-> --
-> Bye, Peter Korsgaard
->
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180612/f69902c4/attachment.html>
+diff --git a/linux/Config.in b/linux/Config.in
+index 07888e2..603aec6 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.17" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.17.1" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-- 
+2.7.4
