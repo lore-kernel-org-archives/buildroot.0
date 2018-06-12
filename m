@@ -1,9 +1,9 @@
 From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Tue, 12 Jun 2018 08:32:00 -0400
-Subject: [Buildroot] [PATCH 3/9] qt5quickcontrols: install examples to target
+Date: Tue, 12 Jun 2018 08:32:03 -0400
+Subject: [Buildroot] [PATCH 6/9] qt5svg: install examples to target
 In-Reply-To: <20180612123206.31523-1-gael.portay@savoirfairelinux.com>
 References: <20180612123206.31523-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180612123206.31523-4-gael.portay@savoirfairelinux.com>
+Message-ID: <20180612123206.31523-7-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +14,42 @@ When BR2_PACKAGE_QT5BASE_EXAMPLES is set, the examples for this module
 are installed in the staging directory but they are not shipped to the
 target.
 
-This commit copies the examples `quickcontrols' from the staging
-directory to the target.
+This commit copies the examples `svg' from the staging directory to
+the target.
 
 Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 ---
- package/qt5/qt5quickcontrols/qt5quickcontrols.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/qt5/qt5svg/qt5svg.mk | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-index 5517cc1537..6e551d5a27 100644
---- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-+++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
-@@ -25,6 +25,12 @@ define QT5QUICKCONTROLS_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
+index 168c4c063f..48ff04bd75 100644
+--- a/package/qt5/qt5svg/qt5svg.mk
++++ b/package/qt5/qt5svg/qt5svg.mk
+@@ -37,12 +37,23 @@ define QT5SVG_INSTALL_ICONENGINES
  endef
+ endif
  
 +ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+define QT5QUICKCONTROLS_INSTALL_TARGET_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/quickcontrols $(TARGET_DIR)/usr/lib/qt/examples/
++define QT5SVG_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/svg $(TARGET_DIR)/usr/lib/qt/examples/
 +endef
 +endif
 +
- ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK)$(BR2_PACKAGE_QT5BASE_WIDGETS),yy)
- define QT5QUICKCONTROLS_INSTALL_TARGET_PRIVATEWIDGETS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/PrivateWidgets $(TARGET_DIR)/usr/qml/QtQuick
-@@ -43,6 +49,7 @@ define QT5QUICKCONTROLS_INSTALL_TARGET_CMDS
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Extras $(TARGET_DIR)/usr/qml/QtQuick
- 	$(QT5QUICKCONTROLS_INSTALL_TARGET_PRIVATEWIDGETS)
- 	$(QT5QUICKCONTROLS_INSTALL_TARGET_LAYOUTS)
-+	$(QT5QUICKCONTROLS_INSTALL_TARGET_EXAMPLES)
+ ifeq ($(BR2_STATIC_LIBS),)
+-define QT5SVG_INSTALL_TARGET_CMDS
++define QT5SVG_INSTALL_TARGET_LIBS
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Svg*.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpf $(STAGING_DIR)/usr/lib/qt/plugins/imageformats/libqsvg.so $(TARGET_DIR)/usr/lib/qt/plugins/imageformats/
+ 	$(QT5SVG_INSTALL_ICONENGINES)
  endef
+ endif
  
++define QT5SVG_INSTALL_TARGET_CMDS
++	$(QT5SVG_INSTALL_TARGET_LIBS)
++	$(QT5SVG_INSTALL_TARGET_EXAMPLES)
++endef
++
  $(eval $(generic-package))
 -- 
 2.17.1
