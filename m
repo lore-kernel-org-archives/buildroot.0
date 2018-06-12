@@ -1,46 +1,44 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Tue, 12 Jun 2018 16:34:48 +0200
-Subject: [Buildroot] [RFC PATCH 6/8] llvm: bump to version 6.0.0
-In-Reply-To: <20180608225932.13127-7-joseph.kogut@gmail.com>
-References: <20180608225932.13127-1-joseph.kogut@gmail.com>
- <20180608225932.13127-7-joseph.kogut@gmail.com>
-Message-ID: <af197ae1-bcbc-0bd7-20ca-03b7e5b6b2a9@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Jun 2018 16:50:27 +0200
+Subject: [Buildroot] swapoff, but no swapon in initab
+In-Reply-To: <598a385a-5693-8fff-876c-550063645a50@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 12 Jun 2018 15:34:21 +0200")
+References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
+ <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
+ <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
+ <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
+ <87zi0074sa.fsf@dell.be.48ers.dk>
+ <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
+ <87in6o6u5n.fsf@dell.be.48ers.dk>
+ <598a385a-5693-8fff-876c-550063645a50@mind.be>
+Message-ID: <87sh5s5aa4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joseph, all,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On 09/06/2018 00:59, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->   ...type-in-ORC-readMem-client-interface.patch | 37 -------------------
->   package/llvm/llvm.hash                        |  2 +-
->   package/llvm/llvm.mk                          |  2 +-
->   3 files changed, 2 insertions(+), 39 deletions(-)
->   delete mode 100644 package/llvm/0001-Fix-return-type-in-ORC-readMem-client-interface.patch
->   
-> -LLVM_VERSION = 5.0.2
-> +LLVM_VERSION = 6.0.0
->   LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
->   LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
->   LLVM_LICENSE = NCSA
+ >> But it does require people to add swapon/swapoff to their busybox config
+ >> even if they aren't using swap, otherwise they would get error messages
 
-Tested-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+ >  I think if people start customizing the busybox config and remove stuff from
+ > it, then it's only reasonable that they also modify the default
+ > inittab.
 
-I've applied the patch and tested llvmpipe on ARM and x86. My only
-doubt is whether we should also keep llvm 5 (no longer mantained).
-Apparently there haven't been changes in the API, most changes are
-related to backends: https://releases.llvm.org/6.0.0/docs/ReleaseNotes.html.
+Correct.
 
-I ask this question because this topic was discussed during the meeting:
-https://elinux.org/Buildroot:DeveloperDaysFOSDEM2018#LLVM.2FClang
+ > Swaponand swapoff are both enabled in our busybox.config and busybox-minimal.config.
 
-I believe we could just bump to 6.0.0 as currently there is only Mesa
-using this package.
+Hmm, does swap work on nommu? I would guess not. Looking at the kernel
+option:
 
-Best regards,
+git grep -A3 'config SWAP' init/Kconfig
+init/Kconfig:config SWAP
+init/Kconfig-   bool "Support for paging of anonymous memory (swap)"
+init/Kconfig-   depends on MMU && BLOCK
+init/Kconfig-   default y
 
-Valentin
+-- 
+Bye, Peter Korsgaard
