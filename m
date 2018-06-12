@@ -1,45 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jun 2018 15:03:15 +0200
-Subject: [Buildroot] [git commit] lighttpd: bump to version 1.4.49
-Message-ID: <20180612130228.EF01880049@busybox.osuosl.org>
+Date: Tue, 12 Jun 2018 14:56:07 +0200
+Subject: [Buildroot] [git commit] busybox: add an inittab entry to activate
+ swap
+Message-ID: <20180612130228.DCB0080049@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b94ddb8d5d1cc74eaf47d3272c2313860d96430d
+commit: https://git.buildroot.net/buildroot/commit/?id=d524cc7d9de549228b998ba5747b0d7cd4f24251
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+There is a call to swapoff in the shutdown sequence, so call "swapon -a"
+on startup. As stated in the swapon man page,
+
+   All devices marked as "swap" in /etc/fstab are made available, except
+   for those with the "noauto" option. Devices that are already being
+   used as swap are silently skipped.
+
+So even if the system has some init script to start/stop swap (e.g. from
+a rootfs ovelay) calling swapon/swapoff would be harmless.
+
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lighttpd/lighttpd.hash | 4 ++--
- package/lighttpd/lighttpd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/busybox/inittab | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index 813d1cd0e0..c99e240c7b 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
-@@ -1,4 +1,4 @@
--# From http://www.lighttpd.net/
--sha256 0f8ad5aac7529d7b948b9d7e8cd0b4a9e177309d85d6bf6516e28e6e40d74f36  lighttpd-1.4.48.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.49.sha256sum
-+sha256 aedf49d7127d9e4c0ea56618e9e945a17674dc46a37ac7990120f87dd939ce09  lighttpd-1.4.49.tar.xz
- # Locally calculated
- sha256 5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 592f547434..c565fed4ff 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).48
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).49
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3-Clause
+diff --git a/package/busybox/inittab b/package/busybox/inittab
+index 7cd203de0b..ff1725c775 100644
+--- a/package/busybox/inittab
++++ b/package/busybox/inittab
+@@ -18,6 +18,7 @@
+ ::sysinit:/bin/mount -o remount,rw /
+ ::sysinit:/bin/mkdir -p /dev/pts /dev/shm
+ ::sysinit:/bin/mount -a
++::sysinit:/sbin/swapon -a
+ null::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
+ null::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
+ null::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
