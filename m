@@ -1,54 +1,57 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Tue, 12 Jun 2018 08:31:57 -0400
-Subject: [Buildroot] [PATCH 0/9] qt5: install missing examples
-Message-ID: <20180612123206.31523-1-gael.portay@savoirfairelinux.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 12 Jun 2018 14:55:48 +0200
+Subject: [Buildroot] swapoff, but no swapon in initab
+In-Reply-To: <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
+ (Carlos Santos's message of "Tue, 12 Jun 2018 08:52:25 -0300 (BRT)")
+References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
+ <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
+ <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
+ <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
+ <87zi0074sa.fsf@dell.be.48ers.dk>
+ <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
+Message-ID: <87in6o6u5n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
+
 Hi,
 
-The following modules do not install theirs examples to the target
-directory; theirs examples are available in the staging directory.
+ >> >  So bottom line: it would make sense to add a swapon -a to the default inittabs
+ >> > (both busybox and sysv).
+ >> 
+ >> Don't we then end up with an ugly error message / somewhat needlessly bloat
+ >> everyones busybox config for the (very common) situation where swap is
+ >> not used and disabled in the kernel?
 
- - qt5canvas3d (in canvas3d directory)
- - qt5location (in location and positioning directories)
- - qt5quickcontrols (in quickcontrols directory)
- - qt5script (in script directory)
- - qt5wayland (in wayland directory)
- - qt5svg (in svg directory)
- - qt5serialbus (in serialbus directory)
- - qt5serialport (in serialport directory)
- - qt5sensors (in sensors directory)
+ > A "swapon -a" does nothing if a swap entry is not found in /etc/fstab,
+ > so there is no error message. Conversely, a "swapoff -a" does nothing
+ > if a mounted swap is not found but I did not test if it issues some
+ > error message due to a failing system call when swap is disabled in
+ > the kernel. I will run some tests and submit an additional patch, if
+ > necessary.
 
-This patch serie copies the examples of that modules from the staging
-directory to the target directory when is set
-BR2_PACKAGE_QT5BASE_EXAMPLES.
+It does not:
 
-Regards,
-Ga?l PORTAY (9):
-  qt5canvas3d: install examples to target
-  qt5location: install examples to target
-  qt5quickcontrols: install examples to target
-  qt5script: install examples to target
-  qt5wayland: install examples to target
-  qt5svg: install examples to target
-  qt5serialbus: install examples to target
-  qt5serialport: install examples to target
-  qt5sensors: install examples to target
+grep CONFIG_SWAP .config
+# CONFIG_SWAP is not set
 
- package/qt5/qt5canvas3d/qt5canvas3d.mk           |  7 +++++++
- package/qt5/qt5location/qt5location.mk           |  7 +++++++
- package/qt5/qt5quickcontrols/qt5quickcontrols.mk |  7 +++++++
- package/qt5/qt5script/qt5script.mk               | 13 ++++++++++++-
- package/qt5/qt5sensors/qt5sensors.mk             |  7 +++++++
- package/qt5/qt5serialbus/qt5serialbus.mk         |  7 +++++++
- package/qt5/qt5serialport/qt5serialport.mk       | 13 ++++++++++++-
- package/qt5/qt5svg/qt5svg.mk                     | 13 ++++++++++++-
- package/qt5/qt5wayland/qt5wayland.mk             |  7 +++++++
- 9 files changed, 78 insertions(+), 3 deletions(-)
+# swapon -a ; echo $?
+0
+
+But it does require people to add swapon/swapoff to their busybox config
+even if they aren't using swap, otherwise they would get error messages
+at bootup/shutdown (I know they already get it at shutdown, but an
+orderly shutdown is a lot more rare than bootup).
+
+But ok, the swapon/swapoff applet is very small, so I guess that is OK.
+
+size util-linux/swaponoff.o
+   text    data     bss     dec     hex filename
+    597       0       0     597     255 util-linux/swaponoff.o
 
 -- 
-2.17.1
+Bye, Peter Korsgaard
