@@ -1,74 +1,84 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 12 Jun 2018 15:34:21 +0200
-Subject: [Buildroot] swapoff, but no swapon in initab
-In-Reply-To: <87in6o6u5n.fsf@dell.be.48ers.dk>
-References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
- <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
- <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
- <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
- <87zi0074sa.fsf@dell.be.48ers.dk>
- <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
- <87in6o6u5n.fsf@dell.be.48ers.dk>
-Message-ID: <598a385a-5693-8fff-876c-550063645a50@mind.be>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Tue, 12 Jun 2018 15:46:05 +0200
+Subject: [Buildroot] [RFC PATCH v3 5/9] llvm: add config to build
+ backend for host arch
+In-Reply-To: <CAMWSM7gUGDSrtqfNXkmBEGF_vw_75x22LyVzX8jx9s86pQkVdA@mail.gmail.com>
+References: <20180610204449.13646-1-joseph.kogut@gmail.com>
+ <20180610205417.13963-1-joseph.kogut@gmail.com>
+ <20180610205417.13963-6-joseph.kogut@gmail.com>
+ <2deecd74-3cb2-e397-551c-263765682c8d@smile.fr>
+ <CAMWSM7gUGDSrtqfNXkmBEGF_vw_75x22LyVzX8jx9s86pQkVdA@mail.gmail.com>
+Message-ID: <f12fb8bf-7918-9026-07ed-73c5ec9a9f1c@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Joseph,
 
+On 11/06/2018 19:54, Joseph Kogut wrote:
+> Hi Valentin,
+>
+> On Mon, Jun 11, 2018 at 2:06 AM, Valentin Korenblit
+> <valentin.korenblit@smile.fr> wrote:
+>> Hi Joseph,
+>>
+>> On 10/06/2018 22:54, Joseph Kogut wrote:
+> <snip>
+>
+>>>    +# Build backend for host architecture
+>>> +ifeq ($(BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH),y)
+>>> +LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_LLVM_HOST_ARCH))
+>>> +endif
+>>> +
+>>
+>> The only problem I see here is that we are going to build the backend for
+>> the host architecture also for the target, which is not necessary. Maybe
+>> we can use another variable like HOST_LLVM_TARGETS_TO_BUILD. This will
+>> break the compatibility of llvm-config for host and target when passing
+>> --targets-built but I don't think this should be a problem.
+>>
+> Looking at the Makefile again, it seems to me that
+> HOST_LLVM_TARGETS_TO_BUILD would always be a superset of
+> LLVM_TARGETS_TO_BUILD. What do you think about naming it
+> HOST_LLVM_ADDTL_TARGETS_TO_BUILD, appending only additional
+> architecture backends to be built for host-llvm, and and appending it
+> to LLVM_TARGETS_TO_BUILD in HOST_LLVM_CONF_OPTS?
+>
+> That way, if a backend is enabled for the target, it's also always
+> enabled for the host, but the host package can enable additional backends
+> that the target package will not build.
 
-On 12-06-18 14:55, Peter Korsgaard wrote:
->>>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
-> 
-> Hi,
-> 
->  >> >  So bottom line: it would make sense to add a swapon -a to the default inittabs
->  >> > (both busybox and sysv).
->  >> 
->  >> Don't we then end up with an ugly error message / somewhat needlessly bloat
->  >> everyones busybox config for the (very common) situation where swap is
->  >> not used and disabled in the kernel?
-> 
->  > A "swapon -a" does nothing if a swap entry is not found in /etc/fstab,
->  > so there is no error message. Conversely, a "swapoff -a" does nothing
->  > if a mounted swap is not found but I did not test if it issues some
->  > error message due to a failing system call when swap is disabled in
->  > the kernel. I will run some tests and submit an additional patch, if
->  > necessary.
-> 
-> It does not:
-> 
-> grep CONFIG_SWAP .config
-> # CONFIG_SWAP is not set
-> 
-> # swapon -a ; echo $?
-> 0
-> 
-> But it does require people to add swapon/swapoff to their busybox config
-> even if they aren't using swap, otherwise they would get error messages
+Yes, actually I meant that. I would do something like this:
 
- I think if people start customizing the busybox config and remove stuff from
-it, then it's only reasonable that they also modify the default inittab. Swapon
-and swapoff are both enabled in our busybox.config and busybox-minimal.config.
+LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
 
- Regards,
- Arnout
+ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+LLVM_TARGETS_TO_BUILD += AMDGPU
+HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
+endif
 
-> at bootup/shutdown (I know they already get it at shutdown, but an
-> orderly shutdown is a lot more rare than bootup).
-> 
-> But ok, the swapon/swapoff applet is very small, so I guess that is OK.
-> 
-> size util-linux/swaponoff.o
->    text    data     bss     dec     hex filename
->     597       0       0     597     255 util-linux/swaponoff.o
-> 
+# Build backend for host architecture
+ifeq ($(BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH),y)
+HOST_LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_LLVM_HOST_ARCH))
+endif
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+and finally:
+
+HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
+
+And in Config.in:
+
+config BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH
+	bool "Build backend for host architecture"
+	help
+	  Build code generator for host machine.
+
+>>>    # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+>>>    LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+>>>
+Best regards,
+
+Valentin
