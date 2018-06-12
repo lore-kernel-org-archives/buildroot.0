@@ -1,32 +1,59 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 12 Jun 2018 22:21:01 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.17.1
-Message-ID: <20180612202315.6A9128844E@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 12 Jun 2018 22:42:55 +0200
+Subject: [Buildroot] [PATCH v3,2/2] librsvg: bump to version 2.42.5
+In-Reply-To: <87k1r369n9.fsf@dell.be.48ers.dk>
+References: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
+ <20180610133857.4737-2-fontaine.fabrice@gmail.com>
+ <20180610162547.6a5d946c@windsurf>
+ <874li88p8t.fsf@dell.be.48ers.dk>
+ <CAPi7W82Dpby1yZCmpzG7_MXm=c3xeowOt3tHyW_gPYbnTA2NXA@mail.gmail.com>
+ <87k1r369n9.fsf@dell.be.48ers.dk>
+Message-ID: <20180612224255.75df55bf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abcc95b3c1c1c725750c480c16c6195af02858b5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 12 Jun 2018 22:18:50 +0200, Peter Korsgaard wrote:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 07888e2f96..603aec6b9e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.17" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.17.1" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+>  >> This also causes a number of issues for host-librsvg (which is a
+>  >> dependency of libgtk3 and midori) when building for architectures not
+>  >> supported by rust:
+>  >>   
+>  > The issue isn't related to libgtk3 and midori as this build fails (
+>  > http://autobuild.buildroot.net/results/f33/f335ed517b402c094ed3b10a3da4cdc23620dbd6/defconfig)
+>  > even if these packages are not selected.  
+> 
+> It is a bit more tricky than that because it can also be about
+> host-libgtk3. For this configuration it is adwaita-icon-theme which
+> pulls in host-libgtk3 -> host-librsvg -> host-cargo -> host-rustc
+
+I think there is an issue in how we handle rust in fact. Indeed, the
+BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS option indicates if the Rust
+compiler is capable to act as a cross-compiler for the selected target.
+
+But we haven't accounted for the fact that the Rust compiler can also
+do native builds, like it does for host-librsvg. In the case of native
+builds, we don't care whether Rust has support for the target
+architecture: we care about it having support for the host architecture.
+
+So basically, the fact that Rust is both a native compiler and a
+cross-compiler is not properly accounted today.
+
+Perhaps we need to have two separate
+BR2_PACKAGE_HOST_RUSTC_something_ARCH_SUPPORTS options, to use
+depending on whether you need Rust support for the target, or Rust
+support for the host ?
+
+Eric, what do you think ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
