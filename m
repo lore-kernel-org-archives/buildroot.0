@@ -1,66 +1,71 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 13 Jun 2018 09:37:10 +0200
-Subject: [Buildroot] [PATCH] scanpypi: rework download_package error handling
-Message-ID: <20180613073710.5715-1-yegorslists@googlemail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Wed, 13 Jun 2018 09:40:33 +0200
+Subject: [Buildroot] scanpypi tool python error - local variable
+ 'download' referenced before assignment
+In-Reply-To: <CAGm1_kuKXEY6CwKozVJxejXHp4AK6D55aRkNN53WrWBeuOYRwQ@mail.gmail.com>
+References: <55bf291b-22cf-b254-d04c-e7bf017f85be@jcz.nl>
+ <660c6058-1507-be7a-8cda-87fc741b8ed1@mind.be>
+ <CAGm1_kuKXEY6CwKozVJxejXHp4AK6D55aRkNN53WrWBeuOYRwQ@mail.gmail.com>
+Message-ID: <CAGm1_ksmh+waEG9gKz6c+F=0y3TqXpAfwOtbhsbF9UDob_nh-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+On Fri, Jun 8, 2018 at 7:25 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Hi all,
+>
+> On Thu, Jun 7, 2018 at 11:16 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>> On 06-06-18 17:29, Jaap Crezee wrote:
+>>> Hi all,
+>>>
+>>>
+>>> Is this a known issue?
+>>>
+>>> [jaap at jaap /data/work/htc/git/buildroot_development ]$ git log -1
+>>> commit f3d114a1effd8a6ef773bee14fe49ea6d8d7c350 (HEAD, tag: 2018.05)
+>>> Author: Peter Korsgaard <peter@korsgaard.com>
+>>> Date:   Fri Jun 1 22:22:57 2018 +0200
+>>>
+>>>     Update for 2018.05
+>>>
+>>>     Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>>> [jaap at jaap /data/work/htc/git/buildroot_development ]$ ./utils/scanpypi azure-iothub-device-client
+>>> buildroot package name for azure-iothub-device-client: python-azure-iothub-device-client
+>>> Package: python-azure-iothub-device-client
+>>> Fetching package azure-iothub-device-client
+>>> Traceback (most recent call last):
+>>>   File "./utils/scanpypi", line 716, in <module>
+>>>     main()
+>>>   File "./utils/scanpypi", line 648, in main
+>>>     package.download_package()
+>>>   File "./utils/scanpypi", line 217, in download_package
+>>>     if download.__class__ == six.moves.urllib.error.HTTPError:
+>>> UnboundLocalError: local variable 'download' referenced before assignment
+>>> [jaap at jaap /data/work/htc/git/buildroot_development ]$
+>>
+>>  This happens because the metadata doesn't contain urls.
+>>
+>>  scanpypi is not at all robust against unexpected metadata contents. I think we
+>> should add some exception handling there that just prints the metadata (or the
+>> relevant parts of it), and continues with other packages (in case it's a
+>> dependency of the package that was requested).
+>>
+>>  Yegor?
+>
+> I'll take care about this.
 
-Some packages don't provide source archive but only a wheel file. In
-this case download variable is not defined. So define this variable at
-the very beginning and check whether it is None after searching for
-source archives in the metadata.
+This is very strange package and it is distributed only as binary
+Wheel file. I've reworked the error handling and now the error says,
+the package doesn't provide a source archive.
 
-Bonus: fix PEP8 issue with wrong indentation.
+If you still want to add this package, you'll have to treat it as
+CMake package.See [1]
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- utils/scanpypi | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+[1] https://github.com/Azure/azure-iot-sdk-python/tree/master/device/iothub_client_python
 
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 8a2ae00434..12c96b842e 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -178,6 +178,7 @@ class BuildrootPackage():
-         """
-         Download a package using metadata from pypi
-         """
-+        download = None
-         try:
-             self.metadata['urls'][0]['filename']
-         except IndexError:
-@@ -201,7 +202,7 @@ class BuildrootPackage():
-                 continue
-             try:
-                 print('Downloading package {pkg} from {url}...'.format(
--                      pkg=self.real_name, url=download_url['url']))
-+                    pkg=self.real_name, url=download_url['url']))
-                 download = six.moves.urllib.request.urlopen(download_url['url'])
-             except six.moves.urllib.error.HTTPError as http_error:
-                 download = http_error
-@@ -213,11 +214,14 @@ class BuildrootPackage():
-                 self.md5_sum = hashlib.md5(self.as_string).hexdigest()
-                 if self.md5_sum == download_url['digests']['md5']:
-                     break
--        else:
--            if download.__class__ == six.moves.urllib.error.HTTPError:
--                raise download
--            raise DownloadFailed('Failed to download package {pkg}'
-+
-+        if download is None:
-+            raise DownloadFailed('Failed to download package {pkg}: '
-+                                 'No source archive available'
-                                  .format(pkg=self.real_name))
-+        elif download.__class__ == six.moves.urllib.error.HTTPError:
-+            raise download
-+
-         self.filename = self.used_url['filename']
-         self.url = self.used_url['url']
- 
--- 
-2.17.0
+Yegor
