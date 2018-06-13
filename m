@@ -1,48 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Jun 2018 22:29:53 +0200
-Subject: [Buildroot] [PATCH] binutils: Fix glibc building for ARC with
- stock binutils 2.30
-In-Reply-To: <20180613163956.28894-1-abrodkin@synopsys.com>
-References: <20180613163956.28894-1-abrodkin@synopsys.com>
-Message-ID: <20180613222953.23ac58db@windsurf>
+Date: Wed, 13 Jun 2018 22:50:42 +0200
+Subject: [Buildroot] [git commit] package/autossh: bump version to 1.4f
+Message-ID: <20180613204835.669CD88558@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cabf1d658ebc878088e8ee592549d412f8f82f6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 13 Jun 2018 19:39:56 +0300, Alexey Brodkin wrote:
-> There're known issues with building glibc for ARC with vanilla
-> Binutils 2.30. Adding a couple of not yet upstreamed patches
-> that solve it.
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> ---
->  ...ocation-where-GOT-information-is-col.patch | 197 ++++++++++++++++++
->  ...ustness.-Return-FALSE-in-case-of-NUL.patch |  34 +++
->  ...obal-symbol-is-not-an-indirect-or-wa.patch |  42 ++++
->  ...ion-was-still-being-generated-when-s.patch |  35 ++++
->  4 files changed, 308 insertions(+)
->  create mode 100644 package/binutils/2.30/0010-ARC-Refactored-location-where-GOT-information-is-col.patch
->  create mode 100644 package/binutils/2.30/0011-ARC-Improved-robustness.-Return-FALSE-in-case-of-NUL.patch
->  create mode 100644 package/binutils/2.30/0012-ARC-Make-sure-global-symbol-is-not-an-indirect-or-wa.patch
->  create mode 100644 package/binutils/2.30/0013-ARC-PLT-information-was-still-being-generated-when-s.patch
+Removed patch applied upstream, added all upstream and license hashes.
 
-I've applied to master after:
+Removed _AUTORECONF, configure and configure.ac in the tarball match,
+also removed _INSTALL_TARGET_CMDS, the upstream install target works
+just fine nowadays.
 
- - Removing the number from the patch titles (use 'git format-patch -N'
-   please!)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/autossh/0001-honour-LDFLAGS.patch | 16 ----------------
+ package/autossh/autossh.hash              |  8 ++++++--
+ package/autossh/autossh.mk                |  9 +--------
+ 3 files changed, 7 insertions(+), 26 deletions(-)
 
- - Adjusting the numbering of patch file names. Recently, Romain Naour
-   renumbered all patches and made them Git formatted, so it would be
-   nice to keep that consistency.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/autossh/0001-honour-LDFLAGS.patch b/package/autossh/0001-honour-LDFLAGS.patch
+deleted file mode 100644
+index 2e6160b8fd..0000000000
+--- a/package/autossh/0001-honour-LDFLAGS.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-Honour LDFLAGS, especially required when static linking
+-
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-
+-diff -Nur autossh-1.4e.orig/Makefile.in autossh-1.4e/Makefile.in
+---- autossh-1.4e.orig/Makefile.in	2015-02-10 05:41:58.000000000 +0100
+-+++ autossh-1.4e/Makefile.in	2016-11-25 12:49:06.052122855 +0100
+-@@ -31,7 +31,7 @@
+- 
+- 
+- $(TARGET):	$(OFILES)
+--		$(CC) $(CPPFLAGS) -o $(TARGET) $(OFILES) $(LIBS)
+-+		$(CC) $(CPPFLAGS) $(LDFLAGS) -o $(TARGET) $(OFILES) $(LIBS)
+- 
+- clean:
+- 		- /bin/rm -f *.o *.a *.core *~
+diff --git a/package/autossh/autossh.hash b/package/autossh/autossh.hash
+index 4f3de137a5..5c6cfbc98f 100644
+--- a/package/autossh/autossh.hash
++++ b/package/autossh/autossh.hash
+@@ -1,2 +1,6 @@
+-# From http://www.harding.motd.ca/autossh/autossh-1.4e.cksums
+-sha256	9e8e10a59d7619176f4b986e256f776097a364d1be012781ea52e08d04679156	autossh-1.4e.tgz
++# From http://www.harding.motd.ca/autossh/autossh-1.4f.cksums
++sha256 0172e5e1bea40c642e0ef025334be3aadd4ff3b4d62c0b177ed88a8384e2f8f2  autossh-1.4f.tgz
++sha1 28189c42ab2e05448596a44adc9d62071172fe9b  autossh-1.4f.tgz
++md5 432ed721a71b8af4b5763b5c484f80df  autossh-1.4f.tgz
++# Locally computed
++sha256 b6938db718166520533b1d56b01e1eb5f0ad508624478e674938b8f507b66d98  autossh.c
+diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
+index d52b4e9666..1538a4c8bc 100644
+--- a/package/autossh/autossh.mk
++++ b/package/autossh/autossh.mk
+@@ -4,19 +4,12 @@
+ #
+ ################################################################################
+ 
+-AUTOSSH_VERSION = 1.4e
++AUTOSSH_VERSION = 1.4f
+ AUTOSSH_SITE = http://www.harding.motd.ca/autossh
+ AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
+ AUTOSSH_LICENSE = Modified BSD
+ AUTOSSH_LICENSE_FILES = autossh.c
+ 
+-# Bundled ./configure is not up-to-date with what is in configure.ac
+-AUTOSSH_AUTORECONF = YES
+-
+ AUTOSSH_CONF_OPTS = --with-ssh=/usr/bin/ssh
+ 
+-define AUTOSSH_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 755 -D $(@D)/autossh $(TARGET_DIR)/usr/bin/autossh
+-endef
+-
+ $(eval $(autotools-package))
