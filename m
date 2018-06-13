@@ -1,35 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Jun 2018 22:23:54 +0200
-Subject: [Buildroot] [PATCH] f2fs-tools: fix build for uclinux
-In-Reply-To: <c5e295a87573a1053f245875ade0b4acda1b61fc.1528913813.git.baruch@tkos.co.il>
-References: <c5e295a87573a1053f245875ade0b4acda1b61fc.1528913813.git.baruch@tkos.co.il>
-Message-ID: <20180613222354.4e9033d4@windsurf>
+Date: Wed, 13 Jun 2018 22:24:10 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9}.x series
+Message-ID: <20180613202202.E1646884B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=78117a553b4734ab810e218d8e3355f12d6889ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 13 Jun 2018 21:16:53 +0300, Baruch Siach wrote:
-> Add a patch making uclinux also linux.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/357/3577d413dc16bcec7a403fd8857ec5dd64470ba5/
-> http://autobuild.buildroot.net/results/819/819a8a528764a68c02b1b98431a1d09929c387f1/
-> http://autobuild.buildroot.net/results/d98/d987df1ea7f8043f05d5221342888892990e9252/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...0001-configure-uclinux-is-also-linux.patch | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 package/f2fs-tools/0001-configure-uclinux-is-also-linux.patch
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-headers/Config.in.host | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index efdeb3bcca..0a8ca79b08 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -258,8 +258,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.136"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.107"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.137"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.108"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
