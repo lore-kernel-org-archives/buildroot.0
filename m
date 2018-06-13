@@ -1,30 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 13 Jun 2018 06:29:01 +0000
-Subject: [Buildroot] [Bug 11091] BR2_PRIMARY_SITE doesn't work (wget is
- selected every time as backend)
-In-Reply-To: <bug-11091-163@https.bugs.busybox.net/>
-References: <bug-11091-163@https.bugs.busybox.net/>
-Message-ID: <bug-11091-163-i270EM9Blo@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 13 Jun 2018 10:00:27 +0300
+Subject: [Buildroot] =?utf-8?q?=5BPATCH=5D_DEVELOPERS=3A_drop_Stefan_Fr?=
+ =?utf-8?q?=C3=B6berg=27s_entry?=
+Message-ID: <349a2869facdc0bc79bb3b5a5d506e3cd3a9721b.1528873227.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11091
+Emails bounce. The domain does not resolve.
 
-t.prueckl at hainzl.at changed:
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ DEVELOPERS | 8 --------
+ 1 file changed, 8 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #7641|0                           |1
-        is obsolete|                            |
-
---- Comment #3 from t.prueckl at hainzl.at ---
-Created attachment 7651
-  --> https://bugs.busybox.net/attachment.cgi?id=7651&action=edit
-Patch to fix the descripted issue
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index eaf64ede6148..e276b4556552 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1827,14 +1827,6 @@ F:	package/mesa3d-demos/
+ F:	package/sunxi-mali/
+ F:	package/ti-gfx/
+ 
+-N:	Stefan Fr?berg <stefan.froberg@petroprogram.com>
+-F:	package/elfutils/
+-F:	package/libtasn1/
+-F:	package/proxychains-ng/
+-F:	package/vte/
+-F:	package/yasm/
+-F:	package/zlib-ng/
+-
+ N:	Stefan S?rensen <stefan.sorensen@spectralink.com>
+ F:	package/cracklib/
+ F:	package/libpwquality/
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
