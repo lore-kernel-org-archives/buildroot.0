@@ -1,49 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Jun 2018 13:58:48 +0200
-Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <CAOJ2eMeC_-w7syzaYMYnBa95y8PkV+yJtjJ6aOdNCg_ZPASLcA@mail.gmail.com>
-References: <20180609210607.13259-1-yann.morin.1998@free.fr>
- <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
- <1528737656.28705.131.camel@impinj.com>
- <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
- <1528825657.28705.168.camel@impinj.com>
- <CAOJ2eMd6vMsXRDSwNRBT1cK2S2i2kBhpqdMvkv9tqUoPTcYhrw@mail.gmail.com>
- <20180612210124.18e1f168@windsurf>
- <fb74bf87-dfdf-5dc6-8612-9faa896ae6e4@mind.be>
- <20180613115705.43c5b5b3@windsurf>
- <CAOJ2eMeC_-w7syzaYMYnBa95y8PkV+yJtjJ6aOdNCg_ZPASLcA@mail.gmail.com>
-Message-ID: <20180613135848.1fcd56bb@windsurf>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 13 Jun 2018 12:25:49 +0000
+Subject: [Buildroot] [arc-buildroot] ARC toolchain build failure
+In-Reply-To: <20180612213346.64dd8095@windsurf>
+References: <20180612213346.64dd8095@windsurf>
+Message-ID: <d6a09756558324f379cc877b07b1ba77a7db3642.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 13 Jun 2018 13:03:45 +0300, Stefan Becker wrote:
-
-> On Wed, Jun 13, 2018 at 12:57 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > However, generally speaking, I do agree that we tend to push back on
-> > people proposing to add more complexity to Buildroot, for the reasons
-> > I've highlighted before.  
+On Tue, 2018-06-12 at 21:33 +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Wouldn't it then be much simpler to reject this change, i.e. *not*
-> adding tarball generation to buildroot SW build at all?
+> When trying to build an ARC toolchain with the following defconfig:
+> 
+> BR2_arcle=y
+> BR2_archs38=y
+> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+> BR2_KERNEL_HEADERS_4_14=y
+> BR2_BINUTILS_VERSION_2_30_X=y
+> BR2_GCC_VERSION_8_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_HOST_GDB=y
+> BR2_INIT_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_GDB=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+> 
+> It fails with:
+> 
+> /opt/arcle-hs38--glibc--bleeding-edge-2018.05-1/lib/gcc/arc-buildroot-linux-gnu/8.1.0/../../../../arc-buildroot-linux-gnu/bin/ld:
+> /opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/libKSC.so symbol number 14 references nonexistent SHT_SYMTAB_SHNDX section
+> /opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/libKSC.so: error adding symbols: No error
+> collect2: error: ld returned 1 exit status
+> extra-module.mk:8: recipe for target '/opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/ISO-2022-KR.so' failed
+> make[3]: *** [/opt/output/build/glibc-arc-2018.03-rc2/build/iconvdata/ISO-2022-KR.so] Error 1
+> 
+> During the glibc build. See
+> https://urldefense.proofpoint.com/v2/url?u=https-3A__gitlab.com_free-2Delectrons_toolchains-2Dbuilder_-2D_jobs_72006369&d=DwICAg&c=DPL6_X_6JkXFx7AXW
+> qB0tg&r=Z74rKOsEpOUneCxYxwKcXHwrAmW8mJhNZjcWnDDJI2U&m=mNYQnvcGH1oc9LtP6AIXFqXjfy3y8Dm5gciItSr4TYc&s=dQ9AvjPPaCcxWSdukgjRHgQlLOQP2qEMuq7S5NSiCWQ&e=
+> for more context.
+> 
+> Are you aware of this issue ? Any fix ?
 
-That's one option. Another option is to:
+Sorry we were off on a longish holidays here in Russia so only now looking at it.
+Still I think I know what's wrong there and will send a patch for Buildroot once
+I confirm it fixes this problem.
 
- (1) Use another make target, such as sdk-tarball, as you suggested
-
- (2) Use a stable name for the output, like
-     output/images/buildroot-sdk.tar.gz. Indeed for no other Buildroot
-     output we include the Git commit ID or the target tuple in the
-     name of the file being generated.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-Alexey
