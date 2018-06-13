@@ -1,98 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Jun 2018 22:24:39 +0200
-Subject: [Buildroot] [git commit] package/connman: bump version to 1.36
-Message-ID: <20180613202247.BB301884B6@busybox.osuosl.org>
+Date: Wed, 13 Jun 2018 22:25:19 +0200
+Subject: [Buildroot] [git commit] package/file: bump version to 5.33
+Message-ID: <20180613202313.DBE89884BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f877e3cf3cd29da7ed40cfe4608c8167a3c06ce
+commit: https://git.buildroot.net/buildroot/commit/?id=eacca09a8a219fdcd94f39ccab329a4d6a63092b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added licence hash, removed patch applied upstream
-https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=bdfb3526466f8fb8f13d9259037d8f42c782ce24
-
-Renumbered remaining patch.
+Added license hashes, added optional dependency to libseccomp provided
+by upstream in this version bump.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-failure.patch => 0001-nat-build-failure.patch} |  0
- .../0001-tethering-Reorder-header-includes.patch   | 37 ----------------------
- package/connman/connman.hash                       |  4 ++-
- package/connman/connman.mk                         |  2 +-
- 4 files changed, 4 insertions(+), 39 deletions(-)
+ package/file/file.hash | 5 ++++-
+ package/file/file.mk   | 9 ++++++++-
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/connman/0002-nat-build-failure.patch b/package/connman/0001-nat-build-failure.patch
-similarity index 100%
-rename from package/connman/0002-nat-build-failure.patch
-rename to package/connman/0001-nat-build-failure.patch
-diff --git a/package/connman/0001-tethering-Reorder-header-includes.patch b/package/connman/0001-tethering-Reorder-header-includes.patch
-deleted file mode 100644
-index 4955df1cdd..0000000000
---- a/package/connman/0001-tethering-Reorder-header-includes.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From bdfb3526466f8fb8f13d9259037d8f42c782ce24 Mon Sep 17 00:00:00 2001
--From: Daniel Wagner <wagi@monom.org>
--Date: Wed, 17 Jan 2018 23:42:50 +0100
--Subject: [PATCH] tethering: Reorder header includes
--
--Avoid compile errors due to unsupported header include order with
--newer kernels (>=4.15). We should import the libc header files first
--and then the Linux header files in user space applications.
--
--Reported by Neil MacLeod <neil@nmacleod.com>. Fix probosal by Jonas
--Bonn <jonas@southpole.se> and Hauke Mehrtens <hauke@hauke-m.de>.
--
--Signed-off-by: Martin Bark <martin@barkynet.com>
-----
-- src/tethering.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/tethering.c b/src/tethering.c
--index c929ba7..4b20236 100644
----- a/src/tethering.c
--+++ b/src/tethering.c
--@@ -31,11 +31,11 @@
-- #include <stdio.h>
-- #include <sys/ioctl.h>
-- #include <net/if.h>
---#include <linux/sockios.h>
-- #include <string.h>
-- #include <fcntl.h>
---#include <linux/if_tun.h>
-- #include <netinet/in.h>
--+#include <linux/sockios.h>
--+#include <linux/if_tun.h>
-- #include <linux/if_bridge.h>
--
-- #include "connman.h"
----
--2.7.4
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index c822bb1fe4..fad1c55d2d 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,2 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256	66d7deb98371545c6e417239a9b3b3e3201c1529d08eedf40afbc859842cf2aa	connman-1.35.tar.xz
-+sha256 c789db41cc443fa41e661217ea321492ad59a004bebcd1aa013f3bc10a6e0074  connman-1.36.tar.xz
-+# Locally computed
-+sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 52c45451d9..b67d1c4b86 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
+diff --git a/package/file/file.hash b/package/file/file.hash
+index fee516c8e2..a6b40be349 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated
+-sha256 8639dc4d1b21e232285cd483604afc4a6ee810710e00e579dbe9591681722b50  file-5.32.tar.gz
++sha256 1c52c8c3d271cd898d5511c36a68059cda94036111ab293f01f83c3525b737c6  file-5.33.tar.gz
++sha256 3c0ad13c36f891a9b4f951e59eb2fc108065a46f849697cc6fd3cdb41cc23a3d  COPYING
++sha256 d98ee4d8d95e7d021a5dfc41f137ecc3b624a7b98e8bd793130202d12a21ed57  src/mygetopt.h
++sha256 85e358d575ad4ac5b38b623a25b24246ccff3c7e680d930c0a9ff5228fe434b6  src/vasprintf.c
+diff --git a/package/file/file.mk b/package/file/file.mk
+index df0e0f0eb9..422e29b1ce 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONNMAN_VERSION = 1.35
-+CONNMAN_VERSION = 1.36
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+-FILE_VERSION = 5.32
++FILE_VERSION = 5.33
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ HOST_FILE_DEPENDENCIES = host-zlib
+@@ -13,5 +13,12 @@ FILE_INSTALL_STAGING = YES
+ FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
+ 
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++FILE_CONF_OPTS += --enable-libseccomp
++FILE_DEPENDENCIES += libseccomp
++else
++FILE_CONF_OPTS += --disable-libseccomp
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
