@@ -1,40 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Jun 2018 10:19:30 +0200
-Subject: [Buildroot] Poll for Buildroot Meeting @ ELCE
-Message-ID: <20180613101930.5a8601cf@windsurf>
+From: Andreas Naumann <dev@andin.de>
+Date: Wed, 13 Jun 2018 10:32:12 +0200
+Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
+In-Reply-To: <CAOJ2eMfh5-dqjRxrZhhBv6yQj6k1jgstnDSWqtsy4LG+UuVmBw@mail.gmail.com>
+References: <20180609210607.13259-1-yann.morin.1998@free.fr>
+ <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
+ <1528737656.28705.131.camel@impinj.com>
+ <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
+ <1528825657.28705.168.camel@impinj.com>
+ <CAOJ2eMd6vMsXRDSwNRBT1cK2S2i2kBhpqdMvkv9tqUoPTcYhrw@mail.gmail.com>
+ <20180612210124.18e1f168@windsurf>
+ <CAOJ2eMfh5-dqjRxrZhhBv6yQj6k1jgstnDSWqtsy4LG+UuVmBw@mail.gmail.com>
+Message-ID: <f8d008ac-4b0e-52a5-93f5-cec21e31459e@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-The next Buildroot Developers Meeting will take place next to the
-Embedded Linux Conference Europe in Edinburgh.
+on a general note, I do find that buildroot does an outstanding job in 
+providing a lot of simple to use functionality while keeping it within a 
+well defined scope!
+To help achieve that for SDK generation, I'll describe my use 
+cases/preferences.
 
-ELCE itself is help from October 22 (Monday) to October 24 (Wednesday).
-The question is whether we should have the Buildroot meeting before
-ELCE (on Saturday/Sunday) or after ELCE (Thursday/Friday).
+Am 12.06.2018 um 21:25 schrieb Stefan Becker:
+> Hi Thomas, All,
+> 
+<snip>
+> 
+> But I'm against building something for naught. If the tarball turns
+> out to be unusable I get slower buildroot builds. Which in turns will
+> force me to extract what "original sdk without tarball" was doing out
+> of buildroot makefile and hard-code it into my build script. And then
+> I can remove "sdk" from the buildroot make command. I fail to see how
+> that is simpler.
 
-We traditionally had the meeting before ELCE, on Saturday/Sunday, so
-that people who are not paid by their employer to attend the meeting
-can do so without having to take vacations. It also allows to avoid
-conflicting with other potential co-located events to ELCE that
-typically take place on Thursday after the conference.
+I also prefer speed over storage size (gz vs. xz) and definitely want to 
+spend both only for building what I need.
 
-But in order to decide, I've opened a poll at:
+> 
+> If you don't offer a way to specify the generated tarball name, fine.
+> Then I won't use sdk-tarball at all, even if the tarball itself would
+> be usable in our downstream integration. Or I could come up with a way
+> to "guess" the build artefact name in my build script and symlink it
+> to the wanted build artefact name (again, I fail to see how this is
+> simpler).
 
-  https://framadate.org/Jd9UWGQVre9ctB42
+Even though the sdk target has been around for a while, I still use 
+custom steps to a) build the SDK on a absolute path to avoid relocation 
+needs and b) tar it with a project-specific name.
 
-If you intend to participate to this meeting, please fill in this poll,
-so that we can chose the option that suits the highest number of
-potential participants.
+So if b) is provided by buildroot I'd be very interested to finally give 
+up my addon mess (modifiying HOST_DIR before the build) and switch to 
+buildroots way.
+However, for maintenance reasons I want to support existing project 
+setups, which would only be "simple" if there was an easy way to
+- run the relocation previous to packing
+- adjust the location to be packed accordingly
+- and define the name of the tarball with a set of "beyond buildroot" 
+Project-Variables
 
-Thanks!
+I guess one way to achieve that would be baking this sort of 
+customization into the defconfig. However, that makes usage of 
+savedefconfig more or less useless to me because it leads to constantly 
+changing defconfigs. (Which is undesirable as my messing with HOST_DIR 
+has showed me).
+Allowing environment variables to control the process would work too, 
+but I dont know if thats considered "good practise" or "simple" either.
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+best regards,
+Andreas
