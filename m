@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Jun 2018 22:52:21 +0200
-Subject: [Buildroot] [PATCH] perl: add upstream security fix for
- CVE-2018-12015
-In-Reply-To: <20180612152130.32491-1-peter@korsgaard.com>
-References: <20180612152130.32491-1-peter@korsgaard.com>
-Message-ID: <20180613225221.5f41e5ee@windsurf>
+Date: Wed, 13 Jun 2018 22:52:38 +0200
+Subject: [Buildroot] [git commit] imx-usb-loader: bump revision to e539461
+Message-ID: <20180613205035.63EAD8856E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=69d2b693c605082f2459c282947c99df517984ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 12 Jun 2018 17:21:30 +0200, Peter Korsgaard wrote:
-> Fixes CVE-2018-12015 - In Perl through 5.26.2, the Archive::Tar module
-> allows remote attackers to bypass a directory-traversal protection
-> mechanism, and overwrite arbitrary files, via an archive file containing a
-> symlink and a regular file with the same name.
-> 
-> Patch from
-> https://github.com/jib/archive-tar-new/commit/ae65651eab053fc6dc4590dbb863a268215c1fc5
-> with path rewritten to match perl tarball.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...ve-existing-files-before-overwriting-them.patch | 46 ++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
->  create mode 100644 package/perl/0001-PATCH-Remove-existing-files-before-overwriting-them.patch
+This latest revision supports starting i.MX8MQ via USB recovery mode.
 
-Applied to master, thanks.
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/imx-usb-loader/imx-usb-loader.hash | 2 +-
+ package/imx-usb-loader/imx-usb-loader.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/imx-usb-loader/imx-usb-loader.hash b/package/imx-usb-loader/imx-usb-loader.hash
+index e246ff85f2..8f59a3888b 100644
+--- a/package/imx-usb-loader/imx-usb-loader.hash
++++ b/package/imx-usb-loader/imx-usb-loader.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256  717b64cec31f7e1167d4a31e4f511eea97ab80039dd435b7b183c6f41352213a imx-usb-loader-7e77787c83288a421080a9bf2f67063931f561be.tar.gz
++sha256  263dba6331206816890eaed0de7b0aa748c6e5300982fe6f31dcfe0df383ad62  imx-usb-loader-e5394615dd413c3823d5bd1de340933e16a8c07c.tar.gz
+diff --git a/package/imx-usb-loader/imx-usb-loader.mk b/package/imx-usb-loader/imx-usb-loader.mk
+index 01a654e6cf..f0db57faac 100644
+--- a/package/imx-usb-loader/imx-usb-loader.mk
++++ b/package/imx-usb-loader/imx-usb-loader.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMX_USB_LOADER_VERSION = 7e77787c83288a421080a9bf2f67063931f561be
++IMX_USB_LOADER_VERSION = e5394615dd413c3823d5bd1de340933e16a8c07c
+ IMX_USB_LOADER_SITE = $(call github,boundarydevices,imx_usb_loader,$(IMX_USB_LOADER_VERSION))
+ IMX_USB_LOADER_LICENSE = LGPL-2.1+
+ IMX_USB_LOADER_LICENSE_FILES = COPYING
