@@ -1,109 +1,132 @@
-From: Jan Dohl <polygon@wh2.tu-dresden.de>
-Date: Wed, 13 Jun 2018 16:28:16 +0200
-Subject: [Buildroot] [PATCH 1/1] Python Tornado bumped to version 5.0.2
-Message-ID: <20180613142816.19691-1-polygon@wh2.tu-dresden.de>
+From: Andreas Naumann <dev@andin.de>
+Date: Wed, 13 Jun 2018 17:46:45 +0200
+Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
+In-Reply-To: <6b49b9db-b1d4-0ba6-1434-0ca94b303756@mind.be>
+References: <20180609210607.13259-1-yann.morin.1998@free.fr>
+ <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
+ <1528737656.28705.131.camel@impinj.com>
+ <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
+ <1528825657.28705.168.camel@impinj.com>
+ <CAOJ2eMd6vMsXRDSwNRBT1cK2S2i2kBhpqdMvkv9tqUoPTcYhrw@mail.gmail.com>
+ <20180612210124.18e1f168@windsurf>
+ <CAOJ2eMfh5-dqjRxrZhhBv6yQj6k1jgstnDSWqtsy4LG+UuVmBw@mail.gmail.com>
+ <f8d008ac-4b0e-52a5-93f5-cec21e31459e@andin.de>
+ <6b49b9db-b1d4-0ba6-1434-0ca94b303756@mind.be>
+Message-ID: <20ef3c7e-1f93-e63f-fe70-7b6829fd589f@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tornado got a requirement on the SSL module in version 5.0.2
-which is also checked in the setup.py script before installing.
-Since the check in buildroot runs against the host-python which
-is built without SSL support, these checks fail.
+Hi Arnout,
 
-In my opinion, adding OpenSSL support to host-python does not make
-sense since the Python on the target will be a different one. Instead,
-remove the checks (which, according to the source code comments
-essentially check for Python >= 2.7.9 / Python3 >= 3.4 which is
-true for current Buildroot) and select the SSL option of
-Python/Python3 when Tornado is selected.
+Am 13.06.2018 um 12:12 schrieb Arnout Vandecappelle:
+>   Hi Andreas,
+> 
 
-Signed-off-by: Jan Dohl <polygon@wh2.tu-dresden.de>
----
- .../0001-remove-ssl-checks-on-install.patch        | 28 ++++++++++++++++++++++
- package/python-tornado/Config.in                   |  2 ++
- package/python-tornado/python-tornado.hash         |  6 ++---
- package/python-tornado/python-tornado.mk           |  5 ++--
- 4 files changed, 36 insertions(+), 5 deletions(-)
- create mode 100644 package/python-tornado/0001-remove-ssl-checks-on-install.patch
+> 
+>>> If you don't offer a way to specify the generated tarball name, fine.
+>>> Then I won't use sdk-tarball at all, even if the tarball itself would
+>>> be usable in our downstream integration. Or I could come up with a way
+>>> to "guess" the build artefact name in my build script and symlink it
+>>> to the wanted build artefact name (again, I fail to see how this is
+>>> simpler).
+>>
+>> Even though the sdk target has been around for a while, I still use custom steps
+>> to a) build the SDK on a absolute path to avoid relocation needs and b) tar it
+>> with a project-specific name.
+>>
+>> So if b) is provided by buildroot I'd be very interested to finally give up my
+>> addon mess (modifiying HOST_DIR before the build and switch to buildroots way.
+>   Why is specifying a BR2_HOST_DIR  on the make command line messy? It is in fact
+> Buildroot's way :-)
 
-diff --git a/package/python-tornado/0001-remove-ssl-checks-on-install.patch b/package/python-tornado/0001-remove-ssl-checks-on-install.patch
-new file mode 100644
-index 0000000000..9bf858bbaa
---- /dev/null
-+++ b/package/python-tornado/0001-remove-ssl-checks-on-install.patch
-@@ -0,0 +1,28 @@
-+diff -Naur python-tornado-5.0.2-orig/setup.py python-tornado-5.0.2/setup.py
-+--- python-tornado-5.0.2-orig/setup.py	2018-04-08 02:31:24.000000000 +0200
-++++ python-tornado-5.0.2/setup.py	2018-06-13 13:27:50.990071928 +0200
-+@@ -15,7 +15,6 @@
-+ 
-+ import os
-+ import platform
-+-import ssl
-+ import sys
-+ import warnings
-+ 
-+@@ -137,16 +136,6 @@
-+     python_requires = '>= 2.7, !=3.0.*, !=3.1.*, !=3.2.*, != 3.3.*'
-+     kwargs['python_requires'] = python_requires
-+ 
-+-# Verify that the SSL module has all the modern upgrades. Check for several
-+-# names individually since they were introduced at different versions,
-+-# although they should all be present by Python 3.4 or 2.7.9.
-+-if (not hasattr(ssl, 'SSLContext') or
-+-        not hasattr(ssl, 'create_default_context') or
-+-        not hasattr(ssl, 'match_hostname')):
-+-    raise ImportError("Tornado requires an up-to-date SSL module. This means "
-+-                      "Python 2.7.9+ or 3.4+ (although some distributions have "
-+-                      "backported the necessary changes to older versions).")
-+-
-+ setup(
-+     name="tornado",
-+     version=version,
-diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
-index a0ee78fb7a..1afbdc5729 100644
---- a/package/python-tornado/Config.in
-+++ b/package/python-tornado/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_PYTHON_TORNADO
- 	bool "python-tornado"
- 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
- 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
- 	select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
-diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
-index 662db6f258..c64e537eed 100644
---- a/package/python-tornado/python-tornado.hash
-+++ b/package/python-tornado/python-tornado.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/tornado/json, sha256 locally computed
--md5	838687d20923360af5ab59f101e9e02e  tornado-4.5.1.tar.gz
--sha256	db0904a28253cfe53e7dedc765c71596f3c53bb8a866ae50123320ec1a7b73fd  tornado-4.5.1.tar.gz
-+# md5, sha256 from https://pypi.python.org/pypi/tornado/json
-+md5	e5e24ce1c8a4e6442dc38d470172f59e  tornado-5.0.2.tar.gz
-+sha256	1b83d5c10550f2653380b4c77331d6f8850f287c4f67d7ce1e1c639d9222fbc7  tornado-5.0.2.tar.gz
-diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
-index 6e6167564f..ed3a61fcf8 100644
---- a/package/python-tornado/python-tornado.mk
-+++ b/package/python-tornado/python-tornado.mk
-@@ -4,10 +4,11 @@
- #
- ################################################################################
- 
--PYTHON_TORNADO_VERSION = 4.5.1
-+PYTHON_TORNADO_VERSION = 5.0.2
- PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
--PYTHON_TORNADO_SITE = https://pypi.python.org/packages/df/42/a180ee540e12e2ec1007ac82a42b09dd92e5461e09c98bf465e98646d187
-+PYTHON_TORNADO_SITE = https://pypi.python.org/packages/cf/d1/3be271ae5eba9fb59df63c9891fdc7d8044b999e8ac145994cdbfd2ae66a
- PYTHON_TORNADO_LICENSE = Apache-2.0
-+PYTHON_TORNADO_LICENSE_FILES = LICENSE
- PYTHON_TORNADO_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
--- 
-2.11.0
+Specifying on command line would have been nice but remember this being 
+ignored in favour of the .config setting. So I always modified .config 
+before the build, which I do regard as somewhat messy.
+
+> 
+>> However, for maintenance reasons I want to support existing project setups,
+>> which would only be "simple" if there was an easy way to
+>> - run the relocation previous to packing
+>> - adjust the location to be packed accordingly
+>> - and define the name of the tarball with a set of "beyond buildroot"
+>> Project-Variables
+> 
+>   This starts to sound complicated... I would say, if you're content with a
+> non-relocatable SDK, setting BR2_HOST_DIR is the way to go.
+
+I just tried again to set BR_HOST_DIR via environment but it doesnt 
+propagate. It would work with make -e ... but I fear hard to discover 
+side effects doing that. So I'd rather go with the relocation in the future.
+
+> 
+>   Perhaps we could consider a post-sdk script. That would get called with the
+> relevant variables so you could set up all the symlinks you want to find the
+> cross-compile tuple etc. Although, really, calling 'make printvars
+> VARS=GNU_TARGET_NAME' from your CI script doesn't sound like the end of the
+> world to me.
+
+Actually, I'm using the printvars solution right now, no problem.
+
+> 
+> 
+>> I guess one way to achieve that would be baking this sort of customization into
+>> the defconfig. However, that makes usage of savedefconfig more or less useless
+>> to me because it leads to constantly changing defconfigs. (Which is undesirable
+>> as my messing with HOST_DIR has showed me).
+>> Allowing environment variables to control the process would work too, but I dont
+>> know if thats considered "good practise" or "simple" either.
+> 
+>   I don't really like putting stuff in environment variables. I'd rather have it
+> in local.mk variables then (which automatically means that they can also be set
+> on the command line). But even so, it smells like unneeded complexity to me.
+
+Just as I fail in overwriting BR2_HOST_DIR from commandline I fail in 
+setting BR2_PACKAGE_OVERRIDE_FILE to something else than defined in 
+.config. I guess it would be really helpful if you could give me an 
+example on how to do that.
+
+> 
+>   Summarizing where we are in this thread now, I think:
+> 
+> 1. The tarball generation should be separated from the sdk generation itself,
+> with e.g.
+> 
+> sdk-tar: sdk
+> 	@$(TAR) ...
+> 
+> 2. The tarball should really be created as a .gz, not as an .xz or anything else.
+> 
+> 3. In addition to the unique name, there should be a symlink/hardlink with a
+> constant name.
+> 
+>   Note that this doesn't solve the potential issue that the images/ directory is
+> constantly growing. So perhaps we should just give up on the unique name, and
+> instead only generate a constant name, like we currently do for all our build
+> artefacts.
+
+Since the SDK tarball is something that is "thrown around" between 
+developers on it's own, it might make sense to somehow being able to 
+distinguish it?
+For my case, I include a project version in the name, but no buildnumber 
+or SHA. That way it just changes between project releases. Also, I have 
+a separate sdk/ folder for it, because I dont like mixing target with 
+host stuff. (and it can be cleaned independently).
+
+So while it's easy enough to rename the tarball to an appropriate name 
+after creating it with make sdk-tar, the contained top-level folder 
+should somehow match this name right?
+
+
+regards,
+Andreas
+
+> 
+> 
+>   With all this in mind, I've marked the patch as Changes Requested.
+> 
+>   Regards,
+>   Arnout
+> 
