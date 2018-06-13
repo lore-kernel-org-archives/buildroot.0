@@ -1,7 +1,7 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Wed, 13 Jun 2018 10:32:12 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 13 Jun 2018 11:47:02 +0200
 Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <CAOJ2eMfh5-dqjRxrZhhBv6yQj6k1jgstnDSWqtsy4LG+UuVmBw@mail.gmail.com>
+In-Reply-To: <20180612210124.18e1f168@windsurf>
 References: <20180609210607.13259-1-yann.morin.1998@free.fr>
  <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
  <1528737656.28705.131.camel@impinj.com>
@@ -9,67 +9,49 @@ References: <20180609210607.13259-1-yann.morin.1998@free.fr>
  <1528825657.28705.168.camel@impinj.com>
  <CAOJ2eMd6vMsXRDSwNRBT1cK2S2i2kBhpqdMvkv9tqUoPTcYhrw@mail.gmail.com>
  <20180612210124.18e1f168@windsurf>
- <CAOJ2eMfh5-dqjRxrZhhBv6yQj6k1jgstnDSWqtsy4LG+UuVmBw@mail.gmail.com>
-Message-ID: <f8d008ac-4b0e-52a5-93f5-cec21e31459e@andin.de>
+Message-ID: <fb74bf87-dfdf-5dc6-8612-9faa896ae6e4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
 
-on a general note, I do find that buildroot does an outstanding job in 
-providing a lot of simple to use functionality while keeping it within a 
-well defined scope!
-To help achieve that for SDK generation, I'll describe my use 
-cases/preferences.
 
-Am 12.06.2018 um 21:25 schrieb Stefan Becker:
-> Hi Thomas, All,
+On 12-06-18 21:01, Thomas Petazzoni wrote:
+> Hello,
 > 
-<snip>
+> On Tue, 12 Jun 2018 21:07:35 +0300, Stefan Becker wrote:
 > 
-> But I'm against building something for naught. If the tarball turns
-> out to be unusable I get slower buildroot builds. Which in turns will
-> force me to extract what "original sdk without tarball" was doing out
-> of buildroot makefile and hard-code it into my build script. And then
-> I can remove "sdk" from the buildroot make command. I fail to see how
-> that is simpler.
-
-I also prefer speed over storage size (gz vs. xz) and definitely want to 
-spend both only for building what I need.
-
+>> I didn't want to write anything to this thread at first, but then I
+>> saw that what Trent wrote matches 100% what I was thinking when
+>> looking at the change.
+>>
+>> I'm very disappointed with the attitude displayed by the buildroot
+>> developers in this thread.
 > 
-> If you don't offer a way to specify the generated tarball name, fine.
-> Then I won't use sdk-tarball at all, even if the tarball itself would
-> be usable in our downstream integration. Or I could come up with a way
-> to "guess" the build artefact name in my build script and symlink it
-> to the wanted build artefact name (again, I fail to see how this is
-> simpler).
+> I believe you are also very abrupt with this statement. For example, I
+> myself asked as a reply to Yann's proposal if there wasn't a backward
+> compatibility issue.
 
-Even though the sdk target has been around for a while, I still use 
-custom steps to a) build the SDK on a absolute path to avoid relocation 
-needs and b) tar it with a project-specific name.
+ Thomas, you can't deny that, whatever your (and my) intention was in this
+thread, it clearly has the effect on (some) people that they think "the
+buildroot developers" are not paying attention to their needs.
 
-So if b) is provided by buildroot I'd be very interested to finally give 
-up my addon mess (modifiying HOST_DIR before the build) and switch to 
-buildroots way.
-However, for maintenance reasons I want to support existing project 
-setups, which would only be "simple" if there was an easy way to
-- run the relocation previous to packing
-- adjust the location to be packed accordingly
-- and define the name of the tarball with a set of "beyond buildroot" 
-Project-Variables
-
-I guess one way to achieve that would be baking this sort of 
-customization into the defconfig. However, that makes usage of 
-savedefconfig more or less useless to me because it leads to constantly 
-changing defconfigs. (Which is undesirable as my messing with HOST_DIR 
-has showed me).
-Allowing environment variables to control the process would work too, 
-but I dont know if thats considered "good practise" or "simple" either.
+ I don't know why that is or what we can do about it (without investing still
+more time in composing our mails), but the least we can do is acknowledge this
+situation.
 
 
-best regards,
-Andreas
+ Regards,
+ Arnout
+
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
