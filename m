@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Jun 2018 22:26:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/connman: bump version to 1.36
-In-Reply-To: <20180613170833.7808-1-bernd.kuhls@t-online.de>
-References: <20180613170833.7808-1-bernd.kuhls@t-online.de>
-Message-ID: <20180613222600.2ad1362a@windsurf>
+Date: Wed, 13 Jun 2018 22:26:06 +0200
+Subject: [Buildroot] [PATCH 1/1] package/unrar: bump version to 5.6.4
+In-Reply-To: <20180613171956.1992-1-bernd.kuhls@t-online.de>
+References: <20180613171956.1992-1-bernd.kuhls@t-online.de>
+Message-ID: <20180613222606.3d4344ff@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 13 Jun 2018 19:08:33 +0200, Bernd Kuhls wrote:
-> Added licence hash, removed patch applied upstream
-> https://git.kernel.org/pub/scm/network/connman/connman.git/commit/?id=bdfb3526466f8fb8f13d9259037d8f42c782ce24
-> 
-> Renumbered remaining patch.
-> 
+On Wed, 13 Jun 2018 19:19:56 +0200, Bernd Kuhls wrote:
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...ure.patch => 0001-nat-build-failure.patch} |  0
->  ...01-tethering-Reorder-header-includes.patch | 37 -------------------
->  package/connman/connman.hash                  |  4 +-
->  package/connman/connman.mk                    |  2 +-
->  4 files changed, 4 insertions(+), 39 deletions(-)
->  rename package/connman/{0002-nat-build-failure.patch => 0001-nat-build-failure.patch} (100%)
->  delete mode 100644 package/connman/0001-tethering-Reorder-header-includes.patch
+>  package/unrar/unrar.hash | 2 +-
+>  package/unrar/unrar.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
