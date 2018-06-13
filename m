@@ -1,281 +1,109 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Wed, 13 Jun 2018 16:14:54 +0200
-Subject: [Buildroot] [PATCH 1/1] libcxx: new package
-Message-ID: <20180613141454.25028-1-nolange79@gmail.com>
+From: Jan Dohl <polygon@wh2.tu-dresden.de>
+Date: Wed, 13 Jun 2018 16:28:16 +0200
+Subject: [Buildroot] [PATCH 1/1] Python Tornado bumped to version 5.0.2
+Message-ID: <20180613142816.19691-1-polygon@wh2.tu-dresden.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-provides llvm's libc++ as package,
-probably needs some more work to
-better fit into buildroots toolchain construction.
+Tornado got a requirement on the SSL module in version 5.0.2
+which is also checked in the setup.py script before installing.
+Since the check in buildroot runs against the host-python which
+is built without SSL support, these checks fail.
 
-It should be build after the host-g++ and C-Library,
-but before any other packages and it does install a
-small script host/bin/<xa-y-z>-g++-libc++
-to allow easy use.
+In my opinion, adding OpenSSL support to host-python does not make
+sense since the Python on the target will be a different one. Instead,
+remove the checks (which, according to the source code comments
+essentially check for Python >= 2.7.9 / Python3 >= 3.4 which is
+true for current Buildroot) and select the SSL option of
+Python/Python3 when Tornado is selected.
 
-For lowlevel language support ABI, it can be built with
-libstdc++ support library or its own libc++-abi.
-
-the parent LLVM software needs to be available,
-apparently for a few tools. Its downloaded currently,
-as depending on host-llvm means this package has to be
-built - which takes forever.
-
-In the future, a option could potentially compile
-all C++ Packages with this library.
-
--   depend on threading library if available?
-    (supposedly builds without)
--   proper integration in toolchain step
--   use libc++ for remaining packages
-
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
+Signed-off-by: Jan Dohl <polygon@wh2.tu-dresden.de>
 ---
- package/Config.in                             |   1 +
- package/libcxx/Config.in                      |  29 +++++
- package/libcxx/g++-libc++.in                  |  16 +++
- package/libcxx/libcxx.hash                    |   7 ++
- package/libcxx/libcxx.mk                      | 108 ++++++++++++++++++
- ...i_fix_find_fpath_when_crosscompiling.patch |  27 +++++
- 6 files changed, 188 insertions(+)
- create mode 100644 package/libcxx/Config.in
- create mode 100644 package/libcxx/g++-libc++.in
- create mode 100644 package/libcxx/libcxx.hash
- create mode 100644 package/libcxx/libcxx.mk
- create mode 100644 package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch
+ .../0001-remove-ssl-checks-on-install.patch        | 28 ++++++++++++++++++++++
+ package/python-tornado/Config.in                   |  2 ++
+ package/python-tornado/python-tornado.hash         |  6 ++---
+ package/python-tornado/python-tornado.mk           |  5 ++--
+ 4 files changed, 36 insertions(+), 5 deletions(-)
+ create mode 100644 package/python-tornado/0001-remove-ssl-checks-on-install.patch
 
-diff --git a/package/Config.in b/package/Config.in
-index fcabed4fde..cda825612a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1565,6 +1565,7 @@ menu "Other"
- 	source "package/lightning/Config.in"
- 	source "package/linux-pam/Config.in"
- 	source "package/llvm/Config.in"
-+	source "package/libcxx/Config.in"
- if BR2_PACKAGE_LINUX_PAM
- comment "linux-pam plugins"
- 	source "package/libpam-radius-auth/Config.in"
-diff --git a/package/libcxx/Config.in b/package/libcxx/Config.in
+diff --git a/package/python-tornado/0001-remove-ssl-checks-on-install.patch b/package/python-tornado/0001-remove-ssl-checks-on-install.patch
 new file mode 100644
-index 0000000000..f5ff911b6d
+index 0000000000..9bf858bbaa
 --- /dev/null
-+++ b/package/libcxx/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_LIBCXX
-+	bool "libc++"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  libc++ is a new implementation of the C++ standard library,
-+	  targeting C++11 (and newer). Part of the LLVM Project.
-+
-+	  The LLVM Project is a collection of modular and reusable
-+	  compiler and toolchain technologies.
-+
-+if BR2_PACKAGE_LIBCXX
-+choice
-+	prompt "libc++ abi support"
-+	default BR2_PACKAGE_LIBCXX_ABI_SUPCXX
-+	help
-+	  Select the c++ abi support: libsupc++ (from gcc toolchain)
-+	  or libc++-abi (from llvm).
-+
-+config BR2_PACKAGE_LIBCXX_ABI_SUPCXX
-+	bool "libsupc++"
-+
-+config BR2_PACKAGE_LIBCXX_ABI_CXXABI
-+	bool "libc++-abi"
-+
-+endchoice
-+endif
-+
-+comment "libc++ needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libcxx/g++-libc++.in b/package/libcxx/g++-libc++.in
-new file mode 100644
-index 0000000000..db6d050a7c
---- /dev/null
-+++ b/package/libcxx/g++-libc++.in
-@@ -0,0 +1,16 @@
-+#!/bin/sh
-+SCRIPTPATH=$(readlink -f "$(dirname "$0")")
-+cxx_libs="-lc++ @link_abi@"
-+c_libs="-lc @link_comrt@"
-+pthread_libs="-lpthread $c_libs"
-+
-+libs="$cxx_libs $c_libs"
-+
-+for i; do
-+    if test x"$i" = x"-pthread"; then
-+        libs="$libs $pthread_libs"
-+        break
-+    fi
-+done
-+
-+exec "$SCRIPTPATH"/@TARGET_CROSS at g++ -nodefaultlibs -nostdinc++ $libs -isystem"$SCRIPTPATH"/../../staging/usr/include/c++/v1 "$@"
-diff --git a/package/libcxx/libcxx.hash b/package/libcxx/libcxx.hash
-new file mode 100644
-index 0000000000..7d384365b6
---- /dev/null
-+++ b/package/libcxx/libcxx.hash
-@@ -0,0 +1,7 @@
-+# locally calculated
-+sha256  1ff53c915b4e761ef400b803f07261ade637b0c269d99569f18040f3dcee4408  llvm-6.0.0.src.tar.xz
-+sha256  70931a87bde9d358af6cb7869e7535ec6b015f7e6df64def6d2ecdd954040dd9  libcxx-6.0.0.src.tar.xz
-+sha256  91c6d9c5426306ce28d0627d6a4448e7d164d6a3f64b01cb1d196003b16d641b  libcxxabi-6.0.0.src.tar.xz
-+
-+
-+sha256  c1938c0e9e90639d1e8f5a7f6bebaab83a3642e0ee44295a4c69934686d0bda8  LICENSE.TXT
-diff --git a/package/libcxx/libcxx.mk b/package/libcxx/libcxx.mk
-new file mode 100644
-index 0000000000..9d9efc90b0
---- /dev/null
-+++ b/package/libcxx/libcxx.mk
-@@ -0,0 +1,108 @@
-+################################################################################
-+#
-+# libc++
-+#
-+################################################################################
-+
-+LIBCXX_VERSION = 6.0.0
-+LIBCXX_SITE = http://llvm.org/releases/$(LIBCXX_VERSION)
-+LIBCXX_SOURCE = llvm-$(LIBCXX_VERSION).src.tar.xz
-+LIBCXX_LICENSE = MIT
-+#LIBCXX_LICENSE_FILES = COPYRIGHT
-+LIBCXX_SUPPORTS_IN_SOURCE_BUILD = NO
-+LIBCXX_INSTALL_STAGING = YES
-+
-+LIBCXX_EXTRA_DOWNLOADS = $(patsubst %,$(LIBCXX_SITE)/%-$(LIBCXX_VERSION).src.tar.xz,libcxx libcxxabi)
-+
-+define LIBCXX_EXTRA_EXTRACT
-+	$(foreach arch,$(LIBCXX_EXTRA_DOWNLOADS), \
-+		TDIR=projects/$(patsubst $(LIBCXX_SITE)/%-$(LIBCXX_VERSION).src.tar.xz,%,$(arch)); \
-+		mkdir -p $(@D)/$$TDIR && \
-+		$(call suitable-extractor,$(notdir $(arch))) $(LIBCXX_DL_DIR)/$(notdir $(arch)) | \
-+		$(TAR) --strip-components=1 -C $(@D)/$$TDIR $(TAR_OPTIONS) -
-+	)
-+endef
-+
-+LIBCXX_POST_EXTRACT_HOOKS += LIBCXX_EXTRA_EXTRACT
-+
-+# Before libcxx is configured, we must have the first stage
-+# cross-compiler and the clibrary
-+LIBCXX_DEPENDENCIES = host-gcc-initial
-+
-+ifeq ($(BR2_PACKAGE_LIBCXX_ABI_CXXABI),y)
-+_LIBCXX_ABI_TARGET = cxxabi
-+endif
-+
-+_LIBCXX_ABI-$(BR2_PACKAGE_LIBCXX_ABI_CXXABI) = libcxxabi
-+_LIBCXX_ABI-$(BR2_PACKAGE_LIBCXX_ABI_SUPCXX) = libsupc++
-+
-+_LIBCXX_ABI_LINK-$(BR2_PACKAGE_LIBCXX_ABI_CXXABI) = c++abi
-+_LIBCXX_ABI_LINK-$(BR2_PACKAGE_LIBCXX_ABI_SUPCXX) = supc++
-+
-+LIBCXX_MAKE_OPTS = $(_LIBCXX_ABI_TARGET) cxx
-+
-+LIBCXX_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) $(addprefix install-,$(_LIBCXX_ABI_TARGET) cxx)
-+
-+LIBCXX_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) $(addprefix install-,$(_LIBCXX_ABI_TARGET) cxx)
-+
-+
-+#LIBCXXABI_SYSROOT LIBCXX_SYSROOT
-+# TODO: potentially depend on threading library?
-+# allow using gccs libsupc++
-+# consider whether its better to statically link libc++-abi
-+# USe this library to build the remaining C++ packages?
-+
-+# llvm does not recommend using this
-+LIBCXX_CONF_OPTS += -DBUILD_SHARED_LIBS:BOOL=OFF
-+
-+LIBCXX_CONF_OPTS += -DLIBCXXABI_INCLUDE_TESTS=OFF -DLIBCXXABI_ENABLE_ASSERTIONS=OFF -DLIBCXXABI_ENABLE_NEW_DELETE_DEFINITIONS=OFF -DLIBCXX_ENABLE_NEW_DELETE_DEFINITIONS=ON
-+
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+LIBCXX_CONF_OPTS += -DLIBCXX_HAS_MUSL_LIBC:BOOL=ON
-+endif
-+
-+ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_SHARED:BOOL=ON -DLIBCXX_ENABLE_SHARED:BOOL=ON
-+else
-+LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_SHARED:BOOL=OFF -DLIBCXX_ENABLE_SHARED:BOOL=OFF
-+endif
-+
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
-+LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_STATIC:BOOL=ON -DLIBCXX_ENABLE_STATIC:BOOL=ON
-+else
-+LIBCXX_CONF_OPTS += -DLIBCXXABI_ENABLE_STATIC:BOOL=OFF -DLIBCXX_ENABLE_STATIC:BOOL=OFF
-+endif
-+
-+LIBCXX_CONF_OPTS += -DLIBCXX_ENABLE_ABI_LINKER_SCRIPT=ON
-+
-+#LIBCXX_CONF_OPTS += -DLLVM_PATH:PATH=$(@D)/llvm
-+
-+#LIBCXX_CONF_OPTS += -DLIBCXX_CXX_ABI:STRING=default
-+
-+# libc++ needs to be massaged to pick header and libs
-+LIBCXX_CONF_OPTS += -DLIBCXX_CXX_ABI:STRING=$(_LIBCXX_ABI-y)
-+
-+ifneq ($(_LIBCXX_ABI_TARGET),)
-+LIBCXX_CONF_OPTS += -DLIBCXX_CXX_ABI_INCLUDE_PATHS:PATH=$(@D)/projects/libcxxabi/include \
-+					-DLIBCXX_CXX_ABI_LIBRARY_PATH:PATH=../../../lib
-+endif
-+
-+
-+#LIBCXX_CONF_OPTS += -DLIBCXX_INCLUDE_BENCHMARKS:BOOL=OFF
-+#LIBCXX_CONF_OPTS += -DLIBCXX_INCLUDE_DOCS:BOOL=OFF
-+#LIBCXX_CONF_OPTS += -DLIBCXX_INCLUDE_TESTS:BOOL=OFF
-+
-+cxx_libs="-lc++ @link_abi@"
-+c_libs="-lc @link_comrt@"
-+
-+# Create a g++ wrapper to add the necessary aguments for building with libc++
-+define LIBCXX_CREATE_GXXWRAPPER_TARGET
-+	sed -e 's, at TARGET_CROSS@,$(notdir $(TARGET_CROSS)),g' \
-+	  -e 's, at link_abi@,$(addprefix -l,$(_LIBCXX_ABI_LINK-y)),g' \
-+	  -e 's, at link_comrt@,-lgcc_s,g' \
-+	  $(LIBCXX_PKGDIR)g++-libc++.in > $(LIBCXX_BUILDDIR)gxxwrap.tmp
-+	install -D -m755 $(LIBCXX_BUILDDIR)gxxwrap.tmp $(TARGET_CROSS)g++-libc++
-+endef
-+LIBCXX_POST_INSTALL_TARGET_HOOKS = LIBCXX_CREATE_GXXWRAPPER_TARGET
-+
-+$(eval $(cmake-package))
-diff --git a/package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch b/package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch
-new file mode 100644
-index 0000000000..2fd95178f7
---- /dev/null
-+++ b/package/libcxx/libcxxabi_fix_find_fpath_when_crosscompiling.patch
-@@ -0,0 +1,27 @@
-+diff -burN libcxx-6.0.0.org/projects/libcxxabi/CMakeLists.txt libcxx-6.0.0/projects/libcxxabi/CMakeLists.txt
-+--- libcxx-6.0.0.org/projects/libcxxabi/CMakeLists.txt	2018-06-12 14:26:05.184675501 +0200
-++++ libcxx-6.0.0/projects/libcxxabi/CMakeLists.txt	2018-06-12 14:27:05.553370290 +0200
-+@@ -115,6 +115,7 @@
-+         ${CMAKE_BINARY_DIR}/${LIBCXXABI_LIBCXX_INCLUDES}
-+         ${LIBCXXABI_LIBCXX_INCLUDE_DIRS}
-+         ${LLVM_INCLUDE_DIR}/c++/v1
-++  NO_CMAKE_FIND_ROOT_PATH
-+   )
-+
-+ set(LIBCXXABI_LIBCXX_INCLUDES "${LIBCXXABI_LIBCXX_INCLUDES}" CACHE PATH
-+@@ -127,6 +128,7 @@
-+         ${LIBCXXABI_LIBCXX_INCLUDES}/../
-+         ${LIBCXXABI_LIBCXX_SRC_DIRS}
-+   NO_DEFAULT_PATH
-++  NO_CMAKE_FIND_ROOT_PATH
-+   )
-+
-+ if (LIBCXXABI_LIBCXX_PATH STREQUAL "LIBCXXABI_LIBCXX_PATH-NOTFOUND")
-+@@ -425,6 +427,7 @@
-+           ${LLVM_MAIN_SRC_DIR}/projects/libunwind/include
-+           ${LLVM_MAIN_SRC_DIR}/runtimes/libunwind/include
-+     NO_DEFAULT_PATH
-++    NO_CMAKE_FIND_ROOT_PATH
-+   )
-+
-+   if (LIBCXXABI_LIBUNWIND_INCLUDES_INTERNAL STREQUAL "LIBCXXABI_LIBUNWIND_INCLUDES_INTERNAL-NOTFOUND")
---
-2.17.1
++++ b/package/python-tornado/0001-remove-ssl-checks-on-install.patch
+@@ -0,0 +1,28 @@
++diff -Naur python-tornado-5.0.2-orig/setup.py python-tornado-5.0.2/setup.py
++--- python-tornado-5.0.2-orig/setup.py	2018-04-08 02:31:24.000000000 +0200
+++++ python-tornado-5.0.2/setup.py	2018-06-13 13:27:50.990071928 +0200
++@@ -15,7 +15,6 @@
++ 
++ import os
++ import platform
++-import ssl
++ import sys
++ import warnings
++ 
++@@ -137,16 +136,6 @@
++     python_requires = '>= 2.7, !=3.0.*, !=3.1.*, !=3.2.*, != 3.3.*'
++     kwargs['python_requires'] = python_requires
++ 
++-# Verify that the SSL module has all the modern upgrades. Check for several
++-# names individually since they were introduced at different versions,
++-# although they should all be present by Python 3.4 or 2.7.9.
++-if (not hasattr(ssl, 'SSLContext') or
++-        not hasattr(ssl, 'create_default_context') or
++-        not hasattr(ssl, 'match_hostname')):
++-    raise ImportError("Tornado requires an up-to-date SSL module. This means "
++-                      "Python 2.7.9+ or 3.4+ (although some distributions have "
++-                      "backported the necessary changes to older versions).")
++-
++ setup(
++     name="tornado",
++     version=version,
+diff --git a/package/python-tornado/Config.in b/package/python-tornado/Config.in
+index a0ee78fb7a..1afbdc5729 100644
+--- a/package/python-tornado/Config.in
++++ b/package/python-tornado/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_PYTHON_TORNADO
+ 	bool "python-tornado"
+ 	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
+ 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_SINGLEDISPATCH if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_BACKPORTS_ABC	if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON_CERTIFI if BR2_PACKAGE_PYTHON # runtime
+diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
+index 662db6f258..c64e537eed 100644
+--- a/package/python-tornado/python-tornado.hash
++++ b/package/python-tornado/python-tornado.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/tornado/json, sha256 locally computed
+-md5	838687d20923360af5ab59f101e9e02e  tornado-4.5.1.tar.gz
+-sha256	db0904a28253cfe53e7dedc765c71596f3c53bb8a866ae50123320ec1a7b73fd  tornado-4.5.1.tar.gz
++# md5, sha256 from https://pypi.python.org/pypi/tornado/json
++md5	e5e24ce1c8a4e6442dc38d470172f59e  tornado-5.0.2.tar.gz
++sha256	1b83d5c10550f2653380b4c77331d6f8850f287c4f67d7ce1e1c639d9222fbc7  tornado-5.0.2.tar.gz
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+index 6e6167564f..ed3a61fcf8 100644
+--- a/package/python-tornado/python-tornado.mk
++++ b/package/python-tornado/python-tornado.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TORNADO_VERSION = 4.5.1
++PYTHON_TORNADO_VERSION = 5.0.2
+ PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
+-PYTHON_TORNADO_SITE = https://pypi.python.org/packages/df/42/a180ee540e12e2ec1007ac82a42b09dd92e5461e09c98bf465e98646d187
++PYTHON_TORNADO_SITE = https://pypi.python.org/packages/cf/d1/3be271ae5eba9fb59df63c9891fdc7d8044b999e8ac145994cdbfd2ae66a
+ PYTHON_TORNADO_LICENSE = Apache-2.0
++PYTHON_TORNADO_LICENSE_FILES = LICENSE
+ PYTHON_TORNADO_SETUP_TYPE = setuptools
+ 
+ $(eval $(python-package))
+-- 
+2.11.0
