@@ -1,60 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 13 Jun 2018 22:16:43 +0200
-Subject: [Buildroot] [PATCH] redis: security bump to version 3.2.12
-Message-ID: <20180613201643.9644-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 13 Jun 2018 22:16:40 +0200
+Subject: [Buildroot] [git commit] f2fs-tools: fix build for uclinux
+Message-ID: <20180613201449.3CFC78842D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the release notes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5b9c59707143f23ae0630c181794a3a3781bde3e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-================================================================================
-Redis 3.2.12     Released Wed Jun 13 12:43:01 CEST 2018
-================================================================================
+Add a patch making uclinux also linux.
 
-Upgrade urgency CRITICAL:
+Fixes:
+http://autobuild.buildroot.net/results/357/3577d413dc16bcec7a403fd8857ec5dd64470ba5/
+http://autobuild.buildroot.net/results/819/819a8a528764a68c02b1b98431a1d09929c387f1/
+http://autobuild.buildroot.net/results/d98/d987df1ea7f8043f05d5221342888892990e9252/
 
-* Multilple security issues fixed.
-* Backport of an older AOF fsync=always fix. Check 4.x release notes.
-* Backport of a *SCAN bug. Sometimes elements could be missing from the scan.
-* Other minor things.
-
-https://raw.githubusercontent.com/antirez/redis/3.2/00-RELEASENOTES
-
-For more details about the lua related security issues, see the blog:
-
-http://antirez.com/news/119
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0001-configure-uclinux-is-also-linux.patch     | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index ce2d66b8c2..d9a14cef6c 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 31ae927cab09f90c9ca5954aab7aeecc3bb4da6087d3d12ba0a929ceb54081b5  redis-3.2.11.tar.gz
-+sha256 98c4254ae1be4e452aa7884245471501c9aa657993e0318d88f048093e7f88fd  redis-3.2.12.tar.gz
- # Locally calculated
- sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 82969c9022..cbd2d7bdcb 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 3.2.11
-+REDIS_VERSION = 3.2.12
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
--- 
-2.11.0
+diff --git a/package/f2fs-tools/0001-configure-uclinux-is-also-linux.patch b/package/f2fs-tools/0001-configure-uclinux-is-also-linux.patch
+new file mode 100644
+index 0000000000..dc91b22c83
+--- /dev/null
++++ b/package/f2fs-tools/0001-configure-uclinux-is-also-linux.patch
+@@ -0,0 +1,31 @@
++From 67629fd736a8a4295a9f2acb96563953be22a3ae Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Wed, 13 Jun 2018 20:39:04 +0300
++Subject: [PATCH] configure: uclinux is also linux
++
++Linux systems on no-MMU platforms identify as uclinux. They are
++otherwise identical to plain Linux.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: sent to linux-f2fs-devel at lists.sourceforge.net
++
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index a3ff12bf3de9..2b13be5b09f9 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -166,7 +166,7 @@ build_mac=no
++ 
++ # Detect the target system
++ case "${host_os}" in
++-linux*)
+++linux*|uclinux*)
++ 	build_linux=yes
++ 	;;
++ cygwin*|mingw*)
++-- 
++2.17.1
++
