@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 13 Jun 2018 18:28:26 +0200
-Subject: [Buildroot] [PATCH v3 6/6] package/mediastreamer: add optional
+Date: Wed, 13 Jun 2018 18:28:24 +0200
+Subject: [Buildroot] [PATCH v3 4/6] package/asterisk: add optional
  dependency to speexdsp
 In-Reply-To: <20180613162826.3490-1-bernd.kuhls@t-online.de>
 References: <20180613162826.3490-1-bernd.kuhls@t-online.de>
-Message-ID: <20180613162826.3490-6-bernd.kuhls@t-online.de>
+Message-ID: <20180613162826.3490-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,28 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes
-http://autobuild.buildroot.net/results/594/594ea96cd7b6726052268a3c0b094e00e7b8f12f/
+http://autobuild.buildroot.net/results/9f6/9f61192382ea4b57b0f0548626968752363bb13f/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: initial version
+v3: no changes
+v2: no changes
 
- package/mediastreamer/mediastreamer.mk | 2 +-
+ package/asterisk/asterisk.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index 1276cfae10..d3b70f4ca9 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -46,7 +46,7 @@ MEDIASTREAMER_CONF_OPTS += --disable-opus
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index f2f210b524..430b122655 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -229,7 +229,7 @@ else
+ ASTERISK_CONF_OPTS += --without-ssl
  endif
  
- # portaudio backend needs speex as well
--ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX),yy)
-+ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yyy)
- MEDIASTREAMER_CONF_OPTS += --enable-portaudio
- MEDIASTREAMER_DEPENDENCIES += portaudio speex
+-ifeq ($(BR2_PACKAGE_SPEEX),y)
++ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
+ ASTERISK_DEPENDENCIES += speex
+ ASTERISK_CONF_OPTS += --with-speex --with-speexdsp
  else
 -- 
 2.17.1
