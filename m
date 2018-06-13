@@ -1,38 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 13 Jun 2018 21:51:56 +0200
-Subject: [Buildroot] [arc-buildroot] ARC toolchain build failure
-In-Reply-To: <559dd5e5578ea6d63b4f0c5d9fe584264482bd50.camel@synopsys.com>
-References: <20180612213346.64dd8095@windsurf>
- <d6a09756558324f379cc877b07b1ba77a7db3642.camel@synopsys.com>
- <559dd5e5578ea6d63b4f0c5d9fe584264482bd50.camel@synopsys.com>
-Message-ID: <20180613215156.73351879@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 13 Jun 2018 22:00:26 +0200
+Subject: [Buildroot] [Hosting] Unplanned outage: Hypervisor issue with
+ gprod1 on primary Ganeti cluster
+In-Reply-To: <CAORfjXRQca2cn+UhOL1_dCG8Ki2VZG-hN0jRONJKci8EVAZ_NQ@mail.gmail.com>
+ (Lance Albertson's message of "Wed, 13 Jun 2018 07:48:29 -0700")
+References: <CAORfjXRQca2cn+UhOL1_dCG8Ki2VZG-hN0jRONJKci8EVAZ_NQ@mail.gmail.com>
+Message-ID: <87tvq64ftx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Lance" == Lance Albertson <lance@osuosl.org> writes:
 
-On Wed, 13 Jun 2018 17:21:46 +0000, Alexey Brodkin wrote:
+FYI,
 
-> > Sorry we were off on a longish holidays here in Russia so only now looking at it.
-> > Still I think I know what's wrong there and will send a patch for Buildroot once
-> > I confirm it fixes this problem.  
-> 
-> Done, see https://patchwork.ozlabs.org/patch/928978/
+If you had issues accessing sources.buildroot.{net,org} today, this was
+most likely the reason.
 
-Thanks a lot!
+The machine is up and running again.
 
-> P.S. That's how you make yourself visible - you know stuff is broken
->      but wait before somebody bumps into it and start asking for help :)
->      I mean I knew about that problem and was going to send out patches
->      but never found enough time to accomplish that, sorry :)
+ > All,
+ > At approximately 2:36AM PDT (0900 UTC), one of the hypervisors (gprod1) in
+ > our primary Ganeti cluster started having hardware issues. This took down
+ > all of the instances running on that node. I attempted to bring the node
+ > back online however the hardware issue prevented it to come back online. At
+ > that point I failed all of the VM instances over to their secondary nodes
+ > and forced another node to become the Ganeti master (since gprod1 WAS the
+ > master). All of the instances were back online by around 7:40AM PDT (1400
+ > UTC).
 
-Hehe :-)
+ > Everything at this point seems to be back to normal (except for gprod1). I
+ > will look into bringing gprod1 back online later today.
 
-Thomas
+ > Thank you and sorry for the outages this caused.
+
+ > -- 
+ > Lance Albertson
+ > Director
+ > Oregon State University | Open Source Lab
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
