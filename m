@@ -1,39 +1,66 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 13 Jun 2018 10:00:27 +0300
-Subject: [Buildroot] =?utf-8?q?=5BPATCH=5D_DEVELOPERS=3A_drop_Stefan_Fr?=
- =?utf-8?q?=C3=B6berg=27s_entry?=
-Message-ID: <349a2869facdc0bc79bb3b5a5d506e3cd3a9721b.1528873227.git.baruch@tkos.co.il>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Wed, 13 Jun 2018 09:37:10 +0200
+Subject: [Buildroot] [PATCH] scanpypi: rework download_package error handling
+Message-ID: <20180613073710.5715-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Emails bounce. The domain does not resolve.
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Some packages don't provide source archive but only a wheel file. In
+this case download variable is not defined. So define this variable at
+the very beginning and check whether it is None after searching for
+source archives in the metadata.
+
+Bonus: fix PEP8 issue with wrong indentation.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- DEVELOPERS | 8 --------
- 1 file changed, 8 deletions(-)
+ utils/scanpypi | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index eaf64ede6148..e276b4556552 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1827,14 +1827,6 @@ F:	package/mesa3d-demos/
- F:	package/sunxi-mali/
- F:	package/ti-gfx/
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 8a2ae00434..12c96b842e 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -178,6 +178,7 @@ class BuildrootPackage():
+         """
+         Download a package using metadata from pypi
+         """
++        download = None
+         try:
+             self.metadata['urls'][0]['filename']
+         except IndexError:
+@@ -201,7 +202,7 @@ class BuildrootPackage():
+                 continue
+             try:
+                 print('Downloading package {pkg} from {url}...'.format(
+-                      pkg=self.real_name, url=download_url['url']))
++                    pkg=self.real_name, url=download_url['url']))
+                 download = six.moves.urllib.request.urlopen(download_url['url'])
+             except six.moves.urllib.error.HTTPError as http_error:
+                 download = http_error
+@@ -213,11 +214,14 @@ class BuildrootPackage():
+                 self.md5_sum = hashlib.md5(self.as_string).hexdigest()
+                 if self.md5_sum == download_url['digests']['md5']:
+                     break
+-        else:
+-            if download.__class__ == six.moves.urllib.error.HTTPError:
+-                raise download
+-            raise DownloadFailed('Failed to download package {pkg}'
++
++        if download is None:
++            raise DownloadFailed('Failed to download package {pkg}: '
++                                 'No source archive available'
+                                  .format(pkg=self.real_name))
++        elif download.__class__ == six.moves.urllib.error.HTTPError:
++            raise download
++
+         self.filename = self.used_url['filename']
+         self.url = self.used_url['url']
  
--N:	Stefan Fr?berg <stefan.froberg@petroprogram.com>
--F:	package/elfutils/
--F:	package/libtasn1/
--F:	package/proxychains-ng/
--F:	package/vte/
--F:	package/yasm/
--F:	package/zlib-ng/
--
- N:	Stefan S?rensen <stefan.sorensen@spectralink.com>
- F:	package/cracklib/
- F:	package/libpwquality/
 -- 
-2.17.1
+2.17.0
