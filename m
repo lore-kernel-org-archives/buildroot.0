@@ -1,11 +1,10 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 14 Jun 2018 15:48:15 -0700
-Subject: [Buildroot] [RFC PATCH v4 4/9] libgtk3: remove patch to disable
- atk-bridge support
+Date: Thu, 14 Jun 2018 15:48:17 -0700
+Subject: [Buildroot] [RFC PATCH v4 6/9] llvm: bump to version 6.0.0
 In-Reply-To: <20180614224820.27126-1-joseph.kogut@gmail.com>
 References: <20180610205417.13963-1-joseph.kogut@gmail.com>
  <20180614224820.27126-1-joseph.kogut@gmail.com>
-Message-ID: <20180614224820.27126-5-joseph.kogut@gmail.com>
+Message-ID: <20180614224820.27126-7-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,88 +13,76 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- package/libgtk3/0003-disable-atk-bridge.patch | 45 -------------------
- package/libgtk3/Config.in                     |  1 +
- package/libgtk3/libgtk3.mk                    |  3 +-
- 3 files changed, 3 insertions(+), 46 deletions(-)
- delete mode 100644 package/libgtk3/0003-disable-atk-bridge.patch
+ ...type-in-ORC-readMem-client-interface.patch | 37 -------------------
+ package/llvm/llvm.hash                        |  2 +-
+ package/llvm/llvm.mk                          |  2 +-
+ 3 files changed, 2 insertions(+), 39 deletions(-)
+ delete mode 100644 package/llvm/0001-Fix-return-type-in-ORC-readMem-client-interface.patch
 
-diff --git a/package/libgtk3/0003-disable-atk-bridge.patch b/package/libgtk3/0003-disable-atk-bridge.patch
+diff --git a/package/llvm/0001-Fix-return-type-in-ORC-readMem-client-interface.patch b/package/llvm/0001-Fix-return-type-in-ORC-readMem-client-interface.patch
 deleted file mode 100644
-index c92174f400..0000000000
---- a/package/libgtk3/0003-disable-atk-bridge.patch
+index 0343b4c7e8..0000000000
+--- a/package/llvm/0001-Fix-return-type-in-ORC-readMem-client-interface.patch
 +++ /dev/null
-@@ -1,45 +0,0 @@
--Remove atk-bridge support.
+@@ -1,37 +0,0 @@
+-From 72ea6ea635d5b5a88f411710daf7e1d340d232d8 Mon Sep 17 00:00:00 2001
+-From: Tilmann Scheller <tschelle@redhat.com>
+-Date: Thu, 1 Feb 2018 11:40:01 -0600
+-Subject: [PATCH] Fix return type in ORC readMem() client interface.
 -
--atk-bridge doesn't seem useful for now in Buildroot and requires to
--add two new packages just for it: at-spi2-core and at-spi2-atk.
+-GCC 8.0.1 detects the type mismatch and causes the compilation to fail. Clang
+-and earlier versions of GCC don't detect the issue.
 -
--Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
+-Fixes rhbz#1540620.
 -
----- a/configure.ac
--+++ b/configure.ac
--@@ -1349,11 +1349,7 @@
-- # Check for Accessibility Toolkit flags
-- ########################################
+-This patch was taken from llvm5.0-5.0.1-7.fc28.src.rpm
 -
---if test x$enable_x11_backend = xyes; then
---   ATK_PACKAGES="atk atk-bridge-2.0"
---else
---   ATK_PACKAGES="atk"
---fi
--+ATK_PACKAGES="atk"
+-Link to bug: https://bugzilla.redhat.com/show_bug.cgi?id=1540620
 -
-- PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
+-Signed-off-by: Valentin Korenblit <valentin.korenblit@smile.fr>
+----
+- include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
 -
----- a/gtk/a11y/gtkaccessibility.c
--+++ b/gtk/a11y/gtkaccessibility.c
--@@ -37,10 +37,6 @@
-- #include <gtk/gtkcombobox.h>
-- #include <gtk/gtkaccessible.h>
+-diff --git a/include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h b/include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h
+-index da02250ba16..bed472e2e0e 100644
+---- a/include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h
+-+++ b/include/llvm/ExecutionEngine/Orc/OrcRemoteTargetClient.h
+-@@ -713,8 +713,8 @@ private:
+- 
+-   uint32_t getTrampolineSize() const { return RemoteTrampolineSize; }
+- 
+--  Expected<std::vector<char>> readMem(char *Dst, JITTargetAddress Src,
+--                                      uint64_t Size) {
+-+  Expected<std::vector<uint8_t>> readMem(char *Dst, JITTargetAddress Src,
+-+                                         uint64_t Size) {
+-     // Check for an 'out-of-band' error, e.g. from an MM destructor.
+-     if (ExistingError)
+-       return std::move(ExistingError);
+--- 
+-2.14.3
 -
---#ifdef GDK_WINDOWING_X11
---#include <atk-bridge.h>
---#endif
---
-- static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
--                                          guint                  n_param_values,
--                                          const GValue          *param_values,
--@@ -987,9 +983,5 @@
--   _gtk_accessibility_override_atk_util ();
--   do_window_event_initialization ();
--
---#ifdef GDK_WINDOWING_X11
---  atk_bridge_adaptor_init (NULL, NULL);
---#endif
---
--   atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
-- }
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index 12e64707bd..f14b9deaf8 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -20,6 +20,7 @@ config BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || \
- 		BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_ATK
-+	select BR2_PACKAGE_AT_SPI2_ATK
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PS
- 	select BR2_PACKAGE_CAIRO_PDF
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 1b85d00aae..e3c3dc5237 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -26,7 +26,8 @@ LIBGTK3_CONF_OPTS = \
- LIBGTK3_MAKE_OPTS = \
- 	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
+diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+index 14f8bb4488..93bdf2e20e 100644
+--- a/package/llvm/llvm.hash
++++ b/package/llvm/llvm.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 d522eda97835a9c75f0b88ddc81437e5edbb87dc2740686cb8647763855c2b3c  llvm-5.0.2.src.tar.xz
++sha256 1ff53c915b4e761ef400b803f07261ade637b0c269d99569f18040f3dcee4408  llvm-6.0.0.src.tar.xz
+ sha256 abd4d8794808bacb1eb6924d49efafd9ab6eef88faaaeb5d3cfa13ee3670d672 LICENSE.TXT
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 50cc74d299..ab79e76aa8 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pixbuf libepoxy
-+LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk at-spi2-atk libglib2 \
-+		       cairo pango gdk-pixbuf libepoxy
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
- LIBGTK3_DEPENDENCIES += fontconfig xlib_libX11 xlib_libXext xlib_libXrender xlib_libXi
+-LLVM_VERSION = 5.0.2
++LLVM_VERSION = 6.0.0
+ LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = NCSA
 -- 
 2.17.1
