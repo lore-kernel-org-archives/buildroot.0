@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 14 Jun 2018 20:02:04 +0200
-Subject: [Buildroot] [PATCH 1/1] pinentry: link with libatomic when needed
-Message-ID: <20180614180204.17438-1-fontaine.fabrice@gmail.com>
+Date: Thu, 14 Jun 2018 20:23:19 +0200
+Subject: [Buildroot] [PATCH 1/1] tor: link with libatomic when needed
+Message-ID: <20180614182319.19543-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,27 +20,27 @@ See d28591a2ee39704f6795c8aa1d0a3db7e909facc,
 03f6e005e6a9617767b24a9026da9477848020cc.
 
 Fixes:
- - http://autobuild.buildroot.net/results/fd6bee70ff20bee9607a9f6f557a3a793d00cd9f
+ - http://autobuild.buildroot.net/results/0f7107d0b703223f567c6749722bc82c81a04d54
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pinentry/pinentry.mk | 4 ++++
+ package/tor/tor.mk | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
-index 4081a8a5d6..8911562db9 100644
---- a/package/pinentry/pinentry.mk
-+++ b/package/pinentry/pinentry.mk
-@@ -18,6 +18,10 @@ PINENTRY_CONF_OPTS += \
- 	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
- 	--without-libcap       # requires PAM
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index f7af718b9b..fb02741d3a 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -47,6 +47,10 @@ endif
+ # uses gnu extensions
+ TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
  
 +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+PINENTRY_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
++TOR_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
 +endif
 +
- # build with X if available
- ifeq ($(BR2_PACKAGE_XORG7),y)
- PINENTRY_CONF_OPTS += --with-x
+ define TOR_INSTALL_CONF
+ 	$(INSTALL) -D -m 644 $(@D)/src/config/torrc.minimal \
+ 		$(TARGET_DIR)/etc/tor/torrc
 -- 
 2.14.1
