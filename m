@@ -1,29 +1,46 @@
-From: Antoine Tenart <antoine.tenart@bootlin.com>
-Date: Thu, 14 Jun 2018 13:44:15 +0200
-Subject: [Buildroot] [PATCH] package/cryptodev-linux: add an hash for the
- license file
-Message-ID: <20180614114415.2657-1-antoine.tenart@bootlin.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 14 Jun 2018 20:02:04 +0200
+Subject: [Buildroot] [PATCH 1/1] pinentry: link with libatomic when needed
+Message-ID: <20180614180204.17438-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a locally computed hash for the license file to track possible
-updates.
+Following errors might occur on architectures required to use gcc
+libatomics:
+sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding
+symbols: DSO missing from command line
 
-Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+This is often the case for sparcv8 32 bit toolchains.
+
+See d28591a2ee39704f6795c8aa1d0a3db7e909facc,
+55a9d6d55888b04ec6c476399e5b98a2412995f5 and
+03f6e005e6a9617767b24a9026da9477848020cc.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/fd6bee70ff20bee9607a9f6f557a3a793d00cd9f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cryptodev-linux/cryptodev-linux.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/pinentry/pinentry.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/cryptodev-linux/cryptodev-linux.hash b/package/cryptodev-linux/cryptodev-linux.hash
-index ad7cb615e60b..eeb481d6aad9 100644
---- a/package/cryptodev-linux/cryptodev-linux.hash
-+++ b/package/cryptodev-linux/cryptodev-linux.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 994ed2f715dd3786f534d5215ae7ae4735b84cff28ea41080ff3501bf1503944 cryptodev-linux-f60aa08c63fc02780554a0a12180a478ca27d49f.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+index 4081a8a5d6..8911562db9 100644
+--- a/package/pinentry/pinentry.mk
++++ b/package/pinentry/pinentry.mk
+@@ -18,6 +18,10 @@ PINENTRY_CONF_OPTS += \
+ 	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
+ 	--without-libcap       # requires PAM
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++PINENTRY_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
++endif
++
+ # build with X if available
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ PINENTRY_CONF_OPTS += --with-x
 -- 
-2.17.1
+2.14.1
