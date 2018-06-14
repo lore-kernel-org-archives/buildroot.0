@@ -1,155 +1,165 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 14 Jun 2018 08:00:11 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-06-13
-Message-ID: <20180614060011.096DC20737@mail.bootlin.com>
+From: Marc Sandusky <marc_sandusky@outlook.com>
+Date: Thu, 14 Jun 2018 07:16:57 +0000
+Subject: [Buildroot] [PATCH 1/1] buildroot Added Banana Pi M2 Ultra platform
+Message-ID: <BN6PR11MB131514FF11A325A511480816927D0@BN6PR11MB1315.namprd11.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Added a default configuration file and supporting board support files
+for the Banana Pi M2 Ultra platform. The port is based on the ports for
+the Banana Pi M1 and Banana Pi M2 Plus platforms, and provides for a
+duplicate feature set. In addition to the default configuration file this
+port includes a boot script, an SD card definition file and a readme file
+explaining its usage.
 
-Build statistics for 2018-06-13
-===============================
+Signed-off-by: Marc Sandusky <marc_sandusky@outlook.com>
+---
+ board/bananapi/bananapi-m2u/boot.cmd     |  7 +++++
+ board/bananapi/bananapi-m2u/genimage.cfg | 33 ++++++++++++++++++++++
+ board/bananapi/bananapi-m2u/readme.txt   | 34 ++++++++++++++++++++++
+ configs/bananapi_m2_ultra_defconfig      | 36 ++++++++++++++++++++++++
+ 4 files changed, 110 insertions(+)
+ create mode 100644 board/bananapi/bananapi-m2u/boot.cmd
+ create mode 100644 board/bananapi/bananapi-m2u/genimage.cfg
+ create mode 100644 board/bananapi/bananapi-m2u/readme.txt
+ create mode 100644 configs/bananapi_m2_ultra_defconfig
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  25 |   1 |   0 |  26 |
-   2018.05.x |  24 |   0 |   0 |  24 |
-      master | 196 |  88 |   1 | 285 |
-
-Results for branch '2018.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                  boost-1.66.0 | 1 
-
-
-Detail of failures
-------------------
-
-     powerpc |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/a74e0a19c802335f5b657781363e1ea90c62dd43 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-             freeswitch-1.6.20 | 26
-                linphone-3.6.1 | 20
-                libtirpc-1.0.3 | 16
-                      x265-2.8 | 5 
-          mediastreamer-2.14.0 | 4 
-               asterisk-14.7.6 | 3 
-            f2fs-tools-v1.10.0 | 3 
-                  mender-1.4.0 | 2 
-                protobuf-3.5.1 | 2 
-                host-libsodium | 1 
-                libmpeg2-0.5.1 | 1 
-               mono-5.12.0.226 | 1 
-                pinentry-1.0.0 | 1 
-                qt5base-5.10.1 | 1 
-       shadowsocks-libev-3.2.0 | 1 
-triggerhappy-b8228880661293... | 1 
-                  zeromq-4.2.5 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                asterisk-14.7.6 | NOK | http://autobuild.buildroot.net/results/e45e351603746b9970c1e53c49173bad78c8eb0a |     
-    mips64el |                asterisk-14.7.6 | NOK | http://autobuild.buildroot.net/results/c6dfad6145455af4e67625e79158df7e4d793f6f |     
-         arm |                asterisk-14.7.6 | NOK | http://autobuild.buildroot.net/results/b9817445b159f9f6564aa4d8d97aadf95dad5bd7 |     
-         arm |             f2fs-tools-v1.10.0 | NOK | http://autobuild.buildroot.net/results/3577d413dc16bcec7a403fd8857ec5dd64470ba5 | ORPH
-         arm |             f2fs-tools-v1.10.0 | NOK | http://autobuild.buildroot.net/results/d987df1ea7f8043f05d5221342888892990e9252 | ORPH
-         arm |             f2fs-tools-v1.10.0 | NOK | http://autobuild.buildroot.net/results/819a8a528764a68c02b1b98431a1d09929c387f1 | ORPH
-       nios2 |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/b34c8ee75e3511b9a9a9e65f7b122af4dc637d68 |     
-         arc |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/cb65a6069e1d263e1958ce9f1391d4416160d3ea |     
-         arc |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/6a9248b7e24be253de60683d20dcf7fb5121c8c6 |     
-      xtensa |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/6a067c8aa34252230673b03fec2decbf9c061a9e |     
-      mipsel |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/bee609ec726d70abdb9fdb4a9904d746cff7896b |     
-      xtensa |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/c5f026b670b22beaf157ced71e1650edfc6d3b59 |     
-         arm |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/dd428541eafeae1a1d8ecfdc81e81503fb670502 |     
-     sparc64 |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/f3a9509bb4a9cfa20959415c35a14e96d63ce1f4 |     
-      x86_64 |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/4c86350f24a8f85161b19441b8068d01ddef90c8 |     
-         arc |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/545c665b2ec42a1fce3685e34c3c7d18027f2095 |     
-        m68k |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/e5705974183c6f199365bf93ca17d991b2437637 |     
-      mipsel |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/4b9976749aeb4a3535d37efa751ff08b672fd4ce |     
-    mips64el |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/b9fdb91468927a97ade61635532960467ef6c3be |     
-        m68k |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/4ce7a7d43044e1b692739623548d7f004d4bd819 |     
-         arm |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/b8b0f865b22c81f5b404e9ea9206f9d02db60a06 |     
-    mips64el |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/76e2a26d9cae40d90775c19a2fbbfb5189339a86 |     
-    mips64el |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/124c377e4d0a4284700ff27f00038fb197b7d5f1 |     
-         arc |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/b86ba41ddaf2a3ee7043b63dc83cc564bb7985f2 |     
-    mips64el |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/e84cc94cff446466c9cada69a048bc1bb64d832d |     
-      x86_64 |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/802e5464bef039a35bfac9ebcd292a304fcc4c1a |     
-         arc |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/2ff5c46dd179cec80da570be987e48f04c99adc5 |     
-         arm |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/9a1fbeb48f9328fc07670694c950f8f14a1d1fe4 |     
-     sparc64 |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/d32875136325823625f2dce2d9bdf0019b42ba0f |     
-    mips64el |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/27c9d7fefef357dd50341f2a0c09bef623b23f73 |     
-     powerpc |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/e8378eecad01f3ed6bb77a9570ea937c7f631e4a |     
-      mipsel |              freeswitch-1.6.20 | NOK | http://autobuild.buildroot.net/results/6013c8524c10f08adbb7b5bb340828dba3a1afa0 |     
- powerpc64le |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/5b14e00022b2ccaff2c0edd52aee6a273eacfcfe |     
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/31e2d75ab257144ea5c083312bf461b2f2586bb9 | ORPH
-         arm |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/2bfb5b7de142a3db7c31127d52d98bcfc80b8e27 |     
-        i586 |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/4bf831930a4ea03ca8bd8fdc21c6d73285080a9a |     
-         arm |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/1054fcb929a78cef1d3f6d6519d98a07d77b8983 |     
-         arm |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/3fae54d27c65bbe40362963821187d106c819a84 |     
-        i586 |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/6a2192066c5d872448dfa4dc2711aa2970a16b8f |     
-      x86_64 |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/a5439b6ae1d28c36d11c0ff3d6d6ff5e021b2a8f |     
-        i586 |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/8b4385731fb40e837cbc8dc692c73a6a6b0094cb |     
-         arm |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/0c4707d46f8abf7565492f951993ed1a55ba5e27 |     
-      x86_64 |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/2f8e64e184f9e591a8db8fbdb5a48fb4c0f88501 |     
-      x86_64 |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/e25aa2c5c3abd99a01a4da768aec4cf00004bf8c |     
-      x86_64 |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/d821dcf373ba8a385e436dee0b035942a4b51cb9 |     
-         arm |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/eafe68ab664a08789b335672d65b92598482f7d2 |     
-      x86_64 |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/645274cc973cb348ce5ae80a3e53b36b5f9d945a |     
-         arm |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/b9e24666bb2b67076acf031ec581a868c294b46c |     
-         arm |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/a645640f77a08f42495ad06fe7d1b6e5931c0c90 |     
-         arm |                 libtirpc-1.0.3 | NOK | http://autobuild.buildroot.net/results/670e85bcae72a35a287e3d5d68794ab08625a659 |     
-      xtensa |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/cea0fb4f0244e028fdc602a6fd16cdd3b61e035f | ORPH
-      x86_64 |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/144cfcfe329f3080ee4ac7d973f670d02bb06717 | ORPH
-       nios2 |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/7f9c94801f94eebb0fd5caa5f587fe258e0ca499 | ORPH
-         sh4 |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/a288db98c06b8f85306fcadc607bbcf8719996e8 | ORPH
-        i686 |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/9b7d65bea6deac99e94d1c5d5fb3da2450ef4dde | ORPH
-         sh4 |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/435427b5df4ad1bc702a2b97e4b442f46be3eecc | ORPH
-   powerpc64 |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/c44d815304a6f883ea412138909637e5eb3a7d4c | ORPH
-      mipsel |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/08bf2a612598544a7fb76ea065cd76327d88cbb2 | ORPH
-      xtensa |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/3b3757f66be76584948c1f85c6481ae68a5845f1 | ORPH
-    mips64el |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/cd2e055b7896255fb843c75f9c6b4dcf36b22fdb | ORPH
-     sparc64 |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/de80ff4337c825436a597a819cecb2ea4410c8e1 | ORPH
-         arm |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/ca2ed532248ae37b050919836ff59ee9859b32ea | ORPH
-         arc |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/d2ae4d748cfa73ca3fd690c2e3795e6a369a9bcc | ORPH
-         arm |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/284793da60d8151ddc1b06b115daed4dd12182bb | ORPH
-         arm |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/879b655fa9e819d114a6d540474da4546b10bbba | ORPH
-      mipsel |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/5f8e45014286d854f4639b447b40dcbade69dcc7 | ORPH
-     powerpc |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/4b19420c1040c873fc42dcea26dc8616b5889269 | ORPH
-    mips64el |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/8bb86f18e8cd1ffc2c4b11794d55beebdc31f36a | ORPH
-     sparc64 |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/1d7062c5fabd0158f138f7f5daf78b3df87f2873 | ORPH
-         sh4 |                 linphone-3.6.1 | NOK | http://autobuild.buildroot.net/results/cf83233b0c61fd526c0542e84a0d54d9579ae889 | ORPH
-         arc |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/78949fe1a212d1fcfe0bb58eda017320b846ff98 | ORPH
-     powerpc |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/d7d32e126c14ab85bac5e6ab142235d67fb4aff0 | ORPH
-      xtensa |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/23e4645c419fdf7633e99402d0f5fcf57b9cbb6f | ORPH
-     aarch64 |           mediastreamer-2.14.0 | NOK | http://autobuild.buildroot.net/results/c8e27ec9196756dcd962bd102b90ee5b3b9dbc5f | ORPH
- powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/c7a6470bc9e3e27afac1d92c6b6e8deb1a50df62 |     
- powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/5301095fcf69d147c28f0ad3377cb3f75140723e |     
-        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/d8dabc64595713ddceb7ed1eb1baeb0f2658107c |     
-       sparc |                 pinentry-1.0.0 | NOK | http://autobuild.buildroot.net/results/fd6bee70ff20bee9607a9f6f557a3a793d00cd9f |     
-     sparc64 |                 protobuf-3.5.1 | NOK | http://autobuild.buildroot.net/results/147020731353d0ac5cee2428c7bce509bca224a8 |     
-     sparc64 |                 protobuf-3.5.1 | NOK | http://autobuild.buildroot.net/results/14098ab7a2cd14036fd3f0edc5dd9c3f8fb34cf6 |     
-        or1k |                 qt5base-5.10.1 | NOK | http://autobuild.buildroot.net/results/9b3098665df67bb5b4ee258be8ee0817ac50f6c0 |     
-       sparc |        shadowsocks-libev-3.2.0 | NOK | http://autobuild.buildroot.net/results/3d27a03cca94faebfe410364fa5d6453565fae58 |     
-        m68k | triggerhappy-b8228880661293... | NOK | http://autobuild.buildroot.net/results/9e7d4018af730b14b5b5114fdd8a8bbb659086e1 |     
-         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/be5c702aeaffcb959fa8a52a645a0d5bc5bb26c2 |     
-         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/4e93bffd58d2d4f278559c27ec4e2a061c96e369 |     
-         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/0edb6c5769fc5e1cf354bed58115add0cfb15b44 |     
-         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/231146ef53fa418969e3b306afe60755915dc2ca |     
-         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/aa7e36fed8309041842ba452e3da9c57231d4424 |     
-       sparc |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/710ed475551b943a388cef964b40c583168e4dce |     
-
-
+diff --git a/board/bananapi/bananapi-m2u/boot.cmd b/board/bananapi/bananapi-m2u/boot.cmd
+new file mode 100644
+index 0000000000..9c24eabff6
+--- /dev/null
++++ b/board/bananapi/bananapi-m2u/boot.cmd
+@@ -0,0 +1,7 @@
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++
++mmc dev 0
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-r40-bananapi-m2-ultra.dtb
++
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/bananapi/bananapi-m2u/genimage.cfg b/board/bananapi/bananapi-m2u/genimage.cfg
+new file mode 100644
+index 0000000000..675253af23
+--- /dev/null
++++ b/board/bananapi/bananapi-m2u/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-r40-bananapi-m2-ultra.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/bananapi/bananapi-m2u/readme.txt b/board/bananapi/bananapi-m2u/readme.txt
+new file mode 100644
+index 0000000000..d48fb4b9ba
+--- /dev/null
++++ b/board/bananapi/bananapi-m2u/readme.txt
+@@ -0,0 +1,34 @@
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the Bananapi M2U. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++Bananapi M2U link:
++http://www.banana-pi.org/m2u.html
++
++This configuration uses U-Boot mainline and kernel mainline.
++
++How to build
++============
++
++    $ make bananapi_m2_ultra_defconfig
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SDcard in your Bananapi M2U and power it up. The console
++is on the serial line, 115200 8N1.
+diff --git a/configs/bananapi_m2_ultra_defconfig b/configs/bananapi_m2_ultra_defconfig
+new file mode 100644
+index 0000000000..a7925115cf
+--- /dev/null
++++ b/configs/bananapi_m2_ultra_defconfig
+@@ -0,0 +1,36 @@
++BR2_arm=y
++BR2_cortex_a7=y
++
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapi_M2_Ultra"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/bananapi/bananapi-m2u/boot.cmd"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.15"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-r40-bananapi-m2-ultra"
++
++# Filesystem
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Ultra"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/bananapi/bananapi-m2u/genimage.cfg"
 -- 
-http://autobuild.buildroot.net
+2.17.1
