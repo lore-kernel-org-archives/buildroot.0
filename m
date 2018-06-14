@@ -1,10 +1,11 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 14 Jun 2018 15:48:14 -0700
-Subject: [Buildroot] [RFC PATCH v4 3/9] at-spi2-atk: new package
+Date: Thu, 14 Jun 2018 15:48:16 -0700
+Subject: [Buildroot] [RFC PATCH v4 5/9] llvm: add config to build backend
+ for host arch
 In-Reply-To: <20180614224820.27126-1-joseph.kogut@gmail.com>
 References: <20180610205417.13963-1-joseph.kogut@gmail.com>
  <20180614224820.27126-1-joseph.kogut@gmail.com>
-Message-ID: <20180614224820.27126-4-joseph.kogut@gmail.com>
+Message-ID: <20180614224820.27126-6-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,83 +14,69 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/at-spi2-atk/Config.in        |  5 +++++
- package/at-spi2-atk/at-spi2-atk.hash |  4 ++++
- package/at-spi2-atk/at-spi2-atk.mk   | 17 +++++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/at-spi2-atk/Config.in
- create mode 100644 package/at-spi2-atk/at-spi2-atk.hash
- create mode 100644 package/at-spi2-atk/at-spi2-atk.mk
+ package/llvm/Config.in | 11 +++++++++++
+ package/llvm/llvm.mk   |  9 ++++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 31c651b938..568f47d242 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -955,6 +955,7 @@ F:	board/qemu/ppc64le-pseries/
- F:	configs/qemu_ppc64le_pseries_defconfig
+diff --git a/package/llvm/Config.in b/package/llvm/Config.in
+index 83e94660eb..dd07b23e07 100644
+--- a/package/llvm/Config.in
++++ b/package/llvm/Config.in
+@@ -11,6 +11,12 @@ config BR2_PACKAGE_LLVM_TARGET_ARCH
+ 	default "ARM" if BR2_arm || BR2_armeb
+ 	default "X86" if BR2_i386 || BR2_x86_64
  
- N:	Joseph Kogut <joseph.kogut@gmail.com>
-+F:	package/at-spi2-atk/
- F:	package/at-spi2-core/
- F:	package/gconf/
- F:	package/libnss/
-diff --git a/package/Config.in b/package/Config.in
-index 692b422911..c2e619b317 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1128,6 +1128,7 @@ endmenu
++config BR2_PACKAGE_LLVM_HOST_ARCH
++	string
++	default "AArch64" if BR2_HOSTARCH="aarch64"
++	default "X86" if BR2_HOSTARCH = "x86" || BR2_HOSTARCH = "x86_64"
++	default "ARM" if BR2_HOSTARCH = "arm"
++
+ config BR2_PACKAGE_LLVM
+ 	bool "llvm"
+ 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+@@ -27,6 +33,11 @@ config BR2_PACKAGE_LLVM
  
- menu "Graphics"
- 	source "package/assimp/Config.in"
-+	source "package/at-spi2-atk/Config.in"
- 	source "package/at-spi2-core/Config.in"
- 	source "package/atk/Config.in"
- 	source "package/atkmm/Config.in"
-diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
-new file mode 100644
-index 0000000000..b354c77ffe
---- /dev/null
-+++ b/package/at-spi2-atk/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_AT_SPI2_ATK
-+	bool "at-spi2-atk"
-+	select BR2_PACKAGE_AT_SPI2_CORE
+ 	  http://llvm.org
+ 
++config BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH
++	bool "Build backend for host architecture"
 +	help
-+	  The At-Spi2 Atk package contains a library that bridges ATK to At-Spi2 D-Bus service.
-diff --git a/package/at-spi2-atk/at-spi2-atk.hash b/package/at-spi2-atk/at-spi2-atk.hash
-new file mode 100644
-index 0000000000..6f7d68ab87
---- /dev/null
-+++ b/package/at-spi2-atk/at-spi2-atk.hash
-@@ -0,0 +1,4 @@
-+# locally calculated
-+sha256 61891f0abae1689f6617a963105a3f1dcdab5970c4a36ded9c79a7a544b16a6e  at-spi2-atk-2.26.2.tar.xz
-+sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
++	  Build code generator for host machine.
 +
-diff --git a/package/at-spi2-atk/at-spi2-atk.mk b/package/at-spi2-atk/at-spi2-atk.mk
-new file mode 100644
-index 0000000000..a3bccbb0d9
---- /dev/null
-+++ b/package/at-spi2-atk/at-spi2-atk.mk
-@@ -0,0 +1,17 @@
-+###############################################################################
-+#
-+# at-spi2-atk
-+#
-+###############################################################################
+ if BR2_PACKAGE_LLVM
+ 
+ config BR2_PACKAGE_LLVM_AMDGPU
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 3abf428989..50cc74d299 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -39,8 +39,9 @@ LLVM_CONF_OPTS += -DLLVM_BUILD_GLOBAL_ISEL=OFF
+ LLVM_TARGET_ARCH = $(call qstrip,$(BR2_PACKAGE_LLVM_TARGET_ARCH))
+ 
+ # Build backend for target architecture. This include backends like AMDGPU.
++HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+ LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+-HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
++HOST_LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(HOST_LLVM_TARGETS_TO_BUILD))"
+ LLVM_CONF_OPTS += -DLLVM_TARGETS_TO_BUILD="$(subst $(space),;,$(LLVM_TARGETS_TO_BUILD))"
+ 
+ # LLVM target to use for native code generation. This is required for JIT generation.
+@@ -56,9 +57,15 @@ LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH)
+ # output only $(LLVM_TARGET_ARCH) if not, and mesa3d won't build as
+ # it thinks AMDGPU backend is not installed on the target.
+ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
++HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
+ LLVM_TARGETS_TO_BUILD += AMDGPU
+ endif
+ 
++# Build backend for host architecture
++ifeq ($(BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH),y)
++HOST_LLVM_TARGETS_TO_BUILD += $(call qstrip,$(BR2_PACKAGE_LLVM_HOST_ARCH))
++endif
 +
-+AT_SPI2_ATK_VERSION_MAJOR = 2.26
-+AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
-+AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
-+AT_SPI2_ATK_SITE =  http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
-+ATK_LICENSE = LGPL-2.0+
-+ATK_LICENSE_FILES = COPYING
-+AT_SPI2_ATK_INSTALL_STAGING = YES
-+AT_SPI2_ATK_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
-+AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
-+
-+$(eval $(autotools-package))
+ # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
+ LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
+ 
 -- 
 2.17.1
