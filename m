@@ -1,46 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 14 Jun 2018 20:23:19 +0200
-Subject: [Buildroot] [PATCH 1/1] tor: link with libatomic when needed
-Message-ID: <20180614182319.19543-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 14 Jun 2018 21:38:48 +0300
+Subject: [Buildroot] [PATCH] autossh: fix manual set of ssh path
+Message-ID: <48dfa0b109e0ae3b807a77444106a0aa6d8768d6.1529001528.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Following errors might occur on architectures required to use gcc
-libatomics:
-sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding
-symbols: DSO missing from command line
+The configure script that is bundled with autossh does not generate the
+correct code for the AC_ARG_WITH() macro of --with-ssh. As a result, the
+configure scripts always check the host location, and fails with ssh is
+not found.
 
-This is often the case for sparcv8 32 bit toolchains.
-
-See d28591a2ee39704f6795c8aa1d0a3db7e909facc,
-55a9d6d55888b04ec6c476399e5b98a2412995f5 and
-03f6e005e6a9617767b24a9026da9477848020cc.
+Restore the autoreconf that has been removed in the last bump to fix the
+--with-ssh configure option.
 
 Fixes:
- - http://autobuild.buildroot.net/results/0f7107d0b703223f567c6749722bc82c81a04d54
+http://autobuild.buildroot.net/results/25d/25d681f9df22c07cdf5a6b8756bfc2d5ecf36247/
+http://autobuild.buildroot.net/results/f0a/f0ae62d0ed6bac011c507cfea7cd7157671baf39/
+http://autobuild.buildroot.net/results/b15/b1546bb3e861c14771bdd03cda9ce2e9176a2069/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/tor/tor.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/autossh/autossh.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index f7af718b9b..fb02741d3a 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -47,6 +47,10 @@ endif
- # uses gnu extensions
- TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
+index 1538a4c8bcfb..9b0df3a34b4a 100644
+--- a/package/autossh/autossh.mk
++++ b/package/autossh/autossh.mk
+@@ -9,6 +9,7 @@ AUTOSSH_SITE = http://www.harding.motd.ca/autossh
+ AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
+ AUTOSSH_LICENSE = Modified BSD
+ AUTOSSH_LICENSE_FILES = autossh.c
++AUTOSSH_AUTORECONF = YES
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+TOR_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
-+endif
-+
- define TOR_INSTALL_CONF
- 	$(INSTALL) -D -m 644 $(@D)/src/config/torrc.minimal \
- 		$(TARGET_DIR)/etc/tor/torrc
+ AUTOSSH_CONF_OPTS = --with-ssh=/usr/bin/ssh
+ 
 -- 
-2.14.1
+2.17.1
