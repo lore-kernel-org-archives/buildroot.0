@@ -1,10 +1,10 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 14 Jun 2018 15:48:13 -0700
-Subject: [Buildroot] [RFC PATCH v4 2/9] at-spi2-core: new package
+Date: Thu, 14 Jun 2018 15:48:14 -0700
+Subject: [Buildroot] [RFC PATCH v4 3/9] at-spi2-atk: new package
 In-Reply-To: <20180614224820.27126-1-joseph.kogut@gmail.com>
 References: <20180610205417.13963-1-joseph.kogut@gmail.com>
  <20180614224820.27126-1-joseph.kogut@gmail.com>
-Message-ID: <20180614224820.27126-3-joseph.kogut@gmail.com>
+Message-ID: <20180614224820.27126-4-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,116 +13,83 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/at-spi2-core/Config.in         |  9 +++++
- package/at-spi2-core/at-spi2-core.hash |  4 +++
- package/at-spi2-core/at-spi2-core.mk   | 46 ++++++++++++++++++++++++++
- 5 files changed, 61 insertions(+)
- create mode 100644 package/at-spi2-core/Config.in
- create mode 100644 package/at-spi2-core/at-spi2-core.hash
- create mode 100644 package/at-spi2-core/at-spi2-core.mk
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/at-spi2-atk/Config.in        |  5 +++++
+ package/at-spi2-atk/at-spi2-atk.hash |  4 ++++
+ package/at-spi2-atk/at-spi2-atk.mk   | 17 +++++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/at-spi2-atk/Config.in
+ create mode 100644 package/at-spi2-atk/at-spi2-atk.hash
+ create mode 100644 package/at-spi2-atk/at-spi2-atk.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 1a8440759e..31c651b938 100644
+index 31c651b938..568f47d242 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -955,6 +955,7 @@ F:	board/qemu/ppc64le-pseries/
  F:	configs/qemu_ppc64le_pseries_defconfig
  
  N:	Joseph Kogut <joseph.kogut@gmail.com>
-+F:	package/at-spi2-core/
++F:	package/at-spi2-atk/
+ F:	package/at-spi2-core/
  F:	package/gconf/
  F:	package/libnss/
- F:	package/python-cython/
 diff --git a/package/Config.in b/package/Config.in
-index 6a1606e568..692b422911 100644
+index 692b422911..c2e619b317 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -1128,6 +1128,7 @@ endmenu
  
  menu "Graphics"
  	source "package/assimp/Config.in"
-+	source "package/at-spi2-core/Config.in"
++	source "package/at-spi2-atk/Config.in"
+ 	source "package/at-spi2-core/Config.in"
  	source "package/atk/Config.in"
  	source "package/atkmm/Config.in"
- 	source "package/bullet/Config.in"
-diff --git a/package/at-spi2-core/Config.in b/package/at-spi2-core/Config.in
+diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
 new file mode 100644
-index 0000000000..9c60c51792
+index 0000000000..b354c77ffe
 --- /dev/null
-+++ b/package/at-spi2-core/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_AT_SPI2_CORE
-+	bool "at-spi2-core"
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_XLIB_LIBXTST
++++ b/package/at-spi2-atk/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_AT_SPI2_ATK
++	bool "at-spi2-atk"
++	select BR2_PACKAGE_AT_SPI2_CORE
 +	help
-+	  The At-Spi2 Core package is a part of the GNOME Accessibility Project.
-+	  It provides a Service Provider Interface for the Assistive Technologies
-+	  available on the GNOME platform and a library against which 
-+	  applications can be linked.
-diff --git a/package/at-spi2-core/at-spi2-core.hash b/package/at-spi2-core/at-spi2-core.hash
++	  The At-Spi2 Atk package contains a library that bridges ATK to At-Spi2 D-Bus service.
+diff --git a/package/at-spi2-atk/at-spi2-atk.hash b/package/at-spi2-atk/at-spi2-atk.hash
 new file mode 100644
-index 0000000000..e792cc0e0a
+index 0000000000..6f7d68ab87
 --- /dev/null
-+++ b/package/at-spi2-core/at-spi2-core.hash
++++ b/package/at-spi2-atk/at-spi2-atk.hash
 @@ -0,0 +1,4 @@
 +# locally calculated
-+sha256 42a2487ab11ce43c288e73b2668ef8b1ab40a0e2b4f94e80fca04ad27b6f1c87  at-spi2-core-2.28.0.tar.xz
++sha256 61891f0abae1689f6617a963105a3f1dcdab5970c4a36ded9c79a7a544b16a6e  at-spi2-atk-2.26.2.tar.xz
 +sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
 +
-diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+diff --git a/package/at-spi2-atk/at-spi2-atk.mk b/package/at-spi2-atk/at-spi2-atk.mk
 new file mode 100644
-index 0000000000..88800e2ce7
+index 0000000000..a3bccbb0d9
 --- /dev/null
-+++ b/package/at-spi2-core/at-spi2-core.mk
-@@ -0,0 +1,46 @@
-+################################################################################
++++ b/package/at-spi2-atk/at-spi2-atk.mk
+@@ -0,0 +1,17 @@
++###############################################################################
 +#
-+# at-spi2-core
++# at-spi2-atk
 +#
-+################################################################################
++###############################################################################
 +
-+AT_SPI2_CORE_VERSION_MAJOR = 2.28
-+AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
-+AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
-+AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
-+AT_SPI2_CORE_LICENSE = LGPL-2.0+
-+AT_SPI2_CORE_LICENSE_FILES = COPYING
-+AT_SPI2_CORE_INSTALL_STAGING = YES
-+AT_SPI2_CORE_DEPENDENCIES = host-meson host-pkgconf dbus libglib2 xlib_libXtst
++AT_SPI2_ATK_VERSION_MAJOR = 2.26
++AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
++AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
++AT_SPI2_ATK_SITE =  http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
++ATK_LICENSE = LGPL-2.0+
++ATK_LICENSE_FILES = COPYING
++AT_SPI2_ATK_INSTALL_STAGING = YES
++AT_SPI2_ATK_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LDFLAGS=-L$(STAGING_DIR)/usr/lib install
++AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
 +
-+AT_SPI2_CORE_MESON_OPTS += \
-+	--prefix=/usr \
-+	--libdir=/usr/lib \
-+	--sysconfdir=/etc \
-+	--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
-+	--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf
-+
-+AT_SPI2_CORE_NINJA_OPTS = $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
-+
-+define AT_SPI2_CORE_CONFIGURE_CMDS
-+	rm -rf $(@D)/build
-+	mkdir -p $(@D)/build
-+	$(TARGET_MAKE_ENV) meson $(AT_SPI2_CORE_MESON_OPTS) $(@D) $(@D)/build
-+endef
-+
-+define AT_SPI2_CORE_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) ninja $(AT_SPI2_CORE_NINJA_OPTS) -C $(@D)/build
-+endef
-+
-+define AT_SPI2_CORE_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(STAGING_DIR) \
-+		ninja $(AT_SPI2_CORE_NINJA_OPTS) -C $(@D)/build install
-+endef
-+
-+define AT_SPI2_CORE_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) DESTDIR=$(TARGET_DIR) \
-+		ninja $(AT_SPI2_CORE_NINJA_OPTS) -C $(@D)/build install
-+endef
-+
-+$(eval $(generic-package))
-+
++$(eval $(autotools-package))
 -- 
 2.17.1
