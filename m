@@ -1,50 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Jun 2018 13:16:06 +0200
-Subject: [Buildroot] [git commit] libgcrypt: security bump to version 1.8.3
-Message-ID: <20180615111559.814938866B@busybox.osuosl.org>
+Date: Fri, 15 Jun 2018 13:16:41 +0200
+Subject: [Buildroot] [git commit] libressl: security bump to version 2.7.4
+Message-ID: <20180615111559.84E66886BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6543b5fdfb17adc81af33cad8133bb86e31748f
+commit: https://git.buildroot.net/buildroot/commit/?id=b609ee33e1d2d37711722933bad279df3bed2786
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes CVE-2018-0495: ECDSA signing side-channel attack.
 
+Cc: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libgcrypt/libgcrypt.hash | 8 ++++----
- package/libgcrypt/libgcrypt.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
-index 736332d350..dce6522959 100644
---- a/package/libgcrypt/libgcrypt.hash
-+++ b/package/libgcrypt/libgcrypt.hash
-@@ -1,6 +1,6 @@
--# From https://www.gnupg.org/download/integrity_check.html
--sha1 ab8aae5d7a68f8e0988f90e11e7f6a4805af5c8d  libgcrypt-1.8.2.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000426.html
-+sha1 13bd2ce69e59ab538e959911dfae80ea309636e3  libgcrypt-1.8.3.tar.bz2
- # Locally calculated after checking signature
--# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.2.tar.bz2.sig
--sha256  c8064cae7558144b13ef0eb87093412380efa16c4ee30ad12ecb54886a524c07  libgcrypt-1.8.2.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.3.tar.bz2.sig
-+sha256  66ec90be036747602f2b48f98312361a9180c97c68a690a5f376fa0f67d0af7c  libgcrypt-1.8.3.tar.bz2
- sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 00e864e836..f25944da64 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 53b7e0af59..111fe4feed 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256 917a8779c342177ff3751a2bf955d0262d1d8916a4b408930c45cef326700995  libressl-2.7.2.tar.gz
++sha256 1e3a9fada06c1c060011470ad0ff960de28f9a0515277d7336f7e09362517da6  libressl-2.7.4.tar.gz
+ # Locally computed
+ sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 1a1dda1000..35494c8239 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBGCRYPT_VERSION = 1.8.2
-+LIBGCRYPT_VERSION = 1.8.3
- LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
- LIBGCRYPT_LICENSE = LGPL-2.1+
- LIBGCRYPT_LICENSE_FILES = COPYING.LIB
+-LIBRESSL_VERSION = 2.7.2
++LIBRESSL_VERSION = 2.7.4
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
