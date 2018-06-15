@@ -1,61 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Jun 2018 14:05:42 +0200
-Subject: [Buildroot] [git commit] redis: security bump to version 3.2.12
-Message-ID: <20180615120400.7F64C886D8@busybox.osuosl.org>
+Date: Fri, 15 Jun 2018 14:13:27 +0200
+Subject: [Buildroot] [PATCH] scanpypi: rework download_package error
+ handling
+In-Reply-To: <20180613073710.5715-1-yegorslists@googlemail.com>
+ (yegorslists@googlemail.com's message of "Wed, 13 Jun 2018 09:37:10
+ +0200")
+References: <20180613073710.5715-1-yegorslists@googlemail.com>
+Message-ID: <87muvw2qoo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3bf2745a0f310f2d0b173cc30645bb8ecadaa0a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
 
-From the release notes:
+ > From: Yegor Yefremov <yegorslists@googlemail.com>
+ > Some packages don't provide source archive but only a wheel file. In
+ > this case download variable is not defined. So define this variable at
+ > the very beginning and check whether it is None after searching for
+ > source archives in the metadata.
 
-================================================================================
-Redis 3.2.12     Released Wed Jun 13 12:43:01 CEST 2018
-================================================================================
+ > Bonus: fix PEP8 issue with wrong indentation.
 
-Upgrade urgency CRITICAL:
+ > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-* Multilple security issues fixed.
-* Backport of an older AOF fsync=always fix. Check 4.x release notes.
-* Backport of a *SCAN bug. Sometimes elements could be missing from the scan.
-* Other minor things.
+Committed, thanks.
 
-https://raw.githubusercontent.com/antirez/redis/3.2/00-RELEASENOTES
+Out of interest, are you using python 2.x or 3.x? I just tried scanpypi
+for the validators module on my Debian (so python 2.7) laptop:
 
-For more details about the lua related security issues, see the blog:
+./utils/scanpypi validators
+spdx_lookup module is not installed. This can lead to an inaccurate licence detection. Please install it via
+pip install spdx_lookup
+buildroot package name for validators: python-validators
+Package: python-validators
+Fetching package validators
+Downloading package validators from https://files.pythonhosted.org/packages/45/7b/5b7b74208a3e0744d1a0efbfb1935fa46fa4cfe58d3d63f17c49c58c429c/validators-0.12.2.tar.gz...
+Added packages 'six, decorator' as dependencies of python-validators
+Checking if package ./package/python-validators already exists...
+Error: Package ./package/python-validators already exists
+Do you want to delete existing package ? [y/N]y
+Creating ./package/python-validators/python-validators.mk...
+Creating ./package/python-validators/python-validators.hash...
+Creating ./package/python-validators/Config.in...
+Traceback (most recent call last):
+  File "./utils/scanpypi", line 720, in <module>
+    main()
+  File "./utils/scanpypi", line 712, in main
+    package.create_config_in()
+  File "./utils/scanpypi", line 606, in create_config_in
+    config_file.writelines(lines)
+TypeError: writelines() argument must be a sequence of strings
 
-http://antirez.com/news/119
+Printing out 'lines', it seems to be a mix of normal strings and unicode:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/redis/redis.hash | 2 +-
- package/redis/redis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+lines: ['config BR2_PACKAGE_PYTHON_VALIDATORS\n', '\tbool "python-validators"\n', '\tselect BR2_PACKAGE_PYTHON_SIX # runtime\n', '\tselect BR2_PACKAGE_PYTHON_DECORATOR # runtime\n', '\thelp\n', u'\t  Python Data Validation for Humans\u2122.\n', '\n', u'\t  https://github.com/kvesteri/validators\n']
 
-diff --git a/package/redis/redis.hash b/package/redis/redis.hash
-index ce2d66b8c2..d9a14cef6c 100644
---- a/package/redis/redis.hash
-+++ b/package/redis/redis.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/antirez/redis-hashes/blob/master/README
--sha256 31ae927cab09f90c9ca5954aab7aeecc3bb4da6087d3d12ba0a929ceb54081b5  redis-3.2.11.tar.gz
-+sha256 98c4254ae1be4e452aa7884245471501c9aa657993e0318d88f048093e7f88fd  redis-3.2.12.tar.gz
- # Locally calculated
- sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
-diff --git a/package/redis/redis.mk b/package/redis/redis.mk
-index 82969c9022..cbd2d7bdcb 100644
---- a/package/redis/redis.mk
-+++ b/package/redis/redis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--REDIS_VERSION = 3.2.11
-+REDIS_VERSION = 3.2.12
- REDIS_SITE = http://download.redis.io/releases
- REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
- REDIS_LICENSE_FILES = COPYING
+-- 
+Bye, Peter Korsgaard
