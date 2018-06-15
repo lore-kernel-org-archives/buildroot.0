@@ -1,39 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Jun 2018 21:33:36 +0200
-Subject: [Buildroot] [git commit] modem-manager: update package prompt name
-Message-ID: <20180615193133.77D7188705@busybox.osuosl.org>
+Date: Fri, 15 Jun 2018 21:35:10 +0200
+Subject: [Buildroot] [PATCH 1/2] modem-manager: fix build with musl
+In-Reply-To: <b3e5a3337202ba9221963ab01400497985202ef2.1529035334.git.baruch@tkos.co.il>
+References: <b3e5a3337202ba9221963ab01400497985202ef2.1529035334.git.baruch@tkos.co.il>
+Message-ID: <20180615213510.1b8605bf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de46ba290d2152261e29ef5339d8ea4adbbaf132
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Rename the prompt string for consistency with the package directory
-name.
+On Fri, 15 Jun 2018 07:02:13 +0300, Baruch Siach wrote:
+> modem-manager version 1.8.0 introduced use of canonicalize_file_name(),
+> which is a GNU extension that musl does not implement. Add a patch
+> switching to POSIX standard realpath().
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/9f6/9f6859f1854d94d3caba7b5c24d9ca6a14622042/
+> 
+> Cc: Aleksander Morgado <aleksander@aleksander.es>
+> Cc: Carlos Santos <casantos@datacom.com.br>
+> Cc: Petr Vorel <petr.vorel@gmail.com>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  ...erneldevice-fix-build-with-musl-libc.patch | 67 +++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+>  create mode 100644 package/modem-manager/0001-kerneldevice-fix-build-with-musl-libc.patch
 
-Cc: Aleksander Morgado <aleksander@aleksander.es>
-Cc: Carlos Santos <casantos@datacom.com.br>
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/modem-manager/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Both applied. Thanks!
 
-diff --git a/package/modem-manager/Config.in b/package/modem-manager/Config.in
-index 226f82f4f6..c4c723776d 100644
---- a/package/modem-manager/Config.in
-+++ b/package/modem-manager/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_MODEM_MANAGER
--	bool "modemmanager"
-+	bool "modem-manager"
- 	depends on BR2_USE_WCHAR # libglib2 and gnutls
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, libglib2
- 	depends on BR2_USE_MMU # dbus
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
