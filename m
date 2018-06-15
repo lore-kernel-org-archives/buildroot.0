@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 15 Jun 2018 21:35:10 +0200
-Subject: [Buildroot] [PATCH 1/2] modem-manager: fix build with musl
-In-Reply-To: <b3e5a3337202ba9221963ab01400497985202ef2.1529035334.git.baruch@tkos.co.il>
-References: <b3e5a3337202ba9221963ab01400497985202ef2.1529035334.git.baruch@tkos.co.il>
-Message-ID: <20180615213510.1b8605bf@windsurf>
+Date: Fri, 15 Jun 2018 21:35:18 +0200
+Subject: [Buildroot] [git commit] atk: bump to version 2.28.1
+Message-ID: <20180615193310.C27E288724@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=45d623f4fe8124253c2efccb7467cf32f96f333a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 15 Jun 2018 07:02:13 +0300, Baruch Siach wrote:
-> modem-manager version 1.8.0 introduced use of canonicalize_file_name(),
-> which is a GNU extension that musl does not implement. Add a patch
-> switching to POSIX standard realpath().
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/9f6/9f6859f1854d94d3caba7b5c24d9ca6a14622042/
-> 
-> Cc: Aleksander Morgado <aleksander@aleksander.es>
-> Cc: Carlos Santos <casantos@datacom.com.br>
-> Cc: Petr Vorel <petr.vorel@gmail.com>
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...erneldevice-fix-build-with-musl-libc.patch | 67 +++++++++++++++++++
->  1 file changed, 67 insertions(+)
->  create mode 100644 package/modem-manager/0001-kerneldevice-fix-build-with-musl-libc.patch
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/atk/atk.hash | 4 ++--
+ package/atk/atk.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Both applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/atk/atk.hash b/package/atk/atk.hash
+index 12c98706dd..80aeecaee9 100644
+--- a/package/atk/atk.hash
++++ b/package/atk/atk.hash
+@@ -1,2 +1,2 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/atk/2.22/atk-2.22.0.sha256sum
+-sha256 d349f5ca4974c9c76a4963e5b254720523b0c78672cbc0e1a3475dbd9b3d44b6 atk-2.22.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/atk/2.28/atk-2.28.1.sha256sum
++sha256 cd3a1ea6ecc268a2497f0cd018e970860de24a6d42086919d6bf6c8e8d53f4fc atk-2.28.1.tar.xz
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 88cf5fbc0a..64950bfd08 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-ATK_VERSION_MAJOR = 2.22
+-ATK_VERSION = $(ATK_VERSION_MAJOR).0
++ATK_VERSION_MAJOR = 2.28
++ATK_VERSION = $(ATK_VERSION_MAJOR).1
+ ATK_SOURCE = atk-$(ATK_VERSION).tar.xz
+ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
+ ATK_LICENSE = LGPL-2.0+
