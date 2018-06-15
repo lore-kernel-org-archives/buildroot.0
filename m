@@ -1,46 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Jun 2018 13:13:58 +0200
-Subject: [Buildroot] [git commit] autossh: fix manual set of ssh path
-Message-ID: <20180615111559.7B6D0886BD@busybox.osuosl.org>
+Date: Fri, 15 Jun 2018 13:16:06 +0200
+Subject: [Buildroot] [git commit] libgcrypt: security bump to version 1.8.3
+Message-ID: <20180615111559.814938866B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acf255e559c60eea03409ae457d673261910e9f7
+commit: https://git.buildroot.net/buildroot/commit/?id=b6543b5fdfb17adc81af33cad8133bb86e31748f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The configure script that is bundled with autossh does not generate the
-correct code for the AC_ARG_WITH() macro of --with-ssh. As a result, the
-configure scripts always check the host location, and fails with ssh is
-not found.
+Fixes CVE-2018-0495: ECDSA signing side-channel attack.
 
-Restore the autoreconf that has been removed in the last bump to fix the
---with-ssh configure option.
-
-Fixes:
-http://autobuild.buildroot.net/results/25d/25d681f9df22c07cdf5a6b8756bfc2d5ecf36247/
-http://autobuild.buildroot.net/results/f0a/f0ae62d0ed6bac011c507cfea7cd7157671baf39/
-http://autobuild.buildroot.net/results/b15/b1546bb3e861c14771bdd03cda9ce2e9176a2069/
-
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/autossh/autossh.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libgcrypt/libgcrypt.hash | 8 ++++----
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
-index 1538a4c8bc..5af8b735c2 100644
---- a/package/autossh/autossh.mk
-+++ b/package/autossh/autossh.mk
-@@ -9,6 +9,8 @@ AUTOSSH_SITE = http://www.harding.motd.ca/autossh
- AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
- AUTOSSH_LICENSE = Modified BSD
- AUTOSSH_LICENSE_FILES = autossh.c
-+# Fix AC_ARG_WITH code generation for --with-ssh
-+AUTOSSH_AUTORECONF = YES
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 736332d350..dce6522959 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,6 +1,6 @@
+-# From https://www.gnupg.org/download/integrity_check.html
+-sha1 ab8aae5d7a68f8e0988f90e11e7f6a4805af5c8d  libgcrypt-1.8.2.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000426.html
++sha1 13bd2ce69e59ab538e959911dfae80ea309636e3  libgcrypt-1.8.3.tar.bz2
+ # Locally calculated after checking signature
+-# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.2.tar.bz2.sig
+-sha256  c8064cae7558144b13ef0eb87093412380efa16c4ee30ad12ecb54886a524c07  libgcrypt-1.8.2.tar.bz2
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.3.tar.bz2.sig
++sha256  66ec90be036747602f2b48f98312361a9180c97c68a690a5f376fa0f67d0af7c  libgcrypt-1.8.3.tar.bz2
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 00e864e836..f25944da64 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- AUTOSSH_CONF_OPTS = --with-ssh=/usr/bin/ssh
- 
+-LIBGCRYPT_VERSION = 1.8.2
++LIBGCRYPT_VERSION = 1.8.3
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
