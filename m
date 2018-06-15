@@ -1,23 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Jun 2018 10:03:33 +0200
-Subject: [Buildroot] [PATCH] package/cryptodev-linux: add an hash for
- the license file
-In-Reply-To: <20180614114415.2657-1-antoine.tenart@bootlin.com> (Antoine
- Tenart's message of "Thu, 14 Jun 2018 13:44:15 +0200")
-References: <20180614114415.2657-1-antoine.tenart@bootlin.com>
-Message-ID: <87h8m44gtm.fsf@dell.be.48ers.dk>
+Date: Fri, 15 Jun 2018 10:04:48 +0200
+Subject: [Buildroot] [PATCH 1/1] docs/manual: fix scancpan path
+In-Reply-To: <20180614191836.10499-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 14 Jun 2018 21:18:36 +0200")
+References: <20180614191836.10499-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d0ws4grj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Antoine" == Antoine Tenart <antoine.tenart@bootlin.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Add a locally computed hash for the license file to track possible
- > updates.
-
- > Signed-off-by: Antoine Tenart <antoine.tenart@bootlin.com>
+ > scancpan is now in utils not in supports/scripts
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
