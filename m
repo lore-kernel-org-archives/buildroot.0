@@ -1,45 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Jun 2018 20:27:35 +0200
-Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
-In-Reply-To: <20180612210124.18e1f168@windsurf> (Thomas Petazzoni's message of
- "Tue, 12 Jun 2018 21:01:24 +0200")
-References: <20180609210607.13259-1-yann.morin.1998@free.fr>
- <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
- <1528737656.28705.131.camel@impinj.com>
- <9ca7c9e9-061c-1dfb-f348-b92407b2f7e0@mind.be>
- <1528825657.28705.168.camel@impinj.com>
- <CAOJ2eMd6vMsXRDSwNRBT1cK2S2i2kBhpqdMvkv9tqUoPTcYhrw@mail.gmail.com>
- <20180612210124.18e1f168@windsurf>
-Message-ID: <87a7rv3nxk.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 Jun 2018 21:13:30 +0200
+Subject: [Buildroot] Using a bootlin toolchain with buildroot
+In-Reply-To: <CAF_dkJAH5u3g_rQYaUVzCnUMyeMTMZrRbo0KDnOt6pVQtwvb-g@mail.gmail.com>
+References: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
+ <20180406210215.6c276c4f@windsurf.home>
+ <CAF_dkJBUm=iYA_WPm3eJ1KGN6aKJKVS+PoYdJnnWax-xivKJWw@mail.gmail.com>
+ <20180407084321.1e68cc90@windsurf.home>
+ <CAF_dkJDwfTvVHmSVgi4mo=2u=-Yj-__3e7rqsOyUXppLPeysEQ@mail.gmail.com>
+ <CAF_dkJAH5u3g_rQYaUVzCnUMyeMTMZrRbo0KDnOt6pVQtwvb-g@mail.gmail.com>
+Message-ID: <20180615211330.479e44c5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello Patrick,
 
-Hi,
+On Mon, 11 Jun 2018 15:12:16 -0400, Patrick Doyle wrote:
 
- > I think you're really rushing way too fast to a conclusion that we're
- > not listening. Yes, we are asking questions about the use cases, yes we
- > are trying to understand such use cases, and see how they fit in the
- > big picture.
+> Remember this thread from last April?
+> 
+> Suppose I wanted to generate and host my own prebuilt toolchain.
+> Suppose I really liked the existing
+> armv7-eabihf--musl--stable-2018.02-2 toolchain, but I really wanted to
+> use 4.9 kernel headers instead of 4.1.  How would I generate and
+> archive the toolchain for my own use?
 
- > I believe one of the reason we all like and use Buildroot is because of
- > its simplicity. And simplicity is a very difficult thing to preserve:
- > the tendency of all projects is to become more and more complicated, to
- > address more and more special use cases. So it is quite normal that we
- > question the use cases, try to understand them, and see which part of
- > those use cases should be solved by Buildroot itself, and which use
- > cases should be solved by external tooling. There is always going to be
- > a tension between people wanted to solve more use cases inside
- > Buildroot and therefore increasing its complexity, and the wish to keep
- > Buildroot simple.
+Here is the summary:
 
- > Let's try to keep the discussion open-minded, please :-)
+ 1/ Generate a Buildroot configuration that just defines the
+    architecture, architecture variant and toolchain options.
 
-Completely agreed. Thank you for describing it so clearly!
+    Also use the following for this configuration to disable any
+    user-space package:
 
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+
+    I also typically pass something like
+    BR2_HOST_DIR=/opt/armv7-eabihf--musl--stable-2018.02-2 in the
+    configuration.
+
+ 2/ Do the Buildroot build as usual
+
+ 3/ Run "make sdk"
+
+ 4/ Create a tarball of /opt/armv7-eabihf--musl--stable-2018.02-2 and
+    you're done :-)
+
+> And, as long as I have your attention, what is the difference between
+> the 2018.02-1 and 2018.02-2 toolchains anyway?  They seem to have the
+> same set of GCC, GDB, Linux headers, library, and binutils versions.
+
+The minor versions are typically just updates to the toolchain build
+process or additional patches on the gcc/binutils/gdb versions. I
+should have a better tracking of what I change between versions, but
+that's not something I'm doing yet :-/
+
+Hope this helps!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
