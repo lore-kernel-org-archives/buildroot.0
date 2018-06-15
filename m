@@ -1,44 +1,72 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 15 Jun 2018 11:22:08 +0300
-Subject: [Buildroot] [PATCH] libressl: security bump to version 2.7.4
-Message-ID: <668fc5774503fefabe4d7886f07e9721fb455149.1529050928.git.baruch@tkos.co.il>
+From: Sven Neumann <neumann@teufel.de>
+Date: Fri, 15 Jun 2018 10:48:38 +0200
+Subject: [Buildroot] [PATCH] gnutls: use included unistring unless
+ libunistring is selected
+Message-ID: <20180615084838.7642-1-neumann@teufel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-0495: ECDSA signing side-channel attack.
+Use the included copy of libunistring unless BR2_PACKAGE_LIBUNISTRING
+is already selected.
 
-Cc: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+The resulting gnutls library with libunistring included is about 1.2 MB
+smaller than the sum of libgnutls and libunistring.
+
+Signed-off-by: Sven Neumann <neumann@teufel.de>
 ---
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gnutls/Config.in |  1 -
+ package/gnutls/gnutls.mk | 10 ++++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 53b7e0af590a..111fe4feed53 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256 917a8779c342177ff3751a2bf955d0262d1d8916a4b408930c45cef326700995  libressl-2.7.2.tar.gz
-+sha256 1e3a9fada06c1c060011470ad0ff960de28f9a0515277d7336f7e09362517da6  libressl-2.7.4.tar.gz
- # Locally computed
- sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 1a1dda100028..35494c823967 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index cfb7cb3f3b..998e213c7d 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_GNUTLS
+ 	bool "gnutls"
+ 	select BR2_PACKAGE_LIBTASN1
+-	select BR2_PACKAGE_LIBUNISTRING
+ 	select BR2_PACKAGE_NETTLE
+ 	select BR2_PACKAGE_PCRE
+ 	depends on BR2_USE_WCHAR
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index be1cf00e06..7d8071c824 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -10,7 +10,7 @@ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = ftp://ftp.gnutls.org/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPLv2.1+ (core library), GPLv3+ (gnutls-openssl library)
+ GNUTLS_LICENSE_FILES = doc/COPYING doc/COPYING.LESSER
+-GNUTLS_DEPENDENCIES = host-pkgconf libunistring libtasn1 nettle pcre
++GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+ 	--disable-guile \
+@@ -19,7 +19,6 @@ GNUTLS_CONF_OPTS = \
+ 	--enable-local-libopts \
+ 	--enable-openssl-compatibility \
+ 	--with-libnettle-prefix=$(STAGING_DIR)/usr \
+-	--with-libunistring-prefix=$(STAGING_DIR)/usr \
+ 	--with-librt-prefix=$(STAGING_DIR) \
+ 	--without-tpm \
+ 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools)
+@@ -75,6 +74,13 @@ else
+ GNUTLS_CONF_OPTS += --without-p11-kit
+ endif
  
--LIBRESSL_VERSION = 2.7.2
-+LIBRESSL_VERSION = 2.7.4
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
++ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
++GNUTLS_CONF_OPTS += --with-libunistring-prefix=$(STAGING_DIR)/usr
++GNUTLS_DEPENDENCIES += libunistring
++else
++GNUTLS_CONF_OPTS += --with-included-unistring
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GNUTLS_CONF_OPTS += --with-zlib
+ GNUTLS_DEPENDENCIES += zlib
 -- 
-2.17.1
+2.14.4
