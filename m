@@ -1,41 +1,40 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Fri, 15 Jun 2018 13:05:00 -0400
-Subject: [Buildroot] Using a bootlin toolchain with buildroot
-In-Reply-To: <CAF_dkJAH5u3g_rQYaUVzCnUMyeMTMZrRbo0KDnOt6pVQtwvb-g@mail.gmail.com>
-References: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
- <20180406210215.6c276c4f@windsurf.home>
- <CAF_dkJBUm=iYA_WPm3eJ1KGN6aKJKVS+PoYdJnnWax-xivKJWw@mail.gmail.com>
- <20180407084321.1e68cc90@windsurf.home>
- <CAF_dkJDwfTvVHmSVgi4mo=2u=-Yj-__3e7rqsOyUXppLPeysEQ@mail.gmail.com>
- <CAF_dkJAH5u3g_rQYaUVzCnUMyeMTMZrRbo0KDnOt6pVQtwvb-g@mail.gmail.com>
-Message-ID: <CAF_dkJArLeXOB6OQZMAj3Ewnyz+w1h=-sHWLC6_N3eu1YN7Dbw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 15 Jun 2018 20:12:12 +0200
+Subject: [Buildroot] [PATCH] core/sdk: generate the SDK tarball ourselves
+In-Reply-To: <1528737656.28705.131.camel@impinj.com> (Trent Piepho's message
+ of "Mon, 11 Jun 2018 17:20:57 +0000")
+References: <20180609210607.13259-1-yann.morin.1998@free.fr>
+ <e4bbb78b-8301-e576-7e65-f83d55e0da7b@mind.be>
+ <1528737656.28705.131.camel@impinj.com>
+Message-ID: <87efh73on7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that the furor has died down for the moment from Yann's proposal
-to generate the SDK tarball automatically, can I respectfully submit a
-bump request?
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
-bump :-)
+Hi,
 
---wpd
+ > So having extracted an SDK, in an automated CI script, how does one use
+ > it?  I'll add it to the Docker container:
 
-On Mon, Jun 11, 2018 at 3:12 PM Patrick Doyle <wpdster@gmail.com> wrote:
->
-> Hi All,
-> Remember this thread from last April?
->
-> Suppose I wanted to generate and host my own prebuilt toolchain.
-> Suppose I really liked the existing
-> armv7-eabihf--musl--stable-2018.02-2 toolchain, but I really wanted to
-> use 4.9 kernel headers instead of 4.1.  How would I generate and
-> archive the toolchain for my own use?
->
-> And, as long as I have your attention, what is the difference between
-> the 2018.02-1 and 2018.02-2 toolchains anyway?  They seem to have the
-> same set of GCC, GDB, Linux headers, library, and binutils versions.
->
-> --wpd
+ > ARG sdk_file
+ > ENV SDK=/mnt/sdk
+ > ADD --chown=user:user ${sdk_file} ${SDK}
+
+ > Now it needs to be relocated.  Something like:
+
+ > RUN cd ${SDK}/buildroot-sdk.arm-buildroot-linux-gnueabihf-2018.02-00035-ge588bdd3e8 && ./relocate-sdk.sh
+
+ > Is the problem with using this tarball apparent?  The dockerfile needs
+ > to be hand edited on every single build to use the correct path to the
+ > SDK.
+
+Why not use a wildcard? E.G. cd ${SDK}/buildroot-sdk* && ./relocate-sdk.sh?
+
+Nothing else should match the wildcard inside the container.
+
+-- 
+Bye, Peter Korsgaard
