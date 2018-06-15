@@ -1,32 +1,38 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 15 Jun 2018 15:05:54 +0200
-Subject: [Buildroot] [PATCH] scanpypi: rework download_package error
- handling
-In-Reply-To: <CAGm1_ks11dzrm7_zwYwaJYTEgLqyZ48y6rtuZ1gNGzAjohdayw@mail.gmail.com>
- (Yegor Yefremov's message of "Fri, 15 Jun 2018 14:30:27 +0200")
-References: <20180613073710.5715-1-yegorslists@googlemail.com>
- <87muvw2qoo.fsf@dell.be.48ers.dk>
- <CAGm1_ks11dzrm7_zwYwaJYTEgLqyZ48y6rtuZ1gNGzAjohdayw@mail.gmail.com>
-Message-ID: <87in6k2o99.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 15 Jun 2018 16:28:31 +0200
+Subject: [Buildroot] [git commit] librtlsdr: fix typo in LIBRTLSDR_CONF_OPTS
+ variable name
+Message-ID: <20180615142716.2223488707@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c8c3a902193552ae9b478bbd76e04f21bbce30b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Commit 9ff035839eef68eb16e90ae70c3e70dc7f57ca5e ("librtlsdr: fix
+static build") introduced this obvious typo, which was spotted by
+check-package:
 
- >> Printing out 'lines', it seems to be a mix of normal strings and unicode:
- >> 
- >> lines: ['config BR2_PACKAGE_PYTHON_VALIDATORS\n', '\tbool "python-validators"\n', '\tselect BR2_PACKAGE_PYTHON_SIX # runtime\n', '\tselect BR2_PACKAGE_PYTHON_DECORATOR # runtime\n', '\thelp\n', u'\t  Python Data Validation for Humans\u2122.\n', '\n', u'\t  https://github.com/kvesteri/validators\n']
+package/librtlsdr/librtlsdr.mk:18: possible typo: LIBRTLSDRCONF_OPTS -> *LIBRTLSDR*
 
- > I'm still using Python 2 by default. In this case I think trademark
- > symbol is the problem.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/librtlsdr/librtlsdr.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes. Perhaps we should filter out these unicode characters? We probably
-don't really want a TM character in the help text anyway.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/librtlsdr/librtlsdr.mk b/package/librtlsdr/librtlsdr.mk
+index ba8a1af104..dd1feacc03 100644
+--- a/package/librtlsdr/librtlsdr.mk
++++ b/package/librtlsdr/librtlsdr.mk
+@@ -15,7 +15,7 @@ LIBRTLSDR_DEPENDENCIES = libusb
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBRTLSDR_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+ else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+-LIBRTLSDRCONF_OPTS += -DBUILD_STATIC_LIBS=ON
++LIBRTLSDR_CONF_OPTS += -DBUILD_STATIC_LIBS=ON
+ else ifeq ($(BR2_SHARED_LIBS),y)
+ LIBRTLSDR_CONF_OPTS += -DBUILD_STATIC_LIBS=OFF
+ endif
