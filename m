@@ -1,30 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jun 2018 14:29:56 +0200
-Subject: [Buildroot] [git commit] perl-digest-hmac: add license hash
-Message-ID: <20180616122909.94F2C8849C@busybox.osuosl.org>
+Date: Sat, 16 Jun 2018 14:29:45 +0200
+Subject: [Buildroot] [git commit] perl-http-message: bump to version 6.18
+Message-ID: <20180616122909.644238849C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3cc471a72e0c70786f19b5a7d5813c8e94cd62d9
+commit: https://git.buildroot.net/buildroot/commit/?id=b31677677bcdecff741fa93c1ab6b67395541550
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-digest-hmac/perl-digest-hmac.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/perl-http-message/perl-http-message.hash | 9 +++++----
+ package/perl-http-message/perl-http-message.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-digest-hmac/perl-digest-hmac.hash b/package/perl-digest-hmac/perl-digest-hmac.hash
-index 018e4eb0ab..84bc86488a 100644
---- a/package/perl-digest-hmac/perl-digest-hmac.hash
-+++ b/package/perl-digest-hmac/perl-digest-hmac.hash
-@@ -1,3 +1,6 @@
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index b58792b5af..78fda135cc 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
+@@ -1,5 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
- md5    e6a5d6f552da16eacb5157ea4369ff9d Digest-HMAC-1.03.tar.gz
- sha256 3bc72c6d3ff144d73aefb90e9a78d33612d58cf1cd1631ecfb8985ba96da4a59 Digest-HMAC-1.03.tar.gz
+-md5    eddd79e2d2975a55bb6ea2e7707e3137 HTTP-Message-6.16.tar.gz
+-sha256 46790ae127946d5cfea5a1e05c1b9f4a045a7c5094fe81f086bbf3341290ebd0 HTTP-Message-6.16.tar.gz
+-# Locally computed
+-sha256 66f0d1e8593d5512d7a8cd90549a976aaae97e4fa9b6097249b3682f14747a6b  LICENSE
++md5    9fd400da24e1784f85d32de1705fc795 HTTP-Message-6.18.tar.gz
++sha256 d060d170d388b694c58c14f4d13ed908a2807f0e581146cef45726641d809112 HTTP-Message-6.18.tar.gz
 +
 +# computed by scancpan
-+sha256 56bf7cdaec5eebf74d58679638ebef5015883e65c1be7251a3ef8cce8bdd1ff5 README
++sha256 66f0d1e8593d5512d7a8cd90549a976aaae97e4fa9b6097249b3682f14747a6b LICENSE
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index c35796e065..e4d642afde 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_HTTP_MESSAGE_VERSION = 6.16
++PERL_HTTP_MESSAGE_VERSION = 6.18
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+ PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_MESSAGE_DEPENDENCIES = perl-encode-locale perl-http-date perl-io-html perl-lwp-mediatypes perl-uri
