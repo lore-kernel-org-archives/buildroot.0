@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 16 Jun 2018 10:16:51 +0200
-Subject: [Buildroot] [PATCH 31/34] perl-www-robotrules: add license hash
+Date: Sat, 16 Jun 2018 10:16:52 +0200
+Subject: [Buildroot] [PATCH 32/34] perl-xml-libxml: add license hash
 In-Reply-To: <20180616081654.34649-1-francois.perrad@gadz.org>
 References: <20180616081654.34649-1-francois.perrad@gadz.org>
-Message-ID: <20180616081654.34649-31-francois.perrad@gadz.org>
+Message-ID: <20180616081654.34649-32-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-www-robotrules/perl-www-robotrules.hash | 3 +++
+ package/perl-xml-libxml/perl-xml-libxml.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/perl-www-robotrules/perl-www-robotrules.hash b/package/perl-www-robotrules/perl-www-robotrules.hash
-index 9091a2965..41f2d7a19 100644
---- a/package/perl-www-robotrules/perl-www-robotrules.hash
-+++ b/package/perl-www-robotrules/perl-www-robotrules.hash
+diff --git a/package/perl-xml-libxml/perl-xml-libxml.hash b/package/perl-xml-libxml/perl-xml-libxml.hash
+index bbe841a60..a3f4d5d64 100644
+--- a/package/perl-xml-libxml/perl-xml-libxml.hash
++++ b/package/perl-xml-libxml/perl-xml-libxml.hash
 @@ -1,3 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
- md5    b7186e8b8b3701e70c22abf430742403 WWW-RobotRules-6.02.tar.gz
- sha256 46b502e7a288d559429891eeb5d979461dd3ecc6a5c491ead85d165b6e03a51e WWW-RobotRules-6.02.tar.gz
+ md5    43546fd9a3974f19323f9fb04861ece9 XML-LibXML-2.0132.tar.gz
+ sha256 721452e3103ca188f5968ab06d5ba29fe8e00e49f4767790882095050312d476 XML-LibXML-2.0132.tar.gz
 +
 +# computed by scancpan
-+sha256 fa375c4f771b92fc076b6c66e19440a0fff51dacf489fecd94bf560091279e05 README
++sha256 5046a7ec515cc1542beafdf2eadeeff24cc221fc3fde9913dd144fd263ae6100 LICENSE
 -- 
 2.17.1
