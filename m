@@ -1,30 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jun 2018 14:30:24 +0200
-Subject: [Buildroot] [git commit] perl-mime-base64: add license hash
-Message-ID: <20180616122910.2A95581992@busybox.osuosl.org>
+Date: Sat, 16 Jun 2018 14:30:16 +0200
+Subject: [Buildroot] [git commit] perl-http-date: add license hash
+Message-ID: <20180616122910.0303D8849C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59a7c1c5274db364040a06339e721c2827156c20
+commit: https://git.buildroot.net/buildroot/commit/?id=324010193e55b11511725928942056ee1c353459
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-mime-base64/perl-mime-base64.hash | 3 +++
+ package/perl-http-date/perl-http-date.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/perl-mime-base64/perl-mime-base64.hash b/package/perl-mime-base64/perl-mime-base64.hash
-index 0cfe598c89..77bd7b0631 100644
---- a/package/perl-mime-base64/perl-mime-base64.hash
-+++ b/package/perl-mime-base64/perl-mime-base64.hash
+diff --git a/package/perl-http-date/perl-http-date.hash b/package/perl-http-date/perl-http-date.hash
+index db85cd061c..f74ca0cd83 100644
+--- a/package/perl-http-date/perl-http-date.hash
++++ b/package/perl-http-date/perl-http-date.hash
 @@ -1,3 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
- md5    ef958dc2bf96be5f759391c6ac1debd4 MIME-Base64-3.15.tar.gz
- sha256 7f863566a6a9cb93eda93beadb77d9aa04b9304d769cea3bb921b9a91b3a1eb9 MIME-Base64-3.15.tar.gz
+ md5    52b7a0d5982d61be1edb217751d7daba HTTP-Date-6.02.tar.gz
+ sha256 e8b9941da0f9f0c9c01068401a5e81341f0e3707d1c754f8e11f42a7e629e333 HTTP-Date-6.02.tar.gz
 +
 +# computed by scancpan
-+sha256 08e6898e3d62619e83880832ec42ae8a2984257e4c244843db9d3b9b7fcff236 README
++sha256 fad3a7732ff63e3521b94baea45d82a300edf8e0a5cf571ef2661c894e196632 README
