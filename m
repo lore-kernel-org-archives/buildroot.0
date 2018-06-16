@@ -1,9 +1,10 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 16 Jun 2018 10:16:54 +0200
-Subject: [Buildroot] [PATCH 34/34] perl-xml-sax-base: add license hash
+Date: Sat, 16 Jun 2018 10:16:53 +0200
+Subject: [Buildroot] [PATCH 33/34] perl-xml-namespacesupport: add license
+ hash
 In-Reply-To: <20180616081654.34649-1-francois.perrad@gadz.org>
 References: <20180616081654.34649-1-francois.perrad@gadz.org>
-Message-ID: <20180616081654.34649-34-francois.perrad@gadz.org>
+Message-ID: <20180616081654.34649-33-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-xml-sax-base/perl-xml-sax-base.hash | 3 +++
+ .../perl-xml-namespacesupport/perl-xml-namespacesupport.hash   | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/perl-xml-sax-base/perl-xml-sax-base.hash b/package/perl-xml-sax-base/perl-xml-sax-base.hash
-index a51e1d1b1..1542922b1 100644
---- a/package/perl-xml-sax-base/perl-xml-sax-base.hash
-+++ b/package/perl-xml-sax-base/perl-xml-sax-base.hash
+diff --git a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
+index d55551c11..e5a98ecf4 100644
+--- a/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
++++ b/package/perl-xml-namespacesupport/perl-xml-namespacesupport.hash
 @@ -1,3 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
- md5    ec347a14065dd7aec7d9fb181b2d7946 XML-SAX-Base-1.09.tar.gz
- sha256 66cb355ba4ef47c10ca738bd35999723644386ac853abbeb5132841f5e8a2ad0 XML-SAX-Base-1.09.tar.gz
+ md5    a8916c6d095bcf073e1108af02e78c97 XML-NamespaceSupport-1.12.tar.gz
+ sha256 47e995859f8dd0413aa3f22d350c4a62da652e854267aa0586ae544ae2bae5ef XML-NamespaceSupport-1.12.tar.gz
 +
 +# computed by scancpan
-+sha256 2a9aae56e13888493523ee9053689627e092aafcf2c5fb06f06df07260f91b42 README
++sha256 3fed787f0f9e1d74024ec7ae5f0f4736c693bcf263781da2054eb4bb1337e911 LICENSE
 -- 
 2.17.1
