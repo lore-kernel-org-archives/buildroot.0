@@ -1,46 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jun 2018 14:29:52 +0200
-Subject: [Buildroot] [git commit] perl-time-hires: bump to version 1.9758
-Message-ID: <20180616122909.846D28849C@busybox.osuosl.org>
+Date: Sat, 16 Jun 2018 14:29:50 +0200
+Subject: [Buildroot] [git commit] perl-net-ssleay: bump to version 1.85
+Message-ID: <20180616122909.7C20B8849C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c2003b22f6a5e030485f8c8c4ceac2f0aa7e940
+commit: https://git.buildroot.net/buildroot/commit/?id=de85509592d21043cb1b16ad97224406c2c57d6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-time-hires/perl-time-hires.hash | 7 +++++--
- package/perl-time-hires/perl-time-hires.mk   | 2 +-
+ package/perl-net-ssleay/perl-net-ssleay.hash | 7 +++++--
+ package/perl-net-ssleay/perl-net-ssleay.mk   | 2 +-
  2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-time-hires/perl-time-hires.hash b/package/perl-time-hires/perl-time-hires.hash
-index f3ab700ea3..4260766681 100644
---- a/package/perl-time-hires/perl-time-hires.hash
-+++ b/package/perl-time-hires/perl-time-hires.hash
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.hash b/package/perl-net-ssleay/perl-net-ssleay.hash
+index daa2c186b3..517b3c4da3 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.hash
++++ b/package/perl-net-ssleay/perl-net-ssleay.hash
 @@ -1,3 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    b98099e0cb7702210606776e9746e103 Time-HiRes-1.9753.tar.gz
--sha256 0fbfd5f99cdd26011d5c0bc3a8e369dacc4a9e1d1658f4663ac6018f2cec4915 Time-HiRes-1.9753.tar.gz
-+md5    8f998cb60966c86e24c500016e4d1ce8 Time-HiRes-1.9758.tar.gz
-+sha256 5bfa145bc11e70a8e337543b1084a293743a690691b568493455dedf58f34b1e Time-HiRes-1.9758.tar.gz
+-md5    cfbe968487149626978f427cc9fb8c77 Net-SSLeay-1.84.tar.gz
+-sha256 823ec3cbb428309d6a9e56f362a9300693ce3215b7fede109adb7be361fff177 Net-SSLeay-1.84.tar.gz
++md5    d602bdce4e0531c6efc276e3e429ca69 Net-SSLeay-1.85.tar.gz
++sha256 9d8188b9fb1cae3bd791979c20554925d5e94a138d00414f1a6814549927b0c8 Net-SSLeay-1.85.tar.gz
 +
 +# computed by scancpan
-+sha256 ecc20782bd6c34d2d632356020f9ad0150c7ae1803ae9560258d76d4533030da README
-diff --git a/package/perl-time-hires/perl-time-hires.mk b/package/perl-time-hires/perl-time-hires.mk
-index c8dde49f2f..271c1398a3 100644
---- a/package/perl-time-hires/perl-time-hires.mk
-+++ b/package/perl-time-hires/perl-time-hires.mk
++sha256 b55065185a2172d9f2ea2dd87c18c206ea3dc45a64e5f3deb3eee34d839dc822 LICENSE
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+index 3814038ccd..2b3b10716d 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.mk
++++ b/package/perl-net-ssleay/perl-net-ssleay.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_TIME_HIRES_VERSION = 1.9753
-+PERL_TIME_HIRES_VERSION = 1.9758
- PERL_TIME_HIRES_SOURCE = Time-HiRes-$(PERL_TIME_HIRES_VERSION).tar.gz
- PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JH/JHI
- PERL_TIME_HIRES_LICENSE = Artistic or GPL-1.0+
+-PERL_NET_SSLEAY_VERSION = 1.84
++PERL_NET_SSLEAY_VERSION = 1.85
+ PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
+ PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM
+ PERL_NET_SSLEAY_DEPENDENCIES = openssl
