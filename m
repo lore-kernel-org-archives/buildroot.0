@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 16 Jun 2018 10:16:24 +0200
-Subject: [Buildroot] [PATCH 04/34] perl-mojolicious: bump to version 7.84
+Date: Sat, 16 Jun 2018 10:16:25 +0200
+Subject: [Buildroot] [PATCH 05/34] perl-net-ssleay: bump to version 1.85
 In-Reply-To: <20180616081654.34649-1-francois.perrad@gadz.org>
 References: <20180616081654.34649-1-francois.perrad@gadz.org>
-Message-ID: <20180616081654.34649-4-francois.perrad@gadz.org>
+Message-ID: <20180616081654.34649-5-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,46 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mojolicious/Config.in             | 2 +-
- package/perl-mojolicious/perl-mojolicious.hash | 7 +++++--
- package/perl-mojolicious/perl-mojolicious.mk   | 2 +-
- 3 files changed, 7 insertions(+), 4 deletions(-)
+ package/perl-net-ssleay/perl-net-ssleay.hash | 7 +++++--
+ package/perl-net-ssleay/perl-net-ssleay.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mojolicious/Config.in b/package/perl-mojolicious/Config.in
-index ebf0932b9..28d45a35f 100644
---- a/package/perl-mojolicious/Config.in
-+++ b/package/perl-mojolicious/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_PERL_MOJOLICIOUS
- 	help
- 	  Real-time web framework
- 
--	  http://mojolicious.org
-+	  https://mojolicious.org
-diff --git a/package/perl-mojolicious/perl-mojolicious.hash b/package/perl-mojolicious/perl-mojolicious.hash
-index 0593a3cc6..528fb7a73 100644
---- a/package/perl-mojolicious/perl-mojolicious.hash
-+++ b/package/perl-mojolicious/perl-mojolicious.hash
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.hash b/package/perl-net-ssleay/perl-net-ssleay.hash
+index daa2c186b..517b3c4da 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.hash
++++ b/package/perl-net-ssleay/perl-net-ssleay.hash
 @@ -1,3 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    47d198ea987b4913818c24107cd9673d Mojolicious-7.61.tar.gz
--sha256 386ade41021bf0470879a0abceeccc305f773b41b76245cc3cdce92d7dc8897d Mojolicious-7.61.tar.gz
-+md5    2aca5046a2efc7ce596c4470893b555f Mojolicious-7.84.tar.gz
-+sha256 7461a27e8e8665b436a60c708cf6ce4164b84dfb1b2435480a65597085d26ebc Mojolicious-7.84.tar.gz
+-md5    cfbe968487149626978f427cc9fb8c77 Net-SSLeay-1.84.tar.gz
+-sha256 823ec3cbb428309d6a9e56f362a9300693ce3215b7fede109adb7be361fff177 Net-SSLeay-1.84.tar.gz
++md5    d602bdce4e0531c6efc276e3e429ca69 Net-SSLeay-1.85.tar.gz
++sha256 9d8188b9fb1cae3bd791979c20554925d5e94a138d00414f1a6814549927b0c8 Net-SSLeay-1.85.tar.gz
 +
 +# computed by scancpan
-+sha256 19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a LICENSE
-diff --git a/package/perl-mojolicious/perl-mojolicious.mk b/package/perl-mojolicious/perl-mojolicious.mk
-index 4e94c47a7..f20fabc9f 100644
---- a/package/perl-mojolicious/perl-mojolicious.mk
-+++ b/package/perl-mojolicious/perl-mojolicious.mk
++sha256 b55065185a2172d9f2ea2dd87c18c206ea3dc45a64e5f3deb3eee34d839dc822 LICENSE
+diff --git a/package/perl-net-ssleay/perl-net-ssleay.mk b/package/perl-net-ssleay/perl-net-ssleay.mk
+index 3814038cc..2b3b10716 100644
+--- a/package/perl-net-ssleay/perl-net-ssleay.mk
++++ b/package/perl-net-ssleay/perl-net-ssleay.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MOJOLICIOUS_VERSION = 7.61
-+PERL_MOJOLICIOUS_VERSION = 7.84
- PERL_MOJOLICIOUS_SOURCE = Mojolicious-$(PERL_MOJOLICIOUS_VERSION).tar.gz
- PERL_MOJOLICIOUS_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SR/SRI
- PERL_MOJOLICIOUS_LICENSE = Artistic-2.0
+-PERL_NET_SSLEAY_VERSION = 1.84
++PERL_NET_SSLEAY_VERSION = 1.85
+ PERL_NET_SSLEAY_SOURCE = Net-SSLeay-$(PERL_NET_SSLEAY_VERSION).tar.gz
+ PERL_NET_SSLEAY_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MI/MIKEM
+ PERL_NET_SSLEAY_DEPENDENCIES = openssl
 -- 
 2.17.1
