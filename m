@@ -1,30 +1,42 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 16 Jun 2018 10:20:29 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.17.2
-Message-ID: <20180616082030.12349-1-bernd.kuhls@t-online.de>
+Date: Sat, 16 Jun 2018 10:40:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.3.3.7
+Message-ID: <20180616084017.474-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Release notes: https://blog.torproject.org/tor-0337-released
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tor/tor.hash | 2 +-
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 603aec6b9e..75a175391b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index ca015a8dc0..554d5906b6 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 99bc59f6dbf395894de12f3a83b3251a82dfd93dc7f6d3afcbbd80f6111433b7  tor-0.3.3.6.tar.gz
++sha256 ea6bb512c4adfbc4e05b22e4c2d06bddff5b358a53de982273fec846b75bde0c  tor-0.3.3.7.tar.gz
+ sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index f7af718b9b..39006e7caf 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.17.1" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.17.2" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-TOR_VERSION = 0.3.3.6
++TOR_VERSION = 0.3.3.7
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 -- 
 2.17.1
