@@ -1,36 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jun 2018 14:28:22 +0200
-Subject: [Buildroot] [git commit] package/mediastreamer: add optional
- dependency to speexdsp
-Message-ID: <20180616122621.5A7CA886E8@busybox.osuosl.org>
+Date: Sat, 16 Jun 2018 14:27:52 +0200
+Subject: [Buildroot] [git commit] package/speex: add optional dependency to
+ speexdsp
+Message-ID: <20180616122621.36B518856E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9b1ec76aa457affc35d372b3d8604a93670d28b
+commit: https://git.buildroot.net/buildroot/commit/?id=1ad40107beb67a0b6a8381e7e1782f68d8adbd3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/594/594ea96cd7b6726052268a3c0b094e00e7b8f12f/
+Quoting speex release notes from https://www.speex.org
+
+"Speex 1.2rc2 and SpeexDSP 1.2rc2 are out
+ December 6, 2014
+ This release splits the speex codec library and the speex DSP library
+ into separate source trees."
+
+After bumping speex to 1.2.0 DSP support is provided by speexdsp.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mediastreamer/mediastreamer.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/speex/speex.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
-index 1276cfae10..d3b70f4ca9 100644
---- a/package/mediastreamer/mediastreamer.mk
-+++ b/package/mediastreamer/mediastreamer.mk
-@@ -46,7 +46,7 @@ MEDIASTREAMER_CONF_OPTS += --disable-opus
- endif
+diff --git a/package/speex/speex.mk b/package/speex/speex.mk
+index c6b46e0eb3..522f8cc09c 100644
+--- a/package/speex/speex.mk
++++ b/package/speex/speex.mk
+@@ -13,6 +13,10 @@ SPEEX_DEPENDENCIES = host-pkgconf libogg
+ SPEEX_CONF_OPTS = \
+ 	--enable-fixed-point
  
- # portaudio backend needs speex as well
--ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX),yy)
-+ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yyy)
- MEDIASTREAMER_CONF_OPTS += --enable-portaudio
- MEDIASTREAMER_DEPENDENCIES += portaudio speex
- else
++ifeq ($(BR2_PACKAGE_SPEEXDSP),y)
++SPEEX_DEPENDENCIES += speexdsp
++endif
++
+ ifeq ($(BR2_PACKAGE_SPEEX_ARM4),y)
+ SPEEX_CONF_OPTS += --enable-arm4-asm
+ endif
