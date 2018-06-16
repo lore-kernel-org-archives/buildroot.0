@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 16 Jun 2018 10:16:35 +0200
-Subject: [Buildroot] [PATCH 15/34] perl-gdtextutil: add license hash
+Date: Sat, 16 Jun 2018 10:16:33 +0200
+Subject: [Buildroot] [PATCH 13/34] perl-file-util: add license hash
 In-Reply-To: <20180616081654.34649-1-francois.perrad@gadz.org>
 References: <20180616081654.34649-1-francois.perrad@gadz.org>
-Message-ID: <20180616081654.34649-15-francois.perrad@gadz.org>
+Message-ID: <20180616081654.34649-13-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-gdtextutil/perl-gdtextutil.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/perl-file-util/perl-file-util.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/perl-gdtextutil/perl-gdtextutil.hash b/package/perl-gdtextutil/perl-gdtextutil.hash
-index 7996ed9d3..f0e947f63 100644
---- a/package/perl-gdtextutil/perl-gdtextutil.hash
-+++ b/package/perl-gdtextutil/perl-gdtextutil.hash
-@@ -1,3 +1,6 @@
+diff --git a/package/perl-file-util/perl-file-util.hash b/package/perl-file-util/perl-file-util.hash
+index dc3e59e32..0915494f7 100644
+--- a/package/perl-file-util/perl-file-util.hash
++++ b/package/perl-file-util/perl-file-util.hash
+@@ -1,3 +1,7 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
- md5    941ad06eadc86b47f3a32da405665c41 GDTextUtil-0.86.tar.gz
- sha256 886ecbf85cfe94f4135ee5689c4847a9ae783ecb99e6759e12c734f2dd6116bc GDTextUtil-0.86.tar.gz
+ md5    5706487ecf0daae885f709914915e832 File-Util-4.161950.tar.gz
+ sha256 88507b19da580d595b5c25fe6ba75bbd6096b4359e389ead067a216f766c20ee File-Util-4.161950.tar.gz
 +
 +# computed by scancpan
-+sha256 710484e3a1196664bbe8a5ad5d53c528e01226eb20e2885a4e1131eb6c6565cd Dustismo.LICENSE
++sha256 5f3732812570654ba911e45ec4e5f7353f4b63747ebfc506c543e8fb1ccf797f COPYING
++sha256 48428fd07c402ea82d3556753ca936c7030f0d7a6a93c3ef09423c36820ffb91 LICENSE
 -- 
 2.17.1
