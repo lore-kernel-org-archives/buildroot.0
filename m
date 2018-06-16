@@ -1,7 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 16 Jun 2018 10:16:21 +0200
-Subject: [Buildroot] [PATCH 01/34] perl-datetime-tiny: bump to version 1.07
-Message-ID: <20180616081654.34649-1-francois.perrad@gadz.org>
+Date: Sat, 16 Jun 2018 10:16:22 +0200
+Subject: [Buildroot] [PATCH 02/34] perl-http-message: bump to version 6.18
+In-Reply-To: <20180616081654.34649-1-francois.perrad@gadz.org>
+References: <20180616081654.34649-1-francois.perrad@gadz.org>
+Message-ID: <20180616081654.34649-2-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,35 +12,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-datetime-tiny/perl-datetime-tiny.hash | 7 +++++--
- package/perl-datetime-tiny/perl-datetime-tiny.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/perl-http-message/perl-http-message.hash | 9 +++++----
+ package/perl-http-message/perl-http-message.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-datetime-tiny/perl-datetime-tiny.hash b/package/perl-datetime-tiny/perl-datetime-tiny.hash
-index 68f2c025e..62fe407d2 100644
---- a/package/perl-datetime-tiny/perl-datetime-tiny.hash
-+++ b/package/perl-datetime-tiny/perl-datetime-tiny.hash
-@@ -1,3 +1,6 @@
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index b58792b5a..78fda135c 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
+@@ -1,5 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    736be4b3e8171f4a029fb6ac3712a9b4 DateTime-Tiny-1.06.tar.gz
--sha256 bd725df481d7223ee787e154c116098b08a129f55e0763194b07ebea3dda33ec DateTime-Tiny-1.06.tar.gz
-+md5    5ac2924652edb0cf5fda7c9d52162b3f DateTime-Tiny-1.07.tar.gz
-+sha256 83568a22838cb518fbeb9e060460ec7f59d5a0b0a1cc06562954c3674d7cf7e4 DateTime-Tiny-1.07.tar.gz
+-md5    eddd79e2d2975a55bb6ea2e7707e3137 HTTP-Message-6.16.tar.gz
+-sha256 46790ae127946d5cfea5a1e05c1b9f4a045a7c5094fe81f086bbf3341290ebd0 HTTP-Message-6.16.tar.gz
+-# Locally computed
+-sha256 66f0d1e8593d5512d7a8cd90549a976aaae97e4fa9b6097249b3682f14747a6b  LICENSE
++md5    9fd400da24e1784f85d32de1705fc795 HTTP-Message-6.18.tar.gz
++sha256 d060d170d388b694c58c14f4d13ed908a2807f0e581146cef45726641d809112 HTTP-Message-6.18.tar.gz
 +
 +# computed by scancpan
-+sha256 21cda7a55a8d4b32a43c654f0d4d4a1587096b35bf2a93ea12a2e3a8c2c0b88f LICENSE
-diff --git a/package/perl-datetime-tiny/perl-datetime-tiny.mk b/package/perl-datetime-tiny/perl-datetime-tiny.mk
-index 6b5496719..e8ee3d60e 100644
---- a/package/perl-datetime-tiny/perl-datetime-tiny.mk
-+++ b/package/perl-datetime-tiny/perl-datetime-tiny.mk
++sha256 66f0d1e8593d5512d7a8cd90549a976aaae97e4fa9b6097249b3682f14747a6b LICENSE
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index 5025b7953..0d4c531ec 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DATETIME_TINY_VERSION = 1.06
-+PERL_DATETIME_TINY_VERSION = 1.07
- PERL_DATETIME_TINY_SOURCE = DateTime-Tiny-$(PERL_DATETIME_TINY_VERSION).tar.gz
- PERL_DATETIME_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DA/DAGOLDEN
- PERL_DATETIME_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_MESSAGE_VERSION = 6.16
++PERL_HTTP_MESSAGE_VERSION = 6.18
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+ PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_MESSAGE_DEPENDENCIES = perl-encode-locale perl-http-date perl-io-html perl-lwp-mediatypes perl-uri
 -- 
 2.17.1
