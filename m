@@ -1,39 +1,34 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sat, 16 Jun 2018 23:06:01 +0100
-Subject: [Buildroot] [PATCH v2 3/3] package/ca-certificates: create
- ca-certificates.crt reproducibly
-In-Reply-To: <20180616220601.4629-1-martin@barkynet.com>
-References: <20180616220601.4629-1-martin@barkynet.com>
-Message-ID: <20180616220601.4629-4-martin@barkynet.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Jun 2018 00:07:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mediastreamer: add another optional
+ dependency to speexdsp
+Message-ID: <20180616220700.22784-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sort the certificates into alphabetical order so the contents of
-ca-certificates.crt can be built reproducibly.
+Fixes
+http://autobuild.buildroot.net/results/b21/b2104c491f0898981c652043161c52ac6c43110f/
 
-Note: The certificates are sorted uppercase then lowercase filenames
-so the contents of ca-certificates.crt matches the source debian package.
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ca-certificates/ca-certificates.mk | 2 +-
+ package/mediastreamer/mediastreamer.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 1df9543e03..5c259aa3ab 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -31,7 +31,7 @@ define CA_CERTIFICATES_INSTALL_TARGET_CMDS
- 	# Create symlinks to certificates under /etc/ssl/certs
- 	# and generate the bundle
- 	cd $(TARGET_DIR) ;\
--	for i in `find usr/share/ca-certificates -name "*.crt"` ; do \
-+	for i in `find usr/share/ca-certificates -name "*.crt" | LC_COLLATE=C sort` ; do \
- 		ln -sf ../../../$$i etc/ssl/certs/`basename $${i} .crt`.pem ;\
- 		cat $$i ;\
- 	done >$(@D)/ca-certificates.crt
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index d3b70f4ca9..3c9756936a 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -60,7 +60,7 @@ else
+ MEDIASTREAMER_CONF_OPTS += --disable-pulseaudio
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SPEEX),y)
++ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
+ MEDIASTREAMER_CONF_OPTS += --enable-speex
+ MEDIASTREAMER_DEPENDENCIES += speex
+ else
 -- 
 2.17.1
