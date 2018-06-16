@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 16 Jun 2018 10:16:50 +0200
-Subject: [Buildroot] [PATCH 30/34] perl-try-tiny: add license hash
+Date: Sat, 16 Jun 2018 10:16:51 +0200
+Subject: [Buildroot] [PATCH 31/34] perl-www-robotrules: add license hash
 In-Reply-To: <20180616081654.34649-1-francois.perrad@gadz.org>
 References: <20180616081654.34649-1-francois.perrad@gadz.org>
-Message-ID: <20180616081654.34649-30-francois.perrad@gadz.org>
+Message-ID: <20180616081654.34649-31-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,19 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-try-tiny/perl-try-tiny.hash | 3 +++
+ package/perl-www-robotrules/perl-www-robotrules.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/perl-try-tiny/perl-try-tiny.hash b/package/perl-try-tiny/perl-try-tiny.hash
-index 85f604011..65731bc14 100644
---- a/package/perl-try-tiny/perl-try-tiny.hash
-+++ b/package/perl-try-tiny/perl-try-tiny.hash
+diff --git a/package/perl-www-robotrules/perl-www-robotrules.hash b/package/perl-www-robotrules/perl-www-robotrules.hash
+index 9091a2965..41f2d7a19 100644
+--- a/package/perl-www-robotrules/perl-www-robotrules.hash
++++ b/package/perl-www-robotrules/perl-www-robotrules.hash
 @@ -1,3 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
- md5    eb362c3cb32c42f9f28de9ddb7f2ead6 Try-Tiny-0.30.tar.gz
- sha256 da5bd0d5c903519bbf10bb9ba0cb7bcac0563882bcfe4503aee3fb143eddef6b Try-Tiny-0.30.tar.gz
+ md5    b7186e8b8b3701e70c22abf430742403 WWW-RobotRules-6.02.tar.gz
+ sha256 46b502e7a288d559429891eeb5d979461dd3ecc6a5c491ead85d165b6e03a51e WWW-RobotRules-6.02.tar.gz
 +
 +# computed by scancpan
-+sha256 6c7eb089021283de176a5c838217ae16453cf9f67899b27cdcd0827045f6f781 README
++sha256 fa375c4f771b92fc076b6c66e19440a0fff51dacf489fecd94bf560091279e05 README
 -- 
 2.17.1
