@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jun 2018 14:28:11 +0200
-Subject: [Buildroot] [git commit] package/linphone: needs speexdsp
-Message-ID: <20180616122621.598618808A@busybox.osuosl.org>
+Date: Sat, 16 Jun 2018 14:28:06 +0200
+Subject: [Buildroot] [git commit] package/asterisk: add optional dependency
+ to speexdsp
+Message-ID: <20180616122621.482248856E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af4e09769d2f74ca4a6bbcb688374c717fb11913
+commit: https://git.buildroot.net/buildroot/commit/?id=bb9a2c178f8d634ed26ad7d399df4ca7dfc6d25a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes
-http://autobuild.buildroot.net/results/956/956b8cffa0a35a417763ad72bb7c8e8a8b2fe6b0/
+http://autobuild.buildroot.net/results/9f6/9f61192382ea4b57b0f0548626968752363bb13f/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linphone/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/asterisk/asterisk.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linphone/Config.in b/package/linphone/Config.in
-index 2504ca2b49..06eb059cfd 100644
---- a/package/linphone/Config.in
-+++ b/package/linphone/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LINPHONE
- 	depends on BR2_USE_MMU # libeXosip2
- 	select BR2_PACKAGE_LIBEXOSIP2
- 	select BR2_PACKAGE_SPEEX
-+	select BR2_PACKAGE_SPEEXDSP
- 	help
- 	  Linphone is an internet phone or Voice Over IP phone (VoIP).
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index f2f210b524..430b122655 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -229,7 +229,7 @@ else
+ ASTERISK_CONF_OPTS += --without-ssl
+ endif
  
+-ifeq ($(BR2_PACKAGE_SPEEX),y)
++ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
+ ASTERISK_DEPENDENCIES += speex
+ ASTERISK_CONF_OPTS += --with-speex --with-speexdsp
+ else
