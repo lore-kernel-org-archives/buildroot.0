@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jun 2018 14:29:05 +0200
-Subject: [Buildroot] [PATCH v3 1/6] package/speexdsp: new package
-In-Reply-To: <20180613162826.3490-1-bernd.kuhls@t-online.de>
-References: <20180613162826.3490-1-bernd.kuhls@t-online.de>
-Message-ID: <20180616142905.0a63457e@windsurf>
+Date: Sat, 16 Jun 2018 14:29:47 +0200
+Subject: [Buildroot] [git commit] perl-io-socket: bump to version 2.056
+Message-ID: <20180616122909.6C4878849C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b18cfc3feb40a9d87e643b279d07c73d095f4a3f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 13 Jun 2018 18:28:21 +0200, Bernd Kuhls wrote:
-> Quoting speex release notes from https://www.speex.org
-> 
-> "Speex 1.2rc2 and SpeexDSP 1.2rc2 are out
->  December 6, 2014
->  This release splits the speex codec library and the speex DSP library
->  into separate source trees."
-> 
-> After bumping speex to 1.2.0 this new package is necessary to provide
-> speex-based DSP support for packages like Freeswitch and Asterisk.
-> 
-> We use current git HEAD which received 21 commits since the 1.2rc3
-> tarball was released in 2015, including a fix for building on arm.
-> 
-> We still need another patch which was not committed to git master to
-> fix building on aarch64.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v3: updated package description and patch description (Peter)
-> v2: no changes
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-io-socket-ssl/perl-io-socket-ssl.hash | 7 +++++--
+ package/perl-io-socket-ssl/perl-io-socket-ssl.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-Series applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+index 3bf0421ee2..5b9cb9934b 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.hash
+@@ -1,3 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    26c9bcdfb4ba8763ef89264f21326a48 IO-Socket-SSL-2.052.tar.gz
+-sha256 e4897a9b17cb18a3c44aa683980d52cef534cdfcb8063d6877c879bfa2f26673 IO-Socket-SSL-2.052.tar.gz
++md5    7f575fd3844263a3401dc6e1fe3ad44c IO-Socket-SSL-2.056.tar.gz
++sha256 91451ecc28b243a78b438f0a42db24c4b60a86f088879b38e40bdbd697818259 IO-Socket-SSL-2.056.tar.gz
++
++# computed by scancpan
++sha256 090aff5421fd55a9dceeaf6c612c36360402e8d29c1284aef88c87be565ce032 README
+diff --git a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+index 62fc2298c8..95bb852f56 100644
+--- a/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
++++ b/package/perl-io-socket-ssl/perl-io-socket-ssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_IO_SOCKET_SSL_VERSION = 2.052
++PERL_IO_SOCKET_SSL_VERSION = 2.056
+ PERL_IO_SOCKET_SSL_SOURCE = IO-Socket-SSL-$(PERL_IO_SOCKET_SSL_VERSION).tar.gz
+ PERL_IO_SOCKET_SSL_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SU/SULLR
+ PERL_IO_SOCKET_SSL_DEPENDENCIES = perl-net-ssleay
