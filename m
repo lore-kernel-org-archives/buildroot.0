@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 16 Jun 2018 14:27:57 +0200
-Subject: [Buildroot] [git commit] package/freeswitch: needs speexdsp
-Message-ID: <20180616122621.3F54E8856E@busybox.osuosl.org>
+Date: Sat, 16 Jun 2018 14:28:22 +0200
+Subject: [Buildroot] [git commit] package/mediastreamer: add optional
+ dependency to speexdsp
+Message-ID: <20180616122621.5A7CA886E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba8805fe8e5307025fc8120a29b3bd4f23f3590d
+commit: https://git.buildroot.net/buildroot/commit/?id=e9b1ec76aa457affc35d372b3d8604a93670d28b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes
-http://autobuild.buildroot.net/results/a3f/a3f9845681025fad93a4f867bb667822e87a08ea/
+http://autobuild.buildroot.net/results/594/594ea96cd7b6726052268a3c0b094e00e7b8f12f/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freeswitch/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/mediastreamer/mediastreamer.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/freeswitch/Config.in b/package/freeswitch/Config.in
-index 1f6459335d..ff2898dc3c 100644
---- a/package/freeswitch/Config.in
-+++ b/package/freeswitch/Config.in
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_FREESWITCH
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PCRE
- 	select BR2_PACKAGE_SPEEX
-+	select BR2_PACKAGE_SPEEXDSP
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+diff --git a/package/mediastreamer/mediastreamer.mk b/package/mediastreamer/mediastreamer.mk
+index 1276cfae10..d3b70f4ca9 100644
+--- a/package/mediastreamer/mediastreamer.mk
++++ b/package/mediastreamer/mediastreamer.mk
+@@ -46,7 +46,7 @@ MEDIASTREAMER_CONF_OPTS += --disable-opus
+ endif
+ 
+ # portaudio backend needs speex as well
+-ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX),yy)
++ifeq ($(BR2_PACKAGE_PORTAUDIO)$(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yyy)
+ MEDIASTREAMER_CONF_OPTS += --enable-portaudio
+ MEDIASTREAMER_DEPENDENCIES += portaudio speex
+ else
