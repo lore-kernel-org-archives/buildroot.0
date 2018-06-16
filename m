@@ -1,9 +1,9 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 16 Jun 2018 10:16:26 +0200
-Subject: [Buildroot] [PATCH 06/34] perl-time-hires: bump to version 1.9758
+Date: Sat, 16 Jun 2018 10:16:27 +0200
+Subject: [Buildroot] [PATCH 07/34] perl-xml-sax: bump to version 1.00
 In-Reply-To: <20180616081654.34649-1-francois.perrad@gadz.org>
 References: <20180616081654.34649-1-francois.perrad@gadz.org>
-Message-ID: <20180616081654.34649-6-francois.perrad@gadz.org>
+Message-ID: <20180616081654.34649-7-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +12,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-time-hires/perl-time-hires.hash | 7 +++++--
- package/perl-time-hires/perl-time-hires.mk   | 2 +-
+ package/perl-xml-sax/perl-xml-sax.hash | 7 +++++--
+ package/perl-xml-sax/perl-xml-sax.mk   | 2 +-
  2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-time-hires/perl-time-hires.hash b/package/perl-time-hires/perl-time-hires.hash
-index f3ab700ea..426076668 100644
---- a/package/perl-time-hires/perl-time-hires.hash
-+++ b/package/perl-time-hires/perl-time-hires.hash
+diff --git a/package/perl-xml-sax/perl-xml-sax.hash b/package/perl-xml-sax/perl-xml-sax.hash
+index 6aa543c00..888e9d2b5 100644
+--- a/package/perl-xml-sax/perl-xml-sax.hash
++++ b/package/perl-xml-sax/perl-xml-sax.hash
 @@ -1,3 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    b98099e0cb7702210606776e9746e103 Time-HiRes-1.9753.tar.gz
--sha256 0fbfd5f99cdd26011d5c0bc3a8e369dacc4a9e1d1658f4663ac6018f2cec4915 Time-HiRes-1.9753.tar.gz
-+md5    8f998cb60966c86e24c500016e4d1ce8 Time-HiRes-1.9758.tar.gz
-+sha256 5bfa145bc11e70a8e337543b1084a293743a690691b568493455dedf58f34b1e Time-HiRes-1.9758.tar.gz
+-md5    290f5375ae87fdebfdb5bc3854019f24 XML-SAX-0.99.tar.gz
+-sha256 32b04b8e36b6cc4cfc486de2d859d87af5386dd930f2383c49347050d6f5ad84 XML-SAX-0.99.tar.gz
++md5    861a454f7bf269990ed2c1c125f4db48 XML-SAX-1.00.tar.gz
++sha256 45ea6564ef8692155d57b2de0862b6442d3c7e29f4a9bc9ede5d7ecdc74c2ae3 XML-SAX-1.00.tar.gz
 +
 +# computed by scancpan
-+sha256 ecc20782bd6c34d2d632356020f9ad0150c7ae1803ae9560258d76d4533030da README
-diff --git a/package/perl-time-hires/perl-time-hires.mk b/package/perl-time-hires/perl-time-hires.mk
-index c8dde49f2..271c1398a 100644
---- a/package/perl-time-hires/perl-time-hires.mk
-+++ b/package/perl-time-hires/perl-time-hires.mk
++sha256 bf2fb225e77b46b8892ef2a8aa5efa92d65b176a870f42559d8b73b308a36509 LICENSE
+diff --git a/package/perl-xml-sax/perl-xml-sax.mk b/package/perl-xml-sax/perl-xml-sax.mk
+index 90b2cd694..024ac6211 100644
+--- a/package/perl-xml-sax/perl-xml-sax.mk
++++ b/package/perl-xml-sax/perl-xml-sax.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_TIME_HIRES_VERSION = 1.9753
-+PERL_TIME_HIRES_VERSION = 1.9758
- PERL_TIME_HIRES_SOURCE = Time-HiRes-$(PERL_TIME_HIRES_VERSION).tar.gz
- PERL_TIME_HIRES_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JH/JHI
- PERL_TIME_HIRES_LICENSE = Artistic or GPL-1.0+
+-PERL_XML_SAX_VERSION = 0.99
++PERL_XML_SAX_VERSION = 1.00
+ PERL_XML_SAX_SOURCE = XML-SAX-$(PERL_XML_SAX_VERSION).tar.gz
+ PERL_XML_SAX_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GR/GRANTM
+ PERL_XML_SAX_DEPENDENCIES = perl-xml-namespacesupport perl-xml-sax-base
 -- 
 2.17.1
