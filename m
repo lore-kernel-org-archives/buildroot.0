@@ -1,30 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:03:01 +0200
-Subject: [Buildroot] [git commit] linux: config.in: add comment for Arm
- Cortex-M
-In-Reply-To: <20180601144051.31A5E7FF2B@busybox.osuosl.org> (Peter Korsgaard's
- message of "Fri, 1 Jun 2018 16:37:48 +0200")
-References: <20180601144051.31A5E7FF2B@busybox.osuosl.org>
-Message-ID: <87d0wpsbfe.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 17:03:16 +0200
+Subject: [Buildroot] [PATCH] package/binutils: extend the 2.28 default
+ to thumb mode
+In-Reply-To: <20180601172629.13505-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Fri, 1 Jun 2018 19:26:29 +0200")
+References: <20180601172629.13505-1-yann.morin.1998@free.fr>
+Message-ID: <878t7dsbez.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=f13477b68fc228709764262431faf3458c28ccab
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Commit 17f352ac (package/binutils: default to 2.29 for Cortex-M targets)
+ > made the default version 2.28 (and not 2.29!) when the target is an
+ > arm-v7m CPU.
 
- > When binutils > 2.28 are selected on Arm Cortex-M cpu,
- > linux kernel does not boot due to a new implementation
- > of 'adr pseudo instruction' on binutils.
+ > However, the real trigger is compilation in Thumb mode, not the fact
+ > that the target is v7m.
 
- > Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
+ > The fact that it was noticed on a v7m target is because Thumb is the
+ > only mode valid on those CPUs.
 
- > Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Tighten the defaults to 2.28 for Thumb and Thumb2 modes.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Laurent GONZALEZ <br22@gezedo.com>
+ > Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
 
 Committed to 2018.02.x, thanks.
 
