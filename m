@@ -1,37 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:53:26 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux: reword binutils
- 2.29+ comment
-Message-ID: <20180617150241.5F8AA81213@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 16:49:04 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/expect: download
+ tarball instead of cvs
+Message-ID: <20180617150241.2A50181213@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbdad97e18e6c65ec9e19a329dc4cddc1f4a51e5
+commit: https://git.buildroot.net/buildroot/commit/?id=05ea70bf27be722b32f9c7ca96db43bff3b68520
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-This issue only applies to kernels built with CONFIG_THUMB2=y, so reword the
-comment to make that more clear.
+More than 3 years after the 5.45.3 release, a tarball for that release
+was uploaded to sourceforge.net. The differences between this tarball
+and the CVS checkout are minimal:
 
+- There are no CVS directories, of course, but we don't need them.
+- File timestamps are different.
+- expect.tests is missing, but we don't execute tests anyway.
+- configure script is different, but we AUTORECONF anyway.
+- 'fixcat' script is missing, but it is not called anywhere.
+
+Since sourceforge.net has broken CVS downloads, now is a good time to
+switch away from it.
+
+While we're at it, add a hash file including license.
+
+Fixes:
+http://autobuild.buildroot.net/results/db3/db33d4fa507fb3b4132423cd0a7e25a1fe6e4105
+http://autobuild.buildroot.net/results/b6d/b6d927dcc73ac8d754422577dacefff4ff918a5c
+http://autobuild.buildroot.net/results/23d/23d1034b33d0354de15de2ec4a8ccd0603e8db78
+http://autobuild.buildroot.net/results/127/1272a3aa3077e434c9805ec3034f35e6fcc330d4
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d937f908f12f80349089e60e418afbb714e86f7e)
+(cherry picked from commit 23ab6cb162b7456925e2c3df4917cf9b45868d55)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/expect/expect.hash | 4 ++++
+ package/expect/expect.mk   | 7 ++++---
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8007271cb7..6f5c0ea694 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -8,7 +8,7 @@ config BR2_LINUX_KERNEL
+diff --git a/package/expect/expect.hash b/package/expect/expect.hash
+new file mode 100644
+index 0000000000..c89f323906
+--- /dev/null
++++ b/package/expect/expect.hash
+@@ -0,0 +1,4 @@
++# From https://sourceforge.net/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz.SHA256
++sha256  c520717b7195944a69ce1492ec82ca0ac3f3baf060804e6c5ee6d505ea512be9  expect5.45.3.tar.gz
++# Locally calculated
++sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
+diff --git a/package/expect/expect.mk b/package/expect/expect.mk
+index d78ff6c208..ccde33a71b 100644
+--- a/package/expect/expect.mk
++++ b/package/expect/expect.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
  
- if BR2_LINUX_KERNEL
+-# Version 5.45.3
+-EXPECT_VERSION = 2014-05-02
+-EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
++EXPECT_VERSION = 5.45.3
++EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
++EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
+ EXPECT_LICENSE = Public domain
+ EXPECT_LICENSE_FILES = README
  
--comment "Linux kernel may fail to boot with binutils >= 2.29"
-+comment "Linux kernel in thumb mode may be broken with binutils >= 2.29"
- 	depends on BR2_arm || BR2_armeb
- 	depends on !BR2_BINUTILS_VERSION_2_28_X
- 
++# 0001-enable-cross-compilation.patch
+ EXPECT_AUTORECONF = YES
+ EXPECT_DEPENDENCIES = tcl
+ EXPECT_CONF_OPTS = --with-tcl=$(BUILD_DIR)/tcl-$(TCL_VERSION)/unix
