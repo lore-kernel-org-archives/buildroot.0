@@ -1,46 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 15:35:02 +0200
-Subject: [Buildroot] [PATCH v2 1/3] shadowsocks-libev: Drop the useless
- hash.
-In-Reply-To: <20180611181823.2722-1-xuminready@gmail.com>
-References: <20180611181823.2722-1-xuminready@gmail.com>
-Message-ID: <20180617153502.295dea02@windsurf>
+Date: Sun, 17 Jun 2018 15:41:51 +0200
+Subject: [Buildroot] [git commit] shadowsocks-libev: add dependency on
+ thread support
+Message-ID: <20180617133941.C478A882E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c3be7d770cdaed65eb98497b797aea3a6bcc27a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 11 Jun 2018 11:18:21 -0700, Min Xu wrote:
-> Signed-off-by: Min Xu <xuminready@gmail.com>
-> ---
->  package/shadowsocks-libev/shadowsocks-libev.hash | 1 -
->  1 file changed, 1 deletion(-)
+shadowsocks-libev needs thread support, otherwise the configure script
+fails with:
 
-I've applied, but there are a few minor things that could have been
-done better (yes, even for such a simple patch):
+configure: error: Can not find pthreads.  This is required.
 
- 1. Use a small letter to start the commit title, i.e:
+Signed-off-by: Min Xu <xuminready@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/shadowsocks-libev/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-    shadowsocks-libev: drop the useless patch
-
- 2. Remove the final dot in the commit title
-
- 3. Add a commit log that explains *why* you're doing this change. I've
-    added the following commit log:
-
-    In commit f8d44394777fb9b45befaee3333d974dfe5e745d
-    ("shadowsocks-libev: new package"), when this package was
-    introduced, the hash for a license file that isn't available in
-    upstream's tarball was added to the license file. Obviously, this
-    hash serves no purpose, so drop it.
-    
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+index d02e5a93ef..56914e8e9d 100644
+--- a/package/shadowsocks-libev/Config.in
++++ b/package/shadowsocks-libev/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+ 	bool "shadowsocks-libev"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_C_ARES
+ 	select BR2_PACKAGE_LIBEV
+@@ -11,3 +12,7 @@ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+ 	  embedded devices and low-end boxes.
+ 
+ 	  https://github.com/shadowsocks/shadowsocks-libev
++
++comment "shadowsocks-libev needs a toolchain w/ threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
