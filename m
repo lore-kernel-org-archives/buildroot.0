@@ -1,30 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 14:04:58 +0200
-Subject: [Buildroot] [PATCH 1/1] network-manager: Fix package prompt name
-In-Reply-To: <20180615212125.22335-1-petr.vorel@gmail.com>
-References: <20180615212125.22335-1-petr.vorel@gmail.com>
-Message-ID: <20180617140458.68dae8ec@windsurf>
+Date: Sun, 17 Jun 2018 14:04:48 +0200
+Subject: [Buildroot] [git commit] network-manager: fix package prompt name
+Message-ID: <20180617121254.921B684250@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b5da9637ec97a8159d4d92b13ee392f9e656cd94
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 15 Jun 2018 23:21:25 +0200, Petr Vorel wrote:
-> Rename the prompt string for consistency with the package directory
-> name.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/network-manager/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Rename the prompt string for consistency with the package directory
+name.
 
-Applied to master, thanks.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/network-manager/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 72658c1278..9602cc4a1a 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_NETWORK_MANAGER
+-	bool "networkmanager"
++	bool "network-manager"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on !BR2_STATIC_LIBS # gnutls
+ 	depends on BR2_USE_MMU # dbus
