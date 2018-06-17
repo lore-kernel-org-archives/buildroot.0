@@ -1,44 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 14:57:44 +0200
-Subject: [Buildroot] [PATCH] qt5script: fix build issue with 32-bits
- armv8-a
-In-Reply-To: <20180611135417.18259-1-gael.portay@savoirfairelinux.com>
-References: <20180611135417.18259-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180617145744.076a6b90@windsurf>
+Date: Sun, 17 Jun 2018 14:58:30 +0200
+Subject: [Buildroot] [git commit] qt53d: fix install issue with qt5.6
+Message-ID: <20180617125618.0C550883BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e922bbc7aef31267bea730a1d4a98ec2eabdf761
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 11 Jun 2018 09:54:17 -0400, Ga?l PORTAY wrote:
-> Adds WTF platform support for the 32-bits armv8-a architectures.
-> 
-> Fixes:
-> 
-> 	In file included from ../3rdparty/javascriptcore/JavaScriptCore/config.h:26,
-> 	                from ../3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_compile.cpp:44:
-> 	../3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h:370:6: error: #error "Not supported ARM architecture"
-> 	#    error "Not supported ARM architecture"
-> 	     ^~~~~
-> 
-> The patch is based on two upstream fixes in WebKit[1][2].
-> 
-> See also commit cea7aa873a.
-> 
-> [1]: https://github.com/WebKit/webkit/commit/313d9fc4bdd2f020a5d0cf834c3c61982f161ebb
-> [2]: https://github.com/WebKit/webkit/commit/98f0de0709786f5d9b09dfd5908266990eb909d6
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
-> Hi all,
+Both plugins `geometryloaders' and `renderplugins' are available since
+Qt 5.9.
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+	>>> qt53d 5.6.3 Installing to target
+	cp -dpf /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt53D*.so.*
+/home/gportay/src/buildroot/output/target/usr/lib
+	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/plugins/geometryloaders
+/home/gportay/src/buildroot/output/target/usr/lib/qt/plugins
+	cp: cannot stat '/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/plugins/geometryloaders': No such file or directory
+	package/pkg-generic.mk:310: recipe for target '/home/gportay/src/buildroot/output/build/qt53d-5.6.3/.stamp_target_installed' failed
+	make[2]: *** [/home/gportay/src/buildroot/output/build/qt53d-5.6.3/.stamp_target_installed] Error 1
+
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Ga??l PORTAY &lt;<a href="mailto:gael.portay@savoirfairelinux.com" target="_blank" rel="noreferrer">gael.portay at savoirfairelinux.com</a>&gt;<br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt53d/qt53d.mk | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+index 6896b00318..48a931d60b 100644
+--- a/package/qt5/qt53d/qt53d.mk
++++ b/package/qt5/qt53d/qt53d.mk
+@@ -37,13 +37,19 @@ endef
+ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),)
+-define QT53D_INSTALL_TARGET_CMDS
+-	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++# Available since 5.9
++define QT53D_INSTALL_TARGET_LATEST
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
++endef
++endif
++define QT53D_INSTALL_TARGET_CMDS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
+ 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
++	$(QT53D_INSTALL_TARGET_LATEST)
+ 	$(QT53D_INSTALL_TARGET_EXAMPLES)
+ endef
+ endif
