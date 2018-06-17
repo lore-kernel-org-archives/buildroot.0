@@ -1,55 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:35:28 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] board/synopsys:
- synchronize custom inittab with BusyBox' one
-Message-ID: <20180617155627.05D19826A9@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:37:04 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] f2fs-tools: update
+ homepage link
+Message-ID: <20180617155627.1933F826A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e40e129d306129c523ac9d347f32212adb7d943
+commit: https://git.buildroot.net/buildroot/commit/?id=9b1232002c0dd16a4ce43fc93a257c1dc9fe9c25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Apply modifications made in recent commits:
+As noted in the sourceforge page, the project is not using sourceforge
+anymore. Use the gitweb summary page instead.
 
-- 456ea9871e busybox: add /dev/std{in, out, err} symlinks to inittab
-- 13dbe73782 busybox: reduce number of mkdir calls in inittab
-- 8a89d290d4 busybox: add an inittab entry to activate swap
-
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a3df894e8315d2b55192abe7ddd7b07128118a79)
+(cherry picked from commit a74a41d834042ec1f2651cfd4adc23e21c8a8a22)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/synopsys/axs10x/fs-overlay/etc/inittab | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ package/f2fs-tools/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/synopsys/axs10x/fs-overlay/etc/inittab b/board/synopsys/axs10x/fs-overlay/etc/inittab
-index 43bacc6580..7412a27366 100644
---- a/board/synopsys/axs10x/fs-overlay/etc/inittab
-+++ b/board/synopsys/axs10x/fs-overlay/etc/inittab
-@@ -14,12 +14,16 @@
- # process   == program to run
+diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
+index f0630e99c6..e373096380 100644
+--- a/package/f2fs-tools/Config.in
++++ b/package/f2fs-tools/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_F2FS_TOOLS
+ 	help
+ 	  Tools for Flash-Friendly File System (F2FS)
  
- # Startup the system
--null::sysinit:/bin/mount -t proc proc /proc
--null::sysinit:/bin/mount -o remount,rw /
--null::sysinit:/bin/mkdir -p /dev/pts
--null::sysinit:/bin/mkdir -p /dev/shm
--null::sysinit:/bin/mount -a
--null::sysinit:/bin/hostname -F /etc/hostname
-+::sysinit:/bin/mount -t proc proc /proc
-+::sysinit:/bin/mount -o remount,rw /
-+::sysinit:/bin/mkdir -p /dev/pts /dev/shm
-+::sysinit:/bin/mount -a
-+::sysinit:/sbin/swapon -a
-+null::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
-+null::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
-+null::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
-+null::sysinit:/bin/ln -sf /proc/self/fd/2 /dev/stderr
-+::sysinit:/bin/hostname -F /etc/hostname
- # now run any rc scripts
- ::sysinit:/etc/init.d/rcS
+-	  http://sourceforge.net/projects/f2fs-tools/
++	  https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
  
+ comment "f2fs-tools needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
