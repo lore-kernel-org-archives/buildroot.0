@@ -1,34 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:49:30 +0200
-Subject: [Buildroot] [PATCH v2,1/1] php-amqp: selects openssl
-In-Reply-To: <20180604170329.32233-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 4 Jun 2018 19:03:29 +0200")
-References: <20180604170329.32233-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r2l5quph.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 17:49:47 +0200
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.15
+In-Reply-To: <20180604215910.0158d37f@windsurf> (Thomas Petazzoni's message of
+ "Mon, 4 Jun 2018 21:59:10 +0200")
+References: <20180603213100.1635-1-peter@korsgaard.com>
+ <20180604215910.0158d37f@windsurf>
+Message-ID: <87muvtqup0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Since version 1.8.0, php-amqp needs a rabbitmq-c with openssl support:
- > https://github.com/pdezwart/php-amqp/issues/310
-
- > SSL support is disabled in rabbitmq-c if BR2_STATIC_LIBS is set however
- > don't add an unneeded !BR2_STATIC_LIBS dependency in Config.in as all
- > PHP External Extensions depends on !BR2_STATIC_LIBS
- > (see package/Config.in)
-
- > Fixes:
- >  - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b45dcf1fad05
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Baruch Siach and Thomas Petazzoni):
- >  - Remove unneeded !BR2_STATIC_LIBS in Config.in as all PHP External
- >    Extensions depends on !BR2_STATIC_LIBS (see package/Config.in)
+ > Hello,
+ > On Sun,  3 Jun 2018 23:31:00 +0200, Peter Korsgaard wrote:
+ >> Fixes the following security issues:
+ >> 
+ >> CVE-2018-11362: LDSS dissector crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-25.html
+ >> 
+ >> CVE-2018-11357: Multiple dissectors could consume excessive memory
+ >> https://www.wireshark.org/security/wnpa-sec-2018-28.html
+ >> 
+ >> CVE-2018-11356: DNS dissector crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-29.html
+ >> 
+ >> CVE-2018-11360: GSM A DTAP dissector crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-30.html
+ >> 
+ >> CVE-2018-11358: Q.931 dissector crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-31.html
+ >> 
+ >> CVE-2018-11359: Multiple dissectors could crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-33.html
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/wireshark/wireshark.hash | 4 ++--
+ >> package/wireshark/wireshark.mk   | 2 +-
+ >> 2 files changed, 3 insertions(+), 3 deletions(-)
 
 Committed to 2018.02.x, thanks.
 
