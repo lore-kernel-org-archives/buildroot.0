@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:22:06 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 3.2.x
- and 4.{4, 9, 14, 16}.x series
-Message-ID: <20180617155626.3AAE081070@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:14:36 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] php-amqp: needs openssl
+ support in rabbitmq-c
+Message-ID: <20180617155626.07C9D81070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d025607cc0a9f055981276e3cda050108f83bee3
+commit: https://git.buildroot.net/buildroot/commit/?id=64ba5b40a408003e1daa6b307faf04d55c645e36
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-[Peter: drop 4.16.x change]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Since version 1.8.0, php-amqp needs a rabbitmq-c with openssl support:
+https://github.com/pdezwart/php-amqp/issues/310
+
+SSL support is disabled in rabbitmq-c if BR2_STATIC_LIBS is set however
+don't add an unneeded !BR2_STATIC_LIBS dependency in Config.in as all
+PHP External Extensions depends on !BR2_STATIC_LIBS
+(see package/Config.in)
+
+Fixes:
+ - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b45dcf1fad05
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0326a06bea92ab67b5ac8db96f619820b5f6cf86)
+(cherry picked from commit d93305744b1dc758a3d86088473d571194762e19)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/php-amqp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index bb5dd6dd26..c1ab64cfdb 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -240,14 +240,14 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
-+	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.134"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.104"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.135"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.106"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.46"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.48"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/php-amqp/Config.in b/package/php-amqp/Config.in
+index 0aa2021f5a..dc779f0ee0 100644
+--- a/package/php-amqp/Config.in
++++ b/package/php-amqp/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PHP_AMQP
+ 	bool "php-amqp"
+ 	depends on BR2_PACKAGE_PHP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # rabbitmq-c
++	select BR2_PACKAGE_OPENSSL # rabbitmq-c: amqp_ssl_socket.h
+ 	select BR2_PACKAGE_RABBITMQ_C
+ 	help
+ 	  Communicate with any AMQP compliant server.
