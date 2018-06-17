@@ -1,73 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:58:37 +0200
-Subject: [Buildroot] [PATCH 2/2] sysvinit: add /dev/std{in, out,
- err} symlinks to inittab
-In-Reply-To: <87efivf8zk.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 01 May 2018 21:53:35 +0200")
-References: <20180404180935.15185-1-joerg.krause@embedded.rocks>
- <20180404180935.15185-3-joerg.krause@embedded.rocks>
- <87efivf8zk.fsf@dell.be.48ers.dk>
-Message-ID: <87wouxl80i.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 17:22:06 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 3.2.x
+ and 4.{4, 9, 14, 16}.x series
+Message-ID: <20180617155626.3AAE081070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d025607cc0a9f055981276e3cda050108f83bee3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
- >> Some applications, e.g. bashs process subsitution feature, rely on the
- >> convention of `/dev/fd` being a symbolic link to `/proc/self/fd`.
+[Peter: drop 4.16.x change]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0326a06bea92ab67b5ac8db96f619820b5f6cf86)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- >> This symbolic link and his companions `/dev/std*` are created by (e)udev [1],
- >> but not by mdev, resulting in the following error when using the following
- >> expression:
-
- >> ```
- >> bash: /dev/fd/62: No such file or directory
- >> ```
-
- >> For the sake of simplicity, lets fix this by creating the symlinks in inittab.
- >> It is only really needed if eudev isn't used, but it doesn't really hurt to
- >> create them even if eudev will recreate them afterwards.
-
- >> Note, that we do not create the symlink `/dev/core` as `/proc/kcore` is
- >> not available on all platforms, e.g. ARM, and the feature is not much
- >> appreciated [2].
-
- >> [1]
- >> https://github.com/gentoo/eudev/blob/8943501993322c59a6eb5be456b0d716aafff21e/src/shared/dev-setup.c#L35-L40
- >> [2] https://lwn.net/Articles/45315/
-
- >> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
- >> ---
- >> package/sysvinit/inittab | 6 +++++-
- >> 1 file changed, 5 insertions(+), 1 deletion(-)
-
- >> diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
- >> index fad91eae8b..608aabce07 100644
- >> --- a/package/sysvinit/inittab
- >> +++ b/package/sysvinit/inittab
- >> @@ -9,7 +9,11 @@ si1::sysinit:/bin/mount -o remount,rw /
- >> si2::sysinit:/bin/mkdir -p /dev/pts
- >> si3::sysinit:/bin/mkdir -p /dev/shm
- >> si4::sysinit:/bin/mount -a
- >> -si5::sysinit:/bin/hostname -F /etc/hostname
- >> +si5::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
- >> +si6::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
- >> +si7::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
- >> +si8::sysinit:/bin/ln -sf /proc/self/fd/2 /dev/stderr
-
- > This will fail on static /dev on a readonly rootfs, so I've redirected
- > errors to /dev/null.
-
- > Committed with that changed, thanks.
-
- > I have also added a patch adding these symlinks in the default skeleton
- > to handle static /dev on readonly rootfs setups.
-
-Committed to 2018.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index bb5dd6dd26..c1ab64cfdb 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -240,14 +240,14 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "3.2.101"	if BR2_KERNEL_HEADERS_3_2
++	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.134"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.104"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.135"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.106"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.46"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.48"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
