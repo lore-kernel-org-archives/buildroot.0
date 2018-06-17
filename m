@@ -1,48 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 15:28:10 +0200
-Subject: [Buildroot] [git commit] imx-gpu-g2d: bump to version 6.2.4.p1.2
-Message-ID: <20180617132558.6DE398833A@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 15:28:14 +0200
+Subject: [Buildroot] [git commit] kernel-module-imx-gpu-viv: bump to version
+ 6.2.4.p1.2
+Message-ID: <20180617132558.78B528833A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c72165998bba0982e4f41f97a508b08b0723cbe6
+commit: https://git.buildroot.net/buildroot/commit/?id=376377d946580549beec1058dad63d85f3e2a1e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Same as imx-gpu-viv, no changelog was provided by NXP.
-
-Tested with the following commands:
- # /usr/share/examples/g2d_samples/g2d_multiblit_test
- # /usr/share/examples/g2d_samples/g2d_overlay_test
- # /usr/share/examples/g2d_samples/g2d_test
- # gst-launch-1.0 videotestsrc ! imxg2dvideosink
+This package has been tested with the following commands:
+ # modprobe galcore
+ # cd /usr/share/examples/viv_samples/vdk/
+ # ./tutorial7
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash | 2 +-
- package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk   | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash            | 2 +-
+ .../kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk              | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-index 299ec703f5..3bcbc558e2 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.hash
-@@ -1 +1 @@
--sha256	070a95aa9942bd67e8ba4012962df74143bffb9998301ac097dab5e1437000d8  imx-gpu-g2d-6.2.2.p0.bin
-+sha256	5f2d2171d5cd57f37ab07184fc908a0f6ecb2a97f023f04c2f9f3b3d7fec8481  imx-gpu-g2d-6.2.4.p1.2.bin
-diff --git a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-index aafd70dc9d..015ab628b6 100644
---- a/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
-+++ b/package/freescale-imx/imx-gpu-g2d/imx-gpu-g2d.mk
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+index c6204aff0e..3ed7ca2dd9 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256	35db597ae0dd8e9e80511e5e9d882a01e4c178b83ffc192c8dd6a1a35859aa13  kernel-module-imx-gpu-viv-3b9e057f29853fd29364aa666328a92b807007d7.tar.gz
++sha256	ad910b7d36dc433bbbe85808d278312e9199635aaa5d00097b70ffab11bde9e6  kernel-module-imx-gpu-viv-86354002bea77acd9ce1812712e9d8485b377ec8.tar.gz
+diff --git a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
+index 2e6744c4f9..c76a5ee386 100644
+--- a/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
++++ b/package/freescale-imx/kernel-module-imx-gpu-viv/kernel-module-imx-gpu-viv.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMX_GPU_G2D_VERSION = 6.2.2.p0
-+IMX_GPU_G2D_VERSION = 6.2.4.p1.2
- IMX_GPU_G2D_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_G2D_SOURCE = imx-gpu-g2d-$(IMX_GPU_G2D_VERSION).bin
- IMX_GPU_G2D_DEPENDENCIES = imx-gpu-viv
+-KERNEL_MODULE_IMX_GPU_VIV_VERSION = 3b9e057f29853fd29364aa666328a92b807007d7
++KERNEL_MODULE_IMX_GPU_VIV_VERSION = 86354002bea77acd9ce1812712e9d8485b377ec8
+ KERNEL_MODULE_IMX_GPU_VIV_SITE = \
+ 	$(call github,Freescale,kernel-module-imx-gpu-viv,$(KERNEL_MODULE_IMX_GPU_VIV_VERSION))
+ KERNEL_MODULE_IMX_GPU_VIV_LICENSE = GPL-2.0
