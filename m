@@ -1,10 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Jun 2018 16:01:22 +0200
-Subject: [Buildroot] [PATCH 03/13] package/gstreamer1/gst1-plugins-bad:
- switch to xorgproto
+Date: Sun, 17 Jun 2018 16:01:21 +0200
+Subject: [Buildroot] [PATCH 02/13] package/efl: switch to xorgproto
 In-Reply-To: <20180617140132.2752-1-bernd.kuhls@t-online.de>
 References: <20180617140132.2752-1-bernd.kuhls@t-online.de>
-Message-ID: <20180617140132.2752-4-bernd.kuhls@t-online.de>
+Message-ID: <20180617140132.2752-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,35 +16,21 @@ https://lists.x.org/archives/xorg-announce/2018-February/002835.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in           | 2 +-
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/efl/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index b09e515f5a..db966e9adf 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -59,7 +59,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_GLX
- 	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR # mesa needs big X
- 	depends on !BR2_PACKAGE_RPI_USERLAND # x11
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index b9b285d8da..5be6d63765 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -168,7 +168,7 @@ config BR2_PACKAGE_EFL_X_XLIB
  	select BR2_PACKAGE_XLIB_LIBXRENDER
+ 	select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
+ 	select BR2_PACKAGE_XLIB_LIBXTST
 -	select BR2_PACKAGE_XPROTO_GLPROTO
 +	select BR2_PACKAGE_XORGPROTO
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_X11
- 	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM
- 	help
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index b041014f81..216301059a 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -88,7 +88,7 @@ endif
  
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_GLX),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-glx
--GST1_PLUGINS_BAD_DEPENDENCIES += xproto_glproto xlib_libXrender
-+GST1_PLUGINS_BAD_DEPENDENCIES += xorgproto xlib_libXrender
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-glx
- endif
+ config BR2_PACKAGE_EFL_WAYLAND
+ 	bool "Wayland support"
 -- 
 2.17.1
