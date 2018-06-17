@@ -1,53 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:49:21 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] jpeg-turbo: add license
- details
-Message-ID: <20180617150241.39EAE81213@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 16:50:11 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: config.in: add
+ comment for Arm Cortex-M
+Message-ID: <20180617150241.4940781213@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e4e64a171475266d55bee93e77f570e5983cd3c
+commit: https://git.buildroot.net/buildroot/commit/?id=e58263e48d3d6d03fafc58ef175c66e5987d4342
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-- jpeg-turbo is covered by 3 licenses: IJG (libjpeg),
-  BSD-3-Clause (TurboJPEG) and Zlib (SIMD)
-- Add README.ijg
-- Add hash for license files
+When binutils > 2.28 are selected on Arm Cortex-M cpu,
+linux kernel does not boot due to a new implementation
+of 'adr pseudo instruction' on binutils.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
+
+Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ca668476b3aa0ce42e7ffb79f484c5eadbcc99d2)
+(cherry picked from commit f13477b68fc228709764262431faf3458c28ccab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jpeg-turbo/jpeg-turbo.hash | 2 ++
- package/jpeg-turbo/jpeg-turbo.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ linux/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index 320bbb2a94..11b323b8bf 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -3,3 +3,5 @@ sha1 e788f6defa58b4393a5e1685c018f3b962971457  libjpeg-turbo-1.5.2.tar.gz
- md5 6b4923e297a7eaa255f08511017a8818  libjpeg-turbo-1.5.2.tar.gz
- # Locally computed
- sha256 9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528  libjpeg-turbo-1.5.2.tar.gz
-+sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
-+sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index bb1278f8b2..d52ab916e0 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -7,8 +7,8 @@
- JPEG_TURBO_VERSION = 1.5.2
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
--JPEG_TURBO_LICENSE = jpeg-license (BSD-3-Clause-like)
--JPEG_TURBO_LICENSE_FILES = LICENSE.md
-+JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
-+JPEG_TURBO_LICENSE_FILES = LICENSE.md README.ijg
- JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_PROVIDES = jpeg
- JPEG_TURBO_DEPENDENCIES = host-pkgconf
+diff --git a/linux/Config.in b/linux/Config.in
+index e8653ea17e..2ebddb403b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
+ 
+ if BR2_LINUX_KERNEL
+ 
++comment "Linux kernel will not boot with binutils >= 2.29"
++	depends on BR2_ARM_CPU_ARMV7M
++	depends on !BR2_BINUTILS_VERSION_2_28_X
++
+ # Packages that need to have a kernel with support for loadable modules,
+ # but do not use the kernel-modules infrastructure, should select that
+ # option.
