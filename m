@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:55:50 +0200
-Subject: [Buildroot] [PATCH 3/4] samba4: depend on host-nfs-utils
-In-Reply-To: <be167a061f05c8d86828d2b6f556fa6ed29ce54e.1526643119.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 18 May 2018 14:31:58 +0300")
-References: <4b1f3623de3a8a4386f76d0f3cdd36b7c9b230dd.1526643119.git.baruch@tkos.co.il>
- <be167a061f05c8d86828d2b6f556fa6ed29ce54e.1526643119.git.baruch@tkos.co.il>
-Message-ID: <87wouxtqbt.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 16:56:15 +0200
+Subject: [Buildroot] [PATCH v2 1/6] libtirpc: add host package
+In-Reply-To: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 22 May 2018 13:30:12 +0300")
+References: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
+Message-ID: <87sh5ltqb4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,16 +13,16 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > host-nfs-utils provides the host rpcgen utility. This fixes the build on
- > recent Fedora systems that removed rpcgen from the glibc package.
+ > The libtirpc host package is only for two headers that the host rpcgen
+ > utility from the nfs-utils package needs to build. glibc used to provide
+ > these headers. In version 2.26 glibc deprecated them with its bundled
+ > Sun RPC. Recently Fedora stopped enabling Sun RPC in glibc. So we can no
+ > longer rely on these headers being present on the host.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/6f8/6f869b8c7c182dfe7f1a291b5952320504540ebf/
- > http://autobuild.buildroot.net/results/4c2/4c228dd6369e4fc11b798af6ab2abe06d7473b78/
- > http://autobuild.buildroot.net/results/489/489be441abd19fba2b0c39357e64a6adcf773b60/
-
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > v2: New patch in this series
 
 Committed to 2018.02.x, thanks.
 
