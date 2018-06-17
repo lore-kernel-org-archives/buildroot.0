@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 14:04:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: security bump to
- version 8.11.3
-In-Reply-To: <20180616224408.31434-1-martin@barkynet.com>
-References: <20180616224408.31434-1-martin@barkynet.com>
-Message-ID: <20180617140435.1844cf11@windsurf>
+Date: Sun, 17 Jun 2018 14:04:58 +0200
+Subject: [Buildroot] [PATCH 1/1] network-manager: Fix package prompt name
+In-Reply-To: <20180615212125.22335-1-petr.vorel@gmail.com>
+References: <20180615212125.22335-1-petr.vorel@gmail.com>
+Message-ID: <20180617140458.68dae8ec@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +12,14 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 16 Jun 2018 23:44:08 +0100, Martin Bark wrote:
-> Fixes the following security issues:
+On Fri, 15 Jun 2018 23:21:25 +0200, Petr Vorel wrote:
+> Rename the prompt string for consistency with the package directory
+> name.
 > 
-> - (CVE-2018-7167): Fixes Denial of Service vulnerability where calling
->   Buffer.fill() could hang
-> 
-> - (CVE-2018-7161): Fixes Denial of Service vulnerability by updating the
->   http2 implementation to not crash under certain circumstances during
->   cleanup
-> 
-> - (CVE-2018-1000168): Fixes Denial of Service vulnerability by upgrading
->   nghttp2 to 1.32.0
-> 
-> See https://nodejs.org/en/blog/release/v8.11.3/ for more details
-> 
-> Signed-off-by: Martin Bark <martin@barkynet.com>
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
->  package/nodejs/nodejs.hash | 4 ++--
->  package/nodejs/nodejs.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/network-manager/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Applied to master, thanks.
 
