@@ -1,48 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:17:23 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] audit: do not remove file
- installed by netplug
-Message-ID: <20180617155626.18F0281070@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:19:52 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] skeleton: PAGER without
+ blank and unset at end of for loop
+Message-ID: <20180617155626.31CA381070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8bb8519ad57fd76dd1a69a29ecfb5131a9566c2
+commit: https://git.buildroot.net/buildroot/commit/?id=8c751db3610f33449cf6ff5bb1826a22e95aef81
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The package recipe uses a post-install hook to remove useless files from
-$(TARGET_DIR)/etc/rc.d/init.d and $(TARGET_DIR)/etc/sysconfig. This may
-damage packages that install useful files on those directories (such as
-netplug, which installs $(TARGET_DIR)/etc/rc.d/init.d/netplugd).
+The PAGER environment variable is including a blank character at the
+end. Remove this.
+A for loop has been unsetting the variable inside the loop, this is only
+needed once at the end of the loop.
 
-In the future[1] we will reorganize the init scripts and possibly get
-rid of /etc/rc.d and /etc/sysconfig but for the moment let's restrict
-the file removal to those installed by audit.
-
-1. http://lists.busybox.net/pipermail/buildroot/2018-May/221549.html
-
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 49844baf2f4c0d89954ccd0c138aea39f23c51f1)
+(cherry picked from commit 903b8446a8db2aff042cdefd398d3598023bed0c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/audit/audit.mk | 4 ++--
+ system/skeleton/etc/profile | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index f5aa00d2f0..2f6e6653b3 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -51,8 +51,8 @@ define AUDIT_INSTALL_INIT_SYSTEMD
- endef
+diff --git a/system/skeleton/etc/profile b/system/skeleton/etc/profile
+index 3a97427fdf..1255d23ff4 100644
+--- a/system/skeleton/etc/profile
++++ b/system/skeleton/etc/profile
+@@ -8,7 +8,7 @@ if [ "$PS1" ]; then
+ 	fi
+ fi
  
- define AUDIT_INSTALL_CLEANUP
--	$(RM) -rf $(TARGET_DIR)/etc/rc.d
--	$(RM) -rf $(TARGET_DIR)/etc/sysconfig
-+	$(RM) $(TARGET_DIR)/etc/rc.d/init.d/auditd
-+	$(RM) $(TARGET_DIR)/etc/sysconfig/auditd
- endef
- AUDIT_POST_INSTALL_TARGET_HOOKS += AUDIT_INSTALL_CLEANUP
+-export PAGER='/bin/more '
++export PAGER='/bin/more'
+ export EDITOR='/bin/vi'
  
+ # Source configuration files from /etc/profile.d
+@@ -16,5 +16,5 @@ for i in /etc/profile.d/*.sh ; do
+ 	if [ -r "$i" ]; then
+ 		. $i
+ 	fi
+-	unset i
+ done
++unset i
