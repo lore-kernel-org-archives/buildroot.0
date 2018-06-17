@@ -1,53 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:29:02 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] docs/manual: always point
- to the correct license file
-Message-ID: <20180617155626.A0A8481070@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:12:50 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] cifs-utils: disable man
+ page generation
+Message-ID: <20180617155625.EA53A81070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f186a3a222aeae128ab68e19cbffdb27e0105ad
+commit: https://git.buildroot.net/buildroot/commit/?id=94a4b18e7a095bb185f1df32adf898cbfa1cd395
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The manual is GPL-2, and points to the COPYING file in the repository.
-When we do a rendering of the manual for a specific version, that URL
-is currently always poitning to the latest version of the COPYING file.
+Buildroot does not generate documentation for target.
 
-If we ever have to change the content of that file (e.g. to add a new
-exception, more clarifications, a license change, or whatever), then
-an old manual would point to that newer version, which would then be
-incorrect.
+This fixes the build on hosts where the rst2man command does not support
+the --syntax-highlight parameter.
 
-Include the sha1 of the commit in the URL, so that the manual always
-point to the tree at the time the manual was rendered, not the time
-it is consulted. Contrary to the informative text above, use the full
-sha1, not the shortened one.
+Fixes:
+http://autobuild.buildroot.net/results/265/2655c0e1fa3ad0a10b4aed39a17feead94e47bfb/
+http://autobuild.buildroot.net/results/92d/92d7c608f717bbfe01ecfb9bc9604cb303d8594c/
+http://autobuild.buildroot.net/results/4b9/4b95404a89a595ca9c1e3df912169e9d36ff2bd7/
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 529219ba96128b3de17dc1201f0b64d723013315)
+(cherry picked from commit 57d16fd480d3eb57822e634e409fb0bbc4dd475b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/manual.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/cifs-utils/cifs-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
-index afb53d0482..9d5076047f 100644
---- a/docs/manual/manual.txt
-+++ b/docs/manual/manual.txt
-@@ -9,8 +9,8 @@ Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {localdate}
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index 9343e3ea89..e0efb3bf2e 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -15,7 +15,7 @@ CIFS_UTILS_DEPENDENCIES = host-pkgconf
  
- The Buildroot manual is written by the Buildroot developers.
- It is licensed under the GNU General Public License, version 2. Refer to the
--http://git.buildroot.org/buildroot/tree/COPYING[COPYING] file in the Buildroot
--sources for the full text of this license.
-+http://git.buildroot.org/buildroot/tree/COPYING?id={sys:git rev-parse HEAD}[COPYING]
-+file in the Buildroot sources for the full text of this license.
+ # Let's disable PIE unconditionally. We want PIE to be enabled only by
+ # the global BR2_RELRO_FULL option.
+-CIFS_UTILS_CONF_OPTS = --disable-pie
++CIFS_UTILS_CONF_OPTS = --disable-pie --disable-man
  
- Copyright (C) 2004-2018 The Buildroot developers
- 
+ ifeq ($(BR2_PACKAGE_KEYUTILS),y)
+ CIFS_UTILS_DEPENDENCIES += keyutils
