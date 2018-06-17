@@ -1,60 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 14:04:29 +0200
-Subject: [Buildroot] [git commit] package/nodejs: security bump to version
- 8.11.3
-Message-ID: <20180617121254.8A167846DE@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 14:05:40 +0200
+Subject: [Buildroot] [git commit] gnutls: use included unistring unless
+ libunistring is selected
+Message-ID: <20180617121254.9B79D84250@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64baf3def763fe962f19d7ca083cf019a73f6281
+commit: https://git.buildroot.net/buildroot/commit/?id=19448f40a0e9cfd6b3ff7f22c38a4b893cf36690
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+Use the included copy of libunistring unless BR2_PACKAGE_LIBUNISTRING
+is already selected.
 
-- (CVE-2018-7167): Fixes Denial of Service vulnerability where calling
-  Buffer.fill() could hang
+The resulting gnutls library with libunistring included is about 1.2 MB
+smaller than the sum of libgnutls and libunistring.
 
-- (CVE-2018-7161): Fixes Denial of Service vulnerability by updating the
-  http2 implementation to not crash under certain circumstances during
-  cleanup
-
-- (CVE-2018-1000168): Fixes Denial of Service vulnerability by upgrading
-  nghttp2 to 1.32.0
-
-See https://nodejs.org/en/blog/release/v8.11.3/ for more details
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Sven Neumann <neumann@teufel.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gnutls/Config.in |  1 -
+ package/gnutls/gnutls.mk | 10 ++++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 25b035d694..be4c3de4f7 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From http://nodejs.org/dist/v8.11.2/SHASUMS256.txt
--sha256 539946c0381809576bed07424a35fc1740d52f4bd56305d6278d9e76c88f4979  node-v8.11.2.tar.xz
-+# From http://nodejs.org/dist/v8.11.3/SHASUMS256.txt
-+sha256 577c751fdca91c46c60ffd8352e5b465881373bfdde212c17c3a3c1bd2616ee0  node-v8.11.3.tar.xz
+diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
+index 176951a385..ef995d21d2 100644
+--- a/package/gnutls/Config.in
++++ b/package/gnutls/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_GNUTLS
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_LIBTASN1
+-	select BR2_PACKAGE_LIBUNISTRING
+ 	select BR2_PACKAGE_NETTLE
+ 	select BR2_PACKAGE_PCRE
+ 	help
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 3d1a627781..fec07dfe03 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -10,7 +10,7 @@ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+ GNUTLS_LICENSE_FILES = doc/COPYING doc/COPYING.LESSER
+-GNUTLS_DEPENDENCIES = host-pkgconf libunistring libtasn1 nettle pcre
++GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 nettle pcre
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+ 	--disable-guile \
+@@ -19,7 +19,6 @@ GNUTLS_CONF_OPTS = \
+ 	--enable-local-libopts \
+ 	--enable-openssl-compatibility \
+ 	--with-libnettle-prefix=$(STAGING_DIR)/usr \
+-	--with-libunistring-prefix=$(STAGING_DIR)/usr \
+ 	--with-librt-prefix=$(STAGING_DIR) \
+ 	--without-tpm \
+ 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools)
+@@ -82,6 +81,13 @@ else
+ GNUTLS_CONF_OPTS += --without-p11-kit
+ endif
  
- # Hash for license file
- sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 0c7db83012..61cd03bb8f 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.11.2
-+NODEJS_VERSION = 8.11.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
++ifeq ($(BR2_PACKAGE_LIBUNISTRING),y)
++GNUTLS_CONF_OPTS += --with-libunistring-prefix=$(STAGING_DIR)/usr
++GNUTLS_DEPENDENCIES += libunistring
++else
++GNUTLS_CONF_OPTS += --with-included-unistring
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GNUTLS_CONF_OPTS += --with-zlib
+ GNUTLS_DEPENDENCIES += zlib
