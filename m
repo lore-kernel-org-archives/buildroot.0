@@ -1,20 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:56:12 +0200
-Subject: [Buildroot] [PATCH 1/1] docs/manual: fix scancpan path
-In-Reply-To: <20180614191836.10499-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 14 Jun 2018 21:18:36 +0200")
-References: <20180614191836.10499-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r2l5mmoz.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 17:56:36 +0200
+Subject: [Buildroot] [PATCH] redis: security bump to version 3.2.12
+In-Reply-To: <20180613201643.9644-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 13 Jun 2018 22:16:43 +0200")
+References: <20180613201643.9644-1-peter@korsgaard.com>
+Message-ID: <87in6hmmob.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > scancpan is now in utils not in supports/scripts
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > From the release notes:
+ > ================================================================================
+ > Redis 3.2.12     Released Wed Jun 13 12:43:01 CEST 2018
+ > ================================================================================
+
+ > Upgrade urgency CRITICAL:
+
+ > * Multilple security issues fixed.
+ > * Backport of an older AOF fsync=always fix. Check 4.x release notes.
+ > * Backport of a *SCAN bug. Sometimes elements could be missing from the scan.
+ > * Other minor things.
+
+ > https://raw.githubusercontent.com/antirez/redis/3.2/00-RELEASENOTES
+
+ > For more details about the lua related security issues, see the blog:
+
+ > http://antirez.com/news/119
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2018.02.x, thanks.
 
