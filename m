@@ -1,54 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 15:43:41 +0200
-Subject: [Buildroot] [PATCH v2 2/3] shadowsocks-libev: Adding the
- pthreads dependency
-In-Reply-To: <20180611181823.2722-2-xuminready@gmail.com>
-References: <20180611181823.2722-1-xuminready@gmail.com>
- <20180611181823.2722-2-xuminready@gmail.com>
-Message-ID: <20180617154341.29dba5b2@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 17 Jun 2018 16:01:23 +0200
+Subject: [Buildroot] [PATCH 04/13] package/libdri2: switch to xorgproto
+In-Reply-To: <20180617140132.2752-1-bernd.kuhls@t-online.de>
+References: <20180617140132.2752-1-bernd.kuhls@t-online.de>
+Message-ID: <20180617140132.2752-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The new package xorgproto will combine and replace all current xproto_*
+packages. For details read
+https://lists.x.org/archives/xorg-announce/2018-February/002835.html
 
-On Mon, 11 Jun 2018 11:18:22 -0700, Min Xu wrote:
-> Signed-off-by: Min Xu <xuminready@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libdri2/Config.in  | 2 +-
+ package/libdri2/libdri2.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Here again, the commit log was empty, which is not good. It should have
-explained *why* you did this change.
-
-> ---
->  package/shadowsocks-libev/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
-> index d02e5a9..82c88e9 100644
-> --- a/package/shadowsocks-libev/Config.in
-> +++ b/package/shadowsocks-libev/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_SHADOWSOCKS_LIBEV
->  	bool "shadowsocks-libev"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # require pthreads
->  	depends on BR2_USE_MMU # fork()
->  	select BR2_PACKAGE_C_ARES
->  	select BR2_PACKAGE_LIBEV
-
-When you add a dependency on a toolchain option, you need to add the
-corresponding Config.in comment:
-
-+comment "shadowsocks-libev needs a toolchain w/ threads"
-+       depends on BR2_USE_MMU
-+       depends on !BR2_TOOLCHAIN_HAS_THREADS
-
-I've added that, extended the commit log and applied.
-
-Thanks!
-
-Thomas
+diff --git a/package/libdri2/Config.in b/package/libdri2/Config.in
+index a10df7404a..fa3f76e8f3 100644
+--- a/package/libdri2/Config.in
++++ b/package/libdri2/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBDRI2
+ 	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XPROTO_DRI2PROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  Library for the DRI2 extension to the X Window System.
+ 
+diff --git a/package/libdri2/libdri2.mk b/package/libdri2/libdri2.mk
+index 22854b5060..79f38c680b 100644
+--- a/package/libdri2/libdri2.mk
++++ b/package/libdri2/libdri2.mk
+@@ -6,7 +6,7 @@
+ 
+ LIBDRI2_VERSION = 4f1eef3183df2b270c3d5cbef07343ee5127a6a4
+ LIBDRI2_SITE = $(call github,robclark,libdri2,$(LIBDRI2_VERSION))
+-LIBDRI2_DEPENDENCIES = xlib_libXext xproto_dri2proto xlib_libXdamage libdrm
++LIBDRI2_DEPENDENCIES = xlib_libXext xlib_libXdamage xorgproto libdrm
+ LIBDRI2_LICENSE = MIT
+ LIBDRI2_LICENSE_FILES = COPYING
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
