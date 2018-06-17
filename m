@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:54:47 +0200
-Subject: [Buildroot] [PATCH 2/4] sysvinit: add an inittab entry to
- activate swap
-In-Reply-To: <20180611060016.20755-3-casantos@datacom.com.br> (Carlos Santos's
- message of "Mon, 11 Jun 2018 03:00:14 -0300")
+Date: Sun, 17 Jun 2018 17:54:53 +0200
+Subject: [Buildroot] [PATCH 4/4] board/synopsys: synchronize custom
+ inittab with BusyBox' one
+In-Reply-To: <20180611060016.20755-5-casantos@datacom.com.br> (Carlos Santos's
+ message of "Mon, 11 Jun 2018 03:00:16 -0300")
 References: <20180611060016.20755-1-casantos@datacom.com.br>
- <20180611060016.20755-3-casantos@datacom.com.br>
-Message-ID: <87h8m1o1bs.fsf@dell.be.48ers.dk>
+ <20180611060016.20755-5-casantos@datacom.com.br>
+Message-ID: <87d0wpo1bm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +15,14 @@ To: buildroot@busybox.net
 
 >>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
 
- > There is a call to swapoff in the shutdown sequence, so call "swapon -a"
- > on startup. As stated in the swapon man page,
-
- >    All devices marked as "swap" in /etc/fstab are made available, except
- >    for those with the "noauto" option. Devices that are already being
- >    used as swap are silently skipped.
-
- > So even if the system has some init script to start/stop swap (e.g. from
- > a rootfs ovelay) calling swapon/swapoff would be harmless.
+ > Apply modifications made in recent commits:
+ > - 456ea9871e busybox: add /dev/std{in, out, err} symlinks to inittab
+ > - 13dbe73782 busybox: reduce number of mkdir calls in inittab
+ > - 8a89d290d4 busybox: add an inittab entry to activate swap
 
  > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+ > ---
+ > This change was tested on a VM, only. I don't have a Synopsys board.
 
 Committed to 2018.02.x, thanks.
 
