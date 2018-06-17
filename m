@@ -1,21 +1,25 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 17 Jun 2018 18:26:20 +0200
-Subject: [Buildroot] [PATCH] perl-libwww-perl: bump to version 6.34
-Message-ID: <20180617162620.70888-1-francois.perrad@gadz.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 17 Jun 2018 19:42:57 +0200
+Subject: [Buildroot] [git commit] perl-libwww-perl: bump to version 6.34
+Message-ID: <20180617174104.7C53288557@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=156a13fc876725624d1c14cafd60f0d32fa6d129
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/perl-libwww-perl/perl-libwww-perl.hash | 4 ++--
  package/perl-libwww-perl/perl-libwww-perl.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
-index a9f3a3461..5606c926b 100644
+index a9f3a34615..5606c926b2 100644
 --- a/package/perl-libwww-perl/perl-libwww-perl.hash
 +++ b/package/perl-libwww-perl/perl-libwww-perl.hash
 @@ -1,6 +1,6 @@
@@ -28,7 +32,7 @@ index a9f3a3461..5606c926b 100644
  # computed by scancpan
  sha256 e84ac5ab84ace59952d2640e0ca4522eb0aaa8c2aa696352d1252aa109ea20bc LICENSE
 diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
-index 427e4c1a9..254603df7 100644
+index 427e4c1a97..254603df7b 100644
 --- a/package/perl-libwww-perl/perl-libwww-perl.mk
 +++ b/package/perl-libwww-perl/perl-libwww-perl.mk
 @@ -4,9 +4,9 @@
@@ -43,5 +47,3 @@ index 427e4c1a9..254603df7 100644
  PERL_LIBWWW_PERL_DEPENDENCIES = \
  	perl-encode-locale \
  	perl-file-listing \
--- 
-2.17.1
