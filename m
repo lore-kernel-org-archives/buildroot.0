@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Jun 2018 16:01:24 +0200
-Subject: [Buildroot] [PATCH 05/13] package/mesa3d: switch to xorgproto
+Date: Sun, 17 Jun 2018 16:01:26 +0200
+Subject: [Buildroot] [PATCH 07/13] package/x11r7/xdriver_xf86-input-*: mass
+ switch to xorgproto
 In-Reply-To: <20180617140132.2752-1-bernd.kuhls@t-online.de>
 References: <20180617140132.2752-1-bernd.kuhls@t-online.de>
-Message-ID: <20180617140132.2752-6-bernd.kuhls@t-online.de>
+Message-ID: <20180617140132.2752-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,87 +15,247 @@ The new package xorgproto will combine and replace all current xproto_*
 packages. For details read
 https://lists.x.org/archives/xorg-announce/2018-February/002835.html
 
-Removed dri3 handling because xorgproto always installs dri3proto.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/Config.in | 18 ++++--------------
- package/mesa3d/mesa3d.mk |  8 +++-----
- 2 files changed, 7 insertions(+), 19 deletions(-)
+ package/x11r7/xdriver_xf86-input-evdev/Config.in             | 4 +---
+ .../xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk     | 4 +---
+ package/x11r7/xdriver_xf86-input-joystick/Config.in          | 4 +---
+ .../xdriver_xf86-input-joystick.mk                           | 2 +-
+ package/x11r7/xdriver_xf86-input-keyboard/Config.in          | 5 +----
+ .../xdriver_xf86-input-keyboard.mk                           | 2 +-
+ package/x11r7/xdriver_xf86-input-libinput/Config.in          | 3 +--
+ .../xdriver_xf86-input-libinput.mk                           | 2 +-
+ package/x11r7/xdriver_xf86-input-mouse/Config.in             | 4 +---
+ .../xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk     | 2 +-
+ package/x11r7/xdriver_xf86-input-synaptics/Config.in         | 4 +---
+ .../xdriver_xf86-input-synaptics.mk                          | 2 +-
+ package/x11r7/xdriver_xf86-input-tslib/Config.in             | 4 +---
+ .../xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk     | 4 +---
+ package/x11r7/xdriver_xf86-input-vmmouse/Config.in           | 4 +---
+ .../xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk | 2 +-
+ 16 files changed, 16 insertions(+), 36 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 8c1877fbc1..dd36a5e0fd 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -8,9 +8,7 @@ menuconfig BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
--	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XPROTO_GLPROTO if BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XORGPROTO if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
-@@ -59,15 +57,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	bool
- 	select BR2_PACKAGE_MESA3D_DRIVER
--	# xlib-libxshmfence needs sync_4, so we cannot select it if
--	# BR2_TOOLCHAIN_HAS_SYNC_4 is false. xproto-presentproto
--	# doesn't need sync_4, but it is only needed in conjunction
--	# with xlib-libxshmfence and dri3proto to provide dri3
--	# support, so we also only select it if sync_4 is available.
--	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
--		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
--	select BR2_PACKAGE_XPROTO_PRESENTPROTO if \
--		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
-+	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_TOOLCHAIN_HAS_SYNC_4
- 
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	bool
-@@ -221,9 +211,9 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # memfd.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
--	depends on BR2_PACKAGE_XORG7 # xproto_dri3proto
-+	depends on BR2_PACKAGE_XORG7 # xorgproto
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
--	select BR2_PACKAGE_XPROTO_DRI3PROTO
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+index 70e950dc74..fe4e451ed7 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
++++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
+@@ -3,9 +3,7 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
+ 	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
+ 	select BR2_PACKAGE_LIBEVDEV
+ 	select BR2_PACKAGE_MTDEV
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
 +	select BR2_PACKAGE_XORGPROTO
  	help
- 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
+ 	  Generic Linux input driver
  
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 6e1e27f62f..cafc41f97d 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -57,13 +57,11 @@ endif
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- MESA3D_DEPENDENCIES += \
--	xproto_xf86driproto \
--	xproto_dri2proto \
--	xproto_glproto \
- 	xlib_libX11 \
- 	xlib_libXext \
- 	xlib_libXdamage \
- 	xlib_libXfixes \
+diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+index 4933c42fda..ded7fa77f1 100644
+--- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
++++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
+@@ -15,10 +15,8 @@ XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	libevdev \
+ 	mtdev \
+-	xproto_inputproto \
 +	xorgproto \
- 	libxcb
- MESA3D_CONF_OPTS += --enable-glx --disable-mangling
- # quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
-@@ -113,8 +111,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- MESA3D_CONF_OPTS += \
- 	--without-dri-drivers --disable-dri3
- else
--ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
--MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
-+MESA3D_DEPENDENCIES += xlib_libxshmfence
- MESA3D_CONF_OPTS += --enable-dri3
- else
- MESA3D_CONF_OPTS += --disable-dri3
+ 	xserver_xorg-server \
+-	xproto_randrproto \
+-	xproto_xproto \
+ 	udev
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/Config.in b/package/x11r7/xdriver_xf86-input-joystick/Config.in
+index ff9f25f549..892d1a161b 100644
+--- a/package/x11r7/xdriver_xf86-input-joystick/Config.in
++++ b/package/x11r7/xdriver_xf86-input-joystick/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_JOYSTICK
+ 	bool "xf86-input-joystick"
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org driver for joystick input devices
+diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+index 5bc2a5cafb..0ec4be5e53 100644
+--- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
++++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
+@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_JOYSTICK_SOURCE = xf86-input-joystick-$(XDRIVER_XF86_INPUT_JO
+ XDRIVER_XF86_INPUT_JOYSTICK_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_JOYSTICK_LICENSE = MIT
+ XDRIVER_XF86_INPUT_JOYSTICK_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_JOYSTICK_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
++XDRIVER_XF86_INPUT_JOYSTICK_DEPENDENCIES = xserver_xorg-server xorgproto
+ XDRIVER_XF86_INPUT_JOYSTICK_AUTORECONF = YES
+ 
+ define XDRIVER_XF86_INPUT_JOYSTICK_CONF
+diff --git a/package/x11r7/xdriver_xf86-input-keyboard/Config.in b/package/x11r7/xdriver_xf86-input-keyboard/Config.in
+index 0a0352424e..ee23033b97 100644
+--- a/package/x11r7/xdriver_xf86-input-keyboard/Config.in
++++ b/package/x11r7/xdriver_xf86-input-keyboard/Config.in
+@@ -1,8 +1,5 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD
+ 	bool "xf86-input-keyboard"
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_KBPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  Keyboard input driver
+diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+index 01a6859cd4..fb1e289643 100644
+--- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
++++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
+@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_KEYBOARD_SOURCE = xf86-input-keyboard-$(XDRIVER_XF86_INPUT_KE
+ XDRIVER_XF86_INPUT_KEYBOARD_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_KEYBOARD_LICENSE = MIT
+ XDRIVER_XF86_INPUT_KEYBOARD_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_KEYBOARD_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_kbproto xproto_randrproto xproto_xproto
++XDRIVER_XF86_INPUT_KEYBOARD_DEPENDENCIES = xserver_xorg-server xorgproto
+ XDRIVER_XF86_INPUT_KEYBOARD_CONF_OPTS = --disable-selective-werror
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/Config.in b/package/x11r7/xdriver_xf86-input-libinput/Config.in
+index 0f2db1bd1a..0cfbfc664a 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/Config.in
++++ b/package/x11r7/xdriver_xf86-input-libinput/Config.in
+@@ -3,8 +3,7 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_LIBINPUT
+ 	depends on BR2_ENABLE_LOCALE # libinput
+ 	depends on BR2_PACKAGE_HAS_UDEV # libinput
+ 	select BR2_PACKAGE_LIBINPUT
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  This is an X driver based on libinput. It is a thin wrapper
+ 	  around libinput, so while it does provide all features that
+diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+index 1723b3fcf8..8642806c8b 100644
+--- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
++++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
+@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LI
+ XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
+ XDRIVER_XF86_INPUT_LIBINPUT_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_LIBINPUT_DEPENDENCIES = libinput xserver_xorg-server xproto_inputproto xproto_xproto
++XDRIVER_XF86_INPUT_LIBINPUT_DEPENDENCIES = libinput xserver_xorg-server xorgproto
+ XDRIVER_XF86_INPUT_LIBINPUT_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/Config.in b/package/x11r7/xdriver_xf86-input-mouse/Config.in
+index 20e1803a99..efa181e556 100644
+--- a/package/x11r7/xdriver_xf86-input-mouse/Config.in
++++ b/package/x11r7/xdriver_xf86-input-mouse/Config.in
+@@ -1,7 +1,5 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE
+ 	bool "xf86-input-mouse"
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org driver for mouse input devices
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+index 5bcbeb70fd..88af9d2361 100644
+--- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
++++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VE
+ XDRIVER_XF86_INPUT_MOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
+ XDRIVER_XF86_INPUT_MOUSE_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_MOUSE_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
++XDRIVER_XF86_INPUT_MOUSE_DEPENDENCIES = xserver_xorg-server xorgproto
+ XDRIVER_XF86_INPUT_MOUSE_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/Config.in b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
+index ffe1a2a448..b974265b31 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/Config.in
++++ b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
+@@ -1,9 +1,7 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_SYNAPTICS
+ 	bool "xf86-input-synaptics"
+ 	select BR2_PACKAGE_LIBEVDEV
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
+ 	select BR2_PACKAGE_MTDEV
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org driver for synaptics input devices
+diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+index 6bd9cc49c5..0708110e91 100644
+--- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
++++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
+@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_
+ XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
+ XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = libevdev xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto mtdev
++XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = libevdev xserver_xorg-server xorgproto mtdev
+ XDRIVER_XF86_INPUT_SYNAPTICS_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xdriver_xf86-input-tslib/Config.in b/package/x11r7/xdriver_xf86-input-tslib/Config.in
+index 4e77abcb10..9205cba6bd 100644
+--- a/package/x11r7/xdriver_xf86-input-tslib/Config.in
++++ b/package/x11r7/xdriver_xf86-input-tslib/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
+ 	bool "xf86-input-tslib"
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	select BR2_PACKAGE_TSLIB
+ 	help
+ 	  Touch screen library input driver
+diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
+index bf0ee4860d..f8944f3521 100644
+--- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
++++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
+@@ -10,10 +10,8 @@ XDRIVER_XF86_INPUT_TSLIB_SITE = https://github.com/merge/xf86-input-tslib/releas
+ XDRIVER_XF86_INPUT_TSLIB_LICENSE = MIT
+ XDRIVER_XF86_INPUT_TSLIB_LICENSE_FILES = COPYING
+ XDRIVER_XF86_INPUT_TSLIB_DEPENDENCIES = \
+-	xproto_inputproto \
+ 	xserver_xorg-server \
+-	xproto_randrproto \
+-	xproto_xproto \
++	xorgproto \
+ 	tslib
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+index de989eb34a..d77def028d 100644
+--- a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
++++ b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_INPUT_VMMOUSE
+ 	bool "xf86-input-vmmouse"
+ 	depends on BR2_i386 || BR2_x86_64
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  VMWare mouse input driver
+diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
+index 6e9cf8b785..b8c77de5f6 100644
+--- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
++++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
+@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_VMMOUSE_SOURCE = xf86-input-vmmouse-$(XDRIVER_XF86_INPUT_VMMO
+ XDRIVER_XF86_INPUT_VMMOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_VMMOUSE_LICENSE = MIT
+ XDRIVER_XF86_INPUT_VMMOUSE_LICENSE_FILES = COPYING
+-XDRIVER_XF86_INPUT_VMMOUSE_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
++XDRIVER_XF86_INPUT_VMMOUSE_DEPENDENCIES = xserver_xorg-server xorgproto
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ XDRIVER_XF86_INPUT_VMMOUSE_CONF_OPTS += --with-libudev
 -- 
 2.17.1
