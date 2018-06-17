@@ -1,261 +1,167 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 17 Jun 2018 16:01:26 +0200
-Subject: [Buildroot] [PATCH 07/13] package/x11r7/xdriver_xf86-input-*: mass
- switch to xorgproto
+Date: Sun, 17 Jun 2018 16:01:20 +0200
+Subject: [Buildroot] [PATCH 01/13] package/x11r7/xorgproto: new package
 In-Reply-To: <20180617140132.2752-1-bernd.kuhls@t-online.de>
 References: <20180617140132.2752-1-bernd.kuhls@t-online.de>
-Message-ID: <20180617140132.2752-8-bernd.kuhls@t-online.de>
+Message-ID: <20180617140132.2752-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The new package xorgproto will combine and replace all current xproto_*
-packages. For details read
+Quoting initial release notes:
 https://lists.x.org/archives/xorg-announce/2018-February/002835.html
+
+"This package combines the protocol headers, which were formerly
+ scattered in individual packages. At this point none of them are
+ changing rapidly enough to justify such fine granularity, particularly
+ when what changes do occur tend to affect multiple extensions at once
+ (Present and DRI3 for example). The individual protocols are still
+ installed as separate pkg-config modules, and consumers should continue
+ to use the per-protocol package version numbers."
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xdriver_xf86-input-evdev/Config.in             | 4 +---
- .../xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk     | 4 +---
- package/x11r7/xdriver_xf86-input-joystick/Config.in          | 4 +---
- .../xdriver_xf86-input-joystick.mk                           | 2 +-
- package/x11r7/xdriver_xf86-input-keyboard/Config.in          | 5 +----
- .../xdriver_xf86-input-keyboard.mk                           | 2 +-
- package/x11r7/xdriver_xf86-input-libinput/Config.in          | 3 +--
- .../xdriver_xf86-input-libinput.mk                           | 2 +-
- package/x11r7/xdriver_xf86-input-mouse/Config.in             | 4 +---
- .../xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk     | 2 +-
- package/x11r7/xdriver_xf86-input-synaptics/Config.in         | 4 +---
- .../xdriver_xf86-input-synaptics.mk                          | 2 +-
- package/x11r7/xdriver_xf86-input-tslib/Config.in             | 4 +---
- .../xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk     | 4 +---
- package/x11r7/xdriver_xf86-input-vmmouse/Config.in           | 4 +---
- .../xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk | 2 +-
- 16 files changed, 16 insertions(+), 36 deletions(-)
+ package/x11r7/Config.in                |  1 +
+ package/x11r7/xorgproto/Config.in      |  5 +++
+ package/x11r7/xorgproto/xorgproto.hash | 43 +++++++++++++++++++++
+ package/x11r7/xorgproto/xorgproto.mk   | 53 ++++++++++++++++++++++++++
+ 4 files changed, 102 insertions(+)
+ create mode 100644 package/x11r7/xorgproto/Config.in
+ create mode 100644 package/x11r7/xorgproto/xorgproto.hash
+ create mode 100644 package/x11r7/xorgproto/xorgproto.mk
 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/Config.in b/package/x11r7/xdriver_xf86-input-evdev/Config.in
-index 70e950dc74..fe4e451ed7 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-evdev/Config.in
-@@ -3,9 +3,7 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_EVDEV
- 	depends on BR2_PACKAGE_HAS_UDEV # libudev is configure dependency
- 	select BR2_PACKAGE_LIBEVDEV
- 	select BR2_PACKAGE_MTDEV
--	select BR2_PACKAGE_XPROTO_INPUTPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Generic Linux input driver
- 
-diff --git a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-index 4933c42fda..ded7fa77f1 100644
---- a/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-+++ b/package/x11r7/xdriver_xf86-input-evdev/xdriver_xf86-input-evdev.mk
-@@ -15,10 +15,8 @@ XDRIVER_XF86_INPUT_EVDEV_DEPENDENCIES = \
- 	host-pkgconf \
- 	libevdev \
- 	mtdev \
--	xproto_inputproto \
-+	xorgproto \
- 	xserver_xorg-server \
--	xproto_randrproto \
--	xproto_xproto \
- 	udev
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-input-joystick/Config.in b/package/x11r7/xdriver_xf86-input-joystick/Config.in
-index ff9f25f549..892d1a161b 100644
---- a/package/x11r7/xdriver_xf86-input-joystick/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-joystick/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_JOYSTICK
- 	bool "xf86-input-joystick"
--	select BR2_PACKAGE_XPROTO_INPUTPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  X.Org driver for joystick input devices
-diff --git a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
-index 5bc2a5cafb..0ec4be5e53 100644
---- a/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
-+++ b/package/x11r7/xdriver_xf86-input-joystick/xdriver_xf86-input-joystick.mk
-@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_JOYSTICK_SOURCE = xf86-input-joystick-$(XDRIVER_XF86_INPUT_JO
- XDRIVER_XF86_INPUT_JOYSTICK_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_JOYSTICK_LICENSE = MIT
- XDRIVER_XF86_INPUT_JOYSTICK_LICENSE_FILES = COPYING
--XDRIVER_XF86_INPUT_JOYSTICK_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
-+XDRIVER_XF86_INPUT_JOYSTICK_DEPENDENCIES = xserver_xorg-server xorgproto
- XDRIVER_XF86_INPUT_JOYSTICK_AUTORECONF = YES
- 
- define XDRIVER_XF86_INPUT_JOYSTICK_CONF
-diff --git a/package/x11r7/xdriver_xf86-input-keyboard/Config.in b/package/x11r7/xdriver_xf86-input-keyboard/Config.in
-index 0a0352424e..ee23033b97 100644
---- a/package/x11r7/xdriver_xf86-input-keyboard/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-keyboard/Config.in
-@@ -1,8 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_KEYBOARD
- 	bool "xf86-input-keyboard"
--	select BR2_PACKAGE_XPROTO_INPUTPROTO
--	select BR2_PACKAGE_XPROTO_KBPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Keyboard input driver
-diff --git a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-index 01a6859cd4..fb1e289643 100644
---- a/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-+++ b/package/x11r7/xdriver_xf86-input-keyboard/xdriver_xf86-input-keyboard.mk
-@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_KEYBOARD_SOURCE = xf86-input-keyboard-$(XDRIVER_XF86_INPUT_KE
- XDRIVER_XF86_INPUT_KEYBOARD_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_KEYBOARD_LICENSE = MIT
- XDRIVER_XF86_INPUT_KEYBOARD_LICENSE_FILES = COPYING
--XDRIVER_XF86_INPUT_KEYBOARD_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_kbproto xproto_randrproto xproto_xproto
-+XDRIVER_XF86_INPUT_KEYBOARD_DEPENDENCIES = xserver_xorg-server xorgproto
- XDRIVER_XF86_INPUT_KEYBOARD_CONF_OPTS = --disable-selective-werror
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/Config.in b/package/x11r7/xdriver_xf86-input-libinput/Config.in
-index 0f2db1bd1a..0cfbfc664a 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-libinput/Config.in
-@@ -3,8 +3,7 @@ config BR2_PACKAGE_XDRIVER_XF86_INPUT_LIBINPUT
- 	depends on BR2_ENABLE_LOCALE # libinput
- 	depends on BR2_PACKAGE_HAS_UDEV # libinput
- 	select BR2_PACKAGE_LIBINPUT
--	select BR2_PACKAGE_XPROTO_INPUTPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  This is an X driver based on libinput. It is a thin wrapper
- 	  around libinput, so while it does provide all features that
-diff --git a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-index 1723b3fcf8..8642806c8b 100644
---- a/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-+++ b/package/x11r7/xdriver_xf86-input-libinput/xdriver_xf86-input-libinput.mk
-@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_LIBINPUT_SOURCE = xf86-input-libinput-$(XDRIVER_XF86_INPUT_LI
- XDRIVER_XF86_INPUT_LIBINPUT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE = MIT
- XDRIVER_XF86_INPUT_LIBINPUT_LICENSE_FILES = COPYING
--XDRIVER_XF86_INPUT_LIBINPUT_DEPENDENCIES = libinput xserver_xorg-server xproto_inputproto xproto_xproto
-+XDRIVER_XF86_INPUT_LIBINPUT_DEPENDENCIES = libinput xserver_xorg-server xorgproto
- XDRIVER_XF86_INPUT_LIBINPUT_AUTORECONF = YES
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/Config.in b/package/x11r7/xdriver_xf86-input-mouse/Config.in
-index 20e1803a99..efa181e556 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-mouse/Config.in
-@@ -1,7 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_MOUSE
- 	bool "xf86-input-mouse"
--	select BR2_PACKAGE_XPROTO_INPUTPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  X.Org driver for mouse input devices
-diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-index 5bcbeb70fd..88af9d2361 100644
---- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
-@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VE
- XDRIVER_XF86_INPUT_MOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
- XDRIVER_XF86_INPUT_MOUSE_LICENSE_FILES = COPYING
--XDRIVER_XF86_INPUT_MOUSE_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
-+XDRIVER_XF86_INPUT_MOUSE_DEPENDENCIES = xserver_xorg-server xorgproto
- XDRIVER_XF86_INPUT_MOUSE_AUTORECONF = YES
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/Config.in b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
-index ffe1a2a448..b974265b31 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/Config.in
-@@ -1,9 +1,7 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_SYNAPTICS
- 	bool "xf86-input-synaptics"
- 	select BR2_PACKAGE_LIBEVDEV
--	select BR2_PACKAGE_XPROTO_INPUTPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_MTDEV
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  X.Org driver for synaptics input devices
-diff --git a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-index 6bd9cc49c5..0708110e91 100644
---- a/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-+++ b/package/x11r7/xdriver_xf86-input-synaptics/xdriver_xf86-input-synaptics.mk
-@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_SYNAPTICS_SOURCE = xf86-input-synaptics-$(XDRIVER_XF86_INPUT_
- XDRIVER_XF86_INPUT_SYNAPTICS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE = MIT
- XDRIVER_XF86_INPUT_SYNAPTICS_LICENSE_FILES = COPYING
--XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = libevdev xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto mtdev
-+XDRIVER_XF86_INPUT_SYNAPTICS_DEPENDENCIES = libevdev xserver_xorg-server xorgproto mtdev
- XDRIVER_XF86_INPUT_SYNAPTICS_AUTORECONF = YES
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/Config.in b/package/x11r7/xdriver_xf86-input-tslib/Config.in
-index 4e77abcb10..9205cba6bd 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-tslib/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_TSLIB
- 	bool "xf86-input-tslib"
--	select BR2_PACKAGE_XPROTO_INPUTPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	select BR2_PACKAGE_TSLIB
- 	help
- 	  Touch screen library input driver
-diff --git a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-index bf0ee4860d..f8944f3521 100644
---- a/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-+++ b/package/x11r7/xdriver_xf86-input-tslib/xdriver_xf86-input-tslib.mk
-@@ -10,10 +10,8 @@ XDRIVER_XF86_INPUT_TSLIB_SITE = https://github.com/merge/xf86-input-tslib/releas
- XDRIVER_XF86_INPUT_TSLIB_LICENSE = MIT
- XDRIVER_XF86_INPUT_TSLIB_LICENSE_FILES = COPYING
- XDRIVER_XF86_INPUT_TSLIB_DEPENDENCIES = \
--	xproto_inputproto \
- 	xserver_xorg-server \
--	xproto_randrproto \
--	xproto_xproto \
-+	xorgproto \
- 	tslib
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-index de989eb34a..d77def028d 100644
---- a/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-+++ b/package/x11r7/xdriver_xf86-input-vmmouse/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_XDRIVER_XF86_INPUT_VMMOUSE
- 	bool "xf86-input-vmmouse"
- 	depends on BR2_i386 || BR2_x86_64
--	select BR2_PACKAGE_XPROTO_INPUTPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  VMWare mouse input driver
-diff --git a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-index 6e9cf8b785..b8c77de5f6 100644
---- a/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-+++ b/package/x11r7/xdriver_xf86-input-vmmouse/xdriver_xf86-input-vmmouse.mk
-@@ -9,7 +9,7 @@ XDRIVER_XF86_INPUT_VMMOUSE_SOURCE = xf86-input-vmmouse-$(XDRIVER_XF86_INPUT_VMMO
- XDRIVER_XF86_INPUT_VMMOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_INPUT_VMMOUSE_LICENSE = MIT
- XDRIVER_XF86_INPUT_VMMOUSE_LICENSE_FILES = COPYING
--XDRIVER_XF86_INPUT_VMMOUSE_DEPENDENCIES = xserver_xorg-server xproto_inputproto xproto_randrproto xproto_xproto
-+XDRIVER_XF86_INPUT_VMMOUSE_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- XDRIVER_XF86_INPUT_VMMOUSE_CONF_OPTS += --with-libudev
+diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
+index ddceaa407f..4648fcb5f6 100644
+--- a/package/x11r7/Config.in
++++ b/package/x11r7/Config.in
+@@ -229,6 +229,7 @@ if BR2_PACKAGE_XORG7
+ 	endmenu
+ 	menu "X11R7 X protocols"
+ 		source package/x11r7/xcb-proto/Config.in
++		source package/x11r7/xorgproto/Config.in
+ 		source package/x11r7/xproto_applewmproto/Config.in
+ 		source package/x11r7/xproto_bigreqsproto/Config.in
+ 		source package/x11r7/xproto_compositeproto/Config.in
+diff --git a/package/x11r7/xorgproto/Config.in b/package/x11r7/xorgproto/Config.in
+new file mode 100644
+index 0000000000..af38eb436e
+--- /dev/null
++++ b/package/x11r7/xorgproto/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_XORGPROTO
++	bool "xorgproto"
++	help
++	  This package combines the protocol headers, which were
++	  formerly scattered in individual packages.
+diff --git a/package/x11r7/xorgproto/xorgproto.hash b/package/x11r7/xorgproto/xorgproto.hash
+new file mode 100644
+index 0000000000..c4e7795751
+--- /dev/null
++++ b/package/x11r7/xorgproto/xorgproto.hash
+@@ -0,0 +1,43 @@
++# From https://lists.x.org/archives/xorg-announce/2018-February/002841.html
++md5 81557ca47ee66a4e54590fcdadd28114  xorgproto-2018.4.tar.bz2
++sha1 2e4a3db312e1ce81e15515dfcac52ba0aa5a920c  xorgproto-2018.4.tar.bz2
++sha256 fee885e0512899ea5280c593fdb2735beb1693ad170c22ebcc844470eec415a0  xorgproto-2018.4.tar.bz2
++sha512 2db682d10280ca58cdc04d8eb9fef30c111d4cd379de9fec86cff317865b859a576de5426447be9231d24be9762cc1d684c57383a99ad499398e8b7d62b1c03c  xorgproto-2018.4.tar.bz2
++# Locally computed
++sha256 aacd931f191b610902aee1e526090c2858aabc07969441fa2537ffd3e7049555  COPYING-applewmproto
++sha256 dabc025f93129a0eb2d17f37c719dbe5ecbcb5bc8f7bc7f4ce89fe04576cc0c2  COPYING-bigreqsproto
++sha256 ab587ca94282c1e60797ffe4a77aea195418387db20ec7e0c24cedf2c844f8c1  COPYING-compositeproto
++sha256 f67a18cb46c4c203c5122b4a901cfcc3178b2a62f83f31ca5fef5bdca3966094  COPYING-damageproto
++sha256 819e8dcd3dd2a44850c350331aa492230f86bccb0983dd739dec5ba36d7d2b8e  COPYING-dmxproto
++sha256 0c306691492c4d7a8cda1ec3847668b797887dddcd7e986b4c166ae27619af7d  COPYING-dri2proto
++sha256 64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING-dri3proto
++sha256 0aa43d03da3cedbd9882c0ded621b0d855353eb9e551f9eed940d75c8a0b03c1  COPYING-evieproto
++sha256 65cb0b867b00fb27f066a37353713b265645b3301146562570d7638ed2ddd548  COPYING-fixesproto
++sha256 1ab381e978bff63d68be2e4f235d51935f3f16f3ba3bebf83afa99a70c0484a2  COPYING-fontcacheproto
++sha256 f4af05774b02ae149357cc26f7bf5ef1116c2e09373c2492081a3a1892c58417  COPYING-fontsproto
++sha256 823deb4673d3f26aa8c90e704888299648f00be3262f9363eaeecedcd65b936d  COPYING-glproto
++sha256 5e083a2ace0215a6084c877c023a6079952ba803d692488203ba4269196debe3  COPYING-inputproto
++sha256 d397a67d4b28e897bc5fce79b2b917df9905b54f961fc3ad1f49c7fe3803f92c  COPYING-kbproto
++sha256 7a5dd5d4c989c167da50f15879959f42bbda960e06d0a0aea7197f61fe1dc846  COPYING-lg3dproto
++sha256 27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING-panoramixproto
++sha256 8442b5f22f2fb13017a4302a906e7dedc899267b41f613558970941120170128  COPYING-pmproto
++sha256 64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING-presentproto
++sha256 6b890b118261694865988378dbba876bcd9caa1a421c5c0d626116948bc0ae35  COPYING-printproto
++sha256 41c13dcd09147ed2440286f2fb8151df8ebee06deee4ed78ddf094601c216d3d  COPYING-randrproto
++sha256 ee10aee0f1697ffdbe870a39f037361d4f7136f2976bb7919a41b3f66407caee  COPYING-recordproto
++sha256 9e48921a94da36d7a69fe71809223ee0bb46370db9842dccdeeb55b5a9946872  COPYING-renderproto
++sha256 403e7be948674530ad40669b1e3a31adeddb656502f3b0ef810d5d3cc35d0b52  COPYING-resourceproto
++sha256 fcbd3c628bf4d28ee3e6032054bf44bbe58f3b1a944dad856a8d3eb6b37ea412  COPYING-scrnsaverproto
++sha256 d6d3513f5a7099748dc387f54498d799380b45f8a444f13aa98aa45a860ae55b  COPYING-trapproto
++sha256 f8f49bbad61967ebc890fb79fff5bfb7cfc1c341aa8f8dee13eb3fb534040b47  COPYING-videoproto
++sha256 eb183a00c61bb47992f096b6993ed7ec17518bea9c285fe87efff7f622cc6c12  COPYING-windowswmproto
++sha256 da4a28570230228b9bd80a701c5d8752f8609394de2e0d46d26d978bd07610db  COPYING-x11proto
++sha256 5531d18cfcc944dab39991f63f182cbbce3fe493ba0c7cf08a25c0d01ee84482  COPYING-xcmiscproto
++sha256 fb42146c6c06a200a9b121220eb692ff9101ba0fbd0b224b9e16a016c59ae86a  COPYING-xextproto
++sha256 3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86bigfontproto
++sha256 3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86dgaproto
++sha256 4a05d06752388d9db71ee1006f371d4fb2c316a821fc2fc272db90b3ef978334  COPYING-xf86driproto
++sha256 3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86miscproto
++sha256 3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86rushproto
++sha256 942bb46a3503a708948491699171b00b9e0dfb47818d9268b160bccc5f51a4b9  COPYING-xf86vidmodeproto
++sha256 b2d8cda803e900915ce10f0ba735ff2c033b39c7cc5a8a436667ca583d4066fa  COPYING-xineramaproto
+diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
+new file mode 100644
+index 0000000000..3f7d25b068
+--- /dev/null
++++ b/package/x11r7/xorgproto/xorgproto.mk
+@@ -0,0 +1,53 @@
++################################################################################
++#
++# xorgproto
++#
++################################################################################
++
++XORGPROTO_VERSION = 2018.4
++XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.bz2
++XORGPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
++XORGPROTO_LICENSE = MIT
++XORGPROTO_LICENSE_FILES = \
++	COPYING-applewmproto \
++	COPYING-bigreqsproto \
++	COPYING-compositeproto \
++	COPYING-damageproto \
++	COPYING-dmxproto \
++	COPYING-dri2proto \
++	COPYING-dri3proto \
++	COPYING-evieproto \
++	COPYING-fixesproto \
++	COPYING-fontcacheproto \
++	COPYING-fontsproto \
++	COPYING-glproto \
++	COPYING-inputproto \
++	COPYING-kbproto \
++	COPYING-lg3dproto \
++	COPYING-panoramixproto \
++	COPYING-pmproto \
++	COPYING-presentproto \
++	COPYING-printproto \
++	COPYING-randrproto \
++	COPYING-recordproto \
++	COPYING-renderproto \
++	COPYING-resourceproto \
++	COPYING-scrnsaverproto \
++	COPYING-trapproto \
++	COPYING-videoproto \
++	COPYING-windowswmproto \
++	COPYING-x11proto \
++	COPYING-xcmiscproto \
++	COPYING-xextproto \
++	COPYING-xf86bigfontproto \
++	COPYING-xf86dgaproto \
++	COPYING-xf86driproto \
++	COPYING-xf86miscproto \
++	COPYING-xf86rushproto \
++	COPYING-xf86vidmodeproto \
++	COPYING-xineramaproto
++XORGPROTO_INSTALL_STAGING = YES
++XORGPROTO_INSTALL_TARGET = NO
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
 2.17.1
