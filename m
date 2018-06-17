@@ -1,52 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:29:45 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] gnupg2: bump to version
- 2.2.7
-Message-ID: <20180617155626.AA4EC826A9@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:34:49 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] sysvinit: add an inittab
+ entry to activate swap
+Message-ID: <20180617155626.E7F43826A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed6a8900dd8b6d3d72a4d1891521e27245b76e37
+commit: https://git.buildroot.net/buildroot/commit/?id=5456704d4f7684a8d231e7195dd0baa18ab16896
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 429c6f21b329f56199158e109d956da9bb37dc3f)
+There is a call to swapoff in the shutdown sequence, so call "swapon -a"
+on startup. As stated in the swapon man page,
+
+   All devices marked as "swap" in /etc/fstab are made available, except
+   for those with the "noauto" option. Devices that are already being
+   used as swap are silently skipped.
+
+So even if the system has some init script to start/stop swap (e.g. from
+a rootfs ovelay) calling swapon/swapoff would be harmless.
+
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d2a091c96b87c5674754a12ee9055a164270d0eb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/sysvinit/inittab | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index 155295244e..f5cc95cb1b 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,6 +1,6 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000421.html
--sha1 295298debcc2c12f02a2f2fdf04aecb6d6aae396  gnupg-2.2.6.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000424.html
-+sha1 e222cda63409a86992369df8976f6c7511e10ea0  gnupg-2.2.7.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.6.tar.bz2.sig
--sha256 e64d8c5fa2d05938a5080cb784a98ac21be0812f2a26f844b18f0d6a0e711984  gnupg-2.2.6.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.7.tar.bz2.sig
-+sha256 d95b361ee6ef7eff86af40c8c72bf9313736ac9f7010d6604d78bf83818e976e  gnupg-2.2.7.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 4d84bfbb9e..0823921b0b 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG2_VERSION = 2.2.6
-+GNUPG2_VERSION = 2.2.7
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
+index 2ca253ad6c..a31471031f 100644
+--- a/package/sysvinit/inittab
++++ b/package/sysvinit/inittab
+@@ -7,7 +7,8 @@ id:3:initdefault:
+ si0::sysinit:/bin/mount -t proc proc /proc
+ si1::sysinit:/bin/mount -o remount,rw /
+ si2::sysinit:/bin/mkdir -p /dev/pts /dev/shm
+-si4::sysinit:/bin/mount -a
++si3::sysinit:/bin/mount -a
++si4::sysinit:/sbin/swapon -a
+ si5::sysinit:/bin/ln -sf /proc/self/fd /dev/fd 2>/dev/null
+ si6::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin 2>/dev/null
+ si7::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout 2>/dev/null
