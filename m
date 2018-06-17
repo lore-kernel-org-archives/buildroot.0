@@ -1,63 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:39:49 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/file: bump
- version to 5.33
-Message-ID: <20180617155627.3CBEF826A9@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:27:53 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/imagemagick:
+ security bump to version 7.0.7-38
+Message-ID: <20180617155626.88DBA81070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21e768411ccd4aea2b95259bea625bb05a8a9a84
+commit: https://git.buildroot.net/buildroot/commit/?id=c602b73cf9f38b12222c55e909609a72448b30c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Added license hashes, added optional dependency to libseccomp provided
-by upstream in this version bump.
+Fixes CVE-2018-11625, CVE-2018-11624 & CVE-2018-10177.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit eacca09a8a219fdcd94f39ccab329a4d6a63092b)
+(cherry picked from commit c3387c59bb6b5ccb89bb7acd7db05a8655eb71c5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/file/file.hash | 5 ++++-
- package/file/file.mk   | 9 ++++++++-
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index fee516c8e2..a6b40be349 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,2 +1,5 @@
- # Locally calculated
--sha256 8639dc4d1b21e232285cd483604afc4a6ee810710e00e579dbe9591681722b50  file-5.32.tar.gz
-+sha256 1c52c8c3d271cd898d5511c36a68059cda94036111ab293f01f83c3525b737c6  file-5.33.tar.gz
-+sha256 3c0ad13c36f891a9b4f951e59eb2fc108065a46f849697cc6fd3cdb41cc23a3d  COPYING
-+sha256 d98ee4d8d95e7d021a5dfc41f137ecc3b624a7b98e8bd793130202d12a21ed57  src/mygetopt.h
-+sha256 85e358d575ad4ac5b38b623a25b24246ccff3c7e680d930c0a9ff5228fe434b6  src/vasprintf.c
-diff --git a/package/file/file.mk b/package/file/file.mk
-index df0e0f0eb9..422e29b1ce 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 170231c4b7..cf529b597c 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 723a28f9cbc5c6130f496065fc01c839083e97bf3e4930f940a03c0155046170  7.0.7-27.tar.gz
++sha256 ac957ef303fb870cb92331947ebcdcef5b553e80c7897c0aec866889f35e1a23  7.0.7-38.tar.gz
+ sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 116543888b..4aa9d56db2 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FILE_VERSION = 5.32
-+FILE_VERSION = 5.33
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- HOST_FILE_DEPENDENCIES = host-zlib
-@@ -13,5 +13,12 @@ FILE_INSTALL_STAGING = YES
- FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
- FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
- 
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+FILE_CONF_OPTS += --enable-libseccomp
-+FILE_DEPENDENCIES += libseccomp
-+else
-+FILE_CONF_OPTS += --disable-libseccomp
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-IMAGEMAGICK_VERSION = 7.0.7-27
++IMAGEMAGICK_VERSION = 7.0.7-38
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
