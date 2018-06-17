@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 14:02:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.3.3.7
-In-Reply-To: <20180616084017.474-1-bernd.kuhls@t-online.de>
-References: <20180616084017.474-1-bernd.kuhls@t-online.de>
-Message-ID: <20180617140252.78ce6613@windsurf>
+Date: Sun, 17 Jun 2018 14:04:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: security bump to
+ version 8.11.3
+In-Reply-To: <20180616224408.31434-1-martin@barkynet.com>
+References: <20180616224408.31434-1-martin@barkynet.com>
+Message-ID: <20180617140435.1844cf11@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,14 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 16 Jun 2018 10:40:17 +0200, Bernd Kuhls wrote:
-> Release notes: https://blog.torproject.org/tor-0337-released
+On Sat, 16 Jun 2018 23:44:08 +0100, Martin Bark wrote:
+> Fixes the following security issues:
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> - (CVE-2018-7167): Fixes Denial of Service vulnerability where calling
+>   Buffer.fill() could hang
+> 
+> - (CVE-2018-7161): Fixes Denial of Service vulnerability by updating the
+>   http2 implementation to not crash under certain circumstances during
+>   cleanup
+> 
+> - (CVE-2018-1000168): Fixes Denial of Service vulnerability by upgrading
+>   nghttp2 to 1.32.0
+> 
+> See https://nodejs.org/en/blog/release/v8.11.3/ for more details
+> 
+> Signed-off-by: Martin Bark <martin@barkynet.com>
 > ---
->  package/tor/tor.hash | 2 +-
->  package/tor/tor.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/nodejs/nodejs.hash | 4 ++--
+>  package/nodejs/nodejs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
