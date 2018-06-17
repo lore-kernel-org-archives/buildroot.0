@@ -1,56 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:26:14 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/libvorbis: add
- upstream security patch to fix CVE-2017-14160
-Message-ID: <20180617155626.6C1C481070@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:26:59 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] mariadb: bump version to
+ 10.1.32
+Message-ID: <20180617155626.758BC81070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5d023f659f0decd4cbb8971237e4758daf1445b
+commit: https://git.buildroot.net/buildroot/commit/?id=a2b8f69cfca49819fcd10e43fc17830a6790d0ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dc7f8715746d50d3a7db36211d5da6c68020eb18)
+Release notes: https://mariadb.com/kb/en/mariadb-10132-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10132-changelog/
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3f37dd7c3b5eb25a41edc6f72ba73e5a21b07e9b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...fix-bounds-check-on-very-low-sample-rates.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ package/mariadb/mariadb.hash | 4 ++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch b/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
-new file mode 100644
-index 0000000000..e84f3d4799
---- /dev/null
-+++ b/package/libvorbis/0001-CVE-2017-14160-fix-bounds-check-on-very-low-sample-rates.patch
-@@ -0,0 +1,28 @@
-+From: Thomas Daede <daede003@umn.edu>
-+Date: Wed, 9 May 2018 21:56:59 +0000 (-0700)
-+Subject: CVE-2017-14160: fix bounds check on very low sample rates.
-+X-Git-Url: https://git.xiph.org/?p=vorbis.git;a=commitdiff_plain;h=018ca26dece618457dd13585cad52941193c4a25
-+
-+CVE-2017-14160: fix bounds check on very low sample rates.
-+
-+Downloaded from upstream commit
-+https://git.xiph.org/?p=vorbis.git;a=commitdiff;h=018ca26dece618457dd13585cad52941193c4a25
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+
-+diff --git a/lib/psy.c b/lib/psy.c
-+index 422c6f1..1310123 100644
-+--- a/lib/psy.c
-++++ b/lib/psy.c
-+@@ -602,8 +602,9 @@ static void bark_noise_hybridmp(int n,const long *b,
-+   for (i = 0, x = 0.f;; i++, x += 1.f) {
-+ 
-+     lo = b[i] >> 16;
-+-    if( lo>=0 ) break;
-+     hi = b[i] & 0xffff;
-++    if( lo>=0 ) break;
-++    if( hi>=n ) break;
-+ 
-+     tN = N[hi] + N[-lo];
-+     tX = X[hi] - X[-lo];
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index cc1e353ab7..b8b2dde374 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.31/
+-sha256 ab7641c2fe4e5289da6141766a9c3350e013def56fafd6f1377080bc8048b2e6  mariadb-10.1.31.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.32/
++sha256 0e2aae6a6a190d07c8e36e87dd43377057fa82651ca3c583462563f3e9369096  mariadb-10.1.32.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 54eafc1702..391655fb0a 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.31
++MARIADB_VERSION = 10.1.32
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
