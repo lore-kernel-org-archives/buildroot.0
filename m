@@ -1,38 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:37:04 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] f2fs-tools: update
- homepage link
-Message-ID: <20180617155627.1933F826A9@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:39:49 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/file: bump
+ version to 5.33
+Message-ID: <20180617155627.3CBEF826A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b1232002c0dd16a4ce43fc93a257c1dc9fe9c25
+commit: https://git.buildroot.net/buildroot/commit/?id=21e768411ccd4aea2b95259bea625bb05a8a9a84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-As noted in the sourceforge page, the project is not using sourceforge
-anymore. Use the gitweb summary page instead.
+Added license hashes, added optional dependency to libseccomp provided
+by upstream in this version bump.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit a74a41d834042ec1f2651cfd4adc23e21c8a8a22)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit eacca09a8a219fdcd94f39ccab329a4d6a63092b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/f2fs-tools/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/file/file.hash | 5 ++++-
+ package/file/file.mk   | 9 ++++++++-
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/package/f2fs-tools/Config.in b/package/f2fs-tools/Config.in
-index f0630e99c6..e373096380 100644
---- a/package/f2fs-tools/Config.in
-+++ b/package/f2fs-tools/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_F2FS_TOOLS
- 	help
- 	  Tools for Flash-Friendly File System (F2FS)
+diff --git a/package/file/file.hash b/package/file/file.hash
+index fee516c8e2..a6b40be349 100644
+--- a/package/file/file.hash
++++ b/package/file/file.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated
+-sha256 8639dc4d1b21e232285cd483604afc4a6ee810710e00e579dbe9591681722b50  file-5.32.tar.gz
++sha256 1c52c8c3d271cd898d5511c36a68059cda94036111ab293f01f83c3525b737c6  file-5.33.tar.gz
++sha256 3c0ad13c36f891a9b4f951e59eb2fc108065a46f849697cc6fd3cdb41cc23a3d  COPYING
++sha256 d98ee4d8d95e7d021a5dfc41f137ecc3b624a7b98e8bd793130202d12a21ed57  src/mygetopt.h
++sha256 85e358d575ad4ac5b38b623a25b24246ccff3c7e680d930c0a9ff5228fe434b6  src/vasprintf.c
+diff --git a/package/file/file.mk b/package/file/file.mk
+index df0e0f0eb9..422e29b1ce 100644
+--- a/package/file/file.mk
++++ b/package/file/file.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--	  http://sourceforge.net/projects/f2fs-tools/
-+	  https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git
+-FILE_VERSION = 5.32
++FILE_VERSION = 5.33
+ FILE_SITE = ftp://ftp.astron.com/pub/file
+ FILE_DEPENDENCIES = host-file zlib
+ HOST_FILE_DEPENDENCIES = host-zlib
+@@ -13,5 +13,12 @@ FILE_INSTALL_STAGING = YES
+ FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
+ FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
  
- comment "f2fs-tools needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++FILE_CONF_OPTS += --enable-libseccomp
++FILE_DEPENDENCIES += libseccomp
++else
++FILE_CONF_OPTS += --disable-libseccomp
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
