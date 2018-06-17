@@ -1,46 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:32:05 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] sysvinit: reduce number
- of mkdir calls in inittab
-Message-ID: <20180617155626.CE7E8826A9@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:29:02 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] docs/manual: always point
+ to the correct license file
+Message-ID: <20180617155626.A0A8481070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e51711a79b3210f858059c218051223df8d4a990
+commit: https://git.buildroot.net/buildroot/commit/?id=5f186a3a222aeae128ab68e19cbffdb27e0105ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The default sysvinit inittab does two separate mkdir calls to create
-/dev/pts and /dev/shm. Reduce this to call mkdir only once for both
-directories.
+The manual is GPL-2, and points to the COPYING file in the repository.
+When we do a rendering of the manual for a specific version, that URL
+is currently always poitning to the latest version of the COPYING file.
 
-This removes id "si3" but keeps ids "si4".."si9" intact rather than
-renumbering them. This would just increase the turmoil without any
-practical effect.
+If we ever have to change the content of that file (e.g. to add a new
+exception, more clarifications, a license change, or whatever), then
+an old manual would point to that newer version, which would then be
+incorrect.
 
-Based on commit e9db8122fb, by Florian La Roche <F.LaRoche@pilz.de>.
+Include the sha1 of the commit in the URL, so that the manual always
+point to the tree at the time the manual was rendered, not the time
+it is consulted. Contrary to the informative text above, use the full
+sha1, not the shortened one.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dc267db6ab4d54ed3ddb582774fb51ef64332649)
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 529219ba96128b3de17dc1201f0b64d723013315)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysvinit/inittab | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ docs/manual/manual.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sysvinit/inittab b/package/sysvinit/inittab
-index fad91eae8b..6b0b580e59 100644
---- a/package/sysvinit/inittab
-+++ b/package/sysvinit/inittab
-@@ -6,8 +6,7 @@ id:3:initdefault:
+diff --git a/docs/manual/manual.txt b/docs/manual/manual.txt
+index afb53d0482..9d5076047f 100644
+--- a/docs/manual/manual.txt
++++ b/docs/manual/manual.txt
+@@ -9,8 +9,8 @@ Buildroot {sys:echo $\{BR2_VERSION%%-git*\}} manual generated on {localdate}
  
- si0::sysinit:/bin/mount -t proc proc /proc
- si1::sysinit:/bin/mount -o remount,rw /
--si2::sysinit:/bin/mkdir -p /dev/pts
--si3::sysinit:/bin/mkdir -p /dev/shm
-+si2::sysinit:/bin/mkdir -p /dev/pts /dev/shm
- si4::sysinit:/bin/mount -a
- si5::sysinit:/bin/hostname -F /etc/hostname
- rcS:12345:wait:/etc/init.d/rcS
+ The Buildroot manual is written by the Buildroot developers.
+ It is licensed under the GNU General Public License, version 2. Refer to the
+-http://git.buildroot.org/buildroot/tree/COPYING[COPYING] file in the Buildroot
+-sources for the full text of this license.
++http://git.buildroot.org/buildroot/tree/COPYING?id={sys:git rev-parse HEAD}[COPYING]
++file in the Buildroot sources for the full text of this license.
+ 
+ Copyright (C) 2004-2018 The Buildroot developers
+ 
