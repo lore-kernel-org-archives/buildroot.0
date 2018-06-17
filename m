@@ -1,44 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:34:57 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] busybox: add an inittab
- entry to activate swap
-Message-ID: <20180617155626.EFFF6826A9@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:30:55 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] triggerhappy: use target
+ pkg-config
+Message-ID: <20180617155626.C5992826A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27e91a6cd6d6faec4395700707ceddb1ed1eaa89
+commit: https://git.buildroot.net/buildroot/commit/?id=56be42df17ca195e482959483f3f885523fb86a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-There is a call to swapoff in the shutdown sequence, so call "swapon -a"
-on startup. As stated in the swapon man page,
+triggerhappy uses pkg-config to detect the systemd library. Make sure it
+uses the target pkg-config, not the host one.
 
-   All devices marked as "swap" in /etc/fstab are made available, except
-   for those with the "noauto" option. Devices that are already being
-   used as swap are silently skipped.
+Fixes build failure when the host has systemd pkg-config files:
 
-So even if the system has some init script to start/stop swap (e.g. from
-a rootfs ovelay) calling swapon/swapoff would be harmless.
+.../host/bin/arm-linux-gcc -static  th-cmd.o cmdsocket.o  -lsystemd -o th-cmd
+.../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: cannot find -lsystemd
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d524cc7d9de549228b998ba5747b0d7cd4f24251)
+(cherry picked from commit b4a7145b0b98fb37ee649e293a6a81785df67837)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/inittab | 1 +
- 1 file changed, 1 insertion(+)
+ package/triggerhappy/triggerhappy.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/busybox/inittab b/package/busybox/inittab
-index 7cd203de0b..ff1725c775 100644
---- a/package/busybox/inittab
-+++ b/package/busybox/inittab
-@@ -18,6 +18,7 @@
- ::sysinit:/bin/mount -o remount,rw /
- ::sysinit:/bin/mkdir -p /dev/pts /dev/shm
- ::sysinit:/bin/mount -a
-+::sysinit:/sbin/swapon -a
- null::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
- null::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
- null::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
+diff --git a/package/triggerhappy/triggerhappy.mk b/package/triggerhappy/triggerhappy.mk
+index 9f74c486f1..4c39ab5e5d 100644
+--- a/package/triggerhappy/triggerhappy.mk
++++ b/package/triggerhappy/triggerhappy.mk
+@@ -8,9 +8,11 @@ TRIGGERHAPPY_VERSION = b822888066129350e51ad79f1cf307fa38dae4f7
+ TRIGGERHAPPY_SITE = $(call github,wertarbyte,triggerhappy,$(TRIGGERHAPPY_VERSION))
+ TRIGGERHAPPY_LICENSE = GPL-3.0+
+ TRIGGERHAPPY_LICENSE_FILES = COPYING
++TRIGGERHAPPY_DEPENDENCIES = host-pkgconf
+ 
+ define TRIGGERHAPPY_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) thd th-cmd
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) PKGCONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++		-C $(@D) thd th-cmd
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
