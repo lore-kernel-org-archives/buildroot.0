@@ -1,145 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:27:05 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] mariadb: security bump
- version to 10.1.33
-Message-ID: <20180617155626.8087381070@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:19:42 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] busybox: reduce number of
+ mkdir calls in inittab
+Message-ID: <20180617155626.29CCB81070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a1c134e32700b26c7fcecc4af41a7b3a9516e336
+commit: https://git.buildroot.net/buildroot/commit/?id=a765cfb34dc2f5f321c05f76e1a3aaf203deda72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Release notes: https://mariadb.com/kb/en/mariadb-10133-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10133-changelog/
+The default busybox inittab does two separate mkdir calls
+to create /dev/pts and /dev/shm. Reduce this to call mkdir
+only once for both directories.
 
-Fixes the following security vulnerabilities:
-
-CVE-2018-2782 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
-prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server.  Successful attacks of this vulnerability can result in
-unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server.
-
-CVE-2018-2784 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
-prior and 5.7.21 and prior.  Easily exploitable vulnerability allows low
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server.  Successful attacks of this vulnerability can result in
-unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server.
-
-CVE-2018-2787 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
-prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server.  Successful attacks of this vulnerability can result in
-unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server as well as unauthorized update, insert or
-delete access to some of MySQL Server accessible data.
-
-CVE-2018-2766 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.6.39 and
-prior and 5.7.21 and prior.  Easily exploitable vulnerability allows high
-privileged attacker with network access via multiple protocols to compromise
-MySQL Server.  Successful attacks of this vulnerability can result in
-unauthorized ability to cause a hang or frequently repeatable crash
-(complete DOS) of MySQL Server.
-
-CVE-2018-2755 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Replication).  Supported versions that are affected
-are 5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
-exploit vulnerability allows unauthenticated attacker with logon to the
-infrastructure where MySQL Server executes to compromise MySQL Server.
-Successful attacks require human interaction from a person other than the
-attacker and while the vulnerability is in MySQL Server, attacks may
-significantly impact additional products.  Successful attacks of this
-vulnerability can result in takeover of MySQL Server.
-
-CVE-2018-2819 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: InnoDB).  Supported versions that are affected are 5.5.59 and
-prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server.  Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2817 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server.  Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2761 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Client programs).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
-exploit vulnerability allows unauthenticated attacker with network access
-via multiple protocols to compromise MySQL Server.  Successful attacks of
-this vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2781 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Optimizer).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
-vulnerability allows high privileged attacker with network access via
-multiple protocols to compromise MySQL Server.  Successful attacks of this
-vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2771 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: Locking).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Difficult to
-exploit vulnerability allows high privileged attacker with network access
-via multiple protocols to compromise MySQL Server.  Successful attacks of
-this vulnerability can result in unauthorized ability to cause a hang or
-frequently repeatable crash (complete DOS) of MySQL Server.
-
-CVE-2018-2813 - Vulnerability in the MySQL Server component of Oracle MySQL
-(subcomponent: Server: DDL).  Supported versions that are affected are
-5.5.59 and prior, 5.6.39 and prior and 5.7.21 and prior.  Easily exploitable
-vulnerability allows low privileged attacker with network access via
-multiple protocols to compromise MySQL Server.  Successful attacks of this
-vulnerability can result in unauthorized read access to a subset of MySQL
-Server accessible data.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5fbacdd59fd43c47f7031922e9fbae4d316a296f)
+Signed-off-by: Florian La Roche <F.LaRoche@pilz.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 13dbe73782c3555b382ea8ebd9cda34ac9ef5744)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.hash | 4 ++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/busybox/inittab | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index b8b2dde374..7eea62ab7b 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,5 @@
--# From https://downloads.mariadb.org/mariadb/10.1.32/
--sha256 0e2aae6a6a190d07c8e36e87dd43377057fa82651ca3c583462563f3e9369096  mariadb-10.1.32.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.33/
-+sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
- 
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 391655fb0a..ce846d9cda 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.32
-+MARIADB_VERSION = 10.1.33
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+diff --git a/package/busybox/inittab b/package/busybox/inittab
+index 3f49f6bd7a..368b037ee2 100644
+--- a/package/busybox/inittab
++++ b/package/busybox/inittab
+@@ -16,8 +16,7 @@
+ # Startup the system
+ ::sysinit:/bin/mount -t proc proc /proc
+ ::sysinit:/bin/mount -o remount,rw /
+-::sysinit:/bin/mkdir -p /dev/pts
+-::sysinit:/bin/mkdir -p /dev/shm
++::sysinit:/bin/mkdir -p /dev/pts /dev/shm
+ ::sysinit:/bin/mount -a
+ ::sysinit:/bin/hostname -F /etc/hostname
+ # now run any rc scripts
