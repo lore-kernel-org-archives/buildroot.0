@@ -1,48 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 20:43:26 +0200
-Subject: [Buildroot] [git commit] shadowsocks-libev: add dependency on sync
- builtins
-Message-ID: <20180617184430.B7B26886EF@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 20:53:53 +0200
+Subject: [Buildroot] [git commit] support/docker: sort the list of installed
+ packages
+Message-ID: <20180617185137.20B7F8156F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0c28f2a80522961c33bbcefc35b4f09dbcb6429
+commit: https://git.buildroot.net/buildroot/commit/?id=afc1ec707384dabd0d63d316c117f45ee8976356
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libcork (bundled inside shadowsocks-libev) uses the __sync builtins
-for atomic operations: the 4-byte variant on 32 bits platforms and the
-8-byte variant on 64-bits platform.
+As suggested in the docker best practices [0], order the package list
+alphabetically, and list only one package per line.
 
-Fixes:
+This will be much usefull later, we need to update the list of installed
+packages, like adding new ones for example.
 
-  http://autobuild.buildroot.net/results/552b09ffe951c429422529c895f4c3ec723cf5ab
+[0] https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#sort-multi-line-arguments
 
-Signed-off-by: Min Xu <xuminready@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/shadowsocks-libev/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ support/docker/Dockerfile | 29 +++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
-diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
-index 56914e8e9d..f58abdbcb1 100644
---- a/package/shadowsocks-libev/Config.in
-+++ b/package/shadowsocks-libev/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_SHADOWSOCKS_LIBEV
- 	bool "shadowsocks-libev"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # for libcork
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR2_ARCH_IS_64 # for libcork
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_C_ARES
-@@ -14,5 +16,7 @@ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
- 	  https://github.com/shadowsocks/shadowsocks-libev
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 8c525f7cf1..bebd861dc1 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -22,13 +22,30 @@ COPY apt-sources.list /etc/apt/sources.list
+ RUN dpkg --add-architecture i386 && \
+     apt-get update -y
+ RUN apt-get install -y --no-install-recommends \
+-        build-essential cmake libc6:i386 g++-multilib \
+-        bc ca-certificates file locales rsync \
+-        cvs bzr git mercurial subversion wget \
+-        cpio unzip \
++        bc \
++        build-essential \
++        bzr \
++        ca-certificates \
++        cmake \
++        cpio \
++        cvs \
++        file \
++        g++-multilib \
++        git \
++        libc6:i386 \
+         libncurses5-dev \
+-        python-nose2 python-pexpect qemu-system-arm qemu-system-x86 \
+-        python-pip && \
++        locales \
++        mercurial \
++        python-nose2 \
++        python-pexpect \
++        python-pip \
++        qemu-system-arm \
++        qemu-system-x86 \
++        rsync \
++        subversion \
++        unzip \
++        wget \
++        && \
+     apt-get -y autoremove && \
+     apt-get -y clean
  
- comment "shadowsocks-libev needs a toolchain w/ threads"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_8 || !BR2_ARCH_IS_64
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
