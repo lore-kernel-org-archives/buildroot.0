@@ -1,22 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:55:06 +0200
-Subject: [Buildroot] [PATCH 1/3] f2fs-tools: update homepage link
-In-Reply-To: <e2de174cc828db7318acd88ebc64f751411e8458.1528825250.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 12 Jun 2018 20:40:48 +0300")
-References: <e2de174cc828db7318acd88ebc64f751411e8458.1528825250.git.baruch@tkos.co.il>
-Message-ID: <878t7do1b9.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 17:55:21 +0200
+Subject: [Buildroot] [PATCH] perl: add upstream security fix for
+ CVE-2018-12015
+In-Reply-To: <20180612152130.32491-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 12 Jun 2018 17:21:30 +0200")
+References: <20180612152130.32491-1-peter@korsgaard.com>
+Message-ID: <874li1o1au.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > As noted in the sourceforge page, the project is not using sourceforge
- > anymore. Use the gitweb summary page instead.
+ > Fixes CVE-2018-12015 - In Perl through 5.26.2, the Archive::Tar module
+ > allows remote attackers to bypass a directory-traversal protection
+ > mechanism, and overwrite arbitrary files, via an archive file containing a
+ > symlink and a regular file with the same name.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Patch from
+ > https://github.com/jib/archive-tar-new/commit/ae65651eab053fc6dc4590dbb863a268215c1fc5
+ > with path rewritten to match perl tarball.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2018.02.x, thanks.
 
