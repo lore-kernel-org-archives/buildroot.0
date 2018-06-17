@@ -1,43 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:44:36 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
- 9, 14, 16, 17}.x series
-Message-ID: <20180617155627.7117F826A9@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:13:08 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] DEVELOPERS: update my
+ e-mail address
+Message-ID: <20180617155625.F2CD681070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e06917c072b3c72f9a50e050066ed7bc96e16bfe
+commit: https://git.buildroot.net/buildroot/commit/?id=abb169750f28ea0ca559bc9fc14703784d158d96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-[Peter: drop 4.16.x/17.x change]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a5a9beb7d9a423bbc9916cbfca87ffcab4c74705)
+(cherry picked from commit 0a0812db05ee5585e52f88d4cb9bbb5b68e9e5e5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 36fdb5c67e..982e24fff8 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.137"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.108"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.138"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.109"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.49"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.50"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4b6c6274f8..909b4cedfe 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1959,7 +1959,7 @@ F:	package/x11r7/xapp_xinput-calibrator/
+ F:	package/zlog/
+ F:	utils/scanpypi
+ 
+-N:	Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>
++N:	Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+ F:	package/crudini/
+ F:	package/grantlee/
+ F:	package/proj/
