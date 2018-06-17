@@ -1,58 +1,106 @@
-From: Martin Bark <martin@barkynet.com>
-Date: Sat, 16 Jun 2018 23:44:08 +0100
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: security bump to version
- 8.11.3
-Message-ID: <20180616224408.31434-1-martin@barkynet.com>
+From: Danny Milosavljevic <dannym@scratchpost.org>
+Date: Sun, 17 Jun 2018 02:49:00 +0200
+Subject: [Buildroot] [PATCH 1/1] Added support for Sinovoip BananaPi M2
+ Ultra board.
+Message-ID: <20180617004900.1413-1-dannym@scratchpost.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
-
-- (CVE-2018-7167): Fixes Denial of Service vulnerability where calling
-  Buffer.fill() could hang
-
-- (CVE-2018-7161): Fixes Denial of Service vulnerability by updating the
-  http2 implementation to not crash under certain circumstances during
-  cleanup
-
-- (CVE-2018-1000168): Fixes Denial of Service vulnerability by upgrading
-  nghttp2 to 1.32.0
-
-See https://nodejs.org/en/blog/release/v8.11.3/ for more details
-
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Signed-off-by: Danny Milosavljevic <dannym@scratchpost.org>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/sinovoip/m2-ultra/boot.cmd     |  7 +++++++
+ board/sinovoip/m2-ultra/genimage.cfg | 33 +++++++++++++++++++++++++++++++++
+ configs/bananapi_m2_ultra_defconfig  | 27 +++++++++++++++++++++++++++
+ 3 files changed, 67 insertions(+)
+ create mode 100644 board/sinovoip/m2-ultra/boot.cmd
+ create mode 100644 board/sinovoip/m2-ultra/genimage.cfg
+ create mode 100644 configs/bananapi_m2_ultra_defconfig
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 25b035d694..be4c3de4f7 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From http://nodejs.org/dist/v8.11.2/SHASUMS256.txt
--sha256 539946c0381809576bed07424a35fc1740d52f4bd56305d6278d9e76c88f4979  node-v8.11.2.tar.xz
-+# From http://nodejs.org/dist/v8.11.3/SHASUMS256.txt
-+sha256 577c751fdca91c46c60ffd8352e5b465881373bfdde212c17c3a3c1bd2616ee0  node-v8.11.3.tar.xz
- 
- # Hash for license file
- sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 0c7db83012..61cd03bb8f 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.11.2
-+NODEJS_VERSION = 8.11.3
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
--- 
-2.17.1
+diff --git a/board/sinovoip/m2-ultra/boot.cmd b/board/sinovoip/m2-ultra/boot.cmd
+new file mode 100644
+index 0000000000..9c24eabff6
+--- /dev/null
++++ b/board/sinovoip/m2-ultra/boot.cmd
+@@ -0,0 +1,7 @@
++setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
++
++mmc dev 0
++fatload mmc 0 $kernel_addr_r zImage
++fatload mmc 0 $fdt_addr_r sun8i-r40-bananapi-m2-ultra.dtb
++
++bootz $kernel_addr_r - $fdt_addr_r
+diff --git a/board/sinovoip/m2-ultra/genimage.cfg b/board/sinovoip/m2-ultra/genimage.cfg
+new file mode 100644
+index 0000000000..675253af23
+--- /dev/null
++++ b/board/sinovoip/m2-ultra/genimage.cfg
+@@ -0,0 +1,33 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"zImage",
++			"sun8i-r40-bananapi-m2-ultra.dtb",
++			"boot.scr"
++		}
++	}
++	size = 64M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/configs/bananapi_m2_ultra_defconfig b/configs/bananapi_m2_ultra_defconfig
+new file mode 100644
+index 0000000000..a86d5923c6
+--- /dev/null
++++ b/configs/bananapi_m2_ultra_defconfig
+@@ -0,0 +1,27 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_13=y
++BR2_TARGET_GENERIC_ISSUE="Welcome to Bananapi M2 Ultra"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sinovoip/m2-ultra/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=n
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-r40-bananapi-m2-ultra"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=n
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Bananapi_M2_Ultra"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/sinovoip/m2-ultra/boot.cmd"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
