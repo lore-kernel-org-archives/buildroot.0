@@ -1,35 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:57:43 +0200
-Subject: [Buildroot] [PATCH v2] poppler: link with libatomic when needed
-In-Reply-To: <20180528181953.GA23287@waldemar-brodkorb.de> (Waldemar
- Brodkorb's message of "Mon, 28 May 2018 20:19:53 +0200")
-References: <20180528181953.GA23287@waldemar-brodkorb.de>
-Message-ID: <87fu1ltq8o.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 16:58:10 +0200
+Subject: [Buildroot] [PATCHv2] package/dash: don't build in paralle
+In-Reply-To: <20180529174237.16902-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Tue, 29 May 2018 19:42:37 +0200")
+References: <20180529174237.16902-1-yann.morin.1998@free.fr>
+Message-ID: <87bmc9tq7x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Following errors might occur on architectures required to use gcc libatomics:
- > sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+ > dash has races in its Makefile, but upstream is not too keen in fixing
+ > those, and just suggests that dash not be built in parallel:
 
- > This is often the case for sparcv8 32 bit toolchains.
-
- > See 55a9d6d55888b04ec6c476399e5b98a2412995f5 and 03f6e005e6a9617767b24a9026da9477848020cc.
+ >     https://www.mail-archive.com/dash at vger.kernel.org/msg01675.html
 
  > Fixes:
- >   http://autobuild.buildroot.net/results/64a96663a48ab644bc03c9a3ec2d6a644119dee6
- >   http://autobuild.buildroot.net/results/82e85e12478fc1972b70ad728ed7c1554920c9e3
+ >     http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
+ >     http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
+ >     http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
+ >     [...]
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > Reported-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Baruch Siach <baruch@tkos.co.il>
+
  > ---
- >  v1 -> v2:
- >    - more verbose commit message
- >    - move code to generic section
- >    - use LDFLAGS instead of CXXFLAGS, LIBS are ignored.
+ > Changes v1 -> v2:
+ >   - disable parallel build instead of trying to fix it, since upstream
+ >     suggest so.
 
 Committed to 2018.02.x, thanks.
 
