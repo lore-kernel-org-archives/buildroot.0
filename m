@@ -1,83 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:39:35 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] perl: add upstream
- security fix for CVE-2018-12015
-Message-ID: <20180617155627.34435826A9@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:28:28 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libvncserver: add
+ upstream security fix for CVE-2018-7225
+Message-ID: <20180617155626.98F4281070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24fa6b99705174025c9edf2325e4012a77ef32e8
+commit: https://git.buildroot.net/buildroot/commit/?id=6de0560cb62b09cd24c4e6457143692d0ed7e5c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes CVE-2018-12015 - In Perl through 5.26.2, the Archive::Tar module
-allows remote attackers to bypass a directory-traversal protection
-mechanism, and overwrite arbitrary files, via an archive file containing a
-symlink and a regular file with the same name.
-
-Patch from
-https://github.com/jib/archive-tar-new/commit/ae65651eab053fc6dc4590dbb863a268215c1fc5
-with path rewritten to match perl tarball.
+Fixes CVE-2018-7225 - An issue was discovered in LibVNCServer through
+0.9.11.  rfbProcessClientNormalMessage() in rfbserver.c does not sanitize
+msg.cct.length, leading to access to uninitialized and potentially sensitive
+data or possibly unspecified other impact (e.g., an integer overflow) via
+specially crafted VNC packets.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 66760f27342fccacdba64269525a3a32d0518905)
+(cherry picked from commit a4f7700f0b40022f91c2d43f7d21c5a01487587e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ve-existing-files-before-overwriting-them.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ ...0001-Limit-client-cut-text-length-to-1-MB.patch | 65 ++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/package/perl/0001-PATCH-Remove-existing-files-before-overwriting-them.patch b/package/perl/0001-PATCH-Remove-existing-files-before-overwriting-them.patch
+diff --git a/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch b/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
 new file mode 100644
-index 0000000000..5223b78c01
+index 0000000000..84a537640d
 --- /dev/null
-+++ b/package/perl/0001-PATCH-Remove-existing-files-before-overwriting-them.patch
-@@ -0,0 +1,46 @@
-+From ae65651eab053fc6dc4590dbb863a268215c1fc5 Mon Sep 17 00:00:00 2001
++++ b/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
+@@ -0,0 +1,65 @@
++From 28afb6c537dc82ba04d5f245b15ca7205c6dbb9c Mon Sep 17 00:00:00 2001
 +From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
-+Date: Fri, 8 Jun 2018 11:45:40 +0100
-+Subject: [PATCH] [PATCH] Remove existing files before overwriting them
++Date: Mon, 26 Feb 2018 13:48:00 +0100
++Subject: [PATCH] Limit client cut text length to 1 MB
 +
-+Archive should extract only the latest same-named entry.
-+Extracted regular file should not be writtent into existing block
-+device (or any other one).
++This patch constrains a client cut text length to 1 MB. Otherwise
++a client could make server allocate 2 GB of memory and that seems to
++be to much to classify it as a denial of service.
 +
-+https://rt.cpan.org/Ticket/Display.html?id=125523
++The limit also prevents from an integer overflow followed by copying
++an uninitilized memory when processing msg.cct.length value larger
++than SIZE_MAX or INT_MAX - sz_rfbClientCutTextMsg.
 +
-+[Peter: rewrite path to match perl tarball with sed 's|\(lib/Archive\)|cpan/Archive-Tar/\1|g']
-+Signed-off-by: Chris 'BinGOs' Williams <chris@bingosnet.co.uk>
++This patch also corrects accepting length value of zero (malloc(0) is
++interpreted on differnet systems differently).
++
++CVE-2018-7225
++<https://github.com/LibVNC/libvncserver/issues/218>
++
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 +---
-+ cpan/Archive-Tar/lib/Archive/Tar.pm | 14 ++++++++++++++
-+ 1 file changed, 14 insertions(+)
++ libvncserver/rfbserver.c | 20 +++++++++++++++++++-
++ 1 file changed, 19 insertions(+), 1 deletion(-)
 +
-+diff --git a/cpan/Archive-Tar/lib/Archive/Tar.pm b/cpan/Archive-Tar/lib/Archive/Tar.pm
-+index 6244369..a83975f 100644
-+--- a/cpan/Archive-Tar/lib/Archive/Tar.pm
-++++ b/cpan/Archive-Tar/lib/Archive/Tar.pm
-+@@ -845,6 +845,20 @@ sub _extract_file {
-+         return;
-+     }
++diff --git a/libvncserver/rfbserver.c b/libvncserver/rfbserver.c
++index 116c488..4fc4d9d 100644
++--- a/libvncserver/rfbserver.c
+++++ b/libvncserver/rfbserver.c
++@@ -88,6 +88,8 @@
++ #include <errno.h>
++ /* strftime() */
++ #include <time.h>
+++/* PRIu32 */
+++#include <inttypes.h>
 + 
-++    ### If a file system already contains a block device with the same name as
-++    ### the being extracted regular file, we would write the file's content
-++    ### to the block device. So remove the existing file (block device) now.
-++    ### If an archive contains multiple same-named entries, the last one
-++    ### should replace the previous ones. So remove the old file now.
-++    ### If the old entry is a symlink to a file outside of the CWD, the new
-++    ### entry would create a file there. This is CVE-2018-12015
-++    ### <https://rt.cpan.org/Ticket/Display.html?id=125523>.
-++    if (-l $full || -e _) {
-++	if (!unlink $full) {
-++	    $self->_error( qq[Could not remove old file '$full': $!] );
++ #ifdef LIBVNCSERVER_WITH_WEBSOCKETS
++ #include "rfbssl.h"
++@@ -2575,7 +2577,23 @@ rfbProcessClientNormalMessage(rfbClientPtr cl)
++ 
++ 	msg.cct.length = Swap32IfLE(msg.cct.length);
++ 
++-	str = (char *)malloc(msg.cct.length);
+++	/* uint32_t input is passed to malloc()'s size_t argument,
+++	 * to rfbReadExact()'s int argument, to rfbStatRecordMessageRcvd()'s int
+++	 * argument increased of sz_rfbClientCutTextMsg, and to setXCutText()'s int
+++	 * argument. Here we impose a limit of 1 MB so that the value fits
+++	 * into all of the types to prevent from misinterpretation and thus
+++	 * from accessing uninitialized memory (CVE-2018-7225) and also to
+++	 * prevent from a denial-of-service by allocating to much memory in
+++	 * the server. */
+++	if (msg.cct.length > 1<<20) {
+++	    rfbLog("rfbClientCutText: too big cut text length requested: %" PRIu32 "\n",
+++		    msg.cct.length);
+++	    rfbCloseClient(cl);
 ++	    return;
 ++	}
-++    }
-+     if( length $entry->type && $entry->is_file ) {
-+         my $fh = IO::File->new;
-+         $fh->open( $full, '>' ) or (
+++
+++	/* Allow zero-length client cut text. */
+++	str = (char *)calloc(msg.cct.length ? msg.cct.length : 1, 1);
++ 	if (str == NULL) {
++ 		rfbLogPerror("rfbProcessClientNormalMessage: not enough memory");
++ 		rfbCloseClient(cl);
 +-- 
 +2.11.0
 +
