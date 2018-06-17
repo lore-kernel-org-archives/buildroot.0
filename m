@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:54:12 +0200
-Subject: [Buildroot] [PATCH 1/4] sysvinit: reduce number of mkdir calls
- in inittab
-In-Reply-To: <20180611060016.20755-2-casantos@datacom.com.br> (Carlos Santos's
- message of "Mon, 11 Jun 2018 03:00:13 -0300")
+Date: Sun, 17 Jun 2018 17:54:47 +0200
+Subject: [Buildroot] [PATCH 2/4] sysvinit: add an inittab entry to
+ activate swap
+In-Reply-To: <20180611060016.20755-3-casantos@datacom.com.br> (Carlos Santos's
+ message of "Mon, 11 Jun 2018 03:00:14 -0300")
 References: <20180611060016.20755-1-casantos@datacom.com.br>
- <20180611060016.20755-2-casantos@datacom.com.br>
-Message-ID: <87po0po1cr.fsf@dell.be.48ers.dk>
+ <20180611060016.20755-3-casantos@datacom.com.br>
+Message-ID: <87h8m1o1bs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,15 +15,15 @@ To: buildroot@busybox.net
 
 >>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
 
- > The default sysvinit inittab does two separate mkdir calls to create
- > /dev/pts and /dev/shm. Reduce this to call mkdir only once for both
- > directories.
+ > There is a call to swapoff in the shutdown sequence, so call "swapon -a"
+ > on startup. As stated in the swapon man page,
 
- > This removes id "si3" but keeps ids "si4".."si9" intact rather than
- > renumbering them. This would just increase the turmoil without any
- > practical effect.
+ >    All devices marked as "swap" in /etc/fstab are made available, except
+ >    for those with the "noauto" option. Devices that are already being
+ >    used as swap are silently skipped.
 
- > Based on commit e9db8122fb, by Florian La Roche <F.LaRoche@pilz.de>.
+ > So even if the system has some init script to start/stop swap (e.g. from
+ > a rootfs ovelay) calling swapon/swapoff would be harmless.
 
  > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 
