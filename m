@@ -1,58 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 14:44:42 +0200
-Subject: [Buildroot] [PATCH 0/9] qt5: install missing examples
-In-Reply-To: <20180612123206.31523-1-gael.portay@savoirfairelinux.com>
-References: <20180612123206.31523-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180617144442.3fc03f6e@windsurf>
+Date: Sun, 17 Jun 2018 14:45:31 +0200
+Subject: [Buildroot] [git commit] qt5script: fix build issue with 32-bits
+ armv8-a
+Message-ID: <20180617125454.C781A884D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ga?l,
+commit: https://git.buildroot.net/buildroot/commit/?id=15706f86baf4e4f3ad7d0b9b5dadfb5710a9296b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 12 Jun 2018 08:31:57 -0400, Ga?l PORTAY wrote:
+Adds WTF platform support for the 32-bits armv8-a architectures.
 
-> Regards,
-> Ga?l PORTAY (9):
->   qt5canvas3d: install examples to target
->   qt5location: install examples to target
->   qt5quickcontrols: install examples to target
->   qt5script: install examples to target
->   qt5wayland: install examples to target
->   qt5svg: install examples to target
->   qt5serialbus: install examples to target
->   qt5serialport: install examples to target
->   qt5sensors: install examples to target
+Fixes:
 
-Thanks, I've applied all your patches.
+	In file included from ../3rdparty/javascriptcore/JavaScriptCore/config.h:26,
+	                from ../3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_compile.cpp:44:
+	../3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h:370:6: error: #error "Not supported ARM architecture"
+	#    error "Not supported ARM architecture"
+	     ^~~~~
 
-However, I am not super happy with how we install Qt5 packages right
-now. What we do is:
+The patch is based on two upstream fixes in WebKit[1][2].
 
- - Staging installation: "make install", with no DESTDIR or anything
-   similar
+See also commit cea7aa873a.
 
- - Target installation: manual copy.
+[1]: https://github.com/WebKit/webkit/commit/313d9fc4bdd2f020a5d0cf834c3c61982f161ebb
+[2]: https://github.com/WebKit/webkit/commit/98f0de0709786f5d9b09dfd5908266990eb909d6
 
-Ideally, I'd prefer if we could do:
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Detect-32-bits-armv8-a-architecture.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
- - Staging installation: make DESTDIR=$(STAGING_DIR) install
- - Target installation: make DESTDIR=$(TARGET_DIR) install
-
-Unfortunately, this doesn't work as-is, because the $(STAGING_DIR)
-location is hardcoded at Qt configure time, so it doesn't work
-immediately to do separate installation for staging and target. I know
-Arnout briefly looked into this during the last Buildroot hackathon.
-
-However, it would be nice if someone could have a deeper look into
-this. It would greatly help to simplify our Qt5 packages.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5script/0001-Detect-32-bits-armv8-a-architecture.patch b/package/qt5/qt5script/0001-Detect-32-bits-armv8-a-architecture.patch
+new file mode 100644
+index 0000000000..7e4e524dc9
+--- /dev/null
++++ b/package/qt5/qt5script/0001-Detect-32-bits-armv8-a-architecture.patch
+@@ -0,0 +1,49 @@
++From daf2e222903bacf85f27dfb0fffc4459bbf58b77 Mon Sep 17 00:00:00 2001
++From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
++Date: Sun, 10 Jun 2018 08:23:50 -0400
++Subject: [PATCH] Detect 32-bits armv8-a architecture
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf-8
++Content-Transfer-Encoding: 8bit
++
++These toolchains define __ARM_ARCH_8A__ (for ARM architecture version)
++and __arm__ (for 32-bits word-size; __aarch64__ for 64-bits).
++
++This commit catches this new architecture (armv8a) within a #ifdef/#endif
++inside the if statement dedicated for 32-bits ARM detection. See commit
++from WebKit [1] and [2].
++
++Fixes:
++
++	In file included from ../3rdparty/javascriptcore/JavaScriptCore/config.h:26,
++	                 from ../3rdparty/javascriptcore/JavaScriptCore/pcre/pcre_compile.cpp:44:
++	../3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h:370:6: error: #error "Not supported ARM architecture"
++	 #    error "Not supported ARM architecture"
++	      ^~~~~
++
++[1]: https://github.com/WebKit/webkit/commit/313d9fc4bdd2f020a5d0cf834c3c61982f161ebb
++[2]: https://github.com/WebKit/webkit/commit/98f0de0709786f5d9b09dfd5908266990eb909d6
++
++Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
++---
++ src/3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h b/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h
++index 00caa6d..c4b758e 100644
++--- a/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h
+++++ b/src/3rdparty/javascriptcore/JavaScriptCore/wtf/Platform.h
++@@ -306,6 +306,10 @@
++     || defined(__ARM_ARCH_7R__)
++ #define WTF_ARM_ARCH_VERSION 7
++ 
+++#elif defined(__ARM_ARCH_8__) \
+++    || defined(__ARM_ARCH_8A__)
+++#define WTF_ARM_ARCH_VERSION 8
+++
++ /* RVCT sets _TARGET_ARCH_ARM */
++ #elif defined(__TARGET_ARCH_ARM)
++ #define WTF_ARM_ARCH_VERSION __TARGET_ARCH_ARM
++-- 
++2.17.1
++
