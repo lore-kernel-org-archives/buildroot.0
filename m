@@ -1,37 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:49:14 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libjpeg: use SPDX short
- identifier
-Message-ID: <20180617150241.31C8D81213@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 16:47:22 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] xen: security bump to
+ version 4.10.1
+Message-ID: <20180617150241.1E8E67FD67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0497d7834f01fcc97caf79ee75b4388b46439d99
+commit: https://git.buildroot.net/buildroot/commit/?id=3a26f5fbd0216c0262e42b1c94bc245730637f03
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Use IJG instead of jpeg-license
+The 4.10.1 version brings a large number of fixes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://www.xenproject.org/downloads/xen-archives/xen-project-410-series/xen-4101.html
+
+Including a number of security fixes:
+
+XSA-252: DoS via non-preemptable L3/L4 pagetable freeing (CVE-2018-7540)
+XSA-253: x86: memory leak with MSR emulation (CVE-2018-5244)
+XSA-254: Information leak via side effects of speculative execution
+	 (CVE-2017-5753 CVE-2017-5715 CVE-2017-5754)
+XSA-255: grant table v2 -> v1 transition may crash Xen (CVE-2018-7541)
+XSA-256: x86 PVH guest without LAPIC may DoS the host (CVE-2018-7542)
+XSA-258: Information leak via crafted user-supplied CDROM (CVE-2018-10472)
+XSA-259: x86: PV guest may crash Xen with XPTI (CVE-2018-10471)
+
+Also add a hash for the license file while we are at it.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1350678212495925e9800772a82ed6a5894d2da7)
+(cherry picked from commit 002348de68617a05b187c995675e5c3b7f829ecc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libjpeg/libjpeg.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/xen/xen.hash | 3 ++-
+ package/xen/xen.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libjpeg/libjpeg.mk b/package/libjpeg/libjpeg.mk
-index 95663a9e00..36f084bfb5 100644
---- a/package/libjpeg/libjpeg.mk
-+++ b/package/libjpeg/libjpeg.mk
-@@ -7,7 +7,7 @@
- LIBJPEG_VERSION = 9b
- LIBJPEG_SITE = http://www.ijg.org/files
- LIBJPEG_SOURCE = jpegsrc.v$(LIBJPEG_VERSION).tar.gz
--LIBJPEG_LICENSE = jpeg-license (BSD-3-Clause-like)
-+LIBJPEG_LICENSE = IJG
- LIBJPEG_LICENSE_FILES = README
- LIBJPEG_INSTALL_STAGING = YES
- LIBJPEG_PROVIDES = jpeg
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index fa4d25bab2..5daebd4d65 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 0262a7023f8b12bcacfb0b25e69b2a63291f944f7683d54d8f33d4b2ca556844 xen-4.10.0.tar.gz
++sha256 570d654f357d4085accdf752989c1cbc33e2075feac8fcc505d68bdb81b1a0cf xen-4.10.1.tar.gz
++sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index 1b741a90f6..29699cf0f9 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XEN_VERSION = 4.10.0
++XEN_VERSION = 4.10.1
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
