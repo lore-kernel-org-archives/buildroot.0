@@ -1,28 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:56:15 +0200
-Subject: [Buildroot] [PATCH v2 1/6] libtirpc: add host package
-In-Reply-To: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 22 May 2018 13:30:12 +0300")
-References: <176e048d628384df6d3b2d82f2b9c7e4cf58892e.1526985017.git.baruch@tkos.co.il>
-Message-ID: <87sh5ltqb4.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 16:57:17 +0200
+Subject: [Buildroot] [PATCH 1/1] libcurl: fix build with ssh2 and static
+ mbedtls
+In-Reply-To: <20180521114108.20916-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 21 May 2018 13:41:08 +0200")
+References: <20180521114108.20916-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o9g9tq9e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > The libtirpc host package is only for two headers that the host rpcgen
- > utility from the nfs-utils package needs to build. glibc used to provide
- > these headers. In version 2.26 glibc deprecated them with its bundled
- > Sun RPC. Recently Fedora stopped enabling Sun RPC in glibc. So we can no
- > longer rely on these headers being present on the host.
+ > The ssh2 pkg-config file could contain the following lines when build
+ > with a static version of mbedtls:
+ >    Libs: -L${libdir} -lssh2 /xxx/libmbedcrypto.a
+ >    Libs.private: /xxx/libmbedcrypto.a
 
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2: New patch in this series
+ > This static mbedtls library must be used to correctly detect ssh2
+ > support and this library must be copied in libcurl.pc otherwise
+ > compilation of any application (such as upmpdcli) with libcurl will fail
+ > when trying to found mbedtls functions included in libssh2.
+ > So, replace pkg-config --libs-only-l by pkg-config --libs.
+
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/43e24b22a77f616d6198c10435dcc23cc3b9088a
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2018.02.x, thanks.
 
