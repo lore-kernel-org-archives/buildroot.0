@@ -1,144 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 21:59:56 +0200
-Subject: [Buildroot] [PATCH v2 1/2] board: amarula: Add A64-Relic support
-In-Reply-To: <20180605092745.26198-1-jagan@amarulasolutions.com>
-References: <20180605092745.26198-1-jagan@amarulasolutions.com>
-Message-ID: <20180617215956.71c3d68c@windsurf>
+Date: Sun, 17 Jun 2018 22:01:55 +0200
+Subject: [Buildroot] [git commit] package/ti-sgx-km: properly handle legacy
+ for renamed options
+Message-ID: <20180617195942.1D8ED803C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4a03a66f405fa5142f3f1fe5f91f0d4d7c097771
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  5 Jun 2018 14:57:44 +0530, Jagan Teki wrote:
+Commit b54c5464cc (ti-sgx-km: rename options to have proper prefix)
+forgot to add defaults from legacy options, and notices in
+Config.in.legacy that legacy options are still referenced in the
+package itself.
 
-> +label linux-4.17.0-rc3
-> +  kernel /Image
-> +  devicetree /sun50i-a64-amarula-relic.dtb
-> +  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p4 rootwait
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy            | 8 ++++++++
+ package/ti-sgx-km/Config.in | 4 ++++
+ 2 files changed, 12 insertions(+)
 
-Is mmcblk1 going to be the SD card or the eMMC ?
-
-> +image sdcard.img {
-
-So you're producing a sdcard.img, but your readme.txt doesn't use it.
-
-> diff --git a/board/amarula/a64-relic/post-build.sh b/board/amarula/a64-relic/post-build.sh
-> new file mode 100755
-> index 0000000000..ec20fca7d9
-> --- /dev/null
-> +++ b/board/amarula/a64-relic/post-build.sh
-> @@ -0,0 +1,4 @@
-> +#!/bin/sh
-> +BOARD_DIR="$(dirname $0)"
-> +
-> +install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
-> diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
-> new file mode 100644
-> index 0000000000..5d8ae65112
-> --- /dev/null
-> +++ b/board/amarula/a64-relic/readme.txt
-> @@ -0,0 +1,77 @@
-> +Amarula A64 Relic
-> +================
-> +
-> +Amarula A64-Relic is A64 based IoT device, which support
-> +- Allwinner A64 Cortex-A53
-> +- Mali-400MP2 GPU
-> +- AXP803 PMIC
-> +- 1GB DDR3 RAM
-> +- 8GB eMMC
-> +- AP6330 Wifi/BLE
-> +- MIPI-DSI
-> +- CSI: OV5640 sensor
-> +- USB OTG
-> +- 12V DC power supply
-> +
-> +Build
-> +=====
-> +
-> +  $ make amarula_a64_relic_defconfig
-> +
-> +  $ make
-> +
-> +build files at output/images/:
-> +  - sunxi-spl.bin
-> +  - u-boot.itb
-> +  - Image
-> +  - sun50i-a64-amarula-relic.dtb
-> +  - boot.vfat
-> +  - rootfs.ext4
-> +  - sdcard.img
-> +
-> +Write eMMC
-> +=========
-> +
-> +The board comes with an operating system preloaded on the eMMC.
-> +To replace it with the Buildroot-built system, take the following
-> +steps
-> +
-> +1. Connect the board UART with host and open minicom(ttyUSBx/115200N8)
-> +
-> +2. Supply 12V DC for power-on the board.
-> +
-> +3. Interrupt U-Boot by pressing enter
-> +
-> +4. Create GPT partitions
-> +  => mmc dev 1
-> +  => gpt write mmc 1 $partitions
-> +
-> +5. Connect the board USB-OTG with USB slot on the host.
-> +
-> +6. Initiate fastboot
-> +  => fastboot 0
-> +
-> +7. Write images from host onto eMMC using fastboot
-> +
-> +  $ output/images
-> +  $ fastboot -i 0x1f3a flash loader1 sunxi-spl.bin
-> +  $ fastboot -i 0x1f3a flash loader2 u-boot.itb
-> +  $ fastboot -i 0x1f3a flash esp boot.vfat
-> +  $ fastboot -i 0x1f3a flash system rootfs.ext4
-
-Is this going to work with the extlinux.conf provided above ? I doubt
-the same extlinux.conf can work for both the SD card booting and eMMC
-booting.
-
-If you want to support both eMMC and SD card booting, that's OK, but it
-should be explained in the readme.txt, and it should be clear whether
-the default extlinux.conf is meant for SD card booting or eMMC booting.
-
-> +
-> +Update eMMC during Development
-> +==============================
-> +
-> +In order to avoid image packing with specified file-system every time
-> +during development, it better to alter the data in the partition by
-> +mounting on host with the help of 'ums' in U-Boot.
-
-What is "image packing with specified file-system" ? I don't understand
-what you mean here. Perhaps you wanted to say:
-
-""
-
-During development, reflashing the entire filesystem image at every
-change is time consuming. A useful alternative is to directly access
-over USB the filesystem stored on the eMMC, using the USB Mass Storage
-capability of U-Boot. To achieve this:
-
-""
-
-Last thing, since your readme.txt says to use fastboot, you should
-probably enable BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT, which will
-make sure fastboot is available in output/host/bin/. And so your
-readme.txt should point to this fastboot.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/Config.in.legacy b/Config.in.legacy
+index e7b0316a4f..7fc4792aed 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -169,6 +169,8 @@ config BR2_PACKAGE_MEDIAART_BACKEND_GDK_PIXBUF
+ 	  BR2_PACKAGE_MEDIAART_BACKEND_QT has been renamed to
+ 	  BR2_PACKAGE_LIBMEDIAART_BACKEND_QT
+ 
++# Note: BR2_PACKAGE_TI_SGX_AM335X is still referenced from
++# package/ti-sgx-km/Config.in
+ config BR2_PACKAGE_TI_SGX_AM335X
+ 	bool "ti-sgx-km AM335X option renamed"
+ 	select BR2_LEGACY
+@@ -177,6 +179,8 @@ config BR2_PACKAGE_TI_SGX_AM335X
+ 	  BR2_PACKAGE_TI_SGX_AM335X has been renamed to
+ 	  BR2_PACKAGE_TI_SGX_KM_AM335X.
+ 
++# Note: BR2_PACKAGE_TI_SGX_AM437X is still referenced from
++# package/ti-sgx-km/Config.in
+ config BR2_PACKAGE_TI_SGX_AM437X
+ 	bool "ti-sgx-km AM437X option renamed"
+ 	select BR2_LEGACY
+@@ -185,6 +189,8 @@ config BR2_PACKAGE_TI_SGX_AM437X
+ 	  BR2_PACKAGE_TI_SGX_AM437X has been renamed to
+ 	  BR2_PACKAGE_TI_SGX_KM_AM437X.
+ 
++# Note: BR2_PACKAGE_TI_SGX_AM4430 is still referenced from
++# package/ti-sgx-km/Config.in
+ config BR2_PACKAGE_TI_SGX_AM4430
+ 	bool "ti-sgx-km AM4430 option renamed"
+ 	select BR2_LEGACY
+@@ -193,6 +199,8 @@ config BR2_PACKAGE_TI_SGX_AM4430
+ 	  BR2_PACKAGE_TI_SGX_AM4430 has been renamed to
+ 	  BR2_PACKAGE_TI_SGX_KM_AM4430.
+ 
++# Note: BR2_PACKAGE_TI_SGX_AM5430 is still referenced from
++# package/ti-sgx-km/Config.in
+ config BR2_PACKAGE_TI_SGX_AM5430
+ 	bool "ti-sgx-km AM5430 option renamed"
+ 	select BR2_LEGACY
+diff --git a/package/ti-sgx-km/Config.in b/package/ti-sgx-km/Config.in
+index db3d3f9ddd..348efdeb82 100644
+--- a/package/ti-sgx-km/Config.in
++++ b/package/ti-sgx-km/Config.in
+@@ -20,6 +20,10 @@ if BR2_PACKAGE_TI_SGX_KM
+ 
+ choice
+ 	prompt "Target"
++	default BR2_PACKAGE_TI_SGX_KM_AM335X if BR2_PACKAGE_TI_SGX_AM335X # legacy
++	default BR2_PACKAGE_TI_SGX_KM_AM437X if BR2_PACKAGE_TI_SGX_AM437X # legacy
++	default BR2_PACKAGE_TI_SGX_KM_AM4430 if BR2_PACKAGE_TI_SGX_AM4430 # legacy
++	default BR2_PACKAGE_TI_SGX_KM_AM5430 if BR2_PACKAGE_TI_SGX_AM5430 # legacy
+ 	default BR2_PACKAGE_TI_SGX_KM_AM335X
+ 	help
+ 	  Select the SOC for which you would like to install drivers.
