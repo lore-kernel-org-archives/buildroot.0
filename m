@@ -1,76 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:49:04 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/expect: download
- tarball instead of cvs
-Message-ID: <20180617150241.2A50181213@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 16:45:45 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/dash: don't build
+ in paralle
+Message-ID: <20180617150240.ED3057FD67@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05ea70bf27be722b32f9c7ca96db43bff3b68520
+commit: https://git.buildroot.net/buildroot/commit/?id=2f2097f111180ad3924cc167179c27a6c38d3ac6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-More than 3 years after the 5.45.3 release, a tarball for that release
-was uploaded to sourceforge.net. The differences between this tarball
-and the CVS checkout are minimal:
+dash has races in its Makefile, but upstream is not too keen in fixing
+those, and just suggests that dash not be built in parallel:
 
-- There are no CVS directories, of course, but we don't need them.
-- File timestamps are different.
-- expect.tests is missing, but we don't execute tests anyway.
-- configure script is different, but we AUTORECONF anyway.
-- 'fixcat' script is missing, but it is not called anywhere.
-
-Since sourceforge.net has broken CVS downloads, now is a good time to
-switch away from it.
-
-While we're at it, add a hash file including license.
+    https://www.mail-archive.com/dash at vger.kernel.org/msg01675.html
 
 Fixes:
-http://autobuild.buildroot.net/results/db3/db33d4fa507fb3b4132423cd0a7e25a1fe6e4105
-http://autobuild.buildroot.net/results/b6d/b6d927dcc73ac8d754422577dacefff4ff918a5c
-http://autobuild.buildroot.net/results/23d/23d1034b33d0354de15de2ec4a8ccd0603e8db78
-http://autobuild.buildroot.net/results/127/1272a3aa3077e434c9805ec3034f35e6fcc330d4
+    http://autobuild.buildroot.org/results/793/7934c815a3009af688c2f1183e67dfe542c9a009/
+    http://autobuild.buildroot.org/results/fc4/fc4e4ab47455ac47dd4a3a60083cec2848e74dbb/
+    http://autobuild.buildroot.org/results/6bf/6bfdd44ea5d55a6ca3ef92254eab18c7c0416b7b/
+    [...]
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+Reported-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 23ab6cb162b7456925e2c3df4917cf9b45868d55)
+(cherry picked from commit 50d443cbf72fc7940c2970b309de535004173966)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expect/expect.hash | 4 ++++
- package/expect/expect.mk   | 7 ++++---
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/dash/dash.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/expect/expect.hash b/package/expect/expect.hash
-new file mode 100644
-index 0000000000..c89f323906
---- /dev/null
-+++ b/package/expect/expect.hash
-@@ -0,0 +1,4 @@
-+# From https://sourceforge.net/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz.SHA256
-+sha256  c520717b7195944a69ce1492ec82ca0ac3f3baf060804e6c5ee6d505ea512be9  expect5.45.3.tar.gz
-+# Locally calculated
-+sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
-diff --git a/package/expect/expect.mk b/package/expect/expect.mk
-index d78ff6c208..ccde33a71b 100644
---- a/package/expect/expect.mk
-+++ b/package/expect/expect.mk
-@@ -4,12 +4,13 @@
- #
- ################################################################################
+diff --git a/package/dash/dash.mk b/package/dash/dash.mk
+index 2ee292b8d3..2d415558d2 100644
+--- a/package/dash/dash.mk
++++ b/package/dash/dash.mk
+@@ -9,6 +9,9 @@ DASH_SITE = http://gondor.apana.org.au/~herbert/dash/files
+ DASH_LICENSE = BSD-3-Clause, GPL-2.0+ (mksignames.c)
+ DASH_LICENSE_FILES = COPYING
  
--# Version 5.45.3
--EXPECT_VERSION = 2014-05-02
--EXPECT_SITE = cvs://expect.cvs.sourceforge.net:/cvsroot/expect
-+EXPECT_VERSION = 5.45.3
-+EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
-+EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
- EXPECT_LICENSE = Public domain
- EXPECT_LICENSE_FILES = README
- 
-+# 0001-enable-cross-compilation.patch
- EXPECT_AUTORECONF = YES
- EXPECT_DEPENDENCIES = tcl
- EXPECT_CONF_OPTS = --with-tcl=$(BUILD_DIR)/tcl-$(TCL_VERSION)/unix
++# dash does not build in parallel
++DASH_MAKE = $(MAKE1)
++
+ ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+ DASH_DEPENDENCIES += libedit host-pkgconf
+ DASH_CONF_OPTS += --with-libedit
