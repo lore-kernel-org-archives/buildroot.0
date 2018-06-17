@@ -1,71 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 22:48:37 +0200
-Subject: [Buildroot] [PATCH 0/9] qt5: install missing examples
-In-Reply-To: <20180617200551.l2kb6yky7w3mfacg@archlinux>
-References: <20180612123206.31523-1-gael.portay@savoirfairelinux.com>
- <20180617144442.3fc03f6e@windsurf>
- <20180617200551.l2kb6yky7w3mfacg@archlinux>
-Message-ID: <20180617224837.33949a3a@windsurf>
+Date: Sun, 17 Jun 2018 22:51:13 +0200
+Subject: [Buildroot] [git commit] tor: link with libatomic when needed
+Message-ID: <20180617204910.BA25E883BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ga?l,
+commit: https://git.buildroot.net/buildroot/commit/?id=b1da7a8aed6a12eeb9ad7f3870a79be859e137f0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 17 Jun 2018 16:05:51 -0400, Ga?l PORTAY wrote:
+The following error occurs on architectures required to use gcc
+libatomic for atomic intrinsics:
 
-> > However, I am not super happy with how we install Qt5 packages right
-> > now. What we do is:
-> >  
-> 
-> I am not happy too; and I was already thinking about improving that.
+sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
 
-Great.
+This is for example the case on sparcv8 32 bit.
 
-> >  - Staging installation: "make install", with no DESTDIR or anything
-> >    similar
-> > 
-> >  - Target installation: manual copy.
-> > 
-> > Ideally, I'd prefer if we could do:
-> > 
-> >  - Staging installation: make DESTDIR=$(STAGING_DIR) install
-> >  - Target installation: make DESTDIR=$(TARGET_DIR) install
-> > 
-> > Unfortunately, this doesn't work as-is, because the $(STAGING_DIR)
-> > location is hardcoded at Qt configure time, so it doesn't work
-> > immediately to do separate installation for staging and target. I know
-> > Arnout briefly looked into this during the last Buildroot hackathon.
-> 
-> There is INSTALL_ROOT variable which looks to be equivalent to DESTDIR.
+Fixes:
 
-Yes, but no. The problem is that with the way things are currently
-setup, if you set INSTALL_ROOT to /foo/bar and STAGING_DIR
-is /home/thomas/buildroot/output/staging, then Qt5 stuff will be
-installed in:
+ http://autobuild.buildroot.net/results/0f7107d0b703223f567c6749722bc82c81a04d54
 
-	/foo/bar/home/thomas/buildroot/output/staging
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Thomas: use LIBS instead of LDFLAGS.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tor/tor.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Which is obviously wrong. And I believe the fact that it does this is
-due to:
-
-                -sysroot $(STAGING_DIR) \
-
-when configuring Qt5. Some research is needed to see if a better
-solution is possible :-)
-
-> Also, I was thinking about a qmake-package or a qt5module-package.
-
-A qmake-package infrastructure might make sense. But beware of Qt4/Qt5
-compatibility. But to me, fixing the first problem is much more
-important/useful.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 39006e7caf..fe22633bf6 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -47,6 +47,10 @@ endif
+ # uses gnu extensions
+ TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++TOR_CONF_ENV += LIBS=-latomic
++endif
++
+ define TOR_INSTALL_CONF
+ 	$(INSTALL) -D -m 644 $(@D)/src/config/torrc.minimal \
+ 		$(TARGET_DIR)/etc/tor/torrc
