@@ -1,60 +1,47 @@
-From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Sun, 17 Jun 2018 17:14:01 -0400
-Subject: [Buildroot] [PATCH v3] libusb: add an option to compile examples
-In-Reply-To: <20180617151345.3034ad05@windsurf>
-References: <20180611134750.27627-1-gael.portay@savoirfairelinux.com>
- <20180617151345.3034ad05@windsurf>
-Message-ID: <20180617211401.4zqcmsz544uuantc@archlinux>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 17 Jun 2018 23:24:48 +0200
+Subject: [Buildroot] [git commit] pinentry: link with libatomic when needed
+Message-ID: <20180617212320.F04EA888A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=265e25834f29f0852cea0004c307a8d9ea1f72ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, Jun 17, 2018 at 03:13:45PM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon, 11 Jun 2018 09:47:50 -0400, Ga?l PORTAY wrote:
-> 
-> > +ifeq ($(BR2_PACKAGE_LIBUSB_EXAMPLES),y)
-> > +LIBUSB_CONF_OPTS += --enable-examples-build
-> > +define LIBUSB_INSTALL_TARGET_EXAMPLES
-> > +	for example in listdevs xusb fxload hotplugtest testlibusb dpfp dpfp_threaded sam3u_benchmark ; do \
-> 
-> As I said in a review of an earlier version, you should use a make loop
-> instead of a shell loop. One benefit of make loops is that they bail
-> out if one iteration of the loop fails. A shell loop doesn't, and
-> continues with the next iterations.
->
+On some architectures, atomic binutils are provided by the libatomic
+library from gcc. Linking with libatomic is therefore necessary,
+otherwise the build fails with:
 
-Sorry to have missed your review.
+sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
 
-Hum... the shell's for loop exits in error too when an iteration fails;
-which causes make failure for TARGET_INSTALL (unless set +e is
-specified)... or maybe I missed something :/
+This is often for example the case on sparcv8 32 bit.
 
-Whatever, I really do prefer your solution.
+Fixes:
 
-> > +		cp -dpfr $(@D)/examples/$${example} $(TARGET_DIR)/usr/bin; \
-> 
-> This should have use $(INSTALL) -D -m 0755 and a full destination path.
-> 
-> I've fixed both issues and applied.
-> 
+ http://autobuild.buildroot.net/results/fd6bee70ff20bee9607a9f6f557a3a793d00cd9f
 
-I pretty sure I picked up this part of code from another package in
-buildroot. I can apply the same changes to keep package consistent.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Thomas: use LIBS instead of LDFLAGS.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pinentry/pinentry.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/pinentry/pinentry.mk b/package/pinentry/pinentry.mk
+index 4081a8a5d6..d0179728bd 100644
+--- a/package/pinentry/pinentry.mk
++++ b/package/pinentry/pinentry.mk
+@@ -18,6 +18,10 @@ PINENTRY_CONF_OPTS += \
+ 	--with-libgpg-error-prefix=$(STAGING_DIR)/usr \
+ 	--without-libcap       # requires PAM
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++PINENTRY_CONF_ENV += LIBS=-latomic
++endif
++
+ # build with X if available
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ PINENTRY_CONF_OPTS += --with-x
