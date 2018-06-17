@@ -1,45 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:14:36 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] php-amqp: needs openssl
- support in rabbitmq-c
-Message-ID: <20180617155626.07C9D81070@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:24:40 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] netplug: don't test if
+ the binary exists in the init script
+Message-ID: <20180617155626.42D7281070@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64ba5b40a408003e1daa6b307faf04d55c645e36
+commit: https://git.buildroot.net/buildroot/commit/?id=e357711fa74b62a8c5f0e46cc6cc133ef4955633
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Since version 1.8.0, php-amqp needs a rabbitmq-c with openssl support:
-https://github.com/pdezwart/php-amqp/issues/310
+The test doesn't make sense. It just exits without any error if the
+binary doesn't exist, which is silly.
 
-SSL support is disabled in rabbitmq-c if BR2_STATIC_LIBS is set however
-don't add an unneeded !BR2_STATIC_LIBS dependency in Config.in as all
-PHP External Extensions depends on !BR2_STATIC_LIBS
-(see package/Config.in)
-
-Fixes:
- - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b45dcf1fad05
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d93305744b1dc758a3d86088473d571194762e19)
+(cherry picked from commit b77c9d265ed678ec6c0ad9c1e1e5c6ada7206ced)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php-amqp/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/netplug/S29netplug | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/php-amqp/Config.in b/package/php-amqp/Config.in
-index 0aa2021f5a..dc779f0ee0 100644
---- a/package/php-amqp/Config.in
-+++ b/package/php-amqp/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PHP_AMQP
- 	bool "php-amqp"
- 	depends on BR2_PACKAGE_PHP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # rabbitmq-c
-+	select BR2_PACKAGE_OPENSSL # rabbitmq-c: amqp_ssl_socket.h
- 	select BR2_PACKAGE_RABBITMQ_C
- 	help
- 	  Communicate with any AMQP compliant server.
+diff --git a/package/netplug/S29netplug b/package/netplug/S29netplug
+index d3df9ddff5..03422499d6 100755
+--- a/package/netplug/S29netplug
++++ b/package/netplug/S29netplug
+@@ -32,8 +32,6 @@ elif [ ! -f /etc/network/interfaces ]; then
+ 	exit 0
+ fi
+ 
+-[ -x /sbin/netplugd ] || exit 0
+-
+ if [ -f /etc/sysconfig/netplugd ]; then
+     . /etc/sysconfig/netplugd
+ fi
