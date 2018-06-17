@@ -1,24 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:55:47 +0200
-Subject: [Buildroot] [PATCH] file: add upstream security fix
-In-Reply-To: <09d9582ecdb7715d356d0eb5bf0bd0f6d6150e03.1529035008.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 15 Jun 2018 06:56:48 +0300")
-References: <09d9582ecdb7715d356d0eb5bf0bd0f6d6150e03.1529035008.git.baruch@tkos.co.il>
-Message-ID: <87vaahmmpo.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 17:56:12 +0200
+Subject: [Buildroot] [PATCH 1/1] docs/manual: fix scancpan path
+In-Reply-To: <20180614191836.10499-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 14 Jun 2018 21:18:36 +0200")
+References: <20180614191836.10499-1-fontaine.fabrice@gmail.com>
+Message-ID: <87r2l5mmoz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes CVE-2018-10360: The do_core_note function in readelf.c in
- > libmagic.a in file 5.33 allows remote attackers to cause a denial of
- > service (out-of-bounds read and application crash) via a crafted ELF
- > file.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > scancpan is now in utils not in supports/scripts
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2018.02.x, thanks.
 
