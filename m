@@ -1,48 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:44:07 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] poppler: link with
- libatomic when needed
-Message-ID: <20180617150240.E5BA281213@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 16:43:40 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: bump Linux CIP to
+ v4.4.130-cip23
+Message-ID: <20180617150240.DDC9381213@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01b411626e1f71afd30ec60b412292d8aed85bdc
+commit: https://git.buildroot.net/buildroot/commit/?id=1f02de6ebcf404d637c7bf7884854d82cd360d99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Following errors might occur on architectures required to use gcc libatomics:
-sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+This patch bump the Linux CIP kernel to version v4.4.130-cip23
 
-This is often the case for sparcv8 32 bit toolchains.
-
-See 55a9d6d55888b04ec6c476399e5b98a2412995f5 and 03f6e005e6a9617767b24a9026da9477848020cc.
-
-Fixes:
-  http://autobuild.buildroot.net/results/64a96663a48ab644bc03c9a3ec2d6a644119dee6
-  http://autobuild.buildroot.net/results/82e85e12478fc1972b70ad728ed7c1554920c9e3
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d28591a2ee39704f6795c8aa1d0a3db7e909facc)
+(cherry picked from commit 299bdf6df83bfb8a960963bb2e7d7bf8f99d47f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/poppler/poppler.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 5946cbec24..bad61a6613 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -14,6 +14,10 @@ POPPLER_INSTALL_STAGING = YES
- POPPLER_CONF_OPTS = --with-font-configuration=fontconfig \
- 	--enable-xpdf-headers
+diff --git a/linux/Config.in b/linux/Config.in
+index 142d42e10c..e8653ea17e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -29,7 +29,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (4.15)"
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+POPPLER_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
-+endif
-+
- ifeq ($(BR2_PACKAGE_CAIRO),y)
- POPPLER_CONF_OPTS += --enable-cairo-output
- POPPLER_DEPENDENCIES += cairo
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (v4.4.112-cip18)"
++	bool "Latest CIP SLTS version (v4.4.130-cip23)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -117,7 +117,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "4.15.16" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "v4.4.112-cip18" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
