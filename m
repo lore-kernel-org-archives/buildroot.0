@@ -1,46 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 22:51:13 +0200
-Subject: [Buildroot] [git commit] tor: link with libatomic when needed
-Message-ID: <20180617204910.BA25E883BA@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 23:01:20 +0200
+Subject: [Buildroot] [PATCH 1/1] tor: link with libatomic when needed
+In-Reply-To: <20180614182319.19543-1-fontaine.fabrice@gmail.com>
+References: <20180614182319.19543-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180617230120.1b826654@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1da7a8aed6a12eeb9ad7f3870a79be859e137f0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The following error occurs on architectures required to use gcc
-libatomic for atomic intrinsics:
+On Thu, 14 Jun 2018 20:23:19 +0200, Fabrice Fontaine wrote:
+> Following errors might occur on architectures required to use gcc
+> libatomics:
 
-sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+"Might occur" is a bit imprecise. Some architectures have atomic
+builtins implemented in libatomic, on such architectures, linking with
+libatomic is mandatory.
 
-This is for example the case on sparcv8 32 bit.
+> diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+> index f7af718b9b..fb02741d3a 100644
+> --- a/package/tor/tor.mk
+> +++ b/package/tor/tor.mk
+> @@ -47,6 +47,10 @@ endif
+>  # uses gnu extensions
+>  TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+>  
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +TOR_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
 
-Fixes:
+  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+              nonstandard directory <lib dir>
+  LIBS        libraries to pass to the linker, e.g. -l<library>
 
- http://autobuild.buildroot.net/results/0f7107d0b703223f567c6749722bc82c81a04d54
+So, using LIBS is more correct than LDFLAGS.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-[Thomas: use LIBS instead of LDFLAGS.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tor/tor.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+I've adjusted the commit log, and changed LDFLAGS to LIBS, and applied.
+Thanks!
 
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 39006e7caf..fe22633bf6 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -47,6 +47,10 @@ endif
- # uses gnu extensions
- TOR_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+TOR_CONF_ENV += LIBS=-latomic
-+endif
-+
- define TOR_INSTALL_CONF
- 	$(INSTALL) -D -m 644 $(@D)/src/config/torrc.minimal \
- 		$(TARGET_DIR)/etc/tor/torrc
+However, it would be nicer to have a solution in the upstream configure
+script for this.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
