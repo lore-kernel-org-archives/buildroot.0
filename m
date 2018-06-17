@@ -1,44 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:42:49 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] autofs: depend on
- host-nfs-utils
-Message-ID: <20180617150240.BD30380F4C@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 16:46:04 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/git: bump version
+ to 2.16.3
+Message-ID: <20180617150241.0106E81213@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55dbb1d627bf0d735eeda52d5c91295b2d4139b0
+commit: https://git.buildroot.net/buildroot/commit/?id=22b1015fcce7cfe09e4612e521bdfb0baf554f47
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-host-nfs-utils provides the host rpcgen utility. This fixes the build on
-recent Fedora systems that removed rpcgen from the glibc package.
-
-Fixes:
-http://autobuild.buildroot.net/results/383/383bc8462f32a226645c9b792b8d65a25d74529d/
-http://autobuild.buildroot.net/results/0c0/0c00f72512754b721813e13f0828d3a942f7b955/
-http://autobuild.buildroot.net/results/50b/50b66d2a3c8264f618d7aa813b10050ed147209f/
-
-Cc: Jonathan Ben Avraham <yba@tkos.co.il>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit dec494f9f58111ee1cd69048114b56f10a159272)
+(cherry picked from commit 9447e866187728009addf0cc62aa0c6b293b6dcd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/autofs/autofs.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/autofs/autofs.mk b/package/autofs/autofs.mk
-index 90cc38de55..befee15495 100644
---- a/package/autofs/autofs.mk
-+++ b/package/autofs/autofs.mk
-@@ -9,7 +9,7 @@ AUTOFS_SOURCE = autofs-$(AUTOFS_VERSION).tar.xz
- AUTOFS_SITE = $(BR2_KERNEL_MIRROR)/linux/daemons/autofs/v5
- AUTOFS_LICENSE = GPL-2.0+
- AUTOFS_LICENSE_FILES = COPYING COPYRIGHT
--AUTOFS_DEPENDENCIES = host-flex host-bison
-+AUTOFS_DEPENDENCIES = host-flex host-bison host-nfs-utils
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 504f7d993a..fea1a1e904 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,4 +1,4 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256 cfad4337f2fdbfc1e2c8abce5e17e1dd4e1718a34ac2cbe3238fbe2426f2ea19  git-2.16.1.tar.xz
++sha256 d65d99e9e5b081c1f14ea018973806e942a2eb7d0da2ebc01bd2525adee62d48  git-2.16.3.tar.xz
+ sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 1109f7a8a2..2115e04e31 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # autofs looks on the build machine for the path of modprobe, so tell
- # it explicitly where it will be located on the target.
+-GIT_VERSION = 2.16.1
++GIT_VERSION = 2.16.3
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
