@@ -1,43 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:50:11 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux: config.in: add
- comment for Arm Cortex-M
-Message-ID: <20180617150241.4940781213@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 16:49:49 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/binutils: default
+ to 2.28 for Cortex-M targets
+Message-ID: <20180617150241.4154381213@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e58263e48d3d6d03fafc58ef175c66e5987d4342
+commit: https://git.buildroot.net/buildroot/commit/?id=b3dddb0a787352bb836ce972e4f07b59d79068e7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-When binutils > 2.28 are selected on Arm Cortex-M cpu,
-linux kernel does not boot due to a new implementation
-of 'adr pseudo instruction' on binutils.
+binutils 2.29 changed the implementation of adr pseudo instruction
+it breaks linux kernel and impacts Cortex-M targets (eg. stm32)
 
-Bugzilla thread: https://bugs.busybox.net/show_bug.cgi?id=11051
-
+[Peter: simplify Config.in logic, adjust message to make it clear this is
+	just a default]
+Signed-off-by: Laurent GONZALEZ <br22@gezedo.com>
 Signed-off-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f13477b68fc228709764262431faf3458c28ccab)
+(cherry picked from commit 17f352acdebd4a825903807f8a2d60ebea223afb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/binutils/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e8653ea17e..2ebddb403b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -8,6 +8,10 @@ config BR2_LINUX_KERNEL
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index d4ed1e3183..c41be82969 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -2,6 +2,7 @@ comment "Binutils Options"
  
- if BR2_LINUX_KERNEL
- 
-+comment "Linux kernel will not boot with binutils >= 2.29"
-+	depends on BR2_ARM_CPU_ARMV7M
-+	depends on !BR2_BINUTILS_VERSION_2_28_X
-+
- # Packages that need to have a kernel with support for loadable modules,
- # but do not use the kernel-modules infrastructure, should select that
- # option.
+ choice
+ 	prompt "Binutils Version"
++	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_CPU_ARMV7M
+ 	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
+ 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+ 	help
