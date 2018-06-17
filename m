@@ -1,12 +1,10 @@
 From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Sun, 17 Jun 2018 17:11:36 -0400
-Subject: [Buildroot] [PATCH 0/9] qt5: install missing examples
-In-Reply-To: <20180617224837.33949a3a@windsurf>
-References: <20180612123206.31523-1-gael.portay@savoirfairelinux.com>
- <20180617144442.3fc03f6e@windsurf>
- <20180617200551.l2kb6yky7w3mfacg@archlinux>
- <20180617224837.33949a3a@windsurf>
-Message-ID: <20180617211136.soa74rty7nxqjs7h@archlinux>
+Date: Sun, 17 Jun 2018 17:14:01 -0400
+Subject: [Buildroot] [PATCH v3] libusb: add an option to compile examples
+In-Reply-To: <20180617151345.3034ad05@windsurf>
+References: <20180611134750.27627-1-gael.portay@savoirfairelinux.com>
+ <20180617151345.3034ad05@windsurf>
+Message-ID: <20180617211401.4zqcmsz544uuantc@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,54 +13,39 @@ To: buildroot@busybox.net
 
 Thomas,
 
-On Sun, Jun 17, 2018 at 10:48:37PM +0200, Thomas Petazzoni wrote:
-> > (...)
-> > 
-> > There is INSTALL_ROOT variable which looks to be equivalent to DESTDIR.
+On Sun, Jun 17, 2018 at 03:13:45PM +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Yes, but no. The problem is that with the way things are currently
-> setup, if you set INSTALL_ROOT to /foo/bar and STAGING_DIR
-> is /home/thomas/buildroot/output/staging, then Qt5 stuff will be
-> installed in:
+> On Mon, 11 Jun 2018 09:47:50 -0400, Ga?l PORTAY wrote:
 > 
-> 	/foo/bar/home/thomas/buildroot/output/staging
+> > +ifeq ($(BR2_PACKAGE_LIBUSB_EXAMPLES),y)
+> > +LIBUSB_CONF_OPTS += --enable-examples-build
+> > +define LIBUSB_INSTALL_TARGET_EXAMPLES
+> > +	for example in listdevs xusb fxload hotplugtest testlibusb dpfp dpfp_threaded sam3u_benchmark ; do \
 > 
-> Which is obviously wrong. And I believe the fact that it does this is
-> due to:
-> 
->                 -sysroot $(STAGING_DIR) \
-> 
-> when configuring Qt5. Some research is needed to see if a better
-> solution is possible :-)
+> As I said in a review of an earlier version, you should use a make loop
+> instead of a shell loop. One benefit of make loops is that they bail
+> out if one iteration of the loop fails. A shell loop doesn't, and
+> continues with the next iterations.
 >
 
-I will have a look to that. I have started a fresh build with few
-modifications on pathes.
+Sorry to have missed your review.
 
-I think it is because of the prefix in qt.conf.in which is sed to
-$(HOST_DIR).
+Hum... the shell's for loop exits in error too when an iteration fails;
+which causes make failure for TARGET_INSTALL (unless set +e is
+specified)... or maybe I missed something :/
 
-	[Paths]
-	Prefix=@@HOST_DIR@@
-	...
-	Libraries=/usr/lib
-	...
-	Binaries=/usr/bin
-	...
+Whatever, I really do prefer your solution.
 
-I will see.
-
-> > Also, I was thinking about a qmake-package or a qt5module-package.
+> > +		cp -dpfr $(@D)/examples/$${example} $(TARGET_DIR)/usr/bin; \
 > 
-> A qmake-package infrastructure might make sense. But beware of Qt4/Qt5
-> compatibility. But to me, fixing the first problem is much more
-> important/useful.
->
+> This should have use $(INSTALL) -D -m 0755 and a full destination path.
+> 
+> I've fixed both issues and applied.
+> 
 
-For sure...  My first run is to rewrite all <qt5modules>_INSTALL_TARGET
-(if possible) using:
-
-	$(MAKE) -C ... install INSTALL_ROOT=$(TARGET_DIR)
+I pretty sure I picked up this part of code from another package in
+buildroot. I can apply the same changes to keep package consistent.
 
 > Thanks!
 > 
@@ -71,3 +54,7 @@ For sure...  My first run is to rewrite all <qt5modules>_INSTALL_TARGET
 > Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 > Embedded Linux and Kernel engineering
 > https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
