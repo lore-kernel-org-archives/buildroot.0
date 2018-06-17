@@ -1,46 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 17:12:50 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] cifs-utils: disable man
- page generation
-Message-ID: <20180617155625.EA53A81070@busybox.osuosl.org>
+Date: Sun, 17 Jun 2018 17:29:45 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] gnupg2: bump to version
+ 2.2.7
+Message-ID: <20180617155626.AA4EC826A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94a4b18e7a095bb185f1df32adf898cbfa1cd395
+commit: https://git.buildroot.net/buildroot/commit/?id=ed6a8900dd8b6d3d72a4d1891521e27245b76e37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Buildroot does not generate documentation for target.
-
-This fixes the build on hosts where the rst2man command does not support
-the --syntax-highlight parameter.
-
-Fixes:
-http://autobuild.buildroot.net/results/265/2655c0e1fa3ad0a10b4aed39a17feead94e47bfb/
-http://autobuild.buildroot.net/results/92d/92d7c608f717bbfe01ecfb9bc9604cb303d8594c/
-http://autobuild.buildroot.net/results/4b9/4b95404a89a595ca9c1e3df912169e9d36ff2bd7/
-
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 57d16fd480d3eb57822e634e409fb0bbc4dd475b)
+(cherry picked from commit 429c6f21b329f56199158e109d956da9bb37dc3f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cifs-utils/cifs-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 9343e3ea89..e0efb3bf2e 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -15,7 +15,7 @@ CIFS_UTILS_DEPENDENCIES = host-pkgconf
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index 155295244e..f5cc95cb1b 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000421.html
+-sha1 295298debcc2c12f02a2f2fdf04aecb6d6aae396  gnupg-2.2.6.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000424.html
++sha1 e222cda63409a86992369df8976f6c7511e10ea0  gnupg-2.2.7.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.6.tar.bz2.sig
+-sha256 e64d8c5fa2d05938a5080cb784a98ac21be0812f2a26f844b18f0d6a0e711984  gnupg-2.2.6.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.7.tar.bz2.sig
++sha256 d95b361ee6ef7eff86af40c8c72bf9313736ac9f7010d6604d78bf83818e976e  gnupg-2.2.7.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 4d84bfbb9e..0823921b0b 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Let's disable PIE unconditionally. We want PIE to be enabled only by
- # the global BR2_RELRO_FULL option.
--CIFS_UTILS_CONF_OPTS = --disable-pie
-+CIFS_UTILS_CONF_OPTS = --disable-pie --disable-man
- 
- ifeq ($(BR2_PACKAGE_KEYUTILS),y)
- CIFS_UTILS_DEPENDENCIES += keyutils
+-GNUPG2_VERSION = 2.2.6
++GNUPG2_VERSION = 2.2.7
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
