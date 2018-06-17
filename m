@@ -1,35 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 17 Jun 2018 16:58:48 +0200
-Subject: [Buildroot] [PATCH] xen: security bump to version 4.10.1
-In-Reply-To: <20180530221713.20890-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 31 May 2018 00:17:13 +0200")
-References: <20180530221713.20890-1-peter@korsgaard.com>
-Message-ID: <87y3fdsbmf.fsf@dell.be.48ers.dk>
+Date: Sun, 17 Jun 2018 16:59:19 +0200
+Subject: [Buildroot] [PATCH 2/2] package/expect: download tarball
+ instead of cvs
+In-Reply-To: <20180531070520.24242-2-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Thu, 31 May 2018 09:05:20 +0200")
+References: <20180531070520.24242-1-arnout@mind.be>
+ <20180531070520.24242-2-arnout@mind.be>
+Message-ID: <87tvq1sblk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > The 4.10.1 version brings a large number of fixes:
- > https://www.xenproject.org/downloads/xen-archives/xen-project-410-series/xen-4101.html
+ > More than 3 years after the 5.45.3 release, a tarball for that release
+ > was uploaded to sourceforge.net. The differences between this tarball
+ > and the CVS checkout are minimal:
 
- > Including a number of security fixes:
+ > - There are no CVS directories, of course, but we don't need them.
+ > - File timestamps are different.
+ > - expect.tests is missing, but we don't execute tests anyway.
+ > - configure script is different, but we AUTORECONF anyway.
+ > - 'fixcat' script is missing, but it is not called anywhere.
 
- > XSA-252: DoS via non-preemptable L3/L4 pagetable freeing (CVE-2018-7540)
- > XSA-253: x86: memory leak with MSR emulation (CVE-2018-5244)
- > XSA-254: Information leak via side effects of speculative execution
- > 	 (CVE-2017-5753 CVE-2017-5715 CVE-2017-5754)
- > XSA-255: grant table v2 -> v1 transition may crash Xen (CVE-2018-7541)
- > XSA-256: x86 PVH guest without LAPIC may DoS the host (CVE-2018-7542)
- > XSA-258: Information leak via crafted user-supplied CDROM (CVE-2018-10472)
- > XSA-259: x86: PV guest may crash Xen with XPTI (CVE-2018-10471)
+ > Since sourceforge.net has broken CVS downloads, now is a good time to
+ > switch away from it.
 
- > Also add a hash for the license file while we are at it.
+ > While we're at it, add a hash file including license.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Fixes:
+ > http://autobuild.buildroot.net/results/db3/db33d4fa507fb3b4132423cd0a7e25a1fe6e4105
+ > http://autobuild.buildroot.net/results/b6d/b6d927dcc73ac8d754422577dacefff4ff918a5c
+ > http://autobuild.buildroot.net/results/23d/23d1034b33d0354de15de2ec4a8ccd0603e8db78
+ > http://autobuild.buildroot.net/results/127/1272a3aa3077e434c9805ec3034f35e6fcc330d4
+
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Fabio Porcedda <fabio.porcedda@gmail.com>
+ > ---
+ > Either this one or the previous one is sufficient to fix the issue, of
+ > course. Still, I think both are relevant for master.
+
+ > Note that there is also a 5.45.4 release from a few months ago. But I
+ > don't know if anyone still uses expect :-).
+
+ > Note that this was the last internal package to use CVS. So we no
+ > longer have autobuild coverage of the cvs download method.
 
 Committed to 2018.02.x, thanks.
 
