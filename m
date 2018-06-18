@@ -1,105 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jun 2018 20:17:16 +0200
-Subject: [Buildroot] Buildroot 2018.02.3 released
-Message-ID: <87r2l4ufgz.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 18 Jun 2018 20:18:45 +0200
+Subject: [Buildroot] [PATCH 1/1] jpeg-turbo: bump to version 1.5.3
+Message-ID: <20180618181845.12885-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
+ package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
-
-Buildroot 2018.02.3 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2018.02.3.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2018.02.3.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2018.02.3 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2018.02.2 release.
-
-- Various fixes for building on modern distributions (GCC 8.x, no rpcgen
-  utility).
-
-- ARM: Default to binutils 2.28 and warn about newer binutils versions,
-  which are known to cause boot failures for Linux kernels built in
-  thumb mode.
-
-- Busybox/mdev: Fix module autoloading.
-
-- Busybox/sysvinit: inittab: Add /dev/{stdin,stdout,stderr} symlinks,
-  call swapon -a to activate any configured swap devices.
-
-- Dependencies: Check that PATH does not contain current working
-  directory, which triggers a number of build failures.
-
-- Infrastructure: Error out for packages erroneously using the 'local'
-  site method but not defining a _SITE.
-
-- Linux: Fix cuImage.<dtb> / simpleImage.<dtb> handling.  Ensure kconfig
-  uses ncurses from the host to fix a ncurses/ncursesw mixup, causing
-  menuconfig display corruption.
-
-- Toolchain: Workarounds for fix-rpath issues with binutils and elf2flt.
-
-- Util-linux: Fix blocking on getrandom() issue with recent kernels.
-
-- Remove broken freescale_imx31_3stack, freescale_imx6sololiteevk and
-  freescale_imx6ulevk defconfigs.
-
-- Security fixes for file, git, glibc, gnupg, gnupg2, imagemagick,
-  libcurl, libgcrypt, libressl, libvncserver, libvorbis, libxslt,
-  mariadb, mbedtls, mpg123, nodejs, perl, procps-ng, redis, wavpack,
-  wget, wireshark, xen
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.3
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2018.02.2..
-
-    27  Baruch Siach
-    15  Bernd Kuhls
-    14  Peter Korsgaard
-    14  Yann E. MORIN
-    13  Fabio Estevam
-    13  Fabrice Fontaine
-    10  Carlos Santos
-     8  Thomas Petazzoni
-     4  Danomi Manchego
-     3  Arnout Vandecappelle (Essensium/Mind)
-     3  Florian La Roche
-     2  J?rg Krause
-     2  Martin Bark
-     2  Olivier Schonken
-     2  Petr Vorel
-     1  Alistair Francis
-     1  Angelo Compagnucci
-     1  Anssi Hannula
-     1  Christophe PRIOUZEAU
-     1  Francois Perrad
-     1  Joseph Kogut
-     1  Laurent GONZALEZ
-     1  Ricardo Martincoski
-     1  Romain Naour
-     1  Ryan Coe
-     1  Waldemar Brodkorb
-     1  Zoltan Gyarmati
-
+diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
+index 11b323b8bf..df1c053005 100644
+--- a/package/jpeg-turbo/jpeg-turbo.hash
++++ b/package/jpeg-turbo/jpeg-turbo.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/libjpeg-turbo/files/1.5.2/
+-sha1 e788f6defa58b4393a5e1685c018f3b962971457  libjpeg-turbo-1.5.2.tar.gz
+-md5 6b4923e297a7eaa255f08511017a8818  libjpeg-turbo-1.5.2.tar.gz
++# From https://sourceforge.net/projects/libjpeg-turbo/files/1.5.3/
++sha1 87ebf4cab2bb27fcb8e7ccb18ec4eb680e1f2c2d  libjpeg-turbo-1.5.3.tar.gz
++md5 7c82f0f6a3130ec06b8a4d0b321cbca3  libjpeg-turbo-1.5.3.tar.gz
+ # Locally computed
+-sha256 9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528  libjpeg-turbo-1.5.2.tar.gz
++sha256 b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523  libjpeg-turbo-1.5.3.tar.gz
+ sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
+ sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index d52ab916e0..2b5d876928 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JPEG_TURBO_VERSION = 1.5.2
++JPEG_TURBO_VERSION = 1.5.3
+ JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
+ JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
+ JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
 -- 
-Bye, Peter Korsgaard
+2.14.1
