@@ -1,53 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 17 Jun 2018 23:46:04 +0200
-Subject: [Buildroot] [PATCH] qt5: bump latest version to 5.11.0
-In-Reply-To: <20180613234411.14823-1-gael.portay@savoirfairelinux.com>
-References: <20180613234411.14823-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180617234604.0a7d1225@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Jun 2018 07:13:25 +0200
+Subject: [Buildroot] [PATCHv2 proposal/next 2/3] build: replace
+ host-mkpasswd with host-busybox
+In-Reply-To: <20180605160827.GD2503@scaer> (Yann E. MORIN's message of "Tue, 5
+ Jun 2018 18:08:27 +0200")
+References: <20180601125900.26400-1-chemobejk@gmail.com>
+ <20180601133053.27552-1-chemobejk@gmail.com>
+ <20180601133053.27552-3-chemobejk@gmail.com>
+ <48945091-d169-18ba-31d0-a51c64e9a918@mind.be>
+ <20180605160827.GD2503@scaer>
+Message-ID: <87k1qwllsa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-On Wed, 13 Jun 2018 19:44:11 -0400, Ga?l PORTAY wrote:
-> qtwayland:
-> 
-> 	Remove 0001-Fix-compilation-for-Renesas-R-Car-M3.patch (upstream
-> 	since [1]).
-> 
-> qtwebengine:
-> 
-> 	New 3rd-part 0001-Fix-build-with-GCC-8.1.0.patch (upstream in
-> 	chromium [2]).
-> 
-> [1]: https://github.com/qt/qtwayland/commit/8b204b2c56be5e7c1fd21144ae140c9b865dd86b
-> [2]: https://codereview.qt-project.org/#/c/229160/
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+ > Arnout, All,
+ > On 2018-06-05 00:21 +0200, Arnout Vandecappelle spake thusly:
+ >> On 01-06-18 15:30, Stefan Becker wrote:
+ >> > host-mkpasswd was a fork from whois to provide a host version of
+ >> > mkpasswd for the build. This has caused a maintenance headache.
+ >> > 
+ >> > Replace it with host-busybox which can provide "mkpasswd" functionality
+ >> > from own source code. That causes less hassle for different build
+ >> > platforms.
+ >> 
+ >> Just to be clear: does everybody agree that it is a good idea to use
+ >> weakly-random numbers as salt, rather than real random numbers like whois does?
 
-I've applied. But there was something weird, see below.
+ > Not really, no. That is definitely no good. I was not aware of how bad
+ > the busybox salt generator was.. Sigh....
 
+If that is the only problem then we could still use it and pass our own
+salt, but that leaves the problem of coming up with a sufficiently
+random salt. I guess we could do something with reading /dev/urandom and
+base64 encoding it.
 
-> diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
-> index ce1189d0e1..6bd9a9d51b 100644
-> --- a/package/qt5/qt5charts/qt5charts.hash
-> +++ b/package/qt5/qt5charts/qt5charts.hash
-> @@ -1,8 +1,8 @@
->  # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcharts-opensource-src-2.1.3.tar.xz.mirrorlist
->  sha256 f636a9b1c255f678f11b36cd73abc807d16dae0c31ecbc75c09524703aae7d2f  qtcharts-opensource-src-2.1.3.tar.xz
+But yeah, just going for the python implementation may be the easiest.
 
-This didn't apply, because there was no such hash in upstream
-Buildroot, since qtcharts only appeared in Qt 5.7.
-
-Could you make sure your patches apply on top of the latest master ?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
