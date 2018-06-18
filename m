@@ -1,44 +1,40 @@
-From: nimaim <nimaim@gmail.com>
-Date: Mon, 18 Jun 2018 06:22:35 -0700 (MST)
-Subject: [Buildroot] Using a bootlin toolchain with buildroot
-In-Reply-To: <CAF_dkJCVMx+LzwJeKjM-5AWABpL_q_W7LcRtj9ZTO+L_vGas1g@mail.gmail.com>
-References: <CAF_dkJBJAouapTOfS-MEo-cLNHb1birJ74dvChGPgfVG=i6guw@mail.gmail.com>
- <20180406210215.6c276c4f@windsurf.home>
- <CAF_dkJBUm=iYA_WPm3eJ1KGN6aKJKVS+PoYdJnnWax-xivKJWw@mail.gmail.com>
- <20180407084321.1e68cc90@windsurf.home>
- <CAF_dkJDwfTvVHmSVgi4mo=2u=-Yj-__3e7rqsOyUXppLPeysEQ@mail.gmail.com>
- <CAF_dkJAH5u3g_rQYaUVzCnUMyeMTMZrRbo0KDnOt6pVQtwvb-g@mail.gmail.com>
- <20180615211330.479e44c5@windsurf>
- <CAF_dkJAfn_-H_L3mf8jDnu72D7=UV38sAbRrDQy+nQ=P1XjuYw@mail.gmail.com>
- <20180617134712.4fbe529e@windsurf>
- <CAF_dkJCVMx+LzwJeKjM-5AWABpL_q_W7LcRtj9ZTO+L_vGas1g@mail.gmail.com>
-Message-ID: <1529328155835-0.post@n4.nabble.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 18 Jun 2018 16:39:31 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/ca-certificates: don't hash
+ certificates.crt
+In-Reply-To: <CAFGQKxeOmRCBUu7XFCDkpRbFV51F0=A8htjRMc75rKQA8_VtoQ@mail.gmail.com>
+References: <20180616220601.4629-1-martin@barkynet.com>
+ <20180616220601.4629-2-martin@barkynet.com>
+ <20180617212547.4bc868c3@windsurf>
+ <CAFGQKxeOmRCBUu7XFCDkpRbFV51F0=A8htjRMc75rKQA8_VtoQ@mail.gmail.com>
+Message-ID: <20180618163931.4531ccb3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patrick Doyle wrote
-> Thank you Thomas.
+Hello,
+
+On Mon, 18 Jun 2018 10:51:34 +0100, Martin Bark wrote:
+
+> > output/target$ ls -l etc/ssl/certs/128805a3.0
+> > lrwxrwxrwx 1 thomas thomas 35 Jun 17 20:58 etc/ssl/certs/128805a3.0 -> EE_Certification_Centre_Root_CA.pem  
 > 
-> --wpd
-> 
-> Thanks for starting this discussion guys ... I thought I was the only one
-> who used one of the bootlin toolchains since it is not really documented
-> anywhere :) I have a similar need: to use one of the stable toolchains w/
-> a newer GCC + libs. Looks like the aforementioned "make sdk" will do just
-> that.
-> _______________________________________________
-> buildroot mailing list
+> Did you check other hashes under etc/ssl/certs/ ? Check for any hashes
+> that link to ca-certificates.crt. I suspect you have a different hash
+> pointing to ca-certificates.
 
-> buildroot@
+There are no files in /etc/ssl/certs that are symlinks to
+ca-certificates.crt:
 
-> http://lists.busybox.net/mailman/listinfo/buildroot
+output/target$ ls -l etc/ssl/certs/| grep ca-certificates.crt
+-rw-r--r-- 1 thomas thomas 207436 Jun 18 15:30 ca-certificates.crt
 
+Best regards,
 
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
