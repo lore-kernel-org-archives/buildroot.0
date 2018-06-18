@@ -1,161 +1,64 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Mon, 18 Jun 2018 13:27:24 +0530
-Subject: [Buildroot] [PATCH v2 1/2] board: amarula: Add A64-Relic support
-In-Reply-To: <20180617215956.71c3d68c@windsurf>
-References: <20180605092745.26198-1-jagan@amarulasolutions.com>
- <20180617215956.71c3d68c@windsurf>
-Message-ID: <CAMty3ZCtUaso87xpFXDAC-J=W_JKwzNNsfakb++9s+VPc3wQ5A@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 18 Jun 2018 10:08:26 +0200
+Subject: [Buildroot] [PATCH 1/2 v2] package/binutils: switch from
+ symlinks to copies to fix rpath
+In-Reply-To: <f8694045b93e9233e65eeb22e7557959a1a8d47e.1527536710.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 28 May 2018 21:45:17 +0200")
+References: <cover.1527536710.git.yann.morin.1998@free.fr>
+ <f8694045b93e9233e65eeb22e7557959a1a8d47e.1527536710.git.yann.morin.1998@free.fr>
+Message-ID: <8736xkldol.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 18, 2018 at 1:29 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Tue,  5 Jun 2018 14:57:44 +0530, Jagan Teki wrote:
->
->> +label linux-4.17.0-rc3
->> +  kernel /Image
->> +  devicetree /sun50i-a64-amarula-relic.dtb
->> +  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p4 rootwait
->
-> Is mmcblk1 going to be the SD card or the eMMC ?
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-mmcblk1 is eMMC there is not SD card support on this. mmcblk0 detected
-as SDIO for wifi
+ > Commit f9cffb6af464 (binutils: replace hard-links with soft-links to fix
+ > rpath) has a side effect that when we build for a noMMU target, elf2flt
+ > will in turn replace some of the programs installed by binutils, with
+ > its own wrappers.
 
->
->> +image sdcard.img {
->
-> So you're producing a sdcard.img, but your readme.txt doesn't use it.
+ > For example, it will rename host/TUPLE/bin/ld to ld.real, and add its
+ > own wrapper in place of the original. It does the same for
+ > host/bin/TUPLE-ld and host/bin/TUPLE-ld.real.
 
-right now I'm not using this, but with fastboot I'm using individual
-images. but we can use sdcard.img in eMMC DOS partition if we want. do
-you want to mentioned the same?
+ > However, we had already made ld a symlink to ../../bin/TUPLE-ld, so
+ > host/TUPLE/bin/ld.real will still point to host/bin/TUPLE-ld when we
+ > want it to point to ld.real instead...
 
->
->> diff --git a/board/amarula/a64-relic/post-build.sh b/board/amarula/a64-relic/post-build.sh
->> new file mode 100755
->> index 0000000000..ec20fca7d9
->> --- /dev/null
->> +++ b/board/amarula/a64-relic/post-build.sh
->> @@ -0,0 +1,4 @@
->> +#!/bin/sh
->> +BOARD_DIR="$(dirname $0)"
->> +
->> +install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
->> diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
->> new file mode 100644
->> index 0000000000..5d8ae65112
->> --- /dev/null
->> +++ b/board/amarula/a64-relic/readme.txt
->> @@ -0,0 +1,77 @@
->> +Amarula A64 Relic
->> +================
->> +
->> +Amarula A64-Relic is A64 based IoT device, which support
->> +- Allwinner A64 Cortex-A53
->> +- Mali-400MP2 GPU
->> +- AXP803 PMIC
->> +- 1GB DDR3 RAM
->> +- 8GB eMMC
->> +- AP6330 Wifi/BLE
->> +- MIPI-DSI
->> +- CSI: OV5640 sensor
->> +- USB OTG
->> +- 12V DC power supply
->> +
->> +Build
->> +=====
->> +
->> +  $ make amarula_a64_relic_defconfig
->> +
->> +  $ make
->> +
->> +build files at output/images/:
->> +  - sunxi-spl.bin
->> +  - u-boot.itb
->> +  - Image
->> +  - sun50i-a64-amarula-relic.dtb
->> +  - boot.vfat
->> +  - rootfs.ext4
->> +  - sdcard.img
->> +
->> +Write eMMC
->> +=========
->> +
->> +The board comes with an operating system preloaded on the eMMC.
->> +To replace it with the Buildroot-built system, take the following
->> +steps
->> +
->> +1. Connect the board UART with host and open minicom(ttyUSBx/115200N8)
->> +
->> +2. Supply 12V DC for power-on the board.
->> +
->> +3. Interrupt U-Boot by pressing enter
->> +
->> +4. Create GPT partitions
->> +  => mmc dev 1
->> +  => gpt write mmc 1 $partitions
->> +
->> +5. Connect the board USB-OTG with USB slot on the host.
->> +
->> +6. Initiate fastboot
->> +  => fastboot 0
->> +
->> +7. Write images from host onto eMMC using fastboot
->> +
->> +  $ output/images
->> +  $ fastboot -i 0x1f3a flash loader1 sunxi-spl.bin
->> +  $ fastboot -i 0x1f3a flash loader2 u-boot.itb
->> +  $ fastboot -i 0x1f3a flash esp boot.vfat
->> +  $ fastboot -i 0x1f3a flash system rootfs.ext4
->
-> Is this going to work with the extlinux.conf provided above ? I doubt
-> the same extlinux.conf can work for both the SD card booting and eMMC
-> booting.
->
-> If you want to support both eMMC and SD card booting, that's OK, but it
-> should be explained in the readme.txt, and it should be clear whether
-> the default extlinux.conf is meant for SD card booting or eMMC booting.
+ > This ultimately confuses gcc later on.
 
-Here, extlinux.conf is for eMMC boot.
+ > Of course, the culprit is also elf2flt, which also installs similar
+ > hardlinks that would ultimately exhibit the same rpath issue as the
+ > one fixed by f9cffb6af464. Note: we haven't had an issue so far with
+ > that, because those tools installed by elf2flt only link with libz,
+ > which is most often present on the host system. So, all seem well,
+ > but is nonetheless broken; this will be fixed in a subsequent commit.
 
->
->> +
->> +Update eMMC during Development
->> +==============================
->> +
->> +In order to avoid image packing with specified file-system every time
->> +during development, it better to alter the data in the partition by
->> +mounting on host with the help of 'ums' in U-Boot.
->
-> What is "image packing with specified file-system" ? I don't understand
-> what you mean here. Perhaps you wanted to say:
->
-> ""
->
-> During development, reflashing the entire filesystem image at every
-> change is time consuming. A useful alternative is to directly access
-> over USB the filesystem stored on the eMMC, using the USB Mass Storage
-> capability of U-Boot. To achieve this:
->
-> ""
->
-> Last thing, since your readme.txt says to use fastboot, you should
-> probably enable BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT, which will
-> make sure fastboot is available in output/host/bin/. And so your
-> readme.txt should point to this fastboot.
+ > But back on topic. If we were to fix elf2flt with similar symlinks,
+ > gcc still gets confused. The underlying reason for this confusion is
+ > not entirely clear, though... It looks like something is trying to
+ > dereference symlinks and gets confused by the result somehow...
 
-OK.
+ > So, in an attempt to restore some sanity in all this mess, we try to
+ > restore the previous behaviour, we no longer use symlinks but just copy
+ > the individual tools.
 
-Jagan.
+ > Fixes: #11031.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+
+ > ---
+ > Changes v1 -> v2:
+ >   - use copies, not shell wrappers  (Arnout)
+
+Committed to 2018.02.x, thanks.
 
 -- 
-Jagan Teki
-Senior Linux Kernel Engineer | Amarula Solutions
-U-Boot, Linux | Upstream Maintainer
-Hyderabad, India.
+Bye, Peter Korsgaard
