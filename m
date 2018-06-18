@@ -1,49 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jun 2018 20:48:59 +0200
-Subject: [Buildroot] [git commit] jpeg-turbo: bump to version 1.5.3
-Message-ID: <20180618184717.139BC886EA@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 18 Jun 2018 20:59:06 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5base: fix license
+Message-ID: <20180618185906.18553-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a08d7f44ea855852cff293444813762dbbbbb32f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Since QT 5.11, LICENSE.GPLv3 doesn't exist anymore so use LICENSE.GPL3
+and add its hash
+Note: hashes of LICENSE.LGPLv3 and header.BSD are not the same between
+QT 5.11 and 5.6.4 but we can't add two hashes for the same file...
+
+Fixes:
+ - http://autobuild.buildroot.net/results/b8add9b9a2defe5e64330714e9768ffa6393adc0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jpeg-turbo/jpeg-turbo.hash | 8 ++++----
- package/jpeg-turbo/jpeg-turbo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/qt5/qt5base/qt5base.hash | 1 +
+ package/qt5/qt5base/qt5base.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index 11b323b8bf..df1c053005 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/libjpeg-turbo/files/1.5.2/
--sha1 e788f6defa58b4393a5e1685c018f3b962971457  libjpeg-turbo-1.5.2.tar.gz
--md5 6b4923e297a7eaa255f08511017a8818  libjpeg-turbo-1.5.2.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/1.5.3/
-+sha1 87ebf4cab2bb27fcb8e7ccb18ec4eb680e1f2c2d  libjpeg-turbo-1.5.3.tar.gz
-+md5 7c82f0f6a3130ec06b8a4d0b321cbca3  libjpeg-turbo-1.5.3.tar.gz
- # Locally computed
--sha256 9098943b270388727ae61de82adec73cf9f0dbb240b3bc8b172595ebf405b528  libjpeg-turbo-1.5.2.tar.gz
-+sha256 b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523  libjpeg-turbo-1.5.3.tar.gz
- sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
- sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index d52ab916e0..2b5d876928 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+index 263fb84acc..937d35bdc2 100644
+--- a/package/qt5/qt5base/qt5base.hash
++++ b/package/qt5/qt5base/qt5base.hash
+@@ -6,6 +6,7 @@ sha256 ed6e46db84f7d34923ab4eae165c63e05ab3cfa9d19a73d3f57b4e7bfd41de66  qtbase-
  
--JPEG_TURBO_VERSION = 1.5.2
-+JPEG_TURBO_VERSION = 1.5.3
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+ sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+ sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35 LICENSE.LGPLv3
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 1eabd7a15b..d5b25abcb8 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -56,7 +56,7 @@ endif
+ QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+-QT5BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
++QT5BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+ QT5BASE_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5BASE_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+-- 
+2.14.1
