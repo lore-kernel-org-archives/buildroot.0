@@ -1,66 +1,55 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon, 18 Jun 2018 18:49:06 -0400
-Subject: [Buildroot] [PATCH 1/2] qt5charts: allow to build with qt5.6
-In-Reply-To: <20180618224907.17322-1-gael.portay@savoirfairelinux.com>
-References: <20180618224907.17322-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180618224907.17322-2-gael.portay@savoirfairelinux.com>
+From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Mon, 18 Jun 2018 19:04:52 -0400
+Subject: [Buildroot] [PATCH] qt5: bump latest version to 5.11.0
+In-Reply-To: <20180617234604.0a7d1225@windsurf>
+References: <20180613234411.14823-1-gael.portay@savoirfairelinux.com>
+ <20180617234604.0a7d1225@windsurf>
+Message-ID: <20180618230452.clpzxg5no3gio57w@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This module is available for Qt 5.6 since version 5.6.3 under the
-version number 2.1.3.
+Hi Thomas,
 
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
- package/qt5/qt5charts/Config.in      | 4 ----
- package/qt5/qt5charts/qt5charts.hash | 3 +++
- package/qt5/qt5charts/qt5charts.mk   | 5 +++++
- 3 files changed, 8 insertions(+), 4 deletions(-)
+On Sun, Jun 17, 2018 at 11:46:04PM +0200, Thomas Petazzoni wrote:
+> (...)
+> 
+> I've applied. But there was something weird, see below.
+> 
+> 
+> > diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
+> > index ce1189d0e1..6bd9a9d51b 100644
+> > --- a/package/qt5/qt5charts/qt5charts.hash
+> > +++ b/package/qt5/qt5charts/qt5charts.hash
+> > @@ -1,8 +1,8 @@
+> >  # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcharts-opensource-src-2.1.3.tar.xz.mirrorlist
+> >  sha256 f636a9b1c255f678f11b36cd73abc807d16dae0c31ecbc75c09524703aae7d2f  qtcharts-opensource-src-2.1.3.tar.xz
+> 
+> This didn't apply, because there was no such hash in upstream
+> Buildroot, since qtcharts only appeared in Qt 5.7.
+> 
+> Could you make sure your patches apply on top of the latest master ?
+> 
 
-diff --git a/package/qt5/qt5charts/Config.in b/package/qt5/qt5charts/Config.in
-index 78f08fe637..db199922db 100644
---- a/package/qt5/qt5charts/Config.in
-+++ b/package/qt5/qt5charts/Config.in
-@@ -1,9 +1,5 @@
--comment "qt5charts needs at least qt-5.7"
--	depends on !BR2_PACKAGE_QT5_VERSION_LATEST
--
- config BR2_PACKAGE_QT5CHARTS
- 	bool "qt5charts"
--	depends on BR2_PACKAGE_QT5_VERSION_LATEST
- 	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
-diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
-index 5a5845ef9f..ce1189d0e1 100644
---- a/package/qt5/qt5charts/qt5charts.hash
-+++ b/package/qt5/qt5charts/qt5charts.hash
-@@ -1,3 +1,6 @@
-+# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcharts-opensource-src-2.1.3.tar.xz.mirrorlist
-+sha256 f636a9b1c255f678f11b36cd73abc807d16dae0c31ecbc75c09524703aae7d2f  qtcharts-opensource-src-2.1.3.tar.xz
-+
- # Hash from: https://download.qt.io/official_releases/qt/5.10/5.10.1/submodules/qtcharts-everywhere-src-5.10.1.tar.xz.mirrorlist
- sha256 4f0d577bf73dd2bbb2765c2cfb493a2d68790fc2c64f42544d31dba806321ec9  qtcharts-everywhere-src-5.10.1.tar.xz
- 
-diff --git a/package/qt5/qt5charts/qt5charts.mk b/package/qt5/qt5charts/qt5charts.mk
-index 123cb658fe..71d0e54027 100644
---- a/package/qt5/qt5charts/qt5charts.mk
-+++ b/package/qt5/qt5charts/qt5charts.mk
-@@ -4,7 +4,12 @@
- #
- ################################################################################
- 
-+# Qt5Charts does not follow Qt versionning for 5.6
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5CHARTS_VERSION = $(QT5_VERSION)
-+else
-+QT5CHARTS_VERSION = 2.1.3
-+endif
- QT5CHARTS_SITE = $(QT5_SITE)
- QT5CHARTS_SOURCE = qtcharts-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5CHARTS_VERSION).tar.xz
- QT5CHARTS_DEPENDENCIES = qt5base
--- 
-2.17.1
+Facepalm... I forgot to send this patch[1] with the bump; qt5charts is
+available with 5.6 since 5.6.3 under the version 2.1.3.
+
+Even worse... the hash bump of 5.11.0 for this module is now missing :(
+Could you consider this patch as well[2]. Thanks and sorry about mess
+up.
+
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+Regards,
+Ga?l
+
+[1]: https://patchwork.ozlabs.org/patch/931215/
+[2]: https://patchwork.ozlabs.org/patch/931214/
