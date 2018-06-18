@@ -1,41 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jun 2018 20:20:32 +0200
-Subject: [Buildroot] [git commit] python-decorator: add license file and hash
-Message-ID: <20180618181921.4BC348895C@busybox.osuosl.org>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 18 Jun 2018 20:29:00 +0200
+Subject: [Buildroot] Fwd: [PATCH] arm: ensure symbol is a thumb symbol
+ in new binutils
+In-Reply-To: <a42868bb-f33a-c9ef-1e5b-31e37282b03d@st.com>
+References: <20171121172751.29545-1-Jason@zx2c4.com>
+ <20171123103518.GL31757@n2100.armlinux.org.uk>
+ <CAHmME9qBxgDV-HGeqj75ohr=4Bf+TD73PcC0DUqTRh5PTOKyhQ@mail.gmail.com>
+ <20171123140228.GP31757@n2100.armlinux.org.uk>
+ <CAKv+Gu8TJi8qSWAkL231WhQkWxK+vSQm2tnQn_qN-2wdFaNaEA@mail.gmail.com>
+ <765227b5-981d-0cea-c831-73cfe2f58721@redhat.com>
+ <aaf57bb5-13e6-852c-0f67-f72aedef0e79@gmail.com>
+ <254af731-459b-1f1d-2d93-27c5a91e7bfb@redhat.com>
+ <1e9b8ffd-cc1d-2c39-e34a-d1e33f49a645@gmail.com>
+ <aca33630-3c36-4ba9-0237-b971cb7ffee7@st.com>
+ <2a8151c1-644e-a6b0-9a21-2c570ac7000b@redhat.com>
+ <9495e928-0ea5-8b47-84b6-5609078950b2@st.com>
+ <ec2b0134-6c4a-53ff-4ae2-69c3f0646ded@redhat.com>
+ <93bd3c78-3884-40be-76f5-f7946f7e03a8@st.com>
+ <1d8f302b-5ece-9921-b930-8c4bca61743e@redhat. com>
+ <CAJA7tRbsNa7oTS-1sLs0WpA74RZr0R-v=sCyQxbDam5Gb7fYHA@mail.gmail.com>
+ <be2db8d4-7c12-2706-5084-322aa659c3bc@redhat.com>
+ <a42868bb-f33a-c9ef-1e5b-31e37282b03d@st.com>
+Message-ID: <81b78bb2-d7a0-8514-1bf6-4d26062756c8@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d54dee36b0c6a8954262ce9284c272216efc4252
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Nick,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-decorator/python-decorator.hash | 2 ++
- package/python-decorator/python-decorator.mk   | 1 +
- 2 files changed, 3 insertions(+)
+Le 18/06/2018 ? 17:04, Christophe PRIOUZEAU a ?crit?:
+> Hi Nick,
+> On 06/18/2018 04:03 PM, Nick Clifton wrote:
+>> Hi Guys,
+>>
+>>    Has there been any further progress on this issue ?
+>>
+>>    Does my suggestion of making the assembler's interpretation of
+>>    the ADR and ADRL pseudo-ops depend upon the -mthumb-interwork
+>>    switch seem like a good idea ?
+>>
+>> Cheers
+>>    Nick
+>>
+>>
+> I think it's a good trigger but I'm not an expert on this domain.
 
-diff --git a/package/python-decorator/python-decorator.hash b/package/python-decorator/python-decorator.hash
-index 293f1ca685..ca7fb88e7b 100644
---- a/package/python-decorator/python-decorator.hash
-+++ b/package/python-decorator/python-decorator.hash
-@@ -1,3 +1,5 @@
- # md5 from https://pypi.python.org/pypi/decorator/json, sha256 locally calculated
- md5 73644c8f0bd4983d1b6a34b49adec0ae decorator-4.0.11.tar.gz
- sha256 953d6bf082b100f43229cf547f4f97f97e970f5ad645ee7601d55ff87afdfe76 decorator-4.0.11.tar.gz
-+# Locally computed sha256 checksums
-+sha256 c9fbbd46d5af040b2b26db2f693034c95de8e9faaaf1cd68af358b092a56d454  LICENSE.txt
-diff --git a/package/python-decorator/python-decorator.mk b/package/python-decorator/python-decorator.mk
-index 3802f3dc16..67d9b8e719 100644
---- a/package/python-decorator/python-decorator.mk
-+++ b/package/python-decorator/python-decorator.mk
-@@ -8,6 +8,7 @@ PYTHON_DECORATOR_VERSION = 4.0.11
- PYTHON_DECORATOR_SITE = https://pypi.python.org/packages/cc/ac/5a16f1fc0506ff72fcc8fd4e858e3a1c231f224ab79bb7c4c9b2094cc570
- PYTHON_DECORATOR_SOURCE = decorator-$(PYTHON_DECORATOR_VERSION).tar.gz
- PYTHON_DECORATOR_LICENSE = BSD-2-Clause
-+PYTHON_DECORATOR_LICENSE_FILES = LICENSE.txt
- PYTHON_DECORATOR_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+Same here...
+I'm not sure how many project enable -mthumb-interwork option.
+
+Best regards,
+Romain
+
+> Regards
+> Christophe
+> 
