@@ -1,97 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jun 2018 19:43:04 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.3
-Message-ID: <20180618174056.081DC88560@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 18 Jun 2018 20:06:40 +0200
+Subject: [Buildroot] [PATCH 1/1] mosquitto: fix build with some glibc
+Message-ID: <20180618180640.12324-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f44524f61ad304e5db7cb933704bb4951ab031d3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+Add patch to define _GNU_SOURCE before using S_IF{DIR,REG}
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/7dcfb6ca9d14a5cd6872590065549356f1ab42a0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- CHANGES  | 54 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 56 insertions(+), 2 deletions(-)
+ ...ckets-_GNU_SOURCE-needed-for-S_IF-DIR-REG.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/mosquitto/0002-websockets-_GNU_SOURCE-needed-for-S_IF-DIR-REG.patch
 
-diff --git a/CHANGES b/CHANGES
-index c11118efd3..f98790154f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,57 @@
-+2018.02.3, Released June 18th, 2018
+diff --git a/package/mosquitto/0002-websockets-_GNU_SOURCE-needed-for-S_IF-DIR-REG.patch b/package/mosquitto/0002-websockets-_GNU_SOURCE-needed-for-S_IF-DIR-REG.patch
+new file mode 100644
+index 0000000000..88f9cbd94a
+--- /dev/null
++++ b/package/mosquitto/0002-websockets-_GNU_SOURCE-needed-for-S_IF-DIR-REG.patch
+@@ -0,0 +1,34 @@
++From d4442c3df7552756f53e656e446bc1bd7dc79a88 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 18 Jun 2018 19:52:58 +0200
++Subject: [PATCH] websockets: _GNU_SOURCE needed for S_IF{DIR,REG}
 +
-+	Important / security related fixes.
++Define of _GNU_SOURCE is needed to be able to use S_IFDIR and S_IFREG in
++src/websockets.c
 +
-+	Various fixes for building on modern distributions (GCC 8.x,
-+	no rpcgen utility).
++Fixes:
++ - http://autobuild.buildroot.net/results/7dcfb6ca9d14a5cd6872590065549356f1ab42a0
 +
-+	ARM: Default to binutils 2.28 and warn about newer binutils
-+	versions, which are known to cause boot failures for Linux
-+	kernels built in thumb mode.
++[Upstream status: https://github.com/eclipse/mosquitto/pull/862]
 +
-+	Busybox/mdev: Fix module autoloading.
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/websockets.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+	Busybox/sysvinit: inittab: Add /dev/{stdin,stdout,stderr}
-+	symlinks, call swapon -a to activate any configured swap
-+	devices.
++diff --git a/src/websockets.c b/src/websockets.c
++index 1e513ae..7722b4d 100644
++--- a/src/websockets.c
+++++ b/src/websockets.c
++@@ -29,6 +29,8 @@ POSSIBILITY OF SUCH DAMAGE.
++ 
++ #ifdef WITH_WEBSOCKETS
++ 
+++#define _GNU_SOURCE
+++
++ #include "config.h"
++ 
++ #include <libwebsockets.h>
++-- 
++2.14.1
 +
-+	Dependencies: Check that PATH does not contain current working
-+	directory, which triggers a number of build failures.
-+
-+	Infrastructure: Error out for packages erroneously using the
-+	'local' site method but not defining a _SITE.
-+
-+	Linux: Fix cuImage.<dtb> / simpleImage.<dtb> handling.  Ensure
-+	kconfig uses ncurses from the host to fix a ncurses/ncursesw
-+	mixup, causing menuconfig display corruption.
-+
-+	Toolchain: Workarounds for fix-rpath issues with binutils and
-+	elf2flt.
-+
-+	Util-linux: Fix blocking on getrandom() issue with recent
-+	kernels.
-+
-+	Remove broken freescale_imx31_3stack,
-+	freescale_imx6sololiteevk and freescale_imx6ulevk defconfigs.
-+
-+	Updated/fixed packages: apr-util, asterisk, attr, audit,
-+	autofs, binutils, busybox, cifs-utils, cups-filters, dash,
-+	ebtables, exim, expect, f2fs-tools, faketime, file, gdb, git,
-+	glibc, gnupg, gnupg2, gst1-plugins-bad, imagemagick, jamvm,
-+	jpeg-turbo, libcap, libcoap, libcurl, libgcrypt, libjpeg,
-+	libnss, libressl, libtirpc, libvncserver, libvorbis, libxslt,
-+	log4cplus, lrzsz, ltrace, lynx, mariadb, mbedtls, mpg123,
-+	nasm, netplug, network-manager, nfs-utils, nodejs,
-+	openvmtools, patch, perl, php-amqp, poppler, procps-ng,
-+	python, python-websockets, quota, redis, samba4, sysvinit,
-+	transmission, triggerhappy, util-linux, wavpack, wget,
-+	wireshark, xen, zmqpp
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#10986: Installing package attr when already supplied by busybox..
-+	#11031: ld-elf2flt: host/bin/ld.real': execvp: No such file or..
-+
- 2018.02.2, Released May 4th, 2018
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 864a15ba0a..c725f329d4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -87,9 +87,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.02.2
-+export BR2_VERSION := 2018.02.3
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1525450000
-+BR2_VERSION_EPOCH = 1529344000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+-- 
+2.14.1
