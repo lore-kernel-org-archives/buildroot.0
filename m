@@ -1,188 +1,161 @@
-From: xu min <xuminready@gmail.com>
-Date: Mon, 18 Jun 2018 00:18:05 -0700
-Subject: [Buildroot] [PATCH 1/1] shadowsocks-libev: add dependency on
- BR2_TOOLCHAIN_HAS_SYNC_4
-In-Reply-To: <54fd78a4-e5ca-35d9-f41b-e60462411628@mind.be>
-References: <20180607230144.387-1-xuminready@gmail.com>
- <630c76ca-9a08-115d-5c32-85567237d012@mind.be>
- <CAMpS7mRvt1Mpt0faz7kMetV92XwYTojD_aFx1iZ-UGSJ8gbq1A@mail.gmail.com>
- <54fd78a4-e5ca-35d9-f41b-e60462411628@mind.be>
-Message-ID: <CAMpS7mSJBRLJpTCNEqo0qtfCKUDsxRJMan=9uu9ryd-4rbONsw@mail.gmail.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Mon, 18 Jun 2018 13:27:24 +0530
+Subject: [Buildroot] [PATCH v2 1/2] board: amarula: Add A64-Relic support
+In-Reply-To: <20180617215956.71c3d68c@windsurf>
+References: <20180605092745.26198-1-jagan@amarulasolutions.com>
+ <20180617215956.71c3d68c@windsurf>
+Message-ID: <CAMty3ZCtUaso87xpFXDAC-J=W_JKwzNNsfakb++9s+VPc3wQ5A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+On Mon, Jun 18, 2018 at 1:29 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> On Tue,  5 Jun 2018 14:57:44 +0530, Jagan Teki wrote:
+>
+>> +label linux-4.17.0-rc3
+>> +  kernel /Image
+>> +  devicetree /sun50i-a64-amarula-relic.dtb
+>> +  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk1p4 rootwait
+>
+> Is mmcblk1 going to be the SD card or the eMMC ?
 
-Thank you for you help. Your comment is very useful for me. I'll keep
-learning.
+mmcblk1 is eMMC there is not SD card support on this. mmcblk0 detected
+as SDIO for wifi
 
-MinXu
+>
+>> +image sdcard.img {
+>
+> So you're producing a sdcard.img, but your readme.txt doesn't use it.
 
-On Sun, Jun 10, 2018 at 2:37 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+right now I'm not using this, but with fastboot I'm using individual
+images. but we can use sdcard.img in eMMC DOS partition if we want. do
+you want to mentioned the same?
 
->  [Please keep the mailing list in Cc when replying.]
->  [Please don't top-post, but reply in-line like I do below.]
 >
-> On 10-06-18 10:18, xu min wrote:
-> > Hi Arnout Vandecappelle,
-> >
-> > Thank  you for your help. Shadowsocks doesn't depends on libuv. But I
-> found
-> > libuv had the same linking error. It fixed by add dependents on
-> > BR2_TOOLCHAIN_HAS_SYNC_4. So I add the link as reference. I already
-> delete it
-> > from my the latest patch.
-> >
-> > I found openal: fix atomic
-> > handling:
-> https://git.busybox.net/buildroot/tree/package/openal/Config.in. I did
-> > the similar way to fix the problems in my latest patch. Plus add depends
-> on
-> > BR2_TOOLCHAIN_HAS_THREADS_NPTL.
-> >
-> > Please review my last patch. https://patchwork.ozlabs.org/patch/927318/
-> > Thank you.
-> > MinXu
-> > PS:
-> > What's the difference between BR2_TOOLCHAIN_HAS_THREADS_NPTL and
-> > BR2_TOOLCHAIN_HAS_THREADS?
+>> diff --git a/board/amarula/a64-relic/post-build.sh b/board/amarula/a64-relic/post-build.sh
+>> new file mode 100755
+>> index 0000000000..ec20fca7d9
+>> --- /dev/null
+>> +++ b/board/amarula/a64-relic/post-build.sh
+>> @@ -0,0 +1,4 @@
+>> +#!/bin/sh
+>> +BOARD_DIR="$(dirname $0)"
+>> +
+>> +install -m 0644 -D $BOARD_DIR/extlinux.conf $BINARIES_DIR/extlinux/extlinux.conf
+>> diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
+>> new file mode 100644
+>> index 0000000000..5d8ae65112
+>> --- /dev/null
+>> +++ b/board/amarula/a64-relic/readme.txt
+>> @@ -0,0 +1,77 @@
+>> +Amarula A64 Relic
+>> +================
+>> +
+>> +Amarula A64-Relic is A64 based IoT device, which support
+>> +- Allwinner A64 Cortex-A53
+>> +- Mali-400MP2 GPU
+>> +- AXP803 PMIC
+>> +- 1GB DDR3 RAM
+>> +- 8GB eMMC
+>> +- AP6330 Wifi/BLE
+>> +- MIPI-DSI
+>> +- CSI: OV5640 sensor
+>> +- USB OTG
+>> +- 12V DC power supply
+>> +
+>> +Build
+>> +=====
+>> +
+>> +  $ make amarula_a64_relic_defconfig
+>> +
+>> +  $ make
+>> +
+>> +build files at output/images/:
+>> +  - sunxi-spl.bin
+>> +  - u-boot.itb
+>> +  - Image
+>> +  - sun50i-a64-amarula-relic.dtb
+>> +  - boot.vfat
+>> +  - rootfs.ext4
+>> +  - sdcard.img
+>> +
+>> +Write eMMC
+>> +=========
+>> +
+>> +The board comes with an operating system preloaded on the eMMC.
+>> +To replace it with the Buildroot-built system, take the following
+>> +steps
+>> +
+>> +1. Connect the board UART with host and open minicom(ttyUSBx/115200N8)
+>> +
+>> +2. Supply 12V DC for power-on the board.
+>> +
+>> +3. Interrupt U-Boot by pressing enter
+>> +
+>> +4. Create GPT partitions
+>> +  => mmc dev 1
+>> +  => gpt write mmc 1 $partitions
+>> +
+>> +5. Connect the board USB-OTG with USB slot on the host.
+>> +
+>> +6. Initiate fastboot
+>> +  => fastboot 0
+>> +
+>> +7. Write images from host onto eMMC using fastboot
+>> +
+>> +  $ output/images
+>> +  $ fastboot -i 0x1f3a flash loader1 sunxi-spl.bin
+>> +  $ fastboot -i 0x1f3a flash loader2 u-boot.itb
+>> +  $ fastboot -i 0x1f3a flash esp boot.vfat
+>> +  $ fastboot -i 0x1f3a flash system rootfs.ext4
 >
->  uClibc has several threads implementations. NPTL is "native threads",
-> i.e. a
-> thread is a lightweigth Linux process. But it's not available on all
-> platforms.
-> Some code depends on this, e.g. it relies on threads having different
-> PIDs. But
-> this is not often the case. So usually, you just need
-> BR2_TOOLCHAIN_HAS_THREADS.
+> Is this going to work with the extlinux.conf provided above ? I doubt
+> the same extlinux.conf can work for both the SD card booting and eMMC
+> booting.
 >
->
-> > What's the difference between sync and atomics? How did you find out it
-> really
-> > needs sync, it can't use atomics?
->
->  _SYNC_* are the atomics builtins in GCC (i.e. the __sync_* functions).
-> Packages
-> can use either these functions, or the atomics library that is included in
-> GCC
-> (but which needs -latomic), or libatomic_ops. So it depends on the package
-> which
-> of these it uses. In the case of libcork, it only uses the sync functions.
->
->  Oh BTW, it would also be good to mention in the commit message and in the
-> comment in Config.in that it is libcork that needs this.
->
->  Regards,
->  Arnout
->
->
-> >
-> >
-> >
-> > On Fri, Jun 8, 2018 at 2:45 AM Arnout Vandecappelle <arnout@mind.be
-> > <mailto:arnout@mind.be>> wrote:
-> >
-> >      Hi Min,
-> >
-> >      Thank you for your speedy reaction!
-> >
-> >     On 08-06-18 01:01, Min Xu wrote:
-> >     > To fixup linking errors:
-> >     > "undefined reference to `__sync_val_compare_and_swap_4'"
-> >     > Fixes
-> >     >
-> >
-> http://autobuild.buildroot.net/results/d00c5f9e1e7a6a40fac5763a06977b351b7875da
-> >     >
-> >
-> http://autobuild.buildroot.net/results/0612f2dc09a8763fdf2111ee8d0c223c8531262a
-> >     >
-> >     > reference:
-> >
-> https://git.buildroot.org/buildroot/commit/?id=7c77d965bdcd301c2644004140faec613c1ee202
-> >
-> >      No need for this - it's actually confusing, I thought you meant
-> that the
-> >     dependency was indirect due to libuv (as is the case in that commit).
-> >
-> >     > Signed-off-by: Min Xu <xuminready@gmail.com <mailto:
-> xuminready at gmail.com>>
-> >     > ---
-> >     >  package/shadowsocks-libev/Config.in | 2 ++
-> >     >  1 file changed, 2 insertions(+)
-> >     >
-> >     > diff --git a/package/shadowsocks-libev/Config.in
-> >     b/package/shadowsocks-libev/Config.in
-> >     > index d02e5a93ef..c914ed778b 100644
-> >     > --- a/package/shadowsocks-libev/Config.in
-> >     > +++ b/package/shadowsocks-libev/Config.in
-> >     > @@ -1,5 +1,7 @@
-> >     >  config BR2_PACKAGE_SHADOWSOCKS_LIBEV
-> >     >       bool "shadowsocks-libev"
-> >     > +     # uses __sync_val_compare_and_swap_4
-> >
-> >      It actually uses the __sync_val_compare_and_swap macro, so the
-> actual function
-> >     that is called depends on sizeof(int) and sizeof(void*)...
-> >
-> >     > +     depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> >
-> >      ... so I think we also need
-> >
-> >             depends on BR2_TOOLCHAIN_HAS_SYNC_8 if BR2_ARCH_IS_64
-> >
-> >     although in practice of course all 64-bit arches have sync_8.
-> >
-> >      BTW I checked, it really needs sync, it can't use atomics.
-> >
-> >      Oh, and I also noticed that it seems to unconditionally require
-> pthreads.
-> >
-> >      Regards,
-> >      Arnout
-> >
-> >     >       depends on BR2_USE_MMU # fork()
-> >     >       select BR2_PACKAGE_C_ARES
-> >     >       select BR2_PACKAGE_LIBEV
-> >     >
-> >
-> >     --
-> >     Arnout Vandecappelle                          arnout at mind be
-> >     Senior Embedded Software Architect            +32-16-286500
-> >     Essensium/Mind                                http://www.mind.be
-> >     G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR
-> Leuven
-> >     LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> >     GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> >
-> >
-> >
-> > --
-> > *
-> > *
-> > *Best Regards*
-> > *
-> > *
-> > *XuMin's Ready?*
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
->
+> If you want to support both eMMC and SD card booting, that's OK, but it
+> should be explained in the readme.txt, and it should be clear whether
+> the default extlinux.conf is meant for SD card booting or eMMC booting.
 
+Here, extlinux.conf is for eMMC boot.
+
+>
+>> +
+>> +Update eMMC during Development
+>> +==============================
+>> +
+>> +In order to avoid image packing with specified file-system every time
+>> +during development, it better to alter the data in the partition by
+>> +mounting on host with the help of 'ums' in U-Boot.
+>
+> What is "image packing with specified file-system" ? I don't understand
+> what you mean here. Perhaps you wanted to say:
+>
+> ""
+>
+> During development, reflashing the entire filesystem image at every
+> change is time consuming. A useful alternative is to directly access
+> over USB the filesystem stored on the eMMC, using the USB Mass Storage
+> capability of U-Boot. To achieve this:
+>
+> ""
+>
+> Last thing, since your readme.txt says to use fastboot, you should
+> probably enable BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT, which will
+> make sure fastboot is available in output/host/bin/. And so your
+> readme.txt should point to this fastboot.
+
+OK.
+
+Jagan.
 
 -- 
-
-*Best Regards*
-
-*XuMin's Ready?*
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180618/622d5224/attachment.html>
+Jagan Teki
+Senior Linux Kernel Engineer | Amarula Solutions
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
