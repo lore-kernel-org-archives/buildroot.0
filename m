@@ -1,55 +1,57 @@
-From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Date: Mon, 18 Jun 2018 15:04:59 +0000
-Subject: [Buildroot] Fwd: [PATCH] arm: ensure symbol is a thumb symbol
- in new binutils
-In-Reply-To: <be2db8d4-7c12-2706-5084-322aa659c3bc@redhat.com>
-References: <20171121172751.29545-1-Jason@zx2c4.com>
- <CAHmME9oMTNJFnOwfhu26QSRSP92Axbc-+v9cCPsTKxekZvGvxg@mail.gmail.com>
- <20171123103518.GL31757@n2100.armlinux.org.uk>
- <CAHmME9qBxgDV-HGeqj75ohr=4Bf+TD73PcC0DUqTRh5PTOKyhQ@mail.gmail.com>
- <20171123140228.GP31757@n2100.armlinux.org.uk>
- <CAKv+Gu8TJi8qSWAkL231WhQkWxK+vSQm2tnQn_qN-2wdFaNaEA@mail.gmail.com>
- <765227b5-981d-0cea-c831-73cfe2f58721@redhat.com>
- <aaf57bb5-13e6-852c-0f67-f72aedef0e79@gmail.com>
- <254af731-459b-1f1d-2d93-27c5a91e7bfb@redhat.com>
- <1e9b8ffd-cc1d-2c39-e34a-d1e33f49a645@gmail.com>
- <aca33630-3c36-4ba9-0237-b971cb7ffee7@st.com>
- <2a8151c1-644e-a6b0-9a21-2c570ac7000b@redhat.com>
- <9495e928-0ea5-8b47-84b6-5609078950b2@st.com>
- <ec2b0134-6c4a-53ff-4ae2-69c3f0646ded@redhat.com>
- <93bd3c78-3884-40be-76f5-f7946f7e03a8@st.com>
- <1d8f302b-5ece-9921-b930-8c4bca61743e@redhat. com>
- <CAJA7tRbsNa7oTS-1sLs0WpA74RZr0R-v=sCyQxbDam5Gb7fYHA@mail.gmail.com>
- <be2db8d4-7c12-2706-5084-322aa659c3bc@redhat.com>
-Message-ID: <a42868bb-f33a-c9ef-1e5b-31e37282b03d@st.com>
+From: Liam Staskawicz <liam@stask.net>
+Date: Mon, 18 Jun 2018 10:16:46 -0700
+Subject: [Buildroot] customizations to package recipes in BR2_EXTERNAL?
+In-Reply-To: <1150144198.1192053.1529322524893.JavaMail.zimbra@datacom.com.br>
+References: <4428F9BB-DCBB-42D1-AA6E-EFBE83730FD9@stask.net>
+ <1150144198.1192053.1529322524893.JavaMail.zimbra@datacom.com.br>
+Message-ID: <27474BF0-E8A6-41D3-8D85-0A50DD2350B7@stask.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nick,
-On 06/18/2018 04:03 PM, Nick Clifton wrote:
-> Hi Guys,
->
->    Has there been any further progress on this issue ?
->
->    Does my suggestion of making the assembler's interpretation of
->    the ADR and ADRL pseudo-ops depend upon the -mthumb-interwork
->    switch seem like a good idea ?
->
-> Cheers
->    Nick
->
->
-I think it's a good trigger but I'm not an expert on this domain.
-Regards
-Christophe
 
--- 
+> On Jun 18, 2018, at 4:48 AM, Carlos Santos <casantos@datacom.com.br> wrote:
+> 
+>> From: "Liam Staskawicz" <liam@stask.net>
+>> To: "buildroot" <buildroot@busybox.net>
+>> Sent: Sunday, June 17, 2018 6:30:14 PM
+>> Subject: [Buildroot] customizations to package recipes in BR2_EXTERNAL?
+> 
+>> Hello,
+>> 
+>> I'd like to slightly modify an existing package (nvidia-driver) to target a
+>> different version (not the latest version, just the specific version my project
+>> is using). The changes are simple - updating the version string, and .hash
+>> entries - but it's not clear how best to manage these changes in a BR2_EXTERNAL
+>> based workflow, as patches in BR2_GLOBAL_PATCH_DIR get applied after the
+>> sources have been downloaded and unpacked.
+>> 
+>> I'd like to avoid maintaining a clone of the buildroot repo with these changes,
+>> if possible. Is there a recommended workflow for this situation?
+>> 
+>> Thanks,
+>> Liam
+> 
+> Allowing users to customize existing packages in a BR2_EXTERNAL could
+> lead to unpredictable results. If you need a custom nvidia-driver then
+> copy/edit the original package definition to <my-project>-nvidia-driver
+> in your BR2_EXTERNAL. That's quite easy, since no other package depends
+> on nvidia-driver.
 
-Best regards / Cordialement,
+Thanks. This is not exactly straightforward, as it requires significant renaming of variables in the package to match the new package name, which is a bit brittle.
 
-Christophe Priouzeau | Tel: +33 244027320
-STMicroelectronics
-ST online: www.st.com<http://www.st.com/>
+If there were a mechanism that allowed for a copy of the package in BR2_EXTERNAL to take precedence over a package with the same name in the core buildroot packages directory, that could address some of those issues, but perhaps there are other issues with it that I'm not aware of.
+
+If this is really the best option, I would probably just maintain a clone of the buildroot repo with my changes in it, as that would be simpler (though as I originally mentioned, not desirable).
+
+> 
+> A more generic solution would be allowing the user to select the desired
+> version by means of a sub-menu. This seems to make sense for a package
+> that install pre-compiled binaries, like nvidia-driver does.
+
+If that's workable, that would address my concern.
+
+Thanks,
+Liam
