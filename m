@@ -1,61 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 18 Jun 2018 10:07:39 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/elf2flt: replace
- hard-links with copies to fix rpath
-Message-ID: <20180618080627.0AD3088E63@busybox.osuosl.org>
+Date: Mon, 18 Jun 2018 10:04:59 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/binutils: switch
+ from symlinks to copies to fix rpath
+Message-ID: <20180618080627.0231B85651@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31bdd82f84a79e7acef54a6c9ff48d7281a5ecc3
+commit: https://git.buildroot.net/buildroot/commit/?id=a85d9fd851ed1e463bda315230105e673a64e29c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Do for elf2flt what we did for binutils: replace the hardlinks (which
-break rpath handling) with copies of the individaul tools.
+Commit f9cffb6af464 (binutils: replace hard-links with soft-links to fix
+rpath) has a side effect that when we build for a noMMU target, elf2flt
+will in turn replace some of the programs installed by binutils, with
+its own wrappers.
 
-See previous commit (package/binutils: switch from symlinks to copies
-and commit f9cffb6af4 (binutils: replace hard-links with soft-links to
-fix rpath) for the complete story.
+For example, it will rename host/TUPLE/bin/ld to ld.real, and add its
+own wrapper in place of the original. It does the same for
+host/bin/TUPLE-ld and host/bin/TUPLE-ld.real.
+
+However, we had already made ld a symlink to ../../bin/TUPLE-ld, so
+host/TUPLE/bin/ld.real will still point to host/bin/TUPLE-ld when we
+want it to point to ld.real instead...
+
+This ultimately confuses gcc later on.
+
+Of course, the culprit is also elf2flt, which also installs similar
+hardlinks that would ultimately exhibit the same rpath issue as the
+one fixed by f9cffb6af464. Note: we haven't had an issue so far with
+that, because those tools installed by elf2flt only link with libz,
+which is most often present on the host system. So, all seem well,
+but is nonetheless broken; this will be fixed in a subsequent commit.
+
+But back on topic. If we were to fix elf2flt with similar symlinks,
+gcc still gets confused. The underlying reason for this confusion is
+not entirely clear, though... It looks like something is trying to
+dereference symlinks and gets confused by the result somehow...
+
+So, in an attempt to restore some sanity in all this mess, we try to
+restore the previous behaviour, we no longer use symlinks but just copy
+the individual tools.
 
 Fixes: #11031.
 
-Reported-by: Christophe Priouzeau <christophe.priouzeau@st.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Christophe Priouzeau <christophe.priouzeau@st.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b37069340010f4d26c3baa741f2dc996014b7c66)
+(cherry picked from commit bb0164a8b191e5cbf656a4a6b4c5491d4fc167b6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/elf2flt/elf2flt.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ package/binutils/binutils.mk | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/elf2flt/elf2flt.mk b/package/elf2flt/elf2flt.mk
-index 995dfedebd..557f94d338 100644
---- a/package/elf2flt/elf2flt.mk
-+++ b/package/elf2flt/elf2flt.mk
-@@ -29,4 +29,20 @@ endif
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 29be5a7e4f..ac4575b616 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -138,12 +138,13 @@ endif
  
- HOST_ELF2FLT_CONF_ENV = LIBS="$(HOST_ELF2FLT_LIBS)"
- 
-+# Hardlinks between binaries in different directories cause a problem
-+# with rpath fixup, so we de-hardlink those binaries, and replace them
-+# with copies instead. Note that elf2flt will rename ld to ld.real
-+# before installing its own ld, but we already took care of the
-+# original ld from binutils so that it is already de-hardlinked. So
-+# ld is now the one from elf2flt, and we want to de-hardlinke it.
-+ELF2FLT_TOOLS = elf2flt flthdr ld
-+define HOST_ELF2FLT_FIXUP_HARDLINKS
-+	$(foreach tool,$(ELF2FLT_TOOLS),\
+ # Hardlinks between binaries in different directories cause a problem
+ # with rpath fixup, so we de-hardlink those binaries, and replace them
+-# with symbolic links.
++# with copies instead.
+ BINUTILS_TOOLS = ar as ld ld.bfd nm objcopy objdump ranlib readelf strip
+ define HOST_BINUTILS_FIXUP_HARDLINKS
+ 	$(foreach tool,$(BINUTILS_TOOLS),\
+-		rm -f $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool) ; \
+-		ln -s ../../bin/$(GNU_TARGET_NAME)-$(tool) $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool)
 +		rm -f $(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool) && \
 +		cp -a $(HOST_DIR)/bin/$(GNU_TARGET_NAME)-$(tool) \
 +			$(HOST_DIR)/$(GNU_TARGET_NAME)/bin/$(tool)
-+	)
-+endef
-+HOST_ELF2FLT_POST_INSTALL_HOOKS += HOST_ELF2FLT_FIXUP_HARDLINKS
-+
- $(eval $(host-autotools-package))
+ 	)
+ endef
+ HOST_BINUTILS_POST_INSTALL_HOOKS += HOST_BINUTILS_FIXUP_HARDLINKS
