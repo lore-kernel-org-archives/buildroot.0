@@ -1,58 +1,40 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 18 Jun 2018 20:29:00 +0200
-Subject: [Buildroot] Fwd: [PATCH] arm: ensure symbol is a thumb symbol
- in new binutils
-In-Reply-To: <a42868bb-f33a-c9ef-1e5b-31e37282b03d@st.com>
-References: <20171121172751.29545-1-Jason@zx2c4.com>
- <20171123103518.GL31757@n2100.armlinux.org.uk>
- <CAHmME9qBxgDV-HGeqj75ohr=4Bf+TD73PcC0DUqTRh5PTOKyhQ@mail.gmail.com>
- <20171123140228.GP31757@n2100.armlinux.org.uk>
- <CAKv+Gu8TJi8qSWAkL231WhQkWxK+vSQm2tnQn_qN-2wdFaNaEA@mail.gmail.com>
- <765227b5-981d-0cea-c831-73cfe2f58721@redhat.com>
- <aaf57bb5-13e6-852c-0f67-f72aedef0e79@gmail.com>
- <254af731-459b-1f1d-2d93-27c5a91e7bfb@redhat.com>
- <1e9b8ffd-cc1d-2c39-e34a-d1e33f49a645@gmail.com>
- <aca33630-3c36-4ba9-0237-b971cb7ffee7@st.com>
- <2a8151c1-644e-a6b0-9a21-2c570ac7000b@redhat.com>
- <9495e928-0ea5-8b47-84b6-5609078950b2@st.com>
- <ec2b0134-6c4a-53ff-4ae2-69c3f0646ded@redhat.com>
- <93bd3c78-3884-40be-76f5-f7946f7e03a8@st.com>
- <1d8f302b-5ece-9921-b930-8c4bca61743e@redhat. com>
- <CAJA7tRbsNa7oTS-1sLs0WpA74RZr0R-v=sCyQxbDam5Gb7fYHA@mail.gmail.com>
- <be2db8d4-7c12-2706-5084-322aa659c3bc@redhat.com>
- <a42868bb-f33a-c9ef-1e5b-31e37282b03d@st.com>
-Message-ID: <81b78bb2-d7a0-8514-1bf6-4d26062756c8@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 18 Jun 2018 20:33:20 +0200
+Subject: [Buildroot] Rust test too long
+In-Reply-To: <20180610165740.1221b491@windsurf>
+References: <20180610165740.1221b491@windsurf>
+Message-ID: <20180618183320.GA13225@itchy>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Nick,
+Hi!
 
-Le 18/06/2018 ? 17:04, Christophe PRIOUZEAU a ?crit?:
-> Hi Nick,
-> On 06/18/2018 04:03 PM, Nick Clifton wrote:
->> Hi Guys,
->>
->>    Has there been any further progress on this issue ?
->>
->>    Does my suggestion of making the assembler's interpretation of
->>    the ADR and ADRL pseudo-ops depend upon the -mthumb-interwork
->>    switch seem like a good idea ?
->>
->> Cheers
->>    Nick
->>
->>
-> I think it's a good trigger but I'm not an expert on this domain.
+On 2018-06-10 16:57, Thomas Petazzoni wrote:
+> Hello Eric,
+>
+> The tests.package.test_rust.TestRust test case takes more than 3 hours
+> and Gitlab, and causes the overall test suite to always fail:
+>
+>   https://gitlab.com/buildroot.org/buildroot/pipelines/23578303/failures
+>
+> (This one also has a failure related to check-package caused by the
+> mender package, but I've fixed that)
+>
+> Is this expected that this test takes as much as 3 hours ? Is there
+> something we can do to reduce this ?
 
-Same here...
-I'm not sure how many project enable -mthumb-interwork option.
+What is the horsepower of the Gitlab instance?
 
-Best regards,
-Romain
+When building rust from source, the longest part is building the LLVM
+backend.
 
-> Regards
-> Christophe
-> 
+On a 4-core i5-7500 CPU @ 3.40GHz, TestRust takes 60 minutes. But on a
+4-core i3-4010U CPU @ 1.70GHz, it does takes nearly 3 hours...
+
+Regards.
+
+--
+ELB
