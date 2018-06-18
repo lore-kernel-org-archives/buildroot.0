@@ -1,51 +1,34 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 18 Jun 2018 20:59:06 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5base: fix license
-Message-ID: <20180618185906.18553-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 18 Jun 2018 22:14:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/freeswitch: enable mod_timerfd
+Message-ID: <20180618201400.26287-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since QT 5.11, LICENSE.GPLv3 doesn't exist anymore so use LICENSE.GPL3
-and add its hash
-Note: hashes of LICENSE.LGPLv3 and header.BSD are not the same between
-QT 5.11 and 5.6.4 but we can't add two hashes for the same file...
+Mod_timerfd uses the Linux kernel timerfd API to create and use a kernel
+timer that delivers timer expire notifications via a file descriptor,
+for details read
 
-Fixes:
- - http://autobuild.buildroot.net/results/b8add9b9a2defe5e64330714e9768ffa6393adc0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+https://freeswitch.org/confluence/display/FREESWITCH/mod_timerfd
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/qt5/qt5base/qt5base.hash | 1 +
- package/qt5/qt5base/qt5base.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/freeswitch/freeswitch.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
-index 263fb84acc..937d35bdc2 100644
---- a/package/qt5/qt5base/qt5base.hash
-+++ b/package/qt5/qt5base/qt5base.hash
-@@ -6,6 +6,7 @@ sha256 ed6e46db84f7d34923ab4eae165c63e05ab3cfa9d19a73d3f57b4e7bfd41de66  qtbase-
- 
- # Hashes for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
- sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
- sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
- sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35 LICENSE.LGPLv3
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index 1eabd7a15b..d5b25abcb8 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -56,7 +56,7 @@ endif
- QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
--QT5BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
-+QT5BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
- else
- QT5BASE_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
- QT5BASE_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 4d490b0730..7f2a067a35 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -150,6 +150,7 @@ FREESWITCH_ENABLED_MODULES += \
+ 	say/mod_say_sv \
+ 	say/mod_say_th \
+ 	say/mod_say_zh \
++	timers/mod_timerfd \
+ 	xml_int/mod_xml_cdr \
+ 	xml_int/mod_xml_rpc \
+ 	xml_int/mod_xml_scgi
 -- 
-2.14.1
+2.17.1
