@@ -1,36 +1,85 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 19 Jun 2018 09:29:45 +0200
-Subject: [Buildroot] [PATCH 0/9] qt5: install missing examples
-In-Reply-To: <20180617224837.33949a3a@windsurf>
-References: <20180612123206.31523-1-gael.portay@savoirfairelinux.com>
- <20180617144442.3fc03f6e@windsurf>
- <20180617200551.l2kb6yky7w3mfacg@archlinux>
- <20180617224837.33949a3a@windsurf>
-Message-ID: <ba50656d-53c5-32f3-a05f-26c50674a229@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Jun 2018 09:57:18 +0200
+Subject: [Buildroot] [PATCH v2] busybox: Update udhcpc.script for DHCPv6
+In-Reply-To: <20180619005233.10531-1-sam@mendozajonas.com> (Samuel
+ Mendoza-Jonas's message of "Tue, 19 Jun 2018 10:52:33 +1000")
+References: <20180619005233.10531-1-sam@mendozajonas.com>
+Message-ID: <87zhzri4yp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Samuel" == Samuel Mendoza-Jonas <sam@mendozajonas.com> writes:
 
+Hi,
 
-On 17-06-18 22:48, Thomas Petazzoni wrote:
-[snip]
-> But beware of Qt4/Qt5
-> compatibility. 
+ > udhcpc6 will call the default script with the address set in the "ipv6"
+ > variable. Set "ip" to this address if present.
 
- I think we just decided to kill Qt4, so no problem there :-)
+ > Also from Rob, if handling a DHCPv6 address wait a moment for the IPv6
+ > route to be configured; this doesn't come from DHCPv6 but rather the
+ > IPv6 Router Advertisement (RA).
 
- Regards,
- Arnout
+ > (wait for IPv6 route)
+ > From: Robert Lippert <rlippert@google.com>
+ > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+ > ---
+ > v2: Avoid bashisms
 
-[snip]
+ >  package/busybox/udhcpc.script | 14 ++++++++++++++
+ >  1 file changed, 14 insertions(+)
+
+ > diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+
+You are sending this to the busybox list, but it looks to be a Buildroot
+patch?
+
+> index ad110d3a7f..65114b6cd0 100755
+ > --- a/package/busybox/udhcpc.script
+ > +++ b/package/busybox/udhcpc.script
+ > @@ -8,6 +8,16 @@ RESOLV_CONF="/etc/resolv.conf"
+ >  [ -e $RESOLV_CONF ] || touch $RESOLV_CONF
+ >  [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+ >  [ -n "$subnet" ] && NETMASK="netmask $subnet"
+ > +[ -n "$ipv6" ] && ip="$ipv6/128"
+
+Why /128?
+
+I'm far from an IPv6 expert, but I take it this is for stateful DHCPv6,
+right? Please mention that in the commit message.
+
+> +
+ > +wait_for_ipv6_default_route() {
+ > +	attempts=10
+ > +	while [ $attempts != 0 ] && [ -z "$(ip -6 route list | grep default)" ] ; do
+ > +		sleep 1
+ > +		attempts=$(($attempts-1))
+ > +	done
+ > +	[ $attempts = 0 ] && echo "failed to get default ipv6 route"
+ > +}
+ 
+ >  case "$1" in
+ >  	deconfig)
+ > @@ -37,6 +47,10 @@ case "$1" in
+ >  			/usr/sbin/avahi-autoipd -k $interface
+ >  		fi
+ >  		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+ > +		if [ -n "$ipv6" ] ; then
+ > +			echo "waiting for default ipv6 route set"
+ > +			wait_for_ipv6_default_route
+ > +		fi
+ 
+ >  		if [ -n "$router" ] ; then
+ >  			echo "deleting routers"
+ > -- 
+ > 2.17.1
+
+ > _______________________________________________
+ > busybox mailing list
+ > busybox at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/busybox
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
