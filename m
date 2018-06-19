@@ -1,35 +1,37 @@
-From: Jan Kraval <jan.kraval@gmail.com>
-Date: Tue, 19 Jun 2018 09:03:15 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/orangepi_lite: Enable HDMI and
- analog audio in Linux config
-In-Reply-To: <20180618074826.pud3rpikt7xzv5sg@flea>
-References: <20180611170113.9305-1-jan.kraval@gmail.com>
- <20180611170113.9305-2-jan.kraval@gmail.com>
- <20180618074826.pud3rpikt7xzv5sg@flea>
-Message-ID: <f5b5fca3-9f81-d367-f80d-f4b20955cd73@gmail.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Tue, 19 Jun 2018 09:20:50 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2018.02.3
+In-Reply-To: <20180618181746.3DD5F888A3@busybox.osuosl.org>
+References: <20180618181746.3DD5F888A3@busybox.osuosl.org>
+Message-ID: <CAAXf6LX8e136r-BSyQC153zAHR2fecOheBeiBCZPXZTcjbVGUQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Maxime,
-
-
-On 18.6.2018 09:48, Maxime Ripard wrote:
-> Hi,
+2018-06-18 20:19 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
+> commit: https://git.buildroot.net/buildroot/commit/?id=e44fa57a30de5e3b9907bf8a6c956dba70d61d39
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 >
-> Why haven't those changes been submitted to the upstream defconfig?
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  docs/website/download.html | 18 +++++++++---------
+>  docs/website/news.html     | 19 +++++++++++++++++++
+>  2 files changed, 28 insertions(+), 9 deletions(-)
 >
-> Maxime
+> diff --git a/docs/website/download.html b/docs/website/download.html
+> index fd08093783..8da44d76eb 100644
+> --- a/docs/website/download.html
+> +++ b/docs/website/download.html
+> @@ -8,37 +8,37 @@
+>      <div class="panel-heading">Download</div>
+>      <div class="panel-body">
+>
+> -      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.2</b></h3>
+> +      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.1</b></h3>
 >
 
-I don' know why 4.17 doesn't enable it in sunxi_defconfig. I suspected 
-that it's because there are boards without HDMI output so it's kept 
-disabled. I tested clean 4.17 on my Lite and HDMI worked only in u-boot. 
-Then I saw 
-https://git.buildroot.net/buildroot/commit/?id=a96100599071055e6daad1211f68b022c86a25c1, 
-which enables HDMI on Opi-PC. I tested it on Lite and it worked, so I 
-just submitted it.
+Woops, that doesn't seem right, should be 2018.02.3
 
-Jan
+/Thomas
