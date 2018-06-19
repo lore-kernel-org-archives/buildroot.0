@@ -1,76 +1,28 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 19 Jun 2018 17:44:41 +0300
-Subject: [Buildroot] [PATCH] imx-usb-loader: fix build with older gcc
-Message-ID: <53fcb79e408e468aaa45b7adc6ba0f92aba03702.1529419481.git.baruch@tkos.co.il>
+From: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
+Date: Tue, 19 Jun 2018 23:12:35 +0530
+Subject: [Buildroot] [PATCH] package/powerpc-utils: Add sha256 hash for the
+ COPYING file
+Message-ID: <20180619174235.23795-1-hegdevasant@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since the last version bump imx-usb-loader uses __builtin_bswap16 which
-is not universally available in gcc older than version 4.8. Add a patch
-switching to a local 16-bit bytes swap implementation.
-
-Should fix:
-http://autobuild.buildroot.net/results/a63/a63b593b7ef3b6d32e755afe42b77d47dbf0276e/
-http://autobuild.buildroot.net/results/48c/48c95cfc65f99fa02be81a11303ba8999f57091a/
-http://autobuild.buildroot.net/results/c9d/c9d4f99b49ddb9b2ce08fce7672dd7c70cf62912/
-
-Cc: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Suggested-by: Peter Korsgaard <peter@korsgaard.com>
+CC: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
 ---
- ....h-fix-build-with-gcc-older-than-4.8.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+ package/powerpc-utils/powerpc-utils.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
-new file mode 100644
-index 000000000000..c0aabed542c6
---- /dev/null
-+++ b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
-@@ -0,0 +1,42 @@
-+From c581e6037ec7ab2f9cd615f6ffa149b4d0a5638c Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 19 Jun 2018 15:31:52 +0300
-+Subject: [PATCH] portable.h: fix build with gcc older than 4.8
-+
-+__builtin_bswap16 is available in all gcc architectures only since
-+version 4.8. Older gcc versions fail to build:
-+
-+imx_sdp.o: In function `perform_dcd':
-+.../imx_sdp.c:1138: undefined reference to `__builtin_bswap16'
-+imx_sdp.o: In function `write_dcd_table_ivt':
-+.../imx_sdp.c:457: undefined reference to `__builtin_bswap16'
-+imx_sdp.o: In function `write_dcd':
-+.../imx_sdp.c:410: undefined reference to `__builtin_bswap16'
-+imx_sdp.o: In function `init_header':
-+.../imx_sdp.c:1075: undefined reference to `__builtin_bswap16'
-+
-+Use a local implementation instead.
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: https://github.com/boundarydevices/imx_usb_loader/pull/82
-+
-+ portable.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/portable.h b/portable.h
-+index 364fe47b212a..364832b5ea69 100644
-+--- a/portable.h
-++++ b/portable.h
-+@@ -58,7 +58,7 @@ extern int debugmode;
-+ #ifdef __GNUC__
-+ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+ #define BE32(x) __builtin_bswap32(x)
-+-#define BE16(x) __builtin_bswap16(x)
-++#define BE16(x) (x<<8 | x>>8)
-+ #else
-+ #define BE32(x) x
-+ #define BE16(x) x
-+-- 
-+2.17.1
-+
+diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
+index 0c495d55e9..b493be086b 100644
+--- a/package/powerpc-utils/powerpc-utils.hash
++++ b/package/powerpc-utils/powerpc-utils.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 77efe3978ac9c251c4728a35b9aebd6076583939a8e26cc7f07ffa86432a8bf0 powerpc-utils-v1.3.5.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
 -- 
-2.17.1
+2.14.3
