@@ -1,37 +1,36 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Tue, 19 Jun 2018 09:20:50 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2018.02.3
-In-Reply-To: <20180618181746.3DD5F888A3@busybox.osuosl.org>
-References: <20180618181746.3DD5F888A3@busybox.osuosl.org>
-Message-ID: <CAAXf6LX8e136r-BSyQC153zAHR2fecOheBeiBCZPXZTcjbVGUQ@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 19 Jun 2018 09:29:45 +0200
+Subject: [Buildroot] [PATCH 0/9] qt5: install missing examples
+In-Reply-To: <20180617224837.33949a3a@windsurf>
+References: <20180612123206.31523-1-gael.portay@savoirfairelinux.com>
+ <20180617144442.3fc03f6e@windsurf>
+ <20180617200551.l2kb6yky7w3mfacg@archlinux>
+ <20180617224837.33949a3a@windsurf>
+Message-ID: <ba50656d-53c5-32f3-a05f-26c50674a229@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-06-18 20:19 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
-> commit: https://git.buildroot.net/buildroot/commit/?id=e44fa57a30de5e3b9907bf8a6c956dba70d61d39
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
->
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  docs/website/download.html | 18 +++++++++---------
->  docs/website/news.html     | 19 +++++++++++++++++++
->  2 files changed, 28 insertions(+), 9 deletions(-)
->
-> diff --git a/docs/website/download.html b/docs/website/download.html
-> index fd08093783..8da44d76eb 100644
-> --- a/docs/website/download.html
-> +++ b/docs/website/download.html
-> @@ -8,37 +8,37 @@
->      <div class="panel-heading">Download</div>
->      <div class="panel-body">
->
-> -      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.2</b></h3>
-> +      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.1</b></h3>
->
 
-Woops, that doesn't seem right, should be 2018.02.3
 
-/Thomas
+On 17-06-18 22:48, Thomas Petazzoni wrote:
+[snip]
+> But beware of Qt4/Qt5
+> compatibility. 
+
+ I think we just decided to kill Qt4, so no problem there :-)
+
+ Regards,
+ Arnout
+
+[snip]
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
