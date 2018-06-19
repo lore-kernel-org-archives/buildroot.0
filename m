@@ -1,42 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jun 2018 13:54:22 +0200
-Subject: [Buildroot] [git commit] powerpc-utils: Bump version to 1.3.5
-Message-ID: <20180619115711.9412888F70@busybox.osuosl.org>
+From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
+Date: Tue, 19 Jun 2018 12:27:27 +0000
+Subject: [Buildroot] Fwd: [PATCH] arm: ensure symbol is a thumb symbol
+ in new binutils
+In-Reply-To: <062a421f-a669-fc1c-91e0-88cf73794414@redhat.com>
+References: <20171121172751.29545-1-Jason@zx2c4.com>
+ <CAHmME9qBxgDV-HGeqj75ohr=4Bf+TD73PcC0DUqTRh5PTOKyhQ@mail.gmail.com>
+ <20171123140228.GP31757@n2100.armlinux.org.uk>
+ <CAKv+Gu8TJi8qSWAkL231WhQkWxK+vSQm2tnQn_qN-2wdFaNaEA@mail.gmail.com>
+ <765227b5-981d-0cea-c831-73cfe2f58721@redhat.com>
+ <aaf57bb5-13e6-852c-0f67-f72aedef0e79@gmail.com>
+ <254af731-459b-1f1d-2d93-27c5a91e7bfb@redhat.com>
+ <1e9b8ffd-cc1d-2c39-e34a-d1e33f49a645@gmail.com>
+ <aca33630-3c36-4ba9-0237-b971cb7ffee7@st.com>
+ <2a8151c1-644e-a6b0-9a21-2c570ac7000b@redhat.com>
+ <9495e928-0ea5-8b47-84b6-5609078950b2@st.com>
+ <ec2b0134-6c4a-53ff-4ae2-69c3f0646ded@redhat.com>
+ <93bd3c78-3884-40be-76f5-f7946f7e03a8@st.com>
+ <1d8f302b-5ece-9921-b930-8c4bca61743e@redhat. com>
+ <CAJA7tRbsNa7oTS-1sLs0WpA74RZr0R-v=sCyQxbDam5Gb7fYHA@mail.gmail.com>
+ <be2db8d4-7c12-2706-5084-322aa659c3bc@redhat.com>
+ <a42868bb-f33a-c9ef-1e5b-31e37282b03d@st.com>
+ <81b78bb2-d7a0-8514-1bf6-4d26062756c8@gmail.com>
+ <062a421f-a669-fc1c-91e0-88cf73794414@redhat.com>
+Message-ID: <0a6d5bc7-f7e9-225e-9901-8b10c0677d94@st.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=09ce2519e5169254435a94d623bc4bca59286da8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+HI Nick,
+On 06/19/2018 02:01 PM, Nick Clifton wrote:
+> Hi Romain,
+>
+>>>>     Does my suggestion of making the assembler's interpretation of
+>>>>     the ADR and ADRL pseudo-ops depend upon the -mthumb-interwork
+>>>>     switch seem like a good idea ?
+>>> I think it's a good trigger but I'm not an expert on this domain.
+>> Same here...
+>> I'm not sure how many project enable -mthumb-interwork option.
+> Well actually that is the point.  By making the ADR/ADRL pseudo-ops
+> only set the bottom bit if the -mthumb-interwork option is used, we
+> will effectively be restoring the old behaviour of the assembler to
+> any project that does not use it.  So the ARM kernel in particular
+> will get the old behaviour back, which is what I think is wanted.
+>
+> So - any objections to the change ?  Anyone ?
+>
+> Cheers
+>    Nick
+>
+>
+>
+>
+I'm ok with this approach, and I'm available for possible patches to test.
 
-CC: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/powerpc-utils/powerpc-utils.hash | 2 +-
- package/powerpc-utils/powerpc-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Regards
+Christophe
 
-diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
-index 437a5865c2..0c495d55e9 100644
---- a/package/powerpc-utils/powerpc-utils.hash
-+++ b/package/powerpc-utils/powerpc-utils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 d36372efebc1f6f9409501f7ab68a812843925334dee6438e7b52a53c21574c5 powerpc-utils-v1.3.4.tar.gz
-+sha256 77efe3978ac9c251c4728a35b9aebd6076583939a8e26cc7f07ffa86432a8bf0 powerpc-utils-v1.3.5.tar.gz
-diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
-index da7a3c9cd6..a3bd8832ff 100644
---- a/package/powerpc-utils/powerpc-utils.mk
-+++ b/package/powerpc-utils/powerpc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POWERPC_UTILS_VERSION = v1.3.4
-+POWERPC_UTILS_VERSION = v1.3.5
- POWERPC_UTILS_SITE = $(call github,ibm-power-utilities,powerpc-utils,$(POWERPC_UTILS_VERSION))
- POWERPC_UTILS_DEPENDENCIES = zlib
- POWERPC_UTILS_AUTORECONF = YES
+-- 
+
+Best regards / Cordialement,
+
+Christophe Priouzeau | Tel: +33 244027320
+STMicroelectronics
+ST online: www.st.com<http://www.st.com/>
