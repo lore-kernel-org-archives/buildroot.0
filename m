@@ -1,48 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jun 2018 13:44:21 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2018.02.3
-In-Reply-To: <CAAXf6LX8e136r-BSyQC153zAHR2fecOheBeiBCZPXZTcjbVGUQ@mail.gmail.com>
- (Thomas De Schampheleire's message of "Tue, 19 Jun 2018 09:20:50
- +0200")
-References: <20180618181746.3DD5F888A3@busybox.osuosl.org>
- <CAAXf6LX8e136r-BSyQC153zAHR2fecOheBeiBCZPXZTcjbVGUQ@mail.gmail.com>
-Message-ID: <87r2l3huga.fsf@dell.be.48ers.dk>
+Date: Tue, 19 Jun 2018 13:45:20 +0200
+Subject: [Buildroot] [git commit] docs/website/download.html: fix latest LTS
+ version number
+Message-ID: <20180619114354.54DED83E95@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8733193e6b744295f0f955b78a9323fb2615416c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > 2018-06-18 20:19 GMT+02:00 Peter Korsgaard <peter@korsgaard.com>:
- >> commit: https://git.buildroot.net/buildroot/commit/?id=e44fa57a30de5e3b9907bf8a6c956dba70d61d39
- >> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> docs/website/download.html | 18 +++++++++---------
- >> docs/website/news.html     | 19 +++++++++++++++++++
- >> 2 files changed, 28 insertions(+), 9 deletions(-)
- >> 
- >> diff --git a/docs/website/download.html b/docs/website/download.html
- >> index fd08093783..8da44d76eb 100644
- >> --- a/docs/website/download.html
- >> +++ b/docs/website/download.html
- >> @@ -8,37 +8,37 @@
- >> <div class="panel-heading">Download</div>
- >> <div class="panel-body">
- >> 
- >> -      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.2</b></h3>
- >> +      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.1</b></h3>
- >> 
+Latest is naturally .3, not .1
 
- > Woops, that doesn't seem right, should be 2018.02.3
+Reported-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Crap, indeed. I normally do search-and-replace, I wonder how I could
-screw that up.
-
-Anyway, I'll fix it - Thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 8da44d76eb..660d1d42f9 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,7 +8,7 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
+ 
+-      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.1</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.3</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
