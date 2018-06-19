@@ -1,22 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jun 2018 22:13:47 +0200
-Subject: [Buildroot] [PATCH 1/1] cargo-bin: add hash for powerpc64le
-In-Reply-To: <20180619181938.24404-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 19 Jun 2018 20:19:38 +0200")
-References: <20180619181938.24404-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736xipm9w.fsf@dell.be.48ers.dk>
+Date: Tue, 19 Jun 2018 22:18:04 +0200
+Subject: [Buildroot] [PATCH] bluez5_utils: bump to version 5.50
+In-Reply-To: <20180619195719.8098-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Tue, 19 Jun 2018 21:57:19 +0200")
+References: <20180619195719.8098-1-joerg.krause@embedded.rocks>
+Message-ID: <87y3fao7ib.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.net/results/1e790bd13745cc0b3f03e6182e700c07d3b8a21c
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Drop upstream patch and remove `AUTORECONF = YES`.
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
 Committed, thanks.
 
