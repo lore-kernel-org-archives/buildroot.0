@@ -1,67 +1,61 @@
-From: Christophe PRIOUZEAU <christophe.priouzeau@st.com>
-Date: Tue, 19 Jun 2018 12:27:27 +0000
-Subject: [Buildroot] Fwd: [PATCH] arm: ensure symbol is a thumb symbol
- in new binutils
-In-Reply-To: <062a421f-a669-fc1c-91e0-88cf73794414@redhat.com>
-References: <20171121172751.29545-1-Jason@zx2c4.com>
- <CAHmME9qBxgDV-HGeqj75ohr=4Bf+TD73PcC0DUqTRh5PTOKyhQ@mail.gmail.com>
- <20171123140228.GP31757@n2100.armlinux.org.uk>
- <CAKv+Gu8TJi8qSWAkL231WhQkWxK+vSQm2tnQn_qN-2wdFaNaEA@mail.gmail.com>
- <765227b5-981d-0cea-c831-73cfe2f58721@redhat.com>
- <aaf57bb5-13e6-852c-0f67-f72aedef0e79@gmail.com>
- <254af731-459b-1f1d-2d93-27c5a91e7bfb@redhat.com>
- <1e9b8ffd-cc1d-2c39-e34a-d1e33f49a645@gmail.com>
- <aca33630-3c36-4ba9-0237-b971cb7ffee7@st.com>
- <2a8151c1-644e-a6b0-9a21-2c570ac7000b@redhat.com>
- <9495e928-0ea5-8b47-84b6-5609078950b2@st.com>
- <ec2b0134-6c4a-53ff-4ae2-69c3f0646ded@redhat.com>
- <93bd3c78-3884-40be-76f5-f7946f7e03a8@st.com>
- <1d8f302b-5ece-9921-b930-8c4bca61743e@redhat. com>
- <CAJA7tRbsNa7oTS-1sLs0WpA74RZr0R-v=sCyQxbDam5Gb7fYHA@mail.gmail.com>
- <be2db8d4-7c12-2706-5084-322aa659c3bc@redhat.com>
- <a42868bb-f33a-c9ef-1e5b-31e37282b03d@st.com>
- <81b78bb2-d7a0-8514-1bf6-4d26062756c8@gmail.com>
- <062a421f-a669-fc1c-91e0-88cf73794414@redhat.com>
-Message-ID: <0a6d5bc7-f7e9-225e-9901-8b10c0677d94@st.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 19 Jun 2018 14:14:24 +0000
+Subject: [Buildroot] [Bug 11101] New: host-patchelf Endian Issue with
+ relative RPATH
+Message-ID: <bug-11101-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-HI Nick,
-On 06/19/2018 02:01 PM, Nick Clifton wrote:
-> Hi Romain,
->
->>>>     Does my suggestion of making the assembler's interpretation of
->>>>     the ADR and ADRL pseudo-ops depend upon the -mthumb-interwork
->>>>     switch seem like a good idea ?
->>> I think it's a good trigger but I'm not an expert on this domain.
->> Same here...
->> I'm not sure how many project enable -mthumb-interwork option.
-> Well actually that is the point.  By making the ADR/ADRL pseudo-ops
-> only set the bottom bit if the -mthumb-interwork option is used, we
-> will effectively be restoring the old behaviour of the assembler to
-> any project that does not use it.  So the ARM kernel in particular
-> will get the old behaviour back, which is what I think is wanted.
->
-> So - any objections to the change ?  Anyone ?
->
-> Cheers
->    Nick
->
->
->
->
-I'm ok with this approach, and I'm available for possible patches to test.
+https://bugs.busybox.net/show_bug.cgi?id=11101
 
-Regards
-Christophe
+            Bug ID: 11101
+           Summary: host-patchelf Endian Issue with relative RPATH
+           Product: buildroot
+           Version: 2018.02.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: bryce.ferguson at rockwellcollins.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
+
+Hello,
+
+This problem was discovered with the package: sudo.  In builds for PowerPC
+architecture, the sudo ELF file contains an invalid symbol after fix-rpath
+script is run.  The following entry below:
+
+0x1d000000 (<unknown>: 1d000000)        0xb77
+
+When it should be:
+
+0x0000001d (RUNPATH)                    Library runpath
+
+Should be the RUNPATH entry (0x1d).  Because of this, sudo cannot find the
+proper libraries at runtime and fails to execute.  It appears, when looking at
+the readelf output, that there is an endian problem here when the host differs
+from the target.
+
+I have traced this to the host-patchelf utility. (Patchelf is executed by the
+fix-rpath script.)  When the --make-rpath-relative option is specified, there
+is a possibility that this can occur.  Wondering why this does not occur on
+other packages, I added the --debug option to the patchelf command in the
+fix-rpath script and ran the build again.  This time, I see that most of the
+packages in my build report "No RPATH to make relative", except for sudo.
+
+I've tried to build for mutliple architectures (ARM, x86/_64, PPC).  So far
+this only occurs for PowerPC builds.  Perhaps a possible workaround having to
+do with the install location of the sudo libraries is needed?
+
+Thanks!
 
 -- 
-
-Best regards / Cordialement,
-
-Christophe Priouzeau | Tel: +33 244027320
-STMicroelectronics
-ST online: www.st.com<http://www.st.com/>
+You are receiving this mail because:
+You are on the CC list for the bug.
