@@ -1,219 +1,40 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon, 18 Jun 2018 22:28:35 -0400
-Subject: [Buildroot] [RFC 1/1] support: add qt5bump script
-Message-ID: <20180619022835.32530-1-gael.portay@savoirfairelinux.com>
+From: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
+Date: Tue, 19 Jun 2018 11:30:28 +0530
+Subject: [Buildroot] [PATCH] powerpc-utils: Bump version to 1.3.5
+Message-ID: <20180619060028.5658-1-hegdevasant@linux.vnet.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This script automatically bumps either the latest version of Qt or Qt
-5.6 (if --5.6 option is given).
-
-It updates URL and checksum of every module's hash file and downloads
-the sources to validate the changes (unless --no-download is specified
-through the command line).
-
-The current patches are moved to the bumped version directory.
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+CC: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Vasant Hegde <hegdevasant@linux.vnet.ibm.com>
 ---
- support/scripts/qt5bump | 186 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 186 insertions(+)
- create mode 100755 support/scripts/qt5bump
+ package/powerpc-utils/powerpc-utils.hash | 2 +-
+ package/powerpc-utils/powerpc-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/qt5bump b/support/scripts/qt5bump
-new file mode 100755
-index 0000000000..911b1e016a
---- /dev/null
-+++ b/support/scripts/qt5bump
-@@ -0,0 +1,186 @@
-+#!/bin/bash
-+
-+set -e
-+
-+# Print traditional usage message
-+usage() {
-+	cat <<EOF
-+Usage: ${0##*/} [--5.6] [--no-download] [QT5_VERSION] -- [ADDITIONAL_MAKE_ARGS]
-+
-+Bumps Qt5 packages to QT5_VERSION when specified, or to the current supported
-+version with the minor number increased by 1.
-+
-+Hashes from hash files are updated using the Qt official release Website.
-+
-+Patches of the current supported version are moved to the new version directory.
-+
-+If the --5.6 option is specified, it bumps the Qt 5.6 release instead of the
-+latest supported release.
-+
-+If the --no-download option is specified, it does not download the bumped
-+sources for validation.
-+
-+Examples:
-+
-+	${0##*/}                   # bumps latest version of Qt (with minor + 1)
-+	${0##*/} 5.11.1            # bumps latest version of Qt to 5.11.1
-+	${0##*/} --5.6             # bumps Qt 5.6 (with minor + 1)
-+	${0##*/} --no-download     # bumps latest version of Qt without
-+                                   # downloading sources for validation
-+	O=output-qt5.11.1 ${0##*/} # bumps latest version of Qt with the
-+                                   # configuration in output-qt5.11.1 directory
-+EOF
-+}
-+
-+# Extract version from current package
-+get_current_version() {
-+	cat package/qt5/qt5.mk - <<EOF | make -f-
-+
-+.SILENT: all
-+all:
-+	echo CURRENT_QT5_VERSION="\$(QT5_VERSION)"
-+	echo CURRENT_QT5_VERSION_MAJOR="\$(QT5_VERSION_MAJOR)"
-+	echo CURRENT_QT5_VERSION_MINOR="\$(subst \$(QT5_VERSION_MAJOR).,,\$(QT5_VERSION))"
-+EOF
-+}
-+
-+# Extract URL from the given hash file
-+# $1: the hash file
-+hashfile_get_url() {
-+	sed -e "\\,# Hash from: https\\?://download.qt.io/official_releases/qt/$QT5_VERSION_MAJOR/.*,{s,# Hash from: ,,;s,\\.mirrorlist,.sha256,p}" \
-+	    -n "$1"
-+}
-+
-+# Update the given checksum to the given hash file
-+# $1: the hash file
-+# $2: the hash value
-+hashfile_update_checksum() {
-+	sed -e "\\,# Hash from: https\\?://download.qt.io/official_releases/qt/$QT5_VERSION_MAJOR/.*,{n;s,^.*$,sha256 $2,}" \
-+	    -i "$1"
-+}
-+
-+# Update hashfile
-+# $1: the hash file
-+update_hashfile() {
-+	local url checksum
-+	url="$(hashfile_get_url "$1")"
-+	if [ -z "$url" ]
-+	then
-+		echo "Error: $module: Cannot get URL from $1" >&2
-+		return 1
-+	fi
-+
-+	if checksum="$(wget -qO- "$url")"
-+	then
-+		hashfile_update_checksum "$1" "$checksum"
-+	else
-+		echo "Error: $module: Cannot wget $url!" >&2
-+		return 1
-+	fi
-+
-+	echo "$module: sha256 $checksum" >&2
-+}
-+
-+download="make"
-+while [ $# -gt 0 ]
-+do
-+	if [ "$1" == "-h" ] || [ "$1" == "--help" ]
-+	then
-+		usage
-+		exit 0
-+	elif [ "$1" == "--no-download" ]
-+	then
-+		download="echo"
-+	elif [ "$1" == "--5.6" ]
-+	then
-+		BR2_PACKAGE_QT5_VERSION_5_6=y
-+		export BR2_PACKAGE_QT5_VERSION_5_6
-+	elif [ -z "$QT5_VERSION" ]
-+	then
-+		QT5_VERSION="$1"
-+		QT5_VERSION_MAJOR="${1%.*}"
-+		QT5_VERSION_MINOR="${1##*.}"
-+		shift
-+		break
-+	elif [ "$1" == "--" ]
-+	then
-+		break
-+	else
-+		usage >&2
-+		echo "Too many arguments!" >&2
-+		exit 1
-+	fi	
-+	shift
-+done
-+
-+if [ -z "$BR2_PACKAGE_QT5_VERSION_5_6" ]
-+then
-+	BR2_PACKAGE_QT5_VERSION_LATEST=y
-+	export BR2_PACKAGE_QT5_VERSION_LATEST
-+fi
-+
-+eval "$(get_current_version)"
-+if [ -z "$QT5_VERSION" ]
-+then
-+	QT5_VERSION_MINOR="$((CURRENT_QT5_VERSION_MINOR+1))"
-+	QT5_VERSION_MAJOR="$CURRENT_QT5_VERSION_MAJOR"
-+	QT5_VERSION="$QT5_VERSION_MAJOR.$QT5_VERSION_MINOR"
-+fi
-+echo "qt5: from $CURRENT_QT5_VERSION to $QT5_VERSION" >&2
-+
-+# First, update references to Qt version in .hash files
-+find package/qt5/ -name "*.hash" -exec \
-+sed -e "s,$CURRENT_QT5_VERSION,$QT5_VERSION,g" \
-+    -e "s,$CURRENT_QT5_VERSION_MAJOR,$QT5_VERSION_MAJOR,g" \
-+    -i {} \;
-+
-+# Then, update and source every Qt modules
-+for pkg in package/qt5/qt5*
-+do
-+	[ -d "$pkg" ] || continue
-+
-+	module=${pkg##*/}
-+
-+	# Filter out modules that are not available
-+	if [ "$BR2_PACKAGE_QT5_VERSION_5_6" = y ]
-+	then
-+		case "$module" in
-+		qt5scxml|qt5virtualkeyboard)
-+			echo "Info: $module: skipped" >&2
-+			continue
-+			;;
-+		esac
-+	else
-+		case "$module" in
-+		qt5enginio)
-+			echo "Info: $module: skipped" >&2
-+			continue
-+			;;
-+		esac
-+	fi
-+
-+	# Move module's current patches
-+	if [ -d "$pkg/$CURRENT_QT5_VERSION" ]
-+	then
-+		mkdir -p "$pkg/$QT5_VERSION/"
-+		mv "$pkg/$CURRENT_QT5_VERSION/"* "$pkg/$QT5_VERSION/"
-+		rm -Rf "$pkg/$CURRENT_QT5_VERSION/"
-+	fi
-+
-+	# Update module's .hash file
-+	if ! update_hashfile "$pkg/$module.hash"
-+	then
-+		continue
-+	fi
-+
-+	# Echo module's target to download
-+	echo "$module-source"
-+done | \
-+xargs "$download" "${O:+O=$O}" "QT5_VERSION=$QT5_VERSION" "$@"
-+
-+# Finally, update the appropriate Qt version
-+sed -e "/^QT5_VERSION_MAJOR = $CURRENT_QT5_VERSION_MAJOR/,/^QT5_VERSION = \$(QT5_VERSION_MAJOR).$CURRENT_QT5_VERSION_MINOR/{\
-+/^QT5_VERSION_MAJOR =/s,$CURRENT_QT5_VERSION_MAJOR,$QT5_VERSION_MAJOR,g;\
-+/^QT5_VERSION =/s,\\.$CURRENT_QT5_VERSION_MINOR,.$QT5_VERSION_MINOR,g\
-+}" \
-+    -i package/qt5/qt5.mk
+diff --git a/package/powerpc-utils/powerpc-utils.hash b/package/powerpc-utils/powerpc-utils.hash
+index 437a5865c2..0c495d55e9 100644
+--- a/package/powerpc-utils/powerpc-utils.hash
++++ b/package/powerpc-utils/powerpc-utils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 d36372efebc1f6f9409501f7ab68a812843925334dee6438e7b52a53c21574c5 powerpc-utils-v1.3.4.tar.gz
++sha256 77efe3978ac9c251c4728a35b9aebd6076583939a8e26cc7f07ffa86432a8bf0 powerpc-utils-v1.3.5.tar.gz
+diff --git a/package/powerpc-utils/powerpc-utils.mk b/package/powerpc-utils/powerpc-utils.mk
+index da7a3c9cd6..a3bd8832ff 100644
+--- a/package/powerpc-utils/powerpc-utils.mk
++++ b/package/powerpc-utils/powerpc-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POWERPC_UTILS_VERSION = v1.3.4
++POWERPC_UTILS_VERSION = v1.3.5
+ POWERPC_UTILS_SITE = $(call github,ibm-power-utilities,powerpc-utils,$(POWERPC_UTILS_VERSION))
+ POWERPC_UTILS_DEPENDENCIES = zlib
+ POWERPC_UTILS_AUTORECONF = YES
 -- 
-2.17.1
+2.14.3
