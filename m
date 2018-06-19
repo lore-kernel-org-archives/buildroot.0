@@ -1,61 +1,76 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 19 Jun 2018 14:14:24 +0000
-Subject: [Buildroot] [Bug 11101] New: host-patchelf Endian Issue with
- relative RPATH
-Message-ID: <bug-11101-163@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 19 Jun 2018 17:44:41 +0300
+Subject: [Buildroot] [PATCH] imx-usb-loader: fix build with older gcc
+Message-ID: <53fcb79e408e468aaa45b7adc6ba0f92aba03702.1529419481.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11101
+Since the last version bump imx-usb-loader uses __builtin_bswap16 which
+is not universally available in gcc older than version 4.8. Add a patch
+switching to a local 16-bit bytes swap implementation.
 
-            Bug ID: 11101
-           Summary: host-patchelf Endian Issue with relative RPATH
-           Product: buildroot
-           Version: 2018.02.2
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: bryce.ferguson at rockwellcollins.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Should fix:
+http://autobuild.buildroot.net/results/a63/a63b593b7ef3b6d32e755afe42b77d47dbf0276e/
+http://autobuild.buildroot.net/results/48c/48c95cfc65f99fa02be81a11303ba8999f57091a/
+http://autobuild.buildroot.net/results/c9d/c9d4f99b49ddb9b2ce08fce7672dd7c70cf62912/
 
-Hello,
+Cc: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ....h-fix-build-with-gcc-older-than-4.8.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
 
-This problem was discovered with the package: sudo.  In builds for PowerPC
-architecture, the sudo ELF file contains an invalid symbol after fix-rpath
-script is run.  The following entry below:
-
-0x1d000000 (<unknown>: 1d000000)        0xb77
-
-When it should be:
-
-0x0000001d (RUNPATH)                    Library runpath
-
-Should be the RUNPATH entry (0x1d).  Because of this, sudo cannot find the
-proper libraries at runtime and fails to execute.  It appears, when looking at
-the readelf output, that there is an endian problem here when the host differs
-from the target.
-
-I have traced this to the host-patchelf utility. (Patchelf is executed by the
-fix-rpath script.)  When the --make-rpath-relative option is specified, there
-is a possibility that this can occur.  Wondering why this does not occur on
-other packages, I added the --debug option to the patchelf command in the
-fix-rpath script and ran the build again.  This time, I see that most of the
-packages in my build report "No RPATH to make relative", except for sudo.
-
-I've tried to build for mutliple architectures (ARM, x86/_64, PPC).  So far
-this only occurs for PowerPC builds.  Perhaps a possible workaround having to
-do with the install location of the sudo libraries is needed?
-
-Thanks!
-
+diff --git a/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+new file mode 100644
+index 000000000000..c0aabed542c6
+--- /dev/null
++++ b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+@@ -0,0 +1,42 @@
++From c581e6037ec7ab2f9cd615f6ffa149b4d0a5638c Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 19 Jun 2018 15:31:52 +0300
++Subject: [PATCH] portable.h: fix build with gcc older than 4.8
++
++__builtin_bswap16 is available in all gcc architectures only since
++version 4.8. Older gcc versions fail to build:
++
++imx_sdp.o: In function `perform_dcd':
++.../imx_sdp.c:1138: undefined reference to `__builtin_bswap16'
++imx_sdp.o: In function `write_dcd_table_ivt':
++.../imx_sdp.c:457: undefined reference to `__builtin_bswap16'
++imx_sdp.o: In function `write_dcd':
++.../imx_sdp.c:410: undefined reference to `__builtin_bswap16'
++imx_sdp.o: In function `init_header':
++.../imx_sdp.c:1075: undefined reference to `__builtin_bswap16'
++
++Use a local implementation instead.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/boundarydevices/imx_usb_loader/pull/82
++
++ portable.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/portable.h b/portable.h
++index 364fe47b212a..364832b5ea69 100644
++--- a/portable.h
+++++ b/portable.h
++@@ -58,7 +58,7 @@ extern int debugmode;
++ #ifdef __GNUC__
++ #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++ #define BE32(x) __builtin_bswap32(x)
++-#define BE16(x) __builtin_bswap16(x)
+++#define BE16(x) (x<<8 | x>>8)
++ #else
++ #define BE32(x) x
++ #define BE16(x) x
++-- 
++2.17.1
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
