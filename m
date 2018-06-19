@@ -1,24 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 19 Jun 2018 13:58:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: enable mod_timerfd
-In-Reply-To: <20180618201400.26287-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 18 Jun 2018 22:14:00 +0200")
-References: <20180618201400.26287-1-bernd.kuhls@t-online.de>
-Message-ID: <87fu1jouml.fsf@dell.be.48ers.dk>
+Date: Tue, 19 Jun 2018 13:59:22 +0200
+Subject: [Buildroot] [PATCH 1/1] mosquitto: fix build with some glibc
+In-Reply-To: <20180618180640.12324-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 18 Jun 2018 20:06:40 +0200")
+References: <20180618180640.12324-1-fontaine.fabrice@gmail.com>
+Message-ID: <87bmc7oulh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Mod_timerfd uses the Linux kernel timerfd API to create and use a kernel
- > timer that delivers timer expire notifications via a file descriptor,
- > for details read
+ > Add patch to define _GNU_SOURCE before using S_IF{DIR,REG}
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/7dcfb6ca9d14a5cd6872590065549356f1ab42a0
 
- > https://freeswitch.org/confluence/display/FREESWITCH/mod_timerfd
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
