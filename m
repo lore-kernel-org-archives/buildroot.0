@@ -1,362 +1,83 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 19 Jun 2018 13:27:06 -0700
-Subject: [Buildroot] [PATCH] gcc: fix uclibc build with gcc-8 for xtensa
-Message-ID: <20180619202706.17347-1-jcmvbkbc@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 19 Jun 2018 22:52:15 +0200
+Subject: [Buildroot] [PATCH] imx-usb-loader: fix build with older gcc
+In-Reply-To: <53fcb79e408e468aaa45b7adc6ba0f92aba03702.1529419481.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 19 Jun 2018 17:44:41 +0300")
+References: <53fcb79e408e468aaa45b7adc6ba0f92aba03702.1529419481.git.baruch@tkos.co.il>
+Message-ID: <87tvpyo5xc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc-8.1 for xtensa miscompiles uClibc dynamic linker due to gcc PR
-target/65416. The build completes successfully, but the binary is
-non-functional because the following fragment in the _dl_get_ready_to_run
-in ld-uClibc.so overwrites register spill area on stack causing register
-corruption in the previous call frame and a subsequent crash:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-    419f:       f0c1b2          addi    a11, a1, -16
-    41a2:       1ba9            s32i.n  a10, a11, 4
-    41a4:       0bc9            s32i.n  a12, a11, 0
-    41a6:       5127f2          l32i    a15, a7, 0x144
-    41a9:       1765b2          s32i    a11, a5, 92
-    41ac:       4e2782          l32i    a8, a7, 0x138
-    41af:       146af2          s32i    a15, a10, 80
-    41b2:       001b10          movsp   a1, a11
+ > Since the last version bump imx-usb-loader uses __builtin_bswap16 which
+ > is not universally available in gcc older than version 4.8. Add a patch
+ > switching to a local 16-bit bytes swap implementation.
 
-The crash terminates the init process and causes kernel panic.
-The fix prevents reordering of movsp opcode and any access to the stack
-frame memory and is applicable to all existing gcc versions..
+ > Should fix:
+ > http://autobuild.buildroot.net/results/a63/a63b593b7ef3b6d32e755afe42b77d47dbf0276e/
+ > http://autobuild.buildroot.net/results/48c/48c95cfc65f99fa02be81a11303ba8999f57091a/
+ > http://autobuild.buildroot.net/results/c9d/c9d4f99b49ddb9b2ce08fce7672dd7c70cf62912/
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- .../gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch | 101 +++++++++++++++++++++
- .../7.3.0/0002-xtensa-fix-PR-target-65416.patch    | 101 +++++++++++++++++++++
- .../8.1.0/0004-xtensa-fix-PR-target-65416.patch    | 101 +++++++++++++++++++++
- 3 files changed, 303 insertions(+)
- create mode 100644 package/gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch
- create mode 100644 package/gcc/7.3.0/0002-xtensa-fix-PR-target-65416.patch
- create mode 100644 package/gcc/8.1.0/0004-xtensa-fix-PR-target-65416.patch
+ > Cc: Adam Duskett <aduskett@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ >  ....h-fix-build-with-gcc-older-than-4.8.patch | 42 +++++++++++++++++++
+ >  1 file changed, 42 insertions(+)
+ >  create mode 100644 package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
 
-diff --git a/package/gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch b/package/gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch
-new file mode 100644
-index 000000000000..7ead575439cc
---- /dev/null
-+++ b/package/gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch
-@@ -0,0 +1,101 @@
-+From 87fda0741d210727672cba5e54a37a189e8ac04e Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 17 Jun 2018 21:18:39 -0700
-+Subject: [PATCH] xtensa: fix PR target/65416
-+
-+The issue is caused by reordering of stack pointer update after stack
-+space allocation with instructions that write to the allocated stack
-+space. In windowed ABI register spill area for the previous call frame
-+is located just below the stack pointer and may be reloaded back into
-+the register file on movsp.
-+Implement allocate_stack pattern for windowed ABI configuration and
-+insert an instruction that prevents reordering of frame memory access
-+and stack pointer update.
-+
-+gcc/
-+2018-06-19  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.md (UNSPEC_FRAME_BLOCKAGE): New unspec
-+	constant.
-+	(allocate_stack, frame_blockage, *frame_blockage): New patterns.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Backported from: r261755
-+---
-+ gcc/config/xtensa/xtensa.md | 46 +++++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 46 insertions(+)
-+
-+diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
-+index 84967dbedc08..209f839cfb0f 100644
-+--- a/gcc/config/xtensa/xtensa.md
-++++ b/gcc/config/xtensa/xtensa.md
-+@@ -38,6 +38,7 @@
-+   (UNSPEC_MEMW		11)
-+   (UNSPEC_LSETUP_START  12)
-+   (UNSPEC_LSETUP_END    13)
-++  (UNSPEC_FRAME_BLOCKAGE 14)
-+ 
-+   (UNSPECV_SET_FP	1)
-+   (UNSPECV_ENTRY	2)
-+@@ -1676,6 +1677,32 @@
-+ 
-+ ;; Miscellaneous instructions.
-+ 
-++;; In windowed ABI stack pointer adjustment must happen before any access
-++;; to the space allocated on stack is allowed, otherwise register spill
-++;; area may be clobbered.  That's what frame blockage is supposed to enforce.
-++
-++(define_expand "allocate_stack"
-++  [(set (match_operand 0 "nonimmed_operand")
-++        (minus (reg A1_REG) (match_operand 1 "add_operand")))
-++   (set (reg A1_REG)
-++        (minus (reg A1_REG) (match_dup 1)))]
-++  "TARGET_WINDOWED_ABI"
-++{
-++  if (CONST_INT_P (operands[1]))
-++    {
-++      rtx neg_op0 = GEN_INT (-INTVAL (operands[1]));
-++      emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, neg_op0));
-++    }
-++  else
-++    {
-++      emit_insn (gen_subsi3 (stack_pointer_rtx, stack_pointer_rtx,
-++			     operands[1]));
-++    }
-++  emit_move_insn (operands[0], virtual_stack_dynamic_rtx);
-++  emit_insn (gen_frame_blockage ());
-++  DONE;
-++})
-++
-+ (define_expand "prologue"
-+   [(const_int 0)]
-+   ""
-+@@ -1767,6 +1794,25 @@
-+   [(set_attr "length" "0")
-+    (set_attr "type" "nop")])
-+ 
-++;; Do not schedule instructions accessing memory before this point.
-++
-++(define_expand "frame_blockage"
-++  [(set (match_dup 0)
-++        (unspec:BLK [(match_dup 1)] UNSPEC_FRAME_BLOCKAGE))]
-++  ""
-++{
-++  operands[0] = gen_rtx_MEM (BLKmode, gen_rtx_SCRATCH (Pmode));
-++  MEM_VOLATILE_P (operands[0]) = 1;
-++  operands[1] = stack_pointer_rtx;
-++})
-++
-++(define_insn "*frame_blockage"
-++  [(set (match_operand:BLK 0 "" "")
-++        (unspec:BLK [(match_operand:SI 1 "" "")] UNSPEC_FRAME_BLOCKAGE))]
-++  ""
-++  ""
-++  [(set_attr "length" "0")])
-++
-+ (define_insn "trap"
-+   [(trap_if (const_int 1) (const_int 0))]
-+   ""
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/7.3.0/0002-xtensa-fix-PR-target-65416.patch b/package/gcc/7.3.0/0002-xtensa-fix-PR-target-65416.patch
-new file mode 100644
-index 000000000000..7ead575439cc
---- /dev/null
-+++ b/package/gcc/7.3.0/0002-xtensa-fix-PR-target-65416.patch
-@@ -0,0 +1,101 @@
-+From 87fda0741d210727672cba5e54a37a189e8ac04e Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 17 Jun 2018 21:18:39 -0700
-+Subject: [PATCH] xtensa: fix PR target/65416
-+
-+The issue is caused by reordering of stack pointer update after stack
-+space allocation with instructions that write to the allocated stack
-+space. In windowed ABI register spill area for the previous call frame
-+is located just below the stack pointer and may be reloaded back into
-+the register file on movsp.
-+Implement allocate_stack pattern for windowed ABI configuration and
-+insert an instruction that prevents reordering of frame memory access
-+and stack pointer update.
-+
-+gcc/
-+2018-06-19  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.md (UNSPEC_FRAME_BLOCKAGE): New unspec
-+	constant.
-+	(allocate_stack, frame_blockage, *frame_blockage): New patterns.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Backported from: r261755
-+---
-+ gcc/config/xtensa/xtensa.md | 46 +++++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 46 insertions(+)
-+
-+diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
-+index 84967dbedc08..209f839cfb0f 100644
-+--- a/gcc/config/xtensa/xtensa.md
-++++ b/gcc/config/xtensa/xtensa.md
-+@@ -38,6 +38,7 @@
-+   (UNSPEC_MEMW		11)
-+   (UNSPEC_LSETUP_START  12)
-+   (UNSPEC_LSETUP_END    13)
-++  (UNSPEC_FRAME_BLOCKAGE 14)
-+ 
-+   (UNSPECV_SET_FP	1)
-+   (UNSPECV_ENTRY	2)
-+@@ -1676,6 +1677,32 @@
-+ 
-+ ;; Miscellaneous instructions.
-+ 
-++;; In windowed ABI stack pointer adjustment must happen before any access
-++;; to the space allocated on stack is allowed, otherwise register spill
-++;; area may be clobbered.  That's what frame blockage is supposed to enforce.
-++
-++(define_expand "allocate_stack"
-++  [(set (match_operand 0 "nonimmed_operand")
-++        (minus (reg A1_REG) (match_operand 1 "add_operand")))
-++   (set (reg A1_REG)
-++        (minus (reg A1_REG) (match_dup 1)))]
-++  "TARGET_WINDOWED_ABI"
-++{
-++  if (CONST_INT_P (operands[1]))
-++    {
-++      rtx neg_op0 = GEN_INT (-INTVAL (operands[1]));
-++      emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, neg_op0));
-++    }
-++  else
-++    {
-++      emit_insn (gen_subsi3 (stack_pointer_rtx, stack_pointer_rtx,
-++			     operands[1]));
-++    }
-++  emit_move_insn (operands[0], virtual_stack_dynamic_rtx);
-++  emit_insn (gen_frame_blockage ());
-++  DONE;
-++})
-++
-+ (define_expand "prologue"
-+   [(const_int 0)]
-+   ""
-+@@ -1767,6 +1794,25 @@
-+   [(set_attr "length" "0")
-+    (set_attr "type" "nop")])
-+ 
-++;; Do not schedule instructions accessing memory before this point.
-++
-++(define_expand "frame_blockage"
-++  [(set (match_dup 0)
-++        (unspec:BLK [(match_dup 1)] UNSPEC_FRAME_BLOCKAGE))]
-++  ""
-++{
-++  operands[0] = gen_rtx_MEM (BLKmode, gen_rtx_SCRATCH (Pmode));
-++  MEM_VOLATILE_P (operands[0]) = 1;
-++  operands[1] = stack_pointer_rtx;
-++})
-++
-++(define_insn "*frame_blockage"
-++  [(set (match_operand:BLK 0 "" "")
-++        (unspec:BLK [(match_operand:SI 1 "" "")] UNSPEC_FRAME_BLOCKAGE))]
-++  ""
-++  ""
-++  [(set_attr "length" "0")])
-++
-+ (define_insn "trap"
-+   [(trap_if (const_int 1) (const_int 0))]
-+   ""
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/8.1.0/0004-xtensa-fix-PR-target-65416.patch b/package/gcc/8.1.0/0004-xtensa-fix-PR-target-65416.patch
-new file mode 100644
-index 000000000000..7ead575439cc
---- /dev/null
-+++ b/package/gcc/8.1.0/0004-xtensa-fix-PR-target-65416.patch
-@@ -0,0 +1,101 @@
-+From 87fda0741d210727672cba5e54a37a189e8ac04e Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Sun, 17 Jun 2018 21:18:39 -0700
-+Subject: [PATCH] xtensa: fix PR target/65416
-+
-+The issue is caused by reordering of stack pointer update after stack
-+space allocation with instructions that write to the allocated stack
-+space. In windowed ABI register spill area for the previous call frame
-+is located just below the stack pointer and may be reloaded back into
-+the register file on movsp.
-+Implement allocate_stack pattern for windowed ABI configuration and
-+insert an instruction that prevents reordering of frame memory access
-+and stack pointer update.
-+
-+gcc/
-+2018-06-19  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.md (UNSPEC_FRAME_BLOCKAGE): New unspec
-+	constant.
-+	(allocate_stack, frame_blockage, *frame_blockage): New patterns.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Backported from: r261755
-+---
-+ gcc/config/xtensa/xtensa.md | 46 +++++++++++++++++++++++++++++++++++++++++++++
-+ 1 file changed, 46 insertions(+)
-+
-+diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
-+index 84967dbedc08..209f839cfb0f 100644
-+--- a/gcc/config/xtensa/xtensa.md
-++++ b/gcc/config/xtensa/xtensa.md
-+@@ -38,6 +38,7 @@
-+   (UNSPEC_MEMW		11)
-+   (UNSPEC_LSETUP_START  12)
-+   (UNSPEC_LSETUP_END    13)
-++  (UNSPEC_FRAME_BLOCKAGE 14)
-+ 
-+   (UNSPECV_SET_FP	1)
-+   (UNSPECV_ENTRY	2)
-+@@ -1676,6 +1677,32 @@
-+ 
-+ ;; Miscellaneous instructions.
-+ 
-++;; In windowed ABI stack pointer adjustment must happen before any access
-++;; to the space allocated on stack is allowed, otherwise register spill
-++;; area may be clobbered.  That's what frame blockage is supposed to enforce.
-++
-++(define_expand "allocate_stack"
-++  [(set (match_operand 0 "nonimmed_operand")
-++        (minus (reg A1_REG) (match_operand 1 "add_operand")))
-++   (set (reg A1_REG)
-++        (minus (reg A1_REG) (match_dup 1)))]
-++  "TARGET_WINDOWED_ABI"
-++{
-++  if (CONST_INT_P (operands[1]))
-++    {
-++      rtx neg_op0 = GEN_INT (-INTVAL (operands[1]));
-++      emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, neg_op0));
-++    }
-++  else
-++    {
-++      emit_insn (gen_subsi3 (stack_pointer_rtx, stack_pointer_rtx,
-++			     operands[1]));
-++    }
-++  emit_move_insn (operands[0], virtual_stack_dynamic_rtx);
-++  emit_insn (gen_frame_blockage ());
-++  DONE;
-++})
-++
-+ (define_expand "prologue"
-+   [(const_int 0)]
-+   ""
-+@@ -1767,6 +1794,25 @@
-+   [(set_attr "length" "0")
-+    (set_attr "type" "nop")])
-+ 
-++;; Do not schedule instructions accessing memory before this point.
-++
-++(define_expand "frame_blockage"
-++  [(set (match_dup 0)
-++        (unspec:BLK [(match_dup 1)] UNSPEC_FRAME_BLOCKAGE))]
-++  ""
-++{
-++  operands[0] = gen_rtx_MEM (BLKmode, gen_rtx_SCRATCH (Pmode));
-++  MEM_VOLATILE_P (operands[0]) = 1;
-++  operands[1] = stack_pointer_rtx;
-++})
-++
-++(define_insn "*frame_blockage"
-++  [(set (match_operand:BLK 0 "" "")
-++        (unspec:BLK [(match_operand:SI 1 "" "")] UNSPEC_FRAME_BLOCKAGE))]
-++  ""
-++  ""
-++  [(set_attr "length" "0")])
-++
-+ (define_insn "trap"
-+   [(trap_if (const_int 1) (const_int 0))]
-+   ""
-+-- 
-+2.11.0
-+
+ > diff --git
+ > a/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+ > b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+ > new file mode 100644
+ > index 000000000000..c0aabed542c6
+ > --- /dev/null
+ > +++ b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+ > @@ -0,0 +1,42 @@
+ > +From c581e6037ec7ab2f9cd615f6ffa149b4d0a5638c Mon Sep 17 00:00:00 2001
+ > +From: Baruch Siach <baruch@tkos.co.il>
+ > +Date: Tue, 19 Jun 2018 15:31:52 +0300
+ > +Subject: [PATCH] portable.h: fix build with gcc older than 4.8
+ > +
+ > +__builtin_bswap16 is available in all gcc architectures only since
+ > +version 4.8. Older gcc versions fail to build:
+ > +
+ > +imx_sdp.o: In function `perform_dcd':
+ > +.../imx_sdp.c:1138: undefined reference to `__builtin_bswap16'
+ > +imx_sdp.o: In function `write_dcd_table_ivt':
+ > +.../imx_sdp.c:457: undefined reference to `__builtin_bswap16'
+ > +imx_sdp.o: In function `write_dcd':
+ > +.../imx_sdp.c:410: undefined reference to `__builtin_bswap16'
+ > +imx_sdp.o: In function `init_header':
+ > +.../imx_sdp.c:1075: undefined reference to `__builtin_bswap16'
+ > +
+ > +Use a local implementation instead.
+ > +
+ > +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > +---
+ > +Upstream status: https://github.com/boundarydevices/imx_usb_loader/pull/82
+ > +
+ > + portable.h | 2 +-
+ > + 1 file changed, 1 insertion(+), 1 deletion(-)
+ > +
+ > +diff --git a/portable.h b/portable.h
+ > +index 364fe47b212a..364832b5ea69 100644
+ > +--- a/portable.h
+ > ++++ b/portable.h
+ > +@@ -58,7 +58,7 @@ extern int debugmode;
+ > + #ifdef __GNUC__
+ > + #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+ > + #define BE32(x) __builtin_bswap32(x)
+ > +-#define BE16(x) __builtin_bswap16(x)
+ > ++#define BE16(x) (x<<8 | x>>8)
+
+I take it this is never called on anything where the double evaluation
+causes any side effects?
+
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
