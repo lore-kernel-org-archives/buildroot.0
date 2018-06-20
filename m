@@ -1,63 +1,42 @@
-From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Wed, 20 Jun 2018 18:36:23 +0200
-Subject: [Buildroot] [RFC 1/1] support: add qt5bump script
-In-Reply-To: <20180619022835.32530-1-gael.portay@savoirfairelinux.com>
-References: <20180619022835.32530-1-gael.portay@savoirfairelinux.com>
-Message-ID: <56b3f748-6f38-fea7-9e83-14699817b73e@armadeus.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Wed, 20 Jun 2018 10:22:27 -0700
+Subject: [Buildroot] Test of Joseph Kogut Chromium patches V3
+In-Reply-To: <79083ca4-e4da-b86e-7531-213d3275ce1e@tidomat.se>
+References: <mailman.2198.1528722821.16495.buildroot@busybox.net>
+ <5936aa62-5aec-877f-7ad6-e39c991005a2@tidomat.se>
+ <CAMWSM7jTQRr45PzSFv07i7VX7PDSbbSA-qoKoUqLgv4_W8niKQ@mail.gmail.com>
+ <6e7f0b20-032c-9305-e6cd-f45843f721d6@tidomat.se>
+ <CAMWSM7gdAYUkXpUTQVHD+pmEQQULcgtCxckG1f7uVCGzAz7KeQ@mail.gmail.com>
+ <79083ca4-e4da-b86e-7531-213d3275ce1e@tidomat.se>
+Message-ID: <CAMWSM7g_OFefLs7Nznmz+VfzY9vNKroZf7ez_BwWtgAx+PahBg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Sven,
 
-On 06/19/2018 04:28 AM, Ga?l PORTAY wrote:
-> This script automatically bumps either the latest version of Qt or Qt
-> 5.6 (if --5.6 option is given).
-> 
-> It updates URL and checksum of every module's hash file and downloads
-> the sources to validate the changes (unless --no-download is specified
-> through the command line).
-> 
-> The current patches are moved to the bumped version directory.
+On Tue, Jun 19, 2018 at 7:49 AM Sven Norinder <sven.norinder@tidomat.se> wrote:
+<snip>
+> Unfortunately enough, Chromium build still fails the same way for me.
 
-Last time I bumped a Qt version, I was surprised that Buildroot hasn't
-such a script and I wrote one too but definitely not as good as yours ! :-)
+Did you try a clean build with the V4 patch set and a reconfigure?
+Your config built for me.
 
-I tried your script on the 2018.02.x branch to bump Qt to 5.9.6. It
-ended with the following error:
+> I have tried building first on Ubuntu 16.04. Then I tried on an U14.04,
+> that one failed already at compiling gn.
 
-make: *** empty string invalid as file name.  Stop.
+Output?
 
-Also, some hashes have a '.', for example:
+> Then I tried on an U18.04. Same problem with cups-config. As I see it it
+> should have another argument telling
+> it where script can be found. I will try to debug deeper.
 
--sha256 fef48529a6fc2617a30d75d952cb327c6be341fd104154993922184b3b3b4da1
-qtbase-opensource-src-5.6.3.tar.xz
-+sha256 fef485.9a6fc2617a30d75.952cb327c6be341fd10415.993922184b3b3b4da1
-qtbase-opensource-src-5.6.3.tar.xz
+The cups_config_helper.py script is actually present in the source
+tarball, it appears the Python exception is raised because it attempts
+to run cups_config, provided by the cups package, and the program is
+unavailable to run.
 
-I think that because of the 2nd script in the following sed expression:
-
-> +# First, update references to Qt version in .hash files
-> +find package/qt5/ -name "*.hash" -exec \
-> +sed -e "s,$CURRENT_QT5_VERSION,$QT5_VERSION,g" \
-> +    -e "s,$CURRENT_QT5_VERSION_MAJOR,$QT5_VERSION_MAJOR,g" \
-> +    -i {} \;
-> +
-
-$CURRENT_QT5_VERSION and $CURRENT_QT5_VERSION_MAJOR contains '.' that
-makes sed match hashes containing '5[a-f0-9]9' sequences. You have to
-escape the '.' character. I fix this like this:
-
-sed -e "s,${CURRENT_QT5_VERSION//./\\.},$QT5_VERSION,g" \
-    -e "s,${CURRENT_QT5_VERSION_MAJOR//./\\.},$QT5_VERSION_MAJOR,g" \
-    -i {} \;
-
-Best regards,
-
--- 
-S?bastien Szymanski
-Software engineer, Armadeus Systems
-Tel: +33 (0)9 72 29 41 44
-Fax: +33 (0)9 72 28 79 26
+The V4 patch set should've fixed this, are you sure you're using the
+right patches?
