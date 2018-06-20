@@ -1,82 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jun 2018 15:08:06 +0200
-Subject: [Buildroot] [PATCH] wireguard: bump version to 0.0.20180613
-Message-ID: <20180620130806.19229-1-peter@korsgaard.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 20 Jun 2018 09:22:55 -0500
+Subject: [Buildroot] [PATCH] protobuf: bump to 3.6.0
+Message-ID: <20180620142255.31441-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contains a fix for a crash when forwarding packets from devices that use
-flow offloading and a x86 FPU issue on -rt kernels.
+Fixes the following issue and brauto builds
+https://github.com/google/protobuf/issues/3937
+http://autobuild.buildroot.net/results/982f727495c1d3524685015c34b1cbb1e0bbb4b0
+http://autobuild.buildroot.net/results/adbd3088e24d7e681c995f8c3d1db0e14ac500ba
 
-Also add a post-release upstream patch fixing a compilation issue related to
-memcpy().
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- ...0001-poly1305-add-missing-string.h-header.patch | 26 ++++++++++++++++++++++
- package/wireguard/wireguard.hash                   |  4 ++--
- package/wireguard/wireguard.mk                     |  2 +-
- 3 files changed, 29 insertions(+), 3 deletions(-)
- create mode 100644 package/wireguard/0001-poly1305-add-missing-string.h-header.patch
+ package/protobuf/protobuf.hash | 2 +-
+ package/protobuf/protobuf.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wireguard/0001-poly1305-add-missing-string.h-header.patch b/package/wireguard/0001-poly1305-add-missing-string.h-header.patch
-new file mode 100644
-index 0000000000..8f1bfecb5c
---- /dev/null
-+++ b/package/wireguard/0001-poly1305-add-missing-string.h-header.patch
-@@ -0,0 +1,26 @@
-+From ed04799b1868f45e05d788e614b9b8cfa4fcab46 Mon Sep 17 00:00:00 2001
-+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-+Date: Wed, 20 Jun 2018 14:55:24 +0200
-+Subject: [PATCH] poly1305: add missing string.h header
-+
-+Reported-by: Peter Korsgaard <peter@korsgaard.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/crypto/poly1305.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/crypto/poly1305.c b/src/crypto/poly1305.c
-+index 26af4ad..65a37d9 100644
-+--- a/src/crypto/poly1305.c
-++++ b/src/crypto/poly1305.c
-+@@ -7,6 +7,7 @@
-+ #include "poly1305.h"
-+ 
-+ #include <linux/kernel.h>
-++#include <linux/string.h>
-+ 
-+ #if defined(CONFIG_X86_64)
-+ #include <asm/fpu/api.h>
-+-- 
-+2.11.0
-+
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 7701424e4e..f7c5e65475 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-May/002914.html
--sha256 57614239c1f1a99a367f2c816153acda5bffada66a3b8e3b8215f1625784abc9  WireGuard-0.0.20180524.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-June/002984.html
-+sha256 c120cdedc3967dcb4ad5c1c7eadd2a1b04ef5dbf2fe60cc8e7c0db337bcda7dc  WireGuard-0.0.20180613.tar.xz
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 4492487efb..33f0e3076f 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index ee68dc5580..e1c43beea7 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20180524
-+WIREGUARD_VERSION = 0.0.20180613
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+-sha256 c28dba8782da2cfea1e11c61d335958c31a9c1bc553063546af9cbe98f204092 protobuf-cpp-3.5.1.tar.gz
++sha256 c3cab055964d554e4fd85067fe3e9eb45c9915cebcf537e97fafaa245376bce1  protobuf-cpp-3.6.0.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 1440589c14..9caf87ed93 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works, as they share the same
+ # version/site variables.
+-PROTOBUF_VERSION = 3.5.1
++PROTOBUF_VERSION = 3.6.0
+ PROTOBUF_SOURCE = protobuf-cpp-$(PROTOBUF_VERSION).tar.gz
+ PROTOBUF_SITE = https://github.com/google/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
 -- 
-2.11.0
+2.17.0
