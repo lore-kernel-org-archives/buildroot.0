@@ -1,73 +1,91 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 20 Jun 2018 22:13:12 +0200
-Subject: [Buildroot] swapoff, but no swapon in initab
-In-Reply-To: <87d0wlonmg.fsf@dell.be.48ers.dk>
-References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
- <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
- <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
- <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
- <87zi0074sa.fsf@dell.be.48ers.dk>
- <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
- <87in6o6u5n.fsf@dell.be.48ers.dk>
- <598a385a-5693-8fff-876c-550063645a50@mind.be>
- <87sh5s5aa4.fsf@dell.be.48ers.dk>
- <4be26713-53f3-2b36-f696-2b8fcf227ec3@mind.be>
- <87d0wlonmg.fsf@dell.be.48ers.dk>
-Message-ID: <3047d59a-46aa-7678-32a1-971a2c07e0bb@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 20 Jun 2018 22:33:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/erlang: bump version to 21.0
+Message-ID: <20180620203343.15647-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Release notes: http://www.erlang.org/news/123
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...-emulator-reorder-inclued-headers-paths.patch | 16 +++++-----------
+ package/erlang/erlang.hash                       |  4 ++--
+ package/erlang/erlang.mk                         |  4 ++--
+ 3 files changed, 9 insertions(+), 15 deletions(-)
 
-On 20-06-18 10:42, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
->  > On 12-06-18 16:50, Peter Korsgaard wrote:
->  >>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
->  >> 
->  >> >> But it does require people to add swapon/swapoff to their busybox config
->  >> >> even if they aren't using swap, otherwise they would get error messages
->  >> 
->  >> >  I think if people start customizing the busybox config and remove stuff from
->  >> > it, then it's only reasonable that they also modify the default
->  >> > inittab.
->  >> 
->  >> Correct.
->  >> 
->  >> > Swaponand swapoff are both enabled in our busybox.config and busybox-minimal.config.
->  >> 
->  >> Hmm, does swap work on nommu? I would guess not. Looking at the kernel
->  >> option:
-> 
->  >  Doesn't matter if it works or not; if the swapon executable exists, then the
->  > swapon in inittab will pass without error (if you don't have swap configured in
->  > fstab). Clearly, the swapon will fail if you indeed have swap enabled in fstab
->  > on a NOMMU system, but I don't think we have to protect against that situation,
->  > right? It will anyway also fail if you don't have swap enabled in the kernel.
->  > Just like mounting the ext2 rootfs will fail if you don't have ext2/3/4 enabled
->  > in your kernel...
-> 
-> Yes, so the only minor issue is that we need to have swapon/swapoff
-> enabled in busybox-minimal.config even though it isn't useful just to
-> not get an error message during bootup/shutdown.
-
- Well, it currently _is_ enabled in busybox-minimal.config... Admittedly, this
-adds almost 1KB to the busybox size so perhaps it should be removed from
--minimal. But the we probably should also remove swapoff from inittab. Hell,
-perhaps we should do that anyway, since doing swapoff for reboot is utterly
-useless IMO.
-
- Regards,
- Arnout
-
-
+diff --git a/package/erlang/0002-erts-emulator-reorder-inclued-headers-paths.patch b/package/erlang/0002-erts-emulator-reorder-inclued-headers-paths.patch
+index c17eefc2a1..2c976f539e 100644
+--- a/package/erlang/0002-erts-emulator-reorder-inclued-headers-paths.patch
++++ b/package/erlang/0002-erts-emulator-reorder-inclued-headers-paths.patch
+@@ -16,6 +16,8 @@ Move INCLUDES before CFLAGS to use pcre.h from erlang.
+ http://autobuild.buildroot.net/results/cbd/cbd8b54eef535f19d7d400fd269af1b3571d6143/build-end.log
+ 
+ Signed-off-by: Romain Naour <romain.naour@openwide.fr>
++[Bernd: rebased for erlang-21.0]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  erts/emulator/Makefile.in | 4 ++--
+  1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -24,20 +26,12 @@ diff --git a/erts/emulator/Makefile.in b/erts/emulator/Makefile.in
+ index 7145824..d079487 100644
+ --- a/erts/emulator/Makefile.in
+ +++ b/erts/emulator/Makefile.in
+-@@ -678,11 +678,11 @@ else
++@@ -712,7 +712,7 @@
+  # Usually the same as the default rule, but certain platforms (e.g. win32) mix
+  # different compilers
+  $(OBJDIR)/beam_emu.o: beam/beam_emu.c
+ -	$(V_EMU_CC) $(subst -O2, $(GEN_OPT_FLGS), $(CFLAGS)) $(INCLUDES) -c $< -o $@
+ +	$(V_EMU_CC) $(INCLUDES) $(subst -O2, $(GEN_OPT_FLGS), $(CFLAGS)) -c $< -o $@
+- endif
+  
+- $(OBJDIR)/%.o: beam/%.c
+--	$(V_CC) $(subst -O2, $(GEN_OPT_FLGS), $(CFLAGS)) $(INCLUDES) -c $< -o $@
+-+	$(V_CC) $(INCLUDES) $(subst -O2, $(GEN_OPT_FLGS), $(CFLAGS)) -c $< -o $@
+- 
+- $(OBJDIR)/%.o: $(TARGET)/%.c
+- 	$(V_CC) $(CFLAGS) $(INCLUDES) -Idrivers/common -c $< -o $@
+--- 
+-1.9.3
+-
++ $(OBJDIR)/beam_emu.S: beam/beam_emu.c
++ 	$(V_EMU_CC) -S -fverbose-asm $(subst -O2, $(GEN_OPT_FLGS), $(CFLAGS)) $(INCLUDES) -c $< -o $@
+diff --git a/package/erlang/erlang.hash b/package/erlang/erlang.hash
+index f5ff74022c..616c85e9ae 100644
+--- a/package/erlang/erlang.hash
++++ b/package/erlang/erlang.hash
+@@ -1,4 +1,4 @@
+ # md5 from http://www.erlang.org/download/MD5, sha256 locally computed
+-md5 a683c8c0aacfe0305c4bf47b3abfde6a  otp_src_20.3.tar.gz
+-sha256 4e19e6c403d5255531c0b870f19511c8b8e3b080618e4f9efcb44d905935b2a1  otp_src_20.3.tar.gz
++md5 350988f024f88e9839c3715b35e7e27a  otp_src_21.0.tar.gz
++sha256 c7d247c0cad2d2e718eaca2e2dff051136a1347a92097abf19ebf65ea2870131  otp_src_21.0.tar.gz
+ sha256 809fa1ed21450f59827d1e9aec720bbc4b687434fa22283c6cb5dd82a47ab9c0  LICENSE.txt
+diff --git a/package/erlang/erlang.mk b/package/erlang/erlang.mk
+index b7fdb6b9ce..786641e4bd 100644
+--- a/package/erlang/erlang.mk
++++ b/package/erlang/erlang.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # See note below when updating Erlang
+-ERLANG_VERSION = 20.3
++ERLANG_VERSION = 21.0
+ ERLANG_SITE = http://www.erlang.org/download
+ ERLANG_SOURCE = otp_src_$(ERLANG_VERSION).tar.gz
+ ERLANG_DEPENDENCIES = host-erlang
+@@ -19,7 +19,7 @@ ERLANG_AUTORECONF = YES
+ 
+ # Whenever updating Erlang, this value should be updated as well, to the
+ # value of EI_VSN in the file lib/erl_interface/vsn.mk
+-ERLANG_EI_VSN = 3.10.1
++ERLANG_EI_VSN = 3.10.3
+ 
+ # The configure checks for these functions fail incorrectly
+ ERLANG_CONF_ENV = ac_cv_func_isnan=yes ac_cv_func_isinf=yes
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.17.1
