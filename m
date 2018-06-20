@@ -1,39 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jun 2018 11:06:14 +0200
-Subject: [Buildroot] [PATCH] gcc: fix uclibc build with gcc-8 for xtensa
-In-Reply-To: <20180619202706.17347-1-jcmvbkbc@gmail.com> (Max Filippov's
- message of "Tue, 19 Jun 2018 13:27:06 -0700")
-References: <20180619202706.17347-1-jcmvbkbc@gmail.com>
-Message-ID: <878t79omih.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Jun 2018 11:07:13 +0200
+Subject: [Buildroot] [git commit] configs/mx51evk: Bump U-Boot and kernel
+Message-ID: <20180620090501.EA95E8908A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=abb0d2ed9832ef7ace85bed579da315a0dbb2afe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > gcc-8.1 for xtensa miscompiles uClibc dynamic linker due to gcc PR
- > target/65416. The build completes successfully, but the binary is
- > non-functional because the following fragment in the _dl_get_ready_to_run
- > in ld-uClibc.so overwrites register spill area on stack causing register
- > corruption in the previous call frame and a subsequent crash:
+Bump U-Boot to 2018.05 and kernel to 4.17.2 versions.
 
- >     419f:       f0c1b2          addi    a11, a1, -16
- >     41a2:       1ba9            s32i.n  a10, a11, 4
- >     41a4:       0bc9            s32i.n  a12, a11, 0
- >     41a6:       5127f2          l32i    a15, a7, 0x144
- >     41a9:       1765b2          s32i    a11, a5, 92
- >     41ac:       4e2782          l32i    a8, a7, 0x138
- >     41af:       146af2          s32i    a15, a10, 80
- >     41b2:       001b10          movsp   a1, a11
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/mx51evk_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- > The crash terminates the init process and causes kernel panic.
- > The fix prevents reordering of movsp opcode and any access to the stack
- > frame memory and is applicable to all existing gcc versions..
-
-As this only triggers at runtime I've reworded the subject to 'fix
-uclibc runtime issue with gcc-8 for xtensa' and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/mx51evk_defconfig b/configs/mx51evk_defconfig
+index 368e9beaf0..d9790ada21 100644
+--- a/configs/mx51evk_defconfig
++++ b/configs/mx51evk_defconfig
+@@ -2,8 +2,8 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ 
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 4.17 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx51evk"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.2"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-babbage"
