@@ -1,171 +1,82 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Wed, 20 Jun 2018 17:35:05 +0530
-Subject: [Buildroot] [PATCH v3 2/2] board: amarula: a64-relic: Add WiFi
- support
-In-Reply-To: <20180620120505.17533-1-jagan@amarulasolutions.com>
-References: <20180620120505.17533-1-jagan@amarulasolutions.com>
-Message-ID: <20180620120505.17533-2-jagan@amarulasolutions.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 20 Jun 2018 15:08:06 +0200
+Subject: [Buildroot] [PATCH] wireguard: bump version to 0.0.20180613
+Message-ID: <20180620130806.19229-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Amarula A64-Relic board has AP6330 WiFi/BT combo, but does
-not have ethernet port. So it makes sense to enable wireless
-networking by default:
-- add broadcom wireless firmware package to image
-- add basic wireless tools to image
-- add rootfs overlay with proper NVRAM file for on-board AP6330 chip
-- add mdev to image to enable module autoloading
-- update readme.txt to test wifi
+Contains a fix for a crash when forwarding packets from devices that use
+flow offloading and a x86 FPU issue on -rt kernels.
 
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Also add a post-release upstream patch fixing a compilation issue related to
+memcpy().
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes for v3:
-- none
-Changes for v2:
-- drop init scripts for module loading
-- add mdev for module autoloading
+ ...0001-poly1305-add-missing-string.h-header.patch | 26 ++++++++++++++++++++++
+ package/wireguard/wireguard.hash                   |  4 ++--
+ package/wireguard/wireguard.mk                     |  2 +-
+ 3 files changed, 29 insertions(+), 3 deletions(-)
+ create mode 100644 package/wireguard/0001-poly1305-add-missing-string.h-header.patch
 
- board/amarula/a64-relic/readme.txt                 |  9 +++
- .../lib/firmware/brcm/brcmfmac4330-sdio.txt        | 83 ++++++++++++++++++++++
- configs/amarula_a64_relic_defconfig                | 13 ++++
- 3 files changed, 105 insertions(+)
- create mode 100644 board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-
-diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
-index 0c4894b9f9..b6f89a1627 100644
---- a/board/amarula/a64-relic/readme.txt
-+++ b/board/amarula/a64-relic/readme.txt
-@@ -76,6 +76,15 @@ capability of U-Boot. To achieve this:
-     => mmc dev 1
-     => ums 0 mmc 1
- 
-+WiFi
-+====
-+
-+ # wpa_passphrase ACCESSPOINTNAME >> /etc/wpa_supplicant.conf
-+   (type password and enter)
-+ # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
-+ # udhcpc -i wlan0
-+ # ping google.com
-+
- --
- Jagan Teki <jagan@amarulasolutions.com>
- 20-Jun-2018
-diff --git a/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+diff --git a/package/wireguard/0001-poly1305-add-missing-string.h-header.patch b/package/wireguard/0001-poly1305-add-missing-string.h-header.patch
 new file mode 100644
-index 0000000000..d095f24c26
+index 0000000000..8f1bfecb5c
 --- /dev/null
-+++ b/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-@@ -0,0 +1,83 @@
-+#AP6330_NVRAM_V1.0_20121130
-+#Sample variables file for BCM94330 SD FC AGB board
-+manfid=0x2d0
-+prodid=0x0547
-+vendid=0x14e4
-+devid=0x4360
-+boardtype=0x05e1
-+boardrev=0x1202
-+boardflags=0x0080200
-+nocrc=1
-+xtalfreq=26000
-+boardnum=22
-+macaddr=00:90:4c:c5:12:38
-+ag0=254
-+aa2g=1
-+ccode=ALL
-+pa0itssit=0x20
-+pa0b0=5587
-+pa0b1=-633
-+pa0b2=-158
-+rssismf2g=0xa
-+rssismc2g=0x3
-+rssisav2g=0x7
-+#rssi params for 5GHz
-+rssismf5g=0x4
-+rssismc5g=0x3
-+rssisav5g=0x7
-+#PA parameters for lower a-band
-+pa1lob0=4748
-+pa1lob1=-566
-+pa1lob2=-180
-+#PA parameters for midband
-+pa1b0=4762
-+pa1b1=-593
-+pa1b2=-172
-+#PA parameters for high band
-+#pa1hib0=4596
-+pa1hib0=4666
-+pa1hib1=-619
-+pa1hib2=-163
-+rxpo5g=0
-+maxp2ga0=74
-+maxp5ga0=66
-+maxp5gla0=66
-+maxp5gha0=66
-+# 2.4G Tx Power offsets
-+cck2gpo=0x2222
-+ofdm2gpo=0x44444444
-+mcs2gpo0=0x6666
-+mcs2gpo1=0x6666
-+# 5G Tx Power offsets
-+ofdm5gpo=0x44444444
-+ofdm5glpo=0x44444444
-+ofdm5ghpo=0x44444444
-+mcs5gpo0=0x6666
-+mcs5gpo1=0x6666
-+mcs5glpo0=0x6666
-+mcs5glpo1=0x6666
-+mcs5ghpo0=0x6666
-+mcs5ghpo1=0x6666
-+sromrev=3
-+il0macaddr=00:90:4c:c5:12:38
-+wl0id=0x431b
-+cckPwrOffset=4
-+swctrlmap_2g=0x44844484,0x42824282,0x40804484,0x18282,0x1ff
-+triso5g=0
-+swctrlmap_5g=0x00100010,0x20202020,0x20202020,0x14202,0x0f0
-+rfreg033=0x19
-+rfreg033_cck=0x1f
-+dacrate2g=160
-+dacrate5g=160
-+txalpfbyp2g=1
-+bphyscale=17
-+cckPwrIdxCorr=-15
-+pacalidx2g=50
-+#pacalidx5g=20
-+noise_cal_ref_2g=53
-+noise_cal_po_2g=0
-+noise_cal_ref_5g=52
-+noise_cal_po_5g=5,0,0
-+# 4330 OOB parameter: High level trigger
-+muxenab=0x10
++++ b/package/wireguard/0001-poly1305-add-missing-string.h-header.patch
+@@ -0,0 +1,26 @@
++From ed04799b1868f45e05d788e614b9b8cfa4fcab46 Mon Sep 17 00:00:00 2001
++From: "Jason A. Donenfeld" <Jason@zx2c4.com>
++Date: Wed, 20 Jun 2018 14:55:24 +0200
++Subject: [PATCH] poly1305: add missing string.h header
 +
-diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
-index 846275eadb..82c30fbb0f 100644
---- a/configs/amarula_a64_relic_defconfig
-+++ b/configs/amarula_a64_relic_defconfig
-@@ -42,6 +42,19 @@ BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/amarula/a64-relic/genimage.cfg"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/amarula/a64-relic/post-build.sh"
-+BR2_ROOTFS_OVERLAY="board/amarula/a64-relic/rootfs_overlay"
++Reported-by: Peter Korsgaard <peter@korsgaard.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/crypto/poly1305.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+# wireless firmware
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
++diff --git a/src/crypto/poly1305.c b/src/crypto/poly1305.c
++index 26af4ad..65a37d9 100644
++--- a/src/crypto/poly1305.c
+++++ b/src/crypto/poly1305.c
++@@ -7,6 +7,7 @@
++ #include "poly1305.h"
++ 
++ #include <linux/kernel.h>
+++#include <linux/string.h>
++ 
++ #if defined(CONFIG_X86_64)
++ #include <asm/fpu/api.h>
++-- 
++2.11.0
 +
-+# wireless tools
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 7701424e4e..f7c5e65475 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-May/002914.html
+-sha256 57614239c1f1a99a367f2c816153acda5bffada66a3b8e3b8215f1625784abc9  WireGuard-0.0.20180524.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-June/002984.html
++sha256 c120cdedc3967dcb4ad5c1c7eadd2a1b04ef5dbf2fe60cc8e7c0db337bcda7dc  WireGuard-0.0.20180613.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index ee68dc5580..e1c43beea7 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20180524
++WIREGUARD_VERSION = 0.0.20180613
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
 -- 
-2.14.3
+2.11.0
