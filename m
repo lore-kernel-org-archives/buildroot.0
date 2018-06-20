@@ -1,33 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jun 2018 23:24:34 +0200
-Subject: [Buildroot] [PATCH] protobuf: bump to 3.6.0
-In-Reply-To: <20180620142255.31441-1-matthew.weber@rockwellcollins.com> (Matt
- Weber's message of "Wed, 20 Jun 2018 09:22:55 -0500")
-References: <20180620142255.31441-1-matthew.weber@rockwellcollins.com>
-Message-ID: <87muvpm9rh.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Jun 2018 23:25:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/berkeleydb: fix build error
+ with gcc8
+In-Reply-To: <20180620195804.9594-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 20 Jun 2018 21:58:04 +0200")
+References: <20180620195804.9594-1-bernd.kuhls@t-online.de>
+Message-ID: <87in6dm9q2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes the following issue and brauto builds
- > https://github.com/google/protobuf/issues/3937
- > http://autobuild.buildroot.net/results/982f727495c1d3524685015c34b1cbb1e0bbb4b0
- > http://autobuild.buildroot.net/results/adbd3088e24d7e681c995f8c3d1db0e14ac500ba
+ > Fixes
+ > ../src/dbinc/atomic.h:179:19: error: definition of 'int __atomic_compare_exchange(db_atomic_t*,
+ >  atomic_value_t, atomic_value_t)' ambiguates built-in declaration 'bool
+ >  __atomic_compare_exchange(unsigned int, volatile void*, void*, void*, int, int)'
+ >  static inline int __atomic_compare_exchange(
+ >                    ^~~~~~~~~~~~~~~~~~~~~~~~~
 
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- > ---
- >  package/protobuf/protobuf.hash | 2 +-
- >  package/protobuf/protobuf.mk   | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
+ > To reproduce the build error use this defconfig
 
-What about python-protobuf?
+ > BR2_GCC_VERSION_8_X=y
+ > BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ > BR2_PACKAGE_BERKELEYDB=y
+ > BR2_PACKAGE_BERKELEYDB_COMPAT185=y
+ > BR2_PACKAGE_BERKELEYDB_TOOLS=y
 
-ERROR: No hash found for protobuf-python-3.6.0.tar.gz
-package/pkg-generic.mk:135: recipe for target '/home/peko/source/buildroot/output-wireguard/build/python-protobuf-3.6.0/.stamp_downloaded' failed
+ > Please note that to trigger the error BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ > is needed although berkeleydb does not depend on c++.
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
