@@ -1,106 +1,71 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Wed, 20 Jun 2018 12:14:25 -0700
-Subject: [Buildroot] [RFC PATCH v4 8/9] lld: new package
-In-Reply-To: <20180615230106.0bebcbb3@windsurf>
-References: <20180610205417.13963-1-joseph.kogut@gmail.com>
- <20180614224820.27126-1-joseph.kogut@gmail.com>
- <20180614224820.27126-9-joseph.kogut@gmail.com>
- <20180615230106.0bebcbb3@windsurf>
-Message-ID: <CAMWSM7hzA-hz5sAcpanoYQKYmX_eu-bro6zZDm0GEgDC=nNQjw@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 20 Jun 2018 21:58:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/berkeleydb: fix build error with
+ gcc8
+Message-ID: <20180620195804.9594-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes
 
-On Fri, Jun 15, 2018 at 2:01 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 14 Jun 2018 15:48:19 -0700, Joseph Kogut wrote:
->
-> > diff --git a/package/lld/Config.in b/package/lld/Config.in
-> > new file mode 100644
-> > index 0000000000..0ad50fd608
-> > --- /dev/null
-> > +++ b/package/lld/Config.in
-> > @@ -0,0 +1,3 @@
-> > +config BR2_PACKAGE_LLD
-> > +     bool "lld"
-> > +     depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
->
-> This is a bit short. No help text, no upstream URL.
->
-> > diff --git a/package/lld/lld.hash b/package/lld/lld.hash
-> > new file mode 100644
-> > index 0000000000..ce81c7baca
-> > --- /dev/null
-> > +++ b/package/lld/lld.hash
-> > @@ -0,0 +1,3 @@
-> > +# locally calculated
-> > +sha256 6b8c4a833cf30230c0213d78dbac01af21387b298225de90ab56032ca79c0e0b  lld-6.0.0.src.tar.xz
-> > +sha256 f0502d2d0e19748c534ee95ea486c092273303dbef76404c8b17dc8bf6ca441b  LICENSE.TXT
-> > diff --git a/package/lld/lld.mk b/package/lld/lld.mk
-> > new file mode 100644
-> > index 0000000000..cfaf3dbd29
-> > --- /dev/null
-> > +++ b/package/lld/lld.mk
-> > @@ -0,0 +1,19 @@
-> > +###############################################################################
-> > +#
-> > +# lld
-> > +#
-> > +###############################################################################
-> > +
-> > +LLD_VERSION = 6.0.0
-> > +LLD_SITE = https://llvm.org/releases/$(LLD_VERSION)
-> > +LLD_SOURCE = lld-$(LLD_VERSION).src.tar.xz
-> > +LLD_LICENSE = NCSA
-> > +LLD_LICENSE_FILES = LICENSE.TXT
-> > +LLD_SUPPORTS_IN_SOURCE_BUILD = NO
->
-> No dependencies really ? Have you tried a configuration with *just* lld
-> enabled ?
->
-> If I build just the lld package, I get:
->
-> CMake Error at CMakeLists.txt:11 (message):
->   llvm-config not found: specify LLVM_CONFIG_PATH
->
-> When you submit new packages, please make sure that they build in a
-> configuration that has *just* this new package enabled and nothing else.
->
+../src/dbinc/atomic.h:179:19: error: definition of 'int __atomic_compare_exchange(db_atomic_t*,
+ atomic_value_t, atomic_value_t)' ambiguates built-in declaration 'bool
+ __atomic_compare_exchange(unsigned int, volatile void*, void*, void*, int, int)'
+ static inline int __atomic_compare_exchange(
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-My mistake, this one wasn't tested enough.
+To reproduce the build error use this defconfig
 
-> > +HOST_LLD_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-> > +LLD_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
->
-> For target packages, CMAKE_BUILD_TYPE is already passed by the
-> cmake-package infrastructure.
->
+BR2_GCC_VERSION_8_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_PACKAGE_BERKELEYDB=y
+BR2_PACKAGE_BERKELEYDB_COMPAT185=y
+BR2_PACKAGE_BERKELEYDB_TOOLS=y
 
-Thanks for the tip.
+Please note that to trigger the error BR2_TOOLCHAIN_BUILDROOT_CXX=y
+is needed although berkeleydb does not depend on c++.
 
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ .../0002-atomic_compare_exchange.patch        | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/berkeleydb/0002-atomic_compare_exchange.patch
 
-After looking over this package again, I'm thinking it should be host
-only. Without a compiler on the target, a linker really doesn't have
-any utility.
-
-Also, the LLVM project claims drop-in compatibility and much better
-performance with LLD compared to GNU ld/gold, so I'm curious how using
-LLD as the default linker would affect build times. I'll do some
-experiments.
-
-Best,
-Joseph
+diff --git a/package/berkeleydb/0002-atomic_compare_exchange.patch b/package/berkeleydb/0002-atomic_compare_exchange.patch
+new file mode 100644
+index 0000000000..81e18ac96f
+--- /dev/null
++++ b/package/berkeleydb/0002-atomic_compare_exchange.patch
+@@ -0,0 +1,27 @@
++Rename __atomic_compare_exchange to not clash with gcc built-in
++
++Downloaded from
++https://src.fedoraproject.org/cgit/rpms/libdb.git/commit/?id=d6841b3b46a51db98c162347211a5a64d154ea37
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++--- db-5.3.28/src/dbinc/atomic.h.old	2018-05-23 09:20:04.216914922 +0200
+++++ db-5.3.28/src/dbinc/atomic.h	2018-05-23 09:20:49.510057897 +0200
++@@ -144,7 +144,7 @@
++ #define	atomic_inc(env, p)	__atomic_inc(p)
++ #define	atomic_dec(env, p)	__atomic_dec(p)
++ #define	atomic_compare_exchange(env, p, o, n)	\
++-	__atomic_compare_exchange((p), (o), (n))
+++	__db_atomic_compare_exchange((p), (o), (n))
++ static inline int __atomic_inc(db_atomic_t *p)
++ {
++ 	int	temp;
++@@ -176,7 +176,7 @@
++  * http://gcc.gnu.org/onlinedocs/gcc-4.1.0/gcc/Atomic-Builtins.html
++  * which configure could be changed to use.
++  */
++-static inline int __atomic_compare_exchange(
+++static inline int __db_atomic_compare_exchange(
++ 	db_atomic_t *p, atomic_value_t oldval, atomic_value_t newval)
++ {
++ 	atomic_value_t was;
+-- 
+2.17.1
