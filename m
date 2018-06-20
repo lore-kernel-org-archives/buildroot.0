@@ -1,50 +1,81 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jun 2018 22:38:40 +0200
-Subject: [Buildroot] swapoff, but no swapon in initab
-In-Reply-To: <3047d59a-46aa-7678-32a1-971a2c07e0bb@mind.be> (Arnout
- Vandecappelle's message of "Wed, 20 Jun 2018 22:13:12 +0200")
-References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
- <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
- <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
- <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
- <87zi0074sa.fsf@dell.be.48ers.dk>
- <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
- <87in6o6u5n.fsf@dell.be.48ers.dk>
- <598a385a-5693-8fff-876c-550063645a50@mind.be>
- <87sh5s5aa4.fsf@dell.be.48ers.dk>
- <4be26713-53f3-2b36-f696-2b8fcf227ec3@mind.be>
- <87d0wlonmg.fsf@dell.be.48ers.dk>
- <3047d59a-46aa-7678-32a1-971a2c07e0bb@mind.be>
-Message-ID: <87r2l1mbvz.fsf@dell.be.48ers.dk>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 20 Jun 2018 15:57:20 -0500
+Subject: [Buildroot] [RFC PATCH v4 9/9] chromium: new package
+In-Reply-To: <20180614224820.27126-10-joseph.kogut@gmail.com>
+References: <20180610205417.13963-1-joseph.kogut@gmail.com>
+ <20180614224820.27126-1-joseph.kogut@gmail.com>
+ <20180614224820.27126-10-joseph.kogut@gmail.com>
+Message-ID: <CANQCQpYM5oyJpk-=G8UvYtHHoXVGt6wVRU8=GPN9KBK0hL9FLQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+Joseph,
 
-Hi,
+On Thu, Jun 14, 2018 at 5:48 PM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
+>
+[snip]
 
- >> Yes, so the only minor issue is that we need to have swapon/swapoff
- >> enabled in busybox-minimal.config even though it isn't useful just to
- >> not get an error message during bootup/shutdown.
+> diff --git a/package/chromium/Config.in b/package/chromium/Config.in
+> new file mode 100644
+> index 0000000000..aa71d0e2dd
+> --- /dev/null
+> +++ b/package/chromium/Config.in
+> @@ -0,0 +1,46 @@
+> +config BR2_PACKAGE_CHROMIUM
+> +       bool "chromium"
+> +       depends on BR2_PACKAGE_HAS_LIBGL
+> +       depends on BR2_PACKAGE_XORG7
+> +       depends on BR2_TOOLCHAIN_USES_GLIBC
+> +       depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64
+> +       select BR2_PACKAGE_ALSA_LIB
+> +       select BR2_PACKAGE_CUPS
+> +       select BR2_PACKAGE_DBUS
+> +       select BR2_PACKAGE_FREETYPE
+> +       select BR2_PACKAGE_HARFBUZZ
+> +       select BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH
+> +       select BR2_PACKAGE_HOST_CLANG
+> +       select BR2_PACKAGE_HOST_LLD
+> +       select BR2_PACKAGE_HOST_NINJA
+> +       select BR2_PACKAGE_HOST_NODEJS
+> +       select BR2_PACKAGE_HOST_PYTHON
+> +       select BR2_PACKAGE_JPEG
+> +       select BR2_PACKAGE_LIBDRM
+> +       select BR2_PACKAGE_LIBERATION # runtime
+> +       select BR2_PACKAGE_LIBGLIB2
+> +       select BR2_PACKAGE_LIBGTK2 if !BR2_PACKAGE_LIBGTK3_X11
+> +       select BR2_PACKAGE_LIBKRB5
+> +       select BR2_PACKAGE_LIBNSS
+> +       select BR2_PACKAGE_LIBPNG
+> +       select BR2_PACKAGE_PCIUTILS
+> +       select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
+> +       select BR2_PACKAGE_XLIB_LIBXCURSOR
+> +       select BR2_PACKAGE_XLIB_LIBXI if !BR2_PACKAGE_LIBGTK3_X11
+> +       select BR2_PACKAGE_XLIB_LIBXRANDR
+> +       select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
+> +       select BR2_PACKAGE_XLIB_LIBXTST if !BR2_PACKAGE_LIBGTK3_X11
+> +
+> +config BR2_PACKAGE_CHROMIUM_TARGET_ARCH
+> +       string
+> +       default "arm" if BR2_arm
+> +       default "arm64" if BR2_aarch64
+> +       default "x86" if BR2_i386
+> +       default "x64" if BR2_x86_64
+> +       default "mips" if BR2_mips
+> +
+> +comment "chromium needs toolchain w/ Glibc"
+> +       depends on !BR2_TOOLCHAIN_USES_GLIBC
+> +
+> +comment "chromium depends on X.org and needs an OpenGL backend"
+> +       depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
 
- >  Well, it currently _is_ enabled in busybox-minimal.config... Admittedly, this
- > adds almost 1KB to the busybox size so perhaps it should be removed from
- > -minimal. But the we probably should also remove swapoff from inittab. Hell,
- > perhaps we should do that anyway, since doing swapoff for reboot is utterly
- > useless IMO.
+I have not checked through all the threads to see if this already is reported.
 
-Yes, I'm not sure what good swapoff would do just before rebooting,
-except if you are using a swapfile and keeping it mounted would cause
-umounting that filesystem to fail - But I've never used swap in a
-Buildroot based project.
+Using master as of today and the v4 patchset adjusted for
+merges/bumps, I got the following failure.  Is there a minimum GCC
+version that should be a dependency?
+https://paste.ubuntu.com/p/dKsNXBms5x/
 
-Notice that we will still get the error message from the swapon call
-during startup if we drop the swapon applet.
-
-Maybe we should just leave it as is.
-
--- 
-Bye, Peter Korsgaard
+Matt
