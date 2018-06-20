@@ -1,33 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 20 Jun 2018 08:55:04 +0200
-Subject: [Buildroot] Buildroot git server configuration issue
-In-Reply-To: <878t7k8pjk.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Tue, 12 Jun 2018 08:52:31 +0200")
-References: <20180612031353.iufmyoec65ocipf4@tarshish>
- <878t7k8pjk.fsf@dell.be.48ers.dk>
-Message-ID: <87h8lyne0n.fsf@dell.be.48ers.dk>
+Date: Wed, 20 Jun 2018 10:42:15 +0200
+Subject: [Buildroot] swapoff, but no swapon in initab
+In-Reply-To: <4be26713-53f3-2b36-f696-2b8fcf227ec3@mind.be> (Arnout
+ Vandecappelle's message of "Tue, 19 Jun 2018 23:51:45 +0200")
+References: <509563228.1507483.1528305257656.JavaMail.zimbra@datacom.com.br>
+ <8b5f67de-8fe7-ffd2-6c20-9662908947de@mind.be>
+ <2139346916.1818743.1528457899819.JavaMail.zimbra@datacom.com.br>
+ <272b0e3a-7f9b-f18d-a430-97553e260019@mind.be>
+ <87zi0074sa.fsf@dell.be.48ers.dk>
+ <909872342.136921.1528804345151.JavaMail.zimbra@datacom.com.br>
+ <87in6o6u5n.fsf@dell.be.48ers.dk>
+ <598a385a-5693-8fff-876c-550063645a50@mind.be>
+ <87sh5s5aa4.fsf@dell.be.48ers.dk>
+ <4be26713-53f3-2b36-f696-2b8fcf227ec3@mind.be>
+Message-ID: <87d0wlonmg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
- >> Hi Buildroot list,
- >> On my last fetch from the Buildroot git server I got this warning:
+ > On 12-06-18 16:50, Peter Korsgaard wrote:
+ >>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+ >> 
+ >> >> But it does require people to add swapon/swapoff to their busybox config
+ >> >> even if they aren't using swap, otherwise they would get error messages
+ >> 
+ >> >  I think if people start customizing the busybox config and remove stuff from
+ >> > it, then it's only reasonable that they also modify the default
+ >> > inittab.
+ >> 
+ >> Correct.
+ >> 
+ >> > Swaponand swapoff are both enabled in our busybox.config and busybox-minimal.config.
+ >> 
+ >> Hmm, does swap work on nommu? I would guess not. Looking at the kernel
+ >> option:
 
- >> remote: warning: unable to access '/root/.config/git/attributes': Permission denied
+ >  Doesn't matter if it works or not; if the swapon executable exists, then the
+ > swapon in inittab will pass without error (if you don't have swap configured in
+ > fstab). Clearly, the swapon will fail if you indeed have swap enabled in fstab
+ > on a NOMMU system, but I don't think we have to protect against that situation,
+ > right? It will anyway also fail if you don't have swap enabled in the kernel.
+ > Just like mounting the ext2 rootfs will fail if you don't have ext2/3/4 enabled
+ > in your kernel...
 
- >> My origin url is set to git://git.buildroot.net/buildroot.
-
- > Yes, I started seeing it as well since a few days from the cronjob I
- > have handling the nightly manual generation. I'll investigate.
-
-It is fixed now. The problem was caused by an upgrade / misconfiguration
-of xinetd, causing git-daemon (which runs as nobody) to still have the
-HOME environment variable pointing to /root.
+Yes, so the only minor issue is that we need to have swapon/swapoff
+enabled in busybox-minimal.config even though it isn't useful just to
+not get an error message during bootup/shutdown.
 
 -- 
 Bye, Peter Korsgaard
