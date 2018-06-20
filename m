@@ -1,32 +1,37 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 20 Jun 2018 18:29:32 -0300
-Subject: [Buildroot] [PATCH] linux-headers: bump 4.{14, 16}.x series
-Message-ID: <1529530172-9168-1-git-send-email-festevam@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 20 Jun 2018 16:30:57 -0500
+Subject: [Buildroot] [PATCH] protobuf: bump to 3.6.0
+In-Reply-To: <87muvpm9rh.fsf@dell.be.48ers.dk>
+References: <20180620142255.31441-1-matthew.weber@rockwellcollins.com>
+ <87muvpm9rh.fsf@dell.be.48ers.dk>
+Message-ID: <CANQCQpbgdD8OjMnsGrbGsRrHbJhApyFqNsP4Bzsn5iKGJ-xseg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Peter,
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 24a2433..97d43e6 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -264,8 +264,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.50"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.51"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
--	default "4.16.16"	if BR2_KERNEL_HEADERS_4_16
-+	default "4.16.17"	if BR2_KERNEL_HEADERS_4_16
- 	default "4.17.2"	if BR2_KERNEL_HEADERS_4_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
--- 
-2.7.4
+On Wed, Jun 20, 2018 at 4:24 PM, Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+>
+>  > Fixes the following issue and brauto builds
+>  > https://github.com/google/protobuf/issues/3937
+>  > http://autobuild.buildroot.net/results/982f727495c1d3524685015c34b1cbb1e0bbb4b0
+>  > http://autobuild.buildroot.net/results/adbd3088e24d7e681c995f8c3d1db0e14ac500ba
+>
+>  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>  > ---
+>  >  package/protobuf/protobuf.hash | 2 +-
+>  >  package/protobuf/protobuf.mk   | 2 +-
+>  >  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> What about python-protobuf?
+>
+> ERROR: No hash found for protobuf-python-3.6.0.tar.gz
+> package/pkg-generic.mk:135: recipe for target '/home/peko/source/buildroot/output-wireguard/build/python-protobuf-3.6.0/.stamp_downloaded' failed
+
+Good catch, forgot about that.  Retesting.
+
+Matt
