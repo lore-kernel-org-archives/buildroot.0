@@ -1,50 +1,60 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 21 Jun 2018 12:15:31 -0500
-Subject: [Buildroot] [PATCH v6 3/7] cpe-info: only report target pkgs
-In-Reply-To: <1529601335-38937-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1529601335-38937-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1529601335-38937-4-git-send-email-matthew.weber@rockwellcollins.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Thu, 21 Jun 2018 22:52:15 +0530
+Subject: [Buildroot] sun8i-h3: sunxi-mali-mainline package with linux-next
+Message-ID: <CAMty3ZDZucZpr-4M=CCc9nLM=XTKGr5qySDe4Zq5O7t_xov+Jg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The reporting of host packages causes some duplication and complicates
-what is really in the targets configuration. For the purpose of the
-first version of this patchset, its assumed that host packages aren't
-relevant for the configuration and we only report the target's
-contents.
+Hi,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-Changes
-v1 -> v2
-[Thomas P
- - select if target vs selecting not host
+I'm trying to use sunxi-mali-mainline with linux-next for H3 platform.
 
-v3
- - Fixed host build error because cpe-info wasn't defined
----
- package/pkg-generic.mk | 2 ++
- 1 file changed, 2 insertions(+)
+Since Mali dt support is already added on linux-next, So I've directly
+used buildroot and enabled necessary options.
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 9badc54..5df3f07 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -883,10 +883,12 @@ endif
- 
- $(1)-cpe-info: PKG=$(2)
- $(1)-cpe-info:
-+ifeq ($$($(2)_TYPE),target)
- ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- 	@$$(call MESSAGE,"Collecting cpe info")
- 	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
- endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-+endif # ifeq ($$($(2)_TYPE),target)
- 
- # legal-info: declare dependencies and set values used later for the manifest
- ifneq ($$($(2)_LICENSE_FILES),)
+Look like Mali initialization seems failing. I've not investigated
+further but just to post if anyone found this already and seeking for
+help.
+
+Log:
+# modprobe -a mali
+[   43.364438] mali: loading out-of-tree module taints kernel.
+[   43.379577] Allwinner sunXi mali glue initialized
+[   43.568791] Mali: ERR:
+/home/jagan/work/code/buildroot/output/build/sunxi-mali-mainline-driver-52ef1c5e133cc5fd791ca636239dc5e7b19c26d5/r6p2/src/devicedrv/mali/common/mali_pp.c
+[   43.584511]            mali_pp_reset_wait() 269
+[   43.584511]
+[   43.584516] Mali PP: Failed to reset core Mali_PP0, rawstat: 0x00000000
+[   43.598088]
+[   43.599585] Mali: ERR:
+/home/jagan/work/code/buildroot/output/build/sunxi-mali-mainline-driver-52ef1c5e133cc5fd791ca636239dc5e7b19c26d5/r6p2/src/devicedrv/mali/common/mali_kernec
+[   43.616079]            mali_parse_product_info() 174
+[   43.616079]
+[   43.616091] Failed to create initial PP object
+[   43.627935]
+[   43.629486] Mali: ERR:
+/home/jagan/work/code/buildroot/output/build/sunxi-mali-mainline-driver-52ef1c5e133cc5fd791ca636239dc5e7b19c26d5/r6p2/src/devicedrv/mali/linux/mali_kernelc
+[   43.645995]            mali_probe() 606
+[   43.645995]
+[   43.645998] mali_probe(): Failed to initialize Mali device driver.
+[   43.652267]
+[   43.659966] mali-utgard: probe of mali-utgard.0 failed with error -14
+[   43.666447] Mali:
+[   43.666449] Mali device driver loaded
+# /usr/lib/qt/examples/opengl/hellowindow/hellowindow
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
+QStandardPaths: XDG_RUNTIME_DIR not set, defaulting to '/tmp/runtime-root'
+Could not initialize egl display
+Aborted
+
+
+Jagan.
+
 -- 
-1.9.1
+Jagan Teki
+Senior Linux Kernel Engineer | Amarula Solutions
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
