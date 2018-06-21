@@ -1,143 +1,63 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 21 Jun 2018 12:15:29 -0500
-Subject: [Buildroot] [PATCH v6 1/7] cpe-info: new make target
-In-Reply-To: <1529601335-38937-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1529601335-38937-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1529601335-38937-2-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Thu, 21 Jun 2018 12:15:28 -0500
+Subject: [Buildroot] [PATCH v6 0/7] CPE ID Support
+Message-ID: <1529601335-38937-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Similar to make legal-info, produce a csv delimited file containing
-all selected packages CPE identification.
+This series begins adding CPE identifier support to Buildroot. The
+intent is to establish and maintain a baseline of CPE IDs, one for each
+package. Each of these IDs ties back to a NIST database entry for the
+respective piece of software, which is linked to specific vunderabilities.
 
-Have the pkg infra define CPE_ID_* defaults using the package name
-for the vendor and name as most CPE IDs seem to align with that
-assumption. Also use the pkg version as the CPE ID's version field.
+Within Buildroot, a CPE report can be generated (like legal-info) that
+captures a target build's list of CPE IDs. This report can then be
+checked for validity using the new support/scripts/cpe-report or another
+third party tool. The script uses a new cpedb.py helper to search and
+identify the validity of the CPE strings.
 
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
----
-Changes
-v2
-[Thomas P
- - Moved comment on conditionals back to this patchset where
-   the conditional is created vs later
+The pkgstats script has been extended to provide CPE ID checking of
+matching/requires update/new as part of its html output.  It also uses
+the new cpedb.py helper.
 
-v3
-[Thomas P
- - Merged infra define CPE_ID_*  into this patch
- - Report all packages vs restricting to just allowing based on if
-   the VENDOR was set (v2). This now represents Thomas P's original
-   idea to report everything.  At first I felt I should restrict
-   the reporting to those CPE IDs we had made sure were correct.
-   Turns out we should have actually let the script handle fixing
-   the CPEs and just make a complete design of this up front.
+As part of testing this series, the following branch contains a series
+of fixups required to make these specific packages match the database.
+(I can submit these to the mailing list but there are ~70 of them)
 
-[Matt
- - Moved to using the _project on all vendors instead of just name
----
- Makefile               | 17 ++++++++++++++++-
- package/pkg-generic.mk | 13 +++++++++++++
- package/pkg-utils.mk   |  8 ++++++++
- 3 files changed, 37 insertions(+), 1 deletion(-)
+https://github.com/rc-matthew-l-weber/buildroot/tree/cpe-strings
+Commit 630fd87..341501b
 
-diff --git a/Makefile b/Makefile
-index 8d25c8a..4cc95b7 100644
---- a/Makefile
-+++ b/Makefile
-@@ -146,7 +146,7 @@ nobuild_targets := source %-source \
- 	clean distclean help show-targets graph-depends \
- 	%-graph-depends %-show-depends %-show-version \
- 	graph-build graph-size list-defconfigs \
--	savedefconfig printvars
-+	savedefconfig printvars cpe-info %-cpe-info
- ifeq ($(MAKECMDGOALS),)
- BR_BUILDING = y
- else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
-@@ -233,6 +233,7 @@ LEGAL_MANIFEST_CSV_TARGET = $(LEGAL_INFO_DIR)/manifest.csv
- LEGAL_MANIFEST_CSV_HOST = $(LEGAL_INFO_DIR)/host-manifest.csv
- LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
- LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
-+CPE_MANIFEST_CSV = $(BASE_DIR)/cpe-manifest.csv
- 
- BR2_CONFIG = $(CONFIG_DIR)/.config
- 
-@@ -802,6 +803,19 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
- 		mv .legal-info.sha256 legal-info.sha256)
- 	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
- 
-+.PHONY: cpe-info-clean
-+cpe-info-clean:
-+	@rm -f $(CPE_MANIFEST_CSV)
-+
-+.PHONY: cpe-info-prepare
-+cpe-info-prepare:
-+	@$(call MESSAGE,"Gathering CPE info")
-+	@$(call cpe-manifest,CPE ID,CVE PATCHED,PACKAGE,VERSION,SOURCE SITE)
-+
-+.PHONY: cpe-info
-+cpe-info: cpe-info-clean cpe-info-prepare $(foreach p,$(PACKAGES),$(p)-cpe-info)
-+	@echo "CPE info produced in $(CPE_MANIFEST_CSV)"
-+
- .PHONY: show-targets
- show-targets:
- 	@echo $(sort $(PACKAGES)) $(sort $(TARGETS_ROOTFS))
-@@ -1070,6 +1084,7 @@ help:
- 	@echo '  source                 - download all sources needed for offline-build'
- 	@echo '  external-deps          - list external packages used'
- 	@echo '  legal-info             - generate info about license compliance'
-+	@echo '  cpe-info               - generate info about security CPE identification'
- 	@echo '  printvars              - dump all the internal variables'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 501dd3d..1bd3f47 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -870,6 +870,18 @@ else
- $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
- endif
- 
-+$(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)_project
-+$(2)_CPE_ID_NAME ?= $$($(2)_NAME)
-+$(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
-+$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
-+
-+$(1)-cpe-info: PKG=$(2)
-+$(1)-cpe-info:
-+ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-+	@$$(call MESSAGE,"Collecting cpe info")
-+	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
-+endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
-+
- # legal-info: declare dependencies and set values used later for the manifest
- ifneq ($$($(2)_LICENSE_FILES),)
- $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
-@@ -1011,6 +1023,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
- 	$(1)-clean-for-reconfigure \
- 	$(1)-clean-for-reinstall \
- 	$(1)-configure \
-+	$(1)-cpe-info \
- 	$(1)-depends \
- 	$(1)-dirclean \
- 	$(1)-external-deps \
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index c3acc22..11a2457 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -95,3 +95,11 @@ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-full
- 	} && \
- 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
- endef
-+
-+#
-+# cpe-info helper functions
-+#
-+
-+define cpe-manifest # cpe, cve patched, pkg name, version, url
-+	echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(CPE_MANIFEST_CSV)
-+endef
+A follow-on patchset will be submitted adding support for pkgstat generation
+of CPE updates in XML and Buildroot manual updates for guidance on submission
+of those XML database updates to the NIST organization. (We'd like to get
+feedback on this series first to save us effort on the update XML stuff)
+
+Changes at a patchset level
+v6 - No specific updates aside from a rebase of this set and github branch
+
+Matt Weber (7):
+  cpe-info: new make target
+  cpe-info: id prefix/suffix
+  cpe-info: only report target pkgs
+  cpe-info: update manual for new pkg vars
+  support/scripts/cpedb.py: new CPE XML helper
+  support/scripts/pkg-stats: add CPE reporting
+  support/scripts/cpe-report: new script
+
+ Makefile                                |  17 ++++-
+ docs/manual/adding-packages-generic.txt | 117 ++++++++++++++++++++------------
+ package/Makefile.in                     |   4 ++
+ package/pkg-generic.mk                  |  21 ++++++
+ package/pkg-utils.mk                    |   8 +++
+ support/scripts/cpe-report              |  53 +++++++++++++++
+ support/scripts/cpedb.py                |  52 ++++++++++++++
+ support/scripts/pkg-stats               |  68 +++++++++++++++++++
+ 8 files changed, 296 insertions(+), 44 deletions(-)
+ create mode 100755 support/scripts/cpe-report
+ create mode 100644 support/scripts/cpedb.py
+
 -- 
 1.9.1
