@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Jun 2018 23:41:04 +0200
-Subject: [Buildroot] Rust test too long
-In-Reply-To: <20180618204438.7a481c7e@windsurf>
-References: <20180610165740.1221b491@windsurf> <20180618183320.GA13225@itchy>
- <20180618204438.7a481c7e@windsurf>
-Message-ID: <d2deab79-5ca8-4dc7-e0c6-2e0dafd70255@mind.be>
+Date: Thu, 21 Jun 2018 23:56:52 +0200
+Subject: [Buildroot] [PATCH] imx-usb-loader: fix build with older gcc
+In-Reply-To: <87tvpyo5xc.fsf@dell.be.48ers.dk>
+References: <53fcb79e408e468aaa45b7adc6ba0f92aba03702.1529419481.git.baruch@tkos.co.il>
+ <87tvpyo5xc.fsf@dell.be.48ers.dk>
+Message-ID: <ad92c4bc-c60a-6312-c484-0f7c447efa0a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,90 @@ To: buildroot@busybox.net
 
 
 
-On 18-06-18 20:44, Thomas Petazzoni wrote:
-> Hello,
+On 19-06-18 22:52, Peter Korsgaard wrote:
+>>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 > 
-> On Mon, 18 Jun 2018 20:33:20 +0200, Eric Le Bihan wrote:
+>  > Since the last version bump imx-usb-loader uses __builtin_bswap16 which
+>  > is not universally available in gcc older than version 4.8. Add a patch
+>  > switching to a local 16-bit bytes swap implementation.
 > 
->>> Is this expected that this test takes as much as 3 hours ? Is there
->>> something we can do to reduce this ?  
->>
->> What is the horsepower of the Gitlab instance?
+>  > Should fix:
+>  > http://autobuild.buildroot.net/results/a63/a63b593b7ef3b6d32e755afe42b77d47dbf0276e/
+>  > http://autobuild.buildroot.net/results/48c/48c95cfc65f99fa02be81a11303ba8999f57091a/
+>  > http://autobuild.buildroot.net/results/c9d/c9d4f99b49ddb9b2ce08fce7672dd7c70cf62912/
 > 
-> I have no idea :-/
+>  > Cc: Adam Duskett <aduskett@gmail.com>
+>  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>  > ---
+>  >  ....h-fix-build-with-gcc-older-than-4.8.patch | 42 +++++++++++++++++++
+>  >  1 file changed, 42 insertions(+)
+>  >  create mode 100644 package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
 > 
->> When building rust from source, the longest part is building the LLVM
->> backend.
->>
->> On a 4-core i5-7500 CPU @ 3.40GHz, TestRust takes 60 minutes. But on a
->> 4-core i3-4010U CPU @ 1.70GHz, it does takes nearly 3 hours...
+>  > diff --git
+>  > a/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+>  > b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+>  > new file mode 100644
+>  > index 000000000000..c0aabed542c6
+>  > --- /dev/null
+>  > +++ b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
+>  > @@ -0,0 +1,42 @@
+>  > +From c581e6037ec7ab2f9cd615f6ffa149b4d0a5638c Mon Sep 17 00:00:00 2001
+>  > +From: Baruch Siach <baruch@tkos.co.il>
+>  > +Date: Tue, 19 Jun 2018 15:31:52 +0300
+>  > +Subject: [PATCH] portable.h: fix build with gcc older than 4.8
+>  > +
+>  > +__builtin_bswap16 is available in all gcc architectures only since
+>  > +version 4.8. Older gcc versions fail to build:
+>  > +
+>  > +imx_sdp.o: In function `perform_dcd':
+>  > +.../imx_sdp.c:1138: undefined reference to `__builtin_bswap16'
+>  > +imx_sdp.o: In function `write_dcd_table_ivt':
+>  > +.../imx_sdp.c:457: undefined reference to `__builtin_bswap16'
+>  > +imx_sdp.o: In function `write_dcd':
+>  > +.../imx_sdp.c:410: undefined reference to `__builtin_bswap16'
+>  > +imx_sdp.o: In function `init_header':
+>  > +.../imx_sdp.c:1075: undefined reference to `__builtin_bswap16'
+>  > +
+>  > +Use a local implementation instead.
+>  > +
+>  > +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>  > +---
+>  > +Upstream status: https://github.com/boundarydevices/imx_usb_loader/pull/82
+>  > +
+>  > + portable.h | 2 +-
+>  > + 1 file changed, 1 insertion(+), 1 deletion(-)
+>  > +
+>  > +diff --git a/portable.h b/portable.h
+>  > +index 364fe47b212a..364832b5ea69 100644
+>  > +--- a/portable.h
+>  > ++++ b/portable.h
+>  > +@@ -58,7 +58,7 @@ extern int debugmode;
+>  > + #ifdef __GNUC__
+>  > + #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+>  > + #define BE32(x) __builtin_bswap32(x)
+>  > +-#define BE16(x) __builtin_bswap16(x)
+>  > ++#define BE16(x) (x<<8 | x>>8)
 > 
-> OK, so it is not crazy that the Gitlab instances are not able to build
-> this. So, I'd say we need to:
-> 
->  - In the short term, disable this test from the Gitlab testing. Do you
->    think you could look into this ?
-> 
->  - In the mid/long term, have our own Gitlab instances, that have more
->    horsepower and no limit in the duration of jobs.
+> I take it this is never called on anything where the double evaluation
+> causes any side effects?
 
- I actually have spare cycles @work, but I'm lacking the time to set up a gitlab
-runner instance. I'm also lacking in disk space but for the tests it should be fine.
+ Even so, x without parenthesis around it is extremely dangerous...
+
+ Since this is inside __GNUC__, we could just use an expression statement like
+in the kernel:
+
+#define BE16(x) \
+({ \
+	typeof(x) __x = (x); \
+	(__x<<8 | __x>>8); \
+})
 
  Regards,
  Arnout
+
+> 
+> Committed, thanks.
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
