@@ -1,107 +1,99 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 21 Jun 2018 23:56:52 +0200
-Subject: [Buildroot] [PATCH] imx-usb-loader: fix build with older gcc
-In-Reply-To: <87tvpyo5xc.fsf@dell.be.48ers.dk>
-References: <53fcb79e408e468aaa45b7adc6ba0f92aba03702.1529419481.git.baruch@tkos.co.il>
- <87tvpyo5xc.fsf@dell.be.48ers.dk>
-Message-ID: <ad92c4bc-c60a-6312-c484-0f7c447efa0a@mind.be>
+From: Martin Bark <martin@barkynet.com>
+Date: Thu, 21 Jun 2018 23:04:25 +0100
+Subject: [Buildroot] [PATCH v2 1/3] package/ca-certificates: don't hash
+ certificates.crt
+In-Reply-To: <20180618163931.4531ccb3@windsurf>
+References: <20180616220601.4629-1-martin@barkynet.com>
+ <20180616220601.4629-2-martin@barkynet.com>
+ <20180617212547.4bc868c3@windsurf>
+ <CAFGQKxeOmRCBUu7XFCDkpRbFV51F0=A8htjRMc75rKQA8_VtoQ@mail.gmail.com>
+ <20180618163931.4531ccb3@windsurf>
+Message-ID: <CAFGQKxcC+jryJo8RBHU00ATeRqMqmbTn_+4jcgHqj+_=kH0mLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thomas,
 
+On 18 June 2018 at 15:39, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> On Mon, 18 Jun 2018 10:51:34 +0100, Martin Bark wrote:
+>
+>> > output/target$ ls -l etc/ssl/certs/128805a3.0
+>> > lrwxrwxrwx 1 thomas thomas 35 Jun 17 20:58 etc/ssl/certs/128805a3.0 -> EE_Certification_Centre_Root_CA.pem
+>>
+>> Did you check other hashes under etc/ssl/certs/ ? Check for any hashes
+>> that link to ca-certificates.crt. I suspect you have a different hash
+>> pointing to ca-certificates.
+>
+> There are no files in /etc/ssl/certs that are symlinks to
+> ca-certificates.crt:
+>
+> output/target$ ls -l etc/ssl/certs/| grep ca-certificates.crt
+> -rw-r--r-- 1 thomas thomas 207436 Jun 18 15:30 ca-certificates.crt
 
-On 19-06-18 22:52, Peter Korsgaard wrote:
->>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
-> 
->  > Since the last version bump imx-usb-loader uses __builtin_bswap16 which
->  > is not universally available in gcc older than version 4.8. Add a patch
->  > switching to a local 16-bit bytes swap implementation.
-> 
->  > Should fix:
->  > http://autobuild.buildroot.net/results/a63/a63b593b7ef3b6d32e755afe42b77d47dbf0276e/
->  > http://autobuild.buildroot.net/results/48c/48c95cfc65f99fa02be81a11303ba8999f57091a/
->  > http://autobuild.buildroot.net/results/c9d/c9d4f99b49ddb9b2ce08fce7672dd7c70cf62912/
-> 
->  > Cc: Adam Duskett <aduskett@gmail.com>
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->  > ---
->  >  ....h-fix-build-with-gcc-older-than-4.8.patch | 42 +++++++++++++++++++
->  >  1 file changed, 42 insertions(+)
->  >  create mode 100644 package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
-> 
->  > diff --git
->  > a/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
->  > b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
->  > new file mode 100644
->  > index 000000000000..c0aabed542c6
->  > --- /dev/null
->  > +++ b/package/imx-usb-loader/0001-portable.h-fix-build-with-gcc-older-than-4.8.patch
->  > @@ -0,0 +1,42 @@
->  > +From c581e6037ec7ab2f9cd615f6ffa149b4d0a5638c Mon Sep 17 00:00:00 2001
->  > +From: Baruch Siach <baruch@tkos.co.il>
->  > +Date: Tue, 19 Jun 2018 15:31:52 +0300
->  > +Subject: [PATCH] portable.h: fix build with gcc older than 4.8
->  > +
->  > +__builtin_bswap16 is available in all gcc architectures only since
->  > +version 4.8. Older gcc versions fail to build:
->  > +
->  > +imx_sdp.o: In function `perform_dcd':
->  > +.../imx_sdp.c:1138: undefined reference to `__builtin_bswap16'
->  > +imx_sdp.o: In function `write_dcd_table_ivt':
->  > +.../imx_sdp.c:457: undefined reference to `__builtin_bswap16'
->  > +imx_sdp.o: In function `write_dcd':
->  > +.../imx_sdp.c:410: undefined reference to `__builtin_bswap16'
->  > +imx_sdp.o: In function `init_header':
->  > +.../imx_sdp.c:1075: undefined reference to `__builtin_bswap16'
->  > +
->  > +Use a local implementation instead.
->  > +
->  > +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->  > +---
->  > +Upstream status: https://github.com/boundarydevices/imx_usb_loader/pull/82
->  > +
->  > + portable.h | 2 +-
->  > + 1 file changed, 1 insertion(+), 1 deletion(-)
->  > +
->  > +diff --git a/portable.h b/portable.h
->  > +index 364fe47b212a..364832b5ea69 100644
->  > +--- a/portable.h
->  > ++++ b/portable.h
->  > +@@ -58,7 +58,7 @@ extern int debugmode;
->  > + #ifdef __GNUC__
->  > + #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
->  > + #define BE32(x) __builtin_bswap32(x)
->  > +-#define BE16(x) __builtin_bswap16(x)
->  > ++#define BE16(x) (x<<8 | x>>8)
-> 
-> I take it this is never called on anything where the double evaluation
-> causes any side effects?
+I did some more testing and found sometimes by chance it does work,
+however, i was able to reproduce the issue as follows
 
- Even so, x without parenthesis around it is extremely dangerous...
+ docker run -it --rm buildroot/base:20180318.1724 bash
+ git clone git://git.busybox.net/buildroot
+ cd buildroot
+ make olddefconfig
+ make ca-certificates
 
- Since this is inside __GNUC__, we could just use an expression statement like
-in the kernel:
+you will see an output like this at the end of the build
 
-#define BE16(x) \
-({ \
-	typeof(x) __x = (x); \
-	(__x<<8 | __x>>8); \
-})
+ # Create symlinks to the certificates by their hash values
+ /home/br-user/buildroot/output/host/bin/c_rehash
+/home/br-user/buildroot/output/target/etc/ssl/certs
+ Doing /home/br-user/buildroot/output/target/etc/ssl/certs
+ WARNING: Skipping duplicate certificate OpenTrust_Root_CA_G1.pem
 
- Regards,
- Arnout
+and one the the hashes will be wrong
 
-> 
-> Committed, thanks.
-> 
+ $ ls -l output/target/etc/ssl/certs/| grep ca-certificates.crt
+ lrwxrwxrwx 1 br-user br-user     19 Jun 21 21:52 87229d21.0 ->
+ca-certificates.crt
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+the incorrect hash is the one mentioned in the warning
+
+ $ ls -l /etc/ssl/certs/87229d21.0
+ lrwxrwxrwx 1 root root 24 Mar 18 16:30 /etc/ssl/certs/87229d21.0 ->
+OpenTrust_Root_CA_G1.pem
+
+The key issue is the
+
+  WARNING: Skipping duplicate certificate xxxxx
+
+where xxxx is the name of one of the files under etc/ssl/certs.
+Sometimes it's ca-certificates.crt and hence you don't see any issue
+(as you found).  Sometime it's one of the CA files which is the bug
+i'm trying to fix.  You can run c_rehash directly
+
+ ./output/host/bin/c_rehash ./output/target/etc/ssl/certs
+
+and you will see the warning.  If you rm
+output/target/etc/ssl/certs/ca-certificates.crt and try again then the
+warning will go.
+
+I had not released quite how random the bug.  It certainly is not
+always EE_Certification_Centre_Root_CA.pem, it can be any CA that goes
+wrong.  The commit message could be changed to make it clearer the bug
+does not allows happen to EE_Certification_Centre_Root_CA.pem but i'm
+100% sure this is a bug that needs fixing.
+
+Thanks
+
+Martin
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
