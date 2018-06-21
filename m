@@ -1,56 +1,79 @@
-From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Thu, 21 Jun 2018 10:25:55 +0200
-Subject: [Buildroot] [RFC 1/1] support: add qt5bump script
-In-Reply-To: <20180620175848.ttom7pvqsqdj4x65@archlinux>
-References: <20180619022835.32530-1-gael.portay@savoirfairelinux.com>
- <56b3f748-6f38-fea7-9e83-14699817b73e@armadeus.com>
- <20180620175848.ttom7pvqsqdj4x65@archlinux>
-Message-ID: <585ece8d-abed-03bd-8647-6718b4e541fa@armadeus.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 21 Jun 2018 10:48:45 +0200
+Subject: [Buildroot] [RFC PATCH v4 4/9] libgtk3: remove patch to disable
+ atk-bridge support
+In-Reply-To: <CAMWSM7jSxBUZWWayCT_GcxP23P7PBw_PrfD8MnVDfERT_EqK3w@mail.gmail.com>
+References: <20180610205417.13963-1-joseph.kogut@gmail.com>
+ <20180614224820.27126-1-joseph.kogut@gmail.com>
+ <20180614224820.27126-5-joseph.kogut@gmail.com>
+ <20180615215331.56328861@windsurf>
+ <CAMWSM7jSxBUZWWayCT_GcxP23P7PBw_PrfD8MnVDfERT_EqK3w@mail.gmail.com>
+Message-ID: <20180621104845.4bcc2c68@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Ga?l,
+Hello,
 
-On 06/20/2018 07:58 PM, Ga?l PORTAY wrote:
-> Hi S?bastien,
+On Wed, 20 Jun 2018 11:05:03 -0700, Joseph Kogut wrote:
+
+> > Could we instead keep them optional, by improving this patch ? We
+> > really try to keep dependencies to a reasonable level in Buildroot, so
+> > it would be nice if we could avoid making those mandatory dependencies
+> > of libgtk3.
+> >  
 > 
-> On Wed, Jun 20, 2018 at 06:36:23PM +0200, S?bastien Szymanski wrote:
->> Hi,
->>
->> On 06/19/2018 04:28 AM, Ga?l PORTAY wrote:
->>> (...)
->>
->> Last time I bumped a Qt version, I was surprised that Buildroot hasn't
->> such a script and I wrote one too but definitely not as good as yours ! :-)
->>
+> That's a great point, and it's something I hadn't thought of. Would
+> you recommend selectively applying the patch to disable the dependency
+> on atk-bridge, or some other approach?
 > 
-> Thanks ;)
-> 
->> I tried your script on the 2018.02.x branch to bump Qt to 5.9.6. It
->> ended with the following error:
->>
->> make: *** empty string invalid as file name.  Stop.
->>
-> 
-> Did you managed to understand why it ended with such error? I have never
-> met that issue.
-> 
+> Are there any examples of selectively applying patches that I can use
+> as a reference?
 
-I called the script like this:
+We don't want to apply patches conditionally. Instead the patch
+*itself* should be smarter, and only use atk if available.
 
-$ ./support/scripts/qt5bump 5.9.6
+> > > ---- a/configure.ac
+> > > -+++ b/configure.ac
+> > > -@@ -1349,11 +1349,7 @@
+> > > - # Check for Accessibility Toolkit flags
+> > > - ########################################
+> > > -
+> > > --if test x$enable_x11_backend = xyes; then
+> > > --   ATK_PACKAGES="atk atk-bridge-2.0"
+> > > --else
+> > > --   ATK_PACKAGES="atk"
+> > > --fi
+> > > -+ATK_PACKAGES="atk"
+> > > -
+> > > - PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
 
-so "${O:+O=$O}" in the xargs call is empty.
+A rough idea is something like this:
 
-Removing the double quotes make it works.
+PKG_CHECK_MODULES(ATK, atk)
 
-Regards,
+if test x$enable_x11_backend = xyes; then
+	PKG_CHECK_MODULES(ATK_BRIDGE, atk-bridge-2.0,
+			  AC_DEFINE([HAVE_ATK_BRIDGE], [1]); ATK_BRIDGE_PACKAGE=atk-bridge-2.0)
+fi
 
+In configure.ac, add $ATK_BRIDGE_PACKAGE in:
+
+GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $WAYLAND_PACKAGES $MIR_PACKAGES epoxy >= epoxy_required_version"
+
+And in gtkaccessibility.c, use #ifdef HAVE_ATK_BRIDGE instead of #ifdef
+GDK_WINDOWING_X11 to guard the include of <atk-bridge.h> and the call
+to atk_bridge_adaptor_init().
+
+Of course, those are rough guidelines, you will probably need to adjust
+stuff to actually make it work :-)
+
+Best regards,
+
+Thomas Petazzoni
 -- 
-S?bastien Szymanski
-Software engineer, Armadeus Systems
-Tel: +33 (0)9 72 29 41 44
-Fax: +33 (0)9 72 28 79 26
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
