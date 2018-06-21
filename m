@@ -1,73 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 22 Jun 2018 00:18:00 +0200
-Subject: [Buildroot] [PATCH 1/1] apache: add init sysv script
-In-Reply-To: <20180620210021.12253-1-fontaine.fabrice@gmail.com>
-References: <20180620210021.12253-1-fontaine.fabrice@gmail.com>
-Message-ID: <6e1b810f-90a1-39c6-7692-dadc34d71d89@mind.be>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Thu, 21 Jun 2018 16:32:03 -0700
+Subject: [Buildroot] [RFC PATCH v4 8/9] lld: new package
+In-Reply-To: <20180621144543.681def58@windsurf>
+References: <20180610205417.13963-1-joseph.kogut@gmail.com>
+ <20180614224820.27126-1-joseph.kogut@gmail.com>
+ <20180614224820.27126-9-joseph.kogut@gmail.com>
+ <20180615230106.0bebcbb3@windsurf>
+ <CAMWSM7hzA-hz5sAcpanoYQKYmX_eu-bro6zZDm0GEgDC=nNQjw@mail.gmail.com>
+ <20180621144543.681def58@windsurf>
+Message-ID: <CAMWSM7hCm3r8VosZRx_kyvzmTvKpGvscEF5CtDk7xb89vOtD6w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, Jun 21, 2018 at 5:45 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+<snip>
+> Having support for using llvm/clang/lld as a toolchain replacement was
+> discussed, and it was on Valentin's radar. It would definitely be
+> interesting to see some progress in this area, even though I believe it
+> will be tricky as I'm sure a large number of packages will not build
+> nicely with clang, the Linux kernel being an important package falling
+> into this category.
+>
 
+I'm sure integrating Clang will be tricky. Even worse, GCC and Clang
+are very competitive nowadays, so the utility is dubious. Furthermore,
+packages such as Chromium that don't build with GCC can depend on
+Clang and setup their build process accordingly, without replacing the
+entire toolchain.
 
-On 20-06-18 23:00, Fabrice Fontaine wrote:
-> sysv init script is just a wrapper to apachectl
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/apache/S50apache | 12 ++++++++++++
->  package/apache/apache.mk |  5 +++++
->  2 files changed, 17 insertions(+)
->  create mode 100644 package/apache/S50apache
-> 
-> diff --git a/package/apache/S50apache b/package/apache/S50apache
-> new file mode 100644
-> index 0000000000..623a7eef3b
-> --- /dev/null
-> +++ b/package/apache/S50apache
-> @@ -0,0 +1,12 @@
-> +#!/bin/sh
-> +
-> +case "$1" in
-> +  start|restart|graceful|graceful-stop|stop)
-> +	apachectl -k $1
-> +	;;
-> +  *)
-> +	echo "Usage: $0 {start|restart|graceful|graceful-stop|stop}"
+Even without substituting Clang for GCC, using LLVM's linker is still
+interesting. The LLVM guys claim drop-in GNU compatibility and 10-20x
+faster linking just by substituting LLD for GNU ld. Additionally, LLD
+supports identical code folding, which can generate smaller binaries.
 
- In our "init script standardisation" effort, I think the idea was to always
-support start, stop, restart and reload. Could you add a reload command that
-maps onto restart?
-
- Regards,
- Arnout
-
-> +	exit 1
-> +esac
-> +
-> +exit $?
-> diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-> index 23414fe44d..f4c522916e 100644
-> --- a/package/apache/apache.mk
-> +++ b/package/apache/apache.mk
-> @@ -92,4 +92,9 @@ define APACHE_CLEANUP_TARGET
->  endef
->  APACHE_POST_INSTALL_TARGET_HOOKS += APACHE_CLEANUP_TARGET
->  
-> +define APACHE_INSTALL_INIT_SYSV
-> +	$(INSTALL) -D -m 0755 package/apache/S50apache \
-> +		$(TARGET_DIR)/etc/init.d/S50apache
-> +endef
-> +
->  $(eval $(autotools-package))
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+However, I finished testing a few builds today with LLD and a config
+that includes LLVM, Qemu, libgtk3, X.org, and several other large
+packages (total build time was ~45 minutes) and the difference between
+GNU ld and LLD was ~6 seconds. There was no difference in generated
+binary size. Maybe my build wasn't actually using LLD, I'll have to do
+some more testing.
