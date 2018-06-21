@@ -1,38 +1,99 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 21 Jun 2018 13:33:42 -0300
-Subject: [Buildroot] [PATCH 0/2] pamtester: new package
-Message-ID: <20180621163344.24552-1-casantos@datacom.com.br>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 21 Jun 2018 12:15:33 -0500
+Subject: [Buildroot] [PATCH v6 5/7] support/scripts/cpedb.py: new CPE XML
+ helper
+In-Reply-To: <1529601335-38937-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1529601335-38937-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1529601335-38937-6-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-pamtester is a tiny utility program to test the pluggable authentication
-modules (PAM) facility, which is a de facto standard of unified authentication
-management mechanism in many unices and similar OSes including Solaris, HP-UX,
-*BSD, MacOSX and Linux.
+Python class which consumes a NIST CPE XML and provides helper
+functions to access and search the db's data.
 
-While specifically designed to help PAM module authors to test their modules,
-that might also be handy for system administrators interested in building a
-centralised authentication system using common standards such as NIS, SASL and
-LDAP.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+v5
+[Ricardo
+ - Fixed typo in join/split of cpe str without version
+ - Removed extra prints as they aren't needed when we have the
+   output reports/stdout
+ - Updated v4 comments about general flake formatting cleanup
+ - Incorporated parts of patch 1/2 suggestions for optimizations
 
-Carlos Santos (2):
-  pamtester: new package
-  DEVELOPERS: add myself to package/pamtester
+[Arnout
+ - added pre-processing of cpe values into two sets, one with
+   and one without version
+ - Collectly with Ricardo, decided to move cpe class to this
+   seperate script
 
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/pamtester/0001-fix-spelling-errors.patch | 19 +++++++++++++++++++
- package/pamtester/Config.in                      | 11 +++++++++++
- package/pamtester/pamtester.hash                 |  2 ++
- package/pamtester/pamtester.mk                   | 13 +++++++++++++
- 6 files changed, 47 insertions(+)
- create mode 100644 package/pamtester/0001-fix-spelling-errors.patch
- create mode 100644 package/pamtester/Config.in
- create mode 100644 package/pamtester/pamtester.hash
- create mode 100644 package/pamtester/pamtester.mk
+v1 -> v4
+ - No version
+---
+ support/scripts/cpedb.py | 52 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 support/scripts/cpedb.py
 
+diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
+new file mode 100644
+index 0000000..77d1d17
+--- /dev/null
++++ b/support/scripts/cpedb.py
+@@ -0,0 +1,52 @@
++import sys
++import urllib2
++import xmltodict
++import gzip
++from StringIO import StringIO
++
++CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
++
++
++class CPEDB:
++    all_cpedb = dict()
++    all_cpes = set()
++    all_cpes_no_version = set()
++
++    def get_xml_dict(self):
++        print("CPE: Fetching xml manifest...")
++        try:
++            compressed_cpe_file = urllib2.urlopen(CPE_XML_URL)
++            print("CPE: Unzipping xml manifest...")
++            cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
++            print("CPE: Converting xml manifest to dict...")
++            self.all_cpedb = xmltodict.parse(cpe_file)
++
++            for cpe in self.all_cpedb['cpe-list']['cpe-item']:
++                cpe_str = cpe['cpe-23:cpe23-item']['@name']
++                cpe_str_no_version = self.get_cpe_no_version(cpe_str)
++                self.all_cpes.add(cpe_str)
++                self.all_cpes_no_version.add(cpe_str_no_version)
++
++        except urllib2.HTTPError:
++            print("CPE: HTTP Error: %s" % CPE_XML_URL)
++            sys.exit(1)
++        except urllib2.URLError:
++            print("CPE: URL Error: %s" % CPE_XML_URL)
++            sys.exit(1)
++
++    def find_partial(self, cpe_str):
++        cpe_str_no_version = self.get_cpe_no_version(cpe_str)
++        if cpe_str_no_version in self.all_cpes_no_version:
++            return cpe_str_no_version
++
++    def find(self, cpe_str):
++        if cpe_str in self.all_cpes:
++            return cpe_str
++
++    def get_cpe_no_version(self, cpe):
++        return ":".join(cpe.split(":")[:5])
++
++    def get_nvd_url(self, cpe_str):
++        return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
++                urllib2.quote(cpe_str) + \
++                "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
 -- 
-2.14.4
+1.9.1
