@@ -1,104 +1,72 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 20 Jun 2018 21:29:55 -0500
-Subject: [Buildroot] [RFC PATCH v4 9/9] chromium: new package
-In-Reply-To: <CAMWSM7jmYPhWONsnKGCStTO+YvkGK3T6x_P8AJmFVU6DnnTw8A@mail.gmail.com>
-References: <20180610205417.13963-1-joseph.kogut@gmail.com>
- <20180614224820.27126-1-joseph.kogut@gmail.com>
- <20180614224820.27126-10-joseph.kogut@gmail.com>
- <CANQCQpYM5oyJpk-=G8UvYtHHoXVGt6wVRU8=GPN9KBK0hL9FLQ@mail.gmail.com>
- <CAMWSM7jmYPhWONsnKGCStTO+YvkGK3T6x_P8AJmFVU6DnnTw8A@mail.gmail.com>
-Message-ID: <CANQCQpYZX7ysz7k-VgfwXkz=YT7TReKgMJkpYS5+1iDqhqPCvw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 21 Jun 2018 08:00:42 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-06-20
+Message-ID: <20180621060042.5829F20DC3@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joseph,
+Hello,
 
-On Wed, Jun 20, 2018 at 6:07 PM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
-> Matt,
->
-> On Wed, Jun 20, 2018 at 1:57 PM Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->>
->> Joseph,
->>
->> On Thu, Jun 14, 2018 at 5:48 PM, Joseph Kogut <joseph.kogut@gmail.com> wrote:
->> >
->> [snip]
->>
->> > diff --git a/package/chromium/Config.in b/package/chromium/Config.in
->> > new file mode 100644
->> > index 0000000000..aa71d0e2dd
->> > --- /dev/null
->> > +++ b/package/chromium/Config.in
->> > @@ -0,0 +1,46 @@
->> > +config BR2_PACKAGE_CHROMIUM
->> > +       bool "chromium"
->> > +       depends on BR2_PACKAGE_HAS_LIBGL
->> > +       depends on BR2_PACKAGE_XORG7
->> > +       depends on BR2_TOOLCHAIN_USES_GLIBC
->> > +       depends on BR2_arm || BR2_aarch64 || BR2_i386 || BR2_x86_64
->> > +       select BR2_PACKAGE_ALSA_LIB
->> > +       select BR2_PACKAGE_CUPS
->> > +       select BR2_PACKAGE_DBUS
->> > +       select BR2_PACKAGE_FREETYPE
->> > +       select BR2_PACKAGE_HARFBUZZ
->> > +       select BR2_PACKAGE_LLVM_ENABLE_HOST_ARCH
->> > +       select BR2_PACKAGE_HOST_CLANG
->> > +       select BR2_PACKAGE_HOST_LLD
->> > +       select BR2_PACKAGE_HOST_NINJA
->> > +       select BR2_PACKAGE_HOST_NODEJS
->> > +       select BR2_PACKAGE_HOST_PYTHON
->> > +       select BR2_PACKAGE_JPEG
->> > +       select BR2_PACKAGE_LIBDRM
->> > +       select BR2_PACKAGE_LIBERATION # runtime
->> > +       select BR2_PACKAGE_LIBGLIB2
->> > +       select BR2_PACKAGE_LIBGTK2 if !BR2_PACKAGE_LIBGTK3_X11
->> > +       select BR2_PACKAGE_LIBKRB5
->> > +       select BR2_PACKAGE_LIBNSS
->> > +       select BR2_PACKAGE_LIBPNG
->> > +       select BR2_PACKAGE_PCIUTILS
->> > +       select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
->> > +       select BR2_PACKAGE_XLIB_LIBXCURSOR
->> > +       select BR2_PACKAGE_XLIB_LIBXI if !BR2_PACKAGE_LIBGTK3_X11
->> > +       select BR2_PACKAGE_XLIB_LIBXRANDR
->> > +       select BR2_PACKAGE_XLIB_LIBXSCRNSAVER
->> > +       select BR2_PACKAGE_XLIB_LIBXTST if !BR2_PACKAGE_LIBGTK3_X11
->> > +
->> > +config BR2_PACKAGE_CHROMIUM_TARGET_ARCH
->> > +       string
->> > +       default "arm" if BR2_arm
->> > +       default "arm64" if BR2_aarch64
->> > +       default "x86" if BR2_i386
->> > +       default "x64" if BR2_x86_64
->> > +       default "mips" if BR2_mips
->> > +
->> > +comment "chromium needs toolchain w/ Glibc"
->> > +       depends on !BR2_TOOLCHAIN_USES_GLIBC
->> > +
->> > +comment "chromium depends on X.org and needs an OpenGL backend"
->> > +       depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_HAS_LIBGL
->>
->> I have not checked through all the threads to see if this already is reported.
->>
->> Using master as of today and the v4 patchset adjusted for
->> merges/bumps, I got the following failure.  Is there a minimum GCC
->> version that should be a dependency?
->> https://paste.ubuntu.com/p/dKsNXBms5x/
->>
->> Matt
->
-> Doing some cursory searching, it seems the c++14 standard is supported
-> in GCC 4.9.0 and later. Before that, it was called c++1y.
->
-> More information here:
-> https://stackoverflow.com/questions/31965413/compile-c14-code-with-g
->
-> I'll go ahead and add that as a dependency for the next version.
->
+Build statistics for 2018-06-20
+===============================
 
-Ah, ic my RHEL7.4 is GCC4.8.5 and this must have been a host tool being built.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  18 |   2 |   0 |  20 |
+   2018.05.x |  17 |   0 |   0 |  17 |
+      master | 100 |  13 |   0 | 113 |
 
-Matt
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                  cc-tool-0.26 | 2 
+
+
+Detail of failures
+------------------
+
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/217119d57bfb847173cdce2c41ba39234c6cd210 |     
+        m68k |                   cc-tool-0.26 | NOK | http://autobuild.buildroot.net/results/1320c76315b83530fa816b8a0d6232dd9d59f63a |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                    host-rustc | 3 
+               mono-5.12.0.226 | 2 
+                      x265-2.8 | 2 
+               aircrack-ng-1.2 | 1 
+                 expect-5.45.3 | 1 
+              mjpegtools-2.1.0 | 1 
+                 opencv3-3.3.0 | 1 
+package/qt5/qt5base/qt5base... | 1 
+                  samba4-4.8.2 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                aircrack-ng-1.2 | NOK | http://autobuild.buildroot.net/results/c1032bd195d46d39a69deda4e4988c00c6331ca1 |     
+        i686 |                  expect-5.45.3 | NOK | http://autobuild.buildroot.net/results/139c32d90f10b399046ea9697374bbf85938e3d3 | ORPH
+      mipsel |                     host-rustc | NOK | http://autobuild.buildroot.net/results/64abc2b5fd432220bb092b1d8198a30f0fb6f93b |     
+   powerpc64 |                     host-rustc | NOK | http://autobuild.buildroot.net/results/d5fa7b164b600d375643f8964d4555450425d9d3 |     
+      mipsel |                     host-rustc | NOK | http://autobuild.buildroot.net/results/507b4f86f9d9288ebd899390f547ae3242769272 |     
+     powerpc |               mjpegtools-2.1.0 | NOK | http://autobuild.buildroot.net/results/eb719da18bd385fbcaac7c233ee7ff6962c92b58 |     
+        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/85d1e36b62a0a4a5aedf1fab5b6ba286446d6d8b |     
+        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/84d161dd14d5418726abc8fe34672c7ac290de98 |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/0b1cc240bed97733c0236a57d461cfa59d2a18ef |     
+       sparc | package/qt5/qt5base/qt5base... | NOK | http://autobuild.buildroot.net/results/277496ff320958a85ca6c4beca32ae149429ef3c |     
+    mips64el |                   samba4-4.8.2 | NOK | http://autobuild.buildroot.net/results/2fe9fa8214a209431a5e897eee2e5a18469d6e93 |     
+         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/f2026139e38e0e24a237e83d8bc83b4038b38e4b |     
+         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/0fc38594ce010706fad7dee71bc6911241af1154 |     
+
+
+-- 
+http://autobuild.buildroot.net
