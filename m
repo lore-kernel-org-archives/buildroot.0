@@ -1,99 +1,143 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 21 Jun 2018 12:15:33 -0500
-Subject: [Buildroot] [PATCH v6 5/7] support/scripts/cpedb.py: new CPE XML
- helper
+Date: Thu, 21 Jun 2018 12:15:29 -0500
+Subject: [Buildroot] [PATCH v6 1/7] cpe-info: new make target
 In-Reply-To: <1529601335-38937-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1529601335-38937-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1529601335-38937-6-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1529601335-38937-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Python class which consumes a NIST CPE XML and provides helper
-functions to access and search the db's data.
+Similar to make legal-info, produce a csv delimited file containing
+all selected packages CPE identification.
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Have the pkg infra define CPE_ID_* defaults using the package name
+for the vendor and name as most CPE IDs seem to align with that
+assumption. Also use the pkg version as the CPE ID's version field.
+
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
-v5
-[Ricardo
- - Fixed typo in join/split of cpe str without version
- - Removed extra prints as they aren't needed when we have the
-   output reports/stdout
- - Updated v4 comments about general flake formatting cleanup
- - Incorporated parts of patch 1/2 suggestions for optimizations
+Changes
+v2
+[Thomas P
+ - Moved comment on conditionals back to this patchset where
+   the conditional is created vs later
 
-[Arnout
- - added pre-processing of cpe values into two sets, one with
-   and one without version
- - Collectly with Ricardo, decided to move cpe class to this
-   seperate script
+v3
+[Thomas P
+ - Merged infra define CPE_ID_*  into this patch
+ - Report all packages vs restricting to just allowing based on if
+   the VENDOR was set (v2). This now represents Thomas P's original
+   idea to report everything.  At first I felt I should restrict
+   the reporting to those CPE IDs we had made sure were correct.
+   Turns out we should have actually let the script handle fixing
+   the CPEs and just make a complete design of this up front.
 
-v1 -> v4
- - No version
+[Matt
+ - Moved to using the _project on all vendors instead of just name
 ---
- support/scripts/cpedb.py | 52 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 support/scripts/cpedb.py
+ Makefile               | 17 ++++++++++++++++-
+ package/pkg-generic.mk | 13 +++++++++++++
+ package/pkg-utils.mk   |  8 ++++++++
+ 3 files changed, 37 insertions(+), 1 deletion(-)
 
-diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
-new file mode 100644
-index 0000000..77d1d17
---- /dev/null
-+++ b/support/scripts/cpedb.py
-@@ -0,0 +1,52 @@
-+import sys
-+import urllib2
-+import xmltodict
-+import gzip
-+from StringIO import StringIO
+diff --git a/Makefile b/Makefile
+index 8d25c8a..4cc95b7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -146,7 +146,7 @@ nobuild_targets := source %-source \
+ 	clean distclean help show-targets graph-depends \
+ 	%-graph-depends %-show-depends %-show-version \
+ 	graph-build graph-size list-defconfigs \
+-	savedefconfig printvars
++	savedefconfig printvars cpe-info %-cpe-info
+ ifeq ($(MAKECMDGOALS),)
+ BR_BUILDING = y
+ else ifneq ($(filter-out $(nobuild_targets),$(MAKECMDGOALS)),)
+@@ -233,6 +233,7 @@ LEGAL_MANIFEST_CSV_TARGET = $(LEGAL_INFO_DIR)/manifest.csv
+ LEGAL_MANIFEST_CSV_HOST = $(LEGAL_INFO_DIR)/host-manifest.csv
+ LEGAL_WARNINGS = $(LEGAL_INFO_DIR)/.warnings
+ LEGAL_REPORT = $(LEGAL_INFO_DIR)/README
++CPE_MANIFEST_CSV = $(BASE_DIR)/cpe-manifest.csv
+ 
+ BR2_CONFIG = $(CONFIG_DIR)/.config
+ 
+@@ -802,6 +803,19 @@ legal-info: dirs legal-info-clean legal-info-prepare $(foreach p,$(PACKAGES),$(p
+ 		mv .legal-info.sha256 legal-info.sha256)
+ 	@echo "Legal info produced in $(LEGAL_INFO_DIR)"
+ 
++.PHONY: cpe-info-clean
++cpe-info-clean:
++	@rm -f $(CPE_MANIFEST_CSV)
 +
-+CPE_XML_URL = "https://static.nvd.nist.gov/feeds/xml/cpe/dictionary/official-cpe-dictionary_v2.3.xml.gz"
++.PHONY: cpe-info-prepare
++cpe-info-prepare:
++	@$(call MESSAGE,"Gathering CPE info")
++	@$(call cpe-manifest,CPE ID,CVE PATCHED,PACKAGE,VERSION,SOURCE SITE)
 +
++.PHONY: cpe-info
++cpe-info: cpe-info-clean cpe-info-prepare $(foreach p,$(PACKAGES),$(p)-cpe-info)
++	@echo "CPE info produced in $(CPE_MANIFEST_CSV)"
 +
-+class CPEDB:
-+    all_cpedb = dict()
-+    all_cpes = set()
-+    all_cpes_no_version = set()
+ .PHONY: show-targets
+ show-targets:
+ 	@echo $(sort $(PACKAGES)) $(sort $(TARGETS_ROOTFS))
+@@ -1070,6 +1084,7 @@ help:
+ 	@echo '  source                 - download all sources needed for offline-build'
+ 	@echo '  external-deps          - list external packages used'
+ 	@echo '  legal-info             - generate info about license compliance'
++	@echo '  cpe-info               - generate info about security CPE identification'
+ 	@echo '  printvars              - dump all the internal variables'
+ 	@echo
+ 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 501dd3d..1bd3f47 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -870,6 +870,18 @@ else
+ $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
+ endif
+ 
++$(2)_CPE_ID_VENDOR ?= $$($(2)_NAME)_project
++$(2)_CPE_ID_NAME ?= $$($(2)_NAME)
++$(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
++$(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
 +
-+    def get_xml_dict(self):
-+        print("CPE: Fetching xml manifest...")
-+        try:
-+            compressed_cpe_file = urllib2.urlopen(CPE_XML_URL)
-+            print("CPE: Unzipping xml manifest...")
-+            cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
-+            print("CPE: Converting xml manifest to dict...")
-+            self.all_cpedb = xmltodict.parse(cpe_file)
++$(1)-cpe-info: PKG=$(2)
++$(1)-cpe-info:
++ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
++	@$$(call MESSAGE,"Collecting cpe info")
++	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_CVE_PATCHED),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
++endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
 +
-+            for cpe in self.all_cpedb['cpe-list']['cpe-item']:
-+                cpe_str = cpe['cpe-23:cpe23-item']['@name']
-+                cpe_str_no_version = self.get_cpe_no_version(cpe_str)
-+                self.all_cpes.add(cpe_str)
-+                self.all_cpes_no_version.add(cpe_str_no_version)
+ # legal-info: declare dependencies and set values used later for the manifest
+ ifneq ($$($(2)_LICENSE_FILES),)
+ $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
+@@ -1011,6 +1023,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+ 	$(1)-clean-for-reconfigure \
+ 	$(1)-clean-for-reinstall \
+ 	$(1)-configure \
++	$(1)-cpe-info \
+ 	$(1)-depends \
+ 	$(1)-dirclean \
+ 	$(1)-external-deps \
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index c3acc22..11a2457 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -95,3 +95,11 @@ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-full
+ 	} && \
+ 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+ endef
 +
-+        except urllib2.HTTPError:
-+            print("CPE: HTTP Error: %s" % CPE_XML_URL)
-+            sys.exit(1)
-+        except urllib2.URLError:
-+            print("CPE: URL Error: %s" % CPE_XML_URL)
-+            sys.exit(1)
++#
++# cpe-info helper functions
++#
 +
-+    def find_partial(self, cpe_str):
-+        cpe_str_no_version = self.get_cpe_no_version(cpe_str)
-+        if cpe_str_no_version in self.all_cpes_no_version:
-+            return cpe_str_no_version
-+
-+    def find(self, cpe_str):
-+        if cpe_str in self.all_cpes:
-+            return cpe_str
-+
-+    def get_cpe_no_version(self, cpe):
-+        return ":".join(cpe.split(":")[:5])
-+
-+    def get_nvd_url(self, cpe_str):
-+        return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
-+                urllib2.quote(cpe_str) + \
-+                "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
++define cpe-manifest # cpe, cve patched, pkg name, version, url
++	echo '"$(1)","$(2)","$(3)","$(4)","$(5)"' >>$(CPE_MANIFEST_CSV)
++endef
 -- 
 1.9.1
