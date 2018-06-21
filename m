@@ -1,80 +1,179 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Thu, 21 Jun 2018 23:26:22 +0200
-Subject: [Buildroot] [PATCH v4 0/3] Add Xilinx ZynqMP and ZCU106 board
- support
-Message-ID: <1529616385-15826-1-git-send-email-luca@lucaceresoli.net>
+Date: Thu, 21 Jun 2018 23:26:24 +0200
+Subject: [Buildroot] [PATCH v4 2/3] uboot: zynqmp: generate SPL image with
+ PMUFW binary
+In-Reply-To: <1529616385-15826-1-git-send-email-luca@lucaceresoli.net>
+References: <1529616385-15826-1-git-send-email-luca@lucaceresoli.net>
+Message-ID: <1529616385-15826-3-git-send-email-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+In order to boot on the Xilinx ZynqMP SoCs, U-Boot SPL requires a
+recent PMU firmware loaded. Instruct U-Boot to add pmufw.bin to the
+boot.bin file together with U-Boot SPL, and the boot ROM will load
+both.
 
-this patchset adds basic support for the ZynqMP family of ARM64
-SoC+FPGA by Xilinx and for the ZCU106 board based on it.
+For this to work properly, a patch to U-Boot is needed. However this
+patch must be applied by each defconfig that wishes to use
+BR2_TARGET_UBOOT_ZYNQMP_PMUFW. If it were in boot/uboot/ to be applied
+unconditionally, it would break the build for configs using a U-Boot
+version higher than 2018.7-rc1 where the patch is already applied.
 
-The ZynqMP sets a few challenges that needed some work besides the
-usual defconfig + readme that is enough for more classic and simple
-SoCs.
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-This v4 addresses the comments received to v3 by Thomas. The main
-concern raised was that the code in v3 was copying some files into the
-U-Boot source tree before compilation, so the build would find
-them. This could not be done any better without changing the U-Boot
-source code, and so I fixed it in the U-Boot makefiles in the first
-place. With those changes to U-Boot, the Buildroot code has become a
-lot leaner, now almost trivial.
+---
+Changes v3 -> v4:
+ - don't copy the pmufw binary in the source tree, use an absolute path
+   to the download dir (which needs a patch from upstream to work)
+ - depend on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG (Thomas)
 
-The first 2 paches in my v3 series have already been applied.
+Changes v2 -> v3:
+ - don't use a "zynqmp-pmufw-binaries" package, just download a file
+ - define kconfig fixups in a variable, then define
+   UBOOT_KCONFIG_FIXUP_CMDS unconditionally at global scope (Thomas)
+ - use $(INSTALL), not cp (Thomas)
+ - $(...) instead of ${...} to reference make variables (Thomas)
 
-Patch 1 allows to pass an externally-supplied init file to U-Boot,
-which is needed to boot boards not supported in the U-Boot source
-code, or on the same boards but with a different
-configuration. Instead of copying the user-provided file inside the
-U-Boot source as in v3, I applied a patch (submitted upstream) so
-U-Boot is able to build that file without any copy.
-
-The next issue is the PMU (Platform Management Unit). It is a
-Microblaze core that handles power and clock gating and the like, and
-reprogramming it at runtime is necessary to boot any modern U-Boot and
-Linux. Since we can't build Microblaze code out of the ARM64
-toolchain, U-Boot obtains a pre-built binary using
-EXTRA_DOWNLOADS. This is added in patch 2. Until v3, the PMUFW had to
-be copied inside the U-Boot source. With a patch, now upstream, it is
-now possible to avoid the copy.
-
-With all these in place, patch 5 just adds the defconfig and board
-files.
-
-Luca
-
-
-Luca Ceresoli (3):
-  uboot: zynqmp: allow to use custom psu_init files
-  uboot: zynqmp: generate SPL image with PMUFW binary
-  configs: add Xilinx ZCU106 board (ZynqMP SoC)
-
- DEVELOPERS                                         |   2 +
- board/zynqmp/genimage.cfg                          |  28 ++++
- ...1-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch |  53 +++++++
- .../0002-arm64-zynqmp-Enable-booting-to-ATF.patch  | 115 ++++++++++++++
- ...p-accept-an-absolute-path-for-PMUFW_INIT_.patch |  68 ++++++++
- ...ynq-zynqmp-pass-the-PS-init-file-as-a-kco.patch | 175 +++++++++++++++++++++
- board/zynqmp/post-image.sh                         |  13 ++
- board/zynqmp/readme.txt                            |  51 ++++++
- boot/uboot/Config.in                               |  47 ++++++
- boot/uboot/uboot.mk                                |  27 ++++
- configs/zynqmp_zcu106_defconfig                    |  34 ++++
- 11 files changed, 613 insertions(+)
- create mode 100644 board/zynqmp/genimage.cfg
- create mode 100644 board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
- create mode 100644 board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.patch
+Changes v1 -> v2:
+ - split from a larger patch doing 2 things.
+---
+ ...p-accept-an-absolute-path-for-PMUFW_INIT_.patch | 68 ++++++++++++++++++++++
+ boot/uboot/Config.in                               | 14 +++++
+ boot/uboot/uboot.mk                                | 12 ++++
+ 3 files changed, 94 insertions(+)
  create mode 100644 board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-path-for-PMUFW_INIT_.patch
- create mode 100644 board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-init-file-as-a-kco.patch
- create mode 100755 board/zynqmp/post-image.sh
- create mode 100644 board/zynqmp/readme.txt
- create mode 100644 configs/zynqmp_zcu106_defconfig
 
+diff --git a/board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-path-for-PMUFW_INIT_.patch b/board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-path-for-PMUFW_INIT_.patch
+new file mode 100644
+index 000000000000..95ab7b3b75ca
+--- /dev/null
++++ b/board/zynqmp/patches/uboot/0003-arm64-zynqmp-accept-an-absolute-path-for-PMUFW_INIT_.patch
+@@ -0,0 +1,68 @@
++From c7df098a71e05dc81cee818747759e8060b59626 Mon Sep 17 00:00:00 2001
++From: Luca Ceresoli <luca@lucaceresoli.net>
++Date: Mon, 4 Jun 2018 12:21:01 +0200
++Subject: [PATCH] arm64: zynqmp: accept an absolute path for PMUFW_INIT_FILE
++
++The value of PMUFW_INIT_FILE is prefixed with "$(srctree)/", thus
++forcing it to be a relative path inside the U-Boot source tree. Since
++the PMUFW is a binary file generated outside of U-Boot, the PMUFW
++binary must be copied inside the U-Boot source tree before the
++build.
++
++This generates a few problems:
++
++ * if the source tree is shared among different out-of-tree builds,
++   they will pollute (and potentially corrupt) each other
++ * the source tree cannot be read-only
++ * any buildsystem must add a command to copy the PMUFW binary
++ * putting an externally-generated binary in the source tree is ugly
++   as hell
++
++Avoid these problems by accepting an absolute path for
++PMUFW_INIT_FILE. This would be as simple as removing the "$(srctree)/"
++prefix, but in order to keep backward compatibility we rather use the
++shell and readlink to get the absolute path even when starting from a
++relative path.
++
++Since 'readlink -f' produces an empty string if the file does not
++exist, we also add a check to ensure the file configured in
++PMUFW_INIT_FILE exists. Otherwise the build would exit successfully,
++but produce a boot.bin without PMUFW as if PMUFW_INIT_FILE were empty.
++
++Tested in the 12 possible combinations of:
++ - PMUFW_INIT_FILE empty, relative, absolute, non-existing
++ - building in-tree, in subdir, in other directory
++
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++Cc: Michal Simek <michal.simek@xilinx.com>
++Cc: Simon Glass <sjg@chromium.org>
++Cc: Emmanuel Vadot <manu@bidouilliste.com>
++Signed-off-by: Michal Simek <michal.simek@xilinx.com>
++Backported from upstream: https://git.denx.de/?p=u-boot.git;a=commit;h=c7df098a71e05dc81cee818747759e8060b59626
++---
++ scripts/Makefile.spl | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/scripts/Makefile.spl b/scripts/Makefile.spl
++index ef018b5b4056..252f13826d4c 100644
++--- a/scripts/Makefile.spl
+++++ b/scripts/Makefile.spl
++@@ -167,8 +167,14 @@ ifdef CONFIG_ARCH_ZYNQ
++ MKIMAGEFLAGS_boot.bin = -T zynqimage -R $(srctree)/$(CONFIG_BOOT_INIT_FILE)
++ endif
++ ifdef CONFIG_ARCH_ZYNQMP
+++ifneq ($(CONFIG_PMUFW_INIT_FILE),"")
+++spl/boot.bin: zynqmp-check-pmufw
+++zynqmp-check-pmufw: FORCE
+++	( cd $(srctree) && test -r $(CONFIG_PMUFW_INIT_FILE) ) \
+++		|| ( echo "Cannot read $(CONFIG_PMUFW_INIT_FILE)" && false )
+++endif
++ MKIMAGEFLAGS_boot.bin = -T zynqmpimage -R $(srctree)/$(CONFIG_BOOT_INIT_FILE) \
++-	-n $(srctree)/$(CONFIG_PMUFW_INIT_FILE)
+++	-n "$(shell cd $(srctree); readlink -f $(CONFIG_PMUFW_INIT_FILE))"
++ endif
++ 
++ spl/boot.bin: $(obj)/u-boot-spl.bin FORCE
++-- 
++2.7.4
++
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index b8bff9949e3d..ba05afa98b48 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -373,6 +373,20 @@ config BR2_TARGET_UBOOT_ZYNQMP
+ 
+ if BR2_TARGET_UBOOT_ZYNQMP
+ 
++config BR2_TARGET_UBOOT_ZYNQMP_PMUFW
++	string "PMU firmware location"
++	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
++	help
++	  Location of a PMU firmware binary.
++
++	  If set to an URL or a file path, instructs the U-Boot build
++	  process to generate a boot.bin (to be loaded by the ZynqMP
++	  boot ROM) containing both the U-Boot SPL and the PMU
++	  firmware in the Xilinx-specific boot format.
++
++	  If empty, the generated boot.bin will not contain a PMU
++	  firmware.
++
+ config BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE
+ 	string "Custom psu_init_gpl file"
+ 	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index e4571a6ccf9f..59b3fe07881d 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -276,6 +276,17 @@ endef
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
+ 
++UBOOT_ZYNQMP_PMUFW = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PMUFW))
++
++ifneq ($(UBOOT_ZYNQMP_PMUFW),)
++UBOOT_EXTRA_DOWNLOADS += $(UBOOT_ZYNQMP_PMUFW)
++BR_NO_CHECK_HASH_FOR += $(notdir $(UBOOT_ZYNQMP_PMUFW))
++define UBOOT_ZYNQMP_KCONFIG_PMUFW
++	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_DL_DIR)/$(notdir $(UBOOT_ZYNQMP_PMUFW))", \
++	       $(@D)/.config)
++endef
++endif
++
+ ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE)),)
+ define UBOOT_ZYNQMP_KCONFIG_PSU_INIT
+ 	$(call KCONFIG_SET_OPT,CONFIG_XILINX_PS_INIT_FILE,"$(TOPDIR)/$(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE))", \
+@@ -335,6 +346,7 @@ UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
+ endif
+ 
+ define UBOOT_KCONFIG_FIXUP_CMDS
++	$(UBOOT_ZYNQMP_KCONFIG_PMUFW)
+ 	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
+ endef
+ 
 -- 
 2.7.4
