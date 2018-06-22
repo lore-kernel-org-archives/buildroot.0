@@ -1,188 +1,41 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 22 Jun 2018 23:09:49 +0200
-Subject: [Buildroot] [PATCH] package/gdb: fix gdbserver build for m68k
-Message-ID: <20180622210949.18107-1-romain.naour@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 22 Jun 2018 23:12:18 +0200
+Subject: [Buildroot] [PATCH 1/1] libxml2: bump to version 2.9.8
+Message-ID: <20180622211218.18904-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As for strace [1], when <sys/reg.h> is included after <linux/ptrace.h>,
-the build fails on m68k with the following diagnostics:
-
-In file included from ./../nat/linux-ptrace.h:28:0,
-                 from linux-low.h:27,
-                 from linux-m68k-low.c:20:
-[...]/usr/include/sys/reg.h:26:3: error: expected identifier before numeric constant
-   PT_D1 = 0,
-   ^
-[...]usr/include/sys/reg.h:26:3: error: expected ??}?? before numeric constant
-[...]usr/include/sys/reg.h:26:3: error: expected unqualified-id before numeric constant
-In file included from linux-m68k-low.c:27:0:
-[...]usr/include/sys/reg.h:99:1: error: expected declaration before ??}?? token
- };
- ^
-
-Fix this by moving <sys/reg.h> on top of "linux-low.h".
-
-Fixes:
-https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006385
-
-[1] https://github.com/strace/strace/commit/6ebf6c4f9e5ebca123a5b5f24afe67cf0473cf92
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-I'm not taking into acount gdb 7.11 and 7.10 since they will be removed soon.
-http://patchwork.ozlabs.org/patch/869573/
-http://patchwork.ozlabs.org/patch/869574/
+ package/libxml2/libxml2.hash | 2 +-
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-gdb 8.1 needs this patch too.
-http://patchwork.ozlabs.org/patch/869572/
----
- .../7.12.1/0007-gdbserver-fix-build-for-m68k.patch | 62 ++++++++++++++++++++++
- .../8.0.1/0005-gdbserver-fix-build-for-m68k.patch  | 62 ++++++++++++++++++++++
- 2 files changed, 124 insertions(+)
- create mode 100644 package/gdb/7.12.1/0007-gdbserver-fix-build-for-m68k.patch
- create mode 100644 package/gdb/8.0.1/0005-gdbserver-fix-build-for-m68k.patch
-
-diff --git a/package/gdb/7.12.1/0007-gdbserver-fix-build-for-m68k.patch b/package/gdb/7.12.1/0007-gdbserver-fix-build-for-m68k.patch
-new file mode 100644
-index 0000000000..451bed312c
---- /dev/null
-+++ b/package/gdb/7.12.1/0007-gdbserver-fix-build-for-m68k.patch
-@@ -0,0 +1,62 @@
-+From 80c60ea9fb3634272a98ec526eabff25f5255bae Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 22 Jun 2018 22:40:26 +0200
-+Subject: [PATCH] gdbserver: fix build for m68k
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+As for strace [1], when <sys/reg.h> is included after <linux/ptrace.h>,
-+the build fails on m68k with the following diagnostics:
-+
-+In file included from ./../nat/linux-ptrace.h:28:0,
-+                 from linux-low.h:27,
-+                 from linux-m68k-low.c:20:
-+[...]/usr/include/sys/reg.h:26:3: error: expected identifier before numeric constant
-+   PT_D1 = 0,
-+   ^
-+[...]usr/include/sys/reg.h:26:3: error: expected ??}?? before numeric constant
-+[...]usr/include/sys/reg.h:26:3: error: expected unqualified-id before numeric constant
-+In file included from linux-m68k-low.c:27:0:
-+[...]usr/include/sys/reg.h:99:1: error: expected declaration before ??}?? token
-+ };
-+ ^
-+
-+Fix this by moving <sys/reg.h> on top of "linux-low.h".
-+
-+[1] https://github.com/strace/strace/commit/6ebf6c4f9e5ebca123a5b5f24afe67cf0473cf92
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/gdbserver/linux-m68k-low.c | 9 +++++----
-+ 1 file changed, 5 insertions(+), 4 deletions(-)
-+
-+diff --git a/gdb/gdbserver/linux-m68k-low.c b/gdb/gdbserver/linux-m68k-low.c
-+index 5594f10f927..19b4ef7b259 100644
-+--- a/gdb/gdbserver/linux-m68k-low.c
-++++ b/gdb/gdbserver/linux-m68k-low.c
-+@@ -17,16 +17,17 @@
-+    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-+ 
-+ #include "server.h"
-++
-++#ifdef HAVE_SYS_REG_H
-++#include <sys/reg.h>
-++#endif
-++
-+ #include "linux-low.h"
-+ 
-+ /* Defined in auto-generated file reg-m68k.c.  */
-+ void init_registers_m68k (void);
-+ extern const struct target_desc *tdesc_m68k;
-+ 
-+-#ifdef HAVE_SYS_REG_H
-+-#include <sys/reg.h>
-+-#endif
-+-
-+ #define m68k_num_regs 29
-+ #define m68k_num_gregs 18
-+ 
-+-- 
-+2.14.4
-+
-diff --git a/package/gdb/8.0.1/0005-gdbserver-fix-build-for-m68k.patch b/package/gdb/8.0.1/0005-gdbserver-fix-build-for-m68k.patch
-new file mode 100644
-index 0000000000..451bed312c
---- /dev/null
-+++ b/package/gdb/8.0.1/0005-gdbserver-fix-build-for-m68k.patch
-@@ -0,0 +1,62 @@
-+From 80c60ea9fb3634272a98ec526eabff25f5255bae Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 22 Jun 2018 22:40:26 +0200
-+Subject: [PATCH] gdbserver: fix build for m68k
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+As for strace [1], when <sys/reg.h> is included after <linux/ptrace.h>,
-+the build fails on m68k with the following diagnostics:
-+
-+In file included from ./../nat/linux-ptrace.h:28:0,
-+                 from linux-low.h:27,
-+                 from linux-m68k-low.c:20:
-+[...]/usr/include/sys/reg.h:26:3: error: expected identifier before numeric constant
-+   PT_D1 = 0,
-+   ^
-+[...]usr/include/sys/reg.h:26:3: error: expected ??}?? before numeric constant
-+[...]usr/include/sys/reg.h:26:3: error: expected unqualified-id before numeric constant
-+In file included from linux-m68k-low.c:27:0:
-+[...]usr/include/sys/reg.h:99:1: error: expected declaration before ??}?? token
-+ };
-+ ^
-+
-+Fix this by moving <sys/reg.h> on top of "linux-low.h".
-+
-+[1] https://github.com/strace/strace/commit/6ebf6c4f9e5ebca123a5b5f24afe67cf0473cf92
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ gdb/gdbserver/linux-m68k-low.c | 9 +++++----
-+ 1 file changed, 5 insertions(+), 4 deletions(-)
-+
-+diff --git a/gdb/gdbserver/linux-m68k-low.c b/gdb/gdbserver/linux-m68k-low.c
-+index 5594f10f927..19b4ef7b259 100644
-+--- a/gdb/gdbserver/linux-m68k-low.c
-++++ b/gdb/gdbserver/linux-m68k-low.c
-+@@ -17,16 +17,17 @@
-+    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
-+ 
-+ #include "server.h"
-++
-++#ifdef HAVE_SYS_REG_H
-++#include <sys/reg.h>
-++#endif
-++
-+ #include "linux-low.h"
-+ 
-+ /* Defined in auto-generated file reg-m68k.c.  */
-+ void init_registers_m68k (void);
-+ extern const struct target_desc *tdesc_m68k;
-+ 
-+-#ifdef HAVE_SYS_REG_H
-+-#include <sys/reg.h>
-+-#endif
-+-
-+ #define m68k_num_regs 29
-+ #define m68k_num_gregs 18
-+ 
-+-- 
-+2.14.4
-+
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index f7e046bff6..d114d98060 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	f63c5e7d30362ed28b38bfa1ac6313f9a80230720b7fb6c80575eeab3ff5900c	libxml2-2.9.7.tar.gz
++sha256	0b74e51595654f958148759cfef0993114ddccccbb6f31aee018f3558e8e2732	libxml2-2.9.8.tar.gz
+ # License files, locally calculated
+ sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index a6285a6946..06a802eb10 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBXML2_VERSION = 2.9.7
++LIBXML2_VERSION = 2.9.8
+ LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_LICENSE = MIT
 -- 
-2.14.4
+2.14.1
