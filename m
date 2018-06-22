@@ -1,118 +1,52 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 22 Jun 2018 08:38:41 +0300
-Subject: [Buildroot] [PATCH] gnutls: drop wchar dependency
-Message-ID: <0498bce769c634b0718a5b0ce7337581d611c63e.1529645921.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 22 Jun 2018 08:00:09 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-06-21
+Message-ID: <20180622060009.DB4CC20834@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 19448f40a0 (gnutls: use included unistring unless libunistring is
-selected) made libunistring and optional dependency. So now gnutls need
-no longer depend on wchar.
+Hello,
 
-Drop wchar dependency of libmicrohttpd and libsoup, which are gnutls
-reverse dependencies that do not depend themselves on wchar.
+Build statistics for 2018-06-21
+===============================
 
-Update the comments in libsoup and taskd; the wchar dependency is now
-not due to gnutls.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  11 |   0 |   0 |  11 |
+   2018.05.x |  10 |   0 |   0 |  10 |
+      master | 104 |  10 |   0 | 114 |
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/gnutls/Config.in        | 5 ++---
- package/libmicrohttpd/Config.in | 5 ++---
- package/libsoup/Config.in       | 2 +-
- package/taskd/Config.in         | 2 +-
- package/vpnc/Config.in          | 5 ++---
- 5 files changed, 8 insertions(+), 11 deletions(-)
+Results for branch 'master'
+===========================
 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index ef995d21d2e0..61b4b239ff82 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_GNUTLS
- 	bool "gnutls"
- 	# https://gitlab.com/gnutls/gnutls/issues/203
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_NETTLE
- 	select BR2_PACKAGE_PCRE
-@@ -24,5 +23,5 @@ config BR2_PACKAGE_GNUTLS_TOOLS
- 
- endif
- 
--comment "gnutls needs a toolchain w/ wchar, dynamic library"
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+comment "gnutls needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index 7f3c9bb8fda0..f3386a63f272 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -12,13 +12,12 @@ if BR2_PACKAGE_LIBMICROHTTPD
- config BR2_PACKAGE_LIBMICROHTTPD_SSL
- 	bool "https support"
- 	depends on !BR2_STATIC_LIBS # gnutls
--	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_GNUTLS
- 	help
- 	  Enable HTTPS (SSL) support.
- 
--comment "libmicrohttpd https support needs a toolchain w/ wchar, dynamic library"
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+comment "libmicrohttpd https support needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
- 
- endif
- 
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 236d3c428a83..f5833229139a 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBSOUP
- 	bool "libsoup"
--	depends on BR2_USE_WCHAR # glib2 and gnutls
-+	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	select BR2_PACKAGE_LIBXML2
-diff --git a/package/taskd/Config.in b/package/taskd/Config.in
-index 19d123fb5910..c068b347242b 100644
---- a/package/taskd/Config.in
-+++ b/package/taskd/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_TASKD
- 	bool "taskd"
- 	depends on !BR2_STATIC_LIBS # gnutls
--	depends on BR2_USE_WCHAR # gnutls
-+	depends on BR2_USE_WCHAR
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_GNUTLS
-diff --git a/package/vpnc/Config.in b/package/vpnc/Config.in
-index 6455b0d87abe..b988ba342bef 100644
---- a/package/vpnc/Config.in
-+++ b/package/vpnc/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_VPNC
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_MMU # fork()
--	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	select BR2_PACKAGE_GNUTLS
-@@ -16,6 +15,6 @@ config BR2_PACKAGE_VPNC
- 
- 	  http://www.unix-ag.uni-kl.de/~massar/vpnc
- 
--comment "vpnc needs a toolchain w/ wchar, dynamic library"
-+comment "vpnc needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-+	depends on BR2_STATIC_LIBS
+Classification of failures by reason
+------------------------------------
+
+              host-erlang-21.0 | 3 
+            qt5base-legal-info | 2 
+                    host-rustc | 1 
+                 libnss-3.37.3 | 1 
+            qt5location-5.11.0 | 1 
+              wireshark-2.2.15 | 1 
+                      x265-2.8 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |               host-erlang-21.0 | NOK | http://autobuild.buildroot.net/results/059baeb9a30d112a57ffef84630c21123890c83a |     
+      x86_64 |               host-erlang-21.0 | NOK | http://autobuild.buildroot.net/results/1c0daa4bfa7aea49559debb1bf73e53f32e2287a |     
+         arm |               host-erlang-21.0 | NOK | http://autobuild.buildroot.net/results/a8e3eb651931702ff8caafa0afb5e63ed728adf6 |     
+         arc |                     host-rustc | NOK | http://autobuild.buildroot.net/results/b06de6e153c902f90b9074bf43c9f0f683930e45 |     
+         arm |                  libnss-3.37.3 | NOK | http://autobuild.buildroot.net/results/267e327301af3b36687f99c9149863a621a4798a |     
+      mipsel |             qt5base-legal-info | NOK | http://autobuild.buildroot.net/results/138a55ee373d3bb49b34255015705cce21bfbec2 |     
+         arm |             qt5base-legal-info | NOK | http://autobuild.buildroot.net/results/6e8bc2b2927b752d24e32e2f7a2a855615e66707 |     
+         arm |             qt5location-5.11.0 | NOK | http://autobuild.buildroot.net/results/ab5c7200b7fccfba815d703f2e86c454edb36fa2 |     
+         arc |               wireshark-2.2.15 | NOK | http://autobuild.buildroot.net/results/76c08f5564bc61240bb57eef4f9d40a70cec0a75 | ORPH
+         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/2e306a16737e67a0011a3efaba9a2c76bdbacb1d |     
+
+
 -- 
-2.17.1
+http://autobuild.buildroot.net
