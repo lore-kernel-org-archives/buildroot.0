@@ -1,47 +1,45 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 22 Jun 2018 06:19:28 +0300
-Subject: [Buildroot] [PATCH] edid-decode: update upstream locations
-Message-ID: <2fd12ccbfed419704a9f0695a1b744a03dce9770.1529637568.git.baruch@tkos.co.il>
+Date: Fri, 22 Jun 2018 06:57:53 +0300
+Subject: [Buildroot] [PATCH] strace: bump to version 4.23
+Message-ID: <d807cf61422d5f18dd2625c466eba4319dd3ccfe.1529639873.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-edid-decode moved to linuxtv.org. Update homepage link and download
-site.
+Add reference to tarball signature verification key.
 
-https://www.spinics.net/lists/linux-media/msg136517.html
-
-Cc: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/edid-decode/Config.in      | 2 +-
- package/edid-decode/edid-decode.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/strace/strace.hash | 6 +++---
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
-index 64297b494dcf..701c70031f96 100644
---- a/package/edid-decode/Config.in
-+++ b/package/edid-decode/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_EDID_DECODE
- 	help
- 	  Decode EDID data in human-readable format.
- 
--	  http://cgit.freedesktop.org/xorg/app/edid-decode/
-+	  https://git.linuxtv.org/edid-decode.git/
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index a4141b899b70..b412a77a1339 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index f50e89c0607a..c6450b1c5186 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking signature
+-# https://strace.io/files/4.22/strace-4.22.tar.xz.asc
+-sha256	068cd09264c95e4d591bbcd3ea08f99a693ed8663cd5169b0fdad72eb5bdb39d	strace-4.22.tar.xz
++# Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
++# https://strace.io/files/4.23/strace-4.23.tar.xz
++sha256	7860a6965f1dd832747bd8281a04738274398d32c56e9fbd0a68b1bb9ec09aad	strace-4.23.tar.xz
+ sha256	df862ba273812c589fd69acc74197a25d38c5295baccab00a62d39d1894c0253	COPYING
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 4af01b9928a6..471dbc2e1dd3 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
--EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
-+EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
- EDID_DECODE_LICENSE = MIT
- EDID_DECODE_LICENSE_FILES = edid-decode.c
- 
+-STRACE_VERSION = 4.22
++STRACE_VERSION = 4.23
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://strace.io/files/$(STRACE_VERSION)
+ STRACE_LICENSE = BSD-3-Clause
 -- 
 2.17.1
