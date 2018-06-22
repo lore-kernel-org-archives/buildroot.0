@@ -1,106 +1,47 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 21 Jun 2018 23:31:05 -0300
-Subject: [Buildroot] [RFC] fs: allow passing the image file name to
- inner-rootfs
-Message-ID: <20180622023105.27865-1-casantos@datacom.com.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 22 Jun 2018 06:19:28 +0300
+Subject: [Buildroot] [PATCH] edid-decode: update upstream locations
+Message-ID: <2fd12ccbfed419704a9f0695a1b744a03dce9770.1529637568.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Suppose that you want to create a filesystem image containing only the
-/var/lib subtree. That would something like this on a br2-external:
+edid-decode moved to linuxtv.org. Update homepage link and download
+site.
 
-fs/rootfs-var-lib/Config.in:
+https://www.spinics.net/lists/linux-media/msg136517.html
 
-    menuconfig BR2_TARGET_ROOTFS_VAR_LIB
-    bool "/var/lib"
-
-    if BR2_TARGET_ROOTFS_VAR_LIB
-    source "$BR2_EXTERNAL_MFS_PATH/fs/rootfs-var-lib/ext4/Config.in"
-    endif
-
-fs/rootfs-var-lib/rootfs-var-lib.mk:
-    ifeq ($(BR2_TARGET_ROOTFS_VAR_LIB),y)
-    rootfs-var-lib = $(call inner-rootfs,var-lib-$(pkgname),VAR_LIB_$(call UPPERCASE,$(pkgname)))
-    include $(sort $(wildcard $(BR2_EXTERNAL_MFS_PATH)/fs/rootfs-var-lib/*/*.mk))
-    endif
-
-fs/rootfs-var-lib/ext4/Config.in:
-    config BR2_TARGET_ROOTFS_VAR_LIB_EXT4
-        bool "ext4 /var/lib filesystem"
-        select BR2_PACKAGE_HOST_E2FSPROGS
-        help
-          Build an ext4 /var/lib filesystem
-
-    if BR2_TARGET_ROOTFS_VAR_LIB_EXT4
-        [...]
-    endif # BR2_TARGET_ROOTFS_VAR_LIB_EXT4
-
-fs/rootfs-var-lib/ext4/ext4.mk:
-    # Build the ext4 /var/lib filesystem image
-    [...]
-    ROOTFS_VAR_LIB_EXT4_OPTS = \
-        -d $(TARGET_DIR)/var/lib \
-                        ^^^^^^^^---- /var/lib, only
-    [...]
-    define ROOTFS_VAR_LIB_EXT4_CMD
-        rm -f $@
-        $(HOST_DIR)/sbin/mkfs.ext4 $(ROOTFS_VAR_LIB_EXT4_OPTS) $@ "$(ROOTFS_VAR_LIB_EXT4_SIZE)"
-    endef
-    $(eval $(rootfs-var-lib))
-
-Selecting BR2_TARGET_ROOTFS_VAR_LIB_EXT4 would produce the filesystem
-image $(BINARIES_DIR)/rootfs.var-lib-ext4 coresponging to the contents
-of $(TARGET_DIR)/var/lib. This is correct but the file name is a bit
-awkward. It would be better to call it "rootfs-var-lib.ext4", instead.
-
-This can be achieved by passing a third argument to inner-rootfs with
-the desired file name:
-
-    rootfs-var-lib = $(call inner-rootfs,var-lib-$(pkgname),VAR_LIB_$(call UPPERCASE,$(pkgname)),rootfs-var-lib.$(pkgname))
-
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- fs/common.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/edid-decode/Config.in      | 2 +-
+ package/edid-decode/edid-decode.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index abf35418cb..2380c1dd3f 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -139,10 +139,10 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
- ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
- endif
+diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
+index 64297b494dcf..701c70031f96 100644
+--- a/package/edid-decode/Config.in
++++ b/package/edid-decode/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_EDID_DECODE
+ 	help
+ 	  Decode EDID data in human-readable format.
  
--$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
--$$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
--$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
--	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
-+$$(BINARIES_DIR)/$(3): ROOTFS=$(2)
-+$$(BINARIES_DIR)/$(3): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
-+$$(BINARIES_DIR)/$(3): $$(ROOTFS_$(2)_DEPENDENCIES)
-+	@$$(call MESSAGE,"Generating root filesystem image $(3)")
- 	rm -rf $$(ROOTFS_$(2)_DIR)
- 	mkdir -p $$(ROOTFS_$(2)_DIR)
- 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
-@@ -163,7 +163,7 @@ endif
- rootfs-$(1)-show-depends:
- 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+-	  http://cgit.freedesktop.org/xorg/app/edid-decode/
++	  https://git.linuxtv.org/edid-decode.git/
+diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+index a4141b899b70..b412a77a1339 100644
+--- a/package/edid-decode/edid-decode.mk
++++ b/package/edid-decode/edid-decode.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
-+rootfs-$(1): $$(BINARIES_DIR)/$(3)
+ EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
+-EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
++EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
+ EDID_DECODE_LICENSE = MIT
+ EDID_DECODE_LICENSE_FILES = edid-decode.c
  
- .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
- 
-@@ -181,6 +181,6 @@ endif
- endef
- 
- # $(pkgname) also works well to return the filesystem name
--rootfs = $(call inner-rootfs,$(pkgname),$(call UPPERCASE,$(pkgname)))
-+rootfs = $(call inner-rootfs,$(pkgname),$(call UPPERCASE,$(pkgname)),rootfs.$(pkgname))
- 
- include $(sort $(wildcard fs/*/*.mk))
 -- 
 2.17.1
