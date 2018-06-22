@@ -1,89 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Jun 2018 11:43:06 +0200
-Subject: [Buildroot] [git commit] iproute2: bump to version 4.17.0
-Message-ID: <20180622094418.88ED4814AA@busybox.osuosl.org>
+Date: Fri, 22 Jun 2018 11:42:21 +0200
+Subject: [Buildroot] [git commit] edid-decode: update upstream locations
+Message-ID: <20180622094418.7C9FF8155B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c67889623ed5ed9aa8d5006edc1db90541554304
+commit: https://git.buildroot.net/buildroot/commit/?id=7817f9f0369003e078a7dae1fc5b9876075295cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patch.
+edid-decode moved to linuxtv.org. Update homepage link and download
+site.
 
-Cc: Petr Vorel <petr.vorel@gmail.com>
+https://www.spinics.net/lists/linux-media/msg136517.html
+
+Cc: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-arpd-remove-pthread-dependency.patch      | 37 ----------------------
- package/iproute2/iproute2.hash                     |  2 +-
- package/iproute2/iproute2.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 39 deletions(-)
+ package/edid-decode/Config.in      | 2 +-
+ package/edid-decode/edid-decode.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iproute2/0001-arpd-remove-pthread-dependency.patch b/package/iproute2/0001-arpd-remove-pthread-dependency.patch
-deleted file mode 100644
-index bfc9649d35..0000000000
---- a/package/iproute2/0001-arpd-remove-pthread-dependency.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 4a4f4d491f89bdd580fdd7a901a3300cb5e9789e Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 1 May 2018 15:33:47 +0300
--Subject: [PATCH] arpd: remove pthread dependency
--
--Explicit link with pthread is not needed when linking dynamically. Even
--static link with recent libdb does not pull in the code that uses
--pthread. Finally, the configure check introduced in commit a25df4887d7
--(configure: Check for Berkeley DB for arpd compilation) does not add
---lpthread to its link command.
--
--This change allows arpd build with toolchains that do not provide
--threads support.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: http://patchwork.ozlabs.org/patch/907031/
--
-- misc/Makefile | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/misc/Makefile b/misc/Makefile
--index 34ef6b21b4ed..b2dd6b26e2dc 100644
----- a/misc/Makefile
--+++ b/misc/Makefile
--@@ -25,7 +25,7 @@ rtacct: rtacct.c
-- 	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o rtacct rtacct.c $(LDLIBS) -lm
-- 
-- arpd: arpd.c
---	$(QUIET_CC)$(CC) $(CFLAGS) -I$(DBM_INCLUDE) $(LDFLAGS) -o arpd arpd.c $(LDLIBS) -ldb -lpthread
--+	$(QUIET_CC)$(CC) $(CFLAGS) -I$(DBM_INCLUDE) $(LDFLAGS) -o arpd arpd.c $(LDLIBS) -ldb
-- 
-- ssfilter.c: ssfilter.y
-- 	$(QUIET_YACC)bison ssfilter.y -o ssfilter.c
---- 
--2.17.0
--
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 9f808b742a..48867f0a99 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256	0c5c24020fd7349fe25728c5edee9fb6a1bc8a38f08e23be5c57a6301e55ee0a	iproute2-4.16.0.tar.xz
-+sha256	6fa991b092315887775b9e47dc6a89af7ae09dd3ad4ccff754d055c566b4be6e	iproute2-4.17.0.tar.xz
- sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 319e69b93f..1f276ac7ed 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
+index 64297b494d..701c70031f 100644
+--- a/package/edid-decode/Config.in
++++ b/package/edid-decode/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_EDID_DECODE
+ 	help
+ 	  Decode EDID data in human-readable format.
+ 
+-	  http://cgit.freedesktop.org/xorg/app/edid-decode/
++	  https://git.linuxtv.org/edid-decode.git/
+diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+index a4141b899b..b412a77a13 100644
+--- a/package/edid-decode/edid-decode.mk
++++ b/package/edid-decode/edid-decode.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--IPROUTE2_VERSION = 4.16.0
-+IPROUTE2_VERSION = 4.17.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
+-EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
++EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
+ EDID_DECODE_LICENSE = MIT
+ EDID_DECODE_LICENSE_FILES = edid-decode.c
+ 
