@@ -1,49 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 22 Jun 2018 11:42:21 +0200
-Subject: [Buildroot] [git commit] edid-decode: update upstream locations
-Message-ID: <20180622094418.7C9FF8155B@busybox.osuosl.org>
+From: Valentin Korenblit <valentin.korenblit@smile.fr>
+Date: Fri, 22 Jun 2018 12:09:33 +0200
+Subject: [Buildroot] [RFC PATCH v5 4/6] llvm: add config to build
+ backend for host arch
+In-Reply-To: <20180622003340.10859-5-joseph.kogut@gmail.com>
+References: <20180622003340.10859-1-joseph.kogut@gmail.com>
+ <20180622003340.10859-5-joseph.kogut@gmail.com>
+Message-ID: <f58a5fab-0b9d-bd0b-34b8-a2b6c9e4b8b3@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7817f9f0369003e078a7dae1fc5b9876075295cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Joseph,
 
-edid-decode moved to linuxtv.org. Update homepage link and download
-site.
+On 22/06/2018 02:33, Joseph Kogut wrote:
+> +config BR2_PACKAGE_HOST_LLVM
+> +	bool "host llvm"
+> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+> +	depends on BR2_HOST_GCC_AT_LEAST_4_8
+> +	help
+> +	  The LLVM Project is a collection of modular and reusable
+> +	  compiler and toolchain technologies.
+> +
+> +	  http://llvm.org
+> +
 
-https://www.spinics.net/lists/linux-media/msg136517.html
+I was asked to remove this option from my first patch series, I think
+mainly because host-llvm was just a dependency of llvm. But in this case,
+as we are using llvm as a compiler, I think we should have it but we should
+also add "select BR2_PACKAGE_HOST_LLVM" in Config.in (same for Clang).
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/edid-decode/Config.in      | 2 +-
- package/edid-decode/edid-decode.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>   # Build backend for target architecture. This include backends like AMDGPU.
+> +HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+>   LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
 
-diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
-index 64297b494d..701c70031f 100644
---- a/package/edid-decode/Config.in
-+++ b/package/edid-decode/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_EDID_DECODE
- 	help
- 	  Decode EDID data in human-readable format.
- 
--	  http://cgit.freedesktop.org/xorg/app/edid-decode/
-+	  https://git.linuxtv.org/edid-decode.git/
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index a4141b899b..b412a77a13 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
--EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
-+EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
- EDID_DECODE_LICENSE = MIT
- EDID_DECODE_LICENSE_FILES = edid-decode.c
- 
+Thomas's suggestion:
+
+LLVM_TARGETS_TO_BUILD = $(LLVM_TARGET_ARCH)
+
+HOST_LLVM_TARGETS_TO_BUILD = $(LLVM_TARGETS_TO_BUILD)
+
+>   ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
+> +HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
+>   LLVM_TARGETS_TO_BUILD += AMDGPU
+>   endif
+
+Thomas's suggestion:
+
+Delete HOST_LLVM_TARGETS_TO_BUILD += AMDGPU
+
+
+Something I'm not sure of is the default backend for host.
+
+We have HOST_LLVM_CONF_OPTS += -DLLVM_TARGET_ARCH=$(LLVM_TARGET_ARCH)
+
+But now that there is a backend for the host, I don't know if we
+should select this one as default. I haven't tested with Clang yet
+but I think that if the target triple is correctly specified there
+shouldn't be any problem.
+
+Best regards,
+
+Valentin
