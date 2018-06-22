@@ -1,36 +1,28 @@
-From: MOHAMMAD RASIM <mohammad.rasim96@gmail.com>
-Date: Fri, 22 Jun 2018 19:37:59 +0300
-Subject: [Buildroot] Run getty on multiple ttys and Box-drawing character
-Message-ID: <CACq04CEcu6tiE-P7-xJUtHVYz4ouYrhq1Q2awjhg=i9W+THAvA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 22 Jun 2018 19:09:44 +0200
+Subject: [Buildroot] [PATCH] imx-usb-loader: make the byte swap macro
+ more robust
+In-Reply-To: <4dfbf2f59dc79aa360a50cc7cee0dc05daaf1065.1529667845.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 22 Jun 2018 14:44:05 +0300")
+References: <4dfbf2f59dc79aa360a50cc7cee0dc05daaf1065.1529667845.git.baruch@tkos.co.il>
+Message-ID: <87y3f6kasn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
-I'm running buildroot-2018.02.3  on an arm64 board from initrd  and have a
-couple of questions:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-1- How can I set buildroot to run getty on multiple ttys. the standard
-BR2_TARGET_GENERIC_GETTY doesn't accept multiple ttys to be set, I normally
-edit output/target/etc/inittab and add the other tty. So is this the
-standard way of adding a tty or is there some setting I'm missing?
-also, there is an official kernel parameter called console that can be used
-to set up gettys, so for example, if I run Ubuntu initramfs I can pass the
-following arguments to the kernel:
+ > The local 16-bit byte swap implementation that was introduced in commit
+ > b05f8f439681 (imx-usb-loader: fix build with older gcc) is not robust
+ > enough. It suffers from double evaluation, and operators precedence
+ > breakage. Use a better implementation suggested by Arnout Vandecappelle.
 
-console=ttyS0,115200n8 console=tty0
+ > Cc: Adam Duskett <aduskett@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-and so the initramfs run a getty on each tty I passed, so why doesn't
-buildroot use these values to run gettys?
+Committed, thanks.
 
-2- I'm running a python script that uses curses library to display a box on
-the framebuffer, the problem is that the box doesn't show with the box
-drawing characters <https://en.wikipedia.org/wiki/Box-drawing_character>
-instead the borders are shown as letters. so what do I need to enable?
-I've already added en_US.UTF-8 to BR2_GENERATE_LOCALE but still I don't get
-the box characters.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180622/2f8e3c1f/attachment.html>
+-- 
+Bye, Peter Korsgaard
