@@ -1,91 +1,109 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 21 Jun 2018 17:33:34 -0700
-Subject: [Buildroot] [RFC PATCH v5 0/6] chromium: new package
-Message-ID: <20180622003340.10859-1-joseph.kogut@gmail.com>
+Date: Thu, 21 Jun 2018 17:33:36 -0700
+Subject: [Buildroot] [RFC PATCH v5 2/6] at-spi2-atk: new package
+In-Reply-To: <20180622003340.10859-1-joseph.kogut@gmail.com>
+References: <20180622003340.10859-1-joseph.kogut@gmail.com>
+Message-ID: <20180622003340.10859-3-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changes since v4:
-- at-spi2-{core,atk}: rework dependencies
-- libgtk3: make atk-bridge an optional dependency
-- at-spi2-core: convert to meson-package infrastructure
-- chromium: define BR2_PACKAGE_CHROMIUM_ARCH_SUPPORTS
-- chromium: add host gcc >= 4.9.0 to depends
-- lld: convert to host-only package
-- fix check-package issues
-
-Changes since v3:
-- llvm: add separate TARGETS_TO_BUILD for host only
-- chromium: add upstream patch to fix ARM build w/ glibc 2.27
-- chromium: disabled v8 snapshotting until the toolchain can be figured out
-- chromium: add missing dependencies when use_gtk3=false
-- chromium: check-package fixes
-
-Changes since v2:
-- patch chromium toolchain config for buildroot
-
-Changes since v1:
-- fix some cross compilation issues
-- chromium: bump version to 67.0.3396.79
-- atk: bump version to 2.28.1
-- lld: new package
-- chromium: use lld for linking
-- minor tweaks to variable naming and quotes
-
-
-Joseph Kogut (6):
-  at-spi2-core: new package
-  at-spi2-atk: new package
-  libgtk3: convert atk-bridge to optional dependency
-  llvm: add config to build backend for host arch
-  lld: new package
-  chromium: new package
-
- DEVELOPERS                                    |   4 +
- package/Config.in                             |   3 +
- package/Config.in.host                        |   2 +
- package/at-spi2-atk/Config.in                 |  21 +++
- package/at-spi2-atk/at-spi2-atk.hash          |   3 +
- package/at-spi2-atk/at-spi2-atk.mk            |  17 +++
- package/at-spi2-core/Config.in                |  24 ++++
- package/at-spi2-core/at-spi2-core.hash        |   3 +
- package/at-spi2-core/at-spi2-core.mk          |  16 +++
- ...iler_cpu_abi-for-buildroot-toolchain.patch | 102 ++++++++++++++
- .../0002-Fix-arm-build-with-glibc-2.27.patch  |  28 ++++
- package/chromium/Config.in                    |  56 ++++++++
- package/chromium/chromium.hash                |   3 +
- package/chromium/chromium.mk                  | 127 ++++++++++++++++++
- package/chromium/toolchain/BUILD.gn           |  71 ++++++++++
- ...3-convert-atk-bridge-to-optional-dep.patch |  76 +++++++++++
- package/libgtk3/0003-disable-atk-bridge.patch |  45 -------
- package/libgtk3/libgtk3.mk                    |   4 +
- package/lld/Config.in.host                    |  16 +++
- package/lld/lld.hash                          |   3 +
- package/lld/lld.mk                            |  15 +++
- package/llvm/Config.in.host                   |  18 +++
- package/llvm/llvm.mk                          |   9 +-
- 23 files changed, 620 insertions(+), 46 deletions(-)
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+ DEVELOPERS                           |  1 +
+ package/Config.in                    |  1 +
+ package/at-spi2-atk/Config.in        | 21 +++++++++++++++++++++
+ package/at-spi2-atk/at-spi2-atk.hash |  3 +++
+ package/at-spi2-atk/at-spi2-atk.mk   | 17 +++++++++++++++++
+ 5 files changed, 43 insertions(+)
  create mode 100644 package/at-spi2-atk/Config.in
  create mode 100644 package/at-spi2-atk/at-spi2-atk.hash
  create mode 100644 package/at-spi2-atk/at-spi2-atk.mk
- create mode 100644 package/at-spi2-core/Config.in
- create mode 100644 package/at-spi2-core/at-spi2-core.hash
- create mode 100644 package/at-spi2-core/at-spi2-core.mk
- create mode 100644 package/chromium/0001-modify-compiler_cpu_abi-for-buildroot-toolchain.patch
- create mode 100644 package/chromium/0002-Fix-arm-build-with-glibc-2.27.patch
- create mode 100644 package/chromium/Config.in
- create mode 100644 package/chromium/chromium.hash
- create mode 100644 package/chromium/chromium.mk
- create mode 100644 package/chromium/toolchain/BUILD.gn
- create mode 100644 package/libgtk3/0003-convert-atk-bridge-to-optional-dep.patch
- delete mode 100644 package/libgtk3/0003-disable-atk-bridge.patch
- create mode 100644 package/lld/Config.in.host
- create mode 100644 package/lld/lld.hash
- create mode 100644 package/lld/lld.mk
- create mode 100644 package/llvm/Config.in.host
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b721b3592a..9116db39cb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -974,6 +974,7 @@ F:	board/qemu/ppc64le-pseries/
+ F:	configs/qemu_ppc64le_pseries_defconfig
+ 
+ N:	Joseph Kogut <joseph.kogut@gmail.com>
++F:	package/at-spi2-atk/
+ F:	package/at-spi2-core/
+ F:	package/gconf/
+ F:	package/libnss/
+diff --git a/package/Config.in b/package/Config.in
+index 56e6b2f2bd..d18b542cc5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1130,6 +1130,7 @@ endmenu
+ 
+ menu "Graphics"
+ 	source "package/assimp/Config.in"
++	source "package/at-spi2-atk/Config.in"
+ 	source "package/at-spi2-core/Config.in"
+ 	source "package/atk/Config.in"
+ 	source "package/atkmm/Config.in"
+diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
+new file mode 100644
+index 0000000000..599913c7df
+--- /dev/null
++++ b/package/at-spi2-atk/Config.in
+@@ -0,0 +1,21 @@
++config BR2_PACKAGE_AT_SPI2_ATK
++	bool "at-spi2-atk"
++	depends on BR2_PACKAGE_XORG7 # at-spi2-core
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_USE_MMU # glib2
++	depends on BR2_USE_WCHAR # glib2
++	select BR2_PACKAGE_ATK
++	select BR2_PACKAGE_AT_SPI2_CORE
++	select BR2_PACKAGE_LIBGLIB2
++	help
++	  The At-Spi2 Atk package contains a library that bridges
++	  ATK to At-Spi2 D-Bus service.
++
++	  https://www.freedesktop.org/wiki/Accessibility/AT-SPI2/
++
++comment "at-spi2-atk needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++
++comment "at-spi2-atk depends on X.org"
++	depends on !BR2_PACKAGE_XORG7
+diff --git a/package/at-spi2-atk/at-spi2-atk.hash b/package/at-spi2-atk/at-spi2-atk.hash
+new file mode 100644
+index 0000000000..77c8f68e47
+--- /dev/null
++++ b/package/at-spi2-atk/at-spi2-atk.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256 61891f0abae1689f6617a963105a3f1dcdab5970c4a36ded9c79a7a544b16a6e  at-spi2-atk-2.26.2.tar.xz
++sha256 c6105b34ab6829ff5c70eba234f40053215fa9f8383ced271b0e370a1923624b  COPYING
+diff --git a/package/at-spi2-atk/at-spi2-atk.mk b/package/at-spi2-atk/at-spi2-atk.mk
+new file mode 100644
+index 0000000000..0e9b39e8b8
+--- /dev/null
++++ b/package/at-spi2-atk/at-spi2-atk.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# at-spi2-atk
++#
++################################################################################
++
++AT_SPI2_ATK_VERSION_MAJOR = 2.26
++AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
++AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
++AT_SPI2_ATK_SITE =  http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
++AT_SPI2_ATK_LICENSE = LGPL-2.0+
++AT_SPI2_ATK_LICENSE_FILES = COPYING
++AT_SPI2_ATK_INSTALL_STAGING = YES
++AT_SPI2_ATK_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install
++AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
++
++$(eval $(autotools-package))
 -- 
 2.17.1
