@@ -1,98 +1,107 @@
-From: Roman Gorbenkov <roman.gorbenkov@ens2m.org>
-Date: Fri, 22 Jun 2018 15:33:25 +0200
-Subject: [Buildroot] [PATCH 1/2] davfs2: new package
-Message-ID: <20180622133326.7528-1-roman.gorbenkov@ens2m.org>
+From: Joel Carlson <joelsoncarl@gmail.com>
+Date: Fri, 22 Jun 2018 10:28:19 -0600
+Subject: [Buildroot] [PATCH v3 1/1] cmocka: new package
+In-Reply-To: <1529533571-22499-1-git-send-email-JoelsonCarl@gmail.com>
+References: <1529533571-22499-1-git-send-email-JoelsonCarl@gmail.com>
+Message-ID: <CAAjKBV_N0+TmOMvy+XuYatkPiNUrOk_31dWGnfTADSh7qG0+AA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-davfs2 is a Linux file system driver that allows to
-mount a WebDAV resource. WebDAV is an extension to HTTP/1.1
-that allows remote collaborative authoring of Web resources.
+On Wed, Jun 20, 2018 at 4:26 PM, Joel Carlson <joelsoncarl@gmail.com> wrote:
+> Signed-off-by: Nimai Mahajan <nimaim@gmail.com>
+> Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+> ---
+> v2 was by Nimai Mahajan, here: http://patchwork.ozlabs.org/patch/500181/
+>
+> Changes v2 -> v3
+>   - changed from v1.0.1 to v1.1.1
+>   - added dependency on !BR2_STATIC_LIBS (suggested by Romain)
+>   - added patch to fix build issue for toolchains without stack protection
+>     (issue found by Romain)
+>   - added generation of static library for BR2_SHARED_STATIC_LIBS
+> ---
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  ...0001-cmocka-cmake-fix-stack-protect-check.patch | 34 ++++++++++++++++++++++
+>  package/cmocka/Config.in                           | 15 ++++++++++
+>  package/cmocka/cmocka.hash                         |  2 ++
+>  package/cmocka/cmocka.mk                           | 23 +++++++++++++++
+>  6 files changed, 76 insertions(+)
+>  create mode 100644 package/cmocka/0001-cmocka-cmake-fix-stack-protect-check.patch
+>  create mode 100644 package/cmocka/Config.in
+>  create mode 100644 package/cmocka/cmocka.hash
+>  create mode 100644 package/cmocka/cmocka.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index d22ac52..229a584 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -966,6 +966,7 @@ N:  Jeremy Rosen <jeremy.rosen@openwide.fr>
+>  F:     package/fxload/
+>
+>  N:     Joel Carlson <JoelsonCarl@gmail.com>
+> +F:     package/cmocka/
+>  F:     package/flatcc/
+>
+>  N:     Joel Stanley <joel@jms.id.au>
+> diff --git a/package/Config.in b/package/Config.in
+> index a5ecfec..f60af1e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1501,6 +1501,7 @@ menu "Other"
+>         source "package/clang/Config.in"
+>         source "package/clapack/Config.in"
+>         source "package/classpath/Config.in"
+> +       source "package/cmocka/Config.in"
+>         source "package/cppcms/Config.in"
+>         source "package/cracklib/Config.in"
+>         source "package/dawgdic/Config.in"
+> diff --git a/package/cmocka/0001-cmocka-cmake-fix-stack-protect-check.patch b/package/cmocka/0001-cmocka-cmake-fix-stack-protect-check.patch
+> new file mode 100644
+> index 0000000..c7a2c27
+> --- /dev/null
+> +++ b/package/cmocka/0001-cmocka-cmake-fix-stack-protect-check.patch
+> @@ -0,0 +1,34 @@
+> +From f9a964edde4011adf88902018cbb87723d78d0a2 Mon Sep 17 00:00:00 2001
+> +From: Joel Carlson <JoelsonCarl@gmail.com>
+> +Date: Wed, 20 Jun 2018 14:35:13 -0600
+> +Subject: [PATCH 1/1] cmocka cmake: fix stack protect check
+> +
+> +The cmake check for if -fstack-protect is supported needs to use
+> +CMAKE_REQUIRED_FLAGS and not CMAKE_REQUIRED_DEFINITIONS.
+> +
+> +Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+> +---
+> +Upstream status: submitted to cmocka mailing list
 
-Signed-off-by: Roman Gorbenkov <roman.gorbenkov@ens2m.org>
----
- package/Config.in          |  1 +
- package/davfs2/Config.in   | 17 +++++++++++++++++
- package/davfs2/davfs2.hash |  5 +++++
- package/davfs2/davfs2.mk   | 19 +++++++++++++++++++
- 4 files changed, 42 insertions(+)
- create mode 100644 package/davfs2/Config.in
- create mode 100644 package/davfs2/davfs2.hash
- create mode 100644 package/davfs2/davfs2.mk
+Note: this is now committed to the cmocka master branch as commit
+d677b564c2193a5cd381925c2eeaad6b23c6af2f
 
-diff --git a/package/Config.in b/package/Config.in
-index a5ecfecbf9..c8e35fd99e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -175,6 +175,7 @@ menu "Filesystem and flash utilities"
- 	source "package/cpio/Config.in"
- 	source "package/cramfs/Config.in"
- 	source "package/curlftpfs/Config.in"
-+	source "package/davfs2/Config.in"
- 	source "package/dosfstools/Config.in"
- 	source "package/e2fsprogs/Config.in"
- 	source "package/e2tools/Config.in"
-diff --git a/package/davfs2/Config.in b/package/davfs2/Config.in
-new file mode 100644
-index 0000000000..9a2e20586c
---- /dev/null
-+++ b/package/davfs2/Config.in
-@@ -0,0 +1,17 @@
-+comment "DAVFS2 needs a toolchain w/ regular stack smashing protection support"
-+	depends on !BR2_TOOLCHAIN_BUILDROOT_USE_SSP || !BR2_SSP_REGULAR
-+
-+config BR2_PACKAGE_DAVFS2
-+	bool "davfs2"
-+	depends on BR2_TOOLCHAIN_BUILDROOT_USE_SSP
-+	depends on BR2_SSP_REGULAR
-+	select BR2_PACKAGE_NEON
-+	select BR2_PACKAGE_NEON_XML
-+	help
-+	  davfs2 is a Linux file system driver that allows to
-+	  mount a WebDAV resource. WebDAV is an extension to HTTP/1.1
-+	  that allows remote collaborative authoring of Web resources.
-+	  To use davfs2 via /etc/fstab, FEATURE_MOUNT_HELPERS
-+	  must be selected in busybox configuration.
-+
-+	  http://savannah.nongnu.org/projects/davfs2
-diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
-new file mode 100644
-index 0000000000..97ce80bfe0
---- /dev/null
-+++ b/package/davfs2/davfs2.hash
-@@ -0,0 +1,5 @@
-+# Calculated based on the hash above
-+#Locally calculated
-+sha256 c9c4e0f0912a782386216b2147eb9c36c47f193b8fcf3d637719e0b9fe7c96e0  davfs2-1.5.4.tar.gz
-+#License file, locally calculated
-+sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-new file mode 100644
-index 0000000000..da5ea530a0
---- /dev/null
-+++ b/package/davfs2/davfs2.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# davfs2
-+#
-+################################################################################
-+
-+DAVFS2_VERSION = 1.5.4
-+DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2/davfs2-$(DAVFS2_VERSION).tar.gz
-+DAVFS2_LICENSE = GPL-3.0+
-+DAVFS2_LICENSE_FILES = COPYING
-+
-+DAVFS2_DEPENDENCIES = neon
-+
-+DAVFS2_AUTORECONF = YES
-+
-+DAVFS2_CONF_ENV += \
-+    ac_cv_path_NEON_CONFIG=$(STAGING_DIR)/usr/bin/neon-config
-+
-+$(eval $(autotools-package))
--- 
-2.13.6
+> +
+> + cmake/Modules/CheckCCompilerFlagSSP.cmake | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/cmake/Modules/CheckCCompilerFlagSSP.cmake b/cmake/Modules/CheckCCompilerFlagSSP.cmake
+> +index 2fe4395..ed34eb3 100644
+> +--- a/cmake/Modules/CheckCCompilerFlagSSP.cmake
+> ++++ b/cmake/Modules/CheckCCompilerFlagSSP.cmake
+> +@@ -19,8 +19,8 @@
+> + include(CheckCSourceCompiles)
+> +
+> + function(CHECK_C_COMPILER_FLAG_SSP _FLAG _RESULT)
+> +-   set(SAFE_CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS}")
+> +-   set(CMAKE_REQUIRED_DEFINITIONS "${_FLAG}")
+> ++   set(SAFE_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+> ++   set(CMAKE_REQUIRED_FLAGS "${_FLAG}")
+> +    check_c_source_compiles("int main(int argc, char **argv) { char buffer[256]; return buffer[argc]=0;}" ${_RESULT})
+> +-   set(CMAKE_REQUIRED_DEFINITIONS "${SAFE_CMAKE_REQUIRED_DEFINITIONS}")
+> ++   set(CMAKE_REQUIRED_FLAGS "${SAFE_CMAKE_REQUIRED_FLAGS}")
+> + endfunction(CHECK_C_COMPILER_FLAG_SSP)
+> +--
+> +2.7.4
+> +
+
+[snip]
