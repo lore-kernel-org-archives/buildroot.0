@@ -1,102 +1,106 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 21 Jun 2018 17:33:39 -0700
-Subject: [Buildroot] [RFC PATCH v5 5/6] lld: new package
-In-Reply-To: <20180622003340.10859-1-joseph.kogut@gmail.com>
-References: <20180622003340.10859-1-joseph.kogut@gmail.com>
-Message-ID: <20180622003340.10859-6-joseph.kogut@gmail.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Thu, 21 Jun 2018 23:31:05 -0300
+Subject: [Buildroot] [RFC] fs: allow passing the image file name to
+ inner-rootfs
+Message-ID: <20180622023105.27865-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- DEVELOPERS                 |  1 +
- package/Config.in.host     |  1 +
- package/lld/Config.in.host | 16 ++++++++++++++++
- package/lld/lld.hash       |  3 +++
- package/lld/lld.mk         | 15 +++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/lld/Config.in.host
- create mode 100644 package/lld/lld.hash
- create mode 100644 package/lld/lld.mk
+Suppose that you want to create a filesystem image containing only the
+/var/lib subtree. That would something like this on a br2-external:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 9116db39cb..7179a70f30 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -978,6 +978,7 @@ F:	package/at-spi2-atk/
- F:	package/at-spi2-core/
- F:	package/gconf/
- F:	package/libnss/
-+F:	package/lld/
- F:	package/python-cython/
- F:	package/python-raven/
- F:	package/python-schedule/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index d0374d351e..943ceff6e5 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -30,6 +30,7 @@ menu "Host utilities"
- 	source "package/jsmin/Config.in.host"
- 	source "package/lpc3250loader/Config.in.host"
- 	source "package/lttng-babeltrace/Config.in.host"
-+	source "package/lld/Config.in.host"
- 	source "package/llvm/Config.in.host"
- 	source "package/mfgtools/Config.in.host"
- 	source "package/mkpasswd/Config.in.host"
-diff --git a/package/lld/Config.in.host b/package/lld/Config.in.host
-new file mode 100644
-index 0000000000..c04b7924fa
---- /dev/null
-+++ b/package/lld/Config.in.host
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_HOST_LLD
-+	bool "host lld"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # llvm
-+	select BR2_PACKAGE_HOST_LLVM
-+	help
-+	  LLD is a linker from the LLVM project that is a drop-in
-+	  replacement for system linkers, and runs much faster than
-+	  them. It also provides features that are useful for
-+	  toolchain developers.
-+
-+	  https://lld.llvm.org/
-+
-+comment "lld needs a toolchain w/ host gcc >= 4.8"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_8
-diff --git a/package/lld/lld.hash b/package/lld/lld.hash
-new file mode 100644
-index 0000000000..ce81c7baca
---- /dev/null
-+++ b/package/lld/lld.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 6b8c4a833cf30230c0213d78dbac01af21387b298225de90ab56032ca79c0e0b  lld-6.0.0.src.tar.xz
-+sha256 f0502d2d0e19748c534ee95ea486c092273303dbef76404c8b17dc8bf6ca441b  LICENSE.TXT
-diff --git a/package/lld/lld.mk b/package/lld/lld.mk
-new file mode 100644
-index 0000000000..e82970c844
---- /dev/null
-+++ b/package/lld/lld.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# lld
-+#
-+################################################################################
-+
-+LLD_VERSION = 6.0.0
-+LLD_SITE = https://llvm.org/releases/$(LLD_VERSION)
-+LLD_SOURCE = lld-$(LLD_VERSION).src.tar.xz
-+LLD_LICENSE = NCSA
-+LLD_LICENSE_FILES = LICENSE.TXT
-+LLD_SUPPORTS_IN_SOURCE_BUILD = NO
-+HOST_LLD_DEPENDENCIES = host-llvm
-+
-+$(eval $(host-cmake-package))
+fs/rootfs-var-lib/Config.in:
+
+    menuconfig BR2_TARGET_ROOTFS_VAR_LIB
+    bool "/var/lib"
+
+    if BR2_TARGET_ROOTFS_VAR_LIB
+    source "$BR2_EXTERNAL_MFS_PATH/fs/rootfs-var-lib/ext4/Config.in"
+    endif
+
+fs/rootfs-var-lib/rootfs-var-lib.mk:
+    ifeq ($(BR2_TARGET_ROOTFS_VAR_LIB),y)
+    rootfs-var-lib = $(call inner-rootfs,var-lib-$(pkgname),VAR_LIB_$(call UPPERCASE,$(pkgname)))
+    include $(sort $(wildcard $(BR2_EXTERNAL_MFS_PATH)/fs/rootfs-var-lib/*/*.mk))
+    endif
+
+fs/rootfs-var-lib/ext4/Config.in:
+    config BR2_TARGET_ROOTFS_VAR_LIB_EXT4
+        bool "ext4 /var/lib filesystem"
+        select BR2_PACKAGE_HOST_E2FSPROGS
+        help
+          Build an ext4 /var/lib filesystem
+
+    if BR2_TARGET_ROOTFS_VAR_LIB_EXT4
+        [...]
+    endif # BR2_TARGET_ROOTFS_VAR_LIB_EXT4
+
+fs/rootfs-var-lib/ext4/ext4.mk:
+    # Build the ext4 /var/lib filesystem image
+    [...]
+    ROOTFS_VAR_LIB_EXT4_OPTS = \
+        -d $(TARGET_DIR)/var/lib \
+                        ^^^^^^^^---- /var/lib, only
+    [...]
+    define ROOTFS_VAR_LIB_EXT4_CMD
+        rm -f $@
+        $(HOST_DIR)/sbin/mkfs.ext4 $(ROOTFS_VAR_LIB_EXT4_OPTS) $@ "$(ROOTFS_VAR_LIB_EXT4_SIZE)"
+    endef
+    $(eval $(rootfs-var-lib))
+
+Selecting BR2_TARGET_ROOTFS_VAR_LIB_EXT4 would produce the filesystem
+image $(BINARIES_DIR)/rootfs.var-lib-ext4 coresponging to the contents
+of $(TARGET_DIR)/var/lib. This is correct but the file name is a bit
+awkward. It would be better to call it "rootfs-var-lib.ext4", instead.
+
+This can be achieved by passing a third argument to inner-rootfs with
+the desired file name:
+
+    rootfs-var-lib = $(call inner-rootfs,var-lib-$(pkgname),VAR_LIB_$(call UPPERCASE,$(pkgname)),rootfs-var-lib.$(pkgname))
+
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ fs/common.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/fs/common.mk b/fs/common.mk
+index abf35418cb..2380c1dd3f 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -139,10 +139,10 @@ ROOTFS_$(2)_COMPRESS_EXT = .xz
+ ROOTFS_$(2)_COMPRESS_CMD = xz -9 -C crc32 -c
+ endif
+ 
+-$$(BINARIES_DIR)/rootfs.$(1): ROOTFS=$(2)
+-$$(BINARIES_DIR)/rootfs.$(1): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
+-$$(BINARIES_DIR)/rootfs.$(1): $$(ROOTFS_$(2)_DEPENDENCIES)
+-	@$$(call MESSAGE,"Generating root filesystem image rootfs.$(1)")
++$$(BINARIES_DIR)/$(3): ROOTFS=$(2)
++$$(BINARIES_DIR)/$(3): FAKEROOT_SCRIPT=$$(ROOTFS_$(2)_DIR)/fakeroot
++$$(BINARIES_DIR)/$(3): $$(ROOTFS_$(2)_DEPENDENCIES)
++	@$$(call MESSAGE,"Generating root filesystem image $(3)")
+ 	rm -rf $$(ROOTFS_$(2)_DIR)
+ 	mkdir -p $$(ROOTFS_$(2)_DIR)
+ 	echo '#!/bin/sh' > $$(FAKEROOT_SCRIPT)
+@@ -163,7 +163,7 @@ endif
+ rootfs-$(1)-show-depends:
+ 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
+ 
+-rootfs-$(1): $$(BINARIES_DIR)/rootfs.$(1)
++rootfs-$(1): $$(BINARIES_DIR)/$(3)
+ 
+ .PHONY: rootfs-$(1) rootfs-$(1)-show-depends
+ 
+@@ -181,6 +181,6 @@ endif
+ endef
+ 
+ # $(pkgname) also works well to return the filesystem name
+-rootfs = $(call inner-rootfs,$(pkgname),$(call UPPERCASE,$(pkgname)))
++rootfs = $(call inner-rootfs,$(pkgname),$(call UPPERCASE,$(pkgname)),rootfs.$(pkgname))
+ 
+ include $(sort $(wildcard fs/*/*.mk))
 -- 
 2.17.1
