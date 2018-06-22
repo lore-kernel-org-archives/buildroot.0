@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 22 Jun 2018 23:12:18 +0200
-Subject: [Buildroot] [PATCH 1/1] libxml2: bump to version 2.9.8
-Message-ID: <20180622211218.18904-1-fontaine.fabrice@gmail.com>
+Date: Fri, 22 Jun 2018 23:25:26 +0200
+Subject: [Buildroot] [PATCH 1/1] libnss: bump to version 3.38
+Message-ID: <20180622212526.602-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,32 +10,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libxml2/libxml2.hash | 2 +-
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 3 +--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index f7e046bff6..d114d98060 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 2b79901a7c..2a7ca2b065 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	f63c5e7d30362ed28b38bfa1ac6313f9a80230720b7fb6c80575eeab3ff5900c	libxml2-2.9.7.tar.gz
-+sha256	0b74e51595654f958148759cfef0993114ddccccbb6f31aee018f3558e8e2732	libxml2-2.9.8.tar.gz
- # License files, locally calculated
- sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index a6285a6946..06a802eb10 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -4,7 +4,7 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_37_3_RTM/src/SHA256SUMS
+-sha256	9af2bbb615d010bd866bb83f8c0bb22b0fa086171e93030ffb03da3da15cc5be  nss-3.37.3.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_38_RTM/src/SHA256SUMS
++sha256	2c643d3c08d6935f4d325f40743719b6990aa25a79ec2f8f712c99d086672f62  nss-3.38.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index dd84aafcbe..03f575014d 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,8 +4,7 @@
  #
  ################################################################################
  
--LIBXML2_VERSION = 2.9.7
-+LIBXML2_VERSION = 2.9.8
- LIBXML2_SITE = ftp://xmlsoft.org/libxml2
- LIBXML2_INSTALL_STAGING = YES
- LIBXML2_LICENSE = MIT
+-LIBNSS_VERSION_MAJOR = 3.37
+-LIBNSS_VERSION = $(LIBNSS_VERSION_MAJOR).3
++LIBNSS_VERSION = 3.38
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
 2.14.1
