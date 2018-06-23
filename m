@@ -1,24 +1,29 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Jun 2018 15:36:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/erlang: bump version to 21.0
-References: <20180620203343.15647-1-bernd.kuhls@t-online.de>
- <87efh1m9pd.fsf@dell.be.48ers.dk> <87muvlj544.fsf@dell.be.48ers.dk>
-Message-ID: <vvu10fx76a.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Jun 2018 17:18:20 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself to package/libuv
+In-Reply-To: <20180623143738.10e6ba76@windsurf> (Thomas Petazzoni's message of
+ "Sat, 23 Jun 2018 14:37:38 +0200")
+References: <20180623104956.25B62813FD@busybox.osuosl.org>
+ <20180623143738.10e6ba76@windsurf>
+Message-ID: <876029ilab.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sat, 23 Jun 2018 10:10:03 +0200 schrieb Peter Korsgaard:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> This causes a number of (pcre related?) build issues for the host
-> version. Care to take a look?
-> 
-> http://autobuild.buildroot.net/?reason=host-erlang-21.0
+ > Hello,
+ > On Sat, 23 Jun 2018 12:51:22 +0200, Peter Korsgaard wrote:
 
-Hi Peter,
+ >> N:	Asaf Kahlon <asafka7@gmail.com>
+ >> +F:	package/libuv
 
-done: http://patchwork.ozlabs.org/patch/933709/
+ > Minor nit: all other entries in DEVELOPERS have a final slash at the
+ > end of paths.
 
-Regards, Bernd
+Correct, I'll fix it.
+
+-- 
+Bye, Peter Korsgaard
