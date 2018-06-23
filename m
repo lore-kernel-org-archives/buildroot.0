@@ -1,307 +1,211 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 23 Jun 2018 18:40:18 +0200
-Subject: [Buildroot] [PATCH 1/1] protobuf-c: fix build with protobuf 3.6
-Message-ID: <20180623164018.27627-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 23 Jun 2018 20:55:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
+Message-ID: <20180623185544.10834-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add two patches retrieved from upstream
+Removed patch 0002, applied upstream:
+https://github.com/tvheadend/tvheadend/commit/068e5f921ddc22e648ebe006e515baf3e1ea12d1
 
-Fixes:
- - http://autobuild.buildroot.net/results/26b84f2614f75ac101078a59afeb63bc4c0d28b7
+Added patch to fix musl & uclibc build.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Renamed option dvbcsa to tvhcsa.
+
+Upstream removed the dvbcsa configure option with this commit:
+https://github.com/tvheadend/tvheadend/commit/4e7f837c7055f4cb173164ca31af139e0a7858a5#diff-e2d5a00791bce9a01f99bc6fd613a39d
+
+and moved the optional dvbcsa support inside the tvhcsa option block:
+https://github.com/tvheadend/tvheadend/blob/c76c7e0604977305498221f83c049d6d4fc715ed/configure#L645
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../protobuf-c/0001-Add-std-to-some-types.patch    | 110 ++++++++++++++
- .../0002-Fix-build-with-protobuf-3.6.x.patch       | 160 +++++++++++++++++++++
- 2 files changed, 270 insertions(+)
- create mode 100644 package/protobuf-c/0001-Add-std-to-some-types.patch
- create mode 100644 package/protobuf-c/0002-Fix-build-with-protobuf-3.6.x.patch
+ ...-configure-check-for-strlcat-strlcpy.patch | 97 +++++++++++++++++++
+ ...02-sbuf-fix-uclibc-compilation-error.patch | 33 -------
+ package/tvheadend/tvheadend.hash              |  2 +-
+ package/tvheadend/tvheadend.mk                |  6 +-
+ 4 files changed, 101 insertions(+), 37 deletions(-)
+ create mode 100644 package/tvheadend/0002-configure-check-for-strlcat-strlcpy.patch
+ delete mode 100644 package/tvheadend/0002-sbuf-fix-uclibc-compilation-error.patch
 
-diff --git a/package/protobuf-c/0001-Add-std-to-some-types.patch b/package/protobuf-c/0001-Add-std-to-some-types.patch
+diff --git a/package/tvheadend/0002-configure-check-for-strlcat-strlcpy.patch b/package/tvheadend/0002-configure-check-for-strlcat-strlcpy.patch
 new file mode 100644
-index 0000000000..8f1a5d0be0
+index 0000000000..71c01e2f48
 --- /dev/null
-+++ b/package/protobuf-c/0001-Add-std-to-some-types.patch
-@@ -0,0 +1,110 @@
-+From 034e603d2a5e629c1c3fbac405638f8afb3ead51 Mon Sep 17 00:00:00 2001
-+From: Fredrik Gustafsson <iveqy@iveqy.com>
-+Date: Sun, 11 Mar 2018 08:57:46 +0100
-+Subject: [PATCH] Add std:: to some types
++++ b/package/tvheadend/0002-configure-check-for-strlcat-strlcpy.patch
+@@ -0,0 +1,97 @@
++From 1f879e4b930fef71f030e5b6e5fae359f27d1aec Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 23 Jun 2018 20:47:26 +0200
++Subject: [PATCH] configure: check for strlcat & strlcpy
 +
-+This is required for compilation to succeed on debian jessie with g++
-+6.3.0.
++Building tvheadend with uclibc and musl fails:
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from: https://github.com/protobuf-c/protobuf-c/pull/309]
++src/tvh_string.h:50:22: error: static declaration of 'strlcpy' follows non-static declaration
++ static inline size_t strlcpy(char *dst, const char *src, size_t size)
++
++src/tvh_string.h:61:22: error: static declaration of 'strlcat' follows non-static declaration
++ static inline size_t strlcat(char *dst, const char *src, size_t count)
++
++because they provide strlcat & strlcpy:
++https://sourceware.org/glibc/wiki/strlcpy
++
++This patch adds configure checks and makes the implementation in
++tvh_string.h optional, the configure log looks like this:
++
++glibc
++  checking for cc strlcat ...                       fail
++  checking for cc strlcpy ...                       fail
++
++musl
++  checking for cc strlcat ...                       ok
++  checking for cc strlcpy ...                       ok
++
++uclibc
++  checking for cc strlcat ...                       ok
++  checking for cc strlcpy ...                       ok
++
++Patch sent upstream: https://github.com/tvheadend/tvheadend/pull/1133
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ protoc-c/c_file.h       |  2 +-
-+ protoc-c/c_generator.cc |  8 ++++----
-+ protoc-c/c_helpers.cc   | 12 ++++++------
-+ 3 files changed, 11 insertions(+), 11 deletions(-)
++ configure        | 14 ++++++++++++++
++ src/tvh_string.h |  4 ++++
++ 2 files changed, 18 insertions(+)
 +
-+diff --git a/protoc-c/c_file.h b/protoc-c/c_file.h
-+index ed38ce4..84df522 100644
-+--- a/protoc-c/c_file.h
-++++ b/protoc-c/c_file.h
-+@@ -104,7 +104,7 @@ class FileGenerator {
-+   scoped_array<scoped_ptr<ExtensionGenerator> > extension_generators_;
++diff --git a/configure b/configure
++index 0857a1958..b183d02b3 100755
++--- a/configure
+++++ b/configure
++@@ -159,6 +159,20 @@ else
++   COMPILER=gcc
++ fi
 + 
-+   // E.g. if the package is foo.bar, package_parts_ is {"foo", "bar"}.
-+-  vector<string> package_parts_;
-++  std::vector<string> package_parts_;
+++check_cc_snippet strlcat '#include <string.h>
+++int test(int argc, char **argv) {
+++  char dst[10];
+++  strlcat("test", dst, sizeof(dst));
+++  return 0;
+++}'
+++
+++check_cc_snippet strlcpy '#include <string.h>
+++int test(int argc, char **argv) {
+++  char dst[10];
+++  strlcpy("test", dst, sizeof(dst));
+++  return 0;
+++}'
+++
++ check_cc_snippet getloadavg '#include <stdlib.h>
++ void test() { getloadavg(NULL,0); }'
 + 
-+   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(FileGenerator);
-+ };
-+diff --git a/protoc-c/c_generator.cc b/protoc-c/c_generator.cc
-+index a0d0cb6..79a272f 100644
-+--- a/protoc-c/c_generator.cc
-++++ b/protoc-c/c_generator.cc
-+@@ -80,13 +80,13 @@ namespace c {
-+ //   "foo=bar,baz,qux=corge"
-+ // parses to the pairs:
-+ //   ("foo", "bar"), ("baz", ""), ("qux", "corge")
-+-void ParseOptions(const string& text, vector<pair<string, string> >* output) {
-+-  vector<string> parts;
-++void ParseOptions(const string& text, std::vector<std::pair<string, string> >* output) {
-++  std::vector<string> parts;
-+   SplitStringUsing(text, ",", &parts);
-+ 
-+   for (unsigned i = 0; i < parts.size(); i++) {
-+     string::size_type equals_pos = parts[i].find_first_of('=');
-+-    pair<string, string> value;
-++    std::pair<string, string> value;
-+     if (equals_pos == string::npos) {
-+       value.first = parts[i];
-+       value.second = "";
-+@@ -105,7 +105,7 @@ bool CGenerator::Generate(const FileDescriptor* file,
-+                             const string& parameter,
-+                             OutputDirectory* output_directory,
-+                             string* error) const {
-+-  vector<pair<string, string> > options;
-++  std::vector<std::pair<string, string> > options;
-+   ParseOptions(parameter, &options);
-+ 
-+   // -----------------------------------------------------------------
-+diff --git a/protoc-c/c_helpers.cc b/protoc-c/c_helpers.cc
-+index b79b5b0..71b8682 100644
-+--- a/protoc-c/c_helpers.cc
-++++ b/protoc-c/c_helpers.cc
-+@@ -177,7 +177,7 @@ string ToCamel(const string &name) {
++diff --git a/src/tvh_string.h b/src/tvh_string.h
++index 87d8c3320..13ef2f308 100644
++--- a/src/tvh_string.h
+++++ b/src/tvh_string.h
++@@ -47,6 +47,7 @@ static inline const char *tvh_strbegins(const char *s1, const char *s2)
++   return s1;
 + }
 + 
-+ string FullNameToLower(const string &full_name) {
-+-  vector<string> pieces;
-++  std::vector<string> pieces;
-+   SplitStringUsing(full_name, ".", &pieces);
-+   string rv = "";
-+   for (unsigned i = 0; i < pieces.size(); i++) {
-+@@ -188,7 +188,7 @@ string FullNameToLower(const string &full_name) {
-+   return rv;
-+ }
-+ string FullNameToUpper(const string &full_name) {
-+-  vector<string> pieces;
-++  std::vector<string> pieces;
-+   SplitStringUsing(full_name, ".", &pieces);
-+   string rv = "";
-+   for (unsigned i = 0; i < pieces.size(); i++) {
-+@@ -199,7 +199,7 @@ string FullNameToUpper(const string &full_name) {
-+   return rv;
-+ }
-+ string FullNameToC(const string &full_name) {
-+-  vector<string> pieces;
-++  std::vector<string> pieces;
-+   SplitStringUsing(full_name, ".", &pieces);
-+   string rv = "";
-+   for (unsigned i = 0; i < pieces.size(); i++) {
-+@@ -214,7 +214,7 @@ void PrintComment (io::Printer* printer, string comment)
+++#ifndef ENABLE_STRLCPY
++ static inline size_t strlcpy(char *dst, const char *src, size_t size)
 + {
-+    if (!comment.empty())
-+    {
-+-      vector<string> comment_lines;
-++      std::vector<string> comment_lines;
-+       SplitStringUsing (comment, "\r\n", &comment_lines);
-+       printer->Print ("/*\n");
-+       for (int i = 0; i < comment_lines.size(); i++)
-+@@ -503,8 +503,8 @@ void SplitStringToIteratorUsing(const string& full,
-+ 
-+ void SplitStringUsing(const string& full,
-+                       const char* delim,
-+-                      vector<string>* result) {
-+-  std::back_insert_iterator< vector<string> > it(*result);
-++                      std::vector<string>* result) {
-++  std::back_insert_iterator< std::vector<string> > it(*result);
-+   SplitStringToIteratorUsing(full, delim, it);
++   size_t ret = strlen(src);
++@@ -57,7 +58,9 @@ static inline size_t strlcpy(char *dst, const char *src, size_t size)
++   }
++   return ret;
 + }
+++#endif
 + 
-diff --git a/package/protobuf-c/0002-Fix-build-with-protobuf-3.6.x.patch b/package/protobuf-c/0002-Fix-build-with-protobuf-3.6.x.patch
-new file mode 100644
-index 0000000000..1469e01015
---- /dev/null
-+++ b/package/protobuf-c/0002-Fix-build-with-protobuf-3.6.x.patch
-@@ -0,0 +1,160 @@
-+From 67e5187e96baac2e16d88ac01471c5ce7cdc3c53 Mon Sep 17 00:00:00 2001
-+From: ilovezfs <ilovezfs@icloud.com>
-+Date: Wed, 20 Jun 2018 08:08:53 -0700
-+Subject: [PATCH] Fix build with protobuf 3.6.x
-+
-+Adapt to changes from https://github.com/google/protobuf/pull/4387.
-+
-+scoped_ptr and scoped_array were removed in favor of std::unique_ptr
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from: https://github.com/protobuf-c/protobuf-c/pull/328]
-+---
-+ protoc-c/c_field.cc     | 2 +-
-+ protoc-c/c_field.h      | 2 +-
-+ protoc-c/c_file.cc      | 8 ++++----
-+ protoc-c/c_file.h       | 8 ++++----
-+ protoc-c/c_generator.cc | 4 ++--
-+ protoc-c/c_helpers.cc   | 2 +-
-+ protoc-c/c_message.cc   | 6 +++---
-+ protoc-c/c_message.h    | 6 +++---
-+ 8 files changed, 19 insertions(+), 19 deletions(-)
-+
-+diff --git a/protoc-c/c_field.cc b/protoc-c/c_field.cc
-+index 9fa56ef..eaa38d2 100644
-+--- a/protoc-c/c_field.cc
-++++ b/protoc-c/c_field.cc
-+@@ -189,7 +189,7 @@ void FieldGenerator::GenerateDescriptorInitializerGeneric(io::Printer* printer,
-+ FieldGeneratorMap::FieldGeneratorMap(const Descriptor* descriptor)
-+   : descriptor_(descriptor),
-+     field_generators_(
-+-      new scoped_ptr<FieldGenerator>[descriptor->field_count()]) {
-++      new std::unique_ptr<FieldGenerator>[descriptor->field_count()]) {
-+   // Construct all the FieldGenerators.
-+   for (int i = 0; i < descriptor->field_count(); i++) {
-+     field_generators_[i].reset(MakeGenerator(descriptor->field(i)));
-+diff --git a/protoc-c/c_field.h b/protoc-c/c_field.h
-+index 91f1a03..efd5a29 100644
-+--- a/protoc-c/c_field.h
-++++ b/protoc-c/c_field.h
-+@@ -117,7 +117,7 @@ class FieldGeneratorMap {
-+ 
-+  private:
-+   const Descriptor* descriptor_;
-+-  scoped_array<scoped_ptr<FieldGenerator> > field_generators_;
-++  std::unique_ptr<std::unique_ptr<FieldGenerator>[] > field_generators_;
-+ 
-+   static FieldGenerator* MakeGenerator(const FieldDescriptor* field);
-+ 
-+diff --git a/protoc-c/c_file.cc b/protoc-c/c_file.cc
-+index 9851768..6dae516 100644
-+--- a/protoc-c/c_file.cc
-++++ b/protoc-c/c_file.cc
-+@@ -83,13 +83,13 @@ FileGenerator::FileGenerator(const FileDescriptor* file,
-+                              const string& dllexport_decl)
-+   : file_(file),
-+     message_generators_(
-+-      new scoped_ptr<MessageGenerator>[file->message_type_count()]),
-++      new std::unique_ptr<MessageGenerator>[file->message_type_count()]),
-+     enum_generators_(
-+-      new scoped_ptr<EnumGenerator>[file->enum_type_count()]),
-++      new std::unique_ptr<EnumGenerator>[file->enum_type_count()]),
-+     service_generators_(
-+-      new scoped_ptr<ServiceGenerator>[file->service_count()]),
-++      new std::unique_ptr<ServiceGenerator>[file->service_count()]),
-+     extension_generators_(
-+-      new scoped_ptr<ExtensionGenerator>[file->extension_count()]) {
-++      new std::unique_ptr<ExtensionGenerator>[file->extension_count()]) {
-+ 
-+   for (int i = 0; i < file->message_type_count(); i++) {
-+     message_generators_[i].reset(
-+diff --git a/protoc-c/c_file.h b/protoc-c/c_file.h
-+index ed38ce4..e86cc44 100644
-+--- a/protoc-c/c_file.h
-++++ b/protoc-c/c_file.h
-+@@ -98,10 +98,10 @@ class FileGenerator {
-+  private:
-+   const FileDescriptor* file_;
-+ 
-+-  scoped_array<scoped_ptr<MessageGenerator> > message_generators_;
-+-  scoped_array<scoped_ptr<EnumGenerator> > enum_generators_;
-+-  scoped_array<scoped_ptr<ServiceGenerator> > service_generators_;
-+-  scoped_array<scoped_ptr<ExtensionGenerator> > extension_generators_;
-++  std::unique_ptr<std::unique_ptr<MessageGenerator>[] > message_generators_;
-++  std::unique_ptr<std::unique_ptr<EnumGenerator>[] > enum_generators_;
-++  std::unique_ptr<std::unique_ptr<ServiceGenerator>[] > service_generators_;
-++  std::unique_ptr<std::unique_ptr<ExtensionGenerator>[] > extension_generators_;
-+ 
-+   // E.g. if the package is foo.bar, package_parts_ is {"foo", "bar"}.
-+   vector<string> package_parts_;
-+diff --git a/protoc-c/c_generator.cc b/protoc-c/c_generator.cc
-+index a0d0cb6..fe3ad26 100644
-+--- a/protoc-c/c_generator.cc
-++++ b/protoc-c/c_generator.cc
-+@@ -149,7 +149,7 @@ bool CGenerator::Generate(const FileDescriptor* file,
-+ 
-+   // Generate header.
-+   {
-+-    scoped_ptr<io::ZeroCopyOutputStream> output(
-++    std::unique_ptr<io::ZeroCopyOutputStream> output(
-+       output_directory->Open(basename + ".h"));
-+     io::Printer printer(output.get(), '$');
-+     file_generator.GenerateHeader(&printer);
-+@@ -157,7 +157,7 @@ bool CGenerator::Generate(const FileDescriptor* file,
-+ 
-+   // Generate cc file.
-+   {
-+-    scoped_ptr<io::ZeroCopyOutputStream> output(
-++    std::unique_ptr<io::ZeroCopyOutputStream> output(
-+       output_directory->Open(basename + ".c"));
-+     io::Printer printer(output.get(), '$');
-+     file_generator.GenerateSource(&printer);
-+diff --git a/protoc-c/c_helpers.cc b/protoc-c/c_helpers.cc
-+index b79b5b0..f2ab448 100644
-+--- a/protoc-c/c_helpers.cc
-++++ b/protoc-c/c_helpers.cc
-+@@ -559,7 +559,7 @@ static int CEscapeInternal(const char* src, int src_len, char* dest,
+++#ifndef ENABLE_STRLCAT
++ static inline size_t strlcat(char *dst, const char *src, size_t count)
++ {
++   size_t dlen = strlen(dst);
++@@ -72,6 +75,7 @@ static inline size_t strlcat(char *dst, const char *src, size_t count)
++   dst[len] = '\0';
++   return res;
 + }
-+ string CEscape(const string& src) {
-+   const int dest_length = src.size() * 4 + 1; // Maximum possible expansion
-+-  scoped_array<char> dest(new char[dest_length]);
-++  std::unique_ptr<char[]> dest(new char[dest_length]);
-+   const int len = CEscapeInternal(src.data(), src.size(),
-+                                   dest.get(), dest_length, false);
-+   GOOGLE_DCHECK_GE(len, 0);
-+diff --git a/protoc-c/c_message.cc b/protoc-c/c_message.cc
-+index 6b22c71..85a946e 100755
-+--- a/protoc-c/c_message.cc
-++++ b/protoc-c/c_message.cc
-+@@ -83,11 +83,11 @@ MessageGenerator::MessageGenerator(const Descriptor* descriptor,
-+   : descriptor_(descriptor),
-+     dllexport_decl_(dllexport_decl),
-+     field_generators_(descriptor),
-+-    nested_generators_(new scoped_ptr<MessageGenerator>[
-++    nested_generators_(new std::unique_ptr<MessageGenerator>[
-+       descriptor->nested_type_count()]),
-+-    enum_generators_(new scoped_ptr<EnumGenerator>[
-++    enum_generators_(new std::unique_ptr<EnumGenerator>[
-+       descriptor->enum_type_count()]),
-+-    extension_generators_(new scoped_ptr<ExtensionGenerator>[
-++    extension_generators_(new std::unique_ptr<ExtensionGenerator>[
-+       descriptor->extension_count()]) {
+++#endif
 + 
-+   for (int i = 0; i < descriptor->nested_type_count(); i++) {
-+diff --git a/protoc-c/c_message.h b/protoc-c/c_message.h
-+index 8b115d1..63aa97a 100644
-+--- a/protoc-c/c_message.h
-++++ b/protoc-c/c_message.h
-+@@ -126,9 +126,9 @@ class MessageGenerator {
-+   const Descriptor* descriptor_;
-+   string dllexport_decl_;
-+   FieldGeneratorMap field_generators_;
-+-  scoped_array<scoped_ptr<MessageGenerator> > nested_generators_;
-+-  scoped_array<scoped_ptr<EnumGenerator> > enum_generators_;
-+-  scoped_array<scoped_ptr<ExtensionGenerator> > extension_generators_;
-++  std::unique_ptr<std::unique_ptr<MessageGenerator>[] > nested_generators_;
-++  std::unique_ptr<std::unique_ptr<EnumGenerator>[] > enum_generators_;
-++  std::unique_ptr<std::unique_ptr<ExtensionGenerator>[] > extension_generators_;
-+ 
-+   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(MessageGenerator);
-+ };
++ #define tvh_strlcatf(buf, size, ptr, fmt...) \
++   do { int __r = snprintf((buf) + ptr, (size) - ptr, fmt); \
++-- 
++2.17.1
++
+diff --git a/package/tvheadend/0002-sbuf-fix-uclibc-compilation-error.patch b/package/tvheadend/0002-sbuf-fix-uclibc-compilation-error.patch
+deleted file mode 100644
+index deed9f98f7..0000000000
+--- a/package/tvheadend/0002-sbuf-fix-uclibc-compilation-error.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From b16ad4d258409fbd6acf843d62a7a84f621e3b70 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Mon, 18 Dec 2017 20:52:06 +0100
+-Subject: [PATCH] sbuf: fix uclibc compilation error
+-
+-Fixes build error
+-
+-tvheadend-e06ffd87beff16103c47d6fa542df2374fca6fd3/src/sbuf.h:77:1:
+- error: unknown type name 'ssize_t'; did you mean 'size_t'?
+- ssize_t sbuf_read(sbuf_t *sb, int fd);
+-
+-Patch sent upstream: https://github.com/tvheadend/tvheadend/pull/1062
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/sbuf.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/src/sbuf.h b/src/sbuf.h
+-index 78aa546b3..d5aa53042 100644
+---- a/src/sbuf.h
+-+++ b/src/sbuf.h
+-@@ -23,6 +23,7 @@
+- #include <stddef.h>
+- #include <stdio.h>
+- #include <stdint.h>
+-+#include <unistd.h>
+- 
+- /**
+-  * Simple dynamically growing buffer
+--- 
+-2.11.0
+-
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 4e890a8272..06820d6193 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 32f96937a3ffa72b5bdbfde9a5f9f9535f88e94e44864d4c8c6a152985c16569  tvheadend-e06ffd87beff16103c47d6fa542df2374fca6fd3.tar.gz
++sha256 f12ad165d5abd464fe38c358b385eb030ae4daa01b940c348525d5bfc876e514  tvheadend-66d6161c563181e5a572337ab3509a835c5a57e2.tar.gz
+ sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 45ea7bfc28..8e06165e3b 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TVHEADEND_VERSION = e06ffd87beff16103c47d6fa542df2374fca6fd3
++TVHEADEND_VERSION = 66d6161c563181e5a572337ab3509a835c5a57e2
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
+@@ -65,9 +65,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBDVBCSA),y)
+ TVHEADEND_DEPENDENCIES += libdvbcsa
+-TVHEADEND_CONF_OPTS += --enable-dvbcsa
++TVHEADEND_CONF_OPTS += --enable-tvhcsa
+ else
+-TVHEADEND_CONF_OPTS += --disable-dvbcsa
++TVHEADEND_CONF_OPTS += --disable-tvhcsa
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBHDHOMERUN),y)
 -- 
-2.14.1
+2.17.1
