@@ -1,82 +1,24 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sat, 23 Jun 2018 23:34:05 +0300
-Subject: [Buildroot] [PATCH 1/1] iproute2: fix rdma build
-In-Reply-To: <20180623192506.7405-1-fontaine.fabrice@gmail.com>
-References: <20180623192506.7405-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180623203405.oie6fj2gd2fjtlhy@tarshish>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 23 Jun 2018 22:42:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pcre: bump version to 8.42
+In-Reply-To: <20180623185644.10956-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 23 Jun 2018 20:56:44 +0200")
+References: <20180623185644.10956-1-bernd.kuhls@t-online.de>
+Message-ID: <87sh5dgrpm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Sat, Jun 23, 2018 at 09:25:06PM +0200, Fabrice Fontaine wrote:
-> Retrieve upstream patch
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/63229f485f58be32238916cd997cbe92ac3ca953
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Updated license hash after upstream commit
+ > https://vcs.pcre.org/pcre/code/tags/pcre-8.42/LICENCE?r1=1674&r2=1726
 
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Thanks,
-baruch
-
-> ---
->  ...0001-rdma-sync-some-IP-headers-with-glibc.patch | 39 ++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
-> 
-> diff --git a/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch b/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
-> new file mode 100644
-> index 0000000000..f78a5d6b43
-> --- /dev/null
-> +++ b/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
-> @@ -0,0 +1,39 @@
-> +From 5887ff0922a06d978d3271df9f01fcb04fadc75f Mon Sep 17 00:00:00 2001
-> +From: Hoang Le <hoang.h.le@dektech.com.au>
-> +Date: Wed, 13 Jun 2018 11:09:56 +0700
-> +Subject: rdma: sync some IP headers with glibc
-> +
-> +In the commit 9a362cc71a45, new userspace header:
-> +  (i.e rdma/rdma_user_cm.h -> linux/in6.h)
-> +is included before the kernel space header:
-> +  (i.e utils.h -> resolv.h -> netinet/in.h).
-> +
-> +This leads to unsynchronous some IP headers and compiler got failure
-> +with error: redefinition of some structs IP.
-> +
-> +In this commit, just reorder this including to make them in-sync.
-> +
-> +Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
-> +Acked-by: Leon Romanovsky <leonro@mellanox.com>
-> +Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Retrieved from: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=5887ff0922a06d978d3271df9f01fcb04fadc75f]
-> +---
-> + rdma/rdma.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/rdma/rdma.h b/rdma/rdma.h
-> +index fcaf9e6..d4b7ba1 100644
-> +--- a/rdma/rdma.h
-> ++++ b/rdma/rdma.h
-> +@@ -15,6 +15,7 @@
-> + #include <string.h>
-> + #include <errno.h>
-> + #include <getopt.h>
-> ++#include <netinet/in.h>
-> + #include <libmnl/libmnl.h>
-> + #include <rdma/rdma_netlink.h>
-> + #include <rdma/rdma_user_cm.h>
-> +-- 
-> +cgit v1.1
+Committed, thanks.
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
