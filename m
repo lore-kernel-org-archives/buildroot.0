@@ -1,84 +1,52 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 24 Jun 2018 00:35:28 +0200
-Subject: [Buildroot] [PATCH v6 8/9] gstreamer1-editing-services: bump to
- 1.14.1
+Date: Sun, 24 Jun 2018 00:35:26 +0200
+Subject: [Buildroot] [PATCH v6 6/9] gst1-libav: bump to 1.14.1
 In-Reply-To: <20180623223529.13629-1-ps.report@gmx.net>
 References: <20180623223529.13629-1-ps.report@gmx.net>
-Message-ID: <20180623223529.13629-9-ps.report@gmx.net>
+Message-ID: <20180623223529.13629-7-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- change legacy select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXER to
-  new select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOMIXER
+From: Adam Duskett <aduskett@gmail.com>
 
+Also add hash for license file.
+
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+[Update to 1.14.1]
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
 Changes v5 -> v6:
   - update to 1.14.1
-  - re-asing to me
-  - handle audiomixer move from bad to base
 ---
- package/gstreamer1/gstreamer1-editing-services/Config.in      | 3 +--
- .../gstreamer1-editing-services.hash                          | 4 ++--
- .../gstreamer1-editing-services.mk                            | 3 +--
- 3 files changed, 4 insertions(+), 6 deletions(-)
+ package/gstreamer1/gst1-libav/gst1-libav.hash | 5 +++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/Config.in b/package/gstreamer1/gstreamer1-editing-services/Config.in
-index 716a4e5ef7..fe46870491 100644
---- a/package/gstreamer1/gstreamer1-editing-services/Config.in
-+++ b/package/gstreamer1/gstreamer1-editing-services/Config.in
-@@ -3,15 +3,14 @@ config BR2_PACKAGE_GSTREAMER1_EDITING_SERVICES
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD
--	select BR2_PACKAGE_GST1_PLUGINS_BAD
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT # runtime
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOMIXER # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOCONVERT # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOSCALE # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME # runtime
- 	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_IMAGEFREEZE # runtime
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXER # runtime
- 	help
- 	  GStreamer Editing Services is a high-level library for
- 	  facilitating the creation of audio/video non-linear editors.
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index ddf9cecaed..c738db6f88 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.12.4.tar.xz.sha256sum
--sha256 bd7eaa2c9572db9e7e535064024b6f69250de864fe8a5d5be86fa8c7edacca0c  gstreamer-editing-services-1.12.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.14.1.tar.xz.sha256sum
-+sha256 7e7c0962f39388cdf81b5e0d9f768eb15e30f58b346fd79f1ea778979eae113e gstreamer-editing-services-1.14.1.tar.xz
- 
- # Hashes for license files:
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 9b5a93eb75..215582bf15 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
+index f9a287c590..d67968557d 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+@@ -1,2 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.12.4.tar.xz.sha256sum
+-sha256 2a56aa5d2d8cd912f2bce17f174713d2c417ca298f1f9c28ee66d4aa1e1d9e62 gst-libav-1.12.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.14.1.tar.xz.sha256sum
++sha256 eff80a02d2f2fb9f34b67e9a26e9954d3218c7aa18e863f2a47805fa7066029d gst-libav-1.14.1.tar.xz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 7450b759f1..b7566f0161 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.12.4
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.14.1
- GSTREAMER1_EDITING_SERVICES_SOURCE = gstreamer-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = http://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
-@@ -15,7 +15,6 @@ GSTREAMER1_EDITING_SERVICES_DEPENDENCIES = \
- 	gstreamer1 \
- 	gst1-plugins-base \
- 	gst1-plugins-good \
--	gst1-plugins-bad \
- 	$(if $(BR2_PACKAGE_GST1_VALIDATE),gst1-validate) \
- 	libxml2
- 
+-GST1_LIBAV_VERSION = 1.12.4
++GST1_LIBAV_VERSION = 1.14.1
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
+ GST1_LIBAV_CONF_OPTS = --with-system-libav
 -- 
 2.17.1
