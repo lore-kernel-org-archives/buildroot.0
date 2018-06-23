@@ -1,56 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Jun 2018 09:51:59 +0200
-Subject: [Buildroot] [git commit] apache: add systemd init script
-Message-ID: <20180623080216.5494F7FE78@busybox.osuosl.org>
+Date: Sat, 23 Jun 2018 10:01:05 +0200
+Subject: [Buildroot] [git commit] libxml2: bump to version 2.9.8
+Message-ID: <20180623080216.6A731813E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ce4028d5ff53acc56c6f07b4c63ccc9105004d2
+commit: https://git.buildroot.net/buildroot/commit/?id=889d904f8ad85ad3aeb6bf696a2f125c9deeb44e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.mk      |  8 ++++++++
- package/apache/apache.service | 13 +++++++++++++
- 2 files changed, 21 insertions(+)
+ package/libxml2/libxml2.hash | 2 +-
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index f4c522916e..6ebd30ca40 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -97,4 +97,12 @@ define APACHE_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S50apache
- endef
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index f7e046bff6..d114d98060 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	f63c5e7d30362ed28b38bfa1ac6313f9a80230720b7fb6c80575eeab3ff5900c	libxml2-2.9.7.tar.gz
++sha256	0b74e51595654f958148759cfef0993114ddccccbb6f31aee018f3558e8e2732	libxml2-2.9.8.tar.gz
+ # License files, locally calculated
+ sha256	c5c63674f8a83c4d2e385d96d1c670a03cb871ba2927755467017317878574bd	COPYING
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index a6285a6946..06a802eb10 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define APACHE_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/apache/apache.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/apache.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/apache.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/apache.service
-+endef
-+
- $(eval $(autotools-package))
-diff --git a/package/apache/apache.service b/package/apache/apache.service
-new file mode 100644
-index 0000000000..b8747e2658
---- /dev/null
-+++ b/package/apache/apache.service
-@@ -0,0 +1,13 @@
-+[Unit]
-+Description=Apache HTTP Server
-+After=network.target
-+
-+[Service]
-+Type=forking
-+ExecStart=/usr/bin/apachectl start
-+ExecReload=/usr/bin/apachectl graceful
-+ExecStop=/usr/bin/apachectl stop
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+-LIBXML2_VERSION = 2.9.7
++LIBXML2_VERSION = 2.9.8
+ LIBXML2_SITE = ftp://xmlsoft.org/libxml2
+ LIBXML2_INSTALL_STAGING = YES
+ LIBXML2_LICENSE = MIT
