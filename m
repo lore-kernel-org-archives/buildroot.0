@@ -1,68 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 23 Jun 2018 21:25:06 +0200
-Subject: [Buildroot] [PATCH 1/1] iproute2: fix rdma build
-Message-ID: <20180623192506.7405-1-fontaine.fabrice@gmail.com>
+Date: Sat, 23 Jun 2018 21:59:45 +0200
+Subject: [Buildroot] [PATCH 1/1] mosh: fix build with protobuf 3.6.0
+Message-ID: <20180623195945.26671-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Retrieve upstream patch
+protobuf now requires C++11
 
 Fixes:
- - http://autobuild.buildroot.net/results/63229f485f58be32238916cd997cbe92ac3ca953
+ - http://autobuild.buildroot.net/results/6e4550e080a9d558b441dcc735b6be14f39fb03f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...0001-rdma-sync-some-IP-headers-with-glibc.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
+ package/mosh/mosh.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch b/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
-new file mode 100644
-index 0000000000..f78a5d6b43
---- /dev/null
-+++ b/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
-@@ -0,0 +1,39 @@
-+From 5887ff0922a06d978d3271df9f01fcb04fadc75f Mon Sep 17 00:00:00 2001
-+From: Hoang Le <hoang.h.le@dektech.com.au>
-+Date: Wed, 13 Jun 2018 11:09:56 +0700
-+Subject: rdma: sync some IP headers with glibc
+diff --git a/package/mosh/mosh.mk b/package/mosh/mosh.mk
+index fa6ab17010..f9e335799d 100644
+--- a/package/mosh/mosh.mk
++++ b/package/mosh/mosh.mk
+@@ -10,6 +10,9 @@ MOSH_DEPENDENCIES = zlib ncurses protobuf host-pkgconf
+ MOSH_LICENSE = GPL-3.0+ with exception
+ MOSH_LICENSE_FILES = COPYING COPYING.iOS
+ 
++# protobuf needs c++11 (since 3.6.0)
++MOSH_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
 +
-+In the commit 9a362cc71a45, new userspace header:
-+  (i.e rdma/rdma_user_cm.h -> linux/in6.h)
-+is included before the kernel space header:
-+  (i.e utils.h -> resolv.h -> netinet/in.h).
-+
-+This leads to unsynchronous some IP headers and compiler got failure
-+with error: redefinition of some structs IP.
-+
-+In this commit, just reorder this including to make them in-sync.
-+
-+Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
-+Acked-by: Leon Romanovsky <leonro@mellanox.com>
-+Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=5887ff0922a06d978d3271df9f01fcb04fadc75f]
-+---
-+ rdma/rdma.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/rdma/rdma.h b/rdma/rdma.h
-+index fcaf9e6..d4b7ba1 100644
-+--- a/rdma/rdma.h
-++++ b/rdma/rdma.h
-+@@ -15,6 +15,7 @@
-+ #include <string.h>
-+ #include <errno.h>
-+ #include <getopt.h>
-++#include <netinet/in.h>
-+ #include <libmnl/libmnl.h>
-+ #include <rdma/rdma_netlink.h>
-+ #include <rdma/rdma_user_cm.h>
-+-- 
-+cgit v1.1
-+
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MOSH_CONF_OPTS += --with-crypto-library=openssl
+ MOSH_DEPENDENCIES += openssl
 -- 
 2.14.1
