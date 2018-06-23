@@ -1,45 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Jun 2018 20:56:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pcre: bump version to 8.42
-Message-ID: <20180623185644.10956-1-bernd.kuhls@t-online.de>
+Date: Sat, 23 Jun 2018 20:57:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pcre2: bump version to 10.31
+Message-ID: <20180623185752.18154-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated license hash after upstream commit
-https://vcs.pcre.org/pcre/code/tags/pcre-8.42/LICENCE?r1=1674&r2=1726
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pcre/pcre.hash | 4 ++--
- package/pcre/pcre.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pcre2/pcre2.hash | 6 ++++--
+ package/pcre2/pcre2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
-index fc0bb98d05..ca72a78cd2 100644
---- a/package/pcre/pcre.hash
-+++ b/package/pcre/pcre.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 e62c7eac5ae7c0e7286db61ff82912e1c0b7a0c13706616e94a7dd729321b530  pcre-8.41.tar.bz2
-+sha256 2cd04b7c887808be030254e8d77de11d3fe9d4505c39d4b15d2664ffe8bf9301  pcre-8.42.tar.bz2
- # License files, locally calculated
--sha256 9ac4dfc82b2645ff77b56b759f95f28aa15ab15a03670fa6d4313a6b351e60f0  LICENCE
-+sha256 f998c0f52eb704eff28f503580cfca3f2547280aa212994f6cf2d8e317587c1c  LICENCE
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index b12b00dd66..163e535ec3 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+index 7b125dda9d..210e2e58c1 100644
+--- a/package/pcre2/pcre2.hash
++++ b/package/pcre2/pcre2.hash
+@@ -1,2 +1,4 @@
+-# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.30.tar.bz2.sig
+-sha256 90bd41c605d30e3745771eb81928d779f158081a51b2f314bbcc1f73de5773db  pcre2-10.30.tar.bz2
++# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.31.tar.bz2.sig
++sha256 e07d538704aa65e477b6a392b32ff9fc5edf75ab9a40ddfc876186c4ff4d68ac  pcre2-10.31.tar.bz2
++# Locally computed
++sha256 4806d1c067bffe106d97dac68744373a866bfdd65486c0532ed1b41595ec4b64  LICENCE
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index 3844622858..49ece6b9dc 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PCRE_VERSION = 8.41
-+PCRE_VERSION = 8.42
- PCRE_SITE = https://ftp.pcre.org/pub/pcre
- PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
- PCRE_LICENSE = BSD-3-Clause
+-PCRE2_VERSION = 10.30
++PCRE2_VERSION = 10.31
+ PCRE2_SITE = https://ftp.pcre.org/pub/pcre
+ PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+ PCRE2_LICENSE = BSD-3-Clause
 -- 
 2.17.1
