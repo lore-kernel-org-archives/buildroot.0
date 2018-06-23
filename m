@@ -1,9 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Jun 2018 23:06:48 +0200
-Subject: [Buildroot] [PATCH v2 04/22] package/libdri2: switch to xorgproto
+Date: Sat, 23 Jun 2018 23:06:56 +0200
+Subject: [Buildroot] [PATCH v2 12/22] package/x11r7/xutil_makedepend: switch
+ to xorgproto
 In-Reply-To: <20180623210706.2519-1-bernd.kuhls@t-online.de>
 References: <20180623210706.2519-1-bernd.kuhls@t-online.de>
-Message-ID: <20180623210706.2519-5-bernd.kuhls@t-online.de>
+Message-ID: <20180623210706.2519-13-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,35 +17,34 @@ https://lists.x.org/archives/xorg-announce/2018-February/002835.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libdri2/Config.in  | 2 +-
- package/libdri2/libdri2.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xutil_makedepend/Config.in           | 1 +
+ package/x11r7/xutil_makedepend/xutil_makedepend.mk | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdri2/Config.in b/package/libdri2/Config.in
-index a10df7404a..fa3f76e8f3 100644
---- a/package/libdri2/Config.in
-+++ b/package/libdri2/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBDRI2
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XPROTO_DRI2PROTO
+diff --git a/package/x11r7/xutil_makedepend/Config.in b/package/x11r7/xutil_makedepend/Config.in
+index 0b091b0e34..fdf2fb92c1 100644
+--- a/package/x11r7/xutil_makedepend/Config.in
++++ b/package/x11r7/xutil_makedepend/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XUTIL_MAKEDEPEND
+ 	bool "makedepend"
 +	select BR2_PACKAGE_XORGPROTO
  	help
- 	  Library for the DRI2 extension to the X Window System.
+ 	  No description available
+diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+index 6fd3c1ae36..8a058efcec 100644
+--- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
++++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+@@ -10,8 +10,8 @@ XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
+ XUTIL_MAKEDEPEND_LICENSE = MIT
+ XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
  
-diff --git a/package/libdri2/libdri2.mk b/package/libdri2/libdri2.mk
-index 22854b5060..79f38c680b 100644
---- a/package/libdri2/libdri2.mk
-+++ b/package/libdri2/libdri2.mk
-@@ -6,7 +6,7 @@
+-XUTIL_MAKEDEPEND_DEPENDENCIES = xproto_xproto
+-HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xproto_xproto
++XUTIL_MAKEDEPEND_DEPENDENCIES = xorgproto
++HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xorgproto
  
- LIBDRI2_VERSION = 4f1eef3183df2b270c3d5cbef07343ee5127a6a4
- LIBDRI2_SITE = $(call github,robclark,libdri2,$(LIBDRI2_VERSION))
--LIBDRI2_DEPENDENCIES = xlib_libXext xproto_dri2proto xlib_libXdamage libdrm
-+LIBDRI2_DEPENDENCIES = xlib_libXext xlib_libXdamage xorgproto libdrm
- LIBDRI2_LICENSE = MIT
- LIBDRI2_LICENSE_FILES = COPYING
- 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.17.1
