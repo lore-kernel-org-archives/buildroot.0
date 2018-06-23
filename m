@@ -1,53 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Jun 2018 12:52:16 +0200
-Subject: [Buildroot] [PATCH] package/gdb: fix gdbserver build for m68k
-In-Reply-To: <20180622210949.18107-1-romain.naour@gmail.com> (Romain Naour's
- message of "Fri, 22 Jun 2018 23:09:49 +0200")
-References: <20180622210949.18107-1-romain.naour@gmail.com>
-Message-ID: <87a7rlixlr.fsf@dell.be.48ers.dk>
+Date: Sat, 23 Jun 2018 12:51:22 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself to package/libuv
+Message-ID: <20180623104956.25B62813FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=dff052827e41b63f3bf287cf44f1185f2b6c139e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > As for strace [1], when <sys/reg.h> is included after <linux/ptrace.h>,
- > the build fails on m68k with the following diagnostics:
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
- > In file included from ./../nat/linux-ptrace.h:28:0,
- >                  from linux-low.h:27,
- >                  from linux-m68k-low.c:20:
- > [...]/usr/include/sys/reg.h:26:3: error: expected identifier before numeric constant
- >    PT_D1 = 0,
- >    ^
- > [...]usr/include/sys/reg.h:26:3: error: expected ??}?? before numeric constant
- > [...]usr/include/sys/reg.h:26:3: error: expected unqualified-id before numeric constant
- > In file included from linux-m68k-low.c:27:0:
- > [...]usr/include/sys/reg.h:99:1: error: expected declaration before ??}?? token
- >  };
- >  ^
-
- > Fix this by moving <sys/reg.h> on top of "linux-low.h".
-
- > Fixes:
- > https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006385
-
- > [1] https://github.com/strace/strace/commit/6ebf6c4f9e5ebca123a5b5f24afe67cf0473cf92
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Waldemar Brodkorb <wbx@openadk.org>
- > ---
- > I'm not taking into acount gdb 7.11 and 7.10 since they will be removed soon.
- > http://patchwork.ozlabs.org/patch/869573/
- > http://patchwork.ozlabs.org/patch/869574/
-
- > gdb 8.1 needs this patch too.
- > http://patchwork.ozlabs.org/patch/869572/
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d22ac527fa..d9b0d80a92 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -195,6 +195,7 @@ F:	package/sqlcipher/
+ F:	package/stress/
+ 
+ N:	Asaf Kahlon <asafka7@gmail.com>
++F:	package/libuv
+ F:	package/python-jsonmodels/
+ F:	package/python-reentry/
+ F:	package/python-subprocess32/
