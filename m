@@ -1,62 +1,82 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 23 Jun 2018 22:24:56 +0200
-Subject: [Buildroot] [PATCH 1/1] cmake: fix build with libuv 1.21.0
-Message-ID: <20180623202456.21724-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sat, 23 Jun 2018 23:34:05 +0300
+Subject: [Buildroot] [PATCH 1/1] iproute2: fix rdma build
+In-Reply-To: <20180623192506.7405-1-fontaine.fabrice@gmail.com>
+References: <20180623192506.7405-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180623203405.oie6fj2gd2fjtlhy@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Retrieve patch from
-https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=229255#c1
+Hi Fabrice,
 
-Fixes:
- - http://autobuild.buildroot.net/results/86d67e5d30f7e3ba9a4932c06640a7924202d3f9
+On Sat, Jun 23, 2018 at 09:25:06PM +0200, Fabrice Fontaine wrote:
+> Retrieve upstream patch
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/63229f485f58be32238916cd997cbe92ac3ca953
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-check-uv-version-h-for-version-detection.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/cmake/0002-FindLibUV-Also-check-uv-version-h-for-version-detection.patch
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Tested-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/cmake/0002-FindLibUV-Also-check-uv-version-h-for-version-detection.patch b/package/cmake/0002-FindLibUV-Also-check-uv-version-h-for-version-detection.patch
-new file mode 100644
-index 0000000000..9abf1a538f
---- /dev/null
-+++ b/package/cmake/0002-FindLibUV-Also-check-uv-version-h-for-version-detection.patch
-@@ -0,0 +1,32 @@
-+From 92c4b3d900a24512967a960f108d985c819fdf00 Mon Sep 17 00:00:00 2001
-+From: Raphael Kubo da Costa <rakuco@FreeBSD.org>
-+Date: Sat, 23 Jun 2018 20:30:07 +0200
-+Subject: [PATCH] FindLibUV: Also check uv/version.h for version detection
-+
-+Starting with libuv 1.21.0, libuv's headers were moved into a uv/ directory.
-+Make FindLibUV aware of the file's new location for configuration to work.
-+
-+Upstream change: https://github.com/libuv/libuv/pull/1429
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieve from: https://gitlab.kitware.com/cmake/cmake/merge_requests/2169]
-+---
-+ Source/Modules/FindLibUV.cmake | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/Source/Modules/FindLibUV.cmake b/Source/Modules/FindLibUV.cmake
-+index ba13d75f8b..0554d62c23 100644
-+--- a/Source/Modules/FindLibUV.cmake
-++++ b/Source/Modules/FindLibUV.cmake
-+@@ -63,6 +63,8 @@ mark_as_advanced(LibUV_INCLUDE_DIR)
-+ set(_LibUV_H_REGEX "#[ \t]*define[ \t]+UV_VERSION_(MAJOR|MINOR|PATCH)[ \t]+[0-9]+")
-+ if(LibUV_INCLUDE_DIR AND EXISTS "${LibUV_INCLUDE_DIR}/uv-version.h")
-+   file(STRINGS "${LibUV_INCLUDE_DIR}/uv-version.h" _LibUV_H REGEX "${_LibUV_H_REGEX}")
-++elseif(LibUV_INCLUDE_DIR AND EXISTS "${LibUV_INCLUDE_DIR}/uv/version.h")
-++  file(STRINGS "${LibUV_INCLUDE_DIR}/uv/version.h" _LibUV_H REGEX "${_LibUV_H_REGEX}")
-+ elseif(LibUV_INCLUDE_DIR AND EXISTS "${LibUV_INCLUDE_DIR}/uv.h")
-+   file(STRINGS "${LibUV_INCLUDE_DIR}/uv.h" _LibUV_H REGEX "${_LibUV_H_REGEX}")
-+ else()
-+-- 
-+2.16.4
-+
+Thanks,
+baruch
+
+> ---
+>  ...0001-rdma-sync-some-IP-headers-with-glibc.patch | 39 ++++++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
+> 
+> diff --git a/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch b/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
+> new file mode 100644
+> index 0000000000..f78a5d6b43
+> --- /dev/null
+> +++ b/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
+> @@ -0,0 +1,39 @@
+> +From 5887ff0922a06d978d3271df9f01fcb04fadc75f Mon Sep 17 00:00:00 2001
+> +From: Hoang Le <hoang.h.le@dektech.com.au>
+> +Date: Wed, 13 Jun 2018 11:09:56 +0700
+> +Subject: rdma: sync some IP headers with glibc
+> +
+> +In the commit 9a362cc71a45, new userspace header:
+> +  (i.e rdma/rdma_user_cm.h -> linux/in6.h)
+> +is included before the kernel space header:
+> +  (i.e utils.h -> resolv.h -> netinet/in.h).
+> +
+> +This leads to unsynchronous some IP headers and compiler got failure
+> +with error: redefinition of some structs IP.
+> +
+> +In this commit, just reorder this including to make them in-sync.
+> +
+> +Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
+> +Acked-by: Leon Romanovsky <leonro@mellanox.com>
+> +Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=5887ff0922a06d978d3271df9f01fcb04fadc75f]
+> +---
+> + rdma/rdma.h | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/rdma/rdma.h b/rdma/rdma.h
+> +index fcaf9e6..d4b7ba1 100644
+> +--- a/rdma/rdma.h
+> ++++ b/rdma/rdma.h
+> +@@ -15,6 +15,7 @@
+> + #include <string.h>
+> + #include <errno.h>
+> + #include <getopt.h>
+> ++#include <netinet/in.h>
+> + #include <libmnl/libmnl.h>
+> + #include <rdma/rdma_netlink.h>
+> + #include <rdma/rdma_user_cm.h>
+> +-- 
+> +cgit v1.1
+
 -- 
-2.14.1
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
