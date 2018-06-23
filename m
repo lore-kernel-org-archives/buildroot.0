@@ -1,42 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Jun 2018 10:05:12 +0200
-Subject: [Buildroot] [git commit] libuv: bump to version 1.21.0
-Message-ID: <20180623080544.31BB481404@busybox.osuosl.org>
+Date: Sat, 23 Jun 2018 10:10:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/erlang: bump version to 21.0
+In-Reply-To: <87efh1m9pd.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Wed, 20 Jun 2018 23:25:50 +0200")
+References: <20180620203343.15647-1-bernd.kuhls@t-online.de>
+ <87efh1m9pd.fsf@dell.be.48ers.dk>
+Message-ID: <87muvlj544.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e06bf3b28a45f069be24f77fe75c157d296409d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+ >> Release notes: http://www.erlang.org/news/123
+ >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index e877e0a1e9..612f45b6ad 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  43a388687194a15d5f3cc1980d53c405020a3586254c620e5f3c4d241bb9da05  libuv-v1.20.3.tar.gz
-+sha256  c6f53e4a75d2601db8efe0e837839969de7667d36569110429a0bc8f8229bf59  libuv-v1.21.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 83b39ac7a2..591eaeb7c4 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUV_VERSION = v1.20.3
-+LIBUV_VERSION = v1.21.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+ > Committed, thanks.
+
+This causes a number of (pcre related?) build issues for the host
+version. Care to take a look?
+
+http://autobuild.buildroot.net/?reason=host-erlang-21.0
+
+-- 
+Bye, Peter Korsgaard
