@@ -1,32 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Jun 2018 10:04:37 +0200
-Subject: [Buildroot] [PATCH] strongswan: Bump strongswan from 5.4.0 to
- 5.6.3
-In-Reply-To: <CANQCQpbkFp5K+kTk5Oqkj-Rzr9TJCJc+==EvJ7VDqJzyJs2++w@mail.gmail.com>
- (Matthew Weber's message of "Fri, 22 Jun 2018 22:14:49 -0500")
-References: <1529528673-31111-1-git-send-email-matthew.weber@rockwellcollins.com>
- <87h8luk6bc.fsf@dell.be.48ers.dk>
- <CANQCQpbkFp5K+kTk5Oqkj-Rzr9TJCJc+==EvJ7VDqJzyJs2++w@mail.gmail.com>
-Message-ID: <87vaaahqsq.fsf@dell.be.48ers.dk>
+Date: Sat, 23 Jun 2018 09:51:59 +0200
+Subject: [Buildroot] [git commit] apache: add systemd init script
+Message-ID: <20180623080216.5494F7FE78@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matthew" == Matthew Weber <matthew.weber@rockwellcollins.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=2ce4028d5ff53acc56c6f07b4c63ccc9105004d2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> > Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
- >> 
- >> Matt, as you forward this patch from somebody else you need to add your
- >> own Signed-off-by.
- >> 
- >> Can I add it myself or do you want to resend the patch?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/apache/apache.mk      |  8 ++++++++
+ package/apache/apache.service | 13 +++++++++++++
+ 2 files changed, 21 insertions(+)
 
- > Opps.  If you don't mind, please add it
- > Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index f4c522916e..6ebd30ca40 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -97,4 +97,12 @@ define APACHE_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S50apache
+ endef
+ 
++define APACHE_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/apache/apache.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/apache.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/apache.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/apache.service
++endef
++
+ $(eval $(autotools-package))
+diff --git a/package/apache/apache.service b/package/apache/apache.service
+new file mode 100644
+index 0000000000..b8747e2658
+--- /dev/null
++++ b/package/apache/apache.service
+@@ -0,0 +1,13 @@
++[Unit]
++Description=Apache HTTP Server
++After=network.target
++
++[Service]
++Type=forking
++ExecStart=/usr/bin/apachectl start
++ExecReload=/usr/bin/apachectl graceful
++ExecStop=/usr/bin/apachectl stop
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
