@@ -1,29 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Jun 2018 17:18:20 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add myself to package/libuv
-In-Reply-To: <20180623143738.10e6ba76@windsurf> (Thomas Petazzoni's message of
- "Sat, 23 Jun 2018 14:37:38 +0200")
-References: <20180623104956.25B62813FD@busybox.osuosl.org>
- <20180623143738.10e6ba76@windsurf>
-Message-ID: <876029ilab.fsf@dell.be.48ers.dk>
+Date: Sat, 23 Jun 2018 17:19:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/erlang: fix host build with
+ host-pcre package
+In-Reply-To: <20180623133410.16783-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 23 Jun 2018 15:34:10 +0200")
+References: <20180623133410.16783-1-bernd.kuhls@t-online.de>
+Message-ID: <871scxil8o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Hello,
- > On Sat, 23 Jun 2018 12:51:22 +0200, Peter Korsgaard wrote:
+ > https://git.buildroot.net/buildroot/commit/?id=bd12cd7d4633200ce01663df6528fd061d64b784
+ > added an incompletely rebased patch to fix host-erlang when pcre is
+ > available on the host.
 
- >> N:	Asaf Kahlon <asafka7@gmail.com>
- >> +F:	package/libuv
+ > Fixes
+ > http://autobuild.buildroot.net/results/484/484a54b005764958073674bf07f6a760bfedb071/
 
- > Minor nit: all other entries in DEVELOPERS have a final slash at the
- > end of paths.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Correct, I'll fix it.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
