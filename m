@@ -1,44 +1,68 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 23 Jun 2018 20:57:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pcre2: bump version to 10.31
-Message-ID: <20180623185752.18154-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 23 Jun 2018 21:25:06 +0200
+Subject: [Buildroot] [PATCH 1/1] iproute2: fix rdma build
+Message-ID: <20180623192506.7405-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Retrieve upstream patch
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes:
+ - http://autobuild.buildroot.net/results/63229f485f58be32238916cd997cbe92ac3ca953
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pcre2/pcre2.hash | 6 ++++--
- package/pcre2/pcre2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ ...0001-rdma-sync-some-IP-headers-with-glibc.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
 
-diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-index 7b125dda9d..210e2e58c1 100644
---- a/package/pcre2/pcre2.hash
-+++ b/package/pcre2/pcre2.hash
-@@ -1,2 +1,4 @@
--# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.30.tar.bz2.sig
--sha256 90bd41c605d30e3745771eb81928d779f158081a51b2f314bbcc1f73de5773db  pcre2-10.30.tar.bz2
-+# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.31.tar.bz2.sig
-+sha256 e07d538704aa65e477b6a392b32ff9fc5edf75ab9a40ddfc876186c4ff4d68ac  pcre2-10.31.tar.bz2
-+# Locally computed
-+sha256 4806d1c067bffe106d97dac68744373a866bfdd65486c0532ed1b41595ec4b64  LICENCE
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index 3844622858..49ece6b9dc 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCRE2_VERSION = 10.30
-+PCRE2_VERSION = 10.31
- PCRE2_SITE = https://ftp.pcre.org/pub/pcre
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
+diff --git a/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch b/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
+new file mode 100644
+index 0000000000..f78a5d6b43
+--- /dev/null
++++ b/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
+@@ -0,0 +1,39 @@
++From 5887ff0922a06d978d3271df9f01fcb04fadc75f Mon Sep 17 00:00:00 2001
++From: Hoang Le <hoang.h.le@dektech.com.au>
++Date: Wed, 13 Jun 2018 11:09:56 +0700
++Subject: rdma: sync some IP headers with glibc
++
++In the commit 9a362cc71a45, new userspace header:
++  (i.e rdma/rdma_user_cm.h -> linux/in6.h)
++is included before the kernel space header:
++  (i.e utils.h -> resolv.h -> netinet/in.h).
++
++This leads to unsynchronous some IP headers and compiler got failure
++with error: redefinition of some structs IP.
++
++In this commit, just reorder this including to make them in-sync.
++
++Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
++Acked-by: Leon Romanovsky <leonro@mellanox.com>
++Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=5887ff0922a06d978d3271df9f01fcb04fadc75f]
++---
++ rdma/rdma.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/rdma/rdma.h b/rdma/rdma.h
++index fcaf9e6..d4b7ba1 100644
++--- a/rdma/rdma.h
+++++ b/rdma/rdma.h
++@@ -15,6 +15,7 @@
++ #include <string.h>
++ #include <errno.h>
++ #include <getopt.h>
+++#include <netinet/in.h>
++ #include <libmnl/libmnl.h>
++ #include <rdma/rdma_netlink.h>
++ #include <rdma/rdma_user_cm.h>
++-- 
++cgit v1.1
++
 -- 
-2.17.1
+2.14.1
