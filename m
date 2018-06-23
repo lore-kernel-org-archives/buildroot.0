@@ -1,29 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 23 Jun 2018 17:19:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/erlang: fix host build with
- host-pcre package
-In-Reply-To: <20180623133410.16783-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 23 Jun 2018 15:34:10 +0200")
-References: <20180623133410.16783-1-bernd.kuhls@t-online.de>
-Message-ID: <871scxil8o.fsf@dell.be.48ers.dk>
+Date: Sat, 23 Jun 2018 17:17:36 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add a trailing slash for libuv
+Message-ID: <20180623151645.D96947FAD9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f5b8f82346aa13ee8bf47a759ffc7c18390fef4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > https://git.buildroot.net/buildroot/commit/?id=bd12cd7d4633200ce01663df6528fd061d64b784
- > added an incompletely rebased patch to fix host-erlang when pcre is
- > available on the host.
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fixes
- > http://autobuild.buildroot.net/results/484/484a54b005764958073674bf07f6a760bfedb071/
-
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d9b0d80a92..cb55ad64b8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -195,7 +195,7 @@ F:	package/sqlcipher/
+ F:	package/stress/
+ 
+ N:	Asaf Kahlon <asafka7@gmail.com>
+-F:	package/libuv
++F:	package/libuv/
+ F:	package/python-jsonmodels/
+ F:	package/python-reentry/
+ F:	package/python-subprocess32/
