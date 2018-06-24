@@ -1,69 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jun 2018 21:31:45 +0200
-Subject: [Buildroot] [git commit] package/gdb: switch to 8.0 as the default
- version
-Message-ID: <20180624193409.2C6EF8127E@busybox.osuosl.org>
+Date: Sun, 24 Jun 2018 21:11:11 +0200
+Subject: [Buildroot] [git commit] uboot: don't override HOSTCC/HOSTLDFLAGS
+ for kconfig
+Message-ID: <20180624193409.060E68127E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f3d8623145505f751c2235a4ae40705cff6e05d
+commit: https://git.buildroot.net/buildroot/commit/?id=9255fd9fc7bb302fcb69282becea7273827c64e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-8.1 is around, 8.0 has already seen a point release, so it's time to
-make 8.0 the default version for gdb.
+So the host ncurses includes and library are used instead of a mix of both,
+causing corrupted characters.  Similar to the linux fix in commit
+6d3d09e23213e8 (linux: don't override HOSTCC for kconfig), except that we
+pass the linker flags in HOSTLDFLAGS.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Jagan Teki <jagan@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/Config.in.host | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ boot/uboot/uboot.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 333da6bad2..02b3b1093b 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -45,7 +45,7 @@ config BR2_PACKAGE_HOST_GDB_SIM
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 03bd7ea743..6ef275e842 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -211,7 +211,15 @@ endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
  
- choice
- 	prompt "GDB debugger Version"
--	default BR2_GDB_VERSION_7_11
-+	default BR2_GDB_VERSION_8_0
- 	depends on !BR2_arc
- 	help
- 	  Select the version of gdb you wish to use.
-@@ -75,14 +75,17 @@ endif
- 
- # Tells whether the currently selected gdb version requires C++11
- # support in the toolchain. When host-gdb is not enabled, the target
--# gdb built is 7.11, which doesn't require C++11 support. So it's only
--# if host-gdb is built, with the version set to 8.0 or 8.1 that C++11
--# support is needed in the toolchain to build gdb for the target.
-+# gdb built is 8.0, which requires C++11 support, which is why
-+# BR2_PACKAGE_GDB_NEEDS_CXX11 is 'y' when BR2_PACKAGE_HOST_GDB is not
-+# enabled. When host-gdb is built, with the version set to 8.0 or 8.1
-+# then C++11 support is needed in the toolchain to build gdb for the
-+# target.
- #
- # Even though this option is related to target gdb dependencies, we
- # keep it next to the BR2_GDB_VERSION so that they are kept in sync.
- config BR2_PACKAGE_GDB_NEEDS_CXX11
- 	bool
-+	default y if !BR2_PACKAGE_HOST_GDB
- 	default y if BR2_GDB_VERSION_8_0
- 	default y if BR2_GDB_VERSION_8_1
- 
-@@ -91,8 +94,8 @@ config BR2_GDB_VERSION
- 	string
- 	default "arc-2018.03-rc2-gdb" if BR2_arc
- 	default "7.10.1"   if BR2_GDB_VERSION_7_10
--	default "7.11.1"   if BR2_GDB_VERSION_7_11 || !BR2_PACKAGE_HOST_GDB
-+	default "7.11.1"   if BR2_GDB_VERSION_7_11
- 	default "7.12.1"   if BR2_GDB_VERSION_7_12
--	default "8.0.1"    if BR2_GDB_VERSION_8_0
-+	default "8.0.1"    if BR2_GDB_VERSION_8_0 || !BR2_PACKAGE_HOST_GDB
- 	default "8.1"      if BR2_GDB_VERSION_8_1
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+ UBOOT_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES))
+ UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+-UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS)
++
++# UBOOT_MAKE_OPTS overrides HOSTCC / HOSTLDFLAGS to allow the build to
++# find our host-openssl. However, this triggers a bug in the kconfig
++# build script that causes it to build with /usr/include/ncurses.h
++# (which is typically wchar) but link with
++# $(HOST_DIR)/lib/libncurses.so (which is not).  We don't actually
++# need any host-package for kconfig, so remove the HOSTCC/HOSTLDFLAGS
++# override again.
++UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC)" HOSTLDFLAGS=""
+ define UBOOT_HELP_CMDS
+ 	@echo '  uboot-menuconfig       - Run U-Boot menuconfig'
+ 	@echo '  uboot-savedefconfig    - Run U-Boot savedefconfig'
