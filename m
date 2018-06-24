@@ -1,48 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jun 2018 23:53:20 +0200
-Subject: [Buildroot] [git commit] domoticz: remove boost hack for powerpc64le
-Message-ID: <20180624215148.E6F5A815B9@busybox.osuosl.org>
+Date: Sun, 24 Jun 2018 23:54:28 +0200
+Subject: [Buildroot] [git commit] boost: add option for contract library
+Message-ID: <20180624215148.F285C813E7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6be346cec40dda8ab762e11471fa6ff951fdbfa0
+commit: https://git.buildroot.net/buildroot/commit/?id=4da82c82364c75da9d8e011ffd73aaabe91b3106
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since boost 1.67, seed_rng.hpp has been removed:
-https://github.com/boostorg/uuid/commit/a8a1ec3d826b04d2c842e79ecd18cff6a991fd29
+Contract library has been added in boost 1.67 and depends on NPTL
+
+Fixes:
+ - http://autobuild.buildroot.net/results/a3dd35cfa50a1862c585a648298351c0aba257db
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/domoticz/domoticz.mk | 15 ---------------
- 1 file changed, 15 deletions(-)
+ package/boost/Config.in | 10 ++++++++++
+ package/boost/boost.mk  |  7 ++++---
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index af58563436..6421fd0dd5 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -18,21 +18,6 @@ DOMOTICZ_DEPENDENCIES = \
- 	sqlite \
- 	zlib
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index ec0e19ccb5..781bc47c00 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -77,6 +77,16 @@ config BR2_PACKAGE_BOOST_CONTEXT
+ 	help
+ 	  C++11 context switching library.
  
--# Fixes:
--# http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
--# There is an issue with powerpc64le and boost::uuids::random_generator on the
--# following line of code (from include/boost/uuid/seed_rng.hpp):
--# sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
--# This line "inspects the first couple bytes (here eight) of the std::rand
--# function to seed some rng. Due to the implementation of process_bytes and
--# inlining happening, it seems that one of the loops therein uses &rand-1 as
--# some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
--# the link will succeed."
--# See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
--ifeq ($(BR2_powerpc64le),y)
--DOMOTICZ_CXXFLAGS += -O0
--endif
--
- # Due to the dependency on mosquitto, domoticz depends on
- # !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
- DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
++config BR2_PACKAGE_BOOST_CONTRACT
++	bool "boost-contract"
++	# pthread_condattr_setclock
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	help
++	  Contract programming for C++.
++
++comment "boost-contract needs a toolchain w/ NPTL"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++
+ config BR2_PACKAGE_BOOST_COROUTINE
+ 	bool "boost-coroutine"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 981d701bdf..cf0cea7edd 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -14,15 +14,16 @@ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ # keep host variant as minimal as possible
+ HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+ 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
+-	coroutine date_time exception filesystem graph graph_parallel iostreams \
+-	locale log math mpi program_options python random regex serialization \
+-	signals system test thread timer type_erasure \
++	contract coroutine date_time exception filesystem graph graph_parallel \
++	iostreams locale log math mpi program_options python random regex \
++	serialization signals system test thread timer type_erasure \
+ 	wave)
+ 
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTRACT),,contract)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
