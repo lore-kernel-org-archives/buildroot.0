@@ -1,123 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 24 Jun 2018 15:53:06 +0200
-Subject: [Buildroot] [PATCH v3 1/5] package/gdb: rework dependency for C++11
+Date: Sun, 24 Jun 2018 15:53:09 +0200
+Subject: [Buildroot] [PATCH v3 4/5] package/gdb: remove 7.10
 In-Reply-To: <20180624135310.16514-1-thomas.petazzoni@bootlin.com>
 References: <20180624135310.16514-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180624135310.16514-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20180624135310.16514-5-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As we are about to switch to 8.0 as the default gdb dependency, we
-need to adjust how the gdb dependencies are handled. Indeed, from 8.0
-onwards, gdb needs a C++11 capable compiler, i.e at least gcc 4.8.
+From: Romain Naour <romain.naour@gmail.com>
 
-Until now, Config.in.host was making sure that gdb 8.0 was not
-selectable if the cross-compilation toolchain did not have C++ support
-with gcc >= 4.8. This worked fine because the default version of gdb,
-used as the target gdb version when no host gdb is built, was 7.11,
-and did not require C++11.
+Now that 8.1 has been added and 8.0 is the default version, let's
+remove the old 7.10 release.
 
-With the switch to 8.0 as the default version, when target gdb is
-enabled but not host gdb, 8.0 is used, which means we need a C++11
-capable compiler. The dependencies in Config.in.host are no longer
-sufficient.
-
-So instead, we remove the target-related dependencies from
-Config.in.host and move them properly to Config.in. The overall logic
-is the following:
-
- - In Config.in.host, BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS ensures that
-   we have at least host gcc 4.8 if we're on ARC, because the ARC gdb
-   needs C++11. We remove the target toolchain related dependencies
-   from here.
-
- - In Config.in.host, the version selection ensures that 8.0 cannot be
-   selected if the host toolchain does not have at least gcc 4.8. We
-   remove the target toolchain related dependencies from here.
-
- - In Config.in.host, we introduce a BR2_PACKAGE_GDB_NEEDS_CXX11
-   option, that indicates whether the currently selected version of
-   gdb requires C++11 support in the toolchain to build the target
-   variant. Even though this option is more related to the target
-   variant of gdb, we keep it in Config.in.host so that it appears
-   next to the definition of BR2_GDB_VERSION, to make sure they are
-   kept in sync.
-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gdb/Config.in      |  8 ++++++++
- package/gdb/Config.in.host | 15 ++++++++++++---
- 2 files changed, 20 insertions(+), 3 deletions(-)
+ Config.in.legacy           | 7 +++++++
+ package/gdb/Config.in.host | 4 ----
+ package/gdb/gdb.hash       | 1 -
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index 6eea73b071..9a71c008a0 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -10,15 +10,23 @@ comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
- 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_HAS_THREADS_DEBUG
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7fc4792aed..e8aa4a557f 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -713,6 +713,13 @@ config BR2_PACKAGE_KODI_ADSP_FREESURROUND
+ ###############################################################################
+ comment "Legacy options removed in 2018.02"
  
-+comment "gdb/gdbserver >= 8.x needs a toolchain w/ C++, gcc >= 4.8"
-+	depends on BR2_PACKAGE_GDB_NEEDS_CXX11
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++config BR2_GDB_VERSION_7_10
++	bool "gdb 7.10 has been removed"
++	select BR2_LEGACY
++	help
++	  The 7.10 version of gdb has been removed. Use a newer version
++	  instead.
 +
- config BR2_PACKAGE_GDB
- 	bool "gdb"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS && BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_PACKAGE_GDB_NEEDS_CXX11
-+	depends on BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_GDB_NEEDS_CXX11
- 	# When the external toolchain gdbserver is copied to the
- 	# target, we don't allow building a separate gdbserver. The
- 	# one from the external toolchain should be used.
- 	select BR2_PACKAGE_GDB_SERVER if \
- 		(!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_PACKAGE_GDB_NEEDS_CXX11
-+	depends on BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_GDB_NEEDS_CXX11
- 	help
- 	  GDB, the GNU Project debugger, allows you to see what is
- 	  going on `inside' another program while it executes -- or
+ config BR2_KERNEL_HEADERS_3_4
+ 	bool "kernel headers version 3.4.x are no longer supported"
+ 	select BR2_KERNEL_HEADERS_4_1
 diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 0011966d88..8736908b6b 100644
+index 41016f6ccd..4f27755a6d 100644
 --- a/package/gdb/Config.in.host
 +++ b/package/gdb/Config.in.host
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
- 	default y
- 	# The ARC version needs C++11, thus gcc >= 4.8, like gdb-8.0.x
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_arc
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_arc
- 	depends on !((BR2_arm || BR2_armeb) && BR2_BINFMT_FLAT)
- 	depends on !BR2_microblaze
- 	depends on !BR2_nios2
-@@ -63,14 +62,24 @@ config BR2_GDB_VERSION_7_12
- config BR2_GDB_VERSION_8_0
- 	bool "gdb 8.0.x"
- 	# Needs a C++11 compiler
--	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+@@ -50,9 +50,6 @@ choice
+ 	help
+ 	  Select the version of gdb you wish to use.
  
- endchoice
+-config BR2_GDB_VERSION_7_10
+-	bool "gdb 7.10.x"
+-
+ config BR2_GDB_VERSION_7_11
+ 	bool "gdb 7.11.x"
  
- endif
- 
-+# Tells whether the currently selected gdb version requires C++11
-+# support in the toolchain. When host-gdb is not enabled, the target
-+# gdb built is 7.11, which doesn't require C++11 support. So it's only
-+# if host-gdb is built, with the version set to 8.0 that C++11 support
-+# is needed in the toolchain to build gdb for the target.
-+#
-+# Even though this option is related to target gdb dependencies, we
-+# keep it next to the BR2_GDB_VERSION so that they are kept in sync.
-+config BR2_PACKAGE_GDB_NEEDS_CXX11
-+	bool
-+	default y if BR2_GDB_VERSION_8_0
-+
- # If cross-gdb is not enabled, the latest working version is chosen.
+@@ -93,7 +90,6 @@ config BR2_PACKAGE_GDB_NEEDS_CXX11
  config BR2_GDB_VERSION
  	string
+ 	default "arc-2018.03-rc2-gdb" if BR2_arc
+-	default "7.10.1"   if BR2_GDB_VERSION_7_10
+ 	default "7.11.1"   if BR2_GDB_VERSION_7_11
+ 	default "7.12.1"   if BR2_GDB_VERSION_7_12
+ 	default "8.0.1"    if BR2_GDB_VERSION_8_0 || !BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index e5c60a916b..4d871ae732 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -1,5 +1,4 @@
+ # From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
+-sha512	17a5138277a31685a5c2a841cb47ed9bc4626ea617b8ca77750513b300299f4fbbffe504958b5372de610dcb952c679cf8fa9c1bdadd380294fbf59b6e366010	gdb-7.10.1.tar.xz
+ sha512  f80ec6c8a0f0b54c8b945666e875809174402b7e121efb378ebac931a91f9a1cc0048568f8e2f42ae8ae2392ff8d144c2e51d41c7398935017450aaf29838360	gdb-7.11.1.tar.xz
+ sha512  0ac8d0a495103611ef41167a08313a010dce6ca4c6d827cbe8558a0c1a1a8a6bfa53f1b7704251289cababbfaaf9e075550cdf741a54d6cd9ca3433d910efcd8	gdb-7.12.1.tar.xz
+ sha512  5eb328910033f0918058be2f92caebf1e8dfc6caa3c730d99d621627e53de3c1b43761c2f683d53555893253c2f06768cbf56cdea051a3d291ffb6cfae87b5e1	gdb-8.0.1.tar.xz
 -- 
 2.14.4
