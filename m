@@ -1,42 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jun 2018 21:36:11 +0200
-Subject: [Buildroot] [PATCH v3 5/5] package/gdb: remove 7.11
-In-Reply-To: <20180624135310.16514-6-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Sun, 24 Jun 2018 15:53:10 +0200")
-References: <20180624135310.16514-1-thomas.petazzoni@bootlin.com>
- <20180624135310.16514-6-thomas.petazzoni@bootlin.com>
-Message-ID: <87sh5cdljo.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Jun 2018 21:10:52 +0200
+Subject: [Buildroot] [git commit] dos2unix: fix static build
+Message-ID: <20180624193408.F0D638127E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=fe5fcdfdbd209177cf8f4a5368ae2324540d4d67
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Romain Naour <romain.naour@gmail.com>
- > Now that 8.1 has been added and 8.0 is the default version, let's
- > remove the old 7.11 release.
+Pass the -static flag to the final link command. Otherwise, the
+generated executables are not static when the external toolchain
+provides both shared and static libraries.
 
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- >  Config.in.legacy           | 7 +++++++
- >  package/gdb/Config.in.host | 4 ----
- >  package/gdb/gdb.hash       | 1 -
- >  3 files changed, 7 insertions(+), 5 deletions(-)
+Should also fix:
+http://autobuild.buildroot.net/results/a5a/a5a64bc3ff5a91a8680ac52f3505362491923b26/
+http://autobuild.buildroot.net/results/ebf/ebfe81e65751d7a5ca3aa4e20cc708a24ba65204/
 
- > diff --git a/Config.in.legacy b/Config.in.legacy
- > index e8aa4a557f..e87786129f 100644
- > --- a/Config.in.legacy
- > +++ b/Config.in.legacy
- > @@ -713,6 +713,13 @@ config BR2_PACKAGE_KODI_ADSP_FREESURROUND
- >  ###############################################################################
- >  comment "Legacy options removed in 2018.02"
+Cc: David Bachelart <david.bachelart@bbright.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dos2unix/dos2unix.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 9b82340590..5001397f05 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -24,6 +24,10 @@ ifeq ($(BR2_USE_WCHAR),)
+ DOS2UNIX_MAKE_OPTS += UCS=
+ endif
  
- > +config BR2_GDB_VERSION_7_11
-
-Same comment as for 7.10. Committed with that fixed, thanks.
-
--- 
-Bye, Peter Korsgaard
++ifeq ($(BR2_STATIC_LIBS),y)
++DOS2UNIX_MAKE_OPTS += LDFLAGS_USER=-static
++endif
++
+ define DOS2UNIX_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(DOS2UNIX_MAKE_OPTS)
+ endef
