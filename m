@@ -1,171 +1,165 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jun 2018 08:36:04 +0200
-Subject: [Buildroot] [git commit] protobuf: add dependency on gcc >= 4.8
-Message-ID: <20180624093057.B073F81F64@busybox.osuosl.org>
+Date: Sun, 24 Jun 2018 11:30:14 +0200
+Subject: [Buildroot] [git commit] davfs2: new package
+Message-ID: <20180624093057.BAD857FE82@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5dd74dbd1abbe87e0e792e2922a06909af279b3b
+commit: https://git.buildroot.net/buildroot/commit/?id=23c91395437febc641f2bd43d90b3344ed90c428
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since version 3.6.0, protobuf requires C++11
+davfs2 is a Linux file system driver that allows to
+mount a WebDAV resource. WebDAV is an extension to HTTP/1.1
+that allows remote collaborative authoring of Web resources.
 
-Fixes:
- - http://autobuild.buildroot.net/results/bb299008423edf4c65ade6c159e33c4216428bf1
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Peter: Add patch to drop -fstack-protector-strong and update dependencies,
+	Not available on musl and nommu, fixup .hash file comments,
+	Fix _SITE and drop autoreconf, update DEVELOPERS]
+Signed-off-by: Roman Gorbenkov <roman.gorbenkov@ens2m.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/collectd/Config.in         |  8 ++++----
- package/mosh/Config.in             |  8 ++++----
- package/protobuf-c/Config.in       |  6 +++---
- package/protobuf/Config.in         | 10 +++++-----
- package/python-protobuf/Config.in  |  2 +-
- package/riemann-c-client/Config.in |  6 +++---
- 6 files changed, 20 insertions(+), 20 deletions(-)
+ DEVELOPERS                                         |  3 ++
+ package/Config.in                                  |  1 +
+ ...e.am-do-not-hardcode-fstack-protector-str.patch | 45 ++++++++++++++++++++++
+ package/davfs2/Config.in                           | 18 +++++++++
+ package/davfs2/davfs2.hash                         |  4 ++
+ package/davfs2/davfs2.mk                           | 17 ++++++++
+ 6 files changed, 88 insertions(+)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index ccd3fbe13f..c9e61a5622 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -559,7 +559,7 @@ config BR2_PACKAGE_COLLECTD_RIEMANN
- 	# riemann-c-client -> protobuf-c
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_HOST_GCC_AT_LEAST_4_5
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8
- 	select BR2_PACKAGE_RIEMANN_C_CLIENT
- 	select BR2_PACKAGE_LIBTOOL
- 	help
-@@ -588,15 +588,15 @@ config BR2_PACKAGE_COLLECTD_WRITEPROMETHEUS
- 	bool "write_prometheus"
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf-c
--	depends on BR2_HOST_GCC_AT_LEAST_4_5 # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # protobuf-c
- 	select BR2_PACKAGE_LIBMICROHTTPD
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
- 	  Publishes values using an embedded HTTP server, in a format
- 	  compatible with Prometheus' collectd_exporter.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cb55ad64b8..626fba3159 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1665,6 +1665,9 @@ F:	package/chocolate-doom/
+ F:	package/irssi/
+ F:	package/vnstat/
  
--comment "write_prometheus needs a toolchain w/ C++, host gcc >= 4.5"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_HOST_GCC_AT_LEAST_4_5
-+comment "write_prometheus needs a toolchain w/ C++, host gcc >= 4.8"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_HOST_GCC_AT_LEAST_4_8
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
- 
- config BR2_PACKAGE_COLLECTD_WRITESENSU
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-index da8a305a06..00da41c794 100644
---- a/package/mosh/Config.in
-+++ b/package/mosh/Config.in
-@@ -1,7 +1,7 @@
--comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, host and target gcc >= 4.5"
-+comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, host and target gcc >= 4.8"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
- 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
--		|| !BR2_HOST_GCC_AT_LEAST_4_5 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+		|| !BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_MOSH
-@@ -9,8 +9,8 @@ config BR2_PACKAGE_MOSH
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
--	depends on BR2_HOST_GCC_AT_LEAST_4_5 # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5 # protobuf
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
- 	depends on !BR2_STATIC_LIBS # protobuf
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_PROTOBUF
-diff --git a/package/protobuf-c/Config.in b/package/protobuf-c/Config.in
-index 6f916c57fe..6d7e7e11df 100644
---- a/package/protobuf-c/Config.in
-+++ b/package/protobuf-c/Config.in
-@@ -4,14 +4,14 @@ config BR2_PACKAGE_PROTOBUF_C
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# host-protobuf only builds on certain architectures
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_HOST_GCC_AT_LEAST_4_5 # host-protobuf
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # host-protobuf
- 	help
- 	  Code generator and runtime libraries to use Protocol Buffers
- 	  from pure C (not C++).
- 
- 	  https://github.com/protobuf-c/protobuf-c
- 
--comment "protobuf-c needs a toolchain w/ C++, threads, host gcc >= 4.5"
-+comment "protobuf-c needs a toolchain w/ C++, threads, host gcc >= 4.8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_HOST_GCC_AT_LEAST_4_5
-+		|| !BR2_HOST_GCC_AT_LEAST_4_8
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index c91e401508..2829b2a5a7 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -30,8 +30,8 @@ config BR2_PACKAGE_PROTOBUF
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_HOST_GCC_AT_LEAST_4_5
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
- 	depends on !BR2_STATIC_LIBS
- 	help
- 	  Protocol buffers are Google's language-neutral,
-@@ -40,8 +40,8 @@ config BR2_PACKAGE_PROTOBUF
- 
- 	  https://developers.google.com/protocol-buffers
- 
--comment "protobuf needs a toolchain w/ C++, threads, dynamic library, host and target gcc >= 4.5"
-+comment "protobuf needs a toolchain w/ C++, threads, dynamic library, host and target gcc >= 4.8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_HOST_GCC_AT_LEAST_4_5 \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
-+		|| BR2_STATIC_LIBS || !BR2_HOST_GCC_AT_LEAST_4_8 \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/python-protobuf/Config.in b/package/python-protobuf/Config.in
-index 500c82a531..8a70e80ad7 100644
---- a/package/python-protobuf/Config.in
-+++ b/package/python-protobuf/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_PYTHON_PROTOBUF
- 	bool "python-protobuf"
- 	# host-protobuf only builds on certain architectures
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
--	depends on BR2_HOST_GCC_AT_LEAST_4_5 # host-protobuf
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # host-protobuf
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  Python implementation of the Google Protocol Buffers.
-diff --git a/package/riemann-c-client/Config.in b/package/riemann-c-client/Config.in
-index 91b13b7901..c241487c7f 100644
---- a/package/riemann-c-client/Config.in
-+++ b/package/riemann-c-client/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf-c
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf-c
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86" # protobuf-c
--	depends on BR2_HOST_GCC_AT_LEAST_4_5 # protobuf-c
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # protobuf-c
- 	select BR2_PACKAGE_PROTOBUF_C
- 	help
- 	  Riemann-c-client is a C client library for the Riemann
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_RIEMANN_C_CLIENT
- 
- 	  https://github.com/algernon/riemann-c-client
- 
--comment "riemann-c-client needs a toolchain w/ C++, threads, host gcc >= 4.5"
-+comment "riemann-c-client needs a toolchain w/ C++, threads, host gcc >= 4.8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_HOST_GCC_AT_LEAST_4_5
-+		|| !BR2_HOST_GCC_AT_LEAST_4_8
- 	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++N:	Roman Gorbenkov <roman.gorbenkov@ens2m.org>
++F:	package/davfs2/
++
+ N:	Romain Naour <romain.naour@gmail.com>
+ F:	package/aubio/
+ F:	package/bullet/
+diff --git a/package/Config.in b/package/Config.in
+index a5ecfecbf9..c8e35fd99e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -175,6 +175,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/cpio/Config.in"
+ 	source "package/cramfs/Config.in"
+ 	source "package/curlftpfs/Config.in"
++	source "package/davfs2/Config.in"
+ 	source "package/dosfstools/Config.in"
+ 	source "package/e2fsprogs/Config.in"
+ 	source "package/e2tools/Config.in"
+diff --git a/package/davfs2/0001-src-Makefile.am-do-not-hardcode-fstack-protector-str.patch b/package/davfs2/0001-src-Makefile.am-do-not-hardcode-fstack-protector-str.patch
+new file mode 100644
+index 0000000000..54ae62fc04
+--- /dev/null
++++ b/package/davfs2/0001-src-Makefile.am-do-not-hardcode-fstack-protector-str.patch
+@@ -0,0 +1,45 @@
++From d209ef650cf2f760ef8217748ab10716bd22d60d Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Sun, 24 Jun 2018 10:35:37 +0200
++Subject: [PATCH] src/Makefile.am: do not hardcode -fstack-protector-strong
++
++davfs2 does not truly require -fstack-protector-strong, so do not hardcode
++it.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/Makefile.am | 3 +--
++ src/Makefile.in | 3 +--
++ 2 files changed, 2 insertions(+), 4 deletions(-)
++
++diff --git a/src/Makefile.am b/src/Makefile.am
++index f083462..ed6b682 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -32,8 +32,7 @@ mount_davfs_SOURCES = cache.c dav_coda.c \
++         kernel_interface.h mount_davfs.h webdav.h
++ umount_davfs_SOURCES = umount_davfs.c defaults.h
++ 
++-AM_CFLAGS = -Wall -Werror=format-security \
++-        -fstack-protector-strong --param=ssp-buffer-size=4
+++AM_CFLAGS = -Wall -Werror=format-security
++ DEFS = -DPROGRAM_NAME=\"mount.davfs\" \
++        -DDAV_SYS_CONF_DIR=\"$(pkgsysconfdir)\" \
++        -DDAV_LOCALSTATE_DIR=\"$(dav_localstatedir)\" \
++diff --git a/src/Makefile.in b/src/Makefile.in
++index 9fee542..e98758d 100644
++--- a/src/Makefile.in
+++++ b/src/Makefile.in
++@@ -315,8 +315,7 @@ mount_davfs_SOURCES = cache.c dav_coda.c \
++         kernel_interface.h mount_davfs.h webdav.h
++ 
++ umount_davfs_SOURCES = umount_davfs.c defaults.h
++-AM_CFLAGS = -Wall -Werror=format-security \
++-        -fstack-protector-strong --param=ssp-buffer-size=4
+++AM_CFLAGS = -Wall -Werror=format-security
++ 
++ all: all-am
++ 
++-- 
++2.11.0
++
+diff --git a/package/davfs2/Config.in b/package/davfs2/Config.in
+new file mode 100644
+index 0000000000..162753be3e
+--- /dev/null
++++ b/package/davfs2/Config.in
+@@ -0,0 +1,18 @@
++comment "davfs2 needs a glibc or uClibc toolchain"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_USES_MUSL
++
++config BR2_PACKAGE_DAVFS2
++	bool "davfs2"
++	depends on !BR2_TOOLCHAIN_USES_MUSL # error.h
++	depends on BR2_USE_MMU # fork()
++	select BR2_PACKAGE_NEON
++	select BR2_PACKAGE_NEON_XML
++	help
++	  davfs2 is a Linux file system driver that allows to
++	  mount a WebDAV resource. WebDAV is an extension to HTTP/1.1
++	  that allows remote collaborative authoring of Web resources.
++	  To use davfs2 via /etc/fstab, FEATURE_MOUNT_HELPERS
++	  must be selected in busybox configuration.
++
++	  http://savannah.nongnu.org/projects/davfs2
+diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
+new file mode 100644
+index 0000000000..102659a38d
+--- /dev/null
++++ b/package/davfs2/davfs2.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256 c9c4e0f0912a782386216b2147eb9c36c47f193b8fcf3d637719e0b9fe7c96e0  davfs2-1.5.4.tar.gz
++# License file, locally calculated
++sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
+diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
+new file mode 100644
+index 0000000000..c1f8477f8b
+--- /dev/null
++++ b/package/davfs2/davfs2.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# davfs2
++#
++################################################################################
++
++DAVFS2_VERSION = 1.5.4
++DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
++DAVFS2_LICENSE = GPL-3.0+
++DAVFS2_LICENSE_FILES = COPYING
++
++DAVFS2_DEPENDENCIES = neon
++
++DAVFS2_CONF_ENV += \
++	ac_cv_path_NEON_CONFIG=$(STAGING_DIR)/usr/bin/neon-config
++
++$(eval $(autotools-package))
