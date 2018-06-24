@@ -1,949 +1,172 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 24 Jun 2018 00:35:22 +0200
-Subject: [Buildroot] [PATCH v6 2/9] gst1-plugins-${base, good, bad,
- ugly}: bump to 1.14.1
-In-Reply-To: <20180623223529.13629-1-ps.report@gmx.net>
-References: <20180623223529.13629-1-ps.report@gmx.net>
-Message-ID: <20180623223529.13629-3-ps.report@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 24 Jun 2018 08:00:20 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-06-23
+Message-ID: <20180624060020.55B692079C@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <aduskett@gmail.com>
+Hello,
 
-These are grouped together because several plugins have been re-arranged and
-there is no way to individually update each plugin package.
+Build statistics for 2018-06-23
+===============================
 
-Changes:
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  21 |   1 |   0 |  22 |
+   2018.05.x |  23 |   0 |   0 |  23 |
+      master | 109 | 102 |   0 | 211 |
 
-Add the following to gst1-plugins-base and remove them from plugins-bad:
- - opengl
- - gles2
- - glx
- - egl
- - x11
- - dispmanx
- - audiomixer
+Results for branch '2018.02.x'
+==============================
 
-Add the following to plugins-good and remove them from plugins-ugly:
- - lame
- - mpg123
+Classification of failures by reason
+------------------------------------
 
-moved --disable-qt from plugins-bad to plugins-good
+                  boost-1.66.0 | 1 
 
-Delete upstream patch from gst1-plugins-ugly ([1])
- - 0001-x264enc-fix-build-with-newer-x264-with-support-for-m.patch
 
-Also add hashes for the license files.
+Detail of failures
+------------------
 
-[1] https://cgit.freedesktop.org/gstreamer/gst-plugins-ugly/commit/?id=83c38dc44622611c1f67dd26e4cb383c5aef90f6
+     powerpc |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/5dd6687874c8b8bec1be1596564d2dda7b01f5af |     
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-[Upate to 1.14.1]
-[Removed legacy lame/mpg123 option, add Config.in.legacy handling]
-[remove leftover audiomixer handling from gst1-plugins-bad.mk]
-[remove upstram patch frmo gst1-plugins-ugly]
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Changes v5 -> v6:
-  - update to 1.14.1
-  - add Config.in.legacy handling for various options (suggested by Thomas Petazzoni)
-  - remove lame/mpg123 from ugly Config.in (suggested by Thomas Petazzoni)
-  - add Config.in.legacy handling for lame/mpg123 (suggested by Thomas Petazzoni)
-  - remove leftover audiomixer handling from gst1-plugins-bad.mk
-  - remove upstream patch from gst1-plugins-ugly
----
- Config.in.legacy                              |  83 +++++++++++
- package/gstreamer1/gst1-plugins-bad/Config.in | 139 +-----------------
- .../gst1-plugins-bad/gst1-plugins-bad.hash    |   5 +-
- .../gst1-plugins-bad/gst1-plugins-bad.mk      |  58 +-------
- .../gstreamer1/gst1-plugins-base/Config.in    | 130 ++++++++++++++++
- .../gst1-plugins-base/gst1-plugins-base.hash  |   5 +-
- .../gst1-plugins-base/gst1-plugins-base.mk    |  63 +++++++-
- .../gstreamer1/gst1-plugins-good/Config.in    |  12 ++
- .../gst1-plugins-good/gst1-plugins-good.hash  |   5 +-
- .../gst1-plugins-good/gst1-plugins-good.mk    |  20 ++-
- ...d-with-newer-x264-with-support-for-m.patch | 106 -------------
- .../gstreamer1/gst1-plugins-ugly/Config.in    |  12 --
- .../gst1-plugins-ugly/gst1-plugins-ugly.hash  |   5 +-
- .../gst1-plugins-ugly/gst1-plugins-ugly.mk    |  16 +-
- 14 files changed, 322 insertions(+), 337 deletions(-)
- delete mode 100644 package/gstreamer1/gst1-plugins-ugly/0001-x264enc-fix-build-with-newer-x264-with-support-for-m.patch
+Results for branch 'master'
+===========================
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7fc4792aed..fa01bdabd3 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -142,6 +142,89 @@ comment "unpredictable ways.                                 "
- comment "----------------------------------------------------"
- endif
- 
-+###############################################################################
-+comment "Legacy options removed in 2018.11"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_OPENGL
-+	bool "gst1-plugins-bad opengl option moved to gst1-plugins-base"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
-+	help
-+	  The opengl option has been moved from gst1-plugins-bad to
-+	  gst1-plugins-base.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_GLES2
-+	bool "gst1-plugins-bad gles2 option moved to gst1-plugins-base"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2
-+	help
-+	  The gles2 option has been moved from gst1-plugins-bad to
-+	  gst1-plugins-base.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_GLX
-+	bool "gst1-plugins-bad glx option moved to gst1-plugins-base"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX
-+	help
-+	  The glx option has been moved from gst1-plugins-bad to
-+	  gst1-plugins-base.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
-+	bool "gst1-plugins-bad egl option moved to gst1-plugins-base"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL
-+	help
-+	  The egl option has been moved from gst1-plugins-bad to
-+	  gst1-plugins-base.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_X11
-+	bool "gst1-plugins-bad x11 option moved to gst1-plugins-base"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_X11
-+	help
-+	  The x11 option has been moved from gst1-plugins-bad to
-+	  gst1-plugins-base.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
-+	bool "gst1-plugins-bad wayland option moved to gst1-plugins-base"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_WAYLAND
-+	help
-+	  The wayland option has been moved from gst1-plugins-bad to
-+	  gst1-plugins-base.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_DISPMANX
-+	bool "gst1-plugins-bad dispmanx option moved to gst1-plugins-base"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX
-+	help
-+	  The dispmanx option has been moved from gst1-plugins-mad to
-+	  gst1-plugins-base.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXER
-+	bool "gst1-plugins-bad audiomixer option moved to gst1-plugins-base"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOMIXER
-+	help
-+	  The audiomixer option has been moved from gst1-plugins-bad to
-+	  gst1-plugins-base.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
-+	bool "gst1-plugins-ugly lame option moved to gst1-plugins-good"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAME
-+	help
-+	  The lame option has been moved from gst1-plugins-ugly to
-+	  gst1-plugins-good.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPG123
-+	bool "gst1-plugins-ugly mpg123 option moved to gst1-plugins-good"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MPG123
-+	help
-+	  The mpg123 option has been moved from gst1-plugins-ugly to
-+	  gst1-plugins-good.
-+
- ###############################################################################
- comment "Legacy options removed in 2018.05"
- 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index b09e515f5a..3ce6daf544 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -9,134 +9,6 @@ menuconfig BR2_PACKAGE_GST1_PLUGINS_BAD
- 
- if BR2_PACKAGE_GST1_PLUGINS_BAD
- 
--comment "libraries with external dependencies"
--
--menuconfig BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL
--	bool "opengl"
--	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
--
--if BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_HAS_LIB_OPENGL
--	def_bool BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
--
--comment "The opengl library needs an API, a platform and a window system"
--	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_HAS_LIB_OPENGL
--
--comment "APIs"
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_API
--	bool
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_OPENGL
--	bool "opengl"
--	default y
--	depends on BR2_PACKAGE_HAS_LIBGL
--	select BR2_PACKAGE_LIBGLU
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_API
--
--comment "opengl needs an OpenGL backend"
--	depends on !BR2_PACKAGE_HAS_LIBGL
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_GLES2
--	bool "gles2"
--	default y
--	depends on BR2_PACKAGE_HAS_LIBGLES
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_API
--
--comment "gles2 needs an OpenGL ES backend"
--	depends on !BR2_PACKAGE_HAS_LIBGLES
--
--comment "Platforms"
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM
--	bool
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_GLX
--	bool "glx"
--	default y
--	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_OPENGL
--	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR # mesa needs big X
--	depends on !BR2_PACKAGE_RPI_USERLAND # x11
--	select BR2_PACKAGE_XLIB_LIBXRENDER
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_X11
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM
--	help
--	  OpenGL Extension to the X Window System
--
--comment "glx not supported with rpi-userland"
--	depends on BR2_PACKAGE_RPI_USERLAND
--
--comment "glx needs the opengl API and modular X.org"
--	depends on !BR2_PACKAGE_RPI_USERLAND && \
--		(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_OPENGL || \
--		!BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR)
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
--	bool "egl"
--	default y
--	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_API
--	depends on BR2_PACKAGE_HAS_LIBEGL
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM
--
--comment "egl needs an API and an EGL backend"
--	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_API || \
--		!BR2_PACKAGE_HAS_LIBEGL
--
--comment "Window systems"
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
--	bool
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_X11
--	bool "x11"
--	default y
--	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM
--	depends on !BR2_PACKAGE_RPI_USERLAND
--	depends on BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
--
--comment "x11 not supported with rpi-userland"
--	depends on BR2_PACKAGE_RPI_USERLAND
--
--comment "x11 needs a platform and X.org"
--	depends on !BR2_PACKAGE_RPI_USERLAND && \
--		(!BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_PLATFORM || \
--		!BR2_PACKAGE_XORG7)
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND
--	bool "wayland"
--	default y
--	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
--	depends on BR2_PACKAGE_WAYLAND
--	select BR2_PACKAGE_WAYLAND_PROTOCOLS
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
--
--comment "wayland needs the egl platform and the wayland package"
--	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL || \
--		!BR2_PACKAGE_WAYLAND
--
--config BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_DISPMANX
--	bool "dispmanx"
--	default y
--	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL
--	depends on BR2_PACKAGE_RPI_USERLAND
--	select BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_HAS_WINDOW
--	help
--	  Raspberry Pi's Dispmanx windowing system
--
--comment "dispmanx needs the egl platform and rpi-userland"
--	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL || \
--		!BR2_PACKAGE_RPI_USERLAND
--
--endif
--
--comment "opengl needs an OpenGL or OpenGL ES backend"
--	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
--
- comment "dependency-less plugins"
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ACCURIP
-@@ -174,11 +46,6 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOFXBAD
- 	help
- 	  Audio filters plugin
- 
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXER
--	bool "audiomixer"
--	help
--	  Audio mixer plugin
--
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXMATRIX
- 	bool "audiomixmatrix"
- 	help
-@@ -513,10 +380,10 @@ comment "fdk-aac needs a toolchain w/ C++"
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL
- 	bool "gl"
- 	default y
--	depends on BR2_PACKAGE_GST1_PLUGINS_BAD_HAS_LIB_OPENGL
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
- 
--comment "gl needs the gst1-plugins-bad opengl library"
--	depends on !BR2_PACKAGE_GST1_PLUGINS_BAD_HAS_LIB_OPENGL
-+comment "gl needs the gst1-plugins-base opengl library"
-+	depends on !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_HLS
- 	bool "hls"
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-index 752d50a56d..927e45b7e9 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-@@ -1,2 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.12.4.tar.xz.sha256sum
--sha256 0c7857be16686d5c1ba6e34bd338664d3d4599d32714a8eca5c8a41a101e2d08 gst-plugins-bad-1.12.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.14.1.tar.xz.sha256sum
-+sha256 2a77c6908032aafdf2cd2e5823fec948f16a25c2d1497a953828d762dc20d61a gst-plugins-bad-1.14.1.tar.xz
-+sha256 0b12e4d1cd5db5f8a0c04fc98a1d8c3acc533097b6198d6644420da78d460223 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index b041014f81..fe8d1aaa75 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BAD_VERSION = 1.12.4
-+GST1_PLUGINS_BAD_VERSION = 1.14.1
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
-@@ -58,8 +58,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	--disable-schro \
- 	--disable-zbar \
- 	--disable-spandsp \
--	--disable-gtk3 \
--	--disable-qt
-+	--disable-gtk3
- 
- GST1_PLUGINS_BAD_DEPENDENCIES = gst1-plugins-base gstreamer1
- 
-@@ -72,58 +71,13 @@ GST1_PLUGINS_BAD_CONF_ENV += \
- 	-I$(STAGING_DIR)/usr/include/interface/vmcs_host/linux"
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_OPENGL),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-opengl
--GST1_PLUGINS_BAD_DEPENDENCIES += libgl libglu
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-opengl
--endif
--
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_GLES2),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-gles2
--GST1_PLUGINS_BAD_DEPENDENCIES += libgles
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-gles2
--endif
--
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_GLX),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-glx
--GST1_PLUGINS_BAD_DEPENDENCIES += xproto_glproto xlib_libXrender
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-glx
--endif
--
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_EGL),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-egl
--GST1_PLUGINS_BAD_DEPENDENCIES += libegl
--GST1_PLUGINS_BAD_CONF_ENV += \
--	CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`" \
--	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs egl`"
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-egl
--endif
--
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_X11),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-x11
--GST1_PLUGINS_BAD_DEPENDENCIES += xlib_libX11 xlib_libXext
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-x11
--endif
--
--ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND)$(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),)
-+ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-wayland
- GST1_PLUGINS_BAD_DEPENDENCIES += wayland wayland-protocols
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-wayland
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_DISPMANX),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-dispmanx
--GST1_PLUGINS_BAD_DEPENDENCIES += rpi-userland
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-dispmanx
--endif
--
- ifeq ($(BR2_PACKAGE_ORC),y)
- GST1_PLUGINS_BAD_DEPENDENCIES += orc
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-orc
-@@ -178,12 +132,6 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-audiofxbad
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXER),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-audiomixer
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-audiomixer
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXMATRIX),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-audiomixmatrix
- else
-diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
-index 6b08b68cf2..531fac4f47 100644
---- a/package/gstreamer1/gst1-plugins-base/Config.in
-+++ b/package/gstreamer1/gst1-plugins-base/Config.in
-@@ -28,6 +28,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
- 	help
- 	  Convert audio to different formats
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOMIXER
-+	bool "audiomixer"
-+	help
-+	  Audio mixer plugin
-+
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE
- 	bool "audiorate"
- 	help
-@@ -111,6 +116,131 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
- 
- comment "plugins with external dependencies"
- 
-+menuconfig BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
-+	bool "opengl"
-+	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES
-+
-+if BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
-+	def_bool BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_WINDOW
-+
-+comment "The opengl library needs an API, a platform and a window system"
-+	depends on !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
-+
-+comment "APIs"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API
-+	bool
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
-+	bool "opengl"
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API
-+
-+comment "opengl needs an OpenGL backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGL
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2
-+	bool "gles2"
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API
-+
-+comment "gles2 needs an OpenGL ES backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGLES
-+
-+comment "Platforms"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM
-+	bool
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX
-+	bool "glx"
-+	default y
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL
-+	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR # mesa needs big X
-+	depends on !BR2_PACKAGE_RPI_USERLAND # x11
-+	select BR2_PACKAGE_XLIB_LIBXRENDER
-+	select BR2_PACKAGE_XPROTO_GLPROTO
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_X11
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM
-+	help
-+	  OpenGL Extension to the X Window System
-+
-+comment "glx not supported with rpi-userland"
-+	depends on BR2_PACKAGE_RPI_USERLAND
-+
-+comment "glx needs the opengl API and modular X.org"
-+	depends on !BR2_PACKAGE_RPI_USERLAND && \
-+		(!BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL || \
-+		!BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR)
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL
-+	bool "egl"
-+	default y
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM
-+
-+comment "egl needs an API and an EGL backend"
-+	depends on !BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API || \
-+		!BR2_PACKAGE_HAS_LIBEGL
-+
-+comment "Window systems"
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_WINDOW
-+	bool
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_X11
-+	bool "x11"
-+	default y
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM
-+	depends on !BR2_PACKAGE_RPI_USERLAND
-+	depends on BR2_PACKAGE_XORG7
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	select BR2_PACKAGE_XLIB_LIBXEXT
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_WINDOW
-+
-+comment "x11 not supported with rpi-userland"
-+	depends on BR2_PACKAGE_RPI_USERLAND
-+
-+comment "x11 needs a platform and X.org"
-+	depends on !BR2_PACKAGE_RPI_USERLAND && \
-+		(!BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM || \
-+		!BR2_PACKAGE_XORG7)
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_WAYLAND
-+	bool "wayland"
-+	default y
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL
-+	depends on BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_WINDOW
-+
-+comment "wayland needs the egl platform and the wayland package"
-+	depends on !BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL || \
-+		!BR2_PACKAGE_WAYLAND
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX
-+	bool "dispmanx"
-+	default y
-+	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL
-+	depends on BR2_PACKAGE_RPI_USERLAND
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_WINDOW
-+	help
-+	  Raspberry Pi's Dispmanx windowing system
-+
-+comment "dispmanx needs the egl platform and rpi-userland"
-+	depends on !BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL || \
-+		!BR2_PACKAGE_RPI_USERLAND
-+endif
-+
-+comment "opengl needs an OpenGL or OpenGL ES backend"
-+	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
-+
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
- 	bool "alsa (mandatory for audio playback)"
- 	select BR2_PACKAGE_ALSA_LIB
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index b935f2f6dc..65c9f29c2f 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-@@ -1,2 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.12.4.tar.xz.sha256sum
--sha256 4c306b03df0212f1b8903784e29bb3493319ba19ebebf13b0c56a17870292282 gst-plugins-base-1.12.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.14.1.tar.xz.sha256sum
-+sha256 1026c7c3082d825d9b5d034c1a6dd8a4ebab60eb3738b0a0afde4ad2dc0b0db5 gst-plugins-base-1.14.1.tar.xz
-+sha256 78fb5977f177ab71cba77a4a127d29b93cb1ca5c25962204b31f183a20cf5c7a COPYING
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 10361ee3c6..ecdc190ef1 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BASE_VERSION = 1.12.4
-+GST1_PLUGINS_BASE_VERSION = 1.14.1
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
-@@ -24,13 +24,64 @@ GST1_PLUGINS_BASE_CONF_OPTS += \
- 
- GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1
- 
--# These plugins are liste in the order from ./configure --help
--
-+# These plugins are listed in the order from ./configure --help
- ifeq ($(BR2_PACKAGE_ORC),y)
- GST1_PLUGINS_BASE_DEPENDENCIES += orc
- GST1_PLUGINS_BASE_CONF_OPTS += --enable-orc
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-opengl
-+GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-opengl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-gles2
-+GST1_PLUGINS_BASE_DEPENDENCIES += libgles
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-gles2
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-glx
-+GST1_PLUGINS_BASE_DEPENDENCIES += xproto_glproto xlib_libXrender
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-glx
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-egl
-+GST1_PLUGINS_BASE_DEPENDENCIES += libegl
-+GST1_PLUGINS_BASE_CONF_ENV += \
-+	CPPFLAGS="$(TARGET_CPPFLAGS) `$(PKG_CONFIG_HOST_BINARY) --cflags egl`" \
-+	LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs egl`"
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-egl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_X11),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-x11
-+GST1_PLUGINS_BASE_DEPENDENCIES += xlib_libX11 xlib_libXext
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-x11
-+endif
-+
-+ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_WAYLAND),)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-wayland
-+GST1_PLUGINS_BASE_DEPENDENCIES += wayland wayland-protocols
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-wayland
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_DISPMANX),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-dispmanx
-+GST1_PLUGINS_BASE_DEPENDENCIES += rpi-userland
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-dispmanx
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ADDER),y)
- GST1_PLUGINS_BASE_CONF_OPTS += --enable-adder
- else
-@@ -49,6 +100,12 @@ else
- GST1_PLUGINS_BASE_CONF_OPTS += --disable-audioconvert
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOMIXER),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-audiomixer
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-audiomixer
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORATE),y)
- GST1_PLUGINS_BASE_CONF_OPTS += --enable-audiorate
- else
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index eea3a3eda8..3bb98a4308 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -261,6 +261,18 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_Y4M
- 
- comment "plugins with external dependencies"
- 
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAME
-+	bool "lame (*.mp3 audio encoder)"
-+	select BR2_PACKAGE_LAME
-+	help
-+	  Encode MP3s with LAME
-+
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MPG123
-+	bool "mpg123 (*.mp3 audio)"
-+	select BR2_PACKAGE_MPG123
-+	help
-+	  mp3 decoding based on the mpg123 library
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS
- 	bool "ossaudio (OSS audio)"
- 	help
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-index c6f6138154..1254c4cde0 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-@@ -1,2 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.12.4.tar.xz.sha256sum
--sha256 649f49bec60892d47ee6731b92266974c723554da1c6649f21296097715eb957 gst-plugins-good-1.12.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.14.1.tar.xz.sha256sum
-+sha256 34ec062ddb766a32377532e039781f4a16fbc3e8b449e642605bacab26a99172 gst-plugins-good-1.14.1.tar.xz
-+sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 53e2341586..26ea8a961a 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_GOOD_VERSION = 1.12.4
-+GST1_PLUGINS_GOOD_VERSION = 1.14.1
- GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
-@@ -20,7 +20,8 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
- 	--disable-osx_video \
- 	--disable-aalib \
- 	--disable-aalibtest \
--	--disable-libcaca
-+	--disable-libcaca \
-+	--disable-qt
- 
- # Options which require currently unpackaged libraries
- GST1_PLUGINS_GOOD_CONF_OPTS += \
-@@ -175,6 +176,21 @@ else
- GST1_PLUGINS_GOOD_CONF_OPTS += --disable-isomp4
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAME),y)
-+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-lame
-+GST1_PLUGINS_GOOD_DEPENDENCIES += lame
-+else
-+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-lame
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MPG123),y)
-+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-mpg123
-+GST1_PLUGINS_GOOD_DEPENDENCIES += mpg123
-+else
-+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-mpg123
-+endif
-+
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAW),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += --enable-law
- else
-diff --git a/package/gstreamer1/gst1-plugins-ugly/0001-x264enc-fix-build-with-newer-x264-with-support-for-m.patch b/package/gstreamer1/gst1-plugins-ugly/0001-x264enc-fix-build-with-newer-x264-with-support-for-m.patch
-deleted file mode 100644
-index c7460470ae..0000000000
---- a/package/gstreamer1/gst1-plugins-ugly/0001-x264enc-fix-build-with-newer-x264-with-support-for-m.patch
-+++ /dev/null
-@@ -1,106 +0,0 @@
--From ffa7ce1e19ec3930de667f213dcaedb7eb10508e Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
--Date: Wed, 28 Feb 2018 10:07:13 +0000
--Subject: [PATCH] x264enc: fix build with newer x264 with support for multiple
-- bit depths
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--libx264 used to be built for one specific bit depth, and if we
--wanted to support multiple bit depths we would have to dynamically
--load the right .so from different paths. That has changed now, and
--libx264 can include support for multiple depths in the same lib,
--so we don't need to do the dlopen() dance any more. We'll keep
--the vtable stuff around until we can drop support for older x264.
--
--gstx264enc.c:2927:36: error: ?x264_bit_depth? undeclared
--
--https://bugzilla.gnome.org/show_bug.cgi?id=792111
--
--Upstream: https://cgit.freedesktop.org/gstreamer/gst-plugins-ugly/patch/ext/x264?id=83c38dc44622611c1f67dd26e4cb383c5aef90f6
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- ext/x264/gstx264enc.c | 35 ++++++++++++++++++++++++++++++++++-
-- 1 file changed, 34 insertions(+), 1 deletion(-)
--
--diff --git a/ext/x264/gstx264enc.c b/ext/x264/gstx264enc.c
--index 4287cf9..d1e4f2b 100644
----- a/ext/x264/gstx264enc.c
--+++ b/ext/x264/gstx264enc.c
--@@ -117,7 +117,9 @@ struct _GstX264EncVTable
-- {
--   GModule *module;
-- 
--+#if X264_BUILD < 153
--   const int *x264_bit_depth;
--+#endif
--   const int *x264_chroma_format;
--   void (*x264_encoder_close) (x264_t *);
--   int (*x264_encoder_delayed_frames) (x264_t *);
--@@ -170,8 +172,9 @@ load_x264 (const gchar * filename)
--         "' from '%s'. Incompatible version?", filename);
--     goto error;
--   }
---
--+#if X264_BUILD < 153
--   LOAD_SYMBOL (x264_bit_depth);
--+#endif
--   LOAD_SYMBOL (x264_chroma_format);
--   LOAD_SYMBOL (x264_encoder_close);
--   LOAD_SYMBOL (x264_encoder_delayed_frames);
--@@ -288,6 +291,7 @@ gst_x264_enc_add_x264_chroma_format (GstStructure * s,
--   return ret;
-- }
-- 
--+#if X264_BUILD < 153
-- static gboolean
-- load_x264_libraries (void)
-- {
--@@ -326,6 +330,33 @@ load_x264_libraries (void)
--   return TRUE;
-- }
-- 
--+#else /* X264_BUILD >= 153 */
--+
--+static gboolean
--+load_x264_libraries (void)
--+{
--+#if X264_BIT_DEPTH == 0         /* all */
--+  vtable_8bit = &default_vtable;
--+  vtable_10bit = &default_vtable;
--+#elif X264_BIT_DEPTH == 8
--+  vtable_8bit = &default_vtable;
--+#elif X264_BIT_DEPTH == 10
--+  vtable_10bit = &default_vtable;
--+#else
--+#error "unexpected X264_BIT_DEPTH value"
--+#endif
--+
--+#ifdef HAVE_X264_ADDITIONAL_LIBRARIES
--+  GST_WARNING ("Ignoring configured additional libraries %s, using libx264 "
--+      "version enabled for multiple bit depths",
--+      HAVE_X264_ADDITIONAL_LIBRARIES);
--+#endif
--+
--+  return TRUE;
--+}
--+
--+#endif
--+
-- enum
-- {
--   ARG_0,
--@@ -2897,7 +2928,9 @@ plugin_init (GstPlugin * plugin)
--    * if needed. We can't initialize statically because these values are not
--    * constant on Windows. */
--   default_vtable.module = NULL;
--+#if X264_BUILD < 153
--   default_vtable.x264_bit_depth = &x264_bit_depth;
--+#endif
--   default_vtable.x264_chroma_format = &x264_chroma_format;
--   default_vtable.x264_encoder_close = x264_encoder_close;
--   default_vtable.x264_encoder_delayed_frames = x264_encoder_delayed_frames;
---- 
--2.16.3
--
-diff --git a/package/gstreamer1/gst1-plugins-ugly/Config.in b/package/gstreamer1/gst1-plugins-ugly/Config.in
-index c997411021..c24ec7ae7b 100644
---- a/package/gstreamer1/gst1-plugins-ugly/Config.in
-+++ b/package/gstreamer1/gst1-plugins-ugly/Config.in
-@@ -44,18 +44,6 @@ config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD
- 	help
- 	  Access a DVD with dvdread
- 
--config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME
--	bool "lame (*.mp3 audio encoder)"
--	select BR2_PACKAGE_LAME
--	help
--	  Encode MP3s with LAME
--
--config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPG123
--	bool "mpg123 (*.mp3 audio)"
--	select BR2_PACKAGE_MPG123
--	help
--	  mp3 decoding based on the mpg123 library
--
- config BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC
- 	bool "mpeg2dec"
- 	select BR2_PACKAGE_LIBMPEG2
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index d0581531d4..4fe4d091a8 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-@@ -1,2 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.12.4.tar.xz.sha256sum
--sha256 1c165b8d888ed350acd8e6ac9f6fe06508e6fcc0a3afc6ccc9fbeb30df9be522 gst-plugins-ugly-1.12.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.14.1.tar.xz.sha256sum
-+sha256 cff2430bb13f54ef81409a0b3d65ce409a376d4a7bab57a14a97d602539fe1d3 gst-plugins-ugly-1.14.1.tar.xz
-+sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index af02a560a8..1b4842fb92 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_UGLY_VERSION = 1.12.4
-+GST1_PLUGINS_UGLY_VERSION = 1.14.1
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
-@@ -70,20 +70,6 @@ else
- GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdread
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_LAME),y)
--GST1_PLUGINS_UGLY_CONF_OPTS += --enable-lame
--GST1_PLUGINS_UGLY_DEPENDENCIES += lame
--else
--GST1_PLUGINS_UGLY_CONF_OPTS += --disable-lame
--endif
--
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPG123),y)
--GST1_PLUGINS_UGLY_CONF_OPTS += --enable-mpg123
--GST1_PLUGINS_UGLY_DEPENDENCIES += mpg123
--else
--GST1_PLUGINS_UGLY_CONF_OPTS += --disable-mpg123
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC),y)
- GST1_PLUGINS_UGLY_CONF_OPTS += --enable-mpeg2dec
- GST1_PLUGINS_UGLY_DEPENDENCIES += libmpeg2
+Classification of failures by reason
+------------------------------------
+
+        host-protobuf-c-v1.3.0 | 27
+               iproute2-4.17.0 | 26
+                   cmake-3.8.2 | 14
+           host-protobuf-3.6.0 | 7 
+                    host-rustc | 4 
+                    mosh-1.3.2 | 4 
+              host-erlang-21.0 | 3 
+package/qt5/qt5base/qt5base... | 3 
+                 gnutls-3.5.18 | 2 
+                   erlang-21.0 | 1 
+                libmpeg2-0.5.1 | 1 
+                  mender-1.4.0 | 1 
+               mono-5.12.0.226 | 1 
+                 opencv3-3.3.0 | 1 
+              python-pyqt5-5.7 | 1 
+            qt5base-legal-info | 1 
+                  samba4-4.8.2 | 1 
+                 socat-1.7.3.2 | 1 
+           uboot-tools-2018.05 | 1 
+                 wiringpi-2.46 | 1 
+                      x265-2.8 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/4ed8cb6a56082f6bca7cd855a5711105793185f8 |     
+     powerpc |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/3fac7bfe53bfaa2ffed78bd9d195afae8dbcbbfa |     
+        mips |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/1e922b47f2536eeb3e9ecefb855b3b45e76d4ea0 |     
+      x86_64 |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/60f77ef2891dd1b2f63546fae50e6332540d17c1 |     
+    mips64el |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/af9849390fe7e57324ce117671c84486bf90c979 |     
+      x86_64 |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/68ef6bf64071ce962dea3cd5daf35868dc0cdf3f |     
+    mips64el |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/3b457cfcb65d859c0b8266e68aea9d49a815607f |     
+         arm |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/887d53000db41c7fc1052cd09b6f3f2682eedcdf |     
+         arm |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/4227d319d9c1e3bcaaa72910afe633b7bf92cac3 |     
+      x86_64 |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/a769ee89f7b778c7f043ffa5c3a0911f58d70bdc |     
+      mipsel |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/5b413ea9c571d0514848eca55d816f69d31660c1 |     
+     powerpc |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/280bb7555777587128a391f16bd8d3f3aa276275 |     
+        mips |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/5c7802d0f49db57142778560ad0b07f34f3df82c |     
+        i586 |                    cmake-3.8.2 | NOK | http://autobuild.buildroot.net/results/86d67e5d30f7e3ba9a4932c06640a7924202d3f9 |     
+         arm |                    erlang-21.0 | NOK | http://autobuild.buildroot.net/results/008b7af68bbaa33fa615a0f95c67d56453911b9d |     
+microblazeel |                  gnutls-3.5.18 | NOK | http://autobuild.buildroot.net/results/e5b8d8dd7ce27dfdc03f5caee9c37e7b17461c93 |     
+microblazeel |                  gnutls-3.5.18 | NOK | http://autobuild.buildroot.net/results/1c353f542c49bbe5520266c0ebb6a58589032453 |     
+         arm |               host-erlang-21.0 | NOK | http://autobuild.buildroot.net/results/f013dab3199bb80418a8ba3f6495ab779bcb5105 |     
+         arm |               host-erlang-21.0 | NOK | http://autobuild.buildroot.net/results/f4774530daaed728d3466cf70061c04e297bbb35 |     
+     powerpc |               host-erlang-21.0 | NOK | http://autobuild.buildroot.net/results/484a54b005764958073674bf07f6a760bfedb071 |     
+         arm |            host-protobuf-3.6.0 | NOK | http://autobuild.buildroot.net/results/a1d01a88e8a0e61126c045e6393af4b018fe6575 |     
+     sparc64 |            host-protobuf-3.6.0 | NOK | http://autobuild.buildroot.net/results/271aaea3382aa951e77fb752a407ee4b438ba344 |     
+    mips64el |            host-protobuf-3.6.0 | NOK | http://autobuild.buildroot.net/results/05a519b36d61b241bae02428294a6e66ab2dca5e |     
+    mips64el |            host-protobuf-3.6.0 | NOK | http://autobuild.buildroot.net/results/c30014cd9757afa1a290d4de8719e76bfbe1da00 |     
+      xtensa |            host-protobuf-3.6.0 | NOK | http://autobuild.buildroot.net/results/7c0ed21b6cfac9e1f4a3a1098286122c0460b480 |     
+    mips64el |            host-protobuf-3.6.0 | NOK | http://autobuild.buildroot.net/results/bb299008423edf4c65ade6c159e33c4216428bf1 |     
+    mips64el |            host-protobuf-3.6.0 | NOK | http://autobuild.buildroot.net/results/013fbdea5b7a3a566b43a5931bdebc130ea4a522 |     
+         arm |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/a0cc2b81376367cc6d41577595daf55d47de7a6c |     
+         arm |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/546bef11abe4976f50e5c124687ea160b9a63c35 |     
+       nios2 |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/101dbe0efcc64ae058db1070dd437c97c030cb23 |     
+         arc |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/e9cc4c22b0b95cfc7ece03cd89ff30e3f735ae77 |     
+         arc |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/d2a7025929edfca4b62f2f12984d47988bf8329f |     
+        i586 |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/8ef914ca88bcae81cdbf01dac38d4f236433f55a |     
+       nios2 |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/b24a06ca66a5704584442b1cacd0fe78edbd83f5 |     
+    mips64el |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/8727d6b1cba7812cb7a3a7812ff6eb1ce658e56a |     
+        or1k |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/def6bc2565a64317d67d1dfea7da6e0fa4051e33 |     
+      xtensa |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/fe20b8174c308d7a42c1a01a2edf94be3ca4418a |     
+    mips64el |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/badc507fceb97aaefdb44b082de146a6d03f8065 |     
+        or1k |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/c8cd9c6a3d7a37fceae993f777f30ac20dba71c6 |     
+       sparc |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/b89321fa8c5369433487572838f5ea68b946e898 |     
+     sparc64 |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/368d63fe61615204c7607f1c7386931d350afa56 |     
+         arc |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/f37331ce701f93547eab0bc272e23d7898301c3d |     
+     sparc64 |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/30c368878d06b1b980181dc74d3e2b849631681b |     
+        m68k |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/6910686719f38557fb5e9201c2d7bce13fb137ea |     
+        i686 |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/36b06fd07b9d6bf605ca2661171be3985d95ec18 |     
+         arm |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/cb610cbc7f80d108ba0deb006d0d0583da342e9f |     
+    mips64el |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/c119c5a62a77ccb4b13d4c5fa355b0864410d532 |     
+     powerpc |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/26b84f2614f75ac101078a59afeb63bc4c0d28b7 |     
+        i586 |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/d4e99482ef93f0a424319d1f09e9b529fa82c6e6 |     
+         arm |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/2ab1e3e7080a28e73da679edc9c8faf2734c38ec |     
+      xtensa |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/24254de175745b0ffefe28eb3bd2e286f1b9a208 |     
+         arc |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/614367518e39be94ea025b3e36ebfe60fba92e31 |     
+     powerpc |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/0fe1218b321200b3a1e26a63d59970ef3148d6f7 |     
+         sh4 |         host-protobuf-c-v1.3.0 | NOK | http://autobuild.buildroot.net/results/4dbcbcd0ec560ce74f4413c529b6dc878693426d |     
+      mipsel |                     host-rustc | NOK | http://autobuild.buildroot.net/results/c0e1ebb8d897e5d8b2137cd2428e9a5fd785b77e |     
+     powerpc |                     host-rustc | NOK | http://autobuild.buildroot.net/results/2aefd1477726b5469dc71e00b29c4349647f9c4c |     
+         arm |                     host-rustc | NOK | http://autobuild.buildroot.net/results/c7305245dc18ea53ea08319fa32907d328b726ff |     
+         arc |                     host-rustc | NOK | http://autobuild.buildroot.net/results/4122c8add170b30cc6e9f237dfb8153eb7baac1d |     
+microblazeel |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/28b04f0a4c8e8846047eba34a0bb8d5c7c98b5f3 |     
+      xtensa |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/0e4854b42f32ecfc3a66bddd564e7fcf11212757 |     
+        m68k |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/7d1f2018829d2bfe37771cb8e68595fed561695c |     
+         arc |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/95cdd1780ef398d65695c6a3bda49ba704642975 |     
+microblazeel |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/fb827ca281ec60d3662aa6e08c887234ee6027d6 |     
+    mips64el |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/beb3a09e9da1aca6c81c116b65b433b07dd1f358 |     
+         arm |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/146670cb7a0ab4b4e5c3f0f15b015bbc7f62a153 |     
+microblazeel |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/ce2e5ee0822bae8130b7f68534978919e196e743 |     
+      xtensa |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/34b526f6cd8001d4e48a1481af1da001a2213bdc |     
+      x86_64 |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/117c37c4196003ac5b8c6fa992aaedd744ebdf37 |     
+     powerpc |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/c043d4282ed04b001df4266d06fcf69a1c628949 |     
+         arm |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/85374a8fb52746460065135ac2d06dcff103104d |     
+    mips64el |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/2e595d361c264bd3b592ba13e0a9f7f20d9284b1 |     
+        i686 |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/7ba9d7de64378c20839ef09e31a876a00e41a774 |     
+         sh4 |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/e8d857bd30f84c603f874b3f7759e5695d2438c5 |     
+        i686 |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/fe9c330658ba072d75fd6ac5998843542ddc1aec |     
+        mips |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/9bc4d0471140e55476c46b51e824e254b9c0fdb9 |     
+         arm |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/2862f0a025023f042fef9abdc2ac983ab2745bd6 |     
+    mips64el |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/dc7b0910d9232bc882348e38883c379a1918fadd |     
+         arc |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/63229f485f58be32238916cd997cbe92ac3ca953 |     
+       sparc |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/2e9b7f7ce930ad00a8b425c59087afecabe0e09f |     
+        mips |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/5a29467ffa4848fd54227b9fbcd51ef1019cd2c7 |     
+     powerpc |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/8197961e676cbd883743eb1fe50a754baff4fc18 |     
+         arm |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/d3b790e1cbc89795adcccf2f33573f120b16b3b3 |     
+      mipsel |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/1a81193035c56ed3dd94197941132151d0ac504b |     
+        m68k |                iproute2-4.17.0 | NOK | http://autobuild.buildroot.net/results/b1ce83b546ac8989c33af09984dc56fc0f79b5ef |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/06e09128ee9eecc618987e996d2a442ecdec84e3 | ORPH
+ powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/6d866ef69045ce07495ae9d3ee8a7ef415902b8a |     
+        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/c5cc39f9b7376ad8e239b8017545201bc51a8c39 |     
+        or1k |                     mosh-1.3.2 | NOK | http://autobuild.buildroot.net/results/e5c03bae0c2b22b8c09833a499d64d5a328da016 |     
+    mips64el |                     mosh-1.3.2 | NOK | http://autobuild.buildroot.net/results/c2ee5e4886ac0ffd885ca49385a0299eaf4a2c65 |     
+        or1k |                     mosh-1.3.2 | NOK | http://autobuild.buildroot.net/results/502415f642b276862eeab9e5860bf6d35d65bffd |     
+        mips |                     mosh-1.3.2 | NOK | http://autobuild.buildroot.net/results/6e4550e080a9d558b441dcc735b6be14f39fb03f |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/79308446e0ed115e4b89d46847407fe924120f17 |     
+   powerpc64 | package/qt5/qt5base/qt5base... | NOK | http://autobuild.buildroot.net/results/055c4cb0026848d81a17d63a952fc11495570abb |     
+      x86_64 | package/qt5/qt5base/qt5base... | NOK | http://autobuild.buildroot.net/results/fd45f5a85d3d154181207543e1dd78eaf5b8f272 |     
+    mips64el | package/qt5/qt5base/qt5base... | NOK | http://autobuild.buildroot.net/results/962888e2d5c73b860a9cae02ec511d4e938485a1 |     
+         arm |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/ddceb7f48e10bc6a49c942ddd457957ab2ab52c1 |     
+    mips64el |             qt5base-legal-info | NOK | http://autobuild.buildroot.net/results/fb012783ca291cc7c1829fca1058c07bb54ff7fb |     
+    mips64el |                   samba4-4.8.2 | NOK | http://autobuild.buildroot.net/results/5cb8399027611dce42a08f06863ffbafb3348e31 |     
+       nios2 |                  socat-1.7.3.2 | NOK | http://autobuild.buildroot.net/results/306b4edcc32246a98ff8334984d0d4a4efeb8e5f |     
+         arm |            uboot-tools-2018.05 | NOK | http://autobuild.buildroot.net/results/d098eeb28c5d69fe373b3ca24ae72ea5f9b15c71 |     
+         arm |                  wiringpi-2.46 | NOK | http://autobuild.buildroot.net/results/a1ca953247475a5f31fe9283ade05c9cba26853b |     
+         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/79e6d02265c3d94d76571acee58617ebe4937520 |     
+
+
 -- 
-2.17.1
+http://autobuild.buildroot.net
