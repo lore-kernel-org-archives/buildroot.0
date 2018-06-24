@@ -1,44 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jun 2018 16:12:42 +0200
-Subject: [Buildroot] [PATCH] uboot: don't override HOSTCC/HOSTLDFLAGS for
- kconfig
-Message-ID: <20180624141242.16851-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 24 Jun 2018 16:15:05 +0200
+Subject: [Buildroot] [PATCH 1/1] domoticz: remove boost hack for powerpc64le
+Message-ID: <20180624141505.31561-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-So the host ncurses includes and library are used instead of a mix of both,
-causing corrupted characters.  Similar to the linux fix in commit
-6d3d09e23213e8 (linux: don't override HOSTCC for kconfig), except that we
-pass the linker flags in HOSTLDFLAGS.
+Since boost 1.67, seed_rng.hpp has been removed:
+https://github.com/boostorg/uuid/commit/a8a1ec3d826b04d2c842e79ecd18cff6a991fd29
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- boot/uboot/uboot.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/domoticz/domoticz.mk | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 03bd7ea743..6ef275e842 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -211,7 +211,15 @@ endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index af58563436..6421fd0dd5 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -18,21 +18,6 @@ DOMOTICZ_DEPENDENCIES = \
+ 	sqlite \
+ 	zlib
  
- UBOOT_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES))
- UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
--UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS)
-+
-+# UBOOT_MAKE_OPTS overrides HOSTCC / HOSTLDFLAGS to allow the build to
-+# find our host-openssl. However, this triggers a bug in the kconfig
-+# build script that causes it to build with /usr/include/ncurses.h
-+# (which is typically wchar) but link with
-+# $(HOST_DIR)/lib/libncurses.so (which is not).  We don't actually
-+# need any host-package for kconfig, so remove the HOSTCC/HOSTLDFLAGS
-+# override again.
-+UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC)" HOSTLDFLAGS=""
- define UBOOT_HELP_CMDS
- 	@echo '  uboot-menuconfig       - Run U-Boot menuconfig'
- 	@echo '  uboot-savedefconfig    - Run U-Boot savedefconfig'
+-# Fixes:
+-# http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
+-# There is an issue with powerpc64le and boost::uuids::random_generator on the
+-# following line of code (from include/boost/uuid/seed_rng.hpp):
+-# sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
+-# This line "inspects the first couple bytes (here eight) of the std::rand
+-# function to seed some rng. Due to the implementation of process_bytes and
+-# inlining happening, it seems that one of the loops therein uses &rand-1 as
+-# some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
+-# the link will succeed."
+-# See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
+-ifeq ($(BR2_powerpc64le),y)
+-DOMOTICZ_CXXFLAGS += -O0
+-endif
+-
+ # Due to the dependency on mosquitto, domoticz depends on
+ # !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
+ DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
 -- 
-2.11.0
+2.14.1
