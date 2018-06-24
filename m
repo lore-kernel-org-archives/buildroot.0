@@ -1,46 +1,50 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Jun 2018 16:15:05 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: remove boost hack for powerpc64le
-Message-ID: <20180624141505.31561-1-fontaine.fabrice@gmail.com>
+Date: Sun, 24 Jun 2018 17:44:52 +0200
+Subject: [Buildroot] [PATCH 1/1] collectd: use --disable-werror
+Message-ID: <20180624154452.31187-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since boost 1.67, seed_rng.hpp has been removed:
-https://github.com/boostorg/uuid/commit/a8a1ec3d826b04d2c842e79ecd18cff6a991fd29
+Since version 5.6.0, --disable-werror is available:
+https://github.com/collectd/collectd/pull/1222
+
+So use this option, instead of adding a hook to remove it from
+Makefile.in
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/domoticz/domoticz.mk | 15 ---------------
- 1 file changed, 15 deletions(-)
+ package/collectd/collectd.mk | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index af58563436..6421fd0dd5 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -18,21 +18,6 @@ DOMOTICZ_DEPENDENCIES = \
- 	sqlite \
- 	zlib
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index ef45f342ae..589324e612 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -42,6 +42,7 @@ COLLECTD_CONF_OPTS += \
+ 	--with-nan-emulation \
+ 	--with-fp-layout=$(COLLECTD_FP_LAYOUT) \
+ 	--with-perl-bindings=no \
++	--disable-werror \
+ 	$(foreach p, $(COLLECTD_PLUGINS_DISABLE), --disable-$(p)) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_AGGREGATION),--enable-aggregation,--disable-aggregation) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_APACHE),--enable-apache,--disable-apache) \
+@@ -194,14 +195,6 @@ else
+ COLLECTD_CONF_OPTS += --with-libgcrypt=no
+ endif
  
--# Fixes:
--# http://autobuild.buildroot.org/results/454c0ea393615bae2d1b44be9920f25b5c49fc33
--# There is an issue with powerpc64le and boost::uuids::random_generator on the
--# following line of code (from include/boost/uuid/seed_rng.hpp):
--# sha.process_bytes( (unsigned char const*)&std::rand, sizeof( void(*)() ) )
--# This line "inspects the first couple bytes (here eight) of the std::rand
--# function to seed some rng. Due to the implementation of process_bytes and
--# inlining happening, it seems that one of the loops therein uses &rand-1 as
--# some boundary, compiling with -O0 makes that reloc come out as 'rand + 0' and
--# the link will succeed."
--# See: https://bugzilla.suse.com/show_bug.cgi?id=955832#c7
--ifeq ($(BR2_powerpc64le),y)
--DOMOTICZ_CXXFLAGS += -O0
--endif
+-# released software should not break on minor warnings
+-define COLLECTD_DROP_WERROR
+-	$(SED) 's/-Werror//' \
+-		$(@D)/src/Makefile.in $(@D)/src/libcollectdclient/Makefile.in
+-endef
 -
- # Due to the dependency on mosquitto, domoticz depends on
- # !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
- DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
+-COLLECTD_POST_PATCH_HOOKS += COLLECTD_DROP_WERROR
+-
+ define COLLECTD_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+ 	rm -f $(TARGET_DIR)/usr/bin/collectd-nagios
 -- 
 2.14.1
