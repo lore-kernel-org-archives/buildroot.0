@@ -1,107 +1,86 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 24 Jun 2018 15:54:53 +0200
-Subject: [Buildroot] [git commit] domoticz: bump to version 4.9700
-Message-ID: <20180624135258.4E8D380262@busybox.osuosl.org>
+Date: Sun, 24 Jun 2018 15:55:09 +0200
+Subject: [Buildroot] [git commit] boost: bump to version 1.67.0
+Message-ID: <20180624135258.55A7880262@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4a6dd3e023fbdff4e1d834179c11b52072e747d
+commit: https://git.buildroot.net/buildroot/commit/?id=85a49834caaad9083c4f8480880287253e9be9ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove patch (not needed anymore)
+Remove fifth patch (already in version)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Fix-compilation-with-boost-1.66.patch     | 56 ----------------------
- package/domoticz/domoticz.hash                     |  2 +-
- package/domoticz/domoticz.mk                       |  2 +-
- 3 files changed, 2 insertions(+), 58 deletions(-)
+ package/boost/0005-fix-build-with-g-5.patch | 32 -----------------------------
+ package/boost/boost.hash                    |  4 ++--
+ package/boost/boost.mk                      |  2 +-
+ 3 files changed, 3 insertions(+), 35 deletions(-)
 
-diff --git a/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch b/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
+diff --git a/package/boost/0005-fix-build-with-g-5.patch b/package/boost/0005-fix-build-with-g-5.patch
 deleted file mode 100644
-index d73ea4f002..0000000000
---- a/package/domoticz/0001-Fix-compilation-with-boost-1.66.patch
+index 49149e6ebf..0000000000
+--- a/package/boost/0005-fix-build-with-g-5.patch
 +++ /dev/null
-@@ -1,56 +0,0 @@
--From b9481d3382d416d72f523a0442d662e49b4192d1 Mon Sep 17 00:00:00 2001
+@@ -1,32 +0,0 @@
+-From da2793fcde5c4e3ff448b4b21348ef8b1482c678 Mon Sep 17 00:00:00 2001
 -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 14 Jan 2018 18:18:32 +0100
--Subject: [PATCH] Fix compilation with boost 1.66
+-Date: Tue, 16 Jan 2018 14:51:32 +0100
+-Subject: [PATCH] fix build with g++5
+-
+-Patch needed to build domoticz
 -
 -Patch fetch from one of the answer of
-- https://github.com/domoticz/domoticz/issues/2034
--(issue still opened, no official PR sent upstream)
--
--Boost asio changed its API:
-- - http://www.boost.org/doc/libs/1_66_0/doc/html/boost_asio/net_ts.html
+- https://github.com/domoticz/domoticz/issues/2034:
+- workaround suggested to the boost developers
 -
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ----
-- webserver/proxyclient.cpp | 2 +-
-- webserver/server.cpp      | 4 ++--
-- 2 files changed, 3 insertions(+), 3 deletions(-)
+- boost/asio/detail/consuming_buffers.hpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/webserver/proxyclient.cpp b/webserver/proxyclient.cpp
--index 203ee619..efc9815a 100644
----- a/webserver/proxyclient.cpp
--+++ b/webserver/proxyclient.cpp
--@@ -639,7 +639,7 @@ namespace http {
-- 		void CProxyManager::StartThread()
-- 		{
-- 			try {
---				boost::asio::ssl::context ctx(io_service, boost::asio::ssl::context::sslv23);
--+				boost::asio::ssl::context ctx(boost::asio::ssl::context::sslv23);
-- 				ctx.set_verify_mode(boost::asio::ssl::verify_none);
+-diff --git a/boost/asio/detail/consuming_buffers.hpp b/boost/asio/detail/consuming_buffers.hpp
+-index a429f97..b7a887c 100644
+---- a/boost/asio/detail/consuming_buffers.hpp
+-+++ b/boost/asio/detail/consuming_buffers.hpp
+-@@ -102,7 +102,7 @@ public:
 - 
-- 				proxyclient.reset(new CProxyClient(io_service, ctx, m_pWebEm));
--diff --git a/webserver/server.cpp b/webserver/server.cpp
--index 5255aa34..0c1af08a 100644
----- a/webserver/server.cpp
--+++ b/webserver/server.cpp
--@@ -148,7 +148,7 @@ void server::handle_accept(const boost::system::error_code& e) {
-- ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler & user_request_handler) :
-- 		server_base(ssl_settings, user_request_handler),
-- 		settings_(ssl_settings),
---		context_(io_service_, ssl_settings.get_ssl_method())
--+		context_(ssl_settings.get_ssl_method())
-- {
-- #ifdef DEBUG_WWW
-- 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using ssl_server_settings : %s", ssl_settings.listening_port.c_str(), ssl_settings.to_string().c_str());
--@@ -161,7 +161,7 @@ ssl_server::ssl_server(const ssl_server_settings & ssl_settings, request_handler
-- ssl_server::ssl_server(const server_settings & settings, request_handler & user_request_handler) :
-- 		server_base(settings, user_request_handler),
-- 		settings_(dynamic_cast<ssl_server_settings const &>(settings)),
---		context_(io_service_, dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
--+		context_(dynamic_cast<ssl_server_settings const &>(settings).get_ssl_method()) {
-- #ifdef DEBUG_WWW
-- 	_log.Log(LOG_STATUS, "[web:%s] create ssl_server using server_settings : %s", settings.listening_port.c_str(), settings.to_string().c_str());
-- #endif
+-     std::advance(next, next_elem_);
+-     std::size_t elem_offset = next_elem_offset_;
+--    while (next != end && max_size > 0 && result.count < result.max_buffers)
+-+    while (next != end && max_size > 0 && (result.count) < result.max_buffers)
+-     {
+-       Buffer next_buf = Buffer(*next) + elem_offset;
+-       result.elems[result.count] = boost::asio::buffer(next_buf, max_size);
 --- 
--2.14.1
+-2.7.4
 -
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-index 00dcf713b2..106d242d0d 100644
---- a/package/domoticz/domoticz.hash
-+++ b/package/domoticz/domoticz.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	5ea8f37f2ef900e9bd17b1b5375e75bfdec4f09001e3e2e0b647a260989d014c	domoticz-3.8153.tar.gz
-+sha256	c31f185a1ffac01b86a77bf33e059a4403d814e826c9d6639c63c2e9afa55a46	domoticz-4.9700.tar.gz
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	License.txt
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index bd25708a14..af58563436 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+index 7eb675d5b1..fb1eb4291f 100644
+--- a/package/boost/boost.hash
++++ b/package/boost/boost.hash
+@@ -1,5 +1,5 @@
+-# From http://www.boost.org/users/history/version_1_66_0.html
+-sha256 5721818253e6a0989583192f96782c4a98eb6204965316df9f5ad75819225ca9  boost_1_66_0.tar.bz2
++# From http://www.boost.org/users/history/version_1_67_0.html
++sha256 2684c972994ee57fc5632e03bf044746f6eb45d4920c343937a465fd67a5adba  boost_1_67_0.tar.bz2
+ 
+ # Locally computed
+ sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 9ad83d5aeb..981d701bdf 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOMOTICZ_VERSION = 3.8153
-+DOMOTICZ_VERSION = 4.9700
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPL-3.0
- DOMOTICZ_LICENSE_FILES = License.txt
+-BOOST_VERSION = 1.66.0
++BOOST_VERSION = 1.67.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
+ BOOST_INSTALL_STAGING = YES
