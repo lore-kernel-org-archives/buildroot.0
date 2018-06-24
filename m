@@ -1,47 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jun 2018 21:11:11 +0200
-Subject: [Buildroot] [git commit] uboot: don't override HOSTCC/HOSTLDFLAGS
- for kconfig
-Message-ID: <20180624193409.060E68127E@busybox.osuosl.org>
+Date: Sun, 24 Jun 2018 21:10:06 +0200
+Subject: [Buildroot] [git commit] collectd: use --disable-werror
+Message-ID: <20180624193408.E638381214@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9255fd9fc7bb302fcb69282becea7273827c64e1
+commit: https://git.buildroot.net/buildroot/commit/?id=50a0f56bca65cd04d6803359f0b01a2e6fc57f19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So the host ncurses includes and library are used instead of a mix of both,
-causing corrupted characters.  Similar to the linux fix in commit
-6d3d09e23213e8 (linux: don't override HOSTCC for kconfig), except that we
-pass the linker flags in HOSTLDFLAGS.
+Since version 5.6.0, --disable-werror is available:
+https://github.com/collectd/collectd/pull/1222
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Jagan Teki <jagan@amarulasolutions.com>
+So use this option, instead of adding a hook to remove it from
+Makefile.in
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/collectd/collectd.mk | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 03bd7ea743..6ef275e842 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -211,7 +211,15 @@ endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index ef45f342ae..589324e612 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -42,6 +42,7 @@ COLLECTD_CONF_OPTS += \
+ 	--with-nan-emulation \
+ 	--with-fp-layout=$(COLLECTD_FP_LAYOUT) \
+ 	--with-perl-bindings=no \
++	--disable-werror \
+ 	$(foreach p, $(COLLECTD_PLUGINS_DISABLE), --disable-$(p)) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_AGGREGATION),--enable-aggregation,--disable-aggregation) \
+ 	$(if $(BR2_PACKAGE_COLLECTD_APACHE),--enable-apache,--disable-apache) \
+@@ -194,14 +195,6 @@ else
+ COLLECTD_CONF_OPTS += --with-libgcrypt=no
+ endif
  
- UBOOT_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES))
- UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
--UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS)
-+
-+# UBOOT_MAKE_OPTS overrides HOSTCC / HOSTLDFLAGS to allow the build to
-+# find our host-openssl. However, this triggers a bug in the kconfig
-+# build script that causes it to build with /usr/include/ncurses.h
-+# (which is typically wchar) but link with
-+# $(HOST_DIR)/lib/libncurses.so (which is not).  We don't actually
-+# need any host-package for kconfig, so remove the HOSTCC/HOSTLDFLAGS
-+# override again.
-+UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC)" HOSTLDFLAGS=""
- define UBOOT_HELP_CMDS
- 	@echo '  uboot-menuconfig       - Run U-Boot menuconfig'
- 	@echo '  uboot-savedefconfig    - Run U-Boot savedefconfig'
+-# released software should not break on minor warnings
+-define COLLECTD_DROP_WERROR
+-	$(SED) 's/-Werror//' \
+-		$(@D)/src/Makefile.in $(@D)/src/libcollectdclient/Makefile.in
+-endef
+-
+-COLLECTD_POST_PATCH_HOOKS += COLLECTD_DROP_WERROR
+-
+ define COLLECTD_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) -C $(@D) install
+ 	rm -f $(TARGET_DIR)/usr/bin/collectd-nagios
