@@ -1,49 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 24 Jun 2018 19:50:45 +0200
-Subject: [Buildroot] [PATCH 1/1] python-libconfig: fix build with boost 1.67
-Message-ID: <20180624175045.2444-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Sun, 24 Jun 2018 21:15:00 +0300
+Subject: [Buildroot] [PATCH] dos2unix: fix static build
+Message-ID: <b1515512894db829300a9efc2cbc37fb9e029db9.1529864100.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since boost 1.67, python3 boost library is boost_python36.so instead of
-boost_python3.so so update first patch
+Pass the -static flag to the final link command. Otherwise, the
+generated executables are not static when the external toolchain
+provides both shared and static libraries.
 
-Fixes:
- - http://autobuild.buildroot.net/results/6f973f2945727b302409405288ef0b9808c7317b
+Should also fix:
+http://autobuild.buildroot.net/results/a5a/a5a64bc3ff5a91a8680ac52f3505362491923b26/
+http://autobuild.buildroot.net/results/ebf/ebfe81e65751d7a5ca3aa4e20cc708a24ba65204/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: David Bachelart <david.bachelart@bbright.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- .../0001-Determine-boost_python-name-depending-on-current-Pyt.patch | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/dos2unix/dos2unix.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-index b30efc124d..53000cd678 100644
---- a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-+++ b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-@@ -4,9 +4,11 @@ Date: Thu, 27 Jul 2017 09:46:07 +0200
- Subject: [PATCH] Determine boost_python name depending on current Python
-  version
+diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
+index 9b823405902e..5001397f0571 100644
+--- a/package/dos2unix/dos2unix.mk
++++ b/package/dos2unix/dos2unix.mk
+@@ -24,6 +24,10 @@ ifeq ($(BR2_USE_WCHAR),)
+ DOS2UNIX_MAKE_OPTS += UCS=
+ endif
  
--Python2 requires boost_python and Python3 requires boost_python3.
-+Python2 requires boost_python and Python3 requires boost_python36 (since
-+boost 1.67).
- 
- Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  setup.py | 6 +++++-
-  1 file changed, 5 insertions(+), 1 deletion(-)
-@@ -19,7 +21,7 @@ index fdf5c27..4b38569 100644
-  from setuptools import setup, find_packages, Extension
-  import sys, os
-  
--+boostlib = "boost_python3"
-++boostlib = "boost_python36"
- +if sys.version_info < (3, 0):
- +    boostlib = "boost_python"
- +
++ifeq ($(BR2_STATIC_LIBS),y)
++DOS2UNIX_MAKE_OPTS += LDFLAGS_USER=-static
++endif
++
+ define DOS2UNIX_BUILD_CMDS
+ 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(DOS2UNIX_MAKE_OPTS)
+ endef
 -- 
-2.14.1
+2.18.0
