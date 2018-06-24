@@ -1,25 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jun 2018 08:37:07 +0200
-Subject: [Buildroot] [PATCH 1/1] protobuf: add dependency on gcc >= 4.8
-In-Reply-To: <20180623153232.3782-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 23 Jun 2018 17:32:32 +0200")
-References: <20180623153232.3782-1-fontaine.fabrice@gmail.com>
-Message-ID: <877emoher0.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 24 Jun 2018 10:52:19 +0200
+Subject: [Buildroot] [PATCH 1/1] host-protobuf-c: fix build with gcc 4.8
+Message-ID: <20180624085219.10452-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+protobuf requires C++11 so add -std=c++11 for host-protobuf-c as it is
+experimental in gcc 4.8
 
- > Since version 3.6.0, protobuf requires C++11
- > Fixes:
- >  - http://autobuild.buildroot.net/results/bb299008423edf4c65ade6c159e33c4216428bf1
+Fixes:
+ - http://autobuild.buildroot.net/results/7fe12457ccac7e8c95b1d4c1fa20d6753599742d
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/protobuf-c/protobuf-c.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Committed, thanks.
-
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 4306610533..34f8294412 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -16,5 +16,8 @@ PROTOBUF_C_LICENSE_FILES = LICENSE
+ PROTOBUF_C_AUTORECONF = YES
+ HOST_PROTOBUF_C_AUTORECONF = YES
+ 
++# host-protobuf needs c++11 (since 3.6.0)
++HOST_PROTOBUF_C_CONF_ENV += CXXFLAGS="$(HOST_CXXFLAGS) -std=c++11"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.14.1
