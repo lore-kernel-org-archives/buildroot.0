@@ -1,25 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jun 2018 21:11:20 +0200
-Subject: [Buildroot] [PATCH] uboot: don't override HOSTCC/HOSTLDFLAGS
- for kconfig
-In-Reply-To: <20180624141242.16851-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 24 Jun 2018 16:12:42 +0200")
-References: <20180624141242.16851-1-peter@korsgaard.com>
-Message-ID: <87efgwf19j.fsf@dell.be.48ers.dk>
+Date: Sun, 24 Jun 2018 21:16:24 +0200
+Subject: [Buildroot] [PATCH v3 1/5] package/gdb: rework dependency for
+ C++11
+In-Reply-To: <20180624135310.16514-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 24 Jun 2018 15:53:06 +0200")
+References: <20180624135310.16514-1-thomas.petazzoni@bootlin.com>
+ <20180624135310.16514-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87a7rkf113.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > So the host ncurses includes and library are used instead of a mix of both,
- > causing corrupted characters.  Similar to the linux fix in commit
- > 6d3d09e23213e8 (linux: don't override HOSTCC for kconfig), except that we
- > pass the linker flags in HOSTLDFLAGS.
+ > As we are about to switch to 8.0 as the default gdb dependency, we
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+s/dependency/version/.
 
 Committed, thanks.
 
