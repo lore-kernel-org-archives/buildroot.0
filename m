@@ -1,73 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jun 2018 21:57:19 +0200
-Subject: [Buildroot] [PATCH] toolchain: Bump ARC tools to arc-2018.03
- release
-In-Reply-To: <20180625154535.21098-1-didin@synopsys.com>
-References: <20180625154535.21098-1-didin@synopsys.com>
-Message-ID: <20180625215719.4a04bde3@windsurf.home>
+Date: Mon, 25 Jun 2018 22:03:01 +0200
+Subject: [Buildroot] [git commit] qt5charts: bump hash for 5.11.0
+Message-ID: <20180625200825.D40EA827ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b236b4edaf38abe7d4f67bf628dd9115496e09a2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 25 Jun 2018 18:45:35 +0300, Evgeniy Didin wrote:
-> This commit finally bumps ARC tools to the most recent arc-2018.03 release version.
-> 
-> ARC GNU tools of version arc-2018.03 bring some quite significant changes like:
-> * Binutils v2.29.51 with additional ARC patches
-> * GCC 7.3.1 with additional ARC patches
-> * GDB 8.0.50 with ARC patches
-> 
-> More information on this release could be found here:
-> https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2018.03-release
-> 
-> Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: arc-buildroot at synopsys.com
-> ---
-> Please also apply this patch on top of 2018.05.x branch, so we will have
-> final release version of toolchain instead of release candidate version. 
->  
->  package/binutils/Config.in.host                               | 2 +-
->  .../{arc-2018.03-rc2 => arc-2018.03}/0002-ld-makefile.patch   | 0
->  .../0003-check-ldrunpath-length.patch                         | 0
->  .../0004-add-sysroot-fix-from-bug-3049.patch                  | 0
->  .../0005-poison-system-directories.patch                      | 0
->  package/binutils/binutils.hash                                | 2 +-
->  package/binutils/binutils.mk                                  | 4 ++--
->  package/gcc/Config.in.host                                    | 2 +-
->  .../{arc-2018.03-rc2 => arc-2018.03}/0100-uclibc-conf.patch   | 0
->  .../0860-cilk-fix-build-without-wchar.patch                   | 0
->  .../0900-remove-selftests.patch                               | 0
->  package/gcc/gcc.hash                                          | 2 +-
->  package/gdb/Config.in.host                                    | 2 +-
->  package/gdb/gdb.hash                                          | 2 +-
->  package/glibc/glibc.hash                                      | 2 +-
->  package/glibc/glibc.mk                                        | 2 +-
->  16 files changed, 10 insertions(+), 10 deletions(-)
->  rename package/binutils/{arc-2018.03-rc2 => arc-2018.03}/0002-ld-makefile.patch (100%)
->  rename package/binutils/{arc-2018.03-rc2 => arc-2018.03}/0003-check-ldrunpath-length.patch (100%)
->  rename package/binutils/{arc-2018.03-rc2 => arc-2018.03}/0004-add-sysroot-fix-from-bug-3049.patch (100%)
->  rename package/binutils/{arc-2018.03-rc2 => arc-2018.03}/0005-poison-system-directories.patch (100%)
->  rename package/gcc/{arc-2018.03-rc2 => arc-2018.03}/0100-uclibc-conf.patch (100%)
->  rename package/gcc/{arc-2018.03-rc2 => arc-2018.03}/0860-cilk-fix-build-without-wchar.patch (100%)
->  rename package/gcc/{arc-2018.03-rc2 => arc-2018.03}/0900-remove-selftests.patch (100%)
+The hash bump was missing commit 4fbb2d143d (qt5: bump latest version to
+5.11.0).
 
-This patch did not apply to master as-is, due to the changes on gdb
-that Peter merged yesterday. I fixed up the conflict and applied to
-master.
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5charts/qt5charts.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I also did a follow-up commit, to make sure BR2_PACKAGE_GDB_NEEDS_CXX11
-is enabled when the ARC version of gdb is used: it's based on GDB 8.0,
-so it needs C++11 support.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
+index ce1189d0e1..6bd9a9d51b 100644
+--- a/package/qt5/qt5charts/qt5charts.hash
++++ b/package/qt5/qt5charts/qt5charts.hash
+@@ -1,8 +1,8 @@
+ # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcharts-opensource-src-2.1.3.tar.xz.mirrorlist
+ sha256 f636a9b1c255f678f11b36cd73abc807d16dae0c31ecbc75c09524703aae7d2f  qtcharts-opensource-src-2.1.3.tar.xz
+ 
+-# Hash from: https://download.qt.io/official_releases/qt/5.10/5.10.1/submodules/qtcharts-everywhere-src-5.10.1.tar.xz.mirrorlist
+-sha256 4f0d577bf73dd2bbb2765c2cfb493a2d68790fc2c64f42544d31dba806321ec9  qtcharts-everywhere-src-5.10.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.0/submodules/qtcharts-everywhere-src-5.11.0.tar.xz.mirrorlist
++sha256 c46e12beeaabf731ce918c7508d8ab62ae3b675870992faf36878268da4ee351  qtcharts-everywhere-src-5.11.0.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
