@@ -1,46 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon, 25 Jun 2018 22:50:49 +0200
-Subject: [Buildroot] [PATCH] gcc: fix uclibc build with gcc-8 for xtensa
-In-Reply-To: <20180619202706.17347-1-jcmvbkbc@gmail.com>
-References: <20180619202706.17347-1-jcmvbkbc@gmail.com>
-Message-ID: <eaba9b03-f0b0-b972-68ff-034a78d9048a@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 25 Jun 2018 22:50:57 +0200
+Subject: [Buildroot] [PATCH 1/1] boost: fiber needs exception_ptr
+In-Reply-To: <20180625213518.45fe3a6d@windsurf.home>
+References: <20180625184506.455-1-fontaine.fabrice@gmail.com>
+ <20180625213518.45fe3a6d@windsurf.home>
+Message-ID: <CAPi7W80JU8wjeKDnNgT6Qnf5aPHGiuRZdce7QVXwe9p2ZBdhoA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Max,
+Dear Thomas,
 
-Le 19/06/2018 ? 22:27, Max Filippov a ?crit?:
-> gcc-8.1 for xtensa miscompiles uClibc dynamic linker due to gcc PR
-> target/65416. The build completes successfully, but the binary is
-> non-functional because the following fragment in the _dl_get_ready_to_run
-> in ld-uClibc.so overwrites register spill area on stack causing register
-> corruption in the previous call frame and a subsequent crash:
-> 
->     419f:       f0c1b2          addi    a11, a1, -16
->     41a2:       1ba9            s32i.n  a10, a11, 4
->     41a4:       0bc9            s32i.n  a12, a11, 0
->     41a6:       5127f2          l32i    a15, a7, 0x144
->     41a9:       1765b2          s32i    a11, a5, 92
->     41ac:       4e2782          l32i    a8, a7, 0x138
->     41af:       146af2          s32i    a15, a10, 80
->     41b2:       001b10          movsp   a1, a11
-> 
-> The crash terminates the init process and causes kernel panic.
-> The fix prevents reordering of movsp opcode and any access to the stack
-> frame memory and is applicable to all existing gcc versions..
-> 
+2018-06-25 21:35 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-Thanks for the patch!
+> Hello,
+>
+> On Mon, 25 Jun 2018 20:45:06 +0200, Fabrice Fontaine wrote:
+> > fiber needs exception_ptr because context is a transient dependency of
+> fiber
+>
+> What do you mean by "transient" ? Perhaps you meant "transitive" ?
+>
+I got this "transient dependencies" from
+https://gist.github.com/ax3l/7450482 but you're right transitive is better.
 
-Do you know what changed in gcc 8.0 that trigger this issue ?
+>
+> > that needs exception_ptr.
+> > An other option would be to make boost fiber depends on boost context
+> > (https://www.boost.org/doc/libs/1_67_0/libs/fiber/doc/
+> html/fiber/overview.html)
+>
+> If boost fiber relies on boost context, then boost fiber should select
+> boost context.
+>
+Indeed a select would be better, I will update my patch.
+However, I was thinking to add a dependency because that's what is
+currently done for BR2_PACKAGE_BOOST_COROUTINE which depends on
+BR2_PACKAGE_BOOST_CONTEXT. But after checking the history in patchwork (
+http://patchwork.ozlabs.org/patch/539552), it seems this one is a special
+case and you wanted to avoid duplicating the dependencies of boost-context
+in boost-coroutine.
 
-I tried to use git bisect to find the culprit commit, the last working gcc
-commit is 5266910fed23d6d7f101a878dd8a28d178697ec5 (2017-06-28) and this "first"
-broken commit is 7051d2393d15d0d1b848768a6f2767c75aa4b5cd (2017-07-06) but I
-gave up due to lack of time...
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+Best Regards,
 
-Best regards,
-Romain
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180625/7ac33ea8/attachment.html>
