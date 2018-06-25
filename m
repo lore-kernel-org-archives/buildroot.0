@@ -1,46 +1,51 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 25 Jun 2018 21:31:49 +0200
-Subject: [Buildroot] [PATCH 2/2] qt5charts: bump hash for 5.11.0
-In-Reply-To: <20180618224907.17322-3-gael.portay@savoirfairelinux.com>
-References: <20180618224907.17322-1-gael.portay@savoirfairelinux.com>
- <20180618224907.17322-3-gael.portay@savoirfairelinux.com>
-Message-ID: <20180625213149.529556fc@gmx.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jun 2018 21:33:26 +0200
+Subject: [Buildroot] [git commit] python-libconfig: fix build with boost 1.67
+Message-ID: <20180625193038.AFDA582270@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ga?l,
+commit: https://git.buildroot.net/buildroot/commit/?id=cf10728757f0daec097e72a037fb27a38de2b0e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 18 Jun 2018 18:49:07 -0400, Ga?l PORTAY <gael.portay@savoirfairelinux.com> wrote:
+Since boost 1.67, python3 boost library is boost_python36.so instead of
+boost_python3.so so update first patch
 
-> The hash bump was missing commit 4fbb2d143d (qt5: bump latest version to
-> 5.11.0).
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/6f973f2945727b302409405288ef0b9808c7317b
 
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Determine-boost_python-name-depending-on-current-Pyt.patch | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Regards,
-Peter
-
-> ---
->  package/qt5/qt5charts/qt5charts.hash | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
-> index ce1189d0e1..6bd9a9d51b 100644
-> --- a/package/qt5/qt5charts/qt5charts.hash
-> +++ b/package/qt5/qt5charts/qt5charts.hash
-> @@ -1,8 +1,8 @@
->  # Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtcharts-opensource-src-2.1.3.tar.xz.mirrorlist
->  sha256 f636a9b1c255f678f11b36cd73abc807d16dae0c31ecbc75c09524703aae7d2f  qtcharts-opensource-src-2.1.3.tar.xz
->  
-> -# Hash from: https://download.qt.io/official_releases/qt/5.10/5.10.1/submodules/qtcharts-everywhere-src-5.10.1.tar.xz.mirrorlist
-> -sha256 4f0d577bf73dd2bbb2765c2cfb493a2d68790fc2c64f42544d31dba806321ec9  qtcharts-everywhere-src-5.10.1.tar.xz
-> +# Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.0/submodules/qtcharts-everywhere-src-5.11.0.tar.xz.mirrorlist
-> +sha256 c46e12beeaabf731ce918c7508d8ab62ae3b675870992faf36878268da4ee351  qtcharts-everywhere-src-5.11.0.tar.xz
->  
->  # Hashes for license files:
->  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+diff --git a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
+index b30efc124d..53000cd678 100644
+--- a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
++++ b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
+@@ -4,9 +4,11 @@ Date: Thu, 27 Jul 2017 09:46:07 +0200
+ Subject: [PATCH] Determine boost_python name depending on current Python
+  version
+ 
+-Python2 requires boost_python and Python3 requires boost_python3.
++Python2 requires boost_python and Python3 requires boost_python36 (since
++boost 1.67).
+ 
+ Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  setup.py | 6 +++++-
+  1 file changed, 5 insertions(+), 1 deletion(-)
+@@ -19,7 +21,7 @@ index fdf5c27..4b38569 100644
+  from setuptools import setup, find_packages, Extension
+  import sys, os
+  
+-+boostlib = "boost_python3"
+++boostlib = "boost_python36"
+ +if sys.version_info < (3, 0):
+ +    boostlib = "boost_python"
+ +
