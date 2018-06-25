@@ -1,70 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 24 Jun 2018 23:54:28 +0200
-Subject: [Buildroot] [git commit] boost: add option for contract library
-Message-ID: <20180624215148.F285C813E7@busybox.osuosl.org>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Mon, 25 Jun 2018 11:30:16 +1000
+Subject: [Buildroot] [PATCH v2] busybox: Update udhcpc.script for DHCPv6
+In-Reply-To: <CAK1hOcN68edmb_n53YhR5ZMShgGo0W9UWzPi=p3nHDFosNEQ+g@mail.gmail.com>
+References: <20180619005233.10531-1-sam@mendozajonas.com>
+ <CAK1hOcN68edmb_n53YhR5ZMShgGo0W9UWzPi=p3nHDFosNEQ+g@mail.gmail.com>
+Message-ID: <cb7c311d08b26082f2cdfb63e8704245134fe325.camel@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4da82c82364c75da9d8e011ffd73aaabe91b3106
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 2018-06-24 at 21:32 +0200, Denys Vlasenko wrote:
+> On Tue, Jun 19, 2018 at 2:52 AM, Samuel Mendoza-Jonas
+> <sam@mendozajonas.com> wrote:
+> > udhcpc6 will call the default script with the address set in the "ipv6"
+> > variable. Set "ip" to this address if present.
+> > 
+> > Also from Rob, if handling a DHCPv6 address wait a moment for the IPv6
+> > route to be configured; this doesn't come from DHCPv6 but rather the
+> > IPv6 Router Advertisement (RA).
+> > 
+> > (wait for IPv6 route)
+> > From: Robert Lippert <rlippert@google.com>
+> > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+> > ---
+> > v2: Avoid bashisms
+> > 
+> >  package/busybox/udhcpc.script | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> > 
+> > diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+> > index ad110d3a7f..65114b6cd0 100755
+> > --- a/package/busybox/udhcpc.script
+> > +++ b/package/busybox/udhcpc.script
+> > @@ -8,6 +8,16 @@ RESOLV_CONF="/etc/resolv.conf"
+> >  [ -e $RESOLV_CONF ] || touch $RESOLV_CONF
+> >  [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+> >  [ -n "$subnet" ] && NETMASK="netmask $subnet"
+> > +[ -n "$ipv6" ] && ip="$ipv6/128"
+> > +
+> > +wait_for_ipv6_default_route() {
+> > +       attempts=10
+> > +       while [ $attempts != 0 ] && [ -z "$(ip -6 route list | grep default)" ] ; do
+> > +               sleep 1
+> > +               attempts=$(($attempts-1))
+> > +       done
+> > +       [ $attempts = 0 ] && echo "failed to get default ipv6 route"
+> > +}
+> > 
+> >  case "$1" in
+> >         deconfig)
+> > @@ -37,6 +47,10 @@ case "$1" in
+> >                         /usr/sbin/avahi-autoipd -k $interface
+> >                 fi
+> >                 /sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+> > +               if [ -n "$ipv6" ] ; then
+> > +                       echo "waiting for default ipv6 route set"
+> > +                       wait_for_ipv6_default_route
+> > +               fi
+> 
+> Please explain "wait_for_ipv6_default_route" logic.
 
-Contract library has been added in boost 1.67 and depends on NPTL
-
-Fixes:
- - http://autobuild.buildroot.net/results/a3dd35cfa50a1862c585a648298351c0aba257db
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/boost/Config.in | 10 ++++++++++
- package/boost/boost.mk  |  7 ++++---
- 2 files changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index ec0e19ccb5..781bc47c00 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -77,6 +77,16 @@ config BR2_PACKAGE_BOOST_CONTEXT
- 	help
- 	  C++11 context switching library.
- 
-+config BR2_PACKAGE_BOOST_CONTRACT
-+	bool "boost-contract"
-+	# pthread_condattr_setclock
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	help
-+	  Contract programming for C++.
-+
-+comment "boost-contract needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+
- config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 981d701bdf..cf0cea7edd 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -14,15 +14,16 @@ BOOST_LICENSE_FILES = LICENSE_1_0.txt
- # keep host variant as minimal as possible
- HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
- 	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
--	coroutine date_time exception filesystem graph graph_parallel iostreams \
--	locale log math mpi program_options python random regex serialization \
--	signals system test thread timer type_erasure \
-+	contract coroutine date_time exception filesystem graph graph_parallel \
-+	iostreams locale log math mpi program_options python random regex \
-+	serialization signals system test thread timer type_erasure \
- 	wave)
- 
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
-+BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTRACT),,contract)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
+I believe Rob's aim here was to be as close to DHCPv4 behaviour as
+possible, ie. once this script completes the interface is set up and able
+to route packets. Since routing information doesn't come from the DHCPv6
+response this waits a moment to make sure the routing information from
+the IPv6 RA has arrived, which happens automatically.
