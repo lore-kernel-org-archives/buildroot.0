@@ -1,91 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jun 2018 23:18:05 +0200
-Subject: [Buildroot] [PATCH v3] pamtester: new package
-In-Reply-To: <20180625203159.13869-1-casantos@datacom.com.br>
-References: <20180625203159.13869-1-casantos@datacom.com.br>
-Message-ID: <20180625231805.229fce7f@windsurf.home>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 25 Jun 2018 14:18:56 -0700
+Subject: [Buildroot] [RFC PATCH v5 2/6] at-spi2-atk: new package
+In-Reply-To: <20180625231045.27dbf4be@windsurf.home>
+References: <20180622003340.10859-1-joseph.kogut@gmail.com>
+ <20180622003340.10859-3-joseph.kogut@gmail.com>
+ <20180625231045.27dbf4be@windsurf.home>
+Message-ID: <CAMWSM7jQj3TP5g4eMQ9MNfHU-hmXsFm8wVRWJ+iU_kNbmZbHdA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 25 Jun 2018 17:31:59 -0300, Carlos Santos wrote:
-> Utility for testing pluggable authentication modules (PAM) facility.
-> 
-> While specifically designed to help PAM module authors to test their
-> modules, that might also be handy for system administrators interested
-> in building a centralised authentication system using common standards
-> such as NIS, SASL and LDAP.
-> 
-> Pull a patch from Debian, rename it and add an SOB to match Buildroot
-> conventions.
-> 
-> Put it along with the PAM modules libpam-{radius-auth,tacplus} in the
-> configuration menu, since alphabetical order is already slightly broken
-> and grouping the packages makes sense.
+On Mon, Jun 25, 2018 at 2:10 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Thu, 21 Jun 2018 17:33:36 -0700, Joseph Kogut wrote:
+>
+> > diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
+> > new file mode 100644
+> > index 0000000000..599913c7df
+> > --- /dev/null
+> > +++ b/package/at-spi2-atk/Config.in
+> > @@ -0,0 +1,21 @@
+> > +config BR2_PACKAGE_AT_SPI2_ATK
+> > +     bool "at-spi2-atk"
+> > +     depends on BR2_PACKAGE_XORG7 # at-spi2-core
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+> > +     depends on BR2_USE_MMU # glib2
+> > +     depends on BR2_USE_WCHAR # glib2
+> > +     select BR2_PACKAGE_ATK
+> > +     select BR2_PACKAGE_AT_SPI2_CORE
+> > +     select BR2_PACKAGE_LIBGLIB2
+> > +     help
+> > +       The At-Spi2 Atk package contains a library that bridges
+> > +       ATK to At-Spi2 D-Bus service.
+> > +
+> > +       https://www.freedesktop.org/wiki/Accessibility/AT-SPI2/
+> > +
+> > +comment "at-spi2-atk needs a toolchain w/ wchar, threads"
+> > +     depends on BR2_USE_MMU
+> > +     depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> > +
+> > +comment "at-spi2-atk depends on X.org"
+>
+> Just like at-spi2-core, I've added:
+>
+>         depends on BR2_USE_MMU
+>
+> for the same reason.
+>
+> > +     depends on !BR2_PACKAGE_XORG7
+>
+> > +AT_SPI2_ATK_VERSION_MAJOR = 2.26
+> > +AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
+> > +AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
+> > +AT_SPI2_ATK_SITE =  http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
+> > +AT_SPI2_ATK_LICENSE = LGPL-2.0+
+> > +AT_SPI2_ATK_LICENSE_FILES = COPYING
+> > +AT_SPI2_ATK_INSTALL_STAGING = YES
+> > +AT_SPI2_ATK_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install
+>
+> This line was not needed, it's the default behavior of the
+> autotools-package infrastructure for staging installation.
+>
+> > +AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
+> > +
+> > +$(eval $(autotools-package))
+>
+> Any reason to use autotools here instead of meson ?
+>
 
-Not really true anymore ?
+No, I think this is an artifact of my initial patch using an older
+version of the package that didn't offer meson support. I'll convert
+it and send a patch.
 
-> Change-Id: I2bcf2f1d6a0e5cf3afd8af59579d8340a88413b1
+> Anyway, I've applied to master with the fixes detailed above.
+>
 
-Not needed.
-
-> diff --git a/package/pamtester/0001-fix-spelling-errors.patch b/package/pamtester/0001-fix-spelling-errors.patch
-> new file mode 100644
-> index 0000000000..5f79754e34
-> --- /dev/null
-> +++ b/package/pamtester/0001-fix-spelling-errors.patch
-> @@ -0,0 +1,19 @@
-> +Description: Fix spelling error in pamtester
-> +Origin: vendor
-> +Bug: https://sourceforge.net/tracker/?func=detail&aid=3599109&group_id=135111&atid=731890
-> +Forwarded: yes
-> +Author: Salvatore Bonaccorso <carnil@debian.org>
-> +Last-Update: 2013-01-01
-> +Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
-> +
-> +--- a/src/app.c
-> ++++ b/src/app.c
-> +@@ -373,7 +373,7 @@
-> + 				err_msg = xstrdup(pam_strerror(pamh, err));
-> + 				goto out;
-> + 			} else {
-> +-				printf("%s: sucessfully opened a session\n", params->app_name);
-> ++				printf("%s: successfully opened a session\n", params->app_name);
-> + 			}
-> + 		} else if (!strcasecmp(op->name, "close_session")) {
-> + 			int flag = 0;
-
-Once again, why do we need this apparently cosmetic patch ?
-
-> diff --git a/package/pamtester/Config.in b/package/pamtester/Config.in
-> new file mode 100644
-> index 0000000000..9415c0e31f
-> --- /dev/null
-> +++ b/package/pamtester/Config.in
-> @@ -0,0 +1,15 @@
-> +config BR2_PACKAGE_PAMTESTER
-> +	bool "pamtester"
-> +	depends on BR2_PACKAGE_LINUX_PAM
-> +	help
-> +	  A tiny utility for testing pluggable authentication modules
-> +	  (PAM) facility. While specifically designed to help PAM module
-> +	  authors to test their modules, that might also be handy for
-> +	  system administrators interested in building a centralised
-> +	  authentication system using common standards such as NIS, SASL
-> +	  and LDAP.
-> +
-> +	  http://pamtester.sourceforge.net/
-> +
-> +comment "pamptester depends on linux-pam"
-
-Typo: pamtester
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks!
