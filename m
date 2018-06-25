@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jun 2018 23:16:56 +0200
-Subject: [Buildroot] [PATCH] package/Config.in: fix alphabetical order
-In-Reply-To: <20180625203909.14296-1-casantos@datacom.com.br>
-References: <20180625203909.14296-1-casantos@datacom.com.br>
-Message-ID: <20180625231656.10b97f4a@windsurf.home>
+Date: Mon, 25 Jun 2018 23:18:05 +0200
+Subject: [Buildroot] [PATCH v3] pamtester: new package
+In-Reply-To: <20180625203159.13869-1-casantos@datacom.com.br>
+References: <20180625203159.13869-1-casantos@datacom.com.br>
+Message-ID: <20180625231805.229fce7f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,77 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 25 Jun 2018 17:39:09 -0300, Carlos Santos wrote:
-> Commit a098636a6b6 inserted LLVM between linux-pam and its plugins.
+On Mon, 25 Jun 2018 17:31:59 -0300, Carlos Santos wrote:
+> Utility for testing pluggable authentication modules (PAM) facility.
 > 
-> Change-Id: Idd298321da5742c8dcc75191c79cf22c663a95ff
+> While specifically designed to help PAM module authors to test their
+> modules, that might also be handy for system administrators interested
+> in building a centralised authentication system using common standards
+> such as NIS, SASL and LDAP.
+> 
+> Pull a patch from Debian, rename it and add an SOB to match Buildroot
+> conventions.
+> 
+> Put it along with the PAM modules libpam-{radius-auth,tacplus} in the
+> configuration menu, since alphabetical order is already slightly broken
+> and grouping the packages makes sense.
 
-Gah, I forgot to drop this one when applying :-/
+Not really true anymore ?
 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> Change-Id: I2bcf2f1d6a0e5cf3afd8af59579d8340a88413b1
 
-Applied, thanks!
+Not needed.
+
+> diff --git a/package/pamtester/0001-fix-spelling-errors.patch b/package/pamtester/0001-fix-spelling-errors.patch
+> new file mode 100644
+> index 0000000000..5f79754e34
+> --- /dev/null
+> +++ b/package/pamtester/0001-fix-spelling-errors.patch
+> @@ -0,0 +1,19 @@
+> +Description: Fix spelling error in pamtester
+> +Origin: vendor
+> +Bug: https://sourceforge.net/tracker/?func=detail&aid=3599109&group_id=135111&atid=731890
+> +Forwarded: yes
+> +Author: Salvatore Bonaccorso <carnil@debian.org>
+> +Last-Update: 2013-01-01
+> +Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
+> +
+> +--- a/src/app.c
+> ++++ b/src/app.c
+> +@@ -373,7 +373,7 @@
+> + 				err_msg = xstrdup(pam_strerror(pamh, err));
+> + 				goto out;
+> + 			} else {
+> +-				printf("%s: sucessfully opened a session\n", params->app_name);
+> ++				printf("%s: successfully opened a session\n", params->app_name);
+> + 			}
+> + 		} else if (!strcasecmp(op->name, "close_session")) {
+> + 			int flag = 0;
+
+Once again, why do we need this apparently cosmetic patch ?
+
+> diff --git a/package/pamtester/Config.in b/package/pamtester/Config.in
+> new file mode 100644
+> index 0000000000..9415c0e31f
+> --- /dev/null
+> +++ b/package/pamtester/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_PAMTESTER
+> +	bool "pamtester"
+> +	depends on BR2_PACKAGE_LINUX_PAM
+> +	help
+> +	  A tiny utility for testing pluggable authentication modules
+> +	  (PAM) facility. While specifically designed to help PAM module
+> +	  authors to test their modules, that might also be handy for
+> +	  system administrators interested in building a centralised
+> +	  authentication system using common standards such as NIS, SASL
+> +	  and LDAP.
+> +
+> +	  http://pamtester.sourceforge.net/
+> +
+> +comment "pamptester depends on linux-pam"
+
+Typo: pamtester
 
 Thomas
 -- 
