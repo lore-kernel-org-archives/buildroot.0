@@ -1,56 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jun 2018 23:15:26 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: fiber needs exception_ptr
-In-Reply-To: <CAPi7W80JU8wjeKDnNgT6Qnf5aPHGiuRZdce7QVXwe9p2ZBdhoA@mail.gmail.com>
-References: <20180625184506.455-1-fontaine.fabrice@gmail.com>
- <20180625213518.45fe3a6d@windsurf.home>
- <CAPi7W80JU8wjeKDnNgT6Qnf5aPHGiuRZdce7QVXwe9p2ZBdhoA@mail.gmail.com>
-Message-ID: <20180625231526.20de6fdf@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 25 Jun 2018 21:15:55 +0000
+Subject: [Buildroot] [Bug 11111] raspberry pi 3 b+: missing BSP for 64-bit
+ kernel
+In-Reply-To: <bug-11111-163@https.bugs.busybox.net/>
+References: <bug-11111-163@https.bugs.busybox.net/>
+Message-ID: <bug-11111-163-DQCji6OELh@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11111
 
-On Mon, 25 Jun 2018 22:50:57 +0200, Fabrice Fontaine wrote:
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+(In reply to nospam+busybox from comment #0)
 
-> > What do you mean by "transient" ? Perhaps you meant "transitive" ?
-> >  
-> I got this "transient dependencies" from
-> https://gist.github.com/ax3l/7450482 but you're right transitive is better.
+Did try the raspberrypi3_64_defconfig (on buildroot-git master) on rpi3b (no
+plus), did work out of the box with functional login on HDMI and serial
+console.
 
-Transient means temporary (in french "fugace", "?ph?m?re", according to
-http://www.wordreference.com/enfr/transient). So I believe "transient"
-here is not correct.
+The three changes which are post 2018.5 are:
 
-> > > that needs exception_ptr.
-> > > An other option would be to make boost fiber depends on boost context
-> > > (https://www.boost.org/doc/libs/1_67_0/libs/fiber/doc/  
-> > html/fiber/overview.html)
-> >
-> > If boost fiber relies on boost context, then boost fiber should select
-> > boost context.
-> >  
-> Indeed a select would be better, I will update my patch.
-> However, I was thinking to add a dependency because that's what is
-> currently done for BR2_PACKAGE_BOOST_COROUTINE which depends on
-> BR2_PACKAGE_BOOST_CONTEXT. But after checking the history in patchwork (
-> http://patchwork.ozlabs.org/patch/539552), it seems this one is a special
-> case and you wanted to avoid duplicating the dependencies of boost-context
-> in boost-coroutine.
+- configs/raspberrypi*: bump kernel version (from 4.14.29 to 4.15.39), see [1]
+- configs/raspberrypi3_64_defconfig: add support for rpi3b+, see [2]
+- package/rpi-firmware: bump version, see [3]
 
-To be honest, I believe a "select" would have been more appropriate as
-well in the coroutine->context dependency.
+[1]
+https://git.buildroot.net/buildroot/commit/configs/raspberrypi3_64_defconfig?id=b677b490f7055963ac1f5a15856a6eab904ccbc7
 
-A hidden BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS dependency would help
-simplify the handling of its architecture dependency.
+[2]
+https://git.buildroot.net/buildroot/commit/configs/raspberrypi3_64_defconfig?id=fbb45f6d7f937e503900a04ff920320c411d8f34
 
-Best regards,
+[3]
+https://git.buildroot.net/buildroot/commit/package/rpi-firmware?id=975fff568f9b5ea99d02b1c24d434ee4cb490864
 
-Thomas
+So no need for 1. and 2.
+
+Suggestion 3. works (as expected), patch welcome ;-)
+
+Regards,
+Peter
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
