@@ -1,47 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 25 Jun 2018 20:45:06 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: fiber needs exception_ptr
-Message-ID: <20180625184506.455-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 25 Jun 2018 21:04:05 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-06-23
+In-Reply-To: <20180624060020.55B692079C@mail.bootlin.com>
+References: <20180624060020.55B692079C@mail.bootlin.com>
+Message-ID: <20180625210405.3a8d6f8a@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fiber needs exception_ptr because context is a transient dependency of fiber
-that needs exception_ptr.
-An other option would be to make boost fiber depends on boost context
-(https://www.boost.org/doc/libs/1_67_0/libs/fiber/doc/html/fiber/overview.html)
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.net/results/56509d315defb95d4ac6e278a9d40cd98f61baa7
+On Sun, 24 Jun 2018 08:00:20 +0200 (CEST), Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/boost/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+> Hello,
+> 
+> Build statistics for 2018-06-23
+> ===============================
+[...]
+> Results for branch 'master'
+> ===========================
+> 
+[...]
+>          arm |                  wiringpi-2.46 | NOK | http://autobuild.buildroot.net/results/a1ca953247475a5f31fe9283ade05c9cba26853b |     
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index db69afa27f..aedc8be97a 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -114,6 +114,7 @@ config BR2_PACKAGE_BOOST_FIBER
- 	# mips support uses the "pause" instruction, only available
- 	# since mips32r2/mips64r2.
- 	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
- 	help
- 	  C++11 userland threads library.
-@@ -121,6 +122,9 @@ config BR2_PACKAGE_BOOST_FIBER
- comment "boost-fiber needs a toolchain w/ NPTL"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
-+comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+
- comment "boost-fiber needs a toolchain not affected by GCC bug 85180"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85180
- 
--- 
-2.14.1
+Related to the version bump to 2.46, now the static build is disabled by the tool author,
+make static in the wiringPi directory gives the following output:
+
+	$ cd build/wiringpi-2.46/wiringPi && make static
+
+    wiringPi is no-longer shipped with the ability to statically link it.
+
+    Many reasons but the biggest issue is people who have statically linked
+    wiringPi into their product - for example a Pi UPS device or a Tetris-like
+    game and not subsequently shipped their modified sources. These people are
+    no better than common thieves with complete disregard to the conditions
+    of the LGPL that wiringPi ships with.
+
+    Additionally, many think it's a good idea to statically link wiringPi
+    into their favourite language - like Node, and Java and other itsy bitsy
+    little things. These people have a complete and utter disregard to what
+    happens underneath when e.g. the Linux kernel changes on the Pi then
+    wiringPi stops as it depends on some Pi kernel features, then the poor
+    user get in-touch with me and I've had over 10,000 emails so-far and
+    it's now beyond a joke.
+
+    DO NOT STATICALLY LINK WIRINGPI.
+
+    Gordon Henderson, March 2018.
+
+
+What to do? Honour Gordons request and disable wiringPi in buildroot for static
+builds or patch the wiringPi makefile to re-introduce the static linking?
+
+Regards,
+Peter
