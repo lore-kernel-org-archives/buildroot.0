@@ -1,61 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jun 2018 21:27:39 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-06-23
-In-Reply-To: <20180625210405.3a8d6f8a@gmx.net>
-References: <20180624060020.55B692079C@mail.bootlin.com>
- <20180625210405.3a8d6f8a@gmx.net>
-Message-ID: <20180625212739.3b60e8f4@windsurf.home>
+From: MOHAMMAD RASIM <mohammad.rasim96@gmail.com>
+Date: Mon, 25 Jun 2018 22:30:06 +0300
+Subject: [Buildroot] Run getty on multiple ttys and Box-drawing character
+In-Reply-To: <740098169.350580.1529848602339.JavaMail.zimbra@datacom.com.br>
+References: <CACq04CEcu6tiE-P7-xJUtHVYz4ouYrhq1Q2awjhg=i9W+THAvA@mail.gmail.com>
+ <87po0ik8re.fsf@dell.be.48ers.dk>
+ <CACq04CEoHtQ0+K5eMjVz=RqjU6SHzR5oNkW5bP32t=kTBVrMLg@mail.gmail.com>
+ <740098169.350580.1529848602339.JavaMail.zimbra@datacom.com.br>
+Message-ID: <47f17f7b-66f1-a726-0ba4-1e9b640ba8b2@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Mon, 25 Jun 2018 21:04:05 +0200, Peter Seiderer wrote:
 
-> Related to the version bump to 2.46, now the static build is disabled by the tool author,
-> make static in the wiringPi directory gives the following output:
-> 
-> 	$ cd build/wiringpi-2.46/wiringPi && make static
-> 
->     wiringPi is no-longer shipped with the ability to statically link it.
-> 
->     Many reasons but the biggest issue is people who have statically linked
->     wiringPi into their product - for example a Pi UPS device or a Tetris-like
->     game and not subsequently shipped their modified sources. These people are
->     no better than common thieves with complete disregard to the conditions
->     of the LGPL that wiringPi ships with.
-> 
->     Additionally, many think it's a good idea to statically link wiringPi
->     into their favourite language - like Node, and Java and other itsy bitsy
->     little things. These people have a complete and utter disregard to what
->     happens underneath when e.g. the Linux kernel changes on the Pi then
->     wiringPi stops as it depends on some Pi kernel features, then the poor
->     user get in-touch with me and I've had over 10,000 emails so-far and
->     it's now beyond a joke.
-> 
->     DO NOT STATICALLY LINK WIRINGPI.
-> 
->     Gordon Henderson, March 2018.
-> 
-> 
-> What to do?
-
-Stop packaging the crap that wiringpi is ?
-
-> Honour Gordons request and disable wiringPi in buildroot for static
-> builds or patch the wiringPi makefile to re-introduce the static linking?
-
-Our policy has (almost) always been to comply with upstream requests,
-so I would disable static linking for this package.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On 06/24/2018 04:56 PM, Carlos Santos wrote:
+>> From: "MOHAMMAD RASIM" <mohammad.rasim96@gmail.com>
+>> To: "Peter Korsgaard" <peter@korsgaard.com>
+>> Cc: "buildroot" <buildroot@busybox.net>
+>> Sent: Friday, June 22, 2018 9:25:43 PM
+>> Subject: Re: [Buildroot] Run getty on multiple ttys and Box-drawing character
+>> Yes, I've already set up a post-build script that modifies the inittab, didn't
+>> know about the raspberrypi script, could have saved me some time :(
+>> I have two Ideas that can be used for tty:
+>> 1- make a startup script in /etc/init.d/ that parses the /proc/cmdline and start
+>> gettys accordingly, I've tried it and it works but obviously, It's not the
+>> right way to do these things(no respawning).
+>> 2- in the /init script after mounting devtmpfs and before running (exec
+>> /sbin/init "$@") we add the same code from the post-build script that parses
+>> /proc/cmdline and adds ttys to /etc/inittab (Didn't try this but seems like the
+>> right way to do it).
+> This works but is a bit dangerous. If the script fails to parse cmdline
+> you may get system on which you can not log in. Ensure that you have an
+> inittab file with least a line containing something like this
+>
+>      cons::respawn:/sbin/getty -L console 115200 vt100
+>
+> (or the corresponding one for BusyBox init).
+>
+> Notice also that /init is a script only when rootfs is in a cpio
+> archive, which is selected along with initrd, but not for other
+> rootfs configurations.
+>
+>> As for the TERM settings I've set up my TERM to 'xterm-256color' which is the
+>> most capable terminal I know and the characters don't show.
+>> I don't think the problem is related to the terminal, instead, I think It has
+>> something to do with charset and character encoding .
+> Are you using a terminal emulator (e.g. PuTTY) to access the console?
+> If yes, check its character encoding configuration.
+>
+No, I'm not using PuTTY, I'm running the script in the 
+framebuffer(/dev/console).
+Actually the problem only appears when running from the framebuffer, if 
+I ssh to the system and run the script I can see the box drawing 
+normally (because I'm using a terminal emulator, e.g gnome-terminal).
