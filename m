@@ -1,85 +1,41 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 25 Jun 2018 14:18:56 -0700
-Subject: [Buildroot] [RFC PATCH v5 2/6] at-spi2-atk: new package
-In-Reply-To: <20180625231045.27dbf4be@windsurf.home>
-References: <20180622003340.10859-1-joseph.kogut@gmail.com>
- <20180622003340.10859-3-joseph.kogut@gmail.com>
- <20180625231045.27dbf4be@windsurf.home>
-Message-ID: <CAMWSM7jQj3TP5g4eMQ9MNfHU-hmXsFm8wVRWJ+iU_kNbmZbHdA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 25 Jun 2018 23:20:10 +0200
+Subject: [Buildroot] [PATCH 1/1] boost: thread depends on NPTL
+In-Reply-To: <20180625211317.12643-1-fontaine.fabrice@gmail.com>
+References: <20180625211317.12643-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180625232010.019e5b8d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Mon, Jun 25, 2018 at 2:10 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 21 Jun 2018 17:33:36 -0700, Joseph Kogut wrote:
->
-> > diff --git a/package/at-spi2-atk/Config.in b/package/at-spi2-atk/Config.in
-> > new file mode 100644
-> > index 0000000000..599913c7df
-> > --- /dev/null
-> > +++ b/package/at-spi2-atk/Config.in
-> > @@ -0,0 +1,21 @@
-> > +config BR2_PACKAGE_AT_SPI2_ATK
-> > +     bool "at-spi2-atk"
-> > +     depends on BR2_PACKAGE_XORG7 # at-spi2-core
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> > +     depends on BR2_USE_MMU # glib2
-> > +     depends on BR2_USE_WCHAR # glib2
-> > +     select BR2_PACKAGE_ATK
-> > +     select BR2_PACKAGE_AT_SPI2_CORE
-> > +     select BR2_PACKAGE_LIBGLIB2
-> > +     help
-> > +       The At-Spi2 Atk package contains a library that bridges
-> > +       ATK to At-Spi2 D-Bus service.
-> > +
-> > +       https://www.freedesktop.org/wiki/Accessibility/AT-SPI2/
-> > +
-> > +comment "at-spi2-atk needs a toolchain w/ wchar, threads"
-> > +     depends on BR2_USE_MMU
-> > +     depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> > +
-> > +comment "at-spi2-atk depends on X.org"
->
-> Just like at-spi2-core, I've added:
->
->         depends on BR2_USE_MMU
->
-> for the same reason.
->
-> > +     depends on !BR2_PACKAGE_XORG7
->
-> > +AT_SPI2_ATK_VERSION_MAJOR = 2.26
-> > +AT_SPI2_ATK_VERSION = $(AT_SPI2_ATK_VERSION_MAJOR).2
-> > +AT_SPI2_ATK_SOURCE = at-spi2-atk-$(AT_SPI2_ATK_VERSION).tar.xz
-> > +AT_SPI2_ATK_SITE =  http://ftp.gnome.org/pub/gnome/sources/at-spi2-atk/$(AT_SPI2_ATK_VERSION_MAJOR)
-> > +AT_SPI2_ATK_LICENSE = LGPL-2.0+
-> > +AT_SPI2_ATK_LICENSE_FILES = COPYING
-> > +AT_SPI2_ATK_INSTALL_STAGING = YES
-> > +AT_SPI2_ATK_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install
->
-> This line was not needed, it's the default behavior of the
-> autotools-package infrastructure for staging installation.
->
-> > +AT_SPI2_ATK_DEPENDENCIES = atk at-spi2-core libglib2 host-pkgconf
-> > +
-> > +$(eval $(autotools-package))
->
-> Any reason to use autotools here instead of meson ?
->
+On Mon, 25 Jun 2018 23:13:17 +0200, Fabrice Fontaine wrote:
+> - Since boost 1.67, CLOCK_MONOTONIC is used by default, there is no more
+>   check on pthread_condaddr_setclock availability:
+>   https://github.com/boostorg/thread/commit/1e84b978b2bb0aae830cc14533dea3b7ddda5cde
+> - So add NPTL dependency on boost-thread but also on boost-contract,
+>   boost-locale, boost-type_erasure and boost-wave which use
+>   boost-thread (and select it even if boost will do it on its own)
+> - Add also NPTL dependency to pulseview
+> - Update comment on NPTL in azmq
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/7db2baeb70b30f7785cbb823e9eaeb8e99ef0d24
+>  - http://autobuild.buildroot.net/results/6a4c5f8d45b51d32114093fa68195c2df2db5449
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-No, I think this is an artifact of my initial patch using an older
-version of the package that didn't offer meson support. I'll convert
-it and send a patch.
+pthread_condattr_setclock() is now implemented in linuxthreads in
+uClibc-ng starting version 1.0.30. I think I should instead rebuild the
+pre-built toolchains rather than adding this NPTL dependency.
 
-> Anyway, I've applied to master with the fixes detailed above.
->
+Best regards,
 
-Thanks!
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
