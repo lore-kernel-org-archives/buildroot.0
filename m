@@ -1,92 +1,74 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 25 Jun 2018 14:20:24 -0700
-Subject: [Buildroot] [RFC PATCH v5 1/6] at-spi2-core: new package
-In-Reply-To: <20180625230944.5a3ca2c3@windsurf.home>
-References: <20180622003340.10859-1-joseph.kogut@gmail.com>
- <20180622003340.10859-2-joseph.kogut@gmail.com>
- <20180625230944.5a3ca2c3@windsurf.home>
-Message-ID: <CAMWSM7jLhVETbeQn-xsLyLw8k3BXiuXALpf_-23-bgR_pp_i5Q@mail.gmail.com>
+From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Date: Mon, 25 Jun 2018 16:44:07 -0500
+Subject: [Buildroot] [PATCH 1/1] patchelf: Add patch to fix relative rpath
+ issue on PPC
+Message-ID: <20180625214407.12687-1-bryce.ferguson@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+This commit adds a patch to the host package patchelf to fix an
+issue with endianness when the --make-rpath-relative option is
+specified. Currently, patchelf does not take into account the
+architecture of the target ELF when it performs the fixup on the
+RPATH. Thus, if it differs from the host in endianness, the RUNPATH
+field will be invalid. The patch fixes the bug reported here:
 
-On Mon, Jun 25, 2018 at 2:09 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 21 Jun 2018 17:33:35 -0700, Joseph Kogut wrote:
-> > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
->
-> I've applied your patch, after doing a few additional fixes. See below.
->
-> > diff --git a/package/at-spi2-core/Config.in b/package/at-spi2-core/Config.in
-> > new file mode 100644
-> > index 0000000000..43110e0bf4
-> > --- /dev/null
-> > +++ b/package/at-spi2-core/Config.in
-> > @@ -0,0 +1,24 @@
-> > +config BR2_PACKAGE_AT_SPI2_CORE
-> > +     bool "at-spi2-core"
-> > +     depends on BR2_PACKAGE_XORG7 # xlib-libxtst
-> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
-> > +     depends on BR2_USE_MMU # glib2
-> > +     depends on BR2_USE_WCHAR # glib2
-> > +     select BR2_PACKAGE_DBUS
-> > +     select BR2_PACKAGE_LIBGLIB2
-> > +     select BR2_PACKAGE_XLIB_LIBXTST
-> > +     help
-> > +       The At-Spi2 Core package is a part of the GNOME
-> > +       Accessibility Project. It provides a Service Provider
-> > +       Interface for the Assistive Technologies available on the
-> > +       GNOME platform and a library against which applications
-> > +       can be linked.
-> > +
-> > +       https://wiki.gnome.org/Accessibility
-> > +
-> > +comment "at-spi2-core needs a toolchain w/ wchar, threads"
-> > +     depends on BR2_USE_MMU
-> > +     depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-> > +
-> > +comment "at-spi2-core depends on X.org"
->
-> I've added:
->
->         depends on BR2_USE_MMU
->
-> here, so that the comment doesn't show up on noMMU architectures where
-> at-spi2-core will anyway not be available regardless of X.org
-> availability.
->
-> > +     depends on !BR2_PACKAGE_XORG7
->
+https://bugs.busybox.net/show_bug.cgi?id=11101
 
-I'll keep that in mind.
+Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+---
+ ...LF-endianness-before-writing-new-run.patch | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/patchelf/0004-patchelf-Check-ELF-endianness-before-writing-new-run.patch
 
-> > +AT_SPI2_CORE_VERSION_MAJOR = 2.28
-> > +AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
-> > +AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
-> > +AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
-> > +AT_SPI2_CORE_LICENSE = LGPL-2.0+
-> > +AT_SPI2_CORE_LICENSE_FILES = COPYING
-> > +AT_SPI2_CORE_INSTALL_STAGING = YES
-> > +AT_SPI2_CORE_DEPENDENCIES = host-meson host-pkgconf dbus libglib2 xlib_libXtst
->
-> Having host-meson in the DEPENDENCIES variable is useless, because the
-> meson-package infrastructure takes care of that.
->
-
-Good point, I missed that.
-
-> Also, I had to specify -Ddbus_daemon=/usr/bin/dbus-daemon, otherwise it
-> tries to search for the dbus-daemon program on the host machine, and
-> errors out if it cannot find it.
->
-> Applied with those changes. Thanks!
->
-
-Thanks for the fixes.
+diff --git a/package/patchelf/0004-patchelf-Check-ELF-endianness-before-writing-new-run.patch b/package/patchelf/0004-patchelf-Check-ELF-endianness-before-writing-new-run.patch
+new file mode 100644
+index 0000000000..4c528a5908
+--- /dev/null
++++ b/package/patchelf/0004-patchelf-Check-ELF-endianness-before-writing-new-run.patch
+@@ -0,0 +1,40 @@
++From 8c75599b674c73fbfe9c15afeccad54ae88243f5 Mon Sep 17 00:00:00 2001
++From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
++Date: Mon, 25 Jun 2018 13:05:07 -0500
++Subject: [PATCH 1/1] patchelf: Check ELF endianness before writing new runpath
++
++This commit modifies the way fields are written in the dynamic
++section in order to account the architecture of the target ELF
++file. Instead of copying the raw data, use the helper functions
++to convert endianness.
++
++Link to upstream PR: https://github.com/NixOS/patchelf/pull/151
++
++Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
++---
++ src/patchelf.cc | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/patchelf.cc b/src/patchelf.cc
++index 35b4a33..a33f644 100644
++--- a/src/patchelf.cc
+++++ b/src/patchelf.cc
++@@ -1315,13 +1315,13 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string rootDir, string
++     debug("new rpath is `%s'\n", newRPath.c_str());
++ 
++     if (!forceRPath && dynRPath && !dynRunPath) { /* convert DT_RPATH to DT_RUNPATH */
++-        dynRPath->d_tag = DT_RUNPATH;
+++        wri(dynRPath->d_tag, DT_RUNPATH);
++         dynRunPath = dynRPath;
++         dynRPath = 0;
++     }
++ 
++     if (forceRPath && dynRPath && dynRunPath) { /* convert DT_RUNPATH to DT_RPATH */
++-        dynRunPath->d_tag = DT_IGNORE;
+++        wri(dynRunPath->d_tag, DT_IGNORE);
++     }
++ 
++     if (newRPath.size() <= rpathSize) {
++-- 
++2.17.0
++
+-- 
+2.17.0
