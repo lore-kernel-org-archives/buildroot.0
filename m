@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jun 2018 21:35:18 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: fiber needs exception_ptr
-In-Reply-To: <20180625184506.455-1-fontaine.fabrice@gmail.com>
-References: <20180625184506.455-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180625213518.45fe3a6d@windsurf.home>
+Date: Mon, 25 Jun 2018 21:42:02 +0200
+Subject: [Buildroot] [PATCH 1/1] python-libconfig: fix build with boost
+ 1.67
+In-Reply-To: <20180624175045.2444-1-fontaine.fabrice@gmail.com>
+References: <20180624175045.2444-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180625214202.4a38186e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 25 Jun 2018 20:45:06 +0200, Fabrice Fontaine wrote:
-> fiber needs exception_ptr because context is a transient dependency of fiber
+On Sun, 24 Jun 2018 19:50:45 +0200, Fabrice Fontaine wrote:
+> Since boost 1.67, python3 boost library is boost_python36.so instead of
+> boost_python3.so so update first patch
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/6f973f2945727b302409405288ef0b9808c7317b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0001-Determine-boost_python-name-depending-on-current-Pyt.patch | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-What do you mean by "transient" ? Perhaps you meant "transitive" ?
-
-> that needs exception_ptr.
-> An other option would be to make boost fiber depends on boost context
-> (https://www.boost.org/doc/libs/1_67_0/libs/fiber/doc/html/fiber/overview.html)
-
-If boost fiber relies on boost context, then boost fiber should select
-boost context.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
