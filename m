@@ -1,83 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jun 2018 10:07:38 +0200
-Subject: [Buildroot] [PATCH] gdb: add patch to fix noMMU build issue
-Message-ID: <20180625080738.8145-1-thomas.petazzoni@bootlin.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Mon, 25 Jun 2018 19:05:24 +0530
+Subject: [Buildroot] sun8i-h3: sunxi-mali-mainline package with
+ linux-next
+In-Reply-To: <88dade5a-99bb-bb6b-7aaf-4561568b2840@micronovasrl.com>
+References: <CAMty3ZDZucZpr-4M=CCc9nLM=XTKGr5qySDe4Zq5O7t_xov+Jg@mail.gmail.com>
+ <a3dc995f-c1a7-6cc9-e1c9-cefdf590a659@micronovasrl.com>
+ <88dade5a-99bb-bb6b-7aaf-4561568b2840@micronovasrl.com>
+Message-ID: <CAMty3ZBTob3VJir5pRvpuKnKdrO06Q+5+U+wOygxEg8iYaBFbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to fix a build issue encountered on noMMU
-architectures when building gdbserver, due to the use of fork()
-instead of vfork().
+On Fri, Jun 22, 2018 at 4:58 PM, Giulio Benetti
+<giulio.benetti@micronovasrl.com> wrote:
+> Hi Jagan,
+>
+> Il 22/06/2018 12:45, Giulio Benetti ha scritto:
+>>
+>> Resend, I was not subscribed to ML sorry.
+>>
+>> Hi Jagan,
+>>
+>> Il 21/06/2018 19:22, Jagan Teki ha scritto:
+>>>
+>>> Hi,
+>>>
+>>> I'm trying to use sunxi-mali-mainline with linux-next for H3 platform.
+>>>
+>>> Since Mali dt support is already added on linux-next, So I've directly
+>>> used buildroot and enabled necessary options.
+>>
+>>
+>> I would suggest you to use master branch or at least 4.17 version instead
+>> of linux-next.
+>> But I'm not sure this is the root-cause.
+>> Maybe give it a try if you can.
+>>
+>>>
+>>> Look like Mali initialization seems failing. I've not investigated
+>>> further but just to post if anyone found this already and seeking for
+>>> help.
+>>>
+>>> Log:
+>>> # modprobe -a mali
+>
+>
+> Driver is loaded automatically on boot,
+> since during install it is added to /lib/modules/extras
+> Are you sure you're not trying to modprobe twice?
+> Can you post lsmod before modprobe?
+> It should be already loaded.
+>
+> If it's already loaded and not working can you post your dmesg?
 
-The patch has been submitted upstream:
+I've tried with 4.17.2 please find the dmesg[1]
 
-  https://sourceware.org/ml/gdb-patches/2018-06/msg00569.html
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-nat-fork-inferior-include-linux-ptrace.h.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/gdb/8.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-
-diff --git a/package/gdb/8.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch b/package/gdb/8.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-new file mode 100644
-index 0000000000..dea24725fc
---- /dev/null
-+++ b/package/gdb/8.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-@@ -0,0 +1,51 @@
-+From 887c667089e5417fdc7c5bbb364b027e86a7c113 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 24 Jun 2018 23:33:55 +0200
-+Subject: [PATCH] nat/fork-inferior: include linux-ptrace.h
-+
-+To decide whether fork() or vfork() should be used, fork-inferior.c
-+uses the following test:
-+
-+  #if !(defined(__UCLIBC__) && defined(HAS_NOMMU))
-+
-+However, HAS_NOMMU is never defined, because it gets defined in
-+linux-ptrace.h, which is not included by fork-inferior.c. Due to this,
-+gdbserver fails to build on noMMU architectures. This commit fixes
-+that by simply including linux-ptrace.h.
-+
-+This bug was introduced by commit
-+2090129c36c7e582943b7d300968d19b46160d84 ("Share fork_inferior et al
-+with gdbserver"). Indeed, the same fork()/vfork() selection was done,
-+but in another file where linux-ptrace.h was included.
-+
-+Fixes the following build issue:
-+
-+../nat/fork-inferior.c: In function 'pid_t fork_inferior(const char*, const string&, char**, void (*)(), void (*)(int), void (*)(), const char*, void (*)(const char*, char* const*, char* const*))':
-+../nat/fork-inferior.c:376:11: error: 'fork' was not declared in this scope
-+     pid = fork ();
-+           ^~~~
-+../nat/fork-inferior.c:376:11: note: suggested alternative: 'vfork'
-+     pid = fork ();
-+           ^~~~
-+           vfork
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ gdb/nat/fork-inferior.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/gdb/nat/fork-inferior.c b/gdb/nat/fork-inferior.c
-+index 8b59387fa5..05167628a6 100644
-+--- a/gdb/nat/fork-inferior.c
-++++ b/gdb/nat/fork-inferior.c
-+@@ -26,6 +26,7 @@
-+ #include "common-gdbthread.h"
-+ #include "signals-state-save-restore.h"
-+ #include "gdb_tilde_expand.h"
-++#include "linux-ptrace.h"
-+ #include <vector>
-+ 
-+ extern char **environ;
-+-- 
-+2.14.4
-+
--- 
-2.14.4
+[1] https://paste.ubuntu.com/p/Y5GtCP4Tjj/
