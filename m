@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jun 2018 22:11:53 +0200
-Subject: [Buildroot] [PATCH 0/2] qt5charts: build with both Qt 5.6/5.11
-In-Reply-To: <20180618224907.17322-1-gael.portay@savoirfairelinux.com>
-References: <20180618224907.17322-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180625221153.75e9e55f@windsurf.home>
+Date: Mon, 25 Jun 2018 22:12:56 +0200
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add myself to
+ package/pamtester
+In-Reply-To: <20180621163344.24552-3-casantos@datacom.com.br>
+References: <20180621163344.24552-1-casantos@datacom.com.br>
+ <20180621163344.24552-3-casantos@datacom.com.br>
+Message-ID: <20180625221256.2340bfd1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,13 +14,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 18 Jun 2018 18:49:05 -0400, Ga?l PORTAY wrote:
+On Thu, 21 Jun 2018 13:33:44 -0300, Carlos Santos wrote:
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 
-> Ga?l PORTAY (2):
->   qt5charts: allow to build with qt5.6
->   qt5chart: bump hash for 5.11.0
+This should be part of PATCH 1/2.
 
-Both applied. Thanks!
+Thanks,
 
 Thomas
 -- 
