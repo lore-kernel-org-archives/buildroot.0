@@ -1,7 +1,7 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon, 25 Jun 2018 17:20:13 -0300
-Subject: [Buildroot] [PATCH] pamtester: new package
-Message-ID: <20180625202013.12337-1-casantos@datacom.com.br>
+Date: Mon, 25 Jun 2018 17:31:59 -0300
+Subject: [Buildroot] [PATCH v3] pamtester: new package
+Message-ID: <20180625203159.13869-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -28,10 +28,10 @@ Signed-off-by: Carlos Santos <casantos@datacom.com.br>
  DEVELOPERS                                       |  1 +
  package/Config.in                                |  1 +
  package/pamtester/0001-fix-spelling-errors.patch | 19 +++++++++++++++++++
- package/pamtester/Config.in                      | 11 +++++++++++
+ package/pamtester/Config.in                      | 15 +++++++++++++++
  package/pamtester/pamtester.hash                 |  2 ++
  package/pamtester/pamtester.mk                   | 13 +++++++++++++
- 6 files changed, 47 insertions(+)
+ 6 files changed, 51 insertions(+)
  create mode 100644 package/pamtester/0001-fix-spelling-errors.patch
  create mode 100644 package/pamtester/Config.in
  create mode 100644 package/pamtester/pamtester.hash
@@ -50,17 +50,17 @@ index 626fba3159..c0472d2547 100644
  F:	package/skeleton-custom/
  F:	package/skeleton-init-common/
 diff --git a/package/Config.in b/package/Config.in
-index c8e35fd99e..5efe67f10a 100644
+index c8e35fd99e..77e869ac42 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1569,6 +1569,7 @@ menu "Other"
- 	source "package/linux-pam/Config.in"
- 	source "package/llvm/Config.in"
- if BR2_PACKAGE_LINUX_PAM
+@@ -2024,6 +2024,7 @@ menu "System tools"
+ 	source "package/numactl/Config.in"
+ 	source "package/nut/Config.in"
+ 	source "package/openvmtools/Config.in"
 +	source "package/pamtester/Config.in"
- comment "linux-pam plugins"
- 	source "package/libpam-radius-auth/Config.in"
- 	source "package/libpam-tacplus/Config.in"
+ 	source "package/polkit/Config.in"
+ 	source "package/powerpc-utils/Config.in"
+ 	source "package/procps-ng/Config.in"
 diff --git a/package/pamtester/0001-fix-spelling-errors.patch b/package/pamtester/0001-fix-spelling-errors.patch
 new file mode 100644
 index 0000000000..5f79754e34
@@ -88,12 +88,13 @@ index 0000000000..5f79754e34
 + 			int flag = 0;
 diff --git a/package/pamtester/Config.in b/package/pamtester/Config.in
 new file mode 100644
-index 0000000000..0be55ca739
+index 0000000000..9415c0e31f
 --- /dev/null
 +++ b/package/pamtester/Config.in
-@@ -0,0 +1,11 @@
+@@ -0,0 +1,15 @@
 +config BR2_PACKAGE_PAMTESTER
 +	bool "pamtester"
++	depends on BR2_PACKAGE_LINUX_PAM
 +	help
 +	  A tiny utility for testing pluggable authentication modules
 +	  (PAM) facility. While specifically designed to help PAM module
@@ -103,6 +104,9 @@ index 0000000000..0be55ca739
 +	  and LDAP.
 +
 +	  http://pamtester.sourceforge.net/
++
++comment "pamptester depends on linux-pam"
++	depends on !BR2_PACKAGE_LINUX_PAM
 diff --git a/package/pamtester/pamtester.hash b/package/pamtester/pamtester.hash
 new file mode 100644
 index 0000000000..6ce187f19f
