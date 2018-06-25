@@ -1,41 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 25 Jun 2018 23:20:10 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: thread depends on NPTL
-In-Reply-To: <20180625211317.12643-1-fontaine.fabrice@gmail.com>
-References: <20180625211317.12643-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180625232010.019e5b8d@windsurf.home>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 25 Jun 2018 14:20:24 -0700
+Subject: [Buildroot] [RFC PATCH v5 1/6] at-spi2-core: new package
+In-Reply-To: <20180625230944.5a3ca2c3@windsurf.home>
+References: <20180622003340.10859-1-joseph.kogut@gmail.com>
+ <20180622003340.10859-2-joseph.kogut@gmail.com>
+ <20180625230944.5a3ca2c3@windsurf.home>
+Message-ID: <CAMWSM7jLhVETbeQn-xsLyLw8k3BXiuXALpf_-23-bgR_pp_i5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Mon, 25 Jun 2018 23:13:17 +0200, Fabrice Fontaine wrote:
-> - Since boost 1.67, CLOCK_MONOTONIC is used by default, there is no more
->   check on pthread_condaddr_setclock availability:
->   https://github.com/boostorg/thread/commit/1e84b978b2bb0aae830cc14533dea3b7ddda5cde
-> - So add NPTL dependency on boost-thread but also on boost-contract,
->   boost-locale, boost-type_erasure and boost-wave which use
->   boost-thread (and select it even if boost will do it on its own)
-> - Add also NPTL dependency to pulseview
-> - Update comment on NPTL in azmq
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/7db2baeb70b30f7785cbb823e9eaeb8e99ef0d24
->  - http://autobuild.buildroot.net/results/6a4c5f8d45b51d32114093fa68195c2df2db5449
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On Mon, Jun 25, 2018 at 2:09 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Thu, 21 Jun 2018 17:33:35 -0700, Joseph Kogut wrote:
+> > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+>
+> I've applied your patch, after doing a few additional fixes. See below.
+>
+> > diff --git a/package/at-spi2-core/Config.in b/package/at-spi2-core/Config.in
+> > new file mode 100644
+> > index 0000000000..43110e0bf4
+> > --- /dev/null
+> > +++ b/package/at-spi2-core/Config.in
+> > @@ -0,0 +1,24 @@
+> > +config BR2_PACKAGE_AT_SPI2_CORE
+> > +     bool "at-spi2-core"
+> > +     depends on BR2_PACKAGE_XORG7 # xlib-libxtst
+> > +     depends on BR2_TOOLCHAIN_HAS_THREADS # dbus, glib2
+> > +     depends on BR2_USE_MMU # glib2
+> > +     depends on BR2_USE_WCHAR # glib2
+> > +     select BR2_PACKAGE_DBUS
+> > +     select BR2_PACKAGE_LIBGLIB2
+> > +     select BR2_PACKAGE_XLIB_LIBXTST
+> > +     help
+> > +       The At-Spi2 Core package is a part of the GNOME
+> > +       Accessibility Project. It provides a Service Provider
+> > +       Interface for the Assistive Technologies available on the
+> > +       GNOME platform and a library against which applications
+> > +       can be linked.
+> > +
+> > +       https://wiki.gnome.org/Accessibility
+> > +
+> > +comment "at-spi2-core needs a toolchain w/ wchar, threads"
+> > +     depends on BR2_USE_MMU
+> > +     depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> > +
+> > +comment "at-spi2-core depends on X.org"
+>
+> I've added:
+>
+>         depends on BR2_USE_MMU
+>
+> here, so that the comment doesn't show up on noMMU architectures where
+> at-spi2-core will anyway not be available regardless of X.org
+> availability.
+>
+> > +     depends on !BR2_PACKAGE_XORG7
+>
 
-pthread_condattr_setclock() is now implemented in linuxthreads in
-uClibc-ng starting version 1.0.30. I think I should instead rebuild the
-pre-built toolchains rather than adding this NPTL dependency.
+I'll keep that in mind.
 
-Best regards,
+> > +AT_SPI2_CORE_VERSION_MAJOR = 2.28
+> > +AT_SPI2_CORE_VERSION = $(AT_SPI2_CORE_VERSION_MAJOR).0
+> > +AT_SPI2_CORE_SOURCE = at-spi2-core-$(AT_SPI2_CORE_VERSION).tar.xz
+> > +AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI2_CORE_VERSION_MAJOR)
+> > +AT_SPI2_CORE_LICENSE = LGPL-2.0+
+> > +AT_SPI2_CORE_LICENSE_FILES = COPYING
+> > +AT_SPI2_CORE_INSTALL_STAGING = YES
+> > +AT_SPI2_CORE_DEPENDENCIES = host-meson host-pkgconf dbus libglib2 xlib_libXtst
+>
+> Having host-meson in the DEPENDENCIES variable is useless, because the
+> meson-package infrastructure takes care of that.
+>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Good point, I missed that.
+
+> Also, I had to specify -Ddbus_daemon=/usr/bin/dbus-daemon, otherwise it
+> tries to search for the dbus-daemon program on the host machine, and
+> errors out if it cannot find it.
+>
+> Applied with those changes. Thanks!
+>
+
+Thanks for the fixes.
