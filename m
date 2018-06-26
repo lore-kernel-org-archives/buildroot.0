@@ -1,133 +1,79 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon, 25 Jun 2018 21:02:24 -0300
-Subject: [Buildroot] [PATCH v4] pamtester: new package
-Message-ID: <20180626000224.3405-1-casantos@datacom.com.br>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 25 Jun 2018 23:01:16 -0300
+Subject: [Buildroot] [PATCH 1/1] pkg-generic: fix no-check-hash for
+ inferred site method
+References: <390b1691-6548-abfd-50de-cb642d692b03@lucaceresoli.net>
+Message-ID: <5b319e6ca0af0_7d0f2ae8223913c422165@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Utility for testing pluggable authentication modules (PAM) facility.
+Hello,
 
-While specifically designed to help PAM module authors to test their
-modules, that might also be handy for system administrators interested
-in building a centralised authentication system using common standards
-such as NIS, SASL and LDAP.
+On Mon, Jun 25, 2018 at 06:01 PM, Luca Ceresoli wrote:
 
-Pull a patch from Debian, rename it and add an SOB to match Buildroot
-conventions.
+> On 25/06/2018 03:41, Ricardo Martincoski wrote:
+>> Currently, when the site method is explicitly set to a SCM other than
+>> git, the main download is correctly excluded from being hash-checked.
+>> But when the site method is inferred from the site uri, the download
+>> from a SCM other than git is wrongly being hash-checked.
+[snip]
+>> ---
+>> All packages in the tree that use those site methods currently
+>> explicitly set the site method.
+>> $ make -s printvars VARS=%_SITE_METHOD | grep '=\(bzr\|cvs\|hg\|svn\)'
+[snip]
+>> PYTHON_PYGAME_SITE_METHOD=hg
+> 
+> Apologies, but I couldn't understand what this commit is supposed to
+> fix. From your description above I understand you're fixing packages
+> whose method is inferred (i.e. not explicitly set). But here you list
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- .../pamtester/0001-fix-spelling-errors.patch  | 19 +++++++++++++++++++
- package/pamtester/Config.in                   | 15 +++++++++++++++
- package/pamtester/pamtester.hash              |  2 ++
- package/pamtester/pamtester.mk                | 13 +++++++++++++
- 6 files changed, 51 insertions(+)
- create mode 100644 package/pamtester/0001-fix-spelling-errors.patch
- create mode 100644 package/pamtester/Config.in
- create mode 100644 package/pamtester/pamtester.hash
- create mode 100644 package/pamtester/pamtester.mk
+I am fixing packages whose method is inferred.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 27e24896fb..ee749b08c8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -416,6 +416,7 @@ F:	package/initscripts/
- F:	package/libpam-radius-auth/
- F:	package/libpam-tacplus/
- F:	package/modem-manager/
-+F:	package/pamtester/
- F:	package/perl-file-util/
- F:	package/skeleton-custom/
- F:	package/skeleton-init-common/
-diff --git a/package/Config.in b/package/Config.in
-index c5365547a4..93f48557d9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2026,6 +2026,7 @@ menu "System tools"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
- 	source "package/openvmtools/Config.in"
-+	source "package/pamtester/Config.in"
- 	source "package/polkit/Config.in"
- 	source "package/powerpc-utils/Config.in"
- 	source "package/procps-ng/Config.in"
-diff --git a/package/pamtester/0001-fix-spelling-errors.patch b/package/pamtester/0001-fix-spelling-errors.patch
-new file mode 100644
-index 0000000000..5f79754e34
---- /dev/null
-+++ b/package/pamtester/0001-fix-spelling-errors.patch
-@@ -0,0 +1,19 @@
-+Description: Fix spelling error in pamtester
-+Origin: vendor
-+Bug: https://sourceforge.net/tracker/?func=detail&aid=3599109&group_id=135111&atid=731890
-+Forwarded: yes
-+Author: Salvatore Bonaccorso <carnil@debian.org>
-+Last-Update: 2013-01-01
-+Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
-+
-+--- a/src/app.c
-++++ b/src/app.c
-+@@ -373,7 +373,7 @@
-+ 				err_msg = xstrdup(pam_strerror(pamh, err));
-+ 				goto out;
-+ 			} else {
-+-				printf("%s: sucessfully opened a session\n", params->app_name);
-++				printf("%s: successfully opened a session\n", params->app_name);
-+ 			}
-+ 		} else if (!strcasecmp(op->name, "close_session")) {
-+ 			int flag = 0;
-diff --git a/package/pamtester/Config.in b/package/pamtester/Config.in
-new file mode 100644
-index 0000000000..9415c0e31f
---- /dev/null
-+++ b/package/pamtester/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PAMTESTER
-+	bool "pamtester"
-+	depends on BR2_PACKAGE_LINUX_PAM
-+	help
-+	  A tiny utility for testing pluggable authentication modules
-+	  (PAM) facility. While specifically designed to help PAM module
-+	  authors to test their modules, that might also be handy for
-+	  system administrators interested in building a centralised
-+	  authentication system using common standards such as NIS, SASL
-+	  and LDAP.
-+
-+	  http://pamtester.sourceforge.net/
-+
-+comment "pamptester depends on linux-pam"
-+	depends on !BR2_PACKAGE_LINUX_PAM
-diff --git a/package/pamtester/pamtester.hash b/package/pamtester/pamtester.hash
-new file mode 100644
-index 0000000000..6ce187f19f
---- /dev/null
-+++ b/package/pamtester/pamtester.hash
-@@ -0,0 +1,2 @@
-+# from https://sourceforge.net/projects/pamtester/files/pamtester/0.1.2/
-+sha1 33bcc610d7f208b50a0a23c144bdbd1e2cae4ac6  pamtester-0.1.2.tar.gz
-diff --git a/package/pamtester/pamtester.mk b/package/pamtester/pamtester.mk
-new file mode 100644
-index 0000000000..b09e4d1cc0
---- /dev/null
-+++ b/package/pamtester/pamtester.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# pamtester
-+#
-+################################################################################
-+
-+PAMTESTER_VERSION = 0.1.2
-+PAMTESTER_SITE = https://download.sourceforge.net/project/pamtester/pamtester/$(PAMTESTER_VERSION)
-+PAMTESTER_DEPENDENCIES = linux-pam
-+PAMTESTER_LICENSE = BSD-3-Clause
-+PAMTESTER_LICENSE_FILES = LICENSE
-+
-+$(eval $(autotools-package))
--- 
-2.17.1
+> packages which explicitly set it.
+
+Sorry. My message after the commit log was misleading.
+Rethinking now, a better message would be:
+"Currently there is no package in the tree that uses inferred site method, and
+that is why the autobuilder didn't caught this. We had packages using inferred
+site method in the past, the last one was 'expect', but since they didn't have a
+hash file (for a license or extra-download for example) the build didn't error
+out."
+
+> 
+> Which one are you fixing exactly? Can you provide an example package
+> that your patch fixes?
+
+There is no example in the tree right now, but they can either live in a
+br2-external somewhere or they can be added to the tree in the future.
+I don't have a real package with this problem.
+
+I stumbled on this because I am creating automated tests for the download infra.
+They setup a SCM remote in the docker image by calling git daemon, svnserver,
+... depending on the download method and download a package. Here is one package
+under test [1], the test failing before this patch [2] and the test passing
+after this patch [3].
+
+> 
+> BTW I couldn't find in Buildroot any package whose method is an SCM
+> other than git and is not explicitly set.
+
+Correct. The last one was 'expect', it now uses a tarball instead of cvs.
+
+You can reproduce the problem I a trying to fix by doing this:
+$ git revert 23ab6cb162b7456925e2c3df4917cf9b45868d55
+$ touch package/expect/expect.hash
+$ make expect-source
+ERROR: No hash found for expect-2014-05-02.tar.gz
+
+
+[1] https://gitlab.com/RicardoMartincoski/buildroot/blob/910ad20b78db2b5f238daca18c5688e3ec3c157b/support/testing/tests/download/br2-external/svn-refs/package/svn-revision-number/svn-revision-number.mk
+[2] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/77355189
+[3] https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/77355202
+
+
+Regards,
+Ricardo
