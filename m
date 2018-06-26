@@ -1,58 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Jun 2018 09:31:37 +0200
-Subject: [Buildroot] [PATCH v2,3/3] boost: fiber selects context
-In-Reply-To: <20180625220237.15217-3-fontaine.fabrice@gmail.com>
-References: <20180625220237.15217-1-fontaine.fabrice@gmail.com>
- <20180625220237.15217-3-fontaine.fabrice@gmail.com>
-Message-ID: <20180626093137.5c3b0d22@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 26 Jun 2018 10:24:18 +0200
+Subject: [Buildroot] [arc-buildroot] Re: [PATCH] toolchain: Bump ARC
+ tools to arc-2018.03 release
+In-Reply-To: <20180626090623.1d84aa7f@windsurf.home> (Thomas Petazzoni's
+ message of "Tue, 26 Jun 2018 09:06:23 +0200")
+References: <20180625154535.21098-1-didin@synopsys.com>
+ <20180625215719.4a04bde3@windsurf.home>
+ <2dbb659af2557f7e70e267b84b7a0360de2b5201.camel@synopsys.com>
+ <20180626090623.1d84aa7f@windsurf.home>
+Message-ID: <87bmbydkgd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Thanks for this new iteration!
+ > Hello,
+ > On Mon, 25 Jun 2018 23:30:47 +0000, Alexey Brodkin wrote:
 
-On Tue, 26 Jun 2018 00:02:37 +0200, Fabrice Fontaine wrote:
+ >> > This patch did not apply to master as-is, due to the changes on gdb
+ >> > that Peter merged yesterday. I fixed up the conflict and applied to
+ >> > master.
+ >> > 
+ >> > I also did a follow-up commit, to make sure BR2_PACKAGE_GDB_NEEDS_CXX11
+ >> > is enabled when the ARC version of gdb is used: it's based on GDB 8.0,
+ >> > so it needs C++11 support.  
+ >> 
+ >> Any chance for this one to be applied to 2018.05.x branch as this is just
+ RC2-> Release bump?
 
->  config BR2_PACKAGE_BOOST_FIBER
->  	bool "boost-fiber"
-> +	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  	# mips support uses the "pause" instruction, only available
->  	# since mips32r2/mips64r2.
->  	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
-> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
-> +	select BR2_PACKAGE_BOOST_CONTEXT
->  	help
->  	  C++11 userland threads library.
->  
->  comment "boost-fiber needs a toolchain w/ NPTL"
-> +	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
->  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
->  
-> +comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
-> +	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-> +
->  comment "boost-fiber needs a toolchain not affected by GCC bug 85180"
-> +	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+ > I saw this note in the patch. It's up to Peter to decide what to do
+ > about this, but considering it only touches ARC toolchain components, I
+ > don't see why we couldn't backport this to 2018.05.
 
-Perhaps a single comment for the gcc bugs is enough, i.e:
+Yes, I'll get around to it this week.
 
-comment "boost-fiber needs a toolchain not affected by GCC bugs 64735, 85180"
-
-if you agree, no need to respin just for this change, we can fix it
-when applying.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
