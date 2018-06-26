@@ -1,60 +1,82 @@
 From: Sven Neumann <neumann@teufel.de>
-Date: Tue, 26 Jun 2018 11:36:17 +0200
-Subject: [Buildroot] [PATCH] git-download: Fix downloading of specific
- revisions from github.
-Message-ID: <20180626093617.13034-1-neumann@teufel.de>
+Date: Tue, 26 Jun 2018 11:53:23 +0200
+Subject: [Buildroot] [PATCH] wampcc: new package
+Message-ID: <20180626095323.14072-1-neumann@teufel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Oliver Tappe <zooey@hirschkaefer.de>
-
-Github has recently dropped support for the archive-URLs that we
-used to use.
-
-They do provide another URL where archives can be fetched from, but
-not as git shallow clone, but direcly as tarball. Adjust the URL to
-be used and adjust the git download script to use wget when trying
-to download from github.
-
-Signed-off-by: Oliver Tappe <zooey@hirschkaefer.de>
 Signed-off-by: Sven Neumann <neumann@teufel.de>
 ---
- package/pkg-download.mk | 2 +-
- support/download/git    | 6 ++++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ package/Config.in          |  1 +
+ package/wampcc/Config.in   | 13 +++++++++++++
+ package/wampcc/wampcc.hash |  2 ++
+ package/wampcc/wampcc.mk   | 14 ++++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/wampcc/Config.in
+ create mode 100644 package/wampcc/wampcc.hash
+ create mode 100644 package/wampcc/wampcc.mk
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 2ca6ccf44d..2e3b734f97 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -56,7 +56,7 @@ notdomain = $(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$
- domainseparator = $(if $(1),$(1),/)
- 
- # github(user,package,version): returns site of GitHub repository
--github = https://github.com/$(1)/$(2)/archive/$(3)
-+github = https://api.github.com/repos/$(1)/$(2)/tarball/$(3)
- 
- # Expressly do not check hashes for those files
- # Exported variables default to immediately expanded in some versions of
-diff --git a/support/download/git b/support/download/git
-index 11bb52c1e1..1efde4fcdc 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -75,6 +75,12 @@ _git() {
-     eval GIT_DIR="${git_cache}/.git" ${GIT} "${@}"
- }
- 
-+# If the URL contains github, simply fetch the archive via wget:
-+if [[ $repo == https://api.github.com/* ]]; then
-+    wget -O $output $repo
-+    exit 0
-+fi
+diff --git a/package/Config.in b/package/Config.in
+index c5365547a4..d5612b5b61 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1487,6 +1487,7 @@ menu "Networking"
+ 	source "package/sofia-sip/Config.in"
+ 	source "package/thrift/Config.in"
+ 	source "package/usbredir/Config.in"
++	source "package/wampcc/Config.in"
+ 	source "package/zeromq/Config.in"
+ 	source "package/zmqpp/Config.in"
+ 	source "package/zyre/Config.in"
+diff --git a/package/wampcc/Config.in b/package/wampcc/Config.in
+new file mode 100644
+index 0000000000..055f21a43d
+--- /dev/null
++++ b/package/wampcc/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_WAMPCC
++	bool "wampcc"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBUV
++	select BR2_PACKAGE_JANSSON
++	select BR2_PACKAGE_OPENSSL
++	help
++	  wampcc is C++ library that implements the Web Application Messaging Protocol protocol.
 +
- # Create a warning file, that the user should not use the git cache.
- # It's ours. Our precious.
- cat <<-_EOF_ >"${dl_dir}/git.readme"
++	  https://github.com/darrenjs/wampcc
++
++comment "wampcc needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/wampcc/wampcc.hash b/package/wampcc/wampcc.hash
+new file mode 100644
+index 0000000000..9c3af366e9
+--- /dev/null
++++ b/package/wampcc/wampcc.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b3c3633b4c6a74d7ac8a676a7ea30fbfde7ae19aa1fc37de3b8aa3a553b674a2  wampcc-v1.6.tar.gz
+diff --git a/package/wampcc/wampcc.mk b/package/wampcc/wampcc.mk
+new file mode 100644
+index 0000000000..d8e093f679
+--- /dev/null
++++ b/package/wampcc/wampcc.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# wampcc
++#
++################################################################################
++
++WAMPCC_VERSION = v1.6
++WAMPCC_SITE = $(call github,darrenjs,wampcc,$(WAMPCC_VERSION))
++WAMPCC_DEPENDENCIES = host-pkgconf libuv jansson openssl
++WAMPCC_INSTALL_STAGING = YES
++WAMPCC_LICENSE = MIT
++WAMPCC_LICENSE_FILES = LICENSE
++
++$(eval $(cmake-package))
 -- 
 2.14.4
