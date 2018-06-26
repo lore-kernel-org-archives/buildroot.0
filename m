@@ -1,73 +1,44 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 Jun 2018 16:18:06 +0300
-Subject: [Buildroot] [PATCH 2/2] libnss: fix build with uClibc
-In-Reply-To: <27c7d62e7c8529f1f8af8f367ff9b16b9a852e02.1530008903.git.baruch@tkos.co.il>
-References: <d20e1c9116d8625fce1f4db9b44c4ab009fbba40.1530008903.git.baruch@tkos.co.il>
- <27c7d62e7c8529f1f8af8f367ff9b16b9a852e02.1530008903.git.baruch@tkos.co.il>
-Message-ID: <20180626131806.hb5gcmpsl53letcb@tarshish>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 26 Jun 2018 15:20:17 +0000
+Subject: [Buildroot] [arc-buildroot] Re: [PATCH] toolchain: Bump ARC
+ tools to arc-2018.03 release
+In-Reply-To: <87bmbydkgd.fsf@dell.be.48ers.dk>
+References: <20180625154535.21098-1-didin@synopsys.com>
+ <20180625215719.4a04bde3@windsurf.home>
+ <2dbb659af2557f7e70e267b84b7a0360de2b5201.camel@synopsys.com>
+ <20180626090623.1d84aa7f@windsurf.home> <87bmbydkgd.fsf@dell.be.48ers.dk>
+Message-ID: <07118ff8c59719a29b28ed2d96250691bde7d0f4.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi List,
+Hi Peter,
 
-On Tue, Jun 26, 2018 at 01:28:23PM +0300, Baruch Siach wrote:
-> Add a patch defining AT_HWCAP2 locally since uClibc is missing this
-> macro. Once uClibc updates its elf.h copy we can remove this patch.
-
-Forgot to mention autobuilder failures being fixed:
-
-http://autobuild.buildroot.net/results/06f/06f5ee4bc9e623fa08d77278acdcb447148ae997/
-http://autobuild.buildroot.net/results/7cd/7cd7586f5854f9447c37adeedb9c113ba37ebea4/
-http://autobuild.buildroot.net/results/335/335bee755fbec45a6d5336c2501dc2687859ec0e/
-
-Adding Waldemar to Cc.
-
-baruch
-
+On Tue, 2018-06-26 at 10:24 +0200, Peter Korsgaard wrote:
+> > > > > > "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 > 
-> Cc: Joseph Kogut <joseph.kogut@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libnss/0001-fix-uclibc-build.patch | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->  create mode 100644 package/libnss/0001-fix-uclibc-build.patch
+>  > Hello,
+>  > On Mon, 25 Jun 2018 23:30:47 +0000, Alexey Brodkin wrote:
 > 
-> diff --git a/package/libnss/0001-fix-uclibc-build.patch b/package/libnss/0001-fix-uclibc-build.patch
-> new file mode 100644
-> index 000000000000..a9e84c264b04
-> --- /dev/null
-> +++ b/package/libnss/0001-fix-uclibc-build.patch
-> @@ -0,0 +1,22 @@
-> +Fix build with uClibc-ng
-> +
-> +The elf.h header in uClibc-ng is missing the AT_HWCAP2 definition. Add it in
-> +the code.
-> +
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> +Upstream status: Not upstreamable; uClibc needs to update elf.h
-> +
-> +diff -Nuar nss-3.38.orig/nss/lib/freebl/blinit.c nss-3.38/nss/lib/freebl/blinit.c
-> +--- nss-3.38.orig/nss/lib/freebl/blinit.c	2018-06-21 12:24:45.000000000 +0300
-> ++++ nss-3.38/nss/lib/freebl/blinit.c	2018-06-26 13:13:55.636434720 +0300
-> +@@ -100,6 +100,9 @@
-> +     defined(__GNUC__) && __GNUC__ >= 2 && defined(__ELF__)
-> + #include <sys/auxv.h>
-> + extern unsigned long getauxval(unsigned long type) __attribute__((weak));
-> ++#ifndef AT_HWCAP2
-> ++#define AT_HWCAP2	26
-> ++#endif
-> + #else
-> + static unsigned long (*getauxval)(unsigned long) = NULL;
-> + #define AT_HWCAP2 0
-> -- 
-> 2.18.0
+>  >> > This patch did not apply to master as-is, due to the changes on gdb
+>  >> > that Peter merged yesterday. I fixed up the conflict and applied to
+>  >> > master.
+>  >> > 
+>  >> > I also did a follow-up commit, to make sure BR2_PACKAGE_GDB_NEEDS_CXX11
+>  >> > is enabled when the ARC version of gdb is used: it's based on GDB 8.0,
+>  >> > so it needs C++11 support.  
+>  >> 
+>  >> Any chance for this one to be applied to 2018.05.x branch as this is just
+>  RC2-> Release bump?
 > 
+>  > I saw this note in the patch. It's up to Peter to decide what to do
+>  > about this, but considering it only touches ARC toolchain components, I
+>  > don't see why we couldn't backport this to 2018.05.
+> 
+> Yes, I'll get around to it this week.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Cool! Thanks for doing this!
+
+-Alexey
