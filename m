@@ -1,44 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Jun 2018 23:22:51 +0200
-Subject: [Buildroot] [PATCH v6 2/9] gst1-plugins-${base, good, bad,
- ugly}: bump to 1.14.1
-In-Reply-To: <20180623223529.13629-3-ps.report@gmx.net>
-References: <20180623223529.13629-1-ps.report@gmx.net>
- <20180623223529.13629-3-ps.report@gmx.net>
-Message-ID: <20180626232251.58cac0f7@windsurf.home>
+Date: Tue, 26 Jun 2018 23:23:32 +0200
+Subject: [Buildroot] [git commit] qt5base: fix license
+Message-ID: <20180626212036.D74C382DE6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=04bdded6ffac100aed7e27d87482682693213a21
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 24 Jun 2018 00:35:22 +0200, Peter Seiderer wrote:
+- Since QT 5.11, LICENSE.GPLv3 doesn't exist anymore so use LICENSE.GPL3
+  and add its hash
+- Update hash of LICENSE.LGPLv3 (as it now makes a reference to
+  LICENSE.GPL3 instead of LICENSE.GPLv3)
+- Update hash of header.BSD (year is now YYYY instead of 2016)
 
-> +###############################################################################
-> +comment "Legacy options removed in 2018.11"
+Fixes:
+ - http://autobuild.buildroot.net/results/b8add9b9a2defe5e64330714e9768ffa6393adc0
 
-They will be removed in 2018.08, not 2018.11. So I've merged this with
-the existing 2018.08 legacy section.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5base/qt5base.hash | 6 +++---
+ package/qt5/qt5base/qt5base.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> -ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_LIB_OPENGL_WAYLAND)$(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),)
-> +ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),)
-
-I've turned this to positive logic:
-
-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WAYLAND),y)
-
-> +ifneq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_WAYLAND),)
-
-And also here.
-
-Applied with those changes.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+index 263fb84acc..896cfb5f06 100644
+--- a/package/qt5/qt5base/qt5base.hash
++++ b/package/qt5/qt5base/qt5base.hash
+@@ -6,9 +6,9 @@ sha256 ed6e46db84f7d34923ab4eae165c63e05ab3cfa9d19a73d3f57b4e7bfd41de66  qtbase-
+ 
+ # Hashes for license files:
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
+-sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+ sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
+-sha256 68afaf3392f8c04218fbf29db43cc0b18bf651c1db086556aa584046de9f3e35 LICENSE.LGPLv3
++sha256 88ec689407cf2df9b2eb5c45952564d51ce73c129a3bdffb15c0d2d161ad7558 LICENSE.LGPLv3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+-sha256 8fdefa0b45d9f791f687da6c2c4c83c1b701aaee2c08008f55d522af214b88f0 header.BSD
++sha256 1f4fa3d202198f5d836993748eac9d91157e2cec7fb8426f56000a02a677cdc5 header.BSD
+ sha256 2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216 src/3rdparty/harfbuzz-ng/COPYING
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 1eabd7a15b..d5b25abcb8 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -56,7 +56,7 @@ endif
+ QT5BASE_CONFIGURE_OPTS += -opensource -confirm-license
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5BASE_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
+-QT5BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
++QT5BASE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
+ else
+ QT5BASE_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
+ QT5BASE_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
