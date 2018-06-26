@@ -1,44 +1,47 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 26 Jun 2018 15:20:17 +0000
-Subject: [Buildroot] [arc-buildroot] Re: [PATCH] toolchain: Bump ARC
- tools to arc-2018.03 release
-In-Reply-To: <87bmbydkgd.fsf@dell.be.48ers.dk>
-References: <20180625154535.21098-1-didin@synopsys.com>
- <20180625215719.4a04bde3@windsurf.home>
- <2dbb659af2557f7e70e267b84b7a0360de2b5201.camel@synopsys.com>
- <20180626090623.1d84aa7f@windsurf.home> <87bmbydkgd.fsf@dell.be.48ers.dk>
-Message-ID: <07118ff8c59719a29b28ed2d96250691bde7d0f4.camel@synopsys.com>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Wed, 27 Jun 2018 00:41:45 +0900
+Subject: [Buildroot] [PATCH] package/dhcp: copy dhcpctl and omapi libraries
+ and headers into staging
+Message-ID: <20180626154145.27019-1-daniel@0x0f.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+---
+ package/dhcp/dhcp.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-On Tue, 2018-06-26 at 10:24 +0200, Peter Korsgaard wrote:
-> > > > > > "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> 
->  > Hello,
->  > On Mon, 25 Jun 2018 23:30:47 +0000, Alexey Brodkin wrote:
-> 
->  >> > This patch did not apply to master as-is, due to the changes on gdb
->  >> > that Peter merged yesterday. I fixed up the conflict and applied to
->  >> > master.
->  >> > 
->  >> > I also did a follow-up commit, to make sure BR2_PACKAGE_GDB_NEEDS_CXX11
->  >> > is enabled when the ARC version of gdb is used: it's based on GDB 8.0,
->  >> > so it needs C++11 support.  
->  >> 
->  >> Any chance for this one to be applied to 2018.05.x branch as this is just
->  RC2-> Release bump?
-> 
->  > I saw this note in the patch. It's up to Peter to decide what to do
->  > about this, but considering it only touches ARC toolchain components, I
->  > don't see why we couldn't backport this to 2018.05.
-> 
-> Yes, I'll get around to it this week.
-
-Cool! Thanks for doing this!
-
--Alexey
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index a1285184d3..dac7235f08 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -118,4 +118,25 @@ define DHCP_INSTALL_TARGET_CMDS
+ 	$(DHCP_INSTALL_CLIENT)
+ endef
+ 
++define DHCP_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 644 $(@D)/dhcpctl/dhcpctl.h \
++		$(HOST_DIR)/usr/include/dhcpctl/dhcpctl.h
++	$(INSTALL) -D -m 644 $(@D)/includes/isc-dhcp/dst.h \
++		$(HOST_DIR)/usr/include/isc-dhcp/dst.h
++	$(INSTALL) -D -m 644 -t $(HOST_DIR)/usr/include/omapip/ \
++		$(@D)/includes/omapip/alloc.h \
++		$(@D)/includes/omapip/buffer.h \
++		$(@D)/includes/omapip/convert.h \
++		$(@D)/includes/omapip/hash.h \
++		$(@D)/includes/omapip/isclib.h \
++		$(@D)/includes/omapip/omapip.h \
++		$(@D)/includes/omapip/omapip_p.h \
++		$(@D)/includes/omapip/result.h \
++		$(@D)/includes/omapip/trace.h
++	$(INSTALL) -D -m 644 $(@D)/dhcpctl/libdhcpctl.a \
++		$(HOST_DIR)/usr/lib/libdhcpctl.a
++	$(INSTALL) -D -m 644 $(@D)/omapip/libomapi.a \
++		$(HOST_DIR)/usr/lib/libomapi.a
++endef
++
+ $(eval $(autotools-package))
+-- 
+2.17.1
