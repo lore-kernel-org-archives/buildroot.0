@@ -1,33 +1,75 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Jun 2018 21:44:53 +0200
-Subject: [Buildroot] [PATCH] libostree: bump to version 2018.6
-In-Reply-To: <20180626090941.4570-1-marcus.folkesson@gmail.com>
-References: <20180626090941.4570-1-marcus.folkesson@gmail.com>
-Message-ID: <20180626214453.32224465@windsurf.home>
+Date: Tue, 26 Jun 2018 22:03:38 +0200
+Subject: [Buildroot] [git commit] patchelf: add patch to fix relative rpath
+ issue on big-endian systems
+Message-ID: <20180626200048.8BBB182B9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=17c9810fe76377fb928579e2b99f03f8ae31addb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 26 Jun 2018 11:09:41 +0200, Marcus Folkesson wrote:
-> Also, add upstream patch for not fail builds on 32bit architectures.
-> The patch will be removed when bumping to v2018.7.
-> 
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-> ---
->  ...-repo-Fix-32-bit-format-string-error.patch | 34 +++++++++++++++++++
->  package/libostree/libostree.hash              |  2 +-
->  package/libostree/libostree.mk                |  2 +-
->  3 files changed, 36 insertions(+), 2 deletions(-)
->  create mode 100644 package/libostree/0001-lib-repo-Fix-32-bit-format-string-error.patch
+This commit adds a patch to the host package patchelf to fix an issue
+with endianness when the --make-rpath-relative option is
+specified. Currently, patchelf does not take into account the
+architecture of the target ELF when it performs the fixup on the
+RPATH. Thus, if it differs from the host in endianness, the RUNPATH
+field will be invalid. The patch fixes the bug reported here:
 
-Applied to master, thanks.
+https://bugs.busybox.net/show_bug.cgi?id=11101
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...eck-ELF-endianness-before-writing-new-run.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+diff --git a/package/patchelf/0004-patchelf-Check-ELF-endianness-before-writing-new-run.patch b/package/patchelf/0004-patchelf-Check-ELF-endianness-before-writing-new-run.patch
+new file mode 100644
+index 0000000000..8a89d3a631
+--- /dev/null
++++ b/package/patchelf/0004-patchelf-Check-ELF-endianness-before-writing-new-run.patch
+@@ -0,0 +1,40 @@
++From 8c75599b674c73fbfe9c15afeccad54ae88243f5 Mon Sep 17 00:00:00 2001
++From: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
++Date: Mon, 25 Jun 2018 13:05:07 -0500
++Subject: [PATCH] patchelf: Check ELF endianness before writing new runpath
++
++This commit modifies the way fields are written in the dynamic
++section in order to account the architecture of the target ELF
++file. Instead of copying the raw data, use the helper functions
++to convert endianness.
++
++Link to upstream PR: https://github.com/NixOS/patchelf/pull/151
++
++Signed-off-by: Bryce Ferguson <bryce.ferguson@rockwellcollins.com>
++---
++ src/patchelf.cc | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/patchelf.cc b/src/patchelf.cc
++index 35b4a33..a33f644 100644
++--- a/src/patchelf.cc
+++++ b/src/patchelf.cc
++@@ -1315,13 +1315,13 @@ void ElfFile<ElfFileParamNames>::modifyRPath(RPathOp op, string rootDir, string
++     debug("new rpath is `%s'\n", newRPath.c_str());
++ 
++     if (!forceRPath && dynRPath && !dynRunPath) { /* convert DT_RPATH to DT_RUNPATH */
++-        dynRPath->d_tag = DT_RUNPATH;
+++        wri(dynRPath->d_tag, DT_RUNPATH);
++         dynRunPath = dynRPath;
++         dynRPath = 0;
++     }
++ 
++     if (forceRPath && dynRPath && dynRunPath) { /* convert DT_RUNPATH to DT_RPATH */
++-        dynRunPath->d_tag = DT_IGNORE;
+++        wri(dynRunPath->d_tag, DT_IGNORE);
++     }
++ 
++     if (newRPath.size() <= rpathSize) {
++-- 
++2.17.0
++
