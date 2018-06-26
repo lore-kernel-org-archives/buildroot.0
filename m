@@ -1,78 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Jun 2018 23:49:22 +0200
-Subject: [Buildroot] [PATCH v2] package/dhcp: copy dhcpctl and omapi
- libraries and headers into staging
-In-Reply-To: <20180626191941.7941-1-daniel@0x0f.com>
-References: <20180626191941.7941-1-daniel@0x0f.com>
-Message-ID: <1e46d919-d896-cd13-f07e-f2dbb6649649@mind.be>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 26 Jun 2018 19:11:32 -0300
+Subject: [Buildroot] [PATCH] configs/imx6-sabresd: Bump U-Boot and kernel
+Message-ID: <1530051092-6438-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump U-Boot to version 2018.05 and kernel to 4.7.3.
 
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx6-sabresd_defconfig     | 8 ++++----
+ configs/imx6-sabresd_qt5_defconfig | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-On 26-06-18 21:19, Daniel Palmer wrote:
-> These libraries/headers are used to control dhclient/dhcpd via omapi
-> (https://www.isc.org/wp-content/uploads/2017/08/dhcp41omapi.html) from
-> another applications and thus a potentially useful in situations where
-> you need to interact with dhclient/dhcpd and need something more reliable
-> than parsing their output.
-> 
-> Signed-off-by: Daniel Palmer <daniel@0x0f.com>
-> ---
->  package/dhcp/dhcp.mk | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> index a1285184d3..dac7235f08 100644
-> --- a/package/dhcp/dhcp.mk
-> +++ b/package/dhcp/dhcp.mk
-> @@ -118,4 +118,25 @@ define DHCP_INSTALL_TARGET_CMDS
->  	$(DHCP_INSTALL_CLIENT)
->  endef
->  
-> +define DHCP_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 644 $(@D)/dhcpctl/dhcpctl.h \
-> +		$(HOST_DIR)/usr/include/dhcpctl/dhcpctl.h
-
- I'm afraid you're doing something terribly wrong here, installing headers for
-the target in HOST_DIR...
-
-> +	$(INSTALL) -D -m 644 $(@D)/includes/isc-dhcp/dst.h \
-> +		$(HOST_DIR)/usr/include/isc-dhcp/dst.h
-> +	$(INSTALL) -D -m 644 -t $(HOST_DIR)/usr/include/omapip/ \
-> +		$(@D)/includes/omapip/alloc.h \
-> +		$(@D)/includes/omapip/buffer.h \
-> +		$(@D)/includes/omapip/convert.h \
-> +		$(@D)/includes/omapip/hash.h \
-> +		$(@D)/includes/omapip/isclib.h \
-> +		$(@D)/includes/omapip/omapip.h \
-> +		$(@D)/includes/omapip/omapip_p.h \
-> +		$(@D)/includes/omapip/result.h \
-> +		$(@D)/includes/omapip/trace.h
-> +	$(INSTALL) -D -m 644 $(@D)/dhcpctl/libdhcpctl.a \
-> +		$(HOST_DIR)/usr/lib/libdhcpctl.a
-
- And this is particularly wrong, it will not even link correctly...
-
- What exactly are you trying to do here?
-
- Regards,
- Arnout
-
-> +	$(INSTALL) -D -m 644 $(@D)/omapip/libomapi.a \
-> +		$(HOST_DIR)/usr/lib/libomapi.a
-> +endef
-> +
->  $(eval $(autotools-package))
-> 
-
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index 9999513..7f42e55 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++# Linux headers same as kernel, a 4.17 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 8e6065d..cee7244 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 4.17 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+ 
+ # Additional features needed for packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
