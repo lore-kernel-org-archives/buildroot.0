@@ -1,59 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Jun 2018 23:39:03 +0200
-Subject: [Buildroot] [PATCH] package/dehydrated: new package
-In-Reply-To: <20180618121309.10606-1-arnout@mind.be>
-References: <20180618121309.10606-1-arnout@mind.be>
-Message-ID: <20180626233903.58cb6365@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 26 Jun 2018 23:43:26 +0200
+Subject: [Buildroot] [PATCH 1/1] gnuradio: needs host-python2
+Message-ID: <20180626214326.27205-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+gnuradio needs host-python2 however there is no way to enforce this so
+add a dependency on !BR2_PACKAGE_PYTHON3.
+Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot will only
+build host-python3.
+This issue was not raised in the previous version of gnuradio as
+host-python-cheetah was the only dependency and host-python-cheetah
+enforces python2 through HOST_PYTHON_CHEETAH_NEEDS_HOST_PYTHON however
+we now have host-python-six and host-python-mako dependencies and it
+does not seem right to enforces python2 on those packages
 
-On Mon, 18 Jun 2018 14:13:09 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> dehydrated is an ACME client written in bash. It should be able to run
-> under zsh as well, but this hasn't been tested so it isn't enabled for
-> now.
-> 
-> Normally, we would want an init script to start dehydrated, and an
-> example configuration file. However, it is very difficult to do this
-> in a generic way in Buildroot:
-> - we normally don't have cron running;
-> - we have no standard location for webroot;
-> - we have no standard location for certificates;
-> - we have no standard way to restart/reload the webserver.
-> So instead, provide brief documentation of how to use dehydrated in the
-> help text.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes:
+ - http://autobuild.buildroot.net/results/a502fef3e2a40f38ca63332440b0b6bd2ed11d5a
 
-Applied, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gnuradio/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> In the hash file, I made a little (IMO) improvement of how we typically
-> handle things: in addition to the URL of the signature file, I also
-> added the PGP fingerprint and the URL where I got the key. This
-> establishes a kind of informal TOFU approach: when someone updates the
-> package, they can verify that it was signed with the same key, or (if
-> the key is renewed by then) check on keybase if it really is the same
-> person. Without this, and adversary could just upload a tarball and
-> signature with some different key and nobody would be any wiser.
-
-This looks interesting to me, but I'm a bit worried about the additional
-complexity for newcomers who are adding new packages or updating
-existing packages. It is not easy to understand how to do all this PGP
-verification, and the overall reasoning behind storing those details in
-the .hash file. Of course, when you understand PGP and have a bit of
-a security mindset, it all makes sense, but for newcomers, it may not
-be that trivial. Not necessarily a reason not to do it, but it's worth
-considering this aspect.
-
-Best regards,
-
-Thomas
+diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+index f748b902a7..25131fb105 100644
+--- a/package/gnuradio/Config.in
++++ b/package/gnuradio/Config.in
+@@ -1,5 +1,6 @@
+ comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ 
+@@ -10,6 +11,7 @@ config BR2_PACKAGE_GNURADIO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_USE_WCHAR # boost
++	depends on !BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
