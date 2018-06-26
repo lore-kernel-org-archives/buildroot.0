@@ -1,89 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 26 Jun 2018 23:38:18 +0200
-Subject: [Buildroot] [PATCH] git-download: Fix downloading of specific
- revisions from github.
-In-Reply-To: <20180626093617.13034-1-neumann@teufel.de>
-References: <20180626093617.13034-1-neumann@teufel.de>
-Message-ID: <16e96d96-9301-46b7-16a2-d745507da71d@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Jun 2018 23:39:03 +0200
+Subject: [Buildroot] [PATCH] package/dehydrated: new package
+In-Reply-To: <20180618121309.10606-1-arnout@mind.be>
+References: <20180618121309.10606-1-arnout@mind.be>
+Message-ID: <20180626233903.58cb6365@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
-
-On 26-06-18 11:36, Sven Neumann wrote:
-> From: Oliver Tappe <zooey@hirschkaefer.de>
+On Mon, 18 Jun 2018 14:13:09 +0200, Arnout Vandecappelle
+(Essensium/Mind) wrote:
+> dehydrated is an ACME client written in bash. It should be able to run
+> under zsh as well, but this hasn't been tested so it isn't enabled for
+> now.
 > 
-> Github has recently dropped support for the archive-URLs that we
-> used to use.
-
- Could you explain what exactly fails? I tried existing packages and your new
-wampcc with the old pattern, and it just works (same hash).
-
-
-> They do provide another URL where archives can be fetched from, but
-> not as git shallow clone, but direcly as tarball.
-
- AFAIK there never was any specific URL from which you could get a shallow
-clone, just the archive URL or the plain (git-over-https) URL (which would allow
-shallow clones for tags).
-
-> Adjust the URL to
-> be used and adjust the git download script to use wget when trying
-> to download from github.
+> Normally, we would want an init script to start dehydrated, and an
+> example configuration file. However, it is very difficult to do this
+> in a generic way in Buildroot:
+> - we normally don't have cron running;
+> - we have no standard location for webroot;
+> - we have no standard location for certificates;
+> - we have no standard way to restart/reload the webserver.
+> So instead, provide brief documentation of how to use dehydrated in the
+> help text.
 > 
-> Signed-off-by: Oliver Tappe <zooey@hirschkaefer.de>
-> Signed-off-by: Sven Neumann <neumann@teufel.de>
-> ---
->  package/pkg-download.mk | 2 +-
->  support/download/git    | 6 ++++++
->  2 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-> index 2ca6ccf44d..2e3b734f97 100644
-> --- a/package/pkg-download.mk
-> +++ b/package/pkg-download.mk
-> @@ -56,7 +56,7 @@ notdomain = $(patsubst $(call domain,$(1),$(2))$(call domainseparator,$(2))%,%,$
->  domainseparator = $(if $(1),$(1),/)
->  
->  # github(user,package,version): returns site of GitHub repository
-> -github = https://github.com/$(1)/$(2)/archive/$(3)
-> +github = https://api.github.com/repos/$(1)/$(2)/tarball/$(3)
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
- This actually gives me a 404 for the wampcc package...
+Applied, thanks.
 
- Regards,
- Arnout
+> In the hash file, I made a little (IMO) improvement of how we typically
+> handle things: in addition to the URL of the signature file, I also
+> added the PGP fingerprint and the URL where I got the key. This
+> establishes a kind of informal TOFU approach: when someone updates the
+> package, they can verify that it was signed with the same key, or (if
+> the key is renewed by then) check on keybase if it really is the same
+> person. Without this, and adversary could just upload a tarball and
+> signature with some different key and nobody would be any wiser.
 
+This looks interesting to me, but I'm a bit worried about the additional
+complexity for newcomers who are adding new packages or updating
+existing packages. It is not easy to understand how to do all this PGP
+verification, and the overall reasoning behind storing those details in
+the .hash file. Of course, when you understand PGP and have a bit of
+a security mindset, it all makes sense, but for newcomers, it may not
+be that trivial. Not necessarily a reason not to do it, but it's worth
+considering this aspect.
 
->  
->  # Expressly do not check hashes for those files
->  # Exported variables default to immediately expanded in some versions of
-> diff --git a/support/download/git b/support/download/git
-> index 11bb52c1e1..1efde4fcdc 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -75,6 +75,12 @@ _git() {
->      eval GIT_DIR="${git_cache}/.git" ${GIT} "${@}"
->  }
->  
-> +# If the URL contains github, simply fetch the archive via wget:
-> +if [[ $repo == https://api.github.com/* ]]; then
-> +    wget -O $output $repo
-> +    exit 0
-> +fi
-> +
->  # Create a warning file, that the user should not use the git cache.
->  # It's ours. Our precious.
->  cat <<-_EOF_ >"${dl_dir}/git.readme"
-> 
+Best regards,
 
+Thomas
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
