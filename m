@@ -1,64 +1,49 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 26 Jun 2018 21:41:44 +0300
-Subject: [Buildroot] [PATCH] package/dhcp: copy dhcpctl and omapi
- libraries and headers into staging
-In-Reply-To: <20180626154145.27019-1-daniel@0x0f.com>
-References: <20180626154145.27019-1-daniel@0x0f.com>
-Message-ID: <20180626184144.lao2t7bes4tt5pfb@tarshish>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 26 Jun 2018 21:06:54 +0200
+Subject: [Buildroot] [git commit] libnss: drop obsolete patch
+Message-ID: <20180626190430.A037482B70@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Daniel,
+commit: https://git.buildroot.net/buildroot/commit/?id=cf9100d3f20dd87bbd8de473b0b0321db5f31f83
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for your contribution. A few comment on your patch below.
+uClibc implements RTLD_NOLOAD for quite some time now. Remove the patch
+adding a dummy definition of RTLD_NOLOAD.
 
-On Wed, Jun 27, 2018 at 12:41:45AM +0900, Daniel Palmer wrote:
+Cc: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnss/0001-uclibc.patch | 20 --------------------
+ 1 file changed, 20 deletions(-)
 
-Please explain in the commit log why you need this change.
-
-You also need to sign-off your patch.
-
-baruch
-
-> ---
->  package/dhcp/dhcp.mk | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-> index a1285184d3..dac7235f08 100644
-> --- a/package/dhcp/dhcp.mk
-> +++ b/package/dhcp/dhcp.mk
-> @@ -118,4 +118,25 @@ define DHCP_INSTALL_TARGET_CMDS
->  	$(DHCP_INSTALL_CLIENT)
->  endef
->  
-> +define DHCP_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -D -m 644 $(@D)/dhcpctl/dhcpctl.h \
-> +		$(HOST_DIR)/usr/include/dhcpctl/dhcpctl.h
-> +	$(INSTALL) -D -m 644 $(@D)/includes/isc-dhcp/dst.h \
-> +		$(HOST_DIR)/usr/include/isc-dhcp/dst.h
-> +	$(INSTALL) -D -m 644 -t $(HOST_DIR)/usr/include/omapip/ \
-> +		$(@D)/includes/omapip/alloc.h \
-> +		$(@D)/includes/omapip/buffer.h \
-> +		$(@D)/includes/omapip/convert.h \
-> +		$(@D)/includes/omapip/hash.h \
-> +		$(@D)/includes/omapip/isclib.h \
-> +		$(@D)/includes/omapip/omapip.h \
-> +		$(@D)/includes/omapip/omapip_p.h \
-> +		$(@D)/includes/omapip/result.h \
-> +		$(@D)/includes/omapip/trace.h
-> +	$(INSTALL) -D -m 644 $(@D)/dhcpctl/libdhcpctl.a \
-> +		$(HOST_DIR)/usr/lib/libdhcpctl.a
-> +	$(INSTALL) -D -m 644 $(@D)/omapip/libomapi.a \
-> +		$(HOST_DIR)/usr/lib/libomapi.a
-> +endef
-> +
->  $(eval $(autotools-package))
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/libnss/0001-uclibc.patch b/package/libnss/0001-uclibc.patch
+deleted file mode 100644
+index b81db930be..0000000000
+--- a/package/libnss/0001-uclibc.patch
++++ /dev/null
+@@ -1,20 +0,0 @@
+-uCLibc does not define RTLD_NOLOAD.
+-
+-[Gustavo: update for nss 3.16.1]
+-Signed-off-by: Will Newton <will.newton@imgtec.com>
+-
+-diff -Nura nss-3.16.1.orig/nss/lib/freebl/stubs.c nss-3.16.1/nss/lib/freebl/stubs.c
+---- nss-3.16.1.orig/nss/lib/freebl/stubs.c	2014-06-18 10:34:30.529997002 -0300
+-+++ nss-3.16.1/nss/lib/freebl/stubs.c	2014-06-18 10:36:25.508882650 -0300
+-@@ -594,6 +594,11 @@
+-     return SECSuccess;
+- }
+- 
+-+/* uClibc does not define RTLD_NOLOAD. */
+-+#ifndef RTLD_NOLOAD
+-+#define RTLD_NOLOAD 0
+-+#endif
+-+
+- /*
+-  * fetch the library if it's loaded. For NSS it should already be loaded
+-  */
