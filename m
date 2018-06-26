@@ -1,33 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 26 Jun 2018 21:08:46 +0200
-Subject: [Buildroot] [PATCH 1/2] libnss: drop obsolete patch
-In-Reply-To: <d20e1c9116d8625fce1f4db9b44c4ab009fbba40.1530008903.git.baruch@tkos.co.il>
-References: <d20e1c9116d8625fce1f4db9b44c4ab009fbba40.1530008903.git.baruch@tkos.co.il>
-Message-ID: <20180626210846.5cef0830@windsurf.home>
+Date: Tue, 26 Jun 2018 21:17:43 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{9, 14, 17}.x series
+Message-ID: <20180626191503.7A4CF82B69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=24b658c002d2cdc922ac06117a11237b4e371b80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 26 Jun 2018 13:28:22 +0300, Baruch Siach wrote:
-> uClibc implements RTLD_NOLOAD for quite some time now. Remove the patch
-> adding a dummy definition of RTLD_NOLOAD.
-> 
-> Cc: Joseph Kogut <joseph.kogut@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/libnss/0001-uclibc.patch | 20 --------------------
->  1 file changed, 20 deletions(-)
->  delete mode 100644 package/libnss/0001-uclibc.patch
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Both applied. I fixed the commit message of the second patch to include
-the autoubuilder references. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 97d43e681b..ebaae8807e 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -259,13 +259,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+ 	default "4.4.138"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.109"	if BR2_KERNEL_HEADERS_4_9
++	default "4.9.110"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.51"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.52"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.17"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.17.2"	if BR2_KERNEL_HEADERS_4_17
++	default "4.17.3"	if BR2_KERNEL_HEADERS_4_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
