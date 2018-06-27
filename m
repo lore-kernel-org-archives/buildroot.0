@@ -1,58 +1,96 @@
-From: oferh at marvell.com <oferh@marvell.com>
-Date: Wed, 27 Jun 2018 17:55:47 +0300
-Subject: [Buildroot] [PATCH 2/2] support/config-fragments/autobuild: add
- Linaro AArch64 BE support
-In-Reply-To: <1530111347-28773-1-git-send-email-oferh@marvell.com>
-References: <1530111347-28773-1-git-send-email-oferh@marvell.com>
-Message-ID: <1530111347-28773-2-git-send-email-oferh@marvell.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 27 Jun 2018 18:24:34 +0200
+Subject: [Buildroot] [PATCH 1/1] gnuradio: needs host-python2
+In-Reply-To: <CAPi7W82WL5MwxnQWri0dg5Ep92fHedomD3XJHLViLGUcr2JwXA@mail.gmail.com>
+References: <20180626214326.27205-1-fontaine.fabrice@gmail.com>
+ <20180627033622.23ouuvp2zvr4cw5y@sapphire.tkos.co.il>
+ <CAPi7W82WL5MwxnQWri0dg5Ep92fHedomD3XJHLViLGUcr2JwXA@mail.gmail.com>
+Message-ID: <CAPi7W82zbZLPORsXG989MfnFVitVEFELC1FU1GDGk_0n19oMDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ofer Heifetz <oferh@marvell.com>
+Dear Baruch
 
-Signed-off-by: Ofer Heifetz <oferh@marvell.com>
----
- support/config-fragments/autobuild/linaro-aarch64-be.config | 3 +++
- support/config-fragments/autobuild/toolchain-configs.csv    | 1 +
- utils/genrandconfig                                         | 1 +
- 3 files changed, 5 insertions(+)
- create mode 100644 support/config-fragments/autobuild/linaro-aarch64-be.config
+2018-06-27 7:35 GMT+02:00 Fabrice Fontaine <fontaine.fabrice@gmail.com>:
 
-diff --git a/support/config-fragments/autobuild/linaro-aarch64-be.config b/support/config-fragments/autobuild/linaro-aarch64-be.config
-new file mode 100644
-index 0000000..7e69350
---- /dev/null
-+++ b/support/config-fragments/autobuild/linaro-aarch64-be.config
-@@ -0,0 +1,3 @@
-+BR2_aarch64=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 64abfb3..136a67f 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -58,6 +58,7 @@ support/config-fragments/autobuild/br-xtensa-full.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full-internal.config,any
- support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
- support/config-fragments/autobuild/linaro-aarch64.config,x86
-+support/config-fragments/autobuild/linaro-aarch64-be.config,x86
- support/config-fragments/autobuild/linaro-arm.config,x86
- support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config,x86
- support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config,x86
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 06701ce..27f84ea 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -187,6 +187,7 @@ def is_toolchain_usable(configfile, config):
-     if platform.machine() == 'x86_64':
-         if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
-+           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
-             ldd_version_output = subprocess.check_output(['ldd', '--version'])
-             glibc_version = ldd_version_output.splitlines()[0].split()[-1]
--- 
-2.7.4
+> Dear Baruch,
+>
+> 2018-06-27 5:36 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+>
+>> Hi Fabrice,
+>>
+>> On Tue, Jun 26, 2018 at 11:43:26PM +0200, Fabrice Fontaine wrote:
+>> > gnuradio needs host-python2 however there is no way to enforce this so
+>> > add a dependency on !BR2_PACKAGE_PYTHON3.
+>> > Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot will only
+>> > build host-python3.
+>>
+>> Why not just add host-python to _DEPENDENCIES?
+>>
+> Indeed, I will update my patch. Thanks for your help.
+>
+After testing this option, this does not work. host-python2 is indeed built
+but host-python3 is also built.
+As a result, host-python-mako and host-python-six are built only for
+host-python3 and not for host-python2. I don't know if this the expected
+behavior,perhaps buildroot should always build the python2 and python3 host
+packages?
+
+> baruch
+>>
+>> > This issue was not raised in the previous version of gnuradio as
+>> > host-python-cheetah was the only dependency and host-python-cheetah
+>> > enforces python2 through HOST_PYTHON_CHEETAH_NEEDS_HOST_PYTHON however
+>> > we now have host-python-six and host-python-mako dependencies and it
+>> > does not seem right to enforces python2 on those packages
+>> >
+>> > Fixes:
+>> >  - http://autobuild.buildroot.net/results/a502fef3e2a40f38ca633
+>> 32440b0b6bd2ed11d5a
+>> >
+>> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> > ---
+>> >  package/gnuradio/Config.in | 2 ++
+>> >  1 file changed, 2 insertions(+)
+>> >
+>> > diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+>> > index f748b902a7..25131fb105 100644
+>> > --- a/package/gnuradio/Config.in
+>> > +++ b/package/gnuradio/Config.in
+>> > @@ -1,5 +1,6 @@
+>> >  comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic
+>> library"
+>> >       depends on BR2_USE_MMU
+>> > +     depends on !BR2_PACKAGE_PYTHON3
+>> >       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+>> >               !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+>> >
+>> > @@ -10,6 +11,7 @@ config BR2_PACKAGE_GNURADIO
+>> >       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+>> >       depends on BR2_USE_MMU # use fork()
+>> >       depends on BR2_USE_WCHAR # boost
+>> > +     depends on !BR2_PACKAGE_PYTHON3
+>> >       select BR2_PACKAGE_BOOST
+>> >       select BR2_PACKAGE_BOOST_DATE_TIME
+>> >       select BR2_PACKAGE_BOOST_FILESYSTEM
+>>
+>> --
+>>      http://baruch.siach.name/blog/                  ~. .~   Tk Open
+>> Systems
+>> =}------------------------------------------------ooO--U--Oo
+>> o------------{=
+>>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>>
+> Best Regards,
+>
+> Fabrice
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180627/c7b36b0e/attachment.html>
