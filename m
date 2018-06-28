@@ -1,53 +1,91 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 28 Jun 2018 10:16:46 -0300 (BRT)
-Subject: [Buildroot] Booting into grub> prompt
-In-Reply-To: <2C6957468785C14D8F47AB016E1D8F4B269C6CF1@hasmsx108.ger.corp.intel.com>
-References: <2C6957468785C14D8F47AB016E1D8F4B269C6CF1@hasmsx108.ger.corp.intel.com>
-Message-ID: <23119300.395175.1530191806180.JavaMail.zimbra@datacom.com.br>
+From: Sven Neumann <neumann@teufel.de>
+Date: Thu, 28 Jun 2018 15:50:08 +0200
+Subject: [Buildroot] [PATCH 1/2] wampcc: new package
+In-Reply-To: <20180626214044.47839797@windsurf.home>
+References: <20180626214044.47839797@windsurf.home>
+Message-ID: <20180628135009.20421-1-neumann@teufel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Montag, Gil" <gil.montag@intel.com>
-> To: "buildroot" <buildroot@busybox.net>
-> Sent: Thursday, June 28, 2018 9:02:16 AM
-> Subject: [Buildroot] Booting into grub> prompt
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+---
+ package/Config.in          |  1 +
+ package/wampcc/Config.in   | 19 +++++++++++++++++++
+ package/wampcc/wampcc.hash |  3 +++
+ package/wampcc/wampcc.mk   | 14 ++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100644 package/wampcc/Config.in
+ create mode 100644 package/wampcc/wampcc.hash
+ create mode 100644 package/wampcc/wampcc.mk
 
-> Hi,
-
-> I created a buildroot EFI disk.img file (X64)
-
-> For some reason, when UEFI bios boots this image, it brings up ?grub>? prompt
-> but not proceeding to boot the OS
-
-> Nor does it present the Menuentry defined in \EFI\BOOT\grub.cfg file
-
-> If looks as if grub does not ?see? the grub.cfg file although both sit in the
-> same \EFI\BOOT folder.
-
-> I did a loopback mount to the disk.img file and here is the structre:
-
-> gmontag1 at gmontag1-desktop from_guy (master) $ ls -R /mnt/gil
-> /mnt/gil:
-
-> bzImage EFI startup.nsh
-
-> /mnt/gil/EFI:
-> BOOT
-
-> /mnt/gil/EFI/BOOT:
-> bootx64.efi grub.cfg
-
-> What am I doing wrong?
-
-Did you use configs/pc_x86_64_efi_defconfig or some custom configuration?
-
-Post your defconfig here if it is short. Share it on pastebin.com or some
-similar service if it is large.
-
+diff --git a/package/Config.in b/package/Config.in
+index c5365547a4..d5612b5b61 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1487,6 +1487,7 @@ menu "Networking"
+ 	source "package/sofia-sip/Config.in"
+ 	source "package/thrift/Config.in"
+ 	source "package/usbredir/Config.in"
++	source "package/wampcc/Config.in"
+ 	source "package/zeromq/Config.in"
+ 	source "package/zmqpp/Config.in"
+ 	source "package/zyre/Config.in"
+diff --git a/package/wampcc/Config.in b/package/wampcc/Config.in
+new file mode 100644
+index 0000000000..e7cf6b26fd
+--- /dev/null
++++ b/package/wampcc/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_WAMPCC
++	bool "wampcc"
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_barrier_*
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	select BR2_PACKAGE_LIBUV
++	select BR2_PACKAGE_JANSSON
++	select BR2_PACKAGE_OPENSSL
++	help
++	  wampcc is a C++ library that implements the Web Application
++	  Messaging Protocol.
++
++	  https://github.com/darrenjs/wampcc
++
++comment "wampcc needs a toolchain w/ NPTL, dynamic library"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/wampcc/wampcc.hash b/package/wampcc/wampcc.hash
+new file mode 100644
+index 0000000000..162dcab0ec
+--- /dev/null
++++ b/package/wampcc/wampcc.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  b3c3633b4c6a74d7ac8a676a7ea30fbfde7ae19aa1fc37de3b8aa3a553b674a2  wampcc-v1.6.tar.gz
++sha256  bd185b1ec8a292d42b42346757ff6e198073e13c1e080e9ea548d34dd42d30d8  LICENSE
+diff --git a/package/wampcc/wampcc.mk b/package/wampcc/wampcc.mk
+new file mode 100644
+index 0000000000..d8e093f679
+--- /dev/null
++++ b/package/wampcc/wampcc.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# wampcc
++#
++################################################################################
++
++WAMPCC_VERSION = v1.6
++WAMPCC_SITE = $(call github,darrenjs,wampcc,$(WAMPCC_VERSION))
++WAMPCC_DEPENDENCIES = host-pkgconf libuv jansson openssl
++WAMPCC_INSTALL_STAGING = YES
++WAMPCC_LICENSE = MIT
++WAMPCC_LICENSE_FILES = LICENSE
++
++$(eval $(cmake-package))
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.14.4
