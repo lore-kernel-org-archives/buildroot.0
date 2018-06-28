@@ -1,39 +1,83 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 28 Jun 2018 02:11:56 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-06-22
-In-Reply-To: <20180623060022.2632920794@mail.bootlin.com>
-References: <20180623060022.2632920794@mail.bootlin.com>
-Message-ID: <20180628021156.GH24526@momiji>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 28 Jun 2018 06:25:58 +0300
+Subject: [Buildroot] [PATCH 1/1] gnuradio: needs host-python2
+In-Reply-To: <CAPi7W82zbZLPORsXG989MfnFVitVEFELC1FU1GDGk_0n19oMDA@mail.gmail.com>
+References: <20180626214326.27205-1-fontaine.fabrice@gmail.com>
+ <20180627033622.23ouuvp2zvr4cw5y@sapphire.tkos.co.il>
+ <CAPi7W82WL5MwxnQWri0dg5Ep92fHedomD3XJHLViLGUcr2JwXA@mail.gmail.com>
+ <CAPi7W82zbZLPORsXG989MfnFVitVEFELC1FU1GDGk_0n19oMDA@mail.gmail.com>
+Message-ID: <20180628032558.b4bgdv2qdpzssean@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 23 Jun 2018 08:00:22 +0200 (CEST), Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Hi Fabrice,
 
->       x86_64 |               webkitgtk-2.18.6 | NOK | http://autobuild.buildroot.net/results/187796535af53ece426641ff7d88aabada281674 |     
+On Wed, Jun 27, 2018 at 06:24:34PM +0200, Fabrice Fontaine wrote:
+> 2018-06-27 7:35 GMT+02:00 Fabrice Fontaine <fontaine.fabrice@gmail.com>:
+> > 2018-06-27 5:36 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+> >> On Tue, Jun 26, 2018 at 11:43:26PM +0200, Fabrice Fontaine wrote:
+> >> > gnuradio needs host-python2 however there is no way to enforce this so
+> >> > add a dependency on !BR2_PACKAGE_PYTHON3.
+> >> > Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot will only
+> >> > build host-python3.
+> >>
+> >> Why not just add host-python to _DEPENDENCIES?
+> >>
+> > Indeed, I will update my patch. Thanks for your help.
+>
+> After testing this option, this does not work. host-python2 is indeed built
+> but host-python3 is also built.
+> As a result, host-python-mako and host-python-six are built only for
+> host-python3 and not for host-python2. I don't know if this the expected
+> behavior,perhaps buildroot should always build the python2 and python3 host
+> packages?
 
-I think that the issue with this one is that webkitgtk.mk is passing
--DENABLE_ACCELERATED_2D_CANVAS=ON, which requires GStreamer-GL, but
-nothing is enforcing that GStreamer is built with OpenGL support.
+Not sure what the right solution here is.
 
-Either we disable the option when it's known that GStreamer won't have
-OpenGL support built, or we add dependencies ensuring that GStreamer gets
-the needed OpenGL support.
+Yegor, do you have an idea?
 
-What would be preferred? I am kind of leaning towards enabling the option
-only when it's known that the GStreamer-GL support is being built, and
-disabling it otherwise (automatically, that is).
+baruch
 
-Cheers,
+> >> > This issue was not raised in the previous version of gnuradio as
+> >> > host-python-cheetah was the only dependency and host-python-cheetah
+> >> > enforces python2 through HOST_PYTHON_CHEETAH_NEEDS_HOST_PYTHON however
+> >> > we now have host-python-six and host-python-mako dependencies and it
+> >> > does not seem right to enforces python2 on those packages
+> >> >
+> >> > Fixes:
+> >> >  - http://autobuild.buildroot.net/results/a502fef3e2a40f38ca633
+> >> 32440b0b6bd2ed11d5a
+> >> >
+> >> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >> > ---
+> >> >  package/gnuradio/Config.in | 2 ++
+> >> >  1 file changed, 2 insertions(+)
+> >> >
+> >> > diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
+> >> > index f748b902a7..25131fb105 100644
+> >> > --- a/package/gnuradio/Config.in
+> >> > +++ b/package/gnuradio/Config.in
+> >> > @@ -1,5 +1,6 @@
+> >> >  comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic
+> >> library"
+> >> >       depends on BR2_USE_MMU
+> >> > +     depends on !BR2_PACKAGE_PYTHON3
+> >> >       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+> >> >               !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+> >> >
+> >> > @@ -10,6 +11,7 @@ config BR2_PACKAGE_GNURADIO
+> >> >       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+> >> >       depends on BR2_USE_MMU # use fork()
+> >> >       depends on BR2_USE_WCHAR # boost
+> >> > +     depends on !BR2_PACKAGE_PYTHON3
+> >> >       select BR2_PACKAGE_BOOST
+> >> >       select BR2_PACKAGE_BOOST_DATE_TIME
+> >> >       select BR2_PACKAGE_BOOST_FILESYSTEM
 
- Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180628/85ce447c/attachment.asc>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
