@@ -1,69 +1,56 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 28 Jun 2018 17:19:44 -0300
-Subject: [Buildroot] [PATCH] dropbear: enable PAM athentication if linux-pam
- is selected
-Message-ID: <20180628201944.31492-1-casantos@datacom.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Jun 2018 22:15:57 +0200
+Subject: [Buildroot] [git commit] support/config-fragments/autobuild: add
+ Linaro AArch64 BE support
+Message-ID: <20180628201800.B90D983647@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Disable password file athentication, since it's not possible to have
-  both at once.
-- Install a /etc/pam.d/sshd file, based on the ofe from from openssh.
+commit: https://git.buildroot.net/buildroot/commit/?id=78968330e3293f622e5f4a4dbbe98ba5665034fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Ofer Heifetz <oferh@marvell.com>
+Reviewed-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dropbear/dropbear.mk    | 14 ++++++++++++++
- package/dropbear/etc-pam.d-sshd |  7 +++++++
- 2 files changed, 21 insertions(+)
- create mode 100644 package/dropbear/etc-pam.d-sshd
+ support/config-fragments/autobuild/linaro-aarch64-be.config | 3 +++
+ support/config-fragments/autobuild/toolchain-configs.csv    | 1 +
+ utils/genrandconfig                                         | 1 +
+ 3 files changed, 5 insertions(+)
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index fc41a84c1f..bb902bc7ce 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -34,6 +34,19 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- DROPBEAR_CONF_OPTS += --disable-static
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define DROPBEAR_SVR_PAM_AUTH
-+	echo '#define DROPBEAR_SVR_PASSWORD_AUTH 0'     >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_SVR_PAM_AUTH 1'          >> $(@D)/localoptions.h
-+endef
-+define DROPBEAR_INSTALL_PAM_CONF
-+	$(INSTALL) -D -m 644 package/dropbear/etc-pam.d-sshd $(TARGET_DIR)/etc/pam.d/sshd
-+endef
-+DROPBEAR_DEPENDENCIES += linux-pam
-+DROPBEAR_CONF_OPTS += --enable-pam
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PAM_AUTH
-+DROPBEAR_POST_INSTALL_TARGET_HOOKS += DROPBEAR_INSTALL_PAM_CONF
-+else
- # Ensure that dropbear doesn't use crypt() when it's not available
- define DROPBEAR_SVR_PASSWORD_AUTH
- 	echo '#if !HAVE_CRYPT'                          >> $(@D)/localoptions.h
-@@ -41,6 +54,7 @@ define DROPBEAR_SVR_PASSWORD_AUTH
- 	echo '#endif'                                   >> $(@D)/localoptions.h
- endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
-+endif
- 
- define DROPBEAR_ENABLE_REVERSE_DNS
- 	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
-diff --git a/package/dropbear/etc-pam.d-sshd b/package/dropbear/etc-pam.d-sshd
+diff --git a/support/config-fragments/autobuild/linaro-aarch64-be.config b/support/config-fragments/autobuild/linaro-aarch64-be.config
 new file mode 100644
-index 0000000000..5e13fc0d60
+index 0000000000..e075fe7eb0
 --- /dev/null
-+++ b/package/dropbear/etc-pam.d-sshd
-@@ -0,0 +1,7 @@
-+#%PAM-1.0
-+auth       required     pam_unix.so shadow nodelay
-+account    required     pam_nologin.so
-+account    required     pam_unix.so
-+password   required     pam_unix.so shadow nullok use_authtok
-+session    required     pam_unix.so
-+session    required     pam_limits.so
--- 
-2.14.4
++++ b/support/config-fragments/autobuild/linaro-aarch64-be.config
+@@ -0,0 +1,3 @@
++BR2_aarch64_be=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 64abfb3fd4..136a67f54b 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -58,6 +58,7 @@ support/config-fragments/autobuild/br-xtensa-full.config,x86_64
+ support/config-fragments/autobuild/br-xtensa-full-internal.config,any
+ support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
+ support/config-fragments/autobuild/linaro-aarch64.config,x86
++support/config-fragments/autobuild/linaro-aarch64-be.config,x86
+ support/config-fragments/autobuild/linaro-arm.config,x86
+ support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config,x86
+ support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config,x86
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 06701ce565..27f84ea555 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -187,6 +187,7 @@ def is_toolchain_usable(configfile, config):
+     if platform.machine() == 'x86_64':
+         if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
++           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
+            'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
+             ldd_version_output = subprocess.check_output(['ldd', '--version'])
+             glibc_version = ldd_version_output.splitlines()[0].split()[-1]
