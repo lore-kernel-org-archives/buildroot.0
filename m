@@ -1,41 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Jun 2018 23:52:23 +0200
-Subject: [Buildroot] [PATCH v2 4/5] grpc: new package
-In-Reply-To: <AC45FC8C-35CA-4B06-A9C1-06DD89A4131A@storagecraft.com>
-References: <20180521175310.18563-1-charles.hardin@storagecraft.com>
- <20180521175310.18563-5-charles.hardin@storagecraft.com>
- <20180628233612.26e24014@windsurf>
- <AC45FC8C-35CA-4B06-A9C1-06DD89A4131A@storagecraft.com>
-Message-ID: <20180628235223.78b5a4ee@windsurf>
+From: Ignacy =?iso-8859-2?Q?Gaw=EAdzki?= <ignacy.gawedzki@green-communications.fr>
+Date: Fri, 29 Jun 2018 00:45:56 +0200
+Subject: [Buildroot] [PATCH 1/1] nginx: Bump to version 1.15.0
+In-Reply-To: <20180628211330.66c97ec8@windsurf>
+References: <20180627135146.11364-1-ignacy.gawedzki@green-communications.fr>
+ <20180628211330.66c97ec8@windsurf>
+Message-ID: <20180628224556.537guyhu7xwdkmrc@zenon.in.qult.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, Jun 28, 2018 at 09:13:30PM +0200, thus spake Thomas Petazzoni:
+> Hello,
 
-On Thu, 28 Jun 2018 21:45:32 +0000, Charles Hardin wrote:
+Hi,
 
-> Ok - never tried ?arm? builds - only mips and x86, so this is likely going to be a bit
-> more involved. But, I think this is a HOSTCXX problem - what is that version because
-> I barely recall that I have to build the gRPC proto gen tools on the host to generate
-> the stubs for the cross.
+> On Wed, 27 Jun 2018 15:51:46 +0200, Ignacy Gaw?dzki wrote:
+> > Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+> > ---
+> >  ...-rework-autotest-to-be-cross-compila.patch |   6 +-
+> >  ...-mechanism-allowing-to-force-feature.patch |   8 +-
+> >  ...ture_run_force_result-for-each-featu.patch |  56 ++--
+> >  ...auto-lib-libxslt-conf-use-pkg-config.patch |  10 +-
+> >  ...ake-sys_nerr-guessing-cross-friendly.patch |  16 +-
+> >  ...auto-lib-openssl-conf-use-pkg-config.patch | 249 ++++++++++++++++--
+> >  ...7-auto-lib-libgd-conf-use-pkg-config.patch |   6 +-
+> >  ...linux_config.h-only-include-dlfcn.h-.patch |   6 +-
+> 
+> What happened to those patches ? Just refreshed ?
 
-The problem is when building host tools with the host compiler, so the
-target architecture shouldn't matter.
+Yes, refreshed, so that they apply properly.
 
-> So, it looks like it is a gcc 7 build on this host side?
+> >  ...x-PCRE-condition-WRT-the-http-and-ht.patch |  33 ---
+> 
+> Why is this patch removed ?
 
-Yes, I'm running a Fedora system with gcc 7.3.1.
+It has been applied upstream.
 
-I see on https://github.com/grpc/grpc/releases that they have newer
-releases. Perhaps this issue has been fixed upstream.
+Cheers,
 
-Best regards,
+Ignacy
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Ignacy Gaw?dzki
+R&D Engineer
+Green Communications
