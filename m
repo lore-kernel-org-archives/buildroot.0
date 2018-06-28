@@ -1,22 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 28 Jun 2018 19:33:49 +0000
-Subject: [Buildroot] [Bug 11121] statfs call corrupts memory struct statfs
- too small
-In-Reply-To: <bug-11121-163@https.bugs.busybox.net/>
-References: <bug-11121-163@https.bugs.busybox.net/>
-Message-ID: <bug-11121-163-x9MBlAGIZt@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Jun 2018 21:35:06 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: regroup entries for Sven
+ Neumann
+Message-ID: <20180628193239.EEB4183602@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11121
+commit: https://git.buildroot.net/buildroot/commit/?id=33576bb26f38ef395ead1405b9aef79bb3f0eca6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Thanks for your bug report. However, this doesn't look like a Buildroot bug,
-but instead a uClibc-ng bug. Could you report it to uClibc-ng instead ?
+Move all entries from Sven Neumann under his new e-mail address.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Signed-off-by: Sven Neumann <neumann@teufel.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d26c53b2de..0a9decbb55 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1882,13 +1882,11 @@ F:	package/lcdproc/
+ F:	package/python-influxdb/
+ 
+ N:	Sven Neumann <neumann@teufel.de>
+-F:	package/gstreamer1/gst1-libav/
+-F:	package/wampcc/
+-
+-N:	Sven Neumann <s.neumann@raumfeld.com>
+ F:	package/glib-networking/
++F:	package/gstreamer1/gst1-libav/
+ F:	package/libmms/
+ F:	package/orc/
++F:	package/wampcc/
+ 
+ N:	S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+ F:	package/mmc-utils/
