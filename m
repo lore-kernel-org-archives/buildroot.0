@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Jun 2018 21:13:30 +0200
-Subject: [Buildroot] [PATCH 1/1] nginx: Bump to version 1.15.0
-In-Reply-To: <20180627135146.11364-1-ignacy.gawedzki@green-communications.fr>
-References: <20180627135146.11364-1-ignacy.gawedzki@green-communications.fr>
-Message-ID: <20180628211330.66c97ec8@windsurf>
+Date: Thu, 28 Jun 2018 21:15:10 +0200
+Subject: [Buildroot] [PATCH] configs/imx6-sabresd: Bump U-Boot and kernel
+In-Reply-To: <1530051092-6438-1-git-send-email-festevam@gmail.com>
+References: <1530051092-6438-1-git-send-email-festevam@gmail.com>
+Message-ID: <20180628211510.279fb767@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +12,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 27 Jun 2018 15:51:46 +0200, Ignacy Gaw?dzki wrote:
-> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+On Tue, 26 Jun 2018 19:11:32 -0300, Fabio Estevam wrote:
+> Bump U-Boot to version 2018.05 and kernel to 4.7.3.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 > ---
->  ...-rework-autotest-to-be-cross-compila.patch |   6 +-
->  ...-mechanism-allowing-to-force-feature.patch |   8 +-
->  ...ture_run_force_result-for-each-featu.patch |  56 ++--
->  ...auto-lib-libxslt-conf-use-pkg-config.patch |  10 +-
->  ...ake-sys_nerr-guessing-cross-friendly.patch |  16 +-
->  ...auto-lib-openssl-conf-use-pkg-config.patch | 249 ++++++++++++++++--
->  ...7-auto-lib-libgd-conf-use-pkg-config.patch |   6 +-
->  ...linux_config.h-only-include-dlfcn.h-.patch |   6 +-
+>  configs/imx6-sabresd_defconfig     | 8 ++++----
+>  configs/imx6-sabresd_qt5_defconfig | 8 ++++----
+>  2 files changed, 8 insertions(+), 8 deletions(-)
 
-What happened to those patches ? Just refreshed ?
-
->  ...x-PCRE-condition-WRT-the-http-and-ht.patch |  33 ---
-
-Why is this patch removed ?
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
