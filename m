@@ -1,37 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Jun 2018 22:00:54 +0200
-Subject: [Buildroot] [git commit] xterm: enable for ARC external toolchain
-Message-ID: <20180628195835.925DD8364A@busybox.osuosl.org>
+Date: Thu, 28 Jun 2018 22:00:55 +0200
+Subject: [Buildroot] [git commit] trousers/tpm-tools: enable on ARC
+Message-ID: <20180628195835.A8DB68364A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c667a10fc396c4dc0b195f0546b8a69e2d2fa944
+commit: https://git.buildroot.net/buildroot/commit/?id=a65194b3fe945e301ea7f0089186d5482a458fd9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With the latest prebuilt ARC toolchain this package is building
-without any errors.
+With the latest ARC toolchain arc-2018.03 builds of "trousers" and
+"tpm-tools" packages perform without errors.
+Lets enable these packages for ARC.
+
+With the exception, building tpm-tools for ARC770/750 requires to pass
+"-mno-compact-casesi" as it was made for trousers before:
+see patch f4cd8ceb9cfa "trousers: Pass "-mno-compact-casesi" when
+building for ARCv1".
+This change is a temporary workaround and the feature is going to be
+fixed in the next ARC toolchain release version.
 
 Signed-off-by: Evgeniy Didin <didin@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: arc-buildroot at synopsys.com
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xterm/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+ package/tpm-tools/Config.in    | 2 --
+ package/tpm-tools/tpm-tools.mk | 4 ++++
+ package/trousers/Config.in     | 3 ---
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/xterm/Config.in b/package/xterm/Config.in
-index f3bc4500a8..eaa756a441 100644
---- a/package/xterm/Config.in
-+++ b/package/xterm/Config.in
-@@ -2,8 +2,6 @@ config BR2_PACKAGE_XTERM
- 	bool "xterm"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU # fork()
--	# ARC toolchain issue
--	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_XLIB_LIBXAW
+diff --git a/package/tpm-tools/Config.in b/package/tpm-tools/Config.in
+index e115687281..ca70adc80c 100644
+--- a/package/tpm-tools/Config.in
++++ b/package/tpm-tools/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_TPM_TOOLS
+ 	bool "tpm-tools"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # trousers
+ 	depends on !BR2_STATIC_LIBS # trousers
+-	depends on !BR2_arc # trousers
+ 	select BR2_PACKAGE_TROUSERS
+ 	select BR2_PACKAGE_OPENSSL
  	help
+@@ -12,4 +11,3 @@ config BR2_PACKAGE_TPM_TOOLS
+ 
+ comment "tpm-tools needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-	depends on !BR2_arc
+diff --git a/package/tpm-tools/tpm-tools.mk b/package/tpm-tools/tpm-tools.mk
+index b6738251ff..623e06fb98 100644
+--- a/package/tpm-tools/tpm-tools.mk
++++ b/package/tpm-tools/tpm-tools.mk
+@@ -16,4 +16,8 @@ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ TPM_TOOLS_CONF_ENV += LIBS='-liconv'
+ endif
+ 
++ifeq ($(BR2_arc770d)$(BR2_arc750d),y)
++TPM_TOOLS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mno-compact-casesi"
++endif
++
+ $(eval $(autotools-package))
+diff --git a/package/trousers/Config.in b/package/trousers/Config.in
+index 7a1470629a..998df98398 100644
+--- a/package/trousers/Config.in
++++ b/package/trousers/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_TROUSERS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# doesn't build properly in static only configurations
+ 	depends on !BR2_STATIC_LIBS
+-	# ARC toolchain issue
+-	depends on !BR2_arc
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -18,4 +16,3 @@ config BR2_PACKAGE_TROUSERS
+ 
+ comment "trousers needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+-	depends on !BR2_arc
