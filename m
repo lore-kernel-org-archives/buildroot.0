@@ -1,58 +1,41 @@
-From: oferh at marvell.com <oferh@marvell.com>
-Date: Thu, 28 Jun 2018 10:24:23 +0300
-Subject: [Buildroot] [PATCH 2/2] support/config-fragments/autobuild: add
- Linaro AArch64 BE support
-In-Reply-To: <1530170663-2950-1-git-send-email-oferh@marvell.com>
-References: <1530170663-2950-1-git-send-email-oferh@marvell.com>
-Message-ID: <1530170663-2950-2-git-send-email-oferh@marvell.com>
+From: Roy Arav <roy.arav@shieldiot.io>
+Date: Thu, 28 Jun 2018 10:19:11 +0300
+Subject: [Buildroot] Docker missing statistics
+Message-ID: <CAM27=5itBcZ_H=CEzVUA2Ow8sfOztB76ekEeWZfMEn2y9MjYpA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Ofer Heifetz <oferh@marvell.com>
+Hi,
 
-Signed-off-by: Ofer Heifetz <oferh@marvell.com>
----
- support/config-fragments/autobuild/linaro-aarch64-be.config | 3 +++
- support/config-fragments/autobuild/toolchain-configs.csv    | 1 +
- utils/genrandconfig                                         | 1 +
- 3 files changed, 5 insertions(+)
- create mode 100644 support/config-fragments/autobuild/linaro-aarch64-be.config
+I am running buildroot on raspberry Pi3 and I fail to see docker statistics.
+I can see CPU statistics but not memory nor network statistics.
 
-diff --git a/support/config-fragments/autobuild/linaro-aarch64-be.config b/support/config-fragments/autobuild/linaro-aarch64-be.config
-new file mode 100644
-index 0000000..e075fe7
---- /dev/null
-+++ b/support/config-fragments/autobuild/linaro-aarch64-be.config
-@@ -0,0 +1,3 @@
-+BR2_aarch64_be=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y
-diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
-index 64abfb3..136a67f 100644
---- a/support/config-fragments/autobuild/toolchain-configs.csv
-+++ b/support/config-fragments/autobuild/toolchain-configs.csv
-@@ -58,6 +58,7 @@ support/config-fragments/autobuild/br-xtensa-full.config,x86_64
- support/config-fragments/autobuild/br-xtensa-full-internal.config,any
- support/config-fragments/autobuild/i686-ctng-linux-gnu.config,x86
- support/config-fragments/autobuild/linaro-aarch64.config,x86
-+support/config-fragments/autobuild/linaro-aarch64-be.config,x86
- support/config-fragments/autobuild/linaro-arm.config,x86
- support/config-fragments/autobuild/mips64el-ctng_n32-linux-gnu.config,x86
- support/config-fragments/autobuild/mips64el-ctng_n64-linux-gnu.config,x86
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 06701ce..27f84ea 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -187,6 +187,7 @@ def is_toolchain_usable(configfile, config):
-     if platform.machine() == 'x86_64':
-         if 'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y\n' in configlines or \
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y\n' in configlines or \
-+           'BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE=y\n' in configlines or \
-            'BR2_TOOLCHAIN_EXTERNAL_LINARO_ARMEB=y\n' in configlines:
-             ldd_version_output = subprocess.check_output(['ldd', '--version'])
-             glibc_version = ldd_version_output.splitlines()[0].split()[-1]
--- 
-2.7.4
+Notes:
+1. When running docker info I see the following warnings
+WARNING: No memory limit support
+WARNING: No swap limit support
+WARNING: No kernel memory limit support
+WARNING: No oom kill disable support
+
+2.  I ran the following check script
+https://raw.githubusercontent.com/moby/moby/master/contrib/check-config.sh
+and the result is that there are 2 kernel flags missing
+CONFIG_CGROUP_HUGETLB=y
+CONFIG_AUFS_FS=y
+
+3. I tried adding them and two more flags that I thought they might depend
+on:
+CONFIG_HUGETLBFS=y
+CONFIG_HUGETLB_PAGE=y
+
+But from some reason they are not shown during runtime.
+
+Any ideas?
+Thanks
+Roy
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180628/4a4a2b60/attachment.html>
