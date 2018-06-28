@@ -1,43 +1,29 @@
-From: Montag, Gil <gil.montag@intel.com>
-Date: Thu, 28 Jun 2018 12:02:16 +0000
-Subject: [Buildroot] Booting into grub> prompt
-Message-ID: <2C6957468785C14D8F47AB016E1D8F4B269C6CF1@hasmsx108.ger.corp.intel.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 28 Jun 2018 07:42:40 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-06-27
+In-Reply-To: <20180628060020.108D0208B3@mail.bootlin.com>
+References: <20180628060020.108D0208B3@mail.bootlin.com>
+Message-ID: <CANQCQpaLoVCCxOvJjZL-TWUTevjrHJZWf7_4cD2yhCJ+1BHTvw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I created a buildroot EFI  disk.img file (X64)
-For some reason, when UEFI bios boots this image, it brings up "grub>" prompt but not proceeding to boot the OS
-Nor does it present the Menuentry defined in \EFI\BOOT\grub.cfg file
-If looks as if grub does not "see" the grub.cfg file although both sit in the same \EFI\BOOT folder.
-I did a loopback mount to the disk.img file and here is the structre:
+On Thu, Jun 28, 2018 at 1:00 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> Build statistics for 2018-06-27
+> ===============================
+>
 
-gmontag1 at gmontag1-desktop from_guy (master) $ ls -R /mnt/gil
-/mnt/gil:
+>      powerpc |                  gnutls-3.5.18 | NOK | http://autobuild.buildroot.net/results/7c4bcb839f0ad5bc0496b4115ff391a3b312581a |
 
-bzImage EFI startup.nsh
+Seems like the failure is back related to non-wchar, I haven't done a
+blame yet to see recent changes but looks similar to why the following
+was reverted.
+http://lists.busybox.net/pipermail/buildroot/2013-February/066729.html
 
-/mnt/gil/EFI:
-BOOT
-
-/mnt/gil/EFI/BOOT:
-bootx64.efi grub.cfg
-
-What am I doing wrong?
-
-Thanks
-Gil
-
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180628/78e34059/attachment.html>
+Matt
