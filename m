@@ -1,82 +1,89 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Thu, 28 Jun 2018 18:46:15 +0000
-Subject: [Buildroot] [PATCH 1/1] gnuradio: needs host-python2
-In-Reply-To: <20180628032558.b4bgdv2qdpzssean@tarshish>
-References: <20180626214326.27205-1-fontaine.fabrice@gmail.com>
- <20180627033622.23ouuvp2zvr4cw5y@sapphire.tkos.co.il>
- <CAPi7W82WL5MwxnQWri0dg5Ep92fHedomD3XJHLViLGUcr2JwXA@mail.gmail.com>
- <CAPi7W82zbZLPORsXG989MfnFVitVEFELC1FU1GDGk_0n19oMDA@mail.gmail.com>
- <20180628032558.b4bgdv2qdpzssean@tarshish>
-Message-ID: <1530211574.2283.39.camel@impinj.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Jun 2018 21:09:28 +0200
+Subject: [Buildroot] [git commit] configs/imx6-sabresd: bump U-Boot and
+ Linux kernel
+Message-ID: <20180628190648.4F9B6835F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2018-06-28 at 06:25 +0300, Baruch Siach wrote:
-> Hi Fabrice,
-> 
-> On Wed, Jun 27, 2018 at 06:24:34PM +0200, Fabrice Fontaine wrote:
-> > 2018-06-27 7:35 GMT+02:00 Fabrice Fontaine <fontaine.fabrice@gmail.
-> > com>:
-> > > 2018-06-27 5:36 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
-> > > > On Tue, Jun 26, 2018 at 11:43:26PM +0200, Fabrice Fontaine
-> > > > wrote:
-> > > > > gnuradio needs host-python2 however there is no way to
-> > > > > enforce this so
-> > > > > add a dependency on !BR2_PACKAGE_PYTHON3.
-> > > > > Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot
-> > > > > will only
-> > > > > build host-python3.
-> > > > 
-> > > > Why not just add host-python to _DEPENDENCIES?
-> > > > 
-> > > 
-> > > Indeed, I will update my patch. Thanks for your help.
-> > 
-> > After testing this option, this does not work. host-python2 is
-> > indeed built
-> > but host-python3 is also built.
-> > As a result, host-python-mako and host-python-six are built only
-> > for
-> > host-python3 and not for host-python2. I don't know if this the
-> > expected
-> > behavior,perhaps buildroot should always build the python2 and
-> > python3 host
-> > packages?
-> 
-> Not sure what the right solution here is.
-> 
-> Yegor, do you have an idea?
+commit: https://git.buildroot.net/buildroot/commit/?id=6a3e3c1d0d6956c35af4177f71710debcd692954
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I sent a patch series out some time ago that allows selecting the host
-python version to be used for creating python packages.
+Bump U-Boot to version 2018.05 and kernel to 4.7.3.
 
-It would allow selecting python2 to be used for host python packages,
-and still get the host-python3 *interpreter* built if something needs
-that too.
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/imx6-sabresd_defconfig     | 8 ++++----
+ configs/imx6-sabresd_qt5_defconfig | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-However, it does not allow:
-Building host python packages for multiple python versions.
-Building host python packages for a different python version than is
-used on the target, if the target has python.
-
-So if we start with the requirement that we must have host-python-mako
-for python2, then from that follows that host-python-six and host-
-python-etcetc must be for python2 as well.  And if the target has
-python, it must also be python2.
-
-Fixing this is hard to to do in buildroot.  It ends up with the need to
-build a package twice, once for python2 and again for python3. 
-Buildroot doesn't like two builds of the same package.
-
-Maybe turn host python packages into two packages?  host-python2-mako
-and host-python3-mako.  eval host-python-package creates one or both
-packages.  Maybe that could fit in.
-
-Or maybe that's too complex.  You get to pick one python version and
-all python packages are that version.  If you want a python2 only
-package and a python3 only package, too bad.  Port one of them to the
-other python version.  As python3 support grows, this will be less and
-less of a problem.
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index 9999513914..7f42e55d1f 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++# Linux headers same as kernel, a 4.17 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+ 
+ # System
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index 8e6065db5b..cee7244ddc 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 4.17 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+ 
+ # Additional features needed for packages
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.3"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
