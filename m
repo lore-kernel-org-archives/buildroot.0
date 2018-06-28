@@ -1,65 +1,82 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 28 Jun 2018 19:25:32 +0200
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Thu, 28 Jun 2018 18:46:15 +0000
 Subject: [Buildroot] [PATCH 1/1] gnuradio: needs host-python2
-In-Reply-To: <CAGm1_kvcW7h4fpw7pEf5pb_RFX9r0HOr2c=Bv94=xAj_CN34Xg@mail.gmail.com>
+In-Reply-To: <20180628032558.b4bgdv2qdpzssean@tarshish>
 References: <20180626214326.27205-1-fontaine.fabrice@gmail.com>
  <20180627033622.23ouuvp2zvr4cw5y@sapphire.tkos.co.il>
  <CAPi7W82WL5MwxnQWri0dg5Ep92fHedomD3XJHLViLGUcr2JwXA@mail.gmail.com>
  <CAPi7W82zbZLPORsXG989MfnFVitVEFELC1FU1GDGk_0n19oMDA@mail.gmail.com>
  <20180628032558.b4bgdv2qdpzssean@tarshish>
- <CAGm1_kuvRh-wam8N-wOyuoyfROc7J_K7FY4SFA55b-Omivmo+g@mail.gmail.com>
- <20180628102352.5a997e68@windsurf.home>
- <CAGm1_kufkaKQ_F=kWy2ihKXq9r6H7bOaNBHoRUfQE89N9-dWYQ@mail.gmail.com>
- <20180628112009.2bf1533a@windsurf.home>
- <CAGm1_kvcW7h4fpw7pEf5pb_RFX9r0HOr2c=Bv94=xAj_CN34Xg@mail.gmail.com>
-Message-ID: <CAPi7W81kEgCx815QZcyewyLim-2F1uPYQTzVXG-xAjpi=hrcxA@mail.gmail.com>
+Message-ID: <1530211574.2283.39.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Yegor,
+On Thu, 2018-06-28 at 06:25 +0300, Baruch Siach wrote:
+> Hi Fabrice,
+> 
+> On Wed, Jun 27, 2018 at 06:24:34PM +0200, Fabrice Fontaine wrote:
+> > 2018-06-27 7:35 GMT+02:00 Fabrice Fontaine <fontaine.fabrice@gmail.
+> > com>:
+> > > 2018-06-27 5:36 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+> > > > On Tue, Jun 26, 2018 at 11:43:26PM +0200, Fabrice Fontaine
+> > > > wrote:
+> > > > > gnuradio needs host-python2 however there is no way to
+> > > > > enforce this so
+> > > > > add a dependency on !BR2_PACKAGE_PYTHON3.
+> > > > > Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot
+> > > > > will only
+> > > > > build host-python3.
+> > > > 
+> > > > Why not just add host-python to _DEPENDENCIES?
+> > > > 
+> > > 
+> > > Indeed, I will update my patch. Thanks for your help.
+> > 
+> > After testing this option, this does not work. host-python2 is
+> > indeed built
+> > but host-python3 is also built.
+> > As a result, host-python-mako and host-python-six are built only
+> > for
+> > host-python3 and not for host-python2. I don't know if this the
+> > expected
+> > behavior,perhaps buildroot should always build the python2 and
+> > python3 host
+> > packages?
+> 
+> Not sure what the right solution here is.
+> 
+> Yegor, do you have an idea?
 
-2018-06-28 12:02 GMT+02:00 Yegor Yefremov <yegorslists@googlemail.com>:
+I sent a patch series out some time ago that allows selecting the host
+python version to be used for creating python packages.
 
-> On Thu, Jun 28, 2018 at 11:20 AM, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> > Hello,
-> >
-> > On Thu, 28 Jun 2018 11:15:36 +0200, Yegor Yefremov wrote:
-> >
-> >> > When python3 is enabled for the target, then the default host python
-> >> > version is python3. And due to this, all external host Python modules
-> >> > are installed for host python3, and not available for host python2.
-> >>
-> >> You're right. Then for now I see only one quick and dirty hack -
-> >> install host versions of six and mako when installing host-python by
-> >> default.
-> >
-> > We also need to take into account the requirements of:
-> >
-> >   http://patchwork.ozlabs.org/patch/906837/
-> >   http://patchwork.ozlabs.org/patch/906838/
-> >
-> > when designing a solution to solve this problem.
->
-> @Fabrice: could you try the latest next branch[1]? It has some Python
-> 3 related fixes. Perhaps one doesn't need to enforce python 2 anymore?
->
-> [1] https://github.com/gnuradio/gnuradio/commits/next
+It would allow selecting python2 to be used for host python packages,
+and still get the host-python3 *interpreter* built if something needs
+that too.
 
-Next branch builds fine however it seems there is outstanding issues:
-https://github.com/gnuradio/gnuradio/issues/1842. What should we do until
-an official release is made with python3 support?
+However, it does not allow:
+Building host python packages for multiple python versions.
+Building host python packages for a different python version than is
+used on the target, if the target has python.
 
->
->
-> Yegor
->
-Best Regards,
+So if we start with the requirement that we must have host-python-mako
+for python2, then from that follows that host-python-six and host-
+python-etcetc must be for python2 as well.  And if the target has
+python, it must also be python2.
 
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180628/36e258ed/attachment.html>
+Fixing this is hard to to do in buildroot.  It ends up with the need to
+build a package twice, once for python2 and again for python3. 
+Buildroot doesn't like two builds of the same package.
+
+Maybe turn host python packages into two packages?  host-python2-mako
+and host-python3-mako.  eval host-python-package creates one or both
+packages.  Maybe that could fit in.
+
+Or maybe that's too complex.  You get to pick one python version and
+all python packages are that version.  If you want a python2 only
+package and a python3 only package, too bad.  Port one of them to the
+other python version.  As python3 support grows, this will be less and
+less of a problem.
