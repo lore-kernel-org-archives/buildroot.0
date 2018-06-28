@@ -1,91 +1,41 @@
 From: Sven Neumann <neumann@teufel.de>
-Date: Thu, 28 Jun 2018 15:50:08 +0200
-Subject: [Buildroot] [PATCH 1/2] wampcc: new package
-In-Reply-To: <20180626214044.47839797@windsurf.home>
+Date: Thu, 28 Jun 2018 15:50:09 +0200
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add myself for wampcc
+In-Reply-To: <20180628135009.20421-1-neumann@teufel.de>
 References: <20180626214044.47839797@windsurf.home>
-Message-ID: <20180628135009.20421-1-neumann@teufel.de>
+ <20180628135009.20421-1-neumann@teufel.de>
+Message-ID: <20180628135009.20421-2-neumann@teufel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also move packages from my old email company address to the new one.
+
 Signed-off-by: Sven Neumann <neumann@teufel.de>
 ---
- package/Config.in          |  1 +
- package/wampcc/Config.in   | 19 +++++++++++++++++++
- package/wampcc/wampcc.hash |  3 +++
- package/wampcc/wampcc.mk   | 14 ++++++++++++++
- 4 files changed, 37 insertions(+)
- create mode 100644 package/wampcc/Config.in
- create mode 100644 package/wampcc/wampcc.hash
- create mode 100644 package/wampcc/wampcc.mk
+ DEVELOPERS | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c5365547a4..d5612b5b61 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1487,6 +1487,7 @@ menu "Networking"
- 	source "package/sofia-sip/Config.in"
- 	source "package/thrift/Config.in"
- 	source "package/usbredir/Config.in"
-+	source "package/wampcc/Config.in"
- 	source "package/zeromq/Config.in"
- 	source "package/zmqpp/Config.in"
- 	source "package/zyre/Config.in"
-diff --git a/package/wampcc/Config.in b/package/wampcc/Config.in
-new file mode 100644
-index 0000000000..e7cf6b26fd
---- /dev/null
-+++ b/package/wampcc/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_WAMPCC
-+	bool "wampcc"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_barrier_*
-+	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	select BR2_PACKAGE_LIBUV
-+	select BR2_PACKAGE_JANSSON
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  wampcc is a C++ library that implements the Web Application
-+	  Messaging Protocol.
-+
-+	  https://github.com/darrenjs/wampcc
-+
-+comment "wampcc needs a toolchain w/ NPTL, dynamic library"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/wampcc/wampcc.hash b/package/wampcc/wampcc.hash
-new file mode 100644
-index 0000000000..162dcab0ec
---- /dev/null
-+++ b/package/wampcc/wampcc.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  b3c3633b4c6a74d7ac8a676a7ea30fbfde7ae19aa1fc37de3b8aa3a553b674a2  wampcc-v1.6.tar.gz
-+sha256  bd185b1ec8a292d42b42346757ff6e198073e13c1e080e9ea548d34dd42d30d8  LICENSE
-diff --git a/package/wampcc/wampcc.mk b/package/wampcc/wampcc.mk
-new file mode 100644
-index 0000000000..d8e093f679
---- /dev/null
-+++ b/package/wampcc/wampcc.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# wampcc
-+#
-+################################################################################
-+
-+WAMPCC_VERSION = v1.6
-+WAMPCC_SITE = $(call github,darrenjs,wampcc,$(WAMPCC_VERSION))
-+WAMPCC_DEPENDENCIES = host-pkgconf libuv jansson openssl
-+WAMPCC_INSTALL_STAGING = YES
-+WAMPCC_LICENSE = MIT
-+WAMPCC_LICENSE_FILES = LICENSE
-+
-+$(eval $(cmake-package))
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 27e24896fb..5bf1a1ac15 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1880,12 +1880,11 @@ F:	package/lcdproc/
+ F:	package/python-influxdb/
+ 
+ N:	Sven Neumann <neumann@teufel.de>
+-F:	package/gstreamer1/gst1-libav/
+-
+-N:	Sven Neumann <s.neumann@raumfeld.com>
+ F:	package/glib-networking/
++F:	package/gstreamer1/gst1-libav/
+ F:	package/libmms/
+ F:	package/orc/
++F:	package/wampcc/
+ 
+ N:	S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+ F:	package/mmc-utils/
 -- 
 2.14.4
