@@ -1,89 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Jun 2018 21:09:28 +0200
-Subject: [Buildroot] [git commit] configs/imx6-sabresd: bump U-Boot and
- Linux kernel
-Message-ID: <20180628190648.4F9B6835F3@busybox.osuosl.org>
+Date: Thu, 28 Jun 2018 21:13:30 +0200
+Subject: [Buildroot] [PATCH 1/1] nginx: Bump to version 1.15.0
+In-Reply-To: <20180627135146.11364-1-ignacy.gawedzki@green-communications.fr>
+References: <20180627135146.11364-1-ignacy.gawedzki@green-communications.fr>
+Message-ID: <20180628211330.66c97ec8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a3e3c1d0d6956c35af4177f71710debcd692954
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Bump U-Boot to version 2018.05 and kernel to 4.7.3.
+On Wed, 27 Jun 2018 15:51:46 +0200, Ignacy Gaw?dzki wrote:
+> Signed-off-by: Ignacy Gaw?dzki <ignacy.gawedzki@green-communications.fr>
+> ---
+>  ...-rework-autotest-to-be-cross-compila.patch |   6 +-
+>  ...-mechanism-allowing-to-force-feature.patch |   8 +-
+>  ...ture_run_force_result-for-each-featu.patch |  56 ++--
+>  ...auto-lib-libxslt-conf-use-pkg-config.patch |  10 +-
+>  ...ake-sys_nerr-guessing-cross-friendly.patch |  16 +-
+>  ...auto-lib-openssl-conf-use-pkg-config.patch | 249 ++++++++++++++++--
+>  ...7-auto-lib-libgd-conf-use-pkg-config.patch |   6 +-
+>  ...linux_config.h-only-include-dlfcn.h-.patch |   6 +-
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/imx6-sabresd_defconfig     | 8 ++++----
- configs/imx6-sabresd_qt5_defconfig | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+What happened to those patches ? Just refreshed ?
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index 9999513914..7f42e55d1f 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 4.15 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+# Linux headers same as kernel, a 4.17 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index 8e6065db5b..cee7244ddc 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
- 
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 4.17 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
- 
- # Additional features needed for packages
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-@@ -30,7 +30,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.3"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+>  ...x-PCRE-condition-WRT-the-http-and-ht.patch |  33 ---
+
+Why is this patch removed ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
