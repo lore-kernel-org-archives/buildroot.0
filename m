@@ -1,83 +1,124 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Jun 2018 06:25:58 +0300
-Subject: [Buildroot] [PATCH 1/1] gnuradio: needs host-python2
-In-Reply-To: <CAPi7W82zbZLPORsXG989MfnFVitVEFELC1FU1GDGk_0n19oMDA@mail.gmail.com>
-References: <20180626214326.27205-1-fontaine.fabrice@gmail.com>
- <20180627033622.23ouuvp2zvr4cw5y@sapphire.tkos.co.il>
- <CAPi7W82WL5MwxnQWri0dg5Ep92fHedomD3XJHLViLGUcr2JwXA@mail.gmail.com>
- <CAPi7W82zbZLPORsXG989MfnFVitVEFELC1FU1GDGk_0n19oMDA@mail.gmail.com>
-Message-ID: <20180628032558.b4bgdv2qdpzssean@tarshish>
+From: oferh at marvell.com <oferh@marvell.com>
+Date: Thu, 28 Jun 2018 08:53:22 +0300
+Subject: [Buildroot] [PATCH 1/2] toolchain-external-linaro-aarch64-be: new
+ package
+Message-ID: <1530165203-2228-1-git-send-email-oferh@marvell.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+From: Ofer Heifetz <oferh@marvell.com>
 
-On Wed, Jun 27, 2018 at 06:24:34PM +0200, Fabrice Fontaine wrote:
-> 2018-06-27 7:35 GMT+02:00 Fabrice Fontaine <fontaine.fabrice@gmail.com>:
-> > 2018-06-27 5:36 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
-> >> On Tue, Jun 26, 2018 at 11:43:26PM +0200, Fabrice Fontaine wrote:
-> >> > gnuradio needs host-python2 however there is no way to enforce this so
-> >> > add a dependency on !BR2_PACKAGE_PYTHON3.
-> >> > Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot will only
-> >> > build host-python3.
-> >>
-> >> Why not just add host-python to _DEPENDENCIES?
-> >>
-> > Indeed, I will update my patch. Thanks for your help.
->
-> After testing this option, this does not work. host-python2 is indeed built
-> but host-python3 is also built.
-> As a result, host-python-mako and host-python-six are built only for
-> host-python3 and not for host-python2. I don't know if this the expected
-> behavior,perhaps buildroot should always build the python2 and python3 host
-> packages?
+This commit adds a new package for the Linaro external toolchain for
+the AArch64 Big Endian architecture.
 
-Not sure what the right solution here is.
+https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05
 
-Yegor, do you have an idea?
+Signed-off-by: Ofer Heifetz <oferh@marvell.com>
+---
+ toolchain/toolchain-external/Config.in                   |  6 ++++++
+ .../toolchain-external-linaro-aarch64-be/Config.in       | 15 +++++++++++++++
+ .../Config.in.options                                    |  9 +++++++++
+ .../toolchain-external-linaro-aarch64-be.hash            |  3 +++
+ .../toolchain-external-linaro-aarch64-be.mk              | 16 ++++++++++++++++
+ 5 files changed, 49 insertions(+)
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.hash
+ create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.mk
 
-baruch
-
-> >> > This issue was not raised in the previous version of gnuradio as
-> >> > host-python-cheetah was the only dependency and host-python-cheetah
-> >> > enforces python2 through HOST_PYTHON_CHEETAH_NEEDS_HOST_PYTHON however
-> >> > we now have host-python-six and host-python-mako dependencies and it
-> >> > does not seem right to enforces python2 on those packages
-> >> >
-> >> > Fixes:
-> >> >  - http://autobuild.buildroot.net/results/a502fef3e2a40f38ca633
-> >> 32440b0b6bd2ed11d5a
-> >> >
-> >> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >> > ---
-> >> >  package/gnuradio/Config.in | 2 ++
-> >> >  1 file changed, 2 insertions(+)
-> >> >
-> >> > diff --git a/package/gnuradio/Config.in b/package/gnuradio/Config.in
-> >> > index f748b902a7..25131fb105 100644
-> >> > --- a/package/gnuradio/Config.in
-> >> > +++ b/package/gnuradio/Config.in
-> >> > @@ -1,5 +1,6 @@
-> >> >  comment "gnuradio needs a toolchain w/ C++, NPTL, wchar, dynamic
-> >> library"
-> >> >       depends on BR2_USE_MMU
-> >> > +     depends on !BR2_PACKAGE_PYTHON3
-> >> >       depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> >> >               !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-> >> >
-> >> > @@ -10,6 +11,7 @@ config BR2_PACKAGE_GNURADIO
-> >> >       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> >> >       depends on BR2_USE_MMU # use fork()
-> >> >       depends on BR2_USE_WCHAR # boost
-> >> > +     depends on !BR2_PACKAGE_PYTHON3
-> >> >       select BR2_PACKAGE_BOOST
-> >> >       select BR2_PACKAGE_BOOST_DATE_TIME
-> >> >       select BR2_PACKAGE_BOOST_FILESYSTEM
-
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 6759e5c..2739106 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -15,6 +15,9 @@ comment "glibc toolchains only available with shared lib support"
+ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in"
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in"
+ 
++# Aarch64 big-endian
++source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in"
++
+ # ARC
+ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
+ 
+@@ -110,6 +113,9 @@ config BR2_TOOLCHAIN_EXTERNAL_PREFIX
+ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64/Config.in.options"
+ source "toolchain/toolchain-external/toolchain-external-codesourcery-aarch64/Config.in.options"
+ 
++# Aarch64 big-endian
++source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options"
++
+ # ARC
+ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options"
+ 
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
+new file mode 100644
+index 0000000..9e7d2a6
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
+@@ -0,0 +1,15 @@
++config BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
++	bool "Linaro AArch64 BE 2018.05"
++	depends on BR2_aarch64_be
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	depends on !BR2_STATIC_LIBS
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HAS_SSP
++	select BR2_INSTALL_LIBSTDCPP
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	help
++	  Toolchain for the AArch64 Big Endian architecture, from
++	  http://www.linaro.org/engineering/armv8/
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options
+new file mode 100644
+index 0000000..d44750f
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options
+@@ -0,0 +1,9 @@
++if BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE
++
++config BR2_TOOLCHAIN_EXTERNAL_PREFIX
++	default "aarch64_be-linux-gnu"
++
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-linaro-aarch64-be"
++
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.hash
+new file mode 100644
+index 0000000..f93642e
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 412da19c1d1bff0f3172bc19fd2c024207d8d716dbe7a8dad4bf9e3d6b71d149  gcc-linaro-7.3.1-2018.05-i686_aarch64_be-linux-gnu.tar.xz
++sha256 277c1483f8dbd6007c945ffeb706fa1ba1da8ec1c397cf5cf1e29c25081426e5  gcc-linaro-7.3.1-2018.05-x86_64_aarch64_be-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.mk
+new file mode 100644
+index 0000000..7a01151
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# toolchain-external-linaro-aarch64-be
++#
++################################################################################
++
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_VERSION = 2018.05
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_SITE = https://releases.linaro.org/components/toolchain/binaries/7.3-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_VERSION)/aarch64_be-linux-gnu
++
++ifeq ($(HOSTARCH),x86)
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_VERSION)-i686_aarch64_be-linux-gnu.tar.xz
++else
++TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_SOURCE = gcc-linaro-7.3.1-$(TOOLCHAIN_EXTERNAL_LINARO_AARCH64_BE_VERSION)-x86_64_aarch64_be-linux-gnu.tar.xz
++endif
++
++$(eval $(toolchain-external-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.7.4
