@@ -1,56 +1,70 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 28 Jun 2018 10:45:49 +0300
-Subject: [Buildroot] Docker missing statistics
-In-Reply-To: <CAM27=5itBcZ_H=CEzVUA2Ow8sfOztB76ekEeWZfMEn2y9MjYpA@mail.gmail.com>
-References: <CAM27=5itBcZ_H=CEzVUA2Ow8sfOztB76ekEeWZfMEn2y9MjYpA@mail.gmail.com>
-Message-ID: <20180628074549.k6juats7vknrs577@tarshish>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 28 Jun 2018 09:58:21 +0200
+Subject: [Buildroot] [PATCH 1/1] gnuradio: needs host-python2
+In-Reply-To: <20180628032558.b4bgdv2qdpzssean@tarshish>
+References: <20180626214326.27205-1-fontaine.fabrice@gmail.com>
+ <20180627033622.23ouuvp2zvr4cw5y@sapphire.tkos.co.il>
+ <CAPi7W82WL5MwxnQWri0dg5Ep92fHedomD3XJHLViLGUcr2JwXA@mail.gmail.com>
+ <CAPi7W82zbZLPORsXG989MfnFVitVEFELC1FU1GDGk_0n19oMDA@mail.gmail.com>
+ <20180628032558.b4bgdv2qdpzssean@tarshish>
+Message-ID: <CAGm1_kuvRh-wam8N-wOyuoyfROc7J_K7FY4SFA55b-Omivmo+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Roy,
+Hi Fabrice, Baruch,
 
-On Thu, Jun 28, 2018 at 10:19:11AM +0300, Roy Arav wrote:
-> I am running buildroot on raspberry Pi3 and I fail to see docker statistics.
-> I can see CPU statistics but not memory nor network statistics.
-> 
-> Notes:
-> 1. When running docker info I see the following warnings
-> WARNING: No memory limit support
-> WARNING: No swap limit support
-> WARNING: No kernel memory limit support
-> WARNING: No oom kill disable support
+On Thu, Jun 28, 2018 at 5:25 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Fabrice,
+>
+> On Wed, Jun 27, 2018 at 06:24:34PM +0200, Fabrice Fontaine wrote:
+>> 2018-06-27 7:35 GMT+02:00 Fabrice Fontaine <fontaine.fabrice@gmail.com>:
+>> > 2018-06-27 5:36 GMT+02:00 Baruch Siach <baruch@tkos.co.il>:
+>> >> On Tue, Jun 26, 2018 at 11:43:26PM +0200, Fabrice Fontaine wrote:
+>> >> > gnuradio needs host-python2 however there is no way to enforce this so
+>> >> > add a dependency on !BR2_PACKAGE_PYTHON3.
+>> >> > Indeed, if BR2_PACKAGE_PYTHON3 is selected, then buildroot will only
+>> >> > build host-python3.
+>> >>
+>> >> Why not just add host-python to _DEPENDENCIES?
+>> >>
+>> > Indeed, I will update my patch. Thanks for your help.
+>>
+>> After testing this option, this does not work. host-python2 is indeed built
+>> but host-python3 is also built.
+>> As a result, host-python-mako and host-python-six are built only for
+>> host-python3 and not for host-python2. I don't know if this the expected
+>> behavior,perhaps buildroot should always build the python2 and python3 host
+>> packages?
+>
+> Not sure what the right solution here is.
+>
+> Yegor, do you have an idea?
 
-You need to enable memory control group (MEMCG) related kernel configuration 
-options, and probably a few others. See 
-https://github.com/moby/moby/issues/4250 . Note that CONFIG_MEMCG_KMEM is only 
-for kernels older than 4.6. Newer kernels provide other config symbols for the 
-same functionality.
+This patch did it for me. I've made "make defconfig", select ARM for
+A8 series, Linaro toolchain and python 2. Then I've just selected
+gnuradio and its python support.
 
-This is not directly related to Buildroot though.
+In this case no host-python3 will be built because we select general
+Python 2 support for the target (as gnuradio enforces) and hence only
+host-python will be built.
 
-baruch
+@Fabrice have you performed "make clean" after adding host-python to
+the dependencies?
 
-> 2.  I ran the following check script
-> https://raw.githubusercontent.com/moby/moby/master/contrib/check-config.sh
-> and the result is that there are 2 kernel flags missing
-> CONFIG_CGROUP_HUGETLB=y
-> CONFIG_AUFS_FS=y
-> 
-> 3. I tried adding them and two more flags that I thought they might depend
-> on:
-> CONFIG_HUGETLBFS=y
-> CONFIG_HUGETLB_PAGE=y
-> 
-> But from some reason they are not shown during runtime.
-> 
-> Any ideas?
-> Thanks
-> Roy
+diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
+index e79f848388..f2486a2fd2 100644
+--- a/package/gnuradio/gnuradio.mk
++++ b/package/gnuradio/gnuradio.mk
+@@ -14,6 +14,7 @@ GNURADIO_SUPPORTS_IN_SOURCE_BUILD = NO
+ # host-python-cheetah, host-python-mako and host-python-six are needed for volk
+ # to compile
+ GNURADIO_DEPENDENCIES = \
++       host-python \
+        host-python-cheetah \
+        host-python-mako \
+        host-python-six \
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Yegor
