@@ -1,9 +1,9 @@
 From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Thu, 28 Jun 2018 13:56:59 +0300
-Subject: [Buildroot] [PATCH 2/3] mpv: enable for ARC external toolchain
+Date: Thu, 28 Jun 2018 13:57:00 +0300
+Subject: [Buildroot] [PATCH 3/3] xterm: enable for ARC external toolchain
 In-Reply-To: <20180628105700.29015-1-didin@synopsys.com>
 References: <20180628105700.29015-1-didin@synopsys.com>
-Message-ID: <20180628105700.29015-3-didin@synopsys.com>
+Message-ID: <20180628105700.29015-4-didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,26 +17,21 @@ Signed-off-by: Evgeniy Didin <didin@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: arc-buildroot at synopsys.com
 ---
- package/mpv/Config.in | 3 ---
- 1 file changed, 3 deletions(-)
+ package/xterm/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/mpv/Config.in b/package/mpv/Config.in
-index ce6f367d72..69810038f1 100644
---- a/package/mpv/Config.in
-+++ b/package/mpv/Config.in
-@@ -4,8 +4,6 @@ config BR2_PACKAGE_MPV
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+diff --git a/package/xterm/Config.in b/package/xterm/Config.in
+index f3bc4500a8..eaa756a441 100644
+--- a/package/xterm/Config.in
++++ b/package/xterm/Config.in
+@@ -2,8 +2,6 @@ config BR2_PACKAGE_XTERM
+ 	bool "xterm"
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on BR2_USE_MMU # fork()
 -	# ARC toolchain issue
 -	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_FFMPEG
- 	select BR2_PACKAGE_FFMPEG_SWSCALE
-@@ -29,4 +27,3 @@ comment "mpv needs a toolchain w/ threads, gcc >= 4.5"
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
--	depends on !BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_XLIB_LIBXAW
+ 	help
 -- 
 2.17.1
