@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 28 Jun 2018 22:21:43 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain-external-linaro-aarch64-be:
- new package
-In-Reply-To: <1530170663-2950-1-git-send-email-oferh@marvell.com>
-References: <1530170663-2950-1-git-send-email-oferh@marvell.com>
-Message-ID: <20180628222143.198fe7e3@windsurf>
+Date: Thu, 28 Jun 2018 22:22:27 +0200
+Subject: [Buildroot] [git commit] pixiewps: fix static linking with uclibc-ng
+Message-ID: <20180628201922.6C49C83689@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b28d859c0655cb95ddb194bf244c213fad03eb9c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 28 Jun 2018 10:24:22 +0300, oferh at marvell.com wrote:
-> From: Ofer Heifetz <oferh@marvell.com>
-> 
-> This commit adds a new package for the Linaro external toolchain for
-> the AArch64 Big Endian architecture.
-> 
-> https://releases.linaro.org/components/toolchain/binaries/7.3-2018.05
-> 
-> Signed-off-by: Ofer Heifetz <oferh@marvell.com>
-> ---
->  toolchain/toolchain-external/Config.in                   |  6 ++++++
->  .../toolchain-external-linaro-aarch64-be/Config.in       | 15 +++++++++++++++
->  .../Config.in.options                                    |  9 +++++++++
->  .../toolchain-external-linaro-aarch64-be.hash            |  3 +++
->  .../toolchain-external-linaro-aarch64-be.mk              | 16 ++++++++++++++++
->  5 files changed, 49 insertions(+)
->  create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in
->  create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config.in.options
->  create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.hash
->  create mode 100644 toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/toolchain-external-linaro-aarch64-be.mk
+Fixes following linking error with uClibc-ng:
+/home/peko/autobuild/instance-0/output/host/lib/gcc/powerpc-buildroot-linux-uclibc/7.3.0/libgcc.a(unwind-dw2-fde-dip.o):
+In function `_Unwind_Find_FDE':
+/home/peko/autobuild/instance-0/output/build/host-gcc-final-7.3.0/build/powerpc-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde-dip.c:469:
+undefined reference to `dl_iterate_phdr'
+collect2: error: ld returned 1 exit status
 
-Thanks for this contribution. I've applied both patches!
+Since uClibc-ng 1.0.18 a circular dependency between libc and libgcc
+exist, when static linking is used. It can be resolved by the compiler
+when -static is correctly passed in the linking step.
 
-Thanks,
+So use TARGET_CONFIGURE_OPTS to pass CC as well as LDFLAGS to make
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.net/results/d9f0311538c8db1196839e36af3f6ef4e403be2b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pixiewps/pixiewps.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pixiewps/pixiewps.mk b/package/pixiewps/pixiewps.mk
+index 95a253ab83..1f84bbeb34 100644
+--- a/package/pixiewps/pixiewps.mk
++++ b/package/pixiewps/pixiewps.mk
+@@ -10,7 +10,7 @@ PIXIEWPS_LICENSE = GPL-3.0+
+ PIXIEWPS_LICENSE_FILES = LICENSE.md
+ 
+ define PIXIEWPS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC=$(TARGET_CC) -C $(@D)
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
+ 
+ define PIXIEWPS_INSTALL_TARGET_CMDS
