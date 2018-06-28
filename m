@@ -1,41 +1,36 @@
-From: Roy Arav <roy.arav@shieldiot.io>
-Date: Thu, 28 Jun 2018 10:19:11 +0300
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 28 Jun 2018 09:39:09 +0200
 Subject: [Buildroot] Docker missing statistics
-Message-ID: <CAM27=5itBcZ_H=CEzVUA2Ow8sfOztB76ekEeWZfMEn2y9MjYpA@mail.gmail.com>
+In-Reply-To: <CAM27=5itBcZ_H=CEzVUA2Ow8sfOztB76ekEeWZfMEn2y9MjYpA@mail.gmail.com>
+References: <CAM27=5itBcZ_H=CEzVUA2Ow8sfOztB76ekEeWZfMEn2y9MjYpA@mail.gmail.com>
+Message-ID: <20180628093909.4205a5cb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-I am running buildroot on raspberry Pi3 and I fail to see docker statistics.
-I can see CPU statistics but not memory nor network statistics.
+On Thu, 28 Jun 2018 10:19:11 +0300, Roy Arav wrote:
 
-Notes:
-1. When running docker info I see the following warnings
-WARNING: No memory limit support
-WARNING: No swap limit support
-WARNING: No kernel memory limit support
-WARNING: No oom kill disable support
+> 2.  I ran the following check script
+> https://raw.githubusercontent.com/moby/moby/master/contrib/check-config.sh
+> and the result is that there are 2 kernel flags missing
+> CONFIG_CGROUP_HUGETLB=y
+> CONFIG_AUFS_FS=y
+> 
+> 3. I tried adding them and two more flags that I thought they might depend
 
-2.  I ran the following check script
-https://raw.githubusercontent.com/moby/moby/master/contrib/check-config.sh
-and the result is that there are 2 kernel flags missing
-CONFIG_CGROUP_HUGETLB=y
-CONFIG_AUFS_FS=y
+How did you add them ?
 
-3. I tried adding them and two more flags that I thought they might depend
-on:
-CONFIG_HUGETLBFS=y
-CONFIG_HUGETLB_PAGE=y
+To change the Linux kernel configuration, you need to use "make
+linux-menuconfig" or "make linux-xconfig".
 
-But from some reason they are not shown during runtime.
+Best regards,
 
-Any ideas?
-Thanks
-Roy
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180628/4a4a2b60/attachment.html>
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
