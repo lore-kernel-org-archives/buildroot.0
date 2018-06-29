@@ -1,127 +1,74 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 29 Jun 2018 13:44:04 +0300
-Subject: [Buildroot] [PATCH] Revert "gnutls: drop wchar dependency"
-Message-ID: <869c1f0ff206cd064a7a6e100e7d8f5073454360.1530269044.git.baruch@tkos.co.il>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Fri, 29 Jun 2018 07:58:18 -0300
+Subject: [Buildroot] [PATCH v2] dropbear: enable PAM athentication if
+ linux-pam is selected
+In-Reply-To: <20180629043644.e4xgahymqctqr7ha@tarshish>
+References: <20180629043644.e4xgahymqctqr7ha@tarshish>
+Message-ID: <20180629105818.5625-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 694cdb9273433e8a1278e2e3bb2a7fe2004aa813.
+- Disable password file athentication, since it's not possible to have
+  both at once.
+- Install a /etc/pam.d/sshd file, based on the one installed by openssh.
 
-Just like commit 68c3f5257d94 (Revert "gnutls: make it non-wchar
-friendly") before. It turns out that gnulib expects some other library
-to provide a wctomb() implementation. So when the C library does not
-provide one it is left as undefined symbol in libgnutls.so.
-
-Add a comment to reduce the chance of repeating the same mistake again.
-
-Fixes:
-http://autobuild.buildroot.net/results/86f/86f08276fcb0cc557ab3cc5f57229b2c0c6ac2d7/
-http://autobuild.buildroot.net/results/7c4/7c4bcb839f0ad5bc0496b4115ff391a3b312581a/
-http://autobuild.buildroot.net/results/1c3/1c353f542c49bbe5520266c0ebb6a58589032453/
-
-Reported-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 ---
-v2: Add a Config.in comment (Thomas P)
+Changes v1->v2:
+- Fix commit message.
 ---
- package/gnutls/Config.in        | 7 +++++--
- package/libmicrohttpd/Config.in | 5 +++--
- package/libsoup/Config.in       | 2 +-
- package/taskd/Config.in         | 2 +-
- package/vpnc/Config.in          | 5 +++--
- 5 files changed, 13 insertions(+), 8 deletions(-)
+ package/dropbear/dropbear.mk    | 14 ++++++++++++++
+ package/dropbear/etc-pam.d-sshd |  7 +++++++
+ 2 files changed, 21 insertions(+)
+ create mode 100644 package/dropbear/etc-pam.d-sshd
 
-diff --git a/package/gnutls/Config.in b/package/gnutls/Config.in
-index 61b4b239ff82..7e8dcc1e4f8b 100644
---- a/package/gnutls/Config.in
-+++ b/package/gnutls/Config.in
-@@ -2,6 +2,9 @@ config BR2_PACKAGE_GNUTLS
- 	bool "gnutls"
- 	# https://gitlab.com/gnutls/gnutls/issues/203
- 	depends on !BR2_STATIC_LIBS
-+	# gnulib requires a library that implements wctomb().
-+	# This is noticed only when linking with libgnutls.so.
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_NETTLE
- 	select BR2_PACKAGE_PCRE
-@@ -23,5 +26,5 @@ config BR2_PACKAGE_GNUTLS_TOOLS
- 
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index fc41a84c1f..bb902bc7ce 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -34,6 +34,19 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
+ DROPBEAR_CONF_OPTS += --disable-static
  endif
  
--comment "gnutls needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "gnutls needs a toolchain w/ wchar, dynamic library"
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
-diff --git a/package/libmicrohttpd/Config.in b/package/libmicrohttpd/Config.in
-index f3386a63f272..7f3c9bb8fda0 100644
---- a/package/libmicrohttpd/Config.in
-+++ b/package/libmicrohttpd/Config.in
-@@ -12,12 +12,13 @@ if BR2_PACKAGE_LIBMICROHTTPD
- config BR2_PACKAGE_LIBMICROHTTPD_SSL
- 	bool "https support"
- 	depends on !BR2_STATIC_LIBS # gnutls
-+	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_GNUTLS
- 	help
- 	  Enable HTTPS (SSL) support.
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++define DROPBEAR_SVR_PAM_AUTH
++	echo '#define DROPBEAR_SVR_PASSWORD_AUTH 0'     >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_SVR_PAM_AUTH 1'          >> $(@D)/localoptions.h
++endef
++define DROPBEAR_INSTALL_PAM_CONF
++	$(INSTALL) -D -m 644 package/dropbear/etc-pam.d-sshd $(TARGET_DIR)/etc/pam.d/sshd
++endef
++DROPBEAR_DEPENDENCIES += linux-pam
++DROPBEAR_CONF_OPTS += --enable-pam
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PAM_AUTH
++DROPBEAR_POST_INSTALL_TARGET_HOOKS += DROPBEAR_INSTALL_PAM_CONF
++else
+ # Ensure that dropbear doesn't use crypt() when it's not available
+ define DROPBEAR_SVR_PASSWORD_AUTH
+ 	echo '#if !HAVE_CRYPT'                          >> $(@D)/localoptions.h
+@@ -41,6 +54,7 @@ define DROPBEAR_SVR_PASSWORD_AUTH
+ 	echo '#endif'                                   >> $(@D)/localoptions.h
+ endef
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
++endif
  
--comment "libmicrohttpd https support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "libmicrohttpd https support needs a toolchain w/ wchar, dynamic library"
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
- 
- endif
- 
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index f5833229139a..236d3c428a83 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LIBSOUP
- 	bool "libsoup"
--	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_USE_WCHAR # glib2 and gnutls
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	select BR2_PACKAGE_LIBXML2
-diff --git a/package/taskd/Config.in b/package/taskd/Config.in
-index c068b347242b..19d123fb5910 100644
---- a/package/taskd/Config.in
-+++ b/package/taskd/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_TASKD
- 	bool "taskd"
- 	depends on !BR2_STATIC_LIBS # gnutls
--	depends on BR2_USE_WCHAR
-+	depends on BR2_USE_WCHAR # gnutls
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_GNUTLS
-diff --git a/package/vpnc/Config.in b/package/vpnc/Config.in
-index b988ba342bef..6455b0d87abe 100644
---- a/package/vpnc/Config.in
-+++ b/package/vpnc/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_VPNC
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 	depends on !BR2_STATIC_LIBS # gnutls
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	select BR2_PACKAGE_GNUTLS
-@@ -15,6 +16,6 @@ config BR2_PACKAGE_VPNC
- 
- 	  http://www.unix-ag.uni-kl.de/~massar/vpnc
- 
--comment "vpnc needs a toolchain w/ dynamic library"
-+comment "vpnc needs a toolchain w/ wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on BR2_STATIC_LIBS
-+	depends on !BR2_USE_WCHAR || BR2_STATIC_LIBS
+ define DROPBEAR_ENABLE_REVERSE_DNS
+ 	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
+diff --git a/package/dropbear/etc-pam.d-sshd b/package/dropbear/etc-pam.d-sshd
+new file mode 100644
+index 0000000000..5e13fc0d60
+--- /dev/null
++++ b/package/dropbear/etc-pam.d-sshd
+@@ -0,0 +1,7 @@
++#%PAM-1.0
++auth       required     pam_unix.so shadow nodelay
++account    required     pam_nologin.so
++account    required     pam_unix.so
++password   required     pam_unix.so shadow nullok use_authtok
++session    required     pam_unix.so
++session    required     pam_limits.so
 -- 
-2.18.0
+2.14.4
