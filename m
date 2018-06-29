@@ -1,74 +1,54 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 29 Jun 2018 07:58:18 -0300
-Subject: [Buildroot] [PATCH v2] dropbear: enable PAM athentication if
- linux-pam is selected
-In-Reply-To: <20180629043644.e4xgahymqctqr7ha@tarshish>
-References: <20180629043644.e4xgahymqctqr7ha@tarshish>
-Message-ID: <20180629105818.5625-1-casantos@datacom.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 29 Jun 2018 13:40:58 +0200
+Subject: [Buildroot] [PATCH 1/1] toolchain: Fix ld.so copying for
+ multilib toolchains.
+In-Reply-To: <20180629113339.59102-1-christoph.muellner@theobroma-systems.com>
+References: <20180629113339.59102-1-christoph.muellner@theobroma-systems.com>
+Message-ID: <20180629134058.2fde536c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Disable password file athentication, since it's not possible to have
-  both at once.
-- Install a /etc/pam.d/sshd file, based on the one installed by openssh.
+Hello Christoph,
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
-Changes v1->v2:
-- Fix commit message.
----
- package/dropbear/dropbear.mk    | 14 ++++++++++++++
- package/dropbear/etc-pam.d-sshd |  7 +++++++
- 2 files changed, 21 insertions(+)
- create mode 100644 package/dropbear/etc-pam.d-sshd
+Thanks for this contribution!
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index fc41a84c1f..bb902bc7ce 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -34,6 +34,19 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- DROPBEAR_CONF_OPTS += --disable-static
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define DROPBEAR_SVR_PAM_AUTH
-+	echo '#define DROPBEAR_SVR_PASSWORD_AUTH 0'     >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_SVR_PAM_AUTH 1'          >> $(@D)/localoptions.h
-+endef
-+define DROPBEAR_INSTALL_PAM_CONF
-+	$(INSTALL) -D -m 644 package/dropbear/etc-pam.d-sshd $(TARGET_DIR)/etc/pam.d/sshd
-+endef
-+DROPBEAR_DEPENDENCIES += linux-pam
-+DROPBEAR_CONF_OPTS += --enable-pam
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PAM_AUTH
-+DROPBEAR_POST_INSTALL_TARGET_HOOKS += DROPBEAR_INSTALL_PAM_CONF
-+else
- # Ensure that dropbear doesn't use crypt() when it's not available
- define DROPBEAR_SVR_PASSWORD_AUTH
- 	echo '#if !HAVE_CRYPT'                          >> $(@D)/localoptions.h
-@@ -41,6 +54,7 @@ define DROPBEAR_SVR_PASSWORD_AUTH
- 	echo '#endif'                                   >> $(@D)/localoptions.h
- endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
-+endif
- 
- define DROPBEAR_ENABLE_REVERSE_DNS
- 	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
-diff --git a/package/dropbear/etc-pam.d-sshd b/package/dropbear/etc-pam.d-sshd
-new file mode 100644
-index 0000000000..5e13fc0d60
---- /dev/null
-+++ b/package/dropbear/etc-pam.d-sshd
-@@ -0,0 +1,7 @@
-+#%PAM-1.0
-+auth       required     pam_unix.so shadow nodelay
-+account    required     pam_nologin.so
-+account    required     pam_unix.so
-+password   required     pam_unix.so shadow nullok use_authtok
-+session    required     pam_unix.so
-+session    required     pam_limits.so
+On Fri, 29 Jun 2018 13:33:39 +0200, Christoph Muellner wrote:
+> Multilib toolchains can have more than one ld.so files in lib/.
+> Typically one for each lib* directory.
+> However the current copy_toolchain_sysroot implemenation does
+> not support more than one ld.so.
+> 
+> This patch addresses this by iterating over all ld.so files
+> in the lib/ directory and choose the one, which has a symlink
+> into $ARCH_LIB_DIR/.
+> 
+> An example is a multilib toolchain for aarch64 (LP64 and ILP32),
+> which includes the following entries in lib/:
+> 
+> $ ls -l lib/
+> lrwxrwxrwx 1 user group ld-linux-aarch64_ilp32.so.1 -> ../libilp32/ld-2.27.so
+> lrwxrwxrwx 1 user group ld-linux-aarch64.so.1 -> ../lib64/ld-2.27.so
+> 
+> $ARCH_LIB_DIR/ will be detected as lib64.
+> Without the patch no ld.so will be copied.
+> With the patch the second ld.so (the one for LP64) will be copied.
+> 
+> Signed-off-by: Christoph Muellner <christoph.muellner@theobroma-systems.com>
+> Signed-off-by: Philipp Tomsich <philipp.tomsich@theobroma-systems.com>
+
+Is it possible to access the problematic toolchain ?
+
+It would be useful to understand better the problem, and potentially
+add some test cases to verify that future changes in the external
+toolchain logic does not break this special situation.
+
+Thanks,
+
+Thomas
 -- 
-2.14.4
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
