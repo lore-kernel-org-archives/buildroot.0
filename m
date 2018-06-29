@@ -1,80 +1,76 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Fri, 29 Jun 2018 09:21:09 -0300
-Subject: [Buildroot] [PATCH v3] dropbear: enable PAM authentication if
- linux-pam is selected
-In-Reply-To: <20180629115039.52bpwyk7xenbly53@tarshish>
-References: <20180629115039.52bpwyk7xenbly53@tarshish>
-Message-ID: <20180629122109.7356-1-casantos@datacom.com.br>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Fri, 29 Jun 2018 10:35:21 -0400
+Subject: [Buildroot] [PATCH v2] qt5webengine: propagate parallel flag to
+ ninja
+Message-ID: <20180629143521.9018-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Disable password file authentication, since it's not possible to have
-  both at once.
-- Install a /etc/pam.d/sshd file, based on the one installed by openssh.
+WebEngine is a big project to build. It uses ninja which is a build
+system that does everything in parallel[1].
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
----
-Changes v1->v2:
-- Fix commit message.
-Changes v2->v3:
-- athentication -> authentication (gah!)
+	Builds are always run in parallel, based by default on the number of
+	CPUs your system has. Underspecified build dependencies will result in
+	incorrect builds.
 
----
-Change-Id: Ic62953e03b598bceb6374eb40436f908ab5d07ee
----
- package/dropbear/dropbear.mk    | 14 ++++++++++++++
- package/dropbear/etc-pam.d-sshd |  7 +++++++
- 2 files changed, 21 insertions(+)
- create mode 100644 package/dropbear/etc-pam.d-sshd
+QtWebEngine does not propagate the parallel flag from the running
+instance of make to ninja. Thus, all the machine cores are used to build
+this single project.
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index fc41a84c1f..bb902bc7ce 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -34,6 +34,19 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- DROPBEAR_CONF_OPTS += --disable-static
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define DROPBEAR_SVR_PAM_AUTH
-+	echo '#define DROPBEAR_SVR_PASSWORD_AUTH 0'     >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_SVR_PAM_AUTH 1'          >> $(@D)/localoptions.h
-+endef
-+define DROPBEAR_INSTALL_PAM_CONF
-+	$(INSTALL) -D -m 644 package/dropbear/etc-pam.d-sshd $(TARGET_DIR)/etc/pam.d/sshd
-+endef
-+DROPBEAR_DEPENDENCIES += linux-pam
-+DROPBEAR_CONF_OPTS += --enable-pam
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PAM_AUTH
-+DROPBEAR_POST_INSTALL_TARGET_HOOKS += DROPBEAR_INSTALL_PAM_CONF
-+else
- # Ensure that dropbear doesn't use crypt() when it's not available
- define DROPBEAR_SVR_PASSWORD_AUTH
- 	echo '#if !HAVE_CRYPT'                          >> $(@D)/localoptions.h
-@@ -41,6 +54,7 @@ define DROPBEAR_SVR_PASSWORD_AUTH
- 	echo '#endif'                                   >> $(@D)/localoptions.h
+	make -j 10 -> ninja -j # all cores
+
+This behavior disrupts powerful machines which are setup to build many
+projects in parallel. Even worse, the build fails on machines where the
+ratio CPU-cores / amount of RAM (including swap) is not appropriate. g++
+may have not enough of memory to build all those files in parallel.
+
+Unfortunatly, the target `run_ninja' is hardcoded in the Makefile
+src/core/Makefile.run_gn; there is no way to propagate flags using a
+variable through the make command-line.
+
+	run_ninja:
+	        /home/gportay/src/buildroot/output-qt5.11/build/qt5webengine-5.11.1/src/3rdparty/ninja/ninja
+-C /home/gportay/src/buildroot/output-qt5.11/build/qt5webengine-5.11.1/src/core/release QtWebEngineCore
+
+Luckily, the Qt gn_run.pro[2] can hardcode ninja extra flags through the
+variable NINJAFLAGS when the Makefile is generated (which is performed
+during the build and not during configure step).
+
+This commit sets the NINJAFLAGS using the variable PARALLEL_JOBS to limit
+the number of cores used by ninja.
+
+Fixes:
+	virtual memory exhausted: Cannot allocate memory
+
+[1]: https://ninja-build.org/manual.html#_comparison_to_make
+[2]: https://github.com/qt/qtwebengine/blob/v5.11.1/src/core/gn_run.pro#L49-L53
+
+CC: Damien Riegel <damien.riegel@savoirfairelinux.com>
+CC: Jean-Fran?ois T?tu <jean-francois.tetu@savoirfairelinux.com>
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+Changes since v1:
+ - Use PARALLEL_JOBS instead of BR2_JLEVEL
+ - Reword commit message
+
+ package/qt5/qt5webengine/qt5webengine.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+index 08120421d6..2c622c91ba 100644
+--- a/package/qt5/qt5webengine/qt5webengine.mk
++++ b/package/qt5/qt5webengine/qt5webengine.mk
+@@ -48,6 +48,8 @@ define QT5WEBENGINE_PYTHON2_SYMLINK
  endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
-+endif
+ QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_PYTHON2_SYMLINK
  
- define DROPBEAR_ENABLE_REVERSE_DNS
- 	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
-diff --git a/package/dropbear/etc-pam.d-sshd b/package/dropbear/etc-pam.d-sshd
-new file mode 100644
-index 0000000000..5e13fc0d60
---- /dev/null
-+++ b/package/dropbear/etc-pam.d-sshd
-@@ -0,0 +1,7 @@
-+#%PAM-1.0
-+auth       required     pam_unix.so shadow nodelay
-+account    required     pam_nologin.so
-+account    required     pam_unix.so
-+password   required     pam_unix.so shadow nullok use_authtok
-+session    required     pam_unix.so
-+session    required     pam_limits.so
++QT5WEBENGINE_ENV += NINJAFLAGS="-j$(PARALLEL_JOBS)"
++
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ define QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
+ 	sed s%@HOST_DIR@%$(HOST_DIR)%g $(QT5WEBENGINE_PKGDIR)/host-pkg-config.in > $(@D)/host-bin/host-pkg-config
 -- 
-2.14.4
+2.17.1
