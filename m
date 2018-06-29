@@ -1,52 +1,50 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 29 Jun 2018 08:02:58 +0300
-Subject: [Buildroot] [PATCH] linux-pam: bump to version 1.3.1
-Message-ID: <e1427940f697c4406f6cf0f770829275a426fff2.1530248578.git.baruch@tkos.co.il>
+Date: Fri, 29 Jun 2018 08:18:58 +0300
+Subject: [Buildroot] [PATCH] qpdf: security bump to version 8.1.0
+Message-ID: <f3824d1a8cf1971f29912fa0891ba7e597066d2d.1530249538.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tarball is now at github.
+Fixes CVE-2018-9918: mishandle certain "expected dictionary key but
+found non-name object" cases, allowing remote attackers to cause a
+denial of service (stack exhaustion)
 
-Switch to .tar.xz, that's the only format that upstream provides.
+https://github.com/qpdf/qpdf/issues/202
 
-Add a note on tarball signature and key.
+Drop local SHA256 hash since we use upstream provided SHA512.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/linux-pam/linux-pam.hash | 6 ++++--
- package/linux-pam/linux-pam.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/qpdf/qpdf.hash | 6 ++----
+ package/qpdf/qpdf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/linux-pam/linux-pam.hash b/package/linux-pam/linux-pam.hash
-index b9c91ef0f663..183bcca40147 100644
---- a/package/linux-pam/linux-pam.hash
-+++ b/package/linux-pam/linux-pam.hash
-@@ -1,2 +1,4 @@
--# Locally computed hashes, not provided by upstream
--sha256 241aed1ef522f66ed672719ecf2205ec513fd0075ed80cda8e086a5b1a01d1bb  Linux-PAM-1.3.0.tar.bz2
-+# Locally computed hashes after checking signature at
-+# https://github.com/linux-pam/linux-pam/releases/download/v1.3.1/Linux-PAM-1.3.1.tar.xz.asc
-+# signed with the key 8C6BFD92EE0F42EDF91A6A736D1A7F052E5924BB
-+sha256 eff47a4ecd833fbf18de9686632a70ee8d0794b79aecb217ebd0ce11db4cd0db  Linux-PAM-1.3.1.tar.xz
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index 5c80e7841617..63610fcc57bf 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
+index 1fbef66e6fc7..d27c9834b99e 100644
+--- a/package/qpdf/qpdf.hash
++++ b/package/qpdf/qpdf.hash
+@@ -1,4 +1,2 @@
+-# From https://sourceforge.net/projects/qpdf/files/qpdf/7.0.0/qpdf-7.0.0.sha512/download
+-sha512	7b52d67b4d2c428a7b0c1cd03b03a23f05d38d7e3c81041079a137919019ea5158f12bf95fdcfcff6b43ffdefe93a85127ced2a363a6b4b380cbaa02a3840256  qpdf-7.0.0.tar.gz
+-# Locally computed
+-sha256	fed08de14caad0fe5efd148d9eca886d812588b2cbb35d13e61993ee8eb8c65f  qpdf-7.0.0.tar.gz
++# From https://sourceforge.net/projects/qpdf/files/qpdf/8.1.0/qpdf-8.1.0.sha512/download
++sha512	1831bcaaed87dae268db5d61805d1483ec5c101f6ce594be660664c119597ae67cf011c2b50092964d785a814d5f6c780935127a89401fe37a1026ae4d3af15c  qpdf-8.1.0.tar.gz
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index 27e4d099789c..4776d22b16d6 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINUX_PAM_VERSION = 1.3.0
--LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.bz2
--LINUX_PAM_SITE = http://linux-pam.org/library
-+LINUX_PAM_VERSION = 1.3.1
-+LINUX_PAM_SOURCE = Linux-PAM-$(LINUX_PAM_VERSION).tar.xz
-+LINUX_PAM_SITE = https://github.com/linux-pam/linux-pam/releases/download/v$(LINUX_PAM_VERSION)
- LINUX_PAM_INSTALL_STAGING = YES
- LINUX_PAM_CONF_OPTS = \
- 	--disable-prelude \
+-QPDF_VERSION = 7.0.0
++QPDF_VERSION = 8.1.0
+ QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
+ QPDF_INSTALL_STAGING = YES
+ QPDF_LICENSE = Artistic-2.0
 -- 
 2.18.0
