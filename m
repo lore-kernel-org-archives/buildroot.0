@@ -1,192 +1,70 @@
-From: Charles Hardin <charles.hardin@storagecraft.com>
-Date: Thu, 28 Jun 2018 21:45:32 +0000
-Subject: [Buildroot] [PATCH v2 4/5] grpc: new package
-In-Reply-To: <20180628233612.26e24014@windsurf>
-References: <20180521175310.18563-1-charles.hardin@storagecraft.com>
- <20180521175310.18563-5-charles.hardin@storagecraft.com>
- <20180628233612.26e24014@windsurf>
-Message-ID: <AC45FC8C-35CA-4B06-A9C1-06DD89A4131A@storagecraft.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 28 Jun 2018 22:42:46 -0300
+Subject: [Buildroot] [PATCH v2 1/1] pkg-generic: fix no-check-hash for
+ inferred site method
+In-Reply-To: <20180625014101.13177-1-ricardo.martincoski@gmail.com>
+References: <20180625014101.13177-1-ricardo.martincoski@gmail.com>
+Message-ID: <20180629014246.13574-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hmm?.
+Currently, when the site method is explicitly set to a SCM other than
+git, the main download is correctly excluded from being hash-checked.
+But when the site method is inferred from the site uri, the download
+from a SCM other than git is wrongly being hash-checked.
 
-> On Jun 28, 2018, at 2:36 PM, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> Hello Charles,
-> 
-> On Mon, 21 May 2018 10:53:09 -0700, charles.hardin at storagecraft.com
-> wrote:
->> From: Charles Hardin <charles.hardin@storagecraft.com>
->> 
->> add the gRPC package from Google's github repo. This is
->> currently just installing the C and C++ libraries on the
->> target installation for now. Some effort could be made
->> to add the python bindings as a subsequent patch.
->> 
->> This also adds a patch to specify the protoc to use since
->> that is provided by buildroot and not the host in addition
->> to overriding the ldconfig command since that doesn't apply
->> to the buildroot compile.
->> 
->> NOTE: This doesn't add the python or any other bindings
->> 
->> Signed-off-by: Charles Hardin <charles.hardin@storagecraft.com>
-> 
-> I tried this here, and unfortunately it doesn't build.
-> 
+Fix this by moving the code that excludes SCM methods from hash-check
+below the code that infers the site method.
 
+Currently there is no package in the tree that uses inferred site
+method, and that is why the autobuilder didn't caught this. We had
+packages using inferred site method in the past, the last one was
+'expect', but since they didn't have a hash file (for a license or
+extra-download for example) the build didn't error out.
 
-Ok - never tried ?arm? builds - only mips and x86, so this is likely going to be a bit
-more involved. But, I think this is a HOSTCXX problem - what is that version because
-I barely recall that I have to build the gRPC proto gen tools on the host to generate
-the stubs for the cross.
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+---
+Changes v1 -> v2:
+  - improve commit message (Luca Ceresoli);
+  - collect Reviewed-by & Tested-by tags.
+---
+ package/pkg-generic.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-It?s entirely possible I just assumed the host toolchain will work - this is what we use
-on the host.
-
-> vagrant at dev:~/buildroot$ cc --version
-> cc (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
-> Copyright (C) 2015 Free Software Foundation, Inc.
-> This is free software; see the source for copying conditions.  There is NO
-> warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-> 
-> vagrant at dev:~/buildroot$ c++ --version
-> c++ (Ubuntu 5.4.0-6ubuntu1~16.04.9) 5.4.0 20160609
-> Copyright (C) 2015 Free Software Foundation, Inc.
-> This is free software; see the source for copying conditions.  There is NO
-> warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-> 
-
-So, it looks like it is a gcc 7 build on this host side?
-
-> First, the CFLAGS/CXXFLAGS/LDFLAGS passed as make options were
-> completely overriding the ones from GRPC makefile, causing a build
-> failure. I fixed that with:
-> 
-> diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-> index 738cd7f851..da5def4ceb 100644
-> --- a/package/grpc/grpc.mk
-> +++ b/package/grpc/grpc.mk
-> @@ -15,7 +15,8 @@ HOST_GRPC_DEPENDENCIES = host-c-ares host-protobuf host-openssl
-> 
-> GRPC_INSTALL_STAGING = YES
-> 
-> -GRPC_CROSS_MAKE_OPTS_BASE = \
-> +GRPC_MAKE_ENV = \
-> +       $(TARGET_MAKE_ENV) \
->        GRPC_CROSS_COMPILE="true" \
->        LDCONFIG=/bin/true \
->        HOST_CC="$(HOSTCC)" \
-> @@ -34,15 +35,12 @@ GRPC_CROSS_MAKE_OPTS_BASE = \
->        STRIP=/bin/true
-> 
-> GRPC_MAKE_OPTS = \
-> -       $(GRPC_CROSS_MAKE_OPTS_BASE) \
->        PROTOC="$(HOST_DIR)/usr/bin/protoc"
-> 
-> GRPC_INSTALL_TARGET_OPTS = \
-> -       $(GRPC_CROSS_MAKE_OPTS_BASE) \
->        prefix="$(TARGET_DIR)/usr"
-> 
-> GRPC_INSTALL_STAGING_OPTS = \
-> -       $(GRPC_CROSS_MAKE_OPTS_BASE) \
->        prefix="$(STAGING_DIR)/usr"
-> 
-> ifeq ($(BR2_SHARED_LIBS),y)
-> @@ -60,17 +58,17 @@ GRPC_INSTALL_TARGETS = install-shared_c install-shared_cxx
-> endif
-> 
-> define GRPC_BUILD_CMDS
-> -       $(TARGET_MAKE_ENV) $(MAKE) $(GRPC_MAKE_OPTS) -C $(@D) \
-> +       $(GRPC_MAKE_ENV) $(MAKE) $(GRPC_MAKE_OPTS) -C $(@D) \
->                $(GRPC_BUILD_TARGETS)
-> endef
-> 
-> define GRPC_INSTALL_STAGING_CMDS
-> -       $(TARGET_MAKE_ENV) $(MAKE) $(GRPC_INSTALL_STAGING_OPTS) -C $(@D) \
-> +       $(GRPC_MAKE_ENV) $(MAKE) $(GRPC_INSTALL_STAGING_OPTS) -C $(@D) \
->                $(GRPC_STAGING_TARGETS)
-> endef
-> 
-> define GRPC_INSTALL_TARGET_CMDS
-> -       $(TARGET_MAKE_ENV) $(MAKE) $(GRPC_INSTALL_TARGET_OPTS) -C $(@D) \
-> +       $(GRPC_MAKE_ENV) $(MAKE) $(GRPC_INSTALL_TARGET_OPTS) -C $(@D) \
->                $(GRPC_INSTALL_TARGETS)
-> endef
-> 
-> With that in place, the GRPC build moved on, but failed at a later point, with:
-> 
-> [HOSTCXX] Compiling src/compiler/cpp_generator.cc
-> [HOSTCXX] Compiling src/compiler/csharp_generator.cc
-> [HOSTCXX] Compiling src/compiler/node_generator.cc
-> In file included from /usr/include/c++/7/ext/string_conversions.h:41:0,
->                 from /usr/include/c++/7/bits/basic_string.h:6349,
->                 from /usr/include/c++/7/string:52,
->                 from /usr/include/c++/7/stdexcept:39,
->                 from /usr/include/c++/7/array:39,
->                 from /usr/include/c++/7/tuple:39,
->                 from /usr/include/c++/7/bits/stl_map.h:63,
->                 from /usr/include/c++/7/map:61,
->                 from src/compiler/cpp_generator.cc:19:
-> /usr/include/c++/7/cstdlib:131:11: error: ?::at_quick_exit? has not been declared
->   using ::at_quick_exit;
->           ^~~~~~~~~~~~~
-> /usr/include/c++/7/cstdlib:154:11: error: ?::quick_exit? has not been declared
->   using ::quick_exit;
->           ^~~~~~~~~~
-> [HOSTCXX] Compiling src/compiler/objective_c_generator.cc
-> In file included from /usr/include/c++/7/ext/string_conversions.h:41:0,
->                 from /usr/include/c++/7/bits/basic_string.h:6349,
->                 from /usr/include/c++/7/string:52,
->                 from /usr/include/c++/7/stdexcept:39,
->                 from /usr/include/c++/7/array:39,
->                 from /usr/include/c++/7/tuple:39,
->                 from /usr/include/c++/7/bits/stl_map.h:63,
->                 from /usr/include/c++/7/map:61,
->                 from src/compiler/csharp_generator.cc:20:
-> /usr/include/c++/7/cstdlib:131:11: error: ?::at_quick_exit? has not been declared
->   using ::at_quick_exit;
->           ^~~~~~~~~~~~~
-> /usr/include/c++/7/cstdlib:154:11: error: ?::quick_exit? has not been declared
->   using ::quick_exit;
->           ^~~~~~~~~~
-> In file included from ./src/compiler/cpp_generator.h:26:0,
->                 from src/compiler/cpp_generator.cc:21:
-> /usr/include/c++/7/memory: In function ?void* std::align(std::size_t, std::size_t, void*&, std::size_t&)?:
-> /usr/include/c++/7/memory:116:58: error: cast from ?void*? to ?uintptr_t {aka unsigned int}? loses precision [-fpermissive]
->   const auto __intptr = reinterpret_cast<uintptr_t>(__ptr);
-> 
-> And more of those issues. Here is the defconfig I have used:
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2018.02-891-g046c5e2.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_GRPC=y
-> # BR2_TARGET_ROOTFS_TAR is not set
-> 
-> Could you have a look ?
-> 
-> I'll also do a regular review of the package in a separate e-mail, so
-> that you can take into account other comments at the same time.
-> 
-> Thanks!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 501dd3de39..91b61c6de0 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -489,10 +489,6 @@ ifndef $(2)_PATCH
+  endif
+ endif
+ 
+-ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
+-BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+-endif
+-
+ $(2)_ALL_DOWNLOADS = \
+ 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+ 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+@@ -514,6 +510,10 @@ ifndef $(2)_SITE_METHOD
+  endif
+ endif
+ 
++ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
++BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
++endif
++
+ # Do not accept to download git submodule if not using the git method
+ ifneq ($$($(2)_GIT_SUBMODULES),)
+  ifneq ($$($(2)_SITE_METHOD),git)
+-- 
+2.17.1
