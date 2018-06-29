@@ -1,76 +1,89 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Fri, 29 Jun 2018 10:35:21 -0400
-Subject: [Buildroot] [PATCH v2] qt5webengine: propagate parallel flag to
- ninja
-Message-ID: <20180629143521.9018-1-gael.portay@savoirfairelinux.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 29 Jun 2018 19:54:47 +0200
+Subject: [Buildroot] [PATCH v2 1/1] pkg-generic: fix no-check-hash for
+ inferred site method
+In-Reply-To: <20180629014246.13574-1-ricardo.martincoski@gmail.com>
+References: <20180625014101.13177-1-ricardo.martincoski@gmail.com>
+ <20180629014246.13574-1-ricardo.martincoski@gmail.com>
+Message-ID: <20180629175447.GB2540@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WebEngine is a big project to build. It uses ninja which is a build
-system that does everything in parallel[1].
+Ricardo, All,
 
-	Builds are always run in parallel, based by default on the number of
-	CPUs your system has. Underspecified build dependencies will result in
-	incorrect builds.
+On 2018-06-28 22:42 -0300, Ricardo Martincoski spake thusly:
+> Currently, when the site method is explicitly set to a SCM other than
+> git, the main download is correctly excluded from being hash-checked.
+> But when the site method is inferred from the site uri, the download
+> from a SCM other than git is wrongly being hash-checked.
+> 
+> Fix this by moving the code that excludes SCM methods from hash-check
+> below the code that infers the site method.
+> 
+> Currently there is no package in the tree that uses inferred site
+> method, and that is why the autobuilder didn't caught this. We had
+> packages using inferred site method in the past, the last one was
+> 'expect', but since they didn't have a hash file (for a license or
+> extra-download for example) the build didn't error out.
+> 
+> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Luca Ceresoli <luca@lucaceresoli.net>
+> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 
-QtWebEngine does not propagate the parallel flag from the running
-instance of make to ninja. Thus, all the machine cores are used to build
-this single project.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-	make -j 10 -> ninja -j # all cores
+Regards,
+Yann E. MORIN.
 
-This behavior disrupts powerful machines which are setup to build many
-projects in parallel. Even worse, the build fails on machines where the
-ratio CPU-cores / amount of RAM (including swap) is not appropriate. g++
-may have not enough of memory to build all those files in parallel.
+> ---
+> Changes v1 -> v2:
+>   - improve commit message (Luca Ceresoli);
+>   - collect Reviewed-by & Tested-by tags.
+> ---
+>  package/pkg-generic.mk | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 501dd3de39..91b61c6de0 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -489,10 +489,6 @@ ifndef $(2)_PATCH
+>   endif
+>  endif
+>  
+> -ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
+> -BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+> -endif
+> -
+>  $(2)_ALL_DOWNLOADS = \
+>  	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+>  	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+> @@ -514,6 +510,10 @@ ifndef $(2)_SITE_METHOD
+>   endif
+>  endif
+>  
+> +ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
+> +BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+> +endif
+> +
+>  # Do not accept to download git submodule if not using the git method
+>  ifneq ($$($(2)_GIT_SUBMODULES),)
+>   ifneq ($$($(2)_SITE_METHOD),git)
+> -- 
+> 2.17.1
+> 
 
-Unfortunatly, the target `run_ninja' is hardcoded in the Makefile
-src/core/Makefile.run_gn; there is no way to propagate flags using a
-variable through the make command-line.
-
-	run_ninja:
-	        /home/gportay/src/buildroot/output-qt5.11/build/qt5webengine-5.11.1/src/3rdparty/ninja/ninja
--C /home/gportay/src/buildroot/output-qt5.11/build/qt5webengine-5.11.1/src/core/release QtWebEngineCore
-
-Luckily, the Qt gn_run.pro[2] can hardcode ninja extra flags through the
-variable NINJAFLAGS when the Makefile is generated (which is performed
-during the build and not during configure step).
-
-This commit sets the NINJAFLAGS using the variable PARALLEL_JOBS to limit
-the number of cores used by ninja.
-
-Fixes:
-	virtual memory exhausted: Cannot allocate memory
-
-[1]: https://ninja-build.org/manual.html#_comparison_to_make
-[2]: https://github.com/qt/qtwebengine/blob/v5.11.1/src/core/gn_run.pro#L49-L53
-
-CC: Damien Riegel <damien.riegel@savoirfairelinux.com>
-CC: Jean-Fran?ois T?tu <jean-francois.tetu@savoirfairelinux.com>
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
-Changes since v1:
- - Use PARALLEL_JOBS instead of BR2_JLEVEL
- - Reword commit message
-
- package/qt5/qt5webengine/qt5webengine.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index 08120421d6..2c622c91ba 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -48,6 +48,8 @@ define QT5WEBENGINE_PYTHON2_SYMLINK
- endef
- QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_PYTHON2_SYMLINK
- 
-+QT5WEBENGINE_ENV += NINJAFLAGS="-j$(PARALLEL_JOBS)"
-+
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- define QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
- 	sed s%@HOST_DIR@%$(HOST_DIR)%g $(QT5WEBENGINE_PKGDIR)/host-pkg-config.in > $(@D)/host-bin/host-pkg-config
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
