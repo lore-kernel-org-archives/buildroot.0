@@ -1,46 +1,38 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Fri, 29 Jun 2018 10:13:00 +0200
-Subject: [Buildroot] [PATCH] libostree: exclude 'lib' from libsoup configure
- option
-Message-ID: <20180629081300.30216-1-marcus.folkesson@gmail.com>
+From: Leon Anavi <leon.anavi@konsulko.com>
+Date: Fri, 29 Jun 2018 12:23:10 +0300
+Subject: [Buildroot] [PATCH] configs/raspberrypi3_defconfig: fix filesystem
+ size
+Message-ID: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The option used by configure script is actually
---with-soup/--without-soup.
+Increase the filesystem size for raspberrypi3 by setting
+BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
+raspberrypi3_64 has the same size.
 
 Fixes:
-- http://autobuild.buildroot.net/results/cf8ab76b8ea1a555d42f0625df1d58543e88efb1/
+Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "services"
+mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
 ---
- package/libostree/libostree.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ configs/raspberrypi3_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index bf5118413b..d9739b7901 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -40,7 +40,7 @@ endif
- 
- #cURL support depends on libsoup
- ifeq ($(BR2_PACKAGE_LIBSOUP),y)
--LIBOSTREE_CONF_OPTS += --with-libsoup
-+LIBOSTREE_CONF_OPTS += --with-soup
- LIBOSTREE_DEPENDENCIES += libsoup
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- LIBOSTREE_CONF_OPTS += --with-curl
-@@ -49,7 +49,7 @@ else
- LIBOSTREE_CONF_OPTS += --without-curl
- endif
- else
--LIBOSTREE_CONF_OPTS += --without-libsoup --without-curl
-+LIBOSTREE_CONF_OPTS += --without-soup --without-curl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 856f321..0ef9afe 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -28,6 +28,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
 -- 
-2.18.0
+2.7.4
