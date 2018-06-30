@@ -1,167 +1,276 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jun 2018 13:08:32 +0200
-Subject: [Buildroot] [PATCH v3 01/22] package/x11r7/xorgproto: new package
+Date: Sat, 30 Jun 2018 13:08:38 +0200
+Subject: [Buildroot] [PATCH v3 07/22] package/x11r7/xapp_*: mass switch to
+ xorgproto
 In-Reply-To: <20180630110853.29339-1-bernd.kuhls@t-online.de>
 References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
-Message-ID: <20180630110853.29339-2-bernd.kuhls@t-online.de>
+Message-ID: <20180630110853.29339-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Quoting initial release notes:
+The new package xorgproto will combine and replace all current xproto_*
+packages. For details read
 https://lists.x.org/archives/xorg-announce/2018-February/002835.html
-
-"This package combines the protocol headers, which were formerly
- scattered in individual packages. At this point none of them are
- changing rapidly enough to justify such fine granularity, particularly
- when what changes do occur tend to affect multiple extensions at once
- (Present and DRI3 for example). The individual protocols are still
- installed as separate pkg-config modules, and consumers should continue
- to use the per-protocol package version numbers."
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/Config.in                |  1 +
- package/x11r7/xorgproto/Config.in      |  5 +++
- package/x11r7/xorgproto/xorgproto.hash | 43 +++++++++++++++++++++
- package/x11r7/xorgproto/xorgproto.mk   | 53 ++++++++++++++++++++++++++
- 4 files changed, 102 insertions(+)
- create mode 100644 package/x11r7/xorgproto/Config.in
- create mode 100644 package/x11r7/xorgproto/xorgproto.hash
- create mode 100644 package/x11r7/xorgproto/xorgproto.mk
+ package/x11r7/xapp_mkfontscale/Config.in           |  1 +
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk |  4 ++--
+ package/x11r7/xapp_rgb/Config.in                   |  2 +-
+ package/x11r7/xapp_rgb/xapp_rgb.mk                 |  2 +-
+ package/x11r7/xapp_sessreg/Config.in               |  2 +-
+ package/x11r7/xapp_sessreg/xapp_sessreg.mk         |  2 +-
+ package/x11r7/xapp_xconsole/Config.in              |  2 +-
+ package/x11r7/xapp_xconsole/xapp_xconsole.mk       |  2 +-
+ package/x11r7/xapp_xdm/Config.in                   |  3 +--
+ package/x11r7/xapp_xdm/xapp_xdm.mk                 | 10 +++++++++-
+ package/x11r7/xapp_xdriinfo/Config.in              |  2 +-
+ package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk       |  2 +-
+ package/x11r7/xapp_xfindproxy/Config.in            |  3 +--
+ package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk   |  3 +--
+ package/x11r7/xapp_xfs/Config.in                   |  2 +-
+ package/x11r7/xapp_xfs/xapp_xfs.mk                 |  2 +-
+ package/x11r7/xapp_xsetpointer/Config.in           |  2 +-
+ package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk |  2 +-
+ 18 files changed, 27 insertions(+), 21 deletions(-)
 
-diff --git a/package/x11r7/Config.in b/package/x11r7/Config.in
-index ddceaa407f..4648fcb5f6 100644
---- a/package/x11r7/Config.in
-+++ b/package/x11r7/Config.in
-@@ -229,6 +229,7 @@ if BR2_PACKAGE_XORG7
- 	endmenu
- 	menu "X11R7 X protocols"
- 		source package/x11r7/xcb-proto/Config.in
-+		source package/x11r7/xorgproto/Config.in
- 		source package/x11r7/xproto_applewmproto/Config.in
- 		source package/x11r7/xproto_bigreqsproto/Config.in
- 		source package/x11r7/xproto_compositeproto/Config.in
-diff --git a/package/x11r7/xorgproto/Config.in b/package/x11r7/xorgproto/Config.in
-new file mode 100644
-index 0000000000..af38eb436e
---- /dev/null
-+++ b/package/x11r7/xorgproto/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_XORGPROTO
-+	bool "xorgproto"
-+	help
-+	  This package combines the protocol headers, which were
-+	  formerly scattered in individual packages.
-diff --git a/package/x11r7/xorgproto/xorgproto.hash b/package/x11r7/xorgproto/xorgproto.hash
-new file mode 100644
-index 0000000000..c4e7795751
---- /dev/null
-+++ b/package/x11r7/xorgproto/xorgproto.hash
-@@ -0,0 +1,43 @@
-+# From https://lists.x.org/archives/xorg-announce/2018-February/002841.html
-+md5 81557ca47ee66a4e54590fcdadd28114  xorgproto-2018.4.tar.bz2
-+sha1 2e4a3db312e1ce81e15515dfcac52ba0aa5a920c  xorgproto-2018.4.tar.bz2
-+sha256 fee885e0512899ea5280c593fdb2735beb1693ad170c22ebcc844470eec415a0  xorgproto-2018.4.tar.bz2
-+sha512 2db682d10280ca58cdc04d8eb9fef30c111d4cd379de9fec86cff317865b859a576de5426447be9231d24be9762cc1d684c57383a99ad499398e8b7d62b1c03c  xorgproto-2018.4.tar.bz2
-+# Locally computed
-+sha256 aacd931f191b610902aee1e526090c2858aabc07969441fa2537ffd3e7049555  COPYING-applewmproto
-+sha256 dabc025f93129a0eb2d17f37c719dbe5ecbcb5bc8f7bc7f4ce89fe04576cc0c2  COPYING-bigreqsproto
-+sha256 ab587ca94282c1e60797ffe4a77aea195418387db20ec7e0c24cedf2c844f8c1  COPYING-compositeproto
-+sha256 f67a18cb46c4c203c5122b4a901cfcc3178b2a62f83f31ca5fef5bdca3966094  COPYING-damageproto
-+sha256 819e8dcd3dd2a44850c350331aa492230f86bccb0983dd739dec5ba36d7d2b8e  COPYING-dmxproto
-+sha256 0c306691492c4d7a8cda1ec3847668b797887dddcd7e986b4c166ae27619af7d  COPYING-dri2proto
-+sha256 64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING-dri3proto
-+sha256 0aa43d03da3cedbd9882c0ded621b0d855353eb9e551f9eed940d75c8a0b03c1  COPYING-evieproto
-+sha256 65cb0b867b00fb27f066a37353713b265645b3301146562570d7638ed2ddd548  COPYING-fixesproto
-+sha256 1ab381e978bff63d68be2e4f235d51935f3f16f3ba3bebf83afa99a70c0484a2  COPYING-fontcacheproto
-+sha256 f4af05774b02ae149357cc26f7bf5ef1116c2e09373c2492081a3a1892c58417  COPYING-fontsproto
-+sha256 823deb4673d3f26aa8c90e704888299648f00be3262f9363eaeecedcd65b936d  COPYING-glproto
-+sha256 5e083a2ace0215a6084c877c023a6079952ba803d692488203ba4269196debe3  COPYING-inputproto
-+sha256 d397a67d4b28e897bc5fce79b2b917df9905b54f961fc3ad1f49c7fe3803f92c  COPYING-kbproto
-+sha256 7a5dd5d4c989c167da50f15879959f42bbda960e06d0a0aea7197f61fe1dc846  COPYING-lg3dproto
-+sha256 27d8cbdcde7a0bd062ce49cdf8c672201452a64e3e6823f09b1beffe2c4b8eff  COPYING-panoramixproto
-+sha256 8442b5f22f2fb13017a4302a906e7dedc899267b41f613558970941120170128  COPYING-pmproto
-+sha256 64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING-presentproto
-+sha256 6b890b118261694865988378dbba876bcd9caa1a421c5c0d626116948bc0ae35  COPYING-printproto
-+sha256 41c13dcd09147ed2440286f2fb8151df8ebee06deee4ed78ddf094601c216d3d  COPYING-randrproto
-+sha256 ee10aee0f1697ffdbe870a39f037361d4f7136f2976bb7919a41b3f66407caee  COPYING-recordproto
-+sha256 9e48921a94da36d7a69fe71809223ee0bb46370db9842dccdeeb55b5a9946872  COPYING-renderproto
-+sha256 403e7be948674530ad40669b1e3a31adeddb656502f3b0ef810d5d3cc35d0b52  COPYING-resourceproto
-+sha256 fcbd3c628bf4d28ee3e6032054bf44bbe58f3b1a944dad856a8d3eb6b37ea412  COPYING-scrnsaverproto
-+sha256 d6d3513f5a7099748dc387f54498d799380b45f8a444f13aa98aa45a860ae55b  COPYING-trapproto
-+sha256 f8f49bbad61967ebc890fb79fff5bfb7cfc1c341aa8f8dee13eb3fb534040b47  COPYING-videoproto
-+sha256 eb183a00c61bb47992f096b6993ed7ec17518bea9c285fe87efff7f622cc6c12  COPYING-windowswmproto
-+sha256 da4a28570230228b9bd80a701c5d8752f8609394de2e0d46d26d978bd07610db  COPYING-x11proto
-+sha256 5531d18cfcc944dab39991f63f182cbbce3fe493ba0c7cf08a25c0d01ee84482  COPYING-xcmiscproto
-+sha256 fb42146c6c06a200a9b121220eb692ff9101ba0fbd0b224b9e16a016c59ae86a  COPYING-xextproto
-+sha256 3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86bigfontproto
-+sha256 3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86dgaproto
-+sha256 4a05d06752388d9db71ee1006f371d4fb2c316a821fc2fc272db90b3ef978334  COPYING-xf86driproto
-+sha256 3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86miscproto
-+sha256 3591964e01a9cdfc9cc4149a847a431a3f3d98328cc9e5864c7a7831b29c4058  COPYING-xf86rushproto
-+sha256 942bb46a3503a708948491699171b00b9e0dfb47818d9268b160bccc5f51a4b9  COPYING-xf86vidmodeproto
-+sha256 b2d8cda803e900915ce10f0ba735ff2c033b39c7cc5a8a436667ca583d4066fa  COPYING-xineramaproto
-diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
-new file mode 100644
-index 0000000000..3f7d25b068
---- /dev/null
-+++ b/package/x11r7/xorgproto/xorgproto.mk
-@@ -0,0 +1,53 @@
-+################################################################################
-+#
-+# xorgproto
-+#
-+################################################################################
-+
-+XORGPROTO_VERSION = 2018.4
-+XORGPROTO_SOURCE = xorgproto-$(XORGPROTO_VERSION).tar.bz2
-+XORGPROTO_SITE = http://xorg.freedesktop.org/releases/individual/proto
-+XORGPROTO_LICENSE = MIT
-+XORGPROTO_LICENSE_FILES = \
-+	COPYING-applewmproto \
-+	COPYING-bigreqsproto \
-+	COPYING-compositeproto \
-+	COPYING-damageproto \
-+	COPYING-dmxproto \
-+	COPYING-dri2proto \
-+	COPYING-dri3proto \
-+	COPYING-evieproto \
-+	COPYING-fixesproto \
-+	COPYING-fontcacheproto \
-+	COPYING-fontsproto \
-+	COPYING-glproto \
-+	COPYING-inputproto \
-+	COPYING-kbproto \
-+	COPYING-lg3dproto \
-+	COPYING-panoramixproto \
-+	COPYING-pmproto \
-+	COPYING-presentproto \
-+	COPYING-printproto \
-+	COPYING-randrproto \
-+	COPYING-recordproto \
-+	COPYING-renderproto \
-+	COPYING-resourceproto \
-+	COPYING-scrnsaverproto \
-+	COPYING-trapproto \
-+	COPYING-videoproto \
-+	COPYING-windowswmproto \
-+	COPYING-x11proto \
-+	COPYING-xcmiscproto \
-+	COPYING-xextproto \
-+	COPYING-xf86bigfontproto \
-+	COPYING-xf86dgaproto \
-+	COPYING-xf86driproto \
-+	COPYING-xf86miscproto \
-+	COPYING-xf86rushproto \
-+	COPYING-xf86vidmodeproto \
-+	COPYING-xineramaproto
-+XORGPROTO_INSTALL_STAGING = YES
-+XORGPROTO_INSTALL_TARGET = NO
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+diff --git a/package/x11r7/xapp_mkfontscale/Config.in b/package/x11r7/xapp_mkfontscale/Config.in
+index 540dd455ff..510c439da8 100644
+--- a/package/x11r7/xapp_mkfontscale/Config.in
++++ b/package/x11r7/xapp_mkfontscale/Config.in
+@@ -3,5 +3,6 @@ config BR2_PACKAGE_XAPP_MKFONTSCALE
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBFONTENC
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  create an index of scalable font files for X
+diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+index 12416b4d6b..a07d2f4fbd 100644
+--- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
++++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+@@ -9,9 +9,9 @@ XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
+ XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_MKFONTSCALE_LICENSE = MIT
+ XAPP_MKFONTSCALE_LICENSE_FILES = COPYING
+-XAPP_MKFONTSCALE_DEPENDENCIES = zlib freetype xlib_libfontenc xproto_xproto
++XAPP_MKFONTSCALE_DEPENDENCIES = zlib freetype xlib_libfontenc xorgproto
+ HOST_XAPP_MKFONTSCALE_DEPENDENCIES = \
+-	host-zlib host-freetype host-xlib_libfontenc host-xproto_xproto
++	host-zlib host-freetype host-xlib_libfontenc host-xorgproto
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xapp_rgb/Config.in b/package/x11r7/xapp_rgb/Config.in
+index 038b849d4b..7198b5f1a4 100644
+--- a/package/x11r7/xapp_rgb/Config.in
++++ b/package/x11r7/xapp_rgb/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_PACKAGE_XAPP_RGB
+ 	bool "rgb"
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  uncompile an rgb color-name database
+diff --git a/package/x11r7/xapp_rgb/xapp_rgb.mk b/package/x11r7/xapp_rgb/xapp_rgb.mk
+index 82878abad0..d63576f44d 100644
+--- a/package/x11r7/xapp_rgb/xapp_rgb.mk
++++ b/package/x11r7/xapp_rgb/xapp_rgb.mk
+@@ -9,6 +9,6 @@ XAPP_RGB_SOURCE = rgb-$(XAPP_RGB_VERSION).tar.bz2
+ XAPP_RGB_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_RGB_LICENSE = MIT
+ XAPP_RGB_LICENSE_FILES = COPYING
+-XAPP_RGB_DEPENDENCIES = xproto_xproto
++XAPP_RGB_DEPENDENCIES = xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xapp_sessreg/Config.in b/package/x11r7/xapp_sessreg/Config.in
+index 0796bc1bca..c9048b3b7e 100644
+--- a/package/x11r7/xapp_sessreg/Config.in
++++ b/package/x11r7/xapp_sessreg/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_XAPP_SESSREG
+ 	bool "sessreg"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  manage utmp/wtmp entries for non-init clients
+diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.mk b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+index c6e9463d3b..46935aed9a 100644
+--- a/package/x11r7/xapp_sessreg/xapp_sessreg.mk
++++ b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+@@ -9,6 +9,6 @@ XAPP_SESSREG_SOURCE = sessreg-$(XAPP_SESSREG_VERSION).tar.bz2
+ XAPP_SESSREG_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_SESSREG_LICENSE = MIT
+ XAPP_SESSREG_LICENSE_FILES = COPYING
+-XAPP_SESSREG_DEPENDENCIES = xlib_libX11 xproto_xproto
++XAPP_SESSREG_DEPENDENCIES = xlib_libX11 xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xapp_xconsole/Config.in b/package/x11r7/xapp_xconsole/Config.in
+index 7baf4ff6af..3d796bd3c1 100644
+--- a/package/x11r7/xapp_xconsole/Config.in
++++ b/package/x11r7/xapp_xconsole/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_XAPP_XCONSOLE
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXAW
+ 	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XPROTO_XPROTO
+ 	select BR2_PACKAGE_XLIB_LIBXMU
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  xconsole - monitor system console messages with X
+diff --git a/package/x11r7/xapp_xconsole/xapp_xconsole.mk b/package/x11r7/xapp_xconsole/xapp_xconsole.mk
+index 52656de83c..a91b98dc60 100644
+--- a/package/x11r7/xapp_xconsole/xapp_xconsole.mk
++++ b/package/x11r7/xapp_xconsole/xapp_xconsole.mk
+@@ -10,7 +10,7 @@ XAPP_XCONSOLE_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XCONSOLE_LICENSE = MIT
+ XAPP_XCONSOLE_LICENSE_FILES = COPYING
+ XAPP_XCONSOLE_DEPENDENCIES = \
+-	xlib_libX11 xlib_libXaw xlib_libXt xproto_xproto \
++	xlib_libX11 xlib_libXaw xlib_libXt xorgproto \
+ 	xlib_libXmu
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xapp_xdm/Config.in b/package/x11r7/xapp_xdm/Config.in
+index 69829701ca..af816a1349 100644
+--- a/package/x11r7/xapp_xdm/Config.in
++++ b/package/x11r7/xapp_xdm/Config.in
+@@ -10,7 +10,6 @@ config BR2_PACKAGE_XAPP_XDM
+ 	select BR2_PACKAGE_XLIB_LIBXDMCP
+ 	select BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XPROTO_XINERAMAPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org xdm application
+diff --git a/package/x11r7/xapp_xdm/xapp_xdm.mk b/package/x11r7/xapp_xdm/xapp_xdm.mk
+index 8f846a82aa..2c213a6bf0 100644
+--- a/package/x11r7/xapp_xdm/xapp_xdm.mk
++++ b/package/x11r7/xapp_xdm/xapp_xdm.mk
+@@ -10,7 +10,15 @@ XAPP_XDM_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XDM_LICENSE = MIT
+ XAPP_XDM_LICENSE_FILES = COPYING
+ XAPP_XDM_CONF_ENV = ac_cv_file__dev_urandom=yes
+-XAPP_XDM_DEPENDENCIES = xapp_sessreg xapp_xrdb xlib_libX11 xlib_libXaw xlib_libXdmcp xlib_libXinerama xlib_libXt xproto_xineramaproto xproto_xproto
++XAPP_XDM_DEPENDENCIES = \
++	xapp_sessreg \
++	xapp_xrdb \
++	xlib_libX11 \
++	xlib_libXaw \
++	xlib_libXdmcp \
++	xlib_libXinerama \
++	xlib_libXt \
++	xorgproto
+ XAPP_XDM_CONF_OPTS = \
+ 	--with-utmp-file=/var/adm/utmpx \
+ 	--with-wtmp-file=/var/adm/wtmpx
+diff --git a/package/x11r7/xapp_xdriinfo/Config.in b/package/x11r7/xapp_xdriinfo/Config.in
+index 2b204d9171..df65b491ab 100644
+--- a/package/x11r7/xapp_xdriinfo/Config.in
++++ b/package/x11r7/xapp_xdriinfo/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_XAPP_XDRIINFO
+ 	bool "xdriinfo"
+ 	depends on BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XPROTO_GLPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  query configuration information of DRI drivers
+ 
+diff --git a/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
+index 00dea8c7ad..7f7aac9e15 100644
+--- a/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
++++ b/package/x11r7/xapp_xdriinfo/xapp_xdriinfo.mk
+@@ -9,6 +9,6 @@ XAPP_XDRIINFO_SOURCE = xdriinfo-$(XAPP_XDRIINFO_VERSION).tar.bz2
+ XAPP_XDRIINFO_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XDRIINFO_LICENSE = MIT
+ XAPP_XDRIINFO_LICENSE_FILES = COPYING
+-XAPP_XDRIINFO_DEPENDENCIES = libgl xlib_libX11 xproto_glproto
++XAPP_XDRIINFO_DEPENDENCIES = libgl xlib_libX11 xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xapp_xfindproxy/Config.in b/package/x11r7/xapp_xfindproxy/Config.in
+index b186ab65bc..e452dc9658 100644
+--- a/package/x11r7/xapp_xfindproxy/Config.in
++++ b/package/x11r7/xapp_xfindproxy/Config.in
+@@ -2,8 +2,7 @@ config BR2_PACKAGE_XAPP_XFINDPROXY
+ 	bool "xfindproxy"
+ 	select BR2_PACKAGE_XLIB_LIBICE
+ 	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XPROTO_XPROTO
+-	select BR2_PACKAGE_XPROTO_XPROXYMANAGEMENTPROTOCOL
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  xfindproxy utilizes the Proxy Management Protocol to
+ 	  communicate with a proxy manager to locate available X11
+diff --git a/package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk b/package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk
+index 7662a902a2..7832e0ca96 100644
+--- a/package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk
++++ b/package/x11r7/xapp_xfindproxy/xapp_xfindproxy.mk
+@@ -12,7 +12,6 @@ XAPP_XFINDPROXY_LICENSE_FILES = COPYING
+ XAPP_XFINDPROXY_DEPENDENCIES = \
+ 	xlib_libICE \
+ 	xlib_libXt \
+-	xproto_xproto \
+-	xproto_xproxymanagementprotocol
++	xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xapp_xfs/Config.in b/package/x11r7/xapp_xfs/Config.in
+index b708af8c0c..19e675b265 100644
+--- a/package/x11r7/xapp_xfs/Config.in
++++ b/package/x11r7/xapp_xfs/Config.in
+@@ -3,6 +3,6 @@ config BR2_PACKAGE_XAPP_XFS
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_XLIB_LIBFS
+ 	select BR2_PACKAGE_XLIB_LIBXFONT2
+-	select BR2_PACKAGE_XPROTO_FONTSPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X font server
+diff --git a/package/x11r7/xapp_xfs/xapp_xfs.mk b/package/x11r7/xapp_xfs/xapp_xfs.mk
+index f4fe35dfb7..9177a65b9c 100644
+--- a/package/x11r7/xapp_xfs/xapp_xfs.mk
++++ b/package/x11r7/xapp_xfs/xapp_xfs.mk
+@@ -9,6 +9,6 @@ XAPP_XFS_SOURCE = xfs-$(XAPP_XFS_VERSION).tar.bz2
+ XAPP_XFS_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFS_LICENSE = MIT
+ XAPP_XFS_LICENSE_FILES = COPYING
+-XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont2 xproto_fontsproto
++XAPP_XFS_DEPENDENCIES = xlib_libFS xlib_libXfont2 xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xapp_xsetpointer/Config.in b/package/x11r7/xapp_xsetpointer/Config.in
+index 2b0b4624e8..0deb6d8112 100644
+--- a/package/x11r7/xapp_xsetpointer/Config.in
++++ b/package/x11r7/xapp_xsetpointer/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_XAPP_XSETPOINTER
+ 	bool "xsetpointer"
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXI
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  set an X Input device as the main pointer
+diff --git a/package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk b/package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk
+index f56cdd58a1..a34b7e637d 100644
+--- a/package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk
++++ b/package/x11r7/xapp_xsetpointer/xapp_xsetpointer.mk
+@@ -9,6 +9,6 @@ XAPP_XSETPOINTER_SOURCE = xsetpointer-$(XAPP_XSETPOINTER_VERSION).tar.bz2
+ XAPP_XSETPOINTER_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XSETPOINTER_LICENSE = MIT
+ XAPP_XSETPOINTER_LICENSE_FILES = COPYING
+-XAPP_XSETPOINTER_DEPENDENCIES = xproto_inputproto xlib_libX11 xlib_libXi
++XAPP_XSETPOINTER_DEPENDENCIES = xlib_libX11 xlib_libXi xorgproto
+ 
+ $(eval $(autotools-package))
 -- 
 2.17.1
