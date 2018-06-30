@@ -1,10 +1,11 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jun 2018 13:08:50 +0200
-Subject: [Buildroot] [PATCH v3 19/22] package/x11r7/xdriver_xf86-video-r128:
- add patch to fix support for xserver_xorg-server 1.20.0
+Date: Sat, 30 Jun 2018 13:08:51 +0200
+Subject: [Buildroot] [PATCH v3 20/22]
+ package/x11r7/xdriver_xf86-video-savage: add patch to fix support for
+ xserver_xorg-server 1.20.0
 In-Reply-To: <20180630110853.29339-1-bernd.kuhls@t-online.de>
 References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
-Message-ID: <20180630110853.29339-20-bernd.kuhls@t-online.de>
+Message-ID: <20180630110853.29339-21-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +14,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0002-xorg-xserver120.patch                | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-video-r128/0002-xorg-xserver120.patch
+ .../0002-xorg-xserver120.patch                | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
 
-diff --git a/package/x11r7/xdriver_xf86-video-r128/0002-xorg-xserver120.patch b/package/x11r7/xdriver_xf86-video-r128/0002-xorg-xserver120.patch
+diff --git a/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch b/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
 new file mode 100644
-index 0000000000..d4d91daecd
+index 0000000000..4c695960d1
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-r128/0002-xorg-xserver120.patch
-@@ -0,0 +1,21 @@
-+Fix build error with xserver_xorg-server 1.20.0
-+
-+atipcirename.h:52:15: error: unknown type name 'uint32_t'
-+ static inline uint32_t
++++ b/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
+@@ -0,0 +1,23 @@
++Fix build with modular-xorg-server-1.20
 +
 +Downloaded from
-+https://gitweb.gentoo.org/repo/gentoo.git/tree/x11-drivers/xf86-video-r128/files/xf86-video-r128-6.10.2-fix-stdint_h.patch
++http://cvsweb.netbsd.org/bsdweb.cgi/pkgsrc/x11/xf86-video-savage/patches/patch-src_savage__driver.c?rev=1.3&content-type=text/x-cvsweb-markup
++
++Patch was sent upstream by Thomas Klausner <wiz@netbsd.org>:
++https://lists.x.org/archives/xorg-devel/2018-May/056952.html
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+--- a/src/atipcirename.h
-++++ b/src/atipcirename.h
-+@@ -29,6 +29,8 @@
-+ #ifndef ATIPCIRENAME_H
-+ #define ATIPCIRENAME_H
++--- a/src/savage_driver.c.orig	2017-01-17 22:43:40.000000000 +0000
+++++ b/src/savage_driver.c
++@@ -2034,8 +2034,10 @@ static Bool SavagePreInit(ScrnInfoPtr pS
++     xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Detected current MCLK value of %1.3f MHz\n",
++ 	       mclk / 1000.0);
 + 
-++#include <stdint.h>
-++
-+ enum region_type {
-+     REGION_MEM,
-+     REGION_IO 
+++#if 0
++     pScrn->maxHValue = 2048 << 3;	/* 11 bits of h_total 8-pixel units */
++     pScrn->maxVValue = 2048;		/* 11 bits of v_total */
+++#endif
++     pScrn->virtualX = pScrn->display->virtualX;
++     pScrn->virtualY = pScrn->display->virtualY;
++ 
 -- 
 2.17.1
