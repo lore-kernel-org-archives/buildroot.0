@@ -1,56 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 21:28:37 +0200
-Subject: [Buildroot] [PATCH] alsa-utils: bat needs fftw single precision
-In-Reply-To: <9349ba14bbc58c62f1824ef2742479972060e732.1530251879.git.baruch@tkos.co.il>
-References: <9349ba14bbc58c62f1824ef2742479972060e732.1530251879.git.baruch@tkos.co.il>
-Message-ID: <20180630212837.69ba14de@windsurf.home>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Sat, 30 Jun 2018 12:28:56 -0700
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-06-29
+In-Reply-To: <20180630212104.4254a15e@windsurf.home>
+References: <20180630060034.AFC6220A33@mail.bootlin.com>
+ <f38c57af-44a3-2766-2512-1f0e9f4f4f98@gmail.com>
+ <CAMWSM7icLBAbxF9OmTCSPr5qXjeNZJBa7ddZP9SbdHpVmY03jg@mail.gmail.com>
+ <20180630212104.4254a15e@windsurf.home>
+Message-ID: <CAMWSM7hhyRKyhcTVVP6zU=+xMr9o1-BFUQrmbhVmf9AhBv_+pA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+On Sat, Jun 30, 2018 at 12:21 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Sat, 30 Jun 2018 12:17:35 -0700, Joseph Kogut wrote:
+>
+> > > It seems that gcc 8.1.1 from the host (ArchLinux) is buggy, there is no such
+> > > error with a Fedora 28 with gcc 8 installed.
+> >
+> > I'm wondering if it really is an Arch bug, or something else, because
+> > the problem is not consistently reproducible. It seems to only happen
+> > a fraction of the time, and I can run make again on the exact same
+> > config after GCC segfaults, and the build will finish.
+> >
+> > Could be a hardware problem. I remember reading about a segfault issue
+> > with Ryzen chips during parallel compilation, though Threadripper
+> > chips, which this was built on, weren't supposed to be affected.
+>
+> I also believe it's a HW issue. Could you stop your autobuilder, until
+> you figure out what's going on ?
+>
+> Having bogus build results really isn't helpful, as it gives a lot of
+> noise to analyze and triage to find out what are the interesting things
+> to look at.
+>
 
-On Fri, 29 Jun 2018 08:57:59 +0300, Baruch Siach wrote:
-> Otherwise the configure check for fftw fails, and alsabat does not link
-> with libfftw. We can not select a config choice, so depend on single
-> precision instead.
-> 
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+That's completely understandable, I've stopped builds on the system
+that's segfaulting until we can narrow it down some more.
 
-Well, if the alsabat binary can be produced without linking to libfftw,
-it means libfftw is not a mandatory dependency of alsabat, but only an
-optional dependency, and therefore there is no need to select/depends
-on FFTW.
+> However, I very much welcome an installation like yours as part of the
+> autobuilders, because you found out a number of issues that we had
+> never found so far, and those are very useful to fix.
+>
+> > I have a few Arch systems with Intel chips I can use to see if I can
+> > reproduce the issue. That would at least tell us if it *is* an Arch
+> > bug, or a hardware problem.
+>
+> Would be good.
+>
 
-I tested a build with fftw in double precision, and indeed, alsabat
-isn't linked with libfftw:
-
-$ readelf -d output/target/usr/bin/alsabat 
-
-Dynamic section at offset 0x6f28 contains 22 entries:
-  Tag        Type                         Name/Value
- 0x00000001 (NEEDED)                     Shared library: [libasound.so.2]
- 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
-
-But alsabat has been built/installed nonetheless, so FFTW is not a
-mandatory dependency.
-
-And indeed, the only code that uses FFTW is properly enclosed in:
-
-if HAVE_LIBFFTW3
-alsabat_SOURCES += analyze.c
-noinst_HEADERS += analyze.h
-endif
-
-Could you turn FFTW into an optional dependency instead ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I've started an autobuilder on an Intel system running Arch. I'll keep
+an eye on it, and if it reproduces the same issue, I'll file a bug
+report with the Arch maintainers.
