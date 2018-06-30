@@ -1,37 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 21:56:17 +0200
-Subject: [Buildroot] [PATCH v2,1/1] libv4l: fix build with sdl2_image
-In-Reply-To: <20180630184032.31750-1-fontaine.fabrice@gmail.com>
-References: <20180630184032.31750-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180630215617.2a5a4a01@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 30 Jun 2018 19:57:38 +0000
+Subject: [Buildroot] [Bug 11121] statfs call corrupts memory struct statfs
+ too small
+In-Reply-To: <bug-11121-163@https.bugs.busybox.net/>
+References: <bug-11121-163@https.bugs.busybox.net/>
+Message-ID: <bug-11121-163-4QJElHLyIw@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11121
 
-On Sat, 30 Jun 2018 20:40:32 +0200, Fabrice Fontaine wrote:
-> sdlcam test includes jpeglib.h so add a patch to disable it if jpeg is
-> disabled
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/1eded8b44cc369550566c6ce0b3c042f1aec8d44
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1->v2 (after review of Thomas Petazzoni):
->  - Update patch to use HAVE_JPEG instead of adding --disable-tests
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied to master, thanks. Please submit the patch upstream. The
-previous patches I submitted to upstream libv4l were merged without
-much problems, so it's definitely worth it.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
 
-Thanks,
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for reporting the bug to upstream uClibc. I'll close the bug here, since
+there isn't much we can do at the Buildroot level about this.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
