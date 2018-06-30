@@ -1,35 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Jul 2018 00:04:51 +0200
-Subject: [Buildroot] [git commit] gst1-plugins-good: remove consecutive
- empty lines
-Message-ID: <20180630220216.87EF883996@busybox.osuosl.org>
+Date: Sun, 1 Jul 2018 00:04:14 +0200
+Subject: [Buildroot] [git commit] package/kf5: base infrastructure
+Message-ID: <20180630220216.6B91683996@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=872474624f3c29a17ce88bec4034ffd89c9746e0
+commit: https://git.buildroot.net/buildroot/commit/?id=3d2445ba1c99c4825c399fda0cd7d5362d9e1253
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following check-package warning:
+KDE Frameworks 5 is a set of libraries built on the Qt framework
+providing a lot of powerfull classes and solutions for developers
+building Qt applications.
 
-package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk:193: consecutive empty lines
+Unlike the previous KDE libraries, they are split in tiny packages,
+reducing dependencies as much as possible, making them usable even for
+embedded projects.
 
+This first commit introduce the kf5 packages folder.
+
+Signed-off-by: Pierre Ducroquet <pinaraf@pinaraf.info>
+[Thomas:
+ - Needs Qt >= 5.8, so added a dependency on
+   BR2_PACKAGE_QT5_VERSION_LATEST
+ - Update to version 5.47.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 1 -
- 1 file changed, 1 deletion(-)
+ DEVELOPERS            |  3 +++
+ package/Config.in     |  1 +
+ package/kf5/Config.in | 10 ++++++++++
+ package/kf5/kf5.mk    | 11 +++++++++++
+ 4 files changed, 25 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 26ea8a961a..6fa989d6bd 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -190,7 +190,6 @@ else
- GST1_PLUGINS_GOOD_CONF_OPTS += --disable-mpg123
- endif
- 
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_LAW),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += --enable-law
- else
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0a9decbb55..b1307e2bbf 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2141,3 +2141,6 @@ F:	package/qjson/
+ F:	package/quazip/
+ F:	package/shapelib/
+ F:	package/tinc/
++
++N:	Pierre Ducroquet <pinaraf@pinaraf.info>
++F:	package/kf5/
+diff --git a/package/Config.in b/package/Config.in
+index f72670c4e5..e94a6a8c12 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -310,6 +310,7 @@ comment "Graphic libraries"
+ comment "Other GUIs"
+ 	source "package/qt/Config.in"
+ 	source "package/qt5/Config.in"
++	source "package/kf5/Config.in"
+ if BR2_PACKAGE_QT || BR2_PACKAGE_QT5
+ comment "QT libraries and helper libraries"
+ 	source "package/grantlee/Config.in"
+diff --git a/package/kf5/Config.in b/package/kf5/Config.in
+new file mode 100644
+index 0000000000..cbc3d0b70d
+--- /dev/null
++++ b/package/kf5/Config.in
+@@ -0,0 +1,10 @@
++menuconfig BR2_PACKAGE_KF5
++	bool "KF5"
++	depends on BR2_PACKAGE_QT5
++	depends on BR2_PACKAGE_QT5_VERSION_LATEST
++	help
++	  This option enables the KF5 KDE Frameworks. Sub-options
++	  allow to select which modules should be built.
++
++if BR2_PACKAGE_KF5
++endif
+diff --git a/package/kf5/kf5.mk b/package/kf5/kf5.mk
+new file mode 100644
+index 0000000000..8360fc9b63
+--- /dev/null
++++ b/package/kf5/kf5.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# kf5
++#
++################################################################################
++
++KF5_VERSION_MAJOR = 5.47
++KF5_VERSION = $(KF5_VERSION_MAJOR).0
++KF5_SITE = https://download.kde.org/stable/frameworks/$(KF5_VERSION_MAJOR)
++
++include $(sort $(wildcard package/kf5/*/*.mk))
