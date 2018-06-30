@@ -1,63 +1,37 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jun 2018 23:00:34 +0200
-Subject: [Buildroot] [PATCH v3 4/4] configs: add linux boot logo to
- raspberrypi3 defconfig
-In-Reply-To: <1527628939-7389-5-git-send-email-angelo@amarulasolutions.com>
-References: <1527628939-7389-1-git-send-email-angelo@amarulasolutions.com>
- <1527628939-7389-5-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180630210034.GE23012@scaer>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 30 Jun 2018 21:45:42 +0000
+Subject: [Buildroot] [Bug 11096] Upgrade from glibc 2.26 to 2.27 broke some
+ locales (ru_RU in particular)
+In-Reply-To: <bug-11096-163@https.bugs.busybox.net/>
+References: <bug-11096-163@https.bugs.busybox.net/>
+Message-ID: <bug-11096-163-35rSviXUOa@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Angelo, All,
+https://bugs.busybox.net/show_bug.cgi?id=11096
 
-On 2018-05-29 23:22 +0200, Angelo Compagnucci spake thusly:
-> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> 
-> This patch adds a custom boot up logo to the raspberrypi3
-> defconfig.
+--- Comment #1 from romain.naour at gmail.com ---
+Hi,
 
-Why the rpi3, and not the otehr configs?
+Are you sure that Buildroot is using localedef from the host?
+Buildroot is building it's own localedef version from [1] which is probably too
+old for glibc 2.27.
+Maybe we have to bump localedef to [2] which is used by Yocto?
 
-Note that I don't mind much, but I'd like we be a bit consistent in all
-our defconfigs. Either all the defconfigs use the BR logo, or none of
-them do.
+localedef is build by the glibc package but for the target, so we really need
+to build it outside of glibc package.
 
-Regards,
-Yann E. MORIN.
+Best regards,
+Romain
 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  configs/raspberrypi3_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-> index 45a76be..ed3d28d 100644
-> --- a/configs/raspberrypi3_defconfig
-> +++ b/configs/raspberrypi3_defconfig
-> @@ -13,6 +13,7 @@ BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,c117a8bccf37bfba323065b566cf999ed4629a4a)/linux-c117a8bccf37bfba323065b566cf999ed4629a4a.tar.gz"
->  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-> +BR2_LINUX_KERNEL_CUSTOMLOGO_PATH="docs/images/logo_linux_clut224.png"
->  
->  # Build the DTB from the kernel sources
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+[1]
+http://www.pengutronix.de/software/ptxdist/temporary-src/localedef-eglibc-2.14.1-r17443-ptx1.tar.bz2
+
+[2] git://github.com/kraj/localedef
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+You are receiving this mail because:
+You are on the CC list for the bug.
