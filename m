@@ -1,40 +1,56 @@
-From: J. Tang <tang@jtang.org>
-Date: Sat, 30 Jun 2018 15:14:25 -0400
-Subject: [Buildroot] [PATCH] raspberrypi3: post-image.sh update 64-bit option
-Message-ID: <C163C8A5-70D5-4EE3-8177-4296770198D5@jtang.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 30 Jun 2018 21:28:37 +0200
+Subject: [Buildroot] [PATCH] alsa-utils: bat needs fftw single precision
+In-Reply-To: <9349ba14bbc58c62f1824ef2742479972060e732.1530251879.git.baruch@tkos.co.il>
+References: <9349ba14bbc58c62f1824ef2742479972060e732.1530251879.git.baruch@tkos.co.il>
+Message-ID: <20180630212837.69ba14de@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As per latest Raspberry Pi firmware documentation, the option
-'arm_control' has been deprecated in favor of 'arm_64bit'.
+Hello Baruch,
 
-Fixes #11111.
+On Fri, 29 Jun 2018 08:57:59 +0300, Baruch Siach wrote:
+> Otherwise the configure check for fftw fails, and alsabat does not link
+> with libfftw. We can not select a config choice, so depend on single
+> precision instead.
+> 
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-Signed-off-by: Jason Tang <tang@jtang.org>
----
- board/raspberrypi/post-image.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Well, if the alsabat binary can be produced without linking to libfftw,
+it means libfftw is not a mandatory dependency of alsabat, but only an
+optional dependency, and therefore there is no need to select/depends
+on FFTW.
 
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index 3c6c938407..70447cd48b 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -23,11 +23,11 @@ __EOF__
- 		--aarch64)
- 		# Run a 64bits kernel (armv8)
- 		sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
--		if ! grep -qE '^arm_control=0x200' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-+		if ! grep -qE '^arm_64bit=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
- 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
- 
- # enable 64bits support
--arm_control=0x200
-+arm_64bit=1
- __EOF__
- 		fi
- 
+I tested a build with fftw in double precision, and indeed, alsabat
+isn't linked with libfftw:
+
+$ readelf -d output/target/usr/bin/alsabat 
+
+Dynamic section at offset 0x6f28 contains 22 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libasound.so.2]
+ 0x00000001 (NEEDED)                     Shared library: [libc.so.0]
+
+But alsabat has been built/installed nonetheless, so FFTW is not a
+mandatory dependency.
+
+And indeed, the only code that uses FFTW is properly enclosed in:
+
+if HAVE_LIBFFTW3
+alsabat_SOURCES += analyze.c
+noinst_HEADERS += analyze.h
+endif
+
+Could you turn FFTW into an optional dependency instead ?
+
+Thanks!
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
