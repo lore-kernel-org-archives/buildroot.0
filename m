@@ -1,40 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 18:04:15 +0200
-Subject: [Buildroot] [git commit] gstreamer: fix build on AArch64 BE
-Message-ID: <20180630160209.2A805835D9@busybox.osuosl.org>
+Date: Sat, 30 Jun 2018 18:09:05 +0200
+Subject: [Buildroot] [git commit] qt5base: remove unused definition
+Message-ID: <20180630160551.A2D03835F2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d3fa007dc35b21ced60a4048ed51358fff8aeac
+commit: https://git.buildroot.net/buildroot/commit/?id=b0241095a67bc87faf19b52a2be21915b2ac44aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We recently enabled AArch64 big-endian testing in the autobuilders,
-and gstreamer started failing because it does an AC_TRY_RUN() test to
-check if unaligned accesses are allowed or not. We already handled the
-AArch64 LE case, but not the AArch64 BE case, so let's handle it.
+Since commit 81fb33af2a (qt5base: correct eglfs support in
+qmake.conf.in) the definition QT5BASE_CONFIGURE_QMAKE_CONFIG is left
+unused.
 
-Fixes:
+Remove it since it is not used anymore.
 
-  http://autobuild.buildroot.net/results/b061948b04b42e753e52607f395ed7c597a52c68/
-
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer/gstreamer/gstreamer.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qt5/qt5base/qt5base.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/gstreamer/gstreamer/gstreamer.mk b/package/gstreamer/gstreamer/gstreamer.mk
-index 91230aac28..88cc798828 100644
---- a/package/gstreamer/gstreamer/gstreamer.mk
-+++ b/package/gstreamer/gstreamer/gstreamer.mk
-@@ -18,7 +18,7 @@ GSTREAMER_LICENSE_FILES = COPYING
- ifeq ($(BR2_arc)$(BR2_xtensa)$(BR2_microblaze)$(BR2_nios2)$(BR2_or1k),y)
- GSTREAMER_CONF_ENV = as_cv_unaligned_access=no
- endif
--ifeq ($(BR2_aarch64),y)
-+ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
- GSTREAMER_CONF_ENV = as_cv_unaligned_access=yes
- endif
- 
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index d5b25abcb8..9eafd593f1 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -269,7 +269,6 @@ define QT5BASE_CONFIGURE_CMDS
+ 	sed 's/@EGLFS_DEVICE@/$(QT5BASE_EGLFS_DEVICE)/g' \
+ 		$(QT5BASE_PKGDIR)/qmake.conf.in > \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+-	$(QT5BASE_CONFIGURE_QMAKE_CONFIG)
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
