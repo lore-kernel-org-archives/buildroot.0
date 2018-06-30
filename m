@@ -1,66 +1,127 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 18:10:48 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 18.1.3
-Message-ID: <20180630160738.4EB93836FA@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 Jun 2018 18:11:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.8.3
+In-Reply-To: <20180630112907.20702-1-bernd.kuhls@t-online.de>
+References: <20180630112907.20702-1-bernd.kuhls@t-online.de>
+Message-ID: <20180630161100.GD2384@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e642310af1c3e53de9b1c7d79b9fa25f6d43140c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+On 2018-06-30 13:29 +0200, Bernd Kuhls spake thusly:
+> Removed patch applied upstream.
+> 
+> Release notes: https://www.samba.org/samba/history/samba-4.8.3.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 846091eb57..c598444b5f 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.1.2
-+MESA3D_HEADERS_VERSION = 18.1.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 77b3eb1c67..f4564d0da7 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-June/000437.html
--md5 a2d4f031eb6bd6111d44d84004476918  mesa-18.1.2.tar.xz
--sha1 938d22b966e9861a5387d31c44cd4753931d3076  mesa-18.1.2.tar.xz
--sha256 070bf0648ba5b242d7303ceed32aed80842f4c0ba16e5acc1a650a46eadfb1f9  mesa-18.1.2.tar.xz
--sha512 1b896ecc42c2f81813d551a2b14d271d274a948fa10bf5b7a567417690316c2ab7e7fdd52fe004732cd1a47661ba91acf7d5b21e3b3f28e21b50aadbfa96a5d5  mesa-18.1.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-June/000439.html
-+md5 b34273403a605f6f98ead00f0bdf8e0b  mesa-18.1.3.tar.xz
-+sha1 0a5fb3096108a95f913411267b8a374f9ff547b2  mesa-18.1.3.tar.xz
-+sha256 54f08deeda0cd2f818e8d40140040ed013de7852573002453b7f50da9ea738ce  mesa-18.1.3.tar.xz
-+sha512 f6e5b81a80a309a36a04759d18364d3c71c48d1cb88f87b2f5432ef003092a22046e88ce2082031d5d52b60ba36f585d8df52e06ecc7a5158079936236f36887  mesa-18.1.3.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 3a0cf6c7835f98f86d5579b2cc517f84254da7411f764fb0095a383fb0759771  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 6e1e27f62f..79e8e25a34 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.1.2
-+MESA3D_VERSION = 18.1.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  .../0004-libgpo-fix-build-without-ads.patch   | 49 -------------------
+>  package/samba4/samba4.hash                    |  4 +-
+>  package/samba4/samba4.mk                      |  2 +-
+>  3 files changed, 3 insertions(+), 52 deletions(-)
+>  delete mode 100644 package/samba4/0004-libgpo-fix-build-without-ads.patch
+> 
+> diff --git a/package/samba4/0004-libgpo-fix-build-without-ads.patch b/package/samba4/0004-libgpo-fix-build-without-ads.patch
+> deleted file mode 100644
+> index 5e3af3c322..0000000000
+> --- a/package/samba4/0004-libgpo-fix-build-without-ads.patch
+> +++ /dev/null
+> @@ -1,49 +0,0 @@
+> -From a222b7506b53e689708834237f18877231dca589 Mon Sep 17 00:00:00 2001
+> -From: Volker Lendecke <vl@samba.org>
+> -Date: Sat, 3 Feb 2018 07:07:55 +0100
+> -Subject: [PATCH] libgpo: Fix the build --without-ads
+> -
+> -Signed-off-by: Volker Lendecke <vl@samba.org>
+> -Reviewed-by: David Disseldorp <ddiss@samba.org>
+> -
+> -Autobuild-User(master): David Disseldorp <ddiss@samba.org>
+> -Autobuild-Date(master): Tue Feb  6 15:36:01 CET 2018 on sn-devel-144
+> -
+> -Downloaded from upstream commit:
+> -https://git.samba.org/samba.git/?p=samba.git;a=commit;h=a222b7506b53e689708834237f18877231dca589
+> -
+> -Fixes https://bugzilla.samba.org/show_bug.cgi?id=13331
+> -
+> -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ----
+> - libgpo/pygpo.c | 5 +++++
+> - 1 file changed, 5 insertions(+)
+> -
+> -diff --git a/libgpo/pygpo.c b/libgpo/pygpo.c
+> -index 7a02a0dc2aa..b6b53b76212 100644
+> ---- a/libgpo/pygpo.c
+> -+++ b/libgpo/pygpo.c
+> -@@ -319,6 +319,7 @@ static PyObject *py_gpo_get_sysvol_gpt_version(PyObject * self,
+> - 	return result;
+> - }
+> - 
+> -+#ifdef HAVE_ADS
+> - static ADS_STATUS find_samaccount(ADS_STRUCT *ads, TALLOC_CTX *mem_ctx,
+> - 				  const char *samaccountname,
+> - 				  uint32_t *uac_ret, const char **dn_ret)
+> -@@ -468,11 +469,15 @@ static PyObject *py_ads_get_gpo_list(ADS *self, PyObject *args, PyObject *kwds)
+> - 	return ret;
+> - }
+> - 
+> -+#endif
+> -+
+> - static PyMethodDef ADS_methods[] = {
+> - 	{ "connect", (PyCFunction)py_ads_connect, METH_NOARGS,
+> - 		"Connect to the LDAP server" },
+> -+#ifdef HAVE_ADS
+> - 	{ "get_gpo_list", (PyCFunction)py_ads_get_gpo_list, METH_KEYWORDS,
+> - 		NULL },
+> -+#endif
+> - 	{ NULL }
+> - };
+> - 
+> diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+> index cadb88b260..4b1b1218ac 100644
+> --- a/package/samba4/samba4.hash
+> +++ b/package/samba4/samba4.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -# https://download.samba.org/pub/samba/stable/samba-4.8.2.tar.asc
+> -sha256 62e552296d49e6ab44bb87d120a288813fa52e42435d53a1f71b77596512bf22  samba-4.8.2.tar.gz
+> +# https://download.samba.org/pub/samba/stable/samba-4.8.3.tar.asc
+> +sha256 e0569a8a605d5dfb49f1fdd11db796f4d36fe0351c4a7f21387ef253010b82ed  samba-4.8.3.tar.gz
+>  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+> diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+> index f75b350375..52d59ffeb9 100644
+> --- a/package/samba4/samba4.mk
+> +++ b/package/samba4/samba4.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -SAMBA4_VERSION = 4.8.2
+> +SAMBA4_VERSION = 4.8.3
+>  SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+>  SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+>  SAMBA4_INSTALL_STAGING = YES
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
