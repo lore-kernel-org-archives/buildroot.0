@@ -1,207 +1,91 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jun 2018 16:21:23 +0200
-Subject: [Buildroot] [PATCH 1/5 v2] package/lua-flu: fix to use the system
+Date: Sat, 30 Jun 2018 16:21:25 +0200
+Subject: [Buildroot] [PATCH 3/5 v2] package/xorriso: fix to use the system
  xattr header
 In-Reply-To: <cover.1530368468.git.yann.morin.1998@free.fr>
 References: <cover.1530368468.git.yann.morin.1998@free.fr>
-Message-ID: <652be114258a3d7b5829303a5c9219a26bd62c08.1530368468.git.yann.morin.1998@free.fr>
+Message-ID: <6c7d039a9b5c4bcd728e3061be1bab895bd29ad5.1530368468.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We can't carry a mercurial patch, because the luarocks package is not
-organised with the same layout as the upstream package source tree is.
+We don't carry a git-formatted patch, because upstream is in fact a
+collection of git trees, while the release tarball is an aggregate
+of those repositories. Thus, the layout is different between the
+tarball and the SCM...
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
-Cc: Francois Perrad <francois.perrad@gadz.org>
-
+Cc: Steve Kenton <skenton@ou.edu>
 ---
-Changes v1 -> v2:
-  - explain ENOATTR -> ENODATA conversion  (Thomas)
-  - explain why it's not a hg patch  (Thomas)
-  - reference upstream PR and commit
----
- package/lua-flu/0001-use-system-xattr-h.patch | 169 ++++++++++++++++++++++++++
- 1 file changed, 169 insertions(+)
- create mode 100644 package/lua-flu/0001-use-system-xattr-h.patch
+ package/xorriso/0001-use-sys-xattr.h.patch | 33 ++++++++++++++++++++++++++++++
+ package/xorriso/xorriso.mk                 | 13 ++++++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 package/xorriso/0001-use-sys-xattr.h.patch
 
-diff --git a/package/lua-flu/0001-use-system-xattr-h.patch b/package/lua-flu/0001-use-system-xattr-h.patch
+diff --git a/package/xorriso/0001-use-sys-xattr.h.patch b/package/xorriso/0001-use-sys-xattr.h.patch
 new file mode 100644
-index 0000000000..1cd44b4617
+index 0000000000..5ae1aae72e
 --- /dev/null
-+++ b/package/lua-flu/0001-use-system-xattr-h.patch
-@@ -0,0 +1,169 @@
++++ b/package/xorriso/0001-use-sys-xattr.h.patch
+@@ -0,0 +1,33 @@
 +Use system <sys/xattr.h>
 +
 +The one from attr is no longer installed with latest version.
 +
-+ENOATTR was in fact defined as ENODATA, so switch to using that instead.
-+
 +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 +
 +---
-+Upstream status: merged:
-+    https://bitbucket.org/doub/flu/pull-requests/1
-+    https://bitbucket.org/doub/flu/commits/2d75cc2be79026b94188b11c6f53b219c24a5f70
++Upstream status: alternate, more complex patch pending...
 +
-+
-+diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua
-+--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua	2015-03-31 18:54:19.000000000 +0200
-++++ lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua	2018-05-06 09:22:28.499324049 +0200
-+@@ -327,7 +327,7 @@
-+ 				name = "fs.getxattr";
-+ 				parameters = {"path", "name"};
-+ 				results = {"value"};
-+-				doc = [[Get an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.]];
-++				doc = [[Get an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.]];
-+ 			},
-+ 			{
-+ 				name = "fs.listxattr";
-+@@ -338,7 +338,7 @@
-+ 			{
-+ 				name = "fs.removexattr";
-+ 				parameters = {"path", "name"};
-+-				doc = [[Remove an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.]];
-++				doc = [[Remove an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.]];
-+ 			},
-+ 			{
-+ 				name = "fs.opendir";
-+diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/luafs.lua lua-flu-20150331-1/doub-flu-a7daae986339/doc/luafs.lua
-+--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/luafs.lua	2015-03-31 18:54:19.000000000 +0200
-++++ lua-flu-20150331-1/doub-flu-a7daae986339/doc/luafs.lua	2018-05-06 09:22:28.495324054 +0200
-+@@ -222,8 +222,8 @@
-+ -- :NOTE: since the filesystem is a pure tree (not a DAG), use the path to find attribs
++diff -durN xorriso-1.4.6.orig/configure.ac xorriso-1.4.6/configure.ac
++--- xorriso-1.4.6.orig/configure.ac	2016-09-16 15:51:33.000000000 +0200
+++++ xorriso-1.4.6/configure.ac	2018-05-06 23:45:38.377153069 +0200
++@@ -264,7 +264,7 @@
++ dnl Check whether there is the header for Linux xattr.
++ dnl If not, erase this macro which would enable use of listxattr and others
++         XATTR_DEF="-DLibisofs_with_aaip_xattR"
++-        AC_CHECK_HEADER(attr/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
+++        AC_CHECK_HEADER(sys/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
++                                                    XATTR_DEF= ), XATTR_DEF= )
++     fi
++ elif test x"$LIBBURNIA_SUPP_FATTR" = xextattr
++diff -durN xorriso-1.4.6.orig/libisofs/aaip-os-linux.c xorriso-1.4.6/libisofs/aaip-os-linux.c
++--- xorriso-1.4.6.orig/libisofs/aaip-os-linux.c	2016-09-16 15:51:34.000000000 +0200
+++++ xorriso-1.4.6/libisofs/aaip-os-linux.c	2018-05-06 23:47:25.764941583 +0200
++@@ -30,7 +30,7 @@
++ #endif
 + 
-+ function luafs.getxattr(path, name)
-+-	local attrs = assert(xattrs[path], errno.ENOATTR)
-+-	return assert(attrs[name], errno.ENOATTR)
-++	local attrs = assert(xattrs[path], errno.ENODATA)
-++	return assert(attrs[name], errno.ENODATA)
-+ end
-+ 
-+ function luafs.setxattr(path, name, value, flags)
-+@@ -236,7 +236,7 @@
-+ end
-+ 
-+ function luafs.removexattr(path, name)
-+-	local attrs = assert(xattrs[path], errno.ENOATTR)
-++	local attrs = assert(xattrs[path], errno.ENODATA)
-+ 	attrs[name] = nil
-+ 	if next(attrs)==nil then
-+ 		xattrs[path] = nil
-+diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/manual.html lua-flu-20150331-1/doub-flu-a7daae986339/doc/manual.html
-+--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/manual.html	2015-03-31 18:54:19.000000000 +0200
-++++ lua-flu-20150331-1/doub-flu-a7daae986339/doc/manual.html	2018-05-06 09:22:28.499324049 +0200
-+@@ -347,7 +347,7 @@
-+ 		<div class="function">
-+ 		<h3><a name="fs.getxattr"><code>value = fs.getxattr (path, name)</code></a></h3>
-+ 
-+-<p>Get an extended attribute. If the attribute doesn't exist <code>ENOATTR</code> should be thrown.</p>
-++<p>Get an extended attribute. If the attribute doesn't exist <code>ENODATA</code> should be thrown.</p>
-+ 		</div>
-+ 
-+ 		<div class="function">
-+@@ -359,7 +359,7 @@
-+ 		<div class="function">
-+ 		<h3><a name="fs.removexattr"><code>fs.removexattr (path, name)</code></a></h3>
-+ 
-+-<p>Remove an extended attribute. If the attribute doesn't exist <code>ENOATTR</code> should be thrown.</p>
-++<p>Remove an extended attribute. If the attribute doesn't exist <code>ENODATA</code> should be thrown.</p>
-+ 		</div>
-+ 
-+ 		<div class="function">
-+diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/errno.c lua-flu-20150331-1/doub-flu-a7daae986339/errno.c
-+--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/errno.c	2015-03-31 18:54:19.000000000 +0200
-++++ lua-flu-20150331-1/doub-flu-a7daae986339/errno.c	2018-05-06 09:23:06.323282527 +0200
-+@@ -3,7 +3,7 @@
-+ #include <lua.h>
-+ #include <lauxlib.h>
-+ #include <stdlib.h>
++ #ifdef Libisofs_with_aaip_xattR
 +-#include <attr/xattr.h>
 ++#include <sys/xattr.h>
-+ #include "compat.h"
++ #endif
 + 
-+ /****************************************************************************/
-+@@ -103,7 +103,7 @@
-+ 	REGISTER_ERROR(EDOM)
-+ 	REGISTER_ERROR(ERANGE)
-+ 	REGISTER_ERROR(ENOSYS)
-+-	REGISTER_ERROR(ENOATTR)
-++	REGISTER_ERROR(ENODATA)
-+ 	#undef REGISTER_ERROR
-+ }
 + 
-+diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu-20150331-1.rockspec lua-flu-20150331-1/doub-flu-a7daae986339/flu-20150331-1.rockspec
-+--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu-20150331-1.rockspec	2018-05-06 09:22:04.123351349 +0200
-++++ lua-flu-20150331-1/doub-flu-a7daae986339/flu-20150331-1.rockspec	2018-05-06 09:23:06.323282527 +0200
-+@@ -14,7 +14,7 @@
-+ 		library = 'fuse',
-+ 	},
-+ 	ATTR = {
-+-		header = 'attr/xattr.h',
-++		header = 'sys/xattr.h',
-+ 	},
-+ }
-+ dependencies = {
-+diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu.c lua-flu-20150331-1/doub-flu-a7daae986339/flu.c
-+--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu.c	2015-03-31 18:54:19.000000000 +0200
-++++ lua-flu-20150331-1/doub-flu-a7daae986339/flu.c	2018-05-06 09:23:06.323282527 +0200
-+@@ -15,7 +15,7 @@
-+ #include <errno.h>
-+ #include <string.h>
-+ #include <fuse.h>
-+-#include <attr/xattr.h>
-++#include <sys/xattr.h>
-+ #include <lua.h>
-+ #include <lauxlib.h>
-+ 
-+diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu.rockspec.in lua-flu-20150331-1/doub-flu-a7daae986339/flu.rockspec.in
-+--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu.rockspec.in	2015-03-31 18:54:19.000000000 +0200
-++++ lua-flu-20150331-1/doub-flu-a7daae986339/flu.rockspec.in	2018-05-06 09:23:06.323282527 +0200
-+@@ -14,7 +14,7 @@
-+ 		library = 'fuse',
-+ 	},
-+ 	ATTR = {
-+-		header = 'attr/xattr.h',
-++		header = 'sys/xattr.h',
-+ 	},
-+ }
-+ dependencies = {
-+diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/README.md lua-flu-20150331-1/doub-flu-a7daae986339/README.md
-+--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/README.md	2015-03-31 18:54:19.000000000 +0200
-++++ lua-flu-20150331-1/doub-flu-a7daae986339/README.md	2018-05-06 09:22:28.495324054 +0200
-+@@ -345,7 +345,7 @@
-+ 
-+ ### `value = fs.getxattr (path, name)`
-+ 
-+-Get an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.
-++Get an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.
-+ 
-+ ---
-+ 
-+@@ -357,7 +357,7 @@
-+ 
-+ ### `fs.removexattr (path, name)`
-+ 
-+-Remove an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.
-++Remove an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.
-+ 
-+ ---
-+ 
-+diff -durN lua-flu-20150331-1.orig/flu-20150331-1.rockspec lua-flu-20150331-1/flu-20150331-1.rockspec
-+--- lua-flu-20150331-1.orig/flu-20150331-1.rockspec	2015-04-02 23:44:11.000000000 +0200
-++++ lua-flu-20150331-1/flu-20150331-1.rockspec	2018-05-06 09:23:06.323282527 +0200
-+@@ -14,7 +14,7 @@
-+ 		library = 'fuse',
-+ 	},
-+ 	ATTR = {
-+-		header = 'attr/xattr.h',
-++		header = 'sys/xattr.h',
-+ 	},
-+ }
-+ dependencies = {
+diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
+index 1f095911f8..af4e1bdace 100644
+--- a/package/xorriso/xorriso.mk
++++ b/package/xorriso/xorriso.mk
+@@ -8,6 +8,19 @@ XORRISO_VERSION = 1.4.6
+ XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
+ XORRISO_LICENSE = GPL-3.0+
+ XORRISO_LICENSE_FILES = COPYING COPYRIGHT
++
++# 0001-use-sys-xattr.h.patch
++XORRISO_DEPENDENCIES = host-pkgconf
++XORRISO_AUTORECONF = YES
++HOST_XORRISO_AUTORECONF = YES
++
++# Make autoreconf happy
++define XORRISO_NEWS
++	touch $(@D)/NEWS
++endef
++XORRISO_POST_PATCH_HOOKS += XORRISO_NEWS
++HOST_XORRISO_POST_PATCH_HOOKS += XORRISO_NEWS
++
+ # Disable everything until we actually need those features, and add the correct
+ # host libraries
+ HOST_XORRISO_CONF_OPTS = \
 -- 
 2.14.1
