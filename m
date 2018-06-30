@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jun 2018 22:51:13 +0200
-Subject: [Buildroot] [PATCH v3 2/4] linux: add custom linux logo
-In-Reply-To: <1527628939-7389-3-git-send-email-angelo@amarulasolutions.com>
+Date: Sat, 30 Jun 2018 22:58:27 +0200
+Subject: [Buildroot] [PATCH v3 3/4] docs/images: adding default
+ buildroot linux logo
+In-Reply-To: <1527628939-7389-4-git-send-email-angelo@amarulasolutions.com>
 References: <1527628939-7389-1-git-send-email-angelo@amarulasolutions.com>
- <1527628939-7389-3-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180630205113.GC23012@scaer>
+ <1527628939-7389-4-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180630205827.GD23012@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,89 +17,27 @@ Angelo, All,
 On 2018-05-29 23:22 +0200, Angelo Compagnucci spake thusly:
 > From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 > 
-> This patch adds a simple way to change the linux bootup logo.
-> The patch was kept purposely simple to support only the use cause
-> where a user needs a colour linux boot up logo.
+> This patch adds a default buildroot linux boot up logo that can
+> be used in all buildroot defconfigs as a buildroot watermark.
 > 
 > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-But I have a small comment though, see below...
-
 > ---
->  linux/Config.in |  8 ++++++++
->  linux/linux.mk  | 15 +++++++++++++++
->  2 files changed, 23 insertions(+)
+>  docs/website/images/logo_linux_clut224.png | Bin 0 -> 6825 bytes
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  create mode 100644 docs/website/images/logo_linux_clut224.png
 > 
-> diff --git a/linux/Config.in b/linux/Config.in
-> index b1691fe..102bb22 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -184,6 +184,14 @@ config BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES
->  	  A space-separated list of kernel configuration fragment files,
->  	  that will be merged to the main kernel configuration file.
->  
-> +config BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH
-> +	string "Custom logo file path"
-> +	help
-> +	  Change the linux boot logo with your own graphics,
-> +	  it can be used as an early bootsplash.o
+> diff --git a/docs/website/images/logo_linux_clut224.png b/docs/website/images/logo_linux_clut224.png
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..002722d09d98272d572e04ea00268dbb234e72c3
+> GIT binary patch
+> literal 6825
+[--SNIP--]
 
-I would add that support for framebuffer be enabled in the kernel
-config.
-
-> +	  Custom logo should be in png or jpg and it will be
-> +	  converted to the linux kernel format (224 colors only).
-
-I would also state that this replaces the existing logo file.
+I don't think we need a special logo; we can re-use the exisitng one,
+i.e. docs/images/logo.png.
 
 Regards,
 Yann E. MORIN.
-
->  #
->  # Binary format
->  #
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 6b5f534..6083756 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -226,6 +226,18 @@ define LINUX_TRY_PATCH_TIMECONST
->  endef
->  LINUX_POST_PATCH_HOOKS += LINUX_TRY_PATCH_TIMECONST
->  
-> +LINUX_KERNEL_CUSTOM_LOGO_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH))
-> +ifneq ($(LINUX_KERNEL_CUSTOM_LOGO_PATH),)
-> +LINUX_DEPENDENCIES += host-imagemagick
-> +LINUX_KERNEL_CUSTOM_LOGO = y
-> +define LINUX_KERNEL_CUSTOM_LOGO_CONVERT
-> +	$(HOST_DIR)/usr/bin/convert $(LINUX_KERNEL_CUSTOM_LOGO_PATH) \
-> +		-dither None -colors 224 -compress none \
-> +		$(LINUX_DIR)/drivers/video/logo/logo_linux_clut224.ppm
-> +endef
-> +LINUX_PRE_BUILD_HOOKS += LINUX_KERNEL_CUSTOM_LOGO_CONVERT
-> +endif
-> +
->  ifeq ($(BR2_LINUX_KERNEL_USE_DEFCONFIG),y)
->  LINUX_KCONFIG_DEFCONFIG = $(call qstrip,$(BR2_LINUX_KERNEL_DEFCONFIG))_defconfig
->  else ifeq ($(BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG),y)
-> @@ -325,6 +337,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
->  	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
->  		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
-> +	$(if $(LINUX_KERNEL_CUSTOM_LOGO),
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO,$(@D)/.config)
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO_LINUX_CLUT224,$(@D)/.config))
->  endef
->  
->  ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-> -- 
-> 2.7.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
