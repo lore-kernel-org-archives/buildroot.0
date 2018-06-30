@@ -1,38 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 22:05:26 +0200
-Subject: [Buildroot] [PATCH 3/5 v2] package/xorriso: fix to use the
- system xattr header
-In-Reply-To: <6c7d039a9b5c4bcd728e3061be1bab895bd29ad5.1530368468.git.yann.morin.1998@free.fr>
-References: <cover.1530368468.git.yann.morin.1998@free.fr>
- <6c7d039a9b5c4bcd728e3061be1bab895bd29ad5.1530368468.git.yann.morin.1998@free.fr>
-Message-ID: <20180630220526.37a3df19@windsurf.home>
+Date: Sat, 30 Jun 2018 22:07:01 +0200
+Subject: [Buildroot] [git commit] board/raspberrypi: update firmware option
+ to use 64-bit mode
+Message-ID: <20180630200359.5C441838D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=722c11ce7b25a1925498483ef58f59d0931b2ca7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 30 Jun 2018 16:21:25 +0200, Yann E. MORIN wrote:
-> We don't carry a git-formatted patch, because upstream is in fact a
-> collection of git trees, while the release tarball is an aggregate
-> of those repositories. Thus, the layout is different between the
-> tarball and the SCM...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Steve Kenton <skenton@ou.edu>
-> ---
->  package/xorriso/0001-use-sys-xattr.h.patch | 33 ++++++++++++++++++++++++++++++
->  package/xorriso/xorriso.mk                 | 13 ++++++++++++
->  2 files changed, 46 insertions(+)
->  create mode 100644 package/xorriso/0001-use-sys-xattr.h.patch
+As per latest Raspberry Pi firmware documentation, the option
+'arm_control' has been deprecated in favor of 'arm_64bit'.
 
-Applied to master after fixing the issues we have discussed in this
-thread. Thanks!
+Fixes https://bugs.busybox.net/show_bug.cgi?id=11111.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Jason Tang <tang@jtang.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/raspberrypi/post-image.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
+index 3c6c938407..70447cd48b 100755
+--- a/board/raspberrypi/post-image.sh
++++ b/board/raspberrypi/post-image.sh
+@@ -23,11 +23,11 @@ __EOF__
+ 		--aarch64)
+ 		# Run a 64bits kernel (armv8)
+ 		sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
+-		if ! grep -qE '^arm_control=0x200' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
++		if ! grep -qE '^arm_64bit=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
+ 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
+ 
+ # enable 64bits support
+-arm_control=0x200
++arm_64bit=1
+ __EOF__
+ 		fi
+ 
