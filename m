@@ -1,71 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 18:28:23 +0200
-Subject: [Buildroot] [git commit] dropbear: enable PAM authentication if
+Date: Sat, 30 Jun 2018 18:32:26 +0200
+Subject: [Buildroot] [PATCH v3] dropbear: enable PAM authentication if
  linux-pam is selected
-Message-ID: <20180630162857.E8ED983757@busybox.osuosl.org>
+In-Reply-To: <20180629122109.7356-1-casantos@datacom.com.br>
+References: <20180629115039.52bpwyk7xenbly53@tarshish>
+ <20180629122109.7356-1-casantos@datacom.com.br>
+Message-ID: <20180630183226.6f39e0e1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=037b8616257067282e375edca9af19418a0e7a4a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-- Disable password file authentication, since it's not possible to have
-  both at once.
-- Install a /etc/pam.d/sshd file, based on the one installed by openssh.
+On Fri, 29 Jun 2018 09:21:09 -0300, Carlos Santos wrote:
+> - Disable password file authentication, since it's not possible to have
+>   both at once.
+> - Install a /etc/pam.d/sshd file, based on the one installed by openssh.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> Changes v1->v2:
+> - Fix commit message.
+> Changes v2->v3:
+> - athentication -> authentication (gah!)
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dropbear/dropbear.mk    | 14 ++++++++++++++
- package/dropbear/etc-pam.d-sshd |  7 +++++++
- 2 files changed, 21 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index fc41a84c1f..bb902bc7ce 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -34,6 +34,19 @@ ifeq ($(BR2_SHARED_STATIC_LIBS),y)
- DROPBEAR_CONF_OPTS += --disable-static
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+define DROPBEAR_SVR_PAM_AUTH
-+	echo '#define DROPBEAR_SVR_PASSWORD_AUTH 0'     >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_SVR_PAM_AUTH 1'          >> $(@D)/localoptions.h
-+endef
-+define DROPBEAR_INSTALL_PAM_CONF
-+	$(INSTALL) -D -m 644 package/dropbear/etc-pam.d-sshd $(TARGET_DIR)/etc/pam.d/sshd
-+endef
-+DROPBEAR_DEPENDENCIES += linux-pam
-+DROPBEAR_CONF_OPTS += --enable-pam
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PAM_AUTH
-+DROPBEAR_POST_INSTALL_TARGET_HOOKS += DROPBEAR_INSTALL_PAM_CONF
-+else
- # Ensure that dropbear doesn't use crypt() when it's not available
- define DROPBEAR_SVR_PASSWORD_AUTH
- 	echo '#if !HAVE_CRYPT'                          >> $(@D)/localoptions.h
-@@ -41,6 +54,7 @@ define DROPBEAR_SVR_PASSWORD_AUTH
- 	echo '#endif'                                   >> $(@D)/localoptions.h
- endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
-+endif
- 
- define DROPBEAR_ENABLE_REVERSE_DNS
- 	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
-diff --git a/package/dropbear/etc-pam.d-sshd b/package/dropbear/etc-pam.d-sshd
-new file mode 100644
-index 0000000000..5e13fc0d60
---- /dev/null
-+++ b/package/dropbear/etc-pam.d-sshd
-@@ -0,0 +1,7 @@
-+#%PAM-1.0
-+auth       required     pam_unix.so shadow nodelay
-+account    required     pam_nologin.so
-+account    required     pam_unix.so
-+password   required     pam_unix.so shadow nullok use_authtok
-+session    required     pam_unix.so
-+session    required     pam_limits.so
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
