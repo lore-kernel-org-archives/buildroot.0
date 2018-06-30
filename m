@@ -1,36 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 21:43:20 +0200
-Subject: [Buildroot] [PATCH] qpdf: security bump to version 8.1.0
-In-Reply-To: <f3824d1a8cf1971f29912fa0891ba7e597066d2d.1530249538.git.baruch@tkos.co.il>
-References: <f3824d1a8cf1971f29912fa0891ba7e597066d2d.1530249538.git.baruch@tkos.co.il>
-Message-ID: <20180630214320.364879e7@windsurf.home>
+Date: Sat, 30 Jun 2018 21:54:46 +0200
+Subject: [Buildroot] [git commit] libv4l: fix build with sdl2_image
+Message-ID: <20180630195230.28546838B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d92d3ddeb1374325a7d92c885dc827317a5c90f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 29 Jun 2018 08:18:58 +0300, Baruch Siach wrote:
-> Fixes CVE-2018-9918: mishandle certain "expected dictionary key but
-> found non-name object" cases, allowing remote attackers to cause a
-> denial of service (stack exhaustion)
-> 
-> https://github.com/qpdf/qpdf/issues/202
-> 
-> Drop local SHA256 hash since we use upstream provided SHA512.
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/qpdf/qpdf.hash | 6 ++----
->  package/qpdf/qpdf.mk   | 2 +-
->  2 files changed, 3 insertions(+), 5 deletions(-)
+sdlcam test includes jpeglib.h so add a patch to disable it if jpeg is
+disabled
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.net/results/1eded8b44cc369550566c6ce0b3c042f1aec8d44
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...0004-Build-sdlcam-only-if-jpeg-is-enabled.patch | 31 ++++++++++++++++++++++
+ package/libv4l/libv4l.mk                           |  4 +++
+ 2 files changed, 35 insertions(+)
+
+diff --git a/package/libv4l/0004-Build-sdlcam-only-if-jpeg-is-enabled.patch b/package/libv4l/0004-Build-sdlcam-only-if-jpeg-is-enabled.patch
+new file mode 100644
+index 0000000000..4c4365f907
+--- /dev/null
++++ b/package/libv4l/0004-Build-sdlcam-only-if-jpeg-is-enabled.patch
+@@ -0,0 +1,31 @@
++From 5c407e130f8d0416f91f5a12bcdc2709f00dda65 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 29 Jun 2018 21:15:10 +0200
++Subject: [PATCH] Build sdlcam only if jpeg is enabled
++
++Fixes:
++ - http://autobuild.buildroot.net/results/1eded8b44cc369550566c6ce0b3c042f1aec8d44
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ contrib/test/Makefile.am | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/contrib/test/Makefile.am b/contrib/test/Makefile.am
++index 0188fe21..c7c38e7a 100644
++--- a/contrib/test/Makefile.am
+++++ b/contrib/test/Makefile.am
++@@ -17,8 +17,10 @@ noinst_PROGRAMS += v4l2gl
++ endif
++ 
++ if HAVE_SDL
+++if HAVE_JPEG
++ noinst_PROGRAMS += sdlcam
++ endif
+++endif
++ 
++ driver_test_SOURCES = driver-test.c
++ driver_test_LDADD = ../../utils/libv4l2util/libv4l2util.la
++-- 
++2.14.1
++
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 95a700b2d5..c95b2778cd 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -10,6 +10,10 @@ LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
+ LIBV4L_DEPENDENCIES = host-pkgconf
+ LIBV4L_CONF_OPTS = --disable-doxygen-doc
++# We're patching contrib/test/Makefile.am
++LIBV4L_AUTORECONF = YES
++# add host-gettext for AM_ICONV macro
++LIBV4L_DEPENDENCIES += host-gettext
+ 
+ # fix uclibc-ng configure/compile
+ LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
