@@ -1,52 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 22:39:17 +0200
-Subject: [Buildroot] [PATCH v3] dropbear: enable PAM authentication if
- linux-pam is selected
-In-Reply-To: <20180630183226.6f39e0e1@windsurf.home>
-References: <20180629115039.52bpwyk7xenbly53@tarshish>
- <20180629122109.7356-1-casantos@datacom.com.br>
- <20180630183226.6f39e0e1@windsurf.home>
-Message-ID: <20180630223917.211d9979@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 Jun 2018 22:45:56 +0200
+Subject: [Buildroot] [PATCH v3 1/4] package/imagemagick: add host package
+In-Reply-To: <1527628939-7389-2-git-send-email-angelo@amarulasolutions.com>
+References: <1527628939-7389-1-git-send-email-angelo@amarulasolutions.com>
+ <1527628939-7389-2-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180630204556.GB23012@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, Baruch,
+Angelo, All,
 
-On Sat, 30 Jun 2018 18:32:26 +0200, Thomas Petazzoni wrote:
-
-> On Fri, 29 Jun 2018 09:21:09 -0300, Carlos Santos wrote:
-> > - Disable password file authentication, since it's not possible to have
-> >   both at once.
-> > - Install a /etc/pam.d/sshd file, based on the one installed by openssh.
-> > 
-> > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> > Reviewed-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> > Changes v1->v2:
-> > - Fix commit message.
-> > Changes v2->v3:
-> > - athentication -> authentication (gah!)  
+On 2018-05-29 23:22 +0200, Angelo Compagnucci spake thusly:
+> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 > 
-> Applied to master, thanks.
+> This patch add the host package for imagemagick.
+> It comes with a minimal selection of configure options to
+> compile fast, it's indeed only used to convert
+> the image file for the custom linux logo.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Since you're looking at dropbear, could you review the following
-patches:
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-  http://patchwork.ozlabs.org/patch/909724/
-  http://patchwork.ozlabs.org/patch/884051/
+Regards,
+Yann E. MORIN.
 
-The former looks OK to me, but the latter seems less OK as I'm not sure
-we want to handle this specifically for dropbear: there are other SSH
-servers as well. Let me know if you see a reason to have that second
-patch.
+> ---
+>  package/imagemagick/imagemagick.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+> index 1165438..c319589 100644
+> --- a/package/imagemagick/imagemagick.mk
+> +++ b/package/imagemagick/imagemagick.mk
+> @@ -143,4 +143,15 @@ else
+>  IMAGEMAGICK_CONF_OPTS += --without-bzlib
+>  endif
+>  
+> +HOST_IMAGEMAGICK_CONF_OPTS = \
+> +	--with-jpeg \
+> +	--with-png \
+> +	--with-zlib
+> +
+> +HOST_IMAGEMAGICK_DEPENDENCIES = \
+> +	host-libjpeg \
+> +	host-libpng \
+> +	host-zlib
+> +
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
