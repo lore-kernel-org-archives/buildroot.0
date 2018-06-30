@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 18:09:05 +0200
-Subject: [Buildroot] [git commit] qt5base: remove unused definition
-Message-ID: <20180630160551.A2D03835F2@busybox.osuosl.org>
+Date: Sat, 30 Jun 2018 18:10:11 +0200
+Subject: [Buildroot] [git commit] qt5base: fix typo in qmake.conf.in
+Message-ID: <20180630160656.DDB3D83615@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0241095a67bc87faf19b52a2be21915b2ac44aa
+commit: https://git.buildroot.net/buildroot/commit/?id=7544295d30d3e2ce6e169d4033a2bf2d36f646d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since commit 81fb33af2a (qt5base: correct eglfs support in
-qmake.conf.in) the definition QT5BASE_CONFIGURE_QMAKE_CONFIG is left
-unused.
-
-Remove it since it is not used anymore.
+A blank space is missing.
 
 Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5base/qt5base.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/qt5/qt5base/qmake.conf.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index d5b25abcb8..9eafd593f1 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -269,7 +269,6 @@ define QT5BASE_CONFIGURE_CMDS
- 	sed 's/@EGLFS_DEVICE@/$(QT5BASE_EGLFS_DEVICE)/g' \
- 		$(QT5BASE_PKGDIR)/qmake.conf.in > \
- 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
--	$(QT5BASE_CONFIGURE_QMAKE_CONFIG)
- 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
- 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
- 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
+diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+index d62ee7cebe..f14527aa7f 100644
+--- a/package/qt5/qt5base/qmake.conf.in
++++ b/package/qt5/qt5base/qmake.conf.in
+@@ -21,7 +21,7 @@ CONFIG                 += nostrip
+ QMAKE_LIBS             += -lrt -lpthread -ldl
+ QMAKE_CFLAGS_ISYSTEM   =
+ 
+-# Architecturespecific configuration
++# Architecture specific configuration
+ include(arch.conf)
+ 
+ @EGLFS_DEVICE@
