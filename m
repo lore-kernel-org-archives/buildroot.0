@@ -1,33 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 22:07:28 +0200
-Subject: [Buildroot] [PATCH] raspberrypi3: post-image.sh update 64-bit
- option
-In-Reply-To: <C163C8A5-70D5-4EE3-8177-4296770198D5@jtang.org>
-References: <C163C8A5-70D5-4EE3-8177-4296770198D5@jtang.org>
-Message-ID: <20180630220728.7a0765b3@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 30 Jun 2018 20:07:44 +0000
+Subject: [Buildroot] [Bug 11111] raspberry pi 3 b+: missing BSP for 64-bit
+ kernel
+In-Reply-To: <bug-11111-163@https.bugs.busybox.net/>
+References: <bug-11111-163@https.bugs.busybox.net/>
+Message-ID: <bug-11111-163-iSAzWaxPoI@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11111
 
-On Sat, 30 Jun 2018 15:14:25 -0400, J. Tang wrote:
-> As per latest Raspberry Pi firmware documentation, the option
-> 'arm_control' has been deprecated in favor of 'arm_64bit'.
-> 
-> Fixes #11111.
-> 
-> Signed-off-by: Jason Tang <tang@jtang.org>
-> ---
->  board/raspberrypi/post-image.sh | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |FIXED
 
-Thomas
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Fixed by
+https://git.buildroot.org/buildroot/commit/?id=722c11ce7b25a1925498483ef58f59d0931b2ca7.
+Thanks!
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
