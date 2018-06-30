@@ -1,64 +1,80 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 30 Jun 2018 20:30:44 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-06-29
-In-Reply-To: <20180630060034.AFC6220A33@mail.bootlin.com>
-References: <20180630060034.AFC6220A33@mail.bootlin.com>
-Message-ID: <f38c57af-44a3-2766-2512-1f0e9f4f4f98@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 30 Jun 2018 20:40:32 +0200
+Subject: [Buildroot] [PATCH v2,1/1] libv4l: fix build with sdl2_image
+Message-ID: <20180630184032.31750-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+sdlcam test includes jpeglib.h so add a patch to disable it if jpeg is
+disabled
 
-Le 30/06/2018 ? 08:00, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> Build statistics for 2018-06-29
-> ===============================
-> 
->       branch |  OK | NOK | TIM | TOT |
->    2018.02.x |  19 |   2 |   0 |  21 |
->    2018.05.x |  16 |   1 |   0 |  17 |
->       master | 141 |  44 |   0 | 185 |
-> 
-> Results for branch 'master'
-> ===========================
-> 
-> Classification of failures by reason
-> ------------------------------------
-> 
->                host-llvm-6.0.0 | 2 
-> 
-> Detail of failures
-> ------------------
-> 
->          arm |                host-llvm-6.0.0 | NOK | http://autobuild.buildroot.net/results/84222a111d7a4cecb14f9fb280ff5763d61ed592 |     
->       x86_64 |                host-llvm-6.0.0 | NOK | http://autobuild.buildroot.net/results/d9265c7a1f9d6568d0a187dc52a08168e1954c91 |     
+Fixes:
+ - http://autobuild.buildroot.net/results/1eded8b44cc369550566c6ce0b3c042f1aec8d44
 
-It seems that gcc 8.1.1 from the host (ArchLinux) is buggy, there is no such
-error with a Fedora 28 with gcc 8 installed.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1->v2 (after review of Thomas Petazzoni):
+ - Update patch to use HAVE_JPEG instead of adding --disable-tests
 
-1)
-/usr/include/c++/8.1.1/type_traits:1054:12: internal compiler error:
-Segmentation fault
-     struct is_nothrow_move_constructible
-            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Please submit a full bug report,
-with preprocessed source if appropriate.
-See <https://bugs.archlinux.org/> for instructions.
+ ...0004-Build-sdlcam-only-if-jpeg-is-enabled.patch | 31 ++++++++++++++++++++++
+ package/libv4l/libv4l.mk                           |  4 +++
+ 2 files changed, 35 insertions(+)
+ create mode 100644 package/libv4l/0004-Build-sdlcam-only-if-jpeg-is-enabled.patch
 
-2)
-
-/home/joseph/buildroot-test/instance-13/output/build/host-llvm-6.0.0/include/llvm/ADT/MapVector.h:104:3:
-internal compiler error: Segmentation fault
-   }
-   ^
-Please submit a full bug report,
-with preprocessed source if appropriate.
-See <https://bugs.archlinux.org/> for instructions.
-
-Best regards,
-Romain
+diff --git a/package/libv4l/0004-Build-sdlcam-only-if-jpeg-is-enabled.patch b/package/libv4l/0004-Build-sdlcam-only-if-jpeg-is-enabled.patch
+new file mode 100644
+index 0000000000..4c4365f907
+--- /dev/null
++++ b/package/libv4l/0004-Build-sdlcam-only-if-jpeg-is-enabled.patch
+@@ -0,0 +1,31 @@
++From 5c407e130f8d0416f91f5a12bcdc2709f00dda65 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 29 Jun 2018 21:15:10 +0200
++Subject: [PATCH] Build sdlcam only if jpeg is enabled
++
++Fixes:
++ - http://autobuild.buildroot.net/results/1eded8b44cc369550566c6ce0b3c042f1aec8d44
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ contrib/test/Makefile.am | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/contrib/test/Makefile.am b/contrib/test/Makefile.am
++index 0188fe21..c7c38e7a 100644
++--- a/contrib/test/Makefile.am
+++++ b/contrib/test/Makefile.am
++@@ -17,8 +17,10 @@ noinst_PROGRAMS += v4l2gl
++ endif
++ 
++ if HAVE_SDL
+++if HAVE_JPEG
++ noinst_PROGRAMS += sdlcam
++ endif
+++endif
++ 
++ driver_test_SOURCES = driver-test.c
++ driver_test_LDADD = ../../utils/libv4l2util/libv4l2util.la
++-- 
++2.14.1
++
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 95a700b2d5..c95b2778cd 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -10,6 +10,10 @@ LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
+ LIBV4L_DEPENDENCIES = host-pkgconf
+ LIBV4L_CONF_OPTS = --disable-doxygen-doc
++# We're patching contrib/test/Makefile.am
++LIBV4L_AUTORECONF = YES
++# add host-gettext for AM_ICONV macro
++LIBV4L_DEPENDENCIES += host-gettext
+ 
+ # fix uclibc-ng configure/compile
+ LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-- 
+2.14.1
