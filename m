@@ -1,51 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jun 2018 13:08:51 +0200
-Subject: [Buildroot] [PATCH v3 20/22]
- package/x11r7/xdriver_xf86-video-savage: add patch to fix support for
- xserver_xorg-server 1.20.0
+Date: Sat, 30 Jun 2018 13:08:48 +0200
+Subject: [Buildroot] [PATCH v3 17/22]
+ package/x11r7/xdriver_xf86-video-vmware: bump version to 13.3.0
 In-Reply-To: <20180630110853.29339-1-bernd.kuhls@t-online.de>
 References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
-Message-ID: <20180630110853.29339-21-bernd.kuhls@t-online.de>
+Message-ID: <20180630110853.29339-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added license hash and all hashes provided by upstream.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0002-xorg-xserver120.patch                | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
- create mode 100644 package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
+ .../xdriver_xf86-video-vmware.hash                       | 9 +++++++--
+ .../xdriver_xf86-video-vmware.mk                         | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch b/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
-new file mode 100644
-index 0000000000..4c695960d1
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
-@@ -0,0 +1,23 @@
-+Fix build with modular-xorg-server-1.20
-+
-+Downloaded from
-+http://cvsweb.netbsd.org/bsdweb.cgi/pkgsrc/x11/xf86-video-savage/patches/patch-src_savage__driver.c?rev=1.3&content-type=text/x-cvsweb-markup
-+
-+Patch was sent upstream by Thomas Klausner <wiz@netbsd.org>:
-+https://lists.x.org/archives/xorg-devel/2018-May/056952.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+--- a/src/savage_driver.c.orig	2017-01-17 22:43:40.000000000 +0000
-++++ b/src/savage_driver.c
-+@@ -2034,8 +2034,10 @@ static Bool SavagePreInit(ScrnInfoPtr pS
-+     xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Detected current MCLK value of %1.3f MHz\n",
-+ 	       mclk / 1000.0);
-+ 
-++#if 0
-+     pScrn->maxHValue = 2048 << 3;	/* 11 bits of h_total 8-pixel units */
-+     pScrn->maxVValue = 2048;		/* 11 bits of v_total */
-++#endif
-+     pScrn->virtualX = pScrn->display->virtualX;
-+     pScrn->virtualY = pScrn->display->virtualY;
-+ 
+diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
+index 8d948a7d4c..f07e061478 100644
+--- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
++++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-November/002743.html
+-sha256 e2f7f7101fba7f53b268e7a25908babbf155b3984fb5268b3d244eb6c11bf62b  xf86-video-vmware-13.2.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-May/002895.html
++md5 08d66d062055080ff699ab4869726ea2  xf86-video-vmware-13.3.0.tar.bz2
++sha1 f01335fe6bdb507e749571bfcd69163aed97312a  xf86-video-vmware-13.3.0.tar.bz2
++sha256 47971924659e51666a757269ad941a059ef5afe7a47b5101c174a6022ac4066c  xf86-video-vmware-13.3.0.tar.bz2
++sha512 c318de893cae7b2b11e11c1b389ee47478b7c8d1f52c27099dbe453efec28f3e9da449217307a8c2251999eada66312f766996be1a6ead413b8b6dedc42c68ca  xf86-video-vmware-13.3.0.tar.bz2
++# Locally computed
++sha256 7e59b8ca2a161855a60561f27ada8dfdbb678733eacdb23423fff6d21f9ad43b  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+index 3ba6b332a3..5f0cb77bf8 100644
+--- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
++++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.2.1
++XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.3.0
+ XDRIVER_XF86_VIDEO_VMWARE_SOURCE = xf86-video-vmware-$(XDRIVER_XF86_VIDEO_VMWARE_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_VMWARE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_VMWARE_LICENSE = MIT
 -- 
 2.17.1
