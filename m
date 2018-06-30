@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jun 2018 13:08:40 +0200
-Subject: [Buildroot] [PATCH v3 09/22] package/x11r7/xdriver_xf86-video-*:
- mass switch to xorgproto
+Date: Sat, 30 Jun 2018 13:08:42 +0200
+Subject: [Buildroot] [PATCH v3 11/22] package/x11r7/xlib_*: mass switch to
+ xorgproto
 In-Reply-To: <20180630110853.29339-1-bernd.kuhls@t-online.de>
 References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
-Message-ID: <20180630110853.29339-10-bernd.kuhls@t-online.de>
+Message-ID: <20180630110853.29339-12-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,1057 +17,982 @@ https://lists.x.org/archives/xorg-announce/2018-February/002835.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../x11r7/xdriver_xf86-video-amdgpu/Config.in |  9 +-------
- .../xdriver_xf86-video-amdgpu.mk              |  9 +-------
- .../x11r7/xdriver_xf86-video-ark/Config.in    |  6 +-----
- .../xdriver_xf86-video-ark.mk                 |  2 +-
- .../x11r7/xdriver_xf86-video-ast/Config.in    |  3 +--
- .../xdriver_xf86-video-ast.mk                 |  2 +-
- .../x11r7/xdriver_xf86-video-ati/Config.in    |  9 +-------
- .../xdriver_xf86-video-ati.mk                 | 11 ++--------
- .../x11r7/xdriver_xf86-video-cirrus/Config.in |  7 +------
- .../xdriver_xf86-video-cirrus.mk              |  2 +-
- .../x11r7/xdriver_xf86-video-dummy/Config.in  |  7 +------
- .../xdriver_xf86-video-dummy.mk               |  2 +-
- .../x11r7/xdriver_xf86-video-fbdev/Config.in  |  6 +-----
- .../xdriver_xf86-video-fbdev.mk               |  2 +-
- .../xdriver_xf86-video-fbturbo/Config.in      |  8 +------
- .../xdriver_xf86-video-fbturbo.mk             | 11 +---------
- .../x11r7/xdriver_xf86-video-geode/Config.in  |  6 +-----
- .../xdriver_xf86-video-geode.mk               |  2 +-
- .../x11r7/xdriver_xf86-video-glint/Config.in  | 10 +--------
- .../xdriver_xf86-video-glint.mk               |  2 +-
- .../x11r7/xdriver_xf86-video-i128/Config.in   |  7 +------
- .../xdriver_xf86-video-i128.mk                |  2 +-
- .../xdriver_xf86-video-imx-viv/Config.in      |  3 +--
- .../xdriver_xf86-video-imx-viv.mk             |  2 +-
- .../x11r7/xdriver_xf86-video-imx/Config.in    |  7 +------
- .../xdriver_xf86-video-imx.mk                 |  3 +--
- .../x11r7/xdriver_xf86-video-intel/Config.in  |  3 +--
- .../xdriver_xf86-video-intel.mk               | 21 +++++--------------
- .../x11r7/xdriver_xf86-video-mach64/Config.in |  6 +-----
- .../xdriver_xf86-video-mach64.mk              |  2 +-
- .../x11r7/xdriver_xf86-video-mga/Config.in    |  9 +-------
- .../xdriver_xf86-video-mga.mk                 |  2 +-
- .../xdriver_xf86-video-neomagic/Config.in     |  8 +------
- .../xdriver_xf86-video-neomagic.mk            |  2 +-
- .../xdriver_xf86-video-nouveau/Config.in      |  6 +-----
- .../xdriver_xf86-video-nouveau.mk             |  6 +-----
- package/x11r7/xdriver_xf86-video-nv/Config.in |  7 +------
- .../xdriver_xf86-video-nv.mk                  |  2 +-
- .../xdriver_xf86-video-openchrome/Config.in   |  7 +------
- .../xdriver_xf86-video-openchrome.mk          |  8 +------
- .../x11r7/xdriver_xf86-video-qxl/Config.in    |  3 +--
- .../xdriver_xf86-video-qxl.mk                 |  3 +--
- .../x11r7/xdriver_xf86-video-r128/Config.in   |  6 +-----
- .../xdriver_xf86-video-r128.mk                |  2 +-
- .../x11r7/xdriver_xf86-video-savage/Config.in |  8 +------
- .../xdriver_xf86-video-savage.mk              |  2 +-
- .../Config.in                                 |  7 +------
- .../xdriver_xf86-video-siliconmotion.mk       |  2 +-
- .../x11r7/xdriver_xf86-video-sis/Config.in    | 10 +--------
- .../xdriver_xf86-video-sis.mk                 |  2 +-
- .../x11r7/xdriver_xf86-video-tdfx/Config.in   |  8 +------
- .../xdriver_xf86-video-tdfx.mk                |  8 +------
- .../x11r7/xdriver_xf86-video-tga/Config.in    |  8 +------
- .../xdriver_xf86-video-tga.mk                 |  2 +-
- .../xdriver_xf86-video-trident/Config.in      |  8 +------
- .../xdriver_xf86-video-trident.mk             |  2 +-
- .../x11r7/xdriver_xf86-video-vesa/Config.in   |  6 +-----
- .../xdriver_xf86-video-vesa.mk                |  2 +-
- .../x11r7/xdriver_xf86-video-vmware/Config.in |  7 +------
- .../xdriver_xf86-video-vmware.mk              |  2 +-
- .../x11r7/xdriver_xf86-video-voodoo/Config.in |  7 +------
- .../xdriver_xf86-video-voodoo.mk              |  2 +-
- 62 files changed, 67 insertions(+), 269 deletions(-)
+ package/x11r7/xlib_libFS/Config.in                 |  3 +--
+ package/x11r7/xlib_libFS/xlib_libFS.mk             |  2 +-
+ package/x11r7/xlib_libICE/Config.in                |  2 +-
+ package/x11r7/xlib_libICE/xlib_libICE.mk           |  2 +-
+ package/x11r7/xlib_libSM/Config.in                 |  2 +-
+ package/x11r7/xlib_libSM/xlib_libSM.mk             |  2 +-
+ package/x11r7/xlib_libX11/Config.in                |  6 +-----
+ package/x11r7/xlib_libX11/xlib_libX11.mk           | 14 +++-----------
+ package/x11r7/xlib_libXScrnSaver/Config.in         |  2 +-
+ .../x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk |  2 +-
+ package/x11r7/xlib_libXau/Config.in                |  2 +-
+ package/x11r7/xlib_libXau/xlib_libXau.mk           |  4 ++--
+ package/x11r7/xlib_libXaw/Config.in                |  2 +-
+ package/x11r7/xlib_libXaw/xlib_libXaw.mk           |  2 +-
+ package/x11r7/xlib_libXcomposite/Config.in         |  3 +--
+ .../x11r7/xlib_libXcomposite/xlib_libXcomposite.mk |  2 +-
+ package/x11r7/xlib_libXcursor/Config.in            |  2 +-
+ package/x11r7/xlib_libXcursor/xlib_libXcursor.mk   |  4 ++--
+ package/x11r7/xlib_libXdamage/Config.in            |  3 +--
+ package/x11r7/xlib_libXdamage/xlib_libXdamage.mk   |  2 +-
+ package/x11r7/xlib_libXdmcp/Config.in              |  2 +-
+ package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk       |  4 ++--
+ package/x11r7/xlib_libXext/Config.in               |  3 +--
+ package/x11r7/xlib_libXext/xlib_libXext.mk         |  2 +-
+ package/x11r7/xlib_libXfixes/Config.in             |  4 +---
+ package/x11r7/xlib_libXfixes/xlib_libXfixes.mk     |  5 ++---
+ package/x11r7/xlib_libXfont/Config.in              |  3 +--
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk       |  4 ++--
+ package/x11r7/xlib_libXfont2/Config.in             |  3 +--
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.mk     |  6 ++----
+ package/x11r7/xlib_libXft/Config.in                |  2 +-
+ package/x11r7/xlib_libXft/xlib_libXft.mk           |  2 +-
+ package/x11r7/xlib_libXi/Config.in                 |  3 +--
+ package/x11r7/xlib_libXi/xlib_libXi.mk             |  5 ++---
+ package/x11r7/xlib_libXinerama/Config.in           |  2 +-
+ package/x11r7/xlib_libXinerama/xlib_libXinerama.mk |  2 +-
+ package/x11r7/xlib_libXmu/Config.in                |  2 +-
+ package/x11r7/xlib_libXmu/xlib_libXmu.mk           |  2 +-
+ package/x11r7/xlib_libXpm/Config.in                |  2 +-
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk           |  2 +-
+ package/x11r7/xlib_libXrandr/Config.in             |  4 +---
+ package/x11r7/xlib_libXrandr/xlib_libXrandr.mk     |  2 +-
+ package/x11r7/xlib_libXrender/Config.in            |  3 +--
+ package/x11r7/xlib_libXrender/xlib_libXrender.mk   |  4 ++--
+ package/x11r7/xlib_libXres/Config.in               |  3 +--
+ package/x11r7/xlib_libXres/xlib_libXres.mk         |  2 +-
+ package/x11r7/xlib_libXt/Config.in                 |  3 +--
+ package/x11r7/xlib_libXt/xlib_libXt.mk             |  2 +-
+ package/x11r7/xlib_libXtst/Config.in               |  2 +-
+ package/x11r7/xlib_libXtst/xlib_libXtst.mk         |  2 +-
+ package/x11r7/xlib_libXv/Config.in                 |  3 +--
+ package/x11r7/xlib_libXv/xlib_libXv.mk             |  2 +-
+ package/x11r7/xlib_libXvMC/Config.in               |  3 +--
+ package/x11r7/xlib_libXvMC/xlib_libXvMC.mk         |  2 +-
+ package/x11r7/xlib_libXxf86dga/Config.in           |  3 +--
+ package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk |  2 +-
+ package/x11r7/xlib_libXxf86vm/Config.in            |  3 +--
+ package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk   |  2 +-
+ package/x11r7/xlib_libdmx/Config.in                |  2 +-
+ package/x11r7/xlib_libdmx/xlib_libdmx.mk           |  2 +-
+ package/x11r7/xlib_libfontenc/Config.in            |  2 +-
+ package/x11r7/xlib_libfontenc/xlib_libfontenc.mk   |  4 ++--
+ package/x11r7/xlib_libxkbfile/Config.in            |  2 +-
+ package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk   |  4 ++--
+ package/x11r7/xlib_libxshmfence/Config.in          |  2 +-
+ .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |  2 +-
+ 66 files changed, 78 insertions(+), 112 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-index 968c5e767c..43090c7559 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
-@@ -6,14 +6,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
- 	select BR2_PACKAGE_LIBDRM_AMDGPU
- 	select BR2_PACKAGE_LIBEPOXY
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
--	select BR2_PACKAGE_XPROTO_DRI3PROTO
+diff --git a/package/x11r7/xlib_libFS/Config.in b/package/x11r7/xlib_libFS/Config.in
+index 0c8a7290c1..6ff0bcc36e 100644
+--- a/package/x11r7/xlib_libFS/Config.in
++++ b/package/x11r7/xlib_libFS/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBFS
+ 	bool "libFS"
+ 	select BR2_PACKAGE_XLIB_XTRANS
+-	select BR2_PACKAGE_XPROTO_XPROTO
 -	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org FS library
+diff --git a/package/x11r7/xlib_libFS/xlib_libFS.mk b/package/x11r7/xlib_libFS/xlib_libFS.mk
+index a3c58b90d9..56f2dc3cba 100644
+--- a/package/x11r7/xlib_libFS/xlib_libFS.mk
++++ b/package/x11r7/xlib_libFS/xlib_libFS.mk
+@@ -10,7 +10,7 @@ XLIB_LIBFS_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBFS_LICENSE = MIT
+ XLIB_LIBFS_LICENSE_FILES = COPYING
+ XLIB_LIBFS_INSTALL_STAGING = YES
+-XLIB_LIBFS_DEPENDENCIES = xlib_xtrans xproto_xproto xproto_fontsproto host-pkgconf
++XLIB_LIBFS_DEPENDENCIES = xlib_xtrans xorgproto host-pkgconf
+ XLIB_LIBFS_CONF_OPTS = --disable-malloc0returnsnull
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libICE/Config.in b/package/x11r7/xlib_libICE/Config.in
+index d63f935602..ccdd400396 100644
+--- a/package/x11r7/xlib_libICE/Config.in
++++ b/package/x11r7/xlib_libICE/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBICE
+ 	bool "libICE"
+ 	select BR2_PACKAGE_XLIB_XTRANS
 -	select BR2_PACKAGE_XPROTO_XPROTO
 +	select BR2_PACKAGE_XORGPROTO
  	help
- 	  AMD GPU video driver
+ 	  X.Org ICE library
+diff --git a/package/x11r7/xlib_libICE/xlib_libICE.mk b/package/x11r7/xlib_libICE/xlib_libICE.mk
+index e2a4e7d387..982e8fdef1 100644
+--- a/package/x11r7/xlib_libICE/xlib_libICE.mk
++++ b/package/x11r7/xlib_libICE/xlib_libICE.mk
+@@ -10,6 +10,6 @@ XLIB_LIBICE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBICE_LICENSE = MIT
+ XLIB_LIBICE_LICENSE_FILES = COPYING
+ XLIB_LIBICE_INSTALL_STAGING = YES
+-XLIB_LIBICE_DEPENDENCIES = xlib_xtrans xproto_xproto host-pkgconf
++XLIB_LIBICE_DEPENDENCIES = xlib_xtrans xorgproto host-pkgconf
  
-diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-index 5c1fb3f844..b8b7dcfe2f 100644
---- a/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-+++ b/package/x11r7/xdriver_xf86-video-amdgpu/xdriver_xf86-video-amdgpu.mk
-@@ -12,14 +12,7 @@ XDRIVER_XF86_VIDEO_AMDGPU_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_AMDGPU_DEPENDENCIES = \
- 	libdrm \
- 	xlib_libXcomposite \
--	xproto_dri3proto \
--	xproto_fontsproto \
--	xproto_glproto \
--	xproto_randrproto \
--	xproto_videoproto \
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libSM/Config.in b/package/x11r7/xlib_libSM/Config.in
+index ef83b531f8..02ee2bd232 100644
+--- a/package/x11r7/xlib_libSM/Config.in
++++ b/package/x11r7/xlib_libSM/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_XLIB_LIBSM
+ 	bool "libSM"
+ 	select BR2_PACKAGE_XLIB_LIBICE
+ 	select BR2_PACKAGE_XLIB_XTRANS
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org SM library
+diff --git a/package/x11r7/xlib_libSM/xlib_libSM.mk b/package/x11r7/xlib_libSM/xlib_libSM.mk
+index 30640bd101..9049cea234 100644
+--- a/package/x11r7/xlib_libSM/xlib_libSM.mk
++++ b/package/x11r7/xlib_libSM/xlib_libSM.mk
+@@ -10,7 +10,7 @@ XLIB_LIBSM_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBSM_LICENSE = MIT
+ XLIB_LIBSM_LICENSE_FILES = COPYING
+ XLIB_LIBSM_INSTALL_STAGING = YES
+-XLIB_LIBSM_DEPENDENCIES = xlib_libICE xlib_xtrans xproto_xproto
++XLIB_LIBSM_DEPENDENCIES = xlib_libICE xlib_xtrans xorgproto
+ XLIB_LIBSM_CONF_OPTS = --without-libuuid
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libX11/Config.in b/package/x11r7/xlib_libX11/Config.in
+index 3ad8d00ae5..d69c51b91e 100644
+--- a/package/x11r7/xlib_libX11/Config.in
++++ b/package/x11r7/xlib_libX11/Config.in
+@@ -5,10 +5,6 @@ config BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_XTRANS
+ 	select BR2_PACKAGE_XLIB_LIBXAU
+ 	select BR2_PACKAGE_XLIB_LIBXDMCP
+-	select BR2_PACKAGE_XPROTO_KBPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
+-	select BR2_PACKAGE_XPROTO_XEXTPROTO
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+-	select BR2_PACKAGE_XPROTO_XF86BIGFONTPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org X11 library
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 64344da737..e2266cdfad 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -16,12 +16,8 @@ XLIB_LIBX11_DEPENDENCIES = \
+ 	xlib_xtrans \
+ 	xlib_libXau \
+ 	xlib_libXdmcp \
+-	xproto_kbproto \
+-	xproto_xproto \
 -	xproto_xextproto \
--	xproto_xf86driproto \
--	xproto_xproto \
+-	xproto_inputproto \
+-	xproto_xf86bigfontproto \
+-	host-xproto_xproto
 +	xorgproto \
- 	xserver_xorg-server
++	host-xorgproto
  
- # xdriver_xf86-video-amdgpu requires O_CLOEXEC
-diff --git a/package/x11r7/xdriver_xf86-video-ark/Config.in b/package/x11r7/xdriver_xf86-video-ark/Config.in
-index cecedde024..e1219affa3 100644
---- a/package/x11r7/xdriver_xf86-video-ark/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ark/Config.in
-@@ -1,9 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ARK
- 	bool "xf86-video-ark"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  X.Org driver for ark cards
-diff --git a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
-index c0b905b8dd..3f2a63609e 100644
---- a/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
-+++ b/package/x11r7/xdriver_xf86-video-ark/xdriver_xf86-video-ark.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_ARK_SOURCE = xf86-video-ark-$(XDRIVER_XF86_VIDEO_ARK_VERSION)
- XDRIVER_XF86_VIDEO_ARK_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_ARK_LICENSE = MIT
- XDRIVER_XF86_VIDEO_ARK_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_ARK_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
-+XDRIVER_XF86_VIDEO_ARK_DEPENDENCIES = xserver_xorg-server xorgproto
+ HOST_XLIB_LIBX11_DEPENDENCIES = \
+ 	host-libxcb \
+@@ -29,11 +25,7 @@ HOST_XLIB_LIBX11_DEPENDENCIES = \
+ 	host-xlib_xtrans \
+ 	host-xlib_libXau \
+ 	host-xlib_libXdmcp \
+-	host-xproto_kbproto \
+-	host-xproto_xproto \
+-	host-xproto_xextproto \
+-	host-xproto_inputproto \
+-	host-xproto_xf86bigfontproto
++	host-xorgproto
  
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-ast/Config.in b/package/x11r7/xdriver_xf86-video-ast/Config.in
-index 5dfe95e537..2ebe8fc2fb 100644
---- a/package/x11r7/xdriver_xf86-video-ast/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ast/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AST
- 	bool "xf86-video-ast"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  No description available
-diff --git a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
-index 3c9eb91159..b39bbf9a15 100644
---- a/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
-+++ b/package/x11r7/xdriver_xf86-video-ast/xdriver_xf86-video-ast.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_AST_SOURCE = xf86-video-ast-$(XDRIVER_XF86_VIDEO_AST_VERSION)
- XDRIVER_XF86_VIDEO_AST_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_AST_LICENSE = MIT
- XDRIVER_XF86_VIDEO_AST_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_AST_DEPENDENCIES = xproto_fontsproto xproto_xproto xserver_xorg-server
-+XDRIVER_XF86_VIDEO_AST_DEPENDENCIES = xorgproto xserver_xorg-server
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-ati/Config.in b/package/x11r7/xdriver_xf86-video-ati/Config.in
-index 00d91bda51..fdf1ebd18b 100644
---- a/package/x11r7/xdriver_xf86-video-ati/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-ati/Config.in
-@@ -5,14 +5,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_ATI
- 	select BR2_PACKAGE_LIBDRM_RADEON
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER_RADEON
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
--	select BR2_PACKAGE_XPROTO_XINERAMAPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  ATI video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-index 8726695399..d283f789f8 100644
---- a/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-+++ b/package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk
-@@ -12,17 +12,10 @@ XDRIVER_XF86_VIDEO_ATI_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_ATI_DEPENDENCIES = \
- 	libdrm \
- 	xlib_libXcomposite \
--	xproto_fontsproto \
--	xproto_glproto \
--	xproto_randrproto \
--	xproto_videoproto \
--	xproto_xextproto \
--	xproto_xf86driproto \
--	xproto_xineramaproto \
--	xproto_xproto \
-+	xorgproto \
- 	xserver_xorg-server
- 
--ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO)$(BR2_PACKAGE_LIBEPOXY),yy)
-+ifeq ($(BR2_PACKAGE_LIBEPOXY),y)
- XDRIVER_XF86_VIDEO_ATI_CONF_OPTS = --enable-glamor
- else
- XDRIVER_XF86_VIDEO_ATI_CONF_OPTS = --disable-glamor
-diff --git a/package/x11r7/xdriver_xf86-video-cirrus/Config.in b/package/x11r7/xdriver_xf86-video-cirrus/Config.in
-index 11c9df8e0e..2987c3f0f0 100644
---- a/package/x11r7/xdriver_xf86-video-cirrus/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-cirrus/Config.in
-@@ -1,10 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_CIRRUS
- 	bool "xf86-video-cirrus"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Cirrus Logic video driver
-diff --git a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-index 78e8a9c05d..fa776a24d6 100644
---- a/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-+++ b/package/x11r7/xdriver_xf86-video-cirrus/xdriver_xf86-video-cirrus.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_CIRRUS_SOURCE = xf86-video-cirrus-$(XDRIVER_XF86_VIDEO_CIRRUS
- XDRIVER_XF86_VIDEO_CIRRUS_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_CIRRUS_LICENSE = MIT
- XDRIVER_XF86_VIDEO_CIRRUS_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_CIRRUS_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
-+XDRIVER_XF86_VIDEO_CIRRUS_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-dummy/Config.in b/package/x11r7/xdriver_xf86-video-dummy/Config.in
-index 00f7e1df40..58c70a8413 100644
---- a/package/x11r7/xdriver_xf86-video-dummy/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-dummy/Config.in
-@@ -1,10 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_DUMMY
- 	bool "xf86-video-dummy"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  X.Org driver for dummy cards
-diff --git a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
-index fff1495ef5..3127f6cb1b 100644
---- a/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
-+++ b/package/x11r7/xdriver_xf86-video-dummy/xdriver_xf86-video-dummy.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_DUMMY_SOURCE = xf86-video-dummy-$(XDRIVER_XF86_VIDEO_DUMMY_VE
- XDRIVER_XF86_VIDEO_DUMMY_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_DUMMY_LICENSE = MIT
- XDRIVER_XF86_VIDEO_DUMMY_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_DUMMY_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xf86dgaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_DUMMY_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-fbdev/Config.in b/package/x11r7/xdriver_xf86-video-fbdev/Config.in
-index 9f7c5402b8..0ecba482fb 100644
---- a/package/x11r7/xdriver_xf86-video-fbdev/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-fbdev/Config.in
-@@ -1,9 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBDEV
- 	bool "xf86-video-fbdev"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  video driver for framebuffer device
-diff --git a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
-index 7d08c7da18..f39311e611 100644
---- a/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
-+++ b/package/x11r7/xdriver_xf86-video-fbdev/xdriver_xf86-video-fbdev.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_FBDEV_SOURCE = xf86-video-fbdev-$(XDRIVER_XF86_VIDEO_FBDEV_VE
- XDRIVER_XF86_VIDEO_FBDEV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_FBDEV_LICENSE = MIT
- XDRIVER_XF86_VIDEO_FBDEV_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_FBDEV_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xproto
-+XDRIVER_XF86_VIDEO_FBDEV_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/Config.in b/package/x11r7/xdriver_xf86-video-fbturbo/Config.in
-index 7825901e98..7acf93e262 100644
---- a/package/x11r7/xdriver_xf86-video-fbturbo/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-fbturbo/Config.in
-@@ -2,13 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_FBTURBO
- 	bool "xf86-video-fbturbo"
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_PIXMAN
--	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_LIBUMP
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  video driver, primarily optimized for the devices powered
- 	  by the Allwinner SoC (A10, A13, A20). It can use some of
-diff --git a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
-index 15f4cd1093..58a70416dd 100644
---- a/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
-+++ b/package/x11r7/xdriver_xf86-video-fbturbo/xdriver_xf86-video-fbturbo.mk
-@@ -12,12 +12,7 @@ XDRIVER_XF86_VIDEO_FBTURBO_DEPENDENCIES = \
- 	xserver_xorg-server \
- 	libdrm \
- 	pixman \
--	xproto_fontsproto \
--	xproto_randrproto \
--	xproto_renderproto \
--	xproto_videoproto \
--	xproto_xproto \
--	xproto_xf86driproto
-+	xorgproto
- 
- ifeq ($(BR2_PACKAGE_LIBPCIACCESS),y)
- XDRIVER_XF86_VIDEO_FBTURBO_DEPENDENCIES += libpciaccess
-@@ -30,10 +25,6 @@ ifeq ($(BR2_PACKAGE_LIBUMP),y)
- XDRIVER_XF86_VIDEO_FBTURBO_DEPENDENCIES += libump
- endif
- 
--ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
--XDRIVER_XF86_VIDEO_FBTURBO_DEPENDENCIES += xproto_dri2proto
--endif
--
- define XDRIVER_XF86_VIDEO_FBTURBO_INSTALL_CONF_FILE
- 	$(INSTALL) -m 0644 -D $(@D)/xorg.conf $(TARGET_DIR)/etc/X11/xorg.conf
- endef
-diff --git a/package/x11r7/xdriver_xf86-video-geode/Config.in b/package/x11r7/xdriver_xf86-video-geode/Config.in
-index fe217b922c..b432f2d4a1 100644
---- a/package/x11r7/xdriver_xf86-video-geode/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-geode/Config.in
-@@ -1,10 +1,6 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GEODE
- 	bool "xf86-video-geode"
- 	depends on BR2_i386
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  video driver for geode device
-diff --git a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-index 9138abdbee..54616f65fe 100644
---- a/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-+++ b/package/x11r7/xdriver_xf86-video-geode/xdriver_xf86-video-geode.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_GEODE_SOURCE = xf86-video-geode-$(XDRIVER_XF86_VIDEO_GEODE_VE
- XDRIVER_XF86_VIDEO_GEODE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_GEODE_LICENSE = MIT
- XDRIVER_XF86_VIDEO_GEODE_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_GEODE_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xproto
-+XDRIVER_XF86_VIDEO_GEODE_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-glint/Config.in b/package/x11r7/xdriver_xf86-video-glint/Config.in
-index acae30b0b0..c474f6c912 100644
---- a/package/x11r7/xdriver_xf86-video-glint/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-glint/Config.in
-@@ -2,15 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_GLINT
- 	bool "xf86-video-glint"
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  GLINT/Permedia video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk b/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
-index 52bc567e59..fba0030757 100644
---- a/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
-+++ b/package/x11r7/xdriver_xf86-video-glint/xdriver_xf86-video-glint.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_GLINT_SOURCE = xf86-video-glint-$(XDRIVER_XF86_VIDEO_GLINT_VE
- XDRIVER_XF86_VIDEO_GLINT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_GLINT_LICENSE = MIT
- XDRIVER_XF86_VIDEO_GLINT_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_GLINT_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xf86driproto xproto_xproto
-+XDRIVER_XF86_VIDEO_GLINT_DEPENDENCIES = xserver_xorg-server libdrm xorgproto
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-i128/Config.in b/package/x11r7/xdriver_xf86-video-i128/Config.in
-index 30b240cc1f..4f4810cc09 100644
---- a/package/x11r7/xdriver_xf86-video-i128/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-i128/Config.in
-@@ -1,10 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_I128
- 	bool "xf86-video-i128"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Number 9 I128 video driver
-diff --git a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
-index 1bb760cee3..148fc3d1d0 100644
---- a/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
-+++ b/package/x11r7/xdriver_xf86-video-i128/xdriver_xf86-video-i128.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_I128_SOURCE = xf86-video-i128-$(XDRIVER_XF86_VIDEO_I128_VERSI
- XDRIVER_XF86_VIDEO_I128_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_I128_LICENSE = MIT
- XDRIVER_XF86_VIDEO_I128_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_I128_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
-+XDRIVER_XF86_VIDEO_I128_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-index 5a0257305c..13cee14deb 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/Config.in
-@@ -6,8 +6,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX_VIV
- 	select BR2_PACKAGE_MESA3D # Needed in order to compile xorg with glx/dri
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_XPROTO_XPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  X.Org driver for iMX6 GPU (Vivante)
- 
-diff --git a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-index 222d74ac4b..0913427542 100644
---- a/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx-viv/xdriver_xf86-video-imx-viv.mk
-@@ -8,7 +8,7 @@ XDRIVER_XF86_VIDEO_IMX_VIV_VERSION = rel_imx_4.9.x_1.0.0_ga
- XDRIVER_XF86_VIDEO_IMX_VIV_SITE = https://source.codeaurora.org/external/imx/xf86-video-imx-vivante
- XDRIVER_XF86_VIDEO_IMX_VIV_SITE_METHOD = git
- XDRIVER_XF86_VIDEO_IMX_VIV_DEPENDENCIES = imx-gpu-viv imx-gpu-g2d xserver_xorg-server \
--	xproto_xproto xproto_xf86driproto libdrm
-+	xorgproto libdrm
- XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE = MIT
- XDRIVER_XF86_VIDEO_IMX_VIV_LICENSE_FILES = COPYING-MIT
- XDRIVER_XF86_VIDEO_IMX_VIV_INSTALL_STAGING = YES
-diff --git a/package/x11r7/xdriver_xf86-video-imx/Config.in b/package/x11r7/xdriver_xf86-video-imx/Config.in
-index 398d49e1f0..410a458411 100644
---- a/package/x11r7/xdriver_xf86-video-imx/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-imx/Config.in
-@@ -5,12 +5,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_IMX
- 	depends on BR2_LINUX_KERNEL # linux/mxcfb.h
- 	depends on BR2_PACKAGE_GPU_AMD_BIN_MX51_OUTPUT_X11
- 	select BR2_PACKAGE_LIBZ160
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  X.Org driver for iMX5 GPU
- 
-diff --git a/package/x11r7/xdriver_xf86-video-imx/xdriver_xf86-video-imx.mk b/package/x11r7/xdriver_xf86-video-imx/xdriver_xf86-video-imx.mk
-index 5684a6db18..b80c6b7733 100644
---- a/package/x11r7/xdriver_xf86-video-imx/xdriver_xf86-video-imx.mk
-+++ b/package/x11r7/xdriver_xf86-video-imx/xdriver_xf86-video-imx.mk
-@@ -8,8 +8,7 @@ XDRIVER_XF86_VIDEO_IMX_VERSION = 11.09.01
- XDRIVER_XF86_VIDEO_IMX_SOURCE = xserver-xorg-video-imx-$(XDRIVER_XF86_VIDEO_IMX_VERSION).tar.gz
- XDRIVER_XF86_VIDEO_IMX_SITE = $(FREESCALE_IMX_SITE)
- XDRIVER_XF86_VIDEO_IMX_DEPENDENCIES = linux libz160 xserver_xorg-server \
--	xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto \
--	xproto_xf86dgaproto xproto_xproto
-+	xorgproto
- XDRIVER_XF86_VIDEO_IMX_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -I$(LINUX_DIR)/include"
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-intel/Config.in b/package/x11r7/xdriver_xf86-video-intel/Config.in
-index dc2fabf404..c4152b7cf8 100644
---- a/package/x11r7/xdriver_xf86-video-intel/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-intel/Config.in
-@@ -1,11 +1,10 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_INTEL
- 	bool "xf86-video-intel"
- 	depends on (BR2_i386 || BR2_x86_64)
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
- 	select BR2_PACKAGE_LIBPCIACCESS
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_INTEL
- 	select BR2_PACKAGE_XLIB_LIBXRANDR
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Intel video driver
-diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-index fa0f650dbe..31cdf4b065 100644
---- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-+++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
-@@ -27,26 +27,15 @@ XDRIVER_XF86_VIDEO_INTEL_DEPENDENCIES = \
- 	libdrm \
- 	libpciaccess \
- 	xlib_libXrandr \
--	xproto_fontsproto \
--	xproto_xproto \
-+	xorgproto \
- 	xserver_xorg-server
- 
- # X.org server support for DRI depends on a Mesa3D DRI driver
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),y)
--XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS += --enable-dri --enable-dri1
--# quote from configure.ac: "UXA doesn't build without DRI2 headers"
--ifeq ($(BR2_PACKAGE_XPROTO_DRI2PROTO),y)
--XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS += --enable-dri2 --enable-uxa
--else
--XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS += --disable-dri2 --disable-uxa
--endif
--ifeq ($(BR2_PACKAGE_XPROTO_DRI3PROTO),y)
--XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS += --enable-dri3
--else
--XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS += --disable-dri3
--endif
--else
--XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS += --disable-dri
-+XDRIVER_XF86_VIDEO_INTEL_CONF_OPTS += \
-+	--enable-dri2 \
-+	--enable-dri3 \
-+	--enable-uxa
- endif
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-mach64/Config.in b/package/x11r7/xdriver_xf86-video-mach64/Config.in
-index 82de826ad7..71c89dd295 100644
---- a/package/x11r7/xdriver_xf86-video-mach64/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-mach64/Config.in
-@@ -1,9 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_MACH64
- 	bool "xf86-video-mach64"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  mach64 video driver
-diff --git a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-index 599036033d..7f77b4883f 100644
---- a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-+++ b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-@@ -10,7 +10,7 @@ XDRIVER_XF86_VIDEO_MACH64_SITE = http://xorg.freedesktop.org/releases/individual
- XDRIVER_XF86_VIDEO_MACH64_LICENSE = MIT
- XDRIVER_XF86_VIDEO_MACH64_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_MACH64_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_MACH64_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
-+XDRIVER_XF86_VIDEO_MACH64_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- XDRIVER_XF86_VIDEO_MACH64_CONF_OPTS = --disable-dri
-diff --git a/package/x11r7/xdriver_xf86-video-mga/Config.in b/package/x11r7/xdriver_xf86-video-mga/Config.in
-index a504ec0c25..15fb3b9f87 100644
---- a/package/x11r7/xdriver_xf86-video-mga/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-mga/Config.in
-@@ -2,14 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_MGA
- 	bool "xf86-video-mga"
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Matrox video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-index 065a68ea67..bdc9f35884 100644
---- a/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-+++ b/package/x11r7/xdriver_xf86-video-mga/xdriver_xf86-video-mga.mk
-@@ -10,7 +10,7 @@ XDRIVER_XF86_VIDEO_MGA_SITE = http://xorg.freedesktop.org/archive/individual/dri
- XDRIVER_XF86_VIDEO_MGA_LICENSE = MIT
- XDRIVER_XF86_VIDEO_MGA_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_MGA_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_MGA_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_glproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xproto
-+XDRIVER_XF86_VIDEO_MGA_DEPENDENCIES = xserver_xorg-server libdrm xorgproto
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- XDRIVER_XF86_VIDEO_MGA_CONF_OPTS = --disable-dri
-diff --git a/package/x11r7/xdriver_xf86-video-neomagic/Config.in b/package/x11r7/xdriver_xf86-video-neomagic/Config.in
-index f8c8c47fce..5f36a48f40 100644
---- a/package/x11r7/xdriver_xf86-video-neomagic/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-neomagic/Config.in
-@@ -1,11 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_NEOMAGIC
- 	bool "xf86-video-neomagic"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Neomagic video driver
-diff --git a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-index cfd55361e7..93cd55a11b 100644
---- a/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-+++ b/package/x11r7/xdriver_xf86-video-neomagic/xdriver_xf86-video-neomagic.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_NEOMAGIC_SOURCE = xf86-video-neomagic-$(XDRIVER_XF86_VIDEO_NE
- XDRIVER_XF86_VIDEO_NEOMAGIC_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE = MIT
- XDRIVER_XF86_VIDEO_NEOMAGIC_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_NEOMAGIC_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_NEOMAGIC_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/Config.in b/package/x11r7/xdriver_xf86-video-nouveau/Config.in
-index 7e756e2107..c9fd2e3d2f 100644
---- a/package/x11r7/xdriver_xf86-video-nouveau/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-nouveau/Config.in
-@@ -4,11 +4,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_NOUVEAU
- 	select BR2_PACKAGE_MESA3D_DRI_DRIVER_NOUVEAU
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBDRM_NOUVEAU
--	select BR2_PACKAGE_XPROTO_DRI2PROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Nouveau video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-index e3969a2646..41b6fd6d42 100644
---- a/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-+++ b/package/x11r7/xdriver_xf86-video-nouveau/xdriver_xf86-video-nouveau.mk
-@@ -12,11 +12,7 @@ XDRIVER_XF86_VIDEO_NOUVEAU_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_NOUVEAU_DEPENDENCIES = \
- 	host-pkgconf \
- 	libdrm \
--	xproto_dri2proto \
--	xproto_randrproto \
--	xproto_renderproto \
--	xproto_videoproto \
--	xproto_xextproto \
-+	xorgproto \
- 	xserver_xorg-server
- 
- # xdriver_xf86-video-nouveau requires O_CLOEXEC
-diff --git a/package/x11r7/xdriver_xf86-video-nv/Config.in b/package/x11r7/xdriver_xf86-video-nv/Config.in
-index 8898f56729..5ff8b798c6 100644
---- a/package/x11r7/xdriver_xf86-video-nv/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-nv/Config.in
-@@ -1,10 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_NV
- 	bool "xf86-video-nv"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  NVIDIA video driver
-diff --git a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
-index 430ce4a1d1..1e5fc26ddb 100644
---- a/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
-+++ b/package/x11r7/xdriver_xf86-video-nv/xdriver_xf86-video-nv.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_NV_SOURCE = xf86-video-nv-$(XDRIVER_XF86_VIDEO_NV_VERSION).ta
- XDRIVER_XF86_VIDEO_NV_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_NV_LICENSE = MIT
- XDRIVER_XF86_VIDEO_NV_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_NV_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
-+XDRIVER_XF86_VIDEO_NV_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-openchrome/Config.in b/package/x11r7/xdriver_xf86-video-openchrome/Config.in
-index 02723eca69..a93d14376b 100644
---- a/package/x11r7/xdriver_xf86-video-openchrome/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-openchrome/Config.in
-@@ -5,12 +5,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_OPENCHROME
+ XLIB_LIBX11_CONF_OPTS = \
+ 	--disable-malloc0returnsnull \
+diff --git a/package/x11r7/xlib_libXScrnSaver/Config.in b/package/x11r7/xlib_libXScrnSaver/Config.in
+index 5df9a00c72..05c96d74cd 100644
+--- a/package/x11r7/xlib_libXScrnSaver/Config.in
++++ b/package/x11r7/xlib_libXScrnSaver/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_XLIB_LIBXSCRNSAVER
+ 	bool "libXScrnSaver"
  	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE
- 	select BR2_PACKAGE_XLIB_LIBXVMC
--	select BR2_PACKAGE_XPROTO_GLPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XPROTO_SCRNSAVERPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org XScrnSaver library
+diff --git a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+index f22ee983c0..f7e0aceb8f 100644
+--- a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
++++ b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXSCRNSAVER_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXSCRNSAVER_LICENSE = MIT
+ XLIB_LIBXSCRNSAVER_LICENSE_FILES = COPYING
+ XLIB_LIBXSCRNSAVER_INSTALL_STAGING = YES
+-XLIB_LIBXSCRNSAVER_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_scrnsaverproto
++XLIB_LIBXSCRNSAVER_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
+ XLIB_LIBXSCRNSAVER_CONF_OPTS = --disable-malloc0returnsnull
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXau/Config.in b/package/x11r7/xlib_libXau/Config.in
+index a220f01970..0323faa3ea 100644
+--- a/package/x11r7/xlib_libXau/Config.in
++++ b/package/x11r7/xlib_libXau/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBXAU
+ 	bool "libXau"
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+ 	help
+ 	  X.Org Xau library
+diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
+index 1c50cb2e4e..d8bac5426a 100644
+--- a/package/x11r7/xlib_libXau/xlib_libXau.mk
++++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
+@@ -10,9 +10,9 @@ XLIB_LIBXAU_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXAU_LICENSE = MIT
+ XLIB_LIBXAU_LICENSE_FILES = COPYING
+ XLIB_LIBXAU_INSTALL_STAGING = YES
+-XLIB_LIBXAU_DEPENDENCIES = host-pkgconf xutil_util-macros xproto_xproto
++XLIB_LIBXAU_DEPENDENCIES = host-pkgconf xutil_util-macros xorgproto
+ HOST_XLIB_LIBXAU_DEPENDENCIES = \
+-	host-pkgconf host-xutil_util-macros host-xproto_xproto
++	host-pkgconf host-xutil_util-macros xorgproto
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xlib_libXaw/Config.in b/package/x11r7/xlib_libXaw/Config.in
+index 3695bb679f..bda4ded26d 100644
+--- a/package/x11r7/xlib_libXaw/Config.in
++++ b/package/x11r7/xlib_libXaw/Config.in
+@@ -4,6 +4,6 @@ config BR2_PACKAGE_XLIB_LIBXAW
+ 	select BR2_PACKAGE_XLIB_LIBXT
+ 	select BR2_PACKAGE_XLIB_LIBXMU
+ 	select BR2_PACKAGE_XLIB_LIBXPM
 -	select BR2_PACKAGE_XPROTO_XPROTO
 +	select BR2_PACKAGE_XORGPROTO
  	help
- 	  Openchrome, A free and Open Source video driver for the
- 	  VIA/S3G UniChrome and UniChrome Pro graphics chipsets.
-diff --git a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-index 9ab032b6bc..0a669e186b 100644
---- a/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-+++ b/package/x11r7/xdriver_xf86-video-openchrome/xdriver_xf86-video-openchrome.mk
-@@ -16,12 +16,6 @@ XDRIVER_XF86_VIDEO_OPENCHROME_DEPENDENCIES = \
- 	xlib_libX11 \
- 	xlib_libXcomposite \
- 	xlib_libXvMC \
+ 	  X.Org Xaw library
+diff --git a/package/x11r7/xlib_libXaw/xlib_libXaw.mk b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+index d78adffeda..17d51a9570 100644
+--- a/package/x11r7/xlib_libXaw/xlib_libXaw.mk
++++ b/package/x11r7/xlib_libXaw/xlib_libXaw.mk
+@@ -10,6 +10,6 @@ XLIB_LIBXAW_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXAW_LICENSE = MIT
+ XLIB_LIBXAW_LICENSE_FILES = COPYING
+ XLIB_LIBXAW_INSTALL_STAGING = YES
+-XLIB_LIBXAW_DEPENDENCIES = xlib_libX11 xlib_libXt xlib_libXmu xlib_libXpm xproto_xproto
++XLIB_LIBXAW_DEPENDENCIES = xlib_libX11 xlib_libXt xlib_libXmu xlib_libXpm xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXcomposite/Config.in b/package/x11r7/xlib_libXcomposite/Config.in
+index 14da977af0..b417140aea 100644
+--- a/package/x11r7/xlib_libXcomposite/Config.in
++++ b/package/x11r7/xlib_libXcomposite/Config.in
+@@ -1,9 +1,8 @@
+ config BR2_PACKAGE_XLIB_LIBXCOMPOSITE
+ 	bool "libXcomposite"
+-	select BR2_PACKAGE_XPROTO_COMPOSITEPROTO
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xcomposite library
+diff --git a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
+index f0e59cba1d..e84b52e3fd 100644
+--- a/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
++++ b/package/x11r7/xlib_libXcomposite/xlib_libXcomposite.mk
+@@ -10,6 +10,6 @@ XLIB_LIBXCOMPOSITE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXCOMPOSITE_LICENSE = MIT
+ XLIB_LIBXCOMPOSITE_LICENSE_FILES = COPYING
+ XLIB_LIBXCOMPOSITE_INSTALL_STAGING = YES
+-XLIB_LIBXCOMPOSITE_DEPENDENCIES = xproto_compositeproto xlib_libX11 xlib_libXext xlib_libXfixes xproto_xproto
++XLIB_LIBXCOMPOSITE_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXfixes xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXcursor/Config.in b/package/x11r7/xlib_libXcursor/Config.in
+index 6519cc7667..0c70f95918 100644
+--- a/package/x11r7/xlib_libXcursor/Config.in
++++ b/package/x11r7/xlib_libXcursor/Config.in
+@@ -3,6 +3,6 @@ config BR2_PACKAGE_XLIB_LIBXCURSOR
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xcursor library
+diff --git a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+index b27aa653e9..6ee76039e0 100644
+--- a/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
++++ b/package/x11r7/xlib_libXcursor/xlib_libXcursor.mk
+@@ -10,10 +10,10 @@ XLIB_LIBXCURSOR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXCURSOR_LICENSE = MIT
+ XLIB_LIBXCURSOR_LICENSE_FILES = COPYING
+ XLIB_LIBXCURSOR_INSTALL_STAGING = YES
+-XLIB_LIBXCURSOR_DEPENDENCIES = xlib_libX11 xlib_libXfixes xlib_libXrender xproto_xproto
++XLIB_LIBXCURSOR_DEPENDENCIES = xlib_libX11 xlib_libXfixes xlib_libXrender xorgproto
+ HOST_XLIB_LIBXCURSOR_DEPENDENCIES = \
+ 	host-xlib_libX11 host-xlib_libXfixes host-xlib_libXrender \
+-	host-xproto_xproto
++	host-xorgproto
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xlib_libXdamage/Config.in b/package/x11r7/xlib_libXdamage/Config.in
+index 242748663c..d1a07dea9e 100644
+--- a/package/x11r7/xlib_libXdamage/Config.in
++++ b/package/x11r7/xlib_libXdamage/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_XLIB_LIBXDAMAGE
+ 	bool "libXdamage"
+-	select BR2_PACKAGE_XPROTO_DAMAGEPROTO
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xdamage library
+diff --git a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
+index 9f982eef10..d52b4e0e24 100644
+--- a/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
++++ b/package/x11r7/xlib_libXdamage/xlib_libXdamage.mk
+@@ -10,6 +10,6 @@ XLIB_LIBXDAMAGE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXDAMAGE_LICENSE = MIT
+ XLIB_LIBXDAMAGE_LICENSE_FILES = COPYING
+ XLIB_LIBXDAMAGE_INSTALL_STAGING = YES
+-XLIB_LIBXDAMAGE_DEPENDENCIES = xproto_damageproto xlib_libX11 xlib_libXfixes xproto_xproto
++XLIB_LIBXDAMAGE_DEPENDENCIES = xlib_libX11 xlib_libXfixes xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXdmcp/Config.in b/package/x11r7/xlib_libXdmcp/Config.in
+index 218ff1598b..832822e912 100644
+--- a/package/x11r7/xlib_libXdmcp/Config.in
++++ b/package/x11r7/xlib_libXdmcp/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBXDMCP
+ 	bool "libXdmcp"
+ 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xdmcp library
+diff --git a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+index ec1b861b92..179234e73f 100644
+--- a/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
++++ b/package/x11r7/xlib_libXdmcp/xlib_libXdmcp.mk
+@@ -10,8 +10,8 @@ XLIB_LIBXDMCP_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXDMCP_LICENSE = MIT
+ XLIB_LIBXDMCP_LICENSE_FILES = COPYING
+ XLIB_LIBXDMCP_INSTALL_STAGING = YES
+-XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xproto_xproto
+-HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xproto_xproto
++XLIB_LIBXDMCP_DEPENDENCIES = xutil_util-macros xorgproto
++HOST_XLIB_LIBXDMCP_DEPENDENCIES = host-xutil_util-macros host-xorgproto
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xlib_libXext/Config.in b/package/x11r7/xlib_libXext/Config.in
+index 823a165bf2..58c9ce55ea 100644
+--- a/package/x11r7/xlib_libXext/Config.in
++++ b/package/x11r7/xlib_libXext/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBXEXT
+ 	bool "libXext"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XPROTO_XEXTPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xext library
+diff --git a/package/x11r7/xlib_libXext/xlib_libXext.mk b/package/x11r7/xlib_libXext/xlib_libXext.mk
+index 211c85360a..02fee222b6 100644
+--- a/package/x11r7/xlib_libXext/xlib_libXext.mk
++++ b/package/x11r7/xlib_libXext/xlib_libXext.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXEXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXEXT_LICENSE = MIT
+ XLIB_LIBXEXT_LICENSE_FILES = COPYING
+ XLIB_LIBXEXT_INSTALL_STAGING = YES
+-XLIB_LIBXEXT_DEPENDENCIES = xlib_libX11 xproto_xextproto xproto_xproto
++XLIB_LIBXEXT_DEPENDENCIES = xlib_libX11 xorgproto
+ XLIB_LIBXEXT_CONF_OPTS = --disable-malloc0returnsnull
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXfixes/Config.in b/package/x11r7/xlib_libXfixes/Config.in
+index 9bbabb2558..2c3b6684f8 100644
+--- a/package/x11r7/xlib_libXfixes/Config.in
++++ b/package/x11r7/xlib_libXfixes/Config.in
+@@ -1,8 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBXFIXES
+ 	bool "libXfixes"
+-	select BR2_PACKAGE_XPROTO_FIXESPROTO
+ 	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XPROTO_XEXTPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xfixes library
+diff --git a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
+index b7d835bb30..f563ba34ec 100644
+--- a/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
++++ b/package/x11r7/xlib_libXfixes/xlib_libXfixes.mk
+@@ -10,10 +10,9 @@ XLIB_LIBXFIXES_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXFIXES_LICENSE = MIT
+ XLIB_LIBXFIXES_LICENSE_FILES = COPYING
+ XLIB_LIBXFIXES_INSTALL_STAGING = YES
+-XLIB_LIBXFIXES_DEPENDENCIES = xproto_fixesproto xlib_libX11 xproto_xextproto xproto_xproto
++XLIB_LIBXFIXES_DEPENDENCIES =  xlib_libX11 xorgproto
+ HOST_XLIB_LIBXFIXES_DEPENDENCIES = \
+-	host-xproto_fixesproto host-xlib_libX11 host-xproto_xextproto \
+-	host-xproto_xproto
++	host-xlib_libX11 host-xorgproto
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xlib_libXfont/Config.in b/package/x11r7/xlib_libXfont/Config.in
+index cc1da0ea39..4658027da8 100644
+--- a/package/x11r7/xlib_libXfont/Config.in
++++ b/package/x11r7/xlib_libXfont/Config.in
+@@ -3,8 +3,7 @@ config BR2_PACKAGE_XLIB_LIBXFONT
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_XLIB_LIBFONTENC
+ 	select BR2_PACKAGE_XLIB_XTRANS
+-	select BR2_PACKAGE_XPROTO_FONTSPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
+ 	select BR2_PACKAGE_XFONT_ENCODINGS
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xfont library
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index 30163eec6f..61b6f99785 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+@@ -12,11 +12,11 @@ XLIB_LIBXFONT_LICENSE_FILES = COPYING
+ XLIB_LIBXFONT_AUTORECONF = YES
+ XLIB_LIBXFONT_INSTALL_STAGING = YES
+ 
+-XLIB_LIBXFONT_DEPENDENCIES = freetype xlib_libfontenc xlib_xtrans xproto_fontsproto xproto_xproto xfont_encodings
++XLIB_LIBXFONT_DEPENDENCIES = freetype xlib_libfontenc xlib_xtrans xorgproto
+ 
+ HOST_XLIB_LIBXFONT_DEPENDENCIES = \
+ 	host-freetype host-xlib_libfontenc host-xlib_xtrans \
+-	host-xproto_fontsproto host-xproto_xproto host-xfont_encodings
++	host-xorgproto
+ 
+ XLIB_LIBXFONT_CONF_OPTS = --disable-devel-docs
+ HOST_XLIB_LIBXFONT_CONF_OPTS = --disable-devel-docs
+diff --git a/package/x11r7/xlib_libXfont2/Config.in b/package/x11r7/xlib_libXfont2/Config.in
+index 6cba46586b..fc2ebfe22c 100644
+--- a/package/x11r7/xlib_libXfont2/Config.in
++++ b/package/x11r7/xlib_libXfont2/Config.in
+@@ -3,8 +3,7 @@ config BR2_PACKAGE_XLIB_LIBXFONT2
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_XLIB_LIBFONTENC
+ 	select BR2_PACKAGE_XLIB_XTRANS
+-	select BR2_PACKAGE_XPROTO_FONTSPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
+ 	select BR2_PACKAGE_XFONT_ENCODINGS
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xfont library
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+index 3f1bdee435..ba2c7540cb 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+@@ -14,16 +14,14 @@ XLIB_LIBXFONT2_DEPENDENCIES = \
+ 	freetype \
+ 	xlib_libfontenc \
+ 	xlib_xtrans \
 -	xproto_fontsproto \
--	xproto_glproto \
--	xproto_randrproto \
--	xproto_renderproto \
--	xproto_xextproto \
--	xproto_xf86driproto \
--	xproto_xproto
+-	xproto_xproto \
++	xorgproto \
+ 	xfont_encodings
+ 
+ HOST_XLIB_LIBXFONT2_DEPENDENCIES = \
+ 	host-freetype \
+ 	host-xlib_libfontenc \
+ 	host-xlib_xtrans \
+-	host-xproto_fontsproto \
+-	host-xproto_xproto \
++	host-xorgproto \
+ 	host-xfont_encodings
+ 
+ XLIB_LIBXFONT2_CONF_OPTS = --disable-devel-docs
+diff --git a/package/x11r7/xlib_libXft/Config.in b/package/x11r7/xlib_libXft/Config.in
+index 6eef170177..84967a55e3 100644
+--- a/package/x11r7/xlib_libXft/Config.in
++++ b/package/x11r7/xlib_libXft/Config.in
+@@ -5,6 +5,6 @@ config BR2_PACKAGE_XLIB_LIBXFT
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xft library
+diff --git a/package/x11r7/xlib_libXft/xlib_libXft.mk b/package/x11r7/xlib_libXft/xlib_libXft.mk
+index de9b47093b..64415cfd30 100644
+--- a/package/x11r7/xlib_libXft/xlib_libXft.mk
++++ b/package/x11r7/xlib_libXft/xlib_libXft.mk
+@@ -11,6 +11,6 @@ XLIB_LIBXFT_LICENSE = MIT
+ XLIB_LIBXFT_LICENSE_FILES = COPYING
+ XLIB_LIBXFT_AUTORECONF = YES
+ XLIB_LIBXFT_INSTALL_STAGING = YES
+-XLIB_LIBXFT_DEPENDENCIES = fontconfig freetype xlib_libX11 xlib_libXext xlib_libXrender xproto_xproto
++XLIB_LIBXFT_DEPENDENCIES = fontconfig freetype xlib_libX11 xlib_libXext xlib_libXrender xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXi/Config.in b/package/x11r7/xlib_libXi/Config.in
+index 3ae22d6305..3131306902 100644
+--- a/package/x11r7/xlib_libXi/Config.in
++++ b/package/x11r7/xlib_libXi/Config.in
+@@ -1,9 +1,8 @@
+ config BR2_PACKAGE_XLIB_LIBXI
+ 	bool "libXi"
+-	select BR2_PACKAGE_XPROTO_XPROTO
+-	select BR2_PACKAGE_XPROTO_INPUTPROTO
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXFIXES
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xi library
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
+index d593c1e95a..2833738911 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.mk
++++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
+@@ -12,11 +12,10 @@ XLIB_LIBXI_LICENSE_FILES = COPYING
+ XLIB_LIBXI_INSTALL_STAGING = YES
+ XLIB_LIBXI_DEPENDENCIES = \
+ 	host-pkgconf \
+-	xproto_inputproto \
+-	xproto_xproto \
+ 	xlib_libX11 \
+ 	xlib_libXext \
+-	xlib_libXfixes
++	xlib_libXfixes \
++	xorgproto
+ 
+ XLIB_LIBXI_CONF_OPTS = --disable-malloc0returnsnull
+ 
+diff --git a/package/x11r7/xlib_libXinerama/Config.in b/package/x11r7/xlib_libXinerama/Config.in
+index 5a79b4eb76..f8ea959537 100644
+--- a/package/x11r7/xlib_libXinerama/Config.in
++++ b/package/x11r7/xlib_libXinerama/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_XLIB_LIBXINERAMA
+ 	bool "libXinerama"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XPROTO_XINERAMAPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xinerama library
+diff --git a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
+index ee8bf55602..f62cecaddd 100644
+--- a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
++++ b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXINERAMA_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXINERAMA_LICENSE = MIT
+ XLIB_LIBXINERAMA_LICENSE_FILES = COPYING
+ XLIB_LIBXINERAMA_INSTALL_STAGING = YES
+-XLIB_LIBXINERAMA_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_xineramaproto
++XLIB_LIBXINERAMA_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
+ XLIB_LIBXINERAMA_CONF_OPTS = --disable-malloc0returnsnull
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXmu/Config.in b/package/x11r7/xlib_libXmu/Config.in
+index ed239dc11c..b588920835 100644
+--- a/package/x11r7/xlib_libXmu/Config.in
++++ b/package/x11r7/xlib_libXmu/Config.in
+@@ -3,6 +3,6 @@ config BR2_PACKAGE_XLIB_LIBXMU
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xmu library
+diff --git a/package/x11r7/xlib_libXmu/xlib_libXmu.mk b/package/x11r7/xlib_libXmu/xlib_libXmu.mk
+index 261f871387..b3f3db3e5d 100644
+--- a/package/x11r7/xlib_libXmu/xlib_libXmu.mk
++++ b/package/x11r7/xlib_libXmu/xlib_libXmu.mk
+@@ -10,6 +10,6 @@ XLIB_LIBXMU_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXMU_LICENSE = MIT
+ XLIB_LIBXMU_LICENSE_FILES = COPYING
+ XLIB_LIBXMU_INSTALL_STAGING = YES
+-XLIB_LIBXMU_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto
++XLIB_LIBXMU_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXpm/Config.in b/package/x11r7/xlib_libXpm/Config.in
+index 528498cb43..9a15d77d8c 100644
+--- a/package/x11r7/xlib_libXpm/Config.in
++++ b/package/x11r7/xlib_libXpm/Config.in
+@@ -3,6 +3,6 @@ config BR2_PACKAGE_XLIB_LIBXPM
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXT
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xpm library
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index 09f897ea09..7e11c4b5aa 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+@@ -12,7 +12,7 @@ XLIB_LIBXPM_LICENSE_FILES = COPYING
+ XLIB_LIBXPM_INSTALL_STAGING = YES
+ # we patch configure.ac
+ XLIB_LIBXPM_AUTORECONF = YES
+-XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xproto_xproto \
++XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ 
+diff --git a/package/x11r7/xlib_libXrandr/Config.in b/package/x11r7/xlib_libXrandr/Config.in
+index 3b3ebd5790..e019ca5ef8 100644
+--- a/package/x11r7/xlib_libXrandr/Config.in
++++ b/package/x11r7/xlib_libXrandr/Config.in
+@@ -1,10 +1,8 @@
+ config BR2_PACKAGE_XLIB_LIBXRANDR
+ 	bool "libXrandr"
+-	select BR2_PACKAGE_XPROTO_RANDRPROTO
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER
+-	select BR2_PACKAGE_XPROTO_RENDERPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xrandr library
+diff --git a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+index 0fd298c50d..1bfd78f73d 100644
+--- a/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
++++ b/package/x11r7/xlib_libXrandr/xlib_libXrandr.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXRANDR_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRANDR_LICENSE = MIT
+ XLIB_LIBXRANDR_LICENSE_FILES = COPYING
+ XLIB_LIBXRANDR_INSTALL_STAGING = YES
+-XLIB_LIBXRANDR_DEPENDENCIES = xproto_randrproto xlib_libX11 xlib_libXext xlib_libXrender xproto_renderproto xproto_xproto
++XLIB_LIBXRANDR_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXrender xorgproto
+ XLIB_LIBXRANDR_CONF_OPTS = --disable-malloc0returnsnull
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXrender/Config.in b/package/x11r7/xlib_libXrender/Config.in
+index c723e4df46..4487ef1faa 100644
+--- a/package/x11r7/xlib_libXrender/Config.in
++++ b/package/x11r7/xlib_libXrender/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBXRENDER
+ 	bool "libXrender"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XPROTO_RENDERPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xrender library
+diff --git a/package/x11r7/xlib_libXrender/xlib_libXrender.mk b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
+index 6134c45386..870f94386e 100644
+--- a/package/x11r7/xlib_libXrender/xlib_libXrender.mk
++++ b/package/x11r7/xlib_libXrender/xlib_libXrender.mk
+@@ -10,9 +10,9 @@ XLIB_LIBXRENDER_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRENDER_LICENSE = MIT
+ XLIB_LIBXRENDER_LICENSE_FILES = COPYING
+ XLIB_LIBXRENDER_INSTALL_STAGING = YES
+-XLIB_LIBXRENDER_DEPENDENCIES = xlib_libX11 xproto_renderproto xproto_xproto
++XLIB_LIBXRENDER_DEPENDENCIES = xlib_libX11 xorgproto
+ HOST_XLIB_LIBXRENDER_DEPENDENCIES = \
+-	host-xlib_libX11 host-xproto_renderproto host-xproto_xproto
++	host-xlib_libX11 host-xorgproto
+ 
+ XLIB_LIBXRENDER_CONF_OPTS = --disable-malloc0returnsnull
+ 
+diff --git a/package/x11r7/xlib_libXres/Config.in b/package/x11r7/xlib_libXres/Config.in
+index 39abbbfd33..4e135ed3aa 100644
+--- a/package/x11r7/xlib_libXres/Config.in
++++ b/package/x11r7/xlib_libXres/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_XLIB_LIBXRES
+ 	bool "libXres"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XPROTO_RESOURCEPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org XRes library
+diff --git a/package/x11r7/xlib_libXres/xlib_libXres.mk b/package/x11r7/xlib_libXres/xlib_libXres.mk
+index 0075e8f60b..72f2ec4424 100644
+--- a/package/x11r7/xlib_libXres/xlib_libXres.mk
++++ b/package/x11r7/xlib_libXres/xlib_libXres.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXRES_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXRES_LICENSE = MIT
+ XLIB_LIBXRES_LICENSE_FILES = COPYING
+ XLIB_LIBXRES_INSTALL_STAGING = YES
+-XLIB_LIBXRES_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_resourceproto xproto_xproto
++XLIB_LIBXRES_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
+ XLIB_LIBXRES_CONF_OPTS = --disable-malloc0returnsnull
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXt/Config.in b/package/x11r7/xlib_libXt/Config.in
+index 6557e20bcd..0f55780886 100644
+--- a/package/x11r7/xlib_libXt/Config.in
++++ b/package/x11r7/xlib_libXt/Config.in
+@@ -2,8 +2,7 @@ config BR2_PACKAGE_XLIB_LIBXT
+ 	bool "libXt"
+ 	select BR2_PACKAGE_XLIB_LIBSM
+ 	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XPROTO_KBPROTO
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	select BR2_PACKAGE_XCB_PROTO
+ 	select BR2_PACKAGE_LIBXCB
+ 	help
+diff --git a/package/x11r7/xlib_libXt/xlib_libXt.mk b/package/x11r7/xlib_libXt/xlib_libXt.mk
+index 4715ac642f..946fd517a7 100644
+--- a/package/x11r7/xlib_libXt/xlib_libXt.mk
++++ b/package/x11r7/xlib_libXt/xlib_libXt.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXT_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXT_LICENSE = MIT
+ XLIB_LIBXT_LICENSE_FILES = COPYING
+ XLIB_LIBXT_INSTALL_STAGING = YES
+-XLIB_LIBXT_DEPENDENCIES = xlib_libSM xlib_libX11 xproto_kbproto xproto_xproto xcb-proto libxcb host-xproto_xproto
++XLIB_LIBXT_DEPENDENCIES = xlib_libSM xlib_libX11 xorgproto xcb-proto libxcb host-xorgproto
+ XLIB_LIBXT_CONF_OPTS = --disable-malloc0returnsnull --disable-install-makestrs
+ XLIB_LIBXT_AUTORECONF = YES
+ 
+diff --git a/package/x11r7/xlib_libXtst/Config.in b/package/x11r7/xlib_libXtst/Config.in
+index 8853bde8d4..2c7db22468 100644
+--- a/package/x11r7/xlib_libXtst/Config.in
++++ b/package/x11r7/xlib_libXtst/Config.in
+@@ -3,6 +3,6 @@ config BR2_PACKAGE_XLIB_LIBXTST
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXI
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XPROTO_RECORDPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org Xtst library
+diff --git a/package/x11r7/xlib_libXtst/xlib_libXtst.mk b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+index d71290ae40..e0d7e8217c 100644
+--- a/package/x11r7/xlib_libXtst/xlib_libXtst.mk
++++ b/package/x11r7/xlib_libXtst/xlib_libXtst.mk
+@@ -15,6 +15,6 @@ XLIB_LIBXTST_DEPENDENCIES = \
+ 	xlib_libX11 \
+ 	xlib_libXext \
+ 	xlib_libXi \
+-	xproto_recordproto
 +	xorgproto
  
  $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/Config.in b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-index 967ecaf527..40f61fd69f 100644
---- a/package/x11r7/xdriver_xf86-video-qxl/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-qxl/Config.in
-@@ -5,8 +5,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_QXL
- 	select BR2_PACKAGE_LIBPCIACCESS
- 	select BR2_PACKAGE_SPICE_PROTOCOL
- 	select BR2_PACKAGE_XLIB_LIBXFONT2 if !BR2_PACKAGE_XLIB_LIBXFONT
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  QEMU QXL paravirt video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-index f410f8e95f..ffbac05ec1 100644
---- a/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-+++ b/package/x11r7/xdriver_xf86-video-qxl/xdriver_xf86-video-qxl.mk
-@@ -16,8 +16,7 @@ XDRIVER_XF86_VIDEO_QXL_CONF_OPTS = \
- XDRIVER_XF86_VIDEO_QXL_DEPENDENCIES = \
- 	libpciaccess \
- 	spice-protocol \
--	xproto_fontsproto \
--	xproto_xproto \
-+	xorgproto \
- 	xserver_xorg-server
- 
- # configure doesn't look for drm headers in the appropiate place, so help it
-diff --git a/package/x11r7/xdriver_xf86-video-r128/Config.in b/package/x11r7/xdriver_xf86-video-r128/Config.in
-index 22ba4931e6..e1e2dd2f30 100644
---- a/package/x11r7/xdriver_xf86-video-r128/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-r128/Config.in
-@@ -1,9 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_R128
- 	bool "xf86-video-r128"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  R128 video driver
-diff --git a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-index 344b48415c..9dd9ef25e4 100644
---- a/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-+++ b/package/x11r7/xdriver_xf86-video-r128/xdriver_xf86-video-r128.mk
-@@ -10,7 +10,7 @@ XDRIVER_XF86_VIDEO_R128_SITE = http://xorg.freedesktop.org/releases/individual/d
- XDRIVER_XF86_VIDEO_R128_LICENSE = MIT
- XDRIVER_XF86_VIDEO_R128_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_R128_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_R128_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
-+XDRIVER_XF86_VIDEO_R128_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- XDRIVER_XF86_VIDEO_R128_CONF_OPTS = --disable-dri
-diff --git a/package/x11r7/xdriver_xf86-video-savage/Config.in b/package/x11r7/xdriver_xf86-video-savage/Config.in
-index 77dde87619..bc6ca52370 100644
---- a/package/x11r7/xdriver_xf86-video-savage/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-savage/Config.in
-@@ -2,13 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SAVAGE
- 	bool "xf86-video-savage"
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
+diff --git a/package/x11r7/xlib_libXv/Config.in b/package/x11r7/xlib_libXv/Config.in
+index 90f07f34be..d3e57445a3 100644
+--- a/package/x11r7/xlib_libXv/Config.in
++++ b/package/x11r7/xlib_libXv/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_XLIB_LIBXV
+ 	bool "libXv"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
 -	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
 -	select BR2_PACKAGE_XPROTO_XPROTO
 +	select BR2_PACKAGE_XORGPROTO
  	help
- 	  S3 Savage video driver
+ 	  X.Org Xv library
+diff --git a/package/x11r7/xlib_libXv/xlib_libXv.mk b/package/x11r7/xlib_libXv/xlib_libXv.mk
+index 0e02439fa8..0ff99b9380 100644
+--- a/package/x11r7/xlib_libXv/xlib_libXv.mk
++++ b/package/x11r7/xlib_libXv/xlib_libXv.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXV_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXV_LICENSE = ISC-like
+ XLIB_LIBXV_LICENSE_FILES = COPYING
+ XLIB_LIBXV_INSTALL_STAGING = YES
+-XLIB_LIBXV_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_videoproto xproto_xproto
++XLIB_LIBXV_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
+ XLIB_LIBXV_CONF_OPTS = --disable-malloc0returnsnull
  
-diff --git a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-index ae1dea34ae..d7311aa918 100644
---- a/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-+++ b/package/x11r7/xdriver_xf86-video-savage/xdriver_xf86-video-savage.mk
-@@ -10,7 +10,7 @@ XDRIVER_XF86_VIDEO_SAVAGE_SITE = http://xorg.freedesktop.org/releases/individual
- XDRIVER_XF86_VIDEO_SAVAGE_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SAVAGE_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_SAVAGE_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_SAVAGE_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86driproto xproto_xproto
-+XDRIVER_XF86_VIDEO_SAVAGE_DEPENDENCIES = xserver_xorg-server libdrm xorgproto
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- XDRIVER_XF86_VIDEO_SAVAGE_CONF_OPTS = --disable-dri
-diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/Config.in b/package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
-index 727004a55a..036a2f1c83 100644
---- a/package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-siliconmotion/Config.in
-@@ -1,10 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SILICONMOTION
- 	bool "xf86-video-siliconmotion"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXvMC/Config.in b/package/x11r7/xlib_libXvMC/Config.in
+index 90c0e74e45..5cc6ec766a 100644
+--- a/package/x11r7/xlib_libXvMC/Config.in
++++ b/package/x11r7/xlib_libXvMC/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_XLIB_LIBXVMC
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+ 	select BR2_PACKAGE_XLIB_LIBXV
 -	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
 -	select BR2_PACKAGE_XPROTO_XPROTO
 +	select BR2_PACKAGE_XORGPROTO
  	help
- 	  Silicon Motion video driver
-diff --git a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-index 53b19f9fea..65fd846535 100644
---- a/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-+++ b/package/x11r7/xdriver_xf86-video-siliconmotion/xdriver_xf86-video-siliconmotion.mk
-@@ -9,7 +9,7 @@ XDRIVER_XF86_VIDEO_SILICONMOTION_SOURCE = xf86-video-siliconmotion-$(XDRIVER_XF8
- XDRIVER_XF86_VIDEO_SILICONMOTION_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SILICONMOTION_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_SILICONMOTION_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xproto
-+XDRIVER_XF86_VIDEO_SILICONMOTION_DEPENDENCIES = xserver_xorg-server xorgproto
+ 	  X.Org XvMC library
+diff --git a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
+index cb39c29f21..c970182fe5 100644
+--- a/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
++++ b/package/x11r7/xlib_libXvMC/xlib_libXvMC.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXVMC_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXVMC_LICENSE = MIT
+ XLIB_LIBXVMC_LICENSE_FILES = COPYING
+ XLIB_LIBXVMC_INSTALL_STAGING = YES
+-XLIB_LIBXVMC_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXv xproto_videoproto xproto_xproto
++XLIB_LIBXVMC_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXv xorgproto
+ XLIB_LIBXVMC_CONF_OPTS = --disable-malloc0returnsnull
  
- XDRIVER_XF86_VIDEO_SILICONMOTION_CONF_OPTS = --disable-selective-werror
- 
-diff --git a/package/x11r7/xdriver_xf86-video-sis/Config.in b/package/x11r7/xdriver_xf86-video-sis/Config.in
-index 3c86bd403e..db01cf2afe 100644
---- a/package/x11r7/xdriver_xf86-video-sis/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-sis/Config.in
-@@ -2,15 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_SIS
- 	bool "xf86-video-sis"
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
--	select BR2_PACKAGE_XPROTO_XINERAMAPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  SiS and XGI video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-index 833246e35e..af80e15da9 100644
---- a/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-+++ b/package/x11r7/xdriver_xf86-video-sis/xdriver_xf86-video-sis.mk
-@@ -10,7 +10,7 @@ XDRIVER_XF86_VIDEO_SIS_SITE = http://xorg.freedesktop.org/releases/individual/dr
- XDRIVER_XF86_VIDEO_SIS_LICENSE = MIT
- XDRIVER_XF86_VIDEO_SIS_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_SIS_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_SIS_DEPENDENCIES = xserver_xorg-server libdrm xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xf86driproto xproto_xineramaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_SIS_DEPENDENCIES = xserver_xorg-server libdrm xorgproto
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
- XDRIVER_XF86_VIDEO_SIS_CONF_OPTS += --disable-dri
-diff --git a/package/x11r7/xdriver_xf86-video-tdfx/Config.in b/package/x11r7/xdriver_xf86-video-tdfx/Config.in
-index 96a69ba25c..959dc31049 100644
---- a/package/x11r7/xdriver_xf86-video-tdfx/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-tdfx/Config.in
-@@ -2,13 +2,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TDFX
- 	bool "xf86-video-tdfx"
- 	depends on BR2_PACKAGE_MESA3D
- 	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DRIPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  3Dfx video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-index 471e6cf4d2..6511eec7ad 100644
---- a/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-+++ b/package/x11r7/xdriver_xf86-video-tdfx/xdriver_xf86-video-tdfx.mk
-@@ -12,13 +12,7 @@ XDRIVER_XF86_VIDEO_TDFX_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_TDFX_AUTORECONF = YES
- XDRIVER_XF86_VIDEO_TDFX_DEPENDENCIES = \
- 	libdrm \
--	xproto_fontsproto \
--	xproto_randrproto \
--	xproto_renderproto \
--	xproto_videoproto \
--	xproto_xextproto \
--	xproto_xf86driproto \
--	xproto_xproto \
-+	xorgproto \
- 	xserver_xorg-server
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-diff --git a/package/x11r7/xdriver_xf86-video-tga/Config.in b/package/x11r7/xdriver_xf86-video-tga/Config.in
-index 9d03db3b38..7c75661acc 100644
---- a/package/x11r7/xdriver_xf86-video-tga/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-tga/Config.in
-@@ -1,11 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TGA
- 	bool "xf86-video-tga"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libXxf86dga/Config.in b/package/x11r7/xlib_libXxf86dga/Config.in
+index 8276b7178f..918ea0f150 100644
+--- a/package/x11r7/xlib_libXxf86dga/Config.in
++++ b/package/x11r7/xlib_libXxf86dga/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_XLIB_LIBXXF86DGA
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
 -	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
 -	select BR2_PACKAGE_XPROTO_XPROTO
 +	select BR2_PACKAGE_XORGPROTO
  	help
- 	  X.Org driver for tga cards
-diff --git a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk b/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
-index 8af5ac81e1..421b09be22 100644
---- a/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
-+++ b/package/x11r7/xdriver_xf86-video-tga/xdriver_xf86-video-tga.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_TGA_SOURCE = xf86-video-tga-$(XDRIVER_XF86_VIDEO_TGA_VERSION)
- XDRIVER_XF86_VIDEO_TGA_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_TGA_LICENSE = MIT
- XDRIVER_XF86_VIDEO_TGA_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_TGA_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_TGA_DEPENDENCIES = xserver_xorg-server xorgproto
+ 	  X.Org Xxf86dga library
+diff --git a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
+index eea756bdb2..59ebd2b413 100644
+--- a/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
++++ b/package/x11r7/xlib_libXxf86dga/xlib_libXxf86dga.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXXF86DGA_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXXF86DGA_LICENSE = MIT
+ XLIB_LIBXXF86DGA_LICENSE_FILES = COPYING
+ XLIB_LIBXXF86DGA_INSTALL_STAGING = YES
+-XLIB_LIBXXF86DGA_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_xf86dgaproto xproto_xproto
++XLIB_LIBXXF86DGA_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
+ XLIB_LIBXXF86DGA_CONF_OPTS = --disable-malloc0returnsnull
  
  $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-trident/Config.in b/package/x11r7/xdriver_xf86-video-trident/Config.in
-index 15ac3ea726..ca7069c800 100644
---- a/package/x11r7/xdriver_xf86-video-trident/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-trident/Config.in
-@@ -1,11 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_TRIDENT
- 	bool "xf86-video-trident"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_VIDEOPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
+diff --git a/package/x11r7/xlib_libXxf86vm/Config.in b/package/x11r7/xlib_libXxf86vm/Config.in
+index 9e32188ec8..c3b11f4218 100644
+--- a/package/x11r7/xlib_libXxf86vm/Config.in
++++ b/package/x11r7/xlib_libXxf86vm/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_XLIB_LIBXXF86VM
+ 	bool "libXxf86vm"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XPROTO_XF86VIDMODEPROTO
 -	select BR2_PACKAGE_XPROTO_XPROTO
 +	select BR2_PACKAGE_XORGPROTO
  	help
- 	  Trident video driver
-diff --git a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
-index 727744c532..20ec4bbc24 100644
---- a/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
-+++ b/package/x11r7/xdriver_xf86-video-trident/xdriver_xf86-video-trident.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_TRIDENT_SOURCE = xf86-video-trident-$(XDRIVER_XF86_VIDEO_TRID
- XDRIVER_XF86_VIDEO_TRIDENT_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_TRIDENT_LICENSE = MIT
- XDRIVER_XF86_VIDEO_TRIDENT_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_TRIDENT_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_videoproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_TRIDENT_DEPENDENCIES = xserver_xorg-server xorgproto
+ 	  X.Org Xxf86vm library
+diff --git a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
+index f650fe4e2a..2106451c74 100644
+--- a/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
++++ b/package/x11r7/xlib_libXxf86vm/xlib_libXxf86vm.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXXF86VM_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXXF86VM_LICENSE = MIT
+ XLIB_LIBXXF86VM_LICENSE_FILES = COPYING
+ XLIB_LIBXXF86VM_INSTALL_STAGING = YES
+-XLIB_LIBXXF86VM_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_xf86vidmodeproto xproto_xproto
++XLIB_LIBXXF86VM_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
+ XLIB_LIBXXF86VM_CONF_OPTS = --disable-malloc0returnsnull
  
  $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-vesa/Config.in b/package/x11r7/xdriver_xf86-video-vesa/Config.in
-index 98f434704f..fb4e4e8e93 100644
---- a/package/x11r7/xdriver_xf86-video-vesa/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-vesa/Config.in
-@@ -1,9 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_VESA
- 	bool "xf86-video-vesa"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
+diff --git a/package/x11r7/xlib_libdmx/Config.in b/package/x11r7/xlib_libdmx/Config.in
+index 879f6895c3..99cddb638a 100644
+--- a/package/x11r7/xlib_libdmx/Config.in
++++ b/package/x11r7/xlib_libdmx/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_XLIB_LIBDMX
+ 	bool "libdmx"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXEXT
+-	select BR2_PACKAGE_XPROTO_DMXPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org dmx library
+diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.mk b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
+index fbe3067fe1..6a289eee02 100644
+--- a/package/x11r7/xlib_libdmx/xlib_libdmx.mk
++++ b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
+@@ -10,7 +10,7 @@ XLIB_LIBDMX_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBDMX_LICENSE = MIT
+ XLIB_LIBDMX_LICENSE_FILES = COPYING
+ XLIB_LIBDMX_INSTALL_STAGING = YES
+-XLIB_LIBDMX_DEPENDENCIES = xlib_libX11 xlib_libXext xproto_dmxproto
++XLIB_LIBDMX_DEPENDENCIES = xlib_libX11 xlib_libXext xorgproto
+ XLIB_LIBDMX_CONF_OPTS = --disable-malloc0returnsnull
+ 
+ $(eval $(autotools-package))
+diff --git a/package/x11r7/xlib_libfontenc/Config.in b/package/x11r7/xlib_libfontenc/Config.in
+index d25e96a5a5..38cb8333c0 100644
+--- a/package/x11r7/xlib_libfontenc/Config.in
++++ b/package/x11r7/xlib_libfontenc/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBFONTENC
+ 	bool "libfontenc"
+-	select BR2_PACKAGE_XPROTO_XPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  X.Org fontenc library
+diff --git a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+index e2c4c6e8d9..526aea9fe5 100644
+--- a/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
++++ b/package/x11r7/xlib_libfontenc/xlib_libfontenc.mk
+@@ -10,8 +10,8 @@ XLIB_LIBFONTENC_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBFONTENC_LICENSE = MIT
+ XLIB_LIBFONTENC_LICENSE_FILES = COPYING
+ XLIB_LIBFONTENC_INSTALL_STAGING = YES
+-XLIB_LIBFONTENC_DEPENDENCIES = zlib xproto_xproto
+-HOST_XLIB_LIBFONTENC_DEPENDENCIES = host-zlib host-xproto_xproto
++XLIB_LIBFONTENC_DEPENDENCIES = zlib xorgproto
++HOST_XLIB_LIBFONTENC_DEPENDENCIES = host-zlib host-xorgproto
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xlib_libxkbfile/Config.in b/package/x11r7/xlib_libxkbfile/Config.in
+index ccd35fa10f..0d7e466005 100644
+--- a/package/x11r7/xlib_libxkbfile/Config.in
++++ b/package/x11r7/xlib_libxkbfile/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBXKBFILE
+ 	bool "libxkbfile"
+ 	select BR2_PACKAGE_XLIB_LIBX11
+-	select BR2_PACKAGE_XPROTO_KBPROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  X.Org xkbfile library
+diff --git a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+index c69d73118f..97755fae84 100644
+--- a/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
++++ b/package/x11r7/xlib_libxkbfile/xlib_libxkbfile.mk
+@@ -10,8 +10,8 @@ XLIB_LIBXKBFILE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXKBFILE_LICENSE = MIT
+ XLIB_LIBXKBFILE_LICENSE_FILES = COPYING
+ XLIB_LIBXKBFILE_INSTALL_STAGING = YES
+-XLIB_LIBXKBFILE_DEPENDENCIES = xlib_libX11 xproto_kbproto
+-HOST_XLIB_LIBXKBFILE_DEPENDENCIES = host-xlib_libX11 host-xproto_kbproto
++XLIB_LIBXKBFILE_DEPENDENCIES = xlib_libX11 xorgproto
++HOST_XLIB_LIBXKBFILE_DEPENDENCIES = host-xlib_libX11 host-xorgproto
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xlib_libxshmfence/Config.in b/package/x11r7/xlib_libxshmfence/Config.in
+index d4e87b3e81..710476b357 100644
+--- a/package/x11r7/xlib_libxshmfence/Config.in
++++ b/package/x11r7/xlib_libxshmfence/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_XLIB_LIBXSHMFENCE
+ 	bool "libxshmfence"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
 -	select BR2_PACKAGE_XPROTO_XPROTO
 +	select BR2_PACKAGE_XORGPROTO
  	help
- 	  Generic VESA video driver
-diff --git a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
-index d2a9205197..425280a119 100644
---- a/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
-+++ b/package/x11r7/xdriver_xf86-video-vesa/xdriver_xf86-video-vesa.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_VESA_SOURCE = xf86-video-vesa-$(XDRIVER_XF86_VIDEO_VESA_VERSI
- XDRIVER_XF86_VIDEO_VESA_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_VESA_LICENSE = MIT
- XDRIVER_XF86_VIDEO_VESA_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_VESA_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xproto
-+XDRIVER_XF86_VIDEO_VESA_DEPENDENCIES = xserver_xorg-server xorgproto
+ 	  X.Org shmfence library
+diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+index f51cf0d5cb..f395ebe172 100644
+--- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
++++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+@@ -10,7 +10,7 @@ XLIB_LIBXSHMFENCE_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXSHMFENCE_LICENSE = MIT
+ XLIB_LIBXSHMFENCE_LICENSE_FILES = COPYING
+ XLIB_LIBXSHMFENCE_INSTALL_STAGING = YES
+-XLIB_LIBXSHMFENCE_DEPENDENCIES = host-pkgconf xproto_xproto
++XLIB_LIBXSHMFENCE_DEPENDENCIES = host-pkgconf xorgproto
  
- $(eval $(autotools-package))
-diff --git a/package/x11r7/xdriver_xf86-video-vmware/Config.in b/package/x11r7/xdriver_xf86-video-vmware/Config.in
-index a3382d7346..6d937b47bb 100644
---- a/package/x11r7/xdriver_xf86-video-vmware/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-vmware/Config.in
-@@ -3,12 +3,7 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_VMWARE
- 	depends on BR2_PACKAGE_MESA3D
- 	depends on BR2_i386 || BR2_x86_64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XINERAMAPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  VMware SVGA video driver
- 
-diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-index 1b2066d277..3ba6b332a3 100644
---- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-+++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-@@ -9,7 +9,7 @@ XDRIVER_XF86_VIDEO_VMWARE_SOURCE = xf86-video-vmware-$(XDRIVER_XF86_VIDEO_VMWARE
- XDRIVER_XF86_VIDEO_VMWARE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_VMWARE_LICENSE = MIT
- XDRIVER_XF86_VIDEO_VMWARE_LICENSE_FILES = COPYING
--XDRIVER_XF86_VIDEO_VMWARE_DEPENDENCIES = mesa3d xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xineramaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_VMWARE_DEPENDENCIES = mesa3d xserver_xorg-server xorgproto
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- XDRIVER_XF86_VIDEO_VMWARE_CONF_OPTS += --with-libudev
-diff --git a/package/x11r7/xdriver_xf86-video-voodoo/Config.in b/package/x11r7/xdriver_xf86-video-voodoo/Config.in
-index f531676dab..f4612120e4 100644
---- a/package/x11r7/xdriver_xf86-video-voodoo/Config.in
-+++ b/package/x11r7/xdriver_xf86-video-voodoo/Config.in
-@@ -1,10 +1,5 @@
- config BR2_PACKAGE_XDRIVER_XF86_VIDEO_VOODOO
- 	bool "xf86-video-voodoo"
--	select BR2_PACKAGE_XPROTO_FONTSPROTO
--	select BR2_PACKAGE_XPROTO_RANDRPROTO
--	select BR2_PACKAGE_XPROTO_RENDERPROTO
--	select BR2_PACKAGE_XPROTO_XEXTPROTO
--	select BR2_PACKAGE_XPROTO_XF86DGAPROTO
--	select BR2_PACKAGE_XPROTO_XPROTO
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  Voodoo video driver
-diff --git a/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk b/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
-index e1ef0c6ca3..d6deaa7974 100644
---- a/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
-+++ b/package/x11r7/xdriver_xf86-video-voodoo/xdriver_xf86-video-voodoo.mk
-@@ -9,6 +9,6 @@ XDRIVER_XF86_VIDEO_VOODOO_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-
- XDRIVER_XF86_VIDEO_VOODOO_LICENSE = MIT
- XDRIVER_XF86_VIDEO_VOODOO_LICENSE_FILES = COPYING
- XDRIVER_XF86_VIDEO_VOODOO_AUTORECONF = YES
--XDRIVER_XF86_VIDEO_VOODOO_DEPENDENCIES = xserver_xorg-server xproto_fontsproto xproto_randrproto xproto_renderproto xproto_xextproto xproto_xf86dgaproto xproto_xproto
-+XDRIVER_XF86_VIDEO_VOODOO_DEPENDENCIES = xserver_xorg-server xorgproto
- 
- $(eval $(autotools-package))
+ # 0001-configure.ac-call-AC_USE_SYSTEM_EXTENSIONS.patch
+ XLIB_LIBXSHMFENCE_AUTORECONF = YES
 -- 
 2.17.1
