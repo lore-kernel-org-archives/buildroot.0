@@ -1,129 +1,100 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 30 Jun 2018 12:57:33 +0200
-Subject: [Buildroot] [PATCH 1/3] systemd: bump to v239
-In-Reply-To: <20180629222552.12808-2-jeremy.rosen@smile.fr>
-References: <20180629222552.12808-1-jeremy.rosen@smile.fr>
- <20180629222552.12808-2-jeremy.rosen@smile.fr>
-Message-ID: <b946d2bb-6515-49a8-9610-104a55c2db44@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 30 Jun 2018 13:08:37 +0200
+Subject: [Buildroot] [PATCH v3 06/22] package/mesa3d: switch to xorgproto
+In-Reply-To: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+Message-ID: <20180630110853.29339-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello J?r?my,
+The new package xorgproto will combine and replace all current xproto_*
+packages. For details read
+https://lists.x.org/archives/xorg-announce/2018-February/002835.html
 
-Le 30/06/2018 ? 00:25, J?r?my Rosen a ?crit?:
-> * remove upstreamed patches
-> * refresh patch 0002 which didn't apply cleanly
-> * update patch 0001 to catch more uses of agetty
+Removed dri3 handling because xorgproto always installs dri3proto.
 
-I believe the patch 0003-fix-am-path-libgcrypt-no-found.patch is not needed
-anymore since systemd now use meson. It's not related to this patch though, it
-should have been removed while switching to meson build system.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/Config.in | 18 ++++--------------
+ package/mesa3d/mesa3d.mk |  8 +++-----
+ 2 files changed, 7 insertions(+), 19 deletions(-)
 
-> 
-> 
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-> ---
->  package/systemd/0001-fix-getty-unit.patch     |  61 ++++--
->  .../0002-install-don-t-use-ln-relative.patch  |  19 +-
->  ...-include-libmount-h-in-a-header-file.patch |  75 -------
->  .../0005-basic-macros-rename-noreturn.patch   | 201 ------------------
->  package/systemd/systemd.hash                  |   2 +-
->  package/systemd/systemd.mk                    |   2 +-
->  6 files changed, 63 insertions(+), 297 deletions(-)
->  delete mode 100644 package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
->  delete mode 100644 package/systemd/0005-basic-macros-rename-noreturn.patch
-> 
-> diff --git a/package/systemd/0001-fix-getty-unit.patch b/package/systemd/0001-fix-getty-unit.patch
-> index b6947626c5..4716679844 100644
-> --- a/package/systemd/0001-fix-getty-unit.patch
-> +++ b/package/systemd/0001-fix-getty-unit.patch
-> @@ -1,21 +1,58 @@
-> -From 7deb6387aeb07fa4300fa3cf9d6c039dabd120d7 Mon Sep 17 00:00:00 2001
-> -From: Maxime Ripard <maxime.ripard@free-electrons.com>
-> -Date: Mon, 31 Jul 2017 10:08:46 -0400
-> -Subject: [PATCH] fix-getty-unit
-> -
-> -Prefer getty to agetty in console setup systemd units
-> +From 58dba37de7a2cd6e353f1ada97f1f3bc85ebf87b Mon Sep 17 00:00:00 2001
-> +From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Rosen?= <jeremy.rosen@enst-bretagne.fr>
-
-Please, keep authorship of the patch even if you rebase it on a new systemd version.
-
-> +Date: Fri, 22 Jun 2018 11:19:07 +0200
-> +Subject: [PATCH 1/3] Prefer getty to agetty in console setup systemd units
-
-Use -N with git format-patch to omit patch numbers from the subject.
-Patches present in the systemd package directory can be removed/added separately.
-
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
->  
->  Signed-off-by: Maxime Ripard <maxime.ripard@free-electrons.com>
->  Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
->  [aduskett at gmail.com: Update for systemd v237]
->  Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> +[jeremy.rosen at smile.fr: Update for systemd v238]
-> +Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
->  ---
-
-[...]
-
-> diff --git a/package/systemd/0002-install-don-t-use-ln-relative.patch b/package/systemd/0002-install-don-t-use-ln-relative.patch
-> index 61a139e2a2..ce3f183537 100644
-> --- a/package/systemd/0002-install-don-t-use-ln-relative.patch
-> +++ b/package/systemd/0002-install-don-t-use-ln-relative.patch
-> @@ -1,7 +1,10 @@
-> -From 17560d52e9ec0afebbfe31e694870c6433b36f60 Mon Sep 17 00:00:00 2001
-> +From f8757e2d9c7c76c5ec0eaeab4a90b8bd663d6956 Mon Sep 17 00:00:00 2001
->  From: Adam Duskett <Adamduskett@outlook.com>
->  Date: Sun, 31 Dec 2017 12:46:04 -0500
-> -Subject: [PATCH] install: don't use ln --relative
-> +Subject: [PATCH 2/3] install: don't use ln --relative
-
-Use git format-patch -N
-
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
->  
->  Oldish enterprise-class distributions have too old versions of
->  coreutils, with ln not supporting --relative.
-> @@ -23,6 +26,8 @@ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  Signed-off-by: Adam Duskett <Adamduskett@outlook.com>
->  [tpiepho at impinj.com: Fix add-wants wrapper]
->  Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-> +[jeremy.rosen at smile.fr: Update for systemd v239]
-> +Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
->  ---
-
-[...]
-
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 82d0e1a027..16c9d9f290 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -SYSTEMD_VERSION = 237
-> +SYSTEMD_VERSION = 239
->  SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
-
-As you noticed, there is another systemd repository containing an "upstream
-maintained stable systemd version" for each release [1].
-Do we want to keep the official systemd release + Buildroot patches or sync to
-the systemd stable branch when needed.
-
-[1] https://github.com/systemd/systemd-stable
-
-Best regards,
-Romain
-
->  SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
->  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
-> 
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index 8c1877fbc1..dd36a5e0fd 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -8,9 +8,7 @@ menuconfig BR2_PACKAGE_MESA3D
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_HAS_LIBGL if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+-	select BR2_PACKAGE_XPROTO_DRI2PROTO if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XPROTO_GLPROTO if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XPROTO_XF86DRIPROTO if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XORGPROTO if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_XORG7
+@@ -59,15 +57,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	bool
+ 	select BR2_PACKAGE_MESA3D_DRIVER
+-	# xlib-libxshmfence needs sync_4, so we cannot select it if
+-	# BR2_TOOLCHAIN_HAS_SYNC_4 is false. xproto-presentproto
+-	# doesn't need sync_4, but it is only needed in conjunction
+-	# with xlib-libxshmfence and dri3proto to provide dri3
+-	# support, so we also only select it if sync_4 is available.
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
+-		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
+-	select BR2_PACKAGE_XPROTO_PRESENTPROTO if \
+-		(BR2_PACKAGE_XPROTO_DRI3PROTO && BR2_TOOLCHAIN_HAS_SYNC_4)
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_TOOLCHAIN_HAS_SYNC_4
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	bool
+@@ -221,9 +211,9 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_18 # memfd.h
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+-	depends on BR2_PACKAGE_XORG7 # xproto_dri3proto
++	depends on BR2_PACKAGE_XORG7 # xorgproto
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+-	select BR2_PACKAGE_XPROTO_DRI3PROTO
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 6e1e27f62f..cafc41f97d 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -57,13 +57,11 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_XORG7),y)
+ MESA3D_DEPENDENCIES += \
+-	xproto_xf86driproto \
+-	xproto_dri2proto \
+-	xproto_glproto \
+ 	xlib_libX11 \
+ 	xlib_libXext \
+ 	xlib_libXdamage \
+ 	xlib_libXfixes \
++	xorgproto \
+ 	libxcb
+ MESA3D_CONF_OPTS += --enable-glx --disable-mangling
+ # quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
+@@ -113,8 +111,8 @@ ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
+ MESA3D_CONF_OPTS += \
+ 	--without-dri-drivers --disable-dri3
+ else
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE)$(BR2_PACKAGE_XPROTO_DRI3PROTO),yy)
+-MESA3D_DEPENDENCIES += xlib_libxshmfence xproto_dri3proto xproto_presentproto
++ifeq ($(BR2_PACKAGE_XLIB_LIBXSHMFENCE),y)
++MESA3D_DEPENDENCIES += xlib_libxshmfence
+ MESA3D_CONF_OPTS += --enable-dri3
+ else
+ MESA3D_CONF_OPTS += --disable-dri3
+-- 
+2.17.1
