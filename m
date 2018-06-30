@@ -1,150 +1,232 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jun 2018 15:56:45 +0200
-Subject: [Buildroot] [PATCHv2] core/sdk: generate the SDK tarball ourselves
-Message-ID: <20180630135645.2956-1-yann.morin.1998@free.fr>
+Date: Sat, 30 Jun 2018 16:21:24 +0200
+Subject: [Buildroot] [PATCH 0/5 v2] package: bump attr and acl,
+ fix builds of dependees
+Message-ID: <cover.1530368468.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the wording in the manual instructs the user to generate a
-tarball from "the contents of the +output/host+ directory".
+Hello All!
 
-This is pretty confusing, because taken literally, this would amount to
-running a command like:
+This series is an attempt at bumping the attr and acl packages to a
+later version.
 
-    tar cf my-sdk.tar -C output/host/ .
+The crux of the changes is to get an attr package that no longer behaves
+silly [0]. attr has had a complete overhaul of it buildsystem, making it
+fully autotools-based, which fixes quite a few idiosyncracies of the
+previous hand-rolled one.
 
-This creates a tarbomb [0], which is very bad practice, because when
-extracted, it creates multiple files in the current directory.
+However, this means that attr no longer installs its own copy of xattr.h,
+on the assumption that it has been provided by glibc "for ages" [1] [2]
+[3] [4]. This means that a few packages have to be fixed now, of which acl.
 
-What one really wants to do, is create a tarball of the host/ directory,
-with something like:
+Three packages then need fixing because they still use attr/xattr.h:
+stress-ng, which we bump and fix, lua-flu, which we simply fix, and
+xorriso. Patches were all sent upstream [6] [7] [8].
 
-    tar cf my-sdk.tar -C output host/
+Of all packages that depend on attr or acl:
 
-However, this is not much better, because the top-most directory would
-have a very common name, host/, which is pretty easy to get conflict
-with when it gets extracted.
+    sys        -> checks for, and uses <sys/xattr.h>
+    attr       -> checks for, and uses <attr/xattr.h>
+    acl        -> checks for, and uses <acl/libacl.h> and/or -lacl
+    patched    -> patch added to uses <sys/xattr.h>
+    no xattr.h -> does not check for <attr/xattr.h> or <sys/xattr.h>,
+                  but uses other <attr/*.h> and -lattr, thus has no
+                  problem
 
-So, we fix that mess by giving the top-most directory a recognisable
-name, based on the target tuple and the Buildroot version, which we also
-use as the name of the archive (suffixed with the usual +.tar.gz+.)
-We offer the user the possibility to override that default by specifying
-the +BR2_SDK_PREFIX+ variable on the command line.
+    acl                 ACK, sys
+    coreutils           ACK, sys-attr
+    host-acl            ACK, sys
+    host-fakeroot       ACK, sys
+    host-pseudo         ACK, sys
+    libarchive          ACK, attr-sys
+    logrotate           ACK, acl
+    lua-flu             ACK, patched, sys
+    mtd                 ACK, sys
+    netatalk            ACK, acl, attr-sys
+    patch               ACK, no xattr.h
+    rpm                 ACK, acl
+    rsync               ACK, acl, attr-sys
+    samba4              ACK, attr-sys [*]
+    stress-ng           ACK, patched, sys
+    systemd             ACK, acl
+    tar                 ACK, acl, sys
+    vim                 ACK, acl [**]
+    xorriso             ACK, acl, patched, sys
 
-Since this is an output file, we place it in the images/ directory.
+[*] in my testing, I had a systemd-based system, and samba4 failed to
+install (I'll investigate separately). But at least, it did detect and
+use <sys/xattr.h> correctly, and the build succeeded. It even installed
+OK, but our SAMBA4_INSTALL_INIT_SYSTEMD is borked (missing source file.)
 
-As some users expressed a very strong feeling that they do not want to
-generate a tarball at all, and that doing so would badly hurt their
-workflows [1], we actually prepare the SDK as was previously done, but
-under the new, intermediate rule 'prepare-sdk'. The existing 'sdk' rule
-obviously depend on that before generating the tarball.
+[**] vim uses xattr to add support for SMACK. Before this series, it did
+detect xattr, but failed to deteect a feature of it [5], so it always
+disabled SMACK support. Now, it does not detect xattr at all, so it
+doesn't enable SMACK either. So, even though we have a regression about
+the detections of xattr.h, we have no regression in functionality.
 
-We choose to make the existing rule to generate the tarball, and
-introduce a new rule to just prepare the SDK, rather than keep the
-existing rule as-is and introduce a new one to generate the tarball,
-because it makes sense to have the simplest rule do the correct thing,
-leaving advanced, power users use the longest command. If someone
-already had a wrapper that called 'sdk' and expected just the host
-directory to be prepared, then this is not broken; it just takes a bit
-longer (gzip is pretty fast).
+Now, let's see some test-pkg configs and results:
 
-Update the manual accordingly.
+    $ cat attr-nommu.cfg
+    BR2_PACKAGE_ACL=y
+    BR2_PACKAGE_ATTR=y
+    BR2_PACKAGE_LIBARCHIVE=y
+    BR2_PACKAGE_MTD=y
+    BR2_PACKAGE_MTD_MKFSJFFS2=y
+    BR2_PACKAGE_MTD_MKFSUBIFS=y
+    $ ./utils/test-pkg -c attr-nommu.cfg -d $(pwd)/test-nommu
+                                 br-arm-full [1/6]: OK
+                      br-arm-cortex-a9-glibc [2/6]: OK
+                       br-arm-cortex-m4-full [3/6]: OK
+                              br-x86-64-musl [4/6]: OK
+                          br-arm-full-static [5/6]: OK
+                    armv5-ctng-linux-gnueabi [6/6]: OK
+    6 builds, 0 skipped, 0 build failed, 0 legal-info failed
 
-[0] https://en.wikipedia.org/wiki/Tar_(computing)#Tarbomb
-[1] http://lists.busybox.net/pipermail/buildroot/2018-June/thread.html#223377
-    and some messages in the ensuing thread...
+    $ cat attr-mmu.cfg
+    BR2_PACKAGE_ACL=y
+    BR2_PACKAGE_ATTR=y
+    BR2_PACKAGE_COREUTILS=y
+    BR2_PACKAGE_LIBARCHIVE=y
+    BR2_PACKAGE_LOGROTATE=y
+    BR2_PACKAGE_MTD=y
+    BR2_PACKAGE_MTD_MKFSJFFS2=y
+    BR2_PACKAGE_MTD_MKFSUBIFS=y
+    BR2_PACKAGE_NETATALK=y
+    BR2_PACKAGE_PATCH=y
+    BR2_PACKAGE_RPM=y
+    BR2_PACKAGE_RSYNC=y
+    BR2_PACKAGE_SAMBA4=y
+    BR2_PACKAGE_TAR=y
+    BR2_PACKAGE_VIM=y
+    BR2_PACKAGE_XORRISO=y
+    $ ./utils/test-pkg -c attr-mmu.cfg -d $(pwd)/test-mmu
+                                 br-arm-full [1/6]: OK
+                      br-arm-cortex-a9-glibc [2/6]: OK
+                       br-arm-cortex-m4-full [3/6]: SKIPPED
+                              br-x86-64-musl [4/6]: SKIPPED
+                          br-arm-full-static [5/6]: SKIPPED
+                    armv5-ctng-linux-gnueabi [6/6]: OK
+    6 builds, 3 skipped, 0 build failed, 0 legal-info failed
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Stefan Becker <chemobejk@gmail.com>
-Cc: Trent Piepho <tpiepho@impinj.com>
+    Notes:
+      - for mtd, the two utilities that use xattr are explcitly enabled;
+      - for br-arm-cortex-m4-full, that's because it is a static
+        build, so a lot of packages are disabled;
+      - for br-x86-64-musl, samba4 is not available for musl;
+      - for br-arm-full-static, again it is a static build.
 
----
-Changes v1 -> v2:
-  - drop the part of the manual stating this can't be re-used as a
-    pre-built toolchain  (Arnout)
-  - make the top-level directory and tarball name configurable
-    (Trent, Thomas)
-  - change the default name  (Arnout)
-  - allow just preparing the SDK (Stefan, Trent)
-  - typoes  (Thomas)
----
- Makefile                                  | 13 +++++++++++--
- docs/manual/using-buildroot-toolchain.txt | 26 +++++++++++++++++---------
- 2 files changed, 28 insertions(+), 11 deletions(-)
+    $ cat attr-mmu-glibc.cfg
+    BR2_PACKAGE_ACL=y
+    BR2_PACKAGE_ATTR=y
+    BR2_PACKAGE_COREUTILS=y
+    BR2_PACKAGE_LIBARCHIVE=y
+    BR2_PACKAGE_LUA=y
+    BR2_PACKAGE_LUA_FLU=y
+    BR2_PACKAGE_LOGROTATE=y
+    BR2_PACKAGE_MTD=y
+    BR2_PACKAGE_MTD_MKFSJFFS2=y
+    BR2_PACKAGE_MTD_MKFSUBIFS=y
+    BR2_PACKAGE_NETATALK=y
+    BR2_PACKAGE_PATCH=y
+    BR2_PACKAGE_RPM=y
+    BR2_PACKAGE_RSYNC=y
+    BR2_PACKAGE_SAMBA4=y
+    BR2_PACKAGE_STRESS_NG=y
+    BR2_PACKAGE_TAR=y
+    BR2_PACKAGE_VIM=y
+    BR2_PACKAGE_XORRISO=y
+    $ ./utils/test-pkg -c attr-mmu-glibc.cfg  -d $(pwd)/test-mmu-glibc
+                                 br-arm-full [1/6]: SKIPPED
+                      br-arm-cortex-a9-glibc [2/6]: OK
+                       br-arm-cortex-m4-full [3/6]: SKIPPED
+                              br-x86-64-musl [4/6]: SKIPPED
+                          br-arm-full-static [5/6]: SKIPPED
+                    armv5-ctng-linux-gnueabi [6/6]: OK
+    6 builds, 4 skipped, 0 build failed, 0 legal-info failed
 
-diff --git a/Makefile b/Makefile
-index 8d25c8a239..04fee06e08 100644
---- a/Makefile
-+++ b/Makefile
-@@ -573,8 +573,8 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- .PHONY: world
- world: target-post-image
- 
--.PHONY: sdk
--sdk: world
-+.PHONY: prepare-sdk
-+prepare-sdk: world
- 	@$(call MESSAGE,"Rendering the SDK relocatable")
- 	$(TOPDIR)/support/scripts/fix-rpath host
- 	$(TOPDIR)/support/scripts/fix-rpath staging
-@@ -582,6 +582,15 @@ sdk: world
- 	mkdir -p $(HOST_DIR)/share/buildroot
- 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
- 
-+BR2_SDK_PREFIX ?= $(GNU_TARGET_NAME)_sdk-buildroot-$(BR2_VERSION_FULL)
-+.PHONY: sdk
-+sdk: $(BR2_TAR_HOST_DEPENDENCY)
-+	$(if $(BR2_SDK_PREFIX),,$(error BR2_SDK_PREFIX must not be empty))
-+	$(Q)mkdir -p $(BINARIES_DIR)
-+	$(TAR) czf "$(BINARIES_DIR)/$(BR2_SDK_PREFIX).tar.gz" \
-+		--transform='s#^\.#$(BR2_SDK_PREFIX)/#' \
-+		-C $(HOST_DIR) "."
-+
- # Populating the staging with the base directories is handled by the skeleton package
- $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)
-diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-index 3246dc2411..4a72026385 100644
---- a/docs/manual/using-buildroot-toolchain.txt
-+++ b/docs/manual/using-buildroot-toolchain.txt
-@@ -12,15 +12,23 @@ The toolchain generated by Buildroot is located by default in
- +output/host/bin/+ to your PATH environment variable and then to
- use +ARCH-linux-gcc+, +ARCH-linux-objdump+, +ARCH-linux-ld+, etc.
- 
--It is possible to relocate the toolchain, this allows to distribute
--the toolchain to other developers to build applications for your
--target. To achieve this:
-+Alternatively, Buildroot can also export the toolchain and the development
-+files of all selected packages, as an SDK, by running the command
-++make sdk+. This generates a tarball of the content of the host directory
-++output/host/+, named +<TARGET-TUPLE>_sdk-buildroot-<BR-VERSION>.tar.gz+
-+(which can be overriden by setting the environment variable
-++BR2_SDK_PREFIX+) and located in the output directory +output/images/+.
- 
--* run +make sdk+, which prepares the toolchain to be relocatable;
--* tarball the contents of the +output/host+ directory;
--* distribute the resulting tarball.
-+This tarball can then be distributed to application developers, when
-+they want to develop their applications that are not (yet) packaged as
-+a Buildroot package.
- 
--Once the toolchain is installed to the new location, the user must run
--the +relocate-sdk.sh+ script to make sure all paths are updated with
--the new location.
-+Upon extracting the SDK tarball, the user must run the script
-++relocate-sdk.sh+ (located at the top directory of the SDK), to make
-+sure all paths are updated with the new location.
- 
-+Alternatively, if you just want to prepare the SDK without generating
-+the tarball (e.g. because you will just be moving the +host+ directory,
-+or will be generating the tarball on your own), Buildroot also allows
-+you to just prepare the SDK with +make prepare-sdk+ without actually
-+generating a tarball.
+    Notes:
+      - br-arm-full: stress-ng only for glibc;
+      - br-arm-cortex-m4-full: it's a static build;
+      - br-x86-64-musl: stress-ng and smaba4 not avail on musl;
+      - br-arm-full-static: static build
+
+Now, I also build-tested systemd with a custom config (not with
+test-pkg).
+
+[0] https://bugs.busybox.net/show_bug.cgi?id=10986
+[1] https://git.savannah.gnu.org/cgit/attr.git/commit/?id=7921157890d07858d092f4003ca4c6bae9fd2c38)
+[2] glibc: since 2.5: https://sourceware.org/git/?p=glibc.git;a=commit;h=0ecb606cb6cf65de1d9fc8a919bceb4be476c602
+[3] uClibc: since 2004: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d503d1d6c62506ba6fb51c04a9703039e71d11a9
+[4] musl: since 2012 (a year after initial release): http://git.musl-libc.org/cgit/musl/commit/?id=207460d09742304941f1a010a89fc2efa46bcb29
+[5] checking for XATTR_NAME_SMACKEXEC in linux/xattr.h... no
+[6] lua-flu applied the patch; additional patch in preparation
+[7] stress-ng applied a different patch, which is dubious, and more
+    discussion on it
+[8] xorriso has seen our patches before I could submit them, needs some
+    work to accomodate their git trees
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 78af2a63625a0893259ceb2f6cfb5b6ab1431419
+
+  package/gcc: backport arm acle bugfix 81497 (2018-06-28 23:13:50 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 166f3279947186301770fa28116bb6d288ee8601
+
+  package/attr: bump version (2018-06-30 16:20:03 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      package/lua-flu: fix to use the system xattr header
+      package/stress-ng: bump version
+      package/xorriso: fix to use the system xattr header
+      package/acl: bump version
+      package/attr: bump version
+
+ package/acl/0001-support-static-installation.patch |  29 --
+ ...2-add-__acl_-prefixes-to-internal-symbols.patch | 292 ---------------------
+ ...-all-use-install-1-to-install-executables.patch |  67 -----
+ package/acl/acl.hash                               |   2 +-
+ package/acl/acl.mk                                 |  50 +---
+ .../attr/0001-support-static-installation.patch    |  29 --
+ .../0002-avoid-glibc-specific-decls-defines.patch  |  37 ---
+ package/attr/0003-portability-fixes.patch          |  37 ---
+ ...-all-use-install-1-to-install-executables.patch |  67 -----
+ package/attr/attr.hash                             |   2 +-
+ package/attr/attr.mk                               |  38 +--
+ package/lua-flu/0001-use-system-xattr-h.patch      | 169 ++++++++++++
+ package/stress-ng/stress-ng.hash                   |   2 +-
+ package/stress-ng/stress-ng.mk                     |   3 +-
+ package/xorriso/0001-use-sys-xattr.h.patch         |  33 +++
+ package/xorriso/xorriso.mk                         |  13 +
+ 16 files changed, 232 insertions(+), 638 deletions(-)
+ delete mode 100644 package/acl/0001-support-static-installation.patch
+ delete mode 100644 package/acl/0002-add-__acl_-prefixes-to-internal-symbols.patch
+ delete mode 100644 package/acl/0003-all-use-install-1-to-install-executables.patch
+ delete mode 100644 package/attr/0001-support-static-installation.patch
+ delete mode 100644 package/attr/0002-avoid-glibc-specific-decls-defines.patch
+ delete mode 100644 package/attr/0003-portability-fixes.patch
+ delete mode 100644 package/attr/0004-all-use-install-1-to-install-executables.patch
+ create mode 100644 package/lua-flu/0001-use-system-xattr-h.patch
+ create mode 100644 package/xorriso/0001-use-sys-xattr.h.patch
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
