@@ -1,91 +1,519 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jun 2018 16:21:25 +0200
-Subject: [Buildroot] [PATCH 3/5 v2] package/xorriso: fix to use the system
- xattr header
+Date: Sat, 30 Jun 2018 16:21:26 +0200
+Subject: [Buildroot] [PATCH 4/5 v2] package/acl: bump version
 In-Reply-To: <cover.1530368468.git.yann.morin.1998@free.fr>
 References: <cover.1530368468.git.yann.morin.1998@free.fr>
-Message-ID: <6c7d039a9b5c4bcd728e3061be1bab895bd29ad5.1530368468.git.yann.morin.1998@free.fr>
+Message-ID: <301ec6ce94e85f26041c1d2855ff315bddb58cde.1530368468.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't carry a git-formatted patch, because upstream is in fact a
-collection of git trees, while the release tarball is an aggregate
-of those repositories. Thus, the layout is different between the
-tarball and the SCM...
+Of most interest is the build system overhaul, and the drop of the
+dependency on attr-provided <attr/xattr.h> in favour of the
+system-provided <sys/xattr.h>.
+
+That last bit meaning that we will be able to bump attr.
+
+We can drop our patches: static is now natively supported thanks to
+the use of libtool, and the internal symbols patch was a backport,
+and finally, our install patch is superseded by the use of autotools.
+
+The option to disable NLS has changed, so update accordingly.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Steve Kenton <skenton@ou.edu>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/xorriso/0001-use-sys-xattr.h.patch | 33 ++++++++++++++++++++++++++++++
- package/xorriso/xorriso.mk                 | 13 ++++++++++++
- 2 files changed, 46 insertions(+)
- create mode 100644 package/xorriso/0001-use-sys-xattr.h.patch
+ package/acl/0001-support-static-installation.patch |  29 --
+ ...2-add-__acl_-prefixes-to-internal-symbols.patch | 292 ---------------------
+ ...-all-use-install-1-to-install-executables.patch |  67 -----
+ package/acl/acl.hash                               |   2 +-
+ package/acl/acl.mk                                 |  50 +---
+ 5 files changed, 8 insertions(+), 432 deletions(-)
+ delete mode 100644 package/acl/0001-support-static-installation.patch
+ delete mode 100644 package/acl/0002-add-__acl_-prefixes-to-internal-symbols.patch
+ delete mode 100644 package/acl/0003-all-use-install-1-to-install-executables.patch
 
-diff --git a/package/xorriso/0001-use-sys-xattr.h.patch b/package/xorriso/0001-use-sys-xattr.h.patch
-new file mode 100644
-index 0000000000..5ae1aae72e
---- /dev/null
-+++ b/package/xorriso/0001-use-sys-xattr.h.patch
-@@ -0,0 +1,33 @@
-+Use system <sys/xattr.h>
+diff --git a/package/acl/0001-support-static-installation.patch b/package/acl/0001-support-static-installation.patch
+deleted file mode 100644
+index 4cb473ffc2..0000000000
+--- a/package/acl/0001-support-static-installation.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-Support installation of .a file when doing static linking
+-
+-When doing static linking (i.e ENABLE_SHARED != yes), the acl build
+-logic wasn't installing any library at all, not even the .a file which
+-is needed for static linking. This patch fixes that.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/include/buildmacros
+-===================================================================
+---- a/include/buildmacros
+-+++ b/include/buildmacros
+-@@ -97,7 +97,15 @@
+- 
+- INSTALL_LTLIB_STATIC = \
+- 	cd $(TOPDIR)/$(LIBNAME)/.libs; \
+--	../$(INSTALL) -m 755 -d $(PKG_DEVLIB_DIR);
+-+	../$(INSTALL) -m 755 -d $(PKG_DEVLIB_DIR); \
+-+	../$(INSTALL) -m 644 -T old_lib $(LIBNAME).la $(PKG_DEVLIB_DIR); \
+-+	../$(INSTALL) -m 644 $(LIBNAME).la $(PKG_DEVLIB_DIR)/$(LIBNAME).la ; \
+-+	../$(INSTALL) -m 755 -d $(PKG_LIB_DIR); \
+-+	../$(INSTALL) -T so_base $(LIBNAME).la $(PKG_LIB_DIR); \
+-+	if test "x$(PKG_DEVLIB_DIR)" != "x$(PKG_LIB_DIR)" ; then \
+-+	../$(INSTALL) -S $(PKG_DEVLIB_DIR)/$(LIBNAME).a $(PKG_LIB_DIR)/$(LIBNAME).a; \
+-+	../$(INSTALL) -S $(PKG_DEVLIB_DIR)/$(LIBNAME).la $(PKG_LIB_DIR)/$(LIBNAME).la; \
+-+	fi
+- 
+- INSTALL_MAN = \
+- 	@for d in $(MAN_PAGES); do \
+diff --git a/package/acl/0002-add-__acl_-prefixes-to-internal-symbols.patch b/package/acl/0002-add-__acl_-prefixes-to-internal-symbols.patch
+deleted file mode 100644
+index f9a5d9bd1e..0000000000
+--- a/package/acl/0002-add-__acl_-prefixes-to-internal-symbols.patch
++++ /dev/null
+@@ -1,292 +0,0 @@
+-From debbe4f7b591b3f35d0ed65c17fa81b196b2eb2d Mon Sep 17 00:00:00 2001
+-From: Mike Frysinger <vapier@gentoo.org>
+-Date: Tue, 12 Aug 2014 08:37:25 -0400
+-Subject: [PATCH] add __acl_ prefixes to internal symbols
+-
+-When static linking libacl, people sometimes run into symbol collisions
+-because their own code defines symbols like "quote".  So for acl internal
+-symbols, use an __acl_ prefix.
+-
+-[Rahul Bedarkar: backported from upstream 
+-  http://git.savannah.gnu.org/cgit/acl.git/commit/?id=a2c4d71c2e84419a49db503ed59de4d3d1dca7dd ]
+-Signed-off-by: Rahul Bedarkar <rahul.bedarkar@imgtec.com>
+----
+- exports                    | 12 ++----------
+- getfacl/getfacl.c          |  4 ++--
+- include/misc.h             |  8 ++++----
+- libacl/__acl_to_any_text.c |  4 ++--
+- libacl/acl_from_text.c     |  4 ++--
+- libmisc/high_water_alloc.c |  2 +-
+- libmisc/next_line.c        |  6 +++---
+- libmisc/quote.c            |  4 ++--
+- libmisc/unquote.c          |  2 +-
+- setfacl/parse.c            | 10 +++++-----
+- setfacl/setfacl.c          |  4 ++--
+- 11 files changed, 26 insertions(+), 34 deletions(-)
+-
+-diff --git a/exports b/exports
+-index 7d8e69e..bf15d84 100644
+---- a/exports
+-+++ b/exports
+-@@ -59,22 +59,14 @@ ACL_1.0 {
+- 	acl_to_any_text;
+- 
+-     local:
+--    	# Library internal stuff
+-+	# Library internal stuff
+- 	__new_var_obj_p;
+- 	__new_obj_p_here;
+- 	__free_obj_p;
+- 	__check_obj_p;
+- 	__ext2int_and_check;
+--	__acl_reorder_entry_obj_p;
+--	__acl_reorder_obj_p;
+--	__acl_init_obj;
+--	__acl_create_entry_obj;
+--	__acl_free_acl_obj;
+--	__acl_to_any_text;
+-+	__acl_*;
+- 	__apply_mask_to_mode;
+--
+--	quote;
+--	unquote;
+- };
+- 
+- ACL_1.1 {
+-diff --git a/getfacl/getfacl.c b/getfacl/getfacl.c
+-index f8eaf25..af9e225 100644
+---- a/getfacl/getfacl.c
+-+++ b/getfacl/getfacl.c
+-@@ -90,7 +90,7 @@ int opt_numeric;  /* don't convert id's to symbolic names */
+- 
+- static const char *xquote(const char *str, const char *quote_chars)
+- {
+--	const char *q = quote(str, quote_chars);
+-+	const char *q = __acl_quote(str, quote_chars);
+- 	if (q == NULL) {
+- 		fprintf(stderr, "%s: %s\n", progname, strerror(errno));
+- 		exit(1);
+-@@ -718,7 +718,7 @@ int main(int argc, char *argv[])
+- 	do {
+- 		if (optind == argc ||
+- 		    strcmp(argv[optind], "-") == 0) {
+--			while ((line = next_line(stdin)) != NULL) {
+-+			while ((line = __acl_next_line(stdin)) != NULL) {
+- 				if (*line == '\0')
+- 					continue;
+- 
+-diff --git a/include/misc.h b/include/misc.h
+-index 0c5fdcc..c25accf 100644
+---- a/include/misc.h
+-+++ b/include/misc.h
+-@@ -15,9 +15,9 @@
+-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-  */
+- 
+--extern int high_water_alloc(void **buf, size_t *bufsize, size_t newsize);
+-+extern int __acl_high_water_alloc(void **buf, size_t *bufsize, size_t newsize);
+- 
+--extern const char *quote(const char *str, const char *quote_chars);
+--extern char *unquote(char *str);
+-+extern const char *__acl_quote(const char *str, const char *quote_chars);
+-+extern char *__acl_unquote(char *str);
+- 
+--extern char *next_line(FILE *file);
+-+extern char *__acl_next_line(FILE *file);
+-diff --git a/libacl/__acl_to_any_text.c b/libacl/__acl_to_any_text.c
+-index a4f9c34..19f1ccc 100644
+---- a/libacl/__acl_to_any_text.c
+-+++ b/libacl/__acl_to_any_text.c
+-@@ -159,7 +159,7 @@ acl_entry_to_any_str(const acl_entry_t entry_d, char *text_p, ssize_t size,
+- 				if (options & TEXT_NUMERIC_IDS)
+- 					str = NULL;
+- 				else
+--					str = quote(user_name(
+-+					str = __acl_quote(user_name(
+- 						entry_obj_p->eid.qid), ":, \t\n\r");
+- 				if (str != NULL) {
+- 					strncpy(text_p, str, size);
+-@@ -182,7 +182,7 @@ acl_entry_to_any_str(const acl_entry_t entry_d, char *text_p, ssize_t size,
+- 				if (options & TEXT_NUMERIC_IDS)
+- 					str = NULL;
+- 				else
+--					str = quote(group_name(
+-+					str = __acl_quote(group_name(
+- 						entry_obj_p->eid.qid), ":, \t\n\r");
+- 				if (str != NULL) {
+- 					strncpy(text_p, str, size);
+-diff --git a/libacl/acl_from_text.c b/libacl/acl_from_text.c
+-index 1e05322..f6165be 100644
+---- a/libacl/acl_from_text.c
+-+++ b/libacl/acl_from_text.c
+-@@ -206,7 +206,7 @@ parse_acl_entry(const char **text_p, acl_t *acl_p)
+- 			str = get_token(text_p);
+- 			if (str) {
+- 				entry_obj.etag = ACL_USER;
+--				error = get_uid(unquote(str),
+-+				error = get_uid(__acl_unquote(str),
+- 						&entry_obj.eid.qid);
+- 				free(str);
+- 				if (error) {
+-@@ -225,7 +225,7 @@ parse_acl_entry(const char **text_p, acl_t *acl_p)
+- 			str = get_token(text_p);
+- 			if (str) {
+- 				entry_obj.etag = ACL_GROUP;
+--				error = get_gid(unquote(str),
+-+				error = get_gid(__acl_unquote(str),
+- 						&entry_obj.eid.qid);
+- 				free(str);
+- 				if (error) {
+-diff --git a/libmisc/high_water_alloc.c b/libmisc/high_water_alloc.c
+-index c127dc1..951f4bb 100644
+---- a/libmisc/high_water_alloc.c
+-+++ b/libmisc/high_water_alloc.c
+-@@ -21,7 +21,7 @@
+- #include <stdlib.h>
+- #include "misc.h"
+- 
+--int high_water_alloc(void **buf, size_t *bufsize, size_t newsize)
+-+int __acl_high_water_alloc(void **buf, size_t *bufsize, size_t newsize)
+- {
+- #define CHUNK_SIZE	256
+- 	/*
+-diff --git a/libmisc/next_line.c b/libmisc/next_line.c
+-index 0566d7a..126a364 100644
+---- a/libmisc/next_line.c
+-+++ b/libmisc/next_line.c
+-@@ -23,7 +23,7 @@
+- 
+- #define LINE_SIZE getpagesize()
+- 
+--char *next_line(FILE *file)
+-+char *__acl_next_line(FILE *file)
+- {
+- 	static char *line;
+- 	static size_t line_size;
+-@@ -31,7 +31,7 @@ char *next_line(FILE *file)
+- 	int eol = 0;
+- 
+- 	if (!line) {
+--		if (high_water_alloc((void **)&line, &line_size, LINE_SIZE))
+-+		if (__acl_high_water_alloc((void **)&line, &line_size, LINE_SIZE))
+- 			return NULL;
+- 	}
+- 	c = line;
+-@@ -47,7 +47,7 @@ char *next_line(FILE *file)
+- 		if (feof(file))
+- 			break;
+- 		if (!eol) {
+--			if (high_water_alloc((void **)&line, &line_size,
+-+			if (__acl_high_water_alloc((void **)&line, &line_size,
+- 					     2 * line_size))
+- 				return NULL;
+- 			c = strrchr(line, '\0');
+-diff --git a/libmisc/quote.c b/libmisc/quote.c
+-index bf8f9eb..a28800c 100644
+---- a/libmisc/quote.c
+-+++ b/libmisc/quote.c
+-@@ -23,7 +23,7 @@
+- #include <string.h>
+- #include "misc.h"
+- 
+--const char *quote(const char *str, const char *quote_chars)
+-+const char *__acl_quote(const char *str, const char *quote_chars)
+- {
+- 	static char *quoted_str;
+- 	static size_t quoted_str_len;
+-@@ -40,7 +40,7 @@ const char *quote(const char *str, const char *quote_chars)
+- 	if (nonpr == 0)
+- 		return str;
+- 
+--	if (high_water_alloc((void **)&quoted_str, &quoted_str_len,
+-+	if (__acl_high_water_alloc((void **)&quoted_str, &quoted_str_len,
+- 			     (s - (unsigned char *)str) + nonpr * 3 + 1))
+- 		return NULL;
+- 	for (s = (unsigned char *)str, q = quoted_str; *s != '\0'; s++) {
+-diff --git a/libmisc/unquote.c b/libmisc/unquote.c
+-index bffebf9..4f4ce7c 100644
+---- a/libmisc/unquote.c
+-+++ b/libmisc/unquote.c
+-@@ -22,7 +22,7 @@
+- #include <ctype.h>
+- #include "misc.h"
+- 
+--char *unquote(char *str)
+-+char *__acl_unquote(char *str)
+- {
+- 	unsigned char *s, *t;
+- 
+-diff --git a/setfacl/parse.c b/setfacl/parse.c
+-index e7e6add..7433459 100644
+---- a/setfacl/parse.c
+-+++ b/setfacl/parse.c
+-@@ -226,7 +226,7 @@ user_entry:
+- 			str = get_token(text_p);
+- 			if (str) {
+- 				cmd->c_tag = ACL_USER;
+--				error = get_uid(unquote(str), &cmd->c_id);
+-+				error = get_uid(__acl_unquote(str), &cmd->c_id);
+- 				free(str);
+- 				if (error) {
+- 					*text_p = backup;
+-@@ -245,7 +245,7 @@ user_entry:
+- 			str = get_token(text_p);
+- 			if (str) {
+- 				cmd->c_tag = ACL_GROUP;
+--				error = get_gid(unquote(str), &cmd->c_id); 
+-+				error = get_gid(__acl_unquote(str), &cmd->c_id);
+- 				free(str);
+- 				if (error) {
+- 					*text_p = backup;
+-@@ -466,7 +466,7 @@ read_acl_comments(
+- 		if (strncmp(cp, "file:", 5) == 0) {
+- 			cp += 5;
+- 			SKIP_WS(cp);
+--			cp = unquote(cp);
+-+			cp = __acl_unquote(cp);
+- 			
+- 			if (path_p) {
+- 				if (*path_p)
+-@@ -483,7 +483,7 @@ read_acl_comments(
+- 			if (uid_p) {
+- 				if (*uid_p != ACL_UNDEFINED_ID)
+- 					goto fail;
+--				if (get_uid(unquote(cp), uid_p) != 0)
+-+				if (get_uid(__acl_unquote(cp), uid_p) != 0)
+- 					continue;
+- 			}
+- 		} else if (strncmp(cp, "group:", 6) == 0) {
+-@@ -493,7 +493,7 @@ read_acl_comments(
+- 			if (gid_p) {
+- 				if (*gid_p != ACL_UNDEFINED_ID)
+- 					goto fail;
+--				if (get_gid(unquote(cp), gid_p) != 0)
+-+				if (get_gid(__acl_unquote(cp), gid_p) != 0)
+- 					continue;
+- 			}
+- 		} else if (strncmp(cp, "flags:", 6) == 0) {
+-diff --git a/setfacl/setfacl.c b/setfacl/setfacl.c
+-index 81062a6..fb2d172 100644
+---- a/setfacl/setfacl.c
+-+++ b/setfacl/setfacl.c
+-@@ -92,7 +92,7 @@ int promote_warning;
+- 
+- static const char *xquote(const char *str, const char *quote_chars)
+- {
+--	const char *q = quote(str, quote_chars);
+-+	const char *q = __acl_quote(str, quote_chars);
+- 	if (q == NULL) {
+- 		fprintf(stderr, "%s: %s\n", progname, strerror(errno));
+- 		exit(1);
+-@@ -311,7 +311,7 @@ int next_file(const char *arg, seq_t seq)
+- 	args.seq = seq;
+- 
+- 	if (strcmp(arg, "-") == 0) {
+--		while ((line = next_line(stdin)))
+-+		while ((line = __acl_next_line(stdin)))
+- 			errors = walk_tree(line, walk_flags, 0, do_set, &args);
+- 		if (!feof(stdin)) {
+- 			fprintf(stderr, _("%s: Standard input: %s\n"),
+--- 
+-2.6.2
+-
+diff --git a/package/acl/0003-all-use-install-1-to-install-executables.patch b/package/acl/0003-all-use-install-1-to-install-executables.patch
+deleted file mode 100644
+index 9640dd866d..0000000000
+--- a/package/acl/0003-all-use-install-1-to-install-executables.patch
++++ /dev/null
+@@ -1,67 +0,0 @@
+-From d3bd7b29b79147b4155e78a8ea06ded98b91f92a Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Tue, 8 May 2018 15:23:57 +0200
+-Subject: [PATCH] all: use install(1) to install executables
+-
+-When the destination file already exists, the current install script
+-will overwrite it with the new executable.
+-
+-However, when the existing executable is a symlink or hardlink to
+-something else, like busybox, this effectively overwrites that something
+-with the new executable, and thus replaces busybox and all its applets
+-with the code for either of the three commands.
+-
+-We fix that by simply calling install(1). install(1) is sufficiently
+-widespread that we don't bother checking for it, as tis is just a
+-workaround while waiting for the version bump that will eventually fix
+-it for good.
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+- chacl/Makefile   | 4 ++--
+- getfacl/Makefile | 4 ++--
+- setfacl/Makefile | 4 ++--
+- 3 files changed, 6 insertions(+), 6 deletions(-)
+-
+-diff --git a/chacl/Makefile b/chacl/Makefile
+-index 33858d6..c857329 100644
+---- a/chacl/Makefile
+-+++ b/chacl/Makefile
+-@@ -30,6 +30,6 @@ default: $(LTCOMMAND)
+- include $(BUILDRULES)
+- 
+- install: default
+--	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
+--	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
+-+	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
+-+
+- install-dev install-lib:
+-diff --git a/getfacl/Makefile b/getfacl/Makefile
+-index 7fbafda..8ac63e0 100644
+---- a/getfacl/Makefile
+-+++ b/getfacl/Makefile
+-@@ -31,6 +31,6 @@ default: $(LTCOMMAND)
+- include $(BUILDRULES)
+- 
+- install: default
+--	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
+--	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
+-+	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
+-+
+- install-dev install-lib:
+-diff --git a/setfacl/Makefile b/setfacl/Makefile
+-index c44e7c0..eea2ede 100644
+---- a/setfacl/Makefile
+-+++ b/setfacl/Makefile
+-@@ -31,6 +31,6 @@ default: $(LTCOMMAND)
+- include $(BUILDRULES)
+- 
+- install: default
+--	$(INSTALL) -m 755 -d $(PKG_BIN_DIR)
+--	$(LTINSTALL) -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)
+-+	install -D -m 755 $(LTCOMMAND) $(PKG_BIN_DIR)/$(LTCOMMAND)
+-+
+- install-dev install-lib:
+--- 
+-2.14.1
+-
+diff --git a/package/acl/acl.hash b/package/acl/acl.hash
+index 3f9d7900d3..091092a1c5 100644
+--- a/package/acl/acl.hash
++++ b/package/acl/acl.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256	179074bb0580c06c4b4137be4c5a92a701583277967acdb5546043c7874e0d23	acl-2.2.52.src.tar.gz
++sha256  06be9865c6f418d851ff4494e12406568353b891ffe1f596b34693c387af26c7  acl-2.2.53.tar.gz
+diff --git a/package/acl/acl.mk b/package/acl/acl.mk
+index 4d30059390..038bc7a050 100644
+--- a/package/acl/acl.mk
++++ b/package/acl/acl.mk
+@@ -4,54 +4,18 @@
+ #
+ ################################################################################
+ 
+-ACL_VERSION = 2.2.52
+-ACL_SOURCE = acl-$(ACL_VERSION).src.tar.gz
++ACL_VERSION = 2.2.53
+ ACL_SITE = http://download.savannah.gnu.org/releases/acl
+-ACL_INSTALL_STAGING = YES
+-ACL_DEPENDENCIES = attr
+-ACL_CONF_OPTS = --enable-gettext=no
+ ACL_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ ACL_LICENSE_FILES = doc/COPYING doc/COPYING.LGPL
+ 
+-# While the configuration system uses autoconf, the Makefiles are
+-# hand-written and do not use automake. Therefore, we have to hack
+-# around their deficiencies by:
+-# - explicitly passing CFLAGS (LDFLAGS are passed on from configure,
+-#   CFLAGS are not).
+-# - explicitly passing the installation prefix, not using DESTDIR.
+-
+-ACL_MAKE_ENV = CFLAGS="$(TARGET_CFLAGS)"
+-
+-ACL_INSTALL_STAGING_OPTS = \
+-	prefix=$(STAGING_DIR)/usr \
+-	exec_prefix=$(STAGING_DIR)/usr \
+-	PKG_DEVLIB_DIR=$(STAGING_DIR)/usr/lib \
+-	install-dev install-lib
+-
+-ACL_INSTALL_TARGET_OPTS = \
+-	prefix=$(TARGET_DIR)/usr \
+-	exec_prefix=$(TARGET_DIR)/usr \
+-	install install-lib
+-
+-# The libdir variable in libacl.la is empty, so let's fix it. This is
+-# probably due to acl not using automake, and not doing fully the
+-# right thing with libtool.
+-define ACL_FIX_LIBTOOL_LA_LIBDIR
+-	$(SED) "s,libdir=.*,libdir='$(STAGING_DIR)'," \
+-		$(STAGING_DIR)/usr/lib/libacl.la
+-endef
+-
+-ACL_POST_INSTALL_STAGING_HOOKS += ACL_FIX_LIBTOOL_LA_LIBDIR
+-
++ACL_DEPENDENCIES = attr
+ HOST_ACL_DEPENDENCIES = host-attr
+-HOST_ACL_CONF_OPTS = --enable-gettext=no
+-HOST_ACL_MAKE_ENV = CFLAGS="$(HOST_CFLAGS)"
+-HOST_ACL_INSTALL_OPTS = \
+-	prefix=$(HOST_DIR) \
+-	exec_prefix=$(HOST_DIR) \
+-	PKG_DEVLIB_DIR=$(HOST_DIR)/lib \
+-	install-dev install-lib
+-# For the host, libacl.la is correct, no fixup needed.
 +
-+The one from attr is no longer installed with latest version.
++ACL_INSTALL_STAGING = YES
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
-+---
-+Upstream status: alternate, more complex patch pending...
-+
-+diff -durN xorriso-1.4.6.orig/configure.ac xorriso-1.4.6/configure.ac
-+--- xorriso-1.4.6.orig/configure.ac	2016-09-16 15:51:33.000000000 +0200
-++++ xorriso-1.4.6/configure.ac	2018-05-06 23:45:38.377153069 +0200
-+@@ -264,7 +264,7 @@
-+ dnl Check whether there is the header for Linux xattr.
-+ dnl If not, erase this macro which would enable use of listxattr and others
-+         XATTR_DEF="-DLibisofs_with_aaip_xattR"
-+-        AC_CHECK_HEADER(attr/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
-++        AC_CHECK_HEADER(sys/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
-+                                                    XATTR_DEF= ), XATTR_DEF= )
-+     fi
-+ elif test x"$LIBBURNIA_SUPP_FATTR" = xextattr
-+diff -durN xorriso-1.4.6.orig/libisofs/aaip-os-linux.c xorriso-1.4.6/libisofs/aaip-os-linux.c
-+--- xorriso-1.4.6.orig/libisofs/aaip-os-linux.c	2016-09-16 15:51:34.000000000 +0200
-++++ xorriso-1.4.6/libisofs/aaip-os-linux.c	2018-05-06 23:47:25.764941583 +0200
-+@@ -30,7 +30,7 @@
-+ #endif
-+ 
-+ #ifdef Libisofs_with_aaip_xattR
-+-#include <attr/xattr.h>
-++#include <sys/xattr.h>
-+ #endif
-+ 
-+ 
-diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
-index 1f095911f8..af4e1bdace 100644
---- a/package/xorriso/xorriso.mk
-+++ b/package/xorriso/xorriso.mk
-@@ -8,6 +8,19 @@ XORRISO_VERSION = 1.4.6
- XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
- XORRISO_LICENSE = GPL-3.0+
- XORRISO_LICENSE_FILES = COPYING COPYRIGHT
-+
-+# 0001-use-sys-xattr.h.patch
-+XORRISO_DEPENDENCIES = host-pkgconf
-+XORRISO_AUTORECONF = YES
-+HOST_XORRISO_AUTORECONF = YES
-+
-+# Make autoreconf happy
-+define XORRISO_NEWS
-+	touch $(@D)/NEWS
-+endef
-+XORRISO_POST_PATCH_HOOKS += XORRISO_NEWS
-+HOST_XORRISO_POST_PATCH_HOOKS += XORRISO_NEWS
-+
- # Disable everything until we actually need those features, and add the correct
- # host libraries
- HOST_XORRISO_CONF_OPTS = \
++ACL_CONF_OPTS = --disable-nls
++HOST_ACL_CONF_OPTS = --disable-nls
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.14.1
