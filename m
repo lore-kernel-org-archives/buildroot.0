@@ -1,95 +1,136 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jun 2018 19:07:08 +0200
-Subject: [Buildroot] [PATCH v2] qt5webengine: propagate parallel flag to
- ninja
-In-Reply-To: <20180629143521.9018-1-gael.portay@savoirfairelinux.com>
-References: <20180629143521.9018-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180630170708.GG2384@scaer>
+Date: Sat, 30 Jun 2018 19:23:35 +0200
+Subject: [Buildroot] [PATCH 1/1] Adding opkg configuration options for
+ curl, curl with  ssl, and sha256
+In-Reply-To: <SN6PR02MB39982FB384F220BD142434F9F24A0@SN6PR02MB3998.namprd02.prod.outlook.com>
+References: <SN6PR02MB39982FB384F220BD142434F9F24A0@SN6PR02MB3998.namprd02.prod.outlook.com>
+Message-ID: <20180630172335.GH2384@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ga?l, All,
+Derek, All,
 
-On 2018-06-29 10:35 -0400, Ga?l PORTAY spake thusly:
-> WebEngine is a big project to build. It uses ninja which is a build
-> system that does everything in parallel[1].
+On 2018-06-25 15:21 +0000, Baker, Derek spake thusly:
+> From 51a9bc5b2fc6e40f8b076a7b153caf3d84489c9c Mon Sep 17 00:00:00 2001
+> From: Derek Baker <derek-baker@idexx.com>
+> Date: Thu, 14 Jun 2018 16:36:31 -0400
+> Subject: [PATCH 1/1] Adding opkg configuration options for curl, curl with
+>  ssl, and sha256
 > 
-> 	Builds are always run in parallel, based by default on the number of
-> 	CPUs your system has. Underspecified build dependencies will result in
-> 	incorrect builds.
+> Signed-off-by: Derek Baker <derek-baker@idexx.com>
+> ---
+>  package/opkg/Config.in | 13 +++++++++++++
+>  package/opkg/opkg.mk   | 20 +++++++++++++++++++-
+>  2 files changed, 32 insertions(+), 1 deletion(-)
 > 
-> QtWebEngine does not propagate the parallel flag from the running
-> instance of make to ninja. Thus, all the machine cores are used to build
-> this single project.
+> diff --git a/package/opkg/Config.in b/package/opkg/Config.in
+> index 20f6fa2f53..4ce3372bc0 100644
+> --- a/package/opkg/Config.in
+> +++ b/package/opkg/Config.in
+> @@ -30,4 +30,17 @@ config BR2_PACKAGE_OPKG_GPG_SIGN
+>        Enable opkg package signature checking support using
+>        gnupg/libgpgme.
 > 
-> 	make -j 10 -> ninja -j # all cores
-> 
-> This behavior disrupts powerful machines which are setup to build many
-> projects in parallel. Even worse, the build fails on machines where the
-> ratio CPU-cores / amount of RAM (including swap) is not appropriate. g++
-> may have not enough of memory to build all those files in parallel.
-> 
-> Unfortunatly, the target `run_ninja' is hardcoded in the Makefile
-> src/core/Makefile.run_gn; there is no way to propagate flags using a
-> variable through the make command-line.
-> 
-> 	run_ninja:
-> 	        /home/gportay/src/buildroot/output-qt5.11/build/qt5webengine-5.11.1/src/3rdparty/ninja/ninja
-> -C /home/gportay/src/buildroot/output-qt5.11/build/qt5webengine-5.11.1/src/core/release QtWebEngineCore
-> 
-> Luckily, the Qt gn_run.pro[2] can hardcode ninja extra flags through the
-> variable NINJAFLAGS when the Makefile is generated (which is performed
-> during the build and not during configure step).
-> 
-> This commit sets the NINJAFLAGS using the variable PARALLEL_JOBS to limit
-> the number of cores used by ninja.
-> 
-> Fixes:
-> 	virtual memory exhausted: Cannot allocate memory
-> 
-> [1]: https://ninja-build.org/manual.html#_comparison_to_make
-> [2]: https://github.com/qt/qtwebengine/blob/v5.11.1/src/core/gn_run.pro#L49-L53
-> 
-> CC: Damien Riegel <damien.riegel@savoirfairelinux.com>
-> CC: Jean-Fran?ois T?tu <jean-francois.tetu@savoirfairelinux.com>
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+> +config BR2_PACKAGE_OPKG_CURL
+> +    bool "curl support"
+> +    select BR2_PACKAGE_LIBCURL
+> +
+> +if BR2_PACKAGE_OPKG_CURL
+> +config BR2_PACKAGE_OPKG_CURL_SSL
+> +    select BR2_PACKAGE_OPENSSL
+> +    bool "ssl support for curl"
+> +endif
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We don;t usually add options like that for optional features. Instead,
+we let user enable the appropriate packages, and so...
+
+> +config BR2_PACKAGE_OPKG_SHA256
+> +    bool "SHA256 support"
+
+Adding sha256 support looks like it is orthogonal to using libcurl,
+right? If so, then this should be two patches, please: one to add
+libcurl, then one to add sha256.
+
+If sha256 is a requirement for libcurl, then make that the first patch.
+
+>  endif
+> diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
+> index 4d34c6d4d3..d72f0bd97d 100644
+> --- a/package/opkg/opkg.mk
+> +++ b/package/opkg/opkg.mk
+> @@ -10,7 +10,6 @@ OPKG_DEPENDENCIES = host-pkgconf libarchive
+>  OPKG_LICENSE = GPL-2.0+
+>  OPKG_LICENSE_FILES = COPYING
+>  OPKG_INSTALL_STAGING = YES
+> -OPKG_CONF_OPTS = --disable-curl
+>  # Populate the conf/ directory
+>  OPKG_AUTORECONF = YES
+> 
+> @@ -37,6 +36,25 @@ else
+>  OPKG_CONF_OPTS += --disable-gpg
+>  endif
+> 
+> +ifeq ($(BR2_PACKAGE_OPKG_SHA256),y)
+> +OPKG_CONF_OPTS += --enable-sha256
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_OPKG_CURL),y)
+> +OPKG_CONF_OPTS += --enable-curl
+> +OPKG_DEPENDENCIES += libcurl
+> +
+> +ifeq ($(BR2_PACKAGE_OPKG_CURL_SSL),y)
+> +OPKG_CONF_OPTS += --enable-ssl-curl
+> +OPKG_DEPENDENCIES += libopenssl
+
+Note in passing: you select the 'openssl' package, but you depend on
+'libopenssl'. openssl is a virtual package that depends on either
+'libopenssl' or 'libressl'. But see below on how to solve this...
+
+> +else
+> +OPKG_CONF_OPTS += --disable-ssl-curl
+> +endif
+> +
+> +else
+> +OPKG_CONF_OPTS += --disable-curl
+> +endif
+
+Here, we would just depend on the appropriate package being enabled.
+Also, we like to forcibly disable the features. This would lo0ok a bit
+like so:
+
+    ifeq ($(BR2_PACKAGE_LIBCURL),y)
+    OPKG_CONF_OPTS += --enable-curl
+    OPKG_DEPENDENCIES += libcurl
+    ifeq ($(BR2_PACKAGE_OPENSSL),y)
+    OPKG_CONF_OPTS += --enable-ssl-curl
+    OPKG_DEPENDENCIES += openssl
+    else
+    OPKG_CONF_OPTS += --disable-ssl-curl
+    endif
+    else
+    OPKG_CONF_OPTS += --disable-curl --disable-ssl-curl
+    endif # libcurl
+
+Note: if only 'libopenssl' (aka upstream openssl) is supported, then
+replace BR2_PACKAGE_OPENSSL by BR2_PACKAGE_LIBOPENSSL.
 
 Regards,
 Yann E. MORIN.
 
-> ---
-> Changes since v1:
->  - Use PARALLEL_JOBS instead of BR2_JLEVEL
->  - Reword commit message
+>  OPKG_POST_INSTALL_TARGET_HOOKS += OPKG_CREATE_LOCKDIR
 > 
->  package/qt5/qt5webengine/qt5webengine.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-> index 08120421d6..2c622c91ba 100644
-> --- a/package/qt5/qt5webengine/qt5webengine.mk
-> +++ b/package/qt5/qt5webengine/qt5webengine.mk
-> @@ -48,6 +48,8 @@ define QT5WEBENGINE_PYTHON2_SYMLINK
->  endef
->  QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_PYTHON2_SYMLINK
->  
-> +QT5WEBENGINE_ENV += NINJAFLAGS="-j$(PARALLEL_JOBS)"
-> +
->  ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->  define QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
->  	sed s%@HOST_DIR@%$(HOST_DIR)%g $(QT5WEBENGINE_PKGDIR)/host-pkg-config.in > $(@D)/host-bin/host-pkg-config
-> -- 
+>  $(eval $(autotools-package))
+> --
 > 2.17.1
-> 
+
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
