@@ -1,85 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Jul 2018 00:10:06 +0200
-Subject: [Buildroot] [PATCH 2/5] Add first KF5 package :
- extra-cmake-modules
-In-Reply-To: <20180215204815.14707-2-pinaraf@pinaraf.info>
+Date: Sun, 1 Jul 2018 00:12:53 +0200
+Subject: [Buildroot] [PATCH 3/5] Add KF5 package networkmanager-qt
+In-Reply-To: <20180215204815.14707-3-pinaraf@pinaraf.info>
 References: <20180215204815.14707-1-pinaraf@pinaraf.info>
- <20180215204815.14707-2-pinaraf@pinaraf.info>
-Message-ID: <20180701001006.35ced39f@windsurf.home>
+ <20180215204815.14707-3-pinaraf@pinaraf.info>
+Message-ID: <20180701001253.38a198e4@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Pierre,
 
-On Thu, 15 Feb 2018 21:48:12 +0100, Pierre Ducroquet wrote:
-> extra-cmake-modules contains several additional CMake modules used by the
-> other KF5 packages. It does not install anything on the target and contain
-> only CMake files for the host.
+On Thu, 15 Feb 2018 21:48:13 +0100, Pierre Ducroquet wrote:
+> networkmanager-qt is a simple Qt wrapper on the NetworkManager API.
 > 
 > Signed-off-by: Pierre Ducroquet <pinaraf@pinaraf.info>
 
-I've applied this package. To be honest, I wasn't sure if it should be
-a host package or a target package, but since CMake looks for its
-module in $(STAGING_DIR), having it as a target package like you did
-was the easiest option. We can always change this later if needed.
+I've applied this package, after doing a number of changes.
 
-I fixed the commit title to follow our convention.
+First, I fixed the commit title to follow our convention.
 
-> ---
->  package/kf5/Config.in                                   |  1 +
->  package/kf5/kf5-extra-cmake-modules/Config.in           | 11 +++++++++++
->  .../kf5-extra-cmake-modules.hash                        |  2 ++
->  .../kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk  | 17 +++++++++++++++++
->  4 files changed, 31 insertions(+)
->  create mode 100644 package/kf5/kf5-extra-cmake-modules/Config.in
->  create mode 100644 package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.hash
->  create mode 100644 package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.mk
-> 
-> diff --git a/package/kf5/Config.in b/package/kf5/Config.in
-> index 4e6ee3a107..89d8c7a140 100644
-> --- a/package/kf5/Config.in
-> +++ b/package/kf5/Config.in
-> @@ -6,4 +6,5 @@ menuconfig BR2_PACKAGE_KF5
->  	  select which modules should be built.
->  
->  if BR2_PACKAGE_KF5
-> +source "package/kf5/kf5-extra-cmake-modules/Config.in"
->  endif
-> diff --git a/package/kf5/kf5-extra-cmake-modules/Config.in b/package/kf5/kf5-extra-cmake-modules/Config.in
+> diff --git a/package/kf5/kf5-networkmanager-qt/Config.in b/package/kf5/kf5-networkmanager-qt/Config.in
 > new file mode 100644
-> index 0000000000..3319ccf2c7
+> index 0000000000..aff4f39ae2
 > --- /dev/null
-> +++ b/package/kf5/kf5-extra-cmake-modules/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
-> +	bool "kf5-extra-cmake-modules"
-> +	help
-> +	  KF5 is a set of Qt framework addons, extending Qt in
-> +	  various ways, not only restricted in helping integration
-> +	  in KDE.
-> +	  
+> +++ b/package/kf5/kf5-networkmanager-qt/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_KF5_NETWORKMANAGER_QT
+> +	bool "kf5-networkmanager-qt"
+> +	select BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
+> +	select BR2_PACKAGE_NETWORK_MANAGER
 
-There was some trailing space here.
+When you select a package you *must* replicate its dependencies. Since
+network-manager has tons of dependencies, and it's pretty obvious for
+the user of kf5-networkmanager-qt that network-manager should be
+enabled, I've changed from a "select" to a "depends on
+BR2_PACKAGE_NETWORK_MANAGER", which avoids the need for replicating the
+dependencies.
 
-> +	  This package corresponds to the extra CMake modules, required
-> +	  for most KF5 libraries.
-> +
-> +	  https://api.kde.org/frameworks/extra-cmake-modules/html/index.html
-> diff --git a/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.hash b/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.hash
-> new file mode 100644
-> index 0000000000..4481b80af7
+In addition, you forgot to select BR2_PACKAGE_QT5DBUS. Without this,
+the build fails because kf5-networkmanager-qt uses the DBus support in
+Qt. This required propagating a few dependencies.
+
+See the final commit for the details.
+
+> index 0000000000..d3c0f96d46
 > --- /dev/null
-> +++ b/package/kf5/kf5-extra-cmake-modules/kf5-extra-cmake-modules.hash
+> +++ b/package/kf5/kf5-networkmanager-qt/kf5-networkmanager-qt.hash
 > @@ -0,0 +1,2 @@
 > +# Locally calculated
-> +sha256 5757a5ddceede5321b58345a8dbf953c2282487bf9c24ae477efde800b94fffd extra-cmake-modules-5.43.0.tar.xz
+> +sha256 0cbbcaa2db1f9bd5445b9c7c5f1e79313df5060f7c31617d673d00f19600755e networkmanager-qt-5.43.0.tar.xz
 
-I've updated the hash for 5.47, and added the hash of the license file.
+Updated to 5.47 + hash for license file added.
 
-Thanks,
+> +KF5_NETWORKMANAGER_QT_DEPENDENCIES = kf5-extra-cmake-modules network-manager
+
+You were missing qt5base here. Without this, you have no guarantee that
+qt5base gets built before, obviously causing a build failure.
+
+Thanks!
 
 Thomas
 -- 
