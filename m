@@ -1,43 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 22:07:01 +0200
-Subject: [Buildroot] [git commit] board/raspberrypi: update firmware option
- to use 64-bit mode
-Message-ID: <20180630200359.5C441838D4@busybox.osuosl.org>
+Date: Sat, 30 Jun 2018 22:07:28 +0200
+Subject: [Buildroot] [PATCH] raspberrypi3: post-image.sh update 64-bit
+ option
+In-Reply-To: <C163C8A5-70D5-4EE3-8177-4296770198D5@jtang.org>
+References: <C163C8A5-70D5-4EE3-8177-4296770198D5@jtang.org>
+Message-ID: <20180630220728.7a0765b3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=722c11ce7b25a1925498483ef58f59d0931b2ca7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-As per latest Raspberry Pi firmware documentation, the option
-'arm_control' has been deprecated in favor of 'arm_64bit'.
+On Sat, 30 Jun 2018 15:14:25 -0400, J. Tang wrote:
+> As per latest Raspberry Pi firmware documentation, the option
+> 'arm_control' has been deprecated in favor of 'arm_64bit'.
+> 
+> Fixes #11111.
+> 
+> Signed-off-by: Jason Tang <tang@jtang.org>
+> ---
+>  board/raspberrypi/post-image.sh | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Fixes https://bugs.busybox.net/show_bug.cgi?id=11111.
+Applied to master, thanks.
 
-Signed-off-by: Jason Tang <tang@jtang.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/raspberrypi/post-image.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index 3c6c938407..70447cd48b 100755
---- a/board/raspberrypi/post-image.sh
-+++ b/board/raspberrypi/post-image.sh
-@@ -23,11 +23,11 @@ __EOF__
- 		--aarch64)
- 		# Run a 64bits kernel (armv8)
- 		sed -e '/^kernel=/s,=.*,=Image,' -i "${BINARIES_DIR}/rpi-firmware/config.txt"
--		if ! grep -qE '^arm_control=0x200' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
-+		if ! grep -qE '^arm_64bit=1' "${BINARIES_DIR}/rpi-firmware/config.txt"; then
- 			cat << __EOF__ >> "${BINARIES_DIR}/rpi-firmware/config.txt"
- 
- # enable 64bits support
--arm_control=0x200
-+arm_64bit=1
- __EOF__
- 		fi
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
