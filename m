@@ -1,48 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jun 2018 13:08:47 +0200
-Subject: [Buildroot] [PATCH v3 16/22]
- package/x11r7/xdriver_xf86-video-mach64: bump version to 6.9.6
+Date: Sat, 30 Jun 2018 13:08:46 +0200
+Subject: [Buildroot] [PATCH v3 15/22]
+ package/x11r7/xdriver_xf86-video-intel: bump version
 In-Reply-To: <20180630110853.29339-1-bernd.kuhls@t-online.de>
 References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
-Message-ID: <20180630110853.29339-17-bernd.kuhls@t-online.de>
+Message-ID: <20180630110853.29339-16-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This version bump includes
+
+https://cgit.freedesktop.org/xorg/driver/xf86-video-intel/commit/?id=359477215092ac1b602ad1e2f17a28963d9224c2
+
+which is needed for compatibility with upcoming xserver_xorg-server
+1.20.0.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-mach64.hash                       | 9 +++++++--
- .../xdriver_xf86-video-mach64.mk                         | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ .../xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash      | 2 +-
+ .../x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash
-index 43a7fa707e..55acd74652 100644
---- a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash
-+++ b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-May/002599.html
--sha256	3e98985b6e044189efd42342862208f472881c25debf22230a1d54a96d71b41f	xf86-video-mach64-6.9.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-May/002896.html
-+md5 0e12f9a3b5659e1e27e03adc42b04d99  xf86-video-mach64-6.9.6.tar.bz2
-+sha1 1fdf0c3488ab88cb46b563efee166a5d54a01932  xf86-video-mach64-6.9.6.tar.bz2
-+sha256 7a0707c71bb522430f83bb5e9d9ee697e661e35534a3a2d10834f86b327a3c9c  xf86-video-mach64-6.9.6.tar.bz2
-+sha512 687f6ac60491b704d5c4788463763d2f4bf725611e10bd2163156963fe0a8fdbffe0a1b7c737eff131f01759e43b5ec3544a7dabe66a67e85b286dcb969da2f1  xf86-video-mach64-6.9.6.tar.bz2
-+# Locally computed
-+sha256 a7d68021893bced0d709338a59a137c74b11e624880e110e4a2f14ccef475120  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-index 7f77b4883f..e6f8d7471c 100644
---- a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-+++ b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+index 1852540cb3..469649ec30 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 e3a107fadcdeef35830a12a305b09dfa793a33a54930a0ecd5e84a6156f546eb  xdriver_xf86-video-intel-84eaaba2737b2765f3fe843a138002ad0056a52b.tar.gz
++sha256 8a008db80964700c57db407fe9fab78884d6919bd5343a269f681625132b4687  xdriver_xf86-video-intel-3d395062ce73f85e8340218df01c2ebf4bc25023.tar.gz
+ sha256 5808e89f4b9a30afc59f335bfa8219ecf2dacb89a81d16b322bc6d92993a48fa  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
+index 31cdf4b065..66b0f9defe 100644
+--- a/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
++++ b/package/x11r7/xdriver_xf86-video-intel/xdriver_xf86-video-intel.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_MACH64_VERSION = 6.9.5
-+XDRIVER_XF86_VIDEO_MACH64_VERSION = 6.9.6
- XDRIVER_XF86_VIDEO_MACH64_SOURCE = xf86-video-mach64-$(XDRIVER_XF86_VIDEO_MACH64_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_MACH64_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_MACH64_LICENSE = MIT
+-XDRIVER_XF86_VIDEO_INTEL_VERSION = 84eaaba2737b2765f3fe843a138002ad0056a52b
++XDRIVER_XF86_VIDEO_INTEL_VERSION = 3d395062ce73f85e8340218df01c2ebf4bc25023
+ XDRIVER_XF86_VIDEO_INTEL_SITE = git://anongit.freedesktop.org/xorg/driver/xf86-video-intel
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE = MIT
+ XDRIVER_XF86_VIDEO_INTEL_LICENSE_FILES = COPYING
 -- 
 2.17.1
