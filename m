@@ -1,43 +1,207 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jun 2018 16:21:24 +0200
-Subject: [Buildroot] [PATCH 2/5 v2] package/stress-ng: bump version
+Date: Sat, 30 Jun 2018 16:21:23 +0200
+Subject: [Buildroot] [PATCH 1/5 v2] package/lua-flu: fix to use the system
+ xattr header
 In-Reply-To: <cover.1530368468.git.yann.morin.1998@free.fr>
 References: <cover.1530368468.git.yann.morin.1998@free.fr>
-Message-ID: <c4daceae3679ceb8b87a82b90c675c286939afb5.1530368468.git.yann.morin.1998@free.fr>
+Message-ID: <652be114258a3d7b5829303a5c9219a26bd62c08.1530368468.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Romain Naour <romain.naour@gmail.com>
----
- package/stress-ng/stress-ng.hash | 2 +-
- package/stress-ng/stress-ng.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+We can't carry a mercurial patch, because the luarocks package is not
+organised with the same layout as the upstream package source tree is.
 
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index e735439a7e..7455288c17 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	0e1d7733b35f594f7461dedbf836bd4966d0611da4cd4e85cde4804d2a425e6d	stress-ng-0.06.15.tar.gz
-+sha256  0de97212a83b2f8a34ee31ef32a7bc69066ed49ebdc59b51aa4060cb95e29321  stress-ng-0.09.32.tar.xz
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 794e87554e..d83240817a 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -4,7 +4,8 @@
- #
- ################################################################################
- 
--STRESS_NG_VERSION = 0.06.15
-+STRESS_NG_VERSION = 0.09.32
-+STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
- STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPL-2.0+
- STRESS_NG_LICENSE_FILES = COPYING
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
+Cc: Francois Perrad <francois.perrad@gadz.org>
+
+---
+Changes v1 -> v2:
+  - explain ENOATTR -> ENODATA conversion  (Thomas)
+  - explain why it's not a hg patch  (Thomas)
+  - reference upstream PR and commit
+---
+ package/lua-flu/0001-use-system-xattr-h.patch | 169 ++++++++++++++++++++++++++
+ 1 file changed, 169 insertions(+)
+ create mode 100644 package/lua-flu/0001-use-system-xattr-h.patch
+
+diff --git a/package/lua-flu/0001-use-system-xattr-h.patch b/package/lua-flu/0001-use-system-xattr-h.patch
+new file mode 100644
+index 0000000000..1cd44b4617
+--- /dev/null
++++ b/package/lua-flu/0001-use-system-xattr-h.patch
+@@ -0,0 +1,169 @@
++Use system <sys/xattr.h>
++
++The one from attr is no longer installed with latest version.
++
++ENOATTR was in fact defined as ENODATA, so switch to using that instead.
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++Upstream status: merged:
++    https://bitbucket.org/doub/flu/pull-requests/1
++    https://bitbucket.org/doub/flu/commits/2d75cc2be79026b94188b11c6f53b219c24a5f70
++
++
++diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua
++--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/doc.lua	2015-03-31 18:54:19.000000000 +0200
+++++ lua-flu-20150331-1/doub-flu-a7daae986339/doc/doc.lua	2018-05-06 09:22:28.499324049 +0200
++@@ -327,7 +327,7 @@
++ 				name = "fs.getxattr";
++ 				parameters = {"path", "name"};
++ 				results = {"value"};
++-				doc = [[Get an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.]];
+++				doc = [[Get an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.]];
++ 			},
++ 			{
++ 				name = "fs.listxattr";
++@@ -338,7 +338,7 @@
++ 			{
++ 				name = "fs.removexattr";
++ 				parameters = {"path", "name"};
++-				doc = [[Remove an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.]];
+++				doc = [[Remove an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.]];
++ 			},
++ 			{
++ 				name = "fs.opendir";
++diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/luafs.lua lua-flu-20150331-1/doub-flu-a7daae986339/doc/luafs.lua
++--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/luafs.lua	2015-03-31 18:54:19.000000000 +0200
+++++ lua-flu-20150331-1/doub-flu-a7daae986339/doc/luafs.lua	2018-05-06 09:22:28.495324054 +0200
++@@ -222,8 +222,8 @@
++ -- :NOTE: since the filesystem is a pure tree (not a DAG), use the path to find attribs
++ 
++ function luafs.getxattr(path, name)
++-	local attrs = assert(xattrs[path], errno.ENOATTR)
++-	return assert(attrs[name], errno.ENOATTR)
+++	local attrs = assert(xattrs[path], errno.ENODATA)
+++	return assert(attrs[name], errno.ENODATA)
++ end
++ 
++ function luafs.setxattr(path, name, value, flags)
++@@ -236,7 +236,7 @@
++ end
++ 
++ function luafs.removexattr(path, name)
++-	local attrs = assert(xattrs[path], errno.ENOATTR)
+++	local attrs = assert(xattrs[path], errno.ENODATA)
++ 	attrs[name] = nil
++ 	if next(attrs)==nil then
++ 		xattrs[path] = nil
++diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/manual.html lua-flu-20150331-1/doub-flu-a7daae986339/doc/manual.html
++--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/doc/manual.html	2015-03-31 18:54:19.000000000 +0200
+++++ lua-flu-20150331-1/doub-flu-a7daae986339/doc/manual.html	2018-05-06 09:22:28.499324049 +0200
++@@ -347,7 +347,7 @@
++ 		<div class="function">
++ 		<h3><a name="fs.getxattr"><code>value = fs.getxattr (path, name)</code></a></h3>
++ 
++-<p>Get an extended attribute. If the attribute doesn't exist <code>ENOATTR</code> should be thrown.</p>
+++<p>Get an extended attribute. If the attribute doesn't exist <code>ENODATA</code> should be thrown.</p>
++ 		</div>
++ 
++ 		<div class="function">
++@@ -359,7 +359,7 @@
++ 		<div class="function">
++ 		<h3><a name="fs.removexattr"><code>fs.removexattr (path, name)</code></a></h3>
++ 
++-<p>Remove an extended attribute. If the attribute doesn't exist <code>ENOATTR</code> should be thrown.</p>
+++<p>Remove an extended attribute. If the attribute doesn't exist <code>ENODATA</code> should be thrown.</p>
++ 		</div>
++ 
++ 		<div class="function">
++diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/errno.c lua-flu-20150331-1/doub-flu-a7daae986339/errno.c
++--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/errno.c	2015-03-31 18:54:19.000000000 +0200
+++++ lua-flu-20150331-1/doub-flu-a7daae986339/errno.c	2018-05-06 09:23:06.323282527 +0200
++@@ -3,7 +3,7 @@
++ #include <lua.h>
++ #include <lauxlib.h>
++ #include <stdlib.h>
++-#include <attr/xattr.h>
+++#include <sys/xattr.h>
++ #include "compat.h"
++ 
++ /****************************************************************************/
++@@ -103,7 +103,7 @@
++ 	REGISTER_ERROR(EDOM)
++ 	REGISTER_ERROR(ERANGE)
++ 	REGISTER_ERROR(ENOSYS)
++-	REGISTER_ERROR(ENOATTR)
+++	REGISTER_ERROR(ENODATA)
++ 	#undef REGISTER_ERROR
++ }
++ 
++diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu-20150331-1.rockspec lua-flu-20150331-1/doub-flu-a7daae986339/flu-20150331-1.rockspec
++--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu-20150331-1.rockspec	2018-05-06 09:22:04.123351349 +0200
+++++ lua-flu-20150331-1/doub-flu-a7daae986339/flu-20150331-1.rockspec	2018-05-06 09:23:06.323282527 +0200
++@@ -14,7 +14,7 @@
++ 		library = 'fuse',
++ 	},
++ 	ATTR = {
++-		header = 'attr/xattr.h',
+++		header = 'sys/xattr.h',
++ 	},
++ }
++ dependencies = {
++diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu.c lua-flu-20150331-1/doub-flu-a7daae986339/flu.c
++--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu.c	2015-03-31 18:54:19.000000000 +0200
+++++ lua-flu-20150331-1/doub-flu-a7daae986339/flu.c	2018-05-06 09:23:06.323282527 +0200
++@@ -15,7 +15,7 @@
++ #include <errno.h>
++ #include <string.h>
++ #include <fuse.h>
++-#include <attr/xattr.h>
+++#include <sys/xattr.h>
++ #include <lua.h>
++ #include <lauxlib.h>
++ 
++diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu.rockspec.in lua-flu-20150331-1/doub-flu-a7daae986339/flu.rockspec.in
++--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/flu.rockspec.in	2015-03-31 18:54:19.000000000 +0200
+++++ lua-flu-20150331-1/doub-flu-a7daae986339/flu.rockspec.in	2018-05-06 09:23:06.323282527 +0200
++@@ -14,7 +14,7 @@
++ 		library = 'fuse',
++ 	},
++ 	ATTR = {
++-		header = 'attr/xattr.h',
+++		header = 'sys/xattr.h',
++ 	},
++ }
++ dependencies = {
++diff -durN lua-flu-20150331-1.orig/doub-flu-a7daae986339/README.md lua-flu-20150331-1/doub-flu-a7daae986339/README.md
++--- lua-flu-20150331-1.orig/doub-flu-a7daae986339/README.md	2015-03-31 18:54:19.000000000 +0200
+++++ lua-flu-20150331-1/doub-flu-a7daae986339/README.md	2018-05-06 09:22:28.495324054 +0200
++@@ -345,7 +345,7 @@
++ 
++ ### `value = fs.getxattr (path, name)`
++ 
++-Get an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.
+++Get an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.
++ 
++ ---
++ 
++@@ -357,7 +357,7 @@
++ 
++ ### `fs.removexattr (path, name)`
++ 
++-Remove an extended attribute. If the attribute doesn't exist `ENOATTR` should be thrown.
+++Remove an extended attribute. If the attribute doesn't exist `ENODATA` should be thrown.
++ 
++ ---
++ 
++diff -durN lua-flu-20150331-1.orig/flu-20150331-1.rockspec lua-flu-20150331-1/flu-20150331-1.rockspec
++--- lua-flu-20150331-1.orig/flu-20150331-1.rockspec	2015-04-02 23:44:11.000000000 +0200
+++++ lua-flu-20150331-1/flu-20150331-1.rockspec	2018-05-06 09:23:06.323282527 +0200
++@@ -14,7 +14,7 @@
++ 		library = 'fuse',
++ 	},
++ 	ATTR = {
++-		header = 'attr/xattr.h',
+++		header = 'sys/xattr.h',
++ 	},
++ }
++ dependencies = {
 -- 
 2.14.1
