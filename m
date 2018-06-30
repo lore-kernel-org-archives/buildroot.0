@@ -1,64 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 30 Jun 2018 13:14:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.1.3
-Message-ID: <20180630111411.18182-1-bernd.kuhls@t-online.de>
+Date: Sat, 30 Jun 2018 13:08:49 +0200
+Subject: [Buildroot] [PATCH v3 18/22]
+ package/x11r7/xdriver_xf86-input-mouse: bump version to 1.9.3
+In-Reply-To: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+Message-ID: <20180630110853.29339-19-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added license hash and all hashes provided by upstream.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ .../xdriver_xf86-input-mouse.hash                        | 9 +++++++--
+ .../xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 846091eb57..c598444b5f 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.1.2
-+MESA3D_HEADERS_VERSION = 18.1.3
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 77b3eb1c67..f4564d0da7 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-June/000437.html
--md5 a2d4f031eb6bd6111d44d84004476918  mesa-18.1.2.tar.xz
--sha1 938d22b966e9861a5387d31c44cd4753931d3076  mesa-18.1.2.tar.xz
--sha256 070bf0648ba5b242d7303ceed32aed80842f4c0ba16e5acc1a650a46eadfb1f9  mesa-18.1.2.tar.xz
--sha512 1b896ecc42c2f81813d551a2b14d271d274a948fa10bf5b7a567417690316c2ab7e7fdd52fe004732cd1a47661ba91acf7d5b21e3b3f28e21b50aadbfa96a5d5  mesa-18.1.2.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-June/000439.html
-+md5 b34273403a605f6f98ead00f0bdf8e0b  mesa-18.1.3.tar.xz
-+sha1 0a5fb3096108a95f913411267b8a374f9ff547b2  mesa-18.1.3.tar.xz
-+sha256 54f08deeda0cd2f818e8d40140040ed013de7852573002453b7f50da9ea738ce  mesa-18.1.3.tar.xz
-+sha512 f6e5b81a80a309a36a04759d18364d3c71c48d1cb88f87b2f5432ef003092a22046e88ce2082031d5d52b60ba36f585d8df52e06ecc7a5158079936236f36887  mesa-18.1.3.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 3a0cf6c7835f98f86d5579b2cc517f84254da7411f764fb0095a383fb0759771  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index cafc41f97d..7737143874 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+index caba427b22..551ff9d844 100644
+--- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
++++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-November/002740.html
+-sha256 f425d5b05c6ab412a27e0a1106bb83f9e2662b307210abbe48270892387f4b2f  xf86-input-mouse-1.9.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-June/002903.html
++md5 a2104693bbcfe1413397f7905eecd3dc  xf86-input-mouse-1.9.3.tar.bz2
++sha1 b3982998808ba43117fc066c4ecc94ce67c5818e  xf86-input-mouse-1.9.3.tar.bz2
++sha256 93ecb350604d05be98b7d4e5db3b8155a44890069a7d8d6b800c0bea79c85cc5  xf86-input-mouse-1.9.3.tar.bz2
++sha512 d99f5b4b1ef1aa4cbf1a92549e412f54f121bc804e4d6643248ad7ea18081b38b958bd289dc8476ebc0f6ef5f7424c2f2a8abcfaa30cae5378829549af6b148f  xf86-input-mouse-1.9.3.tar.bz2
++# Locally computed
++sha256 472ff645ead9bf3ffb48d42c596376ffc595897e0c0993a071a7ada0da1f4f10  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+index 88af9d2361..3886fa7aa1 100644
+--- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
++++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.1.2
-+MESA3D_VERSION = 18.1.3
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.2
++XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.3
+ XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_MOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
 -- 
 2.17.1
