@@ -1,56 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jun 2018 18:44:43 +0200
-Subject: [Buildroot] [PATCH 3/3] systemd: fix nogroup
-In-Reply-To: <20180629222552.12808-4-jeremy.rosen@smile.fr>
-References: <20180629222552.12808-1-jeremy.rosen@smile.fr>
- <20180629222552.12808-4-jeremy.rosen@smile.fr>
-Message-ID: <20180630164443.GF2384@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 30 Jun 2018 18:46:38 +0200
+Subject: [Buildroot] [git commit] libostree: fix libsoup configure option
+ name
+Message-ID: <20180630164420.5D24083838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-06-30 00:25 +0200, J?r?my Rosen spake thusly:
-> The special 65534 group is named nogroup (not nobody) in buildroot
-> tell systemd about that
-> 
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-> ---
->  package/systemd/systemd.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 0d5e348594..10e11a9277 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -43,7 +43,8 @@ SYSTEMD_CONF_OPTS += \
->  	-Dkexec-path=/usr/sbin/kexec \
->  	-Dsulogin-path=/usr/sbin/sulogin \
->  	-Dmount-path=/usr/bin/mount \
-> -	-Dumount-path=/usr/bin/umount
-> +	-Dumount-path=/usr/bin/umount \
-> +	-Dnobody-group=nogroup
+commit: https://git.buildroot.net/buildroot/commit/?id=b8c3ec57e7f60be86e6d5613848f67b1a700ad39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+The option used by configure script is actually
+--with-soup/--without-soup.
 
-Regards,
-Yann E. MORIN.
+Fixes:
 
->  # disable unsupported features for non-glibc toolchains
->  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
-> -- 
-> 2.18.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+  http://autobuild.buildroot.net/results/cf8ab76b8ea1a555d42f0625df1d58543e88efb1/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libostree/libostree.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index bf5118413b..d9739b7901 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -40,7 +40,7 @@ endif
+ 
+ #cURL support depends on libsoup
+ ifeq ($(BR2_PACKAGE_LIBSOUP),y)
+-LIBOSTREE_CONF_OPTS += --with-libsoup
++LIBOSTREE_CONF_OPTS += --with-soup
+ LIBOSTREE_DEPENDENCIES += libsoup
+ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ LIBOSTREE_CONF_OPTS += --with-curl
+@@ -49,7 +49,7 @@ else
+ LIBOSTREE_CONF_OPTS += --without-curl
+ endif
+ else
+-LIBOSTREE_CONF_OPTS += --without-libsoup --without-curl
++LIBOSTREE_CONF_OPTS += --without-soup --without-curl
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
