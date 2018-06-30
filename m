@@ -1,232 +1,43 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Sat, 30 Jun 2018 16:21:24 +0200
-Subject: [Buildroot] [PATCH 0/5 v2] package: bump attr and acl,
- fix builds of dependees
-Message-ID: <cover.1530368468.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 2/5 v2] package/stress-ng: bump version
+In-Reply-To: <cover.1530368468.git.yann.morin.1998@free.fr>
+References: <cover.1530368468.git.yann.morin.1998@free.fr>
+Message-ID: <c4daceae3679ceb8b87a82b90c675c286939afb5.1530368468.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Romain Naour <romain.naour@gmail.com>
+---
+ package/stress-ng/stress-ng.hash | 2 +-
+ package/stress-ng/stress-ng.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-This series is an attempt at bumping the attr and acl packages to a
-later version.
-
-The crux of the changes is to get an attr package that no longer behaves
-silly [0]. attr has had a complete overhaul of it buildsystem, making it
-fully autotools-based, which fixes quite a few idiosyncracies of the
-previous hand-rolled one.
-
-However, this means that attr no longer installs its own copy of xattr.h,
-on the assumption that it has been provided by glibc "for ages" [1] [2]
-[3] [4]. This means that a few packages have to be fixed now, of which acl.
-
-Three packages then need fixing because they still use attr/xattr.h:
-stress-ng, which we bump and fix, lua-flu, which we simply fix, and
-xorriso. Patches were all sent upstream [6] [7] [8].
-
-Of all packages that depend on attr or acl:
-
-    sys        -> checks for, and uses <sys/xattr.h>
-    attr       -> checks for, and uses <attr/xattr.h>
-    acl        -> checks for, and uses <acl/libacl.h> and/or -lacl
-    patched    -> patch added to uses <sys/xattr.h>
-    no xattr.h -> does not check for <attr/xattr.h> or <sys/xattr.h>,
-                  but uses other <attr/*.h> and -lattr, thus has no
-                  problem
-
-    acl                 ACK, sys
-    coreutils           ACK, sys-attr
-    host-acl            ACK, sys
-    host-fakeroot       ACK, sys
-    host-pseudo         ACK, sys
-    libarchive          ACK, attr-sys
-    logrotate           ACK, acl
-    lua-flu             ACK, patched, sys
-    mtd                 ACK, sys
-    netatalk            ACK, acl, attr-sys
-    patch               ACK, no xattr.h
-    rpm                 ACK, acl
-    rsync               ACK, acl, attr-sys
-    samba4              ACK, attr-sys [*]
-    stress-ng           ACK, patched, sys
-    systemd             ACK, acl
-    tar                 ACK, acl, sys
-    vim                 ACK, acl [**]
-    xorriso             ACK, acl, patched, sys
-
-[*] in my testing, I had a systemd-based system, and samba4 failed to
-install (I'll investigate separately). But at least, it did detect and
-use <sys/xattr.h> correctly, and the build succeeded. It even installed
-OK, but our SAMBA4_INSTALL_INIT_SYSTEMD is borked (missing source file.)
-
-[**] vim uses xattr to add support for SMACK. Before this series, it did
-detect xattr, but failed to deteect a feature of it [5], so it always
-disabled SMACK support. Now, it does not detect xattr at all, so it
-doesn't enable SMACK either. So, even though we have a regression about
-the detections of xattr.h, we have no regression in functionality.
-
-Now, let's see some test-pkg configs and results:
-
-    $ cat attr-nommu.cfg
-    BR2_PACKAGE_ACL=y
-    BR2_PACKAGE_ATTR=y
-    BR2_PACKAGE_LIBARCHIVE=y
-    BR2_PACKAGE_MTD=y
-    BR2_PACKAGE_MTD_MKFSJFFS2=y
-    BR2_PACKAGE_MTD_MKFSUBIFS=y
-    $ ./utils/test-pkg -c attr-nommu.cfg -d $(pwd)/test-nommu
-                                 br-arm-full [1/6]: OK
-                      br-arm-cortex-a9-glibc [2/6]: OK
-                       br-arm-cortex-m4-full [3/6]: OK
-                              br-x86-64-musl [4/6]: OK
-                          br-arm-full-static [5/6]: OK
-                    armv5-ctng-linux-gnueabi [6/6]: OK
-    6 builds, 0 skipped, 0 build failed, 0 legal-info failed
-
-    $ cat attr-mmu.cfg
-    BR2_PACKAGE_ACL=y
-    BR2_PACKAGE_ATTR=y
-    BR2_PACKAGE_COREUTILS=y
-    BR2_PACKAGE_LIBARCHIVE=y
-    BR2_PACKAGE_LOGROTATE=y
-    BR2_PACKAGE_MTD=y
-    BR2_PACKAGE_MTD_MKFSJFFS2=y
-    BR2_PACKAGE_MTD_MKFSUBIFS=y
-    BR2_PACKAGE_NETATALK=y
-    BR2_PACKAGE_PATCH=y
-    BR2_PACKAGE_RPM=y
-    BR2_PACKAGE_RSYNC=y
-    BR2_PACKAGE_SAMBA4=y
-    BR2_PACKAGE_TAR=y
-    BR2_PACKAGE_VIM=y
-    BR2_PACKAGE_XORRISO=y
-    $ ./utils/test-pkg -c attr-mmu.cfg -d $(pwd)/test-mmu
-                                 br-arm-full [1/6]: OK
-                      br-arm-cortex-a9-glibc [2/6]: OK
-                       br-arm-cortex-m4-full [3/6]: SKIPPED
-                              br-x86-64-musl [4/6]: SKIPPED
-                          br-arm-full-static [5/6]: SKIPPED
-                    armv5-ctng-linux-gnueabi [6/6]: OK
-    6 builds, 3 skipped, 0 build failed, 0 legal-info failed
-
-    Notes:
-      - for mtd, the two utilities that use xattr are explcitly enabled;
-      - for br-arm-cortex-m4-full, that's because it is a static
-        build, so a lot of packages are disabled;
-      - for br-x86-64-musl, samba4 is not available for musl;
-      - for br-arm-full-static, again it is a static build.
-
-    $ cat attr-mmu-glibc.cfg
-    BR2_PACKAGE_ACL=y
-    BR2_PACKAGE_ATTR=y
-    BR2_PACKAGE_COREUTILS=y
-    BR2_PACKAGE_LIBARCHIVE=y
-    BR2_PACKAGE_LUA=y
-    BR2_PACKAGE_LUA_FLU=y
-    BR2_PACKAGE_LOGROTATE=y
-    BR2_PACKAGE_MTD=y
-    BR2_PACKAGE_MTD_MKFSJFFS2=y
-    BR2_PACKAGE_MTD_MKFSUBIFS=y
-    BR2_PACKAGE_NETATALK=y
-    BR2_PACKAGE_PATCH=y
-    BR2_PACKAGE_RPM=y
-    BR2_PACKAGE_RSYNC=y
-    BR2_PACKAGE_SAMBA4=y
-    BR2_PACKAGE_STRESS_NG=y
-    BR2_PACKAGE_TAR=y
-    BR2_PACKAGE_VIM=y
-    BR2_PACKAGE_XORRISO=y
-    $ ./utils/test-pkg -c attr-mmu-glibc.cfg  -d $(pwd)/test-mmu-glibc
-                                 br-arm-full [1/6]: SKIPPED
-                      br-arm-cortex-a9-glibc [2/6]: OK
-                       br-arm-cortex-m4-full [3/6]: SKIPPED
-                              br-x86-64-musl [4/6]: SKIPPED
-                          br-arm-full-static [5/6]: SKIPPED
-                    armv5-ctng-linux-gnueabi [6/6]: OK
-    6 builds, 4 skipped, 0 build failed, 0 legal-info failed
-
-    Notes:
-      - br-arm-full: stress-ng only for glibc;
-      - br-arm-cortex-m4-full: it's a static build;
-      - br-x86-64-musl: stress-ng and smaba4 not avail on musl;
-      - br-arm-full-static: static build
-
-Now, I also build-tested systemd with a custom config (not with
-test-pkg).
-
-[0] https://bugs.busybox.net/show_bug.cgi?id=10986
-[1] https://git.savannah.gnu.org/cgit/attr.git/commit/?id=7921157890d07858d092f4003ca4c6bae9fd2c38)
-[2] glibc: since 2.5: https://sourceware.org/git/?p=glibc.git;a=commit;h=0ecb606cb6cf65de1d9fc8a919bceb4be476c602
-[3] uClibc: since 2004: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=d503d1d6c62506ba6fb51c04a9703039e71d11a9
-[4] musl: since 2012 (a year after initial release): http://git.musl-libc.org/cgit/musl/commit/?id=207460d09742304941f1a010a89fc2efa46bcb29
-[5] checking for XATTR_NAME_SMACKEXEC in linux/xattr.h... no
-[6] lua-flu applied the patch; additional patch in preparation
-[7] stress-ng applied a different patch, which is dubious, and more
-    discussion on it
-[8] xorriso has seen our patches before I could submit them, needs some
-    work to accomodate their git trees
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 78af2a63625a0893259ceb2f6cfb5b6ab1431419
-
-  package/gcc: backport arm acle bugfix 81497 (2018-06-28 23:13:50 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 166f3279947186301770fa28116bb6d288ee8601
-
-  package/attr: bump version (2018-06-30 16:20:03 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (5):
-      package/lua-flu: fix to use the system xattr header
-      package/stress-ng: bump version
-      package/xorriso: fix to use the system xattr header
-      package/acl: bump version
-      package/attr: bump version
-
- package/acl/0001-support-static-installation.patch |  29 --
- ...2-add-__acl_-prefixes-to-internal-symbols.patch | 292 ---------------------
- ...-all-use-install-1-to-install-executables.patch |  67 -----
- package/acl/acl.hash                               |   2 +-
- package/acl/acl.mk                                 |  50 +---
- .../attr/0001-support-static-installation.patch    |  29 --
- .../0002-avoid-glibc-specific-decls-defines.patch  |  37 ---
- package/attr/0003-portability-fixes.patch          |  37 ---
- ...-all-use-install-1-to-install-executables.patch |  67 -----
- package/attr/attr.hash                             |   2 +-
- package/attr/attr.mk                               |  38 +--
- package/lua-flu/0001-use-system-xattr-h.patch      | 169 ++++++++++++
- package/stress-ng/stress-ng.hash                   |   2 +-
- package/stress-ng/stress-ng.mk                     |   3 +-
- package/xorriso/0001-use-sys-xattr.h.patch         |  33 +++
- package/xorriso/xorriso.mk                         |  13 +
- 16 files changed, 232 insertions(+), 638 deletions(-)
- delete mode 100644 package/acl/0001-support-static-installation.patch
- delete mode 100644 package/acl/0002-add-__acl_-prefixes-to-internal-symbols.patch
- delete mode 100644 package/acl/0003-all-use-install-1-to-install-executables.patch
- delete mode 100644 package/attr/0001-support-static-installation.patch
- delete mode 100644 package/attr/0002-avoid-glibc-specific-decls-defines.patch
- delete mode 100644 package/attr/0003-portability-fixes.patch
- delete mode 100644 package/attr/0004-all-use-install-1-to-install-executables.patch
- create mode 100644 package/lua-flu/0001-use-system-xattr-h.patch
- create mode 100644 package/xorriso/0001-use-sys-xattr.h.patch
-
+diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
+index e735439a7e..7455288c17 100644
+--- a/package/stress-ng/stress-ng.hash
++++ b/package/stress-ng/stress-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	0e1d7733b35f594f7461dedbf836bd4966d0611da4cd4e85cde4804d2a425e6d	stress-ng-0.06.15.tar.gz
++sha256  0de97212a83b2f8a34ee31ef32a7bc69066ed49ebdc59b51aa4060cb95e29321  stress-ng-0.09.32.tar.xz
+diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
+index 794e87554e..d83240817a 100644
+--- a/package/stress-ng/stress-ng.mk
++++ b/package/stress-ng/stress-ng.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
+ 
+-STRESS_NG_VERSION = 0.06.15
++STRESS_NG_VERSION = 0.09.32
++STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
+ STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
+ STRESS_NG_LICENSE = GPL-2.0+
+ STRESS_NG_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
