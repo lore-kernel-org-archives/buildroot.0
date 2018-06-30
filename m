@@ -1,44 +1,100 @@
-From: Stefan Becker <chemobejk@gmail.com>
-Date: Sat, 30 Jun 2018 19:50:34 +0300
-Subject: [Buildroot] [PATCHv2] core/sdk: generate the SDK tarball
- ourselves
-In-Reply-To: <20180630163849.GE2384@scaer>
-References: <20180630135645.2956-1-yann.morin.1998@free.fr>
- <CAOJ2eMf9iAP4kgqPWv2HwD0hBvzeWD7H7xONh0dZtDO1FoY=MQ@mail.gmail.com>
- <20180630163849.GE2384@scaer>
-Message-ID: <CAOJ2eMfbHOu2_VJoYJQc+7+u_K-Ojs44+sfVttnujF+oXe7_aw@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 Jun 2018 19:07:08 +0200
+Subject: [Buildroot] [PATCH v2] qt5webengine: propagate parallel flag to
+ ninja
+In-Reply-To: <20180629143521.9018-1-gael.portay@savoirfairelinux.com>
+References: <20180629143521.9018-1-gael.portay@savoirfairelinux.com>
+Message-ID: <20180630170708.GG2384@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Ga?l, All,
 
-On Sat, Jun 30, 2018 at 7:38 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Well, on my side, I *do* want an artefact that is versioned, so that I
-> am sure users do not extract a new one over a previous one, so that they
-> can work on different versions at the same time.
+On 2018-06-29 10:35 -0400, Ga?l PORTAY spake thusly:
+> WebEngine is a big project to build. It uses ninja which is a build
+> system that does everything in parallel[1].
+> 
+> 	Builds are always run in parallel, based by default on the number of
+> 	CPUs your system has. Underspecified build dependencies will result in
+> 	incorrect builds.
+> 
+> QtWebEngine does not propagate the parallel flag from the running
+> instance of make to ninja. Thus, all the machine cores are used to build
+> this single project.
+> 
+> 	make -j 10 -> ninja -j # all cores
+> 
+> This behavior disrupts powerful machines which are setup to build many
+> projects in parallel. Even worse, the build fails on machines where the
+> ratio CPU-cores / amount of RAM (including swap) is not appropriate. g++
+> may have not enough of memory to build all those files in parallel.
+> 
+> Unfortunatly, the target `run_ninja' is hardcoded in the Makefile
+> src/core/Makefile.run_gn; there is no way to propagate flags using a
+> variable through the make command-line.
+> 
+> 	run_ninja:
+> 	        /home/gportay/src/buildroot/output-qt5.11/build/qt5webengine-5.11.1/src/3rdparty/ninja/ninja
+> -C /home/gportay/src/buildroot/output-qt5.11/build/qt5webengine-5.11.1/src/core/release QtWebEngineCore
+> 
+> Luckily, the Qt gn_run.pro[2] can hardcode ninja extra flags through the
+> variable NINJAFLAGS when the Makefile is generated (which is performed
+> during the build and not during configure step).
+> 
+> This commit sets the NINJAFLAGS using the variable PARALLEL_JOBS to limit
+> the number of cores used by ninja.
+> 
+> Fixes:
+> 	virtual memory exhausted: Cannot allocate memory
+> 
+> [1]: https://ninja-build.org/manual.html#_comparison_to_make
+> [2]: https://github.com/qt/qtwebengine/blob/v5.11.1/src/core/gn_run.pro#L49-L53
+> 
+> CC: Damien Riegel <damien.riegel@savoirfairelinux.com>
+> CC: Jean-Fran?ois T?tu <jean-francois.tetu@savoirfairelinux.com>
+> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 
-Sorry, but the SW build system is the wrong place to generate the
-versioned artefact.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> Versionned artefacts are a requirement for some people.
+Regards,
+Yann E. MORIN.
 
-I agree. But again you hard-code your versioning scheme instead of
-letting the user decide what versioning scheme is appropriate for
-his/her use case when she/he exports the build artefact from the
-automated build system to his/her "versioned storage system".
+> ---
+> Changes since v1:
+>  - Use PARALLEL_JOBS instead of BR2_JLEVEL
+>  - Reword commit message
+> 
+>  package/qt5/qt5webengine/qt5webengine.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
+> index 08120421d6..2c622c91ba 100644
+> --- a/package/qt5/qt5webengine/qt5webengine.mk
+> +++ b/package/qt5/qt5webengine/qt5webengine.mk
+> @@ -48,6 +48,8 @@ define QT5WEBENGINE_PYTHON2_SYMLINK
+>  endef
+>  QT5WEBENGINE_PRE_CONFIGURE_HOOKS += QT5WEBENGINE_PYTHON2_SYMLINK
+>  
+> +QT5WEBENGINE_ENV += NINJAFLAGS="-j$(PARALLEL_JOBS)"
+> +
+>  ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+>  define QT5WEBENGINE_CREATE_HOST_PKG_CONFIG
+>  	sed s%@HOST_DIR@%$(HOST_DIR)%g $(QT5WEBENGINE_PKGDIR)/host-pkg-config.in > $(@D)/host-bin/host-pkg-config
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-> But now, I took *all* the feedback for the first iteration, to provide a
-> situation that works for everyone. If the discussion on this new patch
-> makes it that the maintainer do not want it in the end, then fine.
-
-This new patch set (with small improvements) is acceptable and I will
-not vote against it.
-
-But IMHO the implemented functionality is pretty useless, i.e. all SDK
-users will switch to 'prepare-sdk' instead.
-
-Regards, Stefan
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
