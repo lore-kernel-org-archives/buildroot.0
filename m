@@ -1,49 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 30 Jun 2018 18:41:49 +0200
-Subject: [Buildroot] [PATCH] Revert "gnutls: drop wchar dependency"
-In-Reply-To: <869c1f0ff206cd064a7a6e100e7d8f5073454360.1530269044.git.baruch@tkos.co.il>
-References: <869c1f0ff206cd064a7a6e100e7d8f5073454360.1530269044.git.baruch@tkos.co.il>
-Message-ID: <20180630184149.6867758b@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 30 Jun 2018 18:44:43 +0200
+Subject: [Buildroot] [PATCH 3/3] systemd: fix nogroup
+In-Reply-To: <20180629222552.12808-4-jeremy.rosen@smile.fr>
+References: <20180629222552.12808-1-jeremy.rosen@smile.fr>
+ <20180629222552.12808-4-jeremy.rosen@smile.fr>
+Message-ID: <20180630164443.GF2384@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Fri, 29 Jun 2018 13:44:04 +0300, Baruch Siach wrote:
-> This reverts commit 694cdb9273433e8a1278e2e3bb2a7fe2004aa813.
+On 2018-06-30 00:25 +0200, J?r?my Rosen spake thusly:
+> The special 65534 group is named nogroup (not nobody) in buildroot
+> tell systemd about that
 > 
-> Just like commit 68c3f5257d94 (Revert "gnutls: make it non-wchar
-> friendly") before. It turns out that gnulib expects some other library
-> to provide a wctomb() implementation. So when the C library does not
-> provide one it is left as undefined symbol in libgnutls.so.
-> 
-> Add a comment to reduce the chance of repeating the same mistake again.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/86f/86f08276fcb0cc557ab3cc5f57229b2c0c6ac2d7/
-> http://autobuild.buildroot.net/results/7c4/7c4bcb839f0ad5bc0496b4115ff391a3b312581a/
-> http://autobuild.buildroot.net/results/1c3/1c353f542c49bbe5520266c0ebb6a58589032453/
-> 
-> Reported-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
 > ---
-> v2: Add a Config.in comment (Thomas P)
-> ---
->  package/gnutls/Config.in        | 7 +++++--
->  package/libmicrohttpd/Config.in | 5 +++--
->  package/libsoup/Config.in       | 2 +-
->  package/taskd/Config.in         | 2 +-
->  package/vpnc/Config.in          | 5 +++--
->  5 files changed, 13 insertions(+), 8 deletions(-)
+>  package/systemd/systemd.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 0d5e348594..10e11a9277 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -43,7 +43,8 @@ SYSTEMD_CONF_OPTS += \
+>  	-Dkexec-path=/usr/sbin/kexec \
+>  	-Dsulogin-path=/usr/sbin/sulogin \
+>  	-Dmount-path=/usr/bin/mount \
+> -	-Dumount-path=/usr/bin/umount
+> +	-Dumount-path=/usr/bin/umount \
+> +	-Dnobody-group=nogroup
 
-Applied to master, thanks.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+>  # disable unsupported features for non-glibc toolchains
+>  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+> -- 
+> 2.18.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
