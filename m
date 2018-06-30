@@ -1,60 +1,52 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Sat, 30 Jun 2018 12:28:56 -0700
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-06-29
-In-Reply-To: <20180630212104.4254a15e@windsurf.home>
-References: <20180630060034.AFC6220A33@mail.bootlin.com>
- <f38c57af-44a3-2766-2512-1f0e9f4f4f98@gmail.com>
- <CAMWSM7icLBAbxF9OmTCSPr5qXjeNZJBa7ddZP9SbdHpVmY03jg@mail.gmail.com>
- <20180630212104.4254a15e@windsurf.home>
-Message-ID: <CAMWSM7hhyRKyhcTVVP6zU=+xMr9o1-BFUQrmbhVmf9AhBv_+pA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 30 Jun 2018 21:17:25 +0200
+Subject: [Buildroot] [git commit] qpdf: security bump to version 8.1.0
+Message-ID: <20180630193943.6093B838AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Jun 30, 2018 at 12:21 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Sat, 30 Jun 2018 12:17:35 -0700, Joseph Kogut wrote:
->
-> > > It seems that gcc 8.1.1 from the host (ArchLinux) is buggy, there is no such
-> > > error with a Fedora 28 with gcc 8 installed.
-> >
-> > I'm wondering if it really is an Arch bug, or something else, because
-> > the problem is not consistently reproducible. It seems to only happen
-> > a fraction of the time, and I can run make again on the exact same
-> > config after GCC segfaults, and the build will finish.
-> >
-> > Could be a hardware problem. I remember reading about a segfault issue
-> > with Ryzen chips during parallel compilation, though Threadripper
-> > chips, which this was built on, weren't supposed to be affected.
->
-> I also believe it's a HW issue. Could you stop your autobuilder, until
-> you figure out what's going on ?
->
-> Having bogus build results really isn't helpful, as it gives a lot of
-> noise to analyze and triage to find out what are the interesting things
-> to look at.
->
+commit: https://git.buildroot.net/buildroot/commit/?id=473390a30c5f0a4aa38f2f2304b433a5ec3aad9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-That's completely understandable, I've stopped builds on the system
-that's segfaulting until we can narrow it down some more.
+Fixes CVE-2018-9918: mishandle certain "expected dictionary key but
+found non-name object" cases, allowing remote attackers to cause a
+denial of service (stack exhaustion)
 
-> However, I very much welcome an installation like yours as part of the
-> autobuilders, because you found out a number of issues that we had
-> never found so far, and those are very useful to fix.
->
-> > I have a few Arch systems with Intel chips I can use to see if I can
-> > reproduce the issue. That would at least tell us if it *is* an Arch
-> > bug, or a hardware problem.
->
-> Would be good.
->
+https://github.com/qpdf/qpdf/issues/202
 
-I've started an autobuilder on an Intel system running Arch. I'll keep
-an eye on it, and if it reproduces the same issue, I'll file a bug
-report with the Arch maintainers.
+Drop local SHA256 hash since we use upstream provided SHA512.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qpdf/qpdf.hash | 6 ++----
+ package/qpdf/qpdf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
+index 1fbef66e6f..d27c9834b9 100644
+--- a/package/qpdf/qpdf.hash
++++ b/package/qpdf/qpdf.hash
+@@ -1,4 +1,2 @@
+-# From https://sourceforge.net/projects/qpdf/files/qpdf/7.0.0/qpdf-7.0.0.sha512/download
+-sha512	7b52d67b4d2c428a7b0c1cd03b03a23f05d38d7e3c81041079a137919019ea5158f12bf95fdcfcff6b43ffdefe93a85127ced2a363a6b4b380cbaa02a3840256  qpdf-7.0.0.tar.gz
+-# Locally computed
+-sha256	fed08de14caad0fe5efd148d9eca886d812588b2cbb35d13e61993ee8eb8c65f  qpdf-7.0.0.tar.gz
++# From https://sourceforge.net/projects/qpdf/files/qpdf/8.1.0/qpdf-8.1.0.sha512/download
++sha512	1831bcaaed87dae268db5d61805d1483ec5c101f6ce594be660664c119597ae67cf011c2b50092964d785a814d5f6c780935127a89401fe37a1026ae4d3af15c  qpdf-8.1.0.tar.gz
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index 27e4d09978..4776d22b16 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QPDF_VERSION = 7.0.0
++QPDF_VERSION = 8.1.0
+ QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
+ QPDF_INSTALL_STAGING = YES
+ QPDF_LICENSE = Artistic-2.0
