@@ -1,53 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 30 Jun 2018 21:20:27 +0200
-Subject: [Buildroot] [PATCH 3/5 v2] package/xorriso: fix to use the
- system xattr header
-In-Reply-To: <20180630211629.411d671b@windsurf.home>
-References: <cover.1530368468.git.yann.morin.1998@free.fr>
- <6c7d039a9b5c4bcd728e3061be1bab895bd29ad5.1530368468.git.yann.morin.1998@free.fr>
- <20180630211629.411d671b@windsurf.home>
-Message-ID: <20180630192027.GA23012@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 30 Jun 2018 21:21:04 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-06-29
+In-Reply-To: <CAMWSM7icLBAbxF9OmTCSPr5qXjeNZJBa7ddZP9SbdHpVmY03jg@mail.gmail.com>
+References: <20180630060034.AFC6220A33@mail.bootlin.com>
+ <f38c57af-44a3-2766-2512-1f0e9f4f4f98@gmail.com>
+ <CAMWSM7icLBAbxF9OmTCSPr5qXjeNZJBa7ddZP9SbdHpVmY03jg@mail.gmail.com>
+Message-ID: <20180630212104.4254a15e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Hello,
 
-On 2018-06-30 21:16 +0200, Thomas Petazzoni spake thusly:
-> On Sat, 30 Jun 2018 16:21:25 +0200, Yann E. MORIN wrote:
+On Sat, 30 Jun 2018 12:17:35 -0700, Joseph Kogut wrote:
+
+> > It seems that gcc 8.1.1 from the host (ArchLinux) is buggy, there is no such
+> > error with a Fedora 28 with gcc 8 installed.
 > 
-> > +# 0001-use-sys-xattr.h.patch
-> > +XORRISO_DEPENDENCIES = host-pkgconf
+> I'm wondering if it really is an Arch bug, or something else, because
+> the problem is not consistently reproducible. It seems to only happen
+> a fraction of the time, and I can run make again on the exact same
+> config after GCC segfaults, and the build will finish.
 > 
-> Why do you need host-pkgconf ? For autoreconf to work fine ?
+> Could be a hardware problem. I remember reading about a segfault issue
+> with Ryzen chips during parallel compilation, though Threadripper
+> chips, which this was built on, weren't supposed to be affected.
 
-Yes. I'll update the commit log to mention that.
+I also believe it's a HW issue. Could you stop your autobuilder, until
+you figure out what's going on ?
 
-> If so, why
-> isn't it also needed for host-xorriso ?
+Having bogus build results really isn't helpful, as it gives a lot of
+noise to analyze and triage to find out what are the interesting things
+to look at.
 
-This is an oversight. I did not build host-xorriso alone, but after
-building xorriso, so I missed that. I'll fix.
+However, I very much welcome an installation like yours as part of the
+autobuilders, because you found out a number of issues that we had
+never found so far, and those are very useful to fix.
 
-> > +XORRISO_AUTORECONF = YES
-> > +HOST_XORRISO_AUTORECONF = YES
-> 
-> HOST_<pkg>_AUTORECONF gets derived from <pkg>_AUTORECONF, so
-> HOST_XORRISO_AUTORECONF = YES doesn't seem to be very useful.
+> I have a few Arch systems with Intel chips I can use to see if I can
+> reproduce the issue. That would at least tell us if it *is* an Arch
+> bug, or a hardware problem.
 
-Yeah, I never remember which is inherited and which is not...
+Would be good.
 
-Thanks! :-)
+Best regards,
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
