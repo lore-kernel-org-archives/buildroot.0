@@ -1,117 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Jul 2018 11:01:48 +0200
-Subject: [Buildroot] [git commit] qt5virtualkeyboard: allow to build with
- qt5.6
-Message-ID: <20180701085936.64751835C8@busybox.osuosl.org>
+Date: Sun, 1 Jul 2018 11:03:31 +0200
+Subject: [Buildroot] [PATCH] network-manager: sync kernel headers
+ comment with actual dependency
+In-Reply-To: <20180630221915.448-1-thomas.petazzoni@bootlin.com>
+References: <20180630221915.448-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180701110331.50944ca6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb97d9473b55326374a3868c7d7c21930dda4e3b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-This module is available for Qt 5.6 since version 5.6.3 under the
-version number 2.0.
+On Sun,  1 Jul 2018 00:19:15 +0200, Thomas Petazzoni wrote:
+> In commit 52282828f06dc8aa3f721727f68a5096b9ed8b49
+> ("package/network-manager: add patches to build with kernel headers
+> 3.2"), network-manager was changed to build with kernel headers as old
+> as 3.2, instead of 3.7 before. The dependency was changed accordingly,
+> but the Config.in comment was not.
+> 
+> This commit fixes this inconsistency.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/network-manager/Config.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...001-remove-weird-install-path-for-example.patch | 38 ++++++++++++++++++++++
- package/qt5/qt5virtualkeyboard/Config.in           |  6 ++--
- .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |  3 ++
- .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   |  5 +++
- 4 files changed, 48 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/qt5/qt5virtualkeyboard/2.0/0001-remove-weird-install-path-for-example.patch b/package/qt5/qt5virtualkeyboard/2.0/0001-remove-weird-install-path-for-example.patch
-new file mode 100644
-index 0000000000..2f8ea3bc94
---- /dev/null
-+++ b/package/qt5/qt5virtualkeyboard/2.0/0001-remove-weird-install-path-for-example.patch
-@@ -0,0 +1,38 @@
-+From aef55eb7b3470ba6dee4abc67acda1d308c90e97 Mon Sep 17 00:00:00 2001
-+From: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
-+Date: Mon, 4 Apr 2016 14:25:54 +0200
-+Subject: [PATCH 1/1] remove weird install path for example
-+
-+the deployment system on top should deal with this.
-+
-+Upstream-Status: Backport [with adaptations]
-+Change-Id: I1befb3e0c9bb6546afc59a40e525d1d600475a86
-+Reviewed-by: Joerg Bornemann <joerg.bornemann@theqtcompany.com>
-+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-+[gportay: update basic.pro path]
-+---
-+ examples/virtualkeyboard/basic/basic.pro                  | 8 ++-----
-+ 1 file changed, 2 insertions(+), 6 deletions(-)
-+
-+diff --git a/examples/virtualkeyboard/basic/basic.pro b/examples/virtualkeyboard/basic/basic.pro
-+index 28cc4dc..0f71e0e 100644
-+--- a/examples/virtualkeyboard/basic/basic.pro
-++++ b/examples/virtualkeyboard/basic/basic.pro
-+@@ -7,12 +7,8 @@ static {
-+     QT += svg
-+     QTPLUGIN += qtvirtualkeyboardplugin
-+ }
-+-android-no-sdk|!isEmpty(CROSS_COMPILE) {
-+-    TARGETPATH = /data/user/qt/virtualkeyboard
-+-} else {
-+-    TARGETPATH = $$[QT_INSTALL_EXAMPLES]/virtualkeyboard
-+-}
-+-target.path = $$TARGETPATH
-++
-++target.path = $$[QT_INSTALL_EXAMPLES]/virtualkeyboard
-+ INSTALLS += target
-+ 
-+ RESOURCES += \
-+-- 
-+2.17.1
-+
-diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
-index f0e4f03f61..57b0c703b0 100644
---- a/package/qt5/qt5virtualkeyboard/Config.in
-+++ b/package/qt5/qt5virtualkeyboard/Config.in
-@@ -1,11 +1,9 @@
--comment "qt5virtualkeyboard needs at least qt-5.7 and an OpenGL backend"
-+comment "qt5virtualkeyboard needs an OpenGL-capable backend"
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
--	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
- 
- config BR2_PACKAGE_QT5VIRTUALKEYBOARD
- 	bool "qt5virtualkeyboard"
--	# needs at least Qt 5.7
--	depends on BR2_PACKAGE_QT5_VERSION_LATEST
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative/quick
- 	select BR2_PACKAGE_QT5DECLARATIVE
-diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
-index fd147e28e8..ee463b314c 100644
---- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
-+++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
-@@ -1,3 +1,6 @@
-+# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtvirtualkeyboard-opensource-src-2.0.tar.xz.mirrorlist
-+sha256 1d543a851e83fc3de40f48c2935f70278e842589b9a235c2b22f41733e561aec qtvirtualkeyboard-opensource-src-2.0.tar.xz
-+
- # Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.0/submodules/qtvirtualkeyboard-everywhere-src-5.11.0.tar.xz.mirrorlist
- sha256 914de601a81b32acdddc572d3ade41129b018f3693d9cecdc5dad32424913cbd  qtvirtualkeyboard-everywhere-src-5.11.0.tar.xz
- 
-diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-index bd943b08ac..cbe24d27dc 100644
---- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-+++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-@@ -4,7 +4,12 @@
- #
- ################################################################################
- 
-+# Module does not follow Qt versionning for 5.6
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5VIRTUALKEYBOARD_VERSION = $(QT5_VERSION)
-+else
-+QT5VIRTUALKEYBOARD_VERSION = 2.0
-+endif
- QT5VIRTUALKEYBOARD_SITE = $(QT5_SITE)
- QT5VIRTUALKEYBOARD_SOURCE = qtvirtualkeyboard-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5VIRTUALKEYBOARD_VERSION).tar.xz
- QT5VIRTUALKEYBOARD_DEPENDENCIES = qt5base qt5declarative qt5svg
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
