@@ -1,64 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Jul 2018 11:06:44 +0200
-Subject: [Buildroot] [PATCH] qt5: bump latest version to 5.11.1
-In-Reply-To: <20180628202910.20238-1-gael.portay@savoirfairelinux.com>
-References: <20180628202910.20238-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180701110644.78b8580d@windsurf.home>
+From: Leon Anavi <leon.anavi@konsulko.com>
+Date: Sun,  1 Jul 2018 12:21:14 +0300
+Subject: [Buildroot] [PATCH] package/vim: bump version to v8.1.0133
+Message-ID: <1530436874-13056-1-git-send-email-leon.anavi@konsulko.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+A few new features have been add and a lot of bugs have been fixed in
+minor release Vim 8.1.
 
-On Thu, 28 Jun 2018 16:29:10 -0400, Ga?l PORTAY wrote:
-> qtwebengine:
-> 
-> 	Remove 0001-Fix-build-with-GCC-8.1.0.patch (upstream since
-> 	[1]).
-> 
-> [1]: https://github.com/qt/qtwebengine/commit/08db7562bf7709122807f151cab710b3fd9d7c19
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  package/qt5/qt5.mk                                 |  2 +-
->  package/qt5/qt53d/qt53d.hash                       |  4 +-
->  ...001-qtbase-Fix-build-error-when-using-EGL.patch |  0
->  package/qt5/qt5base/qt5base.hash                   |  4 +-
->  package/qt5/qt5canvas3d/qt5canvas3d.hash           |  4 +-
->  package/qt5/qt5charts/qt5charts.hash               |  4 +-
->  package/qt5/qt5connectivity/qt5connectivity.hash   |  4 +-
->  package/qt5/qt5declarative/qt5declarative.hash     |  4 +-
->  .../qt5graphicaleffects/qt5graphicaleffects.hash   |  4 +-
->  package/qt5/qt5imageformats/qt5imageformats.hash   |  4 +-
->  package/qt5/qt5location/qt5location.hash           |  4 +-
->  package/qt5/qt5multimedia/qt5multimedia.hash       |  4 +-
->  package/qt5/qt5quickcontrols/qt5quickcontrols.hash |  4 +-
->  .../qt5/qt5quickcontrols2/qt5quickcontrols2.hash   |  4 +-
->  package/qt5/qt5script/qt5script.hash               |  4 +-
->  package/qt5/qt5scxml/qt5scxml.hash                 |  4 +-
->  package/qt5/qt5sensors/qt5sensors.hash             |  4 +-
->  package/qt5/qt5serialbus/qt5serialbus.hash         |  4 +-
->  package/qt5/qt5serialport/qt5serialport.hash       |  4 +-
->  package/qt5/qt5svg/qt5svg.hash                     |  4 +-
->  package/qt5/qt5tools/qt5tools.hash                 |  4 +-
->  .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |  4 +-
->  package/qt5/qt5wayland/qt5wayland.hash             |  4 +-
->  package/qt5/qt5webchannel/qt5webchannel.hash       |  4 +-
->  .../5.11.0/0001-Fix-build-with-GCC-8.1.0.patch     | 86 ----------------------
->  package/qt5/qt5webengine/qt5webengine.hash         |  4 +-
->  package/qt5/qt5websockets/qt5websockets.hash       |  4 +-
->  package/qt5/qt5x11extras/qt5x11extras.hash         |  4 +-
->  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash     |  4 +-
->  29 files changed, 53 insertions(+), 139 deletions(-)
->  rename package/qt5/qt5base/{5.11.0 => 5.11.1}/0001-qtbase-Fix-build-error-when-using-EGL.patch (100%)
->  delete mode 100644 package/qt5/qt5webengine/5.11.0/0001-Fix-build-with-GCC-8.1.0.patch
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+---
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Applied to master, thanks. Thanks Peter for the review!
-
-Thomas
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 28c6b97..bfbd55d 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 6fbe0ec1228f951ba598b48ac8033f41ca4934cc34689a6008685e7c26477ae2  vim-v8.0.0329.tar.gz
++sha256 a6dab137949097fbe0b67aafedf4c24a3b0d9c41716db35f5beb4834924d7b00  vim-v8.1.0133.tar.gz
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 5ee8898..0c02ead 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VIM_VERSION = v8.0.0329
++VIM_VERSION = v8.1.0133
+ VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
+ # Win over busybox vi since vim is more feature-rich
+ VIM_DEPENDENCIES = \
+@@ -14,6 +14,7 @@ VIM_SUBDIR = src
+ VIM_CONF_ENV = \
+ 	vim_cv_toupper_broken=no \
+ 	vim_cv_terminfo=yes \
++	vim_cv_tgetent=zero \
+ 	vim_cv_tty_group=world \
+ 	vim_cv_tty_mode=0620 \
+ 	vim_cv_getcwd_broken=no \
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
