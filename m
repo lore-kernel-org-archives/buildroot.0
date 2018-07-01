@@ -1,45 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Jul 2018 21:08:05 +0200
-Subject: [Buildroot] [git commit] perl-cross: bump to version 1.2
-Message-ID: <20180701190504.BE88583D99@busybox.osuosl.org>
+Date: Sun, 1 Jul 2018 21:08:01 +0200
+Subject: [Buildroot] [git commit] boost: filesystem needs system
+Message-ID: <20180701190504.A54A483D99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0567cd37c5bf4f11747f6674a0b3f9a2da9440ab
+commit: https://git.buildroot.net/buildroot/commit/?id=a20893f827e74b9af2bc587ff36a903d016fd63e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+output/host/usr/bin/m68k-linux-readelf -d output/staging/usr/lib/libboost_filesystem.so
+
+Dynamic section at offset 0x17f00 contains 28 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libboost_system.so.1.67.0]
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl/perl.hash | 4 ++--
- package/perl/perl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index 210f6d581b..6936b22e03 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -3,5 +3,5 @@ md5    1fa1b53eeff76aa37b17bfc9b2771671                                 perl-5.2
- sha1   bfa5c7921ed7bf5e035dbf2f7ff81367b81e372c                         perl-5.26.2.tar.xz
- sha256 0f8c0fb1b0db4681adb75c3ba0dd77a0472b1b359b9e80efd79fc27b4352132c perl-5.26.2.tar.xz
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index ac79bb345b..f5369d7cf2 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -145,6 +145,7 @@ comment "boost-fiber needs a toolchain not affected by GCC bug 64735, 85180"
  
--# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.9/perl-cross-1.1.9.hash
--sha256	0bbb450e48d07e7fdf867d578b1780ac8f0e8dc284d52301dac4d763b42f6041  perl-cross-1.1.9.tar.gz
-+# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.2/perl-cross-1.2.hash
-+sha256	599077beb86af5e6097da8922a84474a5484f61475d2899eae0f8634e9619109  perl-cross-1.2.tar.gz
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index f7e5604edb..b0eea3eff4 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -13,7 +13,7 @@ PERL_LICENSE = Artistic or GPL-1.0+
- PERL_LICENSE_FILES = Artistic Copying README
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.1.9
-+PERL_CROSS_VERSION = 1.2
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 	bool "boost-filesystem"
++	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  The Boost Filesystem Library provides portable facilities to
+ 	  query and manipulate paths, files, and directories.
