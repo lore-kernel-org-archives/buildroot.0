@@ -1,33 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Jul 2018 15:49:31 +0200
-Subject: [Buildroot] [PATCH 1/1] python-libconfig: fix build with python2
-In-Reply-To: <20180626183945.28667-1-fontaine.fabrice@gmail.com>
-References: <20180626183945.28667-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180701154931.21406a1b@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  1 Jul 2018 15:52:40 +0200
+Subject: [Buildroot] [PATCH v2,1/1] boost: filesystem needs system
+Message-ID: <20180701135240.28152-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+output/host/usr/bin/m68k-linux-readelf -d output/staging/usr/lib/libboost_filesystem.so
 
-On Tue, 26 Jun 2018 20:39:45 +0200, Fabrice Fontaine wrote:
-> Since boost 1.67, libboost_python is now named libboost_python27 when
-> python2 is enabled
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/a1feb4c4b70b3c939ae1127417130ea33a91159b
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-Determine-boost_python-name-depending-on-current-Pyt.patch | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+Dynamic section at offset 0x17f00 contains 28 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libboost_system.so.1.67.0]
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Don't cut command output
 
-Thomas
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 02a4fd21d6..0523a978c1 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -146,6 +146,7 @@ comment "boost-fiber needs a toolchain not affected by GCC bug 64735, 85180"
+ 
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 	bool "boost-filesystem"
++	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  The Boost Filesystem Library provides portable facilities to
+ 	  query and manipulate paths, files, and directories.
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
