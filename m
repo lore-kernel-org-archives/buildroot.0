@@ -1,55 +1,60 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 1 Jul 2018 10:58:42 +0200
-Subject: [Buildroot] [PATCH] package/nano: bump version to 2.9.8
-In-Reply-To: <1530419167-14747-1-git-send-email-leon.anavi@konsulko.com>
-References: <1530419167-14747-1-git-send-email-leon.anavi@konsulko.com>
-Message-ID: <20180701085842.GC2381@scaer>
+Date: Sun, 1 Jul 2018 10:59:20 +0200
+Subject: [Buildroot] [PATCH] vim: bump version to v8.1.0133
+In-Reply-To: <1530434386-12447-1-git-send-email-leon.anavi@konsulko.com>
+References: <1530434386-12447-1-git-send-email-leon.anavi@konsulko.com>
+Message-ID: <20180701085920.GD2381@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Leon, All,
-
-On 2018-07-01 07:26 +0300, Leon Anavi spake thusly:
-> Upgrade nano to 2.9.8, the latest version as of 2 June 2018:
-> https://www.nano-editor.org/dist/v2.9/ChangeLog
+On 2018-07-01 11:39 +0300, Leon Anavi spake thusly:
+> A few new features have been add and a lot of bugs have been fixed in
+> minor release Vim 8.1.
 > 
 > Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+> ---
+>  package/vim/vim.hash | 2 +-
+>  package/vim/vim.mk   | 3 ++-
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+> index 28c6b97..bfbd55d 100644
+> --- a/package/vim/vim.hash
+> +++ b/package/vim/vim.hash
+> @@ -1,2 +1,2 @@
+>  # Locally computed
+> -sha256 6fbe0ec1228f951ba598b48ac8033f41ca4934cc34689a6008685e7c26477ae2  vim-v8.0.0329.tar.gz
+> +sha256 a6dab137949097fbe0b67aafedf4c24a3b0d9c41716db35f5beb4834924d7b00  vim-v8.1.0133.tar.gz
+> diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+> index 5ee8898..706e09e 100644
+> --- a/package/vim/vim.mk
+> +++ b/package/vim/vim.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -VIM_VERSION = v8.0.0329
+> +VIM_VERSION = v8.1.0133
+>  VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
+>  # Win over busybox vi since vim is more feature-rich
+>  VIM_DEPENDENCIES = \
+> @@ -14,6 +14,7 @@ VIM_SUBDIR = src
+>  VIM_CONF_ENV = \
+>  	vim_cv_toupper_broken=no \
+>  	vim_cv_terminfo=yes \
+> +        vim_cv_tgetent=zero \
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Use a TAB for indentation here.
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/nano/nano.hash | 2 +-
->  package/nano/nano.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-> index c09f031..2f37293 100644
-> --- a/package/nano/nano.hash
-> +++ b/package/nano/nano.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated after checking pgp signature
-> -sha256 d2d30c39caef53aba1ec1b4baff4186d4496f35d2411b0848242a5f2e27e129e  nano-2.9.0.tar.xz
-> +sha256 c2deac31ba4d3fd27a42fafcc47ccf499296cc69a422bbecab63f2933ea85488  nano-2.9.8.tar.xz
->  sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-> diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-> index 458174a..3815cdc 100644
-> --- a/package/nano/nano.mk
-> +++ b/package/nano/nano.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  NANO_VERSION_MAJOR = 2.9
-> -NANO_VERSION = $(NANO_VERSION_MAJOR).0
-> +NANO_VERSION = $(NANO_VERSION_MAJOR).8
->  NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
->  NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
->  NANO_LICENSE = GPL-3.0+
+>  	vim_cv_tty_group=world \
+>  	vim_cv_tty_mode=0620 \
+>  	vim_cv_getcwd_broken=no \
 > -- 
 > 2.7.4
 > 
