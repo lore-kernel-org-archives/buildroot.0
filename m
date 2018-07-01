@@ -1,43 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun,  1 Jul 2018 20:34:08 +0200
-Subject: [Buildroot] [PATCH] btrfs-progs: adjust install-static patch to
- install headers under $(prefix)/include/btrfs
-Message-ID: <20180701183408.7305-1-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 1 Jul 2018 21:08:03 +0200
+Subject: [Buildroot] [git commit] boost: chrono needs system
+Message-ID: <20180701190504.B4A5883D99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/15cc6523a42bf66508b2b37fd1fcb74625561ec2/
+commit: https://git.buildroot.net/buildroot/commit/?id=103f3557fbba10b2509d966bfb6edb8dde14b88d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-btrfs-progs 'make install' installs headers under $(prefix)/include/btrfs,
-but our patch to also install headers for 'install-static' installed
-directly into $(prefix)/include, confusing other packages as btrfs-progs
-headers have very common names such as version, sizes.h, list.h, ioctl.h, ..
+output/host/usr/bin/mips-linux-gnu-readelf -d output/staging/usr/lib/libboost_chrono.so
 
-Fix it by adjusting the patch to also install under $(prefix)/include/btrfs.
+Dynamic section at offset 0x2c0 contains 30 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libboost_system.so.1.67.0]
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Makefile-install-static-library-and-headers-in-insta.patch   | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/btrfs-progs/0001-Makefile-install-static-library-and-headers-in-insta.patch b/package/btrfs-progs/0001-Makefile-install-static-library-and-headers-in-insta.patch
-index 1cdedfd984..de2db2f16f 100644
---- a/package/btrfs-progs/0001-Makefile-install-static-library-and-headers-in-insta.patch
-+++ b/package/btrfs-progs/0001-Makefile-install-static-library-and-headers-in-insta.patch
-@@ -41,8 +41,8 @@ index 67fbc48..d9e34be 100644
-  	$(LN_S) -f btrfs.static $(DESTDIR)$(bindir)/btrfsck.static
- +	$(INSTALL) -m755 -d $(DESTDIR)$(libdir)
- +	$(INSTALL) $(libs_static) $(DESTDIR)$(libdir)
--+	$(INSTALL) -m755 -d $(DESTDIR)$(incdir)
--+	$(INSTALL) -m644 $(libbtrfs_headers) $(DESTDIR)$(incdir)
-++	$(INSTALL) -m755 -d $(DESTDIR)$(incdir)/btrfs
-++	$(INSTALL) -m644 $(libbtrfs_headers) $(DESTDIR)$(incdir)/btrfs
-  
-  $(INSTALLDIRS):
-  	@echo "Making install in $(patsubst install-%,%,$@)"
--- 
-2.11.0
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index f5369d7cf2..12eb98ae21 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -57,6 +57,7 @@ config BR2_PACKAGE_BOOST_ATOMIC
+ 
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
++	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  Useful time utilities. C++11.
+ 
