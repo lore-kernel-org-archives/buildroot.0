@@ -1,72 +1,124 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sat, 30 Jun 2018 22:57:58 -0300
-Subject: [Buildroot] [PATCH] package: dropbear: make PATH configurable
-In-Reply-To: <20180309224149.20225-1-mmayer@broadcom.com>
-References: <20180309224149.20225-1-mmayer@broadcom.com>
-Message-ID: <20180701015758.20354-1-casantos@datacom.com.br>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Sat, 30 Jun 2018 23:07:03 -0400
+Subject: [Buildroot] [PATCH] qt5virtualkeyboard: allow to build with qt5.6
+Message-ID: <20180701030703.10346-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Markus Mayer wrote:
+This module is available for Qt 5.6 since version 5.6.3 under the
+version number 2.0.
 
-> Make the default PATH dropbear is using configurable.
-> 
-> If not specified, it will continue to default to dropbear's
-> DEFAULT_PATH.
-> 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
->  package/dropbear/Config.in   | 6 ++++++
->  package/dropbear/dropbear.mk | 8 ++++++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-> index 6700778161..0cc68d737d 100644
-> --- a/package/dropbear/Config.in
-> +++ b/package/dropbear/Config.in
-> @@ -55,4 +55,10 @@ config BR2_PACKAGE_DROPBEAR_LASTLOG
->  	  Enable logging of dropbear access to lastlog. Notice that
->  	  Buildroot does not generate lastlog by default.
->  
-> +config BR2_PACKAGE_DROPBEAR_PATH
-> +	string "dropbear default path"
-> +	help
-> +	  Use the path specified here as dropbear's default path.
-> +	  If not specified, dropbear will use "/usr/bin:/bin".
-> +
->  endif
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
 
-Looks nice but it would be good to add a similar configuration for
-openssl, whose default user PATH is "/usr/bin:/bin:/usr/sbin:/sbin".
-In fact I believe we should make both ssh servers use the same user
-PATH.
+Hi,
 
-> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-> index 01a1a07b76..9da340670a 100644
-> --- a/package/dropbear/dropbear.mk
-> +++ b/package/dropbear/dropbear.mk
-> @@ -51,6 +51,14 @@ define DROPBEAR_DISABLE_STANDALONE
->  	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
->  endef
->  
-> +ifneq ($(BR2_PACKAGE_DROPBEAR_PATH),"")
-> +define DROPBEAR_CUSTOM_PATH
-> +	$(SED) 's|^\(#define \+DEFAULT_PATH\)[	 ]\+.*|\1 $(BR2_PACKAGE_DROPBEAR_PATH)|' $(@D)/options.h
-> +endef
-> +
-> +DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_CUSTOM_PATH
-> +endif
-> +
->  define DROPBEAR_INSTALL_INIT_SYSTEMD
->  	$(INSTALL) -D -m 644 package/dropbear/dropbear.service \
->  		$(TARGET_DIR)/usr/lib/systemd/system/dropbear.service
+The patch fixes a build issue when the examples are compiled.
 
-This must be updated to put customised options in localoptions.h (refer
-to commit 2e035a9aecc37b87a277fd53f84743a18a6f03a7).
+It is a backport with additionnal modification from Qt 5.7.
 
---
-Carlos Santos
-DATACOM P&D
+Regards,
+Ga?l
+
+ ...001-remove-weird-install-path-for-example.patch | 38 ++++++++++++++++++++++
+ package/qt5/qt5virtualkeyboard/Config.in           |  6 ++--
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash |  3 ++
+ .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   |  5 +++
+ 4 files changed, 48 insertions(+), 4 deletions(-)
+ create mode 100644 package/qt5/qt5virtualkeyboard/2.0/0001-remove-weird-install-path-for-example.patch
+
+diff --git a/package/qt5/qt5virtualkeyboard/2.0/0001-remove-weird-install-path-for-example.patch b/package/qt5/qt5virtualkeyboard/2.0/0001-remove-weird-install-path-for-example.patch
+new file mode 100644
+index 0000000000..2f8ea3bc94
+--- /dev/null
++++ b/package/qt5/qt5virtualkeyboard/2.0/0001-remove-weird-install-path-for-example.patch
+@@ -0,0 +1,38 @@
++From aef55eb7b3470ba6dee4abc67acda1d308c90e97 Mon Sep 17 00:00:00 2001
++From: Oswald Buddenhagen <oswald.buddenhagen@theqtcompany.com>
++Date: Mon, 4 Apr 2016 14:25:54 +0200
++Subject: [PATCH 1/1] remove weird install path for example
++
++the deployment system on top should deal with this.
++
++Upstream-Status: Backport [with adaptations]
++Change-Id: I1befb3e0c9bb6546afc59a40e525d1d600475a86
++Reviewed-by: Joerg Bornemann <joerg.bornemann@theqtcompany.com>
++Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
++[gportay: update basic.pro path]
++---
++ examples/virtualkeyboard/basic/basic.pro                  | 8 ++-----
++ 1 file changed, 2 insertions(+), 6 deletions(-)
++
++diff --git a/examples/virtualkeyboard/basic/basic.pro b/examples/virtualkeyboard/basic/basic.pro
++index 28cc4dc..0f71e0e 100644
++--- a/examples/virtualkeyboard/basic/basic.pro
+++++ b/examples/virtualkeyboard/basic/basic.pro
++@@ -7,12 +7,8 @@ static {
++     QT += svg
++     QTPLUGIN += qtvirtualkeyboardplugin
++ }
++-android-no-sdk|!isEmpty(CROSS_COMPILE) {
++-    TARGETPATH = /data/user/qt/virtualkeyboard
++-} else {
++-    TARGETPATH = $$[QT_INSTALL_EXAMPLES]/virtualkeyboard
++-}
++-target.path = $$TARGETPATH
+++
+++target.path = $$[QT_INSTALL_EXAMPLES]/virtualkeyboard
++ INSTALLS += target
++ 
++ RESOURCES += \
++-- 
++2.17.1
++
+diff --git a/package/qt5/qt5virtualkeyboard/Config.in b/package/qt5/qt5virtualkeyboard/Config.in
+index f0e4f03f61..57b0c703b0 100644
+--- a/package/qt5/qt5virtualkeyboard/Config.in
++++ b/package/qt5/qt5virtualkeyboard/Config.in
+@@ -1,11 +1,9 @@
+-comment "qt5virtualkeyboard needs at least qt-5.7 and an OpenGL backend"
++comment "qt5virtualkeyboard needs an OpenGL-capable backend"
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+-	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
++	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE
+ 
+ config BR2_PACKAGE_QT5VIRTUALKEYBOARD
+ 	bool "qt5virtualkeyboard"
+-	# needs at least Qt 5.7
+-	depends on BR2_PACKAGE_QT5_VERSION_LATEST
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
+ 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative/quick
+ 	select BR2_PACKAGE_QT5DECLARATIVE
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
+index fd147e28e8..ee463b314c 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
+@@ -1,3 +1,6 @@
++# Hash from: https://download.qt.io/official_releases/qt/5.6/5.6.3/submodules/qtvirtualkeyboard-opensource-src-2.0.tar.xz.mirrorlist
++sha256 1d543a851e83fc3de40f48c2935f70278e842589b9a235c2b22f41733e561aec qtvirtualkeyboard-opensource-src-2.0.tar.xz
++
+ # Hash from: https://download.qt.io/official_releases/qt/5.11/5.11.0/submodules/qtvirtualkeyboard-everywhere-src-5.11.0.tar.xz.mirrorlist
+ sha256 914de601a81b32acdddc572d3ade41129b018f3693d9cecdc5dad32424913cbd  qtvirtualkeyboard-everywhere-src-5.11.0.tar.xz
+ 
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index bd943b08ac..cbe24d27dc 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -4,7 +4,12 @@
+ #
+ ################################################################################
+ 
++# Module does not follow Qt versionning for 5.6
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5VIRTUALKEYBOARD_VERSION = $(QT5_VERSION)
++else
++QT5VIRTUALKEYBOARD_VERSION = 2.0
++endif
+ QT5VIRTUALKEYBOARD_SITE = $(QT5_SITE)
+ QT5VIRTUALKEYBOARD_SOURCE = qtvirtualkeyboard-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5VIRTUALKEYBOARD_VERSION).tar.xz
+ QT5VIRTUALKEYBOARD_DEPENDENCIES = qt5base qt5declarative qt5svg
+-- 
+2.11.0
