@@ -1,46 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 01 Jul 2018 18:05:47 +0000
-Subject: [Buildroot] [Bug 11096] Upgrade from glibc 2.26 to 2.27 broke some
- locales (ru_RU in particular)
-In-Reply-To: <bug-11096-163@https.bugs.busybox.net/>
-References: <bug-11096-163@https.bugs.busybox.net/>
-Message-ID: <bug-11096-163-ZFQ9qPjK51@https.bugs.busybox.net/>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun,  1 Jul 2018 20:06:00 +0200
+Subject: [Buildroot] [PATCH] perl-cross: bump to version 1.2
+Message-ID: <20180701180600.15623-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11096
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl/perl.hash | 4 ++--
+ package/perl/perl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- Comment #2 from romain.naour at gmail.com ---
-Hi,
-
-So, we really have a problem with host-localedef...
-
-Our current version is outdated (based on eglibc) and doesn't work with glibc
-2.26. Localedef package version should be the same as glibc package because
-localedef program is part of glibc and building it require glibc sources.
-
-Yocto and ptxdist maintain some "hack/workaround" to only build localedef for
-the host [1] [2].
-
-Also, pre compiled toolchain doesn't provide localdef binary for the host along
-with glibc provided for the target.
-
-I'm not sure if we should allow using BR2_GENERATE_LOCALE for external
-toolchains since there is no guaranties that localedef is compatible with
-toolchain locale.
-
-Best regards,
-Romain
-
-[1]
-https://git.pengutronix.de/cgit/ptxdist/tree/patches/localedef-glibc-2.27/0001-HACK-only-build-and-install-localedef.patch
-
-[2] git://github.com/kraj/localedef and
-http://git.yoctoproject.org/cgit.cgi/poky/tree/meta/recipes-core/glibc/cross-localedef-native_2.26.bb?id=rocko-18.0.3
-
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 210f6d581..6936b22e0 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -3,5 +3,5 @@ md5    1fa1b53eeff76aa37b17bfc9b2771671                                 perl-5.2
+ sha1   bfa5c7921ed7bf5e035dbf2f7ff81367b81e372c                         perl-5.26.2.tar.xz
+ sha256 0f8c0fb1b0db4681adb75c3ba0dd77a0472b1b359b9e80efd79fc27b4352132c perl-5.26.2.tar.xz
+ 
+-# Hashes from: http://github.com/arsv/perl-cross/releases/download/1.1.9/perl-cross-1.1.9.hash
+-sha256	0bbb450e48d07e7fdf867d578b1780ac8f0e8dc284d52301dac4d763b42f6041  perl-cross-1.1.9.tar.gz
++# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.2/perl-cross-1.2.hash
++sha256	599077beb86af5e6097da8922a84474a5484f61475d2899eae0f8634e9619109  perl-cross-1.2.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index f7e5604ed..b0eea3eff 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -13,7 +13,7 @@ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.1.9
++PERL_CROSS_VERSION = 1.2
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
