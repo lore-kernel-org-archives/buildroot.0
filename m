@@ -1,171 +1,38 @@
-From: Jagan Teki <jagannadh.teki@gmail.com>
-Date: Sun,  1 Jul 2018 19:30:26 +0530
-Subject: [Buildroot] [PATCH v4 2/2] board: amarula: a64-relic: Add WiFi
- support
-In-Reply-To: <20180701140026.2261-1-jagan@amarulasolutions.com>
-References: <20180701140026.2261-1-jagan@amarulasolutions.com>
-Message-ID: <20180701140026.2261-2-jagan@amarulasolutions.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  1 Jul 2018 16:00:43 +0200
+Subject: [Buildroot] [PATCH v2,1/1] boost: chrono needs system
+Message-ID: <20180701140043.28829-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Amarula A64-Relic board has AP6330 WiFi/BT combo, but does
-not have ethernet port. So it makes sense to enable wireless
-networking by default:
-- add broadcom wireless firmware package to image
-- add basic wireless tools to image
-- add rootfs overlay with proper NVRAM file for on-board AP6330 chip
-- add mdev to image to enable module autoloading
-- update readme.txt to test wifi
+output/host/usr/bin/mips-linux-gnu-readelf -d output/staging/usr/lib/libboost_chrono.so
 
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+Dynamic section at offset 0x2c0 contains 30 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libboost_system.so.1.67.0]
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes for v4, v3:
-- none
-Changes for v2:
-- drop init scripts for module loading
-- add mdev for module autoloading
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Don't wrap line to 72 characters for command output
 
- board/amarula/a64-relic/readme.txt            |  9 ++
- .../lib/firmware/brcm/brcmfmac4330-sdio.txt   | 83 +++++++++++++++++++
- configs/amarula_a64_relic_defconfig           | 13 +++
- 3 files changed, 105 insertions(+)
- create mode 100644 board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/board/amarula/a64-relic/readme.txt b/board/amarula/a64-relic/readme.txt
-index 55171b2408..a27eb4d92a 100644
---- a/board/amarula/a64-relic/readme.txt
-+++ b/board/amarula/a64-relic/readme.txt
-@@ -75,6 +75,15 @@ capability of U-Boot. To achieve this:
-     => mmc dev 1
-     => ums 0 mmc 1
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 1e1ad64cca..02a4fd21d6 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -57,6 +57,7 @@ config BR2_PACKAGE_BOOST_ATOMIC
  
-+WiFi
-+====
-+
-+ # wpa_passphrase ACCESSPOINTNAME >> /etc/wpa_supplicant.conf
-+   (type password and enter)
-+ # wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
-+ # udhcpc -i wlan0
-+ # ping google.com
-+
- --
- Jagan Teki <jagan@amarulasolutions.com>
- 29-Jun-2018
-diff --git a/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt b/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-new file mode 100644
-index 0000000000..d095f24c26
---- /dev/null
-+++ b/board/amarula/a64-relic/rootfs_overlay/lib/firmware/brcm/brcmfmac4330-sdio.txt
-@@ -0,0 +1,83 @@
-+#AP6330_NVRAM_V1.0_20121130
-+#Sample variables file for BCM94330 SD FC AGB board
-+manfid=0x2d0
-+prodid=0x0547
-+vendid=0x14e4
-+devid=0x4360
-+boardtype=0x05e1
-+boardrev=0x1202
-+boardflags=0x0080200
-+nocrc=1
-+xtalfreq=26000
-+boardnum=22
-+macaddr=00:90:4c:c5:12:38
-+ag0=254
-+aa2g=1
-+ccode=ALL
-+pa0itssit=0x20
-+pa0b0=5587
-+pa0b1=-633
-+pa0b2=-158
-+rssismf2g=0xa
-+rssismc2g=0x3
-+rssisav2g=0x7
-+#rssi params for 5GHz
-+rssismf5g=0x4
-+rssismc5g=0x3
-+rssisav5g=0x7
-+#PA parameters for lower a-band
-+pa1lob0=4748
-+pa1lob1=-566
-+pa1lob2=-180
-+#PA parameters for midband
-+pa1b0=4762
-+pa1b1=-593
-+pa1b2=-172
-+#PA parameters for high band
-+#pa1hib0=4596
-+pa1hib0=4666
-+pa1hib1=-619
-+pa1hib2=-163
-+rxpo5g=0
-+maxp2ga0=74
-+maxp5ga0=66
-+maxp5gla0=66
-+maxp5gha0=66
-+# 2.4G Tx Power offsets
-+cck2gpo=0x2222
-+ofdm2gpo=0x44444444
-+mcs2gpo0=0x6666
-+mcs2gpo1=0x6666
-+# 5G Tx Power offsets
-+ofdm5gpo=0x44444444
-+ofdm5glpo=0x44444444
-+ofdm5ghpo=0x44444444
-+mcs5gpo0=0x6666
-+mcs5gpo1=0x6666
-+mcs5glpo0=0x6666
-+mcs5glpo1=0x6666
-+mcs5ghpo0=0x6666
-+mcs5ghpo1=0x6666
-+sromrev=3
-+il0macaddr=00:90:4c:c5:12:38
-+wl0id=0x431b
-+cckPwrOffset=4
-+swctrlmap_2g=0x44844484,0x42824282,0x40804484,0x18282,0x1ff
-+triso5g=0
-+swctrlmap_5g=0x00100010,0x20202020,0x20202020,0x14202,0x0f0
-+rfreg033=0x19
-+rfreg033_cck=0x1f
-+dacrate2g=160
-+dacrate5g=160
-+txalpfbyp2g=1
-+bphyscale=17
-+cckPwrIdxCorr=-15
-+pacalidx2g=50
-+#pacalidx5g=20
-+noise_cal_ref_2g=53
-+noise_cal_po_2g=0
-+noise_cal_ref_5g=52
-+noise_cal_po_5g=5,0,0
-+# 4330 OOB parameter: High level trigger
-+muxenab=0x10
-+
-diff --git a/configs/amarula_a64_relic_defconfig b/configs/amarula_a64_relic_defconfig
-index 846275eadb..82c30fbb0f 100644
---- a/configs/amarula_a64_relic_defconfig
-+++ b/configs/amarula_a64_relic_defconfig
-@@ -42,6 +42,19 @@ BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT=y
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/amarula/a64-relic/genimage.cfg"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/amarula/a64-relic/post-build.sh"
-+BR2_ROOTFS_OVERLAY="board/amarula/a64-relic/rootfs_overlay"
-+
-+# wireless firmware
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
-+
-+# wireless tools
-+BR2_PACKAGE_IW=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_NL80211=y
-+BR2_PACKAGE_WPA_SUPPLICANT_AP_SUPPORT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
++	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  Useful time utilities. C++11.
+ 
 -- 
-2.17.1
+2.14.1
