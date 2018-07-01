@@ -1,50 +1,44 @@
-From: Leon Anavi <leon.anavi@konsulko.com>
-Date: Sun,  1 Jul 2018 11:39:46 +0300
-Subject: [Buildroot] [PATCH] vim: bump version to v8.1.0133
-Message-ID: <1530434386-12447-1-git-send-email-leon.anavi@konsulko.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  1 Jul 2018 10:41:02 +0200
+Subject: [Buildroot] [PATCH 1/1] libv4l: bump to version 1.14.2
+Message-ID: <20180701084102.12335-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A few new features have been add and a lot of bugs have been fixed in
-minor release Vim 8.1.
-
-Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/vim/vim.hash | 2 +-
- package/vim/vim.mk   | 3 ++-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libv4l/libv4l.hash | 4 ++--
+ package/libv4l/libv4l.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/vim/vim.hash b/package/vim/vim.hash
-index 28c6b97..bfbd55d 100644
---- a/package/vim/vim.hash
-+++ b/package/vim/vim.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 6fbe0ec1228f951ba598b48ac8033f41ca4934cc34689a6008685e7c26477ae2  vim-v8.0.0329.tar.gz
-+sha256 a6dab137949097fbe0b67aafedf4c24a3b0d9c41716db35f5beb4834924d7b00  vim-v8.1.0133.tar.gz
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 5ee8898..706e09e 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index aea9cc988f..5e0df1f7a9 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking signature
+-# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.14.1.tar.bz2.asc
+-sha256 7974e5626447407d8a1ed531da0461c0fe00e599a696cb548a240d17d3519005  v4l-utils-1.14.1.tar.bz2
++# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.14.2.tar.bz2.asc
++sha256 e6b962c4b1253cf852c31da13fd6b5bb7cbe5aa9e182881aec55123bae680692  v4l-utils-1.14.2.tar.bz2
+ # Locally calculated
+ sha256 391e4da1c54a422a78d83be7bf84b2dfb8bacdd8ad256fa4374e128655584a8a  COPYING
+ sha256 5a7f623a50e384aaf6d2ced068339ddf93d0a50d3a0ecbe86f125b07804ecc78  COPYING.libv4l
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index c95b2778cd..55f02b7e8e 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VIM_VERSION = v8.0.0329
-+VIM_VERSION = v8.1.0133
- VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
- # Win over busybox vi since vim is more feature-rich
- VIM_DEPENDENCIES = \
-@@ -14,6 +14,7 @@ VIM_SUBDIR = src
- VIM_CONF_ENV = \
- 	vim_cv_toupper_broken=no \
- 	vim_cv_terminfo=yes \
-+        vim_cv_tgetent=zero \
- 	vim_cv_tty_group=world \
- 	vim_cv_tty_mode=0620 \
- 	vim_cv_getcwd_broken=no \
+-LIBV4L_VERSION = 1.14.1
++LIBV4L_VERSION = 1.14.2
+ LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
+ LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
 -- 
-2.7.4
+2.14.1
