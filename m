@@ -1,50 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 1 Jul 2018 14:19:25 +0200
-Subject: [Buildroot] [PATCH 1/3] systemd: bump to v239
-In-Reply-To: <20180629222552.12808-2-jeremy.rosen@smile.fr>
-References: <20180629222552.12808-1-jeremy.rosen@smile.fr>
- <20180629222552.12808-2-jeremy.rosen@smile.fr>
-Message-ID: <20180701141925.69267e02@windsurf.home>
+Date: Sun, 1 Jul 2018 14:19:44 +0200
+Subject: [Buildroot] [git commit] systemd: add optional dependency on pcre2
+Message-ID: <20180701122742.DA9A181408@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b8dd03de565296698ceaff2aca22867ef365613c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 30 Jun 2018 00:25:50 +0200, J?r?my Rosen wrote:
-> * remove upstreamed patches
-> * refresh patch 0002 which didn't apply cleanly
-> * update patch 0001 to catch more uses of agetty
-> 
-> 
-> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
-> ---
->  package/systemd/0001-fix-getty-unit.patch     |  61 ++++--
->  .../0002-install-don-t-use-ln-relative.patch  |  19 +-
->  ...-include-libmount-h-in-a-header-file.patch |  75 -------
->  .../0005-basic-macros-rename-noreturn.patch   | 201 ------------------
->  package/systemd/systemd.hash                  |   2 +-
->  package/systemd/systemd.mk                    |   2 +-
->  6 files changed, 63 insertions(+), 297 deletions(-)
->  delete mode 100644 package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
->  delete mode 100644 package/systemd/0005-basic-macros-rename-noreturn.patch
+systemd can use libpcre2 when available, so this commit adds the
+detection of this library.
 
-I've applied, after fixing the issues pointed out by Romain: do not
-re-assign the patches to yourself when you're just making some small
-adjustements, use "git format-patch -N".
+Signed-off-by: J??r??my Rosen <jeremy.rosen@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/systemd/systemd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Also, you forgot to update the hash of the README file, which has
-changed. That was breaking "make legal-info", so I fixed that.
-
-Finally, I did a follow-up commit dropping the 0003 patch, which as
-noted by Romain Naour was no longer needed.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 16c9d9f290..0d5e348594 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -144,6 +144,13 @@ else
+ SYSTEMD_CONF_OPTS += -Dgcrypt=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PCRE2),y)
++SYSTEMD_DEPENDENCIES += pcre2
++SYSTEMD_CONF_OPTS += -Dpcre2=true
++else
++SYSTEMD_CONF_OPTS += -Dpcre2=false
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY),y)
+ SYSTEMD_DEPENDENCIES += libmicrohttpd
+ SYSTEMD_CONF_OPTS += -Dmicrohttpd=true
