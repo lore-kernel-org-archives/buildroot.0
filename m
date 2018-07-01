@@ -1,38 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  1 Jul 2018 16:00:43 +0200
-Subject: [Buildroot] [PATCH v2,1/1] boost: chrono needs system
-Message-ID: <20180701140043.28829-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 01 Jul 2018 18:05:47 +0000
+Subject: [Buildroot] [Bug 11096] Upgrade from glibc 2.26 to 2.27 broke some
+ locales (ru_RU in particular)
+In-Reply-To: <bug-11096-163@https.bugs.busybox.net/>
+References: <bug-11096-163@https.bugs.busybox.net/>
+Message-ID: <bug-11096-163-ZFQ9qPjK51@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-output/host/usr/bin/mips-linux-gnu-readelf -d output/staging/usr/lib/libboost_chrono.so
+https://bugs.busybox.net/show_bug.cgi?id=11096
 
-Dynamic section at offset 0x2c0 contains 30 entries:
-  Tag        Type                         Name/Value
- 0x0000000000000001 (NEEDED)             Shared library: [libboost_system.so.1.67.0]
+--- Comment #2 from romain.naour at gmail.com ---
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Don't wrap line to 72 characters for command output
+So, we really have a problem with host-localedef...
 
- package/boost/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Our current version is outdated (based on eglibc) and doesn't work with glibc
+2.26. Localedef package version should be the same as glibc package because
+localedef program is part of glibc and building it require glibc sources.
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 1e1ad64cca..02a4fd21d6 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -57,6 +57,7 @@ config BR2_PACKAGE_BOOST_ATOMIC
- 
- config BR2_PACKAGE_BOOST_CHRONO
- 	bool "boost-chrono"
-+	select BR2_PACKAGE_BOOST_SYSTEM
- 	help
- 	  Useful time utilities. C++11.
- 
+Yocto and ptxdist maintain some "hack/workaround" to only build localedef for
+the host [1] [2].
+
+Also, pre compiled toolchain doesn't provide localdef binary for the host along
+with glibc provided for the target.
+
+I'm not sure if we should allow using BR2_GENERATE_LOCALE for external
+toolchains since there is no guaranties that localedef is compatible with
+toolchain locale.
+
+Best regards,
+Romain
+
+[1]
+https://git.pengutronix.de/cgit/ptxdist/tree/patches/localedef-glibc-2.27/0001-HACK-only-build-and-install-localedef.patch
+
+[2] git://github.com/kraj/localedef and
+http://git.yoctoproject.org/cgit.cgi/poky/tree/meta/recipes-core/glibc/cross-localedef-native_2.26.bb?id=rocko-18.0.3
+
 -- 
-2.14.1
+You are receiving this mail because:
+You are on the CC list for the bug.
