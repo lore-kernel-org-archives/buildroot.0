@@ -1,37 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 30 Jun 2018 21:45:42 +0000
-Subject: [Buildroot] [Bug 11096] Upgrade from glibc 2.26 to 2.27 broke some
- locales (ru_RU in particular)
-In-Reply-To: <bug-11096-163@https.bugs.busybox.net/>
-References: <bug-11096-163@https.bugs.busybox.net/>
-Message-ID: <bug-11096-163-35rSviXUOa@https.bugs.busybox.net/>
+From: Leon Anavi <leon.anavi@konsulko.com>
+Date: Sun,  1 Jul 2018 07:26:07 +0300
+Subject: [Buildroot] [PATCH] package/nano: bump version to 2.9.8
+Message-ID: <1530419167-14747-1-git-send-email-leon.anavi@konsulko.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11096
+Upgrade nano to 2.9.8, the latest version as of 2 June 2018:
+https://www.nano-editor.org/dist/v2.9/ChangeLog
 
---- Comment #1 from romain.naour at gmail.com ---
-Hi,
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+---
+ package/nano/nano.hash | 2 +-
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Are you sure that Buildroot is using localedef from the host?
-Buildroot is building it's own localedef version from [1] which is probably too
-old for glibc 2.27.
-Maybe we have to bump localedef to [2] which is used by Yocto?
-
-localedef is build by the glibc package but for the target, so we really need
-to build it outside of glibc package.
-
-Best regards,
-Romain
-
-[1]
-http://www.pengutronix.de/software/ptxdist/temporary-src/localedef-eglibc-2.14.1-r17443-ptx1.tar.bz2
-
-[2] git://github.com/kraj/localedef
-
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index c09f031..2f37293 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256 d2d30c39caef53aba1ec1b4baff4186d4496f35d2411b0848242a5f2e27e129e  nano-2.9.0.tar.xz
++sha256 c2deac31ba4d3fd27a42fafcc47ccf499296cc69a422bbecab63f2933ea85488  nano-2.9.8.tar.xz
+ sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 458174a..3815cdc 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ NANO_VERSION_MAJOR = 2.9
+-NANO_VERSION = $(NANO_VERSION_MAJOR).0
++NANO_VERSION = $(NANO_VERSION_MAJOR).8
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
