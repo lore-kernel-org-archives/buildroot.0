@@ -1,57 +1,64 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:11:55 +0200
-Subject: [Buildroot] [PATCH 21/50] package/busybox: invert dependency with
- nnamp
+Date: Mon,  2 Jul 2018 23:11:57 +0200
+Subject: [Buildroot] [PATCH 23/50] package/busybox: invert dependency with
+ netcat
 In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <b40a7c127764639247fb674610da56c7023811b9.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <fffbc04ca4ff8a05e29905e36f812ea43ee86bc6.1530565933.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We only need that dependency whan nmap's ncat is enabled.
+Since netcat would be installed before busybox, we don't need to remove
+a pre-installed 'nc' anymore.
 
-For consistency, we add a dependency on nmap, not a suboption of it,
-to have a dependency list in busybox that is only about packages, and
-directly associates the upper-case package variable to the lower-case
-package name, e.g. NMAP <-> nmap.
+If another netcat implementation (e.g. netcat-openbsd) is also enabled,
+there is no way to tell which would win in the end, especially when we
+add TLPB, in which case that will be forbidden.
+
+So, we don't need to remove anything anymore.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk | 1 +
- package/nmap/nmap.mk       | 6 ------
- 2 files changed, 1 insertion(+), 6 deletions(-)
+ package/busybox/busybox.mk |  1 +
+ package/netcat/netcat.mk   | 13 -------------
+ 2 files changed, 1 insertion(+), 13 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 7f08d857f8..4039d1c9ad 100644
+index 47952d42e4..8523271ceb 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_NMAP),nmap) \
++	$(if $(BR2_PACKAGE_NETCAT),netcat) \
+ 	$(if $(BR2_PACKAGE_NETCAT_OPENSBSD),netcat-openbsd) \
+ 	$(if $(BR2_PACKAGE_NMAP),nmap) \
  	$(if $(BR2_PACKAGE_NTP),ntp) \
- 	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
- 	$(if $(BR2_PACKAGE_PROCPS_NG),procps-ng) \
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 1c89b5424e..420aec82d7 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -76,12 +76,6 @@ else
- NMAP_CONF_OPTS += --without-nping
- endif
+diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
+index d8b3c930b9..eb7ddcac27 100644
+--- a/package/netcat/netcat.mk
++++ b/package/netcat/netcat.mk
+@@ -9,17 +9,4 @@ NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VE
+ NETCAT_LICENSE = GPL-2.0+
+ NETCAT_LICENSE_FILES = COPYING
  
--# If we are going to install ncat, ensure Busybox gets built/installed
--# before, so that this package overrides Busybox nc.
--ifeq ($(BR2_PACKAGE_NMAP_NCAT)$(BR2_PACKAGE_BUSYBOX),yy)
--NMAP_DEPENDENCIES += busybox
+-# Ensure Busybox gets built/installed before, so that this package
+-# overrides Busybox nc.
+-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-NETCAT_DEPENDENCIES += busybox
 -endif
 -
- # Add a symlink to "nc" if none of the competing netcats is selected
- ifeq ($(BR2_PACKAGE_NMAP_NCAT):$(BR2_PACKAGE_NETCAT)$(BR2_PACKAGE_NETCAT_OPENBSD),y:)
- define NMAP_INSTALL_NCAT_SYMLINK
+-# Netcat doesn't overwrite a pre-existing 'nc' (e.g. from busybox) so
+-# force-remove it.
+-define NETCAT_RMOVE_NC_LINK
+-	rm -f $(TARGET_DIR)/usr/bin/nc
+-endef
+-NETCAT_PRE_INSTALL_TARGET_HOOKS += NETCAT_RMOVE_NC_LINK
+-
+ $(eval $(autotools-package))
 -- 
 2.14.1
