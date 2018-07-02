@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:12:03 +0200
-Subject: [Buildroot] [PATCH 29/50] package/busybox: invert dependency with
- iputils
+Date: Mon,  2 Jul 2018 23:12:02 +0200
+Subject: [Buildroot] [PATCH 28/50] package/busybox: invert dependency with
+ kmod
 In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <ee2f5fe229bb9b5fd4db563efa7195949efbb816.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <a51e3a1169f5b6153f5432649f2b6e0f133ee75b.1530565933.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +14,34 @@ To: buildroot@busybox.net
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/busybox/busybox.mk | 1 +
- package/iputils/iputils.mk | 6 ------
- 2 files changed, 1 insertion(+), 6 deletions(-)
+ package/kmod/kmod.mk       | 3 ---
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e16ee61053..3412bcb3d5 100644
+index 4a7afa2516..e16ee61053 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_IPUTILS),iputils) \
- 	$(if $(BR2_PACKAGE_KMOD),kmod) \
++	$(if $(BR2_PACKAGE_KMOD),kmod) \
  	$(if $(BR2_PACKAGE_LESS),less) \
  	$(if $(BR2_PACKAGE_LSOF),lsof) \
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 13e33898d6..713b0e4abf 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -17,12 +17,6 @@ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause, BSD-4-Clause
- # Only includes a license file for BSD
- IPUTILS_LICENSE_FILES = ninfod/COPYING
+ 	$(if $(BR2_PACKAGE_MTD),mtd) \
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index e1149b7b65..7c796ab19f 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -49,9 +49,6 @@ ifeq ($(BR2_PACKAGE_KMOD_TOOLS),y)
+ KMOD_LICENSE := $(KMOD_LICENSE), GPL-2.0+ (tools)
+ KMOD_LICENSE_FILES += COPYING
  
--# Build after busybox so target ends up with this package's full
--# versions of the applications instead of busybox applets.
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--IPUTILS_DEPENDENCIES += busybox
--endif
+-# take precedence over busybox implementation
+-KMOD_DEPENDENCIES += $(if $(BR2_PACKAGE_BUSYBOX),busybox)
 -
- IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no\
- 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
+ # /sbin is really /usr/sbin with merged /usr, so adjust relative symlink
+ ifeq ($(BR2_ROOTFS_MERGED_USR),y)
+ KMOD_BIN_PATH = ../bin/kmod
 -- 
 2.14.1
