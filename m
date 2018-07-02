@@ -1,46 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:11:54 +0200
-Subject: [Buildroot] [PATCH 20/50] package/busybox: invert dependency with
- ntp
+Date: Mon,  2 Jul 2018 23:11:55 +0200
+Subject: [Buildroot] [PATCH 21/50] package/busybox: invert dependency with
+ nnamp
 In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <62dd5a45b20413b834d77f5f5da281914f8ed65a.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <b40a7c127764639247fb674610da56c7023811b9.1530565933.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We only need that dependency whan nmap's ncat is enabled.
+
+For consistency, we add a dependency on nmap, not a suboption of it,
+to have a dependency list in busybox that is only about packages, and
+directly associates the upper-case package variable to the lower-case
+package name, e.g. NMAP <-> nmap.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/busybox/busybox.mk | 1 +
- package/ntp/ntp.mk         | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/nmap/nmap.mk       | 6 ------
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 99baf91a83..7f08d857f8 100644
+index 7f08d857f8..4039d1c9ad 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_NTP),ntp) \
++	$(if $(BR2_PACKAGE_NMAP),nmap) \
+ 	$(if $(BR2_PACKAGE_NTP),ntp) \
  	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
  	$(if $(BR2_PACKAGE_PROCPS_NG),procps-ng) \
- 	$(if $(BR2_PACKAGE_PSMISC),psmisc) \
-diff --git a/package/ntp/ntp.mk b/package/ntp/ntp.mk
-index 77bb33a42f..674c368395 100644
---- a/package/ntp/ntp.mk
-+++ b/package/ntp/ntp.mk
-@@ -7,7 +7,7 @@
- NTP_VERSION_MAJOR = 4.2
- NTP_VERSION = $(NTP_VERSION_MAJOR).8p11
- NTP_SITE = https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-$(NTP_VERSION_MAJOR)
--NTP_DEPENDENCIES = host-pkgconf libevent $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+NTP_DEPENDENCIES = host-pkgconf libevent
- NTP_LICENSE = NTP
- NTP_LICENSE_FILES = COPYRIGHT
- NTP_CONF_ENV = ac_cv_lib_md5_MD5Init=no
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 1c89b5424e..420aec82d7 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -76,12 +76,6 @@ else
+ NMAP_CONF_OPTS += --without-nping
+ endif
+ 
+-# If we are going to install ncat, ensure Busybox gets built/installed
+-# before, so that this package overrides Busybox nc.
+-ifeq ($(BR2_PACKAGE_NMAP_NCAT)$(BR2_PACKAGE_BUSYBOX),yy)
+-NMAP_DEPENDENCIES += busybox
+-endif
+-
+ # Add a symlink to "nc" if none of the competing netcats is selected
+ ifeq ($(BR2_PACKAGE_NMAP_NCAT):$(BR2_PACKAGE_NETCAT)$(BR2_PACKAGE_NETCAT_OPENBSD),y:)
+ define NMAP_INSTALL_NCAT_SYMLINK
 -- 
 2.14.1
