@@ -1,80 +1,212 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon,  2 Jul 2018 10:49:22 -0400
-Subject: [Buildroot] [PATCH] qt5webkit: fix installation of headers
-Message-ID: <20180702144922.15130-1-gael.portay@savoirfairelinux.com>
+From: Leon Anavi <leon.anavi@konsulko.com>
+Date: Mon,  2 Jul 2018 17:54:50 +0300
+Subject: [Buildroot] [PATCH] configs/olimex_a10_olinuxino_lime_defconfig:
+ new board
+Message-ID: <1530543290-24202-1-git-send-email-leon.anavi@konsulko.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since Qt 5.11, the headers are not installed anymore.
+Add a defconfig for the Olimex A10-OLinuXino-LIME, reusing most
+of the A20-OLinuXino-Lime and A13-OLinuXino files.
 
-The issue comes from a update in qt5base [1] which is not backported to
-qt5webkit because it is not officially supported anymore by Qt.
+The configurations for Olimex A10-OLinuXino-LIME feature:
+- U-Boot 2018.03
+- Mainline Linux kernel 4.14.26
 
-Fixes build issues with qt5webkit-examples that requires QtWebKit
-headers:
-
-	In file included from main.cpp:42:
-	window.h:46:10: fatal error: QWebElement: No such file or directory
-	 #include <QWebElement>
-	          ^~~~~~~~~~~~~
-	compilation terminated.
-
-[1]: https://github.com/qt/qtbase/commit/9c4c136bc9f29bab1cc9684dfced55a92a8bbe96
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
 ---
+ board/olimex/a10_olinuxino/boot-mali.cmd    |  5 +++
+ board/olimex/a10_olinuxino/boot.cmd         |  5 +++
+ board/olimex/a10_olinuxino/genimage.cfg     | 17 +++++++++
+ board/olimex/a10_olinuxino/post-build.sh    |  8 ++++
+ board/olimex/a10_olinuxino/readme.txt       | 57 +++++++++++++++++++++++++++++
+ configs/olimex_a10_olinuxino_lime_defconfig | 48 ++++++++++++++++++++++++
+ 6 files changed, 140 insertions(+)
+ create mode 100644 board/olimex/a10_olinuxino/boot-mali.cmd
+ create mode 100644 board/olimex/a10_olinuxino/boot.cmd
+ create mode 100644 board/olimex/a10_olinuxino/genimage.cfg
+ create mode 100755 board/olimex/a10_olinuxino/post-build.sh
+ create mode 100644 board/olimex/a10_olinuxino/readme.txt
+ create mode 100644 configs/olimex_a10_olinuxino_lime_defconfig
 
-Hi,
-
-Unfortunatly, this patch cannot be git formated because the headers are not a
-part of the git repository of qtwebkit.
-
-Regards,
-Ga?l
-
- .../0005-Fix-installation-of-class-headers.patch   | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch
-
-diff --git a/package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch b/package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch
+diff --git a/board/olimex/a10_olinuxino/boot-mali.cmd b/board/olimex/a10_olinuxino/boot-mali.cmd
 new file mode 100644
-index 0000000000..abddfe5d14
+index 0000000..9fa5d65
 --- /dev/null
-+++ b/package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch
-@@ -0,0 +1,31 @@
-+Fix installation of class headers
++++ b/board/olimex/a10_olinuxino/boot-mali.cmd
+@@ -0,0 +1,5 @@
++setenv bootm_boot_mode sec
++setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_no_mali_mem_reserve sunxi_fb_mem_reserve=16 consoleblank=0 ${extra}
++ext4load mmc 0 0x43000000 /boot/script.bin
++ext4load mmc 0 0x48000000 /boot/zImage
++bootz 0x48000000
+diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
+new file mode 100644
+index 0000000..44d9239
+--- /dev/null
++++ b/board/olimex/a10_olinuxino/boot.cmd
+@@ -0,0 +1,5 @@
++setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
++ext4load mmc 0 0x49000000 /boot/${fdtfile}
++ext4load mmc 0 0x46000000 /boot/zImage
++env set fdt_high ffffffff
++bootz 0x46000000 - 0x49000000
+diff --git a/board/olimex/a10_olinuxino/genimage.cfg b/board/olimex/a10_olinuxino/genimage.cfg
+new file mode 100644
+index 0000000..fc2f7f8
+--- /dev/null
++++ b/board/olimex/a10_olinuxino/genimage.cfg
+@@ -0,0 +1,17 @@
++image sdcard.img {
++	hdimage {
++	}
 +
-+Since Qt 5.11 (see commit [1]), the key word HEADER_CLASSES has been
-+removed. It has been replaced by a new variable GENERATED_HEADER_FILES.
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
 +
-+The class headers were not generated, this commit moves them directly to
-+HEADER_FILES.
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
+new file mode 100755
+index 0000000..7a8a427
+--- /dev/null
++++ b/board/olimex/a10_olinuxino/post-build.sh
+@@ -0,0 +1,8 @@
++#!/bin/sh
 +
-+[1]: https://github.com/qt/qtbase/commit/9c4c136bc9f29bab1cc9684dfced55a92a8bbe96
++cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
 +
-+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-+diff -Nurd qtwebkit-opensource-src-5.9.1.orig/include/QtWebKit/headers.pri qtwebkit-opensource-src-5.9.1/include/QtWebKit/headers.pri
-+--- qtwebkit-opensource-src-5.9.1.orig/include/QtWebKit/headers.pri	2018-06-29 09:21:06.395038976 -0400
-++++ qtwebkit-opensource-src-5.9.1/include/QtWebKit/headers.pri	2018-06-29 17:37:52.500020060 -0400
-+@@ -1,5 +1,4 @@
-+-SYNCQT.HEADER_FILES = WebKit/qt/Api/qwebdatabase.h WebKit/qt/Api/qwebelement.h WebKit/qt/Api/qwebhistory.h WebKit/qt/Api/qwebhistoryinterface.h WebKit/qt/Api/qwebkitglobal.h WebKit/qt/Api/qwebkitplatformplugin.h WebKit/qt/Api/qwebpluginfactory.h WebKit/qt/Api/qwebsecurityorigin.h WebKit/qt/Api/qwebsettings.h ../include/QtWebKit/qtwebkitversion.h ../include/QtWebKit/QtWebKit 
-+-SYNCQT.HEADER_CLASSES = ../include/QtWebKit/QWebDatabase ../include/QtWebKit/QWebElement ../include/QtWebKit/QWebElementCollection ../include/QtWebKit/QWebHistoryItem ../include/QtWebKit/QWebHistory ../include/QtWebKit/QWebHistoryInterface ../include/QtWebKit/QWebSelectData ../include/QtWebKit/QWebSelectMethod ../include/QtWebKit/QWebNotificationData ../include/QtWebKit/QWebNotificationPresenter ../include/QtWebKit/QWebHapticFeedbackPlayer ../include/QtWebKit/QWebTouchModifier ../include/QtWebKit/QWebFullScreenVideoHandler ../include/QtWebKit/QWebSpellChecker ../include/QtWebKit/QWebKitPlatformPlugin ../include/QtWebKit/QWebPluginFactory ../include/QtWebKit/QWebSecurityOrigin ../include/QtWebKit/QWebSettings ../include/QtWebKit/QtWebKitVersion 
-++SYNCQT.HEADER_FILES = WebKit/qt/Api/qwebdatabase.h WebKit/qt/Api/qwebelement.h WebKit/qt/Api/qwebhistory.h WebKit/qt/Api/qwebhistoryinterface.h WebKit/qt/Api/qwebkitglobal.h WebKit/qt/Api/qwebkitplatformplugin.h WebKit/qt/Api/qwebpluginfactory.h WebKit/qt/Api/qwebsecurityorigin.h WebKit/qt/Api/qwebsettings.h ../include/QtWebKit/qtwebkitversion.h ../include/QtWebKit/QtWebKit ../include/QtWebKit/QWebDatabase ../include/QtWebKit/QWebElement ../include/QtWebKit/QWebElementCollection ../include/QtWebKit/QWebHistoryItem ../include/QtWebKit/QWebHistory ../include/QtWebKit/QWebHistoryInterface ../include/QtWebKit/QWebSelectData ../include/QtWebKit/QWebSelectMethod ../include/QtWebKit/QWebNotificationData ../include/QtWebKit/QWebNotificationPresenter ../include/QtWebKit/QWebHapticFeedbackPlayer ../include/QtWebKit/QWebTouchModifier ../include/QtWebKit/QWebFullScreenVideoHandler ../include/QtWebKit/QWebSpellChecker ../include/QtWebKit/QWebKitPlatformPlugin ../include/QtWebKit/QWebPluginFactory ../include/QtWebKit/QWebSecurityOrigin ../include/QtWebKit/QWebSettings ../include/QtWebKit/QtWebKitVersion 
-+ SYNCQT.PRIVATE_HEADER_FILES = WebKit/qt/Api/qhttpheader_p.h WebKit/qt/Api/qwebdatabase_p.h WebKit/qt/Api/qwebelement_p.h WebKit/qt/Api/qwebhistory_p.h WebKit/qt/Api/qwebplugindatabase_p.h WebKit/qt/Api/qwebscriptworld.h WebKit/qt/Api/qwebscriptworld_p.h WebKit/qt/Api/qwebsecurityorigin_p.h WebKit2/UIProcess/API/qt/qquicknetworkreply_p.h WebKit2/UIProcess/API/qt/qquicknetworkrequest_p.h WebKit2/UIProcess/API/qt/qquickurlschemedelegate_p.h WebKit2/UIProcess/API/qt/qquickwebpage_p.h WebKit2/UIProcess/API/qt/qquickwebpage_p_p.h WebKit2/UIProcess/API/qt/qquickwebview_p.h WebKit2/UIProcess/API/qt/qquickwebview_p_p.h WebKit2/UIProcess/API/qt/qtwebsecurityorigin_p.h WebKit2/UIProcess/API/qt/qwebchannelwebkittransport_p.h WebKit2/UIProcess/API/qt/qwebdownloaditem_p.h WebKit2/UIProcess/API/qt/qwebdownloaditem_p_p.h WebKit2/UIProcess/API/qt/qwebiconimageprovider_p.h WebKit2/UIProcess/API/qt/qwebkittest_p.h WebKit2/UIProcess/API/qt/qwebloadrequest_p.h WebKit2/UIProcess/API/qt/qwebnavigationhistory_p.h WebKit2/UIProcess/API/qt/qwebnavigationhistory_p_p.h WebKit2/UIProcess/API/qt/qwebnavigationrequest_p.h WebKit2/UIProcess/API/qt/qwebpermissionrequest_p.h WebKit2/UIProcess/API/qt/qwebpreferences_p.h WebKit2/UIProcess/API/qt/qwebpreferences_p_p.h WebKit2/UIProcess/API/qt/raw/qrawwebview_p.h WebKit2/UIProcess/API/qt/raw/qrawwebview_p_p.h WebKit2/UIProcess/API/qt/tests/bytearraytestdata.h WebKit2/UIProcess/API/qt/tests/testwindow.h WebKit2/UIProcess/API/qt/tests/util.h 
-+ SYNCQT.INJECTED_PRIVATE_HEADER_FILES = 
-+ SYNCQT.QPA_HEADER_FILES = 
-+diff -Nurd qtwebkit-opensource-src-5.9.1.orig/include/QtWebKitWidgets/headers.pri qtwebkit-opensource-src-5.9.1/include/QtWebKitWidgets/headers.pri
-+--- qtwebkit-opensource-src-5.9.1.orig/include/QtWebKitWidgets/headers.pri	2018-06-29 09:21:06.391705602 -0400
-++++ qtwebkit-opensource-src-5.9.1/include/QtWebKitWidgets/headers.pri	2018-06-29 17:38:47.660648435 -0400
-+@@ -1,5 +1,4 @@
-+-SYNCQT.HEADER_FILES = WebKit/qt/WidgetApi/qgraphicswebview.h WebKit/qt/WidgetApi/qwebframe.h WebKit/qt/WidgetApi/qwebinspector.h WebKit/qt/WidgetApi/qwebpage.h WebKit/qt/WidgetApi/qwebview.h ../include/QtWebKitWidgets/qtwebkitwidgetsversion.h ../include/QtWebKitWidgets/QtWebKitWidgets 
-+-SYNCQT.HEADER_CLASSES = ../include/QtWebKitWidgets/QGraphicsWebView ../include/QtWebKitWidgets/QWebHitTestResult ../include/QtWebKitWidgets/QWebFrame ../include/QtWebKitWidgets/QWebInspector ../include/QtWebKitWidgets/QWebPage ../include/QtWebKitWidgets/QWebView ../include/QtWebKitWidgets/QtWebKitWidgetsVersion 
-++SYNCQT.HEADER_FILES = WebKit/qt/WidgetApi/qgraphicswebview.h WebKit/qt/WidgetApi/qwebframe.h WebKit/qt/WidgetApi/qwebinspector.h WebKit/qt/WidgetApi/qwebpage.h WebKit/qt/WidgetApi/qwebview.h ../include/QtWebKitWidgets/qtwebkitwidgetsversion.h ../include/QtWebKitWidgets/QtWebKitWidgets ../include/QtWebKitWidgets/QGraphicsWebView ../include/QtWebKitWidgets/QWebHitTestResult ../include/QtWebKitWidgets/QWebFrame ../include/QtWebKitWidgets/QWebInspector ../include/QtWebKitWidgets/QWebPage ../include/QtWebKitWidgets/QWebView ../include/QtWebKitWidgets/QtWebKitWidgetsVersion 
-+ SYNCQT.PRIVATE_HEADER_FILES = WebKit/qt/WidgetApi/qwebframe_p.h WebKit/qt/WidgetApi/qwebinspector_p.h WebKit/qt/WidgetApi/qwebpage_p.h WebKit/qt/WidgetApi/qwebviewaccessible_p.h 
-+ SYNCQT.INJECTED_PRIVATE_HEADER_FILES = 
-+ SYNCQT.QPA_HEADER_FILES = 
++if [ -e $BINARIES_DIR/script.bin ]; then
++	# mali requires a legacy kernel
++	cp $BINARIES_DIR/script.bin $TARGET_DIR/boot/script.bin
++fi
+diff --git a/board/olimex/a10_olinuxino/readme.txt b/board/olimex/a10_olinuxino/readme.txt
+new file mode 100644
+index 0000000..ba4bf69
+--- /dev/null
++++ b/board/olimex/a10_olinuxino/readme.txt
+@@ -0,0 +1,57 @@
++A10-OLinuXino-LIME
++
++Intro
++=====
++
++These are open hardware boards, all based on the Allwinner A10 SoC.
++
++for more details about the boards see the following pages:
++ - https://www.olimex.com/Products/OLinuXino/open-source-hardware
++ - https://www.olimex.com/Products/OLinuXino/A10/A10-OLinuXino-LIME/
++
++The following defconfigs are available:
++ - olimex_a10_olinuxino_lime_defconfig
++   for the A10-OLinuXino-LIME board using mainline kernel
++
++(see http://linux-sunxi.org/Linux_Kernel for more details)
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make <board>_defconfig
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++Result of the build
++-------------------
++
++After building, you should get a tree like this:
++
++    output/images/
++    +-- boot.scr
++    +-- rootfs.ext2
++    +-- rootfs.ext4 -> rootfs.ext2
++    +-- sdcard.img
++    +-- sun4i-a10-olinuxino-lime.dtb (lime, mainline)
++    +-- u-boot.bin
++    +-- u-boot-sunxi-with-spl.bin
++    `-- zImage
++
++
++How to write the SD card
++========================
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to a uSD
++card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Where 'sdX' is the device node of the uSD.
++
++Eject the SD card, insert it in the A10-OLinuXino board, and power it up.
++
+diff --git a/configs/olimex_a10_olinuxino_lime_defconfig b/configs/olimex_a10_olinuxino_lime_defconfig
+new file mode 100644
+index 0000000..0b975b0
+--- /dev/null
++++ b/configs/olimex_a10_olinuxino_lime_defconfig
+@@ -0,0 +1,48 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a8=y
++#BR2_ARM_EABIHF=y
++
++# Linux headers same as kernel, a 4.14 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="a10-olinuxino"
++BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a10_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a10_olinuxino/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.26"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-olinuxino-lime"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A10-OLinuXino-Lime"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a10_olinuxino/boot.cmd"
++
++# Additional tools
++BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
-2.11.0
+2.7.4
