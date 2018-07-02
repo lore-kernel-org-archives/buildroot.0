@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:11:44 +0200
-Subject: [Buildroot] [PATCH 10/50] package/busybox: invert dependency with
- tar
+Date: Mon,  2 Jul 2018 23:11:46 +0200
+Subject: [Buildroot] [PATCH 12/50] package/busybox: invert dependency with
+ systemd
 In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <fcb0a7684968479d8a00dc157c4fe688a491ea49.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <bf058f6f4a5afd4cb83c663e6248c3a6d71ad860.1530565933.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,42 +14,37 @@ To: buildroot@busybox.net
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/busybox/busybox.mk | 1 +
- package/tar/tar.mk         | 7 +------
- 2 files changed, 2 insertions(+), 6 deletions(-)
+ package/systemd/systemd.mk | 6 ------
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 4f43fe1e78..76a195d1f5 100644
+index 2e80c5fa14..94842b35da 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_TAR),tar) \
++	$(if $(BR2_PACKAGE_SYSTEMD),systemd) \
+ 	$(if $(BR2_PACKAGE_SYSVINIT),sysvinit) \
+ 	$(if $(BR2_PACKAGE_TAR),tar) \
  	$(if $(BR2_PACKAGE_TFTPD),tftpd) \
- 	$(if $(BR2_PACKAGE_TRACEROUTE),traceroute) \
- 	$(if $(BR2_PACKAGE_UNZIP),unzip) \
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index 9942e77737..5e15ca7dfd 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -8,16 +8,11 @@ TAR_VERSION = 1.29
- TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
- TAR_SITE = $(BR2_GNU_MIRROR)/tar
- # busybox installs in /bin, so we need tar to install as well in /bin
--# so that it overrides the Busybox symlinks.
-+# so that it we don't end up with two different tar
- TAR_CONF_OPTS = --exec-prefix=/
- TAR_LICENSE = GPL-3.0+
- TAR_LICENSE_FILES = COPYING
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 10e11a9277..127e6dd9d2 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -18,12 +18,6 @@ SYSTEMD_DEPENDENCIES = \
  
--# Prefer full-blown tar over buybox's version
+ SYSTEMD_PROVIDES = udev
+ 
+-# Make sure that systemd will always be built after busybox so that we have
+-# a consistent init setup between two builds
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--TAR_DEPENDENCIES += busybox
+-SYSTEMD_DEPENDENCIES += busybox
 -endif
 -
- ifeq ($(BR2_PACKAGE_ACL),y)
- TAR_DEPENDENCIES += acl
- TAR_CONF_OPTS += --with-posix-acls
+ SYSTEMD_CONF_OPTS += \
+ 	-Drootlibdir='/usr/lib' \
+ 	-Dblkid=true \
 -- 
 2.14.1
