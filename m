@@ -1,33 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Jul 2018 13:53:19 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: contract needs system
-In-Reply-To: <20180701191807.11257-1-fontaine.fabrice@gmail.com>
-References: <20180701191807.11257-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180702135319.1a1a3acc@windsurf.home>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Mon,  2 Jul 2018 08:28:25 -0400
+Subject: [Buildroot] [PATCH] qt5base: add comment for qt5webkit examples
+Message-ID: <20180702122825.14954-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Unlike every other Qt5 modules, the examples of QtWebKit are located in
+the dedicated package qt5webkit-examples. This is confusing.
 
-On Sun,  1 Jul 2018 21:18:07 +0200, Fabrice Fontaine wrote:
-> output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-readelf -d output/staging/usr/lib/libboost_contract.so
-> 
-> Dynamic section at offset 0x19f00 contains 28 entries:
->   Tag        Type                         Name/Value
->  0x00000001 (NEEDED)                     Shared library: [libboost_system.so.1.67.0]
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/boost/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+This commit adds a comment to warn the user that QtWebKit examples are
+available under a dedicated package. The comment shows up in the case
+where the Qt examples is set and qt5webkit-examples is left unset.
 
-Applied to master, thanks.
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+ package/qt5/qt5base/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thomas
+diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
+index b9aba2d389..35f990b773 100644
+--- a/package/qt5/qt5base/Config.in
++++ b/package/qt5/qt5base/Config.in
+@@ -42,6 +42,10 @@ config BR2_PACKAGE_QT5BASE_CONFIG_FILE
+ 	  This option allows to set the path of such a configuration
+ 	  file, which Buildroot will give to Qt at compile time.
+ 
++comment "WebKit examples are available in package qt5webkit-example"
++	depends on BR2_PACKAGE_QT5BASE_EXAMPLES
++	depends on !BR2_PACKAGE_QT5WEBKIT_EXAMPLES
++
+ config BR2_PACKAGE_QT5BASE_EXAMPLES
+ 	bool "Compile and install examples (with code)"
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
