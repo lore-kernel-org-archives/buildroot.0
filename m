@@ -1,39 +1,37 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon,  2 Jul 2018 08:28:25 -0400
-Subject: [Buildroot] [PATCH] qt5base: add comment for qt5webkit examples
-Message-ID: <20180702122825.14954-1-gael.portay@savoirfairelinux.com>
+From: David De Grave (Essensium/Mind) <david.degrave@mind.be>
+Date: Mon,  2 Jul 2018 14:38:20 +0200
+Subject: [Buildroot] [PATCH 1/1] support/dependencies/dependencies.sh:
+Message-ID: <20180702123820.32222-1-david.degrave@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Unlike every other Qt5 modules, the examples of QtWebKit are located in
-the dedicated package qt5webkit-examples. This is confusing.
+Add the i686 package list to install when using pre-built 32 bits binaries with
+a redhat/fedora host distribution (glibc.i686 and zlib.i686).
 
-This commit adds a comment to warn the user that QtWebKit examples are
-available under a dedicated package. The comment shows up in the case
-where the Qt examples is set and qt5webkit-examples is left unset.
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
 ---
- package/qt5/qt5base/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+Remark: The 32 bits libraries are already included in the gcc package contrary
+        to debian where additionnal packages are needed. So it's not needed to
+        do something similar for BR2_HOSTARCH_NEEDS_IA32_COMPILER.
+---
+ support/dependencies/dependencies.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index b9aba2d389..35f990b773 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -42,6 +42,10 @@ config BR2_PACKAGE_QT5BASE_CONFIG_FILE
- 	  This option allows to set the path of such a configuration
- 	  file, which Buildroot will give to Qt at compile time.
- 
-+comment "WebKit examples are available in package qt5webkit-example"
-+	depends on BR2_PACKAGE_QT5BASE_EXAMPLES
-+	depends on !BR2_PACKAGE_QT5WEBKIT_EXAMPLES
-+
- config BR2_PACKAGE_QT5BASE_EXAMPLES
- 	bool "Compile and install examples (with code)"
- 	select BR2_PACKAGE_QT5BASE_NETWORK
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index e570a9ee1a..58c34d880f 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -222,6 +222,8 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+ 		echo "If you're running a Debian/Ubuntu distribution, install the libc6-i386,"
+ 		echo "lib32stdc++6, and lib32z1 packages (or alternatively libc6:i386,"
+ 		echo "libstdc++6:i386, and zlib1g:i386)."
++		echo "If you're running a RedHat/Fedora distribution, install the glibc.i686 and"
++		echo "zlib.i686 packages."
+ 		echo "For other distributions, refer to the documentation on how to install the 32 bits"
+ 		echo "compatibility libraries."
+ 		exit 1
 -- 
-2.11.0
+2.13.6
