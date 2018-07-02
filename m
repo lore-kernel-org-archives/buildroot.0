@@ -1,11 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 2 Jul 2018 16:28:26 -0500
-Subject: [Buildroot] [PATCH 01/50] package/busybox: backport upstream
- patch to fix install-noclobber
-In-Reply-To: <2222ddf7fb0c17011ad26da66ff6fa5664f66240.1530565933.git.yann.morin.1998@free.fr>
+Date: Mon, 2 Jul 2018 16:28:51 -0500
+Subject: [Buildroot] [PATCH 50/50] support/scripts: don't draw most of
+ busybox' dependencies
+In-Reply-To: <d5b2e0eebf27fe994337e2c966f8ecf63849f3e1.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
- <2222ddf7fb0c17011ad26da66ff6fa5664f66240.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <CANQCQpaHyrRo1Rjc7icJgEkAKRkaVPKUVyLk8EHbFTg1qU5sSQ@mail.gmail.com>
+ <d5b2e0eebf27fe994337e2c966f8ecf63849f3e1.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <CANQCQpaMcRd4i1of-75oqkqgAQJ8wJ339F8Hnh9JeBXYF-pd-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,18 @@ To: buildroot@busybox.net
 
 Yann,
 
-On Mon, Jul 2, 2018 at 4:11 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> Currently, we shoehorn the noclobber option with a sed call, but
-> upstream has applied a set of 4 patches that adds support to do
-> an install without clobbering.
+On Mon, Jul 2, 2018 at 4:12 PM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Since most dependencies of busybox' are there to guarantee that busybox'
+> does not install applets that are already provided by other packages,
+> they are not really functional dependencies, and mostly clutter the
+> dependency graph.
 >
-> Backport those patches, and use the new install rule.
+> Only the dependencies on libraries are interested, so that is all we
+> keep.
 >
-> Note that the 3rd and 6th patches do not seem like they would be usefull
-> to backport, but a user may well have a custom config that enables shell
-> wrappers, or installs no wrapper (to install then at runtime), so it
-> still makes sense to backport them (especially since the 3rd was part of
-> the noclobber series upstream, and the 6th, a fix of it).
+> Even though that function is only called with pkg set to 'busybox', we
+> still pass it as an argument, for symetry with the other functions that
+> removes the dependencies of a package.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
