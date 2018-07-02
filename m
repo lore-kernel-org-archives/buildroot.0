@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:12:20 +0200
-Subject: [Buildroot] [PATCH 46/50] package/busybox: invert dependency with
- binutils
+Date: Mon,  2 Jul 2018 23:12:09 +0200
+Subject: [Buildroot] [PATCH 35/50] package/busybox: invert dependency with
+ gzip
 In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <ebee4ae0dcb4ba654b7a4254a993293cfb94e02e.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <fde5ab16c9aca787cf4bde212215b5a0d70b8d4e.1530565933.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/binutils/binutils.mk | 5 -----
- package/busybox/busybox.mk   | 1 +
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ package/busybox/busybox.mk | 1 +
+ package/gzip/gzip.mk       | 2 --
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index cb6022f7fa..090065a3e4 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -72,11 +72,6 @@ ifeq ($(BR2_ARM_CPU_ARMV7M)$(BR2_OPTIMIZE_S),yy)
- BINUTILS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O2"
- endif
- 
--# Install binutils after busybox to prefer full-blown utilities
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--BINUTILS_DEPENDENCIES += busybox
--endif
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- BINUTILS_DEPENDENCIES += zlib
- endif
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 0ba8d792fb..d0a49c7495 100644
+index 3c8c251015..5d28d9ee46 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_BINUTILS),binutils) \
- 	$(if $(BR2_PACKAGE_COREUTILS),coreutils) \
- 	$(if $(BR2_PACKAGE_CPIO),cpio) \
- 	$(if $(BR2_PACKAGE_DCRON),dcron) \
++	$(if $(BR2_PACKAGE_GZIP),gzip) \
+ 	$(if $(BR2_PACKAGE_I2C_TOOLS),i2c-tools) \
+ 	$(if $(BR2_PACKAGE_IFENSLAVE),ifenslave) \
+ 	$(if $(BR2_PACKAGE_IFPLUGD),ifplugd) \
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index 26fc8ec347..d69215a850 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -9,8 +9,6 @@ GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
+ GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
+ # Some other tools expect it to be in /bin
+ GZIP_CONF_OPTS = --exec-prefix=/
+-# Prefer full gzip over potentially lightweight/slower from busybox
+-GZIP_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ GZIP_LICENSE = GPL-3.0+
+ GZIP_LICENSE_FILES = COPYING
+ GZIP_CONF_ENV += gl_cv_func_fflush_stdin=yes
 -- 
 2.14.1
