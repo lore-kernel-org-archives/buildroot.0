@@ -1,55 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Jul 2018 22:26:27 +0200
-Subject: [Buildroot] [git commit] luasec: bump to version 0.7
-Message-ID: <20180702202302.EBCA783DF1@busybox.osuosl.org>
+Date: Mon, 2 Jul 2018 22:29:43 +0200
+Subject: [Buildroot] [PATCH]
+ configs/olimex_a10_olinuxino_lime_defconfig: new board
+In-Reply-To: <1530543290-24202-1-git-send-email-leon.anavi@konsulko.com>
+References: <1530543290-24202-1-git-send-email-leon.anavi@konsulko.com>
+Message-ID: <20180702222943.44eebe81@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e62da7f88e9eb75d4afb1092d15af3d6c539ff7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/luasec/Config.in   | 2 +-
- package/luasec/luasec.hash | 2 +-
- package/luasec/luasec.mk   | 5 +++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+On Mon,  2 Jul 2018 17:54:50 +0300, Leon Anavi wrote:
+> Add a defconfig for the Olimex A10-OLinuXino-LIME, reusing most
+> of the A20-OLinuXino-Lime and A13-OLinuXino files.
+> 
+> The configurations for Olimex A10-OLinuXino-LIME feature:
+> - U-Boot 2018.03
+> - Mainline Linux kernel 4.14.26
+> 
+> Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
 
-diff --git a/package/luasec/Config.in b/package/luasec/Config.in
-index 9391cd9d37..d7900a081f 100644
---- a/package/luasec/Config.in
-+++ b/package/luasec/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_LUASEC
- 	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
- 	  communication.
- 
--	  http://www.inf.puc-rio.br/~brunoos/luasec/
-+	  https://github.com/brunoos/luasec/wiki
-diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
-index 9d721ed485..1fdbe7d7e5 100644
---- a/package/luasec/luasec.hash
-+++ b/package/luasec/luasec.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	1d04e2f70bc055348dda3cc3566d27d8408094bc944aa5c6a4ae18bffe5c0007  luasec-0.6-1.src.rock
-+sha256	383e183ba712f00b2fcbf60187177432ccde724a23ac6186075ceae620cf0b0a  luasec-0.7-1.src.rock
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index 28c4b2c64b..7ae7290937 100644
---- a/package/luasec/luasec.mk
-+++ b/package/luasec/luasec.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--LUASEC_VERSION = 0.6-1
--LUASEC_SUBDIR = luasec
-+LUASEC_VERSION_UPSTREAM = 0.7
-+LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-1
-+LUASEC_SUBDIR = luasec-luasec-$(LUASEC_VERSION_UPSTREAM)
- LUASEC_LICENSE = MIT
- LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
- LUASEC_DEPENDENCIES = openssl
+Thanks for this contribution!
+
+>  board/olimex/a10_olinuxino/boot-mali.cmd    |  5 +++
+>  board/olimex/a10_olinuxino/boot.cmd         |  5 +++
+>  board/olimex/a10_olinuxino/genimage.cfg     | 17 +++++++++
+>  board/olimex/a10_olinuxino/post-build.sh    |  8 ++++
+>  board/olimex/a10_olinuxino/readme.txt       | 57 +++++++++++++++++++++++++++++
+>  configs/olimex_a10_olinuxino_lime_defconfig | 48 ++++++++++++++++++++++++
+
+You should add an entry in the DEVELOPERS file for this board (both for
+the defconfig and the stuff in board/).
+
+> diff --git a/board/olimex/a10_olinuxino/boot-mali.cmd b/board/olimex/a10_olinuxino/boot-mali.cmd
+> new file mode 100644
+> index 0000000..9fa5d65
+> --- /dev/null
+> +++ b/board/olimex/a10_olinuxino/boot-mali.cmd
+> @@ -0,0 +1,5 @@
+> +setenv bootm_boot_mode sec
+> +setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_no_mali_mem_reserve sunxi_fb_mem_reserve=16 consoleblank=0 ${extra}
+> +ext4load mmc 0 0x43000000 /boot/script.bin
+> +ext4load mmc 0 0x48000000 /boot/zImage
+> +bootz 0x48000000
+
+Where is this file being used ?
+
+> diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
+> new file mode 100755
+> index 0000000..7a8a427
+> --- /dev/null
+> +++ b/board/olimex/a10_olinuxino/post-build.sh
+> @@ -0,0 +1,8 @@
+> +#!/bin/sh
+> +
+> +cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+> +
+> +if [ -e $BINARIES_DIR/script.bin ]; then
+> +	# mali requires a legacy kernel
+> +	cp $BINARIES_DIR/script.bin $TARGET_DIR/boot/script.bin
+
+It's a bit mysterious what is happening here. Where does this
+script.bin file comes from ?
+
+Besides those questions, looks good to me.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
