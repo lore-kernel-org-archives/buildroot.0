@@ -1,46 +1,52 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:12:21 +0200
-Subject: [Buildroot] [PATCH 47/50] package/busybox: invert dependency with bc
-In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
-References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <791cd8203be317f7a64d899963c5953f07745877.1530565933.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Jul 2018 23:10:06 +0200
+Subject: [Buildroot] [git commit] package/vim: bump version to v8.1.0133
+Message-ID: <20180702211122.1D19584019@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/bc/bc.mk           | 5 -----
- package/busybox/busybox.mk | 1 +
- 2 files changed, 1 insertion(+), 5 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=8e615852790a2235dfad3b11ad82aafe0eb0f3ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/bc/bc.mk b/package/bc/bc.mk
-index a6446cef66..ee0e43848b 100644
---- a/package/bc/bc.mk
-+++ b/package/bc/bc.mk
-@@ -11,9 +11,4 @@ BC_DEPENDENCIES = host-flex
- BC_LICENSE = GPL-2.0+, LGPL-2.1+
- BC_LICENSE_FILES = COPYING COPYING.LIB
+A few new features have been add and a lot of bugs have been fixed in
+minor release Vim 8.1.
+
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vim/vim.hash | 2 +-
+ package/vim/vim.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/vim/vim.hash b/package/vim/vim.hash
+index 28c6b97e31..bfbd55d1a5 100644
+--- a/package/vim/vim.hash
++++ b/package/vim/vim.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 6fbe0ec1228f951ba598b48ac8033f41ca4934cc34689a6008685e7c26477ae2  vim-v8.0.0329.tar.gz
++sha256 a6dab137949097fbe0b67aafedf4c24a3b0d9c41716db35f5beb4834924d7b00  vim-v8.1.0133.tar.gz
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index 5ee889882a..0c02ead7b5 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Build after busybox so target ends up with bc's "dc" version
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--BC_DEPENDENCIES += busybox
--endif
--
- $(eval $(autotools-package))
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index d0a49c7495..2ff6c94e85 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
- 
- # Packages that provide commands that may also be busybox applets:
- BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_BC),bc) \
- 	$(if $(BR2_PACKAGE_BINUTILS),binutils) \
- 	$(if $(BR2_PACKAGE_COREUTILS),coreutils) \
- 	$(if $(BR2_PACKAGE_CPIO),cpio) \
--- 
-2.14.1
+-VIM_VERSION = v8.0.0329
++VIM_VERSION = v8.1.0133
+ VIM_SITE = $(call github,vim,vim,$(VIM_VERSION))
+ # Win over busybox vi since vim is more feature-rich
+ VIM_DEPENDENCIES = \
+@@ -14,6 +14,7 @@ VIM_SUBDIR = src
+ VIM_CONF_ENV = \
+ 	vim_cv_toupper_broken=no \
+ 	vim_cv_terminfo=yes \
++	vim_cv_tgetent=zero \
+ 	vim_cv_tty_group=world \
+ 	vim_cv_tty_mode=0620 \
+ 	vim_cv_getcwd_broken=no \
