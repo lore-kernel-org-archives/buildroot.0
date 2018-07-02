@@ -1,63 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:11:57 +0200
-Subject: [Buildroot] [PATCH 23/50] package/busybox: invert dependency with
- netcat
+Date: Mon,  2 Jul 2018 23:11:51 +0200
+Subject: [Buildroot] [PATCH 17/50] package/busybox: invert dependency with
+ psmisc
 In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <fffbc04ca4ff8a05e29905e36f812ea43ee86bc6.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <f3d0b3e8ac1187b4b2d8592c1f1fef81f6e89fa2.1530565933.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since netcat would be installed before busybox, we don't need to remove
-a pre-installed 'nc' anymore.
-
-If another netcat implementation (e.g. netcat-openbsd) is also enabled,
-there is no way to tell which would win in the end, especially when we
-add TLPB, in which case that will be forbidden.
-
-So, we don't need to remove anything anymore.
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk |  1 +
- package/netcat/netcat.mk   | 13 -------------
- 2 files changed, 1 insertion(+), 13 deletions(-)
+ package/busybox/busybox.mk | 1 +
+ package/psmisc/psmisc.mk   | 5 -----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 47952d42e4..8523271ceb 100644
+index 3a19500ad3..d861e3c1ef 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_NETCAT),netcat) \
- 	$(if $(BR2_PACKAGE_NETCAT_OPENSBSD),netcat-openbsd) \
- 	$(if $(BR2_PACKAGE_NMAP),nmap) \
- 	$(if $(BR2_PACKAGE_NTP),ntp) \
-diff --git a/package/netcat/netcat.mk b/package/netcat/netcat.mk
-index d8b3c930b9..eb7ddcac27 100644
---- a/package/netcat/netcat.mk
-+++ b/package/netcat/netcat.mk
-@@ -9,17 +9,4 @@ NETCAT_SITE = http://downloads.sourceforge.net/project/netcat/netcat/$(NETCAT_VE
- NETCAT_LICENSE = GPL-2.0+
- NETCAT_LICENSE_FILES = COPYING
++	$(if $(BR2_PACKAGE_PSMISC),psmisc) \
+ 	$(if $(BR2_PACKAGE_RSYSLOGD),rsyslogd) \
+ 	$(if $(BR2_PACKAGE_START_STOP_DAEMON),start-stop-daemon) \
+ 	$(if $(BR2_PACKAGE_SYSKLOGD),sysklogd) \
+diff --git a/package/psmisc/psmisc.mk b/package/psmisc/psmisc.mk
+index 3d9a80462d..3916e34b08 100644
+--- a/package/psmisc/psmisc.mk
++++ b/package/psmisc/psmisc.mk
+@@ -23,9 +23,4 @@ ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
+ PSMISC_CONF_OPTS = --disable-harden-flags
+ endif
  
--# Ensure Busybox gets built/installed before, so that this package
--# overrides Busybox nc.
+-# build after busybox, we prefer fat versions while we're at it
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--NETCAT_DEPENDENCIES += busybox
+-PSMISC_DEPENDENCIES += busybox
 -endif
--
--# Netcat doesn't overwrite a pre-existing 'nc' (e.g. from busybox) so
--# force-remove it.
--define NETCAT_RMOVE_NC_LINK
--	rm -f $(TARGET_DIR)/usr/bin/nc
--endef
--NETCAT_PRE_INSTALL_TARGET_HOOKS += NETCAT_RMOVE_NC_LINK
 -
  $(eval $(autotools-package))
 -- 
