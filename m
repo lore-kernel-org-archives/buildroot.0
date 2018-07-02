@@ -1,53 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Jul 2018 23:05:32 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5charts: fix license
-In-Reply-To: <20180702092137.25394-1-sebastien.szymanski@armadeus.com>
-References: <20180702092137.25394-1-sebastien.szymanski@armadeus.com>
-Message-ID: <20180702230532.40820286@windsurf.home>
+Date: Mon, 2 Jul 2018 23:06:58 +0200
+Subject: [Buildroot] [git commit] btrfs-progs: adjust install-static patch
+ to install headers under $(prefix)/include/btrfs
+Message-ID: <20180702210333.25D7A84011@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=83b40e1ea2e3ce046d7db442b01c3bfe52886ce8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for this fix!
+Fixes:
+http://autobuild.buildroot.net/results/15cc6523a42bf66508b2b37fd1fcb74625561ec2/
 
-On Mon,  2 Jul 2018 11:21:37 +0200, S?bastien Szymanski wrote:
-> qt5charts-2.1.3 (build with Qt 5.6) doesn't contain any license files so
-> remove LICENSE.GPL3 from QT5CHARTS_LICENSE_FILES when building Qt 5.6.
-> 
-> Fixes:
->  http://autobuild.buildroot.net/results/c95d34129902a0511b8d64c9d50f1ffa293b33fd
->  http://autobuild.buildroot.net/results/b9c14ce7c2fdaa412eb6416ae12a0376aaf05770
->  http://autobuild.buildroot.net/results/1bde69c515d9140ef0f9a5571475c2850c7b8dee
+btrfs-progs 'make install' installs headers under $(prefix)/include/btrfs,
+but our patch to also install headers for 'install-static' installed
+directly into $(prefix)/include, confusing other packages as btrfs-progs
+headers have very common names such as version, sizes.h, list.h, ioctl.h, ..
 
-Please leave a blank line before the Signed-off-by.
+Fix it by adjusting the patch to also install under $(prefix)/include/btrfs.
 
-> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Makefile-install-static-library-and-headers-in-insta.patch   | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I've applied to master, however...
-
-> ---
->  package/qt5/qt5charts/qt5charts.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/qt5/qt5charts/qt5charts.mk b/package/qt5/qt5charts/qt5charts.mk
-> index 71d0e54027..9e2e6de881 100644
-> --- a/package/qt5/qt5charts/qt5charts.mk
-> +++ b/package/qt5/qt5charts/qt5charts.mk
-> @@ -16,7 +16,9 @@ QT5CHARTS_DEPENDENCIES = qt5base
->  QT5CHARTS_INSTALL_STAGING = YES
->  
->  QT5CHARTS_LICENSE = GPL-3.0
-
-... are we sure the license is GPL-3.0 for both versions of qt5charts ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/btrfs-progs/0001-Makefile-install-static-library-and-headers-in-insta.patch b/package/btrfs-progs/0001-Makefile-install-static-library-and-headers-in-insta.patch
+index 1cdedfd984..de2db2f16f 100644
+--- a/package/btrfs-progs/0001-Makefile-install-static-library-and-headers-in-insta.patch
++++ b/package/btrfs-progs/0001-Makefile-install-static-library-and-headers-in-insta.patch
+@@ -41,8 +41,8 @@ index 67fbc48..d9e34be 100644
+  	$(LN_S) -f btrfs.static $(DESTDIR)$(bindir)/btrfsck.static
+ +	$(INSTALL) -m755 -d $(DESTDIR)$(libdir)
+ +	$(INSTALL) $(libs_static) $(DESTDIR)$(libdir)
+-+	$(INSTALL) -m755 -d $(DESTDIR)$(incdir)
+-+	$(INSTALL) -m644 $(libbtrfs_headers) $(DESTDIR)$(incdir)
+++	$(INSTALL) -m755 -d $(DESTDIR)$(incdir)/btrfs
+++	$(INSTALL) -m644 $(libbtrfs_headers) $(DESTDIR)$(incdir)/btrfs
+  
+  $(INSTALLDIRS):
+  	@echo "Making install in $(patsubst install-%,%,$@)"
