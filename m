@@ -1,33 +1,37 @@
-From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
-Date: Mon, 2 Jul 2018 10:43:25 +0200
-Subject: [Buildroot] Building the Rockchip libv4l plugin
-In-Reply-To: <20180702082211.bwi2ynnjnfzx3mhm@tarshish>
-References: <20180702082211.bwi2ynnjnfzx3mhm@tarshish>
-Message-ID: <10c8b33a-b72c-e13b-af1f-809ced49dcf8@green-communications.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Jul 2018 09:02:49 +0200
+Subject: [Buildroot] [git commit] boost: random needs system
+Message-ID: <20180702114540.BFB4980121@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 02/07/2018 10:22, Baruch Siach wrote:
-> Hi Buildroot list,
-> 
-> I'm trying to build the Rockchip libv4l2 plugin in Buildroot. The source is at
-> 
->   https://chromium.googlesource.com/chromiumos/third_party/libv4lplugins/+/master/libv4l-rockchip_v2/
-> 
-> As upstream indicated[1], the code is meant to build as part of libv4l, not as 
-> a standalone library. ChromiumOS sees to copy the code into the libv4l source 
-> tree, and modify the relevant build configuration files[2].
-> 
-> What would be the best way to do that in Buildroot? A symlink to the plugin 
-> source tree? Copy of the code to libv4l?
-> 
-> Is there any other package doing something similar?
+commit: https://git.buildroot.net/buildroot/commit/?id=a315d2c7fe5d6bfa186a5dd7c521f55905177ca1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-nginx comes to mind, the nginx-dav-ext/nginx-naxsi/nginx-upload packages are
-built by the nginx package.
+output/host/usr/bin/m68k-linux-readelf -d output/staging/usr/lib/libboost_random.so
 
-However, the build system already supports this and the nginx module source does
-not need to be moved, so it's not exactly the same thing.
+Dynamic section at offset 0x5f20 contains 24 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libboost_system.so.1.67.0]
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index c0da58475e..f8eb9422f9 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -252,6 +252,7 @@ config BR2_PACKAGE_BOOST_PYTHON
+ 
+ config BR2_PACKAGE_BOOST_RANDOM
+ 	bool "boost-random"
++	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  A complete system for random number generation.
+ 
