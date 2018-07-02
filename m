@@ -1,77 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Jul 2018 22:29:43 +0200
-Subject: [Buildroot] [PATCH]
- configs/olimex_a10_olinuxino_lime_defconfig: new board
-In-Reply-To: <1530543290-24202-1-git-send-email-leon.anavi@konsulko.com>
-References: <1530543290-24202-1-git-send-email-leon.anavi@konsulko.com>
-Message-ID: <20180702222943.44eebe81@windsurf.home>
+Date: Mon, 2 Jul 2018 22:32:58 +0200
+Subject: [Buildroot] [git commit] qt5webkit: fix installation of headers
+Message-ID: <20180702202935.48DB5811F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bfb6aef1eaf222a3a673746b7f6c78989900aa01
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  2 Jul 2018 17:54:50 +0300, Leon Anavi wrote:
-> Add a defconfig for the Olimex A10-OLinuXino-LIME, reusing most
-> of the A20-OLinuXino-Lime and A13-OLinuXino files.
-> 
-> The configurations for Olimex A10-OLinuXino-LIME feature:
-> - U-Boot 2018.03
-> - Mainline Linux kernel 4.14.26
-> 
-> Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+Since Qt 5.11, the headers are not installed anymore.
 
-Thanks for this contribution!
+The issue comes from a update in qt5base [1] which is not backported to
+qt5webkit because it is not officially supported anymore by Qt.
 
->  board/olimex/a10_olinuxino/boot-mali.cmd    |  5 +++
->  board/olimex/a10_olinuxino/boot.cmd         |  5 +++
->  board/olimex/a10_olinuxino/genimage.cfg     | 17 +++++++++
->  board/olimex/a10_olinuxino/post-build.sh    |  8 ++++
->  board/olimex/a10_olinuxino/readme.txt       | 57 +++++++++++++++++++++++++++++
->  configs/olimex_a10_olinuxino_lime_defconfig | 48 ++++++++++++++++++++++++
+Fixes build issues with qt5webkit-examples that requires QtWebKit
+headers:
 
-You should add an entry in the DEVELOPERS file for this board (both for
-the defconfig and the stuff in board/).
+	In file included from main.cpp:42:
+	window.h:46:10: fatal error: QWebElement: No such file or directory
+	 #include <QWebElement>
+	          ^~~~~~~~~~~~~
+	compilation terminated.
 
-> diff --git a/board/olimex/a10_olinuxino/boot-mali.cmd b/board/olimex/a10_olinuxino/boot-mali.cmd
-> new file mode 100644
-> index 0000000..9fa5d65
-> --- /dev/null
-> +++ b/board/olimex/a10_olinuxino/boot-mali.cmd
-> @@ -0,0 +1,5 @@
-> +setenv bootm_boot_mode sec
-> +setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_no_mali_mem_reserve sunxi_fb_mem_reserve=16 consoleblank=0 ${extra}
-> +ext4load mmc 0 0x43000000 /boot/script.bin
-> +ext4load mmc 0 0x48000000 /boot/zImage
-> +bootz 0x48000000
+[1]: https://github.com/qt/qtbase/commit/9c4c136bc9f29bab1cc9684dfced55a92a8bbe96
 
-Where is this file being used ?
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0005-Fix-installation-of-class-headers.patch   | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-> diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
-> new file mode 100755
-> index 0000000..7a8a427
-> --- /dev/null
-> +++ b/board/olimex/a10_olinuxino/post-build.sh
-> @@ -0,0 +1,8 @@
-> +#!/bin/sh
-> +
-> +cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-> +
-> +if [ -e $BINARIES_DIR/script.bin ]; then
-> +	# mali requires a legacy kernel
-> +	cp $BINARIES_DIR/script.bin $TARGET_DIR/boot/script.bin
-
-It's a bit mysterious what is happening here. Where does this
-script.bin file comes from ?
-
-Besides those questions, looks good to me.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch b/package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch
+new file mode 100644
+index 0000000000..abddfe5d14
+--- /dev/null
++++ b/package/qt5/qt5webkit/5.9.1/0005-Fix-installation-of-class-headers.patch
+@@ -0,0 +1,31 @@
++Fix installation of class headers
++
++Since Qt 5.11 (see commit [1]), the key word HEADER_CLASSES has been
++removed. It has been replaced by a new variable GENERATED_HEADER_FILES.
++
++The class headers were not generated, this commit moves them directly to
++HEADER_FILES.
++
++[1]: https://github.com/qt/qtbase/commit/9c4c136bc9f29bab1cc9684dfced55a92a8bbe96
++
++Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
++diff -Nurd qtwebkit-opensource-src-5.9.1.orig/include/QtWebKit/headers.pri qtwebkit-opensource-src-5.9.1/include/QtWebKit/headers.pri
++--- qtwebkit-opensource-src-5.9.1.orig/include/QtWebKit/headers.pri	2018-06-29 09:21:06.395038976 -0400
+++++ qtwebkit-opensource-src-5.9.1/include/QtWebKit/headers.pri	2018-06-29 17:37:52.500020060 -0400
++@@ -1,5 +1,4 @@
++-SYNCQT.HEADER_FILES = WebKit/qt/Api/qwebdatabase.h WebKit/qt/Api/qwebelement.h WebKit/qt/Api/qwebhistory.h WebKit/qt/Api/qwebhistoryinterface.h WebKit/qt/Api/qwebkitglobal.h WebKit/qt/Api/qwebkitplatformplugin.h WebKit/qt/Api/qwebpluginfactory.h WebKit/qt/Api/qwebsecurityorigin.h WebKit/qt/Api/qwebsettings.h ../include/QtWebKit/qtwebkitversion.h ../include/QtWebKit/QtWebKit 
++-SYNCQT.HEADER_CLASSES = ../include/QtWebKit/QWebDatabase ../include/QtWebKit/QWebElement ../include/QtWebKit/QWebElementCollection ../include/QtWebKit/QWebHistoryItem ../include/QtWebKit/QWebHistory ../include/QtWebKit/QWebHistoryInterface ../include/QtWebKit/QWebSelectData ../include/QtWebKit/QWebSelectMethod ../include/QtWebKit/QWebNotificationData ../include/QtWebKit/QWebNotificationPresenter ../include/QtWebKit/QWebHapticFeedbackPlayer ../include/QtWebKit/QWebTouchModifier ../include/QtWebKit/QWebFullScreenVideoHandler ../include/QtWebKit/QWebSpellChecker ../include/QtWebKit/QWebKitPlatformPlugin ../include/QtWebKit/QWebPluginFactory ../include/QtWebKit/QWebSecurityOrigin ../include/QtWebKit/QWebSettings ../include/QtWebKit/QtWebKitVersion 
+++SYNCQT.HEADER_FILES = WebKit/qt/Api/qwebdatabase.h WebKit/qt/Api/qwebelement.h WebKit/qt/Api/qwebhistory.h WebKit/qt/Api/qwebhistoryinterface.h WebKit/qt/Api/qwebkitglobal.h WebKit/qt/Api/qwebkitplatformplugin.h WebKit/qt/Api/qwebpluginfactory.h WebKit/qt/Api/qwebsecurityorigin.h WebKit/qt/Api/qwebsettings.h ../include/QtWebKit/qtwebkitversion.h ../include/QtWebKit/QtWebKit ../include/QtWebKit/QWebDatabase ../include/QtWebKit/QWebElement ../include/QtWebKit/QWebElementCollection ../include/QtWebKit/QWebHistoryItem ../include/QtWebKit/QWebHistory ../include/QtWebKit/QWebHistoryInterface ../include/QtWebKit/QWebSelectData ../include/QtWebKit/QWebSelectMethod ../include/QtWebKit/QWebNotificationData ../include/QtWebKit/QWebNotificationPresenter ../include/QtWebKit/QWebHapticFeedbackPlayer ../include/QtWebKit/QWebTouchModifier ../include/QtWebKit/QWebFullScreenVideoHandler ../include/QtWebKit/QWebSpellChecker ../include/QtWebKit/QWebKitPlatformPlugin ../include/QtWebKit/QWebPlu
+ ginFacto
+ ry ../include/QtWebKit/QWebSecurityOrigin ../include/QtWebKit/QWebSettings ../include/QtWebKit/QtWebKitVersion 
++ SYNCQT.PRIVATE_HEADER_FILES = WebKit/qt/Api/qhttpheader_p.h WebKit/qt/Api/qwebdatabase_p.h WebKit/qt/Api/qwebelement_p.h WebKit/qt/Api/qwebhistory_p.h WebKit/qt/Api/qwebplugindatabase_p.h WebKit/qt/Api/qwebscriptworld.h WebKit/qt/Api/qwebscriptworld_p.h WebKit/qt/Api/qwebsecurityorigin_p.h WebKit2/UIProcess/API/qt/qquicknetworkreply_p.h WebKit2/UIProcess/API/qt/qquicknetworkrequest_p.h WebKit2/UIProcess/API/qt/qquickurlschemedelegate_p.h WebKit2/UIProcess/API/qt/qquickwebpage_p.h WebKit2/UIProcess/API/qt/qquickwebpage_p_p.h WebKit2/UIProcess/API/qt/qquickwebview_p.h WebKit2/UIProcess/API/qt/qquickwebview_p_p.h WebKit2/UIProcess/API/qt/qtwebsecurityorigin_p.h WebKit2/UIProcess/API/qt/qwebchannelwebkittransport_p.h WebKit2/UIProcess/API/qt/qwebdownloaditem_p.h WebKit2/UIProcess/API/qt/qwebdownloaditem_p_p.h WebKit2/UIProcess/API/qt/qwebiconimageprovider_p.h WebKit2/UIProcess/API/qt/qwebkittest_p.h WebKit2/UIProcess/API/qt/qwebloadrequest_p.h WebKit2/UIProcess/API/qt/qwebnavig
+ ationhis
+ tory_p.h WebKit2/UIProcess/API/qt/qwebnavigationhistory_p_p.h WebKit2/UIProcess/API/qt/qwebnavigationrequest_p.h WebKit2/UIProcess/API/qt/qwebpermissionrequest_p.h WebKit2/UIProcess/API/qt/qwebpreferences_p.h WebKit2/UIProcess/API/qt/qwebpreferences_p_p.h WebKit2/UIProcess/API/qt/raw/qrawwebview_p.h WebKit2/UIProcess/API/qt/raw/qrawwebview_p_p.h WebKit2/UIProcess/API/qt/tests/bytearraytestdata.h WebKit2/UIProcess/API/qt/tests/testwindow.h WebKit2/UIProcess/API/qt/tests/util.h 
++ SYNCQT.INJECTED_PRIVATE_HEADER_FILES = 
++ SYNCQT.QPA_HEADER_FILES = 
++diff -Nurd qtwebkit-opensource-src-5.9.1.orig/include/QtWebKitWidgets/headers.pri qtwebkit-opensource-src-5.9.1/include/QtWebKitWidgets/headers.pri
++--- qtwebkit-opensource-src-5.9.1.orig/include/QtWebKitWidgets/headers.pri	2018-06-29 09:21:06.391705602 -0400
+++++ qtwebkit-opensource-src-5.9.1/include/QtWebKitWidgets/headers.pri	2018-06-29 17:38:47.660648435 -0400
++@@ -1,5 +1,4 @@
++-SYNCQT.HEADER_FILES = WebKit/qt/WidgetApi/qgraphicswebview.h WebKit/qt/WidgetApi/qwebframe.h WebKit/qt/WidgetApi/qwebinspector.h WebKit/qt/WidgetApi/qwebpage.h WebKit/qt/WidgetApi/qwebview.h ../include/QtWebKitWidgets/qtwebkitwidgetsversion.h ../include/QtWebKitWidgets/QtWebKitWidgets 
++-SYNCQT.HEADER_CLASSES = ../include/QtWebKitWidgets/QGraphicsWebView ../include/QtWebKitWidgets/QWebHitTestResult ../include/QtWebKitWidgets/QWebFrame ../include/QtWebKitWidgets/QWebInspector ../include/QtWebKitWidgets/QWebPage ../include/QtWebKitWidgets/QWebView ../include/QtWebKitWidgets/QtWebKitWidgetsVersion 
+++SYNCQT.HEADER_FILES = WebKit/qt/WidgetApi/qgraphicswebview.h WebKit/qt/WidgetApi/qwebframe.h WebKit/qt/WidgetApi/qwebinspector.h WebKit/qt/WidgetApi/qwebpage.h WebKit/qt/WidgetApi/qwebview.h ../include/QtWebKitWidgets/qtwebkitwidgetsversion.h ../include/QtWebKitWidgets/QtWebKitWidgets ../include/QtWebKitWidgets/QGraphicsWebView ../include/QtWebKitWidgets/QWebHitTestResult ../include/QtWebKitWidgets/QWebFrame ../include/QtWebKitWidgets/QWebInspector ../include/QtWebKitWidgets/QWebPage ../include/QtWebKitWidgets/QWebView ../include/QtWebKitWidgets/QtWebKitWidgetsVersion 
++ SYNCQT.PRIVATE_HEADER_FILES = WebKit/qt/WidgetApi/qwebframe_p.h WebKit/qt/WidgetApi/qwebinspector_p.h WebKit/qt/WidgetApi/qwebpage_p.h WebKit/qt/WidgetApi/qwebviewaccessible_p.h 
++ SYNCQT.INJECTED_PRIVATE_HEADER_FILES = 
++ SYNCQT.QPA_HEADER_FILES = 
