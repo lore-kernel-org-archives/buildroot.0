@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:12:01 +0200
-Subject: [Buildroot] [PATCH 27/50] package/busybox: invert dependency with
- less
+Date: Mon,  2 Jul 2018 23:11:58 +0200
+Subject: [Buildroot] [PATCH 24/50] package/busybox: invert dependency with
+ net-tools
 In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <d5c7b77444d2b9994c2964510be05ac5ae37a6d1.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <b5c134bca07756a3f2b2d9d2dada05252ad262b1.1530565933.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,47 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk | 1 +
- package/less/less.mk       | 3 +--
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/busybox/busybox.mk     | 1 +
+ package/net-tools/net-tools.mk | 8 ++------
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index bb2c02e000..4a7afa2516 100644
+index 8523271ceb..792a74cfd8 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_LESS),less) \
- 	$(if $(BR2_PACKAGE_LSOF),lsof) \
- 	$(if $(BR2_PACKAGE_MTD),mtd) \
- 	$(if $(BR2_PACKAGE_NET_TOOLS),net-tools) \
-diff --git a/package/less/less.mk b/package/less/less.mk
-index bccc08b89f..ef3643c0aa 100644
---- a/package/less/less.mk
-+++ b/package/less/less.mk
-@@ -8,8 +8,7 @@ LESS_VERSION = 487
- LESS_SITE = $(BR2_GNU_MIRROR)/less
- LESS_LICENSE = GPL-3.0+
- LESS_LICENSE_FILES = COPYING
--# Build after busybox, full-blown is better
--LESS_DEPENDENCIES = ncurses $(if $(BR2_PACKAGE_BUSYBOX),busybox)
-+LESS_DEPENDENCIES = ncurses
++	$(if $(BR2_PACKAGE_NET_TOOLS),net-tools) \
+ 	$(if $(BR2_PACKAGE_NETCAT),netcat) \
+ 	$(if $(BR2_PACKAGE_NETCAT_OPENSBSD),netcat-openbsd) \
+ 	$(if $(BR2_PACKAGE_NMAP),nmap) \
+diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
+index adab475b35..fc2546fa6b 100644
+--- a/package/net-tools/net-tools.mk
++++ b/package/net-tools/net-tools.mk
+@@ -10,11 +10,6 @@ NET_TOOLS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ NET_TOOLS_LICENSE = GPL-2.0+
+ NET_TOOLS_LICENSE_FILES = COPYING
  
- define LESS_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 $(@D)/less $(TARGET_DIR)/usr/bin/less
+-# Install after busybox for the full-blown versions
+-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-NET_TOOLS_DEPENDENCIES += busybox
+-endif
+-
+ define NET_TOOLS_CONFIGURE_CMDS
+ 	(cd $(@D); yes "" | ./configure.sh config.in )
+ endef
+@@ -40,7 +35,8 @@ define NET_TOOLS_BUILD_CMDS
+ endef
+ 
+ # install renames conflicting binaries, update does not
+-# ifconfig & route reside in /sbin for busybox
++# ifconfig & route reside in /sbin for busybox, so ennsure we don't end
++# up with two versions of those.
+ define NET_TOOLS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) update
+ 	mv -f $(TARGET_DIR)/bin/ifconfig $(TARGET_DIR)/sbin/ifconfig
 -- 
 2.14.1
