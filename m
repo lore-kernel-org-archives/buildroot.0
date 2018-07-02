@@ -1,64 +1,53 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Jul 2018 23:04:11 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: respect strip exclusions for
- special libraries
-In-Reply-To: <20180702222516.5467cc60@windsurf.home>
-References: <20180702160027.28557-1-john@metanate.com>
- <20180702164044.GD2604@scaer> <20180702175711.70bf95c7@donbot>
- <20180702222516.5467cc60@windsurf.home>
-Message-ID: <20180702210411.GF2604@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 2 Jul 2018 23:05:32 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5charts: fix license
+In-Reply-To: <20180702092137.25394-1-sebastien.szymanski@armadeus.com>
+References: <20180702092137.25394-1-sebastien.szymanski@armadeus.com>
+Message-ID: <20180702230532.40820286@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, John, All,
+Hello,
 
-On 2018-07-02 22:25 +0200, Thomas Petazzoni spake thusly:
-> [...] I find this whole thing pretty complex/noisy. Can we do
-> better ?
-> 
-> Here is some untested initial proposal:
-> 
-> # When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
-> # BR2_STRIP_EXCLUDE_FILES
-> STRIP_FIND_COMMON_CMD = \
-> 	find $(TARGET_DIR) \
-> 	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)),, \
-> 		\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
-> 	) \
-> 	-not $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) \
-> 	-print0
-> 
-> # Regular stripping for everything, except libpthread, ld-*.so and
-> # kernel modules.
-> STRIP_FIND_CMD = \
-> 	$(STRIP_FIND_COMMON_CMD) \
-> 	-type f \( -perm /111 -o -name '*.so*' \) \
-> 	-not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \)
-> 
-> # Special stripping (only debugging symbols) for libpthread and ld-*.so.
-> STRIP_FIND_SPECIAL_LIBS_CMD = \
-> 	$(STRIP_FIND_COMMON_CMD) \
-> 	\( -name 'ld-*.so*' -o -name 'libpthread*.so*' \)
-> 
-> And then:
-> 
-> 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
-> 	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 $(STRIPCMD) $(STRIP_STRIP_DEBUG) || true
-> 
-> Thoughts ?
+Thanks for this fix!
 
-Not tested, but it really looks nice.
+On Mon,  2 Jul 2018 11:21:37 +0200, S?bastien Szymanski wrote:
+> qt5charts-2.1.3 (build with Qt 5.6) doesn't contain any license files so
+> remove LICENSE.GPL3 from QT5CHARTS_LICENSE_FILES when building Qt 5.6.
+> 
+> Fixes:
+>  http://autobuild.buildroot.net/results/c95d34129902a0511b8d64c9d50f1ffa293b33fd
+>  http://autobuild.buildroot.net/results/b9c14ce7c2fdaa412eb6416ae12a0376aaf05770
+>  http://autobuild.buildroot.net/results/1bde69c515d9140ef0f9a5571475c2850c7b8dee
 
-Regards,
-Yann E. MORIN.
+Please leave a blank line before the Signed-off-by.
 
+> Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+
+I've applied to master, however...
+
+> ---
+>  package/qt5/qt5charts/qt5charts.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/qt5/qt5charts/qt5charts.mk b/package/qt5/qt5charts/qt5charts.mk
+> index 71d0e54027..9e2e6de881 100644
+> --- a/package/qt5/qt5charts/qt5charts.mk
+> +++ b/package/qt5/qt5charts/qt5charts.mk
+> @@ -16,7 +16,9 @@ QT5CHARTS_DEPENDENCIES = qt5base
+>  QT5CHARTS_INSTALL_STAGING = YES
+>  
+>  QT5CHARTS_LICENSE = GPL-3.0
+
+... are we sure the license is GPL-3.0 for both versions of qt5charts ?
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
