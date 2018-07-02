@@ -1,88 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Jul 2018 22:25:16 +0200
-Subject: [Buildroot] [PATCH v2] Makefile: respect strip exclusions for
- special libraries
-In-Reply-To: <20180702175711.70bf95c7@donbot>
-References: <20180702160027.28557-1-john@metanate.com>
- <20180702164044.GD2604@scaer> <20180702175711.70bf95c7@donbot>
-Message-ID: <20180702222516.5467cc60@windsurf.home>
+Date: Mon, 2 Jul 2018 22:26:27 +0200
+Subject: [Buildroot] [git commit] luasec: bump to version 0.7
+Message-ID: <20180702202302.EBCA783DF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5e62da7f88e9eb75d4afb1092d15af3d6c539ff7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 2 Jul 2018 17:57:11 +0100, John Keeping wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luasec/Config.in   | 2 +-
+ package/luasec/luasec.hash | 2 +-
+ package/luasec/luasec.mk   | 5 +++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-> diff --git a/Makefile b/Makefile
-> index 8d25c8a239..a2d21be243 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -606,6 +606,26 @@ STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
->  #   done for kernel modules with incorrect permissions.
->  STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
->  
-> +# This is the command used to handle the special cases above.
-> +STRIP_SPECIAL_LIBS_CMD = find $(TARGET_DIR)/lib/
-> +ifneq (,$(filter lib/%,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))))
-> +STRIP_SPECIAL_LIBS_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(BR2_STRIP_EXCLUDE_DIRS)) \) -prune -o
-> +endif
-> +# Valgrind needs ld.so with enough information, so only strip
-> +# debugging symbols.
-> +STRIP_SPECIAL_LIBS_CMD += \( -name 'ld-*.so*'
-> +ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> +# See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
-> +# besides the one in which crash occurred; or SIGTRAP kills my program when
-> +# I set a breakpoint"
-> +STRIP_SPECIAL_LIBS_CMD += -o -name 'libpthread*.so*'
-> +endif
-> +STRIP_SPECIAL_LIBS_CMD += \)
-> +ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)))
-> +STRIP_SPECIAL_LIBS_CMD += -not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \)
-> +endif
-> +STRIP_SPECIAL_LIBS_CMD += | xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
-
-I understand the problem, and I know you will find my comment a bit
-useless, but I find this whole thing pretty complex/noisy. Can we do
-better ?
-
-Here is some untested initial proposal:
-
-# When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
-# BR2_STRIP_EXCLUDE_FILES
-STRIP_FIND_COMMON_CMD = \
-	find $(TARGET_DIR) \
-	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)),, \
-		\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
-	) \
-	-not $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) \
-	-print0
-
-# Regular stripping for everything, except libpthread, ld-*.so and
-# kernel modules.
-STRIP_FIND_CMD = \
-	$(STRIP_FIND_COMMON_CMD) \
-	-type f \( -perm /111 -o -name '*.so*' \) \
-	-not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \)
-
-# Special stripping (only debugging symbols) for libpthread and ld-*.so.
-STRIP_FIND_SPECIAL_LIBS_CMD = \
-	$(STRIP_FIND_COMMON_CMD) \
-	\( -name 'ld-*.so*' -o -name 'libpthread*.so*' \)
-
-And then:
-
-	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
-	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 $(STRIPCMD) $(STRIP_STRIP_DEBUG) || true
-
-Thoughts ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/luasec/Config.in b/package/luasec/Config.in
+index 9391cd9d37..d7900a081f 100644
+--- a/package/luasec/Config.in
++++ b/package/luasec/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_LUASEC
+ 	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
+ 	  communication.
+ 
+-	  http://www.inf.puc-rio.br/~brunoos/luasec/
++	  https://github.com/brunoos/luasec/wiki
+diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
+index 9d721ed485..1fdbe7d7e5 100644
+--- a/package/luasec/luasec.hash
++++ b/package/luasec/luasec.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	1d04e2f70bc055348dda3cc3566d27d8408094bc944aa5c6a4ae18bffe5c0007  luasec-0.6-1.src.rock
++sha256	383e183ba712f00b2fcbf60187177432ccde724a23ac6186075ceae620cf0b0a  luasec-0.7-1.src.rock
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index 28c4b2c64b..7ae7290937 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-LUASEC_VERSION = 0.6-1
+-LUASEC_SUBDIR = luasec
++LUASEC_VERSION_UPSTREAM = 0.7
++LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-1
++LUASEC_SUBDIR = luasec-luasec-$(LUASEC_VERSION_UPSTREAM)
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
+ LUASEC_DEPENDENCIES = openssl
