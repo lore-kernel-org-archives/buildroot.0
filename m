@@ -1,35 +1,74 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon,  2 Jul 2018 23:22:28 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: locale needs system
-Message-ID: <20180702212228.13835-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 2 Jul 2018 23:23:08 +0200
+Subject: [Buildroot] [PATCH v3 03/22]
+ package/gstreamer1/gst1-plugins-base: switch to xorgproto
+In-Reply-To: <20180630110853.29339-4-bernd.kuhls@t-online.de>
+References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+ <20180630110853.29339-4-bernd.kuhls@t-online.de>
+Message-ID: <20180702212308.GI2604@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-output/host/usr/bin/arm-buildroot-linux-uclibcgnueabihf-readelf -d output/staging/usr/lib/libboost_locale.so
+Bernd, All,
 
-Dynamic section at offset 0x76ef4 contains 29 entries:
-  Tag        Type                         Name/Value
- 0x00000001 (NEEDED)                     Shared library: [libboost_system.so.1.67.0]
+On 2018-06-30 13:08 +0200, Bernd Kuhls spake thusly:
+> The new package xorgproto will combine and replace all current xproto_*
+> packages. For details read
+> https://lists.x.org/archives/xorg-announce/2018-February/002835.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/boost/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 2abd1aa2e1..97c49551c8 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -186,6 +186,7 @@ config BR2_PACKAGE_BOOST_LOCALE
- 	# https://svn.boost.org/trac/boost/ticket/9685 for more
- 	# details.
- 	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
-+	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  Provide localization and Unicode handling tools for C++.
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/gstreamer1/gst1-plugins-base/Config.in            | 2 +-
+>  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+> index 531fac4f47..340926ecb9 100644
+> --- a/package/gstreamer1/gst1-plugins-base/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-base/Config.in
+> @@ -164,7 +164,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX
+>  	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR # mesa needs big X
+>  	depends on !BR2_PACKAGE_RPI_USERLAND # x11
+>  	select BR2_PACKAGE_XLIB_LIBXRENDER
+> -	select BR2_PACKAGE_XPROTO_GLPROTO
+> +	select BR2_PACKAGE_XORGPROTO
+>  	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_X11
+>  	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM
+>  	help
+> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> index 3ad841bdd3..da58638b30 100644
+> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> @@ -46,7 +46,7 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX),y)
+>  GST1_PLUGINS_BASE_CONF_OPTS += --enable-glx
+> -GST1_PLUGINS_BASE_DEPENDENCIES += xproto_glproto xlib_libXrender
+> +GST1_PLUGINS_BASE_DEPENDENCIES += xorgproto xlib_libXrender
+>  else
+>  GST1_PLUGINS_BASE_CONF_OPTS += --disable-glx
+>  endif
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.14.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
