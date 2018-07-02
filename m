@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Jul 2018 23:59:30 +0200
-Subject: [Buildroot] [PATCH v3 12/22] package/x11r7/xutil_makedepend:
+Date: Tue, 3 Jul 2018 00:06:06 +0200
+Subject: [Buildroot] [PATCH v3 13/22] package/x11r7/xserver_xorg-server:
  switch to xorgproto
-In-Reply-To: <20180630110853.29339-13-bernd.kuhls@t-online.de>
+In-Reply-To: <20180630110853.29339-14-bernd.kuhls@t-online.de>
 References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
- <20180630110853.29339-13-bernd.kuhls@t-online.de>
-Message-ID: <20180702215930.GR2604@scaer>
+ <20180630110853.29339-14-bernd.kuhls@t-online.de>
+Message-ID: <20180702220606.GS2604@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,50 +19,36 @@ On 2018-06-30 13:08 +0200, Bernd Kuhls spake thusly:
 > packages. For details read
 > https://lists.x.org/archives/xorg-announce/2018-February/002835.html
 > 
+> Removed special handling for various xproto packages because xorgproto
+> always installs all available protocols.
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[--SNIP--]
+> diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> index d605a2c742..79cf94dfed 100644
+> --- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+> +++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+[--SNIP--]
+> @@ -188,13 +164,6 @@ else
+>  XSERVER_XORG_SERVER_CONF_OPTS += --disable-libunwind
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_XPROTO_RECORDPROTO),y)
+> -XSERVER_XORG_SERVER_DEPENDENCIES += xproto_recordproto
+> -XSERVER_XORG_SERVER_CONF_OPTS += --enable-record
+> -else
+> -XSERVER_XORG_SERVER_CONF_OPTS += --disable-record
+> -endif
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Where is --enable-record now gone?
+
+Since xorgproto installs all protocols, we should be in the same
+situation as when xproto-record was previously enabled, no?
+
+So, --enable-record should now be always enabled.
 
 Regards,
 Yann E. MORIN.
-
-> ---
->  package/x11r7/xutil_makedepend/Config.in           | 1 +
->  package/x11r7/xutil_makedepend/xutil_makedepend.mk | 4 ++--
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/x11r7/xutil_makedepend/Config.in b/package/x11r7/xutil_makedepend/Config.in
-> index 0b091b0e34..fdf2fb92c1 100644
-> --- a/package/x11r7/xutil_makedepend/Config.in
-> +++ b/package/x11r7/xutil_makedepend/Config.in
-> @@ -1,4 +1,5 @@
->  config BR2_PACKAGE_XUTIL_MAKEDEPEND
->  	bool "makedepend"
-> +	select BR2_PACKAGE_XORGPROTO
->  	help
->  	  No description available
-> diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-> index 6fd3c1ae36..8a058efcec 100644
-> --- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-> +++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-> @@ -10,8 +10,8 @@ XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
->  XUTIL_MAKEDEPEND_LICENSE = MIT
->  XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
->  
-> -XUTIL_MAKEDEPEND_DEPENDENCIES = xproto_xproto
-> -HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xproto_xproto
-> +XUTIL_MAKEDEPEND_DEPENDENCIES = xorgproto
-> +HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xorgproto
->  
->  $(eval $(autotools-package))
->  $(eval $(host-autotools-package))
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
