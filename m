@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 2 Jul 2018 23:57:54 +0200
-Subject: [Buildroot] [PATCH v3 11/22] package/x11r7/xlib_*: mass switch
- to xorgproto
-In-Reply-To: <20180630110853.29339-12-bernd.kuhls@t-online.de>
+Date: Mon, 2 Jul 2018 23:59:30 +0200
+Subject: [Buildroot] [PATCH v3 12/22] package/x11r7/xutil_makedepend:
+ switch to xorgproto
+In-Reply-To: <20180630110853.29339-13-bernd.kuhls@t-online.de>
 References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
- <20180630110853.29339-12-bernd.kuhls@t-online.de>
-Message-ID: <20180702215754.GQ2604@scaer>
+ <20180630110853.29339-13-bernd.kuhls@t-online.de>
+Message-ID: <20180702215930.GR2604@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,41 +20,49 @@ On 2018-06-30 13:08 +0200, Bernd Kuhls spake thusly:
 > https://lists.x.org/archives/xorg-announce/2018-February/002835.html
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[--SNIP--]
-> diff --git a/package/x11r7/xlib_libXau/xlib_libXau.mk b/package/x11r7/xlib_libXau/xlib_libXau.mk
-> index 1c50cb2e4e..d8bac5426a 100644
-> --- a/package/x11r7/xlib_libXau/xlib_libXau.mk
-> +++ b/package/x11r7/xlib_libXau/xlib_libXau.mk
-> @@ -10,9 +10,9 @@ XLIB_LIBXAU_SITE = http://xorg.freedesktop.org/releases/individual/lib
->  XLIB_LIBXAU_LICENSE = MIT
->  XLIB_LIBXAU_LICENSE_FILES = COPYING
->  XLIB_LIBXAU_INSTALL_STAGING = YES
-> -XLIB_LIBXAU_DEPENDENCIES = host-pkgconf xutil_util-macros xproto_xproto
-> +XLIB_LIBXAU_DEPENDENCIES = host-pkgconf xutil_util-macros xorgproto
->  HOST_XLIB_LIBXAU_DEPENDENCIES = \
-> -	host-pkgconf host-xutil_util-macros host-xproto_xproto
-> +	host-pkgconf host-xutil_util-macros xorgproto
 
-Did you mean host-xorgproto instead?
-
-[--SNIP--]
-> diff --git a/package/x11r7/xlib_libXt/Config.in b/package/x11r7/xlib_libXt/Config.in
-> index 6557e20bcd..0f55780886 100644
-> --- a/package/x11r7/xlib_libXt/Config.in
-> +++ b/package/x11r7/xlib_libXt/Config.in
-> @@ -2,8 +2,7 @@ config BR2_PACKAGE_XLIB_LIBXT
->  	bool "libXt"
->  	select BR2_PACKAGE_XLIB_LIBSM
->  	select BR2_PACKAGE_XLIB_LIBX11
-> -	select BR2_PACKAGE_XPROTO_KBPROTO
-> -	select BR2_PACKAGE_XPROTO_XPROTO
-> +	select BR2_PACKAGE_XORGPROTO
->  	select BR2_PACKAGE_XCB_PROTO
-
-To be sure, xcb-proto is still a separate package, right?
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/x11r7/xutil_makedepend/Config.in           | 1 +
+>  package/x11r7/xutil_makedepend/xutil_makedepend.mk | 4 ++--
+>  2 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/x11r7/xutil_makedepend/Config.in b/package/x11r7/xutil_makedepend/Config.in
+> index 0b091b0e34..fdf2fb92c1 100644
+> --- a/package/x11r7/xutil_makedepend/Config.in
+> +++ b/package/x11r7/xutil_makedepend/Config.in
+> @@ -1,4 +1,5 @@
+>  config BR2_PACKAGE_XUTIL_MAKEDEPEND
+>  	bool "makedepend"
+> +	select BR2_PACKAGE_XORGPROTO
+>  	help
+>  	  No description available
+> diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+> index 6fd3c1ae36..8a058efcec 100644
+> --- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+> +++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+> @@ -10,8 +10,8 @@ XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
+>  XUTIL_MAKEDEPEND_LICENSE = MIT
+>  XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
+>  
+> -XUTIL_MAKEDEPEND_DEPENDENCIES = xproto_xproto
+> -HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xproto_xproto
+> +XUTIL_MAKEDEPEND_DEPENDENCIES = xorgproto
+> +HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xorgproto
+>  
+>  $(eval $(autotools-package))
+>  $(eval $(host-autotools-package))
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
