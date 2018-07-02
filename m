@@ -1,104 +1,70 @@
-From: John Keeping <john@metanate.com>
-Date: Mon, 2 Jul 2018 17:57:11 +0100
-Subject: [Buildroot] [PATCH v2] Makefile: respect strip exclusions for
- special libraries
-In-Reply-To: <20180702164044.GD2604@scaer>
-References: <20180702160027.28557-1-john@metanate.com>
- <20180702164044.GD2604@scaer>
-Message-ID: <20180702175711.70bf95c7@donbot>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  2 Jul 2018 21:15:37 +0300
+Subject: [Buildroot] [PATCH] stress-ng: fix build with kernel headers v3.9
+Message-ID: <0f6a3acdfa31f852295e2f3be3701fdafc0f7256.1530555337.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ld-*.so and libpthread*.so* are not stripped in the same way as other
-binaries because some applications need symbols in these libraries in
-order to operate correctly.
+Add a patch correcting the kernel headers version test macro.
 
-However, the special handling for these binaries ignores the usual
-BR2_STRIP_EXCLUDE_* rules so it is not possible to build an image which
-has debugging symbols in these binaries.
+Fixes:
+http://autobuild.buildroot.net/results/cbf/cbfb80117840bddd5712bcda3caeaaff61745b0b/
+http://autobuild.buildroot.net/results/649/64941ac5b7dcd9c100bdc47cdfe73cce5f23c3d8/
+http://autobuild.buildroot.net/results/741/741f5881d3cb745d1003ede3f762c20eb72de0b5/
 
-Instead of running one-off commands to strip each of these special
-binaries, build a single command for everything that needs
-$(STRIP_STRIP_DEBUG) and include the normal exclusion rules in this
-command.
-
-Signed-off-by: John Keeping <john@metanate.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
-On Mon, 2 Jul 2018 18:40:44 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+ ...link-proc-fix-build-with-kernel-v3.9.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch
 
-> I guess you forgot to use 'findfileclauses' here, that is:
-> 
->     STRIP_SPECIAL_LIBS_CMD += -not \( $(call findfileclauses,$(call
-> qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \)
-> 
-> Otherwise, expansion of the variable would give an invalide find
-> pattern, like so:
-> 
->     -not \( some-excluded-file some-other-file a-tird-file \)
-> 
-> Or did I miss something?
-
-You're right, I'm not sure how this worked when I tested it.  Here's an
-updated patch.
-
-
- Makefile | 32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 8d25c8a239..a2d21be243 100644
---- a/Makefile
-+++ b/Makefile
-@@ -606,6 +606,26 @@ STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
- #   done for kernel modules with incorrect permissions.
- STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
- 
-+# This is the command used to handle the special cases above.
-+STRIP_SPECIAL_LIBS_CMD = find $(TARGET_DIR)/lib/
-+ifneq (,$(filter lib/%,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))))
-+STRIP_SPECIAL_LIBS_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(BR2_STRIP_EXCLUDE_DIRS)) \) -prune -o
-+endif
-+# Valgrind needs ld.so with enough information, so only strip
-+# debugging symbols.
-+STRIP_SPECIAL_LIBS_CMD += \( -name 'ld-*.so*'
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+# See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
-+# besides the one in which crash occurred; or SIGTRAP kills my program when
-+# I set a breakpoint"
-+STRIP_SPECIAL_LIBS_CMD += -o -name 'libpthread*.so*'
-+endif
-+STRIP_SPECIAL_LIBS_CMD += \)
-+ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)))
-+STRIP_SPECIAL_LIBS_CMD += -not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \)
-+endif
-+STRIP_SPECIAL_LIBS_CMD += | xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+diff --git a/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch b/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch
+new file mode 100644
+index 000000000000..6cbba5e729b8
+--- /dev/null
++++ b/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch
+@@ -0,0 +1,38 @@
++From f3aa381322a4b73b9ca4e7940f802d74324ef24b Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Mon, 2 Jul 2018 21:06:43 +0300
++Subject: [PATCH] stress-netlink-proc: fix build with kernel v3.9
 +
- ifeq ($(BR2_ECLIPSE_REGISTER),y)
- define TOOLCHAIN_ECLIPSE_REGISTER
- 	./support/scripts/eclipse-register-toolchain `readlink -f $(O)` \
-@@ -717,18 +737,8 @@ endif
- 	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
- 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
- 
--# See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
--# besides the one in which crash occurred; or SIGTRAP kills my program when
--# I set a breakpoint"
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--	find $(TARGET_DIR)/lib/ -type f -name 'libpthread*.so*' | \
--		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
--endif
-+	$(STRIP_SPECIAL_LIBS_CMD) || true
- 
--# Valgrind needs ld.so with enough information, so only strip
--# debugging symbols.
--	find $(TARGET_DIR)/lib/ -type f -name 'ld-*.so*' | \
--		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
- 	test -f $(TARGET_DIR)/etc/ld.so.conf && \
- 		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
- 	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
++The PROC_EVENT_COREDUMP has been introduced in kernel version 3.10.
++Don't use it with 3.9 headers.
++
++Fixes build failure:
++
++stress-netlink-proc.c: In function 'monitor':
++stress-netlink-proc.c:108:8: error: 'PROC_EVENT_COREDUMP' undeclared (first use in this function)
++   case PROC_EVENT_COREDUMP:
++        ^
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: https://github.com/ColinIanKing/stress-ng/pull/24
++
++ stress-netlink-proc.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/stress-netlink-proc.c b/stress-netlink-proc.c
++index 5845610dc816..6114a0b92af1 100644
++--- a/stress-netlink-proc.c
+++++ b/stress-netlink-proc.c
++@@ -104,7 +104,7 @@ static int monitor(const args_t *args, const int sock)
++ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)
++ 		case PROC_EVENT_SID:
++ #endif
++-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,0)
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
++ 		case PROC_EVENT_COREDUMP:
++ #endif
++ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)
++-- 
++2.18.0
++
 -- 
 2.18.0
