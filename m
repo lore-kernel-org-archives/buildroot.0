@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:11:59 +0200
-Subject: [Buildroot] [PATCH 25/50] package/busybox: invert dependency with
- mtd
+Date: Mon,  2 Jul 2018 23:12:04 +0200
+Subject: [Buildroot] [PATCH 30/50] package/busybox: invert dependency with
+ iproute2
 In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <4e9e871b64230238bc64c6b489122634b6824bb7.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <ceb69bb46f54710e18b564d3d81dfb0667b7ee70.1530565933.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,38 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk | 1 +
- package/mtd/mtd.mk         | 4 ----
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ package/busybox/busybox.mk   | 1 +
+ package/iproute2/iproute2.mk | 6 ------
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 792a74cfd8..9d0b19bc03 100644
+index 3412bcb3d5..50c71af284 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_MTD),mtd) \
- 	$(if $(BR2_PACKAGE_NET_TOOLS),net-tools) \
- 	$(if $(BR2_PACKAGE_NETCAT),netcat) \
- 	$(if $(BR2_PACKAGE_NETCAT_OPENSBSD),netcat-openbsd) \
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 83bd6a6ae9..13e501fc33 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -31,10 +31,6 @@ else
- MTD_CONF_OPTS += --disable-tests --disable-install-tests
- endif
++	$(if $(BR2_PACKAGE_IPROUTE2),iproute2) \
+ 	$(if $(BR2_PACKAGE_IPUTILS),iputils) \
+ 	$(if $(BR2_PACKAGE_KMOD),kmod) \
+ 	$(if $(BR2_PACKAGE_LESS),less) \
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 1f276ac7ed..48413401cd 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -12,12 +12,6 @@ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+ IPROUTE2_LICENSE = GPL-2.0+
+ IPROUTE2_LICENSE_FILES = COPYING
  
+-# If both iproute2 and busybox are selected, make certain we win
+-# the fight over who gets to have their utils actually installed.
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--MTD_DEPENDENCIES += busybox
+-IPROUTE2_DEPENDENCIES += busybox
 -endif
 -
- # If extended attributes are required, the acl package must
- # also be enabled which will also include the attr package.
- ifeq ($(BR2_PACKAGE_ACL),y)
+ ifeq ($(BR2_PACKAGE_ELFUTILS),y)
+ IPROUTE2_DEPENDENCIES += elfutils
+ endif
 -- 
 2.14.1
