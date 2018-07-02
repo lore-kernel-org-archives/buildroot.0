@@ -1,98 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 2 Jul 2018 23:20:34 +0200
-Subject: [Buildroot] [git commit] kf5-modemmanager-qt: new package
-Message-ID: <20180702212055.3BA2784051@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 2 Jul 2018 23:23:57 +0200
+Subject: [Buildroot] [PATCH v3 04/22] package/libdri2: switch to
+ xorgproto
+In-Reply-To: <20180630110853.29339-5-bernd.kuhls@t-online.de>
+References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+ <20180630110853.29339-5-bernd.kuhls@t-online.de>
+Message-ID: <20180702212357.GJ2604@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b40992da224b2ec277d22f88c7a00bf8ac41651
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Bernd, All,
 
-modemmanager-qt is a simple Qt wrapper on the ModemManager API.
+On 2018-06-30 13:08 +0200, Bernd Kuhls spake thusly:
+> The new package xorgproto will combine and replace all current xproto_*
+> packages. For details read
+> https://lists.x.org/archives/xorg-announce/2018-February/002835.html
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Pierre Ducroquet <pinaraf@pinaraf.info>
-[Thomas:
- - fix commit title
- - update to 5.47
- - add hash for license file
- - add missing dependency on qt5base
- - add missing dependency on Qt5 DBus module
- - use "depends on" instead of "select" for modemmanager dependency]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kf5/Config.in                                 |  1 +
- package/kf5/kf5-modemmanager-qt/Config.in             | 19 +++++++++++++++++++
- .../kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.hash  |  3 +++
- .../kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk    | 16 ++++++++++++++++
- 4 files changed, 39 insertions(+)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/kf5/Config.in b/package/kf5/Config.in
-index 5a2d2cca2a..075b246269 100644
---- a/package/kf5/Config.in
-+++ b/package/kf5/Config.in
-@@ -8,5 +8,6 @@ menuconfig BR2_PACKAGE_KF5
- 
- if BR2_PACKAGE_KF5
- source "package/kf5/kf5-extra-cmake-modules/Config.in"
-+source "package/kf5/kf5-modemmanager-qt/Config.in"
- source "package/kf5/kf5-networkmanager-qt/Config.in"
- endif
-diff --git a/package/kf5/kf5-modemmanager-qt/Config.in b/package/kf5/kf5-modemmanager-qt/Config.in
-new file mode 100644
-index 0000000000..c291b886f5
---- /dev/null
-+++ b/package/kf5/kf5-modemmanager-qt/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_KF5_MODEMMANAGER_QT
-+	bool "kf5-modemmanager-qt"
-+	depends on BR2_USE_MMU # qt5dbus
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # qt5dbus
-+	depends on BR2_PACKAGE_MODEM_MANAGER
-+	select BR2_PACKAGE_QT5BASE_DBUS
-+	select BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
-+	help
-+	  KF5 is a set of Qt framework addons, extending Qt in various
-+	  ways, not only restricted in helping integration in KDE.
-+
-+	  This package contains the ModemManager Qt5 bindings from the
-+	  KF5 project.
-+
-+	  https://api.kde.org/frameworks/modemmanager-qt/html/index.html
-+
-+comment "kf5-modemmanager-qt needs toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.hash b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.hash
-new file mode 100644
-index 0000000000..408eb0c0b0
---- /dev/null
-+++ b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 8b6ab15ce82b7a30b26814178ac33380056ec4398707481aa5ce95cf09d39d03 modemmanager-qt-5.47.0.tar.xz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
-diff --git a/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-new file mode 100644
-index 0000000000..9bbeeaa760
---- /dev/null
-+++ b/package/kf5/kf5-modemmanager-qt/kf5-modemmanager-qt.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# kf5-modemmanager-qt
-+#
-+################################################################################
-+
-+KF5_MODEMMANAGER_QT_VERSION = $(KF5_VERSION)
-+KF5_MODEMMANAGER_QT_SITE = $(KF5_SITE)
-+KF5_MODEMMANAGER_QT_SOURCE = modemmanager-qt-$(KF5_MODEMMANAGER_QT_VERSION).tar.xz
-+KF5_MODEMMANAGER_QT_LICENSE = LGPL-2.1+
-+KF5_MODEMMANAGER_QT_LICENSE_FILE = COPYING.LIB
-+
-+KF5_MODEMMANAGER_QT_DEPENDENCIES = kf5-extra-cmake-modules modem-manager qt5base
-+KF5_MODEMMANAGER_QT_INSTALL_STAGING = YES
-+
-+$(eval $(cmake-package))
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libdri2/Config.in  | 2 +-
+>  package/libdri2/libdri2.mk | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libdri2/Config.in b/package/libdri2/Config.in
+> index a10df7404a..fa3f76e8f3 100644
+> --- a/package/libdri2/Config.in
+> +++ b/package/libdri2/Config.in
+> @@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBDRI2
+>  	select BR2_PACKAGE_LIBDRM
+>  	select BR2_PACKAGE_XLIB_LIBXDAMAGE
+>  	select BR2_PACKAGE_XLIB_LIBXEXT
+> -	select BR2_PACKAGE_XPROTO_DRI2PROTO
+> +	select BR2_PACKAGE_XORGPROTO
+>  	help
+>  	  Library for the DRI2 extension to the X Window System.
+>  
+> diff --git a/package/libdri2/libdri2.mk b/package/libdri2/libdri2.mk
+> index 22854b5060..79f38c680b 100644
+> --- a/package/libdri2/libdri2.mk
+> +++ b/package/libdri2/libdri2.mk
+> @@ -6,7 +6,7 @@
+>  
+>  LIBDRI2_VERSION = 4f1eef3183df2b270c3d5cbef07343ee5127a6a4
+>  LIBDRI2_SITE = $(call github,robclark,libdri2,$(LIBDRI2_VERSION))
+> -LIBDRI2_DEPENDENCIES = xlib_libXext xproto_dri2proto xlib_libXdamage libdrm
+> +LIBDRI2_DEPENDENCIES = xlib_libXext xlib_libXdamage xorgproto libdrm
+>  LIBDRI2_LICENSE = MIT
+>  LIBDRI2_LICENSE_FILES = COPYING
+>  
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
