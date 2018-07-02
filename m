@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  2 Jul 2018 23:11:50 +0200
-Subject: [Buildroot] [PATCH 16/50] package/busybox: invert dependency with
- rsyslogd
+Date: Mon,  2 Jul 2018 23:11:45 +0200
+Subject: [Buildroot] [PATCH 11/50] package/busybox: invert dependency with
+ sysvinit
 In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <3bdcebd1fb9ecf3173194d86e6b1cc0e2a5cb3fc.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <da0c668f7707c0d68a57dc73d0be09bdbca6ee16.1530565933.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk | 1 +
- package/rsyslog/rsyslog.mk | 5 -----
+ package/busybox/busybox.mk   | 1 +
+ package/sysvinit/sysvinit.mk | 5 -----
  2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 7686667884..3a19500ad3 100644
+index 76a195d1f5..2e80c5fa14 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_RSYSLOGD),rsyslogd) \
- 	$(if $(BR2_PACKAGE_START_STOP_DAEMON),start-stop-daemon) \
- 	$(if $(BR2_PACKAGE_SYSKLOGD),sysklogd) \
- 	$(if $(BR2_PACKAGE_SYSLOG_NG),syslog-ng) \
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index e32505be22..61e08ba765 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -17,11 +17,6 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
- RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
- 	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
++	$(if $(BR2_PACKAGE_SYSVINIT),sysvinit) \
+ 	$(if $(BR2_PACKAGE_TAR),tar) \
+ 	$(if $(BR2_PACKAGE_TFTPD),tftpd) \
+ 	$(if $(BR2_PACKAGE_TRACEROUTE),traceroute) \
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index a606ddabf0..993e399e73 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -13,11 +13,6 @@ SYSVINIT_LICENSE_FILES = COPYING
  
--# Build after BusyBox
+ SYSVINIT_MAKE_OPTS = SYSROOT=$(STAGING_DIR)
+ 
+-# Override BusyBox implementations if BusyBox is enabled.
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--RSYSLOG_DEPENDENCIES += busybox
+-SYSVINIT_DEPENDENCIES = busybox
 -endif
 -
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- RSYSLOG_DEPENDENCIES += gnutls
- RSYSLOG_CONF_OPTS += --enable-gnutls
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ SYSVINIT_DEPENDENCIES += libselinux
+ SYSVINIT_MAKE_OPTS += WITH_SELINUX="yes"
 -- 
 2.14.1
