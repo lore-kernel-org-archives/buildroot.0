@@ -1,212 +1,53 @@
-From: Leon Anavi <leon.anavi@konsulko.com>
-Date: Mon,  2 Jul 2018 17:54:50 +0300
-Subject: [Buildroot] [PATCH] configs/olimex_a10_olinuxino_lime_defconfig:
- new board
-Message-ID: <1530543290-24202-1-git-send-email-leon.anavi@konsulko.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon,  2 Jul 2018 17:51:52 +0200
+Subject: [Buildroot] [PATCH] luasec: bump to version 0.7
+Message-ID: <20180702155152.18490-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a defconfig for the Olimex A10-OLinuXino-LIME, reusing most
-of the A20-OLinuXino-Lime and A13-OLinuXino files.
-
-The configurations for Olimex A10-OLinuXino-LIME feature:
-- U-Boot 2018.03
-- Mainline Linux kernel 4.14.26
-
-Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- board/olimex/a10_olinuxino/boot-mali.cmd    |  5 +++
- board/olimex/a10_olinuxino/boot.cmd         |  5 +++
- board/olimex/a10_olinuxino/genimage.cfg     | 17 +++++++++
- board/olimex/a10_olinuxino/post-build.sh    |  8 ++++
- board/olimex/a10_olinuxino/readme.txt       | 57 +++++++++++++++++++++++++++++
- configs/olimex_a10_olinuxino_lime_defconfig | 48 ++++++++++++++++++++++++
- 6 files changed, 140 insertions(+)
- create mode 100644 board/olimex/a10_olinuxino/boot-mali.cmd
- create mode 100644 board/olimex/a10_olinuxino/boot.cmd
- create mode 100644 board/olimex/a10_olinuxino/genimage.cfg
- create mode 100755 board/olimex/a10_olinuxino/post-build.sh
- create mode 100644 board/olimex/a10_olinuxino/readme.txt
- create mode 100644 configs/olimex_a10_olinuxino_lime_defconfig
+ package/luasec/Config.in   | 2 +-
+ package/luasec/luasec.hash | 2 +-
+ package/luasec/luasec.mk   | 5 +++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/board/olimex/a10_olinuxino/boot-mali.cmd b/board/olimex/a10_olinuxino/boot-mali.cmd
-new file mode 100644
-index 0000000..9fa5d65
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/boot-mali.cmd
-@@ -0,0 +1,5 @@
-+setenv bootm_boot_mode sec
-+setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 sunxi_ve_mem_reserve=0 sunxi_g2d_mem_reserve=0 sunxi_no_mali_mem_reserve sunxi_fb_mem_reserve=16 consoleblank=0 ${extra}
-+ext4load mmc 0 0x43000000 /boot/script.bin
-+ext4load mmc 0 0x48000000 /boot/zImage
-+bootz 0x48000000
-diff --git a/board/olimex/a10_olinuxino/boot.cmd b/board/olimex/a10_olinuxino/boot.cmd
-new file mode 100644
-index 0000000..44d9239
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/boot.cmd
-@@ -0,0 +1,5 @@
-+setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
-+ext4load mmc 0 0x49000000 /boot/${fdtfile}
-+ext4load mmc 0 0x46000000 /boot/zImage
-+env set fdt_high ffffffff
-+bootz 0x46000000 - 0x49000000
-diff --git a/board/olimex/a10_olinuxino/genimage.cfg b/board/olimex/a10_olinuxino/genimage.cfg
-new file mode 100644
-index 0000000..fc2f7f8
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/genimage.cfg
-@@ -0,0 +1,17 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		in-partition-table = "no"
-+		image = "u-boot-sunxi-with-spl.bin"
-+		offset = 8192
-+		size = 1040384 # 1MB - 8192
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext4"
-+		size = 512M
-+	}
-+}
-diff --git a/board/olimex/a10_olinuxino/post-build.sh b/board/olimex/a10_olinuxino/post-build.sh
-new file mode 100755
-index 0000000..7a8a427
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/post-build.sh
-@@ -0,0 +1,8 @@
-+#!/bin/sh
-+
-+cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-+
-+if [ -e $BINARIES_DIR/script.bin ]; then
-+	# mali requires a legacy kernel
-+	cp $BINARIES_DIR/script.bin $TARGET_DIR/boot/script.bin
-+fi
-diff --git a/board/olimex/a10_olinuxino/readme.txt b/board/olimex/a10_olinuxino/readme.txt
-new file mode 100644
-index 0000000..ba4bf69
---- /dev/null
-+++ b/board/olimex/a10_olinuxino/readme.txt
-@@ -0,0 +1,57 @@
-+A10-OLinuXino-LIME
-+
-+Intro
-+=====
-+
-+These are open hardware boards, all based on the Allwinner A10 SoC.
-+
-+for more details about the boards see the following pages:
-+ - https://www.olimex.com/Products/OLinuXino/open-source-hardware
-+ - https://www.olimex.com/Products/OLinuXino/A10/A10-OLinuXino-LIME/
-+
-+The following defconfigs are available:
-+ - olimex_a10_olinuxino_lime_defconfig
-+   for the A10-OLinuXino-LIME board using mainline kernel
-+
-+(see http://linux-sunxi.org/Linux_Kernel for more details)
-+
-+How to build it
-+===============
-+
-+Configure Buildroot:
-+
-+    $ make <board>_defconfig
-+
-+Compile everything and build the rootfs image:
-+
-+    $ make
-+
-+Result of the build
-+-------------------
-+
-+After building, you should get a tree like this:
-+
-+    output/images/
-+    +-- boot.scr
-+    +-- rootfs.ext2
-+    +-- rootfs.ext4 -> rootfs.ext2
-+    +-- sdcard.img
-+    +-- sun4i-a10-olinuxino-lime.dtb (lime, mainline)
-+    +-- u-boot.bin
-+    +-- u-boot-sunxi-with-spl.bin
-+    `-- zImage
-+
-+
-+How to write the SD card
-+========================
-+
-+The sdcard.img file is a complete bootable image ready to be written
-+on the boot medium. To install it, simply copy the image to a uSD
-+card:
-+
-+    # dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Where 'sdX' is the device node of the uSD.
-+
-+Eject the SD card, insert it in the A10-OLinuXino board, and power it up.
-+
-diff --git a/configs/olimex_a10_olinuxino_lime_defconfig b/configs/olimex_a10_olinuxino_lime_defconfig
-new file mode 100644
-index 0000000..0b975b0
---- /dev/null
-+++ b/configs/olimex_a10_olinuxino_lime_defconfig
-@@ -0,0 +1,48 @@
-+# Architecture
-+BR2_arm=y
-+BR2_cortex_a8=y
-+#BR2_ARM_EABIHF=y
-+
-+# Linux headers same as kernel, a 4.14 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+
-+# System configuration
-+BR2_TARGET_GENERIC_HOSTNAME="a10-olinuxino"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to OLinuXino!"
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a10_olinuxino/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a10_olinuxino/genimage.cfg"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.26"
-+BR2_LINUX_KERNEL_USE_DEFCONFIG=y
-+BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun4i-a10-olinuxino-lime"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+
-+# Bootloaders
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A10-OLinuXino-Lime"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_FORMAT_BIN=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
-+BR2_TARGET_UBOOT_BOOT_SCRIPT=y
-+BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a10_olinuxino/boot.cmd"
-+
-+# Additional tools
-+BR2_PACKAGE_HOST_GENIMAGE=y
+diff --git a/package/luasec/Config.in b/package/luasec/Config.in
+index 9391cd9d3..d7900a081 100644
+--- a/package/luasec/Config.in
++++ b/package/luasec/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_LUASEC
+ 	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
+ 	  communication.
+ 
+-	  http://www.inf.puc-rio.br/~brunoos/luasec/
++	  https://github.com/brunoos/luasec/wiki
+diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
+index 9d721ed48..1fdbe7d7e 100644
+--- a/package/luasec/luasec.hash
++++ b/package/luasec/luasec.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	1d04e2f70bc055348dda3cc3566d27d8408094bc944aa5c6a4ae18bffe5c0007  luasec-0.6-1.src.rock
++sha256	383e183ba712f00b2fcbf60187177432ccde724a23ac6186075ceae620cf0b0a  luasec-0.7-1.src.rock
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index 28c4b2c64..7ae729093 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-LUASEC_VERSION = 0.6-1
+-LUASEC_SUBDIR = luasec
++LUASEC_VERSION_UPSTREAM = 0.7
++LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-1
++LUASEC_SUBDIR = luasec-luasec-$(LUASEC_VERSION_UPSTREAM)
+ LUASEC_LICENSE = MIT
+ LUASEC_LICENSE_FILES = $(LUASEC_SUBDIR)/LICENSE
+ LUASEC_DEPENDENCIES = openssl
 -- 
-2.7.4
+2.17.1
