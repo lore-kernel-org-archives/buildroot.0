@@ -1,74 +1,52 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 3 Jul 2018 09:19:18 -0300 (BRT)
-Subject: [Buildroot] [PATCH 50/50] support/scripts: don't draw most of
- busybox' dependencies
-In-Reply-To: <20180703114157.GD2530@scaer>
-References: <cover.1530565933.git.yann.morin.1998@free.fr>
- <d5b2e0eebf27fe994337e2c966f8ecf63849f3e1.1530565933.git.yann.morin.1998@free.fr>
- <1114006316.1182513.1530616827146.JavaMail.zimbra@datacom.com.br>
- <20180703114157.GD2530@scaer>
-Message-ID: <613600301.1205374.1530620358013.JavaMail.zimbra@datacom.com.br>
+From: Fabio Estevam <fabio.estevam@nxp.com>
+Date: Tue,  3 Jul 2018 10:12:01 -0300
+Subject: [Buildroot] [PATCH 4/4] configs/imx6-sabresd: Bump to kernel 4.17.4
+In-Reply-To: <1530623521-11432-1-git-send-email-fabio.estevam@nxp.com>
+References: <1530623521-11432-1-git-send-email-fabio.estevam@nxp.com>
+Message-ID: <1530623521-11432-4-git-send-email-fabio.estevam@nxp.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann Morin" <yann.morin.1998@free.fr>
-> To: "DATACOM" <casantos@datacom.com.br>
-> Cc: "buildroot" <buildroot@buildroot.org>
-> Sent: Tuesday, July 3, 2018 8:41:57 AM
-> Subject: Re: [Buildroot] [PATCH 50/50] support/scripts: don't draw most of busybox' dependencies
+From: Fabio Estevam <festevam@gmail.com>
 
-> Carlos, All,
-> 
-> On 2018-07-03 08:20 -0300, Carlos Santos spake thusly:
->> > From: "Yann Morin" <yann.morin.1998@free.fr>
->> > To: "buildroot" <buildroot@buildroot.org>
->> > Cc: "Yann Morin" <yann.morin.1998@free.fr>
->> > Sent: Monday, July 2, 2018 6:12:24 PM
->> > Subject: [Buildroot] [PATCH 50/50] support/scripts: don't draw most of busybox'
->> > dependencies
->> 
->> > Since most dependencies of busybox' are there to guarantee that busybox'
->> > does not install applets that are already provided by other packages,
->> > they are not really functional dependencies, and mostly clutter the
->> > dependency graph.
->> > 
->> > Only the dependencies on libraries are interested, so that is all we
->> > keep.
->> > 
->> > Even though that function is only called with pkg set to 'busybox', we
->> > still pass it as an argument, for symetry with the other functions that
->> > removes the dependencies of a package.
->> > 
->> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> > ---
->> > support/scripts/graph-depends | 10 ++++++++++
->> > 1 file changed, 10 insertions(+)
->> > 
->> > diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
->> > index 621e603278..909a3d4812 100755
->> > --- a/support/scripts/graph-depends
->> > +++ b/support/scripts/graph-depends
->> > @@ -181,6 +181,14 @@ def remove_mandatory_deps(pkg, deps):
->> >     return [p for p in deps[pkg] if p not in ['toolchain', 'skeleton']]
->> > 
->> > 
->> > +# This function removes all dependencies of busybox, except its
->> > +# dependencies on libraries (of which linux-pam) and host-pkgconf.
->>                                 ^^^^^^^^^^^^^^^^^^
->>                                    missing text?
-> 
-> No: linux-pam is a library too, But it belongs to the "libraries" ensemble, so I
-> really meant to write what I wrote. :-)
-> 
-> It only gets a special mention because it does not start with 'lib'.
+Kernel 4.17.4 contains commit 32c319d4f120 ("pinctrl: devicetree: Fix
+pctldev pointer overwrite"), which fixes camera support
+on imx6-sabresd board, so bump to this kernel version.
 
-Ok, but the text looks a bit strange to me. What about something like
-"dependencies on libraries (e.g. libpam, from linux-pam) ..."?
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx6-sabresd_defconfig     | 2 +-
+ configs/imx6-sabresd_qt5_defconfig | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
+index 7f42e55..89ffa02 100644
+--- a/configs/imx6-sabresd_defconfig
++++ b/configs/imx6-sabresd_defconfig
+@@ -32,7 +32,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
+diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
+index cee7244..7457af3 100644
+--- a/configs/imx6-sabresd_qt5_defconfig
++++ b/configs/imx6-sabresd_qt5_defconfig
+@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabresd imx6dl-sabresd imx6qp-sabresd"
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.7.4
