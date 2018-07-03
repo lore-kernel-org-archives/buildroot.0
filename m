@@ -1,45 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 3 Jul 2018 01:13:33 +0200
-Subject: [Buildroot] [PATCH v3 4/4] configs: add linux boot logo to
- raspberrypi3 defconfig
-In-Reply-To: <20180630210034.GE23012@scaer>
-References: <1527628939-7389-1-git-send-email-angelo@amarulasolutions.com>
- <1527628939-7389-5-git-send-email-angelo@amarulasolutions.com>
- <20180630210034.GE23012@scaer>
-Message-ID: <6e702b32-95d8-4de3-2140-75f0f3e912cf@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 3 Jul 2018 06:05:08 +0300
+Subject: [Buildroot] [git commit] kf5-modemmanager-qt: new package
+In-Reply-To: <20180702212055.3BA2784051@busybox.osuosl.org>
+References: <20180702212055.3BA2784051@busybox.osuosl.org>
+Message-ID: <20180703030508.rjd2345rrh65gcbs@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
+On Mon, Jul 02, 2018 at 11:20:34PM +0200, Thomas Petazzoni wrote: 
+> diff --git a/package/kf5/kf5-modemmanager-qt/Config.in b/package/kf5/kf5-modemmanager-qt/Config.in
+> new file mode 100644
+> index 0000000000..c291b886f5
+> --- /dev/null
+> +++ b/package/kf5/kf5-modemmanager-qt/Config.in
+> @@ -0,0 +1,19 @@
+> +config BR2_PACKAGE_KF5_MODEMMANAGER_QT
+> +	bool "kf5-modemmanager-qt"
+> +	depends on BR2_USE_MMU # qt5dbus
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # qt5dbus
+> +	depends on BR2_PACKAGE_MODEM_MANAGER
+> +	select BR2_PACKAGE_QT5BASE_DBUS
+> +	select BR2_PACKAGE_KF5_EXTRA_CMAKE_MODULES
+> +	help
+> +	  KF5 is a set of Qt framework addons, extending Qt in various
+> +	  ways, not only restricted in helping integration in KDE.
+> +
+> +	  This package contains the ModemManager Qt5 bindings from the
+> +	  KF5 project.
+> +
+> +	  https://api.kde.org/frameworks/modemmanager-qt/html/index.html
+> +
+> +comment "kf5-modemmanager-qt needs toolchain w/ threads"
+> +	depends on BR2_USE_MMU
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 
-On 30-06-18 23:00, Yann E. MORIN wrote:
-> Angelo, All,
-> 
-> On 2018-05-29 23:22 +0200, Angelo Compagnucci spake thusly:
->> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->>
->> This patch adds a custom boot up logo to the raspberrypi3
->> defconfig.
-> 
-> Why the rpi3, and not the otehr configs?
-> 
-> Note that I don't mind much, but I'd like we be a bit consistent in all
-> our defconfigs. Either all the defconfigs use the BR logo, or none of
-> them do.
+Shouldn't the comment also depend on BR2_PACKAGE_MODEM_MANAGER?
 
- There just aren't many configs that have a framebuffer console. But indeed, it
-would be good to add this to at least the pc and the qemu defconfigs.
-
- Regards,
- Arnout
+baruch
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
