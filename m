@@ -1,32 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Jul 2018 16:32:52 +0200
-Subject: [Buildroot] [git commit] kf5-modemmanager-qt: new package
-In-Reply-To: <20180703030508.rjd2345rrh65gcbs@tarshish>
-References: <20180702212055.3BA2784051@busybox.osuosl.org>
- <20180703030508.rjd2345rrh65gcbs@tarshish>
-Message-ID: <20180703163252.10982a64@windsurf.home>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Tue, 3 Jul 2018 08:08:10 -0700
+Subject: [Buildroot] [RFC PATCH 0/8] chromium: new package
+In-Reply-To: <1134768894.33287.1530619482419.JavaMail.administrator@mben.nabble.com>
+References: <1134768894.33287.1530619482419.JavaMail.administrator@mben.nabble.com>
+Message-ID: <CAMWSM7gviJCYaM87J5TLACbHOkmpWmAfpm6hiBLBGYBnnKhmDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Hao,
 
-On Tue, 3 Jul 2018 06:05:08 +0300, Baruch Siach wrote:
+Please include the mailing list in your emails, and read about mailing
+list etiquette.
 
-> > +comment "kf5-modemmanager-qt needs toolchain w/ threads"
-> > +	depends on BR2_USE_MMU
-> > +	depends on !BR2_TOOLCHAIN_HAS_THREADS  
-> 
-> Shouldn't the comment also depend on BR2_PACKAGE_MODEM_MANAGER?
+https://kernelnewbies.org/PatchCulture
 
-Completely correct. And this also applies to kf5-networkmanager-qt.
+On Tue, Jul 3, 2018 at 5:04 AM <huhao526200@gmail.com> wrote:
+> I want to run a chromium browser in the system created by Buildroot for a x86_64 architecture. As I know you have successfully added the chromium package in the buildroot and tested for x86_64, so could you please give a link to download these packages?
+>
 
-Thanks for pointing this out!
+The patches are available on the mailing list and in Patchwork.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://patchwork.ozlabs.org/project/buildroot/list/?series=51418
+
+Best regards,
+Joseph
