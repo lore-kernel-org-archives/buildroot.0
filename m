@@ -1,29 +1,35 @@
-From: Kuldeep Singh Dhaka <kuldeepdhaka9@gmail.com>
-Date: Wed, 4 Jul 2018 00:14:37 +0530
-Subject: [Buildroot] New package: ncrypt
-Message-ID: <a327fc0f-eff6-d1b7-4c6c-823fdacbc18e@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Jul 2018 21:39:14 +0200
+Subject: [Buildroot] [git commit] kf5-networkmanager-qt: correct
+ dependencies comment display conditions
+Message-ID: <20180703193603.0D14084050@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello everyone,
+commit: https://git.buildroot.net/buildroot/commit/?id=aa46b41ecd9484bcba9f55ca8ec0a27b65a77900
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please find the patch attached.
+Display the dependencies comment only when network-manager is enabled.
+Otherwise, a toolchain configuration change would not make the package
+selectable.
 
-Note: I couldn't come up with anything better for NCRYPT_SITE variable.
-Though it may seem that the version code could be used in NCRYPT_SITE
-but no - i couldn't find an pattern.
+Cc: Pierre Ducroquet <pinaraf@pinaraf.info>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kf5/kf5-networkmanager-qt/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Cheers,
-
--- 
-Kuldeep
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: ncrypt.patch
-Type: text/x-patch
-Size: 3694 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180704/fab3e14c/attachment.bin>
+diff --git a/package/kf5/kf5-networkmanager-qt/Config.in b/package/kf5/kf5-networkmanager-qt/Config.in
+index 277e08866a..6b309f0804 100644
+--- a/package/kf5/kf5-networkmanager-qt/Config.in
++++ b/package/kf5/kf5-networkmanager-qt/Config.in
+@@ -16,4 +16,5 @@ config BR2_PACKAGE_KF5_NETWORKMANAGER_QT
+ 
+ comment "kf5-networkmanager-qt needs toolchain w/ threads"
+ 	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
