@@ -1,54 +1,39 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  3 Jul 2018 07:29:36 +0300
-Subject: [Buildroot] [PATCH v2] alsa-utils: bat needs fftw single precision
-Message-ID: <87c2b0d5f06ca9c6842b52cefc76aaf5923d41d7.1530592176.git.baruch@tkos.co.il>
+Date: Tue, 3 Jul 2018 08:25:48 +0300
+Subject: [Buildroot] [PATCH 01/50] package/busybox: backport upstream
+ patch to fix install-noclobber
+In-Reply-To: <2222ddf7fb0c17011ad26da66ff6fa5664f66240.1530565933.git.yann.morin.1998@free.fr>
+References: <cover.1530565933.git.yann.morin.1998@free.fr>
+ <2222ddf7fb0c17011ad26da66ff6fa5664f66240.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <20180703052548.iqefnv3kedkxuh3u@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Otherwise the configure check for fftw fails, and alsabat does not link
-with libfftw. Instead of selecting fftw unconditionally, make fftw
-single precision an optional dependency. Add a help text comment about
-that.
+Hi Yann,
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2: Make fftw single precision an optional dependency (Thomas P)
----
- package/alsa-utils/Config.in     | 3 ++-
- package/alsa-utils/alsa-utils.mk | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+On Mon, Jul 02, 2018 at 11:11:35PM +0200, Yann E. MORIN wrote:
+> Currently, we shoehorn the noclobber option with a sed call, but
+> upstream has applied a set of 4 patches that adds support to do
+> an install without clobbering.
+> 
+> Backport those patches, and use the new install rule.
 
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index 1a48fc0315ef..df6cfdac34d3 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -76,7 +76,8 @@ config BR2_PACKAGE_ALSA_UTILS_ASEQNET
- 
- config BR2_PACKAGE_ALSA_UTILS_BAT
- 	bool "bat"
--	select BR2_PACKAGE_FFTW
-+	help
-+	  Analysis support in alsabat requires fftw single precision
- 
- config BR2_PACKAGE_ALSA_UTILS_IECSET
- 	bool "iecset"
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 9b2e64b1d3e4..e9a45c675f94 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -40,7 +40,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
- ALSA_UTILS_CONF_OPTS += --enable-bat
--ALSA_UTILS_DEPENDENCIES += fftw
-+# Analysis support requires fftw single precision
-+ALSA_UTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),fftw)
- else
- ALSA_UTILS_CONF_OPTS += --disable-bat
- endif
+Busybox 1.29.0 is out now. You can bump instead of backport.
+
+baruch
+
+> Note that the 3rd and 6th patches do not seem like they would be usefull
+> to backport, but a user may well have a custom config that enables shell
+> wrappers, or installs no wrapper (to install then at runtime), so it
+> still makes sense to backport them (especially since the 3rd was part of
+> the noclobber series upstream, and the 6th, a fix of it).
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
 -- 
-2.18.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
