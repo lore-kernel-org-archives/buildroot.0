@@ -1,38 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Jul 2018 13:36:38 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5charts: fix license
-In-Reply-To: <dd7ffef7-2969-f6a6-440c-4c875394dccc@armadeus.com>
-References: <20180702092137.25394-1-sebastien.szymanski@armadeus.com>
- <20180702230532.40820286@windsurf.home>
- <dd7ffef7-2969-f6a6-440c-4c875394dccc@armadeus.com>
-Message-ID: <20180703133638.3f2d9275@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Jul 2018 13:37:19 +0200
+Subject: [Buildroot] [PATCH 01/50] package/busybox: backport upstream
+ patch to fix install-noclobber
+In-Reply-To: <20180703052548.iqefnv3kedkxuh3u@tarshish>
+References: <cover.1530565933.git.yann.morin.1998@free.fr>
+ <2222ddf7fb0c17011ad26da66ff6fa5664f66240.1530565933.git.yann.morin.1998@free.fr>
+ <20180703052548.iqefnv3kedkxuh3u@tarshish>
+Message-ID: <20180703113719.GC2530@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Baruch, All,
 
-On Tue, 3 Jul 2018 10:18:57 +0200, S?bastien Szymanski wrote:
+On 2018-07-03 08:25 +0300, Baruch Siach spake thusly:
+> On Mon, Jul 02, 2018 at 11:11:35PM +0200, Yann E. MORIN wrote:
+> > Currently, we shoehorn the noclobber option with a sed call, but
+> > upstream has applied a set of 4 patches that adds support to do
+> > an install without clobbering.
+> > 
+> > Backport those patches, and use the new install rule.
+> 
+> Busybox 1.29.0 is out now. You can bump instead of backport.
 
-> > ... are we sure the license is GPL-3.0 for both versions of qt5charts ?  
-> 
-> I wondered the same thing.
-> 
-> According to the Qt blog [1], Qt Charts is available under GPLv3 (and
-> commercial license) since Qt 5.6.0:
-> 
-> "As announced recently, the Qt Add-ons licensing will be changed so that
-> the Qt Charts module becomes available under both GPLv3 and commercial
-> license terms."
-> 
-> [1] http://blog.qt.io/blog/2016/01/18/qt-charts-2-1-0-release/
+OK, so it has been ~3 months I have been sitting ion this series waiting
+for upstream to cut out a release. Seeing they were not, I decided to
+refresh the series and send it.
 
-OK, thanks for the confirmation.
+And now, they reelases a new version right before I sent the series.
+Dang... Muahaha! :-)
 
-Thomas
+Thanks for the review, I'll update the series starting with a bump.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
