@@ -1,83 +1,145 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUm9zZW4=?= <jeremy.rosen@smile.fr>
-Date: Tue, 3 Jul 2018 10:44:27 +0200
-Subject: [Buildroot] [PATCH 1/3] systemd: bump to v239
-In-Reply-To: <20180701141925.69267e02@windsurf.home>
-References: <20180629222552.12808-1-jeremy.rosen@smile.fr>
- <20180629222552.12808-2-jeremy.rosen@smile.fr>
- <20180701141925.69267e02@windsurf.home>
-Message-ID: <6efcdf57-c71d-e360-8d0c-d16d872b4b5f@smile.fr>
+From: John Keeping <john@metanate.com>
+Date: Tue, 3 Jul 2018 11:06:14 +0100
+Subject: [Buildroot] [PATCH v3] Makefile: respect strip exclusions for
+ special libraries
+In-Reply-To: <20180702222516.5467cc60@windsurf.home>
+References: <20180702160027.28557-1-john@metanate.com>
+ <20180702164044.GD2604@scaer> <20180702175711.70bf95c7@donbot>
+ <20180702222516.5467cc60@windsurf.home>
+Message-ID: <20180703110614.59009bdb@donbot>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks a lot.
+ld-*.so and libpthread*.so* are not stripped in the same way as other
+binaries because some applications need symbols in these libraries in
+order to operate correctly.
 
-I was preparing a V2 with the same fixes, but you were too fast for me
+However, the special handling for these binaries ignores the usual
+BR2_STRIP_EXCLUDE_* rules so it is not possible to build an image which
+has debugging symbols in these binaries.
 
-:)
-J?r?my
+Pull out the common find functionality so that we can build two find
+commands that re-use the common exclusion rules.
 
-On 01/07/2018 14:19, Thomas Petazzoni wrote:
-> Hello,
->
-> On Sat, 30 Jun 2018 00:25:50 +0200, J?r?my Rosen wrote:
->> * remove upstreamed patches
->> * refresh patch 0002 which didn't apply cleanly
->> * update patch 0001 to catch more uses of agetty
->>
->>
->> Signed-off-by: J?r?my Rosen <jeremy.rosen@smile.fr>
->> ---
->>   package/systemd/0001-fix-getty-unit.patch     |  61 ++++--
->>   .../0002-install-don-t-use-ln-relative.patch  |  19 +-
->>   ...-include-libmount-h-in-a-header-file.patch |  75 -------
->>   .../0005-basic-macros-rename-noreturn.patch   | 201 ------------------
->>   package/systemd/systemd.hash                  |   2 +-
->>   package/systemd/systemd.mk                    |   2 +-
->>   6 files changed, 63 insertions(+), 297 deletions(-)
->>   delete mode 100644 package/systemd/0004-core-dont-include-libmount-h-in-a-header-file.patch
->>   delete mode 100644 package/systemd/0005-basic-macros-rename-noreturn.patch
-> I've applied, after fixing the issues pointed out by Romain: do not
-> re-assign the patches to yourself when you're just making some small
-> adjustements, use "git format-patch -N".
->
-> Also, you forgot to update the hash of the README file, which has
-> changed. That was breaking "make legal-info", so I fixed that.
->
-> Finally, I did a follow-up commit dropping the 0003 patch, which as
-> noted by Romain Naour was no longer needed.
->
-> Thanks!
->
-> Thomas
+Fix-suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: John Keeping <john@metanate.com>
+---
+On Mon, 2 Jul 2018 22:25:16 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
+> I understand the problem, and I know you will find my comment a bit
+> useless, but I find this whole thing pretty complex/noisy. Can we do
+> better ?
+> 
+> Here is some untested initial proposal:
+> 
+> # When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
+> # BR2_STRIP_EXCLUDE_FILES
+> STRIP_FIND_COMMON_CMD = \
+> 	find $(TARGET_DIR) \
+> 	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)),, \
+> 		\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o ) \
+> 	-not $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) \
+> 	-print0
+> 
+> # Regular stripping for everything, except libpthread, ld-*.so and
+> # kernel modules.
+> STRIP_FIND_CMD = \
+> 	$(STRIP_FIND_COMMON_CMD) \
+> 	-type f \( -perm /111 -o -name '*.so*' \) \
+> 	-not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \)
+> 
+> # Special stripping (only debugging symbols) for libpthread and
+> ld-*.so. STRIP_FIND_SPECIAL_LIBS_CMD = \
+> 	$(STRIP_FIND_COMMON_CMD) \
+> 	\( -name 'ld-*.so*' -o -name 'libpthread*.so*' \)
+> 
+> And then:
+> 
+> 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
+> 	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 $(STRIPCMD) $(STRIP_STRIP_DEBUG) || true
+> 
+> Thoughts ?
+
+This looks much nicer.  I've tested it and fixed a few issues, so we end
+up with this patch.
+
+
+ Makefile | 44 +++++++++++++++++++++++++-------------------
+ 1 file changed, 25 insertions(+), 19 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 8d25c8a239..ab081412d3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -591,20 +591,37 @@ RSYNC_VCS_EXCLUSIONS = \
+ 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
+ 	--exclude CVS
+ 
+-STRIP_FIND_CMD = find $(TARGET_DIR)
+-ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
+-STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
+-endif
+-STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
+-# file exclusions:
++# When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
++# BR2_STRIP_EXCLUDE_FILES
++STRIP_FIND_COMMON_CMD = \
++	find $(TARGET_DIR) \
++	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)), \
++		\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) \
++		-prune -o \
++	) \
++	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
++		-not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) )
++
++# Regular stripping for everything, except libpthread, ld-*.so and
++# kernel modules:
+ # - libpthread.so: a non-stripped libpthread shared library is needed for
+ #   proper debugging of pthread programs using gdb.
+ # - ld.so: a non-stripped dynamic linker library is needed for valgrind
+ # - kernel modules (*.ko): do not function properly when stripped like normal
+ #   applications and libraries. Normally kernel modules are already excluded
+ #   by the executable permission check above, so the explicit exclusion is only
+ #   done for kernel modules with incorrect permissions.
+-STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
++STRIP_FIND_CMD = \
++	$(STRIP_FIND_COMMON_CMD) \
++	-type f \( -perm /111 -o -name '*.so*' \) \
++	-not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \) \
++	-print0
++
++# Special stripping (only debugging symbols) for libpthread and ld-*.so.
++STRIP_FIND_SPECIAL_LIBS_CMD = \
++	$(STRIP_FIND_COMMON_CMD) \
++	\( -name 'ld-*.so*' -o -name 'libpthread*.so*' \) \
++	-print0
+ 
+ ifeq ($(BR2_ECLIPSE_REGISTER),y)
+ define TOOLCHAIN_ECLIPSE_REGISTER
+@@ -716,19 +733,8 @@ endif
+ 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
+ 	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
+ 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
++	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $(STRIPCMD) $(STRIP_STRIP_DEBUG) 2>/dev/null || true
+ 
+-# See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
+-# besides the one in which crash occurred; or SIGTRAP kills my program when
+-# I set a breakpoint"
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-	find $(TARGET_DIR)/lib/ -type f -name 'libpthread*.so*' | \
+-		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+-endif
+-
+-# Valgrind needs ld.so with enough information, so only strip
+-# debugging symbols.
+-	find $(TARGET_DIR)/lib/ -type f -name 'ld-*.so*' | \
+-		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
+ 	test -f $(TARGET_DIR)/etc/ld.so.conf && \
+ 		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
+ 	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
 -- 
-SMILE <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-
-	
-*J?r?my ROSEN*
-Architecte technique
-Responsable de l'expertise Smile-ECS
-
-email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
-phone +33141402967
-url http://www.smile.eu
-
-Twitter <https://twitter.com/GroupeSmile> Facebook 
-<https://www.facebook.com/smileopensource> LinkedIn 
-<https://www.linkedin.com/company/smile> Github 
-<https://github.com/Smile-SA>
-
-
-D?couvrez l?univers Smile, rendez-vous sur smile.eu 
-<http://smile.eu/?utm_source=signature&utm_medium=email&utm_campaign=signature>
-
-eco Pour la plan?te, n'imprimez ce mail que si c'est n?cessaire
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180703/cf05ba2a/attachment.html>
+2.18.0
