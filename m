@@ -1,53 +1,37 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue,  3 Jul 2018 23:07:08 +0200
-Subject: [Buildroot] [PATCH] package/exim: remove unused Local-Makefile
-Message-ID: <20180703210708.30017-1-arnout@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 3 Jul 2018 23:35:40 +0200
+Subject: [Buildroot] [PATCH v3 14/22] package/x11r7/xproto_*: mass
+ removal
+In-Reply-To: <20180630110853.29339-15-bernd.kuhls@t-online.de>
+References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+ <20180630110853.29339-15-bernd.kuhls@t-online.de>
+Message-ID: <20180703213540.GE2530@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When the exim package was added, it included a template for the
-build-time configuration file Local/Makefile in the package directory.
-In commit 8956779d5d2 (exim: use a more standard build-time
-configuration), this template file was replaced with the EDITME
-template file included in the exim sources. However, that commit did
-not remove Buildroot's Local-Makefile.
+Bernd, All,
 
-Since this file is no longer used, remove it.
+On 2018-06-30 13:08 +0200, Bernd Kuhls spake thusly:
+> The new package xorgproto will combine and replace all current xproto_*
+> packages. For details read
+> https://lists.x.org/archives/xorg-announce/2018-February/002835.html
+> 
+> After switching to xorgproto the old xproto_* packages are removed.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Luca Ceresoli <luca@lucaceresoli.net>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-I thought I had sent this patch a while ago, but I can't find it in
-patchwork...
----
- package/exim/Local-Makefile | 15 ---------------
- 1 file changed, 15 deletions(-)
- delete mode 100644 package/exim/Local-Makefile
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-diff --git a/package/exim/Local-Makefile b/package/exim/Local-Makefile
-deleted file mode 100644
-index 191f0e0da6..0000000000
---- a/package/exim/Local-Makefile
-+++ /dev/null
-@@ -1,15 +0,0 @@
--BIN_DIRECTORY=/usr/sbin
--CONFIGURE_FILE=/etc/exim/configure
--EXIM_USER=ref:exim
--EXIM_GROUP=mail
--SPOOL_DIRECTORY=/var/spool/exim
--ROUTER_ACCEPT=yes
--TRANSPORT_LMTP=yes
--LOOKUP_DBM=yes
--LOOKUP_LSEARCH=yes
--PCRE_LIBS=-lpcre
--FIXED_NEVER_USERS=root
--HEADERS_CHARSET="ISO-8859-1"
--HAVE_ICONV=no
--SYSLOG_LOG_PID=yes
--TMPDIR="/tmp"
+Regards,
+Yann E. MORIN.
+
 -- 
-2.18.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
