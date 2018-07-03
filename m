@@ -1,11 +1,11 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 3 Jul 2018 08:20:27 -0300 (BRT)
-Subject: [Buildroot] [PATCH 50/50] support/scripts: don't draw most of
- busybox' dependencies
-In-Reply-To: <d5b2e0eebf27fe994337e2c966f8ecf63849f3e1.1530565933.git.yann.morin.1998@free.fr>
+Date: Tue, 3 Jul 2018 08:30:51 -0300 (BRT)
+Subject: [Buildroot] [PATCH 21/50] package/busybox: invert dependency
+ with nnamp
+In-Reply-To: <b40a7c127764639247fb674610da56c7023811b9.1530565933.git.yann.morin.1998@free.fr>
 References: <cover.1530565933.git.yann.morin.1998@free.fr>
- <d5b2e0eebf27fe994337e2c966f8ecf63849f3e1.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <1114006316.1182513.1530616827146.JavaMail.zimbra@datacom.com.br>
+ <b40a7c127764639247fb674610da56c7023811b9.1530565933.git.yann.morin.1998@free.fr>
+Message-ID: <746334206.1185409.1530617451899.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,39 +15,58 @@ To: buildroot@busybox.net
 > From: "Yann Morin" <yann.morin.1998@free.fr>
 > To: "buildroot" <buildroot@buildroot.org>
 > Cc: "Yann Morin" <yann.morin.1998@free.fr>
-> Sent: Monday, July 2, 2018 6:12:24 PM
-> Subject: [Buildroot] [PATCH 50/50] support/scripts: don't draw most of busybox' dependencies
+> Sent: Monday, July 2, 2018 6:11:55 PM
+> Subject: [Buildroot] [PATCH 21/50] package/busybox: invert dependency with nnamp
 
-> Since most dependencies of busybox' are there to guarantee that busybox'
-> does not install applets that are already provided by other packages,
-> they are not really functional dependencies, and mostly clutter the
-> dependency graph.
+nnamp -> nmap
+
+> We only need that dependency whan nmap's ncat is enabled.
 > 
-> Only the dependencies on libraries are interested, so that is all we
-> keep.
+> For consistency, we add a dependency on nmap, not a suboption of it,
+> to have a dependency list in busybox that is only about packages, and
+> directly associates the upper-case package variable to the lower-case
+> package name, e.g. NMAP <-> nmap.
 > 
-> Even though that function is only called with pkg set to 'busybox', we
-> still pass it as an argument, for symetry with the other functions that
-> removes the dependencies of a package.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > ---
-> support/scripts/graph-depends | 10 ++++++++++
-> 1 file changed, 10 insertions(+)
+> package/busybox/busybox.mk | 1 +
+> package/nmap/nmap.mk       | 6 ------
+> 2 files changed, 1 insertion(+), 6 deletions(-)
 > 
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index 621e603278..909a3d4812 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -181,6 +181,14 @@ def remove_mandatory_deps(pkg, deps):
->     return [p for p in deps[pkg] if p not in ['toolchain', 'skeleton']]
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index 7f08d857f8..4039d1c9ad 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
 > 
+> # Packages that provide commands that may also be busybox applets:
+> BUSYBOX_DEPENDENCIES = \
+> +	$(if $(BR2_PACKAGE_NMAP),nmap) \
+> 	$(if $(BR2_PACKAGE_NTP),ntp) \
+> 	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
+> 	$(if $(BR2_PACKAGE_PROCPS_NG),procps-ng) \
+> diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+> index 1c89b5424e..420aec82d7 100644
+> --- a/package/nmap/nmap.mk
+> +++ b/package/nmap/nmap.mk
+> @@ -76,12 +76,6 @@ else
+> NMAP_CONF_OPTS += --without-nping
+> endif
 > 
-> +# This function removes all dependencies of busybox, except its
-> +# dependencies on libraries (of which linux-pam) and host-pkgconf.
-                                ^^^^^^^^^^^^^^^^^^
-                                   missing text?
-[...]
+> -# If we are going to install ncat, ensure Busybox gets built/installed
+> -# before, so that this package overrides Busybox nc.
+> -ifeq ($(BR2_PACKAGE_NMAP_NCAT)$(BR2_PACKAGE_BUSYBOX),yy)
+> -NMAP_DEPENDENCIES += busybox
+> -endif
+> -
+> # Add a symlink to "nc" if none of the competing netcats is selected
+> ifeq
+> ($(BR2_PACKAGE_NMAP_NCAT):$(BR2_PACKAGE_NETCAT)$(BR2_PACKAGE_NETCAT_OPENBSD),y:)
+> define NMAP_INSTALL_NCAT_SYMLINK
+> --
+> 2.14.1
+
+Reviewed-by: Carlos Santos <casantos@datacom.com.br>
 
 -- 
 Carlos Santos (Casantos) - DATACOM, P&D
