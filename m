@@ -1,145 +1,84 @@
-From: John Keeping <john@metanate.com>
-Date: Tue, 3 Jul 2018 11:06:14 +0100
-Subject: [Buildroot] [PATCH v3] Makefile: respect strip exclusions for
- special libraries
-In-Reply-To: <20180702222516.5467cc60@windsurf.home>
-References: <20180702160027.28557-1-john@metanate.com>
- <20180702164044.GD2604@scaer> <20180702175711.70bf95c7@donbot>
- <20180702222516.5467cc60@windsurf.home>
-Message-ID: <20180703110614.59009bdb@donbot>
+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
+Date: Tue,  3 Jul 2018 09:48:10 +0200
+Subject: [Buildroot] [PATCH v3] dropbear: Disable legacy/insecure options
+Message-ID: <20180703074810.19105-1-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ld-*.so and libpthread*.so* are not stripped in the same way as other
-binaries because some applications need symbols in these libraries in
-order to operate correctly.
+Dropbear by default enables a number of algorithms that are now considered
+insecure and should only be used when legacy support is required:
+   3DES encryption
+   Blowfish encryption
+   SHA1-96 message integrity
+   CBC encryption mode
+   DSA public keys
+   Diffie-Hellman Group1 key exchange
 
-However, the special handling for these binaries ignores the usual
-BR2_STRIP_EXCLUDE_* rules so it is not possible to build an image which
-has debugging symbols in these binaries.
+So disable them by default, but add a config option for bringing them back.
+Furthermore the Blowfish legacy algorithm is unconditionally disabled
 
-Pull out the common find functionality so that we can build two find
-commands that re-use the common exclusion rules.
-
-Fix-suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: John Keeping <john@metanate.com>
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
 ---
-On Mon, 2 Jul 2018 22:25:16 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Changes v2->v3:
+ * Rebase on 037b8616257067282e375edca9af19418a0e7a4a
 
-> I understand the problem, and I know you will find my comment a bit
-> useless, but I find this whole thing pretty complex/noisy. Can we do
-> better ?
-> 
-> Here is some untested initial proposal:
-> 
-> # When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
-> # BR2_STRIP_EXCLUDE_FILES
-> STRIP_FIND_COMMON_CMD = \
-> 	find $(TARGET_DIR) \
-> 	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)),, \
-> 		\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o ) \
-> 	-not $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) \
-> 	-print0
-> 
-> # Regular stripping for everything, except libpthread, ld-*.so and
-> # kernel modules.
-> STRIP_FIND_CMD = \
-> 	$(STRIP_FIND_COMMON_CMD) \
-> 	-type f \( -perm /111 -o -name '*.so*' \) \
-> 	-not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \)
-> 
-> # Special stripping (only debugging symbols) for libpthread and
-> ld-*.so. STRIP_FIND_SPECIAL_LIBS_CMD = \
-> 	$(STRIP_FIND_COMMON_CMD) \
-> 	\( -name 'ld-*.so*' -o -name 'libpthread*.so*' \)
-> 
-> And then:
-> 
-> 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
-> 	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 $(STRIPCMD) $(STRIP_STRIP_DEBUG) || true
-> 
-> Thoughts ?
+Changes v1->v2:
+ * Mention that the Blowfish algorithm has been disabled
 
-This looks much nicer.  I've tested it and fixed a few issues, so we end
-up with this patch.
+ package/dropbear/Config.in   | 10 ++++++++++
+ package/dropbear/dropbear.mk | 12 +++++++++++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
-
- Makefile | 44 +++++++++++++++++++++++++-------------------
- 1 file changed, 25 insertions(+), 19 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 8d25c8a239..ab081412d3 100644
---- a/Makefile
-+++ b/Makefile
-@@ -591,20 +591,37 @@ RSYNC_VCS_EXCLUSIONS = \
- 	--exclude .svn --exclude .git --exclude .hg --exclude .bzr \
- 	--exclude CVS
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 5d6b83b6d1..62f77bad9d 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -56,4 +56,14 @@ config BR2_PACKAGE_DROPBEAR_LASTLOG
+ 	  Enable logging of dropbear access to lastlog. Notice that
+ 	  Buildroot does not generate lastlog by default.
  
--STRIP_FIND_CMD = find $(TARGET_DIR)
--ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
--STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
--endif
--STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
--# file exclusions:
-+# When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
-+# BR2_STRIP_EXCLUDE_FILES
-+STRIP_FIND_COMMON_CMD = \
-+	find $(TARGET_DIR) \
-+	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)), \
-+		\( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) \
-+		-prune -o \
-+	) \
-+	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
-+		-not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) )
++config BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO
++	bool "enable legacy crypto"
++	help
++	  Enable legacy and possibly insecure algorithms:
++	    3DES encryption
++	    SHA1-96 message integrity
++	    CBC encryption mode
++	    DSA public keys
++	    Diffie-Hellman Group1 key exchange
 +
-+# Regular stripping for everything, except libpthread, ld-*.so and
-+# kernel modules:
- # - libpthread.so: a non-stripped libpthread shared library is needed for
- #   proper debugging of pthread programs using gdb.
- # - ld.so: a non-stripped dynamic linker library is needed for valgrind
- # - kernel modules (*.ko): do not function properly when stripped like normal
- #   applications and libraries. Normally kernel modules are already excluded
- #   by the executable permission check above, so the explicit exclusion is only
- #   done for kernel modules with incorrect permissions.
--STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
-+STRIP_FIND_CMD = \
-+	$(STRIP_FIND_COMMON_CMD) \
-+	-type f \( -perm /111 -o -name '*.so*' \) \
-+	-not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \) \
-+	-print0
+ endif
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index bb902bc7ce..7b1468cfb1 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -56,13 +56,23 @@ endef
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
+ endif
+ 
++define DROPBEAR_DISABLE_LEGACY_CRYPTO
++	echo '#define DROPBEAR_3DES 0'                  >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_ENABLE_CBC_MODE 0'       >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_SHA1_96_HMAC 0'          >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_DSS 0'                   >> $(@D)/localoptions.h
++	echo '#define DROPBEAR_DH_GROUP1 0'             >> $(@D)/localoptions.h
++endef
++ifneq ($(BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO),y)
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_LEGACY_CRYPTO
++endif
 +
-+# Special stripping (only debugging symbols) for libpthread and ld-*.so.
-+STRIP_FIND_SPECIAL_LIBS_CMD = \
-+	$(STRIP_FIND_COMMON_CMD) \
-+	\( -name 'ld-*.so*' -o -name 'libpthread*.so*' \) \
-+	-print0
+ define DROPBEAR_ENABLE_REVERSE_DNS
+ 	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
+ endef
  
- ifeq ($(BR2_ECLIPSE_REGISTER),y)
- define TOOLCHAIN_ECLIPSE_REGISTER
-@@ -716,19 +733,8 @@ endif
- 	rm -rf $(TARGET_DIR)/usr/share/gtk-doc
- 	rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
- 	$(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
-+	$(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $(STRIPCMD) $(STRIP_STRIP_DEBUG) 2>/dev/null || true
- 
--# See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
--# besides the one in which crash occurred; or SIGTRAP kills my program when
--# I set a breakpoint"
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--	find $(TARGET_DIR)/lib/ -type f -name 'libpthread*.so*' | \
--		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
--endif
--
--# Valgrind needs ld.so with enough information, so only strip
--# debugging symbols.
--	find $(TARGET_DIR)/lib/ -type f -name 'ld-*.so*' | \
--		xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
- 	test -f $(TARGET_DIR)/etc/ld.so.conf && \
- 		{ echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
- 	test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
+ define DROPBEAR_BUILD_FEATURED
+ 	echo '#define DROPBEAR_SMALL_CODE 0'            >> $(@D)/localoptions.h
+-	echo '#define DROPBEAR_BLOWFISH 1'              >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_TWOFISH128 1'            >> $(@D)/localoptions.h
+ 	echo '#define DROPBEAR_TWOFISH256 1'            >> $(@D)/localoptions.h
+ endef
 -- 
-2.18.0
+2.17.1
