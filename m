@@ -1,32 +1,52 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Tue,  3 Jul 2018 10:11:58 -0300
-Subject: [Buildroot] [PATCH 1/4] linux: bump default to version 4.17.4
-Message-ID: <1530623521-11432-1-git-send-email-fabio.estevam@nxp.com>
+From: Alessandro Nasorri <alessandronasorri@hotmail.com>
+Date: Tue, 3 Jul 2018 14:14:57 +0000
+Subject: [Buildroot] Buildroot support for ultrazed board
+Message-ID: <HE1P190MB049224570E27C40E8F82C1E5AB420@HE1P190MB0492.EURP190.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Fabio Estevam <festevam@gmail.com>
+Hello.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm working on AVNET UltraZed EG board. BSP was created with Vivado 2017.2
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a25e021..d3ea344 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.17.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.17.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-2.7.4
+I'm trying to set-up a buildroot enviroment (buildroot version is 2018.2) to compile an image for this board with the hope to set aside petalinux that is too "heavy" for our project.
+
+I've noticed that under the configs folder there is not a zynq_ultrazed_defconfig.
+
+For the Zynq family there are just  zynq_microzed_defconfig, zynq_zc706_defconfig, zynq_zed_defconfig,  zynq_zybo_defconfig.
+
+If a try to compile the enviroment with zynq_zed_defconfig when uboot try to load the kernel an error message appear saying "Unsupported Architecture".
+
+In this case the problem is that UltraZed expect AARCH64 arhitecture while zynq_zed_defconfig refer ARM architecture.
+
+To overcome this problem, starting from zynq_zed_defconfig, i've created a new file named zynq_ultrazed_defconfig (attached) changing from ARM to AARCH64.
+
+Whit this workaround there is an errors on UBOOT compilation
+
+"arch/arm/lib/asm-offsets.c:1:0: error: unknown value ?armv5? for -march"
+
+and i'm not able to go beyond.
+
+
+What i would like to know is:
+
+  1.  Is there a zynq_ultrazed_defconfig for buildroot? Surfing internet i wasn't able to find it
+  2.  If answer for point 1 is NO which the best way to create a correct zynq_ultrazed_defconfig and have a build success?
+
+Thanks in advance
+Regards
+Alessandro
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180703/3abb3489/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: zynq_ultrazed_defconfig
+Type: application/octet-stream
+Size: 1167 bytes
+Desc: zynq_ultrazed_defconfig
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180703/3abb3489/attachment.obj>
