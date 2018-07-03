@@ -1,62 +1,38 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 3 Jul 2018 08:33:55 -0300 (BRT)
-Subject: [Buildroot] [PATCH 15/50] package/busybox: invert dependency
- with start-stop-daemon
-In-Reply-To: <cda4c3bad985fe0ef995d88ad9470d98a313f553.1530565933.git.yann.morin.1998@free.fr>
-References: <cover.1530565933.git.yann.morin.1998@free.fr>
- <cda4c3bad985fe0ef995d88ad9470d98a313f553.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <971023176.1186352.1530617635858.JavaMail.zimbra@datacom.com.br>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 3 Jul 2018 13:36:38 +0200
+Subject: [Buildroot] [PATCH 1/1] qt5charts: fix license
+In-Reply-To: <dd7ffef7-2969-f6a6-440c-4c875394dccc@armadeus.com>
+References: <20180702092137.25394-1-sebastien.szymanski@armadeus.com>
+ <20180702230532.40820286@windsurf.home>
+ <dd7ffef7-2969-f6a6-440c-4c875394dccc@armadeus.com>
+Message-ID: <20180703133638.3f2d9275@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann Morin" <yann.morin.1998@free.fr>
-> To: "buildroot" <buildroot@buildroot.org>
-> Cc: "Yann Morin" <yann.morin.1998@free.fr>
-> Sent: Monday, July 2, 2018 6:11:49 PM
-> Subject: [Buildroot] [PATCH 15/50] package/busybox: invert dependency with start-stop-daemon
+Hello,
 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> package/busybox/busybox.mk                     | 1 +
-> package/start-stop-daemon/start-stop-daemon.mk | 3 +--
-> 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 3 Jul 2018 10:18:57 +0200, S?bastien Szymanski wrote:
+
+> > ... are we sure the license is GPL-3.0 for both versions of qt5charts ?  
 > 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 74629eb698..7686667884 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
+> I wondered the same thing.
 > 
-> # Packages that provide commands that may also be busybox applets:
-> BUSYBOX_DEPENDENCIES = \
-> +	$(if $(BR2_PACKAGE_START_STOP_DAEMON),start-stop-daemon) \
-> 	$(if $(BR2_PACKAGE_SYSKLOGD),sysklogd) \
-> 	$(if $(BR2_PACKAGE_SYSLOG_NG),syslog-ng) \
-> 	$(if $(BR2_PACKAGE_SYSTEMD),systemd) \
-> diff --git a/package/start-stop-daemon/start-stop-daemon.mk
-> b/package/start-stop-daemon/start-stop-daemon.mk
-> index 7071f5617e..01a6719762 100644
-> --- a/package/start-stop-daemon/start-stop-daemon.mk
-> +++ b/package/start-stop-daemon/start-stop-daemon.mk
-> @@ -19,8 +19,7 @@ START_STOP_DAEMON_CONF_ENV = \
-> 	dpkg_cv_va_copy=yes \
-> 	dpkg_cv_c99_snprintf=yes \
-> 	DPKG_DEVEL_MODE=1
-> -START_STOP_DAEMON_DEPENDENCIES = host-pkgconf \
-> -	$(if $(BR2_PACKAGE_BUSYBOX),busybox)
-> +START_STOP_DAEMON_DEPENDENCIES = host-pkgconf
-> # Patching m4/dpkg-arch.m4
-> START_STOP_DAEMON_AUTORECONF = YES
-> START_STOP_DAEMON_LICENSE = GPL-2.0+
-> --
-> 2.14.1
+> According to the Qt blog [1], Qt Charts is available under GPLv3 (and
+> commercial license) since Qt 5.6.0:
+> 
+> "As announced recently, the Qt Add-ons licensing will be changed so that
+> the Qt Charts module becomes available under both GPLv3 and commercial
+> license terms."
+> 
+> [1] http://blog.qt.io/blog/2016/01/18/qt-charts-2-1-0-release/
 
-Reviewed-by: Carlos Santos <casantos@datacom.com.br>
+OK, thanks for the confirmation.
 
+Thomas
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
