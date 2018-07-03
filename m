@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 3 Jul 2018 21:40:14 +0200
-Subject: [Buildroot] [PATCH 1/2] kf5-modemmanager-qt: correct
- dependencies comment display conditions
-In-Reply-To: <66fdce0c33ee33d5be7a51b8f94deb70b235a43a.1530637518.git.baruch@tkos.co.il>
-References: <66fdce0c33ee33d5be7a51b8f94deb70b235a43a.1530637518.git.baruch@tkos.co.il>
-Message-ID: <20180703214014.662f767f@windsurf>
+Date: Tue, 3 Jul 2018 21:40:35 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.17.4
+Message-ID: <20180703193748.5379184614@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=05f4c8096abfd367266aaba2642e3c18c67ac67c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  3 Jul 2018 20:05:17 +0300, Baruch Siach wrote:
-> Display the dependencies comment only when modem-manager is enabled.
-> Otherwise, a toolchain configuration change would not make the package
-> selectable.
-> 
-> Cc: Pierre Ducroquet <pinaraf@pinaraf.info>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/kf5/kf5-modemmanager-qt/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Series applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/linux/Config.in b/linux/Config.in
+index a25e02193b..d3ea3440da 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.17.3" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.17.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
