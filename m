@@ -1,82 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 4 Jul 2018 00:56:27 +0200
-Subject: [Buildroot] [PATCH 00/50] busybox: invert dependencies
-In-Reply-To: <cover.1530565933.git.yann.morin.1998@free.fr>
-References: <cover.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <907b4fa8-f2c6-120d-4980-95b9a5e656a1@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 4 Jul 2018 07:16:46 +0300
+Subject: [Buildroot] Building the Rockchip libv4l plugin
+In-Reply-To: <20180703223743.447c9f7f@gmx.net>
+References: <20180702082211.bwi2ynnjnfzx3mhm@tarshish>
+ <20180702211635.6d55d14a@gmx.net>
+ <20180703033709.vkytmzcwaybt4wu7@tarshish>
+ <20180703223743.447c9f7f@gmx.net>
+Message-ID: <20180704041646.zmer4qfxjjrv5tn6@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Peter,
 
-
-On 07/02/18 23:12, Yann E. MORIN wrote:
-> Hello All!
+On Tue, Jul 03, 2018 at 10:37:43PM +0200, Peter Seiderer wrote:
+> On Tue, 3 Jul 2018 06:37:09 +0300, Baruch Siach <baruch@tkos.co.il> wrote:
+> > On Mon, Jul 02, 2018 at 09:16:35PM +0200, Peter Seiderer wrote:
+> > > On Mon, 2 Jul 2018 11:22:11 +0300, Baruch Siach <baruch@tkos.co.il> wrote:  
+> > > > I'm trying to build the Rockchip libv4l2 plugin in Buildroot. The source 
+> > > > is at
+> > > > 
+> > > >   https://chromium.googlesource.com/chromiumos/third_party/libv4lplugins/+/master/libv4l-rockchip_v2/
+> > > > 
+> > > > As upstream indicated[1], the code is meant to build as part of libv4l, not as 
+> > > > a standalone library. ChromiumOS sees to copy the code into the libv4l source 
+> > > > tree, and modify the relevant build configuration files[2].
+> > > > 
+> > > > What would be the best way to do that in Buildroot? A symlink to the plugin 
+> > > > source tree? Copy of the code to libv4l?  
+> > > 
+> > > ...or add a configure.ac/configure file to the source?  
+> > 
+> > Unfortunately the plugin really needs internal libv4l headers, so this is not 
+> > possible.
 > 
-> Currently, the issue that busybox may install the same executables as
-> those from other packages, is handled in all those packages. This is
-> not very practical.
+> Something like the following (quick hack) patch, done the following first (should be added to libv4l):
 
- The reverse is also not very practical...
+Thanks for doing that. You can see my solution below. The libv4l patch fixes 
+the build issue that you encountered. Not sure which solution is cleaner. The 
+libv4l patch looks problematic, unless we apply it conditionally. Not good.
 
-> Furthermore, this means that those packages all overwrite the
-> busybox-installed applets, which means that this triggers the
-> no-two-packages-touch-the-same-file rule. So far, this is only a
-> warning, but when we eventually go with TLPB, we'll have to enforce
-> that rule.
+I'm not sure I'll continue pursuing this path. Upstream response[1] means that 
+some non trivial kernel change are required to make it work with anything 
+other than ChromeOS kernels.
 
- Although we've already discussed this a couple of times in BR meetings, we
-never found a solution that is really satisfactory.
+baruch
 
- However, I have a new idea now...
-
- IIUC, with PPS, there is no real problem with two packages touching the same
-file, as long as the dependency is explicitly tracked in Buildroot, right?
-Because when it is explicitly tracked, the file created by package A will always
-be present in package B's PPS when package B is built, so it's perfectly
-reproducible.
-
- For the case of two packages *writing* the same file (without looking at the
-previous contents, i.e. not appending or anything like that), the constraint is
-even lighter: there doesn't really need to be an explicit dependency, we just
-have to make sure that when the rsync is done, the order is predictable. That's
-just a matter of sorting. But also, we want it not just to be predictable, but
-also in the "correct" order, e.g. if busybox is a dependency, it should be
-rsync'd before another package that creates the same executable. The rsync will
-then overwrite it (because the rsyncs are not done in parallel).
-
- For that particular ordering, I think there could be a simpler solution than
-enumerating all those dependencies in busybox.mk. We could give each package a
-priority, and use that priority to order the rsync's. The default priority would
-be e.g. 5, and busybox would get e.g. 3. That way, we only need BUSYBOX_PRIORITY
-= 3 in busybox.mk, and everything is solved.
-
- Obviously, it would make the infra more complicated :-)
-
- We would then also need to change the "two packages touching same file" check
-to be error out only if they have the same priority.
-
- For the other packages that install the same file (e.g ntp <> openntpd, the
-different nmaps, ...), we can then use the same simple resolution rather than
-explicitly encoding the dependency. We would still need to choose the priority
-(which is a bit arbitrary), we would still need to detect the conflict, and we
-would still need to verify that this conflict really is of the "overwrite" type
-and not the "append" type. So it's not a silver bullet, but it might make
-maintenance a little bit simpler.
-
- What do you think?
-
- Regards,
- Arnout
-
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+[1] http://lists.infradead.org/pipermail/linux-rockchip/2018-July/021133.html
