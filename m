@@ -1,53 +1,42 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Wed,  4 Jul 2018 09:07:34 +0200
-Subject: [Buildroot] [PATCH 0/5] misc. patches from Nokia
-Message-ID: <20180704070739.7259-1-thomas.de_schampheleire@nokia.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 04 Jul 2018 14:29:44 +0000
+Subject: [Buildroot] [Bug 11141] New: WF111 package no longer availabe
+Message-ID: <bug-11141-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+https://bugs.busybox.net/show_bug.cgi?id=11141
 
-As promised earlier this year, here is a first set of patches from our local
-tree. More will come later.
+            Bug ID: 11141
+           Summary: WF111 package no longer availabe
+           Product: buildroot
+           Version: unspecified
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Outdated package
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: geert at my-clay.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-They are grouped in one series, but only the two dropbear patches actually
-are linked.
+The current WF111 version is 5-2-2-r3. It is no longer available on the
+download website. And therefore builds that rely on it are broken.
 
-Best regards,
-Thomas
+The latest WF111 version is 5-2-2-r4 and contains a fix for KRACK exploit and
+requires a patched WPA_SUPPLICANT version 2.6. The latest version is available.
 
---
+This package is available for public download from the URL as specified in the
+WF111 make file.
 
-Alfredo Alvarez Fernandez (1):
-  pigz: new package
-
-Jan Heylen (1):
-  linux: automatically set CONFIG_PERF_EVENTS when perf is enabled
-
-Thomas De Schampheleire (3):
-  host zstd: additionally build binary and make selectable
-  dropbear: add option to disable CBC mode ciphers
-  dropbear: add option to disable weak HMAC algorithms
-
- linux/linux.mk                |  2 ++
- package/Config.in             |  1 +
- package/Config.in.host        |  1 +
- package/dropbear/Config.in    | 14 ++++++++++++++
- package/dropbear/dropbear.mk  | 17 +++++++++++++++++
- package/linux-tools/Config.in |  8 +++++---
- package/pigz/Config.in        | 14 ++++++++++++++
- package/pigz/pigz.hash        |  2 ++
- package/pigz/pigz.mk          | 21 +++++++++++++++++++++
- package/zstd/Config.in.host   |  8 ++++++++
- package/zstd/zstd.mk          |  4 ++++
- 11 files changed, 89 insertions(+), 3 deletions(-)
- create mode 100644 package/pigz/Config.in
- create mode 100644 package/pigz/pigz.hash
- create mode 100644 package/pigz/pigz.mk
- create mode 100644 package/zstd/Config.in.host
+This issue applies to buildroot version 2018.02 and newer, since the download
+URL was introduced there.
 
 -- 
-2.16.4
+You are receiving this mail because:
+You are on the CC list for the bug.
