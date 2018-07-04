@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Jul 2018 21:44:39 +0200
-Subject: [Buildroot] [PATCH v3] dropbear: Disable legacy/insecure options
-In-Reply-To: <20180703074810.19105-1-stefan.sorensen@spectralink.com>
-References: <20180703074810.19105-1-stefan.sorensen@spectralink.com>
-Message-ID: <20180704214439.27e4d113@windsurf>
+Date: Wed, 4 Jul 2018 21:44:24 +0200
+Subject: [Buildroot] [PATCH 4/5] dropbear: add option to disable CBC
+ mode ciphers
+In-Reply-To: <20180704070739.7259-5-thomas.de_schampheleire@nokia.com>
+References: <20180704070739.7259-1-thomas.de_schampheleire@nokia.com>
+ <20180704070739.7259-5-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180704214424.6f77fb53@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,25 +14,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue,  3 Jul 2018 09:48:10 +0200, Stefan S?rensen wrote:
-> Dropbear by default enables a number of algorithms that are now considered
-> insecure and should only be used when legacy support is required:
->    3DES encryption
->    Blowfish encryption
->    SHA1-96 message integrity
->    CBC encryption mode
->    DSA public keys
->    Diffie-Hellman Group1 key exchange
+On Wed,  4 Jul 2018 09:07:38 +0200, Thomas De Schampheleire wrote:
+> CBC mode ciphers are considered insecure. Add an option to disable it.
 > 
-> So disable them by default, but add a config option for bringing them back.
-> Furthermore the Blowfish legacy algorithm is unconditionally disabled
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> ---
-> Changes v2->v3:
->  * Rebase on 037b8616257067282e375edca9af19418a0e7a4a
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 
-Applied to master, thanks.
+Following the discussion with Baruch, I have marked this patch and
+PATCH 5/5 as Rejected in patchwork.
+
+Thanks,
 
 Thomas
 -- 
