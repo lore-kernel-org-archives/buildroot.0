@@ -1,41 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Jul 2018 21:45:46 +0200
-Subject: [Buildroot] [PATCH] package/exim: remove unused Local-Makefile
-In-Reply-To: <20180703210708.30017-1-arnout@mind.be>
-References: <20180703210708.30017-1-arnout@mind.be>
-Message-ID: <20180704214546.19998c5f@windsurf>
+Date: Wed, 4 Jul 2018 21:52:11 +0200
+Subject: [Buildroot] [git commit] linux: automatically set
+ CONFIG_PERF_EVENTS when perf is enabled
+Message-ID: <20180704194852.113E48680E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=63d76c6f2f04c836af24098e26f2befe1e8e4cc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  3 Jul 2018 23:07:08 +0200, Arnout Vandecappelle
-(Essensium/Mind) wrote:
-> When the exim package was added, it included a template for the
-> build-time configuration file Local/Makefile in the package directory.
-> In commit 8956779d5d2 (exim: use a more standard build-time
-> configuration), this template file was replaced with the EDITME
-> template file included in the exim sources. However, that commit did
-> not remove Buildroot's Local-Makefile.
-> 
-> Since this file is no longer used, remove it.
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Luca Ceresoli <luca@lucaceresoli.net>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Perf profiling cannot be used if CONFIG_PERF_EVENTS is not enabled in the
+kernel configuration. Similar to other tools, like ktap, we can enable the
+right options automatically.
 
-Applied, thanks!
+Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/linux.mk                | 2 ++
+ package/linux-tools/Config.in | 8 +++++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-> I thought I had sent this patch a while ago, but I can't find it in
-> patchwork...
-
-I don't remember seeing in on the list.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 6b5f5344ed..7f4c916671 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -292,6 +292,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
++	$(if $(BR2_PACKAGE_LINUX_TOOLS_PERF),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_SYSTEMD),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 2527c90257..349dc6bf0d 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -47,9 +47,11 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	  code), single CPU or severals threads.
+ 
+ 	  This will build and install the userspace 'perf'
+-	  command. It is up to the user to ensure that the kernel
+-	  configuration has all the suitable options enabled to allow a
+-	  proper operation of 'perf'.
++	  command.
++
++	  Your kernel must have CONFIG_PERF_EVENTS enabled to use perf
++	  profiling. Buildroot automatically enables this in the kernel
++	  configuration.
+ 
+ 	  https://perf.wiki.kernel.org/
+ 
