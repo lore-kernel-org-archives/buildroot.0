@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Jul 2018 22:30:29 +0200
-Subject: [Buildroot] [PATCH 2/5] pigz: new package
-In-Reply-To: <20180704070739.7259-3-thomas.de_schampheleire@nokia.com>
-References: <20180704070739.7259-1-thomas.de_schampheleire@nokia.com>
- <20180704070739.7259-3-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180704223029.288baa38@windsurf>
+Date: Wed, 4 Jul 2018 22:31:46 +0200
+Subject: [Buildroot] [PATCH 1/1] boost: graph needs regex
+In-Reply-To: <20180703222235.14643-1-fontaine.fabrice@gmail.com>
+References: <20180703222235.14643-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180704223146.4d82436c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,29 +12,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  4 Jul 2018 09:07:36 +0200, Thomas De Schampheleire wrote:
-> From: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
+On Wed,  4 Jul 2018 00:22:35 +0200, Fabrice Fontaine wrote:
+> output/host/usr/bin/m68k-linux-readelf -d output/staging/usr/lib/libboost_graph.so
 > 
-> A parallel implementation of gzip for modern
-> multi-processor, multi-core machines.
+> Dynamic section at offset 0x47f00 contains 28 entries:
+>   Tag        Type                         Name/Value
+>  0x00000001 (NEEDED)                     Shared library: [libboost_regex.so.1.67.0]
 > 
-> Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/Config.in      |  1 +
->  package/pigz/Config.in | 14 ++++++++++++++
->  package/pigz/pigz.hash |  2 ++
->  package/pigz/pigz.mk   | 21 +++++++++++++++++++++
->  4 files changed, 38 insertions(+)
->  create mode 100644 package/pigz/Config.in
->  create mode 100644 package/pigz/pigz.hash
->  create mode 100644 package/pigz/pigz.mk
+>  package/boost/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-I've applied, with the following changes:
+Applied to master, thanks. Did you look at Arnout proposal to
+automatically error out if a dependency within boost is not correctly
+handled ? Arnout had an interesting idea to achieve this.
 
-    [Thomas: add entry to DEVELOPERS file, add hash for license file.]
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
