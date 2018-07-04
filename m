@@ -1,44 +1,77 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed,  4 Jul 2018 22:36:24 +0200
-Subject: [Buildroot] [PATCH] systemd: Fix polkit build order
-Message-ID: <20180704203624.12391-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  4 Jul 2018 23:42:57 +0200
+Subject: [Buildroot] [PATCH] toolchain: improve musl check to support static
+ toolchains
+Message-ID: <20180704214257.6849-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
+The check_musl function currently builds a program and verifies if the
+program interpreter starts with /lib/ld-musl. While this works fine
+for dynamically linked programs, this obviously doesn't work for a
+purely static musl toolchain such as [1].
 
-We need to install polkit before systemd if we want to enable
-polkit integration, because systemd will not install polkit
-policy files unless it finds polkit-gobject-1.
+There is no easy way to identify a toolchain as using the musl C
+library. For glibc, dynamic linking is always supported, so we look at
+the dynamic linker name. For uClibc, there is a distinctive
+uClibc_config.h header file. There is no such distinctive feature in
+musl.
 
-Signed-off-by: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+We end up resorting to looking for the string MUSL_LOCPATH, which is
+used by musl locale_map.c source file. This string has been present in
+musl since 2014. It certainly isn't a very stable or convincing
+solution to identify the C library as being musl, but it's the best we
+could find.
 
+Note that we are sure there is a libc.a file, because the
+check_unusable_toolchain function checks that there is a such a file.
+
+[1] http://autobuild.buildroot.net/toolchains/tarballs/br-arm-musl-static-2018.05.tar.bz2
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-I've resent this, as Asgeir does not seem to be subscribed to the list.
-Asgeir, if you want to send more patches (which we encourage you to
-do!), you'll need to subscribe to the list first.
+ toolchain/helpers.mk                                   | 9 +++------
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 3 +--
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-Thanks! :-)
----
- package/systemd/systemd.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 10e11a9277..04775ee778 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -283,6 +283,7 @@ endif
+diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+index 1792286add..e5520c00c3 100644
+--- a/toolchain/helpers.mk
++++ b/toolchain/helpers.mk
+@@ -241,14 +241,11 @@ check_glibc = \
+ # $2: cross-readelf path
+ check_musl = \
+ 	__CROSS_CC=$(strip $1) ; \
+-	__CROSS_READELF=$(strip $2) ; \
+-	echo 'void main(void) {}' | $${__CROSS_CC} -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - >/dev/null 2>&1; \
+-	if ! $${__CROSS_READELF} -l $(BUILD_DIR)/.br-toolchain-test.tmp 2> /dev/null | grep 'program interpreter: /lib/ld-musl' -q; then \
+-		rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*; \
++	libc_a_path=`$${__CROSS_CC} -print-file-name=libc.a` ; \
++	if ! strings $${libc_a_path} | grep -q MUSL_LOCPATH ; then \
+ 		echo "Incorrect selection of the C library" ; \
+ 		exit -1; \
+-	fi ; \
+-	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
++	fi
  
- ifeq ($(BR2_PACKAGE_SYSTEMD_POLKIT),y)
- SYSTEMD_CONF_OPTS += -Dpolkit=true
-+SYSTEMD_DEPENDENCIES += polkit
- else
- SYSTEMD_CONF_OPTS += -Dpolkit=false
- endif
+ #
+ # Check the conformity of Buildroot configuration with regard to the
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index 8b2c283654..02d992531d 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -557,8 +557,7 @@ define $(2)_CONFIGURE_CMDS
+ 		$$(call check_uclibc,$$$${SYSROOT_DIR}) ; \
+ 	elif test "$$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
+ 		$$(call check_musl,\
+-			"$$(TOOLCHAIN_EXTERNAL_CC) $$(TOOLCHAIN_EXTERNAL_CFLAGS)",\
+-			$$(TOOLCHAIN_EXTERNAL_READELF)) ; \
++			"$$(TOOLCHAIN_EXTERNAL_CC) $$(TOOLCHAIN_EXTERNAL_CFLAGS)") ; \
+ 	else \
+ 		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
+ 	fi
 -- 
-2.14.1
+2.14.4
