@@ -1,53 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 4 Jul 2018 21:57:25 +0200
-Subject: [Buildroot] [PATCH 1/1] systemd: Fix polkit build order
-In-Reply-To: <20180704150251.1105-1-asgeir@appdynamic.com>
-References: <20180704150251.1105-1-asgeir@appdynamic.com>
-Message-ID: <20180704195725.GD2595@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 4 Jul 2018 21:53:37 +0200
+Subject: [Buildroot] [git commit] zstd: build program and add menuconfig
+ entry for host variant
+Message-ID: <20180704195533.D4902870B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Asgeir, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c76380dd7c5d7c7a0827ea9619413664fd5c9773
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-07-04 15:02 +0000, Asgeir Bjarni Ingvarsson spake thusly:
-> We need to install polkit before systemd if we want to enable
-> polkit integration, because systemd will not install polkit
-> policy files unless it finds polkit-gobject-1.
-> 
-> Signed-off-by: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
+The zstd (de)compression tool may be used in post-image scripts to
+compress certain elements of the final image.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+In order to allow that, make host-zstd selectable in the 'Host
+utilities' menu, and build the binary in addition to the library.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/Config.in.host      | 1 +
+ package/zstd/Config.in.host | 8 ++++++++
+ package/zstd/zstd.mk        | 4 ++++
+ 3 files changed, 13 insertions(+)
 
-> ---
->  package/systemd/systemd.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 10e11a9277..04775ee778 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -283,6 +283,7 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_SYSTEMD_POLKIT),y)
->  SYSTEMD_CONF_OPTS += -Dpolkit=true
-> +SYSTEMD_DEPENDENCIES += polkit
->  else
->  SYSTEMD_CONF_OPTS += -Dpolkit=false
->  endif
-> -- 
-> 2.16.4
-> 
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 38543e7390..7838ffc219 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -62,5 +62,6 @@ menu "Host utilities"
+ 	source "package/vboot-utils/Config.in.host"
+ 	source "package/xorriso/Config.in.host"
+ 	source "package/zip/Config.in.host"
++	source "package/zstd/Config.in.host"
+ 
+ endmenu
+diff --git a/package/zstd/Config.in.host b/package/zstd/Config.in.host
+new file mode 100644
+index 0000000000..05751f8fbf
+--- /dev/null
++++ b/package/zstd/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_ZSTD
++	bool "host zstd"
++	help
++	  Zstandard, or zstd as short version, is a fast lossless
++	  compression algorithm, targeting real-time compression
++	  scenarios at zlib-level and better compression ratios
++
++	  https://facebook.github.io/zstd
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 4915cee07d..0b613a6da4 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -72,11 +72,15 @@ endef
+ define HOST_ZSTD_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+ 		-C $(@D)/lib
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
++		-C $(@D) zstd
+ endef
+ 
+ define HOST_ZSTD_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+ 		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/lib install
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
++		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/programs install
+ endef
+ 
+ $(eval $(generic-package))
