@@ -1,34 +1,46 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Wed, 4 Jul 2018 10:45:17 +0200
-Subject: [Buildroot] [PATCH v3] dropbear: Disable legacy/insecure options
-In-Reply-To: <20180703103826.yk7jzpvg7xfhagr4@tarshish>
-References: <20180703074810.19105-1-stefan.sorensen@spectralink.com>
- <20180703103826.yk7jzpvg7xfhagr4@tarshish>
-Message-ID: <20180704084517.GC8766@australia.be.alcatel-lucent.com>
+Date: Wed, 4 Jul 2018 10:47:18 +0200
+Subject: [Buildroot] [PATCH 4/5] dropbear: add option to disable CBC
+ mode ciphers
+In-Reply-To: <20180704073057.dr3qp4t34daf434s@sapphire.tkos.co.il>
+References: <20180704070739.7259-1-thomas.de_schampheleire@nokia.com>
+ <20180704070739.7259-5-thomas.de_schampheleire@nokia.com>
+ <20180704073057.dr3qp4t34daf434s@sapphire.tkos.co.il>
+Message-ID: <20180704084718.GD8766@australia.be.alcatel-lucent.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 03, 2018 at 01:38:26PM +0300, Baruch Siach wrote:
-> Hi Stefan,
-> 
-> On Tue, Jul 03, 2018 at 09:48:10AM +0200, Stefan S?rensen wrote:
-> > Dropbear by default enables a number of algorithms that are now considered
-> > insecure and should only be used when legacy support is required:
-> >    3DES encryption
-> >    Blowfish encryption
-> >    SHA1-96 message integrity
-> >    CBC encryption mode
-> >    DSA public keys
-> >    Diffie-Hellman Group1 key exchange
-> > 
-> > So disable them by default, but add a config option for bringing them back.
-> > Furthermore the Blowfish legacy algorithm is unconditionally disabled
-> > 
-> > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> 
-> Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Hi Baruch,
 
-Reviewed-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+On Wed, Jul 04, 2018 at 10:30:58AM +0300, Baruch Siach wrote:
+> Hi Thomas,
+> 
+> On Wed, Jul 04, 2018 at 09:07:38AM +0200, Thomas De Schampheleire wrote:
+> > CBC mode ciphers are considered insecure. Add an option to disable it.
+> 
+> We have a patch from Stefan S?rensen to disable all weak algorithms by 
+> default:
+> 
+>   http://patchwork.ozlabs.org/patch/938595/
+> 
+> I prefer Stefan's patch over this and the next patch.
+> 
+> Stefan's patch doesn't deal with the MD5 HMAC as the next patch does. But I 
+> find it highly unlikely that upstream would enable MD5 by default ever again. 
+> Upstream commit 34ee32607598 adds this code in sysoptions.h:
+> 
+> /* might be needed for compatibility with very old implementations */
+> #ifndef DROPBEAR_MD5_HMAC
+> #define DROPBEAR_MD5_HMAC 0
+> #endif
+> 
+> default_options.h doesn't mention MD5 at all.
+
+
+Thanks for this info. I'm perfectly fine with Stefan's patch instead of these
+two.
+
+/Thomas
