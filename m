@@ -1,37 +1,580 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Jul 2018 21:39:10 +0200
-Subject: [Buildroot] [git commit] package/gdb: remove gdb 7.11.1 patches
-Message-ID: <20180704193737.49B20866BE@busybox.osuosl.org>
+Date: Wed, 4 Jul 2018 21:39:09 +0200
+Subject: [Buildroot] [git commit] package/gdb: remove gdb 7.10.1 patches
+Message-ID: <20180704193737.39F89866BE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf19116c802118ec567e668e60de088b646f4fa3
+commit: https://git.buildroot.net/buildroot/commit/?id=3ed82fab6159494c5aff49f94ed4d5fb50e64395
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gdb 7.11.x support was removed since commit bae35c80128fce6b5b4260186f9020308efbce4b
+gdb 7.10.x support was removed since commit 54a2e7a3b72778c9ec26cb184a1dd7a356e514c9
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-Sync-proc_service-definition-with-GLIBC.patch | 389 ---------------------
- ...Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch |  53 ---
+ .../0001-Add-some-casts-for-building-on-musl.patch |  90 -------
+ ...musl-Move-W_STOPCODE-to-common-gdb_wait-h.patch |  63 -----
+ package/gdb/7.10.1/0003-move-__SIGRTMIN.patch      |  58 -----
+ .../0004-xtensa-implement-NPTL-helpers.patch       | 267 -------------------
+ .../7.10.1/0005-target.h-include-sys-types.h.patch |  30 ---
+ ...6-Sync-proc_service-definition-with-GLIBC.patch | 287 ---------------------
+ ...Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch |  53 ----
  ...efine-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch |  41 ---
- .../0004-Fix-gdbserver-build-on-uClibc-noMMU.patch |  32 --
- package/gdb/7.11.1/0005-use-asm-sgidefs.h.patch    |  40 ---
- 5 files changed, 555 deletions(-)
+ .../0009-Fix-gdbserver-build-on-uClibc-noMMU.patch |  32 ---
+ package/gdb/7.10.1/0010-use-asm-sgidefs.h.patch    |  41 ---
+ 10 files changed, 962 deletions(-)
 
-diff --git a/package/gdb/7.11.1/0001-Sync-proc_service-definition-with-GLIBC.patch b/package/gdb/7.11.1/0001-Sync-proc_service-definition-with-GLIBC.patch
+diff --git a/package/gdb/7.10.1/0001-Add-some-casts-for-building-on-musl.patch b/package/gdb/7.10.1/0001-Add-some-casts-for-building-on-musl.patch
 deleted file mode 100644
-index b3f723a8ef..0000000000
---- a/package/gdb/7.11.1/0001-Sync-proc_service-definition-with-GLIBC.patch
+index 863e26aac3..0000000000
+--- a/package/gdb/7.10.1/0001-Add-some-casts-for-building-on-musl.patch
 +++ /dev/null
-@@ -1,389 +0,0 @@
--From 140bf80050b34f0947b34dba93b830ea2bfc5040 Mon Sep 17 00:00:00 2001
--From: Adhemerval Zanella <adhemerval.zanella@linaro.org>
--Date: Thu, 25 Aug 2016 08:42:03 +0100
+@@ -1,90 +0,0 @@
+-From d41401ace01c234f42697e190a2ac95991780626 Mon Sep 17 00:00:00 2001
+-From: Doug Evans <dje@google.com>
+-Date: Mon, 26 Oct 2015 13:20:12 -0700
+-Subject: [PATCH] Add some casts for building on musl.
+-
+-gdb/ChangeLog:
+-
+-	* linux-thread-db.c (find_new_threads_callback): Cast ti.ti_tid to
+-	unsigned long for debug_printf.
+-	(thread_db_pid_to_str): Ditto.
+-
+-gdb/gdbserver/ChangeLog:
+-
+-	* thread-db.c (find_one_thread): Cast ti.ti_tid to unsigned long
+-	for debug_printf.
+-	(attach_thread, find_new_threads_callback): Ditto.
+-
+-[Arnout: removed the parts that don't apply, including ChangeLog]
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- gdb/ChangeLog             | 5 +++++
+- gdb/gdbserver/ChangeLog   | 6 ++++++
+- gdb/gdbserver/thread-db.c | 9 +++++----
+- gdb/linux-thread-db.c     | 5 +++--
+- 4 files changed, 19 insertions(+), 6 deletions(-)
+-
+-diff --git a/gdb/gdbserver/thread-db.c b/gdb/gdbserver/thread-db.c
+-index ffe722d..3df10ff 100644
+---- a/gdb/gdbserver/thread-db.c
+-+++ b/gdb/gdbserver/thread-db.c
+-@@ -278,7 +278,7 @@ find_one_thread (ptid_t ptid)
+- 
+-   if (debug_threads)
+-     debug_printf ("Found thread %ld (LWP %d)\n",
+--		  ti.ti_tid, ti.ti_lid);
+-+		  (unsigned long) ti.ti_tid, ti.ti_lid);
+- 
+-   if (lwpid != ti.ti_lid)
+-     {
+-@@ -319,12 +319,12 @@ attach_thread (const td_thrhandle_t *th_p, td_thrinfo_t *ti_p)
+- 
+-   if (debug_threads)
+-     debug_printf ("Attaching to thread %ld (LWP %d)\n",
+--		  ti_p->ti_tid, ti_p->ti_lid);
+-+		  (unsigned long) ti_p->ti_tid, ti_p->ti_lid);
+-   err = linux_attach_lwp (ptid);
+-   if (err != 0)
+-     {
+-       warning ("Could not attach to thread %ld (LWP %d): %s\n",
+--	       ti_p->ti_tid, ti_p->ti_lid,
+-+	       (unsigned long) ti_p->ti_tid, ti_p->ti_lid,
+- 	       linux_ptrace_attach_fail_reason_string (ptid, err));
+-       return 0;
+-     }
+-@@ -392,7 +392,8 @@ find_new_threads_callback (const td_thrhandle_t *th_p, void *data)
+- 	 glibc PR17707.  */
+-       if (debug_threads)
+- 	debug_printf ("thread_db: skipping exited and "
+--		      "joined thread (0x%lx)\n", ti.ti_tid);
+-+		      "joined thread (0x%lx)\n",
+-+		      (unsigned long) ti.ti_tid);
+-       return 0;
+-     }
+- 
+-diff --git a/gdb/linux-thread-db.c b/gdb/linux-thread-db.c
+-index 66e9595..41db29a 100644
+---- a/gdb/linux-thread-db.c
+-+++ b/gdb/linux-thread-db.c
+-@@ -1585,7 +1585,8 @@ find_new_threads_callback (const td_thrhandle_t *th_p, void *data)
+-       if (libthread_db_debug)
+- 	fprintf_unfiltered (gdb_stdlog,
+- 			    "thread_db: skipping exited and "
+--			    "joined thread (0x%lx)\n", ti.ti_tid);
+-+			    "joined thread (0x%lx)\n",
+-+			    (unsigned long) ti.ti_tid);
+-       return 0;
+-     }
+- 
+-@@ -1816,7 +1817,7 @@ thread_db_pid_to_str (struct target_ops *ops, ptid_t ptid)
+- 
+-       tid = thread_info->priv->tid;
+-       snprintf (buf, sizeof (buf), "Thread 0x%lx (LWP %ld)",
+--		tid, ptid_get_lwp (ptid));
+-+		(unsigned long) tid, ptid_get_lwp (ptid));
+- 
+-       return buf;
+-     }
+--- 
+-1.9.4
+-
+diff --git a/package/gdb/7.10.1/0002-musl-Move-W_STOPCODE-to-common-gdb_wait-h.patch b/package/gdb/7.10.1/0002-musl-Move-W_STOPCODE-to-common-gdb_wait-h.patch
+deleted file mode 100644
+index 60c357cd80..0000000000
+--- a/package/gdb/7.10.1/0002-musl-Move-W_STOPCODE-to-common-gdb_wait-h.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 963843d4d07aef6caa296dacf191f8adc9518596 Mon Sep 17 00:00:00 2001
+-From: Doug Evans <dje@google.com>
+-Date: Mon, 26 Oct 2015 13:24:01 -0700
+-Subject: [PATCH] musl: Move W_STOPCODE to common/gdb_wait.h.
+-
+-gdb/ChangeLog:
+-
+-	* common/gdb_wait.h (W_STOPCODE): Define, moved here from
+-	gdbserver/linux-low.c.
+-	(WSETSTOP): Simplify.
+-
+-gdb/gdbserver/ChangeLog:
+-
+-	* linux-low.c (W_STOPCODE): Moved to common/gdb_wait.h.
+-
+-[Arnout: removed the parts that don't apply, including ChangeLog]
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- gdb/ChangeLog             | 6 ++++++
+- gdb/common/gdb_wait.h     | 8 ++++----
+- gdb/gdbserver/ChangeLog   | 4 ++++
+- gdb/gdbserver/linux-low.c | 4 ----
+- 4 files changed, 14 insertions(+), 8 deletions(-)
+-
+-diff --git a/gdb/common/gdb_wait.h b/gdb/common/gdb_wait.h
+-index 9b250d2..412f813 100644
+---- a/gdb/common/gdb_wait.h
+-+++ b/gdb/common/gdb_wait.h
+-@@ -85,12 +85,12 @@
+- # endif
+- #endif
+- 
+-+#ifndef W_STOPCODE
+-+#define W_STOPCODE(sig) ((sig) << 8 | 0x7f)
+-+#endif
+-+
+- #ifndef	WSETSTOP
+--# ifdef	W_STOPCODE
+- #define	WSETSTOP(w,sig)    ((w) = W_STOPCODE(sig))
+--# else
+--#define WSETSTOP(w,sig)	   ((w) = (0177 | ((sig) << 8)))
+--# endif
+- #endif
+- 
+- /* For native GNU/Linux we may use waitpid and the __WCLONE option.
+-diff --git a/gdb/gdbserver/linux-low.c b/gdb/gdbserver/linux-low.c
+-index 0c552b8..7ed67c7 100644
+---- a/gdb/gdbserver/linux-low.c
+-+++ b/gdb/gdbserver/linux-low.c
+-@@ -70,10 +70,6 @@
+- #define O_LARGEFILE 0
+- #endif
+- 
+--#ifndef W_STOPCODE
+--#define W_STOPCODE(sig) ((sig) << 8 | 0x7f)
+--#endif
+--
+- /* This is the kernel's hard limit.  Not to be confused with
+-    SIGRTMIN.  */
+- #ifndef __SIGRTMIN
+--- 
+-1.9.4
+-
+diff --git a/package/gdb/7.10.1/0003-move-__SIGRTMIN.patch b/package/gdb/7.10.1/0003-move-__SIGRTMIN.patch
+deleted file mode 100644
+index 38ba1f028a..0000000000
+--- a/package/gdb/7.10.1/0003-move-__SIGRTMIN.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 682b25469e66ea45b214e95962671373983c118f Mon Sep 17 00:00:00 2001
+-From: Doug Evans <dje@google.com>
+-Date: Mon, 26 Oct 2015 13:30:57 -0700
+-Subject: [PATCH] Move __SIGRTMIN.
+-
+-gdb/ChangeLog:
+-
+-	* nat/linux-nat.h (__SIGRTMIN): Move here from gdbserver/linux-low.c.
+-
+-gdb/gdbserver/ChangeLog:
+-
+-	* linux-low.c (__SIGRTMIN): Move to nat/linux-nat.h.
+-
+-[Arnout: removed the parts that don't apply, including ChangeLog]
+-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+----
+- gdb/ChangeLog             | 4 ++++
+- gdb/gdbserver/ChangeLog   | 4 ++++
+- gdb/gdbserver/linux-low.c | 6 ------
+- gdb/nat/linux-nat.h       | 5 +++++
+- 4 files changed, 13 insertions(+), 6 deletions(-)
+-
+-diff --git a/gdb/gdbserver/linux-low.c b/gdb/gdbserver/linux-low.c
+-index 7ed67c7..e778c4c 100644
+---- a/gdb/gdbserver/linux-low.c
+-+++ b/gdb/gdbserver/linux-low.c
+-@@ -70,12 +70,6 @@
+- #define O_LARGEFILE 0
+- #endif
+- 
+--/* This is the kernel's hard limit.  Not to be confused with
+--   SIGRTMIN.  */
+--#ifndef __SIGRTMIN
+--#define __SIGRTMIN 32
+--#endif
+--
+- /* Some targets did not define these ptrace constants from the start,
+-    so gdbserver defines them locally here.  In the future, these may
+-    be removed after they are added to asm/ptrace.h.  */
+-diff --git a/gdb/nat/linux-nat.h b/gdb/nat/linux-nat.h
+-index 0633fa9..70e6274 100644
+---- a/gdb/nat/linux-nat.h
+-+++ b/gdb/nat/linux-nat.h
+-@@ -25,6 +25,11 @@
+- struct lwp_info;
+- struct arch_lwp_info;
+- 
+-+/* This is the kernel's hard limit.  Not to be confused with SIGRTMIN.  */
+-+#ifndef __SIGRTMIN
+-+#define __SIGRTMIN 32
+-+#endif
+-+
+- /* Unlike other extended result codes, WSTOPSIG (status) on
+-    PTRACE_O_TRACESYSGOOD syscall events doesn't return SIGTRAP, but
+-    instead SIGTRAP with bit 7 set.  */
+--- 
+-1.9.4
+-
+diff --git a/package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch b/package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch
+deleted file mode 100644
+index e7bc74ea53..0000000000
+--- a/package/gdb/7.10.1/0004-xtensa-implement-NPTL-helpers.patch
++++ /dev/null
+@@ -1,267 +0,0 @@
+-From d4eb69fc4b50f9a0babd70b28d0601b40f31bd0f Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Thu, 2 Jul 2015 15:10:58 +0300
+-Subject: [PATCH] xtensa: implement NPTL helpers
+-
+-These changes allow debugging multithreaded NPTL xtensa applications.
+-
+-2015-08-20  Max Filippov  <jcmvbkbc@gmail.com>
+-gdb/gdbserver/
+-	* configure.srv (xtensa*-*-linux*): Add srv_linux_thread_db=yes.
+-	* linux-xtensa-low.c (arch/xtensa.h gdb_proc_service.h): New
+-	#includes.
+-	(ps_get_thread_area): New function.
+-
+-2015-08-20  Max Filippov  <jcmvbkbc@gmail.com>
+-gdb/
+-	* arch/xtensa.h: New file.
+-	* xtensa-linux-nat.c (gdb_proc_service.h): New #include.
+-	(ps_get_thread_area): New function.
+-	* xtensa-linux-tdep.c (xtensa_linux_init_abi): Add call to
+-	set_gdbarch_fetch_tls_load_module_address to enable TLS support.
+-	* xtensa-tdep.c (osabi.h): New #include.
+-	(xtensa_gdbarch_init): Call gdbarch_init_osabi to register
+-	xtensa-specific hooks.
+-	* xtensa-tdep.h (struct xtensa_elf_gregset_t): Add threadptr
+-	member and move the structure to arch/xtensa.h.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+----
+-Backported from: 40045d91812b25c88c8275b8c08d27c234b68ba8
+-Changes to ChangeLog files are dropped.
+-
+- gdb/arch/xtensa.h                | 46 ++++++++++++++++++++++++++++++++++++++++
+- gdb/gdbserver/configure.srv      |  1 +
+- gdb/gdbserver/linux-xtensa-low.c | 21 ++++++++++++++++++
+- gdb/xtensa-linux-nat.c           | 22 ++++++++++++++++++
+- gdb/xtensa-linux-tdep.c          |  4 ++++
+- gdb/xtensa-tdep.c                |  4 ++++
+- gdb/xtensa-tdep.h                | 24 ++------------------
+- 7 files changed, 100 insertions(+), 22 deletions(-)
+- create mode 100644 gdb/arch/xtensa.h
+-
+-diff --git a/gdb/arch/xtensa.h b/gdb/arch/xtensa.h
+-new file mode 100644
+-index 0000000..fe96584
+---- /dev/null
+-+++ b/gdb/arch/xtensa.h
+-@@ -0,0 +1,46 @@
+-+/* Common Target-dependent code for the Xtensa port of GDB, the GNU debugger.
+-+
+-+   Copyright (C) 2003-2015 Free Software Foundation, Inc.
+-+
+-+   This file is part of GDB.
+-+
+-+   This program is free software; you can redistribute it and/or modify
+-+   it under the terms of the GNU General Public License as published by
+-+   the Free Software Foundation; either version 3 of the License, or
+-+   (at your option) any later version.
+-+
+-+   This program is distributed in the hope that it will be useful,
+-+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-+   GNU General Public License for more details.
+-+
+-+   You should have received a copy of the GNU General Public License
+-+   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+-+
+-+#ifndef XTENSA_H
+-+#define XTENSA_H
+-+
+-+/* Xtensa ELF core file register set representation ('.reg' section).
+-+   Copied from target-side ELF header <xtensa/elf.h>.  */
+-+
+-+typedef uint32_t xtensa_elf_greg_t;
+-+
+-+typedef struct
+-+{
+-+  xtensa_elf_greg_t pc;
+-+  xtensa_elf_greg_t ps;
+-+  xtensa_elf_greg_t lbeg;
+-+  xtensa_elf_greg_t lend;
+-+  xtensa_elf_greg_t lcount;
+-+  xtensa_elf_greg_t sar;
+-+  xtensa_elf_greg_t windowstart;
+-+  xtensa_elf_greg_t windowbase;
+-+  xtensa_elf_greg_t threadptr;
+-+  xtensa_elf_greg_t reserved[7+48];
+-+  xtensa_elf_greg_t ar[64];
+-+} xtensa_elf_gregset_t;
+-+
+-+#define XTENSA_ELF_NGREG (sizeof (xtensa_elf_gregset_t) \
+-+			  / sizeof (xtensa_elf_greg_t))
+-+
+-+#endif
+-diff --git a/gdb/gdbserver/configure.srv b/gdb/gdbserver/configure.srv
+-index 0b18d1d..320c26a 100644
+---- a/gdb/gdbserver/configure.srv
+-+++ b/gdb/gdbserver/configure.srv
+-@@ -352,6 +352,7 @@ case "${target}" in
+-   xtensa*-*-linux*)	srv_regobj=reg-xtensa.o
+- 			srv_tgtobj="$srv_linux_obj linux-xtensa-low.o"
+- 			srv_linux_regsets=yes
+-+			srv_linux_thread_db=yes
+- 			;;
+-   tilegx-*-linux*)	srv_regobj=reg-tilegx.o
+- 			srv_regobj="${srv_regobj} reg-tilegx32.o"
+-diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
+-index 4daccee..debe467 100644
+---- a/gdb/gdbserver/linux-xtensa-low.c
+-+++ b/gdb/gdbserver/linux-xtensa-low.c
+-@@ -26,6 +26,8 @@ extern const struct target_desc *tdesc_xtensa;
+- 
+- #include <asm/ptrace.h>
+- #include <xtensa-config.h>
+-+#include "arch/xtensa.h"
+-+#include "gdb_proc_service.h"
+- 
+- #include "xtensa-xtregs.c"
+- 
+-@@ -179,6 +181,25 @@ xtensa_breakpoint_at (CORE_ADDR where)
+- 		  xtensa_breakpoint, xtensa_breakpoint_len) == 0;
+- }
+- 
+-+/* Called by libthread_db.  */
+-+
+-+ps_err_e
+-+ps_get_thread_area (const struct ps_prochandle *ph,
+-+                    lwpid_t lwpid, int idx, void **base)
+-+{
+-+  xtensa_elf_gregset_t regs;
+-+
+-+  if (ptrace (PTRACE_GETREGS, lwpid, NULL, &regs) != 0)
+-+    return PS_ERR;
+-+
+-+  /* IDX is the bias from the thread pointer to the beginning of the
+-+     thread descriptor.  It has to be subtracted due to implementation
+-+     quirks in libthread_db.  */
+-+  *base = (void *) ((char *) regs.threadptr - idx);
+-+
+-+  return PS_OK;
+-+}
+-+
+- static struct regsets_info xtensa_regsets_info =
+-   {
+-     xtensa_regsets, /* regsets */
+-diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
+-index 77ad3e0..5538d5b 100644
+---- a/gdb/xtensa-linux-nat.c
+-+++ b/gdb/xtensa-linux-nat.c
+-@@ -37,6 +37,9 @@
+- #include "gregset.h"
+- #include "xtensa-tdep.h"
+- 
+-+/* Defines ps_err_e, struct ps_prochandle.  */
+-+#include "gdb_proc_service.h"
+-+
+- /* Extended register set depends on hardware configs.
+-    Keeping these definitions separately allows to introduce
+-    hardware-specific overlays.  */
+-@@ -280,6 +283,25 @@ xtensa_linux_store_inferior_registers (struct target_ops *ops,
+-     store_xtregs (regcache, regnum);
+- }
+- 
+-+/* Called by libthread_db.  */
+-+
+-+ps_err_e
+-+ps_get_thread_area (const struct ps_prochandle *ph,
+-+                    lwpid_t lwpid, int idx, void **base)
+-+{
+-+  xtensa_elf_gregset_t regs;
+-+
+-+  if (ptrace (PTRACE_GETREGS, lwpid, NULL, &regs) != 0)
+-+    return PS_ERR;
+-+
+-+  /* IDX is the bias from the thread pointer to the beginning of the
+-+     thread descriptor.  It has to be subtracted due to implementation
+-+     quirks in libthread_db.  */
+-+  *base = (void *) ((char *) regs.threadptr - idx);
+-+
+-+  return PS_OK;
+-+}
+-+
+- void _initialize_xtensa_linux_nat (void);
+- 
+- void
+-diff --git a/gdb/xtensa-linux-tdep.c b/gdb/xtensa-linux-tdep.c
+-index 61ea9b0..99e0d3e 100644
+---- a/gdb/xtensa-linux-tdep.c
+-+++ b/gdb/xtensa-linux-tdep.c
+-@@ -106,6 +106,10 @@ xtensa_linux_init_abi (struct gdbarch_info info, struct gdbarch *gdbarch)
+- 				      xtensa_linux_gdb_signal_from_target);
+-   set_gdbarch_gdb_signal_to_target (gdbarch,
+- 				    xtensa_linux_gdb_signal_to_target);
+-+
+-+  /* Enable TLS support.  */
+-+  set_gdbarch_fetch_tls_load_module_address (gdbarch,
+-+                                             svr4_fetch_objfile_link_map);
+- }
+- 
+- /* Provide a prototype to silence -Wmissing-prototypes.  */
+-diff --git a/gdb/xtensa-tdep.c b/gdb/xtensa-tdep.c
+-index 55e7d98..4b693ed 100644
+---- a/gdb/xtensa-tdep.c
+-+++ b/gdb/xtensa-tdep.c
+-@@ -28,6 +28,7 @@
+- #include "value.h"
+- #include "dis-asm.h"
+- #include "inferior.h"
+-+#include "osabi.h"
+- #include "floatformat.h"
+- #include "regcache.h"
+- #include "reggroups.h"
+-@@ -3273,6 +3274,9 @@ xtensa_gdbarch_init (struct gdbarch_info info, struct gdbarch_list *arches)
+-   set_solib_svr4_fetch_link_map_offsets
+-     (gdbarch, svr4_ilp32_fetch_link_map_offsets);
+- 
+-+  /* Hook in the ABI-specific overrides, if they have been registered.  */
+-+  gdbarch_init_osabi (info, gdbarch);
+-+
+-   return gdbarch;
+- }
+- 
+-diff --git a/gdb/xtensa-tdep.h b/gdb/xtensa-tdep.h
+-index caa2988..5b28cab 100644
+---- a/gdb/xtensa-tdep.h
+-+++ b/gdb/xtensa-tdep.h
+-@@ -18,6 +18,8 @@
+-    along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+- 
+- 
+-+#include "arch/xtensa.h"
+-+
+- /* XTENSA_TDEP_VERSION can/should be changed along with XTENSA_CONFIG_VERSION
+-    whenever the "tdep" structure changes in an incompatible way.  */
+- 
+-@@ -81,28 +83,6 @@ typedef enum
+- } xtensa_target_flags_t;
+- 
+- 
+--/* Xtensa ELF core file register set representation ('.reg' section).
+--   Copied from target-side ELF header <xtensa/elf.h>.  */
+--
+--typedef uint32_t xtensa_elf_greg_t;
+--
+--typedef struct
+--{
+--  xtensa_elf_greg_t pc;
+--  xtensa_elf_greg_t ps;
+--  xtensa_elf_greg_t lbeg;
+--  xtensa_elf_greg_t lend;
+--  xtensa_elf_greg_t lcount;
+--  xtensa_elf_greg_t sar;
+--  xtensa_elf_greg_t windowstart;
+--  xtensa_elf_greg_t windowbase;
+--  xtensa_elf_greg_t reserved[8+48];
+--  xtensa_elf_greg_t ar[64];
+--} xtensa_elf_gregset_t;
+--
+--#define XTENSA_ELF_NGREG (sizeof (xtensa_elf_gregset_t) \
+--			  / sizeof (xtensa_elf_greg_t))
+--
+- /*  Mask.  */
+- 
+- typedef struct 
+--- 
+-1.8.1.4
+-
+diff --git a/package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch b/package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch
+deleted file mode 100644
+index ba5419d244..0000000000
+--- a/package/gdb/7.10.1/0005-target.h-include-sys-types.h.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From cd68d0ebe7748a5448c86eb021b717df6fe83f35 Mon Sep 17 00:00:00 2001
+-From: Doug Evans <xdje42@gmail.com>
+-Date: Sun, 22 Nov 2015 17:24:03 -0800
+-Subject: [PATCH] target.h: #include <sys/types.h>.
+-
+-For musl.
+-
+-[Romain:
+-  rebase on gdb 7.10.1 from upstream (7.11)
+-  remove ChangeLog entry]
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- gdb/gdbserver/target.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/gdb/gdbserver/target.h b/gdb/gdbserver/target.h
+-index 9a40867..6af043c 100644
+---- a/gdb/gdbserver/target.h
+-+++ b/gdb/gdbserver/target.h
+-@@ -21,6 +21,7 @@
+- #ifndef TARGET_H
+- #define TARGET_H
+- 
+-+#include <sys/types.h> /* for mode_t */
+- #include "target/target.h"
+- #include "target/resume.h"
+- #include "target/wait.h"
+--- 
+-2.5.5
+-
+diff --git a/package/gdb/7.10.1/0006-Sync-proc_service-definition-with-GLIBC.patch b/package/gdb/7.10.1/0006-Sync-proc_service-definition-with-GLIBC.patch
+deleted file mode 100644
+index 2a53778770..0000000000
+--- a/package/gdb/7.10.1/0006-Sync-proc_service-definition-with-GLIBC.patch
++++ /dev/null
+@@ -1,287 +0,0 @@
+-From ccc18e0b2dc77a6619df31fd4fadfb3a37401616 Mon Sep 17 00:00:00 2001
+-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+-Date: Sun, 26 Mar 2017 23:06:45 +0200
 -Subject: [PATCH] Sync proc_service definition with GLIBC
 -
 -GLIBC BZ#20311 [1] proc_service.h install patch also remove 'const'
@@ -84,59 +627,32 @@ index b3f723a8ef..0000000000
 -	* linux-x86-low.c (ps_get_thread_area): Likewise.
 -	* linux-xtensa-low.c (ps_get_thread_area): Likewise.
 -
+-(cherry picked from commit 140bf80050b34f0947b34dba93b830ea2bfc5040)
 -Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ----
-- gdb/ChangeLog                     | 14 ++++++++++++++
-- gdb/aarch64-linux-nat.c           |  2 +-
-- gdb/amd64-linux-nat.c             |  2 +-
-- gdb/arm-linux-nat.c               |  2 +-
-- gdb/gdb_proc_service.h            |  2 +-
-- gdb/gdbserver/ChangeLog           | 15 +++++++++++++++
-- gdb/gdbserver/gdb_proc_service.h  |  2 +-
-- gdb/gdbserver/linux-aarch64-low.c |  2 +-
-- gdb/gdbserver/linux-arm-low.c     |  2 +-
-- gdb/gdbserver/linux-crisv32-low.c |  2 +-
-- gdb/gdbserver/linux-m68k-low.c    |  2 +-
-- gdb/gdbserver/linux-mips-low.c    |  2 +-
-- gdb/gdbserver/linux-nios2-low.c   |  2 +-
-- gdb/gdbserver/linux-tic6x-low.c   |  2 +-
-- gdb/gdbserver/linux-x86-low.c     |  2 +-
-- gdb/gdbserver/linux-xtensa-low.c  |  2 +-
-- gdb/i386-linux-nat.c              |  2 +-
-- gdb/m68klinux-nat.c               |  2 +-
-- gdb/mips-linux-nat.c              |  2 +-
-- gdb/nat/aarch64-linux.c           |  2 +-
-- gdb/nat/aarch64-linux.h           |  2 +-
-- gdb/xtensa-linux-nat.c            |  2 +-
-- 22 files changed, 49 insertions(+), 20 deletions(-)
+- gdb/aarch64-linux-nat.c           | 2 +-
+- gdb/amd64-linux-nat.c             | 2 +-
+- gdb/arm-linux-nat.c               | 2 +-
+- gdb/gdb_proc_service.h            | 2 +-
+- gdb/gdbserver/gdb_proc_service.h  | 2 +-
+- gdb/gdbserver/linux-aarch64-low.c | 2 +-
+- gdb/gdbserver/linux-arm-low.c     | 2 +-
+- gdb/gdbserver/linux-crisv32-low.c | 2 +-
+- gdb/gdbserver/linux-m68k-low.c    | 2 +-
+- gdb/gdbserver/linux-mips-low.c    | 2 +-
+- gdb/gdbserver/linux-nios2-low.c   | 2 +-
+- gdb/gdbserver/linux-tic6x-low.c   | 2 +-
+- gdb/gdbserver/linux-x86-low.c     | 2 +-
+- gdb/i386-linux-nat.c              | 2 +-
+- gdb/m68klinux-nat.c               | 2 +-
+- gdb/mips-linux-nat.c              | 2 +-
+- 16 files changed, 16 insertions(+), 16 deletions(-)
 -
--diff --git a/gdb/ChangeLog b/gdb/ChangeLog
--index 9b6562502e..a03afdb82f 100644
----- a/gdb/ChangeLog
--+++ b/gdb/ChangeLog
--@@ -1,3 +1,17 @@
--+2016-08-25  Adhemerval Zanella  <adhemerval.zanella@linaro.org>
--+
--+	* aarch64-linux-nat.c (ps_get_thread_area): Remove const from
--+	struct ps_prochandle.
--+	* amd64-linux-nat.c (ps_get_thread_area): Likewise.
--+	* arm-linux-nat.c (ps_get_thread_area): Likewise.
--+	* gdb_proc_service.h (ps_get_thread_area): Likewise.
--+	* i386-linux-nat.c (ps_get_thread_area): Likewise.
--+	* m68klinux-nat.c (ps_get_thread_area): Likewise.
--+	* mips-linux-nat.c (ps_get_thread_area): Likewise.
--+	* nat/aarch64-linux.c (aarch64_ps_get_thread_area): Likewise.
--+	* nat/aarch64-linux.h (aarch64_ps_get_thread_area): Likewise.
--+	* xtensa-linux-nat.c (ps_get_thread_area): Likewise.
--+
-- 2016-06-01  Joel Brobecker  <brobecker@adacore.com>
-- 
-- 	* version.in: Set GDB version number to 7.11.1.DATE-git.
 -diff --git a/gdb/aarch64-linux-nat.c b/gdb/aarch64-linux-nat.c
--index fe1631dbbb..5166eebd33 100644
+-index 9959b81a2d..aa0f8d76bd 100644
 ---- a/gdb/aarch64-linux-nat.c
 -+++ b/gdb/aarch64-linux-nat.c
--@@ -457,7 +457,7 @@ aarch64_linux_new_fork (struct lwp_info *parent, pid_t child_pid)
+-@@ -734,7 +734,7 @@ aarch64_linux_new_fork (struct lwp_info *parent, pid_t child_pid)
 -    storage (or its descriptor).  */
 - 
 - ps_err_e
@@ -144,12 +660,12 @@ index b3f723a8ef..0000000000
 -+ps_get_thread_area (struct ps_prochandle *ph,
 - 		    lwpid_t lwpid, int idx, void **base)
 - {
--   int is_64bit_p
+-   struct iovec iovec;
 -diff --git a/gdb/amd64-linux-nat.c b/gdb/amd64-linux-nat.c
--index 391a646992..9da36fd1ba 100644
+-index 2e1b081b0f..7f076a9148 100644
 ---- a/gdb/amd64-linux-nat.c
 -+++ b/gdb/amd64-linux-nat.c
--@@ -245,7 +245,7 @@ amd64_linux_store_inferior_registers (struct target_ops *ops,
+-@@ -244,7 +244,7 @@ amd64_linux_store_inferior_registers (struct target_ops *ops,
 -    a request for a thread's local storage address.  */
 - 
 - ps_err_e
@@ -159,10 +675,10 @@ index b3f723a8ef..0000000000
 - {
 -   if (gdbarch_bfd_arch_info (target_gdbarch ())->bits_per_word == 32)
 -diff --git a/gdb/arm-linux-nat.c b/gdb/arm-linux-nat.c
--index d77ca93498..d11bdc6e22 100644
+-index c167bce18b..8462655139 100644
 ---- a/gdb/arm-linux-nat.c
 -+++ b/gdb/arm-linux-nat.c
--@@ -477,7 +477,7 @@ supply_fpregset (struct regcache *regcache, const gdb_fpregset_t *fpregsetp)
+-@@ -778,7 +778,7 @@ supply_fpregset (struct regcache *regcache, const gdb_fpregset_t *fpregsetp)
 - /* Fetch the thread-local storage pointer for libthread_db.  */
 - 
 - ps_err_e
@@ -172,7 +688,7 @@ index b3f723a8ef..0000000000
 - {
 -   if (ptrace (PTRACE_GET_THREAD_AREA, lwpid, NULL, base) != 0)
 -diff --git a/gdb/gdb_proc_service.h b/gdb/gdb_proc_service.h
--index 04d3c03884..a1a8eb5b2f 100644
+-index e7369911a1..91fbc29a76 100644
 ---- a/gdb/gdb_proc_service.h
 -+++ b/gdb/gdb_proc_service.h
 -@@ -124,7 +124,7 @@ extern pid_t ps_getpid (struct ps_prochandle *);
@@ -184,31 +700,8 @@ index b3f723a8ef..0000000000
 - 				    lwpid_t, int, psaddr_t *);
 - 
 - 
--diff --git a/gdb/gdbserver/ChangeLog b/gdb/gdbserver/ChangeLog
--index 08fef5b06e..ea278b1250 100644
----- a/gdb/gdbserver/ChangeLog
--+++ b/gdb/gdbserver/ChangeLog
--@@ -1,3 +1,18 @@
--+2016-08-25  Adhemerval Zanella  <adhemerval.zanella@linaro.org>
--+
--+	PR server/20491
--+	* gdb_proc_service.h (ps_get_thread_area): Remove const from struct
--+	ps_prochandle.
--+	* linux-aarch64-low.c (ps_get_thread_area): Likewise.
--+	* linux-arm-low.c (ps_get_thread_area): Likewise.
--+	* linux-crisv32-low.c (ps_get_thread_area): Likewise.
--+	* linux-m68k-low.c (ps_get_thread_area): Likewise.
--+	* linux-mips-low.c (ps_get_thread_area): Likewise.
--+	* linux-nios2-low.c (ps_get_thread_area): Likewise.
--+	* linux-tic6x-low.c (ps_get_thread_area): Likewise.
--+	* linux-x86-low.c (ps_get_thread_area): Likewise.
--+	* linux-xtensa-low.c (ps_get_thread_area): Likewise.
--+
-- 2016-04-15  Pedro Alves  <palves@redhat.com>
-- 
-- 	* linux-low.c (check_stopped_by_breakpoint): Rename to ...
 -diff --git a/gdb/gdbserver/gdb_proc_service.h b/gdb/gdbserver/gdb_proc_service.h
--index 99bf226b01..cec9231ee5 100644
+-index cbafbf3206..7f9b1e4de0 100644
 ---- a/gdb/gdbserver/gdb_proc_service.h
 -+++ b/gdb/gdbserver/gdb_proc_service.h
 -@@ -107,7 +107,7 @@ extern pid_t ps_getpid (struct ps_prochandle *);
@@ -221,10 +714,10 @@ index b3f723a8ef..0000000000
 - 
 - 
 -diff --git a/gdb/gdbserver/linux-aarch64-low.c b/gdb/gdbserver/linux-aarch64-low.c
--index 806a76260f..b86f210390 100644
+-index 8a30b00029..a0ac35620d 100644
 ---- a/gdb/gdbserver/linux-aarch64-low.c
 -+++ b/gdb/gdbserver/linux-aarch64-low.c
--@@ -421,7 +421,7 @@ aarch64_stopped_by_watchpoint (void)
+-@@ -1089,7 +1089,7 @@ aarch64_stopped_by_watchpoint (void)
 - /* Fetch the thread-local storage pointer for libthread_db.  */
 - 
 - ps_err_e
@@ -232,12 +725,12 @@ index b3f723a8ef..0000000000
 -+ps_get_thread_area (struct ps_prochandle *ph,
 - 		    lwpid_t lwpid, int idx, void **base)
 - {
--   return aarch64_ps_get_thread_area (ph, lwpid, idx, base,
+-   struct iovec iovec;
 -diff --git a/gdb/gdbserver/linux-arm-low.c b/gdb/gdbserver/linux-arm-low.c
--index 0f627069e0..9f043878c7 100644
+-index dd77b48ecd..560e7d8496 100644
 ---- a/gdb/gdbserver/linux-arm-low.c
 -+++ b/gdb/gdbserver/linux-arm-low.c
--@@ -269,7 +269,7 @@ get_next_pcs_read_memory_unsigned_integer (CORE_ADDR memaddr,
+-@@ -334,7 +334,7 @@ arm_reinsert_addr (void)
 - /* Fetch the thread-local storage pointer for libthread_db.  */
 - 
 - ps_err_e
@@ -247,10 +740,10 @@ index b3f723a8ef..0000000000
 - {
 -   if (ptrace (PTRACE_GET_THREAD_AREA, lwpid, NULL, base) != 0)
 -diff --git a/gdb/gdbserver/linux-crisv32-low.c b/gdb/gdbserver/linux-crisv32-low.c
--index 16c1f72015..fea6d5bf9b 100644
+-index 65e6c09df2..fd5e627123 100644
 ---- a/gdb/gdbserver/linux-crisv32-low.c
 -+++ b/gdb/gdbserver/linux-crisv32-low.c
--@@ -309,7 +309,7 @@ cris_stopped_data_address (void)
+-@@ -336,7 +336,7 @@ cris_stopped_data_address (void)
 - }
 - 
 - ps_err_e
@@ -260,10 +753,10 @@ index b3f723a8ef..0000000000
 - {
 -   if (ptrace (PTRACE_GET_THREAD_AREA, lwpid, NULL, base) != 0)
 -diff --git a/gdb/gdbserver/linux-m68k-low.c b/gdb/gdbserver/linux-m68k-low.c
--index df3d7c6d9c..78a340fa8f 100644
+-index 4501904e39..7415930360 100644
 ---- a/gdb/gdbserver/linux-m68k-low.c
 -+++ b/gdb/gdbserver/linux-m68k-low.c
--@@ -152,7 +152,7 @@ m68k_breakpoint_at (CORE_ADDR pc)
+-@@ -160,7 +160,7 @@ m68k_breakpoint_at (CORE_ADDR pc)
 - /* Fetch the thread-local storage pointer for libthread_db.  */
 - 
 - ps_err_e
@@ -273,10 +766,10 @@ index b3f723a8ef..0000000000
 - {
 -   if (ptrace (PTRACE_GET_THREAD_AREA, lwpid, NULL, base) != 0)
 -diff --git a/gdb/gdbserver/linux-mips-low.c b/gdb/gdbserver/linux-mips-low.c
--index 30a03d5f43..9356bb3d99 100644
+-index 1695c4cf0d..acc2468bce 100644
 ---- a/gdb/gdbserver/linux-mips-low.c
 -+++ b/gdb/gdbserver/linux-mips-low.c
--@@ -637,7 +637,7 @@ mips_stopped_data_address (void)
+-@@ -640,7 +640,7 @@ mips_stopped_data_address (void)
 - /* Fetch the thread-local storage pointer for libthread_db.  */
 - 
 - ps_err_e
@@ -286,10 +779,10 @@ index b3f723a8ef..0000000000
 - {
 -   if (ptrace (PTRACE_GET_THREAD_AREA, lwpid, NULL, base) != 0)
 -diff --git a/gdb/gdbserver/linux-nios2-low.c b/gdb/gdbserver/linux-nios2-low.c
--index ea0ded1f1e..98a85ed8e3 100644
+-index 7bd3c9795d..719883edef 100644
 ---- a/gdb/gdbserver/linux-nios2-low.c
 -+++ b/gdb/gdbserver/linux-nios2-low.c
--@@ -145,7 +145,7 @@ nios2_breakpoint_at (CORE_ADDR where)
+-@@ -150,7 +150,7 @@ nios2_breakpoint_at (CORE_ADDR where)
 - /* Fetch the thread-local storage pointer for libthread_db.  */
 - 
 - ps_err_e
@@ -299,10 +792,10 @@ index b3f723a8ef..0000000000
 - {
 -   if (ptrace (PTRACE_GET_THREAD_AREA, lwpid, NULL, base) != 0)
 -diff --git a/gdb/gdbserver/linux-tic6x-low.c b/gdb/gdbserver/linux-tic6x-low.c
--index e40a3aff51..6b90560dc4 100644
+-index 0a0d220c34..26c4dee999 100644
 ---- a/gdb/gdbserver/linux-tic6x-low.c
 -+++ b/gdb/gdbserver/linux-tic6x-low.c
--@@ -274,7 +274,7 @@ tic6x_breakpoint_at (CORE_ADDR where)
+-@@ -266,7 +266,7 @@ tic6x_breakpoint_at (CORE_ADDR where)
 - /* Fetch the thread-local storage pointer for libthread_db.  */
 - 
 - ps_err_e
@@ -312,10 +805,10 @@ index b3f723a8ef..0000000000
 - {
 -   if (ptrace (PTRACE_GET_THREAD_AREA, lwpid, NULL, base) != 0)
 -diff --git a/gdb/gdbserver/linux-x86-low.c b/gdb/gdbserver/linux-x86-low.c
--index 0c4954a58d..8bac10a54b 100644
+-index 484eadba05..15f25d71d5 100644
 ---- a/gdb/gdbserver/linux-x86-low.c
 -+++ b/gdb/gdbserver/linux-x86-low.c
--@@ -236,7 +236,7 @@ is_64bit_tdesc (void)
+-@@ -231,7 +231,7 @@ is_64bit_tdesc (void)
 - /* Called by libthread_db.  */
 - 
 - ps_err_e
@@ -324,21 +817,8 @@ index b3f723a8ef..0000000000
 - 		    lwpid_t lwpid, int idx, void **base)
 - {
 - #ifdef __x86_64__
--diff --git a/gdb/gdbserver/linux-xtensa-low.c b/gdb/gdbserver/linux-xtensa-low.c
--index 6e945eac17..431082c01f 100644
----- a/gdb/gdbserver/linux-xtensa-low.c
--+++ b/gdb/gdbserver/linux-xtensa-low.c
--@@ -177,7 +177,7 @@ xtensa_breakpoint_at (CORE_ADDR where)
-- /* Called by libthread_db.  */
-- 
-- ps_err_e
---ps_get_thread_area (const struct ps_prochandle *ph,
--+ps_get_thread_area (struct ps_prochandle *ph,
--                     lwpid_t lwpid, int idx, void **base)
-- {
--   xtensa_elf_gregset_t regs;
 -diff --git a/gdb/i386-linux-nat.c b/gdb/i386-linux-nat.c
--index a41ee21081..70d954fdc0 100644
+-index 349ce68f5c..80d6a516ea 100644
 ---- a/gdb/i386-linux-nat.c
 -+++ b/gdb/i386-linux-nat.c
 -@@ -603,7 +603,7 @@ i386_linux_store_inferior_registers (struct target_ops *ops,
@@ -351,7 +831,7 @@ index b3f723a8ef..0000000000
 - {
 -   unsigned int base_addr;
 -diff --git a/gdb/m68klinux-nat.c b/gdb/m68klinux-nat.c
--index 24b6242ba3..5b8684b719 100644
+-index 8f89d7b87a..6e528b4e91 100644
 ---- a/gdb/m68klinux-nat.c
 -+++ b/gdb/m68klinux-nat.c
 -@@ -508,7 +508,7 @@ m68k_linux_store_inferior_registers (struct target_ops *ops,
@@ -364,7 +844,7 @@ index b3f723a8ef..0000000000
 - {
 -   if (ptrace (PTRACE_GET_THREAD_AREA, lwpid, NULL, base) < 0)
 -diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
--index bfe9fcbe68..0f20f16814 100644
+-index a36bb6356f..9f6d6975a0 100644
 ---- a/gdb/mips-linux-nat.c
 -+++ b/gdb/mips-linux-nat.c
 -@@ -152,7 +152,7 @@ mips64_linux_register_addr (struct gdbarch *gdbarch, int regno, int store)
@@ -376,55 +856,16 @@ index b3f723a8ef..0000000000
 -                     lwpid_t lwpid, int idx, void **base)
 - {
 -   if (ptrace (PTRACE_GET_THREAD_AREA, lwpid, NULL, base) != 0)
--diff --git a/gdb/nat/aarch64-linux.c b/gdb/nat/aarch64-linux.c
--index 5ae5aa8602..1828977e28 100644
----- a/gdb/nat/aarch64-linux.c
--+++ b/gdb/nat/aarch64-linux.c
--@@ -205,7 +205,7 @@ aarch64_siginfo_from_compat_siginfo (siginfo_t *to, compat_siginfo_t *from)
--    storage (or its descriptor).  */
-- 
-- ps_err_e
---aarch64_ps_get_thread_area (const struct ps_prochandle *ph,
--+aarch64_ps_get_thread_area (struct ps_prochandle *ph,
-- 			    lwpid_t lwpid, int idx, void **base,
-- 			    int is_64bit_p)
-- {
--diff --git a/gdb/nat/aarch64-linux.h b/gdb/nat/aarch64-linux.h
--index 7221982b78..aac7c68c06 100644
----- a/gdb/nat/aarch64-linux.h
--+++ b/gdb/nat/aarch64-linux.h
--@@ -122,7 +122,7 @@ void aarch64_linux_prepare_to_resume (struct lwp_info *lwp);
-- 
-- void aarch64_linux_new_thread (struct lwp_info *lwp);
-- 
---ps_err_e aarch64_ps_get_thread_area (const struct ps_prochandle *ph,
--+ps_err_e aarch64_ps_get_thread_area (struct ps_prochandle *ph,
-- 				       lwpid_t lwpid, int idx, void **base,
-- 				       int is_64bit_p);
-- 
--diff --git a/gdb/xtensa-linux-nat.c b/gdb/xtensa-linux-nat.c
--index 54da83791a..836d3f80ee 100644
----- a/gdb/xtensa-linux-nat.c
--+++ b/gdb/xtensa-linux-nat.c
--@@ -286,7 +286,7 @@ xtensa_linux_store_inferior_registers (struct target_ops *ops,
-- /* Called by libthread_db.  */
-- 
-- ps_err_e
---ps_get_thread_area (const struct ps_prochandle *ph,
--+ps_get_thread_area (struct ps_prochandle *ph,
--                     lwpid_t lwpid, int idx, void **base)
-- {
--   xtensa_elf_gregset_t regs;
 --- 
 -2.11.0
 -
-diff --git a/package/gdb/7.11.1/0002-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/7.11.1/0002-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+diff --git a/package/gdb/7.10.1/0007-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/7.10.1/0007-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
 deleted file mode 100644
-index 1e7f6b6c9b..0000000000
---- a/package/gdb/7.11.1/0002-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+index c280831abc..0000000000
+--- a/package/gdb/7.10.1/0007-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
 +++ /dev/null
 @@ -1,53 +0,0 @@
--From 7438f3e5a41adf54cf82cd82d3d52244e77d7d05 Mon Sep 17 00:00:00 2001
+-From 3964e15443c5cdfca6723987c8ef1ef6cf984d41 Mon Sep 17 00:00:00 2001
 -From: Khem Raj <raj.khem@gmail.com>
 -Date: Sat, 6 Aug 2016 17:32:50 -0700
 -Subject: [PATCH] ppc/ptrace: Define pt_regs uapi_pt_regs on !GLIBC systems
@@ -439,7 +880,7 @@ index 1e7f6b6c9b..0000000000
 - 2 files changed, 12 insertions(+)
 -
 -diff --git a/gdb/gdbserver/linux-ppc-low.c b/gdb/gdbserver/linux-ppc-low.c
--index 2145c50..777905d 100644
+-index 188fac0..f71d5ab 100644
 ---- a/gdb/gdbserver/linux-ppc-low.c
 -+++ b/gdb/gdbserver/linux-ppc-low.c
 -@@ -21,7 +21,13 @@
@@ -457,7 +898,7 @@ index 1e7f6b6c9b..0000000000
 - #include "nat/ppc-linux.h"
 - 
 -diff --git a/gdb/nat/ppc-linux.h b/gdb/nat/ppc-linux.h
--index 85fbcd8..cbec9c5 100644
+-index 0ff2223..c978daa 100644
 ---- a/gdb/nat/ppc-linux.h
 -+++ b/gdb/nat/ppc-linux.h
 -@@ -18,7 +18,13 @@
@@ -477,13 +918,13 @@ index 1e7f6b6c9b..0000000000
 --- 
 -2.7.4
 -
-diff --git a/package/gdb/7.11.1/0003-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/7.11.1/0003-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+diff --git a/package/gdb/7.10.1/0008-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/7.10.1/0008-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
 deleted file mode 100644
-index f8c9e59be6..0000000000
---- a/package/gdb/7.11.1/0003-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+index 50f9512bbc..0000000000
+--- a/package/gdb/7.10.1/0008-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
 +++ /dev/null
 @@ -1,41 +0,0 @@
--From b7cbde12595599768bf2831e311a8ab265322313 Mon Sep 17 00:00:00 2001
+-From 1662a42e980c3f605000b23fda86ab24ceb69d32 Mon Sep 17 00:00:00 2001
 -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -Date: Sat, 3 Jun 2017 21:23:52 +0200
 -Subject: [PATCH] sh/ptrace: Define pt_{dsp,}regs uapi_pt_{dsp,}regs on !GLIBC
@@ -502,7 +943,7 @@ index f8c9e59be6..0000000000
 - 1 file changed, 8 insertions(+)
 -
 -diff --git a/gdb/gdbserver/linux-sh-low.c b/gdb/gdbserver/linux-sh-low.c
--index 38612e2..3195d0d 100644
+-index 218d4d3..c4ada84 100644
 ---- a/gdb/gdbserver/linux-sh-low.c
 -+++ b/gdb/gdbserver/linux-sh-low.c
 -@@ -27,7 +27,15 @@ extern const struct target_desc *tdesc_sh;
@@ -524,13 +965,13 @@ index f8c9e59be6..0000000000
 --- 
 -2.7.4
 -
-diff --git a/package/gdb/7.11.1/0004-Fix-gdbserver-build-on-uClibc-noMMU.patch b/package/gdb/7.11.1/0004-Fix-gdbserver-build-on-uClibc-noMMU.patch
+diff --git a/package/gdb/7.10.1/0009-Fix-gdbserver-build-on-uClibc-noMMU.patch b/package/gdb/7.10.1/0009-Fix-gdbserver-build-on-uClibc-noMMU.patch
 deleted file mode 100644
-index fc8b3ac607..0000000000
---- a/package/gdb/7.11.1/0004-Fix-gdbserver-build-on-uClibc-noMMU.patch
+index 3f877b335f..0000000000
+--- a/package/gdb/7.10.1/0009-Fix-gdbserver-build-on-uClibc-noMMU.patch
 +++ /dev/null
 @@ -1,32 +0,0 @@
--From d6bf0c57a6bf361ac53887653aa1878e60d56335 Mon Sep 17 00:00:00 2001
+-From 6de192acd4807d7fd57caf451567f09308bd8350 Mon Sep 17 00:00:00 2001
 -From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 -Date: Fri, 9 Jun 2017 10:19:32 +0200
 -Subject: [PATCH] Fix gdbserver build on uClibc/noMMU
@@ -546,11 +987,11 @@ index fc8b3ac607..0000000000
 - 1 file changed, 2 insertions(+), 1 deletion(-)
 -
 -diff --git a/gdb/nat/linux-ptrace.h b/gdb/nat/linux-ptrace.h
--index 0a23bcb..35b7cbb 100644
+-index be6c395..c9f85aa 100644
 ---- a/gdb/nat/linux-ptrace.h
 -+++ b/gdb/nat/linux-ptrace.h
 -@@ -23,7 +23,8 @@ struct buffer;
-- #include "nat/gdb_ptrace.h"
+- #include <sys/ptrace.h>
 - 
 - #ifdef __UCLIBC__
 --#if !(defined(__UCLIBC_HAS_MMU__) || defined(__ARCH_HAS_MMU__))
@@ -562,12 +1003,12 @@ index fc8b3ac607..0000000000
 --- 
 -2.7.4
 -
-diff --git a/package/gdb/7.11.1/0005-use-asm-sgidefs.h.patch b/package/gdb/7.11.1/0005-use-asm-sgidefs.h.patch
+diff --git a/package/gdb/7.10.1/0010-use-asm-sgidefs.h.patch b/package/gdb/7.10.1/0010-use-asm-sgidefs.h.patch
 deleted file mode 100644
-index d30336904f..0000000000
---- a/package/gdb/7.11.1/0005-use-asm-sgidefs.h.patch
+index fdc56793fb..0000000000
+--- a/package/gdb/7.10.1/0010-use-asm-sgidefs.h.patch
 +++ /dev/null
-@@ -1,40 +0,0 @@
+@@ -1,41 +0,0 @@
 -From 12a0b8d81e1fda6ba98abdce8d6f09f9555ebcf5 Mon Sep 17 00:00:00 2001
 -From: Andre McCurdy <amccurdy@gmail.com>
 -Date: Sat, 30 Apr 2016 15:29:06 -0700
@@ -583,7 +1024,8 @@ index d30336904f..0000000000
 -Upstream-Status: Pending
 -
 -[Vincent:
--Taken from: https://sourceware.org/bugzilla/show_bug.cgi?id=21070]
+-Taken from https://sourceware.org/bugzilla/show_bug.cgi?id=21070
+-Patch has been adapted to apply on 7.10.1.]
 -
 -Signed-off-by: Andre McCurdy <armccurdy@gmail.com>
 -Signed-off-by: Khem Raj <raj.khem@gmail.com>
@@ -593,7 +1035,7 @@ index d30336904f..0000000000
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
 -diff --git a/gdb/mips-linux-nat.c b/gdb/mips-linux-nat.c
--index f2df1b9907..d24664cb56 100644
+-index 9f6d697..8f57bb2 100644
 ---- a/gdb/mips-linux-nat.c
 -+++ b/gdb/mips-linux-nat.c
 -@@ -31,7 +31,7 @@
@@ -602,9 +1044,9 @@ index d30336904f..0000000000
 - 
 --#include <sgidefs.h>
 -+#include <asm/sgidefs.h>
-- #include "nat/gdb_ptrace.h"
+- #include <sys/ptrace.h>
 - #include <asm/ptrace.h>
-- #include "inf-ptrace.h"
+-
 --- 
 -2.13.1
--
+- 
