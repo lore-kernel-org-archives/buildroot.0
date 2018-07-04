@@ -1,37 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Jul 2018 21:52:37 +0200
-Subject: [Buildroot] [PATCH 1/5] linux: automatically set
- CONFIG_PERF_EVENTS when perf is enabled
-In-Reply-To: <20180704070739.7259-2-thomas.de_schampheleire@nokia.com>
-References: <20180704070739.7259-1-thomas.de_schampheleire@nokia.com>
- <20180704070739.7259-2-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180704215237.39ca1527@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 4 Jul 2018 21:57:25 +0200
+Subject: [Buildroot] [PATCH 1/1] systemd: Fix polkit build order
+In-Reply-To: <20180704150251.1105-1-asgeir@appdynamic.com>
+References: <20180704150251.1105-1-asgeir@appdynamic.com>
+Message-ID: <20180704195725.GD2595@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Asgeir, All,
 
-On Wed,  4 Jul 2018 09:07:35 +0200, Thomas De Schampheleire wrote:
-> From: Jan Heylen <jan.heylen@nokia.com>
+On 2018-07-04 15:02 +0000, Asgeir Bjarni Ingvarsson spake thusly:
+> We need to install polkit before systemd if we want to enable
+> polkit integration, because systemd will not install polkit
+> policy files unless it finds polkit-gobject-1.
 > 
-> Perf profiling cannot be used if CONFIG_PERF_EVENTS is not enabled in the
-> kernel configuration. Similar to other tools, like ktap, we can enable the
-> right options automatically.
-> 
-> Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Signed-off-by: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
+
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
 > ---
->  linux/linux.mk                | 2 ++
->  package/linux-tools/Config.in | 8 +++++---
->  2 files changed, 7 insertions(+), 3 deletions(-)
+>  package/systemd/systemd.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 10e11a9277..04775ee778 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -283,6 +283,7 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_SYSTEMD_POLKIT),y)
+>  SYSTEMD_CONF_OPTS += -Dpolkit=true
+> +SYSTEMD_DEPENDENCIES += polkit
+>  else
+>  SYSTEMD_CONF_OPTS += -Dpolkit=false
+>  endif
+> -- 
+> 2.16.4
+> 
 
-Applied to master, thanks.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
