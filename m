@@ -1,67 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 4 Jul 2018 22:04:16 +0200
-Subject: [Buildroot] [git commit] alsa-utils: make fftw an optional
- dependency for alsabat
-Message-ID: <20180704200052.44DBC870D9@busybox.osuosl.org>
+Date: Wed, 4 Jul 2018 22:05:09 +0200
+Subject: [Buildroot] [PATCH v2] alsa-utils: bat needs fftw single
+ precision
+In-Reply-To: <87c2b0d5f06ca9c6842b52cefc76aaf5923d41d7.1530592176.git.baruch@tkos.co.il>
+References: <87c2b0d5f06ca9c6842b52cefc76aaf5923d41d7.1530592176.git.baruch@tkos.co.il>
+Message-ID: <20180704220509.7eba5979@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c31637b584a49a40e3a1f72d80002fd8fea0eeee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The BR2_PACKAGE_ALSA_UTILS_BAT option currently selects
-BR2_PACKAGE_FFTW. However, it turns out that fftw is not a mandatory
-dependency to build alsabat, just an optional dependency.
+On Tue,  3 Jul 2018 07:29:36 +0300, Baruch Siach wrote:
+> Otherwise the configure check for fftw fails, and alsabat does not link
+> with libfftw. Instead of selecting fftw unconditionally, make fftw
+> single precision an optional dependency. Add a help text comment about
+> that.
+> 
+> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> v2: Make fftw single precision an optional dependency (Thomas P)
+> ---
+>  package/alsa-utils/Config.in     | 3 ++-
+>  package/alsa-utils/alsa-utils.mk | 3 ++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
-This commit therefore turns this dependency into an optional
-one. However, it is not just FFTW that is necessary, but the simple
-precision version of FFTW, so the optional dependency takes this into
-account.
+The commit title and commit log were no longer really suitable for what
+the patch does now. I've reworked them, extended the Config.in help
+text and applied.
 
-We take this opportunity to extend the Config.in help text for
-BR2_PACKAGE_ALSA_UTILS_BAT.
+Thanks!
 
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/alsa-utils/Config.in     | 8 +++++++-
- package/alsa-utils/alsa-utils.mk | 3 ++-
- 2 files changed, 9 insertions(+), 2 deletions(-)
-
-diff --git a/package/alsa-utils/Config.in b/package/alsa-utils/Config.in
-index 1a48fc0315..edf5d39f26 100644
---- a/package/alsa-utils/Config.in
-+++ b/package/alsa-utils/Config.in
-@@ -76,7 +76,13 @@ config BR2_PACKAGE_ALSA_UTILS_ASEQNET
- 
- config BR2_PACKAGE_ALSA_UTILS_BAT
- 	bool "bat"
--	select BR2_PACKAGE_FFTW
-+	help
-+	  ALSABAT (ALSA Basic Audio Tester) is a simple command-line
-+	  utility intended to help automate audio driver and sound
-+	  server testing with little human interaction.
-+
-+	  Note that analysis support in alsabat requires fftw single
-+	  precision.
- 
- config BR2_PACKAGE_ALSA_UTILS_IECSET
- 	bool "iecset"
-diff --git a/package/alsa-utils/alsa-utils.mk b/package/alsa-utils/alsa-utils.mk
-index 9b2e64b1d3..e9a45c675f 100644
---- a/package/alsa-utils/alsa-utils.mk
-+++ b/package/alsa-utils/alsa-utils.mk
-@@ -40,7 +40,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_ALSA_UTILS_BAT),y)
- ALSA_UTILS_CONF_OPTS += --enable-bat
--ALSA_UTILS_DEPENDENCIES += fftw
-+# Analysis support requires fftw single precision
-+ALSA_UTILS_DEPENDENCIES += $(if $(BR2_PACKAGE_FFTW_PRECISION_SINGLE),fftw)
- else
- ALSA_UTILS_CONF_OPTS += --disable-bat
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
