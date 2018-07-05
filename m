@@ -1,84 +1,55 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Thu,  5 Jul 2018 16:24:30 -0300
-Subject: [Buildroot] [PATCH 2/3] imx/post-image: Allow flashing
- u-boot-dtb.imx in the SD card
-In-Reply-To: <1530818671-20390-1-git-send-email-festevam@gmail.com>
-References: <1530818671-20390-1-git-send-email-festevam@gmail.com>
-Message-ID: <1530818671-20390-2-git-send-email-festevam@gmail.com>
+Date: Thu,  5 Jul 2018 16:24:29 -0300
+Subject: [Buildroot] [PATCH 1/3] uboot: Introduce
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX
+Message-ID: <1530818671-20390-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for flashing the u-boot-dtb.imx binary in the SD card
-when a target selects BR2_TARGET_UBOOT_FORMAT_DTB_IMX.
+Some i.MX boards which use device tree to describe the hardware
+for U-Boot generate a u-boot-dtb.imx binary.
+
+Introduce the BR2_TARGET_UBOOT_FORMAT_DTB_IMX option to
+handle such case.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- .../common/imx/genimage.cfg.template_dtb_imx       | 40 ++++++++++++++++++++++
- board/freescale/common/imx/post-image.sh           |  2 ++
- 2 files changed, 42 insertions(+)
- create mode 100644 board/freescale/common/imx/genimage.cfg.template_dtb_imx
+ boot/uboot/Config.in | 3 +++
+ boot/uboot/uboot.mk  | 5 +++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/board/freescale/common/imx/genimage.cfg.template_dtb_imx b/board/freescale/common/imx/genimage.cfg.template_dtb_imx
-new file mode 100644
-index 0000000..b38dfa4
---- /dev/null
-+++ b/board/freescale/common/imx/genimage.cfg.template_dtb_imx
-@@ -0,0 +1,40 @@
-+# Minimal SD card image for the Freescale boards Template
-+#
-+# We mimic the .sdcard Freescale's image format:
-+# * the SD card must have 1 kB free space at the beginning,
-+# * U-Boot is dumped as is,
-+# * a FAT partition at offset 8 MB is containing zImage/uImage and DTB files
-+# * a single root filesystem partition is required (ext2, ext3 or ext4)
-+#
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 482711c..7f8291a 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -190,6 +190,9 @@ config BR2_TARGET_UBOOT_FORMAT_DTB_BIN
+ config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
+ 	bool "u-boot-dtb.img"
+ 
++config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
++	bool "u-boot-dtb.imx"
 +
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      %FILES%
-+    }
-+  }
-+  size = 16M
-+}
+ config BR2_TARGET_UBOOT_FORMAT_IMG
+ 	bool "u-boot.img"
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 6ef275e..bf227f2 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -70,6 +70,11 @@ UBOOT_BINS += u-boot-dtb.img
+ UBOOT_MAKE_TARGET += u-boot-dtb.img
+ endif
+ 
++ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMX),y)
++UBOOT_BINS += u-boot-dtb.imx
++UBOOT_MAKE_TARGET += u-boot-dtb.imx
++endif
 +
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition u-boot {
-+    in-partition-table = "no"
-+    image = "u-boot-dtb.imx"
-+    offset = 1024
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+    offset = 8M
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext2"
-+  }
-+}
-diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-index 264c8a4..5eb593b 100755
---- a/board/freescale/common/imx/post-image.sh
-+++ b/board/freescale/common/imx/post-image.sh
-@@ -36,6 +36,8 @@ genimage_type()
- 		echo "genimage.cfg.template_imx8"
- 	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
- 		echo "genimage.cfg.template_spl"
-+	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
-+		echo "genimage.cfg.template_dtb_imx"
- 	else
- 		echo "genimage.cfg.template"
- 	fi
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_BIN),y)
+ UBOOT_BINS += u-boot-dtb.bin
+ UBOOT_MAKE_TARGET += u-boot-dtb.bin
 -- 
 2.7.4
