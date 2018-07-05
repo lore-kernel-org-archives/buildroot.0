@@ -1,55 +1,74 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Thu,  5 Jul 2018 09:56:50 +0200
-Subject: [Buildroot] [PATCHv2 0/3] misc patches from Nokia
-Message-ID: <20180705075653.27758-1-thomas.de_schampheleire@nokia.com>
+Date: Thu,  5 Jul 2018 09:56:53 +0200
+Subject: [Buildroot] [PATCHv2 3/3] host zstd: additionally build binary and
+ make selectable
+In-Reply-To: <20180705075653.27758-1-thomas.de_schampheleire@nokia.com>
+References: <20180705075653.27758-1-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180705075653.27758-4-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+The zstd (de)compression tool may be used in post-image scripts to compress
+certain elements of the final image.
 
-As promised earlier this year, here is a first set of patches from our local
-tree. More will come later.
+In order to allow that, make host-zstd selectable in the 'Host utilities'
+menu, and build the binary in addition to the library.
 
-They are grouped in one series, but only the two dropbear patches actually
-are linked.
-
-Best regards,
-Thomas
-
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
-
-v2:
-- drop dropbear patches, better alternative is in patchwork
-- pigz: add DEVELOPERS entry and update download URL
-
-
-Alfredo Alvarez Fernandez (1):
-  pigz: new package
-
-Jan Heylen (1):
-  linux: automatically set CONFIG_PERF_EVENTS when perf is enabled
-
-Thomas De Schampheleire (1):
-  host zstd: additionally build binary and make selectable
-
- DEVELOPERS                    |  1 +
- linux/linux.mk                |  2 ++
- package/Config.in             |  1 +
- package/Config.in.host        |  1 +
- package/linux-tools/Config.in |  8 +++++---
- package/pigz/Config.in        | 14 ++++++++++++++
- package/pigz/pigz.hash        |  2 ++
- package/pigz/pigz.mk          | 21 +++++++++++++++++++++
- package/zstd/Config.in.host   |  8 ++++++++
- package/zstd/zstd.mk          |  4 ++++
- 10 files changed, 59 insertions(+), 3 deletions(-)
- create mode 100644 package/pigz/Config.in
- create mode 100644 package/pigz/pigz.hash
- create mode 100644 package/pigz/pigz.mk
+ package/Config.in.host      | 1 +
+ package/zstd/Config.in.host | 8 ++++++++
+ package/zstd/zstd.mk        | 4 ++++
+ 3 files changed, 13 insertions(+)
  create mode 100644 package/zstd/Config.in.host
 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 38543e7390..7838ffc219 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -62,5 +62,6 @@ menu "Host utilities"
+ 	source "package/vboot-utils/Config.in.host"
+ 	source "package/xorriso/Config.in.host"
+ 	source "package/zip/Config.in.host"
++	source "package/zstd/Config.in.host"
+ 
+ endmenu
+diff --git a/package/zstd/Config.in.host b/package/zstd/Config.in.host
+new file mode 100644
+index 0000000000..05751f8fbf
+--- /dev/null
++++ b/package/zstd/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_ZSTD
++	bool "host zstd"
++	help
++	  Zstandard, or zstd as short version, is a fast lossless
++	  compression algorithm, targeting real-time compression
++	  scenarios at zlib-level and better compression ratios
++
++	  https://facebook.github.io/zstd
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 4915cee07d..0b613a6da4 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -72,11 +72,15 @@ endef
+ define HOST_ZSTD_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+ 		-C $(@D)/lib
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
++		-C $(@D) zstd
+ endef
+ 
+ define HOST_ZSTD_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
+ 		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/lib install
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(MAKE) \
++		DESTDIR=$(HOST_DIR) PREFIX=/usr -C $(@D)/programs install
+ endef
+ 
+ $(eval $(generic-package))
 -- 
 2.16.4
