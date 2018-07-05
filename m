@@ -1,60 +1,84 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Thu,  5 Jul 2018 09:56:51 +0200
-Subject: [Buildroot] [PATCHv2 1/3] linux: automatically set
- CONFIG_PERF_EVENTS when perf is enabled
-In-Reply-To: <20180705075653.27758-1-thomas.de_schampheleire@nokia.com>
-References: <20180705075653.27758-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180705075653.27758-2-thomas.de_schampheleire@nokia.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Thu,  5 Jul 2018 16:24:30 -0300
+Subject: [Buildroot] [PATCH 2/3] imx/post-image: Allow flashing
+ u-boot-dtb.imx in the SD card
+In-Reply-To: <1530818671-20390-1-git-send-email-festevam@gmail.com>
+References: <1530818671-20390-1-git-send-email-festevam@gmail.com>
+Message-ID: <1530818671-20390-2-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jan Heylen <jan.heylen@nokia.com>
+Add support for flashing the u-boot-dtb.imx binary in the SD card
+when a target selects BR2_TARGET_UBOOT_FORMAT_DTB_IMX.
 
-Perf profiling cannot be used if CONFIG_PERF_EVENTS is not enabled in the
-kernel configuration. Similar to other tools, like ktap, we can enable the
-right options automatically.
-
-Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- linux/linux.mk                | 2 ++
- package/linux-tools/Config.in | 8 +++++---
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ .../common/imx/genimage.cfg.template_dtb_imx       | 40 ++++++++++++++++++++++
+ board/freescale/common/imx/post-image.sh           |  2 ++
+ 2 files changed, 42 insertions(+)
+ create mode 100644 board/freescale/common/imx/genimage.cfg.template_dtb_imx
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6b5f5344ed..7f4c916671 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -292,6 +292,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_LINUX_TOOLS_PERF),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_SYSTEMD),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 2527c90257..349dc6bf0d 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -47,9 +47,11 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF
- 	  code), single CPU or severals threads.
- 
- 	  This will build and install the userspace 'perf'
--	  command. It is up to the user to ensure that the kernel
--	  configuration has all the suitable options enabled to allow a
--	  proper operation of 'perf'.
-+	  command.
+diff --git a/board/freescale/common/imx/genimage.cfg.template_dtb_imx b/board/freescale/common/imx/genimage.cfg.template_dtb_imx
+new file mode 100644
+index 0000000..b38dfa4
+--- /dev/null
++++ b/board/freescale/common/imx/genimage.cfg.template_dtb_imx
+@@ -0,0 +1,40 @@
++# Minimal SD card image for the Freescale boards Template
++#
++# We mimic the .sdcard Freescale's image format:
++# * the SD card must have 1 kB free space at the beginning,
++# * U-Boot is dumped as is,
++# * a FAT partition at offset 8 MB is containing zImage/uImage and DTB files
++# * a single root filesystem partition is required (ext2, ext3 or ext4)
++#
 +
-+	  Your kernel must have CONFIG_PERF_EVENTS enabled to use perf
-+	  profiling. Buildroot automatically enables this in the kernel
-+	  configuration.
- 
- 	  https://perf.wiki.kernel.org/
- 
++image boot.vfat {
++  vfat {
++    files = {
++      %FILES%
++    }
++  }
++  size = 16M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition u-boot {
++    in-partition-table = "no"
++    image = "u-boot-dtb.imx"
++    offset = 1024
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++    offset = 8M
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++  }
++}
+diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+index 264c8a4..5eb593b 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -36,6 +36,8 @@ genimage_type()
+ 		echo "genimage.cfg.template_imx8"
+ 	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
+ 		echo "genimage.cfg.template_spl"
++	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
++		echo "genimage.cfg.template_dtb_imx"
+ 	else
+ 		echo "genimage.cfg.template"
+ 	fi
 -- 
-2.16.4
+2.7.4
