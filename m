@@ -1,66 +1,47 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu,  5 Jul 2018 16:24:31 -0300
-Subject: [Buildroot] [PATCH 3/3] configs/imx7d-sdb: Add new defconfig
-In-Reply-To: <1530818671-20390-1-git-send-email-festevam@gmail.com>
-References: <1530818671-20390-1-git-send-email-festevam@gmail.com>
-Message-ID: <1530818671-20390-3-git-send-email-festevam@gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu,  5 Jul 2018 22:54:39 +0200
+Subject: [Buildroot] [PATCH] package/openpowerlink: bump to version 2.7.0
+Message-ID: <20180705205439.29256-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce imx7d-sdb_defconfig that allows booting imx7d-sdb
-board using U-Boot and kernel mainline instead of the
-vendor provided versions.
+See http://openpowerlink.sourceforge.net/doc/2.7/2.7.0/page_revision_history.html
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- configs/imx7d-sdb_defconfig | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 configs/imx7d-sdb_defconfig
+ package/openpowerlink/openpowerlink.hash | 8 ++++----
+ package/openpowerlink/openpowerlink.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
-new file mode 100644
-index 0000000..b1cc5f8
---- /dev/null
-+++ b/configs/imx7d-sdb_defconfig
-@@ -0,0 +1,36 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+
-+# Linux headers same as kernel, a 4.17 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# U-Boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
-+BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
-+
-+# Filesystem
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# required tools to create the eMMC image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/package/openpowerlink/openpowerlink.hash b/package/openpowerlink/openpowerlink.hash
+index f69950ddcf..da9bdd2a72 100644
+--- a/package/openpowerlink/openpowerlink.hash
++++ b/package/openpowerlink/openpowerlink.hash
+@@ -1,5 +1,5 @@
+-# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.6.2/
+-md5	bbb268e33e55424de563cb677703d8f7	openPOWERLINK_V2.6.2.tar.gz
+-sha1	bf6a8b202c1192b531ce6d6c4c6254e5689c65fe	openPOWERLINK_V2.6.2.tar.gz
++# From http://sourceforge.net/projects/openpowerlink/files/openPOWERLINK/V2.7.0/
++md5	4843f857b8334c984827435fa9e1ab96	openPOWERLINK_V2.7.0.tar.gz
++sha1	a256e05d187b334651764ab21a827b3a4fa64e2f	openPOWERLINK_V2.7.0.tar.gz
+ # sha256 locally computed
+-sha256	38d7a93c05cc0167be5c498e625d1efddeac2616ceb1bc8c3c6679552ae6da15	openPOWERLINK_V2.6.2.tar.gz
++sha256	64c23ee42e3852bf2316fd99c59eae9cdd634219f92b3ea70ce747dad1e05354	openPOWERLINK_V2.7.0.tar.gz
+diff --git a/package/openpowerlink/openpowerlink.mk b/package/openpowerlink/openpowerlink.mk
+index e2958b30b1..90088cef56 100644
+--- a/package/openpowerlink/openpowerlink.mk
++++ b/package/openpowerlink/openpowerlink.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENPOWERLINK_VERSION = V2.6.2
++OPENPOWERLINK_VERSION = V2.7.0
+ OPENPOWERLINK_SITE = http://downloads.sourceforge.net/project/openpowerlink/openPOWERLINK/$(OPENPOWERLINK_VERSION)
+ OPENPOWERLINK_SOURCE = openPOWERLINK_$(OPENPOWERLINK_VERSION).tar.gz
+ OPENPOWERLINK_LICENSE = BSD-2-Clause, GPL-2.0
 -- 
-2.7.4
+2.14.4
