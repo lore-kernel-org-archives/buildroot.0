@@ -1,73 +1,47 @@
-From: Leon Anavi <leon.anavi@konsulko.com>
-Date: Thu, 5 Jul 2018 11:00:45 +0300
-Subject: [Buildroot] [PATCH]
- configs/olimex_a10_olinuxino_lime_defconfig: new board
-In-Reply-To: <20180705073715.w7dmbjfhuh76ujtl@tarshish>
-References: <1530775559-19415-1-git-send-email-leon.anavi@konsulko.com>
- <20180705073715.w7dmbjfhuh76ujtl@tarshish>
-Message-ID: <519c9e52-7b21-1906-4d1b-25a642580a19@konsulko.com>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Thu, 5 Jul 2018 10:00:35 +0200
+Subject: [Buildroot] [PATCH 2/5] pigz: new package
+In-Reply-To: <20180704223029.288baa38@windsurf>
+References: <20180704070739.7259-1-thomas.de_schampheleire@nokia.com>
+ <20180704070739.7259-3-thomas.de_schampheleire@nokia.com>
+ <20180704223029.288baa38@windsurf>
+Message-ID: <CAAXf6LUuPTEUw52SsYZ=EjcNKu8Rq8VAqM4fB6HxVcPM1i8jCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
-
-Thank you for the feedback. I have updated again my patch to keep the
-alphabetical order in DEVELOPERS. Here is the new version of my patch
-for A10-OLinuXino-LIME:
-http://lists.busybox.net/pipermail/buildroot/2018-July/225277.html
-
-Best regards,
-Leon
-
-On 5.07.2018 10:37, Baruch Siach wrote:
-> Hi Leon,
+2018-07-04 22:30 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+> Hello,
 >
-> On Thu, Jul 05, 2018 at 10:25:59AM +0300, Leon Anavi wrote:
->> Add a defconfig for the Olimex A10-OLinuXino-LIME, reusing most
->> of the A20-OLinuXino-Lime and A13-OLinuXino files.
+> On Wed,  4 Jul 2018 09:07:36 +0200, Thomas De Schampheleire wrote:
+>> From: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
 >>
->> The configurations for Olimex A10-OLinuXino-LIME feature:
->> - U-Boot 2018.03
->> - Mainline Linux kernel 4.14.26
+>> A parallel implementation of gzip for modern
+>> multi-processor, multi-core machines.
 >>
->> Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+>> Signed-off-by: Alfredo Alvarez Fernandez <alfredo.alvarez_fernandez@nokia.com>
+>> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 >> ---
->>  DEVELOPERS                                  |  4 ++
->>  board/olimex/a10_olinuxino/boot.cmd         |  5 +++
->>  board/olimex/a10_olinuxino/genimage.cfg     | 17 +++++++++
->>  board/olimex/a10_olinuxino/post-build.sh    |  3 ++
->>  board/olimex/a10_olinuxino/readme.txt       | 57 +++++++++++++++++++++++++++++
->>  configs/olimex_a10_olinuxino_lime_defconfig | 48 ++++++++++++++++++++++++
->>  6 files changed, 134 insertions(+)
->>  create mode 100644 board/olimex/a10_olinuxino/boot.cmd
->>  create mode 100644 board/olimex/a10_olinuxino/genimage.cfg
->>  create mode 100755 board/olimex/a10_olinuxino/post-build.sh
->>  create mode 100644 board/olimex/a10_olinuxino/readme.txt
->>  create mode 100644 configs/olimex_a10_olinuxino_lime_defconfig
->>
->> diff --git a/DEVELOPERS b/DEVELOPERS
->> index 1fa0020..40baa7d 100644
->> --- a/DEVELOPERS
->> +++ b/DEVELOPERS
->> @@ -2146,3 +2146,7 @@ F:	package/tinc/
->>  
->>  N:	Pierre Ducroquet <pinaraf@pinaraf.info>
->>  F:	package/kf5/
->> +
->> +N:	Leon Anavi <leon.anavi@konsulko.com>
->> +F:	board/olimex/a10_olinuxino
->> +F:	configs/olimex_a10_olinuxino_lime_defconfig
-> Please keep the alphabetic order of the list entries.
+>>  package/Config.in      |  1 +
+>>  package/pigz/Config.in | 14 ++++++++++++++
+>>  package/pigz/pigz.hash |  2 ++
+>>  package/pigz/pigz.mk   | 21 +++++++++++++++++++++
+>>  4 files changed, 38 insertions(+)
+>>  create mode 100644 package/pigz/Config.in
+>>  create mode 100644 package/pigz/pigz.hash
+>>  create mode 100644 package/pigz/pigz.mk
 >
-> I have just posted a patch moving Pierre's entry to its correct location.
+> I've applied, with the following changes:
 >
-> baruch
+>     [Thomas: add entry to DEVELOPERS file, add hash for license file.]
 >
 
--- 
-Leon Anavi
-Software Engineer
-konsulko.com
+Oops, I hadn't seen that you already applied these changes and I just sent a v2.
+
+As I added one new change related to a more stable download URL for
+pigz, I'll rebase and send v3.
+Please ignore the v2, sorry for the noise.
+
+/Thomas
