@@ -1,55 +1,66 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Thu,  5 Jul 2018 16:24:29 -0300
-Subject: [Buildroot] [PATCH 1/3] uboot: Introduce
- BR2_TARGET_UBOOT_FORMAT_DTB_IMX
-Message-ID: <1530818671-20390-1-git-send-email-festevam@gmail.com>
+Date: Thu,  5 Jul 2018 16:24:31 -0300
+Subject: [Buildroot] [PATCH 3/3] configs/imx7d-sdb: Add new defconfig
+In-Reply-To: <1530818671-20390-1-git-send-email-festevam@gmail.com>
+References: <1530818671-20390-1-git-send-email-festevam@gmail.com>
+Message-ID: <1530818671-20390-3-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some i.MX boards which use device tree to describe the hardware
-for U-Boot generate a u-boot-dtb.imx binary.
-
-Introduce the BR2_TARGET_UBOOT_FORMAT_DTB_IMX option to
-handle such case.
+Introduce imx7d-sdb_defconfig that allows booting imx7d-sdb
+board using U-Boot and kernel mainline instead of the
+vendor provided versions.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- boot/uboot/Config.in | 3 +++
- boot/uboot/uboot.mk  | 5 +++++
- 2 files changed, 8 insertions(+)
+ configs/imx7d-sdb_defconfig | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 configs/imx7d-sdb_defconfig
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 482711c..7f8291a 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -190,6 +190,9 @@ config BR2_TARGET_UBOOT_FORMAT_DTB_BIN
- config BR2_TARGET_UBOOT_FORMAT_DTB_IMG
- 	bool "u-boot-dtb.img"
- 
-+config BR2_TARGET_UBOOT_FORMAT_DTB_IMX
-+	bool "u-boot-dtb.imx"
+diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
+new file mode 100644
+index 0000000..b1cc5f8
+--- /dev/null
++++ b/configs/imx7d-sdb_defconfig
+@@ -0,0 +1,36 @@
++# architecture
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_NEON_VFPV4=y
 +
- config BR2_TARGET_UBOOT_FORMAT_IMG
- 	bool "u-boot.img"
- 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 6ef275e..bf227f2 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -70,6 +70,11 @@ UBOOT_BINS += u-boot-dtb.img
- UBOOT_MAKE_TARGET += u-boot-dtb.img
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_IMX),y)
-+UBOOT_BINS += u-boot-dtb.imx
-+UBOOT_MAKE_TARGET += u-boot-dtb.imx
-+endif
++# Linux headers same as kernel, a 4.17 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
 +
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_DTB_BIN),y)
- UBOOT_BINS += u-boot-dtb.bin
- UBOOT_MAKE_TARGET += u-boot-dtb.bin
++# system
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
++BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# U-Boot
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
++BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
++
++# Filesystem
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# required tools to create the eMMC image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.7.4
