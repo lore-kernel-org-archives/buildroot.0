@@ -1,47 +1,92 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Wed,  4 Jul 2018 15:57:34 -0700
-Subject: [Buildroot] [PATCH 1/1] python-django: bump to version 1.11.14
-Message-ID: <20180704225734.18136-1-joseph.kogut@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 5 Jul 2018 05:54:18 +0300
+Subject: [Buildroot] [PATCH] toolchain: improve musl check to support
+ static toolchains
+In-Reply-To: <20180704214257.6849-1-thomas.petazzoni@bootlin.com>
+References: <20180704214257.6849-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180705025418.dkit5uzdtwfezkgc@tarshish>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- package/python-django/python-django.hash | 6 ++++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+Hi Thomas,
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 09be18440b..f846658909 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,3 +1,5 @@
- # md5 from https://pypi.python.org/pypi/django/json, sha256 locally computed
--md5	693dfeabad62c561cb205900d32c2a98  Django-1.10.7.tar.gz
--sha256	593d779dbc2350a245c4f76d26bdcad58a39895e87304fe6d725bbdf84b5b0b8  Django-1.10.7.tar.gz
-+md5	38e82b59a1c27bbf98ccf0564ead7426  Django-1.11.14.tar.gz
-+sha256  eb9271f0874f53106a2719c0c35ce67631f6cc27cf81a60c6f8c9817b35a3f6e  Django-1.11.14.tar.gz
-+# sha256 locally computed
-+sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 9056f00cf0..b39e82e737 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 1.10.7
-+PYTHON_DJANGO_VERSION = 1.11.14
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://pypi.python.org/packages/15/b4/d4bb7313e02386bd23a60e1eb5670321313fb67289c6f36ec43bce747aff
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/dc/35/273514b5eb2201d5183dd138c240b12e1d822d2358b1e9436545b66d2d76
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_SETUP_TYPE = setuptools
+On Wed, Jul 04, 2018 at 11:42:57PM +0200, Thomas Petazzoni wrote:
+> The check_musl function currently builds a program and verifies if the
+> program interpreter starts with /lib/ld-musl. While this works fine
+> for dynamically linked programs, this obviously doesn't work for a
+> purely static musl toolchain such as [1].
+> 
+> There is no easy way to identify a toolchain as using the musl C
+> library. For glibc, dynamic linking is always supported, so we look at
+> the dynamic linker name. For uClibc, there is a distinctive
+> uClibc_config.h header file. There is no such distinctive feature in
+> musl.
+> 
+> We end up resorting to looking for the string MUSL_LOCPATH, which is
+> used by musl locale_map.c source file. This string has been present in
+> musl since 2014. It certainly isn't a very stable or convincing
+> solution to identify the C library as being musl, but it's the best we
+> could find.
+> 
+> Note that we are sure there is a libc.a file, because the
+> check_unusable_toolchain function checks that there is a such a file.
+
+So the check should work even for dynamic only toolchains, right?
+
+> [1] http://autobuild.buildroot.net/toolchains/tarballs/br-arm-musl-static-2018.05.tar.bz2
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  toolchain/helpers.mk                                   | 9 +++------
+>  toolchain/toolchain-external/pkg-toolchain-external.mk | 3 +--
+>  2 files changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
+> index 1792286add..e5520c00c3 100644
+> --- a/toolchain/helpers.mk
+> +++ b/toolchain/helpers.mk
+> @@ -241,14 +241,11 @@ check_glibc = \
+>  # $2: cross-readelf path
+
+This comment is redundant now.
+
+>  check_musl = \
+>  	__CROSS_CC=$(strip $1) ; \
+> -	__CROSS_READELF=$(strip $2) ; \
+> -	echo 'void main(void) {}' | $${__CROSS_CC} -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - >/dev/null 2>&1; \
+> -	if ! $${__CROSS_READELF} -l $(BUILD_DIR)/.br-toolchain-test.tmp 2> /dev/null | grep 'program interpreter: /lib/ld-musl' -q; then \
+> -		rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*; \
+> +	libc_a_path=`$${__CROSS_CC} -print-file-name=libc.a` ; \
+> +	if ! strings $${libc_a_path} | grep -q MUSL_LOCPATH ; then \
+>  		echo "Incorrect selection of the C library" ; \
+>  		exit -1; \
+> -	fi ; \
+> -	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
+> +	fi
+>  
+>  #
+>  # Check the conformity of Buildroot configuration with regard to the
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index 8b2c283654..02d992531d 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -557,8 +557,7 @@ define $(2)_CONFIGURE_CMDS
+>  		$$(call check_uclibc,$$$${SYSROOT_DIR}) ; \
+>  	elif test "$$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
+>  		$$(call check_musl,\
+> -			"$$(TOOLCHAIN_EXTERNAL_CC) $$(TOOLCHAIN_EXTERNAL_CFLAGS)",\
+> -			$$(TOOLCHAIN_EXTERNAL_READELF)) ; \
+> +			"$$(TOOLCHAIN_EXTERNAL_CC) $$(TOOLCHAIN_EXTERNAL_CFLAGS)") ; \
+>  	else \
+>  		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
+>  	fi
+
+baruch
+
 -- 
-2.18.0
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
