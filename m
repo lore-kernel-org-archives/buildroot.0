@@ -1,61 +1,31 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 5 Jul 2018 22:58:35 -0300 (BRT)
-Subject: [Buildroot] [PATCH 16/50] package/busybox: invert dependency
- with rsyslogd
-In-Reply-To: <3bdcebd1fb9ecf3173194d86e6b1cc0e2a5cb3fc.1530565933.git.yann.morin.1998@free.fr>
-References: <cover.1530565933.git.yann.morin.1998@free.fr>
- <3bdcebd1fb9ecf3173194d86e6b1cc0e2a5cb3fc.1530565933.git.yann.morin.1998@free.fr>
-Message-ID: <310327190.1977638.1530842315370.JavaMail.zimbra@datacom.com.br>
+Date: Thu,  5 Jul 2018 23:22:39 -0300
+Subject: [Buildroot] [PATCH] liblogging: update project URL
+Message-ID: <20180706022239.12854-1-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Yann Morin" <yann.morin.1998@free.fr>
-> To: "buildroot" <buildroot@buildroot.org>
-> Cc: "Yann Morin" <yann.morin.1998@free.fr>
-> Sent: Monday, July 2, 2018 6:11:50 PM
-> Subject: [Buildroot] [PATCH 16/50] package/busybox: invert dependency with rsyslogd
+The original site www.liblogging.org has been taken down because of the
+new European data protection regulation (GDPR), to which it was not
+compliant.
 
-Should be "rsyslog", not "rsyslogd", in the commit title.
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ package/liblogging/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> package/busybox/busybox.mk | 1 +
-> package/rsyslog/rsyslog.mk | 5 -----
-> 2 files changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-> index 7686667884..3a19500ad3 100644
-> --- a/package/busybox/busybox.mk
-> +++ b/package/busybox/busybox.mk
-> @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
-> 
-> # Packages that provide commands that may also be busybox applets:
-> BUSYBOX_DEPENDENCIES = \
-> +	$(if $(BR2_PACKAGE_RSYSLOGD),rsyslogd) \
-> 	$(if $(BR2_PACKAGE_START_STOP_DAEMON),start-stop-daemon) \
-> 	$(if $(BR2_PACKAGE_SYSKLOGD),sysklogd) \
-> 	$(if $(BR2_PACKAGE_SYSLOG_NG),syslog-ng) \
-> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-> index e32505be22..61e08ba765 100644
-> --- a/package/rsyslog/rsyslog.mk
-> +++ b/package/rsyslog/rsyslog.mk
-> @@ -17,11 +17,6 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
-> RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
-> 	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
-> 
-> -# Build after BusyBox
-> -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
-> -RSYSLOG_DEPENDENCIES += busybox
-> -endif
-> -
-> ifeq ($(BR2_PACKAGE_GNUTLS),y)
-> RSYSLOG_DEPENDENCIES += gnutls
-> RSYSLOG_CONF_OPTS += --enable-gnutls
-> --
-> 2.14.1
-
+diff --git a/package/liblogging/Config.in b/package/liblogging/Config.in
+index 23c3c1ad2d..a39fdf8ddc 100644
+--- a/package/liblogging/Config.in
++++ b/package/liblogging/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBLOGGING
+ 	  logging. It offers an enhanced replacement
+ 	  for the syslog() call, but retains its ease of use.
+ 
+-	  http://www.liblogging.org/
++	  https://www.rsyslog.com/liblogging/
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
+2.17.1
