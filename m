@@ -1,57 +1,50 @@
 From: Celso Varella <celso.neto.cwi@datacom.com.br>
-Date: Fri,  6 Jul 2018 11:36:13 -0300
-Subject: [Buildroot] [PATCH 2/3] gnu-efi: add host variant
-In-Reply-To: <1530887774-19479-1-git-send-email-celso.neto.cwi@datacom.com.br>
-References: <1530887774-19479-1-git-send-email-celso.neto.cwi@datacom.com.br>
-Message-ID: <1530887774-19479-3-git-send-email-celso.neto.cwi@datacom.com.br>
+Date: Fri,  6 Jul 2018 11:36:11 -0300
+Subject: [Buildroot] [PATCH 0/3] New packages to support UEFI Secure Boot
+Message-ID: <1530887774-19479-1-git-send-email-celso.neto.cwi@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It will be required by host-sbsigntools (forthcoming package).
+Patch 1: add efitools package
+Patch 2: add gnu-efi host variante required by host-sbsigntools
+Patch 3: add sbsigntools host and target package
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- package/gnu-efi/gnu-efi.mk | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Celso Varella (3):
+  efitools: new package
+  gnu-efi: add host variant
+  sbsigntools: new package
 
-diff --git a/package/gnu-efi/gnu-efi.mk b/package/gnu-efi/gnu-efi.mk
-index d55e027..b106010 100644
---- a/package/gnu-efi/gnu-efi.mk
-+++ b/package/gnu-efi/gnu-efi.mk
-@@ -26,6 +26,12 @@ else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
- GNU_EFI_PLATFORM = aarch64
- endif
- 
-+ifeq ($(HOSTARCH),x86)
-+HOST_GNU_EFI_PLATFORM = ia32
-+else
-+HOST_GNU_EFI_PLATFORM = $(HOSTARCH)
-+endif
-+
- define GNU_EFI_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(TARGET_CONFIGURE_OPTS) \
-@@ -39,4 +45,18 @@ define GNU_EFI_INSTALL_STAGING_CMDS
- 		PREFIX=/usr ARCH=$(GNU_EFI_PLATFORM) install
- endef
- 
-+define HOST_GNU_EFI_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(HOST_CONFIGURE_OPTS) \
-+		ARCH=$(HOST_GNU_EFI_PLATFORM)
-+endef
-+
-+define HOST_GNU_EFI_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-+		$(HOST_CONFIGURE_OPTS) \
-+		INSTALLROOT=$(HOST_DIR) \
-+		PREFIX= ARCH=$(HOST_GNU_EFI_PLATFORM) install
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+ package/Config.in                                  |   2 +
+ package/Config.in.host                             |   1 +
+ ...kefile-remove-all-dependencies-from-sbsig.patch | 155 ++++++++++++++++++++
+ ...ke.rules-remove-all-dependencies-from-sbs.patch | 159 +++++++++++++++++++++
+ ...tion-of-mount-command-to-turn-compatible-.patch |  27 ++++
+ package/efitools/Config.in                         |   9 ++
+ package/efitools/efitools.hash                     |   3 +
+ package/efitools/efitools.mk                       |  21 +++
+ package/gnu-efi/gnu-efi.mk                         |  20 +++
+ .../0001-configure-fix-AM_INIT_AUTOMAKE-call.patch |  32 +++++
+ ...rove-error-handling-in-__fileio_read_file.patch |  68 +++++++++
+ package/sbsigntools/Config.in                      |  20 +++
+ package/sbsigntools/Config.in.host                 |   7 +
+ package/sbsigntools/sbsigntools.hash               |  10 ++
+ package/sbsigntools/sbsigntools.mk                 |  83 +++++++++++
+ 15 files changed, 617 insertions(+)
+ create mode 100644 package/efitools/0001-Efitools-Makefile-remove-all-dependencies-from-sbsig.patch
+ create mode 100644 package/efitools/0002-Efitools-Make.rules-remove-all-dependencies-from-sbs.patch
+ create mode 100644 package/efitools/0003-remove-l-option-of-mount-command-to-turn-compatible-.patch
+ create mode 100644 package/efitools/Config.in
+ create mode 100644 package/efitools/efitools.hash
+ create mode 100644 package/efitools/efitools.mk
+ create mode 100644 package/sbsigntools/0001-configure-fix-AM_INIT_AUTOMAKE-call.patch
+ create mode 100644 package/sbsigntools/0002-fileio-improve-error-handling-in-__fileio_read_file.patch
+ create mode 100644 package/sbsigntools/Config.in
+ create mode 100644 package/sbsigntools/Config.in.host
+ create mode 100644 package/sbsigntools/sbsigntools.hash
+ create mode 100644 package/sbsigntools/sbsigntools.mk
+
 -- 
 2.7.4
