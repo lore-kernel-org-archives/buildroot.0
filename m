@@ -1,59 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  7 Jul 2018 14:49:40 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: detect missing selects
-Message-ID: <20180707124940.15961-1-fontaine.fabrice@gmail.com>
+Date: Sat,  7 Jul 2018 17:35:46 +0200
+Subject: [Buildroot] [PATCH 1/1] wampcc: needs C++
+Message-ID: <20180707153546.20047-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As suggested by Arnout during the review of
-http://patchwork.ozlabs.org/patch/934589, add a mechanism to detect a
-missing boost select by checking that we do not install a boost library
-which hasn't been selected by the user.
-
-To manage a change of boost configuration by the user between two
-builds, add a BOOST_PRE_INSTALL_TARGET_HOOKS to remove all boost
-libraries before installing them.
-
-Also, use ls with a wildcard instead of test to avoid trying to guess
-library names if boost layout is set to tagged or versionned (the
-wildcard will also help us to manage shared or static library)
+Fixes:
+ - http://autobuild.buildroot.net/results/b47daa2f7df44109b839b07d282d4f5b5123533c
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/boost/boost.mk | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/wampcc/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index cf0cea7edd..b2605a70b7 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -159,6 +159,24 @@ define BOOST_INSTALL_STAGING_CMDS
- 	--layout=$(BOOST_LAYOUT) install)
- endef
+diff --git a/package/wampcc/Config.in b/package/wampcc/Config.in
+index d9d82df3ef..9cf7d99dfe 100644
+--- a/package/wampcc/Config.in
++++ b/package/wampcc/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_WAMPCC
+ 	bool "wampcc"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
+ 	depends on BR2_USE_MMU # libuv
+ 	depends on !BR2_STATIC_LIBS # libuv
+@@ -14,10 +15,11 @@ config BR2_PACKAGE_WAMPCC
  
-+# These hooks will help us to detect missing select in Config.in
-+# Indeed boost buildsystem can select a library even if the user has
-+# disable it
-+define BOOST_REMOVE_TARGET_LIBRARIES
-+	rm -rf $(TARGET_DIR)/usr/lib/libboost_*
-+endef
-+
-+BOOST_PRE_INSTALL_TARGET_HOOKS += BOOST_REMOVE_TARGET_LIBRARIES
-+
-+define BOOST_CHECK_TARGET_LIBRARIES
-+	@$(foreach disabled,$(BOOST_WITHOUT_FLAGS),\
-+		! ls $(TARGET_DIR)/usr/lib/libboost_$(disabled)* 1>/dev/null 2>&1 || \
-+			! echo "libboost_$(disabled) shouldn't have been installed: missing select in boost/Config.in" || \
-+			exit 1;)
-+endef
-+
-+BOOST_POST_INSTALL_TARGET_HOOKS += BOOST_CHECK_TARGET_LIBRARIES
-+
- define HOST_BOOST_CONFIGURE_CMDS
- 	(cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS))
- 	echo "using gcc : `$(HOST_CC) -dumpversion` : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
+ 	  https://github.com/darrenjs/wampcc
+ 
+-comment "wampcc needs a toolchain w/ NPTL, dynamic library"
++comment "wampcc needs a toolchain w/ C++, NPTL, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
+ 
+ comment "wampcc needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_USE_MMU
 -- 
 2.14.1
