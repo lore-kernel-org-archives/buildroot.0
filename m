@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 8 Jul 2018 00:26:44 +0200
-Subject: [Buildroot] [PATCH] systemd: Fix polkit build order
-In-Reply-To: <20180704203624.12391-1-yann.morin.1998@free.fr>
-References: <20180704203624.12391-1-yann.morin.1998@free.fr>
-Message-ID: <c16d5eab-4ee8-3408-8239-adfd86c092ad@mind.be>
+Date: Sun, 8 Jul 2018 00:35:24 +0200
+Subject: [Buildroot] [PATCH] configs/raspberrypi3_defconfig: fix
+ filesystem size
+In-Reply-To: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com>
+References: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com>
+Message-ID: <7061b17f-2365-592c-662b-e383f425e03c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +13,44 @@ To: buildroot@busybox.net
 
 
 
-On 04-07-18 22:36, Yann E. MORIN wrote:
-> From: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
+On 29-06-18 11:23, Leon Anavi wrote:
+> Increase the filesystem size for raspberrypi3 by setting
+> BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
+> raspberrypi3_64 has the same size.
 > 
-> We need to install polkit before systemd if we want to enable
-> polkit integration, because systemd will not install polkit
-> policy files unless it finds polkit-gobject-1.
+> Fixes:
+> Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "services"
+> mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
 > 
-> Signed-off-by: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
-> Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
 
  Applied to master, thanks.
+
+ It's a pity we didn't get to the bottom of why this error was not happening
+every time, or why it didn't happen before. But, as mentioned, the fix is simple
+and we were close to the limit.
+
+ I've extended the commit log a little bit.
 
  Regards,
  Arnout
 
-> 
 > ---
-> I've resent this, as Asgeir does not seem to be subscribed to the list.
-> Asgeir, if you want to send more patches (which we encourage you to
-> do!), you'll need to subscribe to the list first.
-> 
-> Thanks! :-)
-> ---
->  package/systemd/systemd.mk | 1 +
+>  configs/raspberrypi3_defconfig | 1 +
 >  1 file changed, 1 insertion(+)
 > 
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 10e11a9277..04775ee778 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -283,6 +283,7 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_SYSTEMD_POLKIT),y)
->  SYSTEMD_CONF_OPTS += -Dpolkit=true
-> +SYSTEMD_DEPENDENCIES += polkit
->  else
->  SYSTEMD_CONF_OPTS += -Dpolkit=false
->  endif
+> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+> index 856f321..0ef9afe 100644
+> --- a/configs/raspberrypi3_defconfig
+> +++ b/configs/raspberrypi3_defconfig
+> @@ -28,6 +28,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
+>  # Filesystem / image
+>  BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+>  # BR2_TARGET_ROOTFS_TAR is not set
+>  BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+>  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
 > 
 
 -- 
