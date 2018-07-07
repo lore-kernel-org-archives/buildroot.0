@@ -1,67 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 7 Jul 2018 23:27:54 +0200
-Subject: [Buildroot] [PATCH 1/1] wampcc: needs C++
-In-Reply-To: <20180707153546.20047-1-fontaine.fabrice@gmail.com>
-References: <20180707153546.20047-1-fontaine.fabrice@gmail.com>
-Message-ID: <ddbc0e99-07c2-0f8d-fd27-b93d4b6031ca@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 7 Jul 2018 23:28:49 +0200
+Subject: [Buildroot] [git commit] package/automake: bump version to 1.16.1
+Message-ID: <20180707212627.68E558640E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=d36a01273b4d6be2758682784c47ee4e2e610090
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+If Buildroot is run from a folder containing a '@' in the path, automake
+will fail since the aclocal Perl script will interpret what is after the
+'@' as an array in its system include paths. This was fixed in automake
+1.16.1.
 
-On 07-07-18 17:35, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.net/results/b47daa2f7df44109b839b07d282d4f5b5123533c
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/wampcc/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/wampcc/Config.in b/package/wampcc/Config.in
-> index d9d82df3ef..9cf7d99dfe 100644
-> --- a/package/wampcc/Config.in
-> +++ b/package/wampcc/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_WAMPCC
->  	bool "wampcc"
-> +	depends on BR2_INSTALL_LIBSTDCPP
+Signed-off-by: Jean-Fran??ois T??tu <jean-francois.tetu@savoirfairelinux.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/automake/automake.hash | 2 +-
+ package/automake/automake.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- A few lines lower it says that it's a C++ package, so duh...
-
-
- Applied to master, thanks.
-
- Regards,
- Arnout
-
-
->  	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
->  	depends on BR2_USE_MMU # libuv
->  	depends on !BR2_STATIC_LIBS # libuv
-> @@ -14,10 +15,11 @@ config BR2_PACKAGE_WAMPCC
->  
->  	  https://github.com/darrenjs/wampcc
->  
-> -comment "wampcc needs a toolchain w/ NPTL, dynamic library"
-> +comment "wampcc needs a toolchain w/ C++, NPTL, dynamic library"
->  	depends on BR2_USE_MMU
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> -	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
-> +	depends on !BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
->  
->  comment "wampcc needs a toolchain not affected by GCC bug 64735"
->  	depends on BR2_USE_MMU
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/automake/automake.hash b/package/automake/automake.hash
+index b194c3c2bc..9ff55a4bae 100644
+--- a/package/automake/automake.hash
++++ b/package/automake/automake.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 af6ba39142220687c500f79b4aa2f181d9b24e4f8d8ec497cea4ba26c64bedaf  automake-1.15.1.tar.xz
++sha256 5d05bb38a23fd3312b10aea93840feec685bdf4a41146e78882848165d3ae921  automake-1.16.1.tar.xz
+ # License files, locally calculated
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+index 270337712e..92e7d64666 100644
+--- a/package/automake/automake.mk
++++ b/package/automake/automake.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-AUTOMAKE_VERSION = 1.15.1
++AUTOMAKE_VERSION = 1.16.1
+ AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.xz
+ AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
+ AUTOMAKE_LICENSE = GPL-2.0+
