@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:45:44 +0200
-Subject: [Buildroot] [PATCH 19/50 v2] package/busybox: invert dependency
- with pciutils
+Date: Sun,  8 Jul 2018 11:45:36 +0200
+Subject: [Buildroot] [PATCH 11/50 v2] package/busybox: invert dependency
+ with sysvinit
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <5358e2ee36c07fa984d7943db9489027f4d48eff.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <f78eabb010bf2d1df0e0a2cf5ecd3ce1a63d765a.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +12,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Carlos Santos <casantos@datacom.com.br>
 ---
  package/busybox/busybox.mk   | 1 +
- package/pciutils/pciutils.mk | 5 -----
+ package/sysvinit/sysvinit.mk | 5 -----
  2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index df51f288c4..c87bcec0e4 100644
+index ff2e4c770c..e504924540 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
- 	$(if $(BR2_PACKAGE_PROCPS_NG),procps-ng) \
- 	$(if $(BR2_PACKAGE_PSMISC),psmisc) \
- 	$(if $(BR2_PACKAGE_RSYSLOGD),rsyslog) \
-diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
-index 2dd5771f21..30d429e75a 100644
---- a/package/pciutils/pciutils.mk
-+++ b/package/pciutils/pciutils.mk
-@@ -46,11 +46,6 @@ else
- PCIUTILS_MAKE_OPTS += SHARED=yes
- endif
++	$(if $(BR2_PACKAGE_SYSVINIT),sysvinit) \
+ 	$(if $(BR2_PACKAGE_TAR),tar) \
+ 	$(if $(BR2_PACKAGE_TFTPD),tftpd) \
+ 	$(if $(BR2_PACKAGE_TRACEROUTE),traceroute) \
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index a606ddabf0..993e399e73 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -13,11 +13,6 @@ SYSVINIT_LICENSE_FILES = COPYING
  
--# Build after busybox since it's got a lightweight lspci
+ SYSVINIT_MAKE_OPTS = SYSROOT=$(STAGING_DIR)
+ 
+-# Override BusyBox implementations if BusyBox is enabled.
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--PCIUTILS_DEPENDENCIES += busybox
+-SYSVINIT_DEPENDENCIES = busybox
 -endif
 -
- define PCIUTILS_CONFIGURE_CMDS
- 	$(SED) 's/wget --no-timestamping/wget/' $(PCIUTILS_DIR)/update-pciids.sh
- 	$(SED) 's/uname -s/echo Linux/' \
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ SYSVINIT_DEPENDENCIES += libselinux
+ SYSVINIT_MAKE_OPTS += WITH_SELINUX="yes"
 -- 
 2.14.1
