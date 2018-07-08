@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:45:39 +0200
-Subject: [Buildroot] [PATCH 14/50 v2] package/busybox: invert dependency
- with sysklogd
+Date: Sun,  8 Jul 2018 11:45:52 +0200
+Subject: [Buildroot] [PATCH 27/50 v2] package/busybox: invert dependency
+ with less
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <1bf1b12ccea4c34b4b0947cbdc688e3d8d975410.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <d4c871a640897b45635c5e7fdb6ac53d8675a2b1.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,37 +13,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk   | 1 +
- package/sysklogd/sysklogd.mk | 5 -----
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ package/busybox/busybox.mk | 1 +
+ package/less/less.mk       | 3 +--
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index c6c7b03ab3..bbf3834e0d 100644
+index cb629892cd..95fea18b50 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_SYSKLOGD),sysklogd) \
- 	$(if $(BR2_PACKAGE_SYSLOG_NG),syslog-ng) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd) \
- 	$(if $(BR2_PACKAGE_SYSVINIT),sysvinit) \
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 1c8259a9af..c4f064c10b 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -9,11 +9,6 @@ SYSKLOGD_SITE = http://www.infodrom.org/projects/sysklogd/download
- SYSKLOGD_LICENSE = GPL-2.0+
- SYSKLOGD_LICENSE_FILES = COPYING
++	$(if $(BR2_PACKAGE_LESS),less) \
+ 	$(if $(BR2_PACKAGE_LSOF),lsof) \
+ 	$(if $(BR2_PACKAGE_MTD),mtd) \
+ 	$(if $(BR2_PACKAGE_NET_TOOLS),net-tools) \
+diff --git a/package/less/less.mk b/package/less/less.mk
+index bccc08b89f..ef3643c0aa 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
+@@ -8,8 +8,7 @@ LESS_VERSION = 487
+ LESS_SITE = $(BR2_GNU_MIRROR)/less
+ LESS_LICENSE = GPL-3.0+
+ LESS_LICENSE_FILES = COPYING
+-# Build after busybox, full-blown is better
+-LESS_DEPENDENCIES = ncurses $(if $(BR2_PACKAGE_BUSYBOX),busybox)
++LESS_DEPENDENCIES = ncurses
  
--# Override BusyBox implementations if BusyBox is enabled.
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--SYSKLOGD_DEPENDENCIES = busybox
--endif
--
- # Override SKFLAGS which is used as CFLAGS.
- define SYSKLOGD_BUILD_CMDS
- 	$(MAKE) $(TARGET_CONFIGURE_OPTS) SKFLAGS="$(TARGET_CFLAGS) -DSYSV" \
+ define LESS_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 $(@D)/less $(TARGET_DIR)/usr/bin/less
 -- 
 2.14.1
