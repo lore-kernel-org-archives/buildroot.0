@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:45:41 +0200
-Subject: [Buildroot] [PATCH 16/50 v2] package/busybox: invert dependency
- with rsyslog
+Date: Sun,  8 Jul 2018 11:45:37 +0200
+Subject: [Buildroot] [PATCH 12/50 v2] package/busybox: invert dependency
+ with systemd
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <68f785bd3f381be0d4371617fa06a60a51aa6d38.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <418bd1a512af52244749f34cbeedf0c1a14538f4.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +12,39 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Carlos Santos <casantos@datacom.com.br>
-
----
-Changes v1 -> v2:
-  - s/rsyslogd/rsyslog/  (Carlos)
 ---
  package/busybox/busybox.mk | 1 +
- package/rsyslog/rsyslog.mk | 5 -----
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ package/systemd/systemd.mk | 6 ------
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 00e17c4be6..22b798207a 100644
+index e504924540..9d3ea22d96 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_RSYSLOGD),rsyslog) \
- 	$(if $(BR2_PACKAGE_START_STOP_DAEMON),start-stop-daemon) \
- 	$(if $(BR2_PACKAGE_SYSKLOGD),sysklogd) \
- 	$(if $(BR2_PACKAGE_SYSLOG_NG),syslog-ng) \
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index e32505be22..61e08ba765 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -17,11 +17,6 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
- RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
- 	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
++	$(if $(BR2_PACKAGE_SYSTEMD),systemd) \
+ 	$(if $(BR2_PACKAGE_SYSVINIT),sysvinit) \
+ 	$(if $(BR2_PACKAGE_TAR),tar) \
+ 	$(if $(BR2_PACKAGE_TFTPD),tftpd) \
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 04775ee778..d7031ed21d 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -18,12 +18,6 @@ SYSTEMD_DEPENDENCIES = \
  
--# Build after BusyBox
+ SYSTEMD_PROVIDES = udev
+ 
+-# Make sure that systemd will always be built after busybox so that we have
+-# a consistent init setup between two builds
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--RSYSLOG_DEPENDENCIES += busybox
+-SYSTEMD_DEPENDENCIES += busybox
 -endif
 -
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- RSYSLOG_DEPENDENCIES += gnutls
- RSYSLOG_CONF_OPTS += --enable-gnutls
+ SYSTEMD_CONF_OPTS += \
+ 	-Drootlibdir='/usr/lib' \
+ 	-Dblkid=true \
 -- 
 2.14.1
