@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 8 Jul 2018 13:25:47 +0200
-Subject: [Buildroot] [PATCH 50/50 v2] support/scripts: don't draw most
- of busybox' dependencies
-In-Reply-To: <7d4417e280d8c1db48496f8e35895c4819cae957.1531043163.git.yann.morin.1998@free.fr>
-References: <cover.1531043163.git.yann.morin.1998@free.fr>
- <7d4417e280d8c1db48496f8e35895c4819cae957.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <7bdd1aa7-3e94-7e02-a45c-9dfac841b190@mind.be>
+Date: Sun, 8 Jul 2018 13:33:31 +0200
+Subject: [Buildroot] [PATCH] package/automake: bump version to 1.16.1
+In-Reply-To: <20180708105642.GD2474@scaer>
+References: <20180706212709.10376-1-jean-francois.tetu@savoirfairelinux.com>
+ <13b9a287-31bf-fc90-5d49-ba78cb68b002@mind.be>
+ <438109890.9050032.1531017842188.JavaMail.zimbra@savoirfairelinux.com>
+ <20180708105642.GD2474@scaer>
+Message-ID: <62e4e8e3-5992-e9b5-fecc-9c4576760d52@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,89 +15,37 @@ To: buildroot@busybox.net
 
 
 
-On 08-07-18 11:46, Yann E. MORIN wrote:
-> Since most dependencies of busybox' are there to guarantee that busybox
-> does not install applets that are already provided by other packages,
-> they are not really functional dependencies, and mostly clutter the
-> dependency graph.
-
- The thing is, they still are dependencies. I often use graph-depends to do a
-poor man's TLPB by starting builds of individual packages in separate shells,
-but then I first have to check that their dependency chains are non-overlapping.
-If you're going to hide some dependencies, that's not going to work any more...
-
- I also sometimes use it to understand why make decides to execute things in a
-particular order. Again, hiding dependencies doesn't help there.
-
- On the other hand, it's like the toolchain: you know everything depends on the
-toolchain, and similarly you know that buildroot depends on everything. So maybe
-it's not that bad.
-
+On 08-07-18 12:56, Yann E. MORIN wrote:
+> Jean-Fran?ois, All,
 > 
-> Only the dependencies on libraries are interesting, so that is all we
-> keep.
+> On 2018-07-07 22:44 -0400, Jean-Fran?ois T?tu spake thusly:
+>> On Saturday, July 7, 2018 5:31:11 PM, Arnout Vandecappelle wrote:
+>>> automake is a package that runs a risk of breaking other packages using it.
+>>> Would you be willing to monitor the autobuild results in the coming weeks to
+>>> find and fix breakage caused by this bump?
+>>
+>> Gladly, I'll monitor the daily autobuild results and fix whatever breaks.
 > 
-> Even though that function is only called with pkg set to 'busybox', we
-> still pass it as an argument, for symetry with the other functions that
-> removes the dependencies of a package.
+> It looks liek we have our first automake-bump related issues piling up:
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> Cc: Carlos Santos <casantos@datacom.com.br>
-> 
-> ---
-> Changes v1 -> v2:
->   - carry tag from Matt
->   - clarify linux-pam case  (Carlos)
-> ---
->  support/scripts/graph-depends | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/support/scripts/graph-depends b/support/scripts/graph-depends
-> index 621e603278..0a3bc11be7 100755
-> --- a/support/scripts/graph-depends
-> +++ b/support/scripts/graph-depends
-> @@ -181,6 +181,15 @@ def remove_mandatory_deps(pkg, deps):
->      return [p for p in deps[pkg] if p not in ['toolchain', 'skeleton']]
->  
->  
-> +# This function removes all dependencies of busybox, except its
-> +# dependencies on libraries (of which libpam, from linux-pam) and
-> +# host-pkgconf.
-> +def remove_busybox_deps(pkg, deps):
-> +    busybox_dep_whitelist = ['linux-pam', 'host-pkgconf']
-> +    return [p for p in deps[pkg]
-> +            if p.startswith('lib') or p in busybox_dep_whitelist]
+>     http://autobuild.buildroot.org/results/221/2215acb7e011b9fd469217abbc319941f8f6ee61/build-end.log
 
- This feels horribly fragile to me...
+ Looks like the AUTORECONF = YES doesn't propagate into the libltdl directory.
+Makes me think though: can't we use the libltdl from the libtool package?
 
+>     http://autobuild.buildroot.org/results/13d/13d600c8b33017793cd0dbdd5d204ba0b01924a5/build-end.log
 
- I would feel more comfortable if we would introduce _INSTALL_DEPENDENCIES, as
-discussed in v1 of the series, and then simply exclude the _INSTALL_DEPENDENCIES
-from the graph. Or maybe even add a graph-depends option to do that.
-
-
- Note: I have *not* marked this patch as changes requested, since it's actually
-good to go, except that I have more fundamental concerns about it.
+ This one looks like a problem with the timestamps, triggering an
+autoreconfigure though none is needed.
 
  Regards,
  Arnout
 
-
-> +
-> +
->  # This function will check that there is no loop in the dependency chain
->  # As a side effect, it builds up the dependency cache.
->  def check_circular_deps(deps):
-> @@ -211,6 +220,8 @@ def check_circular_deps(deps):
->  # This functions trims down the dependency list of all packages.
->  # It applies in sequence all the dependency-elimination methods.
->  def remove_extra_deps(deps, transitive):
-> +    if 'busybox' in list(deps.keys()):
-> +        deps['busybox'] = remove_busybox_deps('busybox', deps)
->      for pkg in list(deps.keys()):
->          if not pkg == 'all':
->              deps[pkg] = remove_mandatory_deps(pkg, deps)
+> 
+> Care to have a look?
+> 
+> Regards,
+> Yann E. MORIN.
 > 
 
 -- 
