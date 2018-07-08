@@ -1,51 +1,49 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sun, 8 Jul 2018 12:22:14 +0200
 Subject: [Buildroot] [git commit] package/busybox: invert dependency with
- util-linux
-Message-ID: <20180708110809.E1EDD863D6@busybox.osuosl.org>
+ usbutils
+Message-ID: <20180708110809.E9D7A863D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0bc0e94ab0d6cc4a0a30835f162987d5cd0614e
+commit: https://git.buildroot.net/buildroot/commit/?id=c4968938bb8ff60d219e0cea1920a2f1dd0e2760
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Reviewed-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/busybox/busybox.mk       | 1 +
- package/util-linux/util-linux.mk | 6 ------
- 2 files changed, 1 insertion(+), 6 deletions(-)
+ package/busybox/busybox.mk   | 1 +
+ package/usbutils/usbutils.mk | 5 -----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index c42c4a470a..38f0246b4f 100644
+index 38f0246b4f..817f7a9c63 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_UTIL_LINUX),util-linux) \
++	$(if $(BR2_PACKAGE_USBUTILS),usbutils) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX),util-linux) \
  	$(if $(BR2_PACKAGE_VIM),vim) \
  	$(if $(BR2_PACKAGE_WGET),wget) \
- 	$(if $(BR2_PACKAGE_WHOIS),whois)
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 80a8a08051..76f4b97f5f 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -31,12 +31,6 @@ HOST_UTIL_LINUX_DEPENDENCIES = host-pkgconf
- # We also don't want the host-python dependency
- HOST_UTIL_LINUX_CONF_OPTS = --without-python
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index 43322e4a65..4bd12f34ff 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -11,11 +11,6 @@ USBUTILS_DEPENDENCIES = host-pkgconf libusb udev
+ USBUTILS_LICENSE = GPL-2.0+ (utils) GPL-2.0 or GPL-3.0 (lsusb.py)
+ USBUTILS_LICENSE_FILES = LICENSES/GPL-2.0.txt LICENSES/GPL-3.0.txt
  
--# If both util-linux and busybox are selected, make certain util-linux
--# wins the fight over who gets to have their utils actually installed
+-# Build after busybox since it's got a lightweight lsusb
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--UTIL_LINUX_DEPENDENCIES += busybox
+-USBUTILS_DEPENDENCIES += busybox
 -endif
 -
- # Prevent the installation from attempting to move shared libraries from
- # ${usrlib_execdir} (/usr/lib) to ${libdir} (/lib), since both paths are
- # the same when merged usr is in use.
+ # Nice lsusb.py script only if there's python 3.x
+ ifeq ($(BR2_PACKAGE_PYTHON3),)
+ define USBUTILS_REMOVE_PYTHON
