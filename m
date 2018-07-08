@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:45:37 +0200
-Subject: [Buildroot] [PATCH 12/50 v2] package/busybox: invert dependency
- with systemd
+Date: Sun,  8 Jul 2018 11:45:44 +0200
+Subject: [Buildroot] [PATCH 19/50 v2] package/busybox: invert dependency
+ with pciutils
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <418bd1a512af52244749f34cbeedf0c1a14538f4.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <5358e2ee36c07fa984d7943db9489027f4d48eff.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk | 1 +
- package/systemd/systemd.mk | 6 ------
- 2 files changed, 1 insertion(+), 6 deletions(-)
+ package/busybox/busybox.mk   | 1 +
+ package/pciutils/pciutils.mk | 5 -----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e504924540..9d3ea22d96 100644
+index df51f288c4..c87bcec0e4 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_SYSTEMD),systemd) \
- 	$(if $(BR2_PACKAGE_SYSVINIT),sysvinit) \
- 	$(if $(BR2_PACKAGE_TAR),tar) \
- 	$(if $(BR2_PACKAGE_TFTPD),tftpd) \
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 04775ee778..d7031ed21d 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -18,12 +18,6 @@ SYSTEMD_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
+ 	$(if $(BR2_PACKAGE_PROCPS_NG),procps-ng) \
+ 	$(if $(BR2_PACKAGE_PSMISC),psmisc) \
+ 	$(if $(BR2_PACKAGE_RSYSLOGD),rsyslog) \
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index 2dd5771f21..30d429e75a 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -46,11 +46,6 @@ else
+ PCIUTILS_MAKE_OPTS += SHARED=yes
+ endif
  
- SYSTEMD_PROVIDES = udev
- 
--# Make sure that systemd will always be built after busybox so that we have
--# a consistent init setup between two builds
+-# Build after busybox since it's got a lightweight lspci
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--SYSTEMD_DEPENDENCIES += busybox
+-PCIUTILS_DEPENDENCIES += busybox
 -endif
 -
- SYSTEMD_CONF_OPTS += \
- 	-Drootlibdir='/usr/lib' \
- 	-Dblkid=true \
+ define PCIUTILS_CONFIGURE_CMDS
+ 	$(SED) 's/wget --no-timestamping/wget/' $(PCIUTILS_DIR)/update-pciids.sh
+ 	$(SED) 's/uname -s/echo Linux/' \
 -- 
 2.14.1
