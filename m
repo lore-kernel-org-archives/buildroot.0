@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:45:54 +0200
-Subject: [Buildroot] [PATCH 29/50 v2] package/busybox: invert dependency
- with iputils
+Date: Sun,  8 Jul 2018 11:45:57 +0200
+Subject: [Buildroot] [PATCH 32/50 v2] package/busybox: invert dependency
+ with ifplugd
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <66eff1486ca76bd6407ab444a3af9b5e59ee5238.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <7db9b119918974416a26a88153149c72b039e425.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,37 +14,36 @@ To: buildroot@busybox.net
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
  package/busybox/busybox.mk | 1 +
- package/iputils/iputils.mk | 6 ------
- 2 files changed, 1 insertion(+), 6 deletions(-)
+ package/ifplugd/ifplugd.mk | 5 -----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 812de14ad0..399db06bb9 100644
+index b03945ad9c..fb6e02336d 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_IPUTILS),iputils) \
- 	$(if $(BR2_PACKAGE_KMOD),kmod) \
- 	$(if $(BR2_PACKAGE_LESS),less) \
- 	$(if $(BR2_PACKAGE_LSOF),lsof) \
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 13e33898d6..713b0e4abf 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -17,12 +17,6 @@ IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause, BSD-4-Clause
- # Only includes a license file for BSD
- IPUTILS_LICENSE_FILES = ninfod/COPYING
++	$(if $(BR2_PACKAGE_IFPLUGD),ifplugd) \
+ 	$(if $(BR2_PACKAGE_IFUPDOWN),ifupdown) \
+ 	$(if $(BR2_PACKAGE_IPROUTE2),iproute2) \
+ 	$(if $(BR2_PACKAGE_IPUTILS),iputils) \
+diff --git a/package/ifplugd/ifplugd.mk b/package/ifplugd/ifplugd.mk
+index b569320963..c7874b49e5 100644
+--- a/package/ifplugd/ifplugd.mk
++++ b/package/ifplugd/ifplugd.mk
+@@ -15,11 +15,6 @@ IFPLUGD_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec
+ IFPLUGD_CONF_OPTS = --disable-lynx --with-initdir=/etc/init.d/
+ IFPLUGD_DEPENDENCIES = libdaemon
  
--# Build after busybox so target ends up with this package's full
--# versions of the applications instead of busybox applets.
+-# Prefer big ifplugd
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--IPUTILS_DEPENDENCIES += busybox
+-IFPLUGD_DEPENDENCIES += busybox
 -endif
 -
- IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no\
- 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
+ define IFPLUGD_INSTALL_FIXUP
+ 	$(INSTALL) -D -m 0644 $(@D)/conf/ifplugd.conf $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
+ 	$(SED) 's^\(ARGS=.*\)w^\1^' $(TARGET_DIR)/etc/ifplugd/ifplugd.conf; \
 -- 
 2.14.1
