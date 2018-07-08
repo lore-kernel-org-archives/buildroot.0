@@ -1,34 +1,31 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun, 8 Jul 2018 01:17:27 -0300 (BRT)
-Subject: [Buildroot] [PATCH] liblogging: update project URL
-In-Reply-To: <d2ead092-bf4e-2cf1-2faf-e188cf1ff03a@mind.be>
-References: <20180706022239.12854-1-casantos@datacom.com.br>
- <d2ead092-bf4e-2cf1-2faf-e188cf1ff03a@mind.be>
-Message-ID: <349829031.2219782.1531023447719.JavaMail.zimbra@datacom.com.br>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun,  8 Jul 2018 02:16:57 -0300
+Subject: [Buildroot] [PATCH 1/5] gconf: use $() to reference make variables
+ instead of ${}
+Message-ID: <20180708051701.3153-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Arnout Vandecappelle" <arnout@mind.be>
-> To: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>
-> Sent: Saturday, July 7, 2018 6:38:15 PM
-> Subject: Re: [Buildroot] [PATCH] liblogging: update project URL
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
+ package/gconf/gconf.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> On 06-07-18 04:22, Carlos Santos wrote:
->> The original site www.liblogging.org has been taken down because of the
->> new European data protection regulation (GDPR), to which it was not
->> compliant.
-> 
-> Makes me wonder what kind of horrific spyware was on there to warrant taking it
-> down...
-
-There is a page at the original URL explaining the situation (sorta).
-
-Smells like bureaucracy. 
-
+diff --git a/package/gconf/gconf.mk b/package/gconf/gconf.mk
+index 39df95fbd2..60ced95e18 100644
+--- a/package/gconf/gconf.mk
++++ b/package/gconf/gconf.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GCONF_VERSION = 3.2.6
+-GCONF_SOURCE = GConf-${GCONF_VERSION}.tar.xz
++GCONF_SOURCE = GConf-$(GCONF_VERSION).tar.xz
+ GCONF_SITE = http://ftp.gnome.org/pub/gnome/sources/GConf/3.2
+ GCONF_CONF_OPTS = --disable-orbit
+ GCONF_DEPENDENCIES = dbus dbus-glib libglib2 libxml2 \
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.17.1
