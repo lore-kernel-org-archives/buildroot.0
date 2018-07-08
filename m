@@ -1,49 +1,50 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sun, 8 Jul 2018 12:22:14 +0200
 Subject: [Buildroot] [git commit] package/busybox: invert dependency with
- wget
-Message-ID: <20180708110809.D00F3863D6@busybox.osuosl.org>
+ systemd
+Message-ID: <20180708110810.2D308863D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0e3240ddcc6e884fcda952c9a1b1d2da961c163a
+commit: https://git.buildroot.net/buildroot/commit/?id=a4b0e1801c860e18ae6eefc15aead9fc0ec431b6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
  package/busybox/busybox.mk | 1 +
- package/wget/wget.mk       | 5 -----
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ package/systemd/systemd.mk | 6 ------
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 47047d1a81..e5de1b7284 100644
+index e504924540..9d3ea22d96 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_WGET),wget) \
- 	$(if $(BR2_PACKAGE_WHOIS),whois)
++	$(if $(BR2_PACKAGE_SYSTEMD),systemd) \
+ 	$(if $(BR2_PACKAGE_SYSVINIT),sysvinit) \
+ 	$(if $(BR2_PACKAGE_TAR),tar) \
+ 	$(if $(BR2_PACKAGE_TFTPD),tftpd) \
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 04775ee778..d7031ed21d 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -18,12 +18,6 @@ SYSTEMD_DEPENDENCIES = \
  
- # Link against libtirpc if available so that we can leverage its RPC
-diff --git a/package/wget/wget.mk b/package/wget/wget.mk
-index 36afea761a..28bd0a264f 100644
---- a/package/wget/wget.mk
-+++ b/package/wget/wget.mk
-@@ -11,11 +11,6 @@ WGET_DEPENDENCIES = host-pkgconf
- WGET_LICENSE = GPL-3.0+
- WGET_LICENSE_FILES = COPYING
+ SYSTEMD_PROVIDES = udev
  
--# Prefer full-blown wget over busybox
+-# Make sure that systemd will always be built after busybox so that we have
+-# a consistent init setup between two builds
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--WGET_DEPENDENCIES += busybox
+-SYSTEMD_DEPENDENCIES += busybox
 -endif
 -
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- WGET_CONF_OPTS += --with-ssl=gnutls
- WGET_DEPENDENCIES += gnutls
+ SYSTEMD_CONF_OPTS += \
+ 	-Drootlibdir='/usr/lib' \
+ 	-Dblkid=true \
