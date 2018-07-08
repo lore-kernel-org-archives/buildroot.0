@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:45:43 +0200
-Subject: [Buildroot] [PATCH 18/50 v2] package/busybox: invert dependency
- with procps-ng
+Date: Sun,  8 Jul 2018 11:45:49 +0200
+Subject: [Buildroot] [PATCH 24/50 v2] package/busybox: invert dependency
+ with net-tools
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <9297f50628339eb392ace84ff59a103853cba2d0.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <c6083f99c718d3980db93837777794ee6b92af6d.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,50 +12,53 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+
 ---
- package/busybox/busybox.mk     |  1 +
- package/procps-ng/procps-ng.mk | 10 ++--------
- 2 files changed, 3 insertions(+), 8 deletions(-)
+Changes v1 -> v2:
+  - fix typo  (Baruch)
+---
+ package/busybox/busybox.mk     | 1 +
+ package/net-tools/net-tools.mk | 8 ++------
+ 2 files changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 1a1ed792a2..df51f288c4 100644
+index eeb9dc5bac..451aae46a5 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_PROCPS_NG),procps-ng) \
- 	$(if $(BR2_PACKAGE_PSMISC),psmisc) \
- 	$(if $(BR2_PACKAGE_RSYSLOGD),rsyslog) \
- 	$(if $(BR2_PACKAGE_START_STOP_DAEMON),start-stop-daemon) \
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index e1fddea32c..03b74784d2 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -13,12 +13,6 @@ PROCPS_NG_INSTALL_STAGING = YES
- PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
++	$(if $(BR2_PACKAGE_NET_TOOLS),net-tools) \
+ 	$(if $(BR2_PACKAGE_NETCAT),netcat) \
+ 	$(if $(BR2_PACKAGE_NETCAT_OPENSBSD),netcat-openbsd) \
+ 	$(if $(BR2_PACKAGE_NMAP),nmap) \
+diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
+index adab475b35..985fe2e35e 100644
+--- a/package/net-tools/net-tools.mk
++++ b/package/net-tools/net-tools.mk
+@@ -10,11 +10,6 @@ NET_TOOLS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ NET_TOOLS_LICENSE = GPL-2.0+
+ NET_TOOLS_LICENSE_FILES = COPYING
  
--# If both procps-ng and busybox are selected, make certain procps-ng
--# wins the fight over who gets to have their utils actually installed.
+-# Install after busybox for the full-blown versions
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--PROCPS_NG_DEPENDENCIES += busybox
+-NET_TOOLS_DEPENDENCIES += busybox
 -endif
 -
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- PROCPS_NG_DEPENDENCIES += systemd
- PROCPS_NG_CONF_OPTS += --with-systemd
-@@ -26,8 +20,8 @@ else
- PROCPS_NG_CONF_OPTS += --without-systemd
- endif
+ define NET_TOOLS_CONFIGURE_CMDS
+ 	(cd $(@D); yes "" | ./configure.sh config.in )
+ endef
+@@ -40,7 +35,8 @@ define NET_TOOLS_BUILD_CMDS
+ endef
  
--# Make sure binaries get installed in /bin, so that they overwrite
--# their busybox counterparts.
-+# Make sure binaries get installed in /bin, as busybox does, so that we
-+# don't end up with two versions.
- # Make sure libprocps.pc is installed in STAGING_DIR/usr/lib/pkgconfig/
- # otherwise it's installed in STAGING_DIR/lib/pkgconfig/ breaking
- # pkg-config --libs libprocps.
+ # install renames conflicting binaries, update does not
+-# ifconfig & route reside in /sbin for busybox
++# ifconfig & route reside in /sbin for busybox, so ensure we don't end
++# up with two versions of those.
+ define NET_TOOLS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) update
+ 	mv -f $(TARGET_DIR)/bin/ifconfig $(TARGET_DIR)/sbin/ifconfig
 -- 
 2.14.1
