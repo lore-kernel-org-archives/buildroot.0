@@ -1,64 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:45:49 +0200
-Subject: [Buildroot] [PATCH 24/50 v2] package/busybox: invert dependency
- with net-tools
+Date: Sun,  8 Jul 2018 11:45:46 +0200
+Subject: [Buildroot] [PATCH 21/50 v2] package/busybox: invert dependency
+ with nmap
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <c6083f99c718d3980db93837777794ee6b92af6d.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <fba5b7de12815934cfa42099d998d5bbdd6ddb80.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+We only need that dependency whan nmap's ncat is enabled.
+
+For consistency, we add a dependency on nmap, not a suboption of it,
+to have a dependency list in busybox that is only about packages, and
+directly associates the upper-case package variable to the lower-case
+package name, e.g. NMAP <-> nmap.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Carlos Santos <casantos@datacom.com.br>
 
 ---
 Changes v1 -> v2:
-  - fix typo  (Baruch)
+  - fix typo  (Carlos)
 ---
- package/busybox/busybox.mk     | 1 +
- package/net-tools/net-tools.mk | 8 ++------
- 2 files changed, 3 insertions(+), 6 deletions(-)
+ package/busybox/busybox.mk | 1 +
+ package/nmap/nmap.mk       | 6 ------
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index eeb9dc5bac..451aae46a5 100644
+index 1d3d202f53..55c3d25b8e 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_NET_TOOLS),net-tools) \
- 	$(if $(BR2_PACKAGE_NETCAT),netcat) \
- 	$(if $(BR2_PACKAGE_NETCAT_OPENSBSD),netcat-openbsd) \
- 	$(if $(BR2_PACKAGE_NMAP),nmap) \
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index adab475b35..985fe2e35e 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -10,11 +10,6 @@ NET_TOOLS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- NET_TOOLS_LICENSE = GPL-2.0+
- NET_TOOLS_LICENSE_FILES = COPYING
++	$(if $(BR2_PACKAGE_NMAP),nmap) \
+ 	$(if $(BR2_PACKAGE_NTP),ntp) \
+ 	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
+ 	$(if $(BR2_PACKAGE_PROCPS_NG),procps-ng) \
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 1c89b5424e..420aec82d7 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -76,12 +76,6 @@ else
+ NMAP_CONF_OPTS += --without-nping
+ endif
  
--# Install after busybox for the full-blown versions
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--NET_TOOLS_DEPENDENCIES += busybox
+-# If we are going to install ncat, ensure Busybox gets built/installed
+-# before, so that this package overrides Busybox nc.
+-ifeq ($(BR2_PACKAGE_NMAP_NCAT)$(BR2_PACKAGE_BUSYBOX),yy)
+-NMAP_DEPENDENCIES += busybox
 -endif
 -
- define NET_TOOLS_CONFIGURE_CMDS
- 	(cd $(@D); yes "" | ./configure.sh config.in )
- endef
-@@ -40,7 +35,8 @@ define NET_TOOLS_BUILD_CMDS
- endef
- 
- # install renames conflicting binaries, update does not
--# ifconfig & route reside in /sbin for busybox
-+# ifconfig & route reside in /sbin for busybox, so ensure we don't end
-+# up with two versions of those.
- define NET_TOOLS_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) update
- 	mv -f $(TARGET_DIR)/bin/ifconfig $(TARGET_DIR)/sbin/ifconfig
+ # Add a symlink to "nc" if none of the competing netcats is selected
+ ifeq ($(BR2_PACKAGE_NMAP_NCAT):$(BR2_PACKAGE_NETCAT)$(BR2_PACKAGE_NETCAT_OPENBSD),y:)
+ define NMAP_INSTALL_NCAT_SYMLINK
 -- 
 2.14.1
