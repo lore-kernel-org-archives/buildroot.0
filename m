@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:46:06 +0200
-Subject: [Buildroot] [PATCH 41/50 v2] package/busybox: invert dependency
- with diffutils
+Date: Sun,  8 Jul 2018 11:46:07 +0200
+Subject: [Buildroot] [PATCH 42/50 v2] package/busybox: invert dependency
+ with debianutils
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <a79150e1ca10a5b0f58f30df5ce47af804aec8e3.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <98cadc9c1662137dc6cfb5c3e7f8b5c70db6a750.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,34 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk     | 1 +
- package/diffutils/diffutils.mk | 4 ----
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ package/busybox/busybox.mk         | 1 +
+ package/debianutils/debianutils.mk | 2 --
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e50ca1447d..dbb4a9b93f 100644
+index dbb4a9b93f..20459f123a 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_DIFFUTILS),diffutils) \
++	$(if $(BR2_PACKAGE_DEBIANUTILS),debianutils) \
+ 	$(if $(BR2_PACKAGE_DIFFUTILS),diffutils) \
  	$(if $(BR2_PACKAGE_DOS2UNIX),dos2unix) \
  	$(if $(BR2_PACKAGE_E2FSPROGS),e2fsprogs) \
- 	$(if $(BR2_PACKAGE_FBSET),fbset) \
-diff --git a/package/diffutils/diffutils.mk b/package/diffutils/diffutils.mk
-index 79785d6f01..9a41c985df 100644
---- a/package/diffutils/diffutils.mk
-+++ b/package/diffutils/diffutils.mk
-@@ -17,8 +17,4 @@ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
- DIFFUTILS_CONF_ENV += gl_cv_func_getopt_gnu=yes
- endif
+diff --git a/package/debianutils/debianutils.mk b/package/debianutils/debianutils.mk
+index 86f201da1c..189d983732 100644
+--- a/package/debianutils/debianutils.mk
++++ b/package/debianutils/debianutils.mk
+@@ -8,8 +8,6 @@ DEBIANUTILS_VERSION = 4.8.1
+ DEBIANUTILS_SOURCE = debianutils_$(DEBIANUTILS_VERSION).tar.xz
+ DEBIANUTILS_SITE = http://snapshot.debian.org/archive/debian/20161118T033019Z/pool/main/d/debianutils
+ DEBIANUTILS_CONF_OPTS = --exec-prefix=/
+-# Make sure we override the busybox tools, such as which
+-DEBIANUTILS_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ DEBIANUTILS_LICENSE = GPL-2.0+, SMAIL (savelog)
+ DEBIANUTILS_LICENSE_FILES = debian/copyright
  
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--DIFFUTILS_DEPENDENCIES += busybox
--endif
--
- $(eval $(autotools-package))
 -- 
 2.14.1
