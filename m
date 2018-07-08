@@ -1,34 +1,42 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun,  8 Jul 2018 16:00:16 -0300
-Subject: [Buildroot] [PATCH 2/2]  linux-headers: bump 4.{14, 17}.x series
-In-Reply-To: <1531076416-8772-1-git-send-email-festevam@gmail.com>
-References: <1531076416-8772-1-git-send-email-festevam@gmail.com>
-Message-ID: <1531076416-8772-2-git-send-email-festevam@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  8 Jul 2018 21:44:48 +0200
+Subject: [Buildroot] [PATCH 1/1] snappy: bump to version 1.1.7
+Message-ID: <20180708194448.31093-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Add hash for license file
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0c9b102..8965ecf 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -264,8 +264,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.53"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.54"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default "4.16.17"	if BR2_KERNEL_HEADERS_4_16
--	default "4.17.4"	if BR2_KERNEL_HEADERS_4_17
-+	default "4.17.5"	if BR2_KERNEL_HEADERS_4_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/snappy/snappy.hash | 3 ++-
+ package/snappy/snappy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
+index 71a2500f8f..e9ac4324c0 100644
+--- a/package/snappy/snappy.hash
++++ b/package/snappy/snappy.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 e701cd80f1154d648c762c86140ad6873a5c9b09ed1d754e3157be8193d2c39e  snappy-be6dc3db83c4701e3e79694dcbfd1c3da03b91dd.tar.gz
++sha256 3dfa02e873ff51a11ee02b9ca391807f0c8ea0529a4924afa645fbf97163f9d4  snappy-1.1.7.tar.gz
++sha256 55172044f7e241207117448a4d9d6ba1d0925c8ad66b5d4c08c70adfa9cc3de6  COPYING
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index a537ade57b..74d398de81 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SNAPPY_VERSION = be6dc3db83c4701e3e79694dcbfd1c3da03b91dd
++SNAPPY_VERSION = 1.1.7
+ SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
+ SNAPPY_LICENSE = BSD-3-Clause
+ SNAPPY_LICENSE_FILES = COPYING
 -- 
-2.7.4
+2.14.1
