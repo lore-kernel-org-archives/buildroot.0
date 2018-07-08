@@ -1,10 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:46:05 +0200
-Subject: [Buildroot] [PATCH 40/50 v2] package/busybox: invert dependency
- with dos2unix
+Date: Sun,  8 Jul 2018 11:46:03 +0200
+Subject: [Buildroot] [PATCH 38/50 v2] package/busybox: invert dependency
+ with fbset
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <c3e0d20d2ae2f27547f89b22cefef41ea7879fba.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <8c3a2f8f2c990792492123d95dabff613c517347.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +13,37 @@ To: buildroot@busybox.net
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk   | 1 +
- package/dos2unix/dos2unix.mk | 4 +---
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ package/busybox/busybox.mk | 1 +
+ package/fbset/fbset.mk     | 5 -----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 166d187081..e50ca1447d 100644
+index aac31fdba7..a567f25231 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_DOS2UNIX),dos2unix) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS),e2fsprogs) \
- 	$(if $(BR2_PACKAGE_FBSET),fbset) \
++	$(if $(BR2_PACKAGE_FBSET),fbset) \
  	$(if $(BR2_PACKAGE_GAWK),gawk) \
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 5001397f05..0522ad1671 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -8,9 +8,7 @@ DOS2UNIX_VERSION = 7.4.0
- DOS2UNIX_SITE = http://waterlan.home.xs4all.nl/dos2unix
- DOS2UNIX_LICENSE = BSD-2-Clause
- DOS2UNIX_LICENSE_FILES = COPYING.txt
--DOS2UNIX_DEPENDENCIES = \
--	$(if $(BR2_PACKAGE_BUSYBOX),busybox) \
--	$(TARGET_NLS_DEPENDENCIES)
-+DOS2UNIX_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ 	$(if $(BR2_PACKAGE_GREP),grep) \
+ 	$(if $(BR2_PACKAGE_GZIP),gzip) \
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index d6ee104a22..787b4e1dca 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -9,11 +9,6 @@ FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
+ FBSET_DEPENDENCIES = host-bison host-flex
+ FBSET_LICENSE = GPL-2.0
  
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
- DOS2UNIX_MAKE_OPTS += ENABLE_NLS=1
+-# Make sure full fbset wins over busybox fbset
+-ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+-FBSET_DEPENDENCIES += busybox
+-endif
+-
+ define FBSET_BUILD_CMDS
+ 	$(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D)
+ endef
 -- 
 2.14.1
