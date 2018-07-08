@@ -1,81 +1,59 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jul 2018 11:16:51 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi3_defconfig: fix
- filesystem size
-In-Reply-To: <7061b17f-2365-592c-662b-e383f425e03c@mind.be>
-References: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com>
- <7061b17f-2365-592c-662b-e383f425e03c@mind.be>
-Message-ID: <20180708091651.GA2474@scaer>
+Date: Sun, 8 Jul 2018 11:34:55 +0200
+Subject: [Buildroot] patchwork.ozlabs.org down, and e-mails not recorded
+In-Reply-To: <c5bfa3f1-3d33-bfac-5cf3-3de3204bb878@ozlabs.org>
+References: <981ecf77-767e-3c90-243f-67251d956c21@au1.ibm.com>
+ <20180213231930.26ab0efb@windsurf.lan>
+ <16c3e28e-8da0-75f0-1f9a-c1ed86741fc3@au1.ibm.com>
+ <20180214090148.5b21f55e@windsurf.lan>
+ <87lgftau6p.fsf@linkitivity.dja.id.au>
+ <20180216154959.4db712f5@windsurf.lan>
+ <874llocfch.fsf@dell.be.48ers.dk>
+ <20180312015055.3dc9789c@canb.auug.org.au>
+ <7a371f6c-1705-dcf6-2ff5-dc5ba46b7114@ozlabs.org>
+ <c5bfa3f1-3d33-bfac-5cf3-3de3204bb878@ozlabs.org>
+Message-ID: <20180708093455.GB2474@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Jeremy, All,
 
-On 2018-07-08 00:35 +0200, Arnout Vandecappelle spake thusly:
-> On 29-06-18 11:23, Leon Anavi wrote:
-> > Increase the filesystem size for raspberrypi3 by setting
-> > BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
-> > raspberrypi3_64 has the same size.
-> > 
-> > Fixes:
-> > Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "services"
-> > mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
-> > 
-> > Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
-> 
->  Applied to master, thanks.
+On 2018-03-20 20:19 +0800, Jeremy Kerr spake thusly:
+[--SNIP--]
+> Let me know how things go over the next few days.
 
-Not really, I'm afraid...
+So it's been more than a few days, but I recently caught another issue
+about series for the buildroot mailing list.
 
->  It's a pity we didn't get to the bottom of why this error was not happening
-> every time, or why it didn't happen before. But, as mentioned, the fix is simple
-> and we were close to the limit.
+The following three patches should be grouped together, but only 1 and 3
+are:
 
-I did two tests on the same, the first was successfull, the second
-failed. The only difference being that the machine was unloaded for
-the first one, while I was doing something else for the second one...
-Yeah, not very conclusive... :-(
+    https://patchwork.ozlabs.org/project/buildroot/list/?series=54291
+    https://patchwork.ozlabs.org/patch/940910/  [1/3]
+    https://patchwork.ozlabs.org/patch/940911/  [2/3]
+    https://patchwork.ozlabs.org/patch/940912/  [3/3]
+
+And of those 5 patches, patch 2 is also missing:
+
+    https://patchwork.ozlabs.org/project/buildroot/list/?series=54286
+    https://patchwork.ozlabs.org/patch/940895/  [1/5]
+    https://patchwork.ozlabs.org/patch/940894/  [2/5]
+    https://patchwork.ozlabs.org/patch/940897/  [3/5]
+    https://patchwork.ozlabs.org/patch/940896/  [4/5]
+    https://patchwork.ozlabs.org/patch/940898/  [5/5]
+
+And another 3-patch series, with patch 3 failign to get grouped:
+
+    https://patchwork.ozlabs.org/project/buildroot/list/?series=54129
+    https://patchwork.ozlabs.org/patch/940542/  [1/3]
+    https://patchwork.ozlabs.org/patch/940540/  [2/3]
+    https://patchwork.ozlabs.org/patch/940539/  [3/3]
 
 Regards,
 Yann E. MORIN.
-
->  I've extended the commit log a little bit.
-> 
->  Regards,
->  Arnout
-> 
-> > ---
-> >  configs/raspberrypi3_defconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-> > index 856f321..0ef9afe 100644
-> > --- a/configs/raspberrypi3_defconfig
-> > +++ b/configs/raspberrypi3_defconfig
-> > @@ -28,6 +28,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
-> >  # Filesystem / image
-> >  BR2_TARGET_ROOTFS_EXT2=y
-> >  BR2_TARGET_ROOTFS_EXT2_4=y
-> > +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-> >  # BR2_TARGET_ROOTFS_TAR is not set
-> >  BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-> >  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
