@@ -1,111 +1,189 @@
-From: Leon Anavi <leon.anavi@konsulko.com>
-Date: Sun, 8 Jul 2018 12:32:52 +0300
-Subject: [Buildroot] [PATCH] configs/raspberrypi3_defconfig: fix
- filesystem size
-In-Reply-To: <20180708091651.GA2474@scaer>
-References: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com>
- <7061b17f-2365-592c-662b-e383f425e03c@mind.be> <20180708091651.GA2474@scaer>
-Message-ID: <CALtQ3O3=qmz3uWXkUs-ev62qXk0c=RQCtFQ=NaK-WFZGduT39Q@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  8 Jul 2018 11:46:12 +0200
+Subject: [Buildroot] [PATCH 00/50 v2] package/busybox: invert dependencies
+Message-ID: <cover.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, Yann, All,
+Hello All!
 
-On Sun, Jul 8, 2018, 12:16 Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+Currently, the issue that busybox may install the same executables as
+those from other packages, is handled in all those packages. This is
+not very practical from a maintenance point of view.
 
-> Arnout, All,
->
-> On 2018-07-08 00:35 +0200, Arnout Vandecappelle spake thusly:
-> > On 29-06-18 11:23, Leon Anavi wrote:
-> > > Increase the filesystem size for raspberrypi3 by setting
-> > > BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
-> > > raspberrypi3_64 has the same size.
-> > >
-> > > Fixes:
-> > > Copying files into the device: __populate_fs: Could not allocate block
-> in ext2 filesystem while writing file "services"
-> > > mkfs.ext4: Could not allocate block in ext2 filesystem while
-> populating file system
-> > >
-> > > Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
-> >
-> >  Applied to master, thanks.
->
-> Not really, I'm afraid...
->
+Furthermore, this means that those packages all overwrite the
+busybox-installed applets, which means that this triggers the
+no-two-packages-touch-the-same-file rule. So far, this is only a
+warning, but when we eventually go with TLPB, we may have to enforce
+that rule.
 
-I am also afraid that I still don't see it in master.
+But busybox can be told to be smart, and not replace existing files
+during installation. This is in fact what we do with a hook, which uses
+'sed' to force the 'noclobber' install. But now, Busybox upstream has
+proper support for doing a noclobber install without artifice. So we
+bump busybox to the latest release, use the new install-noclobber rule,
+and drop our hook.
 
-Best regards, Leon
+All other commits are just trivial dependency order exchange between a
+package and busybox, except for syslog-ng, for which we must take care
+that busybox does not overwrite the init script.
+
+Eventually, we also add a new dependency onto the 'attr' package, to
+solve a potential conflict with the setfattr applet.
+
+Inverting a single dependency could introduce a dependency loop, which
+would be resolved by a latter inversion. For example, suppose we were to
+start with this initial situation:
+
+    B -->-- A -->-- busybox
+     `------>-------'
+
+With the first inversion, we'd get to now have a dependency loop:
+
+    B -->-- A -->-- busybox -->-- B
+
+Then with the second inversion, we'd resolve that loop:
+
+                    busybox -->-- B -->-- A
+                           `------>------'
+
+Detecting and avoiding those loops is not trivial, because they may
+imply multiple intermediate packages between B and A. So, the series
+does not attempt to prevent those loops, as they are entirely resolved
+by the end of the series anyway.
 
 
-> >  It's a pity we didn't get to the bottom of why this error was not
-> happening
-> > every time, or why it didn't happen before. But, as mentioned, the fix
-> is simple
-> > and we were close to the limit.
->
-> I did two tests on the same, the first was successfull, the second
-> failed. The only difference being that the machine was unloaded for
-> the first one, while I was doing something else for the second one...
-> Yeah, not very conclusive... :-(
->
-> Regards,
-> Yann E. MORIN.
->
-> >  I've extended the commit log a little bit.
-> >
-> >  Regards,
-> >  Arnout
-> >
-> > > ---
-> > >  configs/raspberrypi3_defconfig | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/configs/raspberrypi3_defconfig
-> b/configs/raspberrypi3_defconfig
-> > > index 856f321..0ef9afe 100644
-> > > --- a/configs/raspberrypi3_defconfig
-> > > +++ b/configs/raspberrypi3_defconfig
-> > > @@ -28,6 +28,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
-> > >  # Filesystem / image
-> > >  BR2_TARGET_ROOTFS_EXT2=y
-> > >  BR2_TARGET_ROOTFS_EXT2_4=y
-> > > +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-> > >  # BR2_TARGET_ROOTFS_TAR is not set
-> > >  BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-> > >  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-> > >
-> >
-> > --
-> > Arnout Vandecappelle                          arnout at mind be
-> > Senior Embedded Software Architect            +32-16-286500
-> > Essensium/Mind                                http://www.mind.be
-> > G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> > LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> > GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180708/d14583ab/attachment.html>
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 0fe0c50d3683be4975a4551ac183707692b11215
+
+  systemd: Fix polkit build order (2018-07-08 00:19:37 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 7d4417e280d8c1db48496f8e35895c4819cae957
+
+  support/scripts: don't draw most of busybox' dependencies (2018-07-08 11:24:23 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (50):
+      package/busybox: update to 1.29.0
+      package/busybox: invert dependency with whois
+      package/busybox: invert dependency with wget
+      package/busybox: invert dependency with vim
+      package/busybox: invert dependency with util-linux
+      package/busybox: invert dependency with usbutils
+      package/busybox: invert dependency with unzip
+      package/busybox: invert dependency with traceroute
+      package/busybox: invert dependency with tftpd
+      package/busybox: invert dependency with tar
+      package/busybox: invert dependency with sysvinit
+      package/busybox: invert dependency with systemd
+      package/busybox: invert dependency with syslog-ng
+      package/busybox: invert dependency with sysklogd
+      package/busybox: invert dependency with start-stop-daemon
+      package/busybox: invert dependency with rsyslog
+      package/busybox: invert dependency with psmisc
+      package/busybox: invert dependency with procps-ng
+      package/busybox: invert dependency with pciutils
+      package/busybox: invert dependency with ntp
+      package/busybox: invert dependency with nmap
+      package/busybox: invert dependency with netcat-openbsd
+      package/busybox: invert dependency with netcat
+      package/busybox: invert dependency with net-tools
+      package/busybox: invert dependency with mtd
+      package/busybox: invert dependency with lsof
+      package/busybox: invert dependency with less
+      package/busybox: invert dependency with kmod
+      package/busybox: invert dependency with iputils
+      package/busybox: invert dependency with iproute2
+      package/busybox: invert dependency with ifupdown
+      package/busybox: invert dependency with ifplugd
+      package/busybox: invert dependency with ifenslave
+      package/busybox: invert dependency with i2c-tools
+      package/busybox: invert dependency with gzip
+      package/busybox: invert dependency with grep
+      package/busybox: invert dependency with gawk
+      package/busybox: invert dependency with fbset
+      package/busybox: invert dependency with e2fsprogs
+      package/busybox: invert dependency with dos2unix
+      package/busybox: invert dependency with diffutils
+      package/busybox: invert dependency with debianutils
+      package/busybox: invert dependency with dcron
+      package/busybox: invert dependency with cpio
+      package/busybox: invert dependency with coreutils
+      package/busybox: invert dependency with binutils
+      package/busybox: invert dependency with bc
+      package/busybox: invert dependency with bash
+      package/busybox: add dependency on attr
+      support/scripts: don't draw most of busybox' dependencies
+
+ package/bash/bash.mk                               |  4 +-
+ package/bc/bc.mk                                   |  5 --
+ package/binutils/binutils.mk                       |  5 --
+ ...ags-strip-non-l-arguments-returned-by-pkg.patch |  4 +-
+ package/busybox/busybox.hash                       | 10 +---
+ package/busybox/busybox.mk                         | 68 +++++++++++++++++++---
+ package/coreutils/coreutils.mk                     |  6 --
+ package/cpio/cpio.mk                               |  1 -
+ package/dcron/dcron.mk                             |  5 --
+ package/debianutils/debianutils.mk                 |  2 -
+ package/diffutils/diffutils.mk                     |  4 --
+ package/dos2unix/dos2unix.mk                       |  4 +-
+ package/e2fsprogs/e2fsprogs.mk                     | 10 +---
+ package/fbset/fbset.mk                             |  5 --
+ package/gawk/gawk.mk                               |  5 --
+ package/grep/grep.mk                               |  5 --
+ package/gzip/gzip.mk                               |  2 -
+ package/i2c-tools/i2c-tools.mk                     |  4 --
+ package/ifenslave/ifenslave.mk                     |  1 -
+ package/ifplugd/ifplugd.mk                         |  5 --
+ package/ifupdown/ifupdown.mk                       |  1 -
+ package/iproute2/iproute2.mk                       |  6 --
+ package/iputils/iputils.mk                         |  6 --
+ package/kmod/kmod.mk                               |  3 -
+ package/less/less.mk                               |  3 +-
+ package/lsof/lsof.mk                               |  3 -
+ package/mtd/mtd.mk                                 |  4 --
+ package/net-tools/net-tools.mk                     |  8 +--
+ package/netcat-openbsd/netcat-openbsd.mk           |  6 --
+ package/netcat/netcat.mk                           | 13 -----
+ package/nmap/nmap.mk                               |  6 --
+ package/ntp/ntp.mk                                 |  2 +-
+ package/pciutils/pciutils.mk                       |  5 --
+ package/procps-ng/procps-ng.mk                     | 10 +---
+ package/psmisc/psmisc.mk                           |  5 --
+ package/rsyslog/rsyslog.mk                         |  5 --
+ package/start-stop-daemon/start-stop-daemon.mk     |  3 +-
+ package/sysklogd/sysklogd.mk                       |  5 --
+ package/syslog-ng/syslog-ng.mk                     |  5 --
+ package/systemd/systemd.mk                         |  6 --
+ package/sysvinit/sysvinit.mk                       |  5 --
+ package/tar/tar.mk                                 |  7 +--
+ package/tftpd/tftpd.mk                             |  5 --
+ package/traceroute/traceroute.mk                   |  5 --
+ package/unzip/unzip.mk                             |  2 -
+ package/usbutils/usbutils.mk                       |  5 --
+ package/util-linux/util-linux.mk                   |  6 --
+ package/vim/vim.mk                                 |  5 +-
+ package/wget/wget.mk                               |  5 --
+ package/whois/whois.mk                             |  3 +-
+ support/scripts/graph-depends                      | 11 ++++
+ 51 files changed, 90 insertions(+), 229 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
