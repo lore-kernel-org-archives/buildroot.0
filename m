@@ -1,72 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 8 Jul 2018 16:07:27 +0200
-Subject: [Buildroot] One package with more than one CMakeLists.txt (dlib)
-In-Reply-To: <20180708154350.225b3f7f4c1c0bcdc0a52195@windows3.de>
-References: <20180708154350.225b3f7f4c1c0bcdc0a52195@windows3.de>
-Message-ID: <20180708140727.GC7163@scaer>
+From: 50ty-one <50ty-one@live.de>
+Date: Sun, 8 Jul 2018 16:14:33 +0000
+Subject: [Buildroot] [PATCH 1/1] genimage: bump to version 10
+Message-ID: <DB3PR0402MB38023CF77C8DC4EF166C655482450@DB3PR0402MB3802.eurprd04.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dennis, All,
+Signed-off-by: Rommel, Stefan <50ty-one@live.de>
+---
+ package/genimage/genimage.hash | 2 +-
+ package/genimage/genimage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 2018-07-08 15:43 +0200, Dennis Schulmeister-Zimolong spake thusly:
-> I'm currently trying to create a buildroot package for libdlib.
-> (http://dlib.net/). As dlib uses CMake the package definition itself is
-> straight-forward. However the source tree also contains a few utility
-> applications as well as python bindings which each come with their own
-> CMakeLists.txt.
-
-What's even worse (I think), is that each individual tool includes the
-dlib directory in their CMakeLists.txt, thus triggering a private,
-static build of the library and using that static version... :-(
-
-> What's the best way to deal with this?
-
-The best would be to change upstream's code to use a single
-CMakeList.txt, which would optionally build and install the tools...
-
-> Right now my Config.in looks
-> like this:
-> 
-> config BR2_PACKAGE_LIBDLIB
-> 	bool "libdlib"
-> 	...
-> 
-> if BR2_PACKAGE_LIBDLIB
-> 
-> config BR2_PACKAGE_LIBDLIB_TOOLS_ARCHIVED
-> 	bool "archived tools"
-> 	help
-> 	  Archived tools from the tools/archive directory inside
-> 	  the dlib source tree
-> 
-> config BR2_PACKAGE_LIBDLIB_TOOLS_HTMLIFY
-> 	bool "htmlify"
-> 	help
-> 	  Utility program htmlify from the tools/htmlify directory
-> 	  inside the dlib source tree
-> 
-> ...
-> endif
-> 
-> Is this even feasible? How can I execute CMake more than once with the
-> cmake-package infrastructure without reinventing the wheel. Or is it
-> better to define separate packages for each tool although they all live
-> in the same source tree?
-
-Well, do you actually need to the tools, or do you just need the lib?
-If you don't need the tools, then don't even bother...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index 4be2fca873..095eb1413f 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	69f35af7edf6f4dbdac7a18ddc69dcf38c501e43d8b50c524555754c51479078	genimage-9.tar.xz
++sha256	5a36b2c1387007c2d6535a722ee257a387d0913bddcf8a94d460e6acd4d01859	genimage-10.tar.xz
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 8d11c66a25..393c3e9b94 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GENIMAGE_VERSION = 9
++GENIMAGE_VERSION = 10
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
