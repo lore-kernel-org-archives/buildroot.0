@@ -1,61 +1,45 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 8 Jul 2018 12:54:16 +0200
+Date: Sun, 8 Jul 2018 13:08:05 +0200
 Subject: [Buildroot] [git commit] package/busybox: invert dependency with
- nmap
-Message-ID: <20180708110810.7FD3C863D6@busybox.osuosl.org>
+ ifupdown
+Message-ID: <20180708110810.DB331863D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f9235d35c7bce5cc7ca87b8cb1c6c92a0b2c15c
+commit: https://git.buildroot.net/buildroot/commit/?id=996c4fb6d582eaf878a744b436b4535c948adfca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-We only need that dependency when nmap's ncat is enabled.
-
-For consistency, we add a dependency on nmap, not a suboption of it,
-to have a dependency list in busybox that is only about packages, and
-directly associates the upper-case package variable to the lower-case
-package name, e.g. NMAP <-> nmap.
-
-Thus, if BR2_PACKAGE_NMAP_NCAT is selected, we have a redundant
-dependency. But that doesn't hurt and it really simplifies things.
-
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Reviewed-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/busybox/busybox.mk | 1 +
- package/nmap/nmap.mk       | 6 ------
- 2 files changed, 1 insertion(+), 6 deletions(-)
+ package/busybox/busybox.mk   | 1 +
+ package/ifupdown/ifupdown.mk | 1 -
+ 2 files changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 1d3d202f53..55c3d25b8e 100644
+index a7823d82ae..b03945ad9c 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_NMAP),nmap) \
- 	$(if $(BR2_PACKAGE_NTP),ntp) \
- 	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
- 	$(if $(BR2_PACKAGE_PROCPS_NG),procps-ng) \
-diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
-index 1c89b5424e..420aec82d7 100644
---- a/package/nmap/nmap.mk
-+++ b/package/nmap/nmap.mk
-@@ -76,12 +76,6 @@ else
- NMAP_CONF_OPTS += --without-nping
- endif
++	$(if $(BR2_PACKAGE_IFUPDOWN),ifupdown) \
+ 	$(if $(BR2_PACKAGE_IPROUTE2),iproute2) \
+ 	$(if $(BR2_PACKAGE_IPUTILS),iputils) \
+ 	$(if $(BR2_PACKAGE_KMOD),kmod) \
+diff --git a/package/ifupdown/ifupdown.mk b/package/ifupdown/ifupdown.mk
+index dfc3f3cc11..84d24aedab 100644
+--- a/package/ifupdown/ifupdown.mk
++++ b/package/ifupdown/ifupdown.mk
+@@ -7,7 +7,6 @@
+ IFUPDOWN_VERSION = 0.8.16
+ IFUPDOWN_SOURCE = ifupdown_$(IFUPDOWN_VERSION).tar.xz
+ IFUPDOWN_SITE = http://snapshot.debian.org/archive/debian/20160922T165503Z/pool/main/i/ifupdown
+-IFUPDOWN_DEPENDENCIES = $(if $(BR2_PACKAGE_BUSYBOX),busybox)
+ IFUPDOWN_LICENSE = GPL-2.0+
+ IFUPDOWN_LICENSE_FILES = COPYING
  
--# If we are going to install ncat, ensure Busybox gets built/installed
--# before, so that this package overrides Busybox nc.
--ifeq ($(BR2_PACKAGE_NMAP_NCAT)$(BR2_PACKAGE_BUSYBOX),yy)
--NMAP_DEPENDENCIES += busybox
--endif
--
- # Add a symlink to "nc" if none of the competing netcats is selected
- ifeq ($(BR2_PACKAGE_NMAP_NCAT):$(BR2_PACKAGE_NETCAT)$(BR2_PACKAGE_NETCAT_OPENBSD),y:)
- define NMAP_INSTALL_NCAT_SYMLINK
