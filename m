@@ -1,47 +1,50 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 8 Jul 2018 13:08:04 +0200
-Subject: [Buildroot] [git commit] package/busybox: invert dependency with mtd
-Message-ID: <20180708110810.A326B863D6@busybox.osuosl.org>
+Date: Sun, 8 Jul 2018 12:22:14 +0200
+Subject: [Buildroot] [git commit] package/busybox: invert dependency with
+ rsyslog
+Message-ID: <20180708110810.52C19863D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14a16b3bc6730eefc433c1ad8f399967168dbe04
+commit: https://git.buildroot.net/buildroot/commit/?id=3ee4f78b36fb8d6ccb3b1e8b5d845ccbd86790e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
  package/busybox/busybox.mk | 1 +
- package/mtd/mtd.mk         | 4 ----
- 2 files changed, 1 insertion(+), 4 deletions(-)
+ package/rsyslog/rsyslog.mk | 5 -----
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 451aae46a5..efb463554c 100644
+index 00e17c4be6..22b798207a 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_MTD),mtd) \
- 	$(if $(BR2_PACKAGE_NET_TOOLS),net-tools) \
- 	$(if $(BR2_PACKAGE_NETCAT),netcat) \
- 	$(if $(BR2_PACKAGE_NETCAT_OPENSBSD),netcat-openbsd) \
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 83bd6a6ae9..13e501fc33 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -31,10 +31,6 @@ else
- MTD_CONF_OPTS += --disable-tests --disable-install-tests
- endif
++	$(if $(BR2_PACKAGE_RSYSLOGD),rsyslog) \
+ 	$(if $(BR2_PACKAGE_START_STOP_DAEMON),start-stop-daemon) \
+ 	$(if $(BR2_PACKAGE_SYSKLOGD),sysklogd) \
+ 	$(if $(BR2_PACKAGE_SYSLOG_NG),syslog-ng) \
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index e32505be22..61e08ba765 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -17,11 +17,6 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+ RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
+ 	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
  
+-# Build after BusyBox
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--MTD_DEPENDENCIES += busybox
+-RSYSLOG_DEPENDENCIES += busybox
 -endif
 -
- # If extended attributes are required, the acl package must
- # also be enabled which will also include the attr package.
- ifeq ($(BR2_PACKAGE_ACL),y)
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ RSYSLOG_DEPENDENCIES += gnutls
+ RSYSLOG_CONF_OPTS += --enable-gnutls
