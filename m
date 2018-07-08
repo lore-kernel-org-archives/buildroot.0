@@ -1,65 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:45:38 +0200
-Subject: [Buildroot] [PATCH 13/50 v2] package/busybox: invert dependency
- with syslog-ng
+Date: Sun,  8 Jul 2018 11:45:47 +0200
+Subject: [Buildroot] [PATCH 22/50 v2] package/busybox: invert dependency
+ with netcat-openbsd
 In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
 References: <cover.1531043163.git.yann.morin.1998@free.fr>
-Message-ID: <39003fce0bc7e196e6170bbcee0abaf2f14ea4d5.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <50f3a08cbd0b55507e0d18729da095116d98f1c8.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In so doing, we must now ensure that busybox does not overwrite
-the startup script already installed by syslog-ng.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/busybox/busybox.mk     | 6 +++++-
- package/syslog-ng/syslog-ng.mk | 5 -----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/busybox/busybox.mk               | 1 +
+ package/netcat-openbsd/netcat-openbsd.mk | 6 ------
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 9d3ea22d96..c6c7b03ab3 100644
+index 55c3d25b8e..003909806a 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_SYSLOG_NG),syslog-ng) \
- 	$(if $(BR2_PACKAGE_SYSTEMD),systemd) \
- 	$(if $(BR2_PACKAGE_SYSVINIT),sysvinit) \
- 	$(if $(BR2_PACKAGE_TAR),tar) \
-@@ -208,8 +209,11 @@ define BUSYBOX_INSTALL_INDIVIDUAL_BINARIES
- endef
- endif
++	$(if $(BR2_PACKAGE_NETCAT_OPENSBSD),netcat-openbsd) \
+ 	$(if $(BR2_PACKAGE_NMAP),nmap) \
+ 	$(if $(BR2_PACKAGE_NTP),ntp) \
+ 	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
+diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
+index 5784e4d68e..e98b479c4f 100644
+--- a/package/netcat-openbsd/netcat-openbsd.mk
++++ b/package/netcat-openbsd/netcat-openbsd.mk
+@@ -10,12 +10,6 @@ NETCAT_OPENBSD_LICENSE = BSD-3-Clause
+ NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
+ NETCAT_OPENBSD_DEPENDENCIES = host-pkgconf libbsd
  
-+# Only install our own if no other package already did.
- define BUSYBOX_INSTALL_LOGGING_SCRIPT
--	if grep -q CONFIG_SYSLOGD=y $(@D)/.config; then \
-+	if grep -q CONFIG_SYSLOGD=y $(@D)/.config && \
-+		[ ! -e $(TARGET_DIR)/etc/init.d/S01logging ]; \
-+	then \
- 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
- 			$(TARGET_DIR)/etc/init.d/S01logging; \
- 	fi
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 2b6f2c09e9..793fea0972 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -17,11 +17,6 @@ SYSLOG_NG_CONF_ENV = LIBS=-lrt
- SYSLOG_NG_CONF_OPTS = --disable-manpages --localstatedir=/var/run \
- 	--disable-java --disable-java-modules --disable-mongodb
- 
--# We override busybox's S01logging init script
+-# Ensure Busybox gets built/installed before, so that this package
+-# overrides Busybox nc.
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--SYSLOG_NG_DEPENDENCIES += busybox
+-NETCAT_OPENBSD_DEPENDENCIES += busybox
 -endif
 -
- ifeq ($(BR2_PACKAGE_GEOIP),y)
- SYSLOG_NG_DEPENDENCIES += geoip
- SYSLOG_NG_CONF_OPTS += --enable-geoip
+ define NETCAT_OPENBSD_APPLY_DEBIAN_PATCHES
+ 	if [ -d $(@D)/debian/patches ]; then \
+ 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches *.dpatch; \
 -- 
 2.14.1
