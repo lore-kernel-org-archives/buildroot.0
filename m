@@ -1,39 +1,86 @@
-From: 50ty-one <50ty-one@live.de>
-Date: Sun, 8 Jul 2018 16:14:33 +0000
-Subject: [Buildroot] [PATCH 1/1] genimage: bump to version 10
-Message-ID: <DB3PR0402MB38023CF77C8DC4EF166C655482450@DB3PR0402MB3802.eurprd04.prod.outlook.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sun, 8 Jul 2018 15:56:41 -0300
+Subject: [Buildroot] [PATCH 2/3] imx/post-image: Allow flashing
+ u-boot-dtb.imx in the SD card
+In-Reply-To: <75a18624-33ef-7d5d-3542-2e3b7b75e5f6@mind.be>
+References: <1530818671-20390-1-git-send-email-festevam@gmail.com>
+ <1530818671-20390-2-git-send-email-festevam@gmail.com>
+ <75a18624-33ef-7d5d-3542-2e3b7b75e5f6@mind.be>
+Message-ID: <CAOMZO5BDTyZfo0s7ppN3CORQ-9ru1PtUaPTcK-RpgytGxO2ShA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Rommel, Stefan <50ty-one@live.de>
----
- package/genimage/genimage.hash | 2 +-
- package/genimage/genimage.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi Arnout,
 
-diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
-index 4be2fca873..095eb1413f 100644
---- a/package/genimage/genimage.hash
-+++ b/package/genimage/genimage.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	69f35af7edf6f4dbdac7a18ddc69dcf38c501e43d8b50c524555754c51479078	genimage-9.tar.xz
-+sha256	5a36b2c1387007c2d6535a722ee257a387d0913bddcf8a94d460e6acd4d01859	genimage-10.tar.xz
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index 8d11c66a25..393c3e9b94 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GENIMAGE_VERSION = 9
-+GENIMAGE_VERSION = 10
- GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
- GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
- HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
--- 
-2.17.1
+On Thu, Jul 5, 2018 at 6:57 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+
+>  This file only differs from the normal template in the name of the u-boot
+> binary, right? So wouldn't it make more sense to make that configurable, just
+> like the %FILES%, and handle it in an extra sed line?
+
+I am trying to implement your suggestion, but I think I need some help.
+
+Here is what I have done so far:
+
+diff --git a/board/freescale/common/imx/genimage.cfg.template
+b/board/freescale/common/imx/genimage.cfg.template
+index acce058..41584d9 100644
+--- a/board/freescale/common/imx/genimage.cfg.template
++++ b/board/freescale/common/imx/genimage.cfg.template
+@@ -22,7 +22,7 @@ image sdcard.img {
+
+   partition u-boot {
+     in-partition-table = "no"
+-    image = "u-boot.imx"
++    image = %UBOOTBIN%
+     offset = 1024
+   }
+
+diff --git a/board/freescale/common/imx/post-image.sh
+b/board/freescale/common/imx/post-image.sh
+index 264c8a4..2e57cef 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -41,8 +41,18 @@ genimage_type()
+        fi
+ }
+
++uboot_image()
++{
++       if grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
++               echo "u-boot-dtb.imx"
++       elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMX=y$" ${BR2_CONFIG}; then
++               echo "u-boot.imx"
++       fi
++}
++
+ main()
+ {
++       local UBOOTBIN="$(uboot_image)"
+        local FILES="$(dtb_list) $(linux_image)"
+        local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
+        local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+@@ -50,6 +60,9 @@ main()
+        sed -e "s/%FILES%/${FILES}/" \
+                board/freescale/common/imx/$(genimage_type) > ${GENIMAGE_CFG}
+
++       sed -e "s/%UBOOTBIN%/${UBOOTBIN}/" \
++               board/freescale/common/imx/$(genimage_type) > ${GENIMAGE_CFG}
++
+        rm -rf "${GENIMAGE_TMP}"
+
+        genimage \
+
+but it does not work:
+
+>>>   Executing post-image script board/freescale/common/imx/post-image.sh
+file(%FILES%): stat(/home/fabio/buildroot/output/images/%FILES%)
+failed: No such file or directory
+vfat(boot.vfat): could not setup %FILES%
+
+Could you please provide some suggestion?
+
+Thanks
