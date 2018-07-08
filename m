@@ -1,49 +1,61 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sun, 8 Jul 2018 13:08:05 +0200
 Subject: [Buildroot] [git commit] package/busybox: invert dependency with
- gawk
-Message-ID: <20180708110811.1A4B5863D6@busybox.osuosl.org>
+ e2fsprogs
+Message-ID: <20180708110811.2BBA3863D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f9d14bb756bbda6445da69e2810e1b7d266ca79
+commit: https://git.buildroot.net/buildroot/commit/?id=1561592231a086b3384ddc1ce2ad05eb3c29376c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/busybox/busybox.mk | 1 +
- package/gawk/gawk.mk       | 5 -----
- 2 files changed, 1 insertion(+), 5 deletions(-)
+ package/busybox/busybox.mk     |  1 +
+ package/e2fsprogs/e2fsprogs.mk | 10 ++--------
+ 2 files changed, 3 insertions(+), 8 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index f614576de7..aac31fdba7 100644
+index a567f25231..166d187081 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_GAWK),gawk) \
++	$(if $(BR2_PACKAGE_E2FSPROGS),e2fsprogs) \
+ 	$(if $(BR2_PACKAGE_FBSET),fbset) \
+ 	$(if $(BR2_PACKAGE_GAWK),gawk) \
  	$(if $(BR2_PACKAGE_GREP),grep) \
- 	$(if $(BR2_PACKAGE_GZIP),gzip) \
- 	$(if $(BR2_PACKAGE_I2C_TOOLS),i2c-tools) \
-diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
-index 0779736882..1315abb9ee 100644
---- a/package/gawk/gawk.mk
-+++ b/package/gawk/gawk.mk
-@@ -11,11 +11,6 @@ GAWK_DEPENDENCIES = host-gawk
- GAWK_LICENSE = GPL-3.0+
- GAWK_LICENSE_FILES = COPYING
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 316546a8d7..efc10d0e99 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -17,12 +17,6 @@ E2FSPROGS_INSTALL_STAGING = YES
+ E2FSPROGS_DEPENDENCIES = host-pkgconf util-linux
+ HOST_E2FSPROGS_DEPENDENCIES = host-pkgconf host-util-linux
  
--# Prefer full-blown gawk over busybox awk
+-# If both e2fsprogs and busybox are selected, make certain e2fsprogs
+-# wins the fight over who gets to have their utils actually installed
 -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--GAWK_DEPENDENCIES += busybox
+-E2FSPROGS_DEPENDENCIES += busybox
 -endif
 -
- ifeq ($(BR2_PACKAGE_LIBSIGSEGV),y)
- GAWK_DEPENDENCIES += libsigsegv
- endif
+ # e4defrag doesn't build on older systems like RHEL5.x, and we don't
+ # need it on the host anyway.
+ # Disable fuse2fs as well to avoid carrying over deps, and it's unused
+@@ -35,8 +29,8 @@ HOST_E2FSPROGS_CONF_OPTS = \
+ 	--enable-symlink-install \
+ 	--disable-testio-debug
+ 
+-# Set the binary directories to "/bin" and "/sbin" to override programs
+-# installed by busybox.
++# Set the binary directories to "/bin" and "/sbin", as busybox does,
++# so that we do not end up with two versions of e2fs tools.
+ E2FSPROGS_CONF_OPTS = \
+ 	--bindir=/bin \
+ 	--sbindir=/sbin \
