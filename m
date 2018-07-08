@@ -1,50 +1,61 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 8 Jul 2018 12:22:14 +0200
+Date: Sun, 8 Jul 2018 12:54:16 +0200
 Subject: [Buildroot] [git commit] package/busybox: invert dependency with
- systemd
-Message-ID: <20180708110810.2D308863D6@busybox.osuosl.org>
+ nmap
+Message-ID: <20180708110810.7FD3C863D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4b0e1801c860e18ae6eefc15aead9fc0ec431b6
+commit: https://git.buildroot.net/buildroot/commit/?id=9f9235d35c7bce5cc7ca87b8cb1c6c92a0b2c15c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+We only need that dependency when nmap's ncat is enabled.
+
+For consistency, we add a dependency on nmap, not a suboption of it,
+to have a dependency list in busybox that is only about packages, and
+directly associates the upper-case package variable to the lower-case
+package name, e.g. NMAP <-> nmap.
+
+Thus, if BR2_PACKAGE_NMAP_NCAT is selected, we have a redundant
+dependency. But that doesn't hurt and it really simplifies things.
+
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Carlos Santos <casantos@datacom.com.br>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
  package/busybox/busybox.mk | 1 +
- package/systemd/systemd.mk | 6 ------
+ package/nmap/nmap.mk       | 6 ------
  2 files changed, 1 insertion(+), 6 deletions(-)
 
 diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index e504924540..9d3ea22d96 100644
+index 1d3d202f53..55c3d25b8e 100644
 --- a/package/busybox/busybox.mk
 +++ b/package/busybox/busybox.mk
 @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
  
  # Packages that provide commands that may also be busybox applets:
  BUSYBOX_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_SYSTEMD),systemd) \
- 	$(if $(BR2_PACKAGE_SYSVINIT),sysvinit) \
- 	$(if $(BR2_PACKAGE_TAR),tar) \
- 	$(if $(BR2_PACKAGE_TFTPD),tftpd) \
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 04775ee778..d7031ed21d 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -18,12 +18,6 @@ SYSTEMD_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_NMAP),nmap) \
+ 	$(if $(BR2_PACKAGE_NTP),ntp) \
+ 	$(if $(BR2_PACKAGE_PCIUTILS),pciutils) \
+ 	$(if $(BR2_PACKAGE_PROCPS_NG),procps-ng) \
+diff --git a/package/nmap/nmap.mk b/package/nmap/nmap.mk
+index 1c89b5424e..420aec82d7 100644
+--- a/package/nmap/nmap.mk
++++ b/package/nmap/nmap.mk
+@@ -76,12 +76,6 @@ else
+ NMAP_CONF_OPTS += --without-nping
+ endif
  
- SYSTEMD_PROVIDES = udev
- 
--# Make sure that systemd will always be built after busybox so that we have
--# a consistent init setup between two builds
--ifeq ($(BR2_PACKAGE_BUSYBOX),y)
--SYSTEMD_DEPENDENCIES += busybox
+-# If we are going to install ncat, ensure Busybox gets built/installed
+-# before, so that this package overrides Busybox nc.
+-ifeq ($(BR2_PACKAGE_NMAP_NCAT)$(BR2_PACKAGE_BUSYBOX),yy)
+-NMAP_DEPENDENCIES += busybox
 -endif
 -
- SYSTEMD_CONF_OPTS += \
- 	-Drootlibdir='/usr/lib' \
- 	-Dblkid=true \
+ # Add a symlink to "nc" if none of the competing netcats is selected
+ ifeq ($(BR2_PACKAGE_NMAP_NCAT):$(BR2_PACKAGE_NETCAT)$(BR2_PACKAGE_NETCAT_OPENBSD),y:)
+ define NMAP_INSTALL_NCAT_SYMLINK
