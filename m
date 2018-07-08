@@ -1,62 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 8 Jul 2018 00:35:24 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi3_defconfig: fix
- filesystem size
-In-Reply-To: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com>
-References: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com>
-Message-ID: <7061b17f-2365-592c-662b-e383f425e03c@mind.be>
+From: =?utf-8?Q?Jean-Fran=C3=A7ois_T=C3=AAtu?= <jean-francois.tetu@savoirfairelinux.com>
+Date: Sat, 7 Jul 2018 22:44:02 -0400 (EDT)
+Subject: [Buildroot] [PATCH] package/automake: bump version to 1.16.1
+In-Reply-To: <13b9a287-31bf-fc90-5d49-ba78cb68b002@mind.be>
+References: <20180706212709.10376-1-jean-francois.tetu@savoirfairelinux.com>
+ <13b9a287-31bf-fc90-5d49-ba78cb68b002@mind.be>
+Message-ID: <438109890.9050032.1531017842188.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello!
 
-
-On 29-06-18 11:23, Leon Anavi wrote:
-> Increase the filesystem size for raspberrypi3 by setting
-> BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
-> raspberrypi3_64 has the same size.
+On Saturday, July 7, 2018 5:31:11 PM, Arnout Vandecappelle wrote:
+> On 06-07-18 23:27, Jean-Fran?ois T?tu wrote:
+>> If Buildroot is run from a folder containing a '@' in the path, automake
+>> will fail since the aclocal Perl script will interpret what is after the
+>> '@' as an array in its system include paths. This was fixed in automake
+>> 1.16.1.
+>> 
+>> Signed-off-by: Jean-Fran?ois T?tu <jean-francois.tetu@savoirfairelinux.com>
 > 
-> Fixes:
-> Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "services"
-> mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
-> 
-> Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
-
- Applied to master, thanks.
-
- It's a pity we didn't get to the bottom of why this error was not happening
-every time, or why it didn't happen before. But, as mentioned, the fix is simple
-and we were close to the limit.
-
- I've extended the commit log a little bit.
-
- Regards,
- Arnout
-
-> ---
->  configs/raspberrypi3_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-> index 856f321..0ef9afe 100644
-> --- a/configs/raspberrypi3_defconfig
-> +++ b/configs/raspberrypi3_defconfig
-> @@ -28,6 +28,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
->  # Filesystem / image
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
->  # BR2_TARGET_ROOTFS_TAR is not set
->  BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+> Applied to master, thanks.
 > 
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Great!
+
+> automake is a package that runs a risk of breaking other packages using it.
+> Would you be willing to monitor the autobuild results in the coming weeks to
+> find and fix breakage caused by this bump?
+> 
+> Thanks!
+> 
+
+Gladly, I'll monitor the daily autobuild results and fix whatever breaks.
+
+> Regards,
+> Arnout
+> 
+>> ---
+>>  package/automake/automake.hash | 2 +-
+>>  package/automake/automake.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/package/automake/automake.hash b/package/automake/automake.hash
+>> index b194c3c2bc..9ff55a4bae 100644
+>> --- a/package/automake/automake.hash
+>> +++ b/package/automake/automake.hash
+>> @@ -1,4 +1,4 @@
+>>  # Locally calculated
+>> -sha256 af6ba39142220687c500f79b4aa2f181d9b24e4f8d8ec497cea4ba26c64bedaf
+>> automake-1.15.1.tar.xz
+>> +sha256 5d05bb38a23fd3312b10aea93840feec685bdf4a41146e78882848165d3ae921
+>> automake-1.16.1.tar.xz
+>>  # License files, locally calculated
+>>  sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+>> diff --git a/package/automake/automake.mk b/package/automake/automake.mk
+>> index 270337712e..92e7d64666 100644
+>> --- a/package/automake/automake.mk
+>> +++ b/package/automake/automake.mk
+>> @@ -4,7 +4,7 @@
+>>  #
+>>  ################################################################################
+>>  
+>> -AUTOMAKE_VERSION = 1.15.1
+>> +AUTOMAKE_VERSION = 1.16.1
+>>  AUTOMAKE_SOURCE = automake-$(AUTOMAKE_VERSION).tar.xz
+>>  AUTOMAKE_SITE = $(BR2_GNU_MIRROR)/automake
+>>  AUTOMAKE_LICENSE = GPL-2.0+
+>> 
+> 
+> --
+> Arnout Vandecappelle                          arnout at mind be
+> Senior Embedded Software Architect            +32-16-286500
+> Essensium/Mind                                http://www.mind.be
+> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Thanks!
+
+--
+Jean-Fran?ois T?tu
