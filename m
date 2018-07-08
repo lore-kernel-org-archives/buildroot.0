@@ -1,189 +1,111 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun,  8 Jul 2018 11:46:12 +0200
-Subject: [Buildroot] [PATCH 00/50 v2] package/busybox: invert dependencies
-Message-ID: <cover.1531043163.git.yann.morin.1998@free.fr>
+Date: Sun,  8 Jul 2018 11:45:26 +0200
+Subject: [Buildroot] [PATCH 01/50 v2] package/busybox: update to 1.29.0
+In-Reply-To: <cover.1531043163.git.yann.morin.1998@free.fr>
+References: <cover.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <a4758f31d7bbdee7569e4aa3582ec01ebfbb0954.1531043163.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+The two patches are still needed, with the second needing a slight
+refresh around the edge.
 
-Currently, the issue that busybox may install the same executables as
-those from other packages, is handled in all those packages. This is
-not very practical from a maintenance point of view.
+Since upstream has now full support to perform a noclobber install, drop
+of our hook and use the new install rule.
 
-Furthermore, this means that those packages all overwrite the
-busybox-installed applets, which means that this triggers the
-no-two-packages-touch-the-same-file rule. So far, this is only a
-warning, but when we eventually go with TLPB, we may have to enforce
-that rule.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 
-But busybox can be told to be smart, and not replace existing files
-during installation. This is in fact what we do with a hook, which uses
-'sed' to force the 'noclobber' install. But now, Busybox upstream has
-proper support for doing a noclobber install without artifice. So we
-bump busybox to the latest release, use the new install-noclobber rule,
-and drop our hook.
+---
+Notes: Matt, I did not carry your reviewd-by tag, as the patch entirely
+changed since you reviewed it. Thanks for your initial review! :-)
 
-All other commits are just trivial dependency order exchange between a
-package and busybox, except for syslog-ng, for which we must take care
-that busybox does not overwrite the init script.
+---
+Changes v1?-> v2;
+  - bump version now it is released  (Baruch)
+---
+ ...akefile.flags-strip-non-l-arguments-returned-by-pkg.patch |  4 +++-
+ package/busybox/busybox.hash                                 | 10 +++-------
+ package/busybox/busybox.mk                                   | 12 ++++--------
+ 3 files changed, 10 insertions(+), 16 deletions(-)
 
-Eventually, we also add a new dependency onto the 'attr' package, to
-solve a potential conflict with the setfattr applet.
-
-Inverting a single dependency could introduce a dependency loop, which
-would be resolved by a latter inversion. For example, suppose we were to
-start with this initial situation:
-
-    B -->-- A -->-- busybox
-     `------>-------'
-
-With the first inversion, we'd get to now have a dependency loop:
-
-    B -->-- A -->-- busybox -->-- B
-
-Then with the second inversion, we'd resolve that loop:
-
-                    busybox -->-- B -->-- A
-                           `------>------'
-
-Detecting and avoiding those loops is not trivial, because they may
-imply multiple intermediate packages between B and A. So, the series
-does not attempt to prevent those loops, as they are entirely resolved
-by the end of the series anyway.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit 0fe0c50d3683be4975a4551ac183707692b11215
-
-  systemd: Fix polkit build order (2018-07-08 00:19:37 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 7d4417e280d8c1db48496f8e35895c4819cae957
-
-  support/scripts: don't draw most of busybox' dependencies (2018-07-08 11:24:23 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (50):
-      package/busybox: update to 1.29.0
-      package/busybox: invert dependency with whois
-      package/busybox: invert dependency with wget
-      package/busybox: invert dependency with vim
-      package/busybox: invert dependency with util-linux
-      package/busybox: invert dependency with usbutils
-      package/busybox: invert dependency with unzip
-      package/busybox: invert dependency with traceroute
-      package/busybox: invert dependency with tftpd
-      package/busybox: invert dependency with tar
-      package/busybox: invert dependency with sysvinit
-      package/busybox: invert dependency with systemd
-      package/busybox: invert dependency with syslog-ng
-      package/busybox: invert dependency with sysklogd
-      package/busybox: invert dependency with start-stop-daemon
-      package/busybox: invert dependency with rsyslog
-      package/busybox: invert dependency with psmisc
-      package/busybox: invert dependency with procps-ng
-      package/busybox: invert dependency with pciutils
-      package/busybox: invert dependency with ntp
-      package/busybox: invert dependency with nmap
-      package/busybox: invert dependency with netcat-openbsd
-      package/busybox: invert dependency with netcat
-      package/busybox: invert dependency with net-tools
-      package/busybox: invert dependency with mtd
-      package/busybox: invert dependency with lsof
-      package/busybox: invert dependency with less
-      package/busybox: invert dependency with kmod
-      package/busybox: invert dependency with iputils
-      package/busybox: invert dependency with iproute2
-      package/busybox: invert dependency with ifupdown
-      package/busybox: invert dependency with ifplugd
-      package/busybox: invert dependency with ifenslave
-      package/busybox: invert dependency with i2c-tools
-      package/busybox: invert dependency with gzip
-      package/busybox: invert dependency with grep
-      package/busybox: invert dependency with gawk
-      package/busybox: invert dependency with fbset
-      package/busybox: invert dependency with e2fsprogs
-      package/busybox: invert dependency with dos2unix
-      package/busybox: invert dependency with diffutils
-      package/busybox: invert dependency with debianutils
-      package/busybox: invert dependency with dcron
-      package/busybox: invert dependency with cpio
-      package/busybox: invert dependency with coreutils
-      package/busybox: invert dependency with binutils
-      package/busybox: invert dependency with bc
-      package/busybox: invert dependency with bash
-      package/busybox: add dependency on attr
-      support/scripts: don't draw most of busybox' dependencies
-
- package/bash/bash.mk                               |  4 +-
- package/bc/bc.mk                                   |  5 --
- package/binutils/binutils.mk                       |  5 --
- ...ags-strip-non-l-arguments-returned-by-pkg.patch |  4 +-
- package/busybox/busybox.hash                       | 10 +---
- package/busybox/busybox.mk                         | 68 +++++++++++++++++++---
- package/coreutils/coreutils.mk                     |  6 --
- package/cpio/cpio.mk                               |  1 -
- package/dcron/dcron.mk                             |  5 --
- package/debianutils/debianutils.mk                 |  2 -
- package/diffutils/diffutils.mk                     |  4 --
- package/dos2unix/dos2unix.mk                       |  4 +-
- package/e2fsprogs/e2fsprogs.mk                     | 10 +---
- package/fbset/fbset.mk                             |  5 --
- package/gawk/gawk.mk                               |  5 --
- package/grep/grep.mk                               |  5 --
- package/gzip/gzip.mk                               |  2 -
- package/i2c-tools/i2c-tools.mk                     |  4 --
- package/ifenslave/ifenslave.mk                     |  1 -
- package/ifplugd/ifplugd.mk                         |  5 --
- package/ifupdown/ifupdown.mk                       |  1 -
- package/iproute2/iproute2.mk                       |  6 --
- package/iputils/iputils.mk                         |  6 --
- package/kmod/kmod.mk                               |  3 -
- package/less/less.mk                               |  3 +-
- package/lsof/lsof.mk                               |  3 -
- package/mtd/mtd.mk                                 |  4 --
- package/net-tools/net-tools.mk                     |  8 +--
- package/netcat-openbsd/netcat-openbsd.mk           |  6 --
- package/netcat/netcat.mk                           | 13 -----
- package/nmap/nmap.mk                               |  6 --
- package/ntp/ntp.mk                                 |  2 +-
- package/pciutils/pciutils.mk                       |  5 --
- package/procps-ng/procps-ng.mk                     | 10 +---
- package/psmisc/psmisc.mk                           |  5 --
- package/rsyslog/rsyslog.mk                         |  5 --
- package/start-stop-daemon/start-stop-daemon.mk     |  3 +-
- package/sysklogd/sysklogd.mk                       |  5 --
- package/syslog-ng/syslog-ng.mk                     |  5 --
- package/systemd/systemd.mk                         |  6 --
- package/sysvinit/sysvinit.mk                       |  5 --
- package/tar/tar.mk                                 |  7 +--
- package/tftpd/tftpd.mk                             |  5 --
- package/traceroute/traceroute.mk                   |  5 --
- package/unzip/unzip.mk                             |  2 -
- package/usbutils/usbutils.mk                       |  5 --
- package/util-linux/util-linux.mk                   |  6 --
- package/vim/vim.mk                                 |  5 +-
- package/wget/wget.mk                               |  5 --
- package/whois/whois.mk                             |  3 +-
- support/scripts/graph-depends                      | 11 ++++
- 51 files changed, 90 insertions(+), 229 deletions(-)
-
+diff --git a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+index a5da3a251e..8375ae0531 100644
+--- a/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
++++ b/package/busybox/0002-Makefile.flags-strip-non-l-arguments-returned-by-pkg.patch
+@@ -4,6 +4,8 @@ Date: Mon, 25 Nov 2013 22:51:53 +0100
+ Subject: [PATCH] Makefile.flags: strip non -l arguments returned by pkg-config
+ 
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
++[yann.morin.1998 at free.fr: refresh for 1.29.0]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ ---
+  Makefile.flags | 4 +++-
+  1 file changed, 3 insertions(+), 1 deletion(-)
+@@ -22,7 +24,7 @@ index 307afa7..885e323 100644
+ +       $(SELINUX_PC_MODULES:lib%=%))
+  endif
+  
+- ifeq ($(CONFIG_EFENCE),y)
++ ifeq ($(CONFIG_FEATURE_NSLOOKUP_BIG),y)
+ -- 
+ 1.8.1.2
+ 
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index 066817aefb..26194be3a9 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,7 +1,3 @@
+-# From https://busybox.net/downloads/busybox-1.28.4.tar.bz2.sign
+-md5 5661d013c9ef7cc31a453640c320f56b  busybox-1.28.4.tar.bz2
+-sha1 acd0558a659b795da1dfbd7e0ed5353d6836fa37  busybox-1.28.4.tar.bz2
+-
+-# Locally calculated
+-sha256 e3c14a3699dc7e82fed397392957afc78e37bdf25398ac38ead6e84621b2ae6a  busybox-1.28.4.tar.bz2
+-sha256	bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548	LICENSE
++# From https://busybox.net/downloads/busybox-1.29.0.tar.bz2.sha256
++sha256 c8115612f0be640644e7c35098766ddaac4a88b773c4c4f0e43564982f660c82  busybox-1.29.0.tar.bz2
++sha256 bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index ba5a16b5b7..948a8313c3 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUSYBOX_VERSION = 1.28.4
++BUSYBOX_VERSION = 1.29.0
+ BUSYBOX_SITE = http://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0
+@@ -253,12 +253,6 @@ define BUSYBOX_INSTALL_ADD_TO_SHELLS
+ endef
+ BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_INSTALL_ADD_TO_SHELLS
+ 
+-# Enable "noclobber" in install.sh, to prevent BusyBox from overwriting any
+-# full-blown versions of apps installed by other packages with sym/hard links.
+-define BUSYBOX_NOCLOBBER_INSTALL
+-	$(SED) 's/^noclobber="0"$$/noclobber="1"/' $(@D)/applets/install.sh
+-endef
+-
+ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_MMU)
+ 	$(BUSYBOX_PREFER_STATIC)
+@@ -280,7 +274,9 @@ define BUSYBOX_BUILD_CMDS
+ endef
+ 
+ define BUSYBOX_INSTALL_TARGET_CMDS
+-	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install
++	# Use the 'noclobber' install rule, to prevent BusyBox from overwriting
++	# any full-blown versions of apps installed by other packages.
++	$(BUSYBOX_MAKE_ENV) $(MAKE) $(BUSYBOX_MAKE_OPTS) -C $(@D) install-noclobber
+ 	$(BUSYBOX_INSTALL_INITTAB)
+ 	$(BUSYBOX_INSTALL_UDHCPC_SCRIPT)
+ 	$(BUSYBOX_INSTALL_MDEV_CONF)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
