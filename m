@@ -1,37 +1,33 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 8 Jul 2018 12:17:45 +0200
-Subject: [Buildroot] [git commit] libzip: add optional openssl support
-Message-ID: <20180708101935.68248863D6@busybox.osuosl.org>
+Date: Sun, 8 Jul 2018 12:12:20 +0200
+Subject: [Buildroot] [git commit] libpng: use $() to reference make
+ variables instead of ${}
+Message-ID: <20180708101935.4F857863D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=975dedc753121607300ff059591522b21c4350bc
+commit: https://git.buildroot.net/buildroot/commit/?id=b492ab57855d1983fbf638580a074873ccbf96a6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-openssl support has been added since version 1.5.0
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libzip/libzip.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/libpng/libpng.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-index d46bc17977..0253a61cda 100644
---- a/package/libzip/libzip.mk
-+++ b/package/libzip/libzip.mk
-@@ -18,4 +18,11 @@ else
- LIBZIP_CONF_OPTS += -DCMAKE_DISABLE_FIND_PACKAGE_BZIP2=TRUE
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBZIP_DEPENDENCIES += openssl
-+LIBZIP_CONF_OPTS += -DENABLE_OPENSSL=ON
-+else
-+LIBZIP_CONF_OPTS += -DENABLE_OPENSSL=OFF
-+endif
-+
- $(eval $(cmake-package))
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index f8594c808f..ace62cd876 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -7,7 +7,7 @@
+ LIBPNG_VERSION = 1.6.34
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+-LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng${LIBPNG_SERIES}/$(LIBPNG_VERSION)
++LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+ LIBPNG_LICENSE = Libpng
+ LIBPNG_LICENSE_FILES = LICENSE
+ LIBPNG_INSTALL_STAGING = YES
