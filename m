@@ -1,33 +1,68 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Sun, 8 Jul 2018 18:12:08 -0300
-Subject: [Buildroot] [PATCH 2/3] imx/post-image: Allow flashing
+Date: Sun,  8 Jul 2018 18:16:18 -0300
+Subject: [Buildroot] [PATCH v2 1/2] imx/post-image: Allow flashing
  u-boot-dtb.imx in the SD card
-In-Reply-To: <c40b2f73-d91b-1693-a938-8b6de39b84f1@mind.be>
-References: <1530818671-20390-1-git-send-email-festevam@gmail.com>
- <1530818671-20390-2-git-send-email-festevam@gmail.com>
- <75a18624-33ef-7d5d-3542-2e3b7b75e5f6@mind.be>
- <CAOMZO5BDTyZfo0s7ppN3CORQ-9ru1PtUaPTcK-RpgytGxO2ShA@mail.gmail.com>
- <c40b2f73-d91b-1693-a938-8b6de39b84f1@mind.be>
-Message-ID: <CAOMZO5CVFjnxqHarcdhaAb6ADKV3T2E_LASoAOzouya1sM4dtg@mail.gmail.com>
+Message-ID: <1531084579-7949-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Add support for flashing the u-boot-dtb.imx binary in the SD card
+when a target selects BR2_TARGET_UBOOT_FORMAT_DTB_IMX.
 
-On Sun, Jul 8, 2018 at 5:51 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+Changes since v1:
+- Use a UBOOTBIN variable to decide the U-Boot binary name instead
+of creating a new genimage.cfg variant. (Thanks to Arnout!)
 
->  This way, you're overwriting the file that was created just above. You need to
-> do both in a single command:
->
->         sed -e "s/%FILES%/${FILES}/" \
->                 -e "s/%UBOOTBIN%/${UBOOTBIN}/" \
->                 board/freescale/common/imx/$(genimage_type) > ${GENIMAGE_CFG}
+ board/freescale/common/imx/genimage.cfg.template |  2 +-
+ board/freescale/common/imx/post-image.sh         | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-Thanks a lot for your suggestions! It is working fine now.
-
-Really appreciated!
-
-Will submit a v2.
+diff --git a/board/freescale/common/imx/genimage.cfg.template b/board/freescale/common/imx/genimage.cfg.template
+index acce058..2a7036a 100644
+--- a/board/freescale/common/imx/genimage.cfg.template
++++ b/board/freescale/common/imx/genimage.cfg.template
+@@ -22,7 +22,7 @@ image sdcard.img {
+ 
+   partition u-boot {
+     in-partition-table = "no"
+-    image = "u-boot.imx"
++    image = "%UBOOTBIN%"
+     offset = 1024
+   }
+ 
+diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+index 264c8a4..6590bed 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -41,13 +41,24 @@ genimage_type()
+ 	fi
+ }
+ 
++uboot_image()
++{
++	if grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y$" ${BR2_CONFIG}; then
++		echo "u-boot-dtb.imx"
++	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMX=y$" ${BR2_CONFIG}; then
++		echo "u-boot.imx"
++	fi
++}
++
+ main()
+ {
+ 	local FILES="$(dtb_list) $(linux_image)"
++	local UBOOTBIN="$(uboot_image)"
+ 	local GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
+ 	local GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+ 
+ 	sed -e "s/%FILES%/${FILES}/" \
++		-e "s/%UBOOTBIN%/${UBOOTBIN}/" \
+ 		board/freescale/common/imx/$(genimage_type) > ${GENIMAGE_CFG}
+ 
+ 	rm -rf "${GENIMAGE_TMP}"
+-- 
+2.7.4
