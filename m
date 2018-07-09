@@ -1,151 +1,47 @@
-From: Joel Carlson <joelsoncarl@gmail.com>
-Date: Mon, 9 Jul 2018 13:07:00 -0600
-Subject: [Buildroot] [PATCH v4 1/3] uboot: zynqmp: allow to use custom
- psu_init files
-In-Reply-To: <mailman.4777.1529627642.16495.buildroot@busybox.net>
-References: <mailman.4777.1529627642.16495.buildroot@busybox.net>
-Message-ID: <6b428669-ea55-efe8-d0fa-aa97287824a9@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 9 Jul 2018 21:33:06 +0200
+Subject: [Buildroot] [PATCH 50/50 v2] support/scripts: don't draw most
+ of busybox' dependencies
+In-Reply-To: <654315184.2224042.1531101826145.JavaMail.zimbra@datacom.com.br>
+References: <cover.1531043163.git.yann.morin.1998@free.fr>
+ <7d4417e280d8c1db48496f8e35895c4819cae957.1531043163.git.yann.morin.1998@free.fr>
+ <1404383141.2223862.1531100485070.JavaMail.zimbra@datacom.com.br>
+ <654315184.2224042.1531101826145.JavaMail.zimbra@datacom.com.br>
+Message-ID: <0bac4ee5-f31f-9323-c430-102d64359aa5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-I've been using the v3 form of your patches to get our Zynqmp board 
-booting. This morning I upgraded our U-Boot from v2018.05 to v2018.07, 
-and on my 2018.05 buildroot branch I removed the v3 patches and applied 
-the v4 ones. I had a few issues with this patch.
 
-On 06/21/2018 03:26 PM, Luca Ceresoli <luca@lucaceresoli.net> wrote:
+On 09-07-18 04:03, Carlos Santos wrote:
+>> From: "DATACOM" <casantos@datacom.com.br>
+>> To: "Yann Morin" <yann.morin.1998@free.fr>
+>> Cc: "buildroot" <buildroot@buildroot.org>
+>> Sent: Sunday, July 8, 2018 10:41:25 PM
+>> Subject: Re: [Buildroot] [PATCH 50/50 v2] support/scripts: don't draw most of busybox' dependencies
+> [...]
+>>
+>> Reviewed-by: Carlos Santos <casantos@datacom.com.br>
+>>
+> 
+> So you start writing some review messages but leave home for some hours.
+> 
+> Then you come back and send the messages just to realize, a few minutes
+> later, that the patch was already submitted. Dooh!
 
-<snip>
-> diff --git a/board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-init-file-as-a-kco.patch b/board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-init-file-as-a-kco.patch
-> new file mode 100644
-> index 000000000000..ab8108ee0c6a
-> --- /dev/null
-> +++ b/board/zynqmp/patches/uboot/0004-arm-arm64-zynq-zynqmp-pass-the-PS-init-file-as-a-kco.patch
-> @@ -0,0 +1,175 @@
-> +From 4c9d54ab5a41d65000c8d249b6fb1b76056f1812 Mon Sep 17 00:00:00 2001
-> +From: Luca Ceresoli<luca@lucaceresoli.net>
-> +Date: Wed, 20 Jun 2018 12:11:50 +0200
-> +Subject: [PATCH] arm/arm64: zynq/zynqmp: pass the PS init file as a kconfig
-> + variable
-> +
-> +U-Boot needs to link ps7_init_gpl.c on Zynq or psu_init_gpl.c on
-> +ZynqMP (PS init for short). The current logic to locate this file for
-> +both platforms is:
-> +
-> + 1. if a board-specific file exists in
-> +    board/xilinx/zynq[mp]/$(CONFIG_DEFAULT_DEVICE_TREE)/ps?_init_gpl.c
-> +    then use it
-> + 2. otherwise use board/xilinx/zynq/ps?_init_gpl.c
-> +
-> +In the latter case the file does not exist in the U-Boot sources and
-> +must be copied in the source tree from the outside before starting the
-> +build. This is typical when it is generated from Xilinx tools while
-> +developing a custom hardware. However making sure that a
-> +board-specific file is_not_  found (and used) requires some trickery
-> +such as removing or overwriting all PS init files (e.g.: the current
-> +meta-xilinx yocto layer [0]).
-> +
-> +This generates a few problems:
-> +
-> + * if the source tree is shared among different out-of-tree builds,
-> +   they will pollute (and potentially corrupt) each other
-> + * the source tree cannot be read-only
-> + * any buildsystem must add a command to copy the PS init file binary
-> + * overwriting or deleting files in the source tree is ugly as hell
-> +
-> +Simplify usage by allowing to pass the path to the desired PS init
-> +file in kconfig variable XILINX_PS_INIT_FILE. It can be an absolute
-> +path or relative to $(srctree). If the variable is set, the
-> +user-specified file will always be used without being copied
-> +around. If the the variable is left empty, for backward compatibility
-> +fall back to the old behaviour.
-> +
-> +Since the issue is the same for Zynq and ZynqMP, add one kconfig
-> +variable in a common place and use it for both.
-> +
-> +Also use the new kconfig help text to document all the ways to give
-> +U-Boot the PS init file.
-> +
-> +Build-tested with all combinations of:
-> + - platform: zynq or zynqmp
-> + - PS init file: from XILINX_PS_INIT_FILE (absolute, relative path,
-> +   non-existing), in-tree board-specific, in board/xilinx/zynq[mp]/
-> + - building in-tree, in subdir, in other directory
-> +
-> +[0]https://github.com/Xilinx/meta-xilinx/blob/b2f74cc7fe5c4881589d5e440a17cb51fc66a7ab/meta-xilinx-bsp/recipes-bsp/u-boot/u-boot-spl-zynq-init.inc#L9
-> +
-> +Signed-off-by: Luca Ceresoli<luca@lucaceresoli.net>
-> +Cc: Albert Aribaud<albert.u.boot@aribaud.net>
-> +Cc: Michal Simek<michal.simek@xilinx.com>
-> +Cc: Nathan Rossi<nathan@nathanrossi.com>
-> +Submitted upstream:https://patchwork.ozlabs.org/patch/932392/  (slightly adapted to fix conflicts)
-> +---
-> + arch/arm/Kconfig             |  1 +
-> + board/xilinx/Kconfig         | 41 +++++++++++++++++++++++++++++++++++++++++
-> + board/xilinx/zynq/Makefile   | 10 +++++++++-
-> + board/xilinx/zynqmp/Makefile | 10 +++++++++-
-> + 4 files changed, 60 insertions(+), 2 deletions(-)
-> + create mode 100644 board/xilinx/Kconfig
-> +
-> +diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-> +index 22234cde2ab6..e04979d0ef7e 100644
-> +--- a/arch/arm/Kconfig
-> ++++ b/arch/arm/Kconfig
-> +@@ -1293,4 +1293,5 @@ source "board/technologic/ts4600/Kconfig"
-> + source "board/vscom/baltos/Kconfig"
-> + source "board/woodburn/Kconfig"
-> + source "board/work-microwave/work_92105/Kconfig"
-> ++source "board/xilinx/Kconfig"
+ Actually, it was not submitted, it was rejected... So the review does make
+sense, if you want to make a case to keep it after all.
 
-This patch does not apply with U-Boot 2018.07 - I don't know which 
-version of U-Boot it is desired to maintain compatibility against. But 
-it was a pretty small change to make it apply again, just adding:
- > source "board/xilinx/zynqmp/Kconfig"
-below the line the patch adds.
+ Regards,
+ Arnout
 
-<snip>
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 03bd7ea743ed..e4571a6ccf9f 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -274,6 +274,17 @@ define UBOOT_INSTALL_IMAGES_CMDS
->   			$(BINARIES_DIR)/boot.scr)
->   endef
->   
-> +ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
-> +
-> +ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE)),)
-> +define UBOOT_ZYNQMP_KCONFIG_PSU_INIT
-> +	$(call KCONFIG_SET_OPT,CONFIG_XILINX_PS_INIT_FILE,"$(TOPDIR)/$(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE))", \
-> +           $(@D)/.config)
-
-I think you should get rid of the "$(TOPDIR)/" part and let the user 
-specify it as part of BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE if needed. 
-My psu_init files are in a path that I reference via BR2_EXTERNAL, so 
-having $(TOPDIR) prepended messed up the path to my files.
-
-> +endef
-> +endif
-> +
-> +endif # BR2_TARGET_UBOOT_ZYNQMP
-> +
->   define UBOOT_INSTALL_OMAP_IFT_IMAGE
->   	cp -dpf $(@D)/$(UBOOT_BIN_IFT) $(BINARIES_DIR)/
->   endef
-> @@ -323,6 +334,10 @@ UBOOT_DEPENDENCIES += host-mkpimage
->   UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_CRC_ALTERA_SOCFPGA_IMAGE
->   endif
->   
-> +define UBOOT_KCONFIG_FIXUP_CMDS
-> +	$(UBOOT_ZYNQMP_KCONFIG_PSU_INIT)
-> +endef
-> +
->   ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
->   ifeq ($(BR_BUILDING),y)
->   ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
-> -- 2.7.4
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
