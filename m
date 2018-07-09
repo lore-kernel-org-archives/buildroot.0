@@ -1,49 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 09 Jul 2018 19:53:51 +0200
-Subject: [Buildroot] [PATCH 1/3] ti-sgx-libgbm: new package
-References: <1530773875-19452-1-git-send-email-tolvupostur@gmail.com>
-Message-ID: <f2kc1fxkra.ln2@ID-313208.user.individual.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  9 Jul 2018 20:17:30 +0200
+Subject: [Buildroot] [PATCH 1/1] szip: bump to version 2.1.1
+Message-ID: <20180709181730.10109-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 05 Jul 2018 08:57:53 +0200 schrieb Einar Jon Gunnarsson:
+Add hash for license file
 
-> --- /dev/null
-> +++ b/package/ti-sgx-libgbm/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_TI_SGX_LIBGBM
-> +	bool "ti-sgx-libgbm"
-> +	depends on BR2_PACKAGE_TI_SGX_KM
-> +	select BR2_PACKAGE_WAYLAND
-> +	help
-> +	  This package provides libgbm.so.2 for the
-> +	  TI SGX implementation
-> +
-> +	  https://git.ti.com/glsdk/libgbm
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/szip/szip.hash | 3 ++-
+ package/szip/szip.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-a similar patch was posted two years ago:
-http://lists.busybox.net/pipermail/buildroot/2016-July/167443.html
-
-Back then Thomas wrote:
-"Is this libgbm a TI-specific implementation of the libgm available in
- Mesa ? If that's the case, then it's going to be complicated to
- package, as we would have two implementations of the same API."
-
-Working on the next bump of Kodi to v18 I needed to build mesa3d with 
-libgbm only, no x11, no wayland. To do so I created a virtual package for 
-libgbm which could be used by your package as well to solve the problem 
-Thomas noted:
-
-https://github.com/bkuhls/buildroot/commit/
-af585ebdd2627980eda0581f99aa844c7292d4de
-
-https://github.com/bkuhls/buildroot/
-commit/92a0e96c32aac50a7e28eb0941463c21b119a727
-
-The whole code is still WIP and closely bound to my Kodi repo but you 
-should get the idea ;)
-
-Regards, Bernd
+diff --git a/package/szip/szip.hash b/package/szip/szip.hash
+index c6caf36481..3b582d901d 100644
+--- a/package/szip/szip.hash
++++ b/package/szip/szip.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 a816d95d5662e8279625abdbea7d0e62157d7d1f028020b1075500bf483ed5ef szip-2.1.tar.gz
++sha256 21ee958b4f2d4be2c9cabfa5e1a94877043609ce86fde5f286f105f7ff84d412 szip-2.1.1.tar.gz
++sha256 98cc66747133b26563fefc4630ad4c8c7848c722c7b8a60ecd4afbc4c7d7eb01 COPYING
+diff --git a/package/szip/szip.mk b/package/szip/szip.mk
+index f3a47581bf..7a8a5a82e6 100644
+--- a/package/szip/szip.mk
++++ b/package/szip/szip.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SZIP_VERSION = 2.1
+-SZIP_SITE = http://www.hdfgroup.org/ftp/lib-external/szip/2.1/src
++SZIP_VERSION = 2.1.1
++SZIP_SITE = http://www.hdfgroup.org/ftp/lib-external/szip/2.1.1/src
+ SZIP_LICENSE = szip license
+ SZIP_LICENSE_FILES = COPYING
+ SZIP_INSTALL_STAGING = YES
+-- 
+2.14.1
