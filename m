@@ -1,69 +1,71 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sun,  8 Jul 2018 18:16:19 -0300
-Subject: [Buildroot] [PATCH v2 2/2] configs/imx7d-sdb: Add new defconfig
-In-Reply-To: <1531084579-7949-1-git-send-email-festevam@gmail.com>
-References: <1531084579-7949-1-git-send-email-festevam@gmail.com>
-Message-ID: <1531084579-7949-2-git-send-email-festevam@gmail.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Sun, 8 Jul 2018 22:39:55 -0300 (BRT)
+Subject: [Buildroot] [PATCH 16/50 v2] package/busybox: invert dependency
+ with rsyslog
+In-Reply-To: <68f785bd3f381be0d4371617fa06a60a51aa6d38.1531043163.git.yann.morin.1998@free.fr>
+References: <cover.1531043163.git.yann.morin.1998@free.fr>
+ <68f785bd3f381be0d4371617fa06a60a51aa6d38.1531043163.git.yann.morin.1998@free.fr>
+Message-ID: <891924259.2223860.1531100395258.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduce imx7d-sdb_defconfig that allows booting imx7d-sdb
-board using U-Boot and kernel mainline instead of the
-vendor provided versions.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
-Changes since v1:
-- None
 
- configs/imx7d-sdb_defconfig | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 configs/imx7d-sdb_defconfig
+----- Original Message -----
+> From: "Yann Morin" <yann.morin.1998@free.fr>
+> To: "buildroot" <buildroot@buildroot.org>
+> Cc: "Yann Morin" <yann.morin.1998@free.fr>, "DATACOM" <casantos@datacom.com.br>
+> Sent: Sunday, July 8, 2018 6:45:41 AM
+> Subject: [PATCH 16/50 v2] package/busybox: invert dependency with rsyslog
 
-diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
-new file mode 100644
-index 0000000..b1cc5f8
---- /dev/null
-+++ b/configs/imx7d-sdb_defconfig
-@@ -0,0 +1,36 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+
-+# Linux headers same as kernel, a 4.17 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# U-Boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
-+BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
-+
-+# Filesystem
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+
-+# required tools to create the eMMC image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Carlos Santos <casantos@datacom.com.br>
+> 
+> ---
+> Changes v1 -> v2:
+>  - s/rsyslogd/rsyslog/  (Carlos)
+> ---
+> package/busybox/busybox.mk | 1 +
+> package/rsyslog/rsyslog.mk | 5 -----
+> 2 files changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index 00e17c4be6..22b798207a 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -22,6 +22,7 @@ BUSYBOX_LDFLAGS = \
+> 
+> # Packages that provide commands that may also be busybox applets:
+> BUSYBOX_DEPENDENCIES = \
+> +	$(if $(BR2_PACKAGE_RSYSLOGD),rsyslog) \
+> 	$(if $(BR2_PACKAGE_START_STOP_DAEMON),start-stop-daemon) \
+> 	$(if $(BR2_PACKAGE_SYSKLOGD),sysklogd) \
+> 	$(if $(BR2_PACKAGE_SYSLOG_NG),syslog-ng) \
+> diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+> index e32505be22..61e08ba765 100644
+> --- a/package/rsyslog/rsyslog.mk
+> +++ b/package/rsyslog/rsyslog.mk
+> @@ -17,11 +17,6 @@ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+> RSYSLOG_CONF_OPTS = --disable-generate-man-pages \
+> 	$(foreach x,$(call qstrip,$(RSYSLOG_PLUGINS)),--enable-$(x))
+> 
+> -# Build after BusyBox
+> -ifeq ($(BR2_PACKAGE_BUSYBOX),y)
+> -RSYSLOG_DEPENDENCIES += busybox
+> -endif
+> -
+> ifeq ($(BR2_PACKAGE_GNUTLS),y)
+> RSYSLOG_DEPENDENCIES += gnutls
+> RSYSLOG_CONF_OPTS += --enable-gnutls
+> --
+> 2.14.1
+
+Reviewed-by: Carlos Santos <casantos@datacom.com.br>
+
 -- 
-2.7.4
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
