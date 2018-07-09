@@ -1,67 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Jul 2018 00:21:24 +0200
-Subject: [Buildroot] [PATCH] systemd: add an option to use busybox's
- getty
-In-Reply-To: <be826cad-71c5-10ac-aec2-bc4dc919e356@smile.fr>
-References: <20180708195429.9693-1-jeremy.rosen@smile.fr>
- <be826cad-71c5-10ac-aec2-bc4dc919e356@smile.fr>
-Message-ID: <2708cb51-e9fd-2176-a129-98202de43ddf@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 10 Jul 2018 00:42:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tar: bump version to 1.30
+Message-ID: <20180709224218.32080-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added license hash.
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/tar/tar.hash | 5 +++--
+ package/tar/tar.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-On 09-07-18 10:02, Romain Naour wrote:
-> Hi Jeremy,
-> 
-> Le 08/07/2018 ? 21:54, J?r?my Rosen a ?crit?:
->> Currently, the patch to replace agetty with busybox's getty is always
->> applied.
->>
->> this patch adds a compile-time option to systemd to choose either agetty
->> or busybox's getty and chooses the correct option depending on agetty being
->> selected in busybox
->>
-> 
-> As discussed privately, if you want an example on how apply a patch
-> conditionally you can take a look at the gcc package [1].
-
- I don't think we want to apply patches conditionally. In fact, J?r?my's change
-is much better, because it makes the patch upstreamable.
-
- That said, as discussed on IRC, a much easier approach would be to overwrite
-systemd's getty unit files with custom buildroot unit files in case
-UTIL_LINUX_AGETTY is not selected. Then the patch could be dropped entirely.
-
- Regards,
- Arnout
-
-> This has been introduced by [2] but there is some other place where
-> $(APPLY_PATCHES) is used (conditionally or unconditionally).
-> 
-> $(APPLY_PATCHES) is defined in package/Makefile.in but this way to use it is not
-> documented in the manual [3].
-> 
-> Best regards,
-> Romain
-> 
-> [1] https://git.busybox.net/buildroot/tree/package/gcc/gcc.mk#n41
-> [2]
-> https://git.busybox.net/buildroot/commit/?id=197006a41c1a0450bf6350d5742e186b5b0c69de
-> [3] http://nightly.buildroot.org/manual.html#patch-policy
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+index e5634566e0..efa7bb3520 100644
+--- a/package/tar/tar.hash
++++ b/package/tar/tar.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated after checking signature
+-sha256	402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024	tar-1.29.tar.xz
+-sha256	9173f222464dd3676118408840da5990527062b5c7daf6487bed7c396c45bfb1	tar-1.29.cpio.gz
++sha256 f1bf92dbb1e1ab27911a861ea8dde8208ee774866c46c0bb6ead41f4d1f4d2d3  tar-1.30.tar.xz
++sha256 29a12eebde6bda10b74ede856a159cb6cf8739fdc4d1b48354c9e79c4f658ee3  tar-1.30.cpio.gz
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index 6f609d7a02..227475dd3f 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TAR_VERSION = 1.29
++TAR_VERSION = 1.30
+ TAR_SOURCE = tar-$(TAR_VERSION).tar.xz
+ TAR_SITE = $(BR2_GNU_MIRROR)/tar
+ # busybox installs in /bin, so we need tar to install as well in /bin
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.18.0
