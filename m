@@ -1,50 +1,51 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  9 Jul 2018 19:45:49 +0200
-Subject: [Buildroot] [PATCH 7/7] package/x11r7/xlib_libdmx: bump version to
- 1.1.4
-In-Reply-To: <20180709174549.10744-1-bernd.kuhls@t-online.de>
-References: <20180709174549.10744-1-bernd.kuhls@t-online.de>
-Message-ID: <20180709174549.10744-7-bernd.kuhls@t-online.de>
+Date: Mon, 09 Jul 2018 19:45:36 +0200
+Subject: [Buildroot] [PATCH v3 00/22] package/x11r7/xserver_xorg-server:
+ bump version to 1.20.0
+References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+ <20180703215602.GG2530@scaer>
+Message-ID: <0jjc1fxkra.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash and all hashes provided by upstream.
+Hi Yann,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x11r7/xlib_libdmx/xlib_libdmx.hash | 9 +++++++--
- package/x11r7/xlib_libdmx/xlib_libdmx.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+thank you for your review!
 
-diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.hash b/package/x11r7/xlib_libdmx/xlib_libdmx.hash
-index 9f715359be..1090e3c2d5 100644
---- a/package/x11r7/xlib_libdmx/xlib_libdmx.hash
-+++ b/package/x11r7/xlib_libdmx/xlib_libdmx.hash
-@@ -1,2 +1,7 @@
--# From http://lists.freedesktop.org/archives/xorg-announce/2013-May/002225.html
--sha256	c97da36d2e56a2d7b6e4f896241785acc95e97eb9557465fd66ba2a155a7b201	libdmx-1.1.3.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-May/002894.html
-+md5 d2f1f0ec68ac3932dd7f1d9aa0a7a11c  libdmx-1.1.4.tar.bz2
-+sha1 499e2540ca0e94ca858037865243c3c60908fd94  libdmx-1.1.4.tar.bz2
-+sha256 253f90005d134fa7a209fbcbc5a3024335367c930adf0f3203e754cf32747243  libdmx-1.1.4.tar.bz2
-+sha512 77aba6cadfd17db0cc7e1bc26f14d908223a0fdb135d46f86c3be34e3bc7e2f843f08d4d0ef773357e83b17122bffe56a0442d12908378c05a22177b10ae10e9  libdmx-1.1.4.tar.bz2
-+# Locally computed
-+sha256 819e8dcd3dd2a44850c350331aa492230f86bccb0983dd739dec5ba36d7d2b8e  COPYING
-diff --git a/package/x11r7/xlib_libdmx/xlib_libdmx.mk b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-index fbe3067fe1..01ff493201 100644
---- a/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-+++ b/package/x11r7/xlib_libdmx/xlib_libdmx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBDMX_VERSION = 1.1.3
-+XLIB_LIBDMX_VERSION = 1.1.4
- XLIB_LIBDMX_SOURCE = libdmx-$(XLIB_LIBDMX_VERSION).tar.bz2
- XLIB_LIBDMX_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBDMX_LICENSE = MIT
--- 
-2.18.0
+Am Tue, 03 Jul 2018 23:56:02 +0200 schrieb Yann E. MORIN:
+
+>>   package/x11r7/xdriver_xf86-video-mach64: bump version to 6.9.6
+>>   package/x11r7/xdriver_xf86-video-vmware: bump version to 13.3.0
+>>   package/x11r7/xdriver_xf86-input-mouse: bump version to 1.9.3
+> 
+> I skipped the review, they look simple, so I concentrated on the
+> following patches:
+> 
+>>   package/x11r7/xdriver_xf86-video-r128: add patch to fix support for
+>>     xserver_xorg-server 1.20.0
+>>   package/x11r7/xdriver_xf86-video-savage: add patch to fix support for
+>>     xserver_xorg-server 1.20.0
+>>   package/x11r7/xdriver_xf86-video-sis: add upstream patch to fix
+>>     support for xserver_xorg-server 1.20.0
+> 
+> r128, savage, and sis are all very, very old now. Like, 20 years or
+> more... I wonder if it makes sense to keep them, given that none of
+> those three natively cross-compile, and are starting to require patches
+> to build against a recent X stack. The latter meaning that upstream is
+> not even test-building those drivers anymore...
+
+Up until now and even including the current bump to xserver_xorg-server 
+1.20.0 I am still willing to support even the oldest drivers if I can 
+find the necessary patches somewhere so from my POV it is ok to keep 
+them. If Thomas or Peter think otherwise I can remove them since I have 
+no personal interest in them ;)
+
+Right now I am preparing a smaller patch series bumping some x11r7 
+packages, splitting four xdriver_xf86* packages from this series along 
+with three recent bumps by upstream. After that in the coming days I will 
+send v4 of the xserver bump series.
+
+Regards, Bernd
