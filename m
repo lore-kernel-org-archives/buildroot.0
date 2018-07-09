@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  9 Jul 2018 19:45:43 +0200
-Subject: [Buildroot] [PATCH 1/7] package/x11r7/xdriver_xf86-video-mach64:
- bump version to 6.9.6
-Message-ID: <20180709174549.10744-1-bernd.kuhls@t-online.de>
+Date: Mon,  9 Jul 2018 19:45:48 +0200
+Subject: [Buildroot] [PATCH 6/7] package/x11r7/xlib_libXinerama: bump
+ version to 1.1.4
+In-Reply-To: <20180709174549.10744-1-bernd.kuhls@t-online.de>
+References: <20180709174549.10744-1-bernd.kuhls@t-online.de>
+Message-ID: <20180709174549.10744-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,36 +15,36 @@ Added license hash and all hashes provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-mach64.hash                       | 9 +++++++--
- .../xdriver_xf86-video-mach64.mk                         | 2 +-
+ package/x11r7/xlib_libXinerama/xlib_libXinerama.hash | 9 +++++++--
+ package/x11r7/xlib_libXinerama/xlib_libXinerama.mk   | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash
-index 43a7fa707e..55acd74652 100644
---- a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash
-+++ b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash
+diff --git a/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash b/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash
+index 6dfd7770d2..995181dd16 100644
+--- a/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash
++++ b/package/x11r7/xlib_libXinerama/xlib_libXinerama.hash
 @@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-May/002599.html
--sha256	3e98985b6e044189efd42342862208f472881c25debf22230a1d54a96d71b41f	xf86-video-mach64-6.9.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-May/002896.html
-+md5 0e12f9a3b5659e1e27e03adc42b04d99  xf86-video-mach64-6.9.6.tar.bz2
-+sha1 1fdf0c3488ab88cb46b563efee166a5d54a01932  xf86-video-mach64-6.9.6.tar.bz2
-+sha256 7a0707c71bb522430f83bb5e9d9ee697e661e35534a3a2d10834f86b327a3c9c  xf86-video-mach64-6.9.6.tar.bz2
-+sha512 687f6ac60491b704d5c4788463763d2f4bf725611e10bd2163156963fe0a8fdbffe0a1b7c737eff131f01759e43b5ec3544a7dabe66a67e85b286dcb969da2f1  xf86-video-mach64-6.9.6.tar.bz2
+-# From http://lists.x.org/archives/xorg-announce/2013-May/002231.html
+-sha256	7a45699f1773095a3f821e491cbd5e10c887c5a5fce5d8d3fced15c2ff7698e2	libXinerama-1.1.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-July/002905.html
++md5 0d5f826a197dae74da67af4a9ef35885  libXinerama-1.1.4.tar.bz2
++sha1 34a1d9908ffbd46805d2357c6b05f5e341a8dc7c  libXinerama-1.1.4.tar.bz2
++sha256 0008dbd7ecf717e1e507eed1856ab0d9cf946d03201b85d5dcf61489bb02d720  libXinerama-1.1.4.tar.bz2
++sha512 cff777ad942614fbf6bc6d8529f399e62debf3ecbf6cc0694a94e38c022bf929ffd5636fb59f55533c394d89b23af3ea51fa5128927f12a85787e16239330f14  libXinerama-1.1.4.tar.bz2
 +# Locally computed
-+sha256 a7d68021893bced0d709338a59a137c74b11e624880e110e4a2f14ccef475120  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-index 599036033d..ca24d39e43 100644
---- a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-+++ b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
++sha256 f661fd883b6e980b3b118e0fbe230fbf10eef8d4d4a35931355f29ed647ddbe3  COPYING
+diff --git a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
+index ee8bf55602..3c2a505bc8 100644
+--- a/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
++++ b/package/x11r7/xlib_libXinerama/xlib_libXinerama.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_MACH64_VERSION = 6.9.5
-+XDRIVER_XF86_VIDEO_MACH64_VERSION = 6.9.6
- XDRIVER_XF86_VIDEO_MACH64_SOURCE = xf86-video-mach64-$(XDRIVER_XF86_VIDEO_MACH64_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_MACH64_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_MACH64_LICENSE = MIT
+-XLIB_LIBXINERAMA_VERSION = 1.1.3
++XLIB_LIBXINERAMA_VERSION = 1.1.4
+ XLIB_LIBXINERAMA_SOURCE = libXinerama-$(XLIB_LIBXINERAMA_VERSION).tar.bz2
+ XLIB_LIBXINERAMA_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXINERAMA_LICENSE = MIT
 -- 
 2.18.0
