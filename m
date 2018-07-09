@@ -1,43 +1,50 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  9 Jul 2018 19:18:02 +0200
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_1/1=5D_=C3=82package/dovecot=3A_b?=
- =?utf-8?q?ump_version_to_2=2E3=2E2=2E1?=
-Message-ID: <20180709171802.8791-1-bernd.kuhls@t-online.de>
+Date: Mon,  9 Jul 2018 19:45:44 +0200
+Subject: [Buildroot] [PATCH 2/7] package/x11r7/xdriver_xf86-video-vmware:
+ bump version to 13.3.0
+In-Reply-To: <20180709174549.10744-1-bernd.kuhls@t-online.de>
+References: <20180709174549.10744-1-bernd.kuhls@t-online.de>
+Message-ID: <20180709174549.10744-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Added license hash and all hashes provided by upstream.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../xdriver_xf86-video-vmware.hash                       | 9 +++++++--
+ .../xdriver_xf86-video-vmware.mk                         | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index 46774e0d2e..857c976a8f 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 6e48f0fa60768427f03035b0a3e93d1ae29b972bb2bd9ca998ccc6a0f6dae393  dovecot-2.3.2.tar.gz
-+sha256 4a65118508dc7a562e5f90dd7c3f56219fff22367c496f17d77cd0c7e2724e34  dovecot-2.3.2.1.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 3923ee9e05..c93d4ff4a3 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
+index 8d948a7d4c..f07e061478 100644
+--- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
++++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2016-November/002743.html
+-sha256 e2f7f7101fba7f53b268e7a25908babbf155b3984fb5268b3d244eb6c11bf62b  xf86-video-vmware-13.2.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-May/002895.html
++md5 08d66d062055080ff699ab4869726ea2  xf86-video-vmware-13.3.0.tar.bz2
++sha1 f01335fe6bdb507e749571bfcd69163aed97312a  xf86-video-vmware-13.3.0.tar.bz2
++sha256 47971924659e51666a757269ad941a059ef5afe7a47b5101c174a6022ac4066c  xf86-video-vmware-13.3.0.tar.bz2
++sha512 c318de893cae7b2b11e11c1b389ee47478b7c8d1f52c27099dbe453efec28f3e9da449217307a8c2251999eada66312f766996be1a6ead413b8b6dedc42c68ca  xf86-video-vmware-13.3.0.tar.bz2
++# Locally computed
++sha256 7e59b8ca2a161855a60561f27ada8dfdbb678733eacdb23423fff6d21f9ad43b  COPYING
+diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+index 1b2066d277..63a27a26dd 100644
+--- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
++++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).2
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).2.1
- DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+-XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.2.1
++XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.3.0
+ XDRIVER_XF86_VIDEO_VMWARE_SOURCE = xf86-video-vmware-$(XDRIVER_XF86_VIDEO_VMWARE_VERSION).tar.bz2
+ XDRIVER_XF86_VIDEO_VMWARE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_VIDEO_VMWARE_LICENSE = MIT
 -- 
 2.18.0
