@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  9 Jul 2018 19:45:44 +0200
-Subject: [Buildroot] [PATCH 2/7] package/x11r7/xdriver_xf86-video-vmware:
- bump version to 13.3.0
+Date: Mon,  9 Jul 2018 19:45:45 +0200
+Subject: [Buildroot] [PATCH 3/7] package/x11r7/xdriver_xf86-input-mouse:
+ bump version to 1.9.3
 In-Reply-To: <20180709174549.10744-1-bernd.kuhls@t-online.de>
 References: <20180709174549.10744-1-bernd.kuhls@t-online.de>
-Message-ID: <20180709174549.10744-2-bernd.kuhls@t-online.de>
+Message-ID: <20180709174549.10744-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,36 +15,36 @@ Added license hash and all hashes provided by upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../xdriver_xf86-video-vmware.hash                       | 9 +++++++--
- .../xdriver_xf86-video-vmware.mk                         | 2 +-
+ .../xdriver_xf86-input-mouse.hash                        | 9 +++++++--
+ .../xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk | 2 +-
  2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
-index 8d948a7d4c..f07e061478 100644
---- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
-+++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.hash
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
+index caba427b22..551ff9d844 100644
+--- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
++++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.hash
 @@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2016-November/002743.html
--sha256 e2f7f7101fba7f53b268e7a25908babbf155b3984fb5268b3d244eb6c11bf62b  xf86-video-vmware-13.2.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-May/002895.html
-+md5 08d66d062055080ff699ab4869726ea2  xf86-video-vmware-13.3.0.tar.bz2
-+sha1 f01335fe6bdb507e749571bfcd69163aed97312a  xf86-video-vmware-13.3.0.tar.bz2
-+sha256 47971924659e51666a757269ad941a059ef5afe7a47b5101c174a6022ac4066c  xf86-video-vmware-13.3.0.tar.bz2
-+sha512 c318de893cae7b2b11e11c1b389ee47478b7c8d1f52c27099dbe453efec28f3e9da449217307a8c2251999eada66312f766996be1a6ead413b8b6dedc42c68ca  xf86-video-vmware-13.3.0.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2016-November/002740.html
+-sha256 f425d5b05c6ab412a27e0a1106bb83f9e2662b307210abbe48270892387f4b2f  xf86-input-mouse-1.9.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-June/002903.html
++md5 a2104693bbcfe1413397f7905eecd3dc  xf86-input-mouse-1.9.3.tar.bz2
++sha1 b3982998808ba43117fc066c4ecc94ce67c5818e  xf86-input-mouse-1.9.3.tar.bz2
++sha256 93ecb350604d05be98b7d4e5db3b8155a44890069a7d8d6b800c0bea79c85cc5  xf86-input-mouse-1.9.3.tar.bz2
++sha512 d99f5b4b1ef1aa4cbf1a92549e412f54f121bc804e4d6643248ad7ea18081b38b958bd289dc8476ebc0f6ef5f7424c2f2a8abcfaa30cae5378829549af6b148f  xf86-input-mouse-1.9.3.tar.bz2
 +# Locally computed
-+sha256 7e59b8ca2a161855a60561f27ada8dfdbb678733eacdb23423fff6d21f9ad43b  COPYING
-diff --git a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-index 1b2066d277..63a27a26dd 100644
---- a/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
-+++ b/package/x11r7/xdriver_xf86-video-vmware/xdriver_xf86-video-vmware.mk
++sha256 472ff645ead9bf3ffb48d42c596376ffc595897e0c0993a071a7ada0da1f4f10  COPYING
+diff --git a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
+index 5bcbeb70fd..97ee452f9c 100644
+--- a/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
++++ b/package/x11r7/xdriver_xf86-input-mouse/xdriver_xf86-input-mouse.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.2.1
-+XDRIVER_XF86_VIDEO_VMWARE_VERSION = 13.3.0
- XDRIVER_XF86_VIDEO_VMWARE_SOURCE = xf86-video-vmware-$(XDRIVER_XF86_VIDEO_VMWARE_VERSION).tar.bz2
- XDRIVER_XF86_VIDEO_VMWARE_SITE = http://xorg.freedesktop.org/releases/individual/driver
- XDRIVER_XF86_VIDEO_VMWARE_LICENSE = MIT
+-XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.2
++XDRIVER_XF86_INPUT_MOUSE_VERSION = 1.9.3
+ XDRIVER_XF86_INPUT_MOUSE_SOURCE = xf86-input-mouse-$(XDRIVER_XF86_INPUT_MOUSE_VERSION).tar.bz2
+ XDRIVER_XF86_INPUT_MOUSE_SITE = http://xorg.freedesktop.org/releases/individual/driver
+ XDRIVER_XF86_INPUT_MOUSE_LICENSE = MIT
 -- 
 2.18.0
