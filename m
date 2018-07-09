@@ -1,22 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 09 Jul 2018 23:45:52 +0200
-Subject: [Buildroot] [PATCH 1/1] snappy: bump to version 1.1.7
-In-Reply-To: <20180708194448.31093-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 8 Jul 2018 21:44:48 +0200")
-References: <20180708194448.31093-1-fontaine.fabrice@gmail.com>
-Message-ID: <87d0vwxeun.fsf@dell.be.48ers.dk>
+Date: Mon, 09 Jul 2018 23:50:21 +0200
+Subject: [Buildroot] [PATCH 1/1] genimage: bump to version 10
+In-Reply-To: <DB3PR0402MB38023CF77C8DC4EF166C655482450@DB3PR0402MB3802.eurprd04.prod.outlook.com>
+ (50ty-one@live.de's message of "Sun, 8 Jul 2018 16:14:33 +0000")
+References: <DB3PR0402MB38023CF77C8DC4EF166C655482450@DB3PR0402MB3802.eurprd04.prod.outlook.com>
+Message-ID: <878t6kxen6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "50ty-one" == 50ty-one  <50ty-one@live.de> writes:
 
- > Add hash for license file
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Rommel, Stefan <50ty-one@live.de>
 
-Committed, thanks.
+Please use your real name in From: as well (git config user.name).
+
+Committed after extending the commit message with a short overview of
+the new features in this release, thanks.
 
 -- 
 Bye, Peter Korsgaard
