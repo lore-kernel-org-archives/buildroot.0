@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Jul 2018 00:00:25 +0200
-Subject: [Buildroot] [PATCH 5/8] sysklogd: update S01logging
-In-Reply-To: <20180709033134.22175-6-casantos@datacom.com.br>
+Date: Tue, 10 Jul 2018 00:04:08 +0200
+Subject: [Buildroot] [PATCH 6/8] sysklogd: add logging configuration file
+In-Reply-To: <20180709033134.22175-7-casantos@datacom.com.br>
 References: <20180709033134.22175-1-casantos@datacom.com.br>
- <20180709033134.22175-6-casantos@datacom.com.br>
-Message-ID: <63d82074-c817-927b-995f-c7837b2209ed@mind.be>
+ <20180709033134.22175-7-casantos@datacom.com.br>
+Message-ID: <7059f810-54a7-dc55-d4e3-d3f20dbc2573@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,19 +14,24 @@ To: buildroot@busybox.net
 
 
 On 09-07-18 05:31, Carlos Santos wrote:
-> +		start-stop-daemon -b -S -q -p /var/run/syslogd.pid -x /sbin/syslogd -- -n $SYSLOGD_ARGS && \
-> +		start-stop-daemon -b -S -q -p /var/run/klogd.pid -x /sbin/klogd -- -n $KLOGD_ARGS && \
+> +# Use KLOGD_RELOAD to select the "S01logging reload" behavior.
+> +# - "USR1" will cause the kernel module symbols to be reloaded.
+> +# - "USR2" will cause both the static kernel symbols and the kernel module
+> +#   symbols to be reloaded.
+> +# - "0" will do nothing.
+> +# - Do not use any other value here. Use kill(1) for fine-grained control of
+> +#   klogd, as documented in its manual page.
+> +# KLOGD_RELOAD="0" # (default value)
 
- Just like rsyslogd, I believe syslogd and klogd can background and create a PID
-file themselves. In that case, it's better not to use start-stop-daemon's -b option.
-
- Note that this is different for systemd units, because systemd does actual
-monitoring of the processes it starts; it can only do that if the process
-doesn't background itself. In sysvinit, however, there is no monitoring so it's
-better if daemons daemonize themselves.
+ I don't really think it makes much sense to have this configurable. I don't see
+any real need to ever do reloading of klogd in buildroot context (you're not
+going to dynamically install kernel modules, are you?). In the rare cases that
+this does happen, the user should be smart enough to send a SIGUSR1/2. Let's
+just drop all this klogd reloading.
 
  Regards,
  Arnout
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
