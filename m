@@ -1,44 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jul 2018 23:45:50 +0200
-Subject: [Buildroot] [git commit] snappy: bump to version 1.1.7
-Message-ID: <20180709214918.698727FADB@busybox.osuosl.org>
+Date: Mon, 9 Jul 2018 23:46:39 +0200
+Subject: [Buildroot] [git commit] genimage: bump to version 10
+Message-ID: <20180709214918.7303E7FADB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ede1bc996aac8744a0d9bbd50cf7071323e638d6
+commit: https://git.buildroot.net/buildroot/commit/?id=3a66d0df644b8f3ad5c595e844015f7e65449366
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+Adds cramfs and FIT image support.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Rommel, Stefan <50ty-one@live.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/snappy/snappy.hash | 3 ++-
- package/snappy/snappy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/genimage/genimage.hash | 2 +-
+ package/genimage/genimage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
-index 71a2500f8f..e9ac4324c0 100644
---- a/package/snappy/snappy.hash
-+++ b/package/snappy/snappy.hash
-@@ -1,2 +1,3 @@
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index 4be2fca873..095eb1413f 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
--sha256 e701cd80f1154d648c762c86140ad6873a5c9b09ed1d754e3157be8193d2c39e  snappy-be6dc3db83c4701e3e79694dcbfd1c3da03b91dd.tar.gz
-+sha256 3dfa02e873ff51a11ee02b9ca391807f0c8ea0529a4924afa645fbf97163f9d4  snappy-1.1.7.tar.gz
-+sha256 55172044f7e241207117448a4d9d6ba1d0925c8ad66b5d4c08c70adfa9cc3de6  COPYING
-diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
-index a537ade57b..74d398de81 100644
---- a/package/snappy/snappy.mk
-+++ b/package/snappy/snappy.mk
+-sha256	69f35af7edf6f4dbdac7a18ddc69dcf38c501e43d8b50c524555754c51479078	genimage-9.tar.xz
++sha256	5a36b2c1387007c2d6535a722ee257a387d0913bddcf8a94d460e6acd4d01859	genimage-10.tar.xz
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 8d11c66a25..393c3e9b94 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SNAPPY_VERSION = be6dc3db83c4701e3e79694dcbfd1c3da03b91dd
-+SNAPPY_VERSION = 1.1.7
- SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
- SNAPPY_LICENSE = BSD-3-Clause
- SNAPPY_LICENSE_FILES = COPYING
+-GENIMAGE_VERSION = 9
++GENIMAGE_VERSION = 10
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
