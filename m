@@ -1,43 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jul 2018 23:46:39 +0200
-Subject: [Buildroot] [git commit] genimage: bump to version 10
-Message-ID: <20180709214918.7303E7FADB@busybox.osuosl.org>
+Date: Mon, 9 Jul 2018 23:52:31 +0200
+Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.2.1
+Message-ID: <20180709214918.8EDFB8815A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a66d0df644b8f3ad5c595e844015f7e65449366
+commit: https://git.buildroot.net/buildroot/commit/?id=1b5a8a44ea5e9f8976184041f97832dfa1653fed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adds cramfs and FIT image support.
-
-Signed-off-by: Rommel, Stefan <50ty-one@live.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/genimage/genimage.hash | 2 +-
- package/genimage/genimage.mk   | 2 +-
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
-index 4be2fca873..095eb1413f 100644
---- a/package/genimage/genimage.hash
-+++ b/package/genimage/genimage.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	69f35af7edf6f4dbdac7a18ddc69dcf38c501e43d8b50c524555754c51479078	genimage-9.tar.xz
-+sha256	5a36b2c1387007c2d6535a722ee257a387d0913bddcf8a94d460e6acd4d01859	genimage-10.tar.xz
-diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
-index 8d11c66a25..393c3e9b94 100644
---- a/package/genimage/genimage.mk
-+++ b/package/genimage/genimage.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index 46774e0d2e..857c976a8f 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 6e48f0fa60768427f03035b0a3e93d1ae29b972bb2bd9ca998ccc6a0f6dae393  dovecot-2.3.2.tar.gz
++sha256 4a65118508dc7a562e5f90dd7c3f56219fff22367c496f17d77cd0c7e2724e34  dovecot-2.3.2.1.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 3923ee9e05..c93d4ff4a3 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GENIMAGE_VERSION = 9
-+GENIMAGE_VERSION = 10
- GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
- GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
- HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).2
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).2.1
+ DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
