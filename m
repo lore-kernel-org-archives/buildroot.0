@@ -1,42 +1,113 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 10 Jul 2018 00:59:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.3.3.8
-Message-ID: <20180709225936.9258-1-bernd.kuhls@t-online.de>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Mon, 9 Jul 2018 20:31:02 -0300 (BRT)
+Subject: [Buildroot] [PATCH 3/8] rsyslog: update S01logging
+In-Reply-To: <bc1a7b00-5a50-8084-77ad-4429c856be3c@green-communications.fr>
+References: <20180709033134.22175-1-casantos@datacom.com.br>
+ <20180709033134.22175-4-casantos@datacom.com.br>
+ <bc1a7b00-5a50-8084-77ad-4429c856be3c@green-communications.fr>
+Message-ID: <1421354433.2544023.1531179062394.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://blog.torproject.org/tor-0338-released
+> From: "Nicolas Cavallari" <Nicolas.Cavallari@green-communications.fr>
+> To: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>
+> Cc: "ratbert90" <aduskett@gmail.com>
+> Sent: Monday, July 9, 2018 5:03:37 AM
+> Subject: Re: [Buildroot] [PATCH 3/8] rsyslog: update S01logging
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Hello,
+> 
+> On 09/07/2018 05:31, Carlos Santos wrote:
+>> --- a/package/rsyslog/S01logging
+>> +++ b/package/rsyslog/S01logging
+>> @@ -1,36 +1,64 @@
+>>  #!/bin/sh
+>>  
+>> +RSYSLOGD_ARGS=""
+>> +ENABLED="yes"
+>> +
+>> +# shellcheck source=/dev/null
+>> +[ -r /etc/default/logging ] && . /etc/default/logging
+>> +
+>> +DAEMON="rsyslogd"
+>> +
+>> +test "$ENABLED" = "yes" || {
+> 
+> I find it strange to use test here and use [ ] everywhere else.
+> And why not use if here ?
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index 554d5906b6..d56855f45e 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 ea6bb512c4adfbc4e05b22e4c2d06bddff5b358a53de982273fec846b75bde0c  tor-0.3.3.7.tar.gz
-+sha256 3cf5b4fea2491cbfefa1077bf1b2855e169052d381bd920cd57aa9bfaff6b3a5  tor-0.3.3.8.tar.gz
- sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index fe22633bf6..6f977f8625 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TOR_VERSION = 0.3.3.7
-+TOR_VERSION = 0.3.3.8
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+The "[ command ] &&" sequence is less readable, IMO. I'm doing the same in all
+scripts. 
+
+>> +	printf '%s is disabled\n' "$DAEMON"
+>> +	exit 0
+>> +}
+>> +
+>>  start() {
+>> -  printf "Starting rsyslog daemon: "
+>> -  start-stop-daemon -S -q -p /var/run/rsyslogd.pid --exec /usr/sbin/rsyslogd
+>> -  [ $? = 0 ] && echo "OK" || echo "FAIL"
+>> +	printf 'Starting %s: ' "$DAEMON"
+>> +	{
+>> +		# shellcheck disable=SC2086 # we need the word splitting
+>> +		start-stop-daemon -b -S -q -p /var/run/rsyslogd.pid -x /usr/sbin/rsyslogd --
+>> -n $RSYSLOGD_ARGS && \
+> 
+> Why do you disable backgrounding in rsyslog and ask start-stop-daemon to do it
+> instead ?
+
+It prevents hanging the boot sequence by putting a seemingly innocent "-n"
+in RSYSLOGD_ARGS (in /etc/default/logging). It's impossible to interrupted
+the script with Ctrl-C because stdin is redirected to /dev/null and, since
+logging is the first service to start, there is no way to access the system
+remotely via SSH or telnet to kill rsyslogd.
+
+> This may prevent rsyslogd to report errors and exit 1 before it daemonize
+> itself.
+
+It's a trade-off. I chose safety.
+
+>> +		echo "OK"
+>> +	} || {
+>> +		echo "FAIL"
+>> +		exit 1
+>> +	}
+>>  }
+> 
+> 
+>>  restart() {
+>> -  stop
+>> -  sleep 1
+>> -  start
+>> +	printf '%s %s: ' "${1:-Restarting}" "$DAEMON"
+>> +	{
+>> +		# shellcheck disable=SC2086 # we need the word splitting
+>> +		start-stop-daemon -K -q -p /var/run/rsyslogd.pid && \
+>> +		sleep 1 && \
+>> +		start-stop-daemon -b -S -q -p /var/run/rsyslogd.pid -x /usr/sbin/rsyslogd --
+>> -n $RSYSLOGD_ARGS && \
+> 
+> This duplicates code, and the error reporting is less precise than before.  It
+> will just say "FAIL" if the daemon is not running or fails to start.
+> 
+>> +		echo "OK"
+>> +	} || {
+>> +		echo "FAIL"
+>> +		exit 1
+>> +	}
+>> +}
+>> +
+>> +# rsyslogd ignores SIGHUP, SIGUSRx, so simply restart.
+> 
+> Are you sure about that ? the man page says otherwise.
+
+I will update the comment to clarify that rsyslogd does not restart on
+SIGHUP, just closes all open files. 
+
 -- 
-2.18.0
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
