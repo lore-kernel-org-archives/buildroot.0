@@ -1,34 +1,64 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun, 8 Jul 2018 23:03:46 -0300 (BRT)
-Subject: [Buildroot] [PATCH 50/50 v2] support/scripts: don't draw most
- of busybox' dependencies
-In-Reply-To: <1404383141.2223862.1531100485070.JavaMail.zimbra@datacom.com.br>
-References: <cover.1531043163.git.yann.morin.1998@free.fr>
- <7d4417e280d8c1db48496f8e35895c4819cae957.1531043163.git.yann.morin.1998@free.fr>
- <1404383141.2223862.1531100485070.JavaMail.zimbra@datacom.com.br>
-Message-ID: <654315184.2224042.1531101826145.JavaMail.zimbra@datacom.com.br>
+Date: Mon,  9 Jul 2018 00:31:28 -0300
+Subject: [Buildroot] [PATCH 2/8] busybox: add logging configuration file
+In-Reply-To: <20180709033134.22175-1-casantos@datacom.com.br>
+References: <20180709033134.22175-1-casantos@datacom.com.br>
+Message-ID: <20180709033134.22175-3-casantos@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "DATACOM" <casantos@datacom.com.br>
-> To: "Yann Morin" <yann.morin.1998@free.fr>
-> Cc: "buildroot" <buildroot@buildroot.org>
-> Sent: Sunday, July 8, 2018 10:41:25 PM
-> Subject: Re: [Buildroot] [PATCH 50/50 v2] support/scripts: don't draw most of busybox' dependencies
-[...]
-> 
-> Reviewed-by: Carlos Santos <casantos@datacom.com.br>
-> 
+Provide a template to help users to customize syslogd and klogd without
+editting the startup script.
 
-So you start writing some review messages but leave home for some hours.
+syslogd options worth to configure are remote logging (-R), rotation
+(-s, -b) and minimal priority level (-l).
 
-Then you come back and send the messages just to realize, a few minutes
-later, that the patch was already submitted. Dooh!
+klogd minimal priority level (-c) can be configured too, preventing
+non-critical kernel messages from appearing on the console.
 
+This file is also useful as an example for init script authors.
+
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+---
+ package/busybox/busybox.mk          |  2 ++
+ package/busybox/etc.default.logging | 13 +++++++++++++
+ 2 files changed, 15 insertions(+)
+ create mode 100644 package/busybox/etc.default.logging
+
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 5266f844b6..fac2c394cf 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -252,6 +252,8 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+ 	then \
+ 		$(INSTALL) -m 0755 -D package/busybox/S01logging \
+ 			$(TARGET_DIR)/etc/init.d/S01logging; \
++		$(INSTALL) -m 0644 -D package/busybox/etc.default.logging \
++			$(TARGET_DIR)/etc/default/logging; \
+ 	fi
+ endef
+ 
+diff --git a/package/busybox/etc.default.logging b/package/busybox/etc.default.logging
+new file mode 100644
+index 0000000000..6775622779
+--- /dev/null
++++ b/package/busybox/etc.default.logging
+@@ -0,0 +1,13 @@
++#
++# /etc/default/logging (busybox version)
++#
++
++# Use SYSLOGD_ARGS to pass additional arguments to syslogd (e.g. for log
++# rotation).
++# SYSLOGD_ARGS="" # (default value)
++
++# Use KLOGD_ARGS to pass additional arguments to klogd.
++# KLOGD_ARGS="" # (default value)
++
++# Uncomment the line below to disable this service
++# ENABLED="no"
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.17.1
