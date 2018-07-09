@@ -1,32 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 9 Jul 2018 23:45:17 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.17.5
-Message-ID: <20180709214918.5B67E8815A@busybox.osuosl.org>
+Date: Mon, 9 Jul 2018 23:45:50 +0200
+Subject: [Buildroot] [git commit] snappy: bump to version 1.1.7
+Message-ID: <20180709214918.698727FADB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c48ca9e49302719d60373ca846bfbcf70d1ed6e6
+commit: https://git.buildroot.net/buildroot/commit/?id=ede1bc996aac8744a0d9bbd50cf7071323e638d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Add hash for license file
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/snappy/snappy.hash | 3 ++-
+ package/snappy/snappy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index d3ea3440da..9e53adb8bd 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
+diff --git a/package/snappy/snappy.hash b/package/snappy/snappy.hash
+index 71a2500f8f..e9ac4324c0 100644
+--- a/package/snappy/snappy.hash
++++ b/package/snappy/snappy.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 e701cd80f1154d648c762c86140ad6873a5c9b09ed1d754e3157be8193d2c39e  snappy-be6dc3db83c4701e3e79694dcbfd1c3da03b91dd.tar.gz
++sha256 3dfa02e873ff51a11ee02b9ca391807f0c8ea0529a4924afa645fbf97163f9d4  snappy-1.1.7.tar.gz
++sha256 55172044f7e241207117448a4d9d6ba1d0925c8ad66b5d4c08c70adfa9cc3de6  COPYING
+diff --git a/package/snappy/snappy.mk b/package/snappy/snappy.mk
+index a537ade57b..74d398de81 100644
+--- a/package/snappy/snappy.mk
++++ b/package/snappy/snappy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.17.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.17.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+-SNAPPY_VERSION = be6dc3db83c4701e3e79694dcbfd1c3da03b91dd
++SNAPPY_VERSION = 1.1.7
+ SNAPPY_SITE = $(call github,google,snappy,$(SNAPPY_VERSION))
+ SNAPPY_LICENSE = BSD-3-Clause
+ SNAPPY_LICENSE_FILES = COPYING
