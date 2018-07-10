@@ -1,88 +1,31 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Tue, 10 Jul 2018 10:34:15 -0700
-Subject: [Buildroot] Guide for installing Chromium using patch sets
-In-Reply-To: <CAD0+TpAc6473JO3H24CLwxUwc0WXZ5n8es1xJctnyhUEESrwWg@mail.gmail.com>
-References: <CAD0+TpAc6473JO3H24CLwxUwc0WXZ5n8es1xJctnyhUEESrwWg@mail.gmail.com>
-Message-ID: <CAMWSM7iJjfVUY_Yw13u+gg73eShK5pwh5+1yawWRV+Z-qAhGTw@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 10 Jul 2018 20:22:26 +0200
+Subject: [Buildroot] [PATCH 1/1] brltty: add optional at-spi2-core dependency
+Message-ID: <20180710182226.10485-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fame,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/brltty/brltty.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-On Tue, Jul 10, 2018 at 4:05 AM Fame Castle <famecastle@gmail.com> wrote:
->
-> I am trying to install chromium to my buildroot target using Joseph Kogut's patch sets at https://patchwork.ozlabs.org/project/buildroot/list/?series=51418. I already had to figure out that I had to apply the patches from bottom to top. But then, I was able to patch all the files successfully using `curl "{path to the individual patch's mbox}" | git apply --whitespace=fix` .
->
-> I did a clean make and came across the following problem reported during chromium configuration:
->
-> > /home/buildroot/output/build/chromium-67.0.3396.79/printing/cups_config_helper.py
-> > --api-version
-> > Returned 1.
-> > stderr:
-> >
-> > Traceback (most recent call last):
-> >   File
-> > "/home/buildroot/output/build/chromium-67.0.3396.79/printing/cups_config_helper.py",
-> > line 106, in <module>
-> >     sys.exit(main())
-> >   File
-> > "/home/buildroot/output/build/chromium-67.0.3396.79/printing/cups_config_helper.py",
-> > line 76, in main
-> >     subprocess.call([cups_config, '--api-version'])
-> >   File
-> > "/home/buildroot/output/host/lib/python2.7/subprocess.py",
-> > line 168, in call
-> >     return Popen(*popenargs, **kwargs).wait()
-> >   File
-> > "/home/buildroot/output/host/lib/python2.7/subprocess.py",
-> > line 390, in __init__
-> >     errread, errwrite)
-> >   File
-> > "/home/buildroot/output/host/lib/python2.7/subprocess.py",
-> > line 1025, in _execute_child
-> >     raise child_exception
-> > OSError: [Errno 2] No such file or directory
-> >
-> > See //BUILD.gn:141:7: which caused the file to be included.
-> >       "//printing:printing_unittests",
-> >       ^------------------------------
-> > package/pkg-generic.mk:213: recipe for target
->
-> It seems that cups_config_helper.py can't find a cups-config binary. You replied to a similar problem here "http://lists.busybox.net/pipermail/buildroot/2018-June/223810.html"
-
-It seems the sysroot wasn't enabled, causing the build to fail when
-the requirements, such as cups, weren't installed on the host. I'm
-working on a patch right now to fix this. In the mean time, changing
-"use_sysroot=false" to "use_sysroot=true" in the package makefile
-should fix this.
-
-> in which you speak of a v4 patch set, where this problem should be fixed. But the latest patch set is v5.
-
-This patchset is an RFC, and needs more testing with various
-configurations. Chromium is a very large codebase, with a lot of
-dependencies and configuration options, and there's certainly going to
-be a lot of ways to break the build until the package gets more
-testing and improvements. Feedback from people like you is what this
-package needs.
-
-> I am confused and don't understand which patches I have to apply to make the build work. Furthermore, the patch series at https://patchwork.ozlabs.org/project/buildroot/list/?series=51418 only contains patch 3/6 to 6/6 . What about the missing 2 patches?
-
-The other patches were merged upstream, and are no longer need to be
-applied, assuming you're working off the master branch. The next
-version of the patchset will exclude them.
-
-> I am using the latest buildroot cloned from the git repository's master branch. I think that I will start a new clean project with the latest stable buildroot version. A complete guide of how to compile chromium for buildroot, including all neccessary patches, would be very helpful.
-
-You can apply the patches from patchwork by following the instructions
-in the Buildroot manual, section 21.3.1:
-http://nightly.buildroot.org/#apply-patches-patchwork
-
-Alternatively, once the next patchset is finished, you can checkout
-the chromium-v6 branch from my repo at
-https://github.com/jakogut/buildroot and build as usual.
-
-Best,
-Joseph
+diff --git a/package/brltty/brltty.mk b/package/brltty/brltty.mk
+index eb91ef8ff7..df3e9c7888 100644
+--- a/package/brltty/brltty.mk
++++ b/package/brltty/brltty.mk
+@@ -11,7 +11,8 @@ BRLTTY_INSTALL_STAGING_OPTS = INSTALL_ROOT=$(STAGING_DIR) install
+ BRLTTY_INSTALL_TARGET_OPTS = INSTALL_ROOT=$(TARGET_DIR) install
+ BRLTTY_LICENSE_FILES = LICENSE-GPL LICENSE-LGPL
+ 
+-BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf
++BRLTTY_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES) host-autoconf host-pkgconf \
++	$(if $(BR2_PACKAGE_AT_SPI2_CORE),at-spi2-core)
+ 
+ BRLTTY_CONF_OPTS = \
+ 	--disable-java-bindings \
+-- 
+2.14.1
