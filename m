@@ -1,20 +1,171 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Tue, 10 Jul 2018 17:01:00 +0200
-Subject: [Buildroot] Article about llvm/clang for Buildroot
-Message-ID: <2486f952-8bcd-e28d-451a-f6c1e93a3a0b@smile.fr>
+From: =?UTF-8?B?SsOpcsOpbXkgUm9zZW4=?= <jeremy.rosen@smile.fr>
+Date: Tue, 10 Jul 2018 17:17:40 +0200
+Subject: [Buildroot] [PATCH] systemd: add an option to use busybox's
+ getty
+In-Reply-To: <8cf54714-8e1f-ea12-fd4c-d2f5f4fddfa0@mind.be>
+References: <20180708195429.9693-1-jeremy.rosen@smile.fr>
+ <be826cad-71c5-10ac-aec2-bc4dc919e356@smile.fr>
+ <2708cb51-e9fd-2176-a129-98202de43ddf@mind.be>
+ <07fc8266-b257-845b-f368-b922b3df18e7@smile.fr>
+ <8cf54714-8e1f-ea12-fd4c-d2f5f4fddfa0@mind.be>
+Message-ID: <8898396b-1e42-c4d3-708f-457e5be4ab43@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
 
-I'm finishing my internship and I've written an article about
-llvm/clang in Buildroot. For anyone who is interested:
 
-http://www.linuxembedded.fr/2018/07/llvmclang-integration-into-buildroot/
+On 10/07/2018 11:12, Arnout Vandecappelle wrote:
+>
+> On 10-07-18 10:05, J?r?my Rosen wrote:
+>>
+>> On 10/07/2018 00:21, Arnout Vandecappelle wrote:
+>>> On 09-07-18 10:02, Romain Naour wrote:
+>>>> Hi Jeremy,
+>>>>
+>>>> Le 08/07/2018 ? 21:54, J?r?my Rosen a ?crit?:
+>>>>> Currently, the patch to replace agetty with busybox's getty is always
+>>>>> applied.
+>>>>>
+>>>>> this patch adds a compile-time option to systemd to choose either agetty
+>>>>> or busybox's getty and chooses the correct option depending on agetty being
+>>>>> selected in busybox
+>>>>>
+>>>> As discussed privately, if you want an example on how apply a patch
+>>>> conditionally you can take a look at the gcc package [1].
+>>>   I don't think we want to apply patches conditionally. In fact, J?r?my's change
+>>> is much better, because it makes the patch upstreamable.
+>> systemd upstream is not interested in supporting busybox AFAIU...
+>   Really? There are a few commits in systemd that mention support for busybox...
+>
+>   I do believe that Denys (the busybox maintainer) at some point made some
+> negative comments about adding support for systemd (I guess about communicating
+> with journald). I don't remember ever seeing systemd people saying anything
+> about busybox. But I'm not really following the systemd world.
+>
+That was my understanding, but I can submit a PR, we'll see if they are 
+interested...
 
-Best regards,
+>>>   That said, as discussed on IRC, a much easier approach would be to overwrite
+>>> systemd's getty unit files with custom buildroot unit files in case
+>>> UTIL_LINUX_AGETTY is not selected. Then the patch could be dropped entirely.
+>> The patch approch has the advantage of "breaking" if upstream changes, but I can
+>> do a followup in that direction, if that's what the project wants...
+>   Good point. My first thought was: nothing important is ever going to change in
+> those getty files. But then again, it has some things that might change, like
+> dependencies and conditions.
+>
+>   So yes, the patch is probably the better approach. Could you make an attempt at
+> upstreaming it though?
+will do (not right away, i'm away for a week)
 
-Valentin
+>
+>   One comment on that patch, though: the changequote using a non-7-bit-ascii
+> character is pretty ugly IMO, and also the characters you choose are not a
+> typical open-close pair. Could you replace it with [] or {} or suchlike?
+I'll try to find a pair that is not used in the block I quote :)
+>
+>   Also, I think (but I'm no m4 expert) you can make it a bit more readable by doing:
+>
+> {m4_dnl
+> # The '-o' option ...
+>
+> instead of
+>
+> {# The '-o' option ...
+>
+>   Come to think of it, isn't it sufficient to just double-quote instead of doing
+> changequote? So
+>
+> m4_ifdef(`ENABLE_BUSYBOX_GETTY',
+> ``ExecStart=-/sbin/getty -L %I 115200 vt100'',
+> ``m4_dnl
+> # The '-o' option value tells agetty to replace 'login' arguments with an
+> ...
+> '')m4_dnl
+Ok, your m4-fu is way better than mine... i'll have a look at that too.
+
+Thx for the review
+
+J?r?my
+>
+>   Regards,
+>   Arnout
+>
+>
+>>>   Regards,
+>>>   Arnout
+>>>
+>>>> This has been introduced by [2] but there is some other place where
+>>>> $(APPLY_PATCHES) is used (conditionally or unconditionally).
+>>>>
+>>>> $(APPLY_PATCHES) is defined in package/Makefile.in but this way to use it is not
+>>>> documented in the manual [3].
+>>>>
+>>>> Best regards,
+>>>> Romain
+>>>>
+>>>> [1] https://git.busybox.net/buildroot/tree/package/gcc/gcc.mk#n41
+>>>> [2]
+>>>> https://git.busybox.net/buildroot/commit/?id=197006a41c1a0450bf6350d5742e186b5b0c69de
+>>>> [3] http://nightly.buildroot.org/manual.html#patch-policy
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>>
+>> -- 
+>> SMILE <http://www.smile.eu/>
+>>
+>> 20 rue des Jardins
+>> 92600 Asni?res-sur-Seine
+>>
+>> 	
+>> *J?r?my ROSEN*
+>> Architecte technique
+>> Responsable de l'expertise Smile-ECS
+>>
+>> email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
+>> phone +33141402967
+>> url http://www.smile.eu
+>>
+>> Twitter <https://twitter.com/GroupeSmile> Facebook
+>> <https://www.facebook.com/smileopensource> LinkedIn
+>> <https://www.linkedin.com/company/smile> Github <https://github.com/Smile-SA>
+>>
+>>
+>> D?couvrez l?univers Smile, rendez-vous sur smile.eu
+>> <http://smile.eu/?utm_source=signature&utm_medium=email&utm_campaign=signature>
+>>
+>> eco Pour la plan?te, n'imprimez ce mail que si c'est n?cessaire
+
+-- 
+SMILE <http://www.smile.eu/>
+
+20 rue des Jardins
+92600 Asni?res-sur-Seine
+
+	
+*J?r?my ROSEN*
+Architecte technique
+Responsable de l'expertise Smile-ECS
+
+email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
+phone +33141402967
+url http://www.smile.eu
+
+Twitter <https://twitter.com/GroupeSmile> Facebook 
+<https://www.facebook.com/smileopensource> LinkedIn 
+<https://www.linkedin.com/company/smile> Github 
+<https://github.com/Smile-SA>
+
+
+D?couvrez l?univers Smile, rendez-vous sur smile.eu 
+<http://smile.eu/?utm_source=signature&utm_medium=email&utm_campaign=signature>
+
+eco Pour la plan?te, n'imprimez ce mail que si c'est n?cessaire
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180710/7d0cafe3/attachment.html>
