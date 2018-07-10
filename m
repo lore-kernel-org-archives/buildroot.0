@@ -1,174 +1,62 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 10 Jul 2018 10:56:58 -0500
-Subject: [Buildroot] [PATCH v3] Makefile: respect strip exclusions for
- special libraries
-In-Reply-To: <20180703110614.59009bdb@donbot>
-References: <20180702160027.28557-1-john@metanate.com>
- <20180702164044.GD2604@scaer>
- <20180702175711.70bf95c7@donbot> <20180702222516.5467cc60@windsurf.home>
- <20180703110614.59009bdb@donbot>
-Message-ID: <CANQCQpZ-CeWw7HcCrBJHfjZ6aHccOZaOnrPjkoAeL_gXLYQxjw@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Tue, 10 Jul 2018 18:36:37 +0200
+Subject: [Buildroot] [PATCH] lua: bump to version 5.3.5
+Message-ID: <20180710163637.11405-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-John,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/lua/{5.3.4 => 5.3.5}/0001-root-path.patch           | 0
+ package/lua/{5.3.4 => 5.3.5}/0002-shared-libs-for-lua.patch | 0
+ package/lua/{5.3.4 => 5.3.5}/0011-linenoise.patch           | 0
+ package/lua/lua.hash                                        | 4 ++--
+ package/lua/lua.mk                                          | 2 +-
+ 5 files changed, 3 insertions(+), 3 deletions(-)
+ rename package/lua/{5.3.4 => 5.3.5}/0001-root-path.patch (100%)
+ rename package/lua/{5.3.4 => 5.3.5}/0002-shared-libs-for-lua.patch (100%)
+ rename package/lua/{5.3.4 => 5.3.5}/0011-linenoise.patch (100%)
 
-On Tue, Jul 3, 2018 at 5:06 AM, John Keeping <john@metanate.com> wrote:
-> ld-*.so and libpthread*.so* are not stripped in the same way as other
-> binaries because some applications need symbols in these libraries in
-> order to operate correctly.
->
-> However, the special handling for these binaries ignores the usual
-> BR2_STRIP_EXCLUDE_* rules so it is not possible to build an image which
-> has debugging symbols in these binaries.
->
-> Pull out the common find functionality so that we can build two find
-> commands that re-use the common exclusion rules.
->
-> Fix-suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: John Keeping <john@metanate.com>
-
-I did a test build with a set of folders and files set to exclude.
-Plus checked the symbols on the special libs.  Looks ok when checking
-stripped vs not.
-
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
-
-> ---
-> On Mon, 2 Jul 2018 22:25:16 +0200
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
->> I understand the problem, and I know you will find my comment a bit
->> useless, but I find this whole thing pretty complex/noisy. Can we do
->> better ?
->>
->> Here is some untested initial proposal:
->>
->> # When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
->> # BR2_STRIP_EXCLUDE_FILES
->> STRIP_FIND_COMMON_CMD = \
->>       find $(TARGET_DIR) \
->>       $(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)),, \
->>               \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o ) \
->>       -not $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) \
->>       -print0
->>
->> # Regular stripping for everything, except libpthread, ld-*.so and
->> # kernel modules.
->> STRIP_FIND_CMD = \
->>       $(STRIP_FIND_COMMON_CMD) \
->>       -type f \( -perm /111 -o -name '*.so*' \) \
->>       -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \)
->>
->> # Special stripping (only debugging symbols) for libpthread and
->> ld-*.so. STRIP_FIND_SPECIAL_LIBS_CMD = \
->>       $(STRIP_FIND_COMMON_CMD) \
->>       \( -name 'ld-*.so*' -o -name 'libpthread*.so*' \)
->>
->> And then:
->>
->>       $(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
->>       $(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 $(STRIPCMD) $(STRIP_STRIP_DEBUG) || true
->>
->> Thoughts ?
->
-> This looks much nicer.  I've tested it and fixed a few issues, so we end
-> up with this patch.
->
->
->  Makefile | 44 +++++++++++++++++++++++++-------------------
->  1 file changed, 25 insertions(+), 19 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 8d25c8a239..ab081412d3 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -591,20 +591,37 @@ RSYNC_VCS_EXCLUSIONS = \
->         --exclude .svn --exclude .git --exclude .hg --exclude .bzr \
->         --exclude CVS
->
-> -STRIP_FIND_CMD = find $(TARGET_DIR)
-> -ifneq (,$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)))
-> -STRIP_FIND_CMD += \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) -prune -o
-> -endif
-> -STRIP_FIND_CMD += -type f \( -perm /111 -o -name '*.so*' \)
-> -# file exclusions:
-> +# When stripping, obey to BR2_STRIP_EXCLUDE_DIRS and
-> +# BR2_STRIP_EXCLUDE_FILES
-> +STRIP_FIND_COMMON_CMD = \
-> +       find $(TARGET_DIR) \
-> +       $(if $(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS)), \
-> +               \( $(call finddirclauses,$(TARGET_DIR),$(call qstrip,$(BR2_STRIP_EXCLUDE_DIRS))) \) \
-> +               -prune -o \
-> +       ) \
-> +       $(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
-> +               -not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) )
-> +
-> +# Regular stripping for everything, except libpthread, ld-*.so and
-> +# kernel modules:
->  # - libpthread.so: a non-stripped libpthread shared library is needed for
->  #   proper debugging of pthread programs using gdb.
->  # - ld.so: a non-stripped dynamic linker library is needed for valgrind
->  # - kernel modules (*.ko): do not function properly when stripped like normal
->  #   applications and libraries. Normally kernel modules are already excluded
->  #   by the executable permission check above, so the explicit exclusion is only
->  #   done for kernel modules with incorrect permissions.
-> -STRIP_FIND_CMD += -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) -print0
-> +STRIP_FIND_CMD = \
-> +       $(STRIP_FIND_COMMON_CMD) \
-> +       -type f \( -perm /111 -o -name '*.so*' \) \
-> +       -not \( $(call findfileclauses,libpthread*.so* ld-*.so* *.ko) \) \
-> +       -print0
-> +
-> +# Special stripping (only debugging symbols) for libpthread and ld-*.so.
-> +STRIP_FIND_SPECIAL_LIBS_CMD = \
-> +       $(STRIP_FIND_COMMON_CMD) \
-> +       \( -name 'ld-*.so*' -o -name 'libpthread*.so*' \) \
-> +       -print0
->
->  ifeq ($(BR2_ECLIPSE_REGISTER),y)
->  define TOOLCHAIN_ECLIPSE_REGISTER
-> @@ -716,19 +733,8 @@ endif
->         rm -rf $(TARGET_DIR)/usr/share/gtk-doc
->         rmdir $(TARGET_DIR)/usr/share 2>/dev/null || true
->         $(STRIP_FIND_CMD) | xargs -0 $(STRIPCMD) 2>/dev/null || true
-> +       $(STRIP_FIND_SPECIAL_LIBS_CMD) | xargs -0 -r $(STRIPCMD) $(STRIP_STRIP_DEBUG) 2>/dev/null || true
->
-> -# See http://sourceware.org/gdb/wiki/FAQ, "GDB does not see any threads
-> -# besides the one in which crash occurred; or SIGTRAP kills my program when
-> -# I set a breakpoint"
-> -ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-> -       find $(TARGET_DIR)/lib/ -type f -name 'libpthread*.so*' | \
-> -               xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
-> -endif
-> -
-> -# Valgrind needs ld.so with enough information, so only strip
-> -# debugging symbols.
-> -       find $(TARGET_DIR)/lib/ -type f -name 'ld-*.so*' | \
-> -               xargs -r $(STRIPCMD) $(STRIP_STRIP_DEBUG)
->         test -f $(TARGET_DIR)/etc/ld.so.conf && \
->                 { echo "ERROR: we shouldn't have a /etc/ld.so.conf file"; exit 1; } || true
->         test -d $(TARGET_DIR)/etc/ld.so.conf.d && \
-> --
-> 2.18.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
-
-
+diff --git a/package/lua/5.3.4/0001-root-path.patch b/package/lua/5.3.5/0001-root-path.patch
+similarity index 100%
+rename from package/lua/5.3.4/0001-root-path.patch
+rename to package/lua/5.3.5/0001-root-path.patch
+diff --git a/package/lua/5.3.4/0002-shared-libs-for-lua.patch b/package/lua/5.3.5/0002-shared-libs-for-lua.patch
+similarity index 100%
+rename from package/lua/5.3.4/0002-shared-libs-for-lua.patch
+rename to package/lua/5.3.5/0002-shared-libs-for-lua.patch
+diff --git a/package/lua/5.3.4/0011-linenoise.patch b/package/lua/5.3.5/0011-linenoise.patch
+similarity index 100%
+rename from package/lua/5.3.4/0011-linenoise.patch
+rename to package/lua/5.3.5/0011-linenoise.patch
+diff --git a/package/lua/lua.hash b/package/lua/lua.hash
+index 32e7472c3..43f5be275 100644
+--- a/package/lua/lua.hash
++++ b/package/lua/lua.hash
+@@ -1,6 +1,6 @@
+ # Hashes from: http://www.lua.org/ftp/
+-md5 53a9c68bcc0eda58bdc2095ad5cdfc63           lua-5.3.4.tar.gz
+-sha1 79790cfd40e09ba796b01a571d4d63b52b1cd950  lua-5.3.4.tar.gz
++md5 4f4b4f323fd3514a68e0ab3da8ce3455           lua-5.3.5.tar.gz
++sha1 112eb10ff04d1b4c9898e121d6bdf54a81482447  lua-5.3.5.tar.gz
+ 
+ md5 913fdb32207046b273fdb17aad70be13           lua-5.2.4.tar.gz
+ sha1 ef15259421197e3d85b7d6e4871b8c26fd82c1cf  lua-5.2.4.tar.gz
+diff --git a/package/lua/lua.mk b/package/lua/lua.mk
+index 851dc8f73..22643c4c8 100644
+--- a/package/lua/lua.mk
++++ b/package/lua/lua.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+-LUA_VERSION = 5.3.4
++LUA_VERSION = 5.3.5
+ else
+ ifeq ($(BR2_PACKAGE_LUA_5_2),y)
+ LUA_VERSION = 5.2.4
 -- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+2.17.1
