@@ -1,206 +1,82 @@
-From: Joel Carlson <joelsoncarl@gmail.com>
-Date: Mon,  9 Jul 2018 19:22:57 -0600
-Subject: [Buildroot] [PATCH v3 1/1] capnproto: new package
-Message-ID: <1531185777-23485-1-git-send-email-JoelsonCarl@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 10 Jul 2018 08:01:08 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-07-09
+Message-ID: <20180710060108.074B42072D@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adds the capnproto package. This also builds a host variant to generate
-the capnp compiler that can be used to compile message definitions into
-C++ code. Includes a patch from upstream to fix an issue with uclibc.
+Hello,
 
-The top level of the repository is not where compilation occurs, but
-rather within a 'c++' folder, so the package extraction commands are
-altered to only extract the c++ folder so that the rest of the autotools
-framework will work correctly. Extraction also saves the LICENSE file
-that was in the top-level.
+Build statistics for 2018-07-09
+===============================
 
-Signed-off-by: Koen Martens <gmc@sonologic.nl>
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
----
-This is me digging up yet another old patch...
-Original v2 is here: https://patchwork.ozlabs.org/patch/787341/
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  15 |   0 |   0 |  15 |
+   2018.05.x |  15 |   0 |   0 |  15 |
+      master | 103 |  33 |   0 | 136 |
 
-Changes v2->v3:
-  - commit message about the package and not reiterating the help text
-  - changed to grab source from github, and modify extraction to get
-    appropriate directories
-  - modified patch to fix uclibc issue and point at upstream commit
-  - change order of dependencies to list hardware (MMU) first
+Results for branch 'master'
+===========================
 
-Tested with test-pkg -a: 47 builds, 5 skipped, 0 build failed, 0 legal-info failed
----
- DEVELOPERS                                         |  2 +
- package/Config.in                                  |  1 +
- .../0001-Do-not-use-execinfo-h-with-uclibc.patch   | 33 ++++++++++++++++
- package/capnproto/Config.in                        | 22 +++++++++++
- package/capnproto/capnproto.hash                   |  2 +
- package/capnproto/capnproto.mk                     | 44 ++++++++++++++++++++++
- 6 files changed, 104 insertions(+)
- create mode 100644 package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
- create mode 100644 package/capnproto/Config.in
- create mode 100644 package/capnproto/capnproto.hash
- create mode 100644 package/capnproto/capnproto.mk
+Classification of failures by reason
+------------------------------------
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 82accbb..064fde4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -983,6 +983,7 @@ F:	package/x11r7/xdriver_xf86-video-imx/
- F:	package/x11r7/xdriver_xf86-video-imx-viv/
- 
- N:	Joel Carlson <JoelsonCarl@gmail.com>
-+F:	package/capnproto/
- F:	package/cmocka/
- F:	package/flatcc/
- 
-@@ -1117,6 +1118,7 @@ N:	Kevin Joly <kevin.joly@sensefly.com>
- F:	package/libgphoto2/
- 
- N:	Koen Martens <gmc@sonologic.nl>
-+F:	package/capnproto/
- F:	package/linuxconsoletools/
- 
- N:	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-diff --git a/package/Config.in b/package/Config.in
-index 20fe5ad..5d61f8a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1504,6 +1504,7 @@ menu "Other"
- 	source "package/bctoolbox/Config.in"
- 	source "package/bdwgc/Config.in"
- 	source "package/boost/Config.in"
-+	source "package/capnproto/Config.in"
- 	source "package/clang/Config.in"
- 	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
-diff --git a/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch b/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
-new file mode 100644
-index 0000000..d4f3e56
---- /dev/null
-+++ b/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
-@@ -0,0 +1,33 @@
-+From e651ac5febc59e3e2b5d3365ededbe5362756da2 Mon Sep 17 00:00:00 2001
-+From: Koen Martens <gmc@sonologic.nl>
-+Date: Wed, 12 Jul 2017 18:49:32 +0200
-+Subject: [PATCH] Do not use execinfo.h with uclibc (#511)
-+
-+Upstream commit: https://github.com/capnproto/capnproto/commit/e651ac5febc59e3e2b5d3365ededbe5362756da2
-+
-+Signed-off-by: Koen Martens <gmc@sonologic.nl>
-+
-+---
-+This patch has been hand-edited as the git repository at the top level has a
-+'c++' folder that the 'src' folder resides within, but the buildroot package
-+is setup to extract the internals of the 'c++' folder only.
-+---
-+ src/kj/exception.c++ | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/kj/exception.c++ b/src/kj/exception.c++
-+index 218f1db..339601a 100644
-+--- a/src/kj/exception.c++
-++++ b/src/kj/exception.c++
-+@@ -33,7 +33,7 @@
-+ #endif
-+ #include "io.h"
-+ 
-+-#if (__linux__ && __GLIBC__) || __APPLE__
-++#if (__linux__ && __GLIBC__ && !__UCLIBC__) || __APPLE__
-+ #define KJ_HAS_BACKTRACE 1
-+ #include <execinfo.h>
-+ #endif
-+-- 
-+2.7.4
-+
-diff --git a/package/capnproto/Config.in b/package/capnproto/Config.in
-new file mode 100644
-index 0000000..be5154c
---- /dev/null
-+++ b/package/capnproto/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_CAPNPROTO
-+	bool "capnproto"
-+	depends on BR2_USE_MMU
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+	  Cap'n Proto is an insanely fast data interchange format
-+	  and capability-based RPC system. Think JSON, except
-+	  binary. Or think Protocol Buffers, except faster. In
-+	  fact, in benchmarks, Cap?n Proto is INFINITY TIMES
-+	  faster than Protocol Buffers.
-+
-+	  https://capnproto.org/index.html
-+
-+comment "capnproto needs host and target gcc >= 4.8 w/ C++, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_8 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
-new file mode 100644
-index 0000000..3b0e55b
---- /dev/null
-+++ b/package/capnproto/capnproto.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256	85210424c09693d8fe158c1970a2bca37af3a0424f02b263f566a1b8a5451a2d  capnproto-v0.6.1.tar.gz
-diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
-new file mode 100644
-index 0000000..09b1f91
---- /dev/null
-+++ b/package/capnproto/capnproto.mk
-@@ -0,0 +1,44 @@
-+################################################################################
-+#
-+# capnproto
-+#
-+################################################################################
-+
-+CAPNPROTO_VERSION = v0.6.1
-+CAPNPROTO_SITE = $(call github,capnproto,capnproto,$(CAPNPROTO_VERSION))
-+CAPNPROTO_LICENSE = MIT
-+CAPNPROTO_LICENSE_FILES = LICENSE
-+CAPNPROTO_INSTALL_STAGING = YES
-+CAPNPROTO_AUTORECONF = YES
-+CAPNPROTO_CONF_OPTS = --with-external-capnp
-+# Needs the capnproto compiler on the host to generate C++ code from message
-+# definitions
-+CAPNPROTO_DEPENDENCIES = host-autoconf host-capnproto
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+CAPNPROTO_CONF_ENV += LIBS=-latomic
-+endif
-+
-+# The actual source to be compiled is within a 'c++' folder at the top-level,
-+# so extract just that c++ folder. But the LICENSE file is in the top-level
-+# directory, so extract that as well.
-+define CAPNPROTO_EXTRACT_CMDS
-+	$(TAR) -C $(CAPNPROTO_DIR) --strip-components=2 $(TAR_OPTIONS) \
-+		$(CAPNPROTO_DL_DIR)/$(CAPNPROTO_SOURCE) \
-+		capnproto-$(subst v,,$(CAPNPROTO_VERSION))/c++
-+	$(TAR) -C $(CAPNPROTO_DIR) --strip-components=1 $(TAR_OPTIONS) \
-+		$(CAPNPROTO_DL_DIR)/$(CAPNPROTO_SOURCE) \
-+		capnproto-$(subst v,,$(CAPNPROTO_VERSION))/LICENSE
-+endef
-+
-+define HOST_CAPNPROTO_EXTRACT_CMDS
-+	$(TAR) -C $(HOST_CAPNPROTO_DIR) --strip-components=2 $(TAR_OPTIONS) \
-+		$(CAPNPROTO_DL_DIR)/$(CAPNPROTO_SOURCE) \
-+		capnproto-$(subst v,,$(CAPNPROTO_VERSION))/c++
-+	$(TAR) -C $(HOST_CAPNPROTO_DIR) --strip-components=1 $(TAR_OPTIONS) \
-+		$(CAPNPROTO_DL_DIR)/$(CAPNPROTO_SOURCE) \
-+		capnproto-$(subst v,,$(CAPNPROTO_VERSION))/LICENSE
-+endef
-+
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+                  squid-3.5.27 | 12
+                   wampcc-v1.6 | 4 
+             gnuradio-3.7.13.3 | 2 
+                    host-rustc | 2 
+               mono-5.12.0.226 | 2 
+                 opencv3-3.3.0 | 2 
+                 wiringpi-2.46 | 2 
+                busybox-1.29.0 | 1 
+               domoticz-4.9700 | 1 
+                libmpeg2-0.5.1 | 1 
+              libostree-2018.6 | 1 
+          openpowerlink-V2.7.0 | 1 
+                  samba4-4.8.3 | 1 
+              wireshark-2.2.15 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |                 busybox-1.29.0 | NOK | http://autobuild.buildroot.net/results/6b39648b466738162516aa50ab328d839ec85448 |     
+    mips64el |                domoticz-4.9700 | NOK | http://autobuild.buildroot.net/results/a482fad34d1f1cc99472130e4dde0bb192f1d299 |     
+         arm |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/fde61220ddd3bf46846774a4737166d8a2f3350a |     
+    mips64el |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/d05b7a1cb813e96e70402f75098d63f7ff73540e |     
+    mips64el |                     host-rustc | NOK | http://autobuild.buildroot.net/results/356de6ede09587b16c8064604d5ebdd2b0602a6f |     
+         arc |                     host-rustc | NOK | http://autobuild.buildroot.net/results/dc8722c152d758beeb66f0647036d42a67e4c9d9 |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/87b9f0a36ef4636210d51d0693adac51a5176606 | ORPH
+    mips64el |               libostree-2018.6 | NOK | http://autobuild.buildroot.net/results/f8c80c8684634eaca813b572d48a35d1c90322a3 |     
+        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/735b2ac0908579b22da7768579754ef42dff5223 |     
+        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/8a03cea6f3b31551efec8ab0ec74903b02a925a7 |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/028914bb646907c5f1a6caf9e211bc188c755970 |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/9dadc09b43fc6cc14aea7e480e42a5172b80adb7 |     
+        i586 |           openpowerlink-V2.7.0 | NOK | http://autobuild.buildroot.net/results/63d5b21b5581f2005d6ca2bd0558601cc17eaee1 |     
+      mipsel |                   samba4-4.8.3 | NOK | http://autobuild.buildroot.net/results/7d76c397e4fdbd02611cfc2388bca30cf53e0ee7 |     
+         arm |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/787400a619739668323c396a603094f29b39b7c6 | ORPH
+         arm |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/c7a36347bb7d2df83c7c2f7b542b0eb08e6fc5ef | ORPH
+     powerpc |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/a17863eba6c9f6bb111fc40dbfa1a91493318e37 | ORPH
+       nios2 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/7bb3cc0b02c31e290dc5f7d52e793aad2dfdb295 | ORPH
+         arm |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/c16bf531a677ed49c3dce8c262da1a5bc528760d | ORPH
+      x86_64 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/26824b0c689b86e1b06256cb36504b9831a1ed60 | ORPH
+         arm |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/975397b58139e8a8f7fe071d5b39cf2ec080168a | ORPH
+      x86_64 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/e721f0a6e66c30a597d4f6957dba1876d08e177d | ORPH
+     powerpc |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/cfd093ffa50419d8b01f6460960d70d6595f2ca7 | ORPH
+         arc |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/c15edf557ab9b6f337deab3b29e31f307c842e22 | ORPH
+      x86_64 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/be715719b8da72006e4db88c1c92379003ba225d | ORPH
+     sparc64 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/ac6a34ea206dbdfd2fd9e38bc648c3217b738140 | ORPH
+      mipsel |                    wampcc-v1.6 | NOK | http://autobuild.buildroot.net/results/9b3fdf3369e9c3633d925d9e5c8a428d23dae5d4 |     
+        mips |                    wampcc-v1.6 | NOK | http://autobuild.buildroot.net/results/bf73b68c1bf5fd04295c0e450d3e931b28ef01a5 |     
+     powerpc |                    wampcc-v1.6 | NOK | http://autobuild.buildroot.net/results/6487f7516ebfbbe72ec4fd24f31b60c411dd224e |     
+       nios2 |                    wampcc-v1.6 | NOK | http://autobuild.buildroot.net/results/a6ca6516ad44d2bf0062d06b704ab0ee40193e26 |     
+         arc |               wireshark-2.2.15 | NOK | http://autobuild.buildroot.net/results/9d32877b506915f375f0c30b815c785241434ceb | ORPH
+         arm |                  wiringpi-2.46 | NOK | http://autobuild.buildroot.net/results/8805e1e95ab66d12bcddb7f2d8cf807c1651acd9 |     
+      xtensa |                  wiringpi-2.46 | NOK | http://autobuild.buildroot.net/results/9f0b7220af5947acf99efbb7d74504274063b320 |     
+
+
 -- 
-2.7.4
+http://autobuild.buildroot.net
