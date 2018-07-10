@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Jul 2018 00:02:17 +0200
-Subject: [Buildroot] [PATCH 1/7]
- package/x11r7/xdriver_xf86-video-mach64: bump version to 6.9.6
-In-Reply-To: <20180709174549.10744-1-bernd.kuhls@t-online.de>
-References: <20180709174549.10744-1-bernd.kuhls@t-online.de>
-Message-ID: <2ee5e49f-4c2c-94ce-3e16-809aa0c29564@mind.be>
+Date: Wed, 11 Jul 2018 00:14:23 +0200
+Subject: [Buildroot] [PATCH 1/1] python-django: bump to version 1.11.14
+In-Reply-To: <20180704225734.18136-1-joseph.kogut@gmail.com>
+References: <20180704225734.18136-1-joseph.kogut@gmail.com>
+Message-ID: <fef2a622-c3c8-bef5-763c-82da419a4750@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +12,55 @@ To: buildroot@busybox.net
 
 
 
-On 09-07-18 19:45, Bernd Kuhls wrote:
-> Added license hash and all hashes provided by upstream.
+On 05-07-18 00:57, Joseph Kogut wrote:
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  package/python-django/python-django.hash | 6 ++++--
+>  package/python-django/python-django.mk   | 4 ++--
+>  2 files changed, 6 insertions(+), 4 deletions(-)
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+> index 09be18440b..f846658909 100644
+> --- a/package/python-django/python-django.hash
+> +++ b/package/python-django/python-django.hash
+> @@ -1,3 +1,5 @@
+>  # md5 from https://pypi.python.org/pypi/django/json, sha256 locally computed
 
- Applied all 7 to master, thanks.
+ Actually, https://www.djangoproject.com/m/pgp/Django-1.11.14.checksum.txt has
+much better hashes. It also has all of them. They're actually the same :-)
+
+> -md5	693dfeabad62c561cb205900d32c2a98  Django-1.10.7.tar.gz
+> -sha256	593d779dbc2350a245c4f76d26bdcad58a39895e87304fe6d725bbdf84b5b0b8  Django-1.10.7.tar.gz
+> +md5	38e82b59a1c27bbf98ccf0564ead7426  Django-1.11.14.tar.gz
+> +sha256  eb9271f0874f53106a2719c0c35ce67631f6cc27cf81a60c6f8c9817b35a3f6e  Django-1.11.14.tar.gz
+> +# sha256 locally computed
+> +sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+> index 9056f00cf0..b39e82e737 100644
+> --- a/package/python-django/python-django.mk
+> +++ b/package/python-django/python-django.mk
+> @@ -4,10 +4,10 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_DJANGO_VERSION = 1.10.7
+> +PYTHON_DJANGO_VERSION = 1.11.14
+>  PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+>  # The official Django site has an unpractical URL
+
+ Note sure what is wrong with
+
+PYTHON_DJANGO_SITE =
+https://www.djangoproject.com/m/releases/$(PYTHON_DJANGO_VERSION_MAJOR)
 
  Regards,
  Arnout
 
-
-> ---
->  .../xdriver_xf86-video-mach64.hash                       | 9 +++++++--
->  .../xdriver_xf86-video-mach64.mk                         | 2 +-
->  2 files changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash
-> index 43a7fa707e..55acd74652 100644
-> --- a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash
-> +++ b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.hash
-> @@ -1,2 +1,7 @@
-> -# From http://lists.x.org/archives/xorg-announce/2015-May/002599.html
-> -sha256	3e98985b6e044189efd42342862208f472881c25debf22230a1d54a96d71b41f	xf86-video-mach64-6.9.5.tar.bz2
-> +# From https://lists.x.org/archives/xorg-announce/2018-May/002896.html
-> +md5 0e12f9a3b5659e1e27e03adc42b04d99  xf86-video-mach64-6.9.6.tar.bz2
-> +sha1 1fdf0c3488ab88cb46b563efee166a5d54a01932  xf86-video-mach64-6.9.6.tar.bz2
-> +sha256 7a0707c71bb522430f83bb5e9d9ee697e661e35534a3a2d10834f86b327a3c9c  xf86-video-mach64-6.9.6.tar.bz2
-> +sha512 687f6ac60491b704d5c4788463763d2f4bf725611e10bd2163156963fe0a8fdbffe0a1b7c737eff131f01759e43b5ec3544a7dabe66a67e85b286dcb969da2f1  xf86-video-mach64-6.9.6.tar.bz2
-> +# Locally computed
-> +sha256 a7d68021893bced0d709338a59a137c74b11e624880e110e4a2f14ccef475120  COPYING
-> diff --git a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-> index 599036033d..ca24d39e43 100644
-> --- a/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-> +++ b/package/x11r7/xdriver_xf86-video-mach64/xdriver_xf86-video-mach64.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -XDRIVER_XF86_VIDEO_MACH64_VERSION = 6.9.5
-> +XDRIVER_XF86_VIDEO_MACH64_VERSION = 6.9.6
->  XDRIVER_XF86_VIDEO_MACH64_SOURCE = xf86-video-mach64-$(XDRIVER_XF86_VIDEO_MACH64_VERSION).tar.bz2
->  XDRIVER_XF86_VIDEO_MACH64_SITE = http://xorg.freedesktop.org/releases/individual/driver
->  XDRIVER_XF86_VIDEO_MACH64_LICENSE = MIT
+> -PYTHON_DJANGO_SITE = https://pypi.python.org/packages/15/b4/d4bb7313e02386bd23a60e1eb5670321313fb67289c6f36ec43bce747aff
+> +PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/dc/35/273514b5eb2201d5183dd138c240b12e1d822d2358b1e9436545b66d2d76
+>  PYTHON_DJANGO_LICENSE = BSD-3-Clause
+>  PYTHON_DJANGO_LICENSE_FILES = LICENSE
+>  PYTHON_DJANGO_SETUP_TYPE = setuptools
 > 
 
 -- 
