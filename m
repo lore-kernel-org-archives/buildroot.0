@@ -1,10 +1,9 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Tue, 10 Jul 2018 16:42:09 -0700
-Subject: [Buildroot] [PATCH v6 1/4] libgtk3: convert atk-bridge to optional
- dependency
+Date: Tue, 10 Jul 2018 16:42:11 -0700
+Subject: [Buildroot] [PATCH v6 3/4] lld: new package
 In-Reply-To: <20180710234212.4297-1-joseph.kogut@gmail.com>
 References: <20180710234212.4297-1-joseph.kogut@gmail.com>
-Message-ID: <20180710234212.4297-2-joseph.kogut@gmail.com>
+Message-ID: <20180710234212.4297-4-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,160 +12,91 @@ To: buildroot@busybox.net
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
- ...3-convert-atk-bridge-to-optional-dep.patch | 76 +++++++++++++++++++
- package/libgtk3/0003-disable-atk-bridge.patch | 45 -----------
- package/libgtk3/libgtk3.mk                    |  4 +
- 3 files changed, 80 insertions(+), 45 deletions(-)
- create mode 100644 package/libgtk3/0003-convert-atk-bridge-to-optional-dep.patch
- delete mode 100644 package/libgtk3/0003-disable-atk-bridge.patch
+ DEVELOPERS                 |  1 +
+ package/Config.in.host     |  1 +
+ package/lld/Config.in.host | 16 ++++++++++++++++
+ package/lld/lld.hash       |  3 +++
+ package/lld/lld.mk         | 15 +++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/lld/Config.in.host
+ create mode 100644 package/lld/lld.hash
+ create mode 100644 package/lld/lld.mk
 
-diff --git a/package/libgtk3/0003-convert-atk-bridge-to-optional-dep.patch b/package/libgtk3/0003-convert-atk-bridge-to-optional-dep.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 82accbbc3d..05d2bdde20 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1060,6 +1060,7 @@ F:	package/at-spi2-atk/
+ F:	package/at-spi2-core/
+ F:	package/gconf/
+ F:	package/libnss/
++F:	package/lld/
+ F:	package/python-cython/
+ F:	package/python-raven/
+ F:	package/python-schedule/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 3725c2c81d..d0b25c3ccf 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -30,6 +30,7 @@ menu "Host utilities"
+ 	source "package/jsmin/Config.in.host"
+ 	source "package/lpc3250loader/Config.in.host"
+ 	source "package/lttng-babeltrace/Config.in.host"
++	source "package/lld/Config.in.host"
+ 	source "package/llvm/Config.in.host"
+ 	source "package/mfgtools/Config.in.host"
+ 	source "package/mkpasswd/Config.in.host"
+diff --git a/package/lld/Config.in.host b/package/lld/Config.in.host
 new file mode 100644
-index 0000000000..d92bc96d5e
+index 0000000000..c04b7924fa
 --- /dev/null
-+++ b/package/libgtk3/0003-convert-atk-bridge-to-optional-dep.patch
-@@ -0,0 +1,76 @@
-+From 83aaf47828d40dbafc315c5184ff62fe9914e80a Mon Sep 17 00:00:00 2001
-+From: Joseph Kogut <joseph.kogut@gmail.com>
-+Date: Thu, 21 Jun 2018 10:55:04 -0700
-+Subject: [PATCH] convert atk-bridge to optional dep
++++ b/package/lld/Config.in.host
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_HOST_LLD
++	bool "host lld"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # llvm
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # llvm
++	select BR2_PACKAGE_HOST_LLVM
++	help
++	  LLD is a linker from the LLVM project that is a drop-in
++	  replacement for system linkers, and runs much faster than
++	  them. It also provides features that are useful for
++	  toolchain developers.
 +
-+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-+---
-+ configure                   | 2 +-
-+ configure.ac                | 9 ++++++---
-+ gtk/a11y/gtkaccessibility.c | 4 ++--
-+ 3 files changed, 9 insertions(+), 6 deletions(-)
++	  https://lld.llvm.org/
 +
-+diff --git a/configure b/configure
-+index 9a68486..6504451 100755
-+--- a/configure
-++++ b/configure
-+@@ -27037,7 +27037,7 @@ $as_echo "yes" >&6; }
-+ fi
-+ 
-+ GTK_PACKAGES="atk >= 2.15.1 cairo >= 1.14.0 cairo-gobject >= 1.14.0 gdk-pixbuf-2.0 >= 2.30.0 gio-2.0 >= 2.49.4"
-+-GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $WAYLAND_PACKAGES $MIR_PACKAGES epoxy >= 1.0"
-++GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $ATK_BRIDGE_PACKAGE $WAYLAND_PACKAGES $MIR_PACKAGES epoxy >= 1.0"
-+ if test "x$enable_x11_backend" = xyes -o "x$enable_wayland_backend" = xyes; then
-+   GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
-+ fi
-+diff --git a/configure.ac b/configure.ac
-+index fef0ece..ddb4e04 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1394,15 +1394,18 @@ AC_SUBST(GDK_DEP_CFLAGS)
-+ ########################################
-+ 
-+ if test x$enable_x11_backend = xyes; then
-+-   ATK_PACKAGES="atk atk-bridge-2.0"
-+-else
-+    ATK_PACKAGES="atk"
-++   PKG_CHECK_MODULES(ATK_BRIDGE, atk-bridge-2.0,
-++      AC_DEFINE([HAVE_ATK_BRIDGE], [1], [Define to 1 if atk-bridge is available])
-++      ATK_BRIDGE_PACKAGE="atk-bridge-2.0",
-++      []
-++   )
-+ fi
-+ 
-+ PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
-+ 
-+ GTK_PACKAGES="atk >= atk_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version gdk-pixbuf-2.0 >= gdk_pixbuf_required_version gio-2.0 >= glib_required_version"
-+-GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $WAYLAND_PACKAGES $MIR_PACKAGES epoxy >= epoxy_required_version"
-++GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $ATK_BRIDGE_PACKAGE $WAYLAND_PACKAGES $MIR_PACKAGES epoxy >= epoxy_required_version"
-+ if test "x$enable_x11_backend" = xyes -o "x$enable_wayland_backend" = xyes; then
-+   GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
-+ fi
-+diff --git a/gtk/a11y/gtkaccessibility.c b/gtk/a11y/gtkaccessibility.c
-+index 7f0e520..f2ef2eb 100644
-+--- a/gtk/a11y/gtkaccessibility.c
-++++ b/gtk/a11y/gtkaccessibility.c
-+@@ -37,7 +37,7 @@
-+ #include <gtk/gtktogglebutton.h>
-+ #include <gtk/gtkaccessible.h>
-+ 
-+-#ifdef GDK_WINDOWING_X11
-++#ifdef HAVE_ATK_BRIDGE
-+ #include <atk-bridge.h>
-+ #endif
-+ 
-+@@ -988,7 +988,7 @@ _gtk_accessibility_init (void)
-+   _gtk_accessibility_override_atk_util ();
-+   do_window_event_initialization ();
-+ 
-+-#ifdef GDK_WINDOWING_X11
-++#ifdef HAVE_ATK_BRIDGE
-+   atk_bridge_adaptor_init (NULL, NULL);
-+ #endif
-+ 
-+-- 
-+2.17.1
++comment "lld needs a toolchain w/ host gcc >= 4.8"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on !BR2_HOST_GCC_AT_LEAST_4_8
+diff --git a/package/lld/lld.hash b/package/lld/lld.hash
+new file mode 100644
+index 0000000000..ce81c7baca
+--- /dev/null
++++ b/package/lld/lld.hash
+@@ -0,0 +1,3 @@
++# locally calculated
++sha256 6b8c4a833cf30230c0213d78dbac01af21387b298225de90ab56032ca79c0e0b  lld-6.0.0.src.tar.xz
++sha256 f0502d2d0e19748c534ee95ea486c092273303dbef76404c8b17dc8bf6ca441b  LICENSE.TXT
+diff --git a/package/lld/lld.mk b/package/lld/lld.mk
+new file mode 100644
+index 0000000000..e82970c844
+--- /dev/null
++++ b/package/lld/lld.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# lld
++#
++################################################################################
 +
-diff --git a/package/libgtk3/0003-disable-atk-bridge.patch b/package/libgtk3/0003-disable-atk-bridge.patch
-deleted file mode 100644
-index c92174f400..0000000000
---- a/package/libgtk3/0003-disable-atk-bridge.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--Remove atk-bridge support.
--
--atk-bridge doesn't seem useful for now in Buildroot and requires to
--add two new packages just for it: at-spi2-core and at-spi2-atk.
--
--Signed-off-by: Hadrien Boutteville <hadrien.boutteville@gmail.com>
--
----- a/configure.ac
--+++ b/configure.ac
--@@ -1349,11 +1349,7 @@
-- # Check for Accessibility Toolkit flags
-- ########################################
--
---if test x$enable_x11_backend = xyes; then
---   ATK_PACKAGES="atk atk-bridge-2.0"
---else
---   ATK_PACKAGES="atk"
---fi
--+ATK_PACKAGES="atk"
--
-- PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
--
----- a/gtk/a11y/gtkaccessibility.c
--+++ b/gtk/a11y/gtkaccessibility.c
--@@ -37,10 +37,6 @@
-- #include <gtk/gtkcombobox.h>
-- #include <gtk/gtkaccessible.h>
--
---#ifdef GDK_WINDOWING_X11
---#include <atk-bridge.h>
---#endif
---
-- static gboolean gail_focus_watcher      (GSignalInvocationHint *ihint,
--                                          guint                  n_param_values,
--                                          const GValue          *param_values,
--@@ -987,9 +983,5 @@
--   _gtk_accessibility_override_atk_util ();
--   do_window_event_initialization ();
--
---#ifdef GDK_WINDOWING_X11
---  atk_bridge_adaptor_init (NULL, NULL);
---#endif
---
--   atk_misc_instance = g_object_new (GTK_TYPE_MISC_IMPL, NULL);
-- }
-diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
-index 1b85d00aae..75624a4203 100644
---- a/package/libgtk3/libgtk3.mk
-+++ b/package/libgtk3/libgtk3.mk
-@@ -31,6 +31,10 @@ LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pi
- ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
- LIBGTK3_DEPENDENCIES += fontconfig xlib_libX11 xlib_libXext xlib_libXrender xlib_libXi
- 
-+ifeq ($(BR2_PACKAGE_AT_SPI2_ATK),y)
-+LIBGTK3_DEPENDENCIES += at-spi2-atk
-+endif
++LLD_VERSION = 6.0.0
++LLD_SITE = https://llvm.org/releases/$(LLD_VERSION)
++LLD_SOURCE = lld-$(LLD_VERSION).src.tar.xz
++LLD_LICENSE = NCSA
++LLD_LICENSE_FILES = LICENSE.TXT
++LLD_SUPPORTS_IN_SOURCE_BUILD = NO
++HOST_LLD_DEPENDENCIES = host-llvm
 +
- LIBGTK3_CONF_OPTS += \
- 	--enable-x11-backend \
- 	--x-includes=$(STAGING_DIR)/usr/include/X11 \
++$(eval $(host-cmake-package))
 -- 
 2.18.0
