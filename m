@@ -1,60 +1,62 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 10 Jul 2018 09:43:24 +0000
-Subject: [Buildroot] [Bug 11141] WF111 package no longer availabe
-In-Reply-To: <bug-11141-163@https.bugs.busybox.net/>
-References: <bug-11141-163@https.bugs.busybox.net/>
-Message-ID: <bug-11141-163-haJHAUL5NI@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 10 Jul 2018 11:50:34 +0200
+Subject: [Buildroot] [PATCH 1/1] wampcc: needs atomic
+In-Reply-To: <20180707160855.1179-1-fontaine.fabrice@gmail.com>
+References: <20180707160855.1179-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180710115034.7c4c7a6f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11141
+Hello Fabrice,
 
---- Comment #1 from Peter Korsgaard <jacmet@uclibc.org> ---
-Why are they broken? Buildroot should fall back to the copy we have on
-sources.buildroot.net:
+On Sat,  7 Jul 2018 18:08:55 +0200, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.net/results/2f994762d4e01a904c50cf2728a4103e6e79da2a
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/wampcc/wampcc.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/wampcc/wampcc.mk b/package/wampcc/wampcc.mk
+> index d8e093f679..dcd65f49d5 100644
+> --- a/package/wampcc/wampcc.mk
+> +++ b/package/wampcc/wampcc.mk
+> @@ -11,4 +11,9 @@ WAMPCC_INSTALL_STAGING = YES
+>  WAMPCC_LICENSE = MIT
+>  WAMPCC_LICENSE_FILES = LICENSE
+>  
+> +# Uses __atomic_fetch_add_8
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +WAMPCC_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+> +endif
 
-https://www.silabs.com/documents/login/software/wf111-linux-driver-5-2-2-r3-armv5te.tar.gz
-Resolving www.silabs.com (www.silabs.com)... 23.53.20.107
-Connecting to www.silabs.com (www.silabs.com)|23.53.20.107|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2018-07-10 11:33:42 ERROR 404: Not Found.
+As usual, it would be nicer to handle this directly within the
+CMakeLists.txt, but OK.
 
---2018-07-10 11:33:42-- 
-http://sources.buildroot.net/wf111/wf111-linux-driver-5-2-2-r3-armv5te.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.27.167.48,
-104.27.166.48, 2400:cb00:2048:1::681b:a730, ...
-Connecting to sources.buildroot.net
-(sources.buildroot.net)|104.27.167.48|:80... connected.
-HTTP request sent, awaiting response... 404 Not Found
-2018-07-10 11:33:43 ERROR 404: Not Found.
+However, there's one thing we have not handled completely correctly for
+all those libatomic issues. Linking with libatomic when
+BR2_TOOLCHAIN_HAS_LIBATOMIC is OK, but you're not guaranteed that
+libatomic exists. Indeed, libatomic only exists since gcc 4.8.
 
---2018-07-10 11:33:43-- 
-http://sources.buildroot.net/wf111-linux-driver-5-2-2-r3-armv5te.tar.gz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.27.167.48,
-104.27.166.48, 2400:cb00:2048:1::681b:a730, ...
-Connecting to sources.buildroot.net
-(sources.buildroot.net)|104.27.167.48|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 2743425 (2.6M) [application/x-gtar-compressed]
+So a package that use atomic built-ins should both:
 
+ (1) depends on BR2_TOOLCHAIN_HAS_ATOMIC
 
-With that said, updating to -4 is also fine. Do notice that they apparently
-haven't released a -4 x86 version:
+ (2) link with libatomic if BR2_TOOLCHAIN_HAS_LIBATOMIC
 
-wget
-https://www.silabs.com/documents/login/software/wf111-linux-driver-5-2-2-r4-x86.tar.gz
---2018-07-10 11:34:37-- 
-https://www.silabs.com/documents/login/software/wf111-linux-driver-5-2-2-r4-x86.tar.gz
-Resolving www.silabs.com (www.silabs.com)... 23.53.20.107
-Connecting to www.silabs.com (www.silabs.com)|23.53.20.107|:443... connected.
-HTTP request sent, awaiting response... 404 Not Found
+Your commit does (2) correctly, but forgets to do (1). For example, if
+you try to build wampcc for Sparc with a gcc 4.7 toolchain, it will
+still fail with your commit because libatomic didn't exist back in the
+gcc 4.7 days.
 
-What is this wpa-supplicant patch about? Is this something new for -4? Where
-can this patch be found?
+Best regards,
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
