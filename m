@@ -1,64 +1,142 @@
-From: aai at tut.by <aai@tut.by>
-Date: Tue, 10 Jul 2018 11:53:18 +0300
-Subject: [Buildroot] Orange Pi Prime does not boot
-Message-ID: <20695741531212798@myt3-12f13c3c6b95.qloud-c.yandex.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 10 Jul 2018 11:12:10 +0200
+Subject: [Buildroot] [PATCH] systemd: add an option to use busybox's
+ getty
+In-Reply-To: <07fc8266-b257-845b-f368-b922b3df18e7@smile.fr>
+References: <20180708195429.9693-1-jeremy.rosen@smile.fr>
+ <be826cad-71c5-10ac-aec2-bc4dc919e356@smile.fr>
+ <2708cb51-e9fd-2176-a129-98202de43ddf@mind.be>
+ <07fc8266-b257-845b-f368-b922b3df18e7@smile.fr>
+Message-ID: <8cf54714-8e1f-ea12-fd4c-d2f5f4fddfa0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-orangepi_prime_defconfig does not work for me (try buildroot 2018.02.3 and 2018.05)
-
-I do:
-make orangepi_prime_defconfig
-make
-
-boot log:
---------------------------------------------------------------
-Terminal ready
-
-U-Boot SPL 2017.11 (Jul 09 2018 - 10:12:15)
-DRAM: 2048 MiB
-Trying to boot from MMC1
 
 
-U-Boot 2017.11 (Jul 09 2018 - 10:12:15 +0300) Allwinner Technology
+On 10-07-18 10:05, J?r?my Rosen wrote:
+> 
+> 
+> On 10/07/2018 00:21, Arnout Vandecappelle wrote:
+>> On 09-07-18 10:02, Romain Naour wrote:
+>>> Hi Jeremy,
+>>>
+>>> Le 08/07/2018 ? 21:54, J?r?my Rosen a ?crit?:
+>>>> Currently, the patch to replace agetty with busybox's getty is always
+>>>> applied.
+>>>>
+>>>> this patch adds a compile-time option to systemd to choose either agetty
+>>>> or busybox's getty and chooses the correct option depending on agetty being
+>>>> selected in busybox
+>>>>
+>>> As discussed privately, if you want an example on how apply a patch
+>>> conditionally you can take a look at the gcc package [1].
+>>  I don't think we want to apply patches conditionally. In fact, J?r?my's change
+>> is much better, because it makes the patch upstreamable.
+> systemd upstream is not interested in supporting busybox AFAIU...
 
-CPU:   Allwinner H5 (SUN50I)
-Model: OrangePi Prime
-DRAM:  2 GiB
-MMC:   SUNXI SD/MMC: 0
-*** Warning - bad CRC, using default environment
+ Really? There are a few commits in systemd that mention support for busybox...
 
-In:    serial
-Out:   serial
-Err:   serial
-Net:   No ethernet found.
-starting USB...
-USB0:   USB EHCI 1.00
-USB1:   USB OHCI 1.0
-scanning bus 0 for devices... 1 USB Device(s) found
-       scanning usb for storage devices... 0 Storage Device(s) found
-Hit any key to stop autoboot:  0 
-switch to partitions #0, OK
-mmc0 is current device
-Scanning mmc 0:1...
-Found U-Boot script /boot.scr
-reading /boot.scr
-277 bytes read in 14 ms (18.6 KiB/s)
-## Executing script at 4fc00000
-reading Image
-17365504 bytes read in 870 ms (19 MiB/s)
-reading sun50i-h5-orangepi-prime.dtb
-13714 bytes read in 25 ms (535.2 KiB/s)
-## Flattened Device Tree blob at 4fa00000
-   Booting using the fdt blob at 0x4fa00000
-   Loading Device Tree to 0000000049ff9000, end 0000000049fff591 ... OK
+ I do believe that Denys (the busybox maintainer) at some point made some
+negative comments about adding support for systemd (I guess about communicating
+with journald). I don't remember ever seeing systemd people saying anything
+about busybox. But I'm not really following the systemd world.
 
-Starting kernel ...
---------------------------------------------------------------
 
-kernel does not load  
+>>  That said, as discussed on IRC, a much easier approach would be to overwrite
+>> systemd's getty unit files with custom buildroot unit files in case
+>> UTIL_LINUX_AGETTY is not selected. Then the patch could be dropped entirely.
+> The patch approch has the advantage of "breaking" if upstream changes, but I can
+> do a followup in that direction, if that's what the project wants...
+
+ Good point. My first thought was: nothing important is ever going to change in
+those getty files. But then again, it has some things that might change, like
+dependencies and conditions.
+
+ So yes, the patch is probably the better approach. Could you make an attempt at
+upstreaming it though?
+
+ One comment on that patch, though: the changequote using a non-7-bit-ascii
+character is pretty ugly IMO, and also the characters you choose are not a
+typical open-close pair. Could you replace it with [] or {} or suchlike?
+
+ Also, I think (but I'm no m4 expert) you can make it a bit more readable by doing:
+
+{m4_dnl
+# The '-o' option ...
+
+instead of
+
+{# The '-o' option ...
+
+ Come to think of it, isn't it sufficient to just double-quote instead of doing
+changequote? So
+
+m4_ifdef(`ENABLE_BUSYBOX_GETTY',
+``ExecStart=-/sbin/getty -L %I 115200 vt100'',
+``m4_dnl
+# The '-o' option value tells agetty to replace 'login' arguments with an
+...
+'')m4_dnl
+
+
+ Regards,
+ Arnout
+
+
+>>  Regards,
+>>  Arnout
+>>
+>>> This has been introduced by [2] but there is some other place where
+>>> $(APPLY_PATCHES) is used (conditionally or unconditionally).
+>>>
+>>> $(APPLY_PATCHES) is defined in package/Makefile.in but this way to use it is not
+>>> documented in the manual [3].
+>>>
+>>> Best regards,
+>>> Romain
+>>>
+>>> [1] https://git.busybox.net/buildroot/tree/package/gcc/gcc.mk#n41
+>>> [2]
+>>> https://git.busybox.net/buildroot/commit/?id=197006a41c1a0450bf6350d5742e186b5b0c69de
+>>> [3] http://nightly.buildroot.org/manual.html#patch-policy
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+> 
+> -- 
+> SMILE <http://www.smile.eu/>
+> 
+> 20 rue des Jardins
+> 92600 Asni?res-sur-Seine
+> 
+> 	
+> *J?r?my ROSEN*
+> Architecte technique
+> Responsable de l'expertise Smile-ECS
+> 
+> email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
+> phone +33141402967
+> url http://www.smile.eu
+> 
+> Twitter <https://twitter.com/GroupeSmile> Facebook
+> <https://www.facebook.com/smileopensource> LinkedIn
+> <https://www.linkedin.com/company/smile> Github <https://github.com/Smile-SA>
+> 
+> 
+> D?couvrez l?univers Smile, rendez-vous sur smile.eu
+> <http://smile.eu/?utm_source=signature&utm_medium=email&utm_campaign=signature>
+> 
+> eco Pour la plan?te, n'imprimez ce mail que si c'est n?cessaire
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
