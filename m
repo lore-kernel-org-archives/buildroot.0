@@ -1,78 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 10 Jul 2018 11:18:29 +0200
-Subject: [Buildroot] Orange Pi Prime does not boot
-In-Reply-To: <20695741531212798@myt3-12f13c3c6b95.qloud-c.yandex.net>
- (aai@tut.by's message of "Tue, 10 Jul 2018 11:53:18 +0300")
-References: <20695741531212798@myt3-12f13c3c6b95.qloud-c.yandex.net>
-Message-ID: <87efgbwisa.fsf@dell.be.48ers.dk>
+Date: Tue, 10 Jul 2018 11:21:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: add optional support
+ for libdrm
+In-Reply-To: <20180709174744.10857-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 9 Jul 2018 19:47:44 +0200")
+References: <20180709174744.10857-1-bernd.kuhls@t-online.de>
+Message-ID: <87a7qzwink.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "aai" == aai  <aai@tut.by> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Hello,
- > orangepi_prime_defconfig does not work for me (try buildroot 2018.02.3 and 2018.05)
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > I do:
- > make orangepi_prime_defconfig
- > make
-
-Jagan, you added this defconfig. Any ideas?
-
- > boot log:
- > --------------------------------------------------------------
- > Terminal ready
-
- > U-Boot SPL 2017.11 (Jul 09 2018 - 10:12:15)
- > DRAM: 2048 MiB
- > Trying to boot from MMC1
-
-
- > U-Boot 2017.11 (Jul 09 2018 - 10:12:15 +0300) Allwinner Technology
-
- > CPU:   Allwinner H5 (SUN50I)
- > Model: OrangePi Prime
- > DRAM:  2 GiB
- > MMC:   SUNXI SD/MMC: 0
- > *** Warning - bad CRC, using default environment
-
- > In:    serial
- > Out:   serial
- > Err:   serial
- > Net:   No ethernet found.
- > starting USB...
- > USB0:   USB EHCI 1.00
- > USB1:   USB OHCI 1.0
- > scanning bus 0 for devices... 1 USB Device(s) found
- >        scanning usb for storage devices... 0 Storage Device(s) found
- > Hit any key to stop autoboot:  0 
- > switch to partitions #0, OK
- > mmc0 is current device
- > Scanning mmc 0:1...
- > Found U-Boot script /boot.scr
- > reading /boot.scr
- > 277 bytes read in 14 ms (18.6 KiB/s)
- > ## Executing script at 4fc00000
- > reading Image
- > 17365504 bytes read in 870 ms (19 MiB/s)
- > reading sun50i-h5-orangepi-prime.dtb
- > 13714 bytes read in 25 ms (535.2 KiB/s)
- > ## Flattened Device Tree blob at 4fa00000
- >    Booting using the fdt blob at 0x4fa00000
- >    Loading Device Tree to 0000000049ff9000, end 0000000049fff591 ... OK
-
- > Starting kernel ...
- > --------------------------------------------------------------
-
- > kernel does not load  
-
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
