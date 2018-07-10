@@ -1,171 +1,157 @@
-From: =?UTF-8?B?SsOpcsOpbXkgUm9zZW4=?= <jeremy.rosen@smile.fr>
-Date: Tue, 10 Jul 2018 17:17:40 +0200
-Subject: [Buildroot] [PATCH] systemd: add an option to use busybox's
- getty
-In-Reply-To: <8cf54714-8e1f-ea12-fd4c-d2f5f4fddfa0@mind.be>
-References: <20180708195429.9693-1-jeremy.rosen@smile.fr>
- <be826cad-71c5-10ac-aec2-bc4dc919e356@smile.fr>
- <2708cb51-e9fd-2176-a129-98202de43ddf@mind.be>
- <07fc8266-b257-845b-f368-b922b3df18e7@smile.fr>
- <8cf54714-8e1f-ea12-fd4c-d2f5f4fddfa0@mind.be>
-Message-ID: <8898396b-1e42-c4d3-708f-457e5be4ab43@smile.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 10 Jul 2018 18:45:06 +0300
+Subject: [Buildroot] [PATCH] zstd: bump to version 1.3.5
+Message-ID: <7901bdac3aa2b2e7c07458ba35a2b77e642b1909.1531237506.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop upstream patches.
 
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...stall-target-into-pc-static-shared-a.patch | 51 -------------------
+ ...ate-include-directory-before-headers.patch | 45 ----------------
+ package/zstd/zstd.hash                        |  2 +-
+ package/zstd/zstd.mk                          |  2 +-
+ 4 files changed, 2 insertions(+), 98 deletions(-)
+ delete mode 100644 package/zstd/0001-Split-library-install-target-into-pc-static-shared-a.patch
+ delete mode 100644 package/zstd/0002-lib-Makefile-create-include-directory-before-headers.patch
 
-On 10/07/2018 11:12, Arnout Vandecappelle wrote:
->
-> On 10-07-18 10:05, J?r?my Rosen wrote:
->>
->> On 10/07/2018 00:21, Arnout Vandecappelle wrote:
->>> On 09-07-18 10:02, Romain Naour wrote:
->>>> Hi Jeremy,
->>>>
->>>> Le 08/07/2018 ? 21:54, J?r?my Rosen a ?crit?:
->>>>> Currently, the patch to replace agetty with busybox's getty is always
->>>>> applied.
->>>>>
->>>>> this patch adds a compile-time option to systemd to choose either agetty
->>>>> or busybox's getty and chooses the correct option depending on agetty being
->>>>> selected in busybox
->>>>>
->>>> As discussed privately, if you want an example on how apply a patch
->>>> conditionally you can take a look at the gcc package [1].
->>>   I don't think we want to apply patches conditionally. In fact, J?r?my's change
->>> is much better, because it makes the patch upstreamable.
->> systemd upstream is not interested in supporting busybox AFAIU...
->   Really? There are a few commits in systemd that mention support for busybox...
->
->   I do believe that Denys (the busybox maintainer) at some point made some
-> negative comments about adding support for systemd (I guess about communicating
-> with journald). I don't remember ever seeing systemd people saying anything
-> about busybox. But I'm not really following the systemd world.
->
-That was my understanding, but I can submit a PR, we'll see if they are 
-interested...
-
->>>   That said, as discussed on IRC, a much easier approach would be to overwrite
->>> systemd's getty unit files with custom buildroot unit files in case
->>> UTIL_LINUX_AGETTY is not selected. Then the patch could be dropped entirely.
->> The patch approch has the advantage of "breaking" if upstream changes, but I can
->> do a followup in that direction, if that's what the project wants...
->   Good point. My first thought was: nothing important is ever going to change in
-> those getty files. But then again, it has some things that might change, like
-> dependencies and conditions.
->
->   So yes, the patch is probably the better approach. Could you make an attempt at
-> upstreaming it though?
-will do (not right away, i'm away for a week)
-
->
->   One comment on that patch, though: the changequote using a non-7-bit-ascii
-> character is pretty ugly IMO, and also the characters you choose are not a
-> typical open-close pair. Could you replace it with [] or {} or suchlike?
-I'll try to find a pair that is not used in the block I quote :)
->
->   Also, I think (but I'm no m4 expert) you can make it a bit more readable by doing:
->
-> {m4_dnl
-> # The '-o' option ...
->
-> instead of
->
-> {# The '-o' option ...
->
->   Come to think of it, isn't it sufficient to just double-quote instead of doing
-> changequote? So
->
-> m4_ifdef(`ENABLE_BUSYBOX_GETTY',
-> ``ExecStart=-/sbin/getty -L %I 115200 vt100'',
-> ``m4_dnl
-> # The '-o' option value tells agetty to replace 'login' arguments with an
-> ...
-> '')m4_dnl
-Ok, your m4-fu is way better than mine... i'll have a look at that too.
-
-Thx for the review
-
-J?r?my
->
->   Regards,
->   Arnout
->
->
->>>   Regards,
->>>   Arnout
->>>
->>>> This has been introduced by [2] but there is some other place where
->>>> $(APPLY_PATCHES) is used (conditionally or unconditionally).
->>>>
->>>> $(APPLY_PATCHES) is defined in package/Makefile.in but this way to use it is not
->>>> documented in the manual [3].
->>>>
->>>> Best regards,
->>>> Romain
->>>>
->>>> [1] https://git.busybox.net/buildroot/tree/package/gcc/gcc.mk#n41
->>>> [2]
->>>> https://git.busybox.net/buildroot/commit/?id=197006a41c1a0450bf6350d5742e186b5b0c69de
->>>> [3] http://nightly.buildroot.org/manual.html#patch-policy
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>>
->> -- 
->> SMILE <http://www.smile.eu/>
->>
->> 20 rue des Jardins
->> 92600 Asni?res-sur-Seine
->>
->> 	
->> *J?r?my ROSEN*
->> Architecte technique
->> Responsable de l'expertise Smile-ECS
->>
->> email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
->> phone +33141402967
->> url http://www.smile.eu
->>
->> Twitter <https://twitter.com/GroupeSmile> Facebook
->> <https://www.facebook.com/smileopensource> LinkedIn
->> <https://www.linkedin.com/company/smile> Github <https://github.com/Smile-SA>
->>
->>
->> D?couvrez l?univers Smile, rendez-vous sur smile.eu
->> <http://smile.eu/?utm_source=signature&utm_medium=email&utm_campaign=signature>
->>
->> eco Pour la plan?te, n'imprimez ce mail que si c'est n?cessaire
-
+diff --git a/package/zstd/0001-Split-library-install-target-into-pc-static-shared-a.patch b/package/zstd/0001-Split-library-install-target-into-pc-static-shared-a.patch
+deleted file mode 100644
+index af9b2bf3f944..000000000000
+--- a/package/zstd/0001-Split-library-install-target-into-pc-static-shared-a.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 2623a12bff19049b6ad5bc066e3ef9c6259d415c Mon Sep 17 00:00:00 2001
+-From: Peter Seiderer <ps.report@gmx.net>
+-Date: Mon, 16 Apr 2018 20:44:49 +0200
+-Subject: [PATCH] Split library install target into pc, static, shared and
+- include only target
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- lib/Makefile | 15 ++++++++++++---
+- 1 file changed, 12 insertions(+), 3 deletions(-)
+-
+-diff --git a/lib/Makefile b/lib/Makefile
+-index cdfdc5c..b592aa6 100644
+---- a/lib/Makefile
+-+++ b/lib/Makefile
+-@@ -159,20 +159,29 @@ libzstd.pc: libzstd.pc.in
+-              -e 's|@VERSION@|$(VERSION)|' \
+-              $< >$@
+- 
+--install: libzstd.a libzstd libzstd.pc
+-+install: install-pc install-static install-shared install-includes
+-+	@echo zstd static and shared library installed
+-+
+-+install-pc: libzstd.pc
+- 	@$(INSTALL) -d -m 755 $(DESTDIR)$(PKGCONFIGDIR)/ $(DESTDIR)$(INCLUDEDIR)/
+- 	@$(INSTALL_DATA) libzstd.pc $(DESTDIR)$(PKGCONFIGDIR)/
+--	@echo Installing libraries
+-+
+-+install-static: libzstd.a
+-+	@echo Installing static library
+- 	@$(INSTALL_DATA) libzstd.a $(DESTDIR)$(LIBDIR)
+-+
+-+install-shared: libzstd
+-+	@echo Installing shared library
+- 	@$(INSTALL_PROGRAM) $(LIBZSTD) $(DESTDIR)$(LIBDIR)
+- 	@ln -sf $(LIBZSTD) $(DESTDIR)$(LIBDIR)/libzstd.$(SHARED_EXT_MAJOR)
+- 	@ln -sf $(LIBZSTD) $(DESTDIR)$(LIBDIR)/libzstd.$(SHARED_EXT)
+-+
+-+install-includes:
+- 	@echo Installing includes
+- 	@$(INSTALL_DATA) zstd.h $(DESTDIR)$(INCLUDEDIR)
+- 	@$(INSTALL_DATA) common/zstd_errors.h $(DESTDIR)$(INCLUDEDIR)
+- 	@$(INSTALL_DATA) deprecated/zbuff.h $(DESTDIR)$(INCLUDEDIR)     # prototypes generate deprecation warnings
+- 	@$(INSTALL_DATA) dictBuilder/zdict.h $(DESTDIR)$(INCLUDEDIR)
+--	@echo zstd static and shared library installed
+- 
+- uninstall:
+- 	@$(RM) $(DESTDIR)$(LIBDIR)/libzstd.a
+--- 
+-2.16.3
+-
+diff --git a/package/zstd/0002-lib-Makefile-create-include-directory-before-headers.patch b/package/zstd/0002-lib-Makefile-create-include-directory-before-headers.patch
+deleted file mode 100644
+index e95f8c0be48c..000000000000
+--- a/package/zstd/0002-lib-Makefile-create-include-directory-before-headers.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 9a0643b633c00e86db059e3790bdea7155fb6dc9 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Tue, 8 May 2018 20:43:28 +0300
+-Subject: [PATCH] lib/Makefile: create include directory before headers
+- installation
+-
+-Make sure that $(INCLUDEDIR) exists before copying the headers there.
+-Otherwise, the contest of header files is copied over
+-$(DESTDIR)$(INCLUDEDIR), making it a regular file.
+-
+-While at it, remove $(DESTDIR)$(INCLUDEDIR) from the list of directories
+-to create in the install-pc target. The install-pc target does not need
+-this directory.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/facebook/zstd/pull/1123
+-
+- lib/Makefile | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/Makefile b/lib/Makefile
+-index f64f192d4724..d8178c7a58a0 100644
+---- a/lib/Makefile
+-+++ b/lib/Makefile
+-@@ -163,7 +163,7 @@ install: install-pc install-static install-shared install-includes
+- 	@echo zstd static and shared library installed
+- 
+- install-pc: libzstd.pc
+--	@$(INSTALL) -d -m 755 $(DESTDIR)$(PKGCONFIGDIR)/ $(DESTDIR)$(INCLUDEDIR)/
+-+	@$(INSTALL) -d -m 755 $(DESTDIR)$(PKGCONFIGDIR)/
+- 	@$(INSTALL_DATA) libzstd.pc $(DESTDIR)$(PKGCONFIGDIR)/
+- 
+- install-static: libzstd.a
+-@@ -178,6 +178,7 @@ install-shared: libzstd
+- 
+- install-includes:
+- 	@echo Installing includes
+-+	@$(INSTALL) -d -m 755 $(DESTDIR)$(INCLUDEDIR)/
+- 	@$(INSTALL_DATA) zstd.h $(DESTDIR)$(INCLUDEDIR)
+- 	@$(INSTALL_DATA) common/zstd_errors.h $(DESTDIR)$(INCLUDEDIR)
+- 	@$(INSTALL_DATA) deprecated/zbuff.h $(DESTDIR)$(INCLUDEDIR)     # prototypes generate deprecation warnings
+--- 
+-2.17.0
+-
+diff --git a/package/zstd/zstd.hash b/package/zstd/zstd.hash
+index f7aadfb5db75..95b22709810b 100644
+--- a/package/zstd/zstd.hash
++++ b/package/zstd/zstd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 92e41b6e8dd26bbd46248e8aa1d86f1551bc221a796277ae9362954f26d605a9 zstd-v1.3.4.tar.gz
++sha256 d6e1559e4cdb7c4226767d4ddc990bff5f9aab77085ff0d0490c828b025e2eea zstd-v1.3.5.tar.gz
+ 
+ # License files (locally computed as well)
+ sha256 2c1a7fa704df8f3a606f6fc010b8b5aaebf403f3aeec339a12048f1ba7331a0b LICENSE
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index 0b613a6da45a..a1a11f9ab259 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZSTD_VERSION = v1.3.4
++ZSTD_VERSION = v1.3.5
+ ZSTD_SITE = $(call github,facebook,zstd,$(ZSTD_VERSION))
+ ZSTD_INSTALL_STAGING = YES
+ ZSTD_LICENSE = BSD-3-Clause or GPL-2.0
 -- 
-SMILE <http://www.smile.eu/>
-
-20 rue des Jardins
-92600 Asni?res-sur-Seine
-
-	
-*J?r?my ROSEN*
-Architecte technique
-Responsable de l'expertise Smile-ECS
-
-email jeremy.rosen at smile.fr <mailto:jeremy.rosen@smile.fr>
-phone +33141402967
-url http://www.smile.eu
-
-Twitter <https://twitter.com/GroupeSmile> Facebook 
-<https://www.facebook.com/smileopensource> LinkedIn 
-<https://www.linkedin.com/company/smile> Github 
-<https://github.com/Smile-SA>
-
-
-D?couvrez l?univers Smile, rendez-vous sur smile.eu 
-<http://smile.eu/?utm_source=signature&utm_medium=email&utm_campaign=signature>
-
-eco Pour la plan?te, n'imprimez ce mail que si c'est n?cessaire
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180710/7d0cafe3/attachment.html>
+2.18.0
