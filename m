@@ -1,82 +1,162 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 10 Jul 2018 08:01:08 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-07-09
-Message-ID: <20180710060108.074B42072D@mail.bootlin.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 10 Jul 2018 09:05:33 +0300
+Subject: [Buildroot] [PATCH] iperf: bump to version 2.0.12
+Message-ID: <5deab2d1a94ff8d5b29e4031b0114dc99a31a126.1531202733.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Drop patch #1; not needed anymore.
 
-Build statistics for 2018-07-09
-===============================
+Drop patch #2; fixed upstream in a slightly different way.
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  15 |   0 |   0 |  15 |
-   2018.05.x |  15 |   0 |   0 |  15 |
-      master | 103 |  33 |   0 | 136 |
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...01-util.h-add-missing-stdbool-header.patch | 54 -------------------
+ ...0002-fix-speed-display-in-csv-report.patch | 39 --------------
+ package/iperf/iperf.hash                      |  4 +-
+ package/iperf/iperf.mk                        |  4 +-
+ 4 files changed, 3 insertions(+), 98 deletions(-)
+ delete mode 100644 package/iperf/0001-util.h-add-missing-stdbool-header.patch
+ delete mode 100644 package/iperf/0002-fix-speed-display-in-csv-report.patch
 
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                  squid-3.5.27 | 12
-                   wampcc-v1.6 | 4 
-             gnuradio-3.7.13.3 | 2 
-                    host-rustc | 2 
-               mono-5.12.0.226 | 2 
-                 opencv3-3.3.0 | 2 
-                 wiringpi-2.46 | 2 
-                busybox-1.29.0 | 1 
-               domoticz-4.9700 | 1 
-                libmpeg2-0.5.1 | 1 
-              libostree-2018.6 | 1 
-          openpowerlink-V2.7.0 | 1 
-                  samba4-4.8.3 | 1 
-              wireshark-2.2.15 | 1 
-
-
-Detail of failures
-------------------
-
-    mips64el |                 busybox-1.29.0 | NOK | http://autobuild.buildroot.net/results/6b39648b466738162516aa50ab328d839ec85448 |     
-    mips64el |                domoticz-4.9700 | NOK | http://autobuild.buildroot.net/results/a482fad34d1f1cc99472130e4dde0bb192f1d299 |     
-         arm |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/fde61220ddd3bf46846774a4737166d8a2f3350a |     
-    mips64el |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/d05b7a1cb813e96e70402f75098d63f7ff73540e |     
-    mips64el |                     host-rustc | NOK | http://autobuild.buildroot.net/results/356de6ede09587b16c8064604d5ebdd2b0602a6f |     
-         arc |                     host-rustc | NOK | http://autobuild.buildroot.net/results/dc8722c152d758beeb66f0647036d42a67e4c9d9 |     
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/87b9f0a36ef4636210d51d0693adac51a5176606 | ORPH
-    mips64el |               libostree-2018.6 | NOK | http://autobuild.buildroot.net/results/f8c80c8684634eaca813b572d48a35d1c90322a3 |     
-        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/735b2ac0908579b22da7768579754ef42dff5223 |     
-        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/8a03cea6f3b31551efec8ab0ec74903b02a925a7 |     
-     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/028914bb646907c5f1a6caf9e211bc188c755970 |     
-     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/9dadc09b43fc6cc14aea7e480e42a5172b80adb7 |     
-        i586 |           openpowerlink-V2.7.0 | NOK | http://autobuild.buildroot.net/results/63d5b21b5581f2005d6ca2bd0558601cc17eaee1 |     
-      mipsel |                   samba4-4.8.3 | NOK | http://autobuild.buildroot.net/results/7d76c397e4fdbd02611cfc2388bca30cf53e0ee7 |     
-         arm |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/787400a619739668323c396a603094f29b39b7c6 | ORPH
-         arm |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/c7a36347bb7d2df83c7c2f7b542b0eb08e6fc5ef | ORPH
-     powerpc |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/a17863eba6c9f6bb111fc40dbfa1a91493318e37 | ORPH
-       nios2 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/7bb3cc0b02c31e290dc5f7d52e793aad2dfdb295 | ORPH
-         arm |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/c16bf531a677ed49c3dce8c262da1a5bc528760d | ORPH
-      x86_64 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/26824b0c689b86e1b06256cb36504b9831a1ed60 | ORPH
-         arm |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/975397b58139e8a8f7fe071d5b39cf2ec080168a | ORPH
-      x86_64 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/e721f0a6e66c30a597d4f6957dba1876d08e177d | ORPH
-     powerpc |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/cfd093ffa50419d8b01f6460960d70d6595f2ca7 | ORPH
-         arc |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/c15edf557ab9b6f337deab3b29e31f307c842e22 | ORPH
-      x86_64 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/be715719b8da72006e4db88c1c92379003ba225d | ORPH
-     sparc64 |                   squid-3.5.27 | NOK | http://autobuild.buildroot.net/results/ac6a34ea206dbdfd2fd9e38bc648c3217b738140 | ORPH
-      mipsel |                    wampcc-v1.6 | NOK | http://autobuild.buildroot.net/results/9b3fdf3369e9c3633d925d9e5c8a428d23dae5d4 |     
-        mips |                    wampcc-v1.6 | NOK | http://autobuild.buildroot.net/results/bf73b68c1bf5fd04295c0e450d3e931b28ef01a5 |     
-     powerpc |                    wampcc-v1.6 | NOK | http://autobuild.buildroot.net/results/6487f7516ebfbbe72ec4fd24f31b60c411dd224e |     
-       nios2 |                    wampcc-v1.6 | NOK | http://autobuild.buildroot.net/results/a6ca6516ad44d2bf0062d06b704ab0ee40193e26 |     
-         arc |               wireshark-2.2.15 | NOK | http://autobuild.buildroot.net/results/9d32877b506915f375f0c30b815c785241434ceb | ORPH
-         arm |                  wiringpi-2.46 | NOK | http://autobuild.buildroot.net/results/8805e1e95ab66d12bcddb7f2d8cf807c1651acd9 |     
-      xtensa |                  wiringpi-2.46 | NOK | http://autobuild.buildroot.net/results/9f0b7220af5947acf99efbb7d74504274063b320 |     
-
-
+diff --git a/package/iperf/0001-util.h-add-missing-stdbool-header.patch b/package/iperf/0001-util.h-add-missing-stdbool-header.patch
+deleted file mode 100644
+index 6eeed72a6cd1..000000000000
+--- a/package/iperf/0001-util.h-add-missing-stdbool-header.patch
++++ /dev/null
+@@ -1,54 +0,0 @@
+-From babf9a5c2bbce4725963b21e47f413962e33ea88 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Sat, 30 Jul 2016 14:24:33 +0200
+-Subject: [PATCH] util.h: add missing stdbool header
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-C requires the stdbool.h header for the 'bool' type.
+-
+-Fixes the following build failure under uClibc-ng C library:
+-
+-.../arm-linux-gcc -DHAVE_CONFIG_H -I. -I..  -I../include -I../include -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -c delay.c
+-In file included from delay.c:55:0:
+-../include/util.h:73:1: error: unknown type name ?bool?
+- bool setsock_blocking(int fd, bool blocking);
+- ^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-[Thomas: add AC_PROG_CC_C99, since C99 is needed for the bool type.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+----
+- configure.ac   | 1 +
+- include/util.h | 2 ++
+- 2 files changed, 3 insertions(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index d59107a..ba30cb7 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -46,6 +46,7 @@ dnl ===================================================================
+- AC_PROG_CXX
+- CXXFLAGS=`echo " $CXXFLAGS " | sed -e "s/ -g / /"` # do not want it implicitly
+- AC_PROG_CC
+-+AC_PROG_CC_C99
+- CFLAGS=`echo " $CFLAGS " | sed -e "s/ -g / /"` # do not want it implicitly
+- AC_ISC_POSIX
+- AC_PROG_INSTALL
+-diff --git a/include/util.h b/include/util.h
+-index f4ae3d8..91540a9 100644
+---- a/include/util.h
+-+++ b/include/util.h
+-@@ -57,6 +57,8 @@
+-     #include "config.h"
+- #endif
+- 
+-+#include <stdbool.h>
+-+
+- #ifdef __cplusplus
+- extern "C" {
+- #endif
+--- 
+-2.7.4
+-
+diff --git a/package/iperf/0002-fix-speed-display-in-csv-report.patch b/package/iperf/0002-fix-speed-display-in-csv-report.patch
+deleted file mode 100644
+index b06c7099e9ab..000000000000
+--- a/package/iperf/0002-fix-speed-display-in-csv-report.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From f035e70b72d4285dcdbd393e680777a927cb9da4 Mon Sep 17 00:00:00 2001
+-From: Matt Weber <matthew.weber@rockwellcollins.com>
+-Date: Thu, 28 Jul 2016 19:04:01 -0500
+-Subject: [PATCH] perf: fix "speed" display in csv report
+-
+-Some parameters displayed in the CSV reports are declared
+-as uint64_t, but the printf format doesn't reflect this.
+-
+-Submitted bug: https://sourceforge.net/p/iperf/bugs/66/
+-
+-Signed-off-by: Matt Poduska <matt.poduska@rockwellcollins.com>
+-Signed-off-by: Atul Singh <atul.singh.mandla@gmail.com>
+-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+----
+- src/Locale.c | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/Locale.c b/src/Locale.c
+-index b5d42b1..7b924fa 100644
+---- a/src/Locale.c
+-+++ b/src/Locale.c
+-@@ -260,11 +260,12 @@ const char reportCSV_bw_format[] =
+- const char reportCSV_bw_jitter_loss_format[] =
+- "%s,%s,%d,%.1f-%.1f,%I64d,%I64d,%.3f,%d,%d,%.3f,%d\n";
+- #else
+-+#include "inttypes.h"
+- const char reportCSV_bw_format[] =
+--"%s,%s,%d,%.1f-%.1f,%d,%d\n";
+-+"%s,%s,%d,%.1f-%.1f,%" PRId64 ",%" PRId64 "\n";
+- 
+- const char reportCSV_bw_jitter_loss_format[] =
+--"%s,%s,%d,%.1f-%.1f,%d,%d,%.3f,%d,%d,%.3f,%d\n";
+-+"%s,%s,%d,%.1f-%.1f,%" PRId64 ",%" PRId64 ",%.3f,%d,%d,%.3f,%d\n";
+- #endif //WIN32
+- #endif //HAVE_QUAD_SUPPORT
+- /* -------------------------------------------------------------------
+--- 
+-1.9.1
+-
+diff --git a/package/iperf/iperf.hash b/package/iperf/iperf.hash
+index 0752bfc3561b..3540c6e9304c 100644
+--- a/package/iperf/iperf.hash
++++ b/package/iperf/iperf.hash
+@@ -1,5 +1,5 @@
+ # From https://sourceforge.net/projects/iperf2/files/
+-sha1	8b44a23385044bb454e7891966c37339d3bb3711	iperf-2.0.10.tar.gz
++sha1	909b469bbbc38508cd268e334a6ec319c3116f15	iperf-2.0.12.tar.gz
+ # Locally computed:
+-sha256  7fe4348dcca313b74e0aa9c34a8ccd713b84a5615b8578f4aa94cedce9891ef2  iperf-2.0.10.tar.gz
++sha256  367f651fb1264b13f6518e41b8a7e08ce3e41b2a1c80e99ff0347561eed32646  iperf-2.0.12.tar.gz
+ sha256  5f9f5c4feca3347c3b3c0ada8b16b4e6b698aac4e6f016a24adf61a5915336d1  COPYING
+diff --git a/package/iperf/iperf.mk b/package/iperf/iperf.mk
+index 644980754f52..c712de61e02b 100644
+--- a/package/iperf/iperf.mk
++++ b/package/iperf/iperf.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
+ 
+-IPERF_VERSION = 2.0.10
++IPERF_VERSION = 2.0.12
+ IPERF_SITE = http://downloads.sourceforge.net/project/iperf2
+ IPERF_LICENSE = MIT-like
+ IPERF_LICENSE_FILES = COPYING
+-# patching configure.ac
+-IPERF_AUTORECONF = YES
+ 
+ IPERF_CONF_OPTS = \
+ 	--disable-web100
 -- 
-http://autobuild.buildroot.net
+2.18.0
