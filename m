@@ -1,56 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Jul 2018 23:04:39 +0200
-Subject: [Buildroot] [PATCH] utils/test-pkg: log the output of
- merge-config
-In-Reply-To: <20180708102659.26293-1-yann.morin.1998@free.fr>
-References: <20180708102659.26293-1-yann.morin.1998@free.fr>
-Message-ID: <29d99127-bacc-ccb3-d97c-b485cd333063@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 10 Jul 2018 23:04:56 +0200
+Subject: [Buildroot] [git commit] boost: detect missing selects
+Message-ID: <20180710212711.548008829A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=5230ecfde7fea60f3938e2a3daca56a4d79f83d8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+As suggested by Arnout during the review of
+http://patchwork.ozlabs.org/patch/934589, add a mechanism to detect a
+missing boost select by checking that we do not install a boost library
+which hasn't been selected by the user.
 
-On 08-07-18 12:26, Yann E. MORIN wrote:
-> Currently, the stdout is consigned to oblivion, while the stderr is not
-> redirected at all. So, when the configuration under test redefines a
-> symbol, like is the case when testing busybox for example, there is an
-> ugly warning.
-> 
-> So, just redirect both stdout and stderr to the logfile.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To manage a change of boost configuration by the user between two
+builds, add a BOOST_PRE_INSTALL_TARGET_HOOKS to remove all boost
+libraries before installing them.
 
- Applied to master, thanks.
+Also, use ls with a wildcard instead of test to avoid trying to guess
+library names if boost layout is set to tagged or versionned (the
+wildcard will also help us to manage shared or static library)
 
- Regards,
- Arnout
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/boost/boost.mk | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-> ---
->  utils/test-pkg | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/utils/test-pkg b/utils/test-pkg
-> index 54951276fa..aa91ee02cf 100755
-> --- a/utils/test-pkg
-> +++ b/utils/test-pkg
-> @@ -131,7 +131,7 @@ build_one() {
->  
->      support/kconfig/merge_config.sh -O "${dir}" \
->          "${toolchainconfig}" "support/config-fragments/minimal.config" "${cfg}" \
-> -        > /dev/null
-> +        >> "${dir}/logfile" 2>&1
->      # We want all the options from the snippet to be present as-is (set
->      # or not set) in the actual .config; if one of them is not, it means
->      # some dependency from the toolchain or arch is not available, in
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index cf0cea7edd..b2605a70b7 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -159,6 +159,24 @@ define BOOST_INSTALL_STAGING_CMDS
+ 	--layout=$(BOOST_LAYOUT) install)
+ endef
+ 
++# These hooks will help us to detect missing select in Config.in
++# Indeed boost buildsystem can select a library even if the user has
++# disable it
++define BOOST_REMOVE_TARGET_LIBRARIES
++	rm -rf $(TARGET_DIR)/usr/lib/libboost_*
++endef
++
++BOOST_PRE_INSTALL_TARGET_HOOKS += BOOST_REMOVE_TARGET_LIBRARIES
++
++define BOOST_CHECK_TARGET_LIBRARIES
++	@$(foreach disabled,$(BOOST_WITHOUT_FLAGS),\
++		! ls $(TARGET_DIR)/usr/lib/libboost_$(disabled)* 1>/dev/null 2>&1 || \
++			! echo "libboost_$(disabled) shouldn't have been installed: missing select in boost/Config.in" || \
++			exit 1;)
++endef
++
++BOOST_POST_INSTALL_TARGET_HOOKS += BOOST_CHECK_TARGET_LIBRARIES
++
+ define HOST_BOOST_CONFIGURE_CMDS
+ 	(cd $(@D) && ./bootstrap.sh $(HOST_BOOST_FLAGS))
+ 	echo "using gcc : `$(HOST_CC) -dumpversion` : $(HOSTCXX) : <cxxflags>\"$(HOST_CXXFLAGS)\" <linkflags>\"$(HOST_LDFLAGS)\" ;" > $(@D)/user-config.jam
