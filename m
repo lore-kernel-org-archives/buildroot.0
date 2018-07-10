@@ -1,64 +1,75 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 10 Jul 2018 20:27:40 +0200
-Subject: [Buildroot] [PATCH v2,1/1] wampcc: needs atomic
-Message-ID: <20180710182740.10902-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 10 Jul 2018 21:52:19 +0200
+Subject: [Buildroot] [PATCH] ncurses: make host-ncurses use host terminfo
+In-Reply-To: <5f7fe697b92ac0145674.1531241163@cveaol6qa08.wv.mentorg.com>
+References: <5f7fe697b92ac0145674.1531241163@cveaol6qa08.wv.mentorg.com>
+Message-ID: <16ee7c33-4e5d-63d2-3778-cf362d4473b1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/2f994762d4e01a904c50cf2728a4103e6e79da2a
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Add BR2_TOOLCHAIN_HAS_ATOMIC in Config.in
 
- package/wampcc/Config.in | 3 +++
- package/wampcc/wampcc.mk | 5 +++++
- 2 files changed, 8 insertions(+)
+On 10-07-18 18:46, Hollis Blanchard wrote:
+> # HG changeset patch
+> # User Hollis Blanchard <hollis_blanchard@mentor.com>
+> # Date 1531239381 25200
+> #      Tue Jul 10 09:16:21 2018 -0700
+> # Node ID 5f7fe697b92ac0145674a6c96aad0f787b4bae32
+> # Parent  d71314cdccf1993ccdb05cddb16a5491f0bf723e
+> ncurses: make host-ncurses use host terminfo
+> 
+> Host GDB suffers a serious problem: pressing backspace (or ^W ^U or any other
+> "delete" key) results in a plain space being printed instead, making the
+> command prompt almost completely unusable.
+> 
+> That's because it's using host-ncurses, which embeds a path for the terminfo
+> database into the library itself. That path ends up being something like
+> /home/hollisb/buildroot.git/output/host/share/terminfo, which obviously doesn't
+> generally exist other hosts. ('relocate-sdk.sh' cannot and does not edit
+> binaries like libncurses.so.6, so doesn't resolve this problem.)
+> 
+> /usr/share/terminfo is a far better path to use, since it almost certainly
+> exists on the host. Theoretically, it could be from a different ncurses version
+> with incompatible terminfo database format, but this doesn't seem to be a
+> problem in practice. (Future patches could address the theoretical problem if
+> it actually appears in real life.)
 
-diff --git a/package/wampcc/Config.in b/package/wampcc/Config.in
-index 9cf7d99dfe..92abc9cb25 100644
---- a/package/wampcc/Config.in
-+++ b/package/wampcc/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_WAMPCC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # libuv
- 	depends on BR2_USE_MMU # libuv
- 	depends on !BR2_STATIC_LIBS # libuv
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libuv
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::shared_future
- 	select BR2_PACKAGE_LIBUV
-@@ -17,11 +18,13 @@ config BR2_PACKAGE_WAMPCC
- 
- comment "wampcc needs a toolchain w/ C++, NPTL, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS
- 
- comment "wampcc needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/wampcc/wampcc.mk b/package/wampcc/wampcc.mk
-index d8e093f679..dcd65f49d5 100644
---- a/package/wampcc/wampcc.mk
-+++ b/package/wampcc/wampcc.mk
-@@ -11,4 +11,9 @@ WAMPCC_INSTALL_STAGING = YES
- WAMPCC_LICENSE = MIT
- WAMPCC_LICENSE_FILES = LICENSE
- 
-+# Uses __atomic_fetch_add_8
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+WAMPCC_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+endif
-+
- $(eval $(cmake-package))
+ Indeed, the terminfo information is standardized AFAIU so this should indeed work.
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+> This change allows buildroot's host gdb, which uses ncurses 6.x, to work on
+> RHEL5, RHEL6, and RHEL7, which all provide terminfo from ncurses 5.x.
+> 
+> Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+> 
+> diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+> --- a/package/ncurses/ncurses.mk
+> +++ b/package/ncurses/ncurses.mk
+> @@ -153,6 +153,7 @@ HOST_NCURSES_CONF_OPTS = \
+>  	--without-cxx \
+>  	--without-cxx-binding \
+>  	--without-ada \
+> +	--with-default-terminfo-dir=/usr/share/terminfo \
+>  	--without-normal
+>  
+>  $(eval $(autotools-package))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
 -- 
-2.14.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
