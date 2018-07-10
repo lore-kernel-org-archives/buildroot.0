@@ -1,92 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Jul 2018 23:54:53 +0200
-Subject: [Buildroot] [PATCH v3] busybox: Update udhcpc.script for
- stateful DHCPv6
-In-Reply-To: <20180702010817.3711-1-sam@mendozajonas.com>
-References: <20180702010817.3711-1-sam@mendozajonas.com>
-Message-ID: <75fcc9ab-ac24-6e5f-b2a0-efe361fa7ccf@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 10 Jul 2018 23:56:05 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXScrnSaver: bump
+ version to 1.2.3
+Message-ID: <20180710215810.AB1B288316@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=df6e784f105e170029d17266168e6ac668c6c7a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Added license hash and all hashes provided by upstream.
 
-On 02-07-18 03:08, Samuel Mendoza-Jonas wrote:
-> udhcpc6 will call the default script with the address set in the "ipv6"
-> variable. Set "ip" to this address if present.
-> 
-> Also from Rob, if handling a DHCPv6 address wait a moment for the IPv6
-> route to be configured; this doesn't come from DHCPv6 but rather the
-> IPv6 Router Advertisement (RA).
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash | 9 +++++++--
+ package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
- Point being that you want to *delete* the route coming from the RA, and keep
-only the DHCPv6 route, correct? That's not entirely clear from the commit
-message. Then, you would only need to do that if the DHCPv6 actually announces a
-router, no?
-
-> 
-> (wait for IPv6 route)
-> From: Robert Lippert <rlippert@google.com>
-> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-> ---
-> v3: Point out 'stateful' DHCPv6 in commit, send to the correct list...
-
- I don't see 'stateful' in the commit message :-)
-
-> v2: Avoid bashisms
-> 
->  package/busybox/udhcpc.script | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-> index ad110d3a7f..65114b6cd0 100755
-> --- a/package/busybox/udhcpc.script
-> +++ b/package/busybox/udhcpc.script
-> @@ -8,6 +8,16 @@ RESOLV_CONF="/etc/resolv.conf"
->  [ -e $RESOLV_CONF ] || touch $RESOLV_CONF
->  [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
->  [ -n "$subnet" ] && NETMASK="netmask $subnet"
-> +[ -n "$ipv6" ] && ip="$ipv6/128"
-> +
-> +wait_for_ipv6_default_route() {
-> +	attempts=10
-> +	while [ $attempts != 0 ] && [ -z "$(ip -6 route list | grep default)" ] ; do
-> +		sleep 1
-> +		attempts=$(($attempts-1))
-> +	done
-> +	[ $attempts = 0 ] && echo "failed to get default ipv6 route"
-> +}
->  
->  case "$1" in
->  	deconfig)
-> @@ -37,6 +47,10 @@ case "$1" in
->  			/usr/sbin/avahi-autoipd -k $interface
->  		fi
->  		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
-> +		if [ -n "$ipv6" ] ; then
-
- So I would move this bit...
-
-> +			echo "waiting for default ipv6 route set"
-> +			wait_for_ipv6_default_route
-> +		fi
->  
->  		if [ -n "$router" ] ; then
-
- ... here, so it only happens if routers are present.
-
- Regards,
- Arnout
-
->  			echo "deleting routers"
-> 
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash
+index d5340baf1e..266840114f 100644
+--- a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash
++++ b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.freedesktop.org/pipermail/xorg/2012-March/054015.html
+-sha256	8ff1efa7341c7f34bcf9b17c89648d6325ddaae22e3904e091794e0b4426ce1d	libXScrnSaver-1.2.2.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2018-July/002906.html
++md5 eeea9d5af3e6c143d0ea1721d27a5e49  libXScrnSaver-1.2.3.tar.bz2
++sha1 70c791c5755a298ecf1a0823e239a24fa4b2b42f  libXScrnSaver-1.2.3.tar.bz2
++sha256 f917075a1b7b5a38d67a8b0238eaab14acd2557679835b154cf2bca576e89bf8  libXScrnSaver-1.2.3.tar.bz2
++sha512 7ea628324a11b25ee82c7b11c6bf98f37de219354de51c1e29467b5de422669ba1ab121f3b9dc674093c8f3960e93c5d5428122f5539092f79bc8451c768354a  libXScrnSaver-1.2.3.tar.bz2
++# Locally computed
++sha256 5cf3e16f5dd753a4c0853e8227134ab65f5562d9ef89b1a2d7681f5c8ac9feb5  COPYING
+diff --git a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+index f22ee983c0..4c3d36d007 100644
+--- a/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
++++ b/package/x11r7/xlib_libXScrnSaver/xlib_libXScrnSaver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XLIB_LIBXSCRNSAVER_VERSION = 1.2.2
++XLIB_LIBXSCRNSAVER_VERSION = 1.2.3
+ XLIB_LIBXSCRNSAVER_SOURCE = libXScrnSaver-$(XLIB_LIBXSCRNSAVER_VERSION).tar.bz2
+ XLIB_LIBXSCRNSAVER_SITE = http://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXSCRNSAVER_LICENSE = MIT
