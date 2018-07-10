@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 10 Jul 2018 23:32:01 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: detect missing selects
-In-Reply-To: <20180707124940.15961-1-fontaine.fabrice@gmail.com>
-References: <20180707124940.15961-1-fontaine.fabrice@gmail.com>
-Message-ID: <2fa7c4b0-81c5-9ca8-5d69-d619dd59c097@mind.be>
+Date: Tue, 10 Jul 2018 23:32:39 +0200
+Subject: [Buildroot] [PATCH 4/5 v2] package/acl: bump version
+In-Reply-To: <301ec6ce94e85f26041c1d2855ff315bddb58cde.1530368468.git.yann.morin.1998@free.fr>
+References: <cover.1530368468.git.yann.morin.1998@free.fr>
+ <301ec6ce94e85f26041c1d2855ff315bddb58cde.1530368468.git.yann.morin.1998@free.fr>
+Message-ID: <ffd2080b-dab0-8766-7997-89c412edd35e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +13,27 @@ To: buildroot@busybox.net
 
 
 
-On 07-07-18 14:49, Fabrice Fontaine wrote:
-> As suggested by Arnout during the review of
-> http://patchwork.ozlabs.org/patch/934589, add a mechanism to detect a
-> missing boost select by checking that we do not install a boost library
-> which hasn't been selected by the user.
+On 30-06-18 16:21, Yann E. MORIN wrote:
+> Of most interest is the build system overhaul, and the drop of the
+> dependency on attr-provided <attr/xattr.h> in favour of the
+> system-provided <sys/xattr.h>.
 > 
-> To manage a change of boost configuration by the user between two
-> builds, add a BOOST_PRE_INSTALL_TARGET_HOOKS to remove all boost
-> libraries before installing them.
+> That last bit meaning that we will be able to bump attr.
 > 
-> Also, use ls with a wildcard instead of test to avoid trying to guess
-> library names if boost layout is set to tagged or versionned (the
-> wildcard will also help us to manage shared or static library)
+> We can drop our patches: static is now natively supported thanks to
+> the use of libtool, and the internal symbols patch was a backport,
+> and finally, our install patch is superseded by the use of autotools.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> The option to disable NLS has changed, so update accordingly.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Yegor Yefremov <yegorslists@googlemail.com>
+
 
  Applied to master, thanks.
 
  Regards,
  Arnout
-
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
