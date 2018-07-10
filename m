@@ -1,50 +1,71 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Tue, 10 Jul 2018 09:46:03 -0700
-Subject: [Buildroot] [PATCH] ncurses: make host-ncurses use host terminfo
-Message-ID: <5f7fe697b92ac0145674.1531241163@cveaol6qa08.wv.mentorg.com>
+From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
+Date: Tue, 10 Jul 2018 19:09:23 +0200
+Subject: [Buildroot] [PATCH 1/3] ti-sgx-libgbm: new package
+In-Reply-To: <f2kc1fxkra.ln2@ID-313208.user.individual.net>
+References: <1530773875-19452-1-git-send-email-tolvupostur@gmail.com>
+ <f2kc1fxkra.ln2@ID-313208.user.individual.net>
+Message-ID: <CABhNV22mB=dCP0Wa6w5=hih9nM9aO1odHLyZaKZ+gB=9Y7CH_g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-# HG changeset patch
-# User Hollis Blanchard <hollis_blanchard@mentor.com>
-# Date 1531239381 25200
-#      Tue Jul 10 09:16:21 2018 -0700
-# Node ID 5f7fe697b92ac0145674a6c96aad0f787b4bae32
-# Parent  d71314cdccf1993ccdb05cddb16a5491f0bf723e
-ncurses: make host-ncurses use host terminfo
+Hello Bernd
 
-Host GDB suffers a serious problem: pressing backspace (or ^W ^U or any other
-"delete" key) results in a plain space being printed instead, making the
-command prompt almost completely unusable.
 
-That's because it's using host-ncurses, which embeds a path for the terminfo
-database into the library itself. That path ends up being something like
-/home/hollisb/buildroot.git/output/host/share/terminfo, which obviously doesn't
-generally exist other hosts. ('relocate-sdk.sh' cannot and does not edit
-binaries like libncurses.so.6, so doesn't resolve this problem.)
+On 9 July 2018 at 19:53, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Am Thu, 05 Jul 2018 08:57:53 +0200 schrieb Einar Jon Gunnarsson:
+>
+>> --- /dev/null
+>> +++ b/package/ti-sgx-libgbm/Config.in
+>> @@ -0,0 +1,9 @@
+>> +config BR2_PACKAGE_TI_SGX_LIBGBM
+>> +     bool "ti-sgx-libgbm"
+>> +     depends on BR2_PACKAGE_TI_SGX_KM
+>> +     select BR2_PACKAGE_WAYLAND
+>> +     help
+>> +       This package provides libgbm.so.2 for the
+>> +       TI SGX implementation
+>> +
+>> +       https://git.ti.com/glsdk/libgbm
+>
+> a similar patch was posted two years ago:
+> http://lists.busybox.net/pipermail/buildroot/2016-July/167443.html
+>
+> Back then Thomas wrote:
+> "Is this libgbm a TI-specific implementation of the libgm available in
+>  Mesa ? If that's the case, then it's going to be complicated to
+>  package, as we would have two implementations of the same API."
 
-/usr/share/terminfo is a far better path to use, since it almost certainly
-exists on the host. Theoretically, it could be from a different ncurses version
-with incompatible terminfo database format, but this doesn't seem to be a
-problem in practice. (Future patches could address the theoretical problem if
-it actually appears in real life.)
+This is indeed a TI-specific implementation of the libgm available in Mesa.
+Since it is only available for a subset of ARM CPUs, and Mesa not
+available on ARM, I don't see a big risk of conflicts.
 
-This change allows buildroot's host gdb, which uses ncurses 6.x, to work on
-RHEL5, RHEL6, and RHEL7, which all provide terminfo from ncurses 5.x.
+>
+> Working on the next bump of Kodi to v18 I needed to build mesa3d with
+> libgbm only, no x11, no wayland. To do so I created a virtual package for
+> libgbm which could be used by your package as well to solve the problem
+> Thomas noted:
 
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+Interesting. This implementation of libgbm links to Wayland, and will
+not run without it. X11 is not needed.
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -153,6 +153,7 @@ HOST_NCURSES_CONF_OPTS = \
- 	--without-cxx \
- 	--without-cxx-binding \
- 	--without-ada \
-+	--with-default-terminfo-dir=/usr/share/terminfo \
- 	--without-normal
- 
- $(eval $(autotools-package))
+The virtual package makes sense.
+
+-- 
+Regards
+Einar J?n
+
+>
+> https://github.com/bkuhls/buildroot/commit/
+> af585ebdd2627980eda0581f99aa844c7292d4de
+>
+> https://github.com/bkuhls/buildroot/
+> commit/92a0e96c32aac50a7e28eb0941463c21b119a727
+>
+> The whole code is still WIP and closely bound to my Kodi repo but you
+> should get the idea ;)
+>
+> Regards, Bernd
+>
