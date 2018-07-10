@@ -1,72 +1,179 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Jul 2018 00:14:23 +0200
-Subject: [Buildroot] [PATCH 1/1] python-django: bump to version 1.11.14
-In-Reply-To: <20180704225734.18136-1-joseph.kogut@gmail.com>
-References: <20180704225734.18136-1-joseph.kogut@gmail.com>
-Message-ID: <fef2a622-c3c8-bef5-763c-82da419a4750@mind.be>
+From: Joel Carlson <joelsoncarl@gmail.com>
+Date: Tue, 10 Jul 2018 16:31:25 -0600
+Subject: [Buildroot] [PATCH v4 1/1] capnproto: new package
+Message-ID: <1531261885-2834-1-git-send-email-JoelsonCarl@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Adds the capnproto package. This also builds a host variant to generate
+the capnp compiler that can be used to compile message definitions into
+C++ code. Includes a patch from upstream to fix an issue with uclibc.
 
+Signed-off-by: Koen Martens <gmc@sonologic.nl>
+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+---
+Changes v3->v4:
+  - added my SoB to package patch (suggested by Arnout)
+    (also now able to use patch from upstream without modification)
+  - added hash of license file (Arnout)
+  - added comment in .mk for use of AUTORECONF (Arnout)
+  - added dependency on BR2_TOOLCHAIN_HAS_ATOMIC (Arnout)
+  - switched to use *_SUBDIR instead of custom extraction commands (Arnout)
+    (I missed the existence of *_SUBDIR in the manual when reading!)
 
-On 05-07-18 00:57, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  package/python-django/python-django.hash | 6 ++++--
->  package/python-django/python-django.mk   | 4 ++--
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-> index 09be18440b..f846658909 100644
-> --- a/package/python-django/python-django.hash
-> +++ b/package/python-django/python-django.hash
-> @@ -1,3 +1,5 @@
->  # md5 from https://pypi.python.org/pypi/django/json, sha256 locally computed
+Retested v4 with test-pkg (but not -a like v3):
+6 builds, 1 skipped, 0 build failed, 0 legal-info failed
+---
+ DEVELOPERS                                         |  2 ++
+ package/Config.in                                  |  1 +
+ .../0001-Do-not-use-execinfo-h-with-uclibc.patch   | 30 ++++++++++++++++++++++
+ package/capnproto/Config.in                        | 24 +++++++++++++++++
+ package/capnproto/capnproto.hash                   |  3 +++
+ package/capnproto/capnproto.mk                     | 23 +++++++++++++++++
+ 6 files changed, 83 insertions(+)
+ create mode 100644 package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
+ create mode 100644 package/capnproto/Config.in
+ create mode 100644 package/capnproto/capnproto.hash
+ create mode 100644 package/capnproto/capnproto.mk
 
- Actually, https://www.djangoproject.com/m/pgp/Django-1.11.14.checksum.txt has
-much better hashes. It also has all of them. They're actually the same :-)
-
-> -md5	693dfeabad62c561cb205900d32c2a98  Django-1.10.7.tar.gz
-> -sha256	593d779dbc2350a245c4f76d26bdcad58a39895e87304fe6d725bbdf84b5b0b8  Django-1.10.7.tar.gz
-> +md5	38e82b59a1c27bbf98ccf0564ead7426  Django-1.11.14.tar.gz
-> +sha256  eb9271f0874f53106a2719c0c35ce67631f6cc27cf81a60c6f8c9817b35a3f6e  Django-1.11.14.tar.gz
-> +# sha256 locally computed
-> +sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-> index 9056f00cf0..b39e82e737 100644
-> --- a/package/python-django/python-django.mk
-> +++ b/package/python-django/python-django.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -PYTHON_DJANGO_VERSION = 1.10.7
-> +PYTHON_DJANGO_VERSION = 1.11.14
->  PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
->  # The official Django site has an unpractical URL
-
- Note sure what is wrong with
-
-PYTHON_DJANGO_SITE =
-https://www.djangoproject.com/m/releases/$(PYTHON_DJANGO_VERSION_MAJOR)
-
- Regards,
- Arnout
-
-> -PYTHON_DJANGO_SITE = https://pypi.python.org/packages/15/b4/d4bb7313e02386bd23a60e1eb5670321313fb67289c6f36ec43bce747aff
-> +PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/dc/35/273514b5eb2201d5183dd138c240b12e1d822d2358b1e9436545b66d2d76
->  PYTHON_DJANGO_LICENSE = BSD-3-Clause
->  PYTHON_DJANGO_LICENSE_FILES = LICENSE
->  PYTHON_DJANGO_SETUP_TYPE = setuptools
-> 
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 48ab0d9..8185c12 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -983,6 +983,7 @@ F:	package/x11r7/xdriver_xf86-video-imx/
+ F:	package/x11r7/xdriver_xf86-video-imx-viv/
+ 
+ N:	Joel Carlson <JoelsonCarl@gmail.com>
++F:	package/capnproto/
+ F:	package/cmocka/
+ F:	package/flatcc/
+ 
+@@ -1117,6 +1118,7 @@ N:	Kevin Joly <kevin.joly@sensefly.com>
+ F:	package/libgphoto2/
+ 
+ N:	Koen Martens <gmc@sonologic.nl>
++F:	package/capnproto/
+ F:	package/linuxconsoletools/
+ 
+ N:	Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+diff --git a/package/Config.in b/package/Config.in
+index 20fe5ad..5d61f8a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1504,6 +1504,7 @@ menu "Other"
+ 	source "package/bctoolbox/Config.in"
+ 	source "package/bdwgc/Config.in"
+ 	source "package/boost/Config.in"
++	source "package/capnproto/Config.in"
+ 	source "package/clang/Config.in"
+ 	source "package/clapack/Config.in"
+ 	source "package/classpath/Config.in"
+diff --git a/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch b/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
+new file mode 100644
+index 0000000..6bb7702
+--- /dev/null
++++ b/package/capnproto/0001-Do-not-use-execinfo-h-with-uclibc.patch
+@@ -0,0 +1,30 @@
++From e651ac5febc59e3e2b5d3365ededbe5362756da2 Mon Sep 17 00:00:00 2001
++From: Koen Martens <gmc@sonologic.nl>
++Date: Wed, 12 Jul 2017 18:49:32 +0200
++Subject: [PATCH] Do not use execinfo.h with uclibc (#511)
++
++Upstream commit: https://github.com/capnproto/capnproto/commit/e651ac5febc59e3e2b5d3365ededbe5362756da2
++
++Signed-off-by: Koen Martens <gmc@sonologic.nl>
++Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
++
++---
++ c++/src/kj/exception.c++ | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/c++/src/kj/exception.c++ b/c++/src/kj/exception.c++
++index 218f1db..339601a 100644
++--- a/c++/src/kj/exception.c++
+++++ b/c++/src/kj/exception.c++
++@@ -33,7 +33,7 @@
++ #endif
++ #include "io.h"
++ 
++-#if (__linux__ && __GLIBC__) || __APPLE__
+++#if (__linux__ && __GLIBC__ && !__UCLIBC__) || __APPLE__
++ #define KJ_HAS_BACKTRACE 1
++ #include <execinfo.h>
++ #endif
++-- 
++2.7.4
++
+diff --git a/package/capnproto/Config.in b/package/capnproto/Config.in
+new file mode 100644
+index 0000000..00328fa
+--- /dev/null
++++ b/package/capnproto/Config.in
+@@ -0,0 +1,24 @@
++config BR2_PACKAGE_CAPNPROTO
++	bool "capnproto"
++	depends on BR2_USE_MMU
++	depends on BR2_HOST_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	help
++	  Cap'n Proto is an insanely fast data interchange format
++	  and capability-based RPC system. Think JSON, except
++	  binary. Or think Protocol Buffers, except faster. In
++	  fact, in benchmarks, Cap?n Proto is INFINITY TIMES
++	  faster than Protocol Buffers.
++
++	  https://capnproto.org/index.html
++
++comment "capnproto needs host and target gcc >= 4.8 w/ C++, threads, atomic"
++	depends on BR2_USE_MMU
++	depends on !BR2_HOST_GCC_AT_LEAST_4_8 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
++		!BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HAS_ATOMIC
+diff --git a/package/capnproto/capnproto.hash b/package/capnproto/capnproto.hash
+new file mode 100644
+index 0000000..1a65cdd
+--- /dev/null
++++ b/package/capnproto/capnproto.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256	85210424c09693d8fe158c1970a2bca37af3a0424f02b263f566a1b8a5451a2d  capnproto-v0.6.1.tar.gz
++sha256	16194222e9412c3aa14d2287953f7fc89a1dcbcdd266d1534ba35060d4cde5b6  LICENSE
+diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
+new file mode 100644
+index 0000000..cf1dd4a
+--- /dev/null
++++ b/package/capnproto/capnproto.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# capnproto
++#
++################################################################################
++
++CAPNPROTO_VERSION = v0.6.1
++CAPNPROTO_SITE = $(call github,capnproto,capnproto,$(CAPNPROTO_VERSION))
++CAPNPROTO_LICENSE = MIT
++CAPNPROTO_LICENSE_FILES = LICENSE
++CAPNPROTO_INSTALL_STAGING = YES
++# Fetched from Github with no configure script
++CAPNPROTO_AUTORECONF = YES
++CAPNPROTO_CONF_OPTS = --with-external-capnp
++# Needs the capnproto compiler on the host to generate C++ code from message
++# definitions
++CAPNPROTO_DEPENDENCIES = host-autoconf host-capnproto
++CAPNPROTO_CONF_ENV += LIBS=-latomic
++# The actual source to be compiled is within a 'c++' subdirectory
++CAPNPROTO_SUBDIR = c++
++
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.7.4
