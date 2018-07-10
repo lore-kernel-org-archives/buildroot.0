@@ -1,47 +1,26 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 10 Jul 2018 15:10:05 +0300
-Subject: [Buildroot] [PATCH] sed: bump to version 4.5
-Message-ID: <503998267156f5588963f02fa98286aa20d68f7c.1531224605.git.baruch@tkos.co.il>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 10 Jul 2018 08:42:02 -0500
+Subject: [Buildroot] [PATCH] utils/test-pkg: log the output of
+ merge-config
+In-Reply-To: <20180708102659.26293-1-yann.morin.1998@free.fr>
+References: <20180708102659.26293-1-yann.morin.1998@free.fr>
+Message-ID: <CANQCQpbk-+v-icFTMYB5D7g_tv+r6fxNg-rtLCBVhBSe1OcjsA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add signature and key reference.
+Yann,
 
-Add license hash.
+On Sun, Jul 8, 2018 at 5:26 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Currently, the stdout is consigned to oblivion, while the stderr is not
+> redirected at all. So, when the configuration under test redefines a
+> symbol, like is the case when testing busybox for example, there is an
+> ugly warning.
+>
+> So, just redirect both stdout and stderr to the logfile.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/sed/sed.hash | 6 +++++-
- package/sed/sed.mk   | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/package/sed/sed.hash b/package/sed/sed.hash
-index 652c5736159c..470e5f259588 100644
---- a/package/sed/sed.hash
-+++ b/package/sed/sed.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256	cbd6ebc5aaf080ed60d0162d7f6aeae58211a1ee9ba9bb25623daa6cd942683b	sed-4.4.tar.xz
-+# https://ftp.gnu.org/gnu/sed/sed-4.5.tar.xz.sig
-+# with the key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
-+sha256	7aad73c8839c2bdadca9476f884d2953cdace9567ecd0d90f9959f229d146b40	sed-4.5.tar.xz
-+# Locally calculated
-+sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	COPYING
-diff --git a/package/sed/sed.mk b/package/sed/sed.mk
-index 28df140d39a8..4b2ed0313f34 100644
---- a/package/sed/sed.mk
-+++ b/package/sed/sed.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SED_VERSION = 4.4
-+SED_VERSION = 4.5
- SED_SOURCE = sed-$(SED_VERSION).tar.xz
- SED_SITE = $(BR2_GNU_MIRROR)/sed
- SED_LICENSE = GPL-3.0
--- 
-2.18.0
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
