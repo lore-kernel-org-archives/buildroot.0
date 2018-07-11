@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Jul 2018 23:08:13 +0200
-Subject: [Buildroot] [PATCH] package/squid: fix automake breakage
-In-Reply-To: <20180711193452.19461-1-jean-francois.tetu@savoirfairelinux.com>
-References: <20180711193452.19461-1-jean-francois.tetu@savoirfairelinux.com>
-Message-ID: <e8dab288-fa61-b67f-a37a-d5f59023ad44@mind.be>
+Date: Wed, 11 Jul 2018 23:14:39 +0200
+Subject: [Buildroot] [PATCH 1/6] package/Makefile.in: Do not use
+ CPPFLAGS for hardening options
+In-Reply-To: <20180711143113.11927-2-matthew.weber@rockwellcollins.com>
+References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
+ <20180711143113.11927-2-matthew.weber@rockwellcollins.com>
+Message-ID: <0588fc06-c633-9bcd-5a73-478e8e512506@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,56 +14,81 @@ To: buildroot@busybox.net
 
 
 
-On 11-07-18 21:34, Jean-Fran?ois T?tu wrote:
-> Much like e27ccbabc1, the recent bump in automake causes a build error.
-> If the host automake is not the same version as the one used to generate
-> the squid package, the build fails while building the copy of libltdl
-> included in the package.
+On 11-07-18 16:31, Matt Weber wrote:
+> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
 > 
-> This happens regardless of the Buildroot automake version since the
-> included library is not reconfigured properly. The previous fix set the
-> ACLOCAL and AUTOMAKE variables to the Buildroot generated aclocal and
-> automake thereby ensuring that the subpackage would build correctly.
-> What is needed is to make sure that both the squid configure script and
-> the libltdl configure script are reconfigured following a change to
-> either configure.ac files.
+> The hardening options are compiler flags, not pure pre-processor flags, so
+> put them in CFLAGS, not CPPFLAGS.
 > 
-> This commit adds an option passed to autoreconf which ensures both
-> configure scripts are regenerated with Buildroot's autotools.
+> This fixes build errors where -D_FORTIFY_SOURCE=2 whas put in CPPFLAGS and
+> then applied to configure tests which could fail since the required -O2 is
+> only in CFLAGS.
+> 
+> Originally submitted as
+> http://patchwork.ozlabs.org/patch/904057/
+> 
+> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
- Nicely found!
+ I was thinking: why introduce TARGET_HARDENED instead of just adding to
+TARGET_CFLAGS directly. But it actually does look nicer this way. So
 
- However, have you also looked into the option of using Buildroot's libtool
-instead of the bundled libltdl? If that doesn't work for some reason, I'd like
-to add it in the commit log so a future developer who wants to give it go can
-see what has been tried already.
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+> ---
+>  package/Makefile.in | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index f2962767cc..5e0ff8c841 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -147,29 +147,29 @@ TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
+>  TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+>  
+>  ifeq ($(BR2_SSP_REGULAR),y)
+> -TARGET_CPPFLAGS += -fstack-protector
+> +TARGET_HARDENED += -fstack-protector
+>  else ifeq ($(BR2_SSP_STRONG),y)
+> -TARGET_CPPFLAGS += -fstack-protector-strong
+> +TARGET_HARDENED += -fstack-protector-strong
+>  else ifeq ($(BR2_SSP_ALL),y)
+> -TARGET_CPPFLAGS += -fstack-protector-all
+> +TARGET_HARDENED += -fstack-protector-all
+>  endif
+>  
+>  ifeq ($(BR2_RELRO_PARTIAL),y)
+> -TARGET_CPPFLAGS += $(TARGET_CFLAGS_RELRO)
+> +TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
+>  TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
+>  else ifeq ($(BR2_RELRO_FULL),y)
+> -TARGET_CPPFLAGS += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
+> +TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
+>  TARGET_LDFLAGS += -pie
+>  endif
+>  
+>  ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+> -TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=1
+> +TARGET_HARDENED += -D_FORTIFY_SOURCE=1
+>  else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
+> -TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=2
+> +TARGET_HARDENED += -D_FORTIFY_SOURCE=2
+>  endif
+>  
+>  TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+> -TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+> +TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)
+
+ The line is getting a bit long, but TARGET_DEBUGGING was already too much so
+not for this patch :-)
+
 
  Regards,
  Arnout
 
-> 
-> Fixes:
->  http://autobuild.buildroot.net/results/83d/83d8fb0fc25205d6fb8c96a9877e5901275c6766
->  http://autobuild.buildroot.net/results/948/948737590ba648f7dbade1661c0e2e8d9db6522b
-> 
-> CC: Gustavo Zacarias <gustavo@zacarias.com.ar>
-> Signed-off-by: Jean-Fran?ois T?tu <jean-francois.tetu@savoirfairelinux.com>
-> ---
->  package/squid/squid.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-> index 2d21ad8858..06442157d6 100644
-> --- a/package/squid/squid.mk
-> +++ b/package/squid/squid.mk
-> @@ -12,6 +12,7 @@ SQUID_LICENSE = GPL-2.0+
->  SQUID_LICENSE_FILES = COPYING
->  # For 0001-assume-get-certificate-ok.patch
->  SQUID_AUTORECONF = YES
-> +SQUID_AUTORECONF_OPTS = -fi configure.ac libltdl/configure.ac
->  SQUID_DEPENDENCIES = libcap host-libcap host-pkgconf \
->  	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
->  SQUID_CONF_ENV = \
+>  TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+>  TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+>  
 > 
 
 -- 
