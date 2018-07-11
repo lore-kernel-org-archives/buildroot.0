@@ -1,47 +1,98 @@
-From: Mark Hawthorne <markhawthorne172@gmail.com>
-Date: Tue, 10 Jul 2018 18:43:14 -0500
-Subject: [Buildroot] How to deal configure file getting wrong include path
-Message-ID: <CAEEV9O1YdQyWb6sBpgfs=Vu2ZmMvyBrdjTzJvMbKHizADKbcvQ@mail.gmail.com>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Wed, 11 Jul 2018 10:58:32 +1000
+Subject: [Buildroot] [PATCH v3] busybox: Update udhcpc.script for
+ stateful DHCPv6
+In-Reply-To: <75fcc9ab-ac24-6e5f-b2a0-efe361fa7ccf@mind.be>
+References: <20180702010817.3711-1-sam@mendozajonas.com>
+ <75fcc9ab-ac24-6e5f-b2a0-efe361fa7ccf@mind.be>
+Message-ID: <7353d956f0d5ff42bc6985d32c6ae495253a8f0e.camel@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I have a tricky package situation that I'm not sure how to properly handle.
+On Tue, 2018-07-10 at 23:54 +0200, Arnout Vandecappelle wrote:
+> 
+> On 02-07-18 03:08, Samuel Mendoza-Jonas wrote:
+> > udhcpc6 will call the default script with the address set in the "ipv6"
+> > variable. Set "ip" to this address if present.
+> > 
+> > Also from Rob, if handling a DHCPv6 address wait a moment for the IPv6
+> > route to be configured; this doesn't come from DHCPv6 but rather the
+> > IPv6 Router Advertisement (RA).
+> 
+>  Point being that you want to *delete* the route coming from the RA, and keep
+> only the DHCPv6 route, correct? That's not entirely clear from the commit
+> message. Then, you would only need to do that if the DHCPv6 actually announces a
+> router, no?
 
-I added a package to build spatialite. Spatialite depends on the geos
-library. At build time, the geos library generates a script called
-geos-config which can be used to query the installation location for the
-geos header files and libraries. Geos determines these locations at build
-time using $exec and $exec_prefix and hard-codes them into the geos-config
-file. The include path becomes "/usr/include". This is correct from the
-perspective of the embedded target. However, the configure script for
-spatialite queries the geos-config script to determine if the geos headers
-exist. Instead of looking in the staging directory, it looks in the
-directory returned by geos-config, i.e "/usr/include". The path should be
-"buildroot/output/staging/usr/include"
+No the aim is to check if we've received a route from the RA, since
+DHCPv6 does not advertise any route. Rob can correct me if needed but the
+goal here is to have udhcpc6 behave as much like udhcpc as possible in
+that once it configures an address you would usually expect the network
+to also be routable. We can't determine that from the DHCPv6 response so
+we check to see if the RA has set one before setting the address.
 
-Is there a clean way to solve this problem in buildroot or do I need to
-patch around the geos-config step in the configure file?
+> 
+> > 
+> > (wait for IPv6 route)
+> > From: Robert Lippert <rlippert@google.com>
+> > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+> > ---
+> > v3: Point out 'stateful' DHCPv6 in commit, send to the correct list...
+> 
+>  I don't see 'stateful' in the commit message :-)
 
-https://www.gaia-gis.it/fossil/libspatialite/index
+Message, title... :)
 
-################################################################################
-#
-# libspatialite
-#
-################################################################################
-
-LIBSPATIALITE_VERSION = 4.3.0a
-LIBSPATIALITE_SOURCE = libspatialite-$(LIBSPATIALITE_VERSION).tar.gz
-LIBSPATIALITE_SITE = http://www.gaia-gis.it/gaia-sins
-LIBSPATIALITE_INSTALL_STAGING = YES
-LIBSPATIALITE_INSTALL_TARGET = YES
-LIBSPATIALITE_CONF_OPTS = --disable-shared
-LIBSPATIALITE_DEPENDENCIES = libproj libfreexl sqlite geos libxml2
-
-$(eval $(autotools-package))
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180710/5d9ec72b/attachment.html>
+> 
+> > v2: Avoid bashisms
+> > 
+> >  package/busybox/udhcpc.script | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> > 
+> > diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+> > index ad110d3a7f..65114b6cd0 100755
+> > --- a/package/busybox/udhcpc.script
+> > +++ b/package/busybox/udhcpc.script
+> > @@ -8,6 +8,16 @@ RESOLV_CONF="/etc/resolv.conf"
+> >  [ -e $RESOLV_CONF ] || touch $RESOLV_CONF
+> >  [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+> >  [ -n "$subnet" ] && NETMASK="netmask $subnet"
+> > +[ -n "$ipv6" ] && ip="$ipv6/128"
+> > +
+> > +wait_for_ipv6_default_route() {
+> > +	attempts=10
+> > +	while [ $attempts != 0 ] && [ -z "$(ip -6 route list | grep default)" ] ; do
+> > +		sleep 1
+> > +		attempts=$(($attempts-1))
+> > +	done
+> > +	[ $attempts = 0 ] && echo "failed to get default ipv6 route"
+> > +}
+> >  
+> >  case "$1" in
+> >  	deconfig)
+> > @@ -37,6 +47,10 @@ case "$1" in
+> >  			/usr/sbin/avahi-autoipd -k $interface
+> >  		fi
+> >  		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+> > +		if [ -n "$ipv6" ] ; then
+> 
+>  So I would move this bit...
+> 
+> > +			echo "waiting for default ipv6 route set"
+> > +			wait_for_ipv6_default_route
+> > +		fi
+> >  
+> >  		if [ -n "$router" ] ; then
+> 
+>  ... here, so it only happens if routers are present.
+> 
+>  Regards,
+>  Arnout
+> 
+> >  			echo "deleting routers"
+> > 
+> 
+> 
