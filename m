@@ -1,63 +1,59 @@
-From: MOHAMMAD RASIM <mohammad.rasim96@gmail.com>
-Date: Thu, 12 Jul 2018 00:45:50 +0300
-Subject: [Buildroot] At what stage the init script is created and can be
- used within the post build script?
-In-Reply-To: <89a3cb0b-1fda-0031-ba57-c511ea5d542f@mind.be>
-References: <93b3645f-29f9-6864-5177-ec8ca41474fb@gmail.com>
- <89a3cb0b-1fda-0031-ba57-c511ea5d542f@mind.be>
-Message-ID: <40826fa3-1ab1-65a0-cc1d-8354696185fe@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 11 Jul 2018 23:47:39 +0200
+Subject: [Buildroot] [PATCH 4/6] support/testing: runtest proxy support
+In-Reply-To: <20180711143113.11927-5-matthew.weber@rockwellcollins.com>
+References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
+ <20180711143113.11927-5-matthew.weber@rockwellcollins.com>
+Message-ID: <ddef8aaf-7801-6189-d270-91312a4e6268@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yeah I was trying to avoid using overlay, I guess I don't have a choice now.
-Thanks
-On 07/11/2018 11:58 PM, Arnout Vandecappelle wrote:
 
->
-> On 11-07-18 13:55, MOHAMMAD RASIM wrote:
->> Hi,
->> I'm building buildroot as a cpio initramfs (BR2_TARGET_ROOTFS_CPIO=y) and I have
->> a post build script that edits the /init script like so:
->> sed -i "s/something/anotherthing/" ${TARGET_DIR}/init
->> The script worked fine when I used buildroot-2018.02.3 but now I want to build
->> using the latest buildroot from git repo(master branch, latest commit is
->> 0ce56fbdf6469cf9bbda168ffe75480ae811acaa as of writing this messege) and the
->> script can't find the /init script and errors out:
->>
->> |sed: can't read /home/mohammad/buildroot/output/target/init: No such file or
->> directory
->>
->> |so clearly the init script is not created until the cpio archive is created.
->   Indeed, the filesystem generation steps no longer modify $(TARGET_DIR).
-> Instead, they get their own private directory to work in. So the /init script
-> will only appear in the cpio archive, not in the target directory or in the tarball.
->
->> So how can I access the /init script from the post-build script ?
->   The easiest is: instead of using sed to update the init script, add a complete
-> init script in the rootfs overlay (BR2_ROOTFS_OVERLAY). That's what I usually do.
->
->   Alternatively, but IMO ugly, you could add the following in an external.mk:
->
-> define ROOTFS_CPIO_UPDATE_INIT
-> 	sed -i "s/something/anotherthing/" ${TARGET_DIR}/init
-> endef
->
-> ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_UPDATE_INIT
->
->
->   Regards,
->   Arnout
->
->
->> Thanks
->> ||
->>
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
+
+On 11-07-18 16:31, Matt Weber wrote:
+> Allow builder.py to inherit the system proxy settings from
+> the env if they are present.
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+>  support/testing/infra/builder.py | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+> index faf1eb1494..30230fdb17 100644
+> --- a/support/testing/infra/builder.py
+> +++ b/support/testing/infra/builder.py
+> @@ -35,6 +35,12 @@ class Builder(object):
+>  
+>      def build(self):
+>          env = {"PATH": os.environ["PATH"]}
+> +        if "http_proxy" in os.environ:
+> +            self.logfile.write("Using system proxy: " +
+> +                               os.environ["http_proxy"] + "\n")
+> +            self.logfile.flush()
+> +            env['http_proxy'] = os.environ["http_proxy"]
+> +            env['https_proxy'] = os.environ["http_proxy"]
+
+ I'm not sure if we wouldn't want to propagate the possibly different
+https_proxy variable instead, but in practice I see little use of that, so
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Regards,
+ Arnout
+
+>          cmd = ["make", "-C", self.builddir]
+>          ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
+>                                env=env)
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
