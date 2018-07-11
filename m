@@ -1,18 +1,27 @@
 From: Fame Castle <famecastle@gmail.com>
-Date: Wed, 11 Jul 2018 18:24:44 +0200
+Date: Wed, 11 Jul 2018 18:24:53 +0200
 Subject: [Buildroot] Fwd:  Guide for installing Chromium using patch sets
-In-Reply-To: <CAD0+TpAX_eSnF70YLRq6Kp44iySE4O18gxSu23bcjOHjDsSQWA@mail.gmail.com>
+In-Reply-To: <CAD0+TpC5N2DW8sfs38GAAy5=hbAf6uccHTGMxSt+AjPQmdUqbQ@mail.gmail.com>
 References: <CAD0+TpAc6473JO3H24CLwxUwc0WXZ5n8es1xJctnyhUEESrwWg@mail.gmail.com>
  <CAMWSM7iJjfVUY_Yw13u+gg73eShK5pwh5+1yawWRV+Z-qAhGTw@mail.gmail.com>
  <CAD0+TpAfAu0XKeEzwhACV8j0D-27fodEhFjgg9JcgePs-7Nxgg@mail.gmail.com>
  <CAMWSM7hLA6p+MqQW0MVrf8DZ6A5Ap8UqO_xPo8hW5QMvjirrDQ@mail.gmail.com>
  <CAD0+TpAX_eSnF70YLRq6Kp44iySE4O18gxSu23bcjOHjDsSQWA@mail.gmail.com>
-Message-ID: <CAD0+TpC5N2DW8sfs38GAAy5=hbAf6uccHTGMxSt+AjPQmdUqbQ@mail.gmail.com>
+ <CAD0+TpC5N2DW8sfs38GAAy5=hbAf6uccHTGMxSt+AjPQmdUqbQ@mail.gmail.com>
+Message-ID: <CAD0+TpAFG3X6=MO5VQMcvHRz-JNiEUv31Agr__JFmox9UAc90g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
+
+---------- Forwarded message ----------
+From: Fame Castle <famecastle@gmail.com>
+Date: 2018-07-11 18:24 GMT+02:00
+Subject: Fwd: [Buildroot] Guide for installing Chromium using patch sets
+To: buildroot at busybox.net
+
+
 
 ---------- Forwarded message ----------
 From: Fame Castle <famecastle@gmail.com>
@@ -87,4 +96,4 @@ of hours for me.
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180711/74238c03/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180711/d25043cd/attachment.html>
