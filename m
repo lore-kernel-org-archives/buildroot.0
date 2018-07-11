@@ -1,44 +1,32 @@
-From: Valentin Korenblit <valentin.korenblit@smile.fr>
-Date: Wed, 11 Jul 2018 11:59:02 +0200
-Subject: [Buildroot] [PATCH v6 3/4] lld: new package
-In-Reply-To: <20180710234212.4297-4-joseph.kogut@gmail.com>
-References: <20180710234212.4297-1-joseph.kogut@gmail.com>
- <20180710234212.4297-4-joseph.kogut@gmail.com>
-Message-ID: <274a0373-5169-350f-0eda-8c14fbc895ac@smile.fr>
+From: MOHAMMAD RASIM <mohammad.rasim96@gmail.com>
+Date: Wed, 11 Jul 2018 14:55:27 +0300
+Subject: [Buildroot] At what stage the init script is created and can be
+ used within the post build script?
+Message-ID: <93b3645f-29f9-6864-5177-ec8ca41474fb@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Joseph,
+Hi,
+I'm building buildroot as a cpio initramfs (BR2_TARGET_ROOTFS_CPIO=y) 
+and I have a post build script that edits the /init script like so:
+sed -i "s/something/anotherthing/" ${TARGET_DIR}/init
+The script worked fine when I used buildroot-2018.02.3 but now I want to 
+build using the latest buildroot from git repo(master branch, latest 
+commit is 0ce56fbdf6469cf9bbda168ffe75480ae811acaa as of writing this 
+messege) and the script can't find the /init script and errors out:
 
-On 07/11/2018 01:42 AM, Joseph Kogut wrote:
-> +++ b/package/lld/lld.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# lld
-> +#
-> +################################################################################
-> +
-> +LLD_VERSION = 6.0.0
-> +LLD_SITE = https://llvm.org/releases/$(LLD_VERSION)
-> +LLD_SOURCE = lld-$(LLD_VERSION).src.tar.xz
-> +LLD_LICENSE = NCSA
-> +LLD_LICENSE_FILES = LICENSE.TXT
-> +LLD_SUPPORTS_IN_SOURCE_BUILD = NO
-> +HOST_LLD_DEPENDENCIES = host-llvm
-> +
-> +$(eval $(host-cmake-package))
+|sed: can't read /home/mohammad/buildroot/output/target/init: No such 
+file or directory
 
-I've just checked that lld is linking against libLLVM static libs.
+|so clearly the init script is not created until the cpio archive is 
+created.
+So how can I access the /init script from the post-build script ?
 
-I had the same problem with clang, to avoid this:
-
-HOST_LLD_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_DYLIB_COMPONENTS=all
-
-
-Best regards,
-
-Valentin
+Thanks
+||
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180711/cbaa9581/attachment.html>
