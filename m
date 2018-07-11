@@ -1,133 +1,71 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 11 Jul 2018 09:31:13 -0500
-Subject: [Buildroot] [PATCH 6/6] support/testing/tests/core: SSP & hardening
- flags
+Date: Wed, 11 Jul 2018 09:31:10 -0500
+Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files for
+ PIE build flags
 In-Reply-To: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
 References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180711143113.11927-7-matthew.weber@rockwellcollins.com>
+Message-ID: <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Catch the commonly used options of SSP, Relro, and fortify.
+From: Stefan S?rensen <stefan.sorensen@spectralink.com>
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+The PIE build flags are only intended for building executables and can not be
+used in relocateable links (-r), static builds and shared library build -
+including the flags here causes build errors.
+
+So instead of parsing the PIE flags directly on the command line to gcc,
+include them in a gcc spec file where it is possible to only apply the flags
+when other incompatible flags are not set.
+
+This method and the spec files are from the Fedora build system.
+
+Originally submitted as
+http://patchwork.ozlabs.org/patch/907093/
+
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- support/testing/tests/core/test_hardening.py | 104 +++++++++++++++++++
- 1 file changed, 104 insertions(+)
- create mode 100644 support/testing/tests/core/test_hardening.py
+ package/Makefile.in         | 4 ++--
+ toolchain/gcc-specs-pie-cc1 | 2 ++
+ toolchain/gcc-specs-pie-ld  | 2 ++
+ 3 files changed, 6 insertions(+), 2 deletions(-)
+ create mode 100644 toolchain/gcc-specs-pie-cc1
+ create mode 100644 toolchain/gcc-specs-pie-ld
 
-diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 14b3bbd243..00ddf48c10 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -158,8 +158,8 @@ ifeq ($(BR2_RELRO_PARTIAL),y)
+ TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
+ TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
+ else ifeq ($(BR2_RELRO_FULL),y)
+-TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
+-TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
++TARGET_HARDENED += $(TARGET_CFLAGS_RELRO_FULL) -specs=$(TOPDIR)/toolchain/gcc-specs-pie-cc1
++TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO_FULL) -specs=$(TOPDIR)/toolchain/gcc-specs-pie-ld
+ endif
+ 
+ ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+diff --git a/toolchain/gcc-specs-pie-cc1 b/toolchain/gcc-specs-pie-cc1
 new file mode 100644
-index 0000000000..2a479d89aa
+index 0000000000..fc54bcb510
 --- /dev/null
-+++ b/support/testing/tests/core/test_hardening.py
-@@ -0,0 +1,104 @@
-+import os
-+import subprocess
-+import json
-+
-+import infra.basetest
-+
-+HARD_DEFCONFIG = \
-+    """
-+    BR2_powerpc64=y
-+    BR2_powerpc_e5500=y
-+    BR2_TOOLCHAIN_EXTERNAL=y
-+    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+    BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
-+    BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-+    BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-+    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+    BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+    BR2_PACKAGE_LIGHTTPD=y
-+    BR2_PACKAGE_HOST_CHECKSEC=y
-+    # BR2_TARGET_ROOTFS_TAR is not set
-+    """
-+
-+def checksec_run(builddir, target_file):
-+    cmd = ["host/bin/checksec", "--output", "json", "--file", target_file]
-+    ret = subprocess.check_output(cmd,
-+                                  stderr=open(os.devnull, "w"),
-+                                  cwd=builddir,
-+                                  env={"LANG": "C"})
-+    return ret
-+
-+class TestRelro(infra.basetest.BRTest):
-+    config = HARD_DEFCONFIG + \
-+        """
-+        BR2_RELRO_FULL=y
-+        """
-+
-+    def test_run(self):
-+        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
-+        self.assertEqual(out["file"]["relro"], "full")
-+        self.assertEqual(out["file"]["pie"], "yes")
-+        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
-+        self.assertEqual(out["file"]["relro"], "full")
-+
-+class TestRelroPartial(infra.basetest.BRTest):
-+    config = HARD_DEFCONFIG + \
-+        """
-+        BR2_RELRO_PARTIAL=y
-+        """
-+
-+    def test_run(self):
-+        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
-+        self.assertEqual(out["file"]["relro"], "partial")
-+        self.assertEqual(out["file"]["pie"], "no")
-+        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
-+        self.assertEqual(out["file"]["relro"], "partial")
-+
-+class TestSspNone(infra.basetest.BRTest):
-+    config = HARD_DEFCONFIG + \
-+        """
-+        BR2_SSP_NONE=y
-+        """
-+
-+    def test_run(self):
-+        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
-+        self.assertEqual(out["file"]["canary"], "no")
-+        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
-+        self.assertEqual(out["file"]["canary"], "no")
-+
-+
-+class TestSspStrong(infra.basetest.BRTest):
-+    config = HARD_DEFCONFIG + \
-+        """
-+        BR2_SSP_STRONG=y
-+        """
-+
-+    def test_run(self):
-+        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
-+        self.assertEqual(out["file"]["canary"], "yes")
-+        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
-+        self.assertEqual(out["file"]["canary"], "yes")
-+
-+class TestFortifyNone(infra.basetest.BRTest):
-+    config = HARD_DEFCONFIG + \
-+        """
-+        BR2_FORTIFY_SOURCE_NONE=y
-+        """
-+
-+    def test_run(self):
-+        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
-+        self.assertEqual(out["file"]["fortified"], "0")
-+        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
-+        self.assertEqual(out["file"]["fortified"], "0")
-+
-+class TestFortifyConserv(infra.basetest.BRTest):
-+    config = HARD_DEFCONFIG + \
-+        """
-+        BR2_FORTIFY_SOURCE_1=y
-+        """
-+
-+    def test_run(self):
-+        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
-+        self.assertNotEqual(out["file"]["fortified"], "0")
-+        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
-+        self.assertNotEqual(out["file"]["fortified"], "0")
++++ b/toolchain/gcc-specs-pie-cc1
+@@ -0,0 +1,2 @@
++*cc1_options:
+++ %{!r:%{!fpie:%{!fPIE:%{!fpic:%{!fPIC:%{!fno-pic:-fPIE}}}}}}
+diff --git a/toolchain/gcc-specs-pie-ld b/toolchain/gcc-specs-pie-ld
+new file mode 100644
+index 0000000000..bd6b9071ff
+--- /dev/null
++++ b/toolchain/gcc-specs-pie-ld
+@@ -0,0 +1,2 @@
++*self_spec:
+++ %{!static:%{!shared:%{!r:-pie}}}
 -- 
 2.17.0
