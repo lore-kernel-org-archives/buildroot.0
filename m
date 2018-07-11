@@ -1,150 +1,133 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 11 Jul 2018 09:31:12 -0500
-Subject: [Buildroot] [PATCH 5/6] package/checksec: new package
+Date: Wed, 11 Jul 2018 09:31:13 -0500
+Subject: [Buildroot] [PATCH 6/6] support/testing/tests/core: SSP & hardening
+ flags
 In-Reply-To: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
 References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180711143113.11927-6-matthew.weber@rockwellcollins.com>
+Message-ID: <20180711143113.11927-7-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+Catch the commonly used options of SSP, Relro, and fortify.
 
-This patch added host-checksec package support. This tool
-provides a script to offline check the properties of a
-security hardened elf file.
-
-REF: https://github.com/slimm609/checksec.sh
-
-Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/Config.in.host                        |  1 +
- ...cksec-Fixed-issue-with-relative-path.patch | 43 +++++++++++++++++++
- package/checksec/Config.in.host               | 16 +++++++
- package/checksec/checksec.hash                |  3 ++
- package/checksec/checksec.mk                  | 16 +++++++
- 5 files changed, 79 insertions(+)
- create mode 100644 package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch
- create mode 100644 package/checksec/Config.in.host
- create mode 100644 package/checksec/checksec.hash
- create mode 100644 package/checksec/checksec.mk
+ support/testing/tests/core/test_hardening.py | 104 +++++++++++++++++++
+ 1 file changed, 104 insertions(+)
+ create mode 100644 support/testing/tests/core/test_hardening.py
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 7838ffc219..0c21b11bd0 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -5,6 +5,7 @@ menu "Host utilities"
- 	source "package/cargo/Config.in.host"
- 	source "package/cbootimage/Config.in.host"
- 	source "package/checkpolicy/Config.in.host"
-+	source "package/checksec/Config.in.host"
- 	source "package/cmake/Config.in.host"
- 	source "package/cramfs/Config.in.host"
- 	source "package/cryptsetup/Config.in.host"
-diff --git a/package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch b/package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch
+diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
 new file mode 100644
-index 0000000000..43a882d991
+index 0000000000..2a479d89aa
 --- /dev/null
-+++ b/package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch
-@@ -0,0 +1,43 @@
-+From b48a2dfae26fa3b4af8e65fb5953b3caf62c137b Mon Sep 17 00:00:00 2001
-+From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
-+Date: Mon, 21 May 2018 14:34:23 -0500
-+Subject: [PATCH] checksec: Fixed issue with relative path
++++ b/support/testing/tests/core/test_hardening.py
+@@ -0,0 +1,104 @@
++import os
++import subprocess
++import json
 +
-+Before this patch script was not able find exists directory when user pass
-+relative directory path with '--dir' or '-d' option and also we faced this error
-+when we execute script with relative path.
++import infra.basetest
 +
-+This patch fixed  "No such file or directory" error in both cases.
++HARD_DEFCONFIG = \
++    """
++    BR2_powerpc64=y
++    BR2_powerpc_e5500=y
++    BR2_TOOLCHAIN_EXTERNAL=y
++    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++    BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
++    BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
++    BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
++    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++    BR2_TOOLCHAIN_EXTERNAL_CXX=y
++    BR2_PACKAGE_LIGHTTPD=y
++    BR2_PACKAGE_HOST_CHECKSEC=y
++    # BR2_TARGET_ROOTFS_TAR is not set
++    """
 +
-+https://github.com/slimm609/checksec.sh/issues/54
++def checksec_run(builddir, target_file):
++    cmd = ["host/bin/checksec", "--output", "json", "--file", target_file]
++    ret = subprocess.check_output(cmd,
++                                  stderr=open(os.devnull, "w"),
++                                  cwd=builddir,
++                                  env={"LANG": "C"})
++    return ret
 +
-+Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
-+---
-+ checksec | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++class TestRelro(infra.basetest.BRTest):
++    config = HARD_DEFCONFIG + \
++        """
++        BR2_RELRO_FULL=y
++        """
 +
-+diff --git a/checksec b/checksec
-+index 24b521f..baf8d63 100755
-+--- a/checksec
-++++ b/checksec
-+@@ -1193,7 +1193,7 @@ do
-+     echo_message "RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      FORTIFY Checked         Total   Filename\n" '' "<dir name='$tempdir'>\n" "{ \"dir\": { \"name\":\"$tempdir\" },"
-+     fdircount=0
-+     fdirtotal=0
-+-    for N in $(find $tempdir -type f); do
-++    for N in $(find . -type f); do
-+       if [[ "$N" != "[A-Za-z1-0]*" ]]; then
-+         out=$(file "$N")
-+         if [[  $out =~ ELF ]] ; then
-+@@ -1201,7 +1201,7 @@ do
-+         fi
-+       fi
-+     done
-+-    for N in $(find $tempdir -type f); do
-++    for N in $(find . -type f); do
-+       if [[ "$N" != "[A-Za-z1-0]*" ]]; then
-+     # read permissions?
-+     if [[ ! -r "$N" ]]; then
-+-- 
-+1.9.1
++    def test_run(self):
++        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
++        self.assertEqual(out["file"]["relro"], "full")
++        self.assertEqual(out["file"]["pie"], "yes")
++        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
++        self.assertEqual(out["file"]["relro"], "full")
 +
-diff --git a/package/checksec/Config.in.host b/package/checksec/Config.in.host
-new file mode 100644
-index 0000000000..7f86f46b50
---- /dev/null
-+++ b/package/checksec/Config.in.host
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_HOST_CHECKSEC
-+	bool "host checksec"
-+	help
-+	  This tool provides a shell script to check the
-+	  properties of the executables
-+	  (like PIE,RELRO,PaX,Canaries,ASLR,Fortify Source).
++class TestRelroPartial(infra.basetest.BRTest):
++    config = HARD_DEFCONFIG + \
++        """
++        BR2_RELRO_PARTIAL=y
++        """
 +
-+	  https://github.com/slimm609/checksec.sh.git
++    def test_run(self):
++        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
++        self.assertEqual(out["file"]["relro"], "partial")
++        self.assertEqual(out["file"]["pie"], "no")
++        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
++        self.assertEqual(out["file"]["relro"], "partial")
 +
-+	  NOTE: This tool has a hard-coded path to the standard
-+	  libraries for some of the fortify test cases and
-+	  requires you to either test the local filesystem or be
-+	  in a chroot'd environment.  The tool can still be used
-+	  against a folder of files but requires discretion of
-+	  which the tests may not report consistently vs
-+	  chroot/on-target.
-diff --git a/package/checksec/checksec.hash b/package/checksec/checksec.hash
-new file mode 100644
-index 0000000000..e3d1ffd5d1
---- /dev/null
-+++ b/package/checksec/checksec.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 510b0b0528f15d0bf13fa1ae7140d2b9fc9261323c98ff76c011bef475a69c14 checksec-cdefe53eb72e6e8f23308417d2fc6b68cba9dbac.tar.gz
-+sha256 c5e2a8e188040fc34eb9362084778a2e25f8d1f888e47a2be09efa7cecd9c70d LICENSE.txt
-diff --git a/package/checksec/checksec.mk b/package/checksec/checksec.mk
-new file mode 100644
-index 0000000000..31ceb43e21
---- /dev/null
-+++ b/package/checksec/checksec.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# checksec
-+#
-+################################################################################
++class TestSspNone(infra.basetest.BRTest):
++    config = HARD_DEFCONFIG + \
++        """
++        BR2_SSP_NONE=y
++        """
 +
-+CHECKSEC_VERSION = cdefe53eb72e6e8f23308417d2fc6b68cba9dbac
-+CHECKSEC_SITE = $(call github,slimm609,checksec.sh,$(CHECKSEC_VERSION))
-+CHECKSEC_LICENSE = BSD-3-Clause
-+CHECKSEC_LICENSE_FILES = LICENSE.txt
++    def test_run(self):
++        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
++        self.assertEqual(out["file"]["canary"], "no")
++        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
++        self.assertEqual(out["file"]["canary"], "no")
 +
-+define HOST_CHECKSEC_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/checksec $(HOST_DIR)/bin/
-+endef
 +
-+$(eval $(host-generic-package))
++class TestSspStrong(infra.basetest.BRTest):
++    config = HARD_DEFCONFIG + \
++        """
++        BR2_SSP_STRONG=y
++        """
++
++    def test_run(self):
++        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
++        self.assertEqual(out["file"]["canary"], "yes")
++        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
++        self.assertEqual(out["file"]["canary"], "yes")
++
++class TestFortifyNone(infra.basetest.BRTest):
++    config = HARD_DEFCONFIG + \
++        """
++        BR2_FORTIFY_SOURCE_NONE=y
++        """
++
++    def test_run(self):
++        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
++        self.assertEqual(out["file"]["fortified"], "0")
++        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
++        self.assertEqual(out["file"]["fortified"], "0")
++
++class TestFortifyConserv(infra.basetest.BRTest):
++    config = HARD_DEFCONFIG + \
++        """
++        BR2_FORTIFY_SOURCE_1=y
++        """
++
++    def test_run(self):
++        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
++        self.assertNotEqual(out["file"]["fortified"], "0")
++        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
++        self.assertNotEqual(out["file"]["fortified"], "0")
 -- 
 2.17.0
