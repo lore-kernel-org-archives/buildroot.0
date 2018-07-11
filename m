@@ -1,100 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Jul 2018 23:14:39 +0200
-Subject: [Buildroot] [PATCH 1/6] package/Makefile.in: Do not use
- CPPFLAGS for hardening options
-In-Reply-To: <20180711143113.11927-2-matthew.weber@rockwellcollins.com>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-2-matthew.weber@rockwellcollins.com>
-Message-ID: <0588fc06-c633-9bcd-5a73-478e8e512506@mind.be>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 11 Jul 2018 23:17:47 +0200
+Subject: [Buildroot] [PATCH v4 1/3] uboot: zynqmp: allow to use custom
+ psu_init files
+In-Reply-To: <ece4b0e3-5b7b-5719-393c-21918cc2f839@gmail.com>
+References: <mailman.4777.1529627642.16495.buildroot@busybox.net>
+ <6b428669-ea55-efe8-d0fa-aa97287824a9@gmail.com>
+ <7e3f3d75-15d8-f778-ef25-5e2b0b959f72@lucaceresoli.net>
+ <ece4b0e3-5b7b-5719-393c-21918cc2f839@gmail.com>
+Message-ID: <e5e0d947-8aa3-68bd-0d00-2811830542af@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Joel,
 
-
-On 11-07-18 16:31, Matt Weber wrote:
-> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
+On 11/07/2018 04:48, Joel Carlson wrote:
+[...]
+>> BTW, how are you building your PMU firmware?
 > 
-> The hardening options are compiler flags, not pure pre-processor flags, so
-> put them in CFLAGS, not CPPFLAGS.
+> I'm actually using your zynqmp-pmufw-builder tool on github. =)
+
+Oh, cool! :)
+
+> With the changes:
+> - I check out the embeddedsw submodule to the xilinx-v2018.1 tag
+> - I had to then tweak the 0001 patch a little
+> - I modify build.sh to add some extra flags to reduce the size (or else
+> it overflows its available memory - I got these flags from how Xilinx
+> compiles it)
+> - I think my pm_cfg_obj.c is the default one from Xilinx for 2018.1
+
+The changes you made to reduce the size and support more recent versions
+would be useful to other people, would you like to contribute them to
+zynqmp-pmufw-builder? This would ultimately improve the quality of
+ZynqMP support in Buildroot as well. As this is quite off topic here,
+feel free to just send me patches or a github PR, or t contact me
+directly for any question.
+
+>>> <snip>
+>>>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+>>>> index 03bd7ea743ed..e4571a6ccf9f 100644
+>>>> --- a/boot/uboot/uboot.mk
+>>>> +++ b/boot/uboot/uboot.mk
+>>>> @@ -274,6 +274,17 @@ define UBOOT_INSTALL_IMAGES_CMDS
+>>>> ?????????????? $(BINARIES_DIR)/boot.scr)
+>>>> ?? endef
+>>>> ?? +ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
+>>>> +
+>>>> +ifneq ($(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE)),)
+>>>> +define UBOOT_ZYNQMP_KCONFIG_PSU_INIT
+>>>> +??? $(call
+>>>> KCONFIG_SET_OPT,CONFIG_XILINX_PS_INIT_FILE,"$(TOPDIR)/$(call
+>>>> qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE))", \
+>>>> +?????????? $(@D)/.config)
+>>>
+>>> I think you should get rid of the "$(TOPDIR)/" part and let the user
+>>> specify it as part of BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE if needed.
+>>> My psu_init files are in a path that I reference via BR2_EXTERNAL, so
+>>> having $(TOPDIR) prepended messed up the path to my files.
+>>
+>> Uhm, my mistake, as I've never user BR2_EXTERNAL I tend to forget to
+>> test it... Sorry about that.
+>>
+>> Since the kconfig option we're setting here will be evaulated during the
+>> build process, which will happen in another directory
+>> ($O/build/uboot-*/), I chose to tranform that path to an absolute one
+>> using $TOPDIR.
+>>
+>> But as you noticed this is not a correct solution. At first sight we
+>> should rather copy the file in a proper place (sysroot or
+>> $O/build/uboot-*/) and then point the kconfig option to that path. I'll
+>> have a look to this, as well as to your comments to patch 2.
 > 
-> This fixes build errors where -D_FORTIFY_SOURCE=2 whas put in CPPFLAGS and
-> then applied to configure tests which could fail since the required -O2 is
-> only in CFLAGS.
-> 
-> Originally submitted as
-> http://patchwork.ozlabs.org/patch/904057/
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> This did work for me using a $(BR2_EXTERNAL_MY_BSP_PATH) variable in the
+> value once I simply removed '$(TOPDIR)'. Though I did not test using
+> $(TOPDIR) within the variable value, but I think that should still work.
+> But I suppose copying it into uboot's build folder might seem more
+> appropriate than paths to elsewhere on the system.
 
- I was thinking: why introduce TARGET_HARDENED instead of just adding to
-TARGET_CFLAGS directly. But it actually does look nicer this way. So
+Well, perhaps using TOPDIR in the variable would work, but it would be
+rather ugly and different from other Buildroot settings. Copying looks
+like the best solution at the moment.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-> ---
->  package/Makefile.in | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index f2962767cc..5e0ff8c841 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -147,29 +147,29 @@ TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
->  TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
->  
->  ifeq ($(BR2_SSP_REGULAR),y)
-> -TARGET_CPPFLAGS += -fstack-protector
-> +TARGET_HARDENED += -fstack-protector
->  else ifeq ($(BR2_SSP_STRONG),y)
-> -TARGET_CPPFLAGS += -fstack-protector-strong
-> +TARGET_HARDENED += -fstack-protector-strong
->  else ifeq ($(BR2_SSP_ALL),y)
-> -TARGET_CPPFLAGS += -fstack-protector-all
-> +TARGET_HARDENED += -fstack-protector-all
->  endif
->  
->  ifeq ($(BR2_RELRO_PARTIAL),y)
-> -TARGET_CPPFLAGS += $(TARGET_CFLAGS_RELRO)
-> +TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
->  TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
->  else ifeq ($(BR2_RELRO_FULL),y)
-> -TARGET_CPPFLAGS += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
-> +TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
->  TARGET_LDFLAGS += -pie
->  endif
->  
->  ifeq ($(BR2_FORTIFY_SOURCE_1),y)
-> -TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=1
-> +TARGET_HARDENED += -D_FORTIFY_SOURCE=1
->  else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
-> -TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=2
-> +TARGET_HARDENED += -D_FORTIFY_SOURCE=2
->  endif
->  
->  TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
-> -TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
-> +TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)
-
- The line is getting a bit long, but TARGET_DEBUGGING was already too much so
-not for this patch :-)
-
-
- Regards,
- Arnout
-
->  TARGET_CXXFLAGS = $(TARGET_CFLAGS)
->  TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
->  
-> 
-
+Regards,
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Luca
