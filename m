@@ -1,95 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 11 Jul 2018 23:44:49 +0200
-Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
- for PIE build flags
-In-Reply-To: <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
-Message-ID: <cc562d31-b770-c7e1-0a6d-e3f004c917db@mind.be>
+From: MOHAMMAD RASIM <mohammad.rasim96@gmail.com>
+Date: Thu, 12 Jul 2018 00:45:50 +0300
+Subject: [Buildroot] At what stage the init script is created and can be
+ used within the post build script?
+In-Reply-To: <89a3cb0b-1fda-0031-ba57-c511ea5d542f@mind.be>
+References: <93b3645f-29f9-6864-5177-ec8ca41474fb@gmail.com>
+ <89a3cb0b-1fda-0031-ba57-c511ea5d542f@mind.be>
+Message-ID: <40826fa3-1ab1-65a0-cc1d-8354696185fe@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Yeah I was trying to avoid using overlay, I guess I don't have a choice now.
+Thanks
+On 07/11/2018 11:58 PM, Arnout Vandecappelle wrote:
 
-
-On 11-07-18 16:31, Matt Weber wrote:
-> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> 
-> The PIE build flags are only intended for building executables and can not be
-> used in relocateable links (-r), static builds and shared library build -
-> including the flags here causes build errors.
-> 
-> So instead of parsing the PIE flags directly on the command line to gcc,
-> include them in a gcc spec file where it is possible to only apply the flags
-> when other incompatible flags are not set.
-
- The commit message should also have the reasoning why this is considered better
-than doing the same in the wrapper.
-
-> 
-> This method and the spec files are from the Fedora build system.
-> 
-> Originally submitted as
-> http://patchwork.ozlabs.org/patch/907093/
-> 
-> Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/Makefile.in         | 4 ++--
->  toolchain/gcc-specs-pie-cc1 | 2 ++
->  toolchain/gcc-specs-pie-ld  | 2 ++
->  3 files changed, 6 insertions(+), 2 deletions(-)
->  create mode 100644 toolchain/gcc-specs-pie-cc1
->  create mode 100644 toolchain/gcc-specs-pie-ld
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 14b3bbd243..00ddf48c10 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -158,8 +158,8 @@ ifeq ($(BR2_RELRO_PARTIAL),y)
->  TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
->  TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
->  else ifeq ($(BR2_RELRO_FULL),y)
-> -TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
-> -TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
-> +TARGET_HARDENED += $(TARGET_CFLAGS_RELRO_FULL) -specs=$(TOPDIR)/toolchain/gcc-specs-pie-cc1
-> +TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO_FULL) -specs=$(TOPDIR)/toolchain/gcc-specs-pie-ld
-
- As mentioned in my other mail, it is very likely that there are packages that
-link with TARGET_CFLAGS instead of TARGET_LDFLAGS. Would that be a problem?
-Actually, can't we just have a single spec file that contains both?
-
-
- Regards,
- Arnout
-
->  endif
->  
->  ifeq ($(BR2_FORTIFY_SOURCE_1),y)
-> diff --git a/toolchain/gcc-specs-pie-cc1 b/toolchain/gcc-specs-pie-cc1
-> new file mode 100644
-> index 0000000000..fc54bcb510
-> --- /dev/null
-> +++ b/toolchain/gcc-specs-pie-cc1
-> @@ -0,0 +1,2 @@
-> +*cc1_options:
-> ++ %{!r:%{!fpie:%{!fPIE:%{!fpic:%{!fPIC:%{!fno-pic:-fPIE}}}}}}
-> diff --git a/toolchain/gcc-specs-pie-ld b/toolchain/gcc-specs-pie-ld
-> new file mode 100644
-> index 0000000000..bd6b9071ff
-> --- /dev/null
-> +++ b/toolchain/gcc-specs-pie-ld
-> @@ -0,0 +1,2 @@
-> +*self_spec:
-> ++ %{!static:%{!shared:%{!r:-pie}}}
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+>
+> On 11-07-18 13:55, MOHAMMAD RASIM wrote:
+>> Hi,
+>> I'm building buildroot as a cpio initramfs (BR2_TARGET_ROOTFS_CPIO=y) and I have
+>> a post build script that edits the /init script like so:
+>> sed -i "s/something/anotherthing/" ${TARGET_DIR}/init
+>> The script worked fine when I used buildroot-2018.02.3 but now I want to build
+>> using the latest buildroot from git repo(master branch, latest commit is
+>> 0ce56fbdf6469cf9bbda168ffe75480ae811acaa as of writing this messege) and the
+>> script can't find the /init script and errors out:
+>>
+>> |sed: can't read /home/mohammad/buildroot/output/target/init: No such file or
+>> directory
+>>
+>> |so clearly the init script is not created until the cpio archive is created.
+>   Indeed, the filesystem generation steps no longer modify $(TARGET_DIR).
+> Instead, they get their own private directory to work in. So the /init script
+> will only appear in the cpio archive, not in the target directory or in the tarball.
+>
+>> So how can I access the /init script from the post-build script ?
+>   The easiest is: instead of using sed to update the init script, add a complete
+> init script in the rootfs overlay (BR2_ROOTFS_OVERLAY). That's what I usually do.
+>
+>   Alternatively, but IMO ugly, you could add the following in an external.mk:
+>
+> define ROOTFS_CPIO_UPDATE_INIT
+> 	sed -i "s/something/anotherthing/" ${TARGET_DIR}/init
+> endef
+>
+> ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_UPDATE_INIT
+>
+>
+>   Regards,
+>   Arnout
+>
+>
+>> Thanks
+>> ||
+>>
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
