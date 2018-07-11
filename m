@@ -1,99 +1,50 @@
-From: Fame Castle <famecastle@gmail.com>
-Date: Wed, 11 Jul 2018 18:24:53 +0200
-Subject: [Buildroot] Fwd:  Guide for installing Chromium using patch sets
-In-Reply-To: <CAD0+TpC5N2DW8sfs38GAAy5=hbAf6uccHTGMxSt+AjPQmdUqbQ@mail.gmail.com>
-References: <CAD0+TpAc6473JO3H24CLwxUwc0WXZ5n8es1xJctnyhUEESrwWg@mail.gmail.com>
- <CAMWSM7iJjfVUY_Yw13u+gg73eShK5pwh5+1yawWRV+Z-qAhGTw@mail.gmail.com>
- <CAD0+TpAfAu0XKeEzwhACV8j0D-27fodEhFjgg9JcgePs-7Nxgg@mail.gmail.com>
- <CAMWSM7hLA6p+MqQW0MVrf8DZ6A5Ap8UqO_xPo8hW5QMvjirrDQ@mail.gmail.com>
- <CAD0+TpAX_eSnF70YLRq6Kp44iySE4O18gxSu23bcjOHjDsSQWA@mail.gmail.com>
- <CAD0+TpC5N2DW8sfs38GAAy5=hbAf6uccHTGMxSt+AjPQmdUqbQ@mail.gmail.com>
-Message-ID: <CAD0+TpAFG3X6=MO5VQMcvHRz-JNiEUv31Agr__JFmox9UAc90g@mail.gmail.com>
+From: =?UTF-8?q?Jean-Fran=C3=A7ois=20T=C3=AAtu?= <jean-francois.tetu@savoirfairelinux.com>
+Date: Wed, 11 Jul 2018 15:34:52 -0400
+Subject: [Buildroot] [PATCH] package/squid: fix automake breakage
+Message-ID: <20180711193452.19461-1-jean-francois.tetu@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----------- Forwarded message ----------
-From: Fame Castle <famecastle@gmail.com>
-Date: 2018-07-11 18:24 GMT+02:00
-Subject: Fwd: [Buildroot] Guide for installing Chromium using patch sets
-To: buildroot at busybox.net
+Much like e27ccbabc1, the recent bump in automake causes a build error.
+If the host automake is not the same version as the one used to generate
+the squid package, the build fails while building the copy of libltdl
+included in the package.
 
+This happens regardless of the Buildroot automake version since the
+included library is not reconfigured properly. The previous fix set the
+ACLOCAL and AUTOMAKE variables to the Buildroot generated aclocal and
+automake thereby ensuring that the subpackage would build correctly.
+What is needed is to make sure that both the squid configure script and
+the libltdl configure script are reconfigured following a change to
+either configure.ac files.
 
+This commit adds an option passed to autoreconf which ensures both
+configure scripts are regenerated with Buildroot's autotools.
 
----------- Forwarded message ----------
-From: Fame Castle <famecastle@gmail.com>
-Date: 2018-07-11 18:22 GMT+02:00
-Subject: Re: [Buildroot] Guide for installing Chromium using patch sets
-To: Joseph Kogut <joseph.kogut@gmail.com>
+Fixes:
+ http://autobuild.buildroot.net/results/83d/83d8fb0fc25205d6fb8c96a9877e5901275c6766
+ http://autobuild.buildroot.net/results/948/948737590ba648f7dbade1661c0e2e8d9db6522b
 
+CC: Gustavo Zacarias <gustavo@zacarias.com.ar>
+Signed-off-by: Jean-Fran?ois T?tu <jean-francois.tetu@savoirfairelinux.com>
+---
+ package/squid/squid.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-I did a 'make chromium-dirclean all' and the problem reappeared. You can
-find my buildroot config file at https://pastebin.com/zjZuDgB3 . The libnss
-package is selected in buildroot. "chromium 67.0.3396.79" gets downloaded
-successfully, all patches are applied correctly and the configuration fails
-with the same error.
-
-If you have no idea what the problem could be,I will do a complete
-recompile. But for now, I just wait, since a full recompile takes a couple
-of hours for me.
-
-2018-07-11 18:11 GMT+02:00 Joseph Kogut <joseph.kogut@gmail.com>:
-
-> Hi Fame,
->
-> On Wed, Jul 11, 2018 at 8:37 AM Fame Castle <famecastle@gmail.com> wrote:
-> >
-> > Hello Joseph,
-> >
-> > I checked out your chromium-v6 branch from your repo and applied my
-> buildroot configurations to it. It compiled fine without chromium being
-> selected. But when I selected chromium (indeed, it was the use_sysroot
-> problem that previously made my builds fail, which is now fixed in your
-> repo), I encountered a new problem:
-> >
-> > > >>> chromium 67.0.3396.79 Configuring
-> > > ...
-> > > [412/412] LINK gn
-> > > ERROR at //build/config/linux/pkg_config.gni:103:17: Script returned
-> non-zero exit code.
-> > >     pkgresult = exec_script(pkg_config_script, args, "value")
-> > >                  ^----------
-> > > Current dir: /home/buildroot/output/build/c
-> hromium-67.0.3396.79/out/Release/
-> > > Command: /home/buildroot/output/host/bin/python2 --
-> /home/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py
-> nss -v -lssl3
-> > > Returned 1.
-> > > stderr:
-> > >
-> > > Package nss was not found in the pkg-config search path.
-> > > Perhaps you should add the directory containing `nss.pc'
-> > > to the PKG_CONFIG_PATH environment variable
-> > > No package 'nss' found
-> > > Could not run pkg-config.
-> > >
-> > > See //third_party/nss/BUILD.gn:15:3: whence it was called.
-> > >   pkg_config("system_nss_no_ssl_config") {
-> > >   ^---------------------------------------
-> > > See //crypto/BUILD.gn:221:25: which caused the file to be included.
-> > >     public_configs += [ "//third_party/nss:system_nss_no_ssl_config" ]
-> > >                         ^-------------------------------------------
-> >
-> > The compilation breaks at the same point as it previously did. But now
-> the problem with cups-config is fixed and this error appeared.
->
-> I removed nss from my host system and issued a 'make chromium-dirclean
-> all', and I was unable to reproduce this issue. Could you try a clean
-> build, and see if the issue persists?
->
-> Also, could you upload your config to pastebin or github, and link to it?
->
-> Thanks,
-> Joseph
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180711/d25043cd/attachment.html>
+diff --git a/package/squid/squid.mk b/package/squid/squid.mk
+index 2d21ad8858..06442157d6 100644
+--- a/package/squid/squid.mk
++++ b/package/squid/squid.mk
+@@ -12,6 +12,7 @@ SQUID_LICENSE = GPL-2.0+
+ SQUID_LICENSE_FILES = COPYING
+ # For 0001-assume-get-certificate-ok.patch
+ SQUID_AUTORECONF = YES
++SQUID_AUTORECONF_OPTS = -fi configure.ac libltdl/configure.ac
+ SQUID_DEPENDENCIES = libcap host-libcap host-pkgconf \
+ 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
+ SQUID_CONF_ENV = \
+-- 
+2.18.0
