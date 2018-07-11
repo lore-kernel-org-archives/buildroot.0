@@ -1,32 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 11 Jul 2018 22:40:38 +0200
-Subject: [Buildroot] [git commit] linux: bump default to version 4.17.6
-Message-ID: <20180711203651.0B0EF883A2@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 11 Jul 2018 22:58:08 +0200
+Subject: [Buildroot] At what stage the init script is created and can be
+ used within the post build script?
+In-Reply-To: <93b3645f-29f9-6864-5177-ec8ca41474fb@gmail.com>
+References: <93b3645f-29f9-6864-5177-ec8ca41474fb@gmail.com>
+Message-ID: <89a3cb0b-1fda-0031-ba57-c511ea5d542f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5af4748de4ab45752d8cb77b8fc497ca4d52b208
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9e53adb8bd..9b166eded6 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.17.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.17.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+On 11-07-18 13:55, MOHAMMAD RASIM wrote:
+> Hi,
+> I'm building buildroot as a cpio initramfs (BR2_TARGET_ROOTFS_CPIO=y) and I have
+> a post build script that edits the /init script like so:
+> sed -i "s/something/anotherthing/" ${TARGET_DIR}/init
+> The script worked fine when I used buildroot-2018.02.3 but now I want to build
+> using the latest buildroot from git repo(master branch, latest commit is
+> 0ce56fbdf6469cf9bbda168ffe75480ae811acaa as of writing this messege) and the
+> script can't find the /init script and errors out:
+> 
+> |sed: can't read /home/mohammad/buildroot/output/target/init: No such file or
+> directory
+> 
+> |so clearly the init script is not created until the cpio archive is created.
+
+ Indeed, the filesystem generation steps no longer modify $(TARGET_DIR).
+Instead, they get their own private directory to work in. So the /init script
+will only appear in the cpio archive, not in the target directory or in the tarball.
+
+> So how can I access the /init script from the post-build script ?
+
+ The easiest is: instead of using sed to update the init script, add a complete
+init script in the rootfs overlay (BR2_ROOTFS_OVERLAY). That's what I usually do.
+
+ Alternatively, but IMO ugly, you could add the following in an external.mk:
+
+define ROOTFS_CPIO_UPDATE_INIT
+	sed -i "s/something/anotherthing/" ${TARGET_DIR}/init
+endef
+
+ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_UPDATE_INIT
+
+
+ Regards,
+ Arnout
+
+
+> 
+> Thanks
+> ||
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
