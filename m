@@ -1,62 +1,93 @@
-From: Serj Kalichev <serj.kalichev@gmail.com>
-Date: Thu, 12 Jul 2018 15:33:47 +0300
-Subject: [Buildroot] BR2_LINUX_KERNEL_PATCH for linux-headers
-In-Reply-To: <60e837dd-e80e-c0c3-a5b4-7cb60e87f7f3@mind.be>
-References: <fea35efb-0134-f091-5cbd-30292f137b33@gmail.com>
- <60e837dd-e80e-c0c3-a5b4-7cb60e87f7f3@mind.be>
-Message-ID: <c9339544-608c-ef29-21cd-640f0552e63f@gmail.com>
+From: David Owens <david.owens@rockwellcollins.com>
+Date: Thu, 12 Jul 2018 11:37:34 -0500
+Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python in
+ shebang
+Message-ID: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for the answer.
-I will use BR2_GLOBAL_PATCH_DIR but with enhancement.
-It's not suitable for linux and linux-headers to create dirs like 
-linux/4.9.80. Minor version number is not useful for kernel patches. The 
-dirs like linux/4.0.x is better.
-So I create a file in my external tree:
+When the output directory is nested under a long path name, calling the
+gdbus-codegen, glib-genmarshal, or glib-mkenums scripts throws the
+error:
 
-LINUX_VERSION_S := $(subst ., , $(strip $(LINUX_VERSION)))
-LINUX_VERSION_X := $(word 1, $(LINUX_VERSION_S)).$(word 2, 
-$(LINUX_VERSION_S)).x
+> '/usr/bin/env: /...: No such file or directory'
 
-define LINUX_APPLY_MAJOR_PATCHES
-<------>$(Q)( \
-<------>for D in $(PATCH_BASE_DIRS); do \
-<------>? if test -d $${D}/$($(PKG)_VERSION_X); then \
-<------>??? $(APPLY_PATCHES) $(@D) $${D}/$($(PKG)_VERSION_X) \*.patch 
-\*.patch.$(ARCH) || exit 1; \
-<------>? fi; \
-<------>done; \
-<------>)
-endef
+This is because libglib2 uses the absolute path to the python
+interpreter for its shebang statements, and shebangs have a max length
+of 127 chars[1]. A long absolute path will be cut off and appear as a
+missing file.
 
-LINUX_POST_PATCH_HOOKS += LINUX_APPLY_MAJOR_PATCHES
+Since the host Python is present in the $PATH passed to all packages, we
+can copy the workaround from Yocto and just use the python interpreter
+in $PATH[2]. However, 'python' is used instead of 'python3' as the
+scripts are compatible with both.
 
-The file for linux-headers is the same.
-So buildroot will use dirs like "4.9.x" to patch linux and 
-linux-headers. Maybe it will be useful for someone.
+[1] https://linux.die.net/man/2/execve
+[2] http://cgit.openembedded.org/openembedded-core/commit/?id=eef7883587acc933d6f34b559ec03ff84d18573b
 
-12.07.2018 00:02, Arnout Vandecappelle ?????:
->
-> On 11-07-18 16:32, Serj Kalichev wrote:
->> Hello.
->>
->> Both linux and linux-headers package use BR2_LINUX_KERNEL_PATCH. But
->> BR2_LINUX_KERNEL_PATCH is available if BR2_LINUX_KERNEL is selected. I want to
->> build toolchain only. And don't want to build linux kernel. So I deselect
->> BR2_LINUX_KERNEL and lose BR2_LINUX_KERNEL_PATCH for linux-headers.
->>
->> I think BR2_LINUX_KERNEL_PATCH must not depend on BR2_LINUX_KERNEL.
->   It's not easy to do that properly, because you'd still need to go to the kernel
-> menu to set the kernel patch list.
->
->   Anyway, we consider BR2_LINUX_KERNEL_PATCH as deprecated. Use
-> BR2_GLOBAL_PATCH_DIR instead, and add your patches in the linux-headers
-> subdirectory of that directory.
->
->   Regards,
->   Arnout
->
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: David Owens <david.owens@rockwellcollins.com>
+---
+ ...t-hardcode-python-path-into-various-tools.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
+
+diff --git a/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch b/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
+new file mode 100644
+index 0000000..aadd050
+--- /dev/null
++++ b/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
+@@ -0,0 +1,48 @@
++From b9160d951b9af647b97766c57295ca4f45cf9521 Mon Sep 17 00:00:00 2001
++From: Alexander Kanavin <alex.kanavin@gmail.com>
++Date: Tue, 3 Oct 2017 10:45:55 +0300
++Subject: [PATCH 10/10] Do not hardcode python path into various tools
++
++Upstream-Status: Inappropriate [oe-core specific]
++Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
++Fetch from:
++http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-core/glib-2.0/glib-2.0/0010-Do-not-hardcode-python-path-into-various-tools.patch?id=eef7883587acc933d6f34b559ec03ff84d18573b
++---
++ gio/gdbus-2.0/codegen/gdbus-codegen.in | 2 +-
++ gobject/glib-genmarshal.in             | 2 +-
++ gobject/glib-mkenums.in                | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/gio/gdbus-2.0/codegen/gdbus-codegen.in b/gio/gdbus-2.0/codegen/gdbus-codegen.in
++index 8050981..e693ef3 100644
++--- a/gio/gdbus-2.0/codegen/gdbus-codegen.in
+++++ b/gio/gdbus-2.0/codegen/gdbus-codegen.in
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env @PYTHON@
+++#!/usr/bin/env python
++ 
++ # GDBus - GLib D-Bus Library
++ #
++diff --git a/gobject/glib-genmarshal.in b/gobject/glib-genmarshal.in
++index 09e8408..b2f9d99 100755
++--- a/gobject/glib-genmarshal.in
+++++ b/gobject/glib-genmarshal.in
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env @PYTHON@
+++#!/usr/bin/env python
++ 
++ # pylint: disable=too-many-lines, missing-docstring, invalid-name
++ 
++diff --git a/gobject/glib-mkenums.in b/gobject/glib-mkenums.in
++index d4bfd11..051fce4 100755
++--- a/gobject/glib-mkenums.in
+++++ b/gobject/glib-mkenums.in
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env @PYTHON@
+++#!/usr/bin/env python
++ 
++ # If the code below looks horrible and unpythonic, do not panic.
++ #
++-- 
++2.14.1
++
+-- 
+1.9.1
