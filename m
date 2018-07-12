@@ -1,92 +1,63 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Thu, 12 Jul 2018 23:00:54 +0200
-Subject: [Buildroot] [PATCH 10/10] perl-net-telnet: new package
-In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180712210054.13775-11-thomas.de_schampheleire@nokia.com>
+From: Denis Kotov <redradist@gmail.com>
+Date: Fri, 13 Jul 2018 01:05:44 +0300
+Subject: [Buildroot] How to change compiler to newer in old build-root
+In-Reply-To: <2097395198.3336152.1531394396552.JavaMail.zimbra@datacom.com.br>
+References: <CAPKSe_6Q08-PYugmgAsGJ3waRGTWV2-V+vzT_KU5o7bk0fc58w@mail.gmail.com>
+ <2097395198.3336152.1531394396552.JavaMail.zimbra@datacom.com.br>
+Message-ID: <CAPKSe_7odb9UrbX6Oz9=CP-XLGXNek5GebNDj9GB5ieH66t1Vg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/perl-net-telnet/Config.in            |  6 ++++++
- package/perl-net-telnet/perl-net-telnet.hash |  6 ++++++
- package/perl-net-telnet/perl-net-telnet.mk   | 12 ++++++++++++
- 5 files changed, 26 insertions(+)
- create mode 100644 package/perl-net-telnet/Config.in
- create mode 100644 package/perl-net-telnet/perl-net-telnet.hash
- create mode 100644 package/perl-net-telnet/perl-net-telnet.mk
+Thank you Carlos for reply,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f509041441..f37efa457a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1930,6 +1930,7 @@ F:	package/perl-mojolicious-plugin-authentication/
- F:	package/perl-net-ping/
- F:	package/perl-net-snmp/
- F:	package/perl-net-ssh2/
-+F:	package/perl-net-telnet/
- F:	package/pigz/
- F:	support/scripts/size-stats
- F:	utils/size-stats-compare
-diff --git a/package/Config.in b/package/Config.in
-index 40547760fc..c980e81003 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -704,6 +704,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-net-snmp/Config.in"
- 	source "package/perl-net-ssh2/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
-+	source "package/perl-net-telnet/Config.in"
- 	source "package/perl-netaddr-ip/Config.in"
- 	source "package/perl-path-tiny/Config.in"
- 	source "package/perl-time-hires/Config.in"
-diff --git a/package/perl-net-telnet/Config.in b/package/perl-net-telnet/Config.in
-new file mode 100644
-index 0000000000..6d7993c608
---- /dev/null
-+++ b/package/perl-net-telnet/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_NET_TELNET
-+	bool "perl-net-telnet"
-+	help
-+	  Interact with TELNET port or other TCP ports
-+
-+	  https://metacpan.org/release/Net-Telnet
-diff --git a/package/perl-net-telnet/perl-net-telnet.hash b/package/perl-net-telnet/perl-net-telnet.hash
-new file mode 100644
-index 0000000000..cf1def6a57
---- /dev/null
-+++ b/package/perl-net-telnet/perl-net-telnet.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    d2514080116c1b0fa5f96295c84538e3 Net-Telnet-3.04.tar.gz
-+sha256 e64d567a4e16295ecba949368e7a6b8b5ae2a16b3ad682121d9b007dc5d2a37a Net-Telnet-3.04.tar.gz
-+
-+# computed by scancpan
-+sha256 05beca683093827706ef45a4958bf23bcd91990e0beeb0b098f97c661478c90d README
-diff --git a/package/perl-net-telnet/perl-net-telnet.mk b/package/perl-net-telnet/perl-net-telnet.mk
-new file mode 100644
-index 0000000000..04d170d10a
---- /dev/null
-+++ b/package/perl-net-telnet/perl-net-telnet.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# perl-net-telnet
-+#
-+################################################################################
-+
-+PERL_NET_TELNET_VERSION = 3.04
-+PERL_NET_TELNET_SOURCE = Net-Telnet-$(PERL_NET_TELNET_VERSION).tar.gz
-+PERL_NET_TELNET_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JR/JROGERS
-+PERL_NET_TELNET_LICENSE_FILES = README
-+
-+$(eval $(perl-package))
+Okay, but what if I want to add newer compiler without changing buildroot
+version from 2014 to 2017.
+Is it possible ?
+
+And if no how to switch to new version of buildroot automatically. Is it
+possible ?
+
+On Thu, 12 Jul 2018 at 14:19, Carlos Santos <casantos@datacom.com.br> wrote:
+
+> > From: "Denis Kotov" <redradist@gmail.com>
+> > To: "buildroot" <buildroot@busybox.net>
+> > Sent: Thursday, July 12, 2018 4:58:09 AM
+> > Subject: [Buildroot] How to change compiler to newer in old build-root
+>
+> > Hello everyone,
+>
+> > I am curious if I can change old gcc-4.8 compiler in buildroot-2014 to
+> to gcc-7
+> > ??
+> > I have just replace name of compiler from gcc-4.8 to gcc-7, but failed
+> with an
+> > error:
+>
+> > >>> toolchain-external undefined Configuring
+>
+> > What did I wrong ?
+>
+> Support for GCC7 was introduced in Buildroot 2017.05:
+>
+> $ git --no-pager log --oneline -1 4314161159c
+> 4314161159 package/gcc: add support for gcc 7
+>
+> $ git describe 4314161159c
+> 2017.05-rc1-114-g4314161159
+>
+> --
+> Carlos Santos (Casantos) - DATACOM, P&D
+> ?Marched towards the enemy, spear upright, armed with the certainty
+> that only the ignorant can have.? ? Epitaph of a volunteer
+>
+
+
 -- 
-2.16.4
+
+*Best RegardsDenis Kotov*
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180713/873657ef/attachment.html>
