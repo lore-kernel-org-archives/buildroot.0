@@ -1,119 +1,99 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 12 Jul 2018 22:18:54 +0200
-Subject: [Buildroot] [git commit] libcurl: security bump to version 7.61.0
-Message-ID: <20180712201521.764867F931@busybox.osuosl.org>
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Date: Thu, 12 Jul 2018 23:00:53 +0200
+Subject: [Buildroot] [PATCH 09/10] perl-net-ssh2: new package
+In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
+References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180712210054.13775-10-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf79731153d2739580954161547225acb60f65e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes CVE-2018-0500: curl might overflow a heap based memory buffer when
-sending data over SMTP and using a reduced read buffer.
-
-Drop upstream patch.
-
-Add reference to tarball signature key.
-
-Drop CRYPTO_lock seed. Removed from configure script since 7.45.
-
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- ...ink-with-ssh2-built-with-a-static-mbedtls.patch | 40 ----------------------
- package/libcurl/libcurl.hash                       |  5 +--
- package/libcurl/libcurl.mk                         |  5 +--
- 3 files changed, 4 insertions(+), 46 deletions(-)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/perl-net-ssh2/Config.in          | 11 +++++++++++
+ package/perl-net-ssh2/perl-net-ssh2.hash |  6 ++++++
+ package/perl-net-ssh2/perl-net-ssh2.mk   | 14 ++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/perl-net-ssh2/Config.in
+ create mode 100644 package/perl-net-ssh2/perl-net-ssh2.hash
+ create mode 100644 package/perl-net-ssh2/perl-net-ssh2.mk
 
-diff --git a/package/libcurl/0001-Fix-link-with-ssh2-built-with-a-static-mbedtls.patch b/package/libcurl/0001-Fix-link-with-ssh2-built-with-a-static-mbedtls.patch
-deleted file mode 100644
-index 9107fa7c8c..0000000000
---- a/package/libcurl/0001-Fix-link-with-ssh2-built-with-a-static-mbedtls.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From b5fbc486e805805efb8400373ccec2a3dee1c81b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 21 May 2018 12:07:00 +0200
--Subject: [PATCH 1/1] Fix link with ssh2 built with a static mbedtls
--
--The ssh2 pkg-config file could contain the following lines when build
--with a static version of mbedtls:
--   Libs: -L${libdir} -lssh2 /xxx/libmbedcrypto.a
--   Libs.private: /xxx/libmbedcrypto.a
--
--This static mbedtls library must be used to correctly detect ssh2
--support and this library must be copied in libcurl.pc otherwise
--compilation of any application (such as upmpdcli) with libcurl will fail
--when trying to found mbedtls functions included in libssh2.
--So, replace pkg-config --libs-only-l by pkg-config --libs.
--
--Fixes:
-- - http://autobuild.buildroot.net/results/43e24b22a77f616d6198c10435dcc23cc3b9088a
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 5569a26b4..9e2606885 100755
----- a/configure.ac
--+++ b/configure.ac
--@@ -2766,7 +2766,7 @@ if test X"$OPT_LIBSSH2" != Xno; then
--     CURL_CHECK_PKGCONFIG(libssh2)
-- 
--     if test "$PKGCONFIG" != "no" ; then
---      LIB_SSH2=`$PKGCONFIG --libs-only-l libssh2`
--+      LIB_SSH2=`$PKGCONFIG --libs libssh2`
--       LD_SSH2=`$PKGCONFIG --libs-only-L libssh2`
--       CPP_SSH2=`$PKGCONFIG --cflags-only-I libssh2`
--       version=`$PKGCONFIG --modversion libssh2`
---- 
--2.14.1
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index cb1e6e72f2..9a57153d2b 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,4 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.60.0.tar.xz.asc
--sha256 8736ff8ded89ddf7e926eec7b16f82597d029fc1469f3a551f1fafaac164e6a0  curl-7.60.0.tar.xz
-+# https://curl.haxx.se/download/curl-7.61.0.tar.xz.asc
-+# with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-+sha256 ef6e55192d04713673b4409ccbcb4cb6cd723137d6e10ca45b0c593a454e1720  curl-7.61.0.tar.xz
- sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 00a213cc3c..c9b325c672 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.60.0
-+LIBCURL_VERSION = 7.61.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -13,8 +13,6 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
- LIBCURL_LICENSE = curl
- LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_INSTALL_STAGING = YES
--# We're patching configure.ac
--LIBCURL_AUTORECONF = YES
- 
- # We disable NTLM support because it uses fork(), which doesn't work
- # on non-MMU platforms. Moreover, this authentication method is
-@@ -39,7 +37,6 @@ LIBCURL_CONFIG_SCRIPTS = curl-config
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBCURL_DEPENDENCIES += openssl
--LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
- # configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
- # native stuff during the rest of configure when target == host.
- # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
+diff --git a/DEVELOPERS b/DEVELOPERS
+index df88e516db..f509041441 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1929,6 +1929,7 @@ F:	package/perl-mime-base64-urlsafe/
+ F:	package/perl-mojolicious-plugin-authentication/
+ F:	package/perl-net-ping/
+ F:	package/perl-net-snmp/
++F:	package/perl-net-ssh2/
+ F:	package/pigz/
+ F:	support/scripts/size-stats
+ F:	utils/size-stats-compare
+diff --git a/package/Config.in b/package/Config.in
+index 302a01c0e7..40547760fc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -702,6 +702,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-net-http/Config.in"
+ 	source "package/perl-net-ping/Config.in"
+ 	source "package/perl-net-snmp/Config.in"
++	source "package/perl-net-ssh2/Config.in"
+ 	source "package/perl-net-ssleay/Config.in"
+ 	source "package/perl-netaddr-ip/Config.in"
+ 	source "package/perl-path-tiny/Config.in"
+diff --git a/package/perl-net-ssh2/Config.in b/package/perl-net-ssh2/Config.in
+new file mode 100644
+index 0000000000..07c42ee5b1
+--- /dev/null
++++ b/package/perl-net-ssh2/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PERL_NET_SSH2
++	bool "perl-net-ssh2"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBSSH2
++	help
++	  Support for the SSH 2 protocol via libssh2.
++
++	  https://metacpan.org/release/Net-SSH2
++
++comment "perl-net-ssh2 needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.hash b/package/perl-net-ssh2/perl-net-ssh2.hash
+new file mode 100644
+index 0000000000..7a84949a6e
+--- /dev/null
++++ b/package/perl-net-ssh2/perl-net-ssh2.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    94ed21d4557a6bbc3cb6bfd7c3479ef0 Net-SSH2-0.69.tar.gz
++sha256 2fc85e1434b8a6e77142d85e3cea5a081ca71da5d02c4212b9970d3a3924baa6 Net-SSH2-0.69.tar.gz
++
++# computed by scancpan
++sha256 6db904d7c8127a33df4666961088c97586c24644a4980dc50d0676ef4c0509f7 README
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
+new file mode 100644
+index 0000000000..6d84deb284
+--- /dev/null
++++ b/package/perl-net-ssh2/perl-net-ssh2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# perl-net-ssh2
++#
++################################################################################
++
++PERL_NET_SSH2_VERSION = 0.69
++PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
++PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
++PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
++PERL_NET_SSH2_LICENSE_FILES = README
++PERL_NET_SSH2_DEPENDENCIES = libssh2
++
++$(eval $(perl-package))
+-- 
+2.16.4
