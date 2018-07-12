@@ -1,118 +1,75 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 12 Jul 2018 21:15:57 +0300
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.61.0
-Message-ID: <afd8c54be27becb281c564d1c041c7bc1b1b5a87.1531419357.git.baruch@tkos.co.il>
+From: =?utf-8?Q?Jean-Fran=C3=A7ois_T=C3=AAtu?= <jean-francois.tetu@savoirfairelinux.com>
+Date: Thu, 12 Jul 2018 14:24:01 -0400 (EDT)
+Subject: [Buildroot] [PATCH] package/squid: fix automake breakage
+In-Reply-To: <1471196708.10077896.1531356443377.JavaMail.zimbra@savoirfairelinux.com>
+References: <20180711193452.19461-1-jean-francois.tetu@savoirfairelinux.com>
+ <e8dab288-fa61-b67f-a37a-d5f59023ad44@mind.be>
+ <1471196708.10077896.1531356443377.JavaMail.zimbra@savoirfairelinux.com>
+Message-ID: <1273785525.10287869.1531419841244.JavaMail.zimbra@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-0500: curl might overflow a heap based memory buffer when
-sending data over SMTP and using a reduced read buffer.
+Hello Arnout,
 
-Drop upstream patch.
+On Wednesday, July 11, 2018 8:47:23 PM, Jean-Fran?ois T?tu wrote:
+> Hello!
+> 
+> On Wednesday, July 11, 2018 5:08:13 PM, Arnout Vandecappelle wrote:
+>> On 11-07-18 21:34, Jean-Fran?ois T?tu wrote:
+>>> Much like e27ccbabc1, the recent bump in automake causes a build error.
+>>> If the host automake is not the same version as the one used to generate
+>>> the squid package, the build fails while building the copy of libltdl
+>>> included in the package.
+>>> 
+>>> This happens regardless of the Buildroot automake version since the
+>>> included library is not reconfigured properly. The previous fix set the
+>>> ACLOCAL and AUTOMAKE variables to the Buildroot generated aclocal and
+>>> automake thereby ensuring that the subpackage would build correctly.
+>>> What is needed is to make sure that both the squid configure script and
+>>> the libltdl configure script are reconfigured following a change to
+>>> either configure.ac files.
+>>> 
+>>> This commit adds an option passed to autoreconf which ensures both
+>>> configure scripts are regenerated with Buildroot's autotools.
+>> 
+>> Nicely found!
+>> 
+> 
+> Thanks :)
+> 
+>> However, have you also looked into the option of using Buildroot's libtool
+>> instead of the bundled libltdl? If that doesn't work for some reason, I'd like
+>> to add it in the commit log so a future developer who wants to give it go can
+>> see what has been tried already.
+>> 
+> 
+> I can look into how we could pull in Buildroot's libltdl because
+> currently, Squid relies on its bootstrap script to pull in libtldl from
+> the machine that is generating the package. Maybe this could be done
+> with the autotools instead of the bootstrap?
+> 
 
-Add reference to tarball signature key.
+From what I understand, the packaged libltdl in Squid comes from its
+bootstrap. This pulls in libltdl from the host's libtool during the
+libtoolize step.  Currently, the latest version of libtool is 2.4.6.
+This version was itself created using automake 1.15. Ultimately, this
+means that the included libltdl in Squid is made to be built with
+automake 1.15. Unless its forcibly reconf'd with automake 1.16.1.
 
-Drop CRYPTO_lock seed. Removed from configure script since 7.45.
+To fix this issue would require a version of libtool made with automake
+1.16.1.  This version currently does not exist as the latest version of
+libtool dates back from 2015-02-15, just after the release of automake 
+1.15 on 2015-01-05.
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...ith-ssh2-built-with-a-static-mbedtls.patch | 40 -------------------
- package/libcurl/libcurl.hash                  |  5 ++-
- package/libcurl/libcurl.mk                    |  5 +--
- 3 files changed, 4 insertions(+), 46 deletions(-)
- delete mode 100644 package/libcurl/0001-Fix-link-with-ssh2-built-with-a-static-mbedtls.patch
+In order to build Squid in a sustainable manner, the autoreconf flags
+are needed, at least until libtool is bumped.
 
-diff --git a/package/libcurl/0001-Fix-link-with-ssh2-built-with-a-static-mbedtls.patch b/package/libcurl/0001-Fix-link-with-ssh2-built-with-a-static-mbedtls.patch
-deleted file mode 100644
-index 9107fa7c8c11..000000000000
---- a/package/libcurl/0001-Fix-link-with-ssh2-built-with-a-static-mbedtls.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From b5fbc486e805805efb8400373ccec2a3dee1c81b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Mon, 21 May 2018 12:07:00 +0200
--Subject: [PATCH 1/1] Fix link with ssh2 built with a static mbedtls
--
--The ssh2 pkg-config file could contain the following lines when build
--with a static version of mbedtls:
--   Libs: -L${libdir} -lssh2 /xxx/libmbedcrypto.a
--   Libs.private: /xxx/libmbedcrypto.a
--
--This static mbedtls library must be used to correctly detect ssh2
--support and this library must be copied in libcurl.pc otherwise
--compilation of any application (such as upmpdcli) with libcurl will fail
--when trying to found mbedtls functions included in libssh2.
--So, replace pkg-config --libs-only-l by pkg-config --libs.
--
--Fixes:
-- - http://autobuild.buildroot.net/results/43e24b22a77f616d6198c10435dcc23cc3b9088a
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index 5569a26b4..9e2606885 100755
----- a/configure.ac
--+++ b/configure.ac
--@@ -2766,7 +2766,7 @@ if test X"$OPT_LIBSSH2" != Xno; then
--     CURL_CHECK_PKGCONFIG(libssh2)
-- 
--     if test "$PKGCONFIG" != "no" ; then
---      LIB_SSH2=`$PKGCONFIG --libs-only-l libssh2`
--+      LIB_SSH2=`$PKGCONFIG --libs libssh2`
--       LD_SSH2=`$PKGCONFIG --libs-only-L libssh2`
--       CPP_SSH2=`$PKGCONFIG --cflags-only-I libssh2`
--       version=`$PKGCONFIG --modversion libssh2`
---- 
--2.14.1
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index cb1e6e72f204..9a57153d2b21 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,4 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.60.0.tar.xz.asc
--sha256 8736ff8ded89ddf7e926eec7b16f82597d029fc1469f3a551f1fafaac164e6a0  curl-7.60.0.tar.xz
-+# https://curl.haxx.se/download/curl-7.61.0.tar.xz.asc
-+# with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-+sha256 ef6e55192d04713673b4409ccbcb4cb6cd723137d6e10ca45b0c593a454e1720  curl-7.61.0.tar.xz
- sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 00a213cc3c84..c9b325c672d8 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.60.0
-+LIBCURL_VERSION = 7.61.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -13,8 +13,6 @@ LIBCURL_DEPENDENCIES = host-pkgconf \
- LIBCURL_LICENSE = curl
- LIBCURL_LICENSE_FILES = COPYING
- LIBCURL_INSTALL_STAGING = YES
--# We're patching configure.ac
--LIBCURL_AUTORECONF = YES
- 
- # We disable NTLM support because it uses fork(), which doesn't work
- # on non-MMU platforms. Moreover, this authentication method is
-@@ -39,7 +37,6 @@ LIBCURL_CONFIG_SCRIPTS = curl-config
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- LIBCURL_DEPENDENCIES += openssl
--LIBCURL_CONF_ENV += ac_cv_lib_crypto_CRYPTO_lock=yes
- # configure adds the cross openssl dir to LD_LIBRARY_PATH which screws up
- # native stuff during the rest of configure when target == host.
- # Fix it by setting LD_LIBRARY_PATH to something sensible so those libs
--- 
-2.18.0
+Would you like me to add a note reflecting this in the commitmsg?
+
+Regards,
+
+--
+Jean-Fran?ois T?tu
