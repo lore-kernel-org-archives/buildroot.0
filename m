@@ -1,9 +1,9 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Thu, 12 Jul 2018 23:00:52 +0200
-Subject: [Buildroot] [PATCH 08/10] perl-net-snmp: new package
+Date: Thu, 12 Jul 2018 23:00:54 +0200
+Subject: [Buildroot] [PATCH 10/10] perl-net-telnet: new package
 In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
 References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180712210054.13775-9-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180712210054.13775-11-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,82 +12,80 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/perl-net-snmp/Config.in          |  6 ++++++
- package/perl-net-snmp/perl-net-snmp.hash |  6 ++++++
- package/perl-net-snmp/perl-net-snmp.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
- create mode 100644 package/perl-net-snmp/Config.in
- create mode 100644 package/perl-net-snmp/perl-net-snmp.hash
- create mode 100644 package/perl-net-snmp/perl-net-snmp.mk
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/perl-net-telnet/Config.in            |  6 ++++++
+ package/perl-net-telnet/perl-net-telnet.hash |  6 ++++++
+ package/perl-net-telnet/perl-net-telnet.mk   | 12 ++++++++++++
+ 5 files changed, 26 insertions(+)
+ create mode 100644 package/perl-net-telnet/Config.in
+ create mode 100644 package/perl-net-telnet/perl-net-telnet.hash
+ create mode 100644 package/perl-net-telnet/perl-net-telnet.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 4c6eaffb09..df88e516db 100644
+index f509041441..f37efa457a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1928,6 +1928,7 @@ F:	package/perl-digest-md5/
- F:	package/perl-mime-base64-urlsafe/
- F:	package/perl-mojolicious-plugin-authentication/
+@@ -1930,6 +1930,7 @@ F:	package/perl-mojolicious-plugin-authentication/
  F:	package/perl-net-ping/
-+F:	package/perl-net-snmp/
+ F:	package/perl-net-snmp/
+ F:	package/perl-net-ssh2/
++F:	package/perl-net-telnet/
  F:	package/pigz/
  F:	support/scripts/size-stats
  F:	utils/size-stats-compare
 diff --git a/package/Config.in b/package/Config.in
-index ace997cdb8..302a01c0e7 100644
+index 40547760fc..c980e81003 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -701,6 +701,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
- 	source "package/perl-net-ping/Config.in"
-+	source "package/perl-net-snmp/Config.in"
+@@ -704,6 +704,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-net-snmp/Config.in"
+ 	source "package/perl-net-ssh2/Config.in"
  	source "package/perl-net-ssleay/Config.in"
++	source "package/perl-net-telnet/Config.in"
  	source "package/perl-netaddr-ip/Config.in"
  	source "package/perl-path-tiny/Config.in"
-diff --git a/package/perl-net-snmp/Config.in b/package/perl-net-snmp/Config.in
+ 	source "package/perl-time-hires/Config.in"
+diff --git a/package/perl-net-telnet/Config.in b/package/perl-net-telnet/Config.in
 new file mode 100644
-index 0000000000..e509292cd8
+index 0000000000..6d7993c608
 --- /dev/null
-+++ b/package/perl-net-snmp/Config.in
++++ b/package/perl-net-telnet/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_NET_SNMP
-+	bool "perl-net-snmp"
++config BR2_PACKAGE_PERL_NET_TELNET
++	bool "perl-net-telnet"
 +	help
-+	  Object oriented interface to SNMP
++	  Interact with TELNET port or other TCP ports
 +
-+	  https://metacpan.org/release/Net-SNMP
-diff --git a/package/perl-net-snmp/perl-net-snmp.hash b/package/perl-net-snmp/perl-net-snmp.hash
++	  https://metacpan.org/release/Net-Telnet
+diff --git a/package/perl-net-telnet/perl-net-telnet.hash b/package/perl-net-telnet/perl-net-telnet.hash
 new file mode 100644
-index 0000000000..0b162e6dcc
+index 0000000000..cf1def6a57
 --- /dev/null
-+++ b/package/perl-net-snmp/perl-net-snmp.hash
++++ b/package/perl-net-telnet/perl-net-telnet.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    6137f04f9942d703f66179f890e3d096 Net-SNMP-v6.0.1.tar.gz
-+sha256 14c37bc1cbb3f3cdc7d6c13e0f27a859f14cdcfd5ea54a0467a88bc259b0b741 Net-SNMP-v6.0.1.tar.gz
++md5    d2514080116c1b0fa5f96295c84538e3 Net-Telnet-3.04.tar.gz
++sha256 e64d567a4e16295ecba949368e7a6b8b5ae2a16b3ad682121d9b007dc5d2a37a Net-Telnet-3.04.tar.gz
 +
 +# computed by scancpan
-+sha256 a038159be54a2807dc48e2b946514d59fceab6737d5461d93d55297a98e6e24e LICENSE
-diff --git a/package/perl-net-snmp/perl-net-snmp.mk b/package/perl-net-snmp/perl-net-snmp.mk
++sha256 05beca683093827706ef45a4958bf23bcd91990e0beeb0b098f97c661478c90d README
+diff --git a/package/perl-net-telnet/perl-net-telnet.mk b/package/perl-net-telnet/perl-net-telnet.mk
 new file mode 100644
-index 0000000000..a9daa13d7f
+index 0000000000..04d170d10a
 --- /dev/null
-+++ b/package/perl-net-snmp/perl-net-snmp.mk
-@@ -0,0 +1,14 @@
++++ b/package/perl-net-telnet/perl-net-telnet.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# perl-net-snmp
++# perl-net-telnet
 +#
 +################################################################################
 +
-+PERL_NET_SNMP_VERSION = v6.0.1
-+PERL_NET_SNMP_SOURCE = Net-SNMP-$(PERL_NET_SNMP_VERSION).tar.gz
-+PERL_NET_SNMP_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DT/DTOWN
-+PERL_NET_SNMP_DEPENDENCIES = host-perl-module-build
-+PERL_NET_SNMP_LICENSE = Artistic or GPL-1.0+
-+PERL_NET_SNMP_LICENSE_FILES = LICENSE
++PERL_NET_TELNET_VERSION = 3.04
++PERL_NET_TELNET_SOURCE = Net-Telnet-$(PERL_NET_TELNET_VERSION).tar.gz
++PERL_NET_TELNET_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JR/JROGERS
++PERL_NET_TELNET_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
