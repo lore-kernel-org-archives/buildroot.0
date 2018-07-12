@@ -1,9 +1,9 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Thu, 12 Jul 2018 23:00:48 +0200
-Subject: [Buildroot] [PATCH 04/10] perl-digest-md5: new package
+Date: Thu, 12 Jul 2018 23:00:51 +0200
+Subject: [Buildroot] [PATCH 07/10] perl-net-ping: new package
 In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
 References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180712210054.13775-5-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180712210054.13775-8-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,85 +12,80 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/perl-digest-md5/Config.in            | 10 ++++++++++
- package/perl-digest-md5/perl-digest-md5.hash |  6 ++++++
- package/perl-digest-md5/perl-digest-md5.mk   | 13 +++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/perl-digest-md5/Config.in
- create mode 100644 package/perl-digest-md5/perl-digest-md5.hash
- create mode 100644 package/perl-digest-md5/perl-digest-md5.mk
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/perl-net-ping/Config.in          |  6 ++++++
+ package/perl-net-ping/perl-net-ping.hash |  6 ++++++
+ package/perl-net-ping/perl-net-ping.mk   | 12 ++++++++++++
+ 5 files changed, 26 insertions(+)
+ create mode 100644 package/perl-net-ping/Config.in
+ create mode 100644 package/perl-net-ping/perl-net-ping.hash
+ create mode 100644 package/perl-net-ping/perl-net-ping.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ca7e1efd7e..6208e2b6b2 100644
+index 0cd6b6d03a..4c6eaffb09 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1924,6 +1924,7 @@ F:	package/opkg-utils/
- F:	package/perl-convert-asn1/
- F:	package/perl-crypt-blowfish/
- F:	package/perl-crypt-cbc/
-+F:	package/perl-digest-md5/
+@@ -1927,6 +1927,7 @@ F:	package/perl-crypt-cbc/
+ F:	package/perl-digest-md5/
+ F:	package/perl-mime-base64-urlsafe/
+ F:	package/perl-mojolicious-plugin-authentication/
++F:	package/perl-net-ping/
  F:	package/pigz/
  F:	support/scripts/size-stats
  F:	utils/size-stats-compare
 diff --git a/package/Config.in b/package/Config.in
-index 981c84c350..1408b46bb7 100644
+index fe9175b42b..ace997cdb8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -671,6 +671,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-crypt-openssl-rsa/Config.in"
- 	source "package/perl-datetime-tiny/Config.in"
- 	source "package/perl-digest-hmac/Config.in"
-+	source "package/perl-digest-md5/Config.in"
- 	source "package/perl-digest-sha1/Config.in"
- 	source "package/perl-encode-detect/Config.in"
- 	source "package/perl-encode-locale/Config.in"
-diff --git a/package/perl-digest-md5/Config.in b/package/perl-digest-md5/Config.in
+@@ -700,6 +700,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-mojolicious/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+ 	source "package/perl-net-http/Config.in"
++	source "package/perl-net-ping/Config.in"
+ 	source "package/perl-net-ssleay/Config.in"
+ 	source "package/perl-netaddr-ip/Config.in"
+ 	source "package/perl-path-tiny/Config.in"
+diff --git a/package/perl-net-ping/Config.in b/package/perl-net-ping/Config.in
 new file mode 100644
-index 0000000000..e8bb3fd8e7
+index 0000000000..a0ba7b0de1
 --- /dev/null
-+++ b/package/perl-digest-md5/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_DIGEST_MD5
-+	bool "perl-digest-md5"
-+	depends on !BR2_STATIC_LIBS
++++ b/package/perl-net-ping/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_NET_PING
++	bool "perl-net-ping"
 +	help
-+	  Perl interface to the MD-5 algorithm
++	  check a remote host for reachability
 +
-+	  https://metacpan.org/release/Digest-MD5
-+
-+comment "perl-digest-md5 needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-digest-md5/perl-digest-md5.hash b/package/perl-digest-md5/perl-digest-md5.hash
++	  https://metacpan.org/release/Net-Ping
+diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
 new file mode 100644
-index 0000000000..3876f3aca3
+index 0000000000..363d095386
 --- /dev/null
-+++ b/package/perl-digest-md5/perl-digest-md5.hash
++++ b/package/perl-net-ping/perl-net-ping.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    601519b826ca14c233f13a4578b967ef Digest-MD5-2.55.tar.gz
-+sha256 03b198a2d14425d951e5e50a885d3818c3162c8fe4c21e18d7798a9a179d0e3c Digest-MD5-2.55.tar.gz
++md5    0b01ada2bc588330456924393d47ed11 Net-Ping-2.68.tar.gz
++sha256 d01ac2fcdf684c4a23a07104fbb147cfbdbda47fd5b660912124258f29afd7e3 Net-Ping-2.68.tar.gz
 +
 +# computed by scancpan
-+sha256 f92f16702159fc57cd29c23f29b7f2420bff578ed72365d0225d2945a501cd5a README
-diff --git a/package/perl-digest-md5/perl-digest-md5.mk b/package/perl-digest-md5/perl-digest-md5.mk
++sha256 eb4ad254a468a977f29849efda0183f69b7f4ede0f7123e0dd5768207ee73c58 README
+diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
 new file mode 100644
-index 0000000000..f39f4b2323
+index 0000000000..3cd4cd0b47
 --- /dev/null
-+++ b/package/perl-digest-md5/perl-digest-md5.mk
-@@ -0,0 +1,13 @@
++++ b/package/perl-net-ping/perl-net-ping.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# perl-digest-md5
++# perl-net-ping
 +#
 +################################################################################
 +
-+PERL_DIGEST_MD5_VERSION = 2.55
-+PERL_DIGEST_MD5_SOURCE = Digest-MD5-$(PERL_DIGEST_MD5_VERSION).tar.gz
-+PERL_DIGEST_MD5_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-+PERL_DIGEST_MD5_LICENSE = Artistic or GPL-1.0+
-+PERL_DIGEST_MD5_LICENSE_FILES = README
++PERL_NET_PING_VERSION = 2.68
++PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
++PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
++PERL_NET_PING_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
