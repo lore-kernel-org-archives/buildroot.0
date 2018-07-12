@@ -1,8 +1,8 @@
 From: noctarius <me@noctarius.com>
-Date: Thu, 12 Jul 2018 23:09:41 +0300
+Date: Thu, 12 Jul 2018 23:01:10 +0300
 Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds the option to copy
  "regulatory.db[.p7s]" to /lib/firmware
-Message-ID: <20180712200941.4873-1-me@noctarius.com>
+Message-ID: <20180712200110.4818-1-me@noctarius.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
