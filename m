@@ -1,9 +1,10 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Thu, 12 Jul 2018 23:00:46 +0200
-Subject: [Buildroot] [PATCH 02/10] perl-crypt-blowfish: new package
+Date: Thu, 12 Jul 2018 23:00:50 +0200
+Subject: [Buildroot] [PATCH 06/10] perl-mojolicious-plugin-authentication:
+ new package
 In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
 References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180712210054.13775-3-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180712210054.13775-7-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,84 +13,83 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- DEVELOPERS                                           |  1 +
- package/Config.in                                    |  1 +
- package/perl-crypt-blowfish/Config.in                | 10 ++++++++++
- package/perl-crypt-blowfish/perl-crypt-blowfish.hash |  6 ++++++
- package/perl-crypt-blowfish/perl-crypt-blowfish.mk   | 12 ++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/perl-crypt-blowfish/Config.in
- create mode 100644 package/perl-crypt-blowfish/perl-crypt-blowfish.hash
- create mode 100644 package/perl-crypt-blowfish/perl-crypt-blowfish.mk
+ DEVELOPERS                                                 |  1 +
+ package/Config.in                                          |  1 +
+ package/perl-mojolicious-plugin-authentication/Config.in   |  7 +++++++
+ .../perl-mojolicious-plugin-authentication.hash            |  6 ++++++
+ .../perl-mojolicious-plugin-authentication.mk              | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/perl-mojolicious-plugin-authentication/Config.in
+ create mode 100644 package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash
+ create mode 100644 package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 932b01d327..f437401818 100644
+index 88b4ad0a65..0cd6b6d03a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1922,6 +1922,7 @@ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- F:	docs/manual/
- F:	package/opkg-utils/
- F:	package/perl-convert-asn1/
-+F:	package/perl-crypt-blowfish/
+@@ -1926,6 +1926,7 @@ F:	package/perl-crypt-blowfish/
+ F:	package/perl-crypt-cbc/
+ F:	package/perl-digest-md5/
+ F:	package/perl-mime-base64-urlsafe/
++F:	package/perl-mojolicious-plugin-authentication/
  F:	package/pigz/
  F:	support/scripts/size-stats
  F:	utils/size-stats-compare
 diff --git a/package/Config.in b/package/Config.in
-index 86563a1cee..5bd229eab0 100644
+index e67bcc7f25..fe9175b42b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -665,6 +665,7 @@ endif
- if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
- 	source "package/perl-convert-asn1/Config.in"
-+	source "package/perl-crypt-blowfish/Config.in"
- 	source "package/perl-crypt-openssl-random/Config.in"
- 	source "package/perl-crypt-openssl-rsa/Config.in"
- 	source "package/perl-datetime-tiny/Config.in"
-diff --git a/package/perl-crypt-blowfish/Config.in b/package/perl-crypt-blowfish/Config.in
+@@ -696,6 +696,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-mailtools/Config.in"
+ 	source "package/perl-mime-base64-urlsafe/Config.in"
+ 	source "package/perl-mime-base64/Config.in"
++	source "package/perl-mojolicious-plugin-authentication/Config.in"
+ 	source "package/perl-mojolicious/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+ 	source "package/perl-net-http/Config.in"
+diff --git a/package/perl-mojolicious-plugin-authentication/Config.in b/package/perl-mojolicious-plugin-authentication/Config.in
 new file mode 100644
-index 0000000000..093f11d95b
+index 0000000000..26c3cde5d4
 --- /dev/null
-+++ b/package/perl-crypt-blowfish/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_CRYPT_BLOWFISH
-+	bool "perl-crypt-blowfish"
-+	depends on !BR2_STATIC_LIBS
++++ b/package/perl-mojolicious-plugin-authentication/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION
++	bool "perl-mojolicious-plugin-authentication"
++	select BR2_PACKAGE_PERL_MOJOLICIOUS
 +	help
-+	  Perl Blowfish encryption module
++	  A plugin to make authentication a bit easier
 +
-+	  https://metacpan.org/release/Crypt-Blowfish
-+
-+comment "perl-crypt-blowfish needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-crypt-blowfish/perl-crypt-blowfish.hash b/package/perl-crypt-blowfish/perl-crypt-blowfish.hash
++	  https://metacpan.org/release/Mojolicious-Plugin-Authentication
+diff --git a/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash
 new file mode 100644
-index 0000000000..f814cb9bd5
+index 0000000000..f225ff486b
 --- /dev/null
-+++ b/package/perl-crypt-blowfish/perl-crypt-blowfish.hash
++++ b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    792b43cd4e49d2c2cf4a9f6990ff7d1b Crypt-Blowfish-2.14.tar.gz
-+sha256 46b3431ffb6bf5b9cb359f79565d48407e652ad2b04fdf5ca62a69e7197a67b1 Crypt-Blowfish-2.14.tar.gz
++md5    b318be1e1e50e7595baee639b2964565 Mojolicious-Plugin-Authentication-1.33.tar.gz
++sha256 1c32dffc88a683ba3b2719f34bc52fb9c5c5fb2f1276bbd30136bfad0ac262bc Mojolicious-Plugin-Authentication-1.33.tar.gz
 +
 +# computed by scancpan
-+sha256 d61437443e6912d03677874c7baef242f28119c2c5d8b92b0f3f3660200f98d4 COPYRIGHT
-diff --git a/package/perl-crypt-blowfish/perl-crypt-blowfish.mk b/package/perl-crypt-blowfish/perl-crypt-blowfish.mk
++sha256 59727ac57166e9891175d8247a8ea47d4aeb24a0dc1e24011b773d139481b135 LICENSE
+diff --git a/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk
 new file mode 100644
-index 0000000000..f6644eb151
+index 0000000000..2748965944
 --- /dev/null
-+++ b/package/perl-crypt-blowfish/perl-crypt-blowfish.mk
-@@ -0,0 +1,12 @@
++++ b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-crypt-blowfish
++# perl-mojolicious-plugin-authentication
 +#
 +################################################################################
 +
-+PERL_CRYPT_BLOWFISH_VERSION = 2.14
-+PERL_CRYPT_BLOWFISH_SOURCE = Crypt-Blowfish-$(PERL_CRYPT_BLOWFISH_VERSION).tar.gz
-+PERL_CRYPT_BLOWFISH_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DP/DPARIS
-+PERL_CRYPT_BLOWFISH_LICENSE_FILES = COPYRIGHT
++PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_VERSION = 1.33
++PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_SOURCE = Mojolicious-Plugin-Authentication-$(PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_VERSION).tar.gz
++PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JJ/JJATRIA
++PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_DEPENDENCIES = perl-mojolicious
++PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_LICENSE = Artistic or GPL-1.0+
++PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
 -- 
