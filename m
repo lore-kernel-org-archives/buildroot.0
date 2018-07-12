@@ -1,61 +1,62 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 12 Jul 2018 22:02:18 +0300
-Subject: [Buildroot] [PATCH v2 2/2] coreutils: optimize the '[' symlink
-In-Reply-To: <7ebb787a-3798-5534-9cef-2012943d50ad@mind.be>
-References: <2b42d6f4f947a7423813916cd6f8e5f37c5b113a.1531338679.git.baruch@tkos.co.il>
- <5821c4c9a85e95a15423616c8a7f674df515b714.1531338679.git.baruch@tkos.co.il>
- <7ebb787a-3798-5534-9cef-2012943d50ad@mind.be>
-Message-ID: <87va9kffb9.fsf@tkos.co.il>
+From: noctarius <me@noctarius.com>
+Date: Thu, 12 Jul 2018 23:09:41 +0300
+Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds the option to copy
+ "regulatory.db[.p7s]" to /lib/firmware
+Message-ID: <20180712200941.4873-1-me@noctarius.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Certain wireless drivers (like the Broadcom FullMac drivers" expect the regulatory.db and
+regulatory.db.p7s files to be available to be loadable from /lib/firmware. If not available
+the driver still loads but runs on a minimal subset of channels.
 
-Arnout Vandecappelle writes:
-> On 11-07-18 21:51, Baruch Siach wrote:
->> Link '[' directly to the coreutils binary instead of going through
->> 'test'.
->
->  One more small question: did you do a runtime test to be sure that this
-> actually works? (That said, if this doesn't work, then the previous one also
-> can't have worked.)
+This newly added option gives possibility to have those files copied to the necessary directory.
 
-Tested in chroot now:
-# readlink /usr/bin/[
-coreutils
-# if /usr/bin/[ 0 -eq 0 ]; then echo true; else echo false; fi
-true
-# if /usr/bin/[ 1 -eq 0 ]; then echo true; else echo false; fi
-false
+Signed-off-by: Christoph Engelbert <me@noctarius.com>
+---
+ package/wireless-regdb/Config.in         |  8 ++++++++
+ package/wireless-regdb/wireless-regdb.mk | 10 ++++++++++
+ 2 files changed, 18 insertions(+)
 
-baruch
-
->> Suggested-by: Arnout Vandecappelle <arnout@mind.be>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> ---
->> v2: New patch in this series
->> ---
->>  package/coreutils/coreutils.mk | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
->> index 2fb4a32c794f..7e7251ff7396 100644
->> --- a/package/coreutils/coreutils.mk
->> +++ b/package/coreutils/coreutils.mk
->> @@ -112,7 +112,7 @@ endif
->>  
->>  define COREUTILS_CLEANUP
->>  	# link for archaic shells
->> -	ln -fs test $(TARGET_DIR)/usr/bin/[
->> +	ln -fs coreutils $(TARGET_DIR)/usr/bin/[
->>  	# gnu thinks chroot is in bin, debian thinks it's in sbin
->>  	rm -f $(TARGET_DIR)/usr/bin/chroot
->>  	ln -sf ../bin/coreutils $(TARGET_DIR)/usr/sbin/chroot
-
+diff --git a/package/wireless-regdb/Config.in b/package/wireless-regdb/Config.in
+index 0c9896deb9..5c91a7d8c7 100644
+--- a/package/wireless-regdb/Config.in
++++ b/package/wireless-regdb/Config.in
+@@ -7,3 +7,11 @@ config BR2_PACKAGE_WIRELESS_REGDB
+ 	  allowed radio frequencies for each local jurisdiction.
+ 
+ 	  https://wireless.wiki.kernel.org/en/developers/regulatory/wireless-regdb
++
++config BR2_PACKAGE_WIRELESS_REGDB_FIRMWARE
++	bool "wireless-regdb-firmware"
++	depends on BR2_PACKAGE_WIRELESS_REGDB
++	help
++	  Copies the regulatory.db and regulatory.db.p7s files to
++	  /lib/firmware which is necessary for certain drivers like
++	  the Broadcom FullMac driver.
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index e9283a00e2..e322035841 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -10,6 +10,16 @@ WIRELESS_REGDB_SITE = http://kernel.org/pub/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
+ WIRELESS_REGDB_LICENSE_FILES = LICENSE
+ 
++ifeq ($(BR2_PACKAGE_WIRELESS_REGDB_FIRMWARE),y)
++define WIRELESS_REGDB_FIRMWARE_INSTALL
++	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db \
++		$(TARGET_DIR)/lib/firmware/regulatory.db
++	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db.p7s \
++		$(TARGET_DIR)/lib/firmware/regulatory.db.p7s
++endef
++WIRELESS_REGDB_POST_INSTALL_TARGET_HOOKS += WIRELESS_REGDB_FIRMWARE_INSTALL
++endif
++
+ define WIRELESS_REGDB_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
+ 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.17.1
