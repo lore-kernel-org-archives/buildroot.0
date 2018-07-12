@@ -1,9 +1,9 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Thu, 12 Jul 2018 23:00:45 +0200
-Subject: [Buildroot] [PATCH 01/10] perl-convert-asn1: new package
+Date: Thu, 12 Jul 2018 23:00:46 +0200
+Subject: [Buildroot] [PATCH 02/10] perl-crypt-blowfish: new package
 In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
 References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180712210054.13775-2-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180712210054.13775-3-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,81 +12,84 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/perl-convert-asn1/Config.in              |  6 ++++++
- package/perl-convert-asn1/perl-convert-asn1.hash |  6 ++++++
- package/perl-convert-asn1/perl-convert-asn1.mk   | 13 +++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/perl-convert-asn1/Config.in
- create mode 100644 package/perl-convert-asn1/perl-convert-asn1.hash
- create mode 100644 package/perl-convert-asn1/perl-convert-asn1.mk
+ DEVELOPERS                                           |  1 +
+ package/Config.in                                    |  1 +
+ package/perl-crypt-blowfish/Config.in                | 10 ++++++++++
+ package/perl-crypt-blowfish/perl-crypt-blowfish.hash |  6 ++++++
+ package/perl-crypt-blowfish/perl-crypt-blowfish.mk   | 12 ++++++++++++
+ 5 files changed, 30 insertions(+)
+ create mode 100644 package/perl-crypt-blowfish/Config.in
+ create mode 100644 package/perl-crypt-blowfish/perl-crypt-blowfish.hash
+ create mode 100644 package/perl-crypt-blowfish/perl-crypt-blowfish.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 48ab0d9048..932b01d327 100644
+index 932b01d327..f437401818 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1921,6 +1921,7 @@ F:	package/civetweb/
- N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+@@ -1922,6 +1922,7 @@ N:	Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
  F:	docs/manual/
  F:	package/opkg-utils/
-+F:	package/perl-convert-asn1/
+ F:	package/perl-convert-asn1/
++F:	package/perl-crypt-blowfish/
  F:	package/pigz/
  F:	support/scripts/size-stats
  F:	utils/size-stats-compare
 diff --git a/package/Config.in b/package/Config.in
-index 20fe5ad8ff..86563a1cee 100644
+index 86563a1cee..5bd229eab0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -664,6 +664,7 @@ endif
- 	source "package/perl/Config.in"
+@@ -665,6 +665,7 @@ endif
  if BR2_PACKAGE_PERL
  menu "Perl libraries/modules"
-+	source "package/perl-convert-asn1/Config.in"
+ 	source "package/perl-convert-asn1/Config.in"
++	source "package/perl-crypt-blowfish/Config.in"
  	source "package/perl-crypt-openssl-random/Config.in"
  	source "package/perl-crypt-openssl-rsa/Config.in"
  	source "package/perl-datetime-tiny/Config.in"
-diff --git a/package/perl-convert-asn1/Config.in b/package/perl-convert-asn1/Config.in
+diff --git a/package/perl-crypt-blowfish/Config.in b/package/perl-crypt-blowfish/Config.in
 new file mode 100644
-index 0000000000..a3e988c888
+index 0000000000..093f11d95b
 --- /dev/null
-+++ b/package/perl-convert-asn1/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_CONVERT_ASN1
-+	bool "perl-convert-asn1"
++++ b/package/perl-crypt-blowfish/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PERL_CRYPT_BLOWFISH
++	bool "perl-crypt-blowfish"
++	depends on !BR2_STATIC_LIBS
 +	help
-+	  Convert between perl data structures and ASN.1 encoded packets
++	  Perl Blowfish encryption module
 +
-+	  https://metacpan.org/release/Convert-ASN1
-diff --git a/package/perl-convert-asn1/perl-convert-asn1.hash b/package/perl-convert-asn1/perl-convert-asn1.hash
++	  https://metacpan.org/release/Crypt-Blowfish
++
++comment "perl-crypt-blowfish needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-crypt-blowfish/perl-crypt-blowfish.hash b/package/perl-crypt-blowfish/perl-crypt-blowfish.hash
 new file mode 100644
-index 0000000000..4fd7d3eb61
+index 0000000000..f814cb9bd5
 --- /dev/null
-+++ b/package/perl-convert-asn1/perl-convert-asn1.hash
++++ b/package/perl-crypt-blowfish/perl-crypt-blowfish.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    68723e96be0b258a9e20480276e8a62c Convert-ASN1-0.27.tar.gz
-+sha256 74a4a78ae0c5e973100ac0a8f203a110f76fb047b79dae4fc1fd7d6814d3d58a Convert-ASN1-0.27.tar.gz
++md5    792b43cd4e49d2c2cf4a9f6990ff7d1b Crypt-Blowfish-2.14.tar.gz
++sha256 46b3431ffb6bf5b9cb359f79565d48407e652ad2b04fdf5ca62a69e7197a67b1 Crypt-Blowfish-2.14.tar.gz
 +
 +# computed by scancpan
-+sha256 4ef46cc39d9e2b4c767503457a1f8fda5bcf9c0c164923e2a54a3863209cf237 LICENSE
-diff --git a/package/perl-convert-asn1/perl-convert-asn1.mk b/package/perl-convert-asn1/perl-convert-asn1.mk
++sha256 d61437443e6912d03677874c7baef242f28119c2c5d8b92b0f3f3660200f98d4 COPYRIGHT
+diff --git a/package/perl-crypt-blowfish/perl-crypt-blowfish.mk b/package/perl-crypt-blowfish/perl-crypt-blowfish.mk
 new file mode 100644
-index 0000000000..74482010f9
+index 0000000000..f6644eb151
 --- /dev/null
-+++ b/package/perl-convert-asn1/perl-convert-asn1.mk
-@@ -0,0 +1,13 @@
++++ b/package/perl-crypt-blowfish/perl-crypt-blowfish.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# perl-convert-asn1
++# perl-crypt-blowfish
 +#
 +################################################################################
 +
-+PERL_CONVERT_ASN1_VERSION = 0.27
-+PERL_CONVERT_ASN1_SOURCE = Convert-ASN1-$(PERL_CONVERT_ASN1_VERSION).tar.gz
-+PERL_CONVERT_ASN1_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GB/GBARR
-+PERL_CONVERT_ASN1_LICENSE = Artistic or GPL-1.0+
-+PERL_CONVERT_ASN1_LICENSE_FILES = LICENSE
++PERL_CRYPT_BLOWFISH_VERSION = 2.14
++PERL_CRYPT_BLOWFISH_SOURCE = Crypt-Blowfish-$(PERL_CRYPT_BLOWFISH_VERSION).tar.gz
++PERL_CRYPT_BLOWFISH_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DP/DPARIS
++PERL_CRYPT_BLOWFISH_LICENSE_FILES = COPYRIGHT
 +
 +$(eval $(perl-package))
 -- 
