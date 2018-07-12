@@ -1,10 +1,9 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Thu, 12 Jul 2018 23:00:50 +0200
-Subject: [Buildroot] [PATCH 06/10] perl-mojolicious-plugin-authentication:
- new package
+Date: Thu, 12 Jul 2018 23:00:48 +0200
+Subject: [Buildroot] [PATCH 04/10] perl-digest-md5: new package
 In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
 References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180712210054.13775-7-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180712210054.13775-5-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,83 +12,85 @@ To: buildroot@busybox.net
 
 Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/perl-mojolicious-plugin-authentication/Config.in   |  7 +++++++
- .../perl-mojolicious-plugin-authentication.hash            |  6 ++++++
- .../perl-mojolicious-plugin-authentication.mk              | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/perl-mojolicious-plugin-authentication/Config.in
- create mode 100644 package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash
- create mode 100644 package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/perl-digest-md5/Config.in            | 10 ++++++++++
+ package/perl-digest-md5/perl-digest-md5.hash |  6 ++++++
+ package/perl-digest-md5/perl-digest-md5.mk   | 13 +++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/perl-digest-md5/Config.in
+ create mode 100644 package/perl-digest-md5/perl-digest-md5.hash
+ create mode 100644 package/perl-digest-md5/perl-digest-md5.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 88b4ad0a65..0cd6b6d03a 100644
+index ca7e1efd7e..6208e2b6b2 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1926,6 +1926,7 @@ F:	package/perl-crypt-blowfish/
+@@ -1924,6 +1924,7 @@ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
+ F:	package/perl-crypt-blowfish/
  F:	package/perl-crypt-cbc/
- F:	package/perl-digest-md5/
- F:	package/perl-mime-base64-urlsafe/
-+F:	package/perl-mojolicious-plugin-authentication/
++F:	package/perl-digest-md5/
  F:	package/pigz/
  F:	support/scripts/size-stats
  F:	utils/size-stats-compare
 diff --git a/package/Config.in b/package/Config.in
-index e67bcc7f25..fe9175b42b 100644
+index 981c84c350..1408b46bb7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -696,6 +696,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mailtools/Config.in"
- 	source "package/perl-mime-base64-urlsafe/Config.in"
- 	source "package/perl-mime-base64/Config.in"
-+	source "package/perl-mojolicious-plugin-authentication/Config.in"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
-diff --git a/package/perl-mojolicious-plugin-authentication/Config.in b/package/perl-mojolicious-plugin-authentication/Config.in
+@@ -671,6 +671,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-crypt-openssl-rsa/Config.in"
+ 	source "package/perl-datetime-tiny/Config.in"
+ 	source "package/perl-digest-hmac/Config.in"
++	source "package/perl-digest-md5/Config.in"
+ 	source "package/perl-digest-sha1/Config.in"
+ 	source "package/perl-encode-detect/Config.in"
+ 	source "package/perl-encode-locale/Config.in"
+diff --git a/package/perl-digest-md5/Config.in b/package/perl-digest-md5/Config.in
 new file mode 100644
-index 0000000000..26c3cde5d4
+index 0000000000..e8bb3fd8e7
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-authentication/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION
-+	bool "perl-mojolicious-plugin-authentication"
-+	select BR2_PACKAGE_PERL_MOJOLICIOUS
++++ b/package/perl-digest-md5/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PERL_DIGEST_MD5
++	bool "perl-digest-md5"
++	depends on !BR2_STATIC_LIBS
 +	help
-+	  A plugin to make authentication a bit easier
++	  Perl interface to the MD-5 algorithm
 +
-+	  https://metacpan.org/release/Mojolicious-Plugin-Authentication
-diff --git a/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash
++	  https://metacpan.org/release/Digest-MD5
++
++comment "perl-digest-md5 needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-digest-md5/perl-digest-md5.hash b/package/perl-digest-md5/perl-digest-md5.hash
 new file mode 100644
-index 0000000000..f225ff486b
+index 0000000000..3876f3aca3
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.hash
++++ b/package/perl-digest-md5/perl-digest-md5.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    b318be1e1e50e7595baee639b2964565 Mojolicious-Plugin-Authentication-1.33.tar.gz
-+sha256 1c32dffc88a683ba3b2719f34bc52fb9c5c5fb2f1276bbd30136bfad0ac262bc Mojolicious-Plugin-Authentication-1.33.tar.gz
++md5    601519b826ca14c233f13a4578b967ef Digest-MD5-2.55.tar.gz
++sha256 03b198a2d14425d951e5e50a885d3818c3162c8fe4c21e18d7798a9a179d0e3c Digest-MD5-2.55.tar.gz
 +
 +# computed by scancpan
-+sha256 59727ac57166e9891175d8247a8ea47d4aeb24a0dc1e24011b773d139481b135 LICENSE
-diff --git a/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk
++sha256 f92f16702159fc57cd29c23f29b7f2420bff578ed72365d0225d2945a501cd5a README
+diff --git a/package/perl-digest-md5/perl-digest-md5.mk b/package/perl-digest-md5/perl-digest-md5.mk
 new file mode 100644
-index 0000000000..2748965944
+index 0000000000..f39f4b2323
 --- /dev/null
-+++ b/package/perl-mojolicious-plugin-authentication/perl-mojolicious-plugin-authentication.mk
-@@ -0,0 +1,14 @@
++++ b/package/perl-digest-md5/perl-digest-md5.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-mojolicious-plugin-authentication
++# perl-digest-md5
 +#
 +################################################################################
 +
-+PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_VERSION = 1.33
-+PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_SOURCE = Mojolicious-Plugin-Authentication-$(PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_VERSION).tar.gz
-+PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JJ/JJATRIA
-+PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_DEPENDENCIES = perl-mojolicious
-+PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_LICENSE = Artistic or GPL-1.0+
-+PERL_MOJOLICIOUS_PLUGIN_AUTHENTICATION_LICENSE_FILES = LICENSE
++PERL_DIGEST_MD5_VERSION = 2.55
++PERL_DIGEST_MD5_SOURCE = Digest-MD5-$(PERL_DIGEST_MD5_VERSION).tar.gz
++PERL_DIGEST_MD5_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_DIGEST_MD5_LICENSE = Artistic or GPL-1.0+
++PERL_DIGEST_MD5_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
