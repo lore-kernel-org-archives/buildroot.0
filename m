@@ -1,85 +1,62 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 12 Jul 2018 06:44:42 -0500
-Subject: [Buildroot] [PATCH 0/6] Hardening Flag Bugfix/Enhancement
-In-Reply-To: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
-Message-ID: <CANQCQpabgJO30ghCH8jVaD2uxr6QE-gcpArByWPJcDYHqiC64g@mail.gmail.com>
+From: Serj Kalichev <serj.kalichev@gmail.com>
+Date: Thu, 12 Jul 2018 15:33:47 +0300
+Subject: [Buildroot] BR2_LINUX_KERNEL_PATCH for linux-headers
+In-Reply-To: <60e837dd-e80e-c0c3-a5b4-7cb60e87f7f3@mind.be>
+References: <fea35efb-0134-f091-5cbd-30292f137b33@gmail.com>
+ <60e837dd-e80e-c0c3-a5b4-7cb60e87f7f3@mind.be>
+Message-ID: <c9339544-608c-ef29-21cd-640f0552e63f@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Thanks for the answer.
+I will use BR2_GLOBAL_PATCH_DIR but with enhancement.
+It's not suitable for linux and linux-headers to create dirs like 
+linux/4.9.80. Minor version number is not useful for kernel patches. The 
+dirs like linux/4.0.x is better.
+So I create a file in my external tree:
 
-On Wed, Jul 11, 2018 at 9:31 AM, Matt Weber
-<matthew.weber@rockwellcollins.com> wrote:
-> This series pulls together a few pending patches required for hardening
-> flag bug-fixes.  Additionally a tool is added with Buildroot test cases
-> to validate that the hardening options are working correctly.
+LINUX_VERSION_S := $(subst ., , $(strip $(LINUX_VERSION)))
+LINUX_VERSION_X := $(word 1, $(LINUX_VERSION_S)).$(word 2, 
+$(LINUX_VERSION_S)).x
 
-I forgot to mention the goal of this series is to fix and complete
-testing of the existing approach.  I do like the concept of changing
-to the wrapper and evaluating if we can use GCC spec files, however, I
-was hoping we could establish a working baseline first.  Then propose
-changes to possibly use a more elegant approach.
+define LINUX_APPLY_MAJOR_PATCHES
+<------>$(Q)( \
+<------>for D in $(PATCH_BASE_DIRS); do \
+<------>? if test -d $${D}/$($(PKG)_VERSION_X); then \
+<------>??? $(APPLY_PATCHES) $(@D) $${D}/$($(PKG)_VERSION_X) \*.patch 
+\*.patch.$(ARCH) || exit 1; \
+<------>? fi; \
+<------>done; \
+<------>)
+endef
 
->
-> Stefan S?ena
-> http://patchwork.ozlabs.org/patch/904057/  (Bugfix)
-> http://patchwork.ozlabs.org/patch/904034/  (Bugfix)
->
->
-> Matt Weber (Both have been marked as superseded)
-> http://patchwork.ozlabs.org/patch/907093/  (Bugfix)
-> http://patchwork.ozlabs.org/patch/932853/  (New checksec tool)
->
-> A unrelated patch was also included which adds proxy env support for the runtests script.
->
-> Matt Weber (2):
->   support/testing: runtest proxy support
->   support/testing/tests/core: SSP & hardening flags
->
-> Paresh Chaudhary (1):
->   package/checksec: new package
->
-> Stefan S?rensen (3):
->   package/Makefile.in: Do not use CPPFLAGS for hardening options
->   package/Makefile.in: Add missing options to LDFLAGS for full RELRO
->     build
->   package/Makefile.in: Use gcc spec files for PIE build flags
->
->  package/Config.in.host                        |   1 +
->  package/Makefile.in                           |  18 +--
->  ...cksec-Fixed-issue-with-relative-path.patch |  43 ++++++++
->  package/checksec/Config.in.host               |  16 +++
->  package/checksec/checksec.hash                |   3 +
->  package/checksec/checksec.mk                  |  16 +++
->  support/testing/infra/builder.py              |   6 +
->  support/testing/tests/core/test_hardening.py  | 104 ++++++++++++++++++
->  toolchain/gcc-specs-pie-cc1                   |   2 +
->  toolchain/gcc-specs-pie-ld                    |   2 +
->  10 files changed, 202 insertions(+), 9 deletions(-)
->  create mode 100644 package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch
->  create mode 100644 package/checksec/Config.in.host
->  create mode 100644 package/checksec/checksec.hash
->  create mode 100644 package/checksec/checksec.mk
->  create mode 100644 support/testing/tests/core/test_hardening.py
->  create mode 100644 toolchain/gcc-specs-pie-cc1
->  create mode 100644 toolchain/gcc-specs-pie-ld
->
-> --
-> 2.17.0
->
+LINUX_POST_PATCH_HOOKS += LINUX_APPLY_MAJOR_PATCHES
 
+The file for linux-headers is the same.
+So buildroot will use dirs like "4.9.x" to patch linux and 
+linux-headers. Maybe it will be useful for someone.
 
-
--- 
-Matthew L Weber / Pr Software Engineer
-Airborne Information Systems / RC Linux Secure Platforms
-MS 131-100, C Ave NE, Cedar Rapids, IA, 52498, USA
-www.rockwellcollins.com
-
-Note: Any Export License Required Information and License Restricted
-Third Party Intellectual Property (TPIP) content must be encrypted and
-sent to matthew.weber at corp.rockwellcollins.com.
+12.07.2018 00:02, Arnout Vandecappelle ?????:
+>
+> On 11-07-18 16:32, Serj Kalichev wrote:
+>> Hello.
+>>
+>> Both linux and linux-headers package use BR2_LINUX_KERNEL_PATCH. But
+>> BR2_LINUX_KERNEL_PATCH is available if BR2_LINUX_KERNEL is selected. I want to
+>> build toolchain only. And don't want to build linux kernel. So I deselect
+>> BR2_LINUX_KERNEL and lose BR2_LINUX_KERNEL_PATCH for linux-headers.
+>>
+>> I think BR2_LINUX_KERNEL_PATCH must not depend on BR2_LINUX_KERNEL.
+>   It's not easy to do that properly, because you'd still need to go to the kernel
+> menu to set the kernel patch list.
+>
+>   Anyway, we consider BR2_LINUX_KERNEL_PATCH as deprecated. Use
+> BR2_GLOBAL_PATCH_DIR instead, and add your patches in the linux-headers
+> subdirectory of that directory.
+>
+>   Regards,
+>   Arnout
+>
