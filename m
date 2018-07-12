@@ -1,63 +1,92 @@
-From: Denis Kotov <redradist@gmail.com>
-Date: Fri, 13 Jul 2018 01:05:44 +0300
-Subject: [Buildroot] How to change compiler to newer in old build-root
-In-Reply-To: <2097395198.3336152.1531394396552.JavaMail.zimbra@datacom.com.br>
-References: <CAPKSe_6Q08-PYugmgAsGJ3waRGTWV2-V+vzT_KU5o7bk0fc58w@mail.gmail.com>
- <2097395198.3336152.1531394396552.JavaMail.zimbra@datacom.com.br>
-Message-ID: <CAPKSe_7odb9UrbX6Oz9=CP-XLGXNek5GebNDj9GB5ieH66t1Vg@mail.gmail.com>
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Date: Thu, 12 Jul 2018 23:00:47 +0200
+Subject: [Buildroot] [PATCH 03/10] perl-crypt-cbc: new package
+In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
+References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180712210054.13775-4-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thank you Carlos for reply,
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ DEVELOPERS                                 |  1 +
+ package/Config.in                          |  1 +
+ package/perl-crypt-cbc/Config.in           |  6 ++++++
+ package/perl-crypt-cbc/perl-crypt-cbc.hash |  6 ++++++
+ package/perl-crypt-cbc/perl-crypt-cbc.mk   | 12 ++++++++++++
+ 5 files changed, 26 insertions(+)
+ create mode 100644 package/perl-crypt-cbc/Config.in
+ create mode 100644 package/perl-crypt-cbc/perl-crypt-cbc.hash
+ create mode 100644 package/perl-crypt-cbc/perl-crypt-cbc.mk
 
-Okay, but what if I want to add newer compiler without changing buildroot
-version from 2014 to 2017.
-Is it possible ?
-
-And if no how to switch to new version of buildroot automatically. Is it
-possible ?
-
-On Thu, 12 Jul 2018 at 14:19, Carlos Santos <casantos@datacom.com.br> wrote:
-
-> > From: "Denis Kotov" <redradist@gmail.com>
-> > To: "buildroot" <buildroot@busybox.net>
-> > Sent: Thursday, July 12, 2018 4:58:09 AM
-> > Subject: [Buildroot] How to change compiler to newer in old build-root
->
-> > Hello everyone,
->
-> > I am curious if I can change old gcc-4.8 compiler in buildroot-2014 to
-> to gcc-7
-> > ??
-> > I have just replace name of compiler from gcc-4.8 to gcc-7, but failed
-> with an
-> > error:
->
-> > >>> toolchain-external undefined Configuring
->
-> > What did I wrong ?
->
-> Support for GCC7 was introduced in Buildroot 2017.05:
->
-> $ git --no-pager log --oneline -1 4314161159c
-> 4314161159 package/gcc: add support for gcc 7
->
-> $ git describe 4314161159c
-> 2017.05-rc1-114-g4314161159
->
-> --
-> Carlos Santos (Casantos) - DATACOM, P&D
-> ?Marched towards the enemy, spear upright, armed with the certainty
-> that only the ignorant can have.? ? Epitaph of a volunteer
->
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f437401818..ca7e1efd7e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1923,6 +1923,7 @@ F:	docs/manual/
+ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
+ F:	package/perl-crypt-blowfish/
++F:	package/perl-crypt-cbc/
+ F:	package/pigz/
+ F:	support/scripts/size-stats
+ F:	utils/size-stats-compare
+diff --git a/package/Config.in b/package/Config.in
+index 5bd229eab0..981c84c350 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -666,6 +666,7 @@ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
+ 	source "package/perl-convert-asn1/Config.in"
+ 	source "package/perl-crypt-blowfish/Config.in"
++	source "package/perl-crypt-cbc/Config.in"
+ 	source "package/perl-crypt-openssl-random/Config.in"
+ 	source "package/perl-crypt-openssl-rsa/Config.in"
+ 	source "package/perl-datetime-tiny/Config.in"
+diff --git a/package/perl-crypt-cbc/Config.in b/package/perl-crypt-cbc/Config.in
+new file mode 100644
+index 0000000000..7ecfa70552
+--- /dev/null
++++ b/package/perl-crypt-cbc/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_CRYPT_CBC
++	bool "perl-crypt-cbc"
++	help
++	  Encrypt Data with Cipher Block Chaining Mode
++
++	  https://metacpan.org/release/Crypt-CBC
+diff --git a/package/perl-crypt-cbc/perl-crypt-cbc.hash b/package/perl-crypt-cbc/perl-crypt-cbc.hash
+new file mode 100644
+index 0000000000..f3d5e03c31
+--- /dev/null
++++ b/package/perl-crypt-cbc/perl-crypt-cbc.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    3db5117d60df67e3b400fe367e716be0 Crypt-CBC-2.33.tar.gz
++sha256 6a70de21b6cc7f2b100067e8e188db966e9a8001b5db6fa976e7cb5b294ae645 Crypt-CBC-2.33.tar.gz
++
++# computed by scancpan
++sha256 a98da8a2eef02a8823cf2f58111e981796c4aaf38e8d446acd338a559af42bfc README
+diff --git a/package/perl-crypt-cbc/perl-crypt-cbc.mk b/package/perl-crypt-cbc/perl-crypt-cbc.mk
+new file mode 100644
+index 0000000000..3da0561096
+--- /dev/null
++++ b/package/perl-crypt-cbc/perl-crypt-cbc.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# perl-crypt-cbc
++#
++################################################################################
++
++PERL_CRYPT_CBC_VERSION = 2.33
++PERL_CRYPT_CBC_SOURCE = Crypt-CBC-$(PERL_CRYPT_CBC_VERSION).tar.gz
++PERL_CRYPT_CBC_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS
++PERL_CRYPT_CBC_LICENSE_FILES = README
++
++$(eval $(perl-package))
 -- 
-
-*Best RegardsDenis Kotov*
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180713/873657ef/attachment.html>
+2.16.4
