@@ -1,129 +1,86 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 13 Jul 2018 07:31:33 -0500
-Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
- for PIE build flags
-In-Reply-To: <d6295d8b-0f65-bd81-a5fa-355b5eb70f9f@mind.be>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
- <cc562d31-b770-c7e1-0a6d-e3f004c917db@mind.be>
- <CANQCQpaJd3-tj47Xp4XyFGvu9w5GcKZZyr+Pi98A0i1XRxa1Ww@mail.gmail.com>
- <d6295d8b-0f65-bd81-a5fa-355b5eb70f9f@mind.be>
-Message-ID: <CANQCQpYf3icTRiWKfEkhf88tP6J9_Nuab7cfWrsh8_PdewbFaw@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Fri, 13 Jul 2018 16:51:01 +0200
+Subject: [Buildroot] RISC-V support
+In-Reply-To: <7050aae3-7b98-4b09-41e0-27b60d42baa6@mind.be>
+References: <0fb21945-492b-520b-e859-b827429312bd@aries-embedded.de>
+ <7050aae3-7b98-4b09-41e0-27b60d42baa6@mind.be>
+Message-ID: <79a73931-16b0-7d5d-d514-be1baa16557b@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Hi Anton, Arnout,
 
-On Fri, Jul 13, 2018 at 4:39 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 12-07-18 01:17, Matthew Weber wrote:
->> Arnout,
+Le 13/07/2018 ? 11:10, Arnout Vandecappelle a ?crit?:
+> 
+> 
+> On 13-07-18 10:34, Anton Kuzmin wrote:
+>> Hello All,
 >>
->> On Wed, Jul 11, 2018 at 4:44 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>>
->>>
->>> On 11-07-18 16:31, Matt Weber wrote:
->>>> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
->>>>
->>>> The PIE build flags are only intended for building executables and can not be
->>>> used in relocateable links (-r), static builds and shared library build -
->>>> including the flags here causes build errors.
->>>>
->>>> So instead of parsing the PIE flags directly on the command line to gcc,
->>>> include them in a gcc spec file where it is possible to only apply the flags
->>>> when other incompatible flags are not set.
->>>
->>>  The commit message should also have the reasoning why this is considered better
->>> than doing the same in the wrapper.
->>>
->>
->> It probably isn't better then doing it in the wrapper.  At this point,
->> its just fixing something that's broken with the current approach.  I
->> was assuming a solid baseline option with this feature that's working
->> first and then start looking at replacing the approach with the
->> suggestion awhile back with doing it via the wrapper.
->
->  I'm a bit confused about where you'd like to go in the long run: spec file or
-> wrapper? In your reply to the cover letter you mention "I do like the concept of
-> changing to the wrapper and evaluating if we can use GCC spec files"...
+>> Is anybody already working on adding of the RISC-V [1] support
+>> to buildroot?  If yes, is there any place to discuss/share the progress?
+>> If not, are there any reasons not to do it?
+> 
+>  There is definitely no reason not to add support for it RISC-V.
 
-Sorry, I was pulling a few thoughts together and didn't explain it
-clearly.  I was thinking back to previous threads were it was
-discussed to take all the hardening options and use the wrapper to
-manage them vs directly setting the flag variables.  Ideally, I agree
-that a wrapper approach for that is more ideal.  Since that thread,
-there has been discussion on Stefan's patches about using spec files
-as an option to simplify what the wrapper currently does.  However,
-I'd agree that the spec syntax is complex.  For this patchset, the
-spec file is accompishing a specific task of the mutually exclusive
-options just related to hardening.
+Indeed, patches are welcome :)
 
-So long term, I could see the wrapper handing the hardening flag
-management directly and the seperate possibility of spec files
-possibly being used for other unrelated items that might simplify
-wrapper logic.
+> 
+> 
+>> As a starting point, I have made minimal additions resulting in
+>> a successful build of the buildroot toolchain and sdk.
+> 
+>  Excellent!
+> 
+>  How about a kernel?
+> 
+>> At the moment 64-bit only, gcc-7.3.0, glibc-2.27-57 -- from upstream.
+> 
+>  64-bit only seems a small constraint, IIUC the 32 and 64 bit variants are
+> nearly identical, no?
+> 
+>  Constraints on minimal versions of the toolchain components are expected. We
+> even have BR2_ARCH_NEEDS_GCC_AT_LEAST_7 to handle that. It's used a lot for ARM
+> subarchitectures.
+> 
+> 
+>  The patch series to add RISC-V support could look something like this:
+> 
+> riscv: add RISC-V architecture
+>  -> adds it to arch/Config.in and arch/Config.in.riscv
+>     For now, selects BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT.
+>     Selects the proper atomic etc. toolchain options
+> 
+> toolchain-buildroot: support riscv
+>  -> everything needed to be able to build an internal toolchain with glibc
+> 
+> uclibc: support riscv
 
->
->  I guess the spec files have the advantage that it is a lot easier to specify
-> mutually exclusive options. We have that now in the wrapper for arch/cpu/tune,
-> but it's a lot of code to specify something simple. That said, spec files are so
-> arcane that you can't expect many people contributing to it. The C code, though
-> more verbose, is a lot more understandable.
+musl (if supported)
 
-Agree.
+> 
+> linux: support riscv
+> 
+> configs/qemu_riscv_some_defconfig: new defconfig
+> 
+> support/config-fragments/autobuild: add RISC-V fragment
+> 
+> 
+>  Even if you don't do all of this, it is useful if you post some of these
+> patches, so someone else can take it over.
 
->
->  Back to the patch: basically, the same could be done in the wrapper, but here
-> the spec files are just taken from Fedora so that's a lot simpler. Right?
+After this work, we will need some help to fix all issues discovered by this new
+architecture/toolchain.
 
-Correct.
+It would be great to have someone able to test on a real hardware, at least we
+can test on Qemu (best effort).
 
->
->
->>>> -TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
->>>> -TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
->>>> +TARGET_HARDENED += $(TARGET_CFLAGS_RELRO_FULL) -specs=$(TOPDIR)/toolchain/gcc-specs-pie-cc1
->>>> +TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO_FULL) -specs=$(TOPDIR)/toolchain/gcc-specs-pie-ld
->>>
->>>  As mentioned in my other mail, it is very likely that there are packages that
->>> link with TARGET_CFLAGS instead of TARGET_LDFLAGS. Would that be a problem?
->
->  I don't think you answered this question?
+Best regards,
+Romain
 
-Sorry lumped this in with the one below.  We found that flag usage was
-inconsistent across packages and we were required to over-specify
-flags.  So some packages that link correctly may get linker oriented
-flags through both cflags and ldflags.  We verified that syntax wise
-that this will work and that the post build elf file testing reflects
-they take affect.
-
->
->>> Actually, can't we just have a single spec file that contains both?
->>
->> Like you mentioned previously, flag usage isn't consistent.  When we
->> started doing validation of the elf files we found that inconsistency
->> and we were individually trying to fix the packages.  This didn't get
->> to far as lots of the packages are in stable, no real maintaining
->> occuring.  I'm glad Stefan brought up the spec file idea as that
->> solved all the rework on the linker ordering and combination of
->> values.
->
->  Yes, spec file (or wrapper) is definitely better than patching individual packages.
->
->
->> Related to using a single spec file.  I'm not to familiar with using
->> them but since we have a mix of good/bad flag options already
->> occurring, guessing it wouldn't matter to consolidate to one file.  I
->> can test going to a single file. Stefan, do you know?
-
-I've verified you have to have individual files for each.  Guessing
-there isn't shared syntax between cc/ld spec files based on the errors
-I got when the compiler was invoked with the additional self_spec
-entry in it's spec file.  I couldn't fine enough documentation to
-understand what that entry is doing.....
-
-Matt
+> 
+>  Regards,
+>  Arnout
+> 
