@@ -1,47 +1,100 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 13 Jul 2018 19:43:04 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: locale needs chrono and thread with
- icu
-Message-ID: <20180713174304.4055-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 13 Jul 2018 20:18:36 +0200
+Subject: [Buildroot] Orange Pi Prime does not boot
+In-Reply-To: <CAMty3ZC3rc7rZRtBZMnaQxP=kLJ9AnGWuoCsiV_bHa9UPQ=33g@mail.gmail.com>
+References: <20695741531212798@myt3-12f13c3c6b95.qloud-c.yandex.net>
+ <CAMty3ZC3rc7rZRtBZMnaQxP=kLJ9AnGWuoCsiV_bHa9UPQ=33g@mail.gmail.com>
+Message-ID: <20180713201836.03884858@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-output/host/usr/bin/nios2-linux-readelf -d output/staging/usr/lib/libboost_locale.so
+Hello,
 
-Dynamic section at offset 0x125ec0 contains 36 entries:
-  Tag        Type                         Name/Value
- 0x00000001 (NEEDED)                     Shared library: [libboost_chrono.so.1.67.0]
- 0x00000001 (NEEDED)                     Shared library: [libboost_thread.so.1.67.0]
- 0x00000001 (NEEDED)                     Shared library: [libboost_system.so.1.67.0]
- 0x00000001 (NEEDED)                     Shared library: [librt.so.1]
- 0x00000001 (NEEDED)                     Shared library: [libicudata.so.60]
- 0x00000001 (NEEDED)                     Shared library: [libicui18n.so.60]
- 0x00000001 (NEEDED)                     Shared library: [libicuuc.so.60]
+On Fri, 13 Jul 2018 20:43:49 +0530, Jagan Teki <jagan@amarulasolutions.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.net/results/57838f7cd84f37b66ab7007deaea847af8f54b72
+> On Tue, Jul 10, 2018 at 2:23 PM,  <aai@tut.by> wrote:
+> > Hello,
+> >
+> > orangepi_prime_defconfig does not work for me (try buildroot 2018.02.3 and 2018.05)
+> >
+> > I do:
+> > make orangepi_prime_defconfig
+> > make
+> >
+> > boot log:
+> > --------------------------------------------------------------
+> > Terminal ready
+> >
+> > U-Boot SPL 2017.11 (Jul 09 2018 - 10:12:15)
+> > DRAM: 2048 MiB
+> > Trying to boot from MMC1
+> >
+> >
+> > U-Boot 2017.11 (Jul 09 2018 - 10:12:15 +0300) Allwinner Technology
+> >
+> > CPU:   Allwinner H5 (SUN50I)
+> > Model: OrangePi Prime
+> > DRAM:  2 GiB
+> > MMC:   SUNXI SD/MMC: 0
+> > *** Warning - bad CRC, using default environment
+> >
+> > In:    serial
+> > Out:   serial
+> > Err:   serial
+> > Net:   No ethernet found.
+> > starting USB...
+> > USB0:   USB EHCI 1.00
+> > USB1:   USB OHCI 1.0
+> > scanning bus 0 for devices... 1 USB Device(s) found
+> >        scanning usb for storage devices... 0 Storage Device(s) found
+> > Hit any key to stop autoboot:  0
+> > switch to partitions #0, OK
+> > mmc0 is current device
+> > Scanning mmc 0:1...
+> > Found U-Boot script /boot.scr
+> > reading /boot.scr
+> > 277 bytes read in 14 ms (18.6 KiB/s)
+> > ## Executing script at 4fc00000
+> > reading Image
+> > 17365504 bytes read in 870 ms (19 MiB/s)
+> > reading sun50i-h5-orangepi-prime.dtb
+> > 13714 bytes read in 25 ms (535.2 KiB/s)
+> > ## Flattened Device Tree blob at 4fa00000
+> >    Booting using the fdt blob at 0x4fa00000
+> >    Loading Device Tree to 0000000049ff9000, end 0000000049fff591 ... OK
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/boost/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+From Jagans boot log:
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 42428fab10..92aa17dc63 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -189,7 +189,9 @@ config BR2_PACKAGE_BOOST_LOCALE
- 	# https://svn.boost.org/trac/boost/ticket/9685 for more
- 	# details.
- 	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
-+	select BR2_PACKAGE_BOOST_CHRONO if BR2_PACKAGE_ICU
- 	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD if BR2_PACKAGE_ICU
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
- 	  Provide localization and Unicode handling tools for C++.
--- 
-2.14.1
+reading /boot.scr
+277 bytes read in 15 ms (17.6 KiB/s)
+## Executing script at 4fc00000
+reading Image
+16310784 bytes read in 820 ms (19 MiB/s)
+reading sun50i-h5-orangepi-prime.dtb
+13714 bytes read in 26 ms (514.6 KiB/s)
+## Flattened Device Tree blob at 4fa00000
+   Booting using the fdt blob at 0x4fa00000
+   Loading Device Tree to 0000000049ff9000, end 0000000049fff591 ... OK
+
+Jagan Image size: 16310784
+aai Image size:   17365504
+
+The only visible difference (besides not booting)...
+
+Regards,
+Peter
+
+
+> >
+> > Starting kernel ...
+> > --------------------------------------------------------------  
+> 
+> It's booting fine with my side, here is full boot log[1]
+> 
+> [1] https://paste.ubuntu.com/p/mQsRxMrKnh/
+> 
+> Jagan.
+> 
