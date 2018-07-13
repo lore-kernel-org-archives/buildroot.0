@@ -1,15 +1,13 @@
-From: noctarius <me@noctarius.com>
-Date: Fri, 13 Jul 2018 12:30:09 +0300
+From: Christoph Engelbert <me@noctarius.com>
+Date: Fri, 13 Jul 2018 12:32:54 +0300
 Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds the option to copy
  "regulatory.db[.p7s]" to /lib/firmware
-Message-ID: <20180713093009.7893-1-me@noctarius.com>
+Message-ID: <20180713093254.7994-1-me@noctarius.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-From: Christoph Engelbert <me@noctarius.com>
 
 Certain wireless drivers (like the Broadcom FullMac drivers" expect the regulatory.db and
 regulatory.db.p7s files to be available to be loadable from /lib/firmware. If not available
