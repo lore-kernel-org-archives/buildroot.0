@@ -1,103 +1,129 @@
-From: Serj Kalichev <serj.kalichev@gmail.com>
-Date: Fri, 13 Jul 2018 15:24:02 +0300
-Subject: [Buildroot] BR2_LINUX_KERNEL_PATCH for linux-headers
-In-Reply-To: <6189d2d4-c38c-34b0-d5b8-e37eb245f68d@mind.be>
-References: <fea35efb-0134-f091-5cbd-30292f137b33@gmail.com>
- <60e837dd-e80e-c0c3-a5b4-7cb60e87f7f3@mind.be>
- <c9339544-608c-ef29-21cd-640f0552e63f@gmail.com>
- <6189d2d4-c38c-34b0-d5b8-e37eb245f68d@mind.be>
-Message-ID: <bcaa3e35-ba14-c59f-12ce-a96bf38a7c15@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 13 Jul 2018 07:31:33 -0500
+Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
+ for PIE build flags
+In-Reply-To: <d6295d8b-0f65-bd81-a5fa-355b5eb70f9f@mind.be>
+References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
+ <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
+ <cc562d31-b770-c7e1-0a6d-e3f004c917db@mind.be>
+ <CANQCQpaJd3-tj47Xp4XyFGvu9w5GcKZZyr+Pi98A0i1XRxa1Ww@mail.gmail.com>
+ <d6295d8b-0f65-bd81-a5fa-355b5eb70f9f@mind.be>
+Message-ID: <CANQCQpYf3icTRiWKfEkhf88tP6J9_Nuab7cfWrsh8_PdewbFaw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yes, you are right. I have a several kernel versions in project and can 
-store patches for different versions in different dirs. But additionally 
-I have a conditional patches. For example - for kernel on virtual 
-machine and for kernel on real hardware. And these patches are different 
-for different kernel versions. I mean in my case it will be a 
-directories mess if each variant have their own "patches/linux" structure.
+Arnout,
 
-My structure is:
-
-..patches/linux/3.10.x
-..patches/linux/4.9.x
-etc.
-
-I think this structure is better for complex projects with different 
-kernel versions.
-What do you think about it?
-I can prepare a patch for linux and linux-headers packages to add 
-patching dirs like 4.9.x to POST_PATCH_HOOKS. Is it useful for busybox 
-project?
-
-13.07.2018 13:01, Arnout Vandecappelle ?????:
->
-> On 12-07-18 14:33, Serj Kalichev wrote:
->> Thanks for the answer.
->> I will use BR2_GLOBAL_PATCH_DIR but with enhancement.
->> It's not suitable for linux and linux-headers to create dirs like linux/4.9.80.
->   Well, you don't need to create a version-specific directory at all, just put
-> your patches under linux/. Except if you want to use the same GLOBAL_PATCH_DIR
-> for different configurations with different kernel versions. But even then, you
-> can just have different patch directories. I typically have something like:
->
-> board/project-foo/common/patches/busybox/....patch
->                    board1/patches/linux/.....patch
->                                   linux-headers -> linux
->                    board2/patches/linux/.....patch
->                                   ubuut/.....patch
->
-> BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_FOO_PATH)/board/project-foo/common/patches
-> $(BR2_EXTERNAL_FOO_PATH)/board/project-foo/board1/patches"
+On Fri, Jul 13, 2018 at 4:39 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
 >
 >
->   Regards,
->   Arnout
->
->> Minor version number is not useful for kernel patches. The dirs like linux/4.0.x
->> is better.
->> So I create a file in my external tree:
+> On 12-07-18 01:17, Matthew Weber wrote:
+>> Arnout,
 >>
->> LINUX_VERSION_S := $(subst ., , $(strip $(LINUX_VERSION)))
->> LINUX_VERSION_X := $(word 1, $(LINUX_VERSION_S)).$(word 2, $(LINUX_VERSION_S)).x
->>
->> define LINUX_APPLY_MAJOR_PATCHES
->> <------>$(Q)( \
->> <------>for D in $(PATCH_BASE_DIRS); do \
->> <------>? if test -d $${D}/$($(PKG)_VERSION_X); then \
->> <------>??? $(APPLY_PATCHES) $(@D) $${D}/$($(PKG)_VERSION_X) \*.patch
->> \*.patch.$(ARCH) || exit 1; \
->> <------>? fi; \
->> <------>done; \
->> <------>)
->> endef
->>
->> LINUX_POST_PATCH_HOOKS += LINUX_APPLY_MAJOR_PATCHES
->>
->> The file for linux-headers is the same.
->> So buildroot will use dirs like "4.9.x" to patch linux and linux-headers. Maybe
->> it will be useful for someone.
->>
->> 12.07.2018 00:02, Arnout Vandecappelle ?????:
->>> On 11-07-18 16:32, Serj Kalichev wrote:
->>>> Hello.
+>> On Wed, Jul 11, 2018 at 4:44 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>
+>>>
+>>> On 11-07-18 16:31, Matt Weber wrote:
+>>>> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
 >>>>
->>>> Both linux and linux-headers package use BR2_LINUX_KERNEL_PATCH. But
->>>> BR2_LINUX_KERNEL_PATCH is available if BR2_LINUX_KERNEL is selected. I want to
->>>> build toolchain only. And don't want to build linux kernel. So I deselect
->>>> BR2_LINUX_KERNEL and lose BR2_LINUX_KERNEL_PATCH for linux-headers.
+>>>> The PIE build flags are only intended for building executables and can not be
+>>>> used in relocateable links (-r), static builds and shared library build -
+>>>> including the flags here causes build errors.
 >>>>
->>>> I think BR2_LINUX_KERNEL_PATCH must not depend on BR2_LINUX_KERNEL.
->>>  ? It's not easy to do that properly, because you'd still need to go to the kernel
->>> menu to set the kernel patch list.
+>>>> So instead of parsing the PIE flags directly on the command line to gcc,
+>>>> include them in a gcc spec file where it is possible to only apply the flags
+>>>> when other incompatible flags are not set.
 >>>
->>>  ? Anyway, we consider BR2_LINUX_KERNEL_PATCH as deprecated. Use
->>> BR2_GLOBAL_PATCH_DIR instead, and add your patches in the linux-headers
->>> subdirectory of that directory.
+>>>  The commit message should also have the reasoning why this is considered better
+>>> than doing the same in the wrapper.
 >>>
->>>  ? Regards,
->>>  ? Arnout
+>>
+>> It probably isn't better then doing it in the wrapper.  At this point,
+>> its just fixing something that's broken with the current approach.  I
+>> was assuming a solid baseline option with this feature that's working
+>> first and then start looking at replacing the approach with the
+>> suggestion awhile back with doing it via the wrapper.
+>
+>  I'm a bit confused about where you'd like to go in the long run: spec file or
+> wrapper? In your reply to the cover letter you mention "I do like the concept of
+> changing to the wrapper and evaluating if we can use GCC spec files"...
+
+Sorry, I was pulling a few thoughts together and didn't explain it
+clearly.  I was thinking back to previous threads were it was
+discussed to take all the hardening options and use the wrapper to
+manage them vs directly setting the flag variables.  Ideally, I agree
+that a wrapper approach for that is more ideal.  Since that thread,
+there has been discussion on Stefan's patches about using spec files
+as an option to simplify what the wrapper currently does.  However,
+I'd agree that the spec syntax is complex.  For this patchset, the
+spec file is accompishing a specific task of the mutually exclusive
+options just related to hardening.
+
+So long term, I could see the wrapper handing the hardening flag
+management directly and the seperate possibility of spec files
+possibly being used for other unrelated items that might simplify
+wrapper logic.
+
+>
+>  I guess the spec files have the advantage that it is a lot easier to specify
+> mutually exclusive options. We have that now in the wrapper for arch/cpu/tune,
+> but it's a lot of code to specify something simple. That said, spec files are so
+> arcane that you can't expect many people contributing to it. The C code, though
+> more verbose, is a lot more understandable.
+
+Agree.
+
+>
+>  Back to the patch: basically, the same could be done in the wrapper, but here
+> the spec files are just taken from Fedora so that's a lot simpler. Right?
+
+Correct.
+
+>
+>
+>>>> -TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
+>>>> -TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
+>>>> +TARGET_HARDENED += $(TARGET_CFLAGS_RELRO_FULL) -specs=$(TOPDIR)/toolchain/gcc-specs-pie-cc1
+>>>> +TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO_FULL) -specs=$(TOPDIR)/toolchain/gcc-specs-pie-ld
 >>>
+>>>  As mentioned in my other mail, it is very likely that there are packages that
+>>> link with TARGET_CFLAGS instead of TARGET_LDFLAGS. Would that be a problem?
+>
+>  I don't think you answered this question?
+
+Sorry lumped this in with the one below.  We found that flag usage was
+inconsistent across packages and we were required to over-specify
+flags.  So some packages that link correctly may get linker oriented
+flags through both cflags and ldflags.  We verified that syntax wise
+that this will work and that the post build elf file testing reflects
+they take affect.
+
+>
+>>> Actually, can't we just have a single spec file that contains both?
+>>
+>> Like you mentioned previously, flag usage isn't consistent.  When we
+>> started doing validation of the elf files we found that inconsistency
+>> and we were individually trying to fix the packages.  This didn't get
+>> to far as lots of the packages are in stable, no real maintaining
+>> occuring.  I'm glad Stefan brought up the spec file idea as that
+>> solved all the rework on the linker ordering and combination of
+>> values.
+>
+>  Yes, spec file (or wrapper) is definitely better than patching individual packages.
+>
+>
+>> Related to using a single spec file.  I'm not to familiar with using
+>> them but since we have a mix of good/bad flag options already
+>> occurring, guessing it wouldn't matter to consolidate to one file.  I
+>> can test going to a single file. Stefan, do you know?
+
+I've verified you have to have individual files for each.  Guessing
+there isn't shared syntax between cc/ld spec files based on the errors
+I got when the compiler was invoked with the additional self_spec
+entry in it's spec file.  I couldn't fine enough documentation to
+understand what that entry is doing.....
+
+Matt
