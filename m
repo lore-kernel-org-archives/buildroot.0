@@ -1,48 +1,100 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 13 Jul 2018 22:29:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.3.3.9
-Message-ID: <20180713202931.16642-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 13 Jul 2018 22:58:00 +0200
+Subject: [Buildroot] [RFC v1 1/2] meson: change from global to per package
+ cross-compilation.conf
+Message-ID: <20180713205801.25976-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://gitweb.torproject.org/tor.git/commit/ChangeLog?h=tor-0.3.3.9&id=5521729da9fc5ca732db4f9ccd2e217f4231e1b6
+Add FOO_MESON_CFLAGS, FOO_MESON_LDFLAGS and FOO_MESON_CXXFLAGS
+variables to allow per package additional flags.
 
-o Directory authority changes:
-  - The "Bifroest" bridge authority has been retired; the new bridge
-    authority is "Serge", and it is operated by George from the
-    TorBSD project. Closes ticket 26771.
+Change to buildtype plain as all compiler/linker flags forcing
+debug/release are already given via the cross-compilation.conf
+file.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/tor/tor.hash | 2 +-
- package/tor/tor.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Notes:
+  - documentation change for new flags missing
+  - use in pkg-meson.mk the same sed/printf for flags quotation mark
+    and comma adding
+---
+ package/meson/cross-compilation.conf.in | 8 ++++----
+ package/meson/meson.mk                  | 6 +++---
+ package/pkg-meson.mk                    | 9 +++++++--
+ 3 files changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index d56855f45e..35659eca6e 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 3cf5b4fea2491cbfefa1077bf1b2855e169052d381bd920cd57aa9bfaff6b3a5  tor-0.3.3.8.tar.gz
-+sha256 85346b4d026e6a041c8e326d2cc64b5f5361b032075c89c5854f16dbc02fce6f  tor-0.3.3.9.tar.gz
- sha256 f9a4f724d8037711dde7d3f1d17094fb7d211545b3a3bbb1b03e769e13ca5608  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index 6f977f8625..2ee25c873f 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index 0eec74087b..6af03314eb 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -11,10 +11,10 @@ strip = '@TARGET_CROSS at strip'
+ pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
  
--TOR_VERSION = 0.3.3.8
-+TOR_VERSION = 0.3.3.9
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+ [properties]
+-c_args = [@TARGET_CFLAGS@]
+-c_link_args = [@TARGET_LDFLAGS@]
+-cpp_args = [@TARGET_CXXFLAGS@]
+-cpp_link_args = [@TARGET_LDFLAGS@]
++c_args = [@TARGET_CFLAGS@ @PKG_TARGET_CFLAGS@]
++c_link_args = [@TARGET_LDFLAGS@ @PKG_TARGET_LDFLAGS@]
++cpp_args = [@TARGET_CXXFLAGS@ @PKG_TARGET_CXXFLAGS@]
++cpp_link_args = [@TARGET_LDFLAGS@ @PKG_TARGET_LDFLAGS@]
+ 
+ [host_machine]
+ system = 'linux'
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 28c9e6f202..5c1123a8ad 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -20,7 +20,7 @@ HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_C
+ HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+ 
+-define HOST_MESON_INSTALL_CROSS_CONF
++define HOST_MESON_INSTALL_CROSS_CONF_IN
+ 	mkdir -p $(HOST_DIR)/etc/meson
+ 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+ 	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
+@@ -31,9 +31,9 @@ define HOST_MESON_INSTALL_CROSS_CONF
+ 	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+ 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+ 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+-	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
++	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
+ endef
+ 
+-HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
++HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF_IN
+ 
+ $(eval $(host-python-package))
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 507e686068..565e10e8fb 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -64,12 +64,17 @@ ifeq ($(4),target)
+ define $(2)_CONFIGURE_CMDS
+ 	rm -rf $$($$(PKG)_SRCDIR)/build
+ 	mkdir -p $$($$(PKG)_SRCDIR)/build
++	sed -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_CFLAGS)%g" \
++	    -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_LDFLAGS)%g" \
++	    -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_CXXFLAGS)%g" \
++	    $(HOST_DIR)/etc/meson/cross-compilation.conf.in \
++	    > $$($$(PKG)_SRCDIR)/build//cross-compilation.conf
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+-		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+-		--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
++		--buildtype=plain \
++		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
 -- 
-2.18.0
+2.17.1
