@@ -1,43 +1,37 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 13 Jul 2018 10:06:20 +0300
-Subject: [Buildroot] [PATCH] vim: create a relative symlink for vi
-Message-ID: <702cfdddc48676d80838097f4e871f6cf797a412.1531465580.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 13 Jul 2018 09:19:04 +0200
+Subject: [Buildroot] [PATCH v3 00/22] package/x11r7/xserver_xorg-server:
+ bump version to 1.20.0
+In-Reply-To: <0jjc1fxkra.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Mon, 09 Jul 2018 19:45:36 +0200")
+References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+ <20180703215602.GG2530@scaer>
+ <0jjc1fxkra.ln2@ID-313208.user.individual.net>
+Message-ID: <87in5jvc0n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/bin/vi is created as a canonical symlink, which might be dangling when
-the host doesn't have vim installed. This is not a problem by itself.
-But since commit 50dc350c65f4 (package/busybox: update to 1.29.0) we use
-noclobber install of busybox. The dangling symlink is interpreted as non
-existing file, which breaks the noclobber install.
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/796/796107430db6545401d9926e84f19eaf2040b756/
+Hi,
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-Yann, in the general case we should probably not copy over a dangling
-symlink. So maybe we need to account for that in the install.sh script
-of busybox.
----
- package/vim/vim.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> r128, savage, and sis are all very, very old now. Like, 20 years or
+ >> more... I wonder if it makes sense to keep them, given that none of
+ >> those three natively cross-compile, and are starting to require patches
+ >> to build against a recent X stack. The latter meaning that upstream is
+ >> not even test-building those drivers anymore...
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index dbf71c573f6c..4a8bbdad2e1e 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -64,7 +64,7 @@ endef
- 
- # Avoid oopses with vipw/vigr, lack of $EDITOR and 'vi' command expectation
- define VIM_INSTALL_VI_SYMLINK
--	ln -sf /usr/bin/vim $(TARGET_DIR)/bin/vi
-+	ln -sf ../usr/bin/vim $(TARGET_DIR)/bin/vi
- endef
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_VI_SYMLINK
- 
+ > Up until now and even including the current bump to xserver_xorg-server 
+ > 1.20.0 I am still willing to support even the oldest drivers if I can 
+ > find the necessary patches somewhere so from my POV it is ok to keep 
+ > them. If Thomas or Peter think otherwise I can remove them since I have 
+ > no personal interest in them ;)
+
+As long as you care enough about them to keep them working (and the
+patches aren't super big/ugly), then I am fine with keeping them.
+
 -- 
-2.18.0
+Bye, Peter Korsgaard
