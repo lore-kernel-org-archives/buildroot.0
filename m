@@ -1,86 +1,77 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 13 Jul 2018 16:51:01 +0200
-Subject: [Buildroot] RISC-V support
-In-Reply-To: <7050aae3-7b98-4b09-41e0-27b60d42baa6@mind.be>
-References: <0fb21945-492b-520b-e859-b827429312bd@aries-embedded.de>
- <7050aae3-7b98-4b09-41e0-27b60d42baa6@mind.be>
-Message-ID: <79a73931-16b0-7d5d-d514-be1baa16557b@smile.fr>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Fri, 13 Jul 2018 20:43:49 +0530
+Subject: [Buildroot] Orange Pi Prime does not boot
+In-Reply-To: <20695741531212798@myt3-12f13c3c6b95.qloud-c.yandex.net>
+References: <20695741531212798@myt3-12f13c3c6b95.qloud-c.yandex.net>
+Message-ID: <CAMty3ZC3rc7rZRtBZMnaQxP=kLJ9AnGWuoCsiV_bHa9UPQ=33g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Anton, Arnout,
+On Tue, Jul 10, 2018 at 2:23 PM,  <aai@tut.by> wrote:
+> Hello,
+>
+> orangepi_prime_defconfig does not work for me (try buildroot 2018.02.3 and 2018.05)
+>
+> I do:
+> make orangepi_prime_defconfig
+> make
+>
+> boot log:
+> --------------------------------------------------------------
+> Terminal ready
+>
+> U-Boot SPL 2017.11 (Jul 09 2018 - 10:12:15)
+> DRAM: 2048 MiB
+> Trying to boot from MMC1
+>
+>
+> U-Boot 2017.11 (Jul 09 2018 - 10:12:15 +0300) Allwinner Technology
+>
+> CPU:   Allwinner H5 (SUN50I)
+> Model: OrangePi Prime
+> DRAM:  2 GiB
+> MMC:   SUNXI SD/MMC: 0
+> *** Warning - bad CRC, using default environment
+>
+> In:    serial
+> Out:   serial
+> Err:   serial
+> Net:   No ethernet found.
+> starting USB...
+> USB0:   USB EHCI 1.00
+> USB1:   USB OHCI 1.0
+> scanning bus 0 for devices... 1 USB Device(s) found
+>        scanning usb for storage devices... 0 Storage Device(s) found
+> Hit any key to stop autoboot:  0
+> switch to partitions #0, OK
+> mmc0 is current device
+> Scanning mmc 0:1...
+> Found U-Boot script /boot.scr
+> reading /boot.scr
+> 277 bytes read in 14 ms (18.6 KiB/s)
+> ## Executing script at 4fc00000
+> reading Image
+> 17365504 bytes read in 870 ms (19 MiB/s)
+> reading sun50i-h5-orangepi-prime.dtb
+> 13714 bytes read in 25 ms (535.2 KiB/s)
+> ## Flattened Device Tree blob at 4fa00000
+>    Booting using the fdt blob at 0x4fa00000
+>    Loading Device Tree to 0000000049ff9000, end 0000000049fff591 ... OK
+>
+> Starting kernel ...
+> --------------------------------------------------------------
 
-Le 13/07/2018 ? 11:10, Arnout Vandecappelle a ?crit?:
-> 
-> 
-> On 13-07-18 10:34, Anton Kuzmin wrote:
->> Hello All,
->>
->> Is anybody already working on adding of the RISC-V [1] support
->> to buildroot?  If yes, is there any place to discuss/share the progress?
->> If not, are there any reasons not to do it?
-> 
->  There is definitely no reason not to add support for it RISC-V.
+It's booting fine with my side, here is full boot log[1]
 
-Indeed, patches are welcome :)
+[1] https://paste.ubuntu.com/p/mQsRxMrKnh/
 
-> 
-> 
->> As a starting point, I have made minimal additions resulting in
->> a successful build of the buildroot toolchain and sdk.
-> 
->  Excellent!
-> 
->  How about a kernel?
-> 
->> At the moment 64-bit only, gcc-7.3.0, glibc-2.27-57 -- from upstream.
-> 
->  64-bit only seems a small constraint, IIUC the 32 and 64 bit variants are
-> nearly identical, no?
-> 
->  Constraints on minimal versions of the toolchain components are expected. We
-> even have BR2_ARCH_NEEDS_GCC_AT_LEAST_7 to handle that. It's used a lot for ARM
-> subarchitectures.
-> 
-> 
->  The patch series to add RISC-V support could look something like this:
-> 
-> riscv: add RISC-V architecture
->  -> adds it to arch/Config.in and arch/Config.in.riscv
->     For now, selects BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT.
->     Selects the proper atomic etc. toolchain options
-> 
-> toolchain-buildroot: support riscv
->  -> everything needed to be able to build an internal toolchain with glibc
-> 
-> uclibc: support riscv
+Jagan.
 
-musl (if supported)
-
-> 
-> linux: support riscv
-> 
-> configs/qemu_riscv_some_defconfig: new defconfig
-> 
-> support/config-fragments/autobuild: add RISC-V fragment
-> 
-> 
->  Even if you don't do all of this, it is useful if you post some of these
-> patches, so someone else can take it over.
-
-After this work, we will need some help to fix all issues discovered by this new
-architecture/toolchain.
-
-It would be great to have someone able to test on a real hardware, at least we
-can test on Qemu (best effort).
-
-Best regards,
-Romain
-
-> 
->  Regards,
->  Arnout
-> 
+-- 
+Jagan Teki
+Senior Linux Kernel Engineer | Amarula Solutions
+U-Boot, Linux | Upstream Maintainer
+Hyderabad, India.
