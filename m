@@ -1,73 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 13 Jul 2018 08:38:39 +0200
-Subject: [Buildroot] [PATCH 5/5] support/docker: add an Alpine-3.7 based
- image
-In-Reply-To: <cover.1531463897.git.yann.morin.1998@free.fr>
-References: <cover.1531463897.git.yann.morin.1998@free.fr>
-Message-ID: <9f99ad9f8d86876a7e16185a9025223bc01edf9d.1531463897.git.yann.morin.1998@free.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 13 Jul 2018 10:06:20 +0300
+Subject: [Buildroot] [PATCH] vim: create a relative symlink for vi
+Message-ID: <702cfdddc48676d80838097f4e871f6cf797a412.1531465580.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No attempt was made at making this image reproducible.
+/bin/vi is created as a canonical symlink, which might be dangling when
+the host doesn't have vim installed. This is not a problem by itself.
+But since commit 50dc350c65f4 (package/busybox: update to 1.29.0) we use
+noclobber install of busybox. The dangling symlink is interpreted as non
+existing file, which breaks the noclobber install.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes:
+http://autobuild.buildroot.net/results/796/796107430db6545401d9926e84f19eaf2040b756/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- support/docker/Dockerfile.alpine-3.7 | 42 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 support/docker/Dockerfile.alpine-3.7
+Yann, in the general case we should probably not copy over a dangling
+symlink. So maybe we need to account for that in the install.sh script
+of busybox.
+---
+ package/vim/vim.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/docker/Dockerfile.alpine-3.7 b/support/docker/Dockerfile.alpine-3.7
-new file mode 100644
-index 0000000000..e05eb2bd4a
---- /dev/null
-+++ b/support/docker/Dockerfile.alpine-3.7
-@@ -0,0 +1,42 @@
-+# vi: ft=dockerfile
-+# Note: this dockerfile is not reproducible, because the repository
-+# where we fetch packages from is not pinned to a specific point in
-+# time; i.e. we'll get whatever is current at the moment we build.
-+
-+FROM alpine:3.7
-+
-+LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
-+      vendor="Buildroot" \
-+      description="Container based on Alpine 3.7, with everything needed to run Buildroot already installed"
-+
-+RUN apk update
-+
-+RUN apk add \
-+    alpine-sdk \
-+    bash \
-+    bc \
-+    bzip2 \
-+    bzr \
-+    cpio \
-+    cvs \
-+    file \
-+    flake8 \
-+    grep \
-+    gzip \
-+    mercurial \
-+    ncurses-dev \
-+    perl \
-+    py2-nose \
-+    py2-pexpect \
-+    python \
-+    rsync \
-+    subversion \
-+    unzip \
-+    wget
-+
-+RUN adduser -h /home/br-user -s /bin/bash -D br-user
-+
-+USER br-user
-+WORKDIR /home/br-user
-+ENV HOME /home/br-user
-+ENV LC_ALL en_US.UTF-8
+diff --git a/package/vim/vim.mk b/package/vim/vim.mk
+index dbf71c573f6c..4a8bbdad2e1e 100644
+--- a/package/vim/vim.mk
++++ b/package/vim/vim.mk
+@@ -64,7 +64,7 @@ endef
+ 
+ # Avoid oopses with vipw/vigr, lack of $EDITOR and 'vi' command expectation
+ define VIM_INSTALL_VI_SYMLINK
+-	ln -sf /usr/bin/vim $(TARGET_DIR)/bin/vi
++	ln -sf ../usr/bin/vim $(TARGET_DIR)/bin/vi
+ endef
+ VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_VI_SYMLINK
+ 
 -- 
-2.14.1
+2.18.0
