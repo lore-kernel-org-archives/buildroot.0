@@ -1,37 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jul 2018 09:19:04 +0200
-Subject: [Buildroot] [PATCH v3 00/22] package/x11r7/xserver_xorg-server:
- bump version to 1.20.0
-In-Reply-To: <0jjc1fxkra.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Mon, 09 Jul 2018 19:45:36 +0200")
-References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
- <20180703215602.GG2530@scaer>
- <0jjc1fxkra.ln2@ID-313208.user.individual.net>
-Message-ID: <87in5jvc0n.fsf@dell.be.48ers.dk>
+Date: Fri, 13 Jul 2018 09:23:12 +0200
+Subject: [Buildroot] [PATCH] toolchain: improve musl check to support
+ static toolchains
+In-Reply-To: <20180707115617.GA2507@scaer> (Yann E. MORIN's message of "Sat, 7
+ Jul 2018 13:56:17 +0200")
+References: <20180704214257.6849-1-thomas.petazzoni@bootlin.com>
+ <2a850fef-a581-170d-0945-e8a4182b4347@mind.be>
+ <20180707115617.GA2507@scaer>
+Message-ID: <87efg7vbtr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Hi,
+ >> Well, the most obvious indicator is the output of gcc -dumpmachine... Is there
+ >> any reason why we wouldn't be able to treat that as reliable? AFAIU, hundreds of
+ >> autotools package will fail if the dumpmachine tuple is not something sane...
 
- >> r128, savage, and sis are all very, very old now. Like, 20 years or
- >> more... I wonder if it makes sense to keep them, given that none of
- >> those three natively cross-compile, and are starting to require patches
- >> to build against a recent X stack. The latter meaning that upstream is
- >> not even test-building those drivers anymore...
+ > Does that still output the correct tupple for multilib toolchains?
 
- > Up until now and even including the current bump to xserver_xorg-server 
- > 1.20.0 I am still willing to support even the oldest drivers if I can 
- > find the necessary patches somewhere so from my POV it is ok to keep 
- > them. If Thomas or Peter think otherwise I can remove them since I have 
- > no personal interest in them ;)
+ > For example, the mips-2016.05-8-mips-linux-gnu-i686-pc-linux-gnu.tar.bz2
+ > toolchain is a big-multi-lib toolchain, with both glibc and uclibc, but
+ > it always returns mips-linux-gnu, even when either is explicitly
+ > requested:
 
-As long as you care enough about them to keep them working (and the
-patches aren't super big/ugly), then I am fine with keeping them.
+ >     $ ./mips-2016.05/bin/mips-linux-gnu-gcc -dumpmachine
+ >     mips-linux-gnu
+ >     $ ./mips-2016.05/bin/mips-linux-gnu-gcc -mglibc -dumpmachine
+ >     mips-linux-gnu
+ >     $ ./mips-2016.05/bin/mips-linux-gnu-gcc -muclibc -dumpmachine
+ >     mips-linux-gnu
+
+ > So that unfortunately does not work... :-(
+
+*Grumble* It looked so nice and simple :/
 
 -- 
 Bye, Peter Korsgaard
