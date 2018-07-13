@@ -1,92 +1,41 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Thu, 12 Jul 2018 23:00:51 +0200
-Subject: [Buildroot] [PATCH 07/10] perl-net-ping: new package
-In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180712210054.13775-8-thomas.de_schampheleire@nokia.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Thu, 12 Jul 2018 21:19:30 -0300 (BRT)
+Subject: [Buildroot] How to change compiler to newer in old build-root
+In-Reply-To: <CAPKSe_7odb9UrbX6Oz9=CP-XLGXNek5GebNDj9GB5ieH66t1Vg@mail.gmail.com>
+References: <CAPKSe_6Q08-PYugmgAsGJ3waRGTWV2-V+vzT_KU5o7bk0fc58w@mail.gmail.com>
+ <2097395198.3336152.1531394396552.JavaMail.zimbra@datacom.com.br>
+ <CAPKSe_7odb9UrbX6Oz9=CP-XLGXNek5GebNDj9GB5ieH66t1Vg@mail.gmail.com>
+Message-ID: <1571316215.3527652.1531441170443.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/perl-net-ping/Config.in          |  6 ++++++
- package/perl-net-ping/perl-net-ping.hash |  6 ++++++
- package/perl-net-ping/perl-net-ping.mk   | 12 ++++++++++++
- 5 files changed, 26 insertions(+)
- create mode 100644 package/perl-net-ping/Config.in
- create mode 100644 package/perl-net-ping/perl-net-ping.hash
- create mode 100644 package/perl-net-ping/perl-net-ping.mk
+> From: "Denis Kotov" <redradist@gmail.com>
+> To: "DATACOM" <casantos@datacom.com.br>
+> Cc: "buildroot" <buildroot@busybox.net>
+> Sent: Thursday, July 12, 2018 7:05:44 PM
+> Subject: Re: [Buildroot] How to change compiler to newer in old build-root
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0cd6b6d03a..4c6eaffb09 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1927,6 +1927,7 @@ F:	package/perl-crypt-cbc/
- F:	package/perl-digest-md5/
- F:	package/perl-mime-base64-urlsafe/
- F:	package/perl-mojolicious-plugin-authentication/
-+F:	package/perl-net-ping/
- F:	package/pigz/
- F:	support/scripts/size-stats
- F:	utils/size-stats-compare
-diff --git a/package/Config.in b/package/Config.in
-index fe9175b42b..ace997cdb8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -700,6 +700,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mojolicious/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
-+	source "package/perl-net-ping/Config.in"
- 	source "package/perl-net-ssleay/Config.in"
- 	source "package/perl-netaddr-ip/Config.in"
- 	source "package/perl-path-tiny/Config.in"
-diff --git a/package/perl-net-ping/Config.in b/package/perl-net-ping/Config.in
-new file mode 100644
-index 0000000000..a0ba7b0de1
---- /dev/null
-+++ b/package/perl-net-ping/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_NET_PING
-+	bool "perl-net-ping"
-+	help
-+	  check a remote host for reachability
-+
-+	  https://metacpan.org/release/Net-Ping
-diff --git a/package/perl-net-ping/perl-net-ping.hash b/package/perl-net-ping/perl-net-ping.hash
-new file mode 100644
-index 0000000000..363d095386
---- /dev/null
-+++ b/package/perl-net-ping/perl-net-ping.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    0b01ada2bc588330456924393d47ed11 Net-Ping-2.68.tar.gz
-+sha256 d01ac2fcdf684c4a23a07104fbb147cfbdbda47fd5b660912124258f29afd7e3 Net-Ping-2.68.tar.gz
-+
-+# computed by scancpan
-+sha256 eb4ad254a468a977f29849efda0183f69b7f4ede0f7123e0dd5768207ee73c58 README
-diff --git a/package/perl-net-ping/perl-net-ping.mk b/package/perl-net-ping/perl-net-ping.mk
-new file mode 100644
-index 0000000000..3cd4cd0b47
---- /dev/null
-+++ b/package/perl-net-ping/perl-net-ping.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# perl-net-ping
-+#
-+################################################################################
-+
-+PERL_NET_PING_VERSION = 2.68
-+PERL_NET_PING_SOURCE = Net-Ping-$(PERL_NET_PING_VERSION).tar.gz
-+PERL_NET_PING_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
-+PERL_NET_PING_LICENSE_FILES = README
-+
-+$(eval $(perl-package))
+> Thank you Carlos for reply,
+
+> Okay, but what if I want to add newer compiler without changing buildroot
+> version from 2014 to 2017.
+> Is it possible ?
+
+In theory, yes, but you'd need to cherry-pick dozens of commits that
+upgraded the compiler support. Notice also that old packages may not compile
+with newer compilers.
+
+> And if no how to switch to new version of buildroot automatically. Is it
+> possible ?
+
+If you didn't change buildroot itself, yes. If you have local changes you
+need to rebase them to a recent version. The best approach is to use a
+br2-external, as described in the user manual.
+
 -- 
-2.16.4
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
