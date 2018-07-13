@@ -1,93 +1,382 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 13 Jul 2018 10:08:58 +0200
-Subject: [Buildroot] [git commit] libostree: add upstream patch to fix
- linking errors
-Message-ID: <20180713080510.290577FB18@busybox.osuosl.org>
+Date: Fri, 13 Jul 2018 09:23:54 +0200
+Subject: [Buildroot] [git commit] package/x265: fix arm build
+Message-ID: <20180713080510.0A13F8843A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b88e60abaca1b21f6c67890c1e632d73e9b419b
+commit: https://git.buildroot.net/buildroot/commit/?id=c69af82ba0e3b46c2a5b823757fae2cfce7b60d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support for Avahi in libostree depends on some support functions from
-libsoup.
-Use its own support functions in case of libsoup is not provided.
+Fixes
+http://autobuild.buildroot.net/results/048/048e1914d89d7893f12b90b66a7aa1dbf41b820c/
 
-Fixes:
-  http://autobuild.buildroot.net/results/5e5441822e2a94f8de51bfa0470aced84720ce31
-
-[Peter: enable AUTORECONF as .am file is touched]
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...stree-soup-to-build-process-when-configur.patch | 45 ++++++++++++++++++++++
- package/libostree/libostree.mk                     |  2 +
- 2 files changed, 47 insertions(+)
+ package/x265/0003-arm-asm-primitives.patch | 354 +++++++++++++++++++++++++++++
+ 1 file changed, 354 insertions(+)
 
-diff --git a/package/libostree/0002-build-add-ostree-soup-to-build-process-when-configur.patch b/package/libostree/0002-build-add-ostree-soup-to-build-process-when-configur.patch
+diff --git a/package/x265/0003-arm-asm-primitives.patch b/package/x265/0003-arm-asm-primitives.patch
 new file mode 100644
-index 0000000000..b89bd743a1
+index 0000000000..e500443429
 --- /dev/null
-+++ b/package/libostree/0002-build-add-ostree-soup-to-build-process-when-configur.patch
-@@ -0,0 +1,45 @@
-+From 1cd86d4978ad32405b41f864e11ac21a2474c2f3 Mon Sep 17 00:00:00 2001
-+From: Marcus Folkesson <marcus.folkesson@gmail.com>
-+Date: Tue, 3 Jul 2018 10:02:46 +0200
-+Subject: [PATCH] build: add ostree-soup-* to build process when configured
-+ with avahi
++++ b/package/x265/0003-arm-asm-primitives.patch
+@@ -0,0 +1,354 @@
++Fixes "arm assembly fail to compile on 1.8"
 +
-+Avoid getting these link errors:
-+    ./.libs/libostree-1.so: undefined reference to `soup_uri_set_path'
-+    ./.libs/libostree-1.so: undefined reference to `soup_uri_new'
-+    ./.libs/libostree-1.so: undefined reference to `soup_uri_free'
-+    ./.libs/libostree-1.so: undefined reference to `soup_uri_set_scheme'
-+    ./.libs/libostree-1.so: undefined reference to `soup_uri_to_string'
-+    ./.libs/libostree-1.so: undefined reference to `soup_uri_set_host'
-+    ./.libs/libostree-1.so: undefined reference to `soup_uri_set_port'
-+    collect2: error: ld returned 1 exit status
++Downloaded from upstream bug report:
++https://bitbucket.org/multicoreware/x265/issues/406
 +
-+Reproduce with:
-+    ./configure --with-avahi --without-soup
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +
-+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-+---
-+ Makefile-libostree.am | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/Makefile-libostree.am b/Makefile-libostree.am
-+index 01a209d1..dbc9ebb8 100644
-+--- a/Makefile-libostree.am
-++++ b/Makefile-libostree.am
-+@@ -238,6 +238,13 @@ if USE_LIBSOUP
-+ libostree_1_la_SOURCES += src/libostree/ostree-fetcher-soup.c
-+ libostree_1_la_CFLAGS += $(OT_INTERNAL_SOUP_CFLAGS)
-+ libostree_1_la_LIBADD += $(OT_INTERNAL_SOUP_LIBS)
-++else
-++if USE_AVAHI
-++libostree_1_la_SOURCES += src/libostree/ostree-soup-uri.h \
-++	src/libostree/ostree-soup-uri.c \
-++	src/libostree/ostree-soup-form.c \
-++	$(NULL)
-++endif
-+ endif
-+ endif
++--- ./source/common/arm/asm-primitives.cpp.orig	2018-05-21 02:33:10.000000000 -0600
+++++ ./source/common/arm/asm-primitives.cpp	2018-05-28 20:38:37.302378303 -0600
++@@ -48,77 +48,77 @@ void setupAssemblyPrimitives(EncoderPrim
++         p.ssim_4x4x2_core = PFX(ssim_4x4x2_core_neon);
 + 
-+-- 
-+2.18.0
-+
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index d9739b7901..69e84343e9 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -12,6 +12,8 @@ LIBOSTREE_LICENSE = LGPL-2.0+
- LIBOSTREE_LICENSE_FILES = COPYING
- LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpgme xz
- LIBOSTREE_INSTALL_STAGING = YES
-+# For 0002-build-add-ostree-soup-to-build-process-when-configur.patch
-+LIBOSTREE_AUTORECONF = YES
- 
- LIBOSTREE_CONF_OPTS += \
- 	--with-gpgme-prefix=$(STAGING_DIR)/usr \
++         // addAvg
++-         p.pu[LUMA_4x4].addAvg   = PFX(addAvg_4x4_neon);
++-         p.pu[LUMA_4x8].addAvg   = PFX(addAvg_4x8_neon);
++-         p.pu[LUMA_4x16].addAvg  = PFX(addAvg_4x16_neon);
++-         p.pu[LUMA_8x4].addAvg   = PFX(addAvg_8x4_neon);
++-         p.pu[LUMA_8x8].addAvg   = PFX(addAvg_8x8_neon);
++-         p.pu[LUMA_8x16].addAvg  = PFX(addAvg_8x16_neon);
++-         p.pu[LUMA_8x32].addAvg  = PFX(addAvg_8x32_neon);
++-         p.pu[LUMA_12x16].addAvg = PFX(addAvg_12x16_neon);
++-         p.pu[LUMA_16x4].addAvg  = PFX(addAvg_16x4_neon);
++-         p.pu[LUMA_16x8].addAvg  = PFX(addAvg_16x8_neon);
++-         p.pu[LUMA_16x12].addAvg = PFX(addAvg_16x12_neon);
++-         p.pu[LUMA_16x16].addAvg = PFX(addAvg_16x16_neon);
++-         p.pu[LUMA_16x32].addAvg = PFX(addAvg_16x32_neon);
++-         p.pu[LUMA_16x64].addAvg = PFX(addAvg_16x64_neon);
++-         p.pu[LUMA_24x32].addAvg = PFX(addAvg_24x32_neon);
++-         p.pu[LUMA_32x8].addAvg  = PFX(addAvg_32x8_neon);
++-         p.pu[LUMA_32x16].addAvg = PFX(addAvg_32x16_neon);
++-         p.pu[LUMA_32x24].addAvg = PFX(addAvg_32x24_neon);
++-         p.pu[LUMA_32x32].addAvg = PFX(addAvg_32x32_neon);
++-         p.pu[LUMA_32x64].addAvg = PFX(addAvg_32x64_neon);
++-         p.pu[LUMA_48x64].addAvg = PFX(addAvg_48x64_neon);
++-         p.pu[LUMA_64x16].addAvg = PFX(addAvg_64x16_neon);
++-         p.pu[LUMA_64x32].addAvg = PFX(addAvg_64x32_neon);
++-         p.pu[LUMA_64x48].addAvg = PFX(addAvg_64x48_neon);
++-         p.pu[LUMA_64x64].addAvg = PFX(addAvg_64x64_neon);
+++         p.pu[LUMA_4x4].addAvg[ALIGNED]   = PFX(addAvg_4x4_neon);
+++         p.pu[LUMA_4x8].addAvg[ALIGNED]   = PFX(addAvg_4x8_neon);
+++         p.pu[LUMA_4x16].addAvg[ALIGNED]  = PFX(addAvg_4x16_neon);
+++         p.pu[LUMA_8x4].addAvg[ALIGNED]   = PFX(addAvg_8x4_neon);
+++         p.pu[LUMA_8x8].addAvg[ALIGNED]   = PFX(addAvg_8x8_neon);
+++         p.pu[LUMA_8x16].addAvg[ALIGNED]  = PFX(addAvg_8x16_neon);
+++         p.pu[LUMA_8x32].addAvg[ALIGNED]  = PFX(addAvg_8x32_neon);
+++         p.pu[LUMA_12x16].addAvg[ALIGNED] = PFX(addAvg_12x16_neon);
+++         p.pu[LUMA_16x4].addAvg[ALIGNED]  = PFX(addAvg_16x4_neon);
+++         p.pu[LUMA_16x8].addAvg[ALIGNED]  = PFX(addAvg_16x8_neon);
+++         p.pu[LUMA_16x12].addAvg[ALIGNED] = PFX(addAvg_16x12_neon);
+++         p.pu[LUMA_16x16].addAvg[ALIGNED] = PFX(addAvg_16x16_neon);
+++         p.pu[LUMA_16x32].addAvg[ALIGNED] = PFX(addAvg_16x32_neon);
+++         p.pu[LUMA_16x64].addAvg[ALIGNED] = PFX(addAvg_16x64_neon);
+++         p.pu[LUMA_24x32].addAvg[ALIGNED] = PFX(addAvg_24x32_neon);
+++         p.pu[LUMA_32x8].addAvg[ALIGNED]  = PFX(addAvg_32x8_neon);
+++         p.pu[LUMA_32x16].addAvg[ALIGNED] = PFX(addAvg_32x16_neon);
+++         p.pu[LUMA_32x24].addAvg[ALIGNED] = PFX(addAvg_32x24_neon);
+++         p.pu[LUMA_32x32].addAvg[ALIGNED] = PFX(addAvg_32x32_neon);
+++         p.pu[LUMA_32x64].addAvg[ALIGNED] = PFX(addAvg_32x64_neon);
+++         p.pu[LUMA_48x64].addAvg[ALIGNED] = PFX(addAvg_48x64_neon);
+++         p.pu[LUMA_64x16].addAvg[ALIGNED] = PFX(addAvg_64x16_neon);
+++         p.pu[LUMA_64x32].addAvg[ALIGNED] = PFX(addAvg_64x32_neon);
+++         p.pu[LUMA_64x48].addAvg[ALIGNED] = PFX(addAvg_64x48_neon);
+++         p.pu[LUMA_64x64].addAvg[ALIGNED] = PFX(addAvg_64x64_neon);
++ 
++         // chroma addAvg
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x2].addAvg   = PFX(addAvg_4x2_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x4].addAvg   = PFX(addAvg_4x4_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x8].addAvg   = PFX(addAvg_4x8_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x16].addAvg  = PFX(addAvg_4x16_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_6x8].addAvg   = PFX(addAvg_6x8_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x2].addAvg   = PFX(addAvg_8x2_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x4].addAvg   = PFX(addAvg_8x4_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x6].addAvg   = PFX(addAvg_8x6_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x8].addAvg   = PFX(addAvg_8x8_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x16].addAvg  = PFX(addAvg_8x16_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x32].addAvg  = PFX(addAvg_8x32_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_12x16].addAvg = PFX(addAvg_12x16_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x4].addAvg  = PFX(addAvg_16x4_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x8].addAvg  = PFX(addAvg_16x8_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x12].addAvg = PFX(addAvg_16x12_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x16].addAvg = PFX(addAvg_16x16_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x32].addAvg = PFX(addAvg_16x32_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_24x32].addAvg = PFX(addAvg_24x32_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x8].addAvg  = PFX(addAvg_32x8_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x16].addAvg = PFX(addAvg_32x16_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x24].addAvg = PFX(addAvg_32x24_neon);
++-        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x32].addAvg = PFX(addAvg_32x32_neon);
++-
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x8].addAvg   = PFX(addAvg_4x8_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x16].addAvg  = PFX(addAvg_4x16_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x32].addAvg  = PFX(addAvg_4x32_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_6x16].addAvg  = PFX(addAvg_6x16_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x4].addAvg   = PFX(addAvg_8x4_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x8].addAvg   = PFX(addAvg_8x8_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x12].addAvg  = PFX(addAvg_8x12_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x16].addAvg  = PFX(addAvg_8x16_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x32].addAvg  = PFX(addAvg_8x32_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x64].addAvg  = PFX(addAvg_8x64_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_12x32].addAvg = PFX(addAvg_12x32_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x8].addAvg  = PFX(addAvg_16x8_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x16].addAvg = PFX(addAvg_16x16_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x24].addAvg = PFX(addAvg_16x24_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x32].addAvg = PFX(addAvg_16x32_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x64].addAvg = PFX(addAvg_16x64_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_24x64].addAvg = PFX(addAvg_24x64_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x16].addAvg = PFX(addAvg_32x16_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x32].addAvg = PFX(addAvg_32x32_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x48].addAvg = PFX(addAvg_32x48_neon);
++-        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x64].addAvg = PFX(addAvg_32x64_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x2].addAvg[ALIGNED]   = PFX(addAvg_4x2_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x4].addAvg[ALIGNED]   = PFX(addAvg_4x4_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x8].addAvg[ALIGNED]   = PFX(addAvg_4x8_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_4x16].addAvg[ALIGNED]  = PFX(addAvg_4x16_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_6x8].addAvg[ALIGNED]   = PFX(addAvg_6x8_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x2].addAvg[ALIGNED]   = PFX(addAvg_8x2_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x4].addAvg[ALIGNED]   = PFX(addAvg_8x4_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x6].addAvg[ALIGNED]   = PFX(addAvg_8x6_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x8].addAvg[ALIGNED]   = PFX(addAvg_8x8_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x16].addAvg[ALIGNED]  = PFX(addAvg_8x16_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_8x32].addAvg[ALIGNED]  = PFX(addAvg_8x32_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_12x16].addAvg[ALIGNED] = PFX(addAvg_12x16_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x4].addAvg[ALIGNED]  = PFX(addAvg_16x4_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x8].addAvg[ALIGNED]  = PFX(addAvg_16x8_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x12].addAvg[ALIGNED] = PFX(addAvg_16x12_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x16].addAvg[ALIGNED] = PFX(addAvg_16x16_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_16x32].addAvg[ALIGNED] = PFX(addAvg_16x32_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_24x32].addAvg[ALIGNED] = PFX(addAvg_24x32_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x8].addAvg[ALIGNED]  = PFX(addAvg_32x8_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x16].addAvg[ALIGNED] = PFX(addAvg_32x16_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x24].addAvg[ALIGNED] = PFX(addAvg_32x24_neon);
+++        p.chroma[X265_CSP_I420].pu[CHROMA_420_32x32].addAvg[ALIGNED] = PFX(addAvg_32x32_neon);
+++
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x8].addAvg[ALIGNED]   = PFX(addAvg_4x8_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x16].addAvg[ALIGNED]  = PFX(addAvg_4x16_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_4x32].addAvg[ALIGNED]  = PFX(addAvg_4x32_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_6x16].addAvg[ALIGNED]  = PFX(addAvg_6x16_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x4].addAvg[ALIGNED]   = PFX(addAvg_8x4_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x8].addAvg[ALIGNED]   = PFX(addAvg_8x8_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x12].addAvg[ALIGNED]  = PFX(addAvg_8x12_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x16].addAvg[ALIGNED]  = PFX(addAvg_8x16_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x32].addAvg[ALIGNED]  = PFX(addAvg_8x32_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_8x64].addAvg[ALIGNED]  = PFX(addAvg_8x64_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_12x32].addAvg[ALIGNED] = PFX(addAvg_12x32_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x8].addAvg[ALIGNED]  = PFX(addAvg_16x8_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x16].addAvg[ALIGNED] = PFX(addAvg_16x16_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x24].addAvg[ALIGNED] = PFX(addAvg_16x24_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x32].addAvg[ALIGNED] = PFX(addAvg_16x32_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_16x64].addAvg[ALIGNED] = PFX(addAvg_16x64_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_24x64].addAvg[ALIGNED] = PFX(addAvg_24x64_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x16].addAvg[ALIGNED] = PFX(addAvg_32x16_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x32].addAvg[ALIGNED] = PFX(addAvg_32x32_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x48].addAvg[ALIGNED] = PFX(addAvg_32x48_neon);
+++        p.chroma[X265_CSP_I422].pu[CHROMA_422_32x64].addAvg[ALIGNED] = PFX(addAvg_32x64_neon);
++ 
++         // quant
++          p.quant = PFX(quant_neon);
++@@ -402,7 +402,7 @@ void setupAssemblyPrimitives(EncoderPrim
++         p.scale2D_64to32  = PFX(scale2D_64to32_neon);
++ 
++         // scale1D_128to64
++-        p.scale1D_128to64 = PFX(scale1D_128to64_neon);
+++        p.scale1D_128to64[ALIGNED] = PFX(scale1D_128to64_neon);
++ 
++         // copy_count
++         p.cu[BLOCK_4x4].copy_cnt     = PFX(copy_cnt_4_neon);
++@@ -411,37 +411,37 @@ void setupAssemblyPrimitives(EncoderPrim
++         p.cu[BLOCK_32x32].copy_cnt   = PFX(copy_cnt_32_neon);
++ 
++         // filterPixelToShort
++-        p.pu[LUMA_4x4].convert_p2s   = PFX(filterPixelToShort_4x4_neon);
++-        p.pu[LUMA_4x8].convert_p2s   = PFX(filterPixelToShort_4x8_neon);
++-        p.pu[LUMA_4x16].convert_p2s  = PFX(filterPixelToShort_4x16_neon);
++-        p.pu[LUMA_8x4].convert_p2s   = PFX(filterPixelToShort_8x4_neon);
++-        p.pu[LUMA_8x8].convert_p2s   = PFX(filterPixelToShort_8x8_neon);
++-        p.pu[LUMA_8x16].convert_p2s  = PFX(filterPixelToShort_8x16_neon);
++-        p.pu[LUMA_8x32].convert_p2s  = PFX(filterPixelToShort_8x32_neon);
++-        p.pu[LUMA_12x16].convert_p2s = PFX(filterPixelToShort_12x16_neon);
++-        p.pu[LUMA_16x4].convert_p2s  = PFX(filterPixelToShort_16x4_neon);
++-        p.pu[LUMA_16x8].convert_p2s  = PFX(filterPixelToShort_16x8_neon);
++-        p.pu[LUMA_16x12].convert_p2s = PFX(filterPixelToShort_16x12_neon);
++-        p.pu[LUMA_16x16].convert_p2s = PFX(filterPixelToShort_16x16_neon);
++-        p.pu[LUMA_16x32].convert_p2s = PFX(filterPixelToShort_16x32_neon);
++-        p.pu[LUMA_16x64].convert_p2s = PFX(filterPixelToShort_16x64_neon);
++-        p.pu[LUMA_24x32].convert_p2s = PFX(filterPixelToShort_24x32_neon);
++-        p.pu[LUMA_32x8].convert_p2s  = PFX(filterPixelToShort_32x8_neon);
++-        p.pu[LUMA_32x16].convert_p2s = PFX(filterPixelToShort_32x16_neon);
++-        p.pu[LUMA_32x24].convert_p2s = PFX(filterPixelToShort_32x24_neon);
++-        p.pu[LUMA_32x32].convert_p2s = PFX(filterPixelToShort_32x32_neon);
++-        p.pu[LUMA_32x64].convert_p2s = PFX(filterPixelToShort_32x64_neon);
++-        p.pu[LUMA_48x64].convert_p2s = PFX(filterPixelToShort_48x64_neon);
++-        p.pu[LUMA_64x16].convert_p2s = PFX(filterPixelToShort_64x16_neon);
++-        p.pu[LUMA_64x32].convert_p2s = PFX(filterPixelToShort_64x32_neon);
++-        p.pu[LUMA_64x48].convert_p2s = PFX(filterPixelToShort_64x48_neon);
++-        p.pu[LUMA_64x64].convert_p2s = PFX(filterPixelToShort_64x64_neon);
+++        p.pu[LUMA_4x4].convert_p2s[ALIGNED]   = PFX(filterPixelToShort_4x4_neon);
+++        p.pu[LUMA_4x8].convert_p2s[ALIGNED]   = PFX(filterPixelToShort_4x8_neon);
+++        p.pu[LUMA_4x16].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_4x16_neon);
+++        p.pu[LUMA_8x4].convert_p2s[ALIGNED]   = PFX(filterPixelToShort_8x4_neon);
+++        p.pu[LUMA_8x8].convert_p2s[ALIGNED]   = PFX(filterPixelToShort_8x8_neon);
+++        p.pu[LUMA_8x16].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_8x16_neon);
+++        p.pu[LUMA_8x32].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_8x32_neon);
+++        p.pu[LUMA_12x16].convert_p2s[ALIGNED] = PFX(filterPixelToShort_12x16_neon);
+++        p.pu[LUMA_16x4].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_16x4_neon);
+++        p.pu[LUMA_16x8].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_16x8_neon);
+++        p.pu[LUMA_16x12].convert_p2s[ALIGNED] = PFX(filterPixelToShort_16x12_neon);
+++        p.pu[LUMA_16x16].convert_p2s[ALIGNED] = PFX(filterPixelToShort_16x16_neon);
+++        p.pu[LUMA_16x32].convert_p2s[ALIGNED] = PFX(filterPixelToShort_16x32_neon);
+++        p.pu[LUMA_16x64].convert_p2s[ALIGNED] = PFX(filterPixelToShort_16x64_neon);
+++        p.pu[LUMA_24x32].convert_p2s[ALIGNED] = PFX(filterPixelToShort_24x32_neon);
+++        p.pu[LUMA_32x8].convert_p2s[ALIGNED]  = PFX(filterPixelToShort_32x8_neon);
+++        p.pu[LUMA_32x16].convert_p2s[ALIGNED] = PFX(filterPixelToShort_32x16_neon);
+++        p.pu[LUMA_32x24].convert_p2s[ALIGNED] = PFX(filterPixelToShort_32x24_neon);
+++        p.pu[LUMA_32x32].convert_p2s[ALIGNED] = PFX(filterPixelToShort_32x32_neon);
+++        p.pu[LUMA_32x64].convert_p2s[ALIGNED] = PFX(filterPixelToShort_32x64_neon);
+++        p.pu[LUMA_48x64].convert_p2s[ALIGNED] = PFX(filterPixelToShort_48x64_neon);
+++        p.pu[LUMA_64x16].convert_p2s[ALIGNED] = PFX(filterPixelToShort_64x16_neon);
+++        p.pu[LUMA_64x32].convert_p2s[ALIGNED] = PFX(filterPixelToShort_64x32_neon);
+++        p.pu[LUMA_64x48].convert_p2s[ALIGNED] = PFX(filterPixelToShort_64x48_neon);
+++        p.pu[LUMA_64x64].convert_p2s[ALIGNED] = PFX(filterPixelToShort_64x64_neon);
++ 
++         // Block_fill
++-        p.cu[BLOCK_4x4].blockfill_s   = PFX(blockfill_s_4x4_neon);
++-        p.cu[BLOCK_8x8].blockfill_s   = PFX(blockfill_s_8x8_neon);
++-        p.cu[BLOCK_16x16].blockfill_s = PFX(blockfill_s_16x16_neon);
++-        p.cu[BLOCK_32x32].blockfill_s = PFX(blockfill_s_32x32_neon);
+++        p.cu[BLOCK_4x4].blockfill_s[ALIGNED]   = PFX(blockfill_s_4x4_neon);
+++        p.cu[BLOCK_8x8].blockfill_s[ALIGNED]   = PFX(blockfill_s_8x8_neon);
+++        p.cu[BLOCK_16x16].blockfill_s[ALIGNED] = PFX(blockfill_s_16x16_neon);
+++        p.cu[BLOCK_32x32].blockfill_s[ALIGNED] = PFX(blockfill_s_32x32_neon);
++ 
++         // Blockcopy_ss
++         p.cu[BLOCK_4x4].copy_ss   = PFX(blockcopy_ss_4x4_neon);
++@@ -495,21 +495,21 @@ void setupAssemblyPrimitives(EncoderPrim
++         p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].copy_sp = PFX(blockcopy_sp_32x64_neon);
++ 
++         // pixel_add_ps
++-        p.cu[BLOCK_4x4].add_ps   = PFX(pixel_add_ps_4x4_neon);
++-        p.cu[BLOCK_8x8].add_ps   = PFX(pixel_add_ps_8x8_neon);
++-        p.cu[BLOCK_16x16].add_ps = PFX(pixel_add_ps_16x16_neon);
++-        p.cu[BLOCK_32x32].add_ps = PFX(pixel_add_ps_32x32_neon);
++-        p.cu[BLOCK_64x64].add_ps = PFX(pixel_add_ps_64x64_neon);
+++        p.cu[BLOCK_4x4].add_ps[ALIGNED]   = PFX(pixel_add_ps_4x4_neon);
+++        p.cu[BLOCK_8x8].add_ps[ALIGNED]   = PFX(pixel_add_ps_8x8_neon);
+++        p.cu[BLOCK_16x16].add_ps[ALIGNED] = PFX(pixel_add_ps_16x16_neon);
+++        p.cu[BLOCK_32x32].add_ps[ALIGNED] = PFX(pixel_add_ps_32x32_neon);
+++        p.cu[BLOCK_64x64].add_ps[ALIGNED] = PFX(pixel_add_ps_64x64_neon);
++ 
++         // chroma add_ps
++-        p.chroma[X265_CSP_I420].cu[BLOCK_420_4x4].add_ps   = PFX(pixel_add_ps_4x4_neon);
++-        p.chroma[X265_CSP_I420].cu[BLOCK_420_8x8].add_ps   = PFX(pixel_add_ps_8x8_neon);
++-        p.chroma[X265_CSP_I420].cu[BLOCK_420_16x16].add_ps = PFX(pixel_add_ps_16x16_neon);
++-        p.chroma[X265_CSP_I420].cu[BLOCK_420_32x32].add_ps = PFX(pixel_add_ps_32x32_neon);
++-        p.chroma[X265_CSP_I422].cu[BLOCK_422_4x8].add_ps   = PFX(pixel_add_ps_4x8_neon);
++-        p.chroma[X265_CSP_I422].cu[BLOCK_422_8x16].add_ps  = PFX(pixel_add_ps_8x16_neon);
++-        p.chroma[X265_CSP_I422].cu[BLOCK_422_16x32].add_ps = PFX(pixel_add_ps_16x32_neon);
++-        p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].add_ps = PFX(pixel_add_ps_32x64_neon);
+++        p.chroma[X265_CSP_I420].cu[BLOCK_420_4x4].add_ps[ALIGNED]   = PFX(pixel_add_ps_4x4_neon);
+++        p.chroma[X265_CSP_I420].cu[BLOCK_420_8x8].add_ps[ALIGNED]   = PFX(pixel_add_ps_8x8_neon);
+++        p.chroma[X265_CSP_I420].cu[BLOCK_420_16x16].add_ps[ALIGNED] = PFX(pixel_add_ps_16x16_neon);
+++        p.chroma[X265_CSP_I420].cu[BLOCK_420_32x32].add_ps[ALIGNED] = PFX(pixel_add_ps_32x32_neon);
+++        p.chroma[X265_CSP_I422].cu[BLOCK_422_4x8].add_ps[ALIGNED]   = PFX(pixel_add_ps_4x8_neon);
+++        p.chroma[X265_CSP_I422].cu[BLOCK_422_8x16].add_ps[ALIGNED]  = PFX(pixel_add_ps_8x16_neon);
+++        p.chroma[X265_CSP_I422].cu[BLOCK_422_16x32].add_ps[ALIGNED] = PFX(pixel_add_ps_16x32_neon);
+++        p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].add_ps[ALIGNED] = PFX(pixel_add_ps_32x64_neon);
++ 
++         // cpy2Dto1D_shr
++         p.cu[BLOCK_4x4].cpy2Dto1D_shr   = PFX(cpy2Dto1D_shr_4x4_neon);
++@@ -518,10 +518,10 @@ void setupAssemblyPrimitives(EncoderPrim
++         p.cu[BLOCK_32x32].cpy2Dto1D_shr = PFX(cpy2Dto1D_shr_32x32_neon);
++ 
++         // ssd_s
++-        p.cu[BLOCK_4x4].ssd_s   = PFX(pixel_ssd_s_4x4_neon);
++-        p.cu[BLOCK_8x8].ssd_s   = PFX(pixel_ssd_s_8x8_neon);
++-        p.cu[BLOCK_16x16].ssd_s = PFX(pixel_ssd_s_16x16_neon);
++-        p.cu[BLOCK_32x32].ssd_s = PFX(pixel_ssd_s_32x32_neon);
+++        p.cu[BLOCK_4x4].ssd_s[ALIGNED]   = PFX(pixel_ssd_s_4x4_neon);
+++        p.cu[BLOCK_8x8].ssd_s[ALIGNED]   = PFX(pixel_ssd_s_8x8_neon);
+++        p.cu[BLOCK_16x16].ssd_s[ALIGNED] = PFX(pixel_ssd_s_16x16_neon);
+++        p.cu[BLOCK_32x32].ssd_s[ALIGNED] = PFX(pixel_ssd_s_32x32_neon);
++ 
++         // sse_ss
++         p.cu[BLOCK_4x4].sse_ss   = PFX(pixel_sse_ss_4x4_neon);
++@@ -548,10 +548,10 @@ void setupAssemblyPrimitives(EncoderPrim
++         p.chroma[X265_CSP_I422].cu[BLOCK_422_32x64].sub_ps = PFX(pixel_sub_ps_32x64_neon);
++ 
++         // calc_Residual
++-        p.cu[BLOCK_4x4].calcresidual   = PFX(getResidual4_neon);
++-        p.cu[BLOCK_8x8].calcresidual   = PFX(getResidual8_neon);
++-        p.cu[BLOCK_16x16].calcresidual = PFX(getResidual16_neon);
++-        p.cu[BLOCK_32x32].calcresidual = PFX(getResidual32_neon);
+++        p.cu[BLOCK_4x4].calcresidual[ALIGNED]   = PFX(getResidual4_neon);
+++        p.cu[BLOCK_8x8].calcresidual[ALIGNED]   = PFX(getResidual8_neon);
+++        p.cu[BLOCK_16x16].calcresidual[ALIGNED] = PFX(getResidual16_neon);
+++        p.cu[BLOCK_32x32].calcresidual[ALIGNED] = PFX(getResidual32_neon);
++ 
++         // sse_pp
++         p.cu[BLOCK_4x4].sse_pp   = PFX(pixel_sse_pp_4x4_neon);
++@@ -722,31 +722,31 @@ void setupAssemblyPrimitives(EncoderPrim
++         p.pu[LUMA_64x64].sad_x4 = PFX(sad_x4_64x64_neon);
++ 
++         // pixel_avg_pp
++-        p.pu[LUMA_4x4].pixelavg_pp   = PFX(pixel_avg_pp_4x4_neon);
++-        p.pu[LUMA_4x8].pixelavg_pp   = PFX(pixel_avg_pp_4x8_neon);
++-        p.pu[LUMA_4x16].pixelavg_pp  = PFX(pixel_avg_pp_4x16_neon);
++-        p.pu[LUMA_8x4].pixelavg_pp   = PFX(pixel_avg_pp_8x4_neon);
++-        p.pu[LUMA_8x8].pixelavg_pp   = PFX(pixel_avg_pp_8x8_neon);
++-        p.pu[LUMA_8x16].pixelavg_pp  = PFX(pixel_avg_pp_8x16_neon);
++-        p.pu[LUMA_8x32].pixelavg_pp  = PFX(pixel_avg_pp_8x32_neon);
++-        p.pu[LUMA_12x16].pixelavg_pp = PFX(pixel_avg_pp_12x16_neon);
++-        p.pu[LUMA_16x4].pixelavg_pp  = PFX(pixel_avg_pp_16x4_neon);
++-        p.pu[LUMA_16x8].pixelavg_pp  = PFX(pixel_avg_pp_16x8_neon);
++-        p.pu[LUMA_16x12].pixelavg_pp = PFX(pixel_avg_pp_16x12_neon);
++-        p.pu[LUMA_16x16].pixelavg_pp = PFX(pixel_avg_pp_16x16_neon);
++-        p.pu[LUMA_16x32].pixelavg_pp = PFX(pixel_avg_pp_16x32_neon);
++-        p.pu[LUMA_16x64].pixelavg_pp = PFX(pixel_avg_pp_16x64_neon);
++-        p.pu[LUMA_24x32].pixelavg_pp = PFX(pixel_avg_pp_24x32_neon);
++-        p.pu[LUMA_32x8].pixelavg_pp  = PFX(pixel_avg_pp_32x8_neon);
++-        p.pu[LUMA_32x16].pixelavg_pp = PFX(pixel_avg_pp_32x16_neon);
++-        p.pu[LUMA_32x24].pixelavg_pp = PFX(pixel_avg_pp_32x24_neon);
++-        p.pu[LUMA_32x32].pixelavg_pp = PFX(pixel_avg_pp_32x32_neon);
++-        p.pu[LUMA_32x64].pixelavg_pp = PFX(pixel_avg_pp_32x64_neon);
++-        p.pu[LUMA_48x64].pixelavg_pp = PFX(pixel_avg_pp_48x64_neon);
++-        p.pu[LUMA_64x16].pixelavg_pp = PFX(pixel_avg_pp_64x16_neon);
++-        p.pu[LUMA_64x32].pixelavg_pp = PFX(pixel_avg_pp_64x32_neon);
++-        p.pu[LUMA_64x48].pixelavg_pp = PFX(pixel_avg_pp_64x48_neon);
++-        p.pu[LUMA_64x64].pixelavg_pp = PFX(pixel_avg_pp_64x64_neon);
+++        p.pu[LUMA_4x4].pixelavg_pp[ALIGNED]   = PFX(pixel_avg_pp_4x4_neon);
+++        p.pu[LUMA_4x8].pixelavg_pp[ALIGNED]   = PFX(pixel_avg_pp_4x8_neon);
+++        p.pu[LUMA_4x16].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_4x16_neon);
+++        p.pu[LUMA_8x4].pixelavg_pp[ALIGNED]   = PFX(pixel_avg_pp_8x4_neon);
+++        p.pu[LUMA_8x8].pixelavg_pp[ALIGNED]   = PFX(pixel_avg_pp_8x8_neon);
+++        p.pu[LUMA_8x16].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_8x16_neon);
+++        p.pu[LUMA_8x32].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_8x32_neon);
+++        p.pu[LUMA_12x16].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_12x16_neon);
+++        p.pu[LUMA_16x4].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_16x4_neon);
+++        p.pu[LUMA_16x8].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_16x8_neon);
+++        p.pu[LUMA_16x12].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_16x12_neon);
+++        p.pu[LUMA_16x16].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_16x16_neon);
+++        p.pu[LUMA_16x32].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_16x32_neon);
+++        p.pu[LUMA_16x64].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_16x64_neon);
+++        p.pu[LUMA_24x32].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_24x32_neon);
+++        p.pu[LUMA_32x8].pixelavg_pp[ALIGNED]  = PFX(pixel_avg_pp_32x8_neon);
+++        p.pu[LUMA_32x16].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_32x16_neon);
+++        p.pu[LUMA_32x24].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_32x24_neon);
+++        p.pu[LUMA_32x32].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_32x32_neon);
+++        p.pu[LUMA_32x64].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_32x64_neon);
+++        p.pu[LUMA_48x64].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_48x64_neon);
+++        p.pu[LUMA_64x16].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_64x16_neon);
+++        p.pu[LUMA_64x32].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_64x32_neon);
+++        p.pu[LUMA_64x48].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_64x48_neon);
+++        p.pu[LUMA_64x64].pixelavg_pp[ALIGNED] = PFX(pixel_avg_pp_64x64_neon);
++ 
++         // planecopy
++         p.planecopy_cp = PFX(pixel_planecopy_cp_neon);
