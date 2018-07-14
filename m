@@ -1,38 +1,59 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Sat, 14 Jul 2018 11:55:15 -0700
-Subject: [Buildroot] Fwd: Guide for installing Chromium using patch sets
-In-Reply-To: <CAD0+TpAFG3X6=MO5VQMcvHRz-JNiEUv31Agr__JFmox9UAc90g@mail.gmail.com>
-References: <CAD0+TpAc6473JO3H24CLwxUwc0WXZ5n8es1xJctnyhUEESrwWg@mail.gmail.com>
- <CAMWSM7iJjfVUY_Yw13u+gg73eShK5pwh5+1yawWRV+Z-qAhGTw@mail.gmail.com>
- <CAD0+TpAfAu0XKeEzwhACV8j0D-27fodEhFjgg9JcgePs-7Nxgg@mail.gmail.com>
- <CAMWSM7hLA6p+MqQW0MVrf8DZ6A5Ap8UqO_xPo8hW5QMvjirrDQ@mail.gmail.com>
- <CAD0+TpAX_eSnF70YLRq6Kp44iySE4O18gxSu23bcjOHjDsSQWA@mail.gmail.com>
- <CAD0+TpC5N2DW8sfs38GAAy5=hbAf6uccHTGMxSt+AjPQmdUqbQ@mail.gmail.com>
- <CAD0+TpAFG3X6=MO5VQMcvHRz-JNiEUv31Agr__JFmox9UAc90g@mail.gmail.com>
-Message-ID: <CAMWSM7hfQ-yBqPMZis_1bEn4igGByV4v4EWqW5n_7Dnf5x8kpA@mail.gmail.com>
+From: =?UTF-8?Q?Einar_J=C3=B3n?= <tolvupostur@gmail.com>
+Date: Sat, 14 Jul 2018 21:01:53 +0200
+Subject: [Buildroot] [PATCH 1/1] ti-sgx-*: bump from SDK 02.00 to SDK
+ 04.00
+In-Reply-To: <20180706154944.5fa90a51@windsurf>
+References: <1527175458-16091-1-git-send-email-tolvupostur@gmail.com>
+ <CABhNV23aBnMSVT5a41eopYk6H0ek7-==NF0EuN_QUc_71vDbvw@mail.gmail.com>
+ <5cc76bb8-f92b-ab5d-71bf-c41c0e96930c@gmail.com>
+ <CABhNV22Fv+QjYta+XhH5mixGPK5R0sOnMv=R3+4qpV+iqGegzg@mail.gmail.com>
+ <20180529234243.699648ec@windsurf.home>
+ <CABhNV22Le5eOW9A8LHXS+TJQSishWPS0WPZN2z9r=GkGfMa6xQ@mail.gmail.com>
+ <20180530164923.6cce569c@windsurf.home>
+ <CABhNV23Ydu+oGfM=zYEbhhgT1e-Rv2igLBdP55Kf2pC4=QmhjQ@mail.gmail.com>
+ <CABhNV23ikbKQ7fCyn4fjKAUERnVVrfERuHi38H8qbsszoMRsTA@mail.gmail.com>
+ <20180706154944.5fa90a51@windsurf>
+Message-ID: <CABhNV23ie0SMmjRxPtg6retsf+mhs4cv_J2jSSC-TaoKT-E+=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fame,
+Hello again
 
-On Wed, Jul 11, 2018 at 9:24 AM Fame Castle <famecastle@gmail.com> wrote:
+Please note that this build DOES NOT work.
+I get an error loading the graphics libraries, and Lothar also has issues.
+
+This was originally built using the GCC 6.4 toolchain. The update to GCC 7
+wasn't caught because I didn't reload the defconfig after the rebase
+against origin/master.
+
+I'll try again next week, and only send it in if it clean builds against
+master.
+
+Sorry about that,
+Einar J?n
+
+On Fri, 6 Jul 2018, 15:49 Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
+wrote:
+
+> Hello,
 >
-> I did a 'make chromium-dirclean all' and the problem reappeared. You can find my buildroot config file at https://pastebin.com/zjZuDgB3 . The libnss package is selected in buildroot. "chromium 67.0.3396.79" gets downloaded successfully, all patches are applied correctly and the configuration fails with the same error.
-
-Thanks for sending your config, I was able to reproduce your problem.
-I've fixed this issue, and identified and fixed a few others for the
-next version of this patchset.
-
-You can find my current work in the chromium-v7-wip branch at
-https://github.com/jakogut/buildroot.
-
-I haven't sent an updated patchset to the mailing list yet; your
-config is having linking problems at the end of the build, and I'm
-still working on a solution.
-
-Here's the output of that build.
-
-https://gist.github.com/jakogut/b05bd63c1e3b2ca823fd6b08ed3f0d2e
+> On Fri, 6 Jul 2018 15:36:41 +0200, Einar J?n wrote:
+>
+> > I split this into a set of 3 patches, sent out yesterday
+>
+> Thanks, seen it. I wanted to give it a try, hopefully next week.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180714/8b01949e/attachment.html>
