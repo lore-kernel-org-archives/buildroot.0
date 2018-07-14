@@ -1,64 +1,84 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Jul 2018 09:14:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.1.4
-Message-ID: <20180714071441.11867-1-bernd.kuhls@t-online.de>
+From: Anton Kuzmin <ak@aries-embedded.de>
+Date: Sat, 14 Jul 2018 09:20:10 +0200
+Subject: [Buildroot] RISC-V support
+In-Reply-To: <7050aae3-7b98-4b09-41e0-27b60d42baa6@mind.be>
+References: <0fb21945-492b-520b-e859-b827429312bd@aries-embedded.de>
+ <7050aae3-7b98-4b09-41e0-27b60d42baa6@mind.be>
+Message-ID: <bc6aecb5-1ae1-ebd8-5690-a65e13fe406a@aries-embedded.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+On 13.07.2018 11:10, Arnout Vandecappelle wrote:
+> 
+> 
+> On 13-07-18 10:34, Anton Kuzmin wrote:
+>> Hello All,
+>>
+>> Is anybody already working on adding of the RISC-V [1] support
+>> to buildroot?  If yes, is there any place to discuss/share the progress?
+>> If not, are there any reasons not to do it?
+> 
+>  There is definitely no reason not to add support for it RISC-V.
+> 
+> 
+>> As a starting point, I have made minimal additions resulting in
+>> a successful build of the buildroot toolchain and sdk.
+> 
+>  Excellent!
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index c598444b5f..8c317916e5 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.1.3
-+MESA3D_HEADERS_VERSION = 18.1.4
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index f4564d0da7..7279e8d9f3 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-June/000439.html
--md5 b34273403a605f6f98ead00f0bdf8e0b  mesa-18.1.3.tar.xz
--sha1 0a5fb3096108a95f913411267b8a374f9ff547b2  mesa-18.1.3.tar.xz
--sha256 54f08deeda0cd2f818e8d40140040ed013de7852573002453b7f50da9ea738ce  mesa-18.1.3.tar.xz
--sha512 f6e5b81a80a309a36a04759d18364d3c71c48d1cb88f87b2f5432ef003092a22046e88ce2082031d5d52b60ba36f585d8df52e06ecc7a5158079936236f36887  mesa-18.1.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-July/000442.html
-+md5 7abc628e2e34b2f478d906b6d233ade3  mesa-18.1.4.tar.xz
-+sha1 b5af29aff8b7abe070103ea2cc625d38b4eb1611  mesa-18.1.4.tar.xz
-+sha256 3061488b5d85504092cf4343816cfb2d96f2ad9bc2edec31fc96933d184cf58b  mesa-18.1.4.tar.xz
-+sha512 04b8e5bbfa640f2303c388ab701fc2aca7f6d5d127ca5a9f9409975556813ba8e94305d27c9cea236a0e6d44a38b97e2877509268a96d9ed2a6762ab385aa3dc  mesa-18.1.4.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 3a0cf6c7835f98f86d5579b2cc517f84254da7411f764fb0095a383fb0759771  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 7737143874..35a15bd3a8 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.1.3
-+MESA3D_VERSION = 18.1.4
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.18.0
+Thank you and everybody else for a positive and encouraging reaction.
+
+>  How about a kernel?
+
+Not that far yet, perhaps is some weeks.
+
+>> At the moment 64-bit only, gcc-7.3.0, glibc-2.27-57 -- from upstream.
+> 
+>  64-bit only seems a small constraint, IIUC the 32 and 64 bit variants are
+> nearly identical, no?
+
+AFAIK, 32-bit glibc support is available from risc-v repo on github,
+but has not been merged upstream yet.  There seems to be some
+differencies at least in atomic operations, may be something else.
+
+Frankly, 32-bit toolchain is what I'm interested most at the moment.
+
+>  Constraints on minimal versions of the toolchain components are expected. We
+> even have BR2_ARCH_NEEDS_GCC_AT_LEAST_7 to handle that. It's used a lot for ARM
+> subarchitectures.
+
+Yes, that's exactly how I've tried to make it.
+
+>  The patch series to add RISC-V support could look something like this:
+> 
+> riscv: add RISC-V architecture
+>  -> adds it to arch/Config.in and arch/Config.in.riscv
+>     For now, selects BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT.
+>     Selects the proper atomic etc. toolchain options
+> 
+> toolchain-buildroot: support riscv
+>  -> everything needed to be able to build an internal toolchain with glibc
+
+Both patches are submitted minutes ago to the mailinglist.
+
+> uclibc: support riscv
+> 
+> linux: support riscv
+> 
+> configs/qemu_riscv_some_defconfig: new defconfig
+> 
+> support/config-fragments/autobuild: add RISC-V fragment
+
+These things are still to be done.
+
+>  Even if you don't do all of this, it is useful if you post some of these
+> patches, so someone else can take it over.
+
+Thanks again.
+
+>  Regards,
+>  Arnout
+> 
