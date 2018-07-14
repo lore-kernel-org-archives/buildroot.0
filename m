@@ -1,122 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 14 Jul 2018 12:01:23 +0000
-Subject: [Buildroot] [PATCH 4/5] support/docker: add an Arch image
-In-Reply-To: <CAFGQKxd62h=khKBwP7RwM1uVsAQybHJVjuxNHfPfmaq3Re83gw@mail.gmail.com>
-References: <cover.1531463897.git.yann.morin.1998@free.fr>
- <b909713a26b89db6eae65efffa7e05a8136fd9df.1531463897.git.yann.morin.1998@free.fr>
- <CAFGQKxd62h=khKBwP7RwM1uVsAQybHJVjuxNHfPfmaq3Re83gw@mail.gmail.com>
-Message-ID: <F34B3E21-3366-44DD-891B-401FF71F20E9@free.fr>
+From: Martin Bark <martin@barkynet.com>
+Date: Sat, 14 Jul 2018 13:38:38 +0100
+Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds the option to
+ copy "regulatory.db[.p7s]" to /lib/firmware
+In-Reply-To: <20180713093254.7994-1-me@noctarius.com>
+References: <20180713093254.7994-1-me@noctarius.com>
+Message-ID: <CAFGQKxdVqfFizQBeAHHSmc4tW8FQkXZ+6qGZrD0o3njpNHYjZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On July 14, 2018 11:19:10 AM UTC, Martin Bark <martin@barkynet.com> wrote:
->Yann,
->
->On 13 July 2018 at 07:38, Yann E. MORIN <yann.morin.1998@free.fr>
->wrote:
->> Hopefully, this image is reproducible, since we are using a tagged
->> base image, plus a pinned repository mirror.
->>
->> As for the Debian-stretch Dockerfile, we refresh the repository and
->> install packages in two different layers (see commit c4f844ff321
->> (support/docker: run apt-get update and apt-get install in two RUNs)
->> for in-depth explanations.
->>
->> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->> ---
->>  support/docker/Dockerfile.arch-2018.07.01 | 40
->+++++++++++++++++++++++++++++++
->>  1 file changed, 40 insertions(+)
->>  create mode 100644 support/docker/Dockerfile.arch-2018.07.01
->>
->> diff --git a/support/docker/Dockerfile.arch-2018.07.01
->b/support/docker/Dockerfile.arch-2018.07.01
->> new file mode 100644
->> index 0000000000..65e74d0fdb
->> --- /dev/null
->> +++ b/support/docker/Dockerfile.arch-2018.07.01
->> @@ -0,0 +1,40 @@
->> +# vi: ft=dockerfile
->> +
->> +# When updating this version, please also update it below.
->> +FROM base/devel:2018.07.01
->> +
->> +LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>"
->\
->> +      vendor="Buildroot" \
->> +      description="Container based on Arch 2018.07.01, with
->everything needed to run Buildroot already installed"
->> +
->
->It's best practice to combine the update and install from a package
->manger in one line.  So this should be
+Chris,
 
-Please see:
+On 13 July 2018 at 10:32, Christoph Engelbert <me@noctarius.com> wrote:
+> Certain wireless drivers (like the Broadcom FullMac drivers" expect the regulatory.db and
+> regulatory.db.p7s files to be available to be loadable from /lib/firmware. If not available
+> the driver still loads but runs on a minimal subset of channels.
+>
+> This newly added option gives possibility to have those files copied to the necessary directory.
 
-https://git.busybox.net/buildroot/commit/support/docker/Dockerfile?id=c4f844ff3212266f845ea812da2a8647a9f1e13
+This is a good change but I think the commit message needs changing.
+It's not really certain wireless drivers that is the issue, it's that
+linux 4.15 added support to load regulatory.db directly without using
+crda.  If the kernel can't load regulatory.db directly it will still
+try and use crda.  So this change should allow you to stop using crda
+for kernels after 4.15
 
-Rgd.
+Thanks
 
->RUN echo
->'Server=https://archive.archlinux.org/repos/2018/07/01/$repo/os/$arch'
->\
->        > /etc/pacman.d/mirrorlist && \
->    pacman -Sy --noconfirm \
->
->> +# Pin the repository to a known version
->> +RUN echo
->'Server=https://archive.archlinux.org/repos/2018/07/01/$repo/os/$arch'
->\
->> +        > /etc/pacman.d/mirrorlist && \
->> +    pacman -Sy
->> +RUN pacman --noconfirm -S \
->> +        bc \
->> +        bzr \
->> +        cvs \
->> +        cpio \
->> +        flake8 \
->> +        git \
->> +        mercurial \
->> +        python \
->> +        python-nose2 \
->> +        python-pexpect \
->> +        qemu \
->> +        qemu-arch-extra \
->
->If you change to using qemu-headless and qemu-headless-arch-extra
->packages it saves about 500MB on the image size
->
->Thanks
->
->Martin
->
->> +        rsync \
->> +        subversion \
->> +        unzip \
->> +        wget
->> +
->> +RUN sed -i 's/# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
->> +    && /usr/sbin/locale-gen
->> +
->> +RUN useradd -ms /bin/bash br-user
->> +
->> +USER br-user
->> +WORKDIR /home/br-user
->> +ENV HOME /home/br-user
->> +ENV LC_ALL en_US.UTF-8
->> --
->> 2.14.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+Martin
 
-Martin, All,
--- 
-Sent from my phone. Please excuse my brevity.
+>
+> Signed-off-by: Christoph Engelbert <me@noctarius.com>
+> ---
+>  package/wireless-regdb/wireless-regdb.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+> index e9283a00e2..829374edcf 100644
+> --- a/package/wireless-regdb/wireless-regdb.mk
+> +++ b/package/wireless-regdb/wireless-regdb.mk
+> @@ -15,6 +15,10 @@ define WIRELESS_REGDB_INSTALL_TARGET_CMDS
+>                 $(TARGET_DIR)/usr/lib/crda/regulatory.bin
+>         $(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+>                 $(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
+> +       $(INSTALL) -m 644 -D -T $(@D)/regulatory.db \
+> +               $(TARGET_DIR)/lib/firmware/regulatory.db
+> +       $(INSTALL) -m 644 -D -T $(@D)/regulatory.db.p7s \
+> +               $(TARGET_DIR)/lib/firmware/regulatory.db.p7s
+>  endef
+>
+>  $(eval $(generic-package))
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
