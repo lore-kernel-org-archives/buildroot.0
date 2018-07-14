@@ -1,28 +1,42 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 14 Jul 2018 13:31:02 -0300
-Subject: [Buildroot] [PATCH v2 1/2] imx/post-image: Allow flashing
- u-boot-dtb.imx in the SD card
-In-Reply-To: <1531084579-7949-1-git-send-email-festevam@gmail.com>
-References: <1531084579-7949-1-git-send-email-festevam@gmail.com>
-Message-ID: <CAOMZO5CMZxXcDb0h0_JZaxK_Ar96mo=GuxUcDsURqh-veJd2vQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 14 Jul 2018 19:15:42 +0200
+Subject: [Buildroot] [PATCH] toolchain-external: add fortran support option
+ for custom external toolchains
+Message-ID: <20180714171542.8192-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+If a custom external toolchain is used, we can't enable the fortran
+support. Add a new option for that.
 
-On Sun, Jul 8, 2018 at 6:16 PM, Fabio Estevam <festevam@gmail.com> wrote:
-> Add support for flashing the u-boot-dtb.imx binary in the SD card
-> when a target selects BR2_TARGET_UBOOT_FORMAT_DTB_IMX.
->
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
-> Changes since v1:
-> - Use a UBOOTBIN variable to decide the U-Boot binary name instead
-> of creating a new genimage.cfg variant. (Thanks to Arnout!)
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Samuel Martin <s.martin49@gmail.com>
+---
+ .../toolchain-external-custom/Config.in.options                   | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Are you happy with this version?
-
-Thanks
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 6a9921c149..5ec3f961a1 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -401,6 +401,14 @@ config BR2_TOOLCHAIN_EXTERNAL_CXX
+ 	  support. If you don't know, leave the default value,
+ 	  Buildroot will tell you if it's correct or not.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_FORTRAN
++	bool "Toolchain has Fortran support?"
++	select BR2_TOOLCHAIN_HAS_FORTRAN
++	help
++	  Select this option if your external toolchain has Fortran
++	  support. If you don't know, leave the default value,
++	  Buildroot will tell you if it's correct or not.
++
+ config BR2_TOOLCHAIN_EXTRA_EXTERNAL_LIBS
+ 	string "Extra toolchain libraries to be copied to target"
+ 	help
+-- 
+2.14.4
