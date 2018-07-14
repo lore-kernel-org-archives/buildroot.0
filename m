@@ -1,89 +1,102 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 14 Jul 2018 12:55:12 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libva-intel-driver: bump version to
- 2.2.0
-In-Reply-To: <20180714105513.16687-1-bernd.kuhls@t-online.de>
-References: <20180714105513.16687-1-bernd.kuhls@t-online.de>
-Message-ID: <20180714105513.16687-2-bernd.kuhls@t-online.de>
+From: Martin Bark <martin@barkynet.com>
+Date: Sat, 14 Jul 2018 12:19:10 +0100
+Subject: [Buildroot] [PATCH 4/5] support/docker: add an Arch image
+In-Reply-To: <b909713a26b89db6eae65efffa7e05a8136fd9df.1531463897.git.yann.morin.1998@free.fr>
+References: <cover.1531463897.git.yann.morin.1998@free.fr>
+ <b909713a26b89db6eae65efffa7e05a8136fd9df.1531463897.git.yann.morin.1998@free.fr>
+Message-ID: <CAFGQKxd62h=khKBwP7RwM1uVsAQybHJVjuxNHfPfmaq3Re83gw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream moved its github repo to github.com/intel/, updated URLs, for
-reference see upstream PR 371. Also updated project URL.
+Yann,
 
-Upstream unconditionally added -fstack-protector to CFLAGS:
-https://github.com/intel/intel-vaapi-driver/commit/d8c73243cf7680be01bba1017d1e760c0049bffa
+On 13 July 2018 at 07:38, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Hopefully, this image is reproducible, since we are using a tagged
+> base image, plus a pinned repository mirror.
+>
+> As for the Debian-stretch Dockerfile, we refresh the repository and
+> install packages in two different layers (see commit c4f844ff321
+> (support/docker: run apt-get update and apt-get install in two RUNs)
+> for in-depth explanations.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  support/docker/Dockerfile.arch-2018.07.01 | 40 +++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+>  create mode 100644 support/docker/Dockerfile.arch-2018.07.01
+>
+> diff --git a/support/docker/Dockerfile.arch-2018.07.01 b/support/docker/Dockerfile.arch-2018.07.01
+> new file mode 100644
+> index 0000000000..65e74d0fdb
+> --- /dev/null
+> +++ b/support/docker/Dockerfile.arch-2018.07.01
+> @@ -0,0 +1,40 @@
+> +# vi: ft=dockerfile
+> +
+> +# When updating this version, please also update it below.
+> +FROM base/devel:2018.07.01
+> +
+> +LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
+> +      vendor="Buildroot" \
+> +      description="Container based on Arch 2018.07.01, with everything needed to run Buildroot already installed"
+> +
 
-This breaks the build when the buildroot config has no support for SSP,
-fix this be removing -fstack-protector in the non-SSP case. Please note
-that adding -fnostack-protector to CFLAGS via CONF_ENV is not enough
-because in some makefiles upstream did not include $(CFLAGS), like in
-the aforementioned commit.
+It's best practice to combine the update and install from a package
+manger in one line.  So this should be
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/libva-intel-driver/Config.in               |  2 +-
- package/libva-intel-driver/libva-intel-driver.hash |  6 +++---
- package/libva-intel-driver/libva-intel-driver.mk   | 12 ++++++++++--
- 3 files changed, 14 insertions(+), 6 deletions(-)
+RUN echo 'Server=https://archive.archlinux.org/repos/2018/07/01/$repo/os/$arch'
+\
+        > /etc/pacman.d/mirrorlist && \
+    pacman -Sy --noconfirm \
 
-diff --git a/package/libva-intel-driver/Config.in b/package/libva-intel-driver/Config.in
-index 120f152c96..53c5b366c3 100644
---- a/package/libva-intel-driver/Config.in
-+++ b/package/libva-intel-driver/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBVA_INTEL_DRIVER
- 	help
- 	  VA-API back-end driver for Intel graphics chips
- 
--	  https://01.org/linuxmedia/vaapi
-+	  https://01.org/vaapi
- 
- comment "libva intel driver needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libva-intel-driver/libva-intel-driver.hash b/package/libva-intel-driver/libva-intel-driver.hash
-index dbe5d67fb4..0509ff8d60 100644
---- a/package/libva-intel-driver/libva-intel-driver.hash
-+++ b/package/libva-intel-driver/libva-intel-driver.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/01org/intel-vaapi-driver/releases
--sha1 a40c6bd89b71b547986bf9f9fa2533bb50cf269e intel-vaapi-driver-2.1.0.tar.bz2
-+# From https://github.com/intel/intel-vaapi-driver/releases
-+sha1 0934f97ddcaf4e633f59d049226723239b645b33  intel-vaapi-driver-2.2.0.tar.bz2
- # Locally computed
--sha256 ecfaf2ccc4b9af7340e002d2ef807d1e33051d4992f1983f5f4d60e516f86bdf  intel-vaapi-driver-2.1.0.tar.bz2
-+sha256 e8a5f54694eb76aad42653b591030b8a53b1513144c09a80defb3d8d8c875c18  intel-vaapi-driver-2.2.0.tar.bz2
- sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva-intel-driver/libva-intel-driver.mk b/package/libva-intel-driver/libva-intel-driver.mk
-index dd1903024f..cffad28b9a 100644
---- a/package/libva-intel-driver/libva-intel-driver.mk
-+++ b/package/libva-intel-driver/libva-intel-driver.mk
-@@ -4,14 +4,22 @@
- #
- ################################################################################
- 
--LIBVA_INTEL_DRIVER_VERSION = 2.1.0
-+LIBVA_INTEL_DRIVER_VERSION = 2.2.0
- LIBVA_INTEL_DRIVER_SOURCE = intel-vaapi-driver-$(LIBVA_INTEL_DRIVER_VERSION).tar.bz2
- LIBVA_INTEL_DRIVER_SITE = \
--	https://github.com/01org/intel-vaapi-driver/releases/download/$(LIBVA_INTEL_DRIVER_VERSION)
-+	https://github.com/intel/intel-vaapi-driver/releases/download/$(LIBVA_INTEL_DRIVER_VERSION)
- LIBVA_INTEL_DRIVER_LICENSE = MIT
- LIBVA_INTEL_DRIVER_LICENSE_FILES = COPYING
- LIBVA_INTEL_DRIVER_DEPENDENCIES = host-pkgconf libdrm libva
- 
-+define LIBVA_INTEL_DRIVER_DISABLE_STACK_PROTECTOR
-+	$(SED) 's%-fstack-protector%%' $(@D)/src/Makefile
-+endef
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),)
-+LIBVA_INTEL_DRIVER_POST_CONFIGURE_HOOKS += LIBVA_INTEL_DRIVER_DISABLE_STACK_PROTECTOR
-+endif
-+
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBVA_INTEL_DRIVER_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXfixes
- LIBVA_INTEL_DRIVER_CONF_OPTS += --enable-x11
--- 
-2.18.0
+> +# Pin the repository to a known version
+> +RUN echo 'Server=https://archive.archlinux.org/repos/2018/07/01/$repo/os/$arch' \
+> +        > /etc/pacman.d/mirrorlist && \
+> +    pacman -Sy
+> +RUN pacman --noconfirm -S \
+> +        bc \
+> +        bzr \
+> +        cvs \
+> +        cpio \
+> +        flake8 \
+> +        git \
+> +        mercurial \
+> +        python \
+> +        python-nose2 \
+> +        python-pexpect \
+> +        qemu \
+> +        qemu-arch-extra \
+
+If you change to using qemu-headless and qemu-headless-arch-extra
+packages it saves about 500MB on the image size
+
+Thanks
+
+Martin
+
+> +        rsync \
+> +        subversion \
+> +        unzip \
+> +        wget
+> +
+> +RUN sed -i 's/# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+> +    && /usr/sbin/locale-gen
+> +
+> +RUN useradd -ms /bin/bash br-user
+> +
+> +USER br-user
+> +WORKDIR /home/br-user
+> +ENV HOME /home/br-user
+> +ENV LC_ALL en_US.UTF-8
+> --
+> 2.14.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
