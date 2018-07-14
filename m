@@ -1,120 +1,42 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 14 Jul 2018 11:10:11 +0300
-Subject: [Buildroot] [PATCH 1/2] python-py: new package
-In-Reply-To: <CAGm1_ksuGy_dswqob+GSaupGY9Ry6NAv8FeCou4LwEARstFh4Q@mail.gmail.com>
-References: <20180505120944.18604-1-asafka7@gmail.com>
- <CAGm1_ksuGy_dswqob+GSaupGY9Ry6NAv8FeCou4LwEARstFh4Q@mail.gmail.com>
-Message-ID: <CALFsTFUfzUCqfc5JCDODX9zJyQ74RM_zcM8Y4Z529EPuRKrYyg@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 14 Jul 2018 10:27:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 3.4.3
+Message-ID: <20180714082710.6760-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ping
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, May 7, 2018 at 12:55 PM Yegor Yefremov <yegorslists@googlemail.com>
-wrote:
-
-> On Sat, May 5, 2018 at 2:09 PM, Asaf Kahlon <asafka7@gmail.com> wrote:
-> > library with cross-python path, ini-parsing, io, code, log facilities.
-> >
-> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
->
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
->
-> Yegor
->
-> > ---
-> >  DEVELOPERS                       |  1 +
-> >  package/Config.in                |  1 +
-> >  package/python-py/Config.in      |  7 +++++++
-> >  package/python-py/python-py.hash |  4 ++++
-> >  package/python-py/python-py.mk   | 14 ++++++++++++++
-> >  5 files changed, 27 insertions(+)
-> >  create mode 100644 package/python-py/Config.in
-> >  create mode 100644 package/python-py/python-py.hash
-> >  create mode 100644 package/python-py/python-py.mk
-> >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 24d134cb70..7c0b7f0f28 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -191,6 +191,7 @@ F:  package/stress/
-> >
-> >  N:     Asaf Kahlon <asafka7@gmail.com>
-> >  F:     package/python-jsonmodels/
-> > +F:     package/python-py/
-> >  F:     package/python-subprocess32/
-> >  F:     package/python-yieldfrom/
-> >  F:     package/zeromq/
-> > diff --git a/package/Config.in b/package/Config.in
-> > index fe36d31867..5c3c92d68b 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -869,6 +869,7 @@ menu "External python modules"
-> >         source "package/python-psycopg2/Config.in"
-> >         source "package/python-ptyprocess/Config.in"
-> >         source "package/python-pudb/Config.in"
-> > +       source "package/python-py/Config.in"
-> >         source "package/python-pyasn/Config.in"
-> >         source "package/python-pyasn-modules/Config.in"
-> >         source "package/python-pycli/Config.in"
-> > diff --git a/package/python-py/Config.in b/package/python-py/Config.in
-> > new file mode 100644
-> > index 0000000000..354372f5b4
-> > --- /dev/null
-> > +++ b/package/python-py/Config.in
-> > @@ -0,0 +1,7 @@
-> > +config BR2_PACKAGE_PYTHON_PY
-> > +       bool "python-py"
-> > +       help
-> > +         library with cross-python path, ini-parsing, io, code, log
-> > +         facilities.
-> > +
-> > +         http://py.readthedocs.io/
-> > diff --git a/package/python-py/python-py.hash
-> b/package/python-py/python-py.hash
-> > new file mode 100644
-> > index 0000000000..66a96fd4c1
-> > --- /dev/null
-> > +++ b/package/python-py/python-py.hash
-> > @@ -0,0 +1,4 @@
-> > +# sha256 from https://pypi.org/pypi/py/json
-> > +sha256
-> 29c9fab495d7528e80ba1e343b958684f4ace687327e6f789a94bf3d1915f881
-> py-1.5.3.tar.gz
-> > +# Locally computed sha256 checksums
-> > +sha256
-> 2af680c39ef493fb82830356d1d3df1acb5a06033cba2dec7a19e21caa77a866  LICENSE
-> > diff --git a/package/python-py/python-py.mk b/package/python-py/
-> python-py.mk
-> > new file mode 100644
-> > index 0000000000..1e3f2393da
-> > --- /dev/null
-> > +++ b/package/python-py/python-py.mk
-> > @@ -0,0 +1,14 @@
-> >
-> +################################################################################
-> > +#
-> > +# python-py
-> > +#
-> >
-> +################################################################################
-> > +
-> > +PYTHON_PY_VERSION = 1.5.3
-> > +PYTHON_PY_SOURCE = py-$(PYTHON_PY_VERSION).tar.gz
-> > +PYTHON_PY_SITE =
-> https://files.pythonhosted.org/packages/f7/84/b4c6e84672c4ceb94f727f3da8344037b62cee960d80e999b1cd9b832d83
-> > +PYTHON_PY_SETUP_TYPE = setuptools
-> > +PYTHON_PY_LICENSE = MIT
-> > +PYTHON_PY_LICENSE_FILES = LICENSE
-> > +
-> > +$(eval $(python-package))
-> > --
-> > 2.17.0
-> >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180714/82013c04/attachment.html>
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index a8092616a9..d9f1dda1e7 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 2b92e9578ef8b3e49eeab229e69305f5f4cbc1fdaa22e927fc7fca18acccd740  ffmpeg-3.4.2.tar.xz
++sha256 6b341b7d49e74c4bbdaa8dd166107008c4138ce0d5af73aa04fbbc7ae0d0855c  ffmpeg-3.4.3.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 82140e266e..6932390e40 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.4.2
++FFMPEG_VERSION = 3.4.3
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+-- 
+2.18.0
