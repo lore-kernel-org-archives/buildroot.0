@@ -1,37 +1,40 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sun, 15 Jul 2018 15:53:29 -0700
+Date: Sun, 15 Jul 2018 15:59:26 -0700
 Subject: [Buildroot] [PATCH v4 3/3] docker-engine: split into
  docker-{cli, engine}, bump v2018.06-ce-rc3
-In-Reply-To: <20180715224340.30282-3-christian@paral.in>
+In-Reply-To: <CACvFaDemV-9dCECmvrqQ6OSPrWX0S+QnSsv4JJQfGW-GcdwUSA@mail.gmail.com>
 References: <20180715224340.30282-1-christian@paral.in>
  <20180715224340.30282-3-christian@paral.in>
-Message-ID: <CA+h8R2qfgKP8Pb1BpTYtSXnDUqF7j2UD5i4=imfzxwCo3A9udA@mail.gmail.com>
+ <CACvFaDemV-9dCECmvrqQ6OSPrWX0S+QnSsv4JJQfGW-GcdwUSA@mail.gmail.com>
+Message-ID: <CA+h8R2qmO-DfiY+yt5X9s8Fp=eOZ-Ts7mKUmEAPQ2zVV8ZFo2A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Hi Pascal,
 
-Apologies for making the notorious mistake of finding a typo just
-after submitting something:
+On Sun, Jul 15, 2018 at 3:51 PM Pascal Vizeli <pascal.vizeli@syshack.ch> wrote:
+> I think we should not force anything and stay with official release circle?
 
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -3,6 +3,7 @@  config BR2_PACKAGE_DOCKER_ENGINE
-  depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-  depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-  depends on BR2_TOOLCHAIN_HAS_THREADS
-+  select BR2_PACKAGE_DOCKER_CLI
-  ^
-This should be a tab, not spaces.
+As noted in the commit message:
 
-Same in Config.in.legacy:
+> > Docker repositories "engine" and "cli" recently started tagging releases as
+> > recent as v18.06-ce-rc1, so we pull the latest tagged release v18.06-ce-rc3 and
+> > upgrade to v18.06-ce when it is released.
 
-select BR2_LEGACY
-select BR2_PACKAGE_DOCKER_CLI_STATIC
-^
+There are no tags for v17.03.2-ce to  v18.06.* in docker/engine and docker/cli.
 
-Best,
+The package split also did not happen until recently, IIRC, and we
+suffered critical instability with the early 2018 releases on our arm
+systems when testing earlier this year.
+
+I suppose this series could be deferred until the next major stable
+release of Docker, at which point the split between docker-cli and
+docker-engine would be made, as shown here. I will wait to see what
+the general consensus is.
+
+RFC on the package split, regardless.
+
 Christian
