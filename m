@@ -1,72 +1,51 @@
-From: Christoph Engelbert <me@noctarius.com>
-Date: Sun, 15 Jul 2018 10:13:07 +0200
-Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds the option to
- copy "regulatory.db[.p7s]" to /lib/firmware
-In-Reply-To: <CAFGQKxdVqfFizQBeAHHSmc4tW8FQkXZ+6qGZrD0o3njpNHYjZA@mail.gmail.com>
-References: <20180713093254.7994-1-me@noctarius.com>
- <CAFGQKxdVqfFizQBeAHHSmc4tW8FQkXZ+6qGZrD0o3njpNHYjZA@mail.gmail.com>
-Message-ID: <1461622C-22FB-41D0-9F25-4F0E8D0961EE@noctarius.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 15 Jul 2018 10:25:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: bump version to 12.1
+Message-ID: <20180715082537.11623-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Martin,
+Release notes:
+https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-July/030259.html
 
-Oh I see, didn?t know it was a general change. Does that mean it would probably make more sense to only install the new files as a new package and deprecate the old one?
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/pulseaudio/pulseaudio.hash | 8 ++++----
+ package/pulseaudio/pulseaudio.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Chris
-
-> On 14. Jul 2018, at 14:38, Martin Bark <martin@barkynet.com> wrote:
-> 
-> Chris,
-> 
-> On 13 July 2018 at 10:32, Christoph Engelbert <me@noctarius.com> wrote:
->> Certain wireless drivers (like the Broadcom FullMac drivers" expect the regulatory.db and
->> regulatory.db.p7s files to be available to be loadable from /lib/firmware. If not available
->> the driver still loads but runs on a minimal subset of channels.
->> 
->> This newly added option gives possibility to have those files copied to the necessary directory.
-> 
-> This is a good change but I think the commit message needs changing.
-> It's not really certain wireless drivers that is the issue, it's that
-> linux 4.15 added support to load regulatory.db directly without using
-> crda.  If the kernel can't load regulatory.db directly it will still
-> try and use crda.  So this change should allow you to stop using crda
-> for kernels after 4.15
-> 
-> Thanks
-> 
-> Martin
-> 
->> 
->> Signed-off-by: Christoph Engelbert <me@noctarius.com>
->> ---
->> package/wireless-regdb/wireless-regdb.mk | 4 ++++
->> 1 file changed, 4 insertions(+)
->> 
->> diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
->> index e9283a00e2..829374edcf 100644
->> --- a/package/wireless-regdb/wireless-regdb.mk
->> +++ b/package/wireless-regdb/wireless-regdb.mk
->> @@ -15,6 +15,10 @@ define WIRELESS_REGDB_INSTALL_TARGET_CMDS
->>                $(TARGET_DIR)/usr/lib/crda/regulatory.bin
->>        $(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
->>                $(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
->> +       $(INSTALL) -m 644 -D -T $(@D)/regulatory.db \
->> +               $(TARGET_DIR)/lib/firmware/regulatory.db
->> +       $(INSTALL) -m 644 -D -T $(@D)/regulatory.db.p7s \
->> +               $(TARGET_DIR)/lib/firmware/regulatory.db.p7s
->> endef
->> 
->> $(eval $(generic-package))
->> --
->> 2.17.1
->> 
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/pulseaudio/pulseaudio.hash b/package/pulseaudio/pulseaudio.hash
+index f10ed82e90..948f3aa684 100644
+--- a/package/pulseaudio/pulseaudio.hash
++++ b/package/pulseaudio/pulseaudio.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-June/030091.html
+-md5 efe7683310080e80bc42707285df8c36  pulseaudio-12.0.tar.xz
+-sha1 9b0dcd62ae4c24542e13644e5fac3de5b13d6db7  pulseaudio-12.0.tar.xz
++# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-July/030259.html
++md5 2511b7ce7193eecf029c91de96eee547  pulseaudio-12.1.tar.xz
++sha1 3d8ecff70b7b47d82fd8a262755ce24dd956bef1  pulseaudio-12.1.tar.xz
+ # Locally computed
+-sha256 6e422dbdc9fd11c0cb6af869e5eda73dc24a8be3c14725440edd51ce6b464444  pulseaudio/pulseaudio-12.0.tar.xz
++sha256 5f5dfb5e2c376e8c974b80f93b983ed77088ade7fb8b9325a575c45aa35977f3  pulseaudio-12.1.tar.xz
+ sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  GPL
+ sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
+ sha256 a1064b9838b6b4feee61eaeb0925da4b4834c984b77716558860c4294ed6c015  LICENSE
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 55f9def639..2b8f5724bc 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PULSEAUDIO_VERSION = 12.0
++PULSEAUDIO_VERSION = 12.1
+ PULSEAUDIO_SOURCE = pulseaudio-$(PULSEAUDIO_VERSION).tar.xz
+ PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases
+ PULSEAUDIO_INSTALL_STAGING = YES
+-- 
+2.18.0
