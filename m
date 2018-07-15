@@ -1,47 +1,97 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jul 2018 17:48:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tar: bump version to 1.30
-In-Reply-To: <5afaa00d-083c-2b0d-8375-938f854371a6@mind.be>
-References: <20180709224218.32080-1-bernd.kuhls@t-online.de>
- <5afaa00d-083c-2b0d-8375-938f854371a6@mind.be>
-Message-ID: <20180715154847.GD2516@scaer>
+Date: Sun, 15 Jul 2018 17:57:14 +0200
+Subject: [Buildroot] [PATCH 1/6] tini: new package
+In-Reply-To: <20180715010732.21765-1-christian@paral.in>
+References: <20180715010732.21765-1-christian@paral.in>
+Message-ID: <20180715155714.GE2516@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Christian, All,
 
-On 2018-07-10 10:00 +0200, Arnout Vandecappelle spake thusly:
->  Have you seen b8fa273d500b4?
+On 2018-07-14 18:07 -0700, Christian Stewart spake thusly:
+> Tini is a minimal init process to act as PID 1 for containers.
 > 
->     check-host-tar.sh: blacklist tar 1.30+
+> Tini can be used to satisfy docker-engine's docker-init binary
+> requirement.
 > 
->     Tar 1.30 changed the --numeric-owner output for filenames > 100 characters,
->     leading to hash mismatches for the tar archives we create ourselves from
->     git.  This is really a fix for a bug in earlier tar versions regarding
->     deterministic output, so it is unlikely to be reverted in later versions.
-> 
->     For more details, see:
->     http://lists.busybox.net/pipermail/buildroot/2018-January/211222.html
-> 
->     To work around this issue, blacklist tar 1.30+ similar to how we do it for
->     pre-1.17 versions so Buildroot falls back to building host-tar.
-> 
-> 
->  Marked as Rejected...
+> Signed-off-by: Christian Stewart <christian@paral.in>
+[--SNIP--]
+> diff --git a/package/tini/tini.mk b/package/tini/tini.mk
+> new file mode 100644
+> index 0000000000..9f9d986745
+> --- /dev/null
+> +++ b/package/tini/tini.mk
+> @@ -0,0 +1,35 @@
+> +################################################################################
+> +#
+> +# tini
+> +#
+> +################################################################################
+> +
+> +TINI_VERSION = v0.17.0
+> +TINI_SITE = $(call github,krallin,tini,$(TINI_VERSION))
+> +
+> +TINI_LICENSE = MIT
+> +TINI_LICENSE_FILES = LICENSE
+> +
+> +TINI_CFLAGS = $(TARGET_CFLAGS) -DTINI_VERSION=\"$(TINI_VERSION)\" -DTINI_GIT=\"\"
+> +TINI_CFLAGS += -static
 
-Yet at some point, we will want to bump tar to a newer version.
+I know the rationale behind doing a static build here. However, I ahve a
+more profound concern. Lemme explain:
 
-What I would suggest is that we pin the host version to 1.29, and still
-allow bumping the target version, so maybe something like:
+If you are going to be runnin "something" inside a docker-based container,
+surely you will have to provide said "something". Probalby a system on
+its own, build with Buildroot, or not.
 
-    TAR_VERSION = 1.30
-    HOST_TAR_VERSION = 1.29
+So, why would not that system provide its own init process, how complex
+might it ever be (ranging from the simplest like tini, to a full-blown
+systemd for example).
+
+So, why would it be the responsibility of the host system to provide the
+init program, rather that the responsibility of the guest system?
+
+Note that I did not say we did not want tini. We do want it so that we
+can build an image that can later server as a guest, bringing its own
+tini (or dumb-init or whatever).
+
+So, I still question the reason to have tini built as a static binary,
+provided from the host to the guest...
 
 Regards,
 Yann E. MORIN.
+
+> +ifeq ($(BR2_PACKAGE_TINI_MINIMAL),y)
+> +TINI_CFLAGS += -DTINI_MINIMAL
+> +endif
+> +
+> +define TINI_CONFIGURE_CMDS
+> +	printf "#pragma once\n" > $(@D)/src/tiniConfig.h
+> +endef
+> +
+> +define TINI_BUILD_CMDS
+> +	$(TARGET_CC) \
+> +		$(TINI_CFLAGS) \
+> +		-o $(@D)/tini $(@D)/src/tini.c
+> +endef
+> +
+> +define TINI_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/tini $(TARGET_DIR)/usr/bin/tini
+> +endef
+> +
+> +# Tini's CMakeLists.txt is not suitable for Buildroot.
+> +$(eval $(generic-package))
+> -- 
+> 2.16.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
