@@ -1,117 +1,74 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jul 2018 21:45:49 +0200
-Subject: [Buildroot] [PATCH 4/5] support/docker: add an Arch image
-In-Reply-To: <CAFGQKxe5qQQm=k+CXipjS8U0eJ3nxFB20xJ0QYSMRDbqb1sOPg@mail.gmail.com>
-References: <cover.1531463897.git.yann.morin.1998@free.fr>
- <b909713a26b89db6eae65efffa7e05a8136fd9df.1531463897.git.yann.morin.1998@free.fr>
- <CAFGQKxd62h=khKBwP7RwM1uVsAQybHJVjuxNHfPfmaq3Re83gw@mail.gmail.com>
- <F34B3E21-3366-44DD-891B-401FF71F20E9@free.fr>
- <20180715090539.GA2516@scaer>
- <CAFGQKxe5qQQm=k+CXipjS8U0eJ3nxFB20xJ0QYSMRDbqb1sOPg@mail.gmail.com>
-Message-ID: <20180715194549.GG2516@scaer>
+Date: Sun, 15 Jul 2018 21:58:06 +0200
+Subject: [Buildroot] [PATCH v3 1/6] tini: new package
+In-Reply-To: <CA+h8R2oxXWWnPT8dnn0Bt4UL=JA8SGjDg3vCyZNNchrPCaWJ+w@mail.gmail.com>
+References: <20180715010732.21765-1-christian@paral.in>
+ <20180715010732.21765-7-christian@paral.in>
+ <20180715160129.GF2516@scaer>
+ <CA+h8R2oxXWWnPT8dnn0Bt4UL=JA8SGjDg3vCyZNNchrPCaWJ+w@mail.gmail.com>
+Message-ID: <20180715195806.GH2516@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+Christian, All,
 
-On 2018-07-15 20:30 +0100, Martin Bark spake thusly:
-> On 15 July 2018 at 10:05, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-[--SNIP--]
-> > So, the reasoning is that, since we use a pinned version of the
-> > repository, running "pacman -Sy --noconfirm" will always yield the same
-> > state of the distribution.
-> >
-> > Now, it happens that we need to add a new package to the image, e.g. for
-> > local testing. We can thus re-use the intermediate, locally-cached image
-> > that has the local repository updated.
-> >
-> > It kinda speeds up things a bit.
+On 2018-07-15 12:26 -0700, Christian Stewart spake thusly:
+> Hi Yann,
+> On Sun, Jul 15, 2018 at 9:01 AM Yann E. MORIN < [1]yann.morin.1998@free.fr> wrote:
 > 
-> Yes where you have a pinned package repo i agree splitting the update
-> and install is ok.  So for debian and archlinux this is true but for
-> alpine you do need the update and install in one RUN
+>   Since you want to do a static build (which I questioned in my previous
+>   reply), you should depend on static libs being actually available,
+>   i.e.:
+> 
+>   ? ? depends on !BR2_SHARED_LIBS # Static build
+> 
+> I went over this with Thomas before the last time I tried to merge a similar series.
+> Here are the relevant bits:
+[--SNIP--]
 
-Agreed on principle.
+Then why did you not add those explanation in the commit log, in this
+new iteration?
 
-However, I'd like we use the same constructs in all our dockerfiles, for
-consistency sake.
+Personally, I don't care about a commit log that says "hey, let's add a
+new package". That is pretty much obvious from the diffstat itself.
 
-And even if I did not expend too much time at making the Alpine image
-reproducible, I expect that we can ultimately make it so, if it is not
-already.
+What a commit log is here for, is to explain the tricky details of why a
+specific technical solution is used, especially when it is not obvious
+that it works, and more especially when it runs contrary to the usual
+and common knowledge/wisdom.
 
-In fact, I even expected people to show up and say "hey! what you did
-makes ofr a reproducible image," or "hey! here's how you can make it
-reproducible." ;-)
+Then, when we need to look back at the code in the (far!) future, and we
+wonder "how on Earth can this even work to begin with?", we can git-blame
+or git-log the file and see the corresponding commit and commit log, and
+understand that litle detail. Because by then, the post on the mailing
+list about a comment on the nth-previous iteration will be long
+forgotten.
+
+> Either way, this part of the series is not important. I'm happy to respin it with just the docker-cli and docker-engine split
+> (caused originally by trying to upgrade docker-engine).
+
+Yes, please do so: untangle the two and bump them, since this is not very
+controversial.
+
+But still, I'd like to understand why we need to have the host provide
+an init to the guest, and why can't the guest be responsible for
+providing its own init... Sorry if you already replied to that in
+another thread... In which case those explanations would have been great
+to be repeated in the commit log itself.
+
+Thanks! :-)
 
 Regards,
 Yann E. MORIN.
 
-[--SNIP--]
-> >> >> +        qemu \
-> >> >> +        qemu-arch-extra \
-> >> >
-> >> >If you change to using qemu-headless and qemu-headless-arch-extra
-> >> >packages it saves about 500MB on the image size
-> >
-> > Ah, that one is interesting to know! :-)
-> >
-> > However, are we sure that we don;t need the headed version of qemu?
-> >
-> > And why do we even have to have qemu in the image to start with, in the
-> > end?
+> Best,
+> Christian Stewart
 > 
-> Good questions i don't know the answer to.  I assume it's something to
-> do with automated testing.
-> 
-> Thanks
-> 
-> Martin
-> 
-> >
-> > Regards,
-> > Yann E. MORIN.
-> >
-> >> >Thanks
-> >> >
-> >> >Martin
-> >> >
-> >> >> +        rsync \
-> >> >> +        subversion \
-> >> >> +        unzip \
-> >> >> +        wget
-> >> >> +
-> >> >> +RUN sed -i 's/# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
-> >> >> +    && /usr/sbin/locale-gen
-> >> >> +
-> >> >> +RUN useradd -ms /bin/bash br-user
-> >> >> +
-> >> >> +USER br-user
-> >> >> +WORKDIR /home/br-user
-> >> >> +ENV HOME /home/br-user
-> >> >> +ENV LC_ALL en_US.UTF-8
-> >> >> --
-> >> >> 2.14.1
-> >> >>
-> >> >> _______________________________________________
-> >> >> buildroot mailing list
-> >> >> buildroot at busybox.net
-> >> >> http://lists.busybox.net/mailman/listinfo/buildroot
-> >>
-> >> Martin, All,
-> >> --
-> >> Sent from my phone. Please excuse my brevity.
-> >
-> > --
-> > .-----------------.--------------------.------------------.--------------------.
-> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> > '------------------------------^-------^------------------^--------------------'
+> Links:
+> 1. mailto:yann.morin.1998 at free.fr
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
