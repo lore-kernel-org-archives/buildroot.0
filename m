@@ -1,89 +1,122 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 15 Jul 2018 12:26:17 -0700
-Subject: [Buildroot] [PATCH v3 1/6] tini: new package
-In-Reply-To: <20180715160129.GF2516@scaer>
-References: <20180715010732.21765-1-christian@paral.in>
- <20180715010732.21765-7-christian@paral.in>
- <20180715160129.GF2516@scaer>
-Message-ID: <CA+h8R2oxXWWnPT8dnn0Bt4UL=JA8SGjDg3vCyZNNchrPCaWJ+w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Jul 2018 21:45:49 +0200
+Subject: [Buildroot] [PATCH 4/5] support/docker: add an Arch image
+In-Reply-To: <CAFGQKxe5qQQm=k+CXipjS8U0eJ3nxFB20xJ0QYSMRDbqb1sOPg@mail.gmail.com>
+References: <cover.1531463897.git.yann.morin.1998@free.fr>
+ <b909713a26b89db6eae65efffa7e05a8136fd9df.1531463897.git.yann.morin.1998@free.fr>
+ <CAFGQKxd62h=khKBwP7RwM1uVsAQybHJVjuxNHfPfmaq3Re83gw@mail.gmail.com>
+ <F34B3E21-3366-44DD-891B-401FF71F20E9@free.fr>
+ <20180715090539.GA2516@scaer>
+ <CAFGQKxe5qQQm=k+CXipjS8U0eJ3nxFB20xJ0QYSMRDbqb1sOPg@mail.gmail.com>
+Message-ID: <20180715194549.GG2516@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Yann,
+Martin, All,
 
-On Sun, Jul 15, 2018 at 9:01 AM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+On 2018-07-15 20:30 +0100, Martin Bark spake thusly:
+> On 15 July 2018 at 10:05, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+[--SNIP--]
+> > So, the reasoning is that, since we use a pinned version of the
+> > repository, running "pacman -Sy --noconfirm" will always yield the same
+> > state of the distribution.
+> >
+> > Now, it happens that we need to add a new package to the image, e.g. for
+> > local testing. We can thus re-use the intermediate, locally-cached image
+> > that has the local repository updated.
+> >
+> > It kinda speeds up things a bit.
+> 
+> Yes where you have a pinned package repo i agree splitting the update
+> and install is ok.  So for debian and archlinux this is true but for
+> alpine you do need the update and install in one RUN
 
-> Since you want to do a static build (which I questioned in my previous
-> reply), you should depend on static libs being actually available,
-> i.e.:
->
->     depends on !BR2_SHARED_LIBS # Static build
+Agreed on principle.
 
+However, I'd like we use the same constructs in all our dockerfiles, for
+consistency sake.
 
+And even if I did not expend too much time at making the Alpine image
+reproducible, I expect that we can ultimately make it so, if it is not
+already.
 
-I went over this with Thomas before the last time I tried to merge a
-similar series.
+In fact, I even expected people to show up and say "hey! what you did
+makes ofr a reproducible image," or "hey! here's how you can make it
+reproducible." ;-)
 
-Here are the relevant bits:
+Regards,
+Yann E. MORIN.
 
-> The next issue is that your package assumes that static linking is
-> possible. But Buildroot defaults to BR2_SHARED_LIBS, which means that
-> the toolchain may not necessarily provide libc.a and allow static
-> linking.
+[--SNIP--]
+> >> >> +        qemu \
+> >> >> +        qemu-arch-extra \
+> >> >
+> >> >If you change to using qemu-headless and qemu-headless-arch-extra
+> >> >packages it saves about 500MB on the image size
+> >
+> > Ah, that one is interesting to know! :-)
+> >
+> > However, are we sure that we don;t need the headed version of qemu?
+> >
+> > And why do we even have to have qemu in the image to start with, in the
+> > end?
+> 
+> Good questions i don't know the answer to.  I assume it's something to
+> do with automated testing.
+> 
+> Thanks
+> 
+> Martin
+> 
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> >> >Thanks
+> >> >
+> >> >Martin
+> >> >
+> >> >> +        rsync \
+> >> >> +        subversion \
+> >> >> +        unzip \
+> >> >> +        wget
+> >> >> +
+> >> >> +RUN sed -i 's/# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+> >> >> +    && /usr/sbin/locale-gen
+> >> >> +
+> >> >> +RUN useradd -ms /bin/bash br-user
+> >> >> +
+> >> >> +USER br-user
+> >> >> +WORKDIR /home/br-user
+> >> >> +ENV HOME /home/br-user
+> >> >> +ENV LC_ALL en_US.UTF-8
+> >> >> --
+> >> >> 2.14.1
+> >> >>
+> >> >> _______________________________________________
+> >> >> buildroot mailing list
+> >> >> buildroot at busybox.net
+> >> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> >>
+> >> Martin, All,
+> >> --
+> >> Sent from my phone. Please excuse my brevity.
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
 
-I'm able to compile with BR2_SHARED_LIBS and still produce a static
-output with -static. Why is this possible? I remember seeing an email
-about this at some point, where it was stated that glibc.a or so was not
-produced with BR2_SHARED_LIBS. Why can I then compile this package in
-this way?
-
-> Alternatively, you could decide to build dumb-init statically only
-> if !BR2_SHARED_LIBS, but that means that in the default Buildroot
-> configurations, dumb-init would be linked dynamically.
-
-This wouldn't work unfortunately in 95% of the intended cases where
-dumb-init would be used. I'm using a shared build for example.
-
-Then, Thomas asks me to test it out:
-
-> Could you try a completely dynamic build with uClibc and musl ?
->
-> Something like this:
->
-> BR2_arm=y
-> BR2_cortex_a8=y
-> BR2_SHARED_LIBS=y
-
->> This wouldn't work unfortunately in 95% of the intended cases where
->> dumb-init would be used.
-
-> Let's see what the above test does. If it's able to build a static
-> binary even though BR2_SHARED_LIBS=y, then OK, we're good. Otherwise,
-> we'll have to find a different solution.
-
-I completed the test with this defconfig:
-
-BR2_arm=y
-BR2_cortex_a8=y
-BR2_SHARED_LIBS=y
-BR2_PACKAGE_DUMB_INIT=y
-
-The build passed.
-
-To me, the logic goes, if you're doing a static build, you can't build a
-shared binary. If you're doing a shared build, you can always build a
-static binary. Is this not the case?
-
-Either way, this part of the series is not important. I'm happy to respin
-it with just the docker-cli and docker-engine split (caused originally by
-trying to upgrade docker-engine).
-
-Best,
-Christian Stewart
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180715/1af0f249/attachment.html>
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
