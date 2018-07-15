@@ -1,46 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 15 Jul 2018 16:31:30 +0200
-Subject: [Buildroot] [RFC v1 2/2] libdrm: change to meson build system
-In-Reply-To: <20180715100256.GA27498@itchy>
-References: <20180713205801.25976-1-ps.report@gmx.net>
- <20180713205801.25976-2-ps.report@gmx.net>
- <20180714222729.00517695@windsurf> <20180715100256.GA27498@itchy>
-Message-ID: <20180715163130.1cb50643@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Jul 2018 17:44:41 +0200
+Subject: [Buildroot] [PATCH v3 10/22] package/x11r7/xkeyboard-config:
+ switch to xorgproto
+In-Reply-To: <omcn1fx702.ln2@ID-313208.user.individual.net>
+References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
+ <20180630110853.29339-11-bernd.kuhls@t-online.de>
+ <20180702214801.GP2604@scaer>
+ <omcn1fx702.ln2@ID-313208.user.individual.net>
+Message-ID: <20180715154441.GB2516@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Eric,
+Bernd, All,
 
-On Sun, 15 Jul 2018 12:02:56 +0200, Eric Le Bihan wrote:
+On 2018-07-13 21:55 +0200, Bernd Kuhls spake thusly:
+> Am Mon, 02 Jul 2018 23:48:01 +0200 schrieb Yann E. MORIN:
+> >> --- a/package/x11r7/xkeyboard-config/Config.in
+> >> +++ b/package/x11r7/xkeyboard-config/Config.in
+> >> @@ -3,7 +3,7 @@ config BR2_PACKAGE_XKEYBOARD_CONFIG
+> >>  	# Runtime dependencies
 
-> > If Ninja is compatible with both Python 2 and Python 3, why can't we
-> > use the system-provided Python interpreter rather than building our
-> > own ?  
+Here ^^^
+
+> >>  	select BR2_PACKAGE_XAPP_XKBCOMP if BR2_PACKAGE_XORG7
+> >>  	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+> >> -	select BR2_PACKAGE_XPROTO_XPROTO if BR2_PACKAGE_XORG7
+> >> +	select BR2_PACKAGE_XORGPROTO if BR2_PACKAGE_XORG7
+> > 
+> > I'm always a bit warry about dependencies selected, that are not in the
+> > .mk. Is it missing there?
 > 
-> Is it the technique used for cmake with $(BR2_CMAKE_HOST_DEPENDENCY), or
-> am I mistaken?
+> Afaics they are not missing in the.mk file because these packages are 
+> marked as runtime dependencies in Config.in.
 
-No, it's not the same thing. BR2_CMAKE_HOST_DEPENDENCY is to avoid
-building CMake if a suitable CMake version is already provided on the
-host.
+As noted above, yes, they are marlked "runtime dependencies".
 
-What I'm suggesting as a first step is to avoid building both
-host-python3 and host-python. Once this first step is done, and only
-host-python3 gets built, then maybe we can think of avoiding the
-host-python3 build by using the system-provided version, with something
-similar to BR2_CMAKE_HOST_DEPENDENCY.
+However, I find it hard to believe that the xorg-proto, which supposedly
+provides prototype information, is only a runtime dependency.
 
-> > Does Meson absolutely needs a Python 3 interpreter ?  
-> 
-> Meson is strict about this. From setup.py:
+Similarly, I also find it hard to accept that xlib-libx11 is only a
+runtime dependency.
 
-Meh, OK :-/
+I am afraid that only xapp-xkbcomp is actually a runtime dependency. The
+rest are really build-time dependencies. /me thinks.
 
-Thomas
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
