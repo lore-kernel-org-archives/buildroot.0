@@ -1,87 +1,95 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 14 Jul 2018 18:07:29 -0700
-Subject: [Buildroot] [PATCH v3 3/6] docker-engine: add support for init
- processes
+Date: Sat, 14 Jul 2018 18:07:31 -0700
+Subject: [Buildroot] [PATCH v3 5/6] docker-containerd: bump to v1.1.1
 In-Reply-To: <20180715010732.21765-1-christian@paral.in>
 References: <20180715010732.21765-1-christian@paral.in>
-Message-ID: <20180715010732.21765-9-christian@paral.in>
+Message-ID: <20180715010732.21765-11-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a docker container is run with the --init flag, the Docker engine
-uses the docker-init binary as PID 1 inside the container. This is
-necessary in may cases to avoid issues with signal handling, zombie
-processes, and other quirks when running as PID 1.
+This commit bumps docker-containerd to v1.1.1.
 
-The docker-init binary is backed by tini on default, but optionally can
-be changed to docker-init by user preference.
-
-Furthermore, this patch fixes the following Docker error:
-
-  dockerd: level=warning msg="failed to retrieve docker-init version"
+This is a requisite bump for the upgrade of docker-engine to 2018.06.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/Config.in        | 26 ++++++++++++++++++++++++++
- package/docker-engine/docker-engine.mk |  6 ++++++
- 2 files changed, 32 insertions(+)
+ package/docker-containerd/Config.in              | 12 ++++++++++++
+ package/docker-containerd/docker-containerd.hash |  2 +-
+ package/docker-containerd/docker-containerd.mk   | 18 +++++++++++++++---
+ 3 files changed, 28 insertions(+), 4 deletions(-)
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 8feb11b48c..a76940b6c0 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -34,6 +34,32 @@ config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+index 2f7bf71af1..851345f73e 100644
+--- a/package/docker-containerd/Config.in
++++ b/package/docker-containerd/Config.in
+@@ -15,6 +15,18 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
  
- if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
+ 	  https://github.com/docker/containerd
  
-+choice
-+	bool "docker-init to use"
-+	default BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
++if BR2_PACKAGE_DOCKER_CONTAINERD
++
++config BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS
++	bool "btrfs snapshot driver"
++	depends on BR2_USE_MMU # btrfs-progs
++	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
++	select BR2_PACKAGE_BTRFS_PROGS
 +	help
-+	  The docker engine uses a minimal init process as PID 1
-+	  inside containers. There are several implementations
-+	  of this init process.
++	  Build the btrfs snapshot driver for containerd.
 +
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	bool "tini"
-+	select BR2_PACKAGE_TINI
-+	help
-+	  Use Tini as the container init process.
-+
-+	  https://github.com/krallin/tini
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
-+	bool "dumb-init"
-+	select BR2_PACKAGE_DUMB_INIT
-+	help
-+	  Use dumb-init as the container init process.
-+
-+	  https://github.com/Yelp/dumb-init
-+
-+endchoice
-+
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
- 	depends on BR2_USE_MMU # btrfs-progs
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index ba84b4cf0a..a85f4b5784 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -63,6 +63,12 @@ endif
- 
- DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
- 
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
-+DOCKER_ENGINE_INSTALL_BINS += dumb-init
-+else
-+DOCKER_ENGINE_INSTALL_BINS += tini
 +endif
 +
- define DOCKER_ENGINE_RUN_AUTOGEN
- 	cd $(@D) && \
- 		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
+ comment "docker-containerd needs a toolchain w/ threads"
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index 992eb5b01a..6d5ed45589 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,2 +1,2 @@
+ # Computed locally
+-sha256	da89086a7c643702a2ddecec67a45d3d8e4b0d610dd19036be63e6bd54cc1a85	docker-containerd-9048e5e50717ea4497b757314bad98ea3763c145.tar.gz
++sha256	2901e3f6113ea97850ec9ac5640db0273c7f10e887701f7da2cf3ae1a730934e  docker-containerd-v1.1.1.tar.gz
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 09e89f1aba..85dd6e1f71 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
+-DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
++DOCKER_CONTAINERD_VERSION = v1.1.1
++DOCKER_CONTAINERD_COMMIT = d64c661f1d51c48782c9cec8fda7604785f93587
++DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+ 
+@@ -14,10 +15,21 @@ DOCKER_CONTAINERD_WORKSPACE = vendor
+ DOCKER_CONTAINERD_LDFLAGS = \
+ 	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+ 
+-DOCKER_CONTAINERD_BUILD_TARGETS = ctr containerd containerd-shim
++DOCKER_CONTAINERD_BUILD_TARGETS = cmd/ctr cmd/containerd cmd/containerd-shim
+ 
+ DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
+ 
++ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
++DOCKER_CONTAINERD_DEPENDENCIES += libseccomp
++DOCKER_CONTAINERD_TAGS += seccomp
++endif
++
++ifeq ($(BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS),y)
++DOCKER_CONTAINERD_DEPENDENCIES += btrfs-progs
++else
++DOCKER_CONTAINERD_TAGS += no_btrfs
++endif
++
+ define DOCKER_CONTAINERD_INSTALL_SYMLINKS
+ 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
+ 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
 -- 
 2.16.1
