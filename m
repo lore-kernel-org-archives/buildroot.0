@@ -1,10 +1,10 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 14 Jul 2018 18:07:26 -0700
-Subject: [Buildroot] [PATCH 6/6] docker-engine: split into docker-{cli,
+Date: Sat, 14 Jul 2018 18:07:32 -0700
+Subject: [Buildroot] [PATCH v3 6/6] docker-engine: split into docker-{cli,
  engine}, bump v2018.06-ce-rc3
 In-Reply-To: <20180715010732.21765-1-christian@paral.in>
 References: <20180715010732.21765-1-christian@paral.in>
-Message-ID: <20180715010732.21765-6-christian@paral.in>
+Message-ID: <20180715010732.21765-12-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
