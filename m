@@ -1,40 +1,44 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 15 Jul 2018 17:46:04 +0200
-Subject: [Buildroot] [PATCH v3 00/22] package/x11r7/xserver_xorg-server:
- bump version to 1.20.0
-In-Reply-To: <87in5jvc0n.fsf@dell.be.48ers.dk>
-References: <20180630110853.29339-1-bernd.kuhls@t-online.de>
- <20180703215602.GG2530@scaer>
- <0jjc1fxkra.ln2@ID-313208.user.individual.net>
- <87in5jvc0n.fsf@dell.be.48ers.dk>
-Message-ID: <20180715154604.GC2516@scaer>
+Date: Sun, 15 Jul 2018 17:48:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tar: bump version to 1.30
+In-Reply-To: <5afaa00d-083c-2b0d-8375-938f854371a6@mind.be>
+References: <20180709224218.32080-1-bernd.kuhls@t-online.de>
+ <5afaa00d-083c-2b0d-8375-938f854371a6@mind.be>
+Message-ID: <20180715154847.GD2516@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-07-13 09:19 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
->  >> r128, savage, and sis are all very, very old now. Like, 20 years or
->  >> more... I wonder if it makes sense to keep them, given that none of
->  >> those three natively cross-compile, and are starting to require patches
->  >> to build against a recent X stack. The latter meaning that upstream is
->  >> not even test-building those drivers anymore...
->  > Up until now and even including the current bump to xserver_xorg-server 
->  > 1.20.0 I am still willing to support even the oldest drivers if I can 
->  > find the necessary patches somewhere so from my POV it is ok to keep 
->  > them. If Thomas or Peter think otherwise I can remove them since I have 
->  > no personal interest in them ;)
+Arnout, All,
+
+On 2018-07-10 10:00 +0200, Arnout Vandecappelle spake thusly:
+>  Have you seen b8fa273d500b4?
 > 
-> As long as you care enough about them to keep them working (and the
-> patches aren't super big/ugly), then I am fine with keeping them.
+>     check-host-tar.sh: blacklist tar 1.30+
+> 
+>     Tar 1.30 changed the --numeric-owner output for filenames > 100 characters,
+>     leading to hash mismatches for the tar archives we create ourselves from
+>     git.  This is really a fix for a bug in earlier tar versions regarding
+>     deterministic output, so it is unlikely to be reverted in later versions.
+> 
+>     For more details, see:
+>     http://lists.busybox.net/pipermail/buildroot/2018-January/211222.html
+> 
+>     To work around this issue, blacklist tar 1.30+ similar to how we do it for
+>     pre-1.17 versions so Buildroot falls back to building host-tar.
+> 
+> 
+>  Marked as Rejected...
 
-I'm also fine with keeping them if someone is actually caring for them.
-But as I sais, maintaining them just for the sake of maintenance,
-without actual use, is probably going too far.
+Yet at some point, we will want to bump tar to a newer version.
 
-But OK, if that is an exercise in style. ;-)
+What I would suggest is that we pin the host version to 1.29, and still
+allow bumping the target version, so maybe something like:
+
+    TAR_VERSION = 1.30
+    HOST_TAR_VERSION = 1.29
 
 Regards,
 Yann E. MORIN.
