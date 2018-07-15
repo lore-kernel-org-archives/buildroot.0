@@ -1,51 +1,120 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 15 Jul 2018 10:25:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: bump version to 12.1
-Message-ID: <20180715082537.11623-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 15 Jul 2018 11:05:39 +0200
+Subject: [Buildroot] [PATCH 4/5] support/docker: add an Arch image
+In-Reply-To: <F34B3E21-3366-44DD-891B-401FF71F20E9@free.fr>
+References: <cover.1531463897.git.yann.morin.1998@free.fr>
+ <b909713a26b89db6eae65efffa7e05a8136fd9df.1531463897.git.yann.morin.1998@free.fr>
+ <CAFGQKxd62h=khKBwP7RwM1uVsAQybHJVjuxNHfPfmaq3Re83gw@mail.gmail.com>
+ <F34B3E21-3366-44DD-891B-401FF71F20E9@free.fr>
+Message-ID: <20180715090539.GA2516@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-July/030259.html
+Martin, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/pulseaudio/pulseaudio.hash | 8 ++++----
- package/pulseaudio/pulseaudio.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+So, I see that K9mail put the saultations at the end of the mail, which
+is quite odd... Anyway, let me expand further on my previous reply...
 
-diff --git a/package/pulseaudio/pulseaudio.hash b/package/pulseaudio/pulseaudio.hash
-index f10ed82e90..948f3aa684 100644
---- a/package/pulseaudio/pulseaudio.hash
-+++ b/package/pulseaudio/pulseaudio.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-June/030091.html
--md5 efe7683310080e80bc42707285df8c36  pulseaudio-12.0.tar.xz
--sha1 9b0dcd62ae4c24542e13644e5fac3de5b13d6db7  pulseaudio-12.0.tar.xz
-+# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-July/030259.html
-+md5 2511b7ce7193eecf029c91de96eee547  pulseaudio-12.1.tar.xz
-+sha1 3d8ecff70b7b47d82fd8a262755ce24dd956bef1  pulseaudio-12.1.tar.xz
- # Locally computed
--sha256 6e422dbdc9fd11c0cb6af869e5eda73dc24a8be3c14725440edd51ce6b464444  pulseaudio/pulseaudio-12.0.tar.xz
-+sha256 5f5dfb5e2c376e8c974b80f93b983ed77088ade7fb8b9325a575c45aa35977f3  pulseaudio-12.1.tar.xz
- sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  GPL
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
- sha256 a1064b9838b6b4feee61eaeb0925da4b4834c984b77716558860c4294ed6c015  LICENSE
-diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
-index 55f9def639..2b8f5724bc 100644
---- a/package/pulseaudio/pulseaudio.mk
-+++ b/package/pulseaudio/pulseaudio.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PULSEAUDIO_VERSION = 12.0
-+PULSEAUDIO_VERSION = 12.1
- PULSEAUDIO_SOURCE = pulseaudio-$(PULSEAUDIO_VERSION).tar.xz
- PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases
- PULSEAUDIO_INSTALL_STAGING = YES
+On 2018-07-14 12:01 +0000, Yann E. MORIN spake thusly:
+> On July 14, 2018 11:19:10 AM UTC, Martin Bark <martin@barkynet.com> wrote:
+> >On 13 July 2018 at 07:38, Yann E. MORIN <yann.morin.1998@free.fr>
+> >wrote:
+> >> Hopefully, this image is reproducible", since we are using a tagged
+> >> base image, plus a pinned repository mirror.
+[--SNIP--]
+> >It's best practice to combine the update and install from a package
+> >manger in one line.  So this should be
+> 
+> Please see:
+> 
+> https://git.busybox.net/buildroot/commit/support/docker/Dockerfile?id=c4f844ff3212266f845ea812da2a8647a9f1e13
+
+So, the reasoning is that, since we use a pinned version of the
+repository, running "pacman -Sy --noconfirm" will always yield the same
+state of the distribution.
+
+Now, it happens that we need to add a new package to the image, e.g. for
+local testing. We can thus re-use the intermediate, locally-cached image
+that has the local repository updated.
+
+It kinda speeds up things a bit.
+
+> >RUN echo
+> >'Server=https://archive.archlinux.org/repos/2018/07/01/$repo/os/$arch'
+> >\
+> >        > /etc/pacman.d/mirrorlist && \
+> >    pacman -Sy --noconfirm \
+> >
+> >> +# Pin the repository to a known version
+> >> +RUN echo
+> >'Server=https://archive.archlinux.org/repos/2018/07/01/$repo/os/$arch'
+> >\
+> >> +        > /etc/pacman.d/mirrorlist && \
+> >> +    pacman -Sy
+> >> +RUN pacman --noconfirm -S \
+> >> +        bc \
+> >> +        bzr \
+> >> +        cvs \
+> >> +        cpio \
+> >> +        flake8 \
+> >> +        git \
+> >> +        mercurial \
+> >> +        python \
+> >> +        python-nose2 \
+> >> +        python-pexpect \
+> >> +        qemu \
+> >> +        qemu-arch-extra \
+> >
+> >If you change to using qemu-headless and qemu-headless-arch-extra
+> >packages it saves about 500MB on the image size
+
+Ah, that one is interesting to know! :-)
+
+However, are we sure that we don;t need the headed version of qemu?
+
+And why do we even have to have qemu in the image to start with, in the
+end?
+
+Regards,
+Yann E. MORIN.
+
+> >Thanks
+> >
+> >Martin
+> >
+> >> +        rsync \
+> >> +        subversion \
+> >> +        unzip \
+> >> +        wget
+> >> +
+> >> +RUN sed -i 's/# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+> >> +    && /usr/sbin/locale-gen
+> >> +
+> >> +RUN useradd -ms /bin/bash br-user
+> >> +
+> >> +USER br-user
+> >> +WORKDIR /home/br-user
+> >> +ENV HOME /home/br-user
+> >> +ENV LC_ALL en_US.UTF-8
+> >> --
+> >> 2.14.1
+> >>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> Martin, All,
+> -- 
+> Sent from my phone. Please excuse my brevity.
+
 -- 
-2.18.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
