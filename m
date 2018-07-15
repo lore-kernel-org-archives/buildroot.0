@@ -1,95 +1,103 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 14 Jul 2018 18:07:31 -0700
-Subject: [Buildroot] [PATCH v3 5/6] docker-containerd: bump to v1.1.1
+Date: Sat, 14 Jul 2018 18:07:22 -0700
+Subject: [Buildroot] [PATCH 2/6] dumb-init: new package
 In-Reply-To: <20180715010732.21765-1-christian@paral.in>
 References: <20180715010732.21765-1-christian@paral.in>
-Message-ID: <20180715010732.21765-11-christian@paral.in>
+Message-ID: <20180715010732.21765-2-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit bumps docker-containerd to v1.1.1.
+dumb-init is a minimal init process to act as PID 1 for containers.
 
-This is a requisite bump for the upgrade of docker-engine to 2018.06.
+Static compilation is used, as dumb-init will typically be executed inside a
+container.
+
+dumb-init can satisfy docker-engine's docker-init requirement.
 
 Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/docker-containerd/Config.in              | 12 ++++++++++++
- package/docker-containerd/docker-containerd.hash |  2 +-
- package/docker-containerd/docker-containerd.mk   | 18 +++++++++++++++---
- 3 files changed, 28 insertions(+), 4 deletions(-)
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index 2f7bf71af1..851345f73e 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -15,6 +15,18 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 
- 	  https://github.com/docker/containerd
- 
-+if BR2_PACKAGE_DOCKER_CONTAINERD
-+
-+config BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS
-+	bool "btrfs snapshot driver"
-+	depends on BR2_USE_MMU # btrfs-progs
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # btrfs-progs
-+	select BR2_PACKAGE_BTRFS_PROGS
+---
+
+Changes since v1:
+
+ - Upgraded to v1.2.1
+ - Added license hash
+---
+ package/Config.in                |  1 +
+ package/dumb-init/Config.in      |  7 +++++++
+ package/dumb-init/dumb-init.hash |  3 +++
+ package/dumb-init/dumb-init.mk   | 24 ++++++++++++++++++++++++
+ 4 files changed, 35 insertions(+)
+ create mode 100644 package/dumb-init/Config.in
+ create mode 100644 package/dumb-init/dumb-init.hash
+ create mode 100644 package/dumb-init/dumb-init.mk
+
+diff --git a/package/Config.in b/package/Config.in
+index 9d657287cd..2aeb8d0f10 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1968,6 +1968,7 @@ comment "Utilities"
+ 	source "package/crudini/Config.in"
+ 	source "package/dialog/Config.in"
+ 	source "package/dtach/Config.in"
++	source "package/dumb-init/Config.in"
+ 	source "package/easy-rsa/Config.in"
+ 	source "package/file/Config.in"
+ 	source "package/gnupg/Config.in"
+diff --git a/package/dumb-init/Config.in b/package/dumb-init/Config.in
+new file mode 100644
+index 0000000000..e817493605
+--- /dev/null
++++ b/package/dumb-init/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_DUMB_INIT
++	bool "dumb-init"
 +	help
-+	  Build the btrfs snapshot driver for containerd.
++	  dumb-init is a simple but valid init binary to
++	  act as PID 1 for containers.
 +
-+endif
++	  https://github.com/Yelp/dumb-init
+diff --git a/package/dumb-init/dumb-init.hash b/package/dumb-init/dumb-init.hash
+new file mode 100644
+index 0000000000..9e74ff5580
+--- /dev/null
++++ b/package/dumb-init/dumb-init.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256	56858088d9d6c911c227d196fcbfca06aff31fbe83e1519f9cabe5cf6f11b242	dumb-init-v1.2.1.tar.gz
++sha256	4d74123f166ad8f147e9939bfb451578db84823f22b48fd64b1086d3654a0149  LICENSE
+diff --git a/package/dumb-init/dumb-init.mk b/package/dumb-init/dumb-init.mk
+new file mode 100644
+index 0000000000..4ebbff1930
+--- /dev/null
++++ b/package/dumb-init/dumb-init.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# dumb-init
++#
++################################################################################
 +
- comment "docker-containerd needs a toolchain w/ threads"
- 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index 992eb5b01a..6d5ed45589 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -1,2 +1,2 @@
- # Computed locally
--sha256	da89086a7c643702a2ddecec67a45d3d8e4b0d610dd19036be63e6bd54cc1a85	docker-containerd-9048e5e50717ea4497b757314bad98ea3763c145.tar.gz
-+sha256	2901e3f6113ea97850ec9ac5640db0273c7f10e887701f7da2cf3ae1a730934e  docker-containerd-v1.1.1.tar.gz
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 09e89f1aba..85dd6e1f71 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
--DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
-+DOCKER_CONTAINERD_VERSION = v1.1.1
-+DOCKER_CONTAINERD_COMMIT = d64c661f1d51c48782c9cec8fda7604785f93587
-+DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
- 
-@@ -14,10 +15,21 @@ DOCKER_CONTAINERD_WORKSPACE = vendor
- DOCKER_CONTAINERD_LDFLAGS = \
- 	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
- 
--DOCKER_CONTAINERD_BUILD_TARGETS = ctr containerd containerd-shim
-+DOCKER_CONTAINERD_BUILD_TARGETS = cmd/ctr cmd/containerd cmd/containerd-shim
- 
- DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
- 
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+DOCKER_CONTAINERD_DEPENDENCIES += libseccomp
-+DOCKER_CONTAINERD_TAGS += seccomp
-+endif
++DUMB_INIT_VERSION = v1.2.1
++DUMB_INIT_SITE = $(call github,Yelp,dumb-init,$(DUMB_INIT_VERSION))
 +
-+ifeq ($(BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS),y)
-+DOCKER_CONTAINERD_DEPENDENCIES += btrfs-progs
-+else
-+DOCKER_CONTAINERD_TAGS += no_btrfs
-+endif
++DUMB_INIT_LICENSE = MIT
++DUMB_INIT_LICENSE_FILES = LICENSE
++DUMB_INIT_CFLAGS += -static
 +
- define DOCKER_CONTAINERD_INSTALL_SYMLINKS
- 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
- 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
++define DUMB_INIT_BUILD_CMDS
++	$(TARGET_CC) \
++		$(DUMB_INIT_CFLAGS) \
++		-o $(@D)/dumb-init $(@D)/dumb-init.c
++endef
++
++define DUMB_INIT_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/dumb-init $(TARGET_DIR)/usr/bin/dumb-init
++endef
++
++$(eval $(generic-package))
 -- 
 2.16.1
