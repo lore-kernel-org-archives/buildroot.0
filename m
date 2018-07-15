@@ -1,87 +1,48 @@
 From: Christian Stewart <christian@paral.in>
-Date: Sat, 14 Jul 2018 18:07:23 -0700
-Subject: [Buildroot] [PATCH 3/6] docker-engine: add support for init
- processes
+Date: Sat, 14 Jul 2018 18:07:30 -0700
+Subject: [Buildroot] [PATCH v3 4/6] runc: bump to 69663f0b
 In-Reply-To: <20180715010732.21765-1-christian@paral.in>
 References: <20180715010732.21765-1-christian@paral.in>
-Message-ID: <20180715010732.21765-3-christian@paral.in>
+Message-ID: <20180715010732.21765-10-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a docker container is run with the --init flag, the Docker engine
-uses the docker-init binary as PID 1 inside the container. This is
-necessary in may cases to avoid issues with signal handling, zombie
-processes, and other quirks when running as PID 1.
+This commit bumps runc to the requisite version for Docker 2018.06.
 
-The docker-init binary is backed by tini on default, but optionally can
-be changed to docker-init by user preference.
+Added note about where runc version dependency is declared:
 
-Furthermore, this patch fixes the following Docker error:
-
-  dockerd: level=warning msg="failed to retrieve docker-init version"
+RUNC_VERSION = 69663f0bd4b60df09991c08812a60108003fa340
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-engine/Config.in        | 26 ++++++++++++++++++++++++++
- package/docker-engine/docker-engine.mk |  6 ++++++
- 2 files changed, 32 insertions(+)
+ package/runc/runc.hash | 2 +-
+ package/runc/runc.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 8feb11b48c..a76940b6c0 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -34,6 +34,32 @@ config BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT
+diff --git a/package/runc/runc.hash b/package/runc/runc.hash
+index 3e188c5c79..d6bdfe24c7 100644
+--- a/package/runc/runc.hash
++++ b/package/runc/runc.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256	b5c50d7d9a5f610d5424f96196efa306ec708fd9299302dd919545099c16b7c1	runc-9c2d8d184e5da67c95d601382adf14862e4f2228.tar.gz
++sha256	994a3a0447fcbf7e37614b02aa5604d2d6b9fdb41e6870d8d3ff1138ed6e61ef  runc-69663f0bd4b60df09991c08812a60108003fa340.tar.gz
+diff --git a/package/runc/runc.mk b/package/runc/runc.mk
+index f1586f32b2..7f42c962f3 100644
+--- a/package/runc/runc.mk
++++ b/package/runc/runc.mk
+@@ -4,7 +4,8 @@
+ #
+ ################################################################################
  
- if BR2_PACKAGE_DOCKER_ENGINE_DAEMON
- 
-+choice
-+	bool "docker-init to use"
-+	default BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	help
-+	  The docker engine uses a minimal init process as PID 1
-+	  inside containers. There are several implementations
-+	  of this init process.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_TINI
-+	bool "tini"
-+	select BR2_PACKAGE_TINI
-+	help
-+	  Use Tini as the container init process.
-+
-+	  https://github.com/krallin/tini
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT
-+	bool "dumb-init"
-+	select BR2_PACKAGE_DUMB_INIT
-+	help
-+	  Use dumb-init as the container init process.
-+
-+	  https://github.com/Yelp/dumb-init
-+
-+endchoice
-+
- config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_BTRFS
- 	bool "btrfs filesystem driver"
- 	depends on BR2_USE_MMU # btrfs-progs
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index ba84b4cf0a..a85f4b5784 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -63,6 +63,12 @@ endif
- 
- DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
- 
-+ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_INIT_DUMB_INIT),y)
-+DOCKER_ENGINE_INSTALL_BINS += dumb-init
-+else
-+DOCKER_ENGINE_INSTALL_BINS += tini
-+endif
-+
- define DOCKER_ENGINE_RUN_AUTOGEN
- 	cd $(@D) && \
- 		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
+-RUNC_VERSION = 9c2d8d184e5da67c95d601382adf14862e4f2228
++# docker-engine/hack/dockerfile/install/runc.installer:4 RUNC_COMMIT=...
++RUNC_VERSION = 69663f0bd4b60df09991c08812a60108003fa340
+ RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
+ RUNC_LICENSE = Apache-2.0
+ RUNC_LICENSE_FILES = LICENSE
 -- 
 2.16.1
