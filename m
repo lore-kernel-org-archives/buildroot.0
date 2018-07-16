@@ -1,41 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Jul 2018 17:03:16 +0200
-Subject: [Buildroot] [PATCH v4 1/1] capnproto: new package
-In-Reply-To: <1531261885-2834-1-git-send-email-JoelsonCarl@gmail.com>
-References: <1531261885-2834-1-git-send-email-JoelsonCarl@gmail.com>
-Message-ID: <20180716170316.25a89bb7@windsurf>
+From: Christoph Engelbert <me@noctarius.com>
+Date: Mon, 16 Jul 2018 18:13:03 +0300
+Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds
+ "regulatory.db[.p7s]" to /lib/firmware
+Message-ID: <20180716151303.18064-1-me@noctarius.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+With kernel version 4.15, Linux started to support loading regulatory.db and regulatory.db.p7s files
+directly from /lib/firmware, without the need of crda. If the kernel can't load those files it'll
+fallback to using crda, but the direct way is preferred.
 
-On Tue, 10 Jul 2018 16:31:25 -0600, Joel Carlson wrote:
-> Adds the capnproto package. This also builds a host variant to generate
-> the capnp compiler that can be used to compile message definitions into
-> C++ code. Includes a patch from upstream to fix an issue with uclibc.
-> 
-> Signed-off-by: Koen Martens <gmc@sonologic.nl>
-> Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+This patch copies those those files under /lib/firmware. The use of crda shouldn't be necessary with
+kernels of 4.15 or later.
 
-Thanks, I've applied, after doing one more change.
+Signed-off-by: Christoph Engelbert <me@noctarius.com>
+---
+ package/wireless-regdb/wireless-regdb.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> +CAPNPROTO_CONF_ENV += LIBS=-latomic
-
-You can't do that unconditionally, because libatomic doesn't always
-exists. This needs to be enclosed in a BR2_TOOLCHAIN_HAS_LIBATOMIC
-condition.
-
-For example, some architectures provide __atomic built-ins with gcc
-4.7 (so BR2_TOOLCHAIN_HAS_ATOMIC is true), and there was no libatomic at
-the time (so BR2_TOOLCHAIN_HAS_LIBATOMIC is false).
-
-Thanks!
-
-Thomas
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index e9283a00e2..829374edcf 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -15,6 +15,10 @@ define WIRELESS_REGDB_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
+ 	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+ 		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
++	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db \
++		$(TARGET_DIR)/lib/firmware/regulatory.db
++	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db.p7s \
++		$(TARGET_DIR)/lib/firmware/regulatory.db.p7s
+ endef
+ 
+ $(eval $(generic-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
