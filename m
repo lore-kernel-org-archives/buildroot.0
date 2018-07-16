@@ -1,40 +1,31 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 17 Jul 2018 00:19:08 +0200
-Subject: [Buildroot] [PATCH v3 1/6] tini: new package
-In-Reply-To: <CA+h8R2oxXWWnPT8dnn0Bt4UL=JA8SGjDg3vCyZNNchrPCaWJ+w@mail.gmail.com>
-References: <20180715010732.21765-1-christian@paral.in>
- <20180715010732.21765-7-christian@paral.in> <20180715160129.GF2516@scaer>
- <CA+h8R2oxXWWnPT8dnn0Bt4UL=JA8SGjDg3vCyZNNchrPCaWJ+w@mail.gmail.com>
-Message-ID: <f5bb48b8-d69b-bf4f-cbd7-59b98f577ab7@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Jul 2018 00:33:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pulseaudio: bump version to 12.2
+In-Reply-To: <20180716183552.5755-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 16 Jul 2018 20:35:52 +0200")
+References: <20180716183552.5755-1-bernd.kuhls@t-online.de>
+Message-ID: <87d0vmq09a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
+ > Release notes:
+ > https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-July/030280.html
 
-On 15-07-18 21:26, Christian Stewart wrote:
-> To me, the logic goes, if you're doing a static build, you can't build a shared
-> binary. If you're doing a shared build, you can always build a static binary. Is
-> this not the case?
+ > Removed md5 and sha1 hashes, not provided by upstream anymore.
+ > Added sha256 hash provided by upstream, removed locally computed sha256
+ > hash.
 
- The toolchains always install libc.a (and libm.a too, I think). So as long as
-you use _only_ libc.a, you can do a static link even in BR2_SHARED_LIBS. But as
-soon as you use anything else (in particular, in the case of glibc, libnss which
-gets pulled in automatically if you use some getnameinfo related function), it's
-no longer possible to link statically.
+ > Fixes
+ > http://autobuild.buildroot.net/results/c8d/c8d3822ee34d0bbcba14eecc8524c8c865c85c1b/
 
- So yes, it is possible to link some individual packages statically even in
-BR2_SHARED_LIBS.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- Regards,
- Arnout
+Committed, thanks.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
