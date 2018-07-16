@@ -1,43 +1,107 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Jul 2018 13:47:35 +0200
-Subject: [Buildroot] [PATCH 00/10] new perl packages
-In-Reply-To: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-References: <20180712210054.13775-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180716134735.6bbd3696@windsurf>
+From: aai at tut.by <aai@tut.by>
+Date: Mon, 16 Jul 2018 16:23:27 +0300
+Subject: [Buildroot] Orange Pi Prime does not boot
+References: <20695741531212798@myt3-12f13c3c6b95.qloud-c.yandex.net>
+ <CAMty3ZC3rc7rZRtBZMnaQxP=kLJ9AnGWuoCsiV_bHa9UPQ=33g@mail.gmail.com>
+ <20180713201836.03884858@gmx.net>
+Message-ID: <24361531747407@iva5-d3020dc3459d.qloud-c.yandex.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Thu, 12 Jul 2018 23:00:44 +0200, Thomas De Schampheleire wrote:
 
-> 
-> Thomas De Schampheleire (10):
->   perl-convert-asn1: new package
->   perl-crypt-blowfish: new package
->   perl-crypt-cbc: new package
->   perl-digest-md5: new package
->   perl-mime-base64-urlsafe: new package
->   perl-mojolicious-plugin-authentication: new package
->   perl-net-ping: new package
->   perl-net-snmp: new package
->   perl-net-ssh2: new package
->   perl-net-telnet: new package
+13.07.2018, 21:18, "Peter Seiderer" <ps.report@gmx.net>:
+> Hello,
+>
+> On Fri, 13 Jul 2018 20:43:49 +0530, Jagan Teki <jagan@amarulasolutions.com> wrote:
+>
+>> ?On Tue, Jul 10, 2018 at 2:23 PM, <aai@tut.by> wrote:
+>> ?> Hello,
+>> ?>
+>> ?> orangepi_prime_defconfig does not work for me (try buildroot 2018.02.3 and 2018.05)
+>> ?>
+>> ?> I do:
+>> ?> make orangepi_prime_defconfig
+>> ?> make
+>> ?>
+>> ?> boot log:
+>> ?> --------------------------------------------------------------
+>> ?> Terminal ready
+>> ?>
+>> ?> U-Boot SPL 2017.11 (Jul 09 2018 - 10:12:15)
+>> ?> DRAM: 2048 MiB
+>> ?> Trying to boot from MMC1
+>> ?>
+>> ?>
+>> ?> U-Boot 2017.11 (Jul 09 2018 - 10:12:15 +0300) Allwinner Technology
+>> ?>
+>> ?> CPU: Allwinner H5 (SUN50I)
+>> ?> Model: OrangePi Prime
+>> ?> DRAM: 2 GiB
+>> ?> MMC: SUNXI SD/MMC: 0
+>> ?> *** Warning - bad CRC, using default environment
+>> ?>
+>> ?> In: serial
+>> ?> Out: serial
+>> ?> Err: serial
+>> ?> Net: No ethernet found.
+>> ?> starting USB...
+>> ?> USB0: USB EHCI 1.00
+>> ?> USB1: USB OHCI 1.0
+>> ?> scanning bus 0 for devices... 1 USB Device(s) found
+>> ?> scanning usb for storage devices... 0 Storage Device(s) found
+>> ?> Hit any key to stop autoboot: 0
+>> ?> switch to partitions #0, OK
+>> ?> mmc0 is current device
+>> ?> Scanning mmc 0:1...
+>> ?> Found U-Boot script /boot.scr
+>> ?> reading /boot.scr
+>> ?> 277 bytes read in 14 ms (18.6 KiB/s)
+>> ?> ## Executing script at 4fc00000
+>> ?> reading Image
+>> ?> 17365504 bytes read in 870 ms (19 MiB/s)
+>> ?> reading sun50i-h5-orangepi-prime.dtb
+>> ?> 13714 bytes read in 25 ms (535.2 KiB/s)
+>> ?> ## Flattened Device Tree blob at 4fa00000
+>> ?> Booting using the fdt blob at 0x4fa00000
+>> ?> Loading Device Tree to 0000000049ff9000, end 0000000049fff591 ... OK
+>
+> From Jagans boot log:
+>
+> reading /boot.scr
+> 277 bytes read in 15 ms (17.6 KiB/s)
+> ## Executing script at 4fc00000
+> reading Image
+> 16310784 bytes read in 820 ms (19 MiB/s)
+> reading sun50i-h5-orangepi-prime.dtb
+> 13714 bytes read in 26 ms (514.6 KiB/s)
+> ## Flattened Device Tree blob at 4fa00000
+> ???Booting using the fdt blob at 0x4fa00000
+> ???Loading Device Tree to 0000000049ff9000, end 0000000049fff591 ... OK
+>
+> Jagan Image size: 16310784
+> aai Image size: 17365504
 
-I have applied. However, the <pkg>_LICENSE variable is missing for some
-packages, and it would be good to add it. This is particularly striking
-for perl-crypt-blowfish, which does have a COPYRIGHT file, so clearly,
-it has some license information.
 
-Could you send follow-up patches to add those license details ?
+I built the image again on another computer. Image size is 16310784. But I can not check booting now. 
+I will try later, maybe by the end of the week
 
-Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> The only visible difference (besides not booting)...
+>
+> Regards,
+> Peter
+>
+>> ?>
+>> ?> Starting kernel ...
+>> ?> --------------------------------------------------------------
+>>
+>> ?It's booting fine with my side, here is full boot log[1]
+>>
+>> ?[1] https://paste.ubuntu.com/p/mQsRxMrKnh/
+>>
+>> ?Jagan.
