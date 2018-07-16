@@ -1,10 +1,11 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 16 Jul 2018 06:38:28 +0300
-Subject: [Buildroot] [PATCH v4 2/3] docker-containerd: bump to v1.1.1
-In-Reply-To: <20180715224340.30282-2-christian@paral.in>
+Date: Mon, 16 Jul 2018 06:40:59 +0300
+Subject: [Buildroot] [PATCH v4 3/3] docker-engine: split into
+ docker-{cli, engine}, bump v2018.06-ce-rc3
+In-Reply-To: <20180715224340.30282-3-christian@paral.in>
 References: <20180715224340.30282-1-christian@paral.in>
- <20180715224340.30282-2-christian@paral.in>
-Message-ID: <20180716033828.vx2ojaqcfricwsbx@sapphire.tkos.co.il>
+ <20180715224340.30282-3-christian@paral.in>
+Message-ID: <20180716034058.wju3oo324cg2tiyz@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,49 +14,84 @@ To: buildroot@busybox.net
 
 Hi Christian,
 
-On Sun, Jul 15, 2018 at 03:43:39PM -0700, Christian Stewart wrote: 
-> diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-> index 09e89f1aba..85dd6e1f71 100644
-> --- a/package/docker-containerd/docker-containerd.mk
-> +++ b/package/docker-containerd/docker-containerd.mk
-> @@ -4,8 +4,9 @@
+On Sun, Jul 15, 2018 at 03:43:40PM -0700, Christian Stewart wrote: 
+> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+> index ba84b4cf0a..1add82471d 100644
+> --- a/package/docker-engine/docker-engine.mk
+> +++ b/package/docker-engine/docker-engine.mk
+> @@ -4,25 +4,21 @@
 >  #
 >  ################################################################################
 >  
-> -DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
-> -DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
-> +DOCKER_CONTAINERD_VERSION = v1.1.1
-> +DOCKER_CONTAINERD_COMMIT = d64c661f1d51c48782c9cec8fda7604785f93587
+> -DOCKER_ENGINE_VERSION = v17.05.0-ce
+> -DOCKER_ENGINE_COMMIT = 89658bed64c2a8fe05a978e5b87dbec409d57a0f
 
-Where is this being used?
+You remove it here ...
 
-> +DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
->  DOCKER_CONTAINERD_LICENSE = Apache-2.0
->  DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+> -DOCKER_ENGINE_SITE = $(call github,docker,docker,$(DOCKER_ENGINE_VERSION))
+> +DOCKER_ENGINE_VERSION = v18.06.0-ce-rc3
+> +DOCKER_ENGINE_SITE = $(call github,docker,engine,$(DOCKER_ENGINE_VERSION))
 >  
-> @@ -14,10 +15,21 @@ DOCKER_CONTAINERD_WORKSPACE = vendor
->  DOCKER_CONTAINERD_LDFLAGS = \
->  	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+>  DOCKER_ENGINE_LICENSE = Apache-2.0
+>  DOCKER_ENGINE_LICENSE_FILES = LICENSE
 >  
-> -DOCKER_CONTAINERD_BUILD_TARGETS = ctr containerd containerd-shim
-> +DOCKER_CONTAINERD_BUILD_TARGETS = cmd/ctr cmd/containerd cmd/containerd-shim
+>  DOCKER_ENGINE_DEPENDENCIES = host-go host-pkgconf
+> +DOCKER_ENGINE_SRC_SUBDIR = github.com/docker/docker
 >  
->  DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
+>  DOCKER_ENGINE_LDFLAGS = \
+>  	-X main.GitCommit=$(DOCKER_ENGINE_VERSION) \
+>  	-X main.Version=$(DOCKER_ENGINE_VERSION)
 >  
-> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-> +DOCKER_CONTAINERD_DEPENDENCIES += libseccomp
-> +DOCKER_CONTAINERD_TAGS += seccomp
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS),y)
-> +DOCKER_CONTAINERD_DEPENDENCIES += btrfs-progs
-> +else
-> +DOCKER_CONTAINERD_TAGS += no_btrfs
-> +endif
-> +
->  define DOCKER_CONTAINERD_INSTALL_SYMLINKS
->  	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
->  	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
+> -ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_STATIC_CLIENT),y)
+> -DOCKER_ENGINE_LDFLAGS += -extldflags '-static'
+> -endif
+> -
+>  DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs autogen
+> -DOCKER_ENGINE_BUILD_TARGETS = cmd/docker
+> +DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd
+>  
+>  ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+>  DOCKER_ENGINE_TAGS += seccomp
+> @@ -32,11 +28,7 @@ endif
+>  ifeq ($(BR2_INIT_SYSTEMD),y)
+>  DOCKER_ENGINE_TAGS += journald
+>  DOCKER_ENGINE_DEPENDENCIES += systemd
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+> -DOCKER_ENGINE_TAGS += daemon
+> -DOCKER_ENGINE_BUILD_TARGETS += cmd/dockerd
+> +DOCKER_ENGINE_TAGS += systemd journald
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_EXPERIMENTAL),y)
+> @@ -67,6 +59,7 @@ define DOCKER_ENGINE_RUN_AUTOGEN
+>  	cd $(@D) && \
+>  		GITCOMMIT="$$(echo $(DOCKER_ENGINE_COMMIT) | head -c7)" \
+
+.. but still used it here.
+
+>  		BUILDTIME="$$(date)" \
+> +		IAMSTATIC="true" \
+>  		VERSION="$(patsubst v%,%,$(DOCKER_ENGINE_VERSION))" \
+>  		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" $(TARGET_MAKE_ENV) \
+>  		bash ./hack/make/.go-autogen
+> @@ -74,8 +67,6 @@ endef
+>  
+>  DOCKER_ENGINE_POST_CONFIGURE_HOOKS += DOCKER_ENGINE_RUN_AUTOGEN
+>  
+> -ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DAEMON),y)
+> -
+>  define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+>  	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
+>  		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
+> @@ -90,6 +81,4 @@ define DOCKER_ENGINE_USERS
+>  	- - docker -1 * - - - Docker Application Container Framework
+>  endef
+>  
+> -endif
+> -
+>  $(eval $(golang-package))
 
 baruch
 
