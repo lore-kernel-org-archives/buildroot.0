@@ -1,75 +1,65 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 15 Jul 2018 22:32:48 -0300
-Subject: [Buildroot] [PATCH 6/6] support/testing/tests/core: SSP &
- hardening flags
-References: <20180711143113.11927-7-matthew.weber@rockwellcollins.com>
-Message-ID: <5b4bf5c0f404_14132af17f6f95b4173ee@ultri5.mail>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 16 Jul 2018 06:38:28 +0300
+Subject: [Buildroot] [PATCH v4 2/3] docker-containerd: bump to v1.1.1
+In-Reply-To: <20180715224340.30282-2-christian@paral.in>
+References: <20180715224340.30282-1-christian@paral.in>
+ <20180715224340.30282-2-christian@paral.in>
+Message-ID: <20180716033828.vx2ojaqcfricwsbx@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Christian,
 
-Looks good in general. A few nits below.
+On Sun, Jul 15, 2018 at 03:43:39PM -0700, Christian Stewart wrote: 
+> diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+> index 09e89f1aba..85dd6e1f71 100644
+> --- a/package/docker-containerd/docker-containerd.mk
+> +++ b/package/docker-containerd/docker-containerd.mk
+> @@ -4,8 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -DOCKER_CONTAINERD_VERSION = 9048e5e50717ea4497b757314bad98ea3763c145
+> -DOCKER_CONTAINERD_SITE = $(call github,docker,containerd,$(DOCKER_CONTAINERD_VERSION))
+> +DOCKER_CONTAINERD_VERSION = v1.1.1
+> +DOCKER_CONTAINERD_COMMIT = d64c661f1d51c48782c9cec8fda7604785f93587
 
-On Wed, Jul 11, 2018 at 11:31 AM, Matt Weber wrote:
+Where is this being used?
 
-> Catch the commonly used options of SSP, Relro, and fortify.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  support/testing/tests/core/test_hardening.py | 104 +++++++++++++++++++
->  1 file changed, 104 insertions(+)
->  create mode 100644 support/testing/tests/core/test_hardening.py
-
-You forgot to run 'make .gitlab-ci.yml'. It could be done while applying.
-
-> 
-> diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
-> new file mode 100644
-> index 0000000000..2a479d89aa
-> --- /dev/null
-> +++ b/support/testing/tests/core/test_hardening.py
-
-Could you fix the 6 warnings from flake8?
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/81143173
-
-[snip]
-> +class TestRelro(infra.basetest.BRTest):
-> +    config = HARD_DEFCONFIG + \
-> +        """
-> +        BR2_RELRO_FULL=y
-> +        """
+> +DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
+>  DOCKER_CONTAINERD_LICENSE = Apache-2.0
+>  DOCKER_CONTAINERD_LICENSE_FILES = LICENSE.code
+>  
+> @@ -14,10 +15,21 @@ DOCKER_CONTAINERD_WORKSPACE = vendor
+>  DOCKER_CONTAINERD_LDFLAGS = \
+>  	-X github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+>  
+> -DOCKER_CONTAINERD_BUILD_TARGETS = ctr containerd containerd-shim
+> +DOCKER_CONTAINERD_BUILD_TARGETS = cmd/ctr cmd/containerd cmd/containerd-shim
+>  
+>  DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
+>  
+> +ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
+> +DOCKER_CONTAINERD_DEPENDENCIES += libseccomp
+> +DOCKER_CONTAINERD_TAGS += seccomp
+> +endif
 > +
-> +    def test_run(self):
-> +        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
-> +        self.assertEqual(out["file"]["relro"], "full")
-> +        self.assertEqual(out["file"]["pie"], "yes")
-> +        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
-> +        self.assertEqual(out["file"]["relro"], "full")
-
-Any reason to not test 'pie' for busybox?
-        self.assertEqual(out["file"]["pie"], "yes")
-
+> +ifeq ($(BR2_PACKAGE_DOCKER_CONTAINERD_DRIVER_BTRFS),y)
+> +DOCKER_CONTAINERD_DEPENDENCIES += btrfs-progs
+> +else
+> +DOCKER_CONTAINERD_TAGS += no_btrfs
+> +endif
 > +
-> +class TestRelroPartial(infra.basetest.BRTest):
-> +    config = HARD_DEFCONFIG + \
-> +        """
-> +        BR2_RELRO_PARTIAL=y
-> +        """
-> +
-> +    def test_run(self):
-> +        out = json.loads(checksec_run(self.builddir, "target/usr/sbin/lighttpd"))
-> +        self.assertEqual(out["file"]["relro"], "partial")
-> +        self.assertEqual(out["file"]["pie"], "no")
-> +        out = json.loads(checksec_run(self.builddir, "target/bin/busybox"))
-> +        self.assertEqual(out["file"]["relro"], "partial")
+>  define DOCKER_CONTAINERD_INSTALL_SYMLINKS
+>  	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
+>  	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
 
-The same here:
-        self.assertEqual(out["file"]["pie"], "no")
+baruch
 
-
-Regards,
-Ricardo
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
