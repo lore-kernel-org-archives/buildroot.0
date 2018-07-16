@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Jul 2018 13:18:44 +0200
-Subject: [Buildroot] [PATCH] package/automake: bump version to 1.16.1
-In-Reply-To: <20180706212709.10376-1-jean-francois.tetu@savoirfairelinux.com>
-References: <20180706212709.10376-1-jean-francois.tetu@savoirfairelinux.com>
-Message-ID: <20180716131844.5173b878@windsurf>
+Date: Mon, 16 Jul 2018 13:19:50 +0200
+Subject: [Buildroot] [PATCH v3,2/2] librsvg: bump to version 2.42.5
+In-Reply-To: <20180610133857.4737-2-fontaine.fabrice@gmail.com>
+References: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
+ <20180610133857.4737-2-fontaine.fabrice@gmail.com>
+Message-ID: <20180716131950.418525f0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,23 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  6 Jul 2018 17:27:09 -0400, Jean-Fran?ois T?tu wrote:
-> If Buildroot is run from a folder containing a '@' in the path, automake
-> will fail since the aclocal Perl script will interpret what is after the
-> '@' as an array in its system include paths. This was fixed in automake
-> 1.16.1.
+On Sun, 10 Jun 2018 15:38:57 +0200, Fabrice Fontaine wrote:
+> - Add a dependency to host-cargo
+> - Add a patch to set RUST_TARGET
+> - Add a dependency to BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> - Forward this dependency to efl svg, enlightment, gst-plugins-bad and
+>   gst1-plugins-bad
+> - Add hash for license file
 > 
-> Signed-off-by: Jean-Fran?ois T?tu <jean-francois.tetu@savoirfairelinux.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/automake/automake.hash | 2 +-
->  package/automake/automake.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Changes v2 -> v3 (after review of Thomas Petazzoni)
+>  - Put back select BR2_PACKAGE_HOST_CARGO in Config.in (even if it is
+>    not needed) as well as first patch
 
-Since this commit was causing breakage at least in squid, for which the
-fix was not yet accepted, I've for now reverted the automake bump.
-Could you resend a patch series that includes the automake bump as well
-as the fixes for the different packages causing build breakage (i.e at
-least squid) ?
+This commit was causing many build failures in the autobuilders, due to
+the Rust issue Peter and I have discussed in this thread. It's bit more
+than a month, and nobody stepped up to fix the Rust issues, so for now,
+the safe thing to do is to revert the librsvg bump.
+
+I'll be happy to merge it again once the Rust issues are resolved.
 
 Thanks!
 
