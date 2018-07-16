@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 15 Jul 2018 21:48:05 -0300
-Subject: [Buildroot] [PATCH 3/5] support/docker: add a Fedore-28 based
+Date: Sun, 15 Jul 2018 22:05:14 -0300
+Subject: [Buildroot] [PATCH 5/5] support/docker: add an Alpine-3.7 based
  image
-References: <2738bd4dedf368eb12a7564eff1c2c33b696691f.1531463897.git.yann.morin.1998@free.fr>
-Message-ID: <5b4beb451146b_7adf3f993c69335844119@ultri5.mail>
+References: <9f99ad9f8d86876a7e16185a9025223bc01edf9d.1531463897.git.yann.morin.1998@free.fr>
+Message-ID: <5b4bef4a7808a_7adf2afd8a7d089044369@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,45 +12,47 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, Jul 13, 2018 at 03:38 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+On Fri, Jul 13, 2018 at 03:38 AM, Yann E. MORIN wrote:
 
 [snip]
-> +RUN rm -f /etc/yum.repos.d/fedora-updates*.repo && \
-> +    dnf -y install \
-> +        @development-tools \
-> +        bc \
-> +        bzip2 \
-> +        bzr \
-> +        cpio \
-> +        cvs \
-> +        file \
-> +        gcc-c++ \
-> +        git \
+> +RUN apk add \
+> +    alpine-sdk \
+> +    bash \
+> +    bc \
+> +    bzip2 \
+> +    bzr \
+> +    cpio \
+> +    cvs \
+> +    file \
+> +    flake8 \
 
-> +        ncurses-devel \
-> +        mercurial \
+Not sure why it does not work. See:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/81881805
 
-Er, the sort failed here. :-)
+Maybe it's a dependency issue that we can work around by adding py-enum34? (not
+tested)
 
-> +        perl-ExtUtils-MakeMaker \
-> +        perl-Thread-Queue \
-> +        python-nose2 \
-> +        python-pexpect \
+> +    grep \
+> +    gzip \
+> +    mercurial \
+> +    ncurses-dev \
+> +    perl \
+> +    py2-nose \
 
-Maybe add python2-flake8.noarch (not tested) for consistency between the docker
-images? See:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/81878555
+No. We need nose2. See:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/81881843
+I am not sure it is packaged.
 
-> +        qemu-system-arm \
-> +        qemu-system-x86 \
-> +        rsync \
-> +        subversion \
-> +        unzip \
-> +        wget \
-> +    && dnf -y clean all
+> +    py2-pexpect \
+> +    python \
 
-I guess some *.i686 packages should also be added (not tested). See:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/81878562
+qemu-<something> ?
+
+> +    rsync \
+> +    subversion \
+> +    unzip \
+> +    wget
+> +
 
 
 Regards,
