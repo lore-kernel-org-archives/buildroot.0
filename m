@@ -1,43 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 16 Jul 2018 13:19:50 +0200
-Subject: [Buildroot] [PATCH v3,2/2] librsvg: bump to version 2.42.5
-In-Reply-To: <20180610133857.4737-2-fontaine.fabrice@gmail.com>
-References: <20180610133857.4737-1-fontaine.fabrice@gmail.com>
- <20180610133857.4737-2-fontaine.fabrice@gmail.com>
-Message-ID: <20180716131950.418525f0@windsurf>
+Date: Mon, 16 Jul 2018 13:30:29 +0200
+Subject: [Buildroot] [git commit] perl-digest-md5: new package
+Message-ID: <20180716113231.A25348447D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ab4f62bbbb528b903557e58a546c754b1eb4d4fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 10 Jun 2018 15:38:57 +0200, Fabrice Fontaine wrote:
-> - Add a dependency to host-cargo
-> - Add a patch to set RUST_TARGET
-> - Add a dependency to BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-> - Forward this dependency to efl svg, enlightment, gst-plugins-bad and
->   gst1-plugins-bad
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v2 -> v3 (after review of Thomas Petazzoni)
->  - Put back select BR2_PACKAGE_HOST_CARGO in Config.in (even if it is
->    not needed) as well as first patch
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/perl-digest-md5/Config.in            | 10 ++++++++++
+ package/perl-digest-md5/perl-digest-md5.hash |  6 ++++++
+ package/perl-digest-md5/perl-digest-md5.mk   | 13 +++++++++++++
+ 5 files changed, 31 insertions(+)
 
-This commit was causing many build failures in the autobuilders, due to
-the Rust issue Peter and I have discussed in this thread. It's bit more
-than a month, and nobody stepped up to fix the Rust issues, so for now,
-the safe thing to do is to revert the librsvg bump.
-
-I'll be happy to merge it again once the Rust issues are resolved.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ca7e1efd7e..6208e2b6b2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1924,6 +1924,7 @@ F:	package/opkg-utils/
+ F:	package/perl-convert-asn1/
+ F:	package/perl-crypt-blowfish/
+ F:	package/perl-crypt-cbc/
++F:	package/perl-digest-md5/
+ F:	package/pigz/
+ F:	support/scripts/size-stats
+ F:	utils/size-stats-compare
+diff --git a/package/Config.in b/package/Config.in
+index 981c84c350..1408b46bb7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -671,6 +671,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-crypt-openssl-rsa/Config.in"
+ 	source "package/perl-datetime-tiny/Config.in"
+ 	source "package/perl-digest-hmac/Config.in"
++	source "package/perl-digest-md5/Config.in"
+ 	source "package/perl-digest-sha1/Config.in"
+ 	source "package/perl-encode-detect/Config.in"
+ 	source "package/perl-encode-locale/Config.in"
+diff --git a/package/perl-digest-md5/Config.in b/package/perl-digest-md5/Config.in
+new file mode 100644
+index 0000000000..e8bb3fd8e7
+--- /dev/null
++++ b/package/perl-digest-md5/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PERL_DIGEST_MD5
++	bool "perl-digest-md5"
++	depends on !BR2_STATIC_LIBS
++	help
++	  Perl interface to the MD-5 algorithm
++
++	  https://metacpan.org/release/Digest-MD5
++
++comment "perl-digest-md5 needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-digest-md5/perl-digest-md5.hash b/package/perl-digest-md5/perl-digest-md5.hash
+new file mode 100644
+index 0000000000..3876f3aca3
+--- /dev/null
++++ b/package/perl-digest-md5/perl-digest-md5.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    601519b826ca14c233f13a4578b967ef Digest-MD5-2.55.tar.gz
++sha256 03b198a2d14425d951e5e50a885d3818c3162c8fe4c21e18d7798a9a179d0e3c Digest-MD5-2.55.tar.gz
++
++# computed by scancpan
++sha256 f92f16702159fc57cd29c23f29b7f2420bff578ed72365d0225d2945a501cd5a README
+diff --git a/package/perl-digest-md5/perl-digest-md5.mk b/package/perl-digest-md5/perl-digest-md5.mk
+new file mode 100644
+index 0000000000..f39f4b2323
+--- /dev/null
++++ b/package/perl-digest-md5/perl-digest-md5.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# perl-digest-md5
++#
++################################################################################
++
++PERL_DIGEST_MD5_VERSION = 2.55
++PERL_DIGEST_MD5_SOURCE = Digest-MD5-$(PERL_DIGEST_MD5_VERSION).tar.gz
++PERL_DIGEST_MD5_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_DIGEST_MD5_LICENSE = Artistic or GPL-1.0+
++PERL_DIGEST_MD5_LICENSE_FILES = README
++
++$(eval $(perl-package))
