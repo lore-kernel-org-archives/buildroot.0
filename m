@@ -1,49 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 16 Jul 2018 19:14:12 +0000
-Subject: [Buildroot] [Bug 11156] New: In python3 module 'socket' has no
- attribute 'AF_BLUETOOTH'
-Message-ID: <bug-11156-163@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 16 Jul 2018 21:34:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/apache: bump version to 2.4.34
+Message-ID: <20180716193457.13841-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11156
+Changelog: http://www.apache.org/dist/httpd/CHANGES_2.4.34
 
-            Bug ID: 11156
-           Summary: In python3 module 'socket' has no attribute
-                    'AF_BLUETOOTH'
-           Product: buildroot
-           Version: 2018.05
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: grzegorz at blach.pl
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/apache/apache.hash | 5 +++--
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-I have build system image for RaspberryPi 2 using `make raspberrypi2_defconfig`
-with some customization. For eg. I have enabled bluez-tools, bluez-utils 5.x,
-rpi-bt-firmware and of course python3. When I try to create bluetooth socket, I
-get an error:
-
-Python 3.6.3 (default, Jul 16 2018, 20:00:50) 
-[GCC 7.3.0] on linux
-Type "help", "copyright", "credits" or "license" for more information.
->>> import socket
->>> s = socket.socket(socket.AF_BLUETOOTH, socket.SOCK_STREAM, socket.BTPROTO_RFCOMM)
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-AttributeError: module 'socket' has no attribute 'AF_BLUETOOTH'
-
-
-Bluetooth sockets works correctly in python3 on Raspbian.
-
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 76c7c766cb..74a48ae914 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,3 +1,4 @@
+-# From http://archive.apache.org/dist/httpd/httpd-2.4.33.tar.bz2.sha256
+-sha256 de02511859b00d17845b9abdd1f975d5ccb5d0b280c567da5bf2ad4b70846f05 httpd-2.4.33.tar.bz2
++# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
++sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
++# Locally computed
+ sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 6ebd30ca40..d50e3774ff 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-APACHE_VERSION = 2.4.33
++APACHE_VERSION = 2.4.34
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = http://archive.apache.org/dist/httpd
+ APACHE_LICENSE = Apache-2.0
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.18.0
