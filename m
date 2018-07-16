@@ -1,82 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 16 Jul 2018 18:15:31 +0200
-Subject: [Buildroot] [PATCH 4/5] support/docker: add an Arch image
-In-Reply-To: <CAFGQKxfOSY5-eaNrYpuegD8X6CF6shbdZzusY1E8fWUvJcFm4w@mail.gmail.com>
-References: <cover.1531463897.git.yann.morin.1998@free.fr>
- <b909713a26b89db6eae65efffa7e05a8136fd9df.1531463897.git.yann.morin.1998@free.fr>
- <CAFGQKxd62h=khKBwP7RwM1uVsAQybHJVjuxNHfPfmaq3Re83gw@mail.gmail.com>
- <F34B3E21-3366-44DD-891B-401FF71F20E9@free.fr>
- <20180715090539.GA2516@scaer>
- <CAFGQKxe5qQQm=k+CXipjS8U0eJ3nxFB20xJ0QYSMRDbqb1sOPg@mail.gmail.com>
- <20180715194549.GG2516@scaer>
- <CAFGQKxfOSY5-eaNrYpuegD8X6CF6shbdZzusY1E8fWUvJcFm4w@mail.gmail.com>
-Message-ID: <20180716161531.GA5141@scaer>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 16 Jul 2018 09:29:08 -0700
+Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
+In-Reply-To: <CAFGQKxcnEgQpp+jHfR+fqiUSS6NgfqZ-wx-qow8iVvpmrmsSUg@mail.gmail.com>
+References: <20180710234212.4297-1-joseph.kogut@gmail.com>
+ <20180710234212.4297-5-joseph.kogut@gmail.com>
+ <CAFGQKxfwQh2UDismPjiHtdnPQO4j7D_R-jxYcs1epkg6CVwtRw@mail.gmail.com>
+ <CAMWSM7guNAObwAvHG2T0R+J-w6nzYm2_YE=5QZG8S_G-btwWyA@mail.gmail.com>
+ <CAFGQKxcnEgQpp+jHfR+fqiUSS6NgfqZ-wx-qow8iVvpmrmsSUg@mail.gmail.com>
+Message-ID: <CAMWSM7h851eMP90z27aZd0Oka_sDsvUGmZo0QRPie144zAF8yA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Martin, All,
+Martin,
 
-On 2018-07-16 01:13 +0100, Martin Bark spake thusly:
-> On 15 July 2018 at 20:45, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2018-07-15 20:30 +0100, Martin Bark spake thusly:
-> >> On 15 July 2018 at 10:05, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > [--SNIP--]
-> >> > So, the reasoning is that, since we use a pinned version of the
-> >> > repository, running "pacman -Sy --noconfirm" will always yield the same
-> >> > state of the distribution.
-> >> >
-> >> > Now, it happens that we need to add a new package to the image, e.g. for
-> >> > local testing. We can thus re-use the intermediate, locally-cached image
-> >> > that has the local repository updated.
-> >> >
-> >> > It kinda speeds up things a bit.
-[--SNIP--]
-> hey! here's how you can make it reproducible
+On Sun, Jul 15, 2018 at 2:54 PM Martin Bark <martin@barkynet.com> wrote:
+>
+> Joseph,
+>
+> On 14 July 2018 at 23:57, Joseph Kogut <joseph.kogut@gmail.com> wrote:
+> > Hi Martin,
+> >
+> > On Sat, Jul 14, 2018 at 12:11 PM Martin Bark <martin@barkynet.com> wrote:
+> >>
+> > <snip>
+> >>
+> >> I tried building for an aarch64 target and it fails with the error
+> >>
+> >> ERROR at //chrome/installer/linux/BUILD.gn:413:7: Assertion failed.
+> >>       assert(false, "Linux installer not configured for this architecture.")
+> >>
+> >> Looking at chrome/installer/linux/BUILD.gn it seems only i386, x86_64,
+> >> arm, mipsel and mips64el target architectures are supported.  I think
+> >> you need to remove BR2_aarch64 and add BR2_mipsel and BR2_mips64el
+> >>
+> >
+> > Can you try adding the argument "enable_linux_installer=false" to
+> > CHROMIUM_OPTS in chromium.mk, then reconfiguring and rebuilding?
+> >
+> > I believe the "linux installer" target here is simply packaging for
+> > Debian and Fedora, which this package doesn't use.
+> >
+>
+> Thanks, that go the build further.  Now it fails with the following
+> error.  Any ideas?
+>
+>
+>
+> ERROR at //build/config/linux/pkg_config.gni:103:17: Script returned
+> non-zero exit code.
+>     pkgresult = exec_script(pkg_config_script, args, "value")
+>                 ^----------
+> Current dir: /home/br-user/buildroot/output/build/chromium-67.0.3396.79/out/Release/
+> Command: /home/br-user/buildroot/output/host/bin/python2 --
+> /home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py
+> -s /home/br-user/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot
+> -a arm64 --system_libdir lib nss -v -lssl3
+> Returned 1.
+> stderr:
+>
+> Traceback (most recent call last):
+>   File "/home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py",
+> line 232, in <module>
+>     sys.exit(main())
+>   File "/home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py",
+> line 139, in main
+>     prefix = GetPkgConfigPrefixToStrip(options, args)
+>   File "/home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py",
+> line 80, in GetPkgConfigPrefixToStrip
+>     "--variable=prefix"] + args, env=os.environ)
+>   File "/home/br-user/buildroot/output/host/lib/python2.7/subprocess.py",
+> line 216, in check_output
+>     process = Popen(stdout=PIPE, *popenargs, **kwargs)
+>   File "/home/br-user/buildroot/output/host/lib/python2.7/subprocess.py",
+> line 394, in __init__
+>     errread, errwrite)
+>   File "/home/br-user/buildroot/output/host/lib/python2.7/subprocess.py",
+> line 1047, in _execute_child
+>     raise child_exception
+> OSError: [Errno 2] No such file or directory
+>
+> See //third_party/nss/BUILD.gn:15:3: whence it was called.
+>   pkg_config("system_nss_no_ssl_config") {
+>   ^---------------------------------------
+> See //crypto/BUILD.gn:221:25: which caused the file to be included.
+>     public_configs += [ "//third_party/nss:system_nss_no_ssl_config" ]
+>                         ^-------------------------------------------
+> package/pkg-generic.mk:219: recipe for target
+> '/home/br-user/buildroot/output/build/chromium-67.0.3396.79/.stamp_configured'
+> failed
+> make: *** [/home/br-user/buildroot/output/build/chromium-67.0.3396.79/.stamp_configured]
+> Error 1
+>
 
-Wee! :-)
-
-> 1) build the alpine docker image.
-> 2) mkdir -p support/docker/alpine_snapshot
-> 3) docker run -it --rm -v
-> $PWD/support/docker/alpine_snapshot:/snapshot -u root
-> buildroot/alpine-3.7:$BR2_DOCKER_VERSION bash
-> 4) inside the container run
-> 
-> mkdir -p /var/cache/apk
-> ln -s /var/cache/apk /etc/apk/cache
-> apk cache sync
-> cp -a /etc/apk/cache/*.apk /snapshot
-> exit
-> 
-> 7) sudo chown -R $(id -u):$(id -g) support/docker/alpine_snapshot
-> 6) edit the Dockerfile so it looks like this
-> 
-> COPY ./alpine_snapshot /snapshot
-> RUN apk add /snapshot/*.apk
-> 
-> 7) build the alpine docker image again.  it will build using the apk
-> files from /snapshot directory we just created
-> 
-> This is not ideal but it's a proof of concept.  To improve you could
-> copy the apk to a website, setup it up as a proper signed package
-> repository and then edit /etc/apk/repositories to use this snapshot
-
-Wooo... Scary...
-
-OK, I'll give it a try.
-
-Thanks you for the feedback! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+I think this issue, along with a few others, have since been resolved
+in my chromium-v7-wip branch, which you can find at
+https://github.com/jakogut/buildroot.
