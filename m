@@ -1,40 +1,159 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 15 Jul 2018 15:59:26 -0700
-Subject: [Buildroot] [PATCH v4 3/3] docker-engine: split into
- docker-{cli, engine}, bump v2018.06-ce-rc3
-In-Reply-To: <CACvFaDemV-9dCECmvrqQ6OSPrWX0S+QnSsv4JJQfGW-GcdwUSA@mail.gmail.com>
-References: <20180715224340.30282-1-christian@paral.in>
- <20180715224340.30282-3-christian@paral.in>
- <CACvFaDemV-9dCECmvrqQ6OSPrWX0S+QnSsv4JJQfGW-GcdwUSA@mail.gmail.com>
-Message-ID: <CA+h8R2qmO-DfiY+yt5X9s8Fp=eOZ-Ts7mKUmEAPQ2zVV8ZFo2A@mail.gmail.com>
+From: Martin Bark <martin@barkynet.com>
+Date: Mon, 16 Jul 2018 01:13:50 +0100
+Subject: [Buildroot] [PATCH 4/5] support/docker: add an Arch image
+In-Reply-To: <20180715194549.GG2516@scaer>
+References: <cover.1531463897.git.yann.morin.1998@free.fr>
+ <b909713a26b89db6eae65efffa7e05a8136fd9df.1531463897.git.yann.morin.1998@free.fr>
+ <CAFGQKxd62h=khKBwP7RwM1uVsAQybHJVjuxNHfPfmaq3Re83gw@mail.gmail.com>
+ <F34B3E21-3366-44DD-891B-401FF71F20E9@free.fr> <20180715090539.GA2516@scaer>
+ <CAFGQKxe5qQQm=k+CXipjS8U0eJ3nxFB20xJ0QYSMRDbqb1sOPg@mail.gmail.com>
+ <20180715194549.GG2516@scaer>
+Message-ID: <CAFGQKxfOSY5-eaNrYpuegD8X6CF6shbdZzusY1E8fWUvJcFm4w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Pascal,
+Yann,
 
-On Sun, Jul 15, 2018 at 3:51 PM Pascal Vizeli <pascal.vizeli@syshack.ch> wrote:
-> I think we should not force anything and stay with official release circle?
+On 15 July 2018 at 20:45, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> Martin, All,
+>
+> On 2018-07-15 20:30 +0100, Martin Bark spake thusly:
+>> On 15 July 2018 at 10:05, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> [--SNIP--]
+>> > So, the reasoning is that, since we use a pinned version of the
+>> > repository, running "pacman -Sy --noconfirm" will always yield the same
+>> > state of the distribution.
+>> >
+>> > Now, it happens that we need to add a new package to the image, e.g. for
+>> > local testing. We can thus re-use the intermediate, locally-cached image
+>> > that has the local repository updated.
+>> >
+>> > It kinda speeds up things a bit.
+>>
+>> Yes where you have a pinned package repo i agree splitting the update
+>> and install is ok.  So for debian and archlinux this is true but for
+>> alpine you do need the update and install in one RUN
+>
+> Agreed on principle.
+>
+> However, I'd like we use the same constructs in all our dockerfiles, for
+> consistency sake.
+>
+> And even if I did not expend too much time at making the Alpine image
+> reproducible, I expect that we can ultimately make it so, if it is not
+> already.
+>
+> In fact, I even expected people to show up and say "hey! what you did
+> makes ofr a reproducible image," or "hey! here's how you can make it
+> reproducible." ;-)
+>
 
-As noted in the commit message:
+hey! here's how you can make it reproducible
 
-> > Docker repositories "engine" and "cli" recently started tagging releases as
-> > recent as v18.06-ce-rc1, so we pull the latest tagged release v18.06-ce-rc3 and
-> > upgrade to v18.06-ce when it is released.
+1) build the alpine docker image.
+2) mkdir -p support/docker/alpine_snapshot
+3) docker run -it --rm -v
+$PWD/support/docker/alpine_snapshot:/snapshot -u root
+buildroot/alpine-3.7:$BR2_DOCKER_VERSION bash
+4) inside the container run
 
-There are no tags for v17.03.2-ce to  v18.06.* in docker/engine and docker/cli.
+mkdir -p /var/cache/apk
+ln -s /var/cache/apk /etc/apk/cache
+apk cache sync
+cp -a /etc/apk/cache/*.apk /snapshot
+exit
 
-The package split also did not happen until recently, IIRC, and we
-suffered critical instability with the early 2018 releases on our arm
-systems when testing earlier this year.
+7) sudo chown -R $(id -u):$(id -g) support/docker/alpine_snapshot
+6) edit the Dockerfile so it looks like this
 
-I suppose this series could be deferred until the next major stable
-release of Docker, at which point the split between docker-cli and
-docker-engine would be made, as shown here. I will wait to see what
-the general consensus is.
+COPY ./alpine_snapshot /snapshot
+RUN apk add /snapshot/*.apk
 
-RFC on the package split, regardless.
+7) build the alpine docker image again.  it will build using the apk
+files from /snapshot directory we just created
 
-Christian
+This is not ideal but it's a proof of concept.  To improve you could
+copy the apk to a website, setup it up as a proper signed package
+repository and then edit /etc/apk/repositories to use this snapshot
+
+Thanks
+
+Martin
+
+
+> Regards,
+> Yann E. MORIN.
+>
+> [--SNIP--]
+>> >> >> +        qemu \
+>> >> >> +        qemu-arch-extra \
+>> >> >
+>> >> >If you change to using qemu-headless and qemu-headless-arch-extra
+>> >> >packages it saves about 500MB on the image size
+>> >
+>> > Ah, that one is interesting to know! :-)
+>> >
+>> > However, are we sure that we don;t need the headed version of qemu?
+>> >
+>> > And why do we even have to have qemu in the image to start with, in the
+>> > end?
+>>
+>> Good questions i don't know the answer to.  I assume it's something to
+>> do with automated testing.
+>>
+>> Thanks
+>>
+>> Martin
+>>
+>> >
+>> > Regards,
+>> > Yann E. MORIN.
+>> >
+>> >> >Thanks
+>> >> >
+>> >> >Martin
+>> >> >
+>> >> >> +        rsync \
+>> >> >> +        subversion \
+>> >> >> +        unzip \
+>> >> >> +        wget
+>> >> >> +
+>> >> >> +RUN sed -i 's/# *\(en_US.UTF-8\)/\1/' /etc/locale.gen \
+>> >> >> +    && /usr/sbin/locale-gen
+>> >> >> +
+>> >> >> +RUN useradd -ms /bin/bash br-user
+>> >> >> +
+>> >> >> +USER br-user
+>> >> >> +WORKDIR /home/br-user
+>> >> >> +ENV HOME /home/br-user
+>> >> >> +ENV LC_ALL en_US.UTF-8
+>> >> >> --
+>> >> >> 2.14.1
+>> >> >>
+>> >> >> _______________________________________________
+>> >> >> buildroot mailing list
+>> >> >> buildroot at busybox.net
+>> >> >> http://lists.busybox.net/mailman/listinfo/buildroot
+>> >>
+>> >> Martin, All,
+>> >> --
+>> >> Sent from my phone. Please excuse my brevity.
+>> >
+>> > --
+>> > .-----------------.--------------------.------------------.--------------------.
+>> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+>> > | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+>> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+>> > '------------------------------^-------^------------------^--------------------'
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
