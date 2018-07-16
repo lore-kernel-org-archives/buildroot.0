@@ -1,46 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 00:34:33 +0200
-Subject: [Buildroot] [git commit] package/apache: bump version to 2.4.34
-Message-ID: <20180716223017.70D2388723@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 00:33:08 +0200
+Subject: [Buildroot] [git commit] package/pulseaudio: bump version to 12.2
+Message-ID: <20180716223017.686D788723@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8ef1aaa08478a2d84c17e8bd12e33b0802433ac1
+commit: https://git.buildroot.net/buildroot/commit/?id=8c7eec1d00360ad8ad966413540be2b8f3568e43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: http://www.apache.org/dist/httpd/CHANGES_2.4.34
+Release notes:
+https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-July/030280.html
+
+Removed md5 and sha1 hashes, not provided by upstream anymore.
+Added sha256 hash provided by upstream, removed locally computed sha256
+hash.
+
+Fixes
+http://autobuild.buildroot.net/results/c8d/c8d3822ee34d0bbcba14eecc8524c8c865c85c1b/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/apache/apache.hash | 5 +++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/pulseaudio/pulseaudio.hash | 6 ++----
+ package/pulseaudio/pulseaudio.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 76c7c766cb..74a48ae914 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,3 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.33.tar.bz2.sha256
--sha256 de02511859b00d17845b9abdd1f975d5ccb5d0b280c567da5bf2ad4b70846f05 httpd-2.4.33.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
-+sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
-+# Locally computed
- sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 6ebd30ca40..d50e3774ff 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
+diff --git a/package/pulseaudio/pulseaudio.hash b/package/pulseaudio/pulseaudio.hash
+index 948f3aa684..7e1ea1606e 100644
+--- a/package/pulseaudio/pulseaudio.hash
++++ b/package/pulseaudio/pulseaudio.hash
+@@ -1,8 +1,6 @@
+-# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-July/030259.html
+-md5 2511b7ce7193eecf029c91de96eee547  pulseaudio-12.1.tar.xz
+-sha1 3d8ecff70b7b47d82fd8a262755ce24dd956bef1  pulseaudio-12.1.tar.xz
++# From https://lists.freedesktop.org/archives/pulseaudio-discuss/2018-July/030280.html
++sha256 809668ffc296043779c984f53461c2b3987a45b7a25eb2f0a1d11d9f23ba4055  pulseaudio-12.2.tar.xz
+ # Locally computed
+-sha256 5f5dfb5e2c376e8c974b80f93b983ed77088ade7fb8b9325a575c45aa35977f3  pulseaudio-12.1.tar.xz
+ sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  GPL
+ sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  LGPL
+ sha256 a1064b9838b6b4feee61eaeb0925da4b4834c984b77716558860c4294ed6c015  LICENSE
+diff --git a/package/pulseaudio/pulseaudio.mk b/package/pulseaudio/pulseaudio.mk
+index 2b8f5724bc..d1c35654cf 100644
+--- a/package/pulseaudio/pulseaudio.mk
++++ b/package/pulseaudio/pulseaudio.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--APACHE_VERSION = 2.4.33
-+APACHE_VERSION = 2.4.34
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+-PULSEAUDIO_VERSION = 12.1
++PULSEAUDIO_VERSION = 12.2
+ PULSEAUDIO_SOURCE = pulseaudio-$(PULSEAUDIO_VERSION).tar.xz
+ PULSEAUDIO_SITE = http://freedesktop.org/software/pulseaudio/releases
+ PULSEAUDIO_INSTALL_STAGING = YES
