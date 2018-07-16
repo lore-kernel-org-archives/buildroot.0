@@ -1,9 +1,9 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 15 Jul 2018 21:44:33 -0300
-Subject: [Buildroot] [PATCH 2/5] support/docker: rename the Dockerfile
- and its accompanying file
-References: <adea9d795751dd2ddcc2b205a7eb90da24990d7c.1531463897.git.yann.morin.1998@free.fr>
-Message-ID: <5b4bea714dff9_7adf3f993c6b5368439b2@ultri5.mail>
+Date: Sun, 15 Jul 2018 21:48:05 -0300
+Subject: [Buildroot] [PATCH 3/5] support/docker: add a Fedore-28 based
+ image
+References: <2738bd4dedf368eb12a7564eff1c2c33b696691f.1531463897.git.yann.morin.1998@free.fr>
+Message-ID: <5b4beb451146b_7adf3f993c69335844119@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,20 +12,45 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, Jul 13, 2018 at 03:38 AM, Yann E. MORIN wrote:
+On Fri, Jul 13, 2018 at 03:38 AM, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 
 [snip]
-> We add a symlink so that we still have a 'base' image that we can
-> reference from the gitla-ci infra.
+> +RUN rm -f /etc/yum.repos.d/fedora-updates*.repo && \
+> +    dnf -y install \
+> +        @development-tools \
+> +        bc \
+> +        bzip2 \
+> +        bzr \
+> +        cpio \
+> +        cvs \
+> +        file \
+> +        gcc-c++ \
+> +        git \
 
-We could drop the symlink and just use the new name in .gitlab-ci.yml* once the
-new image gets uploaded:
--image: buildroot/base:20180318.1724
-+image: buildroot/debian-stretch:2018MMDD.HHMM
+> +        ncurses-devel \
+> +        mercurial \
 
+Er, the sort failed here. :-)
 
-Also, see my review on patch 1, I think it would be better to invert the order
-of patches 1 and 2 in the series.
+> +        perl-ExtUtils-MakeMaker \
+> +        perl-Thread-Queue \
+> +        python-nose2 \
+> +        python-pexpect \
+
+Maybe add python2-flake8.noarch (not tested) for consistency between the docker
+images? See:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/81878555
+
+> +        qemu-system-arm \
+> +        qemu-system-x86 \
+> +        rsync \
+> +        subversion \
+> +        unzip \
+> +        wget \
+> +    && dnf -y clean all
+
+I guess some *.i686 packages should also be added (not tested). See:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/81878562
 
 
 Regards,
