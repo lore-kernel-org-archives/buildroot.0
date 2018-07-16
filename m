@@ -1,47 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 16 Jul 2018 05:59:43 +0200
-Subject: [Buildroot] [RFC v1 2/2] libdrm: change to meson build system
-References: <20180713205801.25976-1-ps.report@gmx.net>
- <20180713205801.25976-2-ps.report@gmx.net>
-Message-ID: <fqht1fxpqg.ln2@ID-313208.user.individual.net>
+From: Christian Stewart <christian@paral.in>
+Date: Sun, 15 Jul 2018 21:01:33 -0700
+Subject: [Buildroot] [PATCH v4 2/3] docker-containerd: bump to v1.1.1
+In-Reply-To: <20180716033828.vx2ojaqcfricwsbx@sapphire.tkos.co.il>
+References: <20180715224340.30282-1-christian@paral.in>
+ <20180715224340.30282-2-christian@paral.in>
+ <20180716033828.vx2ojaqcfricwsbx@sapphire.tkos.co.il>
+Message-ID: <CA+h8R2p+rn=sFBwaPi4mKNV6LX3UoRzo=jhq_+Yn1m33N3zNLA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 13 Jul 2018 22:58:01 +0200 schrieb Peter Seiderer:
+Hi Baruch,
 
-> --- a/package/libdrm/libdrm.mk
-> +++ b/package/libdrm/libdrm.mk
-[..]
-> -$(eval $(autotools-package))
-> +$(eval $(meson-package))
+On Sun, Jul 15, 2018 at 8:38 PM Baruch Siach <baruch@tkos.co.il> wrote:
 
-Hi Peter,
+> > +DOCKER_CONTAINERD_COMMIT = d64c661f1d51c48782c9cec8fda7604785f93587
+>
+> Where is this being used?
 
-last year I sent a patch to switch libpng from autotools to cmake:
-http://lists.busybox.net/pipermail/buildroot/2017-September/201303.html
 
-The patch was rejected by Yann
-http://lists.busybox.net/pipermail/buildroot/2017-September/201305.html
+Good catch, this line can be deleted. It's an artifact from a rebase
+conflict.
 
-> If upstream has changed, or there is a *compelling* reason to switch,
-> then so be it. In this case, the commit log *must* explain the rationale
-> for switching.
-> 
-> But switching for the sake of switching is a big no-no from me.
+Best,
+Christian
 
-and Thomas
-http://lists.busybox.net/pipermail/buildroot/2017-September/201307.html
-
-> I agree that there needs to be an explanation for the switch. Is
-> upstream moving to CMake, and getting rid of autotools support in the
-> future ? Other reason ?
-
-From the current discussion of your RFC I am unable to see the 
-"*compelling* reason" for using meson. Instead the mess around python2/
-python3 imho does not justify the few seconds libdrm itself will build 
-faster, so NACK.
-
-Regards, Bernd
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180715/83f9f5b8/attachment.html>
