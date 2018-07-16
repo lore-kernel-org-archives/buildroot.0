@@ -1,95 +1,82 @@
-From: Christoph Engelbert <me@noctarius.com>
-Date: Mon, 16 Jul 2018 17:15:44 +0200
-Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds the option to
- copy "regulatory.db[.p7s]" to /lib/firmware
-In-Reply-To: <CAFGQKxdrSmeWP3Ps9iTo=Os2ZXSZP-i=TUpTWF3TRMPpE8kYQA@mail.gmail.com>
-References: <20180713093254.7994-1-me@noctarius.com>
- <CAFGQKxdVqfFizQBeAHHSmc4tW8FQkXZ+6qGZrD0o3njpNHYjZA@mail.gmail.com>
- <1461622C-22FB-41D0-9F25-4F0E8D0961EE@noctarius.com>
- <CAFGQKxdrSmeWP3Ps9iTo=Os2ZXSZP-i=TUpTWF3TRMPpE8kYQA@mail.gmail.com>
-Message-ID: <5C37D92F-BEC8-40CE-9C5A-E240EE2B462B@noctarius.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 16 Jul 2018 18:15:31 +0200
+Subject: [Buildroot] [PATCH 4/5] support/docker: add an Arch image
+In-Reply-To: <CAFGQKxfOSY5-eaNrYpuegD8X6CF6shbdZzusY1E8fWUvJcFm4w@mail.gmail.com>
+References: <cover.1531463897.git.yann.morin.1998@free.fr>
+ <b909713a26b89db6eae65efffa7e05a8136fd9df.1531463897.git.yann.morin.1998@free.fr>
+ <CAFGQKxd62h=khKBwP7RwM1uVsAQybHJVjuxNHfPfmaq3Re83gw@mail.gmail.com>
+ <F34B3E21-3366-44DD-891B-401FF71F20E9@free.fr>
+ <20180715090539.GA2516@scaer>
+ <CAFGQKxe5qQQm=k+CXipjS8U0eJ3nxFB20xJ0QYSMRDbqb1sOPg@mail.gmail.com>
+ <20180715194549.GG2516@scaer>
+ <CAFGQKxfOSY5-eaNrYpuegD8X6CF6shbdZzusY1E8fWUvJcFm4w@mail.gmail.com>
+Message-ID: <20180716161531.GA5141@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Martin,
+Martin, All,
 
-For some reason the changed mail became a new thread. Sorry about that :(
+On 2018-07-16 01:13 +0100, Martin Bark spake thusly:
+> On 15 July 2018 at 20:45, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2018-07-15 20:30 +0100, Martin Bark spake thusly:
+> >> On 15 July 2018 at 10:05, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > [--SNIP--]
+> >> > So, the reasoning is that, since we use a pinned version of the
+> >> > repository, running "pacman -Sy --noconfirm" will always yield the same
+> >> > state of the distribution.
+> >> >
+> >> > Now, it happens that we need to add a new package to the image, e.g. for
+> >> > local testing. We can thus re-use the intermediate, locally-cached image
+> >> > that has the local repository updated.
+> >> >
+> >> > It kinda speeds up things a bit.
+[--SNIP--]
+> hey! here's how you can make it reproducible
 
-Chris
+Wee! :-)
 
-> On 15. Jul 2018, at 20:41, Martin Bark <martin@barkynet.com> wrote:
+> 1) build the alpine docker image.
+> 2) mkdir -p support/docker/alpine_snapshot
+> 3) docker run -it --rm -v
+> $PWD/support/docker/alpine_snapshot:/snapshot -u root
+> buildroot/alpine-3.7:$BR2_DOCKER_VERSION bash
+> 4) inside the container run
 > 
-> Chris,
+> mkdir -p /var/cache/apk
+> ln -s /var/cache/apk /etc/apk/cache
+> apk cache sync
+> cp -a /etc/apk/cache/*.apk /snapshot
+> exit
 > 
-> On 15 July 2018 at 09:13, Christoph Engelbert <me@noctarius.com> wrote:
->> Hey Martin,
->> 
->> Oh I see, didn?t know it was a general change. Does that mean it would probably make more sense to only install the new files as a new package and deprecate the old one?
+> 7) sudo chown -R $(id -u):$(id -g) support/docker/alpine_snapshot
+> 6) edit the Dockerfile so it looks like this
 > 
-> I think the changes look good, i was just saying to tweak the commit message.
+> COPY ./alpine_snapshot /snapshot
+> RUN apk add /snapshot/*.apk
 > 
-> Thanks
+> 7) build the alpine docker image again.  it will build using the apk
+> files from /snapshot directory we just created
 > 
-> Martin
-> 
->> 
->> Chris
->> 
->>> On 14. Jul 2018, at 14:38, Martin Bark <martin@barkynet.com> wrote:
->>> 
->>> Chris,
->>> 
->>> On 13 July 2018 at 10:32, Christoph Engelbert <me@noctarius.com> wrote:
->>>> Certain wireless drivers (like the Broadcom FullMac drivers" expect the regulatory.db and
->>>> regulatory.db.p7s files to be available to be loadable from /lib/firmware. If not available
->>>> the driver still loads but runs on a minimal subset of channels.
->>>> 
->>>> This newly added option gives possibility to have those files copied to the necessary directory.
->>> 
->>> This is a good change but I think the commit message needs changing.
->>> It's not really certain wireless drivers that is the issue, it's that
->>> linux 4.15 added support to load regulatory.db directly without using
->>> crda.  If the kernel can't load regulatory.db directly it will still
->>> try and use crda.  So this change should allow you to stop using crda
->>> for kernels after 4.15
->>> 
->>> Thanks
->>> 
->>> Martin
->>> 
->>>> 
->>>> Signed-off-by: Christoph Engelbert <me@noctarius.com>
->>>> ---
->>>> package/wireless-regdb/wireless-regdb.mk | 4 ++++
->>>> 1 file changed, 4 insertions(+)
->>>> 
->>>> diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
->>>> index e9283a00e2..829374edcf 100644
->>>> --- a/package/wireless-regdb/wireless-regdb.mk
->>>> +++ b/package/wireless-regdb/wireless-regdb.mk
->>>> @@ -15,6 +15,10 @@ define WIRELESS_REGDB_INSTALL_TARGET_CMDS
->>>>               $(TARGET_DIR)/usr/lib/crda/regulatory.bin
->>>>       $(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
->>>>               $(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
->>>> +       $(INSTALL) -m 644 -D -T $(@D)/regulatory.db \
->>>> +               $(TARGET_DIR)/lib/firmware/regulatory.db
->>>> +       $(INSTALL) -m 644 -D -T $(@D)/regulatory.db.p7s \
->>>> +               $(TARGET_DIR)/lib/firmware/regulatory.db.p7s
->>>> endef
->>>> 
->>>> $(eval $(generic-package))
->>>> --
->>>> 2.17.1
->>>> 
->>>> 
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>> 
->> 
->> 
-> 
+> This is not ideal but it's a proof of concept.  To improve you could
+> copy the apk to a website, setup it up as a proper signed package
+> repository and then edit /etc/apk/repositories to use this snapshot
+
+Wooo... Scary...
+
+OK, I'll give it a try.
+
+Thanks you for the feedback! :-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
