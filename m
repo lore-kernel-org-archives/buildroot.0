@@ -1,50 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 08:57:46 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/nodejs: bump
- version to 8.11.2
-Message-ID: <20180717072759.6BB7488706@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 09:19:10 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/mpg123: security
+ bump to version 1.25.10
+Message-ID: <20180717072759.D7D2488706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1db8dbf0636989d5c4ff15e728db61a561b21a86
+commit: https://git.buildroot.net/buildroot/commit/?id=14834e63afe05fde7219088b330debf0c93f147c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-See https://nodejs.org/en/blog/release/v8.11.2/
+Version 1.25.4 fixes CVE-2017-9545, for details see release notes:
+http://www.mpg123.org/cgi-bin/news.cgi
 
-Signed-off-by: Martin Bark <martin@barkynet.com>
+Added upstream hashes.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1d4eb844e3f25c96e6e84f69e0c9ee6bd4b5a501)
+(cherry picked from commit cb67c1d55b7b58d542ec1c4d0311543f40d5d0a2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/mpg123/mpg123.hash | 8 +++++---
+ package/mpg123/mpg123.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index b3900f6a7d..25b035d694 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From http://nodejs.org/dist/v8.11.1/SHASUMS256.txt
--sha256 40a6eb51ea37fafcf0cfb58786b15b99152bec672cccf861c14d1cca0ad4758a  node-v8.11.1.tar.xz
-+# From http://nodejs.org/dist/v8.11.2/SHASUMS256.txt
-+sha256 539946c0381809576bed07424a35fc1740d52f4bd56305d6278d9e76c88f4979  node-v8.11.2.tar.xz
- 
- # Hash for license file
- sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 2642525c47..0c7db83012 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
+diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
+index cbab6f3ee9..22db5bca3c 100644
+--- a/package/mpg123/mpg123.hash
++++ b/package/mpg123/mpg123.hash
+@@ -1,5 +1,7 @@
+-# Locally calculated after checking pgp signature
+-sha256	5314b0fb8ad291bfc79ff4c5c321b971916819a65233ec065434358fcf8aee38	mpg123-1.25.2.tar.bz2
+-
++# From https://sourceforge.net/projects/mpg123/files/mpg123/1.25.10/
++sha1 604784ddbcfe282bffdc595d1d45c677c7cf381f  mpg123-1.25.10.tar.bz2
++md5 ea32caa61d41d8be797f0b04a1b43ad9  mpg123-1.25.10.tar.bz2
++# Locally calculated
++sha256 6c1337aee2e4bf993299851c70b7db11faec785303cfca3a5c3eb5f329ba7023  mpg123-1.25.10.tar.bz2
+ # License file
+ sha256  f40e0dd86b27b52e429b693a87b3ca63ae0a98a4d142e77207aa6bdf1db7a295  COPYING
+diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
+index 01923d7990..dd2d39d978 100644
+--- a/package/mpg123/mpg123.mk
++++ b/package/mpg123/mpg123.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NODEJS_VERSION = 8.11.1
-+NODEJS_VERSION = 8.11.2
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+-MPG123_VERSION = 1.25.2
++MPG123_VERSION = 1.25.10
+ MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
+ MPG123_SITE = http://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
+ MPG123_CONF_OPTS = --disable-lfs-alias
