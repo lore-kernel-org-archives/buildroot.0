@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:26:33 +0200
-Subject: [Buildroot] [PATCH 1/2] triggerhappy: use target pkg-config
-In-Reply-To: <d94eeb035e53af51d450c8e49b03e01cce0dfa1a.1528741488.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 11 Jun 2018 21:24:47 +0300")
-References: <d94eeb035e53af51d450c8e49b03e01cce0dfa1a.1528741488.git.baruch@tkos.co.il>
-Message-ID: <87r2k2nx06.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Jul 2018 09:26:54 +0200
+Subject: [Buildroot] [PATCH] file: add upstream security fix
+In-Reply-To: <09d9582ecdb7715d356d0eb5bf0bd0f6d6150e03.1529035008.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 15 Jun 2018 06:56:48 +0300")
+References: <09d9582ecdb7715d356d0eb5bf0bd0f6d6150e03.1529035008.git.baruch@tkos.co.il>
+Message-ID: <87muuqnwzl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +13,11 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > triggerhappy uses pkg-config to detect the systemd library. Make sure it
- > uses the target pkg-config, not the host one.
+ > Fixes CVE-2018-10360: The do_core_note function in readelf.c in
+ > libmagic.a in file 5.33 allows remote attackers to cause a denial of
+ > service (out-of-bounds read and application crash) via a crafted ELF
+ > file.
 
- > Fixes build failure when the host has systemd pkg-config files:
-
- > .../host/bin/arm-linux-gcc -static  th-cmd.o cmdsocket.o  -lsystemd -o th-cmd
- > .../host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld:
- > cannot find -lsystemd
-
- > Cc: Peter Korsgaard <peter@korsgaard.com>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.05.x, thanks.
