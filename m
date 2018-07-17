@@ -1,68 +1,52 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 17 Jul 2018 13:30:08 +0200
-Subject: [Buildroot] [PATCH] package/binutils: add binutils version 2.31
-In-Reply-To: <20180717120806.5be54c85@windsurf>
-References: <20180716213010.29310-1-romain.naour@gmail.com>
- <20180717120806.5be54c85@windsurf>
-Message-ID: <0d2afb3c-fe85-057a-4ad3-5744eb397d6e@smile.fr>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 17 Jul 2018 14:32:54 +0300
+Subject: [Buildroot] [PATCH] bind: security bump to 9.11.4
+Message-ID: <410dbec2b2ba1d7f56dcd2381b482ebdb1371d10.1531827174.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Fixes CVE-2018-5738: When recursion is enabled but the allow-recursion
+and allow-query-cache ACLs are not specified, they should be limited to
+local networks, but they were inadvertently set to match the default
+allow-query, thus allowing remote queries.
 
-Le 17/07/2018 ? 12:08, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Mon, 16 Jul 2018 23:30:10 +0200, Romain Naour wrote:
->> https://sourceware.org/ml/binutils/2018-07/msg00213.html
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  package/binutils/2.31/0001-sh-conf.patch           |  48 ++++
->>  package/binutils/2.31/0002-ld-makefile.patch       |  41 +++
->>  .../2.31/0003-check-ldrunpath-length.patch         |  36 +++
->>  .../2.31/0004-add-sysroot-fix-from-bug-3049.patch  |  51 ++++
->>  .../2.31/0005-poison-system-directories.patch      | 306 +++++++++++++++++++++
->>  ...location-where-GOT-information-is-collect.patch | 198 +++++++++++++
->>  ...bustness.-Return-FALSE-in-case-of-NULL-po.patch |  35 +++
->>  ...lobal-symbol-is-not-an-indirect-or-warnin.patch |  43 +++
->>  ...tion-was-still-being-generated-when-symbo.patch |  37 +++
->>  package/binutils/Config.in.host                    |   4 +
->>  package/binutils/binutils.hash                     |   1 +
->>  11 files changed, 800 insertions(+)
->>  create mode 100644 package/binutils/2.31/0001-sh-conf.patch
->>  create mode 100644 package/binutils/2.31/0002-ld-makefile.patch
->>  create mode 100644 package/binutils/2.31/0003-check-ldrunpath-length.patch
->>  create mode 100644 package/binutils/2.31/0004-add-sysroot-fix-from-bug-3049.patch
->>  create mode 100644 package/binutils/2.31/0005-poison-system-directories.patch
->>  create mode 100644 package/binutils/2.31/0006-Refactored-location-where-GOT-information-is-collect.patch
->>  create mode 100644 package/binutils/2.31/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch
->>  create mode 100644 package/binutils/2.31/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch
->>  create mode 100644 package/binutils/2.31/0009-PLT-information-was-still-being-generated-when-symbo.patch
-> 
-> Applied to master, thanks. Could you as follow-up patches set binutils
-> 2.30 as the default version, and drop the oldest binutils version we
-> support ?
+Update license file hash; copyright year update.
 
-I'll do it, but we have to be careful with arm thumb/thumb2 dependencies.
-ADR and ADRl pseudo-ops are still broken for Binutils 2.29 and 2.30. I'm not
-sure if it's necessary to backport the fix since we have now binutils 2.31.
+Add reference to tarball signature key.
 
-> 
-> Also, I'm surprised that we still have all those ARC binutils patches,
-> which should have been upstream. Could you get in touch with the
-> Synopsys guys and see what's going on with those patches ?
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/bind/bind.hash | 7 ++++---
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-I'm adding Alexey in Cc :)
-
-Best regards,
-Romain
-
-> 
-> Thanks a lot!
-> 
-> Thomas
-> 
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 199db704fe86..78f801552155 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,3 +1,4 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.2-P1/bind-9.11.2-P1.tar.gz.sha256.asc
+-sha256 cec31548832fca3f85d95178d4019b7d702039e8595d4c93914feba337df1212 bind-9.11.2-P1.tar.gz
+-sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
++# Verified from https://ftp.isc.org/isc/bind9/9.11.4/bind-9.11.4.tar.gz.asc
++# with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
++sha256 595070b031f869f8939656b5a5d11b121211967f15f6afeafa895df745279617 bind-9.11.4.tar.gz
++sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 392ef321c23f..c4429ef6cc7f 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.2-P1
++BIND_VERSION = 9.11.4
+ BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
+-- 
+2.18.0
