@@ -1,34 +1,109 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 22:06:14 +0200
-Subject: [Buildroot] [PATCH 2018.02.x] procps-ng: disable for musl libc
-In-Reply-To: <3f2a94307e6c380842726b8158e8ec2e9d24372a.1530616293.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 3 Jul 2018 14:11:33 +0300")
-References: <3f2a94307e6c380842726b8158e8ec2e9d24372a.1530616293.git.baruch@tkos.co.il>
-Message-ID: <87in5dk4p5.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Jul 2018 22:05:36 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] procps-ng: disable for
+ musl libc
+Message-ID: <20180717200144.50A9C88843@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ad6298ce973a5e5d81ecd3d7b18bba149a7236e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > The recent procps-ng security bump in commit 88ec06ad484 (procps-ng:
- > security bump to version 3.3.15) of the 2018.02.x branch, introduced use
- > of fopencookie() which is a GNU extension that musl version 1.1.8 does
- > not implement. Backporting the security fixes alone is not feasible.
- > Disable procps-ng for musl libc toolchains.
+The recent procps-ng security bump in commit 88ec06ad484 (procps-ng:
+security bump to version 3.3.15) of the 2018.02.x branch, introduced use
+of fopencookie() which is a GNU extension that musl version 1.1.8 does
+not implement. Backporting the security fixes alone is not feasible.
+Disable procps-ng for musl libc toolchains.
 
- > Propagate this dependency to procps-ng reverse dependencies that used to
- > allow build with musl, openvmtools and tovid.
+Propagate this dependency to procps-ng reverse dependencies that used to
+allow build with musl, openvmtools and tovid.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/eac/eac700c61e277689b46fd617b6ddcbf94b5271e5/
- > http://autobuild.buildroot.net/results/baa/baac54b934d5ac07d3604ae3c6016595e4d7014a/
+Fixes:
+http://autobuild.buildroot.net/results/eac/eac700c61e277689b46fd617b6ddcbf94b5271e5/
+http://autobuild.buildroot.net/results/baa/baac54b934d5ac07d3604ae3c6016595e4d7014a/
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openvmtools/Config.in | 6 +++---
+ package/procps-ng/Config.in   | 5 +++++
+ package/tovid/Config.in       | 6 ++++--
+ 3 files changed, 12 insertions(+), 5 deletions(-)
 
-Committed to 2018.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 72c0293de7..66d4f1b158 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_OPENVMTOOLS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_ENABLE_LOCALE
+-	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBDNET
+ 	help
+@@ -47,9 +47,9 @@ comment "PAM support needs a glibc toolchain w/ dynamic library"
+ 
+ endif
+ 
+-comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, RPC, locale"
++comment "openvmtools needs a glibc toolchain w/ wchar, threads, RPC, locale"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE || \
+-		BR2_TOOLCHAIN_USES_UCLIBC
++		!BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/procps-ng/Config.in b/package/procps-ng/Config.in
+index 6ff8983202..d9e884faee 100644
+--- a/package/procps-ng/Config.in
++++ b/package/procps-ng/Config.in
+@@ -2,9 +2,14 @@ config BR2_PACKAGE_PROCPS_NG
+ 	bool "procps-ng"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on !BR2_TOOLCHAIN_USES_MUSL # fopencookie()
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Standard informational utilities and process-handling tools.
+ 	  Provides things like kill, ps, uptime, free, top, etc...
+ 
+ 	  http://sourceforge.net/projects/procps-ng/
++
++comment "procps-ng needs a glibc or uclibc toolchain"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_USES_MUSL
+diff --git a/package/tovid/Config.in b/package/tovid/Config.in
+index d8052ea334..a22dca8e1e 100644
+--- a/package/tovid/Config.in
++++ b/package/tovid/Config.in
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_TOVID
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # mplayer
++	depends on !BR2_TOOLCHAIN_USES_MUSL # procps-ng
+ 	# The below dependencies are runtime dependencies only
+ 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # procps_ng
+ 	select BR2_PACKAGE_DVDAUTHOR
+@@ -27,14 +28,15 @@ config BR2_PACKAGE_TOVID
+ 
+ 	  http://tovid.wikia.com/wiki/Installing_tovid
+ 
+-comment "tovid needs a toolchain w/ threads, C++, wchar"
++comment "tovid needs a glibc or uclibc toolchain w/ threads, C++, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_MPLAYER_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_USE_WCHAR
++		|| !BR2_USE_WCHAR \
++		|| BR2_TOOLCHAIN_USES_MUSL
+ 
+ comment "tovid depends on python or python3"
+ 	depends on !BR2_PACKAGE_PYTHON && !BR2_PACKAGE_PYTHON3
