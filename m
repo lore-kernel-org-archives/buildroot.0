@@ -1,66 +1,118 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 17 Jul 2018 13:37:16 +0200
-Subject: [Buildroot] [PATCH] package/binutils: add binutils version 2.31
-In-Reply-To: <20180717132321.2173ca42@windsurf>
-References: <20180716213010.29310-1-romain.naour@gmail.com>
- <20180717132321.2173ca42@windsurf>
-Message-ID: <28a78dc3-b71b-8ffc-be49-0417e657c3fb@smile.fr>
+From: Martin Bark <martin@barkynet.com>
+Date: Tue, 17 Jul 2018 12:43:45 +0100
+Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
+In-Reply-To: <CAMWSM7h851eMP90z27aZd0Oka_sDsvUGmZo0QRPie144zAF8yA@mail.gmail.com>
+References: <20180710234212.4297-1-joseph.kogut@gmail.com>
+ <20180710234212.4297-5-joseph.kogut@gmail.com>
+ <CAFGQKxfwQh2UDismPjiHtdnPQO4j7D_R-jxYcs1epkg6CVwtRw@mail.gmail.com>
+ <CAMWSM7guNAObwAvHG2T0R+J-w6nzYm2_YE=5QZG8S_G-btwWyA@mail.gmail.com>
+ <CAFGQKxcnEgQpp+jHfR+fqiUSS6NgfqZ-wx-qow8iVvpmrmsSUg@mail.gmail.com>
+ <CAMWSM7h851eMP90z27aZd0Oka_sDsvUGmZo0QRPie144zAF8yA@mail.gmail.com>
+Message-ID: <CAFGQKxfh88M951NY2r=GNd7ZcLn8xiQeEqJiiCOowYt=eP+pZw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Joseph,
 
-Le 17/07/2018 ? 13:23, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Mon, 16 Jul 2018 23:30:10 +0200, Romain Naour wrote:
->> https://sourceware.org/ml/binutils/2018-07/msg00213.html
+On 16 July 2018 at 17:29, Joseph Kogut <joseph.kogut@gmail.com> wrote:
+> Martin,
+>
+> On Sun, Jul 15, 2018 at 2:54 PM Martin Bark <martin@barkynet.com> wrote:
 >>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  package/binutils/2.31/0001-sh-conf.patch           |  48 ++++
->>  package/binutils/2.31/0002-ld-makefile.patch       |  41 +++
->>  .../2.31/0003-check-ldrunpath-length.patch         |  36 +++
->>  .../2.31/0004-add-sysroot-fix-from-bug-3049.patch  |  51 ++++
->>  .../2.31/0005-poison-system-directories.patch      | 306 +++++++++++++++++++++
->>  ...location-where-GOT-information-is-collect.patch | 198 +++++++++++++
->>  ...bustness.-Return-FALSE-in-case-of-NULL-po.patch |  35 +++
->>  ...lobal-symbol-is-not-an-indirect-or-warnin.patch |  43 +++
->>  ...tion-was-still-being-generated-when-symbo.patch |  37 +++
->>  package/binutils/Config.in.host                    |   4 +
->>  package/binutils/binutils.hash                     |   1 +
->>  11 files changed, 800 insertions(+)
->>  create mode 100644 package/binutils/2.31/0001-sh-conf.patch
->>  create mode 100644 package/binutils/2.31/0002-ld-makefile.patch
->>  create mode 100644 package/binutils/2.31/0003-check-ldrunpath-length.patch
->>  create mode 100644 package/binutils/2.31/0004-add-sysroot-fix-from-bug-3049.patch
->>  create mode 100644 package/binutils/2.31/0005-poison-system-directories.patch
->>  create mode 100644 package/binutils/2.31/0006-Refactored-location-where-GOT-information-is-collect.patch
->>  create mode 100644 package/binutils/2.31/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch
->>  create mode 100644 package/binutils/2.31/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch
->>  create mode 100644 package/binutils/2.31/0009-PLT-information-was-still-being-generated-when-symbo.patch
-> 
-> This bump is also causing host-elf2flt to fail building, on noMMU
-> architectures (m68k coldfire and ARMv7-M):
-> 
->  https://gitlab.com/free-electrons/toolchains-builder/-/jobs/82284002
->  https://gitlab.com/free-electrons/toolchains-builder/-/jobs/82284139
+>> Joseph,
+>>
+>> On 14 July 2018 at 23:57, Joseph Kogut <joseph.kogut@gmail.com> wrote:
+>> > Hi Martin,
+>> >
+>> > On Sat, Jul 14, 2018 at 12:11 PM Martin Bark <martin@barkynet.com> wrote:
+>> >>
+>> > <snip>
+>> >>
+>> >> I tried building for an aarch64 target and it fails with the error
+>> >>
+>> >> ERROR at //chrome/installer/linux/BUILD.gn:413:7: Assertion failed.
+>> >>       assert(false, "Linux installer not configured for this architecture.")
+>> >>
+>> >> Looking at chrome/installer/linux/BUILD.gn it seems only i386, x86_64,
+>> >> arm, mipsel and mips64el target architectures are supported.  I think
+>> >> you need to remove BR2_aarch64 and add BR2_mipsel and BR2_mips64el
+>> >>
+>> >
+>> > Can you try adding the argument "enable_linux_installer=false" to
+>> > CHROMIUM_OPTS in chromium.mk, then reconfiguring and rebuilding?
+>> >
+>> > I believe the "linux installer" target here is simply packaging for
+>> > Debian and Fedora, which this package doesn't use.
+>> >
+>>
+>> Thanks, that go the build further.  Now it fails with the following
+>> error.  Any ideas?
+>>
+>>
+>>
+>> ERROR at //build/config/linux/pkg_config.gni:103:17: Script returned
+>> non-zero exit code.
+>>     pkgresult = exec_script(pkg_config_script, args, "value")
+>>                 ^----------
+>> Current dir: /home/br-user/buildroot/output/build/chromium-67.0.3396.79/out/Release/
+>> Command: /home/br-user/buildroot/output/host/bin/python2 --
+>> /home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py
+>> -s /home/br-user/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot
+>> -a arm64 --system_libdir lib nss -v -lssl3
+>> Returned 1.
+>> stderr:
+>>
+>> Traceback (most recent call last):
+>>   File "/home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py",
+>> line 232, in <module>
+>>     sys.exit(main())
+>>   File "/home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py",
+>> line 139, in main
+>>     prefix = GetPkgConfigPrefixToStrip(options, args)
+>>   File "/home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py",
+>> line 80, in GetPkgConfigPrefixToStrip
+>>     "--variable=prefix"] + args, env=os.environ)
+>>   File "/home/br-user/buildroot/output/host/lib/python2.7/subprocess.py",
+>> line 216, in check_output
+>>     process = Popen(stdout=PIPE, *popenargs, **kwargs)
+>>   File "/home/br-user/buildroot/output/host/lib/python2.7/subprocess.py",
+>> line 394, in __init__
+>>     errread, errwrite)
+>>   File "/home/br-user/buildroot/output/host/lib/python2.7/subprocess.py",
+>> line 1047, in _execute_child
+>>     raise child_exception
+>> OSError: [Errno 2] No such file or directory
+>>
+>> See //third_party/nss/BUILD.gn:15:3: whence it was called.
+>>   pkg_config("system_nss_no_ssl_config") {
+>>   ^---------------------------------------
+>> See //crypto/BUILD.gn:221:25: which caused the file to be included.
+>>     public_configs += [ "//third_party/nss:system_nss_no_ssl_config" ]
+>>                         ^-------------------------------------------
+>> package/pkg-generic.mk:219: recipe for target
+>> '/home/br-user/buildroot/output/build/chromium-67.0.3396.79/.stamp_configured'
+>> failed
+>> make: *** [/home/br-user/buildroot/output/build/chromium-67.0.3396.79/.stamp_configured]
+>> Error 1
+>>
+>
+> I think this issue, along with a few others, have since been resolved
+> in my chromium-v7-wip branch, which you can find at
+> https://github.com/jakogut/buildroot.
 
-Thanks, I'm looking at your gitlab pipeline.
+I just tried out your chromium-v7-wip branch but unfortunately i get
+the exact same error.  Note i'm building inside the
+buildroot/base:20180318.1724 docker container.
 
-I did a runtime test on x86_64 with a Glibc based system and I tried to build
-some toolchain on several architectures.
+Also, to get the code to build i had to change select
+BR2_PACKAGE_JPEG_TURBO into BR2_PACKAGE_JPEG in
+package/chromium/Config.in.  I think you should also change the
+CHROMIUM_DEPENDENCIES from jpeg-turbo to jpeg and let the jpeg package
+pick which jpeg library to use for the target.
 
-It's really great to have such toolchain CI to catch these issues :)
+Thanks
 
-Best regards,
-Romain
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+Martin
