@@ -1,30 +1,77 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Jul 2018 12:55:20 +0200
-Subject: [Buildroot] [PATCH] package/gcc: Backport code generation fix
- for ARC700
-In-Reply-To: <20180712111349.15162-1-abrodkin@synopsys.com>
-References: <20180712111349.15162-1-abrodkin@synopsys.com>
-Message-ID: <20180717125520.3088c6e5@windsurf>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 17 Jul 2018 14:01:43 +0300
+Subject: [Buildroot] [PATCH] busybox: don't clobber dangling symlinks
+Message-ID: <412a4a2df4b4bd31b183dba362dca4a326535624.1531825303.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+We sometimes create dangling symlinks in the target directory. That is
+because we need canonical targets, as relative targets don't work well
+with BR2_ROOTFS_MERGED_USR. For example, the vim package installs the
+/bin/vi symlink to /usr/bin/vim. This symlink might be dangling when the
+build host has no vim installed there.
 
-On Thu, 12 Jul 2018 14:13:49 +0300, Alexey Brodkin wrote:
-> Fixes assembler failure when compiling for ARC700 only:
-> ------------------------>8---------------------  
-> {standard input}: Assembler messages:
-> {standard input}:213: Error: operand out of range (128 is not between -128 and 127)
-> make[2]: *** [scripts/Makefile.build:317: net/ipv4/xfrm4_mode_tunnel.o] Error 1
-> ------------------------>8---------------------  
+Patch the busybox install.sh script to avoid clobber of dangling
+symlinks.
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/796/796107430db6545401d9926e84f19eaf2040b756/
 
-Thomas
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Carlos Santos <casantos@datacom.com.br>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...l.sh-don-t-clobber-dangling-symlinks.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch
+
+diff --git a/package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch b/package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch
+new file mode 100644
+index 000000000000..b6fb5b92368f
+--- /dev/null
++++ b/package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch
+@@ -0,0 +1,38 @@
++From c9f1a877f1b9e2602913600d769edb17ee41d15d Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 17 Jul 2018 13:18:09 +0300
++Subject: [PATCH] install.sh: don't clobber dangling symlinks
++
++Symlinks in a subdirectory that is to become target rootfs are sometimes
++dangling because they link to canonical file names that are not present
++on the host, but are present relative to the target rootfs root. Don't
++copy over dangling symlinks when noclobber is enabled
++
++The -e test treats dangling symlinks as non-existent files. Add -h test
++that returns true for all symlinks.
++
++Cc: Yann E. MORIN <yann.morin.1998@free.fr>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: 
++http://lists.busybox.net/pipermail/busybox/2018-July/086555.html
++
++ applets/install.sh | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/applets/install.sh b/applets/install.sh
++index 9aede0f530e2..415896893e86 100755
++--- a/applets/install.sh
+++++ b/applets/install.sh
++@@ -83,7 +83,7 @@ install -m 755 busybox "$prefix/bin/busybox" || exit 1
++ for i in $h; do
++ 	appdir=`dirname "$i"`
++ 	app=`basename "$i"`
++-	if [ x"$noclobber" = x"1" ] && [ -e "$prefix/$i" ]; then
+++	if [ x"$noclobber" = x"1" ] && ([ -e "$prefix/$i" ] || [ -h "$prefix/$i" ]); then
++ 		echo "  $prefix/$i already exists"
++ 		continue
++ 	fi
++-- 
++2.18.0
++
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
