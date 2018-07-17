@@ -1,64 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 08:58:53 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x]
- support/scripts/pkg-stats: use parenthesis for print
-Message-ID: <20180717072759.7319582C6C@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 08:57:46 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/nodejs: bump
+ version to 8.11.2
+Message-ID: <20180717072759.6BB7488706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b91e72bf017523f47ff430e68f042e5511a6707d
+commit: https://git.buildroot.net/buildroot/commit/?id=1db8dbf0636989d5c4ff15e728db61a561b21a86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Use Python 3 style print calls, in order to make pkg-stats Python 3
-compliant.
+See https://nodejs.org/en/blog/release/v8.11.2/
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
+Signed-off-by: Martin Bark <martin@barkynet.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit eb04235783abe58a6a7f8ecc8f9ab46a6d03b543)
+(cherry picked from commit 1d4eb844e3f25c96e6e84f69e0c9ee6bd4b5a501)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/scripts/pkg-stats | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index 43f7e8d543..b7b00e8634 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -499,17 +499,17 @@ def parse_args():
- def __main__():
-     args = parse_args()
-     if args.npackages and args.packages:
--        print "ERROR: -n and -p are mutually exclusive"
-+        print("ERROR: -n and -p are mutually exclusive")
-         sys.exit(1)
-     if args.packages:
-         package_list = args.packages.split(",")
-     else:
-         package_list = None
--    print "Build package list ..."
-+    print("Build package list ...")
-     packages = get_pkglist(args.npackages, package_list)
--    print "Getting package make info ..."
-+    print("Getting package make info ...")
-     package_init_make_info()
--    print "Getting package details ..."
-+    print("Getting package details ...")
-     for pkg in packages:
-         pkg.set_infra()
-         pkg.set_license()
-@@ -517,9 +517,9 @@ def __main__():
-         pkg.set_patch_count()
-         pkg.set_check_package_warnings()
-         pkg.set_current_version()
--    print "Calculate stats"
-+    print("Calculate stats")
-     stats = calculate_stats(packages)
--    print "Write HTML"
-+    print("Write HTML")
-     dump_html(packages, stats, args.output)
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index b3900f6a7d..25b035d694 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From http://nodejs.org/dist/v8.11.1/SHASUMS256.txt
+-sha256 40a6eb51ea37fafcf0cfb58786b15b99152bec672cccf861c14d1cca0ad4758a  node-v8.11.1.tar.xz
++# From http://nodejs.org/dist/v8.11.2/SHASUMS256.txt
++sha256 539946c0381809576bed07424a35fc1740d52f4bd56305d6278d9e76c88f4979  node-v8.11.2.tar.xz
  
+ # Hash for license file
+ sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 2642525c47..0c7db83012 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-NODEJS_VERSION = 8.11.1
++NODEJS_VERSION = 8.11.2
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
