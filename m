@@ -1,52 +1,42 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 17 Jul 2018 14:32:54 +0300
-Subject: [Buildroot] [PATCH] bind: security bump to 9.11.4
-Message-ID: <410dbec2b2ba1d7f56dcd2381b482ebdb1371d10.1531827174.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 17 Jul 2018 13:36:00 +0200
+Subject: [Buildroot] [PATCH] package/binutils: add binutils version 2.31
+In-Reply-To: <0d2afb3c-fe85-057a-4ad3-5744eb397d6e@smile.fr>
+References: <20180716213010.29310-1-romain.naour@gmail.com>
+ <20180717120806.5be54c85@windsurf>
+ <0d2afb3c-fe85-057a-4ad3-5744eb397d6e@smile.fr>
+Message-ID: <20180717133600.23398581@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-5738: When recursion is enabled but the allow-recursion
-and allow-query-cache ACLs are not specified, they should be limited to
-local networks, but they were inadvertently set to match the default
-allow-query, thus allowing remote queries.
+Hello,
 
-Update license file hash; copyright year update.
+On Tue, 17 Jul 2018 13:30:08 +0200, Romain Naour wrote:
 
-Add reference to tarball signature key.
+> > Applied to master, thanks. Could you as follow-up patches set binutils
+> > 2.30 as the default version, and drop the oldest binutils version we
+> > support ?  
+> 
+> I'll do it, but we have to be careful with arm thumb/thumb2 dependencies.
+> ADR and ADRl pseudo-ops are still broken for Binutils 2.29 and 2.30. I'm not
+> sure if it's necessary to backport the fix since we have now binutils 2.31.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/bind/bind.hash | 7 ++++---
- package/bind/bind.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+I haven't followed the status of this problem. Is it fixed in binutils
+2.31 ?
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 199db704fe86..78f801552155 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,3 +1,4 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.2-P1/bind-9.11.2-P1.tar.gz.sha256.asc
--sha256 cec31548832fca3f85d95178d4019b7d702039e8595d4c93914feba337df1212 bind-9.11.2-P1.tar.gz
--sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.4/bind-9.11.4.tar.gz.asc
-+# with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
-+sha256 595070b031f869f8939656b5a5d11b121211967f15f6afeafa895df745279617 bind-9.11.4.tar.gz
-+sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 392ef321c23f..c4429ef6cc7f 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.2-P1
-+BIND_VERSION = 9.11.4
- BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+> > Also, I'm surprised that we still have all those ARC binutils patches,
+> > which should have been upstream. Could you get in touch with the
+> > Synopsys guys and see what's going on with those patches ?  
+> 
+> I'm adding Alexey in Cc :)
+
+Thanks :-)
+
+Thomas
 -- 
-2.18.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
