@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:30:29 +0200
-Subject: [Buildroot] [git commit] package/nodejs: bump version to 8.11.2
-In-Reply-To: <20180602101010.C24037FADE@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Thu, 17 May 2018 23:55:15 +0200")
-References: <20180602101010.C24037FADE@busybox.osuosl.org>
-Message-ID: <877elumi96.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Jul 2018 09:30:47 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: use
+ parenthesis for print
+In-Reply-To: <20180602101010.DC2FF7FADE@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 19 May 2018 13:48:21 +0200")
+References: <20180602101010.DC2FF7FADE@busybox.osuosl.org>
+Message-ID: <8736wimi8o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,12 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=1d4eb844e3f25c96e6e84f69e0c9ee6bd4b5a501
+ > commit: https://git.buildroot.net/buildroot/commit/?id=eb04235783abe58a6a7f8ecc8f9ab46a6d03b543
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > See https://nodejs.org/en/blog/release/v8.11.2/
+ > Use Python 3 style print calls, in order to make pkg-stats Python 3
+ > compliant.
 
- > Signed-off-by: Martin Bark <martin@barkynet.com>
+ > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ > Reviewed-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2018.05.x, thanks.
