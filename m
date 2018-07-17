@@ -1,99 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:19:48 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] libvncserver: add
- upstream security fix for CVE-2018-7225
-Message-ID: <20180717072759.DFE2288706@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 09:20:11 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] gnupg2: security bump to
+ version 2.2.8
+Message-ID: <20180717072759.E928088706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abcb2f27f5c9c0969ffc9d30792f6b28e9ba6011
+commit: https://git.buildroot.net/buildroot/commit/?id=1a1d6db9af11071b6d343a41eb40468fa5e96fdb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Fixes CVE-2018-7225 - An issue was discovered in LibVNCServer through
-0.9.11.  rfbProcessClientNormalMessage() in rfbserver.c does not sanitize
-msg.cct.length, leading to access to uninitialized and potentially sensitive
-data or possibly unspecified other impact (e.g., an integer overflow) via
-specially crafted VNC packets.
+Fixes CVE-2018-12020: Unsanitized file names might cause injection of
+terminal control characters into the status output of gnupg.
 
+Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a4f7700f0b40022f91c2d43f7d21c5a01487587e)
+(cherry picked from commit b78a365b56eeb57030b8e3ca98c23dddfc416820)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-Limit-client-cut-text-length-to-1-MB.patch | 65 ++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch b/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
-new file mode 100644
-index 0000000000..84a537640d
---- /dev/null
-+++ b/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
-@@ -0,0 +1,65 @@
-+From 28afb6c537dc82ba04d5f245b15ca7205c6dbb9c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
-+Date: Mon, 26 Feb 2018 13:48:00 +0100
-+Subject: [PATCH] Limit client cut text length to 1 MB
-+
-+This patch constrains a client cut text length to 1 MB. Otherwise
-+a client could make server allocate 2 GB of memory and that seems to
-+be to much to classify it as a denial of service.
-+
-+The limit also prevents from an integer overflow followed by copying
-+an uninitilized memory when processing msg.cct.length value larger
-+than SIZE_MAX or INT_MAX - sz_rfbClientCutTextMsg.
-+
-+This patch also corrects accepting length value of zero (malloc(0) is
-+interpreted on differnet systems differently).
-+
-+CVE-2018-7225
-+<https://github.com/LibVNC/libvncserver/issues/218>
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ libvncserver/rfbserver.c | 20 +++++++++++++++++++-
-+ 1 file changed, 19 insertions(+), 1 deletion(-)
-+
-+diff --git a/libvncserver/rfbserver.c b/libvncserver/rfbserver.c
-+index 116c488..4fc4d9d 100644
-+--- a/libvncserver/rfbserver.c
-++++ b/libvncserver/rfbserver.c
-+@@ -88,6 +88,8 @@
-+ #include <errno.h>
-+ /* strftime() */
-+ #include <time.h>
-++/* PRIu32 */
-++#include <inttypes.h>
-+ 
-+ #ifdef LIBVNCSERVER_WITH_WEBSOCKETS
-+ #include "rfbssl.h"
-+@@ -2575,7 +2577,23 @@ rfbProcessClientNormalMessage(rfbClientPtr cl)
-+ 
-+ 	msg.cct.length = Swap32IfLE(msg.cct.length);
-+ 
-+-	str = (char *)malloc(msg.cct.length);
-++	/* uint32_t input is passed to malloc()'s size_t argument,
-++	 * to rfbReadExact()'s int argument, to rfbStatRecordMessageRcvd()'s int
-++	 * argument increased of sz_rfbClientCutTextMsg, and to setXCutText()'s int
-++	 * argument. Here we impose a limit of 1 MB so that the value fits
-++	 * into all of the types to prevent from misinterpretation and thus
-++	 * from accessing uninitialized memory (CVE-2018-7225) and also to
-++	 * prevent from a denial-of-service by allocating to much memory in
-++	 * the server. */
-++	if (msg.cct.length > 1<<20) {
-++	    rfbLog("rfbClientCutText: too big cut text length requested: %" PRIu32 "\n",
-++		    msg.cct.length);
-++	    rfbCloseClient(cl);
-++	    return;
-++	}
-++
-++	/* Allow zero-length client cut text. */
-++	str = (char *)calloc(msg.cct.length ? msg.cct.length : 1, 1);
-+ 	if (str == NULL) {
-+ 		rfbLogPerror("rfbProcessClientNormalMessage: not enough memory");
-+ 		rfbCloseClient(cl);
-+-- 
-+2.11.0
-+
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index f5cc95cb1b..f5890c5e2a 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000424.html
+-sha1 e222cda63409a86992369df8976f6c7511e10ea0  gnupg-2.2.7.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000425.html
++sha1 d87553a125832ea90e8aeb3ceeecf24f88de56fb  gnupg-2.2.8.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.7.tar.bz2.sig
+-sha256 d95b361ee6ef7eff86af40c8c72bf9313736ac9f7010d6604d78bf83818e976e  gnupg-2.2.7.tar.bz2
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.8.tar.bz2.sig
++sha256 777b4cb8ced21965a5053d4fa20fe11484f0a478f3d011cef508a1a49db50dcd  gnupg-2.2.8.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index 0823921b0b..3151860f37 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GNUPG2_VERSION = 2.2.7
++GNUPG2_VERSION = 2.2.8
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
