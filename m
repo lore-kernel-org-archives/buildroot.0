@@ -1,48 +1,61 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 17 Jul 2018 22:23:11 +0200
-Subject: [Buildroot] [RFC v2 1/4] meson: bump version to 0.47.1
-In-Reply-To: <20180717191605.19263-1-ps.report@gmx.net>
-References: <20180717191605.19263-1-ps.report@gmx.net>
-Message-ID: <20180717202311.GA29739@itchy>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Jul 2018 22:32:18 +0200
+Subject: [Buildroot] [PATCH 1/3] efitools: new package
+In-Reply-To: <1530887774-19479-2-git-send-email-celso.neto.cwi@datacom.com.br>
+ (Celso Varella's message of "Fri, 6 Jul 2018 11:36:12 -0300")
+References: <1530887774-19479-1-git-send-email-celso.neto.cwi@datacom.com.br>
+ <1530887774-19479-2-git-send-email-celso.neto.cwi@datacom.com.br>
+Message-ID: <87efg1k3hp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+>>>>> "Celso" == Celso Varella <celso.neto.cwi@datacom.com.br> writes:
 
-On 2018-07-17 21:16, Peter Seiderer wrote:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
-> Hash not checked against the pgp signature, tried
-> 	$ gpg --verify meson-0.47.1.tar.gz.asc meson-0.47.1.tar.gz
->   gpg: Signature made Di 10 Jul 2018 23:28:12 CEST
->   gpg:                using RSA key 95181F4EED14FDF4E41B518D3BF4693BFEEB9428
->   gpg: Can't check signature: No public key
->
-> Any advice which public key is used to sign the meson package?
+ > Linux user-space application to manipulate UEFI signatures database
+ > Patches 1 and 2 remove dependencies from sbsigntools and perl scripts
 
-I check the signature as follows:
+These patches are not very nice, as they don't look upstreamable and are
+likely to cause conflicts every time this package is bumped. Can you
+explain why exactly they are needed? Your series already add a
+sbsigntools package, so why would we need to drop the dependency?
+host-perl is similary available.
 
-```
-$ gpg --recv-keys 3BF4693BFEEB9428
-$ gpg --verify meson-0.47.1.tar.gz.asc meson-0.47.1.tar.gz
-gpg: Signature made Tue Jul 10 23:28:12 2018 CEST using RSA key ID
-FEEB9428
-gpg: Good signature from "Jussi Pakkanen <jpakkane@gmail.com>"
-gpg: WARNING: This key is not certified with a trusted signature!
-gpg:          There is no indication that the signature belongs to the
-owner.
-Primary key fingerprint: 9518 1F4E ED14 FDF4 E41B  518D 3BF4 693B FEEB
-9428
-```
+Looking at the code, the sbsigntools dependency seems to be for the
+*-signed.efi files that gets signed by a just created key. That indeed
+might not be useful for real use cases, but presumably we can just pass
+EFISIGNED= to make to drop that?
 
-BTW, shouldn't a signed-off-by line be added to the refreshed patch? I
-was about to send this package bump, so I can send mine if you want.
 
-Regards,
+ > Patch 3 remove "-l" option from mount command in lib/kernel_efivars.c
+ > for compatibility with Busybox mount command
 
---
-ELB
+Did you try to submit this upstream? What is the -l option used for in
+this context? E.G. what are we missing from not using it for builds with
+util-linux mount?
+
+ > +################################################################################
+ > +#
+ > +# efitools
+ > +#
+ > +################################################################################
+ > +
+ > +EFITOOLS_VERSION = 1.8.1
+ > +EFITOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git/snapshot
+ > +EFITOOLS_LICENSE = GPL-2.0+
+ > +EFITOOLS_LICENSE_FILES = COPYING
+ > +EFITOOLS_DEPENDENCIES = gnu-efi openssl
+ > +
+ > +define EFITOOLS_BUILD_CMDS
+ > +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+
+The Makefile does different things depending on ARCH (which comes from
+uname -m). This naturally doesn't work in a cross compilation setup, so
+we need to pass ARCH=<value> depending on the target architecture (and
+add the needed dependencies to the package so it can only be built for
+those supported architectures).
+
+-- 
+Bye, Peter Korsgaard
