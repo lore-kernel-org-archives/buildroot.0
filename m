@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:26:54 +0200
-Subject: [Buildroot] [PATCH] file: add upstream security fix
-In-Reply-To: <09d9582ecdb7715d356d0eb5bf0bd0f6d6150e03.1529035008.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Fri, 15 Jun 2018 06:56:48 +0300")
-References: <09d9582ecdb7715d356d0eb5bf0bd0f6d6150e03.1529035008.git.baruch@tkos.co.il>
-Message-ID: <87muuqnwzl.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Jul 2018 09:27:09 +0200
+Subject: [Buildroot] [PATCH] libgcrypt: security bump to version 1.8.3
+In-Reply-To: <bf4e05477fe72a516766776e7cdf6fe4a77b3e19.1529050912.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 15 Jun 2018 11:21:52 +0300")
+References: <bf4e05477fe72a516766776e7cdf6fe4a77b3e19.1529050912.git.baruch@tkos.co.il>
+Message-ID: <87in5enwz6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +13,7 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes CVE-2018-10360: The do_core_note function in readelf.c in
- > libmagic.a in file 5.33 allows remote attackers to cause a denial of
- > service (out-of-bounds read and application crash) via a crafted ELF
- > file.
-
+ > Fixes CVE-2018-0495: ECDSA signing side-channel attack.
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.05.x, thanks.
