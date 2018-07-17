@@ -1,26 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 17 Jul 2018 11:18:51 +0000
-Subject: [Buildroot] [Bug 11156] In python3 module 'socket' has no attribute
- 'AF_BLUETOOTH'
-In-Reply-To: <bug-11156-163@https.bugs.busybox.net/>
-References: <bug-11156-163@https.bugs.busybox.net/>
-Message-ID: <bug-11156-163-wL0SrdYiX6@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 17 Jul 2018 13:23:21 +0200
+Subject: [Buildroot] [PATCH] package/binutils: add binutils version 2.31
+In-Reply-To: <20180716213010.29310-1-romain.naour@gmail.com>
+References: <20180716213010.29310-1-romain.naour@gmail.com>
+Message-ID: <20180717132321.2173ca42@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11156
+Hello,
 
---- Comment #1 from Grzegorz Blach <grzegorz@blach.pl> ---
-Created attachment 7666
-  --> https://bugs.busybox.net/attachment.cgi?id=7666&action=edit
-Support for socket.AF_BLUETOOTH
+On Mon, 16 Jul 2018 23:30:10 +0200, Romain Naour wrote:
+> https://sourceware.org/ml/binutils/2018-07/msg00213.html
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/binutils/2.31/0001-sh-conf.patch           |  48 ++++
+>  package/binutils/2.31/0002-ld-makefile.patch       |  41 +++
+>  .../2.31/0003-check-ldrunpath-length.patch         |  36 +++
+>  .../2.31/0004-add-sysroot-fix-from-bug-3049.patch  |  51 ++++
+>  .../2.31/0005-poison-system-directories.patch      | 306 +++++++++++++++++++++
+>  ...location-where-GOT-information-is-collect.patch | 198 +++++++++++++
+>  ...bustness.-Return-FALSE-in-case-of-NULL-po.patch |  35 +++
+>  ...lobal-symbol-is-not-an-indirect-or-warnin.patch |  43 +++
+>  ...tion-was-still-being-generated-when-symbo.patch |  37 +++
+>  package/binutils/Config.in.host                    |   4 +
+>  package/binutils/binutils.hash                     |   1 +
+>  11 files changed, 800 insertions(+)
+>  create mode 100644 package/binutils/2.31/0001-sh-conf.patch
+>  create mode 100644 package/binutils/2.31/0002-ld-makefile.patch
+>  create mode 100644 package/binutils/2.31/0003-check-ldrunpath-length.patch
+>  create mode 100644 package/binutils/2.31/0004-add-sysroot-fix-from-bug-3049.patch
+>  create mode 100644 package/binutils/2.31/0005-poison-system-directories.patch
+>  create mode 100644 package/binutils/2.31/0006-Refactored-location-where-GOT-information-is-collect.patch
+>  create mode 100644 package/binutils/2.31/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch
+>  create mode 100644 package/binutils/2.31/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch
+>  create mode 100644 package/binutils/2.31/0009-PLT-information-was-still-being-generated-when-symbo.patch
 
-Ok, I found a solution, but unfortunately my patch makes a circular
-dependencies, so I must disable libmount Python bindings.
+This bump is also causing host-elf2flt to fail building, on noMMU
+architectures (m68k coldfire and ARMv7-M):
 
+ https://gitlab.com/free-electrons/toolchains-builder/-/jobs/82284002
+ https://gitlab.com/free-electrons/toolchains-builder/-/jobs/82284139
+
+Best regards,
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
