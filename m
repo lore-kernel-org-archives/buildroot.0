@@ -1,57 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Jul 2018 13:28:48 +0200
-Subject: [Buildroot] [PATCH v2 6/6] support/testing/tests/core: SSP &
- hardening flags
-In-Reply-To: <CANQCQpb1cH1k7NBDuRxfs=cKD4=0AgoS100yR7zxwSapnZyRzw@mail.gmail.com>
-References: <20180717030420.12009-1-matthew.weber@rockwellcollins.com>
- <20180717100611.1d443355@windsurf>
- <CANQCQpb1cH1k7NBDuRxfs=cKD4=0AgoS100yR7zxwSapnZyRzw@mail.gmail.com>
-Message-ID: <20180717132848.0a9d7e0c@windsurf>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 17 Jul 2018 13:30:08 +0200
+Subject: [Buildroot] [PATCH] package/binutils: add binutils version 2.31
+In-Reply-To: <20180717120806.5be54c85@windsurf>
+References: <20180716213010.29310-1-romain.naour@gmail.com>
+ <20180717120806.5be54c85@windsurf>
+Message-ID: <0d2afb3c-fe85-057a-4ad3-5744eb397d6e@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Tue, 17 Jul 2018 06:25:28 -0500, Matthew Weber wrote:
-
-> > I'm a bit confused by this patch coming alone, outside of any series.
-> > Is it just because you had only changes to this PATCH 6/6 that you
-> > didn't resent the full series ?  
+Le 17/07/2018 ? 12:08, Thomas Petazzoni a ?crit?:
+> Hello,
 > 
-> Understood, yeah I should have asked on IRC today before sending.  I
-> already had reviewed by on the other patches so I hesitated resending
-> them as there wasn't change. Generally, can I add reviewed by's on
-> patches that don't change on a sending of a new version as long as the
-> patch didn't change?
-
-It's not only that you "can", it's that you "should" so that just
-Reviewed-by are not lost.
-
-Of course, if you make changes to the patches, you cannot keep the
-Reviewed-by because it may not hold anymore (except if the changes are
-really tiny/trivial).
-
-> > In general, my preference is that a full series gets resent, because it
-> > is obvious what your intention is. By just resending one patch, I
-> > wonder if you really sent that one patch, or if all patches were sent,
-> > but the previous ones were lost/not received for some reason.
+> On Mon, 16 Jul 2018 23:30:10 +0200, Romain Naour wrote:
+>> https://sourceware.org/ml/binutils/2018-07/msg00213.html
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> ---
+>>  package/binutils/2.31/0001-sh-conf.patch           |  48 ++++
+>>  package/binutils/2.31/0002-ld-makefile.patch       |  41 +++
+>>  .../2.31/0003-check-ldrunpath-length.patch         |  36 +++
+>>  .../2.31/0004-add-sysroot-fix-from-bug-3049.patch  |  51 ++++
+>>  .../2.31/0005-poison-system-directories.patch      | 306 +++++++++++++++++++++
+>>  ...location-where-GOT-information-is-collect.patch | 198 +++++++++++++
+>>  ...bustness.-Return-FALSE-in-case-of-NULL-po.patch |  35 +++
+>>  ...lobal-symbol-is-not-an-indirect-or-warnin.patch |  43 +++
+>>  ...tion-was-still-being-generated-when-symbo.patch |  37 +++
+>>  package/binutils/Config.in.host                    |   4 +
+>>  package/binutils/binutils.hash                     |   1 +
+>>  11 files changed, 800 insertions(+)
+>>  create mode 100644 package/binutils/2.31/0001-sh-conf.patch
+>>  create mode 100644 package/binutils/2.31/0002-ld-makefile.patch
+>>  create mode 100644 package/binutils/2.31/0003-check-ldrunpath-length.patch
+>>  create mode 100644 package/binutils/2.31/0004-add-sysroot-fix-from-bug-3049.patch
+>>  create mode 100644 package/binutils/2.31/0005-poison-system-directories.patch
+>>  create mode 100644 package/binutils/2.31/0006-Refactored-location-where-GOT-information-is-collect.patch
+>>  create mode 100644 package/binutils/2.31/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch
+>>  create mode 100644 package/binutils/2.31/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch
+>>  create mode 100644 package/binutils/2.31/0009-PLT-information-was-still-being-generated-when-symbo.patch
 > 
-> Agree, it does make it confusing.  My intent was just to update this
-> one as the rest were in a good state without resending and had review.
-> Do you want me to resent the complete set?
+> Applied to master, thanks. Could you as follow-up patches set binutils
+> 2.30 as the default version, and drop the oldest binutils version we
+> support ?
 
-No need to do that for this one. But in general, my preference goes to
-receiving the full series for each iteration. Yes it creates more
-noise/traffic on the mailing list, but it makes perfectly clear what is
-intended, which to me is more important.
+I'll do it, but we have to be careful with arm thumb/thumb2 dependencies.
+ADR and ADRl pseudo-ops are still broken for Binutils 2.29 and 2.30. I'm not
+sure if it's necessary to backport the fix since we have now binutils 2.31.
 
-Thanks a lot!
+> 
+> Also, I'm surprised that we still have all those ARC binutils patches,
+> which should have been upstream. Could you get in touch with the
+> Synopsys guys and see what's going on with those patches ?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I'm adding Alexey in Cc :)
+
+Best regards,
+Romain
+
+> 
+> Thanks a lot!
+> 
+> Thomas
+> 
