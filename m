@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:31:30 +0200
-Subject: [Buildroot] [PATCH] libvncserver: add upstream security fix for
- CVE-2018-7225
-In-Reply-To: <20180609160229.8741-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 9 Jun 2018 18:02:29 +0200")
-References: <20180609160229.8741-1-peter@korsgaard.com>
-Message-ID: <87pnzml3n1.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Jul 2018 09:31:43 +0200
+Subject: [Buildroot] [PATCH] perl: add upstream security fix for
+ CVE-2018-12015
+In-Reply-To: <20180612152130.32491-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 12 Jun 2018 17:21:30 +0200")
+References: <20180612152130.32491-1-peter@korsgaard.com>
+Message-ID: <87lgaal3mo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes CVE-2018-7225 - An issue was discovered in LibVNCServer through
- > 0.9.11.  rfbProcessClientNormalMessage() in rfbserver.c does not sanitize
- > msg.cct.length, leading to access to uninitialized and potentially sensitive
- > data or possibly unspecified other impact (e.g., an integer overflow) via
- > specially crafted VNC packets.
+ > Fixes CVE-2018-12015 - In Perl through 5.26.2, the Archive::Tar module
+ > allows remote attackers to bypass a directory-traversal protection
+ > mechanism, and overwrite arbitrary files, via an archive file containing a
+ > symlink and a regular file with the same name.
+
+ > Patch from
+ > https://github.com/jib/archive-tar-new/commit/ae65651eab053fc6dc4590dbb863a268215c1fc5
+ > with path rewritten to match perl tarball.
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
