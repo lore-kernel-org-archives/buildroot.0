@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Jul 2018 11:37:31 +0200
-Subject: [Buildroot] [PATCH 1/2] DEVELOPERS: drop Valentin Korenblit's
- entry
-In-Reply-To: <20180716172141.7214-1-joseph.kogut@gmail.com>
+Date: Tue, 17 Jul 2018 11:37:50 +0200
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add myself for clang and
+ llvm
+In-Reply-To: <20180716172141.7214-2-joseph.kogut@gmail.com>
 References: <20180716172141.7214-1-joseph.kogut@gmail.com>
-Message-ID: <20180717113731.7c169774@windsurf>
+ <20180716172141.7214-2-joseph.kogut@gmail.com>
+Message-ID: <20180717113750.6bcc4708@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,15 +14,13 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 16 Jul 2018 10:21:40 -0700, Joseph Kogut wrote:
-> Emails bounce, the server replies with "Recipient address rejected".
-> 
+On Mon, 16 Jul 2018 10:21:41 -0700, Joseph Kogut wrote:
 > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+> ---
+>  DEVELOPERS | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Valentin sent a patch to update his e-mail address, so I've applied his
-patch instead of dropping him from the DEVELOPERS file.
-
-Thanks,
+Applied to master, thanks.
 
 Thomas
 -- 
