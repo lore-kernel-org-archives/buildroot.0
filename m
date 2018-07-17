@@ -1,36 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Jul 2018 10:06:11 +0200
-Subject: [Buildroot] [PATCH v2 6/6] support/testing/tests/core: SSP &
- hardening flags
-In-Reply-To: <20180717030420.12009-1-matthew.weber@rockwellcollins.com>
-References: <20180717030420.12009-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180717100611.1d443355@windsurf>
+From: Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Tue, 17 Jul 2018 11:31:09 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: update email for llvm and clang
+Message-ID: <1531819869-14184-1-git-send-email-valentinkorenblit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Mon, 16 Jul 2018 22:04:20 -0500, Matt Weber wrote:
-> Catch the commonly used options of SSP, Relro, and fortify.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
-I'm a bit confused by this patch coming alone, outside of any series.
-Is it just because you had only changes to this PATCH 6/6 that you
-didn't resent the full series ?
-
-In general, my preference is that a full series gets resent, because it
-is obvious what your intention is. By just resending one patch, I
-wonder if you really sent that one patch, or if all patches were sent,
-but the previous ones were lost/not received for some reason.
-
-Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index de09979..67d0748 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2003,7 +2003,7 @@ N:	Tzu-Jung Lee <roylee17@gmail.com>
+ F:	package/dropwatch/
+ F:	package/tstools/
+ 
+-N:	Valentin Korenblit <valentin.korenblit@smile.fr>
++N:	Valentin Korenblit <valentinkorenblit@gmail.com>
+ F:	package/clang/
+ F:	package/llvm/
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
