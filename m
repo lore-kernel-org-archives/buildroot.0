@@ -1,63 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:22:36 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/file: bump
- version to 5.33
-Message-ID: <20180717072800.149E488706@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 09:23:12 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libgcrypt: security bump
+ to version 1.8.3
+Message-ID: <20180717072800.2B5D288706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5e66d1bf3b76354a3a8c88a5a0aaa9d510d263f
+commit: https://git.buildroot.net/buildroot/commit/?id=0cd28cdba94a85528211c00fd4942290e326a0db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Added license hashes, added optional dependency to libseccomp provided
-by upstream in this version bump.
+Fixes CVE-2018-0495: ECDSA signing side-channel attack.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit eacca09a8a219fdcd94f39ccab329a4d6a63092b)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b6543b5fdfb17adc81af33cad8133bb86e31748f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/file/file.hash | 5 ++++-
- package/file/file.mk   | 9 ++++++++-
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ package/libgcrypt/libgcrypt.hash | 8 ++++----
+ package/libgcrypt/libgcrypt.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/file/file.hash b/package/file/file.hash
-index fee516c8e2..a6b40be349 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,2 +1,5 @@
- # Locally calculated
--sha256 8639dc4d1b21e232285cd483604afc4a6ee810710e00e579dbe9591681722b50  file-5.32.tar.gz
-+sha256 1c52c8c3d271cd898d5511c36a68059cda94036111ab293f01f83c3525b737c6  file-5.33.tar.gz
-+sha256 3c0ad13c36f891a9b4f951e59eb2fc108065a46f849697cc6fd3cdb41cc23a3d  COPYING
-+sha256 d98ee4d8d95e7d021a5dfc41f137ecc3b624a7b98e8bd793130202d12a21ed57  src/mygetopt.h
-+sha256 85e358d575ad4ac5b38b623a25b24246ccff3c7e680d930c0a9ff5228fe434b6  src/vasprintf.c
-diff --git a/package/file/file.mk b/package/file/file.mk
-index df0e0f0eb9..422e29b1ce 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
+diff --git a/package/libgcrypt/libgcrypt.hash b/package/libgcrypt/libgcrypt.hash
+index 736332d350..dce6522959 100644
+--- a/package/libgcrypt/libgcrypt.hash
++++ b/package/libgcrypt/libgcrypt.hash
+@@ -1,6 +1,6 @@
+-# From https://www.gnupg.org/download/integrity_check.html
+-sha1 ab8aae5d7a68f8e0988f90e11e7f6a4805af5c8d  libgcrypt-1.8.2.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000426.html
++sha1 13bd2ce69e59ab538e959911dfae80ea309636e3  libgcrypt-1.8.3.tar.bz2
+ # Locally calculated after checking signature
+-# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.2.tar.bz2.sig
+-sha256  c8064cae7558144b13ef0eb87093412380efa16c4ee30ad12ecb54886a524c07  libgcrypt-1.8.2.tar.bz2
++# https://gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.8.3.tar.bz2.sig
++sha256  66ec90be036747602f2b48f98312361a9180c97c68a690a5f376fa0f67d0af7c  libgcrypt-1.8.3.tar.bz2
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LIB
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 00e864e836..f25944da64 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FILE_VERSION = 5.32
-+FILE_VERSION = 5.33
- FILE_SITE = ftp://ftp.astron.com/pub/file
- FILE_DEPENDENCIES = host-file zlib
- HOST_FILE_DEPENDENCIES = host-zlib
-@@ -13,5 +13,12 @@ FILE_INSTALL_STAGING = YES
- FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
- FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
- 
-+ifeq ($(BR2_PACKAGE_LIBSECCOMP),y)
-+FILE_CONF_OPTS += --enable-libseccomp
-+FILE_DEPENDENCIES += libseccomp
-+else
-+FILE_CONF_OPTS += --disable-libseccomp
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-LIBGCRYPT_VERSION = 1.8.2
++LIBGCRYPT_VERSION = 1.8.3
+ LIBGCRYPT_SOURCE = libgcrypt-$(LIBGCRYPT_VERSION).tar.bz2
+ LIBGCRYPT_LICENSE = LGPL-2.1+
+ LIBGCRYPT_LICENSE_FILES = COPYING.LIB
