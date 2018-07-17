@@ -1,101 +1,114 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Tue, 17 Jul 2018 22:48:54 +0200
-Subject: [Buildroot] [PATCH 1/3] rust-bin: bump version to 1.27.1
+Date: Tue, 17 Jul 2018 22:48:55 +0200
+Subject: [Buildroot] [PATCH 2/3] rust: bump version to 1.27.1
 In-Reply-To: <20180717204856.6128-1-eric.le.bihan.dev@free.fr>
 References: <20180717204856.6128-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20180717204856.6128-2-eric.le.bihan.dev@free.fr>
+Message-ID: <20180717204856.6128-3-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bump version to 1.27.1 and backport some patches to fix build of
+rust-installer.
+
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/rust-bin/rust-bin.hash | 60 +++++++++++++++++++++---------------------
- package/rust-bin/rust-bin.mk   |  2 +-
- 2 files changed, 31 insertions(+), 31 deletions(-)
+ ...-Fix-warnings-in-library-from-error-chain.patch | 25 ++++++++++++++++++++++
+ ...mit-warnings-inside-error-chain-expansion.patch | 25 ++++++++++++++++++++++
+ package/rust/rust.hash                             |  4 ++--
+ package/rust/rust.mk                               |  2 +-
+ 4 files changed, 53 insertions(+), 3 deletions(-)
+ create mode 100644 package/rust/0001-Fix-warnings-in-library-from-error-chain.patch
+ create mode 100644 package/rust/0001-Permit-warnings-inside-error-chain-expansion.patch
 
-diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-index d09654307f..a83dea911d 100644
---- a/package/rust-bin/rust-bin.hash
-+++ b/package/rust-bin/rust-bin.hash
-@@ -1,33 +1,33 @@
--# From https://static.rust-lang.org/dist/rustc-1.25.0-i686-unknown-linux-gnu.tar.xz.sha256
--sha256 2b9b7d1df84a2a591c7f02faf082045eb5520cec70162249f941d8da006e97ec  rustc-1.25.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rustc-1.25.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--sha256 f61766a970e067614037f2c788e3800d84b1bbc0c00c283ca0c6ecbc38559776  rustc-1.25.0-x86_64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-aarch64-unknown-linux-gnu.tar.xz.sha256
--sha256 a9257edc85e9159b5953a9d68a3c1fbfe1306e2a5b752284ee4e4410deb96d73  rust-std-1.25.0-aarch64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-arm-unknown-linux-gnueabi.tar.xz.sha256
--sha256 73ad54b1da0d100dc49e2a1ec425aecb6f38ffda334eb91fc6bb99fc30c301f5  rust-std-1.25.0-arm-unknown-linux-gnueabi.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-arm-unknown-linux-gnueabihf.tar.xz.sha256
--sha256 73bf215c2a5cc8068676f8d881a7464352e66f00946a0df81ac271fed16ebcfb  rust-std-1.25.0-arm-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-armv7-unknown-linux-gnueabihf.tar.xz.sha256
--sha256 ebfb2a21b54d610c5454445380628854fc880c8f4f6add4ffac27db6aa65a1a6  rust-std-1.25.0-armv7-unknown-linux-gnueabihf.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-i686-unknown-linux-gnu.tar.xz.sha256
--sha256 6a6dba618372029f640d8a76342d957676cd9324084a1246ab6d5a89283e1d50  rust-std-1.25.0-i686-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-mips-unknown-linux-gnu.tar.xz.sha256
--sha256 85774d422307499b120841c78de7e920f7d1bdb2b8a9aca29607be467c5de9a0  rust-std-1.25.0-mips-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-mips64-unknown-linux-gnuabi64.tar.xz.sha256
--sha256 51347ff3c2cf1a1c55c22a3fecba6b155841e2e5a86ff5a077a7e96de096ff19  rust-std-1.25.0-mips64-unknown-linux-gnuabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
--sha256 e18a7259e58798bcbd6ad68ade35ea46201b9f370f3d2ead2e3d293cb2938d60  rust-std-1.25.0-mips64el-unknown-linux-gnuabi64.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-mipsel-unknown-linux-gnu.tar.xz.sha256
--sha256 9e60e356bd755aa3525f3fc4327e5ef64103e1198b9fbba9ad874e49a66877d7  rust-std-1.25.0-mipsel-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-powerpc-unknown-linux-gnu.tar.xz.sha256
--sha256 6908b1819e6b64ce3a2cbc33cccca10afda686efa60d6d91d4ce19213912f87e  rust-std-1.25.0-powerpc-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-powerpc64-unknown-linux-gnu.tar.xz.sha256
--sha256 1ebe2c241514b41b492772eded30d6c601f41cd68e493cb31ebbdd39ffc5c2e9  rust-std-1.25.0-powerpc64-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
--sha256 28a6200b05b6ab870c0700eb371201f0790ca24e9b3b8982db62fd21c1e846e2  rust-std-1.25.0-powerpc64le-unknown-linux-gnu.tar.xz
--# From https://static.rust-lang.org/dist/rust-std-1.25.0-x86_64-unknown-linux-gnu.tar.xz.sha256
--sha256 30c724d3fa01eb7dd448ef4a1fe63f6caa59f70c250b7d2ec3ede6be29c2505f  rust-std-1.25.0-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.27.1-i686-unknown-linux-gnu.tar.xz.sha256
-+sha256 739acc03d50c5fb2ce43037b0b54c37ac99bd1bef9ea61ee969b49a63d11315d  rustc-1.27.1-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.27.1-x86_64-unknown-linux-gnu.tar.xz.sha256
-+sha256 d4c45e15d4ffb150f3eeef1fa2945a5ae541ab791f9464e9a4dcccba77bdf9c7  rustc-1.27.1-x86_64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-aarch64-unknown-linux-gnu.tar.xz.sha256
-+sha256 1f9565cac16e600c68ebfb4fe50b1658462698b8d4a1e8392f8182c4e813d99d  rust-std-1.27.1-aarch64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-arm-unknown-linux-gnueabi.tar.xz.sha256
-+sha256 a58026c1b441c45d21acc9b054232831fceb12f1906995754ef6aa9b20376d6a  rust-std-1.27.1-arm-unknown-linux-gnueabi.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-arm-unknown-linux-gnueabihf.tar.xz.sha256
-+sha256 dc3ee826617487777bd70f52743baa499396c58cbdd3934cf57fa84624b84f05  rust-std-1.27.1-arm-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-armv7-unknown-linux-gnueabihf.tar.xz.sha256
-+sha256 d846df9113718e3faaf77c7b29690a4f9a9f1432e7d001e2a1fee95514d92c79  rust-std-1.27.1-armv7-unknown-linux-gnueabihf.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-i686-unknown-linux-gnu.tar.xz.sha256
-+sha256 68f028911a1606e93eb71bdf95fe7d91e2b4cbd247663f3ab1e59d291dcd61b7  rust-std-1.27.1-i686-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-mips-unknown-linux-gnu.tar.xz.sha256
-+sha256 e15358613566b4a7721cfbebf424f850c771cf2acfc67ea170154447e81a7d5d  rust-std-1.27.1-mips-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-mips64-unknown-linux-gnuabi64.tar.xz.sha256
-+sha256 a2c8a030964515328cf1cff5d72a53e2d8df30048382318378904df6bd019395  rust-std-1.27.1-mips64-unknown-linux-gnuabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-mips64el-unknown-linux-gnuabi64.tar.xz.sha256
-+sha256 27444c6892c978d294d24e26409bf924b6644822d18ef1d3e0d4fa3370e7d4da  rust-std-1.27.1-mips64el-unknown-linux-gnuabi64.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-mipsel-unknown-linux-gnu.tar.xz.sha256
-+sha256 ac0c03e7d53439821c2d9eaf1311716b92fe347d83c1009bc031907b4ddef0f2  rust-std-1.27.1-mipsel-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-powerpc-unknown-linux-gnu.tar.xz.sha256
-+sha256 d2f2b88adb85af25699dd5e866d8e989660ef1a94561a9b73e4b7080e75ef6ee  rust-std-1.27.1-powerpc-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-powerpc64-unknown-linux-gnu.tar.xz.sha256
-+sha256 80b6070996f297f4e9f802b014e88285914de03c1af7b087064035c9ece500bf  rust-std-1.27.1-powerpc64-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-powerpc64le-unknown-linux-gnu.tar.xz.sha256
-+sha256 a3c1843a583af8a38d49a403ea4e3013c8e1e0092a37353e62e69957fa1e9dbd  rust-std-1.27.1-powerpc64le-unknown-linux-gnu.tar.xz
-+# From https://static.rust-lang.org/dist/rust-std-1.27.1-x86_64-unknown-linux-gnu.tar.xz.sha256
-+sha256 d3b0d00357cfaecf85651bea6f1d72793a5a859b6b07e9613ba21285922d5d58  rust-std-1.27.1-x86_64-unknown-linux-gnu.tar.xz
+diff --git a/package/rust/0001-Fix-warnings-in-library-from-error-chain.patch b/package/rust/0001-Fix-warnings-in-library-from-error-chain.patch
+new file mode 100644
+index 0000000000..be9d2a87c7
+--- /dev/null
++++ b/package/rust/0001-Fix-warnings-in-library-from-error-chain.patch
+@@ -0,0 +1,25 @@
++From ac3ffd15e1cf16059b4ccd90b7c816b078a621a5 Mon Sep 17 00:00:00 2001
++From: Mark Simulacrum <mark.simulacrum@gmail.com>
++Date: Wed, 20 Jun 2018 19:47:00 -0600
++Subject: [PATCH] Fix warnings in library from error-chain
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ src/lib.rs | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git rust-1.27.1.orig/src/tools/rust-installer/src/lib.rs rust-1.27.1/src/tools/rust-installer/src/lib.rs
++index ff0495b..cc5e740 100644
++--- rust-1.27.1.orig/src/tools/rust-installer/src/lib.rs
+++++ rust-1.27.1/src/tools/rust-installer/src/lib.rs
++@@ -22,6 +22,7 @@ extern crate winapi;
++ #[macro_use]
++ extern crate lazy_static;
++ 
+++#[allow(warnings)]
++ mod errors {
++     error_chain!{
++         foreign_links {
++-- 
++2.11.0
++
+diff --git a/package/rust/0001-Permit-warnings-inside-error-chain-expansion.patch b/package/rust/0001-Permit-warnings-inside-error-chain-expansion.patch
+new file mode 100644
+index 0000000000..6c332bc0ba
+--- /dev/null
++++ b/package/rust/0001-Permit-warnings-inside-error-chain-expansion.patch
+@@ -0,0 +1,25 @@
++From d90cef58439bcd14426d64b16599e060cd6464f9 Mon Sep 17 00:00:00 2001
++From: Mark Simulacrum <mark.simulacrum@gmail.com>
++Date: Wed, 20 Jun 2018 16:54:40 -0600
++Subject: [PATCH] Permit warnings inside error-chain expansion
++
++Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
++---
++ src/main.rs | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git rust-1.27.1.orig/src/tools/rust-installer/src/main.rs rust-1.27.1/src/tools/rust-installer/src/main.rs
++index cabffb8..007ed71 100644
++--- rust-1.27.1.orig/src/tools/rust-installer/src/main.rs
+++++ rust-1.27.1/src/tools/rust-installer/src/main.rs
++@@ -7,6 +7,7 @@ extern crate installer;
++ use errors::*;
++ use clap::{App, ArgMatches};
++ 
+++#[allow(warnings)]
++ mod errors {
++     error_chain!{
++         links {
++-- 
++2.11.0
++
+diff --git a/package/rust/rust.hash b/package/rust/rust.hash
+index 495722e355..6e6b0d9b6f 100644
+--- a/package/rust/rust.hash
++++ b/package/rust/rust.hash
+@@ -1,5 +1,5 @@
+-# From https://static.rust-lang.org/dist/rustc-1.25.0-src.tar.xz.sha256
+-sha256 14fcb82d5959df758aaf422539359300917217fa8420e34bd596e3fb6ed2de87  rustc-1.25.0-src.tar.xz
++# From https://static.rust-lang.org/dist/rustc-1.27.1-src.tar.xz.sha256
++sha256 948e2645057960ee1c03d9f0e8f78133a5f73d9ca9a24bc56126e395a212d25c  rustc-1.27.1-src.tar.xz
  # Locally generated
  sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
  sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust-bin/rust-bin.mk b/package/rust-bin/rust-bin.mk
-index e10dbcebd0..cebca11133 100644
---- a/package/rust-bin/rust-bin.mk
-+++ b/package/rust-bin/rust-bin.mk
+diff --git a/package/rust/rust.mk b/package/rust/rust.mk
+index af5c366495..74df7d234a 100644
+--- a/package/rust/rust.mk
++++ b/package/rust/rust.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUST_BIN_VERSION = 1.25.0
-+RUST_BIN_VERSION = 1.27.1
- RUST_BIN_SITE = https://static.rust-lang.org/dist
- RUST_BIN_LICENSE = Apache-2.0 or MIT
- RUST_BIN_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-RUST_VERSION = 1.25.0
++RUST_VERSION = 1.27.1
+ RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
+ RUST_SITE = https://static.rust-lang.org/dist
+ RUST_LICENSE = Apache-2.0 or MIT
 -- 
 2.14.4
