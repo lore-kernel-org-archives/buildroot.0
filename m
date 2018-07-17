@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:30:47 +0200
-Subject: [Buildroot] [git commit] support/scripts/pkg-stats: use
- parenthesis for print
-In-Reply-To: <20180602101010.DC2FF7FADE@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 19 May 2018 13:48:21 +0200")
-References: <20180602101010.DC2FF7FADE@busybox.osuosl.org>
-Message-ID: <8736wimi8o.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Jul 2018 09:31:06 +0200
+Subject: [Buildroot] [PATCH] wireshark: security bump to version 2.2.15
+In-Reply-To: <20180604215910.0158d37f@windsurf> (Thomas Petazzoni's message of
+ "Mon, 4 Jun 2018 21:59:10 +0200")
+References: <20180603213100.1635-1-peter@korsgaard.com>
+ <20180604215910.0158d37f@windsurf>
+Message-ID: <87y3eal3np.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,15 +14,33 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=eb04235783abe58a6a7f8ecc8f9ab46a6d03b543
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
- > Use Python 3 style print calls, in order to make pkg-stats Python 3
- > compliant.
-
- > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- > Reviewed-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Hello,
+ > On Sun,  3 Jun 2018 23:31:00 +0200, Peter Korsgaard wrote:
+ >> Fixes the following security issues:
+ >> 
+ >> CVE-2018-11362: LDSS dissector crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-25.html
+ >> 
+ >> CVE-2018-11357: Multiple dissectors could consume excessive memory
+ >> https://www.wireshark.org/security/wnpa-sec-2018-28.html
+ >> 
+ >> CVE-2018-11356: DNS dissector crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-29.html
+ >> 
+ >> CVE-2018-11360: GSM A DTAP dissector crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-30.html
+ >> 
+ >> CVE-2018-11358: Q.931 dissector crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-31.html
+ >> 
+ >> CVE-2018-11359: Multiple dissectors could crash
+ >> https://www.wireshark.org/security/wnpa-sec-2018-33.html
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/wireshark/wireshark.hash | 4 ++--
+ >> package/wireshark/wireshark.mk   | 2 +-
+ >> 2 files changed, 3 insertions(+), 3 deletions(-)
 
 Committed to 2018.05.x, thanks.
 
