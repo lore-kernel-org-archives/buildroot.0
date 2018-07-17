@@ -1,55 +1,67 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:20:11 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] gnupg2: security bump to
- version 2.2.8
-Message-ID: <20180717072759.E928088706@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 09:09:23 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] wireshark: security bump
+ to version 2.2.15
+Message-ID: <20180717072759.9254582C6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a1d6db9af11071b6d343a41eb40468fa5e96fdb
+commit: https://git.buildroot.net/buildroot/commit/?id=5f5cf32069ff0439c13c3bf1915f3d18632e0a55
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Fixes CVE-2018-12020: Unsanitized file names might cause injection of
-terminal control characters into the status output of gnupg.
+Fixes the following security issues:
 
-Cc: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+CVE-2018-11362: LDSS dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-25.html
+
+CVE-2018-11357: Multiple dissectors could consume excessive memory
+https://www.wireshark.org/security/wnpa-sec-2018-28.html
+
+CVE-2018-11356: DNS dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-29.html
+
+CVE-2018-11360: GSM A DTAP dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-30.html
+
+CVE-2018-11358: Q.931 dissector crash
+https://www.wireshark.org/security/wnpa-sec-2018-31.html
+
+CVE-2018-11359: Multiple dissectors could crash
+https://www.wireshark.org/security/wnpa-sec-2018-33.html
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b78a365b56eeb57030b8e3ca98c23dddfc416820)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1f47aa89f9fc3d4a8f59c4890a1174c6db1e222b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index f5cc95cb1b..f5890c5e2a 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,6 +1,6 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000424.html
--sha1 e222cda63409a86992369df8976f6c7511e10ea0  gnupg-2.2.7.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q2/000425.html
-+sha1 d87553a125832ea90e8aeb3ceeecf24f88de56fb  gnupg-2.2.8.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.7.tar.bz2.sig
--sha256 d95b361ee6ef7eff86af40c8c72bf9313736ac9f7010d6604d78bf83818e976e  gnupg-2.2.7.tar.bz2
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.8.tar.bz2.sig
-+sha256 777b4cb8ced21965a5053d4fa20fe11484f0a478f3d011cef508a1a49db50dcd  gnupg-2.2.8.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 0823921b0b..3151860f37 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 2b44cc0757..4b9c646fa9 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,4 +1,4 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.14.txt
+-sha256 e7a3d4f9bbde20ea5ee09103f9f6dba38e3666dfe1d6a6a1c004602b5fac378b  wireshark-2.2.14.tar.bz2
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.15.txt
++sha256 d73583e9282d47c42b69fc3a1ac9cafb6047d1305f5027d4cf18e95922d11844  wireshark-2.2.15.tar.bz2
+ # Locally calculated
+ sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index ad475803b7..c9a4ef202d 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GNUPG2_VERSION = 2.2.7
-+GNUPG2_VERSION = 2.2.8
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
+-WIRESHARK_VERSION = 2.2.14
++WIRESHARK_VERSION = 2.2.15
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
