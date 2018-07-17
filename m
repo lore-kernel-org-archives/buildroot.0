@@ -1,55 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Jul 2018 16:40:27 +0200
-Subject: [Buildroot] [PATCH] ncurses: make host-ncurses use host terminfo
-In-Reply-To: <5f7fe697b92ac0145674.1531241163@cveaol6qa08.wv.mentorg.com>
-References: <5f7fe697b92ac0145674.1531241163@cveaol6qa08.wv.mentorg.com>
-Message-ID: <20180717164027.04facc4b@windsurf>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Tue, 17 Jul 2018 07:57:18 -0700
+Subject: [Buildroot] [PATCH 1/2] DEVELOPERS: drop Valentin Korenblit's
+ entry
+In-Reply-To: <20180717113731.7c169774@windsurf>
+References: <20180716172141.7214-1-joseph.kogut@gmail.com>
+ <20180717113731.7c169774@windsurf>
+Message-ID: <CAMWSM7jr=H0YP9d2YxzEU_X2WvgUCNp-CH_a8Js4DzT3N=MBjw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, Jul 17, 2018 at 2:37 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Mon, 16 Jul 2018 10:21:40 -0700, Joseph Kogut wrote:
+> > Emails bounce, the server replies with "Recipient address rejected".
+> >
+> > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+>
+> Valentin sent a patch to update his e-mail address, so I've applied his
+> patch instead of dropping him from the DEVELOPERS file.
+>
+> Thanks,
+>
+> Thomas
 
-On Tue, 10 Jul 2018 09:46:03 -0700, Hollis Blanchard wrote:
-> # HG changeset patch
-> # User Hollis Blanchard <hollis_blanchard@mentor.com>
-> # Date 1531239381 25200
-> #      Tue Jul 10 09:16:21 2018 -0700
-> # Node ID 5f7fe697b92ac0145674a6c96aad0f787b4bae32
-> # Parent  d71314cdccf1993ccdb05cddb16a5491f0bf723e
+I'm glad to hear that.
 
-This mercurial stuff is a bit annoying, as it becomes part of the
-commit log. I removed it when applying the patch.
-
-> ncurses: make host-ncurses use host terminfo
-> 
-> Host GDB suffers a serious problem: pressing backspace (or ^W ^U or any other
-> "delete" key) results in a plain space being printed instead, making the
-> command prompt almost completely unusable.
-> 
-> That's because it's using host-ncurses, which embeds a path for the terminfo
-> database into the library itself. That path ends up being something like
-> /home/hollisb/buildroot.git/output/host/share/terminfo, which obviously doesn't
-> generally exist other hosts. ('relocate-sdk.sh' cannot and does not edit
-> binaries like libncurses.so.6, so doesn't resolve this problem.)
-> 
-> /usr/share/terminfo is a far better path to use, since it almost certainly
-> exists on the host. Theoretically, it could be from a different ncurses version
-> with incompatible terminfo database format, but this doesn't seem to be a
-> problem in practice. (Future patches could address the theoretical problem if
-> it actually appears in real life.)
-> 
-> This change allows buildroot's host gdb, which uses ncurses 6.x, to work on
-> RHEL5, RHEL6, and RHEL7, which all provide terminfo from ncurses 5.x.
-> 
-> Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
-
-Applied, thanks!
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks!
