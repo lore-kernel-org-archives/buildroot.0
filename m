@@ -1,41 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Jul 2018 16:08:21 +0200
-Subject: [Buildroot] [PATCH] cutelyst: new package
-In-Reply-To: <CACo8zOdPnJhMDqcJMp4fdKdLTsuGg9RLMNbjGEZBtxQaXEOeyg@mail.gmail.com>
-References: <20180716204912.8915-1-dantti12@gmail.com>
- <20180717090151.30233d21@windsurf>
- <CACo8zOdPnJhMDqcJMp4fdKdLTsuGg9RLMNbjGEZBtxQaXEOeyg@mail.gmail.com>
-Message-ID: <20180717160821.2178aacf@windsurf>
+Date: Tue, 17 Jul 2018 16:39:03 +0200
+Subject: [Buildroot] [git commit] ncurses: make host-ncurses use host
+ terminfo
+Message-ID: <20180717143439.74F7A887EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b35ad5d0b45e5288f4019aeaa06b87ef0f2ef016
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 17 Jul 2018 10:23:26 -0300, Daniel Nicoletti wrote:
+Host GDB suffers a serious problem: pressing backspace (or ^W ^U or any other
+"delete" key) results in a plain space being printed instead, making the
+command prompt almost completely unusable.
 
-> > Why do you have a depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE ? This
-> > dependency is not used by anything in qt5base.  
-> I based on the grantlee package, I actually thought this means QJson..
+That's because it's using host-ncurses, which embeds a path for the terminfo
+database into the library itself. That path ends up being something like
+/home/hollisb/buildroot.git/output/host/share/terminfo, which obviously doesn't
+generally exist other hosts. ('relocate-sdk.sh' cannot and does not edit
+binaries like libncurses.so.6, so doesn't resolve this problem.)
 
-Grantlee has the BR2_PACKAGE_QT5_JSCORE_AVAILABLE dependency because it
-selects the BR2_PACKAGE_QT5SCRIPT option.
+/usr/share/terminfo is a far better path to use, since it almost certainly
+exists on the host. Theoretically, it could be from a different ncurses version
+with incompatible terminfo database format, but this doesn't seem to be a
+problem in practice. (Future patches could address the theoretical problem if
+it actually appears in real life.)
 
-Since you don't select BR2_PACKAGE_QT5SCRIPT, there is no reason to
-depend on BR2_PACKAGE_QT5_JSCORE_AVAILABLE.
+This change allows buildroot's host gdb, which uses ncurses 6.x, to work on
+RHEL5, RHEL6, and RHEL7, which all provide terminfo from ncurses 5.x.
 
-> > We like to have a hash for the license file as well.  
-> a hash of the license file included in the tarball?
+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ncurses/ncurses.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Yes. This allows us to detect when license files are modified, and
-therefore to check if the license terms have been changed.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 90cf4a4dc5..5b36df564c 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -153,6 +153,7 @@ HOST_NCURSES_CONF_OPTS = \
+ 	--without-cxx \
+ 	--without-cxx-binding \
+ 	--without-ada \
++	--with-default-terminfo-dir=/usr/share/terminfo \
+ 	--without-normal
+ 
+ $(eval $(autotools-package))
