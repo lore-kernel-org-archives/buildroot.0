@@ -1,34 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Jul 2018 11:37:40 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add myself for clang and llvm
-Message-ID: <20180717093308.8CAE38874A@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 11:37:31 +0200
+Subject: [Buildroot] [PATCH 1/2] DEVELOPERS: drop Valentin Korenblit's
+ entry
+In-Reply-To: <20180716172141.7214-1-joseph.kogut@gmail.com>
+References: <20180716172141.7214-1-joseph.kogut@gmail.com>
+Message-ID: <20180717113731.7c169774@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc195622cf99f3886ffcc96fd90f3a28d28fb518
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 2 ++
- 1 file changed, 2 insertions(+)
+On Mon, 16 Jul 2018 10:21:40 -0700, Joseph Kogut wrote:
+> Emails bounce, the server replies with "Recipient address rejected".
+> 
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 67d0748360..4c2d1f291f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1059,8 +1059,10 @@ F:	package/rabbitmq-c/
- N:	Joseph Kogut <joseph.kogut@gmail.com>
- F:	package/at-spi2-atk/
- F:	package/at-spi2-core/
-+F:	package/clang/
- F:	package/gconf/
- F:	package/libnss/
-+F:	package/llvm/
- F:	package/python-cython/
- F:	package/python-raven/
- F:	package/python-schedule/
+Valentin sent a patch to update his e-mail address, so I've applied his
+patch instead of dropping him from the DEVELOPERS file.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
