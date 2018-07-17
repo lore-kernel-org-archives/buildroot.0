@@ -1,51 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:10:08 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] dl-wrapper: Fix support
- for URIs containing '+'
-Message-ID: <20180717072759.99D2488706@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 09:15:45 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] docker-containerd: add
+ missing docker-containerd symlink
+Message-ID: <20180717072759.AACC688706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6eddb997357e5afd5a0af524fa638ccecbff1d30
+commit: https://git.buildroot.net/buildroot/commit/?id=42619c1ea54d79b9d24a0afb46522c7fd85952b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-'+' is a valid character in a url. The current dl-wrapper gets the
-URI scheme by dropping everything after the last '+' character, with
-the intension of finding 'git' from e.g. 'git+https://uri'.
+Prior to commit 2dccb4f2fefd8a0dbda65dd0f7537f811e920b13
+("package/docker-containerd: convert to golang infrastructure"), the
+containerd binary was installed as docker-containerd. Following the
+conversion to the golang package infrastructure, the binary is now
+installed as "containerd", which breaks some use cases.
 
-If a uri has a '+' anywhere in it, it ends up using too much of the
-string as a scheme, and fails to match the handler properly.
+Let's add a symlink link docker-containerd -> containerd to fix such
+use cases.
 
-An example of where this form of URI is used is when using deploy tokens
-in gitlab. It uses a form like https://<username>:<password>@gitlab.com/<group>/<repo.git>
-where username for deploy token is of the form 'gitlab+deploy-token-<number>'.
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=11076
 
-Use the %% operator to search backwards until the last '+' character when
-dropping the rest of the string as we know that the first '+'
-in the string should be the scheme.
-
-Signed-off-by: Robert Beckett <bbeckett@netvu.org.uk>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a5ba72946ebf597a163bae9b12453dfa68993d54)
+(cherry picked from commit ded50f69c691e4b4a391ee23ec466abaad4bed99)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/dl-wrapper | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/docker-containerd/docker-containerd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 8d6365e08d..4059c37ebc 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -88,7 +88,7 @@ main() {
-     download_and_check=0
-     rc=1
-     for uri in "${uris[@]}"; do
--        backend=${uri%+*}
-+        backend=${uri%%+*}
-         case "${backend}" in
-             git|svn|cvs|bzr|file|scp|hg) ;;
-             *) backend="wget" ;;
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 88e27b5ed4..09e89f1aba 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -21,6 +21,7 @@ DOCKER_CONTAINERD_INSTALL_BINS = containerd containerd-shim
+ define DOCKER_CONTAINERD_INSTALL_SYMLINKS
+ 	ln -fs runc $(TARGET_DIR)/usr/bin/docker-runc
+ 	ln -fs containerd-shim $(TARGET_DIR)/usr/bin/docker-containerd-shim
++	ln -fs containerd $(TARGET_DIR)/usr/bin/docker-containerd
+ endef
+ 
+ DOCKER_CONTAINERD_POST_INSTALL_TARGET_HOOKS += DOCKER_CONTAINERD_INSTALL_SYMLINKS
