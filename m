@@ -1,34 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:28:48 +0200
-Subject: [Buildroot] [PATCH v2] audit: do not remove file installed by
- netplug
-In-Reply-To: <20180605020842.12761-1-casantos@datacom.com.br> (Carlos Santos's
- message of "Mon, 4 Jun 2018 23:08:42 -0300")
-References: <20180605020842.12761-1-casantos@datacom.com.br>
-Message-ID: <87sh4imibz.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Jul 2018 09:29:20 +0200
+Subject: [Buildroot] [PATCH v2,1/1] php-amqp: selects openssl
+In-Reply-To: <20180604170329.32233-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 4 Jun 2018 19:03:29 +0200")
+References: <20180604170329.32233-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o9f6mib3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > The package recipe uses a post-install hook to remove useless files from
- > $(TARGET_DIR)/etc/rc.d/init.d and $(TARGET_DIR)/etc/sysconfig. This may
- > damage packages that install useful files on those directories (such as
- > netplug, which installs $(TARGET_DIR)/etc/rc.d/init.d/netplugd).
+ > Since version 1.8.0, php-amqp needs a rabbitmq-c with openssl support:
+ > https://github.com/pdezwart/php-amqp/issues/310
 
- > In the future[1] we will reorganize the init scripts and possibly get
- > rid of /etc/rc.d and /etc/sysconfig but for the moment let's restrict
- > the file removal to those installed by audit.
+ > SSL support is disabled in rabbitmq-c if BR2_STATIC_LIBS is set however
+ > don't add an unneeded !BR2_STATIC_LIBS dependency in Config.in as all
+ > PHP External Extensions depends on !BR2_STATIC_LIBS
+ > (see package/Config.in)
 
- > 1. http://lists.busybox.net/pipermail/buildroot/2018-May/221549.html
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b45dcf1fad05
 
- > Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  > ---
- > Changes v1->v2
- >   - Remove file from /etc/rc.d/init.d/, not /etc/rc.d/
+ > Changes v1 -> v2 (after review of Baruch Siach and Thomas Petazzoni):
+ >  - Remove unneeded !BR2_STATIC_LIBS in Config.in as all PHP External
+ >    Extensions depends on !BR2_STATIC_LIBS (see package/Config.in)
 
 Committed to 2018.05.x, thanks.
 
