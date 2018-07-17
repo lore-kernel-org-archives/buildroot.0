@@ -1,46 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:07:47 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] cifs-utils: disable man
- page generation
-Message-ID: <20180717072759.8183788706@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 09:08:25 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] php-amqp: needs openssl
+ support in rabbitmq-c
+Message-ID: <20180717072759.88B4E82C6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39a53f10d693aa7c1a720e523e1910a9c3abe35a
+commit: https://git.buildroot.net/buildroot/commit/?id=7aec6ae09b65d2d544e9cc0f8116fc81cc7e4a00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Buildroot does not generate documentation for target.
+Since version 1.8.0, php-amqp needs a rabbitmq-c with openssl support:
+https://github.com/pdezwart/php-amqp/issues/310
 
-This fixes the build on hosts where the rst2man command does not support
-the --syntax-highlight parameter.
+SSL support is disabled in rabbitmq-c if BR2_STATIC_LIBS is set however
+don't add an unneeded !BR2_STATIC_LIBS dependency in Config.in as all
+PHP External Extensions depends on !BR2_STATIC_LIBS
+(see package/Config.in)
 
 Fixes:
-http://autobuild.buildroot.net/results/265/2655c0e1fa3ad0a10b4aed39a17feead94e47bfb/
-http://autobuild.buildroot.net/results/92d/92d7c608f717bbfe01ecfb9bc9604cb303d8594c/
-http://autobuild.buildroot.net/results/4b9/4b95404a89a595ca9c1e3df912169e9d36ff2bd7/
+ - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b45dcf1fad05
 
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 57d16fd480d3eb57822e634e409fb0bbc4dd475b)
+(cherry picked from commit d93305744b1dc758a3d86088473d571194762e19)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cifs-utils/cifs-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php-amqp/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index 9343e3ea89..e0efb3bf2e 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -15,7 +15,7 @@ CIFS_UTILS_DEPENDENCIES = host-pkgconf
- 
- # Let's disable PIE unconditionally. We want PIE to be enabled only by
- # the global BR2_RELRO_FULL option.
--CIFS_UTILS_CONF_OPTS = --disable-pie
-+CIFS_UTILS_CONF_OPTS = --disable-pie --disable-man
- 
- ifeq ($(BR2_PACKAGE_KEYUTILS),y)
- CIFS_UTILS_DEPENDENCIES += keyutils
+diff --git a/package/php-amqp/Config.in b/package/php-amqp/Config.in
+index 0aa2021f5a..dc779f0ee0 100644
+--- a/package/php-amqp/Config.in
++++ b/package/php-amqp/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PHP_AMQP
+ 	bool "php-amqp"
+ 	depends on BR2_PACKAGE_PHP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # rabbitmq-c
++	select BR2_PACKAGE_OPENSSL # rabbitmq-c: amqp_ssl_socket.h
+ 	select BR2_PACKAGE_RABBITMQ_C
+ 	help
+ 	  Communicate with any AMQP compliant server.
