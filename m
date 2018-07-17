@@ -1,71 +1,51 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 17 Jul 2018 13:09:52 +0200
-Subject: [Buildroot] [PATCH] package/binutils: add binutils version 2.31
-In-Reply-To: <20180716213010.29310-1-romain.naour@gmail.com>
-References: <20180716213010.29310-1-romain.naour@gmail.com>
-Message-ID: <20180717130952.5b09ca40@windsurf>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Tue, 17 Jul 2018 13:18:14 +0200 (CEST)
+Subject: [Buildroot] [PATCH] rust: Modify Rust to be usable as host-tool
+ only
+In-Reply-To: <20180717042953.23648-1-sam.voss@gmail.com>
+Message-ID: <2046565940.1039371796.1531826294693.JavaMail.root@zimbra32-e6.priv.proxad.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi!
 
-+Max Filippov in Cc for Xtensa (see below)
-
-On Mon, 16 Jul 2018 23:30:10 +0200, Romain Naour wrote:
-> https://sourceware.org/ml/binutils/2018-07/msg00213.html
+> From: Sam Voss <sam.voss@gmail.com>
 > 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/binutils/2.31/0001-sh-conf.patch           |  48 ++++
->  package/binutils/2.31/0002-ld-makefile.patch       |  41 +++
->  .../2.31/0003-check-ldrunpath-length.patch         |  36 +++
->  .../2.31/0004-add-sysroot-fix-from-bug-3049.patch  |  51 ++++
->  .../2.31/0005-poison-system-directories.patch      | 306 +++++++++++++++++++++
->  ...location-where-GOT-information-is-collect.patch | 198 +++++++++++++
->  ...bustness.-Return-FALSE-in-case-of-NULL-po.patch |  35 +++
->  ...lobal-symbol-is-not-an-indirect-or-warnin.patch |  43 +++
->  ...tion-was-still-being-generated-when-symbo.patch |  37 +++
->  package/binutils/Config.in.host                    |   4 +
->  package/binutils/binutils.hash                     |   1 +
->  11 files changed, 800 insertions(+)
->  create mode 100644 package/binutils/2.31/0001-sh-conf.patch
->  create mode 100644 package/binutils/2.31/0002-ld-makefile.patch
->  create mode 100644 package/binutils/2.31/0003-check-ldrunpath-length.patch
->  create mode 100644 package/binutils/2.31/0004-add-sysroot-fix-from-bug-3049.patch
->  create mode 100644 package/binutils/2.31/0005-poison-system-directories.patch
->  create mode 100644 package/binutils/2.31/0006-Refactored-location-where-GOT-information-is-collect.patch
->  create mode 100644 package/binutils/2.31/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch
->  create mode 100644 package/binutils/2.31/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch
->  create mode 100644 package/binutils/2.31/0009-PLT-information-was-still-being-generated-when-symbo.patch
+> Modify host-rust virtual package to default to host-rust-bin when no
+> other selection has been made, as long as the host supports rust. This
+> allows host only tools to still use rust when the target architecture
+> does not support it.
+> 
+> Add target-specific variable which is used to differentiate host and
+> target arch requirements (BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS).
+> 
+> A target package shall depend on this variable where a host package will 
+> use the previously defined BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS. The new 
+> "target" version is selectable for the same set of architectures as
+> before, but now depends on the host variant.
+> 
+> Signed-off-by: Sam Voss <sam.voss@gmail.com>
 
-The update to binutils 2.31 seems to be causing a regression: it cannot
-build uClibc anymore:
+IIUC, the goal of this patch is to be able to build host packages which need 
+rust, so host-rust-bin is set as default to avoid errors on empty variables
+and only the compiler and the host standard library are installed (not the
+target standard library). Only x86_64/x86 support is required, right?
 
+I find it confusing that BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS and 
+BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS are quite similar and that in 
+the end BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS is only used to install
+the target standard library. Is that meant to cover the case where the host
+and the target are the same (x86_64) or the librsvg-related issue?
 
-  LD libthread_db-1.0.30.so
-/opt/xtensa-lx60--uclibc--bleeding-edge-2018.07-1/lib/gcc/xtensa-buildroot-linux-uclibc/8.1.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: BFD (GNU Binutils) 2.31 internal error, aborting at elf32-xtensa.c:3269 in elf_xtensa_finish_dynamic_sections
+Would this be solved by introducing a virtual package for the target 
+standard library as previously discussed [1]?
 
-/opt/xtensa-lx60--uclibc--bleeding-edge-2018.07-1/lib/gcc/xtensa-buildroot-linux-uclibc/8.1.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: Please report this bug.
+[1] http://patchwork.ozlabs.org/comment/1830134/ 
 
-collect2: error: ld returned 1 exit status
-libpthread/nptl_db/Makefile.in:53: recipe for target 'lib/libthread_db.so' failed
-make[1]: *** [lib/libthread_db.so] Error 1
-make[1]: Leaving directory '/opt/output/build/uclibc-1.0.30'
+Regards,
 
-My previous build of toolchains, which was using binutils 2.30, went
-fine including on Xtensa.
-
-See
-https://gitlab.com/free-electrons/toolchains-builder/-/jobs/82264912
-for the build failure.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--
+ELB
