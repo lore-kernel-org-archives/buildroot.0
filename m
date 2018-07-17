@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:29:20 +0200
-Subject: [Buildroot] [PATCH v2,1/1] php-amqp: selects openssl
-In-Reply-To: <20180604170329.32233-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 4 Jun 2018 19:03:29 +0200")
-References: <20180604170329.32233-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o9f6mib3.fsf@dell.be.48ers.dk>
+Date: Tue, 17 Jul 2018 09:29:31 +0200
+Subject: [Buildroot] [PATCH 1/1] libxslt: security bump to version 1.3.2
+In-Reply-To: <20180607180704.12441-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 7 Jun 2018 20:07:04 +0200")
+References: <20180607180704.12441-1-fontaine.fabrice@gmail.com>
+Message-ID: <87k1pumias.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,22 +13,13 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Since version 1.8.0, php-amqp needs a rabbitmq-c with openssl support:
- > https://github.com/pdezwart/php-amqp/issues/310
-
- > SSL support is disabled in rabbitmq-c if BR2_STATIC_LIBS is set however
- > don't add an unneeded !BR2_STATIC_LIBS dependency in Config.in as all
- > PHP External Extensions depends on !BR2_STATIC_LIBS
- > (see package/Config.in)
-
- > Fixes:
- >  - http://autobuild.buildroot.net/results/b7c89bbbd0ca1df08dd7cbfc90c7b45dcf1fad05
+ > - Fix CVE-2017-5029
+ > - Remove first patch (already in version)
+ > - Add a dependency to host-pkgconf and remove libxml2 options: see
+ >   https://github.com/GNOME/libxslt/commit/abf537ebb2296cd3ae89989a17b0e1b5c79db107
+ > - Add hash for license file
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Baruch Siach and Thomas Petazzoni):
- >  - Remove unneeded !BR2_STATIC_LIBS in Config.in as all PHP External
- >    Extensions depends on !BR2_STATIC_LIBS (see package/Config.in)
 
 Committed to 2018.05.x, thanks.
 
