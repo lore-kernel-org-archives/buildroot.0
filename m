@@ -1,79 +1,105 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 17 Jul 2018 21:16:05 +0200
-Subject: [Buildroot] [RFC v2 4/4] libinput: bump version to 1.11.0 and
- convert to meson build
+Date: Tue, 17 Jul 2018 21:16:03 +0200
+Subject: [Buildroot] [RFC v2 2/4] meson: change from global to per package
+ cross-compilation.conf
 In-Reply-To: <20180717191605.19263-1-ps.report@gmx.net>
 References: <20180717191605.19263-1-ps.report@gmx.net>
-Message-ID: <20180717191605.19263-4-ps.report@gmx.net>
+Message-ID: <20180717191605.19263-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details since 1.8.x see [1], [2] and [3].
+Add FOO_MESON_CFLAGS, FOO_MESON_LDFLAGS and FOO_MESON_CXXFLAGS
+variables to allow per package additional flags.
 
-Build system changed from autotools to meson exclusively
-since 1.9.0 (see [1]).
-
-[1] https://lists.freedesktop.org/archives/wayland-devel/2017-October/035469.html
-[2] https://lists.freedesktop.org/archives/wayland-devel/2018-February/036957.html
-[3] https://lists.freedesktop.org/archives/wayland-devel/2018-June/038349.html
+Change to buildtype plain as all compiler/linker flags forcing
+debug/release are already given via the cross-compilation.conf
+file.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Changes v1 -> v2:
-  - new patch
----
- package/libinput/libinput.hash | 10 +++++-----
- package/libinput/libinput.mk   | 10 +++++-----
- 2 files changed, 10 insertions(+), 10 deletions(-)
+Notes:
+  - documentation change for new flags missing
+  - use in pkg-meson.mk the same sed/printf for flags quotation mark
+    and comma adding
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 4e64568ca3..5707ee9fa3 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-September/034949.html
--md5  e94e9aa765da9533c23b80b440638de9  libinput-1.8.2.tar.xz
--sha1 1c55462eb598b91c9c360f31170a408fb8d38d22  libinput-1.8.2.tar.xz
--sha256 013518ee0adb2287e6e1f08412efba2137320738cadb5399b783738f04cbab38  libinput-1.8.2.tar.xz
--sha512 555a7680cc8aaf62c5370a865f3aff0a933d42d94a3d8861c072666b02c9e1be45ea39de9a749a9575cdfb613b6150e412e18559d94d4919f21ca4680a3c76a7  libinput-1.8.2.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2018-June/038349.html
-+md5 a182dab52f4d33bc1ef50668dcf53cc6 libinput-1.11.0.tar.xz
-+sha1 5c242a99c7e4c678e15f7bd100f94fa338b81240 libinput-1.11.0.tar.xz
-+sha256 64a36c4f826f4b5d473bf2cb803122f96390a18243ec810f2ce8ac5076a0bc12 libinput-1.11.0.tar.xz
-+sha512 382a6c9ec4aaf13ac209ee5a7f507c7a6d2dd399c5104703ac7c6ac62fb3f393de6f4e15d7895b18c8b8d845ce8fc1f551a90aa7532f0de4cc17e57a09cfe857 libinput-1.11.0.tar.xz
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index f904b796b7..8c4870f269 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Changes v1 -> v2:
+  - no changes
+---
+ package/meson/cross-compilation.conf.in | 8 ++++----
+ package/meson/meson.mk                  | 6 +++---
+ package/pkg-meson.mk                    | 9 +++++++--
+ 3 files changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index 0eec74087b..6af03314eb 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -11,10 +11,10 @@ strip = '@TARGET_CROSS at strip'
+ pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
  
--LIBINPUT_VERSION = 1.8.2
-+LIBINPUT_VERSION = 1.11.0
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
-@@ -12,13 +12,13 @@ LIBINPUT_INSTALL_STAGING = YES
- LIBINPUT_LICENSE = MIT
- LIBINPUT_LICENSE_FILES = COPYING
- # Tests need fork, so just disable them everywhere.
--LIBINPUT_CONF_OPTS = --disable-tests --disable-libwacom
-+LIBINPUT_CONF_OPTS = -Dtests=false -Dlibwacom=false -Ddocumentation=false
+ [properties]
+-c_args = [@TARGET_CFLAGS@]
+-c_link_args = [@TARGET_LDFLAGS@]
+-cpp_args = [@TARGET_CXXFLAGS@]
+-cpp_link_args = [@TARGET_LDFLAGS@]
++c_args = [@TARGET_CFLAGS@ @PKG_TARGET_CFLAGS@]
++c_link_args = [@TARGET_LDFLAGS@ @PKG_TARGET_LDFLAGS@]
++cpp_args = [@TARGET_CXXFLAGS@ @PKG_TARGET_CXXFLAGS@]
++cpp_link_args = [@TARGET_LDFLAGS@ @PKG_TARGET_LDFLAGS@]
  
- ifeq ($(BR2_PACKAGE_LIBGTK3),y)
--LIBINPUT_CONF_OPTS += --enable-debug-gui
-+LIBINPUT_CONF_OPTS += -Ddebug-gui=true
- LIBINPUT_DEPENDENCIES += libgtk3
- else
--LIBINPUT_CONF_OPTS += --disable-debug-gui
-+LIBINPUT_CONF_OPTS += -Ddebug-gui=false
- endif
+ [host_machine]
+ system = 'linux'
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index d110e594f5..0f2ee2855d 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -20,7 +20,7 @@ HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_C
+ HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
  
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+-define HOST_MESON_INSTALL_CROSS_CONF
++define HOST_MESON_INSTALL_CROSS_CONF_IN
+ 	mkdir -p $(HOST_DIR)/etc/meson
+ 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+ 	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
+@@ -31,9 +31,9 @@ define HOST_MESON_INSTALL_CROSS_CONF
+ 	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+ 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+ 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+-	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
++	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
+ endef
+ 
+-HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
++HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF_IN
+ 
+ $(eval $(host-python-package))
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 507e686068..565e10e8fb 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -64,12 +64,17 @@ ifeq ($(4),target)
+ define $(2)_CONFIGURE_CMDS
+ 	rm -rf $$($$(PKG)_SRCDIR)/build
+ 	mkdir -p $$($$(PKG)_SRCDIR)/build
++	sed -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_CFLAGS)%g" \
++	    -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_LDFLAGS)%g" \
++	    -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_CXXFLAGS)%g" \
++	    $(HOST_DIR)/etc/meson/cross-compilation.conf.in \
++	    > $$($$(PKG)_SRCDIR)/build//cross-compilation.conf
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+-		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+-		--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
++		--buildtype=plain \
++		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
 -- 
 2.18.0
