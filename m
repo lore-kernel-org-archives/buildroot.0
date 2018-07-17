@@ -1,42 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:00:04 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] skeleton: create include/
- directory
-Message-ID: <20180717072759.7AA1088706@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 09:10:08 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] dl-wrapper: Fix support
+ for URIs containing '+'
+Message-ID: <20180717072759.99D2488706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54805e67c5eecb282502ee0b9720536af0f5358b
+commit: https://git.buildroot.net/buildroot/commit/?id=6eddb997357e5afd5a0af524fa638ccecbff1d30
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Don't rely on a random host package to create the include/ directory for
-us. Some packages do the wrong thing since they implicitly assume that
-this directory exists already. Commit a557aedad2 (zstd: fix host headers
-installation) shows an example of that.
+'+' is a valid character in a url. The current dl-wrapper gets the
+URI scheme by dropping everything after the last '+' character, with
+the intension of finding 'git' from e.g. 'git+https://uri'.
 
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+If a uri has a '+' anywhere in it, it ends up using too much of the
+string as a scheme, and fails to match the handler properly.
+
+An example of where this form of URI is used is when using deploy tokens
+in gitlab. It uses a form like https://<username>:<password>@gitlab.com/<group>/<repo.git>
+where username for deploy token is of the form 'gitlab+deploy-token-<number>'.
+
+Use the %% operator to search backwards until the last '+' character when
+dropping the rest of the string as we know that the first '+'
+in the string should be the scheme.
+
+Signed-off-by: Robert Beckett <bbeckett@netvu.org.uk>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 967d302e8bbb409c5b5106b0c87091d47f01a890)
+(cherry picked from commit a5ba72946ebf597a163bae9b12453dfa68993d54)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/skeleton/skeleton.mk | 1 +
- 1 file changed, 1 insertion(+)
+ support/download/dl-wrapper | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/skeleton/skeleton.mk b/package/skeleton/skeleton.mk
-index efcf420d72..9d97f02f08 100644
---- a/package/skeleton/skeleton.mk
-+++ b/package/skeleton/skeleton.mk
-@@ -16,6 +16,7 @@ SKELETON_ADD_SKELETON_DEPENDENCY = NO
- define HOST_SKELETON_INSTALL_CMDS
- 	$(Q)ln -snf . $(HOST_DIR)/usr
- 	$(Q)mkdir -p $(HOST_DIR)/lib
-+	$(Q)mkdir -p $(HOST_DIR)/include
- 	$(Q)case $(HOSTARCH) in \
- 		(*64) ln -snf lib $(HOST_DIR)/lib64;; \
- 		(*)   ln -snf lib $(HOST_DIR)/lib32;; \
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 8d6365e08d..4059c37ebc 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -88,7 +88,7 @@ main() {
+     download_and_check=0
+     rc=1
+     for uri in "${uris[@]}"; do
+-        backend=${uri%+*}
++        backend=${uri%%+*}
+         case "${backend}" in
+             git|svn|cvs|bzr|file|scp|hg) ;;
+             *) backend="wget" ;;
