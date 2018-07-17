@@ -1,67 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 09:09:23 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] wireshark: security bump
- to version 2.2.15
-Message-ID: <20180717072759.9254582C6C@busybox.osuosl.org>
+Date: Tue, 17 Jul 2018 08:58:53 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x]
+ support/scripts/pkg-stats: use parenthesis for print
+Message-ID: <20180717072759.7319582C6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f5cf32069ff0439c13c3bf1915f3d18632e0a55
+commit: https://git.buildroot.net/buildroot/commit/?id=b91e72bf017523f47ff430e68f042e5511a6707d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Fixes the following security issues:
+Use Python 3 style print calls, in order to make pkg-stats Python 3
+compliant.
 
-CVE-2018-11362: LDSS dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-25.html
-
-CVE-2018-11357: Multiple dissectors could consume excessive memory
-https://www.wireshark.org/security/wnpa-sec-2018-28.html
-
-CVE-2018-11356: DNS dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-29.html
-
-CVE-2018-11360: GSM A DTAP dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-30.html
-
-CVE-2018-11358: Q.931 dissector crash
-https://www.wireshark.org/security/wnpa-sec-2018-31.html
-
-CVE-2018-11359: Multiple dissectors could crash
-https://www.wireshark.org/security/wnpa-sec-2018-33.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@datacom.ind.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1f47aa89f9fc3d4a8f59c4890a1174c6db1e222b)
+(cherry picked from commit eb04235783abe58a6a7f8ecc8f9ab46a6d03b543)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/wireshark.hash | 4 ++--
- package/wireshark/wireshark.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 2b44cc0757..4b9c646fa9 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.14.txt
--sha256 e7a3d4f9bbde20ea5ee09103f9f6dba38e3666dfe1d6a6a1c004602b5fac378b  wireshark-2.2.14.tar.bz2
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.15.txt
-+sha256 d73583e9282d47c42b69fc3a1ac9cafb6047d1305f5027d4cf18e95922d11844  wireshark-2.2.15.tar.bz2
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index ad475803b7..c9a4ef202d 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 43f7e8d543..b7b00e8634 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -499,17 +499,17 @@ def parse_args():
+ def __main__():
+     args = parse_args()
+     if args.npackages and args.packages:
+-        print "ERROR: -n and -p are mutually exclusive"
++        print("ERROR: -n and -p are mutually exclusive")
+         sys.exit(1)
+     if args.packages:
+         package_list = args.packages.split(",")
+     else:
+         package_list = None
+-    print "Build package list ..."
++    print("Build package list ...")
+     packages = get_pkglist(args.npackages, package_list)
+-    print "Getting package make info ..."
++    print("Getting package make info ...")
+     package_init_make_info()
+-    print "Getting package details ..."
++    print("Getting package details ...")
+     for pkg in packages:
+         pkg.set_infra()
+         pkg.set_license()
+@@ -517,9 +517,9 @@ def __main__():
+         pkg.set_patch_count()
+         pkg.set_check_package_warnings()
+         pkg.set_current_version()
+-    print "Calculate stats"
++    print("Calculate stats")
+     stats = calculate_stats(packages)
+-    print "Write HTML"
++    print("Write HTML")
+     dump_html(packages, stats, args.output)
  
--WIRESHARK_VERSION = 2.2.14
-+WIRESHARK_VERSION = 2.2.15
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
+ 
