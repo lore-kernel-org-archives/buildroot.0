@@ -1,43 +1,34 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 17 Jul 2018 23:02:32 +0300
-Subject: [Buildroot] [RFC v2 1/4] meson: bump version to 0.47.1
-In-Reply-To: <20180717191605.19263-1-ps.report@gmx.net>
-References: <20180717191605.19263-1-ps.report@gmx.net>
-Message-ID: <87o9f5636v.fsf@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 17 Jul 2018 22:06:14 +0200
+Subject: [Buildroot] [PATCH 2018.02.x] procps-ng: disable for musl libc
+In-Reply-To: <3f2a94307e6c380842726b8158e8ec2e9d24372a.1530616293.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 3 Jul 2018 14:11:33 +0300")
+References: <3f2a94307e6c380842726b8158e8ec2e9d24372a.1530616293.git.baruch@tkos.co.il>
+Message-ID: <87in5dk4p5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Peter Seiderer writes:
+ > The recent procps-ng security bump in commit 88ec06ad484 (procps-ng:
+ > security bump to version 3.3.15) of the 2018.02.x branch, introduced use
+ > of fopencookie() which is a GNU extension that musl version 1.1.8 does
+ > not implement. Backporting the security fixes alone is not feasible.
+ > Disable procps-ng for musl libc toolchains.
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Notes:
-> Hash not checked against the pgp signature, tried
-> 	$ gpg --verify meson-0.47.1.tar.gz.asc meson-0.47.1.tar.gz
->   gpg: Signature made Di 10 Jul 2018 23:28:12 CEST
->   gpg:                using RSA key 95181F4EED14FDF4E41B518D3BF4693BFEEB9428
->   gpg: Can't check signature: No public key
->
-> Any advice which public key is used to sign the meson package?
+ > Propagate this dependency to procps-ng reverse dependencies that used to
+ > allow build with musl, openvmtools and tovid.
 
-The key ID is shown in the message above. You can import the key and
-verify with:
+ > Fixes:
+ > http://autobuild.buildroot.net/results/eac/eac700c61e277689b46fd617b6ddcbf94b5271e5/
+ > http://autobuild.buildroot.net/results/baa/baac54b934d5ac07d3604ae3c6016595e4d7014a/
 
-  gpg --recv-keys 95181F4EED14FDF4E41B518D3BF4693BFEEB9428
-  gpg --verify meson-0.47.1.tar.gz.asc
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-gpg: Signature made Wed 11 Jul 2018 12:28:12 AM IDT
-gpg:                using RSA key 95181F4EED14FDF4E41B518D3BF4693BFEEB9428
-gpg: Good signature from "Jussi Pakkanen <jpakkane@gmail.com>" [marginal]
+Committed to 2018.02.x, thanks.
 
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+-- 
+Bye, Peter Korsgaard
