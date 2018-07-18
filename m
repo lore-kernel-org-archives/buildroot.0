@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:24:31 +0200
-Subject: [Buildroot] [PATCH] wireguard: bump version to 0.0.20180613
-In-Reply-To: <20180620130806.19229-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 20 Jun 2018 15:08:06 +0200")
-References: <20180620130806.19229-1-peter@korsgaard.com>
-Message-ID: <877elsi6eo.fsf@dell.be.48ers.dk>
+Date: Wed, 18 Jul 2018 23:26:04 +0200
+Subject: [Buildroot] [PATCH] edid-decode: update upstream locations
+In-Reply-To: <2fd12ccbfed419704a9f0695a1b744a03dce9770.1529637568.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 22 Jun 2018 06:19:28 +0300")
+References: <2fd12ccbfed419704a9f0695a1b744a03dce9770.1529637568.git.baruch@tkos.co.il>
+Message-ID: <8736wgi6c3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Contains a fix for a crash when forwarding packets from devices that use
- > flow offloading and a x86 FPU issue on -rt kernels.
+ > edid-decode moved to linuxtv.org. Update homepage link and download
+ > site.
 
- > Also add a post-release upstream patch fixing a compilation issue related to
- > memcpy().
+ > https://www.spinics.net/lists/linux-media/msg136517.html
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Peter Seiderer <ps.report@gmx.net>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
