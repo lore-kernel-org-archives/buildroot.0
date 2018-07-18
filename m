@@ -1,45 +1,88 @@
 From: =?UTF-8?q?Micha=C3=ABl=20Burtin?= <michael.burtin@netgem.com>
-Date: Wed, 18 Jul 2018 10:17:48 +0200
-Subject: [Buildroot] [PATCH 2/2] libcurl: add libnghttp2 optional dependency
-In-Reply-To: <20180718081748.13364-1-michael.burtin@netgem.com>
-References: <20180718081748.13364-1-michael.burtin@netgem.com>
-Message-ID: <20180718081748.13364-2-michael.burtin@netgem.com>
+Date: Wed, 18 Jul 2018 10:17:47 +0200
+Subject: [Buildroot] [PATCH 1/2] libnghttp2: new package
+Message-ID: <20180718081748.13364-1-michael.burtin@netgem.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The libnghttp2 package has recently been added to buildroot. When
-enabled, this adds support for HTTP2 to libcurl.
-
-By default, libcurl configure script will enable HTTP2 if the library
-is found using pkg-config. Adding this option makes the build
-consistent.
+nghttp2 is an implementation of HTTP/2 and its header
+compression algorithm HPACK in C.
 
 Signed-off-by: Anisse Astier <anisse.astier.ext@netgem.com>
 Signed-off-by: Micha?l Burtin <michael.burtin@netgem.com>
 ---
- package/libcurl/libcurl.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/Config.in                  |  1 +
+ package/libnghttp2/Config.in       |  7 +++++++
+ package/libnghttp2/libnghttp2.hash |  2 ++
+ package/libnghttp2/libnghttp2.mk   | 22 ++++++++++++++++++++++
+ 4 files changed, 32 insertions(+)
+ create mode 100644 package/libnghttp2/Config.in
+ create mode 100644 package/libnghttp2/libnghttp2.hash
+ create mode 100644 package/libnghttp2/libnghttp2.mk
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index c9b325c672..4281d5ed11 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -88,6 +88,13 @@ else
- LIBCURL_CONF_OPTS += --without-brotli
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBNGHTTP2),y)
-+LIBCURL_DEPENDENCIES += nghttp2
-+LIBCURL_CONF_OPTS += --with-nghttp2
-+else
-+LIBCURL_CONF_OPTS += --without-nghttp2
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index eedce83616..9f230afdee 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1454,6 +1454,7 @@ menu "Networking"
+ 	source "package/libnfnetlink/Config.in"
+ 	source "package/libnftnl/Config.in"
+ 	source "package/libnice/Config.in"
++	source "package/libnghttp2/Config.in"
+ 	source "package/libnl/Config.in"
+ 	source "package/liboauth/Config.in"
+ 	source "package/liboping/Config.in"
+diff --git a/package/libnghttp2/Config.in b/package/libnghttp2/Config.in
+new file mode 100644
+index 0000000000..b7f4170d6d
+--- /dev/null
++++ b/package/libnghttp2/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LIBNGHTTP2
++	bool "libnghttp2"
++	help
++		nghttp2 is an implementation of HTTP/2 and its header
++		compression algorithm HPACK in C.
 +
- define LIBCURL_FIX_DOT_PC
- 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
- endef
++		https://nghttp2.org/
+diff --git a/package/libnghttp2/libnghttp2.hash b/package/libnghttp2/libnghttp2.hash
+new file mode 100644
+index 0000000000..067e58cfbc
+--- /dev/null
++++ b/package/libnghttp2/libnghttp2.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 f75e8f228217f23aa5eabfbab140e061cda00b7c21e34c891ecfb248d663303f  nghttp2-1.32.0.tar.gz
+diff --git a/package/libnghttp2/libnghttp2.mk b/package/libnghttp2/libnghttp2.mk
+new file mode 100644
+index 0000000000..b8502dbe42
+--- /dev/null
++++ b/package/libnghttp2/libnghttp2.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# nghttp2
++#
++################################################################################
++
++LIBNGHTTP2_VERSION = 1.32.0
++LIBNGHTTP2_SOURCE = nghttp2-$(LIBNGHTTP2_VERSION).tar.gz
++LIBNGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(LIBNGHTTP2_VERSION)
++LIBNGHTTP2_LICENSE = MIT
++LIBNGHTTP2_LICENSE_FILES = COPYING LICENSE
++LIBNGHTTP2_INSTALL_STAGING = YES
++LIBNGHTTP2_DEPENDENCIES = host-pkgconf
++LIBNGHTTP2_CONF_OPTS = --enable-lib-only
++
++define LIBNGHTTP2_INSTALL_CLEAN_HOOK
++       $(Q)rm -rf $(TARGET_DIR)/usr/share/nghttp2
++endef
++
++LIBNGHTTP2_POST_INSTALL_TARGET_HOOKS += LIBNGHTTP2_INSTALL_CLEAN_HOOK
++
++$(eval $(autotools-package))
 -- 
 2.13.6
