@@ -1,52 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:25:50 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] edid-decode: update
- upstream locations
-Message-ID: <20180718212802.DD85F88C9A@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 23:24:04 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] wireguard: bump version
+ to 0.0.20180613
+Message-ID: <20180718212802.D478E88C9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1d93622f72a760f9e5f6a4fd6c8bc5d3eadeb0a
+commit: https://git.buildroot.net/buildroot/commit/?id=f757657e16d0e6576a608f2b179f032f79ad33b8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-edid-decode moved to linuxtv.org. Update homepage link and download
-site.
+Contains a fix for a crash when forwarding packets from devices that use
+flow offloading and a x86 FPU issue on -rt kernels.
 
-https://www.spinics.net/lists/linux-media/msg136517.html
+Also add a post-release upstream patch fixing a compilation issue related to
+memcpy().
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7817f9f0369003e078a7dae1fc5b9876075295cf)
+(cherry picked from commit 630fd8785bd6b9cef3ada692989543ed1de6a39e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/edid-decode/Config.in      | 2 +-
- package/edid-decode/edid-decode.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...0001-poly1305-add-missing-string.h-header.patch | 26 ++++++++++++++++++++++
+ package/wireguard/wireguard.hash                   |  4 ++--
+ package/wireguard/wireguard.mk                     |  2 +-
+ 3 files changed, 29 insertions(+), 3 deletions(-)
 
-diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
-index 64297b494d..701c70031f 100644
---- a/package/edid-decode/Config.in
-+++ b/package/edid-decode/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_EDID_DECODE
- 	help
- 	  Decode EDID data in human-readable format.
- 
--	  http://cgit.freedesktop.org/xorg/app/edid-decode/
-+	  https://git.linuxtv.org/edid-decode.git/
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index a4141b899b..b412a77a13 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/wireguard/0001-poly1305-add-missing-string.h-header.patch b/package/wireguard/0001-poly1305-add-missing-string.h-header.patch
+new file mode 100644
+index 0000000000..8f1bfecb5c
+--- /dev/null
++++ b/package/wireguard/0001-poly1305-add-missing-string.h-header.patch
+@@ -0,0 +1,26 @@
++From ed04799b1868f45e05d788e614b9b8cfa4fcab46 Mon Sep 17 00:00:00 2001
++From: "Jason A. Donenfeld" <Jason@zx2c4.com>
++Date: Wed, 20 Jun 2018 14:55:24 +0200
++Subject: [PATCH] poly1305: add missing string.h header
++
++Reported-by: Peter Korsgaard <peter@korsgaard.com>
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/crypto/poly1305.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/crypto/poly1305.c b/src/crypto/poly1305.c
++index 26af4ad..65a37d9 100644
++--- a/src/crypto/poly1305.c
+++++ b/src/crypto/poly1305.c
++@@ -7,6 +7,7 @@
++ #include "poly1305.h"
++ 
++ #include <linux/kernel.h>
+++#include <linux/string.h>
++ 
++ #if defined(CONFIG_X86_64)
++ #include <asm/fpu/api.h>
++-- 
++2.11.0
++
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 7701424e4e..f7c5e65475 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-May/002914.html
+-sha256 57614239c1f1a99a367f2c816153acda5bffada66a3b8e3b8215f1625784abc9  WireGuard-0.0.20180524.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-June/002984.html
++sha256 c120cdedc3967dcb4ad5c1c7eadd2a1b04ef5dbf2fe60cc8e7c0db337bcda7dc  WireGuard-0.0.20180613.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index ee68dc5580..e1c43beea7 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
--EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
-+EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
- EDID_DECODE_LICENSE = MIT
- EDID_DECODE_LICENSE_FILES = edid-decode.c
- 
+-WIREGUARD_VERSION = 0.0.20180524
++WIREGUARD_VERSION = 0.0.20180613
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
