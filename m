@@ -1,49 +1,156 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 18 Jul 2018 10:18:40 -0300
-Subject: [Buildroot] [PATCH v2 2/2] configs/imx7d-sdb: Add new defconfig
-In-Reply-To: <20180718151211.73c5eb52@windsurf>
-References: <1531084579-7949-1-git-send-email-festevam@gmail.com>
- <1531084579-7949-2-git-send-email-festevam@gmail.com>
- <20180718120128.2454a930@windsurf>
- <CAOMZO5AnV9edLKrhTwchdghONU7=5CONndAjgXLreTkdN1vj8Q@mail.gmail.com>
- <20180718145146.10793a31@windsurf>
- <CAOMZO5A_feHYFg4Y83bzDv4k-XF8xYoao9AvxFXY-Czj00RWeA@mail.gmail.com>
- <20180718151211.73c5eb52@windsurf>
-Message-ID: <CAOMZO5AUv8ry4OatFiM-QmXBQezwa_oP6sO05XJMPw_hCGWxWQ@mail.gmail.com>
+From: Daniel Nicoletti <dantti12@gmail.com>
+Date: Wed, 18 Jul 2018 10:24:53 -0300
+Subject: [Buildroot] [PATCH] cutelyst: new package
+In-Reply-To: <20180718125949.04f926f8@windsurf>
+References: <20180717204613.22028-1-dantti12@gmail.com>
+ <20180718125949.04f926f8@windsurf>
+Message-ID: <CACo8zOfCUVXp2AGbcrFDeCvaeQGNv9_4rdsr6imRo+YYJN6iyw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 18, 2018 at 10:12 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
+Em qua, 18 de jul de 2018 ?s 07:59, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> escreveu:
 >
-> On Wed, 18 Jul 2018 10:03:20 -0300, Fabio Estevam wrote:
+> Hello Daniel,
 >
->> Actually the dts name in the vendor kernel is the same.
->>
->> We could just add a "freescale" prefix to make clear that it refers to
->> a defconfig that uses the vendor U-Boot and kernel.
->>
->> For example:
->>
->> imx7d-sdb_defconfig: this Buildroot defconfig uses mainline U-Boot/kernel
->> freescale_imx7d-sdb_defconfig: this Buildroot defconfig uses the
->> vendor provided U-Boot/kernel.
+> On Tue, 17 Jul 2018 17:46:13 -0300, Daniel Nicoletti wrote:
+> > A C++ Web Framework built on top of Qt, using
+> > the simple approach of Catalyst (Perl) framework.
+> >
+> > Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
 >
-> To me, this is what would make the most sense.
+> Thanks for this new iteration. I applied it after doing some changes,
+> which I'll describe below.
 >
-> So, is configs/freescale_imx7dsabresd_defconfig related to this same
-> board, or is it a completely different board ?
+> However, first of all, when you send a new iteration of a patch, it is
+> recommended to adjust the patch subject prefix to be [PATCH v2], and to
+> include a changelog...
+>
+> > ---
+>
+> ... here, i.e below the "---" sign.
+>
+> This way, it is clear that it is a new iteration, and we know what has
+> changed since the previous iteration.
+Ok, I'm not very used to send patches with format-patch/send-email
 
-It is the same board.
+>
+> See http://patchwork.ozlabs.org/patch/944700/ for an example of that.
+>
+> To generate a patch with such a prefix, you can use:
+>
+>         git format-patch -v2
+>
+> or:
+>
+>         git format-patch --subject-prefix="PATCH v2"
+>
+> >  package/Config.in              |  1 +
+> >  package/cutelyst/Config.in     |  9 +++++++++
+> >  package/cutelyst/cutelyst.hash |  3 +++
+> >  package/cutelyst/cutelyst.mk   | 36 ++++++++++++++++++++++++++++++++++
+> >  4 files changed, 49 insertions(+)
+>
+> You forgot to add an entry to the DEVELOPERS file, so I've added that.
+Hmm speaking of that, do I need to be subscribed to this buildroot list?
+It's quite high traffic, so if I can subscribe/update package/unsubscribe
+it would work better for me.
 
-From a Buildroot perspective the only difference between
-freescale_imx7dsabresd_defconfig and imx7d-sdb_defconfig is that the
-one with "freescale" uses the vendor U-Boot and kernel.
+>
+> > diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
+> > new file mode 100644
+> > index 0000000000..6b78e48cea
+> > --- /dev/null
+> > +++ b/package/cutelyst/Config.in
+> > @@ -0,0 +1,9 @@
+> > +config BR2_PACKAGE_CUTELYST
+> > +     bool "cutelyst"
+> > +     depends on BR2_PACKAGE_QT5
+> > +     select BR2_PACKAGE_QT5BASE_GUI
+> > +     help
+> > +       A C++ Web Framework built on top of Qt, using
+> > +       the simple approach of Catalyst (Perl) framework.
+> > +
+> > +       https://cutelyst.org
+>
+> With this set of dependencies, cutelyst didn't build for me, with a
+> minimal configuration. It failed to build with:
+>
+> /home/thomas/projets/buildroot/output/build/cutelyst-2.5.1/wsgi/tcpsslserver.h:44:36: error: ?QSslConfiguration? does not name a type
+>      void setSslConfiguration(const QSslConfiguration &conf);
+>
+> This is because it needs SSL support in Qt. So I've added a "select
+> BR2_PACKAGE_OPENSSL" to make sure SSL support is present in Qt.
+hmm strange, I added a bunch of ifdefs to cutelyst for it to build without
+SSL support but I guess I missed some, will try again. I guess in the
+spirit of buildroot images trying to be minimal it could be a good thing.
 
-I will try to improve the board names as per the suggestion above.
+>
+> > index 0000000000..6653675352
+> > --- /dev/null
+> > +++ b/package/cutelyst/cutelyst.mk
+> > @@ -0,0 +1,36 @@
+> > +################################################################################
+> > +#
+> > +# cutelyst
+> > +#
+> > +################################################################################
+> > +
+> > +CUTELYST_VERSION = 2.5.1
+> > +CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
+> > +CUTELYST_INSTALL_STAGING = YES
+> > +CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
+> > +CUTELYST_LICENSE = LGPL-2.1+
+> > +CUTELYST_LICENSE_FILES = COPYING
+> > +CUTELYST_DEPENDENCIES = qt5base
+> > +
+> > +CUTELYST_CONF_OPTS += \
+> > +     -DPLUGIN_CSRFPROTECTION=ON
+> > +
+> > +$(eval $(cmake-package))
+>
+> This line should always go at the end of the .mk file, i.e...
+>
+> > +
+> > +ifeq ($(BR2_PACKAGE_GRANTLEE),y)
+> > +CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=ON
+> > +else
+> > +CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=OFF
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
+> > +CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=ON
+> > +else
+> > +CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=OFF
+> > +endif
+> > +
+> > +ifeq ($(BR2_PACKAGE_JEMALLOC),y)
+> > +CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=ON
+> > +else
+> > +CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=OFF
+> > +endif
+>
+> ... here.
+>
+> I've fixed those three issues, and applied your patch. Once again,
+> thanks for your contribution!
+You welcome, loving this project :)
 
-Thanks
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+
+
+-- 
+Daniel Nicoletti
+
+KDE Developer - http://dantti.wordpress.com
