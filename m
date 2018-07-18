@@ -1,46 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:32:29 +0200
-Subject: [Buildroot] [PATCH] package/gdb: fix gdbserver build for m68k
-In-Reply-To: <20180622210949.18107-1-romain.naour@gmail.com> (Romain Naour's
- message of "Fri, 22 Jun 2018 23:09:49 +0200")
-References: <20180622210949.18107-1-romain.naour@gmail.com>
-Message-ID: <87y3e8grgy.fsf@dell.be.48ers.dk>
+Date: Wed, 18 Jul 2018 23:23:55 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] wireguard: bump version
+ to 0.0.20180524
+Message-ID: <20180718212802.CCFF788C9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1f7db0a2f83d9c2d2d4db45454a8cb83a00cb19a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > As for strace [1], when <sys/reg.h> is included after <linux/ptrace.h>,
- > the build fails on m68k with the following diagnostics:
+Contains a number of fixes, including fixes for building with GCC 8.
 
- > In file included from ./../nat/linux-ptrace.h:28:0,
- >                  from linux-low.h:27,
- >                  from linux-m68k-low.c:20:
- > [...]/usr/include/sys/reg.h:26:3: error: expected identifier before numeric constant
- >    PT_D1 = 0,
- >    ^
- > [...]usr/include/sys/reg.h:26:3: error: expected ??}?? before numeric constant
- > [...]usr/include/sys/reg.h:26:3: error: expected unqualified-id before numeric constant
- > In file included from linux-m68k-low.c:27:0:
- > [...]usr/include/sys/reg.h:99:1: error: expected declaration before ??}?? token
- >  };
- >  ^
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f6b9d59f61b9084b1ae09e26e4bac5d6a1729cf6)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wireguard/wireguard.hash | 4 ++--
+ package/wireguard/wireguard.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Fix this by moving <sys/reg.h> on top of "linux-low.h".
-
- > Fixes:
- > https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006385
-
- > [1] https://github.com/strace/strace/commit/6ebf6c4f9e5ebca123a5b5f24afe67cf0473cf92
-
- > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Waldemar Brodkorb <wbx@openadk.org>
-
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
+index 6cfc7bb9f0..7701424e4e 100644
+--- a/package/wireguard/wireguard.hash
++++ b/package/wireguard/wireguard.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.zx2c4.com/pipermail/wireguard/2018-April/002697.html
+-sha256 b58cd2acf9e8d3fe9044c06c0056bd74da1f5673a456f011d36eee3f6fb1da16  WireGuard-0.0.20180420.tar.xz
++# From https://lists.zx2c4.com/pipermail/wireguard/2018-May/002914.html
++sha256 57614239c1f1a99a367f2c816153acda5bffada66a3b8e3b8215f1625784abc9  WireGuard-0.0.20180524.tar.xz
+ # Locally calculated
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
+index 20162e1d0f..ee68dc5580 100644
+--- a/package/wireguard/wireguard.mk
++++ b/package/wireguard/wireguard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIREGUARD_VERSION = 0.0.20180420
++WIREGUARD_VERSION = 0.0.20180524
+ WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
+ WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
+ WIREGUARD_LICENSE = GPL-2.0
