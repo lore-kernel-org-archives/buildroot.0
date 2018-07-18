@@ -1,52 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:25:35 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] edid-decode: update
- upstream locations
-Message-ID: <20180718212725.4275D8370F@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 23:32:29 +0200
+Subject: [Buildroot] [PATCH] package/gdb: fix gdbserver build for m68k
+In-Reply-To: <20180622210949.18107-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Fri, 22 Jun 2018 23:09:49 +0200")
+References: <20180622210949.18107-1-romain.naour@gmail.com>
+Message-ID: <87y3e8grgy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c243d7c323e0b6bcaa5483085d6f2c0ae5ba16a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
-edid-decode moved to linuxtv.org. Update homepage link and download
-site.
+ > As for strace [1], when <sys/reg.h> is included after <linux/ptrace.h>,
+ > the build fails on m68k with the following diagnostics:
 
-https://www.spinics.net/lists/linux-media/msg136517.html
+ > In file included from ./../nat/linux-ptrace.h:28:0,
+ >                  from linux-low.h:27,
+ >                  from linux-m68k-low.c:20:
+ > [...]/usr/include/sys/reg.h:26:3: error: expected identifier before numeric constant
+ >    PT_D1 = 0,
+ >    ^
+ > [...]usr/include/sys/reg.h:26:3: error: expected ??}?? before numeric constant
+ > [...]usr/include/sys/reg.h:26:3: error: expected unqualified-id before numeric constant
+ > In file included from linux-m68k-low.c:27:0:
+ > [...]usr/include/sys/reg.h:99:1: error: expected declaration before ??}?? token
+ >  };
+ >  ^
 
-Cc: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7817f9f0369003e078a7dae1fc5b9876075295cf)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/edid-decode/Config.in      | 2 +-
- package/edid-decode/edid-decode.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Fix this by moving <sys/reg.h> on top of "linux-low.h".
 
-diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
-index 64297b494d..701c70031f 100644
---- a/package/edid-decode/Config.in
-+++ b/package/edid-decode/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_EDID_DECODE
- 	help
- 	  Decode EDID data in human-readable format.
- 
--	  http://cgit.freedesktop.org/xorg/app/edid-decode/
-+	  https://git.linuxtv.org/edid-decode.git/
-diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
-index a4141b899b..b412a77a13 100644
---- a/package/edid-decode/edid-decode.mk
-+++ b/package/edid-decode/edid-decode.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
--EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
-+EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
- EDID_DECODE_LICENSE = MIT
- EDID_DECODE_LICENSE_FILES = edid-decode.c
- 
+ > Fixes:
+ > https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006385
+
+ > [1] https://github.com/strace/strace/commit/6ebf6c4f9e5ebca123a5b5f24afe67cf0473cf92
+
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Waldemar Brodkorb <wbx@openadk.org>
+
+Committed to 2018.02.x and 2018.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
