@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:37:10 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] uboot: don't override
+Date: Wed, 18 Jul 2018 23:37:04 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] uboot: don't override
  HOSTCC/HOSTLDFLAGS for kconfig
-Message-ID: <20180718213227.44A1A88D20@busybox.osuosl.org>
+Message-ID: <20180718213234.B57BB88D34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c94a89fae1ba0971ddce57487e71389ecdaece01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c2182cd409506fbc6e14e055226e4e7b3bf10570
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 So the host ncurses includes and library are used instead of a mix of both,
 causing corrupted characters.  Similar to the linux fix in commit
@@ -27,10 +27,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 03bd7ea743..6ef275e842 100644
+index b7032d5901..27946d99fe 100644
 --- a/boot/uboot/uboot.mk
 +++ b/boot/uboot/uboot.mk
-@@ -211,7 +211,15 @@ endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
+@@ -215,7 +215,15 @@ endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
  
  UBOOT_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES))
  UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
