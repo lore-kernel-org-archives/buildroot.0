@@ -1,48 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 17:18:43 +0200
-Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
- in shebang
-In-Reply-To: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
-References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
-Message-ID: <20180718171843.5ed5f10c@windsurf>
+Date: Wed, 18 Jul 2018 17:20:48 +0200
+Subject: [Buildroot] [PATCH] cutelyst: new package
+In-Reply-To: <20180718125949.04f926f8@windsurf>
+References: <20180717204613.22028-1-dantti12@gmail.com>
+ <20180718125949.04f926f8@windsurf>
+Message-ID: <20180718172048.71b580e0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Daniel,
 
-On Thu, 12 Jul 2018 11:37:34 -0500, David Owens wrote:
-> When the output directory is nested under a long path name, calling the
-> gdbus-codegen, glib-genmarshal, or glib-mkenums scripts throws the
-> error:
-> 
-> > '/usr/bin/env: /...: No such file or directory'  
-> 
-> This is because libglib2 uses the absolute path to the python
-> interpreter for its shebang statements, and shebangs have a max length
-> of 127 chars[1]. A long absolute path will be cut off and appear as a
-> missing file.
-> 
-> Since the host Python is present in the $PATH passed to all packages, we
-> can copy the workaround from Yocto and just use the python interpreter
-> in $PATH[2]. However, 'python' is used instead of 'python3' as the
-> scripts are compatible with both.
-> 
-> [1] https://linux.die.net/man/2/execve
-> [2] http://cgit.openembedded.org/openembedded-core/commit/?id=eef7883587acc933d6f34b559ec03ff84d18573b
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-> Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-> ---
->  ...t-hardcode-python-path-into-various-tools.patch | 48 ++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
+On Wed, 18 Jul 2018 12:59:49 +0200, Thomas Petazzoni wrote:
 
-Applied to master, thanks.
+> Thanks for this new iteration. I applied it after doing some changes,
+> which I'll describe below.
 
-Thomas
+FYI, cutelyst fails to build when grantlee support is enabled:
+
+  http://autobuild.buildroot.net/results/d84/d8467cdf9d12e606db39de45a19a3f62fdaf8ecc/build-end.log
+
+Best regards,
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
