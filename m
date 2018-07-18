@@ -1,43 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 13:14:50 +0200
-Subject: [Buildroot] [git commit] wireless-regdb: add regulatory.db[.p7s] to
- /lib/firmware
-Message-ID: <20180718111046.0807C888F8@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 13:18:39 +0200
+Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds
+ "regulatory.db[.p7s]" to /lib/firmware
+In-Reply-To: <20180716151303.18064-1-me@noctarius.com>
+References: <20180716151303.18064-1-me@noctarius.com>
+Message-ID: <20180718131839.1995b40c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39e4b467487084b866c1ae35a3e2f74867ba2404
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Starting from kernel version 4.15, Linux supports loading
-regulatory.db and regulatory.db.p7s files directly from /lib/firmware,
-without the need of crda. If the kernel can't load those files it'll
-fallback to using crda, but the direct way is preferred.
+On Mon, 16 Jul 2018 18:13:03 +0300, Christoph Engelbert wrote:
+> With kernel version 4.15, Linux started to support loading regulatory.db and regulatory.db.p7s files
+> directly from /lib/firmware, without the need of crda. If the kernel can't load those files it'll
+> fallback to using crda, but the direct way is preferred.
+> 
+> This patch copies those those files under /lib/firmware. The use of crda shouldn't be necessary with
+> kernels of 4.15 or later.
+> 
+> Signed-off-by: Christoph Engelbert <me@noctarius.com>
+> ---
+>  package/wireless-regdb/wireless-regdb.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-This patch copies those those files under /lib/firmware. The use of
-crda shouldn't be necessary with kernels of 4.15 or later.
+Thanks for your contribution, I've applied your patch. However, I would
+like to recommend a few improvements for your future contributions, if
+possible:
 
-Signed-off-by: Christoph Engelbert <me@noctarius.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wireless-regdb/wireless-regdb.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ - No need to enclose the package name between < and > in the commit
+   title, i.e just "package: description" is enough.
 
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index e9283a00e2..829374edcf 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -15,6 +15,10 @@ define WIRELESS_REGDB_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
- 	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
- 		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
-+	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db \
-+		$(TARGET_DIR)/lib/firmware/regulatory.db
-+	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db.p7s \
-+		$(TARGET_DIR)/lib/firmware/regulatory.db.p7s
- endef
- 
- $(eval $(generic-package))
+ - When sending new iterations, please change the patch subject prefix
+   to PATCH v2, PATCH v3, etc. You can do that with "git format-patch
+   -v2" or git format-patch --subject-prefix="PATCH v2"
+
+ - Also when sending new iterations, adding a changelog below the "---"
+   sign is very nice, because it allows the people reviewing your patch
+   understand what has changed.
+
+ - Finally, the commit log description should be wrapped to 72
+   characters.
+
+But again: I applied your patch after doing minor fixes in the commit
+title and commit log, so those recommendations are valid for your
+future contributions only :-)
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
