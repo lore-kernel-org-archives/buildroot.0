@@ -1,121 +1,133 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 12:55:41 +0200
-Subject: [Buildroot] [git commit] cutelyst: new package
-Message-ID: <20180718105122.73B0C888F2@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 12:59:49 +0200
+Subject: [Buildroot] [PATCH] cutelyst: new package
+In-Reply-To: <20180717204613.22028-1-dantti12@gmail.com>
+References: <20180717204613.22028-1-dantti12@gmail.com>
+Message-ID: <20180718125949.04f926f8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5eed34f4497343669b83513a0b6075295597ee3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Daniel,
 
-A C++ Web Framework built on top of Qt, using
-the simple approach of Catalyst (Perl) framework.
+On Tue, 17 Jul 2018 17:46:13 -0300, Daniel Nicoletti wrote:
+> A C++ Web Framework built on top of Qt, using
+> the simple approach of Catalyst (Perl) framework.
+> 
+> Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
 
-Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
-[Thomas: add entry in DEVELOPERS file, move cmake-package invocation
-to the end of .mk file, select BR2_PACKAGE_OPENSSL.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                     |  3 +++
- package/Config.in              |  1 +
- package/cutelyst/Config.in     | 10 ++++++++++
- package/cutelyst/cutelyst.hash |  3 +++
- package/cutelyst/cutelyst.mk   | 36 ++++++++++++++++++++++++++++++++++++
- 5 files changed, 53 insertions(+)
+Thanks for this new iteration. I applied it after doing some changes,
+which I'll describe below.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 25c3ebe970..257f6ff89e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -510,6 +510,9 @@ N:	Damien Lanson <damien@kal-host.com>
- F:	package/libvdpau/
- F:	package/log4cpp/
- 
-+N:	Daniel Nicoletti <dantti12@gmail.com>
-+F:	package/cutelyst/
-+
- N:	Daniel Nystr??m <daniel.nystrom@timeterminal.se>
- F:	package/e2tools/
- 
-diff --git a/package/Config.in b/package/Config.in
-index eedce83616..08a3eac48a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -314,6 +314,7 @@ comment "Other GUIs"
- 	source "package/kf5/Config.in"
- if BR2_PACKAGE_QT || BR2_PACKAGE_QT5
- comment "QT libraries and helper libraries"
-+	source "package/cutelyst/Config.in"
- 	source "package/grantlee/Config.in"
- 	source "package/qextserialport/Config.in"
- 	source "package/qjson/Config.in"
-diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
-new file mode 100644
-index 0000000000..5a3974a454
---- /dev/null
-+++ b/package/cutelyst/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_CUTELYST
-+	bool "cutelyst"
-+	depends on BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_QT5BASE_GUI
-+	help
-+	  A C++ Web Framework built on top of Qt, using
-+	  the simple approach of Catalyst (Perl) framework.
-+
-+	  https://cutelyst.org
-diff --git a/package/cutelyst/cutelyst.hash b/package/cutelyst/cutelyst.hash
-new file mode 100644
-index 0000000000..58645e50c2
---- /dev/null
-+++ b/package/cutelyst/cutelyst.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated after checking pgp signature
-+sha256  a5d40c5e0027982181529449ffa807492f5759c2c604cdc467e748445721ff28    cutelyst-2.5.1.tar.gz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551    COPYING
-diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-new file mode 100644
-index 0000000000..438ac091c6
---- /dev/null
-+++ b/package/cutelyst/cutelyst.mk
-@@ -0,0 +1,36 @@
-+################################################################################
-+#
-+# cutelyst
-+#
-+################################################################################
-+
-+CUTELYST_VERSION = 2.5.1
-+CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
-+CUTELYST_INSTALL_STAGING = YES
-+CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
-+CUTELYST_LICENSE = LGPL-2.1+
-+CUTELYST_LICENSE_FILES = COPYING
-+CUTELYST_DEPENDENCIES = qt5base
-+
-+CUTELYST_CONF_OPTS += \
-+	-DPLUGIN_CSRFPROTECTION=ON
-+
-+ifeq ($(BR2_PACKAGE_GRANTLEE),y)
-+CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=ON
-+else
-+CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
-+CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=ON
-+else
-+CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-+CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=ON
-+else
-+CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=OFF
-+endif
-+
-+$(eval $(cmake-package))
+However, first of all, when you send a new iteration of a patch, it is
+recommended to adjust the patch subject prefix to be [PATCH v2], and to
+include a changelog...
+
+> ---
+
+... here, i.e below the "---" sign.
+
+This way, it is clear that it is a new iteration, and we know what has
+changed since the previous iteration.
+
+See http://patchwork.ozlabs.org/patch/944700/ for an example of that.
+
+To generate a patch with such a prefix, you can use:
+
+	git format-patch -v2
+
+or:
+
+	git format-patch --subject-prefix="PATCH v2"
+
+>  package/Config.in              |  1 +
+>  package/cutelyst/Config.in     |  9 +++++++++
+>  package/cutelyst/cutelyst.hash |  3 +++
+>  package/cutelyst/cutelyst.mk   | 36 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 49 insertions(+)
+
+You forgot to add an entry to the DEVELOPERS file, so I've added that.
+
+> diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
+> new file mode 100644
+> index 0000000000..6b78e48cea
+> --- /dev/null
+> +++ b/package/cutelyst/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_CUTELYST
+> +	bool "cutelyst"
+> +	depends on BR2_PACKAGE_QT5
+> +	select BR2_PACKAGE_QT5BASE_GUI
+> +	help
+> +	  A C++ Web Framework built on top of Qt, using
+> +	  the simple approach of Catalyst (Perl) framework.
+> +
+> +	  https://cutelyst.org
+
+With this set of dependencies, cutelyst didn't build for me, with a
+minimal configuration. It failed to build with:
+
+/home/thomas/projets/buildroot/output/build/cutelyst-2.5.1/wsgi/tcpsslserver.h:44:36: error: ?QSslConfiguration? does not name a type
+     void setSslConfiguration(const QSslConfiguration &conf);
+
+This is because it needs SSL support in Qt. So I've added a "select
+BR2_PACKAGE_OPENSSL" to make sure SSL support is present in Qt.
+
+> index 0000000000..6653675352
+> --- /dev/null
+> +++ b/package/cutelyst/cutelyst.mk
+> @@ -0,0 +1,36 @@
+> +################################################################################
+> +#
+> +# cutelyst
+> +#
+> +################################################################################
+> +
+> +CUTELYST_VERSION = 2.5.1
+> +CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
+> +CUTELYST_INSTALL_STAGING = YES
+> +CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
+> +CUTELYST_LICENSE = LGPL-2.1+
+> +CUTELYST_LICENSE_FILES = COPYING
+> +CUTELYST_DEPENDENCIES = qt5base
+> +
+> +CUTELYST_CONF_OPTS += \
+> +	-DPLUGIN_CSRFPROTECTION=ON
+> +
+> +$(eval $(cmake-package))
+
+This line should always go at the end of the .mk file, i.e...
+
+> +
+> +ifeq ($(BR2_PACKAGE_GRANTLEE),y)
+> +CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=ON
+> +else
+> +CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
+> +CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=ON
+> +else
+> +CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_JEMALLOC),y)
+> +CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=ON
+> +else
+> +CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=OFF
+> +endif
+
+... here.
+
+I've fixed those three issues, and applied your patch. Once again,
+thanks for your contribution!
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
