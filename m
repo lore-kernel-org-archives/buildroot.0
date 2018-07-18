@@ -1,74 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 15:40:43 +0200
-Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.2.16
-In-Reply-To: <20180718132846.3176-1-bluemrp9@gmail.com>
-References: <20180718132846.3176-1-bluemrp9@gmail.com>
-Message-ID: <20180718154043.1140bb82@windsurf>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Wed, 18 Jul 2018 11:10:50 -0300 (BRT)
+Subject: [Buildroot] [PATCH] vim: install /bin/vi as a relative symlink
+In-Reply-To: <20180718150350.4a910b0c@windsurf>
+References: <20180718123443.7242-1-casantos@datacom.com.br>
+ <20180718150350.4a910b0c@windsurf>
+Message-ID: <617073337.4310170.1531923050413.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "DATACOM" <casantos@datacom.com.br>
+> Cc: "buildroot" <buildroot@buildroot.org>, "Yann Morin" <yann.morin.1998@free.fr>, "ratbert90" <aduskett@gmail.com>,
+> "Baruch Siach" <baruch@tkos.co.il>
+> Sent: Wednesday, July 18, 2018 10:03:50 AM
+> Subject: Re: [Buildroot] [PATCH] vim: install /bin/vi as a relative symlink
 
-Thanks for this update. A few comments/questions below.
+> Hello,
+> 
+> On Wed, 18 Jul 2018 09:34:43 -0300, Carlos Santos wrote:
+>> Prevent creating a dangling symlink when vim is not present on the host
+>> machine. With BR2_ROOTFS_MERGED_USR, just link to "vim", since they are
+>> on the same directory, otherwise link to "../usr/bin/vim".
+>> 
+>> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+> 
+> Baruch had already sent a patch with the same title/intention, but it
+> is no longer in the pending state in patchwork.
+> 
+> Could you clarify what happened, and which of the two patches is
+> relevant ?
 
-On Wed, 18 Jul 2018 06:28:46 -0700, Ryan Coe wrote:
-> @@ -67,7 +67,7 @@ MARIADB_CONF_OPTS += \
->  	-DMYSQL_DATADIR=/var/lib/mysql \
->  	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
->  
-> -HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled
-> +HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
+Baruch's patch is for busybox and is under review. Both can be applied
+independently.
 
-This change should be explained in the commit log. Is it really related
-to the bump ?
-
->  
->  # Some helpers must be compiled for host in order to crosscompile mariadb for
->  # the target. They are then included by import_executables.cmake which is
-> @@ -104,13 +104,13 @@ define MARIADB_INSTALL_INIT_SYSTEMD
->  endef
->  endif
->  
-> +# We don't need mysql_config on the target as it's only useful in staging
-> +# We also don't need the test suite on the target
->  define MARIADB_POST_INSTALL
->  	mkdir -p $(TARGET_DIR)/var/lib/mysql
->  	$(INSTALL) -D -m 644 $(TARGET_DIR)/usr/share/mysql/my-small.cnf \
->  		$(TARGET_DIR)/etc/mysql/my.cnf
-> -	# We don't need this on the target as it's only useful in staging
->  	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
-> -	# Remove test suite
->  	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
->  endef
-
-This whole changed should be explained in the commit log, and be part
-of a separate patch, because it has nothing to do with the bump.
-
->  
-> diff --git a/package/mysql/Config.in b/package/mysql/Config.in
-> index 278dc73e57..140c2314d4 100644
-> --- a/package/mysql/Config.in
-> +++ b/package/mysql/Config.in
-> @@ -17,6 +17,7 @@ choice
->  config BR2_PACKAGE_MARIADB
->  	bool "mariadb"
->  	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-> +	depends on !BR2_STATIC_LIBS #dlopen
-
-This should also be explained in the commit log. In addition, when you
-add such a dependency, a Config.in comment should be added:
-
-comment "mariadb needs a toolchain w/ dynamic library"
-	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-	depends on BR2_STATIC_LIBS
-
-Thanks!
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
