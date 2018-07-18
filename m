@@ -1,30 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 17:20:48 +0200
-Subject: [Buildroot] [PATCH] cutelyst: new package
-In-Reply-To: <20180718125949.04f926f8@windsurf>
-References: <20180717204613.22028-1-dantti12@gmail.com>
- <20180718125949.04f926f8@windsurf>
-Message-ID: <20180718172048.71b580e0@windsurf>
+Date: Wed, 18 Jul 2018 17:49:44 +0200
+Subject: [Buildroot] [PATCH 1/1] aircrack-ng: bump to version 1.3
+In-Reply-To: <20180717152906.28173-1-laurent.cans@gmail.com>
+References: <20180717152906.28173-1-laurent.cans@gmail.com>
+Message-ID: <20180718174944.1ec3577d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Daniel,
+Hello,
 
-On Wed, 18 Jul 2018 12:59:49 +0200, Thomas Petazzoni wrote:
+On Tue, 17 Jul 2018 17:29:06 +0200, Laurent Cans wrote:
+> - Remove patches (already in version)
+> - Add optional dependency to jemalloc
+> 
+> Signed-off-by: Laurent Cans <laurent.cans@gmail.com>
 
-> Thanks for this new iteration. I applied it after doing some changes,
-> which I'll describe below.
+It seems like this new aircrack-ng version is using dlfcn.h, and
+therefore requires dynamic library support. However, I am not sure it
+is actually using dlfcn.h functionality, so it would be worth checking
+this before adding a !BR2_STATIC_LIBS dependency.
 
-FYI, cutelyst fails to build when grantlee support is enabled:
+See:
 
-  http://autobuild.buildroot.net/results/d84/d8467cdf9d12e606db39de45a19a3f62fdaf8ecc/build-end.log
+  http://autobuild.buildroot.net/results/e68/e684f8967a7c8cb14db1afa90e379a6d335ca0db/build-end.log
 
-Best regards,
+Thanks,
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
