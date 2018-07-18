@@ -1,99 +1,63 @@
-From: IoriBranford <ioribranford@gmail.com>
-Date: Tue, 17 Jul 2018 18:48:00 -0700
-Subject: [Buildroot] LOVE can't build with external toolchain - wrong
- tool(s) used to link
-Message-ID: <2ed8a475-08a9-4c1f-3ac6-f3e6cfa057d2@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 18 Jul 2018 06:03:04 +0300
+Subject: [Buildroot] [RFC v2 1/4] meson: bump version to 0.47.1
+In-Reply-To: <20180717232319.75bc4941@gmx.net>
+References: <20180717191605.19263-1-ps.report@gmx.net>
+ <87o9f5636v.fsf@tkos.co.il> <20180717232319.75bc4941@gmx.net>
+Message-ID: <87k1pt5jpz.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Peter,
 
-I've started a package for LOVE, the 2D Lua game engine. 
-https://love2d.org My project is a Raspberry Pi 3 based game system 
-running this engine.
+Peter Seiderer writes:
+> On Tue, 17 Jul 2018 23:02:32 +0300, Baruch Siach <baruch@tkos.co.il> wrote:
+>> Peter Seiderer writes:
+>> 
+>> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>> > ---
+>> > Notes:
+>> > Hash not checked against the pgp signature, tried
+>> > 	$ gpg --verify meson-0.47.1.tar.gz.asc meson-0.47.1.tar.gz
+>> >   gpg: Signature made Di 10 Jul 2018 23:28:12 CEST
+>> >   gpg:                using RSA key 95181F4EED14FDF4E41B518D3BF4693BFEEB9428
+>> >   gpg: Can't check signature: No public key
+>> >
+>> > Any advice which public key is used to sign the meson package?  
+>> 
+>> The key ID is shown in the message above. You can import the key and
+>> verify with:
+>> 
+>>   gpg --recv-keys 95181F4EED14FDF4E41B518D3BF4693BFEEB9428
+>>   gpg --verify meson-0.47.1.tar.gz.asc
+>> 
+>> gpg: Signature made Wed 11 Jul 2018 12:28:12 AM IDT
+>> gpg:                using RSA key 95181F4EED14FDF4E41B518D3BF4693BFEEB9428
+>> gpg: Good signature from "Jussi Pakkanen <jpakkane@gmail.com>" [marginal]
+>
+> Thanks for the hint!
+>
+> I get the same warning as Eric:
+>
+>   gpg: WARNING: This key is not certified with a trusted signature!
+>   gpg:          There is no indication that the signature belongs to the owner.
+>   Primary key fingerprint: 9518 1F4E ED14 FDF4 E41B  518D 3BF4 693B FEEB 9428
+>
+> To 'trust' the signing I need a trust-chain (or an 'official' signed public key) or
+> an second source where I can compare the fingerprint against? Your seem to have
+> an 'marginal' trust-chain?
 
-It builds and runs fine with a Buildroot toolchain. But an external 
-toolchain fails at the last link step. I'd prefer using the external 
-toolchain to save rebuild time.
+I enabled TOFU[1] in my gpg configuration. TOFU makes more sense to me
+for my use of gpg.
 
-This happens with Linaro toolchain. (The test-pkg tests, using 
-love-rpi.testconfig, were all failed or skipped too.) Here the build 
-tries to use host tools instead of toolchain ones.
+baruch
 
-(Note that I happen to be building a previous version, 0.10.2.)
+[1] https://www.gnupg.org/ftp/people/neal/tofu.pdf
 
- >>> love 0.10.2 Building
-PATH="/home/ioribranford/buildroot/output/host/bin:/home/ioribranford/buildroot/output/host/sbin:/home/ioribranford/.nvm/versions/node/v9.4.0/bin:/home/ioribranford/bin:/home/ioribranford/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin" 
-/usr/bin/make -j5? -C /home/ioribranford/buildroot/output/build/love-0.10.2/
-/usr/bin/make? all-recursive
-Making all in src
-/bin/bash ../libtool? --tag=CXX? --mode=link g++???? -o love love.o? 
-liblove.la 
--L/home/ioribranford/buildroot/output/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib 
--lluajit-5.1?? -lphysfs
-
-*** Warning: Linking the executable love against the loadable module
-*** liblove.so is not portable!
-
-libtool: link: _*g++*_ -o love love.o ./.libs/liblove.so 
--L/home/ioribranford/buildroot/output/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib 
-/home/ioribranford/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libSDL2.so 
--ldl -lbrcmEGL -lbrcmGLESv2 -lvchostif -lbcm_host -lvcos -lvchiq_arm 
--lpthread -lrt 
-/home/ioribranford/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libfreetype.so 
--lopenal -lz 
-/home/ioribranford/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libmodplug.so 
-/home/ioribranford/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libvorbisfile.so 
-/home/ioribranford/buildroot/output/build/libvorbis-1.3.6/lib/.libs/libvorbis.so 
--lm 
-/home/ioribranford/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libtheoradec.so 
-/home/ioribranford/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libogg.so 
--lluajit-5.1 -lphysfs -pthread -Wl,-rpath 
--Wl,/home/ioribranford/buildroot/output/build/love-0.10.2/src/.libs 
--Wl,-rpath 
--Wl,/home/ioribranford/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib 
--Wl,-rpath 
--Wl,/home/ioribranford/buildroot/output/build/libvorbis-1.3.6/lib/.libs 
--Wl,-rpath 
--Wl,/home/ioribranford/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib
-(Should be using 
-/home/ioribranford/buildroot/output/host/bin/arm-linux-gnueabihf-g++)
-
-_*/usr/bin/x86_64-linux-gnu-ld*_: love.o: Relocations in generic ELF 
-(EM: 40)
-_*/usr/bin/x86_64-linux-gnu-ld*_: love.o: Relocations in generic ELF 
-(EM: 40)
-(Should be using 
-/home/ioribranford/buildroot/output/host/bin/arm-linux-gnueabihf-ld)
-
-love.o: error adding symbols: File in wrong format
-collect2: error: ld returned 1 exit status
-Makefile:3190: recipe for target 'love' failed
-make[5]: *** [love] Error 1
-Makefile:3740: recipe for target 'all-recursive' failed
-make[4]: *** [all-recursive] Error 1
-Makefile:623: recipe for target 'all-recursive' failed
-make[3]: *** [all-recursive] Error 1
-Makefile:424: recipe for target 'all' failed
-make[2]: *** [all] Error 2
-package/pkg-generic.mk:223: recipe for target 
-'/home/ioribranford/buildroot/output/build/love-0.10.2/.stamp_built' failed
-make[1]: *** 
-[/home/ioribranford/buildroot/output/build/love-0.10.2/.stamp_built] Error 2
-Makefile:79: recipe for target '_all' failed
-make: *** [_all] Error 2
-
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180717/a2ca28a0/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: love.tar.gz
-Type: application/gzip
-Size: 41050 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180717/a2ca28a0/attachment.bin>
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
