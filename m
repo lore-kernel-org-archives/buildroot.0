@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:51:01 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] patchelf: add patch to
+Date: Wed, 18 Jul 2018 23:51:09 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] patchelf: add patch to
  fix relative rpath issue on big-endian systems
-Message-ID: <20180718214618.B275588D2F@busybox.osuosl.org>
+Message-ID: <20180718214625.E63CB88D7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=383025aa0fd58c0629a1de3ec8c77920dec0cd8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9c3b2ad5d8115a34232dfa92116aac03626ac33f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 This commit adds a patch to the host package patchelf to fix an issue
 with endianness when the --make-rpath-relative option is
