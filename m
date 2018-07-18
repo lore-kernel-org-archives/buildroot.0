@@ -1,45 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:35:59 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] dos2unix: fix static build
-Message-ID: <20180718213146.32FB688D1A@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 23:37:10 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] uboot: don't override
+ HOSTCC/HOSTLDFLAGS for kconfig
+Message-ID: <20180718213227.44A1A88D20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e585d770f9a7f0fbd91dd2b60a697c908b7eade4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c94a89fae1ba0971ddce57487e71389ecdaece01
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Pass the -static flag to the final link command. Otherwise, the
-generated executables are not static when the external toolchain
-provides both shared and static libraries.
+So the host ncurses includes and library are used instead of a mix of both,
+causing corrupted characters.  Similar to the linux fix in commit
+6d3d09e23213e8 (linux: don't override HOSTCC for kconfig), except that we
+pass the linker flags in HOSTLDFLAGS.
 
-Should also fix:
-http://autobuild.buildroot.net/results/a5a/a5a64bc3ff5a91a8680ac52f3505362491923b26/
-http://autobuild.buildroot.net/results/ebf/ebfe81e65751d7a5ca3aa4e20cc708a24ba65204/
-
-Cc: David Bachelart <david.bachelart@bbright.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fe5fcdfdbd209177cf8f4a5368ae2324540d4d67)
+Acked-by: Jagan Teki <jagan@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 9255fd9fc7bb302fcb69282becea7273827c64e1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dos2unix/dos2unix.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ boot/uboot/uboot.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/dos2unix/dos2unix.mk b/package/dos2unix/dos2unix.mk
-index 9b82340590..5001397f05 100644
---- a/package/dos2unix/dos2unix.mk
-+++ b/package/dos2unix/dos2unix.mk
-@@ -24,6 +24,10 @@ ifeq ($(BR2_USE_WCHAR),)
- DOS2UNIX_MAKE_OPTS += UCS=
- endif
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 03bd7ea743..6ef275e842 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -211,7 +211,15 @@ endif # BR2_TARGET_UBOOT_USE_DEFCONFIG
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+DOS2UNIX_MAKE_OPTS += LDFLAGS_USER=-static
-+endif
+ UBOOT_KCONFIG_FRAGMENT_FILES = $(call qstrip,$(BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES))
+ UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+-UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS)
 +
- define DOS2UNIX_BUILD_CMDS
- 	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(DOS2UNIX_MAKE_OPTS)
- endef
++# UBOOT_MAKE_OPTS overrides HOSTCC / HOSTLDFLAGS to allow the build to
++# find our host-openssl. However, this triggers a bug in the kconfig
++# build script that causes it to build with /usr/include/ncurses.h
++# (which is typically wchar) but link with
++# $(HOST_DIR)/lib/libncurses.so (which is not).  We don't actually
++# need any host-package for kconfig, so remove the HOSTCC/HOSTLDFLAGS
++# override again.
++UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC)" HOSTLDFLAGS=""
+ define UBOOT_HELP_CMDS
+ 	@echo '  uboot-menuconfig       - Run U-Boot menuconfig'
+ 	@echo '  uboot-savedefconfig    - Run U-Boot savedefconfig'
