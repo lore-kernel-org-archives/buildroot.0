@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 15:36:07 +0200
-Subject: [Buildroot] [PATCH 1/2] libnghttp2: new package
-In-Reply-To: <20180718081748.13364-1-michael.burtin@netgem.com>
-References: <20180718081748.13364-1-michael.burtin@netgem.com>
-Message-ID: <20180718153607.3e4ac9e0@windsurf>
+Date: Wed, 18 Jul 2018 15:40:43 +0200
+Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.2.16
+In-Reply-To: <20180718132846.3176-1-bluemrp9@gmail.com>
+References: <20180718132846.3176-1-bluemrp9@gmail.com>
+Message-ID: <20180718154043.1140bb82@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,110 +12,62 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for this contribution. A few comments/questions below.
+Thanks for this update. A few comments/questions below.
 
-On Wed, 18 Jul 2018 10:17:47 +0200, Micha?l Burtin wrote:
-> nghttp2 is an implementation of HTTP/2 and its header
-> compression algorithm HPACK in C.
-> 
-> Signed-off-by: Anisse Astier <anisse.astier.ext@netgem.com>
-> Signed-off-by: Micha?l Burtin <michael.burtin@netgem.com>
-> ---
->  package/Config.in                  |  1 +
->  package/libnghttp2/Config.in       |  7 +++++++
->  package/libnghttp2/libnghttp2.hash |  2 ++
->  package/libnghttp2/libnghttp2.mk   | 22 ++++++++++++++++++++++
+On Wed, 18 Jul 2018 06:28:46 -0700, Ryan Coe wrote:
+> @@ -67,7 +67,7 @@ MARIADB_CONF_OPTS += \
+>  	-DMYSQL_DATADIR=/var/lib/mysql \
+>  	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
+>  
+> -HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled
+> +HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
 
-Could you add an entry in the DEVELOPERS file for this package ?
+This change should be explained in the commit log. Is it really related
+to the bump ?
 
-> diff --git a/package/libnghttp2/Config.in b/package/libnghttp2/Config.in
-> new file mode 100644
-> index 0000000000..b7f4170d6d
-> --- /dev/null
-> +++ b/package/libnghttp2/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_LIBNGHTTP2
-> +	bool "libnghttp2"
+>  
+>  # Some helpers must be compiled for host in order to crosscompile mariadb for
+>  # the target. They are then included by import_executables.cmake which is
+> @@ -104,13 +104,13 @@ define MARIADB_INSTALL_INIT_SYSTEMD
+>  endef
+>  endif
+>  
+> +# We don't need mysql_config on the target as it's only useful in staging
+> +# We also don't need the test suite on the target
+>  define MARIADB_POST_INSTALL
+>  	mkdir -p $(TARGET_DIR)/var/lib/mysql
+>  	$(INSTALL) -D -m 644 $(TARGET_DIR)/usr/share/mysql/my-small.cnf \
+>  		$(TARGET_DIR)/etc/mysql/my.cnf
+> -	# We don't need this on the target as it's only useful in staging
+>  	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
+> -	# Remove test suite
+>  	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
+>  endef
 
-I am not sure about the name and categorization of the package. Indeed
-the upstream name really is nghttp2, not libnghttp2, and my
-understanding is that it provides more than a library, it also has a
-HTTP/2 client, server and proxy.
+This whole changed should be explained in the commit log, and be part
+of a separate patch, because it has nothing to do with the bump.
 
-Buildroot doesn't have a concept of binary packages, only source
-packages, which can install one or several libraries, one or several
-programs. So the package name should probably not reflect the fact that
-it installs a library, but instead simply mimic the upstream name, i.e
-nghttp2.
+>  
+> diff --git a/package/mysql/Config.in b/package/mysql/Config.in
+> index 278dc73e57..140c2314d4 100644
+> --- a/package/mysql/Config.in
+> +++ b/package/mysql/Config.in
+> @@ -17,6 +17,7 @@ choice
+>  config BR2_PACKAGE_MARIADB
+>  	bool "mariadb"
+>  	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+> +	depends on !BR2_STATIC_LIBS #dlopen
 
-The next question is whether it should appear in Libraries->Networking
-or in Networking applications. I think the former is OK, as we do have
-a number of other network libraries that also install programs.
+This should also be explained in the commit log. In addition, when you
+add such a dependency, a Config.in comment should be added:
 
-So, in other words, I would suggest to name the package nghttp2, but
-keep it in Libraries->Networking in the menuconfig organization.
-
-Could you adjust the package accordingly ?
-
-> +	help
-> +		nghttp2 is an implementation of HTTP/2 and its header
-> +		compression algorithm HPACK in C.
-> +
-> +		https://nghttp2.org/
-
-Indentation for the help text is one tab + 2 spaces. This is verified
-by ./utils/check-package, so this hints that you have not checked your
-package with check-package :-)
-
-> diff --git a/package/libnghttp2/libnghttp2.hash b/package/libnghttp2/libnghttp2.hash
-> new file mode 100644
-> index 0000000000..067e58cfbc
-> --- /dev/null
-> +++ b/package/libnghttp2/libnghttp2.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256 f75e8f228217f23aa5eabfbab140e061cda00b7c21e34c891ecfb248d663303f  nghttp2-1.32.0.tar.gz
-
-We now like to have the hash of the license files here.
-
-> diff --git a/package/libnghttp2/libnghttp2.mk b/package/libnghttp2/libnghttp2.mk
-> new file mode 100644
-> index 0000000000..b8502dbe42
-> --- /dev/null
-> +++ b/package/libnghttp2/libnghttp2.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# nghttp2
-> +#
-> +################################################################################
-> +
-> +LIBNGHTTP2_VERSION = 1.32.0
-> +LIBNGHTTP2_SOURCE = nghttp2-$(LIBNGHTTP2_VERSION).tar.gz
-> +LIBNGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(LIBNGHTTP2_VERSION)
-> +LIBNGHTTP2_LICENSE = MIT
-> +LIBNGHTTP2_LICENSE_FILES = COPYING LICENSE
-
-There is no file named "LICENSE" in the tarball, so I guess you didn't
-test "make legal-info" with this package enabled.
-
-> +LIBNGHTTP2_INSTALL_STAGING = YES
-> +LIBNGHTTP2_DEPENDENCIES = host-pkgconf
-> +LIBNGHTTP2_CONF_OPTS = --enable-lib-only
-> +
-> +define LIBNGHTTP2_INSTALL_CLEAN_HOOK
-> +       $(Q)rm -rf $(TARGET_DIR)/usr/share/nghttp2
-> +endef
-
-Use $(RM) instead of using rm -rf. And also add a small comment
-indicating that this only removes a Python script that isn't useful for
-the nghttp2 library.
-
-Could you fix those details and send an updated version?
+comment "mariadb needs a toolchain w/ dynamic library"
+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+	depends on BR2_STATIC_LIBS
 
 Thanks!
 
-Thomas
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
