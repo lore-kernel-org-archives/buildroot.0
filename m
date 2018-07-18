@@ -1,35 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:27:22 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{14,
- 16}.x series
-Message-ID: <20180718212802.E651E80415@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 23:25:50 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] edid-decode: update
+ upstream locations
+Message-ID: <20180718212802.DD85F88C9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f435b547c6f990d4d25ab9bf0e87692e472042c0
+commit: https://git.buildroot.net/buildroot/commit/?id=e1d93622f72a760f9e5f6a4fd6c8bc5d3eadeb0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-[Peter: drop 4.16.x change]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+edid-decode moved to linuxtv.org. Update homepage link and download
+site.
+
+https://www.spinics.net/lists/linux-media/msg136517.html
+
+Cc: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8974ebaab005a40cf1564650d54d80830e730f55)
+(cherry picked from commit 7817f9f0369003e078a7dae1fc5b9876075295cf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/edid-decode/Config.in      | 2 +-
+ package/edid-decode/edid-decode.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 982e24fff8..3dec028efa 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -248,6 +248,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.50"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.51"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/edid-decode/Config.in b/package/edid-decode/Config.in
+index 64297b494d..701c70031f 100644
+--- a/package/edid-decode/Config.in
++++ b/package/edid-decode/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_EDID_DECODE
+ 	help
+ 	  Decode EDID data in human-readable format.
+ 
+-	  http://cgit.freedesktop.org/xorg/app/edid-decode/
++	  https://git.linuxtv.org/edid-decode.git/
+diff --git a/package/edid-decode/edid-decode.mk b/package/edid-decode/edid-decode.mk
+index a4141b899b..b412a77a13 100644
+--- a/package/edid-decode/edid-decode.mk
++++ b/package/edid-decode/edid-decode.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ EDID_DECODE_VERSION = f56f329ed23a25d002352dedba1e8f092a47286f
+-EDID_DECODE_SITE = git://anongit.freedesktop.org/git/xorg/app/edid-decode.git
++EDID_DECODE_SITE = git://linuxtv.org/edid-decode.git
+ EDID_DECODE_LICENSE = MIT
+ EDID_DECODE_LICENSE_FILES = edid-decode.c
+ 
