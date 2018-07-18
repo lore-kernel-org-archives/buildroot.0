@@ -1,85 +1,257 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:24:04 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] wireguard: bump version
- to 0.0.20180613
-Message-ID: <20180718212802.D478E88C9A@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 23:20:31 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] gcc: fix uclibc runtime
+ issue with gcc-8 for xtensa
+Message-ID: <20180718212802.C4C5A88D02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f757657e16d0e6576a608f2b179f032f79ad33b8
+commit: https://git.buildroot.net/buildroot/commit/?id=742175776cd2dfcb76acd2a6ff9663506d1e4925
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Contains a fix for a crash when forwarding packets from devices that use
-flow offloading and a x86 FPU issue on -rt kernels.
+gcc-8.1 for xtensa miscompiles uClibc dynamic linker due to gcc PR
+target/65416. The build completes successfully, but the binary is
+non-functional because the following fragment in the _dl_get_ready_to_run
+in ld-uClibc.so overwrites register spill area on stack causing register
+corruption in the previous call frame and a subsequent crash:
 
-Also add a post-release upstream patch fixing a compilation issue related to
-memcpy().
+    419f:       f0c1b2          addi    a11, a1, -16
+    41a2:       1ba9            s32i.n  a10, a11, 4
+    41a4:       0bc9            s32i.n  a12, a11, 0
+    41a6:       5127f2          l32i    a15, a7, 0x144
+    41a9:       1765b2          s32i    a11, a5, 92
+    41ac:       4e2782          l32i    a8, a7, 0x138
+    41af:       146af2          s32i    a15, a10, 80
+    41b2:       001b10          movsp   a1, a11
 
+The crash terminates the init process and causes kernel panic.
+The fix prevents reordering of movsp opcode and any access to the stack
+frame memory and is applicable to all existing gcc versions.
+
+[Peter: drop gcc-8.x patch]
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 630fd8785bd6b9cef3ada692989543ed1de6a39e)
+(cherry picked from commit 91e0fc0bf46fba21af72ccf753db7f012ebdc169)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-poly1305-add-missing-string.h-header.patch | 26 ++++++++++++++++++++++
- package/wireguard/wireguard.hash                   |  4 ++--
- package/wireguard/wireguard.mk                     |  2 +-
- 3 files changed, 29 insertions(+), 3 deletions(-)
+ .../gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch | 101 +++++++++++++++++++++
+ .../7.3.0/0002-xtensa-fix-PR-target-65416.patch    | 101 +++++++++++++++++++++
+ 2 files changed, 202 insertions(+)
 
-diff --git a/package/wireguard/0001-poly1305-add-missing-string.h-header.patch b/package/wireguard/0001-poly1305-add-missing-string.h-header.patch
+diff --git a/package/gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch b/package/gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch
 new file mode 100644
-index 0000000000..8f1bfecb5c
+index 0000000000..7ead575439
 --- /dev/null
-+++ b/package/wireguard/0001-poly1305-add-missing-string.h-header.patch
-@@ -0,0 +1,26 @@
-+From ed04799b1868f45e05d788e614b9b8cfa4fcab46 Mon Sep 17 00:00:00 2001
-+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-+Date: Wed, 20 Jun 2018 14:55:24 +0200
-+Subject: [PATCH] poly1305: add missing string.h header
++++ b/package/gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch
+@@ -0,0 +1,101 @@
++From 87fda0741d210727672cba5e54a37a189e8ac04e Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 17 Jun 2018 21:18:39 -0700
++Subject: [PATCH] xtensa: fix PR target/65416
 +
-+Reported-by: Peter Korsgaard <peter@korsgaard.com>
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++The issue is caused by reordering of stack pointer update after stack
++space allocation with instructions that write to the allocated stack
++space. In windowed ABI register spill area for the previous call frame
++is located just below the stack pointer and may be reloaded back into
++the register file on movsp.
++Implement allocate_stack pattern for windowed ABI configuration and
++insert an instruction that prevents reordering of frame memory access
++and stack pointer update.
++
++gcc/
++2018-06-19  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/xtensa/xtensa.md (UNSPEC_FRAME_BLOCKAGE): New unspec
++	constant.
++	(allocate_stack, frame_blockage, *frame_blockage): New patterns.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Backported from: r261755
 +---
-+ src/crypto/poly1305.c | 1 +
-+ 1 file changed, 1 insertion(+)
++ gcc/config/xtensa/xtensa.md | 46 +++++++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 46 insertions(+)
 +
-+diff --git a/src/crypto/poly1305.c b/src/crypto/poly1305.c
-+index 26af4ad..65a37d9 100644
-+--- a/src/crypto/poly1305.c
-++++ b/src/crypto/poly1305.c
-+@@ -7,6 +7,7 @@
-+ #include "poly1305.h"
++diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
++index 84967dbedc08..209f839cfb0f 100644
++--- a/gcc/config/xtensa/xtensa.md
+++++ b/gcc/config/xtensa/xtensa.md
++@@ -38,6 +38,7 @@
++   (UNSPEC_MEMW		11)
++   (UNSPEC_LSETUP_START  12)
++   (UNSPEC_LSETUP_END    13)
+++  (UNSPEC_FRAME_BLOCKAGE 14)
 + 
-+ #include <linux/kernel.h>
-++#include <linux/string.h>
++   (UNSPECV_SET_FP	1)
++   (UNSPECV_ENTRY	2)
++@@ -1676,6 +1677,32 @@
++ 
++ ;; Miscellaneous instructions.
 + 
-+ #if defined(CONFIG_X86_64)
-+ #include <asm/fpu/api.h>
+++;; In windowed ABI stack pointer adjustment must happen before any access
+++;; to the space allocated on stack is allowed, otherwise register spill
+++;; area may be clobbered.  That's what frame blockage is supposed to enforce.
+++
+++(define_expand "allocate_stack"
+++  [(set (match_operand 0 "nonimmed_operand")
+++        (minus (reg A1_REG) (match_operand 1 "add_operand")))
+++   (set (reg A1_REG)
+++        (minus (reg A1_REG) (match_dup 1)))]
+++  "TARGET_WINDOWED_ABI"
+++{
+++  if (CONST_INT_P (operands[1]))
+++    {
+++      rtx neg_op0 = GEN_INT (-INTVAL (operands[1]));
+++      emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, neg_op0));
+++    }
+++  else
+++    {
+++      emit_insn (gen_subsi3 (stack_pointer_rtx, stack_pointer_rtx,
+++			     operands[1]));
+++    }
+++  emit_move_insn (operands[0], virtual_stack_dynamic_rtx);
+++  emit_insn (gen_frame_blockage ());
+++  DONE;
+++})
+++
++ (define_expand "prologue"
++   [(const_int 0)]
++   ""
++@@ -1767,6 +1794,25 @@
++   [(set_attr "length" "0")
++    (set_attr "type" "nop")])
++ 
+++;; Do not schedule instructions accessing memory before this point.
+++
+++(define_expand "frame_blockage"
+++  [(set (match_dup 0)
+++        (unspec:BLK [(match_dup 1)] UNSPEC_FRAME_BLOCKAGE))]
+++  ""
+++{
+++  operands[0] = gen_rtx_MEM (BLKmode, gen_rtx_SCRATCH (Pmode));
+++  MEM_VOLATILE_P (operands[0]) = 1;
+++  operands[1] = stack_pointer_rtx;
+++})
+++
+++(define_insn "*frame_blockage"
+++  [(set (match_operand:BLK 0 "" "")
+++        (unspec:BLK [(match_operand:SI 1 "" "")] UNSPEC_FRAME_BLOCKAGE))]
+++  ""
+++  ""
+++  [(set_attr "length" "0")])
+++
++ (define_insn "trap"
++   [(trap_if (const_int 1) (const_int 0))]
++   ""
 +-- 
 +2.11.0
 +
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 7701424e4e..f7c5e65475 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-May/002914.html
--sha256 57614239c1f1a99a367f2c816153acda5bffada66a3b8e3b8215f1625784abc9  WireGuard-0.0.20180524.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-June/002984.html
-+sha256 c120cdedc3967dcb4ad5c1c7eadd2a1b04ef5dbf2fe60cc8e7c0db337bcda7dc  WireGuard-0.0.20180613.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index ee68dc5580..e1c43beea7 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20180524
-+WIREGUARD_VERSION = 0.0.20180613
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+diff --git a/package/gcc/7.3.0/0002-xtensa-fix-PR-target-65416.patch b/package/gcc/7.3.0/0002-xtensa-fix-PR-target-65416.patch
+new file mode 100644
+index 0000000000..7ead575439
+--- /dev/null
++++ b/package/gcc/7.3.0/0002-xtensa-fix-PR-target-65416.patch
+@@ -0,0 +1,101 @@
++From 87fda0741d210727672cba5e54a37a189e8ac04e Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Sun, 17 Jun 2018 21:18:39 -0700
++Subject: [PATCH] xtensa: fix PR target/65416
++
++The issue is caused by reordering of stack pointer update after stack
++space allocation with instructions that write to the allocated stack
++space. In windowed ABI register spill area for the previous call frame
++is located just below the stack pointer and may be reloaded back into
++the register file on movsp.
++Implement allocate_stack pattern for windowed ABI configuration and
++insert an instruction that prevents reordering of frame memory access
++and stack pointer update.
++
++gcc/
++2018-06-19  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/xtensa/xtensa.md (UNSPEC_FRAME_BLOCKAGE): New unspec
++	constant.
++	(allocate_stack, frame_blockage, *frame_blockage): New patterns.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++Backported from: r261755
++---
++ gcc/config/xtensa/xtensa.md | 46 +++++++++++++++++++++++++++++++++++++++++++++
++ 1 file changed, 46 insertions(+)
++
++diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
++index 84967dbedc08..209f839cfb0f 100644
++--- a/gcc/config/xtensa/xtensa.md
+++++ b/gcc/config/xtensa/xtensa.md
++@@ -38,6 +38,7 @@
++   (UNSPEC_MEMW		11)
++   (UNSPEC_LSETUP_START  12)
++   (UNSPEC_LSETUP_END    13)
+++  (UNSPEC_FRAME_BLOCKAGE 14)
++ 
++   (UNSPECV_SET_FP	1)
++   (UNSPECV_ENTRY	2)
++@@ -1676,6 +1677,32 @@
++ 
++ ;; Miscellaneous instructions.
++ 
+++;; In windowed ABI stack pointer adjustment must happen before any access
+++;; to the space allocated on stack is allowed, otherwise register spill
+++;; area may be clobbered.  That's what frame blockage is supposed to enforce.
+++
+++(define_expand "allocate_stack"
+++  [(set (match_operand 0 "nonimmed_operand")
+++        (minus (reg A1_REG) (match_operand 1 "add_operand")))
+++   (set (reg A1_REG)
+++        (minus (reg A1_REG) (match_dup 1)))]
+++  "TARGET_WINDOWED_ABI"
+++{
+++  if (CONST_INT_P (operands[1]))
+++    {
+++      rtx neg_op0 = GEN_INT (-INTVAL (operands[1]));
+++      emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, neg_op0));
+++    }
+++  else
+++    {
+++      emit_insn (gen_subsi3 (stack_pointer_rtx, stack_pointer_rtx,
+++			     operands[1]));
+++    }
+++  emit_move_insn (operands[0], virtual_stack_dynamic_rtx);
+++  emit_insn (gen_frame_blockage ());
+++  DONE;
+++})
+++
++ (define_expand "prologue"
++   [(const_int 0)]
++   ""
++@@ -1767,6 +1794,25 @@
++   [(set_attr "length" "0")
++    (set_attr "type" "nop")])
++ 
+++;; Do not schedule instructions accessing memory before this point.
+++
+++(define_expand "frame_blockage"
+++  [(set (match_dup 0)
+++        (unspec:BLK [(match_dup 1)] UNSPEC_FRAME_BLOCKAGE))]
+++  ""
+++{
+++  operands[0] = gen_rtx_MEM (BLKmode, gen_rtx_SCRATCH (Pmode));
+++  MEM_VOLATILE_P (operands[0]) = 1;
+++  operands[1] = stack_pointer_rtx;
+++})
+++
+++(define_insn "*frame_blockage"
+++  [(set (match_operand:BLK 0 "" "")
+++        (unspec:BLK [(match_operand:SI 1 "" "")] UNSPEC_FRAME_BLOCKAGE))]
+++  ""
+++  ""
+++  [(set_attr "length" "0")])
+++
++ (define_insn "trap"
++   [(trap_if (const_int 1) (const_int 0))]
++   ""
++-- 
++2.11.0
++
