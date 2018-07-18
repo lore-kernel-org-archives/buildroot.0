@@ -1,44 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 15:12:11 +0200
-Subject: [Buildroot] [PATCH v2 2/2] configs/imx7d-sdb: Add new defconfig
-In-Reply-To: <CAOMZO5A_feHYFg4Y83bzDv4k-XF8xYoao9AvxFXY-Czj00RWeA@mail.gmail.com>
-References: <1531084579-7949-1-git-send-email-festevam@gmail.com>
- <1531084579-7949-2-git-send-email-festevam@gmail.com>
- <20180718120128.2454a930@windsurf>
- <CAOMZO5AnV9edLKrhTwchdghONU7=5CONndAjgXLreTkdN1vj8Q@mail.gmail.com>
- <20180718145146.10793a31@windsurf>
- <CAOMZO5A_feHYFg4Y83bzDv4k-XF8xYoao9AvxFXY-Czj00RWeA@mail.gmail.com>
-Message-ID: <20180718151211.73c5eb52@windsurf>
+Date: Wed, 18 Jul 2018 15:15:14 +0200
+Subject: [Buildroot] [git commit] shairport-sync: bump to version 3.2.1
+Message-ID: <20180718131049.B791E8892C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f57b8b5b4dd44c02b89d7525db255ba34a3037f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Jul 2018 10:03:20 -0300, Fabio Estevam wrote:
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Actually the dts name in the vendor kernel is the same.
-> 
-> We could just add a "freescale" prefix to make clear that it refers to
-> a defconfig that uses the vendor U-Boot and kernel.
-> 
-> For example:
-> 
-> imx7d-sdb_defconfig: this Buildroot defconfig uses mainline U-Boot/kernel
-> freescale_imx7d-sdb_defconfig: this Buildroot defconfig uses the
-> vendor provided U-Boot/kernel.
-
-To me, this is what would make the most sense.
-
-So, is configs/freescale_imx7dsabresd_defconfig related to this same
-board, or is it a completely different board ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index e0eea4c42f..076f0a2132 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  90555f1a5e05bd777741147d5c0104543d0f26d4f95b9bfd44143c818a6f50f1  shairport-sync-3.1.6.tar.gz
++sha256  1fe16856ec828704b086c571038a3b2eb907a3cf0a3847ed1b721b517554659d  shairport-sync-3.2.1.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 53ebcc581e..f1857b0dae 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 3.1.6
++SHAIRPORT_SYNC_VERSION = 3.2.1
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
