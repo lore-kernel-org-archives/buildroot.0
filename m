@@ -1,48 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:23:55 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] wireguard: bump version
- to 0.0.20180524
-Message-ID: <20180718212802.CCFF788C9A@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 23:27:22 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{14,
+ 16}.x series
+Message-ID: <20180718212802.E651E80415@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f7db0a2f83d9c2d2d4db45454a8cb83a00cb19a
+commit: https://git.buildroot.net/buildroot/commit/?id=f435b547c6f990d4d25ab9bf0e87692e472042c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Contains a number of fixes, including fixes for building with GCC 8.
-
+[Peter: drop 4.16.x change]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f6b9d59f61b9084b1ae09e26e4bac5d6a1729cf6)
+(cherry picked from commit 8974ebaab005a40cf1564650d54d80830e730f55)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 6cfc7bb9f0..7701424e4e 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# From https://lists.zx2c4.com/pipermail/wireguard/2018-April/002697.html
--sha256 b58cd2acf9e8d3fe9044c06c0056bd74da1f5673a456f011d36eee3f6fb1da16  WireGuard-0.0.20180420.tar.xz
-+# From https://lists.zx2c4.com/pipermail/wireguard/2018-May/002914.html
-+sha256 57614239c1f1a99a367f2c816153acda5bffada66a3b8e3b8215f1625784abc9  WireGuard-0.0.20180524.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 20162e1d0f..ee68dc5580 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WIREGUARD_VERSION = 0.0.20180420
-+WIREGUARD_VERSION = 0.0.20180524
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 982e24fff8..3dec028efa 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -248,6 +248,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.50"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.51"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
