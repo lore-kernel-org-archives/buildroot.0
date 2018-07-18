@@ -1,133 +1,116 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 12:59:49 +0200
-Subject: [Buildroot] [PATCH] cutelyst: new package
-In-Reply-To: <20180717204613.22028-1-dantti12@gmail.com>
-References: <20180717204613.22028-1-dantti12@gmail.com>
-Message-ID: <20180718125949.04f926f8@windsurf>
+From: aai at tut.by <aai@tut.by>
+Date: Wed, 18 Jul 2018 14:01:44 +0300
+Subject: [Buildroot] Orange Pi Prime does not boot
+In-Reply-To: <24361531747407@iva5-d3020dc3459d.qloud-c.yandex.net>
+References: <20695741531212798@myt3-12f13c3c6b95.qloud-c.yandex.net>
+ <CAMty3ZC3rc7rZRtBZMnaQxP=kLJ9AnGWuoCsiV_bHa9UPQ=33g@mail.gmail.com>
+ <20180713201836.03884858@gmx.net>
+ <24361531747407@iva5-d3020dc3459d.qloud-c.yandex.net>
+Message-ID: <11599171531911704@sas2-7b909973f402.qloud-c.yandex.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Daniel,
 
-On Tue, 17 Jul 2018 17:46:13 -0300, Daniel Nicoletti wrote:
-> A C++ Web Framework built on top of Qt, using
-> the simple approach of Catalyst (Perl) framework.
-> 
-> Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
 
-Thanks for this new iteration. I applied it after doing some changes,
-which I'll describe below.
+16.07.2018, 16:23, "aai at tut.by" <aai@tut.by>:
+> 13.07.2018, 21:18, "Peter Seiderer" <ps.report@gmx.net>:
+>> ?Hello,
+>>
+>> ?On Fri, 13 Jul 2018 20:43:49 +0530, Jagan Teki <jagan@amarulasolutions.com> wrote:
+>>
+>>> ??On Tue, Jul 10, 2018 at 2:23 PM, <aai@tut.by> wrote:
+>>> ??> Hello,
+>>> ??>
+>>> ??> orangepi_prime_defconfig does not work for me (try buildroot 2018.02.3 and 2018.05)
+>>> ??>
+>>> ??> I do:
+>>> ??> make orangepi_prime_defconfig
+>>> ??> make
+>>> ??>
+>>> ??> boot log:
+>>> ??> --------------------------------------------------------------
+>>> ??> Terminal ready
+>>> ??>
+>>> ??> U-Boot SPL 2017.11 (Jul 09 2018 - 10:12:15)
+>>> ??> DRAM: 2048 MiB
+>>> ??> Trying to boot from MMC1
+>>> ??>
+>>> ??>
+>>> ??> U-Boot 2017.11 (Jul 09 2018 - 10:12:15 +0300) Allwinner Technology
+>>> ??>
+>>> ??> CPU: Allwinner H5 (SUN50I)
+>>> ??> Model: OrangePi Prime
+>>> ??> DRAM: 2 GiB
+>>> ??> MMC: SUNXI SD/MMC: 0
+>>> ??> *** Warning - bad CRC, using default environment
+>>> ??>
+>>> ??> In: serial
+>>> ??> Out: serial
+>>> ??> Err: serial
+>>> ??> Net: No ethernet found.
+>>> ??> starting USB...
+>>> ??> USB0: USB EHCI 1.00
+>>> ??> USB1: USB OHCI 1.0
+>>> ??> scanning bus 0 for devices... 1 USB Device(s) found
+>>> ??> scanning usb for storage devices... 0 Storage Device(s) found
+>>> ??> Hit any key to stop autoboot: 0
+>>> ??> switch to partitions #0, OK
+>>> ??> mmc0 is current device
+>>> ??> Scanning mmc 0:1...
+>>> ??> Found U-Boot script /boot.scr
+>>> ??> reading /boot.scr
+>>> ??> 277 bytes read in 14 ms (18.6 KiB/s)
+>>> ??> ## Executing script at 4fc00000
+>>> ??> reading Image
+>>> ??> 17365504 bytes read in 870 ms (19 MiB/s)
+>>> ??> reading sun50i-h5-orangepi-prime.dtb
+>>> ??> 13714 bytes read in 25 ms (535.2 KiB/s)
+>>> ??> ## Flattened Device Tree blob at 4fa00000
+>>> ??> Booting using the fdt blob at 0x4fa00000
+>>> ??> Loading Device Tree to 0000000049ff9000, end 0000000049fff591 ... OK
+>>
+>> ?From Jagans boot log:
+>>
+>> ?reading /boot.scr
+>> ?277 bytes read in 15 ms (17.6 KiB/s)
+>> ?## Executing script at 4fc00000
+>> ?reading Image
+>> ?16310784 bytes read in 820 ms (19 MiB/s)
+>> ?reading sun50i-h5-orangepi-prime.dtb
+>> ?13714 bytes read in 26 ms (514.6 KiB/s)
+>> ?## Flattened Device Tree blob at 4fa00000
+>> ????Booting using the fdt blob at 0x4fa00000
+>> ????Loading Device Tree to 0000000049ff9000, end 0000000049fff591 ... OK
+>>
+>> ?Jagan Image size: 16310784
+>> ?aai Image size: 17365504
+>
+> I built the image again on another computer. Image size is 16310784. But I can not check booting now.
+> I will try later, maybe by the end of the week
 
-However, first of all, when you send a new iteration of a patch, it is
-recommended to adjust the patch subject prefix to be [PATCH v2], and to
-include a changelog...
 
-> ---
+17365504 - I made a mistake and posted the wrong log with optimization level 2.
 
-... here, i.e below the "---" sign.
+I tried Buildroot 2018.05 + Ubuntu 16.04 and Buildroot 2018.02.3 + Fedors 28. Not work.
 
-This way, it is clear that it is a new iteration, and we know what has
-changed since the previous iteration.
+Maybe my board is broken, but Armbian 5.38 works.
 
-See http://patchwork.ozlabs.org/patch/944700/ for an example of that.
 
-To generate a patch with such a prefix, you can use:
-
-	git format-patch -v2
-
-or:
-
-	git format-patch --subject-prefix="PATCH v2"
-
->  package/Config.in              |  1 +
->  package/cutelyst/Config.in     |  9 +++++++++
->  package/cutelyst/cutelyst.hash |  3 +++
->  package/cutelyst/cutelyst.mk   | 36 ++++++++++++++++++++++++++++++++++
->  4 files changed, 49 insertions(+)
-
-You forgot to add an entry to the DEVELOPERS file, so I've added that.
-
-> diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
-> new file mode 100644
-> index 0000000000..6b78e48cea
-> --- /dev/null
-> +++ b/package/cutelyst/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_CUTELYST
-> +	bool "cutelyst"
-> +	depends on BR2_PACKAGE_QT5
-> +	select BR2_PACKAGE_QT5BASE_GUI
-> +	help
-> +	  A C++ Web Framework built on top of Qt, using
-> +	  the simple approach of Catalyst (Perl) framework.
-> +
-> +	  https://cutelyst.org
-
-With this set of dependencies, cutelyst didn't build for me, with a
-minimal configuration. It failed to build with:
-
-/home/thomas/projets/buildroot/output/build/cutelyst-2.5.1/wsgi/tcpsslserver.h:44:36: error: ?QSslConfiguration? does not name a type
-     void setSslConfiguration(const QSslConfiguration &conf);
-
-This is because it needs SSL support in Qt. So I've added a "select
-BR2_PACKAGE_OPENSSL" to make sure SSL support is present in Qt.
-
-> index 0000000000..6653675352
-> --- /dev/null
-> +++ b/package/cutelyst/cutelyst.mk
-> @@ -0,0 +1,36 @@
-> +################################################################################
-> +#
-> +# cutelyst
-> +#
-> +################################################################################
-> +
-> +CUTELYST_VERSION = 2.5.1
-> +CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
-> +CUTELYST_INSTALL_STAGING = YES
-> +CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
-> +CUTELYST_LICENSE = LGPL-2.1+
-> +CUTELYST_LICENSE_FILES = COPYING
-> +CUTELYST_DEPENDENCIES = qt5base
-> +
-> +CUTELYST_CONF_OPTS += \
-> +	-DPLUGIN_CSRFPROTECTION=ON
-> +
-> +$(eval $(cmake-package))
-
-This line should always go at the end of the .mk file, i.e...
-
-> +
-> +ifeq ($(BR2_PACKAGE_GRANTLEE),y)
-> +CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=ON
-> +else
-> +CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
-> +CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=ON
-> +else
-> +CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=OFF
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-> +CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=ON
-> +else
-> +CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=OFF
-> +endif
-
-... here.
-
-I've fixed those three issues, and applied your patch. Once again,
-thanks for your contribution!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+>> ?The only visible difference (besides not booting)...
+>>
+>> ?Regards,
+>> ?Peter
+>>
+>>> ??>
+>>> ??> Starting kernel ...
+>>> ??> --------------------------------------------------------------
+>>>
+>>> ??It's booting fine with my side, here is full boot log[1]
+>>>
+>>> ??[1] https://paste.ubuntu.com/p/mQsRxMrKnh/
+>>>
+>>> ??Jagan.
