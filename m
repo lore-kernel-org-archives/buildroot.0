@@ -1,63 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:09:41 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] qt53d: fix install issue
- with qt5.6
-Message-ID: <20180718211025.37E7B88C9C@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 23:21:44 +0200
+Subject: [Buildroot] [PATCH] gcc: fix uclibc build with gcc-8 for xtensa
+In-Reply-To: <20180619202706.17347-1-jcmvbkbc@gmail.com> (Max Filippov's
+ message of "Tue, 19 Jun 2018 13:27:06 -0700")
+References: <20180619202706.17347-1-jcmvbkbc@gmail.com>
+Message-ID: <87bmb4i6jb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8412528d1b489bdb9b00da8092d5747c6afb007
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Max" == Max Filippov <jcmvbkbc@gmail.com> writes:
 
-Both plugins `geometryloaders' and `renderplugins' are available since
-Qt 5.9.
+ > gcc-8.1 for xtensa miscompiles uClibc dynamic linker due to gcc PR
+ > target/65416. The build completes successfully, but the binary is
+ > non-functional because the following fragment in the _dl_get_ready_to_run
+ > in ld-uClibc.so overwrites register spill area on stack causing register
+ > corruption in the previous call frame and a subsequent crash:
 
-Fixes:
+ >     419f:       f0c1b2          addi    a11, a1, -16
+ >     41a2:       1ba9            s32i.n  a10, a11, 4
+ >     41a4:       0bc9            s32i.n  a12, a11, 0
+ >     41a6:       5127f2          l32i    a15, a7, 0x144
+ >     41a9:       1765b2          s32i    a11, a5, 92
+ >     41ac:       4e2782          l32i    a8, a7, 0x138
+ >     41af:       146af2          s32i    a15, a10, 80
+ >     41b2:       001b10          movsp   a1, a11
 
-	>>> qt53d 5.6.3 Installing to target
-	cp -dpf /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt53D*.so.*
-/home/gportay/src/buildroot/output/target/usr/lib
-	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/plugins/geometryloaders
-/home/gportay/src/buildroot/output/target/usr/lib/qt/plugins
-	cp: cannot stat '/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/plugins/geometryloaders': No such file or directory
-	package/pkg-generic.mk:310: recipe for target '/home/gportay/src/buildroot/output/build/qt53d-5.6.3/.stamp_target_installed' failed
-	make[2]: *** [/home/gportay/src/buildroot/output/build/qt53d-5.6.3/.stamp_target_installed] Error 1
+ > The crash terminates the init process and causes kernel panic.
+ > The fix prevents reordering of movsp opcode and any access to the stack
+ > frame memory and is applicable to all existing gcc versions..
 
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Signed-off-by: Ga??l PORTAY &lt;<a href="mailto:gael.portay@savoirfairelinux.com" target="_blank" rel="noreferrer">gael.portay at savoirfairelinux.com</a>&gt;<br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e922bbc7aef31267bea730a1d4a98ec2eabdf761)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt53d/qt53d.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ > Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+ > ---
+ >  .../gcc/6.4.0/871-xtensa-fix-PR-target-65416.patch | 101 +++++++++++++++++++++
+ >  .../7.3.0/0002-xtensa-fix-PR-target-65416.patch    | 101 +++++++++++++++++++++
+ >  .../8.1.0/0004-xtensa-fix-PR-target-65416.patch    | 101 +++++++++++++++++++++
 
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index bdcc665b94..557f643a63 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -37,13 +37,19 @@ endef
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),)
--define QT53D_INSTALL_TARGET_CMDS
--	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+# Available since 5.9
-+define QT53D_INSTALL_TARGET_LATEST
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
-+endef
-+endif
-+define QT53D_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
-+	$(QT53D_INSTALL_TARGET_LATEST)
- 	$(QT53D_INSTALL_TARGET_EXAMPLES)
- endef
- endif
+Committed to 2018.02.x and 2018.05.x after dropping the gcc-8.x patch,
+thanks.
+
+-- 
+Bye, Peter Korsgaard
