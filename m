@@ -1,39 +1,42 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Wed, 18 Jul 2018 12:30:20 +0200
-Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.2.1
-Message-ID: <20180718103020.3625-1-joerg.krause@embedded.rocks>
+Date: Wed, 18 Jul 2018 12:39:59 +0200
+Subject: [Buildroot] =?utf-8?q?=5BPATCH_1/2=5D_DEVELOPERS=3A_remove_some_?=
+ =?utf-8?q?packages_from_J=C3=B6rg_Krause?=
+Message-ID: <20180718104000.5384-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove the following packages from myself:
+* bctoolbox
+* libshout
+* mp4v2
+
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/shairport-sync/shairport-sync.hash | 2 +-
- package/shairport-sync/shairport-sync.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
-index e0eea4c42f..076f0a2132 100644
---- a/package/shairport-sync/shairport-sync.hash
-+++ b/package/shairport-sync/shairport-sync.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  90555f1a5e05bd777741147d5c0104543d0f26d4f95b9bfd44143c818a6f50f1  shairport-sync-3.1.6.tar.gz
-+sha256  1fe16856ec828704b086c571038a3b2eb907a3cf0a3847ed1b721b517554659d  shairport-sync-3.2.1.tar.gz
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 53ebcc581e..f1857b0dae 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHAIRPORT_SYNC_VERSION = 3.1.6
-+SHAIRPORT_SYNC_VERSION = 3.2.1
- SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
- 
- SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4c2d1f291f..115cc57b2d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1034,14 +1034,11 @@ N:	J?rg Krause <joerg.krause@embedded.rocks>
+ F:	board/lemaker/bananapro/
+ F:	configs/bananapro_defconfig
+ F:	package/augeas/
+-F:	package/bctoolbox/
+ F:	package/freescale-imx/imx-alsa-plugins/
+ F:	package/libopusenc/
+-F:	package/libshout/
+ F:	package/libupnpp/
+ F:	package/luv/
+ F:	package/luvi/
+-F:	package/mp4v2/
+ F:	package/mpd/
+ F:	package/shairport-sync/
+ F:	package/swupdate/
 -- 
 2.18.0
