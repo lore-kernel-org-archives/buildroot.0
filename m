@@ -1,51 +1,88 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 17 Jul 2018 23:34:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tar: bump version to 1.30
-In-Reply-To: <20180715154847.GD2516@scaer> (Yann E. MORIN's message of "Sun,
- 15 Jul 2018 17:48:47 +0200")
-References: <20180709224218.32080-1-bernd.kuhls@t-online.de>
- <5afaa00d-083c-2b0d-8375-938f854371a6@mind.be>
- <20180715154847.GD2516@scaer>
-Message-ID: <871sc1k0mi.fsf@dell.be.48ers.dk>
+From: Tudor Holton <tudor@smartguide.com.au>
+Date: Wed, 18 Jul 2018 10:05:39 +1000
+Subject: [Buildroot] How to bypass fix-rpath for a particular package?
+In-Reply-To: <CAKGmAFrdjv8g3LHf-Cym3xP5TfG=eoQS2HVriLu-V-zNzHoq2A@mail.gmail.com>
+References: <b0387d1c-8e63-c118-f243-63920b9560b7@smartguide.com.au>
+ <CAKGmAFrdjv8g3LHf-Cym3xP5TfG=eoQS2HVriLu-V-zNzHoq2A@mail.gmail.com>
+Message-ID: <8036e3d4-aed5-f3f4-fb21-cb2a197cbb1e@smartguide.com.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hi Bryce,
 
- > Arnout, All,
- > On 2018-07-10 10:00 +0200, Arnout Vandecappelle spake thusly:
- >> Have you seen b8fa273d500b4?
- >> 
- >> check-host-tar.sh: blacklist tar 1.30+
- >> 
- >> Tar 1.30 changed the --numeric-owner output for filenames > 100 characters,
- >> leading to hash mismatches for the tar archives we create ourselves from
- >> git.  This is really a fix for a bug in earlier tar versions regarding
- >> deterministic output, so it is unlikely to be reverted in later versions.
- >> 
- >> For more details, see:
- >> http://lists.busybox.net/pipermail/buildroot/2018-January/211222.html
- >> 
- >> To work around this issue, blacklist tar 1.30+ similar to how we do it for
- >> pre-1.17 versions so Buildroot falls back to building host-tar.
- >> 
- >> 
- >> Marked as Rejected...
+It appears that the symbols referencing the library names have been 
+bitshifted.? At best, objdump -x gives correct references, ldd 
+segfaults.? At worst, the objdump -x contains structured gibberish.? It 
+doesn't happen on all files, though, but at this point I'm unable to 
+discern a pattern.
 
- > Yet at some point, we will want to bump tar to a newer version.
+I'm guessing that patchelf has a false positive, but I'm no expert in 
+this area.? I'm not used to ldd segfaulting so I have only been learning 
+this stuff since I discovered the behaviour.? It came as a complete 
+surprise to me when I noticed the md5sum difference and grafted directly 
+and it worked.
 
- > What I would suggest is that we pin the host version to 1.29, and still
- > allow bumping the target version, so maybe something like:
+Cheers,
+Tudor.
 
- >     TAR_VERSION = 1.30
- >     HOST_TAR_VERSION = 1.29
+On 17/07/18 23:55, Bryce Ferguson wrote:
+> Hello Tudor,
+>
+> When you say that the file is corrupted on the image, what does that 
+> mean exactly?? Have you performed a readelf on the binary to determine 
+> what fields may have been messed up? What is your target architecture?
+>
+> Thanks,
+>
+> -Bryce
+>
+> On Mon, Jul 16, 2018 at 10:53 PM, Tudor Holton 
+> <tudor at smartguide.com.au <mailto:tudor@smartguide.com.au>> wrote:
+>
+>     Hi all,
+>
+>     I have a br_external package that always lands corrupt on the
+>     image and segfaults. I tried a number of things and eventually
+>     discovered that it works fine if I graft the output from build
+>     directly into the final image.? From this I narrowed it down to
+>     something that happens during fix-rpath, which looks simple, but
+>     all my checks show that I'm not linking with anything other than
+>     -rpath=$ORIGIN so I'm at a loss as to the root cause.
+>
+>     This may not be the best solution, but is there a standard way to
+>     tell fix-rpath not to patchelf my package and just copy it
+>     verbatim to the image?
+>
+>     Cheers,
+>     Tudor.
+>
+>     _______________________________________________
+>     buildroot mailing list
+>     buildroot at busybox.net <mailto:buildroot@busybox.net>
+>     http://lists.busybox.net/mailman/listinfo/buildroot
+>     <http://lists.busybox.net/mailman/listinfo/buildroot>
+>
+>
+>
+>
+> -- 
+> *
+> *
+> *
+> *
+> *Bryce Ferguson*
+> Software Engineer
+> Airborne Information Solutions \ RC Linux Platform
+>
+> 400 Collins Rd NE Cedar Rapids, Iowa 52498
+>
+> Bryce.Ferguson at rockwellcollins.com 
+> <mailto:bryce.ferguson@rockwellcollins.com>
+>
 
-Yes, that is possible. It does add a bit of extra complexity (subdirs
-for patches, 2 versions in tar.hash, ..), but we already have that for
-packages where we have a version selection.
-
--- 
-Bye, Peter Korsgaard
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180718/e31e7a5c/attachment.html>
