@@ -1,63 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 18 Jul 2018 23:10:22 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] qt53d: fix install issue
- with qt5.6
-Message-ID: <20180718210952.8282788C83@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 23:15:05 +0200
+Subject: [Buildroot] [PATCH 1/1] pinentry: link with libatomic when
+ needed
+In-Reply-To: <20180614180204.17438-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 14 Jun 2018 20:02:04 +0200")
+References: <20180614180204.17438-1-fontaine.fabrice@gmail.com>
+Message-ID: <87fu0gi6ue.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa7875f626f046f26ab80388fae3f88ac98cf33c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Both plugins `geometryloaders' and `renderplugins' are available since
-Qt 5.9.
+ > Following errors might occur on architectures required to use gcc
+ > libatomics:
+ > sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding
+ > symbols: DSO missing from command line
 
-Fixes:
+ > This is often the case for sparcv8 32 bit toolchains.
 
-	>>> qt53d 5.6.3 Installing to target
-	cp -dpf /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libQt53D*.so.*
-/home/gportay/src/buildroot/output/target/usr/lib
-	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/plugins/geometryloaders
-/home/gportay/src/buildroot/output/target/usr/lib/qt/plugins
-	cp: cannot stat '/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/qt/plugins/geometryloaders': No such file or directory
-	package/pkg-generic.mk:310: recipe for target '/home/gportay/src/buildroot/output/build/qt53d-5.6.3/.stamp_target_installed' failed
-	make[2]: *** [/home/gportay/src/buildroot/output/build/qt53d-5.6.3/.stamp_target_installed] Error 1
+ > See d28591a2ee39704f6795c8aa1d0a3db7e909facc,
+ > 55a9d6d55888b04ec6c476399e5b98a2412995f5 and
+ > 03f6e005e6a9617767b24a9026da9477848020cc.
 
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Signed-off-by: Ga??l PORTAY &lt;<a href="mailto:gael.portay@savoirfairelinux.com" target="_blank" rel="noreferrer">gael.portay at savoirfairelinux.com</a>&gt;<br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e922bbc7aef31267bea730a1d4a98ec2eabdf761)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qt5/qt53d/qt53d.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/fd6bee70ff20bee9607a9f6f557a3a793d00cd9f
 
-diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
-index 6896b00318..48a931d60b 100644
---- a/package/qt5/qt53d/qt53d.mk
-+++ b/package/qt5/qt53d/qt53d.mk
-@@ -37,13 +37,19 @@ endef
- endif
- 
- ifeq ($(BR2_STATIC_LIBS),)
--define QT53D_INSTALL_TARGET_CMDS
--	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+# Available since 5.9
-+define QT53D_INSTALL_TARGET_LATEST
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/geometryloaders $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/renderplugins $(TARGET_DIR)/usr/lib/qt/plugins
-+endef
-+endif
-+define QT53D_INSTALL_TARGET_CMDS
-+	cp -dpf $(STAGING_DIR)/usr/lib/libQt53D*.so.* $(TARGET_DIR)/usr/lib
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/sceneparsers $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/qml/Qt3D $(TARGET_DIR)/usr/qml
- 	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick $(TARGET_DIR)/usr/qml
-+	$(QT53D_INSTALL_TARGET_LATEST)
- 	$(QT53D_INSTALL_TARGET_EXAMPLES)
- endef
- endif
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2018.02.x and 2018.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
