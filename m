@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 12:01:28 +0200
-Subject: [Buildroot] [PATCH v2 2/2] configs/imx7d-sdb: Add new defconfig
-In-Reply-To: <1531084579-7949-2-git-send-email-festevam@gmail.com>
-References: <1531084579-7949-1-git-send-email-festevam@gmail.com>
- <1531084579-7949-2-git-send-email-festevam@gmail.com>
-Message-ID: <20180718120128.2454a930@windsurf>
+Date: Wed, 18 Jul 2018 12:04:20 +0200
+Subject: [Buildroot] [PATCH] configs/imx7ulp-evk: Add new config
+In-Reply-To: <20180717172427.16814-1-marcelo.macedo@nxp.com>
+References: <20180717172427.16814-1-marcelo.macedo@nxp.com>
+Message-ID: <20180718120420.3a95fe87@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  8 Jul 2018 18:16:19 -0300, Fabio Estevam wrote:
-> Introduce imx7d-sdb_defconfig that allows booting imx7d-sdb
-> board using U-Boot and kernel mainline instead of the
-> vendor provided versions.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
-> Changes since v1:
-> - None
+Thanks for this contribution!
 
-This was lacking the update to the DEVELOPERS file and to
-the .gitlab-ci.yml file, so I fixed that and applied. Thanks!
+On Tue, 17 Jul 2018 14:24:27 -0300, Marcelo Macedo wrote:
 
-However, I find the naming a bit strange. If I understand correctly
-freescale_imx7dsabresd_defconfig and imx7d-sdb_defconfig are for the
-same board, the former using the vendor kernel, the latter using the
-mainline kernel. If that's the case, why isn't the defconfig having the
-same name, except for the freescale_ prefix ?
+> +Step 1 - Download the Cortex-M4 pre-compiled binary:
+> +
+> +	wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx7ulp-m4-demo-2.4.0.bin
+> +
+> +Step 2: Extract the example files:
+> +
+> +	$ chmod a+x imx7ulp-m4-demo-2.4.0.bin
+> +	$  ./imx7ulp-m4-demo-2.4.0.bin
+> +
+> +Step 3: Copy the imx7ulp_m4_demo.img binary to the FAT partion of MicroSD card.
 
-Also, the board folder is named "imx7dsdb", which isn't very consistent.
+Shouldn't we instead create a Buildroot package that would
+download/extract/install this firmware image, and put it in the FAT
+partition ?
 
-Could you clarify this and perhaps increase the consistency ?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
