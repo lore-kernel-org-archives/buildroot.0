@@ -1,112 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 11:44:03 +0200
-Subject: [Buildroot] [git commit] rust: bump version to 1.27.1
-Message-ID: <20180718093941.C20CF88890@busybox.osuosl.org>
+Date: Wed, 18 Jul 2018 11:44:04 +0200
+Subject: [Buildroot] [git commit] cargo-bin: bump version to 0.27.0
+Message-ID: <20180718093941.CE31088890@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f09c6907cf770ff927bacc50842abd8bd6e64baf
+commit: https://git.buildroot.net/buildroot/commit/?id=d0e8f4a50d9cdd1818b8a0acea24905a43d7ca17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Bump version to 1.27.1 and backport some patches to fix build of
-rust-installer.
 
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-Fix-warnings-in-library-from-error-chain.patch | 25 ++++++++++++++++++++++
- ...mit-warnings-inside-error-chain-expansion.patch | 25 ++++++++++++++++++++++
- package/rust/rust.hash                             |  4 ++--
- package/rust/rust.mk                               |  2 +-
- 4 files changed, 53 insertions(+), 3 deletions(-)
+ package/cargo-bin/cargo-bin.hash | 12 ++++++------
+ package/cargo-bin/cargo-bin.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/rust/0001-Fix-warnings-in-library-from-error-chain.patch b/package/rust/0001-Fix-warnings-in-library-from-error-chain.patch
-new file mode 100644
-index 0000000000..be9d2a87c7
---- /dev/null
-+++ b/package/rust/0001-Fix-warnings-in-library-from-error-chain.patch
-@@ -0,0 +1,25 @@
-+From ac3ffd15e1cf16059b4ccd90b7c816b078a621a5 Mon Sep 17 00:00:00 2001
-+From: Mark Simulacrum <mark.simulacrum@gmail.com>
-+Date: Wed, 20 Jun 2018 19:47:00 -0600
-+Subject: [PATCH] Fix warnings in library from error-chain
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ src/lib.rs | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git rust-1.27.1.orig/src/tools/rust-installer/src/lib.rs rust-1.27.1/src/tools/rust-installer/src/lib.rs
-+index ff0495b..cc5e740 100644
-+--- rust-1.27.1.orig/src/tools/rust-installer/src/lib.rs
-++++ rust-1.27.1/src/tools/rust-installer/src/lib.rs
-+@@ -22,6 +22,7 @@ extern crate winapi;
-+ #[macro_use]
-+ extern crate lazy_static;
-+ 
-++#[allow(warnings)]
-+ mod errors {
-+     error_chain!{
-+         foreign_links {
-+-- 
-+2.11.0
-+
-diff --git a/package/rust/0001-Permit-warnings-inside-error-chain-expansion.patch b/package/rust/0001-Permit-warnings-inside-error-chain-expansion.patch
-new file mode 100644
-index 0000000000..6c332bc0ba
---- /dev/null
-+++ b/package/rust/0001-Permit-warnings-inside-error-chain-expansion.patch
-@@ -0,0 +1,25 @@
-+From d90cef58439bcd14426d64b16599e060cd6464f9 Mon Sep 17 00:00:00 2001
-+From: Mark Simulacrum <mark.simulacrum@gmail.com>
-+Date: Wed, 20 Jun 2018 16:54:40 -0600
-+Subject: [PATCH] Permit warnings inside error-chain expansion
-+
-+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-+---
-+ src/main.rs | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git rust-1.27.1.orig/src/tools/rust-installer/src/main.rs rust-1.27.1/src/tools/rust-installer/src/main.rs
-+index cabffb8..007ed71 100644
-+--- rust-1.27.1.orig/src/tools/rust-installer/src/main.rs
-++++ rust-1.27.1/src/tools/rust-installer/src/main.rs
-+@@ -7,6 +7,7 @@ extern crate installer;
-+ use errors::*;
-+ use clap::{App, ArgMatches};
-+ 
-++#[allow(warnings)]
-+ mod errors {
-+     error_chain!{
-+         links {
-+-- 
-+2.11.0
-+
-diff --git a/package/rust/rust.hash b/package/rust/rust.hash
-index 495722e355..6e6b0d9b6f 100644
---- a/package/rust/rust.hash
-+++ b/package/rust/rust.hash
-@@ -1,5 +1,5 @@
--# From https://static.rust-lang.org/dist/rustc-1.25.0-src.tar.xz.sha256
--sha256 14fcb82d5959df758aaf422539359300917217fa8420e34bd596e3fb6ed2de87  rustc-1.25.0-src.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.27.1-src.tar.xz.sha256
-+sha256 948e2645057960ee1c03d9f0e8f78133a5f73d9ca9a24bc56126e395a212d25c  rustc-1.27.1-src.tar.xz
+diff --git a/package/cargo-bin/cargo-bin.hash b/package/cargo-bin/cargo-bin.hash
+index 2dfea7c868..ad2da2bc00 100644
+--- a/package/cargo-bin/cargo-bin.hash
++++ b/package/cargo-bin/cargo-bin.hash
+@@ -1,9 +1,9 @@
+-# From https://static.rust-lang.org/dist/cargo-0.26.0-i686-unknown-linux-gnu.tar.xz.sha256
+-sha256 bc5f5aa32d2f4ba26abf79a900231d06eecc7f1f2e125ed51bf71766550d1879  cargo-0.26.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/cargo-0.26.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-sha256 b14b47f59b436d07e57c5eab5bdd7378842b8ef4873d5836e08f0391e743f516  cargo-0.26.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/cargo-0.26.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-sha256 aeaa5813aa6615dd7fdde6d870ca257c5b2e9da5e308f8242a08b231605bce0e  cargo-0.26.0-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/cargo-0.27.0-i686-unknown-linux-gnu.tar.xz.sha256
++sha256 64c2262c0577ef1824d3d885753362d68c04f36ea85a195894894c37e2445ef5  cargo-0.27.0-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/cargo-0.27.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++sha256 3688bea3d971615d9c4b33612c20783bd9a385539aa7f754e6543c196e1bcec2  cargo-0.27.0-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/cargo-0.27.0-x86_64-unknown-linux-gnu.tar.xz.sha256
++sha256 d09c061daaafd735742e0b18a4da6eb656f61d4c57504d100a6ca9f766b38c71  cargo-0.27.0-x86_64-unknown-linux-gnu.tar.xz
  # Locally generated
  sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
  sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index af5c366495..74df7d234a 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
+diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
+index 0c017bdb43..82b020a43a 100644
+--- a/package/cargo-bin/cargo-bin.mk
++++ b/package/cargo-bin/cargo-bin.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUST_VERSION = 1.25.0
-+RUST_VERSION = 1.27.1
- RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
- RUST_SITE = https://static.rust-lang.org/dist
- RUST_LICENSE = Apache-2.0 or MIT
+-CARGO_BIN_VERSION = 0.26.0
++CARGO_BIN_VERSION = 0.27.0
+ CARGO_BIN_SITE = https://static.rust-lang.org/dist
+ CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+ CARGO_BIN_LICENSE = Apache-2.0 or MIT
