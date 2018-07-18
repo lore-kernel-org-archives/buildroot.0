@@ -1,72 +1,53 @@
-From: Christoph Engelbert <me@noctarius.com>
-Date: Wed, 18 Jul 2018 13:23:42 +0200
-Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds
- "regulatory.db[.p7s]" to /lib/firmware
-In-Reply-To: <20180718131839.1995b40c@windsurf>
-References: <20180716151303.18064-1-me@noctarius.com>
- <20180718131839.1995b40c@windsurf>
-Message-ID: <E894B8F4-C70E-4AE1-91D0-B16176A7B6D1@noctarius.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Wed, 18 Jul 2018 13:35:39 +0200
+Subject: [Buildroot] [PATCH] package/elf2flt: fix build with Binutils >=
+ 2.31
+In-Reply-To: <20180718131430.1f02f07f@windsurf>
+References: <1531845102-20058-1-git-send-email-romain.naour@smile.fr>
+ <20180718131430.1f02f07f@windsurf>
+Message-ID: <c792c28c-f53f-7419-657f-a816428b6ff2@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Thomas,
+Hi Thomas,
 
-Thanks for applying the patch. I?ll take your recommendations into consideration next time. Guess that was probably not the last patch to send ;-) Especially since (at the moment) I?m fighting myself through the process to get a full blown nanopi neo air working from the buildroot process.
+Le 18/07/2018 ? 13:14, Thomas Petazzoni a ?crit?:
+> Hello Romain,
+> 
+> On Tue, 17 Jul 2018 18:31:42 +0200, Romain Naour wrote:
+>> Binutils added diagnostics.h to bfd.h [1], so elf2flt must create a
+>> symlink for this header.
+>>
+>> Fixes:
+>> https://gitlab.com/free-electrons/toolchains-builder/-/jobs/82284139
+>>
+>> [1] https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=95da9854466ada2572b42f5528711a06a2d42db1
+>>
+>> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> Thanks for this fix. After it was applied by Peter, I used it for the
+> Bootlin toolchains, and I was able to build the ARMv7-M and m68k
+> Coldfire toolchains with binutils 2.31. They are now online on
+> toolchains.bootlin.com.
 
-Thanks,
-Chris
+Great :)
 
-> On 18. Jul 2018, at 13:18, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 > 
-> Hello,
-> 
-> On Mon, 16 Jul 2018 18:13:03 +0300, Christoph Engelbert wrote:
->> With kernel version 4.15, Linux started to support loading regulatory.db and regulatory.db.p7s files
->> directly from /lib/firmware, without the need of crda. If the kernel can't load those files it'll
->> fallback to using crda, but the direct way is preferred.
->> 
->> This patch copies those those files under /lib/firmware. The use of crda shouldn't be necessary with
->> kernels of 4.15 or later.
->> 
->> Signed-off-by: Christoph Engelbert <me@noctarius.com>
->> ---
->> package/wireless-regdb/wireless-regdb.mk | 4 ++++
->> 1 file changed, 4 insertions(+)
-> 
-> Thanks for your contribution, I've applied your patch. However, I would
-> like to recommend a few improvements for your future contributions, if
-> possible:
-> 
-> - No need to enclose the package name between < and > in the commit
->   title, i.e just "package: description" is enough.
-> 
-> - When sending new iterations, please change the patch subject prefix
->   to PATCH v2, PATCH v3, etc. You can do that with "git format-patch
->   -v2" or git format-patch --subject-prefix="PATCH v2"
-> 
-> - Also when sending new iterations, adding a changelog below the "---"
->   sign is very nice, because it allows the people reviewing your patch
->   understand what has changed.
-> 
-> - Finally, the commit log description should be wrapped to 72
->   characters.
-> 
-> But again: I applied your patch after doing minor fixes in the commit
-> title and commit log, so those recommendations are valid for your
-> future contributions only :-)
+> The only remaining toolchain not building with binutils 2.31 is the
+> xtensa toolchain.
+
+Yes I know, this require more time to find a fix.
+Maybe Max Filippov can help us (once again :) )
+
+Best regards,
+Romain
+
 > 
 > Thanks!
 > 
 > Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
