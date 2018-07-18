@@ -1,117 +1,39 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 18 Jul 2018 14:07:54 +0200
-Subject: [Buildroot] [PATCH] package/binutils: bump to version 2.31.1
-Message-ID: <1531915674-1492-1-git-send-email-romain.naour@smile.fr>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 18 Jul 2018 09:21:39 -0300
+Subject: [Buildroot] [PATCH v2 2/2] configs/imx7d-sdb: Add new defconfig
+In-Reply-To: <20180718120128.2454a930@windsurf>
+References: <1531084579-7949-1-git-send-email-festevam@gmail.com>
+ <1531084579-7949-2-git-send-email-festevam@gmail.com>
+ <20180718120128.2454a930@windsurf>
+Message-ID: <CAOMZO5AnV9edLKrhTwchdghONU7=5CONndAjgXLreTkdN1vj8Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the release note:
-  This is a point release over the previous 2.31 version, which was
-  necessary as a source file was accidentally omitted from that
-  release.
+Hi Thomas,
 
-  This release also contains a fix for PR gold/23409 where the gold
-  linker could end up creating duplicate copies of some symbols.
+On Wed, Jul 18, 2018 at 7:01 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
-https://sourceware.org/ml/binutils/2018-07/msg00286.html
+> This was lacking the update to the DEVELOPERS file and to
+> the .gitlab-ci.yml file, so I fixed that and applied. Thanks!
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- package/binutils/{2.31 => 2.31.1}/0001-sh-conf.patch                  | 0
- package/binutils/{2.31 => 2.31.1}/0002-ld-makefile.patch              | 0
- package/binutils/{2.31 => 2.31.1}/0003-check-ldrunpath-length.patch   | 0
- .../{2.31 => 2.31.1}/0004-add-sysroot-fix-from-bug-3049.patch         | 0
- .../binutils/{2.31 => 2.31.1}/0005-poison-system-directories.patch    | 0
- .../0006-Refactored-location-where-GOT-information-is-collect.patch   | 0
- .../0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch   | 0
- .../0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch   | 0
- .../0009-PLT-information-was-still-being-generated-when-symbo.patch   | 0
- package/binutils/Config.in.host                                       | 4 ++--
- package/binutils/binutils.hash                                        | 2 +-
- 11 files changed, 3 insertions(+), 3 deletions(-)
- rename package/binutils/{2.31 => 2.31.1}/0001-sh-conf.patch (100%)
- rename package/binutils/{2.31 => 2.31.1}/0002-ld-makefile.patch (100%)
- rename package/binutils/{2.31 => 2.31.1}/0003-check-ldrunpath-length.patch (100%)
- rename package/binutils/{2.31 => 2.31.1}/0004-add-sysroot-fix-from-bug-3049.patch (100%)
- rename package/binutils/{2.31 => 2.31.1}/0005-poison-system-directories.patch (100%)
- rename package/binutils/{2.31 => 2.31.1}/0006-Refactored-location-where-GOT-information-is-collect.patch (100%)
- rename package/binutils/{2.31 => 2.31.1}/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch (100%)
- rename package/binutils/{2.31 => 2.31.1}/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch (100%)
- rename package/binutils/{2.31 => 2.31.1}/0009-PLT-information-was-still-being-generated-when-symbo.patch (100%)
+Ops, thanks for fixing these points!
 
-diff --git a/package/binutils/2.31/0001-sh-conf.patch b/package/binutils/2.31.1/0001-sh-conf.patch
-similarity index 100%
-rename from package/binutils/2.31/0001-sh-conf.patch
-rename to package/binutils/2.31.1/0001-sh-conf.patch
-diff --git a/package/binutils/2.31/0002-ld-makefile.patch b/package/binutils/2.31.1/0002-ld-makefile.patch
-similarity index 100%
-rename from package/binutils/2.31/0002-ld-makefile.patch
-rename to package/binutils/2.31.1/0002-ld-makefile.patch
-diff --git a/package/binutils/2.31/0003-check-ldrunpath-length.patch b/package/binutils/2.31.1/0003-check-ldrunpath-length.patch
-similarity index 100%
-rename from package/binutils/2.31/0003-check-ldrunpath-length.patch
-rename to package/binutils/2.31.1/0003-check-ldrunpath-length.patch
-diff --git a/package/binutils/2.31/0004-add-sysroot-fix-from-bug-3049.patch b/package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
-similarity index 100%
-rename from package/binutils/2.31/0004-add-sysroot-fix-from-bug-3049.patch
-rename to package/binutils/2.31.1/0004-add-sysroot-fix-from-bug-3049.patch
-diff --git a/package/binutils/2.31/0005-poison-system-directories.patch b/package/binutils/2.31.1/0005-poison-system-directories.patch
-similarity index 100%
-rename from package/binutils/2.31/0005-poison-system-directories.patch
-rename to package/binutils/2.31.1/0005-poison-system-directories.patch
-diff --git a/package/binutils/2.31/0006-Refactored-location-where-GOT-information-is-collect.patch b/package/binutils/2.31.1/0006-Refactored-location-where-GOT-information-is-collect.patch
-similarity index 100%
-rename from package/binutils/2.31/0006-Refactored-location-where-GOT-information-is-collect.patch
-rename to package/binutils/2.31.1/0006-Refactored-location-where-GOT-information-is-collect.patch
-diff --git a/package/binutils/2.31/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch b/package/binutils/2.31.1/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch
-similarity index 100%
-rename from package/binutils/2.31/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch
-rename to package/binutils/2.31.1/0007-Improved-robustness.-Return-FALSE-in-case-of-NULL-po.patch
-diff --git a/package/binutils/2.31/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch b/package/binutils/2.31.1/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch
-similarity index 100%
-rename from package/binutils/2.31/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch
-rename to package/binutils/2.31.1/0008-Make-sure-global-symbol-is-not-an-indirect-or-warnin.patch
-diff --git a/package/binutils/2.31/0009-PLT-information-was-still-being-generated-when-symbo.patch b/package/binutils/2.31.1/0009-PLT-information-was-still-being-generated-when-symbo.patch
-similarity index 100%
-rename from package/binutils/2.31/0009-PLT-information-was-still-being-generated-when-symbo.patch
-rename to package/binutils/2.31.1/0009-PLT-information-was-still-being-generated-when-symbo.patch
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 9824563..21dc84e 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -20,7 +20,7 @@ config BR2_BINUTILS_VERSION_2_30_X
- 	bool "binutils 2.30"
- 
- config BR2_BINUTILS_VERSION_2_31_X
--	bool "binutils 2.31"
-+	bool "binutils 2.31.1"
- 
- config BR2_BINUTILS_VERSION_ARC
- 	bool "binutils arc (2.29)"
-@@ -33,7 +33,7 @@ config BR2_BINUTILS_VERSION
- 	default "2.28.1"	if BR2_BINUTILS_VERSION_2_28_X
- 	default "2.29.1"	if BR2_BINUTILS_VERSION_2_29_X
- 	default "2.30"		if BR2_BINUTILS_VERSION_2_30_X
--	default "2.31"		if BR2_BINUTILS_VERSION_2_31_X
-+	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
- 
- config BR2_BINUTILS_ENABLE_LTO
- 	bool
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 67f2a99..d97f55d 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -2,7 +2,7 @@
- sha512	dc5b6872ae01c07c12d38f3bb7ead06effc6da3265ac872e2d9c6104304f89f85f2645b029a43f308a7938a7299b1928d385205d0a2245674a621649032a138d  binutils-2.28.1.tar.xz
- sha512  d748d22306477d60d921078804d21943248c23fca0707aac9b016a352c01c75ca69e82624ae37fb0bbd03af3b17088a94f60dfe1a86a7ff82e18ece3c24f0fd0  binutils-2.29.1.tar.xz
- sha512  e747ea20d8d79fcd21b9d9f6695059caa7189d60f19256da398e34b789fea9a133c32b192e9693b5828d27683739b0198431bf8b3e39fb3b04884cf89d9aa839  binutils-2.30.tar.xz
--sha512  3448a71c42d790569c1159c1042aa520b2d8ac8af7506fb1f2a4199dfb13b39f1c2271a5cb3a643d10c7d8a388a73f190e90503d4793a016da7893473aa1c635  binutils-2.31.tar.xz
-+sha512  0fca326feb1d5f5fe505a827b20237fe3ec9c13eaf7ec7e35847fd71184f605ba1cefe1314b1b8f8a29c0aa9d88162849ee1c1a3e70c2f7407d88339b17edb30  binutils-2.31.1.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  bea88164ed48733bad63393fe702e12e651efd113aa4f3fe2e253e05c4c1e5da20b5a99333f0b5528df6d32ce806f799211c568e1916845a87999901dde28817  binutils-arc-2018.03.tar.gz
--- 
-2.7.4
+> However, I find the naming a bit strange. If I understand correctly
+> freescale_imx7dsabresd_defconfig and imx7d-sdb_defconfig are for the
+> same board, the former using the vendor kernel, the latter using the
+> mainline kernel. If that's the case, why isn't the defconfig having the
+> same name, except for the freescale_ prefix ?
+
+For boards that use mainline kernel and U-Boot I try to name its
+Buildroot defconfig using the same convention used in its device tree:
+<soc>-<board>, so that is why I used imx7d-sdb_defconfig.
+
+> Also, the board folder is named "imx7dsdb", which isn't very consistent.
+
+Yes, I can change it to "imx7d-sdb" for better consistency.
+
+Thanks
