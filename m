@@ -1,156 +1,92 @@
-From: Daniel Nicoletti <dantti12@gmail.com>
-Date: Wed, 18 Jul 2018 10:24:53 -0300
-Subject: [Buildroot] [PATCH] cutelyst: new package
-In-Reply-To: <20180718125949.04f926f8@windsurf>
-References: <20180717204613.22028-1-dantti12@gmail.com>
- <20180718125949.04f926f8@windsurf>
-Message-ID: <CACo8zOfCUVXp2AGbcrFDeCvaeQGNv9_4rdsr6imRo+YYJN6iyw@mail.gmail.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Wed, 18 Jul 2018 06:28:46 -0700
+Subject: [Buildroot] [PATCH 1/1] mariadb: bump version to 10.2.16
+Message-ID: <20180718132846.3176-1-bluemrp9@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Em qua, 18 de jul de 2018 ?s 07:59, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> escreveu:
->
-> Hello Daniel,
->
-> On Tue, 17 Jul 2018 17:46:13 -0300, Daniel Nicoletti wrote:
-> > A C++ Web Framework built on top of Qt, using
-> > the simple approach of Catalyst (Perl) framework.
-> >
-> > Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
->
-> Thanks for this new iteration. I applied it after doing some changes,
-> which I'll describe below.
->
-> However, first of all, when you send a new iteration of a patch, it is
-> recommended to adjust the patch subject prefix to be [PATCH v2], and to
-> include a changelog...
->
-> > ---
->
-> ... here, i.e below the "---" sign.
->
-> This way, it is clear that it is a new iteration, and we know what has
-> changed since the previous iteration.
-Ok, I'm not very used to send patches with format-patch/send-email
+Release notes: https://mariadb.com/kb/en/mariadb-10216-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-10216-changelog/
 
->
-> See http://patchwork.ozlabs.org/patch/944700/ for an example of that.
->
-> To generate a patch with such a prefix, you can use:
->
->         git format-patch -v2
->
-> or:
->
->         git format-patch --subject-prefix="PATCH v2"
->
-> >  package/Config.in              |  1 +
-> >  package/cutelyst/Config.in     |  9 +++++++++
-> >  package/cutelyst/cutelyst.hash |  3 +++
-> >  package/cutelyst/cutelyst.mk   | 36 ++++++++++++++++++++++++++++++++++
-> >  4 files changed, 49 insertions(+)
->
-> You forgot to add an entry to the DEVELOPERS file, so I've added that.
-Hmm speaking of that, do I need to be subscribed to this buildroot list?
-It's quite high traffic, so if I can subscribe/update package/unsubscribe
-it would work better for me.
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+---
+ package/mariadb/mariadb.hash |  6 +++---
+ package/mariadb/mariadb.mk   | 10 +++++-----
+ package/mysql/Config.in      |  1 +
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
->
-> > diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
-> > new file mode 100644
-> > index 0000000000..6b78e48cea
-> > --- /dev/null
-> > +++ b/package/cutelyst/Config.in
-> > @@ -0,0 +1,9 @@
-> > +config BR2_PACKAGE_CUTELYST
-> > +     bool "cutelyst"
-> > +     depends on BR2_PACKAGE_QT5
-> > +     select BR2_PACKAGE_QT5BASE_GUI
-> > +     help
-> > +       A C++ Web Framework built on top of Qt, using
-> > +       the simple approach of Catalyst (Perl) framework.
-> > +
-> > +       https://cutelyst.org
->
-> With this set of dependencies, cutelyst didn't build for me, with a
-> minimal configuration. It failed to build with:
->
-> /home/thomas/projets/buildroot/output/build/cutelyst-2.5.1/wsgi/tcpsslserver.h:44:36: error: ?QSslConfiguration? does not name a type
->      void setSslConfiguration(const QSslConfiguration &conf);
->
-> This is because it needs SSL support in Qt. So I've added a "select
-> BR2_PACKAGE_OPENSSL" to make sure SSL support is present in Qt.
-hmm strange, I added a bunch of ifdefs to cutelyst for it to build without
-SSL support but I guess I missed some, will try again. I guess in the
-spirit of buildroot images trying to be minimal it could be a good thing.
-
->
-> > index 0000000000..6653675352
-> > --- /dev/null
-> > +++ b/package/cutelyst/cutelyst.mk
-> > @@ -0,0 +1,36 @@
-> > +################################################################################
-> > +#
-> > +# cutelyst
-> > +#
-> > +################################################################################
-> > +
-> > +CUTELYST_VERSION = 2.5.1
-> > +CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
-> > +CUTELYST_INSTALL_STAGING = YES
-> > +CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
-> > +CUTELYST_LICENSE = LGPL-2.1+
-> > +CUTELYST_LICENSE_FILES = COPYING
-> > +CUTELYST_DEPENDENCIES = qt5base
-> > +
-> > +CUTELYST_CONF_OPTS += \
-> > +     -DPLUGIN_CSRFPROTECTION=ON
-> > +
-> > +$(eval $(cmake-package))
->
-> This line should always go at the end of the .mk file, i.e...
->
-> > +
-> > +ifeq ($(BR2_PACKAGE_GRANTLEE),y)
-> > +CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=ON
-> > +else
-> > +CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=OFF
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
-> > +CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=ON
-> > +else
-> > +CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=OFF
-> > +endif
-> > +
-> > +ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-> > +CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=ON
-> > +else
-> > +CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=OFF
-> > +endif
->
-> ... here.
->
-> I've fixed those three issues, and applied your patch. Once again,
-> thanks for your contribution!
-You welcome, loving this project :)
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-
-
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 7eea62ab7b..97fc1d8262 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,6 +1,6 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.33/
+-sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.2.16/
++sha256 c182ee93bacee9c1395a4cece56acfc433bc5153ec627c4898927b93eee54dc4  mariadb-10.2.16.tar.gz
+ 
+ # Hash for license files
+-sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
++sha256 dec3c92fdc58070facec08db681aa6b9cb05fd21e463358161c1df92e1c0653f  README.md
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index ce846d9cda..c60ba3b4d8 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.33
++MARIADB_VERSION = 10.2.16
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
+ # https://jira.mariadb.org/browse/MDEV-12297
+-MARIADB_LICENSE_FILES = README COPYING
++MARIADB_LICENSE_FILES = README.md COPYING
+ MARIADB_INSTALL_STAGING = YES
+ MARIADB_PROVIDES = mysql
+ 
+@@ -67,7 +67,7 @@ MARIADB_CONF_OPTS += \
+ 	-DMYSQL_DATADIR=/var/lib/mysql \
+ 	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
+ 
+-HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled
++HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
+ 
+ # Some helpers must be compiled for host in order to crosscompile mariadb for
+ # the target. They are then included by import_executables.cmake which is
+@@ -104,13 +104,13 @@ define MARIADB_INSTALL_INIT_SYSTEMD
+ endef
+ endif
+ 
++# We don't need mysql_config on the target as it's only useful in staging
++# We also don't need the test suite on the target
+ define MARIADB_POST_INSTALL
+ 	mkdir -p $(TARGET_DIR)/var/lib/mysql
+ 	$(INSTALL) -D -m 644 $(TARGET_DIR)/usr/share/mysql/my-small.cnf \
+ 		$(TARGET_DIR)/etc/mysql/my.cnf
+-	# We don't need this on the target as it's only useful in staging
+ 	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
+-	# Remove test suite
+ 	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
+ endef
+ 
+diff --git a/package/mysql/Config.in b/package/mysql/Config.in
+index 278dc73e57..140c2314d4 100644
+--- a/package/mysql/Config.in
++++ b/package/mysql/Config.in
+@@ -17,6 +17,7 @@ choice
+ config BR2_PACKAGE_MARIADB
+ 	bool "mariadb"
+ 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
++	depends on !BR2_STATIC_LIBS #dlopen
+ 	select BR2_PACKAGE_LIBAIO
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_NCURSES
 -- 
-Daniel Nicoletti
-
-KDE Developer - http://dantti.wordpress.com
+2.18.0
