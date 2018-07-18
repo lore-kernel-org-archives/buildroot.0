@@ -1,40 +1,39 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 18 Jul 2018 12:04:20 +0200
-Subject: [Buildroot] [PATCH] configs/imx7ulp-evk: Add new config
-In-Reply-To: <20180717172427.16814-1-marcelo.macedo@nxp.com>
-References: <20180717172427.16814-1-marcelo.macedo@nxp.com>
-Message-ID: <20180718120420.3a95fe87@windsurf>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Wed, 18 Jul 2018 12:30:20 +0200
+Subject: [Buildroot] [PATCH] shairport-sync: bump to version 3.2.1
+Message-ID: <20180718103020.3625-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/shairport-sync/shairport-sync.hash | 2 +-
+ package/shairport-sync/shairport-sync.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for this contribution!
-
-On Tue, 17 Jul 2018 14:24:27 -0300, Marcelo Macedo wrote:
-
-> +Step 1 - Download the Cortex-M4 pre-compiled binary:
-> +
-> +	wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx7ulp-m4-demo-2.4.0.bin
-> +
-> +Step 2: Extract the example files:
-> +
-> +	$ chmod a+x imx7ulp-m4-demo-2.4.0.bin
-> +	$  ./imx7ulp-m4-demo-2.4.0.bin
-> +
-> +Step 3: Copy the imx7ulp_m4_demo.img binary to the FAT partion of MicroSD card.
-
-Shouldn't we instead create a Buildroot package that would
-download/extract/install this firmware image, and put it in the FAT
-partition ?
-
-Thanks!
-
-Thomas
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index e0eea4c42f..076f0a2132 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  90555f1a5e05bd777741147d5c0104543d0f26d4f95b9bfd44143c818a6f50f1  shairport-sync-3.1.6.tar.gz
++sha256  1fe16856ec828704b086c571038a3b2eb907a3cf0a3847ed1b721b517554659d  shairport-sync-3.2.1.tar.gz
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index 53ebcc581e..f1857b0dae 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHAIRPORT_SYNC_VERSION = 3.1.6
++SHAIRPORT_SYNC_VERSION = 3.2.1
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
