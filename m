@@ -1,69 +1,51 @@
-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Thu, 19 Jul 2018 13:02:01 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/Makefile.in: Do not use CPPFLAGS
- for hardening options
-In-Reply-To: <1531998123-28360-1-git-send-email-stefan.sorensen@spectralink.com>
-References: <1531998123-28360-1-git-send-email-stefan.sorensen@spectralink.com>
-Message-ID: <1531998123-28360-2-git-send-email-stefan.sorensen@spectralink.com>
+From: anisse at astier.eu <anisse@astier.eu>
+Date: Thu, 19 Jul 2018 13:50:33 +0200
+Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
+ in shebang
+In-Reply-To: <20180719100456.2146ce8b@windsurf>
+References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
+ <20180718171843.5ed5f10c@windsurf>
+ <20180719075842.k3gxopajcat7f4dt@bifrost>
+ <20180719100456.2146ce8b@windsurf>
+Message-ID: <20180719115033.vchfjfwmewah2wjd@bifrost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The hardening options are compiler flags, not pure pre-processor flags, so
-put them in CFLAGS, not CPPFLAGS.
+On Thu, Jul 19, 2018 at 10:04:56AM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> +Peter in Cc.
+> 
+> On Thu, 19 Jul 2018 09:58:42 +0200, Anisse Astier wrote:
+> 
+> > We just hit this issue with the buildroot-2018.02 branch. Is this is the
+> > scope of LTS-backportable patches ?
+> > 
+> > Otherwise it's very easy to take the patch in an external, but I'm
+> > guessing it might break other builds somewhere.
+> 
+> I think it definitely makes sense to have it in 2018.02.x, so I guess
+> Peter will backport it there.
+> 
+> However, it would be nice if someone could try to push this
+> upstream. The OE patch says it's not appropriate for upstream, but I
+> disagree, the fact that the shebang can be too long is a real problem,
+> and if both OE and Buildroot have to fix it, upstream should
+> (hopefully) be interested in finding a solution.
+> 
 
-This fixes build errors where -D_FORTIFY_SOURCE=2 whas put in CPPFLAGS and
-then applied to configure tests which could fail since the required -O2 is
-only in CFLAGS.
+I opened an issue upstream:
+https://gitlab.gnome.org/GNOME/glib/issues/1455
 
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
----
- package/Makefile.in | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+Upstream is already working on a solution, but it might only be fixed in
+the meson build:
+https://gitlab.gnome.org/GNOME/glib/merge_requests/187
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index f296276..5e0ff8c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -147,29 +147,29 @@ TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
- TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- 
- ifeq ($(BR2_SSP_REGULAR),y)
--TARGET_CPPFLAGS += -fstack-protector
-+TARGET_HARDENED += -fstack-protector
- else ifeq ($(BR2_SSP_STRONG),y)
--TARGET_CPPFLAGS += -fstack-protector-strong
-+TARGET_HARDENED += -fstack-protector-strong
- else ifeq ($(BR2_SSP_ALL),y)
--TARGET_CPPFLAGS += -fstack-protector-all
-+TARGET_HARDENED += -fstack-protector-all
- endif
- 
- ifeq ($(BR2_RELRO_PARTIAL),y)
--TARGET_CPPFLAGS += $(TARGET_CFLAGS_RELRO)
-+TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
- TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
- else ifeq ($(BR2_RELRO_FULL),y)
--TARGET_CPPFLAGS += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
-+TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
- TARGET_LDFLAGS += -pie
- endif
- 
- ifeq ($(BR2_FORTIFY_SOURCE_1),y)
--TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=1
-+TARGET_HARDENED += -D_FORTIFY_SOURCE=1
- else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
--TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=2
-+TARGET_HARDENED += -D_FORTIFY_SOURCE=2
- endif
- 
- TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
--TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
-+TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)
- TARGET_CXXFLAGS = $(TARGET_CFLAGS)
- TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
- 
--- 
-1.8.3.1
+Which will require moving the package from autotools to meson.
+
+Regards,
+
+Anisse
