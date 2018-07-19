@@ -1,47 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 20:03:35 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x]
- configs/raspberrypi3_defconfig: increase filesystem size
-Message-ID: <20180719180757.DA8A288FAE@busybox.osuosl.org>
+From: Mahin Hannan <Mahin.hannan@outlook.com>
+Date: Thu, 19 Jul 2018 18:12:50 +0000
+Subject: [Buildroot] SSH and Root password
+Message-ID: <HE1P18901MB00900DF3E3D543020508F21E97520@HE1P18901MB0090.EURP189.PROD.OUTLOOK.COM>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9de12e4432ee63ffcdd7dac825b3bfd46b39bb0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+Hi,
 
-Increase the filesystem size for raspberrypi3 by setting
-BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
-raspberrypi3_64 has the same size. The size is so large because the
-kernel config enables many many modules.
+I am using ver. 2018.05-rc3 for an Orange Pi Zero board.
 
-Fixes:
-Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "services"
-mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
+I used the configurations that came with buildroot and added; OpenSSH and root password was added. I also tried using dropbear instead of the former.
 
-This error is not reproducible, it seems to depend on e.g. directory
-ordering.
+The issue is, I can't log into the board via SSH because my password is incorrect.
 
-Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e26a71d1a96aefcc6a63051207b26ea4282afb10)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/raspberrypi3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+I've read the other mailing list queries and followed the given solutions, but it doesn't work.
 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 45a76beb6a..b55233a207 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -28,6 +28,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
- # Filesystem / image
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+How do I set up a root password for the board?
+
+Thanks
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180719/70fe43f8/attachment.html>
