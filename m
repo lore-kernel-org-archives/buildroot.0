@@ -1,40 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 11:53:32 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libv4l: add optional
- sdl2_image dependency
-Message-ID: <20180719095055.471CA88E25@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 11:56:23 +0200
+Subject: [Buildroot] [PATCH] qt5base: remove unused definition
+In-Reply-To: <20180630125713.4302-1-gael.portay@savoirfairelinux.com>
+ (=?utf-8?Q?=22Ga=C3=ABl?=
+ PORTAY"'s message of "Sat, 30 Jun 2018 08:57:13 -0400")
+References: <20180630125713.4302-1-gael.portay@savoirfairelinux.com>
+Message-ID: <877elrft14.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d190b3a3645caab679471afffc2d8774422d2498
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Ga?l" == Ga?l PORTAY <gael.portay@savoirfairelinux.com> writes:
 
-The configure.ac script simply uses PKG_CHECK_MODULES(), so there is
-not --enable/--disable option.
+ > Since commit 81fb33af2a (qt5base: correct eglfs support in
+ > qmake.conf.in) the definition QT5BASE_CONFIGURE_QMAKE_CONFIG is left
+ > unused.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b1ef2944a356c648ee04309de1b21bdfe5f46b4e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libv4l/libv4l.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Remove it since it is not used anymore.
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 11061306c7..95a700b2d5 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -73,6 +73,10 @@ else
- LIBV4L_CONF_OPTS += --disable-v4l-utils
- endif
- 
-+ifeq ($(BR2_PACKAGE_SDL2_IMAGE),y)
-+LIBV4L_DEPENDENCIES += sdl2_image
-+endif
-+
- LIBV4L_CONF_ENV += LIBS="$(LIBV4L_LIBS)"
- 
- $(eval $(autotools-package))
+ > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+
+Committed to 2018.02.x and 2018.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
