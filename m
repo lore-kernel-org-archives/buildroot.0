@@ -1,31 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:34:38 +0200
-Subject: [Buildroot] [PATCH] minnowboard_max: add CONFIG_IGB kconfig
-In-Reply-To: <20180714191514.3470-1-pierre-louis.bossart@linux.intel.com>
- (Pierre-Louis Bossart's message of "Sat, 14 Jul 2018 14:15:14 -0500")
-References: <20180714191514.3470-1-pierre-louis.bossart@linux.intel.com>
-Message-ID: <87k1pqc3kh.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 23:35:03 +0200
+Subject: [Buildroot] [PATCH v2 1/1] pkg-generic: fix no-check-hash for
+ inferred site method
+In-Reply-To: <20180629014246.13574-1-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Thu, 28 Jun 2018 22:42:46 -0300")
+References: <20180625014101.13177-1-ricardo.martincoski@gmail.com>
+ <20180629014246.13574-1-ricardo.martincoski@gmail.com>
+Message-ID: <87fu0ec3js.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Louis" == Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com> writes:
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
- > The 2017 MinnowBoard Turbot skews no longer use the Realtek 8169
- > Ethernet chip.  The Turbot D0 uses The Intel I211, the Turbot Dual
- > Ethernet has an I210 (quad-core) or I211 (dual-core).
+ > Currently, when the site method is explicitly set to a SCM other than
+ > git, the main download is correctly excluded from being hash-checked.
+ > But when the site method is inferred from the site uri, the download
+ > from a SCM other than git is wrongly being hash-checked.
 
- > Add CONFIG_IGB to the Linux config but keep the Realtek 8169 support
- > to avoid breaking older boards
+ > Fix this by moving the code that excludes SCM methods from hash-check
+ > below the code that infers the site method.
 
- > Tested on Turbot D0, lspci -k shows the igb driver is used:
- > 03:00.0 Class 0200: 8086:1539 igb
+ > Currently there is no package in the tree that uses inferred site
+ > method, and that is why the autobuilder didn't caught this. We had
+ > packages using inferred site method in the past, the last one was
+ > 'expect', but since they didn't have a hash file (for a license or
+ > extra-download for example) the build didn't error out.
 
- > Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Cc: Luca Ceresoli <luca@lucaceresoli.net>
+ > Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+ > ---
+ > Changes v1 -> v2:
+ >   - improve commit message (Luca Ceresoli);
+ >   - collect Reviewed-by & Tested-by tags.
+ > ---
+ >  package/pkg-generic.mk | 8 ++++----
+ >  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Committed to 2018.02.x and 2018.05.x, thanks.
+Committed to 2018.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
