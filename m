@@ -1,23 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:41:20 +0200
-Subject: [Buildroot] [PATCH 2/2] bind: fix build with zlib
-In-Reply-To: <86b9b3c29162e451879854fe975eb7c4ba96945b.1531939984.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 18 Jul 2018 21:53:04 +0300")
-References: <f6a81f45eeaea33eaa9015355bd7c63779f7b881.1531939984.git.baruch@tkos.co.il>
- <86b9b3c29162e451879854fe975eb7c4ba96945b.1531939984.git.baruch@tkos.co.il>
-Message-ID: <87pnziaoov.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 23:44:13 +0200
+Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds
+ "regulatory.db[.p7s]" to /lib/firmware
+In-Reply-To: <20180716151303.18064-1-me@noctarius.com> (Christoph Engelbert's
+ message of "Mon, 16 Jul 2018 18:13:03 +0300")
+References: <20180716151303.18064-1-me@noctarius.com>
+Message-ID: <87lga6aok2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Christoph" == Christoph Engelbert <me@noctarius.com> writes:
 
- > The bind configure.in now checks for "${with_zlib}/include/zlib.h".
- > Remove the redundant "include/".
+ > With kernel version 4.15, Linux started to support loading regulatory.db and regulatory.db.p7s files
+ > directly from /lib/firmware, without the need of crda. If the kernel can't load those files it'll
+ > fallback to using crda, but the direct way is preferred.
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > This patch copies those those files under /lib/firmware. The use of crda shouldn't be necessary with
+ > kernels of 4.15 or later.
+
+ > Signed-off-by: Christoph Engelbert <me@noctarius.com>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
