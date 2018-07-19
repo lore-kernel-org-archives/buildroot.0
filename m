@@ -1,137 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 20:06:26 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] clamav: add patch to fix
- build failure caused by lack of libcurl
-Message-ID: <20180719180713.C14E888F81@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 20:06:39 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/clamav: security
+ bump to 0.100.1
+Message-ID: <20180719180713.C8D9488F81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1785b39aea09155c77ac21bfd1d06b3db3330b97
+commit: https://git.buildroot.net/buildroot/commit/?id=754dfb2974b6279371de89b6b23ff2fdba7994d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-When json-c is enabled but libcurl is disabled, clamav tries to build
-the clamsubmit program, which fails with:
+Fixes CVE-2017-16932, CVE-2018-0360 & CVE-2018-0361:
+http://lists.clamav.net/pipermail/clamav-announce/2018/000032.html
 
-  CC       clamsubmit.o
-clamsubmit.c:6:23: fatal error: curl/curl.h: No such file or directory
- #include <curl/curl.h>
-
-This is due to an incorrect curl-config detection logic, leading to
-/bin/curl-config being present making the configure script believe
-that curl is available, even when --without-libcurl is explicitly
-passed.
-
-This commit adds a patch, submitted upstream, which fixes this
-problem.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/c43d2ebd8ab30016969d642dbd71c297dc5f6bab/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 037572ee56ce7b18110eb45ddf507623cba726aa)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b80886388d7715478a41d0013fab558417af1946)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...zation-libs-curl.m4-fix-curl-config-detec.patch | 75 ++++++++++++++++++++++
- package/clamav/clamav.mk                           |  2 +
- 2 files changed, 77 insertions(+)
+ package/clamav/clamav.hash | 2 +-
+ package/clamav/clamav.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch b/package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
-new file mode 100644
-index 0000000000..1d26b099b9
---- /dev/null
-+++ b/package/clamav/0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
-@@ -0,0 +1,75 @@
-+From 6b6ff53b5931c162be13504a1efc53fc5212f9d1 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Mon, 7 May 2018 22:57:34 +0200
-+Subject: [PATCH] m4/reorganization/libs/curl.m4: fix curl-config detection
-+ logic
-+
-+The current logic in curl.m4 doesn't behave properly when
-+--without-libcurl is passed to the ./configure script.
-+
-+Indeed, in this case what happens is that:
-+
-+ (1) Since --without-libcurl is passed, LIBCURL_HOME is set to nothing
-+
-+ (2) find_curl is set to "no"
-+
-+ (3) Due to find_curl being "no", LIBCURL_HOME is not set to
-+     /usr/local and remains empty
-+
-+ (4) We test if $LIBCURL_HOME/bin/curl_config exists, which is
-+     equivalent to testing if /bin/curl-config exists. So curl.m4 is
-+     looking at /bin/curl-config, which is irrelevant in a
-+     cross-compilation context: it is not because the build machine
-+     has libcurl installed that it is available for the target.
-+
-+     Due to this mistake, it sets have_curl="yes"
-+
-+Due to this, the ./configure script assumes it can build the
-+clamsubmit program, which fails at build time because curl/curl.h
-+doesn't exist.
-+
-+To fix this, this commit rewrites the curl-config detection logic with
-+a simpler loop. If find_curl=yes, it means we have to find libcurl
-+ourselves, so we iterate over /usr/local and /usr, and check if a
-+bin/curl-config binary is available there. If so, we use this path as
-+LIBCURL_HOME and set have_curl="yes".
-+
-+This preserves the existing behavior, while fixing the situation where
-+--without-libcurl is passed, but /bin/curl-config exists.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream-status: https://github.com/Cisco-Talos/clamav-devel/pull/87
-+---
-+ m4/reorganization/libs/curl.m4 | 15 +++++----------
-+ 1 file changed, 5 insertions(+), 10 deletions(-)
-+
-+diff --git a/m4/reorganization/libs/curl.m4 b/m4/reorganization/libs/curl.m4
-+index 2a5966ee7..b6a9c2137 100644
-+--- a/m4/reorganization/libs/curl.m4
-++++ b/m4/reorganization/libs/curl.m4
-+@@ -19,17 +19,12 @@ fi
-+ [find_curl="yes"])
-+ 
-+ if test "X$find_curl" = "Xyes"; then
-+-    LIBCURL_HOME=/usr/local
-+-fi
-+-if test -f "$LIBCURL_HOME/bin/curl-config"; then
-+-    have_curl="yes"
-+-else
-+-    if test "X$find_curl" = "Xyes"; then
-+-        LIBCURL_HOME=/usr
-+-        if test -f "$LIBCURL_HOME/bin/curl-config"; then
-+-            have_curl="yes"
-++    for p in /usr/local /usr ; do
-++        if test -f "${p}/bin/curl-config"; then
-++           LIBCURL_HOME=$p
-++           have_curl="yes"
-+         fi
-+-    fi
-++    done
-+ fi
-+ 
-+ if test "X$have_curl" = "Xyes"; then
-+-- 
-+2.14.3
-+
+diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
+index 4cf7e7a542..0cb8f51d87 100644
+--- a/package/clamav/clamav.hash
++++ b/package/clamav/clamav.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 c5c5edaf75a3c53ac0f271148fd6447310bce53f448ec7e6205124a25918f65c  clamav-0.100.0.tar.gz
++sha256 84e026655152247de7237184ee13003701c40be030dd68e0316111049f58a59f  clamav-0.100.1.tar.gz
+ sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
+ sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
+ sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
 diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 2711ca2a86..c0138a8944 100644
+index c0138a8944..9db90bddea 100644
 --- a/package/clamav/clamav.mk
 +++ b/package/clamav/clamav.mk
-@@ -16,6 +16,8 @@ CLAMAV_DEPENDENCIES = \
- 	openssl \
- 	zlib \
- 	$(TARGET_NLS_DEPENDENCIES)
-+# 0003-m4-reorganization-libs-curl.m4-fix-curl-config-detec.patch
-+CLAMAV_AUTORECONF = YES
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # mmap cannot be detected when cross-compiling, needed for mempool support
- CLAMAV_CONF_ENV = \
+-CLAMAV_VERSION = 0.100.0
++CLAMAV_VERSION = 0.100.1
+ CLAMAV_SITE = https://www.clamav.net/downloads/production
+ CLAMAV_LICENSE = GPL-2.0
+ CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
