@@ -1,34 +1,45 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 19 Jul 2018 07:58:07 -0500
-Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
- for PIE build flags
-In-Reply-To: <2d96f4d291e7fc0eb2e17f497a840364ec6ec488.camel@spectralink.com>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
- <cc562d31-b770-c7e1-0a6d-e3f004c917db@mind.be>
- <CANQCQpaJd3-tj47Xp4XyFGvu9w5GcKZZyr+Pi98A0i1XRxa1Ww@mail.gmail.com>
- <2d96f4d291e7fc0eb2e17f497a840364ec6ec488.camel@spectralink.com>
-Message-ID: <CANQCQpYd6XjQyVeKZ_O+L1TPL0dcE6TaAmbc51+d8+=0Z9PeFQ@mail.gmail.com>
+From: anisse at astier.eu <anisse@astier.eu>
+Date: Thu, 19 Jul 2018 14:58:28 +0200
+Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
+ in shebang
+In-Reply-To: <20180719141557.6f52723a@windsurf>
+References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
+ <20180718171843.5ed5f10c@windsurf>
+ <20180719075842.k3gxopajcat7f4dt@bifrost>
+ <20180719100456.2146ce8b@windsurf>
+ <20180719115033.vchfjfwmewah2wjd@bifrost>
+ <20180719141557.6f52723a@windsurf>
+Message-ID: <20180719125828.xjctfak3qpsawq5z@bifrost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan,
+On Thu, Jul 19, 2018 at 02:15:57PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 19 Jul 2018 13:50:33 +0200, anisse at astier.eu wrote:
+> 
+> > I opened an issue upstream:
+> > https://gitlab.gnome.org/GNOME/glib/issues/1455
+> 
+> In this, they say that using "python" is not correct, because python3
+> is needed to run libglib python code. Is this correct ? If that is
+> correct, then our patch in package/libglib2/ is not good, as it uses
+> just python, which might be python2.
+> 
+> And also, it's not correct because our libglib package does not depend
+> on having python3 available on the host.
+> 
 
-On Thu, Jul 19, 2018 at 4:49 AM, S?rensen, Stefan
-<Stefan.Sorensen@spectralink.com> wrote:
->
-> On Wed, 2018-07-11 at 18:17 -0500, Matthew Weber wrote:
-> > Related to using a single spec file.  I'm not to familiar with using
-> > them but since we have a mix of good/bad flag options already
-> > occurring, guessing it wouldn't matter to consolidate to one file.  I
-> > can test going to a single file. Stefan, do you know?
->
-> It works fine with a single spec file - I used two different files
-> since I was keeping CFLAGS and LDFLAGS separate.
->
+My understanding is that the scripts work with python2 too but that
+upstream is moving to python3 by default, because meson already requires
+host python3, which narrows the number of build-time dependencies.
 
-Something in the syntax then would have to change, right?  I combined
-the files and was getting CC errors.
+So I don't think there's anything to change here, since host python2 is
+already a mandatory buidroot dependency.
+
+Regards,
+
+Anisse
