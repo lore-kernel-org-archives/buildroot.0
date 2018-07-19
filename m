@@ -1,12 +1,23 @@
-From: =?gb2312?B?s8LQobjV?= <shawn_chen@realsil.com.cn>
-Date: Thu, 19 Jul 2018 09:49:59 +0000
-Subject: [Buildroot] reply: patch: fix wrong sysroot path when given rsdk
- toolchain
-Message-ID: <14A4BC6FC7AB3340A49D24D6ACB7BED930621D@RS-MBS02.realsil.com.cn>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Jul 2018 11:50:17 +0200
+Subject: [Buildroot] [PATCH] qt5base: fix typo in qmake.conf.in
+In-Reply-To: <20180630062927.29725-1-gael.portay@savoirfairelinux.com>
+ (=?utf-8?Q?=22Ga=C3=ABl?=
+ PORTAY"'s message of "Sat, 30 Jun 2018 02:29:27 -0400")
+References: <20180630062927.29725-1-gael.portay@savoirfairelinux.com>
+Message-ID: <87r2jzftba.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pasted the patch:
+>>>>> "Ga?l" == Ga?l PORTAY <gael.portay@savoirfairelinux.com> writes:
+
+ > A blank space is missing.
+ > Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+
+Committed to 2018.02.x and 2018.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
