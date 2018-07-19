@@ -1,29 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:34:22 +0200
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.61.0
-In-Reply-To: <afd8c54be27becb281c564d1c041c7bc1b1b5a87.1531419357.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 12 Jul 2018 21:15:57 +0300")
-References: <afd8c54be27becb281c564d1c041c7bc1b1b5a87.1531419357.git.baruch@tkos.co.il>
-Message-ID: <87o9f2c3kx.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 23:34:38 +0200
+Subject: [Buildroot] [PATCH] minnowboard_max: add CONFIG_IGB kconfig
+In-Reply-To: <20180714191514.3470-1-pierre-louis.bossart@linux.intel.com>
+ (Pierre-Louis Bossart's message of "Sat, 14 Jul 2018 14:15:14 -0500")
+References: <20180714191514.3470-1-pierre-louis.bossart@linux.intel.com>
+Message-ID: <87k1pqc3kh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Pierre-Louis" == Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com> writes:
 
- > Fixes CVE-2018-0500: curl might overflow a heap based memory buffer when
- > sending data over SMTP and using a reduced read buffer.
+ > The 2017 MinnowBoard Turbot skews no longer use the Realtek 8169
+ > Ethernet chip.  The Turbot D0 uses The Intel I211, the Turbot Dual
+ > Ethernet has an I210 (quad-core) or I211 (dual-core).
 
- > Drop upstream patch.
+ > Add CONFIG_IGB to the Linux config but keep the Realtek 8169 support
+ > to avoid breaking older boards
 
- > Add reference to tarball signature key.
+ > Tested on Turbot D0, lspci -k shows the igb driver is used:
+ > 03:00.0 Class 0200: 8086:1539 igb
 
- > Drop CRYPTO_lock seed. Removed from configure script since 7.45.
-
- > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
