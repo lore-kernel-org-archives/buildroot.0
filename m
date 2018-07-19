@@ -1,108 +1,94 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 19 Jul 2018 22:43:53 +0200
-Subject: [Buildroot] [RFC v3 2/4] meson: change from global to per package
- cross-compilation.conf
-In-Reply-To: <20180719204355.10465-1-ps.report@gmx.net>
-References: <20180719204355.10465-1-ps.report@gmx.net>
-Message-ID: <20180719204355.10465-2-ps.report@gmx.net>
+Date: Thu, 19 Jul 2018 22:43:52 +0200
+Subject: [Buildroot] [RFC v3 1/4] meson: bump version to 0.47.1
+Message-ID: <20180719204355.10465-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add FOO_MESON_CFLAGS, FOO_MESON_LDFLAGS and FOO_MESON_CXXFLAGS
-variables to allow per package additional flags.
-
-Change to buildtype plain as all compiler/linker flags forcing
-debug/release are already given via the cross-compilation.conf
-file.
+- delete legacy patch 0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+  (no complains from support/scripts/check-host-rpath even without the patch)
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
-Notes:
-  - documentation change for new flags missing
-  - use in pkg-meson.mk the same sed/printf for flags quotation mark
-    and comma adding
-
 Changes v1 -> v2:
-  - no changes
+  - new patch
 
 Changes v2 -> v3:
-  - no changes
+  - check source tar file signature (thanks for the help of
+    Baruch Siach and Eric Le Bihan)
+  - add comment about patch removable
 ---
- package/meson/cross-compilation.conf.in | 8 ++++----
- package/meson/meson.mk                  | 6 +++---
- package/pkg-meson.mk                    | 9 +++++++--
- 3 files changed, 14 insertions(+), 9 deletions(-)
+ ...-RPATH-if-install_rpath-is-not-empty.patch | 32 -------------------
+ package/meson/meson.hash                      |  6 ++--
+ package/meson/meson.mk                        |  2 +-
+ 3 files changed, 4 insertions(+), 36 deletions(-)
+ delete mode 100644 package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index 0eec74087b..6af03314eb 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -11,10 +11,10 @@ strip = '@TARGET_CROSS at strip'
- pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
- 
- [properties]
--c_args = [@TARGET_CFLAGS@]
--c_link_args = [@TARGET_LDFLAGS@]
--cpp_args = [@TARGET_CXXFLAGS@]
--cpp_link_args = [@TARGET_LDFLAGS@]
-+c_args = [@TARGET_CFLAGS@ @PKG_TARGET_CFLAGS@]
-+c_link_args = [@TARGET_LDFLAGS@ @PKG_TARGET_LDFLAGS@]
-+cpp_args = [@TARGET_CXXFLAGS@ @PKG_TARGET_CXXFLAGS@]
-+cpp_link_args = [@TARGET_LDFLAGS@ @PKG_TARGET_LDFLAGS@]
- 
- [host_machine]
- system = 'linux'
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+deleted file mode 100644
+index 03c1944258..0000000000
+--- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 53e4920038d5562b7b672fec8b9469fc02eef4ad Mon Sep 17 00:00:00 2001
+-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-Date: Thu, 10 May 2018 21:57:49 +0200
+-Subject: [PATCH] Only fix RPATH if install_rpath is not empty
+-
+-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+----
+- mesonbuild/scripts/meson_install.py | 8 +++++++-
+- 1 file changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/mesonbuild/scripts/meson_install.py b/mesonbuild/scripts/meson_install.py
+-index 013f2a00..f7ff1dcc 100644
+---- a/mesonbuild/scripts/meson_install.py
+-+++ b/mesonbuild/scripts/meson_install.py
+-@@ -368,7 +368,13 @@ def install_targets(d):
+-                     printed_symlink_error = True
+-         if os.path.isfile(outname):
+-             try:
+--                depfixer.fix_rpath(outname, install_rpath, False)
+-+                # Buildroot check-host-rpath script expects RPATH
+-+                # But if install_rpath is empty, it will stripped.
+-+                # So, preserve it in this case
+-+                if install_rpath:
+-+                    depfixer.fix_rpath(outname, install_rpath, False)
+-+                else:
+-+                    print("Skipping RPATH fixing")
+-             except SystemExit as e:
+-                 if isinstance(e.code, int) and e.code == 0:
+-                     pass
+--- 
+-2.14.3
+-
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index bd9e4114ff..4a4923bd12 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.46.1/meson-0.46.1.tar.gz.asc
+-sha256 19497a03e7e5b303d8d11f98789a79aba59b5ad4a81bd00f4d099be0212cee78  meson-0.46.1.tar.gz
+-sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	COPYING
++# https://github.com/mesonbuild/meson/releases/download/0.47.1/meson-0.47.1.tar.gz.asc
++sha256 d673de79f7bab064190a5ea06140eaa8415efb386d0121ba549f6d66c555ada6 meson-0.47.1.tar.gz
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
 diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index d110e594f5..0f2ee2855d 100644
+index 28c9e6f202..d110e594f5 100644
 --- a/package/meson/meson.mk
 +++ b/package/meson/meson.mk
-@@ -20,7 +20,7 @@ HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_C
- HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
- HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--define HOST_MESON_INSTALL_CROSS_CONF
-+define HOST_MESON_INSTALL_CROSS_CONF_IN
- 	mkdir -p $(HOST_DIR)/etc/meson
- 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
- 	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
-@@ -31,9 +31,9 @@ define HOST_MESON_INSTALL_CROSS_CONF
- 	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
- 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
--	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
-+	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
- endef
- 
--HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
-+HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF_IN
- 
- $(eval $(host-python-package))
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 507e686068..565e10e8fb 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -64,12 +64,17 @@ ifeq ($(4),target)
- define $(2)_CONFIGURE_CMDS
- 	rm -rf $$($$(PKG)_SRCDIR)/build
- 	mkdir -p $$($$(PKG)_SRCDIR)/build
-+	sed -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_CFLAGS)%g" \
-+	    -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_LDFLAGS)%g" \
-+	    -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_CXXFLAGS)%g" \
-+	    $(HOST_DIR)/etc/meson/cross-compilation.conf.in \
-+	    > $$($$(PKG)_SRCDIR)/build//cross-compilation.conf
- 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
- 		--prefix=/usr \
- 		--libdir=lib \
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
--		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
--		--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
-+		--buildtype=plain \
-+		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
- 		$$($$(PKG)_CONF_OPTS) \
- 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
- endef
+-MESON_VERSION = 0.46.1
++MESON_VERSION = 0.47.1
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 -- 
 2.18.0
