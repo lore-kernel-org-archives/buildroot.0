@@ -1,34 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:38:09 +0200
-Subject: [Buildroot] [PATCH v2 1/2] coreutils: fix chroot installation
-In-Reply-To: <2b42d6f4f947a7423813916cd6f8e5f37c5b113a.1531338679.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 11 Jul 2018 22:51:18 +0300")
-References: <2b42d6f4f947a7423813916cd6f8e5f37c5b113a.1531338679.git.baruch@tkos.co.il>
-Message-ID: <877elqc3em.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 23:38:59 +0200
+Subject: [Buildroot] [PATCH] ncurses: make host-ncurses use host terminfo
+In-Reply-To: <5f7fe697b92ac0145674.1531241163@cveaol6qa08.wv.mentorg.com>
+ (Hollis Blanchard's message of "Tue, 10 Jul 2018 09:46:03 -0700")
+References: <5f7fe697b92ac0145674.1531241163@cveaol6qa08.wv.mentorg.com>
+Message-ID: <8736wec3d8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Hollis" == Hollis Blanchard <hollis_blanchard@mentor.com> writes:
 
- > Since commit 256bb383fb7 (coreutils: use single binary in symlink
- > method) the chroot move command creates a dangling symlink, because the
- > symlink target is 'coreutils' which is not in the /usr/sbin/ directory.
- > Instead of moving, remove the coreutils installed symlink, and create a
- > new one in $(TARGET_DIR)/usr/sbin with the correct target.
+ > # HG changeset patch
+ > # User Hollis Blanchard <hollis_blanchard@mentor.com>
+ > # Date 1531239381 25200
+ > #      Tue Jul 10 09:16:21 2018 -0700
+ > # Node ID 5f7fe697b92ac0145674a6c96aad0f787b4bae32
+ > # Parent  d71314cdccf1993ccdb05cddb16a5491f0bf723e
+ > ncurses: make host-ncurses use host terminfo
 
- > Should also fix (busybox):
- > http://autobuild.buildroot.net/results/6b3/6b39648b466738162516aa50ab328d839ec85448/
+ > Host GDB suffers a serious problem: pressing backspace (or ^W ^U or any other
+ > "delete" key) results in a plain space being printed instead, making the
+ > command prompt almost completely unusable.
 
- > Cc: Carlos Santos <casantos@datacom.ind.br>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > v2: Drop ../usr from symlink target (Arnout, Carlos)
+ > That's because it's using host-ncurses, which embeds a path for the terminfo
+ > database into the library itself. That path ends up being something like
+ > /home/hollisb/buildroot.git/output/host/share/terminfo, which obviously doesn't
+ > generally exist other hosts. ('relocate-sdk.sh' cannot and does not edit
+ > binaries like libncurses.so.6, so doesn't resolve this problem.)
 
-Committed to 2018.05.x, thanks.
+ > /usr/share/terminfo is a far better path to use, since it almost certainly
+ > exists on the host. Theoretically, it could be from a different ncurses version
+ > with incompatible terminfo database format, but this doesn't seem to be a
+ > problem in practice. (Future patches could address the theoretical problem if
+ > it actually appears in real life.)
+
+ > This change allows buildroot's host gdb, which uses ncurses 6.x, to work on
+ > RHEL5, RHEL6, and RHEL7, which all provide terminfo from ncurses 5.x.
+
+ > Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+
+Committed to 2018.02.x and 2018.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
