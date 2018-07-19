@@ -1,22 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 11:55:18 +0200
-Subject: [Buildroot] [PATCH 1/2] libv4l: add optional sdl2_image
- dependency
-In-Reply-To: <20180629195248.4008-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 29 Jun 2018 21:52:47 +0200")
-References: <20180629195248.4008-1-fontaine.fabrice@gmail.com>
-Message-ID: <87bmb3ft2x.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 11:55:39 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qt5base: remove unused
+ definition
+Message-ID: <20180719095055.578FD88E25@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a94b2892f8798d17ff6598ae3fbc343cd81ca111
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Since commit 81fb33af2a (qt5base: correct eglfs support in
+qmake.conf.in) the definition QT5BASE_CONFIGURE_QMAKE_CONFIG is left
+unused.
 
-Committed to 2018.02.x and 2018.05.x, thanks.
+Remove it since it is not used anymore.
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b0241095a67bc87faf19b52a2be21915b2ac44aa)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5base/qt5base.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 957cdf57b7..53c98ce490 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -264,7 +264,6 @@ define QT5BASE_CONFIGURE_CMDS
+ 	sed 's/@EGLFS_DEVICE@/$(QT5BASE_EGLFS_DEVICE)/g' \
+ 		$(QT5BASE_PKGDIR)/qmake.conf.in > \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qmake.conf
+-	$(QT5BASE_CONFIGURE_QMAKE_CONFIG)
+ 	$(INSTALL) -m 0644 -D $(QT5BASE_PKGDIR)/qplatformdefs.h \
+ 		$(@D)/mkspecs/devices/linux-buildroot-g++/qplatformdefs.h
+ 	$(QT5BASE_CONFIGURE_CONFIG_FILE)
