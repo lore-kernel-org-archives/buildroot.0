@@ -1,23 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 12:12:09 +0200
-Subject: [Buildroot] [PATCH 1/1] libwebsockets: add optional libevent
- dependency
-In-Reply-To: <20180610135434.27878-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 10 Jun 2018 15:54:34 +0200")
-References: <20180610135434.27878-1-fontaine.fabrice@gmail.com>
-Message-ID: <87d0vjedqe.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 12:14:30 +0200
+Subject: [Buildroot] [PATCH 1/1] support/dependencies/dependencies.sh:
+In-Reply-To: <20180702123820.32222-1-david.degrave@mind.be> (David De Grave's
+ message of "Mon, 2 Jul 2018 14:38:20 +0200")
+References: <20180702123820.32222-1-david.degrave@mind.be>
+Message-ID: <878t67edmh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "David" == David De Grave (Essensium/Mind) <david.degrave@mind.be> writes:
 
- > libevent is supported since 2.3.0
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Add the i686 package list to install when using pre-built 32 bits binaries with
+ > a redhat/fedora host distribution (glibc.i686 and zlib.i686).
 
-Committed to 2018.05.x, thanks.
+ > Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
+ > ---
+ > Remark: The 32 bits libraries are already included in the gcc package contrary
+ >         to debian where additionnal packages are needed. So it's not needed to
+ >         do something similar for BR2_HOSTARCH_NEEDS_IA32_COMPILER.
+
+Committed to 2018.02.x and 2018.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
