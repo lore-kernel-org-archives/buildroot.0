@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Jul 2018 17:02:05 +0200
-Subject: [Buildroot] [PATCH 1/1] gnuradio: needs host-python2
-In-Reply-To: <CAPi7W81kEgCx815QZcyewyLim-2F1uPYQTzVXG-xAjpi=hrcxA@mail.gmail.com>
-References: <20180626214326.27205-1-fontaine.fabrice@gmail.com>
- <20180627033622.23ouuvp2zvr4cw5y@sapphire.tkos.co.il>
- <CAPi7W82WL5MwxnQWri0dg5Ep92fHedomD3XJHLViLGUcr2JwXA@mail.gmail.com>
- <CAPi7W82zbZLPORsXG989MfnFVitVEFELC1FU1GDGk_0n19oMDA@mail.gmail.com>
- <20180628032558.b4bgdv2qdpzssean@tarshish>
- <CAGm1_kuvRh-wam8N-wOyuoyfROc7J_K7FY4SFA55b-Omivmo+g@mail.gmail.com>
- <20180628102352.5a997e68@windsurf.home>
- <CAGm1_kufkaKQ_F=kWy2ihKXq9r6H7bOaNBHoRUfQE89N9-dWYQ@mail.gmail.com>
- <20180628112009.2bf1533a@windsurf.home>
- <CAGm1_kvcW7h4fpw7pEf5pb_RFX9r0HOr2c=Bv94=xAj_CN34Xg@mail.gmail.com>
- <CAPi7W81kEgCx815QZcyewyLim-2F1uPYQTzVXG-xAjpi=hrcxA@mail.gmail.com>
-Message-ID: <20180719170205.0c06ccd3@windsurf>
+Date: Thu, 19 Jul 2018 16:59:55 +0200
+Subject: [Buildroot] [git commit] libcurl: add nghttp2 optional dependency
+Message-ID: <20180719145801.3CFFD7FA18@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9b733d45f4b1b3b8244cfc7513b3d680da3d163d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 28 Jun 2018 19:25:32 +0200, Fabrice Fontaine wrote:
+The nghttp2 package has recently been added to buildroot. When
+enabled, this adds support for HTTP2 to libcurl.
 
-> Next branch builds fine however it seems there is outstanding issues:
-> https://github.com/gnuradio/gnuradio/issues/1842. What should we do until
-> an official release is made with python3 support?
+By default, libcurl configure script will enable HTTP2 if the library
+is found using pkg-config. Adding this option makes the build
+consistent.
 
-In the mean time, I think I will just apply your patch that adds the
-"depends on !BR2_PACKAGE_PYTHON3". It's not great, but it's not the
-only simple approach to resolve the build failures.
+Signed-off-by: Micha??l Burtin <michael.burtin@netgem.com>
+Signed-off-by: Anisse Astier <anisse.astier.ext@netgem.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libcurl/libcurl.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-In today's Buildroot, if a package needs host Python modules in the
-Python version which is not the default one, this is not supported, and
-it will be difficult to support this.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index c9b325c672..e0ecb081b7 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -88,6 +88,13 @@ else
+ LIBCURL_CONF_OPTS += --without-brotli
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NGHTTP2),y)
++LIBCURL_DEPENDENCIES += nghttp2
++LIBCURL_CONF_OPTS += --with-nghttp2
++else
++LIBCURL_CONF_OPTS += --without-nghttp2
++endif
++
+ define LIBCURL_FIX_DOT_PC
+ 	printf 'Requires: openssl\n' >>$(@D)/libcurl.pc.in
+ endef
