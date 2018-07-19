@@ -1,50 +1,43 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 19 Jul 2018 05:57:06 +0300
-Subject: [Buildroot] [PATCH] vim: install /bin/vi as a relative symlink
-In-Reply-To: <20180718150350.4a910b0c@windsurf>
-References: <20180718123443.7242-1-casantos@datacom.com.br>
- <20180718150350.4a910b0c@windsurf>
-Message-ID: <87fu0g53wd.fsf@tkos.co.il>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Thu, 19 Jul 2018 13:12:36 +1000
+Subject: [Buildroot] [PATCH] busybox: Update to 1.29.1
+Message-ID: <20180719031236.17984-1-sam@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Includes fixes to sendmail and wget.
 
-Thomas Petazzoni writes:
-> Hello,
->
-> On Wed, 18 Jul 2018 09:34:43 -0300, Carlos Santos wrote:
->> Prevent creating a dangling symlink when vim is not present on the host
->> machine. With BR2_ROOTFS_MERGED_USR, just link to "vim", since they are
->> on the same directory, otherwise link to "../usr/bin/vim".
->>
->> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
->
-> Baruch had already sent a patch with the same title/intention, but it
-> is no longer in the pending state in patchwork.
->
-> Could you clarify what happened, and which of the two patches is
-> relevant ?
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+---
+ package/busybox/busybox.hash | 4 ++--
+ package/busybox/busybox.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-My vim patch is at
-
-  http://patchwork.ozlabs.org/patch/943314/
-
-I marked it as Rejected following the comment of Arnout. Carlos' patch
-works around the merged /usr issue by changing the symlink target for
-merged /usr. In my opinion this solution is error prone. It would be
-much easier to allow dangling symlinks in the target directory, and
-tweak the busybox install.sh to cope with that. That's what my pending
-busybox patch suggests.
-
-  http://patchwork.ozlabs.org/patch/944884/
-
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index 26194be3a9..11b9565df9 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,3 +1,3 @@
+-# From https://busybox.net/downloads/busybox-1.29.0.tar.bz2.sha256
+-sha256 c8115612f0be640644e7c35098766ddaac4a88b773c4c4f0e43564982f660c82  busybox-1.29.0.tar.bz2
++# From https://busybox.net/downloads/busybox-1.29.1.tar.bz2.sha256
++sha256 fc250730ea16d28839bfecda3c431683fa6bd4273ffca6b632cbeb3556c914c3  busybox-1.29.1.tar.bz2
+ sha256 bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 5266f844b6..3be6cbc7b1 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUSYBOX_VERSION = 1.29.0
++BUSYBOX_VERSION = 1.29.1
+ BUSYBOX_SITE = http://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0
+-- 
+2.18.0
