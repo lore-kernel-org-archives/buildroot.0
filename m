@@ -1,33 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 13:04:10 +0200
-Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
- in shebang
-In-Reply-To: <20180719075842.k3gxopajcat7f4dt@bifrost> (Anisse Astier's
- message of "Thu, 19 Jul 2018 09:58:42 +0200")
-References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
- <20180718171843.5ed5f10c@windsurf>
- <20180719075842.k3gxopajcat7f4dt@bifrost>
-Message-ID: <87va9bcwr9.fsf@dell.be.48ers.dk>
+From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
+Date: Thu, 19 Jul 2018 13:02:01 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/Makefile.in: Do not use CPPFLAGS
+ for hardening options
+In-Reply-To: <1531998123-28360-1-git-send-email-stefan.sorensen@spectralink.com>
+References: <1531998123-28360-1-git-send-email-stefan.sorensen@spectralink.com>
+Message-ID: <1531998123-28360-2-git-send-email-stefan.sorensen@spectralink.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Anisse" == Anisse Astier <anisse@astier.eu> writes:
+The hardening options are compiler flags, not pure pre-processor flags, so
+put them in CFLAGS, not CPPFLAGS.
 
- > Hi,
- > We just hit this issue with the buildroot-2018.02 branch. Is this is the
- > scope of LTS-backportable patches ?
+This fixes build errors where -D_FORTIFY_SOURCE=2 whas put in CPPFLAGS and
+then applied to configure tests which could fail since the required -O2 is
+only in CFLAGS.
 
- > Otherwise it's very easy to take the patch in an external, but I'm
- > guessing it might break other builds somewhere.
+Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+---
+ package/Makefile.in | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Yes, I'll backport to 2018.02.x and 2018.05.x. I'm running a bit behind
-though (synched around July 1st), so it will take a few days.
-
-Does the patch apply as is to 2018.02.x? Have you verified that it fixes
-the issue for you on 2018.02.x?
-
+diff --git a/package/Makefile.in b/package/Makefile.in
+index f296276..5e0ff8c 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -147,29 +147,29 @@ TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
+ 
+ ifeq ($(BR2_SSP_REGULAR),y)
+-TARGET_CPPFLAGS += -fstack-protector
++TARGET_HARDENED += -fstack-protector
+ else ifeq ($(BR2_SSP_STRONG),y)
+-TARGET_CPPFLAGS += -fstack-protector-strong
++TARGET_HARDENED += -fstack-protector-strong
+ else ifeq ($(BR2_SSP_ALL),y)
+-TARGET_CPPFLAGS += -fstack-protector-all
++TARGET_HARDENED += -fstack-protector-all
+ endif
+ 
+ ifeq ($(BR2_RELRO_PARTIAL),y)
+-TARGET_CPPFLAGS += $(TARGET_CFLAGS_RELRO)
++TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
+ TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
+ else ifeq ($(BR2_RELRO_FULL),y)
+-TARGET_CPPFLAGS += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
++TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
+ TARGET_LDFLAGS += -pie
+ endif
+ 
+ ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+-TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=1
++TARGET_HARDENED += -D_FORTIFY_SOURCE=1
+ else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
+-TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=2
++TARGET_HARDENED += -D_FORTIFY_SOURCE=2
+ endif
+ 
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
++TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)
+ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+ 
 -- 
-Bye, Peter Korsgaard
+1.8.3.1
