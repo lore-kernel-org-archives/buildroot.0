@@ -1,54 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:38:22 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] ncurses: make
- host-ncurses use host terminfo
-Message-ID: <20180719214017.94D1E890A3@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 23:43:11 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libglib2: Avoid absolute
+ path to python in shebang
+Message-ID: <20180719214017.C2EEA890A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0a2cacf2c50fab109044e8e835d377a5b1616f5
+commit: https://git.buildroot.net/buildroot/commit/?id=fdc20974270edcc2c3a3a3d0a9b844e67f63e2ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Host GDB suffers a serious problem: pressing backspace (or ^W ^U or any other
-"delete" key) results in a plain space being printed instead, making the
-command prompt almost completely unusable.
+When the output directory is nested under a long path name, calling the
+gdbus-codegen, glib-genmarshal, or glib-mkenums scripts throws the
+error:
 
-That's because it's using host-ncurses, which embeds a path for the terminfo
-database into the library itself. That path ends up being something like
-/home/hollisb/buildroot.git/output/host/share/terminfo, which obviously doesn't
-generally exist other hosts. ('relocate-sdk.sh' cannot and does not edit
-binaries like libncurses.so.6, so doesn't resolve this problem.)
+> '/usr/bin/env: /...: No such file or directory'
 
-/usr/share/terminfo is a far better path to use, since it almost certainly
-exists on the host. Theoretically, it could be from a different ncurses version
-with incompatible terminfo database format, but this doesn't seem to be a
-problem in practice. (Future patches could address the theoretical problem if
-it actually appears in real life.)
+This is because libglib2 uses the absolute path to the python
+interpreter for its shebang statements, and shebangs have a max length
+of 127 chars[1]. A long absolute path will be cut off and appear as a
+missing file.
 
-This change allows buildroot's host gdb, which uses ncurses 6.x, to work on
-RHEL5, RHEL6, and RHEL7, which all provide terminfo from ncurses 5.x.
+Since the host Python is present in the $PATH passed to all packages, we
+can copy the workaround from Yocto and just use the python interpreter
+in $PATH[2]. However, 'python' is used instead of 'python3' as the
+scripts are compatible with both.
 
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[1] https://linux.die.net/man/2/execve
+[2] http://cgit.openembedded.org/openembedded-core/commit/?id=eef7883587acc933d6f34b559ec03ff84d18573b
+
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Signed-off-by: David Owens <david.owens@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b35ad5d0b45e5288f4019aeaa06b87ef0f2ef016)
+(cherry picked from commit 3ab5dfb548a840debe6e4e767ea2ea10e9c6e93a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncurses/ncurses.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...t-hardcode-python-path-into-various-tools.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
-index 90cf4a4dc5..5b36df564c 100644
---- a/package/ncurses/ncurses.mk
-+++ b/package/ncurses/ncurses.mk
-@@ -153,6 +153,7 @@ HOST_NCURSES_CONF_OPTS = \
- 	--without-cxx \
- 	--without-cxx-binding \
- 	--without-ada \
-+	--with-default-terminfo-dir=/usr/share/terminfo \
- 	--without-normal
- 
- $(eval $(autotools-package))
+diff --git a/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch b/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
+new file mode 100644
+index 0000000000..fa558e6dbf
+--- /dev/null
++++ b/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
+@@ -0,0 +1,48 @@
++From b9160d951b9af647b97766c57295ca4f45cf9521 Mon Sep 17 00:00:00 2001
++From: Alexander Kanavin <alex.kanavin@gmail.com>
++Date: Tue, 3 Oct 2017 10:45:55 +0300
++Subject: [PATCH] Do not hardcode python path into various tools
++
++Upstream-Status: Inappropriate [oe-core specific]
++Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
++Fetch from: http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-core/glib-2.0/glib-2.0/0010-Do-not-hardcode-python-path-into-various-tools.patch?id=eef7883587acc933d6f34b559ec03ff84d18573b
++Signed-off-by: David Owens <david.owens@rockwellcollins.com>
++---
++ gio/gdbus-2.0/codegen/gdbus-codegen.in | 2 +-
++ gobject/glib-genmarshal.in             | 2 +-
++ gobject/glib-mkenums.in                | 2 +-
++ 3 files changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/gio/gdbus-2.0/codegen/gdbus-codegen.in b/gio/gdbus-2.0/codegen/gdbus-codegen.in
++index 8050981..e693ef3 100644
++--- a/gio/gdbus-2.0/codegen/gdbus-codegen.in
+++++ b/gio/gdbus-2.0/codegen/gdbus-codegen.in
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env @PYTHON@
+++#!/usr/bin/env python
++ 
++ # GDBus - GLib D-Bus Library
++ #
++diff --git a/gobject/glib-genmarshal.in b/gobject/glib-genmarshal.in
++index 09e8408..b2f9d99 100755
++--- a/gobject/glib-genmarshal.in
+++++ b/gobject/glib-genmarshal.in
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env @PYTHON@
+++#!/usr/bin/env python
++ 
++ # pylint: disable=too-many-lines, missing-docstring, invalid-name
++ 
++diff --git a/gobject/glib-mkenums.in b/gobject/glib-mkenums.in
++index d4bfd11..051fce4 100755
++--- a/gobject/glib-mkenums.in
+++++ b/gobject/glib-mkenums.in
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env @PYTHON@
+++#!/usr/bin/env python
++ 
++ # If the code below looks horrible and unpythonic, do not panic.
++ #
++-- 
++2.14.1
++
