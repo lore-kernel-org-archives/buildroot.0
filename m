@@ -1,96 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:43:17 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libglib2: Avoid absolute
- path to python in shebang
-Message-ID: <20180719214007.C8FC98909A@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 23:39:43 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] bind: fix build with
+ openssl
+Message-ID: <20180719214007.AB3F08905F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95f3567bcf9f3fdbef39d53634ea5f53e88ff57a
+commit: https://git.buildroot.net/buildroot/commit/?id=8ed142d68e98b720cc94023183a38de422cbf36c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-When the output directory is nested under a long path name, calling the
-gdbus-codegen, glib-genmarshal, or glib-mkenums scripts throws the
-error:
+The bind configure.in uses AC_TRY_RUN that is not compatible with cross
+compile. Disable eddsa unconditionally since it requires a newer OpenSSL
+version than we currently have. Enable aes; this is always supported in
+current OpenSSL versions.
 
-> '/usr/bin/env: /...: No such file or directory'
+Fixes:
+http://autobuild.buildroot.net/results/3ed/3edb1659954b00401b68ffc7e1c8b3c29581c0e4/
+http://autobuild.buildroot.net/results/025/025e377b51b39ba34647636ad0d0661a3cb95572/
+http://autobuild.buildroot.net/results/725/7250564e780e43e793ae6c8c526985e5519681f4/
 
-This is because libglib2 uses the absolute path to the python
-interpreter for its shebang statements, and shebangs have a max length
-of 127 chars[1]. A long absolute path will be cut off and appear as a
-missing file.
-
-Since the host Python is present in the $PATH passed to all packages, we
-can copy the workaround from Yocto and just use the python interpreter
-in $PATH[2]. However, 'python' is used instead of 'python3' as the
-scripts are compatible with both.
-
-[1] https://linux.die.net/man/2/execve
-[2] http://cgit.openembedded.org/openembedded-core/commit/?id=eef7883587acc933d6f34b559ec03ff84d18573b
-
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Signed-off-by: David Owens <david.owens@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3ab5dfb548a840debe6e4e767ea2ea10e9c6e93a)
+(cherry picked from commit 5a92bb63bf0657f24694b8c8c24dff04f6e96dca)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-hardcode-python-path-into-various-tools.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ package/bind/bind.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch b/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
-new file mode 100644
-index 0000000000..fa558e6dbf
---- /dev/null
-+++ b/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
-@@ -0,0 +1,48 @@
-+From b9160d951b9af647b97766c57295ca4f45cf9521 Mon Sep 17 00:00:00 2001
-+From: Alexander Kanavin <alex.kanavin@gmail.com>
-+Date: Tue, 3 Oct 2017 10:45:55 +0300
-+Subject: [PATCH] Do not hardcode python path into various tools
-+
-+Upstream-Status: Inappropriate [oe-core specific]
-+Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
-+Fetch from: http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-core/glib-2.0/glib-2.0/0010-Do-not-hardcode-python-path-into-various-tools.patch?id=eef7883587acc933d6f34b559ec03ff84d18573b
-+Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-+---
-+ gio/gdbus-2.0/codegen/gdbus-codegen.in | 2 +-
-+ gobject/glib-genmarshal.in             | 2 +-
-+ gobject/glib-mkenums.in                | 2 +-
-+ 3 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/gio/gdbus-2.0/codegen/gdbus-codegen.in b/gio/gdbus-2.0/codegen/gdbus-codegen.in
-+index 8050981..e693ef3 100644
-+--- a/gio/gdbus-2.0/codegen/gdbus-codegen.in
-++++ b/gio/gdbus-2.0/codegen/gdbus-codegen.in
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/env @PYTHON@
-++#!/usr/bin/env python
-+ 
-+ # GDBus - GLib D-Bus Library
-+ #
-+diff --git a/gobject/glib-genmarshal.in b/gobject/glib-genmarshal.in
-+index 09e8408..b2f9d99 100755
-+--- a/gobject/glib-genmarshal.in
-++++ b/gobject/glib-genmarshal.in
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/env @PYTHON@
-++#!/usr/bin/env python
-+ 
-+ # pylint: disable=too-many-lines, missing-docstring, invalid-name
-+ 
-+diff --git a/gobject/glib-mkenums.in b/gobject/glib-mkenums.in
-+index d4bfd11..051fce4 100755
-+--- a/gobject/glib-mkenums.in
-++++ b/gobject/glib-mkenums.in
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/env @PYTHON@
-++#!/usr/bin/env python
-+ 
-+ # If the code below looks horrible and unpythonic, do not panic.
-+ #
-+-- 
-+2.14.1
-+
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 87a736e9e8..1ff603174f 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -61,7 +61,9 @@ BIND_CONF_ENV += \
+ 	ac_cv_func_EVP_sha512=yes
+ BIND_CONF_OPTS += \
+ 	--with-openssl=$(STAGING_DIR)/usr LIBS="-lz" \
+-	--with-ecdsa=yes
++	--with-ecdsa=yes \
++	--with-eddsa=no \
++	--with-aes=yes
+ # GOST cipher support requires openssl extra engines
+ ifeq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
+ BIND_CONF_OPTS += --with-gost=yes
