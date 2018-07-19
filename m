@@ -1,58 +1,33 @@
-From: =?UTF-8?q?Stefan=20S=C3=B8rensen?= <stefan.sorensen@spectralink.com>
-Date: Thu, 19 Jul 2018 13:02:03 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/Makefile.in: Use gcc spec files
- for PIE build flags
-In-Reply-To: <1531998123-28360-1-git-send-email-stefan.sorensen@spectralink.com>
-References: <1531998123-28360-1-git-send-email-stefan.sorensen@spectralink.com>
-Message-ID: <1531998123-28360-4-git-send-email-stefan.sorensen@spectralink.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Jul 2018 13:04:10 +0200
+Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
+ in shebang
+In-Reply-To: <20180719075842.k3gxopajcat7f4dt@bifrost> (Anisse Astier's
+ message of "Thu, 19 Jul 2018 09:58:42 +0200")
+References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
+ <20180718171843.5ed5f10c@windsurf>
+ <20180719075842.k3gxopajcat7f4dt@bifrost>
+Message-ID: <87va9bcwr9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The PIE build flags are only intended for building executables and can not be
-used in relocateable links (-r), static builds and shared library build -
-including the flags here causes build errors.
+>>>>> "Anisse" == Anisse Astier <anisse@astier.eu> writes:
 
-So instead of parsing the PIE flags directly on the command line to gcc,
-include them in a gcc spec file where it is possible to only apply the flags
-when other incompatible flags are not set.
+ > Hi,
+ > We just hit this issue with the buildroot-2018.02 branch. Is this is the
+ > scope of LTS-backportable patches ?
 
-This method and the spec file are from the Fedora build system.
+ > Otherwise it's very easy to take the patch in an external, but I'm
+ > guessing it might break other builds somewhere.
 
-Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
----
- package/Makefile.in     | 4 ++--
- toolchain/gcc-specs-pie | 5 +++++
- 2 files changed, 7 insertions(+), 2 deletions(-)
- create mode 100644 toolchain/gcc-specs-pie
+Yes, I'll backport to 2018.02.x and 2018.05.x. I'm running a bit behind
+though (synched around July 1st), so it will take a few days.
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 14b3bbd..433701c 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -158,8 +158,8 @@ ifeq ($(BR2_RELRO_PARTIAL),y)
- TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
- TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
- else ifeq ($(BR2_RELRO_FULL),y)
--TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
--TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
-+TARGET_HARDENED += -specs=$(TOPDIR)/toolchain/gcc-specs-pie $(TARGET_CFLAGS_RELRO_FULL)
-+TARGET_LDFLAGS += -specs=$(TOPDIR)/toolchain/gcc-specs-pie $(TARGET_CFLAGS_RELRO_FULL)
- endif
- 
- ifeq ($(BR2_FORTIFY_SOURCE_1),y)
-diff --git a/toolchain/gcc-specs-pie b/toolchain/gcc-specs-pie
-new file mode 100644
-index 0000000..dc03736
---- /dev/null
-+++ b/toolchain/gcc-specs-pie
-@@ -0,0 +1,5 @@
-+*cc1_options:
-++ %{!r:%{!fpie:%{!fPIE:%{!fpic:%{!fPIC:%{!fno-pic:-fPIE}}}}}}
-+
-+*self_spec:
-++ %{!static:%{!shared:%{!r:-pie}}}
+Does the patch apply as is to 2018.02.x? Have you verified that it fixes
+the issue for you on 2018.02.x?
+
 -- 
-1.8.3.1
+Bye, Peter Korsgaard
