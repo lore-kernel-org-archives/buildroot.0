@@ -1,47 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 20:03:30 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x]
- configs/raspberrypi3_defconfig: increase filesystem size
-Message-ID: <20180719180713.A1B6A88F81@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 19:58:33 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] lm-sensors: fix static
+ build
+Message-ID: <20180719180757.C32FD88FAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bb95c720170d8e388f3c72e35ac8023ebef2f04
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3d0db9bfcd941d8b81fc7ac97d0e46eb421c82ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Increase the filesystem size for raspberrypi3 by setting
-BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
-raspberrypi3_64 has the same size. The size is so large because the
-kernel config enables many many modules.
+Add -static to the link command line to have libgcc resolve libc
+symbols. This overrides the default -Wl,-rpath,/usr/lib, which is
+useless for static build anyway.
 
 Fixes:
-Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "services"
-mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
 
-This error is not reproducible, it seems to depend on e.g. directory
-ordering.
+  http://autobuild.buildroot.net/results/25d580bee6f609f6b28ebd6cc96d180179901b0e/
 
-Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e26a71d1a96aefcc6a63051207b26ea4282afb10)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b99dbdfac946751deb05e6e0c1f4c44659e15524)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/raspberrypi3_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/lm-sensors/lm-sensors.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 9304f0cb74..359d549b70 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -29,6 +29,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
- # Filesystem / image
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
+diff --git a/package/lm-sensors/lm-sensors.mk b/package/lm-sensors/lm-sensors.mk
+index f581b5cd8f..6fc7ce4981 100644
+--- a/package/lm-sensors/lm-sensors.mk
++++ b/package/lm-sensors/lm-sensors.mk
+@@ -26,7 +26,7 @@ LM_SENSORS_MAKE_OPTS = \
+ 	PREFIX=/usr
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=0
++LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=0 EXLDFLAGS=-static
+ else
+ LM_SENSORS_MAKE_OPTS += BUILD_SHARED_LIB=1
+ endif
