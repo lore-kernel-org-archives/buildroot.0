@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Jul 2018 09:44:13 +0200
-Subject: [Buildroot] [PATCH] Use TARGET_LDFLAGS for cmake shared and
- module libraries
-In-Reply-To: <205aa775588289b4db7f1ce200b32a9c1500b6ba.camel@vitec.com>
-References: <205aa775588289b4db7f1ce200b32a9c1500b6ba.camel@vitec.com>
-Message-ID: <20180719094413.2f7e0292@windsurf>
+Date: Thu, 19 Jul 2018 09:45:27 +0200
+Subject: [Buildroot] [PATCH 1/5] board/freescale/common/imx: make
+ imx8-bootloader-prepare more generic
+In-Reply-To: <20180719073253.22433-2-gary.bisson@boundarydevices.com>
+References: <20180719073253.22433-1-gary.bisson@boundarydevices.com>
+ <20180719073253.22433-2-gary.bisson@boundarydevices.com>
+Message-ID: <20180719094527.6275cd12@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,21 +14,30 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 12 Jul 2018 06:52:13 +0000, Damien Th?bault wrote:
-> With cmake packages, we are only using TARGET_LDFLAGS for executables
-> and not for shared libraries.
+On Thu, 19 Jul 2018 09:32:49 +0200, Gary Bisson wrote:
+> Allow user to override the hardcoded dtb name by using
+> BR2_ROOTFS_POST_SCRIPT_ARGS.
 > 
-> This patch adds CMAKE_SHARED_LINKER_FLAGS and CMAKE_MODULE_LINKER_FLAGS
-> to the cmake toolchain file so that buildroot TARGET_LDFLAGS are used
-> for shared and module libraries.
-> 
-> Signed-off-by: Damien Th?bault <damien.thebault@vitec.com>
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 > ---
->  support/misc/toolchainfile.cmake.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  .../freescale/common/imx/imx8-bootloader-prepare.sh  | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+> index 2648147ab0..ce2c3405a0 100755
+> --- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
+> +++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+> @@ -2,9 +2,17 @@
+>  
+>  main ()
+>  {
+> -	# Currently we support imx8mqevk.
+> +	if [ $# -le 1 ]; then
+> +		UBOOT_DTB=${BINARIES_DIR}/fsl-imx8mq-evk.dtb
 
-Applied to master, thanks. We'll see how much build breakage this will
-cause (or not?) in the next days :-)
+I don't think it's worth keeping some kind of "backward compatibility"
+here. Just change configs/freescale_imx8mqevk_defconfig to pass the DTB
+name as argument.
 
 Thanks!
 
