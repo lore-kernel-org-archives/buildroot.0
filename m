@@ -1,9 +1,7 @@
 From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 19 Jul 2018 14:33:35 -0300
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 17}.x series
-In-Reply-To: <1532021615-20560-1-git-send-email-festevam@gmail.com>
-References: <1532021615-20560-1-git-send-email-festevam@gmail.com>
-Message-ID: <1532021615-20560-2-git-send-email-festevam@gmail.com>
+Date: Thu, 19 Jul 2018 14:33:34 -0300
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.17.8
+Message-ID: <1532021615-20560-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,28 +10,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- package/linux-headers/Config.in.host | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 909e74d..56fde5f 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -258,7 +258,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+diff --git a/linux/Config.in b/linux/Config.in
+index b5f1577..8ca77c0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
  	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.141"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.4.142"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.113"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
-@@ -267,5 +267,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.14.56"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default "4.16.17"	if BR2_KERNEL_HEADERS_4_16
--	default "4.17.7"	if BR2_KERNEL_HEADERS_4_17
-+	default "4.17.8"	if BR2_KERNEL_HEADERS_4_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-	default "4.17.7" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.17.8" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
 2.7.4
