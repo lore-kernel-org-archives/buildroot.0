@@ -1,43 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 11:50:58 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/heimdal: fix
- build when the host has some DB libs
-Message-ID: <20180719094628.DFA1C88E02@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 11:49:50 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qt5base: fix typo in
+ qmake.conf.in
+Message-ID: <20180719094628.D58797FFA6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fa7baf14b41cff98a190aa749552bf9cf66fd88
+commit: https://git.buildroot.net/buildroot/commit/?id=925031909db657e88b3f60d9e07ccec85fcc8ae6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-When the host has a DB library installed, namely LMDB, host-heimdal
-will detect it and try to use, resulting in a build failure due to
-missing symbols.
+A blank space is missing.
 
-Really disable all the DB backends, we don't need them.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 07d4d97171a3ed293da07aa9d20bae572c4c5e1b)
+(cherry picked from commit 7544295d30d3e2ce6e169d4033a2bf2d36f646d6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/heimdal/heimdal.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/qt5/qt5base/qmake.conf.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index 79aaacbd30..5f7b6c6853 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
-@@ -24,7 +24,10 @@ HOST_HEIMDAL_CONF_OPTS = \
- 	--without-libedit \
- 	--without-hesiod \
- 	--without-x \
-+	--disable-mdb-db \
-+	--disable-ndbm-db \
- 	--disable-heimdal-documentation
-+
- HOST_HEIMDAL_CONF_ENV = MAKEINFO=true
- HEIMDAL_LICENSE = BSD-3-Clause
- HEIMDAL_LICENSE_FILES = LICENSE
+diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+index d62ee7cebe..f14527aa7f 100644
+--- a/package/qt5/qt5base/qmake.conf.in
++++ b/package/qt5/qt5base/qmake.conf.in
+@@ -21,7 +21,7 @@ CONFIG                 += nostrip
+ QMAKE_LIBS             += -lrt -lpthread -ldl
+ QMAKE_CFLAGS_ISYSTEM   =
+ 
+-# Architecturespecific configuration
++# Architecture specific configuration
+ include(arch.conf)
+ 
+ @EGLFS_DEVICE@
