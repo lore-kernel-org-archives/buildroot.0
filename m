@@ -1,266 +1,85 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 19 Jul 2018 09:32:52 +0200
-Subject: [Buildroot] [PATCH 4/5] board/boundarydevices: add i.MX8MQ support
- to u-boot scripts
+Date: Thu, 19 Jul 2018 09:32:53 +0200
+Subject: [Buildroot] [PATCH 5/5] configs/nitrogen8m: Add new defconfig
 In-Reply-To: <20180719073253.22433-1-gary.bisson@boundarydevices.com>
 References: <20180719073253.22433-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180719073253.22433-5-gary.bisson@boundarydevices.com>
+Message-ID: <20180719073253.22433-6-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Update RAM address
-- Update kernel image name for ARM64
-- Update U-Boot boot command for ARM64
-- Remove obsolete cmd_xxx_present check
-- Remove obsolete wlan.mac parameter
-- Add cmd_mipi command for MIPI-DSI interface
+NXP i.MX8MQ based SBC with 2GB of LPDDR4 and 8GB eMMC.
+
+More details on the platform here:
+https://boundarydevices.com/product/nitrogen8m
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- board/boundarydevices/common/boot.cmd    | 40 +++++++-------
- board/boundarydevices/common/upgrade.cmd | 69 +++++++++++++++++++++---
- 2 files changed, 81 insertions(+), 28 deletions(-)
+ configs/nitrogen8m_defconfig | 54 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 configs/nitrogen8m_defconfig
 
-diff --git a/board/boundarydevices/common/boot.cmd b/board/boundarydevices/common/boot.cmd
-index 7602b0139e..760363da9b 100644
---- a/board/boundarydevices/common/boot.cmd
-+++ b/board/boundarydevices/common/boot.cmd
-@@ -2,6 +2,8 @@ setenv bootargs ''
- 
- setenv initrd_high 0xffffffff
- m4=''
-+kernelimage=zImage
-+bootcommand=bootz
- a_base=0x10000000
- if itest.s x51 == "x${imx_cpu}" ; then
- 	a_base=0x90000000
-@@ -9,10 +11,14 @@ elif itest.s x53 == "x${imx_cpu}"; then
- 	a_base=0x70000000
- elif itest.s x6SX == "x${imx_cpu}" || itest.s x7D == "x${imx_cpu}"; then
- 	a_base=0x80000000
--	if itest.s "x1" == "x$m4enabled" ; then
--		run m4boot;
--		m4='-m4';
--	fi
-+elif itest.s x8MQ == "x${imx_cpu}"; then
-+	a_base=0x40000000
-+	kernelimage=Image
-+	bootcommand=booti
-+fi
-+if itest.s "x1" == "x${m4enabled}" ; then
-+	run m4boot;
-+	m4='-m4';
- fi
- 
- setexpr a_script  ${a_base} + 0x00800000
-@@ -39,10 +45,12 @@ if itest.s "x" == "x${fdt_file}" ; then
- 		fdt_file=imx6sx-${board}${m4}.dtb;
- 	elif itest.s x7D == "x${imx_cpu}" ; then
- 		fdt_file=imx7d-${board}${m4}.dtb;
-+	elif itest.s x8MQ == "x${imx_cpu}" ; then
-+		fdt_file=imx8mq-${board}${m4}.dtb;
- 	elif itest.s x51 == "x${imx_cpu}" ; then
--		fdt_file=imx51-${board}${m4}.dtb;
-+		fdt_file=imx51-${board}.dtb;
- 	elif itest.s x53 == "x${imx_cpu}" ; then
--		fdt_file=imx53-${board}${m4}.dtb;
-+		fdt_file=imx53-${board}.dtb;
- 	else
- 		fdt_file=imx6q-${board}.dtb;
- 	fi
-@@ -66,16 +74,12 @@ else
- 	exit;
- fi
- 
--cmd_xxx_present=
- fdt resize
- if itest.s "x" != "x${cmd_custom}" ; then
- 	run cmd_custom
--	cmd_xxx_present=1;
- fi
--
- if itest.s "x" != "x${cmd_hdmi}" ; then
- 	run cmd_hdmi
--	cmd_xxx_present=1;
- 	if itest.s x == x${allow_noncea} ; then
- 		setenv bootargs ${bootargs} mxc_hdmi.only_cea=1;
- 		echo "only CEA modes allowed on HDMI port";
-@@ -87,25 +91,18 @@ fi
- 
- if itest.s "x" != "x${cmd_lcd}" ; then
- 	run cmd_lcd
--	cmd_xxx_present=1;
- fi
- if itest.s "x" != "x${cmd_lcd2}" ; then
- 	run cmd_lcd2
--	cmd_xxx_present=1;
- fi
- if itest.s "x" != "x${cmd_lvds}" ; then
- 	run cmd_lvds
--	cmd_xxx_present=1;
- fi
- if itest.s "x" != "x${cmd_lvds2}" ; then
- 	run cmd_lvds2
--	cmd_xxx_present=1;
- fi
--
--if itest.s "x" == "x${cmd_xxx_present}" ; then
--	echo "!!!!!!!!!!!!!!!!"
--	echo "warning: your u-boot may be outdated, please upgrade"
--	echo "!!!!!!!!!!!!!!!!"
-+if itest.s "x" != "x${cmd_mipi}" ; then
-+	run cmd_mipi
- fi
- 
- if test "sata" = "${devtype}" ; then
-@@ -126,7 +123,6 @@ fi
- 
- if itest.s "x" != "x${wlmac}" ; then
- 	setenv bootargs ${bootargs} wlcore.mac=${wlmac}
--	setenv bootargs ${bootargs} wlan.mac=${wlmac}
- fi
- 
- if itest.s "x" != "x${gpumem}" ; then
-@@ -149,7 +145,7 @@ if itest.s "x" != "x${show_env}" ; then
- 	printenv
- fi
- 
--if load ${devtype} ${devnum}:${distro_bootpart} ${a_zImage} ${prefix}zImage ; then
--	bootz ${a_zImage} - ${a_fdt}
-+if load ${devtype} ${devnum}:${distro_bootpart} ${a_zImage} ${prefix}${kernelimage} ; then
-+	${bootcommand} ${a_zImage} - ${a_fdt}
- fi
- echo "Error loading kernel image"
-diff --git a/board/boundarydevices/common/upgrade.cmd b/board/boundarydevices/common/upgrade.cmd
-index 249185dba4..24b705eb76 100644
---- a/board/boundarydevices/common/upgrade.cmd
-+++ b/board/boundarydevices/common/upgrade.cmd
-@@ -7,6 +7,7 @@ offset=0x400
- erase_size=0xC0000
- qspi_offset=0x0
- a_base=0x12000000
-+block_size=0x200
- 
- if itest.s x51 == "x${imx_cpu}"; then
- 	a_base=0x92000000
-@@ -14,6 +15,9 @@ elif itest.s x53 == "x${imx_cpu}"; then
- 	a_base=0x72000000
- elif itest.s x6SX == "x${imx_cpu}" || itest.s x7D == "x${imx_cpu}"; then
- 	a_base=0x82000000
-+elif itest.s x8MQ == "x${imx_cpu}"; then
-+	a_base=0x42000000
-+	offset=0x8400
- fi
- 
- qspi_match=1
-@@ -25,6 +29,54 @@ setexpr a_script ${a_base}
- 
- setenv stdout serial,vga
- 
-+if itest.s "x${sfname}" == "x" ; then
-+# U-Boot resides in (e)MMC
-+if itest.s "x${env_dev}" == "x" || itest.s "x${env_part}" == "x"; then
-+        echo "Please set env_dev/part to the appropriate values"
-+        exit
-+fi
+diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
+new file mode 100644
+index 0000000000..9b758f0b97
+--- /dev/null
++++ b/configs/nitrogen8m_defconfig
+@@ -0,0 +1,54 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a53=y
 +
-+# Load bootloader binary for this board
-+if ${fs}load ${devtype} ${devnum}:${distro_bootpart} ${a_uImage1} u-boot.$uboot_defconfig ; then
-+else
-+	echo "File u-boot.$uboot_defconfig not found on SD card" ;
-+	exit
-+fi
++# System
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-nitrogen8m.dtb"
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_IMX_MKIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 +
-+# Compute block count for filesize and offset
-+setexpr cntoffset ${offset} / ${block_size}
-+setexpr cntfile ${filesize} / ${block_size}
-+# Add 1 in case the $filesize is not a multiple of $block_size
-+setexpr cntfile ${cntfile} + 1
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
 +
-+# Select media partition (if different from main partition)
-+mmc dev ${env_dev} ${env_part}
++# Linux headers same as kernel, a 4.9 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
 +
-+# Read and compare current U-Boot
-+mmc read ${a_uImage2} ${cntoffset} ${cntfile}
-+if cmp.b ${a_uImage1} ${a_uImage2} ${filesize} ; then
-+	echo "------- U-Boot versions match" ;
-+	exit ;
-+fi
++# DDR training binaries
++BR2_PACKAGE_FREESCALE_IMX=y
++BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y
++BR2_PACKAGE_FIRMWARE_IMX=y
 +
-+echo "Need U-Boot upgrade" ;
-+echo "Program in 5 seconds" ;
-+for n in 5 4 3 2 1 ; do
-+	echo $n ;
-+	sleep 1 ;
-+done
-+mmc write ${a_uImage1} ${cntoffset} ${cntfile}
++# ARM Trusted Firmware
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
++# Latest revision of branch boundary-imx_4.9.51_imx8m_ga
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/imx-atf/archive/67c68675.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
 +
-+# Make sure to boot from the proper partition
-+if itest ${env_part} != 0 ; then
-+	mmc partconf ${env_dev} 1 ${env_part} 0
-+fi
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nitrogen8m"
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
++# Latest revision of branch boundary-imx_v2017.03_4.9.51_imx8m_ga
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/u-boot-imx6/archive/b661d854.tar.gz"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_SPL=y
 +
-+# Switch back to main eMMC partition (to avoid confusion)
-+mmc dev ${env_dev}
-+
-+else
-+# U-Boot resides in NOR flash
- if sf probe || sf probe || sf probe 1 27000000 || sf probe 1 27000000 ; then
- 	echo "probed SPI ROM" ;
- else
-@@ -32,9 +84,13 @@ else
- 	exit
- fi
- 
-+if itest.s "x${sfname}" == "xat45db041d" ; then
-+	erase_size=0x7e000
-+fi
-+
- if itest.s x7D == "x${imx_cpu}"; then
- 	echo "check qspi parameter block" ;
--	if ${fs}load ${devtype} ${devnum}:1 ${a_qspi1} qspi-${sfname}.${uboot_defconfig} ; then
-+	if ${fs}load ${devtype} ${devnum}:${distro_bootpart} ${a_qspi1} qspi-${sfname}.${uboot_defconfig} ; then
- 	else
- 		echo "parameter file qspi-${sfname}.${uboot_defconfig} not found on SD card"
- 		exit
-@@ -63,7 +119,7 @@ fi
- 
- echo "check U-Boot" ;
- 
--if ${fs}load ${devtype} ${devnum}:1 ${a_uImage1} u-boot.$uboot_defconfig ; then
-+if ${fs}load ${devtype} ${devnum}:${distro_bootpart} ${a_uImage1} u-boot.$uboot_defconfig ; then
- else
- 	echo "File u-boot.$uboot_defconfig not found on SD card" ;
- 	exit
-@@ -80,7 +136,7 @@ if cmp.b ${a_uImage1} ${a_uImage2} $filesize ; then
- 	if itest.s "${qspi_match}" == "1" ; then
- 		echo "------- upgrade not needed" ;
- 		if itest.s "x" != "x${next}" ; then
--			if ${fs}load ${devtype} ${devnum}:1 ${a_script} ${next} ; then
-+			if ${fs}load ${devtype} ${devnum}:${distro_bootpart} ${a_script} ${next} ; then
- 				source ${a_script}
- 			else
- 				echo "${next} not found on SD card"
-@@ -142,13 +198,14 @@ if itest.s x7D == "x${imx_cpu}"; then
- fi
- 
- if itest.s "x" != "x${next}" ; then
--	if ${fs}load ${devtype} ${devnum}:1 ${a_script} ${next} ; then
-+	if ${fs}load ${devtype} ${devnum}:${distro_bootpart} ${a_script} ${next} ; then
- 		source ${a_script}
- 	else
--		echo "${next} not found on ${devtype} ${devnum}"
-+		echo "${next} not found on ${devtype} ${devnum}:${distro_bootpart}"
- 	fi
- fi
-+fi
- 
--while echo "---- U-Boot upgraded. reset" ; do
-+while echo "---- U-Boot upgraded. Please reset the board" ; do
- 	sleep 120
- done
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++# Latest revision  of branch boundary-imx_4.9.x_2.0.0_ga
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/boundarydevices/linux-imx6/archive/7777e14d.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="boundary"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-nitrogen8m freescale/imx8mq-nitrogen8m-m4"
 -- 
 2.18.0
