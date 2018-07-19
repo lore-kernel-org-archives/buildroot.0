@@ -1,47 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:36:56 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] coreutils: fix chroot
- installation
-Message-ID: <20180719214017.8C1B5890A3@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 23:42:50 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] wireless-regdb: add
+ regulatory.db[.p7s] to /lib/firmware
+Message-ID: <20180719214017.B8B19890A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58ba8fb9d2e2eb6bd3bd3dfb978d9f8b468763f0
+commit: https://git.buildroot.net/buildroot/commit/?id=48f4e477c8225a8b5ec231b6fbe089fc142a8d77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Since commit 256bb383fb7 (coreutils: use single binary in symlink
-method) the chroot move command creates a dangling symlink, because the
-symlink target is 'coreutils' which is not in the /usr/sbin/ directory.
-Instead of moving, remove the coreutils installed symlink, and create a
-new one in $(TARGET_DIR)/usr/sbin with the correct target.
+Starting from kernel version 4.15, Linux supports loading
+regulatory.db and regulatory.db.p7s files directly from /lib/firmware,
+without the need of crda. If the kernel can't load those files it'll
+fallback to using crda, but the direct way is preferred.
 
-Should also fix (busybox):
-http://autobuild.buildroot.net/results/6b3/6b39648b466738162516aa50ab328d839ec85448/
+This patch copies those those files under /lib/firmware. The use of
+crda shouldn't be necessary with kernels of 4.15 or later.
 
-Cc: Carlos Santos <casantos@datacom.ind.br>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Christoph Engelbert <me@noctarius.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c5dec11d71ac7436892749b40394daead5752524)
+(cherry picked from commit 39e4b467487084b866c1ae35a3e2f74867ba2404)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coreutils/coreutils.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/wireless-regdb/wireless-regdb.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 4ef888829f..81d3b0476f 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -120,7 +120,8 @@ define COREUTILS_CLEANUP
- 	# link for archaic shells
- 	ln -fs test $(TARGET_DIR)/usr/bin/[
- 	# gnu thinks chroot is in bin, debian thinks it's in sbin
--	mv -f $(TARGET_DIR)/usr/bin/chroot $(TARGET_DIR)/usr/sbin/chroot
-+	rm -f $(TARGET_DIR)/usr/bin/chroot
-+	ln -sf ../bin/coreutils $(TARGET_DIR)/usr/sbin/chroot
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 9d7a375461..e3381adefc 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -15,6 +15,10 @@ define WIRELESS_REGDB_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
+ 	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+ 		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
++	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db \
++		$(TARGET_DIR)/lib/firmware/regulatory.db
++	$(INSTALL) -m 644 -D -T $(@D)/regulatory.db.p7s \
++		$(TARGET_DIR)/lib/firmware/regulatory.db.p7s
  endef
  
- COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP
+ $(eval $(generic-package))
