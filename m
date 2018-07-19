@@ -1,50 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 20:06:05 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/clamav: bump
- version to 0.100.0
-Message-ID: <20180719180713.B2CD988F81@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 20:03:30 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x]
+ configs/raspberrypi3_defconfig: increase filesystem size
+Message-ID: <20180719180713.A1B6A88F81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=813ab54a09c5deefaac3f7167e03da588bfa46be
+commit: https://git.buildroot.net/buildroot/commit/?id=4bb95c720170d8e388f3c72e35ac8023ebef2f04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Release notes:
-http://lists.clamav.net/pipermail/clamav-announce/2018/000031.html
+Increase the filesystem size for raspberrypi3 by setting
+BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
+raspberrypi3_64 has the same size. The size is so large because the
+kernel config enables many many modules.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6088fedd736b569d3df7f9a523b254288b3904b3)
+Fixes:
+Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "services"
+mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
+
+This error is not reproducible, it seems to depend on e.g. directory
+ordering.
+
+Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit e26a71d1a96aefcc6a63051207b26ea4282afb10)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/clamav/clamav.hash | 2 +-
- package/clamav/clamav.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/raspberrypi3_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 76c633f979..4cf7e7a542 100644
---- a/package/clamav/clamav.hash
-+++ b/package/clamav/clamav.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 d72ac3273bde8d2e5e28ec9978373ee3ab4529fd868bc3fc4d2d2671228f2461  clamav-0.99.4.tar.gz
-+sha256 c5c5edaf75a3c53ac0f271148fd6447310bce53f448ec7e6205124a25918f65c  clamav-0.100.0.tar.gz
- sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
- sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
- sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
-diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index 4c4fc395c2..2711ca2a86 100644
---- a/package/clamav/clamav.mk
-+++ b/package/clamav/clamav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLAMAV_VERSION = 0.99.4
-+CLAMAV_VERSION = 0.100.0
- CLAMAV_SITE = https://www.clamav.net/downloads/production
- CLAMAV_LICENSE = GPL-2.0
- CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
+diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+index 9304f0cb74..359d549b70 100644
+--- a/configs/raspberrypi3_defconfig
++++ b/configs/raspberrypi3_defconfig
+@@ -29,6 +29,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
