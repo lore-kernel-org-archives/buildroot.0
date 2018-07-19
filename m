@@ -1,34 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 11:57:50 +0200
-Subject: [Buildroot] [PATCH 1/1] replace invocation of tempfile w/
- mktemp in try-run
-In-Reply-To: <20180629214012.26644-1-joseph.kogut@gmail.com> (Joseph Kogut's
- message of "Fri, 29 Jun 2018 14:40:12 -0700")
-References: <20180629214012.26644-1-joseph.kogut@gmail.com>
-Message-ID: <8736wffsyp.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 12:03:17 +0200
+Subject: [Buildroot] [PATCH] libostree: exclude 'lib' from libsoup
+ configure option
+In-Reply-To: <20180629081300.30216-1-marcus.folkesson@gmail.com> (Marcus
+ Folkesson's message of "Fri, 29 Jun 2018 10:13:00 +0200")
+References: <20180629081300.30216-1-marcus.folkesson@gmail.com>
+Message-ID: <87y3e7ee56.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
+>>>>> "Marcus" == Marcus Folkesson <marcus.folkesson@gmail.com> writes:
 
- > mktemp is included in GNU Coreutils, and its usage is preferred over
- > tempfile.
-
- > http://lists.gnu.org/archive/html/bug-coreutils/2007-10/msg00134.html
-
- > Additionally, some distributions no longer package tempfile, and
- > this patch fixes try-run in that case.
+ > The option used by configure script is actually
+ > --with-soup/--without-soup.
 
  > Fixes:
- > http://autobuild.buildroot.net/results/db5/db50f4415d18441f94b641ef6dc5a3672678b8b9/
- > http://autobuild.buildroot.net/results/76d/76d73f767d3aab3c97d61188f5666899d72ed82d/
- > http://autobuild.buildroot.net/results/6aa/6aa9031962603354086b49bc49add92fde496ec2/
- > http://autobuild.buildroot.net/results/33d/33d22f4d96fb439be8551355290896ef6d3649df/
- > http://autobuild.buildroot.net/results/eee/eeec2ed80e147c172ec2d50958b12cfa38b2cc8d/
- > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+ > - http://autobuild.buildroot.net/results/cf8ab76b8ea1a555d42f0625df1d58543e88efb1/
+
+ > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
