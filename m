@@ -1,29 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:35:22 +0200
-Subject: [Buildroot] [PATCH] utils/test-pkg: log the output of
- merge-config
-In-Reply-To: <20180708102659.26293-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 8 Jul 2018 12:26:59 +0200")
-References: <20180708102659.26293-1-yann.morin.1998@free.fr>
-Message-ID: <87bmb2c3j9.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 23:31:51 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] board/minnowboard: add
+ CONFIG_IGB in Linux kernel config
+Message-ID: <20180719213040.B852F88FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c9b16931be6db0fe2f8c19d426152d39027627b7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
- > Currently, the stdout is consigned to oblivion, while the stderr is not
- > redirected at all. So, when the configuration under test redefines a
- > symbol, like is the case when testing busybox for example, there is an
- > ugly warning.
+The 2017 MinnowBoard Turbot skews no longer use the Realtek 8169
+Ethernet chip.  The Turbot D0 uses The Intel I211, the Turbot Dual
+Ethernet has an I210 (quad-core) or I211 (dual-core).
 
- > So, just redirect both stdout and stderr to the logfile.
+Add CONFIG_IGB to the Linux config but keep the Realtek 8169 support
+to avoid breaking older boards
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested on Turbot D0, lspci -k shows the igb driver is used:
+03:00.0 Class 0200: 8086:1539 igb
 
-Committed to 2018.02.x and 2018.05.x, thanks.
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 02b7fbf8fc4321d5d7aab4bdc85f759060e016d7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/minnowboard/linux.config | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/board/minnowboard/linux.config b/board/minnowboard/linux.config
+index 03ffc5e371..27077dbcda 100644
+--- a/board/minnowboard/linux.config
++++ b/board/minnowboard/linux.config
+@@ -21,6 +21,7 @@ CONFIG_SATA_AHCI=y
+ CONFIG_ATA_PIIX=y
+ CONFIG_NETDEVICES=y
+ CONFIG_R8169=y
++CONFIG_IGB=y
+ CONFIG_INPUT_EVDEV=y
+ CONFIG_SERIAL_8250=y
+ CONFIG_SERIAL_8250_CONSOLE=y
