@@ -1,64 +1,202 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 19 Jul 2018 08:00:53 +0200
-Subject: [Buildroot] [RFC v2 1/4] meson: bump version to 0.47.1
-In-Reply-To: <20180718221640.03319bc8@gmx.net>
-References: <20180717191605.19263-1-ps.report@gmx.net>
- <20180717202311.GA29739@itchy> <20180718221640.03319bc8@gmx.net>
-Message-ID: <20180719060053.GA10375@itchy>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Jul 2018 09:03:24 +0200
+Subject: [Buildroot] [PATCH v1] RFC newpackage: fake-hwclock
+In-Reply-To: <20180718161842.27559-1-chrismcc@gmail.com>
+References: <20180718161842.27559-1-chrismcc@gmail.com>
+Message-ID: <20180719090324.208da410@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-07-18 22:16, Peter Seiderer wrote:
-> Hello Eric,
->
-> On Tue, 17 Jul 2018 22:23:11 +0200, Eric Le Bihan <eric.le.bihan.dev@free.fr> wrote:
->
-> > Hi!
-> >
-> > On 2018-07-17 21:16, Peter Seiderer wrote:
-> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > > ---
-> > > Notes:
-> > > Hash not checked against the pgp signature, tried
-> > > 	$ gpg --verify meson-0.47.1.tar.gz.asc meson-0.47.1.tar.gz
-> > >   gpg: Signature made Di 10 Jul 2018 23:28:12 CEST
-> > >   gpg:                using RSA key 95181F4EED14FDF4E41B518D3BF4693BFEEB9428
-> > >   gpg: Can't check signature: No public key
-> > >
-> > > Any advice which public key is used to sign the meson package?
-> >
-> > I check the signature as follows:
-> >
-> > ```
-> > $ gpg --recv-keys 3BF4693BFEEB9428
-> > $ gpg --verify meson-0.47.1.tar.gz.asc meson-0.47.1.tar.gz
-> > gpg: Signature made Tue Jul 10 23:28:12 2018 CEST using RSA key ID
-> > FEEB9428
-> > gpg: Good signature from "Jussi Pakkanen <jpakkane@gmail.com>"
-> > gpg: WARNING: This key is not certified with a trusted signature!
-> > gpg:          There is no indication that the signature belongs to the
-> > owner.
-> > Primary key fingerprint: 9518 1F4E ED14 FDF4 E41B  518D 3BF4 693B FEEB
-> > 9428
-> > ```
-> >
-> > BTW, shouldn't a signed-off-by line be added to the refreshed patch? I
-> > was about to send this package bump, so I can send mine if you want.
->
-> Which Signed-off-by line do you think is missing? Sorry for the double
-> effort, will send an updated version of the patch series soon (some
-> fixes for libdrm conversion), maybe better send a Reviewed-by to
-> my patch?
+Hello Christopher,
 
-Sorry, I misread your patch. I thought it refreshed the
-Buildroot-specific patch for fixing RPATH, whereas it removed it. See
-commit 7a23af4773665d2ee40e2d4e525746ebe38456dd for details.
+Thanks for this contribution.
 
-This specific patch applies to 0.46.1 but not to 0.47.1, as the function
-to modify is not in mesonbuild/scripts/meson_install.py anymore, but in
-mesonbuild/minstall.py:
+On Wed, 18 Jul 2018 09:18:42 -0700, Christopher McCrory wrote:
+> Save/restore system clock on machines without working RTC hardware
+> 
+> https://git.einval.com/cgi-bin/gitweb.cgi?p=fake-hwclock.git
+> 
+> This is a RFC, am I missing anything?
 
-```
+See the review comments below. But first and foremost, you should not
+include "personal" questions/messages in the commit description itself.
+Such questions/comments should go after the "---" sign, i.e
+
+> 
+> The version is 0.11, but I am not sure where this should be noted.
+> 
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+
+... here. This
+
+Indeed, the commit description is preserved in the Buildroot Git
+history, while comments after the "---" sign are not.
+
+Another formatting comment: the title of the commit should be just:
+
+	fake-hwclock: new package
+
+>  package/Config.in                         |  1 +
+>  package/fake-hwclock/001-start-stop.patch | 20 ++++++++++++++++++++
+>  package/fake-hwclock/Config.in            |  9 +++++++++
+>  package/fake-hwclock/fake-hwclock.cronjob |  1 +
+>  package/fake-hwclock/fake-hwclock.mk      | 31 +++++++++++++++++++++++++++++++
+
+We will need an entry added in the DEVELOPERS file for this package.
+
+> diff --git a/package/Config.in b/package/Config.in
+> index 08a3eac48a..826e4c8717 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1981,6 +1981,7 @@ comment "Utilities"
+>  	source "package/dialog/Config.in"
+>  	source "package/dtach/Config.in"
+>  	source "package/easy-rsa/Config.in"
+> +	source "package/fake-hwclock/Config.in"
+>  	source "package/file/Config.in"
+>  	source "package/gnupg/Config.in"
+>  	source "package/gnupg2/Config.in"
+> diff --git a/package/fake-hwclock/001-start-stop.patch b/package/fake-hwclock/001-start-stop.patch
+> new file mode 100644
+> index 0000000000..3ceb0ace4a
+> --- /dev/null
+> +++ b/package/fake-hwclock/001-start-stop.patch
+
+Patches should have a description and a Signed-off-by line. Since the
+upstream project uses Git, we like to have Git-formatted patches (i.e
+patches generated by git format-patch).
+
+> @@ -0,0 +1,20 @@
+> +--- a/fake-hwclock.orig	2018-07-18 07:14:29.943169961 -0700
+> ++++ a/fake-hwclock	2018-07-18 07:14:50.894364970 -0700
+> +@@ -30,7 +30,7 @@
+> + fi
+> + 
+> + case $COMMAND in
+> +-    save)
+> ++    save|stop)
+> +         if [ -e $FILE ] ; then
+> +             NOW_SEC=$(date -u '+%s')
+> +             if $FORCE || [ $NOW_SEC -ge $HWCLOCK_EPOCH_SEC ] ; then
+> +@@ -45,7 +45,7 @@
+> +             date -u '+%Y-%m-%d %H:%M:%S' > $FILE
+> +         fi
+> +         ;;
+> +-    load)
+> ++    start|load)
+> +         if [ -e $FILE ] ; then
+> +             SAVED="$(cat $FILE)"
+> +             SAVED_SEC=$(date -u -d "$SAVED" '+%s')
+> diff --git a/package/fake-hwclock/Config.in b/package/fake-hwclock/Config.in
+> new file mode 100644
+> index 0000000000..4c59f07844
+> --- /dev/null
+> +++ b/package/fake-hwclock/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_FAKE_HWCLOCK
+> +	bool "fake-hwclock"
+> +	depends on BR2_INIT_SYSV
+
+Why only BR2_INIT_SYSV and not BR2_INIT_BUSYBOX ? Do we really a
+dependency on the init system here ?
+
+> +	help
+> +	 a script to load and save creenet time for systems without a 
+> +	 hardware RTC
+> +
+> +comment "fake-hwclock needs SysV init"
+> +	depends on !BR2_INIT_SYSV
+> diff --git a/package/fake-hwclock/fake-hwclock.cronjob b/package/fake-hwclock/fake-hwclock.cronjob
+> new file mode 100644
+> index 0000000000..cefb488719
+> --- /dev/null
+> +++ b/package/fake-hwclock/fake-hwclock.cronjob
+> @@ -0,0 +1 @@
+> +date -u '+%Y-%m-%d %H:%M:%S' > /etc/fake-hwclock.data
+
+What about using debian/fake-hwclock.cron.hourly from the upstream Git
+repository instead ?
+
+This package will also need a .hash file, with the hash of the tarball,
+and the hash of the license file.
+
+> diff --git a/package/fake-hwclock/fake-hwclock.mk b/package/fake-hwclock/fake-hwclock.mk
+> new file mode 100644
+> index 0000000000..b47d6b14f5
+> --- /dev/null
+> +++ b/package/fake-hwclock/fake-hwclock.mk
+> @@ -0,0 +1,31 @@
+> +################################################################################
+> +#
+> +# fake-hwclock
+> +#
+> +################################################################################
+> +
+> +FAKE_HWCLOCK_VERSION = f889fd09f2d8d55819dd53785e8bd895866e6628
+
+What about using the v0.11 tag instead, which makes it clear which
+version is being used ?
+
+> +FAKE_HWCLOCK_SITE = https://git.einval.com/git/fake-hwclock.git
+> +FAKE_HWCLOCK_SITE_METHOD=git
+
+Spaces around the "=" sign.
+
+> +FAKE_HWCLOCK_LICENSE_FILES = COPYING
+
+Please add FAKE_HWCLOCK_LICENSE = GPL-2.0
+
+> +# add a daily cron job to save current time
+
+The Debian packaging makes this an hourly cronjob, perhaps we should do
+the same ?
+
+> +ifeq ($(BR2_PACKAGE_DCRON),y)
+> +FAKE_HWCLOCK_DEPENDENCIES += dcron
+
+I don't think you need dcron to be built before.
+
+> +define FAKE_HWCLOCK_CROBJOB
+
+CROBJOB or CRONJOB ? :-)
+
+> +	$(INSTALL) -D -m 755 $(FAKE_HWCLOCK_PKGDIR)/fake-hwclock.cronjob $(TARGET_DIR)/etc/cron.daily/fake-hwclock
+> +endef
+> +FAKE_HWCLOCK_POST_INSTALL_TARGET_HOOKS += FAKE_HWCLOCK_CROBJOB
+> +endif
+
+Also, I'm not sure why this is limited to dcron. There is a
+cron/crontab implementation in Busybox, which should be sufficient for
+this. However, I don't think we have other packages that install
+cronjobs for the moment, so it's a bit of a new thing.
+
+Perhaps we should just unconditionally install the cronjob file
+to /etc/cron.hourly/ ? Or only do so when either Busybox or dcron are
+enabled ? Are there other cron implementations besides Busybox and
+dcron ?
+
+> +# This should run before everything else
+> +define FAKE_HWCLOCK_INSTALL_INIT_SYSV
+> +	$(INSTALL) -D -m 755 $(@D)/fake-hwclock $(TARGET_DIR)/etc/init.d/S00fake-hwclock
+> +endef
+> +
+> +# Use buildroot buildtime as a seed.  Not ideal, but better than 1970-01-01 UTC
+> +define FAKE_HWCLOCK_INSTALL_TARGET_CMDS
+> +	date -u '+%Y-%m-%d %H:%M:%S' > $(TARGET_DIR)/etc/fake-hwclock.data
+> +endef
+> +
+> +$(eval $(generic-package))
+
+The rest looks good to me.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
