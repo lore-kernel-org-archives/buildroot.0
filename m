@@ -1,50 +1,43 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 19 Jul 2018 10:03:41 +0200
-Subject: [Buildroot] [PATCH 2/5] board/boundarydevices: update
- post-build.sh for i.MX8MQ platforms
-In-Reply-To: <20180719095843.2efcdd0a@windsurf>
-References: <20180719073253.22433-1-gary.bisson@boundarydevices.com>
- <20180719073253.22433-3-gary.bisson@boundarydevices.com>
- <20180719095843.2efcdd0a@windsurf>
-Message-ID: <20180719080341.GB23715@g751.home>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Jul 2018 10:04:56 +0200
+Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
+ in shebang
+In-Reply-To: <20180719075842.k3gxopajcat7f4dt@bifrost>
+References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
+ <20180718171843.5ed5f10c@windsurf>
+ <20180719075842.k3gxopajcat7f4dt@bifrost>
+Message-ID: <20180719100456.2146ce8b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-On Thu, Jul 19, 2018 at 09:58:43AM +0200, Thomas Petazzoni wrote:
-> Hello,
++Peter in Cc.
+
+On Thu, 19 Jul 2018 09:58:42 +0200, Anisse Astier wrote:
+
+> We just hit this issue with the buildroot-2018.02 branch. Is this is the
+> scope of LTS-backportable patches ?
 > 
-> On Thu, 19 Jul 2018 09:32:50 +0200, Gary Bisson wrote:
-> > - Making sure to use proper ARCH for mkimage command
-> > - Remove obsolete 6x_bootscript/6x_upgrade references
-> > - Copy bootloader as u-boot.<defconfig_name>
-> > 
-> > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-> 
-> This patch is doing quite a few things that are in fact separate, which
-> kind of calls for separate patches.
+> Otherwise it's very easy to take the patch in an external, but I'm
+> guessing it might break other builds somewhere.
 
-Ok.
+I think it definitely makes sense to have it in 2018.02.x, so I guess
+Peter will backport it there.
 
-> Removing the use of the obsolete 6x_bootscript and 6x_upgrade scripts
-> should be one patch, which also removes those files (in the same patch).
+However, it would be nice if someone could try to push this
+upstream. The OE patch says it's not appropriate for upstream, but I
+disagree, the fact that the shebang can be too long is a real problem,
+and if both OE and Buildroot have to fix it, upstream should
+(hopefully) be interested in finding a solution.
 
-Ok.
+Best regards,
 
-> Then, adding support for using a ARCH/UBOOT_BINARY value that depends
-> on BR2_aarch64 should be another patch.
-
-Ok.
-
-> Finally, why do you copy the bootloader as u-boot.<defconfig_name> ?
-
-That is actually what the upgrade.cmd looks for, it was wrong to copy it
-as u-boot.imx in the first place anyway.
-https://git.buildroot.net/buildroot/tree/board/boundarydevices/common/upgrade.cmd#n66
-
-Regards,
-Gary
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
