@@ -1,43 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 19:54:28 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
- 9, 14, 17}.x series
-Message-ID: <20180719180713.742B188F81@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 20:02:30 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] systemd: Fix polkit build
+ order
+Message-ID: <20180719180713.99D8388F81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0dcba6c1bb8f3e10de9e217360ec7a0ec7e91705
+commit: https://git.buildroot.net/buildroot/commit/?id=751bcb8a6f8b0446f46ab0cb974b52c6882a18e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-[Peter: drop 4.17.x change]
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 32899448b4a45ad52430a7de68dc36a78901d029)
+We need to install polkit before systemd if we want to enable
+polkit integration, because systemd will not install polkit
+policy files unless it finds polkit-gobject-1.
+
+Signed-off-by: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 0fe0c50d3683be4975a4551ac183707692b11215)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/systemd/systemd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7254705456..ded3237528 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.138"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.110"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.139"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.111"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.52"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.53"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 8ab0f6f370..4dea7d340d 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -266,6 +266,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_POLKIT),y)
+ SYSTEMD_CONF_OPTS += -Dpolkit=true
++SYSTEMD_DEPENDENCIES += polkit
+ else
+ SYSTEMD_CONF_OPTS += -Dpolkit=false
+ endif
