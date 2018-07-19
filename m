@@ -1,55 +1,61 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 19 Jul 2018 12:31:07 +0200
-Subject: [Buildroot] [PATCH v2 5/7] board/boundarydevices: add i.MX8MQ
- support to post-build.sh
-In-Reply-To: <20180719103109.19887-1-gary.bisson@boundarydevices.com>
-References: <20180719103109.19887-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180719103109.19887-6-gary.bisson@boundarydevices.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Thu, 19 Jul 2018 07:58:41 -0300 (BRT)
+Subject: [Buildroot] [PATCH] vim: install /bin/vi as a relative symlink
+In-Reply-To: <87fu0g53wd.fsf@tkos.co.il>
+References: <20180718123443.7242-1-casantos@datacom.com.br>
+ <20180718150350.4a910b0c@windsurf> <87fu0g53wd.fsf@tkos.co.il>
+Message-ID: <589643561.4441380.1531997921281.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Use proper ARCH for mkimage command
-- Use differente U-Boot binary name depending on ARCH
+> From: "Baruch Siach" <baruch@tkos.co.il>
+> To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> Cc: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>, "Yann Morin" <yann.morin.1998@free.fr>,
+> "ratbert90" <aduskett@gmail.com>, "Arnout Vandecappelle" <arnout@mind.be>
+> Sent: Wednesday, July 18, 2018 11:57:06 PM
+> Subject: Re: [Buildroot] [PATCH] vim: install /bin/vi as a relative symlink
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- board/boundarydevices/common/post-build.sh | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+> Hi Thomas,
+> 
+> Thomas Petazzoni writes:
+>> Hello,
+>>
+>> On Wed, 18 Jul 2018 09:34:43 -0300, Carlos Santos wrote:
+>>> Prevent creating a dangling symlink when vim is not present on the host
+>>> machine. With BR2_ROOTFS_MERGED_USR, just link to "vim", since they are
+>>> on the same directory, otherwise link to "../usr/bin/vim".
+>>>
+>>> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+>>
+>> Baruch had already sent a patch with the same title/intention, but it
+>> is no longer in the pending state in patchwork.
+>>
+>> Could you clarify what happened, and which of the two patches is
+>> relevant ?
+> 
+> My vim patch is at
+> 
+>  http://patchwork.ozlabs.org/patch/943314/
+> 
+> I marked it as Rejected following the comment of Arnout. Carlos' patch
+> works around the merged /usr issue by changing the symlink target for
+> merged /usr. In my opinion this solution is error prone.
 
-diff --git a/board/boundarydevices/common/post-build.sh b/board/boundarydevices/common/post-build.sh
-index e30efe8b88..161ec0643f 100755
---- a/board/boundarydevices/common/post-build.sh
-+++ b/board/boundarydevices/common/post-build.sh
-@@ -8,13 +8,22 @@
- BOARD_DIR="$(dirname $0)"
- UBOOT_DEFCONFIG="$(grep BR2_TARGET_UBOOT_BOARD_DEFCONFIG ${BR2_CONFIG} | sed 's/.*\"\(.*\)\"/\1/')"
- 
-+if grep -Eq "^BR2_aarch64=y$" ${BR2_CONFIG}; then
-+	MKIMAGE_ARCH=arm64
-+	UBOOT_BINARY=imx8-boot-sd.bin
-+else
-+	MKIMAGE_ARCH=arm
-+	UBOOT_BINARY=u-boot.imx
-+fi
-+
- # bd u-boot looks for standard bootscript
--install -m 0644 -D $BINARIES_DIR/boot.scr $TARGET_DIR/boot/
-+$HOST_DIR/bin/mkimage -A $MKIMAGE_ARCH -O linux -T script -C none -a 0 -e 0 \
-+    -n "boot script" -d $BOARD_DIR/boot.cmd $TARGET_DIR/boot/boot.scr
- 
- # u-boot / update script for bd upgradeu command
--if [ -e $BINARIES_DIR/u-boot.imx ]; then
--    install -D -m 0644 $BINARIES_DIR/u-boot.imx \
-+if [ -e $BINARIES_DIR/$UBOOT_BINARY ]; then
-+    install -D -m 0644 $BINARIES_DIR/$UBOOT_BINARY \
-         $TARGET_DIR/u-boot.$UBOOT_DEFCONFIG
--    $HOST_DIR/bin/mkimage -A arm -O linux -T script -C none -a 0 -e 0 \
--    -n "upgrade script" -d $BOARD_DIR/upgrade.cmd $TARGET_DIR/upgrade.scr
-+    $HOST_DIR/bin/mkimage -A $MKIMAGE_ARCH -O linux -T script -C none -a 0 -e 0 \
-+        -n "upgrade script" -d $BOARD_DIR/upgrade.cmd $TARGET_DIR/upgrade.scr
- fi
+Why?
+
+> It would be
+> much easier to allow dangling symlinks in the target directory, and
+> tweak the busybox install.sh to cope with that. That's what my pending
+> busybox patch suggests.
+> 
+>  http://patchwork.ozlabs.org/patch/944884/
+
+Both patches could be applied. They are independent from each other.
+
 -- 
-2.18.0
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
