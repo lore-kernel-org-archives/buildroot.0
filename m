@@ -1,42 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 12:11:55 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] libwebsockets: add
- optional libevent dependency
-Message-ID: <20180719101153.4FD8088DFB@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 12:13:55 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x]
+ support/dependencies/dependencies.sh: add details for Redhat/Fedora
+Message-ID: <20180719101153.5C1D188DFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=708b3d44195de42fc93f48ce7563e792e05ceb48
+commit: https://git.buildroot.net/buildroot/commit/?id=c11e0b720be23a52517bc30e26eac453055a4f8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-libevent is supported since 2.3.0
+Add the i686 package list to install when using pre-built 32 bits
+binaries with a redhat/fedora host distribution (glibc.i686 and
+zlib.i686).
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e46257264ed773a9c2b94e0e4f0131187a8940ba)
+(cherry picked from commit d0505b849f20ad7396c767cc18159df6af40099f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libwebsockets/libwebsockets.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ support/dependencies/dependencies.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 28fd183393..81e398bedd 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -35,6 +35,13 @@ else
- LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBEVENT),y)
-+LIBWEBSOCKETS_DEPENDENCIES += libevent
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=ON
-+else
-+LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUV),y)
- LIBWEBSOCKETS_DEPENDENCIES += libuv
- LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBUV=ON
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index f98678973b..c5f29d32f4 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -222,6 +222,8 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+ 		echo "If you're running a Debian/Ubuntu distribution, install the libc6-i386,"
+ 		echo "lib32stdc++6, and lib32z1 packages (or alternatively libc6:i386,"
+ 		echo "libstdc++6:i386, and zlib1g:i386)."
++		echo "If you're running a RedHat/Fedora distribution, install the glibc.i686 and"
++		echo "zlib.i686 packages."
+ 		echo "For other distributions, refer to the documentation on how to install the 32 bits"
+ 		echo "compatibility libraries."
+ 		exit 1
