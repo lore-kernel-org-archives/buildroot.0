@@ -1,46 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Jul 2018 17:02:59 +0200
-Subject: [Buildroot] [PATCH v2 1/2] nghttp2: new package
-In-Reply-To: <20180719135409.8859-1-michael.burtin@netgem.com>
-References: <20180719135409.8859-1-michael.burtin@netgem.com>
-Message-ID: <20180719170259.76870b82@windsurf>
+Date: Thu, 19 Jul 2018 17:03:32 +0200
+Subject: [Buildroot] [git commit] busybox: Update to 1.29.1
+Message-ID: <20180719150148.D1B3C88F3B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9f803332a722c369987c60da06871d100d106e82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 19 Jul 2018 15:54:08 +0200, Micha?l Burtin wrote:
-> nghttp2 is an implementation of HTTP/2 and its header
-> compression algorithm HPACK in C.
-> 
-> Signed-off-by: Micha?l Burtin <michael.burtin@netgem.com>
-> Signed-off-by: Anisse Astier <anisse.astier.ext@netgem.com>
-> 
-> ---
-> Changes v1 -> v2 (from Thomas Petazzoni review):
->   - rename package to nghttp2 (original software name)
->   - fix formatting (checked with check-package)
->   - package added to DEVELOPERS file
->   - fix LICENSE_FILES (remove LICENCE)
->   - add checksum for COPYING file
-> ---
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/nghttp2/Config.in    |  7 +++++++
->  package/nghttp2/nghttp2.hash |  3 +++
->  package/nghttp2/nghttp2.mk   | 22 ++++++++++++++++++++++
->  5 files changed, 34 insertions(+)
->  create mode 100644 package/nghttp2/Config.in
->  create mode 100644 package/nghttp2/nghttp2.hash
->  create mode 100644 package/nghttp2/nghttp2.mk
+Includes fixes to sendmail and wget.
 
-Thanks, both patches applied!
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/busybox/busybox.hash | 4 ++--
+ package/busybox/busybox.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/busybox/busybox.hash b/package/busybox/busybox.hash
+index 26194be3a9..11b9565df9 100644
+--- a/package/busybox/busybox.hash
++++ b/package/busybox/busybox.hash
+@@ -1,3 +1,3 @@
+-# From https://busybox.net/downloads/busybox-1.29.0.tar.bz2.sha256
+-sha256 c8115612f0be640644e7c35098766ddaac4a88b773c4c4f0e43564982f660c82  busybox-1.29.0.tar.bz2
++# From https://busybox.net/downloads/busybox-1.29.1.tar.bz2.sha256
++sha256 fc250730ea16d28839bfecda3c431683fa6bd4273ffca6b632cbeb3556c914c3  busybox-1.29.1.tar.bz2
+ sha256 bbfc9843646d483c334664f651c208b9839626891d8f17604db2146962f43548  LICENSE
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 5266f844b6..3be6cbc7b1 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BUSYBOX_VERSION = 1.29.0
++BUSYBOX_VERSION = 1.29.1
+ BUSYBOX_SITE = http://www.busybox.net/downloads
+ BUSYBOX_SOURCE = busybox-$(BUSYBOX_VERSION).tar.bz2
+ BUSYBOX_LICENSE = GPL-2.0
