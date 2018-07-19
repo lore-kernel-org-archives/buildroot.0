@@ -1,27 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:44:13 +0200
-Subject: [Buildroot] [PATCH 1/1] <wireless-regdb>: Adds
- "regulatory.db[.p7s]" to /lib/firmware
-In-Reply-To: <20180716151303.18064-1-me@noctarius.com> (Christoph Engelbert's
- message of "Mon, 16 Jul 2018 18:13:03 +0300")
-References: <20180716151303.18064-1-me@noctarius.com>
-Message-ID: <87lga6aok2.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 23:44:54 +0200
+Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
+ in shebang
+In-Reply-To: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
+ (David Owens's message of "Thu, 12 Jul 2018 11:37:34 -0500")
+References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
+Message-ID: <87h8kuaoix.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christoph" == Christoph Engelbert <me@noctarius.com> writes:
+>>>>> "David" == David Owens <david.owens@rockwellcollins.com> writes:
 
- > With kernel version 4.15, Linux started to support loading regulatory.db and regulatory.db.p7s files
- > directly from /lib/firmware, without the need of crda. If the kernel can't load those files it'll
- > fallback to using crda, but the direct way is preferred.
+ > When the output directory is nested under a long path name, calling the
+ > gdbus-codegen, glib-genmarshal, or glib-mkenums scripts throws the
+ > error:
 
- > This patch copies those those files under /lib/firmware. The use of crda shouldn't be necessary with
- > kernels of 4.15 or later.
+ >> '/usr/bin/env: /...: No such file or directory'
 
- > Signed-off-by: Christoph Engelbert <me@noctarius.com>
+ > This is because libglib2 uses the absolute path to the python
+ > interpreter for its shebang statements, and shebangs have a max length
+ > of 127 chars[1]. A long absolute path will be cut off and appear as a
+ > missing file.
+
+ > Since the host Python is present in the $PATH passed to all packages, we
+ > can copy the workaround from Yocto and just use the python interpreter
+ > in $PATH[2]. However, 'python' is used instead of 'python3' as the
+ > scripts are compatible with both.
+
+ > [1] https://linux.die.net/man/2/execve
+ > [2] http://cgit.openembedded.org/openembedded-core/commit/?id=eef7883587acc933d6f34b559ec03ff84d18573b
+
+ > Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+ > Signed-off-by: David Owens <david.owens@rockwellcollins.com>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
