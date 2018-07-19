@@ -1,56 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 11:40:39 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/hidapi: select
- glibc gconv libs copy
-Message-ID: <20180719093705.6B93A88DF9@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 11:45:24 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] pixiewps: fix static linking with uclibc-ng
+In-Reply-To: <20180610181104.19619-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 10 Jun 2018 20:11:04 +0200")
+References: <20180610181104.19619-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zhynftjf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8dc83611314ba373e3b86c662c1f819e80ebcd2e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Hidapi source uses iconv_open UTF-16 conversion [1] which requires
-gconv libararies when buiding with glibc in order to successfully
-find serial number, manufacturer and product strings [2].
+ > Fixes following linking error with uClibc-ng:
+ > /home/peko/autobuild/instance-0/output/host/lib/gcc/powerpc-buildroot-linux-uclibc/7.3.0/libgcc.a(unwind-dw2-fde-dip.o):
+ > In function `_Unwind_Find_FDE':
+ > /home/peko/autobuild/instance-0/output/build/host-gcc-final-7.3.0/build/powerpc-buildroot-linux-uclibc/libgcc/../../../libgcc/unwind-dw2-fde-dip.c:469:
+ > undefined reference to `dl_iterate_phdr'
+ > collect2: error: ld returned 1 exit status
 
-Use select in the config file to autmatically select gconv libararies
-for inclusion on the target when building with glibc
+ > Since uClibc-ng 1.0.18 a circular dependency between libc and libgcc
+ > exist, when static linking is used. It can be resolved by the compiler
+ > when -static is correctly passed in the linking step.
 
-Tested with ./utils/test-pkg -c hidapi.cfg -p hidapi and hidapi.cfg file
-contents:
-BR2_PACKAGE_HIDAPI=y
-BR2_PACKAGE_EUDEV=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_USE_MMU=y
-BR2_USE_WCHAR=y
+ > So use TARGET_CONFIGURE_OPTS to pass CC as well as LDFLAGS to make
 
-Also tested on x86-64 build target with application using hidapi
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/d9f0311538c8db1196839e36af3f6ef4e403be2b
 
-[1]: https://github.com/signal11/hidapi/blob/a6a622ffb680c55da0de787ff93b80280498330f/libusb/hid.c#L446
-[2]: https://www.silabs.com/community/interface/forum.topic.html/cp2114_linux_sta-RtWg
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Thomas Petazzoni):
+ >  - Remove PIXIEWPS_MAKE_OPTS to use directly TARGET_CONFIGURE_OPTS
 
-Signed-off-by: Dan Walkes <danwalkes@trellis-logic.com>
-Tested-by: Dan Walkes <danwalkes@trellis-logic.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a7404a79c6355343253353ba9fdd0d227e638df5)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/hidapi/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+Committed to 2018.05.x, thanks.
 
-diff --git a/package/hidapi/Config.in b/package/hidapi/Config.in
-index f6a31bacd3..b98c2db91c 100644
---- a/package/hidapi/Config.in
-+++ b/package/hidapi/Config.in
-@@ -5,6 +5,8 @@ config BR2_PACKAGE_HIDAPI
- 	select BR2_PACKAGE_LIBUSB
- 	select BR2_PACKAGE_LIBGUDEV
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	# runtime UTF conversion support
-+	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC
- 	help
- 	  HIDAPI is a multi-platform library which allows an application
- 	  to interface with USB and Bluetooth HID-Class devices on
+-- 
+Bye, Peter Korsgaard
