@@ -1,68 +1,60 @@
-From: Anisse Astier <anisse@astier.eu>
-Date: Thu, 19 Jul 2018 09:58:42 +0200
-Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
- in shebang
-In-Reply-To: <20180718171843.5ed5f10c@windsurf>
-References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
- <20180718171843.5ed5f10c@windsurf>
-Message-ID: <20180719075842.k3gxopajcat7f4dt@bifrost>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Jul 2018 10:07:23 +0200
+Subject: [Buildroot] [PATCH 1/5] board/freescale/common/imx: make
+ imx8-bootloader-prepare more generic
+In-Reply-To: <20180719080023.GA23715@g751.home>
+References: <20180719073253.22433-1-gary.bisson@boundarydevices.com>
+ <20180719073253.22433-2-gary.bisson@boundarydevices.com>
+ <20180719094527.6275cd12@windsurf>
+ <20180719080023.GA23715@g751.home>
+Message-ID: <20180719100723.4e421707@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-We just hit this issue with the buildroot-2018.02 branch. Is this is the
-scope of LTS-backportable patches ?
+On Thu, 19 Jul 2018 10:00:54 +0200, Gary Bisson wrote:
 
-Otherwise it's very easy to take the patch in an external, but I'm
-guessing it might break other builds somewhere.
-
-Regards,
-
-Anisse
-
-
-On Wed, Jul 18, 2018 at 05:18:43PM +0200, Thomas Petazzoni wrote:
-> Hello,
+> > I don't think it's worth keeping some kind of "backward compatibility"
+> > here. Just change configs/freescale_imx8mqevk_defconfig to pass the DTB
+> > name as argument.  
 > 
-> On Thu, 12 Jul 2018 11:37:34 -0500, David Owens wrote:
-> > When the output directory is nested under a long path name, calling the
-> > gdbus-codegen, glib-genmarshal, or glib-mkenums scripts throws the
-> > error:
-> > 
-> > > '/usr/bin/env: /...: No such file or directory'  
-> > 
-> > This is because libglib2 uses the absolute path to the python
-> > interpreter for its shebang statements, and shebangs have a max length
-> > of 127 chars[1]. A long absolute path will be cut off and appear as a
-> > missing file.
-> > 
-> > Since the host Python is present in the $PATH passed to all packages, we
-> > can copy the workaround from Yocto and just use the python interpreter
-> > in $PATH[2]. However, 'python' is used instead of 'python3' as the
-> > scripts are compatible with both.
-> > 
-> > [1] https://linux.die.net/man/2/execve
-> > [2] http://cgit.openembedded.org/openembedded-core/commit/?id=eef7883587acc933d6f34b559ec03ff84d18573b
-> > 
-> > Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-> > Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-> > ---
-> >  ...t-hardcode-python-path-into-various-tools.patch | 48 ++++++++++++++++++++++
-> >  1 file changed, 48 insertions(+)
-> >  create mode 100644 package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
+> Fair enough, I'm fine with that. However, should I keep the check on the
+> arguments number to throw an error if no argument is provided?
 > 
-> Applied to master, thanks.
+> Or is the check on UBOOT_DTB existence sufficient?
+
+I think the latter is sufficient.
+
+Or, alternatively, change the script radically to use getopt to avoid
+using positional arguments. But I don't think it's worth the effort for
+now, just keep things simple.
+
+> I'll wait for a day before respinning the series to see if there are
+> other comments.
 > 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> Also, not related to the patch, the series doesn't appear "properly" in
+> the mailing list archive, patches aren't answers to the cover letter.
+> Other strange thing in Patchwork, patch 4/5 is part of "Untitled series
+> #56383" instead of the real series, is it normal?
+> I just want to make sure I'm not missing some settings in my
+> git-send-email config although it just seems that the server
+> received/treated the emails in the wrong order.
+
+This is a known patchwork limitation. Your e-mails arrived out of order
+(I was initially missing patch 3/5 here and the cover letter, and they
+arrived a few minutes later). When e-mails arrive out of order,
+patchwork gets confused and is not able to assign patches to the proper
+series. IOW, there's no problem on your side, it's patchwork that
+doesn't behave properly.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
