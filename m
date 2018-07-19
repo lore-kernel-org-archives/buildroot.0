@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 20:14:07 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] wireguard: bump to
+Date: Thu, 19 Jul 2018 20:14:00 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] wireguard: bump to
  0.0.20180708
-Message-ID: <20180719180922.047D888F80@busybox.osuosl.org>
+Message-ID: <20180719180927.2666188FB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69e5210fa2cb64c5ca7ffe84fef1403ee4b5540a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ebd0d3f806e9e7ee8dccf91a7ebd3e498d0c3f3b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 * chacha20poly1305: use slow crypto on -rt kernels on arm too
 
