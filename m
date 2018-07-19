@@ -1,60 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 19:57:23 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] linux: automatically set
- CONFIG_PERF_EVENTS when perf is enabled
-Message-ID: <20180719180757.B9F1388FAE@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 20:02:23 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] systemd: Fix polkit build
+ order
+Message-ID: <20180719180757.D2F7188FAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbf5aaa6d99b218d04a92561e2f7987575800ad5
+commit: https://git.buildroot.net/buildroot/commit/?id=16356507ea38e68c5504e0c3fe26fe1e2206e888
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Perf profiling cannot be used if CONFIG_PERF_EVENTS is not enabled in the
-kernel configuration. Similar to other tools, like ktap, we can enable the
-right options automatically.
+We need to install polkit before systemd if we want to enable
+polkit integration, because systemd will not install polkit
+policy files unless it finds polkit-gobject-1.
 
-Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 63d76c6f2f04c836af24098e26f2befe1e8e4cc4)
+Signed-off-by: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 0fe0c50d3683be4975a4551ac183707692b11215)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk                | 2 ++
- package/linux-tools/Config.in | 8 +++++---
- 2 files changed, 7 insertions(+), 3 deletions(-)
+ package/systemd/systemd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6b5f5344ed..7f4c916671 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -292,6 +292,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_ENABLE_DEFAULT_TRACERS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_FUNCTION_TRACER,$(@D)/.config))
-+	$(if $(BR2_PACKAGE_LINUX_TOOLS_PERF),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_PERF_EVENTS,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_SYSTEMD),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config)
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 2527c90257..349dc6bf0d 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -47,9 +47,11 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF
- 	  code), single CPU or severals threads.
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 1c1808dbcb..aa71e83fc9 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -277,6 +277,7 @@ endif
  
- 	  This will build and install the userspace 'perf'
--	  command. It is up to the user to ensure that the kernel
--	  configuration has all the suitable options enabled to allow a
--	  proper operation of 'perf'.
-+	  command.
-+
-+	  Your kernel must have CONFIG_PERF_EVENTS enabled to use perf
-+	  profiling. Buildroot automatically enables this in the kernel
-+	  configuration.
- 
- 	  https://perf.wiki.kernel.org/
- 
+ ifeq ($(BR2_PACKAGE_SYSTEMD_POLKIT),y)
+ SYSTEMD_CONF_OPTS += -Dpolkit=true
++SYSTEMD_DEPENDENCIES += polkit
+ else
+ SYSTEMD_CONF_OPTS += -Dpolkit=false
+ endif
