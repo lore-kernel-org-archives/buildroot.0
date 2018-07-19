@@ -1,46 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 12:08:41 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] network-manager: sync
- kernel headers comment with actual dependency
-Message-ID: <20180719100626.2A25788E3A@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 12:03:59 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] qpdf: security bump to
+ version 8.1.0
+Message-ID: <20180719100626.1B1B988E3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cb8240149416db828874418e15a370576193717
+commit: https://git.buildroot.net/buildroot/commit/?id=a3c3dad17887cb6ea89b7c9431e4327380a7384e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-In commit 52282828f06dc8aa3f721727f68a5096b9ed8b49
-("package/network-manager: add patches to build with kernel headers
-3.2"), network-manager was changed to build with kernel headers as old
-as 3.2, instead of 3.7 before. The dependency was changed accordingly,
-but the Config.in comment was not.
+Fixes CVE-2018-9918: mishandle certain "expected dictionary key but
+found non-name object" cases, allowing remote attackers to cause a
+denial of service (stack exhaustion)
 
-This commit fixes this inconsistency.
+https://github.com/qpdf/qpdf/issues/202
 
+Drop local SHA256 hash since we use upstream provided SHA512.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 760dc48e15110e90b9aebb49ffcd35648b013c5e)
+(cherry picked from commit 473390a30c5f0a4aa38f2f2304b433a5ec3aad9e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/network-manager/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/qpdf/qpdf.hash | 6 ++----
+ package/qpdf/qpdf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
-index 72658c1278..ccf795a743 100644
---- a/package/network-manager/Config.in
-+++ b/package/network-manager/Config.in
-@@ -64,8 +64,8 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
+diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
+index 1fbef66e6f..d27c9834b9 100644
+--- a/package/qpdf/qpdf.hash
++++ b/package/qpdf/qpdf.hash
+@@ -1,4 +1,2 @@
+-# From https://sourceforge.net/projects/qpdf/files/qpdf/7.0.0/qpdf-7.0.0.sha512/download
+-sha512	7b52d67b4d2c428a7b0c1cd03b03a23f05d38d7e3c81041079a137919019ea5158f12bf95fdcfcff6b43ffdefe93a85127ced2a363a6b4b380cbaa02a3840256  qpdf-7.0.0.tar.gz
+-# Locally computed
+-sha256	fed08de14caad0fe5efd148d9eca886d812588b2cbb35d13e61993ee8eb8c65f  qpdf-7.0.0.tar.gz
++# From https://sourceforge.net/projects/qpdf/files/qpdf/8.1.0/qpdf-8.1.0.sha512/download
++sha512	1831bcaaed87dae268db5d61805d1483ec5c101f6ce594be660664c119597ae67cf011c2b50092964d785a814d5f6c780935127a89401fe37a1026ae4d3af15c  qpdf-8.1.0.tar.gz
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index 27e4d09978..4776d22b16 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
- 
--comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.7, dynamic library"
-+comment "NetworkManager needs udev /dev management and a glibc toolchain w/ headers >= 3.2, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_PACKAGE_HAS_UDEV || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7 || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || \
- 		!BR2_TOOLCHAIN_USES_GLIBC || BR2_STATIC_LIBS
+-QPDF_VERSION = 7.0.0
++QPDF_VERSION = 8.1.0
+ QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
+ QPDF_INSTALL_STAGING = YES
+ QPDF_LICENSE = Artistic-2.0
