@@ -1,36 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 20:01:34 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] liblogging: update
- project URL
-Message-ID: <20180719180757.CB02B88FAE@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 19:53:01 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libsoup: update homepage
+ link
+Message-ID: <20180719180757.B1B3C88FAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45df4885900c32324982f63f6d0f6466ff528cb2
+commit: https://git.buildroot.net/buildroot/commit/?id=2f359ca4405203348cb52b75d0c610eb24397ebb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-The original site www.liblogging.org has been taken down because of the
-new European data protection regulation (GDPR), to which it was not
-compliant.
-
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9d1d513c65a17003f695a8aeea9d686f28456a44)
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit adf2cf0b42b346cfa7e50e615b66d0e8756fcf59)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/liblogging/Config.in | 2 +-
+ package/libsoup/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/liblogging/Config.in b/package/liblogging/Config.in
-index 23c3c1ad2d..a39fdf8ddc 100644
---- a/package/liblogging/Config.in
-+++ b/package/liblogging/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_LIBLOGGING
- 	  logging. It offers an enhanced replacement
- 	  for the syslog() call, but retains its ease of use.
+diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+index 236d3c428a..599f9594d9 100644
+--- a/package/libsoup/Config.in
++++ b/package/libsoup/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_LIBSOUP
+ 	  and the GLib main loop, to integrate well with GNOME
+ 	  applications.
  
--	  http://www.liblogging.org/
-+	  https://www.rsyslog.com/liblogging/
+-	  http://live.gnome.org/LibSoup
++	  https://wiki.gnome.org/Projects/libsoup
+ 
+ if BR2_PACKAGE_LIBSOUP
+ 
