@@ -1,29 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 20:10:56 +0200
-Subject: [Buildroot] [git commit] linux: automatically set
- CONFIG_PERF_EVENTS when perf is enabled
-In-Reply-To: <20180704194852.113E48680E@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Wed, 4 Jul 2018 21:52:11 +0200")
-References: <20180704194852.113E48680E@busybox.osuosl.org>
-Message-ID: <87601bcczz.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 20:11:53 +0200
+Subject: [Buildroot] [PATCH] configs/raspberrypi3_defconfig: fix
+ filesystem size
+In-Reply-To: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com> (Leon
+ Anavi's message of "Fri, 29 Jun 2018 12:23:10 +0300")
+References: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com>
+Message-ID: <871sbzccye.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Leon" == Leon Anavi <leon.anavi@konsulko.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=63d76c6f2f04c836af24098e26f2befe1e8e4cc4
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > Increase the filesystem size for raspberrypi3 by setting
+ > BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
+ > raspberrypi3_64 has the same size.
 
- > Perf profiling cannot be used if CONFIG_PERF_EVENTS is not enabled in the
- > kernel configuration. Similar to other tools, like ktap, we can enable the
- > right options automatically.
+ > Fixes:
+ > Copying files into the device: __populate_fs: Could not allocate block
+ > in ext2 filesystem while writing file "services"
+ > mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
 
- > Signed-off-by: Jan Heylen <jan.heylen@nokia.com>
- > Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
