@@ -1,58 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 11:57:09 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/Makefile.in:
- replace invocation of tempfile w/ mktemp in try-run
-Message-ID: <20180719100626.0A61588E61@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 12:06:22 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] gdb: drop duplicate
+ dependencies
+Message-ID: <20180719100626.22EEB88E3A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84b37b48aa366d2bcd7a5ca68c7cec1fe903d724
+commit: https://git.buildroot.net/buildroot/commit/?id=f312738cfb1302e720c6281a5de6813bd972c9d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-mktemp is included in GNU Coreutils, and its usage is preferred over
-tempfile.
+Commit 1e3738db42919cb4487f7a64381ac7d3090d0e1f ("package/gdb: rework
+dependency for C++11") erroneously added duplicate dependencies in
+package/gdb/Config.in related to gcc 4.8 and C++ dependency.
 
-http://lists.gnu.org/archive/html/bug-coreutils/2007-10/msg00134.html
-
-Additionally, some distributions no longer package tempfile, causing
-the try-run macro to not work as expected. For example, due to try-run
-not behaving as expected, testing for the -no-pie option in the
-aespipe package doesn't work, and we build without -no-pie, causing a
-build failure.
-
-See also commit 91a08ecc998 (package/Makefile.in: add host-cc-option
-macro) which introduced that initial code, explicitly to add -no-pie
-when needed.
+One copy of those dependencies was below the select causing a
+check-package warning.
 
 Fixes:
-  http://autobuild.buildroot.net/results/db50f4415d18441f94b641ef6dc5a3672678b8b9/
-  http://autobuild.buildroot.net/results/76d73f767d3aab3c97d61188f5666899d72ed82d/
-  http://autobuild.buildroot.net/results/6aa9031962603354086b49bc49add92fde496ec2/
-  http://autobuild.buildroot.net/results/33d22f4d96fb439be8551355290896ef6d3649df/
-  http://autobuild.buildroot.net/results/eeec2ed80e147c172ec2d50958b12cfa38b2cc8d/
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+package/gdb/Config.in:28: attributes order: type, default, depends on, select, help (http://nightly.buildroot.org/#_config_files)
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5d08d34b3dd44b7d4d9421ae020b80d9a5065015)
+(cherry picked from commit f50578ab98bbc99139838375f6221411d420b298)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gdb/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 4325f7b3a9..5f207bec10 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -239,7 +239,7 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
- # Exit code chooses option. "$$TMP" is can be used as temporary file and
- # is automatically cleaned up.
- try-run = $(shell set -e;               \
--	TMP="$$(tempfile)";             \
-+	TMP="$$(mktemp)";               \
- 	if ($(1)) >/dev/null 2>&1;      \
- 	then echo "$(2)";               \
- 	else echo "$(3)";               \
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 9a71c008a0..55c1b194ce 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -25,8 +25,6 @@ config BR2_PACKAGE_GDB
+ 	# one from the external toolchain should be used.
+ 	select BR2_PACKAGE_GDB_SERVER if \
+ 		(!BR2_PACKAGE_GDB_DEBUGGER && !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY)
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_PACKAGE_GDB_NEEDS_CXX11
+-	depends on BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_GDB_NEEDS_CXX11
+ 	help
+ 	  GDB, the GNU Project debugger, allows you to see what is
+ 	  going on `inside' another program while it executes -- or
