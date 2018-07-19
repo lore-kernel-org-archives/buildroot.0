@@ -1,31 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 20:11:53 +0200
-Subject: [Buildroot] [PATCH] configs/raspberrypi3_defconfig: fix
- filesystem size
-In-Reply-To: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com> (Leon
- Anavi's message of "Fri, 29 Jun 2018 12:23:10 +0300")
-References: <1530264190-9535-1-git-send-email-leon.anavi@konsulko.com>
-Message-ID: <871sbzccye.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 19:54:28 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
+ 9, 14, 17}.x series
+Message-ID: <20180719180713.742B188F81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Leon" == Leon Anavi <leon.anavi@konsulko.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0dcba6c1bb8f3e10de9e217360ec7a0ec7e91705
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Increase the filesystem size for raspberrypi3 by setting
- > BR2_TARGET_ROOTFS_EXT2_SIZE to "120M". The filesystem for
- > raspberrypi3_64 has the same size.
+[Peter: drop 4.17.x change]
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 32899448b4a45ad52430a7de68dc36a78901d029)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- > Fixes:
- > Copying files into the device: __populate_fs: Could not allocate block
- > in ext2 filesystem while writing file "services"
- > mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
-
- > Signed-off-by: Leon Anavi <leon.anavi@konsulko.com>
-
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7254705456..ded3237528 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.138"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.110"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.139"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.111"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.52"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.53"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
