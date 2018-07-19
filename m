@@ -1,46 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Jul 2018 10:42:00 +0200
-Subject: [Buildroot] [PATCH] btrfs-progs: adjust install-static patch to
- install headers under $(prefix)/include/btrfs
-In-Reply-To: <20180701183408.7305-1-peter@korsgaard.com>
-References: <20180701183408.7305-1-peter@korsgaard.com>
-Message-ID: <20180719104200.39029242@windsurf>
+From: =?gb2312?B?s8LQobjV?= <shawn_chen@realsil.com.cn>
+Date: Thu, 19 Jul 2018 09:10:03 +0000
+Subject: [Buildroot] patch: fix wrong sysroot path when given rsdk toolchain
+Message-ID: <14A4BC6FC7AB3340A49D24D6ACB7BED930620C@RS-MBS02.realsil.com.cn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+The attachment is a patch that fixes a Realtek toolchain that has a sysroot path of ?mips-linux-uclibc?, this causes the buildroot recognizes the sysroot as ?mips-linux-uc? by the sed operation, and then the external toolchain setup is failed. Adding a ?/? in the sed re expression avoids the wrong substitution, other toolchains like linaro arm toolchain are tested ok to ensure no side effect is induced, please help review and apply this patch, thanks.
 
-On Sun,  1 Jul 2018 20:34:08 +0200, Peter Korsgaard wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/15cc6523a42bf66508b2b37fd1fcb74625561ec2/
-> 
-> btrfs-progs 'make install' installs headers under $(prefix)/include/btrfs,
-> but our patch to also install headers for 'install-static' installed
-> directly into $(prefix)/include, confusing other packages as btrfs-progs
-> headers have very common names such as version, sizes.h, list.h, ioctl.h, ..
-> 
-> Fix it by adjusting the patch to also install under $(prefix)/include/btrfs.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Regards
+Shawn Chen
+Realtek Semiconductor
 
-Could you backport this patch to 2018.05.x. Indeed, the version.h
-installed by btrfs-progs confuses the U-Boot build system, which is the
-reason for the following build failures:
-
-  http://autobuild.buildroot.net/?reason=uboot-tools%&branch=2018.05.x
-
-The problem doesn't seem to exist on 2018.02.x, because back then, the
-btrfs-progs version was older and was not installing those headers in
-bogus locations. At least the specific uboot-tools problem cannot be
-reproduced on 2018.02.x.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180719/5b0e5652/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-fix-wrong-sysroot-path-when-given-rsdk-toolchain.patch
+Type: application/octet-stream
+Size: 1129 bytes
+Desc: 0001-fix-wrong-sysroot-path-when-given-rsdk-toolchain.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180719/5b0e5652/attachment.obj>
