@@ -1,55 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 12:03:59 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] qpdf: security bump to
- version 8.1.0
-Message-ID: <20180719100626.1B1B988E3A@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 11:57:09 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/Makefile.in:
+ replace invocation of tempfile w/ mktemp in try-run
+Message-ID: <20180719100626.0A61588E61@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3c3dad17887cb6ea89b7c9431e4327380a7384e
+commit: https://git.buildroot.net/buildroot/commit/?id=84b37b48aa366d2bcd7a5ca68c7cec1fe903d724
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Fixes CVE-2018-9918: mishandle certain "expected dictionary key but
-found non-name object" cases, allowing remote attackers to cause a
-denial of service (stack exhaustion)
+mktemp is included in GNU Coreutils, and its usage is preferred over
+tempfile.
 
-https://github.com/qpdf/qpdf/issues/202
+http://lists.gnu.org/archive/html/bug-coreutils/2007-10/msg00134.html
 
-Drop local SHA256 hash since we use upstream provided SHA512.
+Additionally, some distributions no longer package tempfile, causing
+the try-run macro to not work as expected. For example, due to try-run
+not behaving as expected, testing for the -no-pie option in the
+aespipe package doesn't work, and we build without -no-pie, causing a
+build failure.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+See also commit 91a08ecc998 (package/Makefile.in: add host-cc-option
+macro) which introduced that initial code, explicitly to add -no-pie
+when needed.
+
+Fixes:
+  http://autobuild.buildroot.net/results/db50f4415d18441f94b641ef6dc5a3672678b8b9/
+  http://autobuild.buildroot.net/results/76d73f767d3aab3c97d61188f5666899d72ed82d/
+  http://autobuild.buildroot.net/results/6aa9031962603354086b49bc49add92fde496ec2/
+  http://autobuild.buildroot.net/results/33d22f4d96fb439be8551355290896ef6d3649df/
+  http://autobuild.buildroot.net/results/eeec2ed80e147c172ec2d50958b12cfa38b2cc8d/
+
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 473390a30c5f0a4aa38f2f2304b433a5ec3aad9e)
+(cherry picked from commit 5d08d34b3dd44b7d4d9421ae020b80d9a5065015)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qpdf/qpdf.hash | 6 ++----
- package/qpdf/qpdf.mk   | 2 +-
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/Makefile.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
-index 1fbef66e6f..d27c9834b9 100644
---- a/package/qpdf/qpdf.hash
-+++ b/package/qpdf/qpdf.hash
-@@ -1,4 +1,2 @@
--# From https://sourceforge.net/projects/qpdf/files/qpdf/7.0.0/qpdf-7.0.0.sha512/download
--sha512	7b52d67b4d2c428a7b0c1cd03b03a23f05d38d7e3c81041079a137919019ea5158f12bf95fdcfcff6b43ffdefe93a85127ced2a363a6b4b380cbaa02a3840256  qpdf-7.0.0.tar.gz
--# Locally computed
--sha256	fed08de14caad0fe5efd148d9eca886d812588b2cbb35d13e61993ee8eb8c65f  qpdf-7.0.0.tar.gz
-+# From https://sourceforge.net/projects/qpdf/files/qpdf/8.1.0/qpdf-8.1.0.sha512/download
-+sha512	1831bcaaed87dae268db5d61805d1483ec5c101f6ce594be660664c119597ae67cf011c2b50092964d785a814d5f6c780935127a89401fe37a1026ae4d3af15c  qpdf-8.1.0.tar.gz
-diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
-index 27e4d09978..4776d22b16 100644
---- a/package/qpdf/qpdf.mk
-+++ b/package/qpdf/qpdf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QPDF_VERSION = 7.0.0
-+QPDF_VERSION = 8.1.0
- QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
- QPDF_INSTALL_STAGING = YES
- QPDF_LICENSE = Artistic-2.0
+diff --git a/package/Makefile.in b/package/Makefile.in
+index 4325f7b3a9..5f207bec10 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -239,7 +239,7 @@ HOST_LDFLAGS  += -L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib
+ # Exit code chooses option. "$$TMP" is can be used as temporary file and
+ # is automatically cleaned up.
+ try-run = $(shell set -e;               \
+-	TMP="$$(tempfile)";             \
++	TMP="$$(mktemp)";               \
+ 	if ($(1)) >/dev/null 2>&1;      \
+ 	then echo "$(2)";               \
+ 	else echo "$(3)";               \
