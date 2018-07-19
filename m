@@ -1,96 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:43:11 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] libglib2: Avoid absolute
- path to python in shebang
-Message-ID: <20180719214017.C2EEA890A3@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 23:40:27 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] bind: security bump to
+ 9.11.4
+Message-ID: <20180719214017.9DDBA890A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdc20974270edcc2c3a3a3d0a9b844e67f63e2ae
+commit: https://git.buildroot.net/buildroot/commit/?id=4212446170a3069279ea3c95364d8061d62b8094
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-When the output directory is nested under a long path name, calling the
-gdbus-codegen, glib-genmarshal, or glib-mkenums scripts throws the
-error:
+Fixes CVE-2018-5738: When recursion is enabled but the allow-recursion
+and allow-query-cache ACLs are not specified, they should be limited to
+local networks, but they were inadvertently set to match the default
+allow-query, thus allowing remote queries.
 
-> '/usr/bin/env: /...: No such file or directory'
+Update license file hash; copyright year update.
 
-This is because libglib2 uses the absolute path to the python
-interpreter for its shebang statements, and shebangs have a max length
-of 127 chars[1]. A long absolute path will be cut off and appear as a
-missing file.
+Add reference to tarball signature key.
 
-Since the host Python is present in the $PATH passed to all packages, we
-can copy the workaround from Yocto and just use the python interpreter
-in $PATH[2]. However, 'python' is used instead of 'python3' as the
-scripts are compatible with both.
-
-[1] https://linux.die.net/man/2/execve
-[2] http://cgit.openembedded.org/openembedded-core/commit/?id=eef7883587acc933d6f34b559ec03ff84d18573b
-
-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
-Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3ab5dfb548a840debe6e4e767ea2ea10e9c6e93a)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b36577a2669310c1b1a6722e012a1049e3793d1d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t-hardcode-python-path-into-various-tools.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ package/bind/bind.hash | 7 ++++---
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch b/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
-new file mode 100644
-index 0000000000..fa558e6dbf
---- /dev/null
-+++ b/package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
-@@ -0,0 +1,48 @@
-+From b9160d951b9af647b97766c57295ca4f45cf9521 Mon Sep 17 00:00:00 2001
-+From: Alexander Kanavin <alex.kanavin@gmail.com>
-+Date: Tue, 3 Oct 2017 10:45:55 +0300
-+Subject: [PATCH] Do not hardcode python path into various tools
-+
-+Upstream-Status: Inappropriate [oe-core specific]
-+Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
-+Fetch from: http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-core/glib-2.0/glib-2.0/0010-Do-not-hardcode-python-path-into-various-tools.patch?id=eef7883587acc933d6f34b559ec03ff84d18573b
-+Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-+---
-+ gio/gdbus-2.0/codegen/gdbus-codegen.in | 2 +-
-+ gobject/glib-genmarshal.in             | 2 +-
-+ gobject/glib-mkenums.in                | 2 +-
-+ 3 files changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/gio/gdbus-2.0/codegen/gdbus-codegen.in b/gio/gdbus-2.0/codegen/gdbus-codegen.in
-+index 8050981..e693ef3 100644
-+--- a/gio/gdbus-2.0/codegen/gdbus-codegen.in
-++++ b/gio/gdbus-2.0/codegen/gdbus-codegen.in
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/env @PYTHON@
-++#!/usr/bin/env python
-+ 
-+ # GDBus - GLib D-Bus Library
-+ #
-+diff --git a/gobject/glib-genmarshal.in b/gobject/glib-genmarshal.in
-+index 09e8408..b2f9d99 100755
-+--- a/gobject/glib-genmarshal.in
-++++ b/gobject/glib-genmarshal.in
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/env @PYTHON@
-++#!/usr/bin/env python
-+ 
-+ # pylint: disable=too-many-lines, missing-docstring, invalid-name
-+ 
-+diff --git a/gobject/glib-mkenums.in b/gobject/glib-mkenums.in
-+index d4bfd11..051fce4 100755
-+--- a/gobject/glib-mkenums.in
-++++ b/gobject/glib-mkenums.in
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/env @PYTHON@
-++#!/usr/bin/env python
-+ 
-+ # If the code below looks horrible and unpythonic, do not panic.
-+ #
-+-- 
-+2.14.1
-+
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 199db704fe..78f8015521 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,3 +1,4 @@
+-# Verified from http://ftp.isc.org/isc/bind9/9.11.2-P1/bind-9.11.2-P1.tar.gz.sha256.asc
+-sha256 cec31548832fca3f85d95178d4019b7d702039e8595d4c93914feba337df1212 bind-9.11.2-P1.tar.gz
+-sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
++# Verified from https://ftp.isc.org/isc/bind9/9.11.4/bind-9.11.4.tar.gz.asc
++# with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
++sha256 595070b031f869f8939656b5a5d11b121211967f15f6afeafa895df745279617 bind-9.11.4.tar.gz
++sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 392ef321c2..c4429ef6cc 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.2-P1
++BIND_VERSION = 9.11.4
+ BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
