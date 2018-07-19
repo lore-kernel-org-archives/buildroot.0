@@ -1,44 +1,69 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:31:51 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] board/minnowboard: add
- CONFIG_IGB in Linux kernel config
-Message-ID: <20180719213040.B852F88FB4@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 23:32:42 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] pkg-generic: fix
+ no-check-hash for inferred site method
+Message-ID: <20180719213040.C132B88FB4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9b16931be6db0fe2f8c19d426152d39027627b7
+commit: https://git.buildroot.net/buildroot/commit/?id=e922308ceb7d4296578c439d2cf621652ec6f662
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-The 2017 MinnowBoard Turbot skews no longer use the Realtek 8169
-Ethernet chip.  The Turbot D0 uses The Intel I211, the Turbot Dual
-Ethernet has an I210 (quad-core) or I211 (dual-core).
+Currently, when the site method is explicitly set to a SCM other than
+git, the main download is correctly excluded from being hash-checked.
+But when the site method is inferred from the site uri, the download
+from a SCM other than git is wrongly being hash-checked.
 
-Add CONFIG_IGB to the Linux config but keep the Realtek 8169 support
-to avoid breaking older boards
+Fix this by moving the code that excludes SCM methods from hash-check
+below the code that infers the site method.
 
-Tested on Turbot D0, lspci -k shows the igb driver is used:
-03:00.0 Class 0200: 8086:1539 igb
+Currently there is no package in the tree that uses inferred site
+method, and that is why the autobuilder didn't caught this. We had
+packages using inferred site method in the past, the last one was
+'expect', but since they didn't have a hash file (for a license or
+extra-download for example) the build didn't error out.
 
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 02b7fbf8fc4321d5d7aab4bdc85f759060e016d7)
+(cherry picked from commit b115ecd122d6a9738d89b5e6efc5f7f6df7872e9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/minnowboard/linux.config | 1 +
- 1 file changed, 1 insertion(+)
+ package/pkg-generic.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/minnowboard/linux.config b/board/minnowboard/linux.config
-index 03ffc5e371..27077dbcda 100644
---- a/board/minnowboard/linux.config
-+++ b/board/minnowboard/linux.config
-@@ -21,6 +21,7 @@ CONFIG_SATA_AHCI=y
- CONFIG_ATA_PIIX=y
- CONFIG_NETDEVICES=y
- CONFIG_R8169=y
-+CONFIG_IGB=y
- CONFIG_INPUT_EVDEV=y
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9bd2358ef6..7d4eaf9461 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -483,10 +483,6 @@ ifndef $(2)_PATCH
+  endif
+ endif
+ 
+-ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
+-BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
+-endif
+-
+ $(2)_ALL_DOWNLOADS = \
+ 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE)) \
+ 	$$(foreach p,$$($(2)_PATCH) $$($(2)_EXTRA_DOWNLOADS),\
+@@ -508,6 +504,10 @@ ifndef $(2)_SITE_METHOD
+  endif
+ endif
+ 
++ifneq ($$(filter bzr cvs hg svn,$$($(2)_SITE_METHOD)),)
++BR_NO_CHECK_HASH_FOR += $$($(2)_SOURCE)
++endif
++
+ # Do not accept to download git submodule if not using the git method
+ ifneq ($$($(2)_GIT_SUBMODULES),)
+  ifneq ($$($(2)_SITE_METHOD),git)
