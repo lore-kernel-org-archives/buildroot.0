@@ -1,40 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 11:53:16 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] libv4l: add optional
- sdl2_image dependency
-Message-ID: <20180719095142.18A9588E3B@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 11:57:50 +0200
+Subject: [Buildroot] [PATCH 1/1] replace invocation of tempfile w/
+ mktemp in try-run
+In-Reply-To: <20180629214012.26644-1-joseph.kogut@gmail.com> (Joseph Kogut's
+ message of "Fri, 29 Jun 2018 14:40:12 -0700")
+References: <20180629214012.26644-1-joseph.kogut@gmail.com>
+Message-ID: <8736wffsyp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95172513dfce0b5474d1e184f3b37311ad753106
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+>>>>> "Joseph" == Joseph Kogut <joseph.kogut@gmail.com> writes:
 
-The configure.ac script simply uses PKG_CHECK_MODULES(), so there is
-not --enable/--disable option.
+ > mktemp is included in GNU Coreutils, and its usage is preferred over
+ > tempfile.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b1ef2944a356c648ee04309de1b21bdfe5f46b4e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libv4l/libv4l.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > http://lists.gnu.org/archive/html/bug-coreutils/2007-10/msg00134.html
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index 11061306c7..95a700b2d5 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -73,6 +73,10 @@ else
- LIBV4L_CONF_OPTS += --disable-v4l-utils
- endif
- 
-+ifeq ($(BR2_PACKAGE_SDL2_IMAGE),y)
-+LIBV4L_DEPENDENCIES += sdl2_image
-+endif
-+
- LIBV4L_CONF_ENV += LIBS="$(LIBV4L_LIBS)"
- 
- $(eval $(autotools-package))
+ > Additionally, some distributions no longer package tempfile, and
+ > this patch fixes try-run in that case.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/db5/db50f4415d18441f94b641ef6dc5a3672678b8b9/
+ > http://autobuild.buildroot.net/results/76d/76d73f767d3aab3c97d61188f5666899d72ed82d/
+ > http://autobuild.buildroot.net/results/6aa/6aa9031962603354086b49bc49add92fde496ec2/
+ > http://autobuild.buildroot.net/results/33d/33d22f4d96fb439be8551355290896ef6d3649df/
+ > http://autobuild.buildroot.net/results/eee/eeec2ed80e147c172ec2d50958b12cfa38b2cc8d/
+ > Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+
+Committed to 2018.02.x and 2018.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
