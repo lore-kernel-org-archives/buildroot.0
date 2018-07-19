@@ -1,46 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 12:16:31 +0200
-Subject: [Buildroot] [PATCH] btrfs-progs: adjust install-static patch to
- install headers under $(prefix)/include/btrfs
-In-Reply-To: <20180719104200.39029242@windsurf> (Thomas Petazzoni's message of
- "Thu, 19 Jul 2018 10:42:00 +0200")
-References: <20180701183408.7305-1-peter@korsgaard.com>
- <20180719104200.39029242@windsurf>
-Message-ID: <87zhyncyyo.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 12:11:55 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libwebsockets: add
+ optional libevent dependency
+Message-ID: <20180719101153.4FD8088DFB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=708b3d44195de42fc93f48ce7563e792e05ceb48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
- > Hello Peter,
- > On Sun,  1 Jul 2018 20:34:08 +0200, Peter Korsgaard wrote:
- >> Fixes:
- >> http://autobuild.buildroot.net/results/15cc6523a42bf66508b2b37fd1fcb74625561ec2/
- >> 
- >> btrfs-progs 'make install' installs headers under $(prefix)/include/btrfs,
- >> but our patch to also install headers for 'install-static' installed
- >> directly into $(prefix)/include, confusing other packages as btrfs-progs
- >> headers have very common names such as version, sizes.h, list.h, ioctl.h, ..
- >> 
- >> Fix it by adjusting the patch to also install under $(prefix)/include/btrfs.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+libevent is supported since 2.3.0
 
- > Could you backport this patch to 2018.05.x. Indeed, the version.h
- > installed by btrfs-progs confuses the U-Boot build system, which is the
- > reason for the following build failures:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e46257264ed773a9c2b94e0e4f0131187a8940ba)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libwebsockets/libwebsockets.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
- >   http://autobuild.buildroot.net/?reason=uboot-tools%&branch=2018.05.x
-
- > The problem doesn't seem to exist on 2018.02.x, because back then, the
- > btrfs-progs version was older and was not installing those headers in
- > bogus locations. At least the specific uboot-tools problem cannot be
- > reproduced on 2018.02.x.
-
-Sure, backported to 2018.05.x. Thanks for the heads up!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
+index 28fd183393..81e398bedd 100644
+--- a/package/libwebsockets/libwebsockets.mk
++++ b/package/libwebsockets/libwebsockets.mk
+@@ -35,6 +35,13 @@ else
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEV=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBEVENT),y)
++LIBWEBSOCKETS_DEPENDENCIES += libevent
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=ON
++else
++LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBEVENT=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUV),y)
+ LIBWEBSOCKETS_DEPENDENCIES += libuv
+ LIBWEBSOCKETS_CONF_OPTS += -DLWS_WITH_LIBUV=ON
