@@ -1,30 +1,33 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Thu, 19 Jul 2018 14:33:34 -0300
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.17.8
-Message-ID: <1532021615-20560-1-git-send-email-festevam@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 19 Jul 2018 20:08:23 +0200
+Subject: [Buildroot] [PATCH] systemd: Fix polkit build order
+In-Reply-To: <20180704203624.12391-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Wed, 4 Jul 2018 22:36:24 +0200")
+References: <20180704203624.12391-1-yann.morin.1998@free.fr>
+Message-ID: <87r2jzcd48.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b5f1577..8ca77c0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.17.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.17.8" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ > From: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
+ > We need to install polkit before systemd if we want to enable
+ > polkit integration, because systemd will not install polkit
+ > policy files unless it finds polkit-gobject-1.
+
+ > Signed-off-by: Asgeir Bjarni Ingvarsson <asgeir@appdynamic.com>
+ > Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+ > ---
+ > I've resent this, as Asgeir does not seem to be subscribed to the list.
+ > Asgeir, if you want to send more patches (which we encourage you to
+ > do!), you'll need to subscribe to the list first.
+
+Committed to 2018.02.x and 2018.05.x, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
