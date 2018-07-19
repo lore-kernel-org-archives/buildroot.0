@@ -1,51 +1,45 @@
-From: =?utf-8?B?U8O4cmVuc2VuLCBTdGVmYW4=?= <Stefan.Sorensen@spectralink.com>
-Date: Thu, 19 Jul 2018 12:51:22 +0000
-Subject: [Buildroot] [PATCH v2 0/3] Hardening build flags fixes
-In-Reply-To: <20180719142717.62a09ca7@windsurf>
-References: <1531998123-28360-1-git-send-email-stefan.sorensen@spectralink.com>
- <20180719142717.62a09ca7@windsurf>
-Message-ID: <6fe6f1f90ca7940fd818409e16a334d5697a874e.camel@spectralink.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 19 Jul 2018 15:24:49 +0200
+Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
+ in shebang
+In-Reply-To: <20180719125828.xjctfak3qpsawq5z@bifrost>
+References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
+ <20180718171843.5ed5f10c@windsurf>
+ <20180719075842.k3gxopajcat7f4dt@bifrost>
+ <20180719100456.2146ce8b@windsurf>
+ <20180719115033.vchfjfwmewah2wjd@bifrost>
+ <20180719141557.6f52723a@windsurf>
+ <20180719125828.xjctfak3qpsawq5z@bifrost>
+Message-ID: <20180719152449.054a35f8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2018-07-19 at 14:27 +0200, Thomas Petazzoni wrote:
-> Hello Stefan,
-> 
-> On Thu, 19 Jul 2018 13:02:00 +0200, Stefan S?rensen wrote:
-> > This series provides a number of fixes and cleanups of the build
-> > flags
-> > releated to hardened builds.
-> > 
-> > Changes v1->v2:
-> >   * Drop patch removing linker flags from TARGET_CFLAGS
-> >   * Use a single spec file for compiler and linker flags
-> > 
-> > Stefan S?rensen (3):
-> >   package/Makefile.in: Do not use CPPFLAGS for hardening options
-> >   package/Makefile.in: Add missing options to LDFLAGS for full
-> > RELRO
-> >     build
-> >   package/Makefile.in: Use gcc spec files for PIE build flags
-> 
-> These patches were also sent by Matt Weber recently, the first two
-> got
-> Reviewed-by from Arnout, the third one has questions:
-> 
->   http://patchwork.ozlabs.org/project/buildroot/list/?series=54943
-> 
-> I'm a bit confused as to which patches to apply. Are your patches
-> unchanged compared to what Matt Weber sent ?
+Hello,
 
-I had also modified the first two patches, so i dropped the Reviewed-by 
-from them. But in the end i ditched the changes so that they are now
-unchanged from what Matt posted, but forgot to put back the Reviewed-
-by.
+On Thu, 19 Jul 2018 14:58:28 +0200, anisse at astier.eu wrote:
 
-As far as I can see, all the questions on the third patch was answered
-/ addressed.
+> > And also, it's not correct because our libglib package does not depend
+> > on having python3 available on the host.
+> 
+> My understanding is that the scripts work with python2 too but that
+> upstream is moving to python3 by default, because meson already requires
+> host python3, which narrows the number of build-time dependencies.
 
+OK, understood.
 
-Stefan
+> So I don't think there's anything to change here, since host python2 is
+> already a mandatory buidroot dependency.
+
+Yes, that is correct. What I wasn't sure is if libglib2 needed any
+version of python, or specifically python3.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
