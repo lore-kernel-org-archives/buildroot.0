@@ -1,23 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 20:06:39 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/clamav: security
- bump to 0.100.1
-Message-ID: <20180719180713.C8D9488F81@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 20:06:05 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/clamav: bump
+ version to 0.100.0
+Message-ID: <20180719180713.B2CD988F81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=754dfb2974b6279371de89b6b23ff2fdba7994d9
+commit: https://git.buildroot.net/buildroot/commit/?id=813ab54a09c5deefaac3f7167e03da588bfa46be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes CVE-2017-16932, CVE-2018-0360 & CVE-2018-0361:
-http://lists.clamav.net/pipermail/clamav-announce/2018/000032.html
+Release notes:
+http://lists.clamav.net/pipermail/clamav-announce/2018/000031.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b80886388d7715478a41d0013fab558417af1946)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6088fedd736b569d3df7f9a523b254288b3904b3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/clamav/clamav.hash | 2 +-
@@ -25,26 +25,26 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/clamav/clamav.hash b/package/clamav/clamav.hash
-index 4cf7e7a542..0cb8f51d87 100644
+index 76c633f979..4cf7e7a542 100644
 --- a/package/clamav/clamav.hash
 +++ b/package/clamav/clamav.hash
 @@ -1,5 +1,5 @@
  # Locally calculated
--sha256 c5c5edaf75a3c53ac0f271148fd6447310bce53f448ec7e6205124a25918f65c  clamav-0.100.0.tar.gz
-+sha256 84e026655152247de7237184ee13003701c40be030dd68e0316111049f58a59f  clamav-0.100.1.tar.gz
+-sha256 d72ac3273bde8d2e5e28ec9978373ee3ab4529fd868bc3fc4d2d2671228f2461  clamav-0.99.4.tar.gz
++sha256 c5c5edaf75a3c53ac0f271148fd6447310bce53f448ec7e6205124a25918f65c  clamav-0.100.0.tar.gz
  sha256 0c4fd2fa9733fc9122503797648710851e4ee6d9e4969dd33fcbd8c63cd2f584  COPYING
  sha256 d72a145c90918184a05ef65a04c9e6f7466faa59bc1b82c8f6a8ddc7ddcb9bed  COPYING.bzip2
  sha256 dfb818a0d41411c6fb1c193c68b73018ceadd1994bda41ad541cbff292894bc6  COPYING.file
 diff --git a/package/clamav/clamav.mk b/package/clamav/clamav.mk
-index c0138a8944..9db90bddea 100644
+index 4c4fc395c2..2711ca2a86 100644
 --- a/package/clamav/clamav.mk
 +++ b/package/clamav/clamav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CLAMAV_VERSION = 0.100.0
-+CLAMAV_VERSION = 0.100.1
+-CLAMAV_VERSION = 0.99.4
++CLAMAV_VERSION = 0.100.0
  CLAMAV_SITE = https://www.clamav.net/downloads/production
  CLAMAV_LICENSE = GPL-2.0
  CLAMAV_LICENSE_FILES = COPYING COPYING.bzip2 COPYING.file COPYING.getopt \
