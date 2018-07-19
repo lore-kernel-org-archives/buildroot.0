@@ -1,42 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Jul 2018 15:24:49 +0200
-Subject: [Buildroot] [PATCH 1/1] libglib2: Avoid absolute path to python
- in shebang
-In-Reply-To: <20180719125828.xjctfak3qpsawq5z@bifrost>
-References: <1531413454-11546-1-git-send-email-david.owens@rockwellcollins.com>
- <20180718171843.5ed5f10c@windsurf>
- <20180719075842.k3gxopajcat7f4dt@bifrost>
- <20180719100456.2146ce8b@windsurf>
- <20180719115033.vchfjfwmewah2wjd@bifrost>
- <20180719141557.6f52723a@windsurf>
- <20180719125828.xjctfak3qpsawq5z@bifrost>
-Message-ID: <20180719152449.054a35f8@windsurf>
+Date: Thu, 19 Jul 2018 15:32:40 +0200
+Subject: [Buildroot] patch: fix wrong sysroot path when given rsdk
+ toolchain
+In-Reply-To: <14A4BC6FC7AB3340A49D24D6ACB7BED930620C@RS-MBS02.realsil.com.cn>
+References: <14A4BC6FC7AB3340A49D24D6ACB7BED930620C@RS-MBS02.realsil.com.cn>
+Message-ID: <20180719153240.25e67cd9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Shawn,
 
-On Thu, 19 Jul 2018 14:58:28 +0200, anisse at astier.eu wrote:
+Thanks for your patch, and for contributing to Buildroot!
 
-> > And also, it's not correct because our libglib package does not depend
-> > on having python3 available on the host.
-> 
-> My understanding is that the scripts work with python2 too but that
-> upstream is moving to python3 by default, because meson already requires
-> host python3, which narrows the number of build-time dependencies.
+On Thu, 19 Jul 2018 09:10:03 +0000, ??? wrote:
 
-OK, understood.
+> The attachment is a patch that fixes a Realtek toolchain that has a
+> sysroot path of ?mips-linux-uclibc?, this causes the buildroot
+> recognizes the sysroot as ?mips-linux-uc? by the sed operation, and
+> then the external toolchain setup is failed. Adding a ?/? in the sed
+> re expression avoids the wrong substitution, other toolchains like
+> linaro arm toolchain are tested ok to ensure no side effect is
+> induced, please help review and apply this patch, thanks.
 
-> So I don't think there's anything to change here, since host python2 is
-> already a mandatory buidroot dependency.
+Would it be possible to get access to this Realtek toolchain? I'd like
+to check the behavior, and understand a bit more the issue, because it
+looks a bit suspicious/strange.
 
-Yes, that is correct. What I wasn't sure is if libglib2 needed any
-version of python, or specifically python3.
+The sed expression is supposed to replace:
 
-Best regards,
+  /path/to/sysroot/usr/lib/libc.a
+
+by:
+
+  /path/to/sysroot/
+
+So I don't quite see how the ending "libc" in mips-linux-uclibc can
+affect this.
+
+Also, for your next patches, could you send them with the patch
+description in the commit log (currently your commit log is just
+"IPCSDK-6460", which is not very useful) ? Also, they should be sent
+with "git send-email", so that the patch is inline.
+
+Thanks a lot!
 
 Thomas
 -- 
