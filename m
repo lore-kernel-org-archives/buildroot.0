@@ -1,29 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 12:15:32 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5charts: fix license
-In-Reply-To: <20180702092137.25394-1-sebastien.szymanski@armadeus.com>
- (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Mon, 2 Jul 2018
- 11:21:37 +0200")
-References: <20180702092137.25394-1-sebastien.szymanski@armadeus.com>
-Message-ID: <874lgvedkr.fsf@dell.be.48ers.dk>
+Date: Thu, 19 Jul 2018 12:16:31 +0200
+Subject: [Buildroot] [PATCH] btrfs-progs: adjust install-static patch to
+ install headers under $(prefix)/include/btrfs
+In-Reply-To: <20180719104200.39029242@windsurf> (Thomas Petazzoni's message of
+ "Thu, 19 Jul 2018 10:42:00 +0200")
+References: <20180701183408.7305-1-peter@korsgaard.com>
+ <20180719104200.39029242@windsurf>
+Message-ID: <87zhyncyyo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > qt5charts-2.1.3 (build with Qt 5.6) doesn't contain any license files so
- > remove LICENSE.GPL3 from QT5CHARTS_LICENSE_FILES when building Qt 5.6.
+ > Hello Peter,
+ > On Sun,  1 Jul 2018 20:34:08 +0200, Peter Korsgaard wrote:
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/15cc6523a42bf66508b2b37fd1fcb74625561ec2/
+ >> 
+ >> btrfs-progs 'make install' installs headers under $(prefix)/include/btrfs,
+ >> but our patch to also install headers for 'install-static' installed
+ >> directly into $(prefix)/include, confusing other packages as btrfs-progs
+ >> headers have very common names such as version, sizes.h, list.h, ioctl.h, ..
+ >> 
+ >> Fix it by adjusting the patch to also install under $(prefix)/include/btrfs.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > Fixes:
- >  http://autobuild.buildroot.net/results/c95d34129902a0511b8d64c9d50f1ffa293b33fd
- >  http://autobuild.buildroot.net/results/b9c14ce7c2fdaa412eb6416ae12a0376aaf05770
- >  http://autobuild.buildroot.net/results/1bde69c515d9140ef0f9a5571475c2850c7b8dee
- > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+ > Could you backport this patch to 2018.05.x. Indeed, the version.h
+ > installed by btrfs-progs confuses the U-Boot build system, which is the
+ > reason for the following build failures:
 
-Committed to 2018.02.x and 2018.05.x, thanks.
+ >   http://autobuild.buildroot.net/?reason=uboot-tools%&branch=2018.05.x
+
+ > The problem doesn't seem to exist on 2018.02.x, because back then, the
+ > btrfs-progs version was older and was not installing those headers in
+ > bogus locations. At least the specific uboot-tools problem cannot be
+ > reproduced on 2018.02.x.
+
+Sure, backported to 2018.05.x. Thanks for the heads up!
 
 -- 
 Bye, Peter Korsgaard
