@@ -1,122 +1,108 @@
-From: Joel Carlson <joelsoncarl@gmail.com>
-Date: Thu, 19 Jul 2018 13:21:26 -0600
-Subject: [Buildroot] SSH and Root password
-In-Reply-To: <HE1P18901MB009072FE239C572F867E48B797520@HE1P18901MB0090.EURP189.PROD.OUTLOOK.COM>
-References: <HE1P18901MB00900DF3E3D543020508F21E97520@HE1P18901MB0090.EURP189.PROD.OUTLOOK.COM>
- <CAAjKBV818djjEi8KPipD3i7Us1WHmB62=qzYFnn+c1FFiMLbPw@mail.gmail.com>
- <HE1P18901MB009072FE239C572F867E48B797520@HE1P18901MB0090.EURP189.PROD.OUTLOOK.COM>
-Message-ID: <CAAjKBV_nhD85iOE0h-tKFAygJbu47oA8H92g3_xiA_Fo+_o08A@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 19 Jul 2018 22:43:53 +0200
+Subject: [Buildroot] [RFC v3 2/4] meson: change from global to per package
+ cross-compilation.conf
+In-Reply-To: <20180719204355.10465-1-ps.report@gmx.net>
+References: <20180719204355.10465-1-ps.report@gmx.net>
+Message-ID: <20180719204355.10465-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mahin,
+Add FOO_MESON_CFLAGS, FOO_MESON_LDFLAGS and FOO_MESON_CXXFLAGS
+variables to allow per package additional flags.
 
-Try to remember to "reply all" so the mailing list gets included. =)
-Also, they prefer on these lists if you reply to things immediately
-after the quoted reply text (you can snip out unnecessary chunks),
-rather than "top-posting" the reply.
+Change to buildtype plain as all compiler/linker flags forcing
+debug/release are already given via the cross-compilation.conf
+file.
 
-On Thu, Jul 19, 2018 at 12:46 PM, Mahin Hannan <Mahin.hannan@outlook.com> wrote:
-> Hi,
->
-> OpenSSH works, I can get it up but can't log in. It says my password is
-> incorrect.
->
-> How did you go through your method? It's good to mention that the board I am
-> working with has no display output and I don't have a serial cable at hand.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+Notes:
+  - documentation change for new flags missing
+  - use in pkg-meson.mk the same sed/printf for flags quotation mark
+    and comma adding
 
-If you have a serial port available, I'd highly recommend acquiring a
-cable so you can get on the system to see what it is doing.
+Changes v1 -> v2:
+  - no changes
 
-As for my own board, I'm pretty sure the only relevant parts are:
-1. My defconfig contains:
-BR2_PACKAGE_OPENSSH=y
-and
-BR2_TARGET_GENERIC_ROOT_PASSWD="my_root_password"
+Changes v2 -> v3:
+  - no changes
+---
+ package/meson/cross-compilation.conf.in | 8 ++++----
+ package/meson/meson.mk                  | 6 +++---
+ package/pkg-meson.mk                    | 9 +++++++--
+ 3 files changed, 14 insertions(+), 9 deletions(-)
 
-2. My defconfig also contains:
-BR2_ROOTFS_OVERLAY="/path/to/my/rootfs_overlay_directory"
-and
-BR2_ROOTFS_DEVICE_TABLE="/path/to/my/rootfs_overlay_permissions.txt"
-
-3. I have a file
-/path/to/my/rootfs_overlay_directory/etc/ssh/sshd_config which
-contains (among some other things) "PermitRootLogin yes"
-My /path/to/my/rootfs_overlay_permissions.txt file sets appropriate
-permissions for the sshd_config file.
-
-For more on the rootfs overlay and file permissions, see the buildroot manual:
-https://buildroot.org/downloads/manual/manual.html#rootfs-custom
-(about rootfs overlays)
-and
-https://buildroot.org/downloads/manual/manual.html#makedev-syntax
-(syntax for the permissions file)
-
-I think that is all the relevant configuration I needed to be able to
-ssh in as root.
-
-Debugging Ideas:
-1. get a serial cable so you can see what's happening on the board
-2. See if there is already an "sshd_config" file somewhere in your
-generated root filesystem, and check what is in it.  I am not an
-expert on the various configuration options, but I know you will need
-to have an uncommented line with "PermitRootLogin yes" (the default
-sshd_config included with openssh does set this).
-3. Try your same defconfig except from a more recent version of
-buildroot.  I'm branched off of v2018.05 myself, so I can vouch that
-ssh root login should work. "-rc3" is the version right before the
-final release of v2018.05. Try v2018.05 or even from master.
-4. If none of that helps, try posting your entire defconfig back here
-to the mailing list.  Maybe someone out there with an Orange Pi Zero
-can replicate your build and see if they have the same problem. I
-don't have such a board, so I don't think I can help much more if we
-get to this point.
-
-Good luck!
-
->
-> Thanks
-> ________________________________
-> From: Joel Carlson <joelsoncarl@gmail.com>
-> Sent: 19 July 2018 19:43:15
-> To: Mahin Hannan
-> Cc: buildroot at busybox.net
-> Subject: Re: [Buildroot] SSH and Root password
->
-> Hello Mahin,
->
-> On Thu, Jul 19, 2018 at 12:12 PM, Mahin Hannan <Mahin.hannan@outlook.com>
-> wrote:
->> Hi,
->>
->> I am using ver. 2018.05-rc3 for an Orange Pi Zero board.
->>
->> I used the configurations that came with buildroot and added; OpenSSH and
->> root password was added. I also tried using dropbear instead of the
->> former.
->>
->> The issue is, I can't log into the board via SSH because my password is
->> incorrect.
->>
->> I've read the other mailing list queries and followed the given solutions,
->> but it doesn't work.
->>
->> How do I set up a root password for the board?
->
-> Is the actual error message about an invalid password?  Or is it
-> perhaps "Permission denied"? I know that when I select openssh on my
-> boards and have a root password set, I need to have a custom
-> sshd_config file on the board with "PermitRootLogin yes" set to be
-> able to ssh in as the root user.
->
->>
->> Thanks
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index 0eec74087b..6af03314eb 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -11,10 +11,10 @@ strip = '@TARGET_CROSS at strip'
+ pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+ 
+ [properties]
+-c_args = [@TARGET_CFLAGS@]
+-c_link_args = [@TARGET_LDFLAGS@]
+-cpp_args = [@TARGET_CXXFLAGS@]
+-cpp_link_args = [@TARGET_LDFLAGS@]
++c_args = [@TARGET_CFLAGS@ @PKG_TARGET_CFLAGS@]
++c_link_args = [@TARGET_LDFLAGS@ @PKG_TARGET_LDFLAGS@]
++cpp_args = [@TARGET_CXXFLAGS@ @PKG_TARGET_CXXFLAGS@]
++cpp_link_args = [@TARGET_LDFLAGS@ @PKG_TARGET_LDFLAGS@]
+ 
+ [host_machine]
+ system = 'linux'
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index d110e594f5..0f2ee2855d 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -20,7 +20,7 @@ HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_C
+ HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+ HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+ 
+-define HOST_MESON_INSTALL_CROSS_CONF
++define HOST_MESON_INSTALL_CROSS_CONF_IN
+ 	mkdir -p $(HOST_DIR)/etc/meson
+ 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+ 	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
+@@ -31,9 +31,9 @@ define HOST_MESON_INSTALL_CROSS_CONF
+ 	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+ 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+ 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+-	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
++	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
+ endef
+ 
+-HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
++HOST_MESON_POST_INSTALL_HOOKS += HOST_MESON_INSTALL_CROSS_CONF_IN
+ 
+ $(eval $(host-python-package))
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 507e686068..565e10e8fb 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -64,12 +64,17 @@ ifeq ($(4),target)
+ define $(2)_CONFIGURE_CMDS
+ 	rm -rf $$($$(PKG)_SRCDIR)/build
+ 	mkdir -p $$($$(PKG)_SRCDIR)/build
++	sed -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_CFLAGS)%g" \
++	    -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_LDFLAGS)%g" \
++	    -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_CXXFLAGS)%g" \
++	    $(HOST_DIR)/etc/meson/cross-compilation.conf.in \
++	    > $$($$(PKG)_SRCDIR)/build//cross-compilation.conf
+ 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+ 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+-		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+-		--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
++		--buildtype=plain \
++		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		$$($$(PKG)_CONF_OPTS) \
+ 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+ endef
+-- 
+2.18.0
