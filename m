@@ -1,42 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Jul 2018 10:32:13 +0200
-Subject: [Buildroot] [PATCH 5/5] configs/nitrogen8m: Add new defconfig
-In-Reply-To: <20180719082344.GA26603@g751.home>
-References: <20180719073253.22433-1-gary.bisson@boundarydevices.com>
- <20180719073253.22433-6-gary.bisson@boundarydevices.com>
- <20180719101000.2b07e7f8@windsurf>
- <20180719082344.GA26603@g751.home>
-Message-ID: <20180719103213.610b0215@windsurf>
+Date: Thu, 19 Jul 2018 10:42:00 +0200
+Subject: [Buildroot] [PATCH] btrfs-progs: adjust install-static patch to
+ install headers under $(prefix)/include/btrfs
+In-Reply-To: <20180701183408.7305-1-peter@korsgaard.com>
+References: <20180701183408.7305-1-peter@korsgaard.com>
+Message-ID: <20180719104200.39029242@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Peter,
 
-On Thu, 19 Jul 2018 10:23:44 +0200, Gary Bisson wrote:
-
-> > DEVELOPERS entry + .gitlab-ci.yml update are missing.  
+On Sun,  1 Jul 2018 20:34:08 +0200, Peter Korsgaard wrote:
+> Fixes:
+> http://autobuild.buildroot.net/results/15cc6523a42bf66508b2b37fd1fcb74625561ec2/
 > 
-> DEVELOPERS should be fine since I have:
-> F:	configs/nitrogen*
-
-Ah, yes, my bad.
-
-> > > +# System
-> > > +BR2_TARGET_GENERIC_GETTY=y
-> > > +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-> > > +BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/boundarydevices/common/post-build.sh"
-> > > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/boundarydevices/common/post-image.sh"
-> > > +BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-nitrogen8m.dtb"  
-> > 
-> > UBOOT_DIR is properly going to be expanded by the post-build script ?  
+> btrfs-progs 'make install' installs headers under $(prefix)/include/btrfs,
+> but our patch to also install headers for 'install-static' installed
+> directly into $(prefix)/include, confusing other packages as btrfs-progs
+> headers have very common names such as version, sizes.h, list.h, ioctl.h, ..
 > 
-> My understanding is that the Makefile is expanding it already. What I
-> know for sure is that I receive the proper value in the script.
+> Fix it by adjusting the patch to also install under $(prefix)/include/btrfs.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-OK, thanks!
+Could you backport this patch to 2018.05.x. Indeed, the version.h
+installed by btrfs-progs confuses the U-Boot build system, which is the
+reason for the following build failures:
+
+  http://autobuild.buildroot.net/?reason=uboot-tools%&branch=2018.05.x
+
+The problem doesn't seem to exist on 2018.02.x, because back then, the
+btrfs-progs version was older and was not installing those headers in
+bogus locations. At least the specific uboot-tools problem cannot be
+reproduced on 2018.02.x.
+
+Thanks!
 
 Thomas
 -- 
