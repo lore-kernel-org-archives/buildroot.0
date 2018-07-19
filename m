@@ -1,40 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 19 Jul 2018 09:33:37 +0200
-Subject: [Buildroot] [git commit] support/misc/toolchainfile.cmake.in: use
- TARGET_LDFLAGS for shared and module libraries
-Message-ID: <20180719072924.AD8CA88DE5@busybox.osuosl.org>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Thu, 19 Jul 2018 09:32:49 +0200
+Subject: [Buildroot] [PATCH 1/5] board/freescale/common/imx: make
+ imx8-bootloader-prepare more generic
+In-Reply-To: <20180719073253.22433-1-gary.bisson@boundarydevices.com>
+References: <20180719073253.22433-1-gary.bisson@boundarydevices.com>
+Message-ID: <20180719073253.22433-2-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8c0faa980df32622d5f1964892ba84fa4f17a9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Allow user to override the hardcoded dtb name by using
+BR2_ROOTFS_POST_SCRIPT_ARGS.
 
-With cmake packages, we are only using TARGET_LDFLAGS for executables
-and not for shared libraries.
-
-This patch adds CMAKE_SHARED_LINKER_FLAGS and
-CMAKE_MODULE_LINKER_FLAGS to the cmake toolchain file so that
-buildroot TARGET_LDFLAGS are used for shared and module libraries.
-
-Signed-off-by: Damien Th??bault <damien.thebault@vitec.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- support/misc/toolchainfile.cmake.in | 2 ++
- 1 file changed, 2 insertions(+)
+ .../freescale/common/imx/imx8-bootloader-prepare.sh  | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/support/misc/toolchainfile.cmake.in b/support/misc/toolchainfile.cmake.in
-index 1f5d2371ed..6f3c8ca971 100644
---- a/support/misc/toolchainfile.cmake.in
-+++ b/support/misc/toolchainfile.cmake.in
-@@ -45,6 +45,8 @@ set(CMAKE_BUILD_TYPE @@CMAKE_BUILD_TYPE@@ CACHE STRING "Buildroot build configur
- set(CMAKE_C_FLAGS "@@TARGET_CFLAGS@@" CACHE STRING "Buildroot CFLAGS")
- set(CMAKE_CXX_FLAGS "@@TARGET_CXXFLAGS@@" CACHE STRING "Buildroot CXXFLAGS")
- set(CMAKE_EXE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for executables")
-+set(CMAKE_SHARED_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for shared libraries")
-+set(CMAKE_MODULE_LINKER_FLAGS "@@TARGET_LDFLAGS@@" CACHE STRING "Buildroot LDFLAGS for module libraries")
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index 2648147ab0..ce2c3405a0 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -2,9 +2,17 @@
  
- set(CMAKE_INSTALL_SO_NO_EXE 0)
+ main ()
+ {
+-	# Currently we support imx8mqevk.
++	if [ $# -le 1 ]; then
++		UBOOT_DTB=${BINARIES_DIR}/fsl-imx8mq-evk.dtb
++	else
++		UBOOT_DTB=$2
++	fi
++	if [ ! -e $UBOOT_DTB ]; then
++		echo "ERROR: couldn't find $UBOOT_DTB"
++		exit 1
++	fi
+ 	cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
+-	BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ${HOST_DIR}/bin/mkimage_fit_atf.sh ${BINARIES_DIR}/fsl-imx8mq-evk.dtb > ${BINARIES_DIR}/u-boot.its
++	BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
+ 	${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
+ 	rm -f ${BINARIES_DIR}/u-boot.its
  
+-- 
+2.18.0
