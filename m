@@ -1,51 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 12:02:04 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libostree: fix libsoup
- configure option name
-Message-ID: <20180719100408.DC4C588E21@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 12:04:09 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qpdf: security bump to
+ version 8.1.0
+Message-ID: <20180719100408.E4CFF88E21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c810eeabdf458b122c874750391b88d6fac98f8
+commit: https://git.buildroot.net/buildroot/commit/?id=5e366b1e8f8fd36e7194e673acb7b184b4891abe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-The option used by configure script is actually
---with-soup/--without-soup.
+Fixes CVE-2018-9918: mishandle certain "expected dictionary key but
+found non-name object" cases, allowing remote attackers to cause a
+denial of service (stack exhaustion)
 
-Fixes:
+https://github.com/qpdf/qpdf/issues/202
 
-  http://autobuild.buildroot.net/results/cf8ab76b8ea1a555d42f0625df1d58543e88efb1/
+Drop local SHA256 hash since we use upstream provided SHA512.
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b8c3ec57e7f60be86e6d5613848f67b1a700ad39)
+(cherry picked from commit 473390a30c5f0a4aa38f2f2304b433a5ec3aad9e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libostree/libostree.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/qpdf/qpdf.hash | 6 ++----
+ package/qpdf/qpdf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 336d11a978..f3e79c8436 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -40,7 +40,7 @@ endif
+diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
+index 1fbef66e6f..d27c9834b9 100644
+--- a/package/qpdf/qpdf.hash
++++ b/package/qpdf/qpdf.hash
+@@ -1,4 +1,2 @@
+-# From https://sourceforge.net/projects/qpdf/files/qpdf/7.0.0/qpdf-7.0.0.sha512/download
+-sha512	7b52d67b4d2c428a7b0c1cd03b03a23f05d38d7e3c81041079a137919019ea5158f12bf95fdcfcff6b43ffdefe93a85127ced2a363a6b4b380cbaa02a3840256  qpdf-7.0.0.tar.gz
+-# Locally computed
+-sha256	fed08de14caad0fe5efd148d9eca886d812588b2cbb35d13e61993ee8eb8c65f  qpdf-7.0.0.tar.gz
++# From https://sourceforge.net/projects/qpdf/files/qpdf/8.1.0/qpdf-8.1.0.sha512/download
++sha512	1831bcaaed87dae268db5d61805d1483ec5c101f6ce594be660664c119597ae67cf011c2b50092964d785a814d5f6c780935127a89401fe37a1026ae4d3af15c  qpdf-8.1.0.tar.gz
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index 27e4d09978..4776d22b16 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- #cURL support depends on libsoup
- ifeq ($(BR2_PACKAGE_LIBSOUP),y)
--LIBOSTREE_CONF_OPTS += --with-libsoup
-+LIBOSTREE_CONF_OPTS += --with-soup
- LIBOSTREE_DEPENDENCIES += libsoup
- ifeq ($(BR2_PACKAGE_LIBCURL),y)
- LIBOSTREE_CONF_OPTS += --with-curl
-@@ -49,7 +49,7 @@ else
- LIBOSTREE_CONF_OPTS += --without-curl
- endif
- else
--LIBOSTREE_CONF_OPTS += --without-libsoup --without-curl
-+LIBOSTREE_CONF_OPTS += --without-soup --without-curl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
+-QPDF_VERSION = 7.0.0
++QPDF_VERSION = 8.1.0
+ QPDF_SITE = http://downloads.sourceforge.net/project/qpdf/qpdf/$(QPDF_VERSION)
+ QPDF_INSTALL_STAGING = YES
+ QPDF_LICENSE = Artistic-2.0
