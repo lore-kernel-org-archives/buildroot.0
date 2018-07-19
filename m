@@ -1,57 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 19 Jul 2018 23:40:27 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] bind: security bump to
- 9.11.4
-Message-ID: <20180719214017.9DDBA890A3@busybox.osuosl.org>
+Date: Thu, 19 Jul 2018 23:40:33 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] bind: fix build with
+ openssl
+Message-ID: <20180719214017.A6069890A3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4212446170a3069279ea3c95364d8061d62b8094
+commit: https://git.buildroot.net/buildroot/commit/?id=463e692251deee0fd95419f61c222b6d203e0ce3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Fixes CVE-2018-5738: When recursion is enabled but the allow-recursion
-and allow-query-cache ACLs are not specified, they should be limited to
-local networks, but they were inadvertently set to match the default
-allow-query, thus allowing remote queries.
+The bind configure.in uses AC_TRY_RUN that is not compatible with cross
+compile. Disable eddsa unconditionally since it requires a newer OpenSSL
+version than we currently have. Enable aes; this is always supported in
+current OpenSSL versions.
 
-Update license file hash; copyright year update.
-
-Add reference to tarball signature key.
+Fixes:
+http://autobuild.buildroot.net/results/3ed/3edb1659954b00401b68ffc7e1c8b3c29581c0e4/
+http://autobuild.buildroot.net/results/025/025e377b51b39ba34647636ad0d0661a3cb95572/
+http://autobuild.buildroot.net/results/725/7250564e780e43e793ae6c8c526985e5519681f4/
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b36577a2669310c1b1a6722e012a1049e3793d1d)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 5a92bb63bf0657f24694b8c8c24dff04f6e96dca)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 7 ++++---
- package/bind/bind.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/bind/bind.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 199db704fe..78f8015521 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,3 +1,4 @@
--# Verified from http://ftp.isc.org/isc/bind9/9.11.2-P1/bind-9.11.2-P1.tar.gz.sha256.asc
--sha256 cec31548832fca3f85d95178d4019b7d702039e8595d4c93914feba337df1212 bind-9.11.2-P1.tar.gz
--sha256 d3906dfe153e2c48440d3ca1d5319f5e89b4b820cdfc5d0779c23d7ac2b175e9 COPYRIGHT
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.4/bind-9.11.4.tar.gz.asc
-+# with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
-+sha256 595070b031f869f8939656b5a5d11b121211967f15f6afeafa895df745279617 bind-9.11.4.tar.gz
-+sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 392ef321c2..c4429ef6cc 100644
+index c4429ef6cc..e71eddcd7f 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.2-P1
-+BIND_VERSION = 9.11.4
- BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+@@ -61,7 +61,9 @@ BIND_CONF_ENV += \
+ 	ac_cv_func_EVP_sha512=yes
+ BIND_CONF_OPTS += \
+ 	--with-openssl=$(STAGING_DIR)/usr LIBS="-lz" \
+-	--with-ecdsa=yes
++	--with-ecdsa=yes \
++	--with-eddsa=no \
++	--with-aes=yes
+ # GOST cipher support requires openssl extra engines
+ ifeq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
+ BIND_CONF_OPTS += --with-gost=yes
