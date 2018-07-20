@@ -1,44 +1,77 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jul 2018 09:35:08 +0200
-Subject: [Buildroot] [git commit] wavemon: bump to version 0.8.2
-Message-ID: <20180720073141.7725289100@busybox.osuosl.org>
+Date: Fri, 20 Jul 2018 09:35:29 +0200
+Subject: [Buildroot] [git commit] bluez-alsa: bump to version 1.3.0
+Message-ID: <20180720073141.80D0689100@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b502b90f040cf9e62015e3dce7f92a6fb56e69b
+commit: https://git.buildroot.net/buildroot/commit/?id=e40cdee9ccfaf279465826af8f68f611fd6afcf5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for license file.
+Add optional build of rfcomm which requires readline.
+
+Update license hash as authorship has been updated in the license file.
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wavemon/wavemon.hash | 3 ++-
- package/wavemon/wavemon.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/bluez-alsa/Config.in       | 6 ++++++
+ package/bluez-alsa/bluez-alsa.hash | 4 ++--
+ package/bluez-alsa/bluez-alsa.mk   | 9 ++++++++-
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/package/wavemon/wavemon.hash b/package/wavemon/wavemon.hash
-index 69bd2b4bf1..99d7382450 100644
---- a/package/wavemon/wavemon.hash
-+++ b/package/wavemon/wavemon.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256  c9ea57da4f8161401bcaaca17b37bcdf16ffb88baad2370afed2e15a7f71af73  wavemon-v0.8.1.tar.gz
-+sha256  4199e2ad11a036f4289f5ad42a8b0fe518f2b5ff77447f4c366dbcf3f23e91d5  wavemon-v0.8.2.tar.gz
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/wavemon/wavemon.mk b/package/wavemon/wavemon.mk
-index e87ab7a368..0639c3450e 100644
---- a/package/wavemon/wavemon.mk
-+++ b/package/wavemon/wavemon.mk
+diff --git a/package/bluez-alsa/Config.in b/package/bluez-alsa/Config.in
+index 1753da48f9..e52933f07c 100644
+--- a/package/bluez-alsa/Config.in
++++ b/package/bluez-alsa/Config.in
+@@ -26,6 +26,12 @@ config BR2_PACKAGE_BLUEZ_ALSA_HCITOP
+ 	help
+ 	  Enable top-like monitoring tool for HCI.
+ 
++config BR2_PACKAGE_BLUEZ_ALSA_RFCOMM
++	bool "rfcomm"
++	select BR2_PACKAGE_READLINE
++	help
++	  Simple tool for sending RFCOMM commands.
++
+ endif
+ 
+ comment "bluez-alsa needs a toolchain w/ wchar, NPTL, headers >= 3.4, dynamic library"
+diff --git a/package/bluez-alsa/bluez-alsa.hash b/package/bluez-alsa/bluez-alsa.hash
+index b96c37cc46..5036f82eaa 100644
+--- a/package/bluez-alsa/bluez-alsa.hash
++++ b/package/bluez-alsa/bluez-alsa.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated:
+-sha256  dfa48e991a6bbb194a9161deb949371155150dabd5cfc1453a8df754b7cbdc84  bluez-alsa-9045edb436ea755f395a2e09e4525b5defad286a.tar.gz
+-sha256  c90a0081b0526834f700d084e48819b18d11453ecb030c9b7de0d2cc3e3711a5  LICENSE.txt
++sha256  20005c4a153346ea7941973e9b7bd0b228417351f2e8ce88d1c02cc62bca188e  bluez-alsa-v1.3.0.tar.gz
++sha256  4738489ada14818fe4c53ce86223d7b2f4c1f57cb1f93d62c973c94a89080e83  LICENSE.txt
+diff --git a/package/bluez-alsa/bluez-alsa.mk b/package/bluez-alsa/bluez-alsa.mk
+index 3ba237a6b7..fdf7e464a7 100644
+--- a/package/bluez-alsa/bluez-alsa.mk
++++ b/package/bluez-alsa/bluez-alsa.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAVEMON_VERSION = v0.8.1
-+WAVEMON_VERSION = v0.8.2
- WAVEMON_SITE = $(call github,uoaerg,wavemon,$(WAVEMON_VERSION))
- WAVEMON_LICENSE = GPL-3.0+
- WAVEMON_LICENSE_FILES = COPYING
+-BLUEZ_ALSA_VERSION = 9045edb436ea755f395a2e09e4525b5defad286a
++BLUEZ_ALSA_VERSION = v1.3.0
+ BLUEZ_ALSA_SITE = $(call github,Arkq,bluez-alsa,$(BLUEZ_ALSA_VERSION))
+ BLUEZ_ALSA_LICENSE = MIT
+ BLUEZ_ALSA_LICENSE_FILES = LICENSE.txt
+@@ -40,4 +40,11 @@ else
+ BLUEZ_ALSA_CONF_OPTS += --disable-hcitop
+ endif
+ 
++ifeq ($(BR2_PACKAGE_BLUEZ_ALSA_RFCOMM),y)
++BLUEZ_ALSA_DEPENDENCIES += readline
++BLUEZ_ALSA_CONF_OPTS += --enable-rfcomm
++else
++BLUEZ_ALSA_CONF_OPTS += --disable-rfcomm
++endif
++
+ $(eval $(autotools-package))
