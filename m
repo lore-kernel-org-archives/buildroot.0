@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jul 2018 23:31:01 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] imx-gpu-viv: add a
+Date: Fri, 20 Jul 2018 23:30:50 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] imx-gpu-viv: add a
  missing backslash
-Message-ID: <20180720213244.EC50F8A291@busybox.osuosl.org>
+Message-ID: <20180720213251.76FDD8A295@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d133a211ec79bf395e02620f71f75455205d93e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=58df053dda650f0a4b58ea8fac1b5e5a81eeeedf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 [Peter: add semicolon and || exit 1 to catch failures]
 Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
@@ -23,7 +23,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 0dc2072984..70ea0d19e7 100644
+index a9f8b9d9bd..9104750c3c 100644
 --- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
 +++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
 @@ -65,7 +65,7 @@ endif
