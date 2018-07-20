@@ -1,39 +1,100 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 20 Jul 2018 10:24:17 +0200
-Subject: [Buildroot] [PATCH v2] linux: disable attribute alias with gcc
- >= 8.1
-In-Reply-To: <20180602143407.20985-1-romain.naour@gmail.com>
-References: <20180602143407.20985-1-romain.naour@gmail.com>
-Message-ID: <20180720102417.35ab903b@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 20 Jul 2018 10:43:03 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2018.05.1
+Message-ID: <20180720083845.86B058917C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=73722908f2ec6104a6e52ca79b0e23e2bf1ebf9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  2 Jun 2018 16:34:07 +0200, Romain Naour wrote:
-> gcc-8 started warning about function aliases that have a non-matching
-> prototype. This seems rather useful in general, but it causes tons of
-> warnings in the Linux kernel, where we rely on abusing those aliases
-> for system call entry points, in order to sanitze the arguments passed
-> from user space in registers.
-> 
-> See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
-> 
-> Disable the attribute-alias warning introduced by gcc-8 by adding
-> -Wno-attribute-alias to KCFLAGS.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> v2: use KCFLAGS instead of KBUILD_CFLAGS (ThomasP)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 660d1d42f9..6f48b99f6a 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
+ 
+-      <h3 style="text-align: center;">Latest stable release: <b>2018.05</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2018.05.1</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2018.05.tar.gz">buildroot-2018.05.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.05.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.05.1.tar.gz">buildroot-2018.05.1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.05.1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.05.tar.bz2">buildroot-2018.05.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.05.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.05.1.tar.bz2">buildroot-2018.05.1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.05.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index a9f7ca2d63..49744315c8 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.05.1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>20 July 2018</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.05.1 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.05 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.05.1">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-July/226383.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.05.1.tar.bz2">2018.05.1 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
