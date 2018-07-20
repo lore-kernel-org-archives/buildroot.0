@@ -1,58 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Jul 2018 00:12:30 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] qt5serialport: fix
- license files for 5.9.x variant
-Message-ID: <20180720222017.E60138A294@busybox.osuosl.org>
+Date: Sat, 21 Jul 2018 00:24:34 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] Update for 2018.02.4
+Message-ID: <20180720222018.0A7B68A294@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63dcc89fc3659398fd79ce96bf104e76b38c0520
+commit: https://git.buildroot.net/buildroot/commit/?id=e4eaf7311dfffff7fd753f24ce2d01a6f5188292
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
-
-Fixes:
-http://autobuild.buildroot.net/results/d1a/d1a7a97ba4d95276d34234757ef51c2b25373104/
-
-Similar to commit 3c6958423f6f (qt5: bump latest version to 5.10.1), the
-5.9.x (and 5.8.x) versions of qt5serialport doesn't have the 'v' in the
-license file names, as slightly different formatting/content, so adjust the
-_LICENSE_FILES and hashes to match.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5serialport/qt5serialport.hash | 3 +++
- package/qt5/qt5serialport/qt5serialport.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ CHANGES  | 25 +++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5serialport/qt5serialport.hash b/package/qt5/qt5serialport/qt5serialport.hash
-index 22542fdc2d..21519d8329 100644
---- a/package/qt5/qt5serialport/qt5serialport.hash
-+++ b/package/qt5/qt5serialport/qt5serialport.hash
-@@ -5,9 +5,12 @@ sha256 082d1fee2703aed19f840c4e4031e37c9b929e5bd8ebef2ebac4b28c509bae1a qtserial
- sha256 741dfe9d132aed411ad163304fd4485df2da0b40fe57ebce2f6ed4b4043dfcb9  qtserialport-opensource-src-5.9.6.tar.xz
+diff --git a/CHANGES b/CHANGES
+index f98790154f..9acc9c2e9e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,28 @@
++2018.02.4, Released July 21th, 2018
++
++	Important / security related fixes.
++
++	U-Boot: Ensure host version of ncurses is picked up and not
++	host-ncurses built by buildroot, as that otherwise causes
++	widechar/non-widechar conflicts and corrupted menuconfig
++	menus.
++
++	Linux: Enable CONFIG_PERF_EVENTS when perf is enabled.
++
++	Defconfigs: Raspberrypi3: Bump rootfs size, Minnowboard-max:
++	Support ethernet on Turbot variant.
++
++	Updated/fixed packages: bind, clamav, collectd, dos2unix,
++	edid-decode, gcc, gdb, heimdal, hidapi, imx-gpu-viv, libcurl,
++	libglib2, liblogging, libostree, libsoup, libv4l, lm-sensors,
++	ncurses, network-manager, patchelf, pinentry, procps-ng, qpdf,
++	qt5, qt53d, qt5base, qt5charts, qt5script, qt5serialport,
++	systemd, wireguard, wireless-regdb
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11101: host-patchelf Endian Issue with relative RPATH
++
+ 2018.02.3, Released June 18th, 2018
  
- # Hashes for license files:
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
- sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
- sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
- sha256 0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652 LICENSE.GPL3-EXCEPT
-+sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
- sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
- sha256 e1251235ce9853eecfecfa905da9ee29e9b76e4db2a1c9c4a20699f460419b08 LICENSE.FDL
- sha256 1996a36160b2158c2be264d2ddfa6148ebe0f1ececff55aca8d754a1ddcc7bb8 LICENSE.LGPLv21
-diff --git a/package/qt5/qt5serialport/qt5serialport.mk b/package/qt5/qt5serialport/qt5serialport.mk
-index 479870b16e..05442375e7 100644
---- a/package/qt5/qt5serialport/qt5serialport.mk
-+++ b/package/qt5/qt5serialport/qt5serialport.mk
-@@ -12,7 +12,7 @@ QT5SERIALPORT_INSTALL_STAGING = YES
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index c725f329d4..45194abf99 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
  
- ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
- QT5SERIALPORT_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0 with exception(tools), GFDL-1.3 (docs)
--QT5SERIALPORT_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.GPL3-EXCEPT LICENSE.LGPLv3 LICENSE.FDL
-+QT5SERIALPORT_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT LICENSE.LGPL3 LICENSE.FDL
- else
- QT5SERIALPORT_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3 (docs)
- QT5SERIALPORT_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ # Set and export the version string
+-export BR2_VERSION := 2018.02.3
++export BR2_VERSION := 2018.02.4
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1529344000
++BR2_VERSION_EPOCH = 1532126000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
