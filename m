@@ -1,52 +1,38 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Fri, 20 Jul 2018 16:55:22 -0300
-Subject: [Buildroot] [PATCH] configs/imx28evk: Bump U-Boot and kernel
-Message-ID: <1532116522-9405-1-git-send-email-festevam@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 20 Jul 2018 23:27:17 +0200
+Subject: [Buildroot] [PATCH] wireguard: bump to 0.0.20180708
+In-Reply-To: <87zhym8isj.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Fri, 20 Jul 2018 09:31:40 +0200")
+References: <20180710193554.4394-1-Jason@zx2c4.com>
+ <87wotray9d.fsf@dell.be.48ers.dk>
+ <CAHmME9pCuQBH2QNQaR-VGOviDrZH01vsOj90buj2L0Lt7rBm4w@mail.gmail.com>
+ <87sh4ec3x1.fsf@dell.be.48ers.dk> <87d0vianls.fsf@dell.be.48ers.dk>
+ <CAHmME9oSbkS8OqwzWjC7s2DV0dYDXs1611CWe+p2Ocwvc59hpg@mail.gmail.com>
+ <87zhym8isj.fsf@dell.be.48ers.dk>
+Message-ID: <8760198uoa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump U-Boot to 2018.05 version and kernel to 4.17.8.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/freescale_imx28evk_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>> "Jason" == Jason A Donenfeld <Jason@zx2c4.com> writes:
+ >> Yes I am, but if you really need I can re push them. Is there a good
+ >> reason you're still building old code?
 
-diff --git a/configs/freescale_imx28evk_defconfig b/configs/freescale_imx28evk_defconfig
-index 181c9ab..ba17ed2 100644
---- a/configs/freescale_imx28evk_defconfig
-+++ b/configs/freescale_imx28evk_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_arm926t=y
- 
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 4.17 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-@@ -11,7 +11,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.8"
- BR2_LINUX_KERNEL_DEFCONFIG="mxs"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
-@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx28-evk"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx28evk"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
- BR2_TARGET_UBOOT_FORMAT_SD=y
- 
- # Filesystem
+ > Well, for released Buildroot versions it is, E.G. 2018.02 was released
+ > with 0.0.20180218 (updated to 0.0.20180420 in 2018.02.2 and will now be
+ > updated to 0.0.20180708 in the upcoming 2018.02.4). We normally do not
+ > bump the package versions in the LTS release unless important/security
+ > issues are found.
+
+ > I understand that you prefer people use the latest version, but that is
+ > not always possible. Just keeping the old tags around like other
+ > projects seems the easiest solution to me.
+
+I see you've added back the tags - Thanks!
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
