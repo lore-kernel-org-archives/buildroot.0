@@ -1,95 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jul 2018 10:01:34 +0200
-Subject: [Buildroot] Buildroot 2018.05.1 released
-Message-ID: <87in5a8hep.fsf@dell.be.48ers.dk>
+From: =?utf-8?B?6ZmI5bCP5Yia?= <shawn_chen@realsil.com.cn>
+Date: Fri, 20 Jul 2018 08:21:24 +0000
+Subject: [Buildroot] =?utf-8?b?562U5aSNOiAgcGF0Y2g6IGZpeCB3cm9uZyBzeXNy?=
+ =?utf-8?q?oot_path_when_given_rsdk_toolchain?=
+In-Reply-To: <20180719153240.25e67cd9@windsurf>
+References: <14A4BC6FC7AB3340A49D24D6ACB7BED930620C@RS-MBS02.realsil.com.cn>
+ <20180719153240.25e67cd9@windsurf>
+Message-ID: <14A4BC6FC7AB3340A49D24D6ACB7BED930633B@RS-MBS02.realsil.com.cn>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Thomas,
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+Thanks for reminding, I'm tweaking my work environment to use git-send-email, it takes a while.
+I uploaded the toolchain to Google drive for your test, here is the link:
+https://drive.google.com/open?id=1vkrGPUWbzIGMWMZb8DypyK1VIynnbqnn
+And a defconfig for your reference:
+https://drive.google.com/open?id=1J8ksyWcyXEBfEy0EKrMuH1Zyiif25HrR
 
-Buildroot 2018.05.1 is released - Go download it at:
+In shell you can mimic the buildroot find toolchain sysroot as this:
 
-http://buildroot.org/downloads/buildroot-2018.05.1.tar.gz
+$ readlink -f $(LANG=C ..../rsdk-6.4.1-5281-EL-4.9-u1.0-m32fut-180611/bin/rsdk-linux-gcc -print-file-name=libc.a)|sed -r -e 's:(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::'
 
-or
+Regards
+Shawn Chen
 
-http://buildroot.org/downloads/buildroot-2018.05.1.tar.bz2
+-----????-----
+???: Thomas Petazzoni [mailto:thomas.petazzoni at bootlin.com] 
+????: 2018?7?19? 21:33
+???: ???
+??: buildroot at buildroot.org; Thomas De Schampheleire
+??: Re: [Buildroot] patch: fix wrong sysroot path when given rsdk toolchain
 
-Or get it from Git:
+Hello Shawn,
 
-git://git.buildroot.org/buildroot
+Thanks for your patch, and for contributing to Buildroot!
 
-Buildroot 2018.05.1 is a bugfix release, fixing a number of important /
-security related issues discovered since the 2018.05 release.
+On Thu, 19 Jul 2018 09:10:03 +0000, ??? wrote:
 
-- Security fixes for bind, clamav, file, gnupg, gnupg2, imagemagick, libcurl,
-  libgcrypt, libressl, libvncserver, libvorbis, libxslt, mariadb,
-  mpg123, nodejs, perl, qpdf, redis, wireshark
+> The attachment is a patch that fixes a Realtek toolchain that has a
+> sysroot path of ?mips-linux-uclibc?, this causes the buildroot
+> recognizes the sysroot as ?mips-linux-uc? by the sed operation, and
+> then the external toolchain setup is failed. Adding a ?/? in the sed
+> re expression avoids the wrong substitution, other toolchains like
+> linaro arm toolchain are tested ok to ensure no side effect is
+> induced, please help review and apply this patch, thanks.
 
-- Fixes for download/compilation/runtime issues in audit, btrfs-progs,
-  cifs-utils, collectd, coreutils, docker-containerd, dos2unix,
-  edid-decode, gcc, gdb, heimdal, hidapi, libglib2, liblogging,
-  libostree, libsoup, libv4l, libwebsockets, lm-sensors, ncurses,
-  patchelf, pinentry, pixiewps, php-amqp, qt53d, qt5charts, qt5scripts,
-  systemd, triggerhappy, wireguard, wireless-regdb
+Would it be possible to get access to this Realtek toolchain? I'd like
+to check the behavior, and understand a bit more the issue, because it
+looks a bit suspicious/strange.
 
-- U-Boot: Ensure host version of ncurses is picked up and not
-  host-ncurses built by buildroot, as that otherwise causes
-  widechar/non-widechar conflicts and corrupted menuconfig menus.
+The sed expression is supposed to replace:
 
-- Linux: Enable CONFIG_PERF_EVENTS when perf is enabled.
+  /path/to/sysroot/usr/lib/libc.a
 
-- Toolchain: ARC tools updated to arc-2018.03.
+by:
 
-- pkg-stats: Fix python 3.x compatibility.
+  /path/to/sysroot/
 
-- dl-wrapper: Fix support for URIs containing '+', fix no-check-hash for
-  inferred site method.
+So I don't quite see how the ending "libc" in mips-linux-uclibc can
+affect this.
 
-Users of the affected packages are strongly encouraged to upgrade.
+Also, for your next patches, could you send them with the patch
+description in the commit log (currently your commit log is just
+"IPCSDK-6460", which is not very useful) ? Also, they should be sent
+with "git send-email", so that the patch is inline.
 
-Many thanks to all the people contributing to this release:
+Thanks a lot!
 
-git shortlog -sn 2018.05..
-
-    18  Baruch Siach
-    11  Fabio Estevam
-    10  Peter Korsgaard
-     9  Fabrice Fontaine
-     6  Bernd Kuhls
-     5  Ga?l PORTAY
-     4  Thomas Petazzoni
-     2  Carlos Santos
-     2  Evgeniy Didin
-     2  Martin Bark
-     2  Yann E. MORIN
-     1  Asgeir Bjarni Ingvarsson
-     1  Bryce Ferguson
-     1  Christoph Engelbert
-     1  Dan Walkes
-     1  David De Grave (Essensium/Mind)
-     1  David Owens
-     1  Hollis Blanchard
-     1  Jan Heylen
-     1  Jason A. Donenfeld
-     1  Joseph Kogut
-     1  J?r?my Rosen
-     1  Leon Anavi
-     1  Marcus Folkesson
-     1  Matt Weber
-     1  Max Filippov
-     1  Pierre-Louis Bossart
-     1  Ricardo Martincoski
-     1  Robert Beckett
-     1  Romain Naour
-     1  Sam Lancia
-     1  S?bastien Szymanski
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+------Please consider the environment before printing this e-mail.
