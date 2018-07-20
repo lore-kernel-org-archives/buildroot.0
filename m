@@ -1,83 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 21 Jul 2018 00:31:11 +0200
-Subject: [Buildroot] Buildroot 2018.02.4 released
-Message-ID: <87o9f17d5c.fsf@dell.be.48ers.dk>
+Date: Sat, 21 Jul 2018 00:33:47 +0200
+Subject: [Buildroot] [git commit] Update for 2018.02.4
+Message-ID: <20180720223133.063248A2EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=d91fdfeeae76dd7c80f13eec2eed884af238b1aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit e4eaf7311dfffff7fd753f24ce2d01a6f5188292)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Buildroot 2018.02.4 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2018.02.4.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2018.02.4.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2018.02.4 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2018.02.3 release.
-
-- U-Boot: Ensure host version of ncurses is picked up and not
-  host-ncurses built by buildroot, as that otherwise causes
-  widechar/non-widechar conflicts and corrupted menuconfig
-  menus.
-
-- Linux: Enable CONFIG_PERF_EVENTS when perf is enabled.
-
-- Defconfigs: Raspberrypi3: Bump rootfs size, Minnowboard-max:
-  Support ethernet on Turbot variant.
-
-- Security fixes for bind, clamav, libcurl, qpdf
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.4
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2018.02.3..
-
-    10  Baruch Siach
-     7  Fabio Estevam
-     5  Ga?l PORTAY
-     5  Peter Korsgaard
-     4  Fabrice Fontaine
-     3  Bernd Kuhls
-     3  Thomas Petazzoni
-     2  S?bastien Szymanski
-     2  Yann E. MORIN
-     1  Asgeir Bjarni Ingvarsson
-     1  Bryce Ferguson
-     1  Carlos Santos
-     1  Christoph Engelbert
-     1  Dan Walkes
-     1  David De Grave (Essensium/Mind)
-     1  David Owens
-     1  Hollis Blanchard
-     1  Jan Heylen
-     1  Jason A. Donenfeld
-     1  Joseph Kogut
-     1  J?r?my Rosen
-     1  Laurent Hartanerot
-     1  Leon Anavi
-     1  Marcus Folkesson
-     1  Max Filippov
-     1  Pierre-Louis Bossart
-     1  Romain Naour
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index ef5aec274c..07fd033a30 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -226,6 +226,31 @@
+ 	#10961: Grub2 fails to build for x86_64 when BR2_SSP_ALL is
+ 		enabled
+ 
++2018.02.4, Released July 21th, 2018
++
++	Important / security related fixes.
++
++	U-Boot: Ensure host version of ncurses is picked up and not
++	host-ncurses built by buildroot, as that otherwise causes
++	widechar/non-widechar conflicts and corrupted menuconfig
++	menus.
++
++	Linux: Enable CONFIG_PERF_EVENTS when perf is enabled.
++
++	Defconfigs: Raspberrypi3: Bump rootfs size, Minnowboard-max:
++	Support ethernet on Turbot variant.
++
++	Updated/fixed packages: bind, clamav, collectd, dos2unix,
++	edid-decode, gcc, gdb, heimdal, hidapi, imx-gpu-viv, libcurl,
++	libglib2, liblogging, libostree, libsoup, libv4l, lm-sensors,
++	ncurses, network-manager, patchelf, pinentry, procps-ng, qpdf,
++	qt5, qt53d, qt5base, qt5charts, qt5script, qt5serialport,
++	systemd, wireguard, wireless-regdb
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#11101: host-patchelf Endian Issue with relative RPATH
++
+ 2018.02.3, Released June 18th, 2018
+ 
+ 	Important / security related fixes.
