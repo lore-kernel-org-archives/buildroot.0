@@ -1,26 +1,37 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Fri, 20 Jul 2018 11:23:02 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 20 Jul 2018 11:42:15 +0200
 Subject: [Buildroot] [PATCH 1/1] imx-gpu-viv: add a missing backslash
-In-Reply-To: <20180720091038.24853-1-laurent.hartanerot@gmail.com>
-References: <20180720091038.24853-1-laurent.hartanerot@gmail.com>
-Message-ID: <20180720092302.GA13497@g751.home>
+In-Reply-To: <20180720091629.5723-1-laurent.hartanerot@gmail.com> (Laurent
+ Hartanerot's message of "Fri, 20 Jul 2018 11:16:29 +0200")
+References: <20180720091629.5723-1-laurent.hartanerot@gmail.com>
+Message-ID: <87effy8cqw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Laurent,
+>>>>> "Laurent" == Laurent Hartanerot <laurent.hartanerot@gmail.com> writes:
 
-On Fri, Jul 20, 2018 at 11:10:38AM +0200, Laurent Hartanerot wrote:
-> From: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> 
-> Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+ > From: Laurent Hartanerot <laurent.hartanerot@atos.net>
+ > Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+ > ---
+ >  package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Good catch! Thanks for the patch and sorry about the missing backslash
-;)
+ > diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+ > index 511e3b3b6c..25d25e1871 100644
+ > --- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+ > +++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+ > @@ -79,7 +79,7 @@ endif
+ >  ifeq ($(IMX_GPU_VIV_LIB_TARGET),x11)
+ >  define IMX_GPU_VIV_FIXUP_PKGCONFIG
+ >  	for lib in egl gbm glesv1_cm glesv2 vg; do \
+ > -		ln -sf $${lib}_x11.pc $(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc
+ > +		ln -sf $${lib}_x11.pc $(@D)/gpu-core/usr/lib/pkgconfig/$${lib}.pc \
 
-Reviewed-by: Gary Bisson <gary.bisson@boundarydevices.com>
+A semicolon is also missing. I've changed it to do  '|| exit 1; \' like
+we do elsewhere to catch failures and committed, thanks.
 
-Regards,
-Gary
+-- 
+Bye, Peter Korsgaard
