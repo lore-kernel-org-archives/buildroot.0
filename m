@@ -1,75 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 20 Jul 2018 00:39:18 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] Update for 2018.05.1
-Message-ID: <20180719223434.190C489123@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 20 Jul 2018 08:58:27 +0300
+Subject: [Buildroot] [PATCH] vim: install /bin/vi as a relative symlink
+In-Reply-To: <589643561.4441380.1531997921281.JavaMail.zimbra@datacom.com.br>
+References: <20180718123443.7242-1-casantos@datacom.com.br>
+ <20180718150350.4a910b0c@windsurf> <87fu0g53wd.fsf@tkos.co.il>
+ <589643561.4441380.1531997921281.JavaMail.zimbra@datacom.com.br>
+Message-ID: <877elq5tz0.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef26ffddded912570ca3893271e2900aa8b27866
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+Hi Carlos,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 32 ++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 34 insertions(+), 2 deletions(-)
+Carlos Santos writes:
+>> From: "Baruch Siach" <baruch@tkos.co.il>
+>> To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+>> Cc: "DATACOM" <casantos@datacom.com.br>, "buildroot" <buildroot@buildroot.org>, "Yann Morin" <yann.morin.1998@free.fr>,
+>> "ratbert90" <aduskett@gmail.com>, "Arnout Vandecappelle" <arnout@mind.be>
+>> Sent: Wednesday, July 18, 2018 11:57:06 PM
+>> Subject: Re: [Buildroot] [PATCH] vim: install /bin/vi as a relative symlink
+>
+>> Hi Thomas,
+>> 
+>> Thomas Petazzoni writes:
+>>> Hello,
+>>>
+>>> On Wed, 18 Jul 2018 09:34:43 -0300, Carlos Santos wrote:
+>>>> Prevent creating a dangling symlink when vim is not present on the host
+>>>> machine. With BR2_ROOTFS_MERGED_USR, just link to "vim", since they are
+>>>> on the same directory, otherwise link to "../usr/bin/vim".
+>>>>
+>>>> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+>>>
+>>> Baruch had already sent a patch with the same title/intention, but it
+>>> is no longer in the pending state in patchwork.
+>>>
+>>> Could you clarify what happened, and which of the two patches is
+>>> relevant ?
+>> 
+>> My vim patch is at
+>> 
+>>  http://patchwork.ozlabs.org/patch/943314/
+>> 
+>> I marked it as Rejected following the comment of Arnout. Carlos' patch
+>> works around the merged /usr issue by changing the symlink target for
+>> merged /usr. In my opinion this solution is error prone.
+>
+> Why?
 
-diff --git a/CHANGES b/CHANGES
-index baa85622ae..d41642b031 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,35 @@
-+2018.05.1, Released July 20th, 2018
-+
-+	Important / security related fixes.
-+
-+	U-Boot: Ensure host version of ncurses is picked up and not
-+	host-ncurses built by buildroot, as that otherwise causes
-+	widechar/non-widechar conflicts and corrupted menuconfig
-+	menus.
-+
-+	Linux: Enable CONFIG_PERF_EVENTS when perf is enabled.
-+
-+	Toolchain: ARC tools updated to arc-2018.03.
-+
-+	pkg-stats: Fix python 3.x compatibility.
-+
-+	dl-wrapper: Fix support for URIs containing '+', fix
-+	no-check-hash for inferred site method.
-+
-+	Defconfigs: Raspberrypi3: Bump rootfs size, Minnowboard-max:
-+	Support ethernet on Turbot variant.
-+
-+	Updated/fixed packages: audit, bind, btrfs-progs, cifs-utils,
-+	clamav, collectd, coreutils, docker-containerd, dos2unix,
-+	edid-decode, file, gcc, gdb, gnupg, gnupg2, heimdal, hidapi,
-+	imagemagick, libcurl, libgcrypt, libglib2, liblogging,
-+	libostree, libressl, libsoup, libv4l, libvncserver, libvorbis,
-+	libwebsockets, libxslt, lm-sensors, mariadb, mpg123, ncurses,
-+	network-manager, nodejs, patchelf, perl, php-amqp, pinentry,
-+	pixiewps, qpdf, qt53d, qt5base, qt5charts, qt5script, redis,
-+	systemd, triggerhappy, uboot, wireguard, wireless-regdb,
-+	wireshark
-+
- 2018.05, Released June 1st, 2018
- 
- 	Minor fixes.
-diff --git a/Makefile b/Makefile
-index 9f32c96001..b4cc8956c0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -87,9 +87,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.05
-+export BR2_VERSION := 2018.05.1
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1527884000
-+BR2_VERSION_EPOCH = 1532040000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Because it is confusing, for me at least. Changes in the filesystem
+layout adding or removing directory symlinks might break them.
+
+>> It would be
+>> much easier to allow dangling symlinks in the target directory, and
+>> tweak the busybox install.sh to cope with that. That's what my pending
+>> busybox patch suggests.
+>> 
+>>  http://patchwork.ozlabs.org/patch/944884/
+>
+> Both patches could be applied. They are independent from each other.
+
+But if we allow dangling non-relative symlinks I don't think we want to
+add this complexity to the vim package, or any other package that
+installs similar relative symlinks.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
