@@ -1,51 +1,60 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 21 Jul 2018 16:16:42 +0200
-Subject: [Buildroot] [PATCH v4 12/18] package/x11r7/xutil_makedepend: switch
- to xorgproto
+Date: Sat, 21 Jul 2018 16:16:47 +0200
+Subject: [Buildroot] [PATCH v4 17/18] package/x11r7/xdriver_xf86-video-sis:
+ add upstream patch to fix support for xserver_xorg-server 1.20.0
 In-Reply-To: <20180721141648.29939-1-bernd.kuhls@t-online.de>
 References: <20180721141648.29939-1-bernd.kuhls@t-online.de>
-Message-ID: <20180721141648.29939-13-bernd.kuhls@t-online.de>
+Message-ID: <20180721141648.29939-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The new package xorgproto will combine and replace all current xproto_*
-packages. For details read
-https://lists.x.org/archives/xorg-announce/2018-February/002835.html
-
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/x11r7/xutil_makedepend/Config.in           | 1 +
- package/x11r7/xutil_makedepend/xutil_makedepend.mk | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...0002-Remove-reference-to-virtualFrom.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch
 
-diff --git a/package/x11r7/xutil_makedepend/Config.in b/package/x11r7/xutil_makedepend/Config.in
-index 0b091b0e34..fdf2fb92c1 100644
---- a/package/x11r7/xutil_makedepend/Config.in
-+++ b/package/x11r7/xutil_makedepend/Config.in
-@@ -1,4 +1,5 @@
- config BR2_PACKAGE_XUTIL_MAKEDEPEND
- 	bool "makedepend"
-+	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  No description available
-diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-index 6fd3c1ae36..8a058efcec 100644
---- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-+++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
-@@ -10,8 +10,8 @@ XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
- XUTIL_MAKEDEPEND_LICENSE = MIT
- XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
- 
--XUTIL_MAKEDEPEND_DEPENDENCIES = xproto_xproto
--HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xproto_xproto
-+XUTIL_MAKEDEPEND_DEPENDENCIES = xorgproto
-+HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xorgproto
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch b/package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch
+new file mode 100644
+index 0000000000..7de4ea9d3c
+--- /dev/null
++++ b/package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch
+@@ -0,0 +1,33 @@
++From 4b1356a2b7fd06e9a05d134caa4033681c939737 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Thu, 16 Feb 2017 11:21:27 -0500
++Subject: [PATCH 1/2] Remove reference to ->virtualFrom
++
++The core will print this information as well anyway.
++
++Signed-off-by: Adam Jackson <ajax@redhat.com>
++
++Downloaded from upstream commit
++https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=4b1356a2b7fd06e9a05d134caa4033681c939737
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/sis_driver.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/sis_driver.c b/src/sis_driver.c
++index 8f06164..513f68b 100644
++--- a/src/sis_driver.c
+++++ b/src/sis_driver.c
++@@ -2738,7 +2738,7 @@ SiSPrintModes(ScrnInfoPtr pScrn)
++     float hsync, refresh = 0.0;
++     char *desc, *desc2, *prefix, *uprefix, *output;
++ 
++-    xf86DrvMsg(pScrn->scrnIndex, pScrn->virtualFrom, "Virtual size is %dx%d "
+++    xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Virtual size is %dx%d "
++ 	       "(pitch %d)\n", pScrn->virtualX, pScrn->virtualY,
++ 	       pScrn->displayWidth);
++ 
++-- 
++2.17.1
++
 -- 
 2.18.0
