@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Jul 2018 14:28:32 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x]
- package/wireless-regdb: bump version to 2018.05.31
-In-Reply-To: <20180720221609.BE06A8A295@busybox.osuosl.org>
-References: <20180720221609.BE06A8A295@busybox.osuosl.org>
-Message-ID: <20180723142832.379d74fb@windsurf>
+Date: Mon, 23 Jul 2018 15:08:15 +0200
+Subject: [Buildroot] [PATCH] vim: install /bin/vi as a relative symlink
+In-Reply-To: <87fu0g53wd.fsf@tkos.co.il>
+References: <20180718123443.7242-1-casantos@datacom.com.br>
+ <20180718150350.4a910b0c@windsurf> <87fu0g53wd.fsf@tkos.co.il>
+Message-ID: <20180723150815.304d1c9d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 21 Jul 2018 00:20:58 +0200, Peter Korsgaard wrote:
-> commit: https://git.buildroot.net/buildroot/commit/?id=eece13dcecdfc9dd283c068ec64000edb5fb09e4
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
-> 
-> Added license hash, updated project URL, old site is dead.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> (cherry picked from commit 54917abdd74158298fd848a58117c796c641a130)
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+On Thu, 19 Jul 2018 05:57:06 +0300, Baruch Siach wrote:
 
-I'm wondering why you backported this change. Indeed, the backport of
-"wireless-regdb: add  regulatory.db[.p7s] to /lib/firmware" broke the
-build of wireless-regdb on 2018.05.x, but perhaps the right thing to do
-was to revert rather than bump wireless-regdb ?
+> My vim patch is at
+> 
+>   http://patchwork.ozlabs.org/patch/943314/
+> 
+> I marked it as Rejected following the comment of Arnout. Carlos' patch
+> works around the merged /usr issue by changing the symlink target for
+> merged /usr. In my opinion this solution is error prone. It would be
+> much easier to allow dangling symlinks in the target directory, and
+> tweak the busybox install.sh to cope with that. That's what my pending
+> busybox patch suggests.
+> 
+>   http://patchwork.ozlabs.org/patch/944884/
 
-In any case, the 2018.05.1 currently has a broken wireless-regdb
-package because of this: your backport of the wireless-regdb bump has
-been done after the 2018.05.1 tag.
+Allowing dangling symlinks is indeed desirable, but I think it is also
+nice if we have as few dangling symlinks are possible. It looks cleaner
+to me. So like Carlos said, I believe both your patch fixing the
+Busybox installation and Carlos patch adjusting vim are useful.
 
 Best regards,
 
