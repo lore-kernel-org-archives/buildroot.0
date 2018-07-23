@@ -1,89 +1,42 @@
-From: =?UTF-8?Q?I=c3=b1igo_Huguet?= <inigohuguet@fanamoel.com>
-Date: Mon, 23 Jul 2018 13:10:57 +0200
-Subject: [Buildroot] [PATCH 1/1] gst1-plugins-good: add option for qmlgl
- plugin (qt5 plugin)
-In-Reply-To: <1532336135-10609-1-git-send-email-inigohuguet@fanamoel.com>
-References: <CADujc4qKisW=6QyDZjDSUo50Yj+_H4-+7V=2KW32cAzRB_d2Qw@mail.gmail.com>
- <1532336135-10609-1-git-send-email-inigohuguet@fanamoel.com>
-Message-ID: <d998bc01-624e-1a85-409d-e846419a6494@fanamoel.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 23 Jul 2018 14:28:32 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x]
+ package/wireless-regdb: bump version to 2018.05.31
+In-Reply-To: <20180720221609.BE06A8A295@busybox.osuosl.org>
+References: <20180720221609.BE06A8A295@busybox.osuosl.org>
+Message-ID: <20180723142832.379d74fb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch replaces this other one: 
-https://patchwork.ozlabs.org/patch/792000/
+Hello,
 
-I guess that the previous patch should be closed. Among other things, 
-that previous patch was for gst1-plugins-bad because qmlgl plugin was 
-there when the patch was sent.
+On Sat, 21 Jul 2018 00:20:58 +0200, Peter Korsgaard wrote:
+> commit: https://git.buildroot.net/buildroot/commit/?id=eece13dcecdfc9dd283c068ec64000edb5fb09e4
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+> 
+> Added license hash, updated project URL, old site is dead.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> (cherry picked from commit 54917abdd74158298fd848a58117c796c641a130)
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-I've used --in-reply-to in git send-email because the documentation says 
-that this way previous patch is automatically superseeded in the 
-patchwork, but I'm not sure if this has happened.
+I'm wondering why you backported this change. Indeed, the backport of
+"wireless-regdb: add  regulatory.db[.p7s] to /lib/firmware" broke the
+build of wireless-regdb on 2018.05.x, but perhaps the right thing to do
+was to revert rather than bump wireless-regdb ?
 
+In any case, the 2018.05.1 currently has a broken wireless-regdb
+package because of this: your backport of the wireless-regdb bump has
+been done after the 2018.05.1 tag.
 
-El 23/07/18 a las 10:55, I?igo Huguet escribi?:
-> gst1-plugins-good is built with --disable-qt option, so qmlgl plugin
-> is disabled. Added option to enable it, allowing to use elements
-> qmlglsrc and qmlglsink.
->
-> Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
-> ---
->   package/gstreamer1/gst1-plugins-good/Config.in            | 10 ++++++++++
->   package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 13 +++++++++++--
->   2 files changed, 21 insertions(+), 2 deletions(-)
->
-> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-> index 3bb98a4..d55b445 100644
-> --- a/package/gstreamer1/gst1-plugins-good/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
-> @@ -283,6 +283,16 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4
->   	help
->   	  Open Sound System (OSS) version 4 support for GStreamer
->   
-> +config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
-> +	bool "qmlgl (qt5)"
-> +	depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK
-> +	select BR2_PACKAGE_QT5X11EXTRAS if BR2_PACKAGE_QT5BASE_XCB
-> +	help
-> +	  QT5 plugin which includes elements qmlglsrc and qmlglsink
-> +	
-> +comment "qmlgl (qt5) plugin depends on QT5 declarative with Quick module"
-> +	depends on !BR2_PACKAGE_QT5DECLARATIVE_QUICK
-> +
->   config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
->   	bool "v4l2"
->   	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> index 6fa989d..bc8242d 100644
-> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> @@ -20,8 +20,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
->   	--disable-osx_video \
->   	--disable-aalib \
->   	--disable-aalibtest \
-> -	--disable-libcaca \
-> -	--disable-qt
-> +	--disable-libcaca
->   
->   # Options which require currently unpackaged libraries
->   GST1_PLUGINS_GOOD_CONF_OPTS += \
-> @@ -328,6 +327,16 @@ else
->   GST1_PLUGINS_GOOD_CONF_OPTS += --disable-oss4
->   endif
->   
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL),y)
-> +GST1_PLUGINS_GOOD_CONF_OPTS += --enable-qt
-> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5declarative
-> +else
-> +GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
-> +endif
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL)$(BR2_PACKAGE_QT5BASE_XCB),yy)
-> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5x11extras
-> +endif
-> +
->   ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
->   GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
->   else
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
