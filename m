@@ -1,211 +1,95 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 22 Jul 2018 21:41:07 -0300
-Subject: [Buildroot] [PATCH 1/1] check-package: fix Python3 support
-Message-ID: <20180723004107.20985-1-ricardo.martincoski@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 23 Jul 2018 08:00:41 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-07-22
+Message-ID: <20180723060041.E7B0220922@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This script currently uses "/usr/bin/env python" as shebang but it does
-not really support Python3. Instead of limiting the script to Python2,
-fix it to support both versions.
+Hello,
 
-Do this by first using an automated tool:
-$ python -m modernize -w -p <files>
-and then manually fixing what remains:
- - keep the imports in alphabetical order;
- - fix handling of files that cannot be decoded by 'utf-8' codec, such
-   as package/urg/0002-urg-gcc6-fix-narrowing-conversion.patch .
+Build statistics for 2018-07-22
+===============================
 
-In order to avoid errors when decoding files, use
-errors="surrogateescape" when opening files, the docs for open() states:
-"This is useful for processing files in an unknown encoding.".
-This argument is not compatible with Python2 open() so import 'six' to
-use it only when running in Python3.
-As a consequence the file handler becomes explicit, so use it to close()
-the file after it got processed.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |   9 |   2 |   0 |  11 |
+   2018.05.x |  22 |   0 |   0 |  22 |
+      master | 131 |  30 |   0 | 161 |
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
----
-Using the default docker (debian) image which uses Python2:
-before this patch:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/83454639
-after this patch:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/83542815
+Results for branch '2018.02.x'
+==============================
 
-Using an arch docker image which uses Python3:
-before this patch:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/81892607
-after this patch:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/83543363
-The arch image for docker was generated using:
-http://patchwork.ozlabs.org/patch/943301/
----
- utils/check-package                 |  9 ++++++++-
- utils/checkpackagelib/lib.py        |  3 ++-
- utils/checkpackagelib/lib_config.py | 13 +++++++------
- utils/checkpackagelib/lib_hash.py   | 13 +++++++------
- utils/checkpackagelib/lib_mk.py     | 11 ++++++-----
- utils/checkpackagelib/lib_patch.py  |  5 +++--
- 6 files changed, 33 insertions(+), 21 deletions(-)
+Classification of failures by reason
+------------------------------------
 
-diff --git a/utils/check-package b/utils/check-package
-index 3dbc28b0a2..a8f5ce6157 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -1,11 +1,13 @@
- #!/usr/bin/env python
- # See utils/checkpackagelib/readme.txt before editing this file.
- 
-+from __future__ import absolute_import
- from __future__ import print_function
- import argparse
- import inspect
- import os
- import re
-+import six
- import sys
- 
- import checkpackagelib.lib_config
-@@ -127,10 +129,15 @@ def check_file_using_lib(fname):
- 
-     for cf in objects:
-         nwarnings += print_warnings(cf.before())
--    for lineno, text in enumerate(open(fname, "r").readlines()):
-+    if six.PY3:
-+        f = open(fname, "r", errors="surrogateescape")
-+    else:
-+        f = open(fname, "r")
-+    for lineno, text in enumerate(f.readlines()):
-         nlines += 1
-         for cf in objects:
-             nwarnings += print_warnings(cf.check_line(lineno + 1, text))
-+    f.close()
-     for cf in objects:
-         nwarnings += print_warnings(cf.after())
- 
-diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
-index 91f4ad49b7..61fa46125d 100644
---- a/utils/checkpackagelib/lib.py
-+++ b/utils/checkpackagelib/lib.py
-@@ -1,6 +1,7 @@
- # See utils/checkpackagelib/readme.txt before editing this file.
- 
--from base import _CheckFunction
-+from __future__ import absolute_import
-+from .base import _CheckFunction
- 
- 
- class ConsecutiveEmptyLines(_CheckFunction):
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 1d273f1c5f..5f316a6d5b 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -3,13 +3,14 @@
- # "bool", so below check functions don't need to check for things already
- # checked by running "make menuconfig".
- 
-+from __future__ import absolute_import
- import re
- 
--from base import _CheckFunction
--from lib import ConsecutiveEmptyLines  # noqa: F401
--from lib import EmptyLastLine          # noqa: F401
--from lib import NewlineAtEof           # noqa: F401
--from lib import TrailingSpace          # noqa: F401
-+from .base import _CheckFunction
-+from .lib import ConsecutiveEmptyLines  # noqa: F401
-+from .lib import EmptyLastLine          # noqa: F401
-+from .lib import NewlineAtEof           # noqa: F401
-+from .lib import TrailingSpace          # noqa: F401
- 
- 
- def _empty_or_comment(text):
-@@ -45,7 +46,7 @@ class AttributesOrder(_CheckFunction):
-         if attribute in entries_that_should_not_be_indented:
-             self.state = 0
-             return
--        if attribute not in self.attributes_order_convention.keys():
-+        if attribute not in list(self.attributes_order_convention.keys()):
-             return
-         new_state = self.attributes_order_convention[attribute]
-         wrong_order = self.state > new_state
-diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
-index 6d4cc9fd62..8ca92a5a90 100644
---- a/utils/checkpackagelib/lib_hash.py
-+++ b/utils/checkpackagelib/lib_hash.py
-@@ -3,13 +3,14 @@
- # functions don't need to check for things already checked by running
- # "make package-dirclean package-source".
- 
-+from __future__ import absolute_import
- import re
- 
--from base import _CheckFunction
--from lib import ConsecutiveEmptyLines  # noqa: F401
--from lib import EmptyLastLine          # noqa: F401
--from lib import NewlineAtEof           # noqa: F401
--from lib import TrailingSpace          # noqa: F401
-+from .base import _CheckFunction
-+from .lib import ConsecutiveEmptyLines  # noqa: F401
-+from .lib import EmptyLastLine          # noqa: F401
-+from .lib import NewlineAtEof           # noqa: F401
-+from .lib import TrailingSpace          # noqa: F401
- 
- 
- def _empty_line_or_comment(text):
-@@ -43,7 +44,7 @@ class HashType(_CheckFunction):
-         htype, hexa = fields[:2]
-         if htype == "none":
-             return
--        if htype not in self.len_of_hash.keys():
-+        if htype not in list(self.len_of_hash.keys()):
-             return ["{}:{}: unexpected type of hash ({}#adding-packages-hash)"
-                     .format(self.filename, lineno, self.url_to_manual),
-                     text]
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 86e9aa2d97..9c17a3cfd2 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -4,13 +4,14 @@
- # menu options using "make menuconfig" and by running "make" with appropriate
- # packages enabled.
- 
-+from __future__ import absolute_import
- import re
- 
--from base import _CheckFunction
--from lib import ConsecutiveEmptyLines  # noqa: F401
--from lib import EmptyLastLine          # noqa: F401
--from lib import NewlineAtEof           # noqa: F401
--from lib import TrailingSpace          # noqa: F401
-+from .base import _CheckFunction
-+from .lib import ConsecutiveEmptyLines  # noqa: F401
-+from .lib import EmptyLastLine          # noqa: F401
-+from .lib import NewlineAtEof           # noqa: F401
-+from .lib import TrailingSpace          # noqa: F401
- 
- 
- class Indent(_CheckFunction):
-diff --git a/utils/checkpackagelib/lib_patch.py b/utils/checkpackagelib/lib_patch.py
-index 555621afa1..4b0d32268f 100644
---- a/utils/checkpackagelib/lib_patch.py
-+++ b/utils/checkpackagelib/lib_patch.py
-@@ -3,10 +3,11 @@
- # functions don't need to check for things already checked by running
- # "make package-dirclean package-patch".
- 
-+from __future__ import absolute_import
- import re
- 
--from base import _CheckFunction
--from lib import NewlineAtEof           # noqa: F401
-+from .base import _CheckFunction
-+from .lib import NewlineAtEof           # noqa: F401
- 
- 
- class ApplyOrder(_CheckFunction):
+     qt5xmlpatterns-legal-info | 1 
+                  samba4-4.7.6 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |      qt5xmlpatterns-legal-info | NOK | http://autobuild.buildroot.net/results/b5150f488dbc234ca8c6d515ddcb060008e2490a |     
+        mips |                   samba4-4.7.6 | NOK | http://autobuild.buildroot.net/results/d39c4bf65410e217b7e0d4367d454e54bbb6459d |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.67.0 | 6 
+             gnuradio-3.7.13.3 | 4 
+              libostree-2018.7 | 4 
+               mono-5.12.0.226 | 3 
+linuxptp-303b08cbf55096aba5... | 2 
+                qt5base-5.11.1 | 2 
+           qt5serialbus-5.11.1 | 2 
+                    brltty-5.5 | 1 
+     docker-engine-v17.05.0-ce | 1 
+               domoticz-4.9700 | 1 
+            perl-net-ssh2-0.69 | 1 
+            qt5serialbus-5.6.3 | 1 
+                  samba4-4.8.3 | 1 
+                  zeromq-4.2.5 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/2bf587a396713552ba3f047ec8dab4881355b27d |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/9a5e8b78cda5266154a08b0da5f2b2f2492a320d |     
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/c76a60725f5c9f1499e44a7b1bfbd91541006264 |     
+      xtensa |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/e5aedc598bb2b9175da3cb8bbe2622530e0ca911 |     
+    mips64el |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/a6f56bc3ec5a43c84cb74d00124a29ed6dcb0973 |     
+  aarch64_be |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/db34b991a14a32b7317474cc7a037e7f63a22023 |     
+      x86_64 |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/1f8184f1efb7de8fbee00a518b6588bd7e46e91f |     
+      x86_64 |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/a595812bfa7f12534d9f6508bf9dd1e169c6ba7a |     
+        or1k |                domoticz-4.9700 | NOK | http://autobuild.buildroot.net/results/75309088242733a07f1453b5351fb404b3164300 |     
+         arm |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/7cb92b62f89362990da571870aad26cf84a80e42 |     
+         arc |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/e1c5a8906d1c1ca8207895e27cece9dfde49be56 |     
+      x86_64 |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/ba427b4b61241f09f62b6e0637961de8dfdd80c0 |     
+    mips64el |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/623c498088a04abe5fcf5c6de9697c72ab36b2dd |     
+      x86_64 |               libostree-2018.7 | NOK | http://autobuild.buildroot.net/results/7da9d4230f3f9f2c99b7f7df5532578784ddd62c |     
+     aarch64 |               libostree-2018.7 | NOK | http://autobuild.buildroot.net/results/284778fdb2bd0c65b5d2ec318ede79408c451f09 |     
+    mips64el |               libostree-2018.7 | NOK | http://autobuild.buildroot.net/results/0512fef48fd1d201b013ab136023cce906dcb77d |     
+        i686 |               libostree-2018.7 | NOK | http://autobuild.buildroot.net/results/5d2dc1415984116be04da31095eab11854c56bdc |     
+        m68k | linuxptp-303b08cbf55096aba5... | NOK | http://autobuild.buildroot.net/results/25939ae27b8b9e3effcc6f4c40e48c57d233996a |     
+        m68k | linuxptp-303b08cbf55096aba5... | NOK | http://autobuild.buildroot.net/results/a8de15ae057d1933194fff7c6dfd7d09db56b906 |     
+        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/ccb79c36851a9c5b2edf44576de0e74ec129bff1 |     
+      mipsel |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/e6d2e1ec30ae7693b81a96406e73888084f646b8 |     
+        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/ba2dd6f4c9b6c64935ab52ecfdf3b8db857ce667 |     
+         arm |             perl-net-ssh2-0.69 | NOK | http://autobuild.buildroot.net/results/1310a43508e0ec41b7c17845c078344b8a52cd06 |     
+        or1k |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/7a61ecec7fc4c62139530eb6c963399c34eb10b3 |     
+        or1k |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/b518be8e5c0949604f83e3b916b744f02c771819 |     
+    mips64el |            qt5serialbus-5.11.1 | NOK | http://autobuild.buildroot.net/results/ac7a8dad76559f4e22a0668f350ffa801e36acff |     
+    mips64el |            qt5serialbus-5.11.1 | NOK | http://autobuild.buildroot.net/results/47a941c7bcd0d5baf7e2c8993ae875f2550c925d |     
+         arm |             qt5serialbus-5.6.3 | NOK | http://autobuild.buildroot.net/results/c5445685eb188f2eff1037e08121cd19b7da821e |     
+   powerpc64 |                   samba4-4.8.3 | NOK | http://autobuild.buildroot.net/results/9493b5895485c6a07698eb88a9c4cf9edda505fa |     
+        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/3affcc97a6b6954d62946cf6822b7050bc491c21 |     
+
+
 -- 
-2.17.1
+http://autobuild.buildroot.net
