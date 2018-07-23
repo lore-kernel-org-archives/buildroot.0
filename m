@@ -1,45 +1,211 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 22 Jul 2018 23:34:45 +0200
-Subject: [Buildroot] [PATCH] Makefile: help: BR2_DEFCONFIG for defconfig
- must be on command line
-Message-ID: <20180722213445.29358-1-arnout@mind.be>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 22 Jul 2018 21:41:07 -0300
+Subject: [Buildroot] [PATCH 1/1] check-package: fix Python3 support
+Message-ID: <20180723004107.20985-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The help text says that BR2_DEFCONFIG will be used as input, but a
-BR2_DEFCONFIG specified in the existing .config file will *not* be
-used. So say explicitly that it must be specified on the command line.
-Note that both "BR2_DEFCONFIG=... make defconfig" and
-"make defconfig BR2_DEFCONFIG=..." will work.
+This script currently uses "/usr/bin/env python" as shebang but it does
+not really support Python3. Instead of limiting the script to Python2,
+fix it to support both versions.
 
-While we're at it, add a semicolon to separate the two statements.
+Do this by first using an automated tool:
+$ python -m modernize -w -p <files>
+and then manually fixing what remains:
+ - keep the imports in alphabetical order;
+ - fix handling of files that cannot be decoded by 'utf-8' codec, such
+   as package/urg/0002-urg-gcc6-fix-narrowing-conversion.patch .
 
-Note that this overflows the help text beyond 80 characters, but that
-is already the case in many other lines.
+In order to avoid errors when decoding files, use
+errors="surrogateescape" when opening files, the docs for open() states:
+"This is useful for processing files in an unknown encoding.".
+This argument is not compatible with Python2 open() so import 'six' to
+use it only when running in Python3.
+As a consequence the file handler becomes explicit, so use it to close()
+the file after it got processed.
 
-Reported-by: "aissen" on IRC
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Using the default docker (debian) image which uses Python2:
+before this patch:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/83454639
+after this patch:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/83542815
 
-diff --git a/Makefile b/Makefile
-index 8d25c8a239..37c7072c7c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1020,8 +1020,8 @@ help:
- 	@echo '  silentoldconfig        - Same as oldconfig, but quietly, additionally update deps'
- 	@echo '  olddefconfig           - Same as silentoldconfig but sets new symbols to their default value'
- 	@echo '  randconfig             - New config with random answer to all options'
--	@echo '  defconfig              - New config with default answer to all options'
--	@echo '                             BR2_DEFCONFIG, if set, is used as input'
-+	@echo '  defconfig              - New config with default answer to all options;'
-+	@echo '                             BR2_DEFCONFIG, if set on the command line, is used as input'
- 	@echo '  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)'
- 	@echo '  allyesconfig           - New config where all options are accepted with yes'
- 	@echo '  allnoconfig            - New config where all options are answered with no'
+Using an arch docker image which uses Python3:
+before this patch:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/81892607
+after this patch:
+https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/83543363
+The arch image for docker was generated using:
+http://patchwork.ozlabs.org/patch/943301/
+---
+ utils/check-package                 |  9 ++++++++-
+ utils/checkpackagelib/lib.py        |  3 ++-
+ utils/checkpackagelib/lib_config.py | 13 +++++++------
+ utils/checkpackagelib/lib_hash.py   | 13 +++++++------
+ utils/checkpackagelib/lib_mk.py     | 11 ++++++-----
+ utils/checkpackagelib/lib_patch.py  |  5 +++--
+ 6 files changed, 33 insertions(+), 21 deletions(-)
+
+diff --git a/utils/check-package b/utils/check-package
+index 3dbc28b0a2..a8f5ce6157 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -1,11 +1,13 @@
+ #!/usr/bin/env python
+ # See utils/checkpackagelib/readme.txt before editing this file.
+ 
++from __future__ import absolute_import
+ from __future__ import print_function
+ import argparse
+ import inspect
+ import os
+ import re
++import six
+ import sys
+ 
+ import checkpackagelib.lib_config
+@@ -127,10 +129,15 @@ def check_file_using_lib(fname):
+ 
+     for cf in objects:
+         nwarnings += print_warnings(cf.before())
+-    for lineno, text in enumerate(open(fname, "r").readlines()):
++    if six.PY3:
++        f = open(fname, "r", errors="surrogateescape")
++    else:
++        f = open(fname, "r")
++    for lineno, text in enumerate(f.readlines()):
+         nlines += 1
+         for cf in objects:
+             nwarnings += print_warnings(cf.check_line(lineno + 1, text))
++    f.close()
+     for cf in objects:
+         nwarnings += print_warnings(cf.after())
+ 
+diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
+index 91f4ad49b7..61fa46125d 100644
+--- a/utils/checkpackagelib/lib.py
++++ b/utils/checkpackagelib/lib.py
+@@ -1,6 +1,7 @@
+ # See utils/checkpackagelib/readme.txt before editing this file.
+ 
+-from base import _CheckFunction
++from __future__ import absolute_import
++from .base import _CheckFunction
+ 
+ 
+ class ConsecutiveEmptyLines(_CheckFunction):
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index 1d273f1c5f..5f316a6d5b 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -3,13 +3,14 @@
+ # "bool", so below check functions don't need to check for things already
+ # checked by running "make menuconfig".
+ 
++from __future__ import absolute_import
+ import re
+ 
+-from base import _CheckFunction
+-from lib import ConsecutiveEmptyLines  # noqa: F401
+-from lib import EmptyLastLine          # noqa: F401
+-from lib import NewlineAtEof           # noqa: F401
+-from lib import TrailingSpace          # noqa: F401
++from .base import _CheckFunction
++from .lib import ConsecutiveEmptyLines  # noqa: F401
++from .lib import EmptyLastLine          # noqa: F401
++from .lib import NewlineAtEof           # noqa: F401
++from .lib import TrailingSpace          # noqa: F401
+ 
+ 
+ def _empty_or_comment(text):
+@@ -45,7 +46,7 @@ class AttributesOrder(_CheckFunction):
+         if attribute in entries_that_should_not_be_indented:
+             self.state = 0
+             return
+-        if attribute not in self.attributes_order_convention.keys():
++        if attribute not in list(self.attributes_order_convention.keys()):
+             return
+         new_state = self.attributes_order_convention[attribute]
+         wrong_order = self.state > new_state
+diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
+index 6d4cc9fd62..8ca92a5a90 100644
+--- a/utils/checkpackagelib/lib_hash.py
++++ b/utils/checkpackagelib/lib_hash.py
+@@ -3,13 +3,14 @@
+ # functions don't need to check for things already checked by running
+ # "make package-dirclean package-source".
+ 
++from __future__ import absolute_import
+ import re
+ 
+-from base import _CheckFunction
+-from lib import ConsecutiveEmptyLines  # noqa: F401
+-from lib import EmptyLastLine          # noqa: F401
+-from lib import NewlineAtEof           # noqa: F401
+-from lib import TrailingSpace          # noqa: F401
++from .base import _CheckFunction
++from .lib import ConsecutiveEmptyLines  # noqa: F401
++from .lib import EmptyLastLine          # noqa: F401
++from .lib import NewlineAtEof           # noqa: F401
++from .lib import TrailingSpace          # noqa: F401
+ 
+ 
+ def _empty_line_or_comment(text):
+@@ -43,7 +44,7 @@ class HashType(_CheckFunction):
+         htype, hexa = fields[:2]
+         if htype == "none":
+             return
+-        if htype not in self.len_of_hash.keys():
++        if htype not in list(self.len_of_hash.keys()):
+             return ["{}:{}: unexpected type of hash ({}#adding-packages-hash)"
+                     .format(self.filename, lineno, self.url_to_manual),
+                     text]
+diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+index 86e9aa2d97..9c17a3cfd2 100644
+--- a/utils/checkpackagelib/lib_mk.py
++++ b/utils/checkpackagelib/lib_mk.py
+@@ -4,13 +4,14 @@
+ # menu options using "make menuconfig" and by running "make" with appropriate
+ # packages enabled.
+ 
++from __future__ import absolute_import
+ import re
+ 
+-from base import _CheckFunction
+-from lib import ConsecutiveEmptyLines  # noqa: F401
+-from lib import EmptyLastLine          # noqa: F401
+-from lib import NewlineAtEof           # noqa: F401
+-from lib import TrailingSpace          # noqa: F401
++from .base import _CheckFunction
++from .lib import ConsecutiveEmptyLines  # noqa: F401
++from .lib import EmptyLastLine          # noqa: F401
++from .lib import NewlineAtEof           # noqa: F401
++from .lib import TrailingSpace          # noqa: F401
+ 
+ 
+ class Indent(_CheckFunction):
+diff --git a/utils/checkpackagelib/lib_patch.py b/utils/checkpackagelib/lib_patch.py
+index 555621afa1..4b0d32268f 100644
+--- a/utils/checkpackagelib/lib_patch.py
++++ b/utils/checkpackagelib/lib_patch.py
+@@ -3,10 +3,11 @@
+ # functions don't need to check for things already checked by running
+ # "make package-dirclean package-patch".
+ 
++from __future__ import absolute_import
+ import re
+ 
+-from base import _CheckFunction
+-from lib import NewlineAtEof           # noqa: F401
++from .base import _CheckFunction
++from .lib import NewlineAtEof           # noqa: F401
+ 
+ 
+ class ApplyOrder(_CheckFunction):
 -- 
-2.18.0
+2.17.1
