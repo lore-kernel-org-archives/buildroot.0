@@ -1,42 +1,32 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 24 Jul 2018 15:48:42 +0200
-Subject: [Buildroot] [PATCH 1/1] network-manager: add optional
- dependency on polkit
-In-Reply-To: <20180724105013.7137-1-apanfilov@spectracom.com>
-References: <20180724105013.7137-1-apanfilov@spectracom.com>
-Message-ID: <20180724134841.GA11682@dell5510>
+From: Geoff Levand <geoff@infradead.org>
+Date: Tue, 24 Jul 2018 19:32:17 +0000
+Subject: [Buildroot] [PATCH v1 2/2] dmidecode: Enable for aarch64
+Message-ID: <5a39bc20074e6dc63b2e07c1114fa172160bf7e3.1532460521.git.geoff@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Artem,
+arm64 systems support SMBIOS, so update the dmidecode config
+to allow building dmidecode for arm64.
 
-> Signed-off-by: Artem Panfilov <apanfilov@spectracom.com>
-> ---
->  package/network-manager/network-manager.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+Signed-off-by: Geoff Levand <geoff@infradead.org>
+---
+ package/dmidecode/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-> index a520aad9c0..9774921838 100644
-> --- a/package/network-manager/network-manager.mk
-> +++ b/package/network-manager/network-manager.mk
-> @@ -82,6 +82,10 @@ else
->  NETWORK_MANAGER_CONF_OPTS += --disable-ovs
->  endif
-
-> +ifeq ($(BR2_PACKAGE_POLKIT),y)
-> +NETWORK_MANAGER_DEPENDENCIES += polkit
-> +endif
-Shouldn't we pass --enable-polkit=yes to configure?
-Or is it enough that it's detected here?
-
-> +
->  # uClibc by default doesn't have backtrace support, so don't use it
->  ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
->  NETWORK_MANAGER_CONF_OPTS += --disable-crashtrace
-
-
-Kind regards,
-Petr
+diff --git a/package/dmidecode/Config.in b/package/dmidecode/Config.in
+index 22272ed294..58e7a785ce 100644
+--- a/package/dmidecode/Config.in
++++ b/package/dmidecode/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_DMIDECODE
+ 	bool "dmidecode"
+-	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_aarch64 || BR2_i386 || BR2_x86_64
+ 	help
+ 	  Dmidecode reports information about your system's hardware
+ 	  as described in your system BIOS according to the SMBIOS/DMI
+-- 
+2.14.1
