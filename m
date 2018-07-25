@@ -1,34 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Jul 2018 18:26:28 +0200
-Subject: [Buildroot] [git commit] dmidecode: enable for aarch64
-Message-ID: <20180725162120.A7E0A8A37F@busybox.osuosl.org>
+Date: Wed, 25 Jul 2018 18:15:57 +0200
+Subject: [Buildroot] [git commit] dtc: bump version to 1.4.7
+Message-ID: <20180725162120.9F8958A38B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e00a671bc227a8e567f485df9ccdbefb9a1d5c6
+commit: https://git.buildroot.net/buildroot/commit/?id=7b929ddcf0812310d0113cf3675429dbd123aa99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-arm64 systems support SMBIOS, so update the dmidecode config
-to allow building dmidecode for arm64.
+Bump from 1.4.4 to 1.4.7.
 
 Signed-off-by: Geoff Levand <geoff@infradead.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dmidecode/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dtc/dtc.hash | 2 +-
+ package/dtc/dtc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dmidecode/Config.in b/package/dmidecode/Config.in
-index 22272ed294..58e7a785ce 100644
---- a/package/dmidecode/Config.in
-+++ b/package/dmidecode/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_DMIDECODE
- 	bool "dmidecode"
--	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_aarch64 || BR2_i386 || BR2_x86_64
- 	help
- 	  Dmidecode reports information about your system's hardware
- 	  as described in your system BIOS according to the SMBIOS/DMI
+diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
+index 75c2e40eea..b402c2249b 100644
+--- a/package/dtc/dtc.hash
++++ b/package/dtc/dtc.hash
+@@ -1,2 +1,2 @@
+ # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
+-sha256 470731d5c015b160d26a96645dbb1c7337d6e7b8c98244612002b66bedf6cffb  dtc-1.4.4.tar.xz
++sha256 6643e8f00ff86350f465bb54b2185058b5b1b7bac01a0842c81a52b86589cde7 dtc-1.4.7.tar.xz
+diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
+index 1bcee29bb3..8388793c01 100644
+--- a/package/dtc/dtc.mk
++++ b/package/dtc/dtc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DTC_VERSION = 1.4.4
++DTC_VERSION = 1.4.7
+ DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
+ DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
+ DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
