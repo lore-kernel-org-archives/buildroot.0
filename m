@@ -1,27 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Jul 2018 23:02:21 +0200
-Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.17.9
-In-Reply-To: <1532275004-13376-1-git-send-email-festevam@gmail.com>
-References: <1532275004-13376-1-git-send-email-festevam@gmail.com>
-Message-ID: <20180725230221.1d9d938c@windsurf>
+Date: Wed, 25 Jul 2018 23:02:45 +0200
+Subject: [Buildroot] [git commit] perl-net-ssh2: add missing dependency on
+ zlib
+Message-ID: <20180725205908.BB2188A402@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=8868e6e3404b6bb5d8c562e65efb59eef256bac4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 22 Jul 2018 12:56:43 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  linux/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+perl-net-ssh2 requires zlib. When using the openssl backend to libssh2, this
+dependency is implicit via openssl, but when using the libgcrypt backend the
+dependency is missing.
 
-Both applied. Thanks!
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-net-ssh2/Config.in        | 1 +
+ package/perl-net-ssh2/perl-net-ssh2.mk | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-net-ssh2/Config.in b/package/perl-net-ssh2/Config.in
+index 07c42ee5b1..8f359b7015 100644
+--- a/package/perl-net-ssh2/Config.in
++++ b/package/perl-net-ssh2/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PERL_NET_SSH2
+ 	bool "perl-net-ssh2"
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LIBSSH2
++	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  Support for the SSH 2 protocol via libssh2.
+ 
+diff --git a/package/perl-net-ssh2/perl-net-ssh2.mk b/package/perl-net-ssh2/perl-net-ssh2.mk
+index 6d84deb284..b174fa6210 100644
+--- a/package/perl-net-ssh2/perl-net-ssh2.mk
++++ b/package/perl-net-ssh2/perl-net-ssh2.mk
+@@ -9,6 +9,6 @@ PERL_NET_SSH2_SOURCE = Net-SSH2-$(PERL_NET_SSH2_VERSION).tar.gz
+ PERL_NET_SSH2_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SA/SALVA
+ PERL_NET_SSH2_LICENSE = Artistic or GPL-1.0+
+ PERL_NET_SSH2_LICENSE_FILES = README
+-PERL_NET_SSH2_DEPENDENCIES = libssh2
++PERL_NET_SSH2_DEPENDENCIES = libssh2 zlib
+ 
+ $(eval $(perl-package))
