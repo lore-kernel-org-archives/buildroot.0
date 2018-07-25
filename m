@@ -1,31 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Jul 2018 18:15:36 +0200
-Subject: [Buildroot] [PATCH] gawk: install /usr/bin/awk as a relative
- symlink
-In-Reply-To: <20180725111810.19587-1-casantos@datacom.com.br>
-References: <20180725111810.19587-1-casantos@datacom.com.br>
-Message-ID: <20180725181536.79b98056@windsurf>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Wed, 25 Jul 2018 18:16:02 +0200
+Subject: [Buildroot] [PATCH 1/2] package/lvm2: bump version to 2.02.180
+In-Reply-To: <20180725144659.quiepysrnblfmd3b@sapphire.tkos.co.il>
+References: <20180725123703.12826-1-m.niestroj@grinn-global.com>
+ <20180725144659.quiepysrnblfmd3b@sapphire.tkos.co.il>
+Message-ID: <70fc1bdc-0b5e-bbc4-0bd5-b5aaaa204a08@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Baruch,
 
-On Wed, 25 Jul 2018 08:18:10 -0300, Carlos Santos wrote:
-> Fixes:
->   http://autobuild.buildroot.net/results/bf3937882023df7ed319dc76f1af10f79785112f/
+On 25.07.2018 16:46, Baruch Siach wrote:
+> Hi Marcin,
 > 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
->  package/gawk/gawk.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Wed, Jul 25, 2018 at 02:37:02PM +0200, Marcin Niestroj wrote:
+>> lvm2 starting from version 2.02.178 depends on libaio library.
+>>
+>> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+>> ---
+>>   package/lvm2/Config.in | 3 +++
+>>   package/lvm2/lvm2.hash | 4 ++--
+>>   package/lvm2/lvm2.mk   | 6 +++---
+>>   3 files changed, 8 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
+>> index 0dd6d53b4a..5f706982cd 100644
+>> --- a/package/lvm2/Config.in
+>> +++ b/package/lvm2/Config.in
+>> @@ -1,8 +1,10 @@
+>>   config BR2_PACKAGE_LVM2
+>>   	bool "lvm2 & device mapper"
+>> +	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
+> 
+> This new dependency needs to be added to all lvm2 reverse dependencies, i.e.,
+> packages that select BR2_PACKAGE_LVM2, as well as their reverse dependencies.
 
-Applied to master, thanks.
+Thanks for that! I will fix it in v2.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Marcin Niestroj
