@@ -1,79 +1,41 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed, 25 Jul 2018 14:37:02 +0200
-Subject: [Buildroot] [PATCH 1/2] package/lvm2: bump version to 2.02.180
-Message-ID: <20180725123703.12826-1-m.niestroj@grinn-global.com>
+Date: Wed, 25 Jul 2018 14:28:38 +0200
+Subject: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.0.3
+Message-ID: <20180725122838.20071-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-lvm2 starting from version 2.02.178 depends on libaio library.
-
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/lvm2/Config.in | 3 +++
- package/lvm2/lvm2.hash | 4 ++--
- package/lvm2/lvm2.mk   | 6 +++---
- 3 files changed, 8 insertions(+), 5 deletions(-)
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lvm2/Config.in b/package/lvm2/Config.in
-index 0dd6d53b4a..5f706982cd 100644
---- a/package/lvm2/Config.in
-+++ b/package/lvm2/Config.in
-@@ -1,8 +1,10 @@
- config BR2_PACKAGE_LVM2
- 	bool "lvm2 & device mapper"
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # needs fork()
- 	depends on !BR2_STATIC_LIBS # It fails to build statically
-+	select BR2_PACKAGE_LIBAIO
- 	help
- 	  This is LVM2, the rewrite of The Linux Logical Volume Manager.
- 	  LVM supports enterprise level volume management of disk and
-@@ -50,4 +52,5 @@ endif
- 
- comment "lvm2 needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index b0dfcfcef3..697a413995 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,5 +1,5 @@
--# From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
--sha512 c2ea8beafe006abf9282f51ec98600fd0ebff816d53c10ecbb19bbf336ada4825135cf9c92ccd364afb18f8b1d7e163eff5bdec8dfdd70dfb9ba45db2f6bdd5e  LVM2.2.02.173.tgz
-+# From ftp://sources.redhat.com/pub/lvm2/sha512.sum
-+sha512 6e0a10ab48be4f0c751447c6ab88b8f9fa1dcd1d703de77966e8507b173df70b1987fa0be252c31dfce9e0ee70e5f439db58c8f534e24144a70f254c091554ee  LVM2.2.02.180.tgz
- # Locally computed sha256 checksums
- sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
- sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 20e0dd0d5c..fd823da846 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -4,9 +4,9 @@
- #
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 7629691a66..1573d53080 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/sha256sums.asc
+-sha256 4f8105d7f3bf758d58da3058b3cbd66c0ca81492b2dafe8ae7c049cc9e939e97  cryptsetup-2.0.2.tar.xz
++sha256 4d6cca04c1f5ff4a68d045d190efb2623087eda0274ded92f92a4b6911e501d4  cryptsetup-2.0.3.tar.xz
+ sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index 39c9b7b0bc..d5ab022b77 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LVM2_VERSION = 2.02.173
-+LVM2_VERSION = 2.02.180
- LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
--LVM2_SITE = ftp://sources.redhat.com/pub/lvm2/releases
-+LVM2_SITE = ftp://sources.redhat.com/pub/lvm2
- LVM2_INSTALL_STAGING = YES
- LVM2_LICENSE = GPL-2.0, LGPL-2.1
- LVM2_LICENSE_FILES = COPYING COPYING.LIB
-@@ -21,7 +21,7 @@ LVM2_CONF_OPTS += \
- 	--enable-dmeventd \
- 	--disable-nls
- 
--LVM2_DEPENDENCIES += host-pkgconf
-+LVM2_DEPENDENCIES += host-pkgconf libaio
- 
- # LVM2 uses autoconf, but not automake, and the build system does not
- # take into account the toolchain passed at configure time.
+ CRYPTSETUP_VERSION_MAJOR = 2.0
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c \
 -- 
 2.18.0
