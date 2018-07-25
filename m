@@ -1,28 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Jul 2018 18:15:10 +0200
-Subject: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.0.3
-In-Reply-To: <20180725122838.20071-1-m.niestroj@grinn-global.com>
-References: <20180725122838.20071-1-m.niestroj@grinn-global.com>
-Message-ID: <20180725181510.487f7865@windsurf>
+Date: Wed, 25 Jul 2018 18:15:30 +0200
+Subject: [Buildroot] [git commit] gawk: install /usr/bin/awk as a relative
+ symlink
+Message-ID: <20180725161014.B9DA68A380@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d4b5a92c53f08b3afad4255b663ac292605d5aa8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 25 Jul 2018 14:28:38 +0200, Marcin Niestroj wrote:
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
->  package/cryptsetup/cryptsetup.hash | 2 +-
->  package/cryptsetup/cryptsetup.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+  http://autobuild.buildroot.net/results/bf3937882023df7ed319dc76f1af10f79785112f/
 
-Applied to master, thanks.
+Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gawk/gawk.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index 1315abb9ee..7c93aefed6 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -34,7 +34,7 @@ endif
+ HOST_GAWK_CONF_OPTS = --without-readline --without-mpfr
+ 
+ define GAWK_CREATE_SYMLINK
+-	ln -sf /usr/bin/gawk $(TARGET_DIR)/usr/bin/awk
++	ln -sf gawk $(TARGET_DIR)/usr/bin/awk
+ endef
+ 
+ GAWK_POST_INSTALL_TARGET_HOOKS += GAWK_CREATE_SYMLINK
