@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Jul 2018 18:25:36 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lvm2: Fix runtime crash when
- using uclibc
-In-Reply-To: <5414fc7d-7041-f854-db5c-3b742f060daa@grinn-global.com>
-References: <20180725123703.12826-1-m.niestroj@grinn-global.com>
- <20180725123703.12826-2-m.niestroj@grinn-global.com>
- <20180725180911.5952264a@windsurf>
- <5414fc7d-7041-f854-db5c-3b742f060daa@grinn-global.com>
-Message-ID: <20180725182536.0c1ee5ef@windsurf>
+Date: Wed, 25 Jul 2018 18:26:28 +0200
+Subject: [Buildroot] [git commit] dmidecode: enable for aarch64
+Message-ID: <20180725162120.A7E0A8A37F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6e00a671bc227a8e567f485df9ccdbefb9a1d5c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 25 Jul 2018 18:18:46 +0200, Marcin Niestroj wrote:
+arm64 systems support SMBIOS, so update the dmidecode config
+to allow building dmidecode for arm64.
 
-> > Is this needed only with the lvm2 bump to 2.02.180 ? Or is it needed
-> > even with the current version of lvm2 we have packaged in Buildroot ?  
-> 
-> This is also needed for older version (currently packaged in Buildroot).
+Signed-off-by: Geoff Levand <geoff@infradead.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dmidecode/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Then it should be PATCH 1/2 in your series, to make it clear that it is
-needed today with the current version of lvm2 we have.
-
-Is this fixing the following bug perhaps:
-https://bugs.busybox.net/show_bug.cgi?id=10781 ? I would assume yes.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dmidecode/Config.in b/package/dmidecode/Config.in
+index 22272ed294..58e7a785ce 100644
+--- a/package/dmidecode/Config.in
++++ b/package/dmidecode/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_DMIDECODE
+ 	bool "dmidecode"
+-	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_aarch64 || BR2_i386 || BR2_x86_64
+ 	help
+ 	  Dmidecode reports information about your system's hardware
+ 	  as described in your system BIOS according to the SMBIOS/DMI
