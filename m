@@ -1,41 +1,81 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed, 25 Jul 2018 14:28:38 +0200
-Subject: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.0.3
-Message-ID: <20180725122838.20071-1-m.niestroj@grinn-global.com>
+From: Thomas Ehrhardt <e.thomas@gmx.de>
+Date: Wed, 25 Jul 2018 08:08:11 -0500 (CDT)
+Subject: [Buildroot] [PATCH] ghostscript: not compiled to use freetype lib
+Message-ID: <1532524091103-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+With this patch ghostscript 9.23 use the freetype lib.
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index 7629691a66..1573d53080 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/sha256sums.asc
--sha256 4f8105d7f3bf758d58da3058b3cbd66c0ca81492b2dafe8ae7c049cc9e939e97  cryptsetup-2.0.2.tar.xz
-+sha256 4d6cca04c1f5ff4a68d045d190efb2623087eda0274ded92f92a4b6911e501d4  cryptsetup-2.0.3.tar.xz
- sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index 39c9b7b0bc..d5ab022b77 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CRYPTSETUP_VERSION_MAJOR = 2.0
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).2
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c \
--- 
-2.18.0
+--- a/package/ghostscript/ghostscript.mk
++++ b/package/ghostscript/ghostscript.mk
+@@ -10,6 +10,7 @@
+ GHOSTSCRIPT_LICENSE = AGPL-3.0
+ GHOSTSCRIPT_LICENSE_FILES = LICENSE
+ # 0001-Fix-cross-compilation-issue.patch
++# 0002-Fix-shared-lib-freetype.patch
+ GHOSTSCRIPT_AUTORECONF = YES
+ GHOSTSCRIPT_DEPENDENCIES = \
+        host-lcms2 \
+@@ -32,9 +33,15 @@
+ endef
+ GHOSTSCRIPT_POST_PATCH_HOOKS += GHOSTSCRIPT_REMOVE_LIBS
+
++ifeq ($(BR2_PACKAGE_FREETYPE),y)
++GHOSTSCRIPT_DEPENDENCIES += host-freetype
++HOST_CXXFLAGS += -I$(HOST_DIR)/usr/include/freetype2
++endif
++
+ GHOSTSCRIPT_CONF_ENV = \
+        CCAUX="$(HOSTCC)" \
+-       CFLAGSAUX="$(HOST_CFLAGS) $(HOST_LDFLAGS)"
++        CFLAGSAUX="$(HOST_CFLAGS) $(HOST_LDFLAGS)" \
++        CXXFLAGS="$(HOST_CXXFLAGS)"
+
+ GHOSTSCRIPT_CONF_OPTS = \
+        --disable-compile-inits \
+
+---
+file package/ghostscript/0002-Fix-shared-lib-freetype.patch
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -967,21 +967,12 @@
+
+     if test x"$FTSRCDIR" = x"src"; then
+       AC_MSG_RESULT([no])
+-      if test "x$PKGCONFIG" != x; then
+-        AC_MSG_CHECKING(for system freetype2 >= 2.4.2 with pkg-config)
+-            # pkg-config needs the libtool version, which != the freetype2
+version <sigh!>
+-            # There is a table of corresponding ft2<->libtool numbers in
+freetype/docs/VERSION.DLL
+-            if $PKGCONFIG --atleast-version=12.0.6 freetype2; then
+-                AC_MSG_RESULT(yes)
+-                FT_CFLAGS="$CFLAGS `$PKGCONFIG --cflags freetype2`"
+-                FT_LIBS="`$PKGCONFIG --libs freetype2`"
+-                FT_BRIDGE=1
+-                SHARE_FT=1
+-            else
+-                AC_MSG_RESULT(no)
+-                AC_MSG_WARN([freetype library source not found...using
+native rasterizer])
+-                AFS=1
+-            fi
++      if test "x$BUILD_PKGCONFIG" != x; then
++       AC_MSG_RESULT(yes)
++       FT_CFLAGS="$CFLAGS `$BUILD_PKGCONFIG --cflags freetype2`"
++       FT_LIBS="`$BUILD_PKGCONFIG --libs freetype2`"
++       FT_BRIDGE=1
++       SHARE_FT=1
+       else
+         AC_CHECK_HEADER([ft2build.h], [FT_BRIDGE=1], [AFS=1])
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
