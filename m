@@ -1,52 +1,79 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 25 Jul 2018 16:30:26 -0500
-Subject: [Buildroot] [PATCH 1/1] mtd: Allow holes in volume ID table
-In-Reply-To: <CAOWP8LcOcKKyber_j0cjbh-hzF2QH5X1UaRo9R78OuZXvQ1CbQ@mail.gmail.com>
-References: <1532089807-97597-1-git-send-email-david.owens@rockwellcollins.com>
- <CANQCQpau5i6tyvhvy5Fh=2m8NMWFDVqKpR_fnAiQYBnN9WP_Ew@mail.gmail.com>
- <CAOWP8LcOcKKyber_j0cjbh-hzF2QH5X1UaRo9R78OuZXvQ1CbQ@mail.gmail.com>
-Message-ID: <CANQCQpawFn_FObVHf4Y8Kg35cBnVZ2Er8eiOR-8DFf=MMWYMUA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 25 Jul 2018 23:29:12 +0200
+Subject: [Buildroot] [git commit] luarocks: bump to version 3.0.0
+Message-ID: <20180725212651.EAB288A41B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-David,
+commit: https://git.buildroot.net/buildroot/commit/?id=c83f2c14f8fde96bbdc1ee351d62f3b2346d20ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Jul 20, 2018 at 8:47 AM, David Owens
-<david.owens@rockwellcollins.com> wrote:
-> On Fri, Jul 20, 2018 at 7:40 AM, Matthew Weber
-> <matthew.weber@rockwellcollins.com> wrote:
->>
->> David,
->>
->> On Fri, Jul 20, 2018 at 7:30 AM, David Owens
->> <david.owens@rockwellcollins.com> wrote:
->> > A regression in the mtd package prevents non-consecutive ubi volume IDs
->> > from working properly.  This change reverts the commit [0].  The issue
->> > was originally described on the mtd mailing list:
->> >
->> > http://lists.infradead.org/pipermail/linux-mtd/2018-June/081562.html
->> >
->> > [0]
->> > http://git.infradead.org/mtd-utils.git/commitdiff/dede98ffb706676309488d7cc660f569548d5930
->> >
->>
->> Are you thinking this patch would be for the LTS and then separately a
->> patchset to bump the MTD version would be better for master?
->>
->> Matt
->
->
-> I think the patch should be applied to LTS at a minimum but it also might
-> make
-> sense to apply to master.  The latest MTD version (2.0.2) has the same
-> problem
-> so simply bumping the MTD versions won't help until a new release is
-> available.
->
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luarocks/luarocks.hash |  2 +-
+ package/luarocks/luarocks.mk   | 33 ++++++++++++++++-----------------
+ 2 files changed, 17 insertions(+), 18 deletions(-)
 
-Ok, yeah then both LTS and master. (btw, please use plain text email)
-
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 7c3f96606f..87ef6827c6 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 3938df33de33752ff2c526e604410af3dceb4b7ff06a770bc4a240de80a1f934  luarocks-2.4.4.tar.gz
++sha256 a43fffb997100f11cccb529a3db5456ce8dab18171a5cb3645f948147b6f64a1  luarocks-3.0.0.tar.gz
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 63d908a416..cd4be266cf 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUAROCKS_VERSION = 2.4.4
++LUAROCKS_VERSION = 3.0.0
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
+@@ -29,22 +29,21 @@ endef
+ 
+ define HOST_LUAROCKS_INSTALL_CMDS
+ 	rm -f $(LUAROCKS_CONFIG_FILE)
+-	$(MAKE1) -C $(@D) install \
+-		PREFIX=$(HOST_DIR)
+-	echo "-- BR cross-compilation"                          >> $(LUAROCKS_CONFIG_FILE)
+-	echo "variables = {"                                    >> $(LUAROCKS_CONFIG_FILE)
+-	echo "   LUA_INCDIR = [[$(STAGING_DIR)/usr/include]],"  >> $(LUAROCKS_CONFIG_FILE)
+-	echo "   LUA_LIBDIR = [[$(STAGING_DIR)/usr/lib]],"      >> $(LUAROCKS_CONFIG_FILE)
+-	echo "   CC = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
+-	echo "   LD = [[$(TARGET_CC)]],"                        >> $(LUAROCKS_CONFIG_FILE)
+-	echo "   CFLAGS = [[$(LUAROCKS_CFLAGS)]],"              >> $(LUAROCKS_CONFIG_FILE)
+-	echo "   LIBFLAG = [[-shared $(TARGET_LDFLAGS)]],"      >> $(LUAROCKS_CONFIG_FILE)
+-	echo "}"                                                >> $(LUAROCKS_CONFIG_FILE)
+-	echo "external_deps_dirs = { [[$(STAGING_DIR)/usr]] }"  >> $(LUAROCKS_CONFIG_FILE)
+-	echo "gcc_rpath = false"                                >> $(LUAROCKS_CONFIG_FILE)
+-	echo "rocks_trees = { [[$(TARGET_DIR)/usr]] }"          >> $(LUAROCKS_CONFIG_FILE)
+-	echo "wrap_bin_scripts = false"                         >> $(LUAROCKS_CONFIG_FILE)
+-	echo "deps_mode = [[none]]"                             >> $(LUAROCKS_CONFIG_FILE)
++	$(MAKE1) -C $(@D) install
++	echo "-- BR cross-compilation"                                  >> $(LUAROCKS_CONFIG_FILE)
++	echo "variables.LUA_DIR = [[$(STAGING_DIR)/usr]]"               >> $(LUAROCKS_CONFIG_FILE)
++	echo "variables.LUA_BINDIR = [[$(STAGING_DIR)/usr/bin]]"        >> $(LUAROCKS_CONFIG_FILE)
++	echo "variables.LUA_INCDIR = [[$(STAGING_DIR)/usr/include]]"    >> $(LUAROCKS_CONFIG_FILE)
++	echo "variables.LUA_LIBDIR = [[$(STAGING_DIR)/usr/lib]]"        >> $(LUAROCKS_CONFIG_FILE)
++	echo "variables.CC = [[$(TARGET_CC)]]"                          >> $(LUAROCKS_CONFIG_FILE)
++	echo "variables.LD = [[$(TARGET_CC)]]"                          >> $(LUAROCKS_CONFIG_FILE)
++	echo "variables.CFLAGS = [[$(LUAROCKS_CFLAGS)]]"                >> $(LUAROCKS_CONFIG_FILE)
++	echo "variables.LIBFLAG = [[-shared $(TARGET_LDFLAGS)]]"        >> $(LUAROCKS_CONFIG_FILE)
++	echo "external_deps_dirs = { [[$(STAGING_DIR)/usr]] }"          >> $(LUAROCKS_CONFIG_FILE)
++	echo "gcc_rpath = false"                                        >> $(LUAROCKS_CONFIG_FILE)
++	echo "rocks_trees = { [[$(TARGET_DIR)/usr]] }"                  >> $(LUAROCKS_CONFIG_FILE)
++	echo "wrap_bin_scripts = false"                                 >> $(LUAROCKS_CONFIG_FILE)
++	echo "deps_mode = [[none]]"                                     >> $(LUAROCKS_CONFIG_FILE)
+ endef
+ 
+ $(eval $(host-generic-package))
