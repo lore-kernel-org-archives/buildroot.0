@@ -1,43 +1,60 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Jul 2018 18:15:57 +0200
-Subject: [Buildroot] [git commit] dtc: bump version to 1.4.7
-Message-ID: <20180725162120.9F8958A38B@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 25 Jul 2018 19:26:58 +0300
+Subject: [Buildroot] [PATCH 2/8] imx-vpu: rename package to imx-vpu-cnm
+In-Reply-To: <20180725150149.30774-3-gary.bisson@boundarydevices.com>
+References: <20180725150149.30774-1-gary.bisson@boundarydevices.com>
+ <20180725150149.30774-3-gary.bisson@boundarydevices.com>
+Message-ID: <20180725162658.w46nlncptoxgukrj@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b929ddcf0812310d0113cf3675429dbd123aa99
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Gary,
 
-Bump from 1.4.4 to 1.4.7.
+On Wed, Jul 25, 2018 at 05:01:43PM +0200, Gary Bisson wrote:
+> So far the i.MX processors have been using a Chips&Media CODA VPU.
+> But the latest generation of processors (starting with i.MX8MQ) uses
+> VPU cores from Hantro which is provided as imx-vpu-hantro package.
+> 
+> NXP chose in Yocto to keep the imx-vpu naming for Chips&Media package
+> and created a virtual "imxvpu" package that can either be provided by
+> imx-vpu or imx-vpu-hantro.
+> 
+> Since this naming can be confusing (IMO), renaming the imx-vpu package
+> to imx-vpu-cnm and then create a virtual imx-vpu one should be clearer.
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dtc/dtc.hash | 2 +-
- package/dtc/dtc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+What about Config.in.legacy?
 
-diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
-index 75c2e40eea..b402c2249b 100644
---- a/package/dtc/dtc.hash
-+++ b/package/dtc/dtc.hash
-@@ -1,2 +1,2 @@
- # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
--sha256 470731d5c015b160d26a96645dbb1c7337d6e7b8c98244612002b66bedf6cffb  dtc-1.4.4.tar.xz
-+sha256 6643e8f00ff86350f465bb54b2185058b5b1b7bac01a0842c81a52b86589cde7 dtc-1.4.7.tar.xz
-diff --git a/package/dtc/dtc.mk b/package/dtc/dtc.mk
-index 1bcee29bb3..8388793c01 100644
---- a/package/dtc/dtc.mk
-+++ b/package/dtc/dtc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DTC_VERSION = 1.4.4
-+DTC_VERSION = 1.4.7
- DTC_SOURCE = dtc-$(DTC_VERSION).tar.xz
- DTC_SITE = https://www.kernel.org/pub/software/utils/dtc
- DTC_LICENSE = GPL-2.0+ or BSD-2-Clause (library)
+[..]
+
+> -config BR2_PACKAGE_IMX_VPU
+> -	bool "imx-vpu"
+> +config BR2_PACKAGE_IMX_VPU_CNM
+> +	bool "imx-vpu-cnm"
+>  	depends on BR2_arm # Only relevant for i.MX
+>  	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+>  	select BR2_PACKAGE_FIRMWARE_IMX
+>  	help
+>  	  Library of userspace helpers specific for the Freescale i.MX
+> -	  platform. It wraps the kernel interfaces for the i.MX platform
+> -	  Video Processing Unit (VPU) driver. It requires a kernel that
+> -	  includes the i.MX specific headers to be built.
+> +	  platform integrating a Chips&Media CODA Video Processing Unit
+> +	  (VPU). It requires a kernel that includes the i.MX specific
+> +	  headers to be built.
+
+I think it is worth mentioning here which i.MX variants have this VPU. 
+Otherwise the user has no easy way to know which package supports a specific 
+SoC.
+
+>  	  This library is provided by Freescale as-is and doesn't have
+>  	  an upstream.
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
