@@ -1,51 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Jul 2018 23:13:51 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xkbcomp: bump version
- to 1.4.2
-Message-ID: <20180725210911.30BB27FEA2@busybox.osuosl.org>
+Date: Wed, 25 Jul 2018 23:13:30 +0200
+Subject: [Buildroot] [git commit] package/znc: security bump to 1.7.1
+Message-ID: <20180725210911.20ABF8A415@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32ff94ece13ef14f102a0f55af74c27762f54824
+commit: https://git.buildroot.net/buildroot/commit/?id=92fc6273d905f84d5c32b5bdd727094938080de5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes CVE-2018-14055 & CVE-2018-14056.
+
+Changelog: https://wiki.znc.in/ChangeLog/1.7.1
+
+Removed 0001-Fix-build-without-SSL-support.patch, applied upstream:
+https://github.com/znc/znc/commit/e567f4cb73a1637141f7e4fc3b0ef44e79568048
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash | 10 +++++-----
- package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../znc/0001-Fix-build-without-SSL-support.patch   | 37 ----------------------
+ package/znc/znc.hash                               |  2 +-
+ package/znc/znc.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 39 deletions(-)
 
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-index 56631411d4..86fd033e3e 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002843.html
--md5 07df9790d30f9a369d20a418af784de0  xkbcomp-1.4.1.tar.bz2
--sha1 e7585cdb357b9d20c8f3c8a9d06f7e897934a772  xkbcomp-1.4.1.tar.bz2
--sha256 748dc4cf58ac95684106bd9cf163ac6ab7de9a236faec02a6f4d4006d63a5736  xkbcomp-1.4.1.tar.bz2
--sha512 443397e112f67e2ebc5150ec0dbf0f4a072ea39585d964d2c7cbd0569b7e0ce7d8bed0bc2c2d886343fdb060c941e65b42aac16adf189c66e90849029e278f23  xkbcomp-1.4.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-June/002901.html
-+md5 12610df19df2af3797f2c130ee2bce97  xkbcomp-1.4.2.tar.bz2
-+sha1 9a39cf7a562c152465e04fc7cf1002c59f883870  xkbcomp-1.4.2.tar.bz2
-+sha256 6dd8bcb9be7e85bd7294abe261b8c7b0539d2fc93e41b80fb8bd013767ce8424  xkbcomp-1.4.2.tar.bz2
-+sha512 b00d1eb08c19be86044418c8ea3bfc3c3973406c481878270138a70ed9dab348acb8e4d0af8678879598ffbd7df1c640a63d0abad3d7481758be99af8dd7734e  xkbcomp-1.4.2.tar.bz2
- # Locally computed
- sha256 f1a78f5796fe2374f2b93e579328a02283e57d2a8316484b31799b12debe7ee3  COPYING
-diff --git a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-index 369e1f3fe3..9fcd8c0581 100644
---- a/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
-+++ b/package/x11r7/xapp_xkbcomp/xapp_xkbcomp.mk
+diff --git a/package/znc/0001-Fix-build-without-SSL-support.patch b/package/znc/0001-Fix-build-without-SSL-support.patch
+deleted file mode 100644
+index 23b78ed4be..0000000000
+--- a/package/znc/0001-Fix-build-without-SSL-support.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From a263157165c411552d73a211ac9c7647285abdc5 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Sun, 10 Jun 2018 22:01:47 +0300
+-Subject: [PATCH] Fix build without SSL support
+-
+-The <memory> headers is needed for unique_ptr even when SSL is not
+-enabled. This fixes the following build failure:
+-
+-src/Utils.cpp: In static member function 'static bool CUtils::CheckCIDR(const CString&, const CString&)':
+-src/Utils.cpp:674:5: error: 'unique_ptr' is not a member of 'std'
+-     std::unique_ptr<addrinfo, decltype(deleter)> aiHost(aiHostC, deleter);
+-     ^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: https://github.com/znc/znc/pull/1554
+-
+- src/Utils.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/Utils.cpp b/src/Utils.cpp
+-index 9c3b2549b791..cced5683d78a 100644
+---- a/src/Utils.cpp
+-+++ b/src/Utils.cpp
+-@@ -27,8 +27,8 @@
+- #include <znc/Message.h>
+- #ifdef HAVE_LIBSSL
+- #include <openssl/ssl.h>
+--#include <memory>
+- #endif /* HAVE_LIBSSL */
+-+#include <memory>
+- #include <unistd.h>
+- #include <time.h>
+- 
+--- 
+-2.17.1
+-
+diff --git a/package/znc/znc.hash b/package/znc/znc.hash
+index ee24816d0a..7a14595907 100644
+--- a/package/znc/znc.hash
++++ b/package/znc/znc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 c07e31439ac6b948a577bd61a9d5f61a6d191d387423779b937aa1404051b96f  znc-1.7.0.tar.gz
++sha256 44cfea7158ea05dc2547c7c6bc22371e66c869def90351de0ab90a9c200d39c4  znc-1.7.1.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index 2a04c66377..5235fd9196 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XKBCOMP_VERSION = 1.4.1
-+XAPP_XKBCOMP_VERSION = 1.4.2
- XAPP_XKBCOMP_SOURCE = xkbcomp-$(XAPP_XKBCOMP_VERSION).tar.bz2
- XAPP_XKBCOMP_SITE = http://xorg.freedesktop.org/releases/individual/app
- XAPP_XKBCOMP_LICENSE = MIT
+-ZNC_VERSION = 1.7.0
++ZNC_VERSION = 1.7.1
+ ZNC_SITE = http://znc.in/releases/archive
+ ZNC_LICENSE = Apache-2.0
+ ZNC_LICENSE_FILES = LICENSE
