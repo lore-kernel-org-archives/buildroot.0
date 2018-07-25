@@ -1,47 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Jul 2018 22:58:47 +0200
-Subject: [Buildroot] [git commit] whois: bump to version 5.3.2
-Message-ID: <20180725205550.5320A8A3BE@busybox.osuosl.org>
+Date: Wed, 25 Jul 2018 23:01:01 +0200
+Subject: [Buildroot] [git commit] mutt: add libidn2 support
+Message-ID: <20180725205550.7FD118A3E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa1f5d39d8c9ebe67e923aaf13f0916093c14376
+commit: https://git.buildroot.net/buildroot/commit/?id=cdd532ffd284081073947a092389984b2d9cb296
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+libidn2 support was added in version 1.10: http://www.mutt.org/relnotes/1.10
+libidn and libidn2 can't be selected at the same time: see configure.ac
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mutt/mutt.mk | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index e69b95d999..4fdfebce0f 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20180522T155750Z/pool/main/w/whois/whois_5.3.1.dsc
--sha256	ef4ead31306a388d9c8c83d67f56c94ed8b4c85e94f60baea2f5b1660445893e	whois_5.3.1.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20180715T153200Z/pool/main/w/whois/whois_5.3.2.dsc
-+sha256	79714ba89172bca08a2443f59885daa4af0c5f8d6a49bc9e7f2a83559a286354	whois_5.3.2.tar.xz
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 1a2c5342d7..1c3021ece1 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -16,11 +16,15 @@ MUTT_DEPENDENCIES += libiconv
+ MUTT_CONF_OPTS += --enable-iconv
+ endif
  
- # Hash for license file:
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 6b6069c51a..c162f1cf38 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+-ifeq ($(BR2_PACKAGE_LIBIDN),y)
++# Both options can't be selected at the same time so prefer libidn2
++ifeq ($(BR2_PACKAGE_LIBIDN2),y)
++MUTT_DEPENDENCIES += libidn2
++MUTT_CONF_OPTS += --with-idn2 --without-idn
++else ifeq ($(BR2_PACKAGE_LIBIDN),y)
+ MUTT_DEPENDENCIES += libidn
+-MUTT_CONF_OPTS += --with-idn
++MUTT_CONF_OPTS += --with-idn --without-idn2
+ else
+-MUTT_CONF_OPTS += --without-idn
++MUTT_CONF_OPTS += --without-idn --without-idn2
+ endif
  
--WHOIS_VERSION = 5.3.1
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20180522T155750Z/pool/main/w/whois
-+WHOIS_VERSION = 5.3.2
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20180715T153200Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- WHOIS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+ ifeq ($(BR2_PACKAGE_MUTT_IMAP),y)
