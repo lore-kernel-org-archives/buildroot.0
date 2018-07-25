@@ -1,80 +1,67 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Wed, 25 Jul 2018 17:01:47 +0200
-Subject: [Buildroot] [PATCH 6/8] imx-vpuwrap: bump version to 4.3.5
+Date: Wed, 25 Jul 2018 17:01:49 +0200
+Subject: [Buildroot] [PATCH 8/8] imx-parser: bump version to 4.3.5
 In-Reply-To: <20180725150149.30774-1-gary.bisson@boundarydevices.com>
 References: <20180725150149.30774-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180725150149.30774-7-gary.bisson@boundarydevices.com>
+Message-ID: <20180725150149.30774-9-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No changelog provided for 4.3.5 but it can now builds against the
-following VPU backeds:
-- Chips&Media
-- Hantro
-- Amphion (not supported in BR yet)
+Added COPYING hash to track license changes.
 
-Changes in 4.3.2:
-- Add vpu_wrapper_test
-- Add gst_dump tools
-- Add gl sink
-- Enable RMVB/VC1/DIVX3
-- Add webp support
+No changelog provided by NXP for v4.3.5.
 
-Changes in 4.3.4:
-- set hasColorDesc and fullRange in VPU_DecGetInitialInfo.
-- Fix H264 failure due to too many MBI buffers.
+Changelog for v4.3.4:
+- Fix crash issue when parse index list.
+- Add mett atom in mp4 parser.
+- MP4 PARSER 06.13.00 add interface PARSER_API_GET_TEXT_TRACK_MIME
+to get mime type from mett atom.
+- Add protection for contentDescriptionObject in case the size is not
+correct and larger than qwSize.
+
+Changelog for v4.3.2:
+- Fix creating parser error
+When the variable value is negetive, if(bytesToRead) will return true,
+modify this condition to if(bytesToRead > 0).
+- FLAC PARSER 03.00.07
+Check read actual length in case of parser reach eos.
+- MP4 PARSER 06.12.11
+Fix crash issue when parse id3 metadata.
+- MPG2 PARSER 04.05.16
+Fix parser return wrong frame size after fastforward.
+- ASFPARSER_01.00.55
+Update for HEVC tag and audio AC3 support.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/freescale-imx/imx-vpuwrap/Config.in        | 4 ++--
- package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash | 3 ++-
- package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk   | 2 +-
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/freescale-imx/imx-parser/imx-parser.hash | 3 ++-
+ package/freescale-imx/imx-parser/imx-parser.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-vpuwrap/Config.in b/package/freescale-imx/imx-vpuwrap/Config.in
-index 87303cca9d..54050bf7af 100644
---- a/package/freescale-imx/imx-vpuwrap/Config.in
-+++ b/package/freescale-imx/imx-vpuwrap/Config.in
-@@ -1,5 +1,5 @@
- comment "imx-vpuwrap needs an imx-specific Linux kernel to be built"
--	depends on BR2_arm
-+	depends on BR2_arm || BR2_aarch64
- 	depends on !BR2_LINUX_KERNEL
- 
- comment "imx-vpuwrap needs an i.MX VPU backend provider"
-@@ -9,7 +9,7 @@ comment "imx-vpuwrap needs an i.MX VPU backend provider"
- config BR2_PACKAGE_IMX_VPUWRAP
- 	bool "imx-vpuwrap"
- 	depends on BR2_LINUX_KERNEL
--	depends on BR2_arm # Only relevant for i.MX
-+	depends on BR2_arm || BR2_aarch64 # Only relevant for i.MX
- 	depends on BR2_PACKAGE_HAS_IMX_VPU
- 	help
- 	  Wrapper library for the vpu library, giving it a different
-diff --git a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash
-index 2999984d2c..28c73c002c 100644
---- a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash
-+++ b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash
+diff --git a/package/freescale-imx/imx-parser/imx-parser.hash b/package/freescale-imx/imx-parser/imx-parser.hash
+index 3266f48110..708e9b8386 100644
+--- a/package/freescale-imx/imx-parser/imx-parser.hash
++++ b/package/freescale-imx/imx-parser/imx-parser.hash
 @@ -1,2 +1,3 @@
  # locally computed
--sha256	282e7f8766ce385d8752bd29f04ddeff709ece0846be97547cf982183bbe241e  imx-vpuwrap-1.0.68.bin
-+sha256  5c08b4b7c771404c998779f0e27a75564b57958d463e2df152c910d76cca9e44  imx-vpuwrap-4.3.5.bin
+-sha256	36d3ae7285f3a83a87abf680b8a52b3c07df869d2443de844fb5f0ff528ca862  imx-parser-4.2.1.bin
++sha256  9cd8c49a0bb1050afcfbcc7a677a348443fda4ecacb621cc6e38897619e27c67  imx-parser-4.3.5.bin
 +sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
-diff --git a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
-index edba87279f..e456f67cfd 100644
---- a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
-+++ b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
+diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
+index 11536e5024..fc4376f04b 100644
+--- a/package/freescale-imx/imx-parser/imx-parser.mk
++++ b/package/freescale-imx/imx-parser/imx-parser.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMX_VPUWRAP_VERSION = 1.0.68
-+IMX_VPUWRAP_VERSION = 4.3.5
- IMX_VPUWRAP_SITE = $(FREESCALE_IMX_SITE)
- IMX_VPUWRAP_SOURCE = imx-vpuwrap-$(IMX_VPUWRAP_VERSION).bin
- IMX_VPUWRAP_DEPENDENCIES = imx-vpu
+-IMX_PARSER_VERSION = 4.2.1
++IMX_PARSER_VERSION = 4.3.5
+ IMX_PARSER_SITE = $(FREESCALE_IMX_SITE)
+ IMX_PARSER_SOURCE = imx-parser-$(IMX_PARSER_VERSION).bin
+ IMX_PARSER_INSTALL_STAGING = YES
 -- 
 2.18.0
