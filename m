@@ -1,56 +1,399 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 25 Jul 2018 16:36:12 +0200
-Subject: [Buildroot] [PATCH] ghostscript: not compiled to use freetype
- lib
-In-Reply-To: <1532524091103-0.post@n4.nabble.com>
-References: <1532524091103-0.post@n4.nabble.com>
-Message-ID: <20180725163612.7ccaef8e@windsurf>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Wed, 25 Jul 2018 16:35:37 +0200
+Subject: [Buildroot] [PATCH v5 2/3] configs/zynqmp_zcu106_defconfig: add
+ Xilinx ZCU106 board (ZynqMP SoC)
+In-Reply-To: <20180725143538.25268-1-luca@lucaceresoli.net>
+References: <20180725143538.25268-1-luca@lucaceresoli.net>
+Message-ID: <20180725143538.25268-3-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This adds support the Xilinx ZCU106 development board.
 
-Thanks for your contribution!
+[Tested on the ES2 (Engineering Sample 2) version of the board]
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Cc: Joel Carlson <joelsoncarl@gmail.com>
 
-On Wed, 25 Jul 2018 08:08:11 -0500 (CDT), Thomas Ehrhardt wrote:
-> With this patch ghostscript 9.23 use the freetype lib.
+---
+Changes v4 -> v5:
+ - bump pmufw binary from 2017.1 to 2017.4
 
-Your patch (and the previous one) lacks a Signed-off-by.
+Changes v3 -> v4:
+ - specify an explicit ATF version in the defconfig and use 1.5
+   (Thomas)
+ - update readme.txt
 
-> +ifeq ($(BR2_PACKAGE_FREETYPE),y)
-> +GHOSTSCRIPT_DEPENDENCIES += host-freetype
+Changes v2 -> v3:
+ - adapt to changed ATF option name
+   (BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT)
+ - adapt to the new pmufw implementation in uboot (no
+   zynqmp-pmufw-binaries package, just a downloadable file)
+ - patches now upstream, update patch files
 
-This is most likely incorrect. BR2_PACKAGE_FREETYPE indicates that the
-target freetype is available, it has nothing to do with whether
-host-freetype should be used or not.
+Changes v1 -> v2:
+ - don't provide psu_init files: the xilinx master branch has a
+   defconfig that works (with 2 patches)
+---
+ DEVELOPERS                                    |   2 +
+ board/zynqmp/genimage.cfg                     |  28 +++++
+ ...64-zynqmp-zcu106-fix-SPL-MMC-booting.patch |  52 ++++++++
+ ...2-arm64-zynqmp-Enable-booting-to-ATF.patch | 114 ++++++++++++++++++
+ board/zynqmp/post-image.sh                    |  13 ++
+ board/zynqmp/readme.txt                       |  51 ++++++++
+ configs/zynqmp_zcu106_defconfig               |  34 ++++++
+ 7 files changed, 294 insertions(+)
+ create mode 100644 board/zynqmp/genimage.cfg
+ create mode 100644 board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
+ create mode 100644 board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.patch
+ create mode 100755 board/zynqmp/post-image.sh
+ create mode 100644 board/zynqmp/readme.txt
+ create mode 100644 configs/zynqmp_zcu106_defconfig
 
-> +HOST_CXXFLAGS += -I$(HOST_DIR)/usr/include/freetype2
-
-This line is incorrect, because it changes the CXXFLAGS globally, for
-all packages.
-
-> file package/ghostscript/0002-Fix-shared-lib-freetype.patch
-
-Weird how this is formatted. In any case, all patches should have a
-description and Signed-off-by line.
-
-Could you explain what you are trying to achieve ?
-
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-
-Please send your e-mails to the mailing list directly. If you don't
-want to subscribe because of the traffic, then please subscribe and
-disable mail delivery in the Mailman preferences. This will allow you
-to send e-mails to the list, but you won't receive all the mailing list
-traffic.
-
-Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3605032da3ec..014b245b3dbe 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1162,8 +1162,10 @@ F:	package/ti-sgx-um/
+ N:	Luca Ceresoli <luca@lucaceresoli.net>
+ F:	board/olimex/a20_olinuxino/
+ F:	board/zynq/
++F:	board/zynqmp/
+ F:	configs/olimex_a20_olinuxino_*
+ F:	configs/zynq_zed_defconfig
++F:	configs/zynqmp_zcu106_defconfig
+ F:	package/agentpp/
+ F:	package/exim/
+ F:	package/libpjsip/
+diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg
+new file mode 100644
+index 000000000000..30be086d7d42
+--- /dev/null
++++ b/board/zynqmp/genimage.cfg
+@@ -0,0 +1,28 @@
++image boot.vfat {
++	vfat {
++		files = {
++			"boot.bin",
++			"u-boot.bin",
++			"atf-uboot.ub",
++			"system.dtb",
++			"Image"
++		}
++	}
++	size = 32M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch b/board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
+new file mode 100644
+index 000000000000..3d834a4d2ddb
+--- /dev/null
++++ b/board/zynqmp/patches/uboot/0001-arm64-zynqmp-zcu106-fix-SPL-MMC-booting.patch
+@@ -0,0 +1,52 @@
++From e5d72ed8339eb05285448aad3c89d21e4d18fd29 Mon Sep 17 00:00:00 2001
++From: Luca Ceresoli <luca@lucaceresoli.net>
++Date: Mon, 26 Feb 2018 09:40:34 +0100
++Subject: [PATCH 1/2] arm64: zynqmp: zcu106: fix SPL MMC booting
++
++The U-Boot SPL generated with the current zcu106 defconfig cannot boot
++from MMC:
++
++  [...]
++  U-Boot SPL 2018.01 (Feb 21 2018 - 17:47:14)
++  EL Level:  EL3
++  Trying to boot from MMC1
++  sdhci_transfer_data: Error detected in status(0x408020)!
++  spl_load_image_fat_os: error reading image u-boot.bin, err - -2
++  spl_load_image_fat: error reading image u-boot.img, err - -6
++  SPL: failed to boot from all boot devices
++  ### ERROR ### Please RESET the board ###
++
++Fix by lowering the rpll value. The new value for the RPLL_CTRL
++register comes from the current psu_init_gpl.c from the HDF file at
++https://github.com/xilinx/hdf-examples/tree/01ad8ea5fd1989abf4ea5a072d019a16cb2bc546/zcu106-zynqmp
++(generated by Vivado v2017.4).
++
++RPLL and sdio1_ref clocks before and after this change:
++
++ - Old values: RPLL 1.36 GHz, sdio1_ref 272 MHz
++ - New values: RPLL 1.16 GHz, sdio1_ref 233 MHz
++
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++Cc: Michal Simek <michal.simek@xilinx.com>
++Upstream-status: accepted upstream in a different form
++---
++
++ board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
++index 4d18abe000ca..e6fa477e53e7 100644
++--- a/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
+++++ b/board/xilinx/zynqmp/zynqmp-zcu106-revA/psu_init_gpl.c
++@@ -10,7 +10,7 @@
++ static unsigned long psu_pll_init_data(void)
++ {
++ 	psu_mask_write(0xFF5E0034, 0xFE7FEDEFU, 0x7E4E2C62U);
++-	psu_mask_write(0xFF5E0030, 0x00717F00U, 0x00013C00U);
+++	psu_mask_write(0xFF5E0030, 0x00717F00U, 0x00014600U);
++ 	psu_mask_write(0xFF5E0030, 0x00000008U, 0x00000008U);
++ 	psu_mask_write(0xFF5E0030, 0x00000001U, 0x00000001U);
++ 	psu_mask_write(0xFF5E0030, 0x00000001U, 0x00000000U);
++-- 
++2.7.4
++
+diff --git a/board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.patch b/board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.patch
+new file mode 100644
+index 000000000000..487fff681210
+--- /dev/null
++++ b/board/zynqmp/patches/uboot/0002-arm64-zynqmp-Enable-booting-to-ATF.patch
+@@ -0,0 +1,114 @@
++From 5e3cac50cc981e01d9072241035a8d4162560c71 Mon Sep 17 00:00:00 2001
++From: Luca Ceresoli <luca@lucaceresoli.net>
++Date: Mon, 12 Mar 2018 17:18:38 +0100
++Subject: [PATCH] arm64: zynqmp: Enable booting to ATF
++
++U-Boot is now able to boot to ARM Trusted Firmware (ATF). The boot
++flow is SPL(EL3) loads ATF and full u-boot and jump to ATF(EL3) which
++pass control to full u-boot(EL2). This has been tested on zcu106, so
++enable it in this defconfig.
++
++To generate an image that triggers this booting flow, you need to pass
++'-O arm-trusted-firmware' to mkimage.
++
++Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++Signed-off-by: Michal Simek <michal.simek@xilinx.com>
++Backported from upstream: http://git.denx.de/?p=u-boot.git;a=commit;h=5e3cac50cc981e01d9072241035a8d4162560c71
++---
++
++ configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig | 1 +
++ configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig | 1 +
++ configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig | 1 +
++ configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig | 1 +
++ configs/xilinx_zynqmp_zcu102_rev1_0_defconfig    | 1 +
++ configs/xilinx_zynqmp_zcu102_revA_defconfig      | 1 +
++ configs/xilinx_zynqmp_zcu102_revB_defconfig      | 1 +
++ 7 files changed, 7 insertions(+)
++
++diff --git a/configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig b/configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig
++index c5bfa2b12638..488c72258b0e 100644
++--- a/configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig
+++++ b/configs/xilinx_zynqmp_zc1751_xm015_dc1_defconfig
++@@ -19,6 +19,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
++ CONFIG_SPL_OS_BOOT=y
++ CONFIG_SPL_RAM_SUPPORT=y
++ CONFIG_SPL_RAM_DEVICE=y
+++CONFIG_SPL_ATF=y
++ CONFIG_SYS_PROMPT="ZynqMP> "
++ CONFIG_FASTBOOT=y
++ CONFIG_FASTBOOT_FLASH=y
++diff --git a/configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig b/configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig
++index f86dce403a42..5d501eec0edd 100644
++--- a/configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig
+++++ b/configs/xilinx_zynqmp_zc1751_xm016_dc2_defconfig
++@@ -20,6 +20,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
++ CONFIG_SPL_OS_BOOT=y
++ CONFIG_SPL_RAM_SUPPORT=y
++ CONFIG_SPL_RAM_DEVICE=y
+++CONFIG_SPL_ATF=y
++ CONFIG_SYS_PROMPT="ZynqMP> "
++ CONFIG_FASTBOOT=y
++ CONFIG_FASTBOOT_FLASH=y
++diff --git a/configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig b/configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig
++index 6e947cf56827..6f7eaebd7676 100644
++--- a/configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig
+++++ b/configs/xilinx_zynqmp_zc1751_xm018_dc4_defconfig
++@@ -16,6 +16,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
++ CONFIG_SPL_OS_BOOT=y
++ CONFIG_SPL_RAM_SUPPORT=y
++ CONFIG_SPL_RAM_DEVICE=y
+++CONFIG_SPL_ATF=y
++ CONFIG_SYS_PROMPT="ZynqMP> "
++ CONFIG_CMD_MEMTEST=y
++ CONFIG_SYS_ALT_MEMTEST=y
++diff --git a/configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig b/configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig
++index 1c934858c61c..7a3806cba4b5 100644
++--- a/configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig
+++++ b/configs/xilinx_zynqmp_zc1751_xm019_dc5_defconfig
++@@ -17,6 +17,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
++ CONFIG_SPL_OS_BOOT=y
++ CONFIG_SPL_RAM_SUPPORT=y
++ CONFIG_SPL_RAM_DEVICE=y
+++CONFIG_SPL_ATF=y
++ CONFIG_SYS_PROMPT="ZynqMP> "
++ CONFIG_CMD_MEMTEST=y
++ CONFIG_SYS_ALT_MEMTEST=y
++diff --git a/configs/xilinx_zynqmp_zcu102_rev1_0_defconfig b/configs/xilinx_zynqmp_zcu102_rev1_0_defconfig
++index e13c7c56f310..e4408f182ca0 100644
++--- a/configs/xilinx_zynqmp_zcu102_rev1_0_defconfig
+++++ b/configs/xilinx_zynqmp_zcu102_rev1_0_defconfig
++@@ -19,6 +19,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
++ CONFIG_SPL_OS_BOOT=y
++ CONFIG_SPL_RAM_SUPPORT=y
++ CONFIG_SPL_RAM_DEVICE=y
+++CONFIG_SPL_ATF=y
++ CONFIG_SYS_PROMPT="ZynqMP> "
++ CONFIG_FASTBOOT=y
++ CONFIG_FASTBOOT_FLASH=y
++diff --git a/configs/xilinx_zynqmp_zcu102_revA_defconfig b/configs/xilinx_zynqmp_zcu102_revA_defconfig
++index 5b2cd495ee85..b52f6789fd4b 100644
++--- a/configs/xilinx_zynqmp_zcu102_revA_defconfig
+++++ b/configs/xilinx_zynqmp_zcu102_revA_defconfig
++@@ -19,6 +19,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
++ CONFIG_SPL_OS_BOOT=y
++ CONFIG_SPL_RAM_SUPPORT=y
++ CONFIG_SPL_RAM_DEVICE=y
+++CONFIG_SPL_ATF=y
++ CONFIG_SYS_PROMPT="ZynqMP> "
++ CONFIG_FASTBOOT=y
++ CONFIG_FASTBOOT_FLASH=y
++diff --git a/configs/xilinx_zynqmp_zcu102_revB_defconfig b/configs/xilinx_zynqmp_zcu102_revB_defconfig
++index e6530fbfe7ff..80592554f682 100644
++--- a/configs/xilinx_zynqmp_zcu102_revB_defconfig
+++++ b/configs/xilinx_zynqmp_zcu102_revB_defconfig
++@@ -19,6 +19,7 @@ CONFIG_BOARD_EARLY_INIT_R=y
++ CONFIG_SPL_OS_BOOT=y
++ CONFIG_SPL_RAM_SUPPORT=y
++ CONFIG_SPL_RAM_DEVICE=y
+++CONFIG_SPL_ATF=y
++ CONFIG_SYS_PROMPT="ZynqMP> "
++ CONFIG_FASTBOOT=y
++ CONFIG_FASTBOOT_FLASH=y
++-- 
++2.7.4
++
+diff --git a/board/zynqmp/post-image.sh b/board/zynqmp/post-image.sh
+new file mode 100755
+index 000000000000..2e7bcbaab60f
+--- /dev/null
++++ b/board/zynqmp/post-image.sh
+@@ -0,0 +1,13 @@
++#!/bin/sh
++
++# By default U-Boot loads DTB from a file named "system.dtb", so
++# let's use a symlink with that name that points to the *first*
++# devicetree listed in the config.
++
++FIRST_DT=$(sed -nr \
++               -e 's|^BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/([-_/[:alnum:]]*).*"$|\1|p' \
++               ${BR2_CONFIG})
++
++[ -z "${FIRST_DT}" ] || ln -fs ${FIRST_DT}.dtb ${BINARIES_DIR}/system.dtb
++
++support/scripts/genimage.sh -c board/zynqmp/genimage.cfg
+diff --git a/board/zynqmp/readme.txt b/board/zynqmp/readme.txt
+new file mode 100644
+index 000000000000..da37f4ccc9c5
+--- /dev/null
++++ b/board/zynqmp/readme.txt
+@@ -0,0 +1,51 @@
++********************************
++Xilinx ZCU106 board - ZynqMP SoC
++********************************
++
++This document describes the Buildroot support for the ZCU106 board by
++Xilinx, based on the Zynq UltraScale+ MPSoC (aka ZynqMP). It has been
++tested with the EK-U1-ZCU106-ES2 pre-production board.
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make zynqmp_zcu106_defconfig
++
++Compile everything and build the rootfs image:
++
++    $ make
++
++Result of the build
++-------------------
++
++After building, you should get a tree like this:
++
++    output/images/
++    +-- atf-uboot.ub
++    +-- bl31.bin
++    +-- boot.bin
++    +-- boot.vfat
++    +-- Image
++    +-- rootfs.ext2
++    +-- rootfs.ext4 -> rootfs.ext2
++    +-- sdcard.img
++    +-- system.dtb -> zynqmp-zcu106-revA.dtb
++    +-- u-boot.bin
++    `-- zynqmp-zcu106-revA.dtb
++
++How to write the SD card
++========================
++
++WARNING! This will destroy all the card content. Use with care!
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to an SD
++card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Where 'sdX' is the device node of the SD.
++
++Eject the SD card, insert it in the board, and power it up.
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+new file mode 100644
+index 000000000000..bee7c1daf704
+--- /dev/null
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -0,0 +1,34 @@
++BR2_aarch64=y
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches/"
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="git://github.com/Xilinx/linux-xlnx.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="xilinx-v2017.4"
++BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynqmp"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.5"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="zynqmp"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://github.com/xilinx/u-boot-xlnx.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="228801a215909365ae1dcdd799034195ad7264f7"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_zynqmp_zcu106_revA"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
++BR2_TARGET_UBOOT_ZYNQMP=y
++BR2_TARGET_UBOOT_ZYNQMP_PMUFW="https://github.com/lucaceresoli/zynqmp-pmufw-binaries/raw/53fdb7b6c92860ceb0ec5fd14deee302f4a84269/bin/pmufw-zcu106-default-v2017.4.bin"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
