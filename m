@@ -1,49 +1,34 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Wed, 25 Jul 2018 18:37:44 +0200
-Subject: [Buildroot] [PATCH 2/2] package/lvm2: Fix runtime crash when
- using uclibc
-In-Reply-To: <20180725182536.0c1ee5ef@windsurf>
-References: <20180725123703.12826-1-m.niestroj@grinn-global.com>
- <20180725123703.12826-2-m.niestroj@grinn-global.com>
- <20180725180911.5952264a@windsurf>
- <5414fc7d-7041-f854-db5c-3b742f060daa@grinn-global.com>
- <20180725182536.0c1ee5ef@windsurf>
-Message-ID: <b332421e-78bc-d9fb-922e-4ac08a39692a@grinn-global.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 25 Jul 2018 22:53:19 +0200
+Subject: [Buildroot] [PATCH] package/binutils: fix xtensa linker
+ relaxation regression in 2.31.1
+In-Reply-To: <20180723193753.15922-1-jcmvbkbc@gmail.com>
+References: <20180723193753.15922-1-jcmvbkbc@gmail.com>
+Message-ID: <e7652297-904c-5847-5ce8-8bfb730f7ef4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hi Max,
 
-On 25.07.2018 18:25, Thomas Petazzoni wrote:
-> Hello,
+Le 23/07/2018 ? 21:37, Max Filippov a ?crit?:
+> Fix the following xtensa ld error observed when building uClibc-ng
+> libthread_db with binutils-2.31:
 > 
-> On Wed, 25 Jul 2018 18:18:46 +0200, Marcin Niestroj wrote:
+>   BFD (GNU Binutils) 2.31 internal error, aborting at
+>   elf32-xtensa.c:3269 in elf_xtensa_finish_dynamic_sections
 > 
->>> Is this needed only with the lvm2 bump to 2.02.180 ? Or is it needed
->>> even with the current version of lvm2 we have packaged in Buildroot ?
->>
->> This is also needed for older version (currently packaged in Buildroot).
-> 
-> Then it should be PATCH 1/2 in your series, to make it clear that it is
-> needed today with the current version of lvm2 we have.
+> Fixes: https://gitlab.com/free-electrons/toolchains-builder/-/jobs/82264912
+> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 
-Ok, I will check if this patch applies cleanly for older version
-as well, then make it PATCH 1/2.
+Thanks for the patch :)
 
-> 
-> Is this fixing the following bug perhaps:
-> https://bugs.busybox.net/show_bug.cgi?id=10781 ? I would assume yes.
+Tested-by: Romain Naour <romain.naour@gmail.com>
 
-I didn't see it earlier. But yes, it is fixing this bug.
+Tested using qemu_xtensa_lx60_defconfig.
 
-> 
-> Best regards,
-> 
-> Thomas
-> 
-
-Regards,
-Marcin
+Best regards,
+Romain
