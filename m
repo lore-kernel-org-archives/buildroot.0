@@ -1,61 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Jul 2018 11:45:21 +0200
-Subject: [Buildroot] [PATCH 0/8] imx: update multimedia packages to
- 4.9.88_2.0.0_ga
-In-Reply-To: <7bddd977-45ca-5b84-6aca-842c6de86e7c@mind.be>
-References: <20180725150149.30774-1-gary.bisson@boundarydevices.com>
- <7bddd977-45ca-5b84-6aca-842c6de86e7c@mind.be>
-Message-ID: <20180726114521.22054034@windsurf>
+From: David De Grave <david.degrave@mind.be>
+Date: Thu, 26 Jul 2018 11:55:52 +0200
+Subject: [Buildroot] [PATCH v1 1/2] dtc: bump version to 1.4.7
+Message-ID: <CAD6XyYx8rZNKdqMMBP_3+sDr2sD=1ztEWwr9BJ78sjq6nEVpDw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Geoff, Thomas,
 
-On Thu, 26 Jul 2018 11:26:51 +0200, Arnout Vandecappelle wrote:
+> On Tue, 24 Jul 2018 19:32:17 +0000, Geoff Levand wrote:
+>> Bump from 1.4.4 to 1.4.7.
+>>
+>> Signed-off-by: Geoff Levand <geoff@infradead.org>
+>> ---
+>>  package/dtc/dtc.hash | 2 +-
+>>  package/dtc/dtc.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
 
->  I'm sorry for all the work that you did, but I don't really agree that this is
-> a good idea. The upstream package really is called imx-vpu, so we prefer to keep
-> that name. We changed the name for openssl because there really was no other
-> way, but I do prefer to avoid that.
-> 
->  So I think it's just a matter of finding a better name for the virtual package.
-> What about imx-vpu-provider?
+> Applied to master, thanks.
+> Thomas
 
-I have not reviewed the patch series carefully enough yet, but a
-question is: do we need a virtual package at all?
+I was going to submit exactly the same patch...
+However during my tests, I noticed that except for the 1.4.4 version, all
+the next ones are failing.
+It produces a LOT of warnings and fails with
 
-I guess the imx-vpu API is not going to be used by gazillions of
-packages. If I read PATCH 5/8 correctly, it's in fact only used by two
-packages, right ?
+error: redefinition of ?fdt16_to_cpu'
 
-Can't we simply have those two packages do:
+And many other ones...
 
-ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M),y)
-use the new imx-vpu package
-else
-use the old imx-vpu package
-endif
+I didn't found a way to fix that right now...
 
-And ditto in their Config.in ?
+Regards,
+David.
 
-Virtual packages are great when there is really an arbitrary number of
-providers and/or an arbitrary number of users.
+--
 
-OpenSSL for examples has only two providers, but it has a very large
-number of users. Ditto jpeg. MySQL does not have a lot of users, but it
-might potentially have.
-
-Also, the i.MX VPU stuff is highly platform-specific, it provides a
-very specialized API, it's very unlikely that we will see gazillions of
-packages depending on the i.MX VPU API.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+David De Grave
+Senior Embedded Software Developer
+Gsm : +32(0)496.364.960 | Tel : +32-16-28.65.00 | Fax : +32-16-28a.65.01
+Essensium-Mind - Gaston Geenslaan 9, B-3001 Leuven, Belgium
+>>> Visit our new website: https://www.mind.be/ <<<
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180726/bbe693e9/attachment.html>
