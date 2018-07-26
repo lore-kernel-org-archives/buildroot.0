@@ -1,10 +1,11 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Jul 2018 15:42:23 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/lvm2: Fix runtime crash when
- using uclibc
-In-Reply-To: <20180726131023.28695-1-m.niestroj@grinn-global.com>
-References: <20180726131023.28695-1-m.niestroj@grinn-global.com>
-Message-ID: <20180726154223.390beed1@windsurf>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Thu, 26 Jul 2018 15:52:47 +0200
+Subject: [Buildroot] [PATCH v2] libostree: override path to
+ gpg-error-config
+In-Reply-To: <20180726152714.045942f5@windsurf>
+References: <20180726080800.5564-1-marcus.folkesson@gmail.com>
+ <20180726152714.045942f5@windsurf>
+Message-ID: <20180726135247.GC29310@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,23 +14,63 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thanks for this new iteration.
+On Thu, Jul 26, 2018 at 03:27:14PM +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Thu, 26 Jul 2018 10:08:00 +0200, Marcus Folkesson wrote:
+> > libostree has begun to use `gpg-error-config` in their configuration
+> > script.
+> > Point out gpg-error-config in staging dir to avoid using the one
+> > installed on the host system.
+> > 
+> > Fixes:
+> >  http://autobuild.buildroot.net/results/447b96e449e881cf1bd9644cda0f386aa4c75724
+> > 
+> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> > ---
+> > 
+> > Notes:
+> >     v2:
+> >     	- override ac_cv_path_GPG_ERROR_CONFIG instead of  GPG_ERROR_CONFIG
+> > 
+> >  package/libostree/libostree.mk | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+> > index 24eda0d1db..414cca104a 100644
+> > --- a/package/libostree/libostree.mk
+> > +++ b/package/libostree/libostree.mk
+> > @@ -12,6 +12,7 @@ LIBOSTREE_LICENSE = LGPL-2.0+
+> >  LIBOSTREE_LICENSE_FILES = COPYING
+> >  LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpgme xz
+> >  LIBOSTREE_INSTALL_STAGING = YES
+> > +LIBOSTREE_CONF_ENV = GPG_ERROR_CONFIG=$(STAGING_DIR)/usr/bin/gpg-error-config
+> 
+> So libostree is using libgpg-error directly, not only indirectly
+> through libgpgme. Should we add libgpg-error in libostree dependencies
+> explicitly to document this direct dependency ?
 
-On Thu, 26 Jul 2018 15:10:22 +0200, Marcin Niestroj wrote:
+That would be good. I will add it in v3. Thanks
 
-> + configure                 | 32 ++++++++++++++++++++++++++++++--
+> 
+> It is a bit weird to pass GPG_ERROR_CONFIG with this package not
+> depending on libgpg-error.
+> 
+> Best regards,
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-I missed that in the review of the previous version. Is there a reason
-to patch the configure script itself? In Buildroot, our general rule is
-to not patch configure, but instead patch configure.ac and use
-<pkg>_AUTORECONF = YES to regenerate the configure script.
 
-Is there a reason to not follow this rule in this specific situation ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards
+Marcus Folkesson
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180726/b574b30e/attachment.asc>
