@@ -1,342 +1,856 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 26 Jul 2018 23:23:53 +0200
-Subject: [Buildroot] [PATCH v1] gstreamer1: bump to 1.14.2
-Message-ID: <20180726212353.32617-1-ps.report@gmx.net>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Thu, 26 Jul 2018 23:30:11 +0200
+Subject: [Buildroot] [PATCH] package/gcc: bump to version 8.2.0
+Message-ID: <20180726213011.10141-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For release desription see [1].
+Remove upstream patches.
 
-- gst1-vaapi: remove upstream patch 0001-plugins-guard-GstGL-code.patch
-
-[1] https://gstreamer.freedesktop.org/releases/1.14/#1.14.2
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/gstreamer1/gst-omx/gst-omx.hash       |  4 +--
- package/gstreamer1/gst-omx/gst-omx.mk         |  2 +-
- package/gstreamer1/gst1-libav/gst1-libav.hash |  4 +--
- package/gstreamer1/gst1-libav/gst1-libav.mk   |  2 +-
- .../gst1-plugins-bad/gst1-plugins-bad.hash    |  4 +--
- .../gst1-plugins-bad/gst1-plugins-bad.mk      |  2 +-
- .../gst1-plugins-base/gst1-plugins-base.hash  |  4 +--
- .../gst1-plugins-base/gst1-plugins-base.mk    |  2 +-
- .../gst1-plugins-good/gst1-plugins-good.hash  |  4 +--
- .../gst1-plugins-good/gst1-plugins-good.mk    |  2 +-
- .../gst1-plugins-ugly/gst1-plugins-ugly.hash  |  4 +--
- .../gst1-plugins-ugly/gst1-plugins-ugly.mk    |  2 +-
- .../gst1-rtsp-server/gst1-rtsp-server.hash    |  4 +--
- .../gst1-rtsp-server/gst1-rtsp-server.mk      |  2 +-
- .../0001-plugins-guard-GstGL-code.patch       | 35 -------------------
- package/gstreamer1/gst1-vaapi/gst1-vaapi.hash |  4 +--
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   |  2 +-
- .../gst1-validate/gst1-validate.hash          |  4 +--
- .../gstreamer1/gst1-validate/gst1-validate.mk |  2 +-
- .../gstreamer1-editing-services.hash          |  4 +--
- .../gstreamer1-editing-services.mk            |  2 +-
- package/gstreamer1/gstreamer1/gstreamer1.hash |  4 +--
- package/gstreamer1/gstreamer1/gstreamer1.mk   |  2 +-
- 23 files changed, 33 insertions(+), 68 deletions(-)
- delete mode 100644 package/gstreamer1/gst1-vaapi/0001-plugins-guard-GstGL-code.patch
 
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-index 5535a75812..3e94d4eee0 100644
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ b/package/gstreamer1/gst-omx/gst-omx.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.14.1.tar.xz.sha256sum
--sha256 7cb6c39301dfa3960abce195305c7cf431736bf6b47bde1fd4412c81c3e75cd8 gst-omx-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.14.2.tar.xz.sha256sum
-+sha256 316dbb13693795383cad6ec4dbebd94a869cd1f9d59a393686cad0b77bf9b5a9 gst-omx-1.14.2.tar.xz
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-index 8242d24a1f..f70477823e 100644
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ b/package/gstreamer1/gst-omx/gst-omx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST_OMX_VERSION = 1.14.1
-+GST_OMX_VERSION = 1.14.2
- GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
- GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
- 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index d67968557d..944f63d78e 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.14.1.tar.xz.sha256sum
--sha256 eff80a02d2f2fb9f34b67e9a26e9954d3218c7aa18e863f2a47805fa7066029d gst-libav-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.14.2.tar.xz.sha256sum
-+sha256 8a351c39c5cfc2bbd31ca434ec4a290a730a26efbdea962fdd8306dce5c576de gst-libav-1.14.2.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index b7566f0161..071da40a6e 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_LIBAV_VERSION = 1.14.1
-+GST1_LIBAV_VERSION = 1.14.2
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_CONF_OPTS = --with-system-libav
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-index 927e45b7e9..6342561ddf 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.14.1.tar.xz.sha256sum
--sha256 2a77c6908032aafdf2cd2e5823fec948f16a25c2d1497a953828d762dc20d61a gst-plugins-bad-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.14.2.tar.xz.sha256sum
-+sha256 34fab7da70994465a64468330b2168a4a0ed90a7de7e4c499b6d127c6c1b1eaf gst-plugins-bad-1.14.2.tar.xz
- sha256 0b12e4d1cd5db5f8a0c04fc98a1d8c3acc533097b6198d6644420da78d460223 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index 53b4038f1f..c9bf2b2fb7 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BAD_VERSION = 1.14.1
-+GST1_PLUGINS_BAD_VERSION = 1.14.2
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index 65c9f29c2f..6e13f97a9f 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.14.1.tar.xz.sha256sum
--sha256 1026c7c3082d825d9b5d034c1a6dd8a4ebab60eb3738b0a0afde4ad2dc0b0db5 gst-plugins-base-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.14.2.tar.xz.sha256sum
-+sha256 a4b7e80ba869f599307449b17c9e00b5d1e94d3ba1d8a1a386b8770b2ef01c7c gst-plugins-base-1.14.2.tar.xz
- sha256 78fb5977f177ab71cba77a4a127d29b93cb1ca5c25962204b31f183a20cf5c7a COPYING
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 3ad841bdd3..210bbeb20a 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BASE_VERSION = 1.14.1
-+GST1_PLUGINS_BASE_VERSION = 1.14.2
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-index 1254c4cde0..65750fa5a4 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.14.1.tar.xz.sha256sum
--sha256 34ec062ddb766a32377532e039781f4a16fbc3e8b449e642605bacab26a99172 gst-plugins-good-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.14.2.tar.xz.sha256sum
-+sha256 c0575e2811860bfff59b865b8d125153859a01f0615fa41e279b64d88d25caad gst-plugins-good-1.14.2.tar.xz
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 6fa989d6bd..c1ed039bc7 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_GOOD_VERSION = 1.14.1
-+GST1_PLUGINS_GOOD_VERSION = 1.14.2
- GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index 4fe4d091a8..3e675c8dc3 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.14.1.tar.xz.sha256sum
--sha256 cff2430bb13f54ef81409a0b3d65ce409a376d4a7bab57a14a97d602539fe1d3 gst-plugins-ugly-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.14.2.tar.xz.sha256sum
-+sha256 55e097d9d93921fdcf7abb0ff92d23b21dd9098e632f1ba433603b3bd1cf3d69 gst-plugins-ugly-1.14.2.tar.xz
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 1b4842fb92..0116dad5ca 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_UGLY_VERSION = 1.14.1
-+GST1_PLUGINS_UGLY_VERSION = 1.14.2
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index 4eabe12cef..dfb0849478 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.1.tar.xz.sha256sum
--sha256 38634f3b25c2bf2967b1ff914b54ff384f8612f5aefc18accd72c78bf3b02d7c gst-rtsp-server-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.14.2.tar.xz.sha256sum
-+sha256 f7387755cf6ac5f334d4610f1f5aa7da4ff396a487dd5b789bb707f160222c98 gst-rtsp-server-1.14.2.tar.xz
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index 4aa7c0b0c7..0dc2917685 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_RTSP_SERVER_VERSION = 1.14.1
-+GST1_RTSP_SERVER_VERSION = 1.14.2
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.0+
-diff --git a/package/gstreamer1/gst1-vaapi/0001-plugins-guard-GstGL-code.patch b/package/gstreamer1/gst1-vaapi/0001-plugins-guard-GstGL-code.patch
+Build tested on gitlab:
+https://gitlab.com/kubu93/toolchains-builder/pipelines/26588705
+
+ .../8.1.0/0004-xtensa-fix-PR-target-65416.patch    | 101 ------
+ ...-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch | 305 ------------------
+ ...ement-return-padding-operation-for-ARC700.patch | 355 ---------------------
+ .../gcc/{8.1.0 => 8.2.0}/0001-uclibc-conf.patch    |   0
+ .../0002-arm-softfloat-libgcc.patch                |   0
+ .../{8.1.0 => 8.2.0}/0003-remove-selftests.patch   |   0
+ package/gcc/Config.in.host                         |   2 +-
+ package/gcc/gcc.hash                               |   4 +-
+ 8 files changed, 3 insertions(+), 764 deletions(-)
+ delete mode 100644 package/gcc/8.1.0/0004-xtensa-fix-PR-target-65416.patch
+ delete mode 100644 package/gcc/8.1.0/0005-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch
+ delete mode 100644 package/gcc/8.1.0/0006-ARC-Reimplement-return-padding-operation-for-ARC700.patch
+ rename package/gcc/{8.1.0 => 8.2.0}/0001-uclibc-conf.patch (100%)
+ rename package/gcc/{8.1.0 => 8.2.0}/0002-arm-softfloat-libgcc.patch (100%)
+ rename package/gcc/{8.1.0 => 8.2.0}/0003-remove-selftests.patch (100%)
+
+diff --git a/package/gcc/8.1.0/0004-xtensa-fix-PR-target-65416.patch b/package/gcc/8.1.0/0004-xtensa-fix-PR-target-65416.patch
 deleted file mode 100644
-index a85d666e31..0000000000
---- a/package/gstreamer1/gst1-vaapi/0001-plugins-guard-GstGL-code.patch
+index 7ead575439..0000000000
+--- a/package/gcc/8.1.0/0004-xtensa-fix-PR-target-65416.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 73e31146a5c6bcd48eb3089a2a140833a401623b Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?V=C3=ADctor=20Manuel=20J=C3=A1quez=20Leal?=
-- <vjaquez@igalia.com>
--Date: Mon, 21 May 2018 13:27:14 +0200
--Subject: [PATCH] plugins: guard GstGL code
+@@ -1,101 +0,0 @@
+-From 87fda0741d210727672cba5e54a37a189e8ac04e Mon Sep 17 00:00:00 2001
+-From: Max Filippov <jcmvbkbc@gmail.com>
+-Date: Sun, 17 Jun 2018 21:18:39 -0700
+-Subject: [PATCH] xtensa: fix PR target/65416
 -
--Upstream: https://cgit.freedesktop.org/gstreamer/gstreamer-vaapi/patch/?id=45fb111850955d9192e43b9dbcb2ef8e3974e58d
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-The issue is caused by reordering of stack pointer update after stack
+-space allocation with instructions that write to the allocated stack
+-space. In windowed ABI register spill area for the previous call frame
+-is located just below the stack pointer and may be reloaded back into
+-the register file on movsp.
+-Implement allocate_stack pattern for windowed ABI configuration and
+-insert an instruction that prevents reordering of frame memory access
+-and stack pointer update.
+-
+-gcc/
+-2018-06-19  Max Filippov  <jcmvbkbc@gmail.com>
+-
+-	* config/xtensa/xtensa.md (UNSPEC_FRAME_BLOCKAGE): New unspec
+-	constant.
+-	(allocate_stack, frame_blockage, *frame_blockage): New patterns.
+-
+-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+-Backported from: r261755
 ----
-- gst/vaapi/gstvaapipluginutil.c | 2 ++
-- 1 file changed, 2 insertions(+)
+- gcc/config/xtensa/xtensa.md | 46 +++++++++++++++++++++++++++++++++++++++++++++
+- 1 file changed, 46 insertions(+)
 -
--diff --git a/gst/vaapi/gstvaapipluginutil.c b/gst/vaapi/gstvaapipluginutil.c
--index fa25131..648c91b 100644
----- a/gst/vaapi/gstvaapipluginutil.c
--+++ b/gst/vaapi/gstvaapipluginutil.c
--@@ -246,6 +246,7 @@ gst_vaapi_create_display_from_gl_context (GstObject * gl_context_object)
-- static void
-- gst_vaapi_find_gl_context (GstElement * element)
-- {
--+#if USE_GST_GL_HELPERS
--   GstVaapiPluginBase *const plugin = GST_VAAPI_PLUGIN_BASE (element);
+-diff --git a/gcc/config/xtensa/xtensa.md b/gcc/config/xtensa/xtensa.md
+-index 84967dbedc08..209f839cfb0f 100644
+---- a/gcc/config/xtensa/xtensa.md
+-+++ b/gcc/config/xtensa/xtensa.md
+-@@ -38,6 +38,7 @@
+-   (UNSPEC_MEMW		11)
+-   (UNSPEC_LSETUP_START  12)
+-   (UNSPEC_LSETUP_END    13)
+-+  (UNSPEC_FRAME_BLOCKAGE 14)
 - 
--   /* if the element is vaapisink or any vaapi encoder it doesn't need
--@@ -282,6 +283,7 @@ no_valid_gl_display:
--     gst_object_replace (&plugin->gl_other_context, NULL);
--     return;
--   }
--+#endif
+-   (UNSPECV_SET_FP	1)
+-   (UNSPECV_ENTRY	2)
+-@@ -1676,6 +1677,32 @@
+- 
+
+- ;; Miscellaneous instructions.
+- 
+-+;; In windowed ABI stack pointer adjustment must happen before any access
+-+;; to the space allocated on stack is allowed, otherwise register spill
+-+;; area may be clobbered.  That's what frame blockage is supposed to enforce.
+-+
+-+(define_expand "allocate_stack"
+-+  [(set (match_operand 0 "nonimmed_operand")
+-+        (minus (reg A1_REG) (match_operand 1 "add_operand")))
+-+   (set (reg A1_REG)
+-+        (minus (reg A1_REG) (match_dup 1)))]
+-+  "TARGET_WINDOWED_ABI"
+-+{
+-+  if (CONST_INT_P (operands[1]))
+-+    {
+-+      rtx neg_op0 = GEN_INT (-INTVAL (operands[1]));
+-+      emit_insn (gen_addsi3 (stack_pointer_rtx, stack_pointer_rtx, neg_op0));
+-+    }
+-+  else
+-+    {
+-+      emit_insn (gen_subsi3 (stack_pointer_rtx, stack_pointer_rtx,
+-+			     operands[1]));
+-+    }
+-+  emit_move_insn (operands[0], virtual_stack_dynamic_rtx);
+-+  emit_insn (gen_frame_blockage ());
+-+  DONE;
+-+})
+-+
+- (define_expand "prologue"
+-   [(const_int 0)]
+-   ""
+-@@ -1767,6 +1794,25 @@
+-   [(set_attr "length" "0")
+-    (set_attr "type" "nop")])
+- 
+-+;; Do not schedule instructions accessing memory before this point.
+-+
+-+(define_expand "frame_blockage"
+-+  [(set (match_dup 0)
+-+        (unspec:BLK [(match_dup 1)] UNSPEC_FRAME_BLOCKAGE))]
+-+  ""
+-+{
+-+  operands[0] = gen_rtx_MEM (BLKmode, gen_rtx_SCRATCH (Pmode));
+-+  MEM_VOLATILE_P (operands[0]) = 1;
+-+  operands[1] = stack_pointer_rtx;
+-+})
+-+
+-+(define_insn "*frame_blockage"
+-+  [(set (match_operand:BLK 0 "" "")
+-+        (unspec:BLK [(match_operand:SI 1 "" "")] UNSPEC_FRAME_BLOCKAGE))]
+-+  ""
+-+  ""
+-+  [(set_attr "length" "0")])
+-+
+- (define_insn "trap"
+-   [(trap_if (const_int 1) (const_int 0))]
+-   ""
+--- 
+-2.11.0
+-
+diff --git a/package/gcc/8.1.0/0005-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch b/package/gcc/8.1.0/0005-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch
+deleted file mode 100644
+index a383fb18f9..0000000000
+--- a/package/gcc/8.1.0/0005-arm-PR-target-81497-Fix-arm_acle.h-for-C.patch
++++ /dev/null
+@@ -1,305 +0,0 @@
+-From 4f147efb77e565d28a23c493986b57e2de15443e Mon Sep 17 00:00:00 2001
+-From: ktkachov <ktkachov@138bc75d-0d04-0410-961f-82ee72b054a4>
+-Date: Fri, 8 Jun 2018 08:18:43 +0000
+-Subject: [PATCH] [arm] PR target/81497: Fix arm_acle.h for C++
+-
+-	Backport from mainline
+-	2018-06-05  Kyrylo Tkachov  <kyrylo.tkachov@arm.com>
+-
+-	PR target/81497
+-	* config/arm/arm-builtins.c (arm_type_qualifiers): Add
+-	qualifier_void_pointer and qualifier_const_void_pointer.
+-	(arm_ldc_qualifiers, arm_stc_qualifiers): Use the above.
+-	(arm_init_builtins): Handle the above.
+-	* config/arm/arm_acle.h (__arm_cdp, __arm_ldc, __arm_ldcl, __arm_stc,
+-	__arm_stcl, __arm_mcr, __arm_cdp2, __arm_ldc2, __arm_ldcl2, __arm_stc2,
+-	__arm_stcl2,__arm_mcr2, __arm_mcrr, __arm_mcrr2): Remove return for
+-	void intrinsics.
+-
+-	* g++.target/arm/arm.exp: New file.
+-	* g++.target/arm/pr81497.C: Likewise.
+-
+-
+-git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-8-branch at 261305 138bc75d-0d04-0410-961f-82ee72b054a4
+-Upstream-Status: Backport (gcc-8-branch)
+-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+-[gportay: drop gcc/{,testsuite/}ChangeLog changes]
+----
+- gcc/config/arm/arm-builtins.c          | 42 +++++++++++++---------
+- gcc/config/arm/arm_acle.h              | 28 +++++++--------
+- gcc/testsuite/g++.target/arm/arm.exp   | 50 ++++++++++++++++++++++++++
+- gcc/testsuite/g++.target/arm/pr81497.C |  9 +++++
+- 4 files changed, 99 insertions(+), 30 deletions(-)
+- create mode 100644 gcc/testsuite/g++.target/arm/arm.exp
+- create mode 100644 gcc/testsuite/g++.target/arm/pr81497.C
+-
+-diff --git a/gcc/config/arm/arm-builtins.c b/gcc/config/arm/arm-builtins.c
+-index 7fde7a04672..183a7b907f6 100644
+---- a/gcc/config/arm/arm-builtins.c
+-+++ b/gcc/config/arm/arm-builtins.c
+-@@ -78,7 +78,11 @@ enum arm_type_qualifiers
+-   /* Lane indices - must be within range of previous argument = a vector.  */
+-   qualifier_lane_index = 0x200,
+-   /* Lane indices for single lane structure loads and stores.  */
+--  qualifier_struct_load_store_lane_index = 0x400
+-+  qualifier_struct_load_store_lane_index = 0x400,
+-+  /* A void pointer.  */
+-+  qualifier_void_pointer = 0x800,
+-+  /* A const void pointer.  */
+-+  qualifier_const_void_pointer = 0x802
+- };
+- 
+- /*  The qualifier_internal allows generation of a unary builtin from
+-@@ -202,7 +206,7 @@ arm_cdp_qualifiers[SIMD_MAX_BUILTIN_ARGS]
+- static enum arm_type_qualifiers
+- arm_ldc_qualifiers[SIMD_MAX_BUILTIN_ARGS]
+-   = { qualifier_void, qualifier_unsigned_immediate,
+--      qualifier_unsigned_immediate, qualifier_const_pointer };
+-+      qualifier_unsigned_immediate, qualifier_const_void_pointer };
+- #define LDC_QUALIFIERS \
+-   (arm_ldc_qualifiers)
+- 
+-@@ -210,7 +214,7 @@ arm_ldc_qualifiers[SIMD_MAX_BUILTIN_ARGS]
+- static enum arm_type_qualifiers
+- arm_stc_qualifiers[SIMD_MAX_BUILTIN_ARGS]
+-   = { qualifier_void, qualifier_unsigned_immediate,
+--      qualifier_unsigned_immediate, qualifier_pointer };
+-+      qualifier_unsigned_immediate, qualifier_void_pointer };
+- #define STC_QUALIFIERS \
+-   (arm_stc_qualifiers)
+- 
+-@@ -1095,19 +1099,25 @@ arm_init_builtin (unsigned int fcode, arm_builtin_datum *d,
+-       if (qualifiers & qualifier_pointer && VECTOR_MODE_P (op_mode))
+- 	op_mode = GET_MODE_INNER (op_mode);
+- 
+--      eltype = arm_simd_builtin_type
+--	(op_mode,
+--	 (qualifiers & qualifier_unsigned) != 0,
+--	 (qualifiers & qualifier_poly) != 0);
+--      gcc_assert (eltype != NULL);
+--
+--      /* Add qualifiers.  */
+--      if (qualifiers & qualifier_const)
+--	eltype = build_qualified_type (eltype, TYPE_QUAL_CONST);
+--
+--      if (qualifiers & qualifier_pointer)
+--	eltype = build_pointer_type (eltype);
+--
+-+      /* For void pointers we already have nodes constructed by the midend.  */
+-+      if (qualifiers & qualifier_void_pointer)
+-+	eltype = qualifiers & qualifier_const
+-+		 ? const_ptr_type_node : ptr_type_node;
+-+      else
+-+	{
+-+	  eltype
+-+	    = arm_simd_builtin_type (op_mode,
+-+				     (qualifiers & qualifier_unsigned) != 0,
+-+				     (qualifiers & qualifier_poly) != 0);
+-+	  gcc_assert (eltype != NULL);
+-+
+-+	  /* Add qualifiers.  */
+-+	  if (qualifiers & qualifier_const)
+-+	    eltype = build_qualified_type (eltype, TYPE_QUAL_CONST);
+-+
+-+	  if (qualifiers & qualifier_pointer)
+-+	    eltype = build_pointer_type (eltype);
+-+	}
+-       /* If we have reached arg_num == 0, we are at a non-void
+- 	 return type.  Otherwise, we are still processing
+- 	 arguments.  */
+-diff --git a/gcc/config/arm/arm_acle.h b/gcc/config/arm/arm_acle.h
+-index 9a2f0ba30dc..c0f6ea2d156 100644
+---- a/gcc/config/arm/arm_acle.h
+-+++ b/gcc/config/arm/arm_acle.h
+-@@ -38,35 +38,35 @@ __arm_cdp (const unsigned int __coproc, const unsigned int __opc1,
+- 	   const unsigned int __CRd, const unsigned int __CRn,
+- 	   const unsigned int __CRm, const unsigned int __opc2)
+- {
+--  return __builtin_arm_cdp (__coproc, __opc1, __CRd, __CRn, __CRm, __opc2);
+-+  __builtin_arm_cdp (__coproc, __opc1, __CRd, __CRn, __CRm, __opc2);
 - }
 - 
-- gboolean
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_ldc (const unsigned int __coproc, const unsigned int __CRd,
+- 	   const void * __p)
+- {
+--  return __builtin_arm_ldc (__coproc, __CRd, __p);
+-+  __builtin_arm_ldc (__coproc, __CRd, __p);
+- }
+- 
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_ldcl (const unsigned int __coproc, const unsigned int __CRd,
+- 	    const void * __p)
+- {
+--  return __builtin_arm_ldcl (__coproc, __CRd, __p);
+-+  __builtin_arm_ldcl (__coproc, __CRd, __p);
+- }
+- 
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_stc (const unsigned int __coproc, const unsigned int __CRd,
+- 	   void * __p)
+- {
+--  return __builtin_arm_stc (__coproc, __CRd, __p);
+-+  __builtin_arm_stc (__coproc, __CRd, __p);
+- }
+- 
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_stcl (const unsigned int __coproc, const unsigned int __CRd,
+- 	    void * __p)
+- {
+--  return __builtin_arm_stcl (__coproc, __CRd, __p);
+-+  __builtin_arm_stcl (__coproc, __CRd, __p);
+- }
+- 
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+-@@ -74,7 +74,7 @@ __arm_mcr (const unsigned int __coproc, const unsigned int __opc1,
+- 	   uint32_t __value, const unsigned int __CRn, const unsigned int __CRm,
+- 	   const unsigned int __opc2)
+- {
+--  return __builtin_arm_mcr (__coproc, __opc1, __value, __CRn, __CRm, __opc2);
+-+  __builtin_arm_mcr (__coproc, __opc1, __value, __CRn, __CRm, __opc2);
+- }
+- 
+- __extension__ static __inline uint32_t __attribute__ ((__always_inline__))
+-@@ -90,35 +90,35 @@ __arm_cdp2 (const unsigned int __coproc, const unsigned int __opc1,
+- 	    const unsigned int __CRd, const unsigned int __CRn,
+- 	    const unsigned int __CRm, const unsigned int __opc2)
+- {
+--  return __builtin_arm_cdp2 (__coproc, __opc1, __CRd, __CRn, __CRm, __opc2);
+-+  __builtin_arm_cdp2 (__coproc, __opc1, __CRd, __CRn, __CRm, __opc2);
+- }
+- 
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_ldc2 (const unsigned int __coproc, const unsigned int __CRd,
+- 	    const void * __p)
+- {
+--  return __builtin_arm_ldc2 (__coproc, __CRd, __p);
+-+  __builtin_arm_ldc2 (__coproc, __CRd, __p);
+- }
+- 
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_ldc2l (const unsigned int __coproc, const unsigned int __CRd,
+- 	     const void * __p)
+- {
+--  return __builtin_arm_ldc2l (__coproc, __CRd, __p);
+-+  __builtin_arm_ldc2l (__coproc, __CRd, __p);
+- }
+- 
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_stc2 (const unsigned int __coproc, const unsigned int __CRd,
+- 	    void * __p)
+- {
+--  return __builtin_arm_stc2 (__coproc, __CRd, __p);
+-+  __builtin_arm_stc2 (__coproc, __CRd, __p);
+- }
+- 
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_stc2l (const unsigned int __coproc, const unsigned int __CRd,
+- 	     void * __p)
+- {
+--  return __builtin_arm_stc2l (__coproc, __CRd, __p);
+-+  __builtin_arm_stc2l (__coproc, __CRd, __p);
+- }
+- 
+- __extension__ static __inline void __attribute__ ((__always_inline__))
+-@@ -126,7 +126,7 @@ __arm_mcr2 (const unsigned int __coproc, const unsigned int __opc1,
+- 	    uint32_t __value, const unsigned int __CRn,
+- 	    const unsigned int __CRm, const unsigned int __opc2)
+- {
+--  return __builtin_arm_mcr2 (__coproc, __opc1, __value, __CRn, __CRm, __opc2);
+-+  __builtin_arm_mcr2 (__coproc, __opc1, __value, __CRn, __CRm, __opc2);
+- }
+- 
+- __extension__ static __inline uint32_t __attribute__ ((__always_inline__))
+-@@ -143,7 +143,7 @@ __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_mcrr (const unsigned int __coproc, const unsigned int __opc1,
+- 	    uint64_t __value, const unsigned int __CRm)
+- {
+--  return __builtin_arm_mcrr (__coproc, __opc1, __value, __CRm);
+-+  __builtin_arm_mcrr (__coproc, __opc1, __value, __CRm);
+- }
+- 
+- __extension__ static __inline uint64_t __attribute__ ((__always_inline__))
+-@@ -159,7 +159,7 @@ __extension__ static __inline void __attribute__ ((__always_inline__))
+- __arm_mcrr2 (const unsigned int __coproc, const unsigned int __opc1,
+- 	    uint64_t __value, const unsigned int __CRm)
+- {
+--  return __builtin_arm_mcrr2 (__coproc, __opc1, __value, __CRm);
+-+  __builtin_arm_mcrr2 (__coproc, __opc1, __value, __CRm);
+- }
+- 
+- __extension__ static __inline uint64_t __attribute__ ((__always_inline__))
+-diff --git a/gcc/testsuite/g++.target/arm/arm.exp b/gcc/testsuite/g++.target/arm/arm.exp
+-new file mode 100644
+-index 00000000000..1a169d2f220
+---- /dev/null
+-+++ b/gcc/testsuite/g++.target/arm/arm.exp
+-@@ -0,0 +1,50 @@
+-+#  Specific regression driver for arm.
+-+#  Copyright (C) 2009-2018 Free Software Foundation, Inc.
+-+#
+-+#  This file is part of GCC.
+-+#
+-+#  GCC is free software; you can redistribute it and/or modify it
+-+#  under the terms of the GNU General Public License as published by
+-+#  the Free Software Foundation; either version 3, or (at your option)
+-+#  any later version.
+-+#
+-+#  GCC is distributed in the hope that it will be useful, but
+-+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+-+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-+#  General Public License for more details.
+-+#
+-+#  You should have received a copy of the GNU General Public License
+-+#  along with GCC; see the file COPYING3.  If not see
+-+#  <http://www.gnu.org/licenses/>.  */
+-+
+-+# GCC testsuite that uses the `dg.exp' driver.
+-+
+-+# Exit immediately if this isn't an arm target.
+-+if {![istarget arm*-*-*] } then {
+-+  return
+-+}
+-+
+-+# Load support procs.
+-+load_lib g++-dg.exp
+-+
+-+global DEFAULT_CXXFLAGS
+-+if ![info exists DEFAULT_CXXFLAGS] then {
+-+    set DEFAULT_CXXFLAGS " -pedantic-errors"
+-+}
+-+
+-+
+-+global dg_runtest_extra_prunes
+-+set dg_runtest_extra_prunes ""
+-+lappend dg_runtest_extra_prunes "warning: switch -m(cpu|arch)=.* conflicts with -m(cpu|arch)=.* switch"
+-+
+-+# Initialize `dg'.
+-+dg-init
+-+
+-+# Main loop.
+-+dg-runtest [lsort [glob -nocomplain $srcdir/$subdir/*.C]] \
+-+        "" $DEFAULT_CXXFLAGS
+-+
+-+# All done.
+-+set dg_runtest_extra_prunes ""
+-+dg-finish
+-+
+-diff --git a/gcc/testsuite/g++.target/arm/pr81497.C b/gcc/testsuite/g++.target/arm/pr81497.C
+-new file mode 100644
+-index 00000000000..0519a3a3045
+---- /dev/null
+-+++ b/gcc/testsuite/g++.target/arm/pr81497.C
+-@@ -0,0 +1,9 @@
+-+/* { dg-do compile } */
+-+/* { dg-require-effective-target arm_thumb2_ok } */
+-+
+-+#include <arm_acle.h>
+-+
+-+int main ()
+-+{
+-+  return 0;
+-+}
 --- 
 -2.17.1
 -
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-index b3c72310c2..2e5beb8a0f 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.14.1.tar.xz.sha256sum
--sha256 585c3ddb0c39220de0a33e5d0ed6196a108b8407ec3538d7c64617713b4434e8 gstreamer-vaapi-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.14.2.tar.xz.sha256sum
-+sha256 7f1064e27f5abd3a42ef66b425f1a2b9dbae7748c81bd9d090ce52a1aaf30d8a gstreamer-vaapi-1.14.2.tar.xz
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING.LIB
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-index 1e7e6f1c86..ac33559887 100644
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gcc/8.1.0/0006-ARC-Reimplement-return-padding-operation-for-ARC700.patch b/package/gcc/8.1.0/0006-ARC-Reimplement-return-padding-operation-for-ARC700.patch
+deleted file mode 100644
+index 2c7f50ea6f..0000000000
+--- a/package/gcc/8.1.0/0006-ARC-Reimplement-return-padding-operation-for-ARC700.patch
++++ /dev/null
+@@ -1,355 +0,0 @@
+-From d8d716f49c0057e239f2b64e7d902046b92d244f Mon Sep 17 00:00:00 2001
+-From: Claudiu Zissulescu <claziss@synopsys.com>
+-Date: Fri, 24 Mar 2017 11:55:54 +0100
+-Subject: [PATCH] [ARC] Reimplement return padding operation for ARC700.
+-
+-For ARC700, adding padding if necessary to avoid a mispredict.  A
+-return could happen immediately after the function start.  A
+-call/return and return/return must be 6 bytes apart to avoid
+-mispredict.
+-
+-The old implementation was doing this operation very late in the
+-compilation process, and the additional nop instructions and/or
+-forcing some other instruction to take their long form was not taken
+-into account when generating brcc instructions. Thus, wrong code could
+-be generated.
+-
+-gcc/
+-2017-03-24  Claudiu Zissulescu  <claziss@synopsys.com>
+-
+-	* config/arc/arc-protos.h (arc_pad_return): Remove.
+-	* config/arc/arc.c (machine_function): Remove force_short_suffix
+-	and size_reason.
+-	(arc_print_operand): Adjust printing of '&'.
+-	(arc_verify_short): Remove conditional printing of short suffix.
+-	(arc_final_prescan_insn): Remove reference to size_reason.
+-	(pad_return): New function.
+-	(arc_reorg): Call pad_return.
+-	(arc_pad_return): Remove.
+-	(arc_init_machine_status): Remove reference to force_short_suffix.
+-	* config/arc/arc.md (vunspec): Add VUNSPEC_ARC_BLOCKAGE.
+-	(attr length): When attribute iscompact is true force to 2
+-	regardless; in the case of maybe check if we want to force the
+-	instruction to have 4 bytes length.
+-	(nopv): Change it to generate 4 byte long nop as well.
+-	(blockage): New pattern.
+-	(simple_return): Remove call to arc_pad_return.
+-	(p_return_i): Likewise.
+-
+-git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk at 261542 138bc75d-0d04-0410-961f-82ee72b054a4
+-Upstream-Status: Backport (trunk)
+-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+----
+- gcc/config/arc/arc-protos.h                 |   1 -
+- gcc/config/arc/arc.c                        | 156 +++++++++-----------
+- gcc/config/arc/arc.md                       |  26 +++-
+- 4 files changed, 128 insertions(+), 93 deletions(-)
+-
+-diff --git a/gcc/config/arc/arc-protos.h b/gcc/config/arc/arc-protos.h
+-index 67f3b4e3226b..ce4b6f84749e 100644
+---- a/gcc/config/arc/arc-protos.h
+-+++ b/gcc/config/arc/arc-protos.h
+-@@ -89,7 +89,6 @@ extern void arc_clear_unalign (void);
+- extern void arc_toggle_unalign (void);
+- extern void split_addsi (rtx *);
+- extern void split_subsi (rtx *);
+--extern void arc_pad_return (void);
+- extern void arc_split_move (rtx *);
+- extern const char *arc_short_long (rtx_insn *insn, const char *, const char *);
+- extern rtx arc_regno_use_in (unsigned int, rtx);
+-diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
+-index b1a09d82b72e..22f1442a027c 100644
+---- a/gcc/config/arc/arc.c
+-+++ b/gcc/config/arc/arc.c
+-@@ -2648,8 +2648,6 @@ typedef struct GTY (()) machine_function
+-   struct arc_frame_info frame_info;
+-   /* To keep track of unalignment caused by short insns.  */
+-   int unalign;
+--  int force_short_suffix; /* Used when disgorging return delay slot insns.  */
+--  const char *size_reason;
+-   struct arc_ccfsm ccfsm_current;
+-   /* Map from uid to ccfsm state during branch shortening.  */
+-   rtx ccfsm_current_insn;
+-@@ -4307,7 +4305,7 @@ arc_print_operand (FILE *file, rtx x, int code)
+- 	}
+-       break;
+-     case '&':
+--      if (TARGET_ANNOTATE_ALIGN && cfun->machine->size_reason)
+-+      if (TARGET_ANNOTATE_ALIGN)
+- 	fprintf (file, "; unalign: %d", cfun->machine->unalign);
+-       return;
+-     case '+':
+-@@ -4980,7 +4978,6 @@ static int
+- arc_verify_short (rtx_insn *insn, int, int check_attr)
+- {
+-   enum attr_iscompact iscompact;
+--  struct machine_function *machine;
+- 
+-   if (check_attr > 0)
+-     {
+-@@ -4988,10 +4985,6 @@ arc_verify_short (rtx_insn *insn, int, int check_attr)
+-       if (iscompact == ISCOMPACT_FALSE)
+- 	return 0;
+-     }
+--  machine = cfun->machine;
+--
+--  if (machine->force_short_suffix >= 0)
+--    return machine->force_short_suffix;
+- 
+-   return (get_attr_length (insn) & 2) != 0;
+- }
+-@@ -5030,8 +5023,6 @@ arc_final_prescan_insn (rtx_insn *insn, rtx *opvec ATTRIBUTE_UNUSED,
+-       cfun->machine->prescan_initialized = 1;
+-     }
+-   arc_ccfsm_advance (insn, &arc_ccfsm_current);
+--
+--  cfun->machine->size_reason = 0;
+- }
+- 
+- /* Given FROM and TO register numbers, say whether this elimination is allowed.
+-@@ -7673,6 +7664,76 @@ jli_call_scan (void)
+-     }
+- }
+- 
+-+/* Add padding if necessary to avoid a mispredict.  A return could
+-+   happen immediately after the function start.  A call/return and
+-+   return/return must be 6 bytes apart to avoid mispredict.  */
+-+
+-+static void
+-+pad_return (void)
+-+{
+-+  rtx_insn *insn;
+-+  long offset;
+-+
+-+  if (!TARGET_PAD_RETURN)
+-+    return;
+-+
+-+  for (insn = get_insns (); insn; insn = NEXT_INSN (insn))
+-+    {
+-+      rtx_insn *prev0 = prev_active_insn (insn);
+-+      bool wantlong = false;
+-+
+-+      if (!INSN_P (insn) || GET_CODE (PATTERN (insn)) != SIMPLE_RETURN)
+-+	continue;
+-+
+-+      if (!prev0)
+-+	{
+-+	  prev0 = emit_insn_before (gen_nopv (), insn);
+-+	  /* REG_SAVE_NOTE is used by Haifa scheduler, we are in reorg
+-+	     so it is safe to reuse it for forcing a particular length
+-+	     for an instruction.  */
+-+	  add_reg_note (prev0, REG_SAVE_NOTE, GEN_INT (1));
+-+	  emit_insn_before (gen_nopv (), insn);
+-+	  continue;
+-+	}
+-+      offset = get_attr_length (prev0);
+-+
+-+      if (get_attr_length (prev0) == 2
+-+	  && get_attr_iscompact (prev0) != ISCOMPACT_TRUE)
+-+	{
+-+	  /* Force long version of the insn.  */
+-+	  wantlong = true;
+-+	  offset += 2;
+-+	}
+-+
+-+     rtx_insn *prev = prev_active_insn (prev0);
+-+      if (prev)
+-+	offset += get_attr_length (prev);
+-+
+-+      prev = prev_active_insn (prev);
+-+      if (prev)
+-+	offset += get_attr_length (prev);
+-+
+-+      switch (offset)
+-+	{
+-+	case 2:
+-+	  prev = emit_insn_before (gen_nopv (), insn);
+-+	  add_reg_note (prev, REG_SAVE_NOTE, GEN_INT (1));
+-+	  break;
+-+	case 4:
+-+	  emit_insn_before (gen_nopv (), insn);
+-+	  break;
+-+	default:
+-+	  continue;
+-+	}
+-+
+-+      if (wantlong)
+-+	add_reg_note (prev0, REG_SAVE_NOTE, GEN_INT (1));
+-+
+-+      /* Emit a blockage to avoid delay slot scheduling.  */
+-+      emit_insn_before (gen_blockage(), insn);
+-+    }
+-+}
+-+
+- static int arc_reorg_in_progress = 0;
+- 
+- /* ARC's machince specific reorg function.  */
+-@@ -7698,6 +7759,7 @@ arc_reorg (void)
+- 
+-   workaround_arc_anomaly ();
+-   jli_call_scan ();
+-+  pad_return ();
+- 
+- /* FIXME: should anticipate ccfsm action, generate special patterns for
+-    to-be-deleted branches that have no delay slot and have at least the
+-@@ -9256,79 +9318,6 @@ arc_branch_size_unknown_p (void)
+-   return !optimize_size && arc_reorg_in_progress;
+- }
+- 
+--/* We are about to output a return insn.  Add padding if necessary to avoid
+--   a mispredict.  A return could happen immediately after the function
+--   start, but after a call we know that there will be at least a blink
+--   restore.  */
+--
+--void
+--arc_pad_return (void)
+--{
+--  rtx_insn *insn = current_output_insn;
+--  rtx_insn *prev = prev_active_insn (insn);
+--  int want_long;
+--
+--  if (!prev)
+--    {
+--      fputs ("\tnop_s\n", asm_out_file);
+--      cfun->machine->unalign ^= 2;
+--      want_long = 1;
+--    }
+--  /* If PREV is a sequence, we know it must be a branch / jump or a tailcall,
+--     because after a call, we'd have to restore blink first.  */
+--  else if (GET_CODE (PATTERN (prev)) == SEQUENCE)
+--    return;
+--  else
+--    {
+--      want_long = (get_attr_length (prev) == 2);
+--      prev = prev_active_insn (prev);
+--    }
+--  if (!prev
+--      || ((NONJUMP_INSN_P (prev) && GET_CODE (PATTERN (prev)) == SEQUENCE)
+--	  ? CALL_ATTR (as_a <rtx_sequence *> (PATTERN (prev))->insn (0),
+--		       NON_SIBCALL)
+--	  : CALL_ATTR (prev, NON_SIBCALL)))
+--    {
+--      if (want_long)
+--	cfun->machine->size_reason
+--	  = "call/return and return/return must be 6 bytes apart to avoid mispredict";
+--      else if (TARGET_UNALIGN_BRANCH && cfun->machine->unalign)
+--	{
+--	  cfun->machine->size_reason
+--	    = "Long unaligned jump avoids non-delay slot penalty";
+--	  want_long = 1;
+--	}
+--      /* Disgorge delay insn, if there is any, and it may be moved.  */
+--      if (final_sequence
+--	  /* ??? Annulled would be OK if we can and do conditionalize
+--	     the delay slot insn accordingly.  */
+--	  && !INSN_ANNULLED_BRANCH_P (insn)
+--	  && (get_attr_cond (insn) != COND_USE
+--	      || !reg_set_p (gen_rtx_REG (CCmode, CC_REG),
+--			     XVECEXP (final_sequence, 0, 1))))
+--	{
+--	  prev = as_a <rtx_insn *> (XVECEXP (final_sequence, 0, 1));
+--	  gcc_assert (!prev_real_insn (insn)
+--		      || !arc_hazard (prev_real_insn (insn), prev));
+--	  cfun->machine->force_short_suffix = !want_long;
+--	  rtx save_pred = current_insn_predicate;
+--	  final_scan_insn (prev, asm_out_file, optimize, 1, NULL);
+--	  cfun->machine->force_short_suffix = -1;
+--	  prev->set_deleted ();
+--	  current_output_insn = insn;
+--	  current_insn_predicate = save_pred;
+--	}
+--      else if (want_long)
+--	fputs ("\tnop\n", asm_out_file);
+--      else
+--	{
+--	  fputs ("\tnop_s\n", asm_out_file);
+--	  cfun->machine->unalign ^= 2;
+--	}
+--    }
+--  return;
+--}
+--
+- /* The usual; we set up our machine_function data.  */
+- 
+- static struct machine_function *
+-@@ -9337,7 +9326,6 @@ arc_init_machine_status (void)
+-   struct machine_function *machine;
+-   machine = ggc_cleared_alloc<machine_function> ();
+-   machine->fn_type = ARC_FUNCTION_UNKNOWN;
+--  machine->force_short_suffix = -1;
+- 
+-   return machine;
+- }
+-diff --git a/gcc/config/arc/arc.md b/gcc/config/arc/arc.md
+-index 5610bab694c6..2401926f08df 100644
+---- a/gcc/config/arc/arc.md
+-+++ b/gcc/config/arc/arc.md
+-@@ -162,6 +162,7 @@
+-   VUNSPEC_ARC_CAS
+-   VUNSPEC_ARC_SC
+-   VUNSPEC_ARC_LL
+-+  VUNSPEC_ARC_BLOCKAGE
+-   ])
+- 
+- (define_constants
+-@@ -385,13 +386,18 @@
+- ;; and insn lengths: insns with shimm values cannot be conditionally executed.
+- (define_attr "length" ""
+-   (cond
+--    [(eq_attr "iscompact" "true,maybe")
+-+    [(eq_attr "iscompact" "true")
+-+      (const_int 2)
+-+
+-+     (eq_attr "iscompact" "maybe")
+-      (cond
+-        [(eq_attr "type" "sfunc")
+- 	(cond [(match_test "GET_CODE (PATTERN (insn)) == COND_EXEC")
+- 	       (const_int 12)]
+- 	      (const_int 10))
+--	(match_test "GET_CODE (PATTERN (insn)) == COND_EXEC") (const_int 4)]
+-+	(match_test "GET_CODE (PATTERN (insn)) == COND_EXEC") (const_int 4)
+-+	(match_test "find_reg_note (insn, REG_SAVE_NOTE, GEN_INT (1))")
+-+	(const_int 4)]
+-       (const_int 2))
+- 
+-     (eq_attr "iscompact" "true_limm")
+-@@ -4447,8 +4453,16 @@ archs4x, archs4xd, archs4xd_slow"
+-   ""
+-   "nop%?"
+-   [(set_attr "type" "misc")
+--   (set_attr "iscompact" "true")
+--   (set_attr "length" "2")])
+-+   (set_attr "iscompact" "maybe")
+-+   (set_attr "length" "*")])
+-+
+-+(define_insn "blockage"
+-+  [(unspec_volatile [(const_int 0)] VUNSPEC_ARC_BLOCKAGE)]
+-+  ""
+-+  ""
+-+  [(set_attr "length" "0")
+-+   (set_attr "type" "block")]
+-+)
+- 
+- ;; Split up troublesome insns for better scheduling.
+- 
+-@@ -4993,8 +5007,6 @@ archs4x, archs4xd, archs4xd_slow"
+-   {
+-     return \"rtie\";
+-   }
+--  if (TARGET_PAD_RETURN)
+--    arc_pad_return ();
+-   output_asm_insn (\"j%!%* [%0]%&\", &reg);
+-   return \"\";
+- }
+-@@ -5038,8 +5050,6 @@ archs4x, archs4xd, archs4xd_slow"
+- 		   arc_return_address_register (arc_compute_function_type
+- 						(cfun)));
+- 
+--  if (TARGET_PAD_RETURN)
+--    arc_pad_return ();
+-   output_asm_insn (\"j%d0%!%# [%1]%&\", xop);
+-   /* record the condition in case there is a delay insn.  */
+-   arc_ccfsm_record_condition (xop[0], false, insn, 0);
+--- 
+-2.17.1
+-
+diff --git a/package/gcc/8.1.0/0001-uclibc-conf.patch b/package/gcc/8.2.0/0001-uclibc-conf.patch
+similarity index 100%
+rename from package/gcc/8.1.0/0001-uclibc-conf.patch
+rename to package/gcc/8.2.0/0001-uclibc-conf.patch
+diff --git a/package/gcc/8.1.0/0002-arm-softfloat-libgcc.patch b/package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch
+similarity index 100%
+rename from package/gcc/8.1.0/0002-arm-softfloat-libgcc.patch
+rename to package/gcc/8.2.0/0002-arm-softfloat-libgcc.patch
+diff --git a/package/gcc/8.1.0/0003-remove-selftests.patch b/package/gcc/8.2.0/0003-remove-selftests.patch
+similarity index 100%
+rename from package/gcc/8.1.0/0003-remove-selftests.patch
+rename to package/gcc/8.2.0/0003-remove-selftests.patch
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 899a862dcc..01bf8fa561 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -80,7 +80,7 @@ config BR2_GCC_VERSION
+ 	default "5.5.0"     if BR2_GCC_VERSION_5_X
+ 	default "6.4.0"     if BR2_GCC_VERSION_6_X
+ 	default "7.3.0"     if BR2_GCC_VERSION_7_X
+-	default "8.1.0"     if BR2_GCC_VERSION_8_X
++	default "8.2.0"     if BR2_GCC_VERSION_8_X
+ 	default "arc-2018.03" if BR2_GCC_VERSION_ARC
+ 	default "or1k-musl-5.4.0-20170218" if BR2_GCC_VERSION_OR1K
  
--GST1_VAAPI_VERSION = 1.14.1
-+GST1_VAAPI_VERSION = 1.14.2
- GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
- GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
- GST1_VAAPI_LICENSE = LGPL-2.1+
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
-index cb1046b9f7..07aa036a21 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.hash
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.14.1.tar.xz.sha256sum
--sha256 68e3f38f66e0d04837b60090fe5d9ca1127f5df124669f34ca82e241209171e4 gst-validate-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.14.2.tar.xz.sha256sum
-+sha256 ea9e423e5470ef85ef8a0aea1714e7abfc49deb2ed282057367484cdeba6f19f gst-validate-1.14.2.tar.xz
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index 104cc0150d..cca3417894 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index a6dddb0813..079bf7a2f6 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -6,8 +6,8 @@ sha512  670ff52c2ae12c7852c12987e91798c5aa8bd6daf21f0d6e0cd57a4aa59cc4f06a837fe7
+ sha512  02c60e54527c7adf584798d5251f8a0b80c93d5deafce82501b2c28e6692e0bd783927bbfc4bc527a863c0cccc025150a34740a9e29badb02d4b48e56a8aba90  gcc-6.4.0.tar.xz
+ # From ftp://gcc.gnu.org/pub/gcc/releases/gcc-7.3.0/sha512.sum
+ sha512  ad41a7e4584e40e92cdf860bc0288500fbaf5dfb7e8c3fcabe9eba809c87bcfa85b46c19c19921b0cdf6d05483faede8287bb9ea120c0d1559449a70e602c8d4  gcc-7.3.0.tar.xz
+-# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.1.0/sha512.sum
+-sha512  c96246f34a7aeb404c4525b754dc7f7708a18e06271aadb2b32fef00e6e0940f584e52430bfe2ab01e699c93e3cb418adc113d2622fa826facbec0ec8ce3eb2c  gcc-8.1.0.tar.xz
++# From ftp://gcc.gnu.org/pub/gcc/releases/gcc-8.2.0/sha512.sum
++sha512  64898a165f67e136d802a92e7633bf1b06c85266027e52127ea025bf5fc2291b5e858288aac0bdba246e6cdf7c6ec88bc8e0e7f3f6f1985f4297710cafde56ed  gcc-8.2.0.tar.xz
  
--GST1_VALIDATE_VERSION = 1.14.1
-+GST1_VALIDATE_VERSION = 1.14.2
- GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
- GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
- GST1_VALIDATE_LICENSE = LGPL-2.1+
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index c738db6f88..7e809614a1 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.14.1.tar.xz.sha256sum
--sha256 7e7c0962f39388cdf81b5e0d9f768eb15e30f58b346fd79f1ea778979eae113e gstreamer-editing-services-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.14.2.tar.xz.sha256sum
-+sha256 05b280d19eb637f17634d32eb3b5ac8963fc9b667aeff29dab3594dbdfc61f34 gstreamer-editing-services-1.14.2.tar.xz
- 
- # Hashes for license files:
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 215582bf15..11d99cd160 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.14.1
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.14.2
- GSTREAMER1_EDITING_SERVICES_SOURCE = gstreamer-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = http://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index 7e75489337..f69cc6a386 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.14.1.tar.xz.sha256sum
--sha256 28d82b0d261544a9bf85b429399929e4986eb00efcf1ce16cc71d269a4c3186c gstreamer-1.14.1.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.14.2.tar.xz.sha256sum
-+sha256 4bd6127299f3f29379046bbd58a526e6353b569e0e72f7b4df2ae70df6882e09 gstreamer-1.14.2.tar.xz
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 02158f5238..092d6cb82e 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSTREAMER1_VERSION = 1.14.1
-+GSTREAMER1_VERSION = 1.14.2
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+ # Locally calculated (fetched from Github)
+ sha512  7c6555d629957d154c9c0524fc2c82301c9ab9192f5b9175c47b1f2dde298ac032e86360d91866c3c4d001cf8e191a90dc88f3c900ebfc367c5888ab7bf2ce79  gcc-arc-2018.03.tar.gz
 -- 
-2.18.0
+2.14.4
