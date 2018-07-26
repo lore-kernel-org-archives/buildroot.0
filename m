@@ -1,21 +1,37 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Jul 2018 07:16:59 +0000
-Subject: [Buildroot] [Bug 11186] Building wireless-regdb fails on BR
- 2018.05.1
-In-Reply-To: <bug-11186-163@https.bugs.busybox.net/>
-References: <bug-11186-163@https.bugs.busybox.net/>
-Message-ID: <bug-11186-163-lwGROqwxlj@https.bugs.busybox.net/>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Thu, 26 Jul 2018 09:42:31 +0200
+Subject: [Buildroot] [PATCH] libostree: override path to gpg-error-config
+Message-ID: <20180726074231.19768-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11186
+libostree has begun to use `gpg-error-config` in their configuration
+script.
+Point out gpg-error-config in staging dir to avoid using the one
+installed on the host system.
 
---- Comment #2 from Matthias <porto.rio@gmx.net> ---
-That's great, thank you!
+Fixes:
+ http://autobuild.buildroot.net/results/447b96e449e881cf1bd9644cda0f386aa4c75724
 
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/libostree/libostree.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 24eda0d1db..4d0b38fc9e 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -12,6 +12,7 @@ LIBOSTREE_LICENSE = LGPL-2.0+
+ LIBOSTREE_LICENSE_FILES = COPYING
+ LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpgme xz
+ LIBOSTREE_INSTALL_STAGING = YES
++LIBOSTREE_CONF_ENV = ac_cv_path_GPG_ERROR_CONFIG=$(STAGING_DIR)/usr/bin/gpg-error-config
+ 
+ LIBOSTREE_CONF_OPTS += \
+ 	--with-gpgme-prefix=$(STAGING_DIR)/usr \
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.18.0
