@@ -1,184 +1,226 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 26 Jul 2018 11:26:27 +0200
-Subject: [Buildroot] [PATCH v2 4/8] imx-vpu-hantro: new package
+Date: Thu, 26 Jul 2018 11:26:28 +0200
+Subject: [Buildroot] [PATCH v2 5/8] imx-vpu: new virtual package
 In-Reply-To: <20180726092631.4888-1-gary.bisson@boundarydevices.com>
 References: <20180726092631.4888-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180726092631.4888-5-gary.bisson@boundarydevices.com>
+Message-ID: <20180726092631.4888-6-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package provides the user-space libraries needed to use the Hantro
-VPU present in processors such as the i.MX8MQ.
+Since it can be provided by either imx-vpu-cnm or imx-vpu-hantro.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
-Changelog v2:
-- Mention i.MX8Mx in Config.in help text (Baruch)
----
- package/freescale-imx/Config.in               |  4 +-
- ...on.h-header-inclusion-to-be-standard.patch | 44 +++++++++++++++++++
- .../freescale-imx/imx-vpu-hantro/Config.in    | 17 +++++++
- .../imx-vpu-hantro/imx-vpu-hantro.hash        |  2 +
- .../imx-vpu-hantro/imx-vpu-hantro.mk          | 42 ++++++++++++++++++
- 5 files changed, 108 insertions(+), 1 deletion(-)
- create mode 100644 package/freescale-imx/imx-vpu-hantro/0001-Fix-ion.h-header-inclusion-to-be-standard.patch
- create mode 100644 package/freescale-imx/imx-vpu-hantro/Config.in
- create mode 100644 package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash
- create mode 100644 package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk
+ package/freescale-imx/Config.in                      | 1 +
+ package/freescale-imx/imx-codec/imx-codec.mk         | 2 +-
+ package/freescale-imx/imx-vpu-cnm/Config.in          | 8 ++++++++
+ package/freescale-imx/imx-vpu-hantro/Config.in       | 8 ++++++++
+ package/freescale-imx/imx-vpu/Config.in              | 6 ++++++
+ package/freescale-imx/imx-vpu/imx-vpu.mk             | 7 +++++++
+ package/freescale-imx/imx-vpuwrap/Config.in          | 7 +++----
+ package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk     | 2 +-
+ package/gstreamer/gst-fsl-plugins/Config.in          | 2 +-
+ package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk | 2 +-
+ package/libimxvpuapi/Config.in                       | 7 +++----
+ package/libimxvpuapi/libimxvpuapi.mk                 | 2 +-
+ 12 files changed, 41 insertions(+), 13 deletions(-)
+ create mode 100644 package/freescale-imx/imx-vpu/Config.in
+ create mode 100644 package/freescale-imx/imx-vpu/imx-vpu.mk
 
 diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index 5e0c7ff291..9b47958ff3 100644
+index 9b47958ff3..bcddf647ef 100644
 --- a/package/freescale-imx/Config.in
 +++ b/package/freescale-imx/Config.in
-@@ -63,7 +63,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53 || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
- 
- config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 	bool
-@@ -80,6 +81,7 @@ source "package/freescale-imx/imx-m4fwloader/Config.in"
+@@ -80,6 +80,7 @@ source "package/freescale-imx/imx-lib/Config.in"
+ source "package/freescale-imx/imx-m4fwloader/Config.in"
  source "package/freescale-imx/imx-parser/Config.in"
  source "package/freescale-imx/imx-uuc/Config.in"
++source "package/freescale-imx/imx-vpu/Config.in"
  source "package/freescale-imx/imx-vpu-cnm/Config.in"
-+source "package/freescale-imx/imx-vpu-hantro/Config.in"
+ source "package/freescale-imx/imx-vpu-hantro/Config.in"
  source "package/freescale-imx/imx-vpuwrap/Config.in"
- source "package/freescale-imx/firmware-imx/Config.in"
- if (BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51 || BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53)
-diff --git a/package/freescale-imx/imx-vpu-hantro/0001-Fix-ion.h-header-inclusion-to-be-standard.patch b/package/freescale-imx/imx-vpu-hantro/0001-Fix-ion.h-header-inclusion-to-be-standard.patch
-new file mode 100644
-index 0000000000..951ead9824
---- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro/0001-Fix-ion.h-header-inclusion-to-be-standard.patch
-@@ -0,0 +1,44 @@
-+From 872c82e7cbb9a0a0e761e8ac70fc28e19a55b4c3 Mon Sep 17 00:00:00 2001
-+From: Gary Bisson <gary.bisson@boundarydevices.com>
-+Date: Thu, 12 Jul 2018 11:38:28 +0200
-+Subject: [PATCH] Fix ion.h header inclusion to be standard
+diff --git a/package/freescale-imx/imx-codec/imx-codec.mk b/package/freescale-imx/imx-codec/imx-codec.mk
+index 7b8a5bd4d5..7f738d8129 100644
+--- a/package/freescale-imx/imx-codec/imx-codec.mk
++++ b/package/freescale-imx/imx-codec/imx-codec.mk
+@@ -21,7 +21,7 @@ ifeq ($(BR2_ARM_EABIHF),y)
+ IMX_CODEC_CONF_OPTS += --enable-fhw
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_IMX_VPU_CNM),y)
++ifeq ($(BR2_PACKAGE_HAS_IMX_VPU),y)
+ IMX_CODEC_CONF_OPTS += --enable-vpu
+ endif
+ 
+diff --git a/package/freescale-imx/imx-vpu-cnm/Config.in b/package/freescale-imx/imx-vpu-cnm/Config.in
+index dfe9608600..89e77017da 100644
+--- a/package/freescale-imx/imx-vpu-cnm/Config.in
++++ b/package/freescale-imx/imx-vpu-cnm/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_IMX_VPU_CNM
+ 	depends on BR2_arm # Only relevant for i.MX
+ 	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+ 	select BR2_PACKAGE_FIRMWARE_IMX
++	select BR2_PACKAGE_HAS_IMX_VPU
+ 	help
+ 	  Library of userspace helpers specific for the NXP i.MX SoC
+ 	  integrating a Chips&Media CODA Video Processing Unit (VPU)
+@@ -16,3 +17,10 @@ config BR2_PACKAGE_IMX_VPU_CNM
+ 
+ 	  This library is provided by NXP as-is and doesn't have an
+ 	  upstream.
 +
-+NXP "solution" was to manually copy the header to include/linux.
-+Let's point the Makefile to the proper (mainline) location instead:
-+https://elixir.bootlin.com/linux/v4.17/source/drivers/staging/android/uapi/ion.h
++if BR2_PACKAGE_IMX_VPU_CNM
 +
-+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-+---
-+ Makefile                                  | 2 ++
-+ decoder_sw/software/linux/dwl/dwl_linux.c | 2 +-
-+ 2 files changed, 3 insertions(+), 1 deletion(-)
++config BR2_PACKAGE_PROVIDES_IMX_VPU
++	default "imx-vpu-cnm"
 +
-+diff --git a/Makefile b/Makefile
-+index b74e23a..a5ce22b 100755
-+--- a/Makefile
-++++ b/Makefile
-+@@ -11,6 +11,8 @@ INCLUDE_HEADERS = -I./decoder_sw -I$(SOURCE_ROOT)/source/inc -I$(SOURCE_ROOT)/so
-+ INCLUDE_HEADERS += -I$(SOURCE_ROOT)/linux/memalloc
-+ #INCLUDE_HEADERS += -I$(SOURCE_ROOT)/linux/ldriver
-+ INCLUDE_HEADERS += -I$(LINUX_KERNEL_ROOT)/include/uapi -I$(LINUX_KERNEL_ROOT)/include
-++# ION header location
-++INCLUDE_HEADERS += -I$(LINUX_KERNEL_ROOT)/drivers/staging/android/uapi
-+ 
-+ CFLAGS += -DDEC_MODULE_PATH=\"/dev/mxc_hantro\" -DUSE_FAKE_RFC_TABLE -DFIFO_DATATYPE=void* -DNDEBUG -DDOWN_SCALER \
-+            -DUSE_EXTERNAL_BUFFER -DUSE_FAST_EC -DUSE_VP9_EC -DGET_FREE_BUFFER_NON_BLOCK \
-+diff --git a/decoder_sw/software/linux/dwl/dwl_linux.c b/decoder_sw/software/linux/dwl/dwl_linux.c
-+index 8183660..ed37d86 100644
-+--- a/decoder_sw/software/linux/dwl/dwl_linux.c
-++++ b/decoder_sw/software/linux/dwl/dwl_linux.c
-+@@ -41,7 +41,7 @@
-+ #include "dwl.h"
-+ #include <linux/hantrodec.h>
-+ #ifdef USE_ION
-+-#include <linux/ion.h>
-++#include <ion.h>
-+ #ifdef ANDROID
-+ #include <linux/mxc_ion.h>
-+ #endif
-+-- 
-+2.18.0
-+
++endif
 diff --git a/package/freescale-imx/imx-vpu-hantro/Config.in b/package/freescale-imx/imx-vpu-hantro/Config.in
-new file mode 100644
-index 0000000000..5c6fdf44ed
---- /dev/null
+index 5c6fdf44ed..60dc5d8db0 100644
+--- a/package/freescale-imx/imx-vpu-hantro/Config.in
 +++ b/package/freescale-imx/imx-vpu-hantro/Config.in
-@@ -0,0 +1,17 @@
-+comment "imx-vpu-hantro needs an i.MX platform with VPU support"
-+	depends on BR2_aarch64
-+	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_IMX_VPU_HANTRO
+ 	bool "imx-vpu-hantro"
+ 	depends on BR2_aarch64 # Only relevant for i.MX8
+ 	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
++	select BR2_PACKAGE_HAS_IMX_VPU
+ 	help
+ 	  Library of userspace helpers specific for the NXP i.MX SoC
+ 	  integrating a Hantro Video Processing Unit (VPU) such as the
+@@ -15,3 +16,10 @@ config BR2_PACKAGE_IMX_VPU_HANTRO
+ 
+ 	  This library is provided by NXP as-is and doesn't have an
+ 	  upstream.
 +
-+config BR2_PACKAGE_IMX_VPU_HANTRO
-+	bool "imx-vpu-hantro"
-+	depends on BR2_aarch64 # Only relevant for i.MX8
-+	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
-+	help
-+	  Library of userspace helpers specific for the NXP i.MX SoC
-+	  integrating a Hantro Video Processing Unit (VPU) such as the
-+	  i.MX8MQ/i.MX8MM.
-+	  It requires a kernel that includes the i.MX specific headers
-+	  to be built.
++if BR2_PACKAGE_IMX_VPU_HANTRO
 +
-+	  This library is provided by NXP as-is and doesn't have an
-+	  upstream.
-diff --git a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash
++config BR2_PACKAGE_PROVIDES_IMX_VPU
++	default "imx-vpu-hantro"
++
++endif
+diff --git a/package/freescale-imx/imx-vpu/Config.in b/package/freescale-imx/imx-vpu/Config.in
 new file mode 100644
-index 0000000000..3b1a545b3f
+index 0000000000..caefe9db8c
 --- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash
-@@ -0,0 +1,2 @@
-+sha256  cbc648e41f005aad209f74c9e5dd346138dca12efeb7b27e471de7474c4da302  imx-vpu-hantro-1.6.0.bin
-+sha256  0f34f6175247762e2e1c38319aadf657a53f00ce124e569dfc61b30451549e7a  COPYING
-diff --git a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk
++++ b/package/freescale-imx/imx-vpu/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HAS_IMX_VPU
++	bool
++
++config BR2_PACKAGE_PROVIDES_IMX_VPU
++	depends on BR2_PACKAGE_HAS_IMX_VPU
++	string
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
 new file mode 100644
-index 0000000000..57ce411e63
+index 0000000000..6e44ad1fce
 --- /dev/null
-+++ b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk
-@@ -0,0 +1,42 @@
++++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
+@@ -0,0 +1,7 @@
 +################################################################################
 +#
-+# imx-vpu-hantro
++# imx-vpu
 +#
 +################################################################################
 +
-+IMX_VPU_HANTRO_VERSION = 1.6.0
-+IMX_VPU_HANTRO_SITE = $(FREESCALE_IMX_SITE)
-+IMX_VPU_HANTRO_SOURCE = imx-vpu-hantro-$(IMX_VPU_HANTRO_VERSION).bin
-+
-+IMX_VPU_HANTRO_INSTALL_STAGING = YES
-+
-+IMX_VPU_HANTRO_MAKE_ENV = \
-+	$(TARGET_MAKE_ENV) \
-+	$(TARGET_CONFIGURE_OPTS) \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	SDKTARGETSYSROOT=$(STAGING_DIR) \
-+	LINUX_KERNEL_ROOT=$(LINUX_DIR)
-+
-+IMX_VPU_HANTRO_LICENSE = NXP Semiconductor Software License Agreement
-+IMX_VPU_HANTRO_LICENSE_FILES = EULA COPYING
-+IMX_VPU_HANTRO_REDISTRIBUTE = NO
-+
-+define IMX_VPU_HANTRO_EXTRACT_CMDS
-+	$(call FREESCALE_IMX_EXTRACT_HELPER,$(IMX_VPU_HANTRO_DL_DIR)/$(IMX_VPU_HANTRO_SOURCE))
-+endef
-+
-+define IMX_VPU_HANTRO_BUILD_CMDS
-+	$(IMX_VPU_HANTRO_MAKE_ENV) $(MAKE1) -C $(@D)
-+endef
-+
-+define IMX_VPU_HANTRO_INSTALL_STAGING_CMDS
-+	$(IMX_VPU_HANTRO_MAKE_ENV) $(MAKE1) -C $(@D) \
-+		DEST_DIR=$(STAGING_DIR) libdir=/usr/lib install
-+endef
-+
-+define IMX_VPU_HANTRO_INSTALL_TARGET_CMDS
-+	$(IMX_VPU_HANTRO_MAKE_ENV) $(MAKE1) -C $(@D) \
-+		DEST_DIR=$(TARGET_DIR) libdir=/usr/lib install
-+endef
-+
-+$(eval $(generic-package))
++$(eval $(virtual-package))
+diff --git a/package/freescale-imx/imx-vpuwrap/Config.in b/package/freescale-imx/imx-vpuwrap/Config.in
+index 85eb16004d..87303cca9d 100644
+--- a/package/freescale-imx/imx-vpuwrap/Config.in
++++ b/package/freescale-imx/imx-vpuwrap/Config.in
+@@ -2,16 +2,15 @@ comment "imx-vpuwrap needs an imx-specific Linux kernel to be built"
+ 	depends on BR2_arm
+ 	depends on !BR2_LINUX_KERNEL
+ 
+-comment "imx-vpuwrap needs an i.MX platform with VPU support"
++comment "imx-vpuwrap needs an i.MX VPU backend provider"
+ 	depends on BR2_arm
+-	depends on BR2_LINUX_KERNEL && !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
++	depends on BR2_LINUX_KERNEL && !BR2_PACKAGE_HAS_IMX_VPU
+ 
+ config BR2_PACKAGE_IMX_VPUWRAP
+ 	bool "imx-vpuwrap"
+ 	depends on BR2_LINUX_KERNEL
+ 	depends on BR2_arm # Only relevant for i.MX
+-	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+-	select BR2_PACKAGE_IMX_VPU_CNM
++	depends on BR2_PACKAGE_HAS_IMX_VPU
+ 	help
+ 	  Wrapper library for the vpu library, giving it a different
+ 	  API.
+diff --git a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
+index 0b60868e9a..edba87279f 100644
+--- a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
++++ b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
+@@ -7,7 +7,7 @@
+ IMX_VPUWRAP_VERSION = 1.0.68
+ IMX_VPUWRAP_SITE = $(FREESCALE_IMX_SITE)
+ IMX_VPUWRAP_SOURCE = imx-vpuwrap-$(IMX_VPUWRAP_VERSION).bin
+-IMX_VPUWRAP_DEPENDENCIES = imx-vpu-cnm
++IMX_VPUWRAP_DEPENDENCIES = imx-vpu
+ IMX_VPUWRAP_INSTALL_STAGING = YES
+ 
+ IMX_VPUWRAP_LICENSE = NXP Semiconductor Software License Agreement
+diff --git a/package/gstreamer/gst-fsl-plugins/Config.in b/package/gstreamer/gst-fsl-plugins/Config.in
+index a2ff11ec3e..86226c31fb 100644
+--- a/package/gstreamer/gst-fsl-plugins/Config.in
++++ b/package/gstreamer/gst-fsl-plugins/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_GST_FSL_PLUGINS
+ 	depends on BR2_arm # Only relevant for i.MX
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # imx-codec
+ 	select BR2_PACKAGE_GST_PLUGINS_BASE
+-	select BR2_PACKAGE_IMX_VPUWRAP if BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
++	select BR2_PACKAGE_IMX_VPUWRAP if BR2_PACKAGE_HAS_IMX_VPU
+ 	select BR2_PACKAGE_IMX_LIB
+ 	select BR2_PACKAGE_IMX_PARSER
+ 	select BR2_PACKAGE_IMX_CODEC
+diff --git a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+index 547d253e88..45a629ba39 100644
+--- a/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
++++ b/package/gstreamer/gst-fsl-plugins/gst-fsl-plugins.mk
+@@ -18,7 +18,7 @@ GST_FSL_PLUGINS_AUTORECONF = YES
+ GST_FSL_PLUGINS_DEPENDENCIES += host-pkgconf gstreamer gst-plugins-base \
+ 	imx-lib imx-parser imx-codec
+ 
+-ifeq ($(BR2_PACKAGE_FREESCALE_IMX_HAS_VPU),y)
++ifeq ($(BR2_PACKAGE_HAS_IMX_VPU),y)
+ GST_FSL_PLUGINS_DEPENDENCIES += imx-vpuwrap
+ endif
+ 
+diff --git a/package/libimxvpuapi/Config.in b/package/libimxvpuapi/Config.in
+index 3d25b3b751..479377743d 100644
+--- a/package/libimxvpuapi/Config.in
++++ b/package/libimxvpuapi/Config.in
+@@ -1,12 +1,11 @@
+-comment "libimxvpuapi needs an i.MX platform with VPU support"
++comment "libimxvpuapi needs an i.MX VPU backend provider"
+ 	depends on BR2_arm
+-	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
++	depends on !BR2_PACKAGE_HAS_IMX_VPU
+ 
+ config BR2_PACKAGE_LIBIMXVPUAPI
+ 	bool "libimxvpuapi"
+ 	depends on BR2_arm # Only relevant for i.MX
+-	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+-	select BR2_PACKAGE_IMX_VPU_CNM
++	depends on BR2_PACKAGE_HAS_IMX_VPU
+ 	help
+ 	  This library provides an API for using the iMX6 VPU video
+ 	  engine. It is an alternative to Freescale's VPU
+diff --git a/package/libimxvpuapi/libimxvpuapi.mk b/package/libimxvpuapi/libimxvpuapi.mk
+index 27189ff044..bcabbf3877 100644
+--- a/package/libimxvpuapi/libimxvpuapi.mk
++++ b/package/libimxvpuapi/libimxvpuapi.mk
+@@ -8,7 +8,7 @@ LIBIMXVPUAPI_VERSION = 0.10.3
+ LIBIMXVPUAPI_SITE = $(call github,Freescale,libimxvpuapi,$(LIBIMXVPUAPI_VERSION))
+ LIBIMXVPUAPI_LICENSE = LGPL-2.1+
+ LIBIMXVPUAPI_LICENSE_FILES = LICENSE
+-LIBIMXVPUAPI_DEPENDENCIES = host-pkgconf host-python imx-vpu-cnm
++LIBIMXVPUAPI_DEPENDENCIES = host-pkgconf host-python imx-vpu
+ LIBIMXVPUAPI_INSTALL_STAGING = YES
+ 
+ $(eval $(waf-package))
 -- 
 2.18.0
