@@ -1,38 +1,39 @@
-From: ravi chandran <ravigct27@gmail.com>
-Date: Thu, 26 Jul 2018 22:13:10 +0530
-Subject: [Buildroot] using LINUX_DIR variable in BR
-Message-ID: <CAAMHf5Eu6H49vRDgR1_XikvK8fBo=_hVYPd2hU3QytkgO4_x5A@mail.gmail.com>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Thu, 26 Jul 2018 19:03:39 +0200
+Subject: [Buildroot] [PATCH 1/2] uboot-tools: bump to version 2018.07
+Message-ID: <20180726170340.30734-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-     I am trying to include the path of the linux kernel(source located in
-output/build/linux) in one of the makefile which is located outside the
-linux directory.
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ package/uboot-tools/uboot-tools.hash | 2 +-
+ package/uboot-tools/uboot-tools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-KERNEL_DIR := $(LINUX_DIR).
-
-But when i try to refer the  KERNEL_DIR , it is empty.
-
-Am i missing something here, can some one please help?
-
-I used LINUX_DIR variable as it is mentioned in the BR doc
-
-You may also reference (but you may *not* set!) those variables:
-
-   - LINUX_DIR contains the path to where the Linux kernel has been
-   extracted and built.
-   - LINUX_VERSION contains the version string as configured by the user.
-   - LINUX_VERSION_PROBED contains the real version string of the kernel,
-   retrieved with running make -C $(LINUX_DIR) kernelrelease
-   - KERNEL_ARCH contains the name of the current architecture, like arm,
-   mips?
-
-Thanks,
-Ravi
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180726/83e6dd89/attachment.html>
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+index 17840d8d9b..97d0bd0b5f 100644
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  4da13c2a6139a78cc08608f21fd4741db27eda336cfad7ab8264fda923b9c048  u-boot-2018.05.tar.bz2
++sha256  9f10df88bc91b35642e461217f73256bbaeeca9ae2db8db56197ba5e89e1f6d4  u-boot-2018.07.tar.bz2
+diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
+index b247c2173d..f5027d2da3 100644
+--- a/package/uboot-tools/uboot-tools.mk
++++ b/package/uboot-tools/uboot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UBOOT_TOOLS_VERSION = 2018.05
++UBOOT_TOOLS_VERSION = 2018.07
+ UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
+ UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
+ UBOOT_TOOLS_LICENSE = GPL-2.0+
+-- 
+2.18.0
