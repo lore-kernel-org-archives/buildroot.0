@@ -1,42 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 26 Jul 2018 16:12:17 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/lvm2: Fix runtime crash when
- using uclibc
-In-Reply-To: <687061ac-983c-b700-615f-227b13094489@grinn-global.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 26 Jul 2018 18:57:37 +0300
+Subject: [Buildroot] [PATCH v2 2/2] package/lvm2: bump version to
+ 2.02.180
+In-Reply-To: <20180726131023.28695-2-m.niestroj@grinn-global.com>
 References: <20180726131023.28695-1-m.niestroj@grinn-global.com>
- <20180726154223.390beed1@windsurf>
- <687061ac-983c-b700-615f-227b13094489@grinn-global.com>
-Message-ID: <20180726161217.69057fd3@windsurf>
+ <20180726131023.28695-2-m.niestroj@grinn-global.com>
+Message-ID: <87zhyec7m6.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Marcin,
 
-On Thu, 26 Jul 2018 15:54:01 +0200, Marcin Niestroj wrote:
+Marcin Niestroj writes:
+> lvm2 starting from version 2.02.178 depends on libaio library.
+>
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> ---
+> Changes v1 -> v2:
+>  * Add libaio dependencies for all packages that select lvm2
+>    (suggested by Baruch)
+>  * Adjust lvm2 patch in 'PATCH 1/2' to new lvm2 version
+>
+>  package/cryptsetup/Config.in                  |  2 +
+>  package/dmraid/Config.in                      |  2 +
+>  package/docker-engine/Config.in               |  1 +
+>  ...gure-Introduce-enable-symvers-option.patch | 55 ++++++++++---------
+>  package/lvm2/Config.in                        |  3 +
+>  package/lvm2/lvm2.hash                        |  4 +-
+>  package/lvm2/lvm2.mk                          |  6 +-
+>  package/udisks/Config.in                      |  3 +
+>  8 files changed, 44 insertions(+), 32 deletions(-)
+>
+> diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+> index 7322a4baf6..e4500b1cf2 100644
+> --- a/package/cryptsetup/Config.in
+> +++ b/package/cryptsetup/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_CRYPTSETUP
+>  	bool "cryptsetup"
+> +	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS # lvm2
 
-> I've prepared this patch to go to lvm2 upstream. I looked at other
-> commits, they also included changes in 'configure' script.
-> 
-> I agree, that this is not necessary with Buildroot. But we have to
-> choose between:
-> 1) keep 'configure' changes in Buildroot lvm2 patch, so we have
->     nearly the same patch as posted upstream
-> 2) remove 'configure' changes, so we make the lvm2 patch smaller
->     and cleaner.
-> 
-> Choice is up to you :)
+New dependencies need to be added to all reverse dependencies, and their
+reverse dependencies, recursively. So since luksmeta selects cryptsetup,
+it also needs this dependency.
 
-Meh, why is upstream keeping the configure script under version
-control ?
+baruch
 
-Anyway OK, let's use the patch that hopefully will make its way
-upstream.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
