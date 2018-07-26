@@ -1,11 +1,11 @@
 From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Thu, 26 Jul 2018 08:45:02 +0200
-Subject: [Buildroot] [PATCH 2/8] imx-vpu: rename package to imx-vpu-cnm
-In-Reply-To: <20180725162658.w46nlncptoxgukrj@sapphire.tkos.co.il>
+Date: Thu, 26 Jul 2018 08:45:42 +0200
+Subject: [Buildroot] [PATCH 4/8] imx-vpu-hantro: new package
+In-Reply-To: <20180725162912.a6kf4j3ntp42nfla@sapphire.tkos.co.il>
 References: <20180725150149.30774-1-gary.bisson@boundarydevices.com>
- <20180725150149.30774-3-gary.bisson@boundarydevices.com>
- <20180725162658.w46nlncptoxgukrj@sapphire.tkos.co.il>
-Message-ID: <20180726064502.GA20581@g751.home>
+ <20180725150149.30774-5-gary.bisson@boundarydevices.com>
+ <20180725162912.a6kf4j3ntp42nfla@sapphire.tkos.co.il>
+Message-ID: <20180726064542.GB20581@g751.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,48 +14,22 @@ To: buildroot@busybox.net
 
 Hi Baruch,
 
-On Wed, Jul 25, 2018 at 07:26:58PM +0300, Baruch Siach wrote:
+On Wed, Jul 25, 2018 at 07:29:12PM +0300, Baruch Siach wrote:
 > Hi Gary,
 > 
-> On Wed, Jul 25, 2018 at 05:01:43PM +0200, Gary Bisson wrote:
-> > So far the i.MX processors have been using a Chips&Media CODA VPU.
-> > But the latest generation of processors (starting with i.MX8MQ) uses
-> > VPU cores from Hantro which is provided as imx-vpu-hantro package.
-> > 
-> > NXP chose in Yocto to keep the imx-vpu naming for Chips&Media package
-> > and created a virtual "imxvpu" package that can either be provided by
-> > imx-vpu or imx-vpu-hantro.
-> > 
-> > Since this naming can be confusing (IMO), renaming the imx-vpu package
-> > to imx-vpu-cnm and then create a virtual imx-vpu one should be clearer.
+> On Wed, Jul 25, 2018 at 05:01:45PM +0200, Gary Bisson wrote:
+> > +config BR2_PACKAGE_IMX_VPU_HANTRO
+> > +	bool "imx-vpu-hantro"
+> > +	depends on BR2_aarch64 # Only relevant for i.MX8
+> > +	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+> > +	help
+> > +	  Library of userspace helpers specific for the NXP i.MX CPUs
+> > +	  integrating a Hantro Video Processing Unit (VPU). It requires
+> > +	  a kernel that includes the i.MX specific headers to be built.
 > 
-> What about Config.in.legacy?
+> Here also, a mention of i.MX8 would be nice, IMO.
 
-Yep, good catch, I always forget about this.
-
-> [..]
-> 
-> > -config BR2_PACKAGE_IMX_VPU
-> > -	bool "imx-vpu"
-> > +config BR2_PACKAGE_IMX_VPU_CNM
-> > +	bool "imx-vpu-cnm"
-> >  	depends on BR2_arm # Only relevant for i.MX
-> >  	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
-> >  	select BR2_PACKAGE_FIRMWARE_IMX
-> >  	help
-> >  	  Library of userspace helpers specific for the Freescale i.MX
-> > -	  platform. It wraps the kernel interfaces for the i.MX platform
-> > -	  Video Processing Unit (VPU) driver. It requires a kernel that
-> > -	  includes the i.MX specific headers to be built.
-> > +	  platform integrating a Chips&Media CODA Video Processing Unit
-> > +	  (VPU). It requires a kernel that includes the i.MX specific
-> > +	  headers to be built.
-> 
-> I think it is worth mentioning here which i.MX variants have this VPU. 
-> Otherwise the user has no easy way to know which package supports a specific 
-> SoC.
-
-That makes sense, will be fixed in V2.
+Yes that would be clearer indeed, will be fixed in V2.
 
 Thanks,
 Gary
