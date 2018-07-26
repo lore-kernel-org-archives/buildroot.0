@@ -1,121 +1,71 @@
 From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Thu, 26 Jul 2018 11:51:37 -0700
+Date: Thu, 26 Jul 2018 12:01:07 -0700
 Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
-In-Reply-To: <CAFGQKxfh88M951NY2r=GNd7ZcLn8xiQeEqJiiCOowYt=eP+pZw@mail.gmail.com>
+In-Reply-To: <1532611912386-0.post@n4.nabble.com>
 References: <20180710234212.4297-1-joseph.kogut@gmail.com>
  <20180710234212.4297-5-joseph.kogut@gmail.com>
- <CAFGQKxfwQh2UDismPjiHtdnPQO4j7D_R-jxYcs1epkg6CVwtRw@mail.gmail.com>
- <CAMWSM7guNAObwAvHG2T0R+J-w6nzYm2_YE=5QZG8S_G-btwWyA@mail.gmail.com>
- <CAFGQKxcnEgQpp+jHfR+fqiUSS6NgfqZ-wx-qow8iVvpmrmsSUg@mail.gmail.com>
- <CAMWSM7h851eMP90z27aZd0Oka_sDsvUGmZo0QRPie144zAF8yA@mail.gmail.com>
- <CAFGQKxfh88M951NY2r=GNd7ZcLn8xiQeEqJiiCOowYt=eP+pZw@mail.gmail.com>
-Message-ID: <CAMWSM7is0pk3r6dymK0D4y3A=cQw-93WrO19GOO1OxM3o+qfEA@mail.gmail.com>
+ <1532611912386-0.post@n4.nabble.com>
+Message-ID: <CAMWSM7ikcADGP3Y7_wpSjot8fD_OA_v+R7bZf3fD+APRR-Kc1A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 17, 2018 at 4:43 AM Martin Bark <martin@barkynet.com> wrote:
+Hi Hao,
+
+On Thu, Jul 26, 2018 at 6:37 AM Hao HU <huhao526200@gmail.com> wrote:
 >
-> Joseph,
+> Hello Joseph,
 >
-> On 16 July 2018 at 17:29, Joseph Kogut <joseph.kogut@gmail.com> wrote:
-> > Martin,
-> >
-> > On Sun, Jul 15, 2018 at 2:54 PM Martin Bark <martin@barkynet.com> wrote:
-> >>
-> >> Joseph,
-> >>
-> >> On 14 July 2018 at 23:57, Joseph Kogut <joseph.kogut@gmail.com> wrote:
-> >> > Hi Martin,
-> >> >
-> >> > On Sat, Jul 14, 2018 at 12:11 PM Martin Bark <martin@barkynet.com> wrote:
-> >> >>
-> >> > <snip>
-> >> >>
-> >> >> I tried building for an aarch64 target and it fails with the error
-> >> >>
-> >> >> ERROR at //chrome/installer/linux/BUILD.gn:413:7: Assertion failed.
-> >> >>       assert(false, "Linux installer not configured for this architecture.")
-> >> >>
-> >> >> Looking at chrome/installer/linux/BUILD.gn it seems only i386, x86_64,
-> >> >> arm, mipsel and mips64el target architectures are supported.  I think
-> >> >> you need to remove BR2_aarch64 and add BR2_mipsel and BR2_mips64el
-> >> >>
-> >> >
-> >> > Can you try adding the argument "enable_linux_installer=false" to
-> >> > CHROMIUM_OPTS in chromium.mk, then reconfiguring and rebuilding?
-> >> >
-> >> > I believe the "linux installer" target here is simply packaging for
-> >> > Debian and Fedora, which this package doesn't use.
-> >> >
-> >>
-> >> Thanks, that go the build further.  Now it fails with the following
-> >> error.  Any ideas?
-> >>
-> >>
-> >>
-> >> ERROR at //build/config/linux/pkg_config.gni:103:17: Script returned
-> >> non-zero exit code.
-> >>     pkgresult = exec_script(pkg_config_script, args, "value")
-> >>                 ^----------
-> >> Current dir: /home/br-user/buildroot/output/build/chromium-67.0.3396.79/out/Release/
-> >> Command: /home/br-user/buildroot/output/host/bin/python2 --
-> >> /home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py
-> >> -s /home/br-user/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot
-> >> -a arm64 --system_libdir lib nss -v -lssl3
-> >> Returned 1.
-> >> stderr:
-> >>
-> >> Traceback (most recent call last):
-> >>   File "/home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py",
-> >> line 232, in <module>
-> >>     sys.exit(main())
-> >>   File "/home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py",
-> >> line 139, in main
-> >>     prefix = GetPkgConfigPrefixToStrip(options, args)
-> >>   File "/home/br-user/buildroot/output/build/chromium-67.0.3396.79/build/config/linux/pkg-config.py",
-> >> line 80, in GetPkgConfigPrefixToStrip
-> >>     "--variable=prefix"] + args, env=os.environ)
-> >>   File "/home/br-user/buildroot/output/host/lib/python2.7/subprocess.py",
-> >> line 216, in check_output
-> >>     process = Popen(stdout=PIPE, *popenargs, **kwargs)
-> >>   File "/home/br-user/buildroot/output/host/lib/python2.7/subprocess.py",
-> >> line 394, in __init__
-> >>     errread, errwrite)
-> >>   File "/home/br-user/buildroot/output/host/lib/python2.7/subprocess.py",
-> >> line 1047, in _execute_child
-> >>     raise child_exception
-> >> OSError: [Errno 2] No such file or directory
-> >>
-> >> See //third_party/nss/BUILD.gn:15:3: whence it was called.
-> >>   pkg_config("system_nss_no_ssl_config") {
-> >>   ^---------------------------------------
-> >> See //crypto/BUILD.gn:221:25: which caused the file to be included.
-> >>     public_configs += [ "//third_party/nss:system_nss_no_ssl_config" ]
-> >>                         ^-------------------------------------------
-> >> package/pkg-generic.mk:219: recipe for target
-> >> '/home/br-user/buildroot/output/build/chromium-67.0.3396.79/.stamp_configured'
-> >> failed
-> >> make: *** [/home/br-user/buildroot/output/build/chromium-67.0.3396.79/.stamp_configured]
-> >> Error 1
-> >>
-> >
-> > I think this issue, along with a few others, have since been resolved
-> > in my chromium-v7-wip branch, which you can find at
-> > https://github.com/jakogut/buildroot.
+> I have applied your v6 patch to the Buildroot 2018.05 and wanted to build
+> the chrome in a x86 arch.
 >
-> I just tried out your chromium-v7-wip branch but unfortunately i get
-> the exact same error.  Note i'm building inside the
-> buildroot/base:20180318.1724 docker container.
+> The Target option is like this :
 >
-> Also, to get the code to build i had to change select
-> BR2_PACKAGE_JPEG_TURBO into BR2_PACKAGE_JPEG in
-> package/chromium/Config.in.  I think you should also change the
-> CHROMIUM_DEPENDENCIES from jpeg-turbo to jpeg and let the jpeg package
-> pick which jpeg library to use for the target.
+> /Target Architecture  : i386
+> Target Architecture Variant i586/
+>
+> And I have added the following in the lld.mk
+>
+> HOST_LLD_CONF_OPTS += -DLLVM_LINK_LLVM_DYLIB=ON -DLLVM_DYLIB_COMPONENTS=all
+>
+> +ifeq ($(BR2_PACKAGE_CHROMIUM_PROPRIETARY_CODECS),y)
+> +CHROMIUM_OPTS += proprietary_codecs=true ffmpeg_branding=\"Chrome\"
+> +endif
+>
+> And finally I have comment the following in the chromium.mk
+>
+> +ifeq ($(BR2_PACKAGE_CHROMIUM_PROPRIETARY_CODECS),y)
+> + # CHROMIUM_OPTS += proprietary_codecs=true ffmpeg_branding=\"Chrome\"
+> +endif
 >
 
-Skia depends on libjpeg-turbo, and will fail during linking if it's
-not selected. Specfically, what build error did you encounter?
+I'm not sure what the intent is here. Chromium codec options belong in
+the Chromium makefile, not the LLD makefile. Were you encountering a
+build error related to enabling Chromium proprietary codecs?
+
+> But now there is still a problem
+>
+> /home/as_huhao/eolane/x2m/buildroot-2018.05-IHMI/output/host/bin/ld.lld:
+> error: can't create dynamic relocation R_386_32 against local symbol in
+> readonly segment; recompile object files with -fPIC
+> >>> defined in obj/third_party/ffmpeg/libffmpeg_yasm.a(ffmpeg_yasm/dct32.o)
+> >>> referenced by ../../third_party/ffmpeg/libavcodec/x86/dct32.asm
+> >>>               ffmpeg_yasm/dct32.o:(ff_dct32_float_sse) in archive
+> >>> obj/third_party/ffmpeg/libffmpeg_yasm.a
+>
+
+I've encountered the same issue, and I'm still working on a solution,
+which is why I haven't submitted v7 of this patchset. Apparently the
+Chromium team compiles i386 builds with GNU gold instead of LLD. LLD
+is more strict, and by default errors out when trying to dynamically
+relocate symbols in read only segments.
+
+Consequently, the upstream build is broken on i386 when linking with LLD.
+
+> could you please tell me how to fix this problem?
+>
+
+I'm testing a couple of solutions. In the mean time, try setting
+use_gold=false in CHROMIUM_OPTS, and let me know if that helps.
