@@ -1,55 +1,70 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 26 Jul 2018 00:42:16 +0000
-Subject: [Buildroot] [Bug 11191] xattr and check-package issue
-In-Reply-To: <bug-11191-163@https.bugs.busybox.net/>
-References: <bug-11191-163@https.bugs.busybox.net/>
-Message-ID: <bug-11191-163-nqppynrRK4@https.bugs.busybox.net/>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Thu, 26 Jul 2018 11:39:19 +1000
+Subject: [Buildroot] [PATCH v4] busybox: Update udhcpc.script for stateful
+ DHCPv6
+Message-ID: <20180726013919.31268-1-sam@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11191
+udhcpc6 will call the default script with the address set in the "ipv6"
+variable. Set "ip" to this address if present.
 
-Ricardo Martincoski <ricardo.martincoski@datacom.ind.br> changed:
+udhcpc6 implements "stateful" DHCPv6 for explicitly requesting an address
+and other configuration information. A major difference between DHCPv4
+and DHCPv6 is that DHCPv6 does *not* advertise a default route; this is
+determined by normal IPv6 autoconfiguration.
+Included is a change from Rob, which if handling a DHCPv6 address waits
+a moment for the IPv6 route to be configured; as above this doesn't come
+from DHCPv6 but rather the IPv6 Router Advertisement (RA) which happens
+independently from udhcpc6. The intent here is to try and ensure that
+the interface is route-able upon the script's completion as it would be
+if called from udhcpc.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
+(wait for IPv6 route)
+From: Robert Lippert <rlippert@google.com>
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+---
+v4: Expand description of stateful DHCPv6 in commit message
+v3: Point out 'stateful' DHCPv6 in commit, send to the correct list...
+v2: Avoid bashisms
 
---- Comment #1 from Ricardo Martincoski <ricardo.martincoski@datacom.ind.br> ---
-I can reproduce both behaviors on current master:
-- check-package complaining when tab is not used for |xattr
-- xattr being silently ignored by host-makedevs when tab is used for |xattr
+ package/busybox/udhcpc.script | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-The second one occurs because the tab propagates from the package recipe to
-package/pkg-generic.mk to fs/common.mk and finally to
-output/build/buildroot-fs/device_table.txt and the code that processes this
-file does a strict check:
-line 513 @ package/makedevs/makedevs.c
-if (1 == sscanf(line, "|xattr %254s", xattr)) {
-
-We could fix this inconsistency by a number of ways:
-1) change check-package;
-2) try to come up with a solution in package/pkg-generic.mk to remove leading
-tabs from _PERMISSION. It cannot be a simple $$(strip) because it would remove
-the newlines;
-3) change makedevs to ignore leading tabs/spaces for xattr (as it already does
-for non-xattr lines). Hackish version to replace the code mentioned above:
-> if (2 == sscanf(line, "%4095s %254s", name, xattr) && !strcmp(name, "|xattr")) {
-4) change fs/common.mk to remove the leading tabs/spaces. Something like this:
->+++ b/fs/common.mk
->@@@ -89,2 -89,2 +89,3 @@@ endi
->        $(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
->++      $(SED) "s/^[ \t]*//g" $(FULL_DEVICE_TABLE)
->        echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
-
-I think option 4 makes sense because we also will end up with a better
-formatted device_table.txt.
-
-But let's wait for more opinions on how to proceed.
-
+diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+index ad110d3a7f..65114b6cd0 100755
+--- a/package/busybox/udhcpc.script
++++ b/package/busybox/udhcpc.script
+@@ -8,6 +8,16 @@ RESOLV_CONF="/etc/resolv.conf"
+ [ -e $RESOLV_CONF ] || touch $RESOLV_CONF
+ [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+ [ -n "$subnet" ] && NETMASK="netmask $subnet"
++[ -n "$ipv6" ] && ip="$ipv6/128"
++
++wait_for_ipv6_default_route() {
++	attempts=10
++	while [ $attempts != 0 ] && [ -z "$(ip -6 route list | grep default)" ] ; do
++		sleep 1
++		attempts=$(($attempts-1))
++	done
++	[ $attempts = 0 ] && echo "failed to get default ipv6 route"
++}
+ 
+ case "$1" in
+ 	deconfig)
+@@ -37,6 +47,10 @@ case "$1" in
+ 			/usr/sbin/avahi-autoipd -k $interface
+ 		fi
+ 		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
++		if [ -n "$ipv6" ] ; then
++			echo "waiting for default ipv6 route set"
++			wait_for_ipv6_default_route
++		fi
+ 
+ 		if [ -n "$router" ] ; then
+ 			echo "deleting routers"
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.18.0
