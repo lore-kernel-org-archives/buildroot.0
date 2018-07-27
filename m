@@ -1,53 +1,49 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Fri, 27 Jul 2018 15:23:28 -0700
-Subject: [Buildroot] [PATCH v1] dtc: Add set-ldshared.patch
-In-Reply-To: <20180727110728.300c06e2@windsurf>
-References: <28d7fee033a5e5ef512c02d5291d20b1d19fdbbf.1532460521.git.geoff@infradead.org>
- <20180727110728.300c06e2@windsurf>
-Message-ID: <f1e71e0d-6728-78d1-0431-c1e2846ab885@infradead.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 28 Jul 2018 01:30:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libnss: fix aarch64_be build
+Message-ID: <20180727233000.29075-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes pylibfdt cross compile errors.
+libnss does not treat aarch64_be the same way as aarch64:
+https://hg.mozilla.org/projects/nss/file/fb3585458ac3/lib/freebl/Makefile#l523
 
-http://autobuild.buildroot.net/?reason=%dtc-1.4.7
+Add code to translate "aarch64_be" into "aarch" to fix
+http://autobuild.buildroot.net/results/4fc/4fca771980f9b049ce2690971ddd856652cd5b43/
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
+ package/libnss/libnss.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-Hi Thomas,
-
-This gets the dtc package to build with python support, but
-it seems the real problem is that python distutils doesn't
-set LDSHARED correctly, which should default to CC.
-
--Geoff
-
- package/dtc/set-ldshared.patch | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
- create mode 100644 package/dtc/set-ldshared.patch
-
-diff --git a/package/dtc/set-ldshared.patch b/package/dtc/set-ldshared.patch
-new file mode 100644
-index 0000000000..09220da359
---- /dev/null
-+++ b/package/dtc/set-ldshared.patch
-@@ -0,0 +1,13 @@
-+diff --git a/pylibfdt/Makefile.pylibfdt b/pylibfdt/Makefile.pylibfdt
-+index 9507d3d..c2ac8e9 100644
-+--- a/pylibfdt/Makefile.pylibfdt
-++++ b/pylibfdt/Makefile.pylibfdt
-+@@ -8,7 +8,7 @@ PYMODULE = $(PYLIBFDT_objdir)/_libfdt.so
-+ define run_setup
-+ 	SOURCES="$(1)" CPPFLAGS="$(CPPFLAGS)" OBJDIR="$(PYLIBFDT_objdir)"
-+ 	VERSION="$(dtc_version)"
-+-	$(PYLIBFDT_objdir)/setup.py --quiet $(2)
-++	LDSHARED="$(CC) -shared" $(PYLIBFDT_objdir)/setup.py --quiet $(2)
-+ endef
-+ 
-+ $(PYMODULE): $(PYLIBFDT_srcs)
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 03f575014d..0693f71ee6 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -23,6 +23,12 @@ endef
+ LIBNSS_PRE_CONFIGURE_HOOKS += LIBNSS_DROP_GC_SECTIONS
+ endif
+ 
++ifeq ($(BR2_aarch64_be),y)
++LIBNSS_ARCH = aarch64
++else
++LIBNSS_ARCH = $(ARCH)
++endif
++
+ LIBNSS_BUILD_VARS = \
+ 	MOZILLA_CLIENT=1 \
+ 	NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
+@@ -35,7 +41,7 @@ LIBNSS_BUILD_VARS = \
+ 	NATIVE_CC="$(HOSTCC)" \
+ 	OS_ARCH="Linux" \
+ 	OS_RELEASE="2.6" \
+-	OS_TEST="$(ARCH)"
++	OS_TEST="$(LIBNSS_ARCH)"
+ 
+ # #pragma usage needs gcc >= 4.8
+ # See https://bugzilla.mozilla.org/show_bug.cgi?id=1226179
 -- 
-2.14.1
+2.18.0
