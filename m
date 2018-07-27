@@ -1,34 +1,32 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Fri, 27 Jul 2018 21:54:18 +0200
-Subject: [Buildroot] [PATCH 0/5] add missing licenses to recently added perl
- packages
-Message-ID: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
+Date: Fri, 27 Jul 2018 21:54:21 +0200
+Subject: [Buildroot] [PATCH 3/5] perl-mime-base64-urlsafe: add missing
+ license declaration
+In-Reply-To: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
+References: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180727195423.21338-4-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As requested by Thomas Petazzoni, this series adds the missing license
-declarations for perl packages recently added by me.
-
-/Thomas
-
-
-Thomas De Schampheleire (5):
-  perl-crypt-blowfish: add missing license declaration
-  perl-crypt-cbc: add missing license declaration
-  perl-mime-base64-urlsafe: add missing license declaration
-  perl-net-ping: add missing license declaration
-  perl-net-telnet: add missing license declaration
-
- package/perl-crypt-blowfish/perl-crypt-blowfish.mk           | 1 +
- package/perl-crypt-cbc/perl-crypt-cbc.hash                   | 4 ++--
- package/perl-crypt-cbc/perl-crypt-cbc.mk                     | 3 ++-
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
  package/perl-mime-base64-urlsafe/perl-mime-base64-urlsafe.mk | 1 +
- package/perl-net-ping/perl-net-ping.mk                       | 1 +
- package/perl-net-telnet/perl-net-telnet.mk                   | 1 +
- 6 files changed, 8 insertions(+), 3 deletions(-)
+ 1 file changed, 1 insertion(+)
 
+diff --git a/package/perl-mime-base64-urlsafe/perl-mime-base64-urlsafe.mk b/package/perl-mime-base64-urlsafe/perl-mime-base64-urlsafe.mk
+index d72b36fb04..c29372ecd7 100644
+--- a/package/perl-mime-base64-urlsafe/perl-mime-base64-urlsafe.mk
++++ b/package/perl-mime-base64-urlsafe/perl-mime-base64-urlsafe.mk
+@@ -7,6 +7,7 @@
+ PERL_MIME_BASE64_URLSAFE_VERSION = 0.01
+ PERL_MIME_BASE64_URLSAFE_SOURCE = MIME-Base64-URLSafe-$(PERL_MIME_BASE64_URLSAFE_VERSION).tar.gz
+ PERL_MIME_BASE64_URLSAFE_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZUHO
++PERL_MIME_BASE64_URLSAFE_LICENSE = Artistic or GPL-1.0+
+ PERL_MIME_BASE64_URLSAFE_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
 -- 
 2.16.4
