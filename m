@@ -1,33 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Jul 2018 11:08:24 +0200
-Subject: [Buildroot] [PATCH 1/1] ncmpc: bump to version 0.30
-In-Reply-To: <20180723174345.29552-1-fontaine.fabrice@gmail.com>
-References: <20180723174345.29552-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180727110824.262654c4@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 27 Jul 2018 11:55:24 +0200
+Subject: [Buildroot] [PATCH 1/1] postgresql --with-libxml configure
+ option added
+In-Reply-To: <20180727093114.4943db9a@windsurf>
+References: <20180608062231.2345-1-dde@innovaphone.com>
+ <F73717A01AEC1F4CB9A3D10E39CBB88F4424CD47@INNO-EX-2010.innovaphone.sifi>
+ <F73717A01AEC1F4CB9A3D10E39CBB88F443662EA@INNO-EX-2010.innovaphone.sifi>
+ <AD312B93A689234094FC24F3B98DBF33437A1708@INNO-EX-2010.innovaphone.sifi>
+ <20180727093114.4943db9a@windsurf>
+Message-ID: <99413edb-b83b-6d16-327b-192bbf4c09be@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Mon, 23 Jul 2018 19:43:45 +0200, Fabrice Fontaine wrote:
-> Since this version, ncmpc depends on C++14:
-> https://github.com/MusicPlayerDaemon/ncmpc/commit/aea91692b05e7c2cd2e1b09cf10b0196e3527807
+
+On 27-07-18 09:31, Thomas Petazzoni wrote:
+> Hello Thomas,
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> On Fri, 27 Jul 2018 07:06:48 +0000, Thomas Ehrhardt wrote:
+>> The postgresql package is now built with --with-libxml if BR2_PACKAGE_LIBXML2 is selected to allow the use of XML functions in postgresql.
+>>
+>> Signed-off-by: Daniel Deterding <dde@innovaphone.com>
+> 
+> Thanks for your patch, it looks good, but there's one issue: the From
+> doesn't match the Signed-off-by.
+> 
+> If I understand correctly, the patch was done by your colleague Daniel
+> Deterding, and you are sending it on his behalf. If that is correct,
+> then you need to add your own Signed-off-by below the one from Daniel.
 
-This update is causing a number of build failures:
+ And you should also set the author to Daniel, e.g. with
 
-  http://autobuild.buildroot.net/?reason=ncmpc-0.30
+git commit --amend --author="Daniel Deterding <dde@innovaphone.com>"
 
-Could you have a look ?
+ Regards,
+ Arnout
 
-Thanks,
+> 
+> While you're at it, could you fix the minor issues below (I had fixed
+> them locally as I was about to apply the patch, but realized the
+> Signed-off-by issue) :
+> 
+>  - The commit title should have the format:
+> 
+>    <package>: <description>
+> 
+>    A better commit title is:
+> 
+>    postgresql: add optional dependency on libxml2
+> 
+>  - The commit log text should be wrapped at 72 characters.
+> 
+> Except these, it looks good. Could you resend an updated version ?
+> 
+> Thanks a lot for your contribution!
+> 
+> Thomas
+> 
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
