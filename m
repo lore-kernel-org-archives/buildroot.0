@@ -1,51 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Jul 2018 09:03:47 +0200
-Subject: [Buildroot] [PATCH] package/uboot-tools: version.h collision
-In-Reply-To: <20180727035044.4313-1-matthew.weber@rockwellcollins.com>
-References: <20180727035044.4313-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180727090347.2b0de571@windsurf>
+From: Thomas Ehrhardt <TEhrhardt@innovaphone.com>
+Date: Fri, 27 Jul 2018 07:06:48 +0000
+Subject: [Buildroot] [PATCH 1/1] postgresql --with-libxml configure option
+ added
+In-Reply-To: <F73717A01AEC1F4CB9A3D10E39CBB88F443662EA@INNO-EX-2010.innovaphone.sifi>
+References: <20180608062231.2345-1-dde@innovaphone.com>
+ <F73717A01AEC1F4CB9A3D10E39CBB88F4424CD47@INNO-EX-2010.innovaphone.sifi>
+ <F73717A01AEC1F4CB9A3D10E39CBB88F443662EA@INNO-EX-2010.innovaphone.sifi>
+Message-ID: <AD312B93A689234094FC24F3B98DBF33437A1708@INNO-EX-2010.innovaphone.sifi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+The postgresql package is now built with --with-libxml if BR2_PACKAGE_LIBXML2 is selected to allow the use of XML functions in postgresql.
 
-On Thu, 26 Jul 2018 22:50:44 -0500, Matt Weber wrote:
-> On some systems the host system or even the cross sysroot can
-> contain a version.h.  This leads to the wrong file being picked
-> up and a PLAIN_VERSION undefined error.
-> 
-> This workaround symlinks the version.h into the tool folder to
-> allow reordering of search folders.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/770/7702d5df36a6532aafdbe6e9e62709bbfa058b54/build-end.log
-> http://autobuild.buildroot.net/results/e34/e3401027d2fb3ce565ca9e2456a427afd3610a87/build-end.log
-> ... additional can be found with these queries ...
-> http://autobuild.buildroot.net/?reason=uboot-tools-2018.03
-> http://autobuild.buildroot.net/?reason=uboot-tools-2018.05
-> 
-> Upstream: https://lists.denx.de/pipermail/u-boot/2018-July/336283.html
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Daniel Deterding <dde@innovaphone.com>
+---
+ package/postgresql/postgresql.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-This issue has already been fixed. It was btrfs-progs that was
-installing a version.h header directly in usr/include. It has been
-fixed by:
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 94b3e60e59..0940873686 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -70,6 +70,14 @@ else
+ POSTGRESQL_CONF_OPTS += --without-ldap
+ endif
 
-  https://git.buildroot.org/buildroot/commit/package/btrfs-progs?id=83b40e1ea2e3ce046d7db442b01c3bfe52886ce8
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++POSTGRESQL_DEPENDENCIES += libxml2
++POSTGRESQL_CONF_OPTS += --with-libxml
++POSTGRESQL_CONF_ENV += XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
++else
++POSTGRESQL_CONF_OPTS += --without-libxml
++endif
++
+ define POSTGRESQL_USERS
+        postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+ endef
+--
+2.11.0
 
-I agree it is nice to fix it properly upstream so that the presence of
-a header with a conflicting name doesn't confuse U-Boot, but I don't
-think it's worth having this patch in Buildroot since the problem no
-longer occurs.
 
-Best regards,
+_______________________________________________________________________________
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thomas Ehrhardt | Development
+_______________________________________________________________________________
+
+innovaphone AG
+PURE IP COMMUNICATIONS
+
+B?blinger Stra?e 76 | 71065 Sindelfingen | Germany
+Tel: +49(7031)73009-648 | Fax: +49(7031)73009-9
+E-Mail: tehrhardt at innovaphone.com | http://www.innovaphone.com
+
+[Sitz der Gesellschaft: Sindelfingen | HRB Nr. 245196 Amtsgericht Stuttgart | Vorstand: Dagmar Geer (Vorsitzende), Carsten Bode, Guntram Diehl, Gerd Hornig | Vorsitzender des Aufsichtsrates: Gebhard Michel]
+
+
+Campaign - https://www.youtube.com/user/innovaphoneTV
+[X]
