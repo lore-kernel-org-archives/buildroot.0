@@ -1,52 +1,34 @@
 From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Fri, 27 Jul 2018 21:54:20 +0200
-Subject: [Buildroot] [PATCH 2/5] perl-crypt-cbc: add missing license
- declaration
-In-Reply-To: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
-References: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180727195423.21338-3-thomas.de_schampheleire@nokia.com>
+Date: Fri, 27 Jul 2018 21:54:18 +0200
+Subject: [Buildroot] [PATCH 0/5] add missing licenses to recently added perl
+ packages
+Message-ID: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the license as found in the actual source file, and remove the README
-from _LICENSE_FILES as it does not contain anything regarding licenses.
+As requested by Thomas Petazzoni, this series adds the missing license
+declarations for perl packages recently added by me.
 
-Note that adding the source file as LICENSE_FILE means that the
-corresponding hash will be different on every version bump.
+/Thomas
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/perl-crypt-cbc/perl-crypt-cbc.hash | 4 ++--
- package/perl-crypt-cbc/perl-crypt-cbc.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-crypt-cbc/perl-crypt-cbc.hash b/package/perl-crypt-cbc/perl-crypt-cbc.hash
-index f3d5e03c31..a54772a504 100644
---- a/package/perl-crypt-cbc/perl-crypt-cbc.hash
-+++ b/package/perl-crypt-cbc/perl-crypt-cbc.hash
-@@ -2,5 +2,5 @@
- md5    3db5117d60df67e3b400fe367e716be0 Crypt-CBC-2.33.tar.gz
- sha256 6a70de21b6cc7f2b100067e8e188db966e9a8001b5db6fa976e7cb5b294ae645 Crypt-CBC-2.33.tar.gz
- 
--# computed by scancpan
--sha256 a98da8a2eef02a8823cf2f58111e981796c4aaf38e8d446acd338a559af42bfc README
-+# locally computed
-+sha256 9548d0beb746167270df647aa97a3e47b957adb4ec103c2cfb8f54b0005f99c7 CBC.pm
-diff --git a/package/perl-crypt-cbc/perl-crypt-cbc.mk b/package/perl-crypt-cbc/perl-crypt-cbc.mk
-index 3da0561096..749499c26b 100644
---- a/package/perl-crypt-cbc/perl-crypt-cbc.mk
-+++ b/package/perl-crypt-cbc/perl-crypt-cbc.mk
-@@ -7,6 +7,7 @@
- PERL_CRYPT_CBC_VERSION = 2.33
- PERL_CRYPT_CBC_SOURCE = Crypt-CBC-$(PERL_CRYPT_CBC_VERSION).tar.gz
- PERL_CRYPT_CBC_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS
--PERL_CRYPT_CBC_LICENSE_FILES = README
-+PERL_CRYPT_CBC_LICENSE = Artistic
-+PERL_CRYPT_CBC_LICENSE_FILES = CBC.pm
- 
- $(eval $(perl-package))
+Thomas De Schampheleire (5):
+  perl-crypt-blowfish: add missing license declaration
+  perl-crypt-cbc: add missing license declaration
+  perl-mime-base64-urlsafe: add missing license declaration
+  perl-net-ping: add missing license declaration
+  perl-net-telnet: add missing license declaration
+
+ package/perl-crypt-blowfish/perl-crypt-blowfish.mk           | 1 +
+ package/perl-crypt-cbc/perl-crypt-cbc.hash                   | 4 ++--
+ package/perl-crypt-cbc/perl-crypt-cbc.mk                     | 3 ++-
+ package/perl-mime-base64-urlsafe/perl-mime-base64-urlsafe.mk | 1 +
+ package/perl-net-ping/perl-net-ping.mk                       | 1 +
+ package/perl-net-telnet/perl-net-telnet.mk                   | 1 +
+ 6 files changed, 8 insertions(+), 3 deletions(-)
+
 -- 
 2.16.4
