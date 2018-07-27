@@ -1,34 +1,52 @@
-From: Geoff Levand <geoff@infradead.org>
-Date: Fri, 27 Jul 2018 11:56:49 -0700
-Subject: [Buildroot] [PATCH v1 1/2] dtc: bump version to 1.4.7
-In-Reply-To: <CAPnjgZ1297i1+K=SUB-Y37jjabqxdJRA13iPxPe=MND5da44WA@mail.gmail.com>
-References: <28d7fee033a5e5ef512c02d5291d20b1d19fdbbf.1532460521.git.geoff@infradead.org>
- <20180727110728.300c06e2@windsurf>
- <10d6e217-c05f-ff72-d3fa-0459148746c3@infradead.org>
- <CAPnjgZ1297i1+K=SUB-Y37jjabqxdJRA13iPxPe=MND5da44WA@mail.gmail.com>
-Message-ID: <5503f4f7-d712-44c4-0bb0-001b70418e8c@infradead.org>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Fri, 27 Jul 2018 12:30:15 -0700
+Subject: [Buildroot] RHEL6 autobuilder
+In-Reply-To: <20180726094334.4da615cf@windsurf>
+References: <05bbe42a7a77f46daa8a.1532020842@cveaol6qa08.wv.mentorg.com>
+ <20180725231245.7e1e2f99@windsurf>
+ <a5beffd9-7db4-1836-ba1e-a301a2ac90c6@mentor.com>
+ <20180726094334.4da615cf@windsurf>
+Message-ID: <20ef3a8f-2fa6-6c31-852c-0a11a72c8a16@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Simon,
+On 07/26/2018 12:43 AM, Thomas Petazzoni wrote:
+>
+>>> However, a larger question is: do you intend to contribute an
+>>> autobuilder that tests Buildroot under RHEL6 ? Indeed, you are fixing
+>>> just the few packages that are useful to you, but if we are going to
+>>> support something as old as RHEL6, then we need to do it properly and
+>>> have an autobuilder running on this distro. Do you think this is
+>>> something that could be done ?
+>> Not certain, but possible. What does it entail, exactly? Do I just have
+>> to run
+>> https://git.buildroot.net/buildroot-test/tree/scripts/autobuild-run via
+>> cron?
+> It is about running this script yes, but it does not need to be run in
+> cron, the script itself is an infinite loop that continuously does some
+> builds and contribute the results to autobuild.buildroot.org.
 
-After looking at it a bit more, it seems setup.py is using the host
-toolchain (/usr/bin/gcc), and not the cross toolchain when linking.
+OK, I set this up on a RHEL6.5 host, and it ran enough to hit the known 
+libglib2 problem <https://patchwork.ozlabs.org/patch/947086/>. I 
+encountered two issues along the way:
 
-Any idea how to fix this?
+  * buildroot-test/buildroot-autobuild script uses the --detach option
+    to 'git checkout', which RHEL6.5's git doesn't know about. I just
+    deleted the option and everything's working fine. I can submit a
+    patch if you like.
+  * buildroot/utils/genrandconfig uses argparse, which doesn't exist in
+    RHEL6.5's Python. I avoided the problem for now by supplying an
+    alternate Python installation.
 
-pylibfdt/setup.py --verbose  build_ext --inplace
-running build_ext
-building '_libfdt' extension
-swigging pylibfdt/libfdt.i to pylibfdt/libfdt_wrap.c
-swig -python -I/br-bug/build/dtc-1.4.7 -o pylibfdt/libfdt_wrap.c pylibfdt/libfdt.i
-/br-bug/host/bin/aarch64-linux-gcc -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -I libfdt -I . -fPIC -I/br-bug/host/include/python2.7 -c /br-bug/build/dtc-1.4.7/libfdt/fdt.c -o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt.o -I/br-bug/build/dtc-1.4.7 -I/br-bug/build/dtc-1.4.7/libfdt
-...
-/usr/bin/gcc -pthread -shared -L/br-bug/host/lib -Wl,-rpath,/br-bug/host/lib -Wl,--enable-new-dtags -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -I libfdt -I . build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_ro.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_wip.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_sw.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_rw.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_strerror.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_empty_tree.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_addresses.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_overlay.o build/temp.linux-x86_64-2.7/pylibfdt/libfdt_wrap.o -L/br-bug/host/lib -lpython2.7 -o /br-bug/build/dtc-1.4.7/_libfdt.so
-/usr/bin/ld: build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt.o: Relocations in generic ELF (EM: 183)
+I guess I just need HTTP credentials to submit to 
+http://autobuild.buildroot.org ?
 
+Hollis Blanchard
+Mentor Graphics Emulation Division
 
--Geoff
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180727/e4b5cf34/attachment.html>
