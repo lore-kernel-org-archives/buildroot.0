@@ -1,53 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Jul 2018 09:31:14 +0200
-Subject: [Buildroot] [PATCH 1/1] postgresql --with-libxml configure
- option added
-In-Reply-To: <AD312B93A689234094FC24F3B98DBF33437A1708@INNO-EX-2010.innovaphone.sifi>
-References: <20180608062231.2345-1-dde@innovaphone.com>
- <F73717A01AEC1F4CB9A3D10E39CBB88F4424CD47@INNO-EX-2010.innovaphone.sifi>
- <F73717A01AEC1F4CB9A3D10E39CBB88F443662EA@INNO-EX-2010.innovaphone.sifi>
- <AD312B93A689234094FC24F3B98DBF33437A1708@INNO-EX-2010.innovaphone.sifi>
-Message-ID: <20180727093114.4943db9a@windsurf>
+Date: Fri, 27 Jul 2018 09:36:20 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.17.10
+Message-ID: <20180727073103.D2F298A4D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=d7e687783511ae7dd17bd6c89e3fd522a7f2b205
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 27 Jul 2018 07:06:48 +0000, Thomas Ehrhardt wrote:
-> The postgresql package is now built with --with-libxml if BR2_PACKAGE_LIBXML2 is selected to allow the use of XML functions in postgresql.
-> 
-> Signed-off-by: Daniel Deterding <dde@innovaphone.com>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for your patch, it looks good, but there's one issue: the From
-doesn't match the Signed-off-by.
-
-If I understand correctly, the patch was done by your colleague Daniel
-Deterding, and you are sending it on his behalf. If that is correct,
-then you need to add your own Signed-off-by below the one from Daniel.
-
-While you're at it, could you fix the minor issues below (I had fixed
-them locally as I was about to apply the patch, but realized the
-Signed-off-by issue) :
-
- - The commit title should have the format:
-
-   <package>: <description>
-
-   A better commit title is:
-
-   postgresql: add optional dependency on libxml2
-
- - The commit log text should be wrapped at 72 characters.
-
-Except these, it looks good. Could you resend an updated version ?
-
-Thanks a lot for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/linux/Config.in b/linux/Config.in
+index d30d9e12af..5beac16170 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.17.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.17.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
