@@ -1,35 +1,44 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Fri, 27 Jul 2018 09:12:41 -0700
-Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
-In-Reply-To: <1532700227020-0.post@n4.nabble.com>
-References: <20180710234212.4297-1-joseph.kogut@gmail.com>
- <20180710234212.4297-5-joseph.kogut@gmail.com>
- <1532611912386-0.post@n4.nabble.com>
- <CAMWSM7ikcADGP3Y7_wpSjot8fD_OA_v+R7bZf3fD+APRR-Kc1A@mail.gmail.com>
- <1532700227020-0.post@n4.nabble.com>
-Message-ID: <CAMWSM7i=dS5gbqwDRM34KPsu_9ArgYj3cwHYdp3tQ+pE5=L2Rg@mail.gmail.com>
+From: Geoff Levand <geoff@infradead.org>
+Date: Fri, 27 Jul 2018 10:09:19 -0700
+Subject: [Buildroot] [PATCH v1 1/2] dtc: bump version to 1.4.7
+In-Reply-To: <20180727110728.300c06e2@windsurf>
+References: <28d7fee033a5e5ef512c02d5291d20b1d19fdbbf.1532460521.git.geoff@infradead.org>
+ <20180727110728.300c06e2@windsurf>
+Message-ID: <10d6e217-c05f-ff72-d3fa-0459148746c3@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 27, 2018 at 7:03 AM Hao HU <huhao526200@gmail.com> wrote:
->
-> Hi Joseph,
->
-> Today I tried to set use_gold=false in CHROMIUM_OPTS in chromium.mk.
->
-> But it did't work. The same problem as following still exists.
->
-> //home/as_huhao/eolane/x2m/buildroot-2018.05-IHMI/output/host/bin/ld.lld:
-> error: can't create dynamic relocation R_386_32 against local symbol in
-> readonly segment; recompile object files with -fPIC
-> >>> defined in obj/third_party/ffmpeg/libffmpeg_yasm.a(ffmpeg_yasm/dct32.o)
-> >>> referenced by ../../third_party/ffmpeg/libavcodec/x86/dct32.asm
-> >>>               ffmpeg_yasm/dct32.o:(ff_dct32_float_sse) in archive
-> >>> obj/third_party/ffmpeg/libffmpeg_yasm.a /
->
+Hi Simon,
 
-Did you allow the Chromium package to reconfigure, i.e., by deleting
-.stamp_configured, or running 'make chromium-dirclean all'?
+Any ideas about what's wrong?
+
+Some builds show this error:
+
+  LONG_BIT definition appears wrong for platform (bad gcc/glibc config?)
+
+Which seems to be triggered from this:
+
+  https://github.com/python/cpython/blob/e42b705188271da108de42b55d9344642170aa2b/Include/pyport.h#L701
+
+I'll continue to look into it.
+
+-Geoff
+
+On 07/27/2018 02:07 AM, Thomas Petazzoni wrote:
+> On Tue, 24 Jul 2018 19:32:17 +0000, Geoff Levand wrote:
+>> Bump from 1.4.4 to 1.4.7.
+>>
+>> Signed-off-by: Geoff Levand <geoff@infradead.org>
+>> ---
+>>  package/dtc/dtc.hash | 2 +-
+>>  package/dtc/dtc.mk   | 2 +-
+>>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> This is failing all over the place in the autobuilders:
+> 
+>   http://autobuild.buildroot.net/?reason=%dtc-1.4.7
+> 
+> Could you look into those issues and provide a patch to address them ?
