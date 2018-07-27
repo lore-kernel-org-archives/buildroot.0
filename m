@@ -1,32 +1,74 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Fri, 27 Jul 2018 21:54:23 +0200
-Subject: [Buildroot] [PATCH 5/5] perl-net-telnet: add missing license
- declaration
-In-Reply-To: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
-References: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
-Message-ID: <20180727195423.21338-6-thomas.de_schampheleire@nokia.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri, 27 Jul 2018 21:53:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 18.1.5
+In-Reply-To: <20180727174030.447-1-bernd.kuhls@t-online.de>
+References: <20180727174030.447-1-bernd.kuhls@t-online.de>
+Message-ID: <042ebaee-9d39-5554-5adf-266535462433@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- package/perl-net-telnet/perl-net-telnet.mk | 1 +
- 1 file changed, 1 insertion(+)
+Hi Bernd,
 
-diff --git a/package/perl-net-telnet/perl-net-telnet.mk b/package/perl-net-telnet/perl-net-telnet.mk
-index 04d170d10a..28568871e2 100644
---- a/package/perl-net-telnet/perl-net-telnet.mk
-+++ b/package/perl-net-telnet/perl-net-telnet.mk
-@@ -7,6 +7,7 @@
- PERL_NET_TELNET_VERSION = 3.04
- PERL_NET_TELNET_SOURCE = Net-Telnet-$(PERL_NET_TELNET_VERSION).tar.gz
- PERL_NET_TELNET_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JR/JROGERS
-+PERL_NET_TELNET_LICENSE = Artistic or GPL-1.0+
- PERL_NET_TELNET_LICENSE_FILES = README
- 
- $(eval $(perl-package))
--- 
-2.16.4
+Le 27/07/2018 ? 19:40, Bernd Kuhls a ?crit?:
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Tested-by: Romain Naour <romain.naour@gmail.com>
+
+Best regards,
+Romain
+
+> ---
+>  package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+>  package/mesa3d/mesa3d.hash               | 10 +++++-----
+>  package/mesa3d/mesa3d.mk                 |  2 +-
+>  3 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+> index 8c317916e5..de8a9dc7cf 100644
+> --- a/package/mesa3d-headers/mesa3d-headers.mk
+> +++ b/package/mesa3d-headers/mesa3d-headers.mk
+> @@ -12,7 +12,7 @@ endif
+>  
+>  # Not possible to directly refer to mesa3d variables, because of
+>  # first/second expansion trickery...
+> -MESA3D_HEADERS_VERSION = 18.1.4
+> +MESA3D_HEADERS_VERSION = 18.1.5
+>  MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+>  MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+>  MESA3D_HEADERS_DL_SUBDIR = mesa3d
+> diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+> index 7279e8d9f3..ff336f7d41 100644
+> --- a/package/mesa3d/mesa3d.hash
+> +++ b/package/mesa3d/mesa3d.hash
+> @@ -1,8 +1,8 @@
+> -# From https://lists.freedesktop.org/archives/mesa-announce/2018-July/000442.html
+> -md5 7abc628e2e34b2f478d906b6d233ade3  mesa-18.1.4.tar.xz
+> -sha1 b5af29aff8b7abe070103ea2cc625d38b4eb1611  mesa-18.1.4.tar.xz
+> -sha256 3061488b5d85504092cf4343816cfb2d96f2ad9bc2edec31fc96933d184cf58b  mesa-18.1.4.tar.xz
+> -sha512 04b8e5bbfa640f2303c388ab701fc2aca7f6d5d127ca5a9f9409975556813ba8e94305d27c9cea236a0e6d44a38b97e2877509268a96d9ed2a6762ab385aa3dc  mesa-18.1.4.tar.xz
+> +# From https://lists.freedesktop.org/archives/mesa-announce/2018-July/000445.html
+> +md5 622bd23ca8daa83a62938bd33600a580  mesa-18.1.5.tar.xz
+> +sha1 1ca7d5f5d12c95f8da137be34223229b9f0594fe  mesa-18.1.5.tar.xz
+> +sha256 69dbe6f1a6660386f5beb85d4fcf003ee23023ed7b9a603de84e9a37e8d98dea  mesa-18.1.5.tar.xz
+> +sha512 f0bcb903bbf2ff7fc0b4a8fe100ea26ee91c0029b64adaf5fc4877ed7681f325c54b1be8eb0b140bff620da79f30a96375c2e1085e504ebfaf50e57f6da93013  mesa-18.1.5.tar.xz
+>  # License
+>  sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+>  sha256 3a0cf6c7835f98f86d5579b2cc517f84254da7411f764fb0095a383fb0759771  docs/patents.txt
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index 35a15bd3a8..5c01f92e22 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+> @@ -5,7 +5,7 @@
+>  ################################################################################
+>  
+>  # When updating the version, please also update mesa3d-headers
+> -MESA3D_VERSION = 18.1.4
+> +MESA3D_VERSION = 18.1.5
+>  MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+>  MESA3D_SITE = https://mesa.freedesktop.org/archive
+>  MESA3D_LICENSE = MIT, SGI, Khronos
+> 
