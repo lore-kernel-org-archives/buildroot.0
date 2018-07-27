@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Jul 2018 11:07:28 +0200
-Subject: [Buildroot] [PATCH v1 1/2] dtc: bump version to 1.4.7
-In-Reply-To: <28d7fee033a5e5ef512c02d5291d20b1d19fdbbf.1532460521.git.geoff@infradead.org>
-References: <28d7fee033a5e5ef512c02d5291d20b1d19fdbbf.1532460521.git.geoff@infradead.org>
-Message-ID: <20180727110728.300c06e2@windsurf>
+Date: Fri, 27 Jul 2018 11:08:24 +0200
+Subject: [Buildroot] [PATCH 1/1] ncmpc: bump to version 0.30
+In-Reply-To: <20180723174345.29552-1-fontaine.fabrice@gmail.com>
+References: <20180723174345.29552-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180727110824.262654c4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 24 Jul 2018 19:32:17 +0000, Geoff Levand wrote:
-> Bump from 1.4.4 to 1.4.7.
+On Mon, 23 Jul 2018 19:43:45 +0200, Fabrice Fontaine wrote:
+> Since this version, ncmpc depends on C++14:
+> https://github.com/MusicPlayerDaemon/ncmpc/commit/aea91692b05e7c2cd2e1b09cf10b0196e3527807
 > 
-> Signed-off-by: Geoff Levand <geoff@infradead.org>
-> ---
->  package/dtc/dtc.hash | 2 +-
->  package/dtc/dtc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-This is failing all over the place in the autobuilders:
+This update is causing a number of build failures:
 
-  http://autobuild.buildroot.net/?reason=%dtc-1.4.7
+  http://autobuild.buildroot.net/?reason=ncmpc-0.30
 
-Could you look into those issues and provide a patch to address them ?
+Could you have a look ?
 
-Thanks!
+Thanks,
 
 Thomas
 -- 
