@@ -1,44 +1,87 @@
-From: Trent Piepho <tpiepho@impinj.com>
-Date: Thu, 26 Jul 2018 16:33:19 -0700
-Subject: [Buildroot] [PATCH 1/2] lttng-modules: bump version to 2.10.6
-Message-ID: <20180726233320.1265-1-tpiepho@impinj.com>
+From: Cam Hutchison <camh@xdna.net>
+Date: Fri, 27 Jul 2018 12:47:20 +1000
+Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
+ CGO_ENABLED setting
+Message-ID: <20180727024720.13370-1-camh@xdna.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is needed for kernel 2.16.x compatiblity.
+Allow the CGO_ENABLED variable to be controlled per package and per
+build target, instead of having the value determined by whether or not
+the toolchain has threads.
 
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Some build targets may not build with CGO_ENABLED=1, so allowing a per
+package and build target override will allow those targets to be built
+with Buildroot.
+
+Signed-off-by: Cam Hutchison <camh@xdna.net>
 ---
- package/lttng-modules/lttng-modules.hash | 6 +++---
- package/lttng-modules/lttng-modules.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ docs/manual/adding-packages-golang.txt | 14 ++++++++++++++
+ package/pkg-golang.mk                  | 17 +++++++++++++++--
+ 2 files changed, 29 insertions(+), 2 deletions(-)
 
-diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
-index 7fa742dc11..8992cbce99 100644
---- a/package/lttng-modules/lttng-modules.hash
-+++ b/package/lttng-modules/lttng-modules.hash
-@@ -1,3 +1,3 @@
--# From http://lttng.org/files/lttng-modules/lttng-modules-2.10.4.tar.bz2.{md5,sha1}
--md5 832452b321a4df6836549e72d05b2ce9  lttng-modules-2.10.4.tar.bz2
--sha1 1712f5d5c0ef9b028949693c5cf24c5a00b7f4ef  lttng-modules-2.10.4.tar.bz2
-+# From http://lttng.org/files/lttng-modules/lttng-modules-2.10.6.tar.bz2.{md5,sha1}
-+md5 8110099f4615fc89a74ffe9189b56cfc  lttng-modules-2.10.6.tar.bz2
-+sha1 1126b29e055ebdb3fad9201edaf0ef27f88c9369  lttng-modules-2.10.6.tar.bz2
-diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
-index 4a4974d81d..8d48c37bac 100644
---- a/package/lttng-modules/lttng-modules.mk
-+++ b/package/lttng-modules/lttng-modules.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+index efcf696867..2683774861 100644
+--- a/docs/manual/adding-packages-golang.txt
++++ b/docs/manual/adding-packages-golang.txt
+@@ -99,6 +99,20 @@ therefore only use a few of them, or none.
+    +FOO_BUILD_TARGETS = cmd/docker cmd/dockerd+ the binaries produced
+    are +docker+ and +dockerd+.
  
--LTTNG_MODULES_VERSION = 2.10.4
-+LTTNG_MODULES_VERSION = 2.10.6
- LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
- LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
- LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
++* +FOO_CGO_ENABLED+ overrides the default value for the +CGO_ENABLED+
++  flag passed to the Go compiler. By default +CGO_ENABLED+ is set
++  to 1 if the toolchain supports threads, but you can force it to
++  0 for the package by setting this variable. If the toolchain does
++  not support threads and you set +FOO_CGO_ENABLED+ to 1, an error
++  will be generated.
++
++* +FOO_BUILD_TARGET_CGO_ENABLED_<target>+ can be used to override
++  the +CGO_ENABLED+ flag passed to the Go compiler for a specific
++  build target, similar to +FOO_CGO_ENABLED+. +<target>+ references
++  a target listed in +FOO_BUILD_TARGETS+. If the toolchain does
++  not support threads and you set this variable to 1, an error will
++  be generated.
++
+ * +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
+   should be installed in +/usr/bin+ on the target. If
+   +FOO_INSTALL_BINS+ is not specified, it defaults to the lower-case
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index bf178622b5..2be3bd4c14 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -28,8 +28,20 @@ GO_BIN = $(HOST_DIR)/bin/go
+ GO_TARGET_ENV = \
+ 	$(HOST_GO_TARGET_ENV) \
+ 	PATH=$(BR_PATH) \
+-	GOBIN= \
+-	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
++	GOBIN=
++
++# Allow CGO_ENABLED to be defined per package and per build target, but if
++# CGO is enabled for a package or a build target and the toolchain does not
++# support that, generate an error.
++GO_CGO_ENABLED = $(strip \
++	$(if $(filter 10,$($(1)_CGO_ENABLED)$(HOST_GO_CGO_ENABLED)),\
++		$(error Toolchain does not support CGO_ENABLED=1 for package $(1)),\
++		$(or $($(1)_CGO_ENABLED),$(HOST_GO_CGO_ENABLED))))
++
++GO_TARGET_CGO_ENABLED = $(strip \
++	$(if $(filter 10,$($(1)_BUILD_TARGET_CGO_ENABLED_$(2))$(HOST_GO_CGO_ENABLED)),\
++		$(error Toolchain does not support CGO_ENABLED=1 for target $(2)),\
++		$(or $($(1)_BUILD_TARGET_CGO_ENABLED_$(2)),$(call GO_CGO_ENABLED,$(1)))))
+ 
+ ################################################################################
+ # inner-golang-package -- defines how the configuration, compilation and
+@@ -100,6 +112,7 @@ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+ 		cd $$($(2)_SRC_PATH); \
+ 		$$(GO_TARGET_ENV) \
++			CGO_ENABLED=$$(call GO_TARGET_CGO_ENABLED,$(2),$$(d)) \
+ 			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
 -- 
-2.14.4
+2.11.0
