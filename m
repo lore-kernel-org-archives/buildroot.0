@@ -1,87 +1,93 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Fri, 27 Jul 2018 12:47:20 +1000
-Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
- CGO_ENABLED setting
-Message-ID: <20180727024720.13370-1-camh@xdna.net>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 26 Jul 2018 22:50:44 -0500
+Subject: [Buildroot] [PATCH] package/uboot-tools: version.h collision
+Message-ID: <20180727035044.4313-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allow the CGO_ENABLED variable to be controlled per package and per
-build target, instead of having the value determined by whether or not
-the toolchain has threads.
+On some systems the host system or even the cross sysroot can
+contain a version.h.  This leads to the wrong file being picked
+up and a PLAIN_VERSION undefined error.
 
-Some build targets may not build with CGO_ENABLED=1, so allowing a per
-package and build target override will allow those targets to be built
-with Buildroot.
+This workaround symlinks the version.h into the tool folder to
+allow reordering of search folders.
 
-Signed-off-by: Cam Hutchison <camh@xdna.net>
+Fixes
+http://autobuild.buildroot.net/results/770/7702d5df36a6532aafdbe6e9e62709bbfa058b54/build-end.log
+http://autobuild.buildroot.net/results/e34/e3401027d2fb3ce565ca9e2456a427afd3610a87/build-end.log
+... additional can be found with these queries ...
+http://autobuild.buildroot.net/?reason=uboot-tools-2018.03
+http://autobuild.buildroot.net/?reason=uboot-tools-2018.05
+
+Upstream: https://lists.denx.de/pipermail/u-boot/2018-July/336283.html
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- docs/manual/adding-packages-golang.txt | 14 ++++++++++++++
- package/pkg-golang.mk                  | 17 +++++++++++++++--
- 2 files changed, 29 insertions(+), 2 deletions(-)
+ ...rsion.h-workaround-sysroot-inc-order.patch | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 package/uboot-tools/0004-include-version.h-workaround-sysroot-inc-order.patch
 
-diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
-index efcf696867..2683774861 100644
---- a/docs/manual/adding-packages-golang.txt
-+++ b/docs/manual/adding-packages-golang.txt
-@@ -99,6 +99,20 @@ therefore only use a few of them, or none.
-    +FOO_BUILD_TARGETS = cmd/docker cmd/dockerd+ the binaries produced
-    are +docker+ and +dockerd+.
- 
-+* +FOO_CGO_ENABLED+ overrides the default value for the +CGO_ENABLED+
-+  flag passed to the Go compiler. By default +CGO_ENABLED+ is set
-+  to 1 if the toolchain supports threads, but you can force it to
-+  0 for the package by setting this variable. If the toolchain does
-+  not support threads and you set +FOO_CGO_ENABLED+ to 1, an error
-+  will be generated.
+diff --git a/package/uboot-tools/0004-include-version.h-workaround-sysroot-inc-order.patch b/package/uboot-tools/0004-include-version.h-workaround-sysroot-inc-order.patch
+new file mode 100644
+index 0000000000..89cec5bb34
+--- /dev/null
++++ b/package/uboot-tools/0004-include-version.h-workaround-sysroot-inc-order.patch
+@@ -0,0 +1,53 @@
++From 546ab8f1e4b91f12b4cc1b4b73bb89a1645a99a4 Mon Sep 17 00:00:00 2001
++From: Matt Weber <matthew.weber@rockwellcollins.com>
++Date: Thu, 26 Jul 2018 22:16:17 -0500
++Subject: [PATCH] include/version.h: workaround sysroot inc order
 +
-+* +FOO_BUILD_TARGET_CGO_ENABLED_<target>+ can be used to override
-+  the +CGO_ENABLED+ flag passed to the Go compiler for a specific
-+  build target, similar to +FOO_CGO_ENABLED+. +<target>+ references
-+  a target listed in +FOO_BUILD_TARGETS+. If the toolchain does
-+  not support threads and you set this variable to 1, an error will
-+  be generated.
++On some systems the host system or even the cross sysroot can
++contain a version.h.  This leads to the wrong file being picked
++up and a PLAIN_VERSION undefined error.
 +
- * +FOO_INSTALL_BINS+ can be used to pass the list of binaries that
-   should be installed in +/usr/bin+ on the target. If
-   +FOO_INSTALL_BINS+ is not specified, it defaults to the lower-case
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index bf178622b5..2be3bd4c14 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -28,8 +28,20 @@ GO_BIN = $(HOST_DIR)/bin/go
- GO_TARGET_ENV = \
- 	$(HOST_GO_TARGET_ENV) \
- 	PATH=$(BR_PATH) \
--	GOBIN= \
--	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
-+	GOBIN=
++This workaround symlinks the version.h into the tool folder to
++allow reordering of search folders.
 +
-+# Allow CGO_ENABLED to be defined per package and per build target, but if
-+# CGO is enabled for a package or a build target and the toolchain does not
-+# support that, generate an error.
-+GO_CGO_ENABLED = $(strip \
-+	$(if $(filter 10,$($(1)_CGO_ENABLED)$(HOST_GO_CGO_ENABLED)),\
-+		$(error Toolchain does not support CGO_ENABLED=1 for package $(1)),\
-+		$(or $($(1)_CGO_ENABLED),$(HOST_GO_CGO_ENABLED))))
++Fixes
++http://autobuild.buildroot.net/results/770/7702d5df36a6532aafdbe6e9e62709bbfa058b54/build-end.log
++http://autobuild.buildroot.net/results/e34/e3401027d2fb3ce565ca9e2456a427afd3610a87/build-end.log
++... additional can be found with these queries ...
++http://autobuild.buildroot.net/?reason=uboot-tools-2018.03
++http://autobuild.buildroot.net/?reason=uboot-tools-2018.05
 +
-+GO_TARGET_CGO_ENABLED = $(strip \
-+	$(if $(filter 10,$($(1)_BUILD_TARGET_CGO_ENABLED_$(2))$(HOST_GO_CGO_ENABLED)),\
-+		$(error Toolchain does not support CGO_ENABLED=1 for target $(2)),\
-+		$(or $($(1)_BUILD_TARGET_CGO_ENABLED_$(2)),$(call GO_CGO_ENABLED,$(1)))))
- 
- ################################################################################
- # inner-golang-package -- defines how the configuration, compilation and
-@@ -100,6 +112,7 @@ define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
- 		cd $$($(2)_SRC_PATH); \
- 		$$(GO_TARGET_ENV) \
-+			CGO_ENABLED=$$(call GO_TARGET_CGO_ENABLED,$(2),$$(d)) \
- 			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
- 			$$($(2)_GO_ENV) \
- 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
++Upstream: https://lists.denx.de/pipermail/u-boot/2018-July/336283.html
++
++Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
++---
++ tools/env/Makefile | 3 ++-
++ tools/version.h    | 1 +
++ 2 files changed, 3 insertions(+), 1 deletion(-)
++ create mode 120000 tools/version.h
++
++diff --git a/tools/env/Makefile b/tools/env/Makefile
++index 95a03c9..865fbc3 100644
++--- a/tools/env/Makefile
+++++ b/tools/env/Makefile
++@@ -11,7 +11,8 @@
++ override HOSTCC = $(CC)
++ 
++ # Compile for a hosted environment on the target
++-HOST_EXTRACFLAGS  = $(patsubst -I%,-idirafter%, $(filter -I%, $(UBOOTINCLUDE))) \
+++HOST_EXTRACFLAGS  = -I$(srctree)/tools \
+++		$(patsubst -I%,-idirafter%, $(filter -I%, $(UBOOTINCLUDE))) \
++ 		-idirafter $(srctree)/tools/env \
++ 		-DUSE_HOSTCC \
++ 		-DTEXT_BASE=$(TEXT_BASE)
++diff --git a/tools/version.h b/tools/version.h
++new file mode 120000
++index 0000000..bb57607
++--- /dev/null
+++++ b/tools/version.h
++@@ -0,0 +1 @@
+++../include/version.h
++\ No newline at end of file
++-- 
++2.17.0
++
 -- 
-2.11.0
+2.17.0
