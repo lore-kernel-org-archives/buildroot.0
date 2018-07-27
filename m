@@ -1,71 +1,39 @@
-From: Marcus Folkesson <marcus.folkesson@gmail.com>
-Date: Fri, 27 Jul 2018 21:40:32 +0200
-Subject: [Buildroot] [PATCH v3] libostree: override path to gpg-error-config
-Message-ID: <20180727194032.12451-1-marcus.folkesson@gmail.com>
+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Date: Fri, 27 Jul 2018 21:54:19 +0200
+Subject: [Buildroot] [PATCH 1/5] perl-crypt-blowfish: add missing license
+ declaration
+In-Reply-To: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
+References: <20180727195423.21338-1-thomas.de_schampheleire@nokia.com>
+Message-ID: <20180727195423.21338-2-thomas.de_schampheleire@nokia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libostree has begun to use `gpg-error-config` in their configuration
-script.
-Point out gpg-error-config in staging dir to avoid using the one
-installed on the host system.
+The license of this package is not standard, it is a combination of two
+sets of statements coming from two different authors.
 
-Fixes:
- http://autobuild.buildroot.net/results/447b96e449e881cf1bd9644cda0f386aa4c75724
+The license resembles the original 4-clause BSD license (thus including
+advertising clause) but without the third clause about endorsement.
+The label 'BSD-4-Clause-like' nevertheless seems the closest match.
 
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 ---
+ package/perl-crypt-blowfish/perl-crypt-blowfish.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Notes:
-    v2:
-    	- override GPG_ERROR_CONFIG instead of ac_cv_path_GPG_ERROR_CONFIG
-    v3:
-    	- depend on libgpg-error
-
- package/libostree/Config.in    | 5 +++--
- package/libostree/libostree.mk | 3 ++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/package/libostree/Config.in b/package/libostree/Config.in
-index b62f4ea0a1..4a6ab5464f 100644
---- a/package/libostree/Config.in
-+++ b/package/libostree/Config.in
-@@ -1,15 +1,16 @@
- config BR2_PACKAGE_LIBOSTREE
- 	bool "libostree"
--	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme, libgpg-error
- 	depends on !BR2_STATIC_LIBS # libfuse
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_USE_MMU # e2fsprogs, libfuse,libglib2, libgpgme
-+	depends on BR2_USE_MMU # e2fsprogs, libfuse, libglib2, libgpgme
- 	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_E2FSPROGS
- 	select BR2_PACKAGE_LIBFUSE
- 	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBGPG_ERROR
- 	select BR2_PACKAGE_LIBGPGME
- 	select BR2_PACKAGE_XZ
- 	help
-diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
-index 24eda0d1db..48eff74574 100644
---- a/package/libostree/libostree.mk
-+++ b/package/libostree/libostree.mk
-@@ -10,8 +10,9 @@ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOST
+diff --git a/package/perl-crypt-blowfish/perl-crypt-blowfish.mk b/package/perl-crypt-blowfish/perl-crypt-blowfish.mk
+index f6644eb151..acb6d8af1d 100644
+--- a/package/perl-crypt-blowfish/perl-crypt-blowfish.mk
++++ b/package/perl-crypt-blowfish/perl-crypt-blowfish.mk
+@@ -7,6 +7,7 @@
+ PERL_CRYPT_BLOWFISH_VERSION = 2.14
+ PERL_CRYPT_BLOWFISH_SOURCE = Crypt-Blowfish-$(PERL_CRYPT_BLOWFISH_VERSION).tar.gz
+ PERL_CRYPT_BLOWFISH_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DP/DPARIS
++PERL_CRYPT_BLOWFISH_LICENSE = BSD-4-Clause-like
+ PERL_CRYPT_BLOWFISH_LICENSE_FILES = COPYRIGHT
  
- LIBOSTREE_LICENSE = LGPL-2.0+
- LIBOSTREE_LICENSE_FILES = COPYING
--LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpgme xz
-+LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpg-error libgpgme xz
- LIBOSTREE_INSTALL_STAGING = YES
-+LIBOSTREE_CONF_ENV = GPG_ERROR_CONFIG=$(STAGING_DIR)/usr/bin/gpg-error-config
- 
- LIBOSTREE_CONF_OPTS += \
- 	--with-gpgme-prefix=$(STAGING_DIR)/usr \
+ $(eval $(perl-package))
 -- 
-2.18.0
+2.16.4
