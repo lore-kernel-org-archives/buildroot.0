@@ -1,64 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 27 Jul 2018 19:40:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.1.5
-Message-ID: <20180727174030.447-1-bernd.kuhls@t-online.de>
+From: Geoff Levand <geoff@infradead.org>
+Date: Fri, 27 Jul 2018 11:56:49 -0700
+Subject: [Buildroot] [PATCH v1 1/2] dtc: bump version to 1.4.7
+In-Reply-To: <CAPnjgZ1297i1+K=SUB-Y37jjabqxdJRA13iPxPe=MND5da44WA@mail.gmail.com>
+References: <28d7fee033a5e5ef512c02d5291d20b1d19fdbbf.1532460521.git.geoff@infradead.org>
+ <20180727110728.300c06e2@windsurf>
+ <10d6e217-c05f-ff72-d3fa-0459148746c3@infradead.org>
+ <CAPnjgZ1297i1+K=SUB-Y37jjabqxdJRA13iPxPe=MND5da44WA@mail.gmail.com>
+Message-ID: <5503f4f7-d712-44c4-0bb0-001b70418e8c@infradead.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+Hi Simon,
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 8c317916e5..de8a9dc7cf 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.1.4
-+MESA3D_HEADERS_VERSION = 18.1.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 7279e8d9f3..ff336f7d41 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-July/000442.html
--md5 7abc628e2e34b2f478d906b6d233ade3  mesa-18.1.4.tar.xz
--sha1 b5af29aff8b7abe070103ea2cc625d38b4eb1611  mesa-18.1.4.tar.xz
--sha256 3061488b5d85504092cf4343816cfb2d96f2ad9bc2edec31fc96933d184cf58b  mesa-18.1.4.tar.xz
--sha512 04b8e5bbfa640f2303c388ab701fc2aca7f6d5d127ca5a9f9409975556813ba8e94305d27c9cea236a0e6d44a38b97e2877509268a96d9ed2a6762ab385aa3dc  mesa-18.1.4.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-July/000445.html
-+md5 622bd23ca8daa83a62938bd33600a580  mesa-18.1.5.tar.xz
-+sha1 1ca7d5f5d12c95f8da137be34223229b9f0594fe  mesa-18.1.5.tar.xz
-+sha256 69dbe6f1a6660386f5beb85d4fcf003ee23023ed7b9a603de84e9a37e8d98dea  mesa-18.1.5.tar.xz
-+sha512 f0bcb903bbf2ff7fc0b4a8fe100ea26ee91c0029b64adaf5fc4877ed7681f325c54b1be8eb0b140bff620da79f30a96375c2e1085e504ebfaf50e57f6da93013  mesa-18.1.5.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 3a0cf6c7835f98f86d5579b2cc517f84254da7411f764fb0095a383fb0759771  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 35a15bd3a8..5c01f92e22 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.1.4
-+MESA3D_VERSION = 18.1.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.18.0
+After looking at it a bit more, it seems setup.py is using the host
+toolchain (/usr/bin/gcc), and not the cross toolchain when linking.
+
+Any idea how to fix this?
+
+pylibfdt/setup.py --verbose  build_ext --inplace
+running build_ext
+building '_libfdt' extension
+swigging pylibfdt/libfdt.i to pylibfdt/libfdt_wrap.c
+swig -python -I/br-bug/build/dtc-1.4.7 -o pylibfdt/libfdt_wrap.c pylibfdt/libfdt.i
+/br-bug/host/bin/aarch64-linux-gcc -DNDEBUG -g -fwrapv -O3 -Wall -Wstrict-prototypes -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -I libfdt -I . -fPIC -I/br-bug/host/include/python2.7 -c /br-bug/build/dtc-1.4.7/libfdt/fdt.c -o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt.o -I/br-bug/build/dtc-1.4.7 -I/br-bug/build/dtc-1.4.7/libfdt
+...
+/usr/bin/gcc -pthread -shared -L/br-bug/host/lib -Wl,-rpath,/br-bug/host/lib -Wl,--enable-new-dtags -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC -I libfdt -I . build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_ro.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_wip.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_sw.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_rw.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_strerror.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_empty_tree.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_addresses.o build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt_overlay.o build/temp.linux-x86_64-2.7/pylibfdt/libfdt_wrap.o -L/br-bug/host/lib -lpython2.7 -o /br-bug/build/dtc-1.4.7/_libfdt.so
+/usr/bin/ld: build/temp.linux-x86_64-2.7/br-bug/build/dtc-1.4.7/libfdt/fdt.o: Relocations in generic ELF (EM: 183)
+
+
+-Geoff
