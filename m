@@ -1,52 +1,71 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Fri, 27 Jul 2018 12:30:15 -0700
-Subject: [Buildroot] RHEL6 autobuilder
-In-Reply-To: <20180726094334.4da615cf@windsurf>
-References: <05bbe42a7a77f46daa8a.1532020842@cveaol6qa08.wv.mentorg.com>
- <20180725231245.7e1e2f99@windsurf>
- <a5beffd9-7db4-1836-ba1e-a301a2ac90c6@mentor.com>
- <20180726094334.4da615cf@windsurf>
-Message-ID: <20ef3a8f-2fa6-6c31-852c-0a11a72c8a16@mentor.com>
+From: Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Fri, 27 Jul 2018 21:40:32 +0200
+Subject: [Buildroot] [PATCH v3] libostree: override path to gpg-error-config
+Message-ID: <20180727194032.12451-1-marcus.folkesson@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 07/26/2018 12:43 AM, Thomas Petazzoni wrote:
->
->>> However, a larger question is: do you intend to contribute an
->>> autobuilder that tests Buildroot under RHEL6 ? Indeed, you are fixing
->>> just the few packages that are useful to you, but if we are going to
->>> support something as old as RHEL6, then we need to do it properly and
->>> have an autobuilder running on this distro. Do you think this is
->>> something that could be done ?
->> Not certain, but possible. What does it entail, exactly? Do I just have
->> to run
->> https://git.buildroot.net/buildroot-test/tree/scripts/autobuild-run via
->> cron?
-> It is about running this script yes, but it does not need to be run in
-> cron, the script itself is an infinite loop that continuously does some
-> builds and contribute the results to autobuild.buildroot.org.
+libostree has begun to use `gpg-error-config` in their configuration
+script.
+Point out gpg-error-config in staging dir to avoid using the one
+installed on the host system.
 
-OK, I set this up on a RHEL6.5 host, and it ran enough to hit the known 
-libglib2 problem <https://patchwork.ozlabs.org/patch/947086/>. I 
-encountered two issues along the way:
+Fixes:
+ http://autobuild.buildroot.net/results/447b96e449e881cf1bd9644cda0f386aa4c75724
 
-  * buildroot-test/buildroot-autobuild script uses the --detach option
-    to 'git checkout', which RHEL6.5's git doesn't know about. I just
-    deleted the option and everything's working fine. I can submit a
-    patch if you like.
-  * buildroot/utils/genrandconfig uses argparse, which doesn't exist in
-    RHEL6.5's Python. I avoided the problem for now by supplying an
-    alternate Python installation.
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
 
-I guess I just need HTTP credentials to submit to 
-http://autobuild.buildroot.org ?
+Notes:
+    v2:
+    	- override GPG_ERROR_CONFIG instead of ac_cv_path_GPG_ERROR_CONFIG
+    v3:
+    	- depend on libgpg-error
 
-Hollis Blanchard
-Mentor Graphics Emulation Division
+ package/libostree/Config.in    | 5 +++--
+ package/libostree/libostree.mk | 3 ++-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180727/e4b5cf34/attachment.html>
+diff --git a/package/libostree/Config.in b/package/libostree/Config.in
+index b62f4ea0a1..4a6ab5464f 100644
+--- a/package/libostree/Config.in
++++ b/package/libostree/Config.in
+@@ -1,15 +1,16 @@
+ config BR2_PACKAGE_LIBOSTREE
+ 	bool "libostree"
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme, libgpg-error
+ 	depends on !BR2_STATIC_LIBS # libfuse
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+-	depends on BR2_USE_MMU # e2fsprogs, libfuse,libglib2, libgpgme
++	depends on BR2_USE_MMU # e2fsprogs, libfuse, libglib2, libgpgme
+ 	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	select BR2_PACKAGE_E2FSPROGS
+ 	select BR2_PACKAGE_LIBFUSE
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBGPG_ERROR
+ 	select BR2_PACKAGE_LIBGPGME
+ 	select BR2_PACKAGE_XZ
+ 	help
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 24eda0d1db..48eff74574 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -10,8 +10,9 @@ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOST
+ 
+ LIBOSTREE_LICENSE = LGPL-2.0+
+ LIBOSTREE_LICENSE_FILES = COPYING
+-LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpgme xz
++LIBOSTREE_DEPENDENCIES = e2fsprogs host-bison host-pkgconf libfuse libglib2 libgpg-error libgpgme xz
+ LIBOSTREE_INSTALL_STAGING = YES
++LIBOSTREE_CONF_ENV = GPG_ERROR_CONFIG=$(STAGING_DIR)/usr/bin/gpg-error-config
+ 
+ LIBOSTREE_CONF_OPTS += \
+ 	--with-gpgme-prefix=$(STAGING_DIR)/usr \
+-- 
+2.18.0
