@@ -1,43 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Jul 2018 09:36:23 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
- 17}.x series
-Message-ID: <20180727073103.DBC808A484@busybox.osuosl.org>
+From: Thomas Ehrhardt <TEhrhardt@innovaphone.com>
+Date: Fri, 27 Jul 2018 07:41:25 +0000
+Subject: [Buildroot] [PATCH] postgresql: add optional dependency on libxml2
+Message-ID: <AD312B93A689234094FC24F3B98DBF33437A1740@INNO-EX-2010.innovaphone.sifi>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=871d0edf5b0bde5f7c0e244722597354b9dafef1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The postgresql package is now built with --with-libxml if BR2_PACKAGE_LIBXML2 is selected to allow the use of XML functions in postgresql.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Daniel Deterding <dde@innovaphone.com>
+Signed-off-by: Thomas Ehrhardt <tehrhardt@innovaphone.com>
 ---
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/postgresql/postgresql.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index fb40e96394..fb6140e3bc 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -258,14 +258,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.143"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.114"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.144"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.115"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.57"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.58"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default "4.16.17"	if BR2_KERNEL_HEADERS_4_16
--	default "4.17.9"	if BR2_KERNEL_HEADERS_4_17
-+	default "4.17.10"	if BR2_KERNEL_HEADERS_4_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 94b3e60e59..0940873686 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -70,6 +70,14 @@ else
+ POSTGRESQL_CONF_OPTS += --without-ldap
+ endif
+
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++POSTGRESQL_DEPENDENCIES += libxml2
++POSTGRESQL_CONF_OPTS += --with-libxml
++POSTGRESQL_CONF_ENV += XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
++else
++POSTGRESQL_CONF_OPTS += --without-libxml
++endif
++
+ define POSTGRESQL_USERS
+        postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+ endef
+--
+2.11.0
+
+_______________________________________________________________________________
+
+Thomas Ehrhardt | Development
+_______________________________________________________________________________
+
+innovaphone AG
+PURE IP COMMUNICATIONS
+
+B?blinger Stra?e 76 | 71065 Sindelfingen | Germany
+Tel: +49(7031)73009-648 | Fax: +49(7031)73009-9
+E-Mail: tehrhardt at innovaphone.com | http://www.innovaphone.com
+
+[Sitz der Gesellschaft: Sindelfingen | HRB Nr. 245196 Amtsgericht Stuttgart | Vorstand: Dagmar Geer (Vorsitzende), Carsten Bode, Guntram Diehl, Gerd Hornig | Vorsitzender des Aufsichtsrates: Gebhard Michel]
+
+
+Campaign - https://www.youtube.com/user/innovaphoneTV
+[X]
