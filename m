@@ -1,44 +1,76 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Fri, 27 Jul 2018 22:00:32 +0200
-Subject: [Buildroot] [PATCH 1/2] package/llvm: bump to version 6.0.1
-Message-ID: <20180727200033.27176-1-romain.naour@gmail.com>
+From: Laurent Hartanerot <laurent.hartanerot@gmail.com>
+Date: Fri, 27 Jul 2018 23:35:14 +0200
+Subject: [Buildroot] [PATCH 1/1] lighttpd: Adding /var/log/lighttpd folder
+ with the owner www-data The lighttpd need to write in his root log folder
+Message-ID: <20180727213514.19361-1-laurent.hartanerot@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-http://releases.llvm.org/6.0.1/docs/ReleaseNotes.html
+From: Laurent Hartanerot <laurent.hartanerot@atos.net>
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
+Lighttpd don't start with the default buildroot configuration
+
+/usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
+2018-06-22 11:21:34: (server.c.733) opening errorlog '/var/log/lighttpd-error.log' failed: Permission denied
+2018-06-22 11:21:34: (server.c.1420) Opening errorlog failed. Going down.
+
+
+Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
 ---
- package/llvm/llvm.hash | 2 +-
- package/llvm/llvm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lighttpd/0001-Fix-default-config-file.patch | 6 ++----
+ package/lighttpd/lighttpd.mk                        | 5 +++++
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
-index 93bdf2e20e..6a09e5804c 100644
---- a/package/llvm/llvm.hash
-+++ b/package/llvm/llvm.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256 1ff53c915b4e761ef400b803f07261ade637b0c269d99569f18040f3dcee4408  llvm-6.0.0.src.tar.xz
-+sha256 b6d6c324f9c71494c0ccaf3dac1f16236d970002b42bb24a6c9e1634f7d0f4e2  llvm-6.0.1.src.tar.xz
- sha256 abd4d8794808bacb1eb6924d49efafd9ab6eef88faaaeb5d3cfa13ee3670d672 LICENSE.TXT
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index fb0ae4ce5c..756b46a865 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LLVM_VERSION = 6.0.0
-+LLVM_VERSION = 6.0.1
- LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
- LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
- LLVM_LICENSE = NCSA
--- 
-2.14.4
+diff --git a/package/lighttpd/0001-Fix-default-config-file.patch b/package/lighttpd/0001-Fix-default-config-file.patch
+index ada1589760..4fa5902718 100644
+--- a/package/lighttpd/0001-Fix-default-config-file.patch
++++ b/package/lighttpd/0001-Fix-default-config-file.patch
+@@ -1,6 +1,5 @@
+ Modify the default lighttpd configuration file to have one a starting conf
+
+-  * Changed the log path to /var/log and logs filenames
+   * Disable IPv6
+   * Do not setuid to a user that doesn't exist on the system
+   * Disable pdf ranges fix for Adobe Reader since it uses regex and we
+@@ -27,13 +26,12 @@ diff -Nura lighttpd-1.4.37.orig/doc/config/conf.d/access_log.conf lighttpd-1.4.3
+ diff -Nura lighttpd-1.4.37.orig/doc/config/lighttpd.conf lighttpd-1.4.37/doc/config/lighttpd.conf
+ --- lighttpd-1.4.37.orig/doc/config/lighttpd.conf	2015-09-01 14:38:48.684673663 -0300
+ +++ lighttpd-1.4.37/doc/config/lighttpd.conf	2015-09-01 14:39:40.256442492 -0300
+-@@ -13,8 +13,8 @@
++@@ -14,8 +14,8 @@
+  ## if you add a variable here. Add the corresponding variable in the
+  ## chroot example aswell.
+  ##
+--var.log_root    = "/var/log/lighttpd"
++ var.log_root    = "/var/log/lighttpd"
+ -var.server_root = "/srv/www"
+-+var.log_root    = "/var/log"
+ +var.server_root = "/var/www"
+  var.state_dir   = "/var/run"
+  var.home_dir    = "/var/lib/lighttpd"
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index c565fed4ff..4fa1614c38 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -67,6 +67,7 @@ endif
+ define LIGHTTPD_INSTALL_CONFIG
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/lighttpd/conf.d
+ 	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/www
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/var/log/lighttpd
+ 	$(INSTALL) -D -m 0644 $(@D)/doc/config/lighttpd.conf \
+ 		$(TARGET_DIR)/etc/lighttpd/lighttpd.conf
+ 	$(INSTALL) -D -m 0644 $(@D)/doc/config/modules.conf \
+@@ -98,4 +99,8 @@ define LIGHTTPD_INSTALL_INIT_SYSTEMD
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
+ endef
+
++define LIGHTTPD_PERMISSIONS
++	/var/log/lighttpd d 755 33 33 - - - - -
++endef
++
+ $(eval $(autotools-package))
+--
+2.11.0
