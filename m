@@ -1,49 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Jul 2018 23:09:22 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-savage:
- add patch to fix X.org server 1.20.0 build
-Message-ID: <20180728211152.37593800F5@busybox.osuosl.org>
+Date: Sat, 28 Jul 2018 23:09:26 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-sis: add
+ upstream patch to fix X.org server 1.20.0 build
+Message-ID: <20180728211152.402957F885@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96604ada8f58c6dc612cafafe8479747fb6b3779
+commit: https://git.buildroot.net/buildroot/commit/?id=2a37f15738050f0e321534bdb7aa7ed8d1487481
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-xorg-xserver120.patch                     | 23 ++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ .../0002-Remove-reference-to-virtualFrom.patch     | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch b/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch b/package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch
 new file mode 100644
-index 0000000000..4c695960d1
+index 0000000000..c9e05efb76
 --- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-savage/0002-xorg-xserver120.patch
-@@ -0,0 +1,23 @@
-+Fix build with modular-xorg-server-1.20
++++ b/package/x11r7/xdriver_xf86-video-sis/0002-Remove-reference-to-virtualFrom.patch
+@@ -0,0 +1,33 @@
++From 4b1356a2b7fd06e9a05d134caa4033681c939737 Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Thu, 16 Feb 2017 11:21:27 -0500
++Subject: [PATCH] Remove reference to ->virtualFrom
 +
-+Downloaded from
-+http://cvsweb.netbsd.org/bsdweb.cgi/pkgsrc/x11/xf86-video-savage/patches/patch-src_savage__driver.c?rev=1.3&content-type=text/x-cvsweb-markup
++The core will print this information as well anyway.
 +
-+Patch was sent upstream by Thomas Klausner <wiz@netbsd.org>:
-+https://lists.x.org/archives/xorg-devel/2018-May/056952.html
++Signed-off-by: Adam Jackson <ajax@redhat.com>
++
++Downloaded from upstream commit
++https://cgit.freedesktop.org/xorg/driver/xf86-video-sis/commit/?id=4b1356a2b7fd06e9a05d134caa4033681c939737
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/sis_driver.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+--- a/src/savage_driver.c.orig	2017-01-17 22:43:40.000000000 +0000
-++++ b/src/savage_driver.c
-+@@ -2034,8 +2034,10 @@ static Bool SavagePreInit(ScrnInfoPtr pS
-+     xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Detected current MCLK value of %1.3f MHz\n",
-+ 	       mclk / 1000.0);
++diff --git a/src/sis_driver.c b/src/sis_driver.c
++index 8f06164..513f68b 100644
++--- a/src/sis_driver.c
+++++ b/src/sis_driver.c
++@@ -2738,7 +2738,7 @@ SiSPrintModes(ScrnInfoPtr pScrn)
++     float hsync, refresh = 0.0;
++     char *desc, *desc2, *prefix, *uprefix, *output;
 + 
-++#if 0
-+     pScrn->maxHValue = 2048 << 3;	/* 11 bits of h_total 8-pixel units */
-+     pScrn->maxVValue = 2048;		/* 11 bits of v_total */
-++#endif
-+     pScrn->virtualX = pScrn->display->virtualX;
-+     pScrn->virtualY = pScrn->display->virtualY;
++-    xf86DrvMsg(pScrn->scrnIndex, pScrn->virtualFrom, "Virtual size is %dx%d "
+++    xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Virtual size is %dx%d "
++ 	       "(pitch %d)\n", pScrn->virtualX, pScrn->virtualY,
++ 	       pScrn->displayWidth);
 + 
++-- 
++2.17.1
++
