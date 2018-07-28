@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Jul 2018 22:21:33 +0200
-Subject: [Buildroot] [PATCH v1 1/2] linux-firmware: bump version to
- latest 8d69bab
-In-Reply-To: <bd49c776c2a729a54eb4a82e532129b663d906b3.1532642378.git.geoff@infradead.org>
+Date: Sat, 28 Jul 2018 22:21:38 +0200
+Subject: [Buildroot] [PATCH v1 2/2] linux-firmware: Add QLogic FastLinQ
+ 4xxxx
+In-Reply-To: <62b0fd196638870d0c17da94ca0cb98b96b6dae3.1532642378.git.geoff@infradead.org>
 References: <cover.1532642378.git.geoff@infradead.org>
- <bd49c776c2a729a54eb4a82e532129b663d906b3.1532642378.git.geoff@infradead.org>
-Message-ID: <20180728222133.427a08e3@windsurf>
+ <62b0fd196638870d0c17da94ca0cb98b96b6dae3.1532642378.git.geoff@infradead.org>
+Message-ID: <20180728222138.7bc7f4db@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,13 +15,11 @@ To: buildroot@busybox.net
 Hello,
 
 On Thu, 26 Jul 2018 22:21:25 +0000, Geoff Levand wrote:
-> Update from 65b1c68 (2018-01-04) to 8d69bab (2018-07-17).
-> 
 > Signed-off-by: Geoff Levand <geoff@infradead.org>
 > ---
->  package/linux-firmware/linux-firmware.hash | 2 +-
->  package/linux-firmware/linux-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/linux-firmware/Config.in         | 6 ++++++
+>  package/linux-firmware/linux-firmware.mk | 7 +++++++
+>  2 files changed, 13 insertions(+)
 
 Applied to master, thanks.
 
