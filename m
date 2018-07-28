@@ -1,35 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Jul 2018 22:12:27 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freerdp: bump version to
- 2.0.0-rc2
-In-Reply-To: <20180722150517.17857-1-bernd.kuhls@t-online.de>
-References: <20180722150517.17857-1-bernd.kuhls@t-online.de>
-Message-ID: <20180728221227.52fdb7a9@windsurf>
+Date: Sat, 28 Jul 2018 22:13:37 +0200
+Subject: [Buildroot] [git commit] linux-firmware: bump version to latest
+ 8d69bab
+Message-ID: <20180728201543.83858870D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=51435be1f1e8d4f7f50c95a406ecde6cb0e22418
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 22 Jul 2018 17:05:17 +0200, Bernd Kuhls wrote:
-> Fixes build with upcoming ffmpeg version 4.0.2.
-> 
-> Removed 0001-Fix-gstreamer-1.0-detection.patch, applied upstream.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0001-Fix-gstreamer-1.0-detection.patch    | 28 -------------------
->  package/freerdp/freerdp.hash                  |  2 +-
->  package/freerdp/freerdp.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 30 deletions(-)
->  delete mode 100644 package/freerdp/0001-Fix-gstreamer-1.0-detection.patch
+Update from 65b1c68 (2018-01-04) to 8d69bab (2018-07-17).
 
-Applied to master, thanks.
+Signed-off-by: Geoff Levand <geoff@infradead.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.hash | 2 +-
+ package/linux-firmware/linux-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index 0106db2ffb..d0dfe93f2a 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 d253f7abb32e0407bcc840a5bddba1dc20190bb4a4bb6d40512f279fde384671 linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2.tar.gz
++sha256 905be20e4e2d7628dea4e2e99195520fc0cce8b247faabdc52fc44a3ff2ceb04 linux-firmware-8d69bab7a3da1913113ea98cefb73d5fa6988286.tar.gz
+ sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
+ sha256 448a367f518ff62c0501ded89c3da03cd3b632aa05bf62b4d5b969b136476d96 LICENSE.amdgpu
+ sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 46ab9d5ffe..8e53cacba4 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LINUX_FIRMWARE_VERSION = 65b1c68c63f974d72610db38dfae49861117cae2
++LINUX_FIRMWARE_VERSION = 8d69bab7a3da1913113ea98cefb73d5fa6988286
+ LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+ LINUX_FIRMWARE_SITE_METHOD = git
+ 
