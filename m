@@ -1,69 +1,109 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 29 Jul 2018 00:04:36 +0200
-Subject: [Buildroot] ghostscript: wrong fonts path set in target
- application
-In-Reply-To: <1532595453473-0.post@n4.nabble.com>
-References: <1532519188355-0.post@n4.nabble.com>
- <20180725163732.66eb4956@windsurf> <1532594669999-0.post@n4.nabble.com>
- <1532595453473-0.post@n4.nabble.com>
-Message-ID: <0ecb214c-827d-a880-1096-9e7caf8afa7e@mind.be>
+Date: Sun, 29 Jul 2018 00:22:08 +0200
+Subject: [Buildroot] [PATCH 1/1] gst1-plugins-good: add option for qmlgl
+ plugin (qt5 plugin)
+In-Reply-To: <1532336135-10609-1-git-send-email-inigohuguet@fanamoel.com>
+References: <CADujc4qKisW=6QyDZjDSUo50Yj+_H4-+7V=2KW32cAzRB_d2Qw@mail.gmail.com>
+ <1532336135-10609-1-git-send-email-inigohuguet@fanamoel.com>
+Message-ID: <4a3746f6-f635-e3a2-0d09-deff9c106b70@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi I?igo,
 
-
-On 26-07-18 10:57, Thomas Ehrhardt wrote:
-> Signed-off-by: Thomas Ehrhardt <tehrhardt@innovaphone.com> 
+On 23-07-18 10:55, I?igo Huguet wrote:
+> gst1-plugins-good is built with --disable-qt option, so qmlgl plugin
+> is disabled. Added option to enable it, allowing to use elements
+> qmlglsrc and qmlglsink.
+> 
+> Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
 > ---
-> --- a/package/ghostscript/ghostscript.mk
-> +++ b/package/ghostscript/ghostscript.mk
-> @@ -40,7 +40,7 @@
->         --disable-compile-inits \
->         --disable-cups \
->         --enable-fontconfig \
-> -       --with-fontpath=$(GHOSTSCRIPT_FONTS_TARGET_DIR) \
-> +       --with-fontpath=/usr/share/fonts \
+>  package/gstreamer1/gst1-plugins-good/Config.in            | 10 ++++++++++
+>  package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 13 +++++++++++--
+>  2 files changed, 21 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+> index 3bb98a4..d55b445 100644
+> --- a/package/gstreamer1/gst1-plugins-good/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
+> @@ -283,6 +283,16 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4
+>  	help
+>  	  Open Sound System (OSS) version 4 support for GStreamer
+>  
+> +config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
+> +	bool "qmlgl (qt5)"
+> +	depends on BR2_PACKAGE_QT5DECLARATIVE_QUICK
 
- This diff was containing spaces instead of tabs, so it didn't apply. Please
-send patches using git send-email in the future, as explained in the manual.
+ We try to use select as much as possible. Selecting qt5 itself is a bit over
+the top, but declarative and quick could be selected. So something like
 
- I've made this change manually and applied. I've also improved the commit
-message with the information you gave in your earlier mail:
+	depends on BR2_PACKAGE_QT5
+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
+ 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST #
+qt5declarative-quick
+	select BR2_PACKAGE_QT5DECLARATIVE
+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
 
-    ghostscript: set correct font path on target
+> +	select BR2_PACKAGE_QT5X11EXTRAS if BR2_PACKAGE_QT5BASE_XCB
+> +	help
+> +	  QT5 plugin which includes elements qmlglsrc and qmlglsink
+> +	
+> +comment "qmlgl (qt5) plugin depends on QT5 declarative with Quick module"
+> +	depends on !BR2_PACKAGE_QT5DECLARATIVE_QUICK
 
-    GHOSTSCRIPT_FONTS_TARGET_DIR is set to $(TARGET_DIR)/usr/share/fonts/gs
-    in ghostscript-fonts.mk. If we pass this full path to ghostscript, it
-    will look for fonts in $(TARGET_DIR), which doesn't exist on the
-    target.
+ No comment would be needed for the qt5 (obvious that you need qt5 for qt5
+support in GStreamer), no comment would be needed for JSCORE_AVAILABLE (it's an
+arch dependency), but a comment is needed for GL_AVAILABLE. So:
 
-    Instead of /usr/share/fonts/gs, use /usr/share/fonts so ghostscript can
-    also access other fonts than the ones installed by ghostscript-fonts.
+comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
+	depends on BR2_PACKAGE_QT5
+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
 
+> +
+>  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+>  	bool "v4l2"
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
+> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> index 6fa989d..bc8242d 100644
+> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> @@ -20,8 +20,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+>  	--disable-osx_video \
+>  	--disable-aalib \
+>  	--disable-aalibtest \
+> -	--disable-libcaca \
+> -	--disable-qt
+> +	--disable-libcaca
+>  
+>  # Options which require currently unpackaged libraries
+>  GST1_PLUGINS_GOOD_CONF_OPTS += \
+> @@ -328,6 +327,16 @@ else
+>  GST1_PLUGINS_GOOD_CONF_OPTS += --disable-oss4
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL),y)
+> +GST1_PLUGINS_GOOD_CONF_OPTS += --enable-qt
+> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5declarative
+> +else
+> +GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
+> +endif
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL)$(BR2_PACKAGE_QT5BASE_XCB),yy)
+> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5x11extras
 
- Can you double-check that commit a76eab228f0bde8597bb6431733e3e1a8d25f806 works
-for you?
+ Better put this inside the condition above, so you don't need the ugly yy.
 
  Regards,
  Arnout
 
->         --enable-freetype \
->         --disable-gtk \
->         --without-jbig2dec \
-> 
-> 
-> 
-> 
-> 
-> --
-> Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
+>  GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
+>  else
 > 
 
 -- 
