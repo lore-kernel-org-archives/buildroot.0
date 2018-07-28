@@ -1,86 +1,86 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 28 Jul 2018 19:24:51 -0400
-Subject: [Buildroot] [PATCH v7 0/5] Gobject-introspection: New package
-Message-ID: <20180728232456.19550-1-aduskett@gmail.com>
+Date: Sat, 28 Jul 2018 19:24:53 -0400
+Subject: [Buildroot] [PATCH v7 2/5] prelink-cross: new package
+In-Reply-To: <20180728232456.19550-1-aduskett@gmail.com>
+References: <20180728232456.19550-1-aduskett@gmail.com>
+Message-ID: <20180728232456.19550-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I am releasing version 7 of the gobject-introspection patch series.
-I received reports of some packages requiring installed .typelib files
-on the target filing system from the gobject-introspection package.
-Previous versions of this patch had the configure flag
-of --disable-introspection-data set. This patch now sets this flag
-to enabled, which builds the .typelib files.
+Prelink-cross emulates a runtime linker for a given sysroot. This is
+necessary to allow gobject-introspection to build it's typelib files
+during cross-compiling.
 
-This change requires a few changes, however:
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v7:
+  - Add patch to series.
 
-First: I wasn't able to get the cross-ldd script to work correctly.
-What was happening was that cross-ldd was calling out my host-ldd,
-which then would cause the .typelib files to fail the linking step.
-Adding the prelink-cross package fixes this issue. As such, I removed
-the cross-ldd wrapper from package/gobject-introspection.
-
-Second: I had to move some logic around first to install the ldd and qemu
-wrappers first, as gobject-introspection calls g-ir-ldd-wrapper and
-g-ir-scanner-qemuwrapper during the compiling process.
-
-
-Adam Duskett (5):
-  binutils: install libiberty for host build.
-  prelink-cross: new package
-  gstreamer1 packages: explicitly disable introspection
-  gobject-introspection: new package
-  gstreamer1 packages: add support for introspection
-
- DEVELOPERS                                    |   1 +
- Makefile                                      |   2 +
- package/Config.in                             |   1 +
- package/Config.in.host                        |   1 +
- package/binutils/binutils.mk                  |   1 +
- ...lete-upstream-attempt-at-cross-compi.patch |  50 +++++
- ...-host-gi-gi-cross-wrapper-gi-ldd-wra.patch | 203 ++++++++++++++++++
- ...canner-add-use-binary-wrapper-option.patch |  52 +++++
- ...scanner-add-a-use-ldd-wrapper-option.patch |  48 +++++
- .../0005-add-PYTHON_INCLUDES-override.patch   |  39 ++++
- ...scanner-add-a-lib-dirs-envvar-option.patch |  73 +++++++
- .../0007-Add-rpath-links-to-ccompiler.patch   |  29 +++
- package/gobject-introspection/Config.in       |  30 +++
- .../gobject-introspection/g-ir-compiler.in    |   2 +
- .../g-ir-scanner-lddwrapper.in                |   2 +
- .../g-ir-scanner-qemuwrapper.in               |  10 +
- package/gobject-introspection/g-ir-scanner.in |   3 +
- .../gobject-introspection.hash                |   4 +
- .../gobject-introspection.mk                  |  98 +++++++++
- .../gst1-plugins-bad/gst1-plugins-bad.mk      |   8 +-
- ...ect-reference-to-gstreamer-sdp-in-Ma.patch |  26 +++
- .../gst1-plugins-base/gst1-plugins-base.mk    |   8 +-
- package/gstreamer1/gstreamer1/gstreamer1.mk   |   7 +
- package/pkg-autotools.mk                      |   3 +
- package/prelink-cross/Config.in.host          |   6 +
- package/prelink-cross/prelink-cross.hash      |   3 +
- package/prelink-cross/prelink-cross.mk        |  15 ++
- 27 files changed, 723 insertions(+), 2 deletions(-)
- create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
- create mode 100644 package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch
- create mode 100644 package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0005-add-PYTHON_INCLUDES-override.patch
- create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
- create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
- create mode 100644 package/gobject-introspection/Config.in
- create mode 100644 package/gobject-introspection/g-ir-compiler.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner.in
- create mode 100644 package/gobject-introspection/gobject-introspection.hash
- create mode 100644 package/gobject-introspection/gobject-introspection.mk
- create mode 100644 package/gstreamer1/gst1-plugins-base/0001-rtsp-drop-incorrect-reference-to-gstreamer-sdp-in-Ma.patch
+ package/Config.in.host                   |  1 +
+ package/prelink-cross/Config.in.host     |  6 ++++++
+ package/prelink-cross/prelink-cross.hash |  3 +++
+ package/prelink-cross/prelink-cross.mk   | 15 +++++++++++++++
+ 4 files changed, 25 insertions(+)
  create mode 100644 package/prelink-cross/Config.in.host
  create mode 100644 package/prelink-cross/prelink-cross.hash
  create mode 100644 package/prelink-cross/prelink-cross.mk
 
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 7838ffc219..9ce23b181d 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -41,6 +41,7 @@ menu "Host utilities"
+ 	source "package/parted/Config.in.host"
+ 	source "package/patchelf/Config.in.host"
+ 	source "package/pkgconf/Config.in.host"
++	source "package/prelink-cross/Config.in.host"
+ 	source "package/pru-software-support/Config.in.host"
+ 	source "package/pwgen/Config.in.host"
+ 	source "package/python-cython/Config.in.host"
+diff --git a/package/prelink-cross/Config.in.host b/package/prelink-cross/Config.in.host
+new file mode 100644
+index 0000000000..8394935529
+--- /dev/null
++++ b/package/prelink-cross/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_PRELINK_CROSS
++	bool "host prelink-cross"
++	help
++	  Emulate a runtime linker for a given sysroot.
++
++	  https://wiki.yoctoproject.org/wiki/Cross-Prelink
+diff --git a/package/prelink-cross/prelink-cross.hash b/package/prelink-cross/prelink-cross.hash
+new file mode 100644
+index 0000000000..ed8e7b211a
+--- /dev/null
++++ b/package/prelink-cross/prelink-cross.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  7f2f864f330d4e44abba252d36e2795e6639e46b0ca927aa477cfd1419ca4995  prelink-cross-05aeafd053e56356ec8c62f4bb8f7b95bae192f3.tar.gz
++sha256  b8a2f73f743dc1a51aff23f1aacbca4b868564db52496fa3c0caba755bfd1eaf  COPYING
+diff --git a/package/prelink-cross/prelink-cross.mk b/package/prelink-cross/prelink-cross.mk
+new file mode 100644
+index 0000000000..2cecf12f48
+--- /dev/null
++++ b/package/prelink-cross/prelink-cross.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# host-prelink-cross
++#
++################################################################################
++
++HOST_PRELINK_CROSS_VERSION = 05aeafd053e56356ec8c62f4bb8f7b95bae192f3
++HOST_PRELINK_CROSS_SITE = git://git.yoctoproject.org/prelink-cross
++HOST_PRELINK_CROSS_SITE_METHOD = git
++HOST_PRELINK_CROSS_LICENSE = GPL-2.0
++HOST_PRELINK_CROSS_LICENSE_FILES = COPYING
++HOST_PRELINK_CROSS_AUTORECONF = YES
++HOST_PRELINK_CROSS_DEPENDENCIES = host-binutils
++
++$(eval $(host-autotools-package))
 -- 
 2.17.1
