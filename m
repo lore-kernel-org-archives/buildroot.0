@@ -1,56 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Jul 2018 22:19:58 +0200
-Subject: [Buildroot] [git commit] linux-firmware: add option to install
- QLogic FastLinQ 4xxxx firmware
-Message-ID: <20180728201543.8EC73870D8@busybox.osuosl.org>
+Date: Sat, 28 Jul 2018 22:21:33 +0200
+Subject: [Buildroot] [PATCH v1 1/2] linux-firmware: bump version to
+ latest 8d69bab
+In-Reply-To: <bd49c776c2a729a54eb4a82e532129b663d906b3.1532642378.git.geoff@infradead.org>
+References: <cover.1532642378.git.geoff@infradead.org>
+ <bd49c776c2a729a54eb4a82e532129b663d906b3.1532642378.git.geoff@infradead.org>
+Message-ID: <20180728222133.427a08e3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea4c189abf26ca141cd0680d59c3d51d48fe0097
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/linux-firmware/Config.in         | 6 ++++++
- package/linux-firmware/linux-firmware.mk | 7 +++++++
- 2 files changed, 13 insertions(+)
+On Thu, 26 Jul 2018 22:21:25 +0000, Geoff Levand wrote:
+> Update from 65b1c68 (2018-01-04) to 8d69bab (2018-07-17).
+> 
+> Signed-off-by: Geoff Levand <geoff@infradead.org>
+> ---
+>  package/linux-firmware/linux-firmware.hash | 2 +-
+>  package/linux-firmware/linux-firmware.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 074bcc6c78..bb88afeec2 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -320,6 +320,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5
- 	  Firmware files for Chelsio T5 1Gb and 10Gb ethernet cards
- 	  (cxgb4)
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X
-+	bool "QLogic FastLinQ 4xxxx"
-+	help
-+	  Firmware files for QLogic FastLinQ 4xxxx ethernet devices
-+	  (qede)
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169
- 	bool "Realtek 8169"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 8e53cacba4..c9866fd1bb 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -381,6 +381,13 @@ LINUX_FIRMWARE_FILES += cxgb4/t5fw*.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X),y)
-+LINUX_FIRMWARE_FILES += \
-+	qed/qed_init_values_zipped-8.33.11.0.bin
-+# No license file; the license is in the file WHENCE
-+# which is installed unconditionally
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169),y)
- LINUX_FIRMWARE_FILES += \
- 	rtl_nic/rtl8105e-1.fw \
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
