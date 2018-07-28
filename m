@@ -1,47 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Jul 2018 22:13:37 +0200
-Subject: [Buildroot] [git commit] linux-firmware: bump version to latest
- 8d69bab
-Message-ID: <20180728201543.83858870D8@busybox.osuosl.org>
+Date: Sat, 28 Jul 2018 22:19:58 +0200
+Subject: [Buildroot] [git commit] linux-firmware: add option to install
+ QLogic FastLinQ 4xxxx firmware
+Message-ID: <20180728201543.8EC73870D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51435be1f1e8d4f7f50c95a406ecde6cb0e22418
+commit: https://git.buildroot.net/buildroot/commit/?id=ea4c189abf26ca141cd0680d59c3d51d48fe0097
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Update from 65b1c68 (2018-01-04) to 8d69bab (2018-07-17).
 
 Signed-off-by: Geoff Levand <geoff@infradead.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-firmware/linux-firmware.hash | 2 +-
- package/linux-firmware/linux-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in         | 6 ++++++
+ package/linux-firmware/linux-firmware.mk | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
-index 0106db2ffb..d0dfe93f2a 100644
---- a/package/linux-firmware/linux-firmware.hash
-+++ b/package/linux-firmware/linux-firmware.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 d253f7abb32e0407bcc840a5bddba1dc20190bb4a4bb6d40512f279fde384671 linux-firmware-65b1c68c63f974d72610db38dfae49861117cae2.tar.gz
-+sha256 905be20e4e2d7628dea4e2e99195520fc0cce8b247faabdc52fc44a3ff2ceb04 linux-firmware-8d69bab7a3da1913113ea98cefb73d5fa6988286.tar.gz
- sha256 8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9 LICENCE.Abilis
- sha256 448a367f518ff62c0501ded89c3da03cd3b632aa05bf62b4d5b969b136476d96 LICENSE.amdgpu
- sha256 38f2037aa14631b4b29826d7a99379613c41a97064d1defdee30a7a022138b20 LICENCE.Marvell
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 074bcc6c78..bb88afeec2 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -320,6 +320,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5
+ 	  Firmware files for Chelsio T5 1Gb and 10Gb ethernet cards
+ 	  (cxgb4)
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X
++	bool "QLogic FastLinQ 4xxxx"
++	help
++	  Firmware files for QLogic FastLinQ 4xxxx ethernet devices
++	  (qede)
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169
+ 	bool "Realtek 8169"
+ 	help
 diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 46ab9d5ffe..8e53cacba4 100644
+index 8e53cacba4..c9866fd1bb 100644
 --- a/package/linux-firmware/linux-firmware.mk
 +++ b/package/linux-firmware/linux-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -381,6 +381,13 @@ LINUX_FIRMWARE_FILES += cxgb4/t5fw*.bin
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
+ endif
  
--LINUX_FIRMWARE_VERSION = 65b1c68c63f974d72610db38dfae49861117cae2
-+LINUX_FIRMWARE_VERSION = 8d69bab7a3da1913113ea98cefb73d5fa6988286
- LINUX_FIRMWARE_SITE = http://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
- LINUX_FIRMWARE_SITE_METHOD = git
- 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X),y)
++LINUX_FIRMWARE_FILES += \
++	qed/qed_init_values_zipped-8.33.11.0.bin
++# No license file; the license is in the file WHENCE
++# which is installed unconditionally
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169),y)
+ LINUX_FIRMWARE_FILES += \
+ 	rtl_nic/rtl8105e-1.fw \
