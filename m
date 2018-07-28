@@ -1,14 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Jul 2018 22:30:00 +0200
-Subject: [Buildroot] [git commit] package/libdri2: switch to xorgproto
-Message-ID: <20180728211151.98F118A392@busybox.osuosl.org>
+Date: Sat, 28 Jul 2018 22:29:42 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-base:
+ switch to xorgproto
+Message-ID: <20180728211151.90FDA8A392@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb3a33b4bfcb64cf581a49149691f526565c9356
+commit: https://git.buildroot.net/buildroot/commit/?id=a31c976b30925c956053871c803cddf34bdc6b17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The new package xorgproto will combine and replace all current xproto_*
@@ -19,33 +20,33 @@ Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libdri2/Config.in  | 2 +-
- package/libdri2/libdri2.mk | 2 +-
+ package/gstreamer1/gst1-plugins-base/Config.in            | 2 +-
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libdri2/Config.in b/package/libdri2/Config.in
-index a10df7404a..fa3f76e8f3 100644
---- a/package/libdri2/Config.in
-+++ b/package/libdri2/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_LIBDRI2
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_XLIB_LIBXDAMAGE
- 	select BR2_PACKAGE_XLIB_LIBXEXT
--	select BR2_PACKAGE_XPROTO_DRI2PROTO
+diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
+index 531fac4f47..340926ecb9 100644
+--- a/package/gstreamer1/gst1-plugins-base/Config.in
++++ b/package/gstreamer1/gst1-plugins-base/Config.in
+@@ -164,7 +164,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX
+ 	depends on BR2_PACKAGE_XSERVER_XORG_SERVER_MODULAR # mesa needs big X
+ 	depends on !BR2_PACKAGE_RPI_USERLAND # x11
+ 	select BR2_PACKAGE_XLIB_LIBXRENDER
+-	select BR2_PACKAGE_XPROTO_GLPROTO
 +	select BR2_PACKAGE_XORGPROTO
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_X11
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_PLATFORM
  	help
- 	  Library for the DRI2 extension to the X Window System.
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 210bbeb20a..36440ef5fa 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -46,7 +46,7 @@ endif
  
-diff --git a/package/libdri2/libdri2.mk b/package/libdri2/libdri2.mk
-index 22854b5060..79f38c680b 100644
---- a/package/libdri2/libdri2.mk
-+++ b/package/libdri2/libdri2.mk
-@@ -6,7 +6,7 @@
- 
- LIBDRI2_VERSION = 4f1eef3183df2b270c3d5cbef07343ee5127a6a4
- LIBDRI2_SITE = $(call github,robclark,libdri2,$(LIBDRI2_VERSION))
--LIBDRI2_DEPENDENCIES = xlib_libXext xproto_dri2proto xlib_libXdamage libdrm
-+LIBDRI2_DEPENDENCIES = xlib_libXext xlib_libXdamage xorgproto libdrm
- LIBDRI2_LICENSE = MIT
- LIBDRI2_LICENSE_FILES = COPYING
- 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLX),y)
+ GST1_PLUGINS_BASE_CONF_OPTS += --enable-glx
+-GST1_PLUGINS_BASE_DEPENDENCIES += xproto_glproto xlib_libXrender
++GST1_PLUGINS_BASE_DEPENDENCIES += xorgproto xlib_libXrender
+ else
+ GST1_PLUGINS_BASE_CONF_OPTS += --disable-glx
+ endif
