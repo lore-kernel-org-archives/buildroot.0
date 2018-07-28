@@ -1,349 +1,123 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 28 Jul 2018 11:45:07 +0200
-Subject: [Buildroot] [PATCH 1/1] Buildroot: Target to update config
- fragments in kconfig base packages
-In-Reply-To: <20180727131251.21649-1-m.patzlaff@pilz.de>
-References: <20180727131251.21649-1-m.patzlaff@pilz.de>
-Message-ID: <947900b0-6bcc-e4a8-288f-c2c564d40045@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 28 Jul 2018 13:42:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kodi: Fix build on openrisc
+Message-ID: <20180728114215.12530-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Patch for kodi.mk is needed to fix configure error:
 
-On 27-07-18 15:12, Marcel Patzlaff wrote:
-> This patch introduces a new make target for kconfig based packages:
->     <pkg>-update-last-config-fragment
-> 
-> It updates the last configuration fragment that is specified in
-> <PKG>_KCONFIG_FRAGMENT_FILES in a defined way. 
+CMake Error at scripts/linux/ArchSetup.cmake:24 (message):
+  Unknown CPU: or1k
 
- Now this sounds like a great plan :-)
+Tested using this defconfig:
 
- I unfortunately don't have time to review it now in detail, so I'm just going
-to give a few quick comments.
+BR2_or1k=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-openrisc-full-2018.02-925-gd4158df.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_KODI=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_PYTHON=y
+BR2_PACKAGE_PYTHON_PY_ONLY=y
 
-> Let's assume that
-> we have three fragment files X, Y and Z configured. So the update
-> process will only affect Z and be as follows:
-> 
-> 1) Create the defconfig D_now of the current .config file .C_now:
-> 
->     D_now = savedefconfig .C_now
-> 
-> 2) Create the .config file .C out of either <PKG>_KCONFIG_DEFCONFIG
->    or <PKG>_KCONFIG_FILE.
-> 
-> 3) Merge .C with the two first fragments X and Y into .Cy and create the
->    corresponding defconfig Dy:
-> 
->     .Cy = merge_config.sh .C X Y
->      Dy = savedefconfig .Cy
-> 
-> 2) Collect all items that differ between the two defconfigs Dy and Dnow and
->    take their values from .Cnow:
-> 
->       Z = diff_defconfig.sh Dy Dnow .Cnow
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/kodi/0004-or1k.patch | 62 ++++++++++++++++++++++++++++++++++++
+ package/kodi/kodi.mk         |  2 ++
+ 2 files changed, 64 insertions(+)
+ create mode 100644 package/kodi/0004-or1k.patch
 
- This is actually not the Z that existed before, but Znow.
-
- Could you explain why it is not sufficient to either:
-
-1. take values from Dnow; or
-2. take the difference between .Cy and .Cnow?
-
-
-> 
-> Now the following holds:
-> 
->      .Cnow = merge_config.sh .C X Y Z
-> 
-> The intention of this patch is to allow developers to change the
-> configuration via menuconfig or whatever editor and to apply those changes
-> automatically to the last fragment. This should further ease layering of
-> buildroot configurations.
-
- Put this at the very beginning of the commit message, it's the most important
-bit :-)
-
-> 
-> Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
-> ---
->  package/pkg-kconfig.mk            | 89 +++++++++++++++++++++++--------
->  support/kconfig/diff_defconfig.sh | 89 +++++++++++++++++++++++++++++++
-
- Since this script is not part of upstream kconfig, it should be in a different
-directly. Since it is also useful to be called directly by the user, it should
-be in the utils/ directory.
-
- Also, there is more opportunity for bikeshedding in the pkg-kconfig.mk change,
-so it is worth to split the patch in two patches, one that adds
-diff_defconfig.sh, and one that adds the make support for it.
-
->  2 files changed, 155 insertions(+), 23 deletions(-)
->  create mode 100755 support/kconfig/diff_defconfig.sh
-> 
-> diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-> index 81bba5220c..1e69572c3b 100644
-> --- a/package/pkg-kconfig.mk
-> +++ b/package/pkg-kconfig.mk
-> @@ -27,6 +27,39 @@ define kconfig-package-update-config
->  	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
->  endef
->  
-> +# Macro to save the defconfig file
-> +define kconfig-package-savedefconfig
-> +	$($(PKG)_MAKE_ENV) $(MAKE) -C $($(PKG)_DIR) \
-> +		$($(PKG)_KCONFIG_OPTS) savedefconfig
-> +endef
-> +
-> +# The correct way to regenerate a .config file is to use 'make olddefconfig'.
-> +# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
-> +# versions 2.6.36 and 3.6, and remains as an alias in later versions.
-> +# In older versions, and in some other projects that use kconfig, the target is
-> +# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
-> +# only, as this can fail in complex cases.
-> +# $(1): the name of the package in upper-case letters
-> +define kconfig-package-regen-dot-config
-> +	$(if $(filter olddefconfig,$($(1)_KCONFIG_RULES)),
-> +		$(Q)$($(1)_KCONFIG_MAKE) olddefconfig,
-> +		$(if $(filter oldnoconfig,$($(1)_KCONFIG_RULES)),
-> +			$(Q)$($(1)_KCONFIG_MAKE) oldnoconfig,
-> +			$(Q)(yes "" | $($(1)_KCONFIG_MAKE) oldconfig)))
-> +endef
-
- To ease review, it's also better to split off this change (which is just a
-refactoring with no functional change) in a separate patch.
-
- Also, I *think* (but I'm not sure) that it's not needed to make it a macro that
-is call'ed, because we can just use $(PKG) instead of $(1).
-
-> +
-> +# Macro to create a .config file where all fragments are merged into
-> +# $(1): the name of the package in upper-case letters
-> +# $(2): name of the .config file
-> +# $(3): fragment files to merge
-> +define kconfig-package-merge-config
-> +	$(Q)$(if $($(1)_KCONFIG_DEFCONFIG),\
-> +		$($(1)_KCONFIG_MAKE) $($(1)_KCONFIG_DEFCONFIG),\
-> +		$(INSTALL) -m 0644 -D $($(1)_KCONFIG_FILE) $(2))
-> +	$(Q)support/kconfig/merge_config.sh -m -O $(@D) $(2) $(3)
-> +	$(call kconfig-package-regen-dot-config,$(1))
-> +endef
-> +
->  ################################################################################
->  # inner-kconfig-package -- generates the make targets needed to support a
->  # kconfig package
-> @@ -90,31 +123,12 @@ $(2)_KCONFIG_RULES = \
->  	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
->  		sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
->  
-> -# The correct way to regenerate a .config file is to use 'make olddefconfig'.
-> -# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
-> -# versions 2.6.36 and 3.6, and remains as an alias in later versions.
-> -# In older versions, and in some other projects that use kconfig, the target is
-> -# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
-> -# only, as this can fail in complex cases.
-> -define $(2)_REGEN_DOT_CONFIG
-> -	$$(if $$(filter olddefconfig,$$($(2)_KCONFIG_RULES)),
-> -		$$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
-> -		$$(if $$(filter oldnoconfig,$$($(2)_KCONFIG_RULES)),
-> -			$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
-> -			$$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
-> -endef
-> -
->  # The specified source configuration file and any additional configuration file
->  # fragments are merged together to .config, after the package has been patched.
->  # Since the file could be a defconfig file it needs to be expanded to a
->  # full .config first.
->  $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-> -	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
-> -		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
-> -		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
-> -	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
-> -		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
-> -	$$($(2)_REGEN_DOT_CONFIG)
-> +	$$(call kconfig-package-merge-config,$(2),$$(@),$$($(2)_KCONFIG_FRAGMENT_FILES))
->  
->  # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
->  # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
-> @@ -125,7 +139,7 @@ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | $(1)-patch
->  # The exact rules are specified by the package .mk file.
->  define $(2)_FIXUP_DOT_CONFIG
->  	$$($(2)_KCONFIG_FIXUP_CMDS)
-> -	$$($(2)_REGEN_DOT_CONFIG)
-> +	$$(call kconfig-package-regen-dot-config,$(2))
->  	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
->  endef
->  
-> @@ -213,9 +227,9 @@ $(1)-check-configuration-done:
->  		exit 1; \
->  	fi
->  
-> +$(1)-savedefconfig: PKG=$(2)
->  $(1)-savedefconfig: $(1)-check-configuration-done
-> -	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
-> -		$$($(2)_KCONFIG_OPTS) savedefconfig
-> +	$$(call kconfig-package-savedefconfig)
->  
->  # Target to copy back the configuration to the source configuration file
->  # Even though we could use 'cp --preserve-timestamps' here, the separate
-> @@ -232,11 +246,40 @@ $(1)-update-defconfig: PKG=$(2)
->  $(1)-update-defconfig: $(1)-savedefconfig
->  	$$(call kconfig-package-update-config,defconfig)
->  
-> +
-> +define $(2)_KCONFIG_LAST_FRAGMENT
-> +	$$(lastword $$($(2)_KCONFIG_FRAGMENT_FILES))
-> +endef
-> +
-> +define $(2)_KCONFIG_FIRST_FRAGMENTS
-> +	$$(filter-out $$($(2)_KCONFIG_LAST_FRAGMENT),\
-> +		$$($(2)_KCONFIG_FRAGMENT_FILES))
-> +endef
-> +
-> +$(1)-update-last-config-fragment: PKG=$(2)
-> +$(1)-update-last-config-fragment: $(1)-savedefconfig
-> +	@$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), true, \
-> +		echo "Unable to perform $(@) when no fragment files are set"; exit 1)
-> +	$$(Q)cp -a $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_DIR)/.config.ulcf.all
-> +	$$(Q)cp -a $$($(2)_DIR)/defconfig $$($(2)_DIR)/defconfig.ulcf.all
-> +	$$(call kconfig-package-merge-config,$(2),$$($(2)_KCONFIG_DOTCONFIG),\
-> +		$$($(2)_KCONFIG_FIRST_FRAGMENTS))
-> +	$$(call kconfig-package-savedefconfig)
-> +	$$(Q)cp -a $$($(2)_DIR)/defconfig $$($(2)_DIR)/defconfig.ulcf.first
-> +	$$(Q)cp -a $$($(2)_DIR)/.config.ulcf.all $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
-> +	$$(Q)cp -a $$($(2)_DIR)/defconfig.ulcf.all $$($(2)_DIR)/defconfig
-> +	$$(Q)support/kconfig/diff_defconfig.sh $$($(2)_DIR)/defconfig.ulcf.first \
-> +		$$($(2)_DIR)/defconfig.ulcf.all $$($(2)_DIR)/.config.ulcf.all > \
-> +		$$($(2)_KCONFIG_LAST_FRAGMENT)
-> +	$$(Q)rm -f $$($(2)_DIR)/defconfig.ulcf.* $$($(2)_DIR)/.config.ulcf.*
-> +
-> +
->  endif # package enabled
->  
->  .PHONY: \
->  	$(1)-update-config \
->  	$(1)-update-defconfig \
-> +	$(1)-update-last-config-fragment \
->  	$(1)-savedefconfig \
->  	$(1)-check-configuration-done \
->  	$$($(2)_DIR)/.kconfig_editor_% \
-> diff --git a/support/kconfig/diff_defconfig.sh b/support/kconfig/diff_defconfig.sh
-> new file mode 100755
-> index 0000000000..ee7b0c0fc6
-> --- /dev/null
-> +++ b/support/kconfig/diff_defconfig.sh
-> @@ -0,0 +1,89 @@
-> +#!/bin/sh
-> +
-> +#  diff_defconfig.sh - Takes two defconfig files A and B as well as the config
-> +#  file derived from B and outputs the differences that lead from A to B.
-> +#  The output can be used as configuration fragment.
-> +#
-> +#  Copyright 2018 Pilz GmbH & Co. KG
-> +#
-> +#  This program is free software; you can redistribute it and/or modify
-> +#  it under the terms of the GNU General Public License version 2 as
-> +#  published by the Free Software Foundation.
-> +#
-> +#  This program is distributed in the hope that it will be useful,
-> +#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-> +#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-> +#  See the GNU General Public License for more details.
-> +
-> +set -e
-> +
-> +THIS_FILE=$(basename ${0})
-> +
-> +USAGE="${THIS_FILE} [OPTIONS] <a.defconfig> <b.defconfig> <b.config>"
-> +
-> +fail_msg() {
-> +    printf "%s\n" "${1}" 1>&2
-> +    exit 1
-> +}
-> +
-> +help() {
-> +    cat <<-_EOF_
-> +	Usage:
-> +	    ${USAGE}
-> +
-> +	${THIS_FILE} takes two defconfig files A and B as well as the .config
-> +	file derived from B and outputs the differences that lead from A to B on
-> +	stdout. The output can be used as configuration fragment.
-> +
-> +	Options:
-> +	    -h   display this help text
-> +	    -p   do not restrict config prefix to CONFIG_
-> +
-> +	Returns:
-> +	    0    If no error
-> +	    !0   If any error
-> +	_EOF_
-> +}
-> +
-> +
-> +ALLPREFIXES=false
-> +# parse options
-> +while true; do
-> +    case "${1}" in
-> +        "-h")
-> +            help
-> +            exit 0
-> +        ;;
-> +        "-p")
-> +            ALLPREFIXES=true
-> +            shift
-> +        ;;
-> +        *)
-> +            break
-> +        ;;
-> +    esac
-> +done
-> +
-> +# check if all files are given
-> +[ "${#}" -eq "3" ] || fail_msg "Usage: ${USAGE}"
-> +
-> +# test if files exist
-> +[ -f "${1}" ] || fail_msg "First defconfig file '${1}' does not exist!"
-> +[ -f "${2}" ] || fail_msg "Second defconfig file '${2}' does not exist!"
-> +[ -f "${3}" ] || fail_msg "Config file '${3}' does not exist!"
-> +
-> +ITEM_EXP="s/^[<>]\s\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-> +if [ "${ALLPREFIXES}" = "true" ]; then
-> +    ITEM_EXP="s/^[<>]\s\(# \)\{0,1\}\([a-zA-Z][a-zA-Z0-9_]*\)[= ].*/\2/p"
-> +fi
-> +
-> +# use normal diff and collect all differing items
-> +ITEMS=$(diff "${1}" "${2}" | sed -n "${ITEM_EXP}" | sort | uniq)
-> +
-> +# output their values
-> +for item in ${ITEMS}; do
-
- ITEMS may contain spaces, so you need to set IFS, or use a while read loop.
-
-> +    # some items disable/hide others so grep may fail here
-> +    grep -w "${item}" "${3}" || true
-> +done
-
- If I understand correctly, the result may actually still contain config values
-which are defaults, including config values that are not user-settable. This is
-not ideal. Can't be avoided, I guess, but this should be made explicit
-somewhere, either in the commit message or in a comment in the file.
-
-
- Regards,
- Arnout
-
-> +
-> +exit 0
-> 
-
+diff --git a/package/kodi/0004-or1k.patch b/package/kodi/0004-or1k.patch
+new file mode 100644
+index 0000000000..2bfce1a57e
+--- /dev/null
++++ b/package/kodi/0004-or1k.patch
+@@ -0,0 +1,62 @@
++Fix build on openrisc
++
++Patch for master branch sent upstream as PR 14236.
++This patch is a backport to Krypton branch.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -uNr xbmc-17.6-Krypton.org/xbmc/cores/DllLoader/DllLoader.h xbmc-17.6-Krypton/xbmc/cores/DllLoader/DllLoader.h
++--- xbmc-17.6-Krypton.org/xbmc/cores/DllLoader/DllLoader.h	2017-11-14 17:55:01.000000000 +0100
+++++ xbmc-17.6-Krypton/xbmc/cores/DllLoader/DllLoader.h	2018-07-28 12:24:36.686332911 +0200
++@@ -31,6 +31,7 @@
++     !defined(__SH4__) && \
++     !defined(__sparc__) && \
++     !defined(__arc__) && \
+++    !defined(__or1k__) && \
++     !defined(__xtensa__)
++ #define USE_LDT_KEEPER
++ #include "ldt_keeper.h"
++diff -uNr xbmc-17.6-Krypton.org/xbmc/cores/DllLoader/ldt_keeper.c xbmc-17.6-Krypton/xbmc/cores/DllLoader/ldt_keeper.c
++--- xbmc-17.6-Krypton.org/xbmc/cores/DllLoader/ldt_keeper.c	2017-11-14 17:55:01.000000000 +0100
+++++ xbmc-17.6-Krypton/xbmc/cores/DllLoader/ldt_keeper.c	2018-07-28 12:17:18.052505833 +0200
++@@ -27,6 +27,7 @@
++     !defined(__SH4__) && \
++     !defined(__sparc__) && \
++     !defined(__arc__) && \
+++    !defined(__or1k__) && \
++     !defined(__xtensa__)
++ 
++ #include "ldt_keeper.h"
++diff -uNr xbmc-17.6-Krypton.org/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h xbmc-17.6-Krypton/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h
++--- xbmc-17.6-Krypton.org/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h	2017-11-14 17:55:01.000000000 +0100
+++++ xbmc-17.6-Krypton/xbmc/cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h	2018-07-28 12:24:13.573134108 +0200
++@@ -302,6 +302,7 @@
++     !defined(__SH4__) && \
++     !defined(__sparc__) && \
++     !defined(__arc__) && \
+++    !defined(__or1k__) && \
++     !defined(__xtensa__)
++   // If there are any issues compiling this, just append a ' && 0'
++   // to the above to make it '#if defined(TARGET_POSIX) && 0'
++diff -uNr xbmc-17.6-Krypton.org/xbmc/threads/Atomics.cpp xbmc-17.6-Krypton/xbmc/threads/Atomics.cpp
++--- xbmc-17.6-Krypton.org/xbmc/threads/Atomics.cpp	2017-11-14 17:55:01.000000000 +0100
+++++ xbmc-17.6-Krypton/xbmc/threads/Atomics.cpp	2018-07-28 12:25:57.176022980 +0200
++@@ -113,6 +113,7 @@
++     defined(__SH4__) || \
++     defined(__sparc__) || \
++     defined(__arc__) || \
+++    defined(__or1k__) || \
++     defined(__xtensa__)
++ // Not available/required
++ // Hack to allow compilation
++diff -uNr xbmc-17.6-Krypton.org/xbmc/utils/MathUtils.h xbmc-17.6-Krypton/xbmc/utils/MathUtils.h
++--- xbmc-17.6-Krypton.org/xbmc/utils/MathUtils.h	2017-11-14 17:55:01.000000000 +0100
+++++ xbmc-17.6-Krypton/xbmc/utils/MathUtils.h	2018-07-28 12:10:22.595053280 +0200
++@@ -40,6 +40,7 @@
++     defined(__SH4__) || \
++     defined(__sparc__) || \
++     defined(__arc__) || \
+++    defined(__or1k__) || \
++     defined(__xtensa__)
++   #define DISABLE_MATHUTILS_ASM_ROUND_INT
++ #endif
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index f3fa0b55b0..1ccc6bb8d6 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -95,6 +95,8 @@ else ifeq ($(BR2_mips)$(BR2_mipsel)$(BR2_mips64)$(BR2_mips64el),y)
+ KODI_CONF_OPTS += \
+ 	-DWITH_ARCH=mips$(if $(BR2_ARCH_IS_64),64) \
+ 	-DWITH_CPU=mips$(if $(BR2_ARCH_IS_64),64)
++else ifeq ($(BR2_or1k),y)
++KODI_CONF_OPTS += -DWITH_ARCH=or1k -DWITH_CPU=or1k
+ else ifeq ($(BR2_powerpc)$(BR2_powerpc64le),y)
+ KODI_CONF_OPTS += \
+ 	-DWITH_ARCH=powerpc$(if $(BR2_ARCH_IS_64),64) \
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.18.0
