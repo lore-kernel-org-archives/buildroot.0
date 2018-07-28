@@ -1,33 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Jul 2018 16:07:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-In-Reply-To: <20180728082445.25019-1-bernd.kuhls@t-online.de>
-References: <20180728082445.25019-1-bernd.kuhls@t-online.de>
-Message-ID: <20180728160703.26ced9dc@windsurf>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 28 Jul 2018 16:06:07 +0200
+Subject: [Buildroot] [git commit] postgresql: add optional dependency on
+ libxml2
+Message-ID: <20180728140132.2D4698A4D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=568172d35578eea8fd097611f2ce7a802da2fc4c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 28 Jul 2018 10:24:45 +0200, Bernd Kuhls wrote:
-> Removed patch 0002 after upstream commit:
-> https://github.com/tvheadend/tvheadend/commit/e26ce3390a5ca88f3fcee8a7fa0e4bb1b078e538
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...-configure-check-for-strlcat-strlcpy.patch | 97 -------------------
->  package/tvheadend/tvheadend.hash              |  2 +-
->  package/tvheadend/tvheadend.mk                |  2 +-
->  3 files changed, 2 insertions(+), 99 deletions(-)
->  delete mode 100644 package/tvheadend/0002-configure-check-for-strlcat-strlcpy.patch
+The postgresql package is now built with --with-libxml if
+BR2_PACKAGE_LIBXML2 is selected to allow the use of XML functions in
+postgresql.
 
-Applied to master, thanks.
+Signed-off-by: Daniel Deterding <dde@innovaphone.com>
+Signed-off-by: Thomas Ehrhardt <tehrhardt@innovaphone.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/postgresql/postgresql.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 94b3e60e59..0940873686 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -70,6 +70,14 @@ else
+ POSTGRESQL_CONF_OPTS += --without-ldap
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBXML2),y)
++POSTGRESQL_DEPENDENCIES += libxml2
++POSTGRESQL_CONF_OPTS += --with-libxml
++POSTGRESQL_CONF_ENV += XML2_CONFIG=$(STAGING_DIR)/usr/bin/xml2-config
++else
++POSTGRESQL_CONF_OPTS += --without-libxml
++endif
++
+ define POSTGRESQL_USERS
+ 	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
+ endef
