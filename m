@@ -1,56 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Jul 2018 23:20:05 +0200
-Subject: [Buildroot] [PATCH v4 00/18] package/x11r7/xserver_xorg-server:
- bump version to 1.20.0
-In-Reply-To: <20180721141648.29939-1-bernd.kuhls@t-online.de>
-References: <20180721141648.29939-1-bernd.kuhls@t-online.de>
-Message-ID: <20180728232005.035e8a61@windsurf>
+Date: Sat, 28 Jul 2018 23:21:14 +0200
+Subject: [Buildroot] [git commit] Makefile: help: BR2_DEFCONFIG for
+ defconfig must be on command line
+Message-ID: <20180728211622.AA1398A5C9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=27aa7ae6182b2c6f8246c46b827a48fc80ffdd62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 21 Jul 2018 16:16:30 +0200, Bernd Kuhls wrote:
+The help text says that BR2_DEFCONFIG will be used as input, but a
+BR2_DEFCONFIG specified in the existing .config file will *not* be
+used. So say explicitly that it must be specified on the command line.
+Note that both "BR2_DEFCONFIG=... make defconfig" and
+"make defconfig BR2_DEFCONFIG=..." will work.
 
-> Bernd Kuhls (18):
->   package/x11r7/xorgproto: new package
->   package/efl: switch to xorgproto
->   package/gstreamer1/gst1-plugins-base: switch to xorgproto
->   package/libdri2: switch to xorgproto
->   package/libvdpau: switch to xorgproto
->   package/mesa3d: switch to xorgproto
->   package/x11r7/xapp_*: mass switch to xorgproto
->   package/x11r7/xdriver_xf86-input-*: mass switch to xorgproto
->   package/x11r7/xdriver_xf86-video-*: mass switch to xorgproto
->   package/x11r7/xkeyboard-config: switch to xorgproto
->   package/x11r7/xlib_*: mass switch to xorgproto
->   package/x11r7/xutil_makedepend: switch to xorgproto
->   package/x11r7/xserver_xorg-server: switch to xorgproto
->   package/x11r7/xproto_*: mass removal
->   package/x11r7/xdriver_xf86-video-r128: add ustream patch to fix
->     support for xserver_xorg-server 1.20.0
->   package/x11r7/xdriver_xf86-video-savage: add patch to fix support for
->     xserver_xorg-server 1.20.0
->   package/x11r7/xdriver_xf86-video-sis: add upstream patch to fix
->     support for xserver_xorg-server 1.20.0
->   package/x11r7/xserver_xorg-server: bump version to 1.20.0
+While we're at it, add a semicolon to separate the two statements.
 
-Thanks a lot for your work on this, much appreciated!
+Note that this overflows the help text beyond 80 characters, but that
+is already the case in many other lines.
 
-I've applied the whole series. I only did some changes to the
-Config.in.legacy part, to fix check-package issues and generally
-improve the wording of the legacy options.
+Reported-by: Anisse Astier <anisse@astier.eu>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-We'll see what the autobuilders have to say, but I did a X.org server
-1.14 build and a X.org server 1.20 build, and both went fine.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/Makefile b/Makefile
+index 8d25c8a239..37c7072c7c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1020,8 +1020,8 @@ help:
+ 	@echo '  silentoldconfig        - Same as oldconfig, but quietly, additionally update deps'
+ 	@echo '  olddefconfig           - Same as silentoldconfig but sets new symbols to their default value'
+ 	@echo '  randconfig             - New config with random answer to all options'
+-	@echo '  defconfig              - New config with default answer to all options'
+-	@echo '                             BR2_DEFCONFIG, if set, is used as input'
++	@echo '  defconfig              - New config with default answer to all options;'
++	@echo '                             BR2_DEFCONFIG, if set on the command line, is used as input'
+ 	@echo '  savedefconfig          - Save current config to BR2_DEFCONFIG (minimal config)'
+ 	@echo '  allyesconfig           - New config where all options are accepted with yes'
+ 	@echo '  allnoconfig            - New config where all options are answered with no'
