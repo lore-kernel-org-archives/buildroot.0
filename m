@@ -1,8 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 28 Jul 2018 10:12:08 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 14, 16,
- 17}.x series
-Message-ID: <20180728081209.5766-1-bernd.kuhls@t-online.de>
+Date: Sat, 28 Jul 2018 10:12:09 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.17.11
+In-Reply-To: <20180728081209.5766-1-bernd.kuhls@t-online.de>
+References: <20180728081209.5766-1-bernd.kuhls@t-online.de>
+Message-ID: <20180728081209.5766-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,32 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/linux-headers/Config.in.host | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index fb6140e3bc..4383466af1 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -258,14 +258,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+diff --git a/linux/Config.in b/linux/Config.in
+index 5beac16170..d30489e254 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
  	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.144"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.115"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.145"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.116"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.58"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.59"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
--	default "4.16.17"	if BR2_KERNEL_HEADERS_4_16
--	default "4.17.10"	if BR2_KERNEL_HEADERS_4_17
-+	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
-+	default "4.17.11"	if BR2_KERNEL_HEADERS_4_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-	default "4.17.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.17.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
 2.18.0
