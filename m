@@ -1,60 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 28 Jul 2018 23:09:07 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xdriver_xf86-video-r128: add
- upstream patch to fix X.org server 1.20.0 build
-Message-ID: <20180728211152.2F008800F5@busybox.osuosl.org>
+Date: Sat, 28 Jul 2018 22:33:49 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xutil_makedepend: switch to
+ xorgproto
+Message-ID: <20180728211152.0654A8A5CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63cb49fd90d6e69ca6171182b12728f1517f8f3f
+commit: https://git.buildroot.net/buildroot/commit/?id=454d246ff01e315eb4e69ad0efb29e6d6371c918
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The new package xorgproto will combine and replace all current xproto_*
+packages. For details read
+https://lists.x.org/archives/xorg-announce/2018-February/002835.html
+
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-include-stdint-h.patch                    | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ package/x11r7/xutil_makedepend/Config.in           | 1 +
+ package/x11r7/xutil_makedepend/xutil_makedepend.mk | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xdriver_xf86-video-r128/0002-include-stdint-h.patch b/package/x11r7/xdriver_xf86-video-r128/0002-include-stdint-h.patch
-new file mode 100644
-index 0000000000..4c15915b26
---- /dev/null
-+++ b/package/x11r7/xdriver_xf86-video-r128/0002-include-stdint-h.patch
-@@ -0,0 +1,34 @@
-+From c4c878d2ccb75fa75afe46e0e50ee9975c5c57fc Mon Sep 17 00:00:00 2001
-+From: Stefan Dirsch <sndirsch@suse.de>
-+Date: Mon, 25 Jun 2018 15:57:02 +0200
-+Subject: Include <stdint.h> in order to declare uint32_t
-+
-+Apparently this is needed in src/atipcirename.h since xorg-server
-+1.20 in order to still build this driver.
-+
-+Signed-off-by: Stefan Dirsch <sndirsch@suse.de>
-+Reviewed-by: Emil Velikov <emil.velikov@collabora.com>
-+
-+Downloaded from upstream commit
-+https://cgit.freedesktop.org/xorg/driver/xf86-video-r128/commit/?id=c4c878d2ccb75fa75afe46e0e50ee9975c5c57fc
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/atipcirename.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/atipcirename.h b/src/atipcirename.h
-+index e65ae3c..3e7f686 100644
-+--- a/src/atipcirename.h
-++++ b/src/atipcirename.h
-+@@ -34,6 +34,7 @@ enum region_type {
-+     REGION_IO 
-+ };
-+ 
-++#include <stdint.h>
-+ #include "xf86Module.h"
-+ 
-+ #if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) >= 12
-+-- 
-+cgit v1.1
-+
+diff --git a/package/x11r7/xutil_makedepend/Config.in b/package/x11r7/xutil_makedepend/Config.in
+index 0b091b0e34..fdf2fb92c1 100644
+--- a/package/x11r7/xutil_makedepend/Config.in
++++ b/package/x11r7/xutil_makedepend/Config.in
+@@ -1,4 +1,5 @@
+ config BR2_PACKAGE_XUTIL_MAKEDEPEND
+ 	bool "makedepend"
++	select BR2_PACKAGE_XORGPROTO
+ 	help
+ 	  No description available
+diff --git a/package/x11r7/xutil_makedepend/xutil_makedepend.mk b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+index 6fd3c1ae36..8a058efcec 100644
+--- a/package/x11r7/xutil_makedepend/xutil_makedepend.mk
++++ b/package/x11r7/xutil_makedepend/xutil_makedepend.mk
+@@ -10,8 +10,8 @@ XUTIL_MAKEDEPEND_SITE = http://xorg.freedesktop.org/releases/individual/util
+ XUTIL_MAKEDEPEND_LICENSE = MIT
+ XUTIL_MAKEDEPEND_LICENSE_FILES = COPYING
+ 
+-XUTIL_MAKEDEPEND_DEPENDENCIES = xproto_xproto
+-HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xproto_xproto
++XUTIL_MAKEDEPEND_DEPENDENCIES = xorgproto
++HOST_XUTIL_MAKEDEPEND_DEPENDENCIES = host-xorgproto
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
