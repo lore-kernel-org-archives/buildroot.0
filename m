@@ -1,7 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Jul 2018 21:25:26 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/libva: bump version to 2.2.0
-Message-ID: <20180729192528.5819-1-bernd.kuhls@t-online.de>
+Date: Sun, 29 Jul 2018 21:25:28 +0200
+Subject: [Buildroot] [PATCH v2 3/3] package/libva-utils: bump version to
+ 2.2.0
+In-Reply-To: <20180729192528.5819-1-bernd.kuhls@t-online.de>
+References: <20180729192528.5819-1-bernd.kuhls@t-online.de>
+Message-ID: <20180729192528.5819-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,7 +12,7 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Upstream moved its github repo to github.com/intel/, updated URLs, for
-reference see upstream PR 198. Also updated project URL.
+reference see upstream PR 110. Also updated project URL.
 
 Added patch to fix build without stack-protector support.
 
@@ -17,22 +20,22 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v2: added configure check for -fstack-protector (Thomas)
 
- package/libva/0001-check-ssp.patch | 64 ++++++++++++++++++++++++++++++
- package/libva/Config.in            |  2 +-
- package/libva/libva.hash           |  6 +--
- package/libva/libva.mk             |  6 ++-
- 4 files changed, 72 insertions(+), 6 deletions(-)
- create mode 100644 package/libva/0001-check-ssp.patch
+ package/libva-utils/0001-check-ssp.patch | 145 +++++++++++++++++++++++
+ package/libva-utils/Config.in            |   2 +-
+ package/libva-utils/libva-utils.hash     |   6 +-
+ package/libva-utils/libva-utils.mk       |   6 +-
+ 4 files changed, 153 insertions(+), 6 deletions(-)
+ create mode 100644 package/libva-utils/0001-check-ssp.patch
 
-diff --git a/package/libva/0001-check-ssp.patch b/package/libva/0001-check-ssp.patch
+diff --git a/package/libva-utils/0001-check-ssp.patch b/package/libva-utils/0001-check-ssp.patch
 new file mode 100644
-index 0000000000..ce4c42f89b
+index 0000000000..11c1ded795
 --- /dev/null
-+++ b/package/libva/0001-check-ssp.patch
-@@ -0,0 +1,64 @@
-+From c60ac5bc4f95c8d1ce3d44aa1dfad8636dbe3bee Mon Sep 17 00:00:00 2001
++++ b/package/libva-utils/0001-check-ssp.patch
+@@ -0,0 +1,145 @@
++From bdcf4d90f618f497311c348f984e005924cb3def Mon Sep 17 00:00:00 2001
 +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 29 Jul 2018 00:16:25 +0200
++Date: Sun, 29 Jul 2018 20:58:06 +0200
 +Subject: [PATCH] Check for -fstack-protector
 +
 +Not all toolchains provide support for -fstack-protector. This patch
@@ -41,19 +44,23 @@ index 0000000000..ce4c42f89b
 +/home/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/6.4.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
 +/home/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/6.4.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
 +
-+Patch sent upstream as PR 226.
++Patch sent upstream as PR 125.
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ configure.ac   | 16 ++++++++++++++++
-+ va/Makefile.am |  5 ++++-
-+ 2 files changed, 20 insertions(+), 1 deletion(-)
++ configure.ac             | 16 ++++++++++++++++
++ decode/Makefile.am       |  5 ++++-
++ encode/Makefile.am       |  5 ++++-
++ putsurface/Makefile.am   |  5 ++++-
++ vainfo/Makefile.am       |  5 ++++-
++ videoprocess/Makefile.am |  5 ++++-
++ 6 files changed, 36 insertions(+), 5 deletions(-)
 +
 +diff --git a/configure.ac b/configure.ac
-+index b0b88361..da1908cf 100644
++index be2e00d..cfa508a 100644
 +--- a/configure.ac
 ++++ b/configure.ac
-+@@ -209,6 +209,22 @@ if test "$ac_cv_have_gnuc_visibility_attribute" = "yes"; then
++@@ -129,6 +129,22 @@ if test "$ac_cv_have_gnuc_visibility_attribute" = "yes"; then
 +               [Defined to 1 if GCC visibility attribute is supported])
 + fi
 + 
@@ -76,70 +83,146 @@ index 0000000000..ce4c42f89b
 + # Check for DRM (mandatory)
 + LIBDRM_VERSION=libdrm_version
 + PKG_CHECK_MODULES([DRM], [libdrm >= $LIBDRM_VERSION])
-+diff --git a/va/Makefile.am b/va/Makefile.am
-+index 5b6d49ab..0e94d0ff 100644
-+--- a/va/Makefile.am
-++++ b/va/Makefile.am
-+@@ -77,9 +77,12 @@ libva_ldflags = \
++diff --git a/decode/Makefile.am b/decode/Makefile.am
++index febc50d..8ea9252 100644
++--- a/decode/Makefile.am
+++++ b/decode/Makefile.am
++@@ -24,11 +24,14 @@ bin_PROGRAMS = mpeg2vldemo loadjpeg
 + 
-+ libva_cflags = \
-+ 	-Wall			\
-+-	-fstack-protector	\
++ AM_CPPFLAGS = \
++ 	-Wall					\
++-	-fstack-protector			\
++ 	$(LIBVA_CFLAGS)				\
++ 	-I$(top_srcdir)/common			\
 + 	$(NULL)
 + 
 ++if USE_SSP
-++libva_cflags += -fstack-protector
+++AM_CPPFLAGS += -fstack-protector
 ++endif
 ++
-+ lib_LTLIBRARIES			= libva.la
-+ libvaincludedir			= ${includedir}/va
-+ libvainclude_HEADERS		= $(libva_source_h)
-diff --git a/package/libva/Config.in b/package/libva/Config.in
-index 08eb16b487..e4e351f98a 100644
---- a/package/libva/Config.in
-+++ b/package/libva/Config.in
-@@ -13,7 +13,7 @@ config BR2_PACKAGE_LIBVA
- 	  prevailing coding standards today (MPEG-2, MPEG-4 ASP/H.263,
- 	  MPEG-4 AVC/H.264, and VC-1/VMW3).
++ TEST_LIBS = \
++ 	$(LIBVA_LIBS)				\
++ 	$(top_builddir)/common/libva-display.la	\
++diff --git a/encode/Makefile.am b/encode/Makefile.am
++index 8298b39..c107007 100644
++--- a/encode/Makefile.am
+++++ b/encode/Makefile.am
++@@ -25,10 +25,13 @@ noinst_PROGRAMS = svctenc
++ 
++ AM_CPPFLAGS = \
++ 	-Wall				\
++-	-fstack-protector		\
++ 	$(LIBVA_CFLAGS) 		\
++ 	$(NULL)
++ 
+++if USE_SSP
+++AM_CPPFLAGS += -fstack-protector
+++endif
+++
++ h264encode_SOURCES	= h264encode.c
++ h264encode_CFLAGS	= -I$(top_srcdir)/common -g
++ h264encode_LDADD	= \
++diff --git a/putsurface/Makefile.am b/putsurface/Makefile.am
++index e7b62a1..10ae63e 100644
++--- a/putsurface/Makefile.am
+++++ b/putsurface/Makefile.am
++@@ -26,9 +26,12 @@ TEST_CFLAGS = \
++ 	$(LIBVA_CFLAGS)			\
++ 	-I$(top_srcdir)/common		\
++ 	-Wall				\
++-	-fstack-protector		\
++ 	$(NULL)
++ 
+++if USE_SSP
+++TEST_CFLAGS += -fstack-protector
+++endif
+++
++ TEST_LIBS = \
++ 	$(LIBVA_LIBS)		\
++ 	$(top_builddir)/common/libva-display.la	\
++diff --git a/vainfo/Makefile.am b/vainfo/Makefile.am
++index aff201f..e59f466 100644
++--- a/vainfo/Makefile.am
+++++ b/vainfo/Makefile.am
++@@ -27,9 +27,12 @@ vainfo_cflags = \
++ 	$(LIBVA_CFLAGS) \
++ 	-DLIBVA_VERSION_S="\"$(LIBVA_VERSION)\"" \
++ 	-Wall \
++-	-fstack-protector \
++ 	$(NULL)
++ 
+++if USE_SSP
+++vainfo_cflags += -fstack-protector
+++endif
+++
++ vainfo_libs = \
++        	$(LIBVA_LIBS) \
++ 	$(top_builddir)/common/libva-display.la	\
++diff --git a/videoprocess/Makefile.am b/videoprocess/Makefile.am
++index eb79bc3..448da7d 100644
++--- a/videoprocess/Makefile.am
+++++ b/videoprocess/Makefile.am
++@@ -24,11 +24,14 @@ bin_PROGRAMS = vavpp
++ 
++ AM_CPPFLAGS = \
++ 	-Wall					\
++-	-fstack-protector			\
++ 	$(LIBVA_CFLAGS)				\
++ 	-I$(top_srcdir)/common			\
++ 	$(NULL)
++ 
+++if USE_SSP
+++AM_CPPFLAGS += -fstack-protector
+++endif
+++
++ TEST_LIBS = \
++ 	$(LIBVA_LIBS)				\
++ 	$(top_builddir)/common/libva-display.la	\
+diff --git a/package/libva-utils/Config.in b/package/libva-utils/Config.in
+index ad299234c3..597419f7de 100644
+--- a/package/libva-utils/Config.in
++++ b/package/libva-utils/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBVA_UTILS
+ 	  Libva-utils is a collection of tests for VA-API (Video
+ 	  Acceleration API)
  
 -	  https://01.org/linuxmedia/vaapi
 +	  https://01.org/vaapi
  
- comment "libva needs a toolchain w/ threads, dynamic library"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index ed707095f0..72347a4f2d 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
+ comment "libva-utils needs a toolchain w/ C++, threads, dynamic library"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
+index 46674a3675..e86cb6e09c 100644
+--- a/package/libva-utils/libva-utils.hash
++++ b/package/libva-utils/libva-utils.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/01org/libva/releases
--sha1 9ecde2b6c9deda16e895a0b00b8aef3a765acb4c  libva-2.1.0.tar.bz2
-+# From https://github.com/intel/libva/releases
-+sha1 5b19d2fbf532f14e24c3bedb4074238a1d7f1686  libva-2.2.0.tar.bz2
+-# From https://github.com/01org/libva-utils/releases
+-sha1 9902eb944c3ace00be4fe95627708f156fc5ace7 libva-utils-2.1.0.tar.bz2
++# From https://github.com/intel/libva-utils/releases
++sha1 ef15d40d6bec847c74f21ee3431b7e7b06fec3b4  libva-utils-2.2.0.tar.bz2
  # Locally computed
--sha256 f3fa953a11d3210c3a4ee79031abdbe0863d5ce13d9b3f93f315f1eec60a4b0f  libva-2.1.0.tar.bz2
-+sha256 6f6ca04c785544d30d315ef130a6aeb9435b75f934d7fbe0e4e9ba6084ce4ef2  libva-2.2.0.tar.bz2
- sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index 79956a9d8e..7c129f4d97 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,12 +4,14 @@
+-sha256 f6a7790c3dcc56537372c90a83036a3136194a8b397e84e97bf9cc9254fa2c51  libva-utils-2.1.0.tar.bz2
++sha256 ed7a6ed1fab657df4e83ea11f90310efcf31c27828f32d65351a28ca3c404dc0  libva-utils-2.2.0.tar.bz2
+ sha256 c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
+diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
+index 85ee3083fd..348d419745 100644
+--- a/package/libva-utils/libva-utils.mk
++++ b/package/libva-utils/libva-utils.mk
+@@ -4,11 +4,13 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 2.1.0
-+LIBVA_VERSION = 2.2.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
--LIBVA_SITE = https://github.com/01org/libva/releases/download/$(LIBVA_VERSION)
-+LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
- LIBVA_LICENSE_FILES = COPYING
- LIBVA_INSTALL_STAGING = YES
+-LIBVA_UTILS_VERSION = 2.1.0
++LIBVA_UTILS_VERSION = 2.2.0
+ LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
+-LIBVA_UTILS_SITE = https://github.com/01org/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
++LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
+ LIBVA_UTILS_LICENSE = MIT
+ LIBVA_UTILS_LICENSE_FILES = COPYING
 +# 0001-check-ssp.patch
-+LIBVA_AUTORECONF = YES
- LIBVA_DEPENDENCIES = host-pkgconf libdrm
++LIBVA_UTILS_AUTORECONF = YES
+ LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
  
- # libdrm is a hard-dependency
+ $(eval $(autotools-package))
 -- 
 2.18.0
