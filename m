@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Jul 2018 15:08:25 +0200
-Subject: [Buildroot] [PATCH 1/8] firmware-imx: bump to version 7.5
-In-Reply-To: <6f639664-4b81-033c-fa68-44d48e0a347f@mind.be>
-References: <20180725150149.30774-1-gary.bisson@boundarydevices.com>
- <20180725150149.30774-2-gary.bisson@boundarydevices.com>
- <6f639664-4b81-033c-fa68-44d48e0a347f@mind.be>
-Message-ID: <20180729150825.76f085c1@windsurf>
+Date: Sun, 29 Jul 2018 15:19:50 +0200
+Subject: [Buildroot] [PATCH v2 1/3] mariadb: move comments outside of
+ define block
+In-Reply-To: <20180726163703.7598-1-bluemrp9@gmail.com>
+References: <20180726163703.7598-1-bluemrp9@gmail.com>
+Message-ID: <20180729151950.45d9c48f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,26 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 28 Jul 2018 23:53:44 +0200, Arnout Vandecappelle wrote:
-> On 25-07-18 17:01, Gary Bisson wrote:
-> > This new package includes new binaries for i.MX8QXP.
-> > 
-> > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>  
+On Thu, 26 Jul 2018 09:37:01 -0700, Ryan Coe wrote:
+> There are two comments inside the post install define block that show up in
+> the build. Fix this by moving the comments outside the block.
 > 
->  I've applied this patch to master, the rest is changes requested.
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+>  package/mariadb/mariadb.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-I don't know if we have been clear enough with Gary about what changes
-we want. Do we want to stay with a virtual package ? If so, what should
-be the name of the virtual package vs. the name of the package for the
-"old" i.MX VPUs ?
-
-On my side, while I agree that imx-vpu-cnm violates the rule of "we
-name packages like their upstream name", I believe this is a violation
-that is acceptable because the naming chosen by Gary is the one that is
-the easiest to understand and the most obvious: imx-vpu is the virtual
-package, imx-vpu-hantro and imx-vpu-cnm are the providers.
-
-Best regards,
+Applied to master, thanks.
 
 Thomas
 -- 
