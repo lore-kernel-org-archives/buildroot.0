@@ -1,42 +1,92 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Jul 2018 19:40:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mesa3d: fix xlib_libxshmfence
- dependency
-Message-ID: <20180729174026.21032-1-bernd.kuhls@t-online.de>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sun, 29 Jul 2018 15:19:16 -0400
+Subject: [Buildroot] [PATCH v8 0/5] Gobject-introspection: New package
+Message-ID: <20180729191921.11216-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/6b2/6b214f1013d2def0b7ff33af3115147f47afd7a1/
-http://autobuild.buildroot.net/results/8b8/8b8251235f6b08ae2275659f7af241d6d43df074/
-http://autobuild.buildroot.net/results/468/4681b76cbca66a267741df80719a4c2e032c6b00/
-http://autobuild.buildroot.net/results/90f/90fee90a4a8f6bb35be94ee437f8f7c1f0cbb5d9/
-http://autobuild.buildroot.net/results/1b8/1b862e22f9d1dfaf9b8d3a998061a83012302b05/
-http://autobuild.buildroot.net/results/ebe/ebe3e12887c89649ad3de0045846836957d83396/
-http://autobuild.buildroot.net/results/b7b/b7b300cc056bdc51a0570be2f250b806e306999e/
-http://autobuild.buildroot.net/results/c39/c3960a95741341114ced8907de09b6a266999184/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I am releasing version 8 of the gobject-introspection patch series.
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index dd36a5e0fd..eec72654cd 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -57,7 +57,8 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	bool
- 	select BR2_PACKAGE_MESA3D_DRIVER
--	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_TOOLCHAIN_HAS_SYNC_4
-+	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
-+		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
- 
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	bool
+Previously from V7:
+I received reports of some packages requiring installed .typelib files
+on the target filing system from the gobject-introspection package.
+Previous versions of this patch had the configure flag
+of --disable-introspection-data set. This patch now sets this flag
+to enabled, which builds the .typelib files.
+
+This change requires a few changes, however:
+
+First: I wasn't able to get the cross-ldd script to work correctly.
+What was happening was that cross-ldd was calling out my host-ldd,
+which then would cause the .typelib files to fail the linking step.
+Adding the prelink-cross package fixes this issue. As such, I removed
+the cross-ldd wrapper from package/gobject-introspection.
+
+Second: I had to move some logic around first to install the ldd and qemu
+wrappers first, as gobject-introspection calls g-ir-ldd-wrapper and
+g-ir-scanner-qemuwrapper during the compiling process.
+
+Changes to v8:
+I forgot to add "select BR2_PACKAGE_HOST_PRELINK_CROSS" to the
+gobject-introspectio Config.in file. Whoops!
+
+Adam Duskett (5):
+  binutils: install libiberty for host build.
+  prelink-cross: new package
+  gstreamer1 packages: explicitly disable introspection
+  gobject-introspection: new package
+  gstreamer1 packages: add support for introspection
+
+ DEVELOPERS                                    |   1 +
+ Makefile                                      |   2 +
+ package/Config.in                             |   1 +
+ package/Config.in.host                        |   1 +
+ package/binutils/binutils.mk                  |   1 +
+ ...lete-upstream-attempt-at-cross-compi.patch |  50 +++++
+ ...-host-gi-gi-cross-wrapper-gi-ldd-wra.patch | 203 ++++++++++++++++++
+ ...canner-add-use-binary-wrapper-option.patch |  52 +++++
+ ...scanner-add-a-use-ldd-wrapper-option.patch |  48 +++++
+ .../0005-add-PYTHON_INCLUDES-override.patch   |  39 ++++
+ ...scanner-add-a-lib-dirs-envvar-option.patch |  73 +++++++
+ .../0007-Add-rpath-links-to-ccompiler.patch   |  29 +++
+ package/gobject-introspection/Config.in       |  31 +++
+ .../gobject-introspection/g-ir-compiler.in    |   2 +
+ .../g-ir-scanner-lddwrapper.in                |   2 +
+ .../g-ir-scanner-qemuwrapper.in               |  10 +
+ package/gobject-introspection/g-ir-scanner.in |   3 +
+ .../gobject-introspection.hash                |   4 +
+ .../gobject-introspection.mk                  |  98 +++++++++
+ .../gst1-plugins-bad/gst1-plugins-bad.mk      |   8 +-
+ ...ect-reference-to-gstreamer-sdp-in-Ma.patch |  26 +++
+ .../gst1-plugins-base/gst1-plugins-base.mk    |   8 +-
+ package/gstreamer1/gstreamer1/gstreamer1.mk   |   7 +
+ package/pkg-autotools.mk                      |   3 +
+ package/prelink-cross/Config.in.host          |   6 +
+ package/prelink-cross/prelink-cross.hash      |   3 +
+ package/prelink-cross/prelink-cross.mk        |  15 ++
+ 27 files changed, 724 insertions(+), 2 deletions(-)
+ create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
+ create mode 100644 package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch
+ create mode 100644 package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch
+ create mode 100644 package/gobject-introspection/0005-add-PYTHON_INCLUDES-override.patch
+ create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
+ create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
+ create mode 100644 package/gobject-introspection/Config.in
+ create mode 100644 package/gobject-introspection/g-ir-compiler.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
+ create mode 100644 package/gobject-introspection/g-ir-scanner.in
+ create mode 100644 package/gobject-introspection/gobject-introspection.hash
+ create mode 100644 package/gobject-introspection/gobject-introspection.mk
+ create mode 100644 package/gstreamer1/gst1-plugins-base/0001-rtsp-drop-incorrect-reference-to-gstreamer-sdp-in-Ma.patch
+ create mode 100644 package/prelink-cross/Config.in.host
+ create mode 100644 package/prelink-cross/prelink-cross.hash
+ create mode 100644 package/prelink-cross/prelink-cross.mk
+
 -- 
-2.18.0
+2.17.1
