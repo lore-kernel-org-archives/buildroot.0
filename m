@@ -1,36 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 29 Jul 2018 15:20:40 +0200
-Subject: [Buildroot] [PATCH v2 2/3] mariadb: needs dynamic library
- support
-In-Reply-To: <20180726163703.7598-2-bluemrp9@gmail.com>
-References: <20180726163703.7598-1-bluemrp9@gmail.com>
- <20180726163703.7598-2-bluemrp9@gmail.com>
-Message-ID: <20180729152040.08ef2756@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 29 Jul 2018 19:40:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mesa3d: fix xlib_libxshmfence
+ dependency
+Message-ID: <20180729174026.21032-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ryan,
+Fixes
+http://autobuild.buildroot.net/results/6b2/6b214f1013d2def0b7ff33af3115147f47afd7a1/
+http://autobuild.buildroot.net/results/8b8/8b8251235f6b08ae2275659f7af241d6d43df074/
+http://autobuild.buildroot.net/results/468/4681b76cbca66a267741df80719a4c2e032c6b00/
+http://autobuild.buildroot.net/results/90f/90fee90a4a8f6bb35be94ee437f8f7c1f0cbb5d9/
+http://autobuild.buildroot.net/results/1b8/1b862e22f9d1dfaf9b8d3a998061a83012302b05/
+http://autobuild.buildroot.net/results/ebe/ebe3e12887c89649ad3de0045846836957d83396/
+http://autobuild.buildroot.net/results/b7b/b7b300cc056bdc51a0570be2f250b806e306999e/
+http://autobuild.buildroot.net/results/c39/c3960a95741341114ced8907de09b6a266999184/
 
-On Thu, 26 Jul 2018 09:37:02 -0700, Ryan Coe wrote:
-> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-> ---
->  package/mysql/Config.in | 5 +++++
->  1 file changed, 5 insertions(+)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-An empty commit log for this kind of change is really not good. How did
-you realize it needs dynamic library support ? Why there is no
-autobuilder failure ? How does it fail to build ?
-
-I've improved the commit log and applied, but for future patches, it
-would really be nice to have more detailed commit logs.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index dd36a5e0fd..eec72654cd 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -57,7 +57,8 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ config BR2_PACKAGE_MESA3D_DRI_DRIVER
+ 	bool
+ 	select BR2_PACKAGE_MESA3D_DRIVER
+-	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_TOOLCHAIN_HAS_SYNC_4
++	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
++		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	bool
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
