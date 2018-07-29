@@ -1,7 +1,10 @@
 From: Adam Duskett <aduskett@gmail.com>
-Date: Sun, 29 Jul 2018 15:19:16 -0400
-Subject: [Buildroot] [PATCH v8 0/5] Gobject-introspection: New package
-Message-ID: <20180729191921.11216-1-aduskett@gmail.com>
+Date: Sun, 29 Jul 2018 15:19:17 -0400
+Subject: [Buildroot] [PATCH v8 1/5] binutils: install libiberty for host
+ build.
+In-Reply-To: <20180729191921.11216-1-aduskett@gmail.com>
+References: <20180729191921.11216-1-aduskett@gmail.com>
+Message-ID: <20180729191921.11216-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,84 +12,31 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 
-I am releasing version 8 of the gobject-introspection patch series.
+Add --enable-install-libiberty to HOST_BINUTILS_CONF_OPTS to allow
+prelink-cross to build properly.
 
-Previously from V7:
-I received reports of some packages requiring installed .typelib files
-on the target filing system from the gobject-introspection package.
-Previous versions of this patch had the configure flag
-of --disable-introspection-data set. This patch now sets this flag
-to enabled, which builds the .typelib files.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+---
+Changes v1 -> v7:
+  - Add patch to series.
 
-This change requires a few changes, however:
+Changes v7 -> v8:
+  - None
 
-First: I wasn't able to get the cross-ldd script to work correctly.
-What was happening was that cross-ldd was calling out my host-ldd,
-which then would cause the .typelib files to fail the linking step.
-Adding the prelink-cross package fixes this issue. As such, I removed
-the cross-ldd wrapper from package/gobject-introspection.
+ package/binutils/binutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Second: I had to move some logic around first to install the ldd and qemu
-wrappers first, as gobject-introspection calls g-ir-ldd-wrapper and
-g-ir-scanner-qemuwrapper during the compiling process.
-
-Changes to v8:
-I forgot to add "select BR2_PACKAGE_HOST_PRELINK_CROSS" to the
-gobject-introspectio Config.in file. Whoops!
-
-Adam Duskett (5):
-  binutils: install libiberty for host build.
-  prelink-cross: new package
-  gstreamer1 packages: explicitly disable introspection
-  gobject-introspection: new package
-  gstreamer1 packages: add support for introspection
-
- DEVELOPERS                                    |   1 +
- Makefile                                      |   2 +
- package/Config.in                             |   1 +
- package/Config.in.host                        |   1 +
- package/binutils/binutils.mk                  |   1 +
- ...lete-upstream-attempt-at-cross-compi.patch |  50 +++++
- ...-host-gi-gi-cross-wrapper-gi-ldd-wra.patch | 203 ++++++++++++++++++
- ...canner-add-use-binary-wrapper-option.patch |  52 +++++
- ...scanner-add-a-use-ldd-wrapper-option.patch |  48 +++++
- .../0005-add-PYTHON_INCLUDES-override.patch   |  39 ++++
- ...scanner-add-a-lib-dirs-envvar-option.patch |  73 +++++++
- .../0007-Add-rpath-links-to-ccompiler.patch   |  29 +++
- package/gobject-introspection/Config.in       |  31 +++
- .../gobject-introspection/g-ir-compiler.in    |   2 +
- .../g-ir-scanner-lddwrapper.in                |   2 +
- .../g-ir-scanner-qemuwrapper.in               |  10 +
- package/gobject-introspection/g-ir-scanner.in |   3 +
- .../gobject-introspection.hash                |   4 +
- .../gobject-introspection.mk                  |  98 +++++++++
- .../gst1-plugins-bad/gst1-plugins-bad.mk      |   8 +-
- ...ect-reference-to-gstreamer-sdp-in-Ma.patch |  26 +++
- .../gst1-plugins-base/gst1-plugins-base.mk    |   8 +-
- package/gstreamer1/gstreamer1/gstreamer1.mk   |   7 +
- package/pkg-autotools.mk                      |   3 +
- package/prelink-cross/Config.in.host          |   6 +
- package/prelink-cross/prelink-cross.hash      |   3 +
- package/prelink-cross/prelink-cross.mk        |  15 ++
- 27 files changed, 724 insertions(+), 2 deletions(-)
- create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
- create mode 100644 package/gobject-introspection/0002-configure.ac-add-host-gi-gi-cross-wrapper-gi-ldd-wra.patch
- create mode 100644 package/gobject-introspection/0003-giscanner-add-use-binary-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0004-giscanner-add-a-use-ldd-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0005-add-PYTHON_INCLUDES-override.patch
- create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
- create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
- create mode 100644 package/gobject-introspection/Config.in
- create mode 100644 package/gobject-introspection/g-ir-compiler.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner.in
- create mode 100644 package/gobject-introspection/gobject-introspection.hash
- create mode 100644 package/gobject-introspection/gobject-introspection.mk
- create mode 100644 package/gstreamer1/gst1-plugins-base/0001-rtsp-drop-incorrect-reference-to-gstreamer-sdp-in-Ma.patch
- create mode 100644 package/prelink-cross/Config.in.host
- create mode 100644 package/prelink-cross/prelink-cross.hash
- create mode 100644 package/prelink-cross/prelink-cross.mk
-
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index 090065a3e4..40fe4b394d 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -84,6 +84,7 @@ HOST_BINUTILS_CONF_OPTS = \
+ 	--target=$(GNU_TARGET_NAME) \
+ 	--disable-shared \
+ 	--enable-static \
++	--enable-install-libiberty \
+ 	--with-sysroot=$(STAGING_DIR) \
+ 	--enable-poison-system-directories \
+ 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
 -- 
 2.17.1
