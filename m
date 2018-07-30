@@ -1,218 +1,117 @@
-From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-Date: Mon, 30 Jul 2018 15:39:36 +1000
-Subject: [Buildroot] [RFC PATCH] host-localedef: Compile against glibc
-Message-ID: <20180730053936.26460-1-sam@mendozajonas.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Jul 2018 08:00:13 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-07-29
+Message-ID: <20180730060013.EECB720737@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In glibc 2.27 the following change occured:
-"Statically compiled applications attempting to load locales compiled
-for the GNU C Library version 2.27 will fail and fall back to the
-builtin C/POSIX locale."
+Hello,
 
-This impacts us since upstream buildroot uses a localdef built against
-an older eglibc release [0].
-Update the host-localedef package to build against glibc 2.27.
-Unfortunately we can't compile just the localedef utility, but even so
-this does not increase the build time too significantly. eg:
+Build statistics for 2018-07-29
+===============================
 
-With glibc localedef:
-real    33m11.278s
-user    171m51.684s
-sys     19m46.528s
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  26 |   0 |   0 |  26 |
+   2018.05.x |  23 |   0 |   0 |  23 |
+      master | 155 |  61 |   0 | 216 |
 
-With eglibc localedef:
-real    31m12.715s
-user    155m13.616s
-sys     16m23.504s
+Results for branch 'master'
+===========================
 
-[0] https://bugs.busybox.net/show_bug.cgi?id=11096
+Classification of failures by reason
+------------------------------------
 
-Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
----
-This is a patch we're using in our own Buildroot branch to keep us going
-until a solution is found for the above bug report. While it does add a
-few minutes to our example build it avoids hacking glibc to only build
-localedef which is a solution some other users have gone for.
-Definitely an RFC as I'm sure some of the configuration in localedef.mk
-could be trimmed down but I took the safer bet of basing it off the
-existing glibc.mk.
+                       unknown | 11
+                  boost-1.67.0 | 9 
+     linux-firmware-legal-info | 9 
+                    ncmpc-0.30 | 6 
+             gnuradio-3.7.13.3 | 5 
+                cutelyst-2.5.1 | 3 
+                 opencv3-3.3.0 | 3 
+               mono-5.12.0.226 | 2 
+               aircrack-ng-1.3 | 1 
+                  dado-1.8.3-1 | 1 
+     docker-engine-v17.05.0-ce | 1 
+linuxptp-303b08cbf55096aba5... | 1 
+                  lpeg-1.0.1-1 | 1 
+            lttng-tools-2.10.4 | 1 
+package/freescale-imx/firmw... | 1 
+package/linux-firmware/linu... | 1 
+              python-pyqt5-5.7 | 1 
+            qt5location-5.11.1 | 1 
+                  samba4-4.8.3 | 1 
+                 wiringpi-2.46 | 1 
+                      x265-2.8 | 1 
 
 
- .../0001-Don-t-include-xlocale.h.patch        | 50 -----------
- package/localedef/localedef.hash              |  2 +-
- package/localedef/localedef.mk                | 87 +++++++++++++++++--
- 3 files changed, 79 insertions(+), 60 deletions(-)
- delete mode 100644 package/localedef/0001-Don-t-include-xlocale.h.patch
+Detail of failures
+------------------
 
-diff --git a/package/localedef/0001-Don-t-include-xlocale.h.patch b/package/localedef/0001-Don-t-include-xlocale.h.patch
-deleted file mode 100644
-index 9a6c2f8e90..0000000000
---- a/package/localedef/0001-Don-t-include-xlocale.h.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From: Bernhard Walle <bernhard@bwalle.de>
--Date: Mon, 2 Oct 2017 16:55:23 +0200
--Subject: [PATCH] Don't include <xlocale.h>
--
--This header has been removed in glibc 2.26:
--
--https://abi-laboratory.pro/tracker/changelog/glibc/2.26/log.html
--
-------------------------- >8 ------------------------
--* The nonstandard header <xlocale.h> has been removed.  Most programs should
--  use <locale.h> instead.  If you have a specific need for the definition of
--  locale_t with no other declarations, please contact
--  libc-alpha at sourceware.org and explain.
-------------------------- 8< ------------------------
--
--Signed-off-by: Bernhard Walle <bernhard@bwalle.de>
--
--Upstream: https://git.pengutronix.de/cgit/ptxdist/tree/patches/localedef-eglibc-2.14.1-r17443-ptx1/0003-Don-t-include-xlocale.h.patch
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- eglibc/locale/langinfo.h | 2 +-
-- eglibc/locale/locale.h   | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/eglibc/locale/langinfo.h b/eglibc/locale/langinfo.h
--index 0a5336507196..76707a4584c1 100644
----- a/eglibc/locale/langinfo.h
--+++ b/eglibc/locale/langinfo.h
--@@ -589,7 +589,7 @@ extern char *nl_langinfo (nl_item __item) __THROW;
--    more information.  */
-- 
-- /* Get locale datatype definition.  */
---# include <xlocale.h>
--+# include <locale.h>
-- 
-- /* Just like nl_langinfo but get the information from the locale object L.  */
-- extern char *nl_langinfo_l (nl_item __item, __locale_t __l);
--diff --git a/eglibc/locale/locale.h b/eglibc/locale/locale.h
--index 2aa19e76acb2..18be711a2d40 100644
----- a/eglibc/locale/locale.h
--+++ b/eglibc/locale/locale.h
--@@ -143,7 +143,7 @@ __END_NAMESPACE_STD
--    This is a proof-of-concept implementation.  */
-- 
-- /* Get locale datatype definition.  */
---# include <xlocale.h>
--+# include_next <locale.h>
-- 
-- /* Return a reference to a data structure representing a set of locale
--    datasets.  Unlike for the CATEGORY parameter for `setlocale' the
-diff --git a/package/localedef/localedef.hash b/package/localedef/localedef.hash
-index ee14fb16b8..6f2d6313b6 100644
---- a/package/localedef/localedef.hash
-+++ b/package/localedef/localedef.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256 9a60f7cdab6fb39adf23a12102f2d950d5f07f0cd7e51e85ec327e07440a79c6  localedef-eglibc-2.14.1-r17443-ptx1.tar.bz2
-+sha256 33189b3f10c88730a1f686fac794bc01f31765f12ffd75bc5e8a0f2a690d217a  localedef-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e.tar.gz
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 11d9ba3848..c93132cc3f 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -4,19 +4,88 @@
- #
- ################################################################################
- 
--LOCALEDEF_VERSION = 2.14.1-r17443-ptx1
--LOCALEDEF_SOURCE = localedef-eglibc-$(LOCALEDEF_VERSION).tar.bz2
--LOCALEDEF_SITE = http://www.pengutronix.de/software/ptxdist/temporary-src
-+# Use the same VERSION and SITE as target glibc
-+LOCALEDEF_VERSION = glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e
-+LOCALEDEF_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
- 
--HOST_LOCALEDEF_CONF_OPTS += \
--	--prefix=/usr \
--	--with-glibc=./eglibc
-+HOST_LOCALEDEF_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
-+HOST_LOCALEDEF_LICENSE_FILES = COPYING COPYING.LIB LICENSES
- 
--HOST_LOCALEDEF_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -fgnu89-inline"
-+# glibc is part of the toolchain so disable the toolchain dependency
-+HOST_LOCALEDEF_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
--# The makefile does not implement an install target
-+HOST_LOCALEDEF_SUBDIR = build
-+
-+# Thumb build is broken, build in ARM mode
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
-+HOST_LOCALEDEF_EXTRA_CFLAGS += -marm
-+endif
-+
-+# MIPS64 defaults to n32 so pass the correct -mabi if
-+# we are using a different ABI. OABI32 is also used
-+# in MIPS so we pass -mabi=32 in this case as well
-+# even though it's not strictly necessary.
-+ifeq ($(BR2_MIPS_NABI64),y)
-+HOST_LOCALEDEF_EXTRA_CFLAGS += -mabi=64
-+else ifeq ($(BR2_MIPS_OABI32),y)
-+HOST_LOCALEDEF_EXTRA_CFLAGS += -mabi=32
-+endif
-+
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+HOST_LOCALEDEF_EXTRA_CFLAGS += -g
-+endif
-+
-+# The stubs.h header is not installed by install-headers, but is
-+# needed for the gcc build. An empty stubs.h will work, as explained
-+# in http://gcc.gnu.org/ml/gcc/2002-01/msg00900.html. The same trick
-+# is used by Crosstool-NG.
-+ifeq ($(BR2_TOOLCHAIN_BUILDROOT_HOST_LOCALEDEF),y)
-+define HOST_LOCALEDEF_ADD_MISSING_STUB_H
-+	mkdir -p $(STAGING_DIR)/usr/include/gnu
-+	touch $(STAGING_DIR)/usr/include/gnu/stubs.h
-+endef
-+endif
-+
-+# Even though we use the autotools-package infrastructure, we have to
-+# override the default configure commands for several reasons:
-+#
-+#  1. We have to build out-of-tree, but we can't use the same
-+#     'symbolic link to configure' used with the gcc packages.
-+#
-+#  2. We have to execute the configure script with bash and not sh.
-+#
-+# Note that as mentionned in
-+# http://patches.openembedded.org/patch/38849/, glibc must be
-+# built with -O2, so we pass our own CFLAGS and CXXFLAGS below.
-+define HOST_LOCALEDEF_CONFIGURE_CMDS
-+	mkdir -p $(@D)/build
-+	# Do the configuration
-+	(cd $(@D)/build; \
-+		$(HOST_CONFIGURE_OPTS) \
-+		CFLAGS="-O2 $(HOST_LOCALEDEF_EXTRA_CFLAGS)" CPPFLAGS="" \
-+		CXXFLAGS="-O2 $(HOST_LOCALEDEF_EXTRA_CFLAGS)" \
-+		$(SHELL) $(@D)/configure \
-+		ac_cv_path_BASH_SHELL=/bin/bash \
-+		libc_cv_forced_unwind=yes \
-+		libc_cv_ssp=no \
-+		--target=$(GNU_HOST_NAME) \
-+		--host=$(GNU_HOST_NAME) \
-+		--build=$(GNU_HOST_NAME) \
-+		--prefix=/usr \
-+		$(if $(BR2_SOFT_FLOAT),--without-fp,--with-fp) \
-+		$(if $(BR2_x86_64),--enable-lock-elision) \
-+		--with-pkgversion="Buildroot" \
-+		--without-cvs \
-+		--disable-profile \
-+		--without-gd \
-+		--enable-obsolete-rpc)
-+	$(HOST_LOCALEDEF_ADD_MISSING_STUB_H)
-+endef
-+
-+$(eval $(autotools-package))
-+# The makefile does not implement an install target for localedef
- define HOST_LOCALEDEF_INSTALL_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/localedef $(HOST_DIR)/bin/localedef
-+	$(INSTALL) -D -m 0755 $(@D)/build/locale/localedef $(HOST_DIR)/bin/localedef
- endef
- 
- $(eval $(host-autotools-package))
+         arm |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/9e60764355e478477379aa85c8ef8e580a57a506 |     
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/78c2832724baf8ca8523d0af48709e713bd37526 |     
+         sh4 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/786450e6a38a1cc41b83c304743c69f648721adb |     
+        m68k |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/336aeb82e0cf83fc3b4fdea24a8e2aaeb0931353 |     
+      x86_64 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/6529785ac59a1e5e09a816ad166959501883a1f2 |     
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/bdad342b70aa9083145157e825ac5f9cd94c879b |     
+        i686 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/cd2d039ab5927201f03fedef188a814f81733148 |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/163f573c4c0479397794f1117fda6d1b0b87aeb6 |     
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/cfeffafad52bed884aaa4dadb7e94f848a127d76 |     
+        i686 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/5ccacbff2b08595bc596b6c17183e9b9ae058996 |     
+    mips64el |                 cutelyst-2.5.1 | NOK | http://autobuild.buildroot.net/results/4abae787591d4b443cd49ded0f422608b676e576 |     
+   powerpc64 |                 cutelyst-2.5.1 | NOK | http://autobuild.buildroot.net/results/555cf0cd59c9c832b15c604dae5bad3640f8b450 |     
+        mips |                 cutelyst-2.5.1 | NOK | http://autobuild.buildroot.net/results/ecbe25728a81f13e35a4315b64aacb8e592f5867 |     
+      x86_64 |                   dado-1.8.3-1 | NOK | http://autobuild.buildroot.net/results/fa1d50af90d066cd51954a467ad1c211b18ff315 |     
+         arm |      docker-engine-v17.05.0-ce | NOK | http://autobuild.buildroot.net/results/8947bb122655a4168b5f84d7dbbe38ed1768983e |     
+         arm |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/0604cbbc4e4752c683cdd8b995a3dc3e260e1721 |     
+      xtensa |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/1c1ab4feb2b50ab45ccaecc03fef9d339b023909 |     
+     aarch64 |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/a1c32ccef1efbe19217f9f06c823b1dce0ac57ae |     
+        mips |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/e1a6ea63b3fccefbfb3dd32345903df2888586a7 |     
+      x86_64 |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/364a400da63669769aa130743e33cdecccf26e7b |     
+     powerpc |      linux-firmware-legal-info | NOK | http://autobuild.buildroot.net/results/2d2696f75a4ee382b5bb067a571025dbbae12ab8 |     
+    mips64el |      linux-firmware-legal-info | NOK | http://autobuild.buildroot.net/results/3f3694f5222570559dba35fe0485fc9a68337159 |     
+         arm |      linux-firmware-legal-info | NOK | http://autobuild.buildroot.net/results/45867d71c9db49c4208b23f5f78add78a33c4f8d |     
+     powerpc |      linux-firmware-legal-info | NOK | http://autobuild.buildroot.net/results/beede3858fb05e75b4420ea67811c75ab222025b |     
+         arm |      linux-firmware-legal-info | NOK | http://autobuild.buildroot.net/results/466bd34ec3fb1676123e78eaae4df4d78db740c6 |     
+   powerpc64 |      linux-firmware-legal-info | NOK | http://autobuild.buildroot.net/results/00dd9434a5bde5c67618f1952efc4a96423f73e7 |     
+microblazeel |      linux-firmware-legal-info | NOK | http://autobuild.buildroot.net/results/33034e34ea0f2e2cb8977ec4d6a351f29a718f8b |     
+     powerpc |      linux-firmware-legal-info | NOK | http://autobuild.buildroot.net/results/600add1753952c5ba173148fd9644530b7da6c0d |     
+         arc |      linux-firmware-legal-info | NOK | http://autobuild.buildroot.net/results/fee1aa773e4c3ab95f1c2e0c06849918f1e59b8f |     
+         arm | linuxptp-303b08cbf55096aba5... | NOK | http://autobuild.buildroot.net/results/efdc9bfae64d62d4516a58432f2643fac791e667 |     
+         arm |                   lpeg-1.0.1-1 | NOK | http://autobuild.buildroot.net/results/ebe1d9b88c088abb2cc7c1a3887fc6921c9fb207 |     
+         arm |             lttng-tools-2.10.4 | NOK | http://autobuild.buildroot.net/results/93fabf9cc05c199cc05e61c3a127e92bf87511a0 |     
+      mipsel |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/b3b125eea732c873b4ef1b67123c6ca20aa36926 |     
+      mipsel |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/cb38949bd06083034097aad4989a063738db50ba |     
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/0e147d3e4c3ad98190baa2c17d6a4ae053e50f98 |     
+        mips |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/a6c44f7809347da31c490ce599a97aebb355d640 |     
+        mips |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/af20c62775ceb20fcc719d6af74b58df48cf8f6a |     
+        or1k |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/2d36b22782dc9b157c85364423b5ce2e9fad4e81 |     
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/2b7563dccc7b681d0ae5a07b56426759a4962b00 |     
+         arm |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/c59073a5c5a2c040873a7aeebd63e79faf7f8f2e |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/305f2bf8cc9b9346a59e7fd28489d7516eb4f536 |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/bf50879cf1fe98d12423530602565526b0c6fd61 |     
+     aarch64 |                  opencv3-3.3.0 | NOK | http://autobuild.buildroot.net/results/9bcb775214e71e0ba0fc4b988617b65b7ff8dc41 |     
+         arm | package/freescale-imx/firmw... | NOK | http://autobuild.buildroot.net/results/796a5599020c7187ca450fc38d58a3e452bb1321 |     
+    mips64el | package/linux-firmware/linu... | NOK | http://autobuild.buildroot.net/results/be554e097c6efce97ee9f05bd81782da6c27b3e4 |     
+         sh4 |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/0cb8ad8735ce3acd9790380ccef1748831263b6d |     
+      mipsel |             qt5location-5.11.1 | NOK | http://autobuild.buildroot.net/results/5d7333470c31b83c697218382dc77f74af86c666 |     
+    mips64el |                   samba4-4.8.3 | NOK | http://autobuild.buildroot.net/results/bb15ded9435bcb01cf65455607e2a2d2fd8dec9b |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/4681b76cbca66a267741df80719a4c2e032c6b00 |     
+ powerpc64le |                        unknown | NOK | http://autobuild.buildroot.net/results/8b8251235f6b08ae2275659f7af241d6d43df074 |     
+        or1k |                        unknown | NOK | http://autobuild.buildroot.net/results/6b214f1013d2def0b7ff33af3115147f47afd7a1 |     
+         arc |                        unknown | NOK | http://autobuild.buildroot.net/results/20d69cb3487bc8023997d32118cbee2f914bf2fb |     
+         arc |                        unknown | NOK | http://autobuild.buildroot.net/results/569f64409cf2e593fc5b63514bbb17020b81a3fd |     
+      x86_64 |                        unknown | NOK | http://autobuild.buildroot.net/results/b992e39c4a1563dceb6fabf246e7dd96c04b920a |     
+     aarch64 |                        unknown | NOK | http://autobuild.buildroot.net/results/c3960a95741341114ced8907de09b6a266999184 |     
+    mips64el |                        unknown | NOK | http://autobuild.buildroot.net/results/b7b300cc056bdc51a0570be2f250b806e306999e |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/ebe3e12887c89649ad3de0045846836957d83396 |     
+       nios2 |                        unknown | NOK | http://autobuild.buildroot.net/results/1b862e22f9d1dfaf9b8d3a998061a83012302b05 |     
+    mips64el |                        unknown | NOK | http://autobuild.buildroot.net/results/90fee90a4a8f6bb35be94ee437f8f7c1f0cbb5d9 |     
+     powerpc |                  wiringpi-2.46 | NOK | http://autobuild.buildroot.net/results/e125b8d3a0da3070fdb85d982da6a88bcafb00eb |     
+         arm |                       x265-2.8 | NOK | http://autobuild.buildroot.net/results/5105fb10bfe565541b021ae2282f6197fc328675 |     
+
+
 -- 
-2.18.0
+http://autobuild.buildroot.net
