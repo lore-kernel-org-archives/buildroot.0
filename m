@@ -1,58 +1,64 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 30 Jul 2018 10:59:57 +0200
-Subject: [Buildroot] [PATCH 1/8] firmware-imx: bump to version 7.5
-In-Reply-To: <20180729150825.76f085c1@windsurf>
-References: <20180725150149.30774-1-gary.bisson@boundarydevices.com>
- <20180725150149.30774-2-gary.bisson@boundarydevices.com>
- <6f639664-4b81-033c-fa68-44d48e0a347f@mind.be>
- <20180729150825.76f085c1@windsurf>
-Message-ID: <20180730085957.GA27423@g751.home>
+From: Hao HU <huhao526200@gmail.com>
+Date: Mon, 30 Jul 2018 04:04:04 -0500 (CDT)
+Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
+In-Reply-To: <CAMWSM7i=dS5gbqwDRM34KPsu_9ArgYj3cwHYdp3tQ+pE5=L2Rg@mail.gmail.com>
+References: <20180710234212.4297-1-joseph.kogut@gmail.com>
+ <20180710234212.4297-5-joseph.kogut@gmail.com>
+ <1532611912386-0.post@n4.nabble.com>
+ <CAMWSM7ikcADGP3Y7_wpSjot8fD_OA_v+R7bZf3fD+APRR-Kc1A@mail.gmail.com>
+ <1532700227020-0.post@n4.nabble.com>
+ <CAMWSM7i=dS5gbqwDRM34KPsu_9ArgYj3cwHYdp3tQ+pE5=L2Rg@mail.gmail.com>
+Message-ID: <1532941444387-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Arnout,
+Joseph Kogut wrote
+> On Fri, Jul 27, 2018 at 7:03 AM Hao HU &lt;
 
-On Sun, Jul 29, 2018 at 03:08:25PM +0200, Thomas Petazzoni wrote:
-> Hello,
+> huhao526200@
+
+> &gt; wrote:
+>>
+>> Hi Joseph,
+>>
+>> Today I tried to set use_gold=false in CHROMIUM_OPTS in chromium.mk.
+>>
+>> But it did't work. The same problem as following still exists.
+>>
+>> //home/as_huhao/eolane/x2m/buildroot-2018.05-IHMI/output/host/bin/ld.lld:
+>> error: can't create dynamic relocation R_386_32 against local symbol in
+>> readonly segment; recompile object files with -fPIC
+>> >>> defined in
+>> obj/third_party/ffmpeg/libffmpeg_yasm.a(ffmpeg_yasm/dct32.o)
+>> >>> referenced by ../../third_party/ffmpeg/libavcodec/x86/dct32.asm
+>> >>>               ffmpeg_yasm/dct32.o:(ff_dct32_float_sse) in archive
+>> >>> obj/third_party/ffmpeg/libffmpeg_yasm.a /
+>>
 > 
-> On Sat, 28 Jul 2018 23:53:44 +0200, Arnout Vandecappelle wrote:
-> > On 25-07-18 17:01, Gary Bisson wrote:
-> > > This new package includes new binaries for i.MX8QXP.
-> > > 
-> > > Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>  
-> > 
-> >  I've applied this patch to master, the rest is changes requested.
+>>Did you allow the Chromium package to reconfigure, i.e., by deleting
+>>.stamp_configured, or running 'make chromium-dirclean all'?
 > 
-> I don't know if we have been clear enough with Gary about what changes
-> we want. Do we want to stay with a virtual package ?
-
-That's a good question. But I plan on offering the alternative series
-without the virtual package, maybe that will help making the decision.
-It shouldn't be too hard to do.
-
-The way I see it using a virtual package is cleaner and is more
-future-proof (I wouldn't be surprised another imx-vpu-xxx package shows
-up in a near future).
-
-However it also makes it "harder" to select imx-vpuwrap/libimxvpuapi
-since it depends on imx-vpu, the provider package isn't automatically
-selected as it used to.
-
-> If so, what should
-> be the name of the virtual package vs. the name of the package for the
-> "old" i.MX VPUs ?
+> Before I tested if the use_gold=false worked or not, firstly I deleted the
+> folder 
+/
+> /ouput/build/chromium--67.0.3396.79 
+/
+> then I run $ make 
 > 
-> On my side, while I agree that imx-vpu-cnm violates the rule of "we
-> name packages like their upstream name", I believe this is a violation
-> that is acceptable because the naming chosen by Gary is the one that is
-> the easiest to understand and the most obvious: imx-vpu is the virtual
-> package, imx-vpu-hantro and imx-vpu-cnm are the providers.
+> Is that right or not?
+> _______________________________________________
+> buildroot mailing list
 
-Glad to hear someone agrees with that naming which really makes more
-sense to me than what is done by NXP.
+> buildroot@
 
-Regards,
-Gary
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
