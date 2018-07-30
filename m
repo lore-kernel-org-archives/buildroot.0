@@ -1,60 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Jul 2018 23:51:09 +0200
-Subject: [Buildroot] Random Linux/device tree/GPIO question posted to
- the wrong list...
-In-Reply-To: <CAF_dkJBrU=bF+LZOSe6RNKukbGFjPHOMJUfUXRHs4_8NJ-50Dw@mail.gmail.com>
-References: <CAF_dkJBrU=bF+LZOSe6RNKukbGFjPHOMJUfUXRHs4_8NJ-50Dw@mail.gmail.com>
-Message-ID: <20180730235109.0fe5f681@windsurf>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Mon, 30 Jul 2018 15:02:16 -0700
+Subject: [Buildroot] [PATCH v2 1/3] libglib2: backport upstream patch to
+ handle missing fcntl() flags
+Message-ID: <20180730220218.26454-1-hollis_blanchard@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Patrick,
+On RHEL6 hosts, fcntl.h doesn't define F_SETPIPE_SZ or F_GETPIPE_SZ. Upstream
+glib has a patch for this case that wasn't applied to their 2.56.1 branch.
 
-On Mon, 30 Jul 2018 17:29:36 -0400, Patrick Doyle wrote:
-> But you folks all know about this sort of stuff anyway, so I figured
-> I'd start by asking here.
-> 
-> I was just shocked to learn that, although I allocated a pin to a
-> certain function in my device tree, I was able to override the
-> operation of that pin via /sys/class/gpio (and thus crash my board
-> when it could no longer access it's flash properly).
-> 
-> Can anybody here tell me how I can prevent the GPIO subsystem from
-> overriding the pinmux I specified in my device tree?  I guess I
-> thought that:
-> 
->             pinctrl at fc038000 {
->                 pinctrl_nand_default: nand_default {
->                                         pinmux = <PIN_PA8__NWE_NANDWE>,
->                                                  <PIN_PA9__NCS3>,
->                                                  <PIN_PA10__A21_NANDALE>,
->                                                  <PIN_PA11__A22_NANDCLE>,
->                                                  <PIN_PA12__NRD_NANDOE>,
->                                                  <PIN_PD8__NANDRDY>,
->                                                  <PIN_PA0__D0>,
->                                                  <PIN_PA1__D1>,
->                                                  <PIN_PA2__D2>,
->                                                  <PIN_PA3__D3>,
->                                                  <PIN_PA4__D4>,
->                                                  <PIN_PA5__D5>,
->                                                  <PIN_PA6__D6>,
->                                                  <PIN_PA7__D7>;
->                                         bias-disable;
->                                 };
-> 
-> would have done the trick (on my Microchip SAMA5D2x device).
+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+---
+ ...-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
+ create mode 100644 package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
 
-This snippet of Device Tree only declares a pinmux configuration. If
-there is nothing referencing pinctrl_nand_default, then this pinmux
-configuration is not used/applied, and the pins are not "reserved".
-
-Best regards,
-
-Thomas
+diff --git a/package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch b/package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
+new file mode 100644
+index 0000000000..032f4851c4
+--- /dev/null
++++ b/package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
+@@ -0,0 +1,52 @@
++From 0beb62f564072f3585762c9c55fe894485993b62 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 10 Apr 2018 18:55:11 +0200
++Subject: [PATCH] gio: fix compilation without F_{S,G}ETPIPE_SZ
++
++Commit a5778ef7c51044147fe470ea1707dd297f44f880 broke compilation on
++architectures without F_SETPIPE_SZ and F_GETPIPE_SZ such as or1k.
++If those variables are undefined, put back previous behavior, buffer
++size set to 1024 * 64
++
++Fixes:
++ - http://autobuild.buildroot.net/results/398490e07343a931b25ca6ab5c90a75d7a073e9f
++
++(Modified by Philip Withnall <withnall@endlessm.com> to add an
++explanatory comment.)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++
++https://bugzilla.gnome.org/show_bug.cgi?id=795133
++---
++ gio/gfile.c | 8 ++++++++
++ 1 file changed, 8 insertions(+)
++
++diff --git a/gio/gfile.c b/gio/gfile.c
++index 334ad8ec3..a67aad383 100644
++--- a/gio/gfile.c
+++++ b/gio/gfile.c
++@@ -3012,6 +3012,7 @@ splice_stream_with_progress (GInputStream           *in,
++   if (!g_unix_open_pipe (buffer, FD_CLOEXEC, error))
++     return FALSE;
++ 
+++#if defined(F_SETPIPE_SZ) && defined(F_GETPIPE_SZ)
++   /* Try a 1MiB buffer for improved throughput. If that fails, use the default
++    * pipe size. See: https://bugzilla.gnome.org/791457 */
++   buffer_size = fcntl (buffer[1], F_SETPIPE_SZ, 1024 * 1024);
++@@ -3029,6 +3030,13 @@ splice_stream_with_progress (GInputStream           *in,
++           goto out;
++         }
++     }
+++#else
+++  /* If #F_GETPIPE_SZ isn?t available, assume we?re on Linux < 2.6.35,
+++   * but ? 2.6.11, meaning the pipe capacity is 64KiB. Ignore the possibility of
+++   * running on Linux < 2.6.11 (where the capacity was the system page size,
+++   * typically 4KiB) because it?s ancient. See pipe(7). */
+++  buffer_size = 1024 * 64;
+++#endif
++ 
++   g_assert (buffer_size > 0);
++ 
++-- 
++2.13.0
++
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.13.0
