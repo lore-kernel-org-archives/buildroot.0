@@ -1,64 +1,64 @@
-From: Hao HU <huhao526200@gmail.com>
-Date: Mon, 30 Jul 2018 04:04:04 -0500 (CDT)
-Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
-In-Reply-To: <CAMWSM7i=dS5gbqwDRM34KPsu_9ArgYj3cwHYdp3tQ+pE5=L2Rg@mail.gmail.com>
-References: <20180710234212.4297-1-joseph.kogut@gmail.com>
- <20180710234212.4297-5-joseph.kogut@gmail.com>
- <1532611912386-0.post@n4.nabble.com>
- <CAMWSM7ikcADGP3Y7_wpSjot8fD_OA_v+R7bZf3fD+APRR-Kc1A@mail.gmail.com>
- <1532700227020-0.post@n4.nabble.com>
- <CAMWSM7i=dS5gbqwDRM34KPsu_9ArgYj3cwHYdp3tQ+pE5=L2Rg@mail.gmail.com>
-Message-ID: <1532941444387-0.post@n4.nabble.com>
+From: Laurent Hartanerot <laurent.hartanerot@gmail.com>
+Date: Mon, 30 Jul 2018 12:24:16 +0200
+Subject: [Buildroot] [PATCH v2 1/1] lighttpd: Add systemd tmpfile to fix
+ lighttpd systemd boot
+In-Reply-To: <20180727213514.19361-1-laurent.hartanerot@gmail.com>
+References: <20180727213514.19361-1-laurent.hartanerot@gmail.com>
+Message-ID: <20180730102416.20507-1-laurent.hartanerot@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Joseph Kogut wrote
-> On Fri, Jul 27, 2018 at 7:03 AM Hao HU &lt;
+From: Laurent Hartanerot <laurent.hartanerot@atos.net>
 
-> huhao526200@
+Problem starting lighttpd application with systemd.
 
-> &gt; wrote:
->>
->> Hi Joseph,
->>
->> Today I tried to set use_gold=false in CHROMIUM_OPTS in chromium.mk.
->>
->> But it did't work. The same problem as following still exists.
->>
->> //home/as_huhao/eolane/x2m/buildroot-2018.05-IHMI/output/host/bin/ld.lld:
->> error: can't create dynamic relocation R_386_32 against local symbol in
->> readonly segment; recompile object files with -fPIC
->> >>> defined in
->> obj/third_party/ffmpeg/libffmpeg_yasm.a(ffmpeg_yasm/dct32.o)
->> >>> referenced by ../../third_party/ffmpeg/libavcodec/x86/dct32.asm
->> >>>               ffmpeg_yasm/dct32.o:(ff_dct32_float_sse) in archive
->> >>> obj/third_party/ffmpeg/libffmpeg_yasm.a /
->>
-> 
->>Did you allow the Chromium package to reconfigure, i.e., by deleting
->>.stamp_configured, or running 'make chromium-dirclean all'?
-> 
-> Before I tested if the use_gold=false worked or not, firstly I deleted the
-> folder 
-/
-> /ouput/build/chromium--67.0.3396.79 
-/
-> then I run $ make 
-> 
-> Is that right or not?
-> _______________________________________________
-> buildroot mailing list
+/usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
+2018-06-22 11:21:34: (server.c.733) opening errorlog '/var/log/lighttpd-error.log' failed: Permission denied
+2018-06-22 11:21:34: (server.c.1420) Opening errorlog failed. Going down.
 
-> buildroot@
+Lighttpd can not write the 'lighttpd-access.log' and 'lighttpd-error.log' files
+to the directory '/var/log/'.
 
-> http://lists.busybox.net/mailman/listinfo/buildroot
+When using systemd the directory '/var/log' does not allow the user www-data to
+write.
+
+To correct the problem, we add /usr/lib/tmpfiles.d/lighttpd.conf.
+This file create the 'lighttpd-access.log' and 'lighttpd-error.log' files  with
+the permission
 
 
+Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+---
+ package/lighttpd/lighttpd.mk            | 3 +++
+ package/lighttpd/lighttpd_tmpfiles.conf | 2 ++
+ 2 files changed, 5 insertions(+)
+ create mode 100644 package/lighttpd/lighttpd_tmpfiles.conf
 
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index c565fed4ff..06561e9f55 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -96,6 +96,9 @@ define LIGHTTPD_INSTALL_INIT_SYSTEMD
 
+ 	ln -fs ../../../../usr/lib/systemd/system/lighttpd.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
++
++	$(INSTALL) -D -m 644 package/lighttpd/lighttpd_tmpfiles.conf \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/lighttpd.conf
+ endef
 
+ $(eval $(autotools-package))
+diff --git a/package/lighttpd/lighttpd_tmpfiles.conf b/package/lighttpd/lighttpd_tmpfiles.conf
+new file mode 100644
+index 0000000000..41a248b900
+--- /dev/null
++++ b/package/lighttpd/lighttpd_tmpfiles.conf
+@@ -0,0 +1,2 @@
++f /var/log/lighttpd-access.log 0640 www-data www-data -
++f /var/log/lighttpd-error.log 0640 www-data www-data -
+\ No newline at end of file
 --
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+2.11.0
