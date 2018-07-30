@@ -1,134 +1,107 @@
 From: Marcel Patzlaff <m.patzlaff@pilz.de>
-Date: Mon, 30 Jul 2018 17:51:51 +0200
-Subject: [Buildroot] [PATCH 1/3] Support script for defconfig comparison
+Date: Mon, 30 Jul 2018 17:51:52 +0200
+Subject: [Buildroot] [PATCH 2/3] Refactoring of pkg-kconfig.mk to increase
+ re-usability
 In-Reply-To: <20180730155153.24091-1-m.patzlaff@pilz.de>
 References: <20180730155153.24091-1-m.patzlaff@pilz.de>
-Message-ID: <20180730155153.24091-2-m.patzlaff@pilz.de>
+Message-ID: <20180730155153.24091-3-m.patzlaff@pilz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds a new support script that allows to compare two defconfigs and
-to output the differences in a form such that it can be used as configuration
-fragment.
-
-The comparison is done in two steps:
-
-1) Apply a plain "diff" on the two files (A and B) and collect all item names
-   where diff sees a difference. This results in a list of newline separated
-   item names.
-2) For each item name in the list, the complete line out of the .config file
-   derived from B is taken and written to stdout.
+This patch refactors savedefconfig and the configuration re-generation to
+separate macros so that the functionality can be re-used in further targets.
 
 Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
 ---
- utils/diff_defconfig.sh | 95 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 95 insertions(+)
- create mode 100755 utils/diff_defconfig.sh
+ package/pkg-kconfig.mk | 43 ++++++++++++++++++++++++------------------
+ 1 file changed, 25 insertions(+), 18 deletions(-)
 
-diff --git a/utils/diff_defconfig.sh b/utils/diff_defconfig.sh
-new file mode 100755
-index 0000000000..385e741813
---- /dev/null
-+++ b/utils/diff_defconfig.sh
-@@ -0,0 +1,95 @@
-+#!/bin/sh
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 81bba5220c..331ba16614 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -27,6 +27,27 @@ define kconfig-package-update-config
+ 	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
+ endef
+ 
++# Macro to save the defconfig file
++define kconfig-package-savedefconfig
++	$($(PKG)_MAKE_ENV) $(MAKE) -C $($(PKG)_DIR) \
++		$($(PKG)_KCONFIG_OPTS) savedefconfig
++endef
 +
-+#  diff_defconfig.sh - Takes two defconfig files A and B as well as the config
-+#  file derived from B and outputs the differences that lead from A to B.
-+#  The output can be used as configuration fragment.
-+#  It is garanteed, that the output only contains configuration items that are
-+#  present in either defconfig. So it's assumed, that all configuration items
-+#  this script outputs are also user-settable.
-+#
-+#
-+#  Copyright 2018 Pilz GmbH & Co. KG
-+#
-+#  This program is free software; you can redistribute it and/or modify
-+#  it under the terms of the GNU General Public License version 2 as
-+#  published by the Free Software Foundation.
-+#
-+#  This program is distributed in the hope that it will be useful,
-+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-+#  See the GNU General Public License for more details.
++# The correct way to regenerate a .config file is to use 'make olddefconfig'.
++# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
++# versions 2.6.36 and 3.6, and remains as an alias in later versions.
++# In older versions, and in some other projects that use kconfig, the target is
++# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
++# only, as this can fail in complex cases.
++# $(1): the name of the package in upper-case letters
++define kconfig-package-regen-dot-config
++	$(if $(filter olddefconfig,$($(1)_KCONFIG_RULES)),
++		$(Q)$($(1)_KCONFIG_MAKE) olddefconfig,
++		$(if $(filter oldnoconfig,$($(1)_KCONFIG_RULES)),
++			$(Q)$($(1)_KCONFIG_MAKE) oldnoconfig,
++			$(Q)(yes "" | $($(1)_KCONFIG_MAKE) oldconfig)))
++endef
 +
-+set -e
-+
-+THIS_FILE=$(basename "${0}")
-+
-+USAGE="${THIS_FILE} [OPTIONS] <a.defconfig> <b.defconfig> <b.config>"
-+
-+fail_msg() {
-+    printf "%s\n" "${1}" 1>&2
-+    exit 1
-+}
-+
-+help() {
-+    cat <<-_EOF_
-+	Usage:
-+	    ${USAGE}
-+
-+	${THIS_FILE} takes two defconfig files A and B as well as the .config
-+	file derived from B and outputs the differences that lead from A to B on
-+	stdout. The output can be used as configuration fragment.
-+
-+	Options:
-+	    -h   display this help text
-+	    -p   do not restrict config prefix to CONFIG_
-+
-+	Returns:
-+	    0    If no error
-+	    !0   If any error
-+	_EOF_
-+}
-+
-+
-+ALLPREFIXES=false
-+# parse options
-+while true; do
-+    case "${1}" in
-+        "-h")
-+            help
-+            exit 0
-+        ;;
-+        "-p")
-+            ALLPREFIXES=true
-+            shift
-+        ;;
-+        *)
-+            break
-+        ;;
-+    esac
-+done
-+
-+# check if all files are given
-+[ "${#}" -eq "3" ] || fail_msg "Usage: ${USAGE}"
-+
-+# test if files exist
-+[ -f "${1}" ] || fail_msg "First defconfig file '${1}' does not exist!"
-+[ -f "${2}" ] || fail_msg "Second defconfig file '${2}' does not exist!"
-+[ -f "${3}" ] || fail_msg "Config file '${3}' does not exist!"
-+
-+ITEM_EXP="s/^[<>]\s\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
-+if [ "${ALLPREFIXES}" = "true" ]; then
-+    ITEM_EXP="s/^[<>]\s\(# \)\{0,1\}\([a-zA-Z][a-zA-Z0-9_]*\)[= ].*/\2/p"
-+fi
-+
-+# use normal diff and collect all differing item names
-+ITEMS=$(diff "${1}" "${2}" | sed -n "${ITEM_EXP}" | sort | uniq)
-+
-+# output their values
-+# Note: ITEMS does only contain newline separators and no other whitespaces.
-+#       See regular expression above.
-+for item in ${ITEMS}; do
-+    # some items disable/hide others so grep may fail here
-+    grep -w "${item}" "${3}" || true
-+done
-+
-+exit 0
+ ################################################################################
+ # inner-kconfig-package -- generates the make targets needed to support a
+ # kconfig package
+@@ -90,20 +111,6 @@ $(2)_KCONFIG_RULES = \
+ 	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
+ 		sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
+ 
+-# The correct way to regenerate a .config file is to use 'make olddefconfig'.
+-# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
+-# versions 2.6.36 and 3.6, and remains as an alias in later versions.
+-# In older versions, and in some other projects that use kconfig, the target is
+-# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
+-# only, as this can fail in complex cases.
+-define $(2)_REGEN_DOT_CONFIG
+-	$$(if $$(filter olddefconfig,$$($(2)_KCONFIG_RULES)),
+-		$$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
+-		$$(if $$(filter oldnoconfig,$$($(2)_KCONFIG_RULES)),
+-			$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
+-			$$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
+-endef
+-
+ # The specified source configuration file and any additional configuration file
+ # fragments are merged together to .config, after the package has been patched.
+ # Since the file could be a defconfig file it needs to be expanded to a
+@@ -114,7 +121,7 @@ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_F
+ 		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
+ 	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+ 		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+-	$$($(2)_REGEN_DOT_CONFIG)
++	$$(call kconfig-package-regen-dot-config,$(2))
+ 
+ # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+ # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+@@ -125,7 +132,7 @@ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | $(1)-patch
+ # The exact rules are specified by the package .mk file.
+ define $(2)_FIXUP_DOT_CONFIG
+ 	$$($(2)_KCONFIG_FIXUP_CMDS)
+-	$$($(2)_REGEN_DOT_CONFIG)
++	$$(call kconfig-package-regen-dot-config,$(2))
+ 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ endef
+ 
+@@ -213,9 +220,9 @@ $(1)-check-configuration-done:
+ 		exit 1; \
+ 	fi
+ 
++$(1)-savedefconfig: PKG=$(2)
+ $(1)-savedefconfig: $(1)-check-configuration-done
+-	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+-		$$($(2)_KCONFIG_OPTS) savedefconfig
++	$$(call kconfig-package-savedefconfig)
+ 
+ # Target to copy back the configuration to the source configuration file
+ # Even though we could use 'cp --preserve-timestamps' here, the separate
 -- 
 2.17.1
 
