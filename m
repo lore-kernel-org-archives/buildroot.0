@@ -1,45 +1,38 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 30 Jul 2018 18:08:35 +0200
-Subject: [Buildroot] [PATCH 1/2] package/opencv3: bump version to 3.4.2
-Message-ID: <20180730160836.21016-1-bernd.kuhls@t-online.de>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 30 Jul 2018 10:05:05 -0700
+Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
+In-Reply-To: <1532941444387-0.post@n4.nabble.com>
+References: <20180710234212.4297-1-joseph.kogut@gmail.com>
+ <20180710234212.4297-5-joseph.kogut@gmail.com>
+ <1532611912386-0.post@n4.nabble.com>
+ <CAMWSM7ikcADGP3Y7_wpSjot8fD_OA_v+R7bZf3fD+APRR-Kc1A@mail.gmail.com>
+ <1532700227020-0.post@n4.nabble.com>
+ <CAMWSM7i=dS5gbqwDRM34KPsu_9ArgYj3cwHYdp3tQ+pE5=L2Rg@mail.gmail.com>
+ <1532941444387-0.post@n4.nabble.com>
+Message-ID: <CAMWSM7jKv1kqa3qkCs4wc6ut=HAMMPj58e=jswoXscUzYvwZ0A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated license hash after copyright year update:
-https://github.com/opencv/opencv/commit/e6ed853905744018d9d570fa49e3b9e33b3c6ea6#diff-9879d6db96fd29134fc802214163b95a
+Hi Hao,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/opencv3/opencv3.hash | 5 ++---
- package/opencv3/opencv3.mk   | 2 +-
- 2 files changed, 3 insertions(+), 4 deletions(-)
+On Mon, Jul 30, 2018 at 2:04 AM Hao HU <huhao526200@gmail.com> wrote:
+> >>Did you allow the Chromium package to reconfigure, i.e., by deleting
+> >>.stamp_configured, or running 'make chromium-dirclean all'?
+> >
+> > Before I tested if the use_gold=false worked or not, firstly I deleted the
+> > folder
+> /
+> > /ouput/build/chromium--67.0.3396.79
+> /
+> > then I run $ make
+> >
+> > Is that right or not?
 
-diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
-index de15bc8cb7..e2d020db9b 100644
---- a/package/opencv3/opencv3.hash
-+++ b/package/opencv3/opencv3.hash
-@@ -1,4 +1,3 @@
- # Locally calculated
--sha256 8bb312b9d9fd17336dc1f8b3ac82f021ca50e2034afc866098866176d985adc6  opencv3-3.3.0.tar.gz
--# License files, locally calculated
--sha256 e974db937899a2505f0eb43ece9d2f2eb36e8580ad88785e3ffac0d697ebaf5d  LICENSE
-+sha256 81dbd5e7e9f8a4c936b94629bf4765745942a1d634ae38ec08bc57b73b28ffc5  opencv3-3.4.2.tar.gz
-+sha256 fea311907cb6271b05ff5843b238e0f2edb6f204a3432975211030d20704b321  LICENSE
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 53b771ef25..2fb49e3fb2 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPENCV3_VERSION = 3.3.0
-+OPENCV3_VERSION = 3.4.2
- OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
- OPENCV3_INSTALL_STAGING = YES
- OPENCV3_LICENSE = BSD-3-Clause
--- 
-2.18.0
+That will repeat the configure step, which is what you want. If
+recompiling with use_lld=false doesn't work, the i386 build is still
+broken, and needs fixed.
+
+Can you switch the target architecture to x86_64? That build works properly.
