@@ -1,64 +1,137 @@
-From: Laurent Hartanerot <laurent.hartanerot@gmail.com>
-Date: Mon, 30 Jul 2018 12:24:16 +0200
-Subject: [Buildroot] [PATCH v2 1/1] lighttpd: Add systemd tmpfile to fix
- lighttpd systemd boot
-In-Reply-To: <20180727213514.19361-1-laurent.hartanerot@gmail.com>
-References: <20180727213514.19361-1-laurent.hartanerot@gmail.com>
-Message-ID: <20180730102416.20507-1-laurent.hartanerot@gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Mon, 30 Jul 2018 20:06:30 +0930
+Subject: [Buildroot] [PATCH] gcc: Fix building on ppc64le GCC 8 host
+Message-ID: <20180730103630.21804-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Laurent Hartanerot <laurent.hartanerot@atos.net>
+When building on a ppc64le host we see this error:
 
-Problem starting lighttpd application with systemd.
+    build/genmatch --gimple ../../gcc/match.pd \
+        > tmp-gimple-match.c
+    ../../gcc/match.pd:120:1 error: expected (, got NAME
+       negative value by 0 gives -0, not +0.  */
 
-/usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
-2018-06-22 11:21:34: (server.c.733) opening errorlog '/var/log/lighttpd-error.log' failed: Permission denied
-2018-06-22 11:21:34: (server.c.1420) Opening errorlog failed. Going down.
+This was reported upstream[1] and fixed on the GCC 6 [2] and GCC 7 [3]
+branches:
 
-Lighttpd can not write the 'lighttpd-access.log' and 'lighttpd-error.log' files
-to the directory '/var/log/'.
+    Backport from mainline
+    2018-01-10  Kelvin Nilsen  <kelvin@gcc.gnu.org>
 
-When using systemd the directory '/var/log' does not allow the user www-data to
-write.
+    * lex.c (search_line_fast): Remove illegal coercion of an
+    unaligned pointer value to vector pointer type and replace with
+    use of __builtin_vec_vsx_ld () built-in function, which operates
+    on unaligned pointer values.
 
-To correct the problem, we add /usr/lib/tmpfiles.d/lighttpd.conf.
-This file create the 'lighttpd-access.log' and 'lighttpd-error.log' files  with
-the permission
+The patches included in Buildroot contain just the code changes, and not
+the changelog, to make it easer to manage backporting.
 
+Tested on Ubuntu Cosmic ppc64le.
 
-Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86162
+[2] https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=261621
+[3] https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=262243
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
- package/lighttpd/lighttpd.mk            | 3 +++
- package/lighttpd/lighttpd_tmpfiles.conf | 2 ++
- 2 files changed, 5 insertions(+)
- create mode 100644 package/lighttpd/lighttpd_tmpfiles.conf
+ .../6.4.0/0002-fix-building-on-ppc64.patch    | 38 ++++++++++++++++++
+ .../7.3.0/0002-fix-building-on-ppc64.patch    | 40 +++++++++++++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 package/gcc/6.4.0/0002-fix-building-on-ppc64.patch
+ create mode 100644 package/gcc/7.3.0/0002-fix-building-on-ppc64.patch
 
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index c565fed4ff..06561e9f55 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -96,6 +96,9 @@ define LIGHTTPD_INSTALL_INIT_SYSTEMD
-
- 	ln -fs ../../../../usr/lib/systemd/system/lighttpd.service \
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
-+
-+	$(INSTALL) -D -m 644 package/lighttpd/lighttpd_tmpfiles.conf \
-+		$(TARGET_DIR)/usr/lib/tmpfiles.d/lighttpd.conf
- endef
-
- $(eval $(autotools-package))
-diff --git a/package/lighttpd/lighttpd_tmpfiles.conf b/package/lighttpd/lighttpd_tmpfiles.conf
+diff --git a/package/gcc/6.4.0/0002-fix-building-on-ppc64.patch b/package/gcc/6.4.0/0002-fix-building-on-ppc64.patch
 new file mode 100644
-index 0000000000..41a248b900
+index 000000000000..ee096cfcf1e2
 --- /dev/null
-+++ b/package/lighttpd/lighttpd_tmpfiles.conf
-@@ -0,0 +1,2 @@
-+f /var/log/lighttpd-access.log 0640 www-data www-data -
-+f /var/log/lighttpd-error.log 0640 www-data www-data -
-\ No newline at end of file
---
-2.11.0
++++ b/package/gcc/6.4.0/0002-fix-building-on-ppc64.patch
+@@ -0,0 +1,38 @@
++From 765527ad3725c5f3e82ab2b8e5031120b409983d Mon Sep 17 00:00:00 2001
++From: marxin <marxin@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Fri, 15 Jun 2018 08:51:28 +0000
++Subject: [PATCH] Partial backport r256656
++
++2018-06-15  Martin Liska  <mliska@suse.cz>
++
++	Backport from mainline
++	2018-01-10  Kelvin Nilsen  <kelvin@gcc.gnu.org>
++
++	* lex.c (search_line_fast): Remove illegal coercion of an
++	unaligned pointer value to vector pointer type and replace with
++	use of __builtin_vec_vsx_ld () built-in function, which operates
++	on unaligned pointer values.
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-6-branch at 261621 138bc75d-0d04-0410-961f-82ee72b054a4
++Signed-off-by: Joel Stanley <joel@jms.id.au>
++---
++ libcpp/lex.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libcpp/lex.c b/libcpp/lex.c
++index e5a0397f3099..b789686f1c49 100644
++--- a/libcpp/lex.c
+++++ b/libcpp/lex.c
++@@ -568,7 +568,7 @@ search_line_fast (const uchar *s, const uchar *end ATTRIBUTE_UNUSED)
++     {
++       vc m_nl, m_cr, m_bs, m_qm;
++ 
++-      data = *((const vc *)s);
+++      data = __builtin_vec_vsx_ld (0, s);
++       s += 16;
++ 
++       m_nl = (vc) __builtin_vec_cmpeq(data, repl_nl);
++-- 
++2.17.1
++
+diff --git a/package/gcc/7.3.0/0002-fix-building-on-ppc64.patch b/package/gcc/7.3.0/0002-fix-building-on-ppc64.patch
+new file mode 100644
+index 000000000000..78a028c29a98
+--- /dev/null
++++ b/package/gcc/7.3.0/0002-fix-building-on-ppc64.patch
+@@ -0,0 +1,40 @@
++From aa65a43516da1d48011ef621ed5988289711d99b Mon Sep 17 00:00:00 2001
++From: marxin <marxin@138bc75d-0d04-0410-961f-82ee72b054a4>
++Date: Fri, 29 Jun 2018 09:31:30 +0000
++Subject: [PATCH] Partial backport r256656
++
++2018-06-29  Martin Liska  <mliska@suse.cz>
++
++	Backport from mainline
++	2018-01-10  Kelvin Nilsen  <kelvin@gcc.gnu.org>
++
++	* lex.c (search_line_fast): Remove illegal coercion of an
++	unaligned pointer value to vector pointer type and replace with
++	use of __builtin_vec_vsx_ld () built-in function, which operates
++	on unaligned pointer values.
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-6-branch at 261621 138bc75d-0d04-0410-961f-82ee72b054a4
++
++
++git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch at 262243 138bc75d-0d04-0410-961f-82ee72b054a4
++Signed-off-by: Joel Stanley <joel@jms.id.au>
++---
++ libcpp/lex.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libcpp/lex.c b/libcpp/lex.c
++index 097c78002cbb..e0fb9e822c44 100644
++--- a/libcpp/lex.c
+++++ b/libcpp/lex.c
++@@ -568,7 +568,7 @@ search_line_fast (const uchar *s, const uchar *end ATTRIBUTE_UNUSED)
++     {
++       vc m_nl, m_cr, m_bs, m_qm;
++ 
++-      data = *((const vc *)s);
+++      data = __builtin_vec_vsx_ld (0, s);
++       s += 16;
++ 
++       m_nl = (vc) __builtin_vec_cmpeq(data, repl_nl);
++-- 
++2.17.1
++
+-- 
+2.17.1
