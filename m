@@ -1,32 +1,60 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 30 Jul 2018 14:39:14 -0700
-Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
-In-Reply-To: <CAMWSM7gVEwkEx6mmU=FNS-E1xukuoVNwfLqGZC5Kt7ALz-BH+g@mail.gmail.com>
-References: <20180710234212.4297-1-joseph.kogut@gmail.com>
- <20180710234212.4297-5-joseph.kogut@gmail.com>
- <1532611912386-0.post@n4.nabble.com>
- <CAMWSM7ikcADGP3Y7_wpSjot8fD_OA_v+R7bZf3fD+APRR-Kc1A@mail.gmail.com>
- <1532700227020-0.post@n4.nabble.com>
- <CAMWSM7i=dS5gbqwDRM34KPsu_9ArgYj3cwHYdp3tQ+pE5=L2Rg@mail.gmail.com>
- <1532941444387-0.post@n4.nabble.com>
- <CAMWSM7jKv1kqa3qkCs4wc6ut=HAMMPj58e=jswoXscUzYvwZ0A@mail.gmail.com>
- <1532971302383-0.post@n4.nabble.com>
- <CAMWSM7gVEwkEx6mmU=FNS-E1xukuoVNwfLqGZC5Kt7ALz-BH+g@mail.gmail.com>
-Message-ID: <CAMWSM7hhZr8823+TCo8ANNewpv=P0=ZHZdtTYpz2QaE9Re2vdQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Jul 2018 23:46:43 +0200
+Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
+ target in pkg-kconfig.mk
+In-Reply-To: <20180730155153.24091-4-m.patzlaff@pilz.de>
+References: <20180730155153.24091-1-m.patzlaff@pilz.de>
+ <20180730155153.24091-4-m.patzlaff@pilz.de>
+Message-ID: <20180730234643.34315d11@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Hao,
+Hello Marcel,
 
-I just finished an i386 build that linked Chromium successfully with
-GN option use_lld=false. This was the main issue holding back the next
-version of this patchset, so you can expect it to be posted to the
-mailing list soon.
+On Mon, 30 Jul 2018 17:51:53 +0200, Marcel Patzlaff wrote:
+> This patch adds the new target above which implements the update routine as
+> detailled in the head of this patch series.
+> 
+> Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
 
-Thanks for testing!
+Thanks for working on this complex topic, as Arnout said.
 
-Best,
-Joseph
+On my side, I find the semantic of "let's update the _last_ fragment"
+to be a bit weird and complex to understand. Why the last one, and not
+any other ?
+
+I'm not sure it's possible to have something that updates fragments
+with a sensible semantic.
+
+However, what would be useful would be a way to dump the difference
+between the current configuration, and what the combination of the
+defconfig+fragments provide.
+
+I.e, you start Buildroot with omap2plus_defconfig + some specific
+fragments as the kernel configuration.
+
+You run "make linux-show-config-diff", which returns empty.
+
+Then you tweak the configuration with "make linux-menuconfig", and run
+"make linux-show-config-diff", which shows you the lines that you need
+to put in one of your fragments to preserve the configuration tweaks
+you have done.
+
+Of course, the name "linux-show-config-diff" is just made up here, and
+some more thought is needed to find a good name. But overall, I believe
+the semantic would be much clearer, and doesn't make any assumption on
+whether we have one or several fragments, and whether the last fragment
+or any other fragment needs to be updated.
+
+What do you think about this? Would this also fill your needs?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
