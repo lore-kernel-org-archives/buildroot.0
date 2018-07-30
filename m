@@ -1,111 +1,58 @@
 From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Mon, 30 Jul 2018 15:02:17 -0700
-Subject: [Buildroot] [PATCH v2 2/3] host-attr: build fix for GCC <4.5
+Date: Mon, 30 Jul 2018 15:02:18 -0700
+Subject: [Buildroot] [PATCH v2 3/3] host-acl: build fix for GCC 4.4.7
 In-Reply-To: <20180730220218.26454-1-hollis_blanchard@mentor.com>
 References: <20180730220218.26454-1-hollis_blanchard@mentor.com>
-Message-ID: <20180730220218.26454-2-hollis_blanchard@mentor.com>
+Message-ID: <20180730220218.26454-3-hollis_blanchard@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This didn't introduce any build warnings with host gcc 4.4.7 or gcc 6.3.0.
+
 Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
 ---
- package/attr/0001-build-with-older-GCCs.patch | 87 +++++++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
- create mode 100644 package/attr/0001-build-with-older-GCCs.patch
+ package/acl/0001-Build-with-old-GCC-versions.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/acl/0001-Build-with-old-GCC-versions.patch
 
-diff --git a/package/attr/0001-build-with-older-GCCs.patch b/package/attr/0001-build-with-older-GCCs.patch
+diff --git a/package/acl/0001-Build-with-old-GCC-versions.patch b/package/acl/0001-Build-with-old-GCC-versions.patch
 new file mode 100644
-index 0000000000..2aa41107f9
+index 0000000000..3d958bffac
 --- /dev/null
-+++ b/package/attr/0001-build-with-older-GCCs.patch
-@@ -0,0 +1,87 @@
-+From 3ac428794ea0f95c854166c9c0cffb0267c5e98b Mon Sep 17 00:00:00 2001
++++ b/package/acl/0001-Build-with-old-GCC-versions.patch
+@@ -0,0 +1,32 @@
++From a42519dceef0493ece45538375ae1791313f16d3 Mon Sep 17 00:00:00 2001
 +From: Hollis Blanchard <hollis_blanchard@mentor.com>
-+Date: Mon, 30 Jul 2018 14:17:21 -0700
-+Subject: [PATCH] build with older GCCs
++Date: Mon, 30 Jul 2018 14:29:46 -0700
++Subject: [PATCH] Build with old GCC versions
 +
-+GCC versions up through 4.4.7 (which is used in RHEL 6) do not accept any
-+argument for the deprecated attribute. GCC 4.5 and later say the "msg"
-+argument is optional. We don't need the messages during Buildroot builds
-+anyways.
++GCC 4.4.7, as found in RHEL6, reports:
++    libacl/acl_from_text.c:307: error: #pragma GCC diagnostic not allowed inside functions
 +
 +Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
 +---
-+ include/attributes.h | 20 ++++++++++----------
-+ 1 file changed, 10 insertions(+), 10 deletions(-)
++ libacl/acl_from_text.c | 3 ---
++ 1 file changed, 3 deletions(-)
 +
-+diff --git a/include/attributes.h b/include/attributes.h
-+index 14beb8f..23c39c8 100644
-+--- a/include/attributes.h
-++++ b/include/attributes.h
-+@@ -127,10 +127,10 @@ typedef struct attr_multiop {
-+  */
-+ EXPORT int attr_get (const char *__path, const char *__attrname,
-+ 			char *__attrvalue, int *__valuelength, int __flags)
-+-	__attribute__ ((deprecated ("Use getxattr or lgetxattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_getf (int __fd, const char *__attrname, char *__attrvalue,
-+ 			int *__valuelength, int __flags)
-+-	__attribute__ ((deprecated ("Use fgetxattr instead")));
-++	__attribute__ ((deprecated));
++diff --git a/libacl/acl_from_text.c b/libacl/acl_from_text.c
++index 09790c9..fb6bc07 100644
++--- a/libacl/acl_from_text.c
+++++ b/libacl/acl_from_text.c
++@@ -304,11 +304,8 @@ parse_acl_entry(const char **text_p, acl_t *acl_p)
++ create_entry:
++ 	if (acl_create_entry(acl_p, &entry_d) != 0)
++ 		return -1;
++-#pragma GCC diagnostic push
++-#pragma GCC diagnostic ignored "-Waddress"
++ 	if (acl_copy_entry(entry_d, int2ext(&entry_obj)) != 0)
++ 		return -1;
++-#pragma GCC diagnostic pop
++ 	return 0;
 + 
-+ /*
-+  * Set the value of an attribute, creating the attribute if necessary.
-+@@ -139,11 +139,11 @@ EXPORT int attr_getf (int __fd, const char *__attrname, char *__attrvalue,
-+ EXPORT int attr_set (const char *__path, const char *__attrname,
-+ 			const char *__attrvalue, const int __valuelength,
-+ 			int __flags)
-+-	__attribute__ ((deprecated ("Use setxattr or lsetxattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_setf (int __fd, const char *__attrname,
-+ 			const char *__attrvalue, const int __valuelength,
-+ 			int __flags)
-+-	__attribute__ ((deprecated ("Use fsetxattr instead")));
-++	__attribute__ ((deprecated));
-+ 
-+ /*
-+  * Remove an attribute.
-+@@ -151,9 +151,9 @@ EXPORT int attr_setf (int __fd, const char *__attrname,
-+  */
-+ EXPORT int attr_remove (const char *__path, const char *__attrname,
-+ 			int __flags)
-+-	__attribute__ ((deprecated ("Use removexattr or lremovexattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_removef (int __fd, const char *__attrname, int __flags)
-+-	__attribute__ ((deprecated ("Use fremovexattr instead")));
-++	__attribute__ ((deprecated));
-+ 
-+ /*
-+  * List the names and sizes of the values of all the attributes of an object.
-+@@ -164,10 +164,10 @@ EXPORT int attr_removef (int __fd, const char *__attrname, int __flags)
-+  */
-+ EXPORT int attr_list(const char *__path, char *__buffer, const int __buffersize,
-+ 		int __flags, attrlist_cursor_t *__cursor)
-+-	__attribute__ ((deprecated ("Use listxattr or llistxattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_listf(int __fd, char *__buffer, const int __buffersize,
-+ 		int __flags, attrlist_cursor_t *__cursor)
-+-	__attribute__ ((deprecated ("Use flistxattr instead")));
-++	__attribute__ ((deprecated));
-+ 
-+ /*
-+  * Operate on multiple attributes of the same object simultaneously.
-+@@ -188,10 +188,10 @@ EXPORT int attr_listf(int __fd, char *__buffer, const int __buffersize,
-+  */
-+ EXPORT int attr_multi (const char *__path, attr_multiop_t *__oplist,
-+ 			int __count, int __flags)
-+-	__attribute__ ((deprecated ("Use getxattr, setxattr, listxattr, removexattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_multif (int __fd, attr_multiop_t *__oplist,
-+ 			int __count, int __flags)
-+-	__attribute__ ((deprecated ("Use getxattr, setxattr, listxattr, removexattr instead")));
-++	__attribute__ ((deprecated));
-+ 
-+ #ifdef __cplusplus
-+ }
++ fail:
 +-- 
 +2.13.0
 +
