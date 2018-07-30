@@ -1,67 +1,39 @@
-From: Gary Bisson <gary.bisson@boundarydevices.com>
-Date: Mon, 30 Jul 2018 15:01:44 +0200
-Subject: [Buildroot] [PATCH v3 5/5] imx-parser: bump version to 4.3.5
-In-Reply-To: <20180730130144.31110-1-gary.bisson@boundarydevices.com>
-References: <20180730130144.31110-1-gary.bisson@boundarydevices.com>
-Message-ID: <20180730130144.31110-6-gary.bisson@boundarydevices.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 30 Jul 2018 15:04:33 +0200
+Subject: [Buildroot] [RFC] [PATCH v2 2/2] support/kconfig: Bump to
+ kconfig from Linux 4.17-rc2
+In-Reply-To: <67a166b0-1466-8bd9-86be-3a8f3d7a4079@mind.be>
+References: <20180509164412.31596-1-petr.vorel@gmail.com>
+ <20180509164412.31596-2-petr.vorel@gmail.com>
+ <20180519230311.6a3652fd@windsurf> <20180520142311.GA3453@scaer>
+ <20180520143139.GA14607@x230> <20180520144141.GB3453@scaer>
+ <20180520165009.56b44d9b@windsurf>
+ <dcf8150e-1eb1-ba10-09e6-d3eb0bffaf2b@mind.be>
+ <20180528203743.GK2965@scaer>
+ <67a166b0-1466-8bd9-86be-3a8f3d7a4079@mind.be>
+Message-ID: <20180730150433.704e57ef@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added COPYING hash to track license changes.
+Hello,
 
-No changelog provided by NXP for v4.3.5.
+On Tue, 29 May 2018 12:44:28 +0200, Arnout Vandecappelle wrote:
 
-Changelog for v4.3.4:
-- Fix crash issue when parse index list.
-- Add mett atom in mp4 parser.
-- MP4 PARSER 06.13.00 add interface PARSER_API_GET_TEXT_TRACK_MIME
-to get mime type from mett atom.
-- Add protection for contentDescriptionObject in case the size is not
-correct and larger than qwSize.
+> > We're only talking about dropping the need for host-flex and host-bison
+> > for the kconfig stuff. In this case, we don;t care that the user
+> > generates C code one way or another: it's only a host tool...  
+> 
+>  I was replying to Thomas's "we should remove host-flex and host-bison
+> entirely". Yes we can rely on system-installed flex and bison for kconfig, but
+> we can't rely on that for target packages, e.g. target dtc.
 
-Changelog for v4.3.2:
-- Fix creating parser error
-When the variable value is negetive, if(bytesToRead) will return true,
-modify this condition to if(bytesToRead > 0).
-- FLAC PARSER 03.00.07
-Check read actual length in case of parser reach eos.
-- MP4 PARSER 06.12.11
-Fix crash issue when parse id3 metadata.
-- MPG2 PARSER 04.05.16
-Fix parser return wrong frame size after fastforward.
-- ASFPARSER_01.00.55
-Update for HEVC tag and audio AC3 support.
+Why so ?
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
----
- package/freescale-imx/imx-parser/imx-parser.hash | 3 ++-
- package/freescale-imx/imx-parser/imx-parser.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/freescale-imx/imx-parser/imx-parser.hash b/package/freescale-imx/imx-parser/imx-parser.hash
-index 3266f48110..708e9b8386 100644
---- a/package/freescale-imx/imx-parser/imx-parser.hash
-+++ b/package/freescale-imx/imx-parser/imx-parser.hash
-@@ -1,2 +1,3 @@
- # locally computed
--sha256	36d3ae7285f3a83a87abf680b8a52b3c07df869d2443de844fb5f0ff528ca862  imx-parser-4.2.1.bin
-+sha256  9cd8c49a0bb1050afcfbcc7a677a348443fda4ecacb621cc6e38897619e27c67  imx-parser-4.3.5.bin
-+sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
-diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
-index 11536e5024..fc4376f04b 100644
---- a/package/freescale-imx/imx-parser/imx-parser.mk
-+++ b/package/freescale-imx/imx-parser/imx-parser.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_PARSER_VERSION = 4.2.1
-+IMX_PARSER_VERSION = 4.3.5
- IMX_PARSER_SITE = $(FREESCALE_IMX_SITE)
- IMX_PARSER_SOURCE = imx-parser-$(IMX_PARSER_VERSION).bin
- IMX_PARSER_INSTALL_STAGING = YES
+Thomas
 -- 
-2.18.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
