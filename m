@@ -1,137 +1,446 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Mon, 30 Jul 2018 20:06:30 +0930
-Subject: [Buildroot] [PATCH] gcc: Fix building on ppc64le GCC 8 host
-Message-ID: <20180730103630.21804-1-joel@jms.id.au>
+From: Marcel Patzlaff <M.Patzlaff@pilz.de>
+Date: Mon, 30 Jul 2018 13:14:36 +0200
+Subject: [Buildroot] Antwort: Re: [PATCH 1/1] Buildroot: Target to update
+ config fragments in kconfig base packages
+In-Reply-To: <947900b0-6bcc-e4a8-288f-c2c564d40045@mind.be>
+References: <20180727131251.21649-1-m.patzlaff@pilz.de>
+ <947900b0-6bcc-e4a8-288f-c2c564d40045@mind.be>
+Message-ID: <OF04288403.49BACB76-ONC12582DA.0039FB06-C12582DA.003DC350@local-dmz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building on a ppc64le host we see this error:
+Hi Arnout,
 
-    build/genmatch --gimple ../../gcc/match.pd \
-        > tmp-gimple-match.c
-    ../../gcc/match.pd:120:1 error: expected (, got NAME
-       negative value by 0 gives -0, not +0.  */
+Arnout Vandecappelle <arnout@mind.be> schrieb am 28.07.2018 11:45:07:
 
-This was reported upstream[1] and fixed on the GCC 6 [2] and GCC 7 [3]
-branches:
+> Von: Arnout Vandecappelle <arnout@mind.be>
+> An: Marcel Patzlaff <m.patzlaff@pilz.de>, buildroot at buildroot.org
+> Datum: 28.07.2018 11:45
+> Betreff: Re: [Buildroot] [PATCH 1/1] Buildroot: Target to update 
+> config fragments in kconfig base packages
+> 
+> 
+> On 27-07-18 15:12, Marcel Patzlaff wrote:
+> > This patch introduces a new make target for kconfig based packages:
+> >     <pkg>-update-last-config-fragment
+> > 
+> > It updates the last configuration fragment that is specified in
+> > <PKG>_KCONFIG_FRAGMENT_FILES in a defined way. 
+> 
+>  Now this sounds like a great plan :-)
 
-    Backport from mainline
-    2018-01-10  Kelvin Nilsen  <kelvin@gcc.gnu.org>
+Good to hear that. :-)
 
-    * lex.c (search_line_fast): Remove illegal coercion of an
-    unaligned pointer value to vector pointer type and replace with
-    use of __builtin_vec_vsx_ld () built-in function, which operates
-    on unaligned pointer values.
+>  I unfortunately don't have time to review it now in detail, so I'm just 
+going
+> to give a few quick comments.
+> 
+> > Let's assume that
+> > we have three fragment files X, Y and Z configured. So the update
+> > process will only affect Z and be as follows:
+> > 
+> > 1) Create the defconfig D_now of the current .config file .C_now:
+> > 
+> >     D_now = savedefconfig .C_now
+> > 
+> > 2) Create the .config file .C out of either <PKG>_KCONFIG_DEFCONFIG
+> >    or <PKG>_KCONFIG_FILE.
+> > 
+> > 3) Merge .C with the two first fragments X and Y into .Cy and create 
+the
+> >    corresponding defconfig Dy:
+> > 
+> >     .Cy = merge_config.sh .C X Y
+> >      Dy = savedefconfig .Cy
+> > 
+> > 2) Collect all items that differ between the two defconfigs Dy and 
+Dnow and
+> >    take their values from .Cnow:
+> > 
+> >       Z = diff_defconfig.sh Dy Dnow .Cnow
+> 
+>  This is actually not the Z that existed before, but Znow.
+> 
+>  Could you explain why it is not sufficient to either:
+> 
+> 1. take values from Dnow; or
+> 2. take the difference between .Cy and .Cnow?
 
-The patches included in Buildroot contain just the code changes, and not
-the changelog, to make it easer to manage backporting.
+Well, idea 1 should work. But then the fragment would contain too much
+configuration items. Point 2 works too. But again, then the fragment would
+contain even more configuration items. My intention is to have at most as
+much items in the fragment as required. So that it is still feasible to
+update by hand. But I am also aware, that the proposed change is complex 
+and
+involves several file copy operations. So I'm not absolutely sure which 
+way
+is best to go (even though I currently opt for my proposed way ...).
 
-Tested on Ubuntu Cosmic ppc64le.
+> 
+> > 
+> > Now the following holds:
+> > 
+> >      .Cnow = merge_config.sh .C X Y Z
+> > 
+> > The intention of this patch is to allow developers to change the
+> > configuration via menuconfig or whatever editor and to apply those 
+changes
+> > automatically to the last fragment. This should further ease layering 
+of
+> > buildroot configurations.
+> 
+>  Put this at the very beginning of the commit message, it's the 
+mostimportant
+> bit :-)
 
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86162
-[2] https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=261621
-[3] https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=262243
+I will do ;-)
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
----
- .../6.4.0/0002-fix-building-on-ppc64.patch    | 38 ++++++++++++++++++
- .../7.3.0/0002-fix-building-on-ppc64.patch    | 40 +++++++++++++++++++
- 2 files changed, 78 insertions(+)
- create mode 100644 package/gcc/6.4.0/0002-fix-building-on-ppc64.patch
- create mode 100644 package/gcc/7.3.0/0002-fix-building-on-ppc64.patch
 
-diff --git a/package/gcc/6.4.0/0002-fix-building-on-ppc64.patch b/package/gcc/6.4.0/0002-fix-building-on-ppc64.patch
-new file mode 100644
-index 000000000000..ee096cfcf1e2
---- /dev/null
-+++ b/package/gcc/6.4.0/0002-fix-building-on-ppc64.patch
-@@ -0,0 +1,38 @@
-+From 765527ad3725c5f3e82ab2b8e5031120b409983d Mon Sep 17 00:00:00 2001
-+From: marxin <marxin@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Fri, 15 Jun 2018 08:51:28 +0000
-+Subject: [PATCH] Partial backport r256656
-+
-+2018-06-15  Martin Liska  <mliska@suse.cz>
-+
-+	Backport from mainline
-+	2018-01-10  Kelvin Nilsen  <kelvin@gcc.gnu.org>
-+
-+	* lex.c (search_line_fast): Remove illegal coercion of an
-+	unaligned pointer value to vector pointer type and replace with
-+	use of __builtin_vec_vsx_ld () built-in function, which operates
-+	on unaligned pointer values.
-+
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-6-branch at 261621 138bc75d-0d04-0410-961f-82ee72b054a4
-+Signed-off-by: Joel Stanley <joel@jms.id.au>
-+---
-+ libcpp/lex.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libcpp/lex.c b/libcpp/lex.c
-+index e5a0397f3099..b789686f1c49 100644
-+--- a/libcpp/lex.c
-++++ b/libcpp/lex.c
-+@@ -568,7 +568,7 @@ search_line_fast (const uchar *s, const uchar *end ATTRIBUTE_UNUSED)
-+     {
-+       vc m_nl, m_cr, m_bs, m_qm;
-+ 
-+-      data = *((const vc *)s);
-++      data = __builtin_vec_vsx_ld (0, s);
-+       s += 16;
-+ 
-+       m_nl = (vc) __builtin_vec_cmpeq(data, repl_nl);
-+-- 
-+2.17.1
-+
-diff --git a/package/gcc/7.3.0/0002-fix-building-on-ppc64.patch b/package/gcc/7.3.0/0002-fix-building-on-ppc64.patch
-new file mode 100644
-index 000000000000..78a028c29a98
---- /dev/null
-+++ b/package/gcc/7.3.0/0002-fix-building-on-ppc64.patch
-@@ -0,0 +1,40 @@
-+From aa65a43516da1d48011ef621ed5988289711d99b Mon Sep 17 00:00:00 2001
-+From: marxin <marxin@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Fri, 29 Jun 2018 09:31:30 +0000
-+Subject: [PATCH] Partial backport r256656
-+
-+2018-06-29  Martin Liska  <mliska@suse.cz>
-+
-+	Backport from mainline
-+	2018-01-10  Kelvin Nilsen  <kelvin@gcc.gnu.org>
-+
-+	* lex.c (search_line_fast): Remove illegal coercion of an
-+	unaligned pointer value to vector pointer type and replace with
-+	use of __builtin_vec_vsx_ld () built-in function, which operates
-+	on unaligned pointer values.
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-6-branch at 261621 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch at 262243 138bc75d-0d04-0410-961f-82ee72b054a4
-+Signed-off-by: Joel Stanley <joel@jms.id.au>
-+---
-+ libcpp/lex.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libcpp/lex.c b/libcpp/lex.c
-+index 097c78002cbb..e0fb9e822c44 100644
-+--- a/libcpp/lex.c
-++++ b/libcpp/lex.c
-+@@ -568,7 +568,7 @@ search_line_fast (const uchar *s, const uchar *end ATTRIBUTE_UNUSED)
-+     {
-+       vc m_nl, m_cr, m_bs, m_qm;
-+ 
-+-      data = *((const vc *)s);
-++      data = __builtin_vec_vsx_ld (0, s);
-+       s += 16;
-+ 
-+       m_nl = (vc) __builtin_vec_cmpeq(data, repl_nl);
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+> > 
+> > Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+> > ---
+> >  package/pkg-kconfig.mk            | 89 
++++++++++++++++++++++++--------
+> >  support/kconfig/diff_defconfig.sh | 89 
++++++++++++++++++++++++++++++++
+> 
+>  Since this script is not part of upstream kconfig, it should be in 
+> a different
+> directly. Since it is also useful to be called directly by the user,it 
+should
+> be in the utils/ directory.
+> 
+>  Also, there is more opportunity for bikeshedding in the pkg-
+> kconfig.mk change,
+> so it is worth to split the patch in two patches, one that adds
+> diff_defconfig.sh, and one that adds the make support for it.
+
+Ok, I will split the changes then.
+
+> >  2 files changed, 155 insertions(+), 23 deletions(-)
+> >  create mode 100755 support/kconfig/diff_defconfig.sh
+> > 
+> > diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+> > index 81bba5220c..1e69572c3b 100644
+> > --- a/package/pkg-kconfig.mk
+> > +++ b/package/pkg-kconfig.mk
+> > @@ -27,6 +27,39 @@ define kconfig-package-update-config
+> >     $(Q)touch --reference $($(PKG)_DIR)/$($(PKG)
+> _KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
+> >  endef
+> > 
+> > +# Macro to save the defconfig file
+> > +define kconfig-package-savedefconfig
+> > +   $($(PKG)_MAKE_ENV) $(MAKE) -C $($(PKG)_DIR) \
+> > +      $($(PKG)_KCONFIG_OPTS) savedefconfig
+> > +endef
+> > +
+> > +# The correct way to regenerate a .config file is to use 'make 
+> olddefconfig'.
+> > +# For historical reasons, the target name is 'oldnoconfig' 
+> between Linux kernel
+> > +# versions 2.6.36 and 3.6, and remains as an alias in later versions.
+> > +# In older versions, and in some other projects that use kconfig,
+> the target is
+> > +# not supported at all, and we use 'yes "" | make oldconfig' as a 
+fallback
+> > +# only, as this can fail in complex cases.
+> > +# $(1): the name of the package in upper-case letters
+> > +define kconfig-package-regen-dot-config
+> > +   $(if $(filter olddefconfig,$($(1)_KCONFIG_RULES)),
+> > +      $(Q)$($(1)_KCONFIG_MAKE) olddefconfig,
+> > +      $(if $(filter oldnoconfig,$($(1)_KCONFIG_RULES)),
+> > +         $(Q)$($(1)_KCONFIG_MAKE) oldnoconfig,
+> > +         $(Q)(yes "" | $($(1)_KCONFIG_MAKE) oldconfig)))
+> > +endef
+> 
+>  To ease review, it's also better to split off this change (which is 
+just a
+> refactoring with no functional change) in a separate patch.
+> 
+>  Also, I *think* (but I'm not sure) that it's not needed to make it 
+> a macro that
+> is call'ed, because we can just use $(PKG) instead of $(1).
+
+That's true. It is kind of a style decision of either having an explicitly
+stated dependency on the package name (i.e. call syntax with argument) or 
+an
+implicit one where one have to ensure that the desired variable is set as
+target specific variable. The last macro 
+(kconfig-package-regen-dot-config)
+inspired me to use the argument because it is used also out of a macro 
+itself
+($(2)_FIXUP_DOT_CONFIG) and I was not sure if it is really a good idea to 
+use
+PKG then because of this indirection.
+
+> > +
+> > +# Macro to create a .config file where all fragments are merged into
+> > +# $(1): the name of the package in upper-case letters
+> > +# $(2): name of the .config file
+> > +# $(3): fragment files to merge
+> > +define kconfig-package-merge-config
+> > +   $(Q)$(if $($(1)_KCONFIG_DEFCONFIG),\
+> > +      $($(1)_KCONFIG_MAKE) $($(1)_KCONFIG_DEFCONFIG),\
+> > +      $(INSTALL) -m 0644 -D $($(1)_KCONFIG_FILE) $(2))
+> > +   $(Q)support/kconfig/merge_config.sh -m -O $(@D) $(2) $(3)
+> > +   $(call kconfig-package-regen-dot-config,$(1))
+> > +endef
+> > +
+> > 
+> 
+################################################################################
+> >  # inner-kconfig-package -- generates the make targets needed to 
+support a
+> >  # kconfig package
+> > @@ -90,31 +123,12 @@ $(2)_KCONFIG_RULES = \
+> >     $$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
+> >        sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
+> > 
+> > -# The correct way to regenerate a .config file is to use 'make 
+> olddefconfig'.
+> > -# For historical reasons, the target name is 'oldnoconfig' 
+> between Linux kernel
+> > -# versions 2.6.36 and 3.6, and remains as an alias in later versions.
+> > -# In older versions, and in some other projects that use kconfig,
+> the target is
+> > -# not supported at all, and we use 'yes "" | make oldconfig' as a 
+fallback
+> > -# only, as this can fail in complex cases.
+> > -define $(2)_REGEN_DOT_CONFIG
+> > -   $$(if $$(filter olddefconfig,$$($(2)_KCONFIG_RULES)),
+> > -      $$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
+> > -      $$(if $$(filter oldnoconfig,$$($(2)_KCONFIG_RULES)),
+> > -         $$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
+> > -         $$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
+> > -endef
+> > -
+> >  # The specified source configuration file and any additional 
+> configuration file
+> >  # fragments are merged together to .config, after the package has
+> been patched.
+> >  # Since the file could be a defconfig file it needs to be expanded to 
+a
+> >  # full .config first.
+> >  $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$
+> ($(2)_KCONFIG_FRAGMENT_FILES)
+> > -   $$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+> > -      $$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+> > -      $$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
+> > -   $$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+> > -      $$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+> > -   $$($(2)_REGEN_DOT_CONFIG)
+> > +   $$(call kconfig-package-merge-config,$(2),$$(@),$$($(2)
+> _KCONFIG_FRAGMENT_FILES))
+> > 
+> >  # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency 
+is
+> >  # already implied, but if we only have a _KCONFIG_DEFCONFIG we have 
+to add
+> > @@ -125,7 +139,7 @@ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | 
+$(1)-patch
+> >  # The exact rules are specified by the package .mk file.
+> >  define $(2)_FIXUP_DOT_CONFIG
+> >     $$($(2)_KCONFIG_FIXUP_CMDS)
+> > -   $$($(2)_REGEN_DOT_CONFIG)
+> > +   $$(call kconfig-package-regen-dot-config,$(2))
+> >     $$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+> >  endef
+> > 
+> > @@ -213,9 +227,9 @@ $(1)-check-configuration-done:
+> >        exit 1; \
+> >     fi
+> > 
+> > +$(1)-savedefconfig: PKG=$(2)
+> >  $(1)-savedefconfig: $(1)-check-configuration-done
+> > -   $$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
+> > -      $$($(2)_KCONFIG_OPTS) savedefconfig
+> > +   $$(call kconfig-package-savedefconfig)
+> > 
+> >  # Target to copy back the configuration to the source configuration 
+file
+> >  # Even though we could use 'cp --preserve-timestamps' here, the 
+separate
+> > @@ -232,11 +246,40 @@ $(1)-update-defconfig: PKG=$(2)
+> >  $(1)-update-defconfig: $(1)-savedefconfig
+> >     $$(call kconfig-package-update-config,defconfig)
+> > 
+> > +
+> > +define $(2)_KCONFIG_LAST_FRAGMENT
+> > +   $$(lastword $$($(2)_KCONFIG_FRAGMENT_FILES))
+> > +endef
+> > +
+> > +define $(2)_KCONFIG_FIRST_FRAGMENTS
+> > +   $$(filter-out $$($(2)_KCONFIG_LAST_FRAGMENT),\
+> > +      $$($(2)_KCONFIG_FRAGMENT_FILES))
+> > +endef
+> > +
+> > +$(1)-update-last-config-fragment: PKG=$(2)
+> > +$(1)-update-last-config-fragment: $(1)-savedefconfig
+> > +   @$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), true, \
+> > +      echo "Unable to perform $(@) when no fragment files are set"; 
+exit 1)
+> > +   $$(Q)cp -a $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)
+> _DIR)/.config.ulcf.all
+> > +   $$(Q)cp -a $$($(2)_DIR)/defconfig $$($(2)_DIR)/defconfig.ulcf.all
+> > +   $$(call 
+kconfig-package-merge-config,$(2),$$($(2)_KCONFIG_DOTCONFIG),\
+> > +      $$($(2)_KCONFIG_FIRST_FRAGMENTS))
+> > +   $$(call kconfig-package-savedefconfig)
+> > +   $$(Q)cp -a $$($(2)_DIR)/defconfig 
+$$($(2)_DIR)/defconfig.ulcf.first
+> > +   $$(Q)cp -a $$($(2)_DIR)/.config.ulcf.all $$($(2)_DIR)/$$($(2)
+> _KCONFIG_DOTCONFIG)
+> > +   $$(Q)cp -a $$($(2)_DIR)/defconfig.ulcf.all $$($(2)_DIR)/defconfig
+> > +   $$(Q)support/kconfig/diff_defconfig.sh $$($(2)_DIR)/
+> defconfig.ulcf.first \
+> > +      $$($(2)_DIR)/defconfig.ulcf.all $$($(2)_DIR)/.config.ulcf.all > 
+\
+> > +      $$($(2)_KCONFIG_LAST_FRAGMENT)
+> > +   $$(Q)rm -f $$($(2)_DIR)/defconfig.ulcf.* 
+$$($(2)_DIR)/.config.ulcf.*
+> > +
+> > +
+> >  endif # package enabled
+> > 
+> >  .PHONY: \
+> >     $(1)-update-config \
+> >     $(1)-update-defconfig \
+> > +   $(1)-update-last-config-fragment \
+> >     $(1)-savedefconfig \
+> >     $(1)-check-configuration-done \
+> >     $$($(2)_DIR)/.kconfig_editor_% \
+> > diff --git a/support/kconfig/diff_defconfig.sh b/support/kconfig/
+> diff_defconfig.sh
+> > new file mode 100755
+> > index 0000000000..ee7b0c0fc6
+> > --- /dev/null
+> > +++ b/support/kconfig/diff_defconfig.sh
+> > @@ -0,0 +1,89 @@
+> > +#!/bin/sh
+> > +
+> > +#  diff_defconfig.sh - Takes two defconfig files A and B as well 
+> as the config
+> > +#  file derived from B and outputs the differences that lead from A 
+to B.
+> > +#  The output can be used as configuration fragment.
+> > +#
+> > +#  Copyright 2018 Pilz GmbH & Co. KG
+> > +#
+> > +#  This program is free software; you can redistribute it and/or 
+modify
+> > +#  it under the terms of the GNU General Public License version 2 as
+> > +#  published by the Free Software Foundation.
+> > +#
+> > +#  This program is distributed in the hope that it will be useful,
+> > +#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+> > +#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+> > +#  See the GNU General Public License for more details.
+> > +
+> > +set -e
+> > +
+> > +THIS_FILE=$(basename ${0})
+> > +
+> > +USAGE="${THIS_FILE} [OPTIONS] <a.defconfig> <b.defconfig> <b.config>"
+> > +
+> > +fail_msg() {
+> > +    printf "%s\n" "${1}" 1>&2
+> > +    exit 1
+> > +}
+> > +
+> > +help() {
+> > +    cat <<-_EOF_
+> > +   Usage:
+> > +       ${USAGE}
+> > +
+> > +   ${THIS_FILE} takes two defconfig files A and B as well as the 
+.config
+> > +   file derived from B and outputs the differences that lead fromA to 
+B on
+> > +   stdout. The output can be used as configuration fragment.
+> > +
+> > +   Options:
+> > +       -h   display this help text
+> > +       -p   do not restrict config prefix to CONFIG_
+> > +
+> > +   Returns:
+> > +       0    If no error
+> > +       !0   If any error
+> > +   _EOF_
+> > +}
+> > +
+> > +
+> > +ALLPREFIXES=false
+> > +# parse options
+> > +while true; do
+> > +    case "${1}" in
+> > +        "-h")
+> > +            help
+> > +            exit 0
+> > +        ;;
+> > +        "-p")
+> > +            ALLPREFIXES=true
+> > +            shift
+> > +        ;;
+> > +        *)
+> > +            break
+> > +        ;;
+> > +    esac
+> > +done
+> > +
+> > +# check if all files are given
+> > +[ "${#}" -eq "3" ] || fail_msg "Usage: ${USAGE}"
+> > +
+> > +# test if files exist
+> > +[ -f "${1}" ] || fail_msg "First defconfig file '${1}' does not 
+exist!"
+> > +[ -f "${2}" ] || fail_msg "Second defconfig file '${2}' does not 
+exist!"
+> > +[ -f "${3}" ] || fail_msg "Config file '${3}' does not exist!"
+> > +
+> > +ITEM_EXP="s/^[<>]\s\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
+> > +if [ "${ALLPREFIXES}" = "true" ]; then
+> > +    ITEM_EXP="s/^[<>]\s\(# \)\{0,1\}\([a-zA-Z][a-zA-Z0-9_]*\)[= 
+].*/\2/p"
+> > +fi
+> > +
+> > +# use normal diff and collect all differing items
+> > +ITEMS=$(diff "${1}" "${2}" | sed -n "${ITEM_EXP}" | sort | uniq)
+> > +
+> > +# output their values
+> > +for item in ${ITEMS}; do
+> 
+>  ITEMS may contain spaces, so you need to set IFS, or use a while read 
+loop.
+> 
+> > +    # some items disable/hide others so grep may fail here
+> > +    grep -w "${item}" "${3}" || true
+> > +done
+> 
+>  If I understand correctly, the result may actually still contain 
+> config values
+> which are defaults, including config values that are not user-
+> settable. This is
+> not ideal. Can't be avoided, I guess, but this should be made explicit
+> somewhere, either in the commit message or in a comment in the file.
+> 
+
+I will check that and also will update the documentation on the result.
+
+Thanks for the feedback so far and regards,
+
+Marcel 
+
+Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
+Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
+Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
+Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
+This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
+Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
+We do care about the environment! - Please consider the environment before printing this e-mail.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180730/851f4ac2/attachment.html>
