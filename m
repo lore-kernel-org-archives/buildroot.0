@@ -1,43 +1,45 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 30 Jul 2018 11:13:40 -0700
-Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
-In-Reply-To: <1532971302383-0.post@n4.nabble.com>
-References: <20180710234212.4297-1-joseph.kogut@gmail.com>
- <20180710234212.4297-5-joseph.kogut@gmail.com>
- <1532611912386-0.post@n4.nabble.com>
- <CAMWSM7ikcADGP3Y7_wpSjot8fD_OA_v+R7bZf3fD+APRR-Kc1A@mail.gmail.com>
- <1532700227020-0.post@n4.nabble.com>
- <CAMWSM7i=dS5gbqwDRM34KPsu_9ArgYj3cwHYdp3tQ+pE5=L2Rg@mail.gmail.com>
- <1532941444387-0.post@n4.nabble.com>
- <CAMWSM7jKv1kqa3qkCs4wc6ut=HAMMPj58e=jswoXscUzYvwZ0A@mail.gmail.com>
- <1532971302383-0.post@n4.nabble.com>
-Message-ID: <CAMWSM7gVEwkEx6mmU=FNS-E1xukuoVNwfLqGZC5Kt7ALz-BH+g@mail.gmail.com>
+From: Patrick Doyle <wpdster@gmail.com>
+Date: Mon, 30 Jul 2018 17:29:36 -0400
+Subject: [Buildroot] Random Linux/device tree/GPIO question posted to the
+ wrong list...
+Message-ID: <CAF_dkJBrU=bF+LZOSe6RNKukbGFjPHOMJUfUXRHs4_8NJ-50Dw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 30, 2018 at 10:21 AM Hao HU <huhao526200@gmail.com> wrote:
->
-> Do you mean recompiling with use_gold=false? Or I should try setting
-> use_lld=false?
->
+But you folks all know about this sort of stuff anyway, so I figured
+I'd start by asking here.
 
-The problem is stricter defaults with LLD, so you want to disable LLD
-for an i386 build, which means the proper flag is use_lld=false. I
-haven't tried this, so it may not fix your problem.
+I was just shocked to learn that, although I allocated a pin to a
+certain function in my device tree, I was able to override the
+operation of that pin via /sys/class/gpio (and thus crash my board
+when it could no longer access it's flash properly).
 
-> >Can you switch the target architecture to x86_64? That build works properl
->
-> I have tested the x86_64, it worked, but my project needs to build on a i386
-> arch.
->
+Can anybody here tell me how I can prevent the GPIO subsystem from
+overriding the pinmux I specified in my device tree?  I guess I
+thought that:
 
-If that's the case, the only solution is to link without LLD. The
-Chromium team informed me that they still compile with Gold on i386.
+            pinctrl at fc038000 {
+                pinctrl_nand_default: nand_default {
+                                        pinmux = <PIN_PA8__NWE_NANDWE>,
+                                                 <PIN_PA9__NCS3>,
+                                                 <PIN_PA10__A21_NANDALE>,
+                                                 <PIN_PA11__A22_NANDCLE>,
+                                                 <PIN_PA12__NRD_NANDOE>,
+                                                 <PIN_PD8__NANDRDY>,
+                                                 <PIN_PA0__D0>,
+                                                 <PIN_PA1__D1>,
+                                                 <PIN_PA2__D2>,
+                                                 <PIN_PA3__D3>,
+                                                 <PIN_PA4__D4>,
+                                                 <PIN_PA5__D5>,
+                                                 <PIN_PA6__D6>,
+                                                 <PIN_PA7__D7>;
+                                        bias-disable;
+                                };
 
-Also, this is unrelated, but when you reply you're only addressing the
-mailing list, so your messages are skipping my inbox and I only notice
-when I check messages sent to the mailing list. Make sure to address
-your messages to the correct recipient and CC the mailing list.
+would have done the trick (on my Microchip SAMA5D2x device).
+
+--wpd
