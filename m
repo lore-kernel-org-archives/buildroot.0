@@ -1,48 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Jul 2018 23:50:01 +0200
-Subject: [Buildroot] [PATCH 2/2] package/opencv3: fix aarch64 build
-In-Reply-To: <20180730160836.21016-2-bernd.kuhls@t-online.de>
-References: <20180730160836.21016-1-bernd.kuhls@t-online.de>
- <20180730160836.21016-2-bernd.kuhls@t-online.de>
-Message-ID: <20180730235001.429c059e@windsurf>
+Date: Mon, 30 Jul 2018 23:51:09 +0200
+Subject: [Buildroot] Random Linux/device tree/GPIO question posted to
+ the wrong list...
+In-Reply-To: <CAF_dkJBrU=bF+LZOSe6RNKukbGFjPHOMJUfUXRHs4_8NJ-50Dw@mail.gmail.com>
+References: <CAF_dkJBrU=bF+LZOSe6RNKukbGFjPHOMJUfUXRHs4_8NJ-50Dw@mail.gmail.com>
+Message-ID: <20180730235109.0fe5f681@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Patrick,
 
-On Mon, 30 Jul 2018 18:08:36 +0200, Bernd Kuhls wrote:
-> https://git.buildroot.net/buildroot/commit/package/opencv3?id=a17402e42d8c996af239cfdb536e74188d6c6245
+On Mon, 30 Jul 2018 17:29:36 -0400, Patrick Doyle wrote:
+> But you folks all know about this sort of stuff anyway, so I figured
+> I'd start by asking here.
 > 
-> enabled CMake option ENABLE_VFPV3 in OpenCV3 for all aarch64 CPUs
-> because for them BR2_ARM_CPU_HAS_VFPV3 is always true:
+> I was just shocked to learn that, although I allocated a pin to a
+> certain function in my device tree, I was able to override the
+> operation of that pin via /sys/class/gpio (and thus crash my board
+> when it could no longer access it's flash properly).
 > 
-> BR2_ARM_CPU_HAS_FP_ARMV8 selects BR2_ARM_CPU_HAS_VFPV4 which in turn
-> selects BR2_ARM_CPU_HAS_VFPV3.
+> Can anybody here tell me how I can prevent the GPIO subsystem from
+> overriding the pinmux I specified in my device tree?  I guess I
+> thought that:
 > 
-> OpenCV3 however supports vfpv3 only on !aarch64:
-> https://github.com/opencv/opencv/blob/3.4/cmake/OpenCVCompilerOptimizations.cmake#L275
+>             pinctrl at fc038000 {
+>                 pinctrl_nand_default: nand_default {
+>                                         pinmux = <PIN_PA8__NWE_NANDWE>,
+>                                                  <PIN_PA9__NCS3>,
+>                                                  <PIN_PA10__A21_NANDALE>,
+>                                                  <PIN_PA11__A22_NANDCLE>,
+>                                                  <PIN_PA12__NRD_NANDOE>,
+>                                                  <PIN_PD8__NANDRDY>,
+>                                                  <PIN_PA0__D0>,
+>                                                  <PIN_PA1__D1>,
+>                                                  <PIN_PA2__D2>,
+>                                                  <PIN_PA3__D3>,
+>                                                  <PIN_PA4__D4>,
+>                                                  <PIN_PA5__D5>,
+>                                                  <PIN_PA6__D6>,
+>                                                  <PIN_PA7__D7>;
+>                                         bias-disable;
+>                                 };
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/d38/d38fb092cffe086f93b469d1181da77fba0994bd/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> would have done the trick (on my Microchip SAMA5D2x device).
 
-So this fix is already needed with the currently packaged 3.3.0 version
-of OpenCV ?
+This snippet of Device Tree only declares a pinmux configuration. If
+there is nothing referencing pinctrl_nand_default, then this pinmux
+configuration is not used/applied, and the pins are not "reserved".
 
-If so, why is this fix patch coming *after* the version bump in the
-series ?
-
-Both 2018.05.x and 2018.02.x are using 3.3.0, so I guess they are
-affected as well. However, this failure doesn't appear for 2018.02.x
-and 2018.05.x in http://autobuild.buildroot.net/?reason=opencv3% 
-
-Do you have an explanation for this ?
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
