@@ -1,53 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 30 Jul 2018 18:08:36 +0200
-Subject: [Buildroot] [PATCH 2/2] package/opencv3: fix aarch64 build
-In-Reply-To: <20180730160836.21016-1-bernd.kuhls@t-online.de>
-References: <20180730160836.21016-1-bernd.kuhls@t-online.de>
-Message-ID: <20180730160836.21016-2-bernd.kuhls@t-online.de>
+Date: Mon, 30 Jul 2018 18:08:35 +0200
+Subject: [Buildroot] [PATCH 1/2] package/opencv3: bump version to 3.4.2
+Message-ID: <20180730160836.21016-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://git.buildroot.net/buildroot/commit/package/opencv3?id=a17402e42d8c996af239cfdb536e74188d6c6245
-
-enabled CMake option ENABLE_VFPV3 in OpenCV3 for all aarch64 CPUs
-because for them BR2_ARM_CPU_HAS_VFPV3 is always true:
-
-BR2_ARM_CPU_HAS_FP_ARMV8 selects BR2_ARM_CPU_HAS_VFPV4 which in turn
-selects BR2_ARM_CPU_HAS_VFPV3.
-
-OpenCV3 however supports vfpv3 only on !aarch64:
-https://github.com/opencv/opencv/blob/3.4/cmake/OpenCVCompilerOptimizations.cmake#L275
-
-Fixes
-http://autobuild.buildroot.net/results/d38/d38fb092cffe086f93b469d1181da77fba0994bd/
+Updated license hash after copyright year update:
+https://github.com/opencv/opencv/commit/e6ed853905744018d9d570fa49e3b9e33b3c6ea6#diff-9879d6db96fd29134fc802214163b95a
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/opencv3/opencv3.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/opencv3/opencv3.hash | 5 ++---
+ package/opencv3/opencv3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
+diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+index de15bc8cb7..e2d020db9b 100644
+--- a/package/opencv3/opencv3.hash
++++ b/package/opencv3/opencv3.hash
+@@ -1,4 +1,3 @@
+ # Locally calculated
+-sha256 8bb312b9d9fd17336dc1f8b3ac82f021ca50e2034afc866098866176d985adc6  opencv3-3.3.0.tar.gz
+-# License files, locally calculated
+-sha256 e974db937899a2505f0eb43ece9d2f2eb36e8580ad88785e3ffac0d697ebaf5d  LICENSE
++sha256 81dbd5e7e9f8a4c936b94629bf4765745942a1d634ae38ec08bc57b73b28ffc5  opencv3-3.4.2.tar.gz
++sha256 fea311907cb6271b05ff5843b238e0f2edb6f204a3432975211030d20704b321  LICENSE
 diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 2fb49e3fb2..09455d61b2 100644
+index 53b771ef25..2fb49e3fb2 100644
 --- a/package/opencv3/opencv3.mk
 +++ b/package/opencv3/opencv3.mk
-@@ -100,8 +100,13 @@ OPENCV3_CONF_OPTS += \
- #   adding '-mcpu=G3 -mtune=G5' to them, which is already handled by Buildroot.
- OPENCV3_CONF_OPTS += \
- 	-DENABLE_POWERPC=OFF \
--	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF) \
--	-DENABLE_VFPV3=$(if $(BR2_ARM_CPU_HAS_VFPV3),ON,OFF)
-+	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF)
-+
-+ifeq ($(BR2_ARCH_IS_64):$(BR2_ARM_CPU_HAS_VFPV3),:y)
-+OPENCV3_CONF_OPTS += -DENABLE_VFPV3=ON
-+else
-+OPENCV3_CONF_OPTS += -DENABLE_VFPV3=OFF
-+endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Cuda stuff
- OPENCV3_CONF_OPTS += \
+-OPENCV3_VERSION = 3.3.0
++OPENCV3_VERSION = 3.4.2
+ OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3-Clause
 -- 
 2.18.0
