@@ -1,66 +1,134 @@
 From: Marcel Patzlaff <m.patzlaff@pilz.de>
-Date: Mon, 30 Jul 2018 17:51:50 +0200
-Subject: [Buildroot] [PATCH 0/3] Buildroot: Target to update config
- fragments in kconfig based packages
-Message-ID: <20180730155153.24091-1-m.patzlaff@pilz.de>
+Date: Mon, 30 Jul 2018 17:51:51 +0200
+Subject: [Buildroot] [PATCH 1/3] Support script for defconfig comparison
+In-Reply-To: <20180730155153.24091-1-m.patzlaff@pilz.de>
+References: <20180730155153.24091-1-m.patzlaff@pilz.de>
+Message-ID: <20180730155153.24091-2-m.patzlaff@pilz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The intention of this patch series is to allow developers to change the
-configuration via menuconfig or whatever editor and to apply those
-changes automatically to the last fragment. This should further ease
-layering of buildroot configurations.
+This patch adds a new support script that allows to compare two defconfigs and
+to output the differences in a form such that it can be used as configuration
+fragment.
 
-This patch series introduces, besides some refactoring for code
-sharing, a new make target for kconfig based packages:
-    <pkg>-update-last-config-fragment
+The comparison is done in two steps:
 
-The new target updates the last configuration fragment that is
-specified in <PKG>_KCONFIG_FRAGMENT_FILES in a defined way. Let's
-assume that we have three fragment files X, Y and Z configured. So the
-update process will only affect Z and be as follows:
+1) Apply a plain "diff" on the two files (A and B) and collect all item names
+   where diff sees a difference. This results in a list of newline separated
+   item names.
+2) For each item name in the list, the complete line out of the .config file
+   derived from B is taken and written to stdout.
 
-1) Create the defconfig Dnow from the current .config file .Cnow:
-
-    Dnow = savedefconfig .Cnow
-
-2) Create the .config file .C out of either <PKG>_KCONFIG_DEFCONFIG
-   or <PKG>_KCONFIG_FILE.
-
-3) Merge .C with the two first fragments X and Y into .Cy and create
-   the corresponding defconfig Dy:
-
-    .Cy = merge_config.sh .C X Y
-     Dy = savedefconfig .Cy
-
-4) Collect all items that differ between the two defconfigs Dy and Dnow
-   and take their values from .Cnow:
-
-    Znow = diff_defconfig.sh Dy Dnow .Cnow
-
-Now the following holds:
-
-     .Cnow = merge_config.sh .C X Y Znow
-
-
-Znow will only contain configuration items that are visible in
-defconfigs (see step 4 and the associated script). Also, I assume that
-Znow will not contain items that are not user-settable because those
-are not expected to be in defconfigs.
-
-Marcel Patzlaff (3):
-  Support script for defconfig comparison
-  Refactoring of pkg-kconfig.mk to increase re-usability
-  New <pkg>-update-last-config-fragment target in pkg-kconfig.mk
-
- package/pkg-kconfig.mk  | 89 ++++++++++++++++++++++++++++----------
+Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+---
  utils/diff_defconfig.sh | 95 +++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 161 insertions(+), 23 deletions(-)
+ 1 file changed, 95 insertions(+)
  create mode 100755 utils/diff_defconfig.sh
 
+diff --git a/utils/diff_defconfig.sh b/utils/diff_defconfig.sh
+new file mode 100755
+index 0000000000..385e741813
+--- /dev/null
++++ b/utils/diff_defconfig.sh
+@@ -0,0 +1,95 @@
++#!/bin/sh
++
++#  diff_defconfig.sh - Takes two defconfig files A and B as well as the config
++#  file derived from B and outputs the differences that lead from A to B.
++#  The output can be used as configuration fragment.
++#  It is garanteed, that the output only contains configuration items that are
++#  present in either defconfig. So it's assumed, that all configuration items
++#  this script outputs are also user-settable.
++#
++#
++#  Copyright 2018 Pilz GmbH & Co. KG
++#
++#  This program is free software; you can redistribute it and/or modify
++#  it under the terms of the GNU General Public License version 2 as
++#  published by the Free Software Foundation.
++#
++#  This program is distributed in the hope that it will be useful,
++#  but WITHOUT ANY WARRANTY; without even the implied warranty of
++#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
++#  See the GNU General Public License for more details.
++
++set -e
++
++THIS_FILE=$(basename "${0}")
++
++USAGE="${THIS_FILE} [OPTIONS] <a.defconfig> <b.defconfig> <b.config>"
++
++fail_msg() {
++    printf "%s\n" "${1}" 1>&2
++    exit 1
++}
++
++help() {
++    cat <<-_EOF_
++	Usage:
++	    ${USAGE}
++
++	${THIS_FILE} takes two defconfig files A and B as well as the .config
++	file derived from B and outputs the differences that lead from A to B on
++	stdout. The output can be used as configuration fragment.
++
++	Options:
++	    -h   display this help text
++	    -p   do not restrict config prefix to CONFIG_
++
++	Returns:
++	    0    If no error
++	    !0   If any error
++	_EOF_
++}
++
++
++ALLPREFIXES=false
++# parse options
++while true; do
++    case "${1}" in
++        "-h")
++            help
++            exit 0
++        ;;
++        "-p")
++            ALLPREFIXES=true
++            shift
++        ;;
++        *)
++            break
++        ;;
++    esac
++done
++
++# check if all files are given
++[ "${#}" -eq "3" ] || fail_msg "Usage: ${USAGE}"
++
++# test if files exist
++[ -f "${1}" ] || fail_msg "First defconfig file '${1}' does not exist!"
++[ -f "${2}" ] || fail_msg "Second defconfig file '${2}' does not exist!"
++[ -f "${3}" ] || fail_msg "Config file '${3}' does not exist!"
++
++ITEM_EXP="s/^[<>]\s\(# \)\{0,1\}\(CONFIG_[a-zA-Z0-9_]*\)[= ].*/\2/p"
++if [ "${ALLPREFIXES}" = "true" ]; then
++    ITEM_EXP="s/^[<>]\s\(# \)\{0,1\}\([a-zA-Z][a-zA-Z0-9_]*\)[= ].*/\2/p"
++fi
++
++# use normal diff and collect all differing item names
++ITEMS=$(diff "${1}" "${2}" | sed -n "${ITEM_EXP}" | sort | uniq)
++
++# output their values
++# Note: ITEMS does only contain newline separators and no other whitespaces.
++#       See regular expression above.
++for item in ${ITEMS}; do
++    # some items disable/hide others so grep may fail here
++    grep -w "${item}" "${3}" || true
++done
++
++exit 0
 -- 
 2.17.1
 
