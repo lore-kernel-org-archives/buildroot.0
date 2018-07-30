@@ -1,107 +1,102 @@
 From: Marcel Patzlaff <m.patzlaff@pilz.de>
-Date: Mon, 30 Jul 2018 17:51:52 +0200
-Subject: [Buildroot] [PATCH 2/3] Refactoring of pkg-kconfig.mk to increase
- re-usability
+Date: Mon, 30 Jul 2018 17:51:53 +0200
+Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
+ target in pkg-kconfig.mk
 In-Reply-To: <20180730155153.24091-1-m.patzlaff@pilz.de>
 References: <20180730155153.24091-1-m.patzlaff@pilz.de>
-Message-ID: <20180730155153.24091-3-m.patzlaff@pilz.de>
+Message-ID: <20180730155153.24091-4-m.patzlaff@pilz.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch refactors savedefconfig and the configuration re-generation to
-separate macros so that the functionality can be re-used in further targets.
+This patch adds the new target above which implements the update routine as
+detailled in the head of this patch series.
 
 Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
 ---
- package/pkg-kconfig.mk | 43 ++++++++++++++++++++++++------------------
- 1 file changed, 25 insertions(+), 18 deletions(-)
+ package/pkg-kconfig.mk | 48 ++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 42 insertions(+), 6 deletions(-)
 
 diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 81bba5220c..331ba16614 100644
+index 331ba16614..bc817c457f 100644
 --- a/package/pkg-kconfig.mk
 +++ b/package/pkg-kconfig.mk
-@@ -27,6 +27,27 @@ define kconfig-package-update-config
- 	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
+@@ -48,6 +48,18 @@ define kconfig-package-regen-dot-config
+ 			$(Q)(yes "" | $($(1)_KCONFIG_MAKE) oldconfig)))
  endef
  
-+# Macro to save the defconfig file
-+define kconfig-package-savedefconfig
-+	$($(PKG)_MAKE_ENV) $(MAKE) -C $($(PKG)_DIR) \
-+		$($(PKG)_KCONFIG_OPTS) savedefconfig
-+endef
-+
-+# The correct way to regenerate a .config file is to use 'make olddefconfig'.
-+# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
-+# versions 2.6.36 and 3.6, and remains as an alias in later versions.
-+# In older versions, and in some other projects that use kconfig, the target is
-+# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
-+# only, as this can fail in complex cases.
++# Macro to create a .config file where all fragments are merged into
 +# $(1): the name of the package in upper-case letters
-+define kconfig-package-regen-dot-config
-+	$(if $(filter olddefconfig,$($(1)_KCONFIG_RULES)),
-+		$(Q)$($(1)_KCONFIG_MAKE) olddefconfig,
-+		$(if $(filter oldnoconfig,$($(1)_KCONFIG_RULES)),
-+			$(Q)$($(1)_KCONFIG_MAKE) oldnoconfig,
-+			$(Q)(yes "" | $($(1)_KCONFIG_MAKE) oldconfig)))
++# $(2): name of the .config file
++# $(3): fragment files to merge
++define kconfig-package-merge-config
++	$(Q)$(if $($(1)_KCONFIG_DEFCONFIG),\
++		$($(1)_KCONFIG_MAKE) $($(1)_KCONFIG_DEFCONFIG),\
++		$(INSTALL) -m 0644 -D $($(1)_KCONFIG_FILE) $(2))
++	$(Q)support/kconfig/merge_config.sh -m -O $(@D) $(2) $(3)
++	$(call kconfig-package-regen-dot-config,$(1))
 +endef
 +
  ################################################################################
  # inner-kconfig-package -- generates the make targets needed to support a
  # kconfig package
-@@ -90,20 +111,6 @@ $(2)_KCONFIG_RULES = \
- 	$$(shell $$($(2)_KCONFIG_MAKE) -pn config 2>/dev/null | \
- 		sed 's/^\([_0-9a-zA-Z]*config\):.*/\1/ p; d')
- 
--# The correct way to regenerate a .config file is to use 'make olddefconfig'.
--# For historical reasons, the target name is 'oldnoconfig' between Linux kernel
--# versions 2.6.36 and 3.6, and remains as an alias in later versions.
--# In older versions, and in some other projects that use kconfig, the target is
--# not supported at all, and we use 'yes "" | make oldconfig' as a fallback
--# only, as this can fail in complex cases.
--define $(2)_REGEN_DOT_CONFIG
--	$$(if $$(filter olddefconfig,$$($(2)_KCONFIG_RULES)),
--		$$(Q)$$($(2)_KCONFIG_MAKE) olddefconfig,
--		$$(if $$(filter oldnoconfig,$$($(2)_KCONFIG_RULES)),
--			$$(Q)$$($(2)_KCONFIG_MAKE) oldnoconfig,
--			$$(Q)(yes "" | $$($(2)_KCONFIG_MAKE) oldconfig)))
--endef
--
- # The specified source configuration file and any additional configuration file
- # fragments are merged together to .config, after the package has been patched.
+@@ -116,12 +128,7 @@ $(2)_KCONFIG_RULES = \
  # Since the file could be a defconfig file it needs to be expanded to a
-@@ -114,7 +121,7 @@ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_F
- 		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
- 	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
- 		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	$$($(2)_REGEN_DOT_CONFIG)
-+	$$(call kconfig-package-regen-dot-config,$(2))
+ # full .config first.
+ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+-	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+-		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+-		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
+-	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+-		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
+-	$$(call kconfig-package-regen-dot-config,$(2))
++	$$(call kconfig-package-merge-config,$(2),$$(@),$$($(2)_KCONFIG_FRAGMENT_FILES))
  
  # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
  # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
-@@ -125,7 +132,7 @@ $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | $(1)-patch
- # The exact rules are specified by the package .mk file.
- define $(2)_FIXUP_DOT_CONFIG
- 	$$($(2)_KCONFIG_FIXUP_CMDS)
--	$$($(2)_REGEN_DOT_CONFIG)
-+	$$(call kconfig-package-regen-dot-config,$(2))
- 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
- endef
+@@ -239,11 +246,40 @@ $(1)-update-defconfig: PKG=$(2)
+ $(1)-update-defconfig: $(1)-savedefconfig
+ 	$$(call kconfig-package-update-config,defconfig)
  
-@@ -213,9 +220,9 @@ $(1)-check-configuration-done:
- 		exit 1; \
- 	fi
- 
-+$(1)-savedefconfig: PKG=$(2)
- $(1)-savedefconfig: $(1)-check-configuration-done
--	$$($(2)_MAKE_ENV) $$(MAKE) -C $$($(2)_DIR) \
--		$$($(2)_KCONFIG_OPTS) savedefconfig
++
++define $(2)_KCONFIG_LAST_FRAGMENT
++	$$(lastword $$($(2)_KCONFIG_FRAGMENT_FILES))
++endef
++
++define $(2)_KCONFIG_FIRST_FRAGMENTS
++	$$(filter-out $$($(2)_KCONFIG_LAST_FRAGMENT),\
++		$$($(2)_KCONFIG_FRAGMENT_FILES))
++endef
++
++$(1)-update-last-config-fragment: PKG=$(2)
++$(1)-update-last-config-fragment: $(1)-savedefconfig
++	@$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), true, \
++		echo "Unable to perform $(@) when no fragment files are set"; exit 1)
++	$$(Q)cp -a $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_DIR)/.config.ulcf.all
++	$$(Q)cp -a $$($(2)_DIR)/defconfig $$($(2)_DIR)/defconfig.ulcf.all
++	$$(call kconfig-package-merge-config,$(2),$$($(2)_KCONFIG_DOTCONFIG),\
++		$$($(2)_KCONFIG_FIRST_FRAGMENTS))
 +	$$(call kconfig-package-savedefconfig)
++	$$(Q)cp -a $$($(2)_DIR)/defconfig $$($(2)_DIR)/defconfig.ulcf.first
++	$$(Q)cp -a $$($(2)_DIR)/.config.ulcf.all $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
++	$$(Q)cp -a $$($(2)_DIR)/defconfig.ulcf.all $$($(2)_DIR)/defconfig
++	$$(Q)utils/diff_defconfig.sh $$($(2)_DIR)/defconfig.ulcf.first \
++		$$($(2)_DIR)/defconfig.ulcf.all $$($(2)_DIR)/.config.ulcf.all > \
++		$$($(2)_KCONFIG_LAST_FRAGMENT)
++	$$(Q)rm -f $$($(2)_DIR)/defconfig.ulcf.* $$($(2)_DIR)/.config.ulcf.*
++
++
+ endif # package enabled
  
- # Target to copy back the configuration to the source configuration file
- # Even though we could use 'cp --preserve-timestamps' here, the separate
+ .PHONY: \
+ 	$(1)-update-config \
+ 	$(1)-update-defconfig \
++	$(1)-update-last-config-fragment \
+ 	$(1)-savedefconfig \
+ 	$(1)-check-configuration-done \
+ 	$$($(2)_DIR)/.kconfig_editor_% \
 -- 
 2.17.1
 
