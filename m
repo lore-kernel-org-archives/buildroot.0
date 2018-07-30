@@ -1,109 +1,82 @@
-From: Marcel Patzlaff <m.patzlaff@pilz.de>
-Date: Mon, 30 Jul 2018 17:51:53 +0200
-Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
- target in pkg-kconfig.mk
-In-Reply-To: <20180730155153.24091-1-m.patzlaff@pilz.de>
-References: <20180730155153.24091-1-m.patzlaff@pilz.de>
-Message-ID: <20180730155153.24091-4-m.patzlaff@pilz.de>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 30 Jul 2018 18:00:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv: bump version to 2.4.13.7
+Message-ID: <20180730160051.23731-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds the new target above which implements the update routine as
-detailled in the head of this patch series.
+Removed patch applied upstream.
 
-Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/pkg-kconfig.mk | 48 ++++++++++++++++++++++++++++++++++++------
- 1 file changed, 42 insertions(+), 6 deletions(-)
+ ...3-Update-OpenCVCompilerOptions.cmake.patch | 32 -------------------
+ package/opencv/opencv.hash                    |  2 +-
+ package/opencv/opencv.mk                      |  2 +-
+ 3 files changed, 2 insertions(+), 34 deletions(-)
+ delete mode 100644 package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 331ba16614..bc817c457f 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -48,6 +48,18 @@ define kconfig-package-regen-dot-config
- 			$(Q)(yes "" | $($(1)_KCONFIG_MAKE) oldconfig)))
- endef
- 
-+# Macro to create a .config file where all fragments are merged into
-+# $(1): the name of the package in upper-case letters
-+# $(2): name of the .config file
-+# $(3): fragment files to merge
-+define kconfig-package-merge-config
-+	$(Q)$(if $($(1)_KCONFIG_DEFCONFIG),\
-+		$($(1)_KCONFIG_MAKE) $($(1)_KCONFIG_DEFCONFIG),\
-+		$(INSTALL) -m 0644 -D $($(1)_KCONFIG_FILE) $(2))
-+	$(Q)support/kconfig/merge_config.sh -m -O $(@D) $(2) $(3)
-+	$(call kconfig-package-regen-dot-config,$(1))
-+endef
-+
+diff --git a/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch b/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
+deleted file mode 100644
+index 9a81d9308a..0000000000
+--- a/package/opencv/0003-Update-OpenCVCompilerOptions.cmake.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 126de0cd95418811e302996161e03195bf7e631a Mon Sep 17 00:00:00 2001
+-From: neok-m4700 <neok-m4700@users.noreply.github.com>
+-Date: Tue, 25 Jul 2017 10:25:20 +0200
+-Subject: [PATCH] Update OpenCVCompilerOptions.cmake
+-
+-misplaced else
+-
+-[Upstream commit: https://github.com/opencv/opencv/commit/126de0cd95418811e302996161e03195bf7e631a]
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+----
+- cmake/OpenCVCompilerOptions.cmake | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/cmake/OpenCVCompilerOptions.cmake b/cmake/OpenCVCompilerOptions.cmake
+-index 9b2a4e42e..7b079c5f9 100644
+---- a/cmake/OpenCVCompilerOptions.cmake
+-+++ b/cmake/OpenCVCompilerOptions.cmake
+-@@ -18,9 +18,9 @@ if(ENABLE_CCACHE AND NOT CMAKE_COMPILER_IS_CCACHE)
+-         message(STATUS "Unable to compile program with enabled ccache, reverting...")
+-         set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${__OLD_RULE_LAUNCH_COMPILE}")
+-       endif()
+--    else()
+--      message(STATUS "Looking for ccache - not found")
+-     endif()
+-+  else()
+-+    message(STATUS "Looking for ccache - not found")
+-   endif()
+- endif()
+- 
+--- 
+-2.15.0
+-
+diff --git a/package/opencv/opencv.hash b/package/opencv/opencv.hash
+index 5b4b80d06e..dfb3b28581 100644
+--- a/package/opencv/opencv.hash
++++ b/package/opencv/opencv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 fb4769d0119c35426c3754b7fb079b407911e863958db53bdec83c7794582e41  opencv-2.4.13.3.tar.gz
++sha256 192d903588ae2cdceab3d7dc5a5636b023132c8369f184ca89ccec0312ae33d0  opencv-2.4.13.7.tar.gz
+ sha256 46e42877dfc3ac65769292cb4dc1a04b204ad9e40859a390f4c035d6179fbcc4  LICENSE
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index d170aec58f..d9813a041d 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
- # inner-kconfig-package -- generates the make targets needed to support a
- # kconfig package
-@@ -116,12 +128,7 @@ $(2)_KCONFIG_RULES = \
- # Since the file could be a defconfig file it needs to be expanded to a
- # full .config first.
- $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
--		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
--		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
--	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
--		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
--	$$(call kconfig-package-regen-dot-config,$(2))
-+	$$(call kconfig-package-merge-config,$(2),$$(@),$$($(2)_KCONFIG_FRAGMENT_FILES))
  
- # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
- # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
-@@ -239,11 +246,40 @@ $(1)-update-defconfig: PKG=$(2)
- $(1)-update-defconfig: $(1)-savedefconfig
- 	$$(call kconfig-package-update-config,defconfig)
- 
-+
-+define $(2)_KCONFIG_LAST_FRAGMENT
-+	$$(lastword $$($(2)_KCONFIG_FRAGMENT_FILES))
-+endef
-+
-+define $(2)_KCONFIG_FIRST_FRAGMENTS
-+	$$(filter-out $$($(2)_KCONFIG_LAST_FRAGMENT),\
-+		$$($(2)_KCONFIG_FRAGMENT_FILES))
-+endef
-+
-+$(1)-update-last-config-fragment: PKG=$(2)
-+$(1)-update-last-config-fragment: $(1)-savedefconfig
-+	@$$(if $$($(2)_KCONFIG_FRAGMENT_FILES), true, \
-+		echo "Unable to perform $(@) when no fragment files are set"; exit 1)
-+	$$(Q)cp -a $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_DIR)/.config.ulcf.all
-+	$$(Q)cp -a $$($(2)_DIR)/defconfig $$($(2)_DIR)/defconfig.ulcf.all
-+	$$(call kconfig-package-merge-config,$(2),$$($(2)_KCONFIG_DOTCONFIG),\
-+		$$($(2)_KCONFIG_FIRST_FRAGMENTS))
-+	$$(call kconfig-package-savedefconfig)
-+	$$(Q)cp -a $$($(2)_DIR)/defconfig $$($(2)_DIR)/defconfig.ulcf.first
-+	$$(Q)cp -a $$($(2)_DIR)/.config.ulcf.all $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
-+	$$(Q)cp -a $$($(2)_DIR)/defconfig.ulcf.all $$($(2)_DIR)/defconfig
-+	$$(Q)utils/diff_defconfig.sh $$($(2)_DIR)/defconfig.ulcf.first \
-+		$$($(2)_DIR)/defconfig.ulcf.all $$($(2)_DIR)/.config.ulcf.all > \
-+		$$($(2)_KCONFIG_LAST_FRAGMENT)
-+	$$(Q)rm -f $$($(2)_DIR)/defconfig.ulcf.* $$($(2)_DIR)/.config.ulcf.*
-+
-+
- endif # package enabled
- 
- .PHONY: \
- 	$(1)-update-config \
- 	$(1)-update-defconfig \
-+	$(1)-update-last-config-fragment \
- 	$(1)-savedefconfig \
- 	$(1)-check-configuration-done \
- 	$$($(2)_DIR)/.kconfig_editor_% \
+-OPENCV_VERSION = 2.4.13.3
++OPENCV_VERSION = 2.4.13.7
+ OPENCV_SITE = $(call github,itseez,opencv,$(OPENCV_VERSION))
+ OPENCV_INSTALL_STAGING = YES
+ OPENCV_LICENSE = BSD-3-Clause
 -- 
-2.17.1
-
-Gesch?ftsf?hrung: Susanne Kunschert, Thomas Pilz
-Pilz GmbH & Co. KG, Sitz: Ostfildern, HRA 210 893, Amtsgericht Stuttgart
-Kompl. Ges. Peter Pilz GmbH, Sitz: Ostfildern, HRB 210 612, Amtsgericht Stuttgart
-Umsatzsteuer: ID-Nr. DE 145 355 773, WEEE-Reg.-Nr. DE 71636849
-This email is intended solely for the use of the named address(es). Any unauthorised disclosure, copying or distribution of these confidential information contained therein, or the taking of any action based on it, is prohibited. The sender disclaims any liability for the integrity of this email. Legally binding declarations must be in written form.
-Umweltschutz liegt uns am Herzen! - Bitte denken Sie an unsere Umwelt, bevor Sie diese E-Mail drucken.
-We do care about the environment! - Please consider the environment before printing this e-mail.
+2.18.0
