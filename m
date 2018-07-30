@@ -1,7 +1,7 @@
-From: Hao HU <huhao526200@gmail.com>
-Date: Mon, 30 Jul 2018 12:21:42 -0500 (CDT)
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 30 Jul 2018 11:13:40 -0700
 Subject: [Buildroot] [PATCH v6 4/4] chromium: new package
-In-Reply-To: <CAMWSM7jKv1kqa3qkCs4wc6ut=HAMMPj58e=jswoXscUzYvwZ0A@mail.gmail.com>
+In-Reply-To: <1532971302383-0.post@n4.nabble.com>
 References: <20180710234212.4297-1-joseph.kogut@gmail.com>
  <20180710234212.4297-5-joseph.kogut@gmail.com>
  <1532611912386-0.post@n4.nabble.com>
@@ -10,49 +10,34 @@ References: <20180710234212.4297-1-joseph.kogut@gmail.com>
  <CAMWSM7i=dS5gbqwDRM34KPsu_9ArgYj3cwHYdp3tQ+pE5=L2Rg@mail.gmail.com>
  <1532941444387-0.post@n4.nabble.com>
  <CAMWSM7jKv1kqa3qkCs4wc6ut=HAMMPj58e=jswoXscUzYvwZ0A@mail.gmail.com>
-Message-ID: <1532971302383-0.post@n4.nabble.com>
+ <1532971302383-0.post@n4.nabble.com>
+Message-ID: <CAMWSM7gVEwkEx6mmU=FNS-E1xukuoVNwfLqGZC5Kt7ALz-BH+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Joseph,
+On Mon, Jul 30, 2018 at 10:21 AM Hao HU <huhao526200@gmail.com> wrote:
+>
+> Do you mean recompiling with use_gold=false? Or I should try setting
+> use_lld=false?
+>
 
->Hi Hao, 
+The problem is stricter defaults with LLD, so you want to disable LLD
+for an i386 build, which means the proper flag is use_lld=false. I
+haven't tried this, so it may not fix your problem.
 
->On Mon, Jul 30, 2018 at 2:04 AM Hao HU <[hidden email]> wrote:
+> >Can you switch the target architecture to x86_64? That build works properl
+>
+> I have tested the x86_64, it worked, but my project needs to build on a i386
+> arch.
+>
 
-> >>Did you allow the Chromium package to reconfigure, i.e., by deleting 
-> >>.stamp_configured, or running 'make chromium-dirclean all'? 
-> > 
-> > Before I tested if the use_gold=false worked or not, firstly I deleted
-> the 
-> > folder 
-> / 
-> > /ouput/build/chromium--67.0.3396.79 
-> / 
-> > then I run $ make 
-> > 
-> > Is that right or not?
+If that's the case, the only solution is to link without LLD. The
+Chromium team informed me that they still compile with Gold on i386.
 
->That will repeat the configure step, which is what you want. If 
->recompiling with use_lld=false doesn't work, the i386 build is still 
->broken, and needs fixed. 
-
-Do you mean recompiling with use_gold=false? Or I should try setting
-use_lld=false?
-
->Can you switch the target architecture to x86_64? That build works properl
-
-I have tested the x86_64, it worked, but my project needs to build on a i386
-arch.
-
-Best regards,
-
-Hao
-
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+Also, this is unrelated, but when you reply you're only addressing the
+mailing list, so your messages are skipping my inbox and I only notice
+when I check messages sent to the mailing list. Make sure to address
+your messages to the correct recipient and CC the mailing list.
