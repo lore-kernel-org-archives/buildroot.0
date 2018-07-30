@@ -1,228 +1,218 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 29 Jul 2018 21:25:28 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/libva-utils: bump version to
- 2.2.0
-In-Reply-To: <20180729192528.5819-1-bernd.kuhls@t-online.de>
-References: <20180729192528.5819-1-bernd.kuhls@t-online.de>
-Message-ID: <20180729192528.5819-3-bernd.kuhls@t-online.de>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Mon, 30 Jul 2018 15:39:36 +1000
+Subject: [Buildroot] [RFC PATCH] host-localedef: Compile against glibc
+Message-ID: <20180730053936.26460-1-sam@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream moved its github repo to github.com/intel/, updated URLs, for
-reference see upstream PR 110. Also updated project URL.
+In glibc 2.27 the following change occured:
+"Statically compiled applications attempting to load locales compiled
+for the GNU C Library version 2.27 will fail and fall back to the
+builtin C/POSIX locale."
 
-Added patch to fix build without stack-protector support.
+This impacts us since upstream buildroot uses a localdef built against
+an older eglibc release [0].
+Update the host-localedef package to build against glibc 2.27.
+Unfortunately we can't compile just the localedef utility, but even so
+this does not increase the build time too significantly. eg:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+With glibc localedef:
+real    33m11.278s
+user    171m51.684s
+sys     19m46.528s
+
+With eglibc localedef:
+real    31m12.715s
+user    155m13.616s
+sys     16m23.504s
+
+[0] https://bugs.busybox.net/show_bug.cgi?id=11096
+
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
 ---
-v2: added configure check for -fstack-protector (Thomas)
+This is a patch we're using in our own Buildroot branch to keep us going
+until a solution is found for the above bug report. While it does add a
+few minutes to our example build it avoids hacking glibc to only build
+localedef which is a solution some other users have gone for.
+Definitely an RFC as I'm sure some of the configuration in localedef.mk
+could be trimmed down but I took the safer bet of basing it off the
+existing glibc.mk.
 
- package/libva-utils/0001-check-ssp.patch | 145 +++++++++++++++++++++++
- package/libva-utils/Config.in            |   2 +-
- package/libva-utils/libva-utils.hash     |   6 +-
- package/libva-utils/libva-utils.mk       |   6 +-
- 4 files changed, 153 insertions(+), 6 deletions(-)
- create mode 100644 package/libva-utils/0001-check-ssp.patch
 
-diff --git a/package/libva-utils/0001-check-ssp.patch b/package/libva-utils/0001-check-ssp.patch
-new file mode 100644
-index 0000000000..11c1ded795
---- /dev/null
-+++ b/package/libva-utils/0001-check-ssp.patch
-@@ -0,0 +1,145 @@
-+From bdcf4d90f618f497311c348f984e005924cb3def Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 29 Jul 2018 20:58:06 +0200
-+Subject: [PATCH] Check for -fstack-protector
-+
-+Not all toolchains provide support for -fstack-protector. This patch
-+provides a configure check to avoid build errors like
-+
-+/home/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/6.4.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp_nonshared
-+/home/buildroot/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-buildroot-linux-uclibc/6.4.0/../../../../x86_64-buildroot-linux-uclibc/bin/ld: cannot find -lssp
-+
-+Patch sent upstream as PR 125.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac             | 16 ++++++++++++++++
-+ decode/Makefile.am       |  5 ++++-
-+ encode/Makefile.am       |  5 ++++-
-+ putsurface/Makefile.am   |  5 ++++-
-+ vainfo/Makefile.am       |  5 ++++-
-+ videoprocess/Makefile.am |  5 ++++-
-+ 6 files changed, 36 insertions(+), 5 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index be2e00d..cfa508a 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -129,6 +129,22 @@ if test "$ac_cv_have_gnuc_visibility_attribute" = "yes"; then
-+               [Defined to 1 if GCC visibility attribute is supported])
-+ fi
-+ 
-++# Check for -fstack-protector
-++ssp_cc=yes
-++if test "X$CC-cc" != "X"; then
-++    AC_MSG_CHECKING([whether ${CC-cc} accepts -fstack-protector])
-++    ssp_old_cflags="$CFLAGS"
-++    CFLAGS="$CFLAGS -fstack-protector"
-++    AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[alloca(100);]])], [], [ssp_cc=no])
-++    AC_MSG_RESULT([$ssp_cc])
-++    if test "X$ssp_cc" = "Xno"; then
-++        CFLAGS="$ssp_old_cflags"
-++    else
-++        AC_DEFINE([ENABLE_SSP_CC], 1, [Define if SSP C support is enabled.])
-++    fi
-++fi
-++AM_CONDITIONAL(USE_SSP, test "$ssp_cc" = "yes")
-++
-+ # Check for DRM (mandatory)
-+ LIBDRM_VERSION=libdrm_version
-+ PKG_CHECK_MODULES([DRM], [libdrm >= $LIBDRM_VERSION])
-+diff --git a/decode/Makefile.am b/decode/Makefile.am
-+index febc50d..8ea9252 100644
-+--- a/decode/Makefile.am
-++++ b/decode/Makefile.am
-+@@ -24,11 +24,14 @@ bin_PROGRAMS = mpeg2vldemo loadjpeg
-+ 
-+ AM_CPPFLAGS = \
-+ 	-Wall					\
-+-	-fstack-protector			\
-+ 	$(LIBVA_CFLAGS)				\
-+ 	-I$(top_srcdir)/common			\
-+ 	$(NULL)
-+ 
-++if USE_SSP
-++AM_CPPFLAGS += -fstack-protector
-++endif
-++
-+ TEST_LIBS = \
-+ 	$(LIBVA_LIBS)				\
-+ 	$(top_builddir)/common/libva-display.la	\
-+diff --git a/encode/Makefile.am b/encode/Makefile.am
-+index 8298b39..c107007 100644
-+--- a/encode/Makefile.am
-++++ b/encode/Makefile.am
-+@@ -25,10 +25,13 @@ noinst_PROGRAMS = svctenc
-+ 
-+ AM_CPPFLAGS = \
-+ 	-Wall				\
-+-	-fstack-protector		\
-+ 	$(LIBVA_CFLAGS) 		\
-+ 	$(NULL)
-+ 
-++if USE_SSP
-++AM_CPPFLAGS += -fstack-protector
-++endif
-++
-+ h264encode_SOURCES	= h264encode.c
-+ h264encode_CFLAGS	= -I$(top_srcdir)/common -g
-+ h264encode_LDADD	= \
-+diff --git a/putsurface/Makefile.am b/putsurface/Makefile.am
-+index e7b62a1..10ae63e 100644
-+--- a/putsurface/Makefile.am
-++++ b/putsurface/Makefile.am
-+@@ -26,9 +26,12 @@ TEST_CFLAGS = \
-+ 	$(LIBVA_CFLAGS)			\
-+ 	-I$(top_srcdir)/common		\
-+ 	-Wall				\
-+-	-fstack-protector		\
-+ 	$(NULL)
-+ 
-++if USE_SSP
-++TEST_CFLAGS += -fstack-protector
-++endif
-++
-+ TEST_LIBS = \
-+ 	$(LIBVA_LIBS)		\
-+ 	$(top_builddir)/common/libva-display.la	\
-+diff --git a/vainfo/Makefile.am b/vainfo/Makefile.am
-+index aff201f..e59f466 100644
-+--- a/vainfo/Makefile.am
-++++ b/vainfo/Makefile.am
-+@@ -27,9 +27,12 @@ vainfo_cflags = \
-+ 	$(LIBVA_CFLAGS) \
-+ 	-DLIBVA_VERSION_S="\"$(LIBVA_VERSION)\"" \
-+ 	-Wall \
-+-	-fstack-protector \
-+ 	$(NULL)
-+ 
-++if USE_SSP
-++vainfo_cflags += -fstack-protector
-++endif
-++
-+ vainfo_libs = \
-+        	$(LIBVA_LIBS) \
-+ 	$(top_builddir)/common/libva-display.la	\
-+diff --git a/videoprocess/Makefile.am b/videoprocess/Makefile.am
-+index eb79bc3..448da7d 100644
-+--- a/videoprocess/Makefile.am
-++++ b/videoprocess/Makefile.am
-+@@ -24,11 +24,14 @@ bin_PROGRAMS = vavpp
-+ 
-+ AM_CPPFLAGS = \
-+ 	-Wall					\
-+-	-fstack-protector			\
-+ 	$(LIBVA_CFLAGS)				\
-+ 	-I$(top_srcdir)/common			\
-+ 	$(NULL)
-+ 
-++if USE_SSP
-++AM_CPPFLAGS += -fstack-protector
-++endif
-++
-+ TEST_LIBS = \
-+ 	$(LIBVA_LIBS)				\
-+ 	$(top_builddir)/common/libva-display.la	\
-diff --git a/package/libva-utils/Config.in b/package/libva-utils/Config.in
-index ad299234c3..597419f7de 100644
---- a/package/libva-utils/Config.in
-+++ b/package/libva-utils/Config.in
-@@ -8,7 +8,7 @@ config BR2_PACKAGE_LIBVA_UTILS
- 	  Libva-utils is a collection of tests for VA-API (Video
- 	  Acceleration API)
- 
--	  https://01.org/linuxmedia/vaapi
-+	  https://01.org/vaapi
- 
- comment "libva-utils needs a toolchain w/ C++, threads, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
-diff --git a/package/libva-utils/libva-utils.hash b/package/libva-utils/libva-utils.hash
-index 46674a3675..e86cb6e09c 100644
---- a/package/libva-utils/libva-utils.hash
-+++ b/package/libva-utils/libva-utils.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/01org/libva-utils/releases
--sha1 9902eb944c3ace00be4fe95627708f156fc5ace7 libva-utils-2.1.0.tar.bz2
-+# From https://github.com/intel/libva-utils/releases
-+sha1 ef15d40d6bec847c74f21ee3431b7e7b06fec3b4  libva-utils-2.2.0.tar.bz2
- # Locally computed
--sha256 f6a7790c3dcc56537372c90a83036a3136194a8b397e84e97bf9cc9254fa2c51  libva-utils-2.1.0.tar.bz2
-+sha256 ed7a6ed1fab657df4e83ea11f90310efcf31c27828f32d65351a28ca3c404dc0  libva-utils-2.2.0.tar.bz2
- sha256 c6220c9f87832c27abcb8a32eafdd2823e13ce146b3ea63d5deae2a76798ef50  COPYING
-diff --git a/package/libva-utils/libva-utils.mk b/package/libva-utils/libva-utils.mk
-index 85ee3083fd..348d419745 100644
---- a/package/libva-utils/libva-utils.mk
-+++ b/package/libva-utils/libva-utils.mk
-@@ -4,11 +4,13 @@
+ .../0001-Don-t-include-xlocale.h.patch        | 50 -----------
+ package/localedef/localedef.hash              |  2 +-
+ package/localedef/localedef.mk                | 87 +++++++++++++++++--
+ 3 files changed, 79 insertions(+), 60 deletions(-)
+ delete mode 100644 package/localedef/0001-Don-t-include-xlocale.h.patch
+
+diff --git a/package/localedef/0001-Don-t-include-xlocale.h.patch b/package/localedef/0001-Don-t-include-xlocale.h.patch
+deleted file mode 100644
+index 9a6c2f8e90..0000000000
+--- a/package/localedef/0001-Don-t-include-xlocale.h.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From: Bernhard Walle <bernhard@bwalle.de>
+-Date: Mon, 2 Oct 2017 16:55:23 +0200
+-Subject: [PATCH] Don't include <xlocale.h>
+-
+-This header has been removed in glibc 2.26:
+-
+-https://abi-laboratory.pro/tracker/changelog/glibc/2.26/log.html
+-
+------------------------- >8 ------------------------
+-* The nonstandard header <xlocale.h> has been removed.  Most programs should
+-  use <locale.h> instead.  If you have a specific need for the definition of
+-  locale_t with no other declarations, please contact
+-  libc-alpha at sourceware.org and explain.
+------------------------- 8< ------------------------
+-
+-Signed-off-by: Bernhard Walle <bernhard@bwalle.de>
+-
+-Upstream: https://git.pengutronix.de/cgit/ptxdist/tree/patches/localedef-eglibc-2.14.1-r17443-ptx1/0003-Don-t-include-xlocale.h.patch
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- eglibc/locale/langinfo.h | 2 +-
+- eglibc/locale/locale.h   | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/eglibc/locale/langinfo.h b/eglibc/locale/langinfo.h
+-index 0a5336507196..76707a4584c1 100644
+---- a/eglibc/locale/langinfo.h
+-+++ b/eglibc/locale/langinfo.h
+-@@ -589,7 +589,7 @@ extern char *nl_langinfo (nl_item __item) __THROW;
+-    more information.  */
+- 
+- /* Get locale datatype definition.  */
+--# include <xlocale.h>
+-+# include <locale.h>
+- 
+- /* Just like nl_langinfo but get the information from the locale object L.  */
+- extern char *nl_langinfo_l (nl_item __item, __locale_t __l);
+-diff --git a/eglibc/locale/locale.h b/eglibc/locale/locale.h
+-index 2aa19e76acb2..18be711a2d40 100644
+---- a/eglibc/locale/locale.h
+-+++ b/eglibc/locale/locale.h
+-@@ -143,7 +143,7 @@ __END_NAMESPACE_STD
+-    This is a proof-of-concept implementation.  */
+- 
+- /* Get locale datatype definition.  */
+--# include <xlocale.h>
+-+# include_next <locale.h>
+- 
+- /* Return a reference to a data structure representing a set of locale
+-    datasets.  Unlike for the CATEGORY parameter for `setlocale' the
+diff --git a/package/localedef/localedef.hash b/package/localedef/localedef.hash
+index ee14fb16b8..6f2d6313b6 100644
+--- a/package/localedef/localedef.hash
++++ b/package/localedef/localedef.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 9a60f7cdab6fb39adf23a12102f2d950d5f07f0cd7e51e85ec327e07440a79c6  localedef-eglibc-2.14.1-r17443-ptx1.tar.bz2
++sha256 33189b3f10c88730a1f686fac794bc01f31765f12ffd75bc5e8a0f2a690d217a  localedef-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e.tar.gz
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 11d9ba3848..c93132cc3f 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -4,19 +4,88 @@
  #
  ################################################################################
  
--LIBVA_UTILS_VERSION = 2.1.0
-+LIBVA_UTILS_VERSION = 2.2.0
- LIBVA_UTILS_SOURCE = libva-utils-$(LIBVA_UTILS_VERSION).tar.bz2
--LIBVA_UTILS_SITE = https://github.com/01org/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
-+LIBVA_UTILS_SITE = https://github.com/intel/libva-utils/releases/download/$(LIBVA_UTILS_VERSION)
- LIBVA_UTILS_LICENSE = MIT
- LIBVA_UTILS_LICENSE_FILES = COPYING
-+# 0001-check-ssp.patch
-+LIBVA_UTILS_AUTORECONF = YES
- LIBVA_UTILS_DEPENDENCIES = host-pkgconf libva
+-LOCALEDEF_VERSION = 2.14.1-r17443-ptx1
+-LOCALEDEF_SOURCE = localedef-eglibc-$(LOCALEDEF_VERSION).tar.bz2
+-LOCALEDEF_SITE = http://www.pengutronix.de/software/ptxdist/temporary-src
++# Use the same VERSION and SITE as target glibc
++LOCALEDEF_VERSION = glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e
++LOCALEDEF_SITE = $(call github,bminor,glibc,$(GLIBC_VERSION))
  
- $(eval $(autotools-package))
+-HOST_LOCALEDEF_CONF_OPTS += \
+-	--prefix=/usr \
+-	--with-glibc=./eglibc
++HOST_LOCALEDEF_LICENSE = GPL-2.0+ (programs), LGPL-2.1+, BSD-3-Clause, MIT (library)
++HOST_LOCALEDEF_LICENSE_FILES = COPYING COPYING.LIB LICENSES
+ 
+-HOST_LOCALEDEF_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -fgnu89-inline"
++# glibc is part of the toolchain so disable the toolchain dependency
++HOST_LOCALEDEF_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+-# The makefile does not implement an install target
++HOST_LOCALEDEF_SUBDIR = build
++
++# Thumb build is broken, build in ARM mode
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
++HOST_LOCALEDEF_EXTRA_CFLAGS += -marm
++endif
++
++# MIPS64 defaults to n32 so pass the correct -mabi if
++# we are using a different ABI. OABI32 is also used
++# in MIPS so we pass -mabi=32 in this case as well
++# even though it's not strictly necessary.
++ifeq ($(BR2_MIPS_NABI64),y)
++HOST_LOCALEDEF_EXTRA_CFLAGS += -mabi=64
++else ifeq ($(BR2_MIPS_OABI32),y)
++HOST_LOCALEDEF_EXTRA_CFLAGS += -mabi=32
++endif
++
++ifeq ($(BR2_ENABLE_DEBUG),y)
++HOST_LOCALEDEF_EXTRA_CFLAGS += -g
++endif
++
++# The stubs.h header is not installed by install-headers, but is
++# needed for the gcc build. An empty stubs.h will work, as explained
++# in http://gcc.gnu.org/ml/gcc/2002-01/msg00900.html. The same trick
++# is used by Crosstool-NG.
++ifeq ($(BR2_TOOLCHAIN_BUILDROOT_HOST_LOCALEDEF),y)
++define HOST_LOCALEDEF_ADD_MISSING_STUB_H
++	mkdir -p $(STAGING_DIR)/usr/include/gnu
++	touch $(STAGING_DIR)/usr/include/gnu/stubs.h
++endef
++endif
++
++# Even though we use the autotools-package infrastructure, we have to
++# override the default configure commands for several reasons:
++#
++#  1. We have to build out-of-tree, but we can't use the same
++#     'symbolic link to configure' used with the gcc packages.
++#
++#  2. We have to execute the configure script with bash and not sh.
++#
++# Note that as mentionned in
++# http://patches.openembedded.org/patch/38849/, glibc must be
++# built with -O2, so we pass our own CFLAGS and CXXFLAGS below.
++define HOST_LOCALEDEF_CONFIGURE_CMDS
++	mkdir -p $(@D)/build
++	# Do the configuration
++	(cd $(@D)/build; \
++		$(HOST_CONFIGURE_OPTS) \
++		CFLAGS="-O2 $(HOST_LOCALEDEF_EXTRA_CFLAGS)" CPPFLAGS="" \
++		CXXFLAGS="-O2 $(HOST_LOCALEDEF_EXTRA_CFLAGS)" \
++		$(SHELL) $(@D)/configure \
++		ac_cv_path_BASH_SHELL=/bin/bash \
++		libc_cv_forced_unwind=yes \
++		libc_cv_ssp=no \
++		--target=$(GNU_HOST_NAME) \
++		--host=$(GNU_HOST_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		$(if $(BR2_SOFT_FLOAT),--without-fp,--with-fp) \
++		$(if $(BR2_x86_64),--enable-lock-elision) \
++		--with-pkgversion="Buildroot" \
++		--without-cvs \
++		--disable-profile \
++		--without-gd \
++		--enable-obsolete-rpc)
++	$(HOST_LOCALEDEF_ADD_MISSING_STUB_H)
++endef
++
++$(eval $(autotools-package))
++# The makefile does not implement an install target for localedef
+ define HOST_LOCALEDEF_INSTALL_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/localedef $(HOST_DIR)/bin/localedef
++	$(INSTALL) -D -m 0755 $(@D)/build/locale/localedef $(HOST_DIR)/bin/localedef
+ endef
+ 
+ $(eval $(host-autotools-package))
 -- 
 2.18.0
