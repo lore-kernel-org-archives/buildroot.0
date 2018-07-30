@@ -1,55 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 30 Jul 2018 23:46:43 +0200
-Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
- target in pkg-kconfig.mk
-In-Reply-To: <20180730155153.24091-4-m.patzlaff@pilz.de>
-References: <20180730155153.24091-1-m.patzlaff@pilz.de>
- <20180730155153.24091-4-m.patzlaff@pilz.de>
-Message-ID: <20180730234643.34315d11@windsurf>
+Date: Mon, 30 Jul 2018 23:50:01 +0200
+Subject: [Buildroot] [PATCH 2/2] package/opencv3: fix aarch64 build
+In-Reply-To: <20180730160836.21016-2-bernd.kuhls@t-online.de>
+References: <20180730160836.21016-1-bernd.kuhls@t-online.de>
+ <20180730160836.21016-2-bernd.kuhls@t-online.de>
+Message-ID: <20180730235001.429c059e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcel,
+Hello,
 
-On Mon, 30 Jul 2018 17:51:53 +0200, Marcel Patzlaff wrote:
-> This patch adds the new target above which implements the update routine as
-> detailled in the head of this patch series.
+On Mon, 30 Jul 2018 18:08:36 +0200, Bernd Kuhls wrote:
+> https://git.buildroot.net/buildroot/commit/package/opencv3?id=a17402e42d8c996af239cfdb536e74188d6c6245
 > 
-> Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+> enabled CMake option ENABLE_VFPV3 in OpenCV3 for all aarch64 CPUs
+> because for them BR2_ARM_CPU_HAS_VFPV3 is always true:
+> 
+> BR2_ARM_CPU_HAS_FP_ARMV8 selects BR2_ARM_CPU_HAS_VFPV4 which in turn
+> selects BR2_ARM_CPU_HAS_VFPV3.
+> 
+> OpenCV3 however supports vfpv3 only on !aarch64:
+> https://github.com/opencv/opencv/blob/3.4/cmake/OpenCVCompilerOptimizations.cmake#L275
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/d38/d38fb092cffe086f93b469d1181da77fba0994bd/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Thanks for working on this complex topic, as Arnout said.
+So this fix is already needed with the currently packaged 3.3.0 version
+of OpenCV ?
 
-On my side, I find the semantic of "let's update the _last_ fragment"
-to be a bit weird and complex to understand. Why the last one, and not
-any other ?
+If so, why is this fix patch coming *after* the version bump in the
+series ?
 
-I'm not sure it's possible to have something that updates fragments
-with a sensible semantic.
+Both 2018.05.x and 2018.02.x are using 3.3.0, so I guess they are
+affected as well. However, this failure doesn't appear for 2018.02.x
+and 2018.05.x in http://autobuild.buildroot.net/?reason=opencv3% 
 
-However, what would be useful would be a way to dump the difference
-between the current configuration, and what the combination of the
-defconfig+fragments provide.
-
-I.e, you start Buildroot with omap2plus_defconfig + some specific
-fragments as the kernel configuration.
-
-You run "make linux-show-config-diff", which returns empty.
-
-Then you tweak the configuration with "make linux-menuconfig", and run
-"make linux-show-config-diff", which shows you the lines that you need
-to put in one of your fragments to preserve the configuration tweaks
-you have done.
-
-Of course, the name "linux-show-config-diff" is just made up here, and
-some more thought is needed to find a good name. But overall, I believe
-the semantic would be much clearer, and doesn't make any assumption on
-whether we have one or several fragments, and whether the last fragment
-or any other fragment needs to be updated.
-
-What do you think about this? Would this also fill your needs?
+Do you have an explanation for this ?
 
 Thanks!
 
