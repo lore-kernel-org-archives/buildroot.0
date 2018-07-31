@@ -1,53 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Jul 2018 16:17:56 +0200
-Subject: [Buildroot] Random Linux/device tree/GPIO question posted to
- the wrong list...
-In-Reply-To: <CAF_dkJAfeaGXejcOkUk8=WMfS6eNbqLjNYPZHaRU1wArb7_G6w@mail.gmail.com>
-References: <CAF_dkJBrU=bF+LZOSe6RNKukbGFjPHOMJUfUXRHs4_8NJ-50Dw@mail.gmail.com>
- <20180730235109.0fe5f681@windsurf>
- <CAF_dkJAfeaGXejcOkUk8=WMfS6eNbqLjNYPZHaRU1wArb7_G6w@mail.gmail.com>
-Message-ID: <20180731161756.47cb4d72@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 31 Jul 2018 17:02:06 +0200
+Subject: [Buildroot] [PATCH 2/7] package/python-certifi: bump version to
+ 2018.4.16
+In-Reply-To: <20180731150211.18751-1-bernd.kuhls@t-online.de>
+References: <20180731150211.18751-1-bernd.kuhls@t-online.de>
+Message-ID: <20180731150211.18751-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Patrick,
+Updated package using scanpypi.
 
-On Tue, 31 Jul 2018 09:53:34 -0400, Patrick Doyle wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/python-certifi/Config.in           | 2 +-
+ package/python-certifi/python-certifi.hash | 7 ++++---
+ package/python-certifi/python-certifi.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-> Thank you for the quick reply.  pinctrl_nand_default _is_ referenced
-> by the device tree clause for the nand controller:
-> 
->         nand0: nand at 80000000 {
->             nand-bus-width = <8>;
->             nand-ecc-mode = "hw";
->             nand-on-flash-bbt;
->             atmel,has-pmecc;
->             atmel,pmecc-cap = <12>;
->             atmel,pmecc-sector-size = <512>;
->             pinctrl-names = "default";
->             pinctrl-0 = <&pinctrl_nand_default &pinctrl_nand_rdy_en>;
->             status = "okay";
-> ...
-> 
-> Hence my confusion.  Am I missing something else somewhere?
-
-Asked internally, and my colleague Maxime Ripard (in Cc) gave some
-explanation about this: it depends on whether the pinctrl driver uses
-the strict mode or not and the Atmel doesn't.
-
-This allows to request a pin as a GPIO even if this pin is already
-muxed as a different functionality. Some details about this are
-available at "GPIO mode pitfalls" in
-https://www.kernel.org/doc/Documentation/driver-api/pinctl.rst (link
-also provided by Maxime).
-
-Best regards,
-
-Thomas
+diff --git a/package/python-certifi/Config.in b/package/python-certifi/Config.in
+index 9390b4f898..015b8092a9 100644
+--- a/package/python-certifi/Config.in
++++ b/package/python-certifi/Config.in
+@@ -3,4 +3,4 @@ config BR2_PACKAGE_PYTHON_CERTIFI
+ 	help
+ 	  Python package for providing Mozilla's CA Bundle.
+ 
+-	  https://pypi.python.org/pypi/certifi
++	  http://certifi.io/
+diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
+index e3e2f07770..2d339dd2d5 100644
+--- a/package/python-certifi/python-certifi.hash
++++ b/package/python-certifi/python-certifi.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/certifi/json, sha256 locally computed
+-md5	068fd5c3c690ae47504b3e0bf4e56c4c  certifi-2018.1.18.tar.gz
+-sha256	edbc3f203427eef571f79a7692bb160a2b0f7ccaa31953e99bd17e307cf63f7d  certifi-2018.1.18.tar.gz
++# md5, sha256 from https://pypi.org/pypi/certifi/json
++md5	f5d81d0048e84285611412b0dea0630a  certifi-2018.4.16.tar.gz
++sha256	13e698f54293db9f89122b0581843a782ad0934a4fe0172d2a980ba77fc61bb7  certifi-2018.4.16.tar.gz
++# Locally computed sha256 checksums
+ sha256	6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
+diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
+index 084893f5c1..716e6a3840 100644
+--- a/package/python-certifi/python-certifi.mk
++++ b/package/python-certifi/python-certifi.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CERTIFI_VERSION = 2018.1.18
++PYTHON_CERTIFI_VERSION = 2018.4.16
+ PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
+-PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/15/d4/2f888fc463d516ff7bf2379a4e9a552fef7f22a94147655d9b1097108248
++PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/4d/9c/46e950a6f4d6b4be571ddcae21e7bc846fcbb88f1de3eff0f6dd0a6be55d
+ PYTHON_CERTIFI_SETUP_TYPE = setuptools
+ PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
+ PYTHON_CERTIFI_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
