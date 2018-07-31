@@ -1,52 +1,63 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 31 Jul 2018 17:02:10 +0200
-Subject: [Buildroot] [PATCH 6/7] package/python-requests: bump version to
- 2.19.1
+Date: Tue, 31 Jul 2018 17:02:08 +0200
+Subject: [Buildroot] [PATCH 4/7] package/python-oauthlib: bump version to
+ 2.1.0
 In-Reply-To: <20180731150211.18751-1-bernd.kuhls@t-online.de>
 References: <20180731150211.18751-1-bernd.kuhls@t-online.de>
-Message-ID: <20180731150211.18751-6-bernd.kuhls@t-online.de>
+Message-ID: <20180731150211.18751-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated package using scanpypi, added license hash.
+Updated package using scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-requests/python-requests.hash | 8 +++++---
- package/python-requests/python-requests.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-oauthlib/Config.in            | 2 +-
+ package/python-oauthlib/python-oauthlib.hash | 7 ++++---
+ package/python-oauthlib/python-oauthlib.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index 2f182ea3bd..b71fe86ee7 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/requests/json, sha256 locally computed
--md5	40f723ed01dddeaf990d0609d073f021  requests-2.18.1.tar.gz
--sha256	c6f3bdf4a4323ac7b45d01e04a6f6c20e32a052cd04de81e05103abc049ad9b9  requests-2.18.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/requests/json
-+md5	6c1a31afec9d614e2e71a91ee6ca2878  requests-2.19.1.tar.gz
-+sha256	ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a  requests-2.19.1.tar.gz
+diff --git a/package/python-oauthlib/Config.in b/package/python-oauthlib/Config.in
+index d6617f3898..65016c1d08 100644
+--- a/package/python-oauthlib/Config.in
++++ b/package/python-oauthlib/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_PYTHON_OAUTHLIB
+ 	  A generic, spec-compliant, thorough implementation of the
+ 	  OAuth request-signing logic.
+ 
+-	  https://github.com/idan/oauthlib
++	  https://github.com/oauthlib/oauthlib
+diff --git a/package/python-oauthlib/python-oauthlib.hash b/package/python-oauthlib/python-oauthlib.hash
+index f8e1324244..f0a3dee823 100644
+--- a/package/python-oauthlib/python-oauthlib.hash
++++ b/package/python-oauthlib/python-oauthlib.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/oauthlib/json, sha256 locally computed
+-md5	277a9a966cc8c72e492b4eeb41332445  oauthlib-2.0.6.tar.gz
+-sha256	ce57b501e906ff4f614e71c36a3ab9eacbb96d35c24d1970d2539bbc3ec70ce1  oauthlib-2.0.6.tar.gz
++# md5, sha256 from https://pypi.org/pypi/oauthlib/json
++md5	544b15398afe48d9493fa60d571bd8c7  oauthlib-2.1.0.tar.gz
++sha256	ac35665a61c1685c56336bda97d5eefa246f1202618a1d6f34fccb1bdd404162  oauthlib-2.1.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	82a869fe4e967449956d26a546adc762acace028852ce81ba16c3c5b1d76b15b  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 504eb8d0ad..881d196526 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
+ sha256	9e1ae8725f5815738dadb6cbb09f450453d94e07c7b5efaee864f546a6209a95  LICENSE
+diff --git a/package/python-oauthlib/python-oauthlib.mk b/package/python-oauthlib/python-oauthlib.mk
+index ab39800247..3aa7ae227a 100644
+--- a/package/python-oauthlib/python-oauthlib.mk
++++ b/package/python-oauthlib/python-oauthlib.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_VERSION = 2.18.1
-+PYTHON_REQUESTS_VERSION = 2.19.1
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/2c/b5/2b6e8ef8dd18203b6399e9f28c7d54f6de7b7549853fe36d575bd31e29a7
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/54/1f/782a5734931ddf2e1494e4cd615a51ff98e1879cbe9eecbdfeaf09aa75e9
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+-PYTHON_OAUTHLIB_VERSION = 2.0.6
++PYTHON_OAUTHLIB_VERSION = 2.1.0
+ PYTHON_OAUTHLIB_SOURCE = oauthlib-$(PYTHON_OAUTHLIB_VERSION).tar.gz
+-PYTHON_OAUTHLIB_SITE = https://pypi.python.org/packages/a5/8a/212e9b47fb54be109f3ff0684165bb38c51117f34e175c379fce5c7df754
++PYTHON_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/df/5f/3f4aae7b28db87ddef18afed3b71921e531ca288dc604eb981e9ec9f8853
+ PYTHON_OAUTHLIB_SETUP_TYPE = setuptools
+ PYTHON_OAUTHLIB_LICENSE = BSD-3-Clause
+ PYTHON_OAUTHLIB_LICENSE_FILES = LICENSE
 -- 
 2.18.0
