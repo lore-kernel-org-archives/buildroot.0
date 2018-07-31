@@ -1,39 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Jul 2018 23:17:25 +0200
-Subject: [Buildroot] Minicom git Repo and new version
-In-Reply-To: <46fe66d9-b985-c338-2b84-376646793542@micronovasrl.com>
-References: <46fe66d9-b985-c338-2b84-376646793542@micronovasrl.com>
-Message-ID: <20180731231725.638cbe53@windsurf>
+Date: Tue, 31 Jul 2018 23:51:10 +0200
+Subject: [Buildroot] [git commit] linux-firmware: fix hash for WHENCE
+ license file
+Message-ID: <20180731214738.EC2D98B37D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=dcefb157e186b0d33d5bfc99ca6e5db218072d8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 31 Jul 2018 22:59:02 +0200, Giulio Benetti wrote:
+Commit 51435be1f1e8d4f7f50c95a406ecde6cb0e22418 ("linux-firmware: bump
+version to latest 8d69bab") bumped the linux-firmware package, but
+forgot to update the hash file accordingly for the license files.
 
-> Adam(Minicom Maintainer) in Cc set up a repository for Minicom here:
-> https://salsa.debian.org/minicom-team/minicom
-> 
-> Some fix and support s485 has been added since last package version.
-> Most of all, now it's under git,
-> so I wanted to ask if it would help if I create a patch managing Minicom 
-> package as a git(possibly using github helper) and bumping version to 
-> the last git commit.
-> Or create new package based on git using same version as now.
-> Or wait for Adam to tag a real version to do everything once.
+Especially, the WHENCE file contains the list of all licenses for the
+different firmware, so it gets updated pretty much whenever a new
+firmware is added or a firmware is updated.
 
-Yes, you can send an update to use this new Git repository. It will of
-course be even better when Adam does a tagged release, but in the mean
-time, we can use a random Git commit especially if there's a good
-justification behind it (RS485 support for example).
+Update its hash to fix legal-info for the linux-firmware package, and
+therefore fix:
 
-Thanks,
+  http://autobuild.buildroot.net/results/9795ac912d1bbe66386be9286f1703cdbe0a8898/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/linux-firmware.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index d0dfe93f2a..ede2068c6d 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -27,5 +27,5 @@ sha256 8542aeabf2761935122d693561e16766ce1bcc2b0d003204f9040b7d6d929f2e LICENSE.
+ sha256 be904cd28cb292b80cdb6cf412ab0d9159d431671e987ad433c1f62e0988a9bc LICENSE.qcom
+ sha256 fc6223d4bfe9f2f9e2eddc44b9fe5721d0caf49f01cb08d602906add686d8c6f LICENSE.radeon
+ sha256 2bdd2e716f05d9737d3f9a20f9a3a3c0caee0e866100ddb0673f1178e42f92b9 LICENSE.sdma_firmware
+-sha256 9703115e298649dfad003d7d3d55f4b2bd417e28f19e9cf6d5c6f9a906a2c4d9 WHENCE
++sha256 a2cb7fe112a70132b423aa5db5fdb206bb0bfb89b2fbeb2c38a60ed7da57a3ba WHENCE
+ sha256 fa43e1b9a13b341a07adca9dbe73d0f9072d7966fdfe811c01f0dd2872d7309a qcom/NOTICE.txt
