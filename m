@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 31 Jul 2018 17:02:06 +0200
-Subject: [Buildroot] [PATCH 2/7] package/python-certifi: bump version to
- 2018.4.16
+Date: Tue, 31 Jul 2018 17:02:09 +0200
+Subject: [Buildroot] [PATCH 5/7] package/python-requests-oauthlib: bump
+ version to 1.0.0
 In-Reply-To: <20180731150211.18751-1-bernd.kuhls@t-online.de>
 References: <20180731150211.18751-1-bernd.kuhls@t-online.de>
-Message-ID: <20180731150211.18751-2-bernd.kuhls@t-online.de>
+Message-ID: <20180731150211.18751-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,49 +15,38 @@ Updated package using scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-certifi/Config.in           | 2 +-
- package/python-certifi/python-certifi.hash | 7 ++++---
- package/python-certifi/python-certifi.mk   | 4 ++--
- 3 files changed, 7 insertions(+), 6 deletions(-)
+ .../python-requests-oauthlib/python-requests-oauthlib.hash | 7 ++++---
+ .../python-requests-oauthlib/python-requests-oauthlib.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-certifi/Config.in b/package/python-certifi/Config.in
-index 9390b4f898..015b8092a9 100644
---- a/package/python-certifi/Config.in
-+++ b/package/python-certifi/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_PYTHON_CERTIFI
- 	help
- 	  Python package for providing Mozilla's CA Bundle.
- 
--	  https://pypi.python.org/pypi/certifi
-+	  http://certifi.io/
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index e3e2f07770..2d339dd2d5 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
+diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.hash b/package/python-requests-oauthlib/python-requests-oauthlib.hash
+index be0f644b80..733d293386 100644
+--- a/package/python-requests-oauthlib/python-requests-oauthlib.hash
++++ b/package/python-requests-oauthlib/python-requests-oauthlib.hash
 @@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/certifi/json, sha256 locally computed
--md5	068fd5c3c690ae47504b3e0bf4e56c4c  certifi-2018.1.18.tar.gz
--sha256	edbc3f203427eef571f79a7692bb160a2b0f7ccaa31953e99bd17e307cf63f7d  certifi-2018.1.18.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/certifi/json
-+md5	f5d81d0048e84285611412b0dea0630a  certifi-2018.4.16.tar.gz
-+sha256	13e698f54293db9f89122b0581843a782ad0934a4fe0172d2a980ba77fc61bb7  certifi-2018.4.16.tar.gz
+-# md5 from https://pypi.python.org/pypi/requests_oauthlib/json, sha256 locally computed
+-md5	4358a879a4377393bcfd37d0f9ae6d4d  requests-oauthlib-0.8.0.tar.gz
+-sha256	883ac416757eada6d3d07054ec7092ac21c7f35cb1d2cf82faf205637081f468  requests-oauthlib-0.8.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/requests-oauthlib/json
++md5	e867404084b688dbfb879b9ac9ac040a  requests-oauthlib-1.0.0.tar.gz
++sha256	8886bfec5ad7afb391ed5443b1f697c6f4ae98d0e5620839d8b4499c032ada3f  requests-oauthlib-1.0.0.tar.gz
 +# Locally computed sha256 checksums
- sha256	6a70a4bf6b010016d59a64b8ae4ad8dc7f5ef16f1fb453cc2ecd771c5a341131  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index 084893f5c1..716e6a3840 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
+ sha256	ae01846afad8a8291fe6a08966f3015af9a8ff675d84b981f9793c122f7876e8  LICENSE
+diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.mk b/package/python-requests-oauthlib/python-requests-oauthlib.mk
+index 02e3114e59..a8761b18b1 100644
+--- a/package/python-requests-oauthlib/python-requests-oauthlib.mk
++++ b/package/python-requests-oauthlib/python-requests-oauthlib.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CERTIFI_VERSION = 2018.1.18
-+PYTHON_CERTIFI_VERSION = 2018.4.16
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://pypi.python.org/packages/15/d4/2f888fc463d516ff7bf2379a4e9a552fef7f22a94147655d9b1097108248
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/4d/9c/46e950a6f4d6b4be571ddcae21e7bc846fcbb88f1de3eff0f6dd0a6be55d
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+-PYTHON_REQUESTS_OAUTHLIB_VERSION = 0.8.0
++PYTHON_REQUESTS_OAUTHLIB_VERSION = 1.0.0
+ PYTHON_REQUESTS_OAUTHLIB_SOURCE = requests-oauthlib-$(PYTHON_REQUESTS_OAUTHLIB_VERSION).tar.gz
+-PYTHON_REQUESTS_OAUTHLIB_SITE = https://pypi.python.org/packages/80/14/ad120c720f86c547ba8988010d5186102030591f71f7099f23921ca47fe5
++PYTHON_REQUESTS_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/95/be/072464f05b70e4142cb37151e215a2037b08b1400f8a56f2538b76ca6205
+ PYTHON_REQUESTS_OAUTHLIB_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_OAUTHLIB_LICENSE = ISC
+ PYTHON_REQUESTS_OAUTHLIB_LICENSE_FILES = LICENSE
 -- 
 2.18.0
