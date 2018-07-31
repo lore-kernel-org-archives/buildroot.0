@@ -1,51 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Jul 2018 21:51:59 +0200
-Subject: [Buildroot] [git commit] package/python-idna: bump version to 2.7
-Message-ID: <20180731194701.EF9718A6CD@busybox.osuosl.org>
+Date: Tue, 31 Jul 2018 21:52:08 +0200
+Subject: [Buildroot] [git commit] package/python-oauthlib: bump version to
+ 2.1.0
+Message-ID: <20180731194702.18BB68A5CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7aa35a8f96a062dea6193ea72da46a5a9493d58a
+commit: https://git.buildroot.net/buildroot/commit/?id=62cd0bcf4b218bdf17b120e61de683977277d13d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Updated package using scanpypi, added license hash.
+Updated package using scanpypi.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-idna/python-idna.hash | 8 +++++---
- package/python-idna/python-idna.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-oauthlib/Config.in            | 2 +-
+ package/python-oauthlib/python-oauthlib.hash | 7 ++++---
+ package/python-oauthlib/python-oauthlib.mk   | 4 ++--
+ 3 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
-index 839154a06f..4b3c84e5d8 100644
---- a/package/python-idna/python-idna.hash
-+++ b/package/python-idna/python-idna.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/idna/json, sha256 locally computed
--md5 fc1d992bef73e8824db411bb5d21f012 idna-2.5.tar.gz
--sha256 3cb5ce08046c4e3a560fc02f138d0ac63e00f8ce5901a56b32ec8b7994082aab idna-2.5.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/idna/json
-+md5	0e5bb69018ddef1b9d95f681182be82c  idna-2.7.tar.gz
-+sha256	684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16  idna-2.7.tar.gz
+diff --git a/package/python-oauthlib/Config.in b/package/python-oauthlib/Config.in
+index d6617f3898..65016c1d08 100644
+--- a/package/python-oauthlib/Config.in
++++ b/package/python-oauthlib/Config.in
+@@ -4,4 +4,4 @@ config BR2_PACKAGE_PYTHON_OAUTHLIB
+ 	  A generic, spec-compliant, thorough implementation of the
+ 	  OAuth request-signing logic.
+ 
+-	  https://github.com/idan/oauthlib
++	  https://github.com/oauthlib/oauthlib
+diff --git a/package/python-oauthlib/python-oauthlib.hash b/package/python-oauthlib/python-oauthlib.hash
+index f8e1324244..f0a3dee823 100644
+--- a/package/python-oauthlib/python-oauthlib.hash
++++ b/package/python-oauthlib/python-oauthlib.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/oauthlib/json, sha256 locally computed
+-md5	277a9a966cc8c72e492b4eeb41332445  oauthlib-2.0.6.tar.gz
+-sha256	ce57b501e906ff4f614e71c36a3ab9eacbb96d35c24d1970d2539bbc3ec70ce1  oauthlib-2.0.6.tar.gz
++# md5, sha256 from https://pypi.org/pypi/oauthlib/json
++md5	544b15398afe48d9493fa60d571bd8c7  oauthlib-2.1.0.tar.gz
++sha256	ac35665a61c1685c56336bda97d5eefa246f1202618a1d6f34fccb1bdd404162  oauthlib-2.1.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256	0d4bc7abd48dcfb14e24254ee404066737ff0167144e222914a2113b8794683e  LICENSE.rst
-diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-index c8d1793e0a..d5c57955a3 100644
---- a/package/python-idna/python-idna.mk
-+++ b/package/python-idna/python-idna.mk
+ sha256	9e1ae8725f5815738dadb6cbb09f450453d94e07c7b5efaee864f546a6209a95  LICENSE
+diff --git a/package/python-oauthlib/python-oauthlib.mk b/package/python-oauthlib/python-oauthlib.mk
+index ab39800247..3aa7ae227a 100644
+--- a/package/python-oauthlib/python-oauthlib.mk
++++ b/package/python-oauthlib/python-oauthlib.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_IDNA_VERSION = 2.5
-+PYTHON_IDNA_VERSION = 2.7
- PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
--PYTHON_IDNA_SITE = https://pypi.python.org/packages/d8/82/28a51052215014efc07feac7330ed758702fc0581347098a81699b5281cb
-+PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/65/c4/80f97e9c9628f3cac9b98bfca0402ede54e0563b56482e3e6e45c43c4935
- PYTHON_IDNA_LICENSE =  BSD-3-Clause
- PYTHON_IDNA_LICENSE_FILES = LICENSE.rst
- PYTHON_IDNA_SETUP_TYPE = setuptools
+-PYTHON_OAUTHLIB_VERSION = 2.0.6
++PYTHON_OAUTHLIB_VERSION = 2.1.0
+ PYTHON_OAUTHLIB_SOURCE = oauthlib-$(PYTHON_OAUTHLIB_VERSION).tar.gz
+-PYTHON_OAUTHLIB_SITE = https://pypi.python.org/packages/a5/8a/212e9b47fb54be109f3ff0684165bb38c51117f34e175c379fce5c7df754
++PYTHON_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/df/5f/3f4aae7b28db87ddef18afed3b71921e531ca288dc604eb981e9ec9f8853
+ PYTHON_OAUTHLIB_SETUP_TYPE = setuptools
+ PYTHON_OAUTHLIB_LICENSE = BSD-3-Clause
+ PYTHON_OAUTHLIB_LICENSE_FILES = LICENSE
