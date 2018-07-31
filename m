@@ -1,86 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Jul 2018 21:42:02 +0200
-Subject: [Buildroot] [git commit] libglib2: backport upstream patch to
+Date: Tue, 31 Jul 2018 21:43:15 +0200
+Subject: [Buildroot] [PATCH v2 1/3] libglib2: backport upstream patch to
  handle missing fcntl() flags
-Message-ID: <20180731193647.98AEF8A61D@busybox.osuosl.org>
+In-Reply-To: <20180730220218.26454-1-hollis_blanchard@mentor.com>
+References: <20180730220218.26454-1-hollis_blanchard@mentor.com>
+Message-ID: <20180731214315.4542df50@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb3f944d6669dbf292b9b7693d0bcc3bb351300b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-On RHEL6 hosts, fcntl.h doesn't define F_SETPIPE_SZ or
-F_GETPIPE_SZ. Upstream glib has a patch for this case that wasn't
-applied to their 2.56.1 branch.
+On Mon, 30 Jul 2018 15:02:16 -0700, Hollis Blanchard wrote:
+> On RHEL6 hosts, fcntl.h doesn't define F_SETPIPE_SZ or F_GETPIPE_SZ. Upstream
+> glib has a patch for this case that wasn't applied to their 2.56.1 branch.
+> 
+> Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+> ---
+>  ...-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch | 52 ++++++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
 
-Fixes:
+Applied to master after adding a reference to the autobuilder failure
+being fixed. Thanks!
 
-  http://autobuild.buildroot.net/results/04b98a0b5c593c0525ef39d03c1ee7c2bbf5e44d/
-
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
-
-diff --git a/package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch b/package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
-new file mode 100644
-index 0000000000..032f4851c4
---- /dev/null
-+++ b/package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
-@@ -0,0 +1,52 @@
-+From 0beb62f564072f3585762c9c55fe894485993b62 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 10 Apr 2018 18:55:11 +0200
-+Subject: [PATCH] gio: fix compilation without F_{S,G}ETPIPE_SZ
-+
-+Commit a5778ef7c51044147fe470ea1707dd297f44f880 broke compilation on
-+architectures without F_SETPIPE_SZ and F_GETPIPE_SZ such as or1k.
-+If those variables are undefined, put back previous behavior, buffer
-+size set to 1024 * 64
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/398490e07343a931b25ca6ab5c90a75d7a073e9f
-+
-+(Modified by Philip Withnall <withnall@endlessm.com> to add an
-+explanatory comment.)
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=795133
-+---
-+ gio/gfile.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/gio/gfile.c b/gio/gfile.c
-+index 334ad8ec3..a67aad383 100644
-+--- a/gio/gfile.c
-++++ b/gio/gfile.c
-+@@ -3012,6 +3012,7 @@ splice_stream_with_progress (GInputStream           *in,
-+   if (!g_unix_open_pipe (buffer, FD_CLOEXEC, error))
-+     return FALSE;
-+ 
-++#if defined(F_SETPIPE_SZ) && defined(F_GETPIPE_SZ)
-+   /* Try a 1MiB buffer for improved throughput. If that fails, use the default
-+    * pipe size. See: https://bugzilla.gnome.org/791457 */
-+   buffer_size = fcntl (buffer[1], F_SETPIPE_SZ, 1024 * 1024);
-+@@ -3029,6 +3030,13 @@ splice_stream_with_progress (GInputStream           *in,
-+           goto out;
-+         }
-+     }
-++#else
-++  /* If #F_GETPIPE_SZ isn???t available, assume we???re on Linux < 2.6.35,
-++   * but ??? 2.6.11, meaning the pipe capacity is 64KiB. Ignore the possibility of
-++   * running on Linux < 2.6.11 (where the capacity was the system page size,
-++   * typically 4KiB) because it???s ancient. See pipe(7). */
-++  buffer_size = 1024 * 64;
-++#endif
-+ 
-+   g_assert (buffer_size > 0);
-+ 
-+-- 
-+2.13.0
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
