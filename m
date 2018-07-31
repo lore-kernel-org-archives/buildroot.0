@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Jul 2018 21:52:14 +0200
-Subject: [Buildroot] [git commit] package/python-requests: bump version to
- 2.19.1
-Message-ID: <20180731194702.2B11A8A5CD@busybox.osuosl.org>
+Date: Tue, 31 Jul 2018 21:52:17 +0200
+Subject: [Buildroot] [git commit] package/python-urllib3: bump version to
+ 1.23
+Message-ID: <20180731194702.34BB58A5CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=217fa315abca43579bb47637881fe4127da6584b
+commit: https://git.buildroot.net/buildroot/commit/?id=39f0badb4e4ced9d862a1799e229efc148293181
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Updated package using scanpypi, added license hash.
@@ -17,36 +17,36 @@ Updated package using scanpypi, added license hash.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-requests/python-requests.hash | 8 +++++---
- package/python-requests/python-requests.mk   | 4 ++--
+ package/python-urllib3/python-urllib3.hash | 8 +++++---
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
  2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index 2f182ea3bd..b71fe86ee7 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index 226a826528..505ff923be 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
 @@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/requests/json, sha256 locally computed
--md5	40f723ed01dddeaf990d0609d073f021  requests-2.18.1.tar.gz
--sha256	c6f3bdf4a4323ac7b45d01e04a6f6c20e32a052cd04de81e05103abc049ad9b9  requests-2.18.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/requests/json
-+md5	6c1a31afec9d614e2e71a91ee6ca2878  requests-2.19.1.tar.gz
-+sha256	ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a  requests-2.19.1.tar.gz
+-# md5 from https://pypi.python.org/pypi/urllib3/json, sha256 locally computed
+-md5	ef6c72c79b9c6bcd68c204f9b92abc86  urllib3-1.21.1.tar.gz
+-sha256	b14486978518ca0901a76ba973d7821047409d7f726f22156b24e83fd71382a5  urllib3-1.21.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/urllib3/json
++md5	1ad43e4b5ab7a0794c89dc057e1d7179  urllib3-1.23.tar.gz
++sha256	a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf  urllib3-1.23.tar.gz
 +# Locally computed sha256 checksums
-+sha256	82a869fe4e967449956d26a546adc762acace028852ce81ba16c3c5b1d76b15b  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 504eb8d0ad..881d196526 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
++sha256	11db569430ca5ad793f1399297b8df5041a22137abaf90642ea71da21d59121c  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 454f75fa15..5519fbb9b2 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_VERSION = 2.18.1
-+PYTHON_REQUESTS_VERSION = 2.19.1
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/2c/b5/2b6e8ef8dd18203b6399e9f28c7d54f6de7b7549853fe36d575bd31e29a7
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/54/1f/782a5734931ddf2e1494e4cd615a51ff98e1879cbe9eecbdfeaf09aa75e9
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+-PYTHON_URLLIB3_VERSION = 1.21.1
++PYTHON_URLLIB3_VERSION = 1.23
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://pypi.python.org/packages/96/d9/40e4e515d3e17ed0adbbde1078e8518f8c4e3628496b56eb8f026a02b9e4
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/3c/d2/dc5471622bd200db1cd9319e02e71bc655e9ea27b8e0ce65fc69de0dac15
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_SETUP_TYPE = setuptools
