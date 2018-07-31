@@ -1,44 +1,144 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Jul 2018 23:01:58 +0200
-Subject: [Buildroot] [git commit] package/mesa3d: fix xlib_libxshmfence
- dependency
-Message-ID: <20180731210652.3D8048B353@busybox.osuosl.org>
+Date: Tue, 31 Jul 2018 23:12:14 +0200
+Subject: [Buildroot] [git commit] package: propagate pulseaudio dependencies
+ correctly
+Message-ID: <20180731210652.491FF8B353@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0386515cda6ec9797cf3dd4b6ece8f956fccf228
+commit: https://git.buildroot.net/buildroot/commit/?id=68161802eb53f0af58a274904aebfa115988a468
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/6b2/6b214f1013d2def0b7ff33af3115147f47afd7a1/
-http://autobuild.buildroot.net/results/8b8/8b8251235f6b08ae2275659f7af241d6d43df074/
-http://autobuild.buildroot.net/results/468/4681b76cbca66a267741df80719a4c2e032c6b00/
-http://autobuild.buildroot.net/results/90f/90fee90a4a8f6bb35be94ee437f8f7c1f0cbb5d9/
-http://autobuild.buildroot.net/results/1b8/1b862e22f9d1dfaf9b8d3a998061a83012302b05/
-http://autobuild.buildroot.net/results/ebe/ebe3e12887c89649ad3de0045846836957d83396/
-http://autobuild.buildroot.net/results/b7b/b7b300cc056bdc51a0570be2f250b806e306999e/
-http://autobuild.buildroot.net/results/c39/c3960a95741341114ced8907de09b6a266999184/
+The BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC dependency of
+BR2_PACKAGE_PULSEAUDIO was not properly propagated to reverse
+dependencies, causing the following kconfig warning:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+warning: (BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO && BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE && BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE && BR2_PACKAGE_KODI_PULSEAUDIO && BR2_PACKAGE_MPD_PULSEAUDIO && BR2_PACKAGE_EFL_PULSEAUDIO) selects BR2_PACKAGE_PULSEAUDIO which has unmet direct dependencies (BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && !BR2_STATIC_LIBS && BR2_USE_MMU)
+
+This commit fixes that by propagating the dependency as it should have
+been done.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mesa3d/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/efl/Config.in                          |  5 +++++
+ package/espeak/Config.in                       |  1 +
+ package/gstreamer/gst-plugins-good/Config.in   |  7 +++++--
+ package/gstreamer1/gst1-plugins-good/Config.in |  7 +++++--
+ package/kodi/Config.in                         |  1 +
+ package/mpd/Config.in                          | 12 +++++++++---
+ 6 files changed, 26 insertions(+), 7 deletions(-)
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index dd36a5e0fd..eec72654cd 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -57,7 +57,8 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- config BR2_PACKAGE_MESA3D_DRI_DRIVER
- 	bool
- 	select BR2_PACKAGE_MESA3D_DRIVER
--	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if BR2_TOOLCHAIN_HAS_SYNC_4
-+	select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
-+		(BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index e965d4d142..05be5aae56 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -97,6 +97,11 @@ config BR2_PACKAGE_EFL_LIBSNDFILE
+ config BR2_PACKAGE_EFL_PULSEAUDIO
+ 	bool "Enable pulseaudio support (recommended)"
+ 	default y
++	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	help
+ 	  The only audio output method supported by Ecore right now is
+diff --git a/package/espeak/Config.in b/package/espeak/Config.in
+index 5e46b17e32..5f9007a165 100644
+--- a/package/espeak/Config.in
++++ b/package/espeak/Config.in
+@@ -35,6 +35,7 @@ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
  
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	bool
+ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
+ 	bool "pulseaudio"
++	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 
+ endchoice
+diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
+index e92cd0c5b2..3b2a99f5b4 100644
+--- a/package/gstreamer/gst-plugins-good/Config.in
++++ b/package/gstreamer/gst-plugins-good/Config.in
+@@ -205,11 +205,14 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
+ 	depends on BR2_USE_MMU # pulseaudio
+ 	depends on !BR2_STATIC_LIBS # pulseaudio
++	depends on BR2_USE_WCHAR # pulseaudio
++	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC # pulseaudio
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 
+-comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
++comment "pulseaudio support needs a toolchain w/ threads, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
+ 	bool "souphttpsrc (http client)"
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 3bb98a4308..afb9a418d8 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -333,13 +333,16 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
+ 	depends on BR2_USE_MMU # pulseaudio
+ 	depends on !BR2_STATIC_LIBS # pulseaudio
++	depends on BR2_USE_WCHAR # pulseaudio
++	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC # pulseaudio
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	help
+ 	  PulseAudio plugin library
+ 
+-comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
++comment "pulseaudio support needs a toolchain w/ threads, wchar, dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
+ 	bool "souphttpsrc (http client)"
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index d96d546bf9..5f9c95a7a0 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -192,6 +192,7 @@ config BR2_PACKAGE_KODI_NONFREE
+ 
+ config BR2_PACKAGE_KODI_PULSEAUDIO
+ 	bool "pulseaudio"
++	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
+ 	# Pulseaudio support in kodi needs glib support in Pulseaudio,
+ 	# see FindPulseAudio.cmake. Kodi meets all dependencies of
+ 	# libglib2, so there is no need to propagate them here.
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 1d50c7bf44..d3844391a2 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -264,13 +264,19 @@ config BR2_PACKAGE_MPD_OSS
+ 
+ config BR2_PACKAGE_MPD_PULSEAUDIO
+ 	bool "pulseaudio"
+-	depends on !BR2_STATIC_LIBS # pulseaudio
++	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_PULSEAUDIO
+ 	help
+ 	  Enable pulseaudio output support.
+ 
+-comment "pulseaudio support needs a toolchain w/ dynamic library"
+-	depends on BR2_STATIC_LIBS
++comment "pulseaudio support needs a toolchain w/ threads, wchar, dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_USE_WCHAR
+ 
+ config BR2_PACKAGE_MPD_SHOUTCAST
+ 	bool "shoutcast"
