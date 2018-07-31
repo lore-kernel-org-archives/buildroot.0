@@ -1,57 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Jul 2018 22:02:32 +0200
-Subject: [Buildroot] [PATCH] gcc: Fix building on ppc64le GCC 8 host
-In-Reply-To: <20180730103630.21804-1-joel@jms.id.au>
-References: <20180730103630.21804-1-joel@jms.id.au>
-Message-ID: <20180731220232.3d3b4f4d@windsurf>
+Date: Tue, 31 Jul 2018 22:05:38 +0200
+Subject: [Buildroot] [git commit] package/opencv3: fix aarch64 build
+Message-ID: <20180731200215.2CD1F8A852@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=141cf77903764efad4238abd4cd1391260c0210d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 30 Jul 2018 20:06:30 +0930, Joel Stanley wrote:
-> When building on a ppc64le host we see this error:
-> 
->     build/genmatch --gimple ../../gcc/match.pd \
->         > tmp-gimple-match.c  
->     ../../gcc/match.pd:120:1 error: expected (, got NAME
->        negative value by 0 gives -0, not +0.  */
-> 
-> This was reported upstream[1] and fixed on the GCC 6 [2] and GCC 7 [3]
-> branches:
-> 
->     Backport from mainline
->     2018-01-10  Kelvin Nilsen  <kelvin@gcc.gnu.org>
-> 
->     * lex.c (search_line_fast): Remove illegal coercion of an
->     unaligned pointer value to vector pointer type and replace with
->     use of __builtin_vec_vsx_ld () built-in function, which operates
->     on unaligned pointer values.
-> 
-> The patches included in Buildroot contain just the code changes, and not
-> the changelog, to make it easer to manage backporting.
-> 
-> Tested on Ubuntu Cosmic ppc64le.
-> 
-> [1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86162
-> [2] https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=261621
-> [3] https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=262243
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
-> ---
->  .../6.4.0/0002-fix-building-on-ppc64.patch    | 38 ++++++++++++++++++
->  .../7.3.0/0002-fix-building-on-ppc64.patch    | 40 +++++++++++++++++++
->  2 files changed, 78 insertions(+)
->  create mode 100644 package/gcc/6.4.0/0002-fix-building-on-ppc64.patch
->  create mode 100644 package/gcc/7.3.0/0002-fix-building-on-ppc64.patch
+Commit a17402e42d8c996af239cfdb536e74188d6c6245 ("opencv3:
+conditionally enable NEON and VFPv3 optimizations") broke the build on
+AArch64, because the VFPv3 optimizations are not supported by OpenCV
+on this architecture:
 
-Applied to master, thanks.
+  https://github.com/opencv/opencv/blob/3.4/cmake/OpenCVCompilerOptimizations.cmake#L275
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+However BR2_ARM_CPU_HAS_VFPV3 is always true on AArch64, causing this
+build failure for every AArch64 build of OpenCV 3. This commit fixes
+that by enabling VFPV3 only on ARM, and not on AArch64.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/d38fb092cffe086f93b469d1181da77fba0994bd/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/opencv3/opencv3.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 53b771ef25..e8afa7cccf 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -100,8 +100,13 @@ OPENCV3_CONF_OPTS += \
+ #   adding '-mcpu=G3 -mtune=G5' to them, which is already handled by Buildroot.
+ OPENCV3_CONF_OPTS += \
+ 	-DENABLE_POWERPC=OFF \
+-	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF) \
+-	-DENABLE_VFPV3=$(if $(BR2_ARM_CPU_HAS_VFPV3),ON,OFF)
++	-DENABLE_NEON=$(if $(BR2_ARM_CPU_HAS_NEON),ON,OFF)
++
++ifeq ($(BR2_ARCH_IS_64):$(BR2_ARM_CPU_HAS_VFPV3),:y)
++OPENCV3_CONF_OPTS += -DENABLE_VFPV3=ON
++else
++OPENCV3_CONF_OPTS += -DENABLE_VFPV3=OFF
++endif
+ 
+ # Cuda stuff
+ OPENCV3_CONF_OPTS += \
