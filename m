@@ -1,151 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Aug 2018 14:30:51 +0200
-Subject: [Buildroot] [git commit] fs/btrfs: add support for generating a
- btrfs image
-Message-ID: <20180907111604.4EC52807D1@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 1 Aug 2018 00:14:08 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: Really use host-dtc
+In-Reply-To: <20180731205154.62967de8@windsurf>
+References: <20180726103630.8643-1-david.degrave@mind.be>
+ <20180726103630.8643-2-david.degrave@mind.be>
+ <20180728214834.3496b200@windsurf>
+ <CAD6XyYyrv809pmGMg3M_9wFekQ2c1JfnKRQ3w8bvqFhG4tVYeA@mail.gmail.com>
+ <20180731205154.62967de8@windsurf>
+Message-ID: <ea2ac147-3c9f-a85d-83ea-84f33a0d52e4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0aade4df1f80d7bff58da2b5d3dfd9d8d6ec4b7d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch makes it possible to format the rootfs using btrfs. It
-introduces the option; BR2_TARGET_ROOTFS_BTRFS.
 
-When selected, the user is able to specify the filesystem size, label,
-options, and node and sector sizes. The new files are based on
-fs/ext2/{Config.in,ext2.mk}
+On 31-07-18 20:51, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Tue, 31 Jul 2018 20:12:29 +0200, David De Grave wrote:
+> 
+[snip]
+>> BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_boneblack"
+>> BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="../uboot.fragment"
+>>
+>> uboot.fragment:
+>> CONFIG_MULTI_DTB_FIT=y
+>> CONFIG_OF_LIST="am335x-boneblack"
+[snip]
+>> If I remove the uboot.fragment, all is building well up to the end.
+>> Moreover, why do he use ./scripts/dtc/dtc ? It should use
+>> $(HOST_DIR)/bin/dtc at the moment host-dtc is build, no ?
+> 
+> I think the optional dependency on host-dtc depends from a time where
+> U-Boot did not have its own copy of DTC. I'm not sure it makes a lot of
+> sense now.
 
-Signed-off-by: Robert J. Heywood <robert.heywood@codethink.co.uk>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Thomas:
- - fix issues pointed by Yann (duplicated empty line, missing quotes
-   around default values for string options)
- - use -f option so that we don't have to remove the image file before
-   creating it again
- - use the --byte-count option to set the filesystem size, which
-   avoids the need for doing a "truncate -s"
- - remove the possible explanation of a mkfs.btrfs error. Indeed,
-   mkfs.btrfs automatically extends the size of the image as needed,
-   so the size passed can never be "too small".
- - fix check-package warnings in Config.in file.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- fs/Config.in       |  1 +
- fs/btrfs/Config.in | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
- fs/btrfs/btrfs.mk  | 35 +++++++++++++++++++++++++++++++++++
- 3 files changed, 86 insertions(+)
+ ... but we still want to support those older U-Boot versions, so we can't
+remove it.
 
-diff --git a/fs/Config.in b/fs/Config.in
-index c25b01c3de..24f22fd7e3 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -1,6 +1,7 @@
- menu "Filesystem images"
- 
- source "fs/axfs/Config.in"
-+source "fs/btrfs/Config.in"
- source "fs/cloop/Config.in"
- source "fs/cpio/Config.in"
- source "fs/cramfs/Config.in"
-diff --git a/fs/btrfs/Config.in b/fs/btrfs/Config.in
-new file mode 100644
-index 0000000000..85be68e7e9
---- /dev/null
-+++ b/fs/btrfs/Config.in
-@@ -0,0 +1,50 @@
-+config BR2_TARGET_ROOTFS_BTRFS
-+	bool "btrfs root filesystem"
-+	select BR2_PACKAGE_HOST_BTRFS_PROGS
-+	help
-+	  Build a btrfs root filesystem. If you enable this option, you
-+	  probably want to enable the btrfs-progs package too.
-+
-+if BR2_TARGET_ROOTFS_BTRFS
-+
-+config BR2_TARGET_ROOTFS_BTRFS_LABEL
-+	string "filesystem label"
-+
-+config BR2_TARGET_ROOTFS_BTRFS_SIZE
-+	string "filesystem size"
-+	default "100m"
-+	help
-+	  The size of the filesystem image in bytes.
-+	  Suffix with k, m, g or t for power-of-two kilo-, mega-, giga-
-+	  or terabytes.
-+
-+config BR2_TARGET_ROOTFS_BTRFS_SIZE_SECTOR
-+	string "sector size"
-+	default "4096"
-+	help
-+	  This value should be set to the page size in bytes. The
-+	  default value of 4096 is the the most common page size for
-+	  most systems.  If the sectorsize differs from the page size,
-+	  the created filesystem may not be mountable by the kernel.
-+	  Therefore it is recommended to leave this value at
-+	  4096. Unless you know that your kernel uses a different page
-+	  size.  Suffix with k for power-of-two kilobytes.
-+
-+config BR2_TARGET_ROOTFS_BTRFS_SIZE_NODE
-+	string "btree node size"
-+	default "16384"
-+	help
-+	  The tree block size in which btrfs stores metadata in bytes.
-+	  This must be a multiple of the sectorsize, but not larger
-+	  than 64KiB (65536).
-+	  Suffix with k for power-of-two kilobytes.
-+
-+config BR2_TARGET_ROOTFS_BTRFS_FEATURES
-+	string "Filesystem Features"
-+	help
-+	  A comma separated string of features that can be enabled
-+	  during creation time.
-+	  For a list of available options, use:
-+	    `.../host/bin/mkfs.btrfs -O list-all`
-+
-+endif # BR2_TARGET_ROOTFS_BTRFS
-diff --git a/fs/btrfs/btrfs.mk b/fs/btrfs/btrfs.mk
-new file mode 100644
-index 0000000000..ad00153c26
---- /dev/null
-+++ b/fs/btrfs/btrfs.mk
-@@ -0,0 +1,35 @@
-+################################################################################
-+#
-+# Build the btrfs root filesystem image
-+#
-+################################################################################
-+
-+BTRFS_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_SIZE))
-+ifeq ($(BR2_TARGET_ROOTFS_BTRFS)-$(BTRFS_SIZE),y-)
-+$(error BR2_TARGET_ROOTFS_BTRFS_SIZE cannot be empty)
-+endif
-+
-+BTRFS_SIZE_NODE = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_SIZE_NODE))
-+BTRFS_SIZE_SECTOR = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_SIZE_SECTOR))
-+BTRFS_FEATURES = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_FEATURES))
-+# qstrip results in stripping consecutive spaces into a single one. So the
-+# variable is not qstrip-ed to preserve the integrity of the string value.
-+BTRFS_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_BTRFS_LABEL))
-+# ")
-+
-+BTRFS_OPTS = \
-+	-f \
-+	-r '$(TARGET_DIR)' \
-+	-L '$(BTRFS_LABEL)' \
-+	--byte-count '$(BTRFS_SIZE)' \
-+	$(if $(BTRFS_SIZE_NODE),--nodesize '$(BTRFS_SIZE_NODE)') \
-+	$(if $(BTRFS_SIZE_SECTOR),--sectorsize '$(BTRFS_SIZE_SECTOR)') \
-+	$(if $(BTRFS_FEATURES),--features '$(BTRFS_FEATURES)')
-+
-+ROOTFS_BTRFS_DEPENDENCIES = host-btrfs-progs
-+
-+define ROOTFS_BTRFS_CMD
-+	$(HOST_DIR)/bin/mkfs.btrfs $(BTRFS_OPTS) $@
-+endef
-+
-+$(eval $(rootfs))
+ Ideally, we should find out between which two versions it is needed, and
+mention that in the help text.
+
+> If U-Boot tries to use ./scripts/dtc/dtc, then it should have built it.
+> If it didn't build it but tries to use it nonetheless, it sounds like a
+> bug in U-Boot.
+
+ Oh yes, now I see it, it's indeed a bug in U-Boot. CONFIG_OF_LIST should either
+depend on CONFIG_OF_CONTROL or select it, otherwise dtc is not built.
+
+ Regards,
+ Arnout
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
