@@ -1,52 +1,52 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 31 Jul 2018 17:02:09 +0200
-Subject: [Buildroot] [PATCH 5/7] package/python-requests-oauthlib: bump
- version to 1.0.0
+Date: Tue, 31 Jul 2018 17:02:10 +0200
+Subject: [Buildroot] [PATCH 6/7] package/python-requests: bump version to
+ 2.19.1
 In-Reply-To: <20180731150211.18751-1-bernd.kuhls@t-online.de>
 References: <20180731150211.18751-1-bernd.kuhls@t-online.de>
-Message-ID: <20180731150211.18751-5-bernd.kuhls@t-online.de>
+Message-ID: <20180731150211.18751-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated package using scanpypi.
+Updated package using scanpypi, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../python-requests-oauthlib/python-requests-oauthlib.hash | 7 ++++---
- .../python-requests-oauthlib/python-requests-oauthlib.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-requests/python-requests.hash | 8 +++++---
+ package/python-requests/python-requests.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.hash b/package/python-requests-oauthlib/python-requests-oauthlib.hash
-index be0f644b80..733d293386 100644
---- a/package/python-requests-oauthlib/python-requests-oauthlib.hash
-+++ b/package/python-requests-oauthlib/python-requests-oauthlib.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/requests_oauthlib/json, sha256 locally computed
--md5	4358a879a4377393bcfd37d0f9ae6d4d  requests-oauthlib-0.8.0.tar.gz
--sha256	883ac416757eada6d3d07054ec7092ac21c7f35cb1d2cf82faf205637081f468  requests-oauthlib-0.8.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/requests-oauthlib/json
-+md5	e867404084b688dbfb879b9ac9ac040a  requests-oauthlib-1.0.0.tar.gz
-+sha256	8886bfec5ad7afb391ed5443b1f697c6f4ae98d0e5620839d8b4499c032ada3f  requests-oauthlib-1.0.0.tar.gz
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 2f182ea3bd..b71fe86ee7 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/requests/json, sha256 locally computed
+-md5	40f723ed01dddeaf990d0609d073f021  requests-2.18.1.tar.gz
+-sha256	c6f3bdf4a4323ac7b45d01e04a6f6c20e32a052cd04de81e05103abc049ad9b9  requests-2.18.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/requests/json
++md5	6c1a31afec9d614e2e71a91ee6ca2878  requests-2.19.1.tar.gz
++sha256	ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a  requests-2.19.1.tar.gz
 +# Locally computed sha256 checksums
- sha256	ae01846afad8a8291fe6a08966f3015af9a8ff675d84b981f9793c122f7876e8  LICENSE
-diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.mk b/package/python-requests-oauthlib/python-requests-oauthlib.mk
-index 02e3114e59..a8761b18b1 100644
---- a/package/python-requests-oauthlib/python-requests-oauthlib.mk
-+++ b/package/python-requests-oauthlib/python-requests-oauthlib.mk
++sha256	82a869fe4e967449956d26a546adc762acace028852ce81ba16c3c5b1d76b15b  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 504eb8d0ad..881d196526 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_OAUTHLIB_VERSION = 0.8.0
-+PYTHON_REQUESTS_OAUTHLIB_VERSION = 1.0.0
- PYTHON_REQUESTS_OAUTHLIB_SOURCE = requests-oauthlib-$(PYTHON_REQUESTS_OAUTHLIB_VERSION).tar.gz
--PYTHON_REQUESTS_OAUTHLIB_SITE = https://pypi.python.org/packages/80/14/ad120c720f86c547ba8988010d5186102030591f71f7099f23921ca47fe5
-+PYTHON_REQUESTS_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/95/be/072464f05b70e4142cb37151e215a2037b08b1400f8a56f2538b76ca6205
- PYTHON_REQUESTS_OAUTHLIB_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_OAUTHLIB_LICENSE = ISC
- PYTHON_REQUESTS_OAUTHLIB_LICENSE_FILES = LICENSE
+-PYTHON_REQUESTS_VERSION = 2.18.1
++PYTHON_REQUESTS_VERSION = 2.19.1
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://pypi.python.org/packages/2c/b5/2b6e8ef8dd18203b6399e9f28c7d54f6de7b7549853fe36d575bd31e29a7
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/54/1f/782a5734931ddf2e1494e4cd615a51ff98e1879cbe9eecbdfeaf09aa75e9
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
 -- 
 2.18.0
