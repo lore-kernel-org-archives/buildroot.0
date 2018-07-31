@@ -1,31 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 31 Jul 2018 22:09:45 +0200
-Subject: [Buildroot] [PATCH 1/2] package/opencv3: bump version to 3.4.2
-In-Reply-To: <20180730160836.21016-1-bernd.kuhls@t-online.de>
-References: <20180730160836.21016-1-bernd.kuhls@t-online.de>
-Message-ID: <20180731220945.75c50ad3@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 31 Jul 2018 22:16:17 +0200
+Subject: [Buildroot] [PATCH] linux: kconfig needs the toolchain
+Message-ID: <20180731201617.20829-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Starting with linux-4.18, the kconfig from the kernel can call
+to the compiler to test its capabilities; see:
 
-On Mon, 30 Jul 2018 18:08:35 +0200, Bernd Kuhls wrote:
-> Updated license hash after copyright year update:
-> https://github.com/opencv/opencv/commit/e6ed853905744018d9d570fa49e3b9e33b3c6ea6#diff-9879d6db96fd29134fc802214163b95a
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/opencv3/opencv3.hash | 5 ++---
->  package/opencv3/opencv3.mk   | 2 +-
->  2 files changed, 3 insertions(+), 4 deletions(-)
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/Kconfig.include
 
-Applied to master, thanks.
+Like is done in the kconfig-package infra for the dependency on
+$(1)-patch, we use an order-only prerequisites on the toolchain,
+to guarantee the compiler is available before we can display the
+kconfig of the kernel.
 
-Thomas
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+---
+ linux/linux.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7527b11673..63c649ce83 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -510,6 +510,13 @@ endif # BR_BUILDING
+ 
+ $(eval $(kconfig-package))
+ 
++# Starting with linux-4.18, the kconfig in the kernel calls
++# the cross-compiler to check its capabilities. So we need
++# the toolchain before we can call our configurators.
++# Also, since we need LINUX_DIR, we must be after the call
++# to kconfig-package, above.
++$(LINUX_DIR)/.config: | toolchain
++
+ # Support for rebuilding the kernel after the cpio archive has
+ # been generated.
+ .PHONY: linux-rebuild-with-initramfs
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
