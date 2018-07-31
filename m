@@ -1,49 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 31 Jul 2018 17:02:05 +0200
-Subject: [Buildroot] [PATCH 1/7] package/python-idna: bump version to 2.7
-Message-ID: <20180731150211.18751-1-bernd.kuhls@t-online.de>
+From: Patrick Doyle <wpdster@gmail.com>
+Date: Tue, 31 Jul 2018 11:17:40 -0400
+Subject: [Buildroot] Random Linux/device tree/GPIO question posted to
+ the wrong list...
+In-Reply-To: <20180731161756.47cb4d72@windsurf>
+References: <CAF_dkJBrU=bF+LZOSe6RNKukbGFjPHOMJUfUXRHs4_8NJ-50Dw@mail.gmail.com>
+ <20180730235109.0fe5f681@windsurf>
+ <CAF_dkJAfeaGXejcOkUk8=WMfS6eNbqLjNYPZHaRU1wArb7_G6w@mail.gmail.com>
+ <20180731161756.47cb4d72@windsurf>
+Message-ID: <CAF_dkJBELK4AORdFC7dqCE2rF-f59KYCyZjLQAkx5nDG9r7jTQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Updated package using scanpypi, added license hash.
+On Tue, Jul 31, 2018 at 10:18 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Asked internally, and my colleague Maxime Ripard (in Cc) gave some
+> explanation about this: it depends on whether the pinctrl driver uses
+> the strict mode or not and the Atmel doesn't.
+>
+> This allows to request a pin as a GPIO even if this pin is already
+> muxed as a different functionality. Some details about this are
+> available at "GPIO mode pitfalls" in
+> https://www.kernel.org/doc/Documentation/driver-api/pinctl.rst (link
+> also provided by Maxime).
+Hmmm... I might try setting .strict = true in the Atmel driver and
+seeing what blows up.  If nothing blows up (or even if it does), then
+I'll try harder to understand the differences between the two modes
+and the implication on the Atmel driver.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/python-idna/python-idna.hash | 8 +++++---
- package/python-idna/python-idna.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+Thanks again.
 
-diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
-index 839154a06f..4b3c84e5d8 100644
---- a/package/python-idna/python-idna.hash
-+++ b/package/python-idna/python-idna.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/idna/json, sha256 locally computed
--md5 fc1d992bef73e8824db411bb5d21f012 idna-2.5.tar.gz
--sha256 3cb5ce08046c4e3a560fc02f138d0ac63e00f8ce5901a56b32ec8b7994082aab idna-2.5.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/idna/json
-+md5	0e5bb69018ddef1b9d95f681182be82c  idna-2.7.tar.gz
-+sha256	684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16  idna-2.7.tar.gz
-+# Locally computed sha256 checksums
-+sha256	0d4bc7abd48dcfb14e24254ee404066737ff0167144e222914a2113b8794683e  LICENSE.rst
-diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-index c8d1793e0a..d5c57955a3 100644
---- a/package/python-idna/python-idna.mk
-+++ b/package/python-idna/python-idna.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_IDNA_VERSION = 2.5
-+PYTHON_IDNA_VERSION = 2.7
- PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
--PYTHON_IDNA_SITE = https://pypi.python.org/packages/d8/82/28a51052215014efc07feac7330ed758702fc0581347098a81699b5281cb
-+PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/65/c4/80f97e9c9628f3cac9b98bfca0402ede54e0563b56482e3e6e45c43c4935
- PYTHON_IDNA_LICENSE =  BSD-3-Clause
- PYTHON_IDNA_LICENSE_FILES = LICENSE.rst
- PYTHON_IDNA_SETUP_TYPE = setuptools
--- 
-2.18.0
+--wpd
