@@ -1,60 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 1 Aug 2018 14:17:11 +0200
-Subject: [Buildroot] [git commit] package/cutelyst: fix build dependencies
-Message-ID: <20180801121359.75EDE8B3B0@busybox.osuosl.org>
+Date: Wed, 1 Aug 2018 14:27:12 +0200
+Subject: [Buildroot] [PATCH] package/cutelyst: Fix build dependencies
+In-Reply-To: <20180801114738.5044-1-dantti12@gmail.com>
+References: <20180801114738.5044-1-dantti12@gmail.com>
+Message-ID: <20180801142712.5281ca21@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36514a415d39e9876b93b5efa015382755ccd039
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Daniel,
 
-This commit adds missing optional dependencies on libpwquality and
-jemalloc.
+Thanks for providing this fix!
 
-The optional dependency on grantlee is removed, because it fails to
-build, so we explicitly disable grantlee support.
+On Wed,  1 Aug 2018 08:47:38 -0300, Daniel Nicoletti wrote:
+> Add missing optional dependencies need when
+> the dependency was available, disabling Grantlee
+> plugin for now as it failed to build.
+> 
+> Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
 
-  http://autobuild.buildroot.net/results/ecbe25728a81f13e35a4315b64aacb8e592f5867/ (jemalloc)
-  http://autobuild.buildroot.net/results/84c29fc0d6212f33ff1efdf8495cbb84e4eeed65/ (grantlee)
+I've applied, but after changing one thing:
 
-Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
-[Thomas: explicitly disable grantlee support.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/cutelyst/cutelyst.mk | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+> ---
+>  package/cutelyst/cutelyst.mk | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
+> index 438ac091c6..2d1c9b1532 100644
+> --- a/package/cutelyst/cutelyst.mk
+> +++ b/package/cutelyst/cutelyst.mk
+> @@ -15,20 +15,16 @@ CUTELYST_DEPENDENCIES = qt5base
+>  CUTELYST_CONF_OPTS += \
+>  	-DPLUGIN_CSRFPROTECTION=ON
+>  
+> -ifeq ($(BR2_PACKAGE_GRANTLEE),y)
+> -CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=ON
+> -else
+> -CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=OFF
+> -endif
 
-diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-index 438ac091c6..498d2d5545 100644
---- a/package/cutelyst/cutelyst.mk
-+++ b/package/cutelyst/cutelyst.mk
-@@ -13,22 +13,19 @@ CUTELYST_LICENSE_FILES = COPYING
- CUTELYST_DEPENDENCIES = qt5base
- 
- CUTELYST_CONF_OPTS += \
--	-DPLUGIN_CSRFPROTECTION=ON
--
--ifeq ($(BR2_PACKAGE_GRANTLEE),y)
--CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=ON
--else
--CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=OFF
--endif
-+	-DPLUGIN_CSRFPROTECTION=ON \
-+	-DPLUGIN_VIEW_GRANTLEE=OFF
- 
- ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
- CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=ON
-+CUTELYST_DEPENDENCIES += libpwquality
- else
- CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_JEMALLOC),y)
- CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=ON
-+CUTELYST_DEPENDENCIES += jemalloc
- else
- CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=OFF
- endif
+I've kept an unconditional -DPLUGIN_VIEW_GRANTLEE=OFF to make sure that
+grantlee support is always disabled, even if grantlee gets
+built/installed before cutelyst.
+
+However, there are other build issues of the cutelyst package which
+don't seem to be related:
+
+ - http://autobuild.buildroot.net/results/b4b/b4bd0807fed721d8f553f1392e7d1fa51545d046/build-end.log
+
+   Lots of Qt/C++ errors.
+
+ - http://autobuild.buildroot.net/results/555/555cf0cd59c9c832b15c604dae5bad3640f8b450/build-end.log
+
+   Doxygen missing. We have a host-doxygen package in Buildroot, but it
+   would be a lot nicer of Cutelyst would not require Doxygen. Any
+   chance to make this optional ? We don't really care about building
+   documentation in the context of Buildroot.
+
+ - http://autobuild.buildroot.net/results/771/7716878c3a26b93417188ad7eac91ace172815bb/build-end.log
+
+   lrelease not found
+
+Could you have a look at those remaining build issues ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
