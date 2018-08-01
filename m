@@ -1,37 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 1 Aug 2018 14:27:34 +0200
-Subject: [Buildroot] [git commit] firmware-imx: fix EULA and COPYING hashes
-Message-ID: <20180801122143.F237C8B3B5@busybox.osuosl.org>
+Date: Wed, 1 Aug 2018 14:28:13 +0200
+Subject: [Buildroot] [PATCH] firmware-imx: fix EULA and COPYING hashes
+In-Reply-To: <20180801082100.18394-1-gary.bisson@boundarydevices.com>
+References: <20180801082100.18394-1-gary.bisson@boundarydevices.com>
+Message-ID: <20180801142813.768e8086@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=752fda66012eb6018435d1c5e8d6dd18cd483c17
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-NXP updated their EULA text to 2018.
-Also add QCA text for their WiFi module firmware files.
+On Wed,  1 Aug 2018 10:21:00 +0200, Gary Bisson wrote:
+> NXP updated their EULA text to 2018.
+> Also add QCA text for their WiFi module firmware files.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/144c3ac1902be605ca221e5685b13ba22db9a70e/
+> http://autobuild.buildroot.net/results/c8f787cc5309a9d216fb74b13e700e520facef64/
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+> ---
+>  package/freescale-imx/firmware-imx/firmware-imx.hash | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Fixes:
-http://autobuild.buildroot.net/results/144c3ac1902be605ca221e5685b13ba22db9a70e/
-http://autobuild.buildroot.net/results/c8f787cc5309a9d216fb74b13e700e520facef64/
+Applied to master, thanks.
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/freescale-imx/firmware-imx/firmware-imx.hash | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
-index c4930bb67d..c22ee4c192 100644
---- a/package/freescale-imx/firmware-imx/firmware-imx.hash
-+++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
- sha256 a8f099bdf786b2da1e8b43094950c033ccdbf93f1b8a93caffb912e1500cd735  firmware-imx-7.5.bin
--sha256 faf01d10e484879247963eb97d96622a980232e22a35e487dfe53b13708b686a  EULA
--sha256 0f34f6175247762e2e1c38319aadf657a53f00ce124e569dfc61b30451549e7a  COPYING
-+sha256 fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
-+sha256 78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
