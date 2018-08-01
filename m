@@ -1,68 +1,51 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Aug 2018 22:20:40 +0200
-Subject: [Buildroot] [RFC] [PATCH v2 2/2] support/kconfig: Bump to
- kconfig from Linux 4.17-rc2
-In-Reply-To: <20180801194230.GC2294@scaer>
-References: <20180520144141.GB3453@scaer> <20180520165009.56b44d9b@windsurf>
- <dcf8150e-1eb1-ba10-09e6-d3eb0bffaf2b@mind.be>
- <20180528203743.GK2965@scaer>
- <67a166b0-1466-8bd9-86be-3a8f3d7a4079@mind.be>
- <20180730150433.704e57ef@windsurf>
- <9ec69586-1154-f4e3-2fff-4f831263eef0@mind.be>
- <20180731100646.3221056f@windsurf>
- <785d0b36-933c-34a6-031d-c8201971c2ea@mind.be>
- <20180801194230.GC2294@scaer>
-Message-ID: <20180801202040.GD2294@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  1 Aug 2018 22:55:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv3: fix build with gcc bug
+ 64735
+Message-ID: <20180801205528.22387-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout, All,
+OpenCV3 allows to disable the usage of std::exception_ptr:
+https://github.com/opencv/opencv/issues/11878#issuecomment-402099255
 
-On 2018-08-01 21:42 +0200, Yann E. MORIN spake thusly:
-> On 2018-07-31 10:20 +0200, Arnout Vandecappelle spake thusly:
-> > On 31-07-18 10:06, Thomas Petazzoni wrote:
-> > > On Tue, 31 Jul 2018 09:55:42 +0200, Arnout Vandecappelle wrote:
-> > >>>>> We're only talking about dropping the need for host-flex and host-bison
-> > >>>>> for the kconfig stuff.
+Fixes
+http://autobuild.buildroot.net/results/5ca/5ca221792c72c0a19f8b0e8303c0603d28f3c48e/
 
-And currently, even though we have dependencies on host-flex and
-host-bison, we are broke.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/opencv3/opencv3.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-    $ make distclean
-    $ make menuconfig
-      --> enable the linux kernel, choose a defconfig, save, exit
-    $ make linux-menuconfig
-    [...]
-      HOSTCC  scripts/basic/fixdep
-      HOSTCC  scripts/kconfig/conf.o
-      YACC    scripts/kconfig/zconf.tab.c
-    /bin/sh: bison: command not found
-      LEX     scripts/kconfig/zconf.lex.c
-    scripts/Makefile.lib:196: recipe for target 'scripts/kconfig/zconf.tab.c' failed
-    make[3]: *** [scripts/kconfig/zconf.tab.c] Error 127
-    make[3]: *** Waiting for unfinished jobs....
-    /bin/sh: flex: command not found
-    scripts/Makefile.lib:188: recipe for target 'scripts/kconfig/zconf.lex.c' failed
-    make[3]: *** [scripts/kconfig/zconf.lex.c] Error 127
-    Makefile:528: recipe for target 'rpc_defconfig' failed
-    make[2]: *** [rpc_defconfig] Error 2
-    linux/linux.mk:511: recipe for target '/home/ymorin/dev/buildroot/buildroot/output/build/linux-4.17.11/.config' failed
-    make[1]: *** [/home/ymorin/dev/buildroot/buildroot/output/build/linux-4.17.11/.config] Error 2
-    Makefile:79: recipe for target '_all' failed
-    make: *** [_all] Error 2
-
-So we already need to add dependencies for the kconfig step...
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 09455d61b2..ea4d22743f 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -11,13 +11,21 @@ OPENCV3_LICENSE = BSD-3-Clause
+ OPENCV3_LICENSE_FILES = LICENSE
+ OPENCV3_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
++OPENCV3_CXXFLAGS = $(TARGET_CXXFLAGS)
++
+ # Uses __atomic_fetch_add_4
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-OPENCV3_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
++OPENCV3_CXXFLAGS += -latomic
++endif
++
++# Fix c++11 build with missing std::exception_ptr
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_64735),y)
++OPENCV3_CXXFLAGS += -DCV__EXCEPTION_PTR=0
+ endif
+ 
+ # OpenCV component options
+ OPENCV3_CONF_OPTS += \
++	-DCMAKE_CXX_FLAGS="$(OPENCV3_CXXFLAGS)" \
+ 	-DBUILD_DOCS=OFF \
+ 	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),ON,OFF) \
+ 	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_TESTS),ON,OFF) \
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.18.0
