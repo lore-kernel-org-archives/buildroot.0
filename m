@@ -1,45 +1,75 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Aug 2018 23:12:47 +0200
-Subject: [Buildroot] [PATCH] linux: kconfig needs the toolchain
-In-Reply-To: <20180801154832.GB2294@scaer>
-References: <20180731201617.20829-1-yann.morin.1998@free.fr>
- <d703b5fb-a3e9-6398-c5e8-bf63c25ba106@mind.be>
- <20180801083541.653e1abc@windsurf> <20180801154832.GB2294@scaer>
-Message-ID: <20180801211247.GE2294@scaer>
+Date: Wed,  1 Aug 2018 23:23:37 +0200
+Subject: [Buildroot] [PATCH 0/3 v2] core/pkg-kconfig: ensure we have
+ necessary tools to run configurators
+Message-ID: <cover.1533158588.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout, All,
+Hello All!
 
-On 2018-08-01 17:48 +0200, Yann E. MORIN spake thusly:
-> On 2018-08-01 08:35 +0200, Thomas Petazzoni spake thusly:
-> > On Wed, 1 Aug 2018 00:21:18 +0200, Arnout Vandecappelle wrote:
-> > > > Like is done in the kconfig-package infra for the dependency on
-> > > > $(1)-patch, we use an order-only prerequisites on the toolchain,
-> > > > to guarantee the compiler is available before we can display the
-> > > > kconfig of the kernel.  
-[--SNIP--]
-> > This could even be pushed one level up to the pkg-kconfig
-> > infrastructure, as we're pretty likely to see other packages go down
-> > this route in the future maybe ? Of course, it should be optional.
-> 
-> Well, I also thought about that, but decided against, because we don't
-> want to generalise a behaviour based on a single case.
-[--SNIP--]
-> So I'd prefer waiting, and hard-coding that one peculiarity within the
-> only user so far, the linux kernel.
+Recent version of the linux kernel introduced major changes in the
+kconfig infrastructure.
 
-And now, I changed my mind, seeing that the curent state of oaffairs
-with host-flex and host-bison is already broken...
+Starting with linux-4.16, the kconfig parser code is no longer shipped
+with the linux source tree, and mut be generated from the lex/yacc
+parser sources.
 
-I'll post an updated series that implements this at the kconfig level
-soon-ish.
+Similarly, starting with linux-4.18, the kconfig infra allows calling
+back to the shell to run various commands, especially calling to the
+compiler to test its features (and hide/show options accordingly).
+
+So, we need to ensure the appropriate tools are available before we
+attempt to run any of the configurators.
+
+This three-fold series firs introduces the necessary chjanges in the
+kconfig infrastructure, so that packages can specify dependencies to be
+built and installed before the configurators are run.
+
+Then, the linux package is fixed to take advantage of that forits
+dependencies on host-flex and host-bison.
+
+Finally, the linux package is also fixed to guarantee the toolchain is
+available for the configurators.
+
+
+Changes v1 -> v2:
+  - introduce the KCONFIG_DEPENDENCIES in the kconfig-package infra
+    (Thomas)
+  - change linux to take advantage of that  (Thomas)
+
 
 Regards,
 Yann E. MORIN.
+
+
+The following changes since commit 81ea4a243b63d7bb1fec580910c553af4ae072c1
+
+  package/lttng-tools: bump version to 2.10.5 (2018-08-01 14:28:30 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to c524705de894ee785cb185668ab2d84a48a7218f
+
+  linux: kconfig needs the toolchain (2018-08-01 23:20:40 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      core/pkg-kconfig: allow dependencies before configurators
+      linux: kconfig needs host-{flex,bison} to build the configurators
+      linux: kconfig needs the toolchain
+
+ docs/manual/adding-packages-kconfig.txt |  4 ++++
+ linux/linux.mk                          | 16 +++++++++++++++-
+ package/pkg-kconfig.mk                  |  9 +++++++++
+ 3 files changed, 28 insertions(+), 1 deletion(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
