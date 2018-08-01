@@ -1,42 +1,35 @@
-From: Artem Panfilov <apanfilov@spectracom.com>
-Date: Wed,  1 Aug 2018 10:41:08 +0300
-Subject: [Buildroot] [PATCH 1/1] package/polkit: bump version to 1.105
-Message-ID: <20180801074108.8926-1-apanfilov@spectracom.com>
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed,  1 Aug 2018 10:21:00 +0200
+Subject: [Buildroot] [PATCH] firmware-imx: fix EULA and COPYING hashes
+Message-ID: <20180801082100.18394-1-gary.bisson@boundarydevices.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes build issue with network-manager package when polkit package is
-enabled.
+NXP updated their EULA text to 2018.
+Also add QCA text for their WiFi module firmware files.
 
-Signed-off-by: Artem Panfilov <apanfilov@spectracom.com>
+Fixes:
+http://autobuild.buildroot.net/results/144c3ac1902be605ca221e5685b13ba22db9a70e/
+http://autobuild.buildroot.net/results/c8f787cc5309a9d216fb74b13e700e520facef64/
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 ---
- package/polkit/polkit.hash | 2 +-
- package/polkit/polkit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/polkit/polkit.hash b/package/polkit/polkit.hash
-index 5e133b43e2..b4a1a854c5 100644
---- a/package/polkit/polkit.hash
-+++ b/package/polkit/polkit.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256	36607c8ce576980ee55bd12bab1944f13217eb8e9d04ab56022545861ece3bc5	polkit-0.103.tar.gz
-+sha256	8fdc7cc8ba4750fcce1a4db9daa759c12afebc7901237e1c993c38f08985e1df	polkit-0.103.tar.gz
-diff --git a/package/polkit/polkit.mk b/package/polkit/polkit.mk
-index e283181427..fb4c171c52 100644
---- a/package/polkit/polkit.mk
-+++ b/package/polkit/polkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POLKIT_VERSION = 0.103
-+POLKIT_VERSION = 0.105
- POLKIT_SITE = http://www.freedesktop.org/software/polkit/releases
- POLKIT_LICENSE = GPL-2.0
- POLKIT_LICENSE_FILES = COPYING
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index c4930bb67d..c22ee4c192 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+ sha256 a8f099bdf786b2da1e8b43094950c033ccdbf93f1b8a93caffb912e1500cd735  firmware-imx-7.5.bin
+-sha256 faf01d10e484879247963eb97d96622a980232e22a35e487dfe53b13708b686a  EULA
+-sha256 0f34f6175247762e2e1c38319aadf657a53f00ce124e569dfc61b30451549e7a  COPYING
++sha256 fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
++sha256 78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
 -- 
-2.17.1
+2.18.0
