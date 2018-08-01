@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 1 Aug 2018 08:35:41 +0200
-Subject: [Buildroot] [PATCH] linux: kconfig needs the toolchain
-In-Reply-To: <d703b5fb-a3e9-6398-c5e8-bf63c25ba106@mind.be>
-References: <20180731201617.20829-1-yann.morin.1998@free.fr>
- <d703b5fb-a3e9-6398-c5e8-bf63c25ba106@mind.be>
-Message-ID: <20180801083541.653e1abc@windsurf>
+Date: Wed, 1 Aug 2018 08:39:38 +0200
+Subject: [Buildroot] [RFC PATCH] host-localedef: Compile against glibc
+In-Reply-To: <8e693163a5a63640325889d8a100b9fe01a2a9f1.camel@mendozajonas.com>
+References: <20180730053936.26460-1-sam@mendozajonas.com>
+ <20180731225540.3cd9fcd8@windsurf>
+ <8e693163a5a63640325889d8a100b9fe01a2a9f1.camel@mendozajonas.com>
+Message-ID: <20180801083938.23914da0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +14,49 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 1 Aug 2018 00:21:18 +0200, Arnout Vandecappelle wrote:
+On Wed, 01 Aug 2018 11:31:16 +1000, Samuel Mendoza-Jonas wrote:
 
-> > Like is done in the kconfig-package infra for the dependency on
-> > $(1)-patch, we use an order-only prerequisites on the toolchain,
-> > to guarantee the compiler is available before we can display the
-> > kconfig of the kernel.  
->  You actually want to say here why an order-only dependency and not a normal
-> dependency: "Since 'toolchain' is a phony target and therefore always out of
-> date, a normal dependency would cause the .config target to be rebuilt on each
-> invocation of make."
+> I think it's a bit of both; 2.27 introduces new locale descriptions which
+> localedef can't handle, eg:
+> 
+> Generating locale ru_RU.UTF-8
+> /scratch/jenkins-workspace/op-build-upstream/output/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/ru_RU:125: LC_TIME:syntax error
+> /scratch/jenkins-workspace/op-build-upstream/output/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/ru_RU:149: LC_TIME:syntax error
 
-When looking at the patch, my initial reaction was: why is the
-dependency on the .config file, rather than on the
--menuconfig/-xconfig/-nconfig/... targets. Those are phony targets, so
-a normal dependency would work.
+Ah, so I guess this update of localedef is going to fix
+https://bugs.busybox.net/show_bug.cgi?id=11096.
 
-This could even be pushed one level up to the pkg-kconfig
-infrastructure, as we're pretty likely to see other packages go down
-this route in the future maybe ? Of course, it should be optional.
+> And we fall back to the C locale at runtime (at least in my environment).
+> I'll stare at the glibc release notes / bug report a bit more and see if
+> I can make a more legible explanation.
+
+Would be nice, though it generally makes sense to have a localedef
+implementation that is in sync with glibc.
+
+> > See how they are doing it in PTXdist:
+> > https://git.pengutronix.de/cgit/ptxdist/tree/rules/host-localedef.make.
+> > Most likely using the locale/others make target will help cut the build
+> > time significantly.  
+> 
+> Yes this is the contentious part, we're building a whole glibc. Unfortunately
+> if we want to build just the locale/others target like PTXdist we also need
+> their bonus patch to glibc:
+> https://git.pengutronix.de/cgit/ptxdist/tree/patches/localedef-glibc-2.27/0001-HACK-only-build-and-install-localedef.patch
+> 
+> Otherwise the build fails with, for example:
+> 
+> make[4]: *** No rule to make target '/scratch/builds/locales/build/host-localedef-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e/build/elf/soinit.os', needed by '/scratch/builds/locales/build/host-localedef-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e/build/libc.so'.  Stop.
+> Makefile:215: recipe for target 'locale/others' failed
+> make[3]: *** [locale/others] Error 2
+> Makefile:9: recipe for target 'locale/others' failed
+> make[2]: *** [locale/others] Error 2
+> 
+> So the tradeoff is adding a few minutes of extra build time versus carrying
+> a bit of a hack to enable just the localedef/others target.
+
+Their patch is not that crazy IMO, it should be too complicated to
+maintain. Perhaps we could even improve it a bit further to make it
+acceptable upstream ?
 
 Best regards,
 
