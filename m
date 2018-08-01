@@ -1,41 +1,44 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed,  1 Aug 2018 14:57:18 +0200
-Subject: [Buildroot] [PATCH 1/4] minicom: update package to use git
- repository.
+Date: Wed,  1 Aug 2018 14:57:19 +0200
+Subject: [Buildroot] [PATCH 2/4] minicom: add pre-configure hook to call
+ autogen.sh
 In-Reply-To: <20180801125721.34654-1-giulio.benetti@micronovasrl.com>
 References: <20180801125721.34654-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20180801125721.34654-2-giulio.benetti@micronovasrl.com>
+Message-ID: <20180801125721.34654-3-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Minicom is now hosted on a git repository:
-https://salsa.debian.org/minicom-team/minicom.git
+Using latest minicom git commit need to call autogen.sh instead of
+relying on Buildroot MINICOM_AUTORECONF = YES
 
-Change package to use git method pointing to last commit.
+Add MINICOM_RUN_AUTOGEN to MINICOM_PRE_CONFIGURE_HOOKS and dependencies
+needed by autogen.sh like: host-automake, host-autoconf, host-libtool.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/minicom/minicom.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/minicom/minicom.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-index cb06482379..1a3426899f 100644
+index 1a3426899f..91eb74c9ad 100644
 --- a/package/minicom/minicom.mk
 +++ b/package/minicom/minicom.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+@@ -18,4 +18,13 @@ MINICOM_CONF_ENV = PKG_CONFIG=/bin/false
  
--MINICOM_VERSION = 2.7.1
--MINICOM_SITE = https://alioth.debian.org/frs/download.php/file/4215
-+MINICOM_VERSION = 0e79d0bb731a16a3126d926740f923bcb6ecd738
-+MINICOM_SITE = https://salsa.debian.org/minicom-team/minicom.git
-+MINICOM_SITE_METHOD = git
- MINICOM_LICENSE = GPL-2.0+
- MINICOM_LICENSE_FILES = COPYING
+ MINICOM_DEPENDENCIES = ncurses $(if $(BR2_ENABLE_LOCALE),,libiconv)
  
++# configure is missing and minicom is not compatible with our autoreconf
++# mechanism so we have to do it manually instead of using MINICOM_AUTORECONF = YES
++define MINICOM_RUN_AUTOGEN
++	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
++endef
++MINICOM_PRE_CONFIGURE_HOOKS += MINICOM_RUN_AUTOGEN
++
++MINICOM_DEPENDENCIES += host-automake host-autoconf host-libtool
++
+ $(eval $(autotools-package))
 -- 
 2.17.1
