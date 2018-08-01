@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 1 Aug 2018 14:28:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdrm: bump version to 2.4.93
-In-Reply-To: <20180801053928.19246-1-bernd.kuhls@t-online.de>
-References: <20180801053928.19246-1-bernd.kuhls@t-online.de>
-Message-ID: <20180801142852.52313045@windsurf>
+Date: Wed, 1 Aug 2018 14:29:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lttng-tools: bump version to
+ 2.10.5
+In-Reply-To: <20180801061447.28214-1-bernd.kuhls@t-online.de>
+References: <20180801061447.28214-1-bernd.kuhls@t-online.de>
+Message-ID: <20180801142909.27deaa87@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,12 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  1 Aug 2018 07:39:28 +0200, Bernd Kuhls wrote:
+On Wed,  1 Aug 2018 08:14:47 +0200, Bernd Kuhls wrote:
+> Added sha256 and license hashes, switched _SITE to https.
+> 
+> This bump includes
+> https://github.com/lttng/lttng-tools/commit/b4cf0332cc1164684bbc708b6c46c1d69a15b847
+> which fixes a musl build error:
+> http://autobuild.buildroot.net/results/09d/09d6d5e2d1c50dbd6c026e12aa245fc90687eb19/
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libdrm/libdrm.hash | 10 +++++-----
->  package/libdrm/libdrm.mk   |  2 +-
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  package/lttng-tools/lttng-tools.hash | 11 ++++++++---
+>  package/lttng-tools/lttng-tools.mk   |  4 ++--
+>  2 files changed, 10 insertions(+), 5 deletions(-)
 
 Applied to master, thanks.
 
