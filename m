@@ -1,42 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 1 Aug 2018 14:16:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/polkit: bump version to 1.105
-In-Reply-To: <20180801074108.8926-1-apanfilov@spectracom.com>
-References: <20180801074108.8926-1-apanfilov@spectracom.com>
-Message-ID: <20180801141630.1afe4809@windsurf>
+Date: Wed, 1 Aug 2018 14:17:11 +0200
+Subject: [Buildroot] [git commit] package/cutelyst: fix build dependencies
+Message-ID: <20180801121359.75EDE8B3B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Artem,
+commit: https://git.buildroot.net/buildroot/commit/?id=36514a415d39e9876b93b5efa015382755ccd039
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  1 Aug 2018 10:41:08 +0300, Artem Panfilov wrote:
-> Fixes build issue with network-manager package when polkit package is
-> enabled.
-> 
-> Signed-off-by: Artem Panfilov <apanfilov@spectracom.com>
-> ---
->  package/polkit/polkit.hash | 2 +-
->  package/polkit/polkit.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+This commit adds missing optional dependencies on libpwquality and
+jemalloc.
 
-I've applied to master. However, your change to the .hash file was
-wrong, and it couldn't build with it:
+The optional dependency on grantlee is removed, because it fails to
+build, so we explicitly disable grantlee support.
 
-ERROR: No hash found for polkit-0.105.tar.gz
-make[1]: *** [package/pkg-generic.mk:138: /home/thomas/projets/buildroot/output/build/polkit-0.105/.stamp_downloaded] Error 1
-make: *** [Makefile:79: _all] Error 2
+  http://autobuild.buildroot.net/results/ecbe25728a81f13e35a4315b64aacb8e592f5867/ (jemalloc)
+  http://autobuild.buildroot.net/results/84c29fc0d6212f33ff1efdf8495cbb84e4eeed65/ (grantlee)
 
-Indeed, you changed the hash, but not the name of the tarball.
+Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
+[Thomas: explicitly disable grantlee support.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cutelyst/cutelyst.mk | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-I've fixed that up, and also extended the commit log with more details.
-
-Thanks a lot for this contribution!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
+index 438ac091c6..498d2d5545 100644
+--- a/package/cutelyst/cutelyst.mk
++++ b/package/cutelyst/cutelyst.mk
+@@ -13,22 +13,19 @@ CUTELYST_LICENSE_FILES = COPYING
+ CUTELYST_DEPENDENCIES = qt5base
+ 
+ CUTELYST_CONF_OPTS += \
+-	-DPLUGIN_CSRFPROTECTION=ON
+-
+-ifeq ($(BR2_PACKAGE_GRANTLEE),y)
+-CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=ON
+-else
+-CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=OFF
+-endif
++	-DPLUGIN_CSRFPROTECTION=ON \
++	-DPLUGIN_VIEW_GRANTLEE=OFF
+ 
+ ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
+ CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=ON
++CUTELYST_DEPENDENCIES += libpwquality
+ else
+ CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_JEMALLOC),y)
+ CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=ON
++CUTELYST_DEPENDENCIES += jemalloc
+ else
+ CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=OFF
+ endif
