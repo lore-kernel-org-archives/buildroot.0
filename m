@@ -1,63 +1,65 @@
-From: David De Grave (Essensium/Mind) <david.degrave@mind.be>
-Date: Wed,  1 Aug 2018 16:33:36 +0200
-Subject: [Buildroot] [PATCH v2 1/1] boot/uboot: missing dtc build dependency
-Message-ID: <20180801143336.25420-1-david.degrave@mind.be>
+From: David De Grave <david.degrave@mind.be>
+Date: Wed, 1 Aug 2018 16:36:49 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: Really use host-dtc
+In-Reply-To: <20180801124352.0dfa6670@windsurf>
+References: <20180726103630.8643-1-david.degrave@mind.be>
+ <20180726103630.8643-2-david.degrave@mind.be>
+ <20180728214834.3496b200@windsurf>
+ <CAD6XyYyrv809pmGMg3M_9wFekQ2c1JfnKRQ3w8bvqFhG4tVYeA@mail.gmail.com>
+ <20180731205154.62967de8@windsurf>
+ <ea2ac147-3c9f-a85d-83ea-84f33a0d52e4@mind.be>
+ <20180801090548.0c92457b@windsurf>
+ <CAD6XyYyJn23DXau0VfHOAL03ouY72Pt2GoFu8sQ3rU6xDugVgg@mail.gmail.com>
+ <20180801124352.0dfa6670@windsurf>
+Message-ID: <CAD6XyYyTuHtcPp0BQqRX68CdFcJVGm8SSra3YSKVHoyvOuN6Ng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When trying to include multiple DTBs in a FIT image for u-boot, the
-device tree compiler (dtc) is not build as expected and fails with the
-following error:
+Hi Thomas,
 
-  DTC     arch/arm/dts/foo.dtb
-/bin/sh: ./scripts/dtc/dtc: No such file or directory
-make[4]: *** [scripts/Makefile.lib:329: arch/arm/dts/foo.dtb] Error 127
+On Wed, Aug 1, 2018 at 12:43 PM, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-Using host-dtc instead leads to more problems than it solves and is
-kept to support older versions of u-boot where dtc support were not
-provided.
+> Hello,
+>
+> On Wed, 1 Aug 2018 12:36:16 +0200, David De Grave wrote:
+>
+> > In the other hand, using the host-dtc is working but lead to other
+> problems:
+>
+> So, using the U-Boot provided DTC is better when available. So indeed,
+> I think you should just fix U-Boot so that when it
+> uses ./scripts/dtc/dtc, it builds it first :-)
+>
 
-So better to keep using the U-Boot provided dtc and add a patch to fix
-this issue by adding a dependency on OF_CONTROL for OF_LIST and
-by selecting DTC for MULTI_DTB_FIT in dts/Kconfig.
+Indeed it sounds a better approach and submitted a new patch. Not sure
+however if
+it's well done. At least everything is running fine now on my side.
 
-Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
 
----
- v2: Add patch to fix the dependencies in Kconfig as noticed by Arnout
- v1: Tried to use HOST_DTC
----
- .../0001-missing-dtc-dependency-in-kconfig.patch      | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 boot/uboot/2018.01/0001-missing-dtc-dependency-in-kconfig.patch
+> DEVICE_TREE ?= $(CONFIG_DEFAULT_DEVICE_TREE:"%"=%)
+> ifeq ($(DEVICE_TREE),)
+> DEVICE_TREE := unset
+> endif
+>
+> This is where your unset.dts comes from.
+>
 
-diff --git a/boot/uboot/2018.01/0001-missing-dtc-dependency-in-kconfig.patch b/boot/uboot/2018.01/0001-missing-dtc-dependency-in-kconfig.patch
-new file mode 100644
-index 0000000000..28ebf50185
---- /dev/null
-+++ b/boot/uboot/2018.01/0001-missing-dtc-dependency-in-kconfig.patch
-@@ -0,0 +1,19 @@
-+diff -ru a/dts/Kconfig b/dts/Kconfig
-+--- a/dts/Kconfig	2018-01-09 02:25:29.000000000 +0100
-++++ b/dts/Kconfig	2018-08-01 15:35:57.676153869 +0200
-+@@ -113,6 +113,7 @@
-+ 
-+ config OF_LIST
-+ 	string "List of device tree files to include for DT control"
-++	depends on OF_CONTROL
-+ 	depends on SPL_LOAD_FIT || MULTI_DTB_FIT
-+ 	default DEFAULT_DEVICE_TREE
-+ 	help
-+@@ -135,6 +136,7 @@
-+ 
-+ config MULTI_DTB_FIT
-+ 	bool "Support embedding several DTBs in a FIT image for u-boot"
-++	select DTC
-+ 	help
-+ 	  This option provides hooks to allow U-boot to parse an
-+ 	  appended FIT image and enable board specific code to then select
+Indeed. Thx! :-)
+
+Regards,
+David.
+
 -- 
-2.13.6
+
+*David De Grave*
+Senior Embedded Software Developer
+Gsm : +32(0)496.364.960 | Tel : +32-16-28.65.00 | Fax : +32-16-28a.65.01
+Essensium-Mind <https://www.mind.be/> - Gaston Geenslaan 9, B-3001 Leuven,
+Belgium
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180801/3c434e2a/attachment.html>
