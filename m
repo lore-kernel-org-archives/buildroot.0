@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 1 Aug 2018 16:47:54 +0200
-Subject: [Buildroot] [PATCH 0/4] minicom: update to use latest git
- repository
-In-Reply-To: <20180801125721.34654-1-giulio.benetti@micronovasrl.com>
+Date: Wed, 1 Aug 2018 16:48:52 +0200
+Subject: [Buildroot] [PATCH 2/4] minicom: add pre-configure hook to call
+ autogen.sh
+In-Reply-To: <20180801125721.34654-3-giulio.benetti@micronovasrl.com>
 References: <20180801125721.34654-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20180801164754.72a97112@windsurf>
+ <20180801125721.34654-3-giulio.benetti@micronovasrl.com>
+Message-ID: <20180801164852.7afe9c99@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,16 +14,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  1 Aug 2018 14:57:17 +0200, Giulio Benetti wrote:
+On Wed,  1 Aug 2018 14:57:19 +0200, Giulio Benetti wrote:
+> Using latest minicom git commit need to call autogen.sh instead of
+> relying on Buildroot MINICOM_AUTORECONF = YES
+> 
+> Add MINICOM_RUN_AUTOGEN to MINICOM_PRE_CONFIGURE_HOOKS and dependencies
+> needed by autogen.sh like: host-automake, host-autoconf, host-libtool.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-> Giulio Benetti (4):
->   minicom: update package to use git repository.
->   minicom: add pre-configure hook to call autogen.sh
->   minicom: delete patches
->   minicom: delete hash file.
-
-All these patches should be just one, otherwise your series is not
-bisectable.
+Looking at the autogen.sh script, I don't see anything fancy. What is
+happening when you use MINICOM_AUTORECONF = YES ?
 
 Best regards,
 
