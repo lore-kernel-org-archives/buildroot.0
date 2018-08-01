@@ -1,88 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 1 Aug 2018 17:39:04 +0200
+Date: Wed, 1 Aug 2018 17:48:32 +0200
 Subject: [Buildroot] [PATCH] linux: kconfig needs the toolchain
-In-Reply-To: <d703b5fb-a3e9-6398-c5e8-bf63c25ba106@mind.be>
+In-Reply-To: <20180801083541.653e1abc@windsurf>
 References: <20180731201617.20829-1-yann.morin.1998@free.fr>
  <d703b5fb-a3e9-6398-c5e8-bf63c25ba106@mind.be>
-Message-ID: <20180801153904.GA2294@scaer>
+ <20180801083541.653e1abc@windsurf>
+Message-ID: <20180801154832.GB2294@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Thomas, All,
 
-On 2018-08-01 00:21 +0200, Arnout Vandecappelle spake thusly:
-> On 31-07-18 22:16, Yann E. MORIN wrote:
-> > Starting with linux-4.18, the kconfig from the kernel can call
-> > to the compiler to test its capabilities; see:
-> > 
-> >     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/Kconfig.include
-> > 
-> > Like is done in the kconfig-package infra for the dependency on
-> > $(1)-patch, we use an order-only prerequisites on the toolchain,
-> > to guarantee the compiler is available before we can display the
-> > kconfig of the kernel.
->  You actually want to say here why an order-only dependency and not a normal
-> dependency: "Since 'toolchain' is a phony target and therefore always out of
-> date, a normal dependency would cause the .config target to be rebuilt on each
-> invocation of make."
-
-ACK
-
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > ---
-> >  linux/linux.mk | 7 +++++++
-> >  1 file changed, 7 insertions(+)
-> > 
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index 7527b11673..63c649ce83 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -510,6 +510,13 @@ endif # BR_BUILDING
-> >  
-> >  $(eval $(kconfig-package))
-> >  
-> > +# Starting with linux-4.18, the kconfig in the kernel calls
-> > +# the cross-compiler to check its capabilities. So we need
-> > +# the toolchain before we can call our configurators.
-> > +# Also, since we need LINUX_DIR, we must be after the call
-> > +# to kconfig-package, above.
-> > +$(LINUX_DIR)/.config: | toolchain
+On 2018-08-01 08:35 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 1 Aug 2018 00:21:18 +0200, Arnout Vandecappelle wrote:
+> > > Like is done in the kconfig-package infra for the dependency on
+> > > $(1)-patch, we use an order-only prerequisites on the toolchain,
+> > > to guarantee the compiler is available before we can display the
+> > > kconfig of the kernel.  
+> >  You actually want to say here why an order-only dependency and not a normal
+> > dependency: "Since 'toolchain' is a phony target and therefore always out of
+> > date, a normal dependency would cause the .config target to be rebuilt on each
+> > invocation of make."
 > 
->  I think we want to avoid using LINUX_DIR, and instead use LINUX_SRCDIR or
-> LINUX_BUILDDIR, no? For the eventual source/build directory split?
+> When looking at the patch, my initial reaction was: why is the
+> dependency on the .config file, rather than on the
+> -menuconfig/-xconfig/-nconfig/... targets. Those are phony targets, so
+> a normal dependency would work.
 
-Well, LINUX_DIR is already used below, for the rules doing the rebuild
-with the initramfs.
+We need the toolchain to generate the .config file, even in a nromal
+build, i.e. not just for the menuconfig et al.
 
-And I don't want to mix-n-match the variables just yet...
+I.e. running 'make clean; make' should also build the toolchain before
+the linux configuration, which is part of the kconfig infra.
 
-But if the consensus from others point toward using LINUX_BUILDDIR, then
-I'll change.
+Agreed that it would not happen in practice, but for theoretical
+correctness, it is also needed in this case.
+
+> This could even be pushed one level up to the pkg-kconfig
+> infrastructure, as we're pretty likely to see other packages go down
+> this route in the future maybe ? Of course, it should be optional.
+
+Well, I also thought about that, but decided against, because we don't
+want to generalise a behaviour based on a single case.
+
+As for the configurability, I would have gone with:
+
+    FOO_KCONFIG_NEEDS_CC = YES
+
+because that is actually what it wants currently.
+
+But in the future, it might also want to call 'dtc' to check whether it
+supports overlays, or call 'openssl' to check if a cypher is available.
+So we'd have to expand this to:
+
+    FOO_KCONFIG_DEPENDENCIES = toolchain host-dtc host-openssl
+
+Or whatev'...
+
+So I'd prefer waiting, and hard-coding that one peculiarity within the
+only user so far, the linux kernel.
 
 Regards,
 Yann E. MORIN.
-
->  Regards,
->  Arnout
-> 
-> > +
-> >  # Support for rebuilding the kernel after the cpio archive has
-> >  # been generated.
-> >  .PHONY: linux-rebuild-with-initramfs
-> > 
-> 
-> -- 
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
