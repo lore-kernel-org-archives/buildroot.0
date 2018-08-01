@@ -1,11 +1,14 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 1 Aug 2018 08:39:38 +0200
-Subject: [Buildroot] [RFC PATCH] host-localedef: Compile against glibc
-In-Reply-To: <8e693163a5a63640325889d8a100b9fe01a2a9f1.camel@mendozajonas.com>
-References: <20180730053936.26460-1-sam@mendozajonas.com>
- <20180731225540.3cd9fcd8@windsurf>
- <8e693163a5a63640325889d8a100b9fe01a2a9f1.camel@mendozajonas.com>
-Message-ID: <20180801083938.23914da0@windsurf>
+Date: Wed, 1 Aug 2018 09:05:48 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: Really use host-dtc
+In-Reply-To: <ea2ac147-3c9f-a85d-83ea-84f33a0d52e4@mind.be>
+References: <20180726103630.8643-1-david.degrave@mind.be>
+ <20180726103630.8643-2-david.degrave@mind.be>
+ <20180728214834.3496b200@windsurf>
+ <CAD6XyYyrv809pmGMg3M_9wFekQ2c1JfnKRQ3w8bvqFhG4tVYeA@mail.gmail.com>
+ <20180731205154.62967de8@windsurf>
+ <ea2ac147-3c9f-a85d-83ea-84f33a0d52e4@mind.be>
+Message-ID: <20180801090548.0c92457b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +17,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 01 Aug 2018 11:31:16 +1000, Samuel Mendoza-Jonas wrote:
+On Wed, 1 Aug 2018 00:14:08 +0200, Arnout Vandecappelle wrote:
 
-> I think it's a bit of both; 2.27 introduces new locale descriptions which
-> localedef can't handle, eg:
+> > I think the optional dependency on host-dtc depends from a time where
+> > U-Boot did not have its own copy of DTC. I'm not sure it makes a lot of
+> > sense now.  
 > 
-> Generating locale ru_RU.UTF-8
-> /scratch/jenkins-workspace/op-build-upstream/output/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/ru_RU:125: LC_TIME:syntax error
-> /scratch/jenkins-workspace/op-build-upstream/output/host/powerpc64le-buildroot-linux-gnu/sysroot/usr/share/i18n/locales/ru_RU:149: LC_TIME:syntax error
+>  ... but we still want to support those older U-Boot versions, so we can't
+> remove it.
 
-Ah, so I guess this update of localedef is going to fix
-https://bugs.busybox.net/show_bug.cgi?id=11096.
+Absolutely.
 
-> And we fall back to the C locale at runtime (at least in my environment).
-> I'll stare at the glibc release notes / bug report a bit more and see if
-> I can make a more legible explanation.
+But the case found by David is not a case where U-Boot needs a DTC
+available on the host: it tries to use its own internal DTC, but
+forgets to build it. That's a bug in U-Boot.
 
-Would be nice, though it generally makes sense to have a localedef
-implementation that is in sync with glibc.
-
-> > See how they are doing it in PTXdist:
-> > https://git.pengutronix.de/cgit/ptxdist/tree/rules/host-localedef.make.
-> > Most likely using the locale/others make target will help cut the build
-> > time significantly.  
+>  Ideally, we should find out between which two versions it is needed, and
+> mention that in the help text.
 > 
-> Yes this is the contentious part, we're building a whole glibc. Unfortunately
-> if we want to build just the locale/others target like PTXdist we also need
-> their bonus patch to glibc:
-> https://git.pengutronix.de/cgit/ptxdist/tree/patches/localedef-glibc-2.27/0001-HACK-only-build-and-install-localedef.patch
+> > If U-Boot tries to use ./scripts/dtc/dtc, then it should have built it.
+> > If it didn't build it but tries to use it nonetheless, it sounds like a
+> > bug in U-Boot.  
 > 
-> Otherwise the build fails with, for example:
-> 
-> make[4]: *** No rule to make target '/scratch/builds/locales/build/host-localedef-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e/build/elf/soinit.os', needed by '/scratch/builds/locales/build/host-localedef-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e/build/libc.so'.  Stop.
-> Makefile:215: recipe for target 'locale/others' failed
-> make[3]: *** [locale/others] Error 2
-> Makefile:9: recipe for target 'locale/others' failed
-> make[2]: *** [locale/others] Error 2
-> 
-> So the tradeoff is adding a few minutes of extra build time versus carrying
-> a bit of a hack to enable just the localedef/others target.
+>  Oh yes, now I see it, it's indeed a bug in U-Boot. CONFIG_OF_LIST should either
+> depend on CONFIG_OF_CONTROL or select it, otherwise dtc is not built.
 
-Their patch is not that crazy IMO, it should be too complicated to
-maintain. Perhaps we could even improve it a bit further to make it
-acceptable upstream ?
+Right, so it's indeed a bug in U-Boot. That being said, the change
+proposed by David is not too bad: it makes sense to use the host DTC if
+it was built, rather than the one built by U-Boot. It's just that the
+initial problem explanation wasn't really complete enough, so I was a
+bit confused.
 
 Best regards,
 
