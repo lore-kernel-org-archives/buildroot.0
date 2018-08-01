@@ -1,58 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 1 Aug 2018 14:28:30 +0200
-Subject: [Buildroot] [git commit] package/lttng-tools: bump version to 2.10.5
-Message-ID: <20180801122241.99F0F7FF5C@busybox.osuosl.org>
+Date: Wed, 1 Aug 2018 14:28:24 +0200
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.93
+Message-ID: <20180801122241.8360D8B3C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81ea4a243b63d7bb1fec580910c553af4ae072c1
+commit: https://git.buildroot.net/buildroot/commit/?id=68ee9b075cb5c15eba0c53a9387a08b672b3012a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added sha256 and license hashes, switched _SITE to https.
-
-This bump includes
-https://github.com/lttng/lttng-tools/commit/b4cf0332cc1164684bbc708b6c46c1d69a15b847
-which fixes a musl build error:
-http://autobuild.buildroot.net/results/09d/09d6d5e2d1c50dbd6c026e12aa245fc90687eb19/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lttng-tools/lttng-tools.hash | 11 ++++++++---
- package/lttng-tools/lttng-tools.mk   |  4 ++--
- 2 files changed, 10 insertions(+), 5 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
-index 9756570f90..f6c01b7dec 100644
---- a/package/lttng-tools/lttng-tools.hash
-+++ b/package/lttng-tools/lttng-tools.hash
-@@ -1,3 +1,8 @@
--# From https://lttng.org/files/lttng-tools/lttng-tools-2.10.4.tar.bz2.{md5,sha1}
--md5 fb053baad7f5dc888880386525294659  lttng-tools-2.10.4.tar.bz2
--sha1 5cf77ad0d443a93d31ce54ceb3d64a7bb2b0db94  lttng-tools-2.10.4.tar.bz2
-+# From https://lttng.org/files/lttng-tools/lttng-tools-2.10.5.tar.bz2.{md5,sha1}
-+md5 50e07676d5eb5d6cf4ece804863a6f74  lttng-tools-2.10.5.tar.bz2
-+sha1 68790d44529a3b29896c35bb2350e8a0e1226264  lttng-tools-2.10.5.tar.bz2
-+# Locally computed
-+sha256 a4868078ef961e83dc236c4f24fd848161bfa755344b064dece62c4c81a07411  lttng-tools-2.10.5.tar.bz2
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
-+sha256 051be1f11b508ef7bb839994f6b58be19a827c56bd9bddfe36d77d3d4be55abe  lgpl-2.1.txt
-+sha256 f07515677547da5f3ee2396bdf491affc1accd5e4765a5378b6e1e98392fd5e7  LICENSE
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 452c944f3d..ce07ce4b52 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 52624b6a02..2043ee780e 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2018-May/176249.html
+-md5 f9b00d985f82d0be6ecc20c799acc89e  libdrm-2.4.92.tar.bz2
+-sha1 aad04c8e35cd3ab589ff085b20f75ba43e086647  libdrm-2.4.92.tar.bz2
+-sha256 e9e48fdb4de139dc4d9880aa1473158a16ff6aff63d14341367bd30a51ff39fa  libdrm-2.4.92.tar.bz2
+-sha512 9b75584d8957d298125884d490b74c0a641725d17088ba47f3dc2ec9d06519d8387eb464c024ee11712b31b17fb84e1a9a52bd4ebc7c316beb7d2f8711dc9eb2  libdrm-2.4.92.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2018-August/185041.html
++md5 0ba45ad1551b2c1b6df0797a3e65f827  libdrm-2.4.93.tar.bz2
++sha1 550ba4bb50236fc2e9138cbeadcb4942ce09410e  libdrm-2.4.93.tar.bz2
++sha256 6e84d1dc9548a76f20b59a85cf80a0b230cd8196084f5243469d9e65354fcd3c  libdrm-2.4.93.tar.bz2
++sha512 ba4221e8d6a3a9872fb6d30a0ea391e30ea0e17f249c66f067bed9c2161ed1ad8083959cb2c212834c6566c3e025f4daae31e9533d77aae19bbbbb9de6c2ab3d  libdrm-2.4.93.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 06b1144616..1871488284 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LTTNG_TOOLS_VERSION = 2.10.4
--LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
-+LTTNG_TOOLS_VERSION = 2.10.5
-+LTTNG_TOOLS_SITE = https://lttng.org/files/lttng-tools
- LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
- LTTNG_TOOLS_INSTALL_STAGING = YES
- LTTNG_TOOLS_LICENSE = GPL-2.0+, LGPL-2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
+-LIBDRM_VERSION = 2.4.92
++LIBDRM_VERSION = 2.4.93
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
