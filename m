@@ -1,56 +1,50 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu,  2 Aug 2018 09:38:30 +0300
-Subject: [Buildroot] [PATCH] glibc: Install iconvconfig on target with gconv
- libs
-Message-ID: <20180802063830.19364-1-abrodkin@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 2 Aug 2018 09:13:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5/qt5base: fix
+ PKG_CONFIG_LIBDIR
+In-Reply-To: <20180801201646.512-1-bernd.kuhls@t-online.de>
+References: <20180801201646.512-1-bernd.kuhls@t-online.de>
+Message-ID: <20180802091359.2387b7c1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In some cases we need to have gconv-modules.cache on target,
-for example see [1] or glibc's test-suite (iconv/test-iconvconfig).
+Hello,
 
-We do have iconvconfig installed in Buildroot's staging folder but
-it gets never installed on targe because instead of calling glibc's
-"install" target we simply copy a list of libs.
+On Wed,  1 Aug 2018 22:16:46 +0200, Bernd Kuhls wrote:
 
-So then let's copy oven iconvconfig there as well in a similar manner.
-Still we do it only if gconv libs are being copied otherwise it makes no
-sense I guess.
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 9eafd593f1..62199d8cb2 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -277,7 +277,7 @@ define QT5BASE_CONFIGURE_CMDS
+>  	(cd $(@D); \
+>  		$(TARGET_MAKE_ENV) \
+>  		PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+> -		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
+> +		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig:$(STAGING_DIR)/usr/share/pkgconfig" \
+>  		PKG_CONFIG_SYSROOT_DIR="$(STAGING_DIR)" \
 
-[1] http://lists.busybox.net/pipermail/buildroot/2013-July/075097.html
+Why are we passing PKG_CONFIG_LIBDIR and PKG_CONFIG_SYSROOT_DIR ? Our
+pkg-config wrapper already passes those, so they should not be
+necessary.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
----
+I believe the reason is that back when qt5base was packaged by me in
+2013 (commit 54e95512e5125a650a59c6c7dc0cef70ea832157), we did not had
+a pkg-config wrapper, and we were instead relying on passing
+PKG_CONFIG_LIBDIR and PKG_CONFIG_SYSROOT_DIR in the environment.
 
-I do realize my implementation might look not super correct as
-appending *binary* to the list of *libs* is not good. But:
+But now that we have the pkg-config wrapper, I'd say that the best fix
+is to just delete those two lines.
 
-1. It's very tiny yet working fix or even better "improvement"
-2. That might at least be a good starting pont for a discussion on
-   what would be a better way :)
+Could you try if that also fixes the problem ?
 
- package/glibc/glibc.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Thanks!
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 6d21ae7ac07d..9366b3ec4199 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -119,6 +119,10 @@ ifeq ($(BR2_PACKAGE_GDB),y)
- GLIBC_LIBS_LIB += libthread_db.so.*
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
-+GLIBC_LIBS_LIB += iconvconfig
-+endif
-+
- define GLIBC_INSTALL_TARGET_CMDS
- 	for libpattern in $(GLIBC_LIBS_LIB); do \
- 		$(call copy_toolchain_lib_root,$$libpattern) ; \
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
