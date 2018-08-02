@@ -1,80 +1,95 @@
-From: Artem Panfilov <apanfilov@spectracom.com>
-Date: Thu, 2 Aug 2018 11:37:35 +0300
-Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: add optional support
- for linux-pam
-In-Reply-To: <5b393fxsn8.ln2@ID-313208.user.individual.net>
-References: <20180801132114.24273-1-apanfilov@spectracom.com>
- <5b393fxsn8.ln2@ID-313208.user.individual.net>
-Message-ID: <c18728a2-e18d-07f4-7dbd-e2bb05778c12@spectracom.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 2 Aug 2018 12:45:19 +0200
+Subject: [Buildroot] [PATCH v2 1/1] boot/uboot: missing dtc build
+ dependency
+In-Reply-To: <20180801143336.25420-1-david.degrave@mind.be>
+References: <20180801143336.25420-1-david.degrave@mind.be>
+Message-ID: <af3ceed9-cf95-a656-9df4-c6a0cf50fa82@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+ Hi David,
 
- > could you please add
- >
- > ??? else
- > ??? PURE_FTPD_CONF_OPTS += --without-pam
+On 01-08-18 16:33, David De Grave (Essensium/Mind) wrote:
+> When trying to include multiple DTBs in a FIT image for u-boot, the
+> device tree compiler (dtc) is not build as expected and fails with the
+> following error:
+> 
+>   DTC     arch/arm/dts/foo.dtb
+> /bin/sh: ./scripts/dtc/dtc: No such file or directory
+> make[4]: *** [scripts/Makefile.lib:329: arch/arm/dts/foo.dtb] Error 127
+> 
+> Using host-dtc instead leads to more problems than it solves and is
+> kept to support older versions of u-boot where dtc support were not
+> provided.
+> 
+> So better to keep using the U-Boot provided dtc and add a patch to fix
+> this issue by adding a dependency on OF_CONTROL for OF_LIST and
+> by selecting DTC for MULTI_DTB_FIT in dts/Kconfig.
 
-I added your change, thanks.
+ Unfortunately, since the U-Boot version is user-selectable, adding patches for
+some random version doesn't make a whole lot of sense.
 
-Best Regards,
-Artyom
+ In this particular case, it's easily solvable by adding CONFIG_OF_CONTROL=y to
+your custom config fragment. Still, it would be good to send the patch below
+upstream to U-Boot itself, because it's still not fixed in the latest version
+AFAICS.
 
- From fd70cdf2634e279eb604bbf3381ce70eefd9a7b2 Mon Sep 17 00:00:00 2001
-From: Artem Panfilov <apanfilov@spectracom.com>
-Date: Wed, 1 Aug 2018 16:05:59 +0300
-Subject: [PATCH 1/1] package/pure-ftpd: add optional support for linux-pam
+> 
+> Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
+> 
+> ---
+>  v2: Add patch to fix the dependencies in Kconfig as noticed by Arnout
+>  v1: Tried to use HOST_DTC
+> ---
+>  .../0001-missing-dtc-dependency-in-kconfig.patch      | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>  create mode 100644 boot/uboot/2018.01/0001-missing-dtc-dependency-in-kconfig.patch
+> 
+> diff --git a/boot/uboot/2018.01/0001-missing-dtc-dependency-in-kconfig.patch b/boot/uboot/2018.01/0001-missing-dtc-dependency-in-kconfig.patch
+> new file mode 100644
+> index 0000000000..28ebf50185
+> --- /dev/null
+> +++ b/boot/uboot/2018.01/0001-missing-dtc-dependency-in-kconfig.patch
+> @@ -0,0 +1,19 @@
 
-Signed-off-by: Artem Panfilov <apanfilov@spectracom.com>
----
- ?package/pure-ftpd/pure-ftpd.mk | 7 +++++++
- ?1 file changed, 7 insertions(+)
+ You should use a git-formatted patch, i.e. clone the U-Boot git repo, check out
+the particular version you want to patch, commit your modification, and make
+sure there is a proper commit message + SoB.
 
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 457e67ea60..ae3ca9d1f0 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -57,4 +57,11 @@ ifeq ($(BR2_PACKAGE_PURE_FTPD_UPLOADSCRIPT),y)
- ?PURE_FTPD_CONF_OPTS += --with-uploadscript
- ?endif
+ For sure, the patch *must* have a description and a SoB line.
 
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+PURE_FTPD_CONF_OPTS += --with-pam
-+PURE_FTPD_DEPENDENCIES += linux-pam
-+else
-+PURE_FTPD_CONF_OPTS += --without-pam
-+endif
-+
- ?$(eval $(autotools-package))
+ Regards,
+ Arnout
+
+> +diff -ru a/dts/Kconfig b/dts/Kconfig
+> +--- a/dts/Kconfig	2018-01-09 02:25:29.000000000 +0100
+> ++++ b/dts/Kconfig	2018-08-01 15:35:57.676153869 +0200
+> +@@ -113,6 +113,7 @@
+> + 
+> + config OF_LIST
+> + 	string "List of device tree files to include for DT control"
+> ++	depends on OF_CONTROL
+> + 	depends on SPL_LOAD_FIT || MULTI_DTB_FIT
+> + 	default DEFAULT_DEVICE_TREE
+> + 	help
+> +@@ -135,6 +136,7 @@
+> + 
+> + config MULTI_DTB_FIT
+> + 	bool "Support embedding several DTBs in a FIT image for u-boot"
+> ++	select DTC
+> + 	help
+> + 	  This option provides hooks to allow U-boot to parse an
+> + 	  appended FIT image and enable board specific code to then select
+> 
+
 -- 
-2.17.1
-
-On 01.08.2018 19:22, Bernd Kuhls wrote:
-> Am Wed, 01 Aug 2018 16:21:14 +0300 schrieb Artem Panfilov:
->
->> +ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
->> +PURE_FTPD_CONF_OPTS += --with-pam
->> +PURE_FTPD_DEPENDENCIES += linux-pam
->> +endif
-> Hi Artem,
->
-> could you please add
->
-> 	else
-> 	PURE_FTPD_CONF_OPTS += --without-pam
->
-> to make sure the outcome of the configure step takes our config into
-> account and not defaults chosen by upstream?
->
-> Thanks!
->
-> Regards, Bernd
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
