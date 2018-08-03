@@ -1,87 +1,44 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Fri,  3 Aug 2018 18:27:54 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: build default dtbs if no specific
- source files given
-Message-ID: <1533313674-722-1-git-send-email-bos@je-eigen-domein.nl>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Fri,  3 Aug 2018 20:13:10 +0200
+Subject: [Buildroot] [PATCH] package/gdb: bump to version 8.1.1
+Message-ID: <20180803181310.17488-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently if one wants to build dtbs, one has to specify which
-dts source files to build exactly.
-This is inconvenient, and some platforms use non-standard file
-names that are currently not supported by buildroot.
-(e.g. the overlay files in downstream Raspberry Pi kernel)
+https://sourceware.org/ml/gdb-announce/2018/msg00002.html
 
-Fix this by allowing the DTS source to be left empty,
-in which case the standard list of dtbs for the kernel
-configuration will be build ("make dtbs") and installed
-("make dtbs_install")
-
-Only corner case in which specifying file names is still
-required is when appending dtb to kernel.
-
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- linux/Config.in |  4 ++++
- linux/linux.mk  | 14 ++++++++++++--
- 2 files changed, 16 insertions(+), 2 deletions(-)
+ package/gdb/Config.in.host | 2 +-
+ package/gdb/gdb.hash       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index d30489e..40d337d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -377,6 +377,10 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
- 	  the trailing .dts. You can provide a list of
- 	  dts files to build, separated by spaces.
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 5f5e402a0e..fd05898345 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -90,5 +90,5 @@ config BR2_GDB_VERSION
+ 	default "arc-2018.03-gdb" if BR2_arc
+ 	default "7.12.1"   if BR2_GDB_VERSION_7_12
+ 	default "8.0.1"    if BR2_GDB_VERSION_8_0 || !BR2_PACKAGE_HOST_GDB
+-	default "8.1"      if BR2_GDB_VERSION_8_1
++	default "8.1.1"    if BR2_GDB_VERSION_8_1
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 1530a852a2..f1424faaf2 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -1,7 +1,7 @@
+ # From ftp://gcc.gnu.org/pub/gdb/releases/sha512.sum
+ sha512  0ac8d0a495103611ef41167a08313a010dce6ca4c6d827cbe8558a0c1a1a8a6bfa53f1b7704251289cababbfaaf9e075550cdf741a54d6cd9ca3433d910efcd8	gdb-7.12.1.tar.xz
+ sha512  5eb328910033f0918058be2f92caebf1e8dfc6caa3c730d99d621627e53de3c1b43761c2f683d53555893253c2f06768cbf56cdea051a3d291ffb6cfae87b5e1	gdb-8.0.1.tar.xz
+-sha512  ffd82f415d7652d62dad1716c307836f594217a363429609beb7d70239e8bf06b73b393345b0e000796228e56681ed7656ac3c8be05e91d6d652ab0d5b1dc357	gdb-8.1.tar.xz
++sha512  7dcd5e8c90de92f577834d887b5f54edb93a07083bfe661bc46c270a6cc4919f0b348e7e2fe8ae4511298a570ef150eeefdc667ef7cf527f0cf60943177ab6c9	gdb-8.1.1.tar.xz
  
-+	  If both this option and out-of-tree path is left empty
-+	  the default set of dtbs for the kernel configuration
-+	  is build.
-+
- config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
- 	string "Out-of-tree Device Tree Source file paths"
- 	help
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 7527b11..a00029f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -341,6 +341,15 @@ endef
- 
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
- ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
-+ifeq ($(strip $(LINUX_DTS_NAME)),)
-+define LINUX_BUILD_DTB
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) dtbs
-+endef
-+define LINUX_INSTALL_DTB
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) \
-+		INSTALL_DTBS_PATH=$(1) dtbs_install
-+endef
-+else # LINUX_DTS_NAME
- define LINUX_BUILD_DTB
- 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_DTBS)
- endef
-@@ -353,6 +362,7 @@ define LINUX_INSTALL_DTB
- 		$(1)
- endef
- endif # BR2_LINUX_KERNEL_APPENDED_DTB
-+endif # LINUX_DTS_NAME
- endif # BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
- endif # BR2_LINUX_KERNEL_DTS_SUPPORT
- 
-@@ -501,8 +511,8 @@ $(error No kernel configuration file specified, check your BR2_LINUX_KERNEL_CUST
- endif
- endif
- 
--ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT):$(strip $(LINUX_DTS_NAME)),y:)
--$(error No kernel device tree source specified, check your \
-+ifeq ($(BR2_LINUX_KERNEL_APPENDED_DTB):$(strip $(LINUX_DTS_NAME)),y:)
-+$(error If appending dtb to kernel, device tree source needs to be specified, check your \
- 	BR2_LINUX_KERNEL_INTREE_DTS_NAME / BR2_LINUX_KERNEL_CUSTOM_DTS_PATH settings)
- endif
- 
+ # Locally calculated (fetched from Github)
+ sha512  b17e4066730491f6a75b00eab78012f67cc445fe95ecd82c06cda7c1255190e6c471ac89b92f2fcdba4790b0046756b9cecf1f827537afcb44e1e578345852ad 	gdb-arc-2018.03-gdb.tar.gz
 -- 
-2.7.4
+2.14.4
