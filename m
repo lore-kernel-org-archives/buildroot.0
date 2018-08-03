@@ -1,40 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  4 Aug 2018 00:06:19 +0200
-Subject: [Buildroot] [PATCH 2/3] support/dependencies: also check for
- flex+bison
+Date: Sat,  4 Aug 2018 00:06:20 +0200
+Subject: [Buildroot] [PATCH 3/3] linux: drop dependency on host-{bison, flex}
 In-Reply-To: <cover.1533333972.git.yann.morin.1998@free.fr>
 References: <cover.1533333972.git.yann.morin.1998@free.fr>
-Message-ID: <618683c996f71c0dd6360b3c027406e91a96ab61.1533333972.git.yann.morin.1998@free.fr>
+Message-ID: <0c44ca5ddc27dfe13152a08b4bdd48ce3b8599dc.1533333972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Now that we expect those two tools to be installed n the host, just
+depend on them to generate the linux kconfig parser.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.sh | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 58c34d880f..09d0450688 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -161,7 +161,11 @@ fi
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 7527b11673..7f624e6cb7 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -62,7 +62,7 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
  
- # Check that a few mandatory programs are installed
- missing_progs="no"
--for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
-+required_progs="
-+    patch perl tar wget cpio python unzip rsync bc bison flex
-+    ${DL_TOOLS}
-+"
-+for prog in ${required_progs} ; do
- 	if ! which $prog > /dev/null ; then
- 		echo "You must install '$prog' on your build machine";
- 		missing_progs="yes"
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES += host-bison host-flex host-kmod
++LINUX_DEPENDENCIES = host-kmod
+ 
+ # host tools needed for kernel compression
+ ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
 -- 
 2.14.1
