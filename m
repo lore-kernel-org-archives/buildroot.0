@@ -1,46 +1,40 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  3 Aug 2018 22:16:56 +0200
-Subject: [Buildroot] [PATCH 3/3 v3] linux: kconfig needs the toolchain
-In-Reply-To: <cover.1533327111.git.yann.morin.1998@free.fr>
-References: <cover.1533327111.git.yann.morin.1998@free.fr>
-Message-ID: <5878b50c7b69951bc528d25c98a691a888ee5051.1533327111.git.yann.morin.1998@free.fr>
+Date: Sat,  4 Aug 2018 00:06:19 +0200
+Subject: [Buildroot] [PATCH 2/3] support/dependencies: also check for
+ flex+bison
+In-Reply-To: <cover.1533333972.git.yann.morin.1998@free.fr>
+References: <cover.1533333972.git.yann.morin.1998@free.fr>
+Message-ID: <618683c996f71c0dd6360b3c027406e91a96ab61.1533333972.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Starting with linux-4.18, the kconfig from the kernel can call
-to the compiler to test its capabilities; see:
-
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/Kconfig.include
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
-  - take advantage of the kconfig-package infra  (Thomas)
----
- linux/linux.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ support/dependencies/dependencies.sh | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 60dad3a249..48b2a16ce7 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -68,6 +68,11 @@ LINUX_DEPENDENCIES = host-kmod
- # shipped with the kernel sources, so we need flex and bison.
- LINUX_KCONFIG_DEPENDENCIES = host-bison host-flex
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 58c34d880f..09d0450688 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -161,7 +161,11 @@ fi
  
-+# Starting with 4.18, the kconfig in the kernel calls the
-+# cross-compiler to check its capabilities. So we need the
-+# toolchain before we can call the configurators.
-+LINUX_KCONFIG_DEPENDENCIES += toolchain
-+
- # host tools needed for kernel compression
- ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
- LINUX_DEPENDENCIES += host-lz4
+ # Check that a few mandatory programs are installed
+ missing_progs="no"
+-for prog in patch perl tar wget cpio python unzip rsync bc ${DL_TOOLS} ; do
++required_progs="
++    patch perl tar wget cpio python unzip rsync bc bison flex
++    ${DL_TOOLS}
++"
++for prog in ${required_progs} ; do
+ 	if ! which $prog > /dev/null ; then
+ 		echo "You must install '$prog' on your build machine";
+ 		missing_progs="yes"
 -- 
 2.14.1
