@@ -1,46 +1,46 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  3 Aug 2018 22:16:55 +0200
-Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
- bison} to build the configurators
+Date: Fri,  3 Aug 2018 22:16:56 +0200
+Subject: [Buildroot] [PATCH 3/3 v3] linux: kconfig needs the toolchain
 In-Reply-To: <cover.1533327111.git.yann.morin.1998@free.fr>
 References: <cover.1533327111.git.yann.morin.1998@free.fr>
-Message-ID: <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
+Message-ID: <5878b50c7b69951bc528d25c98a691a888ee5051.1533327111.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Take this opportunity to also drop the append-assignment as the first
-assignment to LINUX_DEPENDENCIES.
+Starting with linux-4.18, the kconfig from the kernel can call
+to the compiler to test its capabilities; see:
+
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/Kconfig.include
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
-Changes v2 -> v3:
-  - also fix the append-assignment
+Changes v1 -> v2:
+  - take advantage of the kconfig-package infra  (Thomas)
 ---
- linux/linux.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ linux/linux.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index 7527b11673..60dad3a249 100644
+index 60dad3a249..48b2a16ce7 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -62,7 +62,11 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
+@@ -68,6 +68,11 @@ LINUX_DEPENDENCIES = host-kmod
+ # shipped with the kernel sources, so we need flex and bison.
+ LINUX_KCONFIG_DEPENDENCIES = host-bison host-flex
  
- LINUX_INSTALL_IMAGES = YES
--LINUX_DEPENDENCIES += host-bison host-flex host-kmod
-+LINUX_DEPENDENCIES = host-kmod
++# Starting with 4.18, the kconfig in the kernel calls the
++# cross-compiler to check its capabilities. So we need the
++# toolchain before we can call the configurators.
++LINUX_KCONFIG_DEPENDENCIES += toolchain
 +
-+# Starting with 4.16, the generated kconfig code is no longer
-+# shipped with the kernel sources, so we need flex and bison.
-+LINUX_KCONFIG_DEPENDENCIES = host-bison host-flex
- 
  # host tools needed for kernel compression
  ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
+ LINUX_DEPENDENCIES += host-lz4
 -- 
 2.14.1
