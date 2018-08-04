@@ -1,136 +1,157 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  4 Aug 2018 08:00:49 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-03
-Message-ID: <20180804060049.54442207CF@mail.bootlin.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  4 Aug 2018 10:27:41 +0200
+Subject: [Buildroot] [PATCHv3] core/sdk: generate the SDK tarball ourselves
+Message-ID: <20180804082741.10783-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Currently, the wording in the manual instructs the user to generate a
+tarball from "the contents of the +output/host+ directory".
 
-Build statistics for 2018-08-03
-===============================
+This is pretty confusing, because taken literally, this would amount to
+running a command like:
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  16 |   3 |   0 |  19 |
-   2018.05.x |  11 |   1 |   0 |  12 |
-      master | 152 |  46 |   2 | 200 |
+    tar cf my-sdk.tar -C output/host/ .
 
-Results for branch '2018.02.x'
-==============================
+This creates a tarbomb [0], which is very bad practice, because when
+extracted, it creates multiple files in the current directory.
 
-Classification of failures by reason
-------------------------------------
+What one really wants to do, is create a tarball of the host/ directory,
+with something like:
 
-                  boost-1.66.0 | 1 
-         host-cryptsetup-2.0.0 | 1 
-     qt5xmlpatterns-legal-info | 1 
+    tar cf my-sdk.tar -C output host/
 
+However, this is not much better, because the top-most directory would
+have a very common name, host/, which is pretty easy to get conflict
+with when it gets extracted.
 
-Detail of failures
-------------------
+So, we fix that mess by giving the top-most directory a recognisable
+name, based on the target tuple, which we also use as the name of the
+archive (suffixed with the usual +.tar.gz+.) We offer the user the
+possibility to override that default by specifying the +BR2_SDK_PREFIX+
+variable on the command line.
 
-     powerpc |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/7615d7e6bebeb870de0ef125ade523adf840be70 |     
-    mips64el |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/4d2627d5644dc3e4c3478d8a9ebf8ef41dbf4124 |     
-     aarch64 |      qt5xmlpatterns-legal-info | NOK | http://autobuild.buildroot.net/results/c8d2767e5541cdb8c36ecc69772b506443b59a83 |     
+Since this is an output file, we place it in the images/ directory.
 
-Results for branch '2018.05.x'
-==============================
+As some users expressed a very strong feeling that they do not want to
+generate a tarball at all, and that doing so would badly hurt their
+workflows [1], we actually prepare the SDK as was previously done, but
+under the new, intermediate rule 'prepare-sdk'. The existing 'sdk' rule
+obviously depend on that before generating the tarball.
 
-Classification of failures by reason
-------------------------------------
+We choose to make the existing rule to generate the tarball, and
+introduce a new rule to just prepare the SDK, rather than keep the
+existing rule as-is and introduce a new one to generate the tarball,
+because it makes sense to have the simplest rule do the correct thing,
+leaving advanced, power users use the longest command. If someone
+already had a wrapper that called 'sdk' and expected just the host
+directory to be prepared, then this is not broken; it just takes a bit
+longer (gzip is pretty fast).
 
-                    links-2.14 | 1 
+Update the manual accordingly.
 
+[0] https://en.wikipedia.org/wiki/Tar_(computing)#Tarbomb
+[1] http://lists.busybox.net/pipermail/buildroot/2018-June/thread.html#223377
+    and some messages in the ensuing thread...
 
-Detail of failures
-------------------
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Wolfgang Grandegger <wg@grandegger.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Stefan Becker <chemobejk@gmail.com>
+Cc: Trent Piepho <tpiepho@impinj.com>
 
-      x86_64 |                     links-2.14 | NOK | http://autobuild.buildroot.net/results/1d1a1388689725cb3dd00fe76f988704baae1efc | ORPH
+---
+Changes v2 -> v3:
+  - drop the version from the prefix  (Stefan, Thomas)
+  - actually have 'sdk' depend on 'prepare-sdk'
+  - anonymise the generated tarball
 
-Results for branch 'master'
-===========================
+Changes v1 -> v2:
+  - drop the part of the manual stating this can't be re-used as a
+    pre-built toolchain  (Arnout)
+  - make the top-level directory and tarball name configurable
+    (Trent, Thomas)
+  - change the default name  (Arnout)
+  - allow just preparing the SDK (Stefan, Trent)
+  - typoes  (Thomas)
+---
+ Makefile                                  | 15 +++++++++++++--
+ docs/manual/using-buildroot-toolchain.txt | 26 +++++++++++++++++---------
+ 2 files changed, 30 insertions(+), 11 deletions(-)
 
-Classification of failures by reason
-------------------------------------
-
-             gnuradio-3.7.13.3 | 8 
-                  polkit-0.105 | 8 
-                  boost-1.67.0 | 4 
-              argparse-0.5.0-1 | 3 
-                cutelyst-2.5.1 | 3 
-           host-libselinux-2.7 | 3 
-               azure-iot-sdk-c | 2 
-                cgilua-5.2.1-1 | 2 
-                 host-rauc-0.4 | 2 
-                 opencv3-3.4.2 | 2 
-               aircrack-ng-1.3 | 1 
-             coxpcall-1.16.0-1 | 1 
-                    links-2.14 | 1 
-linuxptp-303b08cbf55096aba5... | 1 
-               mono-5.12.0.226 | 1 
-                    ncmpc-0.30 | 1 
-          openpowerlink-V2.7.0 | 1 
-            qt5location-5.11.1 | 1 
-           uboot-tools-2018.07 | 1 
-                 wiringpi-2.46 | 1 
-                  zeromq-4.2.5 | 1 
-
-
-Detail of failures
-------------------
-
-        i586 |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/d85c8cd4dd0854e3c13e33e067d6234109fbad8f |     
-         arm |               argparse-0.5.0-1 | NOK | http://autobuild.buildroot.net/results/db85382cdc977fdbb89bab7574002b67af151932 |     
-      x86_64 |               argparse-0.5.0-1 | NOK | http://autobuild.buildroot.net/results/ec0d767365928e0616a0adc5cc46a782ba267577 |     
-      x86_64 |               argparse-0.5.0-1 | NOK | http://autobuild.buildroot.net/results/9df255c3e7c012dcec79976244db27ba9c69a026 |     
-         arm |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/f1e7cbfde23db3ebb528163b555d41ff9e715680 |     
- powerpc64le |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/130d901b40c542ffc0d8d15047b9b8ae42db8f28 |     
-       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/98ebf12c40fb8505bb590e6704c0c4bbbb0ff969 |     
-     powerpc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/4473b3a601417d65b31fa7ed56350847b8a00279 |     
-       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/215fe40e21b4cc7bb4a74fd1b12a30e7a1cbf84d |     
-       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/22768e06deae3fdfaa4027ad7fb9a74b2b72cb71 |     
-      x86_64 |                 cgilua-5.2.1-1 | NOK | http://autobuild.buildroot.net/results/189b743dcaa1483fce02af27e6b2e1c29d32ac17 | ORPH
-      x86_64 |                 cgilua-5.2.1-1 | NOK | http://autobuild.buildroot.net/results/36a70cd680edc76d24719600e9a31e72bffe9561 | ORPH
-      x86_64 |              coxpcall-1.16.0-1 | NOK | http://autobuild.buildroot.net/results/25968ac540cbe1afe1695e52fa214db18849948b | ORPH
-        i686 |                 cutelyst-2.5.1 | NOK | http://autobuild.buildroot.net/results/d38411eda9edf16e2c40d8931bcfc889faae43dc |     
-         arm |                 cutelyst-2.5.1 | NOK | http://autobuild.buildroot.net/results/90c56e4e001daa71efd92c926fe3a5dc5ec759e7 |     
-         arc |                 cutelyst-2.5.1 | NOK | http://autobuild.buildroot.net/results/01933cfc6ef8eea890e3b6c870c7d6cada7db5ee |     
-         arc |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/290923910f16a5e1654f53e5e0da33fa4232c92d |     
-      x86_64 |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/648dae7e36d3f2e67f23a2c1fe0b8127b1770cef |     
-         arc |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/c03d0fd25a01b85de34730c65575ffe55fe7059f |     
-         arc |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/3258a249ba674e1168d8e3c786a1f5822e845f72 |     
-    mips64el |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/5d5c85453388dee82b839dbac99def4d501a78b9 |     
-    mips64el |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/71afc004d7bc8a7c441c13dd7893bf912ae3b432 |     
-  aarch64_be |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/fe7a07beb2d0ac56f66ce6da222d14e20378c7eb |     
-     aarch64 |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/cc148d1064f47759ba36e544f04f6282213f6608 |     
-       sparc |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/ac7c90283b46b177b24280c34f8a3aaa8faef708 |     
-      xtensa |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/db4e2f20c86d52946a4dd253e73333c659e2d285 |     
-         arm |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/ddb55775875439ebebe3abe09e215fadf1ccc818 |     
-         arm |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/ad56123ba2fa95ab9c468eda0ab4039ff4fc664c |     
-      xtensa |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/5e66b71e737530e6a2ec01621d2e734d386f0aa8 |     
-      mipsel |                     links-2.14 | NOK | http://autobuild.buildroot.net/results/16dc8fc6e97da44f3939eee782dc1c5e7ff3feda | ORPH
-        m68k | linuxptp-303b08cbf55096aba5... | NOK | http://autobuild.buildroot.net/results/0c83808d90ac04e5002a9166d1d62cf0245505c7 |     
-        mips |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/2d86a1163d30c9d93ba717291506d4e714281f61 |     
-    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/77bd168fcf78140108cc333b9ad98eae56af7a66 |     
-       sparc |                  opencv3-3.4.2 | NOK | http://autobuild.buildroot.net/results/0b3d8c0d2d6c021f7898ce21b6d6c70655773cf5 |     
-       nios2 |                  opencv3-3.4.2 | NOK | http://autobuild.buildroot.net/results/6ccd7155fd5cd343ffdcc8b3cd619a2e9afbcf5c |     
-      x86_64 |           openpowerlink-V2.7.0 | NOK | http://autobuild.buildroot.net/results/43f0cf875e2827edf6f21d59331da424708b9725 |     
-    mips64el |                   polkit-0.105 | NOK | http://autobuild.buildroot.net/results/899e2b2359d45b8dd1f687aa66be12839c76e301 |     
-      xtensa |                   polkit-0.105 | NOK | http://autobuild.buildroot.net/results/e16c65eee251a2d6a299fb7598e49215f9c6ac34 |     
-         arm |                   polkit-0.105 | NOK | http://autobuild.buildroot.net/results/9cd3078cf2fd2e53241c3efcdea889b594d0d597 |     
-      mipsel |                   polkit-0.105 | NOK | http://autobuild.buildroot.net/results/a5adda089315586297d0bab1b106ac709cc4e600 |     
-        i686 |                   polkit-0.105 | NOK | http://autobuild.buildroot.net/results/458d2c4fe30a54b566afe4cc694e6a1938c09c34 |     
-         arm |                   polkit-0.105 | NOK | http://autobuild.buildroot.net/results/cb435dc34d4274ca41a40e6761b2cba499506152 |     
-       sparc |                   polkit-0.105 | NOK | http://autobuild.buildroot.net/results/81d23ec68bf9e26fc3708db145bf8a61265e8f62 |     
-         arm |                   polkit-0.105 | NOK | http://autobuild.buildroot.net/results/7894d0859bdd1afafe3e65d5827f60c26a6d5d5f |     
-        i686 |             qt5location-5.11.1 | NOK | http://autobuild.buildroot.net/results/da87ca470b22d599bb25998af8f25136921f35a7 |     
-        m68k |            uboot-tools-2018.07 | NOK | http://autobuild.buildroot.net/results/c0ab35c3cb46f84863fe20c0ee92ecc2379578b6 |     
-        i586 |                  wiringpi-2.46 | NOK | http://autobuild.buildroot.net/results/8cb1b8e587c6f9965c634ac7bd5b4e36b2e5fbb0 |     
-        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/05b563e9e1a2b7fd48d73723fe9068894ea709c5 |     
-
-
+diff --git a/Makefile b/Makefile
+index 37c7072c7c..e13e5eaefa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -573,8 +573,8 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
+ .PHONY: world
+ world: target-post-image
+ 
+-.PHONY: sdk
+-sdk: world
++.PHONY: prepare-sdk
++prepare-sdk: world
+ 	@$(call MESSAGE,"Rendering the SDK relocatable")
+ 	$(TOPDIR)/support/scripts/fix-rpath host
+ 	$(TOPDIR)/support/scripts/fix-rpath staging
+@@ -582,6 +582,17 @@ sdk: world
+ 	mkdir -p $(HOST_DIR)/share/buildroot
+ 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+ 
++BR2_SDK_PREFIX ?= $(GNU_TARGET_NAME)_sdk-buildroot
++.PHONY: sdk
++sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
++	@$(call MESSAGE,"Generating SDK tarball")
++	$(if $(BR2_SDK_PREFIX),,$(error BR2_SDK_PREFIX can not be empty))
++	$(Q)mkdir -p $(BINARIES_DIR)
++	$(TAR) czf "$(BINARIES_DIR)/$(BR2_SDK_PREFIX).tar.gz" \
++		--owner=0 --group=0 --numeric-owner \
++		--transform='s#^\.#$(BR2_SDK_PREFIX)#' \
++		-C $(HOST_DIR) "."
++
+ # Populating the staging with the base directories is handled by the skeleton package
+ $(STAGING_DIR):
+ 	@mkdir -p $(STAGING_DIR)
+diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
+index 3246dc2411..0c0c35fced 100644
+--- a/docs/manual/using-buildroot-toolchain.txt
++++ b/docs/manual/using-buildroot-toolchain.txt
+@@ -12,15 +12,23 @@ The toolchain generated by Buildroot is located by default in
+ +output/host/bin/+ to your PATH environment variable and then to
+ use +ARCH-linux-gcc+, +ARCH-linux-objdump+, +ARCH-linux-ld+, etc.
+ 
+-It is possible to relocate the toolchain, this allows to distribute
+-the toolchain to other developers to build applications for your
+-target. To achieve this:
++Alternatively, Buildroot can also export the toolchain and the development
++files of all selected packages, as an SDK, by running the command
+++make sdk+. This generates a tarball of the content of the host directory
+++output/host/+, named +<TARGET-TUPLE>_sdk-buildroot.tar.gz+ (which can be
++overriden by setting the environment variable +BR2_SDK_PREFIX+) and
++located in the output directory +output/images/+.
+ 
+-* run +make sdk+, which prepares the toolchain to be relocatable;
+-* tarball the contents of the +output/host+ directory;
+-* distribute the resulting tarball.
++This tarball can then be distributed to application developers, when
++they want to develop their applications that are not (yet) packaged as
++a Buildroot package.
+ 
+-Once the toolchain is installed to the new location, the user must run
+-the +relocate-sdk.sh+ script to make sure all paths are updated with
+-the new location.
++Upon extracting the SDK tarball, the user must run the script
+++relocate-sdk.sh+ (located at the top directory of the SDK), to make
++sure all paths are updated with the new location.
+ 
++Alternatively, if you just want to prepare the SDK without generating
++the tarball (e.g. because you will just be moving the +host+ directory,
++or will be generating the tarball on your own), Buildroot also allows
++you to just prepare the SDK with +make prepare-sdk+ without actually
++generating a tarball.
 -- 
-http://autobuild.buildroot.net
+2.14.1
