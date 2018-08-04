@@ -1,49 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 4 Aug 2018 18:36:44 +0200
-Subject: [Buildroot] [PATCH 2/3] docs/manual: expand on why using a
- branch name is not supported
-In-Reply-To: <7f01fc03df91561ce5163e1e300d36f2c642f913.1533400367.git.yann.morin.1998@free.fr>
-References: <cover.1533400367.git.yann.morin.1998@free.fr>
- <7f01fc03df91561ce5163e1e300d36f2c642f913.1533400367.git.yann.morin.1998@free.fr>
-Message-ID: <20180804183644.63b7ec0c@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 04 Aug 2018 17:04:08 +0000
+Subject: [Buildroot] [Bug 11096] Upgrade from glibc 2.26 to 2.27 broke some
+ locales (ru_RU in particular)
+In-Reply-To: <bug-11096-163@https.bugs.busybox.net/>
+References: <bug-11096-163@https.bugs.busybox.net/>
+Message-ID: <bug-11096-163-0qjtUFT4sY@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11096
 
-On Sat,  4 Aug 2018 18:33:04 +0200, Yann E. MORIN wrote:
+--- Comment #3 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+An initial proposal has been made to resolve this issue:
+https://patchwork.ozlabs.org/patch/950717/. While the patch is not perfect, it
+shouldn't be too difficult to improve to make it acceptable.
 
-> ++
-> +.Note:
-> +Using a branch name as +FOO_VERSION+ is not supported, because it does
-> +not and can not work as people would expect it should:
-> ++
-> +  1. Due to local caching, Buildroot will not re-fetch the repository,
-> +     so people that expect to be able to follow the remote repository
-> +     will be quite surprised and disapointed;
-
-disappointed with two "p"
-
-> +  2. if the user removes the local cache, then the build is no longer
-> +     reproducible, because the remote repository may change any time
-> +     between two builds, and people will be quite surprised and
-> +     disapointed.
-
-Ditto here.
-
-But in fact more importantly than removing the local cache, it means
-that between two developers building the same Buildroot configuration,
-they won't be building the same state of the source code. I think this
-is more important than a user voluntarily removing stuff from its local
-cache.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
