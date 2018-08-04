@@ -1,97 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  4 Aug 2018 18:33:03 +0200
-Subject: [Buildroot] [PATCH 1/3] support/download: remove help from wrapper
+Date: Sat,  4 Aug 2018 18:33:04 +0200
+Subject: [Buildroot] [PATCH 2/3] docs/manual: expand on why using a branch
+ name is not supported
 In-Reply-To: <cover.1533400367.git.yann.morin.1998@free.fr>
 References: <cover.1533400367.git.yann.morin.1998@free.fr>
-Message-ID: <29c0d6fb488dbaee0969d34df1193cc67a8c73e7.1533400367.git.yann.morin.1998@free.fr>
+Message-ID: <7f01fc03df91561ce5163e1e300d36f2c642f913.1533400367.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The download wrapper is a purely internal helper, and is not supposed to
-be callable manually. No need to offer some help.
-
-Besides, the help text was way out-dated.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
- support/download/dl-wrapper | 47 +--------------------------------------------
- 1 file changed, 1 insertion(+), 46 deletions(-)
+ docs/manual/adding-packages-generic.txt | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 4059c37ebc..742bbd5428 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -4,8 +4,6 @@
- # Its role is to ensure atomicity when saving downloaded files
- # back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
- # failed downloads.
--#
--# Call it with -h to see some help.
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index cc91e894bd..b17d225a3e 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -200,11 +200,22 @@ information is (assuming the package name is +libfoo+) :
+   package. Note that if +HOST_LIBFOO_VERSION+ doesn't exist, it is
+   assumed to be the same as +LIBFOO_VERSION+. It can also be a
+   revision number or a tag for packages that are fetched directly
+-  from their version control system. Do not use a branch name as
+-  version; it does not work. Examples:
++  from their version control system. Examples:
+   ** a version for a release tarball: +LIBFOO_VERSION = 0.1.2+
+   ** a sha1 for a git tree: +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+
+   ** a tag for a git tree +LIBFOO_VERSION = v0.1.2+
+++
++.Note:
++Using a branch name as +FOO_VERSION+ is not supported, because it does
++not and can not work as people would expect it should:
+++
++  1. Due to local caching, Buildroot will not re-fetch the repository,
++     so people that expect to be able to follow the remote repository
++     will be quite surprised and disapointed;
++  2. if the user removes the local cache, then the build is no longer
++     reproducible, because the remote repository may change any time
++     between two builds, and people will be quite surprised and
++     disapointed.
  
- # To avoid cluttering BR2_DL_DIR, we download to a trashable
- # location, namely in $(BUILD_DIR).
-@@ -27,9 +25,8 @@ main() {
-     local -a uris
- 
-     # Parse our options; anything after '--' is for the backend
--    while getopts ":hc:d:D:o:n:N:H:rf:u:q" OPT; do
-+    while getopts ":c:d:D:o:n:N:H:rf:u:q" OPT; do
-         case "${OPT}" in
--        h)  help; exit 0;;
-         c)  cset="${OPTARG}";;
-         d)  dl_dir="${OPTARG}";;
-         D)  old_dl_dir="${OPTARG}";;
-@@ -212,48 +209,6 @@ main() {
-     return ${rc}
- }
- 
--help() {
--    cat <<_EOF_
--NAME
--    ${my_name} - download wrapper for Buildroot
--
--SYNOPSIS
--    ${my_name} [OPTION]... -- [BACKEND OPTION]...
--
--DESCRIPTION
--    Wrapper script around different download mechanisms. Ensures that
--    concurrent downloads do not conflict, that partial downloads are
--    properly evicted without leaving temporary files, and that access
--    rights are maintained.
--
--    -h  This help text.
--
--    -u URIs
--        The URI to get the file from, the URI must respect the format given in
--        the example.
--        You may give as many '-u URI' as you want, the script will stop@the
--        frist successful download.
--
--        Example: backend+URI; git+http://example.com or http+http://example.com
--
--    -o FILE
--        Store the downloaded archive in FILE.
--
--    -H FILE
--        Use FILE to read hashes from, and check them against the downloaded
--        archive.
--
--  Exit status:
--    0   if OK
--    !0  in case of error
--
--ENVIRONMENT
--
--    BUILD_DIR
--        The path to Buildroot's build dir
--_EOF_
--}
--
- trace()  { local msg="${1}"; shift; printf "%s: ${msg}" "${my_name}" "${@}"; }
- warn()   { trace "${@}" >&2; }
- errorN() { local ret="${1}"; shift; warn "${@}"; exit ${ret}; }
+ * +LIBFOO_SOURCE+ may contain the name of the tarball of the package,
+   which Buildroot will use to download the tarball from
 -- 
 2.14.1
