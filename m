@@ -1,47 +1,56 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 4 Aug 2018 16:44:03 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-08-02
-In-Reply-To: <20180803060011.7033C20994@mail.bootlin.com>
-References: <20180803060011.7033C20994@mail.bootlin.com>
-Message-ID: <CAB0FRst6V5bdU4Q0pc4GbOeQq-0izzG0S8wkcV9B43ZiM0Sz2w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  4 Aug 2018 18:33:02 +0200
+Subject: [Buildroot] [PATCH 0/3] download: detect and refuse git branch by
+ name
+Message-ID: <cover.1533400367.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-08-03 8:00 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+Hello All!
 
-> Hello,
->
-> This is the list of Buildroot build failures that occured on
-> 2018-08-02, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
->
-> Results for the 'master' branch
-> ===============================
->
-> Build failures related to your packages:
->
->       x86_64 |             lua-basexx-0.4.0-1 |
-> http://autobuild.buildroot.net/results/996fd6430f99d08956132fd46445ba
-> dcd60df2ac
->       x86_64 |        lua-messagepack-0.5.1-1 |
-> http://autobuild.buildroot.net/results/7c4a23991448dbeed88421888320f3
-> b5fb85ceef
->
->
-Solved by https://patchwork.ozlabs.org/patch/950555/
+This small series documents why using a branch by name is bad and is not
+supoprted, and makes the git backend actually detect them and abort if
+the version is a branch by name.
 
-Fran?ois
+The series starts with a little bit of cleanup in the download wrapper.
 
 
-> --
-> http://autobuild.buildroot.net
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180804/237fbf97/attachment.html>
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 81ea4a243b63d7bb1fec580910c553af4ae072c1
+
+  package/lttng-tools: bump version to 2.10.5 (2018-08-01 14:28:30 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to d1cdffd986d2f2128396aa785d542fdd3d2c90e0
+
+  support/download: detect and abort when using a git branch by name (2018-08-04 18:28:36 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (3):
+      support/download: remove help from wrapper
+      docs/manual: expand on why using a branch name is not supported
+      support/download: detect and abort when using a git branch by name
+
+ docs/manual/adding-packages-generic.txt | 15 +++++++++--
+ support/download/dl-wrapper             | 47 +--------------------------------
+ support/download/git                    |  7 +++++
+ 3 files changed, 21 insertions(+), 48 deletions(-)
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
