@@ -1,39 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Aug 2018 14:37:58 +0200
-Subject: [Buildroot] [git commit] gnuradio: remove host-python-cheetah
+Date: Sun, 5 Aug 2018 14:39:10 +0200
+Subject: [Buildroot] [PATCH 1/1] gnuradio: remove host-python-cheetah
  dependency
-Message-ID: <20180805123230.15CA18B4A6@busybox.osuosl.org>
+In-Reply-To: <20180626211046.9026-1-fontaine.fabrice@gmail.com>
+References: <20180626211046.9026-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180805143910.1c6d3d33@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7f1b030413a51637323a755cbd985b06026990e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-host-python-cheetah has been replaced by host-python-mako:
-https://github.com/gnuradio/volk/commit/1b2bedc8685c4dc2b3587068339d69b5ab1c874d
+On Tue, 26 Jun 2018 23:10:46 +0200, Fabrice Fontaine wrote:
+> host-python-cheetah has been replaced by host-python-mako:
+> https://github.com/gnuradio/volk/commit/1b2bedc8685c4dc2b3587068339d69b5ab1c874d
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/gnuradio/gnuradio.mk | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gnuradio/gnuradio.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/gnuradio/gnuradio.mk b/package/gnuradio/gnuradio.mk
-index 9573b65b73..ed537e3934 100644
---- a/package/gnuradio/gnuradio.mk
-+++ b/package/gnuradio/gnuradio.mk
-@@ -11,10 +11,8 @@ GNURADIO_LICENSE_FILES = COPYING
- 
- GNURADIO_SUPPORTS_IN_SOURCE_BUILD = NO
- 
--# host-python-cheetah, host-python-mako and host-python-six are needed for volk
--# to compile
-+# host-python-mako and host-python-six are needed for volk to compile
- GNURADIO_DEPENDENCIES = \
--	host-python-cheetah \
- 	host-python-mako \
- 	host-python-six \
- 	host-swig \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
