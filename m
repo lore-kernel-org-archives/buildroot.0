@@ -1,34 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Aug 2018 14:16:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv3: fix build with gcc bug
- 64735
-In-Reply-To: <20180801205528.22387-1-bernd.kuhls@t-online.de>
-References: <20180801205528.22387-1-bernd.kuhls@t-online.de>
-Message-ID: <20180805141638.7744f927@windsurf>
+Date: Sun, 5 Aug 2018 14:35:29 +0200
+Subject: [Buildroot] [git commit] package/glibc: remove --{with,
+ without}-fp option
+Message-ID: <20180805122920.82F688B487@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=f0f77c11949167739ab5eaadf7e37b4c0eb94824
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed,  1 Aug 2018 22:55:28 +0200, Bernd Kuhls wrote:
-> OpenCV3 allows to disable the usage of std::exception_ptr:
-> https://github.com/opencv/opencv/issues/11878#issuecomment-402099255
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/5ca/5ca221792c72c0a19f8b0e8303c0603d28f3c48e/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/opencv3/opencv3.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+This option has been removed since glibc 2.27 [1].
 
-Applied to master, thanks.
+[1] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=8df5d34720dd71e934545bade879e04697830757
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/glibc.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 6d21ae7ac0..d34b42b831 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -93,7 +93,6 @@ define GLIBC_CONFIGURE_CMDS
+ 		--build=$(GNU_HOST_NAME) \
+ 		--prefix=/usr \
+ 		--enable-shared \
+-		$(if $(BR2_SOFT_FLOAT),--without-fp,--with-fp) \
+ 		$(if $(BR2_x86_64),--enable-lock-elision) \
+ 		--with-pkgversion="Buildroot" \
+ 		--without-cvs \
