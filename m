@@ -1,65 +1,48 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Aug 2018 13:48:05 +0200
-Subject: [Buildroot] [PATCH] docs/manual: update host gcc minimum
- required version
-In-Reply-To: <9d4d4477b77d5fea865f0b0e76982ac483665ac2.1533464011.git.baruch@tkos.co.il>
-References: <9d4d4477b77d5fea865f0b0e76982ac483665ac2.1533464011.git.baruch@tkos.co.il>
-Message-ID: <20180805114805.GB12445@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 5 Aug 2018 14:12:46 +0200
+Subject: [Buildroot] [git commit] package/cutelyst: bump version to fix
+ build issues
+Message-ID: <20180805120707.F1F888B46E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1eef94f12b8de9a96aabb85a5bb86c7ee41942e2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-08-05 13:13 +0300, Baruch Siach spake thusly:
-> The oldest gcc that is known to work with current Buildroot is that of
-> RHEL 6, version 4.4.
+Fixes:
 
-I hadn't seen your patch before I sent mine, sorry.
+  http://autobuild.buildroot.net/results/fd78e54eca9e95ae5c7a27e6afa1891a0bf65994/
 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
+[Thomas: add autobuilder reference.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cutelyst/cutelyst.hash | 2 +-
+ package/cutelyst/cutelyst.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-
-I've marked my patch as rejected, then (although I prefer my commit
-message! ;-] ).
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  docs/manual/prerequisite.txt | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-> index 110fab41fdae..66e1b88f1654 100644
-> --- a/docs/manual/prerequisite.txt
-> +++ b/docs/manual/prerequisite.txt
-> @@ -23,8 +23,8 @@ between distributions).
->  ** +make+ (version 3.81 or any later)
->  ** +binutils+
->  ** +build-essential+ (only for Debian based systems)
-> -** +gcc+ (version 2.95 or any later)
-> -** `g++` (version 2.95 or any later)
-> +** +gcc+ (version 4.4 or any later)
-> +** `g++` (version 4.4 or any later)
->  ** +bash+
->  ** +patch+
->  ** +gzip+
-> -- 
-> 2.18.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/cutelyst/cutelyst.hash b/package/cutelyst/cutelyst.hash
+index 58645e50c2..edc83f3886 100644
+--- a/package/cutelyst/cutelyst.hash
++++ b/package/cutelyst/cutelyst.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  a5d40c5e0027982181529449ffa807492f5759c2c604cdc467e748445721ff28    cutelyst-2.5.1.tar.gz
++sha256  d088e6dbbb9a1ef03b4481d44746a2b086724842f5ee85abe8095e2eb6fe0da4    cutelyst-2.5.2.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551    COPYING
+diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
+index 498d2d5545..e8695a7b3a 100644
+--- a/package/cutelyst/cutelyst.mk
++++ b/package/cutelyst/cutelyst.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUTELYST_VERSION = 2.5.1
++CUTELYST_VERSION = 2.5.2
+ CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
+ CUTELYST_INSTALL_STAGING = YES
+ CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
