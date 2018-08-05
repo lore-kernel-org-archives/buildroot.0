@@ -1,100 +1,132 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Aug 2018 15:29:56 +0200
-Subject: [Buildroot] [git commit] linuxptp: add patch to fix
- no-thread/linuxthreads uClibc builds
-Message-ID: <20180805132759.F12828B4CF@busybox.osuosl.org>
+Date: Sun, 5 Aug 2018 15:40:05 +0200
+Subject: [Buildroot] [git commit] Update for 2018.08-rc1
+Message-ID: <20180805134025.93E628B50D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae2cae70b82bbb1c85307c5947e1b441567038fd
+commit: https://git.buildroot.net/buildroot/commit/?id=71d8148e593f4f636f585196c498cd9e749212de
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-linuxptp missing.h header implements a replacement clock_nanosleep()
-function, which was used when the thread implementation was not NPTL,
-because uClibc failed to provide clock_nanosleep() in such
-configurations.
-
-However, uClibc-ng has fixed this problem upstream, and has backported
-this change in Buildroot in patch
-package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
-(the code is upstream and will be part of uClibc-ng 1.0.31). Due to
-this, there is now a conflicting definition of clock_nanosleep()
-between the C library and the linuxptp missing.h code, which manifests
-itself by the following build failure:
-
-missing.h:117:19: error: static declaration of 'clock_nanosleep' follows non-static declaration
- static inline int clock_nanosleep(clockid_t clock_id, int flags,
-                   ^~~~~~~~~~~~~~~
-In file included from clockadj.h:24:0,
-                 from clockadj.c:24:
-
-This commit fixes that by adding a patch that removes the replacement
-clock_nanosleep() implementation from the linuxptp code base.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/bf400095a853f5beb28c77a50fcffefe52c3d769/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...issing.h-drop-clock_nanosleep-replacement.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 23 +++++++++++++++++++++++
+ 3 files changed, 36 insertions(+), 13 deletions(-)
 
-diff --git a/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch b/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch
-new file mode 100644
-index 0000000000..54ef963ae4
---- /dev/null
-+++ b/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch
-@@ -0,0 +1,49 @@
-+From 947bf03ec3d9eaa0bfc0269eed86b9364e94bc1a Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 5 Aug 2018 15:25:53 +0200
-+Subject: [PATCH] missing.h: drop clock_nanosleep() replacement
+diff --git a/Makefile b/Makefile
+index 37c7072c7c..f79d39fd26 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2018.08-git
++export BR2_VERSION := 2018.08-rc1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1527884000
++BR2_VERSION_EPOCH = 1533476000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 5ede937930..3a6e08ca91 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -75,38 +75,38 @@
+ 	  <p><a href="/downloads/buildroot-2018.05.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-<!--
+-      <h3 style="text-align: center;">Latest release candidate: <b>2018.05-rc3</b></h3>
 +
-+Since uClibc-ng commits 68628fe7d463541bf3c33da6b214e63c0cc9feed
-+("librt: declare clock_nanosleep not only for NPTL") and
-+ddbb03e77ac1a48740688814b82f45c97ee81f37 ("librt: clock_nanosleep
-+could be even used without threads"), clock_nanosleep() is always
-+provided by uClibc, regardless of the thread implementation (none,
-+linuxthreads, nptl). These commits will be part of the upcoming 1.0.31
-+release of uClibc-ng.
++      <h3 style="text-align: center;">Latest release candidate: <b>2018.08-rc1</b></h3>
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.05-rc3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.08-rc1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.05-rc3.tar.gz">buildroot-2018.05-rc3.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.05-rc3.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.08-rc1.tar.gz">buildroot-2018.08-rc1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.08-rc1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.05-rc3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.08-rc1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.05-rc3.tar.bz2">buildroot-2018.05-rc3.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.05-rc3.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.08-rc1.tar.bz2">buildroot-2018.08-rc1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.08-rc1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+@@ -114,7 +114,7 @@
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+   </div>
+--->
 +
-+Thanks to this, we can drop the replacement clock_nanosleep()
-+implementation added by linuxptp. Without this, linuxptp fails to
-+build with:
+   <div class="panel panel-primary">
+     <div class="panel-heading">Source code</div>
+     <div class="panel-body">
+diff --git a/docs/website/news.html b/docs/website/news.html
+index dfc937cfb0..cf95fb52d5 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,29 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.08-rc1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>5 August 2018</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>We have a new release candidate! Lots of changes all over the
++	  tree, see the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.08-rc1">CHANGES</a>
++	  file for details.
++	</p>
 +
-+missing.h:117:19: error: static declaration of 'clock_nanosleep' follows non-static declaration
-+ static inline int clock_nanosleep(clockid_t clock_id, int flags,
-+                   ^~~~~~~~~~~~~~~
-+In file included from clockadj.h:24:0,
-+                 from clockadj.c:24:
++	<p>Head to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.08-rc1.tar.bz2">2018.08-rc1
++	    release candidate</a>, and report any problems found to the
++	  <a href="support.html">mailing list</a> or
++	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++      </div>
++    </div>
++  </li>
 +
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ missing.h | 7 -------
-+ 1 file changed, 7 deletions(-)
-+
-+diff --git a/missing.h b/missing.h
-+index 2f7adb9..60f89a3 100644
-+--- a/missing.h
-++++ b/missing.h
-+@@ -129,13 +129,6 @@ enum {
-+ 
-+ #define TFD_TIMER_ABSTIME (1 << 0)
-+ 
-+-static inline int clock_nanosleep(clockid_t clock_id, int flags,
-+-				  const struct timespec *request,
-+-				  struct timespec *remain)
-+-{
-+-	return syscall(__NR_clock_nanosleep, clock_id, flags, request, remain);
-+-}
-+-
-+ static inline int timerfd_create(int clockid, int flags)
-+ {
-+ 	return syscall(__NR_timerfd_create, clockid, flags);
-+-- 
-+2.14.4
-+
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
