@@ -1,48 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Aug 2018 14:12:46 +0200
-Subject: [Buildroot] [git commit] package/cutelyst: bump version to fix
- build issues
-Message-ID: <20180805120707.F1F888B46E@busybox.osuosl.org>
+Date: Sun, 5 Aug 2018 14:13:41 +0200
+Subject: [Buildroot] [git commit] docs/manual: update host gcc minimum
+ required version
+Message-ID: <20180805120802.767EB8B475@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1eef94f12b8de9a96aabb85a5bb86c7ee41942e2
+commit: https://git.buildroot.net/buildroot/commit/?id=27797caf76b58aaa9ca0c4dc1044b328dbc6e829
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
+The oldest gcc that is known to work with current Buildroot is that of
+RHEL 6, version 4.4.
 
-  http://autobuild.buildroot.net/results/fd78e54eca9e95ae5c7a27e6afa1891a0bf65994/
-
-Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
-[Thomas: add autobuilder reference.]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cutelyst/cutelyst.hash | 2 +-
- package/cutelyst/cutelyst.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/prerequisite.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cutelyst/cutelyst.hash b/package/cutelyst/cutelyst.hash
-index 58645e50c2..edc83f3886 100644
---- a/package/cutelyst/cutelyst.hash
-+++ b/package/cutelyst/cutelyst.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  a5d40c5e0027982181529449ffa807492f5759c2c604cdc467e748445721ff28    cutelyst-2.5.1.tar.gz
-+sha256  d088e6dbbb9a1ef03b4481d44746a2b086724842f5ee85abe8095e2eb6fe0da4    cutelyst-2.5.2.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551    COPYING
-diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-index 498d2d5545..e8695a7b3a 100644
---- a/package/cutelyst/cutelyst.mk
-+++ b/package/cutelyst/cutelyst.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CUTELYST_VERSION = 2.5.1
-+CUTELYST_VERSION = 2.5.2
- CUTELYST_SITE = https://github.com/cutelyst/cutelyst/archive/v$(CUTELYST_VERSION)
- CUTELYST_INSTALL_STAGING = YES
- CUTELYST_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 110fab41fd..66e1b88f16 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -23,8 +23,8 @@ between distributions).
+ ** +make+ (version 3.81 or any later)
+ ** +binutils+
+ ** +build-essential+ (only for Debian based systems)
+-** +gcc+ (version 2.95 or any later)
+-** `g++` (version 2.95 or any later)
++** +gcc+ (version 4.4 or any later)
++** `g++` (version 4.4 or any later)
+ ** +bash+
+ ** +patch+
+ ** +gzip+
