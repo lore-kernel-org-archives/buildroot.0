@@ -1,41 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Aug 2018 19:39:09 +0200
-Subject: [Buildroot] [PATCH] package/cutelyst: Update micro version for
- build fix
-In-Reply-To: <CACo8zOc4NmY_rYuiBC3nAfNrxmQ15z+OzPuEgQ9dVXfGk2nrGQ@mail.gmail.com>
-References: <20180802133813.12698-1-dantti12@gmail.com>
- <20180802154726.46faa9d7@windsurf.home>
- <CACo8zOc4NmY_rYuiBC3nAfNrxmQ15z+OzPuEgQ9dVXfGk2nrGQ@mail.gmail.com>
-Message-ID: <20180805193909.4a586bd6@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 05 Aug 2018 23:39:32 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-08-04
+References: <20180805060022.2DF08207A8@mail.bootlin.com>
+Message-ID: <kd7k3fx875.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Daniel,
+Am Sun, 05 Aug 2018 08:00:22 +0200 schrieb Thomas Petazzoni:
 
-On Sun, 5 Aug 2018 12:31:57 -0300, Daniel Nicoletti wrote:
+>          arc |                   samba4-4.8.3 | NOK | http://
+autobuild.buildroot.net/results/9188530d80f7bb8edc1394f3e9ad60806279f698 
+|     
+>     mips64el |                   samba4-4.8.3 | NOK | http://
+autobuild.buildroot.net/results/7235cd53dd2eae02b9c25724da8e0ef2c789af3c 
+|     
+>     mips64el |                   samba4-4.8.3 | NOK | http://
+autobuild.buildroot.net/results/8638d46e51333209c264fe3f21d9cf04602522f7 
+|     
 
-> > (Of course, use the correct hash, I just took a random build results to
-> > illustrate here.)  
-> Should all build failures be included or just one with the problem?
+Hi,
 
-Just one with the problem.
+finally I was able to reproduce the build error. The reason for the bug 
+is described in an upstream bug report which was closed as WONTFIX:
+https://bugzilla.samba.org/show_bug.cgi?id=9515
 
-> This here has a new error:
->         i686 |                 cutelyst-2.5.1 |
-> http://autobuild.buildroot.net/results/d38411eda9edf16e2c40d8931bcfc889faae43dc
-> I use SO_REUSEPORT but it seems this kernel is old and does not have
-> support for it
+If installed, samba4 uses the docbook-xsl package from the host system to 
+build parts of the documentation. On my Debian system the bug reported to 
+samba4 was fixed in the docbook-xsl package:
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=765567
 
-Then you need to add a dependency on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-where 3_3 matches the kernel version in which SO_REUSEPORT was added.
+Looking at http://autobuild.buildroot.net/?reason=samba4-4.8.3 I saw the 
+system from Matt Weber being called "(U14.04 RC LARGO)" so I installed 
+Ubuntu 14.04.5, which does not carry the fix and voila, I could reproduce 
+the error.
 
-Thanks!
+This patch fixes the problem by disabling the build of the documentation:
+https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/network/
+samba/patches/samba-950-no-man.patch
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Are you willing to accept this patch for buildroot or should the docbook-
+xsl package on the autobuilder instances instead be patched? At the end 
+the bug is neither in the samba4 package nor in buildroot itself.
+
+Regards, Bernd
