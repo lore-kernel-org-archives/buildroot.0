@@ -1,35 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Aug 2018 12:07:16 +0200
-Subject: [Buildroot] [PATCH] luarocks: fix lua modules building with
- luajit
-In-Reply-To: <20180729094457.32098-1-francois.perrad@gadz.org>
-References: <20180729094457.32098-1-francois.perrad@gadz.org>
-Message-ID: <20180805120716.066d6ae2@windsurf>
+Date: Sun, 5 Aug 2018 12:07:36 +0200
+Subject: [Buildroot] [git commit] package/aircrack-ng: needs dynamic library
+ support
+Message-ID: <20180805100129.455388B42A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=3f47f2542fbb0e4057695499f815267d3c1ebe92
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 29 Jul 2018 11:44:57 +0200, Francois Perrad wrote:
-> currently, when luajit is selected as luainterpreter,
-> all lua module fails to build with the message:
->     Error: Failed finding Lua library. You may need to configure LUA_LIBDIR.
-> 
-> see http://autobuild.buildroot.net/results/66de049c306d7aff66894d53e2f4fa755fd01594
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  .../0001-allow-libluajit-detection.patch      | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/luarocks/0001-allow-libluajit-detection.patch
+Fixes
+http://autobuild.buildroot.net/results/611/61170d12811c70037ee875434a295ac35a2a5c50/
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/aircrack-ng/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+index 9e691e7f89..f3e2bc4ef1 100644
+--- a/package/aircrack-ng/Config.in
++++ b/package/aircrack-ng/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_AIRCRACK_NG
+ 	depends on BR2_USE_MMU # uses fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
+ 	help
+ 	  A set of tools for auditing wireless networks
+@@ -12,6 +13,7 @@ config BR2_PACKAGE_AIRCRACK_NG
+ 
+ 	  http://www.aircrack-ng.org/
+ 
+-comment "aircrack-ng needs a toolchain w/ threads, C++"
++comment "aircrack-ng needs a toolchain w/ dynamic library, threads, C++"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_INSTALL_LIBSTDCPP
