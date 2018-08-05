@@ -1,35 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Aug 2018 14:43:03 +0200
-Subject: [Buildroot] [PATCH] vim: install /bin/vi as a relative symlink
-In-Reply-To: <20180718123443.7242-1-casantos@datacom.com.br>
-References: <20180718123443.7242-1-casantos@datacom.com.br>
-Message-ID: <20180805144303.7624b65a@windsurf>
+Date: Sun, 5 Aug 2018 14:46:29 +0200
+Subject: [Buildroot] [git commit] configs/qemu_sh4eb-r2d: restore the old
+ sh-sci driver behaviour
+Message-ID: <20180805124031.390128B4C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=23aee3eac497f15f901ddf99ab3aa81af747f7e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 18 Jul 2018 09:34:43 -0300, Carlos Santos wrote:
-> Prevent creating a dangling symlink when vim is not present on the host
-> machine. With BR2_ROOTFS_MERGED_USR, just link to "vim", since they are
-> on the same directory, otherwise link to "../usr/bin/vim".
-> 
-> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-> ---
->  package/vim/vim.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+As for sh4-r2d (little-endian) restore the old sh-sci driver behaviour
+for sh4eb-r2d.
 
-I know there is some ongoing discussion on how to handle this better in
-a more generic way, but until those discussions are resolved, I've
-applied this patch to master.
+Tested with qemu_sh4eb_r2d_defconfig.
 
-Thanks!
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...al-sh-sci-increase-RX-FIFO-trigger-defaul.patch | 61 ++++++++++++++++++++++
+ configs/qemu_sh4eb_r2d_defconfig                   |  1 +
+ 2 files changed, 62 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/qemu/sh4eb-r2d/patches/linux/0001-Revert-serial-sh-sci-increase-RX-FIFO-trigger-defaul.patch b/board/qemu/sh4eb-r2d/patches/linux/0001-Revert-serial-sh-sci-increase-RX-FIFO-trigger-defaul.patch
+new file mode 100644
+index 0000000000..36c82d84ef
+--- /dev/null
++++ b/board/qemu/sh4eb-r2d/patches/linux/0001-Revert-serial-sh-sci-increase-RX-FIFO-trigger-defaul.patch
+@@ -0,0 +1,61 @@
++From aaaced6d2d6f796ed77e4725ed7ccbedb189c180 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 15 Jun 2018 17:43:38 +0200
++Subject: [PATCH] Revert: serial: sh-sci: increase RX FIFO trigger defaults for
++ (H)SCIF
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This reverts commit 18e8cf159177100e69d528293f8cf6875c0b1bca (kernel)
++
++The last Qemu kernel update [1] introduced a regresion in sh4 SCIF
++serial device. Some keyboard presses are very slow to be taken into
++account, perhaps not even taken into account at all. This would
++explain why our test infrastructure doesn???t manage to login as root
++[2][3][4].
++
++git bisect reported a kernel patch from 4.11, increasing RX FIFO
++trigger defaults value for sh-sci (H)SCIF. The kernel patch itself
++looks good but the Qemu emulation is not ready to handle this new
++setting.
++
++From Qemu (2.12.0): target/sh4/README.sh4
++"Configuration of the second serial port (SCIF) is supported. FIFO
++handling infrastructure has been started but is not completed yet."
++
++In order to be able to test sh4 architecture with newer kernel,
++revert to the old behaviour.
++
++[1] https://git.buildroot.net/buildroot/commit/?id=03fb00f2175cdb4565e26fcb9b3da1c1059de1bd
++[2] https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006425
++[3] https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006427
++[4] https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006426
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ drivers/tty/serial/sh-sci.c | 7 ++-----
++ 1 file changed, 2 insertions(+), 5 deletions(-)
++
++diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
++index ab757546c6db..138e4dec44fb 100644
++--- a/drivers/tty/serial/sh-sci.c
+++++ b/drivers/tty/serial/sh-sci.c
++@@ -2793,11 +2793,8 @@ static int sci_init_single(struct platform_device *dev,
++ 		sci_port->rx_trigger = 32;
++ 		break;
++ 	case PORT_SCIF:
++-		if (p->regtype == SCIx_SH7705_SCIF_REGTYPE)
++-			/* RX triggering not implemented for this IP */
++-			sci_port->rx_trigger = 1;
++-		else
++-			sci_port->rx_trigger = 8;
+++		/* RX triggering not implemented in Qemu emulation */
+++		sci_port->rx_trigger = 1;
++ 		break;
++ 	default:
++ 		sci_port->rx_trigger = 1;
++-- 
++2.14.4
++
+diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
+index 79e8c38e8a..e7dbd46a2b 100644
+--- a/configs/qemu_sh4eb_r2d_defconfig
++++ b/configs/qemu_sh4eb_r2d_defconfig
+@@ -3,6 +3,7 @@ BR2_sh=y
+ BR2_sh4eb=y
+ 
+ # System
++BR2_GLOBAL_PATCH_DIR="board/qemu/sh4eb-r2d/patches"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttySC1"
+ 
+ # Filesystem
