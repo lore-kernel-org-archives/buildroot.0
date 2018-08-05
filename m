@@ -1,30 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Aug 2018 12:58:59 +0200
-Subject: [Buildroot] [PATCH] package/gdb: bump to version 8.1.1
-In-Reply-To: <20180803181310.17488-1-romain.naour@gmail.com>
-References: <20180803181310.17488-1-romain.naour@gmail.com>
-Message-ID: <20180805125859.03138b40@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun,  5 Aug 2018 13:46:15 +0200
+Subject: [Buildroot] [PATCH] docs/manual: gcc 4.4 is the lowest we are known
+ to work with
+Message-ID: <20180805114615.3442-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+gcc-2.95 is old. No, it is not old; it is antediluvian.
 
-On Fri,  3 Aug 2018 20:13:10 +0200, Romain Naour wrote:
-> https://sourceware.org/ml/gdb-announce/2018/msg00002.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/gdb/Config.in.host | 2 +-
->  package/gdb/gdb.hash       | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+The odlest gcc version we are testing against is gcc-4.4 (on Holiss'
+autobuilder using RHEL6.5).
 
-Applied to master, thanks.
+Update the manual accordingly.
 
-Thomas
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Hollis Blanchard <hollis_blanchard@mentor.com>
+---
+ docs/manual/prerequisite.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
+index 110fab41fd..66e1b88f16 100644
+--- a/docs/manual/prerequisite.txt
++++ b/docs/manual/prerequisite.txt
+@@ -23,8 +23,8 @@ between distributions).
+ ** +make+ (version 3.81 or any later)
+ ** +binutils+
+ ** +build-essential+ (only for Debian based systems)
+-** +gcc+ (version 2.95 or any later)
+-** `g++` (version 2.95 or any later)
++** +gcc+ (version 4.4 or any later)
++** `g++` (version 4.4 or any later)
+ ** +bash+
+ ** +patch+
+ ** +gzip+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
