@@ -1,52 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 5 Aug 2018 12:55:39 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/qt5/qt5base: fix
- PKG_CONFIG_LIBDIR
-In-Reply-To: <20180802180944.26935-1-bernd.kuhls@t-online.de>
-References: <20180802180944.26935-1-bernd.kuhls@t-online.de>
-Message-ID: <20180805125539.7bff50c7@windsurf>
+Date: Sun, 5 Aug 2018 12:56:15 +0200
+Subject: [Buildroot] [git commit] package/tinc: bump version to 1.0.34
+Message-ID: <20180805105107.3B8998B44A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2dbc549ca6f3145cbdeac2ccf2f95186c5a18a27
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  2 Aug 2018 20:09:44 +0200, Bernd Kuhls wrote:
-> By default pkgconf searches "${libdir}/pkgconfig:${datadir}/pkgconfig"
-> for .pc files:
-> https://github.com/pkgconf/pkgconf/blob/844f0a66621629a65e3cbf3c3ca47185602e9df5/configure.ac#L41
-> 
-> The new xorgproto package installs .pc files to ${datadir}/pkgconfig
-> whichs translates to $(STAGING_DIR)/usr/share/pkgconfig, for example
-> dri3proto:
-> https://cgit.freedesktop.org/xorg/proto/xorgproto/tree/Makefile.am#n65
-> 
-> whereas the old xproto_ packages installed their .pc files to
-> ${libdir}/pkgconfig:
-> https://cgit.freedesktop.org/xorg/proto/dri3proto/tree/Makefile.am?id=3937f72040b79c7245b261da880364177cc40a6e#n4
-> 
-> Normally this upstream change is not a problem because pkgconf searches
-> both paths for .pc files, unless we define PKG_CONFIG_LIBDIR with
-> something else like we did for the last six years ;)
-> https://github.com/buildroot/buildroot/blame/master/package/qt5/qt5base/qt5base.mk#L280
-> 
-> This patch removes all variables concerning pkgconf paths. At the time
-> the qt5base package was introduced the pkgconf wrapper did not exist.
-> Today these variables are not necessary anymore.
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/061/06159500c27026d56a772fafbb0d956c72dd4e6c/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: Removed PKG_CONFIG_* variables (Thomas)
+Updated license hash after upstream commit:
+http://www.tinc-vpn.org/git/browse?p=tinc;a=commitdiff;h=54b18a85f68652f94ac5ecffbd9d100879ed06ea
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tinc/tinc.hash | 4 ++--
+ package/tinc/tinc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tinc/tinc.hash b/package/tinc/tinc.hash
+index b0cdde834a..09d2867b16 100644
+--- a/package/tinc/tinc.hash
++++ b/package/tinc/tinc.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	7f6f5dc6444bc651ac635c81f4745bcce581bbd1d45ed60cbdc4ee11bebb10f4 tinc-1.0.33.tar.gz
+-sha256  10618781fe68ee0958d627f9f4b279b55eaff6c852f7742bbef64dc470c0077c COPYING
++sha256  c03a9b61dedd452116dd9a8db231545ba08a7c96bce011e0cbd3cfd2c56dcfda tinc-1.0.34.tar.gz
++sha256  3a112fd37b47d624e89b130d0e158bb8d14ec5bc9ecf5f18b448d2c07626e43d COPYING
+ sha256  9bf76a8aa304d807df20bf3d221c21d259764be63e39b58f299b80ba3ac14b5b COPYING.README
+diff --git a/package/tinc/tinc.mk b/package/tinc/tinc.mk
+index 002785307e..85dccdc34e 100644
+--- a/package/tinc/tinc.mk
++++ b/package/tinc/tinc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TINC_VERSION = 1.0.33
++TINC_VERSION = 1.0.34
+ TINC_SITE = http://www.tinc-vpn.org/packages
+ TINC_DEPENDENCIES = lzo openssl zlib
+ TINC_LICENSE = GPL-2.0+ with OpenSSL exception
