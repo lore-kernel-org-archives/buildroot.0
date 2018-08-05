@@ -1,201 +1,100 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 5 Aug 2018 15:29:10 +0200
-Subject: [Buildroot] [PATCHv3] core/sdk: generate the SDK tarball
- ourselves
-In-Reply-To: <CAOJ2eMf2RjT3KmuUMvvpYGy6r9J_ef0NHrU03TSycZqbaxtBeg@mail.gmail.com>
-References: <20180804082741.10783-1-yann.morin.1998@free.fr>
- <CAOJ2eMf2RjT3KmuUMvvpYGy6r9J_ef0NHrU03TSycZqbaxtBeg@mail.gmail.com>
-Message-ID: <20180805132910.GE12445@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 5 Aug 2018 15:29:56 +0200
+Subject: [Buildroot] [git commit] linuxptp: add patch to fix
+ no-thread/linuxthreads uClibc builds
+Message-ID: <20180805132759.F12828B4CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stefan All,
+commit: https://git.buildroot.net/buildroot/commit/?id=ae2cae70b82bbb1c85307c5947e1b441567038fd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2018-08-05 16:20 +0300, Stefan Becker spake thusly:
-> Reviewed-by: Stefan Becker < [1]chemobejk@gmail.com>
-> No time to test this though...
+linuxptp missing.h header implements a replacement clock_nanosleep()
+function, which was used when the thread implementation was not NPTL,
+because uClibc failed to provide clock_nanosleep() in such
+configurations.
 
-No problem. Thanks! :-)
+However, uClibc-ng has fixed this problem upstream, and has backported
+this change in Buildroot in patch
+package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
+(the code is upstream and will be part of uClibc-ng 1.0.31). Due to
+this, there is now a conflicting definition of clock_nanosleep()
+between the C library and the linuxptp missing.h code, which manifests
+itself by the following build failure:
 
-Regards,
-Yann E. MORIN.
+missing.h:117:19: error: static declaration of 'clock_nanosleep' follows non-static declaration
+ static inline int clock_nanosleep(clockid_t clock_id, int flags,
+                   ^~~~~~~~~~~~~~~
+In file included from clockadj.h:24:0,
+                 from clockadj.c:24:
 
-> On Sat, Aug 4, 2018 at 11:27 AM Yann E. MORIN < [2]yann.morin.1998@free.fr> wrote:
-> 
->   Currently, the wording in the manual instructs the user to generate a
->   tarball from "the contents of the +output/host+ directory".
-> 
->   This is pretty confusing, because taken literally, this would amount to
->   running a command like:
-> 
->   ? ? tar cf my-sdk.tar -C output/host/ .
-> 
->   This creates a tarbomb [0], which is very bad practice, because when
->   extracted, it creates multiple files in the current directory.
-> 
->   What one really wants to do, is create a tarball of the host/ directory,
->   with something like:
-> 
->   ? ? tar cf my-sdk.tar -C output host/
-> 
->   However, this is not much better, because the top-most directory would
->   have a very common name, host/, which is pretty easy to get conflict
->   with when it gets extracted.
-> 
->   So, we fix that mess by giving the top-most directory a recognisable
->   name, based on the target tuple, which we also use as the name of the
->   archive (suffixed with the usual +.tar.gz+.) We offer the user the
->   possibility to override that default by specifying the +BR2_SDK_PREFIX+
->   variable on the command line.
-> 
->   Since this is an output file, we place it in the images/ directory.
-> 
->   As some users expressed a very strong feeling that they do not want to
->   generate a tarball at all, and that doing so would badly hurt their
->   workflows [1], we actually prepare the SDK as was previously done, but
->   under the new, intermediate rule 'prepare-sdk'. The existing 'sdk' rule
->   obviously depend on that before generating the tarball.
-> 
->   We choose to make the existing rule to generate the tarball, and
->   introduce a new rule to just prepare the SDK, rather than keep the
->   existing rule as-is and introduce a new one to generate the tarball,
->   because it makes sense to have the simplest rule do the correct thing,
->   leaving advanced, power users use the longest command. If someone
->   already had a wrapper that called 'sdk' and expected just the host
->   directory to be prepared, then this is not broken; it just takes a bit
->   longer (gzip is pretty fast).
-> 
->   Update the manual accordingly.
-> 
->   [0] [3]https://en.wikipedia.org/wiki/Tar_(computing)#Tarbomb
->   [1] [4]http://lists.busybox.net/pipermail/buildroot/2018-June/thread.html#223377
->   ? ? and some messages in the ensuing thread...
-> 
->   Signed-off-by: "Yann E. MORIN" < [5]yann.morin.1998@free.fr>
->   Cc: Wolfgang Grandegger < [6]wg@grandegger.com>
->   Cc: Thomas Petazzoni < [7]thomas.petazzoni@bootlin.com>
->   Cc: Arnout Vandecappelle < [8]arnout@mind.be>
->   Cc: Stefan Becker < [9]chemobejk@gmail.com>
->   Cc: Trent Piepho < [10]tpiepho@impinj.com>
-> 
->   ---
->   Changes v2 -> v3:
->   ? - drop the version from the prefix? (Stefan, Thomas)
->   ? - actually have 'sdk' depend on 'prepare-sdk'
->   ? - anonymise the generated tarball
-> 
->   Changes v1 -> v2:
->   ? - drop the part of the manual stating this can't be re-used as a
->   ? ? pre-built toolchain? (Arnout)
->   ? - make the top-level directory and tarball name configurable
->   ? ? (Trent, Thomas)
->   ? - change the default name? (Arnout)
->   ? - allow just preparing the SDK (Stefan, Trent)
->   ? - typoes? (Thomas)
->   ---
->   ?Makefile? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?
->   ? | 15 +++++++++++++--
->   ?docs/manual/using-buildroot-toolchain.txt | 26 +++++++++++++++++---------
->   ?2 files changed, 30 insertions(+), 11 deletions(-)
-> 
->   diff --git a/Makefile b/Makefile
->   index 37c7072c7c..e13e5eaefa 100644
->   --- a/Makefile
->   +++ b/Makefile
->   @@ -573,8 +573,8 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
->   ?.PHONY: world
->   ?world: target-post-image
-> 
->   -.PHONY: sdk
->   -sdk: world
->   +.PHONY: prepare-sdk
->   +prepare-sdk: world
->   ? ? ? ? @$(call MESSAGE,"Rendering the SDK relocatable")
->   ? ? ? ? $(TOPDIR)/support/scripts/fix-rpath host
->   ? ? ? ? $(TOPDIR)/support/scripts/fix-rpath staging
->   @@ -582,6 +582,17 @@ sdk: world
->   ? ? ? ? mkdir -p $(HOST_DIR)/share/buildroot
->   ? ? ? ? echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-> 
->   +BR2_SDK_PREFIX ?= $(GNU_TARGET_NAME)_sdk-buildroot
->   +.PHONY: sdk
->   +sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
->   +? ? ? ?@$(call MESSAGE,"Generating SDK tarball")
->   +? ? ? ?$(if $(BR2_SDK_PREFIX),,$(error BR2_SDK_PREFIX can not be empty))
->   +? ? ? ?$(Q)mkdir -p $(BINARIES_DIR)
->   +? ? ? ?$(TAR) czf "$(BINARIES_DIR)/$(BR2_SDK_PREFIX).tar.gz" \
->   +? ? ? ? ? ? ? ?--owner=0 --group=0 --numeric-owner \
->   +? ? ? ? ? ? ? ?--transform='s#^\.#$(BR2_SDK_PREFIX)#' \
->   +? ? ? ? ? ? ? ?-C $(HOST_DIR) "."
->   +
->   ?# Populating the staging with the base directories is handled by the skeleton package
->   ?$(STAGING_DIR):
->   ? ? ? ? @mkdir -p $(STAGING_DIR)
->   diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
->   index 3246dc2411..0c0c35fced 100644
->   --- a/docs/manual/using-buildroot-toolchain.txt
->   +++ b/docs/manual/using-buildroot-toolchain.txt
->   @@ -12,15 +12,23 @@ The toolchain generated by Buildroot is located by default in
->   ?+output/host/bin/+ to your PATH environment variable and then to
->   ?use +ARCH-linux-gcc+, +ARCH-linux-objdump+, +ARCH-linux-ld+, etc.
-> 
->   -It is possible to relocate the toolchain, this allows to distribute
->   -the toolchain to other developers to build applications for your
->   -target. To achieve this:
->   +Alternatively, Buildroot can also export the toolchain and the development
->   +files of all selected packages, as an SDK, by running the command
->   ++make sdk+. This generates a tarball of the content of the host directory
->   ++output/host/+, named +<TARGET-TUPLE>_sdk-buildroot.tar.gz+ (which can be
->   +overriden by setting the environment variable +BR2_SDK_PREFIX+) and
->   +located in the output directory +output/images/+.
-> 
->   -* run +make sdk+, which prepares the toolchain to be relocatable;
->   -* tarball the contents of the +output/host+ directory;
->   -* distribute the resulting tarball.
->   +This tarball can then be distributed to application developers, when
->   +they want to develop their applications that are not (yet) packaged as
->   +a Buildroot package.
-> 
->   -Once the toolchain is installed to the new location, the user must run
->   -the +relocate-sdk.sh+ script to make sure all paths are updated with
->   -the new location.
->   +Upon extracting the SDK tarball, the user must run the script
->   ++relocate-sdk.sh+ (located at the top directory of the SDK), to make
->   +sure all paths are updated with the new location.
-> 
->   +Alternatively, if you just want to prepare the SDK without generating
->   +the tarball (e.g. because you will just be moving the +host+ directory,
->   +or will be generating the tarball on your own), Buildroot also allows
->   +you to just prepare the SDK with +make prepare-sdk+ without actually
->   +generating a tarball.
->   --
->   2.14.1
-> 
-> Links:
-> 1. mailto:chemobejk at gmail.com
-> 2. mailto:yann.morin.1998 at free.fr
-> 3. https://en.wikipedia.org/wiki/Tar_(computing)#Tarbomb
-> 4. http://lists.busybox.net/pipermail/buildroot/2018-June/thread.html#223377
-> 5. mailto:yann.morin.1998 at free.fr
-> 6. mailto:wg at grandegger.com
-> 7. mailto:thomas.petazzoni at bootlin.com
-> 8. mailto:arnout at mind.be
-> 9. mailto:chemobejk at gmail.com
-> 10. mailto:tpiepho at impinj.com
+This commit fixes that by adding a patch that removes the replacement
+clock_nanosleep() implementation from the linuxptp code base.
 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Fixes:
 
+  http://autobuild.buildroot.net/results/bf400095a853f5beb28c77a50fcffefe52c3d769/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...issing.h-drop-clock_nanosleep-replacement.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+
+diff --git a/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch b/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch
+new file mode 100644
+index 0000000000..54ef963ae4
+--- /dev/null
++++ b/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch
+@@ -0,0 +1,49 @@
++From 947bf03ec3d9eaa0bfc0269eed86b9364e94bc1a Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 5 Aug 2018 15:25:53 +0200
++Subject: [PATCH] missing.h: drop clock_nanosleep() replacement
++
++Since uClibc-ng commits 68628fe7d463541bf3c33da6b214e63c0cc9feed
++("librt: declare clock_nanosleep not only for NPTL") and
++ddbb03e77ac1a48740688814b82f45c97ee81f37 ("librt: clock_nanosleep
++could be even used without threads"), clock_nanosleep() is always
++provided by uClibc, regardless of the thread implementation (none,
++linuxthreads, nptl). These commits will be part of the upcoming 1.0.31
++release of uClibc-ng.
++
++Thanks to this, we can drop the replacement clock_nanosleep()
++implementation added by linuxptp. Without this, linuxptp fails to
++build with:
++
++missing.h:117:19: error: static declaration of 'clock_nanosleep' follows non-static declaration
++ static inline int clock_nanosleep(clockid_t clock_id, int flags,
++                   ^~~~~~~~~~~~~~~
++In file included from clockadj.h:24:0,
++                 from clockadj.c:24:
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ missing.h | 7 -------
++ 1 file changed, 7 deletions(-)
++
++diff --git a/missing.h b/missing.h
++index 2f7adb9..60f89a3 100644
++--- a/missing.h
+++++ b/missing.h
++@@ -129,13 +129,6 @@ enum {
++ 
++ #define TFD_TIMER_ABSTIME (1 << 0)
++ 
++-static inline int clock_nanosleep(clockid_t clock_id, int flags,
++-				  const struct timespec *request,
++-				  struct timespec *remain)
++-{
++-	return syscall(__NR_clock_nanosleep, clock_id, flags, request, remain);
++-}
++-
++ static inline int timerfd_create(int clockid, int flags)
++ {
++ 	return syscall(__NR_timerfd_create, clockid, flags);
++-- 
++2.14.4
++
