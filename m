@@ -1,154 +1,70 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Mon,  6 Aug 2018 02:36:53 +0200
-Subject: [Buildroot] [PATCH v2 1/1] qt5wayland: add fix from upstream to
- compile without QtQuick
-Message-ID: <1533515813-11533-1-git-send-email-bos@je-eigen-domein.nl>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 06 Aug 2018 00:12:20 -0300
+Subject: [Buildroot] Handling leading tabs in makedevs [was: [Bug 11191]
+ xattr and check-package issue]
+References: <2e8f28d9-e074-776e-5bdb-c8713e7ec497@mind.be>
+Message-ID: <5b67bc945f9c3_78eb3f98000884789463@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compiling qt5wayland fails if you do not have the QtQuick module:
+Hello,
 
-==
-.obj/qwaylandquickhardwarelayer.o: In function `QWaylandQuickHardwareLayer::classBegin()':
-qwaylandquickhardwarelayer.cpp:(.text+0x170): undefined reference to `QWaylandQuickItem::staticMetaObject'
-.obj/qwaylandquickhardwarelayer.o: In function `non-virtual thunk to QWaylandQuickHardwareLayer::classBegin()':
-qwaylandquickhardwarelayer.cpp:(.text+0x1cc): undefined reference to `QWaylandQuickItem::staticMetaObject'
-.obj/qwaylandquickhardwarelayer.o: In function `QWaylandQuickHardwareLayer::disableSceneGraphPainting()':
-qwaylandquickhardwarelayer.cpp:(.text+0x1e0): undefined reference to `QWaylandQuickItem::setPaintEnabled(bool)'
-.obj/qwaylandquickhardwarelayer.o: In function `QWaylandQuickHardwareLayerPrivate::layerIntegration()':
-qwaylandquickhardwarelayer.cpp:(.text+0x22c): undefined reference to `QtWayland::HardwareLayerIntegrationFactory::keys(QString const&)'
-qwaylandquickhardwarelayer.cpp:(.text+0x408): undefined reference to `QtWayland::HardwareLayerIntegrationFactory::create(QString const&, QStringList const&, QString const&)'
-qwaylandquickhardwarelayer.cpp:(.text+0x890): undefined reference to `QtWayland::HardwareLayerIntegrationFactory::create(QString const&, QStringList const&, QString const&)'
-collect2: error: ld returned 1 exit status
-Makefile:375: recipe for target '../../lib/libQt5WaylandCompositor.so.5.11.1' failed
-make[4]: *** [../../lib/libQt5WaylandCompositor.so.5.11.1] Error 1
-==
+On Thu, Jul 26, 2018 at 05:17 AM, Arnout Vandecappelle wrote:
 
-Fix taken from upstream's git:
-http://code.qt.io/cgit/qt/qtwayland.git/commit/?id=2c48ee65e8c3b894caec214641723d0777fc60b8
+[snip]
+>> --- Comment #1 from Ricardo Martincoski <ricardo.martincoski@datacom.ind.br> ---
+[snip]
+>> We could fix this inconsistency by a number of ways:
+>> 1) change check-package;
+>> 2) try to come up with a solution in package/pkg-generic.mk to remove leading
+>> tabs from _PERMISSION. It cannot be a simple $$(strip) because it would remove
+>> the newlines;
+>> 3) change makedevs to ignore leading tabs/spaces for xattr (as it already does
+>> for non-xattr lines). Hackish version to replace the code mentioned above:
+>>> if (2 == sscanf(line, "%4095s %254s", name, xattr) && !strcmp(name, "|xattr")) {
+> 
+>  1 == sscanf(line, " |xattr %254s", xattr)) should be sufficient - " " matches
+> any amount of whitespace.
 
-No longer depends on declarative after applying either.
+You are right. I will do this.
 
-Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+> 
+>  Note that since the xattr handling is something we added ourselves to busybox
+> makedevs, we can easily do this.
+> 
+>> 4) change fs/common.mk to remove the leading tabs/spaces. Something like this:
+>>> +++ b/fs/common.mk
+>>> @@@ -89,2 -89,2 +89,3 @@@ endi
+>>>        $(call PRINTF,$(PACKAGES_PERMISSIONS_TABLE)) >> $(FULL_DEVICE_TABLE)
+>>> ++      $(SED) "s/^[ \t]*//g" $(FULL_DEVICE_TABLE)
+>>>        echo "$(HOST_DIR)/bin/makedevs -d $(FULL_DEVICE_TABLE) $(TARGET_DIR)" >> $(FAKEROOT_SCRIPT)
+>> 
+>> I think option 4 makes sense because we also will end up with a better
+>> formatted device_table.txt.
+> 
+>  I prefer option 3 or 4 as well. However, I don't agree that it's better
+> formatted without the tabs - with the tab in front, it's clearer that the xattr
+> belongs to the line above. So I'm more inclined to option 3.
 
----
-v1 -> v2:
-  - do add dependency in .mk if quick is enabled, so it is build first.
----
- .../0001-fix-compilation-without-QtQuick.patch     | 68 ++++++++++++++++++++++
- package/qt5/qt5wayland/Config.in                   |  2 -
- package/qt5/qt5wayland/qt5wayland.mk               |  6 +-
- 3 files changed, 73 insertions(+), 3 deletions(-)
- create mode 100644 package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
+But the tabs are also added in front of files when added by _PERMISSIONS, so you
+won't get the visual effect you want.
 
-diff --git a/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch b/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
-new file mode 100644
-index 0000000..a72e053
---- /dev/null
-+++ b/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
-@@ -0,0 +1,68 @@
-+From 2c48ee65e8c3b894caec214641723d0777fc60b8 Mon Sep 17 00:00:00 2001
-+From: Alexander Schlarb <alexander@ninetailed.ninja>
-+Date: Sun, 29 Jul 2018 21:27:28 +0200
-+Subject: Fix compilation of QtWayland without QtQuick
-+
-+Change-Id: I0baf542f89274f48bf7d02121a07d64f0f3a001b
-+Reviewed-by: Johan Helsing <johan.helsing@qt.io>
-+---
-+ src/compositor/compositor_api/compositor_api.pri               | 10 +++++-----
-+ .../hardware_integration/qwlhardwarelayerintegration_p.h       |  1 -
-+ 2 files changed, 5 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/compositor/compositor_api/compositor_api.pri b/src/compositor/compositor_api/compositor_api.pri
-+index e5df0f1f..4a0c0aa6 100644
-+--- a/src/compositor/compositor_api/compositor_api.pri
-++++ b/src/compositor/compositor_api/compositor_api.pri
-+@@ -27,7 +27,6 @@ HEADERS += \
-+     compositor_api/qwaylandresource.h \
-+     compositor_api/qwaylandsurfacegrabber.h \
-+     compositor_api/qwaylandoutputmode_p.h \
-+-    compositor_api/qwaylandquickhardwarelayer_p.h \
-+ 
-+ SOURCES += \
-+     compositor_api/qwaylandcompositor.cpp \
-+@@ -44,8 +43,7 @@ SOURCES += \
-+     compositor_api/qwaylanddestroylistener.cpp \
-+     compositor_api/qwaylandview.cpp \
-+     compositor_api/qwaylandresource.cpp \
-+-    compositor_api/qwaylandsurfacegrabber.cpp \
-+-    compositor_api/qwaylandquickhardwarelayer.cpp
-++    compositor_api/qwaylandsurfacegrabber.cpp
-+ 
-+ qtConfig(im) {
-+     HEADERS += \
-+@@ -71,14 +69,16 @@ qtHaveModule(quick):qtConfig(opengl) {
-+         compositor_api/qwaylandquickcompositor.cpp \
-+         compositor_api/qwaylandquicksurface.cpp \
-+         compositor_api/qwaylandquickoutput.cpp \
-+-        compositor_api/qwaylandquickitem.cpp
-++        compositor_api/qwaylandquickitem.cpp \
-++        compositor_api/qwaylandquickhardwarelayer.cpp
-+ 
-+     HEADERS += \
-+         compositor_api/qwaylandquickcompositor.h \
-+         compositor_api/qwaylandquicksurface.h \
-+         compositor_api/qwaylandquickoutput.h \
-+         compositor_api/qwaylandquickitem.h \
-+-        compositor_api/qwaylandquickitem_p.h
-++        compositor_api/qwaylandquickitem_p.h \
-++        compositor_api/qwaylandquickhardwarelayer_p.h
-+ 
-+     QT += qml qml-private quick quick-private
-+ }
-+diff --git a/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h b/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
-+index 02de8e8b..1e5fb1a1 100644
-+--- a/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
-++++ b/src/compositor/hardware_integration/qwlhardwarelayerintegration_p.h
-+@@ -54,7 +54,6 @@
-+ #include <QtWaylandCompositor/qtwaylandcompositorglobal.h>
-+ 
-+ #include <QObject>
-+-#include <QQmlParserStatus>
-+ 
-+ QT_BEGIN_NAMESPACE
-+ 
-+-- 
-+cgit v1.1-6-g87c4
-+
-diff --git a/package/qt5/qt5wayland/Config.in b/package/qt5/qt5wayland/Config.in
-index 0182d3c..9f144ac 100644
---- a/package/qt5/qt5wayland/Config.in
-+++ b/package/qt5/qt5wayland/Config.in
-@@ -5,8 +5,6 @@ comment "qt5wayland needs an OpenGL-capable backend"
- config BR2_PACKAGE_QT5WAYLAND
- 	bool "qt5wayland"
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
--	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
--	select BR2_PACKAGE_QT5DECLARATIVE
- 	select BR2_PACKAGE_WAYLAND
- 	help
- 	  Qt is a cross-platform application and UI framework for
-diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
-index 98e592f..d6fb6e1 100644
---- a/package/qt5/qt5wayland/qt5wayland.mk
-+++ b/package/qt5/qt5wayland/qt5wayland.mk
-@@ -7,9 +7,13 @@
- QT5WAYLAND_VERSION = $(QT5_VERSION)
- QT5WAYLAND_SITE = $(QT5_SITE)
- QT5WAYLAND_SOURCE = qtwayland-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5WAYLAND_VERSION).tar.xz
--QT5WAYLAND_DEPENDENCIES = qt5base qt5declarative wayland
-+QT5WAYLAND_DEPENDENCIES = qt5base wayland
- QT5WAYLAND_INSTALL_STAGING = YES
- 
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+QT5WAYLAND_DEPENDENCIES += qt5declarative
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBXKBCOMMON),y)
- QT5WAYLAND_DEPENDENCIES += libxkbcommon
- endif
--- 
-2.7.4
+When someone uses the default device_table.txt this is what we get when
+_PERMISSIONS are added for /bin/test:
+/dev
+/tmp
+...
+<tab>/bin/test
+<tab>|xattr
+
+But that is a file generated and used during the build. We don't care too much
+if it is not well aligned.
+
+And option 3 also avoids problems if someone is generating a custom
+device_table.txt and intentionally or by mistake adds leading tabs to xattr.
+
+Regards,
+Ricardo
