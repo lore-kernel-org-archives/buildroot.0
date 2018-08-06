@@ -1,8 +1,8 @@
 From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Mon,  6 Aug 2018 02:13:19 +0200
-Subject: [Buildroot] [PATCH 1/1] qt5wayland: add fix from upstream to
+Date: Mon,  6 Aug 2018 02:36:53 +0200
+Subject: [Buildroot] [PATCH v2 1/1] qt5wayland: add fix from upstream to
  compile without QtQuick
-Message-ID: <1533514399-4023-1-git-send-email-bos@je-eigen-domein.nl>
+Message-ID: <1533515813-11533-1-git-send-email-bos@je-eigen-domein.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -30,14 +30,18 @@ make[4]: *** [../../lib/libQt5WaylandCompositor.so.5.11.1] Error 1
 Fix taken from upstream's git:
 http://code.qt.io/cgit/qt/qtwayland.git/commit/?id=2c48ee65e8c3b894caec214641723d0777fc60b8
 
-No longer seems to depend on declarative after applying either.
+No longer depends on declarative after applying either.
 
 Signed-off-by: Floris Bos <bos@je-eigen-domein.nl>
+
+---
+v1 -> v2:
+  - do add dependency in .mk if quick is enabled, so it is build first.
 ---
  .../0001-fix-compilation-without-QtQuick.patch     | 68 ++++++++++++++++++++++
  package/qt5/qt5wayland/Config.in                   |  2 -
- package/qt5/qt5wayland/qt5wayland.mk               |  2 +-
- 3 files changed, 69 insertions(+), 3 deletions(-)
+ package/qt5/qt5wayland/qt5wayland.mk               |  6 +-
+ 3 files changed, 73 insertions(+), 3 deletions(-)
  create mode 100644 package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
 
 diff --git a/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch b/package/qt5/qt5wayland/0001-fix-compilation-without-QtQuick.patch
@@ -128,10 +132,10 @@ index 0182d3c..9f144ac 100644
  	help
  	  Qt is a cross-platform application and UI framework for
 diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
-index 98e592f..a533b45 100644
+index 98e592f..d6fb6e1 100644
 --- a/package/qt5/qt5wayland/qt5wayland.mk
 +++ b/package/qt5/qt5wayland/qt5wayland.mk
-@@ -7,7 +7,7 @@
+@@ -7,9 +7,13 @@
  QT5WAYLAND_VERSION = $(QT5_VERSION)
  QT5WAYLAND_SITE = $(QT5_SITE)
  QT5WAYLAND_SOURCE = qtwayland-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5WAYLAND_VERSION).tar.xz
@@ -139,6 +143,12 @@ index 98e592f..a533b45 100644
 +QT5WAYLAND_DEPENDENCIES = qt5base wayland
  QT5WAYLAND_INSTALL_STAGING = YES
  
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
++QT5WAYLAND_DEPENDENCIES += qt5declarative
++endif
++
  ifeq ($(BR2_PACKAGE_LIBXKBCOMMON),y)
+ QT5WAYLAND_DEPENDENCIES += libxkbcommon
+ endif
 -- 
 2.7.4
