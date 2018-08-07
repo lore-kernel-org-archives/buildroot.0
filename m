@@ -1,93 +1,70 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon,  6 Aug 2018 18:46:15 -0400
-Subject: [Buildroot] [PATCH 1/1] python-pip: new package
-Message-ID: <20180806224615.31245-1-aduskett@gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 06 Aug 2018 21:39:35 -0300
+Subject: [Buildroot] [PATCH 3/3] support/download: detect and abort when
+ using a git branch by name
+References: <20180806183647.GC2427@scaer>
+Message-ID: <5b68ea47f2a6f_79bb3fe8c00774a0328a9@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A useful tool for managing and installing python packages.
+Hello,
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/python-pip/Config.in       |  6 ++++++
- package/python-pip/python-pip.hash |  5 +++++
- package/python-pip/python-pip.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/python-pip/Config.in
- create mode 100644 package/python-pip/python-pip.hash
- create mode 100644 package/python-pip/python-pip.mk
+On Mon, Aug 06, 2018 at 03:36 PM, Yann E. MORIN wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 215506c71c..32bebecbb9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -53,6 +53,7 @@ F:	package/nginx-naxsi/
- F:	package/policycoreutils/
- F:	package/python-flask-sqlalchemy/
- F:	package/python-mutagen/
-+F:	package/python-pip/
- F:	package/python-psycopg2/
- F:	package/python-sqlalchemy/
- F:	package/python-visitor/
-diff --git a/package/Config.in b/package/Config.in
-index f5a17492c7..f7d28a2d3a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -874,6 +874,7 @@ menu "External python modules"
- 	source "package/python-pexpect/Config.in"
- 	source "package/python-pickleshare/Config.in"
- 	source "package/python-pillow/Config.in"
-+	source "package/python-pip/Config.in"
- 	source "package/python-portend/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-priority/Config.in"
-diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
-new file mode 100644
-index 0000000000..4fcd55e5ab
---- /dev/null
-+++ b/package/python-pip/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PIP
-+	bool "python-pip"
-+	help
-+	  The PyPA recommended tool for installing Python packages.
-+
-+	  https://pip.pypa.io/
-diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
-new file mode 100644
-index 0000000000..c9b574a6dd
---- /dev/null
-+++ b/package/python-pip/python-pip.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pip/json
-+md5	52f75ceb21e96c258f289859a2996b60  pip-18.0.tar.gz
-+sha256	a0e11645ee37c90b40c46d607070c4fd583e2cd46231b1c06e389c5e814eed76  pip-18.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	391a8784e319dae5431477d4cc9bc504fc5d71fd9e89e1c80f1cd3855f5d7cfa  LICENSE.txt
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
-new file mode 100644
-index 0000000000..0a0dce5bca
---- /dev/null
-+++ b/package/python-pip/python-pip.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pip
-+#
-+################################################################################
-+
-+PYTHON_PIP_VERSION = 18.0
-+PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
-+PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/69/81/52b68d0a4de760a2f1979b0931ba7889202f302072cc7a0d614211bc7579
-+PYTHON_PIP_SETUP_TYPE = setuptools
-+PYTHON_PIP_LICENSE = MIT
-+PYTHON_PIP_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
--- 
-2.17.1
+> On 2018-08-06 00:14 -0300, Ricardo Martincoski spake thusly:
+>> On Sat, Aug 04, 2018 at 01:33 PM, Yann E. MORIN wrote:
+>> > +# Check if the changeset is a branch name.
+>> > +if _git show-ref "${cset}" |grep -qv refs/tags; then
+>> 
+>> I didn't had time to test it yet.
+>> Special refs still works after this?
+> 
+> It is not supposed to be broken, as those special refs are (AFAIU)
+> exposed as tags, not heads. But as I don't have access to a server
+> serving those special refs (support for which I find ugly, btw), I
+> could not test.
+
+One way to test special refs is by using a github package with some dirty
+hacks (I picked a special ref at random by inspecting the output of ls-remote):
+$ make defconfig
+$ ./utils/config --set-str BR2_BACKUP_SITE ""
+$ sed -e '/^TMUX_SITE_METHOD/d' \
+      -e 's,^TMUX_VERSION =.*,TMUX_VERSION = refs/pull/1014/head,g' \
+      -e 's,^TMUX_SITE.*,TMUX_SITE = https://github.com/tmux/tmux.git\nTMUX_SITE_METHOD = git,g' \
+      -i package/tmux/tmux.mk
+$ rm -f package/tmux/tmux.hash
+$ BR2_DL_DIR=$(mktemp -d) make tmux-dirclean tmux-source
+...
+Commit 'refs/pull/1014/head' is a branch name.
+Using a branch name is not supported.
+
+
+The other way is by using this series:
+http://patchwork.ozlabs.org/project/buildroot/list/?series=44009
+current master:
+https://gitlab.com/RicardoMartincoski/buildroot/pipelines/27301317
+current master + this patch:
+https://gitlab.com/RicardoMartincoski/buildroot/pipelines/27301358
+It doesn't get to show that special-ref is broken because the tests run
+sequentially (to avoid overpopulate the gitlab CI), but it shows (in the
+-build.log) that also the download of a sha1 tip of a branch (search for
+"git-sha1-branch-head" in the log) would be broken with this patch.
+This can be reproduced locally:
+$ make defconfig
+$ ./utils/config --set-str BR2_BACKUP_SITE ""
+$ BR2_DL_DIR=$(mktemp -d) make tremor-dirclean tremor-source
+...
+Commit '7c30a66346199f3f09017a09567c6c8a3a0eedc8' is a branch name.
+Using a branch name is not supported.
+
+
+So NACK for this patch as-is.
+Of course, I am not against the concept of detecting the name of a branch being
+used as package version and aborting the download with a nice message.
+Unfortunately I currently don't have suggestions on how to fix the code.
+
+Regards,
+Ricardo
