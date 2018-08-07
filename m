@@ -1,102 +1,131 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  7 Aug 2018 08:33:20 +0300
-Subject: [Buildroot] [PATCH] libgit2: security bump to version 0.27.4
-Message-ID: <04aaf275d91880ff5fa562ddd4177d0cbe386148.1533620000.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue,  7 Aug 2018 08:00:14 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-06
+Message-ID: <20180807060014.AD46420799@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-10887 and CVE-2018-10888: out-of-bounds reads when
-reading objects from a packfile.
+Hello,
 
-Also fixes out-of-bounds reads when processing smart-protocol "ng"
-packets (no known CVE yet).
+Build statistics for 2018-08-06
+===============================
 
-Drop upstream patch.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  12 |   2 |   0 |  14 |
+   2018.05.x |  15 |   2 |   0 |  17 |
+      master | 132 |  24 |   3 | 159 |
+        next |  44 |   8 |   0 |  52 |
 
-Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- .../0001-Fix-build-with-LibreSSL-2.7.patch    | 45 -------------------
- package/libgit2/libgit2.hash                  |  2 +-
- package/libgit2/libgit2.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 47 deletions(-)
- delete mode 100644 package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
+Results for branch '2018.02.x'
+==============================
 
-diff --git a/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch b/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
-deleted file mode 100644
-index f0be0f0d2f38..000000000000
---- a/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 7490d449b518115a1ae86b01397e95c38e39cff1 Mon Sep 17 00:00:00 2001
--From: Bernard Spil <brnrd@FreeBSD.org>
--Date: Mon, 2 Apr 2018 20:00:07 +0200
--Subject: [PATCH] Fix build with LibreSSL 2.7
--
--LibreSSL 2.7 adds OpenSSL 1.1 API
--
--Signed-off-by: Bernard Spil <brnrd@FreeBSD.org>
--Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
-----
-- src/streams/openssl.c | 3 ++-
-- src/streams/openssl.h | 3 ++-
-- 2 files changed, 4 insertions(+), 2 deletions(-)
--
--diff --git a/src/streams/openssl.c b/src/streams/openssl.c
--index 9cbb2746f..adcb7f14e 100644
----- a/src/streams/openssl.c
--+++ b/src/streams/openssl.c
--@@ -104,7 +104,8 @@ int git_openssl_stream_global_init(void)
-- 	ssl_opts |= SSL_OP_NO_COMPRESSION;
-- #endif
-- 
---#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
--+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
--+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
-- 	SSL_load_error_strings();
-- 	OpenSSL_add_ssl_algorithms();
-- #else
--diff --git a/src/streams/openssl.h b/src/streams/openssl.h
--index 2bbad7c68..44329ec90 100644
----- a/src/streams/openssl.h
--+++ b/src/streams/openssl.h
--@@ -31,7 +31,8 @@ extern int git_openssl__set_cert_location(const char *file, const char *path);
-- 
-- 
-- 
---# if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
--+# if OPENSSL_VERSION_NUMBER < 0x10100000L || \
--+     (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
-- 
-- GIT_INLINE(BIO_METHOD*) BIO_meth_new(int type, const char *name)
-- {
---- 
--2.17.0
--
-diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 43d8f9930ef1..41ab87bf4d44 100644
---- a/package/libgit2/libgit2.hash
-+++ b/package/libgit2/libgit2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	837b11927bc5f64e7f9ab0376f57cfe3ca5aa52ffd2007ac41184b21124fb086  libgit2-v0.27.1.tar.gz
-+sha256	0b7ca31cb959ff1b22afa0da8621782afe61f99242bf716c403802ffbdb21d51  libgit2-v0.27.4.tar.gz
- sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
-diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
-index 8b7b9f6d7790..551e3dea6226 100644
---- a/package/libgit2/libgit2.mk
-+++ b/package/libgit2/libgit2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGIT2_VERSION = v0.27.1
-+LIBGIT2_VERSION = v0.27.4
- LIBGIT2_SITE = $(call github,libgit2,libgit2,$(LIBGIT2_VERSION))
- LIBGIT2_LICENSE = GPL-2.0 with linking exception
- LIBGIT2_LICENSE_FILES = COPYING
+Classification of failures by reason
+------------------------------------
+
+             host-guile-2.0.14 | 1 
+                 mesa3d-17.3.6 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |              host-guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/f89f3a7af7b7ac4b3666732048f580dbd123c47b | ORPH
+     powerpc |                  mesa3d-17.3.6 | NOK | http://autobuild.buildroot.net/results/ab70e9dfbce7e9ad6320b9481addc30b2a450e00 |     
+
+Results for branch '2018.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+          host-libglib2-2.56.1 | 2 
+
+
+Detail of failures
+------------------
+
+         arm |           host-libglib2-2.56.1 | NOK | http://autobuild.buildroot.net/results/81cde860cae10f21a2412bbf51de1d6a8895cbbd |     
+      x86_64 |           host-libglib2-2.56.1 | NOK | http://autobuild.buildroot.net/results/a7d8b8f3aa9edef84a7ffb8871f73c6c9ba950e7 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.67.0 | 12
+               aircrack-ng-1.3 | 2 
+                  mender-1.4.0 | 2 
+                    ncmpc-0.30 | 2 
+           uboot-tools-2018.07 | 2 
+               azure-iot-sdk-c | 1 
+                    f2fs-tools | 1 
+gst1-interpipe-10dba89eecc2... | 1 
+                 host-rauc-0.4 | 1 
+                linux-firmware | 1 
+                qt5base-5.11.1 | 1 
+                  samba4-4.8.3 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/b1db7ab13f619444bd0d65e037e8ed58e0295dc8 |     
+     powerpc |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/89db73d7a57909654afd4ae11f0a290fd393de56 |     
+microblazeel |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/3723abfad0917fc50f54f9394c1a6c23e96e49e9 |     
+ powerpc64le |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/b0b66511c839db08e1b2a0c72846d5b21b5a8e55 |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/02da29cb1e8746eaf191bb25229352843a494945 |     
+        m68k |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/313b0a551e64b4c296a04f7404240e0b4c6a73d3 |     
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/e240d0ac183d2b403648693af978345a95ec554c |     
+        m68k |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/777695acdd51927a9e88328f3df3917551760c3e |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/d5f0cf270ed731a11d8b6de9f2f39f0ec71a7bd7 |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/abaf7ba1ea497d5a812e04cfdb635714c145d2be |     
+        i686 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/20ec6ec1355749e43b54fda332c844b346ab493a |     
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/bb7ea88e6304c5aaa313652d4d5fe1fcd57c2e5e |     
+        m68k |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/ca9a8922eaafa0955da1a22d0b0a0e5dfb27d268 |     
+        m68k |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/a4a91c722710870488582d67c661ebbfc917195c |     
+        i686 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/5adf21217422c1de1a857248c62dd444c31a1ddd |     
+   powerpc64 |                     f2fs-tools | TIM | http://autobuild.buildroot.net/results/eba88a52d24899cf936937c22b48777566cf492d |     
+         arm | gst1-interpipe-10dba89eecc2... | NOK | http://autobuild.buildroot.net/results/8346a9f7b340e5fdf7c5e0610d9109df25a69417 |     
+     powerpc |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/c35d7bb9bb77243cc5dc79668679416ed3d1b3ef |     
+       sparc |                 linux-firmware | TIM | http://autobuild.buildroot.net/results/76a924e3e11144d766d93fa4d9a617b644697591 |     
+ powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/841abec44a6837289713848fd287f93dc789ee88 |     
+ powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/be8caa703482a5aa8a5220a0613784e3314d35d5 |     
+         arm |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/e8110aaf390fd8c04c19fb1dd338a6d848ac15e9 |     
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/7590754ed3c6cd1a2fe584882fe10bcb72f879fb |     
+  aarch64_be |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/a3ed98e8a58ae80643e02238e448054663464ec0 |     
+    mips64el |                   samba4-4.8.3 | NOK | http://autobuild.buildroot.net/results/31d69190ea74d35db1e114b54a03b23b713fba0d |     
+     powerpc |            uboot-tools-2018.07 | NOK | http://autobuild.buildroot.net/results/ea09b614a3c10d494939d9551c0c3bfca4626ece |     
+         arm |            uboot-tools-2018.07 | NOK | http://autobuild.buildroot.net/results/f8efd9af4d86c51fe4f5afe44db9abf9adc5718f |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.67.0 | 4 
+           host-libselinux-2.7 | 1 
+                 host-rauc-0.4 | 1 
+                libmpeg2-0.5.1 | 1 
+                      qt-4.8.7 | 1 
+
+
+Detail of failures
+------------------
+
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/6e1be7545d29a4670523c29767af3f3eea7a5779 |     
+ powerpc64le |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/1b41378ae89f7a8c5d7a04ee89cd5e26b58adee1 |     
+         arc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/3e71b789008a9432dee9ba8163f62dc705a4d6e9 |     
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/4719e103e0699289b467ea01e92a4d3a36087cc6 |     
+         arm |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/fca0fccd9385aa697a754feac8ee3419604b1f41 |     
+         arm |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/de7e7e60670969d7cb06576a1813afe84e604278 |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/e9084d16c17bdbc4e6a632b59d52dd889b326b3a | ORPH
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/0d6e15da05585ca58a79c12aa89ddb26968ec2a5 | ORPH
+
+
 -- 
-2.18.0
+http://autobuild.buildroot.net
