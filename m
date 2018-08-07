@@ -1,70 +1,240 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 06 Aug 2018 21:39:35 -0300
-Subject: [Buildroot] [PATCH 3/3] support/download: detect and abort when
- using a git branch by name
-References: <20180806183647.GC2427@scaer>
-Message-ID: <5b68ea47f2a6f_79bb3fe8c00774a0328a9@ultri5.mail>
+From: Nabeel Syed <nibzy26@gmail.com>
+Date: Tue, 7 Aug 2018 09:13:48 +0500
+Subject: [Buildroot] stuck at welcome to buildroot login prompt
+Message-ID: <CANL8dc9qPRpKifA8DX_YvYxLg_jZSzWWYyrkf3JpRj7vBRwTng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi ,
 
-On Mon, Aug 06, 2018 at 03:36 PM, Yann E. MORIN wrote:
+I need some help as I am stuck at build root login prompt.the keyboard just
+doesnt work.I am using minicom 115200 8n1 settings on ubuntu 14.04.
 
-> On 2018-08-06 00:14 -0300, Ricardo Martincoski spake thusly:
->> On Sat, Aug 04, 2018 at 01:33 PM, Yann E. MORIN wrote:
->> > +# Check if the changeset is a branch name.
->> > +if _git show-ref "${cset}" |grep -qv refs/tags; then
->> 
->> I didn't had time to test it yet.
->> Special refs still works after this?
-> 
-> It is not supposed to be broken, as those special refs are (AFAIU)
-> exposed as tags, not heads. But as I don't have access to a server
-> serving those special refs (support for which I find ugly, btw), I
-> could not test.
+1. I am aware of this is not your root file system thing.I am using
+genimage to make a sdcard image and after the build i end up with
+rootfs.tar , rootfs.ext2,rootfs.ext4 and sdcard image and ofcourse kernel
+image and dtb files.I dont use tar -C command to get the rootfs to my
+sdcard instead I use dd command to write sdcard.img to sd card .
 
-One way to test special refs is by using a github package with some dirty
-hacks (I picked a special ref at random by inspecting the output of ls-remote):
-$ make defconfig
-$ ./utils/config --set-str BR2_BACKUP_SITE ""
-$ sed -e '/^TMUX_SITE_METHOD/d' \
-      -e 's,^TMUX_VERSION =.*,TMUX_VERSION = refs/pull/1014/head,g' \
-      -e 's,^TMUX_SITE.*,TMUX_SITE = https://github.com/tmux/tmux.git\nTMUX_SITE_METHOD = git,g' \
-      -i package/tmux/tmux.mk
-$ rm -f package/tmux/tmux.hash
-$ BR2_DL_DIR=$(mktemp -d) make tmux-dirclean tmux-source
-...
-Commit 'refs/pull/1014/head' is a branch name.
-Using a branch name is not supported.
+Here is my genimage.cfg file
+------------------------------------------------------------------
+image boot.vfat {
+    vfat {
+        files = {
+            "Image",
+            "cl-som-imx8.dtb",
+            "cl-som-imx8-4k.dtb",
+            "cl-som-imx8-dual.dtb",
+            "cl-som-imx8-lvds-dcss.dtb",
+                        "cl-som-imx8-lvds-lcdif.dtb",
+        }
+    }
+    size = 32M
+}
 
+image sdcard.img {
+    hdimage {
+    }
 
-The other way is by using this series:
-http://patchwork.ozlabs.org/project/buildroot/list/?series=44009
-current master:
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/27301317
-current master + this patch:
-https://gitlab.com/RicardoMartincoski/buildroot/pipelines/27301358
-It doesn't get to show that special-ref is broken because the tests run
-sequentially (to avoid overpopulate the gitlab CI), but it shows (in the
--build.log) that also the download of a sha1 tip of a branch (search for
-"git-sha1-branch-head" in the log) would be broken with this patch.
-This can be reproduced locally:
-$ make defconfig
-$ ./utils/config --set-str BR2_BACKUP_SITE ""
-$ BR2_DL_DIR=$(mktemp -d) make tremor-dirclean tremor-source
-...
-Commit '7c30a66346199f3f09017a09567c6c8a3a0eedc8' is a branch name.
-Using a branch name is not supported.
+    partition my-boot {
+        partition-type = 0xC
+        image = "boot.vfat"
 
 
-So NACK for this patch as-is.
-Of course, I am not against the concept of detecting the name of a branch being
-used as package version and aborting the download with a nice message.
-Unfortunately I currently don't have suggestions on how to fix the code.
+    }
 
-Regards,
-Ricardo
+    partition rootfs {
+        partition-type = 0x83
+        image = "rootfs.ext2"
+        size = 700M
+
+    }
+}
+
+-------------------------------------------------------------
+The post-image.sh script
+-----------------------------------------------------------
+#!/bin/sh
+# post-image.sh for Cl-SOM-IMX8 from compulab
+
+BOARD_DIR="$(dirname $0)"
+
+GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
+
+
+GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
+
+rm -rf "${GENIMAGE_TMP}"
+
+genimage \
+    --rootpath "${TARGET_DIR}" \
+    --tmppath "${GENIMAGE_TMP}" \
+    --inputpath "${BINARIES_DIR}" \
+    --outputpath "${BINARIES_DIR}" \
+    --config "${GENIMAGE_CFG}"
+
+-------------------------------------------------------
+
+Here is my imx8-defconfig file
+
+---------------------------------------------------
+
+
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_PATH="/home/nabeel/linaro"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-linux-gnu"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_10=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_ROOTFS_MERGED_USR=y
+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
+BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
+BR2_TARGET_TZ_INFO=y
+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/compulab/imx8/post-image.sh"
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="file://$(TOPDIR)/imx8-kernel.tar.gz"
+BR2_LINUX_KERNEL_PATCH="/home/nabeel/Desktop/cl-som-imx8-patches"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="/home/nabeel/Desktop/defconfig-bysupport"
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_USE_CUSTOM_DTS=y
+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="/home/nabeel/Desktop/imx8compulab-dts/cl-som-imx8.dts
+/home/nabeel/Desktop/imx8compulab-dts/cl-som-imx8-4k.dts
+/home/nabeel/Desktop/imx8compulab-dts/cl-som-imx8-dual.dts
+/home/nabeel/Desktop/imx8compulab-dts/cl-som-imx8-lvds-dcss.dts
+/home/nabeel/Desktop/imx8compulab-dts/cl-som-imx8-lvds-lcdif.dts  "
+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+BR2_PACKAGE_DBUS=y
+BR2_PACKAGE_LIBCAP=y
+BR2_PACKAGE_KMOD=y
+BR2_PACKAGE_KMOD_TOOLS=y
+BR2_PACKAGE_UTIL_LINUX=y
+BR2_PACKAGE_UTIL_LINUX_BINARIES=y
+BR2_PACKAGE_UTIL_LINUX_FSCK=y
+BR2_PACKAGE_UTIL_LINUX_MOUNT=y
+BR2_PACKAGE_UTIL_LINUX_NOLOGIN=y
+BR2_TARGET_ROOTFS_EXT2=y
+BR2_TARGET_ROOTFS_EXT2_LABEL="myroot"
+BR2_TARGET_ROOTFS_EXT2_SIZE="600M"
+
+
+=============================================================================================
+
+Here is my inittab which i put in my rootfs-overlay folder
+
+# /etc/inittab
+#
+# Copyright (C) 2001 Erik Andersen <andersen@codepoet.org>
+#
+# Note: BusyBox init doesn't support runlevels.  The runlevels field is
+# completely ignored by BusyBox init. If you want runlevels, use
+# sysvinit.
+#
+# Format for each entry: <id>:<runlevels>:<action>:<process>
+#
+# id        == tty to run on, or empty for /dev/console
+# runlevels == ignored
+# action    == one of sysinit, respawn, askfirst, wait, and once
+# process   == program to run
+
+# Startup the system
+::sysinit:/bin/mount -t proc proc /proc
+::sysinit:/bin/mount -o remount,rw /
+::sysinit:/bin/mkdir -p /dev/pts
+::sysinit:/bin/mkdir -p /dev/shm
+::sysinit:/bin/mount -a
+::sysinit:/bin/hostname -F /etc/hostname
+# now run any rc scripts
+::sysinit:/etc/init.d/rcS
+
+# Put a getty on the serial port
+ttymxc2::respawn:/sbin/getty -L  ttymxc2 115200 vt100 # GENERIC_SERIAL
+
+
+ttymxc2::askfirst:/bin/sh
+# Stuff to do for the 3-finger salute
+#::ctrlaltdel:/sbin/reboot
+
+# Stuff to do before rebooting
+::shutdown:/etc/init.d/rcK
+::shutdown:/sbin/swapoff -a
+::shutdown:/bin/umount -a -r
+
+---------------------------------------------
+Here is my rcS script which i also put in rootfs-overlay  etc/init.d/rcS
+
+#!/bin/sh
+
+
+echo " **** STARTING rcS script ***** "
+
+echo " **** STARTING rcS script ***** "
+echo " "
+
+# Start all init scripts in /etc/init.d
+# executing them in numerical order.
+#
+for i in /etc/init.d/S??* ;do
+
+     # Ignore dangling symlinks (if any).
+     [ ! -f "$i" ] && continue
+
+     case "$i" in
+    *.sh)
+        # Source shell script for speed.
+        (
+        trap - INT QUIT TSTP
+        set start
+        . $i
+        )
+        ;;
+    *)
+        # No sh extension, so fork subprocess.
+        $i start
+        ;;
+    esac
+done
+
+echo " EEEEEEEEND of rcS ***** "
+
+rm -f /dev/console
+
+ln -s ttymxc2 /dev/console           // someone suggested this fix on google
+echo " EEEEEEEEND of rcS ***** "
+echo " "
+
+---------------------------------------------------------------------------
+
+I think it is related to console settings .
+kernel console value in u-boot is set to
+
+mmcargs=setenv bootargs console=ttymxc2,115200 root=/dev/mmcblk${mmcdev}p2
+rootwait rw
+
+and
+
+u-boot=> printenv
+console
+
+console=ttymxc2,115200 earlycon=ec_imx6q,0x30880000,115200
+
+---------------------------------------------------------------------
+
+
+Kindly advise what could be wrong with console settings...
+
+is it related to mounting dev at startup or mknod command ??????
+
+Thanks a lot
+
+Nabeel
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180807/fddcc552/attachment.html>
