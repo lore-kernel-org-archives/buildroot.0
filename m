@@ -1,42 +1,73 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Tue, 7 Aug 2018 15:36:07 +0200
-Subject: [Buildroot] How to retain intentional absolute RPATH for target
- application?
-In-Reply-To: <20180801141713.GT21354@australia>
-References: <20180801141713.GT21354@australia>
-Message-ID: <20180807133607.GI13619@australia.be.alcatel-lucent.com>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue,  7 Aug 2018 08:41:22 -0500
+Subject: [Buildroot] [PATCH] package/strongswan: add pid dir support for
+ netns
+Message-ID: <1533649282-62006-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 01, 2018 at 04:17:13PM +0200, Thomas De Schampheleire wrote:
-> Hi,
-> 
-> I have an application that has an RPATH containing (among some automatically
-> present values) an absolute path which is present on target but not a standard
-> search path, say /opt/foobar/lib , and also as first entry $ORIGIN/../lib.
-> The application is stored in /opt/foobar/bin.
-> 
-> Testing on target in a case where fix-rpath is not used (old buildroot version)
-> shows that the first entry in RPATH is used, i.e. $ORIGIN/../lib, resolving to
-> /opt/foobar/bin/../lib.
-> 
-> When going to current buildroot including fix-rpath, this application cannot be
-> loaded because the libraries are not found. Analysis shows that only standard
-> search paths are considered.
-> 
-> Manually checking the patchelf step shows that the RPATH is completely cleared.
-> I found a patch by Bryce Ferguson regarding endianness problems on PPC (this is
-> indeed a PPC target), but although it is applied and fixes the display of the
-> RPATH field in readelf after running fix-rpath, the actual issue remains:
-> RPATH is empty after running fix-rpath.
-> 
-> My question is now: how to allow preserving such an intentional RPATH, or at
-> least make sure that the libraries in /opt/foobar/lib are found?
+From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
 
-Any hints or feedback?
+This patch adds BR2_PACKAGE_STRONGSWAN_PID_DIR support to build
+strongswan with --with-piddir option.
 
-Thanks,
-Thomas
+By default 'charon' and starter daemons create their PID files
+and UNIX sockets in '/var/run' directory and that would
+conflict if multiple instances would use it.
+(ie a network-namespaced or multi-vpn configuration)
+
+This patch provides an option to use custom pid directory to
+avoid issue with multiple instances.
+
+For more information, Please visit
+https://wiki.strongswan.org/projects/strongswan/wiki/Netns
+
+Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+---
+ package/strongswan/Config.in     | 14 ++++++++++++++
+ package/strongswan/strongswan.mk |  3 ++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index 0438eec..e2efa7b 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -130,4 +130,18 @@ config BR2_PACKAGE_STRONGSWAN_VICI
+ 	default y
+ 	depends on BR2_PACKAGE_STRONGSWAN_CHARON
+ 
++config BR2_PACKAGE_STRONGSWAN_PID_DIR
++	string "path to pid dir"
++	default "/var/run"
++	help
++	  This option allows the developer to build strongswan
++	  'with-piddir' option. This option is helpful when running
++	  multiple instances of strongswan in separate namespaces.
++
++	  By default 'charon' and starter daemons create their PID
++	  files and UNIX sockets in '/var/run' directory and that
++	  would conflict if multiple instances would use it.
++
++          https://wiki.strongswan.org/projects/strongswan/wiki/Netns
++
+ endif
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 5c597d5..5edc89c 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -36,7 +36,8 @@ STRONGSWAN_CONF_OPTS += \
+ 	--enable-swanctl=$(if $(BR2_PACKAGE_STRONGSWAN_VICI),yes,no) \
+ 	--with-ipseclibdir=/usr/lib \
+ 	--with-plugindir=/usr/lib/ipsec/plugins \
+-	--with-imcvdir=/usr/lib/ipsec/imcvs
++	--with-imcvdir=/usr/lib/ipsec/imcvs \
++	--with-piddir=$(call qstrip,$(BR2_PACKAGE_STRONGSWAN_PID_DIR))
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ STRONGSWAN_CONF_ENV += LIBS='-latomic'
+-- 
+1.9.1
