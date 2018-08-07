@@ -1,7 +1,8 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue,  7 Aug 2018 08:29:46 -0500
-Subject: [Buildroot] [PATCH] openresolv: new package
-Message-ID: <1533648586-60818-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue,  7 Aug 2018 08:34:26 -0500
+Subject: [Buildroot] [PATCH] package/proftpd: add
+ BR2_PACKAGE_PROFTPD_MOD_SFTP
+Message-ID: <1533648866-61581-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,87 +11,68 @@ To: buildroot@busybox.net
 
 From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
 
-This patch added 'openresolv' package support. This tool
-provides a dns management framework to track currently
-available nameservers.
-
-A key feature of this tool vs resolvconf is the ability to
-manage multiple name server input configuration files and
-generate the /etc/resolv.conf.  This is handy when you have
-multiple dynamic communication paths providing nameserver
-information.
-
-REF: https://github.com/rsmarples/openresolv
+This patch adds BR2_PACKAGE_PROFTPD_MOD_SFTP support and also
+changes the .mk file to add required modules as a list in a
+separate variable. This new variable will help in future to add
+more module support in proftpd package.
 
 Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
-signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- package/Config.in                  |  1 +
- package/openresolv/Config.in       | 13 +++++++++++++
- package/openresolv/openresolv.hash |  3 +++
- package/openresolv/openresolv.mk   | 12 ++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/openresolv/Config.in
- create mode 100644 package/openresolv/openresolv.hash
- create mode 100644 package/openresolv/openresolv.mk
+ package/proftpd/Config.in  |  5 +++++
+ package/proftpd/proftpd.mk | 18 +++++++++++++++++-
+ 2 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f5a1749..2ad6687 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1843,6 +1843,7 @@ endif
- 	source "package/open-plc-utils/Config.in"
- 	source "package/openntpd/Config.in"
- 	source "package/openobex/Config.in"
-+	source "package/openresolv/Config.in"
- 	source "package/openssh/Config.in"
- 	source "package/openswan/Config.in"
- 	source "package/openvpn/Config.in"
-diff --git a/package/openresolv/Config.in b/package/openresolv/Config.in
-new file mode 100644
-index 0000000..3eb736f
---- /dev/null
-+++ b/package/openresolv/Config.in
-@@ -0,0 +1,13 @@
-+comment "openresolv needs a bash shell"
-+	depends on !BR2_SYSTEM_BIN_SH_BASH
-+
-+config BR2_PACKAGE_OPENRESOLV
-+	bool "openresolv"
-+	depends on BR2_SYSTEM_BIN_SH_BASH # bash runtime dependency
-+	select BR2_PACKAGE_BASH
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index e979d40..12b8c93 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -20,4 +20,9 @@ config BR2_PACKAGE_PROFTPD_MOD_REDIS
+ 	  The mod_redis module enables ProFTPD support for caching
+ 	  data in Redis servers, using the hiredis client library.
+ 
++config BR2_PACKAGE_PROFTPD_MOD_SFTP
++	bool "mod_sftp support"
 +	help
-+	  openresolv is a resolvconf implementation which
-+	  manages resolv.conf. This tool provides a dns management
-+	  framework to track currently available nameservers.
++	  Compile ProFTPD with mod_sftp support
 +
-+	  https://github.com/rsmarples/openresolv
-diff --git a/package/openresolv/openresolv.hash b/package/openresolv/openresolv.hash
-new file mode 100644
-index 0000000..e1a1fb5
---- /dev/null
-+++ b/package/openresolv/openresolv.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 96b3f84435a183426c622db7097a930fb0d48a99e82cd87ce83bd343b8c20574 openresolv-fe4e1ec4e2be2adfc1530ade94ebb30aa6f51540.tar.gz
-+sha256 d1f9dcd2dac4e095b14caab517cfe791a6e0785346164b7d0cafc13c714f8aa5 LICENSE
-diff --git a/package/openresolv/openresolv.mk b/package/openresolv/openresolv.mk
-new file mode 100644
-index 0000000..2faa6e1
---- /dev/null
-+++ b/package/openresolv/openresolv.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# openresolv
-+#
-+################################################################################
+ endif
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 3e165c6..1ee88a8 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -23,8 +23,11 @@ PROFTPD_CONF_OPTS = \
+ 	--enable-shadow \
+ 	--with-gnu-ld
+ 
++#Append all required modules in PROFTPD_MODULES variable
++#Use 'space' seperator for more than one module
++#e.g. PROFTPD_MODULES += mod_readme mod_ifsession
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
+-PROFTPD_CONF_OPTS += --with-modules=mod_rewrite
++PROFTPD_MODULES = mod_rewrite
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REDIS),y)
+@@ -34,6 +37,19 @@ else
+ PROFTPD_CONF_OPTS += --disable-redis
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SFTP),y)
++PROFTPD_CONF_OPTS += --enable-openssl
++PROFTPD_MODULES += mod_sftp
++endif
 +
-+OPENRESOLV_VERSION = fe4e1ec4e2be2adfc1530ade94ebb30aa6f51540
-+OPENRESOLV_SITE = $(call github,rsmarples,openresolv,$(OPENRESOLV_VERSION))
-+OPENRESOLV_LICENSE = BSD-2-Clause
-+OPENRESOLV_LICENSE_FILES = LICENSE
++#Make ":" separated final modules list
++PROFTPD_MODULES_LIST = \
++	$(shell for l in $(PROFTPD_MODULES); do \
++	modlist=$$modlist$$l:; done \
++	&& echo $${modlist%?})
 +
-+$(eval $(autotools-package))
++PROFTPD_CONF_OPTS += --with-modules=$(PROFTPD_MODULES_LIST)
++
+ # configure script doesn't handle detection of %llu format string
+ # support for printing the file size when cross compiling, breaking
+ # access for large files.
 -- 
 1.9.1
