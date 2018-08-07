@@ -1,47 +1,102 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  7 Aug 2018 07:38:01 +0300
-Subject: [Buildroot] [PATCH] uboot-tools: requires host gcc 4.7+
-Message-ID: <cc4aa02d36bdd5ab0f2a450508c67c332d1b5d2c.1533616681.git.baruch@tkos.co.il>
+Date: Tue,  7 Aug 2018 08:33:20 +0300
+Subject: [Buildroot] [PATCH] libgit2: security bump to version 0.27.4
+Message-ID: <04aaf275d91880ff5fa562ddd4177d0cbe386148.1533620000.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-U-Boot now adds -std=gnu11 when building its build utilities, like
-fixdep. This option is only supported since gcc version 4.7.
+Fixes CVE-2018-10887 and CVE-2018-10888: out-of-bounds reads when
+reading objects from a packfile.
 
-  https://gcc.gnu.org/gcc-4.7/changes.html
+Also fixes out-of-bounds reads when processing smart-protocol "ng"
+packets (no known CVE yet).
 
-Fixes:
-http://autobuild.buildroot.net/results/ea0/ea09b614a3c10d494939d9551c0c3bfca4626ece/
-http://autobuild.buildroot.net/results/f8e/f8efd9af4d86c51fe4f5afe44db9abf9adc5718f/
-http://autobuild.buildroot.net/results/c0a/c0ab35c3cb46f84863fe20c0ee92ecc2379578b6/
+Drop upstream patch.
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/uboot-tools/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../0001-Fix-build-with-LibreSSL-2.7.patch    | 45 -------------------
+ package/libgit2/libgit2.hash                  |  2 +-
+ package/libgit2/libgit2.mk                    |  2 +-
+ 3 files changed, 2 insertions(+), 47 deletions(-)
+ delete mode 100644 package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index 63a058e8562a..78a8b66c4d97 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -1,10 +1,14 @@
- config BR2_PACKAGE_UBOOT_TOOLS
- 	bool "u-boot tools"
-+	depends on BR2_HOST_GCC_AT_LEAST_4_7 # -std=gnu11
- 	help
- 	  Companion tools for Das U-Boot bootloader.
+diff --git a/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch b/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
+deleted file mode 100644
+index f0be0f0d2f38..000000000000
+--- a/package/libgit2/0001-Fix-build-with-LibreSSL-2.7.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 7490d449b518115a1ae86b01397e95c38e39cff1 Mon Sep 17 00:00:00 2001
+-From: Bernard Spil <brnrd@FreeBSD.org>
+-Date: Mon, 2 Apr 2018 20:00:07 +0200
+-Subject: [PATCH] Fix build with LibreSSL 2.7
+-
+-LibreSSL 2.7 adds OpenSSL 1.1 API
+-
+-Signed-off-by: Bernard Spil <brnrd@FreeBSD.org>
+-Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+----
+- src/streams/openssl.c | 3 ++-
+- src/streams/openssl.h | 3 ++-
+- 2 files changed, 4 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/streams/openssl.c b/src/streams/openssl.c
+-index 9cbb2746f..adcb7f14e 100644
+---- a/src/streams/openssl.c
+-+++ b/src/streams/openssl.c
+-@@ -104,7 +104,8 @@ int git_openssl_stream_global_init(void)
+- 	ssl_opts |= SSL_OP_NO_COMPRESSION;
+- #endif
+- 
+--#if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+#if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+-+    (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
+- 	SSL_load_error_strings();
+- 	OpenSSL_add_ssl_algorithms();
+- #else
+-diff --git a/src/streams/openssl.h b/src/streams/openssl.h
+-index 2bbad7c68..44329ec90 100644
+---- a/src/streams/openssl.h
+-+++ b/src/streams/openssl.h
+-@@ -31,7 +31,8 @@ extern int git_openssl__set_cert_location(const char *file, const char *path);
+- 
+- 
+- 
+--# if OPENSSL_VERSION_NUMBER < 0x10100000L || defined(LIBRESSL_VERSION_NUMBER)
+-+# if OPENSSL_VERSION_NUMBER < 0x10100000L || \
+-+     (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x20700000L)
+- 
+- GIT_INLINE(BIO_METHOD*) BIO_meth_new(int type, const char *name)
+- {
+--- 
+-2.17.0
+-
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 43d8f9930ef1..41ab87bf4d44 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	837b11927bc5f64e7f9ab0376f57cfe3ca5aa52ffd2007ac41184b21124fb086  libgit2-v0.27.1.tar.gz
++sha256	0b7ca31cb959ff1b22afa0da8621782afe61f99242bf716c403802ffbdb21d51  libgit2-v0.27.4.tar.gz
+ sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 8b7b9f6d7790..551e3dea6226 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  http://www.denx.de/wiki/U-Boot/WebHome
- 
-+comment "u-boot tools needs host gcc >= 4.7"
-+	depends on !BR2_HOST_GCC_AT_LEAST_4_7
-+
- if BR2_PACKAGE_UBOOT_TOOLS
- 
- config BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT
+-LIBGIT2_VERSION = v0.27.1
++LIBGIT2_VERSION = v0.27.4
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception
+ LIBGIT2_LICENSE_FILES = COPYING
 -- 
 2.18.0
