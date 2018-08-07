@@ -1,41 +1,34 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Tue,  7 Aug 2018 08:53:53 +0200
-Subject: [Buildroot] [PATCH] linux: bump CIP to version v4.4.138-cip25
-Message-ID: <1533624833-27416-1-git-send-email-angelo@amarulasolutions.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue,  7 Aug 2018 10:12:28 +0200
+Subject: [Buildroot] [PATCH] boot-wrapper-aarch64: use SPDX identifier for 3
+ clause BSD
+Message-ID: <20180807081228.20240-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps the CIP Linux kernel to version v4.4.138-cip25
+Use the correct SPDX identifier for the 3 clause BSD license, like we do
+elsewhere.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index d30489e..11ccf31 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -33,7 +33,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.17)"
+diff --git a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+index 601cfab314..cd6e1b7b77 100644
+--- a/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
++++ b/boot/boot-wrapper-aarch64/boot-wrapper-aarch64.mk
+@@ -6,7 +6,7 @@
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.4.130-cip23)"
-+	bool "Latest CIP SLTS version (v4.4.138-cip25)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -121,7 +121,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "4.17.11" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ BOOT_WRAPPER_AARCH64_VERSION = 4266507a84f8c06452109d38e0350d4759740694
+ BOOT_WRAPPER_AARCH64_SITE = git://git.kernel.org/pub/scm/linux/kernel/git/mark/boot-wrapper-aarch64.git
+-BOOT_WRAPPER_AARCH64_LICENSE = BSD3c
++BOOT_WRAPPER_AARCH64_LICENSE = BSD-3-Clause
+ BOOT_WRAPPER_AARCH64_LICENSE_FILES = LICENSE.txt
+ BOOT_WRAPPER_AARCH64_DEPENDENCIES = linux
+ BOOT_WRAPPER_AARCH64_INSTALL_IMAGES = YES
 -- 
-2.7.4
+2.11.0
