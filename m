@@ -1,35 +1,43 @@
-From: Patrick Doyle <wpdster@gmail.com>
-Date: Tue, 7 Aug 2018 15:52:52 -0400
-Subject: [Buildroot] Setting BLUEZ5_UTILS_AUTORECONF=YES outside of
- bluez5_utls.mk
-Message-ID: <CAF_dkJB_UGTGs+MU7Pco2ViXZg4at1-KHAbA8gUv2LKht2fgdg@mail.gmail.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Tue,  7 Aug 2018 23:20:36 +0300
+Subject: [Buildroot] [PATCH v1] acpid: bump to version 2.0.30
+Message-ID: <20180807202036.31296-1-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Is it possible to set BLUEZ5_UTILS_AUTORECONF=YES outside of bluez5_utils.mk?
+Bump to version 2.0.30.
 
-I have a patch supplied by a third party for bluez5_utils, which
-modifies one of the files included by Makefile.am (Makefile.tools).
-The problem is, since automake isn't run, my build fails because it
-doesn't pick up the change to Makefile.tools.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ package/acpid/acpid.hash | 4 ++--
+ package/acpid/acpid.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-The solution is to set BLUEZ5_UTILS_AUTORECONF=YES, which appears to
-work when I set it in bluez5_utils.mk.  But, since I build
-out-of-tree, I like to keep all of my project customizations out of
-tree.
-
-I can set it on the command line and execute:
-
-make BLUEZ5_UTILS_AUTORECONF=YES
-
-but that is (very) prone to me forgetting to do that.
-
-I tried placing "BLUEZ5_UTILS_AUTORECONF=YES" in my external.mk, but
-that didn't work either.
-
-Any thoughts?
-
---wpd
+diff --git a/package/acpid/acpid.hash b/package/acpid/acpid.hash
+index 9cf91d9333..0286219621 100644
+--- a/package/acpid/acpid.hash
++++ b/package/acpid/acpid.hash
+@@ -1,3 +1,3 @@
+ # From https://sourceforge.net/projects/acpid2/files/
+-md5	0432407b5ff75ae8e08afb43052fde2b	acpid-2.0.28.tar.xz
+-sha1	a5cb34d53eb6965293c436db23dc81550273975b	acpid-2.0.28.tar.xz
++md5	1528040b5d34f8c24ebabd97befbf913	acpid-2.0.30.tar.xz
++sha1	680bbb3fa9cdabb78fb19c6d24bb57224fbbbaed	acpid-2.0.30.tar.xz
+diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
+index 2141a1a9e0..33e87cf50a 100644
+--- a/package/acpid/acpid.mk
++++ b/package/acpid/acpid.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ACPID_VERSION = 2.0.28
++ACPID_VERSION = 2.0.30
+ ACPID_SOURCE = acpid-$(ACPID_VERSION).tar.xz
+ ACPID_SITE = http://downloads.sourceforge.net/project/acpid2
+ ACPID_LICENSE = GPL-2.0+
+-- 
+2.18.0
