@@ -1,38 +1,30 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 07 Aug 2018 17:12:52 +0300
-Subject: [Buildroot] [PATCH] package/proftpd: add
- BR2_PACKAGE_PROFTPD_MOD_SFTP
-In-Reply-To: <CANQCQpbT9m=mvz7pQjuvMrR3dJrzdf+3PJKYhJX6-rRxOYmmJw@mail.gmail.com>
-References: <1533648866-61581-1-git-send-email-matthew.weber@rockwellcollins.com>
- <87r2jab83j.fsf@tkos.co.il>
- <CANQCQpbT9m=mvz7pQjuvMrR3dJrzdf+3PJKYhJX6-rRxOYmmJw@mail.gmail.com>
-Message-ID: <87o9eeb6zf.fsf@tkos.co.il>
+From: =?UTF-8?B?KioqKiogKioqKio=?= <zyama.abel@mail.ru>
+Date: Tue, 07 Aug 2018 17:38:11 +0300
+Subject: [Buildroot] =?utf-8?q?PERL/CGI=3A_Can_not_install_CGI=2Epm_via_b?=
+ =?utf-8?q?uildroot?=
+Message-ID: <1533652691.994785035@f468.i.mail.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
 
-Matthew Weber writes:
-> On Tue, Aug 7, 2018 at 8:48 AM Baruch Siach <baruch@tkos.co.il> wrote:
->> Matt Weber writes:
->> > +ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SFTP),y)
->> > +PROFTPD_CONF_OPTS += --enable-openssl
->>
->> Don't you need openssl/libressl as build time dependency?
->
-> Yeah, I'll add a check for BR2_PACKAGE_OPENSSL.   By chance, do you
-> know if there is a risk of library compatibility between libopenssl
-> and libressl?
+I use buildroot? ?2018.2 and perl by default version is 5.26.2.
+I need a module CGI.pm that is contained in perl version 5.20.2.
+I replace .mk and hash files in package/perl for 5.20.2 version
+Complie project -- all right. But I can not looking the CGI.pm anywhere in linux system.
 
-There are some minor API differences between openssl and libressl. You
-should probably build test against both of them.
-
-baruch
+What I did wrong?
+----------------------------------------------------------------------
 
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+***** *****
+
+----------------------------------------------------------------------
+
+-- 
+*** ***
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180807/90549d58/attachment.html>
