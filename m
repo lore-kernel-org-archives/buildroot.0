@@ -1,39 +1,41 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Tue, 7 Aug 2018 11:33:57 +0530
-Subject: [Buildroot] [PATCH v4 1/2] board: amarula: Add A64-Relic support
-In-Reply-To: <20180701140026.2261-1-jagan@amarulasolutions.com>
-References: <20180701140026.2261-1-jagan@amarulasolutions.com>
-Message-ID: <CAMty3ZCa0x9K9mEYAL_Yz4gkZMNsNO8n8zkhUxSvuuFEe17F6Q@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue,  7 Aug 2018 08:03:57 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 14,
+ 17}.x series
+Message-ID: <20180807060358.2708-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 1, 2018 at 7:30 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
-> Add initial support for Amarula A64-Relic board
-> with below features:
-> - U-Boot 2018.07-rc1
-> - Linux 4.17.0-rc6
-> - Default packages from buildroot
->
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
-> Changes for v4:
-> - remove sdcard.img image creation
-> - on readme 'cd output/images' not output/images
-> - add 'sudo' for fastboot commands on readme.txt
-> Changes for v3:
-> - Use 4.17 kernel headers
-> - Add wiki link
-> - Add BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT
-> - Update comments on readme.txt suggested by Thomas
-> Changes for v2:
-> - Use mainline U-Boot
-> - Drop uboot.fragment since the UMS used for developement,
->   so note it on readme.txt how to use.
-> - format the 'Write eMMC' steps suggested by Arnout.
-> - fix fastboot steps in readme.txt
-> - add offset in genimage.cfg for boot partition instead of size
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Any further comments on this?
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4383466af1..36c1ddcdb8 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -258,14 +258,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.145"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.116"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.146"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.118"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.59"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.61"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.17.11"	if BR2_KERNEL_HEADERS_4_17
++	default "4.17.13"	if BR2_KERNEL_HEADERS_4_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.18.0
