@@ -1,62 +1,45 @@
-From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Tue, 7 Aug 2018 17:32:51 +0200
-Subject: [Buildroot] [PATCH] mmc-utils: Rely on our own _FORTIFY_SOURCE
-Message-ID: <48287dd12fcef0440cc49ff86343867d6cb8429e.1533656185.git.jan.kundrat@cesnet.cz>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 7 Aug 2018 12:02:47 -0500
+Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
+ for PIE build flags
+In-Reply-To: <2400f8a7f1f587d2ff8d351408c0558033150f7f.camel@spectralink.com>
+References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
+ <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
+ <cc562d31-b770-c7e1-0a6d-e3f004c917db@mind.be>
+ <CANQCQpaJd3-tj47Xp4XyFGvu9w5GcKZZyr+Pi98A0i1XRxa1Ww@mail.gmail.com>
+ <2d96f4d291e7fc0eb2e17f497a840364ec6ec488.camel@spectralink.com>
+ <CANQCQpYd6XjQyVeKZ_O+L1TPL0dcE6TaAmbc51+d8+=0Z9PeFQ@mail.gmail.com>
+ <2400f8a7f1f587d2ff8d351408c0558033150f7f.camel@spectralink.com>
+Message-ID: <CANQCQpZxkti_GQ9hqx7tzA657zokznfp1jRa-8200cSV5G=RMw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream always forced _FORTIFY_SOURCE=2. At first, I tried changing
-their flags to undefine that macro first, but that did not work well.
-This patch ensures that the package always respects our toolchain
-settings, even in cases where we are not fortifying the build.
+On Thu, Jul 19, 2018 at 8:10 AM S?rensen, Stefan
+<Stefan.Sorensen@spectralink.com> wrote:
+>
+> On Thu, 2018-07-19 at 07:58 -0500, Matthew Weber wrote:
+> > > It works fine with a single spec file - I used two different files
+> > > since I was keeping CFLAGS and LDFLAGS separate.
+> > >
+> >
+> > Something in the syntax then would have to change, right?  I combined
+> > the files and was getting CC errors.
+>
+> That was what I did - I have not run into any problems. Any particular
+> packages that fails?
 
-This fixes a build failure where the mmc-utils package failed to build
-with, e.g., BR2_FORTIFY_SOURCE_1:
+attr pkg during the configuring stage
+https://paste.ubuntu.com/p/wdn3Pjsd39/
 
-  <command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
-  <command-line>:0:0: note: this is the location of the previous definition
+I can work up a simple defconfig but I didn't get to far before I ran into this.
 
-Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
----
- ...on-the-build-env-for-_FORTIFY_SOURCE.patch | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/mmc-utils/0001-Rely-on-the-build-env-for-_FORTIFY_SOURCE.patch
+The combined specs file looked like.
+*cc1_options:
++ %{!r:%{!fpie:%{!fPIE:%{!fpic:%{!fPIC:%{!fno-pic:-fPIE}}}}}}
+*self_spec:
++ %{!static:%{!shared:%{!r:-pie}}}
 
-diff --git a/package/mmc-utils/0001-Rely-on-the-build-env-for-_FORTIFY_SOURCE.patch b/package/mmc-utils/0001-Rely-on-the-build-env-for-_FORTIFY_SOURCE.patch
-new file mode 100644
-index 0000000000..b099efa6c4
---- /dev/null
-+++ b/package/mmc-utils/0001-Rely-on-the-build-env-for-_FORTIFY_SOURCE.patch
-@@ -0,0 +1,27 @@
-+From 0c893e6f272351572548264bf423208a7b76bb16 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-+Date: Tue, 7 Aug 2018 17:29:35 +0200
-+Subject: [PATCH] Rely on the build env for _FORTIFY_SOURCE
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index aa27ff2..a3890b2 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -1,5 +1,5 @@
-+ CC ?= gcc
-+-AM_CFLAGS = -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2
-++AM_CFLAGS = -D_FILE_OFFSET_BITS=64
-+ CFLAGS ?= -g -O2
-+ objects = \
-+ 	mmc.o \
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+Matt
