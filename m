@@ -1,89 +1,50 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  7 Aug 2018 11:38:39 +0200
-Subject: [Buildroot] [PATCH-NEXT] package: add python-semver
-Message-ID: <20180807093839.18887-1-peter@korsgaard.com>
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Tue, 07 Aug 2018 12:21:42 +0200
+Subject: [Buildroot] [PATCH 3/3 v3] linux: kconfig needs the toolchain
+In-Reply-To: <5878b50c7b69951bc528d25c98a691a888ee5051.1533327111.git.yann.morin.1998@free.fr>
+References: <cover.1533327111.git.yann.morin.1998@free.fr>
+ <5878b50c7b69951bc528d25c98a691a888ee5051.1533327111.git.yann.morin.1998@free.fr>
+Message-ID: <b0c83b84-c80b-4e1d-be77-d9df468efea5@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-semver/Config.in          |  6 ++++++
- package/python-semver/python-semver.hash |  3 +++
- package/python-semver/python-semver.mk   | 14 ++++++++++++++
- 5 files changed, 25 insertions(+)
- create mode 100644 package/python-semver/Config.in
- create mode 100644 package/python-semver/python-semver.hash
- create mode 100644 package/python-semver/python-semver.mk
+On p?tek 3. srpna 2018 22:16:56 CEST, Yann E. MORIN wrote:
+> Starting with linux-4.18, the kconfig from the kernel can call
+> to the compiler to test its capabilities; see:
+>
+>     
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/Kconfig.include
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+>
+> ---
+> Changes v1 -> v2:
+>   - take advantage of the kconfig-package infra  (Thomas)
+> ---
+>  linux/linux.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 60dad3a249..48b2a16ce7 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -68,6 +68,11 @@ LINUX_DEPENDENCIES = host-kmod
+>  # shipped with the kernel sources, so we need flex and bison.
+>  LINUX_KCONFIG_DEPENDENCIES = host-bison host-flex
+>  
+> +# Starting with 4.18, the kconfig in the kernel calls the
+> +# cross-compiler to check its capabilities. So we need the
+> +# toolchain before we can call the configurators.
+> +LINUX_KCONFIG_DEPENDENCIES += toolchain
+> +
+>  # host tools needed for kernel compression
+>  ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
+>  LINUX_DEPENDENCIES += host-lz4
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 215506c71c..67adc08b9a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1557,6 +1557,7 @@ F:	package/python-ipaddr/
- F:	package/python-pam/
- F:	package/python-psutil/
- F:	package/python-request-id/
-+F:	package/python-semver/
- F:	package/python-texttable/
- F:	package/python-validators/
- F:	package/python-webob/
-diff --git a/package/Config.in b/package/Config.in
-index f5a17492c7..18813b3965 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -940,6 +940,7 @@ menu "External python modules"
- 	source "package/python-sdnotify/Config.in"
- 	source "package/python-secretstorage/Config.in"
- 	source "package/python-see/Config.in"
-+	source "package/python-semver/Config.in"
- 	source "package/python-serial/Config.in"
- 	source "package/python-service-identity/Config.in"
- 	source "package/python-setproctitle/Config.in"
-diff --git a/package/python-semver/Config.in b/package/python-semver/Config.in
-new file mode 100644
-index 0000000000..c66231a730
---- /dev/null
-+++ b/package/python-semver/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_SEMVER
-+	bool "python-semver"
-+	help
-+	  Python helper for Semantic Versioning (http://semver.org/).
-+
-+	  https://github.com/k-bx/python-semver
-diff --git a/package/python-semver/python-semver.hash b/package/python-semver/python-semver.hash
-new file mode 100644
-index 0000000000..e18cc1c672
---- /dev/null
-+++ b/package/python-semver/python-semver.hash
-@@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/semver/json
-+md5	dc579ba9d0bb2137bad5324d4bdb7e40  semver-2.8.1.tar.gz
-+sha256	5b09010a66d9a3837211bb7ae5a20d10ba88f8cb49e92cb139a69ef90d5060d8  semver-2.8.1.tar.gz
-diff --git a/package/python-semver/python-semver.mk b/package/python-semver/python-semver.mk
-new file mode 100644
-index 0000000000..afdd34564e
---- /dev/null
-+++ b/package/python-semver/python-semver.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-semver
-+#
-+################################################################################
-+
-+PYTHON_SEMVER_VERSION = 2.8.1
-+PYTHON_SEMVER_SOURCE = semver-$(PYTHON_SEMVER_VERSION).tar.gz
-+PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/47/13/8ae74584d6dd33a1d640ea27cd656a9f718132e75d759c09377d10d64595
-+PYTHON_SEMVER_SETUP_TYPE = setuptools
-+# no license file in tarball, but available in git
-+PYTHON_SEMVER_LICENSE = BSD-3-Clause
-+
-+$(eval $(python-package))
--- 
-2.11.0
+Tested-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+Reviewed-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
