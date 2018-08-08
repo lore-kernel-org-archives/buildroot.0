@@ -1,57 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Aug 2018 17:50:33 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-08-04
-In-Reply-To: <kd7k3fx875.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Sun, 05 Aug 2018 23:39:32 +0200")
-References: <20180805060022.2DF08207A8@mail.bootlin.com>
- <kd7k3fx875.ln2@ID-313208.user.individual.net>
-Message-ID: <87h8k4g8mu.fsf@dell.be.48ers.dk>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed,  8 Aug 2018 20:14:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: add upstream
+ security fix
+Message-ID: <20180808181447.13485-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+Fixes CVE-2018-14526:
+http://w1.fi/security/2018-1/unauthenticated-eapol-key-decryption.txt
 
- > Am Sun, 05 Aug 2018 08:00:22 +0200 schrieb Thomas Petazzoni:
- >> arc |                   samba4-4.8.3 | NOK | http://
- > autobuild.buildroot.net/results/9188530d80f7bb8edc1394f3e9ad60806279f698 
- > |     
- >> mips64el |                   samba4-4.8.3 | NOK | http://
- > autobuild.buildroot.net/results/7235cd53dd2eae02b9c25724da8e0ef2c789af3c 
- > |     
- >> mips64el |                   samba4-4.8.3 | NOK | http://
- > autobuild.buildroot.net/results/8638d46e51333209c264fe3f21d9cf04602522f7 
- > |     
+Added license hash.
 
- > Hi,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/wpa_supplicant/wpa_supplicant.hash | 2 ++
+ package/wpa_supplicant/wpa_supplicant.mk   | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
- > finally I was able to reproduce the build error. The reason for the bug 
- > is described in an upstream bug report which was closed as WONTFIX:
- > https://bugzilla.samba.org/show_bug.cgi?id=9515
-
- > If installed, samba4 uses the docbook-xsl package from the host system to 
- > build parts of the documentation. On my Debian system the bug reported to 
- > samba4 was fixed in the docbook-xsl package:
- > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=765567
-
- > Looking at http://autobuild.buildroot.net/?reason=samba4-4.8.3 I saw the 
- > system from Matt Weber being called "(U14.04 RC LARGO)" so I installed 
- > Ubuntu 14.04.5, which does not carry the fix and voila, I could reproduce 
- > the error.
-
- > This patch fixes the problem by disabling the build of the documentation:
- > https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/network/
- > samba/patches/samba-950-no-man.patch
-
- > Are you willing to accept this patch for buildroot or should the docbook-
- > xsl package on the autobuilder instances instead be patched? At the end 
- > the bug is neither in the samba4 package nor in buildroot itself.
-
-It would be great with an upstreamable (--without-man?) patch instead of
-this unconditional hack, but yeah - Something like this should work.
-
+diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
+index 65a6ae246f..dbc4438215 100644
+--- a/package/wpa_supplicant/wpa_supplicant.hash
++++ b/package/wpa_supplicant/wpa_supplicant.hash
+@@ -7,3 +7,5 @@ sha256  793a54748161b5af430dd9de4a1988d19cb8e85ab29bc2340f886b0297cee20b  rebase
+ sha256  596d4d3b63ea859ed7ea9791b3a21cb11b6173b04c0a14a2afa47edf1666afa6  rebased-v2.6-0006-TDLS-Reject-TPK-TK-reconfiguration.patch
+ sha256  c5a17af84aec2d88c56ce0da2d6945be398fe7cab5c0c340deb30973900c2736  rebased-v2.6-0007-WNM-Ignore-WNM-Sleep-Mode-Response-without-pending-r.patch
+ sha256  c8840d857b9432f3b488113c85c1ff5d4a4b8d81078b7033388dae1e990843b1  rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch
++sha256  960c3cf2a514479b0b4cf09665186a1a9f5d28e8b05dec23db75c6cc13eb1f7c  rebased-v2.6-0001-WPA-Ignore-unauthenticated-encrypted-EAPOL-Key-data.patch
++sha256  3f6ca36d86668d6607389e01cf4766f38aa3b8ab2c144ad132541087b41c061d  README
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 75ecbaa53c..2b451996ed 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -13,7 +13,8 @@ WPA_SUPPLICANT_PATCH = \
+ 	http://w1.fi/security/2017-1/rebased-v2.6-0004-Prevent-installation-of-an-all-zero-TK.patch \
+ 	http://w1.fi/security/2017-1/rebased-v2.6-0006-TDLS-Reject-TPK-TK-reconfiguration.patch \
+ 	http://w1.fi/security/2017-1/rebased-v2.6-0007-WNM-Ignore-WNM-Sleep-Mode-Response-without-pending-r.patch \
+-	http://w1.fi/security/2017-1/rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch
++	http://w1.fi/security/2017-1/rebased-v2.6-0008-FT-Do-not-allow-multiple-Reassociation-Response-fram.patch \
++	http://w1.fi/security/2018-1/rebased-v2.6-0001-WPA-Ignore-unauthenticated-encrypted-EAPOL-Key-data.patch
+ WPA_SUPPLICANT_LICENSE = BSD-3-Clause
+ WPA_SUPPLICANT_LICENSE_FILES = README
+ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
 -- 
-Bye, Peter Korsgaard
+2.18.0
