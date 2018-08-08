@@ -1,44 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Aug 2018 17:47:11 +0200
-Subject: [Buildroot] [Buildroot & ArchLinux] can not build host-m4 on
- machine with glibc-2.28 installed
-In-Reply-To: <20180808031502.GE1085@techyauld.com> (=?utf-8?B?IumDkS4g56WO?=
- =?utf-8?B?LiIncw==?= message of "Wed, 8 Aug 2018 11:15:02 +0800")
-References: <20180808031502.GE1085@techyauld.com>
-Message-ID: <87lg9gg8sg.fsf@dell.be.48ers.dk>
+Date: Wed, 08 Aug 2018 17:50:33 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-08-04
+In-Reply-To: <kd7k3fx875.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Sun, 05 Aug 2018 23:39:32 +0200")
+References: <20180805060022.2DF08207A8@mail.bootlin.com>
+ <kd7k3fx875.ln2@ID-313208.user.individual.net>
+Message-ID: <87h8k4g8mu.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "?" == ? ? <yzheng@techyauld.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Hello,
-
-Please mail the buildroot mailing list and not individual contributors,
-thanks!
+ > Am Sun, 05 Aug 2018 08:00:22 +0200 schrieb Thomas Petazzoni:
+ >> arc |                   samba4-4.8.3 | NOK | http://
+ > autobuild.buildroot.net/results/9188530d80f7bb8edc1394f3e9ad60806279f698 
+ > |     
+ >> mips64el |                   samba4-4.8.3 | NOK | http://
+ > autobuild.buildroot.net/results/7235cd53dd2eae02b9c25724da8e0ef2c789af3c 
+ > |     
+ >> mips64el |                   samba4-4.8.3 | NOK | http://
+ > autobuild.buildroot.net/results/8638d46e51333209c264fe3f21d9cf04602522f7 
+ > |     
 
  > Hi,
- > 	I found that failure and do some hacking.
 
- > 	(1) m4 source, lib/freadahead.c: It use the internal symbols to guess the C runtime lib's type.
+ > finally I was able to reproduce the build error. The reason for the bug 
+ > is described in an upstream bug report which was closed as WONTFIX:
+ > https://bugzilla.samba.org/show_bug.cgi?id=9515
 
- > 	(2) glibc-2.28 removed the header file /usr/include/bits/libio.h.
- > 	    In fact, libio.h seems an internal header. The content of it has been
- > 	    moved into <glibc source>/libio/libio.h, which is not installed.
+ > If installed, samba4 uses the docbook-xsl package from the host system to 
+ > build parts of the documentation. On my Debian system the bug reported to 
+ > samba4 was fixed in the docbook-xsl package:
+ > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=765567
 
+ > Looking at http://autobuild.buildroot.net/?reason=samba4-4.8.3 I saw the 
+ > system from Matt Weber being called "(U14.04 RC LARGO)" so I installed 
+ > Ubuntu 14.04.5, which does not carry the fix and voila, I could reproduce 
+ > the error.
 
- > 	Anyone can help me out? M4 has not released new version since 1.4.18(2016-12-31).
+ > This patch fixes the problem by disabling the build of the documentation:
+ > https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/network/
+ > samba/patches/samba-950-no-man.patch
 
- > Allan,
- > 	It seems that that bug will hit our lovely ArchLinux!
+ > Are you willing to accept this patch for buildroot or should the docbook-
+ > xsl package on the autobuilder instances instead be patched? At the end 
+ > the bug is neither in the samba4 package nor in buildroot itself.
 
-What is the build failure you are seeing exactly? Looking around, it
-seems linuxfromscratch has some workarounds for building against
-glibc-2.28, perhaps we can do the same?
-
-http://www.linuxfromscratch.org/lfs/view/development/chapter05/m4.html
+It would be great with an upstreamable (--without-man?) patch instead of
+this unconditional hack, but yeah - Something like this should work.
 
 -- 
 Bye, Peter Korsgaard
