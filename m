@@ -1,86 +1,117 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  7 Aug 2018 22:37:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xserver_xorg-server: bump
- version to 1.20.1
-Message-ID: <20180807203736.31559-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed,  8 Aug 2018 08:00:47 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-07
+Message-ID: <20180808060047.9CC13209AD@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes for this bugfix release:
-https://lists.x.org/archives/xorg-announce/2018-August/002912.html
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../0001-modesettings-needs-dri2.patch                 |  0
- ...02-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch |  0
- .../0003-Remove-check-for-useSIGIO-option.patch        |  0
- .../0004-include-misc.h-fix-uClibc-build.patch         |  0
- package/x11r7/xserver_xorg-server/Config.in            |  4 ++--
- .../x11r7/xserver_xorg-server/xserver_xorg-server.hash | 10 +++++-----
- 6 files changed, 7 insertions(+), 7 deletions(-)
- rename package/x11r7/xserver_xorg-server/{1.20.0 => 1.20.1}/0001-modesettings-needs-dri2.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.0 => 1.20.1}/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.0 => 1.20.1}/0003-Remove-check-for-useSIGIO-option.patch (100%)
- rename package/x11r7/xserver_xorg-server/{1.20.0 => 1.20.1}/0004-include-misc.h-fix-uClibc-build.patch (100%)
+Build statistics for 2018-08-07
+===============================
 
-diff --git a/package/x11r7/xserver_xorg-server/1.20.0/0001-modesettings-needs-dri2.patch b/package/x11r7/xserver_xorg-server/1.20.1/0001-modesettings-needs-dri2.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.0/0001-modesettings-needs-dri2.patch
-rename to package/x11r7/xserver_xorg-server/1.20.1/0001-modesettings-needs-dri2.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.0/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch b/package/x11r7/xserver_xorg-server/1.20.1/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.0/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-rename to package/x11r7/xserver_xorg-server/1.20.1/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.0/0003-Remove-check-for-useSIGIO-option.patch b/package/x11r7/xserver_xorg-server/1.20.1/0003-Remove-check-for-useSIGIO-option.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.0/0003-Remove-check-for-useSIGIO-option.patch
-rename to package/x11r7/xserver_xorg-server/1.20.1/0003-Remove-check-for-useSIGIO-option.patch
-diff --git a/package/x11r7/xserver_xorg-server/1.20.0/0004-include-misc.h-fix-uClibc-build.patch b/package/x11r7/xserver_xorg-server/1.20.1/0004-include-misc.h-fix-uClibc-build.patch
-similarity index 100%
-rename from package/x11r7/xserver_xorg-server/1.20.0/0004-include-misc.h-fix-uClibc-build.patch
-rename to package/x11r7/xserver_xorg-server/1.20.1/0004-include-misc.h-fix-uClibc-build.patch
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 5af4d09eed..c6dc010980 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -61,7 +61,7 @@ choice
- 	bool "X Window System server version"
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
--	bool "1.20.0"
-+	bool "1.20.1"
- 	select BR2_PACKAGE_XSERVER_XORG_SERVER_VIDEODRV_ABI_24
- 	select BR2_PACKAGE_XLIB_LIBXFONT2
- 
-@@ -79,7 +79,7 @@ endchoice
- 
- config BR2_PACKAGE_XSERVER_XORG_SERVER_VERSION
- 	string
--	default "1.20.0" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
-+	default "1.20.1" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_20
- 	default "1.17.4" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_17
- 	default "1.14.7" if BR2_PACKAGE_XSERVER_XORG_SERVER_V_1_14
- 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 691229a834..c0d93e5580 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -3,8 +3,8 @@ sha1   7a95765e56b124758fcd7b609589e65b8870880b                                x
- sha256 fcf66fa6ad86227613d2d3e8ae13ded297e2a1e947e9060a083eaf80d323451f        xorg-server-1.14.7.tar.bz2
- # From https://lists.x.org/archives/xorg-announce/2015-October/002650.html
- sha256 0c4b45c116a812a996eb432d8508cf26c2ec8c3916ff2a50781796882f8d6457        xorg-server-1.17.4.tar.bz2
--# From https://lists.x.org/archives/xorg-announce/2018-May/002893.html
--md5 c1ca1ea0a905ea788da03c77cc38b06e  xorg-server-1.20.0.tar.bz2
--sha1 a9e999c15a2322bc423d5d6e1978ba38f9635901  xorg-server-1.20.0.tar.bz2
--sha256 9d967d185f05709274ee0c4f861a4672463986e550ca05725ce27974f550d3e6  xorg-server-1.20.0.tar.bz2
--sha512 1489e8511c9da682ef0460182dfeeddd241c72d4ef4d206d9706f1e39572c09953df851fab18cefb65a1ee4c6710c6ba13c63c9c9fc0bc1b5f12c50780412cde  xorg-server-1.20.0.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-August/002912.html
-+md5 e525846d1d0af5732ba835f2e2ec066d  xorg-server-1.20.1.tar.bz2
-+sha1 fd43367c2b7bbb1a4b1dd90b06a021e68a9db240  xorg-server-1.20.1.tar.bz2
-+sha256 59c99fe86fe75b8164c6567bfc6e982aecc2e4a51e6fbac1b842d5d00549e918  xorg-server-1.20.1.tar.bz2
-+sha512 ef2b93a61683c8ca8d1f14b771e70db65ba119a73db8a46e7cdbf2ac2243e3f4b2732068eb5aa5d7b76f460db995a3c04390870198a5210ec30df4360ad9f94b  xorg-server-1.20.1.tar.bz2
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  15 |   0 |   1 |  16 |
+   2018.05.x |  13 |   1 |   0 |  14 |
+      master | 100 |  17 |   2 | 119 |
+        next |  40 |   6 |   1 |  47 |
+
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                       unknown | 1 
+
+
+Detail of failures
+------------------
+
+      mipsel |                        unknown | TIM | http://autobuild.buildroot.net/results/7406a7ba9fbd279ddada3b542358b846ad9e0e7d |     
+
+Results for branch '2018.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+          host-libglib2-2.56.1 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |           host-libglib2-2.56.1 | NOK | http://autobuild.buildroot.net/results/ba24c2754923580bac4c1d9e6ecf8251735ae65f |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.67.0 | 8 
+                    brltty-5.5 | 3 
+           host-libselinux-2.7 | 2 
+                    ncmpc-0.30 | 2 
+               azure-iot-sdk-c | 1 
+                    f2fs-tools | 1 
+         host-cryptsetup-2.0.3 | 1 
+                  zeromq-4.2.5 | 1 
+
+
+Detail of failures
+------------------
+
+        or1k |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/0af744f37ee6fffe192236f23b94b1248d82c77e |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/650791df697b73234e7308fcaf24c929bcd02b22 |     
+         arc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/078047be9289d2438cca312e14b9b5c5e405a563 |     
+     powerpc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/2ba7e049160fa6c07b7bf12ca356a6dac1fc12a6 |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/ae765ef714b7290941a3e582ca80decbee950d67 |     
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/dd2f49ab35ac7f9699c66d60a13583e0d5811722 |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/cfdf121db9bdd978eeefc74b1955b29572a73d3d |     
+        m68k |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/1128e1754c8c25c812a36736d59c9cb7a59efe9f |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/eb68e25320b2e8ee4f3c7fd19799fbc5411b064f |     
+      xtensa |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/55b271cceb5b749f911266ed96998c4ee730fb86 |     
+         sh4 |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/f8ff8c24d940113d7eb9729ae0b1b8e454cb4523 |     
+    mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/c1829952aec2356905a2d5559d77b3e79739ea21 |     
+      mipsel |                     f2fs-tools | TIM | http://autobuild.buildroot.net/results/4132927b01038f9d84786809e769c8312c28a22e |     
+         arm |          host-cryptsetup-2.0.3 | NOK | http://autobuild.buildroot.net/results/ffda2579b215b53161025b7bc703091cb30ef95d |     
+      mipsel |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/f19d23e66648439464b7c9d4d2ce7f455492ba1e |     
+         arm |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/3be7f46f75314f9355214ec5aa0eba5f6f63c658 |     
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/6debffb728ca0cf7a0b70aba3bb9a3b895793204 |     
+        or1k |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/bd8f6b875816307cd86a4bb13d4bfef4ee37458a |     
+        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/a6262fb9795568ea0be8934429b0e5c8f2e11936 |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+               azure-iot-sdk-c | 1 
+               domoticz-4.9700 | 1 
+                  mender-1.4.0 | 1 
+                    ncmpc-0.30 | 1 
+          openpowerlink-V2.7.0 | 1 
+               qt5webkit-5.9.1 | 1 
+                  samba4-4.8.3 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/ed60605ad92f749fb31e53319b97c36f175654b5 |     
+         arm |                domoticz-4.9700 | NOK | http://autobuild.buildroot.net/results/4110b2425ef8fe5f4b834a5c8ebfbcf68bfeff3d |     
+ powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/c6d560d91f7b5d3efa8a90e5dc3fcd02248fab76 |     
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/ab7a3c407ae6778cdf719d1b2d2d6226479c0588 |     
+        i586 |           openpowerlink-V2.7.0 | NOK | http://autobuild.buildroot.net/results/dedb1bbeca4b628eb79f87cdc0403b1b0430b82d |     
+      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/9d42295fa2c4b53d14894ff36721ed9d9043a6ed |     
+    mips64el |                   samba4-4.8.3 | NOK | http://autobuild.buildroot.net/results/8bc070e0a1b700a29e0253bcd0f0dad26059eea7 |     
+
+
 -- 
-2.18.0
+http://autobuild.buildroot.net
