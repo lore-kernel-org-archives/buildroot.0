@@ -1,20 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Aug 2018 16:24:18 +0200
-Subject: [Buildroot] [PATCH] linux: bump CIP to version v4.4.138-cip25
-In-Reply-To: <1533624833-27416-1-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Tue, 7 Aug 2018 08:53:53 +0200")
-References: <1533624833-27416-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87ftzpgcml.fsf@dell.be.48ers.dk>
+Date: Wed, 08 Aug 2018 16:24:39 +0200
+Subject: [Buildroot] [PATCH] boot-wrapper-aarch64: use SPDX identifier
+ for 3 clause BSD
+In-Reply-To: <20180807081228.20240-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 7 Aug 2018 10:12:28 +0200")
+References: <20180807081228.20240-1-peter@korsgaard.com>
+Message-ID: <87bmadgcm0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > This patch bumps the CIP Linux kernel to version v4.4.138-cip25
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Use the correct SPDX identifier for the 3 clause BSD license, like we do
+ > elsewhere.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
