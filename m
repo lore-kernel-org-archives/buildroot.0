@@ -1,39 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 8 Aug 2018 15:17:09 +0200
-Subject: [Buildroot] [PATCH] mmc-utils: Rely on our own _FORTIFY_SOURCE
-In-Reply-To: <48287dd12fcef0440cc49ff86343867d6cb8429e.1533656185.git.jan.kundrat@cesnet.cz>
-References: <48287dd12fcef0440cc49ff86343867d6cb8429e.1533656185.git.jan.kundrat@cesnet.cz>
-Message-ID: <20180808151709.2f35030c@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 08 Aug 2018 16:10:41 +0200
+Subject: [Buildroot] [PATCH] ncurses: make host-ncurses use host terminfo
+In-Reply-To: <8736wec3d8.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 19 Jul 2018 23:38:59 +0200")
+References: <5f7fe697b92ac0145674.1531241163@cveaol6qa08.wv.mentorg.com>
+ <8736wec3d8.fsf@dell.be.48ers.dk>
+Message-ID: <87wot1gd9a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Tue, 7 Aug 2018 17:32:51 +0200, Jan Kundr?t wrote:
-> Upstream always forced _FORTIFY_SOURCE=2. At first, I tried changing
-> their flags to undefine that macro first, but that did not work well.
-> This patch ensures that the package always respects our toolchain
-> settings, even in cases where we are not fortifying the build.
-> 
-> This fixes a build failure where the mmc-utils package failed to build
-> with, e.g., BR2_FORTIFY_SOURCE_1:
-> 
->   <command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
->   <command-line>:0:0: note: this is the location of the previous definition
-> 
-> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+Hi,
 
-Is this fixing a build issue reported by the autobuilders ? Or only
-with hardening options ? Your commit log is not very verbose in details
-about the configuration/condition under which the build failure happens.
+ >> # HG changeset patch
+ >> # User Hollis Blanchard <hollis_blanchard@mentor.com>
+ >> # Date 1531239381 25200
+ >> #      Tue Jul 10 09:16:21 2018 -0700
+ >> # Node ID 5f7fe697b92ac0145674a6c96aad0f787b4bae32
+ >> # Parent  d71314cdccf1993ccdb05cddb16a5491f0bf723e
+ >> ncurses: make host-ncurses use host terminfo
 
-Thanks!
+ >> Host GDB suffers a serious problem: pressing backspace (or ^W ^U or any other
+ >> "delete" key) results in a plain space being printed instead, making the
+ >> command prompt almost completely unusable.
 
-Thomas
+ >> That's because it's using host-ncurses, which embeds a path for the terminfo
+ >> database into the library itself. That path ends up being something like
+ >> /home/hollisb/buildroot.git/output/host/share/terminfo, which obviously doesn't
+ >> generally exist other hosts. ('relocate-sdk.sh' cannot and does not edit
+ >> binaries like libncurses.so.6, so doesn't resolve this problem.)
+
+ >> /usr/share/terminfo is a far better path to use, since it almost certainly
+ >> exists on the host. Theoretically, it could be from a different ncurses version
+ >> with incompatible terminfo database format, but this doesn't seem to be a
+ >> problem in practice. (Future patches could address the theoretical problem if
+ >> it actually appears in real life.)
+
+ >> This change allows buildroot's host gdb, which uses ncurses 6.x, to work on
+ >> RHEL5, RHEL6, and RHEL7, which all provide terminfo from ncurses 5.x.
+
+ >> Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+
+ > Committed to 2018.02.x and 2018.05.x, thanks.
+
+Hmm, this triggers an interesting issue with tic :/
+
+** Building terminfo database, please wait...
+Running sh ./shlib tic to install /usr/share/terminfo ...
+
+        You may see messages regarding extended capabilities, e.g., AX.
+        These are extended terminal capabilities which are compiled
+        using
+                tic -x
+        If you have ncurses 4.2 applications, you should read the INSTALL
+        document, and install the terminfo without the -x option.
+
+"terminfo.tmp", line 21272, terminal 'v3220': /home/peko/.terminfo: permission denied (errno 30)
+
+What happens here is that tic doesn't have write access to
+/usr/share/terminfo (as we are not root), so instead it writes the db to
+~/.terminfo.
+
+We in general don't want buildroot to touch any files outside the
+buildroot output directory (and $TMPDIR), but it normally isn't
+enforced/checked by the autobuilders. For this specific setup with
+building inside a container $HOME is mounted readonly, so it really
+fails.
+
+The question is how to fix it. The logical solution would be to set
+TERMINFO to get it to put the database somewhere else, but that doesn't
+work because run_tic.sh overwrites it:
+
+# don't use user's TERMINFO variable
+TERMINFO=${DESTDIR}$ticdir ; export TERMINFO
+
+The only fix I can think of is:
+
+HOST_NCURSES_MAKE_ENV += HOME=$(HOST_DIR)
+
+But that isn't very nice. Any other ideas?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
