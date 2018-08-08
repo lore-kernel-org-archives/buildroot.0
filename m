@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 8 Aug 2018 22:47:01 +0200
-Subject: [Buildroot] PERL/CGI: Can not install CGI.pm via buildroot
-In-Reply-To: <1533652691.994785035@f468.i.mail.ru>
-References: <1533652691.994785035@f468.i.mail.ru>
-Message-ID: <b4402969-4507-6e3a-6fe4-54b40e331acb@mind.be>
+Date: Wed, 8 Aug 2018 22:57:06 +0200
+Subject: [Buildroot] How to retain intentional absolute RPATH for target
+ application?
+In-Reply-To: <20180801141713.GT21354@australia>
+References: <20180801141713.GT21354@australia>
+Message-ID: <5cac9585-a5e8-56dc-cbde-05530d60e8f1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +13,54 @@ To: buildroot@busybox.net
 
 
 
-On 07-08-18 16:38, ***** ***** wrote:
+On 01-08-18 16:17, Thomas De Schampheleire wrote:
+> Hi,
 > 
-> I use buildroot? ?2018.2 and perl by default version is 5.26.2.
-> I need a module CGI.pm that is contained in perl version 5.20.2.
-> I replace .mk and hash files in package/perl for 5.20.2 version
-> Complie project -- all right. But I can not looking the CGI.pm anywhere in linux
-> system.
+> I have an application that has an RPATH containing (among some automatically
+> present values) an absolute path which is present on target but not a standard
+> search path, say /opt/foobar/lib , and also as first entry $ORIGIN/../lib.
+> The application is stored in /opt/foobar/bin.
+> 
+> Testing on target in a case where fix-rpath is not used (old buildroot version)
+> shows that the first entry in RPATH is used, i.e. $ORIGIN/../lib, resolving to
+> /opt/foobar/bin/../lib.
+> 
+> When going to current buildroot including fix-rpath, this application cannot be
+> loaded because the libraries are not found. Analysis shows that only standard
+> search paths are considered.
+> 
+> Manually checking the patchelf step shows that the RPATH is completely cleared.
+> I found a patch by Bryce Ferguson regarding endianness problems on PPC (this is
+> indeed a PPC target), but although it is applied and fixes the display of the
+> RPATH field in readelf after running fix-rpath, the actual issue remains:
+> RPATH is empty after running fix-rpath.
 
- See [1] - CGI.pm was removed from perl because it's not the right way to do it.
-If you really need it, you have to get the package from cpan. You can use the
-utils/scancpan script to get started.
+ Let's first find out why it is cleared. patchelf should check for each
+directory in rpath if it is actually needed, and only remove it if it is not
+needed. So, what library do you have in /opt/foobar/lib, and is it really linked
+with the program?
+
+ Hm, I realize that we never thought about dlopen()ed libraries. Could that be
+the cause? I guess that hasn't been a problem up to now because usually programs
+using dlopen() will use an absolute path (to a build-time or run-time configured
+plugin directory) rather than relying on RPATH.
+
+ Perhaps we should update our patchelf patch and only remove rpath entries for
+directories that don't exist on the target at all. Although even that may not be
+enough, because you might install plugins at runtime (and create the directory
+at that time).
+
+ So Matt's suggestion is probably the way to go.
 
  Regards,
  Arnout
 
-
-[1] https://metacpan.org/pod/CGI#CGI.pm-HAS-BEEN-REMOVED-FROM-THE-PERL-CORE
-
 > 
-> What I did wrong?
+> My question is now: how to allow preserving such an intentional RPATH, or at
+> least make sure that the libraries in /opt/foobar/lib are found?
 > 
-> --------------------------------------------------------------------------------
-> 
-> -- 
-> ***** *****
-> 
-> --------------------------------------------------------------------------------
-> 
-> -- 
-> *** ***
-> 
-> 
+> Thanks,
+> Thomas
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
