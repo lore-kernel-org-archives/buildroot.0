@@ -1,50 +1,75 @@
 From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
-Date: Wed, 08 Aug 2018 09:24:05 +0200
+Date: Wed, 08 Aug 2018 09:25:40 +0200
 Subject: [Buildroot] 
- =?iso-8859-1?q?=5BPATCH_3/6=5D_package/Makefile=2Ein?=
- =?iso-8859-1?q?=3A_Use_gcc_spec_files_for_PIE_build_flags?=
-In-Reply-To: <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
-Message-ID: <425833b3-d86f-4275-bc3c-a80c6385b030@cesnet.cz>
+ =?iso-8859-1?q?=5BPATCH=5D_mmc-utils=3A_Rely_on_our_?=
+ =?iso-8859-1?q?own_=5FFORTIFY=5FSOURCE?=
+In-Reply-To: <48287dd12fcef0440cc49ff86343867d6cb8429e.1533656185.git.jan.kundrat@cesnet.cz>
+References: <48287dd12fcef0440cc49ff86343867d6cb8429e.1533656185.git.jan.kundrat@cesnet.cz>
+Message-ID: <7cd35f90-f222-4b42-9fcb-19a0d1e78f59@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt, thanks for working on this.
+On ?ter? 7. srpna 2018 17:32:51 CEST, Jan Kundr?t wrote:
+> Upstream always forced _FORTIFY_SOURCE=2. At first, I tried changing
+> their flags to undefine that macro first, but that did not work well.
+> This patch ensures that the package always respects our toolchain
+> settings, even in cases where we are not fortifying the build.
+>
+> This fixes a build failure where the mmc-utils package failed to build
+> with, e.g., BR2_FORTIFY_SOURCE_1:
+>
+>   <command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
+>   <command-line>:0:0: note: this is the location of the previous definition
+>
+> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+> ---
+>  ...on-the-build-env-for-_FORTIFY_SOURCE.patch | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 
+> package/mmc-utils/0001-Rely-on-the-build-env-for-_FORTIFY_SOURCE.patch
+>
+> diff --git 
+> a/package/mmc-utils/0001-Rely-on-the-build-env-for-_FORTIFY_SOURCE.patch 
+> b/package/mmc-utils/0001-Rely-on-the-build-env-for-_FORTIFY_SOURCE.patch
+> new file mode 100644
+> index 0000000000..b099efa6c4
+> --- /dev/null
+> +++ b/package/mmc-utils/0001-Rely-on-the-build-env-for-_FORTIFY_SOURCE.patch
+> @@ -0,0 +1,27 @@
+> +From 0c893e6f272351572548264bf423208a7b76bb16 Mon Sep 17 00:00:00 2001
+> +From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
+> +Date: Tue, 7 Aug 2018 17:29:35 +0200
+> +Subject: [PATCH] Rely on the build env for _FORTIFY_SOURCE
+> +MIME-Version: 1.0
+> +Content-Type: text/plain; charset=UTF-8
+> +Content-Transfer-Encoding: 8bit
+> +
+> +Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+> +---
+> + Makefile | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/Makefile b/Makefile
+> +index aa27ff2..a3890b2 100644
+> +--- a/Makefile
+> ++++ b/Makefile
+> +@@ -1,5 +1,5 @@
+> + CC ?= gcc
+> +-AM_CFLAGS = -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2
+> ++AM_CFLAGS = -D_FILE_OFFSET_BITS=64
+> + CFLAGS ?= -g -O2
+> + objects = \
+> + 	mmc.o \
+> +-- 
+> +2.17.1
+> +
 
-When I apply this patch, I'm getting a build failure from an out-of-tree 
-[1] package, see the attached log. The package lives at [1], the Buildroot 
-recipe is pretty straightforward [2]. Here's the relevant snippet from the 
-failure:
-
-  /home/jkt/work/prog/_build/br-cfb/host/bin/arm-linux-gnueabihf-gcc -Wall 
--Wl,-z -Wl,now -Wl,-z -Wl,relro 
--specs=/home/jkt/work/cesnet/gerrit/github/buildroot/buildroot/toolchain/gcc-specs-pie-ld 
--o .libs/example example.o  ./.libs/libredblack.so
-  
-/home/jkt/work/prog/_build/br-cfb/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/7.3.1/../../../../arm-linux-gnueabihf/bin/ld: 
-example.o: relocation R_ARM_MOVW_ABS_NC against `stderr' can not be used 
-when making a shared object; recompile with -fPIC
-
-Is that a failure of that particular package, or a problem in the compiler 
-specs?
-
-Also, Gentoo Linux has been doing compiler hardening for years and their 
-specs appear to be more complex according to the docs [4]. I have no clue 
-if that extra complexity is needed in Buildroot.
+This patch might not be needed when Matthew Weber's series ([PATCH 0/6] 
+Hardening Flag Bugfix/Enhancement) lands. My recommendation is to hold it 
+for a while.
 
 With kind regards,
 Jan
-
-[1] I'll submit them once my patches reach a release upstream.
-[2] https://github.com/sysrepo/libredblack
-[3] 
-https://gerrit.cesnet.cz/plugins/gitiles/github/buildroot/buildroot/+/a0cff08df5918e1721723400da42c8c68b8c0928%5E%21/
-[4] https://wiki.gentoo.org/wiki/Hardened/Toolchain
--------------- next part --------------
-An embedded and charset-unspecified text was scrubbed...
-Name: log-libredblack-spec-files
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180808/4e152f50/attachment.ksh>
