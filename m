@@ -1,31 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Aug 2018 16:26:43 +0200
-Subject: [Buildroot] [PATCH] libarchive: add upstream security patches
-In-Reply-To: <a154e047363347675abf5c0c172b4ca645bc7bf2.1533653722.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 7 Aug 2018 17:55:22 +0300")
-References: <a154e047363347675abf5c0c172b4ca645bc7bf2.1533653722.git.baruch@tkos.co.il>
-Message-ID: <8736vpgcik.fsf@dell.be.48ers.dk>
+Date: Wed, 08 Aug 2018 16:28:02 +0200
+Subject: [Buildroot] [PATCH] uclibc: ldso/arc: fix LD_DEBUG segv when
+ printing R_ARC_NONE
+In-Reply-To: <20180807173359.35041-1-abrodkin@synopsys.com> (Alexey Brodkin's
+ message of "Tue, 7 Aug 2018 20:33:59 +0300")
+References: <20180807173359.35041-1-abrodkin@synopsys.com>
+Message-ID: <87y3dhexvx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
- > Add patches for the following security issues:
- > CVE-2017-14501 - An out-of-bounds read flaw exists in parse_file_info in
- > archive_read_support_format_iso9660.c when extracting a specially
- > crafted iso9660 iso file.
+ > Dynamic linker used to segfault on attempt to print info
+ > about R_ARC_NONE reloaction.
 
- > CVE-2017-14502 - Off-by-one error for UTF-16 names in RAR archives,
- > leading to an out-of-bounds read in archive_read_format_rar_read_header.
+ > The fix is already in upstream master [1],
+ > should be removed on uClibc version bump.
 
- > CVE-2017-14503 - Out-of-bounds read within lha_read_data_none() in
- > archive_read_support_format_lha.c when extracting a specially crafted
- > lha archive.
+ > [1] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=269a2a2a0f863e1b43dc02f2f4f0f3c50299456e
 
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
 
 Committed, thanks.
 
