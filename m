@@ -1,30 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Aug 2018 16:28:02 +0200
-Subject: [Buildroot] [PATCH] uclibc: ldso/arc: fix LD_DEBUG segv when
- printing R_ARC_NONE
-In-Reply-To: <20180807173359.35041-1-abrodkin@synopsys.com> (Alexey Brodkin's
- message of "Tue, 7 Aug 2018 20:33:59 +0300")
-References: <20180807173359.35041-1-abrodkin@synopsys.com>
-Message-ID: <87y3dhexvx.fsf@dell.be.48ers.dk>
+Date: Wed, 08 Aug 2018 16:30:21 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: requires host gcc 4.7+
+In-Reply-To: <cc4aa02d36bdd5ab0f2a450508c67c332d1b5d2c.1533616681.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 7 Aug 2018 07:38:01 +0300")
+References: <cc4aa02d36bdd5ab0f2a450508c67c332d1b5d2c.1533616681.git.baruch@tkos.co.il>
+Message-ID: <87tvo5exs2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Dynamic linker used to segfault on attempt to print info
- > about R_ARC_NONE reloaction.
+ > U-Boot now adds -std=gnu11 when building its build utilities, like
+ > fixdep. This option is only supported since gcc version 4.7.
 
- > The fix is already in upstream master [1],
- > should be removed on uClibc version bump.
+ >   https://gcc.gnu.org/gcc-4.7/changes.html
 
- > [1] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=269a2a2a0f863e1b43dc02f2f4f0f3c50299456e
+ > Fixes:
+ > http://autobuild.buildroot.net/results/ea0/ea09b614a3c10d494939d9551c0c3bfca4626ece/
+ > http://autobuild.buildroot.net/results/f8e/f8efd9af4d86c51fe4f5afe44db9abf9adc5718f/
+ > http://autobuild.buildroot.net/results/c0a/c0ab35c3cb46f84863fe20c0ee92ecc2379578b6/
 
- > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ >  package/uboot-tools/Config.in | 4 ++++
+ >  1 file changed, 4 insertions(+)
 
-Committed, thanks.
+ > diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
+ > index 63a058e8562a..78a8b66c4d97 100644
+ > --- a/package/uboot-tools/Config.in
+ > +++ b/package/uboot-tools/Config.in
+ > @@ -1,10 +1,14 @@
+ >  config BR2_PACKAGE_UBOOT_TOOLS
+ >  	bool "u-boot tools"
+ > +	depends on BR2_HOST_GCC_AT_LEAST_4_7 # -std=gnu11
+
+What about host-uboot-tools?
 
 -- 
 Bye, Peter Korsgaard
