@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 Aug 2018 16:22:48 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 14,
- 17}.x series
-In-Reply-To: <20180807060358.2708-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Tue, 7 Aug 2018 08:03:57 +0200")
+Date: Wed, 08 Aug 2018 16:22:51 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.17.13
+In-Reply-To: <20180807060358.2708-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Tue, 7 Aug 2018 08:03:58 +0200")
 References: <20180807060358.2708-1-bernd.kuhls@t-online.de>
-Message-ID: <87o9edgcp3.fsf@dell.be.48ers.dk>
+ <20180807060358.2708-2-bernd.kuhls@t-online.de>
+Message-ID: <87k1p1gcp0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
