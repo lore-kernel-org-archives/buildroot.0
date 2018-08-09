@@ -1,9 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Aug 2018 22:13:23 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mono: bump to version 5.14.0.177
-In-Reply-To: <1533817887-8771-1-git-send-email-angelo@amarulasolutions.com>
+Date: Thu, 9 Aug 2018 22:15:33 +0200
+Subject: [Buildroot] [PATCH 2/2] Revert "package/mono: remove target
+ mips architecture"
+In-Reply-To: <1533817887-8771-2-git-send-email-angelo@amarulasolutions.com>
 References: <1533817887-8771-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180809221323.3b0abca5@windsurf>
+ <1533817887-8771-2-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180809221533.42090817@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +14,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  9 Aug 2018 14:31:26 +0200, Angelo Compagnucci wrote:
-> This patch bumps mono to version 5.14.0.177
+On Thu,  9 Aug 2018 14:31:27 +0200, Angelo Compagnucci wrote:
+> This reverts commit 0f96073561badde3c7abdf338abca7d00dba56dd cause the
+> newly released mono version (5.14.0.177) fixed the bug upstream.
 > 
 > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/mono/mono.hash         | 2 +-
->  package/mono/mono.mk           | 2 +-
->  package/monolite/monolite.hash | 2 +-
->  package/monolite/monolite.mk   | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to next, thanks.
+I can't apply this one right now, because disabling Mono on MIPS was
+done on master after 2018.08-rc1 was tagged, and the next branch is
+based on 2018.08-rc1.
+
+I'm not sure if Peter prefers:
+
+ - that we wait until 2018.08 is released to merge back next into
+   master before applying this patch
+
+ - that we cherry-pick just
+   0f96073561badde3c7abdf338abca7d00dba56dd from master to next and
+   then apply your patch to next
+
+ - that we merge master into next right now and apply your patch
+
+Peter ?
+
+I don't like option (1) because it leaves a patch waiting in patchwork.
+
+Thanks,
 
 Thomas
 -- 
