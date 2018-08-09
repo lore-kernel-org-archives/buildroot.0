@@ -1,56 +1,100 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Aug 2018 23:00:40 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/apache: security
- bump version to 2.4.34
-Message-ID: <20180809205417.E116D8B75C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 9 Aug 2018 23:09:57 +0200
+Subject: [Buildroot] [PATCH 1/2] boot: aml-s905x-cc-fip: new package for
+ Libre Computer AML-S905X-CC boot firmwares
+In-Reply-To: <1533545408-11248-2-git-send-email-narmstrong@baylibre.com>
+References: <1533545408-11248-1-git-send-email-narmstrong@baylibre.com>
+ <1533545408-11248-2-git-send-email-narmstrong@baylibre.com>
+Message-ID: <20180809230957.44fac041@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49b179424bbf1227081c8d385f21ebc9c2c52104
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+Hello,
 
-Fixes:
-  *) SECURITY: CVE-2018-8011 (cve.mitre.org)
-     mod_md: DoS via Coredumps on specially crafted requests
+Thanks for this new proposal. However, I still have some concerns about
+it :-/
 
-  *) SECURITY: CVE-2018-1333 (cve.mitre.org)
-     mod_http2: DoS for HTTP/2 connections by specially crafted requests
+On Mon,  6 Aug 2018 08:50:07 +0000, Neil Armstrong wrote:
 
-Changelog: http://www.apache.org/dist/httpd/CHANGES_2.4.34
+> diff --git a/boot/Config.in b/boot/Config.in
+> index 3687c41..a0d897f 100644
+> --- a/boot/Config.in
+> +++ b/boot/Config.in
+> @@ -4,6 +4,7 @@ source "boot/afboot-stm32/Config.in"
+>  source "boot/at91bootstrap/Config.in"
+>  source "boot/at91bootstrap3/Config.in"
+>  source "boot/at91dataflashboot/Config.in"
+> +source "boot/aml-s905x-cc-fip/Config.in"
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 8ef1aaa08478a2d84c17e8bd12e33b0802433ac1)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/apache/apache.hash | 5 +++--
- package/apache/apache.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Alphabetic ordering is not good.
 
-diff --git a/package/apache/apache.hash b/package/apache/apache.hash
-index 76c7c766cb..74a48ae914 100644
---- a/package/apache/apache.hash
-+++ b/package/apache/apache.hash
-@@ -1,3 +1,4 @@
--# From http://archive.apache.org/dist/httpd/httpd-2.4.33.tar.bz2.sha256
--sha256 de02511859b00d17845b9abdd1f975d5ccb5d0b280c567da5bf2ad4b70846f05 httpd-2.4.33.tar.bz2
-+# From http://archive.apache.org/dist/httpd/httpd-2.4.34.tar.bz2.sha256
-+sha256 fa53c95631febb08a9de41fd2864cfff815cf62d9306723ab0d4b8d7aa1638f0 httpd-2.4.34.tar.bz2
-+# Locally computed
- sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
-diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index 23414fe44d..446e58c43a 100644
---- a/package/apache/apache.mk
-+++ b/package/apache/apache.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--APACHE_VERSION = 2.4.33
-+APACHE_VERSION = 2.4.34
- APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
- APACHE_SITE = http://archive.apache.org/dist/httpd
- APACHE_LICENSE = Apache-2.0
+> +	  Amlogic FIP boot firmwares for AML-S905X-CC
+
+Is this package specific to a board ? to a SoC ?
+
+> diff --git a/boot/aml-s905x-cc-fip/aml-s905x-cc-fip.mk b/boot/aml-s905x-cc-fip/aml-s905x-cc-fip.mk
+> new file mode 100644
+> index 0000000..7aa6af9
+> --- /dev/null
+> +++ b/boot/aml-s905x-cc-fip/aml-s905x-cc-fip.mk
+> @@ -0,0 +1,26 @@
+> +################################################################################
+> +#
+> +# aml-s905x-cc-fip
+> +#
+> +################################################################################
+> +
+> +AML_S905X_CC_FIP_VERSION = 20170606
+> +AML_S905X_CC_FIP_SOURCE = libretech-cc_fip_$(AML_S905X_CC_FIP_VERSION).tar.gz
+> +AML_S905X_CC_FIP_SITE = https://github.com/BayLibre/u-boot/releases/download/v2017.11-libretech-cc
+> +AML_S905X_CC_FIP_LICENSE = Amlogic
+
+"Amlogic" is not a license. We need a proper license, that at least
+gives the right to redistribute those binaries. Without a license,
+nobody is allowed to redistribute those binaries, making them pretty
+useless.
+
+> +define AML_S905X_CC_FIP_INSTALL_IMAGES_CMDS
+> +	$(INSTALL) -D -m 0644 $(@D)/gxl/bl2.bin $(BINARIES_DIR)/fip/bl2.bin
+> +	$(INSTALL) -D -m 0644 $(@D)/gxl/acs.bin $(BINARIES_DIR)/fip/acs.bin
+> +	$(INSTALL) -D -m 0644 $(@D)/gxl/bl21.bin $(BINARIES_DIR)/fip/bl21.bin
+> +	$(INSTALL) -D -m 0644 $(@D)/gxl/bl30.bin $(BINARIES_DIR)/fip/bl30.bin
+> +	$(INSTALL) -D -m 0644 $(@D)/gxl/bl301.bin $(BINARIES_DIR)/fip/bl301.bin
+> +	$(INSTALL) -D -m 0644 $(@D)/gxl/bl31.img $(BINARIES_DIR)/fip/bl31.img
+> +	$(INSTALL) -D -m 0755 $(@D)/gxl/aml_encrypt_gxl $(BINARIES_DIR)/fip/aml_encrypt_gxl
+> +	$(INSTALL) -D -m 0755 $(@D)/blx_fix.sh $(BINARIES_DIR)/fip/blx_fix.sh
+> +	$(INSTALL) -D -m 0644 $(@D)/acs_tool.pyc $(BINARIES_DIR)/fip/acs_tool.pyc
+
+These last three files are host programs, they should be installed to
+$(HOST_DIR).
+
+However:
+
+ - aml_encrypt_gxl is a prebuilt binary for x86-64. This means this
+   package should depend on host arch being x86-64:
+
+   depends on BR2_HOSTARCH = "x86_64"
+
+   You really don't have the source code for this tool ? It would be
+   much easier.
+
+ - acs_tool.pyc is byte-compiled. You also don't have the source code
+   here ? I'm not sure how much Python bytecode is compatible between
+   Python versions. The bytecode you have has been built with Python
+   2.7. Does it work with Python 2.6 ? Python 3.x ?
+
+Also, perhaps we should do like arm-trusted-firmware: make this package
+depend on u-boot, and then include all the complicated firmware
+generation logic inside aml-s905x-cc instead of having it in a
+post-image script.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
