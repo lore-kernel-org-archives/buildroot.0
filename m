@@ -1,69 +1,39 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 09 Aug 2018 10:24:59 +0200
-Subject: [Buildroot] [Buildroot & ArchLinux] can not build host-m4 on
- machine with glibc-2.28 installed
-In-Reply-To: <20180808225558.GB3148@momiji>
-References: <20180808031502.GE1085@techyauld.com>
- <87lg9gg8sg.fsf@dell.be.48ers.dk> <20180808225558.GB3148@momiji>
-Message-ID: <87c75540d51a0d520aa7e8549eaa51b36bb35aeb.camel@embedded.rocks>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Thu,  9 Aug 2018 20:27:50 +1200
+Subject: [Buildroot] [PATCH] micropython: bump version to v1.9.4
+Message-ID: <20180809082750.26725-1-judge.packham@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adrian,
+Signed-off-by: Chris Packham <judge.packham@gmail.com>
+---
+ package/micropython/micropython.hash | 2 +-
+ package/micropython/micropython.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 2018-08-08 at 22:55 +0300, Adrian Perez de Castro wrote:
-> Hello,
-> 
-> On Wed, 08 Aug 2018 17:47:11 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
-> > > > > > > "?" == ? ? <yzheng@techyauld.com> writes:
-> > 
-> > Please mail the buildroot mailing list and not individual contributors,
-> > thanks!
-> > 
-> >  > Hi,
-> >  > 	I found that failure and do some hacking.
-> > 
-> >  > 	(1) m4 source, lib/freadahead.c: It use the internal symbols to guess the C runtime lib's type.
-> > 
-> >  > 	(2) glibc-2.28 removed the header file /usr/include/bits/libio.h.
-> >  > 	    In fact, libio.h seems an internal header. The content of it has been
-> >  > 	    moved into <glibc source>/libio/libio.h, which is not installed.
-> > 
-> > 
-> >  > 	Anyone can help me out? M4 has not released new version since 1.4.18(2016-12-31).
-> > 
-> >  > Allan,
-> >  > 	It seems that that bug will hit our lovely ArchLinux!
-> > 
-> > What is the build failure you are seeing exactly? Looking around, it
-> > seems linuxfromscratch has some workarounds for building against
-> > glibc-2.28, perhaps we can do the same?
-> > 
-> > http://www.linuxfromscratch.org/lfs/view/development/chapter05/m4.html
-> 
-> I don't have a build log at hand, but the gnulib sources would complain e.g.
-> that ?freadahead()? is unimplemented for the current target platform, and its
-> source would ?#error?. I have a crappy local patch which patches a few files
-> from gnulib to the most recent version available in the repository. I also
-> have a similar one for Bison, but they are a bit crappy and should be done
-> properly, updating all gnulib bits that the packages use instead of just the
-> bare minimum to make things work (see the attached patches, you can drop them
-> in a local patches directory).
-> 
-> Also: gnulib is horrible, and I am baffled that it's still being used in
-> 2018... I refuse to think that something like M4 or Bison (which basically
-> process some input text and generate some output text) needs functions from
-> gnulib which rely on the internals of the system C library. It was quite
-> disheartening for me to find out this ~_~
-> 
-> Regards,
-> 
-> -Adri?n
-
-I've tested your m4 patch and it works for me (Arch Linux).
-
-Best regards,
-J?rg Krause
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index d42d7ee148..88068a60f3 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
+@@ -1,2 +1,2 @@
+ #locally computed
+-sha256 ce6b5c4548e85d84075635ff3e94d5cd3356b5fcc7593a7b49dd513612b6ed01  micropython-v1.9.3.tar.gz
++sha256 9a66205d0ba3dff6dcc98119f104cd59c15855c6c030a190ca02354be52836c1  micropython-v1.9.4.tar.gz
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 2c6bddd81d..cff8b17b14 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MICROPYTHON_VERSION = v1.9.3
++MICROPYTHON_VERSION = v1.9.4
+ MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
+ MICROPYTHON_LICENSE = MIT
+ MICROPYTHON_LICENSE_FILES = LICENSE
+-- 
+2.18.0
