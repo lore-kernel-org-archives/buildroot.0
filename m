@@ -1,56 +1,58 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu,  9 Aug 2018 21:53:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/waylandpp: fix build error with gcc
- 4.4/4.9
-Message-ID: <20180809195355.22877-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 9 Aug 2018 21:59:52 +0200
+Subject: [Buildroot] [PATCH] package/sysdig: bump to version 0.22.1
+In-Reply-To: <1533825067-28079-1-git-send-email-angelo@amarulasolutions.com>
+References: <1533825067-28079-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180809215952.60f89a78@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/51a/51afcd6d3c3c4839d8216b7b0dba35c8e38211f4/
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...iler-error-missing-stdexcept-to-use-.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/waylandpp/0001-scanner-Fix-compiler-error-missing-stdexcept-to-use-.patch
+On Thu,  9 Aug 2018 16:31:07 +0200, Angelo Compagnucci wrote:
 
-diff --git a/package/waylandpp/0001-scanner-Fix-compiler-error-missing-stdexcept-to-use-.patch b/package/waylandpp/0001-scanner-Fix-compiler-error-missing-stdexcept-to-use-.patch
-new file mode 100644
-index 0000000000..ad5b84257f
---- /dev/null
-+++ b/package/waylandpp/0001-scanner-Fix-compiler-error-missing-stdexcept-to-use-.patch
-@@ -0,0 +1,28 @@
-+From 85b61589b0c73f6c6974862af678ed2f82806ac5 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Thu, 9 Aug 2018 21:44:46 +0200
-+Subject: [PATCH] [scanner] Fix compiler error: missing <stdexcept> to use
-+ std::runtime_error
-+
-+Patch sent upstream as PR 50.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ scanner/scanner.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/scanner/scanner.cpp b/scanner/scanner.cpp
-+index 9c97b7c..7019e0a 100644
-+--- a/scanner/scanner.cpp
-++++ b/scanner/scanner.cpp
-+@@ -22,6 +22,7 @@
-+ #include <sstream>
-+ #include <cctype>
-+ #include <cmath>
-++#include <stdexcept>
-+ 
-+ #include "pugixml.hpp"
-+ 
-+-- 
-+2.18.0
-+
+> +	select BR2_PACKAGE_ELFUTILS
+
+When you select an option, you need to replicate its dependencies:
+
+config BR2_PACKAGE_ELFUTILS
+        bool "elfutils"
+        depends on BR2_USE_WCHAR
+        depends on !BR2_STATIC_LIBS
+        # Only glibc and uClibc implement the myriad of required GNUisms
+        depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
+
+Currently, BR2_PACKAGE_SYSDIG only has:
+
+config BR2_PACKAGE_SYSDIG
+        bool "sysdig"
+        depends on BR2_LINUX_KERNEL
+        depends on BR2_INSTALL_LIBSTDCPP # libjson
+        depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+        depends on !BR2_STATIC_LIBS # luajit
+
+Therefore, it should be changed to:
+
+config BR2_PACKAGE_SYSDIG
+        bool "sysdig"
+        depends on BR2_LINUX_KERNEL
+        depends on BR2_INSTALL_LIBSTDCPP # libjson
+        depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+        depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+	depends on BR2_USE_WCHAR # elfutils
+        depends on !BR2_STATIC_LIBS # luajit, elfutils
+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+
+Is elfutils really a mandatory dependency of this new version of sysdig ?
+
+Thanks!
+
+Thomas
 -- 
-2.18.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
