@@ -1,65 +1,41 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 9 Aug 2018 12:19:42 -0500
-Subject: [Buildroot] [PATCH] core/legal-info: Add package dependencies
- with licenses to the manifest
-In-Reply-To: <20180809170055.13334-1-sojkam1@fel.cvut.cz>
-References: <20180809170055.13334-1-sojkam1@fel.cvut.cz>
-Message-ID: <CANQCQpaDnvpfFUuHZGJFfM=s6n8NrGthOyay9f_WbJXJz5EMHQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu,  9 Aug 2018 21:40:46 +0200
+Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 14,
+ 17}.x series
+Message-ID: <20180809194047.22535-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michal,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-On Thu, Aug 9, 2018 at 12:08 PM <sojkam1@fel.cvut.cz> wrote:
->
-> From: Michal Sojka <michal.sojka@cvut.cz>
->
-> This adds one column to the legal-info manifest table. It contains the
-> dependencies of the given package and their licenses. This information
-> is useful when assessing license compatibility of the packages and
-> their libraries.
->
-> An example of the content of the new column for the MPD package is
-> shown below:
->
->     "alsa-lib (LGPL-2.1+ (library), GPL-2.0+ (aserver)),
->     boost (BSL-1.0), libid3tag (GPL-2.0+), libmad (GPL-2.0+),
->     libzlib (Zlib), skeleton-init-common (unknown),
->     skeleton-init-sysv (unknown),
->     toolchain-external-linaro-arm (unknown), "
-
-This output is definitely good verbose data to look at for possible
-licensing violations/inheritance.  Maybe it would be better show as a
-part of the dependency graph?
-
->
-> Signed-off-by: Michal Sojka <sojka@merica.cz>
-> ---
->  Makefile               |  6 +++---
->  package/pkg-generic.mk |  2 +-
->  package/pkg-utils.mk   | 15 +++++++++++++--
->  3 files changed, 17 insertions(+), 6 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index f79d39fd26..ba60a5a08f 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -781,9 +781,9 @@ legal-info-clean:
->  legal-info-prepare: $(LEGAL_INFO_DIR)
->         @$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
->         @$(call legal-license-file,buildroot,buildroot,support/legal-info,COPYING,COPYING,HOST)
-> -       @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
-> -       @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
-> -       @$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
-> +       @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSE,TARGET)
-> +       @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSE,HOST)
-
-I'd suggest not changing the existing format and append the new data
-as a new field on the end.  Some people might have scripts using this
-data which would be impacted by keeping the host/target field last and
-inserting dependencies before it.
-
-Matt
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 36c1ddcdb8..7d7a6e1a61 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -258,14 +258,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.146"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.118"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.147"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.119"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.61"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.62"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.17.13"	if BR2_KERNEL_HEADERS_4_17
++	default "4.17.14"	if BR2_KERNEL_HEADERS_4_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.18.0
