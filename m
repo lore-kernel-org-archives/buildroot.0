@@ -1,95 +1,65 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Thu, 9 Aug 2018 10:14:04 -0700
-Subject: [Buildroot] [PATCH] docs/manual: gcc 4.4 is the lowest we are
- known to work with
-In-Reply-To: <CANQCQpZv0zcAV4L_ZdRk21e22GLw5pzaTe_2JoH0kN_uC4Tumw@mail.gmail.com>
-References: <20180805114615.3442-1-yann.morin.1998@free.fr>
- <CANQCQpZv0zcAV4L_ZdRk21e22GLw5pzaTe_2JoH0kN_uC4Tumw@mail.gmail.com>
-Message-ID: <e985bd73-96e5-a955-70fd-dfd532032a77@mentor.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 9 Aug 2018 12:19:42 -0500
+Subject: [Buildroot] [PATCH] core/legal-info: Add package dependencies
+ with licenses to the manifest
+In-Reply-To: <20180809170055.13334-1-sojkam1@fel.cvut.cz>
+References: <20180809170055.13334-1-sojkam1@fel.cvut.cz>
+Message-ID: <CANQCQpaDnvpfFUuHZGJFfM=s6n8NrGthOyay9f_WbJXJz5EMHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/09/2018 06:08 AM, Matthew Weber wrote:
+Michal,
+
+On Thu, Aug 9, 2018 at 12:08 PM <sojkam1@fel.cvut.cz> wrote:
 >
-> Any suggestions if we keep the minimum host compiler requirement at
-> 4.4, how should I address the below build failures with "error:
-> '__ATOMIC_ACQUIRE' undeclared " on the RHEL6.5 autobuilder?
-> http://autobuild.buildroot.net/?reason=host-libselinux-2.7
+> From: Michal Sojka <michal.sojka@cvut.cz>
 >
-> If this was a more recent compiler version issue, I'd dig into the
-> package and look at up-streaming a compatibility ifdef check.
-I'm not an expert in this area, but I'm surprised atomic operations are 
-needed in addition to the pthread_mutex_lock. See these comments, for 
-example: 
-https://stackoverflow.com/questions/24137964/does-pthread-mutex-lock-contains-memory-fence-instruction 
-. AFAIK, these atomic operations could be replaced with their native 
-equivalents.
+> This adds one column to the legal-info manifest table. It contains the
+> dependencies of the given package and their licenses. This information
+> is useful when assessing license compatibility of the packages and
+> their libraries.
+>
+> An example of the content of the new column for the MPD package is
+> shown below:
+>
+>     "alsa-lib (LGPL-2.1+ (library), GPL-2.0+ (aserver)),
+>     boost (BSL-1.0), libid3tag (GPL-2.0+), libmad (GPL-2.0+),
+>     libzlib (Zlib), skeleton-init-common (unknown),
+>     skeleton-init-sysv (unknown),
+>     toolchain-external-linaro-arm (unknown), "
 
-That said, I'm not using SELinux, and even if I were I wouldn't care too 
-much about the host binaries, so I'm not interested in a lengthy email 
-debate about compiler optimizations, processor pipelines, atomic 
-operations, and memory barriers. :-) If we're not comfortable with 
-removing them altogether, then I think we could use the older "__sync" 
-builtins 
-<https://gcc.gnu.org/onlinedocs/gcc-4.4.7/gcc/Atomic-Builtins.html> 
-instead. Going for correctness instead of performance:
+This output is definitely good verbose data to look at for possible
+licensing violations/inheritance.  Maybe it would be better show as a
+part of the dependency graph?
 
---- output/build/host-libselinux-2.7/src/label_file.h.orig      2018-08-09 09:47:46.432960085 -0700
-+++ output/build/host-libselinux-2.7/src/label_file.h   2018-08-09 09:50:47.036960057 -0700
-@@ -349,8 +349,14 @@
-          * init_routine does not take a parameter, it's not possible
-          * to use, so we generate the same effect with atomics and a
-          * mutex */
-+#ifdef __ATOMIC_ACQUIRE
-         regex_compiled =
-                 __atomic_load_n(&spec->regex_compiled, __ATOMIC_ACQUIRE);
-+#else
-+       /* GCC <4.7 */
-+       __sync_synchronize();
-+       regex_compiled = spec->regex_compiled;
-+#endif
-         if (regex_compiled) {
-                 return 0; /* already done */
-         }
-@@ -358,8 +364,14 @@
-         __pthread_mutex_lock(&spec->regex_lock);
-         /* Check if another thread compiled the regex while we waited
-          * on the mutex */
-+#ifdef __ATOMIC_ACQUIRE
-         regex_compiled =
-                 __atomic_load_n(&spec->regex_compiled, __ATOMIC_ACQUIRE);
-+#else
-+       /* GCC <4.7 */
-+       __sync_synchronize();
-+       regex_compiled = spec->regex_compiled;
-+#endif
-         if (regex_compiled) {
-                 __pthread_mutex_unlock(&spec->regex_lock);
-                 return 0;
-@@ -402,7 +414,13 @@
-         }
-  
-         /* Done. */
-+#ifdef __ATOMIC_RELEASE
-         __atomic_store_n(&spec->regex_compiled, true, __ATOMIC_RELEASE);
-+#else
-+       /* GCC <4.7 */
-+       spec->regex_compiled = true;
-+       __sync_synchronize();
-+#endif
-         __pthread_mutex_unlock(&spec->regex_lock);
-         return 0;
-  }
+>
+> Signed-off-by: Michal Sojka <sojka@merica.cz>
+> ---
+>  Makefile               |  6 +++---
+>  package/pkg-generic.mk |  2 +-
+>  package/pkg-utils.mk   | 15 +++++++++++++--
+>  3 files changed, 17 insertions(+), 6 deletions(-)
+>
+> diff --git a/Makefile b/Makefile
+> index f79d39fd26..ba60a5a08f 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -781,9 +781,9 @@ legal-info-clean:
+>  legal-info-prepare: $(LEGAL_INFO_DIR)
+>         @$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
+>         @$(call legal-license-file,buildroot,buildroot,support/legal-info,COPYING,COPYING,HOST)
+> -       @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
+> -       @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
+> -       @$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
+> +       @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSE,TARGET)
+> +       @$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSE,HOST)
 
-If there's general agreement with this approach, I can submit it as a 
-Buildroot patch.
+I'd suggest not changing the existing format and append the new data
+as a new field on the end.  Some people might have scripts using this
+data which would be impacted by keeping the host/target field last and
+inserting dependencies before it.
 
-Hollis Blanchard
-Mentor Graphics Emulation Division
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180809/f849b621/attachment.html>
+Matt
