@@ -1,70 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Thu, 9 Aug 2018 22:40:12 +0200
-Subject: [Buildroot] [git commit branch/next] package/mono: bump to version
- 5.14.0.177
-Message-ID: <20180809203350.59A8E8B748@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] python-pip: new package
+Message-ID: <20180809203350.84E6A7F8BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10cb36ce95b602837cf9100b38a91868edc3b3ad
+commit: https://git.buildroot.net/buildroot/commit/?id=f5e2de1fd7a05b53d1775c1b710983a4204dd852
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps mono to version 5.14.0.177
+A useful tool for managing and installing python packages.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mono/mono.hash         | 2 +-
- package/mono/mono.mk           | 2 +-
- package/monolite/monolite.hash | 2 +-
- package/monolite/monolite.mk   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/python-pip/Config.in       |  6 ++++++
+ package/python-pip/python-pip.hash |  5 +++++
+ package/python-pip/python-pip.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index b4911a6de6..db7ce52c97 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256 100d4ea7ac3e4a26740e0f284344272d6c5dcfef5c6e21e500d59b64814dcfbf  mono-5.12.0.301.tar.bz2
-+sha256 d4f5fa2e8188d66fbc8054f4145711e45c1faa6d070e63600efab93d1d189498  mono-5.14.0.177.tar.bz2
- sha256 3b40a54878b5ac2767a764bd082f8772ab27c03b9da9c7328c4c4935725556f7  LICENSE
- sha256 fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
- sha256 2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index bb851d5932..62eaeaf8b4 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONO_VERSION = 5.12.0.301
-+MONO_VERSION = 5.14.0.177
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 77810a9511..cf72916855 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 fece21adc06118fa5d79d3621a5fc702ec354abf83be29a36f8718645a2dc058  monolite-linux-1051200002-latest.tar.gz
-+sha256 bb4b3b12b9ff04b219ad00dcea78145475d756a1c22ad84e0db978a8eee8c654  monolite-linux-1051400005-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index 4e1d548994..2e1e54a549 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONOLITE_VERSION = 1051200002
-+MONOLITE_VERSION = 1051400005
- MONOLITE_SITE = http://download.mono-project.com/monolite
- MONOLITE_SOURCE = monolite-linux-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPL-2.0 or commercial
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 67adc08b9a..e0e37a031a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -53,6 +53,7 @@ F:	package/nginx-naxsi/
+ F:	package/policycoreutils/
+ F:	package/python-flask-sqlalchemy/
+ F:	package/python-mutagen/
++F:	package/python-pip/
+ F:	package/python-psycopg2/
+ F:	package/python-sqlalchemy/
+ F:	package/python-visitor/
+diff --git a/package/Config.in b/package/Config.in
+index 18813b3965..bc6df3a3b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -874,6 +874,7 @@ menu "External python modules"
+ 	source "package/python-pexpect/Config.in"
+ 	source "package/python-pickleshare/Config.in"
+ 	source "package/python-pillow/Config.in"
++	source "package/python-pip/Config.in"
+ 	source "package/python-portend/Config.in"
+ 	source "package/python-posix-ipc/Config.in"
+ 	source "package/python-priority/Config.in"
+diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
+new file mode 100644
+index 0000000000..4fcd55e5ab
+--- /dev/null
++++ b/package/python-pip/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_PIP
++	bool "python-pip"
++	help
++	  The PyPA recommended tool for installing Python packages.
++
++	  https://pip.pypa.io/
+diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
+new file mode 100644
+index 0000000000..c9b574a6dd
+--- /dev/null
++++ b/package/python-pip/python-pip.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pip/json
++md5	52f75ceb21e96c258f289859a2996b60  pip-18.0.tar.gz
++sha256	a0e11645ee37c90b40c46d607070c4fd583e2cd46231b1c06e389c5e814eed76  pip-18.0.tar.gz
++# Locally computed sha256 checksums
++sha256	391a8784e319dae5431477d4cc9bc504fc5d71fd9e89e1c80f1cd3855f5d7cfa  LICENSE.txt
+diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
+new file mode 100644
+index 0000000000..0a0dce5bca
+--- /dev/null
++++ b/package/python-pip/python-pip.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-pip
++#
++################################################################################
++
++PYTHON_PIP_VERSION = 18.0
++PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
++PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/69/81/52b68d0a4de760a2f1979b0931ba7889202f302072cc7a0d614211bc7579
++PYTHON_PIP_SETUP_TYPE = setuptools
++PYTHON_PIP_LICENSE = MIT
++PYTHON_PIP_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
