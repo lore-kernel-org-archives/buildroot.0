@@ -1,72 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  9 Aug 2018 17:57:28 +0200
-Subject: [Buildroot] [PATCH] chrony: backport upstream patch to fix blocking
- on getrandom() at startup with recent kernels
-Message-ID: <20180809155728.22817-1-peter@korsgaard.com>
+From: sojkam1 at fel.cvut.cz <sojkam1@fel.cvut.cz>
+Date: Thu,  9 Aug 2018 19:00:55 +0200
+Subject: [Buildroot] [PATCH] core/legal-info: Add package dependencies with
+ licenses to the manifest
+Message-ID: <20180809170055.13334-1-sojkam1@fel.cvut.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-chrony calls getrandom() at startup if available, so it needs a workaround
-for the blocking behaviour on recent (4.14.39+), similar to what was done
-for util-linux in commit c4d86707cd6 (util-linux: add two upstream patches
-to fix blocking on getrandom() with recent kernels).
+From: Michal Sojka <michal.sojka@cvut.cz>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This adds one column to the legal-info manifest table. It contains the
+dependencies of the given package and their licenses. This information
+is useful when assessing license compatibility of the packages and
+their libraries.
+
+An example of the content of the new column for the MPD package is
+shown below:
+
+    "alsa-lib (LGPL-2.1+ (library), GPL-2.0+ (aserver)),
+    boost (BSL-1.0), libid3tag (GPL-2.0+), libmad (GPL-2.0+),
+    libzlib (Zlib), skeleton-init-common (unknown),
+    skeleton-init-sysv (unknown),
+    toolchain-external-linaro-arm (unknown), "
+
+Signed-off-by: Michal Sojka <sojka@merica.cz>
 ---
- ...ack-to-reading-dev-urandom-when-getrandom.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/chrony/0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch
+ Makefile               |  6 +++---
+ package/pkg-generic.mk |  2 +-
+ package/pkg-utils.mk   | 15 +++++++++++++--
+ 3 files changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/package/chrony/0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch b/package/chrony/0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch
-new file mode 100644
-index 0000000000..d71685e5cd
---- /dev/null
-+++ b/package/chrony/0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch
-@@ -0,0 +1,42 @@
-+From 7c5bd948bb7e21fa0ee22f29e97748b2d0360319 Mon Sep 17 00:00:00 2001
-+From: Miroslav Lichvar <mlichvar@redhat.com>
-+Date: Thu, 17 May 2018 14:16:58 +0200
-+Subject: [PATCH] util: fall back to reading /dev/urandom when getrandom()
-+ blocks
+diff --git a/Makefile b/Makefile
+index f79d39fd26..ba60a5a08f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -781,9 +781,9 @@ legal-info-clean:
+ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
+ 	@$(call legal-license-file,buildroot,buildroot,support/legal-info,COPYING,COPYING,HOST)
+-	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
+-	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
+-	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
++	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSE,TARGET)
++	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSE,HOST)
++	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,,HOST)
+ 	@$(call legal-warning,the Buildroot source code has not been saved)
+ 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 91b61c6de0..ec51e073a6 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -936,7 +936,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ endif # redistribute
+ 
+ endif # other packages
+-	@$$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call UPPERCASE,$(4)))
++	@$$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(foreach p,$$(call legal-deps,$(2)),$$(p) ($$($$(call UPPERCASE,$$(p))_LICENSE)), ),$$(call UPPERCASE,$(4)))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ 
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index c3acc22b17..3390f2ef67 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -79,8 +79,8 @@ define legal-warning-nosource # pkg, {local|override}
+ 	$(call legal-warning-pkg,$(1),sources not saved ($(2) packages not handled))
+ endef
+ 
+-define legal-manifest # pkg, version, license, license-files, source, url, {HOST|TARGET}
+-	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
++define legal-manifest # pkg, version, license, license-files, source, url, dependencies, {HOST|TARGET}
++	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)","$(7)"' >>$(LEGAL_MANIFEST_CSV_$(8))
+ endef
+ 
+ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
+@@ -95,3 +95,14 @@ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-full
+ 	} && \
+ 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+ endef
 +
-+With recent changes in the Linux kernel, the getrandom() system call may
-+block for a long time after boot on machines that don't have enough
-+entropy. It blocks the chronyd's initialization before it can detach
-+from the terminal and may cause a chronyd service to fail to start due
-+to a timeout.
++remove-virtual-pkgs = $(foreach p,$(1),$(if $($(call UPPERCASE,$(p))_IS_VIRTUAL),,$(p)))
++get-direct-deps = $(sort $(foreach p,$(1),$($(call UPPERCASE,$(p))_FINAL_DEPENDENCIES)))
 +
-+At least for now, enable the GRND_NONBLOCK flag to make the system call
-+non-blocking and let the code fall back to reading /dev/urandom (which
-+never blocks) if the system call failed with EAGAIN or any other error.
++define get-transitive-deps # packages
++	$(if $(filter-out $(1),$(call get-direct-deps,$(1))),\
++	     $(sort $(1) $(call get-transitive-deps,$(filter-out $(1),$(call get-direct-deps,$(1))))),\
++	     $(1))
++endef
 +
-+This makes the start of chronyd non-deterministic with respect to files
-+that it needs to open and possibly also makes it slightly easier to
-+guess the transmit/receive timestamp in client requests until the
-+urandom source is fully initialized.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ util.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/util.c b/util.c
-+index 4b3e455..76417d5 100644
-+--- a/util.c
-++++ b/util.c
-+@@ -1224,7 +1224,7 @@ get_random_bytes_getrandom(char *buf, unsigned int len)
-+       if (disabled)
-+         break;
-+ 
-+-      if (getrandom(rand_buf, sizeof (rand_buf), 0) != sizeof (rand_buf)) {
-++      if (getrandom(rand_buf, sizeof (rand_buf), GRND_NONBLOCK) != sizeof (rand_buf)) {
-+         disabled = 1;
-+         break;
-+       }
-+-- 
-+2.11.0
-+
++legal-deps = $(call remove-virtual-pkgs,$(filter-out $(1) host-%,$(call get-transitive-deps,$(1))))
 -- 
-2.11.0
+2.18.0
