@@ -1,64 +1,48 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Thu,  9 Aug 2018 16:31:07 +0200
-Subject: [Buildroot] [PATCH] package/sysdig: bump to version 0.22.1
-Message-ID: <1533825067-28079-1-git-send-email-angelo@amarulasolutions.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 9 Aug 2018 09:32:27 -0500
+Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
+ for PIE build flags
+In-Reply-To: <9a76db59-2d32-4227-bc93-be06b3fc9866@cesnet.cz>
+References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
+ <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
+ <425833b3-d86f-4275-bc3c-a80c6385b030@cesnet.cz>
+ <9a76db59-2d32-4227-bc93-be06b3fc9866@cesnet.cz>
+Message-ID: <CANQCQpZVS7qk7JbRxJeGyj_YXibKtkkh60_7gVfFRNS2p0GrZw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps sysdig to version 0.22.1 and adds a new dependency on
-elfutils.
+Jan,
+On Wed, Aug 8, 2018 at 3:36 AM Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
+>
+> I just got a similar failure from an in-tree package, the spi-tools:
+>
+> >>> spi-tools 0.8.1 Building
+> PATH="/home/jkt/work/prog/_build/br-cfb/host/bin:/home/jkt/work/prog/_build/br-cfb/host/sbin:/home/jkt/.local/bin:/home/jkt/bin/:/opt/qtc/bin:/opt/darktable/bin:/home/jkt/.local/bin:/home/jkt/bin/:/opt/qtc/bin:/opt/darktable/bin:/usr/x86_64-pc-linux-gnu/gcc-bin/8.1.0:/usr/lib/llvm/6/bin:/usr/lib/llvm/4/bin:/usr/local/bin:/usr/bin:/bin:/opt/bin:/usr/games/bin"
+>  /usr/bin/make   -C
+> /home/jkt/work/prog/_build/br-cfb/build/spi-tools-0.8.1/
+> Making all in src
+> /usr/bin/make  all-am
+> /home/jkt/work/prog/_build/br-cfb/host/bin/arm-linux-gnueabihf-gcc  -O0
+> -Wl,-z,now -Wl,-z,relro
+> -specs=/home/jkt/work/cesnet/gerrit/github/buildroot/buildroot/toolchain/gcc-specs-pie-ld
+> -o spi-config spi-config.o
+> /home/jkt/work/prog/_build/br-cfb/host/opt/ext-toolchain/bin/../lib/gcc/arm-linux-gnueabihf/7.3.1/../../../../arm-linux-gnueabihf/bin/ld:
+> spi-config.o: relocation R_ARM_MOVW_ABS_NC against `stderr' can not be used
+> when making a shared object; recompile with -fPIC
+> spi-config.o: error adding symbols: Bad value
+> collect2: error: ld returned 1 exit status
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/sysdig/Config.in   | 1 +
- package/sysdig/sysdig.hash | 2 +-
- package/sysdig/sysdig.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 3 deletions(-)
+This one has to do with the configure.ac of that package not observing
+cflags/cxxflags being passed to configure.  So the *.o that are trying
+to be linked weren't build as position independent.  Probably a
+similar case for your libredblack package.
 
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 6ccb706..b527b78 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -13,6 +13,7 @@ config BR2_PACKAGE_SYSDIG
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_JQ
- 	select BR2_PACKAGE_LIBB64
-+	select BR2_PACKAGE_ELFUTILS
- 	help
- 	  Sysdig is open source, system-level exploration:
- 	  capture system state and activity from a running Linux
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-index 63a9e38..0c242e5 100644
---- a/package/sysdig/sysdig.hash
-+++ b/package/sysdig/sysdig.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256  480d5d8fd7e7373c08008c30bd8e2c7595d5c45d710bf07bd15a522021b560f6  sysdig-0.19.1.tar.gz
-+sha256  b0ca30473c813c8086187e171f1b8faee6e72689fc02cb1e54ff9f8563bfbe89  sysdig-0.22.1.tar.gz
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index a9c9f21..49b4bf8 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SYSDIG_VERSION = 0.19.1
-+SYSDIG_VERSION = 0.22.1
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = GPL-2.0
- SYSDIG_LICENSE_FILES = COPYING
-@@ -12,7 +12,7 @@ SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
- 	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF -DUSE_BUNDLED_CURL=OFF \
- 	-DUSE_BUNDLED_NCURSES=OFF -DUSE_BUNDLED_OPENSSL=OFF \
- 	-DUSE_BUNDLED_JQ=OFF -DUSE_BUNDLED_B64=OFF
--SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64
-+SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64 elfutils
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
- 
- # sysdig creates the module Makefile from a template, which contains a
--- 
-2.7.4
+I've posted an upstream issue at this point and a basic fix.  As
+buildroot could probably use a bump, rather then carrying the patch,
+I'll ask upstream if they could do a tag after this fix is merged.
+https://github.com/cpb-/spi-tools/issues/12
+
+Matt
