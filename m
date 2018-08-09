@@ -1,85 +1,55 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Wed, 8 Aug 2018 18:05:26 -0700
-Subject: [Buildroot] PERL/CGI: Can not install CGI.pm via buildroot
-In-Reply-To: <b4402969-4507-6e3a-6fe4-54b40e331acb@mind.be>
-References: <1533652691.994785035@f468.i.mail.ru>
- <b4402969-4507-6e3a-6fe4-54b40e331acb@mind.be>
-Message-ID: <CALURroSDTEWNDmZTfQTrOaW-miu1evpU40AHr4cm-JNVMMKOsg@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 09 Aug 2018 07:08:01 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-08-07
+In-Reply-To: <20180808060047.9CC13209AD@mail.bootlin.com>
+References: <20180808060047.9CC13209AD@mail.bootlin.com>
+Message-ID: <87mutwb2se.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Hi Thomas, Yann, Romain, Richard,
 
-Sorry for top posting, on my phone.
+Thomas Petazzoni writes:
+> Results for branch '2018.05.x'
+> ==============================
+>
+> Classification of failures by reason
+> ------------------------------------
+>
+>           host-libglib2-2.56.1 | 1 
+>
+> Detail of failures
+> ------------------
+>
+>          arm |           host-libglib2-2.56.1 | NOK | http://autobuild.buildroot.net/results/ba24c2754923580bac4c1d9e6ecf8251735ae65f |     
 
-I have a perl CGI package ( via scancpan ), I can post tomorrow.
+Backport of bb3f944d6669dbf from master would fix this one.
 
-FWIW, I'm working on packaging zoneminder and have 35 ish perl- packages
-that could be added.
+> Results for branch 'master'
+> ===========================
+>
+>       xtensa |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/55b271cceb5b749f911266ed96998c4ee730fb86 |     
+>          sh4 |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/f8ff8c24d940113d7eb9729ae0b1b8e454cb4523 |     
+>     mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/c1829952aec2356905a2d5559d77b3e79739ea21 |     
 
-On Wed, Aug 8, 2018, 1:47 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+I could not reproduce this one here. The autobuilder indicates that it
+only happens on the autobuilders of Yann, Romain and Richard:
 
->
->
-> On 07-08-18 16:38, ***** ***** wrote:
-> >
-> > I use buildroot   2018.2 and perl by default version is 5.26.2.
-> > I need a module CGI.pm that is contained in perl version 5.20.2.
-> > I replace .mk and hash files in package/perl for 5.20.2 version
-> > Complie project -- all right. But I can not looking the CGI.pm anywhere
-> in linux
-> > system.
->
->  See [1] - CGI.pm was removed from perl because it's not the right way to
-> do it.
-> If you really need it, you have to get the package from cpan. You can use
-> the
-> utils/scancpan script to get started.
->
->  Regards,
->  Arnout
->
->
-> [1]
-> https://metacpan.org/pod/CGI#CGI.pm-HAS-BEEN-REMOVED-FROM-THE-PERL-CORE
->
-> >
-> > What I did wrong?
-> >
-> >
-> --------------------------------------------------------------------------------
-> >
-> > --
-> > ***** *****
-> >
-> >
-> --------------------------------------------------------------------------------
-> >
-> > --
-> > *** ***
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
-> --
-> Arnout Vandecappelle                          arnout at mind be
-> Senior Embedded Software Architect            +32-16-286500
-> Essensium/Mind                                http://www.mind.be
-> G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-> LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-> GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180808/b386c2ba/attachment.html>
+  http://autobuild.buildroot.net/?reason=brltty-5.5
+
+It looks like ATSPI2_INCLUDES and GLIB2_INCLUDES evaluate to empty
+strings in Drivers/Screen/AtSpi2/Makefile.in on these
+builders. config.log looks normal though.
+
+Maybe one of you can take a look?
+
+baruch
+
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
