@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 Aug 2018 22:58:37 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/apache: security
+Date: Thu, 9 Aug 2018 23:00:40 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/apache: security
  bump version to 2.4.34
-Message-ID: <20180809205343.487798B759@busybox.osuosl.org>
+Message-ID: <20180809205417.E116D8B75C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=574d32606a78d170290cca0709ea027f510727b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=49b179424bbf1227081c8d385f21ebc9c2c52104
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Fixes:
   *) SECURITY: CVE-2018-8011 (cve.mitre.org)
@@ -42,7 +42,7 @@ index 76c7c766cb..74a48ae914 100644
 +# Locally computed
  sha256 c49c0819a726b70142621715dae3159c47b0349c2bc9db079070f28dadac0229 LICENSE
 diff --git a/package/apache/apache.mk b/package/apache/apache.mk
-index eaf7b9c5bf..14891adbe7 100644
+index 23414fe44d..446e58c43a 100644
 --- a/package/apache/apache.mk
 +++ b/package/apache/apache.mk
 @@ -4,7 +4,7 @@
