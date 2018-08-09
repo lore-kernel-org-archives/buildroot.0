@@ -1,44 +1,58 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 09 Aug 2018 17:34:57 +0300
-Subject: [Buildroot] [PATCH] package/sysdig: bump to version 0.22.1
-In-Reply-To: <1533825067-28079-1-git-send-email-angelo@amarulasolutions.com>
-References: <1533825067-28079-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <87600jboby.fsf@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  9 Aug 2018 16:57:22 +0200
+Subject: [Buildroot] [PATCH] ncurses: disable terminfo database install for
+ host-ncurses
+Message-ID: <20180809145722.388-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Angelo,
+Since commit b35ad5d0b45e (ncurses: make host-ncurses use host terminfo), we
+are now pointing host-ncurses to the host terminfo (typically) located in
+/usr/share/terminfo.
 
-Angelo Compagnucci writes:
-> This patch bumps sysdig to version 0.22.1 and adds a new dependency on
-> elfutils.
->
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/sysdig/Config.in   | 1 +
->  package/sysdig/sysdig.hash | 2 +-
->  package/sysdig/sysdig.mk   | 4 ++--
->  3 files changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-> index 6ccb706..b527b78 100644
-> --- a/package/sysdig/Config.in
-> +++ b/package/sysdig/Config.in
-> @@ -13,6 +13,7 @@ config BR2_PACKAGE_SYSDIG
->  	select BR2_PACKAGE_OPENSSL
->  	select BR2_PACKAGE_JQ
->  	select BR2_PACKAGE_LIBB64
-> +	select BR2_PACKAGE_ELFUTILS
+With this change we are reusing the existing host terminfo database, so
+there is no point in trying to install our own on top.  The user running
+buildroot typically will have no write access to /usr/share/terminfo, but
+tic in that case falls back to writing the database to $HOME/.terminfo.
+Neither of which are desirable.
 
-So elfutils is a mandatory dependency now, right? If so, you need to
-replicate the dependencies of elfutils here.
+In case $HOME/.terminfo also isn't writable, tic fails, breaking the install
+step for host-ncurses:
 
-baruch
+** Building terminfo database, please wait...
+Running sh ./shlib tic to install /usr/share/terminfo ...
 
+        You may see messages regarding extended capabilities, e.g., AX.
+        These are extended terminal capabilities which are compiled
+        using
+                tic -x
+        If you have ncurses 4.2 applications, you should read the INSTALL
+        document, and install the terminfo without the -x option.
+
+"terminfo.tmp", line 21272, terminal 'v3220': /home/peko/.terminfo: permission denied (errno 30)
+
+To fix all of this, simply disable the terminfo database install.
+
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ncurses/ncurses.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 5b36df564c..e27598bd42 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -154,6 +154,7 @@ HOST_NCURSES_CONF_OPTS = \
+ 	--without-cxx-binding \
+ 	--without-ada \
+ 	--with-default-terminfo-dir=/usr/share/terminfo \
++	--disable-db-install \
+ 	--without-normal
+ 
+ $(eval $(autotools-package))
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.11.0
