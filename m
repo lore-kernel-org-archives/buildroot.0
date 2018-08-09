@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Aug 2018 22:15:33 +0200
-Subject: [Buildroot] [PATCH 2/2] Revert "package/mono: remove target
- mips architecture"
-In-Reply-To: <1533817887-8771-2-git-send-email-angelo@amarulasolutions.com>
-References: <1533817887-8771-1-git-send-email-angelo@amarulasolutions.com>
- <1533817887-8771-2-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180809221533.42090817@windsurf>
+Date: Thu, 9 Aug 2018 22:16:02 +0200
+Subject: [Buildroot] [PATCH] package/dt-utils: bump to v2018.05.0 and
+ add hashes
+In-Reply-To: <20180806192536.11559-1-m.niestroj@grinn-global.com>
+References: <20180806192536.11559-1-m.niestroj@grinn-global.com>
+Message-ID: <20180809221602.0c8c89f0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,32 +13,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  9 Aug 2018 14:31:27 +0200, Angelo Compagnucci wrote:
-> This reverts commit 0f96073561badde3c7abdf338abca7d00dba56dd cause the
-> newly released mono version (5.14.0.177) fixed the bug upstream.
+On Mon,  6 Aug 2018 21:25:36 +0200, Marcin Niestroj wrote:
+> Also drop mainlined patches.
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> ---
+>  ...-common-Rename-strlcpy-to-DT_strlcpy.patch | 58 -------------------
+>  ...02-common-Include-sys-types.h-header.patch | 38 ------------
+>  package/dt-utils/dt-utils.hash                |  3 +
+>  package/dt-utils/dt-utils.mk                  |  2 +-
+>  4 files changed, 4 insertions(+), 97 deletions(-)
+>  delete mode 100644 package/dt-utils/0001-common-Rename-strlcpy-to-DT_strlcpy.patch
+>  delete mode 100644 package/dt-utils/0002-common-Include-sys-types.h-header.patch
+>  create mode 100644 package/dt-utils/dt-utils.hash
 
-I can't apply this one right now, because disabling Mono on MIPS was
-done on master after 2018.08-rc1 was tagged, and the next branch is
-based on 2018.08-rc1.
-
-I'm not sure if Peter prefers:
-
- - that we wait until 2018.08 is released to merge back next into
-   master before applying this patch
-
- - that we cherry-pick just
-   0f96073561badde3c7abdf338abca7d00dba56dd from master to next and
-   then apply your patch to next
-
- - that we merge master into next right now and apply your patch
-
-Peter ?
-
-I don't like option (1) because it leaves a patch waiting in patchwork.
-
-Thanks,
+Applied to next, thanks.
 
 Thomas
 -- 
