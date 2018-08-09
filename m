@@ -1,38 +1,32 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Thu,  9 Aug 2018 14:31:27 +0200
-Subject: [Buildroot] [PATCH 2/2] Revert "package/mono: remove target mips
- architecture"
-In-Reply-To: <1533817887-8771-1-git-send-email-angelo@amarulasolutions.com>
-References: <1533817887-8771-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <1533817887-8771-2-git-send-email-angelo@amarulasolutions.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 9 Aug 2018 08:08:57 -0500
+Subject: [Buildroot] [PATCH] docs/manual: gcc 4.4 is the lowest we are
+ known to work with
+In-Reply-To: <20180805114615.3442-1-yann.morin.1998@free.fr>
+References: <20180805114615.3442-1-yann.morin.1998@free.fr>
+Message-ID: <CANQCQpZv0zcAV4L_ZdRk21e22GLw5pzaTe_2JoH0kN_uC4Tumw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This reverts commit 0f96073561badde3c7abdf338abca7d00dba56dd cause the
-newly released mono version (5.14.0.177) fixed the bug upstream.
+All,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/mono/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sun, Aug 5, 2018 at 6:46 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> gcc-2.95 is old. No, it is not old; it is antediluvian.
+>
+> The odlest gcc version we are testing against is gcc-4.4 (on Holiss'
+> autobuilder using RHEL6.5).
+>
 
-diff --git a/package/mono/Config.in b/package/mono/Config.in
-index a375a98..63208fe 100644
---- a/package/mono/Config.in
-+++ b/package/mono/Config.in
-@@ -5,8 +5,8 @@ config BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_MONO_ARCH_SUPPORTS
- 	bool
--	default y if (BR2_arm || BR2_armeb || BR2_i386 || \
--		      BR2_powerpc || BR2_x86_64)
-+	default y if (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
-+		      BR2_mipsel || BR2_powerpc || BR2_x86_64)
- 	depends on BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_MONO
--- 
-2.7.4
+Any suggestions if we keep the minimum host compiler requirement at
+4.4, how should I address the below build failures with "error:
+'__ATOMIC_ACQUIRE' undeclared " on the RHEL6.5 autobuilder?
+http://autobuild.buildroot.net/?reason=host-libselinux-2.7
+
+If this was a more recent compiler version issue, I'd dig into the
+package and look at up-streaming a compatibility ifdef check.
+
+Matt
