@@ -1,43 +1,36 @@
-From: Floris Bos <bos@je-eigen-domein.nl>
-Date: Thu, 9 Aug 2018 23:55:15 +0200
-Subject: [Buildroot] [PATCH v2 1/1] qt5wayland: add fix from upstream to
- compile without QtQuick
-In-Reply-To: <20180809234736.010b22fc@windsurf>
-References: <1533515813-11533-1-git-send-email-bos@je-eigen-domein.nl>
- <20180809234736.010b22fc@windsurf>
-Message-ID: <a069c583-65e5-c788-95d8-53bc3da07d6f@je-eigen-domein.nl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 9 Aug 2018 23:57:50 +0200
+Subject: [Buildroot] [PATCH 1/2] package/systemd: fix statx support with
+ glibc >= 2.28
+In-Reply-To: <20180803181425.18106-1-romain.naour@gmail.com>
+References: <20180803181425.18106-1-romain.naour@gmail.com>
+Message-ID: <20180809235750.407788dc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello Romain,
 
-On 08/09/2018 11:47 PM, Thomas Petazzoni wrote:
-> config BR2_PACKAGE_QT5WAYLAND
->>   	bool "qt5wayland"
->>   	depends on BR2_PACKAGE_QT5_GL_AVAILABLE
-> Is this OpenGL support dependency needed because of qt5wayland itself,
-> or was it needed only because of the qt5declarative dependency ?
->
-> BR2_PACKAGE_WAYLAND doesn't require OpenGL support, so I'm wondering if
-> qt5wayland needs it or not. If it doesn't, could you send a follow-up
-> patch fixing this ?
+On Fri,  3 Aug 2018 20:14:24 +0200, Romain Naour wrote:
+> Backport 2 patches fixing statix redefinition:
 
-It currently does not compile without OpenGL.
+                            ^^^^^ statx
 
-But I was also wondering whether or not that was meant to be as well.
-So had already opened an issue upstream: 
-https://bugreports.qt.io/browse/QTBUG-69779
+> +Subject: [PATCH 3/4] build-sys: Detect whether struct statx is defined in
+> + sys/stat.h
 
-Would indeed be nice if it was possible to do without OpenGL, as then we 
-could finally port some old Qt 4 QWS applications to Qt 5.
+> +Subject: [PATCH 4/4] meson: unify linux/stat.h check with other checks and use
+> + _GNU_SOURCE
 
+Please generate your patches with git format-patch -N to avoid the
+numbering in the patch titles.
 
-Thanks for the merge.
+I've applied to next after fixing those two minor issues. Thanks!
 
-
-Yours sincerely,
-
-Floris Bos
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
