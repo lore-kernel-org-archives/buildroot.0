@@ -1,14 +1,19 @@
-From: Chris Packham <judge.packham@gmail.com>
-Date: Thu,  9 Aug 2018 20:27:50 +1200
-Subject: [Buildroot] [PATCH] micropython: bump version to v1.9.4
-Message-ID: <20180809082750.26725-1-judge.packham@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 9 Aug 2018 10:30:20 +0200
+Subject: [Buildroot] [git commit branch/next] micropython: bump version to
+ v1.9.4
+Message-ID: <20180809082413.DD20E8B66F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0095a8f38048435144bbf9a59819752ef5fb5726
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
 Signed-off-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/micropython/micropython.hash | 2 +-
  package/micropython/micropython.mk   | 2 +-
@@ -35,5 +40,3 @@ index 2c6bddd81d..cff8b17b14 100644
  MICROPYTHON_SITE = $(call github,micropython,micropython,$(MICROPYTHON_VERSION))
  MICROPYTHON_LICENSE = MIT
  MICROPYTHON_LICENSE_FILES = LICENSE
--- 
-2.18.0
