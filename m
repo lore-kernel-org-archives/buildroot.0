@@ -1,34 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Aug 2018 22:11:45 +0200
-Subject: [Buildroot] [PATCH] chrony: backport upstream patch to fix
- blocking on getrandom() at startup with recent kernels
-In-Reply-To: <20180809155728.22817-1-peter@korsgaard.com>
-References: <20180809155728.22817-1-peter@korsgaard.com>
-Message-ID: <20180809221145.701a9bb2@windsurf>
+Date: Thu, 9 Aug 2018 22:12:01 +0200
+Subject: [Buildroot] [git commit] ncurses: disable terminfo database install
+ for host-ncurses
+Message-ID: <20180809200534.DC8448B714@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b42fb29048128a432a130c0652e086dfde641d75
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  9 Aug 2018 17:57:28 +0200, Peter Korsgaard wrote:
-> chrony calls getrandom() at startup if available, so it needs a workaround
-> for the blocking behaviour on recent (4.14.39+), similar to what was done
-> for util-linux in commit c4d86707cd6 (util-linux: add two upstream patches
-> to fix blocking on getrandom() with recent kernels).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  ...ack-to-reading-dev-urandom-when-getrandom.patch | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 package/chrony/0002-util-fall-back-to-reading-dev-urandom-when-getrandom.patch
+Since commit b35ad5d0b45e (ncurses: make host-ncurses use host terminfo), we
+are now pointing host-ncurses to the host terminfo (typically) located in
+/usr/share/terminfo.
 
-Applied to master, thanks.
+With this change we are reusing the existing host terminfo database, so
+there is no point in trying to install our own on top.  The user running
+buildroot typically will have no write access to /usr/share/terminfo, but
+tic in that case falls back to writing the database to $HOME/.terminfo.
+Neither of which are desirable.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+In case $HOME/.terminfo also isn't writable, tic fails, breaking the install
+step for host-ncurses:
+
+** Building terminfo database, please wait...
+Running sh ./shlib tic to install /usr/share/terminfo ...
+
+        You may see messages regarding extended capabilities, e.g., AX.
+        These are extended terminal capabilities which are compiled
+        using
+                tic -x
+        If you have ncurses 4.2 applications, you should read the INSTALL
+        document, and install the terminfo without the -x option.
+
+"terminfo.tmp", line 21272, terminal 'v3220': /home/peko/.terminfo: permission denied (errno 30)
+
+To fix all of this, simply disable the terminfo database install.
+
+Suggested-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Acked-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ncurses/ncurses.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/ncurses/ncurses.mk b/package/ncurses/ncurses.mk
+index 5b36df564c..e27598bd42 100644
+--- a/package/ncurses/ncurses.mk
++++ b/package/ncurses/ncurses.mk
+@@ -154,6 +154,7 @@ HOST_NCURSES_CONF_OPTS = \
+ 	--without-cxx-binding \
+ 	--without-ada \
+ 	--with-default-terminfo-dir=/usr/share/terminfo \
++	--disable-db-install \
+ 	--without-normal
+ 
+ $(eval $(autotools-package))
