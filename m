@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Aug 2018 22:11:24 +0200
-Subject: [Buildroot] [PATCH 1/2] linux-headers: bump 4.{4, 9, 14,
- 17}.x series
-In-Reply-To: <20180809194047.22535-1-bernd.kuhls@t-online.de>
-References: <20180809194047.22535-1-bernd.kuhls@t-online.de>
-Message-ID: <20180809221124.173f8b31@windsurf>
+Date: Thu, 9 Aug 2018 22:11:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/waylandpp: fix build error with
+ gcc 4.4/4.9
+In-Reply-To: <20180809195355.22877-1-bernd.kuhls@t-online.de>
+References: <20180809195355.22877-1-bernd.kuhls@t-online.de>
+Message-ID: <20180809221127.28e35ab9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,13 +13,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  9 Aug 2018 21:40:46 +0200, Bernd Kuhls wrote:
+On Thu,  9 Aug 2018 21:53:55 +0200, Bernd Kuhls wrote:
+> Fixes
+> http://autobuild.buildroot.net/results/51a/51afcd6d3c3c4839d8216b7b0dba35c8e38211f4/
+> 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/linux-headers/Config.in.host | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  ...iler-error-missing-stdexcept-to-use-.patch | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 package/waylandpp/0001-scanner-Fix-compiler-error-missing-stdexcept-to-use-.patch
 
-Both applied to master, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
