@@ -1,53 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 Aug 2018 10:10:55 +0200
-Subject: [Buildroot] [PATCH] wireshark: bump version to 2.2.16 (security)
-In-Reply-To: <20180808204005.24356-1-nerv@dawncrow.de>
-References: <20180808204005.24356-1-nerv@dawncrow.de>
-Message-ID: <20180809101055.0d7fedc5@windsurf>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Thu, 09 Aug 2018 10:24:59 +0200
+Subject: [Buildroot] [Buildroot & ArchLinux] can not build host-m4 on
+ machine with glibc-2.28 installed
+In-Reply-To: <20180808225558.GB3148@momiji>
+References: <20180808031502.GE1085@techyauld.com>
+ <87lg9gg8sg.fsf@dell.be.48ers.dk> <20180808225558.GB3148@momiji>
+Message-ID: <87c75540d51a0d520aa7e8549eaa51b36bb35aeb.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Adrian,
 
-On Wed,  8 Aug 2018 22:40:05 +0200, Andr? Hentschel wrote:
-> Security fixes since 2.2.15:
+On Wed, 2018-08-08 at 22:55 +0300, Adrian Perez de Castro wrote:
+> Hello,
 > 
-> - wnpa-sec-2018-06
->   RPKI-Router infinite loop. Bug 14414. CVE-2018-7325.
-> - wnpa-sec-2018-34
->   BGP dissector large loop. Bug 13741. CVE-2018-14342.
-> - wnpa-sec-2018-35
->   ISMP dissector crash. Bug 14672. CVE-2018-14344.
-> - wnpa-sec-2018-36
->   Multiple dissectors could crash. Bug 14675. CVE-2018-14340.
-> - wnpa-sec-2018-37
->   ASN.1 BER dissector crash. Bug 14682. CVE-2018-14343.
-> - wnpa-sec-2018-38
->   MMSE dissector infinite loop. Bug 14738. CVE-2018-14339.
-> - wnpa-sec-2018-39
->   DICOM dissector crash. Bug 14742. CVE-2018-14341.
-> - wnpa-sec-2018-40
->   Bazaar dissector infinite loop. Bug 14841.
-> - wnpa-sec-2018-41
->   HTTP2 dissector crash. Bug 14869.
+> On Wed, 08 Aug 2018 17:47:11 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+> > > > > > > "?" == ? ? <yzheng@techyauld.com> writes:
+> > 
+> > Please mail the buildroot mailing list and not individual contributors,
+> > thanks!
+> > 
+> >  > Hi,
+> >  > 	I found that failure and do some hacking.
+> > 
+> >  > 	(1) m4 source, lib/freadahead.c: It use the internal symbols to guess the C runtime lib's type.
+> > 
+> >  > 	(2) glibc-2.28 removed the header file /usr/include/bits/libio.h.
+> >  > 	    In fact, libio.h seems an internal header. The content of it has been
+> >  > 	    moved into <glibc source>/libio/libio.h, which is not installed.
+> > 
+> > 
+> >  > 	Anyone can help me out? M4 has not released new version since 1.4.18(2016-12-31).
+> > 
+> >  > Allan,
+> >  > 	It seems that that bug will hit our lovely ArchLinux!
+> > 
+> > What is the build failure you are seeing exactly? Looking around, it
+> > seems linuxfromscratch has some workarounds for building against
+> > glibc-2.28, perhaps we can do the same?
+> > 
+> > http://www.linuxfromscratch.org/lfs/view/development/chapter05/m4.html
 > 
-> Full release notes:
+> I don't have a build log at hand, but the gnulib sources would complain e.g.
+> that ?freadahead()? is unimplemented for the current target platform, and its
+> source would ?#error?. I have a crappy local patch which patches a few files
+> from gnulib to the most recent version available in the repository. I also
+> have a similar one for Bison, but they are a bit crappy and should be done
+> properly, updating all gnulib bits that the packages use instead of just the
+> bare minimum to make things work (see the attached patches, you can drop them
+> in a local patches directory).
 > 
->   https://www.wireshark.org/docs/relnotes/wireshark-2.2.16.html
+> Also: gnulib is horrible, and I am baffled that it's still being used in
+> 2018... I refuse to think that something like M4 or Bison (which basically
+> process some input text and generate some output text) needs functions from
+> gnulib which rely on the internals of the system C library. It was quite
+> disheartening for me to find out this ~_~
 > 
-> Signed-off-by: Andr? Hentschel <nerv@dawncrow.de>
-> ---
->  package/wireshark/wireshark.hash | 4 ++--
->  package/wireshark/wireshark.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Regards,
+> 
+> -Adri?n
 
-Applied to master, thanks.
+I've tested your m4 patch and it works for me (Arch Linux).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+J?rg Krause
