@@ -1,43 +1,55 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 9 Aug 2018 08:41:57 -0500
-Subject: [Buildroot] [PATCH] docs/manual: gcc 4.4 is the lowest we are
- known to work with
-In-Reply-To: <87a7pvbs1f.fsf@tkos.co.il>
-References: <20180805114615.3442-1-yann.morin.1998@free.fr>
- <CANQCQpZv0zcAV4L_ZdRk21e22GLw5pzaTe_2JoH0kN_uC4Tumw@mail.gmail.com>
- <87a7pvbs1f.fsf@tkos.co.il>
-Message-ID: <CANQCQpbdWEJca7JE06UohOrAenz64n-gCxTiHkiBaMvhbVbBHg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 09 Aug 2018 16:28:20 +0200
+Subject: [Buildroot] [PATCH] ncurses: make host-ncurses use host terminfo
+In-Reply-To: <4b28a0d6-dc95-4d3b-6ecb-a4607935f6e2@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 8 Aug 2018 22:37:55 +0200")
+References: <5f7fe697b92ac0145674.1531241163@cveaol6qa08.wv.mentorg.com>
+ <8736wec3d8.fsf@dell.be.48ers.dk> <87wot1gd9a.fsf@dell.be.48ers.dk>
+ <4b28a0d6-dc95-4d3b-6ecb-a4607935f6e2@mind.be>
+Message-ID: <87d0urfwcb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
-On Thu, Aug 9, 2018 at 8:15 AM Baruch Siach <baruch@tkos.co.il> wrote:
->
-> Hi Matt,
->
-> Matthew Weber writes:
-> > On Sun, Aug 5, 2018 at 6:46 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >>
-> >> gcc-2.95 is old. No, it is not old; it is antediluvian.
-> >>
-> >> The odlest gcc version we are testing against is gcc-4.4 (on Holiss'
-> >> autobuilder using RHEL6.5).
-> >>
-> >
-> > Any suggestions if we keep the minimum host compiler requirement at
-> > 4.4, how should I address the below build failures with "error:
-> > '__ATOMIC_ACQUIRE' undeclared " on the RHEL6.5 autobuilder?
-> > http://autobuild.buildroot.net/?reason=host-libselinux-2.7
-> >
-> > If this was a more recent compiler version issue, I'd dig into the
-> > package and look at up-streaming a compatibility ifdef check.
->
-> The atomic operations were introduced in gcc version 4.7:
->
->   https://gcc.gnu.org/gcc-4.7/changes.html
->
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Yeah.
+Hi,
+
+ >> We in general don't want buildroot to touch any files outside the
+ >> buildroot output directory (and $TMPDIR), but it normally isn't
+ >> enforced/checked by the autobuilders. For this specific setup with
+ >> building inside a container $HOME is mounted readonly, so it really
+ >> fails.
+
+ >  Actually, sounds like a good idea to have an autobuilder that does exactly
+ > this: nothing writeable outside of OUTPUT_DIR.
+
+Indeed. I will try to find (time and cpu) cycles to setup such a
+builder.
+
+
+ >> 
+ >> The question is how to fix it. The logical solution would be to set
+ >> TERMINFO to get it to put the database somewhere else, but that doesn't
+ >> work because run_tic.sh overwrites it:
+ >> 
+ >> # don't use user's TERMINFO variable
+ >> TERMINFO=${DESTDIR}$ticdir ; export TERMINFO
+ >            ^^^^^^^^^^
+ >  So, set DESTDIR?
+
+That isn't really handy as DESTDIR is used in a bunch of other places
+and this is built as part of make install.
+
+
+ >  Or actually, why is this script called at all? The whole point of Hollis's
+ > patch was to use the system's terminfo, so why should we generate the terminfo
+ > at all? In other words, can't we just pass --disable-db-install ?
+
+Ahh, I hadn't noticed that option. That indeed works, I'll send a patch
+- Thanks!
+
+-- 
+Bye, Peter Korsgaard
