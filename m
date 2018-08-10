@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Fri, 10 Aug 2018 09:14:51 -0700
-Subject: [Buildroot] [PATCH 07/18] perl-dbi: new package
+Date: Fri, 10 Aug 2018 09:14:52 -0700
+Subject: [Buildroot] [PATCH 08/18] perl-device-serialport: new package
 In-Reply-To: <20180810161502.21598-1-chrismcc@gmail.com>
 References: <20180810161502.21598-1-chrismcc@gmail.com>
-Message-ID: <20180810161502.21598-8-chrismcc@gmail.com>
+Message-ID: <20180810161502.21598-9-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,71 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/Config.in              |  1 +
- package/perl-dbi/Config.in     | 10 ++++++++++
- package/perl-dbi/perl-dbi.hash |  6 ++++++
- package/perl-dbi/perl-dbi.mk   | 13 +++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/perl-dbi/Config.in
- create mode 100644 package/perl-dbi/perl-dbi.hash
- create mode 100644 package/perl-dbi/perl-dbi.mk
+ package/Config.in                                          |  1 +
+ package/perl-device-serialport/Config.in                   | 10 ++++++++++
+ package/perl-device-serialport/perl-device-serialport.hash |  6 ++++++
+ package/perl-device-serialport/perl-device-serialport.mk   | 12 ++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/perl-device-serialport/Config.in
+ create mode 100644 package/perl-device-serialport/perl-device-serialport.hash
+ create mode 100644 package/perl-device-serialport/perl-device-serialport.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index c5edc5cb76..73adb62e0b 100644
+index 73adb62e0b..cd01657802 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -677,6 +677,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-data-uuid/Config.in"
+@@ -678,6 +678,7 @@ menu "Perl libraries/modules"
  	source "package/perl-date-manip/Config.in"
  	source "package/perl-datetime-tiny/Config.in"
-+	source "package/perl-dbi/Config.in"
+ 	source "package/perl-dbi/Config.in"
++	source "package/perl-device-serialport/Config.in"
  	source "package/perl-digest-hmac/Config.in"
  	source "package/perl-digest-md5/Config.in"
  	source "package/perl-digest-sha1/Config.in"
-diff --git a/package/perl-dbi/Config.in b/package/perl-dbi/Config.in
+diff --git a/package/perl-device-serialport/Config.in b/package/perl-device-serialport/Config.in
 new file mode 100644
-index 0000000000..069669b9bc
+index 0000000000..f14e9794d0
 --- /dev/null
-+++ b/package/perl-dbi/Config.in
++++ b/package/perl-device-serialport/Config.in
 @@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_DBI
-+	bool "perl-dbi"
++config BR2_PACKAGE_PERL_DEVICE_SERIALPORT
++	bool "perl-device-serialport"
 +	depends on !BR2_STATIC_LIBS
 +	help
-+	  Database independent interface for Perl
++	  Linux/POSIX emulation of Win32::SerialPort functions.
 +
-+	  http://dbi.perl.org/
++	  https://metacpan.org/release/Device-SerialPort
 +
-+comment "perl-dbi needs a toolchain w/ dynamic library"
++comment "perl-device-serialport needs a toolchain w/ dynamic library"
 +	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-dbi/perl-dbi.hash b/package/perl-dbi/perl-dbi.hash
+diff --git a/package/perl-device-serialport/perl-device-serialport.hash b/package/perl-device-serialport/perl-device-serialport.hash
 new file mode 100644
-index 0000000000..1d0b7e9ad5
+index 0000000000..35ddc13d3f
 --- /dev/null
-+++ b/package/perl-dbi/perl-dbi.hash
++++ b/package/perl-device-serialport/perl-device-serialport.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e77fd37fcf77fc88fde029c1b75ded54 DBI-1.641.tar.gz
-+sha256 5509e532cdd0e3d91eda550578deaac29e2f008a12b64576e8c261bb92e8c2c1 DBI-1.641.tar.gz
++md5    82c698151f934eb28c65d1838cee7d9e Device-SerialPort-1.04.tar.gz
++sha256 d392567cb39b4ea606c0e0acafd8ed72320311b995336ece5fcefcf9b150e9d7 Device-SerialPort-1.04.tar.gz
 +
 +# computed by scancpan
-+sha256 33453c8b0d8d474a42669ac702a13c20f39c91a34b3df4e6ca778fc2f0f711c7 LICENSE
-diff --git a/package/perl-dbi/perl-dbi.mk b/package/perl-dbi/perl-dbi.mk
++sha256 59432e84eca65c10c4b627f8af0b00833685856b68242b816aea2a38283a124c README
+diff --git a/package/perl-device-serialport/perl-device-serialport.mk b/package/perl-device-serialport/perl-device-serialport.mk
 new file mode 100644
-index 0000000000..f7ae6ca5a1
+index 0000000000..635179f80a
 --- /dev/null
-+++ b/package/perl-dbi/perl-dbi.mk
-@@ -0,0 +1,13 @@
++++ b/package/perl-device-serialport/perl-device-serialport.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# perl-dbi
++# perl-device-serialport
 +#
 +################################################################################
 +
-+PERL_DBI_VERSION = 1.641
-+PERL_DBI_SOURCE = DBI-$(PERL_DBI_VERSION).tar.gz
-+PERL_DBI_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TI/TIMB
-+PERL_DBI_LICENSE = Artistic or GPL-1.0+
-+PERL_DBI_LICENSE_FILES = LICENSE
++PERL_DEVICE_SERIALPORT_VERSION = 1.04
++PERL_DEVICE_SERIALPORT_SOURCE = Device-SerialPort-$(PERL_DEVICE_SERIALPORT_VERSION).tar.gz
++PERL_DEVICE_SERIALPORT_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CO/COOK
++PERL_DEVICE_SERIALPORT_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
