@@ -1,49 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Aug 2018 10:16:48 +0200
-Subject: [Buildroot] [git commit branch/next] gzip: bump to version 1.9
-Message-ID: <20180810081020.B7C80863B6@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Fri, 10 Aug 2018 10:23:08 +0200
+Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 5.2.0
+Message-ID: <1533889388-28500-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05c23d35429ec4ec5eb318655a3c95c6a9c58458
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+This patch bumps python-pillow to version 5.2.0 and adds the hash for
+license file.
 
-Add reference to tarball signature and key.
-
-Add license file hash.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/gzip/gzip.hash | 6 +++++-
- package/gzip/gzip.mk   | 2 +-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/python-pillow/python-pillow.hash | 6 ++++--
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
-index 466f846e12..632176c2b6 100644
---- a/package/gzip/gzip.hash
-+++ b/package/gzip/gzip.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
--sha256 ff1767ec444f71e5daf8972f6f8bf68cfcca1d2f76c248eb18e8741fc91dbbd3  gzip-1.8.tar.xz
-+# https://ftp.gnu.org/gnu/gzip/gzip-1.9.tar.xz.sig
-+# using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
-+sha256 ae506144fc198bd8f81f1f4ad19ce63d5a2d65e42333255977cf1dcf1479089a  gzip-1.9.tar.xz
-+# Locally calculated
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
-index d69215a850..d48cb1aa15 100644
---- a/package/gzip/gzip.mk
-+++ b/package/gzip/gzip.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 463b562..0f90a0b 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,2 +1,4 @@
+-# sha256 from https://pypi.org/project/Pillow/5.1.0/#files
+-sha256 cee9bc75bff455d317b6947081df0824a8f118de2786dc3d74a3503fd631f4ef  Pillow-5.1.0.tar.gz
++# sha256 for python-pillow from https://pypi.org/project/Pillow/5.2.0/#files
++# sha256 for LICENSE locally computed
++sha256 f8b3d413c5a8f84b12cd4c5df1d8e211777c9852c6be3ee9c094b626644d3eab  Pillow-5.2.0.tar.gz
++sha256 4960fc18becc286be839c8ff17bd70cd5222533f761129142153443718a25199  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index c9b3e31..c3a3d13 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--GZIP_VERSION = 1.8
-+GZIP_VERSION = 1.9
- GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
- GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
- # Some other tools expect it to be in /bin
+-PYTHON_PILLOW_VERSION = 5.1.0
++PYTHON_PILLOW_VERSION = 5.2.0
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/89/b8/2f49bf71cbd0e9485bb36f72d438421b69b7356180695ae10bd4fd3066f5
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/d3/c4/b45b9c0d549f482dd072055e2d3ced88f3b977f7b87c7a990228b20e7da1
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
+-- 
+2.7.4
