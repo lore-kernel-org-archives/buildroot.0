@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Fri, 10 Aug 2018 09:14:57 -0700
-Subject: [Buildroot] [PATCH 13/18] perl-number-bytes-human: new package
+Date: Fri, 10 Aug 2018 09:14:58 -0700
+Subject: [Buildroot] [PATCH 14/18] perl-params-util: new package
 In-Reply-To: <20180810161502.21598-1-chrismcc@gmail.com>
 References: <20180810161502.21598-1-chrismcc@gmail.com>
-Message-ID: <20180810161502.21598-14-chrismcc@gmail.com>
+Message-ID: <20180810161502.21598-15-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +12,72 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/Config.in                                           |  1 +
- package/perl-number-bytes-human/Config.in                   |  6 ++++++
- .../perl-number-bytes-human/perl-number-bytes-human.hash    |  6 ++++++
- package/perl-number-bytes-human/perl-number-bytes-human.mk  | 13 +++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/perl-number-bytes-human/Config.in
- create mode 100644 package/perl-number-bytes-human/perl-number-bytes-human.hash
- create mode 100644 package/perl-number-bytes-human/perl-number-bytes-human.mk
+ package/Config.in                              |  1 +
+ package/perl-params-util/Config.in             | 10 ++++++++++
+ package/perl-params-util/perl-params-util.hash |  6 ++++++
+ package/perl-params-util/perl-params-util.mk   | 13 +++++++++++++
+ 4 files changed, 30 insertions(+)
+ create mode 100644 package/perl-params-util/Config.in
+ create mode 100644 package/perl-params-util/perl-params-util.hash
+ create mode 100644 package/perl-params-util/perl-params-util.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index a20dfe57d7..6410a5b233 100644
+index 6410a5b233..fece804e81 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -719,6 +719,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-net-ssleay/Config.in"
+@@ -720,6 +720,7 @@ menu "Perl libraries/modules"
  	source "package/perl-net-telnet/Config.in"
  	source "package/perl-netaddr-ip/Config.in"
-+	source "package/perl-number-bytes-human/Config.in"
+ 	source "package/perl-number-bytes-human/Config.in"
++	source "package/perl-params-util/Config.in"
  	source "package/perl-path-tiny/Config.in"
  	source "package/perl-time-hires/Config.in"
  	source "package/perl-timedate/Config.in"
-diff --git a/package/perl-number-bytes-human/Config.in b/package/perl-number-bytes-human/Config.in
+diff --git a/package/perl-params-util/Config.in b/package/perl-params-util/Config.in
 new file mode 100644
-index 0000000000..ca43873d49
+index 0000000000..b155899b06
 --- /dev/null
-+++ b/package/perl-number-bytes-human/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_NUMBER_BYTES_HUMAN
-+	bool "perl-number-bytes-human"
++++ b/package/perl-params-util/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PERL_PARAMS_UTIL
++	bool "perl-params-util"
++	depends on !BR2_STATIC_LIBS
 +	help
-+	  Convert byte count to human readable format
++	  Simple, compact and correct param-checking functions
 +
-+	  https://metacpan.org/release/Number-Bytes-Human
-diff --git a/package/perl-number-bytes-human/perl-number-bytes-human.hash b/package/perl-number-bytes-human/perl-number-bytes-human.hash
++	  https://metacpan.org/release/Params-Util
++
++comment "perl-params-util needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-params-util/perl-params-util.hash b/package/perl-params-util/perl-params-util.hash
 new file mode 100644
-index 0000000000..af7a6b65a1
+index 0000000000..0c247ebfe5
 --- /dev/null
-+++ b/package/perl-number-bytes-human/perl-number-bytes-human.hash
++++ b/package/perl-params-util/perl-params-util.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    43d2c86a55924aa71535a41de0311efd Number-Bytes-Human-0.11.tar.gz
-+sha256 5fc79c49b0b40df780479c43696381343e2b6ad1fe52859f60bc65b66ebe6f2c Number-Bytes-Human-0.11.tar.gz
++md5    02db120c0eef87aae1830cc62bdec37b Params-Util-1.07.tar.gz
++sha256 30f1ec3f2cf9ff66ae96f973333f23c5f558915bb6266881eac7423f52d7c76c Params-Util-1.07.tar.gz
 +
 +# computed by scancpan
-+sha256 d42143fe4b63cb5d488d65a44e6c55769b098ea447462ff33316b33a837b7cf9 README
-diff --git a/package/perl-number-bytes-human/perl-number-bytes-human.mk b/package/perl-number-bytes-human/perl-number-bytes-human.mk
++sha256 71b5fb95de1ba013a517c926feaa2a7d0fb0e8f132818e8529e0da5ec01187cd LICENSE
+diff --git a/package/perl-params-util/perl-params-util.mk b/package/perl-params-util/perl-params-util.mk
 new file mode 100644
-index 0000000000..e10c550eed
+index 0000000000..71868ddff4
 --- /dev/null
-+++ b/package/perl-number-bytes-human/perl-number-bytes-human.mk
++++ b/package/perl-params-util/perl-params-util.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-number-bytes-human
++# perl-params-util
 +#
 +################################################################################
 +
-+PERL_NUMBER_BYTES_HUMAN_VERSION = 0.11
-+PERL_NUMBER_BYTES_HUMAN_SOURCE = Number-Bytes-Human-$(PERL_NUMBER_BYTES_HUMAN_VERSION).tar.gz
-+PERL_NUMBER_BYTES_HUMAN_SITE = $(BR2_CPAN_MIRROR)/authors/id/F/FE/FERREIRA
-+PERL_NUMBER_BYTES_HUMAN_LICENSE = Artistic or GPL-1.0+
-+PERL_NUMBER_BYTES_HUMAN_LICENSE_FILES = README
++PERL_PARAMS_UTIL_VERSION = 1.07
++PERL_PARAMS_UTIL_SOURCE = Params-Util-$(PERL_PARAMS_UTIL_VERSION).tar.gz
++PERL_PARAMS_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AD/ADAMK
++PERL_PARAMS_UTIL_LICENSE = Artistic or GPL-1.0+
++PERL_PARAMS_UTIL_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
 -- 
