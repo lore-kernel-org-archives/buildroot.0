@@ -1,103 +1,69 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 10 Aug 2018 02:08:57 +0000
-Subject: [Buildroot] [Bug 11216] New: Extended attributes not applied to
- filesystem
-Message-ID: <bug-11216-163@https.bugs.busybox.net/>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 09 Aug 2018 23:18:33 -0300
+Subject: [Buildroot] [2018.02.x 1/2] makedevs: allow leading whitespace
+ for capabilities
+References: <20180809234235.47a45e5f@windsurf>
+Message-ID: <5b6cf5f93b22_57833f926e0c8bdc217d4@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11216
+Hello,
 
-            Bug ID: 11216
-           Summary: Extended attributes not applied to filesystem
-           Product: buildroot
-           Version: 2018.05
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: ricardo.martincoski at datacom.com.br
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Thu, Aug 09, 2018 at 06:42 PM, Thomas Petazzoni wrote:
 
-Steps to reproduce:
-1) create a config for squashfs with xattrs added by either a device_table or
-_PERMISSIONS in a package.
-An example can be seen on the test case of this series:
-http://patchwork.ozlabs.org/project/buildroot/list/?series=59394
-2) Build
-3) Run test, checking with getcap
+> On Mon,  6 Aug 2018 00:17:14 -0300, Ricardo Martincoski wrote:
+>> Currently makedevs silently ignores extended attributes with leading
+>> whitespace, for example those added to a <PACKAGE>_PERMISSIONS following
+>> the recommended style from check-package.
+>> 
+>> Makedevs already ignores leading whitespace for normal entries (file
+>> permission changes and device files creation). Do the same for extended
+>> attributes.
+>> 
+>> Fixes: #11191.
+>> 
+>> Reported-by: Jean-pierre Cartal <jpcartal@free.fr>
+>> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+>> Cc: Arnout Vandecappelle <arnout@mind.be>
+>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> 
+> It is not clear to me why you have the "2018.02.x" prefix in your patch
+> title. I would assume this patch is needed in master, not just in
+> 2018.02.x. We generally include 2018.02.x in the patch title when
+> the patch should only be applied to 2018.02.x. For patches going in
+> master, and needing a backport, we normally rely on Peter being smart
+> and realizing that the patch is a fix that makes sense for 2018.02.x.
+> 
+> Could you clarify what was your intention with this 2018.02.x prefix ?
 
-Actual results:
-The build succeeds without any warning.
-But in runtime the xattrs are not in the filesystem.
+I developed and runtime tested the patch for 2018.02.x.
+But now I tested the patch (by temporarily adding a printf to makedevs) in the
+master branch too. It works well.
 
-Expected results:
-In runtime, calling getcap shows the xattrs.
+This patch can/should be applied to master.
 
-Additional info:
-This bug occurs on master and 2018.05.x. It does not occur on 2018.02.x, before
-the use of a per-fs target dir.
-makedevs does apply the file capabilities to the $(FS_DIR)/target copy, but the
-extended attributes are not propagated to the target filesystem.
+In the branch 2018.02.x this patch unbreaks xattr with leading whitespace.
+In the master branch (and also 2018.05.x), which use a per-fs target dir, there
+are other issues with xattr, this patch is only part of the solution to unbreak
+xattrs, see #11216.
 
-Hacks (cumulative) to understand the problem:
-1) removing "rm -f $(ROOTFS_COMMON_TAR)" from the main Makefile and inspecting
-the tarball
-> tvvf rootfs.common.tar --xattrs --xattrs-include='*'
-the xattr are not shown.
-2) adding "--xattrs --xattrs-include='*'" to ROOTFS_COMMON_TAR_CMD the build
-succeeds without any warning. Inspecting the tarball the xattrs show up
-> x: 20 security.capability
-But when run testing the xattrs are not there.
-3) adding "--xattrs --xattrs-include='*'" to ROOTFS_COMMON_UNTAR_CMD the build
-succeeds with a warning
-> File my_file_with_xattr has unrecognised filetype 0, ignoring
-Inspecting the tarball the xattr shows up.
-But when run testing the file that should have the xattrs is not in the image.
+> 
+> Perhaps we need to have some tags ?
+> 
+> Backport-to: 2018.02.x
+> 
+> when the patch is for master, but needs to be backported. And perhaps:
+> 
+> Apply-to: 2018.02.x
+> 
+> when the patch is to be applied only on 2018.02.x.
+> 
+> Or simply rely on informal notes below the "---" sign ?
 
-Additional notes (speculation):
-- In its source code, tar has some suspicious workarounds for
-security.capability, but it works fine outside of fakeroot.
-- fakeroot 1.23 is out but I didn't tried it.
-- It looks like the problem occurs when extracting a tarfile with xattrs inside
-fakeroot. See below the commands I used to test.
-Outside of buildroot I tried using those versions from Ubuntu 18.04:
-tar (GNU tar) 1.29
-fakeroot version 1.22
-> $ mkdir dir
-> $ touch dir/file
-> $ fakeroot
-> # setcap cap_kill+eip dir/file
-> # getcap dir/file
-> dir/file = cap_kill+eip
-> # tar cf archive.tar dir --xattrs
-> # exit
-> $ tar tvvf archive.tar --xattrs --xattrs-include='*'
-> drwxr-xr-x  root/root         0 2018-08-05 23:21 dir/
-> -rw-r--r--* ricardo/ricardo   0 2018-08-05 23:21 dir/file
->   x: 20 security.capability
-> $ fakeroot
-> # tar xf archive.tar --xattrs --xattrs-include='*'
-> # ls -l dir/file
-> ?rw-r--r-- 1 root root 0 ago  5 23:21 dir/file
-> # file dir/file
-> dir/file: ERROR: invalid mode 0644
-> # getcap dir/file
-> # exit
-> $ file dir/file
-> dir/file: empty
-> $ getcap dir/file
-> $ sudo tar xf archive.tar --xattrs --xattrs-include='*'
-> $ getcap dir/file
-> dir/file = cap_kill+eip
+Sorry, I should have added such informal notes.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards,
+Ricardo
