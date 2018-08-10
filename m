@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Aug 2018 16:25:57 +0200
-Subject: [Buildroot] [PATCH 1/1] mtd: Allow holes in volume ID table
-In-Reply-To: <1532089807-97597-1-git-send-email-david.owens@rockwellcollins.com>
-References: <1532089807-97597-1-git-send-email-david.owens@rockwellcollins.com>
-Message-ID: <20180810162557.76df0848@windsurf>
+Date: Fri, 10 Aug 2018 16:27:00 +0200
+Subject: [Buildroot] [PATCH] configs/imx7ulp-evk: Add new config
+In-Reply-To: <20180718120420.3a95fe87@windsurf>
+References: <20180717172427.16814-1-marcelo.macedo@nxp.com>
+ <20180718120420.3a95fe87@windsurf>
+Message-ID: <20180810162700.3c03c73e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,22 +13,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 20 Jul 2018 07:30:07 -0500, David Owens wrote:
-> A regression in the mtd package prevents non-consecutive ubi volume IDs
-> from working properly.  This change reverts the commit [0].  The issue
-> was originally described on the mtd mailing list:
-> 
-> http://lists.infradead.org/pipermail/linux-mtd/2018-June/081562.html
-> 
-> [0] http://git.infradead.org/mtd-utils.git/commitdiff/dede98ffb706676309488d7cc660f569548d5930
-> 
-> Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-> ---
->  ...correct-error-number-in-ubi_get_vol_info1.patch | 91 ++++++++++++++++++++++
->  1 file changed, 91 insertions(+)
->  create mode 100644 package/mtd/0001-revert-return-correct-error-number-in-ubi_get_vol_info1.patch
+On Wed, 18 Jul 2018 12:04:20 +0200, Thomas Petazzoni wrote:
 
-Applied to master, thanks.
+> > +Step 1 - Download the Cortex-M4 pre-compiled binary:
+> > +
+> > +	wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx7ulp-m4-demo-2.4.0.bin
+> > +
+> > +Step 2: Extract the example files:
+> > +
+> > +	$ chmod a+x imx7ulp-m4-demo-2.4.0.bin
+> > +	$  ./imx7ulp-m4-demo-2.4.0.bin
+> > +
+> > +Step 3: Copy the imx7ulp_m4_demo.img binary to the FAT partion of MicroSD card.  
+> 
+> Shouldn't we instead create a Buildroot package that would
+> download/extract/install this firmware image, and put it in the FAT
+> partition ?
+
+Fabio, do you have any comment about this ?
+
+In the mean time, I'll mark the patch as Changes Requested.
 
 Thomas
 -- 
