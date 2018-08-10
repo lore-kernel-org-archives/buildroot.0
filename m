@@ -1,45 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Aug 2018 10:34:11 +0200
-Subject: [Buildroot] [git commit] uboot-tools: force host CFLAGS
-Message-ID: <20180810082800.1421A8B85D@busybox.osuosl.org>
+Date: Fri, 10 Aug 2018 10:37:21 +0200
+Subject: [Buildroot] [PATCH 2018.02.x 1/1] qt5xmlpatterns: fix license
+ files for 5.9.x variant
+In-Reply-To: <20180801082938.1726-1-sebastien.szymanski@armadeus.com>
+ (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Wed, 1 Aug 2018
+ 10:29:38 +0200")
+References: <20180801082938.1726-1-sebastien.szymanski@armadeus.com>
+Message-ID: <87in4iehxa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03a808a0999ac031a1e93000d9a3c50ffbcb64a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
 
-U-Boot now adds -std=gnu11 when building its build utilities, like
-fixdep. This option is only supported since gcc version 4.7.
+ > Similar to commit 3c6958423f6f (qt5: bump latest version to 5.10.1), the
+ > 5.9.x (and 5.8.x) versions of qt5xmlpatterns doesn't have the 'v' in the
+ > license file names, as slightly different formatting/content, so adjust the
+ > _LICENSE_FILES and hashes to match.
 
-  https://gcc.gnu.org/gcc-4.7/changes.html
+ > Fixes:
+ >  http://autobuild.buildroot.net/results/8a9e40a8c56f2bf1cbf2d2dcab4a874a3fefa367
 
-Force usage of Buildroot HOST_CFLAGS, like we do already for
-host-uboot-tools, to avoid the -std=gnu11 option.
+ > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+ > ---
+ >  package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash | 2 ++
+ >  package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk   | 2 +-
+ >  2 files changed, 3 insertions(+), 1 deletion(-)
 
-Fixes:
-http://autobuild.buildroot.net/results/ea0/ea09b614a3c10d494939d9551c0c3bfca4626ece/
-http://autobuild.buildroot.net/results/f8e/f8efd9af4d86c51fe4f5afe44db9abf9adc5718f/
-http://autobuild.buildroot.net/results/c0a/c0ab35c3cb46f84863fe20c0ee92ecc2379578b6/
+Committed to 2018.02.x, thanks.
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uboot-tools/uboot-tools.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index f5027d2da3..5ac7b1c293 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -19,6 +19,7 @@ endef
- UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
- 	CFLAGS="$(TARGET_CFLAGS)" \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
-+	HOSTCFLAGS="$(HOST_CFLAGS)" \
- 	STRIP=$(TARGET_STRIP)
- 
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),y)
+-- 
+Bye, Peter Korsgaard
