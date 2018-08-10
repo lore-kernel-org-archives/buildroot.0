@@ -1,31 +1,127 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 10 Aug 2018 08:53:49 -0500
-Subject: [Buildroot] [PATCH 1/6] tini: new package
-In-Reply-To: <20180715010732.21765-1-christian@paral.in>
-References: <20180715010732.21765-1-christian@paral.in>
-Message-ID: <CANQCQpa9x_Re_A1+j9Zt7CPEXfxXwp8134G2_=u4TxxhonF3mQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 10 Aug 2018 15:59:30 +0200
+Subject: [Buildroot] [git commit] mtd: backport upstream bug fix
+Message-ID: <20180810135304.BC1788B8B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Christian,
-On Sat, Jul 14, 2018 at 8:15 PM Christian Stewart <christian@paral.in> wrote:
->
-> Tini is a minimal init process to act as PID 1 for containers.
->
-> Tini can be used to satisfy docker-engine's docker-init binary
-> requirement.
->
-> Signed-off-by: Christian Stewart <christian@paral.in>
+commit: https://git.buildroot.net/buildroot/commit/?id=fd127c8e5962158eb02104d5e41a029ee31967be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I see this patch is in a "Not Applicable" state.  This package is
-useful as a minimal init in the most basic of LXC containers (cases
-where docker is overkill).  Our use case had the rootfs being shared
-with the container and this init could remain dyn linked.
+A regression in the mtd package prevents non-consecutive ubi volume
+IDs from working properly. This change backported from upstream
+reverts the commit [0]. The issue was originally described on the mtd
+mailing list:
 
-I couldn't see a clear path in the thread on next steps.  I'm glad to
-respin with an update.
+http://lists.infradead.org/pipermail/linux-mtd/2018-June/081562.html
 
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+[0] http://git.infradead.org/mtd-utils.git/commitdiff/dede98ffb706676309488d7cc660f569548d5930
+
+Signed-off-by: David Owens <david.owens@rockwellcollins.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...correct-error-number-in-ubi_get_vol_info1.patch | 92 ++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+
+diff --git a/package/mtd/0001-revert-return-correct-error-number-in-ubi_get_vol_info1.patch b/package/mtd/0001-revert-return-correct-error-number-in-ubi_get_vol_info1.patch
+new file mode 100644
+index 0000000000..1fd4f7693b
+--- /dev/null
++++ b/package/mtd/0001-revert-return-correct-error-number-in-ubi_get_vol_info1.patch
+@@ -0,0 +1,92 @@
++From 0f833ac73ad631248826386e2918d8571ecf0347 Mon Sep 17 00:00:00 2001
++From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
++Date: Sat, 9 Jun 2018 16:45:22 +0200
++Subject: [PATCH] Revert "Return correct error number in ubi_get_vol_info1"
++
++This reverts commit dede98ffb706676309488d7cc660f569548d5930.
++
++The original commit tried to fix a descrepancy between the implementation
++and the documentation by making the implementation comply.
++
++When making the change, it was overlooked, that ubinfo and ubirename were
++written against the implementation instead of the behaviour specified by
++the documentation. So were further internal functions like
++ubi_get_vol_info1_nm which further breaks ubirmvol.
++
++A report with an outline of a resulting problem can be read on
++the mailing list:
++
++http://lists.infradead.org/pipermail/linux-mtd/2018-June/081562.html
++
++From the report:
++
++steps to reproduce: have mtd-utils 2.0.1 or 2.0.2
++
++0. make a bunch of ubi volumes in sequential order
++
++ubimkvol /dev/ubi0 -s 64KiB -N test1
++ubimkvol /dev/ubi0 -s 64KiB -N test2
++ubimkvol /dev/ubi0 -s 64KiB -N test3
++ubimkvol /dev/ubi0 -s 64KiB -N test4
++..
++
++1. delete the test1 volume, making a hole in the volume table
++
++ubirmvol /dev/ubi0 -N test1
++
++2. try an affected tool (i.e. "ubirmvol /dev/ubi0 -N test4" )
++
++ |root at mr24:/# ubirmvol /dev/ubi0 -N test4
++ |ubirmvol: error!: cannot find UBI volume "test4"
++ |         error 19 (No such device)
++
++or "ubinfo -a"
++
++ | root at mr24:/# ubinfo -a
++ | UBI version:                    1
++ | Count of UBI devices:           1
++ | UBI control device major/minor: 10:59
++ | Present UBI devices:            ubi0
++ |
++ | ubi0
++ | Volumes count:                           11
++ | Logical eraseblock size:                 15872 bytes, 15.5 KiB
++ | Total amount of logical eraseblocks:     1952 (30982144 bytes, 29.5 MiB)
++ | Amount of available logical eraseblocks: 75 (1190400 bytes, 1.1 MiB)
++ | Maximum count of volumes                 92
++ | Count of bad physical eraseblocks:       0
++ | Count of reserved physical eraseblocks:  40
++ | Current maximum erase counter value:     984
++ | Minimum input/output unit size:          512 bytes
++ | Character device major/minor:            251:0
++ | ubinfo: error!: libubi failed to probe volume 5 on ubi0
++ |        error 19 (No such device)
++ | Present volumes:                         0, 1, 2, 3, 4root at mr24:/#
++
++Reported-by: Christian Lamparter <chunkeey@gmail.com>
++Signed-off-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
++Signed-off-by: David Owens <david.owens@rockwellcollins.com>
++---
++ lib/libubi.c | 5 +----
++ 1 file changed, 1 insertion(+), 4 deletions(-)
++
++diff --git a/lib/libubi.c b/lib/libubi.c
++index b50e68a..978b433 100644
++--- a/lib/libubi.c
+++++ b/lib/libubi.c
++@@ -1240,11 +1240,8 @@ int ubi_get_vol_info1(libubi_t desc, int dev_num, int vol_id,
++ 	info->dev_num = dev_num;
++ 	info->vol_id = vol_id;
++ 
++-	if (vol_get_major(lib, dev_num, vol_id, &info->major, &info->minor)) {
++-		if (errno == ENOENT)
++-			errno = ENODEV;
+++	if (vol_get_major(lib, dev_num, vol_id, &info->major, &info->minor))
++ 		return -1;
++-	}
++ 
++ 	ret = vol_read_data(lib->vol_type, dev_num, vol_id, buf, 50);
++ 	if (ret < 0)
++-- 
++2.14.4
++
