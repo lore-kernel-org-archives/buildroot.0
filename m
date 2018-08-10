@@ -1,110 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Aug 2018 08:26:45 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] support/testing: add test
- for file capabilities
-Message-ID: <20180810062637.CD7998B830@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 10 Aug 2018 10:48:01 +0300
+Subject: [Buildroot] [PATCH] gzip: bump to version 1.9
+Message-ID: <94c6ff30b8ea6327a7c95c8bae28a08f544550aa.1533887281.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=510f2c91d9b1953b24c56a28f2ff0604065487c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+Add reference to tarball signature and key.
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5f201de0dca4f7ed9bd2be9d836fbb7955f5b572)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Add license file hash.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- .gitlab-ci.yml                                     |  1 +
- support/testing/tests/core/device_table2.txt       |  7 ++++
- .../tests/core/squashfs-xattr-kernel.config        |  1 +
- .../testing/tests/core/test_file_capabilities.py   | 47 ++++++++++++++++++++++
- 4 files changed, 56 insertions(+)
+ package/gzip/gzip.hash | 6 +++++-
+ package/gzip/gzip.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 59ce6ae59e..271b938842 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -237,6 +237,7 @@ zynq_zybo_defconfig: *defconfig
- tests.boot.test_atf.TestATFAllwinner: *runtime_test
- tests.boot.test_atf.TestATFMarvell: *runtime_test
- tests.boot.test_atf.TestATFVexpress: *runtime_test
-+tests.core.test_file_capabilities.TestFileCapabilities: *runtime_test
- tests.core.test_post_scripts.TestPostScripts: *runtime_test
- tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
- tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
-diff --git a/support/testing/tests/core/device_table2.txt b/support/testing/tests/core/device_table2.txt
-new file mode 100644
-index 0000000000..f8323217f3
---- /dev/null
-+++ b/support/testing/tests/core/device_table2.txt
-@@ -0,0 +1,7 @@
-+# <name>				<type>	<mode>	<uid>	<gid>	<major>	<minor>	<start>	<inc>	<count>
-+/usr/sbin/getcap                        f       755     0       0	-	-	-	-	-
-+|xattr cap_sys_nice+eip
-+# leading spaces are ignored for xattr
-+  |xattr cap_kill+eip
-+# leading tabs are ignored for xattr
-+	|xattr cap_sys_time+eip
-diff --git a/support/testing/tests/core/squashfs-xattr-kernel.config b/support/testing/tests/core/squashfs-xattr-kernel.config
-new file mode 100644
-index 0000000000..81b21b94c5
---- /dev/null
-+++ b/support/testing/tests/core/squashfs-xattr-kernel.config
-@@ -0,0 +1 @@
-+CONFIG_SQUASHFS_XATTR=y
-diff --git a/support/testing/tests/core/test_file_capabilities.py b/support/testing/tests/core/test_file_capabilities.py
-new file mode 100644
-index 0000000000..945b48a4c3
---- /dev/null
-+++ b/support/testing/tests/core/test_file_capabilities.py
-@@ -0,0 +1,47 @@
-+import os
-+import subprocess
-+
-+import infra.basetest
-+
-+
-+class TestFileCapabilities(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_ROOTFS_DEVICE_TABLE="system/device_table.txt {}"
-+        BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.3"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_PACKAGE_LIBCAP=y
-+        BR2_PACKAGE_LIBCAP_TOOLS=y
-+        BR2_TARGET_ROOTFS_SQUASHFS=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(infra.filepath("tests/core/device_table2.txt"),
-+                   infra.filepath("tests/core/squashfs-xattr-kernel.config"))
-+
-+    def test_run(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.squashfs")
-+        subprocess.call(["truncate", "-s", "%1M", img])
-+
-+        self.emulator.boot(arch="armv7",
-+                           kernel=os.path.join(self.builddir, "images", "zImage"),
-+                           kernel_cmdline=["root=/dev/mmcblk0",
-+                                           "rootfstype=squashfs"],
-+                           options=["-drive", "file={},if=sd,format=raw".format(img),
-+                                    "-M", "vexpress-a9",
-+                                    "-dtb", os.path.join(self.builddir, "images", "vexpress-v2p-ca9.dtb")])
-+        self.emulator.login()
-+
-+        cmd = "getcap -v /usr/sbin/getcap"
-+        output, _ = self.emulator.run(cmd)
-+        self.assertIn("cap_kill", output[0])
-+        self.assertIn("cap_sys_nice", output[0])
-+        self.assertIn("cap_sys_time", output[0])
-+        self.assertIn("+eip", output[0])
+diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
+index 466f846e127e..632176c2b630 100644
+--- a/package/gzip/gzip.hash
++++ b/package/gzip/gzip.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated after checking pgp signature
+-sha256 ff1767ec444f71e5daf8972f6f8bf68cfcca1d2f76c248eb18e8741fc91dbbd3  gzip-1.8.tar.xz
++# https://ftp.gnu.org/gnu/gzip/gzip-1.9.tar.xz.sig
++# using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
++sha256 ae506144fc198bd8f81f1f4ad19ce63d5a2d65e42333255977cf1dcf1479089a  gzip-1.9.tar.xz
++# Locally calculated
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index d69215a8506c..d48cb1aa1599 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GZIP_VERSION = 1.8
++GZIP_VERSION = 1.9
+ GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
+ GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
+ # Some other tools expect it to be in /bin
+-- 
+2.18.0
