@@ -1,116 +1,108 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 10 Aug 2018 11:42:55 -0700
-Subject: [Buildroot] [PATCH v1 1/1] tini: new package
-Message-ID: <20180810184255.17612-1-christian@paral.in>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Fri, 10 Aug 2018 11:45:44 -0700
+Subject: [Buildroot] [PATCH 2/3] perl: add vendorprefix
+In-Reply-To: <CAB0FRsuEUYa=8Fr2htcge8ULEVP-ZCpPE1tHJoThvqZ+4r+VvA@mail.gmail.com>
+References: <20180810144724.16347-1-chrismcc@gmail.com>
+ <CAB0FRsuEUYa=8Fr2htcge8ULEVP-ZCpPE1tHJoThvqZ+4r+VvA@mail.gmail.com>
+Message-ID: <CALURroQhF-4kcf2F3DKKEwiuPwC2Hbw-cYbAysaCXbXGrJWedw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tini is a minimal init process to act as PID 1 for containers.
+On Fri, Aug 10, 2018 at 11:13 AM, Fran?ois Perrad <francois.perrad@gadz.org>
+wrote:
 
-Note: it is not necessary to compile Tini statically for many non-docker
-container environments, and Docker now statically links to Tini internally (as
-of 1.13).
+>
+>
+> 2018-08-10 16:47 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+>
+>> This adds vendorprefix to configure args
+>>
+>> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+>>
+>
+>
+> What is the rational of this patch ?
+>
+> Currently, core modules (ie. built directly with the perl distribution)
+> are installed in /usr/lib/perl5/5.xx.y,
+> others modules (built by the perl-package infrastructure) are installed in
+> /usr/lib/perl5/site-perl/5.xx.y.
+> Why adding /usr/lib/perl5/vendor-perl/5.xx.y ?
+>
 
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- package/Config.in      |  1 +
- package/tini/Config.in | 16 ++++++++++++++++
- package/tini/tini.hash |  3 +++
- package/tini/tini.mk   | 37 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 57 insertions(+)
- create mode 100644 package/tini/Config.in
- create mode 100644 package/tini/tini.hash
- create mode 100644 package/tini/tini.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index f5a17492c7..fa8e36747d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1996,6 +1996,7 @@ comment "Utilities"
- 	source "package/sudo/Config.in"
- 	source "package/terminology/Config.in"
- 	source "package/time/Config.in"
-+	source "package/tini/Config.in"
- 	source "package/tmux/Config.in"
- 	source "package/which/Config.in"
- 	source "package/xmlstarlet/Config.in"
-diff --git a/package/tini/Config.in b/package/tini/Config.in
-new file mode 100644
-index 0000000000..235fc1a8fb
---- /dev/null
-+++ b/package/tini/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_TINI
-+	bool "tini"
-+	help
-+	  tini is a simple but valid init binary to
-+	  act as PID 1 for containers.
-+
-+	  https://github.com/krallin/tini
-+
-+if BR2_PACKAGE_TINI
-+
-+config BR2_PACKAGE_TINI_MINIMAL
-+	bool "build minimal variant"
-+	help
-+	  Disables argument parsing and verbose output.
-+
-+endif
-diff --git a/package/tini/tini.hash b/package/tini/tini.hash
-new file mode 100644
-index 0000000000..34f919f068
---- /dev/null
-+++ b/package/tini/tini.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256	e5f46bca81266bdd511cf08018d66866870531794569c04f9b45f50dd23c28b0	LICENSE
-+sha256	1097675352d6317b547e73f9dc7c6839fd0bb0d96dafc2e5c95506bb324049a2  tini-v0.18.0.tar.gz
-diff --git a/package/tini/tini.mk b/package/tini/tini.mk
-new file mode 100644
-index 0000000000..f4ec63020b
---- /dev/null
-+++ b/package/tini/tini.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# tini
-+#
-+################################################################################
-+
-+TINI_VERSION = v0.18.0
-+TINI_SITE = $(call github,krallin,tini,$(TINI_VERSION))
-+
-+TINI_LICENSE = MIT
-+TINI_LICENSE_FILES = LICENSE
-+
-+TINI_CFLAGS = $(TARGET_CFLAGS) \
-+	-DTINI_VERSION=\"$(TINI_VERSION)\" \
-+	-DTINI_GIT=\"\"
-+
-+ifeq ($(BR2_PACKAGE_TINI_MINIMAL),y)
-+TINI_CFLAGS += -DTINI_MINIMAL
-+endif
-+
-+define TINI_CONFIGURE_CMDS
-+	printf "#pragma once\n" > $(@D)/src/tiniConfig.h
-+endef
-+
-+define TINI_BUILD_CMDS
-+	mkdir -p $(@D)/bin
-+	$(TARGET_CC) \
-+		$(TINI_CFLAGS) \
-+		-o $(@D)/bin/tini $(@D)/src/tini.c
-+endef
-+
-+define TINI_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/bin/tini $(TARGET_DIR)/usr/bin/tini
-+endef
-+
-+# Tini's CMakeLists.txt is not suitable for Buildroot.
-+$(eval $(generic-package))
+I'm far from a perl expert.  Short answer is so it is there.
+
+Longer answer, I'm trying to package ZoneMinder for buildroot.  It is a
+complicated package to say the least.  It is written in C++, configured
+with cmake, and perl, and php.  It uses the vendor perl directories.  So
+when it installs, instead of using TARGET_DIR/usr/lib/perl5/site_perl/...
+it uses  TARGET_DIR/ .  So all the perl bits end up in the top directory,
+which is sub optimal.  The ZoneMinder authors provide prebuilt binaries for
+the major distributions because it is very difficult to successfully
+compile from source.  Cross compiling with buildroot adds even more
+challenges.  Adding a vendor directory to perl like most other
+distributions is the easiest solution by far.
+
+That said, if you don't want to add this change, I would understand.
+
+
+
+
+
+>
+> Fran?ois
+>
+> ---
+>>  package/perl/perl.mk | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+>> index b0eea3eff4..19a8f95f7b 100644
+>> --- a/package/perl/perl.mk
+>> +++ b/package/perl/perl.mk
+>> @@ -48,6 +48,7 @@ PERL_CONF_OPTS = \
+>>         --target=$(GNU_TARGET_NAME) \
+>>         --target-tools-prefix=$(TARGET_CROSS) \
+>>         --prefix=/usr \
+>> +       --vendorprefix=/usr \
+>>         -Dld="$(TARGET_CC)" \
+>>         -Dccflags="$(TARGET_CFLAGS)" \
+>>         -Dldflags="$(TARGET_LDFLAGS) -lm" \
+>> @@ -92,6 +93,7 @@ endef
+>>  HOST_PERL_CONF_OPTS = \
+>>         -des \
+>>         -Dprefix="$(HOST_DIR)" \
+>> +       -Dvendorprefix="$(HOST_DIR)" \
+>>         -Dcc="$(HOSTCC)"
+>>
+>>  define HOST_PERL_CONFIGURE_CMDS
+>> @@ -111,6 +113,7 @@ $(eval $(generic-package))
+>>  $(eval $(host-generic-package))
+>>
+>>  define PERL_FINALIZE_TARGET
+>> +       mkdir -p $(TARGET_DIR)/usr/lib/perl5/ve
+>> ndor_perl/$(PERL_VERSION)/$(PERL_ARCHNAME)
+>>         rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
+>>         rm -rf $(TARGET_DIR)/usr/lib/perl5/$(
+>> PERL_VERSION)/$(PERL_ARCHNAME)/CORE
+>>         find $(TARGET_DIR)/usr/lib/perl5/ -name 'extralibs.ld' -print0 |
+>> xargs -0 rm -f
+>> --
+>> 2.14.4
+>>
+>>
+>
+
+
 -- 
-2.16.4
+Christopher McCrory
+To the optimist, the glass is half full.
+To the pessimist, the glass is half empty.
+To the engineer, the glass is twice as big as it needs to be.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180810/59ed2f26/attachment.html>
