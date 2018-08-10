@@ -1,45 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 Aug 2018 08:28:25 +0200
+Date: Fri, 10 Aug 2018 08:29:07 +0200
 Subject: [Buildroot] [2018.02.x 1/2] makedevs: allow leading whitespace
  for capabilities
-In-Reply-To: <20180809234235.47a45e5f@windsurf> (Thomas Petazzoni's message of
- "Thu, 9 Aug 2018 23:42:35 +0200")
-References: <20180806031715.7088-1-ricardo.martincoski@gmail.com>
- <20180809234235.47a45e5f@windsurf>
-Message-ID: <874lg2g2gm.fsf@dell.be.48ers.dk>
+In-Reply-To: <5b6cf5f93b22_57833f926e0c8bdc217d4@ultri5.mail> (Ricardo
+ Martincoski's message of "Thu, 09 Aug 2018 23:18:33 -0300")
+References: <20180809234235.47a45e5f@windsurf>
+ <5b6cf5f93b22_57833f926e0c8bdc217d4@ultri5.mail>
+Message-ID: <87zhxuenv0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
-Hi,
+ > Hello,
+ > On Thu, Aug 09, 2018 at 06:42 PM, Thomas Petazzoni wrote:
 
- > It is not clear to me why you have the "2018.02.x" prefix in your patch
- > title. I would assume this patch is needed in master, not just in
- > 2018.02.x. We generally include 2018.02.x in the patch title when
- > the patch should only be applied to 2018.02.x. For patches going in
- > master, and needing a backport, we normally rely on Peter being smart
- > and realizing that the patch is a fix that makes sense for 2018.02.x.
+ >> On Mon,  6 Aug 2018 00:17:14 -0300, Ricardo Martincoski wrote:
+ >>> Currently makedevs silently ignores extended attributes with leading
+ >>> whitespace, for example those added to a <PACKAGE>_PERMISSIONS following
+ >>> the recommended style from check-package.
+ >>> 
+ >>> Makedevs already ignores leading whitespace for normal entries (file
+ >>> permission changes and device files creation). Do the same for extended
+ >>> attributes.
+ >>> 
+ >>> Fixes: #11191.
+ >>> 
+ >>> Reported-by: Jean-pierre Cartal <jpcartal@free.fr>
+ >>> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ >>> Cc: Arnout Vandecappelle <arnout@mind.be>
+ >>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ >> 
+ >> It is not clear to me why you have the "2018.02.x" prefix in your patch
+ >> title. I would assume this patch is needed in master, not just in
+ >> 2018.02.x. We generally include 2018.02.x in the patch title when
+ >> the patch should only be applied to 2018.02.x. For patches going in
+ >> master, and needing a backport, we normally rely on Peter being smart
+ >> and realizing that the patch is a fix that makes sense for 2018.02.x.
+ >> 
+ >> Could you clarify what was your intention with this 2018.02.x prefix ?
 
- > Could you clarify what was your intention with this 2018.02.x prefix ?
+ > I developed and runtime tested the patch for 2018.02.x.
+ > But now I tested the patch (by temporarily adding a printf to makedevs) in the
+ > master branch too. It works well.
 
- > Perhaps we need to have some tags ?
+ > This patch can/should be applied to master.
 
- > Backport-to: 2018.02.x
+ > In the branch 2018.02.x this patch unbreaks xattr with leading whitespace.
+ > In the master branch (and also 2018.05.x), which use a per-fs target dir, there
+ > are other issues with xattr, this patch is only part of the solution to unbreak
+ > xattrs, see #11216.
 
- > when the patch is for master, but needs to be backported. And perhaps:
+Ok, thanks.
 
- > Apply-to: 2018.02.x
-
- > when the patch is to be applied only on 2018.02.x.
-
- > Or simply rely on informal notes below the "---" sign ?
-
-Just stating it below the --- sign is IMHO good enough, and in the worst
-case send a mail if I miss something.
+Committed to master, and then backported to 2018.02.x and 2018.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
