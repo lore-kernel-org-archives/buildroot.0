@@ -1,95 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Aug 2018 23:18:52 +0200
-Subject: [Buildroot] [PATCH v2 6/6] support/testing/tests/core: SSP &
- hardening flags
-In-Reply-To: <20180717030420.12009-1-matthew.weber@rockwellcollins.com>
-References: <20180717030420.12009-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180810231852.70f9a004@windsurf>
+Date: Fri, 10 Aug 2018 23:46:32 +0200
+Subject: [Buildroot] [PATCH] mesa3d-headers: fix logic to generate the
+ dri.pc file
+Message-ID: <20180810214632.21735-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+As noted by Arnout in [1], the logic in mesa3d-headers.mk generates a
+bogus dri.pc file, which looks like this:
 
-On Mon, 16 Jul 2018 22:04:20 -0500, Matt Weber wrote:
+prefix=/usr
+exec_prefix=/usr
+libdir=/lib
+includedir=/include
+dridriverdir=/dri
 
-> diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
-> new file mode 100644
-> index 0000000000..d3eb0941d3
-> --- /dev/null
-> +++ b/support/testing/tests/core/test_hardening.py
-> @@ -0,0 +1,112 @@
-> +import os
-> +import subprocess
-> +import json
-> +
-> +import infra.basetest
-> +
-> +HARD_DEFCONFIG = \
-> +    """
-> +    BR2_powerpc64=y
-> +    BR2_powerpc_e5500=y
-> +    BR2_TOOLCHAIN_EXTERNAL=y
-> +    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> +    BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
-> +    BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-> +    BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-> +    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> +    BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> +    BR2_PACKAGE_LIGHTTPD=y
-> +    BR2_PACKAGE_HOST_CHECKSEC=y
-> +    # BR2_TARGET_ROOTFS_TAR is not set
-> +    """
-> +
-> +
-> +def checksec_run(builddir, target_file):
-> +    cmd = ["host/bin/checksec", "--output", "json", "--file", target_file]
+Indeed, the ${...} are expanded as shell variables when the sed
+command is executed, while the intention is that those ${...} should
+go in the .pc file. By escaping those using $${...}, we get the
+expected .pc file:
 
-I'm even more confused now. I thought checksec didn't work in a
-cross-compiled situation. Could you clarify ?
+prefix=/usr
+exec_prefix=/usr
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+dridriverdir=${libdir}/dri
 
-> +    ret = subprocess.check_output(cmd,
-> +                                  stderr=open(os.devnull, "w"),
-> +                                  cwd=builddir,
-> +                                  env={"LANG": "C"})
-> +    return ret
+This was detected by the not yet committed check-package improvement
+from Ricardo that detects bogus ${...} usage to reference make
+variables.
 
-Perhaps this function should also do the json.loads and return only
-out["file"] to avoid duplicating this everywhere in the below classes ?
+[1] http://lists.busybox.net/pipermail/buildroot/2018-July/225402.html
 
-Also, using inheritance would be better here:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-class TestHardeningBase(infra.basetest.BRTest):
-	config = """
-... the base defconfig ...
-"""
-
-	checksec_files = ["usr/sbin/lighttpd", "bin/busybox"]
-
-	def checksec_run(self, target_file):
-		filepath = os.path.join(self.builddir, "target", target_file)
-		...
-
-class TestHardeningRelRo(TestHardeningBase):
-	config = TestHardeningBase.config +
-"""
-...
-"""
-
-	def test_run():
-		for f in checksec_files:
-			out = self.checksec_run(f)
-			self.assertEqual(out["relro"], "full")
-			self.assertEqual(out["pie"], "yes")
-
-and ditto for the other tests.
-
-Best regards,
-
-Thomas
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index de8a9dc7cf..fc88f0ed60 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -35,9 +35,9 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+ # contains -i.
+ define MESA3D_HEADERS_BUILD_DRI_PC
+ 	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
+-	    -e 's:@libdir@:${exec_prefix}/lib:' \
+-	    -e 's:@includedir@:${prefix}/include:' \
+-	    -e 's:@DRI_DRIVER_INSTALL_DIR@:${libdir}/dri:' \
++	    -e 's:@libdir@:$${exec_prefix}/lib:' \
++	    -e 's:@includedir@:$${prefix}/include:' \
++	    -e 's:@DRI_DRIVER_INSTALL_DIR@:$${libdir}/dri:' \
+ 	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
+ 	    -e 's:@DRI_PC_REQ_PRIV@::' \
+ 	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.4
