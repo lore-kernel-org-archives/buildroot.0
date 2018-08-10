@@ -1,41 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Aug 2018 16:27:00 +0200
+From: Fabio Estevam <festevam@gmail.com>
+Date: Fri, 10 Aug 2018 11:42:29 -0300
 Subject: [Buildroot] [PATCH] configs/imx7ulp-evk: Add new config
-In-Reply-To: <20180718120420.3a95fe87@windsurf>
+In-Reply-To: <20180810162700.3c03c73e@windsurf>
 References: <20180717172427.16814-1-marcelo.macedo@nxp.com>
- <20180718120420.3a95fe87@windsurf>
-Message-ID: <20180810162700.3c03c73e@windsurf>
+ <20180718120420.3a95fe87@windsurf> <20180810162700.3c03c73e@windsurf>
+Message-ID: <CAOMZO5Bvo9Z_c4mw_AYusW7OGDMuFaaiJdZPuBnu2q3a7+cuEQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Wed, 18 Jul 2018 12:04:20 +0200, Thomas Petazzoni wrote:
+On Fri, Aug 10, 2018 at 11:27 AM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
-> > +Step 1 - Download the Cortex-M4 pre-compiled binary:
-> > +
-> > +	wget https://www.nxp.com/lgfiles/NMG/MAD/YOCTO/imx7ulp-m4-demo-2.4.0.bin
-> > +
-> > +Step 2: Extract the example files:
-> > +
-> > +	$ chmod a+x imx7ulp-m4-demo-2.4.0.bin
-> > +	$  ./imx7ulp-m4-demo-2.4.0.bin
-> > +
-> > +Step 3: Copy the imx7ulp_m4_demo.img binary to the FAT partion of MicroSD card.  
-> 
-> Shouldn't we instead create a Buildroot package that would
-> download/extract/install this firmware image, and put it in the FAT
-> partition ?
+>> Shouldn't we instead create a Buildroot package that would
+>> download/extract/install this firmware image, and put it in the FAT
+>> partition ?
+>
+> Fabio, do you have any comment about this ?
 
-Fabio, do you have any comment about this ?
+I agree with you that we should create a Buildroot package that
+handles the Cortex-M4 FreeRTOS binary.
 
-In the mean time, I'll mark the patch as Changes Requested.
+I will work on it when I am back from vacation.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks
