@@ -1,44 +1,48 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 09 Aug 2018 23:21:02 -0300
-Subject: [Buildroot] [2018.02.x 2/2] support/testing: add test for file
- capabilities
-References: <20180806031715.7088-2-ricardo.martincoski@gmail.com>
-Message-ID: <5b6cf68edeebc_57833f926c0b30402199d@ultri5.mail>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 9 Aug 2018 21:56:39 -0500
+Subject: [Buildroot] [PATCH] mmc-utils: Rely on our own _FORTIFY_SOURCE
+In-Reply-To: <20180808151709.2f35030c@windsurf>
+References: <48287dd12fcef0440cc49ff86343867d6cb8429e.1533656185.git.jan.kundrat@cesnet.cz>
+ <20180808151709.2f35030c@windsurf>
+Message-ID: <CANQCQpaJpUo1VRNtaRpu0QxiRaMJ5jjn7_FZTyAaeCBBbg1fSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+All,
+On Wed, Aug 8, 2018 at 8:17 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Tue, 7 Aug 2018 17:32:51 +0200, Jan Kundr?t wrote:
+> > Upstream always forced _FORTIFY_SOURCE=2. At first, I tried changing
+> > their flags to undefine that macro first, but that did not work well.
+> > This patch ensures that the package always respects our toolchain
+> > settings, even in cases where we are not fortifying the build.
+> >
+> > This fixes a build failure where the mmc-utils package failed to build
+> > with, e.g., BR2_FORTIFY_SOURCE_1:
+> >
+> >   <command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
+> >   <command-line>:0:0: note: this is the location of the previous definition
+> >
+> > Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+>
+> Is this fixing a build issue reported by the autobuilders ? Or only
+> with hardening options ? Your commit log is not very verbose in details
+> about the configuration/condition under which the build failure happens.
 
-Please notice this test case could be applied to master or next, but it will
-fail until we fix #11216.
+(I haven't directly talked with Jan on this) It looks very similar to
+other pkgs him and I looked at where flags were messy in the pkg and
+now exposed when a build is done using hardening options, not a
+autobuilder.
 
-On Mon, Aug 06, 2018 at 12:17 AM, Ricardo Martincoski wrote:
+This isn't related to my hardening fixes patchset (ie those patches
+won't fix this issue).  Instead, I'd refactor this patch to move the
+AM_CFLAGS "-D_FORTIFY_SOURCE=2" into the CFLAGS ?= .  That should be
+an upstream-able change and preserve their intent.
 
-[snip]
-> complete run on GitLab CI on top of 2018.02.4 with the series applied:
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/27226377
-
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/86985522 
-passed, #11191 fixed
-
-> only the test on top of 2018.02.4:
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/86985431
-
-failed, detects #11191
-
-> only the test on top of 2018.05.1:
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/86985455
-
-failed, detects #11216
-
-> only the test on top of 2018.08-rc1:
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/86985484
-
-failed, detects #11216
-
-
-Regards,
-Ricardo
+Matt
