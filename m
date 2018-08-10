@@ -1,72 +1,84 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Fri, 10 Aug 2018 20:13:24 +0200
-Subject: [Buildroot] [PATCH 2/3] perl: add vendorprefix
-In-Reply-To: <20180810144724.16347-1-chrismcc@gmail.com>
-References: <20180810144724.16347-1-chrismcc@gmail.com>
-Message-ID: <CAB0FRsuEUYa=8Fr2htcge8ULEVP-ZCpPE1tHJoThvqZ+4r+VvA@mail.gmail.com>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Fri, 10 Aug 2018 11:31:22 -0700
+Subject: [Buildroot] [PATCH 4/4] scancpan: skip Dist::Zilla
+In-Reply-To: <CAB0FRstkkWvw2-c6CEpxxHUTzTwQcKFcz-6Zf4o+vEyeM=AE6Q@mail.gmail.com>
+References: <20180810151345.17792-1-chrismcc@gmail.com>
+ <CAB0FRstkkWvw2-c6CEpxxHUTzTwQcKFcz-6Zf4o+vEyeM=AE6Q@mail.gmail.com>
+Message-ID: <CALURroSaFUGAUyNyrhrT04GZC730g_1yauvTaG_5MdkwJ-Kh8g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-08-10 16:47 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+On Fri, Aug 10, 2018 at 11:12 AM, Fran?ois Perrad <francois.perrad@gadz.org>
+wrote:
 
-> This adds vendorprefix to configure args
 >
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+>
+> 2018-08-10 17:13 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+>
+>> skip Dist::Zilla when finding dependancies
+>>
+>> ---
+>>
+>> Dist::Zilla will pull in lots of unneeded dependancies
+>> ./utils/scancpan Class-Load will bring in ~250 perl-foo packages
+>>
+>>
+> A better job will be done by :
+>
+> --- a/utils/scancpan
+> +++ b/utils/scancpan
+> @@ -595,6 +595,7 @@ sub fetch {
+>              # we could use the host Module::CoreList data, because host
+> perl and
+>              # target perl have the same major version
+>              next if ${$dep}{phase} eq q{develop};
+> +            next if ${$dep}{phase} eq q{x_Dist_Zilla};
+>              next if !($test && $top) && ${$dep}{phase} eq q{test};
+>              my $distname = $mcpan->module( $modname )->{distribution};
+>              if (${$dep}{phase} eq q{runtime}) {
+> --
 >
 
+I'm far from a perl expert, I'll redo it this way.  Thanks
 
-What is the rational of this patch ?
 
-Currently, core modules (ie. built directly with the perl distribution) are
-installed in /usr/lib/perl5/5.xx.y,
-others modules (built by the perl-package infrastructure) are installed in
-/usr/lib/perl5/site-perl/5.xx.y.
-Why adding /usr/lib/perl5/vendor-perl/5.xx.y ?
 
 Fran?ois
+>
+>
+>> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+>> ---
+>>  utils/scancpan | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/utils/scancpan b/utils/scancpan
+>> index da8e7b91ac..1dbda7261f 100755
+>> --- a/utils/scancpan
+>> +++ b/utils/scancpan
+>> @@ -590,6 +590,7 @@ sub fetch {
+>>              next if $modname eq q{perl};
+>>              next if $modname =~ m|^Alien|;
+>>              next if $modname =~ m|^Win32|;
+>> +           next if $modname =~ m|^Dist::Zilla|;
+>>              next if !($test && $top) && $modname =~ m|^Test|;
+>>              next if Module::CoreList::is_core( $modname, undef, $] );
+>>              # we could use the host Module::CoreList data, because host
+>> perl and
+>> --
+>> 2.14.4
+>>
+>>
+>
 
----
->  package/perl/perl.mk | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-> index b0eea3eff4..19a8f95f7b 100644
-> --- a/package/perl/perl.mk
-> +++ b/package/perl/perl.mk
-> @@ -48,6 +48,7 @@ PERL_CONF_OPTS = \
->         --target=$(GNU_TARGET_NAME) \
->         --target-tools-prefix=$(TARGET_CROSS) \
->         --prefix=/usr \
-> +       --vendorprefix=/usr \
->         -Dld="$(TARGET_CC)" \
->         -Dccflags="$(TARGET_CFLAGS)" \
->         -Dldflags="$(TARGET_LDFLAGS) -lm" \
-> @@ -92,6 +93,7 @@ endef
->  HOST_PERL_CONF_OPTS = \
->         -des \
->         -Dprefix="$(HOST_DIR)" \
-> +       -Dvendorprefix="$(HOST_DIR)" \
->         -Dcc="$(HOSTCC)"
->
->  define HOST_PERL_CONFIGURE_CMDS
-> @@ -111,6 +113,7 @@ $(eval $(generic-package))
->  $(eval $(host-generic-package))
->
->  define PERL_FINALIZE_TARGET
-> +       mkdir -p $(TARGET_DIR)/usr/lib/perl5/
-> vendor_perl/$(PERL_VERSION)/$(PERL_ARCHNAME)
->         rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
->         rm -rf $(TARGET_DIR)/usr/lib/perl5/$(
-> PERL_VERSION)/$(PERL_ARCHNAME)/CORE
->         find $(TARGET_DIR)/usr/lib/perl5/ -name 'extralibs.ld' -print0 |
-> xargs -0 rm -f
-> --
-> 2.14.4
->
->
+
+-- 
+Christopher McCrory
+To the optimist, the glass is half full.
+To the pessimist, the glass is half empty.
+To the engineer, the glass is twice as big as it needs to be.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180810/8658f240/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180810/2fc0c4fc/attachment.html>
