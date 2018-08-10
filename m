@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Fri, 10 Aug 2018 09:14:53 -0700
-Subject: [Buildroot] [PATCH 09/18] perl-file-slurp: new package
+Date: Fri, 10 Aug 2018 09:14:55 -0700
+Subject: [Buildroot] [PATCH 11/18] perl-json-maybexs: new package
 In-Reply-To: <20180810161502.21598-1-chrismcc@gmail.com>
 References: <20180810161502.21598-1-chrismcc@gmail.com>
-Message-ID: <20180810161502.21598-10-chrismcc@gmail.com>
+Message-ID: <20180810161502.21598-12-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,68 +12,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/Config.in                            |  1 +
- package/perl-file-slurp/Config.in            |  6 ++++++
- package/perl-file-slurp/perl-file-slurp.hash |  6 ++++++
- package/perl-file-slurp/perl-file-slurp.mk   | 13 +++++++++++++
+ package/Config.in                                |  1 +
+ package/perl-json-maybexs/Config.in              |  6 ++++++
+ package/perl-json-maybexs/perl-json-maybexs.hash |  6 ++++++
+ package/perl-json-maybexs/perl-json-maybexs.mk   | 13 +++++++++++++
  4 files changed, 26 insertions(+)
- create mode 100644 package/perl-file-slurp/Config.in
- create mode 100644 package/perl-file-slurp/perl-file-slurp.hash
- create mode 100644 package/perl-file-slurp/perl-file-slurp.mk
+ create mode 100644 package/perl-json-maybexs/Config.in
+ create mode 100644 package/perl-json-maybexs/perl-json-maybexs.hash
+ create mode 100644 package/perl-json-maybexs/perl-json-maybexs.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index cd01657802..a458e56871 100644
+index 13a1b60588..40964d3406 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -685,6 +685,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-encode-detect/Config.in"
- 	source "package/perl-encode-locale/Config.in"
- 	source "package/perl-file-listing/Config.in"
-+	source "package/perl-file-slurp/Config.in"
- 	source "package/perl-file-util/Config.in"
- 	source "package/perl-gd/Config.in"
- 	source "package/perl-gdgraph/Config.in"
-diff --git a/package/perl-file-slurp/Config.in b/package/perl-file-slurp/Config.in
+@@ -700,6 +700,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-io-html/Config.in"
+ 	source "package/perl-io-interface/Config.in"
+ 	source "package/perl-io-socket-ssl/Config.in"
++	source "package/perl-json-maybexs/Config.in"
+ 	source "package/perl-json-tiny/Config.in"
+ 	source "package/perl-libwww-perl/Config.in"
+ 	source "package/perl-lwp-mediatypes/Config.in"
+diff --git a/package/perl-json-maybexs/Config.in b/package/perl-json-maybexs/Config.in
 new file mode 100644
-index 0000000000..bfd1cad186
+index 0000000000..1db82c3684
 --- /dev/null
-+++ b/package/perl-file-slurp/Config.in
++++ b/package/perl-json-maybexs/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_FILE_SLURP
-+	bool "perl-file-slurp"
++config BR2_PACKAGE_PERL_JSON_MAYBEXS
++	bool "perl-json-maybexs"
 +	help
-+	  Simple and Efficient Reading/Writing/Modifying of Complete Files
++	  Use Cpanel::JSON::XS with a fallback to JSON::XS and JSON::PP
 +
-+	  https://metacpan.org/release/File-Slurp
-diff --git a/package/perl-file-slurp/perl-file-slurp.hash b/package/perl-file-slurp/perl-file-slurp.hash
++	  https://metacpan.org/release/JSON-MaybeXS
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.hash b/package/perl-json-maybexs/perl-json-maybexs.hash
 new file mode 100644
-index 0000000000..18f9e65ced
+index 0000000000..c8bf172aaa
 --- /dev/null
-+++ b/package/perl-file-slurp/perl-file-slurp.hash
++++ b/package/perl-json-maybexs/perl-json-maybexs.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    7d584cd15c4f8b9547765eff8c4ef078 File-Slurp-9999.19.tar.gz
-+sha256 ce29ebe995097ebd6e9bc03284714cdfa0c46dc94f6b14a56980747ea3253643 File-Slurp-9999.19.tar.gz
++md5    db61fb5515f8e2f19709a317e26dde42 JSON-MaybeXS-1.004000.tar.gz
++sha256 59bda02e8f4474c73913723c608b539e2452e16c54ed7f0150c01aad06e0a126 JSON-MaybeXS-1.004000.tar.gz
 +
 +# computed by scancpan
-+sha256 17e638d011c04b1d39b300c07ccd0c57d7857b9ccdb9fe7abce1b15f0e7b0c20 README
-diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
++sha256 d972e00126c5337e88d81d64fc349a3f4c54841075f4180a1145441d30c86f83 README
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.mk b/package/perl-json-maybexs/perl-json-maybexs.mk
 new file mode 100644
-index 0000000000..32773ddbbc
+index 0000000000..b4eaccddcb
 --- /dev/null
-+++ b/package/perl-file-slurp/perl-file-slurp.mk
++++ b/package/perl-json-maybexs/perl-json-maybexs.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-file-slurp
++# perl-json-maybexs
 +#
 +################################################################################
 +
-+PERL_FILE_SLURP_VERSION = 9999.19
-+PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
-+PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/U/UR/URI
-+PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
-+PERL_FILE_SLURP_LICENSE_FILES = README
++PERL_JSON_MAYBEXS_VERSION = 1.004000
++PERL_JSON_MAYBEXS_SOURCE = JSON-MaybeXS-$(PERL_JSON_MAYBEXS_VERSION).tar.gz
++PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
++PERL_JSON_MAYBEXS_LICENSE = Artistic or GPL-1.0+
++PERL_JSON_MAYBEXS_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
