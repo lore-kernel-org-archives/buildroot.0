@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Fri, 10 Aug 2018 09:14:49 -0700
-Subject: [Buildroot] [PATCH 05/18] perl-data-uuid: new package
+Date: Fri, 10 Aug 2018 09:14:50 -0700
+Subject: [Buildroot] [PATCH 06/18] perl-date-manip: new package
 In-Reply-To: <20180810161502.21598-1-chrismcc@gmail.com>
 References: <20180810161502.21598-1-chrismcc@gmail.com>
-Message-ID: <20180810161502.21598-6-chrismcc@gmail.com>
+Message-ID: <20180810161502.21598-7-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,72 +12,68 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/Config.in                          |  1 +
- package/perl-data-uuid/Config.in           | 10 ++++++++++
- package/perl-data-uuid/perl-data-uuid.hash |  6 ++++++
- package/perl-data-uuid/perl-data-uuid.mk   | 13 +++++++++++++
- 4 files changed, 30 insertions(+)
- create mode 100644 package/perl-data-uuid/Config.in
- create mode 100644 package/perl-data-uuid/perl-data-uuid.hash
- create mode 100644 package/perl-data-uuid/perl-data-uuid.mk
+ package/Config.in                            |  1 +
+ package/perl-date-manip/Config.in            |  6 ++++++
+ package/perl-date-manip/perl-date-manip.hash |  6 ++++++
+ package/perl-date-manip/perl-date-manip.mk   | 13 +++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/perl-date-manip/Config.in
+ create mode 100644 package/perl-date-manip/perl-date-manip.hash
+ create mode 100644 package/perl-date-manip/perl-date-manip.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index d1f0947d6d..dad6916c64 100644
+index dad6916c64..c5edc5cb76 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -674,6 +674,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-crypt-cbc/Config.in"
+@@ -675,6 +675,7 @@ menu "Perl libraries/modules"
  	source "package/perl-crypt-openssl-random/Config.in"
  	source "package/perl-crypt-openssl-rsa/Config.in"
-+	source "package/perl-data-uuid/Config.in"
+ 	source "package/perl-data-uuid/Config.in"
++	source "package/perl-date-manip/Config.in"
  	source "package/perl-datetime-tiny/Config.in"
  	source "package/perl-digest-hmac/Config.in"
  	source "package/perl-digest-md5/Config.in"
-diff --git a/package/perl-data-uuid/Config.in b/package/perl-data-uuid/Config.in
+diff --git a/package/perl-date-manip/Config.in b/package/perl-date-manip/Config.in
 new file mode 100644
-index 0000000000..e0752c44ab
+index 0000000000..cbfb5c5b30
 --- /dev/null
-+++ b/package/perl-data-uuid/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_DATA_UUID
-+	bool "perl-data-uuid"
-+	depends on !BR2_STATIC_LIBS
++++ b/package/perl-date-manip/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_DATE_MANIP
++	bool "perl-date-manip"
 +	help
-+	  Globally/Universally Unique Identifiers (GUIDs/UUIDs)
++	  Date manipulation routines
 +
-+	  https://metacpan.org/release/Data-UUID
-+
-+comment "perl-data-uuid needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-data-uuid/perl-data-uuid.hash b/package/perl-data-uuid/perl-data-uuid.hash
++	  https://metacpan.org/release/Date-Manip
+diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
 new file mode 100644
-index 0000000000..5086936d4e
+index 0000000000..f02f657822
 --- /dev/null
-+++ b/package/perl-data-uuid/perl-data-uuid.hash
++++ b/package/perl-date-manip/perl-date-manip.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    7619929e8fe205a7fb83bc1c29ecbf99 Data-UUID-1.221.tar.gz
-+sha256 3cc7b2a3a7b74b45a059e013f7fd878078500ea4b7269036f84556b022078667 Data-UUID-1.221.tar.gz
++md5    b41b0d476fd7eae3ce81324386266a85 Date-Manip-6.72.tar.gz
++sha256 38f4dd9d94b41092ca7b9da2ef72c3bb8b8c8bff6da14d785c612f3cc7a94da6 Date-Manip-6.72.tar.gz
 +
 +# computed by scancpan
-+sha256 0560c8eea8e1fb8173faa6c2e9b7e9f8728b8ae8250a814709a53c30b778d5fb LICENSE
-diff --git a/package/perl-data-uuid/perl-data-uuid.mk b/package/perl-data-uuid/perl-data-uuid.mk
++sha256 8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d LICENSE
+diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
 new file mode 100644
-index 0000000000..24d61c6ce3
+index 0000000000..a5e1609a88
 --- /dev/null
-+++ b/package/perl-data-uuid/perl-data-uuid.mk
++++ b/package/perl-date-manip/perl-date-manip.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-data-uuid
++# perl-date-manip
 +#
 +################################################################################
 +
-+PERL_DATA_UUID_VERSION = 1.221
-+PERL_DATA_UUID_SOURCE = Data-UUID-$(PERL_DATA_UUID_VERSION).tar.gz
-+PERL_DATA_UUID_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
-+PERL_DATA_UUID_LICENSE = bsd
-+PERL_DATA_UUID_LICENSE_FILES = LICENSE
++PERL_DATE_MANIP_VERSION = 6.72
++PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
++PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
++PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
++PERL_DATE_MANIP_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
 -- 
