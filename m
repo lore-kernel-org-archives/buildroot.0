@@ -1,48 +1,35 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Fri, 10 Aug 2018 10:23:08 +0200
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 5.2.0
-Message-ID: <1533889388-28500-1-git-send-email-angelo@amarulasolutions.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 10 Aug 2018 10:34:30 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: force host CFLAGS
+In-Reply-To: <6c246971096ed5ace6c35e3102ca0649025c19fa.1533879441.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 10 Aug 2018 08:37:21 +0300")
+References: <6c246971096ed5ace6c35e3102ca0649025c19fa.1533879441.git.baruch@tkos.co.il>
+Message-ID: <87mutuei21.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps python-pillow to version 5.2.0 and adds the hash for
-license file.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
- package/python-pillow/python-pillow.hash | 6 ++++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ > U-Boot now adds -std=gnu11 when building its build utilities, like
+ > fixdep. This option is only supported since gcc version 4.7.
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 463b562..0f90a0b 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,2 +1,4 @@
--# sha256 from https://pypi.org/project/Pillow/5.1.0/#files
--sha256 cee9bc75bff455d317b6947081df0824a8f118de2786dc3d74a3503fd631f4ef  Pillow-5.1.0.tar.gz
-+# sha256 for python-pillow from https://pypi.org/project/Pillow/5.2.0/#files
-+# sha256 for LICENSE locally computed
-+sha256 f8b3d413c5a8f84b12cd4c5df1d8e211777c9852c6be3ee9c094b626644d3eab  Pillow-5.2.0.tar.gz
-+sha256 4960fc18becc286be839c8ff17bd70cd5222533f761129142153443718a25199  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index c9b3e31..c3a3d13 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 5.1.0
-+PYTHON_PILLOW_VERSION = 5.2.0
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/89/b8/2f49bf71cbd0e9485bb36f72d438421b69b7356180695ae10bd4fd3066f5
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/d3/c4/b45b9c0d549f482dd072055e2d3ced88f3b977f7b87c7a990228b20e7da1
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+ >   https://gcc.gnu.org/gcc-4.7/changes.html
+
+ > Force usage of Buildroot HOST_CFLAGS, like we do already for
+ > host-uboot-tools, to avoid the -std=gnu11 option.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/ea0/ea09b614a3c10d494939d9551c0c3bfca4626ece/
+ > http://autobuild.buildroot.net/results/f8e/f8efd9af4d86c51fe4f5afe44db9abf9adc5718f/
+ > http://autobuild.buildroot.net/results/c0a/c0ab35c3cb46f84863fe20c0ee92ecc2379578b6/
+
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Ahh, nice - Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
