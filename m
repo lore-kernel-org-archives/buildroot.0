@@ -1,51 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Aug 2018 15:25:34 +0200
-Subject: [Buildroot] [git commit branch/next] package/python-pillow: bump to
- version 5.2.0
-Message-ID: <20180810131900.C7FA68B895@busybox.osuosl.org>
+Date: Fri, 10 Aug 2018 14:18:29 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-can: bump to
+ version 2.2.1
+Message-ID: <20180810131900.BB7CB8B895@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a799d4757dde8d6e6d6ca7084379ad58c35edb1
+commit: https://git.buildroot.net/buildroot/commit/?id=3a3d71eaea8ac9d9b697b94596177d5c469e7b64
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps python-pillow to version 5.2.0 and adds the hash for
+This patch bumps python-can to version 2.2.1 and adds the has for
 license file.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pillow/python-pillow.hash | 6 ++++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/python-can/python-can.hash | 7 ++++---
+ package/python-can/python-can.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 463b5620ce..0f90a0be18 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,2 +1,4 @@
--# sha256 from https://pypi.org/project/Pillow/5.1.0/#files
--sha256 cee9bc75bff455d317b6947081df0824a8f118de2786dc3d74a3503fd631f4ef  Pillow-5.1.0.tar.gz
-+# sha256 for python-pillow from https://pypi.org/project/Pillow/5.2.0/#files
-+# sha256 for LICENSE locally computed
-+sha256 f8b3d413c5a8f84b12cd4c5df1d8e211777c9852c6be3ee9c094b626644d3eab  Pillow-5.2.0.tar.gz
-+sha256 4960fc18becc286be839c8ff17bd70cd5222533f761129142153443718a25199  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index c9b3e316f9..c3a3d13315 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+index 8a70bb42b7..234f138562 100644
+--- a/package/python-can/python-can.hash
++++ b/package/python-can/python-can.hash
+@@ -1,3 +1,4 @@
+-# md5 from https://pypi.python.org/pypi/python-can/json, sha256 locally computed
+-md5     3310f0aa2a8492d0ff614ecf636ec8a8  python-can-2.1.0.tar.gz
+-sha256  4a5c01dd67feeda35f88e6c12ea14ac8cabd426b9be0cc5f9fd083fe90a9dbfc  python-can-2.1.0.tar.gz
++# sha256 for python-can from https://pypi.org/project/python-can/#files
++# sha256 for LICENSE.txt locally computed
++sha256  b5e93b2ee32bdd597d9d908afe5171c402a04c9678ba47b60f33506738b1375b  python-can-2.2.1.tar.gz
++sha256  ea7d049c7705dc13afc202dd18e1827f3484f8212fd3fa7b82fc4a0c363432c9  LICENSE.txt
+diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+index 9a7e903303..01a335f5c8 100644
+--- a/package/python-can/python-can.mk
++++ b/package/python-can/python-can.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 5.1.0
-+PYTHON_PILLOW_VERSION = 5.2.0
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/89/b8/2f49bf71cbd0e9485bb36f72d438421b69b7356180695ae10bd4fd3066f5
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/d3/c4/b45b9c0d549f482dd072055e2d3ced88f3b977f7b87c7a990228b20e7da1
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+-PYTHON_CAN_VERSION = 2.1.0
+-PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/04/87/0d5b0f2f4e5d7f64a44f74b7f0bc1668457e6aa7e90b04ad15c3b9a44411
++PYTHON_CAN_VERSION = 2.2.1
++PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/e6/49/7a25ca6f38421009621b9958a725a0bd57dc0caa656ee508324f26ea5363
+ PYTHON_CAN_LICENSE = LGPL-3.0
+ PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+ PYTHON_CAN_SETUP_TYPE = setuptools
