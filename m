@@ -1,24 +1,62 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 10 Aug 2018 21:49:43 +0000
-Subject: [Buildroot] [Bug 11211] Internal compiler error: Killed (program
- cc1plus) on WebCoreDerivedSources.dir
-In-Reply-To: <bug-11211-163@https.bugs.busybox.net/>
-References: <bug-11211-163@https.bugs.busybox.net/>
-Message-ID: <bug-11211-163-eaNoGvFOeI@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 10 Aug 2018 23:51:53 +0200
+Subject: [Buildroot] [PATCH] Makefile: introduce check-package target
+Message-ID: <20180810215153.22987-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11211
+The snippet of code that runs a check-package on all
+.mk/.hash/Config.in files is currently only available within
+.gitlab-ci.yml, and isn't immediately and easily usable by Buildroot
+users. In order to simplify this, this commit introduces a top-level
+"check-package" make target that implements the same logic. The
+.gitlab-ci.yml file is changed to use "make check-package".
 
---- Comment #2 from Jan Kundr?t <jan.kundrat@cesnet.cz> ---
-Are you sure that the build is not being killed externally? This is WebKit
-which requires huge amounts of memory (and N-times that in a multi-CPU,
-parallel build). How much RAM does your build environment have allocated? Is
-there any trace of an OOM condition in dmesg?
+Since this target is oriented towards Buildroot developers, we
+intentionally do not clutter the already noisy "make help" text with
+this additional make target.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+I often found myself copy/pasting this find command line from
+.gitlab-ci.yml to my shell, and got tired of doing this, hence this
+patch.
+---
+ .gitlab-ci.yml | 3 +--
+ Makefile       | 4 ++++
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 9d4301076f..d4807c5c85 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -43,8 +43,7 @@ check-flake8:
+ 
+ check-package:
+     script:
+-        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \)
+-            -exec ./utils/check-package {} +
++        - make check-package
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+diff --git a/Makefile b/Makefile
+index f79d39fd26..e7fb216442 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1125,6 +1125,10 @@ release:
+ print-version:
+ 	@echo $(BR2_VERSION_FULL)
+ 
++check-package:
++	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
++		-exec ./utils/check-package {} +
++
+ .PHONY: .gitlab-ci.yml
+ .gitlab-ci.yml: .gitlab-ci.yml.in
+ 	cp $< $@
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.4
