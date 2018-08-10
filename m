@@ -1,43 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Aug 2018 13:57:55 +0200
-Subject: [Buildroot] [PATCH v3] package/sysdig: bump to version 0.22.1
-In-Reply-To: <1533888631-7613-1-git-send-email-angelo@amarulasolutions.com>
-References: <1533888631-7613-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180810135755.121222b8@windsurf>
+Date: Fri, 10 Aug 2018 14:00:56 +0200
+Subject: [Buildroot] pkg-golang: host package not supported
+In-Reply-To: <CADHdJwDuaeDU_G0ePRPRrWw+3Vo4W0mSx45OuEDnqrgnsKgZQA@mail.gmail.com>
+References: <CADHdJwDuaeDU_G0ePRPRrWw+3Vo4W0mSx45OuEDnqrgnsKgZQA@mail.gmail.com>
+Message-ID: <20180810140056.5cf7d9ed@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Mirza,
 
-On Fri, 10 Aug 2018 10:10:31 +0200, Angelo Compagnucci wrote:
-> This patch bumps sysdig to version 0.22.1, adds a new dependency on
-> elfutils and adds hash for the license file.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/sysdig/Config.in   | 5 ++++-
->  package/sysdig/sysdig.hash | 5 +++--
->  package/sysdig/sysdig.mk   | 4 ++--
->  3 files changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-> index 6ccb706..f87b5dd 100644
-> --- a/package/sysdig/Config.in
-> +++ b/package/sysdig/Config.in
-> @@ -4,7 +4,9 @@ config BR2_PACKAGE_SYSDIG
->  	depends on BR2_INSTALL_LIBSTDCPP # libjson
->  	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> -	depends on !BR2_STATIC_LIBS # luajit
-> +	depends on !BR2_STATIC_LIBS # luajit, elfutils
-> +	depends on BR2_USE_WCHAR # elfutils
-> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+On Fri, 10 Aug 2018 13:34:06 +0200, Mirza Krak wrote:
 
-When you add dependencies, the Config.in comment mentioning the
-dependencies should be updated as well.
+> I have recently started doing some work with Buildroot and
+> specifically I am building packages that are based on golang.
+> 
+> Build packages for "target" works just fine. But I noticed that the
+> pkg-golang.mk [1] does not support "host" target yet [2] which is
+> required for one my packages.
+> 
+> Buildroot is new to me but looking at pkg-golang.mk it does _not_ seem
+> that a lot of needs to change to support "host" packages as well.
+> 
+> So two questions:
+> - Any specific reason "host" target is not supported?
+
+Because it wasn't needed until now.
+
+> - Any hints on to add host-golang-package support?
+
+The first question is whether the existing host-go package installs a
+Go compiler that can do native compilation in addition to
+cross-compilation.
+
+If that is the case, then pkg-golang.mk can be extended a bit like
+pkg-cmake.mk, with a host-golang-package macro, which expands to:
+
+$(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+
+and then, in the inner-golang-package macro, do some ifeq
+($(5),target) ... else ... endif to define the configure/build/install
+commands differently depending on whether the package is a target
+package or a host package. Again, see pkg-cmake.mk for an example.
+
+Hope this helps!
 
 Thomas
 -- 
