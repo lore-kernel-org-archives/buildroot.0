@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Aug 2018 22:31:31 +0200
-Subject: [Buildroot] [PATCH 1/6] package/Makefile.in: Do not use
+Date: Fri, 10 Aug 2018 22:32:17 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/Makefile.in: Do not use
  CPPFLAGS for hardening options
-In-Reply-To: <20180711143113.11927-2-matthew.weber@rockwellcollins.com>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-2-matthew.weber@rockwellcollins.com>
-Message-ID: <20180810223131.184d075c@windsurf>
+In-Reply-To: <1531998123-28360-2-git-send-email-stefan.sorensen@spectralink.com>
+References: <1531998123-28360-1-git-send-email-stefan.sorensen@spectralink.com>
+ <1531998123-28360-2-git-send-email-stefan.sorensen@spectralink.com>
+Message-ID: <20180810223217.21bcb66f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +14,7 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 11 Jul 2018 09:31:08 -0500, Matt Weber wrote:
-> From: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> 
+On Thu, 19 Jul 2018 13:02:01 +0200, Stefan S?rensen wrote:
 > The hardening options are compiler flags, not pure pre-processor flags, so
 > put them in CFLAGS, not CPPFLAGS.
 > 
@@ -24,16 +22,14 @@ On Wed, 11 Jul 2018 09:31:08 -0500, Matt Weber wrote:
 > then applied to configure tests which could fail since the required -O2 is
 > only in CFLAGS.
 > 
-> Originally submitted as
-> http://patchwork.ozlabs.org/patch/904057/
-> 
 > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/Makefile.in | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
 
-Applied to next, thanks.
+I have applied this patch, from the series resent by Matt Weber.
+
+See:
+https://git.buildroot.org/buildroot/commit/?h=next&id=d4f5801027f3329fb6c2cd096f3396d3cd067390
+
+Best regards,
 
 Thomas
 -- 
