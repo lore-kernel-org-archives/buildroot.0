@@ -1,127 +1,111 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Aug 2018 15:59:30 +0200
-Subject: [Buildroot] [git commit] mtd: backport upstream bug fix
-Message-ID: <20180810135304.BC1788B8B2@busybox.osuosl.org>
+From: sojkam1 at fel.cvut.cz <sojkam1@fel.cvut.cz>
+Date: Fri, 10 Aug 2018 16:03:22 +0200
+Subject: [Buildroot] [PATCH v2] core/legal-info: Add package dependencies
+ with licenses to the manifest
+Message-ID: <20180810140322.2748-1-sojkam1@fel.cvut.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd127c8e5962158eb02104d5e41a029ee31967be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Michal Sojka <sojka@merica.cz>
 
-A regression in the mtd package prevents non-consecutive ubi volume
-IDs from working properly. This change backported from upstream
-reverts the commit [0]. The issue was originally described on the mtd
-mailing list:
+This adds one column to the legal-info manifest table. It contains the
+dependencies of the given package and their licenses. This information
+is useful when assessing license compatibility of the packages and
+their libraries.
 
-http://lists.infradead.org/pipermail/linux-mtd/2018-June/081562.html
+An example of the content of the new column for the MPD package is
+shown below:
 
-[0] http://git.infradead.org/mtd-utils.git/commitdiff/dede98ffb706676309488d7cc660f569548d5930
+    "alsa-lib [LGPL-2.1+ (library), GPL-2.0+ (aserver)], boost
+    [BSL-1.0], libid3tag [GPL-2.0+], libmad [GPL-2.0+], libogg
+    [BSD-3-Clause], libvorbis [BSD-3-Clause], libzlib [Zlib],
+    skeleton-init-common [unknown], skeleton-init-sysv [unknown],
+    sqlite [Public domain], toolchain-external-linaro-arm [unknown], "
 
-Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Michal Sojka <sojka@merica.cz>
 ---
- ...correct-error-number-in-ubi_get_vol_info1.patch | 92 ++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+Changes against v1:
 
-diff --git a/package/mtd/0001-revert-return-correct-error-number-in-ubi_get_vol_info1.patch b/package/mtd/0001-revert-return-correct-error-number-in-ubi_get_vol_info1.patch
-new file mode 100644
-index 0000000000..1fd4f7693b
---- /dev/null
-+++ b/package/mtd/0001-revert-return-correct-error-number-in-ubi_get_vol_info1.patch
-@@ -0,0 +1,92 @@
-+From 0f833ac73ad631248826386e2918d8571ecf0347 Mon Sep 17 00:00:00 2001
-+From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-+Date: Sat, 9 Jun 2018 16:45:22 +0200
-+Subject: [PATCH] Revert "Return correct error number in ubi_get_vol_info1"
+* switched parameters of legal-manifest (added one is the last)
+* producing some output even for host packages
+* documented legal-deps macro
+
+
+ Makefile               |  6 +++---
+ package/pkg-generic.mk |  2 +-
+ package/pkg-utils.mk   | 23 +++++++++++++++++++++--
+ 3 files changed, 25 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f79d39fd26..cadf43146b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -781,9 +781,9 @@ legal-info-clean:
+ legal-info-prepare: $(LEGAL_INFO_DIR)
+ 	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
+ 	@$(call legal-license-file,buildroot,buildroot,support/legal-info,COPYING,COPYING,HOST)
+-	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET)
+-	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST)
+-	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST)
++	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,TARGET,DEPENDENCIES WITH LICENSES)
++	@$(call legal-manifest,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,HOST,DEPENDENCIES WITH LICENSES)
++	@$(call legal-manifest,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved,HOST,)
+ 	@$(call legal-warning,the Buildroot source code has not been saved)
+ 	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+ 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 91b61c6de0..a539483ae4 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -936,7 +936,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+ endif # redistribute
+ 
+ endif # other packages
+-	@$$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call UPPERCASE,$(4)))
++	@$$(call legal-manifest,$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call UPPERCASE,$(4)),$$(call legal-deps,$(1)))
+ endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+ 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+ 
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index c3acc22b17..f7a3609443 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -79,8 +79,8 @@ define legal-warning-nosource # pkg, {local|override}
+ 	$(call legal-warning-pkg,$(1),sources not saved ($(2) packages not handled))
+ endef
+ 
+-define legal-manifest # pkg, version, license, license-files, source, url, {HOST|TARGET}
+-	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)"' >>$(LEGAL_MANIFEST_CSV_$(7))
++define legal-manifest # pkg, version, license, license-files, source, url, {HOST|TARGET}, dependencies
++	echo '"$(1)","$(2)","$(3)","$(4)","$(5)","$(6)","$(8)"' >>$(LEGAL_MANIFEST_CSV_$(7))
+ endef
+ 
+ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
+@@ -95,3 +95,22 @@ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-full
+ 	} && \
+ 	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+ endef
 +
-+This reverts commit dede98ffb706676309488d7cc660f569548d5930.
++remove-virtual-pkgs = $(foreach p,$(1),$(if $($(call UPPERCASE,$(p))_IS_VIRTUAL),,$(p)))
++get-direct-deps = $(sort $(foreach p,$(1),$($(call UPPERCASE,$(p))_FINAL_DEPENDENCIES)))
 +
-+The original commit tried to fix a descrepancy between the implementation
-+and the documentation by making the implementation comply.
++define get-transitive-deps # packages
++	$(if $(filter-out $(1),$(call get-direct-deps,$(1))),\
++	     $(sort $(1) $(call get-transitive-deps,$(filter-out $(1),$(call get-direct-deps,$(1))))),\
++	     $(1))
++endef
 +
-+When making the change, it was overlooked, that ubinfo and ubirename were
-+written against the implementation instead of the behaviour specified by
-+the documentation. So were further internal functions like
-+ubi_get_vol_info1_nm which further breaks ubirmvol.
++non-virtual-deps = $(call remove-virtual-pkgs,$(filter-out $(1),$(call get-transitive-deps,$(1))))
++host-pattern-if-target-pkg = $(if $(1:host-%=),host-%,)
 +
-+A report with an outline of a resulting problem can be read on
-+the mailing list:
-+
-+http://lists.infradead.org/pipermail/linux-mtd/2018-June/081562.html
-+
-+From the report:
-+
-+steps to reproduce: have mtd-utils 2.0.1 or 2.0.2
-+
-+0. make a bunch of ubi volumes in sequential order
-+
-+ubimkvol /dev/ubi0 -s 64KiB -N test1
-+ubimkvol /dev/ubi0 -s 64KiB -N test2
-+ubimkvol /dev/ubi0 -s 64KiB -N test3
-+ubimkvol /dev/ubi0 -s 64KiB -N test4
-+..
-+
-+1. delete the test1 volume, making a hole in the volume table
-+
-+ubirmvol /dev/ubi0 -N test1
-+
-+2. try an affected tool (i.e. "ubirmvol /dev/ubi0 -N test4" )
-+
-+ |root at mr24:/# ubirmvol /dev/ubi0 -N test4
-+ |ubirmvol: error!: cannot find UBI volume "test4"
-+ |         error 19 (No such device)
-+
-+or "ubinfo -a"
-+
-+ | root at mr24:/# ubinfo -a
-+ | UBI version:                    1
-+ | Count of UBI devices:           1
-+ | UBI control device major/minor: 10:59
-+ | Present UBI devices:            ubi0
-+ |
-+ | ubi0
-+ | Volumes count:                           11
-+ | Logical eraseblock size:                 15872 bytes, 15.5 KiB
-+ | Total amount of logical eraseblocks:     1952 (30982144 bytes, 29.5 MiB)
-+ | Amount of available logical eraseblocks: 75 (1190400 bytes, 1.1 MiB)
-+ | Maximum count of volumes                 92
-+ | Count of bad physical eraseblocks:       0
-+ | Count of reserved physical eraseblocks:  40
-+ | Current maximum erase counter value:     984
-+ | Minimum input/output unit size:          512 bytes
-+ | Character device major/minor:            251:0
-+ | ubinfo: error!: libubi failed to probe volume 5 on ubi0
-+ |        error 19 (No such device)
-+ | Present volumes:                         0, 1, 2, 3, 4root at mr24:/#
-+
-+Reported-by: Christian Lamparter <chunkeey@gmail.com>
-+Signed-off-by: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-+Signed-off-by: David Owens <david.owens@rockwellcollins.com>
-+---
-+ lib/libubi.c | 5 +----
-+ 1 file changed, 1 insertion(+), 4 deletions(-)
-+
-+diff --git a/lib/libubi.c b/lib/libubi.c
-+index b50e68a..978b433 100644
-+--- a/lib/libubi.c
-++++ b/lib/libubi.c
-+@@ -1240,11 +1240,8 @@ int ubi_get_vol_info1(libubi_t desc, int dev_num, int vol_id,
-+ 	info->dev_num = dev_num;
-+ 	info->vol_id = vol_id;
-+ 
-+-	if (vol_get_major(lib, dev_num, vol_id, &info->major, &info->minor)) {
-+-		if (errno == ENOENT)
-+-			errno = ENODEV;
-++	if (vol_get_major(lib, dev_num, vol_id, &info->major, &info->minor))
-+ 		return -1;
-+-	}
-+ 
-+ 	ret = vol_read_data(lib->vol_type, dev_num, vol_id, buf, 50);
-+ 	if (ret < 0)
-+-- 
-+2.14.4
-+
++# Produce a comma-separated list of dependent packages and their
++# licenses. Host packages are removed from the list if the argument is
++# not a host package.
++define legal-deps # package
++$(foreach p,$(filter-out $(call host-pattern-if-target-pkg,$(1)),$(call non-virtual-deps,$(1))),$(p) [$($(call UPPERCASE,$(p))_LICENSE)], )
++endef
+-- 
+2.18.0
