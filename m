@@ -1,49 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 10 Aug 2018 22:51:23 +0200
-Subject: [Buildroot] [PATCH 4/6] support/testing: runtest proxy support
-In-Reply-To: <20180711143113.11927-5-matthew.weber@rockwellcollins.com>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-5-matthew.weber@rockwellcollins.com>
-Message-ID: <20180810225123.0f70cfcc@windsurf>
+From: Patrick Doyle <wpdster@gmail.com>
+Date: Fri, 10 Aug 2018 16:56:29 -0400
+Subject: [Buildroot] buildroot, python{,3}, and pip
+In-Reply-To: <20180810215321.3b1d840d@windsurf>
+References: <CAF_dkJCw8P3YcUOgsODcrX_YrdYaYfcxriBFs+dxRSRjUrXf+w@mail.gmail.com>
+ <20180810215321.3b1d840d@windsurf>
+Message-ID: <CAF_dkJAsx6DDBawp73RAZhXsVpbk7SRGjFdAJjE_oGH55rf2Kg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, Aug 10, 2018 at 3:53 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello Patrick,
 
-On Wed, 11 Jul 2018 09:31:11 -0500, Matt Weber wrote:
-> Allow builder.py to inherit the system proxy settings from
-> the env if they are present.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> The bigger question is why do you need python-pip in the first place ?
+> It goes against the Buildroot principle of reproducible builds. Why
+> don't you create Buildroot packages for the Python modules that you
+> need ? The utils/scanpypi script makes this relatively easy for most
+> Python modules.
+>
+Yeah, yeah, I know... the answer is that we expect our application
+code to change much more often than the system code.  And our
+application architect would like to distribute the application via
+pip.  I'm still not sure we have the memory (RAM) to do this.  Early
+experimentation shows that pip requires a _lot_ of RAM.
 
-I have applied to next, but I have one question below.
+We'll see where we end up.
 
-> ---
->  support/testing/infra/builder.py | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-> index faf1eb1494..30230fdb17 100644
-> --- a/support/testing/infra/builder.py
-> +++ b/support/testing/infra/builder.py
-> @@ -35,6 +35,12 @@ class Builder(object):
->  
->      def build(self):
->          env = {"PATH": os.environ["PATH"]}
-> +        if "http_proxy" in os.environ:
-> +            self.logfile.write("Using system proxy: " +
-> +                               os.environ["http_proxy"] + "\n")
-> +            self.logfile.flush()
+Besides, I would rather humor him and stay in my preferred development
+environment, than to have to support a Yocto/OE development
+environment just so he can use pip :-)
 
-Is this flush() really needed ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--wpd
