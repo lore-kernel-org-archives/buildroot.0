@@ -1,49 +1,36 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Fri, 10 Aug 2018 09:15:02 -0700
-Subject: [Buildroot] [PATCH 18/18] Add to DEVELOPERS file
-In-Reply-To: <20180810161502.21598-1-chrismcc@gmail.com>
-References: <20180810161502.21598-1-chrismcc@gmail.com>
-Message-ID: <20180810161502.21598-19-chrismcc@gmail.com>
+From: Patrick Doyle <wpdster@gmail.com>
+Date: Fri, 10 Aug 2018 13:11:04 -0400
+Subject: [Buildroot] buildroot, python{,3}, and pip
+Message-ID: <CAF_dkJCw8P3YcUOgsODcrX_YrdYaYfcxriBFs+dxRSRjUrXf+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
----
- DEVELOPERS | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+Does anybody have experience using pip on a buildroot generated system?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 215506c71c..c693f6765b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -479,6 +479,25 @@ F:	package/python-rtslib-fb/
- F:	package/python-urwid/
- F:	package/targetcli-fb/
- 
-+N:	Christopher McCrory <chrismcc@gmail.com>
-+F:	package/perl-appconfig
-+F:	package/perl-astro-suntime
-+F:	package/perl-cgi
-+F:	package/perl-class-std
-+F:	package/perl-data-uuid
-+F:	package/perl-date-manip
-+F:	package/perl-dbi
-+F:	package/perl-device-serialport
-+F:	package/perl-file-slurp
-+F:	package/perl-io-interface
-+F:	package/perl-json-maybexs
-+F:	package/perl-module-runtime
-+F:	package/perl-number-bytes-human
-+F:	package/perl-params-util
-+F:	package/perl-sub-install
-+F:	package/perl-sys-meminfo
-+F:	package/perl-sys-mmap
-+
- N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- F:	package/audit/
- F:	package/checkpolicy/
--- 
-2.14.4
+Poking around, I have found patches to add a python-pip module, (for
+example http://lists.busybox.net/pipermail/buildroot/2013-July/075194.html)
+but I don't see that in my 2018.02 release.
+
+I have a severely memory constrained system and have already found that
+
+# python3 -mensure-pip
+
+...will add a "pip" command to my rootfs once I have booted up... but
+sometimes that command fails (apparently depending on the amount of
+free RAM I have, as a first pass diagnosis) and "pip install
+<some_package>" works sometimes, and fails other times, again
+apparently package size/free RAM relatedly.
+
+So, I might have other system issues to deal with, but in the mean
+time, I thought I would ask why pip isn't available as an option to
+begin with.
+
+Yes... I get the whole philosophy of "buildroot doesn't support
+package managers".  Is that the primary reason it isn't supported?  Or
+am I setting myself up for failure should I go down the rathole of
+adding support myself?
+
+--wpd
