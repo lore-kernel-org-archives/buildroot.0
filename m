@@ -1,126 +1,49 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 11 Aug 2018 12:14:13 +0200
-Subject: [Buildroot] [PATCH 2/3] perl: add vendorprefix
-In-Reply-To: <CALURroQhF-4kcf2F3DKKEwiuPwC2Hbw-cYbAysaCXbXGrJWedw@mail.gmail.com>
-References: <20180810144724.16347-1-chrismcc@gmail.com>
- <CAB0FRsuEUYa=8Fr2htcge8ULEVP-ZCpPE1tHJoThvqZ+4r+VvA@mail.gmail.com>
- <CALURroQhF-4kcf2F3DKKEwiuPwC2Hbw-cYbAysaCXbXGrJWedw@mail.gmail.com>
-Message-ID: <CAB0FRsvx8J2bsF7q7kmMPxYhMP-+96ifk2T2QCGL00KKRzpyfg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Aug 2018 12:25:29 +0200
+Subject: [Buildroot] Analysis of build results for 2018-08-09
+In-Reply-To: <CANQCQpauBUYBkxNiw7CtHNOO3pOkxF0PGnjrP_HagUJ+N2q=hQ@mail.gmail.com>
+References: <20180810060017.0EEFE20719@mail.bootlin.com>
+ <20180811001555.0b515e22@windsurf>
+ <CANQCQpauBUYBkxNiw7CtHNOO3pOkxF0PGnjrP_HagUJ+N2q=hQ@mail.gmail.com>
+Message-ID: <20180811122529.664a5d96@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-08-10 20:45 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+Hello,
 
->
->
-> On Fri, Aug 10, 2018 at 11:13 AM, Fran?ois Perrad <
-> francois.perrad at gadz.org> wrote:
->
->>
->>
->> 2018-08-10 16:47 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
->>
->>> This adds vendorprefix to configure args
->>>
->>> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
->>>
->>
->>
->> What is the rational of this patch ?
->>
->> Currently, core modules (ie. built directly with the perl distribution)
->> are installed in /usr/lib/perl5/5.xx.y,
->> others modules (built by the perl-package infrastructure) are installed
->> in /usr/lib/perl5/site-perl/5.xx.y.
->> Why adding /usr/lib/perl5/vendor-perl/5.xx.y ?
->>
->
->
-> I'm far from a perl expert.  Short answer is so it is there.
->
-> Longer answer, I'm trying to package ZoneMinder for buildroot.  It is a
-> complicated package to say the least.  It is written in C++, configured
-> with cmake, and perl, and php.  It uses the vendor perl directories.  So
-> when it installs, instead of using TARGET_DIR/usr/lib/perl5/site_perl/...
-> it uses  TARGET_DIR/ .  So all the perl bits end up in the top directory,
-> which is sub optimal.  The ZoneMinder authors provide prebuilt binaries for
-> the major distributions because it is very difficult to successfully
-> compile from source.  Cross compiling with buildroot adds even more
-> challenges.  Adding a vendor directory to perl like most other
-> distributions is the easiest solution by far.
->
-> That said, if you don't want to add this change, I would understand.
->
->
->
-OK, for configuring vendorprefix.
+Adding Hollis, which I forgot in my initial e-mail. Hollis, please have
+a look at the thread, there has been some other build errors on your
+older build machine.
 
-But a target-finalize hook is not the right place to create a directory
-(see https://buildroot.org/downloads/manual/manual.html#hooks).
+On Fri, 10 Aug 2018 19:20:47 -0500, Matthew Weber wrote:
 
-You could create the directory usr/lib/perl5/vendor_perl in the
-INSTALL_TARGET_CMDS of your package ZoneMinder.
+> > This we've got only 10 failures on master, let's have a look at them.  
+> > >      aarch64 |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/66c03506e10071ec44ca509304595f4f5150e4d9 |
+> > >       mipsel |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/2b41afe7841feba626fc29c9474e82d9934e6173 |  
+> >
+> > Due to the use of atomic built-ins, not available in old compilers. I
+> > would suggest to make all packages that depend on host-libselinux to
+> > depend on the appropriate host gcc version.  
+> 
+> Hollis has sent a patch suggestion to keep libselinux compatible with
+> older gcc.  Is there a preference on carrying the patch vs using a
+> host gcc version detect ?  I didn't realize we had a way to depend on
+> host gcc version.  I'll take a look at that but let me know which way
+> is preferred.
 
-Fran?ois
+If the issue can be worked around by a patch, it's nice because we
+don't have to propagate the host gcc dependency to gazillions of
+packages. However, Hollis patch wasn't that simple/trivial, it would be
+nice to have it checked by upstream. Or maybe it's just me who isn't
+familiar enough with the semantic of atomic intrinsics.
 
+Best regards,
 
->
->
->
->>
->> Fran?ois
->>
->> ---
->>>  package/perl/perl.mk | 3 +++
->>>  1 file changed, 3 insertions(+)
->>>
->>> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
->>> index b0eea3eff4..19a8f95f7b 100644
->>> --- a/package/perl/perl.mk
->>> +++ b/package/perl/perl.mk
->>> @@ -48,6 +48,7 @@ PERL_CONF_OPTS = \
->>>         --target=$(GNU_TARGET_NAME) \
->>>         --target-tools-prefix=$(TARGET_CROSS) \
->>>         --prefix=/usr \
->>> +       --vendorprefix=/usr \
->>>         -Dld="$(TARGET_CC)" \
->>>         -Dccflags="$(TARGET_CFLAGS)" \
->>>         -Dldflags="$(TARGET_LDFLAGS) -lm" \
->>> @@ -92,6 +93,7 @@ endef
->>>  HOST_PERL_CONF_OPTS = \
->>>         -des \
->>>         -Dprefix="$(HOST_DIR)" \
->>> +       -Dvendorprefix="$(HOST_DIR)" \
->>>         -Dcc="$(HOSTCC)"
->>>
->>>  define HOST_PERL_CONFIGURE_CMDS
->>> @@ -111,6 +113,7 @@ $(eval $(generic-package))
->>>  $(eval $(host-generic-package))
->>>
->>>  define PERL_FINALIZE_TARGET
->>> +       mkdir -p $(TARGET_DIR)/usr/lib/perl5/ve
->>> ndor_perl/$(PERL_VERSION)/$(PERL_ARCHNAME)
->>>         rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
->>>         rm -rf $(TARGET_DIR)/usr/lib/perl5/$(
->>> PERL_VERSION)/$(PERL_ARCHNAME)/CORE
->>>         find $(TARGET_DIR)/usr/lib/perl5/ -name 'extralibs.ld' -print0 |
->>> xargs -0 rm -f
->>> --
->>> 2.14.4
->>>
->>>
->>
->
->
-> --
-> Christopher McCrory
-> To the optimist, the glass is half full.
-> To the pessimist, the glass is half empty.
-> To the engineer, the glass is twice as big as it needs to be.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180811/08cd4358/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
