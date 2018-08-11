@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sat, 11 Aug 2018 11:27:47 -0700
-Subject: [Buildroot] [PATCH 15/17] perl-module-build: add target
+Date: Sat, 11 Aug 2018 11:27:48 -0700
+Subject: [Buildroot] [PATCH 16/17] perl-class-load: new package
 In-Reply-To: <20180811182749.20924-1-chrismcc@gmail.com>
 References: <20180811182749.20924-1-chrismcc@gmail.com>
-Message-ID: <20180811182749.20924-16-chrismcc@gmail.com>
+Message-ID: <20180811182749.20924-17-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,58 +12,92 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- DEVELOPERS                                     | 1 +
- package/Config.in                              | 1 +
- package/perl-module-build/Config.in            | 6 ++++++
- package/perl-module-build/perl-module-build.mk | 1 +
- 4 files changed, 9 insertions(+)
- create mode 100644 package/perl-module-build/Config.in
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/perl-class-load/Config.in            | 15 +++++++++++++++
+ package/perl-class-load/perl-class-load.hash |  6 ++++++
+ package/perl-class-load/perl-class-load.mk   | 14 ++++++++++++++
+ 5 files changed, 37 insertions(+)
+ create mode 100644 package/perl-class-load/Config.in
+ create mode 100644 package/perl-class-load/perl-class-load.hash
+ create mode 100644 package/perl-class-load/perl-class-load.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d056cadf1f..b9d510f3a6 100644
+index b9d510f3a6..e04058a37e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -496,6 +496,7 @@ F:	package/perl-io-interface
- F:	package/perl-io-socket-multicast
- F:	package/perl-json-maybexs
- F:	package/perl-mime-tools
-+F:	package/perl-module-build
- F:	package/perl-module-implementation
- F:	package/perl-module-runtime
- F:	package/perl-number-bytes-human
+@@ -483,6 +483,7 @@ N:	Christopher McCrory <chrismcc@gmail.com>
+ F:	package/perl-appconfig
+ F:	package/perl-astro-suntime
+ F:	package/perl-cgi
++F:	package/perl-class-load
+ F:	package/perl-class-std
+ F:	package/perl-class-std-fast
+ F:	package/perl-data-optlist
 diff --git a/package/Config.in b/package/Config.in
-index 4cedcec11a..3dc8a8717a 100644
+index 3dc8a8717a..5585ebcdfa 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -713,6 +713,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mime-base64-urlsafe/Config.in"
- 	source "package/perl-mime-base64/Config.in"
- 	source "package/perl-mime-tools/Config.in"
-+	source "package/perl-module-build/Config.in"
- 	source "package/perl-module-implementation/Config.in"
- 	source "package/perl-module-runtime/Config.in"
- 	source "package/perl-mojolicious-plugin-authentication/Config.in"
-diff --git a/package/perl-module-build/Config.in b/package/perl-module-build/Config.in
+@@ -668,6 +668,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-appconfig/Config.in"
+ 	source "package/perl-astro-suntime/Config.in"
+ 	source "package/perl-cgi/Config.in"
++	source "package/perl-class-load/Config.in"
+ 	source "package/perl-class-std/Config.in"
+ 	source "package/perl-class-std-fast/Config.in"
+ 	source "package/perl-convert-asn1/Config.in"
+diff --git a/package/perl-class-load/Config.in b/package/perl-class-load/Config.in
 new file mode 100644
-index 0000000000..ee4354cc6a
+index 0000000000..fef9431e49
 --- /dev/null
-+++ b/package/perl-module-build/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_MODULE_BUILD
-+	bool "perl-module-build"
++++ b/package/perl-class-load/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PERL_CLASS_LOAD
++	bool "perl-class-load"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_PERL_DATA_OPTLIST
++	select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
++	select BR2_PACKAGE_PERL_MODULE_RUNTIME
++	select BR2_PACKAGE_PERL_PACKAGE_STASH
++	select BR2_PACKAGE_PERL_TRY_TINY
 +	help
-+	  Build and install Perl modules
++	  A working (require "Class::Name") and more
 +
-+	  https://metacpan.org/release/Module-Build
-diff --git a/package/perl-module-build/perl-module-build.mk b/package/perl-module-build/perl-module-build.mk
-index 42c9c11141..0a79b64d00 100644
---- a/package/perl-module-build/perl-module-build.mk
-+++ b/package/perl-module-build/perl-module-build.mk
-@@ -10,4 +10,5 @@ PERL_MODULE_BUILD_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEONT
- PERL_MODULE_BUILD_LICENSE = Artistic or GPL-1.0+
- PERL_MODULE_BUILD_LICENSE_FILES = LICENSE
- 
++	  https://github.com/moose/Class-Load
++
++comment "perl-class-load needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-class-load/perl-class-load.hash b/package/perl-class-load/perl-class-load.hash
+new file mode 100644
+index 0000000000..c2900d6964
+--- /dev/null
++++ b/package/perl-class-load/perl-class-load.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    e4c831c08df592ce8dfee0c7cfc12fd7 Class-Load-0.25.tar.gz
++sha256 2a48fa779b5297e56156380e8b32637c6c58decb4f4a7f3c7350523e11275f8f Class-Load-0.25.tar.gz
++
++# computed by scancpan
++sha256 dc030e63f20035291b90d09c2c40f296224e85878caf829ea981fc2f10910f9d LICENSE
+diff --git a/package/perl-class-load/perl-class-load.mk b/package/perl-class-load/perl-class-load.mk
+new file mode 100644
+index 0000000000..33a6288465
+--- /dev/null
++++ b/package/perl-class-load/perl-class-load.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# perl-class-load
++#
++################################################################################
++
++PERL_CLASS_LOAD_VERSION = 0.25
++PERL_CLASS_LOAD_SOURCE = Class-Load-$(PERL_CLASS_LOAD_VERSION).tar.gz
++PERL_CLASS_LOAD_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
++PERL_CLASS_LOAD_DEPENDENCIES = perl-data-optlist perl-module-implementation perl-module-runtime perl-package-stash perl-try-tiny
++PERL_CLASS_LOAD_LICENSE = Artistic or GPL-1.0+
++PERL_CLASS_LOAD_LICENSE_FILES = LICENSE
++
 +$(eval $(perl-package))
- $(eval $(host-perl-package))
 -- 
 2.14.4
