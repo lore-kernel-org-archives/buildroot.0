@@ -1,12 +1,10 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 10 Aug 2018 18:33:31 -0500
-Subject: [Buildroot] [PATCH v1 1/1] tini: new package
-In-Reply-To: <20180811001720.6f407992@windsurf>
-References: <20180810184255.17612-1-christian@paral.in>
- <20180810215502.1647fe01@windsurf>
- <CA+h8R2pEc4A-=jch5c1A8SchJv6K+LZrrHSy+EcSbp=Tnw6Xvg@mail.gmail.com>
- <20180811001720.6f407992@windsurf>
-Message-ID: <CANQCQpZuPG658Kz+675RGSbNdFrH4kEd=Cm-FTnYM1Wze2qM9A@mail.gmail.com>
+Date: Fri, 10 Aug 2018 19:20:47 -0500
+Subject: [Buildroot] Analysis of build results for 2018-08-09
+In-Reply-To: <20180811001555.0b515e22@windsurf>
+References: <20180810060017.0EEFE20719@mail.bootlin.com>
+ <20180811001555.0b515e22@windsurf>
+Message-ID: <CANQCQpauBUYBkxNiw7CtHNOO3pOkxF0PGnjrP_HagUJ+N2q=hQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +12,34 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Thomas,
-On Fri, Aug 10, 2018 at 5:17 PM Thomas Petazzoni
+
+On Fri, Aug 10, 2018 at 5:16 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
 > Hello,
 >
-> On Fri, 10 Aug 2018 15:11:11 -0700, Christian Stewart wrote:
+> On Fri, 10 Aug 2018 08:00:17 +0200 (CEST), Thomas Petazzoni wrote:
 >
-> > On Fri, Aug 10, 2018 at 12:55 PM Thomas Petazzoni
-> > <thomas.petazzoni@bootlin.com> wrote:
-> > >
-> > > What does "Docker now statically links to Tiny internally" mean ?
+> > Build statistics for 2018-08-09
+> > ===============================
 > >
-> > I suppose the commit note is not clear. I am basically saying that we
-> > do not need to statically link Tini, unlike previous revisions of this
-> > commit. The intent of this package is no longer to satisfy the
-> > docker-init requirement, but instead to just provide the "tini" binary
-> > in the target environment, dynamically linked or otherwise.
+> >       branch |  OK | NOK | TIM | TOT |
+> >    2018.02.x |  10 |   1 |   0 |  11 |
+> >    2018.05.x |  14 |   1 |   0 |  15 |
+> >       master | 123 |  10 |   3 | 136 |
 >
-> Why did the requirement change ?
-
-Tini can be used for cases where you do a basic container and the
-filesystem isn't isolated from the host.  Thus no need for static
-building of the init process.
-
+> This we've got only 10 failures on master, let's have a look at them.
+> >      aarch64 |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/66c03506e10071ec44ca509304595f4f5150e4d9 |
+> >       mipsel |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/2b41afe7841feba626fc29c9474e82d9934e6173 |
 >
-> > According to https://github.com/krallin/tini - NOTE: If you are using
-> > Docker 1.13 or greater, Tini is included in Docker itself. This
-> > includes all versions of Docker CE. To enable Tini, just pass the
-> > --init flag to docker run.
->
-> If Tini is included in Docker itself, why do we need a package for it ?
+> Due to the use of atomic built-ins, not available in old compilers. I
+> would suggest to make all packages that depend on host-libselinux to
+> depend on the appropriate host gcc version.
 
-Basic LXC based containers can use it when are doing an abbreviated
-init sequence for a container start.
+Hollis has sent a patch suggestion to keep libselinux compatible with
+older gcc.  Is there a preference on carrying the patch vs using a
+host gcc version detect ?  I didn't realize we had a way to depend on
+host gcc version.  I'll take a look at that but let me know which way
+is preferred.
 
 Matt
