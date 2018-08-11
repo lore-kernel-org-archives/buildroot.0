@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Aug 2018 12:34:46 +0200
-Subject: [Buildroot] [git commit] package/vlc: needs speexdsp for optional
- speex support
-Message-ID: <20180811102808.677F4841EE@busybox.osuosl.org>
+Date: Sat, 11 Aug 2018 12:34:43 +0200
+Subject: [Buildroot] [git commit] package/vlc: Remove warning from Config.in
+Message-ID: <20180811102808.5BAE58B7A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4f18dd3c8664bb6715122c62a32e3b4388fa34e
+commit: https://git.buildroot.net/buildroot/commit/?id=4c575ffde5fee6f3548b8907aa9c85660dc5ad2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes configure warning:
+Four years ago this warning was added to this package
+https://git.buildroot.net/buildroot/commit/package/vlc?id=e33019aaa0409e35b725dddffe09e3e2a42959d1
+due to "autobuilder failures for vlc on many platforms".
 
-checking for SPEEX... yes
-checking for SPEEXDSP... no
-configure: WARNING: Package speexdsp was not found in the pkg-config search path.
-Perhaps you should add the directory containing `speexdsp.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'speexdsp', required by 'world', not found.
+The last autobuilder failure occured May 1st, 2018 and was fixed by
+https://git.buildroot.net/buildroot/commit/package/vlc?id=9f115bfc2ac798c737d0c2a8ec8c96670e814a49
+
+Therefore this warning is not needed anymore.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/vlc/Config.in | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 56bfdced53..af85377c94 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -381,9 +381,9 @@ else
- VLC_CONF_OPTS += --disable-sdl-image
- endif
- 
--ifeq ($(BR2_PACKAGE_SPEEX),y)
-+ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
- VLC_CONF_OPTS += --enable-speex
--VLC_DEPENDENCIES += speex
-+VLC_DEPENDENCIES += speex speexdsp
- else
- VLC_CONF_OPTS += --disable-speex
- endif
+diff --git a/package/vlc/Config.in b/package/vlc/Config.in
+index 166e7d256a..78769ac27b 100644
+--- a/package/vlc/Config.in
++++ b/package/vlc/Config.in
+@@ -1,8 +1,3 @@
+-if BR2_PACKAGE_VLC
+-comment "vlc is known not to work in all configurations"
+-comment "If you can fix it, please inform buildroot at buildroot.org"
+-endif
+-
+ config BR2_PACKAGE_VLC
+ 	bool "vlc"
+ 	depends on BR2_USE_MMU # fork()
