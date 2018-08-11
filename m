@@ -1,79 +1,38 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Aug 2018 23:05:12 +0200
-Subject: [Buildroot] [PATCH/next 02/12] package/vlc: sort VLC_CONF_OPTS
+Date: Sat, 11 Aug 2018 23:05:17 +0200
+Subject: [Buildroot] [PATCH/next 07/12] package/vlc: add optional dependency
+ to pulseaudio
 In-Reply-To: <20180811210522.15600-1-bernd.kuhls@t-online.de>
 References: <20180811210522.15600-1-bernd.kuhls@t-online.de>
-Message-ID: <20180811210522.15600-3-bernd.kuhls@t-online.de>
+Message-ID: <20180811210522.15600-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-No code changes. The upcoming bump to vlc 3.0.3 will add another eleven
---disable-* options to CONF_OPTS. To stay on top of things we sort the
-current entries before we begin the version bump.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vlc/vlc.mk | 36 ++++++++++++++++++------------------
- 1 file changed, 18 insertions(+), 18 deletions(-)
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index af85377c94..5e5230edc9 100644
+index 14fe3b7861..b90fd602d3 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -34,33 +34,33 @@ endef
- VLC_POST_PATCH_HOOKS += VLC_OVERRIDE_PKG_M4
+@@ -362,6 +362,13 @@ else
+ VLC_CONF_OPTS += --disable-ncurses
+ endif
  
- VLC_CONF_OPTS += \
--	--disable-gles1 \
- 	--disable-a52 \
--	--disable-shout \
--	--disable-twolame \
--	--disable-dca \
--	--disable-schroedinger \
--	--disable-fluidsynth \
--	--disable-zvbi \
--	--disable-kate \
-+	--disable-addonmanagermodules \
- 	--disable-caca \
--	--disable-jack \
--	--disable-samplerate \
- 	--disable-chromaprint \
-+	--disable-dca \
-+	--disable-dvdnav \
-+	--disable-fluidsynth \
-+	--disable-gles1 \
- 	--disable-goom \
--	--disable-projectm \
--	--disable-vsxu \
--	--disable-mtp \
-+	--disable-jack \
-+	--disable-jpeg \
-+	--disable-kate \
-+	--disable-mfx \
- 	--disable-mmal-codec \
- 	--disable-mmal-vout \
--	--disable-dvdnav \
-+	--disable-mtp \
-+	--disable-projectm \
-+	--disable-samplerate \
-+	--disable-schroedinger \
-+	--disable-shout \
-+	--disable-twolame \
-+	--disable-vdpau \
- 	--disable-vpx \
--	--disable-jpeg \
-+	--disable-vsxu \
- 	--disable-x262 \
- 	--disable-x265 \
--	--disable-mfx \
--	--disable-vdpau \
--	--disable-addonmanagermodules \
-+	--disable-zvbi \
- 	--enable-run-as-root
- 
- # Uses __atomic_fetch_add_4
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++VLC_CONF_OPTS += --enable-pulse
++VLC_DEPENDENCIES += pulseaudio
++else
++VLC_CONF_OPTS += --disable-pulse
++endif
++
+ ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+ VLC_CONF_OPTS += --enable-qt
+ VLC_CONF_ENV += \
 -- 
 2.18.0
