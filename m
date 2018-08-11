@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sat, 11 Aug 2018 11:27:42 -0700
-Subject: [Buildroot] [PATCH 10/17] perl-module-implementation: new package
+Date: Sat, 11 Aug 2018 11:27:43 -0700
+Subject: [Buildroot] [PATCH 11/17] perl-package-stash: new package
 In-Reply-To: <20180811182749.20924-1-chrismcc@gmail.com>
 References: <20180811182749.20924-1-chrismcc@gmail.com>
-Message-ID: <20180811182749.20924-11-chrismcc@gmail.com>
+Message-ID: <20180811182749.20924-12-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,84 +12,85 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/perl-module-implementation/Config.in               |  8 ++++++++
- .../perl-module-implementation.hash                        |  6 ++++++
- .../perl-module-implementation.mk                          | 14 ++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/perl-module-implementation/Config.in
- create mode 100644 package/perl-module-implementation/perl-module-implementation.hash
- create mode 100644 package/perl-module-implementation/perl-module-implementation.mk
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/perl-package-stash/Config.in               |  8 ++++++++
+ package/perl-package-stash/perl-package-stash.hash |  6 ++++++
+ package/perl-package-stash/perl-package-stash.mk   | 15 +++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/perl-package-stash/Config.in
+ create mode 100644 package/perl-package-stash/perl-package-stash.hash
+ create mode 100644 package/perl-package-stash/perl-package-stash.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 2bc890e744..9d7d38ea75 100644
+index 9d7d38ea75..ce2e31461a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -496,6 +496,7 @@ F:	package/perl-io-interface
- F:	package/perl-io-socket-multicast
- F:	package/perl-json-maybexs
- F:	package/perl-mime-tools
-+F:	package/perl-module-implementation
+@@ -499,6 +499,7 @@ F:	package/perl-mime-tools
+ F:	package/perl-module-implementation
  F:	package/perl-module-runtime
  F:	package/perl-number-bytes-human
++F:	package/perl-package-stash
  F:	package/perl-params-util
+ F:	package/perl-sub-install
+ F:	package/perl-sys-meminfo
 diff --git a/package/Config.in b/package/Config.in
-index 6124a7197a..1008a651ec 100644
+index 1008a651ec..57b22af90e 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -713,6 +713,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mime-base64-urlsafe/Config.in"
- 	source "package/perl-mime-base64/Config.in"
- 	source "package/perl-mime-tools/Config.in"
-+	source "package/perl-module-implementation/Config.in"
- 	source "package/perl-module-runtime/Config.in"
- 	source "package/perl-mojolicious-plugin-authentication/Config.in"
- 	source "package/perl-mojolicious/Config.in"
-diff --git a/package/perl-module-implementation/Config.in b/package/perl-module-implementation/Config.in
+@@ -726,6 +726,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-net-telnet/Config.in"
+ 	source "package/perl-netaddr-ip/Config.in"
+ 	source "package/perl-number-bytes-human/Config.in"
++	source "package/perl-package-stash/Config.in"
+ 	source "package/perl-params-util/Config.in"
+ 	source "package/perl-path-tiny/Config.in"
+ 	source "package/perl-sub-install/Config.in"
+diff --git a/package/perl-package-stash/Config.in b/package/perl-package-stash/Config.in
 new file mode 100644
-index 0000000000..aa07cacd11
+index 0000000000..755850f7b6
 --- /dev/null
-+++ b/package/perl-module-implementation/Config.in
++++ b/package/perl-package-stash/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
-+	bool "perl-module-implementation"
-+	select BR2_PACKAGE_PERL_MODULE_RUNTIME
-+	select BR2_PACKAGE_PERL_TRY_TINY
++config BR2_PACKAGE_PERL_PACKAGE_STASH
++	bool "perl-package-stash"
++	select BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS
++	select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
 +	help
-+	  Loads one of several alternate underlying implementations for a module
++	  routines for manipulating stashes
 +
-+	  http://metacpan.org/release/Module-Implementation
-diff --git a/package/perl-module-implementation/perl-module-implementation.hash b/package/perl-module-implementation/perl-module-implementation.hash
++	  http://metacpan.org/release/Package-Stash
+diff --git a/package/perl-package-stash/perl-package-stash.hash b/package/perl-package-stash/perl-package-stash.hash
 new file mode 100644
-index 0000000000..caf365c024
+index 0000000000..4d9b202879
 --- /dev/null
-+++ b/package/perl-module-implementation/perl-module-implementation.hash
++++ b/package/perl-package-stash/perl-package-stash.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    52e3fe0ca6b1eff0488d59b7aacc0667 Module-Implementation-0.09.tar.gz
-+sha256 c15f1a12f0c2130c9efff3c2e1afe5887b08ccd033bd132186d1e7d5087fd66d Module-Implementation-0.09.tar.gz
++md5    7e47a8261312e1cf3d12bd2007916b66 Package-Stash-0.37.tar.gz
++sha256 06ab05388f9130cd377c0e1d3e3bafeed6ef6a1e22104571a9e1d7bfac787b2c Package-Stash-0.37.tar.gz
 +
 +# computed by scancpan
-+sha256 dd34e4dbcadfaa3db992201873e1cbb4b4f4c18e9bf000821d5c768e66d7ff0b LICENSE
-diff --git a/package/perl-module-implementation/perl-module-implementation.mk b/package/perl-module-implementation/perl-module-implementation.mk
++sha256 b4e0637ed96008ddcbf7e0ddeb73967df3d0b4dc62a6b7fdb86eac37018cb12e LICENSE
+diff --git a/package/perl-package-stash/perl-package-stash.mk b/package/perl-package-stash/perl-package-stash.mk
 new file mode 100644
-index 0000000000..50ee8610a5
+index 0000000000..0da733dcbe
 --- /dev/null
-+++ b/package/perl-module-implementation/perl-module-implementation.mk
-@@ -0,0 +1,14 @@
++++ b/package/perl-package-stash/perl-package-stash.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# perl-module-implementation
++# perl-package-stash
 +#
 +################################################################################
 +
-+PERL_MODULE_IMPLEMENTATION_VERSION = 0.09
-+PERL_MODULE_IMPLEMENTATION_SOURCE = Module-Implementation-$(PERL_MODULE_IMPLEMENTATION_VERSION).tar.gz
-+PERL_MODULE_IMPLEMENTATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DR/DROLSKY
-+PERL_MODULE_IMPLEMENTATION_DEPENDENCIES = perl-module-runtime perl-try-tiny
-+PERL_MODULE_IMPLEMENTATION_LICENSE = Artistic-2.0
-+PERL_MODULE_IMPLEMENTATION_LICENSE_FILES = LICENSE
++PERL_PACKAGE_STASH_VERSION = 0.37
++PERL_PACKAGE_STASH_SOURCE = Package-Stash-$(PERL_PACKAGE_STASH_VERSION).tar.gz
++PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY
++PERL_PACKAGE_STASH_DEPENDENCIES = host-perl-dist-checkconflicts perl-dist-checkconflicts perl-module-implementation
++PERL_TEMPLATE_TOOLKIT_CONF_OPTS += TT_XS_ENABLE=n
++PERL_PACKAGE_STASH_LICENSE = Artistic or GPL-1.0+
++PERL_PACKAGE_STASH_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
 -- 
