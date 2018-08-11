@@ -1,55 +1,127 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Aug 2018 20:55:19 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/iperf3: fix openssl detection
-Message-ID: <20180811185519.29273-1-bernd.kuhls@t-online.de>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 11 Aug 2018 21:37:48 +0200
+Subject: [Buildroot] [PATCH 11/17] perl-package-stash: new package
+In-Reply-To: <20180811182749.20924-12-chrismcc@gmail.com>
+References: <20180811182749.20924-1-chrismcc@gmail.com>
+ <20180811182749.20924-12-chrismcc@gmail.com>
+Message-ID: <CAB0FRsv0KA=_=Gb_6PeFpsyBKOJow9u78MrTx7ydh_G4k-EB3g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Searching for openssl uses the AC_ARG_WITH macro:
+2018-08-11 20:27 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 
-https://github.com/esnet/iperf/blob/master/config/ax_check_openssl.m4#L40
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  package/perl-package-stash/Config.in               |  8 ++++++++
+>  package/perl-package-stash/perl-package-stash.hash |  6 ++++++
+>  package/perl-package-stash/perl-package-stash.mk   | 15 +++++++++++++++
+>  5 files changed, 31 insertions(+)
+>  create mode 100644 package/perl-package-stash/Config.in
+>  create mode 100644 package/perl-package-stash/perl-package-stash.hash
+>  create mode 100644 package/perl-package-stash/perl-package-stash.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 9d7d38ea75..ce2e31461a 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -499,6 +499,7 @@ F:  package/perl-mime-tools
+>  F:     package/perl-module-implementation
+>  F:     package/perl-module-runtime
+>  F:     package/perl-number-bytes-human
+> +F:     package/perl-package-stash
+>  F:     package/perl-params-util
+>  F:     package/perl-sub-install
+>  F:     package/perl-sys-meminfo
+> diff --git a/package/Config.in b/package/Config.in
+> index 1008a651ec..57b22af90e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -726,6 +726,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-net-telnet/Config.in"
+>         source "package/perl-netaddr-ip/Config.in"
+>         source "package/perl-number-bytes-human/Config.in"
+> +       source "package/perl-package-stash/Config.in"
+>         source "package/perl-params-util/Config.in"
+>         source "package/perl-path-tiny/Config.in"
+>         source "package/perl-sub-install/Config.in"
+> diff --git a/package/perl-package-stash/Config.in
+> b/package/perl-package-stash/Config.in
+> new file mode 100644
+> index 0000000000..755850f7b6
+> --- /dev/null
+> +++ b/package/perl-package-stash/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PERL_PACKAGE_STASH
+> +       bool "perl-package-stash"
+> +       select BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS
+> +       select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
+> +       help
+> +         routines for manipulating stashes
+> +
+> +         http://metacpan.org/release/Package-Stash
+> diff --git a/package/perl-package-stash/perl-package-stash.hash
+> b/package/perl-package-stash/perl-package-stash.hash
+> new file mode 100644
+> index 0000000000..4d9b202879
+> --- /dev/null
+> +++ b/package/perl-package-stash/perl-package-stash.hash
+> @@ -0,0 +1,6 @@
+> +# retrieved by scancpan from http://cpan.metacpan.org/
+> +md5    7e47a8261312e1cf3d12bd2007916b66 Package-Stash-0.37.tar.gz
+> +sha256 06ab05388f9130cd377c0e1d3e3bafeed6ef6a1e22104571a9e1d7bfac787b2c
+> Package-Stash-0.37.tar.gz
+> +
+> +# computed by scancpan
+> +sha256 b4e0637ed96008ddcbf7e0ddeb73967df3d0b4dc62a6b7fdb86eac37018cb12e
+> LICENSE
+> diff --git a/package/perl-package-stash/perl-package-stash.mk
+> b/package/perl-package-stash/perl-package-stash.mk
+> new file mode 100644
+> index 0000000000..0da733dcbe
+> --- /dev/null
+> +++ b/package/perl-package-stash/perl-package-stash.mk
+> @@ -0,0 +1,15 @@
+> +###########################################################
+> #####################
+> +#
+> +# perl-package-stash
+> +#
+> +###########################################################
+> #####################
+> +
+> +PERL_PACKAGE_STASH_VERSION = 0.37
+> +PERL_PACKAGE_STASH_SOURCE = Package-Stash-$(PERL_PACKAGE_
+> STASH_VERSION).tar.gz
+> +PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY
+> +PERL_PACKAGE_STASH_DEPENDENCIES = host-perl-dist-checkconflicts
+> perl-dist-checkconflicts perl-module-implementation
+> +PERL_TEMPLATE_TOOLKIT_CONF_OPTS += TT_XS_ENABLE=n
+>
+This line (copy&pasted from perl-template-toolkit.mk) has no side effect
+here.
 
-Pkgconf is only used when --with-openssl is not used at all as
-configure parameter because it was placed in the "action-if-not-given"
-part of the AC_ARG_WITH macro:
-https://github.com/esnet/iperf/blob/master/config/ax_check_openssl.m4#L52
+Package-Stash and Package-Stash-XS are two separated modules.
+They just supply the same feature, with different implementations, one pure
+perl and another native XS.
+And you could install both or only your prefered without modification of
+files generated by scancpan.
 
-The current CONF_OPTS contain --with-openssl which causes OPENSSL_LIBS
-not be filled by pkgconf but with default values "-lssl -lcrypto":
-https://github.com/esnet/iperf/blob/master/config/ax_check_openssl.m4#L82
+Fran?ois
 
-This breaks openssl detection for static builds because -lz is missing:
-http://autobuild.buildroot.net/results/ba5/ba56d132c5994486066c304fa1f3872bb0f3ee32//iperf3-3.6/config.log
 
-/home/buildroot/build/instance-0/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
- In function `zlib_stateful_expand_block':
-  c_zlib.c:(.text+0x54): undefined reference to `inflate'
-
-This patch removes --with-openssl and adds host-pkgconf as dependency
-to let the configure script auto-detect openssl, this fixes
-
-http://autobuild.buildroot.net/results/ba5/ba56d132c5994486066c304fa1f3872bb0f3ee32/
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/iperf3/iperf3.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index 0080bd8c6c..e033af13e1 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -13,8 +13,7 @@ IPERF3_LICENSE_FILES = LICENSE
- IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--IPERF3_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
--IPERF3_DEPENDENCIES += openssl
-+IPERF3_DEPENDENCIES += host-pkgconf openssl
- else
- IPERF3_CONF_OPTS += --without-openssl
- endif
--- 
-2.18.0
+> +PERL_PACKAGE_STASH_LICENSE = Artistic or GPL-1.0+
+> +PERL_PACKAGE_STASH_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(perl-package))
+> --
+> 2.14.4
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180811/f58756b8/attachment.html>
