@@ -1,43 +1,126 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Aug 2018 10:48:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: needs speexdsp for optional
- speex support
-Message-ID: <20180811084855.16065-1-bernd.kuhls@t-online.de>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sat, 11 Aug 2018 12:14:13 +0200
+Subject: [Buildroot] [PATCH 2/3] perl: add vendorprefix
+In-Reply-To: <CALURroQhF-4kcf2F3DKKEwiuPwC2Hbw-cYbAysaCXbXGrJWedw@mail.gmail.com>
+References: <20180810144724.16347-1-chrismcc@gmail.com>
+ <CAB0FRsuEUYa=8Fr2htcge8ULEVP-ZCpPE1tHJoThvqZ+4r+VvA@mail.gmail.com>
+ <CALURroQhF-4kcf2F3DKKEwiuPwC2Hbw-cYbAysaCXbXGrJWedw@mail.gmail.com>
+Message-ID: <CAB0FRsvx8J2bsF7q7kmMPxYhMP-+96ifk2T2QCGL00KKRzpyfg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes configure warning:
+2018-08-10 20:45 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 
-checking for SPEEX... yes
-checking for SPEEXDSP... no
-configure: WARNING: Package speexdsp was not found in the pkg-config search path.
-Perhaps you should add the directory containing `speexdsp.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'speexdsp', required by 'world', not found.
+>
+>
+> On Fri, Aug 10, 2018 at 11:13 AM, Fran?ois Perrad <
+> francois.perrad at gadz.org> wrote:
+>
+>>
+>>
+>> 2018-08-10 16:47 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+>>
+>>> This adds vendorprefix to configure args
+>>>
+>>> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+>>>
+>>
+>>
+>> What is the rational of this patch ?
+>>
+>> Currently, core modules (ie. built directly with the perl distribution)
+>> are installed in /usr/lib/perl5/5.xx.y,
+>> others modules (built by the perl-package infrastructure) are installed
+>> in /usr/lib/perl5/site-perl/5.xx.y.
+>> Why adding /usr/lib/perl5/vendor-perl/5.xx.y ?
+>>
+>
+>
+> I'm far from a perl expert.  Short answer is so it is there.
+>
+> Longer answer, I'm trying to package ZoneMinder for buildroot.  It is a
+> complicated package to say the least.  It is written in C++, configured
+> with cmake, and perl, and php.  It uses the vendor perl directories.  So
+> when it installs, instead of using TARGET_DIR/usr/lib/perl5/site_perl/...
+> it uses  TARGET_DIR/ .  So all the perl bits end up in the top directory,
+> which is sub optimal.  The ZoneMinder authors provide prebuilt binaries for
+> the major distributions because it is very difficult to successfully
+> compile from source.  Cross compiling with buildroot adds even more
+> challenges.  Adding a vendor directory to perl like most other
+> distributions is the easiest solution by far.
+>
+> That said, if you don't want to add this change, I would understand.
+>
+>
+>
+OK, for configuring vendorprefix.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/vlc/vlc.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+But a target-finalize hook is not the right place to create a directory
+(see https://buildroot.org/downloads/manual/manual.html#hooks).
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 56bfdced53..af85377c94 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -381,9 +381,9 @@ else
- VLC_CONF_OPTS += --disable-sdl-image
- endif
- 
--ifeq ($(BR2_PACKAGE_SPEEX),y)
-+ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
- VLC_CONF_OPTS += --enable-speex
--VLC_DEPENDENCIES += speex
-+VLC_DEPENDENCIES += speex speexdsp
- else
- VLC_CONF_OPTS += --disable-speex
- endif
--- 
-2.18.0
+You could create the directory usr/lib/perl5/vendor_perl in the
+INSTALL_TARGET_CMDS of your package ZoneMinder.
+
+Fran?ois
+
+
+>
+>
+>
+>>
+>> Fran?ois
+>>
+>> ---
+>>>  package/perl/perl.mk | 3 +++
+>>>  1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+>>> index b0eea3eff4..19a8f95f7b 100644
+>>> --- a/package/perl/perl.mk
+>>> +++ b/package/perl/perl.mk
+>>> @@ -48,6 +48,7 @@ PERL_CONF_OPTS = \
+>>>         --target=$(GNU_TARGET_NAME) \
+>>>         --target-tools-prefix=$(TARGET_CROSS) \
+>>>         --prefix=/usr \
+>>> +       --vendorprefix=/usr \
+>>>         -Dld="$(TARGET_CC)" \
+>>>         -Dccflags="$(TARGET_CFLAGS)" \
+>>>         -Dldflags="$(TARGET_LDFLAGS) -lm" \
+>>> @@ -92,6 +93,7 @@ endef
+>>>  HOST_PERL_CONF_OPTS = \
+>>>         -des \
+>>>         -Dprefix="$(HOST_DIR)" \
+>>> +       -Dvendorprefix="$(HOST_DIR)" \
+>>>         -Dcc="$(HOSTCC)"
+>>>
+>>>  define HOST_PERL_CONFIGURE_CMDS
+>>> @@ -111,6 +113,7 @@ $(eval $(generic-package))
+>>>  $(eval $(host-generic-package))
+>>>
+>>>  define PERL_FINALIZE_TARGET
+>>> +       mkdir -p $(TARGET_DIR)/usr/lib/perl5/ve
+>>> ndor_perl/$(PERL_VERSION)/$(PERL_ARCHNAME)
+>>>         rm -rf $(TARGET_DIR)/usr/lib/perl5/$(PERL_VERSION)/pod
+>>>         rm -rf $(TARGET_DIR)/usr/lib/perl5/$(
+>>> PERL_VERSION)/$(PERL_ARCHNAME)/CORE
+>>>         find $(TARGET_DIR)/usr/lib/perl5/ -name 'extralibs.ld' -print0 |
+>>> xargs -0 rm -f
+>>> --
+>>> 2.14.4
+>>>
+>>>
+>>
+>
+>
+> --
+> Christopher McCrory
+> To the optimist, the glass is half full.
+> To the pessimist, the glass is half empty.
+> To the engineer, the glass is twice as big as it needs to be.
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180811/08cd4358/attachment.html>
