@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Aug 2018 23:05:20 +0200
-Subject: [Buildroot] [PATCH/next 10/12] package/vlc: add optional dependency
- to libsamplerate
+Date: Sat, 11 Aug 2018 23:05:14 +0200
+Subject: [Buildroot] [PATCH/next 04/12] package/vlc: add optional dependency
+ to x265
 In-Reply-To: <20180811210522.15600-1-bernd.kuhls@t-online.de>
 References: <20180811210522.15600-1-bernd.kuhls@t-online.de>
-Message-ID: <20180811210522.15600-11-bernd.kuhls@t-online.de>
+Message-ID: <20180811210522.15600-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index edd0c36372..9e1dc6b92e 100644
+index bc20e2946e..7e496688b9 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -51,7 +51,6 @@ VLC_CONF_OPTS += \
- 	--disable-mmal-vout \
- 	--disable-mtp \
- 	--disable-projectm \
--	--disable-samplerate \
- 	--disable-schroedinger \
- 	--disable-shout \
- 	--disable-twolame \
-@@ -262,6 +261,13 @@ else
- VLC_CONF_OPTS += --disable-svg --disable-svgdec
+@@ -59,7 +59,6 @@ VLC_CONF_OPTS += \
+ 	--disable-vpx \
+ 	--disable-vsxu \
+ 	--disable-x262 \
+-	--disable-x265 \
+ 	--disable-zvbi \
+ 	--enable-run-as-root
+ 
+@@ -416,6 +415,13 @@ else
+ VLC_CONF_OPTS += --disable-x264
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-+VLC_CONF_OPTS += --enable-samplerate
-+VLC_DEPENDENCIES += libsamplerate
++ifeq ($(BR2_PACKAGE_X265),y)
++VLC_CONF_OPTS += --enable-x265
++VLC_DEPENDENCIES += x265
 +else
-+VLC_CONF_OPTS += --disable-samplerate
++VLC_CONF_OPTS += --disable-x265
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBSSH2),y)
- VLC_CONF_OPTS += --enable-sftp
- VLC_DEPENDENCIES += libssh2
+ ifeq ($(BR2_PACKAGE_XCB_UTIL_KEYSYMS),y)
+ VLC_CONF_OPTS += --enable-xcb
+ VLC_DEPENDENCIES += xcb-util-keysyms
 -- 
 2.18.0
