@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sat, 11 Aug 2018 11:27:48 -0700
-Subject: [Buildroot] [PATCH 16/17] perl-class-load: new package
+Date: Sat, 11 Aug 2018 11:27:49 -0700
+Subject: [Buildroot] [PATCH 17/17] perl-termreadkey: new package
 In-Reply-To: <20180811182749.20924-1-chrismcc@gmail.com>
 References: <20180811182749.20924-1-chrismcc@gmail.com>
-Message-ID: <20180811182749.20924-17-chrismcc@gmail.com>
+Message-ID: <20180811182749.20924-18-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,91 +12,85 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/perl-class-load/Config.in            | 15 +++++++++++++++
- package/perl-class-load/perl-class-load.hash |  6 ++++++
- package/perl-class-load/perl-class-load.mk   | 14 ++++++++++++++
- 5 files changed, 37 insertions(+)
- create mode 100644 package/perl-class-load/Config.in
- create mode 100644 package/perl-class-load/perl-class-load.hash
- create mode 100644 package/perl-class-load/perl-class-load.mk
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/perl-termreadkey/Config.in             | 10 ++++++++++
+ package/perl-termreadkey/perl-termreadkey.hash |  6 ++++++
+ package/perl-termreadkey/perl-termreadkey.mk   | 13 +++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/perl-termreadkey/Config.in
+ create mode 100644 package/perl-termreadkey/perl-termreadkey.hash
+ create mode 100644 package/perl-termreadkey/perl-termreadkey.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index b9d510f3a6..e04058a37e 100644
+index e04058a37e..dddb9ca60d 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -483,6 +483,7 @@ N:	Christopher McCrory <chrismcc@gmail.com>
- F:	package/perl-appconfig
- F:	package/perl-astro-suntime
- F:	package/perl-cgi
-+F:	package/perl-class-load
- F:	package/perl-class-std
- F:	package/perl-class-std-fast
- F:	package/perl-data-optlist
+@@ -506,6 +506,7 @@ F:	package/perl-params-util
+ F:	package/perl-sub-install
+ F:	package/perl-sys-meminfo
+ F:	package/perl-sys-mmap
++F:	package/perl-termreadkey
+ F:	package/perl-template-toolkit
+ F:	package/perl-time-parsedate
+ F:	package/perl-x10
 diff --git a/package/Config.in b/package/Config.in
-index 3dc8a8717a..5585ebcdfa 100644
+index 5585ebcdfa..2b36b477c7 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -668,6 +668,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-appconfig/Config.in"
- 	source "package/perl-astro-suntime/Config.in"
- 	source "package/perl-cgi/Config.in"
-+	source "package/perl-class-load/Config.in"
- 	source "package/perl-class-std/Config.in"
- 	source "package/perl-class-std-fast/Config.in"
- 	source "package/perl-convert-asn1/Config.in"
-diff --git a/package/perl-class-load/Config.in b/package/perl-class-load/Config.in
+@@ -734,6 +734,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-sub-install/Config.in"
+ 	source "package/perl-sys-meminfo/Config.in"
+ 	source "package/perl-sys-mmap/Config.in"
++	source "package/perl-termreadkey/Config.in"
+ 	source "package/perl-template-toolkit/Config.in"
+ 	source "package/perl-time-hires/Config.in"
+ 	source "package/perl-time-parsedate/Config.in"
+diff --git a/package/perl-termreadkey/Config.in b/package/perl-termreadkey/Config.in
 new file mode 100644
-index 0000000000..fef9431e49
+index 0000000000..7157bb6f68
 --- /dev/null
-+++ b/package/perl-class-load/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PERL_CLASS_LOAD
-+	bool "perl-class-load"
++++ b/package/perl-termreadkey/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PERL_TERMREADKEY
++	bool "perl-termreadkey"
 +	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_DATA_OPTLIST
-+	select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
-+	select BR2_PACKAGE_PERL_MODULE_RUNTIME
-+	select BR2_PACKAGE_PERL_PACKAGE_STASH
-+	select BR2_PACKAGE_PERL_TRY_TINY
 +	help
-+	  A working (require "Class::Name") and more
++	  Change terminal modes, and perform non-blocking reads.
 +
-+	  https://github.com/moose/Class-Load
++	  https://metacpan.org/release/TermReadKey
 +
-+comment "perl-class-load needs a toolchain w/ dynamic library"
++comment "perl-termreadkey needs a toolchain w/ dynamic library"
 +	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-class-load/perl-class-load.hash b/package/perl-class-load/perl-class-load.hash
+diff --git a/package/perl-termreadkey/perl-termreadkey.hash b/package/perl-termreadkey/perl-termreadkey.hash
 new file mode 100644
-index 0000000000..c2900d6964
+index 0000000000..168e37223c
 --- /dev/null
-+++ b/package/perl-class-load/perl-class-load.hash
++++ b/package/perl-termreadkey/perl-termreadkey.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e4c831c08df592ce8dfee0c7cfc12fd7 Class-Load-0.25.tar.gz
-+sha256 2a48fa779b5297e56156380e8b32637c6c58decb4f4a7f3c7350523e11275f8f Class-Load-0.25.tar.gz
++md5    e8ea15c16333ac4f8d146d702e83cc0c TermReadKey-2.37.tar.gz
++sha256 4a9383cf2e0e0194668fe2bd546e894ffad41d556b41d2f2f577c8db682db241 TermReadKey-2.37.tar.gz
 +
 +# computed by scancpan
-+sha256 dc030e63f20035291b90d09c2c40f296224e85878caf829ea981fc2f10910f9d LICENSE
-diff --git a/package/perl-class-load/perl-class-load.mk b/package/perl-class-load/perl-class-load.mk
++sha256 9deb4e80e04cca282a98902939225bf0bedac2e04034df5dba80f12bd0a3be26 README
+diff --git a/package/perl-termreadkey/perl-termreadkey.mk b/package/perl-termreadkey/perl-termreadkey.mk
 new file mode 100644
-index 0000000000..33a6288465
+index 0000000000..ba2193b66b
 --- /dev/null
-+++ b/package/perl-class-load/perl-class-load.mk
-@@ -0,0 +1,14 @@
++++ b/package/perl-termreadkey/perl-termreadkey.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-class-load
++# perl-termreadkey
 +#
 +################################################################################
 +
-+PERL_CLASS_LOAD_VERSION = 0.25
-+PERL_CLASS_LOAD_SOURCE = Class-Load-$(PERL_CLASS_LOAD_VERSION).tar.gz
-+PERL_CLASS_LOAD_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
-+PERL_CLASS_LOAD_DEPENDENCIES = perl-data-optlist perl-module-implementation perl-module-runtime perl-package-stash perl-try-tiny
-+PERL_CLASS_LOAD_LICENSE = Artistic or GPL-1.0+
-+PERL_CLASS_LOAD_LICENSE_FILES = LICENSE
++PERL_TERMREADKEY_VERSION = 2.37
++PERL_TERMREADKEY_SOURCE = TermReadKey-$(PERL_TERMREADKEY_VERSION).tar.gz
++PERL_TERMREADKEY_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JS/JSTOWE
++PERL_TERMREADKEY_LICENSE = Artistic or GPL-1.0+
++PERL_TERMREADKEY_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
