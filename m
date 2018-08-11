@@ -1,189 +1,128 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 11 Aug 2018 00:48:27 -0300
-Subject: [Buildroot] [PATCH v2 1/1] check-package: fix Python3 support
-In-Reply-To: <20180723004107.20985-1-ricardo.martincoski@gmail.com>
-References: <20180723004107.20985-1-ricardo.martincoski@gmail.com>
-Message-ID: <20180811034827.14504-1-ricardo.martincoski@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 11 Aug 2018 08:00:10 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-10
+Message-ID: <20180811060010.B732F207AB@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This script currently uses "/usr/bin/env python" as shebang but it does
-not really support Python3. Instead of limiting the script to Python2,
-fix it to support both versions.
+Hello,
 
-So change all imports to absolute imports because Python3 follows PEP328
-and dropped implicit relative imports.
+Build statistics for 2018-08-10
+===============================
 
-In order to avoid errors when decoding files with the default 'utf-8'
-codec, use errors="surrogateescape" when opening files, the docs for
-open() states: "This is useful for processing files in an unknown
-encoding.". This argument is not compatible with Python2 open() so
-import 'six' to use it only when running in Python3.
-As a consequence the file handler becomes explicit, so use it to close()
-the file after it got processed.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  13 |   1 |   0 |  14 |
+   2018.05.x |  16 |   3 |   0 |  19 |
+      master | 137 |  22 |   0 | 159 |
+        next |  25 |   6 |   2 |  33 |
 
-This "surrogateescape" is a simple alternative to the complete solution
-of opening files with "rb" and changing all functions in the lib*.py
-files to use bytes objects instead of strings. The only case we can have
-non-ascii/non-utf-8 files being checked by the script are for patch
-files when the upstream file to be patched is not ascii or utf-8. There
-is currently one case in the tree:
-package/urg/0002-urg-gcc6-fix-narrowing-conversion.patch.
+Results for branch '2018.02.x'
+==============================
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
-Changes v1 -> v2:
-  - do not use an automated tool (modernize);
-  - use absolute import;
-  - drop list() added to .keys(), it's not needed (Arnout);
-  - drop 'from __future__ import absolute_import' everywhere;
-  - list the (not used) approach of opening files in binary mode in the
-    commit message;
+Classification of failures by reason
+------------------------------------
 
-Using the default docker (debian) image which uses Python2:
-before this patch:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/88548503
-after this patch:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/88561994
+                  samba4-4.7.6 | 1 
 
-Using an arch docker image which uses Python3:
-before this patch:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/88561488
-after this patch:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/88561704
-The arch image for docker was generated using:
-http://patchwork.ozlabs.org/patch/943301/
----
- utils/check-package                 |  8 +++++++-
- utils/checkpackagelib/lib.py        |  2 +-
- utils/checkpackagelib/lib_config.py | 10 +++++-----
- utils/checkpackagelib/lib_hash.py   | 10 +++++-----
- utils/checkpackagelib/lib_mk.py     | 10 +++++-----
- utils/checkpackagelib/lib_patch.py  |  4 ++--
- 6 files changed, 25 insertions(+), 19 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 3dbc28b0a2..26439f08eb 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -6,6 +6,7 @@ import argparse
- import inspect
- import os
- import re
-+import six
- import sys
- 
- import checkpackagelib.lib_config
-@@ -127,10 +128,15 @@ def check_file_using_lib(fname):
- 
-     for cf in objects:
-         nwarnings += print_warnings(cf.before())
--    for lineno, text in enumerate(open(fname, "r").readlines()):
-+    if six.PY3:
-+        f = open(fname, "r", errors="surrogateescape")
-+    else:
-+        f = open(fname, "r")
-+    for lineno, text in enumerate(f.readlines()):
-         nlines += 1
-         for cf in objects:
-             nwarnings += print_warnings(cf.check_line(lineno + 1, text))
-+    f.close()
-     for cf in objects:
-         nwarnings += print_warnings(cf.after())
- 
-diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
-index 91f4ad49b7..6afe1aabce 100644
---- a/utils/checkpackagelib/lib.py
-+++ b/utils/checkpackagelib/lib.py
-@@ -1,6 +1,6 @@
- # See utils/checkpackagelib/readme.txt before editing this file.
- 
--from base import _CheckFunction
-+from checkpackagelib.base import _CheckFunction
- 
- 
- class ConsecutiveEmptyLines(_CheckFunction):
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 1d273f1c5f..89d44da57e 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -5,11 +5,11 @@
- 
- import re
- 
--from base import _CheckFunction
--from lib import ConsecutiveEmptyLines  # noqa: F401
--from lib import EmptyLastLine          # noqa: F401
--from lib import NewlineAtEof           # noqa: F401
--from lib import TrailingSpace          # noqa: F401
-+from checkpackagelib.base import _CheckFunction
-+from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
-+from checkpackagelib.lib import EmptyLastLine          # noqa: F401
-+from checkpackagelib.lib import NewlineAtEof           # noqa: F401
-+from checkpackagelib.lib import TrailingSpace          # noqa: F401
- 
- 
- def _empty_or_comment(text):
-diff --git a/utils/checkpackagelib/lib_hash.py b/utils/checkpackagelib/lib_hash.py
-index 6d4cc9fd62..3e381119a5 100644
---- a/utils/checkpackagelib/lib_hash.py
-+++ b/utils/checkpackagelib/lib_hash.py
-@@ -5,11 +5,11 @@
- 
- import re
- 
--from base import _CheckFunction
--from lib import ConsecutiveEmptyLines  # noqa: F401
--from lib import EmptyLastLine          # noqa: F401
--from lib import NewlineAtEof           # noqa: F401
--from lib import TrailingSpace          # noqa: F401
-+from checkpackagelib.base import _CheckFunction
-+from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
-+from checkpackagelib.lib import EmptyLastLine          # noqa: F401
-+from checkpackagelib.lib import NewlineAtEof           # noqa: F401
-+from checkpackagelib.lib import TrailingSpace          # noqa: F401
- 
- 
- def _empty_line_or_comment(text):
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 86e9aa2d97..9bf417fb73 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -6,11 +6,11 @@
- 
- import re
- 
--from base import _CheckFunction
--from lib import ConsecutiveEmptyLines  # noqa: F401
--from lib import EmptyLastLine          # noqa: F401
--from lib import NewlineAtEof           # noqa: F401
--from lib import TrailingSpace          # noqa: F401
-+from checkpackagelib.base import _CheckFunction
-+from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
-+from checkpackagelib.lib import EmptyLastLine          # noqa: F401
-+from checkpackagelib.lib import NewlineAtEof           # noqa: F401
-+from checkpackagelib.lib import TrailingSpace          # noqa: F401
- 
- 
- class Indent(_CheckFunction):
-diff --git a/utils/checkpackagelib/lib_patch.py b/utils/checkpackagelib/lib_patch.py
-index 555621afa1..453b782e6c 100644
---- a/utils/checkpackagelib/lib_patch.py
-+++ b/utils/checkpackagelib/lib_patch.py
-@@ -5,8 +5,8 @@
- 
- import re
- 
--from base import _CheckFunction
--from lib import NewlineAtEof           # noqa: F401
-+from checkpackagelib.base import _CheckFunction
-+from checkpackagelib.lib import NewlineAtEof           # noqa: F401
- 
- 
- class ApplyOrder(_CheckFunction):
+Detail of failures
+------------------
+
+    mips64el |                   samba4-4.7.6 | NOK | http://autobuild.buildroot.net/results/63daa9e3e94426cc4007e279bd4e531fdc711439 |     
+
+Results for branch '2018.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+          host-libglib2-2.56.1 | 1 
+                      qt-4.8.7 | 1 
+              wireshark-2.2.15 | 1 
+
+
+Detail of failures
+------------------
+
+    mips64el |           host-libglib2-2.56.1 | NOK | http://autobuild.buildroot.net/results/114d534168908cef0e84c8727aaf21e304fef73d |     
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/ae2996a3b1543794b2925c1c1e96e29736f0dce5 | ORPH
+         arc |               wireshark-2.2.15 | NOK | http://autobuild.buildroot.net/results/8beb0f535bb80e02ab1bc85e089bb67f95a67242 | ORPH
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+           host-libselinux-2.7 | 4 
+                  boost-1.67.0 | 3 
+                    ncmpc-0.30 | 3 
+                qt5base-5.11.1 | 3 
+              mjpegtools-2.1.0 | 2 
+               aircrack-ng-1.3 | 1 
+                    brltty-5.5 | 1 
+                 host-rauc-0.4 | 1 
+            micropython-v1.9.3 | 1 
+              python-pyqt5-5.7 | 1 
+              wireshark-2.2.16 | 1 
+                  zeromq-4.2.5 | 1 
+
+
+Detail of failures
+------------------
+
+        i586 |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/882c75ba2825b3b45dbc8d4a73403106de31d3a4 |     
+        m68k |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/8b6d55ddb003741203e898217538a65c29c0c200 |     
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/d8d2b89f9412a99065e43fb414403a45f13a0dbe |     
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/b2517e3f6736798826bacfabacd5050c0955f672 |     
+       sparc |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/c9b1a8c8ab7a5502e94a260577ad60dc04d427f2 |     
+      xtensa |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/0c85a9a3effd541ca03d1d86ec42a8054c434aeb |     
+         arm |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/50280d31eb4291dd993ab772a4b8af07b5a24293 |     
+     powerpc |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/1fa49b8447650d1ec4580213fe183a7537302bbf |     
+      x86_64 |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/d5ce6f38433759e2324fa89e6decb19af9e3ee8a |     
+        i686 |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/eabfa15e1d7f84e2b7a9540f0b639b900942848c |     
+     aarch64 |             micropython-v1.9.3 | NOK | http://autobuild.buildroot.net/results/fd1cc5f2bcb7b6110a93a00dddeb96e19fa7489f |     
+     powerpc |               mjpegtools-2.1.0 | NOK | http://autobuild.buildroot.net/results/f92da0a4e5d07f0887ebee087eaa551735fb19aa |     
+     powerpc |               mjpegtools-2.1.0 | NOK | http://autobuild.buildroot.net/results/8882f441e44bc5808e2ef91cde8a54fb8e776649 |     
+        or1k |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/cb708ecfaa9444c480071dfc174510fe06b7a5a9 |     
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/952e9a5c51d439481b014a4bfcde41cfa35bff6e |     
+        or1k |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/c8e94b94dc6455d8dc38e08733b63173d1bf8baf |     
+    mips64el |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/19718603e70ea4fd7ffbfe4110dfb6704f5f2ded |     
+  aarch64_be |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/b53ff039a13f5a340c852bbde61ed971f98160da |     
+        or1k |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/be91a83d6458c8a77c2bcb293e319d03dc4406b8 |     
+microblazeel |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/052ce15b6892e218a3b7878e279a8b66671282b6 |     
+      mipsel |               wireshark-2.2.16 | NOK | http://autobuild.buildroot.net/results/cb36b07407f4b12df14a2800db098810217290c0 | ORPH
+        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/1960ea5b8b3a393d993a647fc498abdbe811c821 |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.67.0 | 3 
+               azure-iot-sdk-c | 1 
+              glibc-glibc-2.28 | 1 
+         host-cryptsetup-2.0.3 | 1 
+                linux-firmware | 1 
+            micropython-v1.9.4 | 1 
+
+
+Detail of failures
+------------------
+
+     sparc64 |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/8333fdf5972757e0e3b8370aee59d28f14546cdb |     
+      x86_64 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/d3dfad8b666273a97c11aa7f6fab0cdbd1b2cb96 |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/7c4229ca8e2edda580bb9ceed9466bf23b61dabc |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/ad38c4640969a3617d64700c123baca355037757 |     
+         arm |               glibc-glibc-2.28 | NOK | http://autobuild.buildroot.net/results/414c0f859ea69a3689c73daed4e2b4f3a936dd32 | ORPH
+        m68k |          host-cryptsetup-2.0.3 | NOK | http://autobuild.buildroot.net/results/bb169559adfc0f9966a3378781222700ed59b278 |     
+      xtensa |                 linux-firmware | TIM | http://autobuild.buildroot.net/results/d103b662c009e284afe8afcf10e06d434cd236c6 |     
+         sh4 |             micropython-v1.9.4 | NOK | http://autobuild.buildroot.net/results/79d14b71a3a66434bf004f32a215b7e62a167c85 |     
+
+
 -- 
-2.17.1
+http://autobuild.buildroot.net
