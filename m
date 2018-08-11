@@ -1,64 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Aug 2018 12:35:15 +0200
-Subject: [Buildroot] [git commit] mesa3d-headers: fix logic to generate the
- dri.pc file
-Message-ID: <20180811102835.890E88B802@busybox.osuosl.org>
+Date: Sat, 11 Aug 2018 12:35:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: Remove warning from
+ Config.in
+In-Reply-To: <20180811080647.16373-1-bernd.kuhls@t-online.de>
+References: <20180811080647.16373-1-bernd.kuhls@t-online.de>
+Message-ID: <20180811123523.4c33218b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98e3c1eee505b6c92c75daa1772ba543936b099f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-As noted by Arnout in [1], the logic in mesa3d-headers.mk generates a
-bogus dri.pc file, which looks like this:
+On Sat, 11 Aug 2018 10:06:47 +0200, Bernd Kuhls wrote:
+> Four years ago this warning was added to this package
+> https://git.buildroot.net/buildroot/commit/package/vlc?id=e33019aaa0409e35b725dddffe09e3e2a42959d1
+> due to "autobuilder failures for vlc on many platforms".
+> 
+> The last autobuilder failure occured May 1st, 2018 and was fixed by
+> https://git.buildroot.net/buildroot/commit/package/vlc?id=9f115bfc2ac798c737d0c2a8ec8c96670e814a49
+> 
+> Therefore this warning is not needed anymore.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/vlc/Config.in | 5 -----
+>  1 file changed, 5 deletions(-)
 
-prefix=/usr
-exec_prefix=/usr
-libdir=/lib
-includedir=/include
-dridriverdir=/dri
+Applied to master, thanks.
 
-Indeed, the ${...} are expanded as shell variables when the sed
-command is executed, while the intention is that those ${...} should
-go in the .pc file. By escaping those using $${...}, we get the
-expected .pc file:
-
-prefix=/usr
-exec_prefix=/usr
-libdir=${exec_prefix}/lib
-includedir=${prefix}/include
-dridriverdir=${libdir}/dri
-
-This was detected by the not yet committed check-package improvement
-from Ricardo that detects bogus ${...} usage to reference make
-variables.
-
-[1] http://lists.busybox.net/pipermail/buildroot/2018-July/225402.html
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mesa3d-headers/mesa3d-headers.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index de8a9dc7cf..fc88f0ed60 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -35,9 +35,9 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
- # contains -i.
- define MESA3D_HEADERS_BUILD_DRI_PC
- 	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
--	    -e 's:@libdir@:${exec_prefix}/lib:' \
--	    -e 's:@includedir@:${prefix}/include:' \
--	    -e 's:@DRI_DRIVER_INSTALL_DIR@:${libdir}/dri:' \
-+	    -e 's:@libdir@:$${exec_prefix}/lib:' \
-+	    -e 's:@includedir@:$${prefix}/include:' \
-+	    -e 's:@DRI_DRIVER_INSTALL_DIR@:$${libdir}/dri:' \
- 	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
- 	    -e 's:@DRI_PC_REQ_PRIV@::' \
- 	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
