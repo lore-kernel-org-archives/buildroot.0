@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Aug 2018 12:35:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Remove warning from
- Config.in
-In-Reply-To: <20180811080647.16373-1-bernd.kuhls@t-online.de>
-References: <20180811080647.16373-1-bernd.kuhls@t-online.de>
-Message-ID: <20180811123523.4c33218b@windsurf>
+Date: Sat, 11 Aug 2018 12:36:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: needs speexdsp for
+ optional speex support
+In-Reply-To: <20180811084855.16065-1-bernd.kuhls@t-online.de>
+References: <20180811084855.16065-1-bernd.kuhls@t-online.de>
+Message-ID: <20180811123641.5f67eff4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 11 Aug 2018 10:06:47 +0200, Bernd Kuhls wrote:
-> Four years ago this warning was added to this package
-> https://git.buildroot.net/buildroot/commit/package/vlc?id=e33019aaa0409e35b725dddffe09e3e2a42959d1
-> due to "autobuilder failures for vlc on many platforms".
+On Sat, 11 Aug 2018 10:48:55 +0200, Bernd Kuhls wrote:
+> Fixes configure warning:
 > 
-> The last autobuilder failure occured May 1st, 2018 and was fixed by
-> https://git.buildroot.net/buildroot/commit/package/vlc?id=9f115bfc2ac798c737d0c2a8ec8c96670e814a49
-> 
-> Therefore this warning is not needed anymore.
+> checking for SPEEX... yes
+> checking for SPEEXDSP... no
+> configure: WARNING: Package speexdsp was not found in the pkg-config search path.
+> Perhaps you should add the directory containing `speexdsp.pc'
+> to the PKG_CONFIG_PATH environment variable
+> Package 'speexdsp', required by 'world', not found.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/vlc/Config.in | 5 -----
->  1 file changed, 5 deletions(-)
+>  package/vlc/vlc.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
