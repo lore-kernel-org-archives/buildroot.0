@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Aug 2018 23:05:21 +0200
-Subject: [Buildroot] [PATCH/next 11/12] package/vlc: add optional dependency
- to libdvdread
+Date: Sat, 11 Aug 2018 23:05:19 +0200
+Subject: [Buildroot] [PATCH/next 09/12] package/vlc: add optional dependency
+ to libidn
 In-Reply-To: <20180811210522.15600-1-bernd.kuhls@t-online.de>
 References: <20180811210522.15600-1-bernd.kuhls@t-online.de>
-Message-ID: <20180811210522.15600-12-bernd.kuhls@t-online.de>
+Message-ID: <20180811210522.15600-10-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vlc/vlc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/vlc/vlc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 9e1dc6b92e..928b3fabb8 100644
+index b8c47582dc..edd0c36372 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -206,6 +206,13 @@ else
- VLC_CONF_OPTS += --disable-dvbpsi
+@@ -216,6 +216,10 @@ else
+ VLC_CONF_OPTS += --disable-libgcrypt
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
-+VLC_CONF_OPTS += --enable-dvdread
-+VLC_DEPENDENCIES += libdvdread
-+else
-+VLC_CONF_OPTS += --disable-dvdread
++ifeq ($(BR2_PACKAGE_LIBIDN),y)
++VLC_DEPENDENCIES += libidn
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- VLC_CONF_OPTS += --enable-libgcrypt
- VLC_DEPENDENCIES += libgcrypt
+ ifeq ($(BR2_PACKAGE_LIBMAD),y)
+ VLC_CONF_OPTS += --enable-mad
+ VLC_DEPENDENCIES += libmad
 -- 
 2.18.0
