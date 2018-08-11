@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sat, 11 Aug 2018 11:27:43 -0700
-Subject: [Buildroot] [PATCH 11/17] perl-package-stash: new package
+Date: Sat, 11 Aug 2018 11:27:44 -0700
+Subject: [Buildroot] [PATCH 12/17] perl-template-toolkit: new package
 In-Reply-To: <20180811182749.20924-1-chrismcc@gmail.com>
 References: <20180811182749.20924-1-chrismcc@gmail.com>
-Message-ID: <20180811182749.20924-12-chrismcc@gmail.com>
+Message-ID: <20180811182749.20924-13-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,85 +12,87 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/perl-package-stash/Config.in               |  8 ++++++++
- package/perl-package-stash/perl-package-stash.hash |  6 ++++++
- package/perl-package-stash/perl-package-stash.mk   | 15 +++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/perl-package-stash/Config.in
- create mode 100644 package/perl-package-stash/perl-package-stash.hash
- create mode 100644 package/perl-package-stash/perl-package-stash.mk
+ DEVELOPERS                                               |  1 +
+ package/Config.in                                        |  1 +
+ package/perl-template-toolkit/Config.in                  | 11 +++++++++++
+ package/perl-template-toolkit/perl-template-toolkit.hash |  6 ++++++
+ package/perl-template-toolkit/perl-template-toolkit.mk   | 14 ++++++++++++++
+ 5 files changed, 33 insertions(+)
+ create mode 100644 package/perl-template-toolkit/Config.in
+ create mode 100644 package/perl-template-toolkit/perl-template-toolkit.hash
+ create mode 100644 package/perl-template-toolkit/perl-template-toolkit.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9d7d38ea75..ce2e31461a 100644
+index ce2e31461a..e23ad8a879 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -499,6 +499,7 @@ F:	package/perl-mime-tools
- F:	package/perl-module-implementation
- F:	package/perl-module-runtime
- F:	package/perl-number-bytes-human
-+F:	package/perl-package-stash
- F:	package/perl-params-util
+@@ -504,6 +504,7 @@ F:	package/perl-params-util
  F:	package/perl-sub-install
  F:	package/perl-sys-meminfo
+ F:	package/perl-sys-mmap
++F:	package/perl-template-toolkit
+ 
+ N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ F:	package/audit/
 diff --git a/package/Config.in b/package/Config.in
-index 1008a651ec..57b22af90e 100644
+index 57b22af90e..58c75b0d8f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -726,6 +726,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-net-telnet/Config.in"
- 	source "package/perl-netaddr-ip/Config.in"
- 	source "package/perl-number-bytes-human/Config.in"
-+	source "package/perl-package-stash/Config.in"
- 	source "package/perl-params-util/Config.in"
- 	source "package/perl-path-tiny/Config.in"
+@@ -732,6 +732,7 @@ menu "Perl libraries/modules"
  	source "package/perl-sub-install/Config.in"
-diff --git a/package/perl-package-stash/Config.in b/package/perl-package-stash/Config.in
+ 	source "package/perl-sys-meminfo/Config.in"
+ 	source "package/perl-sys-mmap/Config.in"
++	source "package/perl-template-toolkit/Config.in"
+ 	source "package/perl-time-hires/Config.in"
+ 	source "package/perl-timedate/Config.in"
+ 	source "package/perl-try-tiny/Config.in"
+diff --git a/package/perl-template-toolkit/Config.in b/package/perl-template-toolkit/Config.in
 new file mode 100644
-index 0000000000..755850f7b6
+index 0000000000..1caca074aa
 --- /dev/null
-+++ b/package/perl-package-stash/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PERL_PACKAGE_STASH
-+	bool "perl-package-stash"
-+	select BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS
-+	select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
++++ b/package/perl-template-toolkit/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PERL_TEMPLATE_TOOLKIT
++	bool "perl-template-toolkit"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_PERL_APPCONFIG
 +	help
-+	  routines for manipulating stashes
++	  comprehensive template processing system
 +
-+	  http://metacpan.org/release/Package-Stash
-diff --git a/package/perl-package-stash/perl-package-stash.hash b/package/perl-package-stash/perl-package-stash.hash
++	  https://metacpan.org/release/Template-Toolkit
++
++comment "perl-template-toolkit needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-template-toolkit/perl-template-toolkit.hash b/package/perl-template-toolkit/perl-template-toolkit.hash
 new file mode 100644
-index 0000000000..4d9b202879
+index 0000000000..54d4553695
 --- /dev/null
-+++ b/package/perl-package-stash/perl-package-stash.hash
++++ b/package/perl-template-toolkit/perl-template-toolkit.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    7e47a8261312e1cf3d12bd2007916b66 Package-Stash-0.37.tar.gz
-+sha256 06ab05388f9130cd377c0e1d3e3bafeed6ef6a1e22104571a9e1d7bfac787b2c Package-Stash-0.37.tar.gz
++md5    a7fae5d4fe5918f33105d92a62134067 Template-Toolkit-2.27.tar.gz
++sha256 1311a403264d0134c585af0309ff2a9d5074b8ece23ece5660d31ec96bf2c6dc Template-Toolkit-2.27.tar.gz
 +
 +# computed by scancpan
-+sha256 b4e0637ed96008ddcbf7e0ddeb73967df3d0b4dc62a6b7fdb86eac37018cb12e LICENSE
-diff --git a/package/perl-package-stash/perl-package-stash.mk b/package/perl-package-stash/perl-package-stash.mk
++sha256 d897b2d98affd4f0489340e54ceb542383101e3d21408dfad025df71d770d842 README
+diff --git a/package/perl-template-toolkit/perl-template-toolkit.mk b/package/perl-template-toolkit/perl-template-toolkit.mk
 new file mode 100644
-index 0000000000..0da733dcbe
+index 0000000000..820fb5bd8d
 --- /dev/null
-+++ b/package/perl-package-stash/perl-package-stash.mk
-@@ -0,0 +1,15 @@
++++ b/package/perl-template-toolkit/perl-template-toolkit.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-package-stash
++# perl-template-toolkit
 +#
 +################################################################################
 +
-+PERL_PACKAGE_STASH_VERSION = 0.37
-+PERL_PACKAGE_STASH_SOURCE = Package-Stash-$(PERL_PACKAGE_STASH_VERSION).tar.gz
-+PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY
-+PERL_PACKAGE_STASH_DEPENDENCIES = host-perl-dist-checkconflicts perl-dist-checkconflicts perl-module-implementation
-+PERL_TEMPLATE_TOOLKIT_CONF_OPTS += TT_XS_ENABLE=n
-+PERL_PACKAGE_STASH_LICENSE = Artistic or GPL-1.0+
-+PERL_PACKAGE_STASH_LICENSE_FILES = LICENSE
++PERL_TEMPLATE_TOOLKIT_VERSION = 2.27
++PERL_TEMPLATE_TOOLKIT_SOURCE = Template-Toolkit-$(PERL_TEMPLATE_TOOLKIT_VERSION).tar.gz
++PERL_TEMPLATE_TOOLKIT_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABW
++PERL_TEMPLATE_TOOLKIT_DEPENDENCIES = host-perl-cgi perl-appconfig
++PERL_TEMPLATE_TOOLKIT_LICENSE = Artistic or GPL-1.0+
++PERL_TEMPLATE_TOOLKIT_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
