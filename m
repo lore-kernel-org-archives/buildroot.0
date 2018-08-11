@@ -1,10 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 10 Aug 2018 19:20:47 -0500
-Subject: [Buildroot] Analysis of build results for 2018-08-09
-In-Reply-To: <20180811001555.0b515e22@windsurf>
-References: <20180810060017.0EEFE20719@mail.bootlin.com>
- <20180811001555.0b515e22@windsurf>
-Message-ID: <CANQCQpauBUYBkxNiw7CtHNOO3pOkxF0PGnjrP_HagUJ+N2q=hQ@mail.gmail.com>
+Date: Fri, 10 Aug 2018 19:30:04 -0500
+Subject: [Buildroot] [PATCH 4/6] support/testing: runtest proxy support
+In-Reply-To: <20180810225123.0f70cfcc@windsurf>
+References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
+ <20180711143113.11927-5-matthew.weber@rockwellcollins.com>
+ <20180810225123.0f70cfcc@windsurf>
+Message-ID: <CANQCQpZqRX17oBbaNKM6ovVATtCdJOJo79TV1_TfWBWL_T_pDA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +14,40 @@ To: buildroot@busybox.net
 
 Thomas,
 
-On Fri, Aug 10, 2018 at 5:16 PM Thomas Petazzoni
+On Fri, Aug 10, 2018 at 3:51 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
 > Hello,
 >
-> On Fri, 10 Aug 2018 08:00:17 +0200 (CEST), Thomas Petazzoni wrote:
->
-> > Build statistics for 2018-08-09
-> > ===============================
+> On Wed, 11 Jul 2018 09:31:11 -0500, Matt Weber wrote:
+> > Allow builder.py to inherit the system proxy settings from
+> > the env if they are present.
 > >
-> >       branch |  OK | NOK | TIM | TOT |
-> >    2018.02.x |  10 |   1 |   0 |  11 |
-> >    2018.05.x |  14 |   1 |   0 |  15 |
-> >       master | 123 |  10 |   3 | 136 |
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 >
-> This we've got only 10 failures on master, let's have a look at them.
-> >      aarch64 |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/66c03506e10071ec44ca509304595f4f5150e4d9 |
-> >       mipsel |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/2b41afe7841feba626fc29c9474e82d9934e6173 |
+> I have applied to next, but I have one question below.
 >
-> Due to the use of atomic built-ins, not available in old compilers. I
-> would suggest to make all packages that depend on host-libselinux to
-> depend on the appropriate host gcc version.
+> > ---
+> >  support/testing/infra/builder.py | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+> > index faf1eb1494..30230fdb17 100644
+> > --- a/support/testing/infra/builder.py
+> > +++ b/support/testing/infra/builder.py
+> > @@ -35,6 +35,12 @@ class Builder(object):
+> >
+> >      def build(self):
+> >          env = {"PATH": os.environ["PATH"]}
+> > +        if "http_proxy" in os.environ:
+> > +            self.logfile.write("Using system proxy: " +
+> > +                               os.environ["http_proxy"] + "\n")
+> > +            self.logfile.flush()
+>
+> Is this flush() really needed ?
 
-Hollis has sent a patch suggestion to keep libselinux compatible with
-older gcc.  Is there a preference on carrying the patch vs using a
-host gcc version detect ?  I didn't realize we had a way to depend on
-host gcc version.  I'll take a look at that but let me know which way
-is preferred.
+I had added it because my subprocess.call() in python was failing and
+at that time I believed the proxy logfile write wasn't flushing.  It
+could probably be removed now as it was an artifact of debugging.
 
 Matt
