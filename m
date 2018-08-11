@@ -1,11 +1,11 @@
 From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 10 Aug 2018 19:49:20 -0500
-Subject: [Buildroot] [PATCH v2 6/6] support/testing/tests/core: SSP &
- hardening flags
-In-Reply-To: <20180810231852.70f9a004@windsurf>
-References: <20180717030420.12009-1-matthew.weber@rockwellcollins.com>
- <20180810231852.70f9a004@windsurf>
-Message-ID: <CANQCQpbZBRPam3wYMgWeFd7eEMwuCPrDTZ+nP7-U7o1iEZgGSw@mail.gmail.com>
+Date: Fri, 10 Aug 2018 19:57:06 -0500
+Subject: [Buildroot] [PATCH 5/6] package/checksec: new package
+In-Reply-To: <20180810225855.4cb005dc@windsurf>
+References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
+ <20180711143113.11927-6-matthew.weber@rockwellcollins.com>
+ <20180810225855.4cb005dc@windsurf>
+Message-ID: <CANQCQpY2V8pnzkro2-Y4DnDXFTC0DnwsD8JX6f1xpj_YxbhajA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,95 +13,134 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Thomas,
-On Fri, Aug 10, 2018 at 4:18 PM Thomas Petazzoni
+On Fri, Aug 10, 2018 at 3:59 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello,
+> Matt, Paresh,
 >
-> On Mon, 16 Jul 2018 22:04:20 -0500, Matt Weber wrote:
+> On Wed, 11 Jul 2018 09:31:12 -0500, Matt Weber wrote:
+> > From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+> >
+> > This patch added host-checksec package support. This tool
 >
-> > diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+> added -> adds
+
+Noted.
+
+>
+> > diff --git a/package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch b/package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch
 > > new file mode 100644
-> > index 0000000000..d3eb0941d3
+> > index 0000000000..43a882d991
 > > --- /dev/null
-> > +++ b/support/testing/tests/core/test_hardening.py
-> > @@ -0,0 +1,112 @@
-> > +import os
-> > +import subprocess
-> > +import json
+> > +++ b/package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch
+> > @@ -0,0 +1,43 @@
+> > +From b48a2dfae26fa3b4af8e65fb5953b3caf62c137b Mon Sep 17 00:00:00 2001
+> > +From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+> > +Date: Mon, 21 May 2018 14:34:23 -0500
+> > +Subject: [PATCH] checksec: Fixed issue with relative path
 > > +
-> > +import infra.basetest
-> > +
-> > +HARD_DEFCONFIG = \
-> > +    """
-> > +    BR2_powerpc64=y
-> > +    BR2_powerpc_e5500=y
-> > +    BR2_TOOLCHAIN_EXTERNAL=y
-> > +    BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> > +    BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
-> > +    BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-> > +    BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-> > +    BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> > +    BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> > +    BR2_PACKAGE_LIGHTTPD=y
-> > +    BR2_PACKAGE_HOST_CHECKSEC=y
-> > +    # BR2_TARGET_ROOTFS_TAR is not set
-> > +    """
-> > +
-> > +
-> > +def checksec_run(builddir, target_file):
-> > +    cmd = ["host/bin/checksec", "--output", "json", "--file", target_file]
+> > +Before this patch script was not able find exists directory when user pass
+> > +relative directory path with '--dir' or '-d' option and also we faced this error
+> > +when we execute script with relative path.
 >
-> I'm even more confused now. I thought checksec didn't work in a
-> cross-compiled situation. Could you clarify ?
-
-It has some limitations related to FORTIFY checking when being used in
-a cross compile configuration (needs to run in the actual filesystem
-of the executable to look at the standard libraries).  I can add a
-note to state that limitation.  Otherwise it is completely functional
-for use against any type of binary as it is using readelf and shell
-scripting for ASLR related items.   I'll address more detail in the
-other patch adding the tool when we clean that up.
-
+> The english wording seems weird here, even though I'm not a native
+> speaker. Perhaps:
 >
-> > +    ret = subprocess.check_output(cmd,
-> > +                                  stderr=open(os.devnull, "w"),
-> > +                                  cwd=builddir,
-> > +                                  env={"LANG": "C"})
-> > +    return ret
->
-> Perhaps this function should also do the json.loads and return only
-> out["file"] to avoid duplicating this everywhere in the below classes ?
->
-> Also, using inheritance would be better here:
->
-> class TestHardeningBase(infra.basetest.BRTest):
->         config = """
-> ... the base defconfig ...
+> """
+> Before this patch, the checksec script was not able to find existing
+> directories when the user passes a relative path with --dir/-d,
+> aborting with a "No such file or directory". The same error was
+> reported when the script is executed through a relative path.
 > """
 >
->         checksec_files = ["usr/sbin/lighttpd", "bin/busybox"]
->
->         def checksec_run(self, target_file):
->                 filepath = os.path.join(self.builddir, "target", target_file)
->                 ...
->
-> class TestHardeningRelRo(TestHardeningBase):
->         config = TestHardeningBase.config +
-> """
-> ...
-> """
->
->         def test_run():
->                 for f in checksec_files:
->                         out = self.checksec_run(f)
->                         self.assertEqual(out["relro"], "full")
->                         self.assertEqual(out["pie"], "yes")
->
-> and ditto for the other tests.
->
+> I'm sure Matt, as a native speaker, can come up with an even better
+> wording.
 
-Thanks for the suggestion, I'll take a look at reworking.  My python
-intuition isn't the best :-)
+Thanks, yes will rework.
+
+>
+> > diff --git a/package/checksec/Config.in.host b/package/checksec/Config.in.host
+> > new file mode 100644
+> > index 0000000000..7f86f46b50
+> > --- /dev/null
+> > +++ b/package/checksec/Config.in.host
+> > @@ -0,0 +1,16 @@
+> > +config BR2_PACKAGE_HOST_CHECKSEC
+> > +     bool "host checksec"
+> > +     help
+> > +       This tool provides a shell script to check the
+> > +       properties of the executables
+> > +       (like PIE,RELRO,PaX,Canaries,ASLR,Fortify Source).
+> > +
+> > +       https://github.com/slimm609/checksec.sh.git
+> > +
+> > +       NOTE: This tool has a hard-coded path to the standard
+> > +       libraries for some of the fortify test cases and
+> > +       requires you to either test the local filesystem or be
+> > +       in a chroot'd environment.  The tool can still be used
+> > +       against a folder of files but requires discretion of
+> > +       which the tests may not report consistently vs
+> > +       chroot/on-target.
+>
+> When I look at this and the comment from the maintainer at [0], I am
+> not sure about the usefulness of such a tool in the context of
+> Buildroot. Chrooting into the target filesystem is generally not
+> possible, because the target architecture is different than the build
+> system architecture. To me, this limitation makes the tool essentially
+> useless in the context of Buildroot. Could you comment on this a bit
+> more ?
+
+The tool tests a lot of items related to hardening and we were
+originally trying to get the full set working.  In reality we only
+needed the core items that show us ASLR related items.  The tool is
+made up of scripts and uses readelf for the ASLR piece.  Thus it works
+fine for a host (offline)target filesystem check of executable ALSR
+requirements.  However, I can add a note stating what doesn't work
+correctly.  There are test cases it has that use live proc information
+and the system libraries, etc.
+
+>
+> Also, the formulation "requires discretion of which the test may not
+> report consistently vs chroot/on-target" doesn't make any sense to me.
+
+I can make a list do this is definitive.
+
+>
+> [0] https://github.com/slimm609/checksec.sh/issues/62#issuecomment-389880584
+>
+> > diff --git a/package/checksec/checksec.hash b/package/checksec/checksec.hash
+> > new file mode 100644
+> > index 0000000000..e3d1ffd5d1
+> > --- /dev/null
+> > +++ b/package/checksec/checksec.hash
+> > @@ -0,0 +1,3 @@
+> > +# Locally calculated
+> > +sha256 510b0b0528f15d0bf13fa1ae7140d2b9fc9261323c98ff76c011bef475a69c14 checksec-cdefe53eb72e6e8f23308417d2fc6b68cba9dbac.tar.gz
+> > +sha256 c5e2a8e188040fc34eb9362084778a2e25f8d1f888e47a2be09efa7cecd9c70d LICENSE.txt
+> > diff --git a/package/checksec/checksec.mk b/package/checksec/checksec.mk
+> > new file mode 100644
+> > index 0000000000..31ceb43e21
+> > --- /dev/null
+> > +++ b/package/checksec/checksec.mk
+> > @@ -0,0 +1,16 @@
+> > +################################################################################
+> > +#
+> > +# checksec
+> > +#
+> > +################################################################################
+> > +
+> > +CHECKSEC_VERSION = cdefe53eb72e6e8f23308417d2fc6b68cba9dbac
+> > +CHECKSEC_SITE = $(call github,slimm609,checksec.sh,$(CHECKSEC_VERSION))
+> > +CHECKSEC_LICENSE = BSD-3-Clause
+> > +CHECKSEC_LICENSE_FILES = LICENSE.txt
+> > +
+> > +define HOST_CHECKSEC_INSTALL_CMDS
+> > +     $(INSTALL) -D -m 0755 $(@D)/checksec $(HOST_DIR)/bin/
+>
+> There should be a full destination path here.
+
+Noted.
+
+Thanks for the review.
 
 Matt
