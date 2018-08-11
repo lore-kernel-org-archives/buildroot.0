@@ -1,70 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 14:14:33 +0200
-Subject: [Buildroot] [git commit branch/next] imx-parser: bump version to
+Date: Sat, 11 Aug 2018 19:45:23 +0200
+Subject: [Buildroot] [git commit branch/next] imx-vpuwrap: bump version to
  4.3.5
-Message-ID: <20180812121126.A11A88B8B2@busybox.osuosl.org>
+Message-ID: <20180812121126.8AC378B8B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a60fbd4a91e46a2bac227f1d6a569ff2e5060a0
+commit: https://git.buildroot.net/buildroot/commit/?id=30648c3fd033a67e1f2ed1aa38bc2fea8d21d07d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Added COPYING hash to track license changes.
+No changelog provided for 4.3.5 but it can now builds against the
+following VPU backends:
+- Chips&Media
+- Hantro
+- Amphion (not supported in BR yet)
 
-No changelog provided by NXP for v4.3.5.
+Changes in 4.3.2:
+- Add vpu_wrapper_test
+- Add gst_dump tools
+- Add gl sink
+- Enable RMVB/VC1/DIVX3
+- Add webp support
 
-Changelog for v4.3.4:
-- Fix crash issue when parse index list.
-- Add mett atom in mp4 parser.
-- MP4 PARSER 06.13.00 add interface PARSER_API_GET_TEXT_TRACK_MIME
-to get mime type from mett atom.
-- Add protection for contentDescriptionObject in case the size is not
-correct and larger than qwSize.
-
-Changelog for v4.3.2:
-- Fix creating parser error
-When the variable value is negetive, if(bytesToRead) will return true,
-modify this condition to if(bytesToRead > 0).
-- FLAC PARSER 03.00.07
-Check read actual length in case of parser reach eos.
-- MP4 PARSER 06.12.11
-Fix crash issue when parse id3 metadata.
-- MPG2 PARSER 04.05.16
-Fix parser return wrong frame size after fastforward.
-- ASFPARSER_01.00.55
-Update for HEVC tag and audio AC3 support.
+Changes in 4.3.4:
+- set hasColorDesc and fullRange in VPU_DecGetInitialInfo.
+- Fix H264 failure due to too many MBI buffers.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-[Thomas: add hash for EULA file.]
+[Thomas: add hash for EULA file]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-parser/imx-parser.hash | 4 +++-
- package/freescale-imx/imx-parser/imx-parser.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-vpuwrap/Config.in        | 11 +++++------
+ package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash |  4 +++-
+ package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk   | 11 +++++++++--
+ 3 files changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/package/freescale-imx/imx-parser/imx-parser.hash b/package/freescale-imx/imx-parser/imx-parser.hash
-index 3266f48110..017d2c2f91 100644
---- a/package/freescale-imx/imx-parser/imx-parser.hash
-+++ b/package/freescale-imx/imx-parser/imx-parser.hash
+diff --git a/package/freescale-imx/imx-vpuwrap/Config.in b/package/freescale-imx/imx-vpuwrap/Config.in
+index bdfa147867..8a9bf0e32d 100644
+--- a/package/freescale-imx/imx-vpuwrap/Config.in
++++ b/package/freescale-imx/imx-vpuwrap/Config.in
+@@ -1,17 +1,16 @@
+ comment "imx-vpuwrap needs an imx-specific Linux kernel to be built"
+-	depends on BR2_arm
+ 	depends on !BR2_LINUX_KERNEL
+ 
+ comment "imx-vpuwrap needs an i.MX platform with VPU support"
+-	depends on BR2_arm
+-	depends on BR2_LINUX_KERNEL && !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
++	depends on BR2_LINUX_KERNEL
++	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU && !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
+ 
+ config BR2_PACKAGE_IMX_VPUWRAP
+ 	bool "imx-vpuwrap"
+ 	depends on BR2_LINUX_KERNEL
+-	depends on BR2_arm # Only relevant for i.MX
+-	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+-	select BR2_PACKAGE_IMX_VPU
++	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU || BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
++	select BR2_PACKAGE_IMX_VPU if BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
++	select BR2_PACKAGE_IMX_VPU_HANTRO if BR2_PACKAGE_FREESCALE_IMX_HAS_VPU_HANTRO
+ 	help
+ 	  Wrapper library for the vpu library, giving it a different
+ 	  API.
+diff --git a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash
+index 2999984d2c..7a640374d7 100644
+--- a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash
++++ b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.hash
 @@ -1,2 +1,4 @@
  # locally computed
--sha256	36d3ae7285f3a83a87abf680b8a52b3c07df869d2443de844fb5f0ff528ca862  imx-parser-4.2.1.bin
-+sha256  9cd8c49a0bb1050afcfbcc7a677a348443fda4ecacb621cc6e38897619e27c67  imx-parser-4.3.5.bin
+-sha256	282e7f8766ce385d8752bd29f04ddeff709ece0846be97547cf982183bbe241e  imx-vpuwrap-1.0.68.bin
++sha256  5c08b4b7c771404c998779f0e27a75564b57958d463e2df152c910d76cca9e44  imx-vpuwrap-4.3.5.bin
 +sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
 +sha256  fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
-diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
-index 11536e5024..fc4376f04b 100644
---- a/package/freescale-imx/imx-parser/imx-parser.mk
-+++ b/package/freescale-imx/imx-parser/imx-parser.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
+index edba87279f..fdad3a5f2b 100644
+--- a/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
++++ b/package/freescale-imx/imx-vpuwrap/imx-vpuwrap.mk
+@@ -4,12 +4,19 @@
  #
  ################################################################################
  
--IMX_PARSER_VERSION = 4.2.1
-+IMX_PARSER_VERSION = 4.3.5
- IMX_PARSER_SITE = $(FREESCALE_IMX_SITE)
- IMX_PARSER_SOURCE = imx-parser-$(IMX_PARSER_VERSION).bin
- IMX_PARSER_INSTALL_STAGING = YES
+-IMX_VPUWRAP_VERSION = 1.0.68
++IMX_VPUWRAP_VERSION = 4.3.5
+ IMX_VPUWRAP_SITE = $(FREESCALE_IMX_SITE)
+ IMX_VPUWRAP_SOURCE = imx-vpuwrap-$(IMX_VPUWRAP_VERSION).bin
+-IMX_VPUWRAP_DEPENDENCIES = imx-vpu
+ IMX_VPUWRAP_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PACKAGE_IMX_VPU),y)
++IMX_VPUWRAP_DEPENDENCIES = imx-vpu
++endif
++
++ifeq ($(BR2_PACKAGE_IMX_VPU_HANTRO),y)
++IMX_VPUWRAP_DEPENDENCIES = imx-vpu-hantro
++endif
++
+ IMX_VPUWRAP_LICENSE = NXP Semiconductor Software License Agreement
+ IMX_VPUWRAP_LICENSE_FILES = EULA COPYING
+ IMX_VPUWRAP_REDISTRIBUTE = NO
