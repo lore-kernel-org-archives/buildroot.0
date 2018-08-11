@@ -1,39 +1,81 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 11 Aug 2018 10:06:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: Remove warning from Config.in
-Message-ID: <20180811080647.16373-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 11 Aug 2018 10:33:01 +0200
+Subject: [Buildroot] [PATCH] mesa3d-headers: fix logic to generate the
+ dri.pc file
+In-Reply-To: <20180810214632.21735-1-thomas.petazzoni@bootlin.com>
+References: <20180810214632.21735-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180811083301.GA2402@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Four years ago this warning was added to this package
-https://git.buildroot.net/buildroot/commit/package/vlc?id=e33019aaa0409e35b725dddffe09e3e2a42959d1
-due to "autobuilder failures for vlc on many platforms".
+Thomas, All,
 
-The last autobuilder failure occured May 1st, 2018 and was fixed by
-https://git.buildroot.net/buildroot/commit/package/vlc?id=9f115bfc2ac798c737d0c2a8ec8c96670e814a49
+On 2018-08-10 23:46 +0200, Thomas Petazzoni spake thusly:
+> As noted by Arnout in [1], the logic in mesa3d-headers.mk generates a
+> bogus dri.pc file, which looks like this:
+> 
+> prefix=/usr
+> exec_prefix=/usr
+> libdir=/lib
+> includedir=/include
+> dridriverdir=/dri
+> 
+> Indeed, the ${...} are expanded as shell variables when the sed
+> command is executed, while the intention is that those ${...} should
+> go in the .pc file. By escaping those using $${...}, we get the
+> expected .pc file:
+> 
+> prefix=/usr
+> exec_prefix=/usr
+> libdir=${exec_prefix}/lib
+> includedir=${prefix}/include
+> dridriverdir=${libdir}/dri
+> 
+> This was detected by the not yet committed check-package improvement
+> from Ricardo that detects bogus ${...} usage to reference make
+> variables.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2018-July/225402.html
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Therefore this warning is not needed anymore.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/vlc/Config.in | 5 -----
- 1 file changed, 5 deletions(-)
+Regards,
+Yann E. MORIN.
 
-diff --git a/package/vlc/Config.in b/package/vlc/Config.in
-index 166e7d256a..78769ac27b 100644
---- a/package/vlc/Config.in
-+++ b/package/vlc/Config.in
-@@ -1,8 +1,3 @@
--if BR2_PACKAGE_VLC
--comment "vlc is known not to work in all configurations"
--comment "If you can fix it, please inform buildroot at buildroot.org"
--endif
--
- config BR2_PACKAGE_VLC
- 	bool "vlc"
- 	depends on BR2_USE_MMU # fork()
+> ---
+>  package/mesa3d-headers/mesa3d-headers.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+> index de8a9dc7cf..fc88f0ed60 100644
+> --- a/package/mesa3d-headers/mesa3d-headers.mk
+> +++ b/package/mesa3d-headers/mesa3d-headers.mk
+> @@ -35,9 +35,9 @@ ifeq ($(BR2_PACKAGE_XORG7),y)
+>  # contains -i.
+>  define MESA3D_HEADERS_BUILD_DRI_PC
+>  	sed -e 's:@\(exec_\)\?prefix@:/usr:' \
+> -	    -e 's:@libdir@:${exec_prefix}/lib:' \
+> -	    -e 's:@includedir@:${prefix}/include:' \
+> -	    -e 's:@DRI_DRIVER_INSTALL_DIR@:${libdir}/dri:' \
+> +	    -e 's:@libdir@:$${exec_prefix}/lib:' \
+> +	    -e 's:@includedir@:$${prefix}/include:' \
+> +	    -e 's:@DRI_DRIVER_INSTALL_DIR@:$${libdir}/dri:' \
+>  	    -e 's:@VERSION@:$(MESA3D_HEADERS_VERSION):' \
+>  	    -e 's:@DRI_PC_REQ_PRIV@::' \
+>  	    $(@D)/src/mesa/drivers/dri/dri.pc.in \
+> -- 
+> 2.14.4
+> 
+
 -- 
-2.18.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
