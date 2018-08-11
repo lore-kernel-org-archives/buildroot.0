@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sat, 11 Aug 2018 11:27:36 -0700
-Subject: [Buildroot] [PATCH 04/17] perl-class-std-fast: new package
+Date: Sat, 11 Aug 2018 11:27:38 -0700
+Subject: [Buildroot] [PATCH 06/17] perl-module-runtime: add host
 In-Reply-To: <20180811182749.20924-1-chrismcc@gmail.com>
 References: <20180811182749.20924-1-chrismcc@gmail.com>
-Message-ID: <20180811182749.20924-5-chrismcc@gmail.com>
+Message-ID: <20180811182749.20924-7-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,84 +12,22 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- DEVELOPERS                                           |  1 +
- package/Config.in                                    |  1 +
- package/perl-class-std-fast/Config.in                |  7 +++++++
- package/perl-class-std-fast/perl-class-std-fast.hash |  6 ++++++
- package/perl-class-std-fast/perl-class-std-fast.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/perl-class-std-fast/Config.in
- create mode 100644 package/perl-class-std-fast/perl-class-std-fast.hash
- create mode 100644 package/perl-class-std-fast/perl-class-std-fast.mk
+ package/perl-module-runtime/perl-module-runtime.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c693f6765b..7c8483f493 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -484,6 +484,7 @@ F:	package/perl-appconfig
- F:	package/perl-astro-suntime
- F:	package/perl-cgi
- F:	package/perl-class-std
-+F:	package/perl-class-std-fast
- F:	package/perl-data-uuid
- F:	package/perl-date-manip
- F:	package/perl-dbi
-diff --git a/package/Config.in b/package/Config.in
-index 5b9c47aa79..d38c26a98a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -669,6 +669,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-astro-suntime/Config.in"
- 	source "package/perl-cgi/Config.in"
- 	source "package/perl-class-std/Config.in"
-+	source "package/perl-class-std-fast/Config.in"
- 	source "package/perl-convert-asn1/Config.in"
- 	source "package/perl-crypt-blowfish/Config.in"
- 	source "package/perl-crypt-cbc/Config.in"
-diff --git a/package/perl-class-std-fast/Config.in b/package/perl-class-std-fast/Config.in
-new file mode 100644
-index 0000000000..10b1e0d786
---- /dev/null
-+++ b/package/perl-class-std-fast/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_CLASS_STD_FAST
-+	bool "perl-class-std-fast"
-+	select BR2_PACKAGE_PERL_CLASS_STD
-+	help
-+	  faster but less secure than Class::Std
-+
-+	  https://metacpan.org/release/Class-Std-Fast
-diff --git a/package/perl-class-std-fast/perl-class-std-fast.hash b/package/perl-class-std-fast/perl-class-std-fast.hash
-new file mode 100644
-index 0000000000..07e830a5ee
---- /dev/null
-+++ b/package/perl-class-std-fast/perl-class-std-fast.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    d06d084cb84f295b0aabf2eee78ef746 Class-Std-Fast-v0.0.8.tar.gz
-+sha256 1bd43763c6a373183097a30e787f5d6713b0db27511c52d533266b59d2cfa780 Class-Std-Fast-v0.0.8.tar.gz
-+
-+# computed by scancpan
-+sha256 aa1ab90c498aee078076e9a1f83e5f14bbfd841509582795ab5a9571428c0c38 README
-diff --git a/package/perl-class-std-fast/perl-class-std-fast.mk b/package/perl-class-std-fast/perl-class-std-fast.mk
-new file mode 100644
-index 0000000000..7c008622dd
---- /dev/null
-+++ b/package/perl-class-std-fast/perl-class-std-fast.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# perl-class-std-fast
-+#
-+################################################################################
-+
-+PERL_CLASS_STD_FAST_VERSION = v0.0.8
-+PERL_CLASS_STD_FAST_SOURCE = Class-Std-Fast-$(PERL_CLASS_STD_FAST_VERSION).tar.gz
-+PERL_CLASS_STD_FAST_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AC/ACID
-+PERL_CLASS_STD_FAST_DEPENDENCIES = perl-class-std
-+PERL_CLASS_STD_FAST_LICENSE = Artistic or GPL-1.0+
-+PERL_CLASS_STD_FAST_LICENSE_FILES = README
-+
-+$(eval $(perl-package))
+diff --git a/package/perl-module-runtime/perl-module-runtime.mk b/package/perl-module-runtime/perl-module-runtime.mk
+index 5ba95f7056..44981dc546 100644
+--- a/package/perl-module-runtime/perl-module-runtime.mk
++++ b/package/perl-module-runtime/perl-module-runtime.mk
+@@ -8,7 +8,9 @@ PERL_MODULE_RUNTIME_VERSION = 0.016
+ PERL_MODULE_RUNTIME_SOURCE = Module-Runtime-$(PERL_MODULE_RUNTIME_VERSION).tar.gz
+ PERL_MODULE_RUNTIME_SITE = $(BR2_CPAN_MIRROR)/authors/id/Z/ZE/ZEFRAM
+ PERL_MODULE_RUNTIME_DEPENDENCIES = host-perl-module-build
++HOST_PERL_MODULE_RUNTIME_DEPENDENCIES = host-perl-module-build
+ PERL_MODULE_RUNTIME_LICENSE = Artistic or GPL-1.0+
+ PERL_MODULE_RUNTIME_LICENSE_FILES = README
+ 
+ $(eval $(perl-package))
++$(eval $(host-perl-package))
 -- 
 2.14.4
