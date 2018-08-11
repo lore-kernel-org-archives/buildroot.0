@@ -1,53 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Aug 2018 12:30:49 +0200
-Subject: [Buildroot] [PATCH 5/6] package/checksec: new package
-In-Reply-To: <CANQCQpY2V8pnzkro2-Y4DnDXFTC0DnwsD8JX6f1xpj_YxbhajA@mail.gmail.com>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-6-matthew.weber@rockwellcollins.com>
- <20180810225855.4cb005dc@windsurf>
- <CANQCQpY2V8pnzkro2-Y4DnDXFTC0DnwsD8JX6f1xpj_YxbhajA@mail.gmail.com>
-Message-ID: <20180811123049.16cac0d3@windsurf>
+Date: Sat, 11 Aug 2018 12:34:46 +0200
+Subject: [Buildroot] [git commit] package/vlc: needs speexdsp for optional
+ speex support
+Message-ID: <20180811102808.677F4841EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Matt,
+commit: https://git.buildroot.net/buildroot/commit/?id=c4f18dd3c8664bb6715122c62a32e3b4388fa34e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 10 Aug 2018 19:57:06 -0500, Matthew Weber wrote:
+Fixes configure warning:
 
-> > When I look at this and the comment from the maintainer at [0], I am
-> > not sure about the usefulness of such a tool in the context of
-> > Buildroot. Chrooting into the target filesystem is generally not
-> > possible, because the target architecture is different than the build
-> > system architecture. To me, this limitation makes the tool essentially
-> > useless in the context of Buildroot. Could you comment on this a bit
-> > more ?  
-> 
-> The tool tests a lot of items related to hardening and we were
-> originally trying to get the full set working.  In reality we only
-> needed the core items that show us ASLR related items.  The tool is
-> made up of scripts and uses readelf for the ASLR piece.  Thus it works
-> fine for a host (offline)target filesystem check of executable ALSR
-> requirements.  However, I can add a note stating what doesn't work
-> correctly.  There are test cases it has that use live proc information
-> and the system libraries, etc.
+checking for SPEEX... yes
+checking for SPEEXDSP... no
+configure: WARNING: Package speexdsp was not found in the pkg-config search path.
+Perhaps you should add the directory containing `speexdsp.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'speexdsp', required by 'world', not found.
 
-Yes, something more specific than the vague explanation in the proposed
-Config.in help text would be good.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vlc/vlc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> > Also, the formulation "requires discretion of which the test may not
-> > report consistently vs chroot/on-target" doesn't make any sense to me.  
-> 
-> I can make a list do this is definitive.
-
-OK, good.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 56bfdced53..af85377c94 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -381,9 +381,9 @@ else
+ VLC_CONF_OPTS += --disable-sdl-image
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SPEEX),y)
++ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
+ VLC_CONF_OPTS += --enable-speex
+-VLC_DEPENDENCIES += speex
++VLC_DEPENDENCIES += speex speexdsp
+ else
+ VLC_CONF_OPTS += --disable-speex
+ endif
