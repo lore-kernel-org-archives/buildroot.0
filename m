@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 Aug 2018 12:36:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: needs speexdsp for
- optional speex support
-In-Reply-To: <20180811084855.16065-1-bernd.kuhls@t-online.de>
-References: <20180811084855.16065-1-bernd.kuhls@t-online.de>
-Message-ID: <20180811123641.5f67eff4@windsurf>
+Date: Sat, 11 Aug 2018 12:37:03 +0200
+Subject: [Buildroot] [PATCH] mesa3d-headers: fix logic to generate the
+ dri.pc file
+In-Reply-To: <20180810214632.21735-1-thomas.petazzoni@bootlin.com>
+References: <20180810214632.21735-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180811123703.0b0a4f7f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,20 +13,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 11 Aug 2018 10:48:55 +0200, Bernd Kuhls wrote:
-> Fixes configure warning:
+On Fri, 10 Aug 2018 23:46:32 +0200, Thomas Petazzoni wrote:
+> As noted by Arnout in [1], the logic in mesa3d-headers.mk generates a
+> bogus dri.pc file, which looks like this:
 > 
-> checking for SPEEX... yes
-> checking for SPEEXDSP... no
-> configure: WARNING: Package speexdsp was not found in the pkg-config search path.
-> Perhaps you should add the directory containing `speexdsp.pc'
-> to the PKG_CONFIG_PATH environment variable
-> Package 'speexdsp', required by 'world', not found.
+> prefix=/usr
+> exec_prefix=/usr
+> libdir=/lib
+> includedir=/include
+> dridriverdir=/dri
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Indeed, the ${...} are expanded as shell variables when the sed
+> command is executed, while the intention is that those ${...} should
+> go in the .pc file. By escaping those using $${...}, we get the
+> expected .pc file:
+> 
+> prefix=/usr
+> exec_prefix=/usr
+> libdir=${exec_prefix}/lib
+> includedir=${prefix}/include
+> dridriverdir=${libdir}/dri
+> 
+> This was detected by the not yet committed check-package improvement
+> from Ricardo that detects bogus ${...} usage to reference make
+> variables.
+> 
+> [1] http://lists.busybox.net/pipermail/buildroot/2018-July/225402.html
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/vlc/vlc.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/mesa3d-headers/mesa3d-headers.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
 
