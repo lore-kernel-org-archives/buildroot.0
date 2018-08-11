@@ -1,97 +1,55 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sat, 11 Aug 2018 11:27:49 -0700
-Subject: [Buildroot] [PATCH 17/17] perl-termreadkey: new package
-In-Reply-To: <20180811182749.20924-1-chrismcc@gmail.com>
-References: <20180811182749.20924-1-chrismcc@gmail.com>
-Message-ID: <20180811182749.20924-18-chrismcc@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 11 Aug 2018 20:55:19 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/iperf3: fix openssl detection
+Message-ID: <20180811185519.29273-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
----
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/perl-termreadkey/Config.in             | 10 ++++++++++
- package/perl-termreadkey/perl-termreadkey.hash |  6 ++++++
- package/perl-termreadkey/perl-termreadkey.mk   | 13 +++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/perl-termreadkey/Config.in
- create mode 100644 package/perl-termreadkey/perl-termreadkey.hash
- create mode 100644 package/perl-termreadkey/perl-termreadkey.mk
+Searching for openssl uses the AC_ARG_WITH macro:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e04058a37e..dddb9ca60d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -506,6 +506,7 @@ F:	package/perl-params-util
- F:	package/perl-sub-install
- F:	package/perl-sys-meminfo
- F:	package/perl-sys-mmap
-+F:	package/perl-termreadkey
- F:	package/perl-template-toolkit
- F:	package/perl-time-parsedate
- F:	package/perl-x10
-diff --git a/package/Config.in b/package/Config.in
-index 5585ebcdfa..2b36b477c7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -734,6 +734,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-sub-install/Config.in"
- 	source "package/perl-sys-meminfo/Config.in"
- 	source "package/perl-sys-mmap/Config.in"
-+	source "package/perl-termreadkey/Config.in"
- 	source "package/perl-template-toolkit/Config.in"
- 	source "package/perl-time-hires/Config.in"
- 	source "package/perl-time-parsedate/Config.in"
-diff --git a/package/perl-termreadkey/Config.in b/package/perl-termreadkey/Config.in
-new file mode 100644
-index 0000000000..7157bb6f68
---- /dev/null
-+++ b/package/perl-termreadkey/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_TERMREADKEY
-+	bool "perl-termreadkey"
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  Change terminal modes, and perform non-blocking reads.
-+
-+	  https://metacpan.org/release/TermReadKey
-+
-+comment "perl-termreadkey needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-termreadkey/perl-termreadkey.hash b/package/perl-termreadkey/perl-termreadkey.hash
-new file mode 100644
-index 0000000000..168e37223c
---- /dev/null
-+++ b/package/perl-termreadkey/perl-termreadkey.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e8ea15c16333ac4f8d146d702e83cc0c TermReadKey-2.37.tar.gz
-+sha256 4a9383cf2e0e0194668fe2bd546e894ffad41d556b41d2f2f577c8db682db241 TermReadKey-2.37.tar.gz
-+
-+# computed by scancpan
-+sha256 9deb4e80e04cca282a98902939225bf0bedac2e04034df5dba80f12bd0a3be26 README
-diff --git a/package/perl-termreadkey/perl-termreadkey.mk b/package/perl-termreadkey/perl-termreadkey.mk
-new file mode 100644
-index 0000000000..ba2193b66b
---- /dev/null
-+++ b/package/perl-termreadkey/perl-termreadkey.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-termreadkey
-+#
-+################################################################################
-+
-+PERL_TERMREADKEY_VERSION = 2.37
-+PERL_TERMREADKEY_SOURCE = TermReadKey-$(PERL_TERMREADKEY_VERSION).tar.gz
-+PERL_TERMREADKEY_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JS/JSTOWE
-+PERL_TERMREADKEY_LICENSE = Artistic or GPL-1.0+
-+PERL_TERMREADKEY_LICENSE_FILES = README
-+
-+$(eval $(perl-package))
+https://github.com/esnet/iperf/blob/master/config/ax_check_openssl.m4#L40
+
+Pkgconf is only used when --with-openssl is not used at all as
+configure parameter because it was placed in the "action-if-not-given"
+part of the AC_ARG_WITH macro:
+https://github.com/esnet/iperf/blob/master/config/ax_check_openssl.m4#L52
+
+The current CONF_OPTS contain --with-openssl which causes OPENSSL_LIBS
+not be filled by pkgconf but with default values "-lssl -lcrypto":
+https://github.com/esnet/iperf/blob/master/config/ax_check_openssl.m4#L82
+
+This breaks openssl detection for static builds because -lz is missing:
+http://autobuild.buildroot.net/results/ba5/ba56d132c5994486066c304fa1f3872bb0f3ee32//iperf3-3.6/config.log
+
+/home/buildroot/build/instance-0/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
+ In function `zlib_stateful_expand_block':
+  c_zlib.c:(.text+0x54): undefined reference to `inflate'
+
+This patch removes --with-openssl and adds host-pkgconf as dependency
+to let the configure script auto-detect openssl, this fixes
+
+http://autobuild.buildroot.net/results/ba5/ba56d132c5994486066c304fa1f3872bb0f3ee32/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/iperf3/iperf3.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 0080bd8c6c..e033af13e1 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -13,8 +13,7 @@ IPERF3_LICENSE_FILES = LICENSE
+ IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-IPERF3_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+-IPERF3_DEPENDENCIES += openssl
++IPERF3_DEPENDENCIES += host-pkgconf openssl
+ else
+ IPERF3_CONF_OPTS += --without-openssl
+ endif
 -- 
-2.14.4
+2.18.0
