@@ -1,10 +1,17 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 17:03:31 +0200
-Subject: [Buildroot] Bump ATF version in arm_juno_defconfig ?
-In-Reply-To: <b3321ee8-8265-e448-21fe-1b722cbb68ef@synopsys.com>
-References: <20180423221713.275f1f66@windsurf>
- <b3321ee8-8265-e448-21fe-1b722cbb68ef@synopsys.com>
-Message-ID: <20180812170331.2dc2b9e9@windsurf>
+Date: Sun, 12 Aug 2018 17:07:03 +0200
+Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
+ for PIE build flags
+In-Reply-To: <CANQCQpam_kU+CdNETW7g9N49MgRhRj6tEQNc8qayzGdJiTWC_A@mail.gmail.com>
+References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
+ <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
+ <20180810225051.4f34fb06@windsurf>
+ <CANQCQpYDuFNMYrwmWiJefh89NjOMoABQwCSne1sM1=-Kcjt9vA@mail.gmail.com>
+ <20180811122954.15470d8a@windsurf>
+ <CANQCQpZXCEBy-sxPm+dbHELJm5AD8+Mc9Q2o=C2nUFfgSenViQ@mail.gmail.com>
+ <20180812094115.1a17f172@windsurf>
+ <CANQCQpam_kU+CdNETW7g9N49MgRhRj6tEQNc8qayzGdJiTWC_A@mail.gmail.com>
+Message-ID: <20180812170703.06be88df@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,42 +20,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 28 May 2018 17:52:07 +0100, Joao Pinto wrote:
+On Sun, 12 Aug 2018 07:49:19 -0500, Matthew Weber wrote:
 
-> > You originally contributed the arm_juno_defconfig in Buildroot. It
-> > currently uses v1.2 of ATF, and I encountered a build failure with this
-> > ATF version as part of the Buildroot test suite:
-> > 
-> >     ./build/juno/release/bl1/context_mgmt.o: In function `cm_prepare_el3_exit':
-> >     context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): undefined reference to `cm_set_next_context'
-> >     context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): relocation truncated to fit: R_AARCH64_JUMP26 against undefined symbol `cm_set_next_context'
-> > 
-> > This issue has been fixed since ATF v1.3. Do you think you could
-> > provide a patch bumping the ATF version ? The latest version is ATF
-> > v1.5, so if you could bump the defconfig, it would be nice.
-> > 
-> > In addition, it would be great if you could send a patch adding
-> > yourself in the DEVELOPERS file for this platform, so we easily know who
-> > to contact for questions related to this platform.
+> > So I don't think we need to wrap "ld", as ld shouldn't be used
+> > directly. The only packages that should use "ld" directly are things
+> > like the Linux kernel or bootloaders.
 > 
-> My team member Gustavo will check this out and he will be the maintainer if it
-> is ok for you.
+> The current hardening approach is trying to cover the cases where
+> packages are still using ld directly and have other incompatible flags
+> set (static/shared/r).  I don't have the exact list but I believe
+> busybox is even one of those and others like valgrind, boost, etc who
+> use the "shared" flag and adding "pie" causes a compile failure.  So
+> we do still need to cover the ld case or go patch packages.
 
-Following this discussion, Gustavo never sent any patch to fix
-arm_juno_defconfig, and the ATF build broken was still broken as of
-today. So I went ahead, and bumped the ATF version to 1.3, to at least
-fix the build issue.
+I find it weird that those packages are using "ld" directly, because if
+that's the case, we would have build failures on some mips64
+configurations.
 
-It would be nice if you could give it a test on the actual hardware,
-and perhaps bump ATF to an ever newer version.
+> What I could do is move the cc1 spec file conditional add of PIE into
+> the wrapper.  Then leave the LDFLAGS as we have them and the
+> associated spec file that does a conditional add of "pie".  This would
+> prevent us from wrapping the ld tool and keep the existing wrapper
+> approach consistent.
 
-See
-https://git.buildroot.org/buildroot/commit/?id=395bc11dde5b4ef034118a9be568131f134daaa3
-for details.
+If we really need to do some custom logic around ld, then I believe I'd
+prefer to have a wrapper for it as well, to keep things consistent. But
+of course, Arnout's opinion on the matter would be welcome.
 
-Best regards,
-
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
