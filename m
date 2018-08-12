@@ -1,11 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 12 Aug 2018 18:50:28 +0200
-Subject: [Buildroot] [PATCH 10/17] perl-module-implementation: new
- package
-In-Reply-To: <20180811182749.20924-11-chrismcc@gmail.com>
+Date: Sun, 12 Aug 2018 18:51:52 +0200
+Subject: [Buildroot] [PATCH 13/17] perl-time-parsedate: new package
+In-Reply-To: <20180811182749.20924-14-chrismcc@gmail.com>
 References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-11-chrismcc@gmail.com>
-Message-ID: <CAB0FRssQyc9TgqB84yA6=sbzv2s1-x+KhHKfv9cR7C05LkvT9Q@mail.gmail.com>
+ <20180811182749.20924-14-chrismcc@gmail.com>
+Message-ID: <CAB0FRst+z+xm=OCJp2q3UKzrv+EDLCfFQvZSj2YLwm+ni2PF1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,101 +18,90 @@ To: buildroot@busybox.net
 
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
-
-> ---
->  DEVELOPERS                                                 |  1 +
->  package/Config.in                                          |  1 +
->  package/perl-module-implementation/Config.in               |  8 ++++++++
->  .../perl-module-implementation.hash                        |  6 ++++++
->  .../perl-module-implementation.mk                          | 14
-> ++++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/perl-module-implementation/Config.in
->  create mode 100644 package/perl-module-implementation/perl-module-
-> implementation.hash
->  create mode 100644 package/perl-module-implementation/perl-module-
-> implementation.mk
+---
+>  DEVELOPERS                                           |  1 +
+>  package/Config.in                                    |  1 +
+>  package/perl-time-parsedate/Config.in                |  6 ++++++
+>  package/perl-time-parsedate/perl-time-parsedate.hash |  6 ++++++
+>  package/perl-time-parsedate/perl-time-parsedate.mk   | 12 ++++++++++++
+>  5 files changed, 26 insertions(+)
+>  create mode 100644 package/perl-time-parsedate/Config.in
+>  create mode 100644 package/perl-time-parsedate/perl-time-parsedate.hash
+>  create mode 100644 package/perl-time-parsedate/perl-time-parsedate.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 2bc890e744..9d7d38ea75 100644
+> index e23ad8a879..1a4eb9d5e4 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -496,6 +496,7 @@ F:  package/perl-io-interface
->  F:     package/perl-io-socket-multicast
->  F:     package/perl-json-maybexs
->  F:     package/perl-mime-tools
-> +F:     package/perl-module-implementation
->  F:     package/perl-module-runtime
->  F:     package/perl-number-bytes-human
->  F:     package/perl-params-util
+> @@ -505,6 +505,7 @@ F:  package/perl-sub-install
+>  F:     package/perl-sys-meminfo
+>  F:     package/perl-sys-mmap
+>  F:     package/perl-template-toolkit
+> +F:     package/perl-time-parsedate
+>
+>  N:     Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>  F:     package/audit/
 > diff --git a/package/Config.in b/package/Config.in
-> index 6124a7197a..1008a651ec 100644
+> index 58c75b0d8f..6ce5ccd080 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -713,6 +713,7 @@ menu "Perl libraries/modules"
->         source "package/perl-mime-base64-urlsafe/Config.in"
->         source "package/perl-mime-base64/Config.in"
->         source "package/perl-mime-tools/Config.in"
-> +       source "package/perl-module-implementation/Config.in"
->         source "package/perl-module-runtime/Config.in"
->         source "package/perl-mojolicious-plugin-authentication/Config.in"
->         source "package/perl-mojolicious/Config.in"
-> diff --git a/package/perl-module-implementation/Config.in
-> b/package/perl-module-implementation/Config.in
+> @@ -734,6 +734,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-sys-mmap/Config.in"
+>         source "package/perl-template-toolkit/Config.in"
+>         source "package/perl-time-hires/Config.in"
+> +       source "package/perl-time-parsedate/Config.in"
+>         source "package/perl-timedate/Config.in"
+>         source "package/perl-try-tiny/Config.in"
+>         source "package/perl-uri/Config.in"
+> diff --git a/package/perl-time-parsedate/Config.in
+> b/package/perl-time-parsedate/Config.in
 > new file mode 100644
-> index 0000000000..aa07cacd11
+> index 0000000000..cea5d2941e
 > --- /dev/null
-> +++ b/package/perl-module-implementation/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
-> +       bool "perl-module-implementation"
-> +       select BR2_PACKAGE_PERL_MODULE_RUNTIME
-> +       select BR2_PACKAGE_PERL_TRY_TINY
+> +++ b/package/perl-time-parsedate/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PERL_TIME_PARSEDATE
+> +       bool "perl-time-parsedate"
 > +       help
-> +         Loads one of several alternate underlying implementations for a
-> module
+> +         Parse and format time values
 > +
-> +         http://metacpan.org/release/Module-Implementation
-> diff --git a/package/perl-module-implementation/perl-module-implementation.hash
-> b/package/perl-module-implementation/perl-module-implementation.hash
+> +         https://metacpan.org/release/Time-ParseDate
+> diff --git a/package/perl-time-parsedate/perl-time-parsedate.hash
+> b/package/perl-time-parsedate/perl-time-parsedate.hash
 > new file mode 100644
-> index 0000000000..caf365c024
+> index 0000000000..97d0009850
 > --- /dev/null
-> +++ b/package/perl-module-implementation/perl-module-implementation.hash
+> +++ b/package/perl-time-parsedate/perl-time-parsedate.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    52e3fe0ca6b1eff0488d59b7aacc0667 Module-Implementation-0.09.tar.gz
-> +sha256 c15f1a12f0c2130c9efff3c2e1afe5887b08ccd033bd132186d1e7d5087fd66d
-> Module-Implementation-0.09.tar.gz
+> +md5    9143d075278857d21c77467d26f1603b Time-ParseDate-2015.103.tar.gz
+> +sha256 2c1a06235bf811813caac9eaa9daa71af758667cdf7b082cb59863220fcaeed1
+> Time-ParseDate-2015.103.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 dd34e4dbcadfaa3db992201873e1cbb4b4f4c18e9bf000821d5c768e66d7ff0b
-> LICENSE
-> diff --git a/package/perl-module-implementation/perl-module-
-> implementation.mk b/package/perl-module-implementation/perl-module-
-> implementation.mk
+> +sha256 a8f6d313ecc680934da33872f69e6f4fa64ad9840b016d4d4822e952e518a964
+> README
+> diff --git a/package/perl-time-parsedate/perl-time-parsedate.mk
+> b/package/perl-time-parsedate/perl-time-parsedate.mk
 > new file mode 100644
-> index 0000000000..50ee8610a5
+> index 0000000000..828271079b
 > --- /dev/null
-> +++ b/package/perl-module-implementation/perl-module-implementation.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/perl-time-parsedate/perl-time-parsedate.mk
+> @@ -0,0 +1,12 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-module-implementation
+> +# perl-time-parsedate
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_MODULE_IMPLEMENTATION_VERSION = 0.09
-> +PERL_MODULE_IMPLEMENTATION_SOURCE = Module-Implementation-$(PERL_
-> MODULE_IMPLEMENTATION_VERSION).tar.gz
-> +PERL_MODULE_IMPLEMENTATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/
-> D/DR/DROLSKY
-> +PERL_MODULE_IMPLEMENTATION_DEPENDENCIES = perl-module-runtime
-> perl-try-tiny
-> +PERL_MODULE_IMPLEMENTATION_LICENSE = Artistic-2.0
-> +PERL_MODULE_IMPLEMENTATION_LICENSE_FILES = LICENSE
+> +PERL_TIME_PARSEDATE_VERSION = 2015.103
+> +PERL_TIME_PARSEDATE_SOURCE = Time-ParseDate-$(PERL_TIME_
+> PARSEDATE_VERSION).tar.gz
+> +PERL_TIME_PARSEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/
+> M/MU/MUIR/modules
+> +PERL_TIME_PARSEDATE_LICENSE_FILES = README
 > +
 > +$(eval $(perl-package))
 > --
@@ -122,4 +110,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/f9b95713/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/12bcabf7/attachment.html>
