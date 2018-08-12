@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 12 Aug 2018 18:32:26 +0200
-Subject: [Buildroot] [PATCH 09/18] perl-file-slurp: new package
-In-Reply-To: <20180810161502.21598-10-chrismcc@gmail.com>
+Date: Sun, 12 Aug 2018 18:33:19 +0200
+Subject: [Buildroot] [PATCH 10/18] perl-io-interface: new package
+In-Reply-To: <20180810161502.21598-11-chrismcc@gmail.com>
 References: <20180810161502.21598-1-chrismcc@gmail.com>
- <20180810161502.21598-10-chrismcc@gmail.com>
-Message-ID: <CAB0FRsvB4aaS_YuXc7ptT22n=S-er0hgCAKwjFJmr7FaWXC+nA@mail.gmail.com>
+ <20180810161502.21598-11-chrismcc@gmail.com>
+Message-ID: <CAB0FRsuVg5HzDoRpCrvxZqAR05B4iz8nA7ZATsVJJnFti4mqRQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,76 +18,83 @@ To: buildroot@busybox.net
 
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
----
->  package/Config.in                            |  1 +
->  package/perl-file-slurp/Config.in            |  6 ++++++
->  package/perl-file-slurp/perl-file-slurp.hash |  6 ++++++
->  package/perl-file-slurp/perl-file-slurp.mk   | 13 +++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/perl-file-slurp/Config.in
->  create mode 100644 package/perl-file-slurp/perl-file-slurp.hash
->  create mode 100644 package/perl-file-slurp/perl-file-slurp.mk
+
+> ---
+>  package/Config.in                                |  1 +
+>  package/perl-io-interface/Config.in              | 10 ++++++++++
+>  package/perl-io-interface/perl-io-interface.hash |  6 ++++++
+>  package/perl-io-interface/perl-io-interface.mk   | 14 ++++++++++++++
+>  4 files changed, 31 insertions(+)
+>  create mode 100644 package/perl-io-interface/Config.in
+>  create mode 100644 package/perl-io-interface/perl-io-interface.hash
+>  create mode 100644 package/perl-io-interface/perl-io-interface.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index cd01657802..a458e56871 100644
+> index a458e56871..13a1b60588 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -685,6 +685,7 @@ menu "Perl libraries/modules"
->         source "package/perl-encode-detect/Config.in"
->         source "package/perl-encode-locale/Config.in"
->         source "package/perl-file-listing/Config.in"
-> +       source "package/perl-file-slurp/Config.in"
->         source "package/perl-file-util/Config.in"
->         source "package/perl-gd/Config.in"
->         source "package/perl-gdgraph/Config.in"
-> diff --git a/package/perl-file-slurp/Config.in b/package/perl-file-slurp/
-> Config.in
+> @@ -698,6 +698,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-http-message/Config.in"
+>         source "package/perl-http-negotiate/Config.in"
+>         source "package/perl-io-html/Config.in"
+> +       source "package/perl-io-interface/Config.in"
+>         source "package/perl-io-socket-ssl/Config.in"
+>         source "package/perl-json-tiny/Config.in"
+>         source "package/perl-libwww-perl/Config.in"
+> diff --git a/package/perl-io-interface/Config.in
+> b/package/perl-io-interface/Config.in
 > new file mode 100644
-> index 0000000000..bfd1cad186
+> index 0000000000..7aa7064ec0
 > --- /dev/null
-> +++ b/package/perl-file-slurp/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PERL_FILE_SLURP
-> +       bool "perl-file-slurp"
+> +++ b/package/perl-io-interface/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PERL_IO_INTERFACE
+> +       bool "perl-io-interface"
+> +       depends on !BR2_STATIC_LIBS
 > +       help
-> +         Simple and Efficient Reading/Writing/Modifying of Complete Files
+> +         Access and modify network interface card configuration
 > +
-> +         https://metacpan.org/release/File-Slurp
-> diff --git a/package/perl-file-slurp/perl-file-slurp.hash
-> b/package/perl-file-slurp/perl-file-slurp.hash
+> +         https://metacpan.org/release/IO-Interface
+> +
+> +comment "perl-io-interface needs a toolchain w/ dynamic library"
+> +       depends on BR2_STATIC_LIBS
+> diff --git a/package/perl-io-interface/perl-io-interface.hash
+> b/package/perl-io-interface/perl-io-interface.hash
 > new file mode 100644
-> index 0000000000..18f9e65ced
+> index 0000000000..75e572f918
 > --- /dev/null
-> +++ b/package/perl-file-slurp/perl-file-slurp.hash
+> +++ b/package/perl-io-interface/perl-io-interface.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    7d584cd15c4f8b9547765eff8c4ef078 File-Slurp-9999.19.tar.gz
-> +sha256 ce29ebe995097ebd6e9bc03284714cdfa0c46dc94f6b14a56980747ea3253643
-> File-Slurp-9999.19.tar.gz
+> +md5    806f97aff5a7361b6f54cd494f4cc9fd IO-Interface-1.09.tar.gz
+> +sha256 e63e81c52eb1e0e60ec2d983f5552d2493e117179925c96757f23c4bd9fa713a
+> IO-Interface-1.09.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 17e638d011c04b1d39b300c07ccd0c57d7857b9ccdb9fe7abce1b15f0e7b0c20
-> README
-> diff --git a/package/perl-file-slurp/perl-file-slurp.mk
-> b/package/perl-file-slurp/perl-file-slurp.mk
+> +sha256 b5a5bf59bd1be13f7f498e5aa2ea5c0c603c04a095dcf03a06aa5b83bbccf921
+> LICENSE
+> diff --git a/package/perl-io-interface/perl-io-interface.mk
+> b/package/perl-io-interface/perl-io-interface.mk
 > new file mode 100644
-> index 0000000000..32773ddbbc
+> index 0000000000..24f4eeb0b3
 > --- /dev/null
-> +++ b/package/perl-file-slurp/perl-file-slurp.mk
-> @@ -0,0 +1,13 @@
+> +++ b/package/perl-io-interface/perl-io-interface.mk
+> @@ -0,0 +1,14 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-file-slurp
+> +# perl-io-interface
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_FILE_SLURP_VERSION = 9999.19
-> +PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
-> +PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/U/UR/URI
-> +PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
-> +PERL_FILE_SLURP_LICENSE_FILES = README
+> +PERL_IO_INTERFACE_VERSION = 1.09
+> +PERL_IO_INTERFACE_SOURCE = IO-Interface-$(PERL_IO_
+> INTERFACE_VERSION).tar.gz
+> +PERL_IO_INTERFACE_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS
+> +PERL_IO_INTERFACE_DEPENDENCIES = host-perl-module-build
+> +PERL_IO_INTERFACE_LICENSE = Artistic or GPL-1.0+
+> +PERL_IO_INTERFACE_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(perl-package))
 > --
@@ -100,4 +107,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/e12ee2bb/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/d5b32fc2/attachment.html>
