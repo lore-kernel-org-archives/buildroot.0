@@ -1,145 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 14:39:02 +0200
-Subject: [Buildroot] [PATCH 1/1] libjwt: new package.
-In-Reply-To: <20180811202925.3547-1-mikael@robomagi.com>
-References: <20180811202925.3547-1-mikael@robomagi.com>
-Message-ID: <20180812143902.5dde6618@windsurf>
+Date: Sun, 12 Aug 2018 14:39:32 +0200
+Subject: [Buildroot] [git commit branch/next] Makefile: introduce
+ check-package target
+Message-ID: <20180812123248.81DB88C062@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mikael,
+commit: https://git.buildroot.net/buildroot/commit/?id=1290241dc694b5435c47cb7065affbfa687d98cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-First of all, thanks for your contribution!
+The snippet of code that runs a check-package on all
+.mk/.hash/Config.in files is currently only available within
+.gitlab-ci.yml, and isn't immediately and easily usable by Buildroot
+users. In order to simplify this, this commit introduces a top-level
+"check-package" make target that implements the same logic. The
+.gitlab-ci.yml file is changed to use "make check-package".
 
-On Sat, 11 Aug 2018 22:29:25 +0200, Mikael wrote:
-> Signed-off-by: Mikael <mikael@robomagi.com>
+Since this target is oriented towards Buildroot developers, we
+intentionally do not clutter the already noisy "make help" text with
+this additional make target.
 
-Could you use your full first name + last name when contributing? This
-is important for legal reasons.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml    | 3 +--
+ .gitlab-ci.yml.in | 3 +--
+ Makefile          | 6 +++++-
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-> diff --git a/package/libjwt/Config.in b/package/libjwt/Config.in
-> new file mode 100644
-> index 0000000000..81e33e6d93
-> --- /dev/null
-> +++ b/package/libjwt/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_LIBJWT
-> +	bool "libjwt"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-
-There is no C++ anywhere in this package, and none of the dependencies
-require C++. To me, it seems like the CMakeLists.txt should be changed
-from:
-
-project (jwt)
-
-to
-
-project (jwt C)
-
-which tells CMake that the project is using C only, and no C++.
-
-> +	select BR2_PACKAGE_JANSSON
-> +	select BR2_PACKAGE_OPENSSL
-
-Are you sure OpenSSL is mandatory ? I see a possibility to use GnuTLS
-as well:
-
-if (WITHOUT_OPENSSL)
-	find_package (GnuTLS REQUIRED)
-	set (FILES_TO_REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/jwt-openssl.c)
-	set (SSL_LIBRARY_INCLUDE_DIR ${GNUTLS_INCLUDE_DIR})
-	set (SSL_LIBRARIES_DEBUG ${GNUTLS_LIBRARY})
-	set (SSL_LIBRARIES_OPTIMIZED ${GNUTLS_LIBRARY})
-else ()
-	if (MSVC AND STATIC_RUNTIME)
-		set (OPENSSL_MSVC_STATIC_RT TRUE)
-	endif ()
-	find_package (OpenSSL REQUIRED)
-	set (FILES_TO_REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/jwt-gnutls.c)
-	set (SSL_LIBRARY_INCLUDE_DIR ${OPENSSL_INCLUDE_DIR})
-	if (MSVC)
-		set (SSL_LIBRARIES_DEBUG ${LIB_EAY_DEBUG} ${SSL_EAY_DEBUG})
-		set (SSL_LIBRARIES_OPTIMIZED ${LIB_EAY_RELEASE} ${SSL_EAY_RELEASE})
-	else ()
-		set (SSL_LIBRARIES_DEBUG ${OPENSSL_CRYPTO_LIBRARY})
-		set (SSL_LIBRARIES_OPTIMIZED ${OPENSSL_CRYPTO_LIBRARY})
-	endif ()
-endif ()
-
-So perhaps, you could do:
-
-	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
-
-And the in the .mk file, pass -DWITHOUT_OPENSSL= if GnuTLS is
-available, but not OpenSSL:
-
-ifeq ($(BR2_PACKAGE_OPENSSL),y)
-LIBJWT_DEPENDENCIES += openssl
-else
-LIBJWT_DEPENDENCIES += gnutls
-LIBJWT_CONF_OPTS += -DWITHOUT_OPENSSL=1
-endif
-
-> +	help
-> +	  JSON Web Tokens are an open, industry standard RFC 7519
-> +	  method for representing claims securely between two parties.
-> +
-> +	  https://github.com/benmcollins/libjwt
-> +
-> +comment "libjwt needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/libjwt/libjwt.hash b/package/libjwt/libjwt.hash
-> new file mode 100644
-> index 0000000000..c8b7ed168a
-> --- /dev/null
-> +++ b/package/libjwt/libjwt.hash
-> @@ -0,0 +1,2 @@
-> +#Locally computed
-> +sha256 cc694dfc3abe17d1f5cde4bf6714e39dc17f7cbad352a85ffb0fe6418c584076 libjwt-v1.9.0.tar.gz
-
-Could you add the hash of the COPYING.LIB license file ?
-
-> diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
-> new file mode 100644
-> index 0000000000..2007d6c541
-> --- /dev/null
-> +++ b/package/libjwt/libjwt.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# libjwt
-> +#
-> +################################################################################
-> +
-> +LIBJWT_VERSION = v1.9.0
-> +LIBJWT_SITE = $(call github,benmcollins,libjwt,$(LIBJWT_VERSION))
-> +LIBJWT_INSTALL_STAGING = YES
-> +LIBJWT_DEPENDENCIES = jansson openssl
-> +LIBJWT_LICENSE = LGPL-3.0-only
-
-We use LGPL-3.0 in this case (i.e we don't obey strictly to SPDX, we
-probably should, but we don't yet, and we should have a single package
-deviates from what we do in the rest of Buildroot).
-
-> +LIBJWT_LICENSE_FILES = COPYING.LIB
-> +
-> +$(eval $(cmake-package))
-
-Finally, could you test this package with "utils/test-pkg" ? I am
-wondering if it builds properly in a static-only configuration.
-utils/test-pkg will test this for you.
-
-Could you take into account those comments, and send an updated
-version ?
-
-Thanks a lot!
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index a0dc0ffa21..3fc9b06a34 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -43,8 +43,7 @@ check-flake8:
+ 
+ check-package:
+     script:
+-        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \)
+-            -exec ./utils/check-package {} +
++        - make check-package
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index fb2650c5ce..38e24c8d01 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -43,8 +43,7 @@ check-flake8:
+ 
+ check-package:
+     script:
+-        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \)
+-            -exec ./utils/check-package {} +
++        - make check-package
+ 
+ .defconfig: &defconfig
+     # Running the defconfigs for every push is too much, so limit to
+diff --git a/Makefile b/Makefile
+index f79d39fd26..c4ed45837d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -130,7 +130,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
+ noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+ 	defconfig %_defconfig allyesconfig allnoconfig alldefconfig silentoldconfig release \
+ 	randpackageconfig allyespackageconfig allnopackageconfig \
+-	print-version olddefconfig distclean manual manual-%
++	print-version olddefconfig distclean manual manual-% check-package
+ 
+ # Some global targets do not trigger a build, but are used to collect
+ # metadata, or do various checks. When such targets are triggered,
+@@ -1125,6 +1125,10 @@ release:
+ print-version:
+ 	@echo $(BR2_VERSION_FULL)
+ 
++check-package:
++	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
++		-exec ./utils/check-package {} +
++
+ .PHONY: .gitlab-ci.yml
+ .gitlab-ci.yml: .gitlab-ci.yml.in
+ 	cp $< $@
