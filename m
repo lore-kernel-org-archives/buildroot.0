@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Aug 2018 22:29:34 +0200
-Subject: [Buildroot] [PATCH/next v2 22/23] package/vlc: add optional
- dependency to wayland
+Date: Sun, 12 Aug 2018 22:29:18 +0200
+Subject: [Buildroot] [PATCH/next v2 06/23] package/vlc: add optional
+ dependency to samba4
 In-Reply-To: <20180812202935.12983-1-bernd.kuhls@t-online.de>
 References: <20180812202935.12983-1-bernd.kuhls@t-online.de>
-Message-ID: <20180812202935.12983-23-bernd.kuhls@t-online.de>
+Message-ID: <20180812202935.12983-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vlc/vlc.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 3dbaac1757..53a2b61633 100644
+index ecc5c6cafe..14fe3b7861 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -84,7 +84,6 @@ VLC_CONF_OPTS += \
- 	--disable-vdpau \
- 	--disable-vsxu \
- 	--disable-wasapi \
--	--disable-wayland \
- 	--disable-x262 \
- 	--disable-zvbi \
- 	--enable-run-as-root
-@@ -529,6 +528,13 @@ else
- VLC_CONF_OPTS += --disable-udev
+@@ -387,6 +387,13 @@ else
+ VLC_CONF_OPTS += --disable-sdl-image
  endif
  
-+ifeq ($(BR2_PACKAGE_WAYLAND),y)
-+VLC_CONF_OPTS += --enable-wayland
-+VLC_DEPENDENCIES += wayland
++ifeq ($(BR2_PACKAGE_SAMBA4),y)
++VLC_CONF_OPTS += --enable-smbclient
++VLC_DEPENDENCIES += samba4
 +else
-+VLC_CONF_OPTS += --disable-wayland
++VLC_CONF_OPTS += --disable-smbclient
 +endif
 +
- ifeq ($(BR2_PACKAGE_X264),y)
- VLC_CONF_OPTS += --enable-x264
- VLC_DEPENDENCIES += x264
+ ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
+ VLC_CONF_OPTS += --enable-speex
+ VLC_DEPENDENCIES += speex speexdsp
 -- 
 2.18.0
