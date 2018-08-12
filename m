@@ -1,102 +1,133 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 12 Aug 2018 09:45:20 +0200
-Subject: [Buildroot] [PATCH 1/1] ncmpc: fix build with some old toolchains
-Message-ID: <20180812074520.1467-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 12 Aug 2018 10:04:30 +0200
+Subject: [Buildroot] [PATCH 12/17] perl-template-toolkit: new package
+In-Reply-To: <20180811182749.20924-13-chrismcc@gmail.com>
+References: <20180811182749.20924-1-chrismcc@gmail.com>
+ <20180811182749.20924-13-chrismcc@gmail.com>
+Message-ID: <CAB0FRsuTNsRPaBAUB26k10y6Ubuzg9bpFRz3i2E2kkX9vOFqSg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With some "old" toolchains (glibc, uclibc in version 4.9.4, 5.3, 5.4,
-5.5 ...), the following error is raised by the compiler:
+2018-08-11 20:27 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 
-../src/screen.cxx:60:29:   required from here
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/ext/new_allocator.h:120:4:
-error: no matching function for call to 'std::pair<const screen_functions* const, std::unique_ptr<Page> >::pair(const screen_functions*, Page*)'
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  DEVELOPERS                                               |  1 +
+>  package/Config.in                                        |  1 +
+>  package/perl-template-toolkit/Config.in                  | 11 +++++++++++
+>  package/perl-template-toolkit/perl-template-toolkit.hash |  6 ++++++
+>  package/perl-template-toolkit/perl-template-toolkit.mk   | 14
+> ++++++++++++++
+>  5 files changed, 33 insertions(+)
+>  create mode 100644 package/perl-template-toolkit/Config.in
+>  create mode 100644 package/perl-template-toolkit/
+> perl-template-toolkit.hash
+>  create mode 100644 package/perl-template-toolkit/perl-template-toolkit.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index ce2e31461a..e23ad8a879 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -504,6 +504,7 @@ F:  package/perl-params-util
+>  F:     package/perl-sub-install
+>  F:     package/perl-sys-meminfo
+>  F:     package/perl-sys-mmap
+> +F:     package/perl-template-toolkit
+>
+>  N:     Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>  F:     package/audit/
+> diff --git a/package/Config.in b/package/Config.in
+> index 57b22af90e..58c75b0d8f 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -732,6 +732,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-sub-install/Config.in"
+>         source "package/perl-sys-meminfo/Config.in"
+>         source "package/perl-sys-mmap/Config.in"
+> +       source "package/perl-template-toolkit/Config.in"
+>         source "package/perl-time-hires/Config.in"
+>         source "package/perl-timedate/Config.in"
+>         source "package/perl-try-tiny/Config.in"
+> diff --git a/package/perl-template-toolkit/Config.in
+> b/package/perl-template-toolkit/Config.in
+> new file mode 100644
+> index 0000000000..1caca074aa
+> --- /dev/null
+> +++ b/package/perl-template-toolkit/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_PERL_TEMPLATE_TOOLKIT
+> +       bool "perl-template-toolkit"
+> +       depends on !BR2_STATIC_LIBS
+> +       select BR2_PACKAGE_PERL_APPCONFIG
+> +       help
+> +         comprehensive template processing system
+> +
+> +         https://metacpan.org/release/Template-Toolkit
+> +
+> +comment "perl-template-toolkit needs a toolchain w/ dynamic library"
+> +       depends on BR2_STATIC_LIBS
+> diff --git a/package/perl-template-toolkit/perl-template-toolkit.hash
+> b/package/perl-template-toolkit/perl-template-toolkit.hash
+> new file mode 100644
+> index 0000000000..54d4553695
+> --- /dev/null
+> +++ b/package/perl-template-toolkit/perl-template-toolkit.hash
+> @@ -0,0 +1,6 @@
+> +# retrieved by scancpan from http://cpan.metacpan.org/
+> +md5    a7fae5d4fe5918f33105d92a62134067 Template-Toolkit-2.27.tar.gz
+> +sha256 1311a403264d0134c585af0309ff2a9d5074b8ece23ece5660d31ec96bf2c6dc
+> Template-Toolkit-2.27.tar.gz
+> +
+> +# computed by scancpan
+> +sha256 d897b2d98affd4f0489340e54ceb542383101e3d21408dfad025df71d770d842
+> README
+> diff --git a/package/perl-template-toolkit/perl-template-toolkit.mk
+> b/package/perl-template-toolkit/perl-template-toolkit.mk
+> new file mode 100644
+> index 0000000000..820fb5bd8d
+> --- /dev/null
+> +++ b/package/perl-template-toolkit/perl-template-toolkit.mk
+> @@ -0,0 +1,14 @@
+> +###########################################################
+> #####################
+> +#
+> +# perl-template-toolkit
+> +#
+> +###########################################################
+> #####################
+> +
+> +PERL_TEMPLATE_TOOLKIT_VERSION = 2.27
+> +PERL_TEMPLATE_TOOLKIT_SOURCE = Template-Toolkit-$(PERL_
+> TEMPLATE_TOOLKIT_VERSION).tar.gz
+> +PERL_TEMPLATE_TOOLKIT_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABW
+> +PERL_TEMPLATE_TOOLKIT_DEPENDENCIES = host-perl-cgi perl-appconfig
+>
 
-[...]
+In fact, host-perl-cgi could be removed, and the patches 01-02-03/17 become
+useless.
 
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
-note: candidate: constexpr std::pair<_T1, _T2>::pair(const _T1&, const _T2&) [with _T1 = const screen_functions* const; _T2 = std::unique_ptr<Page>]
-       _GLIBCXX_CONSTEXPR pair(const _T1& __a, const _T2& __b)
-                          ^
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
-note:   no known conversion for argument 2 from 'Page*' to 'const std::unique_ptr<Page>&'
 
-This is due to the fact that init function of screen_functions
-structure returns Page* but PageMap wants a std::unique_ptr<Page>
+> +PERL_TEMPLATE_TOOLKIT_LICENSE = Artistic or GPL-1.0+
+> +PERL_TEMPLATE_TOOLKIT_LICENSE_FILES = README
+>
 
-To fix this, cast raw pointer into a unique_ptr with an explicit cast
+With adding :
+PERL_TEMPLATE_TOOLKIT_CONF_OPTS += TT_XS_ENABLE=n
 
-Fixes:
- - http://autobuild.buildroot.net/results/d8a7339d8bdd5cdc6bd1716585d4bcf15a2e8015
+The module becomes pure perl, so you could remove the BR2_STATIC_LIBS stuff
+in the Config.in
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...unique_ptr-error-with-some-old-toolchains.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
+Fran?ois
 
-diff --git a/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch b/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
-new file mode 100644
-index 0000000000..47905d71d7
---- /dev/null
-+++ b/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
-@@ -0,0 +1,54 @@
-+From 63c0c47106007f7b2a791e3e4b062a5424d3dfe8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 12 Aug 2018 09:02:50 +0200
-+Subject: [PATCH] Fix unique_ptr error with some old toolchains
 +
-+With some "old" toolchains (glibc, uclibc in version 4.9.4, 5.3, 5.4,
-+5.5 ...), the following error is raised by the compiler:
-+
-+../src/screen.cxx:60:29:   required from here
-+/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/ext/new_allocator.h:120:4:
-+error: no matching function for call to 'std::pair<const screen_functions* const, std::unique_ptr<Page> >::pair(const screen_functions*, Page*)'
-+
-+[...]
-+
-+/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
-+note: candidate: constexpr std::pair<_T1, _T2>::pair(const _T1&, const _T2&) [with _T1 = const screen_functions* const; _T2 = std::unique_ptr<Page>]
-+       _GLIBCXX_CONSTEXPR pair(const _T1& __a, const _T2& __b)
-+                          ^
-+/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
-+note:   no known conversion for argument 2 from 'Page*' to 'const
-+std::unique_ptr<Page>&'
-+
-+This is due to the fact that init function of screen_functions
-+structure returns Page* but PageMap wants a std::unique_ptr<Page>
-+
-+To fix this, cast raw pointer into a unique_ptr with an explicit cast
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/d8a7339d8bdd5cdc6bd1716585d4bcf15a2e8015
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ src/screen.cxx | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/screen.cxx b/src/screen.cxx
-+index dd42b25..56afd11 100644
-+--- a/src/screen.cxx
-++++ b/src/screen.cxx
-+@@ -56,8 +56,9 @@ ScreenManager::MakePage(const struct screen_functions &sf)
-+ 		return i;
-+ 
-+ 	auto j = pages.emplace(&sf,
-+-			       sf.init(*this, main_window.w,
-+-				       main_window.size));
-++			       std::unique_ptr<Page>(sf.init(*this,
-++							     main_window.w,
-++							     main_window.size)));
-+ 	assert(j.second);
-+ 	return j.first;
-+ }
-+-- 
-+2.14.1
-+
--- 
-2.14.1
+> +$(eval $(perl-package))
+> --
+> 2.14.4
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/6a6b0b09/attachment.html>
