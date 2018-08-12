@@ -1,91 +1,103 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 14:30:29 +0200
-Subject: [Buildroot] [PATCH/RFC/next 1/1] package/kodi: switch to
- internal ffmpeg version 3.1.11 build
-In-Reply-To: <20180811211028.23679-1-bernd.kuhls@t-online.de>
-References: <20180811211028.23679-1-bernd.kuhls@t-online.de>
-Message-ID: <20180812143029.3178d100@windsurf>
+Date: Sun, 12 Aug 2018 14:31:27 +0200
+Subject: [Buildroot] [git commit] ncmpc: fix build with some old toolchains
+Message-ID: <20180812122445.342ED8B911@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=21f0507cc193469b8ba7fccc3fc07a2bbd12784b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 11 Aug 2018 23:10:28 +0200, Bernd Kuhls wrote:
-> Kodi 17 is incompatible with ffmpeg-4.x. To prepare the ffmpeg bump we
-> switch the current Kodi package to internally build and statically link
-> to patched ffmpeg-3.1.11 provided by upstream. Gnutls is added as
-> dependency to allow playback of https streams.
-> 
-> Upstream expects Kodi 17 to be used with ffmpeg 3.1.x (see upstream PR
-> 12368) so we choose the upstream way to build ffmpeg instead of provi-
-> ding a version choice for ffmpeg in buildroot.
-> 
-> This hackish commit can be reverted when Kodi is bumped to version 18,
-> currently released as alpha3.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+With some "old" toolchains (glibc, uclibc in version 4.9.4, 5.3, 5.4,
+5.5 ...), the following error is raised by the compiler:
 
-OK, not nice, but I didn't don't see us having much choice here.
+../src/screen.cxx:60:29:   required from here
+/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/ext/new_allocator.h:120:4:
+error: no matching function for call to 'std::pair<const screen_functions* const, std::unique_ptr<Page> >::pair(const screen_functions*, Page*)'
 
-> diff --git a/package/kodi/0004-fix-ffmpeg-internal-cross-build.patch b/package/kodi/0004-fix-ffmpeg-internal-cross-build.patch
-> new file mode 100644
-> index 0000000000..7f71be3a00
-> --- /dev/null
-> +++ b/package/kodi/0004-fix-ffmpeg-internal-cross-build.patch
-> @@ -0,0 +1,54 @@
-> +Fix crosscompiling issues
-> +
-> +The codepath for KODI_DEPENDSBUILD needs to be used in order to provide
-> +the correct crosscompiling options to ffmpeg. The CMake option
-> +KODI_DEPENDSBUILD itself can not be enabled because it disables the
-> +internal build of libdvd*.
-> +
-> +To link kodi.bin with the statically built ffmpeg libraries kodi uses
-> +a wrapper script which calls pkgconfig. Our pkgconfig is patched to
-> +alter paths which breaks the link command in this case. Add a hack
-> +to force the usage of unpatched /usr/bin/pkg-config instead.
+[...]
 
-I don't think you're guaranteed that /usr/bin/pkg-config exists. What
-is the problem with our own pkg-config ?
+/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
+note: candidate: constexpr std::pair<_T1, _T2>::pair(const _T1&, const _T2&) [with _T1 = const screen_functions* const; _T2 = std::unique_ptr<Page>]
+       _GLIBCXX_CONSTEXPR pair(const _T1& __a, const _T2& __b)
+                          ^
+/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
+note:   no known conversion for argument 2 from 'Page*' to 'const std::unique_ptr<Page>&'
 
-Indeed, our wrapper script only overwrites
-PKG_CONFIG_PATH/PKG_CONFIG_LIBDIR if they are not already defined:
+This is due to the fact that init function of screen_functions
+structure returns Page* but PageMap wants a std::unique_ptr<Page>
 
-DEFAULT_PKG_CONFIG_LIBDIR=${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/lib/pkgconfig:${PKGCONFDIR}/../@STAGING_SUBDIR@/usr/share/pkgconfig
-DEFAULT_PKG_CONFIG_SYSROOT_DIR=${PKGCONFDIR}/../@STAGING_SUBDIR@
-PKG_CONFIG_LIBDIR=${PKG_CONFIG_LIBDIR:-${DEFAULT_PKG_CONFIG_LIBDIR}} PKG_CONFIG_SYSROOT_DIR=${PKG_CONFIG_SYSROOT_DIR:-${DEFAULT_PKG_CONFIG_SYSROOT_DIR}} exec ${PKGCONFDIR}/pkgconf @STATIC@ "$@"
+To fix this, cast raw pointer into a unique_ptr with an explicit cast
 
-> +-  avformat=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs --static libavcodec`
-> +-  avcodec=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs --static libavformat`
-> +-  avfilter=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs --static libavfilter`
-> +-  avutil=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs --static libavutil`
-> +-  swscale=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs --static libswscale`
-> +-  swresample=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig ${PKG_CONFIG_EXECUTABLE} --libs --static libswresample`
-> +-  gnutls=`PKG_CONFIG_PATH=${DEPENDS_PATH}/lib/pkgconfig/ ${PKG_CONFIG_EXECUTABLE}  --libs-only-l --static --silence-errors gnutls`
-> ++  avformat=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig /usr/bin/pkg-config --libs --static libavcodec`
-> ++  avcodec=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig /usr/bin/pkg-config --libs --static libavformat`
-> ++  avfilter=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig /usr/bin/pkg-config --libs --static libavfilter`
-> ++  avutil=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig /usr/bin/pkg-config --libs --static libavutil`
-> ++  swscale=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig /usr/bin/pkg-config --libs --static libswscale`
-> ++  swresample=`PKG_CONFIG_PATH=${CMAKE_BINARY_DIR}/${CORE_BUILD_DIR}/lib/pkgconfig /usr/bin/pkg-config --libs --static libswresample`
-> ++  gnutls=`PKG_CONFIG_PATH=${DEPENDS_PATH}/lib/pkgconfig/ /usr/bin/pkg-config --libs-only-l --static --silence-errors gnutls`
+Fixes:
+ - http://autobuild.buildroot.net/results/d8a7339d8bdd5cdc6bd1716585d4bcf15a2e8015
 
-Did you try changing PKG_CONFIG_PATH to PKG_CONFIG_LIBDIR ?
-PKG_CONFIG_LIBDIR entirely replaces the pkg-config search path, while
-PKG_CONFIG_PATH only appends to it. I'd say this should probably fix
-your problem, without having to use /usr/bin/pkg-config (and it would
-no longer be a hack).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...unique_ptr-error-with-some-old-toolchains.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-Also, please use a Git-formatted patch, and don't forget your
-Signed-off-by, which was missing.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch b/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
+new file mode 100644
+index 0000000000..47905d71d7
+--- /dev/null
++++ b/package/ncmpc/0001-Fix-unique_ptr-error-with-some-old-toolchains.patch
+@@ -0,0 +1,54 @@
++From 63c0c47106007f7b2a791e3e4b062a5424d3dfe8 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 12 Aug 2018 09:02:50 +0200
++Subject: [PATCH] Fix unique_ptr error with some old toolchains
++
++With some "old" toolchains (glibc, uclibc in version 4.9.4, 5.3, 5.4,
++5.5 ...), the following error is raised by the compiler:
++
++../src/screen.cxx:60:29:   required from here
++/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/ext/new_allocator.h:120:4:
++error: no matching function for call to 'std::pair<const screen_functions* const, std::unique_ptr<Page> >::pair(const screen_functions*, Page*)'
++
++[...]
++
++/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
++note: candidate: constexpr std::pair<_T1, _T2>::pair(const _T1&, const _T2&) [with _T1 = const screen_functions* const; _T2 = std::unique_ptr<Page>]
++       _GLIBCXX_CONSTEXPR pair(const _T1& __a, const _T2& __b)
++                          ^
++/usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/bits/stl_pair.h:112:26:
++note:   no known conversion for argument 2 from 'Page*' to 'const
++std::unique_ptr<Page>&'
++
++This is due to the fact that init function of screen_functions
++structure returns Page* but PageMap wants a std::unique_ptr<Page>
++
++To fix this, cast raw pointer into a unique_ptr with an explicit cast
++
++Fixes:
++ - http://autobuild.buildroot.net/results/d8a7339d8bdd5cdc6bd1716585d4bcf15a2e8015
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/screen.cxx | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/src/screen.cxx b/src/screen.cxx
++index dd42b25..56afd11 100644
++--- a/src/screen.cxx
+++++ b/src/screen.cxx
++@@ -56,8 +56,9 @@ ScreenManager::MakePage(const struct screen_functions &sf)
++ 		return i;
++ 
++ 	auto j = pages.emplace(&sf,
++-			       sf.init(*this, main_window.w,
++-				       main_window.size));
+++			       std::unique_ptr<Page>(sf.init(*this,
+++							     main_window.w,
+++							     main_window.size)));
++ 	assert(j.second);
++ 	return j.first;
++ }
++-- 
++2.14.1
++
