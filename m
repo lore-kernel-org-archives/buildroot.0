@@ -1,56 +1,86 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Sun, 12 Aug 2018 07:49:19 -0500
-Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
- for PIE build flags
-In-Reply-To: <20180812094115.1a17f172@windsurf>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
- <20180810225051.4f34fb06@windsurf>
- <CANQCQpYDuFNMYrwmWiJefh89NjOMoABQwCSne1sM1=-Kcjt9vA@mail.gmail.com>
- <20180811122954.15470d8a@windsurf>
- <CANQCQpZXCEBy-sxPm+dbHELJm5AD8+Mc9Q2o=C2nUFfgSenViQ@mail.gmail.com>
- <20180812094115.1a17f172@windsurf>
-Message-ID: <CANQCQpam_kU+CdNETW7g9N49MgRhRj6tEQNc8qayzGdJiTWC_A@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 12 Aug 2018 15:52:07 +0200
+Subject: [Buildroot] [PATCH 1/1] ncmpc: fix build with some old
+ toolchains
+In-Reply-To: <20180812143203.049f7619@windsurf>
+References: <20180812074520.1467-1-fontaine.fabrice@gmail.com>
+ <20180812143203.049f7619@windsurf>
+Message-ID: <CAPi7W82Mof=7vNE8quasJNiRd8Yt8YTaRsdTXfZWOnQT0tFURg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-On Sun, Aug 12, 2018 at 2:41 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
+Dear Thomas,
+
+2018-08-12 14:32 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+
 > Hello,
 >
-> On Sat, 11 Aug 2018 22:55:47 -0500, Matthew Weber wrote:
+> On Sun, 12 Aug 2018 09:45:20 +0200, Fabrice Fontaine wrote:
+> > With some "old" toolchains (glibc, uclibc in version 4.9.4, 5.3, 5.4,
+> > 5.5 ...), the following error is raised by the compiler:
+> >
+> > ../src/screen.cxx:60:29:   required from here
+> > /usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/
+> host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/
+> ext/new_allocator.h:120:4:
+> > error: no matching function for call to 'std::pair<const
+> screen_functions* const, std::unique_ptr<Page> >::pair(const
+> screen_functions*, Page*)'
+> >
+> > [...]
+> >
+> > /usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/
+> host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/
+> bits/stl_pair.h:112:26:
+> > note: candidate: constexpr std::pair<_T1, _T2>::pair(const _T1&, const
+> _T2&) [with _T1 = const screen_functions* const; _T2 =
+> std::unique_ptr<Page>]
+> >        _GLIBCXX_CONSTEXPR pair(const _T1& __a, const _T2& __b)
+> >                           ^
+> > /usr/lfs/v0/rc-buildroot-test/scripts/instance-1/output/
+> host/opt/ext-toolchain/mips-linux-gnu/include/c++/5.3.0/
+> bits/stl_pair.h:112:26:
+> > note:   no known conversion for argument 2 from 'Page*' to 'const
+> std::unique_ptr<Page>&'
+> >
+> > This is due to the fact that init function of screen_functions
+> > structure returns Page* but PageMap wants a std::unique_ptr<Page>
+> >
+> > To fix this, cast raw pointer into a unique_ptr with an explicit cast
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.net/results/d8a7339d8bdd5cdc6bd1716585d4bc
+> f15a2e8015
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> >  ...unique_ptr-error-with-some-old-toolchains.patch | 54
+> ++++++++++++++++++++++
+> >  1 file changed, 54 insertions(+)
+> >  create mode 100644 package/ncmpc/0001-Fix-unique_
+> ptr-error-with-some-old-toolchains.patch
 >
-> > I started to look at this tonight and if I understand the current
-> > wrapper, it's solely working with cc/gcc.  If someone explicity uses
-> > ld, the wrapper doesn't take affect? (I'll do a build tomorrow and
-> > look at behavior, didn't have a linux machine handy tonight to check.
+> To be honest, I don't have enough C++ knowledge to figure out if this
+> is the right fix, but I've applied to master anyway. Please submit
+> upstream to get a proper review. Thanks!
 >
-> We only wrap gcc/cc indeed. Packages should not call "ld" directly, as
-> it breaks a bunch of other situations. For example, on mips64, using
-> "ld" directly doesn't work as it needs to be passed the "machine
-> emulation", which gcc does.
->
-> So I don't think we need to wrap "ld", as ld shouldn't be used
-> directly. The only packages that should use "ld" directly are things
-> like the Linux kernel or bootloaders.
->
+I sent it upstream (https://github.com/MusicPlayerDaemon/ncmpc/pull/29) but
+the PR has been closed :-/
 
-The current hardening approach is trying to cover the cases where
-packages are still using ld directly and have other incompatible flags
-set (static/shared/r).  I don't have the exact list but I believe
-busybox is even one of those and others like valgrind, boost, etc who
-use the "shared" flag and adding "pie" causes a compile failure.  So
-we do still need to cover the ld case or go patch packages.
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+Best Regards,
 
-What I could do is move the cc1 spec file conditional add of PIE into
-the wrapper.  Then leave the LDFLAGS as we have them and the
-associated spec file that does a conditional add of "pie".  This would
-prevent us from wrapping the ld tool and keep the existing wrapper
-approach consistent.
-
-Matt
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/727f14de/attachment.html>
