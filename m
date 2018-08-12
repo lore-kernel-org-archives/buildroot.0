@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Aug 2018 22:29:35 +0200
-Subject: [Buildroot] [PATCH/next v2 23/23] package/vlc: add optional support
- for skins2
+Date: Sun, 12 Aug 2018 22:29:33 +0200
+Subject: [Buildroot] [PATCH/next v2 21/23] package/vlc: add optional
+ dependency to mpg123
 In-Reply-To: <20180812202935.12983-1-bernd.kuhls@t-online.de>
 References: <20180812202935.12983-1-bernd.kuhls@t-online.de>
-Message-ID: <20180812202935.12983-24-bernd.kuhls@t-online.de>
+Message-ID: <20180812202935.12983-22-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 53a2b61633..ed682e60b3 100644
+index af500cba33..3dbaac1757 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -74,7 +74,6 @@ VLC_CONF_OPTS += \
- 	--disable-schroedinger \
- 	--disable-shine \
- 	--disable-shout \
--	--disable-skins2 \
- 	--disable-sndio \
- 	--disable-spatialaudio \
- 	--disable-srt \
-@@ -560,6 +559,13 @@ else
- VLC_CONF_OPTS += --without-x
+@@ -68,7 +68,6 @@ VLC_CONF_OPTS += \
+ 	--disable-mfx \
+ 	--disable-microdns \
+ 	--disable-mmal \
+-	--disable-mpg123 \
+ 	--disable-mtp \
+ 	--disable-notify \
+ 	--disable-projectm \
+@@ -453,6 +452,13 @@ ifeq ($(BR2_PACKAGE_MINIZIP),y)
+ VLC_DEPENDENCIES += minizip
  endif
  
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
-+VLC_CONF_OPTS += --enable-skins2
-+VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
++ifeq ($(BR2_PACKAGE_MPG123),y)
++VLC_CONF_OPTS += --enable-mpg123
++VLC_DEPENDENCIES += mpg123
 +else
-+VLC_CONF_OPTS += --disable-skins2
++VLC_CONF_OPTS += --disable-mpg123
 +endif
 +
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- VLC_DEPENDENCIES += zlib
- endif
+ ifeq ($(BR2_PACKAGE_MUSEPACK),y)
+ VLC_CONF_OPTS += --enable-mpc
+ VLC_DEPENDENCIES += musepack
 -- 
 2.18.0
