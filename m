@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 12 Aug 2018 18:24:35 +0200
-Subject: [Buildroot] [PATCH 01/18] perl-appconfig: new package
-In-Reply-To: <20180810161502.21598-2-chrismcc@gmail.com>
+Date: Sun, 12 Aug 2018 18:26:03 +0200
+Subject: [Buildroot] [PATCH 02/18] perl-astro-suntime: new package
+In-Reply-To: <20180810161502.21598-3-chrismcc@gmail.com>
 References: <20180810161502.21598-1-chrismcc@gmail.com>
- <20180810161502.21598-2-chrismcc@gmail.com>
-Message-ID: <CAB0FRsuY1Qy_cwd0jeRUp9Y2WcGAE18vBCmuwX78XXNM=10EUA@mail.gmail.com>
+ <20180810161502.21598-3-chrismcc@gmail.com>
+Message-ID: <CAB0FRsv4o4kcrTNSCk+Y9n1YGVowgYv76BTZC+a-k+MVMAu7Ag@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,76 +19,77 @@ To: buildroot@busybox.net
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
 ---
->  package/Config.in                          |  1 +
->  package/perl-appconfig/Config.in           |  6 ++++++
->  package/perl-appconfig/perl-appconfig.hash |  6 ++++++
->  package/perl-appconfig/perl-appconfig.mk   | 13 +++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/perl-appconfig/Config.in
->  create mode 100644 package/perl-appconfig/perl-appconfig.hash
->  create mode 100644 package/perl-appconfig/perl-appconfig.mk
+>  package/Config.in                                  |  1 +
+>  package/perl-astro-suntime/Config.in               |  6 ++++++
+>  package/perl-astro-suntime/perl-astro-suntime.hash |  6 ++++++
+>  package/perl-astro-suntime/perl-astro-suntime.mk   | 14 ++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/perl-astro-suntime/Config.in
+>  create mode 100644 package/perl-astro-suntime/perl-astro-suntime.hash
+>  create mode 100644 package/perl-astro-suntime/perl-astro-suntime.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index f5a17492c7..8b80276fb1 100644
+> index 8b80276fb1..97a108535b 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -665,6 +665,7 @@ endif
->         source "package/perl/Config.in"
+> @@ -666,6 +666,7 @@ endif
 >  if BR2_PACKAGE_PERL
 >  menu "Perl libraries/modules"
-> +       source "package/perl-appconfig/Config.in"
+>         source "package/perl-appconfig/Config.in"
+> +       source "package/perl-astro-suntime/Config.in"
 >         source "package/perl-convert-asn1/Config.in"
 >         source "package/perl-crypt-blowfish/Config.in"
 >         source "package/perl-crypt-cbc/Config.in"
-> diff --git a/package/perl-appconfig/Config.in b/package/perl-appconfig/
-> Config.in
+> diff --git a/package/perl-astro-suntime/Config.in
+> b/package/perl-astro-suntime/Config.in
 > new file mode 100644
-> index 0000000000..ca2220f1c0
+> index 0000000000..22e2cb1aa2
 > --- /dev/null
-> +++ b/package/perl-appconfig/Config.in
+> +++ b/package/perl-astro-suntime/Config.in
 > @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PERL_APPCONFIG
-> +       bool "perl-appconfig"
+> +config BR2_PACKAGE_PERL_ASTRO_SUNTIME
+> +       bool "perl-astro-suntime"
 > +       help
-> +         AppConfig is a bundle of Perl5 modules for reading configuration
-> files and parsing command line arguments.
+> +         A functional module for calculating sunrise/sunset times
 > +
-> +         https://metacpan.org/release/AppConfig
-> diff --git a/package/perl-appconfig/perl-appconfig.hash
-> b/package/perl-appconfig/perl-appconfig.hash
+> +         https://metacpan.org/release/Astro-SunTime
+> diff --git a/package/perl-astro-suntime/perl-astro-suntime.hash
+> b/package/perl-astro-suntime/perl-astro-suntime.hash
 > new file mode 100644
-> index 0000000000..151a2e903f
+> index 0000000000..e75293d4fb
 > --- /dev/null
-> +++ b/package/perl-appconfig/perl-appconfig.hash
+> +++ b/package/perl-astro-suntime/perl-astro-suntime.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    7747d9241561ed5567d5e134b8648707 AppConfig-1.71.tar.gz
-> +sha256 1177027025ecb09ee64d9f9f255615c04db5e14f7536c344af632032eb887b0f
-> AppConfig-1.71.tar.gz
+> +md5    42cb8c94de8a111ed652196925c22a45 Astro-SunTime-0.06.tar.gz
+> +sha256 b4a44fddfc055cc42ee67bfd8939354793da7512ea04f30578d42dc6a701112a
+> Astro-SunTime-0.06.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 0b22dd532e4123a511d14989c4169ed56b7316cf844c29c7897a1638a4616868
+> +sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
 > LICENSE
-> diff --git a/package/perl-appconfig/perl-appconfig.mk
-> b/package/perl-appconfig/perl-appconfig.mk
+> diff --git a/package/perl-astro-suntime/perl-astro-suntime.mk
+> b/package/perl-astro-suntime/perl-astro-suntime.mk
 > new file mode 100644
-> index 0000000000..7a553e330b
+> index 0000000000..a35291b1db
 > --- /dev/null
-> +++ b/package/perl-appconfig/perl-appconfig.mk
-> @@ -0,0 +1,13 @@
+> +++ b/package/perl-astro-suntime/perl-astro-suntime.mk
+> @@ -0,0 +1,14 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-appconfig
+> +# perl-astro-suntime
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_APPCONFIG_VERSION = 1.71
-> +PERL_APPCONFIG_SOURCE = AppConfig-$(PERL_APPCONFIG_VERSION).tar.gz
-> +PERL_APPCONFIG_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NE/NEILB
-> +PERL_APPCONFIG_LICENSE = Artistic or GPL-1.0+
-> +PERL_APPCONFIG_LICENSE_FILES = LICENSE
+> +PERL_ASTRO_SUNTIME_VERSION = 0.06
+> +PERL_ASTRO_SUNTIME_SOURCE = Astro-SunTime-$(PERL_ASTRO_
+> SUNTIME_VERSION).tar.gz
+> +PERL_ASTRO_SUNTIME_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RO/ROBF
+> +PERL_ASTRO_SUNTIME_DEPENDENCIES = host-perl-module-build
+> +PERL_ASTRO_SUNTIME_LICENSE = gpl_3
+> +PERL_ASTRO_SUNTIME_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(perl-package))
 > --
@@ -101,4 +102,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/fbc43516/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/8cef522a/attachment.html>
