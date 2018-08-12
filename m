@@ -1,36 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 16:01:44 +0200
-Subject: [Buildroot] [PATCH 1/1] ncmpc: fix build with some old
- toolchains
-In-Reply-To: <CAPi7W82Mof=7vNE8quasJNiRd8Yt8YTaRsdTXfZWOnQT0tFURg@mail.gmail.com>
-References: <20180812074520.1467-1-fontaine.fabrice@gmail.com>
- <20180812143203.049f7619@windsurf>
- <CAPi7W82Mof=7vNE8quasJNiRd8Yt8YTaRsdTXfZWOnQT0tFURg@mail.gmail.com>
-Message-ID: <20180812160144.0d172d2a@windsurf>
+Date: Sun, 12 Aug 2018 16:09:28 +0200
+Subject: [Buildroot] [git commit] configs/raspberrypi2: increase ext4
+ filesystem size
+Message-ID: <20180812140405.D895F8C437@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=272bf797c9c4d67154316619ff6fcadb63d38511
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 12 Aug 2018 15:52:07 +0200, Fabrice Fontaine wrote:
+The default size of the ext4 filesystem is no longer sufficient to
+hold all the kernel modules built by the RPi Linux kernel
+configuration. Let's increase to 120 MB, like we did for
+raspberrypi3_defconfig.
 
-> > To be honest, I don't have enough C++ knowledge to figure out if this
-> > is the right fix, but I've applied to master anyway. Please submit
-> > upstream to get a proper review. Thanks!
-> >  
-> I sent it upstream (https://github.com/MusicPlayerDaemon/ncmpc/pull/29) but
-> the PR has been closed :-/
+Fixes:
 
-Considering upstream's reaction, perhaps we should drop the patch, and
-add the appropriate BR2_TOOLCHAIN_HAS_GCC_AT_LEAST_... dependency ?
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/88314938
 
-Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/raspberrypi2_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
+index b5e5110d00..11877496d7 100644
+--- a/configs/raspberrypi2_defconfig
++++ b/configs/raspberrypi2_defconfig
+@@ -30,6 +30,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
+ # Filesystem / image
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2/post-image.sh"
