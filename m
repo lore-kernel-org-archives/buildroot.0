@@ -1,33 +1,95 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat, 11 Aug 2018 21:59:47 -0300
-Subject: [Buildroot] [PATCH v2] Makefile: introduce check-package target
-References: <20180811104423.31391-1-thomas.petazzoni@bootlin.com>
-Message-ID: <5b6f8683ae7c7_79012ab66f6c5a0c17714@ultri5.mail>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Sat, 11 Aug 2018 22:55:47 -0500
+Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
+ for PIE build flags
+In-Reply-To: <20180811122954.15470d8a@windsurf>
+References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
+ <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
+ <20180810225051.4f34fb06@windsurf>
+ <CANQCQpYDuFNMYrwmWiJefh89NjOMoABQwCSne1sM1=-Kcjt9vA@mail.gmail.com>
+ <20180811122954.15470d8a@windsurf>
+Message-ID: <CANQCQpZXCEBy-sxPm+dbHELJm5AD8+Mc9Q2o=C2nUFfgSenViQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
+On Sat, Aug 11, 2018 at 5:30 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Fri, 10 Aug 2018 19:42:32 -0500, Matthew Weber wrote:
+>
+> > > I've read the whole discussion on this patch, but still I don't
+> > > understand which direction we want to take moving forward: move away
+> > > from handling options in the wrapper, and use a spec file for
+> > > everything ? Or keep the entire logic in the wrapper ?
+> >
+> > So far, the spec files are just fixing a conditional case where a
+> > option isn't compatible.  ie PIE and shared can't be used together.
+> > This prevents a lot of patchwork on all the packages.  I could move
+> > this string search and condition process to the wrapper but it seems
+> > cleaner to do that in the spec file.  I do want to note that we did
+> > not go to the extent that gentoo did where they use spec files to
+> > enable and do the conditional compatibility fixups at link time(PIE vs
+> > shared) for all the hardening options.
+>
+> I understand the idea of using the spec file. However, I'm worried that
+> it further complicates the overall toolchain setup. In addition, the
+> -spec option passed in TARGET_CFLAGS/TARGET_LDFLAGS will only work with
+> packages that do obey to CFLAGS/LDFLAGS, and some broken packages
+> don't. Being in the wrapper allows to ensure the flags are used. And
+> additionally, what's done in the wrapper is also used when the
+> Buildroot toolchain is used "manually" (outside of the Buildroot
+> infrastructure) to build stuff.
+>
+> > > I'm not happy at all with the approach of having some flags handled in
+> > > the wrapper, some flags handled through spec files. I believe choosing
+> > > the spec file direction makes this patch series more difficult to
+> > > merge, because we have to go through this whole discussion of spec file
+> > > vs. wrapper.
+> >
+> > Agree, the specfile even just doing the conditional fixup is a 3rd leg
+> > on this whole thing.  We can add it to the wrapper code but we will
+> > loose visibility to what the wrapper is doing vs with the spec we can
+> > dump and analyze the output.
+>
+> That's not true: the wrapper looks at BR2_DEBUG_WRAPPER={1,2} to dump
+> what it is doing:
+>
+>         /* Debug the wrapper to see actual arguments passed to
+>          * the compiler:
+>          * unset, empty, or 0: do not trace
+>          * set to 1          : trace all arguments on a single line
+>          * set to 2          : trace one argument per line
+>          */
+>         if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
+>
+> > > I have nothing against using spec files, but right now, our logic is
+> > > based on a wrapper program. Therefore, I would be more comfortable with
+> > > an approach that relies on the wrapper program, so that it is in line
+> > > with what we are doing today. Then, separately, we can discuss how our
+> > > wrapper can be replaced, completely or partially, by a spec file.
+> >
+> > Ok. If the above feedback in this email doesn't change the view
+> > related to spec files, I can look at switching to a pure wrapper for
+> > fixups and static setting of variables with flags.
+>
+> I think I'd be happier with a first step where the wrapper is being
+> used. Then in a second step, we can decide to rethink what the wrapper
+> is doing, and move more of its logic to a spec file. I think a wrapper
+> will still be needed anyway, at least to pass --sysroot and --spec.
+>
 
-On Sat, Aug 11, 2018 at 07:44 AM, Thomas Petazzoni wrote:
+I started to look at this tonight and if I understand the current
+wrapper, it's solely working with cc/gcc.  If someone explicity uses
+ld, the wrapper doesn't take affect? (I'll do a build tomorrow and
+look at behavior, didn't have a linux machine handy tonight to check.
 
-> The snippet of code that runs a check-package on all
-> .mk/.hash/Config.in files is currently only available within
-> .gitlab-ci.yml, and isn't immediately and easily usable by Buildroot
-> users. In order to simplify this, this commit introduces a top-level
-> "check-package" make target that implements the same logic. The
-> .gitlab-ci.yml file is changed to use "make check-package".
-> 
-> Since this target is oriented towards Buildroot developers, we
-> intentionally do not clutter the already noisy "make help" text with
-> this additional make target.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+If that's the case, any pointers to detecting the type of invocation
+of the wrapper if I update the symlinking so ld also goes through?
 
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-
-
-Regards,
-Ricardo
+Matt
