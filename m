@@ -1,188 +1,104 @@
-From: Mikael Eliasson <mikael@robomagi.com>
-Date: Sun, 12 Aug 2018 18:08:49 +0200
-Subject: [Buildroot] [PATCH 1/1] libjwt: new package.
-In-Reply-To: <20180812143902.5dde6618@windsurf>
-References: <20180811202925.3547-1-mikael@robomagi.com>
- <20180812143902.5dde6618@windsurf>
-Message-ID: <CAMKz0Yp_0Ccwey=qKoRHFdNf55OL=ZA2GuuCA+SoBaAPNFbzuA@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Sun, 12 Aug 2018 18:24:35 +0200
+Subject: [Buildroot] [PATCH 01/18] perl-appconfig: new package
+In-Reply-To: <20180810161502.21598-2-chrismcc@gmail.com>
+References: <20180810161502.21598-1-chrismcc@gmail.com>
+ <20180810161502.21598-2-chrismcc@gmail.com>
+Message-ID: <CAB0FRsuY1Qy_cwd0jeRUp9Y2WcGAE18vBCmuwX78XXNM=10EUA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
-Not used to using mailing lists so this may not be the correct way to send
-a follow up patch. It is attached.
+2018-08-10 18:14 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 
-I think I have made all the changes you requested. I had also missed
-including package/Config.in.
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+>
 
-Tested with test-pkg -a:
-47 builds, 0 skipped, 0 build failed, 0 legal-info failed
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
-/Regards
-Mikael
-
-2018-08-12 14:39 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
-
-> Hello Mikael,
+---
+>  package/Config.in                          |  1 +
+>  package/perl-appconfig/Config.in           |  6 ++++++
+>  package/perl-appconfig/perl-appconfig.hash |  6 ++++++
+>  package/perl-appconfig/perl-appconfig.mk   | 13 +++++++++++++
+>  4 files changed, 26 insertions(+)
+>  create mode 100644 package/perl-appconfig/Config.in
+>  create mode 100644 package/perl-appconfig/perl-appconfig.hash
+>  create mode 100644 package/perl-appconfig/perl-appconfig.mk
 >
-> First of all, thanks for your contribution!
->
-> On Sat, 11 Aug 2018 22:29:25 +0200, Mikael wrote:
-> > Signed-off-by: Mikael <mikael@robomagi.com>
->
-> Could you use your full first name + last name when contributing? This
-> is important for legal reasons.
->
-> > diff --git a/package/libjwt/Config.in b/package/libjwt/Config.in
-> > new file mode 100644
-> > index 0000000000..81e33e6d93
-> > --- /dev/null
-> > +++ b/package/libjwt/Config.in
-> > @@ -0,0 +1,13 @@
-> > +config BR2_PACKAGE_LIBJWT
-> > +     bool "libjwt"
-> > +     depends on BR2_INSTALL_LIBSTDCPP
->
-> There is no C++ anywhere in this package, and none of the dependencies
-> require C++. To me, it seems like the CMakeLists.txt should be changed
-> from:
->
-> project (jwt)
->
-> to
->
-> project (jwt C)
->
-> which tells CMake that the project is using C only, and no C++.
->
-> > +     select BR2_PACKAGE_JANSSON
-> > +     select BR2_PACKAGE_OPENSSL
->
-> Are you sure OpenSSL is mandatory ? I see a possibility to use GnuTLS
-> as well:
->
-> if (WITHOUT_OPENSSL)
->         find_package (GnuTLS REQUIRED)
->         set (FILES_TO_REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/jwt-openssl.c)
->         set (SSL_LIBRARY_INCLUDE_DIR ${GNUTLS_INCLUDE_DIR})
->         set (SSL_LIBRARIES_DEBUG ${GNUTLS_LIBRARY})
->         set (SSL_LIBRARIES_OPTIMIZED ${GNUTLS_LIBRARY})
-> else ()
->         if (MSVC AND STATIC_RUNTIME)
->                 set (OPENSSL_MSVC_STATIC_RT TRUE)
->         endif ()
->         find_package (OpenSSL REQUIRED)
->         set (FILES_TO_REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/jwt-gnutls.c)
->         set (SSL_LIBRARY_INCLUDE_DIR ${OPENSSL_INCLUDE_DIR})
->         if (MSVC)
->                 set (SSL_LIBRARIES_DEBUG ${LIB_EAY_DEBUG} ${SSL_EAY_DEBUG})
->                 set (SSL_LIBRARIES_OPTIMIZED ${LIB_EAY_RELEASE}
-> ${SSL_EAY_RELEASE})
->         else ()
->                 set (SSL_LIBRARIES_DEBUG ${OPENSSL_CRYPTO_LIBRARY})
->                 set (SSL_LIBRARIES_OPTIMIZED ${OPENSSL_CRYPTO_LIBRARY})
->         endif ()
-> endif ()
->
-> So perhaps, you could do:
->
->         select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
->
-> And the in the .mk file, pass -DWITHOUT_OPENSSL= if GnuTLS is
-> available, but not OpenSSL:
->
-> ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> LIBJWT_DEPENDENCIES += openssl
-> else
-> LIBJWT_DEPENDENCIES += gnutls
-> LIBJWT_CONF_OPTS += -DWITHOUT_OPENSSL=1
-> endif
->
-> > +     help
-> > +       JSON Web Tokens are an open, industry standard RFC 7519
-> > +       method for representing claims securely between two parties.
-> > +
-> > +       https://github.com/benmcollins/libjwt
-> > +
-> > +comment "libjwt needs a toolchain w/ C++"
-> > +     depends on !BR2_INSTALL_LIBSTDCPP
-> > diff --git a/package/libjwt/libjwt.hash b/package/libjwt/libjwt.hash
-> > new file mode 100644
-> > index 0000000000..c8b7ed168a
-> > --- /dev/null
-> > +++ b/package/libjwt/libjwt.hash
-> > @@ -0,0 +1,2 @@
-> > +#Locally computed
-> > +sha256 cc694dfc3abe17d1f5cde4bf6714e39dc17f7cbad352a85ffb0fe6418c584076
-> libjwt-v1.9.0.tar.gz
->
-> Could you add the hash of the COPYING.LIB license file ?
->
-> > diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
-> > new file mode 100644
-> > index 0000000000..2007d6c541
-> > --- /dev/null
-> > +++ b/package/libjwt/libjwt.mk
-> > @@ -0,0 +1,14 @@
-> > +###########################################################
+> diff --git a/package/Config.in b/package/Config.in
+> index f5a17492c7..8b80276fb1 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -665,6 +665,7 @@ endif
+>         source "package/perl/Config.in"
+>  if BR2_PACKAGE_PERL
+>  menu "Perl libraries/modules"
+> +       source "package/perl-appconfig/Config.in"
+>         source "package/perl-convert-asn1/Config.in"
+>         source "package/perl-crypt-blowfish/Config.in"
+>         source "package/perl-crypt-cbc/Config.in"
+> diff --git a/package/perl-appconfig/Config.in b/package/perl-appconfig/
+> Config.in
+> new file mode 100644
+> index 0000000000..ca2220f1c0
+> --- /dev/null
+> +++ b/package/perl-appconfig/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PERL_APPCONFIG
+> +       bool "perl-appconfig"
+> +       help
+> +         AppConfig is a bundle of Perl5 modules for reading configuration
+> files and parsing command line arguments.
+> +
+> +         https://metacpan.org/release/AppConfig
+> diff --git a/package/perl-appconfig/perl-appconfig.hash
+> b/package/perl-appconfig/perl-appconfig.hash
+> new file mode 100644
+> index 0000000000..151a2e903f
+> --- /dev/null
+> +++ b/package/perl-appconfig/perl-appconfig.hash
+> @@ -0,0 +1,6 @@
+> +# retrieved by scancpan from http://cpan.metacpan.org/
+> +md5    7747d9241561ed5567d5e134b8648707 AppConfig-1.71.tar.gz
+> +sha256 1177027025ecb09ee64d9f9f255615c04db5e14f7536c344af632032eb887b0f
+> AppConfig-1.71.tar.gz
+> +
+> +# computed by scancpan
+> +sha256 0b22dd532e4123a511d14989c4169ed56b7316cf844c29c7897a1638a4616868
+> LICENSE
+> diff --git a/package/perl-appconfig/perl-appconfig.mk
+> b/package/perl-appconfig/perl-appconfig.mk
+> new file mode 100644
+> index 0000000000..7a553e330b
+> --- /dev/null
+> +++ b/package/perl-appconfig/perl-appconfig.mk
+> @@ -0,0 +1,13 @@
+> +###########################################################
 > #####################
-> > +#
-> > +# libjwt
-> > +#
-> > +###########################################################
+> +#
+> +# perl-appconfig
+> +#
+> +###########################################################
 > #####################
-> > +
-> > +LIBJWT_VERSION = v1.9.0
-> > +LIBJWT_SITE = $(call github,benmcollins,libjwt,$(LIBJWT_VERSION))
-> > +LIBJWT_INSTALL_STAGING = YES
-> > +LIBJWT_DEPENDENCIES = jansson openssl
-> > +LIBJWT_LICENSE = LGPL-3.0-only
->
-> We use LGPL-3.0 in this case (i.e we don't obey strictly to SPDX, we
-> probably should, but we don't yet, and we should have a single package
-> deviates from what we do in the rest of Buildroot).
->
-> > +LIBJWT_LICENSE_FILES = COPYING.LIB
-> > +
-> > +$(eval $(cmake-package))
->
-> Finally, could you test this package with "utils/test-pkg" ? I am
-> wondering if it builds properly in a static-only configuration.
-> utils/test-pkg will test this for you.
->
-> Could you take into account those comments, and send an updated
-> version ?
->
-> Thanks a lot!
->
-> Thomas Petazzoni
+> +
+> +PERL_APPCONFIG_VERSION = 1.71
+> +PERL_APPCONFIG_SOURCE = AppConfig-$(PERL_APPCONFIG_VERSION).tar.gz
+> +PERL_APPCONFIG_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NE/NEILB
+> +PERL_APPCONFIG_LICENSE = Artistic or GPL-1.0+
+> +PERL_APPCONFIG_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(perl-package))
 > --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> 2.14.4
 >
-
-
-
--- 
-Mikael Eliasson
-Telefon:
-+46703900837
-Email:
-mikael at robomagi.com
-Adress:
-Robomagi AB
-T?ngringsgatan 26A 78430 Borl?nge
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/1060078a/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: 0001-libjwt-new-package.patch
-Type: text/x-patch
-Size: 3520 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/1060078a/attachment.bin>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/fbc43516/attachment.html>
