@@ -1,47 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 16:13:22 +0200
-Subject: [Buildroot] [git commit] configs/snps_archs38_vdk: use post-build
- script instead of overlay
-Message-ID: <20180812140814.2F78C8C557@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 12 Aug 2018 16:15:50 +0200
+Subject: [Buildroot] [PATCH 1/1] ncmpc: fix build with some old
+ toolchains
+In-Reply-To: <20180812160144.0d172d2a@windsurf>
+References: <20180812074520.1467-1-fontaine.fabrice@gmail.com>
+ <20180812143203.049f7619@windsurf>
+ <CAPi7W82Mof=7vNE8quasJNiRd8Yt8YTaRsdTXfZWOnQT0tFURg@mail.gmail.com>
+ <20180812160144.0d172d2a@windsurf>
+Message-ID: <CAPi7W82fSW9+LhnwZxd-C7utzGAvcYukU=gH8TT6Zn6p0Wvmcw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9707ac5840df8bd707a3fad9894441c34c2cf79
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Dear Thomas,
 
-In commit 2cdfa6c84951b25e805d329cb7bae833d333538f ("synopsys/axs10x:
-Update /etc/inittab by post-build"), two Synopsys platforms were
-changed to use a post-build script adding an extra getty in the
-inittab instead of a rootfs overlay containing a custom
-inittab. However, in this commit, configs/snps_archs38_vdk_defconfig
-was not changed, even though it was using the same rootfs overlay.
+2018-08-12 16:01 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-This commit therefore adjusts configs/snps_archs38_vdk_defconfig to
-also use the newly introduced post-build script, fixing the build of
-configs/snps_archs38_vdk_defconfig.
+> Hello,
+>
+> On Sun, 12 Aug 2018 15:52:07 +0200, Fabrice Fontaine wrote:
+>
+> > > To be honest, I don't have enough C++ knowledge to figure out if this
+> > > is the right fix, but I've applied to master anyway. Please submit
+> > > upstream to get a proper review. Thanks!
+> > >
+> > I sent it upstream (https://github.com/MusicPlayerDaemon/ncmpc/pull/29)
+> but
+> > the PR has been closed :-/
+>
+> Considering upstream's reaction, perhaps we should drop the patch, and
+> add the appropriate BR2_TOOLCHAIN_HAS_GCC_AT_LEAST_... dependency ?
+>
+ Indeed, you're right. I will send a new patch to add a dependency to gcc
+>= 5.6.
 
-Fixes:
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+Best Regards,
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/88314952
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/snps_archs38_vdk_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/configs/snps_archs38_vdk_defconfig b/configs/snps_archs38_vdk_defconfig
-index 129e3267e5..f8766cff8a 100644
---- a/configs/snps_archs38_vdk_defconfig
-+++ b/configs/snps_archs38_vdk_defconfig
-@@ -5,7 +5,7 @@ BR2_archs38=y
- # System
- BR2_TARGET_GENERIC_HOSTNAME="archs38_vdk"
- BR2_TARGET_GENERIC_ISSUE="Welcome to the HS38 VDK Software Development Platform"
--BR2_ROOTFS_OVERLAY="board/synopsys/axs10x/fs-overlay"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/synopsys/axs10x/post-build.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- 
- # Linux headers same as kernel, a 4.16 series
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/bcbbd526/attachment.html>
