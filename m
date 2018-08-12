@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Aug 2018 22:29:24 +0200
-Subject: [Buildroot] [PATCH/next v2 12/23] package/vlc: add optional
- dependency to libdvdnav
+Date: Sun, 12 Aug 2018 22:29:19 +0200
+Subject: [Buildroot] [PATCH/next v2 07/23] package/vlc: add optional
+ dependency to pulseaudio
 In-Reply-To: <20180812202935.12983-1-bernd.kuhls@t-online.de>
 References: <20180812202935.12983-1-bernd.kuhls@t-online.de>
-Message-ID: <20180812202935.12983-13-bernd.kuhls@t-online.de>
+Message-ID: <20180812202935.12983-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,26 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vlc/vlc.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 928b3fabb8..9a8ee56256 100644
+index 14fe3b7861..b90fd602d3 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -39,7 +39,6 @@ VLC_CONF_OPTS += \
- 	--disable-caca \
- 	--disable-chromaprint \
- 	--disable-dca \
--	--disable-dvdnav \
- 	--disable-fluidsynth \
- 	--disable-gles1 \
- 	--disable-goom \
-@@ -206,6 +205,13 @@ else
- VLC_CONF_OPTS += --disable-dvbpsi
+@@ -362,6 +362,13 @@ else
+ VLC_CONF_OPTS += --disable-ncurses
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
-+VLC_CONF_OPTS += --enable-dvdnav
-+VLC_DEPENDENCIES += libdvdnav
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++VLC_CONF_OPTS += --enable-pulse
++VLC_DEPENDENCIES += pulseaudio
 +else
-+VLC_CONF_OPTS += --disable-dvdnav
++VLC_CONF_OPTS += --disable-pulse
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
- VLC_CONF_OPTS += --enable-dvdread
- VLC_DEPENDENCIES += libdvdread
+ ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+ VLC_CONF_OPTS += --enable-qt
+ VLC_CONF_ENV += \
 -- 
 2.18.0
