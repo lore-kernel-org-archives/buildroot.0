@@ -1,94 +1,96 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 12 Aug 2018 18:37:32 +0200
-Subject: [Buildroot] [PATCH 15/18] perl-sub-install: new package
-In-Reply-To: <20180810161502.21598-16-chrismcc@gmail.com>
+Date: Sun, 12 Aug 2018 18:38:14 +0200
+Subject: [Buildroot] [PATCH 16/18] perl-sys-meminfo: new package
+In-Reply-To: <20180810161502.21598-17-chrismcc@gmail.com>
 References: <20180810161502.21598-1-chrismcc@gmail.com>
- <20180810161502.21598-16-chrismcc@gmail.com>
-Message-ID: <CAB0FRsuG-7omf=5kOY=qUbwCJyV+bPLROQdQWubJWOzqo1ggWA@mail.gmail.com>
+ <20180810161502.21598-17-chrismcc@gmail.com>
+Message-ID: <CAB0FRsv5avWAXcGVz=YnOFr=V1MntCpeA8OZdTc=KH4M-TZTYQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-08-10 18:14 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+2018-08-10 18:15 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 
 > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 >
 
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
-
-> ---
+---
 >  package/Config.in                              |  1 +
->  package/perl-sub-install/Config.in             |  6 ++++++
->  package/perl-sub-install/perl-sub-install.hash |  6 ++++++
->  package/perl-sub-install/perl-sub-install.mk   | 13 +++++++++++++
->  4 files changed, 26 insertions(+)
->  create mode 100644 package/perl-sub-install/Config.in
->  create mode 100644 package/perl-sub-install/perl-sub-install.hash
->  create mode 100644 package/perl-sub-install/perl-sub-install.mk
+>  package/perl-sys-meminfo/Config.in             | 10 ++++++++++
+>  package/perl-sys-meminfo/perl-sys-meminfo.hash |  6 ++++++
+>  package/perl-sys-meminfo/perl-sys-meminfo.mk   | 12 ++++++++++++
+>  4 files changed, 29 insertions(+)
+>  create mode 100644 package/perl-sys-meminfo/Config.in
+>  create mode 100644 package/perl-sys-meminfo/perl-sys-meminfo.hash
+>  create mode 100644 package/perl-sys-meminfo/perl-sys-meminfo.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index fece804e81..4f6d6dede6 100644
+> index 4f6d6dede6..dd3da6ebe6 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -722,6 +722,7 @@ menu "Perl libraries/modules"
->         source "package/perl-number-bytes-human/Config.in"
+> @@ -723,6 +723,7 @@ menu "Perl libraries/modules"
 >         source "package/perl-params-util/Config.in"
 >         source "package/perl-path-tiny/Config.in"
-> +       source "package/perl-sub-install/Config.in"
+>         source "package/perl-sub-install/Config.in"
+> +       source "package/perl-sys-meminfo/Config.in"
 >         source "package/perl-time-hires/Config.in"
 >         source "package/perl-timedate/Config.in"
 >         source "package/perl-try-tiny/Config.in"
-> diff --git a/package/perl-sub-install/Config.in
-> b/package/perl-sub-install/Config.in
+> diff --git a/package/perl-sys-meminfo/Config.in
+> b/package/perl-sys-meminfo/Config.in
 > new file mode 100644
-> index 0000000000..41d57b237f
+> index 0000000000..3e3155d6cb
 > --- /dev/null
-> +++ b/package/perl-sub-install/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PERL_SUB_INSTALL
-> +       bool "perl-sub-install"
+> +++ b/package/perl-sys-meminfo/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PERL_SYS_MEMINFO
+> +       bool "perl-sys-meminfo"
+> +       depends on !BR2_STATIC_LIBS
 > +       help
-> +         install subroutines into packages easily
+> +         query the total free and used physical memory
 > +
-> +         https://github.com/rjbs/Sub-Install
-> diff --git a/package/perl-sub-install/perl-sub-install.hash
-> b/package/perl-sub-install/perl-sub-install.hash
+> +         https://metacpan.org/release/Sys-MemInfo
+> +
+> +comment "perl-sys-meminfo needs a toolchain w/ dynamic library"
+> +       depends on BR2_STATIC_LIBS
+> diff --git a/package/perl-sys-meminfo/perl-sys-meminfo.hash
+> b/package/perl-sys-meminfo/perl-sys-meminfo.hash
 > new file mode 100644
-> index 0000000000..3abd9940e6
+> index 0000000000..207cfad2bf
 > --- /dev/null
-> +++ b/package/perl-sub-install/perl-sub-install.hash
+> +++ b/package/perl-sys-meminfo/perl-sys-meminfo.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    e1ce4f9cb6b2f6b8778b036c31afa5ab Sub-Install-0.928.tar.gz
-> +sha256 61e567a7679588887b7b86d427bc476ea6d77fffe7e0d17d640f89007d98ef0f
-> Sub-Install-0.928.tar.gz
+> +md5    88f0632691d7de91cbed95ba1ff29025 Sys-MemInfo-0.99.tar.gz
+> +sha256 0786319d3a3a8bae5d727939244bf17e140b714f52734d5e9f627203e4cf3e3b
+> Sys-MemInfo-0.99.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 ad5fb5c05003488f924c60ead21694d629055c9db2ee2d9dd0cf0041b9fedaca
+> +sha256 62854ade112a6782f476bdc7dc9603776c4e064782623d999f966dba131a15de
 > LICENSE
-> diff --git a/package/perl-sub-install/perl-sub-install.mk
-> b/package/perl-sub-install/perl-sub-install.mk
+> diff --git a/package/perl-sys-meminfo/perl-sys-meminfo.mk
+> b/package/perl-sys-meminfo/perl-sys-meminfo.mk
 > new file mode 100644
-> index 0000000000..fc7c55afb8
+> index 0000000000..ed35f411be
 > --- /dev/null
-> +++ b/package/perl-sub-install/perl-sub-install.mk
-> @@ -0,0 +1,13 @@
+> +++ b/package/perl-sys-meminfo/perl-sys-meminfo.mk
+> @@ -0,0 +1,12 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-sub-install
+> +# perl-sys-meminfo
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_SUB_INSTALL_VERSION = 0.928
-> +PERL_SUB_INSTALL_SOURCE = Sub-Install-$(PERL_SUB_INSTALL_VERSION).tar.gz
-> +PERL_SUB_INSTALL_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
-> +PERL_SUB_INSTALL_LICENSE = Artistic or GPL-1.0+
-> +PERL_SUB_INSTALL_LICENSE_FILES = LICENSE
+> +PERL_SYS_MEMINFO_VERSION = 0.99
+> +PERL_SYS_MEMINFO_SOURCE = Sys-MemInfo-$(PERL_SYS_MEMINFO_VERSION).tar.gz
+> +PERL_SYS_MEMINFO_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SC/SCRESTO
+> +PERL_SYS_MEMINFO_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(perl-package))
 > --
@@ -101,4 +103,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/46d17bc6/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/fb640551/attachment.html>
