@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 23:14:29 +0200
-Subject: [Buildroot] [PATCH 02/18] perl-astro-suntime: new package
-In-Reply-To: <20180810161502.21598-3-chrismcc@gmail.com>
-References: <20180810161502.21598-1-chrismcc@gmail.com>
- <20180810161502.21598-3-chrismcc@gmail.com>
-Message-ID: <20180812231429.107ea19b@windsurf>
+Date: Sun, 12 Aug 2018 23:17:35 +0200
+Subject: [Buildroot] [PATCH 04/17] perl-class-std-fast: new package
+In-Reply-To: <20180811182749.20924-5-chrismcc@gmail.com>
+References: <20180811182749.20924-1-chrismcc@gmail.com>
+ <20180811182749.20924-5-chrismcc@gmail.com>
+Message-ID: <20180812231735.1f4fd550@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 10 Aug 2018 09:14:46 -0700, Christopher McCrory wrote:
+On Sat, 11 Aug 2018 11:27:36 -0700, Christopher McCrory wrote:
 > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 > ---
->  package/Config.in                                  |  1 +
->  package/perl-astro-suntime/Config.in               |  6 ++++++
->  package/perl-astro-suntime/perl-astro-suntime.hash |  6 ++++++
->  package/perl-astro-suntime/perl-astro-suntime.mk   | 14 ++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/perl-astro-suntime/Config.in
->  create mode 100644 package/perl-astro-suntime/perl-astro-suntime.hash
->  create mode 100644 package/perl-astro-suntime/perl-astro-suntime.mk
+>  DEVELOPERS                                           |  1 +
+>  package/Config.in                                    |  1 +
+>  package/perl-class-std-fast/Config.in                |  7 +++++++
+>  package/perl-class-std-fast/perl-class-std-fast.hash |  6 ++++++
+>  package/perl-class-std-fast/perl-class-std-fast.mk   | 14 ++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/perl-class-std-fast/Config.in
+>  create mode 100644 package/perl-class-std-fast/perl-class-std-fast.hash
+>  create mode 100644 package/perl-class-std-fast/perl-class-std-fast.mk
 
-I've applied to next. The entry in the DEVELOPERS file was missing.
-
-> +PERL_ASTRO_SUNTIME_VERSION = 0.06
-> +PERL_ASTRO_SUNTIME_SOURCE = Astro-SunTime-$(PERL_ASTRO_SUNTIME_VERSION).tar.gz
-> +PERL_ASTRO_SUNTIME_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RO/ROBF
-> +PERL_ASTRO_SUNTIME_DEPENDENCIES = host-perl-module-build
-> +PERL_ASTRO_SUNTIME_LICENSE = gpl_3
-
-gpl_3 is not correct, it should have been GPL-3.0.
-
-Fran?ois, is this a bug in scancpan ?
-
-Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
