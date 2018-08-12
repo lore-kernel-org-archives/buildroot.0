@@ -1,40 +1,33 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Sun, 12 Aug 2018 08:23:36 +1000
-Subject: [Buildroot] pkg-golang: host package not supported
-In-Reply-To: <20180810140056.5cf7d9ed@windsurf>
-References: <CADHdJwDuaeDU_G0ePRPRrWw+3Vo4W0mSx45OuEDnqrgnsKgZQA@mail.gmail.com>
- <20180810140056.5cf7d9ed@windsurf>
-Message-ID: <CABa6e=q8EfZv0C+E6B_AxwNDw65+u6-VfWDh0ck6eBHv+_nTug@mail.gmail.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat, 11 Aug 2018 21:59:47 -0300
+Subject: [Buildroot] [PATCH v2] Makefile: introduce check-package target
+References: <20180811104423.31391-1-thomas.petazzoni@bootlin.com>
+Message-ID: <5b6f8683ae7c7_79012ab66f6c5a0c17714@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 10 August 2018 at 22:00, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello Mirza,
->
-> On Fri, 10 Aug 2018 13:34:06 +0200, Mirza Krak wrote:
->
->> - Any hints on to add host-golang-package support?
->
-> The first question is whether the existing host-go package installs a
-> Go compiler that can do native compilation in addition to
-> cross-compilation.
+Hello,
 
-Yes, the existing host-go package will do native compilation. It is
-just a matter of calling the compiler without the extra environment
-variables set in HOST_GO_TARGET_ENV, specifically GOARCH, GOTOOLDIR,
-CC and CXX. I'm not sure about GOROOT - the docs talk about that var
-when un-archiving a binary installation of the toolchain anywhere but
-/usr/local. I suspect a built-from-source toolchain will have the
-correct GOROOT compiled in.
+On Sat, Aug 11, 2018 at 07:44 AM, Thomas Petazzoni wrote:
 
-I have successfully compiled kubernetes under buildroot. It has a
-pre-build generate-files step that builds a generator program for the
-host and runs it. All I needed to do was put $(BR_PATH) at the head of
-the path and ran the kubernetes generated_files step.
+> The snippet of code that runs a check-package on all
+> .mk/.hash/Config.in files is currently only available within
+> .gitlab-ci.yml, and isn't immediately and easily usable by Buildroot
+> users. In order to simplify this, this commit introduces a top-level
+> "check-package" make target that implements the same logic. The
+> .gitlab-ci.yml file is changed to use "make check-package".
+> 
+> Since this target is oriented towards Buildroot developers, we
+> intentionally do not clutter the already noisy "make help" text with
+> this additional make target.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-[I also posted the patch https://patchwork.ozlabs.org/patch/949972/ to
-selectively set CGO_ENABLED, which I also needed to build kubernetes].
+Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+
+Regards,
+Ricardo
