@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Aug 2018 22:29:22 +0200
-Subject: [Buildroot] [PATCH/next v2 10/23] package/vlc: add optional
- dependency to libsamplerate
+Date: Sun, 12 Aug 2018 22:29:21 +0200
+Subject: [Buildroot] [PATCH/next v2 09/23] package/vlc: add optional
+ dependency to libidn
 In-Reply-To: <20180812202935.12983-1-bernd.kuhls@t-online.de>
 References: <20180812202935.12983-1-bernd.kuhls@t-online.de>
-Message-ID: <20180812202935.12983-11-bernd.kuhls@t-online.de>
+Message-ID: <20180812202935.12983-10-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,23 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/vlc/vlc.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/vlc/vlc.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index edd0c36372..9e1dc6b92e 100644
+index b8c47582dc..edd0c36372 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -51,7 +51,6 @@ VLC_CONF_OPTS += \
- 	--disable-mmal-vout \
- 	--disable-mtp \
- 	--disable-projectm \
--	--disable-samplerate \
- 	--disable-schroedinger \
- 	--disable-shout \
- 	--disable-twolame \
-@@ -262,6 +261,13 @@ else
- VLC_CONF_OPTS += --disable-svg --disable-svgdec
+@@ -216,6 +216,10 @@ else
+ VLC_CONF_OPTS += --disable-libgcrypt
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-+VLC_CONF_OPTS += --enable-samplerate
-+VLC_DEPENDENCIES += libsamplerate
-+else
-+VLC_CONF_OPTS += --disable-samplerate
++ifeq ($(BR2_PACKAGE_LIBIDN),y)
++VLC_DEPENDENCIES += libidn
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBSSH2),y)
- VLC_CONF_OPTS += --enable-sftp
- VLC_DEPENDENCIES += libssh2
+ ifeq ($(BR2_PACKAGE_LIBMAD),y)
+ VLC_CONF_OPTS += --enable-mad
+ VLC_DEPENDENCIES += libmad
 -- 
 2.18.0
