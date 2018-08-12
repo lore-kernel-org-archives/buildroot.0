@@ -1,39 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 14:08:35 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/qt5/qt5base: fix statx
- support with glibc >= 2.28
-In-Reply-To: <20180812090840.23436-1-bernd.kuhls@t-online.de>
-References: <20180812090840.23436-1-bernd.kuhls@t-online.de>
-Message-ID: <20180812140835.432afd4a@windsurf>
+Date: Sun, 12 Aug 2018 14:11:47 +0200
+Subject: [Buildroot] [PATCH 01/17] perl-cgi: add host
+In-Reply-To: <20180811182749.20924-2-chrismcc@gmail.com>
+References: <20180811182749.20924-1-chrismcc@gmail.com>
+ <20180811182749.20924-2-chrismcc@gmail.com>
+Message-ID: <20180812141147.5942e27f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Christopher,
 
-On Sun, 12 Aug 2018 11:08:40 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+On Sat, 11 Aug 2018 11:27:33 -0700, Christopher McCrory wrote:
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 > ---
->  .../qt5base/5.11.1/0002-qtbase-glibc.patch    | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 package/qt5/qt5base/5.11.1/0002-qtbase-glibc.patch
+>  package/perl-cgi/perl-cgi.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/qt5/qt5base/5.11.1/0002-qtbase-glibc.patch b/package/qt5/qt5base/5.11.1/0002-qtbase-glibc.patch
-> new file mode 100644
-> index 0000000000..d726bb027f
-> --- /dev/null
-> +++ b/package/qt5/qt5base/5.11.1/0002-qtbase-glibc.patch
-> @@ -0,0 +1,52 @@
-> +Fix statx support with glibc >= 2.28
-> +
-> +Ported statx-related changes from
-> +https://src.fedoraproject.org/cgit/rpms/qt5-qtbase.git/plain/qt5-qtbase-glibc.patch
-> +
-> +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> diff --git a/package/perl-cgi/perl-cgi.mk b/package/perl-cgi/perl-cgi.mk
+> index b8115de6ad..476f5f69c3 100644
+> --- a/package/perl-cgi/perl-cgi.mk
+> +++ b/package/perl-cgi/perl-cgi.mk
+> @@ -8,7 +8,9 @@ PERL_CGI_VERSION = 4.38
+>  PERL_CGI_SOURCE = CGI-$(PERL_CGI_VERSION).tar.gz
+>  PERL_CGI_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEEJO
+>  PERL_CGI_DEPENDENCIES = perl-html-parser
+> +HOST_PERL_CGI_DEPENDENCIES = host-perl-html-parser
 
-Please, please, please: Git-formatted patches.
+host-perl-html-parser does not exist, until PATCH 02/17 of this series.
+Therefore, the order of the patches in your series is not good, and the
+series is not bisectable. If I apply only PATCH 01/17, things are
+broken because host-perl-cgi-perl will try to build
+host-perl-html-parser, which doesn't exist.
+
+Please be careful when ordering the patches: they should be organized
+in the correct order to make sure that everything builds at every point
+of the series.
+
+In this specific example, you should have the following order:
+
+ (1) Introduce host-perl-html-tagset
+
+ (2) Introduce host-perl-html-parser, which uses host-perl-html-tagset
+
+ (3) Introduce host-perl-cgi, which uses host-perl-html-parser
+
+Does that make sense ?
 
 Thanks!
 
