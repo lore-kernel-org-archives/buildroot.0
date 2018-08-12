@@ -1,57 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 16:29:15 +0200
-Subject: [Buildroot] [git commit] board/technologic/ts7680: fix bogus size
- in genimage.cfg
-Message-ID: <20180812142424.66B348C589@busybox.osuosl.org>
+Date: Sun, 12 Aug 2018 16:53:31 +0200
+Subject: [Buildroot] [git commit] configs/arm_juno: bump ATF to v1.3
+Message-ID: <20180812144740.C664B813DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1bdb63ff4fddc53cdb43ad670dbf6f3401c19ca
+commit: https://git.buildroot.net/buildroot/commit/?id=395bc11dde5b4ef034118a9be568131f134daaa3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-512B is not a correct size to express "512 bytes", and causes a
-genimage failure:
+ATF in version 1.2 fails to build with:
 
-  ERROR: Invalid size suffix 'B' in '512B'
+./build/juno/release/bl1/context_mgmt.o: In function `cm_prepare_el3_exit':
+context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): undefined reference to `cm_set_next_context'
+context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): relocation truncated to fit: R_AARCH64_JUMP26 against undefined symbol `cm_set_next_context'
 
-To express "512 bytes", using just "512" is sufficient. With this
-commit, genimage works fine, and we indeed have a 512 bytes unused
-partition:
-
-$ fdisk -l output/images/sdcard.img
-Disk output/images/sdcard.img: 60 MiB, 62915584 bytes, 122882 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: dos
-Disk identifier: 0x00000000
-
-Device                    Boot Start    End Sectors  Size Id Type
-output/images/sdcard.img1          1      1       1  512B  0 Empty
-output/images/sdcard.img2          2 524289  524288  256M 83 Linux
+This has been fixed in ATF v1.3. Even though there are even newer
+versions of ATF available, we take a conservative approach, and bump
+to the first version that has the build issue fixed.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/88314963
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/88314771
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/technologic/ts7680/genimage.cfg | 2 +-
+ configs/arm_juno_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/technologic/ts7680/genimage.cfg b/board/technologic/ts7680/genimage.cfg
-index b5599823dc..70b1dac64f 100644
---- a/board/technologic/ts7680/genimage.cfg
-+++ b/board/technologic/ts7680/genimage.cfg
-@@ -3,7 +3,7 @@ image sdcard.img {
- 	}
- 
- 	partition unused {
--		size =  512B
-+		size =  512
- 	}
- 
- 	partition rootfs {
+diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
+index 54506d8061..98f257387d 100644
+--- a/configs/arm_juno_defconfig
++++ b/configs/arm_juno_defconfig
+@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1 arm/juno-r2"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.3"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
