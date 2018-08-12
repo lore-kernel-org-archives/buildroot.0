@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 12 Aug 2018 18:31:25 +0200
-Subject: [Buildroot] [PATCH 08/18] perl-device-serialport: new package
-In-Reply-To: <20180810161502.21598-9-chrismcc@gmail.com>
+Date: Sun, 12 Aug 2018 18:32:26 +0200
+Subject: [Buildroot] [PATCH 09/18] perl-file-slurp: new package
+In-Reply-To: <20180810161502.21598-10-chrismcc@gmail.com>
 References: <20180810161502.21598-1-chrismcc@gmail.com>
- <20180810161502.21598-9-chrismcc@gmail.com>
-Message-ID: <CAB0FRsvk7MWBiWEhdHCAXcfEcbhM_+dofXXmd7+rj6Jysb1Kug@mail.gmail.com>
+ <20180810161502.21598-10-chrismcc@gmail.com>
+Message-ID: <CAB0FRsvB4aaS_YuXc7ptT22n=S-er0hgCAKwjFJmr7FaWXC+nA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,83 +19,75 @@ To: buildroot@busybox.net
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
 ---
->  package/Config.in                                          |  1 +
->  package/perl-device-serialport/Config.in                   | 10
-> ++++++++++
->  package/perl-device-serialport/perl-device-serialport.hash |  6 ++++++
->  package/perl-device-serialport/perl-device-serialport.mk   | 12
-> ++++++++++++
->  4 files changed, 29 insertions(+)
->  create mode 100644 package/perl-device-serialport/Config.in
->  create mode 100644 package/perl-device-serialport/perl-device-
-> serialport.hash
->  create mode 100644 package/perl-device-serialport/perl-device-
-> serialport.mk
+>  package/Config.in                            |  1 +
+>  package/perl-file-slurp/Config.in            |  6 ++++++
+>  package/perl-file-slurp/perl-file-slurp.hash |  6 ++++++
+>  package/perl-file-slurp/perl-file-slurp.mk   | 13 +++++++++++++
+>  4 files changed, 26 insertions(+)
+>  create mode 100644 package/perl-file-slurp/Config.in
+>  create mode 100644 package/perl-file-slurp/perl-file-slurp.hash
+>  create mode 100644 package/perl-file-slurp/perl-file-slurp.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index 73adb62e0b..cd01657802 100644
+> index cd01657802..a458e56871 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -678,6 +678,7 @@ menu "Perl libraries/modules"
->         source "package/perl-date-manip/Config.in"
->         source "package/perl-datetime-tiny/Config.in"
->         source "package/perl-dbi/Config.in"
-> +       source "package/perl-device-serialport/Config.in"
->         source "package/perl-digest-hmac/Config.in"
->         source "package/perl-digest-md5/Config.in"
->         source "package/perl-digest-sha1/Config.in"
-> diff --git a/package/perl-device-serialport/Config.in
-> b/package/perl-device-serialport/Config.in
+> @@ -685,6 +685,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-encode-detect/Config.in"
+>         source "package/perl-encode-locale/Config.in"
+>         source "package/perl-file-listing/Config.in"
+> +       source "package/perl-file-slurp/Config.in"
+>         source "package/perl-file-util/Config.in"
+>         source "package/perl-gd/Config.in"
+>         source "package/perl-gdgraph/Config.in"
+> diff --git a/package/perl-file-slurp/Config.in b/package/perl-file-slurp/
+> Config.in
 > new file mode 100644
-> index 0000000000..f14e9794d0
+> index 0000000000..bfd1cad186
 > --- /dev/null
-> +++ b/package/perl-device-serialport/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PERL_DEVICE_SERIALPORT
-> +       bool "perl-device-serialport"
-> +       depends on !BR2_STATIC_LIBS
+> +++ b/package/perl-file-slurp/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PERL_FILE_SLURP
+> +       bool "perl-file-slurp"
 > +       help
-> +         Linux/POSIX emulation of Win32::SerialPort functions.
+> +         Simple and Efficient Reading/Writing/Modifying of Complete Files
 > +
-> +         https://metacpan.org/release/Device-SerialPort
-> +
-> +comment "perl-device-serialport needs a toolchain w/ dynamic library"
-> +       depends on BR2_STATIC_LIBS
-> diff --git a/package/perl-device-serialport/perl-device-serialport.hash
-> b/package/perl-device-serialport/perl-device-serialport.hash
+> +         https://metacpan.org/release/File-Slurp
+> diff --git a/package/perl-file-slurp/perl-file-slurp.hash
+> b/package/perl-file-slurp/perl-file-slurp.hash
 > new file mode 100644
-> index 0000000000..35ddc13d3f
+> index 0000000000..18f9e65ced
 > --- /dev/null
-> +++ b/package/perl-device-serialport/perl-device-serialport.hash
+> +++ b/package/perl-file-slurp/perl-file-slurp.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    82c698151f934eb28c65d1838cee7d9e Device-SerialPort-1.04.tar.gz
-> +sha256 d392567cb39b4ea606c0e0acafd8ed72320311b995336ece5fcefcf9b150e9d7
-> Device-SerialPort-1.04.tar.gz
+> +md5    7d584cd15c4f8b9547765eff8c4ef078 File-Slurp-9999.19.tar.gz
+> +sha256 ce29ebe995097ebd6e9bc03284714cdfa0c46dc94f6b14a56980747ea3253643
+> File-Slurp-9999.19.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 59432e84eca65c10c4b627f8af0b00833685856b68242b816aea2a38283a124c
+> +sha256 17e638d011c04b1d39b300c07ccd0c57d7857b9ccdb9fe7abce1b15f0e7b0c20
 > README
-> diff --git a/package/perl-device-serialport/perl-device-serialport.mk
-> b/package/perl-device-serialport/perl-device-serialport.mk
+> diff --git a/package/perl-file-slurp/perl-file-slurp.mk
+> b/package/perl-file-slurp/perl-file-slurp.mk
 > new file mode 100644
-> index 0000000000..635179f80a
+> index 0000000000..32773ddbbc
 > --- /dev/null
-> +++ b/package/perl-device-serialport/perl-device-serialport.mk
-> @@ -0,0 +1,12 @@
+> +++ b/package/perl-file-slurp/perl-file-slurp.mk
+> @@ -0,0 +1,13 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-device-serialport
+> +# perl-file-slurp
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_DEVICE_SERIALPORT_VERSION = 1.04
-> +PERL_DEVICE_SERIALPORT_SOURCE = Device-SerialPort-$(PERL_
-> DEVICE_SERIALPORT_VERSION).tar.gz
-> +PERL_DEVICE_SERIALPORT_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CO/COOK
-> +PERL_DEVICE_SERIALPORT_LICENSE_FILES = README
+> +PERL_FILE_SLURP_VERSION = 9999.19
+> +PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
+> +PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/U/UR/URI
+> +PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
+> +PERL_FILE_SLURP_LICENSE_FILES = README
 > +
 > +$(eval $(perl-package))
 > --
@@ -108,4 +100,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/b018b708/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/e12ee2bb/attachment.html>
