@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Aug 2018 22:29:27 +0200
-Subject: [Buildroot] [PATCH/next v2 15/23] package/vlc: add optional
- dependency to harfbuzz
+Date: Sun, 12 Aug 2018 22:29:34 +0200
+Subject: [Buildroot] [PATCH/next v2 22/23] package/vlc: add optional
+ dependency to wayland
 In-Reply-To: <20180812202935.12983-1-bernd.kuhls@t-online.de>
 References: <20180812202935.12983-1-bernd.kuhls@t-online.de>
-Message-ID: <20180812202935.12983-16-bernd.kuhls@t-online.de>
+Message-ID: <20180812202935.12983-23-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 6643d6fd8d..7ce1f57cd8 100644
+index 3dbaac1757..53a2b61633 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -59,7 +59,6 @@ VLC_CONF_OPTS += \
- 	--disable-fluidsynth \
- 	--disable-gme \
- 	--disable-goom \
--	--disable-harfbuzz \
- 	--disable-jack \
- 	--disable-jpeg \
- 	--disable-kai \
-@@ -191,6 +190,13 @@ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
- VLC_DEPENDENCIES += libgl
+@@ -84,7 +84,6 @@ VLC_CONF_OPTS += \
+ 	--disable-vdpau \
+ 	--disable-vsxu \
+ 	--disable-wasapi \
+-	--disable-wayland \
+ 	--disable-x262 \
+ 	--disable-zvbi \
+ 	--enable-run-as-root
+@@ -529,6 +528,13 @@ else
+ VLC_CONF_OPTS += --disable-udev
  endif
  
-+ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
-+VLC_CONF_OPTS += --enable-harfbuzz
-+VLC_DEPENDENCIES += harfbuzz
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++VLC_CONF_OPTS += --enable-wayland
++VLC_DEPENDENCIES += wayland
 +else
-+VLC_CONF_OPTS += --disable-harfbuzz
++VLC_CONF_OPTS += --disable-wayland
 +endif
 +
- ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
- VLC_CONF_OPTS += --enable-gles2
- VLC_DEPENDENCIES += libgles
+ ifeq ($(BR2_PACKAGE_X264),y)
+ VLC_CONF_OPTS += --enable-x264
+ VLC_DEPENDENCIES += x264
 -- 
 2.18.0
