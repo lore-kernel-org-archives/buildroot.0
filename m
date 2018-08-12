@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Aug 2018 22:29:29 +0200
-Subject: [Buildroot] [PATCH/next v2 17/23] package/vlc: add optional
- dependency to libnfs
+Date: Sun, 12 Aug 2018 22:29:26 +0200
+Subject: [Buildroot] [PATCH/next v2 14/23] package/vlc: add optional
+ dependency to gst1-plugins-base
 In-Reply-To: <20180812202935.12983-1-bernd.kuhls@t-online.de>
 References: <20180812202935.12983-1-bernd.kuhls@t-online.de>
-Message-ID: <20180812202935.12983-18-bernd.kuhls@t-online.de>
+Message-ID: <20180812202935.12983-15-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,30 +17,30 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index d34ab2a9e0..fab08b950d 100644
+index 91e96516ac..6643d6fd8d 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -71,7 +71,6 @@ VLC_CONF_OPTS += \
- 	--disable-mmal \
- 	--disable-mpg123 \
- 	--disable-mtp \
--	--disable-nfs \
- 	--disable-notify \
- 	--disable-projectm \
- 	--disable-schroedinger \
-@@ -311,6 +310,13 @@ else
- VLC_CONF_OPTS += --disable-libmpeg2
+@@ -59,7 +59,6 @@ VLC_CONF_OPTS += \
+ 	--disable-fluidsynth \
+ 	--disable-gme \
+ 	--disable-goom \
+-	--disable-gst-decode \
+ 	--disable-harfbuzz \
+ 	--disable-jack \
+ 	--disable-jpeg \
+@@ -181,6 +180,13 @@ else
+ VLC_CONF_OPTS += --disable-freerdp
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBNFS),y)
-+VLC_CONF_OPTS += --enable-nfs
-+VLC_DEPENDENCIES += libnfs
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
++VLC_CONF_OPTS += --enable-gst-decode
++VLC_DEPENDENCIES += gst1-plugins-base
 +else
-+VLC_CONF_OPTS += --disable-nfs
++VLC_CONF_OPTS += --disable-gst-decode
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- VLC_CONF_OPTS += --enable-png
- VLC_DEPENDENCIES += libpng
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ VLC_DEPENDENCIES += libgl
+ endif
 -- 
 2.18.0
