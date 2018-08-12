@@ -1,39 +1,91 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Aug 2018 20:10:34 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/gcc: fix build of
- gcc-7.3.0 with glibc-2.28
-References: <20180812172909.21450-1-bernd.kuhls@t-online.de>
- <20180812172909.21450-2-bernd.kuhls@t-online.de>
- <20180812194851.37f58885@windsurf>
-Message-ID: <qp964fxkpu.ln2@ID-313208.user.individual.net>
+Date: Sun, 12 Aug 2018 20:28:34 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/qt5/qt5base: fix statx
+ support with glibc >= 2.28
+Message-ID: <20180812182834.1797-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: git-formatted patch (Thomas)
 
-Am Sun, 12 Aug 2018 19:48:51 +0200 schrieb Thomas Petazzoni:
+ ...02-Fix-statx-support-with-glibc-2.28.patch | 64 +++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+ create mode 100644 package/qt5/qt5base/5.11.1/0002-Fix-statx-support-with-glibc-2.28.patch
 
-> What about the older gcc versions we support ?
-
-upstream has no patches for these versions:
-
-> 4.9.4
-
-https://gcc.gnu.org/git/?p=gcc.git;a=history;f=libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc;h=196eb3b3c6458b30c2b1a47e0d5ef514b3063044;hb=refs/heads/gcc-4_9-branch
-
-> 5.5.0
-
-https://gcc.gnu.org/git/?p=gcc.git;a=history;f=libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc;h=0d5b11f6e15f55a3193ced0f329461c9b9633185;hb=refs/heads/gcc-5-branch
-
-> 6.4.0
-
-https://gcc.gnu.org/git/?p=gcc.git;a=history;f=libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc;h=6992f2cd8ac56bcd5102f7440d71137b4458871d;hb=refs/heads/gcc-6-branch
-
-> or1k-musl-5.4.0-20170218
-
-Could not find an upstream branch at gcc.gnu.org.
-
-Regards, Bernd
+diff --git a/package/qt5/qt5base/5.11.1/0002-Fix-statx-support-with-glibc-2.28.patch b/package/qt5/qt5base/5.11.1/0002-Fix-statx-support-with-glibc-2.28.patch
+new file mode 100644
+index 0000000000..d7857471de
+--- /dev/null
++++ b/package/qt5/qt5base/5.11.1/0002-Fix-statx-support-with-glibc-2.28.patch
+@@ -0,0 +1,64 @@
++From c41b7d021309e26456cb4e2f9dd6a13aa5cea538 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 12 Aug 2018 20:14:40 +0200
++Subject: [PATCH] Fix statx support with glibc >= 2.28
++
++Ported statx-related changes from
++https://src.fedoraproject.org/cgit/rpms/qt5-qtbase.git/plain/qt5-qtbase-glibc.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ mkspecs/linux-g++/qplatformdefs.h         | 2 ++
++ src/corelib/io/qfilesystemengine_unix.cpp | 6 +++++-
++ 2 files changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/mkspecs/linux-g++/qplatformdefs.h b/mkspecs/linux-g++/qplatformdefs.h
++index 13523f0702..d32453162c 100644
++--- a/mkspecs/linux-g++/qplatformdefs.h
+++++ b/mkspecs/linux-g++/qplatformdefs.h
++@@ -72,7 +72,9 @@
++ #include <sys/time.h>
++ #include <sys/shm.h>
++ #include <sys/socket.h>
+++#if 0
++ #include <sys/stat.h>
+++#endif
++ #include <sys/wait.h>
++ #include <netinet/in.h>
++ 
++diff --git a/src/corelib/io/qfilesystemengine_unix.cpp b/src/corelib/io/qfilesystemengine_unix.cpp
++index be6ce48d0c..5c2d3a1324 100644
++--- a/src/corelib/io/qfilesystemengine_unix.cpp
+++++ b/src/corelib/io/qfilesystemengine_unix.cpp
++@@ -50,7 +50,9 @@
++ #include <pwd.h>
++ #include <stdlib.h> // for realpath()
++ #include <sys/types.h>
+++#if 0
++ #include <sys/stat.h>
+++#endif
++ #include <unistd.h>
++ #include <stdio.h>
++ #include <errno.h>
++@@ -91,7 +93,9 @@ extern "C" NSString *NSTemporaryDirectory();
++ #  include <sys/syscall.h>
++ #  include <sys/sendfile.h>
++ #  include <linux/fs.h>
+++#if 0
++ #  include <linux/stat.h>
+++#endif
++ 
++ // in case linux/fs.h is too old and doesn't define it:
++ #ifndef FICLONE
++@@ -111,7 +115,7 @@ static int renameat2(int oldfd, const char *oldpath, int newfd, const char *newp
++ { return syscall(SYS_renameat2, oldfd, oldpath, newfd, newpath, flags); }
++ #    endif
++ 
++-#    if !QT_CONFIG(statx) && defined(SYS_statx)
+++#    if 0 && !QT_CONFIG(statx) && defined(SYS_statx)
++ static int statx(int dirfd, const char *pathname, int flag, unsigned mask, struct statx *statxbuf)
++ { return syscall(SYS_statx, dirfd, pathname, flag, mask, statxbuf); }
++ #    elif !QT_CONFIG(statx) && !defined(SYS_statx)
++-- 
++2.18.0
++
+-- 
+2.18.0
