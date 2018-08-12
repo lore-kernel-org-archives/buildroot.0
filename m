@@ -1,55 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 14:11:47 +0200
-Subject: [Buildroot] [PATCH 01/17] perl-cgi: add host
-In-Reply-To: <20180811182749.20924-2-chrismcc@gmail.com>
+Date: Sun, 12 Aug 2018 14:13:36 +0200
+Subject: [Buildroot] [PATCH 06/17] perl-module-runtime: add host
+In-Reply-To: <CAB0FRssyWKMjxCeX9WHg7K-P5A97W32X4Qr=S8EvMOTBovn5LA@mail.gmail.com>
 References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-2-chrismcc@gmail.com>
-Message-ID: <20180812141147.5942e27f@windsurf>
+ <20180811182749.20924-7-chrismcc@gmail.com>
+ <CAB0FRssyWKMjxCeX9WHg7K-P5A97W32X4Qr=S8EvMOTBovn5LA@mail.gmail.com>
+Message-ID: <20180812141336.0621e01e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christopher,
+Hello Fran?ois,
 
-On Sat, 11 Aug 2018 11:27:33 -0700, Christopher McCrory wrote:
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> ---
->  package/perl-cgi/perl-cgi.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/perl-cgi/perl-cgi.mk b/package/perl-cgi/perl-cgi.mk
-> index b8115de6ad..476f5f69c3 100644
-> --- a/package/perl-cgi/perl-cgi.mk
-> +++ b/package/perl-cgi/perl-cgi.mk
-> @@ -8,7 +8,9 @@ PERL_CGI_VERSION = 4.38
->  PERL_CGI_SOURCE = CGI-$(PERL_CGI_VERSION).tar.gz
->  PERL_CGI_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LE/LEEJO
->  PERL_CGI_DEPENDENCIES = perl-html-parser
-> +HOST_PERL_CGI_DEPENDENCIES = host-perl-html-parser
+(Thanks for reviewing the Perl patches, definitely very useful!)
 
-host-perl-html-parser does not exist, until PATCH 02/17 of this series.
-Therefore, the order of the patches in your series is not good, and the
-series is not bisectable. If I apply only PATCH 01/17, things are
-broken because host-perl-cgi-perl will try to build
-host-perl-html-parser, which doesn't exist.
+On Sun, 12 Aug 2018 11:21:07 +0200, Fran?ois Perrad wrote:
+> Most of the time, host-perl-* packages are useless on BuildRoot,
+> please, double check the package which introduces this dependency.
 
-Please be careful when ordering the patches: they should be organized
-in the correct order to make sure that everything builds at every point
-of the series.
+For which specific patches are you giving this comment ? Does it also
+apply to host-perl-cgi, host-perl-html-parser and
+host-perl-html-tagset ?
 
-In this specific example, you should have the following order:
+Also Fran?ois, it is very good when you make comments on patches that
+have issues, but it would be even better if you could provide your
+Reviewed-by/Acked-by on the patches that look correct to you. This
+gives me a sign that you are OK with a specific patch, so that I can
+merge it, and reduce the backlog of patches.
 
- (1) Introduce host-perl-html-tagset
-
- (2) Introduce host-perl-html-parser, which uses host-perl-html-tagset
-
- (3) Introduce host-perl-cgi, which uses host-perl-html-parser
-
-Does that make sense ?
-
-Thanks!
+Thanks a lot!
 
 Thomas
 -- 
