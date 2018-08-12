@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 12 Aug 2018 18:33:19 +0200
-Subject: [Buildroot] [PATCH 10/18] perl-io-interface: new package
-In-Reply-To: <20180810161502.21598-11-chrismcc@gmail.com>
+Date: Sun, 12 Aug 2018 18:34:07 +0200
+Subject: [Buildroot] [PATCH 11/18] perl-json-maybexs: new package
+In-Reply-To: <20180810161502.21598-12-chrismcc@gmail.com>
 References: <20180810161502.21598-1-chrismcc@gmail.com>
- <20180810161502.21598-11-chrismcc@gmail.com>
-Message-ID: <CAB0FRsuVg5HzDoRpCrvxZqAR05B4iz8nA7ZATsVJJnFti4mqRQ@mail.gmail.com>
+ <20180810161502.21598-12-chrismcc@gmail.com>
+Message-ID: <CAB0FRssU5RmvH7mecr9Ho0bLtLZy0jQr6+NBLtQhTvytbUYmAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,80 +21,75 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
 > ---
 >  package/Config.in                                |  1 +
->  package/perl-io-interface/Config.in              | 10 ++++++++++
->  package/perl-io-interface/perl-io-interface.hash |  6 ++++++
->  package/perl-io-interface/perl-io-interface.mk   | 14 ++++++++++++++
->  4 files changed, 31 insertions(+)
->  create mode 100644 package/perl-io-interface/Config.in
->  create mode 100644 package/perl-io-interface/perl-io-interface.hash
->  create mode 100644 package/perl-io-interface/perl-io-interface.mk
+>  package/perl-json-maybexs/Config.in              |  6 ++++++
+>  package/perl-json-maybexs/perl-json-maybexs.hash |  6 ++++++
+>  package/perl-json-maybexs/perl-json-maybexs.mk   | 13 +++++++++++++
+>  4 files changed, 26 insertions(+)
+>  create mode 100644 package/perl-json-maybexs/Config.in
+>  create mode 100644 package/perl-json-maybexs/perl-json-maybexs.hash
+>  create mode 100644 package/perl-json-maybexs/perl-json-maybexs.mk
 >
 > diff --git a/package/Config.in b/package/Config.in
-> index a458e56871..13a1b60588 100644
+> index 13a1b60588..40964d3406 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -698,6 +698,7 @@ menu "Perl libraries/modules"
->         source "package/perl-http-message/Config.in"
->         source "package/perl-http-negotiate/Config.in"
+> @@ -700,6 +700,7 @@ menu "Perl libraries/modules"
 >         source "package/perl-io-html/Config.in"
-> +       source "package/perl-io-interface/Config.in"
+>         source "package/perl-io-interface/Config.in"
 >         source "package/perl-io-socket-ssl/Config.in"
+> +       source "package/perl-json-maybexs/Config.in"
 >         source "package/perl-json-tiny/Config.in"
 >         source "package/perl-libwww-perl/Config.in"
-> diff --git a/package/perl-io-interface/Config.in
-> b/package/perl-io-interface/Config.in
+>         source "package/perl-lwp-mediatypes/Config.in"
+> diff --git a/package/perl-json-maybexs/Config.in
+> b/package/perl-json-maybexs/Config.in
 > new file mode 100644
-> index 0000000000..7aa7064ec0
+> index 0000000000..1db82c3684
 > --- /dev/null
-> +++ b/package/perl-io-interface/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_PERL_IO_INTERFACE
-> +       bool "perl-io-interface"
-> +       depends on !BR2_STATIC_LIBS
+> +++ b/package/perl-json-maybexs/Config.in
+> @@ -0,0 +1,6 @@
+> +config BR2_PACKAGE_PERL_JSON_MAYBEXS
+> +       bool "perl-json-maybexs"
 > +       help
-> +         Access and modify network interface card configuration
+> +         Use Cpanel::JSON::XS with a fallback to JSON::XS and JSON::PP
 > +
-> +         https://metacpan.org/release/IO-Interface
-> +
-> +comment "perl-io-interface needs a toolchain w/ dynamic library"
-> +       depends on BR2_STATIC_LIBS
-> diff --git a/package/perl-io-interface/perl-io-interface.hash
-> b/package/perl-io-interface/perl-io-interface.hash
+> +         https://metacpan.org/release/JSON-MaybeXS
+> diff --git a/package/perl-json-maybexs/perl-json-maybexs.hash
+> b/package/perl-json-maybexs/perl-json-maybexs.hash
 > new file mode 100644
-> index 0000000000..75e572f918
+> index 0000000000..c8bf172aaa
 > --- /dev/null
-> +++ b/package/perl-io-interface/perl-io-interface.hash
+> +++ b/package/perl-json-maybexs/perl-json-maybexs.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    806f97aff5a7361b6f54cd494f4cc9fd IO-Interface-1.09.tar.gz
-> +sha256 e63e81c52eb1e0e60ec2d983f5552d2493e117179925c96757f23c4bd9fa713a
-> IO-Interface-1.09.tar.gz
+> +md5    db61fb5515f8e2f19709a317e26dde42 JSON-MaybeXS-1.004000.tar.gz
+> +sha256 59bda02e8f4474c73913723c608b539e2452e16c54ed7f0150c01aad06e0a126
+> JSON-MaybeXS-1.004000.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 b5a5bf59bd1be13f7f498e5aa2ea5c0c603c04a095dcf03a06aa5b83bbccf921
-> LICENSE
-> diff --git a/package/perl-io-interface/perl-io-interface.mk
-> b/package/perl-io-interface/perl-io-interface.mk
+> +sha256 d972e00126c5337e88d81d64fc349a3f4c54841075f4180a1145441d30c86f83
+> README
+> diff --git a/package/perl-json-maybexs/perl-json-maybexs.mk
+> b/package/perl-json-maybexs/perl-json-maybexs.mk
 > new file mode 100644
-> index 0000000000..24f4eeb0b3
+> index 0000000000..b4eaccddcb
 > --- /dev/null
-> +++ b/package/perl-io-interface/perl-io-interface.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/perl-json-maybexs/perl-json-maybexs.mk
+> @@ -0,0 +1,13 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-io-interface
+> +# perl-json-maybexs
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_IO_INTERFACE_VERSION = 1.09
-> +PERL_IO_INTERFACE_SOURCE = IO-Interface-$(PERL_IO_
-> INTERFACE_VERSION).tar.gz
-> +PERL_IO_INTERFACE_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS
-> +PERL_IO_INTERFACE_DEPENDENCIES = host-perl-module-build
-> +PERL_IO_INTERFACE_LICENSE = Artistic or GPL-1.0+
-> +PERL_IO_INTERFACE_LICENSE_FILES = LICENSE
+> +PERL_JSON_MAYBEXS_VERSION = 1.004000
+> +PERL_JSON_MAYBEXS_SOURCE = JSON-MaybeXS-$(PERL_JSON_
+> MAYBEXS_VERSION).tar.gz
+> +PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
+> +PERL_JSON_MAYBEXS_LICENSE = Artistic or GPL-1.0+
+> +PERL_JSON_MAYBEXS_LICENSE_FILES = README
 > +
 > +$(eval $(perl-package))
 > --
@@ -107,4 +102,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/d5b32fc2/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/74c55392/attachment.html>
