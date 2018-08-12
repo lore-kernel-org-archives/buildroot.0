@@ -1,8 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 12 Aug 2018 22:32:00 +0200
-Subject: [Buildroot] [PATCH/next 1/6] package/aubio: Fix build with FFmpeg
- 4.0
-Message-ID: <20180812203205.7251-1-bernd.kuhls@t-online.de>
+Date: Sun, 12 Aug 2018 22:32:05 +0200
+Subject: [Buildroot] [PATCH/next 6/6] package/squeezelite: Fix build with
+ FFmpeg 4.0
+In-Reply-To: <20180812203205.7251-1-bernd.kuhls@t-online.de>
+References: <20180812203205.7251-1-bernd.kuhls@t-online.de>
+Message-ID: <20180812203205.7251-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,47 +13,36 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/aubio/0001-ffmpeg4.patch | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/aubio/0001-ffmpeg4.patch
+ package/squeezelite/0004-ffmpeg4.0.patch | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+ create mode 100644 package/squeezelite/0004-ffmpeg4.0.patch
 
-diff --git a/package/aubio/0001-ffmpeg4.patch b/package/aubio/0001-ffmpeg4.patch
+diff --git a/package/squeezelite/0004-ffmpeg4.0.patch b/package/squeezelite/0004-ffmpeg4.0.patch
 new file mode 100644
-index 0000000000..bdaac55a3d
+index 0000000000..55f194f10a
 --- /dev/null
-+++ b/package/aubio/0001-ffmpeg4.patch
-@@ -0,0 +1,32 @@
-+From 5690daf759b473b9d13b4547ef37adc2695cf524 Mon Sep 17 00:00:00 2001
-+From: James Cowgill <jcowgill@jcowgill.uk>
-+Date: Sun, 25 Feb 2018 14:23:25 +0000
-+Subject: [PATCH] Fix build with FFmpeg 4.0
++++ b/package/squeezelite/0004-ffmpeg4.0.patch
+@@ -0,0 +1,21 @@
++Description: Fix FTBFS with FFmpeg 4.0
++Author: James Cowgill <jcowgill@debian.org>
++Bug-Debian: https://bugs.debian.org/888335
 +
-+Downloaded from upstream commit
-+https://git.aubio.org/?p=aubio.git;a=commitdiff;h=5690daf759b473b9d13b4547ef37adc2695cf524
++Downloaded from Debian:
++https://sources.debian.org/src/squeezelite/1.8-4.1/debian/patches/ffmpeg4.0.patch/
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ src/io/source_avcodec.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/io/source_avcodec.c b/src/io/source_avcodec.c
-+index ccdce807..8197445c 100644
-+--- a/src/io/source_avcodec.c
-++++ b/src/io/source_avcodec.c
-+@@ -58,7 +58,11 @@
-+ #include "fmat.h"
-+ #include "source_avcodec.h"
++This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
++--- a/ffmpeg.c
+++++ b/ffmpeg.c
++@@ -264,7 +264,7 @@ static decode_state ff_decode(void) {
++ 		ff->mmsh_bytes_left = ff->mmsh_bytes_pad = ff->mmsh_packet_len = 0;
 + 
-++#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(56, 56, 0)
-+ #define AUBIO_AVCODEC_MAX_BUFFER_SIZE FF_MIN_BUFFER_SIZE
-++#else
-++#define AUBIO_AVCODEC_MAX_BUFFER_SIZE AV_INPUT_BUFFER_MIN_SIZE
-++#endif
++ 		if (!ff->readbuf) {
++-			ff->readbuf = AV(ff, malloc, READ_SIZE +  FF_INPUT_BUFFER_PADDING_SIZE);
+++			ff->readbuf = AV(ff, malloc, READ_SIZE +  AV_INPUT_BUFFER_PADDING_SIZE);
++ 		}
 + 
-+ struct _aubio_source_avcodec_t {
-+   uint_t hop_size;
-+-- 
-+2.11.0
-+
++ 		avio = AVIO(ff, alloc_context, ff->readbuf, READ_SIZE, 0, NULL, _read_data, NULL, NULL);
 -- 
 2.18.0
