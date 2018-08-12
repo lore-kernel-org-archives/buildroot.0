@@ -1,54 +1,188 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 12 Aug 2018 17:07:03 +0200
-Subject: [Buildroot] [PATCH 3/6] package/Makefile.in: Use gcc spec files
- for PIE build flags
-In-Reply-To: <CANQCQpam_kU+CdNETW7g9N49MgRhRj6tEQNc8qayzGdJiTWC_A@mail.gmail.com>
-References: <20180711143113.11927-1-matthew.weber@rockwellcollins.com>
- <20180711143113.11927-4-matthew.weber@rockwellcollins.com>
- <20180810225051.4f34fb06@windsurf>
- <CANQCQpYDuFNMYrwmWiJefh89NjOMoABQwCSne1sM1=-Kcjt9vA@mail.gmail.com>
- <20180811122954.15470d8a@windsurf>
- <CANQCQpZXCEBy-sxPm+dbHELJm5AD8+Mc9Q2o=C2nUFfgSenViQ@mail.gmail.com>
- <20180812094115.1a17f172@windsurf>
- <CANQCQpam_kU+CdNETW7g9N49MgRhRj6tEQNc8qayzGdJiTWC_A@mail.gmail.com>
-Message-ID: <20180812170703.06be88df@windsurf>
+From: Mikael Eliasson <mikael@robomagi.com>
+Date: Sun, 12 Aug 2018 18:08:49 +0200
+Subject: [Buildroot] [PATCH 1/1] libjwt: new package.
+In-Reply-To: <20180812143902.5dde6618@windsurf>
+References: <20180811202925.3547-1-mikael@robomagi.com>
+ <20180812143902.5dde6618@windsurf>
+Message-ID: <CAMKz0Yp_0Ccwey=qKoRHFdNf55OL=ZA2GuuCA+SoBaAPNFbzuA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
+Not used to using mailing lists so this may not be the correct way to send
+a follow up patch. It is attached.
 
-On Sun, 12 Aug 2018 07:49:19 -0500, Matthew Weber wrote:
+I think I have made all the changes you requested. I had also missed
+including package/Config.in.
 
-> > So I don't think we need to wrap "ld", as ld shouldn't be used
-> > directly. The only packages that should use "ld" directly are things
-> > like the Linux kernel or bootloaders.
-> 
-> The current hardening approach is trying to cover the cases where
-> packages are still using ld directly and have other incompatible flags
-> set (static/shared/r).  I don't have the exact list but I believe
-> busybox is even one of those and others like valgrind, boost, etc who
-> use the "shared" flag and adding "pie" causes a compile failure.  So
-> we do still need to cover the ld case or go patch packages.
+Tested with test-pkg -a:
+47 builds, 0 skipped, 0 build failed, 0 legal-info failed
 
-I find it weird that those packages are using "ld" directly, because if
-that's the case, we would have build failures on some mips64
-configurations.
+/Regards
+Mikael
 
-> What I could do is move the cc1 spec file conditional add of PIE into
-> the wrapper.  Then leave the LDFLAGS as we have them and the
-> associated spec file that does a conditional add of "pie".  This would
-> prevent us from wrapping the ld tool and keep the existing wrapper
-> approach consistent.
+2018-08-12 14:39 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
 
-If we really need to do some custom logic around ld, then I believe I'd
-prefer to have a wrapper for it as well, to keep things consistent. But
-of course, Arnout's opinion on the matter would be welcome.
+> Hello Mikael,
+>
+> First of all, thanks for your contribution!
+>
+> On Sat, 11 Aug 2018 22:29:25 +0200, Mikael wrote:
+> > Signed-off-by: Mikael <mikael@robomagi.com>
+>
+> Could you use your full first name + last name when contributing? This
+> is important for legal reasons.
+>
+> > diff --git a/package/libjwt/Config.in b/package/libjwt/Config.in
+> > new file mode 100644
+> > index 0000000000..81e33e6d93
+> > --- /dev/null
+> > +++ b/package/libjwt/Config.in
+> > @@ -0,0 +1,13 @@
+> > +config BR2_PACKAGE_LIBJWT
+> > +     bool "libjwt"
+> > +     depends on BR2_INSTALL_LIBSTDCPP
+>
+> There is no C++ anywhere in this package, and none of the dependencies
+> require C++. To me, it seems like the CMakeLists.txt should be changed
+> from:
+>
+> project (jwt)
+>
+> to
+>
+> project (jwt C)
+>
+> which tells CMake that the project is using C only, and no C++.
+>
+> > +     select BR2_PACKAGE_JANSSON
+> > +     select BR2_PACKAGE_OPENSSL
+>
+> Are you sure OpenSSL is mandatory ? I see a possibility to use GnuTLS
+> as well:
+>
+> if (WITHOUT_OPENSSL)
+>         find_package (GnuTLS REQUIRED)
+>         set (FILES_TO_REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/jwt-openssl.c)
+>         set (SSL_LIBRARY_INCLUDE_DIR ${GNUTLS_INCLUDE_DIR})
+>         set (SSL_LIBRARIES_DEBUG ${GNUTLS_LIBRARY})
+>         set (SSL_LIBRARIES_OPTIMIZED ${GNUTLS_LIBRARY})
+> else ()
+>         if (MSVC AND STATIC_RUNTIME)
+>                 set (OPENSSL_MSVC_STATIC_RT TRUE)
+>         endif ()
+>         find_package (OpenSSL REQUIRED)
+>         set (FILES_TO_REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/jwt-gnutls.c)
+>         set (SSL_LIBRARY_INCLUDE_DIR ${OPENSSL_INCLUDE_DIR})
+>         if (MSVC)
+>                 set (SSL_LIBRARIES_DEBUG ${LIB_EAY_DEBUG} ${SSL_EAY_DEBUG})
+>                 set (SSL_LIBRARIES_OPTIMIZED ${LIB_EAY_RELEASE}
+> ${SSL_EAY_RELEASE})
+>         else ()
+>                 set (SSL_LIBRARIES_DEBUG ${OPENSSL_CRYPTO_LIBRARY})
+>                 set (SSL_LIBRARIES_OPTIMIZED ${OPENSSL_CRYPTO_LIBRARY})
+>         endif ()
+> endif ()
+>
+> So perhaps, you could do:
+>
+>         select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
+>
+> And the in the .mk file, pass -DWITHOUT_OPENSSL= if GnuTLS is
+> available, but not OpenSSL:
+>
+> ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> LIBJWT_DEPENDENCIES += openssl
+> else
+> LIBJWT_DEPENDENCIES += gnutls
+> LIBJWT_CONF_OPTS += -DWITHOUT_OPENSSL=1
+> endif
+>
+> > +     help
+> > +       JSON Web Tokens are an open, industry standard RFC 7519
+> > +       method for representing claims securely between two parties.
+> > +
+> > +       https://github.com/benmcollins/libjwt
+> > +
+> > +comment "libjwt needs a toolchain w/ C++"
+> > +     depends on !BR2_INSTALL_LIBSTDCPP
+> > diff --git a/package/libjwt/libjwt.hash b/package/libjwt/libjwt.hash
+> > new file mode 100644
+> > index 0000000000..c8b7ed168a
+> > --- /dev/null
+> > +++ b/package/libjwt/libjwt.hash
+> > @@ -0,0 +1,2 @@
+> > +#Locally computed
+> > +sha256 cc694dfc3abe17d1f5cde4bf6714e39dc17f7cbad352a85ffb0fe6418c584076
+> libjwt-v1.9.0.tar.gz
+>
+> Could you add the hash of the COPYING.LIB license file ?
+>
+> > diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
+> > new file mode 100644
+> > index 0000000000..2007d6c541
+> > --- /dev/null
+> > +++ b/package/libjwt/libjwt.mk
+> > @@ -0,0 +1,14 @@
+> > +###########################################################
+> #####################
+> > +#
+> > +# libjwt
+> > +#
+> > +###########################################################
+> #####################
+> > +
+> > +LIBJWT_VERSION = v1.9.0
+> > +LIBJWT_SITE = $(call github,benmcollins,libjwt,$(LIBJWT_VERSION))
+> > +LIBJWT_INSTALL_STAGING = YES
+> > +LIBJWT_DEPENDENCIES = jansson openssl
+> > +LIBJWT_LICENSE = LGPL-3.0-only
+>
+> We use LGPL-3.0 in this case (i.e we don't obey strictly to SPDX, we
+> probably should, but we don't yet, and we should have a single package
+> deviates from what we do in the rest of Buildroot).
+>
+> > +LIBJWT_LICENSE_FILES = COPYING.LIB
+> > +
+> > +$(eval $(cmake-package))
+>
+> Finally, could you test this package with "utils/test-pkg" ? I am
+> wondering if it builds properly in a static-only configuration.
+> utils/test-pkg will test this for you.
+>
+> Could you take into account those comments, and send an updated
+> version ?
+>
+> Thanks a lot!
+>
+> Thomas Petazzoni
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
 
-Thomas
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Mikael Eliasson
+Telefon:
++46703900837
+Email:
+mikael at robomagi.com
+Adress:
+Robomagi AB
+T?ngringsgatan 26A 78430 Borl?nge
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/1060078a/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-libjwt-new-package.patch
+Type: text/x-patch
+Size: 3520 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/1060078a/attachment.bin>
