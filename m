@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sun, 12 Aug 2018 18:52:39 +0200
-Subject: [Buildroot] [PATCH 14/17] perl-x10: new package
-In-Reply-To: <20180811182749.20924-15-chrismcc@gmail.com>
+Date: Sun, 12 Aug 2018 18:55:07 +0200
+Subject: [Buildroot] [PATCH 17/17] perl-termreadkey: new package
+In-Reply-To: <20180811182749.20924-18-chrismcc@gmail.com>
 References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-15-chrismcc@gmail.com>
-Message-ID: <CAB0FRssEH-C_N7o95QLN79pruvW+=mWZv5wnRMXHsncorcjdyA@mail.gmail.com>
+ <20180811182749.20924-18-chrismcc@gmail.com>
+Message-ID: <CAB0FRst572HP1S2M7mS5fJ3BbdtViMYo1qDaXgyRa-FNMk69rg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,97 +18,93 @@ To: buildroot@busybox.net
 
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
-
-> ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/perl-x10/Config.in     | 13 +++++++++++++
->  package/perl-x10/perl-x10.hash |  6 ++++++
->  package/perl-x10/perl-x10.mk   | 14 ++++++++++++++
->  5 files changed, 35 insertions(+)
->  create mode 100644 package/perl-x10/Config.in
->  create mode 100644 package/perl-x10/perl-x10.hash
->  create mode 100644 package/perl-x10/perl-x10.mk
+---
+>  DEVELOPERS                                     |  1 +
+>  package/Config.in                              |  1 +
+>  package/perl-termreadkey/Config.in             | 10 ++++++++++
+>  package/perl-termreadkey/perl-termreadkey.hash |  6 ++++++
+>  package/perl-termreadkey/perl-termreadkey.mk   | 13 +++++++++++++
+>  5 files changed, 31 insertions(+)
+>  create mode 100644 package/perl-termreadkey/Config.in
+>  create mode 100644 package/perl-termreadkey/perl-termreadkey.hash
+>  create mode 100644 package/perl-termreadkey/perl-termreadkey.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 1a4eb9d5e4..d056cadf1f 100644
+> index e04058a37e..dddb9ca60d 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -506,6 +506,7 @@ F:  package/perl-sys-meminfo
+> @@ -506,6 +506,7 @@ F:  package/perl-params-util
+>  F:     package/perl-sub-install
+>  F:     package/perl-sys-meminfo
 >  F:     package/perl-sys-mmap
+> +F:     package/perl-termreadkey
 >  F:     package/perl-template-toolkit
 >  F:     package/perl-time-parsedate
-> +F:     package/perl-x10
->
->  N:     Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
->  F:     package/audit/
+>  F:     package/perl-x10
 > diff --git a/package/Config.in b/package/Config.in
-> index 6ce5ccd080..4cedcec11a 100644
+> index 5585ebcdfa..2b36b477c7 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -739,6 +739,7 @@ menu "Perl libraries/modules"
->         source "package/perl-try-tiny/Config.in"
->         source "package/perl-uri/Config.in"
->         source "package/perl-www-robotrules/Config.in"
-> +       source "package/perl-x10/Config.in"
->         source "package/perl-xml-libxml/Config.in"
->         source "package/perl-xml-namespacesupport/Config.in"
->         source "package/perl-xml-sax/Config.in"
-> diff --git a/package/perl-x10/Config.in b/package/perl-x10/Config.in
+> @@ -734,6 +734,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-sub-install/Config.in"
+>         source "package/perl-sys-meminfo/Config.in"
+>         source "package/perl-sys-mmap/Config.in"
+> +       source "package/perl-termreadkey/Config.in"
+>         source "package/perl-template-toolkit/Config.in"
+>         source "package/perl-time-hires/Config.in"
+>         source "package/perl-time-parsedate/Config.in"
+> diff --git a/package/perl-termreadkey/Config.in
+> b/package/perl-termreadkey/Config.in
 > new file mode 100644
-> index 0000000000..984a561b05
+> index 0000000000..7157bb6f68
 > --- /dev/null
-> +++ b/package/perl-x10/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_PERL_X10
-> +       bool "perl-x10"
+> +++ b/package/perl-termreadkey/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_PERL_TERMREADKEY
+> +       bool "perl-termreadkey"
 > +       depends on !BR2_STATIC_LIBS
-> +       select BR2_PACKAGE_PERL_ASTRO_SUNTIME
-> +       select BR2_PACKAGE_PERL_DEVICE_SERIALPORT
-> +       select BR2_PACKAGE_PERL_TIME_PARSEDATE
 > +       help
-> +         creates a server used to receive events from an x10 client
+> +         Change terminal modes, and perform non-blocking reads.
 > +
-> +         https://metacpan.org/release/X10
+> +         https://metacpan.org/release/TermReadKey
 > +
-> +comment "perl-x10 needs a toolchain w/ dynamic library"
+> +comment "perl-termreadkey needs a toolchain w/ dynamic library"
 > +       depends on BR2_STATIC_LIBS
-> diff --git a/package/perl-x10/perl-x10.hash b/package/perl-x10/perl-x10.
-> hash
+> diff --git a/package/perl-termreadkey/perl-termreadkey.hash
+> b/package/perl-termreadkey/perl-termreadkey.hash
 > new file mode 100644
-> index 0000000000..5411390e3e
+> index 0000000000..168e37223c
 > --- /dev/null
-> +++ b/package/perl-x10/perl-x10.hash
+> +++ b/package/perl-termreadkey/perl-termreadkey.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    20dcca2dfb978bfed3043276aa3481e5 X10-0.04.tar.gz
-> +sha256 3dcee9d95614b2db70de608e933d42817f93fccd5b1f2f782b0846af487d9134
-> X10-0.04.tar.gz
+> +md5    e8ea15c16333ac4f8d146d702e83cc0c TermReadKey-2.37.tar.gz
+> +sha256 4a9383cf2e0e0194668fe2bd546e894ffad41d556b41d2f2f577c8db682db241
+> TermReadKey-2.37.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 e6f320afa82517d663be348dd2515ecb1454a7c851ba5590f13aca01d219be80
+> +sha256 9deb4e80e04cca282a98902939225bf0bedac2e04034df5dba80f12bd0a3be26
 > README
-> diff --git a/package/perl-x10/perl-x10.mk b/package/perl-x10/perl-x10.mk
+> diff --git a/package/perl-termreadkey/perl-termreadkey.mk
+> b/package/perl-termreadkey/perl-termreadkey.mk
 > new file mode 100644
-> index 0000000000..783fad3143
+> index 0000000000..ba2193b66b
 > --- /dev/null
-> +++ b/package/perl-x10/perl-x10.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/perl-termreadkey/perl-termreadkey.mk
+> @@ -0,0 +1,13 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-x10
+> +# perl-termreadkey
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_X10_VERSION = 0.04
-> +PERL_X10_SOURCE = X10-$(PERL_X10_VERSION).tar.gz
-> +PERL_X10_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RO/ROBF
-> +PERL_X10_DEPENDENCIES = perl-astro-suntime perl-device-serialport
-> perl-time-parsedate
-> +PERL_X10_LICENSE = gpl_3
-> +PERL_X10_LICENSE_FILES = README
+> +PERL_TERMREADKEY_VERSION = 2.37
+> +PERL_TERMREADKEY_SOURCE = TermReadKey-$(PERL_TERMREADKEY_VERSION).tar.gz
+> +PERL_TERMREADKEY_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JS/JSTOWE
+> +PERL_TERMREADKEY_LICENSE = Artistic or GPL-1.0+
+> +PERL_TERMREADKEY_LICENSE_FILES = README
 > +
 > +$(eval $(perl-package))
 > --
@@ -117,4 +113,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/48475148/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180812/eb05a9c8/attachment-0001.html>
