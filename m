@@ -1,71 +1,65 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Mon, 13 Aug 2018 06:23:51 -0700
-Subject: [Buildroot] [PATCH 01/17] perl-cgi: add host
-In-Reply-To: <20180812141147.5942e27f@windsurf>
-References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-2-chrismcc@gmail.com>
- <20180812141147.5942e27f@windsurf>
-Message-ID: <CALURroQgb6YPhoUUBB3fxopuxjg0Qp+T7KRT_Gy8jy+Cr6LKuQ@mail.gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 13 Aug 2018 08:40:04 -0500
+Subject: [Buildroot] [PATCH v2] core/legal-info: Add package
+ dependencies with licenses to the manifest
+In-Reply-To: <20180812142202.GF2402@scaer>
+References: <20180810140322.2748-1-sojkam1@fel.cvut.cz>
+ <20180812142202.GF2402@scaer>
+Message-ID: <CANQCQpZs=342ftV_tVf7LxB9weMyhFxpqdB_QkX7Li1Le4v47A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hello
-
-On Sun, Aug 12, 2018 at 5:11 AM, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello Christopher,
+Yann,
+On Sun, Aug 12, 2018 at 9:22 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
 >
-> On Sat, 11 Aug 2018 11:27:33 -0700, Christopher McCrory wrote:
-> > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> Michal, All,
+>
+> On 2018-08-10 16:03 +0200, sojkam1 at fel.cvut.cz spake thusly:
+> > From: Michal Sojka <sojka@merica.cz>
+> >
+> > This adds one column to the legal-info manifest table. It contains the
+> > dependencies of the given package and their licenses. This information
+> > is useful when assessing license compatibility of the packages and
+> > their libraries.
+> >
+> > An example of the content of the new column for the MPD package is
+> > shown below:
+> >
+> >     "alsa-lib [LGPL-2.1+ (library), GPL-2.0+ (aserver)], boost
+> >     [BSL-1.0], libid3tag [GPL-2.0+], libmad [GPL-2.0+], libogg
+> >     [BSD-3-Clause], libvorbis [BSD-3-Clause], libzlib [Zlib],
+> >     skeleton-init-common [unknown], skeleton-init-sysv [unknown],
+> >     sqlite [Public domain], toolchain-external-linaro-arm [unknown], "
+>
+> I believe this is a very good addition to the manifest. Good idea! :-)
+>
+> The trailing comma is ugly, though. I would just drop the coma
+> altogether...
+>
+> And here, I have two spaces between each packages:
+>
+>     "alsa-lib [LGPL-2.1+ (library), GPL-2.0+ (aserver)],  boost
+>     [BSL-1.0],  libid3tag [GPL-2.0+],  libmad [GPL-2.0+],  [...]"
+>
+> > Signed-off-by: Michal Sojka <sojka@merica.cz>
 > > ---
-> >  package/perl-cgi/perl-cgi.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
+> > Changes against v1:
+> > * switched parameters of legal-manifest (added one is the last)
 >
->
-> Please be careful when ordering the patches: they should be organized
-> in the correct order to make sure that everything builds at every point
-> of the series.
->
->
+> Actually, I disagree with that one: it is OK that new parameters be
+> added before the last, especially since the 'legal-manifest' macro
+> would be easier to review, see below...
 
-Sorry about that, I did spend a lot of time getting them in the correct
-order.  Somehow I missed this one.  After a while they all started bluring
-together :)
+If we change the format of the legal info csv, is there someway we
+could determine version of that file's syntax?  I assume worst case we
+can parse out the first line and see the additional dependencies
+entry?
 
+I'm concerned about external tools impact to changing this file's
+format.   I'm sure there are others that use this file for CVE
+analysis and legal reporting.
 
-
-
-
-> In this specific example, you should have the following order:
->
->  (1) Introduce host-perl-html-tagset
->
->  (2) Introduce host-perl-html-parser, which uses host-perl-html-tagset
->
->  (3) Introduce host-perl-cgi, which uses host-perl-html-parser
->
-> Does that make sense ?
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
-
-
-
--- 
-Christopher McCrory
-To the optimist, the glass is half full.
-To the pessimist, the glass is half empty.
-To the engineer, the glass is twice as big as it needs to be.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180813/8480682d/attachment.html>
+Matt
