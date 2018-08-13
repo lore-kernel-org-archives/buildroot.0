@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Aug 2018 00:40:27 +0200
-Subject: [Buildroot] [PATCH 17/17] perl-termreadkey: new package
-In-Reply-To: <20180813235716.070f77f0@windsurf>
-References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-18-chrismcc@gmail.com>
- <20180813235716.070f77f0@windsurf>
-Message-ID: <0baaa089-a67e-d998-7bb8-1ba4ec0534ac@mind.be>
+Date: Tue, 14 Aug 2018 00:43:34 +0200
+Subject: [Buildroot] Analysis of build results for 2018-08-11
+In-Reply-To: <CANQCQpYGFe1AXd=2=6AG8rJtWp9OFNo3eJtq+u6FOArHz8izsQ@mail.gmail.com>
+References: <20180812060015.A385B207E5@mail.bootlin.com>
+ <20180812223629.2bac8ebe@windsurf>
+ <CANQCQpYGFe1AXd=2=6AG8rJtWp9OFNo3eJtq+u6FOArHz8izsQ@mail.gmail.com>
+Message-ID: <bb82de29-ad31-76a6-f0ad-eb74c60f50f4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,75 +14,66 @@ To: buildroot@busybox.net
 
 
 
-On 13-08-18 23:57, Thomas Petazzoni wrote:
-> Hello,
+On 13-08-18 16:15, Matthew Weber wrote:
+> Thomas,
+> On Sun, Aug 12, 2018 at 3:36 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> Hello,
+>>
+>> Matt, Hollis, Romain, J?rg, Bernd, there are some questions for you
+>> below.
+>>
+>> On Sun, 12 Aug 2018 08:00:15 +0200 (CEST), Thomas Petazzoni wrote:
+>>
+>>>      powerpc |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/87e82a5e8d0b1c1ff10ec3e59d25bcd56b329075 |
+>>
+>> Seems like some PowerPC Altivec code gets used even when Altivec is not
+>> available, or something like that:
+>>
+>>   CC       libaircrack_crypto_ppc_altivec_la-sha1-git.lo
+>> memory.c:1:0: warning: -mvsx requires hardware floating point [enabled by default]
+>>   CC       libaircrack_crypto_ppc_altivec_la-simd-intrinsics.lo
+>> sha1-git.c:1:0: warning: -mvsx requires hardware floating point [enabled by default]
+>>   CC       libaircrack_crypto_ppc_altivec_la-wpapsk.lo
+>> simd-intrinsics.c:1:0: warning: -mvsx requires hardware floating point [enabled by default]
+>> simd-intrinsics.c:147:18: error: unknown type name 'vtype'
+>> simd-intrinsics.c: In function 'dispatch':
+>> simd-intrinsics.c:671:3: warning: implicit declaration of function 'SIMDmd5body' [-Wimplicit-function-declaration]
+>> simd-intrinsics.c:671:16: error: 'vtype' undeclared (first use in this function)
+>> simd-intrinsics.c:671:16: note: each undeclared identifier is reported only once for each function it appears in
+>> simd-intrinsics.c:671:23: error: expected expression before ')' token
+>> simd-intrinsics.c: At top level:
+>> simd-intrinsics.c:905:18: error: unknown type name 'vtype'
+>> simd-intrinsics.c:1386:19: error: unknown type name 'vtype'
+>> simd-intrinsics.c:1928:21: error: unknown type name 'vtype'
+>> simd-intrinsics.c:2547:21: error: unknown type name 'vtype'
+>>
+>> Anybody with some PowerPC understanding to look into this ? Matt perhaps ?
 > 
-> Adding Yann and Arnout, licensing question below.
+> Looks like there is no support for non-altivec ppc  in this code.  Is
+> there a way I can do a conditional dependency in kconfig?
 > 
-> On Sat, 11 Aug 2018 11:27:49 -0700, Christopher McCrory wrote:
-> 
->> +PERL_TERMREADKEY_VERSION = 2.37
->> +PERL_TERMREADKEY_SOURCE = TermReadKey-$(PERL_TERMREADKEY_VERSION).tar.gz
->> +PERL_TERMREADKEY_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JS/JSTOWE
->> +PERL_TERMREADKEY_LICENSE = Artistic or GPL-1.0+
-> 
-> This is not correct I believe.
-> 
-> The README file says this:
-> 
-> """
->  Term::ReadKey 2.36 - Change terminal modes, and perform non-blocking reads.
-> 
->  Copyright (C) 1994-1999 Kenneth Albanowski.
->                2001-2016 Jonathan Stowe and others
-> 
-> This package is dual licensed.  You can either choose to license it under
-> the original terms which were:
-> 
->  Unlimited distribution and/or modification is allowed as long as this
->  copyright notice remains intact.
-> 
-> Or the standard Perl terms:
-> 
->   This module is free software; you can redistribute it and/or modify it
->   under the terms of the Artistic License. For details, see the full
->   text of the license in the file "Artistic" that should have been provided
->   with the version of perl you are using.
-> 
->   This program is distributed in the hope that it will be useful, but
->   without any warranty; without even the implied warranty of merchantability
->   or fitness for a particular purpose.
-> """
-> 
-> So it is not under "Artistic or GPL-1.0+", but it is under "Artistic or
-> <some funky license>".
-> 
-> According to
-> http://docs.activestate.com/activeperl/5.22/perl/lib/Term/ReadKey.html,
-> the small "Unlimited distribution..." license was the only license of
-> this Perl module up to version 2.31, at which point the Artistic
-> license was added as an option.
-> 
-> I don't know how to SPDX-encode this weird license. Perhaps we should
-> simply not care, and say the license is just "Artistic" ? Yann ?
-> Arnout ?
+> Something like
+> depends on BR2_POWERPC_CPU_HAS_ALTIVEC if BR2_powerpc || BR2_powerpc64
+> || BR2_powerpc64le
 
- For licenses which don't have an SPDX code, we use "<package> license", so this
-would be
+ I think that works, if not you can convert it into
 
-PERL_TERMREADKEY_LICENSE = Term::ReadKey license or Artistic-2.0
+	depends on BR2_POWERPC_CPU_HAS_ALTIVEC || \
+		!(BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le)
 
-(it's artistic 2.0 because they refer to Artistic in the version of perl you're
-using, and our version has Artistic-2.0).
+("if" is the same as "or not". Think about it.)
 
  Regards,
  Arnout
 
-
 > 
-> Thanks,
-> 
-> Thomas
+> Matt
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
 
 -- 
