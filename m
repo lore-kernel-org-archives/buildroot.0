@@ -1,63 +1,40 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 13 Aug 2018 18:29:21 +0200
-Subject: [Buildroot] [RFC PATCH 2/2] scancpan: wrap abstract if too long
-In-Reply-To: <20180813131135.32651-3-chrismcc@gmail.com>
-References: <20180813131135.32651-1-chrismcc@gmail.com>
- <20180813131135.32651-3-chrismcc@gmail.com>
-Message-ID: <CAB0FRssNmZLLzQyVn9LXdoineANjPC1zXaOJSXoteCrAMqW5yw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 Aug 2018 18:51:58 +0200
+Subject: [Buildroot] [PATCH] package/libselinux: host gcc at least 4.7
+In-Reply-To: <20180813150559.guf6i4qh6vogmwhl@sapphire.tkos.co.il>
+References: <20180813143326.14262-1-matthew.weber@rockwellcollins.com>
+ <20180813144722.tagr3xka7pv24ah3@sapphire.tkos.co.il>
+ <CANQCQpZnw5jjVV4LFTYwJfjvoBkws2TKKTCp3TS=tpJ3bf886g@mail.gmail.com>
+ <20180813145425.vqtpzppgqznjdcmi@sapphire.tkos.co.il>
+ <CANQCQpa5kOpB9ENCSBam=-Zc6QCsJgNfrYUnCoWw9g=A_S=_hg@mail.gmail.com>
+ <20180813150559.guf6i4qh6vogmwhl@sapphire.tkos.co.il>
+Message-ID: <20180813185158.6658248e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-08-13 15:11 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+Hello,
 
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> ---
->  utils/scancpan | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/utils/scancpan b/utils/scancpan
-> index 2070e2a233..f8411079e1 100755
-> --- a/utils/scancpan
-> +++ b/utils/scancpan
-> @@ -484,6 +484,8 @@ use HTTP::Tiny;
->  use Safe;
->  use MetaCPAN::API::Tiny;
->  use Digest::SHA qw(sha256_hex);
-> +use Text::Wrap;
->
+On Mon, 13 Aug 2018 18:05:59 +0300, Baruch Siach wrote:
 
-Ok, Text::Wrap is a core module, so the script scancpan stays self-depend.
+> No. I mean all host and target packages that have host-libselinux in their 
+> _DEPENDENCIES. Otherwise, enabling any of them would cause a build of 
+> host-libselinux regardless of the Config.in dependency.
+> 
+> Isn't it easier to apply the alternative patch that uses the older __sync 
+> routines for older gcc?
 
->
-> +$Text::Wrap::columns = 70;
->
->  # Below, 5.026 should be aligned with the version of perl actually
->  # bundled in Buildroot:
-> @@ -655,7 +657,7 @@ while (my ($distname, $dist) = each %dist) {
->      my $brname = brname( $fsname );
->      mkdir $dirname unless -d $dirname;
->      if ($need_target{$distname} && ($force || !-f $cfgname)) {
-> -        my $abstract = $dist->{abstract};
-> +        my $abstract = wrap("","\t  ",$dist->{abstract});
->
+Is it would be much easier. The question is: is this patch correct ? I
+am not super familiar with the semantic of those atomic operations, so
+I'm not super confident in reviewing Hollis proposal. But if you think
+Hollis patch is correct, a Acked-by or Reviewed-by on it would be good.
 
-In this script, I don't use quote but q{} and qq{}.
-And I put one space after comma.
+Thanks!
 
-Fran?ois
-
-
->          my $homepage = $dist->{resources}->{homepage} || qq{
-> https://metacpan.org/release/${distname}};
->          say qq{write ${cfgname}} unless $quiet;
->          open my $fh, q{>}, $cfgname;
-> --
-> 2.14.4
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180813/7dfe8759/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
