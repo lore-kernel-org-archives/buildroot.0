@@ -1,103 +1,47 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Aug 2018 21:42:06 +0200
-Subject: [Buildroot] [PATCH/next v3 1/1] package/qt5/qt5base: fix statx
- support with glibc >= 2.28
-Message-ID: <20180813194206.24355-1-bernd.kuhls@t-online.de>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Mon, 13 Aug 2018 12:43:10 -0700
+Subject: [Buildroot] host-libselinux atomics with GCC 4.4
+In-Reply-To: <CANQCQpZ2dPYy9kwS1tZ9LYXxwJZjEO66vmOSSZU17NO=7a+AQw@mail.gmail.com>
+References: <20180812060015.A385B207E5@mail.bootlin.com>
+ <20180812223629.2bac8ebe@windsurf>
+ <CANQCQpbDmecDS1LE8HY46y1BnEtJH=cRsmo7KEbZhsNZvHhquw@mail.gmail.com>
+ <CANQCQpZ2mVuPkeeiR5yxKf3Cs7xUiADuO0dAMkZxsLaCa_iQCw@mail.gmail.com>
+ <95ce06f3-5560-81f3-4949-0a2842b7b78a@mentor.com>
+ <CANQCQpZ2dPYy9kwS1tZ9LYXxwJZjEO66vmOSSZU17NO=7a+AQw@mail.gmail.com>
+Message-ID: <4e9928a9-5a67-fdc7-63a9-bd34118f3dee@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v3: switched to upstream patch (Thomas)
-v2: git-formatted patch (Thomas)
-    re-sent because it did not appear on patchworks
+On 08/13/2018 11:25 AM, Matthew Weber wrote:
+> Hollis,
+> On Mon, Aug 13, 2018 at 1:10 PM Hollis Blanchard
+> <hollis_blanchard@mentor.com> wrote:
+>> On 08/13/2018 08:30 AM, Matthew Weber wrote:
+>>> All,
+>>> On Mon, Aug 13, 2018 at 9:36 AM Matthew Weber
+>>> <matthew.weber@rockwellcollins.com> wrote:
+>>>> Hollis / Thomas,
+>>>> On Sun, Aug 12, 2018 at 3:36 PM Thomas Petazzoni
+>>>> <thomas.petazzoni@bootlin.com> wrote:
+>>>>>>         x86_64 |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/e48c974980b8228302a76ac5b6afad14e7ce81c1 |
+>>>> Require host gcc at least 4.7
+>>>> http://patchwork.ozlabs.org/patch/957001/
+>>> v2.  http://patchwork.ozlabs.org/project/buildroot/list/?series=60561
+>>>
+>>> I've also opened a upstream ticket
+>>> https://github.com/SELinuxProject/selinux/issues/97.  We'll see if I
+>>> can get traction there and maybe that determines kconfig vs patch?
+>> Thanks for opening that upstream issue.
+>>
+>> Due to the surprisingly quick response from the maintainers, it looks
+>> like we already have an answer: the patch is OK, so we don't need the
+>> Kconfig changes. (A more aggressive patch is almost certainly OK too,
+>> but I doubt anybody wants to fuss about it.)
+> Did you want to tie-off with upstream and then submit the patch here?
+"Want to": no, but I submitted the patch anyways. ;-)
 
- ...0002-Fix-qmake-build-with-glibc-2.28.patch | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/qt5/qt5base/5.11.1/0002-Fix-qmake-build-with-glibc-2.28.patch
-
-diff --git a/package/qt5/qt5base/5.11.1/0002-Fix-qmake-build-with-glibc-2.28.patch b/package/qt5/qt5base/5.11.1/0002-Fix-qmake-build-with-glibc-2.28.patch
-new file mode 100644
-index 0000000000..6d8bb28992
---- /dev/null
-+++ b/package/qt5/qt5base/5.11.1/0002-Fix-qmake-build-with-glibc-2.28.patch
-@@ -0,0 +1,74 @@
-+From 25feee4e061b99edab79503d81f5bd045c6c8e3d Mon Sep 17 00:00:00 2001
-+From: Thiago Macieira <thiago.macieira@intel.com>
-+Date: Tue, 7 Aug 2018 09:38:42 -0700
-+Subject: [PATCH] Fix qmake build with glibc 2.28
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+We haven't yet run the configure checks to see if statx and renameat2
-+are present in glibc, so this fails when we redefine the structures and
-+functions.
-+
-+linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
-+bits/statx.h:25:8: note: previous definition of 'struct statx_timestamp'
-+qfilesystemengine_unix.cpp:110:12: error: 'int renameat2(int, const char*, int, const char*, unsigned int)' was declared 'extern' and later 'static' [-fpermissive]
-+
-+Change-Id: Ia741b559c24d46c78fb2fffd1548a792d22e3368
-+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
-+Reviewed-by: J?ri Valdmann <juri.valdmann@qt.io>
-+
-+Downloaded from upstream commit
-+http://code.qt.io/cgit/qt/qtbase.git/commit/?id=25feee4e061b99edab79503d81f5bd045c6c8e3d
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/corelib/global/qconfig-bootstrapped.h | 12 ++++++++++--
-+ src/corelib/io/qfilesystemengine_unix.cpp |  2 +-
-+ 2 files changed, 11 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/corelib/global/qconfig-bootstrapped.h b/src/corelib/global/qconfig-bootstrapped.h
-+index 3469ebe5e6..c5585ea32a 100644
-+--- a/src/corelib/global/qconfig-bootstrapped.h
-++++ b/src/corelib/global/qconfig-bootstrapped.h
-+@@ -98,10 +98,18 @@
-+ #define QT_NO_QOBJECT
-+ #define QT_FEATURE_process -1
-+ #define QT_FEATURE_regularexpression -1
-+-#define QT_FEATURE_renameat2 -1
-++#ifdef __GLIBC_PREREQ
-++# define QT_FEATURE_renameat2 (__GLIBC_PREREQ(2, 28) ? 1 : -1)
-++#else
-++# define QT_FEATURE_renameat2 -1
-++#endif
-+ #define QT_FEATURE_sharedmemory -1
-+ #define QT_FEATURE_slog2 -1
-+-#define QT_FEATURE_statx -1
-++#ifdef __GLIBC_PREREQ
-++# define QT_FEATURE_statx (__GLIBC_PREREQ(2, 28) ? 1 : -1)
-++#else
-++# define QT_FEATURE_statx -1
-++#endif
-+ #define QT_FEATURE_syslog -1
-+ #define QT_NO_SYSTEMLOCALE
-+ #define QT_FEATURE_systemsemaphore -1
-+diff --git a/src/corelib/io/qfilesystemengine_unix.cpp b/src/corelib/io/qfilesystemengine_unix.cpp
-+index 0c9cdb8667..deb4a9f220 100644
-+--- a/src/corelib/io/qfilesystemengine_unix.cpp
-++++ b/src/corelib/io/qfilesystemengine_unix.cpp
-+@@ -91,7 +91,6 @@ extern "C" NSString *NSTemporaryDirectory();
-+ #  include <sys/syscall.h>
-+ #  include <sys/sendfile.h>
-+ #  include <linux/fs.h>
-+-#  include <linux/stat.h>
-+ 
-+ // in case linux/fs.h is too old and doesn't define it:
-+ #ifndef FICLONE
-+@@ -112,6 +111,7 @@ static int renameat2(int oldfd, const char *oldpath, int newfd, const char *newp
-+ #    endif
-+ 
-+ #    if !QT_CONFIG(statx) && defined(SYS_statx)
-++#      include <linux/stat.h>
-+ static int statx(int dirfd, const char *pathname, int flag, unsigned mask, struct statx *statxbuf)
-+ { return syscall(SYS_statx, dirfd, pathname, flag, mask, statxbuf); }
-+ #    elif !QT_CONFIG(statx) && !defined(SYS_statx)
--- 
-2.18.0
+Hollis Blanchard
+Mentor Graphics Emulation Division
