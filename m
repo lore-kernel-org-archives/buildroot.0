@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Aug 2018 11:45:48 +0200
-Subject: [Buildroot] [git commit branch/next] support/misc: updating
- Vagrantfile to ubuntu 18.04
-Message-ID: <20180813093900.77A248CA34@busybox.osuosl.org>
+Date: Mon, 13 Aug 2018 11:46:14 +0200
+Subject: [Buildroot] [PATCH] support/misc: updating Vagrantfile to
+ ubuntu 18.04
+In-Reply-To: <1534150152-32385-1-git-send-email-angelo@amarulasolutions.com>
+References: <1534150152-32385-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180813114614.1f42289c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8511a66fc1d16014703e76ce0d5bf3ca3b010bdc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-This patch updates the vagrant box to ubuntu bionic 64 and switches back
-to the official ubuntu image cause the issues with the official image
-are now solved.
+On Mon, 13 Aug 2018 10:49:12 +0200, Angelo Compagnucci wrote:
+> This patch updates the vagrant box to ubuntu bionic 64 and switches back
+> to the official ubuntu image cause the issues with the official image
+> are now solved.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  support/misc/Vagrantfile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/misc/Vagrantfile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to next, thanks.
 
-diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index cca0a3db3d..acfc8abfc8 100644
---- a/support/misc/Vagrantfile
-+++ b/support/misc/Vagrantfile
-@@ -12,7 +12,7 @@ VM_MEMORY=2048
- VM_CORES=1
- 
- Vagrant.configure('2') do |config|
--	config.vm.box = 'bento/ubuntu-16.04'
-+	config.vm.box = 'ubuntu/bionic64'
- 
- 	config.vm.provider :vmware_fusion do |v, override|
- 		v.vmx['memsize'] = VM_MEMORY
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
