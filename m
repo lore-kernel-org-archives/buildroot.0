@@ -1,101 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Aug 2018 20:14:13 +0200
-Subject: [Buildroot] [PATCH/next v2 4/5] package/gcc: fix build of gcc-5.5.0
- with glibc-2.28
-In-Reply-To: <20180813181414.25661-1-bernd.kuhls@t-online.de>
-References: <20180813181414.25661-1-bernd.kuhls@t-online.de>
-Message-ID: <20180813181414.25661-4-bernd.kuhls@t-online.de>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Mon, 13 Aug 2018 11:18:10 -0700
+Subject: [Buildroot] autobuilder flock hangs
+In-Reply-To: <20180812223629.2bac8ebe@windsurf>
+References: <20180812060015.A385B207E5@mail.bootlin.com>
+ <20180812223629.2bac8ebe@windsurf>
+Message-ID: <1a4b53ec-1ed3-7770-3a65-8d4f4f596918@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-v2: initial version (Thomas)
+On 08/12/2018 01:36 PM, Thomas Petazzoni wrote:
+>
+>>        x86_64 |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/43b9bccacd88397d732fda16d998fa7dc001f900 |
+> Hollis: your autobuilder times out when downloading this package, could
+> you have a look ? See
+> http://autobuild.buildroot.net/?reason=azure-iot-sdk-c%.
 
- ...2-libsanitizer-Use-pre-computed-size.patch | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 package/gcc/5.5.0/0002-libsanitizer-Use-pre-computed-size.patch
 
-diff --git a/package/gcc/5.5.0/0002-libsanitizer-Use-pre-computed-size.patch b/package/gcc/5.5.0/0002-libsanitizer-Use-pre-computed-size.patch
-new file mode 100644
-index 0000000000..6e73331eae
---- /dev/null
-+++ b/package/gcc/5.5.0/0002-libsanitizer-Use-pre-computed-size.patch
-@@ -0,0 +1,72 @@
-+From 61f38c64c01a15560026115a157b7021ec67bd3b Mon Sep 17 00:00:00 2001
-+From: hjl <hjl@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Thu, 24 May 2018 20:21:54 +0000
-+Subject: [PATCH] libsanitizer: Use pre-computed size of struct ustat for Linux
-+
-+Cherry-pick compiler-rt revision 333213:
-+
-+<sys/ustat.h> has been removed from glibc 2.28 by:
-+
-+commit cf2478d53ad7071e84c724a986b56fe17f4f4ca7
-+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
-+Date:   Sun Mar 18 11:28:59 2018 +0800
-+
-+    Deprecate ustat syscall interface
-+
-+This patch uses pre-computed size of struct ustat for Linux.
-+
-+	PR sanitizer/85835
-+	* sanitizer_common/sanitizer_platform_limits_posix.cc: Don't
-+	include <sys/ustat.h> for Linux.
-+	(SIZEOF_STRUCT_USTAT): New.
-+	(struct_ustat_sz): Use SIZEOF_STRUCT_USTAT for Linux.
-+
-+
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch at 260688 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+Downloaded from upstream commit
-+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=61f38c64c01a15560026115a157b7021ec67bd3b
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libsanitizer/ChangeLog                                    |  8 ++++++++
-+ .../sanitizer_common/sanitizer_platform_limits_posix.cc   | 15 +++++++++++++--
-+ 2 files changed, 21 insertions(+), 2 deletions(-)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
-+index 31a5e69..8017afd 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
-+@@ -154,7 +154,6 @@ typedef struct user_fpregs elf_fpregset_t;
-+ # include <sys/procfs.h>
-+ #endif
-+ #include <sys/user.h>
-+-#include <sys/ustat.h>
-+ #include <linux/cyclades.h>
-+ #include <linux/if_eql.h>
-+ #include <linux/if_plip.h>
-+@@ -247,7 +246,19 @@ namespace __sanitizer {
-+ #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+-  unsigned struct_ustat_sz = sizeof(struct ustat);
-++  // Use pre-computed size of struct ustat to avoid <sys/ustat.h> which
-++  // has been removed from glibc 2.28.
-++#if defined(__aarch64__) || defined(__s390x__) || defined (__mips64) \
-++  || defined(__powerpc64__) || defined(__arch64__) || defined(__sparcv9) \
-++  || defined(__x86_64__)
-++#define SIZEOF_STRUCT_USTAT 32
-++#elif defined(__arm__) || defined(__i386__) || defined(__mips__) \
-++  || defined(__powerpc__) || defined(__s390__)
-++#define SIZEOF_STRUCT_USTAT 20
-++#else
-++#error Unknown size of struct ustat
-++#endif
-++  unsigned struct_ustat_sz = SIZEOF_STRUCT_USTAT;
-+   unsigned struct_rlimit64_sz = sizeof(struct rlimit64);
-+   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
-+ #endif // SANITIZER_LINUX && !SANITIZER_ANDROID
-+-- 
-+2.9.3
-+
--- 
-2.18.0
+>>        xtensa |                 linux-firmware | TIM | http://autobuild.buildroot.net/results/34b8bb8824d369e5b53e2a4effd1a8d18df07aee |
+> Hollis, once again your autobuilder timing out when downloading stuff:
+> http://autobuild.buildroot.net/?reason=linux-firmware%.
+flock was hanging. I don't know why; have you experienced anything like 
+that?
+
+I deleted the directories and subsequent manual dl-wrapper invocations 
+succeeded, so I restarted the builder.
+
+Hollis Blanchard
+Mentor Graphics Emulation Division
