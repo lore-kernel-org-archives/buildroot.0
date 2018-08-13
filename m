@@ -1,44 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Aug 2018 20:17:05 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/gcc: fix build of
- gcc-7.3.0 with
-References: <20180812172909.21450-1-bernd.kuhls@t-online.de>
- <ae19c065-5ce3-a333-173d-388612659cc3@t-online.de>
- <20180812210419.78125b1e@windsurf>
-Message-ID: <1iu84fx279.ln2@ID-313208.user.individual.net>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 13 Aug 2018 13:25:38 -0500
+Subject: [Buildroot] host-libselinux atomics with GCC 4.4
+In-Reply-To: <95ce06f3-5560-81f3-4949-0a2842b7b78a@mentor.com>
+References: <20180812060015.A385B207E5@mail.bootlin.com>
+ <20180812223629.2bac8ebe@windsurf>
+ <CANQCQpbDmecDS1LE8HY46y1BnEtJH=cRsmo7KEbZhsNZvHhquw@mail.gmail.com>
+ <CANQCQpZ2mVuPkeeiR5yxKf3Cs7xUiADuO0dAMkZxsLaCa_iQCw@mail.gmail.com>
+ <95ce06f3-5560-81f3-4949-0a2842b7b78a@mentor.com>
+Message-ID: <CANQCQpZ2dPYy9kwS1tZ9LYXxwJZjEO66vmOSSZU17NO=7a+AQw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hollis,
+On Mon, Aug 13, 2018 at 1:10 PM Hollis Blanchard
+<hollis_blanchard@mentor.com> wrote:
+>
+> On 08/13/2018 08:30 AM, Matthew Weber wrote:
+> > All,
+> > On Mon, Aug 13, 2018 at 9:36 AM Matthew Weber
+> > <matthew.weber@rockwellcollins.com> wrote:
+> >> Hollis / Thomas,
+> >> On Sun, Aug 12, 2018 at 3:36 PM Thomas Petazzoni
+> >> <thomas.petazzoni@bootlin.com> wrote:
+> >>>>        x86_64 |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/e48c974980b8228302a76ac5b6afad14e7ce81c1 |
+> >> Require host gcc at least 4.7
+> >> http://patchwork.ozlabs.org/patch/957001/
+> > v2.  http://patchwork.ozlabs.org/project/buildroot/list/?series=60561
+> >
+> > I've also opened a upstream ticket
+> > https://github.com/SELinuxProject/selinux/issues/97.  We'll see if I
+> > can get traction there and maybe that determines kconfig vs patch?
+> Thanks for opening that upstream issue.
+>
+> Due to the surprisingly quick response from the maintainers, it looks
+> like we already have an answer: the patch is OK, so we don't need the
+> Kconfig changes. (A more aggressive patch is almost certainly OK too,
+> but I doubt anybody wants to fuss about it.)
+>
 
-Am Sun, 12 Aug 2018 21:04:19 +0200 schrieb Thomas Petazzoni:
+Did you want to tie-off with upstream and then submit the patch here?
 
->> upstream has no patches for these versions:
-> 
-> Does this mean the problem doesn't exist, or just that the gcc
-> developers didn't backport the patch ?
-
-the latter.
-
-> Could you do a test build of gcc 6.x and glibc 2.28 ? Or perhaps verify
-> in the source code that the problem didn't exist back then ?
-
-done, all older gcc versions are affected as well, sent patches:
-
-http://patchwork.ozlabs.org/project/buildroot/list/?series=60590
-
->> > or1k-musl-5.4.0-20170218
->> 
->> Could not find an upstream branch at gcc.gnu.org.
-> 
-> This is not an official upstream branch, but if the upstream 5.4.0 is
-> affected by the issue, the patch should apply just as well to this
-> branch.
-
-In buildroot or1k has no support for glibc, only for uclibc and musl.
-Therefore I did not patch this gcc version.
-
-Regards, Bernd
+Matt
