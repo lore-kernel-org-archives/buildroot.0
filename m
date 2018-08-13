@@ -1,59 +1,23 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 13 Aug 2018 17:42:21 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] scancpan: support more licenses
-In-Reply-To: <20180813131135.32651-2-chrismcc@gmail.com>
-References: <20180813131135.32651-1-chrismcc@gmail.com>
- <20180813131135.32651-2-chrismcc@gmail.com>
-Message-ID: <CAB0FRss9OomGpAqUqk9KGV3fqzqMGVHAdqtBaXjk26GG+tY=Eg@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 13 Aug 2018 15:48:29 +0000
+Subject: [Buildroot] [Bug 11211] Internal compiler error: Killed (program
+ cc1plus) on WebCoreDerivedSources.dir
+In-Reply-To: <bug-11211-163@https.bugs.busybox.net/>
+References: <bug-11211-163@https.bugs.busybox.net/>
+Message-ID: <bug-11211-163-yhBEOJ3fhl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-08-13 15:11 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+https://bugs.busybox.net/show_bug.cgi?id=11211
 
-> from perl-module-build Module/Build/Base.pm %licenses
-> GPL, LGPT, and BSD
->
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
->
+--- Comment #3 from Kevin D <kdevries@AESAustin.com> ---
+Yeah - there's definitely a end-of-memory problem. Dmesg reports OOM.
 
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Only solution is to single-thread the build?
 
-
-> ---
->  utils/scancpan | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/utils/scancpan b/utils/scancpan
-> index da8e7b91ac..2070e2a233 100755
-> --- a/utils/scancpan
-> +++ b/utils/scancpan
-> @@ -692,8 +692,19 @@ while (my ($distname, $dist) = each %dist) {
->                      : $dist->{license};
->          # BR requires license name as in http://spdx.org/licenses/
->          $license =~ s|apache_2_0|Apache-2.0|;
-> +        $license =~ s|apache_1_1|Apache-1.1|;
-> +        $license =~ s|apache|Apache-2.0|;
->          $license =~ s|artistic_2|Artistic-2.0|;
-> +        $license =~ s|artistic|Artistic-1.0|;
-> +        $license =~ s|lgpl_2_1|LGPL-2.1|;
-> +        $license =~ s|lgpl_3_0|LGPL-3.0|;
-> +        $license =~ s|lgpl|LGPL-2.1|;
-> +        $license =~ s|bsd|BSD|;
-> +        $license =~ s|gpl_2|GPL-2.0|;
-> +        $license =~ s|gpl_3|GPL-3.0|;
-> +        $license =~ s|gpl|GPL-1.0|;
->          $license =~ s|mit|MIT|;
-> +        $license =~ s|mozilla_1_1|Mozilla-1.1|;
->          $license =~ s|openssl|OpenSSL|;
->          $license =~ s|perl_5|Artistic or GPL-1.0+|;
->          my $license_files = join q{ }, keys %{$license_files{$distname}};
-> --
-> 2.14.4
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180813/bd0c601a/attachment.html>
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
