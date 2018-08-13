@@ -1,94 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Aug 2018 12:05:12 +0200
-Subject: [Buildroot] [git commit branch/next] perl-class-std-fast: new
- package
-Message-ID: <20180813100757.6575A8CA74@busybox.osuosl.org>
+Date: Mon, 13 Aug 2018 12:16:03 +0200
+Subject: [Buildroot] [git commit branch/next] perl-data-optlist: new package
+Message-ID: <20180813100956.0A2C28CA7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b434dc40baf9836331fbafd1e91aa602f90e37ea
+commit: https://git.buildroot.net/buildroot/commit/?id=701c3ab2059d121da333b45630604cf5418ef2fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                           |  1 +
- package/Config.in                                    |  1 +
- package/perl-class-std-fast/Config.in                |  7 +++++++
- package/perl-class-std-fast/perl-class-std-fast.hash |  6 ++++++
- package/perl-class-std-fast/perl-class-std-fast.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/perl-data-optlist/Config.in              | 12 ++++++++++++
+ package/perl-data-optlist/perl-data-optlist.hash |  6 ++++++
+ package/perl-data-optlist/perl-data-optlist.mk   | 14 ++++++++++++++
+ 5 files changed, 34 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 4379b24da1..46c0f06637 100644
+index 46c0f06637..60b2f2da1a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -484,6 +484,7 @@ N:	Christopher McCrory <chrismcc@gmail.com>
- F:	package/perl-appconfig/
+@@ -485,6 +485,7 @@ F:	package/perl-appconfig/
  F:	package/perl-astro-suntime/
  F:	package/perl-class-std/
-+F:	package/perl-class-std-fast/
+ F:	package/perl-class-std-fast/
++F:	package/perl-data-optlist/
  F:	package/perl-data-uuid/
  F:	package/perl-date-manip/
  F:	package/perl-dbi/
 diff --git a/package/Config.in b/package/Config.in
-index a50eb2d561..858b781251 100644
+index 858b781251..c9bc7bec42 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -668,6 +668,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-appconfig/Config.in"
- 	source "package/perl-astro-suntime/Config.in"
- 	source "package/perl-class-std/Config.in"
-+	source "package/perl-class-std-fast/Config.in"
- 	source "package/perl-convert-asn1/Config.in"
- 	source "package/perl-crypt-blowfish/Config.in"
+@@ -674,6 +674,7 @@ menu "Perl libraries/modules"
  	source "package/perl-crypt-cbc/Config.in"
-diff --git a/package/perl-class-std-fast/Config.in b/package/perl-class-std-fast/Config.in
+ 	source "package/perl-crypt-openssl-random/Config.in"
+ 	source "package/perl-crypt-openssl-rsa/Config.in"
++	source "package/perl-data-optlist/Config.in"
+ 	source "package/perl-data-uuid/Config.in"
+ 	source "package/perl-date-manip/Config.in"
+ 	source "package/perl-datetime-tiny/Config.in"
+diff --git a/package/perl-data-optlist/Config.in b/package/perl-data-optlist/Config.in
 new file mode 100644
-index 0000000000..10b1e0d786
+index 0000000000..0393e65645
 --- /dev/null
-+++ b/package/perl-class-std-fast/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_CLASS_STD_FAST
-+	bool "perl-class-std-fast"
-+	select BR2_PACKAGE_PERL_CLASS_STD
++++ b/package/perl-data-optlist/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PERL_DATA_OPTLIST
++	bool "perl-data-optlist"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_PERL_PARAMS_UTIL
++	select BR2_PACKAGE_PERL_SUB_INSTALL
 +	help
-+	  faster but less secure than Class::Std
++	  parse and validate simple name/value option pairs
 +
-+	  https://metacpan.org/release/Class-Std-Fast
-diff --git a/package/perl-class-std-fast/perl-class-std-fast.hash b/package/perl-class-std-fast/perl-class-std-fast.hash
++	  https://github.com/rjbs/Data-OptList
++
++comment "perl-data-optlist needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-data-optlist/perl-data-optlist.hash b/package/perl-data-optlist/perl-data-optlist.hash
 new file mode 100644
-index 0000000000..07e830a5ee
+index 0000000000..93df006486
 --- /dev/null
-+++ b/package/perl-class-std-fast/perl-class-std-fast.hash
++++ b/package/perl-data-optlist/perl-data-optlist.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    d06d084cb84f295b0aabf2eee78ef746 Class-Std-Fast-v0.0.8.tar.gz
-+sha256 1bd43763c6a373183097a30e787f5d6713b0db27511c52d533266b59d2cfa780 Class-Std-Fast-v0.0.8.tar.gz
++md5    f9236c9ea5607134ad8a2b3dc901c4c5 Data-OptList-0.110.tar.gz
++sha256 366117cb2966473f2559f2f4575ff6ae69e84c69a0f30a0773e1b51a457ef5c3 Data-OptList-0.110.tar.gz
 +
 +# computed by scancpan
-+sha256 aa1ab90c498aee078076e9a1f83e5f14bbfd841509582795ab5a9571428c0c38 README
-diff --git a/package/perl-class-std-fast/perl-class-std-fast.mk b/package/perl-class-std-fast/perl-class-std-fast.mk
++sha256 73c7bd4c8e4adc474f9dae32b9aa08f6ce27327940751dd6e8373404beabdffa LICENSE
+diff --git a/package/perl-data-optlist/perl-data-optlist.mk b/package/perl-data-optlist/perl-data-optlist.mk
 new file mode 100644
-index 0000000000..7c008622dd
+index 0000000000..ef643cf845
 --- /dev/null
-+++ b/package/perl-class-std-fast/perl-class-std-fast.mk
++++ b/package/perl-data-optlist/perl-data-optlist.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-class-std-fast
++# perl-data-optlist
 +#
 +################################################################################
 +
-+PERL_CLASS_STD_FAST_VERSION = v0.0.8
-+PERL_CLASS_STD_FAST_SOURCE = Class-Std-Fast-$(PERL_CLASS_STD_FAST_VERSION).tar.gz
-+PERL_CLASS_STD_FAST_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AC/ACID
-+PERL_CLASS_STD_FAST_DEPENDENCIES = perl-class-std
-+PERL_CLASS_STD_FAST_LICENSE = Artistic or GPL-1.0+
-+PERL_CLASS_STD_FAST_LICENSE_FILES = README
++PERL_DATA_OPTLIST_VERSION = 0.110
++PERL_DATA_OPTLIST_SOURCE = Data-OptList-$(PERL_DATA_OPTLIST_VERSION).tar.gz
++PERL_DATA_OPTLIST_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
++PERL_DATA_OPTLIST_DEPENDENCIES = perl-params-util perl-sub-install
++PERL_DATA_OPTLIST_LICENSE = Artistic or GPL-1.0+
++PERL_DATA_OPTLIST_LICENSE_FILES = LICENSE
 +
 +$(eval $(perl-package))
