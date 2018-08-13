@@ -1,34 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Aug 2018 23:35:22 +0200
-Subject: [Buildroot] [PATCH 16/17] perl-class-load: new package
-In-Reply-To: <CAB0FRsuBSq7Ev0hHZvWmFxCa50htPvoimNyittX-QLXyvoAv3w@mail.gmail.com>
-References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-17-chrismcc@gmail.com>
- <CAB0FRsuBSq7Ev0hHZvWmFxCa50htPvoimNyittX-QLXyvoAv3w@mail.gmail.com>
-Message-ID: <20180813233522.12733896@windsurf>
+Date: Mon, 13 Aug 2018 23:21:11 +0200
+Subject: [Buildroot] [PATCH 05/18] perl-data-uuid: new package
+In-Reply-To: <CALURroRxMkO+-NiyQV-ArGnS0RcjrNYLrPZp6m-G85DGrTp39g@mail.gmail.com>
+References: <20180810161502.21598-1-chrismcc@gmail.com>
+ <20180810161502.21598-6-chrismcc@gmail.com>
+ <20180812232713.74e6ba82@windsurf>
+ <CALURroRxMkO+-NiyQV-ArGnS0RcjrNYLrPZp6m-G85DGrTp39g@mail.gmail.com>
+Message-ID: <20180813232111.2ddba85c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Christopher,
 
-On Sun, 12 Aug 2018 18:57:52 +0200, Fran?ois Perrad wrote:
-> 2018-08-11 20:27 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
-> 
-> > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> >  
-> 
-> Acked-by: Francois Perrad <francois.perrad@gadz.org>
-> but depends on perl-package-stash which needs rework.
+On Mon, 13 Aug 2018 06:46:53 -0700, Christopher McCrory wrote:
 
-Thanks Fran?ois. I have marked this patch as Changes Requested in
-patchwork.
+> Yea, I found this:
+> https://github.com/rjbs/Data-UUID/issues/26
 
-Christopher: when you send a new iteration of your patch series, please
-add the Acked-by from Fran?ois on this patch, provided you don't make
-any change to it.
+OK, I added a comment to "ping" on this question.
 
 Thanks,
 
