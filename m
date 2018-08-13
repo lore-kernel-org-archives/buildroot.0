@@ -1,25 +1,29 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 13 Aug 2018 10:49:12 +0200
-Subject: [Buildroot] [PATCH] support/misc: updating Vagrantfile to ubuntu
- 18.04
-Message-ID: <1534150152-32385-1-git-send-email-angelo@amarulasolutions.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 Aug 2018 11:45:48 +0200
+Subject: [Buildroot] [git commit branch/next] support/misc: updating
+ Vagrantfile to ubuntu 18.04
+Message-ID: <20180813093900.77A248CA34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=8511a66fc1d16014703e76ce0d5bf3ca3b010bdc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
 This patch updates the vagrant box to ubuntu bionic 64 and switches back
 to the official ubuntu image cause the issues with the official image
 are now solved.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  support/misc/Vagrantfile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-index cca0a3d..acfc8ab 100644
+index cca0a3db3d..acfc8abfc8 100644
 --- a/support/misc/Vagrantfile
 +++ b/support/misc/Vagrantfile
 @@ -12,7 +12,7 @@ VM_MEMORY=2048
@@ -31,5 +35,3 @@ index cca0a3d..acfc8ab 100644
  
  	config.vm.provider :vmware_fusion do |v, override|
  		v.vmx['memsize'] = VM_MEMORY
--- 
-2.7.4
