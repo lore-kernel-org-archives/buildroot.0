@@ -1,97 +1,63 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 13 Aug 2018 18:19:55 +0200
-Subject: [Buildroot] [PATCH 3/3] support/download: detect and abort when
- using a git branch by name
-In-Reply-To: <5b7196ad77a28_5d773f801c6b6e18120e9@ultri5.mail>
-References: <20180812224139.2b81b839@windsurf>
- <5b7196ad77a28_5d773f801c6b6e18120e9@ultri5.mail>
-Message-ID: <20180813161955.GE7915@scaer>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 13 Aug 2018 18:29:21 +0200
+Subject: [Buildroot] [RFC PATCH 2/2] scancpan: wrap abstract if too long
+In-Reply-To: <20180813131135.32651-3-chrismcc@gmail.com>
+References: <20180813131135.32651-1-chrismcc@gmail.com>
+ <20180813131135.32651-3-chrismcc@gmail.com>
+Message-ID: <CAB0FRssNmZLLzQyVn9LXdoineANjPC1zXaOJSXoteCrAMqW5yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+2018-08-13 15:11 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 
-On 2018-08-13 11:33 -0300, Ricardo Martincoski spake thusly:
-> On Sun, Aug 12, 2018 at 05:41 PM, Thomas Petazzoni wrote:
-> > On Sun, 12 Aug 2018 22:25:43 +0200, Yann E. MORIN wrote:
-> >> > Commit 'refs/pull/1014/head' is a branch name.
-> >> > Using a branch name is not supported.  
-[--SNIP--]
-> >> Sure, you'd argue that an automated build job could do the build. But
-> >> you anyway have to write some scripting for that automated job anyway.
-> >> Just have it prepare a git clone of the affected package, checkout the
-> >> correct commit, and prepare a local.mk with the correct override-srcdir
-> >> befor attempting the buildroot build.
-> It seems a lot of scripting for something that git supports natively and that
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+> ---
+>  utils/scancpan | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/utils/scancpan b/utils/scancpan
+> index 2070e2a233..f8411079e1 100755
+> --- a/utils/scancpan
+> +++ b/utils/scancpan
+> @@ -484,6 +484,8 @@ use HTTP::Tiny;
+>  use Safe;
+>  use MetaCPAN::API::Tiny;
+>  use Digest::SHA qw(sha256_hex);
+> +use Text::Wrap;
+>
 
-Not true: they are not even fetched by default at all. If they were,
-then we would not be having this discussion. As it stands, we currently
-have to resort to unstable trickery to use those.
+Ok, Text::Wrap is a core module, so the script scancpan stays self-depend.
 
-> could be added to the backend to support the right way: using sha1 for
-> reproducibility.
+>
+> +$Text::Wrap::columns = 70;
+>
+>  # Below, 5.026 should be aligned with the version of perl actually
+>  # bundled in Buildroot:
+> @@ -655,7 +657,7 @@ while (my ($distname, $dist) = each %dist) {
+>      my $brname = brname( $fsname );
+>      mkdir $dirname unless -d $dirname;
+>      if ($need_target{$distname} && ($force || !-f $cfgname)) {
+> -        my $abstract = $dist->{abstract};
+> +        my $abstract = wrap("","\t  ",$dist->{abstract});
+>
 
-I also thought about it and tried to replace the special ref by its
-expanded sha1 and name the local archive by the sha1.
+In this script, I don't use quote but q{} and qq{}.
+And I put one space after comma.
 
-But that does not work, because locating the tarball is completely
-decorelated from generating it.
+Fran?ois
 
-I.e. the code that extracts the tarball has no way to know that the
-version string has been changed!
 
-[--SNIP--]
-> Gerrit Changes (when the server has the 'Draft' mode disabled) do not suffer
-> from the same. Each new revision ('Patch Set') has its own sha1. The refs for
-> many revisions of Change 1001 look like this:
-> refs/changes/01/1001/1
-> refs/changes/01/1001/2
-> refs/changes/01/1001/3
-
-So, those would be stable, it looks like, indeed.
-
-But then it means we're maybe currently doing it wrong anyway, as we
-create a local branch for something that is more akin to a tag...
-
-[--SNIP--]
-> What I think we should do is:
->  - to re-add support to download of the sha1 of any ref (branch, tag, special
->    ref).
-
-That is not supposed to be broken, and should work again if we check if
-the remote has the ref as we both suggested in previous replies in this
-thread (but you and I with different solutions).
-
->  - add automated tests to avoid going back and forth, supporting some refs,
->    then dropping support for them and then supporting them.
-
-Yes, your series doing that is still pending... TBH, it is still marked
-as unread here, because I still want to have a look at it...
-
->  - drop the support to the name of a special ref as it is not guaranteed to be
->    reproducible.
-
-This should be done before we add tests, I think.
-
-[--SNIP--]
-> But maybe even this patch "detect and abort" should not be applied to 2018.08
-> either as it is not so trivial, demonstrated by this review.
-> Just to be clear: please do not apply v1 of this patch. It will break things.
-
-Agreed. It is material for next.
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>          my $homepage = $dist->{resources}->{homepage} || qq{
+> https://metacpan.org/release/${distname}};
+>          say qq{write ${cfgname}} unless $quiet;
+>          open my $fh, q{>}, $cfgname;
+> --
+> 2.14.4
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180813/7dfe8759/attachment.html>
