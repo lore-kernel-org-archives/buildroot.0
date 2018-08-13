@@ -1,68 +1,57 @@
-From: ricardo.martincoski at gmail.com <ricardo.martincoski@gmail.com>
-Date: Mon, 13 Aug 2018 11:13:13 -0300
-Subject: [Buildroot] [PATCH 3/3] support/download: detect and abort when
- using a git branch by name
-References: <20180812204841.GC29650@scaer>
-Message-ID: <5b7191f987832_7ea83f8ffa0dde2c984c0@ultri5.mail>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 13 Aug 2018 09:15:37 -0500
+Subject: [Buildroot] Analysis of build results for 2018-08-11
+In-Reply-To: <20180812223629.2bac8ebe@windsurf>
+References: <20180812060015.A385B207E5@mail.bootlin.com>
+ <20180812223629.2bac8ebe@windsurf>
+Message-ID: <CANQCQpYGFe1AXd=2=6AG8rJtWp9OFNo3eJtq+u6FOArHz8izsQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
+On Sun, Aug 12, 2018 at 3:36 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> Matt, Hollis, Romain, J?rg, Bernd, there are some questions for you
+> below.
+>
+> On Sun, 12 Aug 2018 08:00:15 +0200 (CEST), Thomas Petazzoni wrote:
+>
+> >      powerpc |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/87e82a5e8d0b1c1ff10ec3e59d25bcd56b329075 |
+>
+> Seems like some PowerPC Altivec code gets used even when Altivec is not
+> available, or something like that:
+>
+>   CC       libaircrack_crypto_ppc_altivec_la-sha1-git.lo
+> memory.c:1:0: warning: -mvsx requires hardware floating point [enabled by default]
+>   CC       libaircrack_crypto_ppc_altivec_la-simd-intrinsics.lo
+> sha1-git.c:1:0: warning: -mvsx requires hardware floating point [enabled by default]
+>   CC       libaircrack_crypto_ppc_altivec_la-wpapsk.lo
+> simd-intrinsics.c:1:0: warning: -mvsx requires hardware floating point [enabled by default]
+> simd-intrinsics.c:147:18: error: unknown type name 'vtype'
+> simd-intrinsics.c: In function 'dispatch':
+> simd-intrinsics.c:671:3: warning: implicit declaration of function 'SIMDmd5body' [-Wimplicit-function-declaration]
+> simd-intrinsics.c:671:16: error: 'vtype' undeclared (first use in this function)
+> simd-intrinsics.c:671:16: note: each undeclared identifier is reported only once for each function it appears in
+> simd-intrinsics.c:671:23: error: expected expression before ')' token
+> simd-intrinsics.c: At top level:
+> simd-intrinsics.c:905:18: error: unknown type name 'vtype'
+> simd-intrinsics.c:1386:19: error: unknown type name 'vtype'
+> simd-intrinsics.c:1928:21: error: unknown type name 'vtype'
+> simd-intrinsics.c:2547:21: error: unknown type name 'vtype'
+>
+> Anybody with some PowerPC understanding to look into this ? Matt perhaps ?
 
-On Sun, Aug 12, 2018 at 05:48 PM, Yann E. MORIN wrote:
+Looks like there is no support for non-altivec ppc  in this code.  Is
+there a way I can do a conditional dependency in kconfig?
 
-> On 2018-08-12 22:41 +0200, Thomas Petazzoni spake thusly:
->> > > The other way is by using this series:
->> > > http://patchwork.ozlabs.org/project/buildroot/list/?series=44009
->> > > current master:
->> > > https://gitlab.com/RicardoMartincoski/buildroot/pipelines/27301317
->> > > current master + this patch:
->> > > https://gitlab.com/RicardoMartincoski/buildroot/pipelines/27301358
->> > > It doesn't get to show that special-ref is broken because the tests run
->> > > sequentially (to avoid overpopulate the gitlab CI), but it shows (in the
->> > > -build.log) that also the download of a sha1 tip of a branch (search for
->> > > "git-sha1-branch-head" in the log) would be broken with this patch.
->> > > This can be reproduced locally:
->> > > $ make defconfig
->> > > $ ./utils/config --set-str BR2_BACKUP_SITE ""
->> > > $ BR2_DL_DIR=$(mktemp -d) make tremor-dirclean tremor-source
->> > > ...
->> > > Commit '7c30a66346199f3f09017a09567c6c8a3a0eedc8' is a branch name.
->> > > Using a branch name is not supported.
->> 
->> Yann: this one I don't understand.
->> 7c30a66346199f3f09017a09567c6c8a3a0eedc8 is a regular commit SHA1, so
->> it should not be considered as a branch. Why do we have this failure
->> for a commit SHA1 ?
-> 
-> That's because of our special refs support, for which we do [0]:
-> 
->     git fetch origin "${cset}:${cset}"
+Something like
+depends on BR2_POWERPC_CPU_HAS_ALTIVEC if BR2_powerpc || BR2_powerpc64
+|| BR2_powerpc64le
 
-But only removing this code will not make 'git show-ref' to work as expected.
-There are git caches out there with the mentioned branch.
-If for any reason the tarball is not there (like we do test in autobuilder) the
-download will fail for the wrong reason, and it would require a manual fix.
-
-And IMO we should not start removing all refs from the git caches otherwise we
-can decrease the cache hit ratio (due to git gc), specially for linux trees.
-
-So the best approach IMO is to ask "given we want a named ref, is that ref a
-branch in the remote?". That obviously lead to using git ls-remote and check
-the second column:
-$ git ls-remote https://git.xiph.org/tremor.git
-7c30a66346199f3f09017a09567c6c8a3a0eedc8        HEAD
-293fd1c04f9d4489be6d4b2b1ca8698f2f902e8e        refs/heads/lowmem
-7c30a66346199f3f09017a09567c6c8a3a0eedc8        refs/heads/master
-f946f9acbf7aced75d3810a52c878e47680a18f6        refs/heads/nobyte
-3175ff964c7d85d070df823189997f6b753cfef7        refs/heads/tremolo
-0bcded806a0327c86d9246703724b45037d1bbaa        refs/heads/tremolo_mips
-
-And the corner case is when there is a branch and a tag with the same name.
-We must choose whether that case fails or the tag is used. I would use the tag.
-
-Regards,
-Ricardo
+Matt
