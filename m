@@ -1,75 +1,90 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Mon, 13 Aug 2018 07:05:58 +0300
-Subject: [Buildroot] [PATCH] bzip2: change upstream site
-In-Reply-To: <20180812093345.GE2402@scaer>
-References: <7f5f3c1bfdc21cad97c41dfba00c53f935ef6a73.1533875056.git.baruch@tkos.co.il>
- <20180812093345.GE2402@scaer>
-Message-ID: <20180813040557.th5v3ftbpixgppsg@sapphire.tkos.co.il>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 13 Aug 2018 07:42:37 +0200
+Subject: [Buildroot] [PATCH 1/1] Enhanced resiliency of PyPI scanning
+ tool
+In-Reply-To: <CAGm1_kvZMy5k4tjP7O5PkTdoGxPQ_dZgWcHgwNwys9cFVjQ+qw@mail.gmail.com>
+References: <20180807121514.8989-1-malachi.burke@gmail.com>
+ <CAGm1_kvZMy5k4tjP7O5PkTdoGxPQ_dZgWcHgwNwys9cFVjQ+qw@mail.gmail.com>
+Message-ID: <CAGm1_ktYAvdUur8NiWF0YFZwDETVGg=WKhR=UL_wFdaN_r5r+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi Thomas,
 
-On Sun, Aug 12, 2018 at 11:33:45AM +0200, Yann E. MORIN wrote:
-> On 2018-08-10 07:24 +0300, Baruch Siach spake thusly:
-> > The bzip.org website is down. Use the Buildroot backup download site.
-> > Change the website link to a gitlab repo that mirrors the content of the
-> > tarball.
-> > 
-> >   https://lwn.net/Articles/762264/
-> > 
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> >  package/bzip2/Config.in | 2 +-
-> >  package/bzip2/bzip2.mk  | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/package/bzip2/Config.in b/package/bzip2/Config.in
-> > index dbc82496df7e..89e4d5de9a03 100644
-> > --- a/package/bzip2/Config.in
-> > +++ b/package/bzip2/Config.in
-> > @@ -6,4 +6,4 @@ config BR2_PACKAGE_BZIP2
-> >  	  available techniques, while being around twice as fast at
-> >  	  compression and six times faster at decompression.
-> >  
-> > -	  http://www.bzip.org
-> > +	  https://gitlab.com/bzip/bzip2
-> 
-> Not sure this is the best upstream location. The LWN thread also has
-> this comment https://lwn.net/Articles/762340/ which points to this
-> webpage https://sourceware.org/bzip2 which has a canonical locations
-> pointing to https://www.sourceware.org/bzip2/
-> 
-> So, I am not sure which is better: an out-dated (but soon to be revived)
-> webpage, or a git tree made by a random guy on a random forge (there are
-> also github trees as well, and no doubt we can also find more random git
-> trees elesewhere).
+On Fri, Aug 10, 2018 at 7:00 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> Hi Malachi,
+>
+> On Tue, Aug 7, 2018 at 2:15 PM, Malachi Burke <malachi.burke@gmail.com> wrote:
+>> Specifically during scenarios where (probably older)
+>> python packages don't explicitly specify their name
+>> during setup.py processing, we can fallback and use
+>> metadata_name to track setup_args
+>
+> Please provide URL for such a package.
+>
+>> Signed-off-by: Malachi Burke <malachi.burke@gmail.com>
+>> ---
+>>  utils/scanpypi | 16 ++++++++++++++--
+>>  1 file changed, 14 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/utils/scanpypi b/utils/scanpypi
+>> index 12c96b842e..8e8643a8db 100755
+>> --- a/utils/scanpypi
+>> +++ b/utils/scanpypi
+>> @@ -45,6 +45,13 @@ except ImportError:
+>>      liclookup = None
+>>
+>>
+>> +# Ugly global representing currently evaluating package
+>> +# need this because some packages don't specify their name
+>> +# fortunately BuildrootPackage operates iteratively and not
+>> +# recursively, so managing this is straightforward
+>> +current_package = None
+>> +
+>> +
+>>  def setup_decorator(func, method):
+>>      """
+>>      Decorator for distutils.core.setup and setuptools.setup.
+>> @@ -60,8 +67,11 @@ def setup_decorator(func, method):
+>>      def closure(*args, **kwargs):
+>>          # Any python packages calls its setup function to be installed.
+>>          # Argument 'name' of this setup function is the package's name
+>> -        BuildrootPackage.setup_args[kwargs['name']] = kwargs
+>> -        BuildrootPackage.setup_args[kwargs['name']]['method'] = method
+>> +        # When 'name' isn't available, we query current_package
+>> +        name = kwargs.get('name', current_package.metadata_name)
+>> +
+>> +        BuildrootPackage.setup_args[name] = kwargs
+>> +        BuildrootPackage.setup_args[name]['method'] = method
+>>      return closure
+>>
+>>  # monkey patch
+>> @@ -278,6 +288,8 @@ class BuildrootPackage():
+>>          current_dir = os.getcwd()
+>>          os.chdir(self.tmp_extract)
+>>          sys.path.append(self.tmp_extract)
+>> +        global current_package
+>
+> Can we avoid using 'global' construct?
 
-In my opinion, the best option at this point is to drop this link entirely. We 
-can always put it back when "real" upstream reappears.
+What do you think about this patch/issue?
 
-What do you think?
+Malachi pointed me to the mock package [1]. Its setup.py is missing
+'name' keyword. I've sent a PR [2] fixing this, but the project
+doesn't seem to actively maintained.
 
-baruch
+We already had a similar discussion [3]. The decision was to avoid
+fixing such things by scanpypi and just to inform the user, that the
+package is malformed. I could add related error messages to the except
+clauses.
 
-> > diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
-> > index e43533072b2d..a3af32299370 100644
-> > --- a/package/bzip2/bzip2.mk
-> > +++ b/package/bzip2/bzip2.mk
-> > @@ -5,7 +5,7 @@
-> >  ################################################################################
-> >  
-> >  BZIP2_VERSION = 1.0.6
-> > -BZIP2_SITE = http://www.bzip.org/$(BZIP2_VERSION)
-> > +BZIP2_SITE = http://sources.buildroot.net
-> >  BZIP2_INSTALL_STAGING = YES
-> >  BZIP2_LICENSE = bzip2 license
-> >  BZIP2_LICENSE_FILES = LICENSE
+[1] https://github.com/testing-cabal/mock
+[2] https://github.com/testing-cabal/mock/pull/433
+[3] http://lists.busybox.net/pipermail/buildroot/2018-January/212333.html
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Regards,
+Yegor
