@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Aug 2018 23:34:21 +0200
-Subject: [Buildroot] [PATCH 15/17] perl-module-build: add target
-In-Reply-To: <CAB0FRst9-NvVTEFnEjt178Dv7p_pmxzPyQmucyA4-nyeVaYUdg@mail.gmail.com>
+Date: Mon, 13 Aug 2018 23:35:22 +0200
+Subject: [Buildroot] [PATCH 16/17] perl-class-load: new package
+In-Reply-To: <CAB0FRsuBSq7Ev0hHZvWmFxCa50htPvoimNyittX-QLXyvoAv3w@mail.gmail.com>
 References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-16-chrismcc@gmail.com>
- <CAB0FRst9-NvVTEFnEjt178Dv7p_pmxzPyQmucyA4-nyeVaYUdg@mail.gmail.com>
-Message-ID: <20180813233421.0cc3a4db@windsurf>
+ <20180811182749.20924-17-chrismcc@gmail.com>
+ <CAB0FRsuBSq7Ev0hHZvWmFxCa50htPvoimNyittX-QLXyvoAv3w@mail.gmail.com>
+Message-ID: <20180813233522.12733896@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 12 Aug 2018 10:07:54 +0200, Fran?ois Perrad wrote:
-
-> > diff --git a/package/perl-module-build/Config.in
-> > b/package/perl-module-build/Config.in
-> > new file mode 100644
-> > index 0000000000..ee4354cc6a
-> > --- /dev/null
-> > +++ b/package/perl-module-build/Config.in
-> > @@ -0,0 +1,6 @@
-> > +config BR2_PACKAGE_PERL_MODULE_BUILD
-> > +       bool "perl-module-build"
-> > +       help
-> > +         Build and install Perl modules
+On Sun, 12 Aug 2018 18:57:52 +0200, Fran?ois Perrad wrote:
+> 2018-08-11 20:27 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+> 
+> > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 > >  
 > 
-> On Buildroot, we never need this package on target.
+> Acked-by: Francois Perrad <francois.perrad@gadz.org>
+> but depends on perl-package-stash which needs rework.
 
-Christopher, any comment on this ?
+Thanks Fran?ois. I have marked this patch as Changes Requested in
+patchwork.
+
+Christopher: when you send a new iteration of your patch series, please
+add the Acked-by from Fran?ois on this patch, provided you don't make
+any change to it.
 
 Thanks,
 
