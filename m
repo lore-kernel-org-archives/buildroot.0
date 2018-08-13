@@ -1,71 +1,44 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 13 Aug 2018 20:39:49 +0200
-Subject: [Buildroot] [PATCH v1] qt5base: fix double-conversion compile for
- aarch64_be
-Message-ID: <20180813183949.16698-1-ps.report@gmx.net>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 13 Aug 2018 11:58:24 -0700
+Subject: [Buildroot] [PATCH 1/1] libunistring: bump to version 0.9.10
+Message-ID: <20180813185824.98469-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
-
-  ../3rdparty/double-conversion/include/double-conversion/utils.h:81:2: error: #error Target architecture was not detected as supported by Double-Conversion.
-  #error Target architecture was not detected as supported by Double-Conversion.
-
-[1] http://autobuild.buildroot.net/results/1fe2be0f26e5b92db57a5cfb5646dd253b731a5c
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 ---
-Notes:
-  - not upstreamable patch (or only for the 5.11 branch), on qtbase dev branch
-    double-conversion is already updated to v3.0.0 [2] using
-        defined(__AARCH64EL__) || defined(__aarch64__)
-    instead of
-        defined(__AARCH64EL__) || defined(__AARCH64EB__)
-    used here.
+ package/libunistring/libunistring.hash | 4 ++--
+ package/libunistring/libunistring.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-  - compile failes later at linking stage with
-        aarch64_be-linux-gnu/bin/ld.gold: internal error in update_erratum_insn, at /home/tcwg-buildslave/workspace/tcwg-make-release/builder_arch/amd64/label/tcwg-x86_64-build/target/aarch64_be-linux-gnu/snapshots/binutils-gdb.git~users~linaro~binutils-2_28-branch/gold/aarch64.cc:998
-
-[2] https://code.qt.io/cgit/qt/qtbase.git/commit/?h=dev&id=6a39e49a6cdeb28a04a3657bb6a22f848d5dfa9d
----
- ...ble-conversion-enable-for-aarch64_be.patch | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/qt5/qt5base/5.11.1/0002-double-conversion-enable-for-aarch64_be.patch
-
-diff --git a/package/qt5/qt5base/5.11.1/0002-double-conversion-enable-for-aarch64_be.patch b/package/qt5/qt5base/5.11.1/0002-double-conversion-enable-for-aarch64_be.patch
-new file mode 100644
-index 0000000000..838f4dd7ad
---- /dev/null
-+++ b/package/qt5/qt5base/5.11.1/0002-double-conversion-enable-for-aarch64_be.patch
-@@ -0,0 +1,26 @@
-+From e81ba4e0de16ff741417ae7ed7dfe7b5a83d66e2 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 13 Aug 2018 20:15:05 +0200
-+Subject: [PATCH] double-conversion: enable for aarch64_be
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ .../double-conversion/include/double-conversion/utils.h         | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/3rdparty/double-conversion/include/double-conversion/utils.h b/src/3rdparty/double-conversion/include/double-conversion/utils.h
-+index 20bfd36c84..77baa2861a 100644
-+--- a/src/3rdparty/double-conversion/include/double-conversion/utils.h
-++++ b/src/3rdparty/double-conversion/include/double-conversion/utils.h
-+@@ -65,7 +65,7 @@
-+     defined(__sparc__) || defined(__sparc) || defined(__s390__) || \
-+     defined(__SH4__) || defined(__alpha__) || \
-+     defined(_MIPS_ARCH_MIPS32R2) || \
-+-    defined(__AARCH64EL__)
-++    defined(__AARCH64EL__) || defined(__AARCH64EB__)
-+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-+ #elif defined(_M_IX86) || defined(__i386__) || defined(__i386)
-+ #if defined(_WIN32)
-+-- 
-+2.18.0
-+
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index 8a5da7782d..2e4595b17d 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.9.tar.xz.sig
+-sha256	a4d993ecfce16cf503ff7579f5da64619cee66226fb3b998dafb706190d9a833	libunistring-0.9.9.tar.xz
++# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz.sig
++sha256	eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7	libunistring-0.9.10.tar.xz
+ # Locally calculated
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+ sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LIB
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index 929b52ebd5..fa51447170 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUNISTRING_VERSION = 0.9.9
++LIBUNISTRING_VERSION = 0.9.10
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
 -- 
 2.18.0
