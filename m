@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Aug 2018 20:14:11 +0200
-Subject: [Buildroot] [PATCH/next v2 2/5] package/gcc: fix build of gcc-7.3.0
+Date: Mon, 13 Aug 2018 20:14:13 +0200
+Subject: [Buildroot] [PATCH/next v2 4/5] package/gcc: fix build of gcc-5.5.0
  with glibc-2.28
 In-Reply-To: <20180813181414.25661-1-bernd.kuhls@t-online.de>
 References: <20180813181414.25661-1-bernd.kuhls@t-online.de>
-Message-ID: <20180813181414.25661-2-bernd.kuhls@t-online.de>
+Message-ID: <20180813181414.25661-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,17 +13,17 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: no changes
+v2: initial version (Thomas)
 
- ...4-libsanitizer-Use-pre-computed-size.patch | 72 +++++++++++++++++++
+ ...2-libsanitizer-Use-pre-computed-size.patch | 72 +++++++++++++++++++
  1 file changed, 72 insertions(+)
- create mode 100644 package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
+ create mode 100644 package/gcc/5.5.0/0002-libsanitizer-Use-pre-computed-size.patch
 
-diff --git a/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch b/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
+diff --git a/package/gcc/5.5.0/0002-libsanitizer-Use-pre-computed-size.patch b/package/gcc/5.5.0/0002-libsanitizer-Use-pre-computed-size.patch
 new file mode 100644
 index 0000000000..6e73331eae
 --- /dev/null
-+++ b/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
++++ b/package/gcc/5.5.0/0002-libsanitizer-Use-pre-computed-size.patch
 @@ -0,0 +1,72 @@
 +From 61f38c64c01a15560026115a157b7021ec67bd3b Mon Sep 17 00:00:00 2001
 +From: hjl <hjl@138bc75d-0d04-0410-961f-82ee72b054a4>
