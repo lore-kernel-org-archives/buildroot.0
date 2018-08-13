@@ -1,47 +1,23 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Mon, 13 Aug 2018 12:43:10 -0700
-Subject: [Buildroot] host-libselinux atomics with GCC 4.4
-In-Reply-To: <CANQCQpZ2dPYy9kwS1tZ9LYXxwJZjEO66vmOSSZU17NO=7a+AQw@mail.gmail.com>
-References: <20180812060015.A385B207E5@mail.bootlin.com>
- <20180812223629.2bac8ebe@windsurf>
- <CANQCQpbDmecDS1LE8HY46y1BnEtJH=cRsmo7KEbZhsNZvHhquw@mail.gmail.com>
- <CANQCQpZ2mVuPkeeiR5yxKf3Cs7xUiADuO0dAMkZxsLaCa_iQCw@mail.gmail.com>
- <95ce06f3-5560-81f3-4949-0a2842b7b78a@mentor.com>
- <CANQCQpZ2dPYy9kwS1tZ9LYXxwJZjEO66vmOSSZU17NO=7a+AQw@mail.gmail.com>
-Message-ID: <4e9928a9-5a67-fdc7-63a9-bd34118f3dee@mentor.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 13 Aug 2018 21:44:57 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/qt5/qt5base: fix statx
+ support with glibc >= 2.28
+References: <20180813194043.24300-1-bernd.kuhls@t-online.de>
+Message-ID: <pm394fx279.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/13/2018 11:25 AM, Matthew Weber wrote:
-> Hollis,
-> On Mon, Aug 13, 2018 at 1:10 PM Hollis Blanchard
-> <hollis_blanchard@mentor.com> wrote:
->> On 08/13/2018 08:30 AM, Matthew Weber wrote:
->>> All,
->>> On Mon, Aug 13, 2018 at 9:36 AM Matthew Weber
->>> <matthew.weber@rockwellcollins.com> wrote:
->>>> Hollis / Thomas,
->>>> On Sun, Aug 12, 2018 at 3:36 PM Thomas Petazzoni
->>>> <thomas.petazzoni@bootlin.com> wrote:
->>>>>>         x86_64 |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/e48c974980b8228302a76ac5b6afad14e7ce81c1 |
->>>> Require host gcc at least 4.7
->>>> http://patchwork.ozlabs.org/patch/957001/
->>> v2.  http://patchwork.ozlabs.org/project/buildroot/list/?series=60561
->>>
->>> I've also opened a upstream ticket
->>> https://github.com/SELinuxProject/selinux/issues/97.  We'll see if I
->>> can get traction there and maybe that determines kconfig vs patch?
->> Thanks for opening that upstream issue.
->>
->> Due to the surprisingly quick response from the maintainers, it looks
->> like we already have an answer: the patch is OK, so we don't need the
->> Kconfig changes. (A more aggressive patch is almost certainly OK too,
->> but I doubt anybody wants to fuss about it.)
-> Did you want to tie-off with upstream and then submit the patch here?
-"Want to": no, but I submitted the patch anyways. ;-)
+Am Mon, 13 Aug 2018 21:40:43 +0200 schrieb Bernd Kuhls:
 
-Hollis Blanchard
-Mentor Graphics Emulation Division
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v2: switched to upstream patch (Thomas)
+
+Hi,
+
+please ignore, this is really v3, follow-up patch sent.
+
+Regards, Bernd
