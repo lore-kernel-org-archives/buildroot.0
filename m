@@ -1,96 +1,130 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Aug 2018 23:16:01 +0200
-Subject: [Buildroot] [git commit branch/next] perl-module-implementation:
- new package
-Message-ID: <20180813210948.3667F8D1FB@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 13 Aug 2018 23:16:59 +0200
+Subject: [Buildroot] [RFC PATCH 1/2] scancpan: support more licenses
+In-Reply-To: <CALURroRRC9sPBLeAuv4=0XOwgGvnEZchKU03xxPtgn0Uheik3Q@mail.gmail.com>
+References: <20180813131135.32651-1-chrismcc@gmail.com>
+ <20180813131135.32651-2-chrismcc@gmail.com>
+ <20180813185453.5b8bae4a@windsurf>
+ <CALURroRRC9sPBLeAuv4=0XOwgGvnEZchKU03xxPtgn0Uheik3Q@mail.gmail.com>
+Message-ID: <20180813211659.GG7915@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84e9a557f1978d8356f9928a90faff933de8e51c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Christopher, All,
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/perl-module-implementation/Config.in               |  9 +++++++++
- .../perl-module-implementation.hash                        |  6 ++++++
- .../perl-module-implementation.mk                          | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
+On 2018-08-13 10:35 -0700, Christopher McCrory spake thusly:
+> On Mon, Aug 13, 2018 at 9:54 AM, Thomas Petazzoni < [1]thomas.petazzoni@bootlin.com> wrote:
+>   > +? ? ? ? $license =~ s|lgpl|LGPL-2.1|;
+>   Just "lgpl" always means it's LGPL-2.1 ?
+> Apparently
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6d0e3ecceb..f96a18a5f7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -495,6 +495,7 @@ F:	package/perl-io-interface/
- F:	package/perl-io-socket-multicast/
- F:	package/perl-json-maybexs/
- F:	package/perl-mime-tools/
-+F:	package/perl-module-implementation/
- F:	package/perl-module-runtime/
- F:	package/perl-number-bytes-human/
- F:	package/perl-params-util/
-diff --git a/package/Config.in b/package/Config.in
-index 85046ae56e..7a7142802a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -711,6 +711,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mime-base64-urlsafe/Config.in"
- 	source "package/perl-mime-base64/Config.in"
- 	source "package/perl-mime-tools/Config.in"
-+	source "package/perl-module-implementation/Config.in"
- 	source "package/perl-module-runtime/Config.in"
- 	source "package/perl-mojolicious-plugin-authentication/Config.in"
- 	source "package/perl-mojolicious/Config.in"
-diff --git a/package/perl-module-implementation/Config.in b/package/perl-module-implementation/Config.in
-new file mode 100644
-index 0000000000..354197649d
---- /dev/null
-+++ b/package/perl-module-implementation/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
-+	bool "perl-module-implementation"
-+	select BR2_PACKAGE_PERL_MODULE_RUNTIME
-+	select BR2_PACKAGE_PERL_TRY_TINY
-+	help
-+	  Loads one of several alternate underlying implementations
-+	  for a module
-+
-+	  http://metacpan.org/release/Module-Implementation
-diff --git a/package/perl-module-implementation/perl-module-implementation.hash b/package/perl-module-implementation/perl-module-implementation.hash
-new file mode 100644
-index 0000000000..caf365c024
---- /dev/null
-+++ b/package/perl-module-implementation/perl-module-implementation.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    52e3fe0ca6b1eff0488d59b7aacc0667 Module-Implementation-0.09.tar.gz
-+sha256 c15f1a12f0c2130c9efff3c2e1afe5887b08ccd033bd132186d1e7d5087fd66d Module-Implementation-0.09.tar.gz
-+
-+# computed by scancpan
-+sha256 dd34e4dbcadfaa3db992201873e1cbb4b4f4c18e9bf000821d5c768e66d7ff0b LICENSE
-diff --git a/package/perl-module-implementation/perl-module-implementation.mk b/package/perl-module-implementation/perl-module-implementation.mk
-new file mode 100644
-index 0000000000..50ee8610a5
---- /dev/null
-+++ b/package/perl-module-implementation/perl-module-implementation.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# perl-module-implementation
-+#
-+################################################################################
-+
-+PERL_MODULE_IMPLEMENTATION_VERSION = 0.09
-+PERL_MODULE_IMPLEMENTATION_SOURCE = Module-Implementation-$(PERL_MODULE_IMPLEMENTATION_VERSION).tar.gz
-+PERL_MODULE_IMPLEMENTATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DR/DROLSKY
-+PERL_MODULE_IMPLEMENTATION_DEPENDENCIES = perl-module-runtime perl-try-tiny
-+PERL_MODULE_IMPLEMENTATION_LICENSE = Artistic-2.0
-+PERL_MODULE_IMPLEMENTATION_LICENSE_FILES = LICENSE
-+
-+$(eval $(perl-package))
+IANAL...
+
+Usually, if any license of the GPL familly is used without any version
+specified, then it means just any version can be used:
+
+    https://www.gnu.org/licenses/gpl.html
+
+    14. Revised Versions of this License.
+
+    [...]  If the Program does not specify a version number of the GNU
+    General Public License, you may choose any version ever published
+    by the Free Software Foundation.
+
+Similar clauses can be had for each license. So I doubt 'lgpl' would
+stand for LGPL-2.1.
+
+Besides, see below...
+
+>   > +? ? ? ? $license =~ s|bsd|BSD|;
+>   "BSD" is not a license. There are several different BSD licenses.
+>   Though with just "bsd" as an initial information, there's not much you
+>   can do :-/
+> 
+> yea :(
+> AFAICT, this is the source from Base.pm
+
+What 'Base.pm' are you talink about? On my Ubuntu 17.10, I get:
+
+    $ apt-file search /Base.pm |wc -l
+    191
+
+> ? my %licenses = (
+> ??? perl???????? => 'Perl_5',
+> ??? apache?????? => 'Apache_2_0',
+> ??? apache_1_1?? => 'Apache_1_1',
+> ??? artistic???? => 'Artistic_1',
+> ??? artistic_2?? => 'Artistic_2',
+> ??? lgpl???????? => 'LGPL_2_1',
+> ??? lgpl2??????? => 'LGPL_2_1',
+> ??? lgpl3??????? => 'LGPL_3_0',
+> ??? bsd????????? => 'BSD',
+> ??? gpl????????? => 'GPL_1',
+> ??? gpl2???????? => 'GPL_2',
+> ??? gpl3???????? => 'GPL_3',
+> ??? mit????????? => 'MIT',
+> ??? mozilla????? => 'Mozilla_1_1',
+> ??? restrictive? => 'Restricted',
+> ??? open_source? => undef,
+> ??? unrestricted => undef,
+> ??? unknown????? => undef,
+> ? );
+> 
+> ?# TODO - would be nice to not have these here, since they're more
+> ? # properly stored only in Software::License
+> ? my %license_urls = (
+> ??? perl???????? => 'http://dev.perl.org/licenses/',
+> ??? apache?????? => 'http://apache.org/licenses/LICENSE-2.0',
+> ??? apache_1_1?? => 'http://apache.org/licenses/LICENSE-1.1',
+> ??? artistic???? => 'http://opensource.org/licenses/artistic-license.php',
+> ??? artistic_2?? => 'http://opensource.org/licenses/artistic-license-2.0.php',
+> ??? lgpl???????? => 'http://opensource.org/licenses/lgpl-license.php',
+> ??? lgpl2??????? => 'http://opensource.org/licenses/lgpl-2.1.php',
+> ??? lgpl3??????? => 'http://opensource.org/licenses/lgpl-3.0.html',
+> ??? bsd????????? => 'http://opensource.org/licenses/bsd-license.php',
+> ??? gpl????????? => 'http://opensource.org/licenses/gpl-license.php',
+> ??? gpl2???????? => 'http://opensource.org/licenses/gpl-2.0.php',
+> ??? gpl3???????? => 'http://opensource.org/licenses/gpl-3.0.html',
+> ??? mit????????? => 'http://opensource.org/licenses/mit-license.php',
+> ??? mozilla????? => 'http://opensource.org/licenses/mozilla1.1.php',
+> ??? restrictive? => undef,
+> ??? open_source? => undef,
+> ??? unrestricted => undef,
+> ??? unknown????? => undef,
+> ? );
+
+And at the same time, still on my Ubuntu 17.10, I was looking at
+/usr/share/perl/5.26.0/CPAN/Meta/Converter.pm, which has;
+
+    # The "old" values were defined by Module::Build, and were often vague.
+    # I have
+    # made the decisions below based on reading Module::Build::API and how
+    # clearly
+    # it specifies the version of the license.
+    my %license_map_2 = (
+      (map { $_ => $_ } @valid_licenses_2),
+      apache      => 'apache_2_0',  # clearly stated as 2.0
+      artistic    => 'artistic_1',  # clearly stated as 1
+      artistic2   => 'artistic_2',  # clearly stated as 2
+      gpl         => 'open_source', # we don't know which GPL; punt
+      lgpl        => 'open_source', # we don't know which LGPL; punt
+      mozilla     => 'open_source', # we don't know which MPL; punt
+      perl        => 'perl_5',      # clearly Perl 5
+      restrictive => 'restricted',
+    );
+
+So... The resolution is not that clear-cut IMNSHO...
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
