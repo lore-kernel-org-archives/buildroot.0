@@ -1,28 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Aug 2018 23:21:11 +0200
-Subject: [Buildroot] [PATCH 05/18] perl-data-uuid: new package
-In-Reply-To: <CALURroRxMkO+-NiyQV-ArGnS0RcjrNYLrPZp6m-G85DGrTp39g@mail.gmail.com>
-References: <20180810161502.21598-1-chrismcc@gmail.com>
- <20180810161502.21598-6-chrismcc@gmail.com>
- <20180812232713.74e6ba82@windsurf>
- <CALURroRxMkO+-NiyQV-ArGnS0RcjrNYLrPZp6m-G85DGrTp39g@mail.gmail.com>
-Message-ID: <20180813232111.2ddba85c@windsurf>
+Date: Mon, 13 Aug 2018 23:46:58 +0200
+Subject: [Buildroot] [PATCH 13/17] perl-time-parsedate: new package
+In-Reply-To: <20180811182749.20924-14-chrismcc@gmail.com>
+References: <20180811182749.20924-1-chrismcc@gmail.com>
+ <20180811182749.20924-14-chrismcc@gmail.com>
+Message-ID: <20180813234658.0a19b4f6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christopher,
+Hello,
 
-On Mon, 13 Aug 2018 06:46:53 -0700, Christopher McCrory wrote:
+On Sat, 11 Aug 2018 11:27:45 -0700, Christopher McCrory wrote:
 
-> Yea, I found this:
-> https://github.com/rjbs/Data-UUID/issues/26
+> +PERL_TIME_PARSEDATE_VERSION = 2015.103
+> +PERL_TIME_PARSEDATE_SOURCE = Time-ParseDate-$(PERL_TIME_PARSEDATE_VERSION).tar.gz
+> +PERL_TIME_PARSEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MU/MUIR/modules
+> +PERL_TIME_PARSEDATE_LICENSE_FILES = README
 
-OK, I added a comment to "ping" on this question.
+This file doesn't contain any license information. In fact, this module
+has no license at all. Even CPAN says the license is "unknown". I've
+filled a bug report upstream about this:
 
-Thanks,
+  https://github.com/muir/Time-modules/issues/9
+
+In the mean time, I've marked this patch as "Changes Requested".
+
+Best regards,
 
 Thomas
 -- 
