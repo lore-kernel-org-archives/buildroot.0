@@ -1,11 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Aug 2018 00:43:34 +0200
-Subject: [Buildroot] Analysis of build results for 2018-08-11
-In-Reply-To: <CANQCQpYGFe1AXd=2=6AG8rJtWp9OFNo3eJtq+u6FOArHz8izsQ@mail.gmail.com>
-References: <20180812060015.A385B207E5@mail.bootlin.com>
- <20180812223629.2bac8ebe@windsurf>
- <CANQCQpYGFe1AXd=2=6AG8rJtWp9OFNo3eJtq+u6FOArHz8izsQ@mail.gmail.com>
-Message-ID: <bb82de29-ad31-76a6-f0ad-eb74c60f50f4@mind.be>
+Date: Tue, 14 Aug 2018 00:52:11 +0200
+Subject: [Buildroot] [RFC PATCH 1/2] scancpan: support more licenses
+In-Reply-To: <20180813211659.GG7915@scaer>
+References: <20180813131135.32651-1-chrismcc@gmail.com>
+ <20180813131135.32651-2-chrismcc@gmail.com>
+ <20180813185453.5b8bae4a@windsurf>
+ <CALURroRRC9sPBLeAuv4=0XOwgGvnEZchKU03xxPtgn0Uheik3Q@mail.gmail.com>
+ <20180813211659.GG7915@scaer>
+Message-ID: <22f25d06-9990-f00d-8028-efaef267300f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,66 +16,129 @@ To: buildroot@busybox.net
 
 
 
-On 13-08-18 16:15, Matthew Weber wrote:
-> Thomas,
-> On Sun, Aug 12, 2018 at 3:36 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello,
->>
->> Matt, Hollis, Romain, J?rg, Bernd, there are some questions for you
->> below.
->>
->> On Sun, 12 Aug 2018 08:00:15 +0200 (CEST), Thomas Petazzoni wrote:
->>
->>>      powerpc |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/87e82a5e8d0b1c1ff10ec3e59d25bcd56b329075 |
->>
->> Seems like some PowerPC Altivec code gets used even when Altivec is not
->> available, or something like that:
->>
->>   CC       libaircrack_crypto_ppc_altivec_la-sha1-git.lo
->> memory.c:1:0: warning: -mvsx requires hardware floating point [enabled by default]
->>   CC       libaircrack_crypto_ppc_altivec_la-simd-intrinsics.lo
->> sha1-git.c:1:0: warning: -mvsx requires hardware floating point [enabled by default]
->>   CC       libaircrack_crypto_ppc_altivec_la-wpapsk.lo
->> simd-intrinsics.c:1:0: warning: -mvsx requires hardware floating point [enabled by default]
->> simd-intrinsics.c:147:18: error: unknown type name 'vtype'
->> simd-intrinsics.c: In function 'dispatch':
->> simd-intrinsics.c:671:3: warning: implicit declaration of function 'SIMDmd5body' [-Wimplicit-function-declaration]
->> simd-intrinsics.c:671:16: error: 'vtype' undeclared (first use in this function)
->> simd-intrinsics.c:671:16: note: each undeclared identifier is reported only once for each function it appears in
->> simd-intrinsics.c:671:23: error: expected expression before ')' token
->> simd-intrinsics.c: At top level:
->> simd-intrinsics.c:905:18: error: unknown type name 'vtype'
->> simd-intrinsics.c:1386:19: error: unknown type name 'vtype'
->> simd-intrinsics.c:1928:21: error: unknown type name 'vtype'
->> simd-intrinsics.c:2547:21: error: unknown type name 'vtype'
->>
->> Anybody with some PowerPC understanding to look into this ? Matt perhaps ?
+On 13-08-18 23:16, Yann E. MORIN wrote:
+> Christopher, All,
 > 
-> Looks like there is no support for non-altivec ppc  in this code.  Is
-> there a way I can do a conditional dependency in kconfig?
+> On 2018-08-13 10:35 -0700, Christopher McCrory spake thusly:
+>> On Mon, Aug 13, 2018 at 9:54 AM, Thomas Petazzoni < [1]thomas.petazzoni@bootlin.com> wrote:
+>>   > +? ? ? ? $license =~ s|lgpl|LGPL-2.1|;
+>>   Just "lgpl" always means it's LGPL-2.1 ?
+>> Apparently
 > 
-> Something like
-> depends on BR2_POWERPC_CPU_HAS_ALTIVEC if BR2_powerpc || BR2_powerpc64
-> || BR2_powerpc64le
+> IANAL...
+> 
+> Usually, if any license of the GPL familly is used without any version
+> specified, then it means just any version can be used:
 
- I think that works, if not you can convert it into
+ But that is not the case here. In this case, it's most likely an incomplete
+manifest, not a package that is actually under any GPL version.
 
-	depends on BR2_POWERPC_CPU_HAS_ALTIVEC || \
-		!(BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le)
+ So instead, scancpan should issue a warning.
 
-("if" is the same as "or not". Think about it.)
+ I have the feeling that the licenses mentioned in perl packages are not very
+reliable, unless it is "perl".
+
+> 
+>     https://www.gnu.org/licenses/gpl.html
+> 
+>     14. Revised Versions of this License.
+> 
+>     [...]  If the Program does not specify a version number of the GNU
+>     General Public License, you may choose any version ever published
+>     by the Free Software Foundation.
+> 
+> Similar clauses can be had for each license. So I doubt 'lgpl' would
+> stand for LGPL-2.1.
+> 
+> Besides, see below...
+> 
+>>   > +? ? ? ? $license =~ s|bsd|BSD|;
+>>   "BSD" is not a license. There are several different BSD licenses.
+>>   Though with just "bsd" as an initial information, there's not much you
+>>   can do :-/
+>>
+>> yea :(
+>> AFAICT, this is the source from Base.pm
+> 
+> What 'Base.pm' are you talink about? On my Ubuntu 17.10, I get:
+> 
+>     $ apt-file search /Base.pm |wc -l
+>     191
+> 
+>> ? my %licenses = (
+>> ??? perl???????? => 'Perl_5',
+>> ??? apache?????? => 'Apache_2_0',
+>> ??? apache_1_1?? => 'Apache_1_1',
+>> ??? artistic???? => 'Artistic_1',
+>> ??? artistic_2?? => 'Artistic_2',
+>> ??? lgpl???????? => 'LGPL_2_1',
+>> ??? lgpl2??????? => 'LGPL_2_1',
+>> ??? lgpl3??????? => 'LGPL_3_0',
+>> ??? bsd????????? => 'BSD',
+>> ??? gpl????????? => 'GPL_1',
+>> ??? gpl2???????? => 'GPL_2',
+>> ??? gpl3???????? => 'GPL_3',
+>> ??? mit????????? => 'MIT',
+>> ??? mozilla????? => 'Mozilla_1_1',
+>> ??? restrictive? => 'Restricted',
+>> ??? open_source? => undef,
+>> ??? unrestricted => undef,
+>> ??? unknown????? => undef,
+>> ? );
+>>
+>> ?# TODO - would be nice to not have these here, since they're more
+>> ? # properly stored only in Software::License
+>> ? my %license_urls = (
+>> ??? perl???????? => 'http://dev.perl.org/licenses/',
+>> ??? apache?????? => 'http://apache.org/licenses/LICENSE-2.0',
+>> ??? apache_1_1?? => 'http://apache.org/licenses/LICENSE-1.1',
+>> ??? artistic???? => 'http://opensource.org/licenses/artistic-license.php',
+>> ??? artistic_2?? => 'http://opensource.org/licenses/artistic-license-2.0.php',
+>> ??? lgpl???????? => 'http://opensource.org/licenses/lgpl-license.php',
+>> ??? lgpl2??????? => 'http://opensource.org/licenses/lgpl-2.1.php',
+>> ??? lgpl3??????? => 'http://opensource.org/licenses/lgpl-3.0.html',
+>> ??? bsd????????? => 'http://opensource.org/licenses/bsd-license.php',
+>> ??? gpl????????? => 'http://opensource.org/licenses/gpl-license.php',
+>> ??? gpl2???????? => 'http://opensource.org/licenses/gpl-2.0.php',
+>> ??? gpl3???????? => 'http://opensource.org/licenses/gpl-3.0.html',
+>> ??? mit????????? => 'http://opensource.org/licenses/mit-license.php',
+>> ??? mozilla????? => 'http://opensource.org/licenses/mozilla1.1.php',
+>> ??? restrictive? => undef,
+>> ??? open_source? => undef,
+>> ??? unrestricted => undef,
+>> ??? unknown????? => undef,
+>> ? );
+> 
+> And at the same time, still on my Ubuntu 17.10, I was looking at
+> /usr/share/perl/5.26.0/CPAN/Meta/Converter.pm, which has;
+> 
+>     # The "old" values were defined by Module::Build, and were often vague.
+>     # I have
+>     # made the decisions below based on reading Module::Build::API and how
+>     # clearly
+>     # it specifies the version of the license.
+>     my %license_map_2 = (
+>       (map { $_ => $_ } @valid_licenses_2),
+>       apache      => 'apache_2_0',  # clearly stated as 2.0
+>       artistic    => 'artistic_1',  # clearly stated as 1
+>       artistic2   => 'artistic_2',  # clearly stated as 2
+>       gpl         => 'open_source', # we don't know which GPL; punt
+>       lgpl        => 'open_source', # we don't know which LGPL; punt
+>       mozilla     => 'open_source', # we don't know which MPL; punt
+
+ That sounds correct :-)
 
  Regards,
  Arnout
 
+>       perl        => 'perl_5',      # clearly Perl 5
+>       restrictive => 'restricted',
+>     );
 > 
-> Matt
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> So... The resolution is not that clear-cut IMNSHO...
+> 
+> Regards,
+> Yann E. MORIN.
 > 
 
 -- 
