@@ -1,45 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 Aug 2018 23:59:58 +0200
-Subject: [Buildroot] [PATCH 06/17] perl-module-runtime: add host
-In-Reply-To: <20180812141336.0621e01e@windsurf>
-References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-7-chrismcc@gmail.com>
- <CAB0FRssyWKMjxCeX9WHg7K-P5A97W32X4Qr=S8EvMOTBovn5LA@mail.gmail.com>
- <20180812141336.0621e01e@windsurf>
-Message-ID: <20180813235958.4999fe33@windsurf>
+Date: Tue, 14 Aug 2018 00:00:19 +0200
+Subject: [Buildroot] [git commit branch/next] libunistring: bump to version
+ 0.9.10
+Message-ID: <20180813215328.1EB878D20A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+commit: https://git.buildroot.net/buildroot/commit/?id=7d480277b6425005e0b0357fe1665aa3e7cff1c8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 12 Aug 2018 14:13:36 +0200, Thomas Petazzoni wrote:
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libunistring/libunistring.hash | 4 ++--
+ package/libunistring/libunistring.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> (Thanks for reviewing the Perl patches, definitely very useful!)
-> 
-> On Sun, 12 Aug 2018 11:21:07 +0200, Fran?ois Perrad wrote:
-> > Most of the time, host-perl-* packages are useless on BuildRoot,
-> > please, double check the package which introduces this dependency.  
-> 
-> For which specific patches are you giving this comment ? Does it also
-> apply to host-perl-cgi, host-perl-html-parser and
-> host-perl-html-tagset ?
-
-Could you comment on this specific perl-module-runtime patch, adding
-the host variant ? Christopher, have you been able to verify if it it's
-really needed for your use-case ?
-
-Fran?ois, I also need your input/review on:
-
-  http://patchwork.ozlabs.org/patch/956316/
-  http://patchwork.ozlabs.org/patch/956590/
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index 8a5da7782d..2e4595b17d 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.9.tar.xz.sig
+-sha256	a4d993ecfce16cf503ff7579f5da64619cee66226fb3b998dafb706190d9a833	libunistring-0.9.9.tar.xz
++# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz.sig
++sha256	eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7	libunistring-0.9.10.tar.xz
+ # Locally calculated
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+ sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LIB
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index 929b52ebd5..fa51447170 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUNISTRING_VERSION = 0.9.9
++LIBUNISTRING_VERSION = 0.9.10
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
