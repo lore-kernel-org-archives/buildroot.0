@@ -1,8 +1,8 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 13 Aug 2018 21:40:43 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/qt5/qt5base: fix statx
+Date: Mon, 13 Aug 2018 21:42:06 +0200
+Subject: [Buildroot] [PATCH/next v3 1/1] package/qt5/qt5base: fix statx
  support with glibc >= 2.28
-Message-ID: <20180813194043.24300-1-bernd.kuhls@t-online.de>
+Message-ID: <20180813194206.24355-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,7 +11,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: switched to upstream patch (Thomas)
+v3: switched to upstream patch (Thomas)
+v2: git-formatted patch (Thomas)
+    re-sent because it did not appear on patchworks
 
  ...0002-Fix-qmake-build-with-glibc-2.28.patch | 74 +++++++++++++++++++
  1 file changed, 74 insertions(+)
