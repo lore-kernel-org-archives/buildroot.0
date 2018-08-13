@@ -1,10 +1,10 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 13 Aug 2018 10:17:34 -0500
-Subject: [Buildroot] [PATCH v2 6/7] package/restorecond: libselinux depend
+Date: Mon, 13 Aug 2018 10:17:31 -0500
+Subject: [Buildroot] [PATCH v2 3/7] package/busybox: libselinux depend
  >=gcc4.7
 In-Reply-To: <20180813151735.5297-1-matthew.weber@rockwellcollins.com>
 References: <20180813151735.5297-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180813151735.5297-6-matthew.weber@rockwellcollins.com>
+Message-ID: <20180813151735.5297-3-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,21 +16,20 @@ package is using ATOMICS.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/restorecond/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/busybox/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/restorecond/Config.in b/package/restorecond/Config.in
-index 54a5545a12..58718e28d8 100644
---- a/package/restorecond/Config.in
-+++ b/package/restorecond/Config.in
-@@ -6,6 +6,8 @@ config BR2_PACKAGE_RESTORECOND
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on !BR2_STATIC_LIBS # libselinux
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # libselinux
-+	depends on BR2_HOST_GCC_AT_LEAST_4_7 # libselinux use of __ATOMIC_*
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index e5c5f89a4d..ff96b3aadb 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -42,6 +42,7 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on !BR2_arc
 +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # libselinux use of __ATOMIC_*
- 	select BR2_PACKAGE_DBUS
- 	select BR2_PACKAGE_DBUS_GLIB
- 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBSELINUX
+ 	help
+ 	  Enable SELinux support in BusyBox. Please note that
 -- 
 2.17.0
