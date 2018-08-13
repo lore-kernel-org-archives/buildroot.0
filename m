@@ -1,10 +1,10 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 13 Aug 2018 10:17:31 -0500
-Subject: [Buildroot] [PATCH v2 3/7] package/busybox: libselinux depend
+Date: Mon, 13 Aug 2018 10:17:32 -0500
+Subject: [Buildroot] [PATCH v2 4/7] package/checkpolicy: libselinux depend
  >=gcc4.7
 In-Reply-To: <20180813151735.5297-1-matthew.weber@rockwellcollins.com>
 References: <20180813151735.5297-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180813151735.5297-3-matthew.weber@rockwellcollins.com>
+Message-ID: <20180813151735.5297-4-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,20 +16,21 @@ package is using ATOMICS.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/busybox/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/checkpolicy/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index e5c5f89a4d..ff96b3aadb 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -42,6 +42,7 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_arc
+diff --git a/package/checkpolicy/Config.in b/package/checkpolicy/Config.in
+index 97ad0b7704..1a3d1215f0 100644
+--- a/package/checkpolicy/Config.in
++++ b/package/checkpolicy/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_CHECKPOLICY
+ 	depends on !BR2_STATIC_LIBS # libselinux
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # libselinux
+ 	depends on !BR2_arc # libselinux
++	depends on BR2_HOST_GCC_AT_LEAST_4_7 # libselinux use of __ATOMIC_*
 +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # libselinux use of __ATOMIC_*
  	select BR2_PACKAGE_LIBSELINUX
+ 	select BR2_PACKAGE_FLEX
  	help
- 	  Enable SELinux support in BusyBox. Please note that
 -- 
 2.17.0
