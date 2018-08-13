@@ -1,5 +1,5 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 13 Aug 2018 10:01:08 -0500
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 13 Aug 2018 18:05:59 +0300
 Subject: [Buildroot] [PATCH] package/libselinux: host gcc at least 4.7
 In-Reply-To: <CANQCQpa5kOpB9ENCSBam=-Zc6QCsJgNfrYUnCoWw9g=A_S=_hg@mail.gmail.com>
 References: <20180813143326.14262-1-matthew.weber@rockwellcollins.com>
@@ -7,22 +7,17 @@ References: <20180813143326.14262-1-matthew.weber@rockwellcollins.com>
  <CANQCQpZnw5jjVV4LFTYwJfjvoBkws2TKKTCp3TS=tpJ3bf886g@mail.gmail.com>
  <20180813145425.vqtpzppgqznjdcmi@sapphire.tkos.co.il>
  <CANQCQpa5kOpB9ENCSBam=-Zc6QCsJgNfrYUnCoWw9g=A_S=_hg@mail.gmail.com>
-Message-ID: <CANQCQpapvU2FxPmFq7BuWF-CZdi_1NN28cZEaNCSbj=U38nGxA@mail.gmail.com>
+Message-ID: <20180813150559.guf6i4qh6vogmwhl@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
-On Mon, Aug 13, 2018 at 9:56 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Baruch
+Hi Matt,
+
+On Mon, Aug 13, 2018 at 09:56:57AM -0500, Matthew Weber wrote:
 > On Mon, Aug 13, 2018 at 9:54 AM Baruch Siach <baruch@tkos.co.il> wrote:
-> >
-> > Hi Matt,
-> >
 > > On Mon, Aug 13, 2018 at 09:50:24AM -0500, Matthew Weber wrote:
 > > > On Mon, Aug 13, 2018 at 9:47 AM Baruch Siach <baruch@tkos.co.il> wrote:
 > > > > On Mon, Aug 13, 2018 at 09:33:26AM -0500, Matt Weber wrote:
@@ -67,26 +62,25 @@ On Mon, Aug 13, 2018 at 9:56 AM Matthew Weber
 > > > cfg generation filtering
 > >
 > > Note that you need to propagate the host- dependency as well.
->
+> 
 > You mean in utils/genrandconfig's update for this, right?
->
+
+No. I mean all host and target packages that have host-libselinux in their 
+_DEPENDENCIES. Otherwise, enabling any of them would cause a build of 
+host-libselinux regardless of the Config.in dependency.
+
+Isn't it easier to apply the alternative patch that uses the older __sync 
+routines for older gcc?
+
 > For the original patch above, I'm assuming I should propogate the
 > depends on BR2_HOST_GCC_AT_LEAST_4_7  but also add depends on
 > BR2_GCC_AT_LEAST_4_7.
->
 
-Just realized this is going to get messy.  Here's more detail.
+Both dependencies need to be propagated, as far as I understand.
 
-For these, I'll propagate the BR2_HOST_GCC_AT_LEAST_4_7 and
-BR2_GCC_AT_LEAST_4_7 based on the .mk having a make depends on
-host-libselinux
-android-tools
-restorecond
-checkpolicy
-setools
-libsemanage
+baruch
 
-For these just, BR2_GCC_AT_LEAST_4_7 as there is no host-libselinux built.
-busybox
-
-Matt
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
