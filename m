@@ -1,46 +1,59 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 13 Aug 2018 10:30:04 -0500
-Subject: [Buildroot] Analysis of build results for 2018-08-11
-In-Reply-To: <CANQCQpbDmecDS1LE8HY46y1BnEtJH=cRsmo7KEbZhsNZvHhquw@mail.gmail.com>
-References: <20180812060015.A385B207E5@mail.bootlin.com>
- <20180812223629.2bac8ebe@windsurf>
- <CANQCQpbDmecDS1LE8HY46y1BnEtJH=cRsmo7KEbZhsNZvHhquw@mail.gmail.com>
-Message-ID: <CANQCQpZ2mVuPkeeiR5yxKf3Cs7xUiADuO0dAMkZxsLaCa_iQCw@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Mon, 13 Aug 2018 17:42:21 +0200
+Subject: [Buildroot] [RFC PATCH 1/2] scancpan: support more licenses
+In-Reply-To: <20180813131135.32651-2-chrismcc@gmail.com>
+References: <20180813131135.32651-1-chrismcc@gmail.com>
+ <20180813131135.32651-2-chrismcc@gmail.com>
+Message-ID: <CAB0FRss9OomGpAqUqk9KGV3fqzqMGVHAdqtBaXjk26GG+tY=Eg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
-On Mon, Aug 13, 2018 at 9:36 AM Matthew Weber
-<matthew.weber@rockwellcollins.com> wrote:
+2018-08-13 15:11 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+
+> from perl-module-build Module/Build/Base.pm %licenses
+> GPL, LGPT, and BSD
 >
-> Hollis / Thomas,
-> On Sun, Aug 12, 2018 at 3:36 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello,
-> >
-> > Matt, Hollis, Romain, J?rg, Bernd, there are some questions for you
-> > below.
-> >
-> > On Sun, 12 Aug 2018 08:00:15 +0200 (CEST), Thomas Petazzoni wrote:
-> >
-> [snip]
-> > Hollis, this is happening only on your autobuilder, could you have a
-> > look: http://autobuild.buildroot.net/?reason=host-cryptsetup%.
-> >
-> > >       x86_64 |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/e48c974980b8228302a76ac5b6afad14e7ce81c1 |
-> >
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 >
-> Require host gcc at least 4.7
-> http://patchwork.ozlabs.org/patch/957001/
 
-v2.  http://patchwork.ozlabs.org/project/buildroot/list/?series=60561
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
-I've also opened a upstream ticket
-https://github.com/SELinuxProject/selinux/issues/97.  We'll see if I
-can get traction there and maybe that determines kconfig vs patch?
 
-Matt
+> ---
+>  utils/scancpan | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/utils/scancpan b/utils/scancpan
+> index da8e7b91ac..2070e2a233 100755
+> --- a/utils/scancpan
+> +++ b/utils/scancpan
+> @@ -692,8 +692,19 @@ while (my ($distname, $dist) = each %dist) {
+>                      : $dist->{license};
+>          # BR requires license name as in http://spdx.org/licenses/
+>          $license =~ s|apache_2_0|Apache-2.0|;
+> +        $license =~ s|apache_1_1|Apache-1.1|;
+> +        $license =~ s|apache|Apache-2.0|;
+>          $license =~ s|artistic_2|Artistic-2.0|;
+> +        $license =~ s|artistic|Artistic-1.0|;
+> +        $license =~ s|lgpl_2_1|LGPL-2.1|;
+> +        $license =~ s|lgpl_3_0|LGPL-3.0|;
+> +        $license =~ s|lgpl|LGPL-2.1|;
+> +        $license =~ s|bsd|BSD|;
+> +        $license =~ s|gpl_2|GPL-2.0|;
+> +        $license =~ s|gpl_3|GPL-3.0|;
+> +        $license =~ s|gpl|GPL-1.0|;
+>          $license =~ s|mit|MIT|;
+> +        $license =~ s|mozilla_1_1|Mozilla-1.1|;
+>          $license =~ s|openssl|OpenSSL|;
+>          $license =~ s|perl_5|Artistic or GPL-1.0+|;
+>          my $license_files = join q{ }, keys %{$license_files{$distname}};
+> --
+> 2.14.4
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180813/bd0c601a/attachment.html>
