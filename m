@@ -1,346 +1,114 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 13 Aug 2018 23:26:41 -0500
-Subject: [Buildroot] [RFC 1/3] toolchain/toolchain-wrapper: add linker
- wrapper
-In-Reply-To: <1534220803-26737-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1534220803-26737-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1534220803-26737-2-git-send-email-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 Aug 2018 08:00:13 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-13
+Message-ID: <20180814060013.3890D20802@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- - Updates symlink creation int/ext toolchain
- - Adds new source file for link wrapper with build/install
+Hello,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/gcc/gcc.mk                                 |   7 +
- .../toolchain-external/pkg-toolchain-external.mk   |   3 +
- toolchain/toolchain-wrapper-ld.c                   | 252 +++++++++++++++++++++
- toolchain/toolchain-wrapper.mk                     |  10 +
- 4 files changed, 272 insertions(+)
- create mode 100644 toolchain/toolchain-wrapper-ld.c
+Build statistics for 2018-08-13
+===============================
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 1ae9b7e..a380004 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -334,6 +334,13 @@ define HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
- 			ln -sf toolchain-wrapper $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
- 			ln -snf $$i.br_real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.br_real; \
- 			;; \
-+		*ld) \
-+			rm -f $$i.br_real; \
-+			mv $$i $$i.br_real; \
-+			ln -sf toolchain-wrapper-ld $$i; \
-+			ln -sf toolchain-wrapper-ld $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-+			ln -snf $$i.br_real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.br_real; \
-+			;; \
- 		*) \
- 			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
- 			;; \
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 8b2c283..e4288bd 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -274,6 +274,9 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
- 				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
- 			fi \
- 			;; \
-+		*ld) \
-+			ln -sf toolchain-wrapper-ld $$base; \
-+			;; \
- 		*) \
- 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
- 			;; \
-diff --git a/toolchain/toolchain-wrapper-ld.c b/toolchain/toolchain-wrapper-ld.c
-new file mode 100644
-index 0000000..384c571
---- /dev/null
-+++ b/toolchain/toolchain-wrapper-ld.c
-@@ -0,0 +1,252 @@
-+/**
-+ * Buildroot wrapper for toolchains. This simply executes the real toolchain
-+ * with a number of arguments hardcoded, to ensure the toolchain uses the
-+ * correct configuration.
-+
-+ * This file is based on the original wrapper code but updated for the linker.
-+ *
-+ * (C) 2011 Peter Korsgaard <jacmet@sunsite.dk>
-+ * (C) 2011 Daniel Nystr?m <daniel.nystrom@timeterminal.se>
-+ * (C) 2012 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+ * (C) 2013 Spenser Gilliland <spenser@gillilanding.com>
-+ *
-+ * This file is licensed under the terms of the GNU General Public License
-+ * version 2.  This program is licensed "as is" without any warranty of any
-+ * kind, whether express or implied.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <string.h>
-+#include <limits.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <errno.h>
-+#include <time.h>
-+#include <stdbool.h>
-+
-+static char path[PATH_MAX];
-+
-+/**
-+ * GCC linker errors out with certain combinations of arguments (examples are
-+ * static/shared/r/pie, so we have to ensure that we only pass the predefined
-+ * one to the real compiler if the inverse option isn't in the argument list.
-+ * This specifies the worst case number of extra arguments we might pass
-+ * Currently, we may have:
-+ * 	-pie
-+ */
-+#define EXCLUSIVE_ARGS	1
-+
-+
-+/* A {string,length} tuple, to avoid computing strlen() on constants.
-+ *  - str must be a \0-terminated string
-+ *  - len does not account for the terminating '\0'
-+ */
-+struct str_len_s {
-+	const char *str;
-+	size_t     len;
-+};
-+
-+/* Define a {string,length} tuple. Takes an unquoted constant string as
-+ * parameter. sizeof() on a string literal includes the terminating \0,
-+ * but we don't want to count it.
-+ */
-+#define STR_LEN(s) { #s, sizeof(#s)-1 }
-+
-+/* List of paths considered unsafe for cross-compilation.
-+ *
-+ * An unsafe path is one that points to a directory with libraries or
-+ * headers for the build machine, which are not suitable for the target.
-+ */
-+static const struct str_len_s unsafe_paths[] = {
-+	STR_LEN(/lib),
-+	STR_LEN(/usr/include),
-+	STR_LEN(/usr/lib),
-+	STR_LEN(/usr/local/include),
-+	STR_LEN(/usr/local/lib),
-+	{ NULL, 0 },
-+};
-+
-+/* Unsafe options are options that specify a potentialy unsafe path,
-+ * that will be checked by check_unsafe_path(), below.
-+ */
-+static const struct str_len_s unsafe_opts[] = {
-+	STR_LEN(-I),
-+	STR_LEN(-idirafter),
-+	STR_LEN(-iquote),
-+	STR_LEN(-isystem),
-+	STR_LEN(-L),
-+	{ NULL, 0 },
-+};
-+
-+/* Check if path is unsafe for cross-compilation. Unsafe paths are those
-+ * pointing to the standard native include or library paths.
-+ *
-+ * We print the arguments leading to the failure. For some options, gcc
-+ * accepts the path to be concatenated to the argument (e.g. -I/foo/bar)
-+ * or separated (e.g. -I /foo/bar). In the first case, we need only print
-+ * the argument as it already contains the path (arg_has_path), while in
-+ * the second case we need to print both (!arg_has_path).
-+ *
-+ * If paranoid, exit in error instead of just printing a warning.
-+ */
-+static void check_unsafe_path(const char *arg,
-+			      const char *path,
-+			      int paranoid,
-+			      int arg_has_path)
-+{
-+	const struct str_len_s *p;
-+
-+	for (p=unsafe_paths; p->str; p++) {
-+		if (strncmp(path, p->str, p->len))
-+			continue;
-+		fprintf(stderr,
-+			"%s: %s: unsafe header/library path used in cross-compilation: '%s%s%s'\n",
-+			program_invocation_short_name,
-+			paranoid ? "ERROR" : "WARNING",
-+			arg,
-+			arg_has_path ? "" : "' '", /* close single-quote, space, open single-quote */
-+			arg_has_path ? "" : path); /* so that arg and path are properly quoted. */
-+		if (paranoid)
-+			exit(1);
-+	}
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	char **args, **cur, **exec_args;
-+	char *relbasedir, *absbasedir;
-+	char *progpath = argv[0];
-+	char *basename;
-+	char *env_debug;
-+	char *paranoid_wrapper;
-+	int paranoid;
-+	int ret, i, count = 0, debug;
-+
-+	/* Calculate the relative paths */
-+	basename = strrchr(progpath, '/');
-+	if (basename) {
-+		*basename = '\0';
-+		basename++;
-+		relbasedir = malloc(strlen(progpath) + 7);
-+		if (relbasedir == NULL) {
-+			perror(__FILE__ ": malloc");
-+			return 2;
-+		}
-+		sprintf(relbasedir, "%s/..", argv[0]);
-+		absbasedir = realpath(relbasedir, NULL);
-+	} else {
-+		basename = progpath;
-+		absbasedir = malloc(PATH_MAX + 1);
-+		ret = readlink("/proc/self/exe", absbasedir, PATH_MAX);
-+		if (ret < 0) {
-+			perror(__FILE__ ": readlink");
-+			return 2;
-+		}
-+		absbasedir[ret] = '\0';
-+		for (i = ret; i > 0; i--) {
-+			if (absbasedir[i] == '/') {
-+				absbasedir[i] = '\0';
-+				if (++count == 2)
-+					break;
-+			}
-+		}
-+	}
-+	if (absbasedir == NULL) {
-+		perror(__FILE__ ": realpath");
-+		return 2;
-+	}
-+
-+	/* Fill in the relative paths */
-+#ifdef BR_CROSS_PATH_REL
-+	ret = snprintf(path, sizeof(path), "%s/" BR_CROSS_PATH_REL "/%s" BR_CROSS_PATH_SUFFIX, absbasedir, basename);
-+#elif defined(BR_CROSS_PATH_ABS)
-+	ret = snprintf(path, sizeof(path), BR_CROSS_PATH_ABS "/%s" BR_CROSS_PATH_SUFFIX, basename);
-+#else
-+	ret = snprintf(path, sizeof(path), "%s/bin/%s" BR_CROSS_PATH_SUFFIX, absbasedir, basename);
-+#endif
-+	if (ret >= sizeof(path)) {
-+		perror(__FILE__ ": overflow");
-+		return 3;
-+	}
-+
-+        cur = args = malloc((sizeof(char *) * (argc + EXCLUSIVE_ARGS)));
-+	if (args == NULL) {
-+		perror(__FILE__ ": malloc");
-+		return 2;
-+	}
-+
-+#ifdef BR2_RELRO_FULL
-+	/* pie isn't compatible with static and shared/r accomplish the same thing */
-+	for (i = 1; i < argc; i++) {
-+		if (!strcmp(argv[i], "-static") ||
-+		    !strcmp(argv[i], "-shared") ||
-+		    !strcmp(argv[i], "-r"))
-+			break;
-+	}
-+
-+	if (i == argc)
-+		*cur++ = "-pie";
-+#endif
-+
-+	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
-+	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
-+		paranoid = 1;
-+	else
-+		paranoid = 0;
-+
-+	/* Check for unsafe library and header paths */
-+	for (i = 1; i < argc; i++) {
-+		const struct str_len_s *opt;
-+		for (opt=unsafe_opts; opt->str; opt++ ) {
-+			/* Skip any non-unsafe option. */
-+			if (strncmp(argv[i], opt->str, opt->len))
-+				continue;
-+
-+			/* Handle both cases:
-+			 *  - path is a separate argument,
-+			 *  - path is concatenated with option.
-+			 */
-+			if (argv[i][opt->len] == '\0') {
-+				i++;
-+				if (i == argc)
-+					break;
-+				check_unsafe_path(argv[i-1], argv[i], paranoid, 0);
-+			} else
-+				check_unsafe_path(argv[i], argv[i] + opt->len, paranoid, 1);
-+		}
-+	}
-+
-+	/* append forward args */
-+	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
-+	cur += argc - 1;
-+
-+	/* finish with NULL termination */
-+	*cur = NULL;
-+
-+	exec_args = args;
-+
-+	/* Debug the wrapper to see actual arguments passed to
-+	 * the compiler:
-+	 * unset, empty, or 0: do not trace
-+	 * set to 1          : trace all arguments on a single line
-+	 * set to 2          : trace one argument per line
-+	 */
-+	if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
-+		debug = atoi(env_debug);
-+		if (debug > 0) {
-+			fprintf(stderr, "Toolchain wrapper executing:");
-+			for (i = 0; exec_args[i]; i++)
-+				fprintf(stderr, "%s'%s'",
-+					(debug == 2) ? "\n    " : " ", exec_args[i]);
-+			fprintf(stderr, "\n");
-+		}
-+	}
-+
-+	if (execv(exec_args[0], exec_args))
-+		perror(path);
-+
-+	free(args);
-+
-+	return 2;
-+}
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index b8074ef..19cd45d 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -45,14 +45,24 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
- 
-+ifeq ($(BR2_RELRO_FULL),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
-+endif
-+
- define TOOLCHAIN_WRAPPER_BUILD
- 	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
- 		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
- 		toolchain/toolchain-wrapper.c \
- 		-o $(@D)/toolchain-wrapper
-+	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
-+		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
-+		toolchain/toolchain-wrapper-ld.c \
-+		-o $(@D)/toolchain-wrapper-ld
- endef
- 
- define TOOLCHAIN_WRAPPER_INSTALL
- 	$(INSTALL) -D -m 0755 $(@D)/toolchain-wrapper \
- 		$(HOST_DIR)/bin/toolchain-wrapper
-+	$(INSTALL) -D -m 0755 $(@D)/toolchain-wrapper-ld \
-+		$(HOST_DIR)/bin/toolchain-wrapper-ld
- endef
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  14 |   1 |   0 |  15 |
+   2018.05.x |  17 |   0 |   0 |  17 |
+      master | 163 |  16 |   1 | 180 |
+        next |  50 |  12 |   3 |  65 |
+
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                  samba4-4.7.6 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                   samba4-4.7.6 | NOK | http://autobuild.buildroot.net/results/b08cb30c030c4670003a5ca0ec05302f010729a2 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.67.0 | 8 
+           python-numpy-1.13.3 | 2 
+               azure-iot-sdk-c | 1 
+                    brltty-5.5 | 1 
+gst1-interpipe-10dba89eecc2... | 1 
+           host-libselinux-2.7 | 1 
+          openpowerlink-V2.7.0 | 1 
+                      qt-4.8.7 | 1 
+           qt5serialbus-5.11.1 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/4ca53f6dfb5652b91fe3f0290a7aa1f0798f793b |     
+        m68k |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/b2d1f93c8b815673c13e966a976852a3916b014b |     
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/8783e803a8ddcbc39551db689e002511da1f65c6 |     
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/e596f92114c82ae74e14b406a6dfdee228351980 |     
+     powerpc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/5292bc1964380d577a17af0c4c84b8946764a246 |     
+ powerpc64le |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/b26dc1cfa2a85a47317019250909c068a9196393 |     
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/171c447420341ba56fcd4690024b16016afcd3aa |     
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/fd22a3e026f8b8695625d8647a81254accdc499a |     
+      x86_64 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/9440f57178477138a8bdb990da7761ae56ee98ed |     
+      xtensa |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/49e3bbe7f157ce24efe0fcfbadd5840bfa193a81 |     
+      x86_64 | gst1-interpipe-10dba89eecc2... | NOK | http://autobuild.buildroot.net/results/1f256d70c237846a97694af4008ee988a0b3372c |     
+        i686 |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/3d3ecf63236bb41abca7d1996619ba697a7cbdb8 |     
+        i586 |           openpowerlink-V2.7.0 | NOK | http://autobuild.buildroot.net/results/d452f66c77b08941da4272d858f511aab1e6f80b |     
+     aarch64 |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/7cad2754a1d9243566865993a25208086483eb0a |     
+     aarch64 |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/72c63d23812e03f330138b2506392d8200e650bb |     
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/dba957fd9aafbb4f204e687a4325b9882428b03a | ORPH
+    mips64el |            qt5serialbus-5.11.1 | NOK | http://autobuild.buildroot.net/results/147809b5f8758af935bee48c0fc83fd86a8509e9 |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+               azure-iot-sdk-c | 2 
+                  boost-1.67.0 | 2 
+                libmpeg2-0.5.1 | 2 
+              python-pyqt5-5.7 | 2 
+                    f2fs-tools | 1 
+              glibc-glibc-2.28 | 1 
+gst1-interpipe-10dba89eecc2... | 1 
+                 midori-0.5.11 | 1 
+                    ncmpc-0.30 | 1 
+           python-numpy-1.13.3 | 1 
+                qt5base-5.11.1 | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/52ab4ff3d0410ddd4fef524302cd8b81920d9093 |     
+      xtensa |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/ac62ba40356cd286756c39461c6815d7144fec62 |     
+       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/7e990b82c7b9fa2c4d607f6af76f1726ab4a2ddb |     
+       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/8e6011d23c41c004cdf07dc9f0e411e9a3918f3c |     
+    mips64el |                     f2fs-tools | TIM | http://autobuild.buildroot.net/results/75256a56088b09adeb602e549af7ecc68057b0c9 |     
+         arm |               glibc-glibc-2.28 | NOK | http://autobuild.buildroot.net/results/a6bef24383ccd6fbb63396db0b682b2f46038607 | ORPH
+         arm | gst1-interpipe-10dba89eecc2... | NOK | http://autobuild.buildroot.net/results/59a38ceb50d4bf564e93596efd5d3c307d035280 |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/a7128c0d4c789ed7e8eb25ed35cdb5b96f8915ab | ORPH
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/6597743ca04c8d472c3ea68950975099d80ce36c | ORPH
+      x86_64 |                  midori-0.5.11 | NOK | http://autobuild.buildroot.net/results/038be1fcc545f90e178a996ca7bb33c6eb69478a | ORPH
+        mips |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/a713aa0c68a17685393de8d6f4be2e7c0a3ea80e |     
+     aarch64 |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/ba134c8fab296dee36031d7666d5882a520079ec |     
+         arm |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/f71c068d0eac3ddd70ab63ccaff093a0191ef5df |     
+         arm |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/761ec3a26ed913a0f45a3f3185c74d4adc56646a |     
+  aarch64_be |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/9e2ce0228075af2bdc2faa3f23d32d9ca8fe6a36 |     
+
+
 -- 
-1.9.1
+http://autobuild.buildroot.net
