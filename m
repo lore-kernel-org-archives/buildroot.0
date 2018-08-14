@@ -1,32 +1,147 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 13:34:49 +0200
-Subject: [Buildroot] [git commit branch/next] package/samba4: drop patch
- numbering in patch 0003
-Message-ID: <20180814112805.47BFB8D209@busybox.osuosl.org>
+Date: Tue, 14 Aug 2018 13:34:53 +0200
+Subject: [Buildroot] [git commit branch/next] package/samba4: disable build
+ of manpages and documentation
+Message-ID: <20180814112805.50D958D22D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83f91e2f8eb3ab3cccc1b9536e1842e25fbe40a5
+commit: https://git.buildroot.net/buildroot/commit/?id=05e6967924ab2dc9a4d0c8e55028b5b952d1f6fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Fixes
+http://autobuild.buildroot.net/results/3f214cbb1fe2dc2c2cbfb630032e13eba81c1b5a/
+and many others
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: reformat patch as Git formatted]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch     | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...sable-build-of-manpages-and-documentation.patch | 116 +++++++++++++++++++++
+ 1 file changed, 116 insertions(+)
 
-diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
-index 3b248e690d..1256d1c969 100644
---- a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
-+++ b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
-@@ -1,7 +1,7 @@
- From 4a63f267efab2ef86adbeddda45909127135d7c8 Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd.kuhls@t-online.de>
- Date: Sun, 28 Jan 2018 11:57:11 +0100
--Subject: [PATCH 1/1] Fix uClibc build on 64bit platforms by including stdint.h
-+Subject: [PATCH] Fix uClibc build on 64bit platforms by including stdint.h
- 
- Fixes an error detected by buildroot autobuilders:
- http://autobuild.buildroot.net/results/573/573e2268e205e10d1352fa81122d8f225fdb4575/build-end.log
+diff --git a/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch b/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
+new file mode 100644
+index 0000000000..41a06801c7
+--- /dev/null
++++ b/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
+@@ -0,0 +1,116 @@
++From 3cd608170b99492bdd5fe3b7b8e7db61af199845 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Thu, 9 Aug 2018 09:59:06 +0200
++Subject: [PATCH] Disable build of manpages and documentation
++
++This patch fixes a bug described in an upstream bug report
++https://bugzilla.samba.org/show_bug.cgi?id=9515
++which was closed as WONTFIX by disabling the build of manpages and
++documentation.
++
++If installed on the host, samba4 uses the docbook-xsl package to build
++parts of the documentation. This package is broken, on Debian for
++example the bug reported to samba4 was fixed in the docbook-xsl package:
++https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=765567
++
++Since we do not provide a host version of docbook-xsl we need to disable
++the build of manpages and documentation.
++
++Patch was downloaded from
++https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/network/samba/patches/samba-950-no-man.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ buildtools/wafsamba/wafsamba.py | 10 +++++-----
++ docs-xml/wscript_build          | 34 +++++++++++++++++-----------------
++ source4/scripting/wscript_build |  4 ++--
++ 3 files changed, 24 insertions(+), 24 deletions(-)
++
++diff --git a/buildtools/wafsamba/wafsamba.py b/buildtools/wafsamba/wafsamba.py
++index 4bb19d070e2..a255d841111 100644
++--- a/buildtools/wafsamba/wafsamba.py
+++++ b/buildtools/wafsamba/wafsamba.py
++@@ -335,9 +335,9 @@ def SAMBA_LIBRARY(bld, libname, source,
++         else:
++             bld.PKG_CONFIG_FILES(pc_files, vnum=vnum)
++ 
++-    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
++-        bld.env['XSLTPROC_MANPAGES']):
++-        bld.MANPAGES(manpages, install)
+++#    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
+++#        bld.env['XSLTPROC_MANPAGES']):
+++#        bld.MANPAGES(manpages, install)
++ 
++ 
++ Build.BuildContext.SAMBA_LIBRARY = SAMBA_LIBRARY
++@@ -442,8 +442,8 @@ def SAMBA_BINARY(bld, binname, source,
++         samba_ldflags  = pie_ldflags
++         )
++ 
++-    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
++-        bld.MANPAGES(manpages, install)
+++#    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
+++#        bld.MANPAGES(manpages, install)
++ 
++ Build.BuildContext.SAMBA_BINARY = SAMBA_BINARY
++ 
++diff --git a/docs-xml/wscript_build b/docs-xml/wscript_build
++index 954c62a29bc..1169158fd57 100644
++--- a/docs-xml/wscript_build
+++++ b/docs-xml/wscript_build
++@@ -147,20 +147,20 @@ bld.SAMBA_GENERATOR(parameter_all,
++                     rule=smbdotconf_generate_parameter_list,
++                     dep_vars=bld.dynconfig_varnames())
++ 
++-def SMBDOTCONF_MANPAGE(bld, target):
++-    ''' assemble and build smb.conf.5 manual page'''
++-    bld.SAMBAMANPAGES(target, parameter_all)
++-
++-if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
++-
++-    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
++-    bld.SAMBAMANPAGES(manpages)
++-
++-    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
++-        bld.SAMBAMANPAGES(pam_winbind_manpages)
++-
++-    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
++-        bld.SAMBAMANPAGES(krb5_locator_manpages)
++-
++-    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
++-        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
+++#def SMBDOTCONF_MANPAGE(bld, target):
+++#    ''' assemble and build smb.conf.5 manual page'''
+++#    bld.SAMBAMANPAGES(target, parameter_all)
+++#
+++#if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
+++#
+++#    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
+++#    bld.SAMBAMANPAGES(manpages)
+++#
+++#    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
+++#        bld.SAMBAMANPAGES(pam_winbind_manpages)
+++#
+++#    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
+++#        bld.SAMBAMANPAGES(krb5_locator_manpages)
+++#
+++#    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
+++#        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
++diff --git a/source4/scripting/wscript_build b/source4/scripting/wscript_build
++index 2f53cce12b7..9841ae0a116 100644
++--- a/source4/scripting/wscript_build
+++++ b/source4/scripting/wscript_build
++@@ -12,8 +12,8 @@ if sbin_files:
++     bld.INSTALL_FILES('${SBINDIR}',
++                       sbin_files,
++                       chmod=MODE_755, python_fixup=True, flat=True)
++-    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
++-        bld.MANPAGES(man_files, True)
+++#    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
+++#        bld.MANPAGES(man_files, True)
++ 
++ if bld.CONFIG_SET('AD_DC_BUILD_IS_ENABLED'):
++     bld.INSTALL_FILES('${BINDIR}',
++-- 
++2.14.4
++
