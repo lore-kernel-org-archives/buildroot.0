@@ -1,47 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 14 Aug 2018 07:24:51 +0300
-Subject: [Buildroot] [PATCH v2] bzip2: change upstream site
-Message-ID: <59cd8eb281eed8b9102b8d2a56aa6ff50f0a9a80.1534220691.git.baruch@tkos.co.il>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 13 Aug 2018 23:26:42 -0500
+Subject: [Buildroot] [RFC 2/3] hardening testing: busybox test case to
+ verify linker wrapper behavior with -r
+In-Reply-To: <1534220803-26737-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1534220803-26737-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1534220803-26737-3-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The bzip.org website is down. Use the Buildroot backup download site.
-Remove the website link as there is no clear alternative upstream at
-this point.
-
-  https://lwn.net/Articles/762264/
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- package/bzip2/Config.in | 2 --
- package/bzip2/bzip2.mk  | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ support/testing/tests/core/test_hardening.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bzip2/Config.in b/package/bzip2/Config.in
-index dbc82496df7e..ca447bbb2dc5 100644
---- a/package/bzip2/Config.in
-+++ b/package/bzip2/Config.in
-@@ -5,5 +5,3 @@ config BR2_PACKAGE_BZIP2
- 	  It typically compresses files to within 10% to 15% of the best
- 	  available techniques, while being around twice as fast at
- 	  compression and six times faster at decompression.
--
--	  http://www.bzip.org
-diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
-index e43533072b2d..a3af32299370 100644
---- a/package/bzip2/bzip2.mk
-+++ b/package/bzip2/bzip2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+index fcec46f..ab8d078 100644
+--- a/support/testing/tests/core/test_hardening.py
++++ b/support/testing/tests/core/test_hardening.py
+@@ -21,7 +21,7 @@ class TestHardeningBase(infra.basetest.BRTest):
+         BR2_PACKAGE_HOST_CHECKSEC=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+         """
+-    checksec_files = ["usr/sbin/lighttpd"]
++    checksec_files = ["usr/sbin/lighttpd", "target/bin/busybox"]
  
- BZIP2_VERSION = 1.0.6
--BZIP2_SITE = http://www.bzip.org/$(BZIP2_VERSION)
-+BZIP2_SITE = http://sources.buildroot.net
- BZIP2_INSTALL_STAGING = YES
- BZIP2_LICENSE = bzip2 license
- BZIP2_LICENSE_FILES = LICENSE
+     def checksec_run(self, target_file):
+         filepath = os.path.join(self.builddir, "target", target_file)
 -- 
-2.18.0
+1.9.1
