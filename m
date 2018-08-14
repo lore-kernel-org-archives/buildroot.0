@@ -1,26 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 15:36:22 +0200
-Subject: [Buildroot] [PATCH/next v2 1/5] package/gcc: renumber patch
-In-Reply-To: <20180813181414.25661-1-bernd.kuhls@t-online.de>
-References: <20180813181414.25661-1-bernd.kuhls@t-online.de>
-Message-ID: <20180814153622.1c182d73@windsurf>
+Date: Tue, 14 Aug 2018 15:37:14 +0200
+Subject: [Buildroot] [git commit branch/next] scancpan: warn on undefined
+ LICENSE
+Message-ID: <20180814133027.537108D286@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=cd87d05f7792647d49694087f14e0307ba5b1be6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 13 Aug 2018 20:14:10 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: no changes
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/scancpan | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Series applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/utils/scancpan b/utils/scancpan
+index fa31dfdeab..8f47521692 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -705,6 +705,10 @@ while (my ($distname, $dist) = each %dist) {
+         $license =~ s|openssl|OpenSSL|;
+         $license =~ s|perl_5|Artistic or GPL-1.0+|;
+         my $license_files = join q{ }, keys %{$license_files{$distname}};
++        if ($license_files && (!$license || $license eq q{unknown})) {
++            push @info, qq{[$distname] undefined LICENSE, see $license_files};
++            $license = q{???};
++        }
+         say qq{write ${mkname}} unless $quiet;
+         open my $fh, q{>}, $mkname;
+         say {$fh} qq{################################################################################};
+@@ -718,7 +722,7 @@ while (my ($distname, $dist) = each %dist) {
+         say {$fh} qq{${brname}_SITE = \$(BR2_CPAN_MIRROR)${directories}};
+         say {$fh} qq{${brname}_DEPENDENCIES = ${dependencies}} if $need_target{$distname} && $dependencies;
+         say {$fh} qq{HOST_${brname}_DEPENDENCIES = ${host_dependencies}} if $need_host{$distname} && $host_dependencies;
+-        say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
++        say {$fh} qq{${brname}_LICENSE = ${license}} if $license;
+         say {$fh} qq{${brname}_LICENSE_FILES = ${license_files}} if $license_files;
+         say {$fh} qq{};
+         foreach (sort @{$deps_optional{$distname}}) {
