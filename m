@@ -1,62 +1,104 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Aug 2018 17:31:16 +0200
-Subject: [Buildroot] [PATCH v2] bzip2: change upstream site
-In-Reply-To: <59cd8eb281eed8b9102b8d2a56aa6ff50f0a9a80.1534220691.git.baruch@tkos.co.il>
-References: <59cd8eb281eed8b9102b8d2a56aa6ff50f0a9a80.1534220691.git.baruch@tkos.co.il>
-Message-ID: <20180814153116.GL7915@scaer>
+Date: Tue, 14 Aug 2018 17:53:37 +0200
+Subject: [Buildroot] [PATCH 17/17] perl-termreadkey: new package
+In-Reply-To: <20180813235716.070f77f0@windsurf>
+References: <20180811182749.20924-1-chrismcc@gmail.com>
+ <20180811182749.20924-18-chrismcc@gmail.com>
+ <20180813235716.070f77f0@windsurf>
+Message-ID: <20180814155337.GM7915@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Thomas, Christopher, All,
 
-On 2018-08-14 07:24 +0300, Baruch Siach spake thusly:
-> The bzip.org website is down. Use the Buildroot backup download site.
-> Remove the website link as there is no clear alternative upstream at
-> this point.
+On 2018-08-13 23:57 +0200, Thomas Petazzoni spake thusly:
+> Adding Yann and Arnout, licensing question below.
+> On Sat, 11 Aug 2018 11:27:49 -0700, Christopher McCrory wrote:
+> > +PERL_TERMREADKEY_VERSION = 2.37
+> > +PERL_TERMREADKEY_SOURCE = TermReadKey-$(PERL_TERMREADKEY_VERSION).tar.gz
+> > +PERL_TERMREADKEY_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JS/JSTOWE
+> > +PERL_TERMREADKEY_LICENSE = Artistic or GPL-1.0+
 > 
->   https://lwn.net/Articles/762264/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> This is not correct I believe.
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+IANAL...
+
+Indeed it's not.
+
+> The README file says this:
+> 
+> """
+>  Term::ReadKey 2.36 - Change terminal modes, and perform non-blocking reads.
+> 
+>  Copyright (C) 1994-1999 Kenneth Albanowski.
+>                2001-2016 Jonathan Stowe and others
+> 
+> This package is dual licensed.  You can either choose to license it under
+> the original terms which were:
+> 
+>  Unlimited distribution and/or modification is allowed as long as this
+>  copyright notice remains intact.
+> 
+> Or the standard Perl terms:
+> 
+>   This module is free software; you can redistribute it and/or modify it
+>   under the terms of the Artistic License. For details, see the full
+>   text of the license in the file "Artistic" that should have been provided
+>   with the version of perl you are using.
+> 
+>   This program is distributed in the hope that it will be useful, but
+>   without any warranty; without even the implied warranty of merchantability
+>   or fitness for a particular purpose.
+> """
+> 
+> So it is not under "Artistic or GPL-1.0+", but it is under "Artistic or
+> <some funky license>".
+> 
+> According to
+> http://docs.activestate.com/activeperl/5.22/perl/lib/Term/ReadKey.html,
+> the small "Unlimited distribution..." license was the only license of
+> this Perl module up to version 2.31, at which point the Artistic
+> license was added as an option.
+> 
+> I don't know how to SPDX-encode this weird license. Perhaps we should
+> simply not care, and say the license is just "Artistic" ? Yann ?
+> Arnout ?
+
+According to the SPDX FAQ [0]:
+
+  * How does one handle [...] licenses not found in the SPDX License
+    List?
+
+    [...] one can add the license text to the SPDX file and define a new
+    license label. That license identifier is defined only for that
+    specific SPDX document. This is explained in Section 6 of the SPDX
+    Specification or see [1].
+
+However, we do not have our own SPDX document in Buildroot, so section 6
+does not apply.
+
+However, we already have similar situations, where we simply state
+something like:
+
+    FOO_LICENSE = Foo license
+
+So, I would state something similar here:
+
+    PERL_TERMREADKEY_LICENSE = Term::ReadKey license or Artistic-1.0-Perl
+
+Please double-check which versiopn of the Artistic license this is
+refering to (i.e. the docs says "see the full text of the license in the
+file "Artistic" that should have been provided with the version of perl
+you are using.", so I just used Artistic-1.0-Perl but I'm not sure...)
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/bzip2/Config.in | 2 --
->  package/bzip2/bzip2.mk  | 2 +-
->  2 files changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/package/bzip2/Config.in b/package/bzip2/Config.in
-> index dbc82496df7e..ca447bbb2dc5 100644
-> --- a/package/bzip2/Config.in
-> +++ b/package/bzip2/Config.in
-> @@ -5,5 +5,3 @@ config BR2_PACKAGE_BZIP2
->  	  It typically compresses files to within 10% to 15% of the best
->  	  available techniques, while being around twice as fast at
->  	  compression and six times faster at decompression.
-> -
-> -	  http://www.bzip.org
-> diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
-> index e43533072b2d..a3af32299370 100644
-> --- a/package/bzip2/bzip2.mk
-> +++ b/package/bzip2/bzip2.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  BZIP2_VERSION = 1.0.6
-> -BZIP2_SITE = http://www.bzip.org/$(BZIP2_VERSION)
-> +BZIP2_SITE = http://sources.buildroot.net
->  BZIP2_INSTALL_STAGING = YES
->  BZIP2_LICENSE = bzip2 license
->  BZIP2_LICENSE_FILES = LICENSE
-> -- 
-> 2.18.0
-> 
+[0] https://spdx.org/frequently-asked-questions-faq-0
+[1] https://spdx.org/spdx-specification-21-web-version#h.1v1yuxt
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
