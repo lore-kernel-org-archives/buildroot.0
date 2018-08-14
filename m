@@ -1,150 +1,180 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 Aug 2018 00:52:11 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] scancpan: support more licenses
-In-Reply-To: <20180813211659.GG7915@scaer>
-References: <20180813131135.32651-1-chrismcc@gmail.com>
- <20180813131135.32651-2-chrismcc@gmail.com>
- <20180813185453.5b8bae4a@windsurf>
- <CALURroRRC9sPBLeAuv4=0XOwgGvnEZchKU03xxPtgn0Uheik3Q@mail.gmail.com>
- <20180813211659.GG7915@scaer>
-Message-ID: <22f25d06-9990-f00d-8028-efaef267300f@mind.be>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 13 Aug 2018 20:10:54 -0500
+Subject: [Buildroot] [PATCH v3 2/2] support/testing/tests/core: SSP &
+ hardening flags
+In-Reply-To: <1534209054-11294-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1534209054-11294-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1534209054-11294-2-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Catch the commonly used options of SSP, Relro, and fortify.
 
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-On 13-08-18 23:16, Yann E. MORIN wrote:
-> Christopher, All,
-> 
-> On 2018-08-13 10:35 -0700, Christopher McCrory spake thusly:
->> On Mon, Aug 13, 2018 at 9:54 AM, Thomas Petazzoni < [1]thomas.petazzoni@bootlin.com> wrote:
->>   > +? ? ? ? $license =~ s|lgpl|LGPL-2.1|;
->>   Just "lgpl" always means it's LGPL-2.1 ?
->> Apparently
-> 
-> IANAL...
-> 
-> Usually, if any license of the GPL familly is used without any version
-> specified, then it means just any version can be used:
+---
+Changes
+v2 -> v3
+[Matt
+ - Removed the busybox target as without the link time
+   wrapper/specfile being merged the build will fail.
+   Link time conflict between use of 'r' and pie.
 
- But that is not the case here. In this case, it's most likely an incomplete
-manifest, not a package that is actually under any GPL version.
+[Thomas
+ - Add clarificaion of what checksec can test
+ - Reworked using inheritance
+ - Relocated json load (removed duplication)
 
- So instead, scancpan should issue a warning.
+v1 -> v2
+[Ricardo
+ - Fix flake8 warnings
+ - Added missing busyfox pie assertions
+ - Updated the yml to include new test cases
 
- I have the feeling that the licenses mentioned in perl packages are not very
-reliable, unless it is "perl".
+foofa
+---
+ .gitlab-ci.yml                               |   6 ++
+ support/testing/tests/core/test_hardening.py | 112 +++++++++++++++++++++++++++
+ 2 files changed, 118 insertions(+)
+ create mode 100644 support/testing/tests/core/test_hardening.py
 
-> 
->     https://www.gnu.org/licenses/gpl.html
-> 
->     14. Revised Versions of this License.
-> 
->     [...]  If the Program does not specify a version number of the GNU
->     General Public License, you may choose any version ever published
->     by the Free Software Foundation.
-> 
-> Similar clauses can be had for each license. So I doubt 'lgpl' would
-> stand for LGPL-2.1.
-> 
-> Besides, see below...
-> 
->>   > +? ? ? ? $license =~ s|bsd|BSD|;
->>   "BSD" is not a license. There are several different BSD licenses.
->>   Though with just "bsd" as an initial information, there's not much you
->>   can do :-/
->>
->> yea :(
->> AFAICT, this is the source from Base.pm
-> 
-> What 'Base.pm' are you talink about? On my Ubuntu 17.10, I get:
-> 
->     $ apt-file search /Base.pm |wc -l
->     191
-> 
->> ? my %licenses = (
->> ??? perl???????? => 'Perl_5',
->> ??? apache?????? => 'Apache_2_0',
->> ??? apache_1_1?? => 'Apache_1_1',
->> ??? artistic???? => 'Artistic_1',
->> ??? artistic_2?? => 'Artistic_2',
->> ??? lgpl???????? => 'LGPL_2_1',
->> ??? lgpl2??????? => 'LGPL_2_1',
->> ??? lgpl3??????? => 'LGPL_3_0',
->> ??? bsd????????? => 'BSD',
->> ??? gpl????????? => 'GPL_1',
->> ??? gpl2???????? => 'GPL_2',
->> ??? gpl3???????? => 'GPL_3',
->> ??? mit????????? => 'MIT',
->> ??? mozilla????? => 'Mozilla_1_1',
->> ??? restrictive? => 'Restricted',
->> ??? open_source? => undef,
->> ??? unrestricted => undef,
->> ??? unknown????? => undef,
->> ? );
->>
->> ?# TODO - would be nice to not have these here, since they're more
->> ? # properly stored only in Software::License
->> ? my %license_urls = (
->> ??? perl???????? => 'http://dev.perl.org/licenses/',
->> ??? apache?????? => 'http://apache.org/licenses/LICENSE-2.0',
->> ??? apache_1_1?? => 'http://apache.org/licenses/LICENSE-1.1',
->> ??? artistic???? => 'http://opensource.org/licenses/artistic-license.php',
->> ??? artistic_2?? => 'http://opensource.org/licenses/artistic-license-2.0.php',
->> ??? lgpl???????? => 'http://opensource.org/licenses/lgpl-license.php',
->> ??? lgpl2??????? => 'http://opensource.org/licenses/lgpl-2.1.php',
->> ??? lgpl3??????? => 'http://opensource.org/licenses/lgpl-3.0.html',
->> ??? bsd????????? => 'http://opensource.org/licenses/bsd-license.php',
->> ??? gpl????????? => 'http://opensource.org/licenses/gpl-license.php',
->> ??? gpl2???????? => 'http://opensource.org/licenses/gpl-2.0.php',
->> ??? gpl3???????? => 'http://opensource.org/licenses/gpl-3.0.html',
->> ??? mit????????? => 'http://opensource.org/licenses/mit-license.php',
->> ??? mozilla????? => 'http://opensource.org/licenses/mozilla1.1.php',
->> ??? restrictive? => undef,
->> ??? open_source? => undef,
->> ??? unrestricted => undef,
->> ??? unknown????? => undef,
->> ? );
-> 
-> And at the same time, still on my Ubuntu 17.10, I was looking at
-> /usr/share/perl/5.26.0/CPAN/Meta/Converter.pm, which has;
-> 
->     # The "old" values were defined by Module::Build, and were often vague.
->     # I have
->     # made the decisions below based on reading Module::Build::API and how
->     # clearly
->     # it specifies the version of the license.
->     my %license_map_2 = (
->       (map { $_ => $_ } @valid_licenses_2),
->       apache      => 'apache_2_0',  # clearly stated as 2.0
->       artistic    => 'artistic_1',  # clearly stated as 1
->       artistic2   => 'artistic_2',  # clearly stated as 2
->       gpl         => 'open_source', # we don't know which GPL; punt
->       lgpl        => 'open_source', # we don't know which LGPL; punt
->       mozilla     => 'open_source', # we don't know which MPL; punt
-
- That sounds correct :-)
-
- Regards,
- Arnout
-
->       perl        => 'perl_5',      # clearly Perl 5
->       restrictive => 'restricted',
->     );
-> 
-> So... The resolution is not that clear-cut IMNSHO...
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 3fc9b06..c271c05 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -261,6 +261,12 @@ zynqmp_zcu106_defconfig: *defconfig
+ tests.boot.test_atf.TestATFAllwinner: *runtime_test
+ tests.boot.test_atf.TestATFMarvell: *runtime_test
+ tests.boot.test_atf.TestATFVexpress: *runtime_test
++tests.core.test_hardening.TestFortifyConserv: *runtime_test
++tests.core.test_hardening.TestFortifyNone: *runtime_test
++tests.core.test_hardening.TestRelro: *runtime_test
++tests.core.test_hardening.TestRelroPartial: *runtime_test
++tests.core.test_hardening.TestSspNone: *runtime_test
++tests.core.test_hardening.TestSspStrong: *runtime_test
+ tests.core.test_post_scripts.TestPostScripts: *runtime_test
+ tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
+ tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
+diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+new file mode 100644
+index 0000000..352b153
+--- /dev/null
++++ b/support/testing/tests/core/test_hardening.py
+@@ -0,0 +1,112 @@
++import os
++import subprocess
++import json
++
++import infra.basetest
++
++
++class TestHardeningBase(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_powerpc64=y
++        BR2_powerpc_e5500=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++        BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
++        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++        BR2_TOOLCHAIN_EXTERNAL_CXX=y
++        BR2_PACKAGE_LIGHTTPD=y
++        BR2_PACKAGE_HOST_CHECKSEC=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    checksec_files = ["usr/sbin/lighttpd"]
++
++    def checksec_run(self, target_file):
++        filepath = os.path.join(self.builddir, "target", target_file)
++        cmd = ["host/bin/checksec", "--output", "json", "--file", filepath]
++        # Checksec is being used for elf file analysis only.  There are no
++        # assumptions of target/run-time checks as part of this testing.
++        ret = subprocess.check_output(cmd,
++                                      stderr=open(os.devnull, "w"),
++                                      cwd=self.builddir,
++                                      env={"LANG": "C"})
++        return json.loads(ret)
++
++
++class TestRelro(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_RELRO_FULL=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["relro"], "full")
++            self.assertEqual(out["file"]["pie"], "yes")
++            # self.assertEqual(out["file"]["pie"], "yes")  fails for busybox
++
++
++class TestRelroPartial(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_RELRO_PARTIAL=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["relro"], "partial")
++            self.assertEqual(out["file"]["pie"], "no")
++            # self.assertEqual(out["file"]["pie"], "no") fails for busybox
++
++
++class TestSspNone(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_SSP_NONE=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["canary"], "no")
++
++
++class TestSspStrong(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_SSP_STRONG=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["canary"], "yes")
++
++
++class TestFortifyNone(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_FORTIFY_SOURCE_NONE=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["fortified"], "0")
++            self.assertEqual(out["file"]["fortified"], "0")
++
++
++class TestFortifyConserv(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_FORTIFY_SOURCE_1=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertNotEqual(out["file"]["fortified"], "0")
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+1.9.1
