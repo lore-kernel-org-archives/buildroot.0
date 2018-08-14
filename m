@@ -1,64 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 16:23:05 +0200
-Subject: [Buildroot] [git commit branch/next] uboot: add option to depend on
- host-lzop
-Message-ID: <20180814141611.33A6D8D2BF@busybox.osuosl.org>
+Date: Tue, 14 Aug 2018 16:21:30 +0200
+Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
+ bison} to build the configurators
+In-Reply-To: <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
+References: <cover.1533327111.git.yann.morin.1998@free.fr>
+ <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
+Message-ID: <20180814162130.00f55418@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13eeeb4684d7916f9024381dc8d241e5b2d24a92
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Some U-Boot configurations use lzop, which may not be available on the
-build machine since it's not a mandatory dependency of Buildroot.
+On Fri,  3 Aug 2018 22:16:55 +0200, Yann E. MORIN wrote:
+> Take this opportunity to also drop the append-assignment as the first
+> assignment to LINUX_DEPENDENCIES.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-To solve this, a new option BR2_TARGET_UBOOT_NEEDS_LZOP is introduced,
-and handled in a similar way to the existing
-BR2_TARGET_UBOOT_NEEDS_OPENSSL option.
+I am a bit confused. In this series, you suggest to make
+host-flex/host-bison dependencies of the configuration step of Linux.
+But in another series
+(http://patchwork.ozlabs.org/project/buildroot/list/?series=59260), you
+suggest to make flex/bison hard requirements of Buildroot, so that we
+don't have to build them.
 
-This fixes the build of the dra7xx_evm U-Boot defconfig as of U-Boot
-2018.07, on a build machine without lzop installed.
+Could you clarify in which direction you would like to go ? Also, if we
+make bison/flex hard requirements of Buildroot, I'd like to have a
+clear rule on whether we keep or not our host-bison/host-flex packages,
+and if we keep them, when they should be used vs. when the system
+bison/flex should be used.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/uboot/Config.in | 8 ++++++++
- boot/uboot/uboot.mk  | 4 ++++
- 2 files changed, 12 insertions(+)
+Thanks!
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 8e369cec04..9e40c11fa1 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -159,6 +159,14 @@ config BR2_TARGET_UBOOT_NEEDS_OPENSSL
- 	  typically the case when the board configuration has
- 	  CONFIG_FIT_SIGNATURE enabled.
- 
-+config BR2_TARGET_UBOOT_NEEDS_LZOP
-+	bool "U-Boot needs lzop"
-+	help
-+	  Select this option if your U-Boot board configuration
-+	  requires lzop to be available on the host. This is typically
-+	  the case when the board configuration has CONFIG_SPL_LZO
-+	  enabled.
-+
- config BR2_TARGET_UBOOT_NEEDS_ATF_BL31
- 	bool "U-Boot needs ATF BL31"
- 	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 04c759be34..3e05f38046 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -152,6 +152,10 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
- UBOOT_DEPENDENCIES += host-openssl
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_LZOP),y)
-+UBOOT_DEPENDENCIES += host-lzop
-+endif
-+
- # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
- # legal-info finds it
- define UBOOT_COPY_OLD_LICENSE_FILE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
