@@ -1,29 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 15:34:51 +0200
+Date: Tue, 14 Aug 2018 15:35:20 +0200
 Subject: [Buildroot] [git commit branch/next] package/gcc: fix build of
- gcc-7.3.0 with glibc-2.28
-Message-ID: <20180814132834.A3B4E8D23D@busybox.osuosl.org>
+ gcc-4.9.4 with glibc-2.28
+Message-ID: <20180814132834.C196F8D260@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9db27a03c272914f3efcde0bc86dc86e159e0a9
+commit: https://git.buildroot.net/buildroot/commit/?id=6b33b7ba517bee4d88af9b1827201df923b4a600
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0004-libsanitizer-Use-pre-computed-size.patch  | 72 ++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+ .../0003-libsanitizer-Use-pre-computed-size.patch  | 71 ++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-diff --git a/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch b/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
+diff --git a/package/gcc/4.9.4/0003-libsanitizer-Use-pre-computed-size.patch b/package/gcc/4.9.4/0003-libsanitizer-Use-pre-computed-size.patch
 new file mode 100644
-index 0000000000..6e73331eae
+index 0000000000..5b4c05a719
 --- /dev/null
-+++ b/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
-@@ -0,0 +1,72 @@
++++ b/package/gcc/4.9.4/0003-libsanitizer-Use-pre-computed-size.patch
+@@ -0,0 +1,71 @@
 +From 61f38c64c01a15560026115a157b7021ec67bd3b Mon Sep 17 00:00:00 2001
 +From: hjl <hjl@138bc75d-0d04-0410-961f-82ee72b054a4>
 +Date: Thu, 24 May 2018 20:21:54 +0000
@@ -51,7 +51,7 @@ index 0000000000..6e73331eae
 +
 +git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch at 260688 138bc75d-0d04-0410-961f-82ee72b054a4
 +
-+Downloaded from upstream commit
++Backported from upstream commit
 +https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=61f38c64c01a15560026115a157b7021ec67bd3b
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -64,7 +64,7 @@ index 0000000000..6e73331eae
 +index 31a5e69..8017afd 100644
 +--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
 ++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
-+@@ -154,7 +154,6 @@ typedef struct user_fpregs elf_fpregset_t;
++@@ -81,7 +89,6 @@ typedef struct user_fpregs elf_fpregset_t;
 + # include <sys/procfs.h>
 + #endif
 + #include <sys/user.h>
@@ -72,10 +72,10 @@ index 0000000000..6e73331eae
 + #include <linux/cyclades.h>
 + #include <linux/if_eql.h>
 + #include <linux/if_plip.h>
-+@@ -247,7 +246,19 @@ namespace __sanitizer {
-+ #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
++@@ -163,7 +170,19 @@
++   unsigned struct_old_utsname_sz = sizeof(struct old_utsname);
++   unsigned struct_oldold_utsname_sz = sizeof(struct oldold_utsname);
++   unsigned struct_itimerspec_sz = sizeof(struct itimerspec);
 +-  unsigned struct_ustat_sz = sizeof(struct ustat);
 ++  // Use pre-computed size of struct ustat to avoid <sys/ustat.h> which
 ++  // has been removed from glibc 2.28.
@@ -90,9 +90,8 @@ index 0000000000..6e73331eae
 ++#error Unknown size of struct ustat
 ++#endif
 ++  unsigned struct_ustat_sz = SIZEOF_STRUCT_USTAT;
-+   unsigned struct_rlimit64_sz = sizeof(struct rlimit64);
-+   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
-+ #endif // SANITIZER_LINUX && !SANITIZER_ANDROID
++ #endif // SANITIZER_LINUX
++ 
++ #if SANITIZER_LINUX && !SANITIZER_ANDROID
 +-- 
 +2.9.3
-+
