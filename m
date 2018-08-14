@@ -1,126 +1,153 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 14 Aug 2018 05:59:52 +0200
-Subject: [Buildroot] [PATCH 07/17] perl-dist-checkconflicts: new package
-In-Reply-To: <20180811182749.20924-8-chrismcc@gmail.com>
-References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-8-chrismcc@gmail.com>
-Message-ID: <CAB0FRss88Y1uy09wc7GV9sKHtucCxHvtTq_oXDFxX3iKvgJhFQ@mail.gmail.com>
+Date: Tue, 14 Aug 2018 06:21:02 +0200
+Subject: [Buildroot] [RFC PATCH 1/2] perl-template-toolkit: new package
+In-Reply-To: <20180813175645.11088-2-chrismcc@gmail.com>
+References: <20180813175645.11088-1-chrismcc@gmail.com>
+ <20180813175645.11088-2-chrismcc@gmail.com>
+Message-ID: <CAB0FRste31CaZoHAOhgNY3Ho8_4QRrjBVOZWKqbmW9a4XyUy-Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-08-11 20:27 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+2018-08-13 19:56 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 
 > Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 > ---
->  DEVELOPERS                                               |  1 +
->  package/Config.in                                        |  1 +
->  package/perl-dist-checkconflicts/Config.in               |  7 +++++++
->  .../perl-dist-checkconflicts.hash                        |  6 ++++++
->  .../perl-dist-checkconflicts/perl-dist-checkconflicts.mk | 16
-> ++++++++++++++++
->  5 files changed, 31 insertions(+)
->  create mode 100644 package/perl-dist-checkconflicts/Config.in
->  create mode 100644 package/perl-dist-checkconflicts/perl-dist-
-> checkconflicts.hash
->  create mode 100644 package/perl-dist-checkconflicts/perl-dist-
-> checkconflicts.mk
+>  DEVELOPERS                                         |  1 +
+>  package/Config.in                                  |  1 +
+>  package/perl-template-toolkit/Config.in            | 11 ++++++++
+>  .../perl-template-toolkit.hash                     |  6 ++++
+>  .../perl-template-toolkit/perl-template-toolkit.mk | 32
+> ++++++++++++++++++++++
+>  5 files changed, 51 insertions(+)
+>  create mode 100644 package/perl-template-toolkit/Config.in
+>  create mode 100644 package/perl-template-toolkit/
+> perl-template-toolkit.hash
+>  create mode 100644 package/perl-template-toolkit/perl-template-toolkit.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 2ecfddf9b0..78934320c6 100644
+> index 6d0e3ecceb..d35cf3fb72 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -490,6 +490,7 @@ F:  package/perl-data-uuid
->  F:     package/perl-date-manip
->  F:     package/perl-dbi
->  F:     package/perl-device-serialport
-> +F:     package/perl-dist-checkconflicts
->  F:     package/perl-file-slurp
->  F:     package/perl-io-interface
->  F:     package/perl-json-maybexs
+> @@ -501,6 +501,7 @@ F:  package/perl-params-util/
+>  F:     package/perl-sub-install/
+>  F:     package/perl-sys-meminfo/
+>  F:     package/perl-sys-mmap/
+> +F:     package/perl-template-toolkit/
+>
+>  N:     Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>  F:     package/audit/
 > diff --git a/package/Config.in b/package/Config.in
-> index 91aff2953b..1eac9b3726 100644
+> index 85046ae56e..6437cc0451 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -680,6 +680,7 @@ menu "Perl libraries/modules"
->         source "package/perl-date-manip/Config.in"
->         source "package/perl-datetime-tiny/Config.in"
->         source "package/perl-dbi/Config.in"
-> +       source "package/perl-dist-checkconflicts/Config.in"
->         source "package/perl-device-serialport/Config.in"
->         source "package/perl-digest-hmac/Config.in"
->         source "package/perl-digest-md5/Config.in"
-> diff --git a/package/perl-dist-checkconflicts/Config.in
-> b/package/perl-dist-checkconflicts/Config.in
+> @@ -728,6 +728,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-sub-install/Config.in"
+>         source "package/perl-sys-meminfo/Config.in"
+>         source "package/perl-sys-mmap/Config.in"
+> +       source "package/perl-template-toolkit/Config.in"
+>         source "package/perl-time-hires/Config.in"
+>         source "package/perl-timedate/Config.in"
+>         source "package/perl-try-tiny/Config.in"
+> diff --git a/package/perl-template-toolkit/Config.in
+> b/package/perl-template-toolkit/Config.in
 > new file mode 100644
-> index 0000000000..10f0944aa8
+> index 0000000000..1caca074aa
 > --- /dev/null
-> +++ b/package/perl-dist-checkconflicts/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS
-> +       bool "perl-dist-checkconflicts"
-> +       select BR2_PACKAGE_PERL_MODULE_RUNTIME
+> +++ b/package/perl-template-toolkit/Config.in
+> @@ -0,0 +1,11 @@
+> +config BR2_PACKAGE_PERL_TEMPLATE_TOOLKIT
+> +       bool "perl-template-toolkit"
+> +       depends on !BR2_STATIC_LIBS
+> +       select BR2_PACKAGE_PERL_APPCONFIG
 > +       help
-> +         declare version conflicts for your dist
+> +         comprehensive template processing system
 > +
-> +         http://metacpan.org/release/Dist-CheckConflicts
-> diff --git a/package/perl-dist-checkconflicts/perl-dist-checkconflicts.hash
-> b/package/perl-dist-checkconflicts/perl-dist-checkconflicts.hash
+> +         https://metacpan.org/release/Template-Toolkit
+> +
+> +comment "perl-template-toolkit needs a toolchain w/ dynamic library"
+> +       depends on BR2_STATIC_LIBS
+> diff --git a/package/perl-template-toolkit/perl-template-toolkit.hash
+> b/package/perl-template-toolkit/perl-template-toolkit.hash
 > new file mode 100644
-> index 0000000000..5605fed4ae
+> index 0000000000..54d4553695
 > --- /dev/null
-> +++ b/package/perl-dist-checkconflicts/perl-dist-checkconflicts.hash
+> +++ b/package/perl-template-toolkit/perl-template-toolkit.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    c8725a92b9169708b0f63036812070f2 Dist-CheckConflicts-0.11.tar.gz
-> +sha256 ea844b9686c94d666d9d444321d764490b2cde2f985c4165b4c2c77665caedc4
-> Dist-CheckConflicts-0.11.tar.gz
+> +md5    a7fae5d4fe5918f33105d92a62134067 Template-Toolkit-2.27.tar.gz
+> +sha256 1311a403264d0134c585af0309ff2a9d5074b8ece23ece5660d31ec96bf2c6dc
+> Template-Toolkit-2.27.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 b4e0637ed96008ddcbf7e0ddeb73967df3d0b4dc62a6b7fdb86eac37018cb12e
-> LICENSE
-> diff --git a/package/perl-dist-checkconflicts/perl-dist-checkconflicts.mk
-> b/package/perl-dist-checkconflicts/perl-dist-checkconflicts.mk
+> +sha256 d897b2d98affd4f0489340e54ceb542383101e3d21408dfad025df71d770d842
+> README
+> diff --git a/package/perl-template-toolkit/perl-template-toolkit.mk
+> b/package/perl-template-toolkit/perl-template-toolkit.mk
 > new file mode 100644
-> index 0000000000..cbde23c2f1
+> index 0000000000..875437dead
 > --- /dev/null
-> +++ b/package/perl-dist-checkconflicts/perl-dist-checkconflicts.mk
-> @@ -0,0 +1,16 @@
+> +++ b/package/perl-template-toolkit/perl-template-toolkit.mk
+> @@ -0,0 +1,32 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-dist-checkconflicts
+> +# perl-template-toolkit
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_DIST_CHECKCONFLICTS_VERSION = 0.11
-> +PERL_DIST_CHECKCONFLICTS_SOURCE = Dist-CheckConflicts-$(PERL_
-> DIST_CHECKCONFLICTS_VERSION).tar.gz
-> +PERL_DIST_CHECKCONFLICTS_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY
-> +PERL_DIST_CHECKCONFLICTS_DEPENDENCIES = perl-module-runtime
-> +HOST_PERL_DIST_CHECKCONFLICTS_DEPENDENCIES = host-perl-module-runtime
-> +PERL_DIST_CHECKCONFLICTS_LICENSE = Artistic or GPL-1.0+
-> +PERL_DIST_CHECKCONFLICTS_LICENSE_FILES = LICENSE
+> +PERL_TEMPLATE_TOOLKIT_VERSION = 2.27
+> +PERL_TEMPLATE_TOOLKIT_SOURCE = Template-Toolkit-$(PERL_
+> TEMPLATE_TOOLKIT_VERSION).tar.gz
+> +PERL_TEMPLATE_TOOLKIT_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABW
+> +PERL_TEMPLATE_TOOLKIT_DEPENDENCIES = perl-appconfig
+> +PERL_TEMPLATE_TOOLKIT_LICENSE = Artistic or GPL-1.0+
+> +PERL_TEMPLATE_TOOLKIT_LICENSE_FILES = README
 > +
-> +$(eval $(perl-package))
-> +$(eval $(host-perl-package))
+> +# There has got to be a better way... :(
+> +# Some arguments to Makefile.PL do not get propagated to subdirectories
+> +# similar to:
+> +# https://rt.cpan.org/Public/Bug/Display.html?id=28632
+> +define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+> +        $(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(@D)/xs/Makefile
+> +        $(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g"
+> $(@D)/xs/Makefile
+> +        $(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(@D)/xs/Makefile
+> +        $(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g"
+> $(@D)/xs/Makefile
+> +        $(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(@D)/xs/Makefile
+> +        $(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared
+> $(TARGET_LDFLAGS):g" $(@D)/xs/Makefile
+> +        $(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g"
+> $(@D)/xs/Makefile
+> +        $(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g"
+> $(@D)/xs/Makefile
+> +endef
 >
 
-This package is a dependency of perl-package-stash : target and host
-version.
-I think only one version is really needed.
+If you put this block of code in a function (in pkg-perl.mk) with the
+filename as parameter,
+you could just call it, in each module
+    define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+         $(call,foo,$(@D)/xs/Makefile)
+    endef
 
 Fran?ois
 
 
-
+> +
+> +PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_HOOKS += PERL_TEMPLATE_TOOLKIT_POST_
+> CONFIGURE_SED
+> +
+> +
+> +$(eval $(perl-package))
 > --
 > 2.14.4
 >
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180814/d03cc2e1/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180814/49392ddd/attachment.html>
