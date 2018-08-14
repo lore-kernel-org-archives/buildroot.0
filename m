@@ -1,32 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 15:41:27 +0200
-Subject: [Buildroot] [PATCH/next v3 1/1] package/qt5/qt5base: fix statx
- support with glibc >= 2.28
-In-Reply-To: <20180813194206.24355-1-bernd.kuhls@t-online.de>
-References: <20180813194206.24355-1-bernd.kuhls@t-online.de>
-Message-ID: <20180814154127.1a60cab7@windsurf>
+Date: Tue, 14 Aug 2018 15:51:39 +0200
+Subject: [Buildroot] [git commit] package/aircrack-ng: powerpc arch requires
+ altivec
+Message-ID: <20180814134447.309D68D29C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1f3f1fb8c7324c9a50383b1cafcbd2f9d74a91f9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 13 Aug 2018 21:42:06 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v3: switched to upstream patch (Thomas)
-> v2: git-formatted patch (Thomas)
->     re-sent because it did not appear on patchworks
+The powerpc support in this package currently requires an arch with
+altivec accelerator support. This is a bug and the the powerpc arch
+should have a non-simd option like ARM/x86.
 
-Applied to next, thanks. Did you check if this issue also applies to Qt
-5.6.3, which we still support ?
+Upstream issue: https://github.com/aircrack-ng/aircrack-ng/issues/1941
 
-Thanks!
+Fixes
+http://autobuild.buildroot.net/results/87e82a5e8d0b1c1ff10ec3e59d25bcd56b329075
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/aircrack-ng/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+index f3e2bc4ef1..d821c5a0a2 100644
+--- a/package/aircrack-ng/Config.in
++++ b/package/aircrack-ng/Config.in
+@@ -4,6 +4,9 @@ config BR2_PACKAGE_AIRCRACK_NG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
++	# https://github.com/aircrack-ng/aircrack-ng/issues/1941
++	depends on BR2_POWERPC_CPU_HAS_ALTIVEC || \
++		!(BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le)
+ 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
+ 	help
+ 	  A set of tools for auditing wireless networks
