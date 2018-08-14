@@ -1,56 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 22:47:17 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/lvm2: Fix runtime crash when
- using uclibc
-In-Reply-To: <20180726171524.479-1-m.niestroj@grinn-global.com>
-References: <20180726171524.479-1-m.niestroj@grinn-global.com>
-Message-ID: <20180814224717.02d57e06@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Aug 2018 23:03:49 +0200
+Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
+ bison} to build the configurators
+In-Reply-To: <20180814215344.20784816@windsurf>
+References: <cover.1533327111.git.yann.morin.1998@free.fr>
+ <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
+ <20180814162130.00f55418@windsurf> <20180814152743.GJ7915@scaer>
+ <20180814215344.20784816@windsurf>
+Message-ID: <20180814210349.GN7915@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcin,
+Thomas, All,
 
-Once again, thanks for this work!
-
-On Thu, 26 Jul 2018 19:15:23 +0200, Marcin Niestroj wrote:
-> When using uclibc libdevmapper.so was calling dm_task_get_info_base()
-> function recursively, leading to segmentation fault. This was
-> happening because uclibc linker loader just takes first existing
-> 'dm_task_get_info' (which is 'dm_task_get_info_base') symbol in elf
-> binary, instead of default version.
+On 2018-08-14 21:53 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 14 Aug 2018 17:27:43 +0200, Yann E. MORIN wrote:
+> > > Also, if we
+> > > make bison/flex hard requirements of Buildroot, I'd like to have a
+> > > clear rule on whether we keep or not our host-bison/host-flex packages,
+> > > and if we keep them, when they should be used vs. when the system
+> > > bison/flex should be used.  
+> > 
+> > My position is that we will always want to have our host flex and bison
+> > to build packages that install things in host/, in staging/ or in
+> > target/.
+> > 
+> > For the linux kernel and other kconfig-based packages, we don't care
+> > which flex/bison are used, because the resulting binaries are not
+> > installed, unless those packages also generate code eventually installed
+> > in host/, staging/ or target/
 > 
-> Add upstreamable lvm2 patch [1], which introduces
-> --enable-symvers[=STYLE] switch. Use that switch to disable symbol
-> versions, as we do not plan to support binaries compiled against
-> old libdevmapper library.
-> 
-> [1] https://www.redhat.com/archives/dm-devel/2018-July/msg00187.html
-> 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
-> Changes v2 -> v3: none
+> So the system-wide bison/flex would only be used for the kconfig
+> programs built by Buildroot itself (if we move to a newer kconfig
+> version that doesn't have the pre-generated files) or by
+> Linux/U-Boot/Busybox/Barebox. Any other use of flex/bison would use
+> host-flex and host-bison. That's your proposal ?
 
-I have added a reference to the Buildroot bug report being fixed by
-this, and I've applied to master.
+Yes, that is my proposal.
 
-Two questions:
+Regards,
+Yann E. MORIN.
 
- (1) Could you try to push this forward in terms of upstreaming
-     acceptance ? I know you have submitted the patch, but I looked
-     today and apparently you haven't received any feedback.
-
- (2) It would be nicer if the availability of symbol versioning could
-     be auto-detected. Is there a compile-time test that can be done to
-     verify if symbol versioning is available ? This would perhaps help
-     make the patch even more acceptable upstream.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
