@@ -1,53 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 16:27:05 +0200
-Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
- target in pkg-kconfig.mk
-In-Reply-To: <20180731154948.GB8537@scaer>
-References: <20180730155153.24091-1-m.patzlaff@pilz.de>
- <20180730155153.24091-4-m.patzlaff@pilz.de>
- <20180730234643.34315d11@windsurf> <20180731154948.GB8537@scaer>
-Message-ID: <20180814162705.505476fe@windsurf>
+Date: Tue, 14 Aug 2018 16:27:58 +0200
+Subject: [Buildroot] [git commit] lighttpd: Add systemd tmpfile to fix
+ lighttpd systemd boot
+Message-ID: <20180814142137.1EAFE8D2C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7c2eb68cac14ea1281cfaca6ab81f63e72bc8016
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Adding Arnout and Peter in Cc, in case they want to give their opinion
-on the patch series.
+Problem starting lighttpd application with systemd.
 
-On Tue, 31 Jul 2018 17:49:48 +0200, Yann E. MORIN wrote:
+/usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
+2018-06-22 11:21:34: (server.c.733) opening errorlog '/var/log/lighttpd-error.log' failed: Permission denied
+2018-06-22 11:21:34: (server.c.1420) Opening errorlog failed. Going down.
 
-> I would just suggest that we do not add any new rule, but trying to
-> update the defconfig when there are fragments would fail as it currently
-> does, but also would display the delta if there is one. I.e.:
-> 
->     $ make linux-menuconfig
->     [change stuff]
->     $ make linux-update-defconfig
->     Unable to perform linux-update-defconfig when fragment files are set
->     Configuration changes that you want to propagate to one of the fragments:
->     -CONFIG_FOO=y
->     +# CONFIG_BAR is unset
->     linux/linux.mk:511: recipe for target 'linux-update-defconfig' failed
->     make[1]: *** [linux-update-defconfig] Error 1
+Lighttpd can not write the 'lighttpd-access.log' and 'lighttpd-error.log' files
+to the directory '/var/log/'.
 
-I think we could do that in *addition* to having a new rule. Indeed,
-when you know what you're doing, having to run something that doesn't
-make sense ("make linux-update-defconfig") and which causes a failure
-is a bit silly. I'd rather run "make linux-diff-config" (or whatever
-name we chose).
+When using systemd the directory '/var/log' does not allow the user www-data to
+write.
 
-Marcel, do you think you could rework your patch series to go in the
-direction of showing a diff rather than arbitrarily adjusting the last
-fragment ?
+To correct the problem, we add /usr/lib/tmpfiles.d/lighttpd.conf.
+This file create the 'lighttpd-access.log' and 'lighttpd-error.log' files  with
+the permission
 
-Thanks!
+Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lighttpd/lighttpd.mk            | 3 +++
+ package/lighttpd/lighttpd_tmpfiles.conf | 2 ++
+ 2 files changed, 5 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index c565fed4ff..06561e9f55 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -96,6 +96,9 @@ define LIGHTTPD_INSTALL_INIT_SYSTEMD
+ 
+ 	ln -fs ../../../../usr/lib/systemd/system/lighttpd.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/lighttpd.service
++
++	$(INSTALL) -D -m 644 package/lighttpd/lighttpd_tmpfiles.conf \
++		$(TARGET_DIR)/usr/lib/tmpfiles.d/lighttpd.conf
+ endef
+ 
+ $(eval $(autotools-package))
+diff --git a/package/lighttpd/lighttpd_tmpfiles.conf b/package/lighttpd/lighttpd_tmpfiles.conf
+new file mode 100644
+index 0000000000..a24f3f7fbf
+--- /dev/null
++++ b/package/lighttpd/lighttpd_tmpfiles.conf
+@@ -0,0 +1,2 @@
++f /var/log/lighttpd-access.log 0640 www-data www-data -
++f /var/log/lighttpd-error.log 0640 www-data www-data -
