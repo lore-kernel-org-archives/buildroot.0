@@ -1,58 +1,53 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Tue, 14 Aug 2018 10:39:01 +0100
-Subject: [Buildroot] Setting Defaults for RISCV64 Architecture
-Message-ID: <862bfe2f-fc60-ead9-2b63-b6a0f23c59cd@embecosm.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 Aug 2018 13:33:37 +0200
+Subject: [Buildroot] [RFC PATCH 1/2] scancpan: support more licenses
+In-Reply-To: <20180813131135.32651-2-chrismcc@gmail.com>
+References: <20180813131135.32651-1-chrismcc@gmail.com>
+ <20180813131135.32651-2-chrismcc@gmail.com>
+Message-ID: <20180814133337.5b9338b0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello
+Hello Christopher,
 
-I am working on adding RISCV64 support to Buildroot and was wondering
-how best to set some of the defaults when the riscv64 architecture is
-selected.
+So, taking Arnout/Yann feedback into account.
 
-The two issues that I currently have are that the version of binutils
-needs to be 2.30 (or greater) and that the kernel needs to be a custom
-version from the riscv git repo (the 4.17 mainline kernel doesn't appear
-to have full riscv support).
+On Mon, 13 Aug 2018 06:11:34 -0700, Christopher McCrory wrote:
 
-In both of these cases I could either:
+> diff --git a/utils/scancpan b/utils/scancpan
+> index da8e7b91ac..2070e2a233 100755
+> --- a/utils/scancpan
+> +++ b/utils/scancpan
+> @@ -692,8 +692,19 @@ while (my ($distname, $dist) = each %dist) {
+>                      : $dist->{license};
+>          # BR requires license name as in http://spdx.org/licenses/
+>          $license =~ s|apache_2_0|Apache-2.0|;
+> +        $license =~ s|apache_1_1|Apache-1.1|;
+> +        $license =~ s|apache|Apache-2.0|;
 
-a) Add some architecture specific options to the 'Config.in' files, i.e.
-packages/binutils/Config.in.host and linux/Config.in, to select the
-appropriate default versions/values .
-or
-b)? Set the appropriate variables in a board or architecture specific
-'_defconfig' file, e.g.
-??? ??? BR2_BINUTILS_VERSION_2_30_X=y
-??? ??? BR2_LINUX_KERNEL=y
-??? ??? BR2_LINUX_KERNEL_CUSTOM_GIT=y
-??? ???
-BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
-??? ??? BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="riscv-linux-4.15"
+In this case, scancpan should not conclude that Apache-2.0 is used,
+because "apache" is not specific enough. Instead, it should emit a
+warning.
 
-I think that I prefer option a) as option b) would require a specific
-config to be selected every time rather than just working by default
-when you set the Target Architecture.
+>          $license =~ s|artistic_2|Artistic-2.0|;
+> +        $license =~ s|artistic|Artistic-1.0|;
+> +        $license =~ s|lgpl_2_1|LGPL-2.1|;
+> +        $license =~ s|lgpl_3_0|LGPL-3.0|;
+> +        $license =~ s|lgpl|LGPL-2.1|;
 
-Any thoughts or comments regarding the most appropriate approach would
-be much appreciated.
+Same.
 
-Many thanks
+> +        $license =~ s|bsd|BSD|;
 
-Mark
+Same.
 
+Best regards,
+
+Thomas Petazzoni
 -- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: pEpkey.asc
-Type: application/pgp-keys
-Size: 3139 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180814/c3d35b4b/attachment.key>
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
