@@ -1,54 +1,72 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Aug 2018 22:16:08 +0200
-Subject: [Buildroot] [PATCH v2,1/1] domoticz: fix appversion.default
-Message-ID: <20180814201608.9437-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 Aug 2018 22:14:45 +0200
+Subject: [Buildroot] [git commit branch/next] package/proftpd: add
+ BR2_PACKAGE_PROFTPD_MOD_SFTP
+Message-ID: <20180814201444.DAE068D324@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Retrieve correct appversion.default (9700) from upstream
+commit: https://git.buildroot.net/buildroot/commit/?id=c4f39476fdb2867a05c267c62ee1ac1aaa00e69c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Without this patch, the wrong version is displayed in the web ui and
-when the user checks for an update, domoticz wrongly says that a new
-version is available
-This issue was reported by an email from Eyal Eshed <eeshed@coldroll.ca>
+This patch adds BR2_PACKAGE_PROFTPD_MOD_SFTP support and also
+changes the .mk file to add required modules as a list in a
+separate variable. This new variable will help in future to add
+more module support in proftpd package.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Give more details on issue in commit message
+ package/proftpd/Config.in  |  6 ++++++
+ package/proftpd/proftpd.mk | 12 +++++++++++-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
- package/domoticz/0001-Bumped-version.patch | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
- create mode 100644 package/domoticz/0001-Bumped-version.patch
-
-diff --git a/package/domoticz/0001-Bumped-version.patch b/package/domoticz/0001-Bumped-version.patch
-new file mode 100644
-index 0000000000..70426ba1aa
---- /dev/null
-+++ b/package/domoticz/0001-Bumped-version.patch
-@@ -0,0 +1,20 @@
-+From 98723b7da9467a49222b8a7ffaae276c5bc075c1 Mon Sep 17 00:00:00 2001
-+From: gizmocuz <gizmocuz@users.noreply.github.com>
-+Date: Thu, 28 Jun 2018 08:00:58 +0200
-+Subject: [PATCH] Bumped version
+diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
+index e979d407cf..e7e3c13780 100644
+--- a/package/proftpd/Config.in
++++ b/package/proftpd/Config.in
+@@ -20,4 +20,10 @@ config BR2_PACKAGE_PROFTPD_MOD_REDIS
+ 	  The mod_redis module enables ProFTPD support for caching
+ 	  data in Redis servers, using the hiredis client library.
+ 
++config BR2_PACKAGE_PROFTPD_MOD_SFTP
++	bool "mod_sftp support"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  Compile ProFTPD with mod_sftp support
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from https://github.com/domoticz/domoticz/commit/98723b7da9467a49222b8a7ffaae276c5bc075c1]
-+---
-+ appversion.default | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ endif
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 3e165c6ada..b02320f4c0 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -24,7 +24,7 @@ PROFTPD_CONF_OPTS = \
+ 	--with-gnu-ld
+ 
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
+-PROFTPD_CONF_OPTS += --with-modules=mod_rewrite
++PROFTPD_MODULES += mod_rewrite
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REDIS),y)
+@@ -34,6 +34,16 @@ else
+ PROFTPD_CONF_OPTS += --disable-redis
+ endif
+ 
++ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SFTP),y)
++PROFTPD_CONF_OPTS += --enable-openssl
++PROFTPD_MODULES += mod_sftp
++PROFTPD_DEPENDENCIES += openssl
++else
++PROFTPD_CONF_OPTS += --disable-openssl
++endif
 +
-+diff --git a/appversion.default b/appversion.default
-+index beaa069bb..7d3530590 100644
-+--- a/appversion.default
-++++ b/appversion.default
-+@@ -1,3 +1,3 @@
-+-#define APPVERSION 5876
-++#define APPVERSION 9700
-+ #define APPHASH "b97777b"
-+ #define APPDATE 1478691222
--- 
-2.14.1
++PROFTPD_CONF_OPTS += --with-modules=$(subst $(space),:,$(PROFTPD_MODULES))
++
+ # configure script doesn't handle detection of %llu format string
+ # support for printing the file size when cross compiling, breaking
+ # access for large files.
