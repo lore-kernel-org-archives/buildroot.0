@@ -1,78 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 22:42:10 +0200
-Subject: [Buildroot] Intel MediaSDK package w. Quicksync (h264,
- h265 HW encoding)
-In-Reply-To: <ea-mime-5b7336a6-c6c-5874a42@www-1.netcourrier.com>
-References: <ea-mime-5b7336a6-c6c-5874a42@www-1.netcourrier.com>
-Message-ID: <20180814224210.5427ea5c@windsurf>
+Date: Tue, 14 Aug 2018 22:47:17 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/lvm2: Fix runtime crash when
+ using uclibc
+In-Reply-To: <20180726171524.479-1-m.niestroj@grinn-global.com>
+References: <20180726171524.479-1-m.niestroj@grinn-global.com>
+Message-ID: <20180814224717.02d57e06@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Marcin,
 
-On Tue, 14 Aug 2018 22:08:06 +0200 (CEST), lpdev at cordier.org wrote:
+Once again, thanks for this work!
 
-> Working on buildroot for 3 weeks now, I would like to congrat
-> everyone that participated to this wonderful project.
-
-Thanks!
-
-> Today I have finished to integrate the the Intel MediaSDK to
-> buildroot. The Intel MediaSDK features Intel QuickSync through the
-> libmfx API, allowing all the cool kids to make use of hardware
-> encoding/decoding for popular video format such as h264, h265, jpeg,
-> vp9, etc. Even though there are no real benchmark against vaapi, MFX
-> layer promise better performances than the former. There is currently
-> a working implementation of this layer in ffmpeg that is working very
-> well even on little 'embedded' computers (I did some testing on an
-> Intel Computestick STK2MV64CC).
-
-It's a good idea to package this indeed.
-
-> I would like to submit a patch to buildroot for this new package,
-> intel-mediasdk. However I am running into small issues that need to
-> be addressed before the submission.
+On Thu, 26 Jul 2018 19:15:23 +0200, Marcin Niestroj wrote:
+> When using uclibc libdevmapper.so was calling dm_task_get_info_base()
+> function recursively, leading to segmentation fault. This was
+> happening because uclibc linker loader just takes first existing
+> 'dm_task_get_info' (which is 'dm_task_get_info_base') symbol in elf
+> binary, instead of default version.
 > 
-> 1. Currently there are some strong restriction around the kernel
-> version that needs to be 4.14.16. 
+> Add upstreamable lvm2 patch [1], which introduces
+> --enable-symvers[=STYLE] switch. Use that switch to disable symbol
+> versions, as we do not plan to support binaries compiled against
+> old libdevmapper library.
 > 
->   1.1 Is it possible for a package to force the Kernel version?
-
-No. But we already have packages that depend on a specific fork of the
-Linux kernel. We simply indicate something like this in Config.in:
-
-comment "imx-vpuwrap needs an imx-specific Linux kernel to be built"
-        depends on BR2_arm
-        depends on !BR2_LINUX_KERNEL
-
-See package/freescale-imx/imx-vpuwrap/Config.in.
-
-> 2. libva and libva-utils need to be recompiled using Intel forks
-> (respectively https://github.com/intel/libva and
-> https://github.com/intel/libva-utils).
-
-Argh. That's annoying.
-
-> I have no idea of how I can switch the version in buildroot. I have
-> currently modified the source site of both package using the repo
-> above. 
+> [1] https://www.redhat.com/archives/dm-devel/2018-July/msg00187.html
 > 
-> ? 2.1 Should I add a special switch like
-> BR2_PACKAGE_LIBVA_INTEL_QUICKSYNC that switches between these 2
-> versions? 
-> 
-> ? 2.2 Is it the cleaner way? 
-> 
-> ? 2.3 Is wrapping these 2 packages into a virtual-package better? If
-> not, how this can be integrated in Buildroot?
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> ---
+> Changes v2 -> v3: none
 
-In this situation, I don't really see the need to have two copies of
-those packages. Instead, just add a Config.in sub-option to select
-between "upstream" and "Intel" versions. It's annoying, but hopefully
-Intel will get its code merged in libva and libva-utils.
+I have added a reference to the Buildroot bug report being fixed by
+this, and I've applied to master.
+
+Two questions:
+
+ (1) Could you try to push this forward in terms of upstreaming
+     acceptance ? I know you have submitted the patch, but I looked
+     today and apparently you haven't received any feedback.
+
+ (2) It would be nicer if the availability of symbol versioning could
+     be auto-detected. Is there a compile-time test that can be done to
+     verify if symbol versioning is available ? This would perhaps help
+     make the patch even more acceptable upstream.
 
 Thanks!
 
