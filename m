@@ -1,64 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 16:55:31 +0200
-Subject: [Buildroot] [PATCH] openresolv: new package
-In-Reply-To: <CANQCQpa-n4we3SnN+ZoGd+3mxufqnO5jVVAdFYZXtyjtWczneQ@mail.gmail.com>
-References: <1533648586-60818-1-git-send-email-matthew.weber@rockwellcollins.com>
- <20180814161200.08d4a984@windsurf>
- <CANQCQpa-n4we3SnN+ZoGd+3mxufqnO5jVVAdFYZXtyjtWczneQ@mail.gmail.com>
-Message-ID: <20180814165531.7943c53b@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 Aug 2018 17:27:43 +0200
+Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
+ bison} to build the configurators
+In-Reply-To: <20180814162130.00f55418@windsurf>
+References: <cover.1533327111.git.yann.morin.1998@free.fr>
+ <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
+ <20180814162130.00f55418@windsurf>
+Message-ID: <20180814152743.GJ7915@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-On Tue, 14 Aug 2018 09:37:05 -0500, Matthew Weber wrote:
-
-> > Are you sure it needs a bash shell ? Indeed in
-> > https://github.com/rsmarples/openresolv, the #1 argument for resolvconf
-> > compared to its Debian variant is:
-> >
-> > ""
-> > Works with POSIX shell and userland
-> > ""  
+On 2018-08-14 16:21 +0200, Thomas Petazzoni spake thusly:
+> On Fri,  3 Aug 2018 22:16:55 +0200, Yann E. MORIN wrote:
+> > Take this opportunity to also drop the append-assignment as the first
+> > assignment to LINUX_DEPENDENCIES.
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > 
-> This dialog should have been included in the description related to
-> use of getopts vs getopt in the script.
+> I am a bit confused. In this series, you suggest to make
+> host-flex/host-bison dependencies of the configuration step of Linux.
+> But in another series
+> (http://patchwork.ozlabs.org/project/buildroot/list/?series=59260), you
+> suggest to make flex/bison hard requirements of Buildroot, so that we
+> don't have to build them.
 > 
-> https://github.com/rsmarples/openresolv/commit/a694a49c41ffdc0e215320459af009d44482b065#commitcomment-29850615
+> Could you clarify in which direction you would like to go ?
 
-I think Paresh got it wrong somehow. Busybox provides both getopt and
-getopts. getopt is non-POSIX, while getopts is POSIX (see
-https://en.wikipedia.org/wiki/Getopt#Shell and
-http://pubs.opengroup.org/onlinepubs/9699919799/utilities/getopts.html).
+This very series is about solving a technical problem, that
+kconfig-based packages may have dependencies required even before
+running the configurators.
 
-Minimal Buildroot system with our default Busybox configuration:
+On the other hand, that other series is about changing our requirements.
 
-# getopts
--sh: getopts: usage: getopts optstring var [arg]
-# getopt
-getopt: missing optstring argument
+If we decide to require flex+bison, so in this series, only patch 2 can
+be dropped.
 
-Both are provided. getopt is a separate program, getopts is a shell
-built-in.
+> Also, if we
+> make bison/flex hard requirements of Buildroot, I'd like to have a
+> clear rule on whether we keep or not our host-bison/host-flex packages,
+> and if we keep them, when they should be used vs. when the system
+> bison/flex should be used.
 
-I added a comment on the Github issue.
+My position is that we will always want to have our host flex and bison
+to build packages that install things in host/, in staging/ or in
+target/.
 
-> Missed this, looks like they are mimic'n a configure script.  It is
-> working as a autotools pkg, but I'll pull the commands over to a
-> generic.
+For the linux kernel and other kconfig-based packages, we don't care
+which flex/bison are used, because the resulting binaries are not
+installed, unless those packages also generate code eventually installed
+in host/, staging/ or target/
 
-Please don't pull the full commands from autotools-package with all the
-environment variables and options that only make sense for
-real-autotools based packages: only include the minimal set of
-variables/options.
+Regards,
+Yann E. MORIN.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
