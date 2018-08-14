@@ -1,38 +1,29 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 22:22:30 +0200
-Subject: [Buildroot] [PATCH/Next v2] package/proftpd: add
- BR2_PACKAGE_PROFTPD_MOD_SFTP
-In-Reply-To: <1534270525-48448-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1534270525-48448-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180814222230.1c53a863@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 Aug 2018 20:25:10 +0000
+Subject: [Buildroot] [Bug 10996] bogus musl ARM toolchain
+In-Reply-To: <bug-10996-163@https.bugs.busybox.net/>
+References: <bug-10996-163@https.bugs.busybox.net/>
+Message-ID: <bug-10996-163-hOI3SUqwhP@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=10996
 
-On Tue, 14 Aug 2018 13:15:25 -0500, Matt Weber wrote:
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-> +#Append all required modules in PROFTPD_MODULES variable
-> +#Use 'space' seperator for more than one module
-> +#e.g. PROFTPD_MODULES += mod_readme mod_ifsession
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WONTFIX
 
-This comment really wasn't necessary, that's how we do things
-everywhere in Buildroot, for all variables.
+--- Comment #4 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Closing this bug: the musl developers said that -static must be passed when
+linking statically, even if the C library was built with static linking support
+only.
 
->  ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
-> -PROFTPD_CONF_OPTS += --with-modules=mod_rewrite
-> +PROFTPD_MODULES = mod_rewrite
-
-I changed the "=" here to a "+=" to avoid potential mistakes in the
-future.
-
-Applied to next with those changes. Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
