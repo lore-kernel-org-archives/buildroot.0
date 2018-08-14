@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 15:53:27 +0200
-Subject: [Buildroot] [PATCH v2] package/aircrack-ng: powerpc arch
- requires altivec
-In-Reply-To: <20180814133832.5658-1-matthew.weber@rockwellcollins.com>
-References: <20180814133832.5658-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20180814155327.24b7f14a@windsurf>
+Date: Tue, 14 Aug 2018 15:53:34 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/kodi: switch to
+ internal ffmpeg version 3.1.11 build
+In-Reply-To: <20180812202352.15128-1-bernd.kuhls@t-online.de>
+References: <20180812202352.15128-1-bernd.kuhls@t-online.de>
+Message-ID: <20180814155334.0376e758@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Aug 2018 08:38:32 -0500, Matt Weber wrote:
-> The powerpc support in this package currently requires an arch with
-> altivec accelerator support. This is a bug and the the powerpc arch
-> should have a non-simd option like ARM/x86.
+On Sun, 12 Aug 2018 22:23:52 +0200, Bernd Kuhls wrote:
+> Kodi 17 is incompatible with ffmpeg-4.x. To prepare the ffmpeg bump we
+> switch the current Kodi package to internally build and statically link
+> to patched ffmpeg-3.1.11 provided by upstream. Gnutls is added as
+> dependency to allow playback of https streams.
 > 
-> Upstream issue: https://github.com/aircrack-ng/aircrack-ng/issues/1941
+> Upstream expects Kodi 17 to be used with ffmpeg 3.1.x (see upstream PR
+> 12368) so we choose the upstream way to build ffmpeg instead of provi-
+> ding a version choice for ffmpeg in buildroot.
 > 
-> Fixes
-> http://autobuild.buildroot.net/results/87e82a5e8d0b1c1ff10ec3e59d25bcd56b329075
+> This commit can be reverted when Kodi is bumped to version 18, currently
+> released as alpha3.
 > 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> --
-> Changes
-> v1 -> v2
-> [Thomas
->  - Add issue link to Config.in
->  - Reworded description above to note this is a bug
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/aircrack-ng/Config.in | 3 +++
->  1 file changed, 3 insertions(+)
+> v2:
+> - git-formatted patches (Thomas)
+> - fixed pkgconf problem by adding PKG_CONFIG_SYSROOT_DIR instead
+>   of using /usr/bin/pkg-config (Thomas)
+> - added upstream patch to fix ffmpeg build error on mips
 
-Applied to master, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
