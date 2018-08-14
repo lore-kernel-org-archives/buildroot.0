@@ -1,76 +1,83 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 Aug 2018 22:40:56 +0200
-Subject: [Buildroot] [PATCH 1/1] jpeg-turbo: bump to version 2.0.0
-Message-ID: <20180814204056.11371-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 Aug 2018 22:42:10 +0200
+Subject: [Buildroot] Intel MediaSDK package w. Quicksync (h264,
+ h265 HW encoding)
+In-Reply-To: <ea-mime-5b7336a6-c6c-5874a42@www-1.netcourrier.com>
+References: <ea-mime-5b7336a6-c6c-5874a42@www-1.netcourrier.com>
+Message-ID: <20180814224210.5427ea5c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Move to cmake-infrastructure
-- Update hash of license files: minor updates and clarifications
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/jpeg-turbo/jpeg-turbo.hash | 12 ++++++------
- package/jpeg-turbo/jpeg-turbo.mk   | 10 +++++-----
- 2 files changed, 11 insertions(+), 11 deletions(-)
+On Tue, 14 Aug 2018 22:08:06 +0200 (CEST), lpdev at cordier.org wrote:
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index df1c053005..f0fc5396ef 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/libjpeg-turbo/files/1.5.3/
--sha1 87ebf4cab2bb27fcb8e7ccb18ec4eb680e1f2c2d  libjpeg-turbo-1.5.3.tar.gz
--md5 7c82f0f6a3130ec06b8a4d0b321cbca3  libjpeg-turbo-1.5.3.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.0/
-+sha1 fe49aea935617748c21ecbe46c986d6c1b98f39b  libjpeg-turbo-2.0.0.tar.gz
-+md5 b12a3fcf1d078db38410f27718a91b83  libjpeg-turbo-2.0.0.tar.gz
- # Locally computed
--sha256 b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523  libjpeg-turbo-1.5.3.tar.gz
--sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
--sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
-+sha256 778876105d0d316203c928fd2a0374c8c01f755d0a00b12a1c8934aeccff8868  libjpeg-turbo-2.0.0.tar.gz
-+sha256 8412238c5ad95965cf3c3197791e9dea8b5fae505d133449e33ee2fa754fe61e  LICENSE.md
-+sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 2b5d876928..0fe2fcda72 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--JPEG_TURBO_VERSION = 1.5.3
-+JPEG_TURBO_VERSION = 2.0.0
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
-@@ -13,14 +13,14 @@ JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_PROVIDES = jpeg
- JPEG_TURBO_DEPENDENCIES = host-pkgconf
- 
--JPEG_TURBO_CONF_OPTS = --with-jpeg8
-+JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
- 
- ifeq ($(BR2_PACKAGE_JPEG_SIMD_SUPPORT),y)
--JPEG_TURBO_CONF_OPTS += --with-simd
-+JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=ON
- # x86 simd support needs nasm
- JPEG_TURBO_DEPENDENCIES += $(if $(BR2_X86_CPU_HAS_MMX),host-nasm)
- else
--JPEG_TURBO_CONF_OPTS += --without-simd
-+JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=OFF
- endif
- 
- define JPEG_TURBO_REMOVE_USELESS_TOOLS
-@@ -29,4 +29,4 @@ endef
- 
- JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+> Working on buildroot for 3 weeks now, I would like to congrat
+> everyone that participated to this wonderful project.
+
+Thanks!
+
+> Today I have finished to integrate the the Intel MediaSDK to
+> buildroot. The Intel MediaSDK features Intel QuickSync through the
+> libmfx API, allowing all the cool kids to make use of hardware
+> encoding/decoding for popular video format such as h264, h265, jpeg,
+> vp9, etc. Even though there are no real benchmark against vaapi, MFX
+> layer promise better performances than the former. There is currently
+> a working implementation of this layer in ffmpeg that is working very
+> well even on little 'embedded' computers (I did some testing on an
+> Intel Computestick STK2MV64CC).
+
+It's a good idea to package this indeed.
+
+> I would like to submit a patch to buildroot for this new package,
+> intel-mediasdk. However I am running into small issues that need to
+> be addressed before the submission.
+> 
+> 1. Currently there are some strong restriction around the kernel
+> version that needs to be 4.14.16. 
+> 
+>   1.1 Is it possible for a package to force the Kernel version?
+
+No. But we already have packages that depend on a specific fork of the
+Linux kernel. We simply indicate something like this in Config.in:
+
+comment "imx-vpuwrap needs an imx-specific Linux kernel to be built"
+        depends on BR2_arm
+        depends on !BR2_LINUX_KERNEL
+
+See package/freescale-imx/imx-vpuwrap/Config.in.
+
+> 2. libva and libva-utils need to be recompiled using Intel forks
+> (respectively https://github.com/intel/libva and
+> https://github.com/intel/libva-utils).
+
+Argh. That's annoying.
+
+> I have no idea of how I can switch the version in buildroot. I have
+> currently modified the source site of both package using the repo
+> above. 
+> 
+> ? 2.1 Should I add a special switch like
+> BR2_PACKAGE_LIBVA_INTEL_QUICKSYNC that switches between these 2
+> versions? 
+> 
+> ? 2.2 Is it the cleaner way? 
+> 
+> ? 2.3 Is wrapping these 2 packages into a virtual-package better? If
+> not, how this can be integrated in Buildroot?
+
+In this situation, I don't really see the need to have two copies of
+those packages. Instead, just add a Config.in sub-option to select
+between "upstream" and "Intel" versions. It's annoying, but hopefully
+Intel will get its code merged in libva and libva-utils.
+
+Thanks!
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
