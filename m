@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 15:57:02 +0200
-Subject: [Buildroot] [PATCH v1 1/1] tini: new package
-In-Reply-To: <20180810184255.17612-1-christian@paral.in>
-References: <20180810184255.17612-1-christian@paral.in>
-Message-ID: <20180814155702.7672ca9a@windsurf>
+Date: Tue, 14 Aug 2018 16:00:32 +0200
+Subject: [Buildroot] [PATCH 1/3] fake-hwclock: new package
+In-Reply-To: <20180810144635.16182-1-chrismcc@gmail.com>
+References: <20180810144635.16182-1-chrismcc@gmail.com>
+Message-ID: <20180814160032.5d2bfce8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,27 +12,40 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 10 Aug 2018 11:42:55 -0700, Christian Stewart wrote:
-> Tini is a minimal init process to act as PID 1 for containers.
-> 
-> Note: it is not necessary to compile Tini statically for many non-docker
-> container environments, and Docker now statically links to Tini internally (as
-> of 1.13).
-> 
-> Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-> Signed-off-by: Christian Stewart <christian@paral.in>
-> ---
->  package/Config.in      |  1 +
->  package/tini/Config.in | 16 ++++++++++++++++
->  package/tini/tini.hash |  3 +++
->  package/tini/tini.mk   | 37 +++++++++++++++++++++++++++++++++++++
->  4 files changed, 57 insertions(+)
->  create mode 100644 package/tini/Config.in
->  create mode 100644 package/tini/tini.hash
->  create mode 100644 package/tini/tini.mk
+Yann, Arnout, Peter, there is a question below.
 
-The entry to the DEVELOPERS file was missing, so I've added it, and
-applied.
+Christopher, there are some review comments as well.
+
+On Fri, 10 Aug 2018 07:46:34 -0700, Christopher McCrory wrote:
+
+> +if BR2_PACKAGE_FAKE_HWCLOCK
+> +config BR2_PACKAGE_FAKE_HWCLOCK_CRONJOB
+> +        bool "install fake-hwclock cronjob"
+> +        help
+> +          Hourly cronjob to save current timestamp
+
+What should be our policy for cronjobs ? I'm not sure we currently have
+packages that install cronjobs. What should we do? Install
+unconditionally? Have a sub-option?
+
+I would personally lean towards installing unconditionally, but I'd
+like to have others opinions before applying.
+
+> +FAKE_HWCLOCK_VERSION = v0.11
+> +FAKE_HWCLOCK_SITE = https://git.einval.com/git/fake-hwclock.git
+> +FAKE_HWCLOCK_SITE_METHOD = git
+> +FAKE_HWCLOCK_LICENSE_FILES = COPYING
+> +FAKE_LICENSE = GPL-2.0
+
+This variable is wrong: it should be FAKE_HWCLOCK_LICENSE. Also, we
+prefer to have it before the LICENSE_FILES variable.
+
+> +define FAKE_HWCLOCK_NO_LSB
+> +	$(SED) 's at . /lib/lsb/init-functions@#. /lib/lsb/init-functions@' \
+> +		$(@D)/debian/fake-hwclock.init
+> +endef
+
+This should be done by a patch.
 
 Thanks!
 
