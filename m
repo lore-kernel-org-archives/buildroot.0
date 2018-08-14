@@ -1,64 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Aug 2018 17:27:43 +0200
-Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
- bison} to build the configurators
-In-Reply-To: <20180814162130.00f55418@windsurf>
-References: <cover.1533327111.git.yann.morin.1998@free.fr>
- <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
- <20180814162130.00f55418@windsurf>
-Message-ID: <20180814152743.GJ7915@scaer>
+Date: Tue, 14 Aug 2018 17:29:23 +0200
+Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
+ target in pkg-kconfig.mk
+In-Reply-To: <20180814162705.505476fe@windsurf>
+References: <20180730155153.24091-1-m.patzlaff@pilz.de>
+ <20180730155153.24091-4-m.patzlaff@pilz.de>
+ <20180730234643.34315d11@windsurf> <20180731154948.GB8537@scaer>
+ <20180814162705.505476fe@windsurf>
+Message-ID: <20180814152923.GK7915@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Thomas, Marcel, All,
 
-On 2018-08-14 16:21 +0200, Thomas Petazzoni spake thusly:
-> On Fri,  3 Aug 2018 22:16:55 +0200, Yann E. MORIN wrote:
-> > Take this opportunity to also drop the append-assignment as the first
-> > assignment to LINUX_DEPENDENCIES.
+On 2018-08-14 16:27 +0200, Thomas Petazzoni spake thusly:
+> Adding Arnout and Peter in Cc, in case they want to give their opinion
+> on the patch series.
+> On Tue, 31 Jul 2018 17:49:48 +0200, Yann E. MORIN wrote:
+> > I would just suggest that we do not add any new rule, but trying to
+> > update the defconfig when there are fragments would fail as it currently
+> > does, but also would display the delta if there is one. I.e.:
 > > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> >     $ make linux-menuconfig
+> >     [change stuff]
+> >     $ make linux-update-defconfig
+> >     Unable to perform linux-update-defconfig when fragment files are set
+> >     Configuration changes that you want to propagate to one of the fragments:
+> >     -CONFIG_FOO=y
+> >     +# CONFIG_BAR is unset
+> >     linux/linux.mk:511: recipe for target 'linux-update-defconfig' failed
+> >     make[1]: *** [linux-update-defconfig] Error 1
 > 
-> I am a bit confused. In this series, you suggest to make
-> host-flex/host-bison dependencies of the configuration step of Linux.
-> But in another series
-> (http://patchwork.ozlabs.org/project/buildroot/list/?series=59260), you
-> suggest to make flex/bison hard requirements of Buildroot, so that we
-> don't have to build them.
-> 
-> Could you clarify in which direction you would like to go ?
+> I think we could do that in *addition* to having a new rule. Indeed,
+> when you know what you're doing, having to run something that doesn't
+> make sense ("make linux-update-defconfig") and which causes a failure
+> is a bit silly. I'd rather run "make linux-diff-config" (or whatever
+> name we chose).
 
-This very series is about solving a technical problem, that
-kconfig-based packages may have dependencies required even before
-running the configurators.
+OK by me.
 
-On the other hand, that other series is about changing our requirements.
+> Marcel, do you think you could rework your patch series to go in the
+> direction of showing a diff rather than arbitrarily adjusting the last
+> fragment ?
 
-If we decide to require flex+bison, so in this series, only patch 2 can
-be dropped.
-
-> Also, if we
-> make bison/flex hard requirements of Buildroot, I'd like to have a
-> clear rule on whether we keep or not our host-bison/host-flex packages,
-> and if we keep them, when they should be used vs. when the system
-> bison/flex should be used.
-
-My position is that we will always want to have our host flex and bison
-to build packages that install things in host/, in staging/ or in
-target/.
-
-For the linux kernel and other kconfig-based packages, we don't care
-which flex/bison are used, because the resulting binaries are not
-installed, unless those packages also generate code eventually installed
-in host/, staging/ or target/
+Yes, please! ;-)
 
 Regards,
 Yann E. MORIN.
+
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
