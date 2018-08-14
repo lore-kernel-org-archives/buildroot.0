@@ -1,128 +1,70 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 14 Aug 2018 12:33:48 -0500
-Subject: [Buildroot] [Next v2] openresolv: new package
-Message-ID: <20180814173348.31148-1-matthew.weber@rockwellcollins.com>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Tue, 14 Aug 2018 10:44:40 -0700
+Subject: [Buildroot] [PATCH 1/3] fake-hwclock: new package
+In-Reply-To: <20180814160032.5d2bfce8@windsurf>
+References: <20180810144635.16182-1-chrismcc@gmail.com>
+ <20180814160032.5d2bfce8@windsurf>
+Message-ID: <CALURroRnDriOiyac=DbxOfwJyT6Am4_h_1Xn3_GfPyqJJs7PmA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+On Tue, Aug 14, 2018, 7:00 AM Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-This patch added 'openresolv' package support. This tool
-provides a dns management framework to track currently
-available nameservers.
+> Hello,
+>
+> Yann, Arnout, Peter, there is a question below.
+>
+> Christopher, there are some review comments as well.
+>
+> On phone, sorry for formatting.  I'll look into this and the others
+tomorrow.  My other job got in the way today.
 
-A key feature of this tool vs resolvconf is the ability to
-manage multiple name server input configuration files and
-generate the /etc/resolv.conf.  This is handy when you have
-multiple dynamic communication paths providing nameserver
-information.
 
-REF: https://github.com/rsmarples/openresolv
 
-Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
-signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-
----
-Changes
-v1 -> v2
-[Thomas
- - Added DEVELOPERS file entry
- - Removed bash dependency as our original testing was invalid and the
-   tool works fine with busybox as along as CONFIG_ASH_GETOPTS is
-   enabled which is the default in buildroot.
- - Fixed pkg to build as a generic vs autotools (they tried to mimic
-   autotools and we missed it in the orignal patch)
----
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/openresolv/Config.in       |  8 ++++++++
- package/openresolv/openresolv.hash |  3 +++
- package/openresolv/openresolv.mk   | 25 +++++++++++++++++++++++++
- 5 files changed, 38 insertions(+)
- create mode 100644 package/openresolv/Config.in
- create mode 100644 package/openresolv/openresolv.hash
- create mode 100644 package/openresolv/openresolv.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f530158c21..6e44d9825f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1353,6 +1353,7 @@ F:	package/mtd/
- F:	package/mtools/
- F:	package/nginx-upload/
- F:	package/omniorb/
-+F:	package/openresolv/
- F:	package/paxtest/
- F:	package/picocom/
- F:	package/policycoreutils/
-diff --git a/package/Config.in b/package/Config.in
-index 7b4637900f..eda0f698dc 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1866,6 +1866,7 @@ endif
- 	source "package/open-plc-utils/Config.in"
- 	source "package/openntpd/Config.in"
- 	source "package/openobex/Config.in"
-+	source "package/openresolv/Config.in"
- 	source "package/openssh/Config.in"
- 	source "package/openswan/Config.in"
- 	source "package/openvpn/Config.in"
-diff --git a/package/openresolv/Config.in b/package/openresolv/Config.in
-new file mode 100644
-index 0000000000..2a393c6bc4
---- /dev/null
-+++ b/package/openresolv/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_OPENRESOLV
-+	bool "openresolv"
-+	help
-+	  openresolv is a resolvconf implementation which
-+	  manages resolv.conf. This tool provides a dns management
-+	  framework to track currently available nameservers.
-+
-+	  https://github.com/rsmarples/openresolv
-diff --git a/package/openresolv/openresolv.hash b/package/openresolv/openresolv.hash
-new file mode 100644
-index 0000000000..e1a1fb5468
---- /dev/null
-+++ b/package/openresolv/openresolv.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 96b3f84435a183426c622db7097a930fb0d48a99e82cd87ce83bd343b8c20574 openresolv-fe4e1ec4e2be2adfc1530ade94ebb30aa6f51540.tar.gz
-+sha256 d1f9dcd2dac4e095b14caab517cfe791a6e0785346164b7d0cafc13c714f8aa5 LICENSE
-diff --git a/package/openresolv/openresolv.mk b/package/openresolv/openresolv.mk
-new file mode 100644
-index 0000000000..6adf973527
---- /dev/null
-+++ b/package/openresolv/openresolv.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# openresolv
-+#
-+################################################################################
-+
-+OPENRESOLV_VERSION = fe4e1ec4e2be2adfc1530ade94ebb30aa6f51540
-+OPENRESOLV_SITE = $(call github,rsmarples,openresolv,$(OPENRESOLV_VERSION))
-+OPENRESOLV_LICENSE = BSD-2-Clause
-+OPENRESOLV_LICENSE_FILES = LICENSE
-+
-+define OPENRESOLV_CONFIGURE_CMDS
-+	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure --prefix=/usr \
-+		--sysconfdir=/etc
-+endef
-+
-+define OPENRESOLV_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define OPENRESOLV_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.17.0
+>
+> On Fri, 10 Aug 2018 07:46:34 -0700, Christopher McCrory wrote:
+>
+> > +if BR2_PACKAGE_FAKE_HWCLOCK
+> > +config BR2_PACKAGE_FAKE_HWCLOCK_CRONJOB
+> > +        bool "install fake-hwclock cronjob"
+> > +        help
+> > +          Hourly cronjob to save current timestamp
+>
+> What should be our policy for cronjobs ? I'm not sure we currently have
+> packages that install cronjobs. What should we do? Install
+> unconditionally? Have a sub-option?
+>
+> I would personally lean towards installing unconditionally, but I'd
+> like to have others opinions before applying.
+>
+> > +FAKE_HWCLOCK_VERSION = v0.11
+> > +FAKE_HWCLOCK_SITE = https://git.einval.com/git/fake-hwclock.git
+> > +FAKE_HWCLOCK_SITE_METHOD = git
+> > +FAKE_HWCLOCK_LICENSE_FILES = COPYING
+> > +FAKE_LICENSE = GPL-2.0
+>
+> This variable is wrong: it should be FAKE_HWCLOCK_LICENSE. Also, we
+> prefer to have it before the LICENSE_FILES variable.
+>
+> > +define FAKE_HWCLOCK_NO_LSB
+> > +     $(SED) 's at . /lib/lsb/init-functions@#. /lib/lsb/init-functions@' \
+> > +             $(@D)/debian/fake-hwclock.init
+> > +endef
+>
+> This should be done by a patch.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180814/0deb8d54/attachment.html>
