@@ -1,82 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 16:08:29 +0200
-Subject: [Buildroot] [PATCHv3] core/sdk: generate the SDK tarball
- ourselves
-In-Reply-To: <20180804082741.10783-1-yann.morin.1998@free.fr>
-References: <20180804082741.10783-1-yann.morin.1998@free.fr>
-Message-ID: <20180814160829.7d1b639a@windsurf>
+Date: Tue, 14 Aug 2018 16:12:00 +0200
+Subject: [Buildroot] [PATCH] openresolv: new package
+In-Reply-To: <1533648586-60818-1-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1533648586-60818-1-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180814161200.08d4a984@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Matt,
 
-On Sat,  4 Aug 2018 10:27:41 +0200, Yann E. MORIN wrote:
-> Currently, the wording in the manual instructs the user to generate a
-> tarball from "the contents of the +output/host+ directory".
-> 
-> This is pretty confusing, because taken literally, this would amount to
-> running a command like:
-> 
->     tar cf my-sdk.tar -C output/host/ .
-> 
-> This creates a tarbomb [0], which is very bad practice, because when
-> extracted, it creates multiple files in the current directory.
-> 
-> What one really wants to do, is create a tarball of the host/ directory,
-> with something like:
-> 
->     tar cf my-sdk.tar -C output host/
-> 
-> However, this is not much better, because the top-most directory would
-> have a very common name, host/, which is pretty easy to get conflict
-> with when it gets extracted.
-> 
-> So, we fix that mess by giving the top-most directory a recognisable
-> name, based on the target tuple, which we also use as the name of the
-> archive (suffixed with the usual +.tar.gz+.) We offer the user the
-> possibility to override that default by specifying the +BR2_SDK_PREFIX+
-> variable on the command line.
-> 
-> Since this is an output file, we place it in the images/ directory.
-> 
-> As some users expressed a very strong feeling that they do not want to
-> generate a tarball at all, and that doing so would badly hurt their
-> workflows [1], we actually prepare the SDK as was previously done, but
-> under the new, intermediate rule 'prepare-sdk'. The existing 'sdk' rule
-> obviously depend on that before generating the tarball.
-> 
-> We choose to make the existing rule to generate the tarball, and
-> introduce a new rule to just prepare the SDK, rather than keep the
-> existing rule as-is and introduce a new one to generate the tarball,
-> because it makes sense to have the simplest rule do the correct thing,
-> leaving advanced, power users use the longest command. If someone
-> already had a wrapper that called 'sdk' and expected just the host
-> directory to be prepared, then this is not broken; it just takes a bit
-> longer (gzip is pretty fast).
-> 
-> Update the manual accordingly.
-> 
-> [0] https://en.wikipedia.org/wiki/Tar_(computing)#Tarbomb
-> [1] http://lists.busybox.net/pipermail/buildroot/2018-June/thread.html#223377
->     and some messages in the ensuing thread...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Wolfgang Grandegger <wg@grandegger.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Stefan Becker <chemobejk@gmail.com>
-> Cc: Trent Piepho <tpiepho@impinj.com>
-> 
-> ---
-> Changes v2 -> v3:
->   - drop the version from the prefix  (Stefan, Thomas)
->   - actually have 'sdk' depend on 'prepare-sdk'
->   - anonymise the generated tarball
+On Tue,  7 Aug 2018 08:29:46 -0500, Matt Weber wrote:
 
-Applied to next, thanks!
+>  package/Config.in                  |  1 +
+>  package/openresolv/Config.in       | 13 +++++++++++++
+>  package/openresolv/openresolv.hash |  3 +++
+>  package/openresolv/openresolv.mk   | 12 ++++++++++++
+>  4 files changed, 29 insertions(+)
+
+Entry in DEVELOPERS file is missing.
+
+> diff --git a/package/Config.in b/package/Config.in
+> index f5a1749..2ad6687 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1843,6 +1843,7 @@ endif
+>  	source "package/open-plc-utils/Config.in"
+>  	source "package/openntpd/Config.in"
+>  	source "package/openobex/Config.in"
+> +	source "package/openresolv/Config.in"
+>  	source "package/openssh/Config.in"
+>  	source "package/openswan/Config.in"
+>  	source "package/openvpn/Config.in"
+> diff --git a/package/openresolv/Config.in b/package/openresolv/Config.in
+> new file mode 100644
+> index 0000000..3eb736f
+> --- /dev/null
+> +++ b/package/openresolv/Config.in
+> @@ -0,0 +1,13 @@
+> +comment "openresolv needs a bash shell"
+> +	depends on !BR2_SYSTEM_BIN_SH_BASH
+
+Are you sure it needs a bash shell ? Indeed in
+https://github.com/rsmarples/openresolv, the #1 argument for resolvconf
+compared to its Debian variant is:
+
+""
+Works with POSIX shell and userland
+""
+
+> $(eval $(autotools-package))
+
+This package is not using the autotools. The configure script is not
+generated by autoconf, the Makefile is not generated by automake. So,
+generic-package should be used, and not autotools-package.
+
+Thanks!
 
 Thomas
 -- 
