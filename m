@@ -1,73 +1,99 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 13:34:44 +0200
-Subject: [Buildroot] [git commit branch/next] package/samba4: reformat patch
- 0002 as Git-formatted patch
-Message-ID: <20180814112805.3EA8B8D22D@busybox.osuosl.org>
+Date: Tue, 14 Aug 2018 13:56:43 +0200
+Subject: [Buildroot] [git commit branch/next] htop: bump to version 2.2.0
+Message-ID: <20180814114959.7203D8D23E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e4f2357fb719ddd27a30e3073e0276abc0abd57
+commit: https://git.buildroot.net/buildroot/commit/?id=acee9564b7bb8fb398d0247027bcf0099fcd5c82
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit reformats
-0002-patch-source3__libads__kerberos_keytab.c.patch as a Git-formatted
-patch.
-
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...mpilation-of-Samba-4.7.4-with-disabled-ADS.patch} | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ ...2-MakeHeader-open-files-using-binary-mode.patch | 50 ----------------------
+ package/htop/htop.hash                             |  2 +-
+ package/htop/htop.mk                               |  2 +-
+ 3 files changed, 2 insertions(+), 52 deletions(-)
 
-diff --git a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
-similarity index 58%
-rename from package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
-rename to package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
-index 1213659c8d..45d3050a39 100644
---- a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
-+++ b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
-@@ -1,5 +1,7 @@
--From: Timur I. Bakeyev <timur@freebsd.org>
--Subject: Fix compilation of Samba 4.7.4 with disabled ADS
-+From da2f2cf8e7a1dfcb661b707e4649cec1e8a0e79c Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Thu, 9 Aug 2018 10:03:06 +0200
-+Subject: [PATCH] Fix compilation of Samba 4.7.4 with disabled ADS
+diff --git a/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch b/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
+deleted file mode 100644
+index bcc3e6564c..0000000000
+--- a/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From 1a83a3e6ae0841a0dc4c7eb08a1a71930e99666c Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sun, 18 Mar 2018 21:57:54 +0100
+-Subject: [PATCH] MakeHeader: open files using binary mode
+-
+-By default, open(sys.argv[1]) use Unicode mode.
+-The readlines() will try to convert with the default codec
+-(which depends on the i18n settings, so 'ascii' under
+-LC_ALL=C)
+-
+-Open files using binary mode so no conversion will be done
+-by readlines(). But then, normal strings can't be used in
+-the rest of the code; either all strings have to be prefixed
+-with b'' or (simpler) the read line has to be converted to
+-a unicode string by calling decode() on it.
+-
+-http://lists.busybox.net/pipermail/buildroot/2018-February/214373.html
+-
+-Fixes:
+-http://autobuild.buildroot.net/results/9ce/9ce2ef5ef694253b9759016c9702c5c6be7849a1
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- scripts/MakeHeader.py | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/scripts/MakeHeader.py b/scripts/MakeHeader.py
+-index 4841bda..dd0798c 100755
+---- a/scripts/MakeHeader.py
+-+++ b/scripts/MakeHeader.py
+-@@ -16,7 +16,7 @@ SKIPONE=4
+- state = ANY
+- static = 0
+- 
+--file = open(sys.argv[1])
+-+file = open(sys.argv[1], 'rb')
+- name = sys.argv[1][:-2]
+- 
+- out = StringIO()
+-@@ -31,6 +31,7 @@ out.write( "#define HEADER_" + os.path.basename(name) + "\n")
+- is_blank = False
+- for line in file.readlines():
+-    line = line[:-1]
+-+   line = line.decode('utf-8')
+-    if state == ANY:
+-       if line == '/*{':
+-          state = COPY
+--- 
+-2.14.3
+-
+diff --git a/package/htop/htop.hash b/package/htop/htop.hash
+index 5419d767a3..e764644a0b 100644
+--- a/package/htop/htop.hash
++++ b/package/htop/htop.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3260be990d26e25b6b49fc9d96dbc935ad46e61083c0b7f6df413e513bf80748  htop-2.1.0.tar.gz
++sha256  d9d6826f10ce3887950d709b53ee1d8c1849a70fa38e91d5896ad8cbc6ba3c57  htop-2.2.0.tar.gz
+ sha256  70466e76443cb5b68144d9fcedca9584e7bfdb6c50859daa5a0290ea27c58aad  COPYING
+diff --git a/package/htop/htop.mk b/package/htop/htop.mk
+index 71889557ca..dc84e32708 100644
+--- a/package/htop/htop.mk
++++ b/package/htop/htop.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Downloaded from upstream mailinglist
- https://lists.samba.org/archive/samba-technical/2017-December/124629.html
-@@ -8,9 +10,14 @@ Patch originates from FreeBSD:
- https://svnweb.freebsd.org/ports/head/net/samba47/files/patch-source3__libads__kerberos_keytab.c?revision=457119&view=markup
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ source3/libads/kerberos_keytab.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
- 
----- a/source3/libads/kerberos_keytab.c.orig	2017-12-23 14:23:53.247467000 +0100
--+++ b/source3/libads/kerberos_keytab.c	2017-12-23 18:57:07.135340000 +0100
-+diff --git a/source3/libads/kerberos_keytab.c b/source3/libads/kerberos_keytab.c
-+index 37ac7ba985e..71250962090 100644
-+--- a/source3/libads/kerberos_keytab.c
-++++ b/source3/libads/kerberos_keytab.c
- @@ -32,8 +32,6 @@
-  
-  #ifdef HAVE_KRB5
-@@ -20,7 +27,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  /* This MAX_NAME_LEN is a constant defined in krb5.h */
-  #ifndef MAX_KEYTAB_NAME_LEN
-  #define MAX_KEYTAB_NAME_LEN 1100
--@@ -85,6 +83,8 @@
-+@@ -85,6 +83,8 @@ out:
-  	return ret;
-  }
-  
-@@ -29,3 +36,6 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  /**********************************************************************
-   Adds a single service principal, i.e. 'host' to the system keytab
-  ***********************************************************************/
-+-- 
-+2.14.4
-+
+-HTOP_VERSION = 2.1.0
++HTOP_VERSION = 2.2.0
+ HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
+ HTOP_DEPENDENCIES = ncurses
+ # Prevent htop build system from searching the host paths
