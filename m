@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 16:21:30 +0200
-Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
- bison} to build the configurators
-In-Reply-To: <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
-References: <cover.1533327111.git.yann.morin.1998@free.fr>
- <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
-Message-ID: <20180814162130.00f55418@windsurf>
+Date: Tue, 14 Aug 2018 16:22:47 +0200
+Subject: [Buildroot] [PATCH 1/1] gst1-plugins-good: add option for qmlgl
+ plugin (qt5 plugin)
+In-Reply-To: <1533208261-13853-1-git-send-email-inigohuguet@fanamoel.com>
+References: <4a3746f6-f635-e3a2-0d09-deff9c106b70@mind.be>
+ <1533208261-13853-1-git-send-email-inigohuguet@fanamoel.com>
+Message-ID: <20180814162247.396f9862@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +14,85 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  3 Aug 2018 22:16:55 +0200, Yann E. MORIN wrote:
-> Take this opportunity to also drop the append-assignment as the first
-> assignment to LINUX_DEPENDENCIES.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Peter (Seiderer), you are the de-facto GStreamer / Qt5 person, could you
+please review/test/ack the below patch ?
 
-I am a bit confused. In this series, you suggest to make
-host-flex/host-bison dependencies of the configuration step of Linux.
-But in another series
-(http://patchwork.ozlabs.org/project/buildroot/list/?series=59260), you
-suggest to make flex/bison hard requirements of Buildroot, so that we
-don't have to build them.
-
-Could you clarify in which direction you would like to go ? Also, if we
-make bison/flex hard requirements of Buildroot, I'd like to have a
-clear rule on whether we keep or not our host-bison/host-flex packages,
-and if we keep them, when they should be used vs. when the system
-bison/flex should be used.
-
-Thanks!
+Thanks a lot :-)
 
 Thomas
+
+On Thu,  2 Aug 2018 13:11:01 +0200, I?igo Huguet wrote:
+> gst1-plugins-good is built with --disable-qt option, so qmlgl plugin
+> is disabled. Added option to enable it, allowing to use elements
+> qmlglsrc and qmlglsink.
+> 
+> Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
+> ---
+>  package/gstreamer1/gst1-plugins-good/Config.in           | 16 ++++++++++++++++
+>  .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk    | 13 +++++++++++--
+>  2 files changed, 27 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+> index afb9a41..62ac07b 100644
+> --- a/package/gstreamer1/gst1-plugins-good/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
+> @@ -283,6 +283,22 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4
+>  	help
+>  	  Open Sound System (OSS) version 4 support for GStreamer
+>  
+> +config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
+> +	bool "qmlgl (qt5)"
+> +	depends on BR2_PACKAGE_QT5
+> +	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
+> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative-quick
+> +	select BR2_PACKAGE_QT5DECLARATIVE
+> +	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+> +	select BR2_PACKAGE_QT5X11EXTRAS if BR2_PACKAGE_QT5BASE_XCB
+> +	help
+> +	  QT5 plugin which includes elements qmlglsrc and qmlglsink
+> +	
+> +comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
+> +	depends on BR2_PACKAGE_QT5
+> +	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+> +
+>  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+>  	bool "v4l2"
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
+> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> index c1ed039..ef28f2d 100644
+> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> @@ -20,8 +20,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+>  	--disable-osx_video \
+>  	--disable-aalib \
+>  	--disable-aalibtest \
+> -	--disable-libcaca \
+> -	--disable-qt
+> +	--disable-libcaca
+>  
+>  # Options which require currently unpackaged libraries
+>  GST1_PLUGINS_GOOD_CONF_OPTS += \
+> @@ -328,6 +327,16 @@ else
+>  GST1_PLUGINS_GOOD_CONF_OPTS += --disable-oss4
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL),y)
+> +GST1_PLUGINS_GOOD_CONF_OPTS += --enable-qt
+> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5declarative
+> +ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5x11extras
+> +endif
+> +else
+> +GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
+>  GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
+>  else
+
+
+
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
