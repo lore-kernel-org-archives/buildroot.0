@@ -1,28 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 23:39:02 +0200
-Subject: [Buildroot] [PATCH 1/1] jpeg-turbo: bump to version 2.0.0
-In-Reply-To: <20180814204056.11371-1-fontaine.fabrice@gmail.com>
-References: <20180814204056.11371-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180814233902.29d43a18@windsurf>
+Date: Tue, 14 Aug 2018 23:39:55 +0200
+Subject: [Buildroot] [PATCH v3 2/2] package/lvm2: bump version to
+ 2.02.180
+In-Reply-To: <20180726171524.479-2-m.niestroj@grinn-global.com>
+References: <20180726171524.479-1-m.niestroj@grinn-global.com>
+ <20180726171524.479-2-m.niestroj@grinn-global.com>
+Message-ID: <20180814233955.2fa26ff3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Marcin,
 
-On Tue, 14 Aug 2018 22:40:56 +0200, Fabrice Fontaine wrote:
-> - Move to cmake-infrastructure
-> - Update hash of license files: minor updates and clarifications
+On Thu, 26 Jul 2018 19:15:24 +0200, Marcin Niestroj wrote:
+> lvm2 starting from version 2.02.178 depends on libaio library.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 > ---
->  package/jpeg-turbo/jpeg-turbo.hash | 12 ++++++------
->  package/jpeg-turbo/jpeg-turbo.mk   | 10 +++++-----
->  2 files changed, 11 insertions(+), 11 deletions(-)
+> Changes v2 -> v3:
+>  * Add missing libaio dependency in luksmeta (suggested by Baruch)
 
-Applied to next, thanks.
+Applied to next, thanks. I have submitted a follow-up patch that bumps
+libaio, with the consequence that it no longer has any architecture
+dependency. This allows to remove all the
+BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS dependencies, which is nice. Feel free
+to have a look/review the patch I posted.
+
+Thanks!
 
 Thomas
 -- 
