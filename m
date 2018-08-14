@@ -1,39 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 23:12:30 +0200
-Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
- bison} to build the configurators
-In-Reply-To: <20180814210349.GN7915@scaer>
-References: <cover.1533327111.git.yann.morin.1998@free.fr>
- <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
- <20180814162130.00f55418@windsurf> <20180814152743.GJ7915@scaer>
- <20180814215344.20784816@windsurf> <20180814210349.GN7915@scaer>
-Message-ID: <20180814231230.7f5e2e3e@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 14 Aug 2018 23:13:09 +0200
+Subject: [Buildroot] [PATCH v1] qt5serialbus: examples need qt5 widgets
+ module
+Message-ID: <20180814211309.17510-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes [1]:
 
-On Tue, 14 Aug 2018 23:03:49 +0200, Yann E. MORIN wrote:
+  make[2]: Entering directory '.../build/qt5serialbus-5.11.1/examples'
+  Some of the required modules (qtHaveModule(widgets)) are not available.
+  Skipped.
+  [...]
+  cp -dpfr .../host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/qt/examples/serialbus .../target/usr/lib/qt/examples/
+  cp: cannot stat '.../host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/qt/examples/serialbus': No such file or directory
 
-> > So the system-wide bison/flex would only be used for the kconfig
-> > programs built by Buildroot itself (if we move to a newer kconfig
-> > version that doesn't have the pre-generated files) or by
-> > Linux/U-Boot/Busybox/Barebox. Any other use of flex/bison would use
-> > host-flex and host-bison. That's your proposal ?  
-> 
-> Yes, that is my proposal.
+[1] http://autobuild.buildroot.net/results/147809b5f8758af935bee48c0fc83fd86a8509e9
 
-OK. Let's see what Arnout/Peter have to say about this. If they don't
-express any opinion by Thursday, I'll go with your proposal which seems
-reasonable to me.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/qt5/qt5serialbus/qt5serialbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-
-Thomas
+diff --git a/package/qt5/qt5serialbus/qt5serialbus.mk b/package/qt5/qt5serialbus/qt5serialbus.mk
+index 6de9f9b7d3..98c4466cb8 100644
+--- a/package/qt5/qt5serialbus/qt5serialbus.mk
++++ b/package/qt5/qt5serialbus/qt5serialbus.mk
+@@ -36,7 +36,7 @@ define QT5SERIALBUS_INSTALL_TARGET_LIBS
+ endef
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES)$(BR2_PACKAGE_QT5BASE_WIDGETS),yy)
+ define QT5SERIALBUS_INSTALL_TARGET_EXAMPLES
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/serialbus $(TARGET_DIR)/usr/lib/qt/examples/
+ endef
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
