@@ -1,33 +1,35 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 13 Aug 2018 23:26:42 -0500
-Subject: [Buildroot] [RFC 2/3] hardening testing: busybox test case to
- verify linker wrapper behavior with -r
-In-Reply-To: <1534220803-26737-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1534220803-26737-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1534220803-26737-3-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Mon, 13 Aug 2018 23:26:40 -0500
+Subject: [Buildroot] [RFC 0/3] Hardening Wrapper Support
+Message-ID: <1534220803-26737-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- support/testing/tests/core/test_hardening.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I took an attempt at the start of the wrapper update.  This is
+still missing fortify and stack protector options being migrated.
 
-diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
-index fcec46f..ab8d078 100644
---- a/support/testing/tests/core/test_hardening.py
-+++ b/support/testing/tests/core/test_hardening.py
-@@ -21,7 +21,7 @@ class TestHardeningBase(infra.basetest.BRTest):
-         BR2_PACKAGE_HOST_CHECKSEC=y
-         # BR2_TARGET_ROOTFS_TAR is not set
-         """
--    checksec_files = ["usr/sbin/lighttpd"]
-+    checksec_files = ["usr/sbin/lighttpd", "target/bin/busybox"]
- 
-     def checksec_run(self, target_file):
-         filepath = os.path.join(self.builddir, "target", target_file)
+I would assume these patches need cleanup as I was sloppy with the
+linker wrapper including the relro stuff, but I wanted to get an
+understanding of what I might have missed.
+
+
+Matt Weber (3):
+  toolchain/toolchain-wrapper: add linker wrapper
+  hardening testing: busybox test case to verify linker wrapper behavior
+    with -r
+  toolchain/toolchain-wrapper: add BR2_RELRO_FULL support
+
+ package/gcc/gcc.mk                                 |   7 +
+ support/testing/tests/core/test_hardening.py       |   2 +-
+ .../toolchain-external/pkg-toolchain-external.mk   |   3 +
+ toolchain/toolchain-wrapper-ld.c                   | 252 +++++++++++++++++++++
+ toolchain/toolchain-wrapper.c                      |  19 +-
+ toolchain/toolchain-wrapper.mk                     |  10 +
+ 6 files changed, 291 insertions(+), 2 deletions(-)
+ create mode 100644 toolchain/toolchain-wrapper-ld.c
+
 -- 
 1.9.1
