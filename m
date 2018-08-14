@@ -1,153 +1,47 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 14 Aug 2018 06:21:02 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] perl-template-toolkit: new package
-In-Reply-To: <20180813175645.11088-2-chrismcc@gmail.com>
-References: <20180813175645.11088-1-chrismcc@gmail.com>
- <20180813175645.11088-2-chrismcc@gmail.com>
-Message-ID: <CAB0FRste31CaZoHAOhgNY3Ho8_4QRrjBVOZWKqbmW9a4XyUy-Q@mail.gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 14 Aug 2018 07:24:51 +0300
+Subject: [Buildroot] [PATCH v2] bzip2: change upstream site
+Message-ID: <59cd8eb281eed8b9102b8d2a56aa6ff50f0a9a80.1534220691.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-08-13 19:56 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+The bzip.org website is down. Use the Buildroot backup download site.
+Remove the website link as there is no clear alternative upstream at
+this point.
 
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> ---
->  DEVELOPERS                                         |  1 +
->  package/Config.in                                  |  1 +
->  package/perl-template-toolkit/Config.in            | 11 ++++++++
->  .../perl-template-toolkit.hash                     |  6 ++++
->  .../perl-template-toolkit/perl-template-toolkit.mk | 32
-> ++++++++++++++++++++++
->  5 files changed, 51 insertions(+)
->  create mode 100644 package/perl-template-toolkit/Config.in
->  create mode 100644 package/perl-template-toolkit/
-> perl-template-toolkit.hash
->  create mode 100644 package/perl-template-toolkit/perl-template-toolkit.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 6d0e3ecceb..d35cf3fb72 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -501,6 +501,7 @@ F:  package/perl-params-util/
->  F:     package/perl-sub-install/
->  F:     package/perl-sys-meminfo/
->  F:     package/perl-sys-mmap/
-> +F:     package/perl-template-toolkit/
->
->  N:     Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
->  F:     package/audit/
-> diff --git a/package/Config.in b/package/Config.in
-> index 85046ae56e..6437cc0451 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -728,6 +728,7 @@ menu "Perl libraries/modules"
->         source "package/perl-sub-install/Config.in"
->         source "package/perl-sys-meminfo/Config.in"
->         source "package/perl-sys-mmap/Config.in"
-> +       source "package/perl-template-toolkit/Config.in"
->         source "package/perl-time-hires/Config.in"
->         source "package/perl-timedate/Config.in"
->         source "package/perl-try-tiny/Config.in"
-> diff --git a/package/perl-template-toolkit/Config.in
-> b/package/perl-template-toolkit/Config.in
-> new file mode 100644
-> index 0000000000..1caca074aa
-> --- /dev/null
-> +++ b/package/perl-template-toolkit/Config.in
-> @@ -0,0 +1,11 @@
-> +config BR2_PACKAGE_PERL_TEMPLATE_TOOLKIT
-> +       bool "perl-template-toolkit"
-> +       depends on !BR2_STATIC_LIBS
-> +       select BR2_PACKAGE_PERL_APPCONFIG
-> +       help
-> +         comprehensive template processing system
-> +
-> +         https://metacpan.org/release/Template-Toolkit
-> +
-> +comment "perl-template-toolkit needs a toolchain w/ dynamic library"
-> +       depends on BR2_STATIC_LIBS
-> diff --git a/package/perl-template-toolkit/perl-template-toolkit.hash
-> b/package/perl-template-toolkit/perl-template-toolkit.hash
-> new file mode 100644
-> index 0000000000..54d4553695
-> --- /dev/null
-> +++ b/package/perl-template-toolkit/perl-template-toolkit.hash
-> @@ -0,0 +1,6 @@
-> +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    a7fae5d4fe5918f33105d92a62134067 Template-Toolkit-2.27.tar.gz
-> +sha256 1311a403264d0134c585af0309ff2a9d5074b8ece23ece5660d31ec96bf2c6dc
-> Template-Toolkit-2.27.tar.gz
-> +
-> +# computed by scancpan
-> +sha256 d897b2d98affd4f0489340e54ceb542383101e3d21408dfad025df71d770d842
-> README
-> diff --git a/package/perl-template-toolkit/perl-template-toolkit.mk
-> b/package/perl-template-toolkit/perl-template-toolkit.mk
-> new file mode 100644
-> index 0000000000..875437dead
-> --- /dev/null
-> +++ b/package/perl-template-toolkit/perl-template-toolkit.mk
-> @@ -0,0 +1,32 @@
-> +###########################################################
-> #####################
-> +#
-> +# perl-template-toolkit
-> +#
-> +###########################################################
-> #####################
-> +
-> +PERL_TEMPLATE_TOOLKIT_VERSION = 2.27
-> +PERL_TEMPLATE_TOOLKIT_SOURCE = Template-Toolkit-$(PERL_
-> TEMPLATE_TOOLKIT_VERSION).tar.gz
-> +PERL_TEMPLATE_TOOLKIT_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AB/ABW
-> +PERL_TEMPLATE_TOOLKIT_DEPENDENCIES = perl-appconfig
-> +PERL_TEMPLATE_TOOLKIT_LICENSE = Artistic or GPL-1.0+
-> +PERL_TEMPLATE_TOOLKIT_LICENSE_FILES = README
-> +
-> +# There has got to be a better way... :(
-> +# Some arguments to Makefile.PL do not get propagated to subdirectories
-> +# similar to:
-> +# https://rt.cpan.org/Public/Bug/Display.html?id=28632
-> +define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
-> +        $(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(@D)/xs/Makefile
-> +        $(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g"
-> $(@D)/xs/Makefile
-> +        $(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(@D)/xs/Makefile
-> +        $(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g"
-> $(@D)/xs/Makefile
-> +        $(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(@D)/xs/Makefile
-> +        $(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared
-> $(TARGET_LDFLAGS):g" $(@D)/xs/Makefile
-> +        $(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g"
-> $(@D)/xs/Makefile
-> +        $(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g"
-> $(@D)/xs/Makefile
-> +endef
->
+  https://lwn.net/Articles/762264/
 
-If you put this block of code in a function (in pkg-perl.mk) with the
-filename as parameter,
-you could just call it, in each module
-    define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
-         $(call,foo,$(@D)/xs/Makefile)
-    endef
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/bzip2/Config.in | 2 --
+ package/bzip2/bzip2.mk  | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-Fran?ois
-
-
-> +
-> +PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_HOOKS += PERL_TEMPLATE_TOOLKIT_POST_
-> CONFIGURE_SED
-> +
-> +
-> +$(eval $(perl-package))
-> --
-> 2.14.4
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180814/49392ddd/attachment.html>
+diff --git a/package/bzip2/Config.in b/package/bzip2/Config.in
+index dbc82496df7e..ca447bbb2dc5 100644
+--- a/package/bzip2/Config.in
++++ b/package/bzip2/Config.in
+@@ -5,5 +5,3 @@ config BR2_PACKAGE_BZIP2
+ 	  It typically compresses files to within 10% to 15% of the best
+ 	  available techniques, while being around twice as fast at
+ 	  compression and six times faster at decompression.
+-
+-	  http://www.bzip.org
+diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
+index e43533072b2d..a3af32299370 100644
+--- a/package/bzip2/bzip2.mk
++++ b/package/bzip2/bzip2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ BZIP2_VERSION = 1.0.6
+-BZIP2_SITE = http://www.bzip.org/$(BZIP2_VERSION)
++BZIP2_SITE = http://sources.buildroot.net
+ BZIP2_INSTALL_STAGING = YES
+ BZIP2_LICENSE = bzip2 license
+ BZIP2_LICENSE_FILES = LICENSE
+-- 
+2.18.0
