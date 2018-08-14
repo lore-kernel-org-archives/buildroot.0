@@ -1,48 +1,91 @@
-From: Mirza Krak <mirza.krak@northern.tech>
-Date: Wed, 15 Aug 2018 00:43:13 +0200
-Subject: [Buildroot] pkg-golang: host package not supported
-In-Reply-To: <24764a81-1a68-9432-fbdc-d43aa26ed218@mind.be>
-References: <CADHdJwDuaeDU_G0ePRPRrWw+3Vo4W0mSx45OuEDnqrgnsKgZQA@mail.gmail.com>
- <20180810140056.5cf7d9ed@windsurf>
- <CABa6e=q8EfZv0C+E6B_AxwNDw65+u6-VfWDh0ck6eBHv+_nTug@mail.gmail.com>
- <CADHdJwA2GpxG9mCJ9xV0_VxS9bPUax3Uvq-bJ07TTXy5XikuxQ@mail.gmail.com>
- <24764a81-1a68-9432-fbdc-d43aa26ed218@mind.be>
-Message-ID: <CADHdJwB+9juxwRXttOfeizfrFyvvF_gQYuWjpyM3EqN8SsK4wg@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 15 Aug 2018 00:50:42 +0200
+Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
+ bison} to build the configurators
+In-Reply-To: <20180814152743.GJ7915@scaer>
+References: <cover.1533327111.git.yann.morin.1998@free.fr>
+ <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
+ <20180814162130.00f55418@windsurf> <20180814152743.GJ7915@scaer>
+Message-ID: <ea46788a-f814-7fc8-b9dd-1ce97a59546c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 15, 2018 at 12:37 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 15-08-18 00:05, Mirza Krak wrote:
->> I did have one problem with $(2)_SRC_SUBDIR, it turns out to be empty
->> when building host target. Workaround was to explicitly set this in
->> the .mk file with the HOST_ prefix. Any hints on why? Need some ifeq
->> ($(4),target) ... else ... endif  magic? :)
->
->  I guess you expect _SRC_SUBDIR to be inherited from the target package, so you
-> need something like this in the golang infra:
 
-For this specific package I am not defining a "target" package, host
-only. Do not know if that affects the outcome.
 
->
-> ifndef $(2)_SRC_SUBDIR
->  ifdef $(3)_SRC_SUBDIR
->   $(2)_SRC_SUBDIR = $$($(3)_SRC_SUBDIR)
->  else
->   $(2)_SRC_SUBDIR ?=
-> $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE) endif
-> endif
->
->  And similar for SRC_DOMAIN, SRC_VENDOR, SRC_SOFTWARE...
+On 14-08-18 17:27, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2018-08-14 16:21 +0200, Thomas Petazzoni spake thusly:
+>> On Fri,  3 Aug 2018 22:16:55 +0200, Yann E. MORIN wrote:
+>>> Take this opportunity to also drop the append-assignment as the first
+>>> assignment to LINUX_DEPENDENCIES.
+>>>
+>>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>>> Cc: Arnout Vandecappelle <arnout@mind.be>
+>>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>>
+>> I am a bit confused. In this series, you suggest to make
+>> host-flex/host-bison dependencies of the configuration step of Linux.
+>> But in another series
+>> (http://patchwork.ozlabs.org/project/buildroot/list/?series=59260), you
+>> suggest to make flex/bison hard requirements of Buildroot, so that we
+>> don't have to build them.
+>>
+>> Could you clarify in which direction you would like to go ?
+> 
+> This very series is about solving a technical problem, that
+> kconfig-based packages may have dependencies required even before
+> running the configurators.
+> 
+> On the other hand, that other series is about changing our requirements.
+> 
+> If we decide to require flex+bison, so in this series, only patch 2 can
+> be dropped.
+> 
+>> Also, if we
+>> make bison/flex hard requirements of Buildroot, I'd like to have a
+>> clear rule on whether we keep or not our host-bison/host-flex packages,
+>> and if we keep them, when they should be used vs. when the system
+>> bison/flex should be used.
+> 
+> My position is that we will always want to have our host flex and bison
+> to build packages that install things in host/, in staging/ or in
+> target/.
 
-To fresh on Buildroot to comment on above :).
+ My position is that we do indeed need our host flex and bison for everything
+installed in target/ (which implies everything installed in staging/), but not
+for things installed in host/. We definitely need it for BR2_REPRODUCIBLE.
+
+ It would also be nice if dependencies.sh could do a version check and accept
+the system flex/bison if it is the right version, like we do for cmake and tar.
+
+ But both of these wishes make things more complicated, so I'm OK with just
+keeping all current host-flex/bison dependencies.
+
+
+> For the linux kernel and other kconfig-based packages, we don't care
+> which flex/bison are used, because the resulting binaries are not
+> installed, unless those packages also generate code eventually installed
+> in host/, staging/ or target/
+
+ Note that this means you'll still need host-flex/bison for the kernel, because
+the kernel may build dtc and that gets installed in host...
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
 
 -- 
-Mirza Krak | Embedded Solutions Architect | https://mender.io
-
- Northern.tech AS | @northerntechHQ
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
