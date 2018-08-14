@@ -1,109 +1,128 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 Aug 2018 17:53:37 +0200
-Subject: [Buildroot] [PATCH 17/17] perl-termreadkey: new package
-In-Reply-To: <20180813235716.070f77f0@windsurf>
-References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-18-chrismcc@gmail.com>
- <20180813235716.070f77f0@windsurf>
-Message-ID: <20180814155337.GM7915@scaer>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 14 Aug 2018 12:33:48 -0500
+Subject: [Buildroot] [Next v2] openresolv: new package
+Message-ID: <20180814173348.31148-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Christopher, All,
+From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
 
-On 2018-08-13 23:57 +0200, Thomas Petazzoni spake thusly:
-> Adding Yann and Arnout, licensing question below.
-> On Sat, 11 Aug 2018 11:27:49 -0700, Christopher McCrory wrote:
-> > +PERL_TERMREADKEY_VERSION = 2.37
-> > +PERL_TERMREADKEY_SOURCE = TermReadKey-$(PERL_TERMREADKEY_VERSION).tar.gz
-> > +PERL_TERMREADKEY_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JS/JSTOWE
-> > +PERL_TERMREADKEY_LICENSE = Artistic or GPL-1.0+
-> 
-> This is not correct I believe.
+This patch added 'openresolv' package support. This tool
+provides a dns management framework to track currently
+available nameservers.
 
-IANAL...
+A key feature of this tool vs resolvconf is the ability to
+manage multiple name server input configuration files and
+generate the /etc/resolv.conf.  This is handy when you have
+multiple dynamic communication paths providing nameserver
+information.
 
-Indeed it's not.
+REF: https://github.com/rsmarples/openresolv
 
-> The README file says this:
-> 
-> """
->  Term::ReadKey 2.36 - Change terminal modes, and perform non-blocking reads.
-> 
->  Copyright (C) 1994-1999 Kenneth Albanowski.
->                2001-2016 Jonathan Stowe and others
-> 
-> This package is dual licensed.  You can either choose to license it under
-> the original terms which were:
-> 
->  Unlimited distribution and/or modification is allowed as long as this
->  copyright notice remains intact.
-> 
-> Or the standard Perl terms:
-> 
->   This module is free software; you can redistribute it and/or modify it
->   under the terms of the Artistic License. For details, see the full
->   text of the license in the file "Artistic" that should have been provided
->   with the version of perl you are using.
-> 
->   This program is distributed in the hope that it will be useful, but
->   without any warranty; without even the implied warranty of merchantability
->   or fitness for a particular purpose.
-> """
-> 
-> So it is not under "Artistic or GPL-1.0+", but it is under "Artistic or
-> <some funky license>".
-> 
-> According to
-> http://docs.activestate.com/activeperl/5.22/perl/lib/Term/ReadKey.html,
-> the small "Unlimited distribution..." license was the only license of
-> this Perl module up to version 2.31, at which point the Artistic
-> license was added as an option.
-> 
-> I don't know how to SPDX-encode this weird license. Perhaps we should
-> simply not care, and say the license is just "Artistic" ? Yann ?
-> Arnout ?
+Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 
-According to the SPDX FAQ [0]:
+---
+Changes
+v1 -> v2
+[Thomas
+ - Added DEVELOPERS file entry
+ - Removed bash dependency as our original testing was invalid and the
+   tool works fine with busybox as along as CONFIG_ASH_GETOPTS is
+   enabled which is the default in buildroot.
+ - Fixed pkg to build as a generic vs autotools (they tried to mimic
+   autotools and we missed it in the orignal patch)
+---
+ DEVELOPERS                         |  1 +
+ package/Config.in                  |  1 +
+ package/openresolv/Config.in       |  8 ++++++++
+ package/openresolv/openresolv.hash |  3 +++
+ package/openresolv/openresolv.mk   | 25 +++++++++++++++++++++++++
+ 5 files changed, 38 insertions(+)
+ create mode 100644 package/openresolv/Config.in
+ create mode 100644 package/openresolv/openresolv.hash
+ create mode 100644 package/openresolv/openresolv.mk
 
-  * How does one handle [...] licenses not found in the SPDX License
-    List?
-
-    [...] one can add the license text to the SPDX file and define a new
-    license label. That license identifier is defined only for that
-    specific SPDX document. This is explained in Section 6 of the SPDX
-    Specification or see [1].
-
-However, we do not have our own SPDX document in Buildroot, so section 6
-does not apply.
-
-However, we already have similar situations, where we simply state
-something like:
-
-    FOO_LICENSE = Foo license
-
-So, I would state something similar here:
-
-    PERL_TERMREADKEY_LICENSE = Term::ReadKey license or Artistic-1.0-Perl
-
-Please double-check which versiopn of the Artistic license this is
-refering to (i.e. the docs says "see the full text of the license in the
-file "Artistic" that should have been provided with the version of perl
-you are using.", so I just used Artistic-1.0-Perl but I'm not sure...)
-
-Regards,
-Yann E. MORIN.
-
-[0] https://spdx.org/frequently-asked-questions-faq-0
-[1] https://spdx.org/spdx-specification-21-web-version#h.1v1yuxt
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f530158c21..6e44d9825f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1353,6 +1353,7 @@ F:	package/mtd/
+ F:	package/mtools/
+ F:	package/nginx-upload/
+ F:	package/omniorb/
++F:	package/openresolv/
+ F:	package/paxtest/
+ F:	package/picocom/
+ F:	package/policycoreutils/
+diff --git a/package/Config.in b/package/Config.in
+index 7b4637900f..eda0f698dc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1866,6 +1866,7 @@ endif
+ 	source "package/open-plc-utils/Config.in"
+ 	source "package/openntpd/Config.in"
+ 	source "package/openobex/Config.in"
++	source "package/openresolv/Config.in"
+ 	source "package/openssh/Config.in"
+ 	source "package/openswan/Config.in"
+ 	source "package/openvpn/Config.in"
+diff --git a/package/openresolv/Config.in b/package/openresolv/Config.in
+new file mode 100644
+index 0000000000..2a393c6bc4
+--- /dev/null
++++ b/package/openresolv/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_OPENRESOLV
++	bool "openresolv"
++	help
++	  openresolv is a resolvconf implementation which
++	  manages resolv.conf. This tool provides a dns management
++	  framework to track currently available nameservers.
++
++	  https://github.com/rsmarples/openresolv
+diff --git a/package/openresolv/openresolv.hash b/package/openresolv/openresolv.hash
+new file mode 100644
+index 0000000000..e1a1fb5468
+--- /dev/null
++++ b/package/openresolv/openresolv.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 96b3f84435a183426c622db7097a930fb0d48a99e82cd87ce83bd343b8c20574 openresolv-fe4e1ec4e2be2adfc1530ade94ebb30aa6f51540.tar.gz
++sha256 d1f9dcd2dac4e095b14caab517cfe791a6e0785346164b7d0cafc13c714f8aa5 LICENSE
+diff --git a/package/openresolv/openresolv.mk b/package/openresolv/openresolv.mk
+new file mode 100644
+index 0000000000..6adf973527
+--- /dev/null
++++ b/package/openresolv/openresolv.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# openresolv
++#
++################################################################################
++
++OPENRESOLV_VERSION = fe4e1ec4e2be2adfc1530ade94ebb30aa6f51540
++OPENRESOLV_SITE = $(call github,rsmarples,openresolv,$(OPENRESOLV_VERSION))
++OPENRESOLV_LICENSE = BSD-2-Clause
++OPENRESOLV_LICENSE_FILES = LICENSE
++
++define OPENRESOLV_CONFIGURE_CMDS
++	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure --prefix=/usr \
++		--sysconfdir=/etc
++endef
++
++define OPENRESOLV_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define OPENRESOLV_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++endef
++
++$(eval $(generic-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.0
