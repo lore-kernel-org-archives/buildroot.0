@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Aug 2018 00:50:42 +0200
-Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
- bison} to build the configurators
-In-Reply-To: <20180814152743.GJ7915@scaer>
-References: <cover.1533327111.git.yann.morin.1998@free.fr>
- <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
- <20180814162130.00f55418@windsurf> <20180814152743.GJ7915@scaer>
-Message-ID: <ea46788a-f814-7fc8-b9dd-1ce97a59546c@mind.be>
+Date: Wed, 15 Aug 2018 01:04:03 +0200
+Subject: [Buildroot] [PATCH 1/3] fake-hwclock: new package
+In-Reply-To: <20180814160032.5d2bfce8@windsurf>
+References: <20180810144635.16182-1-chrismcc@gmail.com>
+ <20180814160032.5d2bfce8@windsurf>
+Message-ID: <e991943f-b214-b364-0dc5-276c6e306273@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,71 +13,65 @@ To: buildroot@busybox.net
 
 
 
-On 14-08-18 17:27, Yann E. MORIN wrote:
-> Thomas, All,
+On 14-08-18 16:00, Thomas Petazzoni wrote:
+> Hello,
 > 
-> On 2018-08-14 16:21 +0200, Thomas Petazzoni spake thusly:
->> On Fri,  3 Aug 2018 22:16:55 +0200, Yann E. MORIN wrote:
->>> Take this opportunity to also drop the append-assignment as the first
->>> assignment to LINUX_DEPENDENCIES.
->>>
->>> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->>> Cc: Arnout Vandecappelle <arnout@mind.be>
->>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->>
->> I am a bit confused. In this series, you suggest to make
->> host-flex/host-bison dependencies of the configuration step of Linux.
->> But in another series
->> (http://patchwork.ozlabs.org/project/buildroot/list/?series=59260), you
->> suggest to make flex/bison hard requirements of Buildroot, so that we
->> don't have to build them.
->>
->> Could you clarify in which direction you would like to go ?
+> Yann, Arnout, Peter, there is a question below.
 > 
-> This very series is about solving a technical problem, that
-> kconfig-based packages may have dependencies required even before
-> running the configurators.
+> Christopher, there are some review comments as well.
 > 
-> On the other hand, that other series is about changing our requirements.
+> On Fri, 10 Aug 2018 07:46:34 -0700, Christopher McCrory wrote:
 > 
-> If we decide to require flex+bison, so in this series, only patch 2 can
-> be dropped.
+>> +if BR2_PACKAGE_FAKE_HWCLOCK
+>> +config BR2_PACKAGE_FAKE_HWCLOCK_CRONJOB
+>> +        bool "install fake-hwclock cronjob"
+>> +        help
+>> +          Hourly cronjob to save current timestamp
 > 
->> Also, if we
->> make bison/flex hard requirements of Buildroot, I'd like to have a
->> clear rule on whether we keep or not our host-bison/host-flex packages,
->> and if we keep them, when they should be used vs. when the system
->> bison/flex should be used.
+> What should be our policy for cronjobs ? I'm not sure we currently have
+> packages that install cronjobs.
+
+ We don't, for a good reason: we don't start a cron daemon.
+
+ Actually the 'at' package does install crontab entries, but it's kind of
+pointless without crond...
+
+> What should we do? Install
+> unconditionally? Have a sub-option?
+
+ I agree with unconditional. Ideally, though, as part of the _INSTALL_INIT,
+because for systemd you really want to use systemd.timer units instead of crontabs.
+
 > 
-> My position is that we will always want to have our host flex and bison
-> to build packages that install things in host/, in staging/ or in
-> target/.
+> I would personally lean towards installing unconditionally, but I'd
+> like to have others opinions before applying.
+> 
+>> +FAKE_HWCLOCK_VERSION = v0.11
+>> +FAKE_HWCLOCK_SITE = https://git.einval.com/git/fake-hwclock.git
+>> +FAKE_HWCLOCK_SITE_METHOD = git
+>> +FAKE_HWCLOCK_LICENSE_FILES = COPYING
+>> +FAKE_LICENSE = GPL-2.0
+> 
+> This variable is wrong: it should be FAKE_HWCLOCK_LICENSE. Also, we
+> prefer to have it before the LICENSE_FILES variable.
+> 
+>> +define FAKE_HWCLOCK_NO_LSB
+>> +	$(SED) 's at . /lib/lsb/init-functions@#. /lib/lsb/init-functions@' \
+>> +		$(@D)/debian/fake-hwclock.init
+>> +endef
+> 
+> This should be done by a patch.
 
- My position is that we do indeed need our host flex and bison for everything
-installed in target/ (which implies everything installed in staging/), but not
-for things installed in host/. We definitely need it for BR2_REPRODUCIBLE.
-
- It would also be nice if dependencies.sh could do a version check and accept
-the system flex/bison if it is the right version, like we do for cmake and tar.
-
- But both of these wishes make things more complicated, so I'm OK with just
-keeping all current host-flex/bison dependencies.
-
-
-> For the linux kernel and other kconfig-based packages, we don't care
-> which flex/bison are used, because the resulting binaries are not
-> installed, unless those packages also generate code eventually installed
-> in host/, staging/ or target/
-
- Note that this means you'll still need host-flex/bison for the kernel, because
-the kernel may build dtc and that gets installed in host...
+ Actually I think we'd prefer a Buildroot-specific init script instead of the
+bloaty Debian one.
 
  Regards,
  Arnout
 
 > 
-> Regards,
-> Yann E. MORIN.
+> Thanks!
+> 
+> Thomas
 > 
 
 -- 
