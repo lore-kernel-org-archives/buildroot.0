@@ -1,11 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 16:22:47 +0200
-Subject: [Buildroot] [PATCH 1/1] gst1-plugins-good: add option for qmlgl
- plugin (qt5 plugin)
-In-Reply-To: <1533208261-13853-1-git-send-email-inigohuguet@fanamoel.com>
-References: <4a3746f6-f635-e3a2-0d09-deff9c106b70@mind.be>
- <1533208261-13853-1-git-send-email-inigohuguet@fanamoel.com>
-Message-ID: <20180814162247.396f9862@windsurf>
+Date: Tue, 14 Aug 2018 16:23:23 +0200
+Subject: [Buildroot] [PATCH] uboot: add option to depend on host-lzop
+In-Reply-To: <20180728201152.5094-1-thomas.petazzoni@bootlin.com>
+References: <20180728201152.5094-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180814162323.16e21f36@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,85 +12,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-Peter (Seiderer), you are the de-facto GStreamer / Qt5 person, could you
-please review/test/ack the below patch ?
+On Sat, 28 Jul 2018 22:11:52 +0200, Thomas Petazzoni wrote:
+> Some U-Boot configurations use lzop, which may not be available on the
+> build machine since it's not a mandatory dependency of Buildroot.
+> 
+> To solve this, a new option BR2_TARGET_UBOOT_NEEDS_LZOP is introduced,
+> and handled in a similar way to the existing
+> BR2_TARGET_UBOOT_NEEDS_OPENSSL option.
+> 
+> This fixes the build of the dra7xx_evm U-Boot defconfig as of U-Boot
+> 2018.07, on a build machine without lzop installed.
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  boot/uboot/Config.in | 8 ++++++++
+>  boot/uboot/uboot.mk  | 4 ++++
+>  2 files changed, 12 insertions(+)
 
-Thanks a lot :-)
+Applied to next, thanks.
 
 Thomas
-
-On Thu,  2 Aug 2018 13:11:01 +0200, I?igo Huguet wrote:
-> gst1-plugins-good is built with --disable-qt option, so qmlgl plugin
-> is disabled. Added option to enable it, allowing to use elements
-> qmlglsrc and qmlglsink.
-> 
-> Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
-> ---
->  package/gstreamer1/gst1-plugins-good/Config.in           | 16 ++++++++++++++++
->  .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk    | 13 +++++++++++--
->  2 files changed, 27 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-> index afb9a41..62ac07b 100644
-> --- a/package/gstreamer1/gst1-plugins-good/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
-> @@ -283,6 +283,22 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4
->  	help
->  	  Open Sound System (OSS) version 4 support for GStreamer
->  
-> +config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
-> +	bool "qmlgl (qt5)"
-> +	depends on BR2_PACKAGE_QT5
-> +	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
-> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative-quick
-> +	select BR2_PACKAGE_QT5DECLARATIVE
-> +	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-> +	select BR2_PACKAGE_QT5X11EXTRAS if BR2_PACKAGE_QT5BASE_XCB
-> +	help
-> +	  QT5 plugin which includes elements qmlglsrc and qmlglsink
-> +	
-> +comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
-> +	depends on BR2_PACKAGE_QT5
-> +	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
-> +
->  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
->  	bool "v4l2"
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> index c1ed039..ef28f2d 100644
-> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> @@ -20,8 +20,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
->  	--disable-osx_video \
->  	--disable-aalib \
->  	--disable-aalibtest \
-> -	--disable-libcaca \
-> -	--disable-qt
-> +	--disable-libcaca
->  
->  # Options which require currently unpackaged libraries
->  GST1_PLUGINS_GOOD_CONF_OPTS += \
-> @@ -328,6 +327,16 @@ else
->  GST1_PLUGINS_GOOD_CONF_OPTS += --disable-oss4
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL),y)
-> +GST1_PLUGINS_GOOD_CONF_OPTS += --enable-qt
-> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5declarative
-> +ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
-> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5x11extras
-> +endif
-> +else
-> +GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
->  GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
->  else
-
-
-
 -- 
 Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
