@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 16:23:23 +0200
-Subject: [Buildroot] [PATCH] uboot: add option to depend on host-lzop
-In-Reply-To: <20180728201152.5094-1-thomas.petazzoni@bootlin.com>
-References: <20180728201152.5094-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180814162323.16e21f36@windsurf>
+Date: Tue, 14 Aug 2018 16:27:05 +0200
+Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
+ target in pkg-kconfig.mk
+In-Reply-To: <20180731154948.GB8537@scaer>
+References: <20180730155153.24091-1-m.patzlaff@pilz.de>
+ <20180730155153.24091-4-m.patzlaff@pilz.de>
+ <20180730234643.34315d11@windsurf> <20180731154948.GB8537@scaer>
+Message-ID: <20180814162705.505476fe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +15,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 28 Jul 2018 22:11:52 +0200, Thomas Petazzoni wrote:
-> Some U-Boot configurations use lzop, which may not be available on the
-> build machine since it's not a mandatory dependency of Buildroot.
-> 
-> To solve this, a new option BR2_TARGET_UBOOT_NEEDS_LZOP is introduced,
-> and handled in a similar way to the existing
-> BR2_TARGET_UBOOT_NEEDS_OPENSSL option.
-> 
-> This fixes the build of the dra7xx_evm U-Boot defconfig as of U-Boot
-> 2018.07, on a build machine without lzop installed.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  boot/uboot/Config.in | 8 ++++++++
->  boot/uboot/uboot.mk  | 4 ++++
->  2 files changed, 12 insertions(+)
+Adding Arnout and Peter in Cc, in case they want to give their opinion
+on the patch series.
 
-Applied to next, thanks.
+On Tue, 31 Jul 2018 17:49:48 +0200, Yann E. MORIN wrote:
+
+> I would just suggest that we do not add any new rule, but trying to
+> update the defconfig when there are fragments would fail as it currently
+> does, but also would display the delta if there is one. I.e.:
+> 
+>     $ make linux-menuconfig
+>     [change stuff]
+>     $ make linux-update-defconfig
+>     Unable to perform linux-update-defconfig when fragment files are set
+>     Configuration changes that you want to propagate to one of the fragments:
+>     -CONFIG_FOO=y
+>     +# CONFIG_BAR is unset
+>     linux/linux.mk:511: recipe for target 'linux-update-defconfig' failed
+>     make[1]: *** [linux-update-defconfig] Error 1
+
+I think we could do that in *addition* to having a new rule. Indeed,
+when you know what you're doing, having to run something that doesn't
+make sense ("make linux-update-defconfig") and which causes a failure
+is a bit silly. I'd rather run "make linux-diff-config" (or whatever
+name we chose).
+
+Marcel, do you think you could rework your patch series to go in the
+direction of showing a diff rather than arbitrarily adjusting the last
+fragment ?
+
+Thanks!
 
 Thomas
 -- 
