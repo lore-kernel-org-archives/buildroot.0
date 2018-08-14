@@ -1,37 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 23:39:55 +0200
-Subject: [Buildroot] [PATCH v3 2/2] package/lvm2: bump version to
- 2.02.180
-In-Reply-To: <20180726171524.479-2-m.niestroj@grinn-global.com>
-References: <20180726171524.479-1-m.niestroj@grinn-global.com>
- <20180726171524.479-2-m.niestroj@grinn-global.com>
-Message-ID: <20180814233955.2fa26ff3@windsurf>
+Date: Tue, 14 Aug 2018 23:41:06 +0200
+Subject: [Buildroot] [git commit] qt5serialbus: examples need qt5 widgets
+ module
+Message-ID: <20180814213410.808A38D368@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Marcin,
+commit: https://git.buildroot.net/buildroot/commit/?id=a3c3a54da9394afc819f70215a2cf34162c05b82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 26 Jul 2018 19:15:24 +0200, Marcin Niestroj wrote:
-> lvm2 starting from version 2.02.178 depends on libaio library.
-> 
-> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-> ---
-> Changes v2 -> v3:
->  * Add missing libaio dependency in luksmeta (suggested by Baruch)
+Fixes [1]:
 
-Applied to next, thanks. I have submitted a follow-up patch that bumps
-libaio, with the consequence that it no longer has any architecture
-dependency. This allows to remove all the
-BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS dependencies, which is nice. Feel free
-to have a look/review the patch I posted.
+  make[2]: Entering directory '.../build/qt5serialbus-5.11.1/examples'
+  Some of the required modules (qtHaveModule(widgets)) are not available.
+  Skipped.
+  [...]
+  cp -dpfr .../host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/qt/examples/serialbus .../target/usr/lib/qt/examples/
+  cp: cannot stat '.../host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/qt/examples/serialbus': No such file or directory
 
-Thanks!
+[1] http://autobuild.buildroot.net/results/147809b5f8758af935bee48c0fc83fd86a8509e9
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5serialbus/qt5serialbus.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/qt5/qt5serialbus/qt5serialbus.mk b/package/qt5/qt5serialbus/qt5serialbus.mk
+index 6de9f9b7d3..98c4466cb8 100644
+--- a/package/qt5/qt5serialbus/qt5serialbus.mk
++++ b/package/qt5/qt5serialbus/qt5serialbus.mk
+@@ -36,7 +36,7 @@ define QT5SERIALBUS_INSTALL_TARGET_LIBS
+ endef
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES)$(BR2_PACKAGE_QT5BASE_WIDGETS),yy)
+ define QT5SERIALBUS_INSTALL_TARGET_EXAMPLES
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/serialbus $(TARGET_DIR)/usr/lib/qt/examples/
+ endef
