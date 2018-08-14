@@ -1,10 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Aug 2018 01:04:03 +0200
-Subject: [Buildroot] [PATCH 1/3] fake-hwclock: new package
-In-Reply-To: <20180814160032.5d2bfce8@windsurf>
-References: <20180810144635.16182-1-chrismcc@gmail.com>
- <20180814160032.5d2bfce8@windsurf>
-Message-ID: <e991943f-b214-b364-0dc5-276c6e306273@mind.be>
+Date: Wed, 15 Aug 2018 01:13:24 +0200
+Subject: [Buildroot] pkg-golang: host package not supported
+In-Reply-To: <CADHdJwB+9juxwRXttOfeizfrFyvvF_gQYuWjpyM3EqN8SsK4wg@mail.gmail.com>
+References: <CADHdJwDuaeDU_G0ePRPRrWw+3Vo4W0mSx45OuEDnqrgnsKgZQA@mail.gmail.com>
+ <20180810140056.5cf7d9ed@windsurf>
+ <CABa6e=q8EfZv0C+E6B_AxwNDw65+u6-VfWDh0ck6eBHv+_nTug@mail.gmail.com>
+ <CADHdJwA2GpxG9mCJ9xV0_VxS9bPUax3Uvq-bJ07TTXy5XikuxQ@mail.gmail.com>
+ <24764a81-1a68-9432-fbdc-d43aa26ed218@mind.be>
+ <CADHdJwB+9juxwRXttOfeizfrFyvvF_gQYuWjpyM3EqN8SsK4wg@mail.gmail.com>
+Message-ID: <214a9eac-afe5-2b4f-72a2-b212968f5992@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,65 +17,88 @@ To: buildroot@busybox.net
 
 
 
-On 14-08-18 16:00, Thomas Petazzoni wrote:
-> Hello,
+On 15-08-18 00:43, Mirza Krak wrote:
+> On Wed, Aug 15, 2018 at 12:37 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>> On 15-08-18 00:05, Mirza Krak wrote:
+>>> I did have one problem with $(2)_SRC_SUBDIR, it turns out to be empty
+>>> when building host target. Workaround was to explicitly set this in
+>>> the .mk file with the HOST_ prefix. Any hints on why? Need some ifeq
+>>> ($(4),target) ... else ... endif  magic? :)
+>>
+>>  I guess you expect _SRC_SUBDIR to be inherited from the target package, so you
+>> need something like this in the golang infra:
 > 
-> Yann, Arnout, Peter, there is a question below.
-> 
-> Christopher, there are some review comments as well.
-> 
-> On Fri, 10 Aug 2018 07:46:34 -0700, Christopher McCrory wrote:
-> 
->> +if BR2_PACKAGE_FAKE_HWCLOCK
->> +config BR2_PACKAGE_FAKE_HWCLOCK_CRONJOB
->> +        bool "install fake-hwclock cronjob"
->> +        help
->> +          Hourly cronjob to save current timestamp
-> 
-> What should be our policy for cronjobs ? I'm not sure we currently have
-> packages that install cronjobs.
+> For this specific package I am not defining a "target" package, host
+> only. Do not know if that affects the outcome.
 
- We don't, for a good reason: we don't start a cron daemon.
+ As I said, I'm guessing since you didn't provide details...
 
- Actually the 'at' package does install crontab entries, but it's kind of
-pointless without crond...
+ You're defining a host-only package, but you still set FOO_SITE instead of
+HOST_FOO_SITE, I guess. HOST_FOO_SITE is set automatically by the generic infra,
+but only *after* the empty definition has already been used to define
+HOST_FOO_SRC_SUBDIR:
 
-> What should we do? Install
-> unconditionally? Have a sub-option?
+$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
+$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
+$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
 
- I agree with unconditional. Ideally, though, as part of the _INSTALL_INIT,
-because for systemd you really want to use systemd.timer units instead of crontabs.
+$(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
 
-> 
-> I would personally lean towards installing unconditionally, but I'd
-> like to have others opinions before applying.
-> 
->> +FAKE_HWCLOCK_VERSION = v0.11
->> +FAKE_HWCLOCK_SITE = https://git.einval.com/git/fake-hwclock.git
->> +FAKE_HWCLOCK_SITE_METHOD = git
->> +FAKE_HWCLOCK_LICENSE_FILES = COPYING
->> +FAKE_LICENSE = GPL-2.0
-> 
-> This variable is wrong: it should be FAKE_HWCLOCK_LICENSE. Also, we
-> prefer to have it before the LICENSE_FILES variable.
-> 
->> +define FAKE_HWCLOCK_NO_LSB
->> +	$(SED) 's at . /lib/lsb/init-functions@#. /lib/lsb/init-functions@' \
->> +		$(@D)/debian/fake-hwclock.init
->> +endef
-> 
-> This should be done by a patch.
+expands to
 
- Actually I think we'd prefer a Buildroot-specific init script instead of the
-bloaty Debian one.
+HOST_FOO_SRC_DOMAIN = $(call domain,)
+HOST_FOO_SRC_VENDOR = $(word 1,$(subst /, ,$(call notdomain,)
+HOST_FOO_SRC_SOFTWARE = $(word 2,$(subst /, ,$(call notdomain,)
+
+HOST_FOO_SRC_SUBDIR ?=
+$(HOST_FOO_SRC_DOMAIN)/$(HOST_FOO_SRC_VENDOR)/$(HOST_FOO_SRC_SOFTWARE)
+
+and later on you get
+
+$(call inner-generic-package,$(1),$(2),$(3),$(4))
+
+which contains
+
+ifndef $(2)_SITE
+ ifdef $(3)_SITE
+  $(2)_SITE = $$($(3)_SITE)
+ endif
+endif
+
+which expands to
+
+HOST_FOO_SITE = $(FOO_SITE)
+
+
+ Actually, looking at it now, the real problem is that _SRC_DOMAIN definitions
+have a single dollar only. Try this:
+
+-$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
+-$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
+-$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
++$(2)_SRC_DOMAIN = $$(call domain,$$($(2)_SITE))
++$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
++$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
+
 
  Regards,
  Arnout
 
+
+>>
+>> ifndef $(2)_SRC_SUBDIR
+>>  ifdef $(3)_SRC_SUBDIR
+>>   $(2)_SRC_SUBDIR = $$($(3)_SRC_SUBDIR)
+>>  else
+>>   $(2)_SRC_SUBDIR ?=
+>> $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE) endif
+>> endif
+>>
+>>  And similar for SRC_DOMAIN, SRC_VENDOR, SRC_SOFTWARE...
 > 
-> Thanks!
-> 
-> Thomas
+> To fresh on Buildroot to comment on above :).
 > 
 
 -- 
