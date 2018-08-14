@@ -1,10 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 23:42:11 +0200
-Subject: [Buildroot] [PATCH v1] qt5serialbus: examples need qt5 widgets
- module
-In-Reply-To: <20180814211309.17510-1-ps.report@gmx.net>
-References: <20180814211309.17510-1-ps.report@gmx.net>
-Message-ID: <20180814234211.4d09f40d@windsurf>
+Date: Wed, 15 Aug 2018 00:14:13 +0200
+Subject: [Buildroot] pkg-golang: host package not supported
+In-Reply-To: <CADHdJwA2GpxG9mCJ9xV0_VxS9bPUax3Uvq-bJ07TTXy5XikuxQ@mail.gmail.com>
+References: <CADHdJwDuaeDU_G0ePRPRrWw+3Vo4W0mSx45OuEDnqrgnsKgZQA@mail.gmail.com>
+ <20180810140056.5cf7d9ed@windsurf>
+ <CABa6e=q8EfZv0C+E6B_AxwNDw65+u6-VfWDh0ck6eBHv+_nTug@mail.gmail.com>
+ <CADHdJwA2GpxG9mCJ9xV0_VxS9bPUax3Uvq-bJ07TTXy5XikuxQ@mail.gmail.com>
+Message-ID: <20180815001413.5c063d83@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +15,34 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 Aug 2018 23:13:09 +0200, Peter Seiderer wrote:
-> Fixes [1]:
-> 
->   make[2]: Entering directory '.../build/qt5serialbus-5.11.1/examples'
->   Some of the required modules (qtHaveModule(widgets)) are not available.
->   Skipped.
->   [...]
->   cp -dpfr .../host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/qt/examples/serialbus .../target/usr/lib/qt/examples/
->   cp: cannot stat '.../host/mips64el-buildroot-linux-gnu/sysroot/usr/lib/qt/examples/serialbus': No such file or directory
-> 
-> [1] http://autobuild.buildroot.net/results/147809b5f8758af935bee48c0fc83fd86a8509e9
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
->  package/qt5/qt5serialbus/qt5serialbus.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 15 Aug 2018 00:05:47 +0200, Mirza Krak wrote:
 
-Applied to master, thanks. We really need to switch to using "make
-install" for target installation of Qt5 modules at some point. This
-will allow to avoid duplicating all the installation logic in our .mk
-file, including all those conditionals.
+> I did have one problem with $(2)_SRC_SUBDIR, it turns out to be empty
+> when building host target. Workaround was to explicitly set this in
+> the .mk file with the HOST_ prefix. Any hints on why? Need some ifeq
+> ($(4),target) ... else ... endif  magic? :)
+
+Could you try this change:
+
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index bf178622b5..6eacd14180 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -77,9 +77,9 @@ $(2)_INSTALL_BINS ?= $(1)
+ # of GOPATH. It usually resolves around domain/vendor/software. By default, we
+ # derive domain/vendor/software from the upstream URL of the project, but we
+ # allow $(2)_SRC_SUBDIR to be overridden if needed.
+-$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
+-$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
+-$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
++$(2)_SRC_DOMAIN = $$(call domain,$$($(2)_SITE))
++$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
++$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
+ 
+ $(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
+ $(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
+
+Thanks!
 
 Thomas
 -- 
