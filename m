@@ -1,53 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 Aug 2018 13:33:37 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] scancpan: support more licenses
-In-Reply-To: <20180813131135.32651-2-chrismcc@gmail.com>
-References: <20180813131135.32651-1-chrismcc@gmail.com>
- <20180813131135.32651-2-chrismcc@gmail.com>
-Message-ID: <20180814133337.5b9338b0@windsurf>
+Date: Tue, 14 Aug 2018 13:34:49 +0200
+Subject: [Buildroot] [git commit branch/next] package/samba4: drop patch
+ numbering in patch 0003
+Message-ID: <20180814112805.47BFB8D209@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christopher,
+commit: https://git.buildroot.net/buildroot/commit/?id=83f91e2f8eb3ab3cccc1b9536e1842e25fbe40a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-So, taking Arnout/Yann feedback into account.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Mon, 13 Aug 2018 06:11:34 -0700, Christopher McCrory wrote:
-
-> diff --git a/utils/scancpan b/utils/scancpan
-> index da8e7b91ac..2070e2a233 100755
-> --- a/utils/scancpan
-> +++ b/utils/scancpan
-> @@ -692,8 +692,19 @@ while (my ($distname, $dist) = each %dist) {
->                      : $dist->{license};
->          # BR requires license name as in http://spdx.org/licenses/
->          $license =~ s|apache_2_0|Apache-2.0|;
-> +        $license =~ s|apache_1_1|Apache-1.1|;
-> +        $license =~ s|apache|Apache-2.0|;
-
-In this case, scancpan should not conclude that Apache-2.0 is used,
-because "apache" is not specific enough. Instead, it should emit a
-warning.
-
->          $license =~ s|artistic_2|Artistic-2.0|;
-> +        $license =~ s|artistic|Artistic-1.0|;
-> +        $license =~ s|lgpl_2_1|LGPL-2.1|;
-> +        $license =~ s|lgpl_3_0|LGPL-3.0|;
-> +        $license =~ s|lgpl|LGPL-2.1|;
-
-Same.
-
-> +        $license =~ s|bsd|BSD|;
-
-Same.
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+index 3b248e690d..1256d1c969 100644
+--- a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
++++ b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+@@ -1,7 +1,7 @@
+ From 4a63f267efab2ef86adbeddda45909127135d7c8 Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Sun, 28 Jan 2018 11:57:11 +0100
+-Subject: [PATCH 1/1] Fix uClibc build on 64bit platforms by including stdint.h
++Subject: [PATCH] Fix uClibc build on 64bit platforms by including stdint.h
+ 
+ Fixes an error detected by buildroot autobuilders:
+ http://autobuild.buildroot.net/results/573/573e2268e205e10d1352fa81122d8f225fdb4575/build-end.log
