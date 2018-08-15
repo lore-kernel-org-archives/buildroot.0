@@ -1,13 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 19:41:57 +0200
-Subject: [Buildroot] [PATCH 2/8] package/mender: update install of
- config files
-In-Reply-To: <CADHdJwCjktMrL2YQpKbzm45n0UoqpXRLHGjy1PyQJv_SRwH-Ug@mail.gmail.com>
+Date: Wed, 15 Aug 2018 19:47:08 +0200
+Subject: [Buildroot] [PATCH 5/8] package/mender: add
+ BR2_PACKAGE_MENDER_DEVICE_TYPE option
+In-Reply-To: <CADHdJwB11mau2fiZsWCy=og6uEmSzybNDULUNXHr8T+s-CSB2Q@mail.gmail.com>
 References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-3-mirza.krak@northern.tech>
- <20180815143144.587c2045@windsurf>
- <CADHdJwCjktMrL2YQpKbzm45n0UoqpXRLHGjy1PyQJv_SRwH-Ug@mail.gmail.com>
-Message-ID: <20180815194157.782858ac@windsurf>
+ <20180814231337.19114-6-mirza.krak@northern.tech>
+ <20180815135507.6c321a4a@windsurf>
+ <CADHdJwA+gYRAc5r1PGaE4ubaudUhJh5cmQeuaAgAWACPV-oAZQ@mail.gmail.com>
+ <20180815144224.49d967a7@windsurf>
+ <CADHdJwB11mau2fiZsWCy=og6uEmSzybNDULUNXHr8T+s-CSB2Q@mail.gmail.com>
+Message-ID: <20180815194708.733bc58d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,39 +18,65 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 Aug 2018 14:42:51 +0200, Mirza Krak wrote:
+On Wed, 15 Aug 2018 14:46:20 +0200, Mirza Krak wrote:
 
-> > Do you know why tenant.conf was added in the current Mender packaging ?
-> > Was it an old configuration file from previous Mender versions ?  
+> >> > I am a bit confused with "Note that /data is a mount point for the
+> >> > persistent data partition". If /data is a different partition than the
+> >> > root filesystem one, then what is the point of
+> >> > having /data/mender/device_type in the root filesystem ? It will be
+> >> > hidden by whatever partition gets mounted in /data.  
+> >>
+> >> Understand the confusion, my intention was to convert the /data
+> >> directory on target image to an ext4 image in a post build step  
+> >
+> > Why do you want to do this ?  
 > 
-> This was something that we did deploy in our Yocto recipes (which
-> might have been source of inspiration for the package in Buildroot),
-> but it was never actually used for anything. There is an option in
-> mender.conf for this, TenantToken.
-
-Which is set to ?
-
-tenant.conf was the target of a symlink, created in the systemd unit
-file:
-
-/bin/ln -sf /etc/mender/tenant.conf /var/lib/mender/authtentoken
-
-How does it work now ?
-
-> > The installation path has changed from /var/share, to /usr/share. Why ?  
+> In the end I would like to create a "disk image" with _all_ the
+> content, and the data part must be populated at build time, as it
+> works at the moment.
 > 
-> /var/share was incorrect, it has always been /usr/share.
+> Pseudo image:
+> 
+> image sdcard.img {
+>     hdimage {
+>     }
+> 
+>     partition u-boot {
+>         partition-type = 0xC
+>         bootable = "true"
+>                 image = "boot.vfat"
+>     }
+> 
+>     partition rootfsA {
+>         partition-type = 0x83
+>         image = "rootfs.ext4"
+>         size = 512M
+>     }
+> 
+>     partition rootfsB {
+>         partition-type = 0x83
+>         image = "rootfs.ext4"
+>         size = 512M
+>     }
+> 
+>     partition data {
+>         partition-type = 0x83
+>         image = "data.ext4"
+>         size = 512M
+>     }
+> }
 
-So in its current state, the mender package in Buildroot doesn't work ?
-I'm trying to figure out if this is a bug, or just a preference. If
-it's a bug, we need to fix it in the master branch, and perhaps
-backport it to our LTS release.
+I don't think we should enforce anything like that in the Mender
+package. Buildroot's policy is to not have much policy on how the
+system should be structured/organized. Maybe people won't need any data
+partition because the system is completely state-less ? Maybe they need
+two data partitions ? Maybe having it in /data is not what they want.
 
-In your next iteration of the patches, could you please clearly
-separate the bug fixes as separate patches. They should come first in
-the series, before the improvements/cleanups.
+So, the mender package should not make any assumption like this. And I
+still don't get why the device_type file should be in this data
+partition :-)
 
-Thanks!
+Best regards,
 
 Thomas
 -- 
