@@ -1,42 +1,47 @@
 From: Mirza Krak <mirza.krak@northern.tech>
-Date: Wed, 15 Aug 2018 14:27:14 +0200
-Subject: [Buildroot] [PATCH 6/8] package/mender: populate the
- mender.conf template
-In-Reply-To: <20180815135647.2ed1e874@windsurf>
+Date: Wed, 15 Aug 2018 14:28:31 +0200
+Subject: [Buildroot] [PATCH 7/8] package/mender: select
+ BR2_PACKAGE_CA_CERTIFICATES
+In-Reply-To: <20180815135714.7fd871a0@windsurf>
 References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-7-mirza.krak@northern.tech>
- <20180815135647.2ed1e874@windsurf>
-Message-ID: <CADHdJwASuwjsbLQZOQPUoerP_AHKRfAd5_Uc_xJup9g1Rg-iVg@mail.gmail.com>
+ <20180814231337.19114-8-mirza.krak@northern.tech>
+ <20180815135714.7fd871a0@windsurf>
+Message-ID: <CADHdJwDoZmXkdJCR0f4dKJYjnFekDsJqHTj=3iXFv56Pj1Zd+A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 15, 2018 at 1:56 PM, Thomas Petazzoni
+On Wed, Aug 15, 2018 at 1:57 PM, Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 > Hello,
 >
-> On Wed, 15 Aug 2018 01:13:35 +0200, Mirza Krak wrote:
->> Options are provided for the Mender configuration and the
->> default values should work together with a Mender demo
->> environment.
->>
->> https://docs.mender.io//getting-started/create-a-test-environment
+> On Wed, 15 Aug 2018 01:13:36 +0200, Mirza Krak wrote:
+>> Mender uses TLS to community with the management server,
+>> and if CA signed certificates are used we must have
+>> the ca-certificates package installed to be able to
+>> verify these.
 >>
 >> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+>> ---
+>>  package/mender/Config.in | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/mender/Config.in b/package/mender/Config.in
+>> index 6fa9079b1d..f5a1a74110 100644
+>> --- a/package/mender/Config.in
+>> +++ b/package/mender/Config.in
+>> @@ -5,6 +5,7 @@ config BR2_PACKAGE_MENDER
+>>       depends on BR2_TOOLCHAIN_HAS_THREADS
+>>       depends on BR2_PACKAGE_UBOOT_TOOLS
+>>       depends on BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
+>> +     select BR2_PACKAGE_CA_CERTIFICATES
 >
-> I'm sorry, but no. We are not going to add gazillions of options to
-> each and every package to be able to configure the zillions of possible
-> knobs that can be configured. We are not going to add options to create
-> virtual hosts in Apache or Lighttpd, we are not going to add options to
-> enable/disable each and every cipher in OpenSSH, etc.
->
-> The point of Buildroot is to provide a reasonable default mender.conf,
-> and let user override it with their own configuration file as part of a
-> root filesystem overlay.
+> Please add "# runtime" at the end of this line, to clarify that we
+> don't have a build dependency on this.
 
-Got it.
+Got it, thanks
 
 -- 
 Mirza Krak | Embedded Solutions Architect | https://mender.io
