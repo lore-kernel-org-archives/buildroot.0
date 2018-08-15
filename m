@@ -1,53 +1,54 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 15 Aug 2018 01:33:50 +0200
-Subject: [Buildroot] pkg-golang: host package not supported
-In-Reply-To: <CADHdJwB8QhetJLhJBFh7B=wYgPyrEhJmY6uWci15kMdCdXvicw@mail.gmail.com>
-References: <CADHdJwDuaeDU_G0ePRPRrWw+3Vo4W0mSx45OuEDnqrgnsKgZQA@mail.gmail.com>
- <20180810140056.5cf7d9ed@windsurf>
- <CABa6e=q8EfZv0C+E6B_AxwNDw65+u6-VfWDh0ck6eBHv+_nTug@mail.gmail.com>
- <CADHdJwA2GpxG9mCJ9xV0_VxS9bPUax3Uvq-bJ07TTXy5XikuxQ@mail.gmail.com>
- <24764a81-1a68-9432-fbdc-d43aa26ed218@mind.be>
- <CADHdJwB+9juxwRXttOfeizfrFyvvF_gQYuWjpyM3EqN8SsK4wg@mail.gmail.com>
- <214a9eac-afe5-2b4f-72a2-b212968f5992@mind.be>
- <CADHdJwB8QhetJLhJBFh7B=wYgPyrEhJmY6uWci15kMdCdXvicw@mail.gmail.com>
-Message-ID: <78f6d5db-dc9b-01b6-3622-c233efd76689@mind.be>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 15 Aug 2018 08:08:03 +0300
+Subject: [Buildroot] [PATCH 3/8] package/mender: add dep on
+ BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
+In-Reply-To: <20180814231337.19114-4-mirza.krak@northern.tech>
+References: <20180814231337.19114-1-mirza.krak@northern.tech>
+ <20180814231337.19114-4-mirza.krak@northern.tech>
+Message-ID: <87wossnrnw.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Mirza,
 
+Mirza Krak writes:
+> The Mender client uses fw_printenv/fw_setenv to manipulate the U-boot
+> environment, e.g to change the boot candidate after a update has been
+> done.
+>
+> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+> ---
+>  package/mender/Config.in | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/package/mender/Config.in b/package/mender/Config.in
+> index e461857486..8c2838c64a 100644
+> --- a/package/mender/Config.in
+> +++ b/package/mender/Config.in
+> @@ -3,6 +3,8 @@ config BR2_PACKAGE_MENDER
+>  	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+>  	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_PACKAGE_UBOOT_TOOLS
+> +	depends on BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
 
-On 15-08-18 01:22, Mirza Krak wrote:
-> On Wed, 15 Aug 2018, 01:13 Arnout Vandecappelle, <arnout@mind.be> wrote:
-[snip]
->>  Actually, looking at it now, the real problem is that _SRC_DOMAIN
->> definitions
->> have a single dollar only. Try this:
->>
->> -$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
->> -$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
->> -$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call
->> notdomain,$($(2)_SITE))))
->> +$(2)_SRC_DOMAIN = $$(call domain,$$($(2)_SITE))
->> +$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call
->> notdomain,$$($(2)_SITE))))
->> +$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call
->> notdomain,$$($(2)_SITE))))
->>
-> 
-> Yeah, Thomas suggested this as well and that got rid of the problems I was
-> having. Is this the correct fix?
+For non-obvious dependencies like these we prefer 'select'. Also, since
+this is a run-time only dependency, there should be a comment saying
+that. So:
 
- Yes.
+      select BR2_PACKAGE_UBOOT_TOOLS # runtime
+      select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV # runtime
 
- Regards,
- Arnout
+baruch
+
+>  	help
+>  	  Mender is an open source over-the-air (OTA) software updater
+>  	  for embedded Linux devices. Mender comprises a client
+
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
