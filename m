@@ -1,95 +1,129 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Wed, 15 Aug 2018 13:24:20 -0700
-Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11
- toolchains
-In-Reply-To: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
-References: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
-Message-ID: <bae2ff1f-ee13-489e-ba77-fedfbb023d54@mentor.com>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Wed, 15 Aug 2018 13:24:54 -0700
+Subject: [Buildroot] [RFC PATCH 1/2] perl-template-toolkit: new package
+In-Reply-To: <CAB0FRsvXvNu_8RgvUrUz7LHhV6tHymRT9BDMBtSZok0W6q7JHQ@mail.gmail.com>
+References: <20180813175645.11088-1-chrismcc@gmail.com>
+ <20180813175645.11088-2-chrismcc@gmail.com>
+ <CAB0FRste31CaZoHAOhgNY3Ho8_4QRrjBVOZWKqbmW9a4XyUy-Q@mail.gmail.com>
+ <CALURroTkML0n-QzKh-nNsLC6h9Qje=txZo6qy9UBHqy1UF7ZFA@mail.gmail.com>
+ <CAB0FRsvXvNu_8RgvUrUz7LHhV6tHymRT9BDMBtSZok0W6q7JHQ@mail.gmail.com>
+Message-ID: <CALURroQOcj6hoKCKbr7e+4zaN8SH5LXs3_m46m6bapNkJYcAYw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Worked for me.
+Sorry for top posting, on phone
 
-Tested-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+I'll gen up a patch with this tomorrow.  You are awesome!
 
-Hollis Blanchard
-Mentor Graphics Emulation Division
+On Wed, Aug 15, 2018, 11:06 AM Fran?ois Perrad <francois.perrad@gadz.org>
+wrote:
 
-On 08/15/2018 05:14 AM, Baruch Siach wrote:
-> Add a patch removing a redefined typedef. Redefinition of typedef, even
-> to the same type, used to be illegal before C11.
 >
-> Fixes:
-> http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
-> http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
-> http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
 >
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> Hi Hollis,
+> 2018-08-15 14:03 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 >
-> Can you git this a run on your autobuilder? I would like to verify that
-> it actually fixes the problem before I send the patch upstream.
+>> hello
+>>
+>> On Mon, Aug 13, 2018 at 9:21 PM, Fran?ois Perrad <
+>> francois.perrad at gadz.org> wrote:
+>>
+>>>
+>>>
+>>> 2018-08-13 19:56 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+>>>
+>>>> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+>>>> ---
+>>>>
+>>>>
+>> <snip>
+>>
+>>
+>>> +# There has got to be a better way... :(
+>>>> +# Some arguments to Makefile.PL do not get propagated to subdirectories
+>>>> +# similar to:
+>>>> +# https://rt.cpan.org/Public/Bug/Display.html?id=28632
+>>>> +define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>>>> +        $(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(@D)/xs/Makefile
+>>>> +        $(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g"
+>>>> $(@D)/xs/Makefile
+>>>> +        $(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(@D)/xs/Makefile
+>>>> +        $(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g"
+>>>> $(@D)/xs/Makefile
+>>>> +        $(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(@D)/xs/Makefile
+>>>> +        $(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared
+>>>> $(TARGET_LDFLAGS):g" $(@D)/xs/Makefile
+>>>> +        $(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g"
+>>>> $(@D)/xs/Makefile
+>>>> +        $(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g"
+>>>> $(@D)/xs/Makefile
+>>>> +endef
+>>>>
+>>>
+>>> If you put this block of code in a function (in pkg-perl.mk) with the
+>>> filename as parameter,
+>>> you could just call it, in each module
+>>>     define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>>>          $(call,foo,$(@D)/xs/Makefile)
+>>>     endef
+>>>
+>>>
+>> My makefile skills aren't good enough to handle the subtleties of the
+>> entire buildroot process.  Is that something you want to handle?  Or use
+>> these as is until someone has some time to work on the pkg-perl.mk bits?
+>> Or other?
+>>
+>>
+> It is just like that :
 >
-> Thanks,
-> baruch
-> ---
->   .../0001-Remove-json_object-typedef.patch     | 46 +++++++++++++++++++
->   1 file changed, 46 insertions(+)
->   create mode 100644 package/cryptsetup/0001-Remove-json_object-typedef.patch
+> define patch_sub_makefile
+>     $(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(1)
+>     $(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g" $(1)
+>     $(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(1)
+>     $(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g" $(1)
+>     $(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(1)
+>     $(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared $(TARGET_LDFLAGS):g" $(1)
+>     $(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g" $(1)
+>     $(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g" $(1)
+> endef
 >
-> diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
-> new file mode 100644
-> index 000000000000..fa865314a7da
-> --- /dev/null
-> +++ b/package/cryptsetup/0001-Remove-json_object-typedef.patch
-> @@ -0,0 +1,46 @@
-> +From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
-> +From: Baruch Siach <baruch@tkos.co.il>
-> +Date: Wed, 15 Aug 2018 14:13:46 +0300
-> +Subject: [PATCH] Remove json_object typedef
-> +
-> +The json-c header already defines the same typedef. While C11 allows
-> +typedef redefinition to the same type, older versions of gcc disallow
-> +that.
-> +
-> +In file included from lib/luks2/luks2_internal.h:32,
-> +                 from lib/luks2/luks2_disk_metadata.c:24:
-> +lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
-> +
-> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> +---
-> + lib/luks2/luks2.h | 1 -
-> + lib/setup.c       | 1 +
-> + 2 files changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
-> +index ee57b41ba974..25e36190da45 100644
-> +--- a/lib/luks2/luks2.h
-> ++++ b/lib/luks2/luks2.h
-> +@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
-> + /*
-> +  * LUKS2 header in-memory.
-> +  */
-> +-typedef struct json_object json_object;
-> + struct luks2_hdr {
-> + 	size_t		hdr_size;
-> + 	uint64_t	seqid;
-> +diff --git a/lib/setup.c b/lib/setup.c
-> +index fddbe7ef7897..856f6e80f465 100644
-> +--- a/lib/setup.c
-> ++++ b/lib/setup.c
-> +@@ -28,6 +28,7 @@
-> + #include <sys/utsname.h>
-> + #include <fcntl.h>
-> + #include <errno.h>
-> ++#include <json-c/json.h>
-> +
-> + #include "libcryptsetup.h"
-> + #include "luks.h"
-> +--
-> +2.18.0
-> +
+> define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>     $(call patch_sub_makefile,$(@D)/xs/Makefile)
+> endef
+>
+> Fran?ois
+>
+>
+>
+>> Thanks for looking at all these packages I sent.
+>>
+>>
+>>> Fran?ois
+>>>
+>>>
+>>>> +
+>>>> +PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_HOOKS +=
+>>>> PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>>>> +
+>>>> +
+>>>> +$(eval $(perl-package))
+>>>> --
+>>>> 2.14.4
+>>>>
+>>>>
+>>>
+>>
+>>
+>> --
+>> Christopher McCrory
+>> To the optimist, the glass is half full.
+>> To the pessimist, the glass is half empty.
+>> To the engineer, the glass is twice as big as it needs to be.
+>>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180815/390a6283/attachment.html>
