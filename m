@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 13:57:14 +0200
-Subject: [Buildroot] [PATCH 7/8] package/mender: select
- BR2_PACKAGE_CA_CERTIFICATES
-In-Reply-To: <20180814231337.19114-8-mirza.krak@northern.tech>
+Date: Wed, 15 Aug 2018 13:58:18 +0200
+Subject: [Buildroot] [PATCH 8/8] package/mender: set version in go linker
+In-Reply-To: <20180814231337.19114-9-mirza.krak@northern.tech>
 References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-8-mirza.krak@northern.tech>
-Message-ID: <20180815135714.7fd871a0@windsurf>
+ <20180814231337.19114-9-mirza.krak@northern.tech>
+Message-ID: <20180815135818.121312d5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,31 +13,38 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 Aug 2018 01:13:36 +0200, Mirza Krak wrote:
-> Mender uses TLS to community with the management server,
-> and if CA signed certificates are used we must have
-> the ca-certificates package installed to be able to
-> verify these.
+On Wed, 15 Aug 2018 01:13:37 +0200, Mirza Krak wrote:
+> This is used when calling the mender client with the
+> -version option and it says "unknown" if not set in
+> linker.
+> 
+> Now it displays the following:
+> 
+>     # mender -version
+>     1.4.0
+>     runtime: go1.10.2
 > 
 > Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
 > ---
->  package/mender/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/mender/mender.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/package/mender/Config.in b/package/mender/Config.in
-> index 6fa9079b1d..f5a1a74110 100644
-> --- a/package/mender/Config.in
-> +++ b/package/mender/Config.in
-> @@ -5,6 +5,7 @@ config BR2_PACKAGE_MENDER
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_PACKAGE_UBOOT_TOOLS
->  	depends on BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
-> +	select BR2_PACKAGE_CA_CERTIFICATES
+> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+> index ce48c82671..db0eb55454 100644
+> --- a/package/mender/mender.mk
+> +++ b/package/mender/mender.mk
+> @@ -17,6 +17,8 @@ ifeq ($(call qstrip,$(BR2_PACKAGE_MENDER_DEVICE_TYPE)),)
+>  $(error Mender device type not set. Check your BR2_PACKAGE_MENDER_DEVICE_TYPE setting)
+>  endif
+>  
+> +MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
 
-Please add "# runtime" at the end of this line, to clarify that we
-don't have a build dependency on this.
+Is this main.Version property something specific to Mender, or
+something that is common to Go packaging in general ? I'm just trying
+to figure out if it should be in mender.mk like you did, or in
+pkg-golang.mk.
 
-Thanks,
+Thanks!
 
 Thomas
 -- 
