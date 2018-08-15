@@ -1,47 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Aug 2018 22:48:04 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/ffmpeg: bump
- version to 3.4.4
-Message-ID: <20180815204249.521AA8D40E@busybox.osuosl.org>
+Date: Wed, 15 Aug 2018 23:27:17 +0200
+Subject: [Buildroot] Analysis of defconfig build failures
+In-Reply-To: <20180815213421.08e0a3b6@windsurf> (Thomas Petazzoni's message of
+ "Wed, 15 Aug 2018 21:34:21 +0200")
+References: <20180812170138.0b51be07@windsurf>
+ <87600bbg68.fsf@dell.be.48ers.dk> <20180815213421.08e0a3b6@windsurf>
+Message-ID: <87ftzf9v7u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=753337dcd91f7a3c4112368f9b8a09c6bae10d39
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fbeeb8ce067a24eff5a3418f58b22bc6a752e184)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Hello,
+ > On Wed, 15 Aug 2018 21:09:19 +0200, Peter Korsgaard wrote:
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index d9f1dda1e7..7d64d8441c 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 6b341b7d49e74c4bbdaa8dd166107008c4138ce0d5af73aa04fbbc7ae0d0855c  ffmpeg-3.4.3.tar.xz
-+sha256 386f7601e865df6bddde05bb6927119b5a853f0b92e2e9834f59c125a17d3fc6  ffmpeg-3.4.4.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 19eb1cdc34..0b34aa0ff1 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.4.3
-+FFMPEG_VERSION = 3.4.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+ >> >    The problem is fixed in U-Boot 2018.01 but present in 2017.11.
+ >> >    However, we have a number of vendor-provided U-Boot, and it's not
+ >> >    necessarily easy to upgrade all defconfigs to use at least 2018.01.  
+ >> 
+ >> Perhaps we could backport the changes and add as patches for the
+ >> affected defconfigs?
+
+ > The problem is that it will still affect anyone doing a U-Boot build,
+ > outside of the defconfigs.
+
+Ok. Is this a new failure introduced by something we do
+wrong/differently in Buildroot, or just something that is broken by
+building with newer compilers?
+
+
+ >> What is needed? Just the libfdt.h -> linux/libfdt.h you reported?
+
+ > I am not sure what is needed exactly.
+
+Ok :/
+
+
+ >> Sorry, I haven't looked at that series yet. If various packages start
+ >> needing this, and there aren't any version dependencies, then requiring
+ >> bison and flex is imho not a big problem (E.G. they are generally
+ >> available on all distributions).
+
+ > We've been having a discussion on this in a separate thread (search
+ > "[2/3,v3] linux: kconfig needs host-{flex, bison} to build the
+ > configurators ").
+
+Ok, thanks.
+
+
+ >> >    sheevaplug_defconfig
+ >> >    https://gitlab.com/buildroot.org/buildroot/-/jobs/88314946  
+ >> 
+ >> I still have this board somewhere. I'll take a look at bumping u-boot.
+
+ > OK, thanks!
+
+You're welcome, I'm doing a build with v2018.07 as we speak.
+
+-- 
+Bye, Peter Korsgaard
