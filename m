@@ -1,66 +1,59 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 15 Aug 2018 09:19:53 +0300
-Subject: [Buildroot] [2/2] package/glibc: bump to version 2.28
-In-Reply-To: <20180803181425.18106-2-romain.naour@gmail.com>
-References: <20180803181425.18106-2-romain.naour@gmail.com>
-Message-ID: <87tvnwnoc6.fsf@tkos.co.il>
+From: Geert Visser <geert@my-clay.com>
+Date: Wed, 15 Aug 2018 08:48:34 +0200
+Subject: [Buildroot] [PATCH v2 1/1] wf111: ARM bumped to 5.2.2-r4
+Message-ID: <20180815064834.4198-1-geert@my-clay.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Signed-off-by: Geert Visser <geert@my-clay.com>
+---
+Changes since v1:
+- Fixed hash file formatting
+- Updated version define
 
-Romain Naour writes:
-> https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
+ package/wf111/wf111.hash | 4 ++++
+ package/wf111/wf111.mk   | 9 +++++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+ create mode 100644 package/wf111/wf111.hash
 
-This announcement says:
-
-  GNU make 4.0 or later is now required to build glibc.
-
-autobuilders now show that:
-
-  http://autobuild.buildroot.net/?reason=glibc-glibc-2.28
-
-Since glibc is a fundamental package, does that mean we need to bump the
-make version requirement to 4.0 (current requirement is 3.81)? Maybe
-build host-make on older hosts?
-
-baruch
-
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/glibc/glibc.hash | 2 +-
->  package/glibc/glibc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-> index 81dd5ad5ed..85afd6fd6b 100644
-> --- a/package/glibc/glibc.hash
-> +++ b/package/glibc/glibc.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated (fetched from Github)
-> -sha256  33189b3f10c88730a1f686fac794bc01f31765f12ffd75bc5e8a0f2a690d217a     glibc-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e.tar.gz
-> +sha256  877c7b4741501d1762af8ef1a2518bdf2d722947d2e8d48b203e2d83cc600bca     glibc-glibc-2.28.tar.gz
->  # Locally calculated (fetched from Github)
->  sha256  e08ab67b2db2d0f0e8f3311d23c54fb8f6d4c1ef6fa0b4047fd5da400e3ce9de     glibc-arc-2018.03-release.tar.gz
->  
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index d34b42b831..399cf395ce 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
->  else
->  # Generate version string using:
->  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
-> -GLIBC_VERSION = glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e
-> +GLIBC_VERSION = glibc-2.28
->  # Upstream doesn't officially provide an https download link.
->  # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
->  # sometimes the connection times out. So use an unofficial github mirror.
-
+diff --git a/package/wf111/wf111.hash b/package/wf111/wf111.hash
+new file mode 100644
+index 0000000000..e3a5c484f7
+--- /dev/null
++++ b/package/wf111/wf111.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256	33de265d28702ce32bb292f29a43e9e946382a1e31f1e4feae0f4753cf18b4f4	wf111-linux-driver_5.2.2-r4_armv7-a.tar.gz
++sha256	fbe86a30e4025b9f510feb4cb8f846aca82f8f3e8f6c8a28a74baf45c87f6e96	wf111-linux-driver_5.2.2-r4_armv5te.tar.gz
++sha256	37983d73f60bab9768eb02a89695448f27cd1964e23cf462e76657344a9c67ac	wf111-linux-driver-5-2-2-r3-x86.tar.gz
+diff --git a/package/wf111/wf111.mk b/package/wf111/wf111.mk
+index 72526333fd..fd9cb19600 100644
+--- a/package/wf111/wf111.mk
++++ b/package/wf111/wf111.mk
+@@ -4,14 +4,19 @@
+ #
+ ################################################################################
+ 
++ifeq ($(BR2_ARM_CPU_ARMV7A)$(BR2_ARM_CPU_ARMV5),y)
++WF111_VERSION = 5.2.2-r4
++else
+ WF111_VERSION = 5-2-2-r3
++endif
++
+ WF111_SITE = https://www.silabs.com/documents/login/software
+ WF111_DEPENDENCIES = linux
+ 
+ ifeq ($(BR2_ARM_CPU_ARMV7A),y)
+-WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv7-a.tar.gz
++WF111_SOURCE = wf111-linux-driver_$(WF111_VERSION)_armv7-a.tar.gz
+ else ifeq ($(BR2_ARM_CPU_ARMV5),y)
+-WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-armv5te.tar.gz
++WF111_SOURCE = wf111-linux-driver_$(WF111_VERSION)_armv5te.tar.gz
+ else ifeq ($(BR2_i386),y)
+ WF111_SOURCE = wf111-linux-driver-$(WF111_VERSION)-x86.tar.gz
+ endif
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.17.1
