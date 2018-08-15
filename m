@@ -1,34 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 00:40:50 +0200
-Subject: [Buildroot] [PATCH v2] bzip2: change upstream site
-In-Reply-To: <59cd8eb281eed8b9102b8d2a56aa6ff50f0a9a80.1534220691.git.baruch@tkos.co.il>
-References: <59cd8eb281eed8b9102b8d2a56aa6ff50f0a9a80.1534220691.git.baruch@tkos.co.il>
-Message-ID: <20180816004050.08f49167@windsurf>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Wed, 15 Aug 2018 16:44:34 -0700
+Subject: [Buildroot] [PATCH v3] download: fix file:// BR2_PRIMARY_SITE
+ (download cache)
+Message-ID: <20180815234434.7319-1-hollis_blanchard@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+wget is the only downloader currently usable with BR2_PRIMARY_SITE, and that
+doesn't work at all for file:// URLs. The symptoms are these:
 
-On Tue, 14 Aug 2018 07:24:51 +0300, Baruch Siach wrote:
-> The bzip.org website is down. Use the Buildroot backup download site.
-> Remove the website link as there is no clear alternative upstream at
-> this point.
-> 
->   https://lwn.net/Articles/762264/
-> 
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  package/bzip2/Config.in | 2 --
->  package/bzip2/bzip2.mk  | 2 +-
->  2 files changed, 1 insertion(+), 3 deletions(-)
+	support/download/dl-wrapper -c '2.4.47' -d '/PATH/build/sw/source/attr' -D '/PATH/build/sw/source' -f 'attr-2.4.47.src.tar.gz' -H 'package/attr//attr.hash' -n 'attr-2.4.47' -N 'attr' -o '/PATH/build/sw/source/attr/attr-2.4.47.src.tar.gz'  -u file\|urlencode+file:///NFS/buildroot_dl_cache/attr -u file\|urlencode+file:///NFS/buildroot_dl_cache -u http+http://download.savannah.gnu.org/releases/attr -u http\|urlencode+http://sources.buildroot.net/attr -u http\|urlencode+http://sources.buildroot.net  --
+	file:///NFS/buildroot_dl_cache/attr/attr-2.4.47.src.tar.gz: Unsupported scheme `file'.
+	ERROR: attr-2.4.47.src.tar.gz has wrong sha256 hash:
+	ERROR: expected: 25772f653ac5b2e3ceeb89df50e4688891e21f723c460636548971652af0a859
+	ERROR: got     : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+	ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-Applied to master, thanks.
+In the case of custom Linux kernel versions, this is fatal, because there isn't
+necessarily a hash file to indicate that wget's empty tarball is wrong.
 
-Thomas
+This seems to have been broken by commit c8ef0c03b0b, because:
+1. BR2_PRIMARY_SITE always appends "urlencode" (package/pkg-download.mk)
+2. Anything with the "|urlencode" suffix in $uri will end up using wget due to
+   the backend case wildcarding.
+3. The wget backend rejects file:/// URLs ("unsupported scheme"), and we end up
+   with an empty .tar.gz file in the downloads directory.
+
+Fix that by shell-extracting the backend name from the left of "|". I'm not
+positive if all URLs will have a "|", so this code only looks for a "|" left of
+the "+".
+
+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+---
+Changes from v2: add quoting around the variable expansion.
+
+ support/download/dl-wrapper | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 4059c37ebc..490335c859 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -88,7 +88,8 @@ main() {
+     download_and_check=0
+     rc=1
+     for uri in "${uris[@]}"; do
+-        backend=${uri%%+*}
++        backend_urlencode="${uri%%+*}"
++        backend="${backend_urlencode%|*}"
+         case "${backend}" in
+             git|svn|cvs|bzr|file|scp|hg) ;;
+             *) backend="wget" ;;
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.13.0
