@@ -1,67 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 15 Aug 2018 18:16:57 +0200
-Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
- target in pkg-kconfig.mk
-In-Reply-To: <20180815140413.62984968@windsurf>
-References: <20180730155153.24091-1-m.patzlaff@pilz.de>
- <20180730155153.24091-4-m.patzlaff@pilz.de>
- <20180730234643.34315d11@windsurf> <20180731154948.GB8537@scaer>
- <20180814162705.505476fe@windsurf>
- <83afeab5-baf8-122e-15ab-17889c3a300d@mind.be>
- <20180815140413.62984968@windsurf>
-Message-ID: <20180815161657.GC2556@scaer>
+Date: Wed, 15 Aug 2018 18:23:07 +0200
+Subject: [Buildroot] [PATCH 17/17] perl-termreadkey: new package
+In-Reply-To: <CALURroQQrDa5m5=0BVYaW1zr2hEK9dNvoihqoQG1Om2adZhw6A@mail.gmail.com>
+References: <20180811182749.20924-1-chrismcc@gmail.com>
+ <20180811182749.20924-18-chrismcc@gmail.com>
+ <20180813235716.070f77f0@windsurf> <20180814155337.GM7915@scaer>
+ <CALURroQQrDa5m5=0BVYaW1zr2hEK9dNvoihqoQG1Om2adZhw6A@mail.gmail.com>
+Message-ID: <20180815162307.GD2556@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, Arnout, Marcel, All,
+Chrsitopher, All,
 
-On 2018-08-15 14:04 +0200, Thomas Petazzoni spake thusly:
-> On Wed, 15 Aug 2018 01:20:29 +0200, Arnout Vandecappelle wrote:
-> > > Marcel, do you think you could rework your patch series to go in the
-> > > direction of showing a diff rather than arbitrarily adjusting the last
-> > > fragment ?  
-> > 
-> >  Note that the diff really applies to the last fragment only, in the sense that
-> > if the last fragment is setting CONFIG_BAR, the "is unset" bit has to come after
-> > it. I don't think there is a way to say anything sensible automatically except
-> > for the last fragment.
+On 2018-08-15 04:24 -0700, Christopher McCrory spake thusly:
+> On Tue, Aug 14, 2018 at 8:53 AM, Yann E. MORIN < [1]yann.morin.1998@free.fr> wrote:
+>   On 2018-08-13 23:57 +0200, Thomas Petazzoni spake thusly:
+>   > Adding Yann and Arnout, licensing question below.
+>   > On Sat, 11 Aug 2018 11:27:49 -0700, Christopher McCrory wrote:
+>   > > +PERL_TERMREADKEY_VERSION = 2.37
+>   > > +PERL_TERMREADKEY_SOURCE = TermReadKey-$(PERL_ TERMREADKEY_VERSION).tar.gz
+>   > > +PERL_TERMREADKEY_SITE = $(BR2_CPAN_MIRROR)/authors/id/ J/JS/JSTOWE
+>   > > +PERL_TERMREADKEY_LICENSE = Artistic or GPL-1.0+
+>   >
+>   > This is not correct I believe.
 > 
-> Yes, the diff cannot be blindly applied to anything but the last
-> fragment. But the idea in showing the diff is not for the user to apply
-> it blindly, but rather to determine which parts of the diff should be
-> reflected to each fragment.
+>   IANAL...
+> 
+>   Indeed it's not.
+> 
+> The current maintainer explains it here:
+> [2]https://github.com/jonathanstowe/TermReadKey/issues/11
 
-Indeed, it is not to be considered to be a diff of any of the fragment,
-but of the configuration *as a whole*.
+So the watters are even muddier than what I expected. We can't take a
+position here. The best we can state then is:
 
-That's why I initially did not write a full diff, but only the delta
-snippet, not the context, because it is a diff, not a patch.
+    PERL_TERMREADKEY_LICENSE = TERM::Readkey license
 
-But I think we should instead use the scripts/diffconfig script that is
-in the linux kernel tree, and which outputs looks like:
+Anything else could be misleading.
 
-    $ cat config.000
-    CONFIG_FOO=y
-    $ cat config.001
-    CONFIG_FOO is not set
-    $ ./scripts/diffconfig config.000 config.001
-     FOO y -> n
-
-which IMNSHO is exactly the message we want to convey.
+If a user has any concern with that license, they'd have to consult with
+the legal department in their organisation.
 
 Regards,
 Yann E. MORIN.
-
-> Best regards,
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
