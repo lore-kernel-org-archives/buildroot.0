@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 13:40:41 +0200
-Subject: [Buildroot] [2/2] package/glibc: bump to version 2.28
-In-Reply-To: <87tvnwnoc6.fsf@tkos.co.il>
-References: <20180803181425.18106-2-romain.naour@gmail.com>
- <87tvnwnoc6.fsf@tkos.co.il>
-Message-ID: <20180815134041.74b55316@windsurf>
+Date: Wed, 15 Aug 2018 13:53:30 +0200
+Subject: [Buildroot] [PATCH 4/8] package/mender: add
+ BR2_PACKAGE_MENDER_ARTIFACT_NAME option
+In-Reply-To: <20180814231337.19114-5-mirza.krak@northern.tech>
+References: <20180814231337.19114-1-mirza.krak@northern.tech>
+ <20180814231337.19114-5-mirza.krak@northern.tech>
+Message-ID: <20180815135330.2fa7ad72@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,26 +14,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 Aug 2018 09:19:53 +0300, Baruch Siach wrote:
+On Wed, 15 Aug 2018 01:13:33 +0200, Mirza Krak wrote:
 
-> Romain Naour writes:
-> > https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html  
-> 
-> This announcement says:
-> 
->   GNU make 4.0 or later is now required to build glibc.
-> 
-> autobuilders now show that:
-> 
->   http://autobuild.buildroot.net/?reason=glibc-glibc-2.28
-> 
-> Since glibc is a fundamental package, does that mean we need to bump the
-> make version requirement to 4.0 (current requirement is 3.81)? Maybe
-> build host-make on older hosts?
+> +if BR2_PACKAGE_MENDER
+> +
+> +config BR2_PACKAGE_MENDER_ARTIFACT_NAME
+> +	string "Mender artifact name"
+> +	help
+> +	  The name of the image or update that will be built. This is what the
+> +	  device will report that it is running, and different updates must have
+> +	  different names.
+> +
+> +	  Will be stored in /etc/mender/artifact_info
+> +
+> +endif
 
-Building host-make on machines that don't have make >= 4.0 sounds like
-a good approach to me. And of course, we only do this as a dependency
-of glibc.
+I am wondering if we really need a new option for that, or if you
+shouldn't just let the user add /etc/mender/artifact_info to its root
+filesystem overlay.
 
 Best regards,
 
