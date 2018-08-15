@@ -1,69 +1,50 @@
 From: Mirza Krak <mirza.krak@northern.tech>
-Date: Wed, 15 Aug 2018 14:23:57 +0200
-Subject: [Buildroot] [PATCH 4/8] package/mender: add
- BR2_PACKAGE_MENDER_ARTIFACT_NAME option
-In-Reply-To: <20180815135330.2fa7ad72@windsurf>
+Date: Wed, 15 Aug 2018 14:26:46 +0200
+Subject: [Buildroot] [PATCH 5/8] package/mender: add
+ BR2_PACKAGE_MENDER_DEVICE_TYPE option
+In-Reply-To: <20180815135507.6c321a4a@windsurf>
 References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-5-mirza.krak@northern.tech>
- <20180815135330.2fa7ad72@windsurf>
-Message-ID: <CADHdJwATYL5VguXjETMF8aF81OnQCV2qhj3DmR3F7ODGx8NDTw@mail.gmail.com>
+ <20180814231337.19114-6-mirza.krak@northern.tech>
+ <20180815135507.6c321a4a@windsurf>
+Message-ID: <CADHdJwA+gYRAc5r1PGaE4ubaudUhJh5cmQeuaAgAWACPV-oAZQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 15, 2018 at 1:53 PM, Thomas Petazzoni
+On Wed, Aug 15, 2018 at 1:55 PM, Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 > Hello,
 >
-> On Wed, 15 Aug 2018 01:13:33 +0200, Mirza Krak wrote:
+> On Wed, 15 Aug 2018 01:13:34 +0200, Mirza Krak wrote:
 >
->> +if BR2_PACKAGE_MENDER
->> +
->> +config BR2_PACKAGE_MENDER_ARTIFACT_NAME
->> +     string "Mender artifact name"
+>> +config BR2_PACKAGE_MENDER_DEVICE_TYPE
+>> +     string "Mender device type"
 >> +     help
->> +       The name of the image or update that will be built. This is what the
->> +       device will report that it is running, and different updates must have
->> +       different names.
+>> +       A string that defines the type of device which will be used to check
+>> +       compatibility of update artifacts. Once a device is flashed with this,
+>> +       it will not change, even if the device is updated using Mender.
 >> +
->> +       Will be stored in /etc/mender/artifact_info
->> +
->> +endif
+>> +       Will be stored in /data/mender/device_type. Note that /data is a mount
+>> +       point for the persistent data partition.
 >
-> I am wondering if we really need a new option for that, or if you
-> shouldn't just let the user add /etc/mender/artifact_info to its root
-> filesystem overlay.
+> I am a bit confused with "Note that /data is a mount point for the
+> persistent data partition". If /data is a different partition than the
+> root filesystem one, then what is the point of
+> having /data/mender/device_type in the root filesystem ? It will be
+> hidden by whatever partition gets mounted in /data.
 
-This file is required to be present for the Mender client to start in
-daemon mode, but I could just create a file with "dummy" content
-without the option to satisfy that behavior and let users override
-with file-system overlay if that is the preferred to minimize number
-of options.
+Understand the confusion, my intention was to convert the /data
+directory on target image to an ext4 image in a post build step and
+that is why I put these files there. Or is there a better way of
+"staging" files for post build steps?
 
-Though there is a reason why this was an option and it was to be able
-to share this information with the mender-artifact tool, I do not know
-if that is actually possible with how I did this. To provide some more
-context, somewhere I have the intention of calling the mender-artifact
-(host tool) tool with the following arguments:
+>
+> (Side note: please make sure to run check-package on your changes, the
+> Config.in help text lines look a bit too long.)
 
-#Create Mender artifact
-mender-artifact write rootfs-image \
-    --update ${output_dir}/rootfs.ext4 \
-    --output-path ${mender_artifact} \
-    --artifact-name ${artifact_name} \
-    --device-type ${device_type}
-
-I have not yet figured out where to put above but I am getting there
-:). Mender artifacts are basically the ext4 image + some meta-data
-(checksum, signature, file-size etc)
-
-Target image and Mender artifact share information (device_type and
-artifact_info/artifact_name) to be able to do sanity checks later on
-when updates are applied. This was my intention of keeping
-artifact_name as an option to be able to share it. But I gladly accept
-suggestions on how to best solve this.
+Will do.
 
 -- 
 Mirza Krak | Embedded Solutions Architect | https://mender.io
