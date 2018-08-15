@@ -1,85 +1,117 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 19:47:08 +0200
-Subject: [Buildroot] [PATCH 5/8] package/mender: add
- BR2_PACKAGE_MENDER_DEVICE_TYPE option
-In-Reply-To: <CADHdJwB11mau2fiZsWCy=og6uEmSzybNDULUNXHr8T+s-CSB2Q@mail.gmail.com>
-References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-6-mirza.krak@northern.tech>
- <20180815135507.6c321a4a@windsurf>
- <CADHdJwA+gYRAc5r1PGaE4ubaudUhJh5cmQeuaAgAWACPV-oAZQ@mail.gmail.com>
- <20180815144224.49d967a7@windsurf>
- <CADHdJwB11mau2fiZsWCy=og6uEmSzybNDULUNXHr8T+s-CSB2Q@mail.gmail.com>
-Message-ID: <20180815194708.733bc58d@windsurf>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 15 Aug 2018 20:06:27 +0200
+Subject: [Buildroot] [RFC PATCH 1/2] perl-template-toolkit: new package
+In-Reply-To: <CALURroTkML0n-QzKh-nNsLC6h9Qje=txZo6qy9UBHqy1UF7ZFA@mail.gmail.com>
+References: <20180813175645.11088-1-chrismcc@gmail.com>
+ <20180813175645.11088-2-chrismcc@gmail.com>
+ <CAB0FRste31CaZoHAOhgNY3Ho8_4QRrjBVOZWKqbmW9a4XyUy-Q@mail.gmail.com>
+ <CALURroTkML0n-QzKh-nNsLC6h9Qje=txZo6qy9UBHqy1UF7ZFA@mail.gmail.com>
+Message-ID: <CAB0FRsvXvNu_8RgvUrUz7LHhV6tHymRT9BDMBtSZok0W6q7JHQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+2018-08-15 14:03 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 
-On Wed, 15 Aug 2018 14:46:20 +0200, Mirza Krak wrote:
+> hello
+>
+> On Mon, Aug 13, 2018 at 9:21 PM, Fran?ois Perrad <francois.perrad@gadz.org
+> > wrote:
+>
+>>
+>>
+>> 2018-08-13 19:56 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+>>
+>>> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+>>> ---
+>>>
+>>>
+> <snip>
+>
+>
+>> +# There has got to be a better way... :(
+>>> +# Some arguments to Makefile.PL do not get propagated to subdirectories
+>>> +# similar to:
+>>> +# https://rt.cpan.org/Public/Bug/Display.html?id=28632
+>>> +define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>>> +        $(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(@D)/xs/Makefile
+>>> +        $(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g"
+>>> $(@D)/xs/Makefile
+>>> +        $(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(@D)/xs/Makefile
+>>> +        $(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g"
+>>> $(@D)/xs/Makefile
+>>> +        $(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(@D)/xs/Makefile
+>>> +        $(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared
+>>> $(TARGET_LDFLAGS):g" $(@D)/xs/Makefile
+>>> +        $(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g"
+>>> $(@D)/xs/Makefile
+>>> +        $(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g"
+>>> $(@D)/xs/Makefile
+>>> +endef
+>>>
+>>
+>> If you put this block of code in a function (in pkg-perl.mk) with the
+>> filename as parameter,
+>> you could just call it, in each module
+>>     define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>>          $(call,foo,$(@D)/xs/Makefile)
+>>     endef
+>>
+>>
+> My makefile skills aren't good enough to handle the subtleties of the
+> entire buildroot process.  Is that something you want to handle?  Or use
+> these as is until someone has some time to work on the pkg-perl.mk bits?
+> Or other?
+>
+>
+It is just like that :
 
-> >> > I am a bit confused with "Note that /data is a mount point for the
-> >> > persistent data partition". If /data is a different partition than the
-> >> > root filesystem one, then what is the point of
-> >> > having /data/mender/device_type in the root filesystem ? It will be
-> >> > hidden by whatever partition gets mounted in /data.  
-> >>
-> >> Understand the confusion, my intention was to convert the /data
-> >> directory on target image to an ext4 image in a post build step  
-> >
-> > Why do you want to do this ?  
-> 
-> In the end I would like to create a "disk image" with _all_ the
-> content, and the data part must be populated at build time, as it
-> works at the moment.
-> 
-> Pseudo image:
-> 
-> image sdcard.img {
->     hdimage {
->     }
-> 
->     partition u-boot {
->         partition-type = 0xC
->         bootable = "true"
->                 image = "boot.vfat"
->     }
-> 
->     partition rootfsA {
->         partition-type = 0x83
->         image = "rootfs.ext4"
->         size = 512M
->     }
-> 
->     partition rootfsB {
->         partition-type = 0x83
->         image = "rootfs.ext4"
->         size = 512M
->     }
-> 
->     partition data {
->         partition-type = 0x83
->         image = "data.ext4"
->         size = 512M
->     }
-> }
+define patch_sub_makefile
+    $(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(1)
+    $(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g" $(1)
+    $(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(1)
+    $(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g" $(1)
+    $(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(1)
+    $(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared $(TARGET_LDFLAGS):g" $(1)
+    $(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g" $(1)
+    $(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g" $(1)
+endef
 
-I don't think we should enforce anything like that in the Mender
-package. Buildroot's policy is to not have much policy on how the
-system should be structured/organized. Maybe people won't need any data
-partition because the system is completely state-less ? Maybe they need
-two data partitions ? Maybe having it in /data is not what they want.
+define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+    $(call patch_sub_makefile,$(@D)/xs/Makefile)
+endef
 
-So, the mender package should not make any assumption like this. And I
-still don't get why the device_type file should be in this data
-partition :-)
+Fran?ois
 
-Best regards,
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+> Thanks for looking at all these packages I sent.
+>
+>
+>> Fran?ois
+>>
+>>
+>>> +
+>>> +PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_HOOKS +=
+>>> PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>>> +
+>>> +
+>>> +$(eval $(perl-package))
+>>> --
+>>> 2.14.4
+>>>
+>>>
+>>
+>
+>
+> --
+> Christopher McCrory
+> To the optimist, the glass is half full.
+> To the pessimist, the glass is half empty.
+> To the engineer, the glass is twice as big as it needs to be.
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180815/f15391c5/attachment.html>
