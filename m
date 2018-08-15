@@ -1,115 +1,129 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 21:02:10 +0200
-Subject: [Buildroot] [PATCH 2/8] package/mender: update install of
- config files
-In-Reply-To: <CADHdJwBemwZr-AJ+jSGhJem1g70xmWRFC4pb3ajctwFHTjYPeQ@mail.gmail.com>
-References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-3-mirza.krak@northern.tech>
- <20180815143144.587c2045@windsurf>
- <CADHdJwCjktMrL2YQpKbzm45n0UoqpXRLHGjy1PyQJv_SRwH-Ug@mail.gmail.com>
- <20180815194157.782858ac@windsurf>
- <CADHdJwBemwZr-AJ+jSGhJem1g70xmWRFC4pb3ajctwFHTjYPeQ@mail.gmail.com>
-Message-ID: <20180815210210.410ca497@windsurf>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 15 Aug 2018 21:02:49 +0200
+Subject: [Buildroot] [PATCH 1/1] gst1-plugins-good: add option for qmlgl
+ plugin (qt5 plugin)
+In-Reply-To: <1533208261-13853-1-git-send-email-inigohuguet@fanamoel.com>
+References: <4a3746f6-f635-e3a2-0d09-deff9c106b70@mind.be>
+ <1533208261-13853-1-git-send-email-inigohuguet@fanamoel.com>
+Message-ID: <20180815210249.5e11df4d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello I?igo,
 
-On Wed, 15 Aug 2018 20:48:27 +0200, Mirza Krak wrote:
-> On Wed, Aug 15, 2018 at 7:41 PM, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> > Hello,
-> >
-> > On Wed, 15 Aug 2018 14:42:51 +0200, Mirza Krak wrote:
-> >  
-> >> > Do you know why tenant.conf was added in the current Mender packaging ?
-> >> > Was it an old configuration file from previous Mender versions ?  
-> >>
-> >> This was something that we did deploy in our Yocto recipes (which
-> >> might have been source of inspiration for the package in Buildroot),
-> >> but it was never actually used for anything. There is an option in
-> >> mender.conf for this, TenantToken.  
-> >
-> > Which is set to ?
-> >
-> > tenant.conf was the target of a symlink, created in the systemd unit
-> > file:
-> >
-> > /bin/ln -sf /etc/mender/tenant.conf /var/lib/mender/authtentoken
-> >
-> > How does it work now ?  
+thanks for the updated patch, most of the points from the first version
+reviews ([1]) seem to be fixed, but...
+
+On Thu,  2 Aug 2018 13:11:01 +0200, I?igo Huguet <inigohuguet@fanamoel.com> wrote:
+
+> gst1-plugins-good is built with --disable-qt option, so qmlgl plugin
+> is disabled. Added option to enable it, allowing to use elements
+> qmlglsrc and qmlglsink.
 > 
-> Example:
+> Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
+> ---
+>  package/gstreamer1/gst1-plugins-good/Config.in           | 16 ++++++++++++++++
+>  .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk    | 13 +++++++++++--
+>  2 files changed, 27 insertions(+), 2 deletions(-)
 > 
-> /etc/mender/mender.conf
-> {
->     TenantToken: "very long base64 encoded string"
-> }
+> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+> index afb9a41..62ac07b 100644
+> --- a/package/gstreamer1/gst1-plugins-good/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
+> @@ -283,6 +283,22 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4
+>  	help
+>  	  Open Sound System (OSS) version 4 support for GStreamer
 > 
-> This is a configuration option that has to do with Hosted Mender,
-> where you you need to set this for the devices to connect to the
-> correct organization in a multi-tenant system.
-> 
-> I also looked up some details, the removal of tenant.conf usage (and
-> /var/lib/mender/authtentoken) was in version 1.2.0, where it was
-> switched to be an mender.conf option instead as the example above
-> demonstrates. As the first version that was integrated in Buildroot
-> was 1.4.0, the inclusion of tenant.conf and the creation of the
-> symlink was not necessary.
+> +config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
+> +	bool "qmlgl (qt5)"
+> +	depends on BR2_PACKAGE_QT5
+> +	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
+> +	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative-quick
+> +	select BR2_PACKAGE_QT5DECLARATIVE
+> +	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
+> +	select BR2_PACKAGE_QT5X11EXTRAS if BR2_PACKAGE_QT5BASE_XCB
 
-OK, thanks a lot for this research. Please make this a separate patch
-from the rest, with this very good explanation as the commit log.
+Needs to select BR2_PACKAGE_QT5BASE_WIDGETS to enable the host uic command
+(otherwise gst1-plugins-good configure disables qt support with the message
+'One of the required qt build programs was not found')...
 
-> >> > The installation path has changed from /var/share, to /usr/share. Why ?  
-> >>
-> >> /var/share was incorrect, it has always been /usr/share.  
-> >
-> > So in its current state, the mender package in Buildroot doesn't work ?  
-> 
-> We need to define works. If we define works as that the mender.service
-> is started successfully and the daemon is running, currently this does
-> not work. And the path change from /var/share -> /usr/share is one of
-> the fixes.
+Next failure was because the search for qplatformnativeinterface.h failed, fixed
+by the following patch:
 
-OK, so we want this as a separate patch as well, so that we can apply
-it to master and backport to our LTS branch.
+	$ cat package/gstreamer1/gst1-plugins-good/0001-configure-fix-qt-qpa-detection.patch 
+--- gst1-plugins-good-1.14.2/configure_orig	2018-08-15 19:42:48.065311007 +0200
++++ gst1-plugins-good-1.14.2/configure	2018-08-15 19:42:58.665528543 +0200
+@@ -35924,7 +35924,7 @@
+       else
+         HAVE_QT="yes"
+         HAVE_QT_WINDOWING="no"
+-        QT_VERSION="`$PKG_CONFIG --define-prefix --modversion Qt5Core`"
++        QT_VERSION="`$PKG_CONFIG --modversion Qt5Core`"
+         QPA_INCLUDE_PATH=`$PKG_CONFIG --variable=includedir Qt5Core`/QtGui/${QT_VERSION}/QtGui
+         if test -f "$PKG_CONFIG_SYSROOT_DIR/$QPA_INCLUDE_PATH/qpa/qplatformnativeinterface.h"; then :
+ 
+According to [2] the '--define-prefix' option is introduced with pkgconf-1.2.0 (buildroot is
+still using 0.9.12)...
 
-> The other one is a "sane" mender.conf file, currently there
-> are only "template" values in the file installed that are not replaced
-> with actually working values.
+The last failure ('Could not find any Qt Windowing integration') is fixed by
+selecting BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL...
 
-It is kind of expected that the mender.conf provided in Buildroot is a
-template and needs to be replaced. I don't think it is really possible
-to provide an out-of-the-box working solution for update systems. As
-you explain below, it requires integration with the bootloader, a
-specific organization of the partitions, etc.
+> +	help
+> +	  QT5 plugin which includes elements qmlglsrc and qmlglsink
+> +	
 
-> For Mender to actually be able to perform updates (works) it requires
-> integration with U-boot and a specific partition layout, as it is A &
-> B update solution. Will go in more detail on this in the other thread,
-> with similar questions.
+Spurious tab in the line above (checkout check-package to avoid this one [3])...
 
-OK, thanks!
+Patch iteration version and changelog (see [4]) would be nice for the next patch
+iteration ;-)
 
-> > In your next iteration of the patches, could you please clearly
-> > separate the bug fixes as separate patches. They should come first in
-> > the series, before the improvements/cleanups.  
-> 
-> Yes, I can do that.
+Regards,
+Peter
 
-Thanks a lot!
+[1] https://patchwork.ozlabs.org/patch/792000/
+[2] https://github.com/pkgconf/pkgconf/blob/master/NEWS
+[3] http://nightly.buildroot.org/manual.html#_tips_and_tric
+[4] http://nightly.buildroot.org/manual.html#submitting-patches
 
-I have to say I'm really pleased to have people with deep knowledge of
-Mender taking care of its Buildroot packaging. This will definitely
-help in making Mender more usable in the context of Buildroot.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> +comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
+> +	depends on BR2_PACKAGE_QT5
+> +	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> +	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+> +
+>  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+>  	bool "v4l2"
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
+> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> index c1ed039..ef28f2d 100644
+> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> @@ -20,8 +20,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+>  	--disable-osx_video \
+>  	--disable-aalib \
+>  	--disable-aalibtest \
+> -	--disable-libcaca \
+> -	--disable-qt
+> +	--disable-libcaca
+>  
+>  # Options which require currently unpackaged libraries
+>  GST1_PLUGINS_GOOD_CONF_OPTS += \
+> @@ -328,6 +327,16 @@ else
+>  GST1_PLUGINS_GOOD_CONF_OPTS += --disable-oss4
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL),y)
+> +GST1_PLUGINS_GOOD_CONF_OPTS += --enable-qt
+> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5declarative
+> +ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
+> +GST1_PLUGINS_GOOD_DEPENDENCIES += qt5x11extras
+> +endif
+> +else
+> +GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
+>  GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
+>  else
