@@ -1,91 +1,86 @@
-From: LP C <lpdev@cordier.org>
-Date: Wed, 15 Aug 2018 14:06:37 +0200
-Subject: [Buildroot] Intel MediaSDK package w. Quicksync (h264,
- h265 HW encoding)
-In-Reply-To: <20180815133808.53f62baf@windsurf>
-References: <20180815133808.53f62baf@windsurf>
-Message-ID: <1534334535.local-4ba41dde-fbd1-v1.4.1-b1028ad4@getmailspring.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 15 Aug 2018 15:14:09 +0300
+Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11 toolchains
+Message-ID: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Agreed. I will work on this. Thank you both for your feedback.
+Add a patch removing a redefined typedef. Redefinition of typedef, even
+to the same type, used to be illegal before C11.
 
-On Aug 15 2018, at 1:38 pm, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
-> On Wed, 15 Aug 2018 12:45:32 +0200, LP C wrote:
-> > > Really? 4.14.16, not 4.14.17 or later? That's really unlikely... Or do you mean
-> > > that it needs a specific fork?
-> >
-> >
-> > Indeed I did not saw the statement on the official website. Any
-> > kernel newer than 4.14.16 should be fine then. I will conduct further
-> > testing next week to check whether I have issues ton encode with a
-> > really recent kernel version.
->
->
-> First of all, you need to check whether you have a build dependency on
-> 4.14 kernel headers, or only a runtime dependency on having a 4.14
-> kernel.
->
-> If it's just a runtime dependency, a mention in the Config.in help text
-> is good enough.
->
-> > BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 is not "strong enough" here. I
-> > would like to specify a precise 'starting' version of the kernel.
-> > Maybe this could be an additional feature that might be addable to
-> > buildroot? Maybe it is too over engineered though.
->
->
-> We can't do that, because Linux kernel versions are sometimes specified
-> as a Git commit. How can you determine that
-> f1d2d2f924e986ac86fdf7b36c94bcdf32beec15 is older or newer than 4.14 ?
-> You can't without fetching the source code, and fetching the source
-> code only happens at build time, i.e wait after the Buildroot
-> configuration is defined.
->
-> > > It really depends on the plans for upstreaming the changes, and how much
-> > > changes there are. If Intel's libva is really the libva version we carry at the
-> > > moment with some innocent changes to them, and it is intended to be upstreamed
-> > > in the very short term, then I'd be OK to just temporarily switch to the Intel
-> > > version. If, on the other hand, there is a risk that the fork will stay a fork,
-> > > then I think we need to add libva-intel and libva-utils-intel and virtual
-> > > packages. That would be really annoying though.
-> >
-> >
-> > Tough to say, I did not studied the Intel's libva repo specifically.
-> > Maybe we can ask directly to one of the maintainer. That said every
-> > version of the Media SDK is tightly coupled with libva version, and
-> > AFAIK there are no forward compatibility between an older version of
-> > the SDK and the libva version of a new MediaSDK release. I think the
-> > best would be to create a virtual package. Intel has slightly
-> > modified the way libva is built, and I needed to add some lines (not
-> > that much though) to libva.mk. Virtual package would allow to not
-> > bloat the current libva.mk. I can do a PR on this.
-> >
-> > Naming convention:
-> > libva - virtual package
-> >
-> > libva-mainstream: current libva impl
-> > libva-intel: current version validated to work with Intel MediaSDK.
-> > Any thoughts on this?
-> I am not thrilled with the virtual package idea here. I would prefer to
-> first see an approach where everything is done in the existing libva
-> package, and depending on how good/bad this looks, take a decision from
-> there. Going immediately with a virtual package sounds like
-> over-engineering to me.
->
-> Best regards,
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
+Fixes:
+http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
+http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
+http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180815/b3f104af/attachment.html>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+Hi Hollis,
+
+Can you git this a run on your autobuilder? I would like to verify that
+it actually fixes the problem before I send the patch upstream.
+
+Thanks,
+baruch
+---
+ .../0001-Remove-json_object-typedef.patch     | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/cryptsetup/0001-Remove-json_object-typedef.patch
+
+diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+new file mode 100644
+index 000000000000..fa865314a7da
+--- /dev/null
++++ b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+@@ -0,0 +1,46 @@
++From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Wed, 15 Aug 2018 14:13:46 +0300
++Subject: [PATCH] Remove json_object typedef
++
++The json-c header already defines the same typedef. While C11 allows
++typedef redefinition to the same type, older versions of gcc disallow
++that.
++
++In file included from lib/luks2/luks2_internal.h:32,
++                 from lib/luks2/luks2_disk_metadata.c:24:
++lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++ lib/luks2/luks2.h | 1 -
++ lib/setup.c       | 1 +
++ 2 files changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
++index ee57b41ba974..25e36190da45 100644
++--- a/lib/luks2/luks2.h
+++++ b/lib/luks2/luks2.h
++@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
++ /*
++  * LUKS2 header in-memory.
++  */
++-typedef struct json_object json_object;
++ struct luks2_hdr {
++ 	size_t		hdr_size;
++ 	uint64_t	seqid;
++diff --git a/lib/setup.c b/lib/setup.c
++index fddbe7ef7897..856f6e80f465 100644
++--- a/lib/setup.c
+++++ b/lib/setup.c
++@@ -28,6 +28,7 @@
++ #include <sys/utsname.h>
++ #include <fcntl.h>
++ #include <errno.h>
+++#include <json-c/json.h>
++ 
++ #include "libcryptsetup.h"
++ #include "luks.h"
++-- 
++2.18.0
++
+-- 
+2.18.0
