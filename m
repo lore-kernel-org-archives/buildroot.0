@@ -1,16 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 00:15:22 +0200
-Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
- target in pkg-kconfig.mk
-In-Reply-To: <20180815202922.GE2556@scaer>
-References: <20180730155153.24091-1-m.patzlaff@pilz.de>
- <20180730155153.24091-4-m.patzlaff@pilz.de>
- <20180730234643.34315d11@windsurf> <20180731154948.GB8537@scaer>
- <20180814162705.505476fe@windsurf>
- <83afeab5-baf8-122e-15ab-17889c3a300d@mind.be>
- <20180815140413.62984968@windsurf> <20180815161657.GC2556@scaer>
- <20180815193528.6fc47d7b@windsurf> <20180815202922.GE2556@scaer>
-Message-ID: <20180816001522.40f4ff83@windsurf>
+Date: Thu, 16 Aug 2018 00:18:29 +0200
+Subject: [Buildroot] Analysis of defconfig build failures
+In-Reply-To: <87ftzf9v7u.fsf@dell.be.48ers.dk>
+References: <20180812170138.0b51be07@windsurf>
+ <87600bbg68.fsf@dell.be.48ers.dk>
+ <20180815213421.08e0a3b6@windsurf>
+ <87ftzf9v7u.fsf@dell.be.48ers.dk>
+Message-ID: <20180816001829.3f7a1436@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,20 +15,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 Aug 2018 22:29:22 +0200, Yann E. MORIN wrote:
+On Wed, 15 Aug 2018 23:27:17 +0200, Peter Korsgaard wrote:
 
-> > Indeed, this looks very good, and diffconfig is an existing tool.  
+>  >> Perhaps we could backport the changes and add as patches for the
+>  >> affected defconfigs?  
 > 
-> Note that this was the diffconfig tool frm the kernel. The one we have
-> behave differently (and badly I think), given the same config files as
-> input:
+>  > The problem is that it will still affect anyone doing a U-Boot build,
+>  > outside of the defconfigs.  
 > 
->     $ ./utils/diffconfig linux-config.000 linux-config.001
->     +IG_FOO n
-> 
-> Which is not nice... :-/
+> Ok. Is this a new failure introduced by something we do
+> wrong/differently in Buildroot, or just something that is broken by
+> building with newer compilers?
 
-Well, I guess we can import the diffconfig from the kernel, no?
+I don't think it's related to building with new compilers. It's just
+some U-Boot versions that are broken if libfdt headers are already
+available in the include path.
 
 Thomas
 -- 
