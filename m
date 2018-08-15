@@ -1,65 +1,51 @@
-From: Mirza Krak <mirza.krak@northern.tech>
-Date: Wed, 15 Aug 2018 14:32:23 +0200
-Subject: [Buildroot] [PATCH 8/8] package/mender: set version in go linker
-In-Reply-To: <20180815135818.121312d5@windsurf>
-References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-9-mirza.krak@northern.tech>
- <20180815135818.121312d5@windsurf>
-Message-ID: <CADHdJwBGQKrWPiLOio9oz5k-xrL-+CUNo+WAJf-Q6vUbOdiU7g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Aug 2018 14:32:46 +0200
+Subject: [Buildroot] [git commit] package/pkg-golang: post-pone evaluation
+ of variables
+Message-ID: <20180815122852.262D28155C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 15, 2018 at 1:58 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Wed, 15 Aug 2018 01:13:37 +0200, Mirza Krak wrote:
->> This is used when calling the mender client with the
->> -version option and it says "unknown" if not set in
->> linker.
->>
->> Now it displays the following:
->>
->>     # mender -version
->>     1.4.0
->>     runtime: go1.10.2
->>
->> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
->> ---
->>  package/mender/mender.mk | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
->> index ce48c82671..db0eb55454 100644
->> --- a/package/mender/mender.mk
->> +++ b/package/mender/mender.mk
->> @@ -17,6 +17,8 @@ ifeq ($(call qstrip,$(BR2_PACKAGE_MENDER_DEVICE_TYPE)),)
->>  $(error Mender device type not set. Check your BR2_PACKAGE_MENDER_DEVICE_TYPE setting)
->>  endif
->>
->> +MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
->
-> Is this main.Version property something specific to Mender, or
-> something that is common to Go packaging in general ? I'm just trying
-> to figure out if it should be in mender.mk like you did, or in
-> pkg-golang.mk.
+commit: https://git.buildroot.net/buildroot/commit/?id=4eccbe3ef975fa7dcc8984fa9a19c778752d70af
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I would not know the answer to this as my experience is somewhat
-limited when it comes to golang. But if we take a look at
-docker-containerd.mk, it does this:
+As explained in pkg-generic.mk, all variable references inside the
+inner-xxx-package should use $$(...). Otherwise, they are evaluated
+too early, and will not contain the expected value. In the content of
+the pkg-golang infrastructure, the <pkg>_SRC_DOMAIN, <pkg>_SRC_VENDOR
+and <pkg>_SRC_SOFTWARE variables were not properly escaping their
+reference to the $$($(2)_SITE) variable.
 
-    DOCKER_CONTAINERD_LDFLAGS = \
-                  -X
-github.com/docker/containerd.GitCommit=$(DOCKER_CONTAINERD_VERSION)
+This was not visible until now, as only target Go packages were
+supported, where $(2)_SITE was always defined prior to this macro
+being expanded. With the upcoming support of host Go packages, we need
+to fix this, as $(2)_SITE may be defined later, inherited from
+$(3)_SITE.
 
-Maybe above an argument against putting it in pkg-golank.mk?
+Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+[Thomas: rework commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pkg-golang.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Marcin, maybe you know? Or someone else on the list.
-
--- 
-Mirza Krak | Embedded Solutions Architect | https://mender.io
-
- Northern.tech AS | @northerntechHQ
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index bf178622b5..6eacd14180 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -77,9 +77,9 @@ $(2)_INSTALL_BINS ?= $(1)
+ # of GOPATH. It usually resolves around domain/vendor/software. By default, we
+ # derive domain/vendor/software from the upstream URL of the project, but we
+ # allow $(2)_SRC_SUBDIR to be overridden if needed.
+-$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
+-$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
+-$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
++$(2)_SRC_DOMAIN = $$(call domain,$$($(2)_SITE))
++$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
++$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
+ 
+ $(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
+ $(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
