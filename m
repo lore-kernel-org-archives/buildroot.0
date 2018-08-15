@@ -1,75 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 22:15:44 +0200
-Subject: [Buildroot] [git commit] boost: thread needs chrono
-Message-ID: <20180815200853.528638D3F4@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 15 Aug 2018 22:17:20 +0200
+Subject: [Buildroot] [PATCH 1/2]  linux-headers: bump 4.{4, 9, 14,
+ 17}.x series
+Message-ID: <20180815201721.534-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6607d6656319e8801ba2c9d5e74a54ad6e2900ee
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-chrono is selected by thread (see libs/thread/build/Jamfile.v2):
-
-rule usage-requirements ( properties * )
-{
-[...]
-result += <library>/boost/chrono//boost_chrono ;
-}
-
-So add this select for BR2_PACKAGE_BOOST_THREAD and remove it from
-BR2_PACKAGE_BOOST_COROUTINE, BR2_PACKAGE_BOOST_LOG,
-BR2_PACKAGE_TYPE_ERASURE and BR2_PACKAGE_BOOST_WAVE
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/boost/Config.in | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 035a450d12..b7991ae367 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -101,7 +101,6 @@ config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
--	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_CONTEXT
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
-@@ -206,7 +205,6 @@ config BR2_PACKAGE_BOOST_LOG
- 	# log module
- 	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
- 	select BR2_PACKAGE_BOOST_ATOMIC
--	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_REGEX
-@@ -314,6 +312,7 @@ config BR2_PACKAGE_BOOST_TEST
- 
- config BR2_PACKAGE_BOOST_THREAD
- 	bool "boost-thread"
-+	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	help
- 	  Portable C++ multi-threading. C++11, C++14.
-@@ -327,7 +326,6 @@ config BR2_PACKAGE_BOOST_TIMER
- 
- config BR2_PACKAGE_BOOST_TYPE_ERASURE
- 	bool "boost-type_erasure"
--	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	help
-@@ -338,7 +336,6 @@ config BR2_PACKAGE_BOOST_WAVE
- 	# limitation of assembler for coldfire
- 	# error: Tried to convert PC relative branch to absolute jump
- 	depends on !BR2_m68k_cf
--	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_DATE_TIME
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_SYSTEM
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 7d7a6e1a61..858db1f941 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -258,14 +258,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.147"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.119"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.148"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.120"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.62"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.63"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.17.14"	if BR2_KERNEL_HEADERS_4_17
++	default "4.17.15"	if BR2_KERNEL_HEADERS_4_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+-- 
+2.18.0
