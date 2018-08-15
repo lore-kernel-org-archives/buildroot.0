@@ -1,56 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 21:34:21 +0200
-Subject: [Buildroot] Analysis of defconfig build failures
-In-Reply-To: <87600bbg68.fsf@dell.be.48ers.dk>
-References: <20180812170138.0b51be07@windsurf>
- <87600bbg68.fsf@dell.be.48ers.dk>
-Message-ID: <20180815213421.08e0a3b6@windsurf>
+Date: Wed, 15 Aug 2018 21:35:20 +0200
+Subject: [Buildroot] [git commit] domoticz: fix appversion.default
+Message-ID: <20180815192832.667108D3B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=680789fa391a8c323f449d34a0ca722b17a85997
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 15 Aug 2018 21:09:19 +0200, Peter Korsgaard wrote:
+Retrieve correct appversion.default (9700) from upstream
 
->  >    The problem is fixed in U-Boot 2018.01 but present in 2017.11.
->  >    However, we have a number of vendor-provided U-Boot, and it's not
->  >    necessarily easy to upgrade all defconfigs to use at least 2018.01.  
-> 
-> Perhaps we could backport the changes and add as patches for the
-> affected defconfigs?
+Without this patch, the wrong version is displayed in the web ui and
+when the user checks for an update, domoticz wrongly says that a new
+version is available
+This issue was reported by an email from Eyal Eshed <eeshed@coldroll.ca>
 
-The problem is that it will still affect anyone doing a U-Boot build,
-outside of the defconfigs.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/domoticz/0001-Bumped-version.patch | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-> What is needed? Just the libfdt.h -> linux/libfdt.h you reported?
-
-I am not sure what is needed exactly.
-
->  >  - Problem of recent U-Boot that needs host-bison to build kconfig.
->  >    Yann posted a patch series to make bison and flex hard requirements
->  >    of Buildroot. Do we want to go this way ?  
-> 
-> Sorry, I haven't looked at that series yet. If various packages start
-> needing this, and there aren't any version dependencies, then requiring
-> bison and flex is imho not a big problem (E.G. they are generally
-> available on all distributions).
-
-We've been having a discussion on this in a separate thread (search
-"[2/3,v3] linux: kconfig needs host-{flex, bison} to build the
-configurators ").
-
->  >    sheevaplug_defconfig
->  >    https://gitlab.com/buildroot.org/buildroot/-/jobs/88314946  
-> 
-> I still have this board somewhere. I'll take a look at bumping u-boot.
-
-OK, thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/domoticz/0001-Bumped-version.patch b/package/domoticz/0001-Bumped-version.patch
+new file mode 100644
+index 0000000000..70426ba1aa
+--- /dev/null
++++ b/package/domoticz/0001-Bumped-version.patch
+@@ -0,0 +1,20 @@
++From 98723b7da9467a49222b8a7ffaae276c5bc075c1 Mon Sep 17 00:00:00 2001
++From: gizmocuz <gizmocuz@users.noreply.github.com>
++Date: Thu, 28 Jun 2018 08:00:58 +0200
++Subject: [PATCH] Bumped version
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from https://github.com/domoticz/domoticz/commit/98723b7da9467a49222b8a7ffaae276c5bc075c1]
++---
++ appversion.default | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/appversion.default b/appversion.default
++index beaa069bb..7d3530590 100644
++--- a/appversion.default
+++++ b/appversion.default
++@@ -1,3 +1,3 @@
++-#define APPVERSION 5876
+++#define APPVERSION 9700
++ #define APPHASH "b97777b"
++ #define APPDATE 1478691222
