@@ -1,111 +1,47 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 15 Aug 2018 20:09:49 +0300
-Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11
- toolchains
-In-Reply-To: <73f7c7a1-1aaa-47df-3a90-91a5e8e668f4@mentor.com>
-References: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
- <73f7c7a1-1aaa-47df-3a90-91a5e8e668f4@mentor.com>
-Message-ID: <87r2izo8te.fsf@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Aug 2018 19:35:28 +0200
+Subject: [Buildroot] [PATCH 3/3] New <pkg>-update-last-config-fragment
+ target in pkg-kconfig.mk
+In-Reply-To: <20180815161657.GC2556@scaer>
+References: <20180730155153.24091-1-m.patzlaff@pilz.de>
+ <20180730155153.24091-4-m.patzlaff@pilz.de>
+ <20180730234643.34315d11@windsurf> <20180731154948.GB8537@scaer>
+ <20180814162705.505476fe@windsurf>
+ <83afeab5-baf8-122e-15ab-17889c3a300d@mind.be>
+ <20180815140413.62984968@windsurf> <20180815161657.GC2556@scaer>
+Message-ID: <20180815193528.6fc47d7b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Hollis,
+Hello,
 
-Hollis Blanchard writes:
-> I can manually place this in the autobuilder's checkout of buildroot, but
-> maybe it will pick some arbitrary branch the next time it runs. Is there a
-> better way to try it out?
+On Wed, 15 Aug 2018 18:16:57 +0200, Yann E. MORIN wrote:
 
-No need to run it under the autobuilder script, only on the same
-machine. Just do a separate checkout of buildroot, set a config (any
-config), and do 'make host-cryptsetup'. Verify that the build fails with
-the error mentioned in the patch. Then, apply this patch, delete
-output/build/host-cryptsetup-2.0.3/, and do 'make host-cryptsetup'
-again.
+> Indeed, it is not to be considered to be a diff of any of the fragment,
+> but of the configuration *as a whole*.
+> 
+> That's why I initially did not write a full diff, but only the delta
+> snippet, not the context, because it is a diff, not a patch.
+> 
+> But I think we should instead use the scripts/diffconfig script that is
+> in the linux kernel tree, and which outputs looks like:
+> 
+>     $ cat config.000
+>     CONFIG_FOO=y
+>     $ cat config.001
+>     CONFIG_FOO is not set
+>     $ ./scripts/diffconfig config.000 config.001
+>      FOO y -> n
+> 
+> which IMNSHO is exactly the message we want to convey.
 
-baruch
+Indeed, this looks very good, and diffconfig is an existing tool.
 
-> On 08/15/2018 05:14 AM, Baruch Siach wrote:
->> Add a patch removing a redefined typedef. Redefinition of typedef, even
->> to the same type, used to be illegal before C11.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
->> http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
->> http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
->>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> ---
->> Hi Hollis,
->>
->> Can you git this a run on your autobuilder? I would like to verify that
->> it actually fixes the problem before I send the patch upstream.
->>
->> Thanks,
->> baruch
->> ---
->>   .../0001-Remove-json_object-typedef.patch     | 46 +++++++++++++++++++
->>   1 file changed, 46 insertions(+)
->>   create mode 100644 package/cryptsetup/0001-Remove-json_object-typedef.patch
->>
->> diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
->> new file mode 100644
->> index 000000000000..fa865314a7da
->> --- /dev/null
->> +++ b/package/cryptsetup/0001-Remove-json_object-typedef.patch
->> @@ -0,0 +1,46 @@
->> +From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
->> +From: Baruch Siach <baruch@tkos.co.il>
->> +Date: Wed, 15 Aug 2018 14:13:46 +0300
->> +Subject: [PATCH] Remove json_object typedef
->> +
->> +The json-c header already defines the same typedef. While C11 allows
->> +typedef redefinition to the same type, older versions of gcc disallow
->> +that.
->> +
->> +In file included from lib/luks2/luks2_internal.h:32,
->> +                 from lib/luks2/luks2_disk_metadata.c:24:
->> +lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
->> +
->> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> +---
->> + lib/luks2/luks2.h | 1 -
->> + lib/setup.c       | 1 +
->> + 2 files changed, 1 insertion(+), 1 deletion(-)
->> +
->> +diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
->> +index ee57b41ba974..25e36190da45 100644
->> +--- a/lib/luks2/luks2.h
->> ++++ b/lib/luks2/luks2.h
->> +@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
->> + /*
->> +  * LUKS2 header in-memory.
->> +  */
->> +-typedef struct json_object json_object;
->> + struct luks2_hdr {
->> + 	size_t		hdr_size;
->> + 	uint64_t	seqid;
->> +diff --git a/lib/setup.c b/lib/setup.c
->> +index fddbe7ef7897..856f6e80f465 100644
->> +--- a/lib/setup.c
->> ++++ b/lib/setup.c
->> +@@ -28,6 +28,7 @@
->> + #include <sys/utsname.h>
->> + #include <fcntl.h>
->> + #include <errno.h>
->> ++#include <json-c/json.h>
->> +
->> + #include "libcryptsetup.h"
->> + #include "luks.h"
->> +--
->> +2.18.0
->> +
-
-
+Thomas
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
