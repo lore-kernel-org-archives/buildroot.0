@@ -1,149 +1,85 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Wed, 15 Aug 2018 04:24:27 -0700
-Subject: [Buildroot] [PATCH 17/17] perl-termreadkey: new package
-In-Reply-To: <20180814155337.GM7915@scaer>
-References: <20180811182749.20924-1-chrismcc@gmail.com>
- <20180811182749.20924-18-chrismcc@gmail.com>
- <20180813235716.070f77f0@windsurf> <20180814155337.GM7915@scaer>
-Message-ID: <CALURroQQrDa5m5=0BVYaW1zr2hEK9dNvoihqoQG1Om2adZhw6A@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Aug 2018 13:38:08 +0200
+Subject: [Buildroot] Intel MediaSDK package w. Quicksync (h264,
+ h265 HW encoding)
+In-Reply-To: <1534329012.local-f5796c68-5b45-v1.4.1-b1028ad4@getmailspring.com>
+References: <8bc186fd-f3f5-e9de-e6be-0c2be0510b48@mind.be>
+ <1534329012.local-f5796c68-5b45-v1.4.1-b1028ad4@getmailspring.com>
+Message-ID: <20180815133808.53f62baf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hello
+Hello,
 
+On Wed, 15 Aug 2018 12:45:32 +0200, LP C wrote:
 
-On Tue, Aug 14, 2018 at 8:53 AM, Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+> > Really? 4.14.16, not 4.14.17 or later? That's really unlikely... Or do you mean
+> > that it needs a specific fork?
+> 
+> Indeed I did not saw the statement on the official website. Any
+> kernel newer than 4.14.16 should be fine then. I will conduct further
+> testing next week to check whether I have issues ton encode with a
+> really recent kernel version.
 
-> Thomas, Christopher, All,
->
-> On 2018-08-13 23:57 +0200, Thomas Petazzoni spake thusly:
-> > Adding Yann and Arnout, licensing question below.
-> > On Sat, 11 Aug 2018 11:27:49 -0700, Christopher McCrory wrote:
-> > > +PERL_TERMREADKEY_VERSION = 2.37
-> > > +PERL_TERMREADKEY_SOURCE = TermReadKey-$(PERL_
-> TERMREADKEY_VERSION).tar.gz
-> > > +PERL_TERMREADKEY_SITE = $(BR2_CPAN_MIRROR)/authors/id/J/JS/JSTOWE
-> > > +PERL_TERMREADKEY_LICENSE = Artistic or GPL-1.0+
-> >
-> > This is not correct I believe.
->
-> IANAL...
->
-> Indeed it's not.
->
->
+First of all, you need to check whether you have a build dependency on
+4.14 kernel headers, or only a runtime dependency on having a 4.14
+kernel.
 
-The current maintainer explains it here:
+If it's just a runtime dependency, a mention in the Config.in help text
+is good enough.
 
-https://github.com/jonathanstowe/TermReadKey/issues/11
+> BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 is not "strong enough" here. I
+> would like to specify a precise 'starting' version of the kernel.
+> Maybe this could be an additional feature that might be addable to
+> buildroot? Maybe it is too over engineered though.
 
+We can't do that, because Linux kernel versions are sometimes specified
+as a Git commit. How can you determine that
+f1d2d2f924e986ac86fdf7b36c94bcdf32beec15 is older or newer than 4.14 ?
+You can't without fetching the source code, and fetching the source
+code only happens at build time, i.e wait after the Buildroot
+configuration is defined.
 
+> > It really depends on the plans for upstreaming the changes, and how much
+> > changes there are. If Intel's libva is really the libva version we carry at the
+> > moment with some innocent changes to them, and it is intended to be upstreamed
+> > in the very short term, then I'd be OK to just temporarily switch to the Intel
+> > version. If, on the other hand, there is a risk that the fork will stay a fork,
+> > then I think we need to add libva-intel and libva-utils-intel and virtual
+> > packages. That would be really annoying though.
+> 
+> Tough to say, I did not studied the Intel's libva repo specifically.
+> Maybe we can ask directly to one of the maintainer. That said every
+> version of the Media SDK is tightly coupled with libva version, and
+> AFAIK there are no forward compatibility between an older version of
+> the SDK and the libva version of a new MediaSDK release. I think the
+> best would be to create a virtual package. Intel has slightly
+> modified the way libva is built, and I needed to add some lines (not
+> that much though) to libva.mk. Virtual package would allow to not
+> bloat the current libva.mk. I can do a PR on this.
+> 
+> Naming convention:
+> libva - virtual package
+> 
+> libva-mainstream: current libva impl
+> 
+> libva-intel: current version validated to work with Intel MediaSDK.
+> 
+> Any thoughts on this?
 
+I am not thrilled with the virtual package idea here. I would prefer to
+first see an approach where everything is done in the existing libva
+package, and depending on how good/bad this looks, take a decision from
+there. Going immediately with a virtual package sounds like
+over-engineering to me.
 
+Best regards,
 
-
-
-> > The README file says this:
-> >
-> > """
-> >  Term::ReadKey 2.36 - Change terminal modes, and perform non-blocking
-> reads.
-> >
-> >  Copyright (C) 1994-1999 Kenneth Albanowski.
-> >                2001-2016 Jonathan Stowe and others
-> >
-> > This package is dual licensed.  You can either choose to license it under
-> > the original terms which were:
-> >
-> >  Unlimited distribution and/or modification is allowed as long as this
-> >  copyright notice remains intact.
-> >
-> > Or the standard Perl terms:
-> >
-> >   This module is free software; you can redistribute it and/or modify it
-> >   under the terms of the Artistic License. For details, see the full
-> >   text of the license in the file "Artistic" that should have been
-> provided
-> >   with the version of perl you are using.
-> >
-> >   This program is distributed in the hope that it will be useful, but
-> >   without any warranty; without even the implied warranty of
-> merchantability
-> >   or fitness for a particular purpose.
-> > """
-> >
-> > So it is not under "Artistic or GPL-1.0+", but it is under "Artistic or
-> > <some funky license>".
-> >
-> > According to
-> > http://docs.activestate.com/activeperl/5.22/perl/lib/Term/ReadKey.html,
-> > the small "Unlimited distribution..." license was the only license of
-> > this Perl module up to version 2.31, at which point the Artistic
-> > license was added as an option.
-> >
-> > I don't know how to SPDX-encode this weird license. Perhaps we should
-> > simply not care, and say the license is just "Artistic" ? Yann ?
-> > Arnout ?
->
-> According to the SPDX FAQ [0]:
->
->   * How does one handle [...] licenses not found in the SPDX License
->     List?
->
->     [...] one can add the license text to the SPDX file and define a new
->     license label. That license identifier is defined only for that
->     specific SPDX document. This is explained in Section 6 of the SPDX
->     Specification or see [1].
->
-> However, we do not have our own SPDX document in Buildroot, so section 6
-> does not apply.
->
-> However, we already have similar situations, where we simply state
-> something like:
->
->     FOO_LICENSE = Foo license
->
-> So, I would state something similar here:
->
->     PERL_TERMREADKEY_LICENSE = Term::ReadKey license or Artistic-1.0-Perl
->
-> Please double-check which versiopn of the Artistic license this is
-> refering to (i.e. the docs says "see the full text of the license in the
-> file "Artistic" that should have been provided with the version of perl
-> you are using.", so I just used Artistic-1.0-Perl but I'm not sure...)
->
-> Regards,
-> Yann E. MORIN.
->
-> [0] https://spdx.org/frequently-asked-questions-faq-0
-> [1] https://spdx.org/spdx-specification-21-web-version#h.1v1yuxt
->
-> --
-> .-----------------.--------------------.------------------.-
-> -------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
-> '------------------------------^-------^------------------^-
-> -------------------'
->
-
-
-
+Thomas
 -- 
-Christopher McCrory
-To the optimist, the glass is half full.
-To the pessimist, the glass is half empty.
-To the engineer, the glass is twice as big as it needs to be.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180815/35a473f3/attachment.html>
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
