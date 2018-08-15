@@ -1,35 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 21:13:44 +0200
-Subject: [Buildroot] [PATCH] luarocks: bump to version 3.0.1
-In-Reply-To: <20180815143104.27453-1-francois.perrad@gadz.org>
-References: <20180815143104.27453-1-francois.perrad@gadz.org>
-Message-ID: <20180815211344.3116d32a@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 Aug 2018 21:14:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump to
+ version 4.8.4
+In-Reply-To: <20180815052300.11971-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 15 Aug 2018 07:23:00 +0200")
+References: <20180815052300.11971-1-bernd.kuhls@t-online.de>
+Message-ID: <871sazbfx6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fran?ois,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Wed, 15 Aug 2018 16:31:04 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  .../0001-allow-libluajit-detection.patch      | 32 -------------------
->  package/luarocks/luarocks.hash                |  2 +-
->  package/luarocks/luarocks.mk                  |  8 ++---
->  3 files changed, 4 insertions(+), 38 deletions(-)
->  delete mode 100644 package/luarocks/0001-allow-libluajit-detection.patch
+ > Release notes: https://www.samba.org/samba/history/samba-4.8.4.html
+ > Fixes
 
-I was about to apply, but it doesn't apply to next. I could fix the
-conflicts myself, but I also found that the commit log was a bit too
-short. Could you add some details as to why the patch can be dropped ?
-Why is sysconfdir changed to /etc instead of /etc/luarocks ?
+ > o  CVE-2018-1139  (Weak authentication protocol allowed.)
+ > o  CVE-2018-1140  (Denial of Service Attack on DNS and LDAP server.)
+ > o  CVE-2018-10858 (Insufficient input validation on client directory
+ >                    listing in libsmbclient.)
+ > o  CVE-2018-10918 (Denial of Service Attack on AD DC DRSUAPI server.)
+ > o  CVE-2018-10919 (Confidential attribute disclosure from the AD LDAP
+ >                    server.)
 
-Thanks!
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
