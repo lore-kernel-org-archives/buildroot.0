@@ -1,32 +1,95 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 15 Aug 2018 22:17:21 +0200
-Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.17.15
-In-Reply-To: <20180815201721.534-1-bernd.kuhls@t-online.de>
-References: <20180815201721.534-1-bernd.kuhls@t-online.de>
-Message-ID: <20180815201721.534-2-bernd.kuhls@t-online.de>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Wed, 15 Aug 2018 13:24:20 -0700
+Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11
+ toolchains
+In-Reply-To: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
+References: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
+Message-ID: <bae2ff1f-ee13-489e-ba77-fedfbb023d54@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Worked for me.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 5f2a6d738c..12f180370f 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.17.14" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.17.15" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-2.18.0
+Tested-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+
+Hollis Blanchard
+Mentor Graphics Emulation Division
+
+On 08/15/2018 05:14 AM, Baruch Siach wrote:
+> Add a patch removing a redefined typedef. Redefinition of typedef, even
+> to the same type, used to be illegal before C11.
+>
+> Fixes:
+> http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
+> http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
+> http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
+>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> Hi Hollis,
+>
+> Can you git this a run on your autobuilder? I would like to verify that
+> it actually fixes the problem before I send the patch upstream.
+>
+> Thanks,
+> baruch
+> ---
+>   .../0001-Remove-json_object-typedef.patch     | 46 +++++++++++++++++++
+>   1 file changed, 46 insertions(+)
+>   create mode 100644 package/cryptsetup/0001-Remove-json_object-typedef.patch
+>
+> diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+> new file mode 100644
+> index 000000000000..fa865314a7da
+> --- /dev/null
+> +++ b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+> @@ -0,0 +1,46 @@
+> +From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
+> +From: Baruch Siach <baruch@tkos.co.il>
+> +Date: Wed, 15 Aug 2018 14:13:46 +0300
+> +Subject: [PATCH] Remove json_object typedef
+> +
+> +The json-c header already defines the same typedef. While C11 allows
+> +typedef redefinition to the same type, older versions of gcc disallow
+> +that.
+> +
+> +In file included from lib/luks2/luks2_internal.h:32,
+> +                 from lib/luks2/luks2_disk_metadata.c:24:
+> +lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
+> +
+> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> +---
+> + lib/luks2/luks2.h | 1 -
+> + lib/setup.c       | 1 +
+> + 2 files changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
+> +index ee57b41ba974..25e36190da45 100644
+> +--- a/lib/luks2/luks2.h
+> ++++ b/lib/luks2/luks2.h
+> +@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
+> + /*
+> +  * LUKS2 header in-memory.
+> +  */
+> +-typedef struct json_object json_object;
+> + struct luks2_hdr {
+> + 	size_t		hdr_size;
+> + 	uint64_t	seqid;
+> +diff --git a/lib/setup.c b/lib/setup.c
+> +index fddbe7ef7897..856f6e80f465 100644
+> +--- a/lib/setup.c
+> ++++ b/lib/setup.c
+> +@@ -28,6 +28,7 @@
+> + #include <sys/utsname.h>
+> + #include <fcntl.h>
+> + #include <errno.h>
+> ++#include <json-c/json.h>
+> +
+> + #include "libcryptsetup.h"
+> + #include "luks.h"
+> +--
+> +2.18.0
+> +
