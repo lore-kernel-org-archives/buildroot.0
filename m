@@ -1,117 +1,90 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 15 Aug 2018 20:06:27 +0200
-Subject: [Buildroot] [RFC PATCH 1/2] perl-template-toolkit: new package
-In-Reply-To: <CALURroTkML0n-QzKh-nNsLC6h9Qje=txZo6qy9UBHqy1UF7ZFA@mail.gmail.com>
-References: <20180813175645.11088-1-chrismcc@gmail.com>
- <20180813175645.11088-2-chrismcc@gmail.com>
- <CAB0FRste31CaZoHAOhgNY3Ho8_4QRrjBVOZWKqbmW9a4XyUy-Q@mail.gmail.com>
- <CALURroTkML0n-QzKh-nNsLC6h9Qje=txZo6qy9UBHqy1UF7ZFA@mail.gmail.com>
-Message-ID: <CAB0FRsvXvNu_8RgvUrUz7LHhV6tHymRT9BDMBtSZok0W6q7JHQ@mail.gmail.com>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Wed, 15 Aug 2018 20:48:27 +0200
+Subject: [Buildroot] [PATCH 2/8] package/mender: update install of
+ config files
+In-Reply-To: <20180815194157.782858ac@windsurf>
+References: <20180814231337.19114-1-mirza.krak@northern.tech>
+ <20180814231337.19114-3-mirza.krak@northern.tech>
+ <20180815143144.587c2045@windsurf>
+ <CADHdJwCjktMrL2YQpKbzm45n0UoqpXRLHGjy1PyQJv_SRwH-Ug@mail.gmail.com>
+ <20180815194157.782858ac@windsurf>
+Message-ID: <CADHdJwBemwZr-AJ+jSGhJem1g70xmWRFC4pb3ajctwFHTjYPeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-2018-08-15 14:03 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+On Wed, Aug 15, 2018 at 7:41 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> On Wed, 15 Aug 2018 14:42:51 +0200, Mirza Krak wrote:
+>
+>> > Do you know why tenant.conf was added in the current Mender packaging ?
+>> > Was it an old configuration file from previous Mender versions ?
+>>
+>> This was something that we did deploy in our Yocto recipes (which
+>> might have been source of inspiration for the package in Buildroot),
+>> but it was never actually used for anything. There is an option in
+>> mender.conf for this, TenantToken.
+>
+> Which is set to ?
+>
+> tenant.conf was the target of a symlink, created in the systemd unit
+> file:
+>
+> /bin/ln -sf /etc/mender/tenant.conf /var/lib/mender/authtentoken
+>
+> How does it work now ?
 
-> hello
->
-> On Mon, Aug 13, 2018 at 9:21 PM, Fran?ois Perrad <francois.perrad@gadz.org
-> > wrote:
->
->>
->>
->> 2018-08-13 19:56 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
->>
->>> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
->>> ---
->>>
->>>
-> <snip>
->
->
->> +# There has got to be a better way... :(
->>> +# Some arguments to Makefile.PL do not get propagated to subdirectories
->>> +# similar to:
->>> +# https://rt.cpan.org/Public/Bug/Display.html?id=28632
->>> +define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
->>> +        $(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(@D)/xs/Makefile
->>> +        $(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g"
->>> $(@D)/xs/Makefile
->>> +        $(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(@D)/xs/Makefile
->>> +        $(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g"
->>> $(@D)/xs/Makefile
->>> +        $(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(@D)/xs/Makefile
->>> +        $(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared
->>> $(TARGET_LDFLAGS):g" $(@D)/xs/Makefile
->>> +        $(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g"
->>> $(@D)/xs/Makefile
->>> +        $(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g"
->>> $(@D)/xs/Makefile
->>> +endef
->>>
->>
->> If you put this block of code in a function (in pkg-perl.mk) with the
->> filename as parameter,
->> you could just call it, in each module
->>     define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
->>          $(call,foo,$(@D)/xs/Makefile)
->>     endef
->>
->>
-> My makefile skills aren't good enough to handle the subtleties of the
-> entire buildroot process.  Is that something you want to handle?  Or use
-> these as is until someone has some time to work on the pkg-perl.mk bits?
-> Or other?
->
->
-It is just like that :
+Example:
 
-define patch_sub_makefile
-    $(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(1)
-    $(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g" $(1)
-    $(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(1)
-    $(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g" $(1)
-    $(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(1)
-    $(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared $(TARGET_LDFLAGS):g" $(1)
-    $(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g" $(1)
-    $(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g" $(1)
-endef
+/etc/mender/mender.conf
+{
+    TenantToken: "very long base64 encoded string"
+}
 
-define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
-    $(call patch_sub_makefile,$(@D)/xs/Makefile)
-endef
+This is a configuration option that has to do with Hosted Mender,
+where you you need to set this for the devices to connect to the
+correct organization in a multi-tenant system.
 
-Fran?ois
+I also looked up some details, the removal of tenant.conf usage (and
+/var/lib/mender/authtentoken) was in version 1.2.0, where it was
+switched to be an mender.conf option instead as the example above
+demonstrates. As the first version that was integrated in Buildroot
+was 1.4.0, the inclusion of tenant.conf and the creation of the
+symlink was not necessary.
 
-
-
-> Thanks for looking at all these packages I sent.
->
->
->> Fran?ois
+>> > The installation path has changed from /var/share, to /usr/share. Why ?
 >>
->>
->>> +
->>> +PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_HOOKS +=
->>> PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
->>> +
->>> +
->>> +$(eval $(perl-package))
->>> --
->>> 2.14.4
->>>
->>>
->>
+>> /var/share was incorrect, it has always been /usr/share.
 >
+> So in its current state, the mender package in Buildroot doesn't work ?
+
+We need to define works. If we define works as that the mender.service
+is started successfully and the daemon is running, currently this does
+not work. And the path change from /var/share -> /usr/share is one of
+the fixes. The other one is a "sane" mender.conf file, currently there
+are only "template" values in the file installed that are not replaced
+with actually working values.
+
+For Mender to actually be able to perform updates (works) it requires
+integration with U-boot and a specific partition layout, as it is A &
+B update solution. Will go in more detail on this in the other thread,
+with similar questions.
+
+> I'm trying to figure out if this is a bug, or just a preference. If
+> it's a bug, we need to fix it in the master branch, and perhaps
+> backport it to our LTS release.
 >
-> --
-> Christopher McCrory
-> To the optimist, the glass is half full.
-> To the pessimist, the glass is half empty.
-> To the engineer, the glass is twice as big as it needs to be.
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180815/f15391c5/attachment.html>
+> In your next iteration of the patches, could you please clearly
+> separate the bug fixes as separate patches. They should come first in
+> the series, before the improvements/cleanups.
+
+Yes, I can do that.
+
+-- 
+Mirza Krak | Embedded Solutions Architect | https://mender.io
+
+ Northern.tech AS | @northerntechHQ
