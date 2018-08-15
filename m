@@ -1,40 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 Aug 2018 22:48:16 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/ffmpeg: add
- optional support for libdrm
-Message-ID: <20180815204237.5F1E58D403@busybox.osuosl.org>
+Date: Wed, 15 Aug 2018 22:48:22 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/ffmpeg: bump
+ version to 3.4.4
+Message-ID: <20180815204237.72CE98D403@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1e65809cfbe202189d557fb62adf00fe526c2d9
+commit: https://git.buildroot.net/buildroot/commit/?id=ba3d3ae8ff6b0d162ea1f9300238f7263509b575
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5c1ae91a245e1d9bcec03852c7be8cbbdf858a6b)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit fbeeb8ce067a24eff5a3418f58b22bc6a752e184)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index d9f1dda1e7..7d64d8441c 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 6b341b7d49e74c4bbdaa8dd166107008c4138ce0d5af73aa04fbbc7ae0d0855c  ffmpeg-3.4.3.tar.xz
++sha256 386f7601e865df6bddde05bb6927119b5a853f0b92e2e9834f59c125a17d3fc6  ffmpeg-3.4.4.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
 diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 432e4cda09..82140e266e 100644
+index 6932390e40..cf9abeb102 100644
 --- a/package/ffmpeg/ffmpeg.mk
 +++ b/package/ffmpeg/ffmpeg.mk
-@@ -231,6 +231,13 @@ ifeq ($(BR2_PACKAGE_FFMPEG_GPL)$(BR2_PACKAGE_LIBEBUR128),yy)
- FFMPEG_DEPENDENCIES += libebur128
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_LIBDRM),y)
-+FFMPEG_CONF_OPTS += --enable-libdrm
-+FFMPEG_DEPENDENCIES += libdrm
-+else
-+FFMPEG_CONF_OPTS += --disable-libdrm
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBOPENH264),y)
- FFMPEG_CONF_OPTS += --enable-libopenh264
- FFMPEG_DEPENDENCIES += libopenh264
+-FFMPEG_VERSION = 3.4.3
++FFMPEG_VERSION = 3.4.4
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
