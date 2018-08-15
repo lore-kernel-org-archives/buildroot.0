@@ -1,39 +1,54 @@
 From: Mirza Krak <mirza.krak@northern.tech>
-Date: Wed, 15 Aug 2018 09:16:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-golang: fix illegal variable
- reference
-Message-ID: <20180815071609.6722-1-mirza.krak@northern.tech>
+Date: Wed, 15 Aug 2018 09:21:53 +0200
+Subject: [Buildroot] [PATCH 3/8] package/mender: add dep on
+ BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
+In-Reply-To: <87wossnrnw.fsf@tkos.co.il>
+References: <20180814231337.19114-1-mirza.krak@northern.tech>
+ <20180814231337.19114-4-mirza.krak@northern.tech> <87wossnrnw.fsf@tkos.co.il>
+Message-ID: <CADHdJwBgS17SekSG+Ex3CJ3FmGB34aDxryoG9-sQQR8jajSttg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-References to variables inside $(eval) blocks must be with a double
-dollar sign, otherwise we end up with unintuitive and undesired behavior
-according to the description in pkg-generic.mk
+On Wed, Aug 15, 2018 at 7:08 AM, Baruch Siach <baruch@tkos.co.il> wrote:
+> Hi Mirza,
 
-Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
----
- package/pkg-golang.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hi Baruch,
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index bf178622b5..6eacd14180 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -77,9 +77,9 @@ $(2)_INSTALL_BINS ?= $(1)
- # of GOPATH. It usually resolves around domain/vendor/software. By default, we
- # derive domain/vendor/software from the upstream URL of the project, but we
- # allow $(2)_SRC_SUBDIR to be overridden if needed.
--$(2)_SRC_DOMAIN = $$(call domain,$($(2)_SITE))
--$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
--$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$($(2)_SITE))))
-+$(2)_SRC_DOMAIN = $$(call domain,$$($(2)_SITE))
-+$(2)_SRC_VENDOR = $$(word 1,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
-+$(2)_SRC_SOFTWARE = $$(word 2,$$(subst /, ,$$(call notdomain,$$($(2)_SITE))))
- 
- $(2)_SRC_SUBDIR ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
- $(2)_SRC_PATH = $$(@D)/$$($(2)_WORKSPACE)/src/$$($(2)_SRC_SUBDIR)
+>
+> Mirza Krak writes:
+>> The Mender client uses fw_printenv/fw_setenv to manipulate the U-boot
+>> environment, e.g to change the boot candidate after a update has been
+>> done.
+>>
+>> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+>> ---
+>>  package/mender/Config.in | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/package/mender/Config.in b/package/mender/Config.in
+>> index e461857486..8c2838c64a 100644
+>> --- a/package/mender/Config.in
+>> +++ b/package/mender/Config.in
+>> @@ -3,6 +3,8 @@ config BR2_PACKAGE_MENDER
+>>       depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+>>       depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+>>       depends on BR2_TOOLCHAIN_HAS_THREADS
+>> +     depends on BR2_PACKAGE_UBOOT_TOOLS
+>> +     depends on BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
+>
+> For non-obvious dependencies like these we prefer 'select'. Also, since
+> this is a run-time only dependency, there should be a comment saying
+> that. So:
+>
+>       select BR2_PACKAGE_UBOOT_TOOLS # runtime
+>       select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV # runtime
+
+Acknowledged.
+
 -- 
-2.18.0
+Mirza Krak | Embedded Solutions Architect | https://mender.io
+
+ Northern.tech AS | @northerntechHQ
