@@ -1,53 +1,91 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 13:58:18 +0200
-Subject: [Buildroot] [PATCH 8/8] package/mender: set version in go linker
-In-Reply-To: <20180814231337.19114-9-mirza.krak@northern.tech>
-References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-9-mirza.krak@northern.tech>
-Message-ID: <20180815135818.121312d5@windsurf>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Wed, 15 Aug 2018 05:03:03 -0700
+Subject: [Buildroot] [RFC PATCH 1/2] perl-template-toolkit: new package
+In-Reply-To: <CAB0FRste31CaZoHAOhgNY3Ho8_4QRrjBVOZWKqbmW9a4XyUy-Q@mail.gmail.com>
+References: <20180813175645.11088-1-chrismcc@gmail.com>
+ <20180813175645.11088-2-chrismcc@gmail.com>
+ <CAB0FRste31CaZoHAOhgNY3Ho8_4QRrjBVOZWKqbmW9a4XyUy-Q@mail.gmail.com>
+Message-ID: <CALURroTkML0n-QzKh-nNsLC6h9Qje=txZo6qy9UBHqy1UF7ZFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+hello
 
-On Wed, 15 Aug 2018 01:13:37 +0200, Mirza Krak wrote:
-> This is used when calling the mender client with the
-> -version option and it says "unknown" if not set in
-> linker.
-> 
-> Now it displays the following:
-> 
->     # mender -version
->     1.4.0
->     runtime: go1.10.2
-> 
-> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-> ---
->  package/mender/mender.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-> index ce48c82671..db0eb55454 100644
-> --- a/package/mender/mender.mk
-> +++ b/package/mender/mender.mk
-> @@ -17,6 +17,8 @@ ifeq ($(call qstrip,$(BR2_PACKAGE_MENDER_DEVICE_TYPE)),)
->  $(error Mender device type not set. Check your BR2_PACKAGE_MENDER_DEVICE_TYPE setting)
->  endif
->  
-> +MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
+On Mon, Aug 13, 2018 at 9:21 PM, Fran?ois Perrad <francois.perrad@gadz.org>
+wrote:
 
-Is this main.Version property something specific to Mender, or
-something that is common to Go packaging in general ? I'm just trying
-to figure out if it should be in mender.mk like you did, or in
-pkg-golang.mk.
+>
+>
+> 2018-08-13 19:56 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
+>
+>> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+>> ---
+>>
+>>
+<snip>
 
-Thanks!
 
-Thomas
+> +# There has got to be a better way... :(
+>> +# Some arguments to Makefile.PL do not get propagated to subdirectories
+>> +# similar to:
+>> +# https://rt.cpan.org/Public/Bug/Display.html?id=28632
+>> +define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>> +        $(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(@D)/xs/Makefile
+>> +        $(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g"
+>> $(@D)/xs/Makefile
+>> +        $(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(@D)/xs/Makefile
+>> +        $(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g"
+>> $(@D)/xs/Makefile
+>> +        $(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(@D)/xs/Makefile
+>> +        $(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared
+>> $(TARGET_LDFLAGS):g" $(@D)/xs/Makefile
+>> +        $(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g"
+>> $(@D)/xs/Makefile
+>> +        $(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g"
+>> $(@D)/xs/Makefile
+>> +endef
+>>
+>
+> If you put this block of code in a function (in pkg-perl.mk) with the
+> filename as parameter,
+> you could just call it, in each module
+>     define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>          $(call,foo,$(@D)/xs/Makefile)
+>     endef
+>
+>
+My makefile skills aren't good enough to handle the subtleties of the
+entire buildroot process.  Is that something you want to handle?  Or use
+these as is until someone has some time to work on the pkg-perl.mk bits? Or
+other?
+
+Thanks for looking at all these packages I sent.
+
+
+> Fran?ois
+>
+>
+>> +
+>> +PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_HOOKS +=
+>> PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
+>> +
+>> +
+>> +$(eval $(perl-package))
+>> --
+>> 2.14.4
+>>
+>>
+>
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Christopher McCrory
+To the optimist, the glass is half full.
+To the pessimist, the glass is half empty.
+To the engineer, the glass is twice as big as it needs to be.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180815/bec7df93/attachment.html>
