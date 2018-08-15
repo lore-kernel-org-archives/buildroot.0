@@ -1,75 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 Aug 2018 14:18:38 +0200
-Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
- bison} to build the configurators
-In-Reply-To: <ea46788a-f814-7fc8-b9dd-1ce97a59546c@mind.be>
-References: <cover.1533327111.git.yann.morin.1998@free.fr>
- <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
- <20180814162130.00f55418@windsurf> <20180814152743.GJ7915@scaer>
- <ea46788a-f814-7fc8-b9dd-1ce97a59546c@mind.be>
-Message-ID: <20180815141838.0a83993c@windsurf>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Wed, 15 Aug 2018 14:23:57 +0200
+Subject: [Buildroot] [PATCH 4/8] package/mender: add
+ BR2_PACKAGE_MENDER_ARTIFACT_NAME option
+In-Reply-To: <20180815135330.2fa7ad72@windsurf>
+References: <20180814231337.19114-1-mirza.krak@northern.tech>
+ <20180814231337.19114-5-mirza.krak@northern.tech>
+ <20180815135330.2fa7ad72@windsurf>
+Message-ID: <CADHdJwATYL5VguXjETMF8aF81OnQCV2qhj3DmR3F7ODGx8NDTw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Wed, Aug 15, 2018 at 1:53 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> On Wed, 15 Aug 2018 01:13:33 +0200, Mirza Krak wrote:
+>
+>> +if BR2_PACKAGE_MENDER
+>> +
+>> +config BR2_PACKAGE_MENDER_ARTIFACT_NAME
+>> +     string "Mender artifact name"
+>> +     help
+>> +       The name of the image or update that will be built. This is what the
+>> +       device will report that it is running, and different updates must have
+>> +       different names.
+>> +
+>> +       Will be stored in /etc/mender/artifact_info
+>> +
+>> +endif
+>
+> I am wondering if we really need a new option for that, or if you
+> shouldn't just let the user add /etc/mender/artifact_info to its root
+> filesystem overlay.
 
-On Wed, 15 Aug 2018 00:50:42 +0200, Arnout Vandecappelle wrote:
+This file is required to be present for the Mender client to start in
+daemon mode, but I could just create a file with "dummy" content
+without the option to satisfy that behavior and let users override
+with file-system overlay if that is the preferred to minimize number
+of options.
 
->  My position is that we do indeed need our host flex and bison for everything
-> installed in target/ (which implies everything installed in staging/), but not
-> for things installed in host/. We definitely need it for BR2_REPRODUCIBLE.
-> 
->  It would also be nice if dependencies.sh could do a version check and accept
-> the system flex/bison if it is the right version, like we do for cmake and tar.
-> 
->  But both of these wishes make things more complicated, so I'm OK with just
-> keeping all current host-flex/bison dependencies.
+Though there is a reason why this was an option and it was to be able
+to share this information with the mender-artifact tool, I do not know
+if that is actually possible with how I did this. To provide some more
+context, somewhere I have the intention of calling the mender-artifact
+(host tool) tool with the following arguments:
 
-In fact, I think adding flex and bison as mandatory dependencies of the
-system is going to cause too much disruption. All the autobuilders
-would start complaining, all the Travis/Gitlab CI setups would have to
-be adjusted, and everyone building in containers/minimal environments
-will be affected.
+#Create Mender artifact
+mender-artifact write rootfs-image \
+    --update ${output_dir}/rootfs.ext4 \
+    --output-path ${mender_artifact} \
+    --artifact-name ${artifact_name} \
+    --device-type ${device_type}
 
-So instead, I'd like to detect if flex/bison are available on the
-system. If they are available, then we use them for the Linux kernel
-configuration process. If they are not available, we build them.
+I have not yet figured out where to put above but I am getting there
+:). Mender artifacts are basically the ext4 image + some meta-data
+(checksum, signature, file-size etc)
 
-Instead of:
+Target image and Mender artifact share information (device_type and
+artifact_info/artifact_name) to be able to do sanity checks later on
+when updates are applied. This was my intention of keeping
+artifact_name as an option to be able to share it. But I gladly accept
+suggestions on how to best solve this.
 
-  LINUX_KCONFIG_DEPENDENCIES = host-bison host-flex
-
-I'd prefer to see:
-
-  LINUX_KCONFIG_DEPENDENCIES = $(BR2_FLEX_HOST_DEPENDENCY) $(BR2_BISON_HOST_DEPENDENCY)
-
-And the usual logic in support/dependencies/ to check for bison/flex.
-This will avoid disrupting all existing setups, and still provide the
-speed-up that we don't need to build flex/bison when doing "make
-linux-menuconfig".
-
-> > For the linux kernel and other kconfig-based packages, we don't care
-> > which flex/bison are used, because the resulting binaries are not
-> > installed, unless those packages also generate code eventually installed
-> > in host/, staging/ or target/  
-> 
->  Note that this means you'll still need host-flex/bison for the kernel, because
-> the kernel may build dtc and that gets installed in host...
-
-Are you sure flex/bison are used when building the DTC copy in the
-Linux kernel ? Indeed we only added host-bison/host-flex as
-dependencies of linux in commit
-1b9faedf32be26d9c983c573ccd98f57fc6f6569, when kconfig stopped shipping
-its pre-generated files. How could DTC be built before
-1b9faedf32be26d9c983c573ccd98f57fc6f6569 if it required bison/flex ?
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Mirza Krak | Embedded Solutions Architect | https://mender.io
+
+ Northern.tech AS | @northerntechHQ
