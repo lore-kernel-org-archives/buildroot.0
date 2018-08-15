@@ -1,64 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 15 Aug 2018 22:09:31 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 18.1.6
-Message-ID: <20180815200931.18493-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Aug 2018 22:12:27 +0200
+Subject: [Buildroot] [git commit] boost: locale needs thread with icu
+Message-ID: <20180815200853.428548D3F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=73cdfc6a4d8ab9a1041f9e58be9102cad74f3647
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index de8a9dc7cf..b94b640147 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 18.1.5
-+MESA3D_HEADERS_VERSION = 18.1.6
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index ff336f7d41..4f8eb851d2 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2018-July/000445.html
--md5 622bd23ca8daa83a62938bd33600a580  mesa-18.1.5.tar.xz
--sha1 1ca7d5f5d12c95f8da137be34223229b9f0594fe  mesa-18.1.5.tar.xz
--sha256 69dbe6f1a6660386f5beb85d4fcf003ee23023ed7b9a603de84e9a37e8d98dea  mesa-18.1.5.tar.xz
--sha512 f0bcb903bbf2ff7fc0b4a8fe100ea26ee91c0029b64adaf5fc4877ed7681f325c54b1be8eb0b140bff620da79f30a96375c2e1085e504ebfaf50e57f6da93013  mesa-18.1.5.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2018-August/000451.html
-+md5  f798814c0b93ca3c1cf395bb936db3e0  mesa-18.1.6.tar.xz
-+sha1 8d4daf725f20404f980b981c9693b58756ba6c48  mesa-18.1.6.tar.xz
-+sha256 bb7ce759069801804fcfb8152da3457f76cd7b4e0096e4870ff5adcb5c894289  mesa-18.1.6.tar.xz
-+sha512 2966210800215f5ced2720691063a8519b51ebeab9fb1e99bde4b1bd7ccc719d6395a1c29f25c88efe62d1592cf14ceafc163aca349490b1f8cee81070d46fcc  mesa-18.1.6.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
- sha256 3a0cf6c7835f98f86d5579b2cc517f84254da7411f764fb0095a383fb0759771  docs/patents.txt
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 5c01f92e22..194fb98a85 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 18.1.5
-+MESA3D_VERSION = 18.1.6
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
--- 
-2.18.0
+output/host/usr/bin/nios2-linux-readelf -d output/staging/usr/lib/libboost_locale.so
+
+Dynamic section at offset 0x125ec0 contains 36 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libboost_chrono.so.1.67.0]
+ 0x00000001 (NEEDED)                     Shared library: [libboost_thread.so.1.67.0]
+ 0x00000001 (NEEDED)                     Shared library: [libboost_system.so.1.67.0]
+ 0x00000001 (NEEDED)                     Shared library: [librt.so.1]
+ 0x00000001 (NEEDED)                     Shared library: [libicudata.so.60]
+ 0x00000001 (NEEDED)                     Shared library: [libicui18n.so.60]
+ 0x00000001 (NEEDED)                     Shared library: [libicuuc.so.60]
+
+Fixes:
+ - http://autobuild.buildroot.net/results/57838f7cd84f37b66ab7007deaea847af8f54b72
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 510ed336e4..035a450d12 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -190,6 +190,7 @@ config BR2_PACKAGE_BOOST_LOCALE
+ 	# details.
+ 	depends on !(BR2_STATIC_LIBS && BR2_PACKAGE_ICU)
+ 	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_THREAD if BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+ 	  Provide localization and Unicode handling tools for C++.
