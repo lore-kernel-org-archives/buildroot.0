@@ -1,86 +1,75 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 15 Aug 2018 15:14:09 +0300
-Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11 toolchains
-Message-ID: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 Aug 2018 14:18:38 +0200
+Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
+ bison} to build the configurators
+In-Reply-To: <ea46788a-f814-7fc8-b9dd-1ce97a59546c@mind.be>
+References: <cover.1533327111.git.yann.morin.1998@free.fr>
+ <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
+ <20180814162130.00f55418@windsurf> <20180814152743.GJ7915@scaer>
+ <ea46788a-f814-7fc8-b9dd-1ce97a59546c@mind.be>
+Message-ID: <20180815141838.0a83993c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch removing a redefined typedef. Redefinition of typedef, even
-to the same type, used to be illegal before C11.
+Hello,
 
-Fixes:
-http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
-http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
-http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
+On Wed, 15 Aug 2018 00:50:42 +0200, Arnout Vandecappelle wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-Hi Hollis,
+>  My position is that we do indeed need our host flex and bison for everything
+> installed in target/ (which implies everything installed in staging/), but not
+> for things installed in host/. We definitely need it for BR2_REPRODUCIBLE.
+> 
+>  It would also be nice if dependencies.sh could do a version check and accept
+> the system flex/bison if it is the right version, like we do for cmake and tar.
+> 
+>  But both of these wishes make things more complicated, so I'm OK with just
+> keeping all current host-flex/bison dependencies.
 
-Can you git this a run on your autobuilder? I would like to verify that
-it actually fixes the problem before I send the patch upstream.
+In fact, I think adding flex and bison as mandatory dependencies of the
+system is going to cause too much disruption. All the autobuilders
+would start complaining, all the Travis/Gitlab CI setups would have to
+be adjusted, and everyone building in containers/minimal environments
+will be affected.
 
-Thanks,
-baruch
----
- .../0001-Remove-json_object-typedef.patch     | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/cryptsetup/0001-Remove-json_object-typedef.patch
+So instead, I'd like to detect if flex/bison are available on the
+system. If they are available, then we use them for the Linux kernel
+configuration process. If they are not available, we build them.
 
-diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
-new file mode 100644
-index 000000000000..fa865314a7da
---- /dev/null
-+++ b/package/cryptsetup/0001-Remove-json_object-typedef.patch
-@@ -0,0 +1,46 @@
-+From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Wed, 15 Aug 2018 14:13:46 +0300
-+Subject: [PATCH] Remove json_object typedef
-+
-+The json-c header already defines the same typedef. While C11 allows
-+typedef redefinition to the same type, older versions of gcc disallow
-+that.
-+
-+In file included from lib/luks2/luks2_internal.h:32,
-+                 from lib/luks2/luks2_disk_metadata.c:24:
-+lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ lib/luks2/luks2.h | 1 -
-+ lib/setup.c       | 1 +
-+ 2 files changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
-+index ee57b41ba974..25e36190da45 100644
-+--- a/lib/luks2/luks2.h
-++++ b/lib/luks2/luks2.h
-+@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
-+ /*
-+  * LUKS2 header in-memory.
-+  */
-+-typedef struct json_object json_object;
-+ struct luks2_hdr {
-+ 	size_t		hdr_size;
-+ 	uint64_t	seqid;
-+diff --git a/lib/setup.c b/lib/setup.c
-+index fddbe7ef7897..856f6e80f465 100644
-+--- a/lib/setup.c
-++++ b/lib/setup.c
-+@@ -28,6 +28,7 @@
-+ #include <sys/utsname.h>
-+ #include <fcntl.h>
-+ #include <errno.h>
-++#include <json-c/json.h>
-+ 
-+ #include "libcryptsetup.h"
-+ #include "luks.h"
-+-- 
-+2.18.0
-+
+Instead of:
+
+  LINUX_KCONFIG_DEPENDENCIES = host-bison host-flex
+
+I'd prefer to see:
+
+  LINUX_KCONFIG_DEPENDENCIES = $(BR2_FLEX_HOST_DEPENDENCY) $(BR2_BISON_HOST_DEPENDENCY)
+
+And the usual logic in support/dependencies/ to check for bison/flex.
+This will avoid disrupting all existing setups, and still provide the
+speed-up that we don't need to build flex/bison when doing "make
+linux-menuconfig".
+
+> > For the linux kernel and other kconfig-based packages, we don't care
+> > which flex/bison are used, because the resulting binaries are not
+> > installed, unless those packages also generate code eventually installed
+> > in host/, staging/ or target/  
+> 
+>  Note that this means you'll still need host-flex/bison for the kernel, because
+> the kernel may build dtc and that gets installed in host...
+
+Are you sure flex/bison are used when building the DTC copy in the
+Linux kernel ? Indeed we only added host-bison/host-flex as
+dependencies of linux in commit
+1b9faedf32be26d9c983c573ccd98f57fc6f6569, when kconfig stopped shipping
+its pre-generated files. How could DTC be built before
+1b9faedf32be26d9c983c573ccd98f57fc6f6569 if it required bison/flex ?
+
+Best regards,
+
+Thomas
 -- 
-2.18.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
