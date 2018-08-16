@@ -1,47 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Aug 2018 22:11:37 +0200
-Subject: [Buildroot] [PATCH 1/3] sheevaplug_defconfig: bump u-boot to
- 2018.07 to fix build issue
-Message-ID: <20180816201139.19656-1-peter@korsgaard.com>
+Date: Thu, 16 Aug 2018 22:11:39 +0200
+Subject: [Buildroot] [PATCH 3/3] sheevaplug: add a basic readme
+In-Reply-To: <20180816201139.19656-1-peter@korsgaard.com>
+References: <20180816201139.19656-1-peter@korsgaard.com>
+Message-ID: <20180816201139.19656-3-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-u-boot 2016.05 no longer builds with the default gcc/binutils versions:
-
-https://gitlab.com/buildroot.org/buildroot/-/jobs/88314946
-
-  LD      u-boot
-fs/built-in.o: In function `read_symbol':
-/builds/buildroot.org/buildroot/output/build/uboot-2016.05/fs/jffs2/mini_inflate.c:129: undefined reference to `pull_bit'
-fs/built-in.o: In function `decompress_huffman':
-/builds/buildroot.org/buildroot/output/build/uboot-2016.05/fs/jffs2/mini_inflate.c:159: undefined reference to `pull_bits'
-/builds/buildroot.org/buildroot/output/build/uboot-2016.05/fs/jffs2/mini_inflate.c:170: undefined reference to `pull_bits'
-..
-/builds/buildroot.org/buildroot/output/host/bin/arm-buildroot-linux-uclibcgnueabi-ld.bfd: BFD (GNU Binutils) 2.29.1 assertion fail elf32-arm.c:9509
-Makefile:1192: recipe for target 'u-boot' failed
-make[1]: *** [u-boot] Error 1
-make[1]: Leaving directory '/builds/buildroot.org/buildroot/output/build/uboot-2016.05'
+Describing how to update the board.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/sheevaplug_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/sheevaplug/readme.txt | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 board/sheevaplug/readme.txt
 
-diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
-index edafffe0a0..17139f7afb 100644
---- a/configs/sheevaplug_defconfig
-+++ b/configs/sheevaplug_defconfig
-@@ -19,7 +19,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sheevaplug"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
- BR2_TARGET_UBOOT_FORMAT_KWB=y
- # BR2_TARGET_UBOOT_NETWORK is not set
- 
+diff --git a/board/sheevaplug/readme.txt b/board/sheevaplug/readme.txt
+new file mode 100644
+index 0000000000..e0ed2684c9
+--- /dev/null
++++ b/board/sheevaplug/readme.txt
+@@ -0,0 +1,36 @@
++Sheevaplug
++==========
++
++Once the build process is finished you will have the following files
++in the output/images/ directory:
++
++- u-boot.kwb
++- uImage.kirkwood-sheevaplug
++- rootfs.jffs2
++
++Copy these to a TFTP server, connect ethernet and mini-USB cable and
++power up the board. Stop the board in U-Boot and update U-Boot by
++executing:
++
++setenv serverip <ipaddress-of-tftp-server>
++setenv bootfile <path/to/u-boot.kwb>
++bootp
++nand erase 0x0 0x80000
++nand write $fileaddr 0x0 0x80000
++reset
++
++Once the new U-Boot boots up, stop it again and update Linux kernel
++and rootfs by:
++
++setenv serverip <ipaddress-of-tftp-server>
++setenv bootfile <path/to/uImage.kirkwood-sheevaplug>
++bootp
++nand erase.part kernel
++nand write $fileaddr kernel 0x400000
++
++setenv bootfile <path/to/rootfs.jffs2>
++bootp
++nand erase.part rootfs
++nand write $fileaddr rootfs $filesize
++
++reset
 -- 
 2.11.0
