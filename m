@@ -1,84 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 11:56:46 +0200
-Subject: [Buildroot] [PATCH] package/sysdig: bump to version 0.23.1
-In-Reply-To: <1534399959-15617-1-git-send-email-angelo@amarulasolutions.com>
-References: <1534399959-15617-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180816115646.58f52f54@windsurf>
+Date: Thu, 16 Aug 2018 11:58:08 +0200
+Subject: [Buildroot] [git commit branch/next] luarocks: bump to version 3.0.1
+Message-ID: <20180816095127.85A0788CBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a5374ceeeeca5b68e636a2cf2bc1b5cde451bd67
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 16 Aug 2018 08:12:39 +0200, Angelo Compagnucci wrote:
-> This patch bumps sysdig to version 0.23.1, adds a new dependency on
-> elfutils and adds hash for the license file.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+The meaning of --sysconfdir has changed (see announcement
+http://lua-users.org/lists/lua-l/2018-08/msg00101.html), So,
+LUAROCKS_CONFIG_DIR & LUAROCKS_CONFIG_FILE are adjusted.
 
-I've applied to next. However, there was still a bug.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luarocks/0001-allow-libluajit-detection.patch | 4 +++-
+ package/luarocks/luarocks.hash                        | 2 +-
+ package/luarocks/luarocks.mk                          | 6 +++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-> diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-> index 6ccb706..49ebb6e 100644
-> --- a/package/sysdig/Config.in
-> +++ b/package/sysdig/Config.in
-> @@ -4,7 +4,9 @@ config BR2_PACKAGE_SYSDIG
->  	depends on BR2_INSTALL_LIBSTDCPP # libjson
->  	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> -	depends on !BR2_STATIC_LIBS # luajit
-> +	depends on !BR2_STATIC_LIBS # luajit, elfutils
-> +	depends on BR2_USE_WCHAR # elfutils
-> +	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
->  	select BR2_PACKAGE_ZLIB
->  	select BR2_PACKAGE_LUAJIT
->  	select BR2_PACKAGE_JSONCPP
-> @@ -13,6 +15,7 @@ config BR2_PACKAGE_SYSDIG
->  	select BR2_PACKAGE_OPENSSL
->  	select BR2_PACKAGE_JQ
->  	select BR2_PACKAGE_LIBB64
-> +	select BR2_PACKAGE_ELFUTILS
->  	help
->  	  Sysdig is open source, system-level exploration:
->  	  capture system state and activity from a running Linux
-> @@ -22,7 +25,8 @@ config BR2_PACKAGE_SYSDIG
->  
->  	  http://sysdig.org
->  
-> -comment "sysdig needs a toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
-> +comment "sysdig needs a toolchain w/ C++, gcc >= 4.8, dynamic library, uclibc or glibc and a Linux kernel to be built"
->  	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
-> -		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS
-> +		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
-> +		|| !BR2_TOOLCHAIN_USES_UCLIBC || !BR2_TOOLCHAIN_USES_GLIBC
-
-The opposite of:
-
-  BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC
-
-is not:
-
-  !BR2_TOOLCHAIN_USES_UCLIBC || !BR2_TOOLCHAIN_USES_GLIBC
-
-Indeed, with this expression, if glibc is used,
-BR2_TOOLCHAIN_USES_UCLIBC is false,
-therefore !BR2_TOOLCHAIN_USES_UCLIBC is true, and the comment is
-displayed... even if you're using glibc, which is a valid configuration!
-
-The proper expression is:
-
-  !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
-
-In this case, if you use glibc, BR2_TOOLCHAIN_USES_UCLIBC ||
-BR2_TOOLCHAIN_USES_GLIBC is true, and therefore the overall expression
-is false, and the comment is not displayed.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/luarocks/0001-allow-libluajit-detection.patch b/package/luarocks/0001-allow-libluajit-detection.patch
+index c5e52f4281..05d025bba2 100644
+--- a/package/luarocks/0001-allow-libluajit-detection.patch
++++ b/package/luarocks/0001-allow-libluajit-detection.patch
+@@ -6,6 +6,8 @@ Subject: [PATCH] allow libluajit detection
+ This detection was done only if luarocks is runned by luajit.
+ But on Buildroot, luarocks is always runned by lua.
+ 
++See https://github.com/luarocks/luarocks/pull/883
++
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ ---
+  src/luarocks/deps.lua | 4 +---
+@@ -15,7 +17,7 @@ diff --git a/src/luarocks/deps.lua b/src/luarocks/deps.lua
+ index 8403f12..c1c0220 100644
+ --- a/src/luarocks/deps.lua
+ +++ b/src/luarocks/deps.lua
+-@@ -511,10 +511,8 @@ function deps.check_lua(vars)
++@@ -513,10 +513,8 @@ function deps.check_lua(vars)
+        "lua-" .. cfg.lua_version,
+        "lua-" .. shortv,
+        "lua",
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 87ef6827c6..4aa791cb4d 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 a43fffb997100f11cccb529a3db5456ce8dab18171a5cb3645f948147b6f64a1  luarocks-3.0.0.tar.gz
++sha256 b989c4b60d6c9edcd65169e5e42fcffbd39cdbebe6b138fa5aea45102f8d9ec0  luarocks-3.0.1.tar.gz
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index cd4be266cf..25e3ad3e22 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,15 +4,15 @@
+ #
+ ################################################################################
+ 
+-LUAROCKS_VERSION = 3.0.0
++LUAROCKS_VERSION = 3.0.1
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
+ 
+ HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter
+ 
+-LUAROCKS_CONFIG_DIR = $(HOST_DIR)/etc/luarocks
+-LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
++LUAROCKS_CONFIG_DIR = $(HOST_DIR)/etc
++LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/luarocks/config-$(LUAINTERPRETER_ABIVER).lua
+ LUAROCKS_CFLAGS = $(TARGET_CFLAGS) -fPIC
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
