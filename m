@@ -1,85 +1,136 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 22:34:44 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: build default dtbs if no
- specific source files given
-In-Reply-To: <1533313674-722-1-git-send-email-bos@je-eigen-domein.nl>
-References: <1533313674-722-1-git-send-email-bos@je-eigen-domein.nl>
-Message-ID: <20180816223444.41200c10@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 16 Aug 2018 22:37:54 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/freeswitch: Fix build with
+ FFmpeg 4.0
+Message-ID: <20180816203754.30593-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Floris,
+Added missing license hashes.
 
-Thanks for this contribution. It definitely makes sense to support this.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: split patch from v1 series, added missing license hashes,
+    git-formatted patch 0002
+    patch 0001 can not be reformatted because Makefile.in is not part of
+    the git repository
 
-On Fri,  3 Aug 2018 18:27:54 +0200, Floris Bos wrote:
-> Currently if one wants to build dtbs, one has to specify which
-> dts source files to build exactly.
-> This is inconvenient, and some platforms use non-standard file
-> names that are currently not supported by buildroot.
-> (e.g. the overlay files in downstream Raspberry Pi kernel)
+ .../0002-mod_av-unbreak-with-ffmpeg-4.0.patch | 90 +++++++++++++++++++
+ package/freeswitch/freeswitch.hash            |  2 +
+ 2 files changed, 92 insertions(+)
+ create mode 100644 package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch
 
-Could you give some more specific example of those non-standard names ?
-Are we talking about .dtbo files ?
-
-> diff --git a/linux/Config.in b/linux/Config.in
-> index d30489e..40d337d 100644
-> --- a/linux/Config.in
-> +++ b/linux/Config.in
-> @@ -377,6 +377,10 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
->  	  the trailing .dts. You can provide a list of
->  	  dts files to build, separated by spaces.
->  
-> +	  If both this option and out-of-tree path is left empty
-> +	  the default set of dtbs for the kernel configuration
-> +	  is build.
-
-I think this should rather be in the help text of the
-BR2_LINUX_KERNEL_DTS_SUPPORT. Basically, if you enable
-BR2_LINUX_KERNEL_DTS_SUPPORT, but leave
-BR2_LINUX_KERNEL_INTREE_DTS_NAME and BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
-empty, you'll have all Device Tree for the selected configuration built
-and installed.
-
-As a separate patch, we should also change:
-
-  bool "Build a Device Tree Blob (DTB)"
-
-to
-
-  bool "Build Device Tree Blobs (DTBs)"
-
->  ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
->  ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
-> +ifeq ($(strip $(LINUX_DTS_NAME)),)
-> +define LINUX_BUILD_DTB
-> +	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) dtbs
-
-Perhaps we can do:
-
-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) \
-		$(if $(LINUX_DTS_NAME),$(LINUX_DTBS),dtbs)
-
-to handle both situations at once.
-
-> +define LINUX_INSTALL_DTB
-> +	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) \
-> +		INSTALL_DTBS_PATH=$(1) dtbs_install
-
-I see one problem with see: no all architecture that support building
-dtbs have the dtbs_install target.
-
-Can we install all *.dtb* for example ? Or should we say we don't care
-if this new feature only works for a subset of the CPU architectures
-that use DT ?
-
-Thanks!
-
-Thomas
+diff --git a/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch b/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch
+new file mode 100644
+index 0000000000..0fc7536f52
+--- /dev/null
++++ b/package/freeswitch/0002-mod_av-unbreak-with-ffmpeg-4.0.patch
+@@ -0,0 +1,90 @@
++From 72f2f7047ad35b37002d6210458667a89c301cfe Mon Sep 17 00:00:00 2001
++From: jbeich <jbeich@FreeBSD.org>
++Date: Thu, 16 Aug 2018 22:14:20 +0200
++Subject: [PATCH] mod_av: unbreak with ffmpeg 4.0
++
++avcodec.c:194:40: error: use of undeclared identifier 'FF_INPUT_BUFFER_PADDING_SIZE'
++static uint8_t ff_input_buffer_padding[FF_INPUT_BUFFER_PADDING_SIZE] = { 0 };
++                                       ^
++avformat.c:471:14: error: use of undeclared identifier 'CODEC_FLAG_LOOP_FILTER'
++                        c->flags|=CODEC_FLAG_LOOP_FILTER;   // flags=+loop
++                                  ^
++avformat.c:477:47: error: use of undeclared identifier 'ME_HEX'
++                        av_opt_set_int(c->priv_data, "motion_est", ME_HEX, 0);
++                                                                   ^
++avformat.c:553:15: error: use of undeclared identifier 'CODEC_FLAG_GLOBAL_HEADER'
++                c->flags |= CODEC_FLAG_GLOBAL_HEADER;
++                            ^
++avformat.c:638:31: error: use of undeclared identifier 'CODEC_CAP_VARIABLE_FRAME_SIZE'
++        if (c->codec->capabilities & CODEC_CAP_VARIABLE_FRAME_SIZE) {
++                                     ^
++
++PR:		227726
++Reported by:	antoine (via exp-run)
++
++Downloaded from
++https://github.com/freebsd/freebsd-ports/commit/da104360ea7d7861aa9fe6dc04b776a1eaf794ec
++
++Original file
++https://svnweb.freebsd.org/ports/head/net/freeswitch/files/patch-ffmpeg4?view=markup
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/mod/applications/mod_av/avcodec.c  | 2 +-
++ src/mod/applications/mod_av/avformat.c | 8 ++++----
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/src/mod/applications/mod_av/avcodec.c b/src/mod/applications/mod_av/avcodec.c
++index f987a47466..54a61c878c 100644
++--- a/src/mod/applications/mod_av/avcodec.c
+++++ b/src/mod/applications/mod_av/avcodec.c
++@@ -191,7 +191,7 @@ typedef struct h264_codec_context_s {
++ 	int hw_encoder;
++ } h264_codec_context_t;
++ 
++-static uint8_t ff_input_buffer_padding[FF_INPUT_BUFFER_PADDING_SIZE] = { 0 };
+++static uint8_t ff_input_buffer_padding[AV_INPUT_BUFFER_PADDING_SIZE] = { 0 };
++ 
++ static switch_status_t buffer_h264_nalu(h264_codec_context_t *context, switch_frame_t *frame)
++ {
++diff --git a/src/mod/applications/mod_av/avformat.c b/src/mod/applications/mod_av/avformat.c
++index b9f6f99ef5..f5329c9106 100644
++--- a/src/mod/applications/mod_av/avformat.c
+++++ b/src/mod/applications/mod_av/avformat.c
++@@ -468,13 +468,13 @@ GCC_DIAG_ON(deprecated-declarations)
++ 			c->ticks_per_frame = 2;
++ 
++ 
++-			c->flags|=CODEC_FLAG_LOOP_FILTER;   // flags=+loop
+++			c->flags|=AV_CODEC_FLAG_LOOP_FILTER;   // flags=+loop
++ 			c->me_cmp|= 1;  // cmp=+chroma, where CHROMA = 1
++ 			c->me_range = 16;   // me_range=16
++ 			c->max_b_frames = 3;    // bf=3
++ 
++ 			av_opt_set_int(c->priv_data, "b_strategy", 1, 0);
++-			av_opt_set_int(c->priv_data, "motion_est", ME_HEX, 0);
+++			av_opt_set(c->priv_data, "motion_est", "hex", 0);
++ 			av_opt_set_int(c->priv_data, "coder", 1, 0);
++ 
++ 			switch (mm->vprofile) {
++@@ -550,7 +550,7 @@ GCC_DIAG_ON(deprecated-declarations)
++ 
++ 	/* Some formats want stream headers to be separate. */
++ 	if (fc->oformat->flags & AVFMT_GLOBALHEADER) {
++-		c->flags |= CODEC_FLAG_GLOBAL_HEADER;
+++		c->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
++ 	}
++ 
++ 	return SWITCH_STATUS_SUCCESS;
++@@ -639,7 +639,7 @@ GCC_DIAG_ON(deprecated-declarations)
++ 	mst->frame->format         = AV_SAMPLE_FMT_S16;
++ 	mst->frame->channel_layout = c->channel_layout;
++ 
++-	if (c->codec->capabilities & CODEC_CAP_VARIABLE_FRAME_SIZE) {
+++	if (c->codec->capabilities & AV_CODEC_CAP_VARIABLE_FRAME_SIZE) {
++ 		mst->frame->nb_samples = 10000;
++ 	} else {
++ 		mst->frame->nb_samples = c->frame_size;
++-- 
++2.18.0
++
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 25421de99b..057142e655 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -8,6 +8,8 @@ sha256 dbb0f73109171bd381772b247b8ef581f6a176964619082a1fe031b004086f6b  freeswi
+ sha256 10299420c1e8602c0daf5a59d022621cd72a9148d1f0f33501edb3db3445c7fe  COPYING
+ sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
+ sha256 1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
++sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  libs/libvpx/LICENSE
++sha256 2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  libs/libyuv/LICENSE
+ sha256 7d72a8aee2c4b1a084200487992a5d86f5df6b535727a14c1874918e99d24600  libs/libzrtp/src/zrtp_legal.c
+ sha256 e1c0890440efe31b6cd2ee2abf895eb917c787799f079133f5809414d90d5d60  libs/sofia-sip/COPYING
+ sha256 b402ae58cf355b33be8fa023f704a039e3d41ecaccd2bbcda43ca31d703e4556  libs/sofia-sip/COPYRIGHTS
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
