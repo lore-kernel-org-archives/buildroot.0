@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 12:00:18 +0200
+Date: Thu, 16 Aug 2018 12:00:51 +0200
 Subject: [Buildroot] [git commit branch/next] package/vlc: add optional
- dependency to x265
-Message-ID: <20180816113141.2EFBE812A8@busybox.osuosl.org>
+ dependency to libsamplerate
+Message-ID: <20180816113141.706B78D23D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=641d8ad05b6bb4ff074038ee50d6742c462934f6
+commit: https://git.buildroot.net/buildroot/commit/?id=70858702a7aabd8a6162c5e15be214a0bce2aecb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -19,28 +19,28 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index bc20e2946e..7e496688b9 100644
+index edd0c36372..9e1dc6b92e 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -59,7 +59,6 @@ VLC_CONF_OPTS += \
- 	--disable-vpx \
- 	--disable-vsxu \
- 	--disable-x262 \
--	--disable-x265 \
- 	--disable-zvbi \
- 	--enable-run-as-root
- 
-@@ -416,6 +415,13 @@ else
- VLC_CONF_OPTS += --disable-x264
+@@ -51,7 +51,6 @@ VLC_CONF_OPTS += \
+ 	--disable-mmal-vout \
+ 	--disable-mtp \
+ 	--disable-projectm \
+-	--disable-samplerate \
+ 	--disable-schroedinger \
+ 	--disable-shout \
+ 	--disable-twolame \
+@@ -262,6 +261,13 @@ else
+ VLC_CONF_OPTS += --disable-svg --disable-svgdec
  endif
  
-+ifeq ($(BR2_PACKAGE_X265),y)
-+VLC_CONF_OPTS += --enable-x265
-+VLC_DEPENDENCIES += x265
++ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++VLC_CONF_OPTS += --enable-samplerate
++VLC_DEPENDENCIES += libsamplerate
 +else
-+VLC_CONF_OPTS += --disable-x265
++VLC_CONF_OPTS += --disable-samplerate
 +endif
 +
- ifeq ($(BR2_PACKAGE_XCB_UTIL_KEYSYMS),y)
- VLC_CONF_OPTS += --enable-xcb
- VLC_DEPENDENCIES += xcb-util-keysyms
+ ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+ VLC_CONF_OPTS += --enable-sftp
+ VLC_DEPENDENCIES += libssh2
