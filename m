@@ -1,59 +1,58 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 16 Aug 2018 21:11:17 +0200
-Subject: [Buildroot] [PATCH/next v3 1/1] package/qt5/qt5base: fix statx
- support with glibc >= 2.28
-References: <20180813194206.24355-1-bernd.kuhls@t-online.de>
- <20180814154127.1a60cab7@windsurf>
-Message-ID: <lrug4fxqji.ln2@ID-313208.user.individual.net>
+Date: Thu, 16 Aug 2018 21:20:22 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/aubio: Fix build with FFmpeg 4.0
+Message-ID: <20180816192022.14024-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 14 Aug 2018 15:41:27 +0200 schrieb Thomas Petazzoni:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: split patch from v1 series
 
-> Did you check if this issue also applies to Qt
-> 5.6.3, which we still support ?
+ package/aubio/0001-ffmpeg4.patch | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/aubio/0001-ffmpeg4.patch
 
-Hi Thomas,
-
-because the qt5 dependency of vlc was my first ever contact with qt5 in 
-buildroot I did not notice that 5.6 can also be selected while 5.11 is 
-the default version. I think qt 5.6 does not need any patches for 
-glibc-2.28 because I just did a successful build with the current next 
-branch:
-
-BR2_x86_64=y
-BR2_x86_core_avx2=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_BINUTILS_VERSION_2_31_X=y
-BR2_GCC_VERSION_8_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_SYSTEMD=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_FFMPEG=y
-BR2_PACKAGE_FFMPEG_GPL=y
-BR2_PACKAGE_FFMPEG_NONFREE=y
-BR2_PACKAGE_FFMPEG_FFPLAY=y
-BR2_PACKAGE_FFMPEG_FFPROBE=y
-BR2_PACKAGE_FFMPEG_AVRESAMPLE=y
-BR2_PACKAGE_FFMPEG_POSTPROC=y
-BR2_PACKAGE_VLC=y
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_DRI_DRIVER_I965=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_MESA3D_OPENGL_ES=y
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5_VERSION_5_6=y
-BR2_PACKAGE_QT5BASE_WIDGETS=y
-BR2_PACKAGE_QT5SVG=y
-BR2_PACKAGE_XORG7=y
-
-Quotes from vlc configure log:
-
-checking for QT... yes
-[...]
-vlc aliases           : cvlc rvlc qvlc
-
-Regards, Bernd
+diff --git a/package/aubio/0001-ffmpeg4.patch b/package/aubio/0001-ffmpeg4.patch
+new file mode 100644
+index 0000000000..bdaac55a3d
+--- /dev/null
++++ b/package/aubio/0001-ffmpeg4.patch
+@@ -0,0 +1,32 @@
++From 5690daf759b473b9d13b4547ef37adc2695cf524 Mon Sep 17 00:00:00 2001
++From: James Cowgill <jcowgill@jcowgill.uk>
++Date: Sun, 25 Feb 2018 14:23:25 +0000
++Subject: [PATCH] Fix build with FFmpeg 4.0
++
++Downloaded from upstream commit
++https://git.aubio.org/?p=aubio.git;a=commitdiff;h=5690daf759b473b9d13b4547ef37adc2695cf524
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/io/source_avcodec.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/io/source_avcodec.c b/src/io/source_avcodec.c
++index ccdce807..8197445c 100644
++--- a/src/io/source_avcodec.c
+++++ b/src/io/source_avcodec.c
++@@ -58,7 +58,11 @@
++ #include "fmat.h"
++ #include "source_avcodec.h"
++ 
+++#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(56, 56, 0)
++ #define AUBIO_AVCODEC_MAX_BUFFER_SIZE FF_MIN_BUFFER_SIZE
+++#else
+++#define AUBIO_AVCODEC_MAX_BUFFER_SIZE AV_INPUT_BUFFER_MIN_SIZE
+++#endif
++ 
++ struct _aubio_source_avcodec_t {
++   uint_t hop_size;
++-- 
++2.11.0
++
+-- 
+2.18.0
