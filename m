@@ -1,55 +1,75 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Thu, 16 Aug 2018 21:52:25 +0200
-Subject: [Buildroot] Analysis of defconfig build failures
-In-Reply-To: <20180816001829.3f7a1436@windsurf>
-References: <20180812170138.0b51be07@windsurf>
- <87600bbg68.fsf@dell.be.48ers.dk>
- <20180815213421.08e0a3b6@windsurf> <87ftzf9v7u.fsf@dell.be.48ers.dk>
- <20180816001829.3f7a1436@windsurf>
-Message-ID: <CAAXf6LVNs8470+VwKJCM68cHdp+ZgD-JxEpCbUpMXte4JYm68Q@mail.gmail.com>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Thu, 16 Aug 2018 21:59:59 +0200
+Subject: [Buildroot] [PATCH 1/8] package/mender: update legal info
+In-Reply-To: <1377b705-71cf-3649-5bf1-f31a307d74fd@mind.be>
+References: <20180814231337.19114-1-mirza.krak@northern.tech>
+ <20180814231337.19114-2-mirza.krak@northern.tech>
+ <0d11b4c6-40ac-5a3a-69d4-a1dda529d43f@mind.be>
+ <CADHdJwB78Mo5rtpQk0e6OhkAzdcGPvkz_iRu4AcWcSwB68z2Mw@mail.gmail.com>
+ <1377b705-71cf-3649-5bf1-f31a307d74fd@mind.be>
+Message-ID: <CADHdJwBhDUZx8UwV4NML4LGfBcWZ_mnBme9VmX8sSS5U=WJvoA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-
-2018-08-16 0:18 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
-> Hello,
+On Thu, Aug 16, 2018 at 5:36 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
 >
-> On Wed, 15 Aug 2018 23:27:17 +0200, Peter Korsgaard wrote:
 >
->>  >> Perhaps we could backport the changes and add as patches for the
->>  >> affected defconfigs?
+> On 15/08/2018 09:37, Mirza Krak wrote:
+>> On Wed, Aug 15, 2018 at 1:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>  Hi Mirza,
 >>
->>  > The problem is that it will still affect anyone doing a U-Boot build,
->>  > outside of the defconfigs.
+>> Hi Arnout,
 >>
->> Ok. Is this a new failure introduced by something we do
->> wrong/differently in Buildroot, or just something that is broken by
->> building with newer compilers?
+>>>
+>>> On 15-08-18 01:13, Mirza Krak wrote:
 >
-> I don't think it's related to building with new compilers. It's just
-> some U-Boot versions that are broken if libfdt headers are already
-> available in the include path.
+> [snip]
+>>>> +MENDER_LICENSE_FILES = LICENSE LIC_FILES_CHKSUM.sha256
+>>>
+>>>  Instead of LIC_FILES_CHKSUM.sha256, we should actually include all the files
+>>> mentioned in there in our license list. Well, actually, we can optimize it a
+>>> little bit because there are some identical files.
+>>>
+>>>  Alternatively, you could include all of them, and for the .hash file you can
+>>> just prepend 'sha256  ' to every line of LIC_FILES_CHKSUM.sha256 and append it
+>>> to the .hash file, with the comment
+>>>
+>>> # From LIC_FILES_CHKSUM.sha256
+>>>
+>>>
+>>>  On second thought, actually it is a good idea to include
+>>> LIC_FILES_CHKSUM.sha256 as well, to detect when a new subpackage with a new
+>>> license is added.
+>>
+>> I would really like to keep this as-is to avoid a heavy maintenance
+>> burden. This file is maintained in the upstream package and would
+>> rather not duplicate the work by extracting the information from
+>> LIC_FILES_CHKSUM.sha256 to put it in mender.hash.
+>>
+>> The checksum check of LIC_FILES_CHKSUM.sha256 will handle the sanity
+>> check of the LICENSE files, and all the licenses that are in
+>> LIC_FILES_CHKSUM.sha256 are already mentioned in the mender.mk file:
+>>
+>>      MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, MIT, OLDAP-2.8
+>>
+>> This should cover it. Or are there any big drawbacks with this
+>> approach that I am not seeing?
 >
+>  Well, we really want to collect the license text for all applicable licenses.
+> So you should include at least one file for each license mentioned in
+> MENDER_LICENSE. Since the checksums are already available, I thought the easiest
+> would be to create part of the hash file from the existing file. Like:
+>
+> # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+> # Apache-2.0 license.
+> sha256  ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680  LICENSE
 
-I can try to have a look somewhere next week.
+Got it, and thanks for providing the "sed magic" :).
 
-From the previous solution, I have a feeling that we can only go so
-far in trying to solve the issue from Buildroot. We did already one
-thing, and it seems insufficient for some u-boot versions.
-There is a risk that what we do to fix these new failures, may break
-some of those that work today.
-We could implement some kind of detection to see how we need to solve
-the issue depending on the u-boot at hand, but it could be cumbersome.
+-- 
+Mirza Krak | Embedded Solutions Architect | https://mender.io
 
-An alternative solution is to document the known solution to this
-problem (the patches). We can apply these patches to the defconfigs
-inside buildroot, and let users with custom u-boots apply the patches
-themselves (i.e. make them aware from release notes or documentation
-but don't solve it automatically).
-
-Best regards,
-Thomas
+ Northern.tech AS | @northerntechHQ
