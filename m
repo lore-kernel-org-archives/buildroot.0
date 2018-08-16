@@ -1,43 +1,94 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Aug 2018 22:12:12 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
- 17}.x series
-Message-ID: <20180816200524.22B7C8D49C@busybox.osuosl.org>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Thu, 16 Aug 2018 22:18:29 +0200
+Subject: [Buildroot] [PATCH 1/8] package/mender: update legal info
+In-Reply-To: <1377b705-71cf-3649-5bf1-f31a307d74fd@mind.be>
+References: <20180814231337.19114-1-mirza.krak@northern.tech>
+ <20180814231337.19114-2-mirza.krak@northern.tech>
+ <0d11b4c6-40ac-5a3a-69d4-a1dda529d43f@mind.be>
+ <CADHdJwB78Mo5rtpQk0e6OhkAzdcGPvkz_iRu4AcWcSwB68z2Mw@mail.gmail.com>
+ <1377b705-71cf-3649-5bf1-f31a307d74fd@mind.be>
+Message-ID: <CADHdJwBjz6OCX4wBz_cTquz2+QbD_48NDEBSSrjAbkRBDgqiGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=345a8eeda1cdb5d5d9a5c00a740e8143110e9f73
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, Aug 16, 2018 at 5:36 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+> On 15/08/2018 09:37, Mirza Krak wrote:
+>> On Wed, Aug 15, 2018 at 1:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>  Hi Mirza,
+>>
+>> Hi Arnout,
+>>
+>>>
+>>> On 15-08-18 01:13, Mirza Krak wrote:
+>
+> [snip]
+>>>> +MENDER_LICENSE_FILES = LICENSE LIC_FILES_CHKSUM.sha256
+>>>
+>>>  Instead of LIC_FILES_CHKSUM.sha256, we should actually include all the files
+>>> mentioned in there in our license list. Well, actually, we can optimize it a
+>>> little bit because there are some identical files.
+>>>
+>>>  Alternatively, you could include all of them, and for the .hash file you can
+>>> just prepend 'sha256  ' to every line of LIC_FILES_CHKSUM.sha256 and append it
+>>> to the .hash file, with the comment
+>>>
+>>> # From LIC_FILES_CHKSUM.sha256
+>>>
+>>>
+>>>  On second thought, actually it is a good idea to include
+>>> LIC_FILES_CHKSUM.sha256 as well, to detect when a new subpackage with a new
+>>> license is added.
+>>
+>> I would really like to keep this as-is to avoid a heavy maintenance
+>> burden. This file is maintained in the upstream package and would
+>> rather not duplicate the work by extracting the information from
+>> LIC_FILES_CHKSUM.sha256 to put it in mender.hash.
+>>
+>> The checksum check of LIC_FILES_CHKSUM.sha256 will handle the sanity
+>> check of the LICENSE files, and all the licenses that are in
+>> LIC_FILES_CHKSUM.sha256 are already mentioned in the mender.mk file:
+>>
+>>      MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, MIT, OLDAP-2.8
+>>
+>> This should cover it. Or are there any big drawbacks with this
+>> approach that I am not seeing?
+>
+>  Well, we really want to collect the license text for all applicable licenses.
+> So you should include at least one file for each license mentioned in
+> MENDER_LICENSE. Since the checksums are already available, I thought the easiest
+> would be to create part of the hash file from the existing file. Like:
+>
+> # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+> # Apache-2.0 license.
+> sha256  ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680  LICENSE
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Hmm, though I having some issues with trying to accommodate this.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 7d7a6e1a61..858db1f941 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -258,14 +258,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.147"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.119"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.148"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.120"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.62"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.63"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
--	default "4.17.14"	if BR2_KERNEL_HEADERS_4_17
-+	default "4.17.15"	if BR2_KERNEL_HEADERS_4_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Adding the following line to mender.hash:
+
+    # BSD 2 Clause license.
+sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86
+ vendor/github.com/pkg/errors/LICENSE
+
+Does not do anything, when I run:
+
+    $ make mender-legal-info
+    >>> mender 1.4.0 Collecting legal info
+    LICENSE: OK (sha256:
+ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680)
+    LIC_FILES_CHKSUM.sha256: OK (sha256:
+54d6f54a2815cc2e3cef4f7dde5a3aae20f09b2cde394d8d3f1dce5d8a79d738)
+
+Inspecting other *.hash files in Buildroot, no one seems to reference
+files that are outside of the "root source". Or should I specify the
+path differently?
+
+-- 
+Mirza Krak | Embedded Solutions Architect | https://mender.io
+
+ Northern.tech AS | @northerntechHQ
