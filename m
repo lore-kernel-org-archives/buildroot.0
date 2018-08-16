@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 12:00:35 +0200
+Date: Thu, 16 Aug 2018 12:00:18 +0200
 Subject: [Buildroot] [git commit branch/next] package/vlc: add optional
- dependency to pulseaudio
-Message-ID: <20180816113141.4DE767FB9E@busybox.osuosl.org>
+ dependency to x265
+Message-ID: <20180816113141.2EFBE812A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f892cad80b5de6cddbcef754c2d17302eca04bf8
+commit: https://git.buildroot.net/buildroot/commit/?id=641d8ad05b6bb4ff074038ee50d6742c462934f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/vlc/vlc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 14fe3b7861..b90fd602d3 100644
+index bc20e2946e..7e496688b9 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -362,6 +362,13 @@ else
- VLC_CONF_OPTS += --disable-ncurses
+@@ -59,7 +59,6 @@ VLC_CONF_OPTS += \
+ 	--disable-vpx \
+ 	--disable-vsxu \
+ 	--disable-x262 \
+-	--disable-x265 \
+ 	--disable-zvbi \
+ 	--enable-run-as-root
+ 
+@@ -416,6 +415,13 @@ else
+ VLC_CONF_OPTS += --disable-x264
  endif
  
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-+VLC_CONF_OPTS += --enable-pulse
-+VLC_DEPENDENCIES += pulseaudio
++ifeq ($(BR2_PACKAGE_X265),y)
++VLC_CONF_OPTS += --enable-x265
++VLC_DEPENDENCIES += x265
 +else
-+VLC_CONF_OPTS += --disable-pulse
++VLC_CONF_OPTS += --disable-x265
 +endif
 +
- ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
- VLC_CONF_OPTS += --enable-qt
- VLC_CONF_ENV += \
+ ifeq ($(BR2_PACKAGE_XCB_UTIL_KEYSYMS),y)
+ VLC_CONF_OPTS += --enable-xcb
+ VLC_DEPENDENCIES += xcb-util-keysyms
