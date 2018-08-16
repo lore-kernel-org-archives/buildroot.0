@@ -1,46 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 13:36:38 +0200
+Date: Thu, 16 Aug 2018 13:36:50 +0200
 Subject: [Buildroot] [git commit branch/next] package/vlc: add optional
- dependency to libsecret
-Message-ID: <20180816113141.D265682626@busybox.osuosl.org>
+ dependency to libva
+Message-ID: <20180816113141.E785F84D2B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02cc1e770671ab65bc0b2767e4e60355af98e7d2
+commit: https://git.buildroot.net/buildroot/commit/?id=f1ff252506735a4e97cb846ccc87528ab2d65678
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/vlc/vlc.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index fab08b950d..f777d86bda 100644
+index a15bda3204..af500cba33 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -74,7 +74,6 @@ VLC_CONF_OPTS += \
- 	--disable-notify \
- 	--disable-projectm \
- 	--disable-schroedinger \
--	--disable-secret \
- 	--disable-soxr \
- 	--disable-shine \
- 	--disable-shout \
-@@ -338,6 +337,13 @@ else
- VLC_CONF_OPTS += --disable-samplerate
+@@ -64,7 +64,6 @@ VLC_CONF_OPTS += \
+ 	--disable-kate \
+ 	--disable-kva \
+ 	--disable-libplacebo \
+-	--disable-libva \
+ 	--disable-linsys \
+ 	--disable-mfx \
+ 	--disable-microdns \
+@@ -378,6 +377,14 @@ else
+ VLC_CONF_OPTS += --disable-upnp
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSECRET),y)
-+VLC_CONF_OPTS += --enable-secret
-+VLC_DEPENDENCIES += libsecret
++# libva support depends on ffmpeg
++ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_LIBVA),yy)
++VLC_CONF_OPTS += --enable-libva
++VLC_DEPENDENCIES += libva
 +else
-+VLC_CONF_OPTS += --disable-secret
++VLC_CONF_OPTS += --disable-libva
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBSSH2),y)
- VLC_CONF_OPTS += --enable-sftp
- VLC_DEPENDENCIES += libssh2
+ ifeq ($(BR2_PACKAGE_LIBVNCSERVER),y)
+ VLC_CONF_OPTS += --enable-vnc
+ VLC_DEPENDENCIES += libvncserver
