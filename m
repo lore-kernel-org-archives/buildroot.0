@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 13:36:33 +0200
+Date: Thu, 16 Aug 2018 13:36:42 +0200
 Subject: [Buildroot] [git commit branch/next] package/vlc: add optional
- dependency to libnfs
-Message-ID: <20180816113141.C5D078B709@busybox.osuosl.org>
+ dependency to libsoxr
+Message-ID: <20180816113141.DC5008D399@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02091bcc25385c7699ea610d45d8fb4df7b6649d
+commit: https://git.buildroot.net/buildroot/commit/?id=1291938c6c5128001bd906c6d5694674840fb471
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -19,28 +19,28 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index d34ab2a9e0..fab08b950d 100644
+index f777d86bda..a15bda3204 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -71,7 +71,6 @@ VLC_CONF_OPTS += \
- 	--disable-mmal \
- 	--disable-mpg123 \
- 	--disable-mtp \
--	--disable-nfs \
+@@ -74,7 +74,6 @@ VLC_CONF_OPTS += \
  	--disable-notify \
  	--disable-projectm \
  	--disable-schroedinger \
-@@ -311,6 +310,13 @@ else
- VLC_CONF_OPTS += --disable-libmpeg2
+-	--disable-soxr \
+ 	--disable-shine \
+ 	--disable-shout \
+ 	--disable-skins2 \
+@@ -344,6 +343,13 @@ else
+ VLC_CONF_OPTS += --disable-secret
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBNFS),y)
-+VLC_CONF_OPTS += --enable-nfs
-+VLC_DEPENDENCIES += libnfs
++ifeq ($(BR2_PACKAGE_LIBSOXR),y)
++VLC_CONF_OPTS += --enable-soxr
++VLC_DEPENDENCIES += libsoxr
 +else
-+VLC_CONF_OPTS += --disable-nfs
++VLC_CONF_OPTS += --disable-soxr
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- VLC_CONF_OPTS += --enable-png
- VLC_DEPENDENCIES += libpng
+ ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+ VLC_CONF_OPTS += --enable-sftp
+ VLC_DEPENDENCIES += libssh2
