@@ -1,61 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 13:41:20 +0200
-Subject: [Buildroot] [PATCH/next v2 00/23] package/vlc: bump version to
- 3.0.3
-In-Reply-To: <20180812202935.12983-1-bernd.kuhls@t-online.de>
-References: <20180812202935.12983-1-bernd.kuhls@t-online.de>
-Message-ID: <20180816134120.4b35381b@windsurf>
+Date: Thu, 16 Aug 2018 13:51:46 +0200
+Subject: [Buildroot] [git commit branch/next] meson: bump version to 0.47.1
+Message-ID: <20180816114459.24E5C8D48C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=a03f46ca6e9f43028003aedc92f1a1204ae7480f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 12 Aug 2018 22:29:12 +0200, Bernd Kuhls wrote:
+- delete legacy patch 0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+  (no complains from support/scripts/check-host-rpath even without the patch)
 
-> Bernd Kuhls (23):
->   package/vlc: needs speexdsp for optional speex support
->   package/vlc: sort VLC_CONF_OPTS
->   package/vlc: add optional dependency to x264
->   package/vlc: add optional dependency to x265
->   package/vlc: add optional dependency to ncurses
->   package/vlc: add optional dependency to samba4
->   package/vlc: add optional dependency to pulseaudio
->   package/vlc: add optional dependency to libvpx
->   package/vlc: add optional dependency to libidn
->   package/vlc: add optional dependency to libsamplerate
->   package/vlc: add optional dependency to libdvdread
->   package/vlc: add optional dependency to libdvdnav
->   package/vlc: bump version to 3.0.3
->   package/vlc: add optional dependency to gst1-plugins-base
->   package/vlc: add optional dependency to harfbuzz
->   package/vlc: add optional dependency to libarchive
->   package/vlc: add optional dependency to libnfs
->   package/vlc: add optional dependency to libsecret
->   package/vlc: add optional dependency to libsoxr
->   package/vlc: add optional dependency to libva
->   package/vlc: add optional dependency to mpg123
->   package/vlc: add optional dependency to wayland
->   package/vlc: add optional support for skins2
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Acked-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Tested-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...y-fix-RPATH-if-install_rpath-is-not-empty.patch | 32 ----------------------
+ package/meson/meson.hash                           |  6 ++--
+ package/meson/meson.mk                             |  2 +-
+ 3 files changed, 4 insertions(+), 36 deletions(-)
 
-Thanks, entire series applied to next. As usual, you forgot to Git
-format the patches in the 3.0.3 version bump. I still don't get what is
-the problem with getting the VLC Git repository, applying the patches
-in a branch based on the 3.0.3 tag, and then running "git format-patch
--N". It gives a nice clean series of patches, that you only have to
-copy in package/vlc/. I fixed that up once again, but it would really,
-really be nice if you could do that for the next contributions.
-
-Another comment: there is a 3.0.4 tag, and there are quite a few fixes
-between 3.0.3 and 3.0.4, including the Qt5 build fix. Perhaps you could
-bump to 3.0.4 ?
-
-Thanks a lot for maintaining this package!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+deleted file mode 100644
+index 03c1944258..0000000000
+--- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 53e4920038d5562b7b672fec8b9469fc02eef4ad Mon Sep 17 00:00:00 2001
+-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-Date: Thu, 10 May 2018 21:57:49 +0200
+-Subject: [PATCH] Only fix RPATH if install_rpath is not empty
+-
+-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+----
+- mesonbuild/scripts/meson_install.py | 8 +++++++-
+- 1 file changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/mesonbuild/scripts/meson_install.py b/mesonbuild/scripts/meson_install.py
+-index 013f2a00..f7ff1dcc 100644
+---- a/mesonbuild/scripts/meson_install.py
+-+++ b/mesonbuild/scripts/meson_install.py
+-@@ -368,7 +368,13 @@ def install_targets(d):
+-                     printed_symlink_error = True
+-         if os.path.isfile(outname):
+-             try:
+--                depfixer.fix_rpath(outname, install_rpath, False)
+-+                # Buildroot check-host-rpath script expects RPATH
+-+                # But if install_rpath is empty, it will stripped.
+-+                # So, preserve it in this case
+-+                if install_rpath:
+-+                    depfixer.fix_rpath(outname, install_rpath, False)
+-+                else:
+-+                    print("Skipping RPATH fixing")
+-             except SystemExit as e:
+-                 if isinstance(e.code, int) and e.code == 0:
+-                     pass
+--- 
+-2.14.3
+-
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index bd9e4114ff..4a4923bd12 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.46.1/meson-0.46.1.tar.gz.asc
+-sha256 19497a03e7e5b303d8d11f98789a79aba59b5ad4a81bd00f4d099be0212cee78  meson-0.46.1.tar.gz
+-sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	COPYING
++# https://github.com/mesonbuild/meson/releases/download/0.47.1/meson-0.47.1.tar.gz.asc
++sha256 d673de79f7bab064190a5ea06140eaa8415efb386d0121ba549f6d66c555ada6 meson-0.47.1.tar.gz
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 28c9e6f202..d110e594f5 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.46.1
++MESON_VERSION = 0.47.1
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
