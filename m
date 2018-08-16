@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 12:00:30 +0200
+Date: Thu, 16 Aug 2018 12:00:26 +0200
 Subject: [Buildroot] [git commit branch/next] package/vlc: add optional
- dependency to samba4
-Message-ID: <20180816113141.450BB7FB43@busybox.osuosl.org>
+ dependency to ncurses
+Message-ID: <20180816113141.38651812A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5488b00dac91a1ffe323a02c6c9eea6dc07ec1e
+commit: https://git.buildroot.net/buildroot/commit/?id=b63c3af947b2a8e8f63ffd52fe2b401b3b227cb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -19,20 +19,20 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index ecc5c6cafe..14fe3b7861 100644
+index 7e496688b9..ecc5c6cafe 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -387,6 +387,13 @@ else
- VLC_CONF_OPTS += --disable-sdl-image
+@@ -355,6 +355,13 @@ else
+ VLC_CONF_OPTS += --disable-mpc
  endif
  
-+ifeq ($(BR2_PACKAGE_SAMBA4),y)
-+VLC_CONF_OPTS += --enable-smbclient
-+VLC_DEPENDENCIES += samba4
++ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
++VLC_CONF_OPTS += --enable-ncurses
++VLC_DEPENDENCIES += ncurses
 +else
-+VLC_CONF_OPTS += --disable-smbclient
++VLC_CONF_OPTS += --disable-ncurses
 +endif
 +
- ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
- VLC_CONF_OPTS += --enable-speex
- VLC_DEPENDENCIES += speex speexdsp
+ ifeq ($(BR2_PACKAGE_QT_GUI_MODULE),y)
+ VLC_CONF_OPTS += --enable-qt
+ VLC_CONF_ENV += \
