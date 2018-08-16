@@ -1,12 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Aug 2018 17:36:06 +0200
-Subject: [Buildroot] [PATCH 1/8] package/mender: update legal info
-In-Reply-To: <CADHdJwB78Mo5rtpQk0e6OhkAzdcGPvkz_iRu4AcWcSwB68z2Mw@mail.gmail.com>
-References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-2-mirza.krak@northern.tech>
- <0d11b4c6-40ac-5a3a-69d4-a1dda529d43f@mind.be>
- <CADHdJwB78Mo5rtpQk0e6OhkAzdcGPvkz_iRu4AcWcSwB68z2Mw@mail.gmail.com>
-Message-ID: <1377b705-71cf-3649-5bf1-f31a307d74fd@mind.be>
+Date: Thu, 16 Aug 2018 17:50:34 +0200
+Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
+ bison} to build the configurators
+In-Reply-To: <20180815141838.0a83993c@windsurf>
+References: <cover.1533327111.git.yann.morin.1998@free.fr>
+ <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
+ <20180814162130.00f55418@windsurf> <20180814152743.GJ7915@scaer>
+ <ea46788a-f814-7fc8-b9dd-1ce97a59546c@mind.be>
+ <20180815141838.0a83993c@windsurf>
+Message-ID: <afed53a2-8711-f927-31c7-8d84caa7b541@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,60 +17,54 @@ To: buildroot@busybox.net
 
 
 
-On 15/08/2018 09:37, Mirza Krak wrote:
-> On Wed, Aug 15, 2018 at 1:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>  Hi Mirza,
+On 15/08/2018 14:18, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Hi Arnout,
-> 
->>
->> On 15-08-18 01:13, Mirza Krak wrote:
-
+> On Wed, 15 Aug 2018 00:50:42 +0200, Arnout Vandecappelle wrote:
 [snip]
->>> +MENDER_LICENSE_FILES = LICENSE LIC_FILES_CHKSUM.sha256
->>
->>  Instead of LIC_FILES_CHKSUM.sha256, we should actually include all the files
->> mentioned in there in our license list. Well, actually, we can optimize it a
->> little bit because there are some identical files.
->>
->>  Alternatively, you could include all of them, and for the .hash file you can
->> just prepend 'sha256  ' to every line of LIC_FILES_CHKSUM.sha256 and append it
->> to the .hash file, with the comment
->>
->> # From LIC_FILES_CHKSUM.sha256
->>
->>
->>  On second thought, actually it is a good idea to include
->> LIC_FILES_CHKSUM.sha256 as well, to detect when a new subpackage with a new
->> license is added.
+> I'd prefer to see:
 > 
-> I would really like to keep this as-is to avoid a heavy maintenance
-> burden. This file is maintained in the upstream package and would
-> rather not duplicate the work by extracting the information from
-> LIC_FILES_CHKSUM.sha256 to put it in mender.hash.
+>   LINUX_KCONFIG_DEPENDENCIES = $(BR2_FLEX_HOST_DEPENDENCY) $(BR2_BISON_HOST_DEPENDENCY)
 > 
-> The checksum check of LIC_FILES_CHKSUM.sha256 will handle the sanity
-> check of the LICENSE files, and all the licenses that are in
-> LIC_FILES_CHKSUM.sha256 are already mentioned in the mender.mk file:
-> 
->      MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, MIT, OLDAP-2.8
-> 
-> This should cover it. Or are there any big drawbacks with this
-> approach that I am not seeing?
+> And the usual logic in support/dependencies/ to check for bison/flex.
+> This will avoid disrupting all existing setups, and still provide the
+> speed-up that we don't need to build flex/bison when doing "make
+> linux-menuconfig".
 
- Well, we really want to collect the license text for all applicable licenses.
-So you should include at least one file for each license mentioned in
-MENDER_LICENSE. Since the checksums are already available, I thought the easiest
-would be to create part of the hash file from the existing file. Like:
+ +1. It also makes it easy to add the feature "build flex is system version is
+not OK" later.
 
-# Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
-# Apache-2.0 license.
-sha256  ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680  LICENSE
-...
 
+>>> For the linux kernel and other kconfig-based packages, we don't care
+>>> which flex/bison are used, because the resulting binaries are not
+>>> installed, unless those packages also generate code eventually installed
+>>> in host/, staging/ or target/  
+>>
+>>  Note that this means you'll still need host-flex/bison for the kernel, because
+>> the kernel may build dtc and that gets installed in host...
+> 
+> Are you sure flex/bison are used when building the DTC copy in the
+> Linux kernel ? Indeed we only added host-bison/host-flex as
+> dependencies of linux in commit
+> 1b9faedf32be26d9c983c573ccd98f57fc6f6569, when kconfig stopped shipping
+> its pre-generated files. How could DTC be built before
+> 1b9faedf32be26d9c983c573ccd98f57fc6f6569 if it required bison/flex ?
+
+ The shipped files for DTC were removed in
+e039139be8c25145b103ab365ff1bd4a540066a3 which is v4.17-rc1~106^2~8^2~2 (while
+the kconfig stuff was removed in 29c833061c1d8c2d1d23a62e7061561eadd76cdb which
+is v4.16-rc1~105^2~26). So we already had the dependencies when the shipped DTC
+files were removed from the kernel. And as Yann said, they're not needed for
+kconfig itself, only for building.
 
  Regards,
  Arnout
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
 
 -- 
 Arnout Vandecappelle                          arnout at mind be
