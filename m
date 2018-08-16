@@ -1,33 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 11:10:59 +0200
-Subject: [Buildroot] autobuilder flock hangs
-In-Reply-To: <1a4b53ec-1ed3-7770-3a65-8d4f4f596918@mentor.com>
-References: <20180812060015.A385B207E5@mail.bootlin.com>
- <20180812223629.2bac8ebe@windsurf>
- <1a4b53ec-1ed3-7770-3a65-8d4f4f596918@mentor.com>
-Message-ID: <20180816111059.3a7f1b59@windsurf>
+Date: Thu, 16 Aug 2018 11:29:43 +0200
+Subject: [Buildroot] [PATCH next 1/2] libaio: add host variant
+Message-ID: <20180816092944.10586-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since the bump of lvm2 to 2.02.180 in commit
+8e666bf29e762f3c7681a48d0ee350f8396d798f, lvm2 needs libaio. This was
+properly taken into account for the target lvm2 variant, but not the
+host lvm2 variant. In order to build the host lvm2, we now need
+host-libaio, so this patch adds support for building libaio for the
+host.
 
-On Mon, 13 Aug 2018 11:18:10 -0700, Hollis Blanchard wrote:
+Part of fixing:
 
-> flock was hanging. I don't know why; have you experienced anything like 
-> that?
-> 
-> I deleted the directories and subsequent manual dl-wrapper invocations 
-> succeeded, so I restarted the builder.
+  http://autobuild.buildroot.net/results/f95dd353c17bdfd00fde6762e58aa32e6830b52b/
 
-This happened again:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libaio/libaio.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-  http://autobuild.buildroot.net/results/ddb/ddbc96b24017f2a2b06c6091dea3e19520bf2dd1/
-
-Thomas
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 03029d84d8..76e6937cc2 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -35,4 +35,13 @@ define LIBAIO_INSTALL_TARGET_CMDS
+ 	$(LIBAIO_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
+ 
++define HOST_LIBAIO_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_LIBAIO_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.4
