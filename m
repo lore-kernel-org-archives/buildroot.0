@@ -1,75 +1,63 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 16 Aug 2018 17:50:34 +0200
-Subject: [Buildroot] [PATCH 2/3 v3] linux: kconfig needs host-{flex,
- bison} to build the configurators
-In-Reply-To: <20180815141838.0a83993c@windsurf>
-References: <cover.1533327111.git.yann.morin.1998@free.fr>
- <c85b3d3994261356bedfa3daeaddbc4329836fe9.1533327111.git.yann.morin.1998@free.fr>
- <20180814162130.00f55418@windsurf> <20180814152743.GJ7915@scaer>
- <ea46788a-f814-7fc8-b9dd-1ce97a59546c@mind.be>
- <20180815141838.0a83993c@windsurf>
-Message-ID: <afed53a2-8711-f927-31c7-8d84caa7b541@mind.be>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 16 Aug 2018 13:01:04 -0500
+Subject: [Buildroot] [PATCH 1/2] configs/freescale_t2080_qds_rdb_defconfig:
+ new board
+Message-ID: <20180816180105.32318-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The board is setup to track upstream Linux as the official
+vendor support was complete(depricated) at 4.1 via NXP SDKs.
 
+The target does not build uboot and assumes the user still uses the NXP
+suggested prebuilts in the SDK2.0 (last release for PowerPC). If a
+uboot is required, the source for SDK2.0 can be found in the following
+repo.
+http://git.freescale.com/git/cgit.cgi/ppc/sdk/u-boot.git/tag/?id=fsl-sdk-v2.0-1703
 
-On 15/08/2018 14:18, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 15 Aug 2018 00:50:42 +0200, Arnout Vandecappelle wrote:
-[snip]
-> I'd prefer to see:
-> 
->   LINUX_KCONFIG_DEPENDENCIES = $(BR2_FLEX_HOST_DEPENDENCY) $(BR2_BISON_HOST_DEPENDENCY)
-> 
-> And the usual logic in support/dependencies/ to check for bison/flex.
-> This will avoid disrupting all existing setups, and still provide the
-> speed-up that we don't need to build flex/bison when doing "make
-> linux-menuconfig".
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
 
- +1. It also makes it easy to add the feature "build flex is system version is
-not OK" later.
+DEVELOPERS already covers my entry with a wildcard catching this one
+configs/freescale_t*
+---
+ configs/freescale_t2080_qds_rdb_defconfig | 25 +++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 configs/freescale_t2080_qds_rdb_defconfig
 
-
->>> For the linux kernel and other kconfig-based packages, we don't care
->>> which flex/bison are used, because the resulting binaries are not
->>> installed, unless those packages also generate code eventually installed
->>> in host/, staging/ or target/  
->>
->>  Note that this means you'll still need host-flex/bison for the kernel, because
->> the kernel may build dtc and that gets installed in host...
-> 
-> Are you sure flex/bison are used when building the DTC copy in the
-> Linux kernel ? Indeed we only added host-bison/host-flex as
-> dependencies of linux in commit
-> 1b9faedf32be26d9c983c573ccd98f57fc6f6569, when kconfig stopped shipping
-> its pre-generated files. How could DTC be built before
-> 1b9faedf32be26d9c983c573ccd98f57fc6f6569 if it required bison/flex ?
-
- The shipped files for DTC were removed in
-e039139be8c25145b103ab365ff1bd4a540066a3 which is v4.17-rc1~106^2~8^2~2 (while
-the kconfig stuff was removed in 29c833061c1d8c2d1d23a62e7061561eadd76cdb which
-is v4.16-rc1~105^2~26). So we already had the dependencies when the shipped DTC
-files were removed from the kernel. And as Yann said, they're not needed for
-kconfig itself, only for building.
-
- Regards,
- Arnout
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
-
+diff --git a/configs/freescale_t2080_qds_rdb_defconfig b/configs/freescale_t2080_qds_rdb_defconfig
+new file mode 100644
+index 0000000000..3d03c32f7e
+--- /dev/null
++++ b/configs/freescale_t2080_qds_rdb_defconfig
+@@ -0,0 +1,25 @@
++# Architecture
++BR2_powerpc64=y
++BR2_powerpc_e6500=y
++
++# Linux headers same as kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
++
++# Serial port config
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.14"
++BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/t2080qds fsl/t2080rdb"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_CPIO_GZIP=y
++BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.17.0
