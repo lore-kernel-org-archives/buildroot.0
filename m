@@ -1,38 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 12:01:05 +0200
+Date: Thu, 16 Aug 2018 13:36:25 +0200
 Subject: [Buildroot] [git commit branch/next] package/vlc: add optional
- dependency to libdvdread
-Message-ID: <20180816113141.7A5A88D3DC@busybox.osuosl.org>
+ dependency to harfbuzz
+Message-ID: <20180816113141.A98C88D3F4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06a68723f3566af6866bb955d1139d9f42dfe94d
+commit: https://git.buildroot.net/buildroot/commit/?id=556ed7c3fd0d0f6206ffcadc0f3f5b94a7053062
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/vlc/vlc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 9e1dc6b92e..928b3fabb8 100644
+index 6643d6fd8d..7ce1f57cd8 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -206,6 +206,13 @@ else
- VLC_CONF_OPTS += --disable-dvbpsi
+@@ -59,7 +59,6 @@ VLC_CONF_OPTS += \
+ 	--disable-fluidsynth \
+ 	--disable-gme \
+ 	--disable-goom \
+-	--disable-harfbuzz \
+ 	--disable-jack \
+ 	--disable-jpeg \
+ 	--disable-kai \
+@@ -191,6 +190,13 @@ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ VLC_DEPENDENCIES += libgl
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
-+VLC_CONF_OPTS += --enable-dvdread
-+VLC_DEPENDENCIES += libdvdread
++ifeq ($(BR2_PACKAGE_HARFBUZZ),y)
++VLC_CONF_OPTS += --enable-harfbuzz
++VLC_DEPENDENCIES += harfbuzz
 +else
-+VLC_CONF_OPTS += --disable-dvdread
++VLC_CONF_OPTS += --disable-harfbuzz
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
- VLC_CONF_OPTS += --enable-libgcrypt
- VLC_DEPENDENCIES += libgcrypt
+ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+ VLC_CONF_OPTS += --enable-gles2
+ VLC_DEPENDENCIES += libgles
