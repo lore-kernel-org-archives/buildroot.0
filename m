@@ -1,36 +1,38 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Aug 2018 18:17:48 +0000
-Subject: [Buildroot] [Bug 11236] util-linux fails to build on Travis CI when
- python also selected
-In-Reply-To: <bug-11236-163@https.bugs.busybox.net/>
-References: <bug-11236-163@https.bugs.busybox.net/>
-Message-ID: <bug-11236-163-K04d1zUHz9@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 16 Aug 2018 20:30:31 +0200
+Subject: [Buildroot] [PATCH 1/1] boost: put back chrono select for coroutine
+Message-ID: <20180816183031.13304-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11236
+coroutine module does use chrono directly:
 
-Raphael Jacob <r.jacob2002@gmail.com> changed:
+./libs/coroutine/performance/asymmetric/segmented/Jamfile.v2: <library>/boost/chrono//boost_chrono
+./libs/coroutine/performance/asymmetric/Jamfile.v2: <library>/boost/chrono//boost_chrono
+./libs/coroutine/performance/symmetric/segmented/Jamfile.v2: <library>/boost/chrono//boost_chrono
+./libs/coroutine/performance/symmetric/Jamfile.v2: <library>/boost/chrono//boost_chrono
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|WORKSFORME                  |---
-             Status|RESOLVED                    |REOPENED
+So put back select of chrono for coroutine
 
---- Comment #2 from Raphael Jacob <r.jacob2002@gmail.com> ---
-Hi,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-@Yann Morin:
-I think you confound Frank and me. I was on IRC and you told me to investigate
-more.
-
-I would keep this open. Maybe we can fix this in buildroot.
-
-Raphael
-
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 66a954027c..334098ec5d 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -101,6 +101,7 @@ config BR2_PACKAGE_BOOST_COROUTINE
+ 	bool "boost-coroutine"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
++	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_CONTEXT
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
