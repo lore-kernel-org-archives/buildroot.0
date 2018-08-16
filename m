@@ -1,32 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 11:58:42 +0200
-Subject: [Buildroot] [V2] luarocks: bump to version 3.0.1
-In-Reply-To: <20180816073049.5501-1-francois.perrad@gadz.org>
-References: <20180816073049.5501-1-francois.perrad@gadz.org>
-Message-ID: <20180816115842.4af7e63c@windsurf>
+Date: Thu, 16 Aug 2018 11:59:14 +0200
+Subject: [Buildroot] [git commit branch/next] package/vlc: needs speexdsp
+ for optional speex support
+Message-ID: <20180816113141.0131A8079B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=84d64e0f780d530a189de3b16f0a5c76b89e0049
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 16 Aug 2018 09:30:49 +0200, Francois Perrad wrote:
-> The meaning of --sysconfdir has changed (see announcement http://lua-users.org/lists/lua-l/2018-08/msg00101.html),
-> So, LUAROCKS_CONFIG_DIR & LUAROCKS_CONFIG_FILE are adjusted.
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/luarocks/0001-allow-libluajit-detection.patch | 4 +++-
->  package/luarocks/luarocks.hash                        | 2 +-
->  package/luarocks/luarocks.mk                          | 6 +++---
->  3 files changed, 7 insertions(+), 5 deletions(-)
+Fixes configure warning:
 
-Applied to next, thanks.
+checking for SPEEX... yes
+checking for SPEEXDSP... no
+configure: WARNING: Package speexdsp was not found in the pkg-config search path.
+Perhaps you should add the directory containing `speexdsp.pc'
+to the PKG_CONFIG_PATH environment variable
+Package 'speexdsp', required by 'world', not found.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vlc/vlc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 56bfdced53..af85377c94 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -381,9 +381,9 @@ else
+ VLC_CONF_OPTS += --disable-sdl-image
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SPEEX),y)
++ifeq ($(BR2_PACKAGE_SPEEX)$(BR2_PACKAGE_SPEEXDSP),yy)
+ VLC_CONF_OPTS += --enable-speex
+-VLC_DEPENDENCIES += speex
++VLC_DEPENDENCIES += speex speexdsp
+ else
+ VLC_CONF_OPTS += --disable-speex
+ endif
