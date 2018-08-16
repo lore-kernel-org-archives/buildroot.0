@@ -1,33 +1,47 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Aug 2018 03:01:52 +0000
-Subject: [Buildroot] [Bug 11191] xattr and check-package issue
-In-Reply-To: <bug-11191-163@https.bugs.busybox.net/>
-References: <bug-11191-163@https.bugs.busybox.net/>
-Message-ID: <bug-11191-163-g5xIiWtJZw@https.bugs.busybox.net/>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Thu, 16 Aug 2018 00:07:10 -0300
+Subject: [Buildroot] [RFC PATCH 2/2] scancpan: wrap abstract if too long
+References: <20180813131135.32651-3-chrismcc@gmail.com>
+Message-ID: <5b74ea5e337d2_1cc13fb728614f8034368@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11191
+Hello,
 
-Ricardo Martincoski <ricardo.martincoski@datacom.com.br> changed:
+On Mon, Aug 13, 2018 at 10:11 AM, Christopher McCrory wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
+> +++ b/utils/scancpan
+> @@ -484,6 +484,8 @@ use HTTP::Tiny;
+>  use Safe;
+>  use MetaCPAN::API::Tiny;
+>  use Digest::SHA qw(sha256_hex);
+> +use Text::Wrap;
+> +$Text::Wrap::columns = 70;
 
---- Comment #3 from Ricardo Martincoski <ricardo.martincoski@datacom.com.br> ---
-Fixed in the 2018.02.x branch:
-https://git.buildroot.org/buildroot/commit/?h=2018.02.x&id=1369d30a99234b256c9b5bed08d7764393ccd09f
-This commit will be part of the next 2018.02.5 release.
+Please use 62 instead of 70 here ...
 
-The same fix was applied to 2018.05.x and master branches, but on those
-branches there is another xattr issue that I found while fixing this one:
-https://bugs.busybox.net/show_bug.cgi?id=11216
+>  
+>  # Below, 5.026 should be aligned with the version of perl actually
+>  # bundled in Buildroot:
+> @@ -655,7 +657,7 @@ while (my ($distname, $dist) = each %dist) {
+>      my $brname = brname( $fsname );
+>      mkdir $dirname unless -d $dirname;
+>      if ($need_target{$distname} && ($force || !-f $cfgname)) {
+> -        my $abstract = $dist->{abstract};
+> +        my $abstract = wrap("","\t  ",$dist->{abstract});
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+... so the help text generated here always fits in:
+<tab><2 spaces><62 chars>
+"tab counts for 8" as described in:
+http://nightly.buildroot.org/#writing-rules-config-in
+
+>          my $homepage = $dist->{resources}->{homepage} || qq{https://metacpan.org/release/${distname}};
+>          say qq{write ${cfgname}} unless $quiet;
+>          open my $fh, q{>}, $cfgname;
+> -- 
+
+Regards,
+Ricardo
