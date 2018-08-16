@@ -1,37 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 22:09:36 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: put back chrono select for
- coroutine
-In-Reply-To: <20180816183031.13304-1-fontaine.fabrice@gmail.com>
-References: <20180816183031.13304-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180816220936.43eb6e7e@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 16 Aug 2018 22:11:38 +0200
+Subject: [Buildroot] [PATCH 2/3] sheevaplug_defconfig: bump linux to 4.14.63
+ to include latest fixes
+In-Reply-To: <20180816201139.19656-1-peter@korsgaard.com>
+References: <20180816201139.19656-1-peter@korsgaard.com>
+Message-ID: <20180816201139.19656-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/sheevaplug_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, 16 Aug 2018 20:30:31 +0200, Fabrice Fontaine wrote:
-> coroutine module does use chrono directly:
-> 
-> ./libs/coroutine/performance/asymmetric/segmented/Jamfile.v2: <library>/boost/chrono//boost_chrono
-> ./libs/coroutine/performance/asymmetric/Jamfile.v2: <library>/boost/chrono//boost_chrono
-> ./libs/coroutine/performance/symmetric/segmented/Jamfile.v2: <library>/boost/chrono//boost_chrono
-> ./libs/coroutine/performance/symmetric/Jamfile.v2: <library>/boost/chrono//boost_chrono
-> 
-> So put back select of chrono for coroutine
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/boost/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
+index 17139f7afb..052e39398a 100644
+--- a/configs/sheevaplug_defconfig
++++ b/configs/sheevaplug_defconfig
+@@ -26,7 +26,7 @@ BR2_TARGET_UBOOT_FORMAT_KWB=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.63"
+ BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
+ BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
