@@ -1,64 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 Aug 2018 22:11:39 +0200
-Subject: [Buildroot] [PATCH 3/3] sheevaplug: add a basic readme
-In-Reply-To: <20180816201139.19656-1-peter@korsgaard.com>
-References: <20180816201139.19656-1-peter@korsgaard.com>
-Message-ID: <20180816201139.19656-3-peter@korsgaard.com>
+Date: Thu, 16 Aug 2018 22:12:12 +0200
+Subject: [Buildroot] [git commit] linux: bump default to version 4.17.15
+Message-ID: <20180816200524.2D4F38D49C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Describing how to update the board.
+commit: https://git.buildroot.net/buildroot/commit/?id=65c47ce0a8d646211a5222035a821056896a5886
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/sheevaplug/readme.txt | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 board/sheevaplug/readme.txt
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/sheevaplug/readme.txt b/board/sheevaplug/readme.txt
-new file mode 100644
-index 0000000000..e0ed2684c9
---- /dev/null
-+++ b/board/sheevaplug/readme.txt
-@@ -0,0 +1,36 @@
-+Sheevaplug
-+==========
-+
-+Once the build process is finished you will have the following files
-+in the output/images/ directory:
-+
-+- u-boot.kwb
-+- uImage.kirkwood-sheevaplug
-+- rootfs.jffs2
-+
-+Copy these to a TFTP server, connect ethernet and mini-USB cable and
-+power up the board. Stop the board in U-Boot and update U-Boot by
-+executing:
-+
-+setenv serverip <ipaddress-of-tftp-server>
-+setenv bootfile <path/to/u-boot.kwb>
-+bootp
-+nand erase 0x0 0x80000
-+nand write $fileaddr 0x0 0x80000
-+reset
-+
-+Once the new U-Boot boots up, stop it again and update Linux kernel
-+and rootfs by:
-+
-+setenv serverip <ipaddress-of-tftp-server>
-+setenv bootfile <path/to/uImage.kirkwood-sheevaplug>
-+bootp
-+nand erase.part kernel
-+nand write $fileaddr kernel 0x400000
-+
-+setenv bootfile <path/to/rootfs.jffs2>
-+bootp
-+nand erase.part rootfs
-+nand write $fileaddr rootfs $filesize
-+
-+reset
--- 
-2.11.0
+diff --git a/linux/Config.in b/linux/Config.in
+index 5f2a6d738c..12f180370f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.17.14" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.17.15" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
