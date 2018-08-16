@@ -1,88 +1,75 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Thu, 16 Aug 2018 08:12:39 +0200
-Subject: [Buildroot] [PATCH] package/sysdig: bump to version 0.23.1
-Message-ID: <1534399959-15617-1-git-send-email-angelo@amarulasolutions.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu, 16 Aug 2018 09:30:49 +0200
+Subject: [Buildroot] [V2] luarocks: bump to version 3.0.1
+Message-ID: <20180816073049.5501-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps sysdig to version 0.23.1, adds a new dependency on
-elfutils and adds hash for the license file.
+The meaning of --sysconfdir has changed (see announcement http://lua-users.org/lists/lua-l/2018-08/msg00101.html),
+So, LUAROCKS_CONFIG_DIR & LUAROCKS_CONFIG_FILE are adjusted.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/sysdig/Config.in   | 10 +++++++---
- package/sysdig/sysdig.hash |  5 +++--
- package/sysdig/sysdig.mk   |  4 ++--
- 3 files changed, 12 insertions(+), 7 deletions(-)
+ package/luarocks/0001-allow-libluajit-detection.patch | 4 +++-
+ package/luarocks/luarocks.hash                        | 2 +-
+ package/luarocks/luarocks.mk                          | 6 +++---
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 6ccb706..49ebb6e 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -4,7 +4,9 @@ config BR2_PACKAGE_SYSDIG
- 	depends on BR2_INSTALL_LIBSTDCPP # libjson
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
--	depends on !BR2_STATIC_LIBS # luajit
-+	depends on !BR2_STATIC_LIBS # luajit, elfutils
-+	depends on BR2_USE_WCHAR # elfutils
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
- 	select BR2_PACKAGE_ZLIB
- 	select BR2_PACKAGE_LUAJIT
- 	select BR2_PACKAGE_JSONCPP
-@@ -13,6 +15,7 @@ config BR2_PACKAGE_SYSDIG
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_JQ
- 	select BR2_PACKAGE_LIBB64
-+	select BR2_PACKAGE_ELFUTILS
- 	help
- 	  Sysdig is open source, system-level exploration:
- 	  capture system state and activity from a running Linux
-@@ -22,7 +25,8 @@ config BR2_PACKAGE_SYSDIG
+diff --git a/package/luarocks/0001-allow-libluajit-detection.patch b/package/luarocks/0001-allow-libluajit-detection.patch
+index c5e52f428..05d025bba 100644
+--- a/package/luarocks/0001-allow-libluajit-detection.patch
++++ b/package/luarocks/0001-allow-libluajit-detection.patch
+@@ -6,6 +6,8 @@ Subject: [PATCH] allow libluajit detection
+ This detection was done only if luarocks is runned by luajit.
+ But on Buildroot, luarocks is always runned by lua.
  
- 	  http://sysdig.org
- 
--comment "sysdig needs a toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
-+comment "sysdig needs a toolchain w/ C++, gcc >= 4.8, dynamic library, uclibc or glibc and a Linux kernel to be built"
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_USES_UCLIBC || !BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-index 63a9e38..565b1e9 100644
---- a/package/sysdig/sysdig.hash
-+++ b/package/sysdig/sysdig.hash
-@@ -1,2 +1,3 @@
--# locally computed
--sha256  480d5d8fd7e7373c08008c30bd8e2c7595d5c45d710bf07bd15a522021b560f6  sysdig-0.19.1.tar.gz
-+# sha256 locally computed
-+sha256  57d5b713b875eba35546a1408bf3f20c2703904a17d956be115ee55272db4cfa  sysdig-0.23.1.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index a9c9f21..9ac990e 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,7 +4,7 @@
++See https://github.com/luarocks/luarocks/pull/883
++
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ ---
+  src/luarocks/deps.lua | 4 +---
+@@ -15,7 +17,7 @@ diff --git a/src/luarocks/deps.lua b/src/luarocks/deps.lua
+ index 8403f12..c1c0220 100644
+ --- a/src/luarocks/deps.lua
+ +++ b/src/luarocks/deps.lua
+-@@ -511,10 +511,8 @@ function deps.check_lua(vars)
++@@ -513,10 +513,8 @@ function deps.check_lua(vars)
+        "lua-" .. cfg.lua_version,
+        "lua-" .. shortv,
+        "lua",
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index 87ef6827c..4aa791cb4 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 a43fffb997100f11cccb529a3db5456ce8dab18171a5cb3645f948147b6f64a1  luarocks-3.0.0.tar.gz
++sha256 b989c4b60d6c9edcd65169e5e42fcffbd39cdbebe6b138fa5aea45102f8d9ec0  luarocks-3.0.1.tar.gz
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index cd4be266c..25e3ad3e2 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
+@@ -4,15 +4,15 @@
  #
  ################################################################################
  
--SYSDIG_VERSION = 0.19.1
-+SYSDIG_VERSION = 0.23.1
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = GPL-2.0
- SYSDIG_LICENSE_FILES = COPYING
-@@ -12,7 +12,7 @@ SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
- 	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF -DUSE_BUNDLED_CURL=OFF \
- 	-DUSE_BUNDLED_NCURSES=OFF -DUSE_BUNDLED_OPENSSL=OFF \
- 	-DUSE_BUNDLED_JQ=OFF -DUSE_BUNDLED_B64=OFF
--SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64
-+SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64 elfutils
- SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+-LUAROCKS_VERSION = 3.0.0
++LUAROCKS_VERSION = 3.0.1
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
  
- # sysdig creates the module Makefile from a template, which contains a
+ HOST_LUAROCKS_DEPENDENCIES = host-luainterpreter
+ 
+-LUAROCKS_CONFIG_DIR = $(HOST_DIR)/etc/luarocks
+-LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/config-$(LUAINTERPRETER_ABIVER).lua
++LUAROCKS_CONFIG_DIR = $(HOST_DIR)/etc
++LUAROCKS_CONFIG_FILE = $(LUAROCKS_CONFIG_DIR)/luarocks/config-$(LUAINTERPRETER_ABIVER).lua
+ LUAROCKS_CFLAGS = $(TARGET_CFLAGS) -fPIC
+ ifeq ($(BR2_PACKAGE_LUA_5_3),y)
+ LUAROCKS_CFLAGS += -DLUA_COMPAT_5_2
 -- 
-2.7.4
+2.17.1
