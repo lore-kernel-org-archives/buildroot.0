@@ -1,8 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Aug 2018 14:40:19 +0000
-Subject: [Buildroot] [Bug 11236] New: util-linux fails to build on Travis CI
- when python also selected
-Message-ID: <bug-11236-163@https.bugs.busybox.net/>
+Date: Thu, 16 Aug 2018 15:12:06 +0000
+Subject: [Buildroot] [Bug 11236] util-linux fails to build on Travis CI when
+ python also selected
+In-Reply-To: <bug-11236-163@https.bugs.busybox.net/>
+References: <bug-11236-163@https.bugs.busybox.net/>
+Message-ID: <bug-11236-163-lW69sb7aq9@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,29 +13,31 @@ To: buildroot@busybox.net
 
 https://bugs.busybox.net/show_bug.cgi?id=11236
 
-            Bug ID: 11236
-           Summary: util-linux fails to build on Travis CI when python
-                    also selected
-           Product: buildroot
-           Version: 2018.02.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: frankv at helium.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Here is a link to the build output.  Notice that Python.h cannot be located.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+         Resolution|---                         |WORKSFORME
+             Status|NEW                         |RESOLVED
 
-https://gist.github.com/fvasquez/1d4e94b37bd3388a3e6051d03d25fbd2
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Frank,
 
-The failure only occurs when building on Travis CI.  The same defconfig builds
-just fine on my Ubuntu 16.04 laptop.  I tried adding python-dev to apt packages
-in .travis.yml to no avail.
+As discussed on IRC, this is an environment problem on TravisCI.
+
+I suggested you investigate what /opt/pyenv/shims is for, and similarly
+for all the other stuff in PATH. You may have to sanitise the PATH
+somehow before calling Buildroot.
+
+Otherwise, there's not much we can do about it... :-/
+
+> I tried adding python-dev
+
+Which I explained on IRC was useless because your error is about building
+util-linux for the target, so the host python devel files are useless.
+
+Closing as not reproducible on a standard environment...
 
 -- 
 You are receiving this mail because:
