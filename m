@@ -1,41 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 Aug 2018 11:43:46 +0200
-Subject: [Buildroot] host-libselinux atomics with GCC 4.4
-In-Reply-To: <4e9928a9-5a67-fdc7-63a9-bd34118f3dee@mentor.com>
-References: <20180812060015.A385B207E5@mail.bootlin.com>
- <20180812223629.2bac8ebe@windsurf>
- <CANQCQpbDmecDS1LE8HY46y1BnEtJH=cRsmo7KEbZhsNZvHhquw@mail.gmail.com>
- <CANQCQpZ2mVuPkeeiR5yxKf3Cs7xUiADuO0dAMkZxsLaCa_iQCw@mail.gmail.com>
- <95ce06f3-5560-81f3-4949-0a2842b7b78a@mentor.com>
- <CANQCQpZ2dPYy9kwS1tZ9LYXxwJZjEO66vmOSSZU17NO=7a+AQw@mail.gmail.com>
- <4e9928a9-5a67-fdc7-63a9-bd34118f3dee@mentor.com>
-Message-ID: <20180816114346.4196c730@windsurf>
+Date: Thu, 16 Aug 2018 11:52:36 +0200
+Subject: [Buildroot] [git commit branch/next] package/sysdig: bump to
+ version 0.23.1
+Message-ID: <20180816094607.26C5C8D467@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b7143338d0a9935cb1978c31cd7ba9135edf384f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 13 Aug 2018 12:43:10 -0700, Hollis Blanchard wrote:
+This patch bumps sysdig to version 0.23.1, adds a new dependency on
+elfutils and adds hash for the license file.
 
-> >> Due to the surprisingly quick response from the maintainers, it looks
-> >> like we already have an answer: the patch is OK, so we don't need the
-> >> Kconfig changes. (A more aggressive patch is almost certainly OK too,
-> >> but I doubt anybody wants to fuss about it.)  
-> > Did you want to tie-off with upstream and then submit the patch here?  
-> "Want to": no, but I submitted the patch anyways. ;-)
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+[Thomas: fix Config.in comment dependencies.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sysdig/Config.in   | 10 +++++++---
+ package/sysdig/sysdig.hash |  5 +++--
+ package/sysdig/sysdig.mk   |  4 ++--
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-I took your libselinux patch, added it in package/libselinux/, and
-applied:
-
-  https://git.buildroot.org/buildroot/commit/?id=6288409642d8368104f916bd264d2cb042942dfa
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 6ccb706a5a..672c44d211 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -4,7 +4,9 @@ config BR2_PACKAGE_SYSDIG
+ 	depends on BR2_INSTALL_LIBSTDCPP # libjson
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+-	depends on !BR2_STATIC_LIBS # luajit
++	depends on !BR2_STATIC_LIBS # luajit, elfutils
++	depends on BR2_USE_WCHAR # elfutils
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_JSONCPP
+@@ -13,6 +15,7 @@ config BR2_PACKAGE_SYSDIG
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_JQ
+ 	select BR2_PACKAGE_LIBB64
++	select BR2_PACKAGE_ELFUTILS
+ 	help
+ 	  Sysdig is open source, system-level exploration:
+ 	  capture system state and activity from a running Linux
+@@ -22,7 +25,8 @@ config BR2_PACKAGE_SYSDIG
+ 
+ 	  http://sysdig.org
+ 
+-comment "sysdig needs a toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
++comment "sysdig needs a glibc or uclibc toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
++		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
+index 63a9e385d8..565b1e9828 100644
+--- a/package/sysdig/sysdig.hash
++++ b/package/sysdig/sysdig.hash
+@@ -1,2 +1,3 @@
+-# locally computed
+-sha256  480d5d8fd7e7373c08008c30bd8e2c7595d5c45d710bf07bd15a522021b560f6  sysdig-0.19.1.tar.gz
++# sha256 locally computed
++sha256  57d5b713b875eba35546a1408bf3f20c2703904a17d956be115ee55272db4cfa  sysdig-0.23.1.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index a9c9f21bb5..9ac990e3e2 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSDIG_VERSION = 0.19.1
++SYSDIG_VERSION = 0.23.1
+ SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
+ SYSDIG_LICENSE = GPL-2.0
+ SYSDIG_LICENSE_FILES = COPYING
+@@ -12,7 +12,7 @@ SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
+ 	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF -DUSE_BUNDLED_CURL=OFF \
+ 	-DUSE_BUNDLED_NCURSES=OFF -DUSE_BUNDLED_OPENSSL=OFF \
+ 	-DUSE_BUNDLED_JQ=OFF -DUSE_BUNDLED_B64=OFF
+-SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64
++SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64 elfutils
+ SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+ # sysdig creates the module Makefile from a template, which contains a
