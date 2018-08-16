@@ -1,61 +1,59 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Wed, 15 Aug 2018 16:44:34 -0700
-Subject: [Buildroot] [PATCH v3] download: fix file:// BR2_PRIMARY_SITE
- (download cache)
-Message-ID: <20180815234434.7319-1-hollis_blanchard@mentor.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Wed, 15 Aug 2018 22:04:38 -0300
+Subject: [Buildroot] [PATCH 3/3] support/download: detect and abort when
+ using a git branch by name
+References: <20180813160657.GD7915@scaer>
+Message-ID: <5b74cda659f07_64da2abc4a138cc0754d@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-wget is the only downloader currently usable with BR2_PRIMARY_SITE, and that
-doesn't work at all for file:// URLs. The symptoms are these:
+Hello,
 
-	support/download/dl-wrapper -c '2.4.47' -d '/PATH/build/sw/source/attr' -D '/PATH/build/sw/source' -f 'attr-2.4.47.src.tar.gz' -H 'package/attr//attr.hash' -n 'attr-2.4.47' -N 'attr' -o '/PATH/build/sw/source/attr/attr-2.4.47.src.tar.gz'  -u file\|urlencode+file:///NFS/buildroot_dl_cache/attr -u file\|urlencode+file:///NFS/buildroot_dl_cache -u http+http://download.savannah.gnu.org/releases/attr -u http\|urlencode+http://sources.buildroot.net/attr -u http\|urlencode+http://sources.buildroot.net  --
-	file:///NFS/buildroot_dl_cache/attr/attr-2.4.47.src.tar.gz: Unsupported scheme `file'.
-	ERROR: attr-2.4.47.src.tar.gz has wrong sha256 hash:
-	ERROR: expected: 25772f653ac5b2e3ceeb89df50e4688891e21f723c460636548971652af0a859
-	ERROR: got     : e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-	ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+On Mon, Aug 13, 2018 at 01:06 PM, Yann E. MORIN wrote:
 
-In the case of custom Linux kernel versions, this is fatal, because there isn't
-necessarily a hash file to indicate that wget's empty tarball is wrong.
+> On 2018-08-13 11:13 -0300, ricardo.martincoski at gmail.com spake thusly:
+>> On Sun, Aug 12, 2018 at 05:48 PM, Yann E. MORIN wrote:
+[snip]
+>> >     git fetch origin "${cset}:${cset}"
+>> 
+>> But only removing this code will not make 'git show-ref' to work as expected.
+>> There are git caches out there with the mentioned branch.
+>> If for any reason the tarball is not there (like we do test in autobuilder) the
+>> download will fail for the wrong reason, and it would require a manual fix.
+> 
+> Rightfully right.
+> 
+> So, we don't care about the ref being a local branch. Instead, we must
+> check whether it is a branch on the remote. I.e.:
+> 
+>     git show-ref "origin/${cset}" |grep -qv refs/tags
+> 
+> Thoughts?
 
-This seems to have been broken by commit c8ef0c03b0b, because:
-1. BR2_PRIMARY_SITE always appends "urlencode" (package/pkg-download.mk)
-2. Anything with the "|urlencode" suffix in $uri will end up using wget due to
-   the backend case wildcarding.
-3. The wget backend rejects file:/// URLs ("unsupported scheme"), and we end up
-   with an empty .tar.gz file in the downloads directory.
+I didn't tested it, but it looks promising.
 
-Fix that by shell-extracting the backend name from the left of "|". I'm not
-positive if all URLs will have a "|", so this code only looks for a "|" left of
-the "+".
+> 
+>> And IMO we should not start removing all refs from the git caches otherwise we
+>> can decrease the cache hit ratio (due to git gc), specially for linux trees.
+> 
+> Well, we can still remove local branches.
 
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+OK.
 
----
-Changes from v2: add quoting around the variable expansion.
+> 
+>> So the best approach IMO is to ask "given we want a named ref, is that ref a
+>> branch in the remote?". That obviously lead to using git ls-remote and check
+>> the second column:
+> 
+> I would prefer to avoid another round-trip to the remote, when we have
+> the necessary information locally. What about the git-show-ref snippet I
+> pasted above instead?
 
- support/download/dl-wrapper | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+In the other hand with ls-remote we could fail faster, before downloading any
+refs.
 
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 4059c37ebc..490335c859 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -88,7 +88,8 @@ main() {
-     download_and_check=0
-     rc=1
-     for uri in "${uris[@]}"; do
--        backend=${uri%%+*}
-+        backend_urlencode="${uri%%+*}"
-+        backend="${backend_urlencode%|*}"
-         case "${backend}" in
-             git|svn|cvs|bzr|file|scp|hg) ;;
-             *) backend="wget" ;;
--- 
-2.13.0
+Regards,
+Ricardo
