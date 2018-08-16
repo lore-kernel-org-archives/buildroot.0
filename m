@@ -1,92 +1,109 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Thu, 16 Aug 2018 00:13:59 -0300
-Subject: [Buildroot] [PATCH 3/3] support/download: detect and abort when
- using a git branch by name
-References: <20180813161955.GE7915@scaer>
-Message-ID: <5b74ebf74a4c2_34db3fa85c5f35681332@ultri5.mail>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 16 Aug 2018 08:19:16 +0300
+Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11
+ toolchains
+In-Reply-To: <bae2ff1f-ee13-489e-ba77-fedfbb023d54@mentor.com>
+References: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
+ <bae2ff1f-ee13-489e-ba77-fedfbb023d54@mentor.com>
+Message-ID: <87k1oqopm3.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Hollis,
 
-On Mon, Aug 13, 2018 at 01:19 PM, Yann E. MORIN wrote:
-> On 2018-08-13 11:33 -0300, Ricardo Martincoski spake thusly:
->> On Sun, Aug 12, 2018 at 05:41 PM, Thomas Petazzoni wrote:
->> > On Sun, 12 Aug 2018 22:25:43 +0200, Yann E. MORIN wrote:
->> >> > Commit 'refs/pull/1014/head' is a branch name.
->> >> > Using a branch name is not supported.  
-> [--SNIP--]
->> >> Sure, you'd argue that an automated build job could do the build. But
->> >> you anyway have to write some scripting for that automated job anyway.
->> >> Just have it prepare a git clone of the affected package, checkout the
->> >> correct commit, and prepare a local.mk with the correct override-srcdir
->> >> befor attempting the buildroot build.
->> It seems a lot of scripting for something that git supports natively and that
-> 
-> Not true: they are not even fetched by default at all. If they were,
-> then we would not be having this discussion. As it stands, we currently
-> have to resort to unstable trickery to use those.
+Hollis Blanchard writes:
+> Worked for me.
+>
+> Tested-by: Hollis Blanchard <hollis_blanchard@mentor.com>
 
-OK. The porcelain commands do support them but they are not fetched using the
-default options.
+Thanks for the confirmation. I sent the patch upstream:
 
-> 
->> could be added to the backend to support the right way: using sha1 for
->> reproducibility.
-> 
-> I also thought about it and tried to replace the special ref by its
-> expanded sha1 and name the local archive by the sha1.
+  https://gitlab.com/cryptsetup/cryptsetup/merge_requests/49
 
-No. Sorry. I meant the other way around:
-To always use (for special refs) a sha1 as version of the package and get the
-download infra to fetch it using the name expanded from the sha1 (by git
-ls-remote), as it is reproducible.
-It also works for branches tips and tags and provides some performance
-improvement, nothing so dramatic as --depth 1 but without all the corner cases
-that come with shallow clones, because it is not shallow, we just download more
-like... on-demand.
+I'm not sure upstream would like the namespace pollution in this patch.
 
-[snip]
->> What I think we should do is:
->>  - to re-add support to download of the sha1 of any ref (branch, tag, special
->>    ref).
-> 
-> That is not supposed to be broken, and should work again if we check if
-> the remote has the ref as we both suggested in previous replies in this
-> thread (but you and I with different solutions).
+baruch
 
-Sorry. I failed to express what I wanted to. Let me try again:
-  - to re-add support to download of the sha1 of *any* ref (sha1 of branch tip
-    and sha1 of tag currently do work, sha1 of special ref worked in the past
-    but don't work anymore).
+> On 08/15/2018 05:14 AM, Baruch Siach wrote:
+>> Add a patch removing a redefined typedef. Redefinition of typedef, even
+>> to the same type, used to be illegal before C11.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
+>> http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
+>> http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
+>>
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> ---
+>> Hi Hollis,
+>>
+>> Can you git this a run on your autobuilder? I would like to verify that
+>> it actually fixes the problem before I send the patch upstream.
+>>
+>> Thanks,
+>> baruch
+>> ---
+>>   .../0001-Remove-json_object-typedef.patch     | 46 +++++++++++++++++++
+>>   1 file changed, 46 insertions(+)
+>>   create mode 100644 package/cryptsetup/0001-Remove-json_object-typedef.patch
+>>
+>> diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+>> new file mode 100644
+>> index 000000000000..fa865314a7da
+>> --- /dev/null
+>> +++ b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+>> @@ -0,0 +1,46 @@
+>> +From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
+>> +From: Baruch Siach <baruch@tkos.co.il>
+>> +Date: Wed, 15 Aug 2018 14:13:46 +0300
+>> +Subject: [PATCH] Remove json_object typedef
+>> +
+>> +The json-c header already defines the same typedef. While C11 allows
+>> +typedef redefinition to the same type, older versions of gcc disallow
+>> +that.
+>> +
+>> +In file included from lib/luks2/luks2_internal.h:32,
+>> +                 from lib/luks2/luks2_disk_metadata.c:24:
+>> +lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
+>> +
+>> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> +---
+>> + lib/luks2/luks2.h | 1 -
+>> + lib/setup.c       | 1 +
+>> + 2 files changed, 1 insertion(+), 1 deletion(-)
+>> +
+>> +diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
+>> +index ee57b41ba974..25e36190da45 100644
+>> +--- a/lib/luks2/luks2.h
+>> ++++ b/lib/luks2/luks2.h
+>> +@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
+>> + /*
+>> +  * LUKS2 header in-memory.
+>> +  */
+>> +-typedef struct json_object json_object;
+>> + struct luks2_hdr {
+>> + 	size_t		hdr_size;
+>> + 	uint64_t	seqid;
+>> +diff --git a/lib/setup.c b/lib/setup.c
+>> +index fddbe7ef7897..856f6e80f465 100644
+>> +--- a/lib/setup.c
+>> ++++ b/lib/setup.c
+>> +@@ -28,6 +28,7 @@
+>> + #include <sys/utsname.h>
+>> + #include <fcntl.h>
+>> + #include <errno.h>
+>> ++#include <json-c/json.h>
+>> +
+>> + #include "libcryptsetup.h"
+>> + #include "luks.h"
+>> +--
+>> +2.18.0
+>> +
 
-> 
->>  - add automated tests to avoid going back and forth, supporting some refs,
->>    then dropping support for them and then supporting them.
-> 
-> Yes, your series doing that is still pending... TBH, it is still marked
-> as unread here, because I still want to have a look at it...
-
-Great! Please do review when you find some time.
-They use br2-external, hash-check and git repos.
-
-> 
->>  - drop the support to the name of a special ref as it is not guaranteed to be
->>    reproducible.
-> 
-> This should be done before we add tests, I think.
-
-*should*: no. We can always adapt the tests when the behavior needs to change.
-If we had already the test case for the name of a special ref as package
-version, we would keep it, and just change it (in the same commit removing the
-code from the backend) to ensure the download using the name of a special ref
-always fails instead of always succeeding.
-
-But yes. It *can* be done before.
-
-
-Regards,
-Ricardo
+-- 
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
