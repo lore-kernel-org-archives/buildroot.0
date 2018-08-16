@@ -1,41 +1,33 @@
-From: Matt Flax <flatmax@flatmax.com>
-Date: Fri, 17 Aug 2018 08:16:20 +1000
-Subject: [Buildroot] [PATCH 1/1] eigen: Fix pkg-config file prefix error
-Message-ID: <20180816221620.30881-1-flatmax@flatmax.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 16 Aug 2018 22:45:37 +0000
+Subject: [Buildroot] [Bug 11166] Erlang bad argument on valid uint64 when
+ crosscompiled on 64-bit host
+In-Reply-To: <bug-11166-163@https.bugs.busybox.net/>
+References: <bug-11166-163@https.bugs.busybox.net/>
+Message-ID: <bug-11166-163-CvalW9GkPG@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Matt Flax <flatmax@flatmax.org>
+https://bugs.busybox.net/show_bug.cgi?id=11166
 
-eigen generates	a pkg-config file which	has a broken prefix. This broken
-prefix causes an incorrect path	when other packages call
-pkg-config --cflags eigen
+--- Comment #4 from Frank Hunleth <fhunleth@troodon-software.com> ---
+I agree with your assessment. 
 
-This patch fixes the prefix in the generated eigen pc file and prjects
-which depend on	this pc	file can now path correctly to the eigen include
-directory at build time.
+I did a quick test on a 32-bit target (64-bit host) locally and Erlang's Uint64
+is compiled to "unsigned long long" which is correct for my target. Looking
+through the Erlang source code, I can see how if SIZEOF_LONG were detected
+incorrectly that you'd have the problem that you're seeing. It seems to be fine
+for me. 
 
-Signed-off-by: Matt Flax <flatmax@flatmax.org>
----
- package/eigen/eigen.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Can you check that sizeof(Uint64) is 8 in both your NIF and in Erlang when
+they're compiled? You can modify the Erlang source code in your
+output/build/erlang directory and then do a "make erlang-rebuild all".
 
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 89f54fb..84e6f3a 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -23,7 +23,8 @@ endif
- # Generate the .pc file at build time
- define EIGEN_BUILD_CMDS
- 	sed -r -e 's,^Version: .*,Version: $(EIGEN_VERSION),' \
--		-e 's,^Cflags: .*,Cflags: -I$(EIGEN_DEST_DIR),' \
-+		-e 's,^Cflags: .*,Cflags: -I$$\{prefix\}\/include\/eigen3,' \
-+		-e 's,^prefix.*,prefix=\/usr,' \
- 		$(@D)/eigen3.pc.in >$(@D)/eigen3.pc
- endef
- 
+Also, is your simple example and Buildroot tree somewhere public?
+
 -- 
-2.17.1
+You are receiving this mail because:
+You are on the CC list for the bug.
