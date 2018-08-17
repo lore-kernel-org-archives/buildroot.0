@@ -1,31 +1,57 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 17 Aug 2018 19:08:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to
- version 1.0.2p
-References: <20180817053207.15702-1-bernd.kuhls@t-online.de>
- <87a7plcw36.fsf@dell.be.48ers.dk>
-Message-ID: <62cj4fxe0i.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 17 Aug 2018 19:19:41 +0200
+Subject: [Buildroot] [PATCH 1/1] eigen: Fix pkg-config file prefix error
+In-Reply-To: <20180816221620.30881-1-flatmax@flatmax.com> (Matt Flax's message
+ of "Fri, 17 Aug 2018 08:16:20 +1000")
+References: <20180816221620.30881-1-flatmax@flatmax.com>
+Message-ID: <87in48oqqa.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 17 Aug 2018 09:04:45 +0200 schrieb Peter Korsgaard:
+>>>>> "Matt" == Matt Flax <flatmax@flatmax.com> writes:
 
->>>>>> "Bernd" == Bernd Kuhls
->>>>>> <bernd.kuhls@t-online.de> writes:
->  > Added upstream sha1 hash.
-> 
-> I'm not sure that really buys us much, but OK.
+ > From: Matt Flax <flatmax@flatmax.org>
+ > eigen generates	a pkg-config file which	has a broken prefix. This broken
+ > prefix causes an incorrect path	when other packages call
+ > pkg-config --cflags eigen
 
-Hi Peter,
+It wasn't clear from the description what this broken prefix was, so I
+had a look:
 
-I am just following the manual:
-http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-
-hash
+grep '^prefix=' build/eigen-3.3.4/eigen3.pc.in
+prefix=@CMAKE_INSTALL_PREFIX@
 
-"If upstream provides more than one type of hash (e.g. sha1 and sha512), 
-then it is best to add all those hashes in the .hash file."
+Which is indeed no good.
 
-Regards, Bernd
+ > This patch fixes the prefix in the generated eigen pc file and prjects
+ > which depend on	this pc	file can now path correctly to the eigen include
+ > directory at build time.
+
+ > Signed-off-by: Matt Flax <flatmax@flatmax.org>
+ > ---
+ >  package/eigen/eigen.mk | 3 ++-
+ >  1 file changed, 2 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+ > index 89f54fb..84e6f3a 100644
+ > --- a/package/eigen/eigen.mk
+ > +++ b/package/eigen/eigen.mk
+ > @@ -23,7 +23,8 @@ endif
+ >  # Generate the .pc file at build time
+ >  define EIGEN_BUILD_CMDS
+ >  	sed -r -e 's,^Version: .*,Version: $(EIGEN_VERSION),' \
+ > -		-e 's,^Cflags: .*,Cflags: -I$(EIGEN_DEST_DIR),' \
+ > +		-e 's,^Cflags: .*,Cflags: -I$$\{prefix\}\/include\/eigen3,' \
+ > +		-e 's,^prefix.*,prefix=\/usr,' \
+
+Why are you escaping these '/' characters? The sed invocation uses , as
+seperator, so / isn't special.
+
+Committed with these backslashes dropped and the commit message tweaked,
+thanks.
+
+-- 
+Bye, Peter Korsgaard
