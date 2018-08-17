@@ -1,66 +1,367 @@
-From: Joao Pinto <Joao.Pinto@synopsys.com>
-Date: Fri, 17 Aug 2018 13:15:50 +0100
-Subject: [Buildroot] Bump ATF version in arm_juno_defconfig ?
-In-Reply-To: <20180812170331.2dc2b9e9@windsurf>
-References: <20180423221713.275f1f66@windsurf>
- <b3321ee8-8265-e448-21fe-1b722cbb68ef@synopsys.com>
- <20180812170331.2dc2b9e9@windsurf>
-Message-ID: <9a3e9576-53d3-62a2-67f4-01499ec086dd@synopsys.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Aug 2018 14:38:03 +0200
+Subject: [Buildroot] [PATCH] package/m4: fix build in host with glibc-2.28
+Message-ID: <20180817123803.13807-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+glibc-2.28 did quite some lifting in their headers, which breaks the
+way some packages were detecting glibc, like gnulib.
 
-?s 4:03 PM de 8/12/2018, Thomas Petazzoni escreveu:
-> Hello,
-> 
-> On Mon, 28 May 2018 17:52:07 +0100, Joao Pinto wrote:
-> 
->>> You originally contributed the arm_juno_defconfig in Buildroot. It
->>> currently uses v1.2 of ATF, and I encountered a build failure with this
->>> ATF version as part of the Buildroot test suite:
->>>
->>>     ./build/juno/release/bl1/context_mgmt.o: In function `cm_prepare_el3_exit':
->>>     context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): undefined reference to `cm_set_next_context'
->>>     context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): relocation truncated to fit: R_AARCH64_JUMP26 against undefined symbol `cm_set_next_context'
->>>
->>> This issue has been fixed since ATF v1.3. Do you think you could
->>> provide a patch bumping the ATF version ? The latest version is ATF
->>> v1.5, so if you could bump the defconfig, it would be nice.
->>>
->>> In addition, it would be great if you could send a patch adding
->>> yourself in the DEVELOPERS file for this platform, so we easily know who
->>> to contact for questions related to this platform.
->>
->> My team member Gustavo will check this out and he will be the maintainer if it
->> is ok for you.
-> 
-> Following this discussion, Gustavo never sent any patch to fix
-> arm_juno_defconfig, and the ATF build broken was still broken as of
-> today. So I went ahead, and bumped the ATF version to 1.3, to at least
-> fix the build issue.
+However, packages do bundle gnulib (it was meant to be bundled),
+and so does m4.
 
-We are focused in top priority issues that don't include the ARM Juno platform
-at the moment, so I apologize for the delay.
+Since m4 hasn't seen the slightest commit since 2017-01-09, it is
+bundling an old gnulib version, that predates glibc-2.28, and thus
+breaks. It also means that upstream hasn't already fixed the issue.
 
-> 
-> It would be nice if you could give it a test on the actual hardware,
-> and perhaps bump ATF to an ever newer version.
+Furthermore, as upstream is using a git submodule for gnulib, and
+that the paths are not the same in the release tarball (in lib/)
+and in the git ttree (in gnulib/), we can't do a plain backport.
 
-Yes we will do that, thanks.
+So, we selectively backport the two patches from gnulib upstream,
+restricted to only the files that happen to be used in m4.
 
-> 
-> See
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__git.buildroot.org_buildroot_commit_-3Fid-3D395bc11dde5b4ef034118a9be568131f134daaa3&d=DwICAg&c=DPL6_X_6JkXFx7AXWqB0tg&r=s2fO0hii0OGNOv9qQy_HRXy-xAJUD1NNoEcc3io_kx0&m=5bh5AR12AC1liXRzkOXOJdxgehZPpCPel3tK_o4KxRY&s=cFDUqDTSi6slvtHyLlB1XzOjt1M9trCh6pctM1odcok&e=
-> for details.
-> 
-> Best regards,
-> 
-> Thomas Petazzoni
-> 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reported-by: c32 on IRC
+---
+ ...lush-adjust-to-glibc-2.28-libio.h-removal.patch | 166 +++++++++++++++++++++
+ ...ush-be-more-paranoid-about-libio.h-change.patch | 151 +++++++++++++++++++
+ 2 files changed, 317 insertions(+)
+ create mode 100644 package/m4/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+ create mode 100644 package/m4/0002-fflush-be-more-paranoid-about-libio.h-change.patch
 
-best regards,
-Joao Pinto
+diff --git a/package/m4/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch b/package/m4/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+new file mode 100644
+index 0000000000..5c5c11b990
+--- /dev/null
++++ b/package/m4/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+@@ -0,0 +1,166 @@
++From 4af4a4a71827c0bc5e0ec67af23edef4f15cee8e Mon Sep 17 00:00:00 2001
++From: Paul Eggert <eggert@cs.ucla.edu>
++Date: Mon, 5 Mar 2018 10:56:29 -0800
++Subject: [PATCH] fflush: adjust to glibc 2.28 libio.h removal
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Problem reported by Daniel P. Berrang? in:
++https://lists.gnu.org/r/bug-gnulib/2018-03/msg00000.html
++* lib/fbufmode.c (fbufmode):
++* lib/fflush.c (clear_ungetc_buffer_preserving_position)
++(disable_seek_optimization, rpl_fflush):
++* lib/fpending.c (__fpending):
++* lib/fpurge.c (fpurge):
++* lib/freadable.c (freadable):
++* lib/freadahead.c (freadahead):
++* lib/freading.c (freading):
++* lib/freadptr.c (freadptr):
++* lib/freadseek.c (freadptrinc):
++* lib/fseeko.c (fseeko):
++* lib/fseterr.c (fseterr):
++* lib/fwritable.c (fwritable):
++* lib/fwriting.c (fwriting):
++Check _IO_EOF_SEEN instead of _IO_ftrylockfile.
++* lib/stdio-impl.h (_IO_IN_BACKUP) [_IO_EOF_SEEN]:
++Define if not already defined.
++
++[yann.morin.1998 at free.fr: partially backport from upstream gnulib]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++---
++ lib/fflush.c     |  6 +++---
++ lib/fpending.c   |  2 +-
++ lib/fpurge.c     |  2 +-
++ lib/freadahead.c |  2 +-
++ lib/freading.c   |  2 +-
++ lib/fseeko.c     |  4 ++--
++ lib/stdio-impl.h |  6 ++++++
++ 7 files changed, 15 insertions(+), 9 deletions(-)
++
++diff --git a/lib/fflush.c b/build-aux/gnulib/lib/fflush.c
++index 983ade0ff..a6edfa105 100644
++--- a/lib/fflush.c
+++++ b/lib/fflush.c
++@@ -33,7 +33,7 @@
++ #undef fflush
++ 
++ 
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++ 
++ /* Clear the stream's ungetc buffer, preserving the value of ftello (fp).  */
++ static void
++@@ -72,7 +72,7 @@ clear_ungetc_buffer (FILE *fp)
++ 
++ #endif
++ 
++-#if ! (defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */)
+++#if ! (defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */)
++ 
++ # if (defined __sferror || defined __DragonFly__ || defined __ANDROID__) && defined __SNPT
++ /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
++@@ -148,7 +148,7 @@ rpl_fflush (FILE *stream)
++   if (stream == NULL || ! freading (stream))
++     return fflush (stream);
++ 
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++ 
++   clear_ungetc_buffer_preserving_position (stream);
++ 
++diff --git a/lib/fpending.c b/build-aux/gnulib/lib/fpending.c
++index c84e3a5b4..789f50e4e 100644
++--- a/lib/fpending.c
+++++ b/lib/fpending.c
++@@ -32,7 +32,7 @@ __fpending (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   return fp->_IO_write_ptr - fp->_IO_write_base;
++ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
++   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
++diff --git a/lib/fpurge.c b/build-aux/gnulib/lib/fpurge.c
++index b1d417c7a..3aedcc373 100644
++--- a/lib/fpurge.c
+++++ b/lib/fpurge.c
++@@ -62,7 +62,7 @@ fpurge (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-# if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   fp->_IO_read_end = fp->_IO_read_ptr;
++   fp->_IO_write_ptr = fp->_IO_write_base;
++   /* Avoid memory leak when there is an active ungetc buffer.  */
++diff --git a/lib/freadahead.c b/build-aux/gnulib/lib/freadahead.c
++index c2ecb5b28..23ec76ee5 100644
++--- a/lib/freadahead.c
+++++ b/lib/freadahead.c
++@@ -30,7 +30,7 @@ extern size_t __sreadahead (FILE *);
++ size_t
++ freadahead (FILE *fp)
++ {
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   if (fp->_IO_write_ptr > fp->_IO_write_base)
++     return 0;
++   return (fp->_IO_read_end - fp->_IO_read_ptr)
++diff --git a/lib/freading.c b/build-aux/gnulib/lib/freading.c
++index 73c28acdd..c24d0c88a 100644
++--- a/lib/freading.c
+++++ b/lib/freading.c
++@@ -31,7 +31,7 @@ freading (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-# if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   return ((fp->_flags & _IO_NO_WRITES) != 0
++           || ((fp->_flags & (_IO_NO_READS | _IO_CURRENTLY_PUTTING)) == 0
++               && fp->_IO_read_base != NULL));
++diff --git a/lib/fseeko.c b/build-aux/gnulib/lib/fseeko.c
++index 0101ab55f..193f4e8ce 100644
++--- a/lib/fseeko.c
+++++ b/lib/fseeko.c
++@@ -47,7 +47,7 @@ fseeko (FILE *fp, off_t offset, int whence)
++ #endif
++ 
++   /* These tests are based on fpurge.c.  */
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   if (fp->_IO_read_end == fp->_IO_read_ptr
++       && fp->_IO_write_ptr == fp->_IO_write_base
++       && fp->_IO_save_base == NULL)
++@@ -123,7 +123,7 @@ fseeko (FILE *fp, off_t offset, int whence)
++           return -1;
++         }
++ 
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++       fp->_flags &= ~_IO_EOF_SEEN;
++       fp->_offset = pos;
++ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
++diff --git a/lib/stdio-impl.h b/build-aux/gnulib/lib/stdio-impl.h
++index 78d896e9f..05c5752a2 100644
++--- a/lib/stdio-impl.h
+++++ b/lib/stdio-impl.h
++@@ -18,6 +18,12 @@
++    the same implementation of stdio extension API, except that some fields
++    have different naming conventions, or their access requires some casts.  */
++ 
+++/* Glibc 2.28 made _IO_IN_BACKUP private.  For now, work around this
+++   problem by defining it ourselves.  FIXME: Do not rely on glibc
+++   internals.  */
+++#if !defined _IO_IN_BACKUP && defined _IO_EOF_SEEN
+++# define _IO_IN_BACKUP 0x100
+++#endif
++ 
++ /* BSD stdio derived implementations.  */
++ 
++-- 
++2.14.1
++
+diff --git a/package/m4/0002-fflush-be-more-paranoid-about-libio.h-change.patch b/package/m4/0002-fflush-be-more-paranoid-about-libio.h-change.patch
+new file mode 100644
+index 0000000000..a820ca8ca9
+--- /dev/null
++++ b/package/m4/0002-fflush-be-more-paranoid-about-libio.h-change.patch
+@@ -0,0 +1,151 @@
++From 74d9d6a293d7462dea8f83e7fc5ac792e956a0ad Mon Sep 17 00:00:00 2001
++From: Paul Eggert <eggert@cs.ucla.edu>
++Date: Thu, 8 Mar 2018 16:42:45 -0800
++Subject: [PATCH 2/2] fflush: be more paranoid about libio.h change
++
++Suggested by Eli Zaretskii in:
++https://lists.gnu.org/r/emacs-devel/2018-03/msg00270.html
++* lib/fbufmode.c (fbufmode):
++* lib/fflush.c (clear_ungetc_buffer_preserving_position)
++(disable_seek_optimization, rpl_fflush):
++* lib/fpending.c (__fpending):
++* lib/fpurge.c (fpurge):
++* lib/freadable.c (freadable):
++* lib/freadahead.c (freadahead):
++* lib/freading.c (freading):
++* lib/freadptr.c (freadptr):
++* lib/freadseek.c (freadptrinc):
++* lib/fseeko.c (fseeko):
++* lib/fseterr.c (fseterr):
++* lib/fwritable.c (fwritable):
++* lib/fwriting.c (fwriting):
++Look at _IO_ftrylockfile as well as at _IO_EOF_SEEN.
++---
++ lib/fflush.c     |  9 ++++++---
++ lib/fpending.c   |  3 ++-
++ lib/fpurge.c     |  3 ++-
++ lib/freadahead.c |  3 ++-
++ lib/freading.c   |  3 ++-
++ lib/fseeko.c     |  6 ++++--
++ 6 files changed, 18 insertions(+), 9 deletions(-)
++
++[yann.morin.1998 at free.fr: partially backport from upstream gnulib]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff --git a/lib/fflush.c b/build-aux/gnulib/lib/fflush.c
++index a6edfa105..a140b7ad9 100644
++--- a/lib/fflush.c
+++++ b/lib/fflush.c
++@@ -33,7 +33,8 @@
++ #undef fflush
++ 
++ 
++-#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
+++/* GNU libc, BeOS, Haiku, Linux libc5 */
++ 
++ /* Clear the stream's ungetc buffer, preserving the value of ftello (fp).  */
++ static void
++@@ -72,7 +73,8 @@ clear_ungetc_buffer (FILE *fp)
++ 
++ #endif
++ 
++-#if ! (defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */)
+++#if ! (defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1)
+++/* GNU libc, BeOS, Haiku, Linux libc5 */
++ 
++ # if (defined __sferror || defined __DragonFly__ || defined __ANDROID__) && defined __SNPT
++ /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
++@@ -148,7 +150,8 @@ rpl_fflush (FILE *stream)
++   if (stream == NULL || ! freading (stream))
++     return fflush (stream);
++ 
++-#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
+++  /* GNU libc, BeOS, Haiku, Linux libc5 */
++ 
++   clear_ungetc_buffer_preserving_position (stream);
++ 
++diff --git a/lib/fpending.c b/build-aux/gnulib/lib/fpending.c
++index 789f50e4e..7bc235ded 100644
++--- a/lib/fpending.c
+++++ b/lib/fpending.c
++@@ -32,7 +32,8 @@ __fpending (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
+++  /* GNU libc, BeOS, Haiku, Linux libc5 */
++   return fp->_IO_write_ptr - fp->_IO_write_base;
++ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
++   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
++diff --git a/lib/fpurge.c b/build-aux/gnulib/lib/fpurge.c
++index 3aedcc373..554790b56 100644
++--- a/lib/fpurge.c
+++++ b/lib/fpurge.c
++@@ -62,7 +62,8 @@ fpurge (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++# if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
+++  /* GNU libc, BeOS, Haiku, Linux libc5 */
++   fp->_IO_read_end = fp->_IO_read_ptr;
++   fp->_IO_write_ptr = fp->_IO_write_base;
++   /* Avoid memory leak when there is an active ungetc buffer.  */
++diff --git a/lib/freadahead.c b/build-aux/gnulib/lib/freadahead.c
++index 23ec76ee5..ed3dd0ebd 100644
++--- a/lib/freadahead.c
+++++ b/lib/freadahead.c
++@@ -30,7 +30,8 @@ extern size_t __sreadahead (FILE *);
++ size_t
++ freadahead (FILE *fp)
++ {
++-#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
+++  /* GNU libc, BeOS, Haiku, Linux libc5 */
++   if (fp->_IO_write_ptr > fp->_IO_write_base)
++     return 0;
++   return (fp->_IO_read_end - fp->_IO_read_ptr)
++diff --git a/lib/freading.c b/build-aux/gnulib/lib/freading.c
++index c24d0c88a..790f92ca3 100644
++--- a/lib/freading.c
+++++ b/lib/freading.c
++@@ -31,7 +31,8 @@ freading (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-# if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++# if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
+++  /* GNU libc, BeOS, Haiku, Linux libc5 */
++   return ((fp->_flags & _IO_NO_WRITES) != 0
++           || ((fp->_flags & (_IO_NO_READS | _IO_CURRENTLY_PUTTING)) == 0
++               && fp->_IO_read_base != NULL));
++diff --git a/lib/fseeko.c b/build-aux/gnulib/lib/fseeko.c
++index 193f4e8ce..e5c5172e7 100644
++--- a/lib/fseeko.c
+++++ b/lib/fseeko.c
++@@ -47,7 +47,8 @@ fseeko (FILE *fp, off_t offset, int whence)
++ #endif
++ 
++   /* These tests are based on fpurge.c.  */
++-#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
+++  /* GNU libc, BeOS, Haiku, Linux libc5 */
++   if (fp->_IO_read_end == fp->_IO_read_ptr
++       && fp->_IO_write_ptr == fp->_IO_write_base
++       && fp->_IO_save_base == NULL)
++@@ -123,7 +124,8 @@ fseeko (FILE *fp, off_t offset, int whence)
++           return -1;
++         }
++ 
++-#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
+++      /* GNU libc, BeOS, Haiku, Linux libc5 */
++       fp->_flags &= ~_IO_EOF_SEEN;
++       fp->_offset = pos;
++ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
++-- 
++2.14.1
++
+-- 
+2.14.1
