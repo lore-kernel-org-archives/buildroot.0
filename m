@@ -1,52 +1,53 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 18 Aug 2018 00:10:13 +0200
+Date: Sat, 18 Aug 2018 00:10:14 +0200
 Subject: [Buildroot] [PATCH v2,
- 1/2] Add BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-Message-ID: <20180817221014.32681-1-fontaine.fabrice@gmail.com>
+ 2/2] boost: thread needs atomic if GCC hasn't lock-free
+In-Reply-To: <20180817221014.32681-1-fontaine.fabrice@gmail.com>
+References: <20180817221014.32681-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180817221014.32681-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS variable and use
-it in BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-This new variable will be used to select boost atomic when lock-free
-atomic ints are not available
+When gcc has not always lock-free atomic ints:
+ - lockfree boost::atomic_flag : no
+
+boost thread needs boost atomic:
+output/host/usr/bin/nios2-linux-readelf -d output/staging/usr/lib/libboost_thread.so
+
+Dynamic section at offset 0x2cee0 contains 32 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libboost_system.so.1.67.0]
+ 0x00000001 (NEEDED)                     Shared library: [libboost_atomic.so.1.67.0]
+
+Fixes:
+ - http://autobuild.buildroot.net/results/5a7db292f1365f27e32695527701d5b827f60092
+ - http://autobuild.buildroot.net/results/413dff87f5329d3c5180167a8711cdedea5dec67
+ - http://autobuild.buildroot.net/results/a7eb4cbcdbd9412c344f45336dec58c82e84dab9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- toolchain/Config.in | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - issue was not related to bug 64735 but to lock-free atomic ints so
+   add a patch to toolchain/Config.in to get this information in a
+   dedicated variable and use it in boost
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 3a53a32a6d..ed9b59df46 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -73,13 +73,19 @@ config BR2_TOOLCHAIN_HAS_BINUTILS_BUG_19615
- # exception_ptr, nested_exception, and future from libstdc++ are not
- # available for architectures not supporting always lock-free atomic
- # ints before GCC 7
-+config BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-+	bool
-+	default y
-+	depends on !BR2_nios2
-+	depends on !BR2_ARM_CPU_ARMV4
-+	depends on !BR2_ARM_CPU_ARMV5
-+	depends on !BR2_sparc_v8
-+	depends on !BR2_m68k_cf5208
-+
- config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 	bool
--	default y if BR2_nios2
--	default y if BR2_ARM_CPU_ARMV4
--	default y if BR2_ARM_CPU_ARMV5
--	default y if BR2_sparc_v8
--	default y if BR2_m68k_cf5208
-+	default y
-+	depends on !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 97695e17b7..57e98c72e4 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -313,6 +313,7 @@ config BR2_PACKAGE_BOOST_TEST
  
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. This bug no
+ config BR2_PACKAGE_BOOST_THREAD
+ 	bool "boost-thread"
++	select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
 -- 
 2.14.1
