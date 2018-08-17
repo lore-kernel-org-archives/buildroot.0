@@ -1,18 +1,18 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 17 Aug 2018 17:59:48 +0000
-Subject: [Buildroot] [Bug 11241] New: ACPID shouldn't depend on BR2_x86_64
- || BR2_i386
-Message-ID: <bug-11241-163@https.bugs.busybox.net/>
+Date: Fri, 17 Aug 2018 18:11:04 +0000
+Subject: [Buildroot] [Bug 11246] New: Glibc 2.28 - fails to build host-bison
+ and host-m4
+Message-ID: <bug-11246-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11241
+https://bugs.busybox.net/show_bug.cgi?id=11246
 
-            Bug ID: 11241
-           Summary: ACPID shouldn't depend on BR2_x86_64 || BR2_i386
+            Bug ID: 11246
+           Summary: Glibc 2.28 - fails to build host-bison and host-m4
            Product: buildroot
            Version: unspecified
           Hardware: All
@@ -26,9 +26,15 @@ https://bugs.busybox.net/show_bug.cgi?id=11241
                 CC: buildroot at uclibc.org
   Target Milestone: ---
 
-Nowadays multiple ARM-based devboards provide ACPI, so this restriction is not
-a good option anymore. For example I've used standard Buildroot acpi package on
-Cubieboard 6 without any issue.
+Bleeding edge Linux distros (such as Arch Linux or Fedora) have switched some
+time ago to glibc 2.28. It has broken building of bison and m4 host packages.
+
+It can be fixed by using these patches (the same problem was found in Fedora
+and OpenWRT):
+
+https://github.com/openwrt/openwrt/commit/8ae84899865ea14ce9d55cffa5de5ddd7167c680
+
+https://github.com/openwrt/openwrt/blob/e5d47f32131849a69a9267de51a30d6be1f0d0ac/tools/bison/patches/110-glibc-change-work-around.patch
 
 -- 
 You are receiving this mail because:
