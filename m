@@ -1,70 +1,44 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 17 Aug 2018 12:33:52 +0300
-Subject: [Buildroot] [PATCH] dahdi-tools: fix dependencies comment
- condition
-In-Reply-To: <20180817092648.GG2556@scaer>
-References: <bcc4fba3f0a19c97f2361a8924defc43716966cc.1534496720.git.baruch@tkos.co.il>
- <20180817092648.GG2556@scaer>
-Message-ID: <874lftnxq7.fsf@tkos.co.il>
+Date: Fri, 17 Aug 2018 12:35:44 +0300
+Subject: [Buildroot] [PATCH] dbus: bump to version 1.2.10
+Message-ID: <5287897e1cc971ae8a3059ce329792207ca84507.1534498544.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/dbus/dbus.hash | 5 +++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-Yann E. MORIN writes:
-> On 2018-08-17 12:05 +0300, Baruch Siach spake thusly:
->> The threads dependency comment is unrelated to the Linux kernel
->> dependency.
->
-> But at the same time, if the kernel is not enabled, do we want to
-> display the comment?
-
-Currently the comment is shown even when the toolchain has threads
-support.
-
-> However, this is indeed not like the other cases, where we have a single
-> comment, like aufs-utils, gst-plugin-x170, on2-8170-libs, sysdig, or,
-> with a slight difference, xdriver_xf86-video-imx.
->
-> So, if we want to make it more similar to the others, and to make it
-> conform to the manual (17.2.5 Dependencies on a Linux kernel built by
-> buildroot):
->
->     comment "dahdi-tools needs a toolchain w/ threads and a Linux kernel to be built"
->         depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LINUX_KERNEL
->
-> and get rid of the second comment altogether.
-
-OK. I'll send a patch.
-
-baruch
-
->> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> ---
->>  package/dahdi-tools/Config.in | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/package/dahdi-tools/Config.in b/package/dahdi-tools/Config.in
->> index 39042df04134..625d17f216e3 100644
->> --- a/package/dahdi-tools/Config.in
->> +++ b/package/dahdi-tools/Config.in
->> @@ -17,7 +17,7 @@ config BR2_PACKAGE_DAHDI_TOOLS
->>  
->>  # Two comments, otherwise it may not fit in menuconfig for narrow terminals
->>  comment "dahdi-tools needs a toolchain w/ threads"
->> -	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LINUX_KERNEL
->> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
->>  
->>  comment "dahdi-tools needs a Linux kernel to be built"
->>  	depends on !BR2_LINUX_KERNEL
->> -- 
->> 2.18.0
-
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 91d270eb13da..92c0c9421004 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,5 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.8.tar.gz.asc
+-sha256	e2dc99e7338303393b6663a98320aba6a63421bcdaaf571c8022f815e5896eb3  dbus-1.12.8.tar.gz
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.10.tar.gz.asc
++# using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
++sha256	4b693d24976258c3f2fa9cc33ad9288c5fbfa7a16481dbd9a8a429f7aa8cdcf7  dbus-1.12.10.tar.gz
+ # Locally calculated
+ sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 8cf4367bf2cd..0a56de5a4e5a 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.12.8
++DBUS_VERSION = 1.12.10
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.18.0
