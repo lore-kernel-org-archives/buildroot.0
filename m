@@ -1,102 +1,40 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 17 Aug 2018 06:48:59 +0300
-Subject: [Buildroot] [PATCH 1/8] package/mender: update legal info
-In-Reply-To: <CADHdJwBjz6OCX4wBz_cTquz2+QbD_48NDEBSSrjAbkRBDgqiGQ@mail.gmail.com>
-References: <20180814231337.19114-1-mirza.krak@northern.tech>
- <20180814231337.19114-2-mirza.krak@northern.tech>
- <0d11b4c6-40ac-5a3a-69d4-a1dda529d43f@mind.be>
- <CADHdJwB78Mo5rtpQk0e6OhkAzdcGPvkz_iRu4AcWcSwB68z2Mw@mail.gmail.com>
- <1377b705-71cf-3649-5bf1-f31a307d74fd@mind.be>
- <CADHdJwBjz6OCX4wBz_cTquz2+QbD_48NDEBSSrjAbkRBDgqiGQ@mail.gmail.com>
-Message-ID: <876009odp0.fsf@tkos.co.il>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 17 Aug 2018 08:00:51 +0300
+Subject: [Buildroot] [PATCH 1/1] libuv: bump to version 1.23.0
+Message-ID: <20180817050051.21477-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Mirza,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Mirza Krak writes:
-> On Thu, Aug 16, 2018 at 5:36 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
->> On 15/08/2018 09:37, Mirza Krak wrote:
->>> On Wed, Aug 15, 2018 at 1:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
->>>> On 15-08-18 01:13, Mirza Krak wrote:
->>
->> [snip]
->>>>> +MENDER_LICENSE_FILES = LICENSE LIC_FILES_CHKSUM.sha256
->>>>
->>>>  Instead of LIC_FILES_CHKSUM.sha256, we should actually include all the files
->>>> mentioned in there in our license list. Well, actually, we can optimize it a
->>>> little bit because there are some identical files.
->>>>
->>>>  Alternatively, you could include all of them, and for the .hash file you can
->>>> just prepend 'sha256  ' to every line of LIC_FILES_CHKSUM.sha256 and append it
->>>> to the .hash file, with the comment
->>>>
->>>> # From LIC_FILES_CHKSUM.sha256
->>>>
->>>>
->>>>  On second thought, actually it is a good idea to include
->>>> LIC_FILES_CHKSUM.sha256 as well, to detect when a new subpackage with a new
->>>> license is added.
->>>
->>> I would really like to keep this as-is to avoid a heavy maintenance
->>> burden. This file is maintained in the upstream package and would
->>> rather not duplicate the work by extracting the information from
->>> LIC_FILES_CHKSUM.sha256 to put it in mender.hash.
->>>
->>> The checksum check of LIC_FILES_CHKSUM.sha256 will handle the sanity
->>> check of the LICENSE files, and all the licenses that are in
->>> LIC_FILES_CHKSUM.sha256 are already mentioned in the mender.mk file:
->>>
->>>      MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, MIT, OLDAP-2.8
->>>
->>> This should cover it. Or are there any big drawbacks with this
->>> approach that I am not seeing?
->>
->>  Well, we really want to collect the license text for all applicable licenses.
->> So you should include at least one file for each license mentioned in
->> MENDER_LICENSE. Since the checksums are already available, I thought the easiest
->> would be to create part of the hash file from the existing file. Like:
->>
->> # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
->> # Apache-2.0 license.
->> sha256  ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680  LICENSE
->
-> Hmm, though I having some issues with trying to accommodate this.
->
-> Adding the following line to mender.hash:
->
->     # BSD 2 Clause license.
-> sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86
->  vendor/github.com/pkg/errors/LICENSE
->
-> Does not do anything, when I run:
->
->     $ make mender-legal-info
->     >>> mender 1.4.0 Collecting legal info
->     LICENSE: OK (sha256:
-> ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680)
->     LIC_FILES_CHKSUM.sha256: OK (sha256:
-> 54d6f54a2815cc2e3cef4f7dde5a3aae20f09b2cde394d8d3f1dce5d8a79d738)
->
-> Inspecting other *.hash files in Buildroot, no one seems to reference
-> files that are outside of the "root source". Or should I specify the
-> path differently?
-
-There are a number of packages with license files in subdirectories. For
-example:
-
-make alsa-lib-legal-info
-...
->>> alsa-lib 1.1.6 Collecting legal info
-COPYING: OK (sha256: 32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b)
-aserver/COPYING: OK (sha256: bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced)
-
-baruch
-
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index c9f6565ef3..e687450d53 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c72f0401e1298f948daf310abafce38373a926fb9438464d1bf7fe90784544e0  libuv-v1.22.0.tar.gz
++sha256  8c8eff0bec85306aae508392b395e8bb0e1e34daad2a4e3bec308ced0c92bfaa  libuv-v1.23.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 85e8dccb63..90818ad789 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.22.0
++LIBUV_VERSION = v1.23.0
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
 -- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.17.1
