@@ -1,81 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Aug 2018 16:55:41 +0200
-Subject: [Buildroot] [git commit] cryptsetup: fix build with pre C11
- toolchains
-Message-ID: <20180817145448.16D198D4C1@busybox.osuosl.org>
+Date: Fri, 17 Aug 2018 16:54:07 +0200
+Subject: [Buildroot] [git commit] libfuse: security bump to version 2.9.8
+Message-ID: <20180817145448.0D4D18D4F3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9cfe343d230fe95ad84842b9b2ed87667da6430
+commit: https://git.buildroot.net/buildroot/commit/?id=9c2bbc3fc9a6193ac866c06d474e99f6e428efbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a patch removing a redefined typedef. Redefinition of typedef, even
-to the same type, used to be illegal before C11.
+Fixes CVE-2018-10906 - In fuse before versions 2.9.8 and 3.x before 3.2.5,
+fusermount is vulnerable to a restriction bypass when SELinux is active.
+This allows non-root users to mount a FUSE file system with the
+'allow_other' mount option regardless of whether 'user_allow_other' is set
+in the fuse configuration.  An attacker may use this flaw to mount a FUSE
+file system, accessible by other users, and trick them into accessing files
+on that file system, possibly causing Denial of Service or other unspecified
+effects.
 
-Fixes:
-http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
-http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
-http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
+And additionally:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Tested-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+- libfuse no longer segfaults when fuse_interrupted() is called outside the
+  event loop.
+
+- The fusermount binary has been hardened in several ways to reduce
+  potential attack surface.  Most importantly, mountpoints and mount options
+  must now match a hard-coded whitelist.  It is expected that this whitelist
+  covers all regular use-cases.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Remove-json_object-typedef.patch          | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ package/libfuse/libfuse.hash | 2 +-
+ package/libfuse/libfuse.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
-new file mode 100644
-index 0000000000..fa865314a7
---- /dev/null
-+++ b/package/cryptsetup/0001-Remove-json_object-typedef.patch
-@@ -0,0 +1,46 @@
-+From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Wed, 15 Aug 2018 14:13:46 +0300
-+Subject: [PATCH] Remove json_object typedef
-+
-+The json-c header already defines the same typedef. While C11 allows
-+typedef redefinition to the same type, older versions of gcc disallow
-+that.
-+
-+In file included from lib/luks2/luks2_internal.h:32,
-+                 from lib/luks2/luks2_disk_metadata.c:24:
-+lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+ lib/luks2/luks2.h | 1 -
-+ lib/setup.c       | 1 +
-+ 2 files changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
-+index ee57b41ba974..25e36190da45 100644
-+--- a/lib/luks2/luks2.h
-++++ b/lib/luks2/luks2.h
-+@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
-+ /*
-+  * LUKS2 header in-memory.
-+  */
-+-typedef struct json_object json_object;
-+ struct luks2_hdr {
-+ 	size_t		hdr_size;
-+ 	uint64_t	seqid;
-+diff --git a/lib/setup.c b/lib/setup.c
-+index fddbe7ef7897..856f6e80f465 100644
-+--- a/lib/setup.c
-++++ b/lib/setup.c
-+@@ -28,6 +28,7 @@
-+ #include <sys/utsname.h>
-+ #include <fcntl.h>
-+ #include <errno.h>
-++#include <json-c/json.h>
-+ 
-+ #include "libcryptsetup.h"
-+ #include "luks.h"
-+-- 
-+2.18.0
-+
+diff --git a/package/libfuse/libfuse.hash b/package/libfuse/libfuse.hash
+index f02c78418e..3d1b973071 100644
+--- a/package/libfuse/libfuse.hash
++++ b/package/libfuse/libfuse.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256	832432d1ad4f833c20e13b57cf40ce5277a9d33e483205fc63c78111b3358874	fuse-2.9.7.tar.gz
++sha256	5e84f81d8dd527ea74f39b6bc001c874c02bad6871d7a9b0c14efb57430eafe3	fuse-2.9.8.tar.gz
+ 
+ # Hash for license files:
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/libfuse/libfuse.mk b/package/libfuse/libfuse.mk
+index dc177d03c1..e8a79a3166 100644
+--- a/package/libfuse/libfuse.mk
++++ b/package/libfuse/libfuse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFUSE_VERSION = 2.9.7
++LIBFUSE_VERSION = 2.9.8
+ LIBFUSE_SOURCE = fuse-$(LIBFUSE_VERSION).tar.gz
+ LIBFUSE_SITE = https://github.com/libfuse/libfuse/releases/download/fuse-$(LIBFUSE_VERSION)
+ LIBFUSE_LICENSE = GPL-2.0, LGPL-2.1
