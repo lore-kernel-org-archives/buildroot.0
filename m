@@ -1,40 +1,51 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 17 Aug 2018 08:00:51 +0300
-Subject: [Buildroot] [PATCH 1/1] libuv: bump to version 1.23.0
-Message-ID: <20180817050051.21477-1-asafka7@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 17 Aug 2018 07:32:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to
+ version 1.0.2p
+Message-ID: <20180817053207.15702-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes CVE-2018-0732 & CVE-2018-0737:
+https://www.openssl.org/news/vulnerabilities.html
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index c9f6565ef3..e687450d53 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c72f0401e1298f948daf310abafce38373a926fb9438464d1bf7fe90784544e0  libuv-v1.22.0.tar.gz
-+sha256  8c8eff0bec85306aae508392b395e8bb0e1e34daad2a4e3bec308ced0c92bfaa  libuv-v1.23.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 85e8dccb63..90818ad789 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
+Added upstream sha1 hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libopenssl/libopenssl.hash | 6 ++++--
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 48b7471c20..2b1e048751 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,7 @@
+-# From https://www.openssl.org/source/openssl-1.0.2o.tar.gz.sha256
+-sha256	ec3f5c9714ba0fd45cb4e087301eb1336c317e0d20b575a125050470e8089e4d	openssl-1.0.2o.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2p.tar.gz.sha256
++sha256	50a98e07b1a89eb8f6a99477f262df71c6fa7bef77df4dc83025a2845c827d00	openssl-1.0.2p.tar.gz
++# From https://www.openssl.org/source/openssl-1.0.2p.tar.gz.sha1
++sha1	f34b5322e92415755c7d58bf5d0d5cf37666382c				openssl-1.0.2p.tar.gz
+ # Locally computed
+ sha256	eddd8a5123748052c598214487ac178e4bfa4e31ba2ec520c70d59c8c5bfa2e9	openssl-1.0.2a-parallel-install-dirs.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+ sha256	147c3eeaad614c044749ea527cb433eae5e2d5cad34a78c6ba61cd967bfbe01f	openssl-1.0.2a-parallel-obj-headers.patch?id=c8abcbe8de5d3b6cdd68c162f398c011ff6e2d9d
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 16a9c2e9d2..d8e3dd8b56 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUV_VERSION = v1.22.0
-+LIBUV_VERSION = v1.23.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-LIBOPENSSL_VERSION = 1.0.2o
++LIBOPENSSL_VERSION = 1.0.2p
+ LIBOPENSSL_SITE = http://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 -- 
-2.17.1
+2.18.0
