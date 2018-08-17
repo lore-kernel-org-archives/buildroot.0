@@ -1,33 +1,102 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 16 Aug 2018 22:45:37 +0000
-Subject: [Buildroot] [Bug 11166] Erlang bad argument on valid uint64 when
- crosscompiled on 64-bit host
-In-Reply-To: <bug-11166-163@https.bugs.busybox.net/>
-References: <bug-11166-163@https.bugs.busybox.net/>
-Message-ID: <bug-11166-163-CvalW9GkPG@https.bugs.busybox.net/>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Fri, 17 Aug 2018 06:48:59 +0300
+Subject: [Buildroot] [PATCH 1/8] package/mender: update legal info
+In-Reply-To: <CADHdJwBjz6OCX4wBz_cTquz2+QbD_48NDEBSSrjAbkRBDgqiGQ@mail.gmail.com>
+References: <20180814231337.19114-1-mirza.krak@northern.tech>
+ <20180814231337.19114-2-mirza.krak@northern.tech>
+ <0d11b4c6-40ac-5a3a-69d4-a1dda529d43f@mind.be>
+ <CADHdJwB78Mo5rtpQk0e6OhkAzdcGPvkz_iRu4AcWcSwB68z2Mw@mail.gmail.com>
+ <1377b705-71cf-3649-5bf1-f31a307d74fd@mind.be>
+ <CADHdJwBjz6OCX4wBz_cTquz2+QbD_48NDEBSSrjAbkRBDgqiGQ@mail.gmail.com>
+Message-ID: <876009odp0.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11166
+Hi Mirza,
 
---- Comment #4 from Frank Hunleth <fhunleth@troodon-software.com> ---
-I agree with your assessment. 
+Mirza Krak writes:
+> On Thu, Aug 16, 2018 at 5:36 PM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>> On 15/08/2018 09:37, Mirza Krak wrote:
+>>> On Wed, Aug 15, 2018 at 1:32 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>> On 15-08-18 01:13, Mirza Krak wrote:
+>>
+>> [snip]
+>>>>> +MENDER_LICENSE_FILES = LICENSE LIC_FILES_CHKSUM.sha256
+>>>>
+>>>>  Instead of LIC_FILES_CHKSUM.sha256, we should actually include all the files
+>>>> mentioned in there in our license list. Well, actually, we can optimize it a
+>>>> little bit because there are some identical files.
+>>>>
+>>>>  Alternatively, you could include all of them, and for the .hash file you can
+>>>> just prepend 'sha256  ' to every line of LIC_FILES_CHKSUM.sha256 and append it
+>>>> to the .hash file, with the comment
+>>>>
+>>>> # From LIC_FILES_CHKSUM.sha256
+>>>>
+>>>>
+>>>>  On second thought, actually it is a good idea to include
+>>>> LIC_FILES_CHKSUM.sha256 as well, to detect when a new subpackage with a new
+>>>> license is added.
+>>>
+>>> I would really like to keep this as-is to avoid a heavy maintenance
+>>> burden. This file is maintained in the upstream package and would
+>>> rather not duplicate the work by extracting the information from
+>>> LIC_FILES_CHKSUM.sha256 to put it in mender.hash.
+>>>
+>>> The checksum check of LIC_FILES_CHKSUM.sha256 will handle the sanity
+>>> check of the LICENSE files, and all the licenses that are in
+>>> LIC_FILES_CHKSUM.sha256 are already mentioned in the mender.mk file:
+>>>
+>>>      MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, MIT, OLDAP-2.8
+>>>
+>>> This should cover it. Or are there any big drawbacks with this
+>>> approach that I am not seeing?
+>>
+>>  Well, we really want to collect the license text for all applicable licenses.
+>> So you should include at least one file for each license mentioned in
+>> MENDER_LICENSE. Since the checksums are already available, I thought the easiest
+>> would be to create part of the hash file from the existing file. Like:
+>>
+>> # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+>> # Apache-2.0 license.
+>> sha256  ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680  LICENSE
+>
+> Hmm, though I having some issues with trying to accommodate this.
+>
+> Adding the following line to mender.hash:
+>
+>     # BSD 2 Clause license.
+> sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86
+>  vendor/github.com/pkg/errors/LICENSE
+>
+> Does not do anything, when I run:
+>
+>     $ make mender-legal-info
+>     >>> mender 1.4.0 Collecting legal info
+>     LICENSE: OK (sha256:
+> ceb1b36ff073bd13d9806d4615b931707768ca9023805620acc32dd1cfc2f680)
+>     LIC_FILES_CHKSUM.sha256: OK (sha256:
+> 54d6f54a2815cc2e3cef4f7dde5a3aae20f09b2cde394d8d3f1dce5d8a79d738)
+>
+> Inspecting other *.hash files in Buildroot, no one seems to reference
+> files that are outside of the "root source". Or should I specify the
+> path differently?
 
-I did a quick test on a 32-bit target (64-bit host) locally and Erlang's Uint64
-is compiled to "unsigned long long" which is correct for my target. Looking
-through the Erlang source code, I can see how if SIZEOF_LONG were detected
-incorrectly that you'd have the problem that you're seeing. It seems to be fine
-for me. 
+There are a number of packages with license files in subdirectories. For
+example:
 
-Can you check that sizeof(Uint64) is 8 in both your NIF and in Erlang when
-they're compiled? You can modify the Erlang source code in your
-output/build/erlang directory and then do a "make erlang-rebuild all".
+make alsa-lib-legal-info
+...
+>>> alsa-lib 1.1.6 Collecting legal info
+COPYING: OK (sha256: 32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b)
+aserver/COPYING: OK (sha256: bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced)
 
-Also, is your simple example and Buildroot tree somewhere public?
+baruch
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
