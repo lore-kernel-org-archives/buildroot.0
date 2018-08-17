@@ -1,38 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Aug 2018 17:01:28 +0200
-Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11
- toolchains
-In-Reply-To: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Wed, 15 Aug 2018 15:14:09 +0300")
-References: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
-Message-ID: <87k1opavg7.fsf@dell.be.48ers.dk>
+Date: Fri, 17 Aug 2018 16:51:07 +0200
+Subject: [Buildroot] [git commit] sheevaplug_defconfig: bump linux to
+ 4.14.63 to include latest fixes
+Message-ID: <20180817145447.9CF8D8D4C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1c5b7ba27b8cf03f618464eebe062987a97d515c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Add a patch removing a redefined typedef. Redefinition of typedef, even
- > to the same type, used to be illegal before C11.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/sheevaplug_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fixes:
- > http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
- > http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
- > http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
- > ---
- > Hi Hollis,
-
- > Can you git this a run on your autobuilder? I would like to verify that
- > it actually fixes the problem before I send the patch upstream.
-
-Committed, thanks.
-
-I see that discussion are ongoing with upstream, but we can adjust the
-patch later if/when changes are needed.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
+index 17139f7afb..052e39398a 100644
+--- a/configs/sheevaplug_defconfig
++++ b/configs/sheevaplug_defconfig
+@@ -26,7 +26,7 @@ BR2_TARGET_UBOOT_FORMAT_KWB=y
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.63"
+ BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v5"
+ BR2_LINUX_KERNEL_APPENDED_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
