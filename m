@@ -1,42 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Aug 2018 17:09:05 +0200
-Subject: [Buildroot] [git commit branch/next] libuv: bump to version 1.23.0
-Message-ID: <20180817150220.160C28CA17@busybox.osuosl.org>
+Date: Fri, 17 Aug 2018 17:44:18 +0200
+Subject: [Buildroot] [PATCH] ruby: security bump to version 2.4.4
+Message-ID: <20180817154418.19080-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90a97097963e4b23921a6221026c977f655fd9a7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Fixes the following security issues:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+CVE-2017-17405: Command injection vulnerability in Net::FTP (2.4.3):
+https://www.ruby-lang.org/en/news/2017/12/14/net-ftp-command-injection-cve-2017-17405/
+
+CVE-2017-17742: HTTP response splitting in WEBrick (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/http-response-splitting-in-webrick-cve-2017-17742/
+
+CVE-2018-6914: Unintentional file and directory creation with directory
+traversal in tempfile and tmpdir (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/unintentional-file-and-directory-creation-with-directory-traversal-cve-2018-6914/
+
+CVE-2018-8777: DoS by large request in WEBrick (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/large-request-dos-in-webrick-cve-2018-8777/
+
+CVE-2018-8778: Buffer under-read in String#unpack (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/buffer-under-read-unpack-cve-2018-8778/
+
+CVE-2018-8779: Unintentional socket creation by poisoned NUL byte in
+UNIXServer and UNIXSocket (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/poisoned-nul-byte-unixsocket-cve-2018-8779/
+
+CVE-2018-8780: Unintentional directory traversal by poisoned NUL byte in Dir
+(2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/poisoned-nul-byte-dir-cve-2018-8780/
+
+Multiple vulnerabilities in RubyGems (2.4.4):
+https://www.ruby-lang.org/en/news/2018/02/17/multiple-vulnerabilities-in-rubygems/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index c9f6565ef3..e687450d53 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c72f0401e1298f948daf310abafce38373a926fb9438464d1bf7fe90784544e0  libuv-v1.22.0.tar.gz
-+sha256  8c8eff0bec85306aae508392b395e8bb0e1e34daad2a4e3bec308ced0c92bfaa  libuv-v1.23.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 85e8dccb63..90818ad789 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index d066186d56..dd4cfc202b 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# From https://www.ruby-lang.org/en/news/2017/09/14/ruby-2-4-2-released/
+-sha256 748a8980d30141bd1a4124e11745bb105b436fb1890826e0d2b9ea31af27f735  ruby-2.4.2.tar.xz
++# From https://www.ruby-lang.org/en/news/2018/03/28/ruby-2-4-4-released/
++sha256 1d0034071d675193ca769f64c91827e5f54cb3a7962316a41d5217c7bc6949f0  ruby-2.4.4.tar.xz
+ # License files, Locally calculated
+ sha256 5cda9584acd5e1096276a375085b7e659fa67a072fd69ec2c3931e54f7f563bb  LEGAL
+ sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 365b8cead2..b85ee9d069 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBUV_VERSION = v1.22.0
-+LIBUV_VERSION = v1.23.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+ RUBY_VERSION_MAJOR = 2.4
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
+ RUBY_VERSION_EXT = 2.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-- 
+2.11.0
