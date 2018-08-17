@@ -1,40 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Aug 2018 16:54:15 +0200
-Subject: [Buildroot] [PATCH] libfuse: security bump to version 2.9.8
-In-Reply-To: <20180817070121.17733-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 17 Aug 2018 09:01:21 +0200")
-References: <20180817070121.17733-1-peter@korsgaard.com>
-Message-ID: <87o9e1avs8.fsf@dell.be.48ers.dk>
+Date: Fri, 17 Aug 2018 17:01:28 +0200
+Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11
+ toolchains
+In-Reply-To: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 15 Aug 2018 15:14:09 +0300")
+References: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
+Message-ID: <87k1opavg7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Fixes CVE-2018-10906 - In fuse before versions 2.9.8 and 3.x before 3.2.5,
- > fusermount is vulnerable to a restriction bypass when SELinux is active.
- > This allows non-root users to mount a FUSE file system with the
- > 'allow_other' mount option regardless of whether 'user_allow_other' is set
- > in the fuse configuration.  An attacker may use this flaw to mount a FUSE
- > file system, accessible by other users, and trick them into accessing files
- > on that file system, possibly causing Denial of Service or other unspecified
- > effects.
+ > Add a patch removing a redefined typedef. Redefinition of typedef, even
+ > to the same type, used to be illegal before C11.
 
- > And additionally:
+ > Fixes:
+ > http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
+ > http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
+ > http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
 
- > - libfuse no longer segfaults when fuse_interrupted() is called outside the
- >   event loop.
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > Hi Hollis,
 
- > - The fusermount binary has been hardened in several ways to reduce
- >   potential attack surface.  Most importantly, mountpoints and mount options
- >   must now match a hard-coded whitelist.  It is expected that this whitelist
- >   covers all regular use-cases.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Can you git this a run on your autobuilder? I would like to verify that
+ > it actually fixes the problem before I send the patch upstream.
 
 Committed, thanks.
+
+I see that discussion are ongoing with upstream, but we can adjust the
+patch later if/when changes are needed.
 
 -- 
 Bye, Peter Korsgaard
