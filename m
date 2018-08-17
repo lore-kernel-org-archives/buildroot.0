@@ -1,45 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Aug 2018 19:20:23 +0200
-Subject: [Buildroot] [git commit] eigen: Fix pkg-config file prefix error
-Message-ID: <20180817171855.5ADEA8D55C@busybox.osuosl.org>
+Date: Fri, 17 Aug 2018 19:29:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libopenssl: security bump to
+ version 1.0.2p
+In-Reply-To: <62cj4fxe0i.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Fri, 17 Aug 2018 19:08:54 +0200")
+References: <20180817053207.15702-1-bernd.kuhls@t-online.de>
+ <87a7plcw36.fsf@dell.be.48ers.dk>
+ <62cj4fxe0i.ln2@ID-313208.user.individual.net>
+Message-ID: <87efewoq9b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e477dc19b5264c8fd01ff235dded4f148fde7a65
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-eigen generates	a pkg-config file which	has a broken prefix
-(@CMAKE_INSTALL_PREFIX@).  This broken prefix causes an incorrect path when
-other packages call pkg-config --cflags eigen.
+ > Am Fri, 17 Aug 2018 09:04:45 +0200 schrieb Peter Korsgaard:
+ >>>>>>> "Bernd" == Bernd Kuhls
+ >>>>>>> <bernd.kuhls@t-online.de> writes:
+ >> > Added upstream sha1 hash.
+ >> 
+ >> I'm not sure that really buys us much, but OK.
 
-This patch fixes the prefix in the generated eigen pc file, so projects
-which depend on this pc file can now correctly find the eigen include
-directory at build time.
+ > Hi Peter,
 
-Also correct the Cflags output to use the runtime prefix instead of the
-build time STAGING_DIR, like we do elsewhere.
+ > I am just following the manual:
+ > http://buildroot.uclibc.org/downloads/manual/manual.html#adding-packages-
+ > hash
 
-[Peter: drop backslashes, tweak commit message]
-Signed-off-by: Matt Flax <flatmax@flatmax.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/eigen/eigen.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > "If upstream provides more than one type of hash (e.g. sha1 and sha512), 
+ > then it is best to add all those hashes in the .hash file."
 
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 89f54fb948..27c4e212a9 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -23,7 +23,8 @@ endif
- # Generate the .pc file at build time
- define EIGEN_BUILD_CMDS
- 	sed -r -e 's,^Version: .*,Version: $(EIGEN_VERSION),' \
--		-e 's,^Cflags: .*,Cflags: -I$(EIGEN_DEST_DIR),' \
-+		-e 's,^Cflags: .*,Cflags: -I$$\{prefix\}/include/eigen3,' \
-+		-e 's,^prefix.*,prefix=/usr,' \
- 		$(@D)/eigen3.pc.in >$(@D)/eigen3.pc
- endef
- 
+Heh, you win ;) I believe this was originally aimed at weaker hashes
+(md5 and sha1), but you're right, it doesn't harm.
+
+Thanks for the patch!
+
+-- 
+Bye, Peter Korsgaard
