@@ -1,53 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 17 Aug 2018 18:06:51 +0200
-Subject: [Buildroot] [PATCH 5/7 v4] linux: host-{flex,
- bison} only needed for DTS
+Date: Fri, 17 Aug 2018 18:06:52 +0200
+Subject: [Buildroot] [PATCH 6/7 v4] linux: kconfig needs the toolchain
 In-Reply-To: <cover.1534522005.git.yann.morin.1998@free.fr>
 References: <cover.1534522005.git.yann.morin.1998@free.fr>
-Message-ID: <7df293032b336d58e0a8aed21fc21695ef4ffd20.1534522005.git.yann.morin.1998@free.fr>
+Message-ID: <67cb563b2b89c6aed36e2ef6564409678f405e84.1534522005.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-{flex,bison} are only needed to generate the dtc parser, so we
-don't need them if the kernel does not have support for device tree.
+Starting with linux-4.18, the kconfig from the kernel can call
+to the compiler to test its capabilities; see:
+
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/Kconfig.include
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Jan Kundr?t <jan.kundrat@cesnet.cz>
+Tested-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+Reviewed-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+
 ---
- linux/linux.mk | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Changes v1 -> v2:
+  - take advantage of the kconfig-package infra  (Thomas)
+---
+ linux/linux.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/linux/linux.mk b/linux/linux.mk
-index deb5a4ac57..d6b0853518 100644
+index d6b0853518..675e7906a8 100644
 --- a/linux/linux.mk
 +++ b/linux/linux.mk
-@@ -64,11 +64,6 @@ LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
- LINUX_INSTALL_IMAGES = YES
- LINUX_DEPENDENCIES = host-kmod
+@@ -71,6 +71,11 @@ LINUX_KCONFIG_DEPENDENCIES = \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
  
--# Starting with 4.17, the generated dtc parser code is no longer
--# shipped with the kernel sources, so we need flex and bison. For
--# reproducibility, we use our owns rather than the host ones.
--LINUX_DEPENDENCIES += host-bison host-flex
--
- # Starting with 4.16, the generated kconfig paser code is no longer
- # shipped with the kernel sources, so we need flex and bison, but
- # only if the host does not have them.
-@@ -352,6 +347,11 @@ define LINUX_KCONFIG_FIXUP_CMDS
- endef
- 
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
-+# Starting with 4.17, the generated dtc parser code is no longer
-+# shipped with the kernel sources, so we need flex and bison. For
-+# reproducibility, we use our owns rather than the host ones.
-+LINUX_DEPENDENCIES += host-bison host-flex
++# Starting with 4.18, the kconfig in the kernel calls the
++# cross-compiler to check its capabilities. So we need the
++# toolchain before we can call the configurators.
++LINUX_KCONFIG_DEPENDENCIES += toolchain
 +
- ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
- define LINUX_BUILD_DTB
- 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_DTBS)
+ # host tools needed for kernel compression
+ ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
+ LINUX_DEPENDENCIES += host-lz4
 -- 
 2.14.1
