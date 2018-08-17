@@ -1,48 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Aug 2018 16:51:01 +0200
-Subject: [Buildroot] [git commit] sheevaplug_defconfig: bump u-boot to
+Date: Fri, 17 Aug 2018 16:52:33 +0200
+Subject: [Buildroot] [git commit] orangepi_pc_defconfig: bump u-boot to
  2018.07 to fix build issue
-Message-ID: <20180817145447.9486C8D4F4@busybox.osuosl.org>
+Message-ID: <20180817145447.D84898D4C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f09daba15fc4d412aadb02491a4baab138d368e
+commit: https://git.buildroot.net/buildroot/commit/?id=1d8d6cbdcc9fb85db6f885ffd9019174ce9952bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-u-boot 2016.05 no longer builds with the default gcc/binutils versions:
+u-boot 2018.05 now fails to build with the following error:
 
-https://gitlab.com/buildroot.org/buildroot/-/jobs/88314946
+  HOSTCC  scripts/dtc/flattree.o
+In file included from /builds/buildroot.org/buildroot/output/host/include/libfdt.h:54:0,
+                 from /builds/buildroot.org/buildroot/output/build/uboot-2018.05/scripts/dtc/libfdt/fdt.c:54:
+/builds/buildroot.org/buildroot/output/host/include/libfdt_env.h:82:24: error: redefinition of 'fdt16_to_cpu'
+ static inline uint16_t fdt16_to_cpu(fdt16_t x)
+                        ^~~~~~~~~~~~
+In file included from /builds/buildroot.org/buildroot/output/build/uboot-2018.05/scripts/dtc/libfdt/fdt.c:51:0:
+/builds/buildroot.org/buildroot/output/build/uboot-2018.05/scripts/dtc/libfdt/libfdt_env.h:81:24: note: previous definition of 'fdt16_to_cpu' was here
+ static inline uint16_t fdt16_to_cpu(fdt16_t x)
+                        ^~~~~~~~~~~~
 
-  LD      u-boot
-fs/built-in.o: In function `read_symbol':
-/builds/buildroot.org/buildroot/output/build/uboot-2016.05/fs/jffs2/mini_inflate.c:129: undefined reference to `pull_bit'
-fs/built-in.o: In function `decompress_huffman':
-/builds/buildroot.org/buildroot/output/build/uboot-2016.05/fs/jffs2/mini_inflate.c:159: undefined reference to `pull_bits'
-/builds/buildroot.org/buildroot/output/build/uboot-2016.05/fs/jffs2/mini_inflate.c:170: undefined reference to `pull_bits'
-..
-/builds/buildroot.org/buildroot/output/host/bin/arm-buildroot-linux-uclibcgnueabi-ld.bfd: BFD (GNU Binutils) 2.29.1 assertion fail elf32-arm.c:9509
-Makefile:1192: recipe for target 'u-boot' failed
-make[1]: *** [u-boot] Error 1
-make[1]: Leaving directory '/builds/buildroot.org/buildroot/output/build/uboot-2016.05'
+https://gitlab.com/buildroot.org/buildroot/-/jobs/88314886
+
+Fix it by bumping the u-boot version to 2018.07.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/sheevaplug_defconfig | 2 +-
+ configs/orangepi_pc_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/sheevaplug_defconfig b/configs/sheevaplug_defconfig
-index edafffe0a0..17139f7afb 100644
---- a/configs/sheevaplug_defconfig
-+++ b/configs/sheevaplug_defconfig
-@@ -19,7 +19,7 @@ BR2_TARGET_UBOOT=y
+diff --git a/configs/orangepi_pc_defconfig b/configs/orangepi_pc_defconfig
+index 05199af53b..fc7e0040aa 100644
+--- a/configs/orangepi_pc_defconfig
++++ b/configs/orangepi_pc_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sheevaplug"
  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2016.05"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.05"
 +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
- BR2_TARGET_UBOOT_FORMAT_KWB=y
- # BR2_TARGET_UBOOT_NETWORK is not set
- 
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_pc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
