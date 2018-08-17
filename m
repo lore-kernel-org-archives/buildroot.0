@@ -1,72 +1,103 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 Aug 2018 17:44:18 +0200
-Subject: [Buildroot] [PATCH] ruby: security bump to version 2.4.4
-Message-ID: <20180817154418.19080-1-peter@korsgaard.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 17 Aug 2018 18:06:50 +0200
+Subject: [Buildroot] [PATCH 0/7 v4] core/pkg-kconfig: ensure we have
+ necessary tools to run configurators
+Message-ID: <cover.1534522005.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hello All!
 
-CVE-2017-17405: Command injection vulnerability in Net::FTP (2.4.3):
-https://www.ruby-lang.org/en/news/2017/12/14/net-ftp-command-injection-cve-2017-17405/
+Recent version of the linux kernel introduced major changes in the
+kconfig infrastructure.
 
-CVE-2017-17742: HTTP response splitting in WEBrick (2.4.4):
-https://www.ruby-lang.org/en/news/2018/03/28/http-response-splitting-in-webrick-cve-2017-17742/
+Starting with linux-4.16, the kconfig parser code is no longer shipped
+with the linux source tree, and mut be generated from the lex/yacc
+parser sources.
 
-CVE-2018-6914: Unintentional file and directory creation with directory
-traversal in tempfile and tmpdir (2.4.4):
-https://www.ruby-lang.org/en/news/2018/03/28/unintentional-file-and-directory-creation-with-directory-traversal-cve-2018-6914/
+Similarly, starting with linux-4.18, the kconfig infra allows calling
+back to the shell to run various commands, especially calling to the
+compiler to test its features (and hide/show options accordingly).
 
-CVE-2018-8777: DoS by large request in WEBrick (2.4.4):
-https://www.ruby-lang.org/en/news/2018/03/28/large-request-dos-in-webrick-cve-2018-8777/
+So, we need to ensure the appropriate tools are available before we
+attempt to run any of the configurators. Since building host-flex and
+host-bison is not entirely free (they both have a few dependencies of
+their own), we want to be able to use the system ones if they are
+present.
 
-CVE-2018-8778: Buffer under-read in String#unpack (2.4.4):
-https://www.ruby-lang.org/en/news/2018/03/28/buffer-under-read-unpack-cve-2018-8778/
+This seven-patch series first documents the reasons for having host-flex
+and host-bison as dependencies of the linux package.
 
-CVE-2018-8779: Unintentional socket creation by poisoned NUL byte in
-UNIXServer and UNIXSocket (2.4.4):
-https://www.ruby-lang.org/en/news/2018/03/28/poisoned-nul-byte-unixsocket-cve-2018-8779/
+Then we add support for detecting if the system provides flex and/or
+bison; if either is missing, a conditional dependency is defined for
+either.
 
-CVE-2018-8780: Unintentional directory traversal by poisoned NUL byte in Dir
-(2.4.4):
-https://www.ruby-lang.org/en/news/2018/03/28/poisoned-nul-byte-dir-cve-2018-8780/
+Third, the kconfig infra is enhanced to accept dependencies needed
+before the configurators are called.
 
-Multiple vulnerabilities in RubyGems (2.4.4):
-https://www.ruby-lang.org/en/news/2018/02/17/multiple-vulnerabilities-in-rubygems/
+The linux packages is then adapted, one step at a time, to use the
+conditional flex/bison dependencies for the configurators, and use
+the host-{flex,bison} dependencies only for the DTS support.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Then, the toolchain is added as a kconfig dependencies of the linux
+kernel.
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index d066186d56..dd4cfc202b 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# From https://www.ruby-lang.org/en/news/2017/09/14/ruby-2-4-2-released/
--sha256 748a8980d30141bd1a4124e11745bb105b436fb1890826e0d2b9ea31af27f735  ruby-2.4.2.tar.xz
-+# From https://www.ruby-lang.org/en/news/2018/03/28/ruby-2-4-4-released/
-+sha256 1d0034071d675193ca769f64c91827e5f54cb3a7962316a41d5217c7bc6949f0  ruby-2.4.4.tar.xz
- # License files, Locally calculated
- sha256 5cda9584acd5e1096276a375085b7e659fa67a072fd69ec2c3931e54f7f563bb  LEGAL
- sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 365b8cead2..b85ee9d069 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 2.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
- RUBY_VERSION_EXT = 2.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+Eventually, uboot is also fixed to conditionally require flex/bison.
+
+Changes v3 -> v4:
+  - also fix uboot
+
+(note: there was no v2.)
+
+Changes v1 -> v3:
+  - introduce the KCONFIG_DEPENDENCIES in the kconfig-package infra
+    (Thomas)
+  - change linux to take advantage of that  (Thomas)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit f70b13a7cb6eb01e9d78fddcb695b84a22e5699b
+
+  dahdi-tools: unify dependencies comments (2018-08-17 17:07:11 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to ed63f1c812145907ef83c6bf245ad5765c67aded
+
+  boot/uboot: needs host-{flex,bison} (2018-08-17 17:40:03 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (7):
+      linux: explain why we need host-{flex,bison}
+      support/dependencies: check for system-provided bison and flex
+      core/pkg-kconfig: allow dependencies before configurators
+      linux: kconfig may need host-{flex,bison} to build the configurators
+      linux: host-{flex,bison} only needed for DTS
+      linux: kconfig needs the toolchain
+      boot/uboot: needs host-{flex,bison}
+
+ boot/uboot/uboot.mk                           |  3 +++
+ docs/manual/adding-packages-kconfig.txt       |  4 ++++
+ linux/linux.mk                                | 19 ++++++++++++++++++-
+ package/pkg-kconfig.mk                        |  9 +++++++++
+ support/dependencies/check-host-bison-flex.mk | 10 ++++++++++
+ 5 files changed, 44 insertions(+), 1 deletion(-)
+ create mode 100644 support/dependencies/check-host-bison-flex.mk
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
