@@ -1,85 +1,45 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Aug 2018 10:08:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: Fix uClibc build on 64bit
- platforms by including stdint.h
-Message-ID: <20180818080801.15299-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sat, 18 Aug 2018 10:31:37 +0200
+Subject: [Buildroot] [PATCH v1] libxkbcommon: bump version to 0.8.2
+Message-ID: <20180818083137.2557-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patch needed to be updated for samba-4.8.4
+Bump version to 0.8.2 and add hash for the license file.
 
-Fixes
-http://autobuild.buildroot.net/results/140/1404a594583ff192d70086ef590f924472465c89/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...-on-64bit-platforms-by-including-std.patch | 26 +++++++++++++++----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ package/libxkbcommon/libxkbcommon.hash | 7 +++++--
+ package/libxkbcommon/libxkbcommon.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
-index 1256d1c969..1cad407b07 100644
---- a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
-+++ b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
-@@ -1,7 +1,7 @@
--From 4a63f267efab2ef86adbeddda45909127135d7c8 Mon Sep 17 00:00:00 2001
-+From 3d91847322eba55e97adc76c5c95570382af7059 Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd.kuhls@t-online.de>
- Date: Sun, 28 Jan 2018 11:57:11 +0100
--Subject: [PATCH] Fix uClibc build on 64bit platforms by including stdint.h
-+Subject: [PATCH v2] Fix uClibc build on 64bit platforms by including stdint.h
- 
- Fixes an error detected by buildroot autobuilders:
- http://autobuild.buildroot.net/results/573/573e2268e205e10d1352fa81122d8f225fdb4575/build-end.log
-@@ -20,15 +20,19 @@ define uintptr_t, this patch includes stdint.h when needed.
- Patch sent upstream:
- https://lists.samba.org/archive/samba-technical/2018-January/125306.html
- 
-+[updated for samba-4.8.4, v2 sent upstream
-+ https://lists.samba.org/archive/samba-technical/2018-August/129732.html]
+diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
+index 525f9ffd20..67ae4b5921 100644
+--- a/package/libxkbcommon/libxkbcommon.hash
++++ b/package/libxkbcommon/libxkbcommon.hash
+@@ -1,2 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032725.html
+-sha256	ba59305d2e19e47c27ea065c2e0df96ebac6a3c6e97e28ae5620073b6084e68b	libxkbcommon-0.7.1.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2018-August/039243.html
++sha256 7ab8c4b3403d89d01898066b72cb6069bddeb5af94905a65368f671a026ed58c libxkbcommon-0.8.2.tar.xz
 +
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  lib/ldb/tests/ldb_mod_op_test.c   | 1 +
-  lib/ldb/tests/ldb_msg.c           | 1 +
-+ libcli/auth/tests/ntlm_check.c    | 1 +
-  libcli/smb/test_smb1cli_session.c | 1 +
-- 3 files changed, 3 insertions(+)
-+ 4 files changed, 4 insertions(+)
++# License file:
++sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
+diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
+index 601181446d..2045d96380 100644
+--- a/package/libxkbcommon/libxkbcommon.mk
++++ b/package/libxkbcommon/libxkbcommon.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- diff --git a/lib/ldb/tests/ldb_mod_op_test.c b/lib/ldb/tests/ldb_mod_op_test.c
--index cf2288c7bce..4690594186e 100644
-+index c8b9c1aa9ff..4893dc3b38b 100644
- --- a/lib/ldb/tests/ldb_mod_op_test.c
- +++ b/lib/ldb/tests/ldb_mod_op_test.c
- @@ -13,6 +13,7 @@
-@@ -51,6 +55,18 @@ index f8de418e0dc..31786a9a318 100644
-  #include <setjmp.h>
-  #include <cmocka.h>
-  
-+diff --git a/libcli/auth/tests/ntlm_check.c b/libcli/auth/tests/ntlm_check.c
-+index e87a0a276d4..65c7b086008 100644
-+--- a/libcli/auth/tests/ntlm_check.c
-++++ b/libcli/auth/tests/ntlm_check.c
-+@@ -40,6 +40,7 @@
-+  */
-+ #include <stdarg.h>
-+ #include <stddef.h>
-++#include <stdint.h>
-+ #include <setjmp.h>
-+ #include <cmocka.h>
-+ 
- diff --git a/libcli/smb/test_smb1cli_session.c b/libcli/smb/test_smb1cli_session.c
- index d1e21d5431e..6a526c96b61 100644
- --- a/libcli/smb/test_smb1cli_session.c
-@@ -63,5 +79,5 @@ index d1e21d5431e..6a526c96b61 100644
-  #include <cmocka.h>
-  
- -- 
--2.11.0
-+2.18.0
- 
+-LIBXKBCOMMON_VERSION = 0.7.1
++LIBXKBCOMMON_VERSION = 0.8.2
+ LIBXKBCOMMON_SITE = http://xkbcommon.org/download
+ LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
+ LIBXKBCOMMON_LICENSE = MIT/X11
 -- 
 2.18.0
