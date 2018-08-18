@@ -1,46 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 23:29:05 +0200
-Subject: [Buildroot] [PATCH 2/7 v4] support/dependencies: check for
- system-provided bison and flex
-In-Reply-To: <20180818231758.69bc7209@windsurf>
-References: <cover.1534522005.git.yann.morin.1998@free.fr>
- <d9d77c26d35f7ccfe57e53ce930189ec29980e92.1534522005.git.yann.morin.1998@free.fr>
- <20180818231758.69bc7209@windsurf>
-Message-ID: <20180818232905.70811759@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Aug 2018 00:00:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bind: security bump to version
+ 9.11.4-P1
+Message-ID: <20180818220013.7733-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes CVE-2018-5740: https://ftp.isc.org/isc/bind9/9.11.4-P1/CHANGES
 
-On Sat, 18 Aug 2018 23:17:58 +0200, Thomas Petazzoni wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/bind/bind.hash | 4 ++--
+ package/bind/bind.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> This solution (which differs from what we do for other dependencies,
-> that are using suitable-host-package) has a drawback: it shows stderr
-> on the terminal, despite the 2>/dev/null:
-> 
-> $ make
-> which: no bison in (/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin)
-> 
-> I'm not sure why this happens.
-
-Wait, wait, scratch that. Even without your patch it does that. This
-error is displayed because of:
-
-BISON := $(shell which bison || type -p bison)
-
-in package/Makefile.in. I'm not even sure why we have this definition,
-we don't use it anywhere, ditto for the FLEX definition.
-
-So basically your patch looks good, we probably need to remove the
-useless lines in package/Makefile.in, as a separate patch.
-
-Best regards,
-
-Thomas
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 78f8015521..6e8c186e2d 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.4/bind-9.11.4.tar.gz.asc
++# Verified from https://ftp.isc.org/isc/bind9/9.11.4-P1/bind-9.11.4-P1.tar.gz.asc
+ # with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
+-sha256 595070b031f869f8939656b5a5d11b121211967f15f6afeafa895df745279617 bind-9.11.4.tar.gz
++sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
+ sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index d478a7f6e1..0140041218 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.11.4
++BIND_VERSION = 9.11.4-P1
+ BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
