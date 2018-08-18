@@ -1,46 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 22:32:14 +0200
-Subject: [Buildroot] [git commit] boost: context needs thread without C++11
- mutex
-Message-ID: <20180818202516.C08BE8D5F6@busybox.osuosl.org>
+Date: Sat, 18 Aug 2018 22:32:29 +0200
+Subject: [Buildroot] [git commit] boost: enable back log on powerpc with
+ uclibc
+Message-ID: <20180818202516.CA4F88D5F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b20c5ca3b8c5b180a6ee87556d0c87d474e86cde
+commit: https://git.buildroot.net/buildroot/commit/?id=ee2af55d38121e796d907f6e8a1703210a1658f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Extract from output/build/boost-1.67.0/libs/context/build/Jamfile.v2:
-
-explicit cxx11_hdr_mutex_check ;
-local cxx11_mutex = [ check-target-builds
-      cxx11_hdr_mutex_check "C++11 mutex"
-    :
-    : <library>/boost/thread//boost_thread
-  ] ;
-
-So select boost_thread if gcc <= 4.7
+boost-log builds fine with powerpc on uclibc nowadays so enable it back.
+By removing this dependency, build failure on azmq is also fixed as this
+package is currently selecting boost-log without fulfilling this
+dependency
 
 Fixes:
- - http://autobuild.buildroot.net/results/fb046c04fe18bec973d120e4ab33971f32ba5769
+ - http://autobuild.buildroot.net/results/9c373d0b5a1a59e2271d71c480d55a90a67b84cb
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/boost/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/boost/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 57e98c72e4..0fd049d53c 100644
+index 0fd049d53c..389592fd32 100644
 --- a/package/boost/Config.in
 +++ b/package/boost/Config.in
-@@ -83,6 +83,7 @@ config BR2_PACKAGE_BOOST_CONTEXT
- 	bool "boost-context"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	help
- 	  C++11 context switching library.
+@@ -203,9 +203,6 @@ comment "boost-locale needs a toolchain w/ dynamic library"
+ config BR2_PACKAGE_BOOST_LOG
+ 	bool "boost-log"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	# for some reason, uClibc on PowerPC fails to build the boost
+-	# log module
+-	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+ 	select BR2_PACKAGE_BOOST_ATOMIC
+ 	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+@@ -217,7 +214,6 @@ config BR2_PACKAGE_BOOST_LOG
  
+ comment "boost-log needs a toolchain w/ NPTL"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+ 
+ config BR2_PACKAGE_BOOST_MATH
+ 	bool "boost-math"
