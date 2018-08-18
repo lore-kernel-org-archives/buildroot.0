@@ -1,40 +1,48 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Aug 2018 17:34:25 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/x264: bump version
-Message-ID: <20180818153425.29177-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 18 Aug 2018 14:34:31 +0200
+Subject: [Buildroot] [git commit] boost: thread needs atomic if GCC hasn't
+ lock-free
+Message-ID: <20180818153838.BCD5E8D4F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x264/x264.hash | 2 +-
- package/x264/x264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=e2928dfa080658c35f6f0b7c9e62a3ade438a827
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index 920f3b74eb..dd84794366 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 cdae4489e0306938a46429824aa3511e7ec2a43f71fee8b4aa46ceea46d15888  x264-7d0ff22e8c96de126be9d3de4952edd6d1b75a8c.tar.gz
-+sha256 0c43680b516f76fe3b9ecbe0efc7c2a763987213051c16c248f506851aebe6c7  x264-303c484ec828ed0d8bfe743500e70314d026c3bd.tar.gz
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index f2fb10c41c..31304b9eae 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+When gcc has not always lock-free atomic ints:
+ - lockfree boost::atomic_flag : no
+
+boost thread needs boost atomic:
+output/host/usr/bin/nios2-linux-readelf -d output/staging/usr/lib/libboost_thread.so
+
+Dynamic section at offset 0x2cee0 contains 32 entries:
+  Tag        Type                         Name/Value
+ 0x00000001 (NEEDED)                     Shared library: [libboost_system.so.1.67.0]
+ 0x00000001 (NEEDED)                     Shared library: [libboost_atomic.so.1.67.0]
+
+Fixes:
+ - http://autobuild.buildroot.net/results/5a7db292f1365f27e32695527701d5b827f60092
+ - http://autobuild.buildroot.net/results/413dff87f5329d3c5180167a8711cdedea5dec67
+ - http://autobuild.buildroot.net/results/a7eb4cbcdbd9412c344f45336dec58c82e84dab9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 97695e17b7..57e98c72e4 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -313,6 +313,7 @@ config BR2_PACKAGE_BOOST_TEST
  
--X264_VERSION = 7d0ff22e8c96de126be9d3de4952edd6d1b75a8c
-+X264_VERSION = 303c484ec828ed0d8bfe743500e70314d026c3bd
- X264_SITE = git://git.videolan.org/x264.git
- X264_LICENSE = GPL-2.0+
- X264_DEPENDENCIES = host-pkgconf
--- 
-2.18.0
+ config BR2_PACKAGE_BOOST_THREAD
+ 	bool "boost-thread"
++	select BR2_PACKAGE_BOOST_ATOMIC if !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
