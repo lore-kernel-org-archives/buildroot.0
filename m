@@ -1,50 +1,103 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Aug 2018 11:37:59 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libssh: bump version to 0.8.1
-Message-ID: <20180818093759.26718-1-bernd.kuhls@t-online.de>
+Date: Sat, 18 Aug 2018 13:01:15 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/mediastreamer: Fix build
+ with FFmpeg 4.0
+Message-ID: <20180818110115.30130-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixed broken _SITE, added license hash.
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libssh/libssh.hash | 8 +++-----
- package/libssh/libssh.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 7 deletions(-)
+v2: split patch from v1 series, git-formatted patch,
+    added license hash
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 009a335e3b..7220c337cf 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,3 @@
--# from https://red.libssh.org/projects/libssh/files/
--md5	d3fc864208bf607ad87cdee836894feb	libssh-0.7.5.tar.xz
--# Locally calculated after checking signature on uncompressed libssh-0.7.5.tar
--# https://red.libssh.org/attachments/download/217/libssh-0.7.5.tar.asc
--sha256	54e86dd5dc20e5367e58f3caab337ce37675f863f80df85b6b1614966a337095  libssh-0.7.5.tar.xz
-+# Locally calculated after checking pgp signature
-+sha256 d17f1267b4a5e46c0fbe66d39a3e702b8cefe788928f2eb6e339a18bb00b1924  libssh-0.8.1.tar.xz
-+sha256 468cf08f784ef6fd3b3705b60dd8111e2b70fbb8f6549cd503665a6bbb3bc625  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 34716c502a..4295aa42ee 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
- 
--LIBSSH_VERSION = 0.7.5
-+LIBSSH_VERSION_MAJOR = 0.8
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).1
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
--LIBSSH_SITE = https://red.libssh.org/attachments/download/218
-+LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
- LIBSSH_LICENSE_FILES = COPYING
- LIBSSH_INSTALL_STAGING = YES
+ ...FER_PADDING_SIZE-to-determine-paddin.patch | 64 +++++++++++++++++++
+ package/mediastreamer/mediastreamer.hash      |  1 +
+ 2 files changed, 65 insertions(+)
+ create mode 100644 package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
+
+diff --git a/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch b/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
+new file mode 100644
+index 0000000000..792c3eeb44
+--- /dev/null
++++ b/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
+@@ -0,0 +1,64 @@
++From 84b1919124884232e0fa30b30458470db27c73fc Mon Sep 17 00:00:00 2001
++From: James Cowgill <jcowgill@debian.org>
++Date: Sat, 18 Aug 2018 12:56:38 +0200
++Subject: [PATCH] Use AV_INPUT_BUFFER_PADDING_SIZE to determine padding
++ size
++
++Hardcoding the value for FF_INPUT_BUFFER_PADDING_SIZE is not safe
++because upstream FFmpeg might change it (as they did in FFmpeg 4.0).
++
++Instead, use FFmpeg's AV_INPUT_BUFFER_PADDING_SIZE if available and
++only hardcode a value if FFmpeg is disabled (in which case the value
++doesn't particularly matter anyway). For compatibility with older
++FFmpeg versions, define AV_INPUT_BUFFER_PADDING_SIZE if hasn't been
++defined yet.
++
++Backported from
++https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=901735
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/utils/ffmpeg-priv.h     | 4 ++++
++ src/videofilters/nowebcam.c | 4 ++--
++ 2 files changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/utils/ffmpeg-priv.h b/src/utils/ffmpeg-priv.h
++index c0745a9a..d59ea0e1 100644
++--- a/src/utils/ffmpeg-priv.h
+++++ b/src/utils/ffmpeg-priv.h
++@@ -102,6 +102,10 @@ static inline int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
++ #endif
++ #endif
++ 
+++#ifndef AV_INPUT_BUFFER_PADDING_SIZE
+++#define AV_INPUT_BUFFER_PADDING_SIZE FF_INPUT_BUFFER_PADDING_SIZE
+++#endif
+++
++ #ifndef HAVE_FUN_avcodec_encode_video2
++ int avcodec_encode_video2 (AVCodecContext *avctx, AVPacket *avpkt, const AVFrame *frame, int *got_packet_ptr);
++ #endif
++diff --git a/src/videofilters/nowebcam.c b/src/videofilters/nowebcam.c
++index bd2ca838..4783de05 100644
++--- a/src/videofilters/nowebcam.c
+++++ b/src/videofilters/nowebcam.c
++@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++ #ifndef NO_FFMPEG
++ #include "ffmpeg-priv.h"
++ #else
++-#define FF_INPUT_BUFFER_PADDING_SIZE 32
+++#define AV_INPUT_BUFFER_PADDING_SIZE 32
++ #endif
++ 
++ #if TARGET_OS_IPHONE
++@@ -248,7 +248,7 @@ static mblk_t *_ms_load_jpeg_as_yuv(const char *jpgpath, MSVideoSize *reqsize){
++ 			ms_error("Cannot load %s",jpgpath);
++ 			return NULL;
++ 		}
++-		jpgbuf=(uint8_t*)ms_malloc0(statbuf.st_size + FF_INPUT_BUFFER_PADDING_SIZE);
+++		jpgbuf=(uint8_t*)ms_malloc0(statbuf.st_size + AV_INPUT_BUFFER_PADDING_SIZE);
++ 		if (jpgbuf==NULL)
++ 		{
++ 			close(fd);
++-- 
++2.18.0
++
+diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
+index 5f26b54bff..8ebf64af09 100644
+--- a/package/mediastreamer/mediastreamer.hash
++++ b/package/mediastreamer/mediastreamer.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
++sha256  ba9ed2269151ad63b922598f3c5c19ddf781b2bbb6cb843ed9f085ecd1679c5d  COPYING
 -- 
 2.18.0
