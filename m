@@ -1,36 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 22:32:53 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: enable back log on powerpc with
- uclibc
-In-Reply-To: <20180818201052.3959-1-fontaine.fabrice@gmail.com>
-References: <20180818201052.3959-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180818223253.6df6bdfe@windsurf>
+From: Chris Packham <judge.packham@gmail.com>
+Date: Sun, 19 Aug 2018 08:40:55 +1200
+Subject: [Buildroot] Analysis of build results for 2018-08-17
+In-Reply-To: <20180818215603.04843f8d@windsurf>
+References: <20180818060019.8702120DE6@mail.bootlin.com>
+ <20180818215603.04843f8d@windsurf>
+Message-ID: <CAFOYHZC34UUQvZ0rQWwsjMB-iCvWe7XLCR27LDgOMyzrRDZNhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun, 19 Aug 2018, 7:56 AM Thomas Petazzoni, <thomas.petazzoni@bootlin.com>
+wrote:
 
-On Sat, 18 Aug 2018 22:10:52 +0200, Fabrice Fontaine wrote:
-> boost-log builds fine with powerpc on uclibc nowadays so enable it back.
-> By removing this dependency, build failure on azmq is also fixed as this
-> package is currently selecting boost-log without fulfilling this
-> dependency
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/9c373d0b5a1a59e2271d71c480d55a90a67b84cb
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/boost/Config.in | 4 ----
->  1 file changed, 4 deletions(-)
+>
+> >          sh4 |             micropython-v1.9.3 | NOK |
+> http://autobuild.buildroot.net/results/2b18b9e1449f91d0c8d72ceadf298b5b37f5c9c4
+> |
+>
+>
+> cc1: warnings being treated as errors
+> ../py/objdict.c: In function 'dict_view_print':
+> ../py/objdict.c:458: error: dereferencing pointer 'o' does break
+> strict-aliasing rules
+> ../py/objdict.c:457: error: dereferencing pointer 'o' does break
+> strict-aliasing rules
+> ../py/objdict.c:456: error: dereferencing pointer 'o' does break
+> strict-aliasing rules
+> ../py/objdict.c:455: error: dereferencing pointer 'o' does break
+> strict-aliasing rules
+> ../py/objdict.c:454: note: initialized from here
+>
+> Not sure what is going on here, but it happens only on Hollis autobuilder:
+>
+>   http://autobuild.buildroot.net/?reason=micropython%
+>
+> Chris, perhaps you have an idea ?
+>
 
-Applied to master, thanks.
+I've tried reproducing this a few times with no luck. Initially I thought
+it was due to a newer gcc generating new warnings, but then I tried gcc 8
+and didn't see any issue.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180819/37af0d52/attachment.html>
