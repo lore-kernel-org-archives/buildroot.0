@@ -1,46 +1,93 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Aug 2018 20:22:58 +0200
-Subject: [Buildroot] [PATCH/next 3/3] package/live555: bump version to
- 2018.08.05
-In-Reply-To: <20180818182258.2936-1-bernd.kuhls@t-online.de>
-References: <20180818182258.2936-1-bernd.kuhls@t-online.de>
-Message-ID: <20180818182258.2936-3-bernd.kuhls@t-online.de>
+Date: Sat, 18 Aug 2018 20:22:56 +0200
+Subject: [Buildroot] [PATCH/next 1/3] package/live555: Add a pkg-config file
+ for the shared libraries
+Message-ID: <20180818182258.2936-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needed for vlc to fix linking issue.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/live555/live555.hash | 4 ++--
- package/live555/live555.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...config-file-for-the-shared-libraries.patch | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch
 
-diff --git a/package/live555/live555.hash b/package/live555/live555.hash
-index 66a7b7d74c..d74d674c7a 100644
---- a/package/live555/live555.hash
-+++ b/package/live555/live555.hash
-@@ -1,5 +1,5 @@
- # From http://live555.com/liveMedia/public/live555-latest-md5.txt
--md5 a5acd14c4fa7b50f7270304d3b4a70ae live.2017.10.28.tar.gz
-+md5 93c65b0f55f37835c727bbf65c1b61b4 live.2018.08.05.tar.gz
- # Locally generated
--sha256 d8eaec9ded34321aa655d3c9007217dd447218c54cb48c97827e58ecd5edb338  live.2017.10.28.tar.gz
-+sha256 c309fb6d499557250b4db8371243715b9ee2cdaa7ccacaf254bcc62e97566ae4  live.2018.08.05.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/live555/live555.mk b/package/live555/live555.mk
-index 0507ee9b1b..a5479d6d7c 100644
---- a/package/live555/live555.mk
-+++ b/package/live555/live555.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIVE555_VERSION = 2017.10.28
-+LIVE555_VERSION = 2018.08.05
- LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
- LIVE555_SITE = http://www.live555.com/liveMedia/public
- LIVE555_LICENSE = LGPL-2.1+
+diff --git a/package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch b/package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch
+new file mode 100644
+index 0000000000..a2ae1c183a
+--- /dev/null
++++ b/package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch
+@@ -0,0 +1,66 @@
++From: Benjamin Drung <bdrung@debian.org>
++Date: Sat, 16 Sep 2017 11:22:03 +0200
++Subject: Add a pkg-config file for the shared libraries
++
++This patch was downloaded from Debian
++https://sources.debian.org/src/liblivemedia/2018.08.05-1/debian/patches/0002-Add-a-pkg-config-file-for-the-shared-libraries.patch/
++
++The local/ part of PREXIX and LIBDIR was removed to fit into buildroot.
++
++A similar version of this patch is part of the vlc source repo:
++http://git.videolan.org/?p=vlc.git;a=blob;f=contrib/src/live555/add-pkgconfig-file.patch;hb=HEAD
++
++Upstream status: Rejected
++http://lists.live555.com/pipermail/live-devel/2013-January/016374.html
++http://lists.live555.com/pipermail/live-devel/2013-January/016375.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ Makefile.head | 3 +++
++ Makefile.tail | 7 ++++++-
++ live555.pc.in | 9 +++++++++
++ 3 files changed, 18 insertions(+), 1 deletion(-)
++ create mode 100644 live555.pc.in
++
++diff --git a/Makefile.head b/Makefile.head
++index 458c54c..1571037 100644
++--- a/Makefile.head
+++++ b/Makefile.head
++@@ -1 +1,4 @@
+++PREFIX = /usr
+++LIBDIR = /usr/lib
+++VERSION = $(shell grep LIVEMEDIA_LIBRARY_VERSION_STRING liveMedia/include/liveMedia_version.hh | sed 's/.*"\([^"]*\)".*/\1/')
++ ##### Change the following for your environment:
++diff --git a/Makefile.tail b/Makefile.tail
++index fc594ea..a20a527 100644
++--- a/Makefile.tail
+++++ b/Makefile.tail
++@@ -22,7 +22,12 @@ all:
++ 	@echo
++ 	@echo "For more information about this source code (including your obligations under the LGPL), please see our FAQ at http://live555.com/liveMedia/faq.html"
++ 
++-install:
+++install_shared_libraries:
+++	install -d $(DESTDIR)$(LIBDIR)/pkgconfig
+++	sed "s#@PREFIX@#$(PREFIX)#;s#@LIBDIR@#$(LIBDIR)#;s#@VERSION@#$(VERSION)#" live555.pc.in > $(DESTDIR)$(LIBDIR)/pkgconfig/live555.pc
+++	chmod 644 $(DESTDIR)$(LIBDIR)/pkgconfig/live555.pc
+++
+++install: $(INSTALL2)
++ 	cd $(LIVEMEDIA_DIR) ; $(MAKE) install
++ 	cd $(GROUPSOCK_DIR) ; $(MAKE) install
++ 	cd $(USAGE_ENVIRONMENT_DIR) ; $(MAKE) install
++diff --git a/live555.pc.in b/live555.pc.in
++new file mode 100644
++index 0000000..3736944
++--- /dev/null
+++++ b/live555.pc.in
++@@ -0,0 +1,9 @@
+++prefix=@PREFIX@
+++libdir=@LIBDIR@
+++includedir=${prefix}/include
+++
+++Name: live555
+++Description: multimedia RTSP streaming library
+++Version: @VERSION@
+++Cflags: -I${includedir}/liveMedia -I${includedir}/groupsock -I${includedir}/BasicUsageEnvironment -I${includedir}/UsageEnvironment
+++Libs: -L${libdir} -lliveMedia -lgroupsock -lBasicUsageEnvironment -lUsageEnvironment
 -- 
 2.18.0
