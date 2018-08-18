@@ -1,31 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 18 Aug 2018 08:54:29 +0000
-Subject: [Buildroot] [Bug 11241] ACPID shouldn't depend on BR2_x86_64 ||
- BR2_i386
-In-Reply-To: <bug-11241-163@https.bugs.busybox.net/>
-References: <bug-11241-163@https.bugs.busybox.net/>
-Message-ID: <bug-11241-163-en71psYvKL@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 18 Aug 2018 11:09:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version 7.2.9
+Message-ID: <20180818090933.17376-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11241
+Version 7.2.8 fixed CVE-2018-12882, CVE-2018-14883 & CVE-2018-14851:
+http://www.php.net/ChangeLog-7.php#7.2.8
 
---- Comment #2 from happycorsair at yandex.ru ---
-Hi, Peter!
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I'm not a specialist in ACPI or power management, so please don't blame me a
-lot :)
-
-It seems to me, that you are right. All ACPI-related options in Cubieboard 6
-kernel config are disabled (it's ARM, not ARM64). But at the same time, acpid
-handles power button pushes and powers off the board. If no acpid is running, I
-can only reboot the board by long push.
-
-So, it's useful. I found no building issues.
-
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 4ddef44274..6e401dec00 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 af70a33b3f7a51510467199b39af151333fbbe4cc21923bad9c7cf64268cddb2  php-7.2.5.tar.xz
++sha256 3585c1222e00494efee4f5a65a8e03a1e6eca3dfb834814236ee7f02c5248ae0  php-7.2.9.tar.xz
+ 
+ # License file
+ sha256 00e567a8d50359d93ee1f9afdd9511277660c1e70a0cbf3229f84403aa9aebb1  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 028fa6fc55..04a32283c8 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.2.5
++PHP_VERSION = 7.2.9
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.18.0
