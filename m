@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 22:20:10 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/2] Add BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-In-Reply-To: <CAPi7W808osYXWuNs8URXOdOix6eP4P46+ESrH+DuaR6syRLz5A@mail.gmail.com>
-References: <20180817221014.32681-1-fontaine.fabrice@gmail.com>
- <20180818174900.0ee2b668@windsurf>
- <20180818212953.26bf3a2f@windsurf>
- <CAPi7W808osYXWuNs8URXOdOix6eP4P46+ESrH+DuaR6syRLz5A@mail.gmail.com>
-Message-ID: <20180818222010.17f19f75@windsurf>
+Date: Sat, 18 Aug 2018 22:32:14 +0200
+Subject: [Buildroot] [git commit] boost: context needs thread without C++11
+ mutex
+Message-ID: <20180818202516.C08BE8D5F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b20c5ca3b8c5b180a6ee87556d0c87d474e86cde
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 18 Aug 2018 22:09:13 +0200, Fabrice Fontaine wrote:
+Extract from output/build/boost-1.67.0/libs/context/build/Jamfile.v2:
 
-> OK, this last one is easy, azmq selects BOOST_LOG but BOOST_LOG depends on
-> !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC):
-> 
-> warning: (BR2_PACKAGE_AZMQ) selects BR2_PACKAGE_BOOST_LOG which has unmet
-> direct dependencies (BR2_PACKAGE_BOOST && BR2_TOOLCHAIN_HAS_THREADS_NPTL &&
-> (!BR2_powerpc || !BR2_TOOLCHAIN_USES_UCLIBC))
-> 
-> I will fix this by removing the dependency on !(BR2_powerpc &&
-> BR2_TOOLCHAIN_USES_UCLIBC) from BOOST_LOG as it seems that boost-log builds
-> fine on powerpc with uclibc nowadays.
+explicit cxx11_hdr_mutex_check ;
+local cxx11_mutex = [ check-target-builds
+      cxx11_hdr_mutex_check "C++11 mutex"
+    :
+    : <library>/boost/thread//boost_thread
+  ] ;
 
-OK. This was added by me in commit
-7aaa9bee2e6009c6c00fa2a356b8f014999e9a54. There was no clear
-explanation of the problem, it was just "it doesn't build, and nobody
-cares". And it was 3 years ago, so there are high chances that the
-problem has been fixed either in uClibc or in Boost. So let's try to
-remove this dependency indeed. Waiting for your patch!
+So select boost_thread if gcc <= 4.7
 
-(BTW, you still haven't joined IRC! :-))
+Fixes:
+ - http://autobuild.buildroot.net/results/fb046c04fe18bec973d120e4ab33971f32ba5769
 
-Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/boost/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 57e98c72e4..0fd049d53c 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -83,6 +83,7 @@ config BR2_PACKAGE_BOOST_CONTEXT
+ 	bool "boost-context"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	help
+ 	  C++11 context switching library.
+ 
