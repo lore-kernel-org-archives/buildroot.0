@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 11:21:10 +0200
-Subject: [Buildroot] [PATCH v1] libxkbcommon: bump version to 0.8.2
-In-Reply-To: <20180818083137.2557-1-ps.report@gmx.net>
-References: <20180818083137.2557-1-ps.report@gmx.net>
-Message-ID: <20180818112110.5bbb5797@windsurf>
+Date: Sat, 18 Aug 2018 11:21:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xdriver_xf86-video-ati:
+ fix glamor dependency
+In-Reply-To: <20180818090950.17428-1-bernd.kuhls@t-online.de>
+References: <20180818090950.17428-1-bernd.kuhls@t-online.de>
+Message-ID: <20180818112125.0d9efb1f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 18 Aug 2018 10:31:37 +0200, Peter Seiderer wrote:
-> Bump version to 0.8.2 and add hash for the license file.
+On Sat, 18 Aug 2018 11:09:50 +0200, Bernd Kuhls wrote:
+> Glamor support needs egl, fix dependency after
+> https://git.buildroot.net/buildroot/commit/?id=5b4bcbdafbe8e7b42d4e085a0524d70665cdbaf5
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Fixes
+> http://autobuild.buildroot.net/results/6ac/6acd5ad820a47fc3442d3e3a5d8d72b396fb6e41/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libxkbcommon/libxkbcommon.hash | 7 +++++--
->  package/libxkbcommon/libxkbcommon.mk   | 2 +-
->  2 files changed, 6 insertions(+), 3 deletions(-)
+>  package/x11r7/xdriver_xf86-video-ati/xdriver_xf86-video-ati.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
