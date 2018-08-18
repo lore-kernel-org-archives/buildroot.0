@@ -1,56 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 21:33:47 +0200
-Subject: [Buildroot] [git commit] libselinux: use correct name and content
- for patch 0004
-Message-ID: <20180818193204.2F6708D5DA@busybox.osuosl.org>
+Date: Sat, 18 Aug 2018 21:39:49 +0200
+Subject: [Buildroot] [git commit] package/mariadb: security bump to version
+ 10.1.35
+Message-ID: <20180818193234.085468D5DF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb8d1743cab1449b91afbabe38c64cbb85bef6ba
+commit: https://git.buildroot.net/buildroot/commit/?id=dbe8483b20ad3c42607878cfd8adfa723bc73bc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 6288409642d8368104f916bd264d2cb042942dfa ("libselinux: add
-patch to fix build with gcc < 4.7") introduced a patch, but its file
-name was incorrect, so it was never applied. In addition, the patch
-was generated against the Git repository of SELinux, which includes
-all projects, and therefore it doesn't apply to the libselinux source
-code extracted from the tarball: the "libselinux/" component path
-needs to be removed from the patch.
+Fixes CVE-2018-3064, CVE-2018-3063, CVE-2018-3058 & CVE-2018-3066:
+https://mariadb.com/kb/en/library/mariadb-10135-release-notes/
 
-This commit fixes both problems, which should finally and really fix:
+Added all hashes provided by upstream.
 
-  http://autobuild.buildroot.net/results/c3272566bb808e43bb77ec59cfe596f7e0fe9a64/
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...t => 0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch} | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/mariadb/mariadb.hash | 7 +++++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt b/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
-similarity index 91%
-rename from package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt
-rename to package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
-index 85bd064066..88e3a79332 100644
---- a/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt
-+++ b/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
-@@ -14,13 +14,13 @@ pthread_mutex_unlock() "synchronize memory with respect to other threads"...)
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 7eea62ab7b..e4736465e0 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,8 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.33/
+-sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.35/
++md5 935f401314ff08a4177beb70fed6055c  mariadb-10.1.35.tar.gz
++sha1 d322f0da17f4de475832dd534657eba5a936f77b  mariadb-10.1.35.tar.gz
++sha256 9e91d985ed4f662126e3e5791fe91ec8a2f44ec811113c2b6fbc72fa14553c4d  mariadb-10.1.35.tar.gz
++sha512 88e6049f3bbc3aa047e108f91a2c4f335758e80f25bfa2974b5f8c2e13f5758824d7835dece021b515c531e5641b9998e4de92256ad4b47b7f694da99bd471aa  mariadb-10.1.35.tar.gz
  
- Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
- ---
-- libselinux/src/label_file.h | 18 ++++++++++++++++++
-+ src/label_file.h | 18 ++++++++++++++++++
-  1 file changed, 18 insertions(+)
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index e395d387e5..23822187c3 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--diff --git a/libselinux/src/label_file.h b/libselinux/src/label_file.h
-+diff --git a/src/label_file.h b/src/label_file.h
- index 2fa85474..47859baf 100644
----- a/libselinux/src/label_file.h
--+++ b/libselinux/src/label_file.h
-+--- a/src/label_file.h
-++++ b/src/label_file.h
- @@ -351,8 +351,14 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
-  	 * init_routine does not take a parameter, it's not possible
-  	 * to use, so we generate the same effect with atomics and a
+-MARIADB_VERSION = 10.1.33
++MARIADB_VERSION = 10.1.35
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
