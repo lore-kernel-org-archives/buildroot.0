@@ -1,45 +1,31 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sat, 18 Aug 2018 10:31:37 +0200
-Subject: [Buildroot] [PATCH v1] libxkbcommon: bump version to 0.8.2
-Message-ID: <20180818083137.2557-1-ps.report@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 18 Aug 2018 08:54:29 +0000
+Subject: [Buildroot] [Bug 11241] ACPID shouldn't depend on BR2_x86_64 ||
+ BR2_i386
+In-Reply-To: <bug-11241-163@https.bugs.busybox.net/>
+References: <bug-11241-163@https.bugs.busybox.net/>
+Message-ID: <bug-11241-163-en71psYvKL@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump version to 0.8.2 and add hash for the license file.
+https://bugs.busybox.net/show_bug.cgi?id=11241
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
- package/libxkbcommon/libxkbcommon.hash | 7 +++++--
- package/libxkbcommon/libxkbcommon.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+--- Comment #2 from happycorsair at yandex.ru ---
+Hi, Peter!
 
-diff --git a/package/libxkbcommon/libxkbcommon.hash b/package/libxkbcommon/libxkbcommon.hash
-index 525f9ffd20..67ae4b5921 100644
---- a/package/libxkbcommon/libxkbcommon.hash
-+++ b/package/libxkbcommon/libxkbcommon.hash
-@@ -1,2 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2017-January/032725.html
--sha256	ba59305d2e19e47c27ea065c2e0df96ebac6a3c6e97e28ae5620073b6084e68b	libxkbcommon-0.7.1.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2018-August/039243.html
-+sha256 7ab8c4b3403d89d01898066b72cb6069bddeb5af94905a65368f671a026ed58c libxkbcommon-0.8.2.tar.xz
-+
-+# License file:
-+sha256 086caee279449369d41c1157911ec7696e707b93feba7280de757d3c470b2dfb LICENSE
-diff --git a/package/libxkbcommon/libxkbcommon.mk b/package/libxkbcommon/libxkbcommon.mk
-index 601181446d..2045d96380 100644
---- a/package/libxkbcommon/libxkbcommon.mk
-+++ b/package/libxkbcommon/libxkbcommon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXKBCOMMON_VERSION = 0.7.1
-+LIBXKBCOMMON_VERSION = 0.8.2
- LIBXKBCOMMON_SITE = http://xkbcommon.org/download
- LIBXKBCOMMON_SOURCE = libxkbcommon-$(LIBXKBCOMMON_VERSION).tar.xz
- LIBXKBCOMMON_LICENSE = MIT/X11
+I'm not a specialist in ACPI or power management, so please don't blame me a
+lot :)
+
+It seems to me, that you are right. All ACPI-related options in Cubieboard 6
+kernel config are disabled (it's ARM, not ARM64). But at the same time, acpid
+handles power button pushes and powers off the board. If no acpid is running, I
+can only reboot the board by long push.
+
+So, it's useful. I found no building issues.
+
 -- 
-2.18.0
+You are receiving this mail because:
+You are on the CC list for the bug.
