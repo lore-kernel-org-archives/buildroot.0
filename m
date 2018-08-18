@@ -1,75 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 23:02:08 +0200
-Subject: [Buildroot] [PATCH] python-pyqt5: add Qt 5.11 compatibility patch
-Message-ID: <20180818210208.23097-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 18 Aug 2018 23:08:45 +0200
+Subject: [Buildroot] [git commit] linux: explain why we need host-{flex,
+ bison}
+Message-ID: <20180818210611.3AAEF8D65D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch to python-pyqt5 to make it build properly
-against Qt 5.11.
+commit: https://git.buildroot.net/buildroot/commit/?id=9ff4167c8cf94b66a077651b27d796c1a521ac24
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-PyQt5 is using a dual-licensing model, and the commercial company
-behind it (RiverBank) only provides release tarballs, and no public
-Git repository, so we cannot see the individual changes they make. By
-diffing the PyQt5 5.10 and 5.11 releases, we could see that they opted
-for dropping entirely support for the waitForEvents() method, rather
-than keeping it for Qt < 5.11. We take the same approach in the below
-patch, since this is anyway what will happen when we will bump to
-PyQt5 5.11.
+The commit that added the dependency on host-{bison,flex} did
+so because the pre-generated kconfig parser source files were
+removed from the kernel tree, in linux-4.16.
 
-The patch is not Git-formatted, because there is no upstream Git
-repository for this project.
+But then, in linux-4.17, the pre-generated dtc parser source
+files were in turn removed as well.
 
-Fixes:
+So, document the two reasons why they are needed, so we don't
+accidentally remove them when we (soon) introduce the kconfig
+dependencies.
 
-  http://autobuild.buildroot.net/results/1f1e92374fe71a1d4343243db5f530c33db06698/
+(Also fix the first assignment to LINUX_DEPENDENCIES to be a
+simple assignement, not an append-assignment.)
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...0004-drop-qttest-qtestmouse-waitforevents.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/python-pyqt5/0004-drop-qttest-qtestmouse-waitforevents.patch
+ linux/linux.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-pyqt5/0004-drop-qttest-qtestmouse-waitforevents.patch b/package/python-pyqt5/0004-drop-qttest-qtestmouse-waitforevents.patch
-new file mode 100644
-index 0000000000..352be9aee0
---- /dev/null
-+++ b/package/python-pyqt5/0004-drop-qttest-qtestmouse-waitforevents.patch
-@@ -0,0 +1,32 @@
-+Drop waitForEvents() method from qtestmouse
+diff --git a/linux/linux.mk b/linux/linux.mk
+index e0d437427d..d307970065 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -62,7 +62,13 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
+ 
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES += host-bison host-flex host-kmod
++LINUX_DEPENDENCIES = host-kmod
 +
-+This method was dropped in Qt 5.11:
-+
-+  https://github.com/qt/qtbase/commit/75e583b3fcbdbbb999633eb5f2267720dd695cfa
-+
-+However, Python PyQt5 still generates a wrapper for it, causing a
-+build failure. The upstream PyQt5 maintainers have not kept
-+waitForEvents() support for older Qt versions, and instead entirely
-+dropped it unconditionally. This can be verified by diffing PyQt 5.10
-+and PyQt 5.11. We take the same approach, and drop waitForEvents()
-+unconditionally, even when PyQt5 is built against the older Qt 5.6.
-+
-+Fedora is using a similar solution:
-+https://src.fedoraproject.org/rpms/python-qt5/c/47fb7fdc5d16582772f9c3fc8a6a674a41a7f605?branch=master.
-+
-+This patch can be dropped when PyQt5 is bumped to its 5.11 version.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+
-+Index: b/sip/QtTest/qtestmouse.sip
-+===================================================================
-+--- a/sip/QtTest/qtestmouse.sip
-++++ b/sip/QtTest/qtestmouse.sip
-+@@ -41,7 +41,6 @@
-+     void mousePress(QWidget *widget, Qt::MouseButton button, Qt::KeyboardModifiers modifier = 0, QPoint pos = QPoint(), int delay = -1);
-+     void mouseRelease(QWidget *widget, Qt::MouseButton button, Qt::KeyboardModifiers modifier = 0, QPoint pos = QPoint(), int delay = -1);
-+     void mouseEvent(QTest::MouseAction action, QWidget *widget, Qt::MouseButton button, Qt::KeyboardModifiers modifier, QPoint pos, int delay = -1);
-+-    void waitForEvents() /ReleaseGIL/;
-+     void mouseEvent(QTest::MouseAction action, QWindow *window, Qt::MouseButton button, Qt::KeyboardModifiers modifier, QPoint pos, int delay = -1);
-+     void mousePress(QWindow *window, Qt::MouseButton button, Qt::KeyboardModifiers modifier = Qt::KeyboardModifiers(), QPoint pos = QPoint(), int delay = -1);
-+     void mouseRelease(QWindow *window, Qt::MouseButton button, Qt::KeyboardModifiers modifier = Qt::KeyboardModifiers(), QPoint pos = QPoint(), int delay = -1);
--- 
-2.14.4
++# Starting with 4.16, the generated kconfig paser code is no longer
++# shipped with the kernel sources, so we need flex and bison.
++# Starting with 4.17, the generated dtc parser code is no longer
++# shipped with the kernel sources, so we need flex and bison.
++LINUX_DEPENDENCIES += host-bison host-flex
+ 
+ # host tools needed for kernel compression
+ ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
