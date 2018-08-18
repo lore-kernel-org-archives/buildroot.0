@@ -1,45 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Aug 2018 00:00:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bind: security bump to version
- 9.11.4-P1
-Message-ID: <20180818220013.7733-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Aug 2018 00:10:19 +0200
+Subject: [Buildroot] [PATCH] core: drop useless assignements to BISON and
+ FLEX
+Message-ID: <20180818221019.4384-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-5740: https://ftp.isc.org/isc/bind9/9.11.4-P1/CHANGES
+They were added back in 5432f26f0 (Adding Central config.cache options),
+supposedly to be able to cache the result of configure tests, but they
+were never, ever referenced anywhere in our code... Besides, we dropped
+the idea of getting a configure cache long ago now (it does not work)...
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+They are causing spurious error messages on some distros (e.g. Fedora)
+which use GNU's which (whatever package that comes from), while it is
+silent on other distros (e.g. Ubuntu) which use debianutils' which.
+
+Drop them.
+
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/Makefile.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 78f8015521..6e8c186e2d 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.4/bind-9.11.4.tar.gz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.4-P1/bind-9.11.4-P1.tar.gz.asc
- # with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
--sha256 595070b031f869f8939656b5a5d11b121211967f15f6afeafa895df745279617 bind-9.11.4.tar.gz
-+sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
- sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index d478a7f6e1..0140041218 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/Makefile.in b/package/Makefile.in
+index f2962767cc..91b3e8f936 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -219,8 +219,6 @@ TARGET_STRIP = /bin/true
+ STRIPCMD = $(TARGET_STRIP)
+ endif
+ INSTALL := $(shell which install || type -p install)
+-FLEX := $(shell which flex || type -p flex)
+-BISON := $(shell which bison || type -p bison)
+ UNZIP := $(shell which unzip || type -p unzip) -q
  
--BIND_VERSION = 9.11.4
-+BIND_VERSION = 9.11.4-P1
- BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+ APPLY_PATCHES = PATH=$(HOST_DIR)/bin:$$PATH support/scripts/apply-patches.sh $(if $(QUIET),-s)
 -- 
-2.18.0
+2.14.1
