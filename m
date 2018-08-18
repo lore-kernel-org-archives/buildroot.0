@@ -1,49 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 21:46:16 +0200
-Subject: [Buildroot] [git commit branch/next] package/harfbuzz: bump version
- to 1.8.8
-Message-ID: <20180818193901.01DEC8D5EB@busybox.osuosl.org>
+Date: Sat, 18 Aug 2018 21:46:27 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/harfbuzz: bump version to
+ 1.8.8
+In-Reply-To: <20180817064446.20764-1-bernd.kuhls@t-online.de>
+References: <20180817064446.20764-1-bernd.kuhls@t-online.de>
+Message-ID: <20180818214627.43500802@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68ee820ddeefa7f8477dd70f302f099a224884bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Added missing license hash.
+On Fri, 17 Aug 2018 08:44:46 +0200, Bernd Kuhls wrote:
+> Added missing license hash.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> Build-tested with qt5base, vlc and test-pkg with BR2_PACKAGE_HARFBUZZ=y:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/harfbuzz/harfbuzz.hash | 5 +++--
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index 5f786dcb87..a10b4cfd5d 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,5 +1,6 @@
--# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.7.1.tar.bz2.sha256
--sha256	9645a6e83313b690602017f18d4eb2adf81f2e54c6fc4471e19331304965154e	harfbuzz-1.7.1.tar.bz2
-+# From https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-1.8.8.tar.bz2.sha256
-+sha256	a8e5c86e4d99e1cc9865ec1b8e9b05b98e413c2a885cd11f8e9bb9502dd3e3a9	harfbuzz-1.8.8.tar.bz2
- 
- # Locally computed
- sha256	2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216	COPYING
-+sha256	ec20cbe051200fc846caf4dc253cf660e874a2d9e4f3a682e08354b567fae409	src/hb-ucdn/COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 5708745fd2..52374c9c9e 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 1.7.1
-+HARFBUZZ_VERSION = 1.8.8
- HARFBUZZ_SITE = https://www.freedesktop.org/software/harfbuzz/release
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.bz2
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
