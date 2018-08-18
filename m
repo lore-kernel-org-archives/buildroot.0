@@ -1,93 +1,50 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 18 Aug 2018 20:22:56 +0200
-Subject: [Buildroot] [PATCH/next 1/3] package/live555: Add a pkg-config file
- for the shared libraries
-Message-ID: <20180818182258.2936-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 18 Aug 2018 21:29:53 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/2] Add BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+In-Reply-To: <20180818174900.0ee2b668@windsurf>
+References: <20180817221014.32681-1-fontaine.fabrice@gmail.com>
+ <20180818174900.0ee2b668@windsurf>
+Message-ID: <20180818212953.26bf3a2f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for vlc to fix linking issue.
+Hello,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...config-file-for-the-shared-libraries.patch | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch
+On Sat, 18 Aug 2018 17:49:00 +0200, Thomas Petazzoni wrote:
 
-diff --git a/package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch b/package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch
-new file mode 100644
-index 0000000000..a2ae1c183a
---- /dev/null
-+++ b/package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch
-@@ -0,0 +1,66 @@
-+From: Benjamin Drung <bdrung@debian.org>
-+Date: Sat, 16 Sep 2017 11:22:03 +0200
-+Subject: Add a pkg-config file for the shared libraries
-+
-+This patch was downloaded from Debian
-+https://sources.debian.org/src/liblivemedia/2018.08.05-1/debian/patches/0002-Add-a-pkg-config-file-for-the-shared-libraries.patch/
-+
-+The local/ part of PREXIX and LIBDIR was removed to fit into buildroot.
-+
-+A similar version of this patch is part of the vlc source repo:
-+http://git.videolan.org/?p=vlc.git;a=blob;f=contrib/src/live555/add-pkgconfig-file.patch;hb=HEAD
-+
-+Upstream status: Rejected
-+http://lists.live555.com/pipermail/live-devel/2013-January/016374.html
-+http://lists.live555.com/pipermail/live-devel/2013-January/016375.html
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ Makefile.head | 3 +++
-+ Makefile.tail | 7 ++++++-
-+ live555.pc.in | 9 +++++++++
-+ 3 files changed, 18 insertions(+), 1 deletion(-)
-+ create mode 100644 live555.pc.in
-+
-+diff --git a/Makefile.head b/Makefile.head
-+index 458c54c..1571037 100644
-+--- a/Makefile.head
-++++ b/Makefile.head
-+@@ -1 +1,4 @@
-++PREFIX = /usr
-++LIBDIR = /usr/lib
-++VERSION = $(shell grep LIVEMEDIA_LIBRARY_VERSION_STRING liveMedia/include/liveMedia_version.hh | sed 's/.*"\([^"]*\)".*/\1/')
-+ ##### Change the following for your environment:
-+diff --git a/Makefile.tail b/Makefile.tail
-+index fc594ea..a20a527 100644
-+--- a/Makefile.tail
-++++ b/Makefile.tail
-+@@ -22,7 +22,12 @@ all:
-+ 	@echo
-+ 	@echo "For more information about this source code (including your obligations under the LGPL), please see our FAQ at http://live555.com/liveMedia/faq.html"
-+ 
-+-install:
-++install_shared_libraries:
-++	install -d $(DESTDIR)$(LIBDIR)/pkgconfig
-++	sed "s#@PREFIX@#$(PREFIX)#;s#@LIBDIR@#$(LIBDIR)#;s#@VERSION@#$(VERSION)#" live555.pc.in > $(DESTDIR)$(LIBDIR)/pkgconfig/live555.pc
-++	chmod 644 $(DESTDIR)$(LIBDIR)/pkgconfig/live555.pc
-++
-++install: $(INSTALL2)
-+ 	cd $(LIVEMEDIA_DIR) ; $(MAKE) install
-+ 	cd $(GROUPSOCK_DIR) ; $(MAKE) install
-+ 	cd $(USAGE_ENVIRONMENT_DIR) ; $(MAKE) install
-+diff --git a/live555.pc.in b/live555.pc.in
-+new file mode 100644
-+index 0000000..3736944
-+--- /dev/null
-++++ b/live555.pc.in
-+@@ -0,0 +1,9 @@
-++prefix=@PREFIX@
-++libdir=@LIBDIR@
-++includedir=${prefix}/include
-++
-++Name: live555
-++Description: multimedia RTSP streaming library
-++Version: @VERSION@
-++Cflags: -I${includedir}/liveMedia -I${includedir}/groupsock -I${includedir}/BasicUsageEnvironment -I${includedir}/UsageEnvironment
-++Libs: -L${libdir} -lliveMedia -lgroupsock -lBasicUsageEnvironment -lUsageEnvironment
+> However, we still have an issue: when static linking, libboost_atomic.a
+> is produced even on platforms that do provide the "always lock-free
+> atomic ints".
+> 
+> Examples:
+> 
+>  - Cortex-M4
+> 
+>    http://autobuild.buildroot.net/results/212/212651b677cfb0763b34596d4f999103039d89bc/build-end.log
+> 
+>    $ ./host/bin/arm-linux-gcc -dM -E - < /dev/null | grep
+>    ATOMIC_BOOL_LOCK_FREE #define __GCC_ATOMIC_BOOL_LOCK_FREE 2
+> 
+>  - MIPS, statically linked
+> 
+>    http://autobuild.buildroot.net/results/6d3/6d3db8a67a1de75920624b3e13e8110e783ddbd9/build-end.log
+> 
+>    $ ./host/bin/mipsel-linux-gcc -dM -E - < /dev/null | grep
+>    ATOMIC_BOOL_LOCK_FREE #define __GCC_ATOMIC_BOOL_LOCK_FREE 2
+
+And we have another situation here:
+
+  http://autobuild.buildroot.net/results/9c3/9c373d0b5a1a59e2271d71c480d55a90a67b84cb/build-end.log
+
+This one is on PowerPC, and with dynamic linking. It is not going to be
+solved by the BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS stuff.
+
+Thomas
 -- 
-2.18.0
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
