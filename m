@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 22:32:45 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: context needs thread without
- C++11 mutex
-In-Reply-To: <20180818194725.5342-1-fontaine.fabrice@gmail.com>
-References: <20180818194725.5342-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180818223245.1122b875@windsurf>
+Date: Sat, 18 Aug 2018 22:32:53 +0200
+Subject: [Buildroot] [PATCH 1/1] boost: enable back log on powerpc with
+ uclibc
+In-Reply-To: <20180818201052.3959-1-fontaine.fabrice@gmail.com>
+References: <20180818201052.3959-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180818223253.6df6bdfe@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 18 Aug 2018 21:47:25 +0200, Fabrice Fontaine wrote:
-> Extract from output/build/boost-1.67.0/libs/context/build/Jamfile.v2:
-> 
-> explicit cxx11_hdr_mutex_check ;
-> local cxx11_mutex = [ check-target-builds
->       cxx11_hdr_mutex_check "C++11 mutex"
->     :
->     : <library>/boost/thread//boost_thread
->   ] ;
-> 
-> So select boost_thread if gcc <= 4.7
+On Sat, 18 Aug 2018 22:10:52 +0200, Fabrice Fontaine wrote:
+> boost-log builds fine with powerpc on uclibc nowadays so enable it back.
+> By removing this dependency, build failure on azmq is also fixed as this
+> package is currently selecting boost-log without fulfilling this
+> dependency
 > 
 > Fixes:
->  - http://autobuild.buildroot.net/results/fb046c04fe18bec973d120e4ab33971f32ba5769
+>  - http://autobuild.buildroot.net/results/9c373d0b5a1a59e2271d71c480d55a90a67b84cb
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/boost/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/boost/Config.in | 4 ----
+>  1 file changed, 4 deletions(-)
 
 Applied to master, thanks.
 
