@@ -1,33 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 Aug 2018 11:23:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: Fix uClibc build on
- 64bit platforms by including stdint.h
-In-Reply-To: <20180818080801.15299-1-bernd.kuhls@t-online.de>
-References: <20180818080801.15299-1-bernd.kuhls@t-online.de>
-Message-ID: <20180818112302.179726a6@windsurf>
+Date: Sat, 18 Aug 2018 11:23:42 +0200
+Subject: [Buildroot] [git commit branch/next] cryptsetup: fix build with old
+ host kernel headers
+Message-ID: <20180818091643.D46CB8D4A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=b44d4e0b09f661f2672a3d9d7ec8cf8fce7916c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 18 Aug 2018 10:08:01 +0200, Bernd Kuhls wrote:
-> Patch needed to be updated for samba-4.8.4
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/140/1404a594583ff192d70086ef590f924472465c89/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...-on-64bit-platforms-by-including-std.patch | 26 +++++++++++++++----
->  1 file changed, 21 insertions(+), 5 deletions(-)
+By default cryptsetup configure fails when the if_alg.h kernel header is
+not available. Kernels older than 2.6.38, like the one in RHEL 6 hosts,
+do not provide this header. Since we don't need the kernel crypto
+feature for host tools, just disable this feature to allow successful
+completion of the configure script.
 
-Applied to master, thanks.
+While at it, fix a typo in the --with-crypto_backend option (hyphen ->
+underscore).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Should fix:
+http://autobuild.buildroot.net/results/ffd/ffda2579b215b53161025b7bc703091cb30ef95d/
+http://autobuild.buildroot.net/results/c48/c48015f76b13fec38f650f66824e7b986eb28572/
+http://autobuild.buildroot.net/results/be6/be621f71bf9da8719bf7fc943eccc9b4dc2cc43e/
+
+Cc: Martin Hicks <mort@bork.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cryptsetup/cryptsetup.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index d5ab022b77..d81aa7b341 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -36,7 +36,8 @@ HOST_CRYPTSETUP_DEPENDENCIES = \
+ 	host-json-c \
+ 	host-openssl
+ 
+-HOST_CRYPTSETUP_CONF_OPTS = --with-crypto-backend=openssl
++HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
++	--disable-kernel_crypto
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
