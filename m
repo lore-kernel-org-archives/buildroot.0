@@ -1,93 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Aug 2018 21:44:57 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/shellinabox: bump version to
- 2.20
-Message-ID: <20180819194457.12196-1-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 19 Aug 2018 21:49:17 +0200
+Subject: [Buildroot] [RFC v3 2/4] meson: change from global to per
+ package cross-compilation.conf
+In-Reply-To: <20180819191511.3c38bb60@gmx.net>
+References: <20180719204355.10465-1-ps.report@gmx.net>
+ <20180719204355.10465-2-ps.report@gmx.net>
+ <20180816135745.71ed73f2@windsurf>
+ <20180819011512.11fad995@gmx.net>
+ <20180819152206.7b15fce9@windsurf>
+ <20180819191511.3c38bb60@gmx.net>
+Message-ID: <20180819214917.67c960a3@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch 0002, applied upstream, which also added --disable-utmp
-for musl:
-https://github.com/shellinabox/shellinabox/commit/05b2d3630c48dc9bca678d8158fce486c583c26b
+Hello Thomas,
 
-Added license hashes.
+On Sun, 19 Aug 2018 19:15:11 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...launcher.c-include-sys-ttydefaults.h.patch | 27 -------------------
- package/shellinabox/shellinabox.hash          |  6 +++--
- package/shellinabox/shellinabox.mk            |  4 +--
- 3 files changed, 6 insertions(+), 31 deletions(-)
- delete mode 100644 package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch
+> Hello Thomas,
+> 
+> 
+> On Sun, 19 Aug 2018 15:22:06 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+> > Hello,
+> > 
+> > On Sun, 19 Aug 2018 01:15:12 +0200, Peter Seiderer wrote:
+> >   
+> > > The CFLAGS are ignored, e.g. with 'LIBDRM_CONF_ENV += CFLAGS=-DAO_NO_SPARC_V9' in package/libdrm/libdrm.mk:
+> > > 
+> > > 	$ make libdrm V=1    
+> > 
+> > It seems weird, no? It is documented to be working, and even at runtime
+> > it tells you "I am going to use those additional CFLAGS". Isn't this a
+> > bug or a misuse of meson from us ?
+> >   
+> 
+> Bug or feature of the cross-compilation.conf usage? Will take a look at
+> the meson sources....
 
-diff --git a/package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch b/package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch
-deleted file mode 100644
-index caa5456609..0000000000
---- a/package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--From c8d9df500b1ca83ad6da9b6055549adaba6ee0d3 Mon Sep 17 00:00:00 2001
--From: Olivier Singla <olivier.singla@gmail.com>
--Date: Thu, 4 Aug 2016 22:05:08 +0200
--Subject: [PATCH] launcher.c: include <sys/ttydefaults.h>
--
--This include is needed to get the definition of TTYDEF_*.
--
--Signed-off-by: Olivier Singla <olivier.singla@gmail.com>
-----
-- shellinabox/launcher.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/shellinabox/launcher.c b/shellinabox/launcher.c
--index 2bac171..c8ba6cb 100644
----- a/shellinabox/launcher.c
--+++ b/shellinabox/launcher.c
--@@ -66,6 +66,7 @@
-- #include <sys/types.h>
-- #include <sys/wait.h>
-- #include <sys/utsname.h>
--+#include <sys/ttydefaults.h>
-- #include <termios.h>
-- #include <unistd.h>
-- 
---- 
--2.7.4
--
-diff --git a/package/shellinabox/shellinabox.hash b/package/shellinabox/shellinabox.hash
-index 4bc110385a..6e19207066 100644
---- a/package/shellinabox/shellinabox.hash
-+++ b/package/shellinabox/shellinabox.hash
-@@ -1,2 +1,4 @@
--# Locally calculated after checking pgp signature
--sha256	d25ba9f72f04471fc1a8a564c65ef466c4553280ff3eeb365ed9c897d05ed2da	shellinabox-v2.19.tar.gz
-+# Locally calculated
-+sha256 27a5ec6c3439f87aee238c47cc56e7357a6249e5ca9ed0f044f0057ef389d81e  shellinabox-v2.20.tar.gz
-+sha256 04ef60ab9b83cde6f0862ea18474454477efb34c52ebce1f8d8260a398a39362  COPYING
-+sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  GPL-2
-diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/shellinabox.mk
-index 1db62e609a..70db551e3c 100644
---- a/package/shellinabox/shellinabox.mk
-+++ b/package/shellinabox/shellinabox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SHELLINABOX_VERSION = v2.19
-+SHELLINABOX_VERSION = v2.20
- SHELLINABOX_SITE = $(call github,shellinabox,shellinabox,$(SHELLINABOX_VERSION))
- SHELLINABOX_LICENSE = GPL-2.0 with OpenSSL exception
- SHELLINABOX_LICENSE_FILES = COPYING GPL-2
-@@ -23,7 +23,7 @@ SHELLINABOX_CONF_OPTS = \
- # musl's implementation of utmpx is a dummy one, and some aspects of
- # it cause build failures in shellinabox
- ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
--SHELLINABOX_CONF_ENV += ac_cv_header_utmpx_h=no
-+SHELLINABOX_CONF_OPTS += --disable-utmp
- endif
- 
- $(eval $(autotools-package))
--- 
-2.18.0
+Seems to be intentional, see mesonbuild/backend/backends.py#L542 ([1]):
+
+        if not target.is_cross:
+            # Compile args added from the env: CFLAGS/CXXFLAGS, etc. We want these
+            # to override all the defaults, but not the per-target compile args.
+commands += self.environment.coredata.get_external_args(compiler.get_language())
+
+With the 'if not target.is_cross' added with this commit [2] fixing [3] which
+suggests adding CROSS_*FLAGS...
+
+Regards,
+Peter
+
+[1] https://github.com/mesonbuild/meson/blob/master/mesonbuild/backend/backends.py#L542
+[2] https://github.com/mesonbuild/meson/commit/b595cda4ed0ca699da3052a6bd30ba7d1dae1124
+[3] https://github.com/mesonbuild/meson/issues/1772
+
+> 
+> Regards,
+> Peter
+> 
+> > I would really prefer to understand what is going on here instead of
+> > having to generate per-package .conf files.
+> > 
+> > Thanks!
+> > 
+> > Thomas  
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
