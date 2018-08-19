@@ -1,233 +1,66 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Aug 2018 11:25:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ipsec-tools: add security patch to
- fix CVE-2016-10396
-Message-ID: <20180819092534.8050-1-bernd.kuhls@t-online.de>
+Date: Sun, 19 Aug 2018 11:42:13 +0200
+Subject: [Buildroot] [PATCH] git-download: Fix downloading of specific
+ revisions from github.
+References: <20180626093617.13034-1-neumann@teufel.de>
+ <16e96d96-9301-46b7-16a2-d745507da71d@mind.be>
+Message-ID: <lkqn4fx8c7.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ipsec-tools/0005-CVE-2016-10396.patch | 208 ++++++++++++++++++
- 1 file changed, 208 insertions(+)
- create mode 100644 package/ipsec-tools/0005-CVE-2016-10396.patch
+Am Tue, 26 Jun 2018 23:38:18 +0200 schrieb Arnout Vandecappelle:
 
-diff --git a/package/ipsec-tools/0005-CVE-2016-10396.patch b/package/ipsec-tools/0005-CVE-2016-10396.patch
-new file mode 100644
-index 0000000000..8ef3b03753
---- /dev/null
-+++ b/package/ipsec-tools/0005-CVE-2016-10396.patch
-@@ -0,0 +1,208 @@
-+Fix CVE-2016-10396
-+
-+Description: Fix remotely exploitable DoS. http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-10396
-+Source: vendor; https://gnats.netbsd.org/cgi-bin/query-pr-single.pl?number=51682
-+Bug-debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=867986
-+
-+Downloaded from
-+https://github.com/openwrt/packages/blob/master/net/ipsec-tools/patches/010-CVE-2016-10396.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+Index: ipsec-tools-0.8.2/src/racoon/isakmp_frag.c
-+===================================================================
-+--- ipsec-tools-0.8.2.orig/src/racoon/isakmp_frag.c
-++++ ipsec-tools-0.8.2/src/racoon/isakmp_frag.c
-+@@ -1,4 +1,4 @@
-+-/*	$NetBSD: isakmp_frag.c,v 1.5 2009/04/22 11:24:20 tteras Exp $	*/
-++/*	$NetBSD: isakmp_frag.c,v 1.5.36.1 2017/04/21 16:50:42 bouyer Exp $	*/
-+ 
-+ /* Id: isakmp_frag.c,v 1.4 2004/11/13 17:31:36 manubsd Exp */
-+ 
-+@@ -173,6 +173,43 @@ vendorid_frag_cap(gen)
-+ 	return ntohl(hp[MD5_DIGEST_LENGTH / sizeof(*hp)]);
-+ }
-+ 
-++static int 
-++isakmp_frag_insert(struct ph1handle *iph1, struct isakmp_frag_item *item)
-++{
-++	struct isakmp_frag_item *pitem = NULL;
-++	struct isakmp_frag_item *citem = iph1->frag_chain;
-++
-++	/* no frag yet, just insert at beginning of list */
-++	if (iph1->frag_chain == NULL) {
-++		iph1->frag_chain = item;
-++		return 0;
-++	}
-++
-++	do {
-++		/* duplicate fragment number, abort (CVE-2016-10396) */
-++		if (citem->frag_num == item->frag_num)
-++			return -1;
-++
-++		/* need to insert before current item */
-++		if (citem->frag_num > item->frag_num) {
-++			if (pitem != NULL)
-++				pitem->frag_next = item;
-++			else
-++				/* insert at the beginning of the list  */
-++				iph1->frag_chain = item;
-++			item->frag_next = citem;
-++			return 0;
-++		}
-++
-++		pitem = citem;
-++		citem = citem->frag_next;
-++	} while (citem != NULL);
-++
-++	/* we reached the end of the list, insert */
-++	pitem->frag_next = item;
-++	return 0;
-++}
-++
-+ int 
-+ isakmp_frag_extract(iph1, msg)
-+ 	struct ph1handle *iph1;
-+@@ -224,39 +261,43 @@ isakmp_frag_extract(iph1, msg)
-+ 	item->frag_next = NULL;
-+ 	item->frag_packet = buf;
-+ 
-+-	/* Look for the last frag while inserting the new item in the chain */
-+-	if (item->frag_last)
-+-		last_frag = item->frag_num;
-++	/* Check for the last frag before inserting the new item in the chain */
-++	if (item->frag_last) {
-++		/* if we have the last fragment, indices must match */
-++		if (iph1->frag_last_index != 0 &&
-++		    item->frag_last != iph1->frag_last_index) {
-++			plog(LLV_ERROR, LOCATION, NULL,
-++			     "Repeated last fragment index mismatch\n");
-++			racoon_free(item);
-++			vfree(buf);
-++			return -1;
-++		}
-+ 
-+-	if (iph1->frag_chain == NULL) {
-+-		iph1->frag_chain = item;
-+-	} else {
-+-		struct isakmp_frag_item *current;
-++		last_frag = iph1->frag_last_index = item->frag_num;
-++	}
-+ 
-+-		current = iph1->frag_chain;
-+-		while (current->frag_next) {
-+-			if (current->frag_last)
-+-				last_frag = item->frag_num;
-+-			current = current->frag_next;
-+-		}
-+-		current->frag_next = item;
-++	/* insert fragment into chain */
-++	if (isakmp_frag_insert(iph1, item) == -1) {
-++		plog(LLV_ERROR, LOCATION, NULL,
-++		    "Repeated fragment index mismatch\n");
-++		racoon_free(item);
-++		vfree(buf);
-++		return -1;
-+ 	}
-+ 
-+-	/* If we saw the last frag, check if the chain is complete */
-++	/* If we saw the last frag, check if the chain is complete
-++	 * we have a sorted list now, so just walk through */
-+ 	if (last_frag != 0) {
-++		item = iph1->frag_chain;
-+ 		for (i = 1; i <= last_frag; i++) {
-+-			item = iph1->frag_chain;
-+-			do {
-+-				if (item->frag_num == i)
-+-					break;
-+-				item = item->frag_next;
-+-			} while (item != NULL);
-+-
-++			if (item->frag_num != i)
-++				break;
-++			item = item->frag_next;
-+ 			if (item == NULL) /* Not found */
-+ 				break;
-+ 		}
-+ 
-+-		if (item != NULL) /* It is complete */
-++		if (i > last_frag) /* It is complete */
-+ 			return 1;
-+ 	}
-+ 		
-+@@ -291,15 +332,9 @@ isakmp_frag_reassembly(iph1)
-+ 	}
-+ 	data = buf->v;
-+ 
-++	item = iph1->frag_chain;
-+ 	for (i = 1; i <= frag_count; i++) {
-+-		item = iph1->frag_chain;
-+-		do {
-+-			if (item->frag_num == i)
-+-				break;
-+-			item = item->frag_next;
-+-		} while (item != NULL);
-+-
-+-		if (item == NULL) {
-++		if (item->frag_num != i) {
-+ 			plog(LLV_ERROR, LOCATION, NULL, 
-+ 			    "Missing fragment #%d\n", i);
-+ 			vfree(buf);
-+@@ -308,6 +343,7 @@ isakmp_frag_reassembly(iph1)
-+ 		}
-+ 		memcpy(data, item->frag_packet->v, item->frag_packet->l);
-+ 		data += item->frag_packet->l;
-++		item = item->frag_next;
-+ 	}
-+ 
-+ out:
-+Index: ipsec-tools-0.8.2/src/racoon/isakmp_inf.c
-+===================================================================
-+--- ipsec-tools-0.8.2.orig/src/racoon/isakmp_inf.c
-++++ ipsec-tools-0.8.2/src/racoon/isakmp_inf.c
-+@@ -720,6 +720,7 @@ isakmp_info_send_nx(isakmp, remote, loca
-+ #endif
-+ #ifdef ENABLE_FRAG
-+ 	iph1->frag = 0;
-++	iph1->frag_last_index = 0;
-+ 	iph1->frag_chain = NULL;
-+ #endif
-+ 
-+Index: ipsec-tools-0.8.2/src/racoon/isakmp.c
-+===================================================================
-+--- ipsec-tools-0.8.2.orig/src/racoon/isakmp.c
-++++ ipsec-tools-0.8.2/src/racoon/isakmp.c
-+@@ -1071,6 +1071,7 @@ isakmp_ph1begin_i(rmconf, remote, local)
-+ 		iph1->frag = 1;
-+ 	else
-+ 		iph1->frag = 0;
-++	iph1->frag_last_index = 0;
-+ 	iph1->frag_chain = NULL;
-+ #endif
-+ 	iph1->approval = NULL;
-+@@ -1175,6 +1176,7 @@ isakmp_ph1begin_r(msg, remote, local, et
-+ #endif
-+ #ifdef ENABLE_FRAG
-+ 	iph1->frag = 0;
-++	iph1->frag_last_index = 0;
-+ 	iph1->frag_chain = NULL;
-+ #endif
-+ 	iph1->approval = NULL;
-+Index: ipsec-tools-0.8.2/src/racoon/handler.h
-+===================================================================
-+--- ipsec-tools-0.8.2.orig/src/racoon/handler.h
-++++ ipsec-tools-0.8.2/src/racoon/handler.h
-+@@ -1,4 +1,4 @@
-+-/*	$NetBSD: handler.h,v 1.25 2010/11/17 10:40:41 tteras Exp $	*/
-++/*	$NetBSD: handler.h,v 1.26 2017/01/24 19:23:56 christos Exp $	*/
-+ 
-+ /* Id: handler.h,v 1.19 2006/02/25 08:25:12 manubsd Exp */
-+ 
-+@@ -141,6 +141,7 @@ struct ph1handle {
-+ #endif
-+ #ifdef ENABLE_FRAG
-+ 	int frag;			/* IKE phase 1 fragmentation */
-++	int frag_last_index;
-+ 	struct isakmp_frag_item *frag_chain;	/* Received fragments */
-+ #endif
-+ 
--- 
-2.18.0
+> On 26-06-18 11:36, Sven Neumann wrote:
+>> From: Oliver Tappe <zooey@hirschkaefer.de>
+>> 
+>> Github has recently dropped support for the archive-URLs that we used
+>> to use.
+> 
+>  Could you explain what exactly fails? I tried existing packages and
+>  your new
+> wampcc with the old pattern, and it just works (same hash).
+
+Hi,
+
+I did not test the patch but a problem when downloading from github does 
+exist, for example:
+
+$ LC_ALL=C make libsrtp
+>>> libsrtp v1.5.4 Downloading
+
+[...]
+
+--2018-08-19 11:37:59--  https://github.com/cisco/libsrtp/archive/v1.5.4/
+libsrtp-v1.5.4.tar.gz
+Resolving github.com (github.com)... 192.30.253.113, 192.30.253.112
+Connecting to github.com (github.com)|192.30.253.113|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://codeload.github.com/cisco/libsrtp/tar.gz/v1.5.4/libsrtp-
+v1.5.4 [following]
+--2018-08-19 11:37:59--  https://codeload.github.com/cisco/libsrtp/tar.gz/
+v1.5.4/libsrtp-v1.5.4
+Resolving codeload.github.com (codeload.github.com)... 192.30.253.120, 
+192.30.253.121
+Connecting to codeload.github.com (codeload.github.com)|192.30.253.120|:
+443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2018-08-19 11:38:00 ERROR 404: Not Found.
+
+--2018-08-19 11:38:00--  http://sources.buildroot.net/libsrtp/libsrtp-
+v1.5.4.tar.gz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.25.210.19, 
+104.25.211.19, 2400:cb00:2048:1::6819:d313, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|
+104.25.210.19|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 1646184 (1.6M) [application/x-gtar-compressed]
+
+[...]
+
+libsrtp-v1.5.4.tar.gz: OK (sha256: 
+56a7b521c25134f48faff26b0b1e3d4378a14986a2d3d7bc6fefb48987304ff0)
+
+Regards, Bernd
