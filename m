@@ -1,47 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Aug 2018 21:20:35 +0200
-Subject: [Buildroot] [git commit] package/bind: security bump to version
- 9.11.4-P1
-Message-ID: <20180819192721.E37768D69F@busybox.osuosl.org>
+Date: Sun, 19 Aug 2018 21:29:11 +0200
+Subject: [Buildroot] [git commit] package/nodejs: security bump version to
+ 8.11.4
+Message-ID: <20180819192722.381AF81402@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21d0077a2d1e6b8afba0812708d07a99e2738fc6
+commit: https://git.buildroot.net/buildroot/commit/?id=bfc5dc9920ffa9913b096cdc85572a06980ee9e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2018-5740: https://ftp.isc.org/isc/bind9/9.11.4-P1/CHANGES
+Release notes:
+https://nodejs.org/en/blog/vulnerability/august-2018-security-releases/
+
+Fixes CVE-2018-12115, also CVEs were fixed in included OpenSSL code
+which do not use for the target build.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 78f8015521..34d9891805 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.4/bind-9.11.4.tar.gz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.4-P1/bind-9.11.4-P1.tar.gz.asc
- # with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
--sha256 595070b031f869f8939656b5a5d11b121211967f15f6afeafa895df745279617 bind-9.11.4.tar.gz
-+sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
- sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index d478a7f6e1..0140041218 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index be4c3de4f7..8285172215 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From http://nodejs.org/dist/v8.11.3/SHASUMS256.txt
+-sha256 577c751fdca91c46c60ffd8352e5b465881373bfdde212c17c3a3c1bd2616ee0  node-v8.11.3.tar.xz
++# From http://nodejs.org/dist/v8.11.4/SHASUMS256.txt
++sha256 fbce7de6d96b0bcb0db0bf77f0e6ea999b6755e6930568aedaab06847552a609  node-v8.11.4.tar.xz
+ 
+ # Hash for license file
+ sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 61cd03bb8f..e2c94ba8db 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BIND_VERSION = 9.11.4
-+BIND_VERSION = 9.11.4-P1
- BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-NODEJS_VERSION = 8.11.3
++NODEJS_VERSION = 8.11.4
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
