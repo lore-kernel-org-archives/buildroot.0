@@ -1,50 +1,253 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Aug 2018 15:22:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: security bump version to
- 8.11.4
-Message-ID: <20180819132217.2776-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Aug 2018 15:39:17 +0200
+Subject: [Buildroot] [PATCH 1/1] Add support for custom initramfs
+ contents
+In-Reply-To: <20180810183405.25378-1-r.jacob2002@gmail.com>
+References: <20180810183405.25378-1-r.jacob2002@gmail.com>
+Message-ID: <20180819133917.GB15347@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://nodejs.org/en/blog/vulnerability/august-2018-security-releases/
+Raphael, Richard, All,
 
-Fixes CVE-2018-12115, also CVEs were fixed in included OpenSSL code
-which do not use for the target build.
+Here's my long-promiosed review of this patch; sorry for the delay...
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/nodejs/nodejs.hash | 4 ++--
- package/nodejs/nodejs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2018-08-10 20:34 +0200, Raphael Jacob spake thusly:
+> From: Richard Kunze <richard.kunze@web.de>
+> 
+> Signed-off-by: Raphael Jacob <r.jacob2002@gmail.com>
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index be4c3de4f7..8285172215 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,5 +1,5 @@
--# From http://nodejs.org/dist/v8.11.3/SHASUMS256.txt
--sha256 577c751fdca91c46c60ffd8352e5b465881373bfdde212c17c3a3c1bd2616ee0  node-v8.11.3.tar.xz
-+# From http://nodejs.org/dist/v8.11.4/SHASUMS256.txt
-+sha256 fbce7de6d96b0bcb0db0bf77f0e6ea999b6755e6930568aedaab06847552a609  node-v8.11.4.tar.xz
- 
- # Hash for license file
- sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 61cd03bb8f..e2c94ba8db 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NODEJS_VERSION = 8.11.3
-+NODEJS_VERSION = 8.11.4
- NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
- NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+First, two comments:
+
+ 1. the author and the SoB lines differ: this is not good. There must be
+    a SoB line from the author.
+
+ 2. this is a rather big and complex change that has absolutely no
+    explanation in the commit log. There is no rationale for the change,
+    and there is no explanations of the tricky changes it brings.
+
+So, just because of these two points, I am not fond of it at all.
+
+But then, discussing on IRC with ski777 (Rapahel? Richard? At least it
+starts with an 'R' ;-) ), the purpose is less opaque: to be able to
+create an initrd from parts of $(TARGET_DIR), that will then be able to
+mount the final / filesystem, which is itself made from the entirety of
+$(TARGET_DIR).
+
+At least that is what I understood. Please correct me if I am wrong.
+
+If I am correct, I have to say that I am not too fond of this either.
+
+Note that I *do* understand the reason behind the proposed change, but I
+don't think it is good overall, because it opens a can of worms, where
+people will then want a similar solution for the other filesystems, to
+generate those filesystems with only parts of the content of TARGET_DIR,
+and we already shot down such proposals in the past.
+
+Instead, here is what I suggest people do:
+
+  - have a first defconfig that builds the kernel and a simple userland
+    that acts as the initrd;
+
+  - have a second defconfig that builds the complete, final system.
+
+Of course, there is a gotcha: the final system will need all the kernel
+modules, but they are built from the first defconfig; and the initrd may
+not need all of the kernel modules, just the few ones needed to mount
+the comnplete final system.
+
+So:
+
+  - have a post-build script that is run from the first defconfig, which
+    copies all the modules to a "well-known" location, keeps in
+    TARGET_DIR only the ones required to mount the final system.
+
+  - a second post-build script (or a custom package) that copies the
+    kernel modules from the "well-known" location into the second
+    defconfig's TARGET_DIR.
+
+  - implement a new, custom type of filesystem that generates the final
+    image from the kwernel iamge from the first defconfig and the rootfs
+    from the second defconfig.
+
+At least, that is exactly what I've been doing in similar conditions.
+
+A simple way to have a well-known location is to have a wrapper script
+that does the two builds in sequence:
+
+    #!/bin/sh
+    set -e
+
+    WELL_KNOWN_DIR=$(mktemp -d)
+    export WELL_KNOWN_DIR
+
+    make my_project_initrd_defconfig
+    make my_project_complete_defconfig
+
+    rm -rf "${WELL_KNOWN_DIR}"
+
+And the post-build scripts each refer to the WELL_KNOWN_DIR environment
+variable (you can be inventive with a better name, of course!)
+
+If you are using a br2-external tree (which is probably a good idea to
+store the defconfigs, and other local customisations such as the kernel
+config, the post-build scripts, the local packages, in a VCS), you can
+have the external.mk export that location such as:
+
+    export WELL_KNOWN_DIR = $(BR2_EXTERNAL_MY_NAME_PATH)/tmp
+
+Again, be inventive with names and locations....
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  fs/initramfs/Config.in    | 34 +++++++++++++++++++++++++++++++++-
+>  fs/initramfs/initramfs.mk | 18 +++++++++++++++++-
+>  linux/linux.mk            |  8 ++++----
+>  3 files changed, 54 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/initramfs/Config.in b/fs/initramfs/Config.in
+> index 9d5a3f92e6..9b7ac9475e 100644
+> --- a/fs/initramfs/Config.in
+> +++ b/fs/initramfs/Config.in
+> @@ -1,6 +1,22 @@
+>  config BR2_TARGET_ROOTFS_INITRAMFS
+>  	bool "initial RAM filesystem linked into linux kernel"
+>  	depends on BR2_LINUX_KERNEL
+> +	help
+> +	  Integrate an initramfs inside the kernel image.
+> +	  This integration will take place automatically.
+> +
+> +	  The initramfs contents can either be the full root filesystem
+> +	  generated by buildroot, or an image built from a custom list
+> +	  of files specified via the BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS
+> +	  config option.
+> +
+> +choice
+> +	prompt "initial RAM filesystem contents"
+> +	depends on BR2_TARGET_ROOTFS_INITRAMFS
+> +
+> +config BR2_TARGET_ROOTFS_INITRAMFS_ROOTFS
+> +	bool "rootfs.cpio"
+> +	depends on BR2_TARGET_ROOTFS_INITRAMFS
+>  	select BR2_TARGET_ROOTFS_CPIO
+>  	help
+>  	  Integrate the root filesystem generated by Buildroot as an
+> @@ -13,10 +29,26 @@ config BR2_TARGET_ROOTFS_INITRAMFS
+>  	  is used, regardless of how buildroot's cpio archive is
+>  	  configured.
+>  
+> -	  Note that enabling initramfs together with another filesystem
+> +	  Note that enabling this option together with another filesystem
+>  	  formats doesn't make sense: you would end up having two
+>  	  identical root filesystems, one embedded inside the kernel
+>  	  image, and one separately.
+> +config BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM
+> +	bool "custom initramfs contents"
+> +	depends on BR2_TARGET_ROOTFS_INITRAMFS
+> +	help
+> +	  Use the contents of BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS
+> +	  as the linux kernel configuration variable CONFIG_INITRAMFS_SOURCE
+> +
+> +endchoice
+> +
+> +config BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS
+> +	string "custom initramfs contents"
+> +	depends on BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM
+> +	help
+> +	  Custom value to use as CONFIG_INITRAMFS_SOURCE linux kernel configuration
+> +	  variable. See Documentation/filesystems/ramfs-rootfs-initramfs.txt in the
+> +	  linux kernel sources for details.
+>  
+>  comment "initramfs needs a Linux kernel to be built"
+>  	depends on !BR2_LINUX_KERNEL
+> diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
+> index c751093214..ef3fdc6d3d 100644
+> --- a/fs/initramfs/initramfs.mk
+> +++ b/fs/initramfs/initramfs.mk
+> @@ -4,6 +4,12 @@
+>  #
+>  ################################################################################
+>  
+> +ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS_ROOTFS),y)
+> +ROOTFS_INITRAMFS_DEPENDENCIES += rootfs-cpio
+> +endif
+> +
+> +ROOTFS_INITRAMFS_DEPENDENCIES += $(BINARIES_DIR)/initramfs.cpio
+> +
+>  # The generic fs infrastructure isn't very useful here.
+>  #
+>  # The initramfs image does not actually build an image; its only purpose is:
+> @@ -19,13 +25,23 @@
+>  # advertise that our dependency is on the rootfs-cpio rule, which is
+>  # cleaner in the dependency graph.
+>  
+> -rootfs-initramfs: linux-rebuild-with-initramfs
+> +rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) linux-rebuild-with-initramfs
+>  
+>  rootfs-initramfs-show-depends:
+>  	@echo rootfs-cpio
+>  
+>  .PHONY: rootfs-initramfs rootfs-initramfs-show-depends
+>  
+> +ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS_ROOTFS),y)
+> +$(BINARIES_DIR)/initramfs.cpio: rootfs-cpio
+> +	ln -sf rootfs.cpio $(BINARIES_DIR)/initramfs.cpio
+> +endif
+> +
+> +ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM),y)
+> +$(BINARIES_DIR)/initramfs.cpio: target-finalize $(call qstrip,$(BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS))
+> +	$(LINUX_DIR)/usr/gen_init_cpio $(BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS) > $(BINARIES_DIR)/initramfs.cpio
+> +endif
+> +
+>  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
+>  TARGETS_ROOTFS += rootfs-initramfs
+>  endif
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 7f4c916671..b98043419b 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -278,8 +278,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>  	# replaced later by the real cpio archive, and the kernel will be
+>  	# rebuilt using the linux-rebuild-with-initramfs target.
+>  	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
+> -		touch $(BINARIES_DIR)/rootfs.cpio
+> -		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
+> +		touch $(BINARIES_DIR)/initramfs.cpio
+> +		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/initramfs.cpio",$(@D)/.config)
+>  		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
+>  		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
+>  	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
+> @@ -501,11 +501,11 @@ endif # BR_BUILDING
+>  $(eval $(kconfig-package))
+>  
+>  # Support for rebuilding the kernel after the cpio archive has
+> -# been generated.
+> +# been generated in $(BINARIES_DIR)/initramfs.cpio.
+>  .PHONY: linux-rebuild-with-initramfs
+>  linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_target_installed
+>  linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_images_installed
+> -linux-rebuild-with-initramfs: rootfs-cpio
+> +linux-rebuild-with-initramfs: $(BINARIES_DIR)/initramfs.cpio
+>  linux-rebuild-with-initramfs:
+>  	@$(call MESSAGE,"Rebuilding kernel with initramfs")
+>  	# Build the kernel.
+> -- 
+> 2.18.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.18.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
