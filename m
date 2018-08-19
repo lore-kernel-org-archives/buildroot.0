@@ -1,83 +1,133 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Aug 2018 18:51:58 +0200
-Subject: [Buildroot] [PATCH/next/RFC 1/1] package/nodejs: use host-libopenssl
-Message-ID: <20180819165158.25255-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Aug 2018 18:59:31 +0200
+Subject: [Buildroot] [PATCH] package.bison: fix build on host with glibc-2.28
+Message-ID: <20180819165931.23259-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-host-nodejs is configured to build openssl by using its included openssl
-source code which is based on openssl 1.0.2. If host-libopenssl was
-already built its header files are being picked up during host-nodejs
-build, this was verified by adding debug code to
-$(HOST_DIR)/include/openssl/opensslv.h.
+Similarly to c48f8a6462 (package/m4: fix build on host with glibc-2.28),
+backport the two fixes fromn gnulib upstream, that allows building
+host-bison on systems using glibc 2.28.
 
-This situation was not a problem as long as host-libopenssl was the
-same version than the openssl code included in nodejs.
-
-Some code in host-nodejs-8.11.4/src/node_crypto.cc is guarded by
-
-	#if OPENSSL_VERSION_NUMBER < 0x10100000L
-
-to be used only with openssl 1.0.x.
-
-This leads to problems if host-libopenssl 1.1.x was built before. Due
-to the usage of its header files some code in node_crypto.cc is not
-built leading to many linking errors later on, for example:
-
-node_crypto.cc:(.text+0x1a1): undefined reference to `DH_get0_pqg'
-
-When the nodejs package originally was added to buildroot back in
-March 2013:
-https://git.buildroot.net/buildroot/commit/?id=b31bc7d4387095091a109eb879464d54d37a5eab
-
-We did not have a host-libopenssl package back then, it was added one
-month later:
-https://git.buildroot.net/buildroot/commit/?id=7842789cb539b6b64d61b03f5c8dbe6813f01da7
-
-To fix the problem we use host-libopenssl for host-nodejs.
-By using host-libopenssl the build time of nodejs is reduced by ~15s.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reported-by: c32 on IRC
 ---
- package/nodejs/nodejs.mk | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ ...lush-adjust-to-glibc-2.28-libio.h-removal.patch | 50 ++++++++++++++++++++++
+ ...ush-be-more-paranoid-about-libio.h-change.patch | 46 ++++++++++++++++++++
+ 2 files changed, 96 insertions(+)
+ create mode 100644 package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+ create mode 100644 package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index e2c94ba8db..165f3f109a 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -10,7 +10,7 @@ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
- NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
- 	libhttpparser libuv zlib \
- 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
--HOST_NODEJS_DEPENDENCIES = host-python host-zlib
-+HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib
- NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
- NODEJS_LICENSE_FILES = LICENSE
- 
-@@ -50,10 +50,6 @@ define HOST_NODEJS_CONFIGURE_CMDS
- 	mkdir -p $(@D)/bin
- 	ln -sf $(HOST_DIR)/bin/python2 $(@D)/bin/python
- 
--	# Build with the static, built-in OpenSSL which is supplied as part of
--	# the nodejs source distribution.  This is needed on the host because
--	# NPM is non-functional without it, and host-openssl isn't part of
--	# buildroot.
- 	(cd $(@D); \
- 		$(HOST_CONFIGURE_OPTS) \
- 		PATH=$(@D)/bin:$(BR_PATH) \
-@@ -63,6 +59,9 @@ define HOST_NODEJS_CONFIGURE_CMDS
- 		--without-snapshot \
- 		--without-dtrace \
- 		--without-etw \
-+		--shared-openssl \
-+		--shared-openssl-includes=$(HOST_DIR)/include/openssl \
-+		--shared-openssl-libpath=$(HOST_DIR)/lib \
- 		--shared-zlib \
- 		--with-intl=none \
- 	)
+diff --git a/package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch b/package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+new file mode 100644
+index 0000000000..e9dee48af9
+--- /dev/null
++++ b/package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+@@ -0,0 +1,50 @@
++From 4af4a4a71827c0bc5e0ec67af23edef4f15cee8e Mon Sep 17 00:00:00 2001
++From: Paul Eggert <eggert@cs.ucla.edu>
++Date: Mon, 5 Mar 2018 10:56:29 -0800
++Subject: [PATCH 1/1] fflush: adjust to glibc 2.28 libio.h removal
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Problem reported by Daniel P. Berrang? in:
++https://lists.gnu.org/r/bug-gnulib/2018-03/msg00000.html
++* lib/fbufmode.c (fbufmode):
++* lib/fflush.c (clear_ungetc_buffer_preserving_position)
++(disable_seek_optimization, rpl_fflush):
++* lib/fpending.c (__fpending):
++* lib/fpurge.c (fpurge):
++* lib/freadable.c (freadable):
++* lib/freadahead.c (freadahead):
++* lib/freading.c (freading):
++* lib/freadptr.c (freadptr):
++* lib/freadseek.c (freadptrinc):
++* lib/fseeko.c (fseeko):
++* lib/fseterr.c (fseterr):
++* lib/fwritable.c (fwritable):
++* lib/fwriting.c (fwriting):
++Check _IO_EOF_SEEN instead of _IO_ftrylockfile.
++* lib/stdio-impl.h (_IO_IN_BACKUP) [_IO_EOF_SEEN]:
++Define if not already defined.
++---
++ lib/fseterr.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++[yann.morin.1998 at free.fr: partially backport from upstream gnulib]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff --git a/lib/fseterr.c b/lib/fseterr.c
++index 82649c3ac..adb637256 100644
++--- a/lib/fseterr.c
+++++ b/lib/fseterr.c
++@@ -29,7 +29,7 @@ fseterr (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
++   fp->_flags |= _IO_ERR_SEEN;
++ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
++   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
++-- 
++2.14.1
++
+diff --git a/package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch b/package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch
+new file mode 100644
+index 0000000000..035f8282c1
+--- /dev/null
++++ b/package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch
+@@ -0,0 +1,46 @@
++From 74d9d6a293d7462dea8f83e7fc5ac792e956a0ad Mon Sep 17 00:00:00 2001
++From: Paul Eggert <eggert@cs.ucla.edu>
++Date: Thu, 8 Mar 2018 16:42:45 -0800
++Subject: [PATCH 2/2] fflush: be more paranoid about libio.h change
++
++Suggested by Eli Zaretskii in:
++https://lists.gnu.org/r/emacs-devel/2018-03/msg00270.html
++* lib/fbufmode.c (fbufmode):
++* lib/fflush.c (clear_ungetc_buffer_preserving_position)
++(disable_seek_optimization, rpl_fflush):
++* lib/fpending.c (__fpending):
++* lib/fpurge.c (fpurge):
++* lib/freadable.c (freadable):
++* lib/freadahead.c (freadahead):
++* lib/freading.c (freading):
++* lib/freadptr.c (freadptr):
++* lib/freadseek.c (freadptrinc):
++* lib/fseeko.c (fseeko):
++* lib/fseterr.c (fseterr):
++* lib/fwritable.c (fwritable):
++* lib/fwriting.c (fwriting):
++Look at _IO_ftrylockfile as well as at _IO_EOF_SEEN.
++---
++ lib/fseterr.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++[yann.morin.1998 at free.fr: partially backport from upstream gnulib]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
++diff --git a/lib/fseterr.c b/lib/fseterr.c
++index adb637256..fd9da6338 100644
++--- a/lib/fseterr.c
+++++ b/lib/fseterr.c
++@@ -29,7 +29,8 @@ fseterr (FILE *fp)
++   /* Most systems provide FILE as a struct and the necessary bitmask in
++      <stdio.h>, because they need it for implementing getc() and putc() as
++      fast macros.  */
++-#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
+++#if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
+++  /* GNU libc, BeOS, Haiku, Linux libc5 */
++   fp->_flags |= _IO_ERR_SEEN;
++ #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
++   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
++-- 
++2.14.1
++
 -- 
-2.18.0
+2.14.1
