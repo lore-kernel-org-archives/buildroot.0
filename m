@@ -1,50 +1,103 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Aug 2018 11:06:59 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/ipmiutil: bump version to 3.1.2
-Message-ID: <20180819090659.14684-1-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 Aug 2018 11:22:15 +0200
+Subject: [Buildroot] [RFC v3 2/4] meson: change from global to per
+ package cross-compilation.conf
+In-Reply-To: <20180819011512.11fad995@gmx.net>
+References: <20180719204355.10465-1-ps.report@gmx.net>
+ <20180719204355.10465-2-ps.report@gmx.net>
+ <20180816135745.71ed73f2@windsurf>
+ <20180819011512.11fad995@gmx.net>
+Message-ID: <20180819092215.GA15347@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added md5 hash provided by upstream and license hash, switched _SITE to
-https.
+Peter, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/ipmiutil/ipmiutil.hash | 8 +++++---
- package/ipmiutil/ipmiutil.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+On 2018-08-19 01:15 +0200, Peter Seiderer spake thusly:
+> On Thu, 16 Aug 2018 13:57:45 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> > On Thu, 19 Jul 2018 22:43:53 +0200, Peter Seiderer wrote:
+> > > -define HOST_MESON_INSTALL_CROSS_CONF
+> > > +define HOST_MESON_INSTALL_CROSS_CONF_IN
+> > >  	mkdir -p $(HOST_DIR)/etc/meson
+> > >  	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
+> > >  	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
+> > > @@ -31,9 +31,9 @@ define HOST_MESON_INSTALL_CROSS_CONF
+> > >  	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+> > >  	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+> > >  	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \  
+> > > -	    > $(HOST_DIR)/etc/meson/cross-compilation.conf    
+> > > +	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in  
+> > 
+> > I am not super happy with this approach, because this file is not meant
+> > to be used just during the build of Buildroot packages, but potentially
+> > after the Buildroot build is finished, for people to easily
+> > cross-compile Meson-based software manually. To me, this file is
+> > similar to toolchainfile.cmake that pkg-cmake.mk is installing, and
+> > which allows to easily cross-compile stuff with CMake outside of
+> > Buildroot, using the Buildroot generated toolchain.
+> > 
+> > So I would prefer to:
+> > 
+> >  - Move this file to
+> >    $(HOST_DIR)/usr/share/buildroot/meson-cross-compilation.conf or
+> >    something like that, so that we are a bit consistent with what we do
+> >    for CMake.
+> > 
+> >  - Keep it directly usable.
+> > 
+> >  - Pass the additional CFLAGS/LDFLAGS to packages on the command line
+> >    rather than through this file.
+> >    https://mesonbuild.com/howtox.html#set-extra-compiler-and-linker-flags-from-the-outside-when-eg-building-distro-packages
+> >    seems to say this is possible, no ? Or does it override the ones
+> >    from the cross-compilation.conf ?
+> 
+> The CFLAGS are ignored, e.g. with 'LIBDRM_CONF_ENV += CFLAGS=-DAO_NO_SPARC_V9' in package/libdrm/libdrm.mk:
 
-diff --git a/package/ipmiutil/ipmiutil.hash b/package/ipmiutil/ipmiutil.hash
-index f9d086b67a..e09511f96f 100644
---- a/package/ipmiutil/ipmiutil.hash
-+++ b/package/ipmiutil/ipmiutil.hash
-@@ -1,4 +1,6 @@
--# From http://sourceforge.net/projects/ipmiutil/files/?source=navbar
--sha1	f423a77a374b6a37a16496844f1e6e363e7d63fe	ipmiutil-2.9.9.tar.gz
-+# From https://sourceforge.net/projects/ipmiutil/files/
-+md5 ee90387f8a14dea3f867167865c7c968  ipmiutil-3.1.2.tar.gz
-+sha1 9453db110bffab3111d6ff4047243a34084e5878  ipmiutil-3.1.2.tar.gz
- # Locally computed
--sha256	beace08386a002c6a4bbbf894bda9899ea34fae4c2181c89f29fb1fa136925f6	ipmiutil-2.9.9.tar.gz
-+sha256 768053b3e3adfe1bf656e2848b2805ede87e429c10d282929a7c4ceeebc24703  ipmiutil-3.1.2.tar.gz
-+sha256 7e0ec8238aa1431e95a4950032a4483fe33fec3fac348eaade5856cdc5ae3e39  COPYING
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index a5a6b49314..5d8c45665d 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--IPMIUTIL_VERSION = 2.9.9
--IPMIUTIL_SITE = http://sourceforge.net/projects/ipmiutil/files
-+IPMIUTIL_VERSION = 3.1.2
-+IPMIUTIL_SITE = https://sourceforge.net/projects/ipmiutil/files
- IPMIUTIL_LICENSE = BSD-3-Clause
- IPMIUTIL_LICENSE_FILES = COPYING
- # We're patching configure.ac
+What if you _also_ pass them in LIBDRM_NINJA_ENV ?
+
+Regards,
+Yann E. MORIN.
+
+> 	$ make libdrm V=1
+> [...]
+> 
+> ... CFLAGS=-DAO_NO_SPARC_V9 host/bin/meson --prefix=/usr --libdir=lib --default-library=shared --buildtype=debug --cross-file=.../host/etc/meson/cross-compilation.conf -Dcairo-tests=false -Dmanpages=false -Dintel=false -Dradeon=true -Damdgpu=true -Dnouveau=true -Dvmwgfx=false -Domap=false -Detnaviv=true -Dexynos=false -Dfreedreno=false -Dtegra=false -Dvc4=false -Dudev=true -Dvalgrind=false -Dinstall-test-programs=true .../build/libdrm-2.4.93/ .../build/libdrm-2.4.93//build
+> The Meson build system
+> Version: 0.47.1
+> Source dir: .../build/libdrm-2.4.93
+> Build dir: .../build/libdrm-2.4.93/build
+> Build type: cross build
+> WARNING: Unknown options: "manpages"
+> Project name: libdrm
+> Project version: 2.4.93
+> Appending CFLAGS from environment: '-DAO_NO_SPARC_V9'
+> Appending CFLAGS from environment: '-DAO_NO_SPARC_V9'
+> Native C compiler: cc (gcc 8.1.1 "cc (SUSE Linux) 8.1.1 20180719 [gcc-8-branch revision 262874]")
+> Cross C compiler: /home/seiderer/Work/Buildroot/build_libdrm_c99/host/bin/sparc-linux-gcc (gcc 6.4.0)
+> 
+> [...]
+> 
+> [1/104] .../host/bin/sparc-linux-gcc -Ilibkms/libkms@@kms at sha -Ilibkms -I../libkms -I. -I../ -I../include/drm -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=gnu99 -O0 -g -include config.h -fPIC -Wall -Wextra -Wsign-compare -Werror=undef -Werror-implicit-function-declaration -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wpacked -Wswitch-enum -Wmissing-format-attribute -Wstrict-aliasing=2 -Winit-self -Winline -Wshadow -Wdeclaration-after-statement -Wold-style-definition -Wno-unused-parameter -Wno-attributes -Wno-long-long -Wno-missing-field-initializers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g2 -MD -MQ 'libkms/libkms@@kms at sha/api.c.o' -MF 'libkms/libkms@@kms at sha/api.c.o.d' -o 'libkms/libkms@@kms at sha/api.c.o' -c ../libkms/api.c
+> 
+> Only the c_args from cross-compilation.conf ('-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g2')
+> are used (in contrast to the 'Appending CFLAGS from environment' message)...
+> 
+> Regards,
+> Peter
+> 
+> > 
+> > Thanks!
+> > 
+> > Thomas
+> 
+
 -- 
-2.18.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
