@@ -1,38 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Aug 2018 15:22:06 +0200
-Subject: [Buildroot] [RFC v3 2/4] meson: change from global to per
- package cross-compilation.conf
-In-Reply-To: <20180819011512.11fad995@gmx.net>
-References: <20180719204355.10465-1-ps.report@gmx.net>
- <20180719204355.10465-2-ps.report@gmx.net>
- <20180816135745.71ed73f2@windsurf>
- <20180819011512.11fad995@gmx.net>
-Message-ID: <20180819152206.7b15fce9@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Aug 2018 15:22:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nodejs: security bump version to
+ 8.11.4
+Message-ID: <20180819132217.2776-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Release notes:
+https://nodejs.org/en/blog/vulnerability/august-2018-security-releases/
 
-On Sun, 19 Aug 2018 01:15:12 +0200, Peter Seiderer wrote:
+Fixes CVE-2018-12115, also CVEs were fixed in included OpenSSL code
+which do not use for the target build.
 
-> The CFLAGS are ignored, e.g. with 'LIBDRM_CONF_ENV += CFLAGS=-DAO_NO_SPARC_V9' in package/libdrm/libdrm.mk:
-> 
-> 	$ make libdrm V=1
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/nodejs/nodejs.hash | 4 ++--
+ package/nodejs/nodejs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-It seems weird, no? It is documented to be working, and even at runtime
-it tells you "I am going to use those additional CFLAGS". Isn't this a
-bug or a misuse of meson from us ?
-
-I would really prefer to understand what is going on here instead of
-having to generate per-package .conf files.
-
-Thanks!
-
-Thomas
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index be4c3de4f7..8285172215 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,5 +1,5 @@
+-# From http://nodejs.org/dist/v8.11.3/SHASUMS256.txt
+-sha256 577c751fdca91c46c60ffd8352e5b465881373bfdde212c17c3a3c1bd2616ee0  node-v8.11.3.tar.xz
++# From http://nodejs.org/dist/v8.11.4/SHASUMS256.txt
++sha256 fbce7de6d96b0bcb0db0bf77f0e6ea999b6755e6930568aedaab06847552a609  node-v8.11.4.tar.xz
+ 
+ # Hash for license file
+ sha256 b87be6c1479ed977481115869c2dd8b6d59e5ea55aa09939d6c898242121b2f5  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 61cd03bb8f..e2c94ba8db 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NODEJS_VERSION = 8.11.3
++NODEJS_VERSION = 8.11.4
+ NODEJS_SOURCE = node-v$(NODEJS_VERSION).tar.xz
+ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
