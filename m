@@ -1,12 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Aug 2018 23:17:01 +0200
-Subject: [Buildroot] [PATCH v3 1/1] Python3: Bump to 3.7.0
-In-Reply-To: <SN6PR14MB21260D8517E2E6E173EE7582C7330@SN6PR14MB2126.namprd14.prod.outlook.com>
-References: <20180817184607.27639-1-aduskett@gmail.com>
- <20180819155655.65466d16@windsurf>
- <SN6PR14MB21263CD05F33E8BEAAFC5A11C7330@SN6PR14MB2126.namprd14.prod.outlook.com>
- <SN6PR14MB21260D8517E2E6E173EE7582C7330@SN6PR14MB2126.namprd14.prod.outlook.com>
-Message-ID: <20180819231701.66ece243@windsurf>
+Date: Sun, 19 Aug 2018 23:25:23 +0200
+Subject: [Buildroot] [PATCH/next 2/3] package/perl-crypt-openssl-random:
+ bump version to 0.15
+In-Reply-To: <20180819231557.62acd467@windsurf>
+References: <20180819181558.15338-1-bernd.kuhls@t-online.de>
+ <20180819181558.15338-2-bernd.kuhls@t-online.de>
+ <20180819231557.62acd467@windsurf>
+Message-ID: <20180819232523.42a4635f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,14 +15,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 19 Aug 2018 21:03:28 +0000, Adam Duskett wrote:
+On Sun, 19 Aug 2018 23:15:57 +0200, Thomas Petazzoni wrote:
 
-> I will investigate further tomorrow, however it seems that error can
-> crop up if the tarball has pyc files in it. If you could check to see
-> if vcversioner is bundled with pyc files, and if so remove them
-> before building; that may solve the issue.
+> So, there's a new dependency on a module that helps guessing the path
+> to OpenSSL library/headers, but you nonetheless have to force where
+> they are located ? Seems strange :-)
 
-Already checked, the vcversioner tarball does not have .pyc files.
+In fact, more serious question: figuring out the path to OpenSSL
+libs/headers is something that is needed at build time. But you're
+adding perl-crypt-openssl-guess as a target package. I don't understand
+how it makes sense. Could you clarify ?
+
+Thanks,
 
 Thomas
 -- 
