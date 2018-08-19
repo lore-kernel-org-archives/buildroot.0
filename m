@@ -1,103 +1,233 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Aug 2018 11:22:15 +0200
-Subject: [Buildroot] [RFC v3 2/4] meson: change from global to per
- package cross-compilation.conf
-In-Reply-To: <20180819011512.11fad995@gmx.net>
-References: <20180719204355.10465-1-ps.report@gmx.net>
- <20180719204355.10465-2-ps.report@gmx.net>
- <20180816135745.71ed73f2@windsurf>
- <20180819011512.11fad995@gmx.net>
-Message-ID: <20180819092215.GA15347@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Aug 2018 11:25:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ipsec-tools: add security patch to
+ fix CVE-2016-10396
+Message-ID: <20180819092534.8050-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/ipsec-tools/0005-CVE-2016-10396.patch | 208 ++++++++++++++++++
+ 1 file changed, 208 insertions(+)
+ create mode 100644 package/ipsec-tools/0005-CVE-2016-10396.patch
 
-On 2018-08-19 01:15 +0200, Peter Seiderer spake thusly:
-> On Thu, 16 Aug 2018 13:57:45 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> > On Thu, 19 Jul 2018 22:43:53 +0200, Peter Seiderer wrote:
-> > > -define HOST_MESON_INSTALL_CROSS_CONF
-> > > +define HOST_MESON_INSTALL_CROSS_CONF_IN
-> > >  	mkdir -p $(HOST_DIR)/etc/meson
-> > >  	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
-> > >  	    -e "s%@TARGET_ARCH@%$(ARCH)%g" \
-> > > @@ -31,9 +31,9 @@ define HOST_MESON_INSTALL_CROSS_CONF
-> > >  	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
-> > >  	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-> > >  	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \  
-> > > -	    > $(HOST_DIR)/etc/meson/cross-compilation.conf    
-> > > +	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in  
-> > 
-> > I am not super happy with this approach, because this file is not meant
-> > to be used just during the build of Buildroot packages, but potentially
-> > after the Buildroot build is finished, for people to easily
-> > cross-compile Meson-based software manually. To me, this file is
-> > similar to toolchainfile.cmake that pkg-cmake.mk is installing, and
-> > which allows to easily cross-compile stuff with CMake outside of
-> > Buildroot, using the Buildroot generated toolchain.
-> > 
-> > So I would prefer to:
-> > 
-> >  - Move this file to
-> >    $(HOST_DIR)/usr/share/buildroot/meson-cross-compilation.conf or
-> >    something like that, so that we are a bit consistent with what we do
-> >    for CMake.
-> > 
-> >  - Keep it directly usable.
-> > 
-> >  - Pass the additional CFLAGS/LDFLAGS to packages on the command line
-> >    rather than through this file.
-> >    https://mesonbuild.com/howtox.html#set-extra-compiler-and-linker-flags-from-the-outside-when-eg-building-distro-packages
-> >    seems to say this is possible, no ? Or does it override the ones
-> >    from the cross-compilation.conf ?
-> 
-> The CFLAGS are ignored, e.g. with 'LIBDRM_CONF_ENV += CFLAGS=-DAO_NO_SPARC_V9' in package/libdrm/libdrm.mk:
-
-What if you _also_ pass them in LIBDRM_NINJA_ENV ?
-
-Regards,
-Yann E. MORIN.
-
-> 	$ make libdrm V=1
-> [...]
-> 
-> ... CFLAGS=-DAO_NO_SPARC_V9 host/bin/meson --prefix=/usr --libdir=lib --default-library=shared --buildtype=debug --cross-file=.../host/etc/meson/cross-compilation.conf -Dcairo-tests=false -Dmanpages=false -Dintel=false -Dradeon=true -Damdgpu=true -Dnouveau=true -Dvmwgfx=false -Domap=false -Detnaviv=true -Dexynos=false -Dfreedreno=false -Dtegra=false -Dvc4=false -Dudev=true -Dvalgrind=false -Dinstall-test-programs=true .../build/libdrm-2.4.93/ .../build/libdrm-2.4.93//build
-> The Meson build system
-> Version: 0.47.1
-> Source dir: .../build/libdrm-2.4.93
-> Build dir: .../build/libdrm-2.4.93/build
-> Build type: cross build
-> WARNING: Unknown options: "manpages"
-> Project name: libdrm
-> Project version: 2.4.93
-> Appending CFLAGS from environment: '-DAO_NO_SPARC_V9'
-> Appending CFLAGS from environment: '-DAO_NO_SPARC_V9'
-> Native C compiler: cc (gcc 8.1.1 "cc (SUSE Linux) 8.1.1 20180719 [gcc-8-branch revision 262874]")
-> Cross C compiler: /home/seiderer/Work/Buildroot/build_libdrm_c99/host/bin/sparc-linux-gcc (gcc 6.4.0)
-> 
-> [...]
-> 
-> [1/104] .../host/bin/sparc-linux-gcc -Ilibkms/libkms@@kms at sha -Ilibkms -I../libkms -I. -I../ -I../include/drm -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -std=gnu99 -O0 -g -include config.h -fPIC -Wall -Wextra -Wsign-compare -Werror=undef -Werror-implicit-function-declaration -Wpointer-arith -Wwrite-strings -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wnested-externs -Wpacked -Wswitch-enum -Wmissing-format-attribute -Wstrict-aliasing=2 -Winit-self -Winline -Wshadow -Wdeclaration-after-statement -Wold-style-definition -Wno-unused-parameter -Wno-attributes -Wno-long-long -Wno-missing-field-initializers -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g2 -MD -MQ 'libkms/libkms@@kms at sha/api.c.o' -MF 'libkms/libkms@@kms at sha/api.c.o.d' -o 'libkms/libkms@@kms at sha/api.c.o' -c ../libkms/api.c
-> 
-> Only the c_args from cross-compilation.conf ('-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -g2')
-> are used (in contrast to the 'Appending CFLAGS from environment' message)...
-> 
-> Regards,
-> Peter
-> 
-> > 
-> > Thanks!
-> > 
-> > Thomas
-> 
-
+diff --git a/package/ipsec-tools/0005-CVE-2016-10396.patch b/package/ipsec-tools/0005-CVE-2016-10396.patch
+new file mode 100644
+index 0000000000..8ef3b03753
+--- /dev/null
++++ b/package/ipsec-tools/0005-CVE-2016-10396.patch
+@@ -0,0 +1,208 @@
++Fix CVE-2016-10396
++
++Description: Fix remotely exploitable DoS. http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-10396
++Source: vendor; https://gnats.netbsd.org/cgi-bin/query-pr-single.pl?number=51682
++Bug-debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=867986
++
++Downloaded from
++https://github.com/openwrt/packages/blob/master/net/ipsec-tools/patches/010-CVE-2016-10396.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++Index: ipsec-tools-0.8.2/src/racoon/isakmp_frag.c
++===================================================================
++--- ipsec-tools-0.8.2.orig/src/racoon/isakmp_frag.c
+++++ ipsec-tools-0.8.2/src/racoon/isakmp_frag.c
++@@ -1,4 +1,4 @@
++-/*	$NetBSD: isakmp_frag.c,v 1.5 2009/04/22 11:24:20 tteras Exp $	*/
+++/*	$NetBSD: isakmp_frag.c,v 1.5.36.1 2017/04/21 16:50:42 bouyer Exp $	*/
++ 
++ /* Id: isakmp_frag.c,v 1.4 2004/11/13 17:31:36 manubsd Exp */
++ 
++@@ -173,6 +173,43 @@ vendorid_frag_cap(gen)
++ 	return ntohl(hp[MD5_DIGEST_LENGTH / sizeof(*hp)]);
++ }
++ 
+++static int 
+++isakmp_frag_insert(struct ph1handle *iph1, struct isakmp_frag_item *item)
+++{
+++	struct isakmp_frag_item *pitem = NULL;
+++	struct isakmp_frag_item *citem = iph1->frag_chain;
+++
+++	/* no frag yet, just insert at beginning of list */
+++	if (iph1->frag_chain == NULL) {
+++		iph1->frag_chain = item;
+++		return 0;
+++	}
+++
+++	do {
+++		/* duplicate fragment number, abort (CVE-2016-10396) */
+++		if (citem->frag_num == item->frag_num)
+++			return -1;
+++
+++		/* need to insert before current item */
+++		if (citem->frag_num > item->frag_num) {
+++			if (pitem != NULL)
+++				pitem->frag_next = item;
+++			else
+++				/* insert at the beginning of the list  */
+++				iph1->frag_chain = item;
+++			item->frag_next = citem;
+++			return 0;
+++		}
+++
+++		pitem = citem;
+++		citem = citem->frag_next;
+++	} while (citem != NULL);
+++
+++	/* we reached the end of the list, insert */
+++	pitem->frag_next = item;
+++	return 0;
+++}
+++
++ int 
++ isakmp_frag_extract(iph1, msg)
++ 	struct ph1handle *iph1;
++@@ -224,39 +261,43 @@ isakmp_frag_extract(iph1, msg)
++ 	item->frag_next = NULL;
++ 	item->frag_packet = buf;
++ 
++-	/* Look for the last frag while inserting the new item in the chain */
++-	if (item->frag_last)
++-		last_frag = item->frag_num;
+++	/* Check for the last frag before inserting the new item in the chain */
+++	if (item->frag_last) {
+++		/* if we have the last fragment, indices must match */
+++		if (iph1->frag_last_index != 0 &&
+++		    item->frag_last != iph1->frag_last_index) {
+++			plog(LLV_ERROR, LOCATION, NULL,
+++			     "Repeated last fragment index mismatch\n");
+++			racoon_free(item);
+++			vfree(buf);
+++			return -1;
+++		}
++ 
++-	if (iph1->frag_chain == NULL) {
++-		iph1->frag_chain = item;
++-	} else {
++-		struct isakmp_frag_item *current;
+++		last_frag = iph1->frag_last_index = item->frag_num;
+++	}
++ 
++-		current = iph1->frag_chain;
++-		while (current->frag_next) {
++-			if (current->frag_last)
++-				last_frag = item->frag_num;
++-			current = current->frag_next;
++-		}
++-		current->frag_next = item;
+++	/* insert fragment into chain */
+++	if (isakmp_frag_insert(iph1, item) == -1) {
+++		plog(LLV_ERROR, LOCATION, NULL,
+++		    "Repeated fragment index mismatch\n");
+++		racoon_free(item);
+++		vfree(buf);
+++		return -1;
++ 	}
++ 
++-	/* If we saw the last frag, check if the chain is complete */
+++	/* If we saw the last frag, check if the chain is complete
+++	 * we have a sorted list now, so just walk through */
++ 	if (last_frag != 0) {
+++		item = iph1->frag_chain;
++ 		for (i = 1; i <= last_frag; i++) {
++-			item = iph1->frag_chain;
++-			do {
++-				if (item->frag_num == i)
++-					break;
++-				item = item->frag_next;
++-			} while (item != NULL);
++-
+++			if (item->frag_num != i)
+++				break;
+++			item = item->frag_next;
++ 			if (item == NULL) /* Not found */
++ 				break;
++ 		}
++ 
++-		if (item != NULL) /* It is complete */
+++		if (i > last_frag) /* It is complete */
++ 			return 1;
++ 	}
++ 		
++@@ -291,15 +332,9 @@ isakmp_frag_reassembly(iph1)
++ 	}
++ 	data = buf->v;
++ 
+++	item = iph1->frag_chain;
++ 	for (i = 1; i <= frag_count; i++) {
++-		item = iph1->frag_chain;
++-		do {
++-			if (item->frag_num == i)
++-				break;
++-			item = item->frag_next;
++-		} while (item != NULL);
++-
++-		if (item == NULL) {
+++		if (item->frag_num != i) {
++ 			plog(LLV_ERROR, LOCATION, NULL, 
++ 			    "Missing fragment #%d\n", i);
++ 			vfree(buf);
++@@ -308,6 +343,7 @@ isakmp_frag_reassembly(iph1)
++ 		}
++ 		memcpy(data, item->frag_packet->v, item->frag_packet->l);
++ 		data += item->frag_packet->l;
+++		item = item->frag_next;
++ 	}
++ 
++ out:
++Index: ipsec-tools-0.8.2/src/racoon/isakmp_inf.c
++===================================================================
++--- ipsec-tools-0.8.2.orig/src/racoon/isakmp_inf.c
+++++ ipsec-tools-0.8.2/src/racoon/isakmp_inf.c
++@@ -720,6 +720,7 @@ isakmp_info_send_nx(isakmp, remote, loca
++ #endif
++ #ifdef ENABLE_FRAG
++ 	iph1->frag = 0;
+++	iph1->frag_last_index = 0;
++ 	iph1->frag_chain = NULL;
++ #endif
++ 
++Index: ipsec-tools-0.8.2/src/racoon/isakmp.c
++===================================================================
++--- ipsec-tools-0.8.2.orig/src/racoon/isakmp.c
+++++ ipsec-tools-0.8.2/src/racoon/isakmp.c
++@@ -1071,6 +1071,7 @@ isakmp_ph1begin_i(rmconf, remote, local)
++ 		iph1->frag = 1;
++ 	else
++ 		iph1->frag = 0;
+++	iph1->frag_last_index = 0;
++ 	iph1->frag_chain = NULL;
++ #endif
++ 	iph1->approval = NULL;
++@@ -1175,6 +1176,7 @@ isakmp_ph1begin_r(msg, remote, local, et
++ #endif
++ #ifdef ENABLE_FRAG
++ 	iph1->frag = 0;
+++	iph1->frag_last_index = 0;
++ 	iph1->frag_chain = NULL;
++ #endif
++ 	iph1->approval = NULL;
++Index: ipsec-tools-0.8.2/src/racoon/handler.h
++===================================================================
++--- ipsec-tools-0.8.2.orig/src/racoon/handler.h
+++++ ipsec-tools-0.8.2/src/racoon/handler.h
++@@ -1,4 +1,4 @@
++-/*	$NetBSD: handler.h,v 1.25 2010/11/17 10:40:41 tteras Exp $	*/
+++/*	$NetBSD: handler.h,v 1.26 2017/01/24 19:23:56 christos Exp $	*/
++ 
++ /* Id: handler.h,v 1.19 2006/02/25 08:25:12 manubsd Exp */
++ 
++@@ -141,6 +141,7 @@ struct ph1handle {
++ #endif
++ #ifdef ENABLE_FRAG
++ 	int frag;			/* IKE phase 1 fragmentation */
+++	int frag_last_index;
++ 	struct isakmp_frag_item *frag_chain;	/* Received fragments */
++ #endif
++ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.18.0
