@@ -1,253 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Aug 2018 15:39:17 +0200
-Subject: [Buildroot] [PATCH 1/1] Add support for custom initramfs
- contents
-In-Reply-To: <20180810183405.25378-1-r.jacob2002@gmail.com>
-References: <20180810183405.25378-1-r.jacob2002@gmail.com>
-Message-ID: <20180819133917.GB15347@scaer>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Sun, 19 Aug 2018 16:46:56 +0300
+Subject: [Buildroot] [PATCH 1/1] wireless_tools: Fix site URL does not work
+Message-ID: <20180819134656.29239-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Raphael, Richard, All,
+From: Vadim Kochan <vadim.kochan@petcube.com>
 
-Here's my long-promiosed review of this patch; sorry for the delay...
+Replace broken http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
+by https://hewlettpackard.github.io/wireless-tools.
 
-On 2018-08-10 20:34 +0200, Raphael Jacob spake thusly:
-> From: Richard Kunze <richard.kunze@web.de>
-> 
-> Signed-off-by: Raphael Jacob <r.jacob2002@gmail.com>
+Signed-off-by: Vadim Kochan <vadim.kochan@petcube.com>
+---
+ package/wireless_tools/wireless_tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-First, two comments:
-
- 1. the author and the SoB lines differ: this is not good. There must be
-    a SoB line from the author.
-
- 2. this is a rather big and complex change that has absolutely no
-    explanation in the commit log. There is no rationale for the change,
-    and there is no explanations of the tricky changes it brings.
-
-So, just because of these two points, I am not fond of it at all.
-
-But then, discussing on IRC with ski777 (Rapahel? Richard? At least it
-starts with an 'R' ;-) ), the purpose is less opaque: to be able to
-create an initrd from parts of $(TARGET_DIR), that will then be able to
-mount the final / filesystem, which is itself made from the entirety of
-$(TARGET_DIR).
-
-At least that is what I understood. Please correct me if I am wrong.
-
-If I am correct, I have to say that I am not too fond of this either.
-
-Note that I *do* understand the reason behind the proposed change, but I
-don't think it is good overall, because it opens a can of worms, where
-people will then want a similar solution for the other filesystems, to
-generate those filesystems with only parts of the content of TARGET_DIR,
-and we already shot down such proposals in the past.
-
-Instead, here is what I suggest people do:
-
-  - have a first defconfig that builds the kernel and a simple userland
-    that acts as the initrd;
-
-  - have a second defconfig that builds the complete, final system.
-
-Of course, there is a gotcha: the final system will need all the kernel
-modules, but they are built from the first defconfig; and the initrd may
-not need all of the kernel modules, just the few ones needed to mount
-the comnplete final system.
-
-So:
-
-  - have a post-build script that is run from the first defconfig, which
-    copies all the modules to a "well-known" location, keeps in
-    TARGET_DIR only the ones required to mount the final system.
-
-  - a second post-build script (or a custom package) that copies the
-    kernel modules from the "well-known" location into the second
-    defconfig's TARGET_DIR.
-
-  - implement a new, custom type of filesystem that generates the final
-    image from the kwernel iamge from the first defconfig and the rootfs
-    from the second defconfig.
-
-At least, that is exactly what I've been doing in similar conditions.
-
-A simple way to have a well-known location is to have a wrapper script
-that does the two builds in sequence:
-
-    #!/bin/sh
-    set -e
-
-    WELL_KNOWN_DIR=$(mktemp -d)
-    export WELL_KNOWN_DIR
-
-    make my_project_initrd_defconfig
-    make my_project_complete_defconfig
-
-    rm -rf "${WELL_KNOWN_DIR}"
-
-And the post-build scripts each refer to the WELL_KNOWN_DIR environment
-variable (you can be inventive with a better name, of course!)
-
-If you are using a br2-external tree (which is probably a good idea to
-store the defconfigs, and other local customisations such as the kernel
-config, the post-build scripts, the local packages, in a VCS), you can
-have the external.mk export that location such as:
-
-    export WELL_KNOWN_DIR = $(BR2_EXTERNAL_MY_NAME_PATH)/tmp
-
-Again, be inventive with names and locations....
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  fs/initramfs/Config.in    | 34 +++++++++++++++++++++++++++++++++-
->  fs/initramfs/initramfs.mk | 18 +++++++++++++++++-
->  linux/linux.mk            |  8 ++++----
->  3 files changed, 54 insertions(+), 6 deletions(-)
-> 
-> diff --git a/fs/initramfs/Config.in b/fs/initramfs/Config.in
-> index 9d5a3f92e6..9b7ac9475e 100644
-> --- a/fs/initramfs/Config.in
-> +++ b/fs/initramfs/Config.in
-> @@ -1,6 +1,22 @@
->  config BR2_TARGET_ROOTFS_INITRAMFS
->  	bool "initial RAM filesystem linked into linux kernel"
->  	depends on BR2_LINUX_KERNEL
-> +	help
-> +	  Integrate an initramfs inside the kernel image.
-> +	  This integration will take place automatically.
-> +
-> +	  The initramfs contents can either be the full root filesystem
-> +	  generated by buildroot, or an image built from a custom list
-> +	  of files specified via the BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS
-> +	  config option.
-> +
-> +choice
-> +	prompt "initial RAM filesystem contents"
-> +	depends on BR2_TARGET_ROOTFS_INITRAMFS
-> +
-> +config BR2_TARGET_ROOTFS_INITRAMFS_ROOTFS
-> +	bool "rootfs.cpio"
-> +	depends on BR2_TARGET_ROOTFS_INITRAMFS
->  	select BR2_TARGET_ROOTFS_CPIO
->  	help
->  	  Integrate the root filesystem generated by Buildroot as an
-> @@ -13,10 +29,26 @@ config BR2_TARGET_ROOTFS_INITRAMFS
->  	  is used, regardless of how buildroot's cpio archive is
->  	  configured.
->  
-> -	  Note that enabling initramfs together with another filesystem
-> +	  Note that enabling this option together with another filesystem
->  	  formats doesn't make sense: you would end up having two
->  	  identical root filesystems, one embedded inside the kernel
->  	  image, and one separately.
-> +config BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM
-> +	bool "custom initramfs contents"
-> +	depends on BR2_TARGET_ROOTFS_INITRAMFS
-> +	help
-> +	  Use the contents of BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS
-> +	  as the linux kernel configuration variable CONFIG_INITRAMFS_SOURCE
-> +
-> +endchoice
-> +
-> +config BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS
-> +	string "custom initramfs contents"
-> +	depends on BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM
-> +	help
-> +	  Custom value to use as CONFIG_INITRAMFS_SOURCE linux kernel configuration
-> +	  variable. See Documentation/filesystems/ramfs-rootfs-initramfs.txt in the
-> +	  linux kernel sources for details.
->  
->  comment "initramfs needs a Linux kernel to be built"
->  	depends on !BR2_LINUX_KERNEL
-> diff --git a/fs/initramfs/initramfs.mk b/fs/initramfs/initramfs.mk
-> index c751093214..ef3fdc6d3d 100644
-> --- a/fs/initramfs/initramfs.mk
-> +++ b/fs/initramfs/initramfs.mk
-> @@ -4,6 +4,12 @@
->  #
->  ################################################################################
->  
-> +ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS_ROOTFS),y)
-> +ROOTFS_INITRAMFS_DEPENDENCIES += rootfs-cpio
-> +endif
-> +
-> +ROOTFS_INITRAMFS_DEPENDENCIES += $(BINARIES_DIR)/initramfs.cpio
-> +
->  # The generic fs infrastructure isn't very useful here.
->  #
->  # The initramfs image does not actually build an image; its only purpose is:
-> @@ -19,13 +25,23 @@
->  # advertise that our dependency is on the rootfs-cpio rule, which is
->  # cleaner in the dependency graph.
->  
-> -rootfs-initramfs: linux-rebuild-with-initramfs
-> +rootfs-initramfs: $(ROOTFS_INITRAMFS_DEPENDENCIES) linux-rebuild-with-initramfs
->  
->  rootfs-initramfs-show-depends:
->  	@echo rootfs-cpio
->  
->  .PHONY: rootfs-initramfs rootfs-initramfs-show-depends
->  
-> +ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS_ROOTFS),y)
-> +$(BINARIES_DIR)/initramfs.cpio: rootfs-cpio
-> +	ln -sf rootfs.cpio $(BINARIES_DIR)/initramfs.cpio
-> +endif
-> +
-> +ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM),y)
-> +$(BINARIES_DIR)/initramfs.cpio: target-finalize $(call qstrip,$(BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS))
-> +	$(LINUX_DIR)/usr/gen_init_cpio $(BR2_TARGET_ROOTFS_INITRAMFS_CUSTOM_CONTENTS) > $(BINARIES_DIR)/initramfs.cpio
-> +endif
-> +
->  ifeq ($(BR2_TARGET_ROOTFS_INITRAMFS),y)
->  TARGETS_ROOTFS += rootfs-initramfs
->  endif
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index 7f4c916671..b98043419b 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -278,8 +278,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
->  	# replaced later by the real cpio archive, and the kernel will be
->  	# rebuilt using the linux-rebuild-with-initramfs target.
->  	$(if $(BR2_TARGET_ROOTFS_INITRAMFS),
-> -		touch $(BINARIES_DIR)/rootfs.cpio
-> -		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio",$(@D)/.config)
-> +		touch $(BINARIES_DIR)/initramfs.cpio
-> +		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/initramfs.cpio",$(@D)/.config)
->  		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0,$(@D)/.config)
->  		$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0,$(@D)/.config))
->  	$(if $(BR2_ROOTFS_DEVICE_CREATION_STATIC),,
-> @@ -501,11 +501,11 @@ endif # BR_BUILDING
->  $(eval $(kconfig-package))
->  
->  # Support for rebuilding the kernel after the cpio archive has
-> -# been generated.
-> +# been generated in $(BINARIES_DIR)/initramfs.cpio.
->  .PHONY: linux-rebuild-with-initramfs
->  linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_target_installed
->  linux-rebuild-with-initramfs: $(LINUX_DIR)/.stamp_images_installed
-> -linux-rebuild-with-initramfs: rootfs-cpio
-> +linux-rebuild-with-initramfs: $(BINARIES_DIR)/initramfs.cpio
->  linux-rebuild-with-initramfs:
->  	@$(call MESSAGE,"Rebuilding kernel with initramfs")
->  	# Build the kernel.
-> -- 
-> 2.18.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
+index 51320a9b25..b87ab20fb2 100644
+--- a/package/wireless_tools/wireless_tools.mk
++++ b/package/wireless_tools/wireless_tools.mk
+@@ -6,7 +6,7 @@
+ 
+ WIRELESS_TOOLS_VERSION_MAJOR = 30
+ WIRELESS_TOOLS_VERSION = $(WIRELESS_TOOLS_VERSION_MAJOR).pre9
+-WIRELESS_TOOLS_SITE = http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
++WIRELESS_TOOLS_SITE = https://hewlettpackard.github.io/wireless-tools
+ WIRELESS_TOOLS_SOURCE = wireless_tools.$(WIRELESS_TOOLS_VERSION).tar.gz
+ WIRELESS_TOOLS_LICENSE = GPL-2.0
+ WIRELESS_TOOLS_LICENSE_FILES = COPYING
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
