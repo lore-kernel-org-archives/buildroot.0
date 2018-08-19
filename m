@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Aug 2018 21:21:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bind: security bump to version
- 9.11.4-P1
-In-Reply-To: <20180818220013.7733-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 19 Aug 2018 00:00:13 +0200")
-References: <20180818220013.7733-1-bernd.kuhls@t-online.de>
-Message-ID: <87wosmmac2.fsf@dell.be.48ers.dk>
+Date: Sun, 19 Aug 2018 21:22:03 +0200
+Subject: [Buildroot] [PATCH 1/2] linux: bump default to version 4.17.17
+In-Reply-To: <20180819065932.7156-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 19 Aug 2018 08:59:31 +0200")
+References: <20180819065932.7156-1-bernd.kuhls@t-online.de>
+Message-ID: <87sh3amaas.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,7 +13,6 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Fixes CVE-2018-5740: https://ftp.isc.org/isc/bind9/9.11.4-P1/CHANGES
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
