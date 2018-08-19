@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Aug 2018 20:15:58 +0200
-Subject: [Buildroot] [PATCH/next 3/3] package/perl-crypt-openssl-rsa: bump
- version to 0.30
+Date: Sun, 19 Aug 2018 20:15:57 +0200
+Subject: [Buildroot] [PATCH/next 2/3] package/perl-crypt-openssl-random:
+ bump version to 0.15
 In-Reply-To: <20180819181558.15338-1-bernd.kuhls@t-online.de>
 References: <20180819181558.15338-1-bernd.kuhls@t-online.de>
-Message-ID: <20180819181558.15338-3-bernd.kuhls@t-online.de>
+Message-ID: <20180819181558.15338-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,67 +12,65 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Changelog:
-https://metacpan.org/changes/distribution/Crypt-OpenSSL-RSA
+https://metacpan.org/changes/distribution/Crypt-OpenSSL-Random
 
 Added new build dependency to perl-crypt-openssl-guess and force it to
-search for openssl in STAGING_DIR. Added license hash. Updated _SITE
-according to scancpan.
+search for openssl in STAGING_DIR. Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/perl-crypt-openssl-rsa/Config.in             |  1 +
- .../perl-crypt-openssl-rsa.hash                      |  7 +++++--
- .../perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk | 12 +++++++++---
- 3 files changed, 15 insertions(+), 5 deletions(-)
+ package/perl-crypt-openssl-random/Config.in            |  1 +
+ .../perl-crypt-openssl-random.hash                     |  7 +++++--
+ .../perl-crypt-openssl-random.mk                       | 10 ++++++++--
+ 3 files changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-crypt-openssl-rsa/Config.in b/package/perl-crypt-openssl-rsa/Config.in
-index 1fa1fd9881..4d33284f0a 100644
---- a/package/perl-crypt-openssl-rsa/Config.in
-+++ b/package/perl-crypt-openssl-rsa/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RSA
- 	bool "perl-crypt-openssl-rsa"
+diff --git a/package/perl-crypt-openssl-random/Config.in b/package/perl-crypt-openssl-random/Config.in
+index 2ceb78dfd6..de474c13d5 100644
+--- a/package/perl-crypt-openssl-random/Config.in
++++ b/package/perl-crypt-openssl-random/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM
+ 	bool "perl-crypt-openssl-random"
  	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_OPENSSL
 +	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_GUESS
- 	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM
  	help
- 	  RSA encoding and decoding, using the openSSL libraries
-diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-index 6e060ce672..0d101d7bb8 100644
---- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-+++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
+ 	  OpenSSL/LibreSSL pseudo-random number generator access
+ 
+diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
+index caacdc9015..57677e3445 100644
+--- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
++++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
 @@ -1,3 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    86217a5036fc63779c30420b5fd84129 Crypt-OpenSSL-RSA-0.28.tar.gz
--sha256 5357f977464bb3a8184cf2d3341851a10d5515b4b2b0dfb88bf78995c0ded7be Crypt-OpenSSL-RSA-0.28.tar.gz
-+md5    10bca2fc6d0ba1aa329f227424ae87d5 Crypt-OpenSSL-RSA-0.30.tar.gz
-+sha256 23e13531397af102db4fd24bcf70137add7c85c23cca697c43aa71c2959a29ac Crypt-OpenSSL-RSA-0.30.tar.gz
+-md5    5d71337503e0356ce1ce1481504e5885 Crypt-OpenSSL-Random-0.11.tar.gz
+-sha256 bb8c81c6a39b9b13a22d818ee9a746242f136f0fadceb6b9776ae615e7524c7a Crypt-OpenSSL-Random-0.11.tar.gz
++md5    bcde8d5a822c91376deda3c4f0c75fbe Crypt-OpenSSL-Random-0.15.tar.gz
++sha256 f0876faa1ba3111e39b86aa730c603211eff2905e460c72a57b61e8cf475cef4 Crypt-OpenSSL-Random-0.15.tar.gz
 +
 +# computed by scancpan
-+sha256 8a693ad3f52daeeb5ac5deceb1e1109c9c87095ed5ba6506d6d5c106e4066f5a LICENSE
-diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-index b853d9953e..118ee66a5e 100644
---- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-+++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
++sha256 fdaba2134145d3e252c5930180b2bcb13b5367ad5a8713d6868f014cd25c496f LICENSE
+diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
+index de029e9af0..775a0ab2c5 100644
+--- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
++++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
 @@ -4,11 +4,17 @@
  #
  ################################################################################
  
--PERL_CRYPT_OPENSSL_RSA_VERSION = 0.28
-+PERL_CRYPT_OPENSSL_RSA_VERSION = 0.30
- PERL_CRYPT_OPENSSL_RSA_SOURCE = Crypt-OpenSSL-RSA-$(PERL_CRYPT_OPENSSL_RSA_VERSION).tar.gz
--PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERLER
--PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = perl-crypt-openssl-random
-+PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
-+PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = \
+-PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.11
++PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.15
+ PERL_CRYPT_OPENSSL_RANDOM_SOURCE = Crypt-OpenSSL-Random-$(PERL_CRYPT_OPENSSL_RANDOM_VERSION).tar.gz
+ PERL_CRYPT_OPENSSL_RANDOM_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+-PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = openssl
++PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = \
 +	perl-crypt-openssl-guess \
-+	perl-crypt-openssl-random
- PERL_CRYPT_OPENSSL_RSA_LICENSE = Artistic or GPL-1.0+
- PERL_CRYPT_OPENSSL_RSA_LICENSE_FILES = LICENSE
++	openssl
+ PERL_CRYPT_OPENSSL_RANDOM_LICENSE = Artistic or GPL-1.0+
+ PERL_CRYPT_OPENSSL_RANDOM_LICENSE_FILES = LICENSE
  
 +# Try as hard as possible to remedy to the brain-damage their build-system
 +# suffers from: don't search for openssl, they pick the host-system one.
-+PERL_CRYPT_OPENSSL_RSA_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
++PERL_CRYPT_OPENSSL_RANDOM_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
 +
  $(eval $(perl-package))
 -- 
