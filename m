@@ -1,28 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Aug 2018 21:29:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nodejs: security bump version
- to 8.11.4
-In-Reply-To: <20180819132217.2776-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 19 Aug 2018 15:22:17 +0200")
-References: <20180819132217.2776-1-bernd.kuhls@t-online.de>
-Message-ID: <87ftzam9yi.fsf@dell.be.48ers.dk>
+Date: Sun, 19 Aug 2018 21:33:58 +0200
+Subject: [Buildroot] [PATCH 1/1] wireless_tools: Fix site URL does not
+ work
+In-Reply-To: <20180819134656.29239-1-vadim4j@gmail.com> (Vadim Kochan's
+ message of "Sun, 19 Aug 2018 16:46:56 +0300")
+References: <20180819134656.29239-1-vadim4j@gmail.com>
+Message-ID: <87bm9ym9qx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
 
- > Release notes:
- > https://nodejs.org/en/blog/vulnerability/august-2018-security-releases/
+ > From: Vadim Kochan <vadim.kochan@petcube.com>
+ > Replace broken http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
+ > by https://hewlettpackard.github.io/wireless-tools.
 
- > Fixes CVE-2018-12115, also CVEs were fixed in included OpenSSL code
- > which do not use for the target build.
+ > Signed-off-by: Vadim Kochan <vadim.kochan@petcube.com>
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed, thanks.
+Committed after also adjusting the URL in Config.in, thanks.
 
 -- 
 Bye, Peter Korsgaard
