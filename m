@@ -1,100 +1,83 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 Aug 2018 18:26:41 +0200
-Subject: [Buildroot] [PATCH 1/1] Add support for custom initramfs
- contents
-In-Reply-To: <b3576a560b4ad4272bdbe2520b0d2378a328deec.camel@web.de>
-References: <20180810183405.25378-1-r.jacob2002@gmail.com>
- <20180819133917.GB15347@scaer>
- <b3576a560b4ad4272bdbe2520b0d2378a328deec.camel@web.de>
-Message-ID: <20180819162641.GC15347@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Aug 2018 18:51:58 +0200
+Subject: [Buildroot] [PATCH/next/RFC 1/1] package/nodejs: use host-libopenssl
+Message-ID: <20180819165158.25255-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Richard, Raphael, All,
+host-nodejs is configured to build openssl by using its included openssl
+source code which is based on openssl 1.0.2. If host-libopenssl was
+already built its header files are being picked up during host-nodejs
+build, this was verified by adding debug code to
+$(HOST_DIR)/include/openssl/opensslv.h.
 
-On 2018-08-19 18:05 +0200, Richard Kunze spake thusly:
-> Yes, you did understand ski7777 (that's Raphael :-)) on IRC correctly -
-> we're indeed using the initrd to set up the environment for the "real"
-> root file system.
+This situation was not a problem as long as host-libopenssl was the
+same version than the openssl code included in nodejs.
 
-OK, so next time, do provide such explanations from the onset, it helps
-in the review.
+Some code in host-nodejs-8.11.4/src/node_crypto.cc is guarded by
 
-Consider that the commit log is here to:
+	#if OPENSSL_VERSION_NUMBER < 0x10100000L
 
- 1. explain the problem, i.e. what you expected and fails, or what you
-    need and is missing...
+to be used only with openssl 1.0.x.
 
- 2. explain the cause of the problem, e.g. the current limitations that
-    cause the above grievance;
+This leads to problems if host-libopenssl 1.1.x was built before. Due
+to the usage of its header files some code in node_crypto.cc is not
+built leading to many linking errors later on, for example:
 
- 3. explain the remedial to lift the limitations and fix the problem.
+node_crypto.cc:(.text+0x1a1): undefined reference to `DH_get0_pqg'
 
-The commit log is usefull:
+When the nodejs package originally was added to buildroot back in
+March 2013:
+https://git.buildroot.net/buildroot/commit/?id=b31bc7d4387095091a109eb879464d54d37a5eab
 
- 1. to the reviewers, to understand the patch;
+We did not have a host-libopenssl package back then, it was added one
+month later:
+https://git.buildroot.net/buildroot/commit/?id=7842789cb539b6b64d61b03f5c8dbe6813f01da7
 
- 2. to the author, to formalise their thoughts about the issue;
+To fix the problem we use host-libopenssl for host-nodejs.
+By using host-libopenssl the build time of nodejs is reduced by ~15s.
 
- 3. to anyone in the future, author included, to understand what the
-    change was made back at the time it was made.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/nodejs/nodejs.mk | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-> I thought the requirement for an additional initrd with different
-> content from the main root file system would be quite common (after
-> all, almost all server and desktop linux distributions use a similar
-> setup) and wondered why Buildroot did not provide any means for this,
-
-Probably mainly because Buildroot does not target desktop or servers,
-but mostly embedded devices that are not meant to be taht flexible that
-they require an initrd; i.e. the overwhelming majority of embedded
-devices boot directly into their final rootfs.
-
-The only case I've seen, is a device that would boot into a very minimal
-system, download the real image from a server, and kexec into that. But
-then that case would even be better served with two separate defconfigs
-as well, because they really were two different systems.
-
-> so I implemented it back at the start of our project (
-> https://github.com/ftCommunity/ftcommunity-TXT in case you're
-> curious). 
-> 
-> And now, while finally switching from our initial, hacked-up-buildroot-
-> tree initial setup to a proper br-external setup (should have done that
-> from the start, really), this was the final change that prevented
-> building from a pristine Buildroot tree, so we decided to try and get
-> it upstream ;-)
-> I can understand your reasoning why you don't want to accept it,
-
-Note that I did not say 'no'. I said I did not like it; which is a bit
-different. ;-) I don't have the final say.
-
-At least, provide a commit log that completely explains the reason for
-the commit, that would be a very good step forward. (TBH, that is the
-main sticking point for me in the current state.)
-
-> though, and will probably implement a two-stage build as suggested in
-> your mail instead.
-
-That is my position: to suggest such a two step procedure, because it is
-the most flexible solution.
-
-However, as I said: I *do* understand the underlying reason for your
-proposal. Let's just try to find the best way to do it.
-
-> Again, thank you very much for your review and advice.
-
-You're welcome! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index e2c94ba8db..165f3f109a 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -10,7 +10,7 @@ NODEJS_SITE = http://nodejs.org/dist/v$(NODEJS_VERSION)
+ NODEJS_DEPENDENCIES = host-python host-nodejs c-ares \
+ 	libhttpparser libuv zlib \
+ 	$(call qstrip,$(BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL_DEPS))
+-HOST_NODEJS_DEPENDENCIES = host-python host-zlib
++HOST_NODEJS_DEPENDENCIES = host-libopenssl host-python host-zlib
+ NODEJS_LICENSE = MIT (core code); MIT, Apache and BSD family licenses (Bundled components)
+ NODEJS_LICENSE_FILES = LICENSE
+ 
+@@ -50,10 +50,6 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 	mkdir -p $(@D)/bin
+ 	ln -sf $(HOST_DIR)/bin/python2 $(@D)/bin/python
+ 
+-	# Build with the static, built-in OpenSSL which is supplied as part of
+-	# the nodejs source distribution.  This is needed on the host because
+-	# NPM is non-functional without it, and host-openssl isn't part of
+-	# buildroot.
+ 	(cd $(@D); \
+ 		$(HOST_CONFIGURE_OPTS) \
+ 		PATH=$(@D)/bin:$(BR_PATH) \
+@@ -63,6 +59,9 @@ define HOST_NODEJS_CONFIGURE_CMDS
+ 		--without-snapshot \
+ 		--without-dtrace \
+ 		--without-etw \
++		--shared-openssl \
++		--shared-openssl-includes=$(HOST_DIR)/include/openssl \
++		--shared-openssl-libpath=$(HOST_DIR)/lib \
+ 		--shared-zlib \
+ 		--with-intl=none \
+ 	)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.18.0
