@@ -1,136 +1,367 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Aug 2018 08:00:11 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-18
-Message-ID: <20180819060011.E1CB320DE6@mail.bootlin.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 19 Aug 2018 08:51:46 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/netsnmp: bump version to 5.8
+Message-ID: <20180819065146.19958-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Removed patch, applied upstream, autoreconf is not needed anymore.
+Added sha256 hashes for tarball and license file.
+Switched _SITE to https.
 
-Build statistics for 2018-08-18
-===============================
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...ate-the-hard-coded-libnl-3-include-p.patch | 300 ------------------
+ package/netsnmp/netsnmp.hash                  |   9 +-
+ package/netsnmp/netsnmp.mk                    |   5 +-
+ 3 files changed, 8 insertions(+), 306 deletions(-)
+ delete mode 100644 package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  13 |   2 |   1 |  16 |
-   2018.05.x |  26 |   0 |   0 |  26 |
-      master | 183 |  23 |   1 | 207 |
-        next |  47 |  19 |   1 |  67 |
-
-Results for branch '2018.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-         host-cryptsetup-2.0.0 | 1 
-                  samba4-4.7.6 | 1 
-                       unknown | 1 
-
-
-Detail of failures
-------------------
-
-        i686 |          host-cryptsetup-2.0.0 | NOK | http://autobuild.buildroot.net/results/fe1cb8c03508f0413b7dfb31580b6f44ab664b52 |     
-      x86_64 |                   samba4-4.7.6 | NOK | http://autobuild.buildroot.net/results/4cd5eb614fd7399225b20a3832fe9f7b60cacb86 |     
-         arm |                        unknown | TIM | http://autobuild.buildroot.net/results/5e7a59e7fef8dfed52b4657e70822712564e8946 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-              python-pyqt5-5.7 | 4 
-                qt5base-5.11.1 | 4 
-                     php-7.2.9 | 3 
-                  boost-1.67.0 | 2 
-               aircrack-ng-1.3 | 1 
-                    brltty-5.5 | 1 
-             host-gauche-0.9.5 | 1 
-           host-libselinux-2.7 | 1 
-                linux-firmware | 1 
-                    owfs-3.2p1 | 1 
-                      qt-4.8.7 | 1 
-                 qt5base-5.6.3 | 1 
-          shairport-sync-3.2.1 | 1 
-              wireshark-2.2.16 | 1 
-                    xen-4.10.1 | 1 
-
-
-Detail of failures
-------------------
-
-        i586 |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/8325fa01aca1a816e107044ddf79fb2a36a5862b |     
-     powerpc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/9c373d0b5a1a59e2271d71c480d55a90a67b84cb |     
-       nios2 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/097cc1809f78369208d4df2bbe091d69391c6afd |     
-     powerpc |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/b3667ef1d15245c05d5aaac30a0352fff4cb2734 |     
-      mipsel |              host-gauche-0.9.5 | NOK | http://autobuild.buildroot.net/results/a5cefd76d4cd54512597c811002b41d22aaed910 |     
-         arc |            host-libselinux-2.7 | NOK | http://autobuild.buildroot.net/results/c3272566bb808e43bb77ec59cfe596f7e0fe9a64 |     
-        i686 |                 linux-firmware | TIM | http://autobuild.buildroot.net/results/63767fc6219894d8e7b7bee3648c4f59128d69cf |     
-microblazeel |                     owfs-3.2p1 | NOK | http://autobuild.buildroot.net/results/d369e2c8b90558e84ffd5a44cfe1308111c88637 |     
-    mips64el |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/15049fe21aa2c126c271139adbed6467bf185c4d | ORPH
-    mips64el |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/aa06c788df158172bffbfdff2543c45b5b651a88 | ORPH
-         arm |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/a48ccecc41915e0e12c652113334439801ffe501 | ORPH
-     sparc64 |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/f831180ff7bbed3ca3610d3c6160b64862f07ded |     
-         arm |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/fe8a5deeba3e96b719f81fe8d17a3d424b60524e |     
-         arm |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/1f1e92374fe71a1d4343243db5f530c33db06698 |     
-         arm |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/8df926f8096f7d36b2d0cf908191eacf8f68721b |     
-     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/466375dda01a618addef84eda652b3a2feeee9b7 | ORPH
-        or1k |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/e1e9dbd376bfca869f8489c3735851107b4cce1b |     
-        or1k |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/fad661b963e050fbdf09fe59473d59e40e64ac9c |     
-        or1k |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/4b7d943a81242295fdba9fb845570c71b1c46733 |     
-  aarch64_be |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/a5c70417c298d60758d6f9f17a0792530a66eec0 |     
-         arm |                  qt5base-5.6.3 | NOK | http://autobuild.buildroot.net/results/b5474a3e0e98b9dd08539ee9ca812befe491903e |     
-         arm |           shairport-sync-3.2.1 | NOK | http://autobuild.buildroot.net/results/53d21686780aa2485745b59e812b6280dd39f1c5 |     
-     powerpc |               wireshark-2.2.16 | NOK | http://autobuild.buildroot.net/results/f84a9f9b5a8fc6faf23fd4c3cafa2e1fcc5278ab | ORPH
-     aarch64 |                     xen-4.10.1 | NOK | http://autobuild.buildroot.net/results/a7f2bf387458c2f0db6a4b555c51004f321f9320 |     
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-            host-lvm2-2.02.180 | 6 
-              glibc-glibc-2.28 | 3 
-                  boost-1.67.0 | 2 
-host-python-vcversioner-2.1... | 2 
-                    f2fs-tools | 1 
-              host-cxxtest-4.4 | 1 
-             host-meson-0.47.1 | 1 
-              python-pyqt5-5.7 | 1 
-            python-pyyaml-3.12 | 1 
-             util-linux-2.32.1 | 1 
-                     vlc-3.0.3 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/d9feba90f9ad59f64edb69f7776ec5933dc9867c |     
-       sparc |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/8e979944a3f48e0a021f7b994e60e644f878e1f9 |     
-         arm |                     f2fs-tools | TIM | http://autobuild.buildroot.net/results/775a5914b59a2aa5b349c092be56cc14da8612b0 |     
-         arm |               glibc-glibc-2.28 | NOK | http://autobuild.buildroot.net/results/8b6d63d74578b685493f30d0897a96efd9b8c2f8 | ORPH
-         arm |               glibc-glibc-2.28 | NOK | http://autobuild.buildroot.net/results/88467eea8474366fc8d247fe240c0f392d2c8b1a | ORPH
-         arm |               glibc-glibc-2.28 | NOK | http://autobuild.buildroot.net/results/eb0e8a23749db3476a782295ced5bde0e82d6a4a | ORPH
-         arm |               host-cxxtest-4.4 | NOK | http://autobuild.buildroot.net/results/98e0f97655cbc92939a78998e6aab663b18471b1 |     
-         arm |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/bfd85382e6dfbeff405e94af113d9317e1b473a8 | ORPH
-        or1k |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/5973f83d93dd2d1b79ca1536ad7e3a025e3d10f5 | ORPH
-         arm |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/8f624e502a5a0d7ce892a269ba48ac7a0b31d199 | ORPH
-        mips |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/5f8c139c7c21fdf4ed346fd0b84df2db28391cdd | ORPH
-        i586 |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/06f14bbda4825ad791c192b65407ebb17841339f | ORPH
-     aarch64 |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/3ca4a0909da0897681c5efbcd4508906ad7ef729 | ORPH
- powerpc64le |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/129d3adbf84ccee64cd7bc8e1cc585f03c374e75 |     
-         arc | host-python-vcversioner-2.1... | NOK | http://autobuild.buildroot.net/results/e6134309e1eeb3b3cd8883a2642c002fb353f5b5 |     
-         arm | host-python-vcversioner-2.1... | NOK | http://autobuild.buildroot.net/results/2b8d0bd5d2538af5e6707696f83b32f808e73d40 |     
-         arm |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/7ba82b05d5b675fea7d580dc9e9fc7e2ea3d5de0 |     
-microblazeel |             python-pyyaml-3.12 | NOK | http://autobuild.buildroot.net/results/3f28a636563e3e12d5cb1f5c47de5ad4008c2e2b |     
-      x86_64 |              util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/064270b27d3c97852f0c9578b990610de641af42 |     
-     powerpc |                      vlc-3.0.3 | NOK | http://autobuild.buildroot.net/results/7445bdc2fdcb28aa7f58c0249653329414e447df |     
-
-
+diff --git a/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch b/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
+deleted file mode 100644
+index cf0592233e..0000000000
+--- a/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
++++ /dev/null
+@@ -1,300 +0,0 @@
+-From 57d6c3d36045aab8957ffeb7324728bf17faf8bd Mon Sep 17 00:00:00 2001
+-From: Bart Van Assche <bvanassche@acm.org>
+-Date: Mon, 2 Feb 2015 20:31:29 +0100
+-Subject: [PATCH] configure: Eliminate the hard-coded libnl-3 include path
+-
+-See also commit 3dde41998625fe0e24119a2e1f4509ba3ba2fd9a.
+-
+-(cherry picked from commit 852dcd644cfe4cfc7177649eaec163d6221f2be1)
+-
+-Original commit included modifications to configure script.
+-Do not keep these modifications, since they caused lots of conflicts, and
+-configure script is meant to be automatically generated.
+-
+-Signed-off-by: Julien Floret <julien.floret@6wind.com>
+-
+-Conflicts:
+-	configure
+----
+- aclocal.m4                  |   1 +
+- configure.d/config_os_libs2 |  30 ++++++-
+- m4/pkg.m4                   | 214 ++++++++++++++++++++++++++++++++++++++++++++
+- 3 files changed, 243 insertions(+), 2 deletions(-)
+- create mode 100644 m4/pkg.m4
+-
+-diff --git a/aclocal.m4 b/aclocal.m4
+-index cd80c7486f2f..45e3608ed480 100644
+---- a/aclocal.m4
+-+++ b/aclocal.m4
+-@@ -22,3 +22,4 @@ m4_include([m4/ltversion.m4])
+- m4_include([m4/lt~obsolete.m4])
+- m4_include([m4/netsnmp_arg.m4])
+- m4_include([m4/netsnmp_search_libs.m4])
+-+m4_include([m4/pkg.m4])
+-diff --git a/configure.d/config_os_libs2 b/configure.d/config_os_libs2
+-index 47491e24ce0a..10bd414b879e 100644
+---- a/configure.d/config_os_libs2
+-+++ b/configure.d/config_os_libs2
+-@@ -225,11 +225,37 @@ fi
+- if test "x$with_nl" != "xno"; then
+-     case $target_os in
+-     linux*) # Check for libnl (linux)
+-+        # The test below verifies whether the libnl-3 package been installed.
+-+        # This test works as follows:
+-+        # - If pkg-config was not installed at the time autogen.sh was run,
+-+        #   the definition of the PKG_CHECK_EXISTS() macro will not be found by
+-+        #   autogen.sh. Augogen.sh will generate a configure script that prints
+-+        #   a warning about pkg-config and proceeds as if libnl-3 has not been
+-+        #   installed.
+-+        # - If pkg-config was installed at the time autogen.sh was run,
+-+        #   the generated configure script will try to detect the presence of
+-+        #   the libnl-3 library by looking up compile and linker flags in the
+-+        #   file called libnl-3.pc.
+-+        # - pkg-config settings can be overridden via the configure variables
+-+        #   LIBNL3_CFLAGS and LIBNL3_LIBS (added by the pkg-config m4 macro's to
+-+        #   the configure script -- see also ./configure --help).
+-+        # - The LIBNL3_CFLAGS and LIBNL3_LIBS configure variables can be used
+-+        #   even if the pkg-config executable is not present on the system on
+-+        #   which the configure script is run.
+-+        ifdef(
+-+          [PKG_CHECK_EXISTS],
+-+          [PKG_CHECK_EXISTS([libnl-3.0],
+-+            [PKG_CHECK_MODULES([LIBNL3], [libnl-3.0])])
+-+          ],
+-+          AC_MSG_WARN([pkg-config has not been installed or is too old.])
+-+          AC_MSG_WARN([Detection of libnl-3.0 will be skipped.])
+-+        )
+-+
+-         netsnmp_save_CPPFLAGS="$CPPFLAGS"
+--        CPPFLAGS="-I/usr/include/libnl3 $CPPFLAGS"
+-+        CPPFLAGS="${LIBNL3_CFLAGS} $CPPFLAGS"
+-         NETSNMP_SEARCH_LIBS(nl_connect, nl-3,
+-             [AC_CHECK_HEADERS(netlink/netlink.h)
+--            EXTERNAL_MIBGROUP_INCLUDES="$EXTERNAL_MIBGROUP_INCLUDES -I/usr/include/libnl3"],
+-+            EXTERNAL_MIBGROUP_INCLUDES="$EXTERNAL_MIBGROUP_INCLUDES ${LIBNL3_CFLAGS}"],
+-             [CPPFLAGS="$netsnmp_save_CPPFLAGS"], [], [], [LMIBLIBS])
+-         if test "x$ac_cv_header_netlink_netlink_h" != xyes; then
+-             NETSNMP_SEARCH_LIBS(nl_connect, nl, [
+-diff --git a/m4/pkg.m4 b/m4/pkg.m4
+-new file mode 100644
+-index 000000000000..c5b26b52e6cd
+---- /dev/null
+-+++ b/m4/pkg.m4
+-@@ -0,0 +1,214 @@
+-+# pkg.m4 - Macros to locate and utilise pkg-config.            -*- Autoconf -*-
+-+# serial 1 (pkg-config-0.24)
+-+# 
+-+# Copyright ? 2004 Scott James Remnant <scott@netsplit.com>.
+-+#
+-+# This program is free software; you can redistribute it and/or modify
+-+# it under the terms of the GNU General Public License as published by
+-+# the Free Software Foundation; either version 2 of the License, or
+-+# (at your option) any later version.
+-+#
+-+# This program is distributed in the hope that it will be useful, but
+-+# WITHOUT ANY WARRANTY; without even the implied warranty of
+-+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-+# General Public License for more details.
+-+#
+-+# You should have received a copy of the GNU General Public License
+-+# along with this program; if not, write to the Free Software
+-+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+-+#
+-+# As a special exception to the GNU General Public License, if you
+-+# distribute this file as part of a program that contains a
+-+# configuration script generated by Autoconf, you may include it under
+-+# the same distribution terms that you use for the rest of that program.
+-+
+-+# PKG_PROG_PKG_CONFIG([MIN-VERSION])
+-+# ----------------------------------
+-+AC_DEFUN([PKG_PROG_PKG_CONFIG],
+-+[m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+-+m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
+-+m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
+-+AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])
+-+AC_ARG_VAR([PKG_CONFIG_PATH], [directories to add to pkg-config's search path])
+-+AC_ARG_VAR([PKG_CONFIG_LIBDIR], [path overriding pkg-config's built-in search path])
+-+
+-+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
+-+	AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
+-+fi
+-+if test -n "$PKG_CONFIG"; then
+-+	_pkg_min_version=m4_default([$1], [0.9.0])
+-+	AC_MSG_CHECKING([pkg-config is at least version $_pkg_min_version])
+-+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
+-+		AC_MSG_RESULT([yes])
+-+	else
+-+		AC_MSG_RESULT([no])
+-+		PKG_CONFIG=""
+-+	fi
+-+fi[]dnl
+-+])# PKG_PROG_PKG_CONFIG
+-+
+-+# PKG_CHECK_EXISTS(MODULES, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+-+#
+-+# Check to see whether a particular set of modules exists.  Similar
+-+# to PKG_CHECK_MODULES(), but does not set variables or print errors.
+-+#
+-+# Please remember that m4 expands AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+-+# only at the first occurence in configure.ac, so if the first place
+-+# it's called might be skipped (such as if it is within an "if", you
+-+# have to call PKG_CHECK_EXISTS manually
+-+# --------------------------------------------------------------
+-+AC_DEFUN([PKG_CHECK_EXISTS],
+-+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+-+if test -n "$PKG_CONFIG" && \
+-+    AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
+-+  m4_default([$2], [:])
+-+m4_ifvaln([$3], [else
+-+  $3])dnl
+-+fi])
+-+
+-+# _PKG_CONFIG([VARIABLE], [COMMAND], [MODULES])
+-+# ---------------------------------------------
+-+m4_define([_PKG_CONFIG],
+-+[if test -n "$$1"; then
+-+    pkg_cv_[]$1="$$1"
+-+ elif test -n "$PKG_CONFIG"; then
+-+    PKG_CHECK_EXISTS([$3],
+-+                     [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`
+-+		      test "x$?" != "x0" && pkg_failed=yes ],
+-+		     [pkg_failed=yes])
+-+ else
+-+    pkg_failed=untried
+-+fi[]dnl
+-+])# _PKG_CONFIG
+-+
+-+# _PKG_SHORT_ERRORS_SUPPORTED
+-+# -----------------------------
+-+AC_DEFUN([_PKG_SHORT_ERRORS_SUPPORTED],
+-+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+-+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
+-+        _pkg_short_errors_supported=yes
+-+else
+-+        _pkg_short_errors_supported=no
+-+fi[]dnl
+-+])# _PKG_SHORT_ERRORS_SUPPORTED
+-+
+-+
+-+# PKG_CHECK_MODULES(VARIABLE-PREFIX, MODULES, [ACTION-IF-FOUND],
+-+# [ACTION-IF-NOT-FOUND])
+-+#
+-+#
+-+# Note that if there is a possibility the first call to
+-+# PKG_CHECK_MODULES might not happen, you should be sure to include an
+-+# explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
+-+#
+-+#
+-+# --------------------------------------------------------------
+-+AC_DEFUN([PKG_CHECK_MODULES],
+-+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+-+AC_ARG_VAR([$1][_CFLAGS], [C compiler flags for $1, overriding pkg-config])dnl
+-+AC_ARG_VAR([$1][_LIBS], [linker flags for $1, overriding pkg-config])dnl
+-+
+-+pkg_failed=no
+-+AC_MSG_CHECKING([for $1])
+-+
+-+_PKG_CONFIG([$1][_CFLAGS], [cflags], [$2])
+-+_PKG_CONFIG([$1][_LIBS], [libs], [$2])
+-+
+-+m4_define([_PKG_TEXT], [Alternatively, you may set the environment variables $1[]_CFLAGS
+-+and $1[]_LIBS to avoid the need to call pkg-config.
+-+See the pkg-config man page for more details.])
+-+
+-+if test $pkg_failed = yes; then
+-+   	AC_MSG_RESULT([no])
+-+        _PKG_SHORT_ERRORS_SUPPORTED
+-+        if test $_pkg_short_errors_supported = yes; then
+-+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
+-+        else 
+-+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
+-+        fi
+-+	# Put the nasty error message in config.log where it belongs
+-+	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
+-+
+-+	m4_default([$4], [AC_MSG_ERROR(
+-+[Package requirements ($2) were not met:
+-+
+-+$$1_PKG_ERRORS
+-+
+-+Consider adjusting the PKG_CONFIG_PATH environment variable if you
+-+installed software in a non-standard prefix.
+-+
+-+_PKG_TEXT])[]dnl
+-+        ])
+-+elif test $pkg_failed = untried; then
+-+     	AC_MSG_RESULT([no])
+-+	m4_default([$4], [AC_MSG_FAILURE(
+-+[The pkg-config script could not be found or is too old.  Make sure it
+-+is in your PATH or set the PKG_CONFIG environment variable to the full
+-+path to pkg-config.
+-+
+-+_PKG_TEXT
+-+
+-+To get pkg-config, see <http://pkg-config.freedesktop.org/>.])[]dnl
+-+        ])
+-+else
+-+	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
+-+	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
+-+        AC_MSG_RESULT([yes])
+-+	$3
+-+fi[]dnl
+-+])# PKG_CHECK_MODULES
+-+
+-+
+-+# PKG_INSTALLDIR(DIRECTORY)
+-+# -------------------------
+-+# Substitutes the variable pkgconfigdir as the location where a module
+-+# should install pkg-config .pc files. By default the directory is
+-+# $libdir/pkgconfig, but the default can be changed by passing
+-+# DIRECTORY. The user can override through the --with-pkgconfigdir
+-+# parameter.
+-+AC_DEFUN([PKG_INSTALLDIR],
+-+[m4_pushdef([pkg_default], [m4_default([$1], ['${libdir}/pkgconfig'])])
+-+m4_pushdef([pkg_description],
+-+    [pkg-config installation directory @<:@]pkg_default[@:>@])
+-+AC_ARG_WITH([pkgconfigdir],
+-+    [AS_HELP_STRING([--with-pkgconfigdir], pkg_description)],,
+-+    [with_pkgconfigdir=]pkg_default)
+-+AC_SUBST([pkgconfigdir], [$with_pkgconfigdir])
+-+m4_popdef([pkg_default])
+-+m4_popdef([pkg_description])
+-+]) dnl PKG_INSTALLDIR
+-+
+-+
+-+# PKG_NOARCH_INSTALLDIR(DIRECTORY)
+-+# -------------------------
+-+# Substitutes the variable noarch_pkgconfigdir as the location where a
+-+# module should install arch-independent pkg-config .pc files. By
+-+# default the directory is $datadir/pkgconfig, but the default can be
+-+# changed by passing DIRECTORY. The user can override through the
+-+# --with-noarch-pkgconfigdir parameter.
+-+AC_DEFUN([PKG_NOARCH_INSTALLDIR],
+-+[m4_pushdef([pkg_default], [m4_default([$1], ['${datadir}/pkgconfig'])])
+-+m4_pushdef([pkg_description],
+-+    [pkg-config arch-independent installation directory @<:@]pkg_default[@:>@])
+-+AC_ARG_WITH([noarch-pkgconfigdir],
+-+    [AS_HELP_STRING([--with-noarch-pkgconfigdir], pkg_description)],,
+-+    [with_noarch_pkgconfigdir=]pkg_default)
+-+AC_SUBST([noarch_pkgconfigdir], [$with_noarch_pkgconfigdir])
+-+m4_popdef([pkg_default])
+-+m4_popdef([pkg_description])
+-+]) dnl PKG_NOARCH_INSTALLDIR
+-+
+-+
+-+# PKG_CHECK_VAR(VARIABLE, MODULE, CONFIG-VARIABLE,
+-+# [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
+-+# -------------------------------------------
+-+# Retrieves the value of the pkg-config variable for the given module.
+-+AC_DEFUN([PKG_CHECK_VAR],
+-+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+-+AC_ARG_VAR([$1], [value of $3 for $2, overriding pkg-config])dnl
+-+
+-+_PKG_CONFIG([$1], [variable="][$3]["], [$2])
+-+AS_VAR_COPY([$1], [pkg_cv_][$1])
+-+
+-+AS_VAR_IF([$1], [""], [$5], [$4])dnl
+-+])# PKG_CHECK_VAR
+--- 
+-2.1.0
+-
+diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
+index fc77926023..d05a7de9da 100644
+--- a/package/netsnmp/netsnmp.hash
++++ b/package/netsnmp/netsnmp.hash
+@@ -1,3 +1,6 @@
+-# From http://sourceforge.net/projects/net-snmp/files/net-snmp/5.7.3/
+-md5	d4a3459e1577d0efa8d96ca70a885e53	net-snmp-5.7.3.tar.gz
+-sha1	97dc25077257680815de44e34128d365c76bd839	net-snmp-5.7.3.tar.gz
++# From http://sourceforge.net/projects/net-snmp/files/net-snmp/5.8/
++md5	63bfc65fbb86cdb616598df1aff6458a		net-snmp-5.8.tar.gz
++sha1	78f70731df9dcdb13fe8f60eb7d80d7583da4d2c	net-snmp-5.8.tar.gz
++# Locally computed
++sha256 b2fc3500840ebe532734c4786b0da4ef0a5f67e51ef4c86b3345d697e4976adf  net-snmp-5.8.tar.gz
++sha256 ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 742fa6e3b3..b85d7d38ba 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NETSNMP_VERSION = 5.7.3
+-NETSNMP_SITE = http://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
++NETSNMP_VERSION = 5.8
++NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
+ NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
+ NETSNMP_LICENSE = Various BSD-like
+ NETSNMP_LICENSE_FILES = COPYING
+@@ -36,7 +36,6 @@ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true inst
+ NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
+ NETSNMP_MAKE = $(MAKE1)
+ NETSNMP_CONFIG_SCRIPTS = net-snmp-config
+-NETSNMP_AUTORECONF = YES
+ 
+ ifeq ($(BR2_ENDIAN),"BIG")
+ NETSNMP_CONF_OPTS += --with-endianness=big
 -- 
-http://autobuild.buildroot.net
+2.18.0
