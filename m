@@ -1,43 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Aug 2018 23:30:03 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/synergy: bump version to
- 2.0.12-beta
-In-Reply-To: <20180819210835.13321-1-bernd.kuhls@t-online.de>
-References: <20180819210835.13321-1-bernd.kuhls@t-online.de>
-Message-ID: <20180819233003.496215f3@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 Aug 2018 00:21:33 +0200
+Subject: [Buildroot] [PATCH v1] qt5base: fix double-conversion for or1k
+In-Reply-To: <20180818224236.2422-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 19 Aug 2018 00:42:36 +0200")
+References: <20180818224236.2422-1-ps.report@gmx.net>
+Message-ID: <87y3d2knf6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On Sun, 19 Aug 2018 23:08:35 +0200, Bernd Kuhls wrote:
-> Normally we do not use beta versions but 1.x versions are incompatible
-> with openssl-1.1.x and openssl support was dropped in synergy with
-> version 2.0.4: https://github.com/symless/synergy-core/releases
-> 
-> Also libcurl is not needed anymore since version 2.0.12.
-> 
-> Added license hash, removed all patches since they fixed bugs which do
-> not exist anymore.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...ow-building-of-synergy-without-tests.patch | 86 -------------------
->  ...e-output-path-when-building-in-debug.patch | 33 -------
->  package/synergy/Config.in                     |  2 -
->  package/synergy/synergy.hash                  |  3 +-
->  package/synergy/synergy.mk                    |  4 +-
->  5 files changed, 4 insertions(+), 124 deletions(-)
->  delete mode 100644 package/synergy/0001-allow-building-of-synergy-without-tests.patch
->  delete mode 100644 package/synergy/0002-do-not-change-output-path-when-building-in-debug.patch
+ > Fixes [1]:
+ >   ../3rdparty/double-conversion/include/double-conversion/utils.h:81:2: error: #error Target architecture was not detected as supported by Double-Conversion.
+ >   #error Target architecture was not detected as supported by Double-Conversion.
 
-Applied to next, thanks.
+ > [1] http://autobuild.buildroot.net/results/a3535cdf5e91df011a59a4b9f60d69195f5efdcb
 
-Thomas
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
