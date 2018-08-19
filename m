@@ -1,75 +1,41 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 19 Aug 2018 21:49:17 +0200
-Subject: [Buildroot] [RFC v3 2/4] meson: change from global to per
- package cross-compilation.conf
-In-Reply-To: <20180819191511.3c38bb60@gmx.net>
-References: <20180719204355.10465-1-ps.report@gmx.net>
- <20180719204355.10465-2-ps.report@gmx.net>
- <20180816135745.71ed73f2@windsurf>
- <20180819011512.11fad995@gmx.net>
- <20180819152206.7b15fce9@windsurf>
- <20180819191511.3c38bb60@gmx.net>
-Message-ID: <20180819214917.67c960a3@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 19 Aug 2018 21:50:58 +0200
+Subject: [Buildroot] [PATCH] python-pyqt5: add Qt 5.11 compatibility
+ patch
+In-Reply-To: <20180818210208.23097-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sat, 18 Aug 2018 23:02:08 +0200")
+References: <20180818210208.23097-1-thomas.petazzoni@bootlin.com>
+Message-ID: <877ekmm8yl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Sun, 19 Aug 2018 19:15:11 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
+ > This commit adds a patch to python-pyqt5 to make it build properly
+ > against Qt 5.11.
 
-> Hello Thomas,
-> 
-> 
-> On Sun, 19 Aug 2018 15:22:06 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> > Hello,
-> > 
-> > On Sun, 19 Aug 2018 01:15:12 +0200, Peter Seiderer wrote:
-> >   
-> > > The CFLAGS are ignored, e.g. with 'LIBDRM_CONF_ENV += CFLAGS=-DAO_NO_SPARC_V9' in package/libdrm/libdrm.mk:
-> > > 
-> > > 	$ make libdrm V=1    
-> > 
-> > It seems weird, no? It is documented to be working, and even at runtime
-> > it tells you "I am going to use those additional CFLAGS". Isn't this a
-> > bug or a misuse of meson from us ?
-> >   
-> 
-> Bug or feature of the cross-compilation.conf usage? Will take a look at
-> the meson sources....
+ > PyQt5 is using a dual-licensing model, and the commercial company
+ > behind it (RiverBank) only provides release tarballs, and no public
+ > Git repository, so we cannot see the individual changes they make. By
+ > diffing the PyQt5 5.10 and 5.11 releases, we could see that they opted
+ > for dropping entirely support for the waitForEvents() method, rather
+ > than keeping it for Qt < 5.11. We take the same approach in the below
+ > patch, since this is anyway what will happen when we will bump to
+ > PyQt5 5.11.
 
-Seems to be intentional, see mesonbuild/backend/backends.py#L542 ([1]):
+ > The patch is not Git-formatted, because there is no upstream Git
+ > repository for this project.
 
-        if not target.is_cross:
-            # Compile args added from the env: CFLAGS/CXXFLAGS, etc. We want these
-            # to override all the defaults, but not the per-target compile args.
-commands += self.environment.coredata.get_external_args(compiler.get_language())
+ > Fixes:
 
-With the 'if not target.is_cross' added with this commit [2] fixing [3] which
-suggests adding CROSS_*FLAGS...
+ >   http://autobuild.buildroot.net/results/1f1e92374fe71a1d4343243db5f530c33db06698/
 
-Regards,
-Peter
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-[1] https://github.com/mesonbuild/meson/blob/master/mesonbuild/backend/backends.py#L542
-[2] https://github.com/mesonbuild/meson/commit/b595cda4ed0ca699da3052a6bd30ba7d1dae1124
-[3] https://github.com/mesonbuild/meson/issues/1772
+Committed, thanks.
 
-> 
-> Regards,
-> Peter
-> 
-> > I would really prefer to understand what is going on here instead of
-> > having to generate per-package .conf files.
-> > 
-> > Thanks!
-> > 
-> > Thomas  
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+-- 
+Bye, Peter Korsgaard
