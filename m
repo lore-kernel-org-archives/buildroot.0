@@ -1,26 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Aug 2018 21:33:58 +0200
-Subject: [Buildroot] [PATCH 1/1] wireless_tools: Fix site URL does not
- work
-In-Reply-To: <20180819134656.29239-1-vadim4j@gmail.com> (Vadim Kochan's
- message of "Sun, 19 Aug 2018 16:46:56 +0300")
-References: <20180819134656.29239-1-vadim4j@gmail.com>
-Message-ID: <87bm9ym9qx.fsf@dell.be.48ers.dk>
+Date: Sun, 19 Aug 2018 21:21:55 +0200
+Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
+ 17}.x series
+Message-ID: <20180819192722.1248B8D6A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d2965cbb7e435b1ba0fb3cc6d1996c05d18faa66
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Vadim Kochan <vadim.kochan@petcube.com>
- > Replace broken http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
- > by https://hewlettpackard.github.io/wireless-tools.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- > Signed-off-by: Vadim Kochan <vadim.kochan@petcube.com>
-
-Committed after also adjusting the URL in Config.in, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 858db1f941..783cc7ea3a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -258,14 +258,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.148"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.120"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.150"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.122"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.63"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.65"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.17.15"	if BR2_KERNEL_HEADERS_4_17
++	default "4.17.17"	if BR2_KERNEL_HEADERS_4_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
