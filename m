@@ -1,40 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 19 Aug 2018 23:28:23 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/squid: bump version to 4.2
-In-Reply-To: <20180819205020.12303-1-bernd.kuhls@t-online.de>
-References: <20180819205020.12303-1-bernd.kuhls@t-online.de>
-Message-ID: <20180819232823.0b00b21e@windsurf>
+Date: Sun, 19 Aug 2018 23:28:32 +0200
+Subject: [Buildroot] [git commit branch/next] package/sylpheed: bump version
+ to 3.7.0
+Message-ID: <20180819212111.E58C78D6EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a869884f498274588adaf8076ff6b1d8efe0ac0f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 19 Aug 2018 22:50:20 +0200, Bernd Kuhls wrote:
-> Added dependency for libxml2:
-> http://www.squid-cache.org/Versions/v4/RELEASENOTES.html#ss2.9
-> 
-> Rebased patch 0001, removed patches 0002 & 0003 after being applied
-> upstream. Added sha256 hash for tarball.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0001-assume-get-certificate-ok.patch      | 18 ++++++----
->  ...e-endofName-never-exceeds-tagEnd-130.patch | 35 -------------------
->  ...logging-for-transactions-without-a-c.patch | 31 ----------------
->  package/squid/Config.in                       |  1 +
->  package/squid/squid.hash                      |  9 ++---
->  package/squid/squid.mk                        |  8 ++---
->  6 files changed, 21 insertions(+), 81 deletions(-)
->  delete mode 100644 package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
->  delete mode 100644 package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
+Added license hashes, switched to xz tarball.
 
-Applied to next, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sylpheed/sylpheed.hash | 4 +++-
+ package/sylpheed/sylpheed.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/sylpheed/sylpheed.hash b/package/sylpheed/sylpheed.hash
+index 39c0927735..08a5d0a221 100644
+--- a/package/sylpheed/sylpheed.hash
++++ b/package/sylpheed/sylpheed.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	4aeb7c6436ad485a2cc101dd68a1fb84abcad4c6471ed9ddefec65e482e5b2b1	sylpheed-3.2.0.tar.bz2
++sha256 0d6bc5eb46f5d0a463757c62bc80b00d219b294b3c3662840e4540f6db2e3e49  sylpheed-3.7.0.tar.xz
++sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
++sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index 14107f0a6a..0453fba521 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SYLPHEED_VERSION_MAJOR = 3.2
++SYLPHEED_VERSION_MAJOR = 3.7
+ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).0
+-SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
++SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.xz
+ SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
+ SYLPHEED_LICENSE = GPL-2.0+ (executables), LGPL-2.1+ (library, attachment plugin)
+ SYLPHEED_LICENSE_FILES = COPYING COPYING.LIB
