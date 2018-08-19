@@ -1,35 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Aug 2018 23:13:35 +0200
-Subject: [Buildroot] [PATCH] core: drop useless assignements to BISON
- and FLEX
-In-Reply-To: <20180818221019.4384-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 19 Aug 2018 00:10:19 +0200")
-References: <20180818221019.4384-1-yann.morin.1998@free.fr>
-Message-ID: <8736vam54w.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 19 Aug 2018 23:15:57 +0200
+Subject: [Buildroot] [PATCH/next 2/3] package/perl-crypt-openssl-random:
+ bump version to 0.15
+In-Reply-To: <20180819181558.15338-2-bernd.kuhls@t-online.de>
+References: <20180819181558.15338-1-bernd.kuhls@t-online.de>
+ <20180819181558.15338-2-bernd.kuhls@t-online.de>
+Message-ID: <20180819231557.62acd467@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello,
 
- > They were added back in 5432f26f0 (Adding Central config.cache options),
- > supposedly to be able to cache the result of configure tests, but they
- > were never, ever referenced anywhere in our code... Besides, we dropped
- > the idea of getting a configure cache long ago now (it does not work)...
+On Sun, 19 Aug 2018 20:15:57 +0200, Bernd Kuhls wrote:
 
- > They are causing spurious error messages on some distros (e.g. Fedora)
- > which use GNU's which (whatever package that comes from), while it is
- > silent on other distros (e.g. Ubuntu) which use debianutils' which.
+> -PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.11
+> +PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.15
+>  PERL_CRYPT_OPENSSL_RANDOM_SOURCE = Crypt-OpenSSL-Random-$(PERL_CRYPT_OPENSSL_RANDOM_VERSION).tar.gz
+>  PERL_CRYPT_OPENSSL_RANDOM_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+> -PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = openssl
+> +PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = \
+> +	perl-crypt-openssl-guess \
+> +	openssl
+>  PERL_CRYPT_OPENSSL_RANDOM_LICENSE = Artistic or GPL-1.0+
+>  PERL_CRYPT_OPENSSL_RANDOM_LICENSE_FILES = LICENSE
+>  
+> +# Try as hard as possible to remedy to the brain-damage their build-system
+> +# suffers from: don't search for openssl, they pick the host-system one.
+> +PERL_CRYPT_OPENSSL_RANDOM_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
 
- > Drop them.
+So, there's a new dependency on a module that helps guessing the path
+to OpenSSL library/headers, but you nonetheless have to force where
+they are located ? Seems strange :-)
 
- > Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Perhaps those Perl people should learn about pkg-config rather than:
 
-Committed, thanks.
+    my @guesses = (
+        '/home/linuxbrew/.linuxbrew/opt/openssl/bin/openssl' => '/home/linuxbrew/.linuxbrew/opt/openssl', # LinuxBrew openssl
+        '/usr/local/opt/openssl/bin/openssl' => '/usr/local/opt/openssl', # OSX homebrew openssl
+        '/usr/local/bin/openssl'         => '/usr/local', # OSX homebrew openssl
+        '/opt/local/bin/openssl'         => '/opt/local', # Macports openssl
+        '/usr/bin/openssl'               => '/usr',
+        '/usr/sbin/openssl'              => '/usr',
+        '/opt/ssl/bin/openssl'           => '/opt/ssl',
+        '/opt/ssl/sbin/openssl'          => '/opt/ssl',
+        '/usr/local/ssl/bin/openssl'     => '/usr/local/ssl',
+        '/usr/local/openssl/bin/openssl' => '/usr/local/openssl',
+        '/apps/openssl/std/bin/openssl'  => '/apps/openssl/std',
+        '/usr/sfw/bin/openssl'           => '/usr/sfw', # Open Solaris
+        'C:\OpenSSL\bin\openssl.exe'     => 'C:\OpenSSL',
+        'C:\OpenSSL-Win32\bin\openssl.exe'        => 'C:\OpenSSL-Win32',
+        $Config{prefix} . '\bin\openssl.exe'      => $Config{prefix},           # strawberry perl
+        $Config{prefix} . '\..\c\bin\openssl.exe' => $Config{prefix} . '\..\c', # strawberry perl
+        '/sslexe/openssl.exe'            => '/sslroot',  # VMS, openssl.org
+        '/ssl$exe/openssl.exe'           => '/ssl$root', # VMS, HP install
+    );
 
+but oh well...
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
