@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Aug 2018 21:22:06 +0200
-Subject: [Buildroot] [PATCH 2/2] linux-headers: bump 4.{4, 9, 14,
- 17}.x series
-In-Reply-To: <20180819065932.7156-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 19 Aug 2018 08:59:32 +0200")
-References: <20180819065932.7156-1-bernd.kuhls@t-online.de>
- <20180819065932.7156-2-bernd.kuhls@t-online.de>
-Message-ID: <87o9dymaap.fsf@dell.be.48ers.dk>
+Date: Sun, 19 Aug 2018 21:26:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ipsec-tools: add security patch
+ to fix CVE-2016-10396
+In-Reply-To: <20180819092534.8050-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 19 Aug 2018 11:25:34 +0200")
+References: <20180819092534.8050-1-bernd.kuhls@t-online.de>
+Message-ID: <87k1omma34.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
