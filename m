@@ -1,77 +1,45 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Aug 2018 20:15:57 +0200
-Subject: [Buildroot] [PATCH/next 2/3] package/perl-crypt-openssl-random:
- bump version to 0.15
-In-Reply-To: <20180819181558.15338-1-bernd.kuhls@t-online.de>
-References: <20180819181558.15338-1-bernd.kuhls@t-online.de>
-Message-ID: <20180819181558.15338-2-bernd.kuhls@t-online.de>
+Date: Sun, 19 Aug 2018 20:26:57 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/pound: bump version to 2.8
+Message-ID: <20180819182657.19155-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://metacpan.org/changes/distribution/Crypt-OpenSSL-Random
+Release notes:
+www.apsis.ch/pound/pound_list/archive/2018/2018-05/1526034164000
 
-Added new build dependency to perl-crypt-openssl-guess and force it to
-search for openssl in STAGING_DIR. Added license hash.
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/perl-crypt-openssl-random/Config.in            |  1 +
- .../perl-crypt-openssl-random.hash                     |  7 +++++--
- .../perl-crypt-openssl-random.mk                       | 10 ++++++++--
- 3 files changed, 14 insertions(+), 4 deletions(-)
+ package/pound/pound.hash | 3 ++-
+ package/pound/pound.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/perl-crypt-openssl-random/Config.in b/package/perl-crypt-openssl-random/Config.in
-index 2ceb78dfd6..de474c13d5 100644
---- a/package/perl-crypt-openssl-random/Config.in
-+++ b/package/perl-crypt-openssl-random/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PERL_CRYPT_OPENSSL_RANDOM
- 	bool "perl-crypt-openssl-random"
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_PERL_CRYPT_OPENSSL_GUESS
- 	help
- 	  OpenSSL/LibreSSL pseudo-random number generator access
- 
-diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
-index caacdc9015..57677e3445 100644
---- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
-+++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
-@@ -1,3 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    5d71337503e0356ce1ce1481504e5885 Crypt-OpenSSL-Random-0.11.tar.gz
--sha256 bb8c81c6a39b9b13a22d818ee9a746242f136f0fadceb6b9776ae615e7524c7a Crypt-OpenSSL-Random-0.11.tar.gz
-+md5    bcde8d5a822c91376deda3c4f0c75fbe Crypt-OpenSSL-Random-0.15.tar.gz
-+sha256 f0876faa1ba3111e39b86aa730c603211eff2905e460c72a57b61e8cf475cef4 Crypt-OpenSSL-Random-0.15.tar.gz
-+
-+# computed by scancpan
-+sha256 fdaba2134145d3e252c5930180b2bcb13b5367ad5a8713d6868f014cd25c496f LICENSE
-diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
-index de029e9af0..775a0ab2c5 100644
---- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
-+++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
-@@ -4,11 +4,17 @@
+diff --git a/package/pound/pound.hash b/package/pound/pound.hash
+index 6908b9060c..7fbf01b89b 100644
+--- a/package/pound/pound.hash
++++ b/package/pound/pound.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256	cdfbf5a7e8dc8fbbe0d6c1e83cd3bd3f2472160aac65684bb01ef661c626a8e4	Pound-2.7.tgz
++sha256 a7fd8690de0fd390615e79fd0f4bfd56a544b8ef97dd6659c07ecd3207480c25  Pound-2.8.tgz
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL.txt
+diff --git a/package/pound/pound.mk b/package/pound/pound.mk
+index 6f7cc848f8..9a62cf7a58 100644
+--- a/package/pound/pound.mk
++++ b/package/pound/pound.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.11
-+PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.15
- PERL_CRYPT_OPENSSL_RANDOM_SOURCE = Crypt-OpenSSL-Random-$(PERL_CRYPT_OPENSSL_RANDOM_VERSION).tar.gz
- PERL_CRYPT_OPENSSL_RANDOM_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
--PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = openssl
-+PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = \
-+	perl-crypt-openssl-guess \
-+	openssl
- PERL_CRYPT_OPENSSL_RANDOM_LICENSE = Artistic or GPL-1.0+
- PERL_CRYPT_OPENSSL_RANDOM_LICENSE_FILES = LICENSE
- 
-+# Try as hard as possible to remedy to the brain-damage their build-system
-+# suffers from: don't search for openssl, they pick the host-system one.
-+PERL_CRYPT_OPENSSL_RANDOM_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
-+
- $(eval $(perl-package))
+-POUND_VERSION = 2.7
++POUND_VERSION = 2.8
+ POUND_SITE = http://www.apsis.ch/pound
+ POUND_SOURCE = Pound-$(POUND_VERSION).tgz
+ POUND_LICENSE = GPL-3.0+
 -- 
 2.18.0
