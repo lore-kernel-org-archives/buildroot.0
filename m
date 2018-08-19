@@ -1,22 +1,23 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 19 Aug 2018 21:02:33 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/python-cryptography: bump
- version to 2.3.1
-References: <20180819184242.21134-1-bernd.kuhls@t-online.de>
- <CAGm1_kvHG2zGtw8U200teJtVnjAOf57t_5XCxRsb3TsBjLi69Q@mail.gmail.com>
-Message-ID: <9fro4fx8c7.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 19 Aug 2018 21:21:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bind: security bump to version
+ 9.11.4-P1
+In-Reply-To: <20180818220013.7733-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 19 Aug 2018 00:00:13 +0200")
+References: <20180818220013.7733-1-bernd.kuhls@t-online.de>
+Message-ID: <87wosmmac2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 19 Aug 2018 20:53:49 +0200 schrieb Yegor Yefremov:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> Have you performed runtime tests?
+ > Fixes CVE-2018-5740: https://ftp.isc.org/isc/bind9/9.11.4-P1/CHANGES
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Hi Yegor,
+Committed, thanks.
 
-no, only build-tested with openssl-1.1.0i.
-
-Regards, Bernd
+-- 
+Bye, Peter Korsgaard
