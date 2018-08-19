@@ -1,50 +1,234 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 19 Aug 2018 21:33:19 +0200
-Subject: [Buildroot] [git commit] wireless_tools: Fix site URL does not work
-Message-ID: <20180819192722.4A1CF8D69F@busybox.osuosl.org>
+Date: Sun, 19 Aug 2018 21:24:35 +0200
+Subject: [Buildroot] [git commit] package/ipsec-tools: add security patch to
+ fix CVE-2016-10396
+Message-ID: <20180819192722.259888D69F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=052d3cbb0ea6aec7123b8595780d6f819dc7c925
+commit: https://git.buildroot.net/buildroot/commit/?id=a3422534c8023f3d6d0e7d38a2904544317d5c79
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Replace broken http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
-by https://hewlettpackard.github.io/wireless-tools.
-
-[Peter: also adjust URL in Config.in]
-Signed-off-by: Vadim Kochan <vadim.kochan@petcube.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireless_tools/Config.in         | 2 +-
- package/wireless_tools/wireless_tools.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ipsec-tools/0005-CVE-2016-10396.patch | 208 ++++++++++++++++++++++++++
+ 1 file changed, 208 insertions(+)
 
-diff --git a/package/wireless_tools/Config.in b/package/wireless_tools/Config.in
-index e33af25b86..349908dbde 100644
---- a/package/wireless_tools/Config.in
-+++ b/package/wireless_tools/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_WIRELESS_TOOLS
- 	help
- 	  A collection of tools to configure wireless lan cards.
- 
--	  http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Tools.html
-+	  https://hewlettpackard.github.io/wireless-tools/
- 
- if BR2_PACKAGE_WIRELESS_TOOLS
- 
-diff --git a/package/wireless_tools/wireless_tools.mk b/package/wireless_tools/wireless_tools.mk
-index 51320a9b25..b87ab20fb2 100644
---- a/package/wireless_tools/wireless_tools.mk
-+++ b/package/wireless_tools/wireless_tools.mk
-@@ -6,7 +6,7 @@
- 
- WIRELESS_TOOLS_VERSION_MAJOR = 30
- WIRELESS_TOOLS_VERSION = $(WIRELESS_TOOLS_VERSION_MAJOR).pre9
--WIRELESS_TOOLS_SITE = http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux
-+WIRELESS_TOOLS_SITE = https://hewlettpackard.github.io/wireless-tools
- WIRELESS_TOOLS_SOURCE = wireless_tools.$(WIRELESS_TOOLS_VERSION).tar.gz
- WIRELESS_TOOLS_LICENSE = GPL-2.0
- WIRELESS_TOOLS_LICENSE_FILES = COPYING
+diff --git a/package/ipsec-tools/0005-CVE-2016-10396.patch b/package/ipsec-tools/0005-CVE-2016-10396.patch
+new file mode 100644
+index 0000000000..8ef3b03753
+--- /dev/null
++++ b/package/ipsec-tools/0005-CVE-2016-10396.patch
+@@ -0,0 +1,208 @@
++Fix CVE-2016-10396
++
++Description: Fix remotely exploitable DoS. http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2016-10396
++Source: vendor; https://gnats.netbsd.org/cgi-bin/query-pr-single.pl?number=51682
++Bug-debian: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=867986
++
++Downloaded from
++https://github.com/openwrt/packages/blob/master/net/ipsec-tools/patches/010-CVE-2016-10396.patch
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++Index: ipsec-tools-0.8.2/src/racoon/isakmp_frag.c
++===================================================================
++--- ipsec-tools-0.8.2.orig/src/racoon/isakmp_frag.c
+++++ ipsec-tools-0.8.2/src/racoon/isakmp_frag.c
++@@ -1,4 +1,4 @@
++-/*	$NetBSD: isakmp_frag.c,v 1.5 2009/04/22 11:24:20 tteras Exp $	*/
+++/*	$NetBSD: isakmp_frag.c,v 1.5.36.1 2017/04/21 16:50:42 bouyer Exp $	*/
++ 
++ /* Id: isakmp_frag.c,v 1.4 2004/11/13 17:31:36 manubsd Exp */
++ 
++@@ -173,6 +173,43 @@ vendorid_frag_cap(gen)
++ 	return ntohl(hp[MD5_DIGEST_LENGTH / sizeof(*hp)]);
++ }
++ 
+++static int 
+++isakmp_frag_insert(struct ph1handle *iph1, struct isakmp_frag_item *item)
+++{
+++	struct isakmp_frag_item *pitem = NULL;
+++	struct isakmp_frag_item *citem = iph1->frag_chain;
+++
+++	/* no frag yet, just insert at beginning of list */
+++	if (iph1->frag_chain == NULL) {
+++		iph1->frag_chain = item;
+++		return 0;
+++	}
+++
+++	do {
+++		/* duplicate fragment number, abort (CVE-2016-10396) */
+++		if (citem->frag_num == item->frag_num)
+++			return -1;
+++
+++		/* need to insert before current item */
+++		if (citem->frag_num > item->frag_num) {
+++			if (pitem != NULL)
+++				pitem->frag_next = item;
+++			else
+++				/* insert at the beginning of the list  */
+++				iph1->frag_chain = item;
+++			item->frag_next = citem;
+++			return 0;
+++		}
+++
+++		pitem = citem;
+++		citem = citem->frag_next;
+++	} while (citem != NULL);
+++
+++	/* we reached the end of the list, insert */
+++	pitem->frag_next = item;
+++	return 0;
+++}
+++
++ int 
++ isakmp_frag_extract(iph1, msg)
++ 	struct ph1handle *iph1;
++@@ -224,39 +261,43 @@ isakmp_frag_extract(iph1, msg)
++ 	item->frag_next = NULL;
++ 	item->frag_packet = buf;
++ 
++-	/* Look for the last frag while inserting the new item in the chain */
++-	if (item->frag_last)
++-		last_frag = item->frag_num;
+++	/* Check for the last frag before inserting the new item in the chain */
+++	if (item->frag_last) {
+++		/* if we have the last fragment, indices must match */
+++		if (iph1->frag_last_index != 0 &&
+++		    item->frag_last != iph1->frag_last_index) {
+++			plog(LLV_ERROR, LOCATION, NULL,
+++			     "Repeated last fragment index mismatch\n");
+++			racoon_free(item);
+++			vfree(buf);
+++			return -1;
+++		}
++ 
++-	if (iph1->frag_chain == NULL) {
++-		iph1->frag_chain = item;
++-	} else {
++-		struct isakmp_frag_item *current;
+++		last_frag = iph1->frag_last_index = item->frag_num;
+++	}
++ 
++-		current = iph1->frag_chain;
++-		while (current->frag_next) {
++-			if (current->frag_last)
++-				last_frag = item->frag_num;
++-			current = current->frag_next;
++-		}
++-		current->frag_next = item;
+++	/* insert fragment into chain */
+++	if (isakmp_frag_insert(iph1, item) == -1) {
+++		plog(LLV_ERROR, LOCATION, NULL,
+++		    "Repeated fragment index mismatch\n");
+++		racoon_free(item);
+++		vfree(buf);
+++		return -1;
++ 	}
++ 
++-	/* If we saw the last frag, check if the chain is complete */
+++	/* If we saw the last frag, check if the chain is complete
+++	 * we have a sorted list now, so just walk through */
++ 	if (last_frag != 0) {
+++		item = iph1->frag_chain;
++ 		for (i = 1; i <= last_frag; i++) {
++-			item = iph1->frag_chain;
++-			do {
++-				if (item->frag_num == i)
++-					break;
++-				item = item->frag_next;
++-			} while (item != NULL);
++-
+++			if (item->frag_num != i)
+++				break;
+++			item = item->frag_next;
++ 			if (item == NULL) /* Not found */
++ 				break;
++ 		}
++ 
++-		if (item != NULL) /* It is complete */
+++		if (i > last_frag) /* It is complete */
++ 			return 1;
++ 	}
++ 		
++@@ -291,15 +332,9 @@ isakmp_frag_reassembly(iph1)
++ 	}
++ 	data = buf->v;
++ 
+++	item = iph1->frag_chain;
++ 	for (i = 1; i <= frag_count; i++) {
++-		item = iph1->frag_chain;
++-		do {
++-			if (item->frag_num == i)
++-				break;
++-			item = item->frag_next;
++-		} while (item != NULL);
++-
++-		if (item == NULL) {
+++		if (item->frag_num != i) {
++ 			plog(LLV_ERROR, LOCATION, NULL, 
++ 			    "Missing fragment #%d\n", i);
++ 			vfree(buf);
++@@ -308,6 +343,7 @@ isakmp_frag_reassembly(iph1)
++ 		}
++ 		memcpy(data, item->frag_packet->v, item->frag_packet->l);
++ 		data += item->frag_packet->l;
+++		item = item->frag_next;
++ 	}
++ 
++ out:
++Index: ipsec-tools-0.8.2/src/racoon/isakmp_inf.c
++===================================================================
++--- ipsec-tools-0.8.2.orig/src/racoon/isakmp_inf.c
+++++ ipsec-tools-0.8.2/src/racoon/isakmp_inf.c
++@@ -720,6 +720,7 @@ isakmp_info_send_nx(isakmp, remote, loca
++ #endif
++ #ifdef ENABLE_FRAG
++ 	iph1->frag = 0;
+++	iph1->frag_last_index = 0;
++ 	iph1->frag_chain = NULL;
++ #endif
++ 
++Index: ipsec-tools-0.8.2/src/racoon/isakmp.c
++===================================================================
++--- ipsec-tools-0.8.2.orig/src/racoon/isakmp.c
+++++ ipsec-tools-0.8.2/src/racoon/isakmp.c
++@@ -1071,6 +1071,7 @@ isakmp_ph1begin_i(rmconf, remote, local)
++ 		iph1->frag = 1;
++ 	else
++ 		iph1->frag = 0;
+++	iph1->frag_last_index = 0;
++ 	iph1->frag_chain = NULL;
++ #endif
++ 	iph1->approval = NULL;
++@@ -1175,6 +1176,7 @@ isakmp_ph1begin_r(msg, remote, local, et
++ #endif
++ #ifdef ENABLE_FRAG
++ 	iph1->frag = 0;
+++	iph1->frag_last_index = 0;
++ 	iph1->frag_chain = NULL;
++ #endif
++ 	iph1->approval = NULL;
++Index: ipsec-tools-0.8.2/src/racoon/handler.h
++===================================================================
++--- ipsec-tools-0.8.2.orig/src/racoon/handler.h
+++++ ipsec-tools-0.8.2/src/racoon/handler.h
++@@ -1,4 +1,4 @@
++-/*	$NetBSD: handler.h,v 1.25 2010/11/17 10:40:41 tteras Exp $	*/
+++/*	$NetBSD: handler.h,v 1.26 2017/01/24 19:23:56 christos Exp $	*/
++ 
++ /* Id: handler.h,v 1.19 2006/02/25 08:25:12 manubsd Exp */
++ 
++@@ -141,6 +141,7 @@ struct ph1handle {
++ #endif
++ #ifdef ENABLE_FRAG
++ 	int frag;			/* IKE phase 1 fragmentation */
+++	int frag_last_index;
++ 	struct isakmp_frag_item *frag_chain;	/* Received fragments */
++ #endif
++ 
