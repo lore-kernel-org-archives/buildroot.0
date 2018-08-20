@@ -1,43 +1,66 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Aug 2018 19:12:39 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: bump to version 1.68
-Message-ID: <20180820171239.21321-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 20 Aug 2018 17:16:21 +0000
+Subject: [Buildroot] [Bug 11166] Erlang bad argument on valid uint64 when
+ crosscompiled on 64-bit host
+In-Reply-To: <bug-11166-163@https.bugs.busybox.net/>
+References: <bug-11166-163@https.bugs.busybox.net/>
+Message-ID: <bug-11166-163-1wthVXVwFe@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/boost/boost.hash | 4 ++--
- package/boost/boost.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+https://bugs.busybox.net/show_bug.cgi?id=11166
 
-diff --git a/package/boost/boost.hash b/package/boost/boost.hash
-index fb1eb4291f..f3322aed98 100644
---- a/package/boost/boost.hash
-+++ b/package/boost/boost.hash
-@@ -1,5 +1,5 @@
--# From http://www.boost.org/users/history/version_1_67_0.html
--sha256 2684c972994ee57fc5632e03bf044746f6eb45d4920c343937a465fd67a5adba  boost_1_67_0.tar.bz2
-+# From http://www.boost.org/users/history/version_1_68_0.html
-+sha256 7f6130bc3cf65f56a618888ce9d5ea704fa10b462be126ad053e80e553d6d8b7  boost_1_68_0.tar.bz2
- 
- # Locally computed
- sha256 c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 242b60a460..3f61017d1c 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BOOST_VERSION = 1.67.0
-+BOOST_VERSION = 1.68.0
- BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
- BOOST_SITE = http://downloads.sourceforge.net/project/boost/boost/$(BOOST_VERSION)
- BOOST_INSTALL_STAGING = YES
+--- Comment #6 from Frank Vasquez <frankv@helium.com> ---
+> Also, is your simple example and Buildroot tree somewhere public?
+
+Here it is.
+
+https://github.com/fvasquez/buildroot
+
+See the following commit for my rebar3-related modifications.
+
+https://github.com/fvasquez/buildroot/commit/6411ce9d06a1880e082674231a1902f364fc4da8
+
+Make sure to checkout the bbb-bitcask branch before building.  This branch is
+based off of the Buildroot 2018.02.01 tag since that's what we're running on
+our device.
+
+$ git checkout bbb-bitcask
+$ make bbb-bitcask_defconfig
+$ make
+
+I booted the resulting image on a BeagleBone Black and verified that my bug
+still repros.
+
+# erl
+Eshell V9.0  (abort with ^G)
+1> Handle = bitcask:open("some_db", [read_write]).
+#Ref<0.3081199234.2883585.143186>
+2> N = 1.
+1
+3> bitcask:put(Handle, <<"some_key">>, term_to_binary(N)).
+** exception error: bad argument
+     in function  bitcask_nifs:keydir_get_int/3
+        called as
+bitcask_nifs:keydir_get_int(#Ref<0.3081199234.3014657.143177>,
+                                              <<"some_key">>,
+                                              18446744073709551615)
+     in call from bitcask_nifs:keydir_get/3
+(/home/frank/buildroot/output/build/erlang-bitcask-0.1.0/_build/default/lib/bitcask/src/bitcask_nifs.erl,
+line 181)
+     in call from bitcask:do_put/5
+(/home/frank/buildroot/output/build/erlang-bitcask-0.1.0/_build/default/lib/bitcask/src/bitcask.erl,
+line 1760)
+     in call from bitcask:put/3
+(/home/frank/buildroot/output/build/erlang-bitcask-0.1.0/_build/default/lib/bitcask/src/bitcask.erl,
+line 298)
+
+Make sure to delete the some_db directory or rename your bitcask store before
+re-running bitcask:open.
+
 -- 
-2.14.1
+You are receiving this mail because:
+You are on the CC list for the bug.
