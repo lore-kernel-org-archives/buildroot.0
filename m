@@ -1,56 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 23:37:28 +0200
-Subject: [Buildroot] [PATCH 2/2] boost: context needs C++11
-In-Reply-To: <CAPi7W81tk-yBnm0NzyxZRM_A2kkO_kR7yqZz-VaKP536=F5kuQ@mail.gmail.com>
-References: <20180820165555.20492-1-fontaine.fabrice@gmail.com>
- <20180820165555.20492-2-fontaine.fabrice@gmail.com>
- <20180820225058.4d83d48f@windsurf>
- <CAPi7W81tk-yBnm0NzyxZRM_A2kkO_kR7yqZz-VaKP536=F5kuQ@mail.gmail.com>
-Message-ID: <20180820233728.6fa1a054@windsurf>
+Date: Mon, 20 Aug 2018 23:39:58 +0200
+Subject: [Buildroot] [PATCH/next 1/4] package/botan: bump version to
+ 2.7.0
+In-Reply-To: <20180818233052.30190-1-bernd.kuhls@t-online.de>
+References: <20180818233052.30190-1-bernd.kuhls@t-online.de>
+Message-ID: <20180820233958.62e2f505@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello,
 
-On Mon, 20 Aug 2018 23:33:14 +0200, Fabrice Fontaine wrote:
-
-> > I was about to apply, but... C++11 requires at least gcc 4.8 or 4.9
-> >  
-> That's not right, C++11 requires at least gcc 4.7 (see libcec, jsoncpp,
-> poppler, yaml-cpp, ...)
-
-OK. It in fact depends on which C++11 features you depend on, see
-https://gcc.gnu.org/projects/cxx-status.html#cxx11. Some C++11 features
-only got added in 4.8.
-
-> > depending on the features being used, and I don't see any dependency on
-> > a gcc version in the definition of BR2_PACKAGE_BOOST_CONTEXT.  
+On Sun, 19 Aug 2018 01:30:49 +0200, Bernd Kuhls wrote:
+> Depends on gcc >= 4.8:
+> https://github.com/randombit/botan/blob/master/readme.rst
 > 
-> But you're right, we should update first patch to select
-> BR2_PACKAGE_BOOST_THREAD if gcc version is lower than 4.7 (and not 4.8). I
-> will send a v2.
-
-Well, see above. C++11 support is not as clear-cut as: gcc < 4.7
-doesn't have it, gcc >= 4.7 has it.
-
-> > There are
-> > also other Boost options that say they are related to C++11.
-> >  
-> I did not check if we should add -std=c++11 for those other boost options.
-> At least, it does not cause any build failures but perhaps some features
-> are wrongly disabled with some older versions of gcc.
+> Rebased patch 0001, added license hash and updated license path.
 > 
-> >
-> > Don't we have a problem with gcc 4.7 or older compilers ?
-> >  
-> std=c++11 works with gcc 4.7, I did not take time to test with older
-> versions.
+> Updated configure options for shared/static libraries after commit
+> https://github.com/randombit/botan/commit/299119f02c09e7d3e657b13e1706cb653eff560c
+> 
+> Added configure for ssp support after commit
+> https://github.com/randombit/botan/commit/ebeae68aba0d3384a00fddde77a561bb0cd88102
+> This fixes a build error with toolchains without ssp support.
+> 
+> Removed dependency to gmp:
+> https://github.com/randombit/botan/issues/719
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../0001-remove-mips64-explicit-mabi.patch    | 10 ++++---
+>  package/botan/Config.in                       |  6 ++--
+>  package/botan/botan.hash                      |  4 ++-
+>  package/botan/botan.mk                        | 30 +++++++++++++------
+>  4 files changed, 34 insertions(+), 16 deletions(-)
 
-So what are you going to do ? Add std=c++11 unconditionally, without
-knowing if this is going to be accepted by older gcc versions ?
+First of all, thanks for your documented commit log. It is definitely
+nice to have all those details to understand the changes made as part
+of the version bump. So thanks for doing that.
+
+I've applied the entire series to next. Thanks!
 
 Thomas
 -- 
