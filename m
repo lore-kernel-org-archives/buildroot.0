@@ -1,45 +1,61 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Aug 2018 22:49:53 +0200
-Subject: [Buildroot] [PATCH] core: detect and reject build paths which
- contain an '@'
-Message-ID: <20180820204953.29566-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Aug 2018 22:50:58 +0200
+Subject: [Buildroot] [PATCH 2/2] boost: context needs C++11
+In-Reply-To: <20180820165555.20492-2-fontaine.fabrice@gmail.com>
+References: <20180820165555.20492-1-fontaine.fabrice@gmail.com>
+ <20180820165555.20492-2-fontaine.fabrice@gmail.com>
+Message-ID: <20180820225058.4d83d48f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc does not build when the srcdir path contains a '@', because that
-path is then substitued in a texi file as argument to an @include
-directive. But then, the '@' in the path will start a command evaluation
-of its own, thus breaking the build. For example, with a $(O) path set
-to /home/ymorin/dev/buildroot/O/to at ti :
+Hello,
 
-    perl ../../gcc/../contrib/texi2pod.pl ../../gcc/doc/invoke.texi > gcc.pod
-    ../../gcc/doc/invoke.texi:1678: unknown command `ti'
-    ../../gcc/doc/invoke.texi:1678: @include: could not find /home/ymorin/dev/buildroot/O/to/build/host-gcc-initial-7.3.0/build/gcc/../../gcc/../libiberty/at-file.texi
+On Mon, 20 Aug 2018 18:55:55 +0200, Fabrice Fontaine wrote:
+> Without this flag, mutex is not always correctly detected with gcc 4.x
+> or 5.x. As a result, boost_thread is wrongly selected by boost_context.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/fb046c04fe18bec973d120e4ab33971f32ba5769
+>  - http://autobuild.buildroot.net/results/99f1a255b78a973faeb8bf3b94d78efc54426a8b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/boost/boost.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+> index 14f6162003..a09dd3cf45 100644
+> --- a/package/boost/boost.mk
+> +++ b/package/boost/boost.mk
+> @@ -61,6 +61,11 @@ else
+>  BOOST_FLAGS += --without-icu
+>  endif
+>  
+> +# boost-context needs C++11
+> +ifeq ($(BR2_PACKAGE_BOOST_CONTEXT),y)
+> +BOOST_TARGET_CXXFLAGS += -std=c++11
+> +endif
 
-Reported-by: c32 on IRC
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+I was about to apply, but... C++11 requires at least gcc 4.8 or 4.9
+depending on the features being used, and I don't see any dependency on
+a gcc version in the definition of BR2_PACKAGE_BOOST_CONTEXT. There are
+also other Boost options that say they are related to C++11.
 
-diff --git a/Makefile b/Makefile
-index d1ee9293a2..8a2b614b81 100644
---- a/Makefile
-+++ b/Makefile
-@@ -60,6 +60,11 @@ override O := $(patsubst %/,%,$(patsubst %.,%,$(O)))
- # avoid empty CANONICAL_O in case on non-existing entry.
- CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
- 
-+# gcc fails to build when the srcdir contains a '@'
-+ifneq ($(CANONICAL_O),$(subst @,,$(CANONICAL_O)))
-+$(error The build directory can not contain a '@')
-+endif
-+
- CANONICAL_CURDIR = $(realpath $(CURDIR))
- 
- REQ_UMASK = 0022
+Don't we have a problem with gcc 4.7 or older compilers ?
+
+https://git.buildroot.org/buildroot/tree/support/config-fragments/autobuild/powerpc-ctng_e500v2-linux-gnuspe.config
+has a 4.7 compiler.
+
+I'm not sure we have a gcc 4.6 compiler. Perhaps we should add that to
+the autobuilders.
+
+Best regards,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
