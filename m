@@ -1,57 +1,41 @@
 From: Mirza Krak <mirza.krak@northern.tech>
-Date: Mon, 20 Aug 2018 15:09:12 +0200
-Subject: [Buildroot] [[PATCH v2 12/14] package/mender: use MENDER_PKGDIR to
- access local files
+Date: Mon, 20 Aug 2018 15:09:07 +0200
+Subject: [Buildroot] [[PATCH v2 07/14] package/mender: select
+ BR2_PACKAGE_CA_CERTIFICATES
 In-Reply-To: <20180820130914.22377-1-mirza.krak@northern.tech>
 References: <20180820130914.22377-1-mirza.krak@northern.tech>
-Message-ID: <20180820130914.22377-13-mirza.krak@northern.tech>
+Message-ID: <20180820130914.22377-8-mirza.krak@northern.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Utilize the predefined variable MENDER_PKGDIR which points to the
-directory containing mender.mk and Config.in, along with the local
-files.
-
-One benefit is also that it works when BR2_EXTERNAL is used, which
-makes it easier to "backport" this to an older external tree.
+Mender uses TLS to community with the management server,
+and if CA signed certificates are used we must have
+the ca-certificates package installed to be able to
+verify these.
 
 Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
 ---
 
 Changes in V2:
-- New patch, reported by eager user :)
+- Added #runtime to hint that this not a build dependency
 
- package/mender/mender.mk | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ package/mender/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 7e6f18f523..a4b9c6ee85 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -42,10 +42,9 @@ define MENDER_INSTALL_CONFIG_FILES
- 	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/mender/scripts
- 	echo -n "2" > $(TARGET_DIR)/etc/mender/scripts/version
-
--	$(INSTALL) -D -m 0644 package/mender/mender.conf \
-+	$(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender.conf \
- 		$(TARGET_DIR)/etc/mender/mender.conf
--
--	$(INSTALL) -D -m 0644 package/mender/server.crt \
-+	$(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/server.crt \
- 		$(TARGET_DIR)/etc/mender/server.crt
-
- 	$(INSTALL) -D -m 0755 $(@D)/support/mender-device-identity \
-@@ -61,7 +60,7 @@ endef
- MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
-
- define MENDER_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 0644 package/mender/mender.service \
-+	$(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/mender.service
- 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
- 	ln -fs ../../../../usr/lib/systemd/system/mender.service \
+diff --git a/package/mender/Config.in b/package/mender/Config.in
+index aeb0b2694f..853a472ea1 100644
+--- a/package/mender/Config.in
++++ b/package/mender/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_MENDER
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_UBOOT_TOOLS # runtime
+ 	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV # runtime
++	select BR2_PACKAGE_CA_CERTIFICATES # runtime
+ 	help
+ 	  Mender is an open source over-the-air (OTA) software updater
+ 	  for embedded Linux devices. Mender comprises a client
 --
 2.11.0
