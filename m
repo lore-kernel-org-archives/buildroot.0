@@ -1,63 +1,53 @@
-From: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
-Date: Mon, 20 Aug 2018 06:57:17 +0000
-Subject: [Buildroot] Can not create driver package with local sources
-In-Reply-To: <20180817233750.12cbc85e@windsurf>
-References: <VI1PR0802MB22211E2F46DD87FB8C69FFF6EA3D0@VI1PR0802MB2221.eurprd08.prod.outlook.com>
- <20180817233750.12cbc85e@windsurf>
-Message-ID: <VI1PR0802MB2221C786D19A7F77DE6A1B48EA320@VI1PR0802MB2221.eurprd08.prod.outlook.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 20 Aug 2018 10:05:15 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/python-cryptography: bump
+ version to 2.3.1
+In-Reply-To: <9fro4fx8c7.ln2@ID-313208.user.individual.net>
+References: <20180819184242.21134-1-bernd.kuhls@t-online.de>
+ <CAGm1_kvHG2zGtw8U200teJtVnjAOf57t_5XCxRsb3TsBjLi69Q@mail.gmail.com>
+ <9fro4fx8c7.ln2@ID-313208.user.individual.net>
+Message-ID: <CAGm1_ktoBnagq89z6WbQcTCB4Fkc5bY2YqEnpy3PeVZbMST_hA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Good morning Thomas,
+On Sun, Aug 19, 2018 at 9:02 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+> Am Sun, 19 Aug 2018 20:53:49 +0200 schrieb Yegor Yefremov:
+>
+>> Have you performed runtime tests?
+>
+> Hi Yegor,
+>
+> no, only build-tested with openssl-1.1.0i.
 
-thanks a lot for you reply. Changing BR2_PACKAGE_SITEC_S4_LP_XXXX to SITEC_S4_LP_XXXX resolved the build issues.
+I've performed a runtime test and I still get:
 
-Best regards
+# python
+Python 3.6.3 (default, Aug 20 2018, 08:30:51)
+[GCC 7.3.1 20180425 [linaro-7.3-2018.05 revision
+d29120a424ecfbc167ef90065c0eeb on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> from cryptography.fernet import Fernet
+>>> key = Fernet.generate_key()
+random: nonblocking pool is initialized
+>>> f = Fernet(key)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "usr/lib/python3.6/site-packages/cryptography/fernet.py", line
+32, in __init__
+  File "usr/lib/python3.6/site-packages/cryptography/hazmat/backends/__init__.py",
+line 15, in default_backend
+  File "usr/lib/python3.6/site-packages/cryptography/hazmat/backends/openssl/__init__.py",
+line 7, in <module>
+  File "usr/lib/python3.6/site-packages/cryptography/hazmat/backends/openssl/backend.py",
+line 53, in <module>
+  File "usr/lib/python3.6/site-packages/cryptography/hazmat/bindings/openssl/binding.py",
+line 13, in <module>
+ImportError: /usr/lib/python3.6/site-packages/cryptography/hazmat/bindings/_openssl.abi3.so:
+undefined symbol: pthread_atfork
 
-Fabrice Mousset
+That's why the packaged wasn't updated for a long time.
 
-
-> -----Urspr?ngliche Nachricht-----
-> Von: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Gesendet: Freitag, 17. August 2018 23:38
-> An: Fabrice Mousset | GEOCEPT GmbH <fabrice.mousset@geocept.com>
-> Cc: 'buildroot at busybox.net' <buildroot@busybox.net>
-> Betreff: Re: [Buildroot] Can not create driver package with local sources
-> 
-> Hello Fabrice,
-> 
-> On Fri, 17 Aug 2018 14:06:35 +0000, Fabrice Mousset | GEOCEPT GmbH
-> wrote:
-> 
-> > I try to create a custom package to build a linux driver which sources are
-> stored locally, but this doesn't work, because source files are not copy to build
-> directory.
-> > I am using BuildRoot 2018.05.
-> >
-> > Here is my mk file:
-> > ---
-> > BR2_PACKAGE_SITEC_S4_LP_VERSION      = 1.0
-> > BR2_PACKAGE_SITEC_S4_LP_SITE         = $(TOPDIR)/package/sitec-s4-lp/src
-> > BR2_PACKAGE_SITEC_S4_LP_SITE_METHOD  = local
-> > BR2_PACKAGE_SITEC_S4_LP_DEPENDENCIES = linux
-> >
-> > define BR2_PACKAGE_SITEC_S4_LP_BUILD_CMDS
-> 
-> All those prefixes are wrong. The variables in the .mk file should be prefixed by
-> SITEC_S4_LP, not BR2_PACKAGE_SITEC_S4_LP.
-> 
-> As your .mk file is written, none of those variables are taken into account, so
-> it's exactly as if your file contained just:
-> 
-> $(eval $(kernel-module))
-> $(eval $(generic-package))
-> 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons) Embedded Linux and
-> Kernel engineering https://bootlin.com
+Yegor
