@@ -1,38 +1,57 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Mon, 20 Aug 2018 10:39:33 +0200
-Subject: [Buildroot] [PATCH] gr-osmosdr: add host-python-cheetah dependency
-Message-ID: <20180820083933.26217-1-gwenj@trabucayre.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 Aug 2018 11:52:27 +0200
+Subject: [Buildroot] Buildroot 2018.08-rc2 released
+Message-ID: <87tvnpl604.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Hi,
 
-Since b7f1b030413a51637323a755cbd985b06026990e host-python-cheetah is no more a
-dependency for gnuradio. So this package must be explicitly added for
-gr-osmosdr.
+Buildroot 2018.08-rc2 is released - Go download it at:
 
-Fix : http://autobuild.buildroot.net/results/aa208a69996548c15d937fc7c97d267162a56c48/
+http://buildroot.net/downloads/buildroot-2018.08-rc2.tar.gz
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- package/gr-osmosdr/gr-osmosdr.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+or
 
-diff --git a/package/gr-osmosdr/gr-osmosdr.mk b/package/gr-osmosdr/gr-osmosdr.mk
-index 55e043ef32..9ed4ad3118 100644
---- a/package/gr-osmosdr/gr-osmosdr.mk
-+++ b/package/gr-osmosdr/gr-osmosdr.mk
-@@ -12,7 +12,7 @@ GR_OSMOSDR_LICENSE_FILES = COPYING
- # gr-osmosdr prevents doing an in-source-tree build
- GR_OSMOSDR_SUPPORTS_IN_SOURCE_BUILD = NO
- 
--GR_OSMOSDR_DEPENDENCIES = gnuradio
-+GR_OSMOSDR_DEPENDENCIES = gnuradio host-python-cheetah
- 
- GR_OSMOSDR_CONF_OPTS = -DENABLE_DEFAULT=OFF
- 
+http://buildroot.net/downloads/buildroot-2018.08-rc2.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Another week, another release candidate.
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -sn 2018.08-rc1..
+    23  Bernd Kuhls
+    16  Peter Korsgaard
+    13  Thomas Petazzoni
+     9  Fabrice Fontaine
+     8  Baruch Siach
+     4  Yann E. MORIN
+     3  Peter Seiderer
+     2  Angelo Compagnucci
+     2  Ricardo Martincoski
+     1  Alexey Brodkin
+     1  Andr? Hentschel
+     1  David Owens
+     1  Laurent Hartanerot
+     1  Marcin Niestroj
+     1  Matt Flax
+     1  Matt Weber
+     1  Mirza Krak
+     1  Vadim Kochan
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.08-rc2
+
+Expect the final 2018.08 release by the end of the month.
+
 -- 
-2.16.4
+Bye, Peter Korsgaard
