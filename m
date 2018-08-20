@@ -1,53 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 14:00:23 +0200
-Subject: [Buildroot] [git commit branch/next] package/luvi: bump version to
- 2.8.0
-Message-ID: <20180820120004.7FE9D8DE8F@busybox.osuosl.org>
+Date: Mon, 20 Aug 2018 13:39:19 +0200
+Subject: [Buildroot] [git commit branch/next] package/git-crypt: bump
+ version to 0.6.0
+Message-ID: <20180820120004.5676B8DE8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac6fedda6b43996545ff498cd19a781698a96050
+commit: https://git.buildroot.net/buildroot/commit/?id=58b7005be1845f6f5c15da46e6bb95d769773c6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream does not provide a tarball including all submodules so we need
-to checkout the git repo including the submodules ourselves.
+Quoting from release notes:
+https://www.agwa.name/git/git-crypt.git/raw/master/NEWS
 
-Added license hash.
+"v0.6.0 (2017-11-26)
+  * Add support for OpenSSL 1.1 (still works with OpenSSL 1.0).
+  * Switch to C++11 (gcc 4.9 or higher now required to build).
+ [...]"
+
+Added license hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luvi/luvi.hash | 3 ++-
- package/luvi/luvi.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/git-crypt/Config.in      | 6 ++++--
+ package/git-crypt/git-crypt.hash | 7 +++++--
+ package/git-crypt/git-crypt.mk   | 2 +-
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-index e2239b6171..d5716e0036 100644
---- a/package/luvi/luvi.hash
-+++ b/package/luvi/luvi.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256  ce9a1fb762e61267618ddea9ea129170fd543bb918c382b71cb35985d0024c42  luvi-src-v2.7.6.tar.gz
-+sha256 a18e138c7032ef8406fef6e2135a61fad713861742512f2073adc0b4ab6d8f8b  luvi-v2.8.0.tar.gz
-+sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-index a2bc218e77..8b3b7659b0 100644
---- a/package/luvi/luvi.mk
-+++ b/package/luvi/luvi.mk
-@@ -4,9 +4,10 @@
+diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
+index 362fe9a600..bb86219cf8 100644
+--- a/package/git-crypt/Config.in
++++ b/package/git-crypt/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GIT_CRYPT
+ 	bool "git-crypt"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+ 	depends on BR2_USE_MMU # git
+ 	select BR2_PACKAGE_GIT # runtime
+ 	select BR2_PACKAGE_OPENSSL
+@@ -10,6 +11,7 @@ config BR2_PACKAGE_GIT_CRYPT
+ 
+ 	  https://www.agwa.name/projects/git-crypt/
+ 
+-comment "git-crypt needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "git-crypt needs a toolchain w/ C++, gcc >= 4.9"
++	depends on !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
+index 8589f03f71..973432d7d0 100644
+--- a/package/git-crypt/git-crypt.hash
++++ b/package/git-crypt/git-crypt.hash
+@@ -1,2 +1,5 @@
+-# Hash from: https://lists.cloudmutt.com/pipermail/git-crypt-announce/2015-May/000003.html
+-sha256 0a8f92c0a0a125bf768d0c054d947ca4e4b8d6556454b0e7e87fb907ee17cf06 git-crypt-0.5.0.tar.gz
++# Locally calculated after checking pgp signature
++sha256 6d30fcd99442d50f4b3c8d554067ff1d980cdf9f3120ee774131172dba98fd6f  git-crypt-0.6.0.tar.gz
++# Locally calculated
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256 506657e7a381165550e6c33e35b3b03bbef3e1feb68ba5529e264bd75ed2dc64  parse_options.hpp
+diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
+index 6cae456fd3..507534c139 100644
+--- a/package/git-crypt/git-crypt.mk
++++ b/package/git-crypt/git-crypt.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUVI_VERSION = v2.7.6
--LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
--LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
-+LUVI_VERSION = v2.8.0
-+LUVI_SITE = https://github.com/luvit/luvi.git
-+LUVI_SITE_METHOD = git
-+LUVI_GIT_SUBMODULES = YES
- LUVI_LICENSE = Apache-2.0
- LUVI_LICENSE_FILES = LICENSE.txt
- LUVI_DEPENDENCIES = libuv luajit luv host-luajit
+-GIT_CRYPT_VERSION = 0.5.0
++GIT_CRYPT_VERSION = 0.6.0
+ GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
+ GIT_CRYPT_DEPENDENCIES = host-pkgconf openssl
+ GIT_CRYPT_LICENSE = GPL-3.0+, MIT
