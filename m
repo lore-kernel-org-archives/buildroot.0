@@ -1,50 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 23:39:58 +0200
-Subject: [Buildroot] [PATCH/next 1/4] package/botan: bump version to
- 2.7.0
-In-Reply-To: <20180818233052.30190-1-bernd.kuhls@t-online.de>
-References: <20180818233052.30190-1-bernd.kuhls@t-online.de>
-Message-ID: <20180820233958.62e2f505@windsurf>
+Date: Mon, 20 Aug 2018 23:49:38 +0200
+Subject: [Buildroot] [git commit] libssh: fix download location
+Message-ID: <20180820214226.F2F458E0D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=ac26da5275af39e723547e0945de03752051e1ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 19 Aug 2018 01:30:49 +0200, Bernd Kuhls wrote:
-> Depends on gcc >= 4.8:
-> https://github.com/randombit/botan/blob/master/readme.rst
-> 
-> Rebased patch 0001, added license hash and updated license path.
-> 
-> Updated configure options for shared/static libraries after commit
-> https://github.com/randombit/botan/commit/299119f02c09e7d3e657b13e1706cb653eff560c
-> 
-> Added configure for ssp support after commit
-> https://github.com/randombit/botan/commit/ebeae68aba0d3384a00fddde77a561bb0cd88102
-> This fixes a build error with toolchains without ssp support.
-> 
-> Removed dependency to gmp:
-> https://github.com/randombit/botan/issues/719
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  .../0001-remove-mips64-explicit-mabi.patch    | 10 ++++---
->  package/botan/Config.in                       |  6 ++--
->  package/botan/botan.hash                      |  4 ++-
->  package/botan/botan.mk                        | 30 +++++++++++++------
->  4 files changed, 34 insertions(+), 16 deletions(-)
+The current download location fails, and Buildroot falls back to
+sources.b.o:
 
-First of all, thanks for your documented commit log. It is definitely
-nice to have all those details to understand the changes made as part
-of the version bump. So thanks for doing that.
+--2018-08-20 23:41:39--  https://red.libssh.org/attachments/download/218/libssh-0.7.5.tar.xz
+Resolving red.libssh.org (red.libssh.org)... 78.46.80.163
+Connecting to red.libssh.org (red.libssh.org)|78.46.80.163|:443... connected.
+The certificate's owner does not match hostname ???red.libssh.org???
+--2018-08-20 23:41:39--  http://sources.buildroot.net/libssh/libssh-0.7.5.tar.xz
+Resolving sources.buildroot.net (sources.buildroot.net)... 104.25.211.19, 104.25.210.19, 2400:cb00:2048:1::6819:d313, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|104.25.211.19|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 351632 (343K) [application/x-xz]
 
-I've applied the entire series to next. Thanks!
+This commit fixes the download location:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--2018-08-20 23:43:04--  https://www.libssh.org/files/0.7/libssh-0.7.5.tar.xz
+Resolving www.libssh.org (www.libssh.org)... 87.98.168.187, 2001:41d0:2:f80c::4
+Connecting to www.libssh.org (www.libssh.org)|87.98.168.187|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 351632 (343K) [application/x-tar]
+
+This patch is extracted from a contribution from Bernd Kuhls who was
+also bumping the package at the same time
+(http://patchwork.ozlabs.org/patch/959192/).
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libssh/libssh.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index 34716c502a..902865d73b 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-LIBSSH_VERSION = 0.7.5
++LIBSSH_VERSION_MAJOR = 0.7
++LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+-LIBSSH_SITE = https://red.libssh.org/attachments/download/218
++LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
+ LIBSSH_LICENSE = LGPL-2.1
+ LIBSSH_LICENSE_FILES = COPYING
+ LIBSSH_INSTALL_STAGING = YES
