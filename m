@@ -1,80 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 13:40:31 +0200
-Subject: [Buildroot] [git commit branch/next] package/libtorrent: bump
- version to 0.13.7
-Message-ID: <20180820120004.75CBE8DE8F@busybox.osuosl.org>
+Date: Mon, 20 Aug 2018 14:10:37 +0200
+Subject: [Buildroot] [PATCH 00/13] perl modules again
+In-Reply-To: <20180820115519.24046-1-chrismcc@gmail.com>
+References: <20180820115519.24046-1-chrismcc@gmail.com>
+Message-ID: <20180820141037.5b4c40cb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07673dd6eb2565468abb5730fa3ca9334df683fc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Added license hash.
+Note: the title of your cover letter says PATCH 00/13, but your series
+has 18 patches. Seems like something went wrong.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libtorrent/0001-cross_compile.patch | 14 ++------------
- package/libtorrent/libtorrent.hash          |  3 ++-
- package/libtorrent/libtorrent.mk            |  2 +-
- 3 files changed, 5 insertions(+), 14 deletions(-)
+On Mon, 20 Aug 2018 04:55:01 -0700, Christopher McCrory wrote:
 
-diff --git a/package/libtorrent/0001-cross_compile.patch b/package/libtorrent/0001-cross_compile.patch
-index abb243820c..9febfa7f3c 100644
---- a/package/libtorrent/0001-cross_compile.patch
-+++ b/package/libtorrent/0001-cross_compile.patch
-@@ -4,27 +4,17 @@ Date: Mon, 5 Oct 2015 00:40:25 +0100
- Subject: [PATCH] Fix cross compilation, based on OpenWRT patch.
- 
- [Vincent: tweak the patch for version 0.13.6]
-+[Bernd: tweak the patch for version 0.13.7]
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  configure.ac      |    1 -
-  scripts/checks.m4 |    2 +-
-  scripts/common.m4 |    4 ++--
-  3 files changed, 3 insertions(+), 4 deletions(-)
- 
--diff --git a/configure.ac b/configure.ac
--index ba994ee..7696466 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -19,7 +19,6 @@ AC_SUBST(LIBTORRENT_INTERFACE_VERSION_NO)
-- 
-- AM_INIT_AUTOMAKE
-- AC_CONFIG_HEADERS(config.h)
---AM_PATH_CPPUNIT(1.9.6)
-- 
-- AC_PROG_CXX
-- 
- diff --git a/scripts/checks.m4 b/scripts/checks.m4
- index 598f39b..0e5abe0 100644
- --- a/scripts/checks.m4
-diff --git a/package/libtorrent/libtorrent.hash b/package/libtorrent/libtorrent.hash
-index 73753e94ce..8e0bc1caa4 100644
---- a/package/libtorrent/libtorrent.hash
-+++ b/package/libtorrent/libtorrent.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 2838a08c96edfd936aff8fbf99ecbb930c2bfca3337dd1482eb5fccdb80d5a04  libtorrent-0.13.6.tar.gz
-+sha256 c738f60f4d7b6879cd2745fb4310bf24c9287219c1fd619706a9d5499ca7ecc1  libtorrent-0.13.7.tar.gz
-+sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
-index fbd332e379..8d74addaf7 100644
---- a/package/libtorrent/libtorrent.mk
-+++ b/package/libtorrent/libtorrent.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTORRENT_VERSION = 0.13.6
-+LIBTORRENT_VERSION = 0.13.7
- LIBTORRENT_SITE = http://rtorrent.net/downloads
- LIBTORRENT_DEPENDENCIES = host-pkgconf zlib \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
+> Christopher McCrory (18):
+>   perl-dbi: add host package
+>   perl-dbd-mysql: new package
+>   perl-data-dump: new package
+>   perl-time-parsedate: new package
+>   perl-x10: new package
+>   perl-sys-cpu: new package
+>   perl-dist-checkconflicts: new package
+>   perl-package-stash: new package
+>   perl-class-load: new package
+>   perl-template-toolkit: new package
+>   perl-xml-parser: new package
+>   perl-soap-wsdl: new package
+>   perl-time-parsedate: add license
+>   perl-termreadkey: new package
+>   pkg-utils.mk: patch_sub_makefile
+>   perl-template-toolkit: use new patch_sub_makefile
+>   perl-xml-parser: use new patch_sub_makefile
+>   perl-soap-wsdl: add dependancy on perl-termreadkey
+
+Note: you still had a number of patches pending. Some of them are in
+this new series some not, which is a bit unclear on which ones you
+still want to get merged, which one you do want. I've marked all those
+older patches as Superseded:
+
+  http://patchwork.ozlabs.org/patch/956316/
+  http://patchwork.ozlabs.org/patch/956592/
+  http://patchwork.ozlabs.org/patch/956590/
+  http://patchwork.ozlabs.org/patch/956598/
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
