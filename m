@@ -1,47 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 23:41:22 +0200
-Subject: [Buildroot] [git commit branch/next] package/libepoxy: bump version
- to 1.5.2
-Message-ID: <20180820215044.9178C8E0EA@busybox.osuosl.org>
+Date: Mon, 20 Aug 2018 23:56:46 +0200
+Subject: [Buildroot] [git commit branch/next] package/libssh: bump version
+ to 0.8.1
+Message-ID: <20180820215044.A69D58E0EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0354fc5f6a2d1b672eec7a33a0d104b0fbd13bc
+commit: https://git.buildroot.net/buildroot/commit/?id=23430a63a789dccd635d58d699bfa6416340da8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Fixed broken _SITE, added license hash.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libepoxy/libepoxy.hash | 4 ++--
- package/libepoxy/libepoxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libssh/libssh.hash | 8 +++-----
+ package/libssh/libssh.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
-index 654d1675fd..dd1b13487b 100644
---- a/package/libepoxy/libepoxy.hash
-+++ b/package/libepoxy/libepoxy.hash
-@@ -1,5 +1,5 @@
--# From ftp://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.0.sha256sum
--sha256 4c94995398a6ebf691600dda2e9685a0cac261414175c2adf4645cdfab42a5d5  libepoxy-1.5.0.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.2.sha256sum
-+sha256 a9562386519eb3fd7f03209f279f697a8cba520d3c155d6e253c3e138beca7d8  libepoxy-1.5.2.tar.xz
- 
- # Hashes for license files:
- sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
-diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
-index b9498b17b4..b1731a22c5 100644
---- a/package/libepoxy/libepoxy.mk
-+++ b/package/libepoxy/libepoxy.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+index 009a335e3b..7220c337cf 100644
+--- a/package/libssh/libssh.hash
++++ b/package/libssh/libssh.hash
+@@ -1,5 +1,3 @@
+-# from https://red.libssh.org/projects/libssh/files/
+-md5	d3fc864208bf607ad87cdee836894feb	libssh-0.7.5.tar.xz
+-# Locally calculated after checking signature on uncompressed libssh-0.7.5.tar
+-# https://red.libssh.org/attachments/download/217/libssh-0.7.5.tar.asc
+-sha256	54e86dd5dc20e5367e58f3caab337ce37675f863f80df85b6b1614966a337095  libssh-0.7.5.tar.xz
++# Locally calculated after checking pgp signature
++sha256 d17f1267b4a5e46c0fbe66d39a3e702b8cefe788928f2eb6e339a18bb00b1924  libssh-0.8.1.tar.xz
++sha256 468cf08f784ef6fd3b3705b60dd8111e2b70fbb8f6549cd503665a6bbb3bc625  COPYING
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index 902865d73b..4295aa42ee 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- LIBEPOXY_VERSION_MAJOR = 1.5
--LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).0
-+LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).2
- LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
- LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
- LIBEPOXY_INSTALL_STAGING = YES
+-LIBSSH_VERSION_MAJOR = 0.7
+-LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
++LIBSSH_VERSION_MAJOR = 0.8
++LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).1
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+ LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
+ LIBSSH_LICENSE = LGPL-2.1
