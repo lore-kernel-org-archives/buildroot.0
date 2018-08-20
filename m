@@ -1,42 +1,41 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 20 Aug 2018 18:55:55 +0200
-Subject: [Buildroot] [PATCH 2/2] boost: context needs C++11
-In-Reply-To: <20180820165555.20492-1-fontaine.fabrice@gmail.com>
-References: <20180820165555.20492-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180820165555.20492-2-fontaine.fabrice@gmail.com>
+Date: Mon, 20 Aug 2018 18:59:29 +0200
+Subject: [Buildroot] [PATCH 1/1] zeromq: fix build on m68k_cf
+Message-ID: <20180820165929.20741-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this flag, mutex is not always correctly detected with gcc 4.x
-or 5.x. As a result, boost_thread is wrongly selected by boost_context.
+An internal compiler error is raised on m68k_cf at dwarf2cfi.c:2752 in
+connect_traces. Error can be fixed by adding -fno-defer-pop, see
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
 
 Fixes:
- - http://autobuild.buildroot.net/results/fb046c04fe18bec973d120e4ab33971f32ba5769
- - http://autobuild.buildroot.net/results/99f1a255b78a973faeb8bf3b94d78efc54426a8b
+ - http://autobuild.buildroot.net/results/dad241acbe59b1c5a24a0a2f3da6b12a553aec84
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/boost/boost.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/zeromq/zeromq.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 14f6162003..a09dd3cf45 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -61,6 +61,11 @@ else
- BOOST_FLAGS += --without-icu
- endif
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index 8273cad763..4b25c7d678 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -23,6 +23,12 @@ ZEROMQ_CONF_ENV = libzmq_cv_sock_cloexec=yes \
+ 	libzmq_cv_tcp_keepidle=yes \
+ 	libzmq_cv_tcp_keepintvl=yes
  
-+# boost-context needs C++11
-+ifeq ($(BR2_PACKAGE_BOOST_CONTEXT),y)
-+BOOST_TARGET_CXXFLAGS += -std=c++11
++# Internal error, aborting at dwarf2cfi.c:2752 in connect_traces
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
++ifeq ($(BR2_m68k_cf),y)
++ZEROMQ_CONF_OPTS += CXXFLAGS="$(TARGET_CXXFLAGS) -fno-defer-pop"
 +endif
 +
- ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
- BOOST_DEPENDENCIES += bzip2 zlib
- endif
+ # Only tools/curve_keygen.c needs this, but it doesn't hurt to pass it
+ # for the rest of the build as well (which automatically includes stdc++).
+ ifeq ($(BR2_STATIC_LIBS),y)
 -- 
 2.14.1
