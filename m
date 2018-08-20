@@ -1,79 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 13:39:19 +0200
-Subject: [Buildroot] [git commit branch/next] package/git-crypt: bump
- version to 0.6.0
-Message-ID: <20180820120004.5676B8DE8D@busybox.osuosl.org>
+Date: Mon, 20 Aug 2018 14:05:47 +0200
+Subject: [Buildroot] [git commit branch/next] package/lynx: bump version to
+ 2.8.9rel.1
+Message-ID: <20180820120004.8AD188B8E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58b7005be1845f6f5c15da46e6bb95d769773c6a
+commit: https://git.buildroot.net/buildroot/commit/?id=563246b262bc513c650fb8f14383da02adda71d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Quoting from release notes:
-https://www.agwa.name/git/git-crypt.git/raw/master/NEWS
+Changelog: http://lynx.invisible-island.net/current/CHANGES
 
-"v0.6.0 (2017-11-26)
-  * Add support for OpenSSL 1.1 (still works with OpenSSL 1.0).
-  * Switch to C++11 (gcc 4.9 or higher now required to build).
- [...]"
-
-Added license hashes.
+Removed patch 0001, quoted from Changelog:
+* when cross-compiling, trim LDFLAGS from makefile rule linking makeuctb,
+  because it is a build tool, which should generally use BUILD_LDFLAGS
+  (patch by Thomas Petazzoni)
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/git-crypt/Config.in      | 6 ++++--
- package/git-crypt/git-crypt.hash | 7 +++++--
- package/git-crypt/git-crypt.mk   | 2 +-
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ ...s-don-t-build-host-tools-with-target-LDFL.patch | 41 ----------------------
+ package/lynx/lynx.hash                             |  2 +-
+ package/lynx/lynx.mk                               |  2 +-
+ 3 files changed, 2 insertions(+), 43 deletions(-)
 
-diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
-index 362fe9a600..bb86219cf8 100644
---- a/package/git-crypt/Config.in
-+++ b/package/git-crypt/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GIT_CRYPT
- 	bool "git-crypt"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_USE_MMU # git
- 	select BR2_PACKAGE_GIT # runtime
- 	select BR2_PACKAGE_OPENSSL
-@@ -10,6 +11,7 @@ config BR2_PACKAGE_GIT_CRYPT
- 
- 	  https://www.agwa.name/projects/git-crypt/
- 
--comment "git-crypt needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "git-crypt needs a toolchain w/ C++, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
-diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
-index 8589f03f71..973432d7d0 100644
---- a/package/git-crypt/git-crypt.hash
-+++ b/package/git-crypt/git-crypt.hash
-@@ -1,2 +1,5 @@
--# Hash from: https://lists.cloudmutt.com/pipermail/git-crypt-announce/2015-May/000003.html
--sha256 0a8f92c0a0a125bf768d0c054d947ca4e4b8d6556454b0e7e87fb907ee17cf06 git-crypt-0.5.0.tar.gz
-+# Locally calculated after checking pgp signature
-+sha256 6d30fcd99442d50f4b3c8d554067ff1d980cdf9f3120ee774131172dba98fd6f  git-crypt-0.6.0.tar.gz
-+# Locally calculated
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256 506657e7a381165550e6c33e35b3b03bbef3e1feb68ba5529e264bd75ed2dc64  parse_options.hpp
-diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
-index 6cae456fd3..507534c139 100644
---- a/package/git-crypt/git-crypt.mk
-+++ b/package/git-crypt/git-crypt.mk
+diff --git a/package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch b/package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch
+deleted file mode 100644
+index cc057cee13..0000000000
+--- a/package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From bb47abe9e7996147f6b7b325f5c9b2143abf8f13 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Mon, 7 May 2018 22:00:52 +0200
+-Subject: [PATCH] src/chrtrans: don't build host tools with target LDFLAGS
+-
+-In a cross-compilation context, the LDFLAGS variable contains linker
+-flags used when building things for the target. However, the makeuctb
+-tool is built for the host machine, and therefore should not use the
+-same LDFLAGS as the target, which is why BUILD_LDFLAGS exist.
+-
+-Using LDFLAGS when building a tool for the host can cause problems
+-when some flags in LDFLAGS are not supported by the host machine. For
+-example, if you're linking statically lynx for the target, but the
+-build machine does not support static linking:
+-
+-gcc -I../.. -I../../src -I../../src/chrtrans -I../../WWW/Library/Implementation -I../../     -static  -o makeuctb makeuctb.o
+-/usr/bin/ld: cannot find -lc
+-collect2: error: ld returned 1 exit status
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream-status: submitted on the mailing list
+----
+- src/chrtrans/makefile.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/chrtrans/makefile.in b/src/chrtrans/makefile.in
+-index aab358f..6e0ef03 100644
+---- a/src/chrtrans/makefile.in
+-+++ b/src/chrtrans/makefile.in
+-@@ -123,7 +123,7 @@ OBJS		= makeuctb$o
+- C_SRC		= $(OBJS:$o=.c)
+- 
+- $(MAKEUCTB) : $(OBJS)
+--	$(BUILD_CC) $(CC_OPTS) $(LDFLAGS) $(BUILD_LDFLAGS) -o $@ $(OBJS) $(INTLLIB) $(BUILD_LIBS)
+-+	$(BUILD_CC) $(CC_OPTS) $(BUILD_LDFLAGS) -o $@ $(OBJS) $(INTLLIB) $(BUILD_LIBS)
+- 
+- makeuctb$o : $(srcdir)/UCkd.h $(srcdir)/makeuctb.c
+- 
+--- 
+-2.14.3
+-
+diff --git a/package/lynx/lynx.hash b/package/lynx/lynx.hash
+index c39475aa23..76d7614a7c 100644
+--- a/package/lynx/lynx.hash
++++ b/package/lynx/lynx.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated:
+-sha256  04318a100b052d079d0018fa371aa28cfb41ab68db3a959f3b75c2170eea1bc8  lynx2.8.9dev.16.tar.bz2
++sha256  387f193d7792f9cfada14c60b0e5c0bff18f227d9257a39483e14fa1aaf79595  lynx2.8.9rel.1.tar.bz2
+ sha256  8406a30ff3134ec23cf752d1ceda92ddaabbe41b4f2dc07ea3cfa139de12d6d6  COPYING
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+index a95326a14a..735d5b317f 100644
+--- a/package/lynx/lynx.mk
++++ b/package/lynx/lynx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_CRYPT_VERSION = 0.5.0
-+GIT_CRYPT_VERSION = 0.6.0
- GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
- GIT_CRYPT_DEPENDENCIES = host-pkgconf openssl
- GIT_CRYPT_LICENSE = GPL-3.0+, MIT
+-LYNX_VERSION = 2.8.9dev.16
++LYNX_VERSION = 2.8.9rel.1
+ LYNX_SOURCE = lynx$(LYNX_VERSION).tar.bz2
+ LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
+ LYNX_LICENSE = GPL-2.0
