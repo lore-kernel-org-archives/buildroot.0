@@ -1,39 +1,41 @@
 From: Mirza Krak <mirza.krak@northern.tech>
-Date: Mon, 20 Aug 2018 15:09:05 +0200
-Subject: [Buildroot] [[PATCH v2 05/14] package/mender: symlink
- /var/lib/mender -> /data/mender
+Date: Mon, 20 Aug 2018 15:09:06 +0200
+Subject: [Buildroot] [[PATCH v2 06/14] package/mender: select
+ BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
 In-Reply-To: <20180820130914.22377-1-mirza.krak@northern.tech>
 References: <20180820130914.22377-1-mirza.krak@northern.tech>
-Message-ID: <20180820130914.22377-6-mirza.krak@northern.tech>
+Message-ID: <20180820130914.22377-7-mirza.krak@northern.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The Mender client will use /var/lib/mender to access the persistent data
-partition and expect the link to be in place.
-
-By default it points to /data, but this can easily be overriden by
-overriding the link in overlay_fs
+The Mender client uses fw_printenv/fw_setenv to manipulate the U-boot
+environment, e.g to change the boot candidate after a update has been
+done.
 
 Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
 ---
- package/mender/mender.mk | 2 ++
+
+Changes in V2:
+- Added #runtime to hint that this not a build dependency
+
+ package/mender/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index acf50e0092..eb718ebc02 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -28,6 +28,8 @@ define MENDER_INSTALL_CONFIG_FILES
- 		$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-network
- 	$(INSTALL) -D -m 0755 package/mender/mender-inventory-hostinfo \
- 		$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-hostinfo
-+
-+	ln -sf /data/mender $(TARGET_DIR)/var/lib/mender
- endef
- 
- MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
--- 
+diff --git a/package/mender/Config.in b/package/mender/Config.in
+index e461857486..aeb0b2694f 100644
+--- a/package/mender/Config.in
++++ b/package/mender/Config.in
+@@ -3,6 +3,8 @@ config BR2_PACKAGE_MENDER
+ 	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_UBOOT_TOOLS # runtime
++	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV # runtime
+ 	help
+ 	  Mender is an open source over-the-air (OTA) software updater
+ 	  for embedded Linux devices. Mender comprises a client
+--
 2.11.0
