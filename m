@@ -1,32 +1,74 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 14:36:29 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libtorrent: bump version
- to 0.13.7
-In-Reply-To: <20180819104716.4306-1-bernd.kuhls@t-online.de>
-References: <20180819104716.4306-1-bernd.kuhls@t-online.de>
-Message-ID: <20180820143629.1aa1d048@windsurf>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Mon, 20 Aug 2018 05:41:43 -0700
+Subject: [Buildroot] [PATCH 04/18] perl-time-parsedate: new package
+In-Reply-To: <20180820142755.17fdb6b5@windsurf>
+References: <20180820115519.24046-1-chrismcc@gmail.com>
+ <20180820115519.24046-5-chrismcc@gmail.com>
+ <20180820135930.67c124db@windsurf>
+ <CALURroRXJRkT3agrhjCniDUV608M06Tm+n_7ssFL=w2FiWpytg@mail.gmail.com>
+ <20180820142755.17fdb6b5@windsurf>
+Message-ID: <CALURroQsU0NNQQyyH=O0+MJPXwCrDistn1Hzup-EvH4YndBSMQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, Aug 20, 2018 at 5:27 AM, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-On Sun, 19 Aug 2018 12:47:16 +0200, Bernd Kuhls wrote:
-> Added license hash.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libtorrent/0001-cross_compile.patch | 14 ++------------
->  package/libtorrent/libtorrent.hash          |  3 ++-
->  package/libtorrent/libtorrent.mk            |  2 +-
->  3 files changed, 5 insertions(+), 14 deletions(-)
+> Hello,
+>
+> On Mon, 20 Aug 2018 05:12:22 -0700, Christopher McCrory wrote:
+>
+> > It looks like I missed putting this in the cover leter
+> > 0013-perl-time-parsedate-add-license.patch has
+> >
+> >
+> > -PERL_TIME_PARSEDATE_LICENSE = unknown
+> > +# https://fedoraproject.org/wiki/Licensing/TPDL
+> > +PERL_TIME_PARSEDATE_LICENSE = Public Domain
+>
+> Why is this change part of a separate patch ? It should be inside the
+> patch adding the perl-time-parsedate package.
+>
 
-Applied to next, thanks.
+I wasn't sure what would be best.  It allows a followup patch to do the
+right thing.
+
+
+
+>
+> Also, the license is not public domain. Fedora calls it TPDL, which
+> stands for Time Parse Date License.
+>
+>
+https://src.fedoraproject.org/rpms/perl-Time-ParseDate/blob/master/f/perl-Time-ParseDate.spec
+
+Summary:        Perl modules for parsing dates and times
+# See https://fedoraproject.org/wiki/Licensing/TPDL
+License:        TPDL and Public Domain
+URL:            https://metacpan.org/release/Time-ParseDate
+
+
+Arg, that should have also been in the cover letter,  Somehow I missed it
+during copy and paste.
+
 
 Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Christopher McCrory
+To the optimist, the glass is half full.
+To the pessimist, the glass is half empty.
+To the engineer, the glass is twice as big as it needs to be.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180820/3585bf7f/attachment.html>
