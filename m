@@ -1,43 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 13:59:30 +0200
-Subject: [Buildroot] [PATCH 04/18] perl-time-parsedate: new package
-In-Reply-To: <20180820115519.24046-5-chrismcc@gmail.com>
-References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820115519.24046-5-chrismcc@gmail.com>
-Message-ID: <20180820135930.67c124db@windsurf>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Mon, 20 Aug 2018 14:05:54 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/python-cryptography: bump
+ version to 2.3.1
+In-Reply-To: <CAGm1_ktoBnagq89z6WbQcTCB4Fkc5bY2YqEnpy3PeVZbMST_hA@mail.gmail.com>
+References: <20180819184242.21134-1-bernd.kuhls@t-online.de>
+ <CAGm1_kvHG2zGtw8U200teJtVnjAOf57t_5XCxRsb3TsBjLi69Q@mail.gmail.com>
+ <9fro4fx8c7.ln2@ID-313208.user.individual.net>
+ <CAGm1_ktoBnagq89z6WbQcTCB4Fkc5bY2YqEnpy3PeVZbMST_hA@mail.gmail.com>
+Message-ID: <CAGm1_kvy6uRamH4NJyHykuAUJxJ+kvWuizSPRWFGTn4H9xt5iQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Bernd,
 
-On Mon, 20 Aug 2018 04:55:05 -0700, Christopher McCrory wrote:
+On Mon, Aug 20, 2018 at 10:05 AM, Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+> On Sun, Aug 19, 2018 at 9:02 PM, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+>> Am Sun, 19 Aug 2018 20:53:49 +0200 schrieb Yegor Yefremov:
+>>
+>>> Have you performed runtime tests?
+>>
+>> Hi Yegor,
+>>
+>> no, only build-tested with openssl-1.1.0i.
+>
+> I've performed a runtime test and I still get:
+>
+> # python
+> Python 3.6.3 (default, Aug 20 2018, 08:30:51)
+> [GCC 7.3.1 20180425 [linaro-7.3-2018.05 revision
+> d29120a424ecfbc167ef90065c0eeb on linux
+> Type "help", "copyright", "credits" or "license" for more information.
+>>>> from cryptography.fernet import Fernet
+>>>> key = Fernet.generate_key()
+> random: nonblocking pool is initialized
+>>>> f = Fernet(key)
+> Traceback (most recent call last):
+>   File "<stdin>", line 1, in <module>
+>   File "usr/lib/python3.6/site-packages/cryptography/fernet.py", line
+> 32, in __init__
+>   File "usr/lib/python3.6/site-packages/cryptography/hazmat/backends/__init__.py",
+> line 15, in default_backend
+>   File "usr/lib/python3.6/site-packages/cryptography/hazmat/backends/openssl/__init__.py",
+> line 7, in <module>
+>   File "usr/lib/python3.6/site-packages/cryptography/hazmat/backends/openssl/backend.py",
+> line 53, in <module>
+>   File "usr/lib/python3.6/site-packages/cryptography/hazmat/bindings/openssl/binding.py",
+> line 13, in <module>
+> ImportError: /usr/lib/python3.6/site-packages/cryptography/hazmat/bindings/_openssl.abi3.so:
+> undefined symbol: pthread_atfork
+>
+> That's why the packaged wasn't updated for a long time.
 
-> +PERL_TIME_PARSEDATE_VERSION = 2015.103
-> +PERL_TIME_PARSEDATE_SOURCE = Time-ParseDate-$(PERL_TIME_PARSEDATE_VERSION).tar.gz
-> +PERL_TIME_PARSEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MU/MUIR/modules
-> +PERL_TIME_PARSEDATE_LICENSE_FILES = README
-> +PERL_TIME_PARSEDATE_LICENSE = unknown
+Could you make a runtest against openssl-1.1.0i? I was using the
+current openssl version. Perhaps this error comes from the old
+version...
 
-Could you check with upstream what is the license ? An unknown license
-means you're not allow to redistribute it, which would be a bit
-annoying, no ?
-
-Here is what Debian says about the license:
-
-  https://metadata.ftp-master.debian.org/changelogs/main/libt/libtime-parsedate-perl/libtime-parsedate-perl_2015.103-2_copyright
-
-I.e:
-
- License hereby granted for anyone to use, modify or redistribute this module
- at their own risk. Please feed useful changes back to cpan at dave.sharnoff.org.
-
-So, "Time::ParseDate License" ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yegor
