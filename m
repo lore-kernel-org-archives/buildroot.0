@@ -1,68 +1,35 @@
-From: Mirza Krak <mirza.krak@northern.tech>
-Date: Mon, 20 Aug 2018 22:33:54 +0200
-Subject: [Buildroot] [[PATCH v2 05/14] package/mender: symlink
- /var/lib/mender -> /data/mender
-In-Reply-To: <20180820220429.1e67ba29@windsurf>
-References: <20180820130914.22377-1-mirza.krak@northern.tech>
- <20180820130914.22377-6-mirza.krak@northern.tech>
- <CADHdJwC4ZJv7uAwX5OZfVr2xedHESE7en8TjSGrPKAt2qdsB3A@mail.gmail.com>
- <20180820220429.1e67ba29@windsurf>
-Message-ID: <CADHdJwDd81-YntQ_s1Y4wR3VUX684+D_MFxqgSvbS+XtHwTdqw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Aug 2018 22:39:18 +0200
+Subject: [Buildroot] [git commit branch/next] package/libsrtp: fix license
+ hash
+Message-ID: <20180820203217.DFCC18E00C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 20, 2018 at 10:04 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Mon, 20 Aug 2018 20:36:22 +0200, Mirza Krak wrote:
->> On Mon, Aug 20, 2018 at 3:09 PM, Mirza Krak <mirza.krak@northern.tech> wrote:
->> > The Mender client will use /var/lib/mender to access the persistent data
->> > partition and expect the link to be in place.
->> >
->> > By default it points to /data, but this can easily be overriden by
->> > overriding the link in overlay_fs
->> >
->> > Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
->> > ---
->> >  package/mender/mender.mk | 2 ++
->> >  1 file changed, 2 insertions(+)
->>
->> Thanks Thomas for picking up my other patches.
->>
->> Wondering if this one was missed or some other reason not to apply it?
->
-> This one also relies on the assumption that /data is the persistent
-> partition, which is the part I'm still not sure how to handle. So I've
-> so far merged the things that I agree with, and that are OK for master.
+commit: https://git.buildroot.net/buildroot/commit/?id=22b89ffe42ddba393ad5b36195c3bbb8cffcb1a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Sorry I probably mislead you regarding this.
+While bumping the package from 1.5.4 to 2.2.0 the license hash from
+version 1.6.0 was erroneously used.
 
-The Mender client will use the /var/lib/mender path, that is pretty
-much hard-coded. The fact that it was a link to /data is simply to
-provide a "valid" path, because the mender.service will create the
-directory structure on start-up. The reason it is a link is because
-you can change it to point to where ever your persistent storage is.
+Fixes
+http://autobuild.buildroot.net/results/2d8/2d8344bab5b87d20156814b96cbbab1d5fc89586/
 
-So we either have to have a "mkdir -p /var/lib/mender" in mender.mk or
-use the link that this patch provides.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libsrtp/libsrtp.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sorry once again for not making this clear.
-
->
-> The rest is either stuff that needs more discussion (persistent
-> partition related stuff) or that isn't material for master because it
-> doesn't fix any problem.
->
-> BTW, could you send a patch adding yourself as a developer for the
-> mender package in the DEVELOPERS file ?
-
-Will do.
-
--- 
-Mirza Krak | Embedded Solutions Architect | https://mender.io
-
- Northern.tech AS | @northerntechHQ
+diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
+index 0aa8a67497..1a88673c81 100644
+--- a/package/libsrtp/libsrtp.hash
++++ b/package/libsrtp/libsrtp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256 44fd7497bce78767e96b54a11bca520adb2ad32effd515f04bce602b60a1a50b  libsrtp-v2.2.0.tar.gz
+-sha256 8defed37d52096ae14b60adc499c33d43975109bc265552ee67e9a888c634b93  LICENSE
++sha256 8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
