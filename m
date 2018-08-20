@@ -1,41 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 16:02:37 +0200
-Subject: [Buildroot] [git commit] boot/uboot: needs host-{flex,bison}
-Message-ID: <20180820140105.730D98DEF9@busybox.osuosl.org>
+Date: Mon, 20 Aug 2018 16:02:17 +0200
+Subject: [Buildroot] [git commit] linux: host-{flex,
+ bison} only needed for DTS
+Message-ID: <20180820140105.5FCB28DEF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=551454efff01c17aa2f0df1e0688276ec21e0035
+commit: https://git.buildroot.net/buildroot/commit/?id=43ac3c8432a48b30c64b4c3ceac3ffdeb4befbca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Recent U-Boot no longer ship the flex/bison generated kconfig parser, as
-of commit e91610da7c8a9fe42f3e5a75f06c3d1a0cb5f815 (kconfig: re-sync
-with Linux 4.17-rc4).
-
-So, add the conditional kconfig dependencies, as we just did for the
-kernel.
+host-{flex,bison} are only needed to generate the dtc parser, so we
+don't need them if the kernel does not have support for device tree.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/uboot/uboot.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ linux/linux.mk | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 04c759be34..bddafe234d 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -449,5 +449,8 @@ endif # BR2_TARGET_UBOOT && BR_BUILDING
- ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
- $(eval $(generic-package))
- else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-+UBOOT_KCONFIG_DEPENDENCIES = \
-+	$(BR2_BISON_HOST_DEPENDENCY) \
-+	$(BR2_FLEX_HOST_DEPENDENCY)
- $(eval $(kconfig-package))
- endif # BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY
+diff --git a/linux/linux.mk b/linux/linux.mk
+index deb5a4ac57..d6b0853518 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -64,11 +64,6 @@ LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
+ LINUX_INSTALL_IMAGES = YES
+ LINUX_DEPENDENCIES = host-kmod
+ 
+-# Starting with 4.17, the generated dtc parser code is no longer
+-# shipped with the kernel sources, so we need flex and bison. For
+-# reproducibility, we use our owns rather than the host ones.
+-LINUX_DEPENDENCIES += host-bison host-flex
+-
+ # Starting with 4.16, the generated kconfig paser code is no longer
+ # shipped with the kernel sources, so we need flex and bison, but
+ # only if the host does not have them.
+@@ -352,6 +347,11 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ endef
+ 
+ ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
++# Starting with 4.17, the generated dtc parser code is no longer
++# shipped with the kernel sources, so we need flex and bison. For
++# reproducibility, we use our owns rather than the host ones.
++LINUX_DEPENDENCIES += host-bison host-flex
++
+ ifeq ($(BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT),)
+ define LINUX_BUILD_DTB
+ 	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_DTBS)
