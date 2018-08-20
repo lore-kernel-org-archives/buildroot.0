@@ -1,88 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Aug 2018 22:27:53 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] libglib2: backport
- upstream patch to handle missing fcntl() flags
-Message-ID: <20180820202038.81BCA8DFDD@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Aug 2018 22:26:27 +0200
+Subject: [Buildroot] [git commit branch/next] python-setuptools: bump to
+ 40.0.0
+Message-ID: <20180820202247.38FAF8DFE4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4fc669254dfd2264caa9e38617d6b0627b7cbeb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=eb9d0e38101d3f62096550e0a39dbd18932ccc87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On RHEL6 hosts, fcntl.h doesn't define F_SETPIPE_SZ or
-F_GETPIPE_SZ. Upstream glib has a patch for this case that wasn't
-applied to their 2.56.1 branch.
+With the introduction of Python 3.7.0, setuptools also needs to be updated.
+Without the update, several packages will fail to build or install with a
+ValueError: bad marshal data (unknown type code).
+
+Updating setuptools to 40.0.0 version fixes this issue.
+
+Even though 40.1.0 is out, updating to 40.0.0 is recommended as it seems like
+40.1.0 breaks version detection on some python packages such as
+python-cryptography which will error out with a complaint that setuptools is too
+old, even though it's at 40.1.0. Using 40.0.0 fixes the issue.
 
 Fixes:
-
-  http://autobuild.buildroot.net/results/04b98a0b5c593c0525ef39d03c1ee7c2bbf5e44d/
-
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+http://autobuild.buildroot.net/results/636/636da0febe02f991095965d52cc4a8b2da644777/
+http://autobuild.buildroot.net/results/5f6/5f659130a6a32a4c43d6ed2c3b559df77ae18249/
+Signed-off-by: Adam Duskett <aduskett@greenlots.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bb3f944d6669dbf292b9b7693d0bcc3bb351300b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ package/python-setuptools/python-setuptools.hash | 2 +-
+ package/python-setuptools/python-setuptools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch b/package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
-new file mode 100644
-index 0000000000..032f4851c4
---- /dev/null
-+++ b/package/libglib2/0005-gio-fix-compilation-without-F_-S-G-ETPIPE_SZ.patch
-@@ -0,0 +1,52 @@
-+From 0beb62f564072f3585762c9c55fe894485993b62 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 10 Apr 2018 18:55:11 +0200
-+Subject: [PATCH] gio: fix compilation without F_{S,G}ETPIPE_SZ
-+
-+Commit a5778ef7c51044147fe470ea1707dd297f44f880 broke compilation on
-+architectures without F_SETPIPE_SZ and F_GETPIPE_SZ such as or1k.
-+If those variables are undefined, put back previous behavior, buffer
-+size set to 1024 * 64
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/398490e07343a931b25ca6ab5c90a75d7a073e9f
-+
-+(Modified by Philip Withnall <withnall@endlessm.com> to add an
-+explanatory comment.)
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+
-+https://bugzilla.gnome.org/show_bug.cgi?id=795133
-+---
-+ gio/gfile.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/gio/gfile.c b/gio/gfile.c
-+index 334ad8ec3..a67aad383 100644
-+--- a/gio/gfile.c
-++++ b/gio/gfile.c
-+@@ -3012,6 +3012,7 @@ splice_stream_with_progress (GInputStream           *in,
-+   if (!g_unix_open_pipe (buffer, FD_CLOEXEC, error))
-+     return FALSE;
-+ 
-++#if defined(F_SETPIPE_SZ) && defined(F_GETPIPE_SZ)
-+   /* Try a 1MiB buffer for improved throughput. If that fails, use the default
-+    * pipe size. See: https://bugzilla.gnome.org/791457 */
-+   buffer_size = fcntl (buffer[1], F_SETPIPE_SZ, 1024 * 1024);
-+@@ -3029,6 +3030,13 @@ splice_stream_with_progress (GInputStream           *in,
-+           goto out;
-+         }
-+     }
-++#else
-++  /* If #F_GETPIPE_SZ isn???t available, assume we???re on Linux < 2.6.35,
-++   * but ??? 2.6.11, meaning the pipe capacity is 64KiB. Ignore the possibility of
-++   * running on Linux < 2.6.11 (where the capacity was the system page size,
-++   * typically 4KiB) because it???s ancient. See pipe(7). */
-++  buffer_size = 1024 * 64;
-++#endif
-+ 
-+   g_assert (buffer_size > 0);
-+ 
-+-- 
-+2.13.0
-+
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index f116a69f74..c905d8254a 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2599b4c452e77824bbd6da28d16b1fe8159c7a4c203d8d419d8b348fde7b9549  python-setuptools-v38.4.0.tar.gz
++sha256  327e232b1809c9481256408fe9233bcf6a27f9f63ddbbadc526f451e5027aad5  python-setuptools-v40.0.0.tar.gz
+ sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 004fc0db2a..8db8511286 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SETUPTOOLS_VERSION = v38.4.0
++PYTHON_SETUPTOOLS_VERSION = v40.0.0
+ PYTHON_SETUPTOOLS_SITE = $(call github,pypa,setuptools,$(PYTHON_SETUPTOOLS_VERSION))
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
