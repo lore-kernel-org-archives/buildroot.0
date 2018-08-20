@@ -1,51 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 23:56:46 +0200
-Subject: [Buildroot] [git commit branch/next] package/libssh: bump version
- to 0.8.1
-Message-ID: <20180820215044.A69D58E0EA@busybox.osuosl.org>
+Date: Mon, 20 Aug 2018 23:33:36 +0200
+Subject: [Buildroot] [git commit branch/next] botan: fix minor typo in
+ Config.in file
+Message-ID: <20180820215044.867DC8E0EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23430a63a789dccd635d58d699bfa6416340da8a
+commit: https://git.buildroot.net/buildroot/commit/?id=826be91a5d5110a76d6156fddd1593037e38889e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixed broken _SITE, added license hash.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libssh/libssh.hash | 8 +++-----
- package/libssh/libssh.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ package/botan/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 009a335e3b..7220c337cf 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,3 @@
--# from https://red.libssh.org/projects/libssh/files/
--md5	d3fc864208bf607ad87cdee836894feb	libssh-0.7.5.tar.xz
--# Locally calculated after checking signature on uncompressed libssh-0.7.5.tar
--# https://red.libssh.org/attachments/download/217/libssh-0.7.5.tar.asc
--sha256	54e86dd5dc20e5367e58f3caab337ce37675f863f80df85b6b1614966a337095  libssh-0.7.5.tar.xz
-+# Locally calculated after checking pgp signature
-+sha256 d17f1267b4a5e46c0fbe66d39a3e702b8cefe788928f2eb6e339a18bb00b1924  libssh-0.8.1.tar.xz
-+sha256 468cf08f784ef6fd3b3705b60dd8111e2b70fbb8f6549cd503665a6bbb3bc625  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 902865d73b..4295aa42ee 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/botan/Config.in b/package/botan/Config.in
+index db2b33dfbe..6fe818bc6d 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -16,7 +16,7 @@ config BR2_PACKAGE_BOTAN
  
--LIBSSH_VERSION_MAJOR = 0.7
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
-+LIBSSH_VERSION_MAJOR = 0.8
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).1
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+ 	  http://botan.randombit.net
+ 
+-comment "botan needs a toolchain w/ C++, threads,gcc >= 4.8"
++comment "botan needs a toolchain w/ C++, threads, gcc >= 4.8"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
