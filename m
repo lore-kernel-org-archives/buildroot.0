@@ -1,48 +1,32 @@
 From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun, 19 Aug 2018 21:12:08 -0300
-Subject: [Buildroot] [PATCH] liburiparser: bump to version 0.8.6
-Message-ID: <20180820001208.10551-1-casantos@datacom.com.br>
+Date: Sun, 19 Aug 2018 22:42:30 -0300 (BRT)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-08-18
+In-Reply-To: <20180819060011.E1CB320DE6@mail.bootlin.com>
+References: <20180819060011.E1CB320DE6@mail.bootlin.com>
+Message-ID: <2136484645.1515454.1534729350975.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 0.8.6 is a bugfix release including a nasty bug that has
-potential to crash applications when parsing certain URIs (like
-"//:%aa@", excluding quotes).
+> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> To: "buildroot" <buildroot@buildroot.org>
+> Sent: Sunday, August 19, 2018 3:00:11 AM
+> Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-18
 
-For more details please check the change log at
+[...]
+> Results for branch 'next'
+> =========================
+[...]
+> Detail of failures
+[...]
+>      x86_64 | util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/064270b27d3c97852f0c9578b990610de641af42
 
-    https://github.com/uriparser/uriparser/blob/uriparser-0.8.6/ChangeLog
+I was unable to reproduce this on Fedora 28 neither on CentOS 7.4.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
----
- package/liburiparser/liburiparser.hash | 2 +-
- package/liburiparser/liburiparser.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/liburiparser/liburiparser.hash b/package/liburiparser/liburiparser.hash
-index c03e832f9f..1fd65d2f19 100644
---- a/package/liburiparser/liburiparser.hash
-+++ b/package/liburiparser/liburiparser.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  58eacd5c03d9e341c04eb0b30831faec89f3b415949ff8d72254e63432352cdd  uriparser-0.8.5.tar.bz2
-+sha256  0709a7e572417db763f0356250d91686c19a64ab48e9da9f5a1e8055dc2a4a54  uriparser-0.8.6.tar.bz2
- sha256  ee90029e62d11f48faa59360d15c3ad8e7c094c74cc25b055716d92340da561f  COPYING
-diff --git a/package/liburiparser/liburiparser.mk b/package/liburiparser/liburiparser.mk
-index 4b32b7f7f2..baed4506a4 100644
---- a/package/liburiparser/liburiparser.mk
-+++ b/package/liburiparser/liburiparser.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBURIPARSER_VERSION = 0.8.5
-+LIBURIPARSER_VERSION = 0.8.6
- LIBURIPARSER_SOURCE = uriparser-$(LIBURIPARSER_VERSION).tar.bz2
- LIBURIPARSER_SITE = https://github.com/uriparser/uriparser/releases/download/uriparser-$(LIBURIPARSER_VERSION)
- LIBURIPARSER_LICENSE = BSD-3-Clause
 -- 
-2.17.1
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
