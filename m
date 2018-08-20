@@ -1,33 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 Aug 2018 20:35:13 +0200
-Subject: [Buildroot] [PATCH] liburiparser: bump to version 0.8.6
-In-Reply-To: <146368874.1687439.1534786887521.JavaMail.zimbra@datacom.com.br>
- (Carlos Santos's message of "Mon, 20 Aug 2018 14:41:27 -0300 (BRT)")
-References: <20180820001208.10551-1-casantos@datacom.com.br>
- <87sh392brh.fsf@dell.be.48ers.dk>
- <146368874.1687439.1534786887521.JavaMail.zimbra@datacom.com.br>
-Message-ID: <87o9dw3mzi.fsf@dell.be.48ers.dk>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Mon, 20 Aug 2018 20:36:22 +0200
+Subject: [Buildroot] [[PATCH v2 05/14] package/mender: symlink
+ /var/lib/mender -> /data/mender
+In-Reply-To: <20180820130914.22377-6-mirza.krak@northern.tech>
+References: <20180820130914.22377-1-mirza.krak@northern.tech>
+ <20180820130914.22377-6-mirza.krak@northern.tech>
+Message-ID: <CADHdJwC4ZJv7uAwX5OZfVr2xedHESE7en8TjSGrPKAt2qdsB3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
+On Mon, Aug 20, 2018 at 3:09 PM, Mirza Krak <mirza.krak@northern.tech> wrote:
+> The Mender client will use /var/lib/mender to access the persistent data
+> partition and expect the link to be in place.
+>
+> By default it points to /data, but this can easily be overriden by
+> overriding the link in overlay_fs
+>
+> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+> ---
+>  package/mender/mender.mk | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Hi,
+Thanks Thomas for picking up my other patches.
 
- >> Committed, thanks.
- >> 
- >> When was this issue introduced? 2018.02.x has 0.8.4.
-
- > Looking a the code it seems to predate 0.8.4 by several years since it
- > fixes a function that was introduced in 2008:
-
- >    https://github.com/uriparser/uriparser/commit/451eb07f3a289e0d1b7800629f4814bf6b48c121
-
-Ok, thanks. I'll cherry pick this bump for 2018.02.x as well next time I
-sync then.
+Wondering if this one was missed or some other reason not to apply it?
 
 -- 
-Bye, Peter Korsgaard
+Mirza Krak | Embedded Solutions Architect | https://mender.io
+
+ Northern.tech AS | @northerntechHQ
