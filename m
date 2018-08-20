@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 16:51:47 +0200
-Subject: [Buildroot] [[PATCH v2 01/14] package/mender: fix install path
- for identity and inventory scripts
-In-Reply-To: <20180820130914.22377-2-mirza.krak@northern.tech>
+Date: Mon, 20 Aug 2018 16:51:53 +0200
+Subject: [Buildroot] [[PATCH v2 02/14] package/mender: provide sane
+ values in mender.conf
+In-Reply-To: <20180820130914.22377-3-mirza.krak@northern.tech>
 References: <20180820130914.22377-1-mirza.krak@northern.tech>
- <20180820130914.22377-2-mirza.krak@northern.tech>
-Message-ID: <20180820165147.77137a9a@windsurf>
+ <20180820130914.22377-3-mirza.krak@northern.tech>
+Message-ID: <20180820165153.693ca843@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,38 +14,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 20 Aug 2018 15:09:01 +0200, Mirza Krak wrote:
-> These scripts are used to generate the device identity and to populate
-> the the device inventory. The Mender client will call these and at least
-> the mender-device-identity is required to be present at the correct
-> location. Inventory scripts are there as an example and not
-> actually required.
+On Mon, 20 Aug 2018 15:09:02 +0200, Mirza Krak wrote:
+> The current values that are in mender.conf will actually
+> cause the Mender client to fail to start because of invalid
+> values.
 > 
-> Example output from identity script:
+> Provide sane default values that at least allow the Mender client
+> to parse the configuration options and start running.
 > 
->     $ ./mender-device-identity
->     mac=de:ad:ca:fe:00:01
->     cpuid=1112233
+> The values provided will actually work in a "Demo Environment",
+> see https://docs.mender.io/getting-started/create-a-test-environment.
 > 
-> Example output from inventory script:
+> Though an entry is required in /etc/hosts to resolve the URL to the
+> local IP address of the running demo server.
 > 
->     $ ./mender-inventory-network
->     mac_br-fbfdad18c33c=02:42:7e:74:96:85
->     network_interfaces=br-fbfdad18c33c
->     ipv4_br-fbfdad18c33c=172.21.0.1/16
->     mac_enp0s25=de:ad:be:ef:bb:05
->     network_interfaces=enp0s25
->     ipv4_enp0s25=123.22.0.197/16
->     ipv4_enp0s25=10.20.20.105/16
->     ipv6_enp0s25=fe80::2aad:beff:feef:bb05/64
+> Example:
 > 
-> Inventory and device identity data is presented on the Mender server
-> front-end.
+>     echo "192.168.0.10 docker.mender.io s3.docker.mender.io" >> \
+>          /etc/hosts
+> 
+> Above is required because the demo certificate
+> (/etc/mender/server.crt) is created for https://docker.mender.io.
 > 
 > Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
 > ---
->  package/mender/mender.mk | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  package/mender/mender.conf | 20 ++++++++------------
+>  1 file changed, 8 insertions(+), 12 deletions(-)
 
 Applied to master, thanks.
 
