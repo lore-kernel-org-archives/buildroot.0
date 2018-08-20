@@ -1,69 +1,186 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 16:55:01 +0200
-Subject: [Buildroot] [git commit] package/mender: remove tenant.conf
-Message-ID: <20180820145923.38A188DEF5@busybox.osuosl.org>
+Date: Mon, 20 Aug 2018 17:03:49 +0200
+Subject: [Buildroot] [git commit] package/mender: use inventory and identity
+ script from upstream source
+Message-ID: <20180820145923.481DA7FA9A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3882c878fb9b96930570380cd39b45d5d99c73df
+commit: https://git.buildroot.net/buildroot/commit/?id=5a70d2ae5944b67e8452baad355c604213bfbd8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Tenant Token is a configuration option that has to do with Hosted Mender,
-where you you need to set this for the devices to connect to the
-correct organization in a multi-tenant system.
-
-The removal of tenant.conf usage (and /var/lib/mender/authtentoken)
-was in Mender client version 1.2.0, where it was switched to be an mender.conf
-option instead as the example above demonstrates. As the first version that was
-integrated in Buildroot was 1.4.0, the inclusion of tenant.conf and the
-creation of the symlink is not necessary.
-
-Now it is specified as such in mender.conf:
-
-Example:
-
-/etc/mender/mender.conf
-{
-    TenantToken: "very long base64 encoded string"
-}
+These files are part of Mender sources and no point in keeping duplicate
+files locally.
 
 Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mender/mender.mk      | 3 +--
- package/mender/mender.service | 1 -
- package/mender/tenant.conf    | 0
- 3 files changed, 1 insertion(+), 3 deletions(-)
+ package/mender/mender-device-identity    | 52 --------------------------------
+ package/mender/mender-inventory-hostinfo | 21 -------------
+ package/mender/mender-inventory-network  | 47 -----------------------------
+ package/mender/mender.mk                 | 10 +++---
+ 4 files changed, 5 insertions(+), 125 deletions(-)
 
+diff --git a/package/mender/mender-device-identity b/package/mender/mender-device-identity
+deleted file mode 100644
+index d87f843357..0000000000
+--- a/package/mender/mender-device-identity
++++ /dev/null
+@@ -1,52 +0,0 @@
+-#!/bin/sh
+-
+-# Example script called by Mender agent to collect device identity data. The
+-# script needs to be located at
+-# $(datadir)/mender/identity/mender-device-identity path for the agent to find
+-# it. The script shall exit with non-0 status on errors. In this case the agent
+-# will discard any output the script may have produced.
+-#
+-# The script shall output identity data in <key>=<value> format, one
+-# entry per line. Example
+-#
+-# $ ./mender-device-identity
+-# mac=de:ad:ca:fe:00:01
+-# cpuid=1112233
+-#
+-# The example script collects the MAC address of a network interface with the
+-# type ARPHRD_ETHER and it will pick the interface with the lowest ifindex
+-# number if there are multiple interfaces with that type. The identity data is
+-# output in the following format:
+-#
+-# mac=00:01:02:03:04:05
+-#
+-
+-set -ue
+-
+-SCN=/sys/class/net
+-min=65535
+-arphrd_ether=1
+-ifdev=
+-
+-# find iface with lowest ifindex, skip non ARPHRD_ETHER types (lo, sit ...)
+-for dev in $SCN/*; do
+-    iftype=$(cat $dev/type)
+-    if [ $iftype -ne $arphrd_ether ]; then
+-        continue
+-    fi
+-
+-    idx=$(cat $dev/ifindex)
+-    if [ $idx -lt $min ]; then
+-        min=$idx
+-        ifdev=$dev
+-    fi
+-done
+-
+-if [ -z "$ifdev" ]; then
+-    echo "no suitable interfaces found" >&2
+-    exit 1
+-else
+-    echo "using interface $ifdev" >&2
+-    # grab MAC address
+-    echo "mac=$(cat $ifdev/address)"
+-fi
+diff --git a/package/mender/mender-inventory-hostinfo b/package/mender/mender-inventory-hostinfo
+deleted file mode 100644
+index cf508fdf88..0000000000
+--- a/package/mender/mender-inventory-hostinfo
++++ /dev/null
+@@ -1,21 +0,0 @@
+-#!/bin/sh
+-#
+-# The example script collects information about current host
+-#
+-
+-set -ue
+-
+-LC_ALL=C
+-export LC_ALL
+-
+-grep 'model name' /proc/cpuinfo | uniq | awk -F': ' '
+-     // { printf("cpu_model=%s\n", $2);}
+-'
+-echo "kernel=$(cat /proc/version)"
+-
+-cat /proc/meminfo | awk '
+-/MemTotal/ {printf("mem_total_kB=%d\n", $2)}
+-'
+-
+-echo "hostname=$(cat /etc/hostname)"
+-
+diff --git a/package/mender/mender-inventory-network b/package/mender/mender-inventory-network
+deleted file mode 100644
+index b017c4ea14..0000000000
+--- a/package/mender/mender-inventory-network
++++ /dev/null
+@@ -1,47 +0,0 @@
+-#!/bin/sh
+-#
+-# Example script called by Mender agent to collect inventory data for a
+-# particular devce. The script needs to be located in $(datadir)/mender and its
+-# name shall start with `mender-inventory-` prefix. The script shall exit with
+-# non-0 status on errors. In this case the agent will discard any output the
+-# script may have produced.
+-#
+-# The script shall output inventory data in <key>=<value> format, one entry per
+-# line. Entries appearing multiple times will be joined in a list under the same
+-# key.
+-#
+-# $ ./mender-inventory-network
+-# mac_br-fbfdad18c33c=02:42:7e:74:96:85
+-# network_interfaces=br-fbfdad18c33c
+-# ipv4_br-fbfdad18c33c=172.21.0.1/16
+-# mac_enp0s25=de:ad:be:ef:bb:05
+-# network_interfaces=enp0s25
+-# ipv4_enp0s25=123.22.0.197/16
+-# ipv4_enp0s25=10.20.20.105/16
+-# ipv6_enp0s25=fe80::2aad:beff:feef:bb05/64
+-#
+-#
+-# The example script collects the list of network interfaces, as well as
+-# ethernet and IP addresses of each of the interfaces.
+-#
+-
+-set -ue
+-
+-SCN=/sys/class/net
+-min=65535
+-ifdev=
+-
+-# find iface with lowest ifindex, except loopback
+-for devpath in $SCN/*; do
+-    dev=$(basename $devpath)
+-    if [ $dev = "lo" ]; then
+-        continue
+-    fi
+-    echo "mac_$dev=$(cat $devpath/address)"
+-    echo "network_interfaces=$dev"
+-
+-    ip addr show dev $dev | awk -v dev=$dev '
+-       /inet / { printf("ipv4_%s=%s\n", dev, $2) }
+-       /inet6 / {printf("ipv6_%s=%s\n", dev, $2) }
+-    '
+-done
 diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index a90ca3d2a8..a7ae1d388a 100644
+index a7ae1d388a..dd4a852209 100644
 --- a/package/mender/mender.mk
 +++ b/package/mender/mender.mk
-@@ -13,8 +13,7 @@ define MENDER_INSTALL_CONFIG_FILES
- 
- 	$(INSTALL) -D -m 0644 package/mender/mender.conf \
- 		$(TARGET_DIR)/etc/mender/mender.conf
--	$(INSTALL) -D -m 0644 package/mender/tenant.conf \
--		$(TARGET_DIR)/etc/mender/tenant.conf
-+
+@@ -17,12 +17,12 @@ define MENDER_INSTALL_CONFIG_FILES
  	$(INSTALL) -D -m 0644 package/mender/server.crt \
  		$(TARGET_DIR)/etc/mender/server.crt
  
-diff --git a/package/mender/mender.service b/package/mender/mender.service
-index ec77fbc46c..9ede55acb5 100644
---- a/package/mender/mender.service
-+++ b/package/mender/mender.service
-@@ -7,7 +7,6 @@ Type=idle
- User=root
- Group=root
- ExecStartPre=/bin/mkdir -p -m 0700 /data/mender
--ExecStartPre=/bin/ln -sf /etc/mender/tenant.conf /var/lib/mender/authtentoken
- ExecStart=/usr/bin/mender -daemon
- Restart=on-abort
+-	$(INSTALL) -D -m 0755 package/mender/mender-device-identity \
++	$(INSTALL) -D -m 0755 $(@D)/support/mender-device-identity \
+ 		$(TARGET_DIR)/usr/share/mender/identity/mender-device-identity
+-	$(INSTALL) -D -m 0755 package/mender/mender-inventory-network \
+-		$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-network
+-	$(INSTALL) -D -m 0755 package/mender/mender-inventory-hostinfo \
+-		$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-hostinfo
++	$(foreach f,hostinfo network, \
++		$(INSTALL) -D -m 0755 $(@D)/support/mender-inventory-$(f) \
++			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
++	)
+ endef
  
-diff --git a/package/mender/tenant.conf b/package/mender/tenant.conf
-deleted file mode 100644
-index e69de29bb2..0000000000
+ MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
