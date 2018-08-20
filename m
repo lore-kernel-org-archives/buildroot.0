@@ -1,44 +1,33 @@
-From: Mirza Krak <mirza.krak@northern.tech>
-Date: Mon, 20 Aug 2018 20:33:51 +0200
-Subject: [Buildroot] [[PATCH v2 07/14] package/mender: select
- BR2_PACKAGE_CA_CERTIFICATES
-In-Reply-To: <20180820165427.7f25b056@windsurf>
-References: <20180820130914.22377-1-mirza.krak@northern.tech>
- <20180820130914.22377-8-mirza.krak@northern.tech>
- <20180820165427.7f25b056@windsurf>
-Message-ID: <CADHdJwB=UQdmk8vVCPSc-gGBs8RKvAsztKRVYMZbCsSdJqBxRg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 Aug 2018 20:35:13 +0200
+Subject: [Buildroot] [PATCH] liburiparser: bump to version 0.8.6
+In-Reply-To: <146368874.1687439.1534786887521.JavaMail.zimbra@datacom.com.br>
+ (Carlos Santos's message of "Mon, 20 Aug 2018 14:41:27 -0300 (BRT)")
+References: <20180820001208.10551-1-casantos@datacom.com.br>
+ <87sh392brh.fsf@dell.be.48ers.dk>
+ <146368874.1687439.1534786887521.JavaMail.zimbra@datacom.com.br>
+Message-ID: <87o9dw3mzi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 20, 2018 at 4:54 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Mon, 20 Aug 2018 15:09:07 +0200, Mirza Krak wrote:
->> Mender uses TLS to community with the management server,
->> and if CA signed certificates are used we must have
->> the ca-certificates package installed to be able to
->> verify these.
->>
->> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
->
-> I am not sure we want to make this a mandatory dependency. If people
-> are using a management server that provides a CA signed certificate,
-> then they should add the ca-certificates package to their build.
->
-> Perhaps this belongs more to a note in the Config.in help text. Or
-> maybe even Mender deserves a package/mender/readme.txt, which a bit like
-> boot/grub2/readme.txt, would give more details about Mender's
-> integration in Buildroot.
+>>>>> "Carlos" == Carlos Santos <casantos@datacom.com.br> writes:
 
-Makes sense.
+Hi,
 
-Thanks for the hint on creating a readme.txt. Will make so sure to do that.
+ >> Committed, thanks.
+ >> 
+ >> When was this issue introduced? 2018.02.x has 0.8.4.
+
+ > Looking a the code it seems to predate 0.8.4 by several years since it
+ > fixes a function that was introduced in 2008:
+
+ >    https://github.com/uriparser/uriparser/commit/451eb07f3a289e0d1b7800629f4814bf6b48c121
+
+Ok, thanks. I'll cherry pick this bump for 2018.02.x as well next time I
+sync then.
 
 -- 
-Mirza Krak | Embedded Solutions Architect | https://mender.io
-
- Northern.tech AS | @northerntechHQ
+Bye, Peter Korsgaard
