@@ -1,155 +1,449 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 08:00:18 +0200 (CEST)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-19
-Message-ID: <20180820060018.CB0F620DE0@mail.bootlin.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 20 Aug 2018 08:14:00 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/vtun: bump version to 3.0.4
+Message-ID: <20180820061400.28737-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Removed patch 0003, upstream fixes configure.in.
+Added patch from Fedora to fix OpenSSL 1.1.x. build.
+Added upstream hashes and license hash.
 
-Build statistics for 2018-08-19
-===============================
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vtun/0003-fixup-configure.in.patch |  92 -------
+ package/vtun/0003-openssl11.patch          | 294 +++++++++++++++++++++
+ package/vtun/vtun.hash                     |   6 +-
+ package/vtun/vtun.mk                       |   2 +-
+ 4 files changed, 300 insertions(+), 94 deletions(-)
+ delete mode 100644 package/vtun/0003-fixup-configure.in.patch
+ create mode 100644 package/vtun/0003-openssl11.patch
 
-      branch |  OK | NOK | TIM | TOT |
-   2018.02.x |  15 |   0 |   1 |  16 |
-   2018.05.x |  17 |   2 |   0 |  19 |
-      master | 190 |  25 |   1 | 216 |
-        next |  37 |  25 |   0 |  62 |
-
-Results for branch '2018.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                         mimic | 1 
-
-
-Detail of failures
-------------------
-
-        or1k |                          mimic | TIM | http://autobuild.buildroot.net/results/8d6c8016b01c8214b69c8a2513113159000f6b8b |     
-
-Results for branch '2018.05.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-     glibc-arc-2018.03-release | 1 
-               qt5webkit-5.9.1 | 1 
-
-
-Detail of failures
-------------------
-
-         arc |      glibc-arc-2018.03-release | NOK | http://autobuild.buildroot.net/results/7fad06eee3b9e002f930bb36e494d4901340eb47 | ORPH
-      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/8ad1896be0d10671f698abde20eec982cae83a12 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                     php-7.2.9 | 4 
-                qt5base-5.11.1 | 4 
-                  boost-1.67.0 | 2 
-             host-guile-2.0.14 | 2 
-              python-pyqt5-5.7 | 2 
-                  zeromq-4.2.5 | 2 
-                    efl-1.20.7 | 1 
-                libmpeg2-0.5.1 | 1 
-                linux-firmware | 1 
-              lynx-2.8.9dev.16 | 1 
-                  mender-1.4.0 | 1 
-            micropython-v1.9.3 | 1 
-              mjpegtools-2.1.0 | 1 
-                   mutt-1.10.1 | 1 
-          openpowerlink-V2.7.0 | 1 
-              wireshark-2.2.16 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/9159450d3ac9bd20fab7dc701e4619fd32e5522c |     
-        i586 |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/c8c9c9cca7b54c3e99bcd5f14c5fcf7f7f4aa6f9 |     
-      x86_64 |                     efl-1.20.7 | NOK | http://autobuild.buildroot.net/results/c0c8b03bfcfee3680b7f219f87390d06dbd1d1e7 |     
-         arm |              host-guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/ccf17d10ca08c20ced88a92db7e90105ed482039 | ORPH
-      x86_64 |              host-guile-2.0.14 | NOK | http://autobuild.buildroot.net/results/53e2ce4568e0be10cc7f3d4bf199529dd23185bd | ORPH
-     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/74ddd77f099815344dcdf89f961f075086f838ba | ORPH
-         arm |                 linux-firmware | TIM | http://autobuild.buildroot.net/results/b54863ddc6c0b05ef29af827b225ad2b10b037c2 |     
-microblazeel |               lynx-2.8.9dev.16 | NOK | http://autobuild.buildroot.net/results/e4c109c28faacd251a46368576ece12fad2f9c36 |     
- powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/9059c8bdac2450cd2b3f6b027a0e63739895c307 |     
-        mips |             micropython-v1.9.3 | NOK | http://autobuild.buildroot.net/results/4c1839ce04d62a5e028fc2699ceb0216356610ef |     
-     powerpc |               mjpegtools-2.1.0 | NOK | http://autobuild.buildroot.net/results/e7092881e0bdf50a0167a0d79c62d4faddb359d2 |     
-         arm |                    mutt-1.10.1 | NOK | http://autobuild.buildroot.net/results/177da8f4798f69298db5385957184f1c53cca923 |     
-      x86_64 |           openpowerlink-V2.7.0 | NOK | http://autobuild.buildroot.net/results/f1be3be0f3f80fca9fc0a67441355ecc4e149db2 |     
-         arm |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/d8d1edb132552be6d4288d613a356bfed53225d4 | ORPH
-    mips64el |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/c155bf04c0b4466a65f675c3c769c9e1d5b2009c | ORPH
-   powerpc64 |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/cf5c9738a472329d11f6d4d20e49c65e2d9183a6 | ORPH
-       nios2 |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/0830373beacbba856a2ec18866a8420887d79de0 | ORPH
-        i586 |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/140c986bfd91ffe502dad684c967c17c0b3162f5 |     
-         arm |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/2066b8198c13c4514f7d43230a5ce25edbe69dfe |     
-        or1k |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/9e27ee5bf27164b0add7f7e874688b82c379845b |     
-microblazeel |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/df46abf31ba746d34333a7c6471f01cb4165af68 |     
-microblazeel |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/df9f786a568bcf1d278f01f99f782fa1f3bb4f5f |     
-        or1k |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/b1936af0e24b5a0559dbddd2bac68ae8f9b94190 |     
-         arc |               wireshark-2.2.16 | NOK | http://autobuild.buildroot.net/results/7f0627b48a129deb2dc28b70cd9172bea1e8ec6f | ORPH
-        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/e731c08981fdb2d5314ec6cc207fe44aff0a90ee |     
-        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/1c06ae2661a04fcef79fceaac0220f99b95d1049 |     
-
-Results for branch 'next'
-=========================
-
-Classification of failures by reason
-------------------------------------
-
-             host-meson-0.47.1 | 11
-            host-lvm2-2.02.180 | 4 
-host-python-vcversioner-2.1... | 2 
-                       kmod-24 | 2 
-              host-cxxtest-4.4 | 1 
-                  mender-1.4.0 | 1 
-               qt5webkit-5.9.1 | 1 
-               target-finalize | 1 
-           uboot-tools-2018.07 | 1 
-                     vlc-3.0.3 | 1 
-
-
-Detail of failures
-------------------
-
-        or1k |               host-cxxtest-4.4 | NOK | http://autobuild.buildroot.net/results/44e8753dca21713dec18422a2c3db29a87fe5222 |     
-         arc |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/99894e76a4ff0c590c7003df5d23acb740b1c5a4 | ORPH
-  aarch64_be |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/78cda7a90f042e3a9f631cf49a6ebc20906d93f7 | ORPH
-         arm |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/31d015871b3bb528ab90c6ccae32f51bb536a46f | ORPH
-         arm |             host-lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/75028343dea992e3c53ada0329ae6d8625308dc2 | ORPH
-       sparc |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/e6378bb90752439ba205f0f6bf8955ef59a8e4f2 |     
-        or1k |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/b5c95bd3a6d46cca495a77f0eaedcfa832aef8d4 |     
-         arc |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/4425ef592f6538c7a22c7c906953a59b6bb73315 |     
-        i686 |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/9b510e5d7b644bc9c9281cb279d5a4aa10b8d743 |     
- powerpc64le |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/904d135397443fa8f694cf2d32a798818c34f141 |     
-         arm |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/eb9de0b7e3ef625adaa4632cfa1b2e16222f15d0 |     
-      x86_64 |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/76d62f20292bf2c8a004e125e34b83b020a121d2 |     
-         arm |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/8368459a0f4bd41209177a1ef372a11cbacdc2cf |     
-         arm |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/699d6154b6ff7c4d57f0f12ef25c8881d99a991d |     
-         arm |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/17ea65d4954fc6c12c811d73265c913ec6ecd913 |     
-         sh4 |              host-meson-0.47.1 | NOK | http://autobuild.buildroot.net/results/99eb91573e74a39d395212f2c470ce55d0412ec0 |     
-         arm | host-python-vcversioner-2.1... | NOK | http://autobuild.buildroot.net/results/2653d65d3a2b78b4e19dc213b41a2a4f0436d817 |     
-         sh4 | host-python-vcversioner-2.1... | NOK | http://autobuild.buildroot.net/results/94474cf3541b5c9cfdc261702f02160d1215eb9f |     
-        or1k |                        kmod-24 | NOK | http://autobuild.buildroot.net/results/b392ee5e62b63c156413ca894227e3efb60e6c80 |     
- powerpc64le |                        kmod-24 | NOK | http://autobuild.buildroot.net/results/5914d32f7a11faf0148eceab7ed852f67357b0b5 |     
- powerpc64le |                   mender-1.4.0 | NOK | http://autobuild.buildroot.net/results/d7dccc968493066c343abfb81acb35cd52cfaa05 |     
-      mipsel |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/18d3d0b50a50b8f0ce8913f23e6239f5fe4ac2ba |     
-    mips64el |                target-finalize | NOK | http://autobuild.buildroot.net/results/b47e3c1fd9f1e2f2f1e747add6c66cddd28563f6 |     
-         arm |            uboot-tools-2018.07 | NOK | http://autobuild.buildroot.net/results/84b92f39e7fdf143a0a037404cb8965aa1ed63f3 |     
-      x86_64 |                      vlc-3.0.3 | NOK | http://autobuild.buildroot.net/results/9764856c4ee5785ebaeb2ccdfeb7292330b0f8db |     
-
-
+diff --git a/package/vtun/0003-fixup-configure.in.patch b/package/vtun/0003-fixup-configure.in.patch
+deleted file mode 100644
+index cb2ac67aa2..0000000000
+--- a/package/vtun/0003-fixup-configure.in.patch
++++ /dev/null
+@@ -1,92 +0,0 @@
+-configure.in: minimal syntax fixup for autoreconf
+-
+-This is the strictly minimal syntax fixups to make autoreconf happy...
+-
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-
+----
+-Note: configure.in is still full of incorrect syntax, but fixing it is
+-a task for another day, and would have to be upstreamed. But upstream
+-looks to be moribund at best, if not dead... :-(
+-
+-So, keep it for ourselves for now... Too bad, vtun is really helpfull.
+-
+---- vtun-3.0.3.orig/configure.in	2013-02-16 23:54:52.582451817 +0100
+-+++ vtun-3.0.3/configure.in	2013-02-17 00:03:13.640887353 +0100
+-@@ -110,10 +110,10 @@
+- AC_SEARCH_LIBS(nanosleep, rt posix4)
+- 
+- dnl Check for setproctitle in libutil
+--AC_SEARCH_LIBS(setproctitle, util bsd, AC_DEFINE(HAVE_SETPROC_TITLE) )
+-+AC_SEARCH_LIBS(setproctitle, util bsd, AC_DEFINE([HAVE_SETPROC_TITLE],[],[Define to set title in /proc]) )
+- 
+- if test "$SHAPER" = "yes"; then
+--   AC_DEFINE(HAVE_SHAPER)
+-+   AC_DEFINE([HAVE_SHAPER],[],[Define to use shapper])
+- fi
+- 
+- if test "$ZLIB" = "yes"; then
+-@@ -121,7 +121,7 @@
+-    AC_CHECKING( for ZLIB Library and Header files ... )
+-    AC_CHECK_LIB(z, deflate,
+- 	LIBS="$LIBS -lz"
+--	AC_DEFINE(HAVE_ZLIB),
+-+	AC_DEFINE([HAVE_ZLIB],[],[Define to use ZLIB]),
+- 	AC_MSG_ERROR( Zlib library not found.)
+-    )
+- fi
+-@@ -148,7 +148,7 @@
+- 	    AC_CHECK_LIB($I, lzo1x_decompress,
+- 	    [
+- 	          LIBS="$LIBS -l"$I
+--	       AC_DEFINE(HAVE_LZO)
+-+	       AC_DEFINE([HAVE_LZO],[],[Define to use LZO])
+- 	          havelzo=1
+- 	      ]
+- 	    )
+-@@ -180,8 +180,8 @@
+- 	AC_CHECK_LIB(crypto, BF_set_key,
+- 	    [
+- 	       LIBS="$LIBS -lcrypto"
+--	       AC_DEFINE(HAVE_SSL)
+--	       AC_DEFINE(HAVE_SSL_BLOWFISH)
+-+	       AC_DEFINE([HAVE_SSL],[],[Define to use SSL])
+-+	       AC_DEFINE([HAVE_SSL_BLOWFISH],[],[Define to use blowfish])
+- 	    ],
+- 	    AC_MSG_ERROR( SSL library not found. )
+- 	),
+-@@ -196,7 +196,7 @@
+-     $SSL_HDR_DIR ,
+- 	AC_CHECK_LIB(crypto, AES_set_encrypt_key,
+- 	    [
+--	       AC_DEFINE(HAVE_SSL_AES)
+-+	       AC_DEFINE([HAVE_SSL_AES],[],[Define to use AES])
+- 	    ],
+- 	    AC_MSG_ERROR( AES library not found. )
+- 	),
+-@@ -211,7 +211,7 @@
+-     $SSL_HDR_DIR ,
+- 	AC_CHECK_LIB(crypto, EVP_EncryptInit,
+- 	    [
+--	       AC_DEFINE(HAVE_SSL_EVP)
+-+	       AC_DEFINE([HAVE_SSL_EVP],[],Define to use EVP)
+- 	    ],
+- 	    AC_MSG_ERROR( EVP library not found. )
+- 	),
+-@@ -220,7 +220,7 @@
+- fi
+- 
+- if test "$NATHACK" = "yes"; then
+--   AC_DEFINE(ENABLE_NAT_HACK)
+-+   AC_DEFINE([ENABLE_NAT_HACK],[],[Define to use NAT hack])
+- fi
+- 
+- if test "$SOCKS" = "yes"; then
+-@@ -274,6 +274,6 @@
+- REL=`echo 'BRANCH-3_X' | tr -d '$: \-' | sed 's/^[A-Za-z]*//' | sed 's/\_/\./'`
+- changequote([,])
+- 
+--AC_DEFINE_UNQUOTED(VTUN_VER, "$REL `date '+%m/%d/%Y'`")
+-+AC_DEFINE_UNQUOTED([VTUN_VER], ["$REL `date '+%m/%d/%Y'`"], [vtun version])
+- 
+- AC_OUTPUT(Makefile)
+diff --git a/package/vtun/0003-openssl11.patch b/package/vtun/0003-openssl11.patch
+new file mode 100644
+index 0000000000..2c6bb812fc
+--- /dev/null
++++ b/package/vtun/0003-openssl11.patch
+@@ -0,0 +1,294 @@
++Fix build with OpenSSL 1.1.x
++
++Extracted vtun-openssl.patch from
++http://dl.fedoraproject.org/pub/fedora/linux/releases/27/Everything/source/tree/Packages/v/vtun-3.0.4-4.fc27.src.rpm
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++
++diff -NarU5 a/lfd_encrypt.c b/lfd_encrypt.c
++--- a/lfd_encrypt.c	2016-10-01 17:27:51.000000000 -0400
+++++ b/lfd_encrypt.c	2017-03-20 08:43:48.013308435 -0400
++@@ -93,15 +93,15 @@
++ static int dec_init_first_time;
++ static unsigned long sequence_num;
++ static char * pkey;
++ static char * iv_buf;
++ 
++-static EVP_CIPHER_CTX ctx_enc;	/* encrypt */
++-static EVP_CIPHER_CTX ctx_dec;	/* decrypt */
+++static EVP_CIPHER_CTX *ctx_enc;	/* encrypt */
+++static EVP_CIPHER_CTX *ctx_dec;	/* decrypt */
++ 
++-static EVP_CIPHER_CTX ctx_enc_ecb;	/* sideband ecb encrypt */
++-static EVP_CIPHER_CTX ctx_dec_ecb;	/* sideband ecb decrypt */
+++static EVP_CIPHER_CTX *ctx_enc_ecb;	/* sideband ecb encrypt */
+++static EVP_CIPHER_CTX *ctx_dec_ecb;	/* sideband ecb decrypt */
++ 
++ static int send_msg(int len, char *in, char **out);
++ static int recv_msg(int len, char *in, char **out);
++ static int send_ib_mesg(int *len, char **in);
++ static int recv_ib_mesg(int *len, char **in);
++@@ -180,37 +180,37 @@
++       case VTUN_ENC_AES256CBC:
++          blocksize = 16;
++          keysize = 32;
++          sb_init = 1;
++          cipher_type = EVP_aes_256_ecb();
++-         pctx_enc = &ctx_enc_ecb;
++-         pctx_dec = &ctx_dec_ecb;
+++         pctx_enc = ctx_enc_ecb;
+++         pctx_dec = ctx_dec_ecb;
++       break;
++       
++       case VTUN_ENC_AES256ECB:
++          blocksize = 16;
++          keysize = 32;
++-         pctx_enc = &ctx_enc;
++-         pctx_dec = &ctx_dec;
+++         pctx_enc = ctx_enc;
+++         pctx_dec = ctx_dec;
++          cipher_type = EVP_aes_256_ecb();
++          strcpy(cipher_name,"AES-256-ECB");
++       break;      
++       case VTUN_ENC_AES128OFB:
++       case VTUN_ENC_AES128CFB:
++       case VTUN_ENC_AES128CBC:
++          blocksize = 16;
++          keysize = 16;
++          sb_init=1;
++          cipher_type = EVP_aes_128_ecb();
++-         pctx_enc = &ctx_enc_ecb;
++-         pctx_dec = &ctx_dec_ecb;
+++         pctx_enc = ctx_enc_ecb;
+++         pctx_dec = ctx_dec_ecb;
++       break;
++       case VTUN_ENC_AES128ECB:
++          blocksize = 16;
++          keysize = 16;
++-         pctx_enc = &ctx_enc;
++-         pctx_dec = &ctx_dec;
+++         pctx_enc = ctx_enc;
+++         pctx_dec = ctx_dec;
++          cipher_type = EVP_aes_128_ecb();
++          strcpy(cipher_name,"AES-128-ECB");
++       break;
++ 
++       case VTUN_ENC_BF256OFB:
++@@ -219,20 +219,20 @@
++          blocksize = 8;
++          keysize = 32;
++          var_key = 1;
++          sb_init = 1;
++          cipher_type = EVP_bf_ecb();
++-         pctx_enc = &ctx_enc_ecb;
++-         pctx_dec = &ctx_dec_ecb;
+++         pctx_enc = ctx_enc_ecb;
+++         pctx_dec = ctx_dec_ecb;
++       break;
++ 
++       case VTUN_ENC_BF256ECB:
++          blocksize = 8;
++          keysize = 32;
++          var_key = 1;
++-         pctx_enc = &ctx_enc;
++-         pctx_dec = &ctx_dec;
+++         pctx_enc = ctx_enc;
+++         pctx_dec = ctx_dec;
++          cipher_type = EVP_bf_ecb();
++          strcpy(cipher_name,"Blowfish-256-ECB");
++       break;
++ 
++       case VTUN_ENC_BF128OFB:
++@@ -241,26 +241,28 @@
++          blocksize = 8;
++          keysize = 16;
++          var_key = 1;
++          sb_init = 1;
++          cipher_type = EVP_bf_ecb();
++-         pctx_enc = &ctx_enc_ecb;
++-         pctx_dec = &ctx_dec_ecb;
+++         pctx_enc = ctx_enc_ecb;
+++         pctx_dec = ctx_dec_ecb;
++       break;
++       case VTUN_ENC_BF128ECB: /* blowfish 128 ecb is the default */
++       default:
++          blocksize = 8;
++          keysize = 16;
++          var_key = 1;
++-         pctx_enc = &ctx_enc;
++-         pctx_dec = &ctx_dec;
+++         pctx_enc = ctx_enc;
+++         pctx_dec = ctx_dec;
++          cipher_type = EVP_bf_ecb();
++          strcpy(cipher_name,"Blowfish-128-ECB");
++       break;
++    } /* switch(host->cipher) */
++ 
++    if (prep_key(&pkey, keysize, host) != 0) return -1;
+++   pctx_enc = EVP_CIPHER_CTX_new();
+++   pctx_dec = EVP_CIPHER_CTX_new();
++    EVP_CIPHER_CTX_init(pctx_enc);
++    EVP_CIPHER_CTX_init(pctx_dec);
++    EVP_EncryptInit_ex(pctx_enc, cipher_type, NULL, NULL, NULL);
++    EVP_DecryptInit_ex(pctx_dec, cipher_type, NULL, NULL, NULL);
++    if (var_key)
++@@ -292,14 +294,14 @@
++    free_key(pkey); pkey = NULL;
++ 
++    lfd_free(enc_buf); enc_buf = NULL;
++    lfd_free(dec_buf); dec_buf = NULL;
++ 
++-   EVP_CIPHER_CTX_cleanup(&ctx_enc);
++-   EVP_CIPHER_CTX_cleanup(&ctx_dec);
++-   EVP_CIPHER_CTX_cleanup(&ctx_enc_ecb);
++-   EVP_CIPHER_CTX_cleanup(&ctx_dec_ecb);
+++   EVP_CIPHER_CTX_free(ctx_enc);
+++   EVP_CIPHER_CTX_free(ctx_dec);
+++   EVP_CIPHER_CTX_free(ctx_enc_ecb);
+++   EVP_CIPHER_CTX_free(ctx_dec_ecb);
++ 
++    return 0;
++ }
++ 
++ static int encrypt_buf(int len, char *in, char **out)
++@@ -321,11 +323,11 @@
++    
++    memset(in_ptr+len, pad, pad);
++    outlen=len+pad;
++    if (pad == blocksize)
++       RAND_bytes(in_ptr+len, blocksize-1);
++-   EVP_EncryptUpdate(&ctx_enc, out_ptr, &outlen, in_ptr, len+pad);
+++   EVP_EncryptUpdate(ctx_enc, out_ptr, &outlen, in_ptr, len+pad);
++    *out = enc_buf;
++ 
++    sequence_num++;
++ 
++    return outlen+msg_len;
++@@ -341,11 +343,11 @@
++    in = *out;
++    in_ptr = in;
++ 
++    outlen=len;
++    if (!len) return 0;
++-   EVP_DecryptUpdate(&ctx_dec, out_ptr, &outlen, in_ptr, len);
+++   EVP_DecryptUpdate(ctx_dec, out_ptr, &outlen, in_ptr, len);
++    recv_ib_mesg(&outlen, &out_ptr);
++    if (!outlen) return 0;
++    tmp_ptr = out_ptr + outlen; tmp_ptr--;
++    pad = *tmp_ptr;
++    if (pad < 1 || pad > blocksize) {
++@@ -429,17 +431,18 @@
++       /* if we're here, something weird's going on */
++          return -1;
++       break;
++    } /* switch(cipher) */
++ 
++-   EVP_CIPHER_CTX_init(&ctx_enc);
++-   EVP_EncryptInit_ex(&ctx_enc, cipher_type, NULL, NULL, NULL);
+++   ctx_enc = EVP_CIPHER_CTX_new();
+++   EVP_CIPHER_CTX_init(ctx_enc);
+++   EVP_EncryptInit_ex(ctx_enc, cipher_type, NULL, NULL, NULL);
++    if (var_key)
++-      EVP_CIPHER_CTX_set_key_length(&ctx_enc, keysize);
++-   EVP_EncryptInit_ex(&ctx_enc, NULL, NULL, pkey, NULL);
++-   EVP_EncryptInit_ex(&ctx_enc, NULL, NULL, NULL, iv);
++-   EVP_CIPHER_CTX_set_padding(&ctx_enc, 0);
+++      EVP_CIPHER_CTX_set_key_length(ctx_enc, keysize);
+++   EVP_EncryptInit_ex(ctx_enc, NULL, NULL, pkey, NULL);
+++   EVP_EncryptInit_ex(ctx_enc, NULL, NULL, NULL, iv);
+++   EVP_CIPHER_CTX_set_padding(ctx_enc, 0);
++    if (enc_init_first_time)
++    {
++       sprintf(tmpstr,"%s encryption initialized", cipher_name);
++       vtun_syslog(LOG_INFO, tmpstr);
++       enc_init_first_time = 0;
++@@ -519,17 +522,18 @@
++       /* if we're here, something weird's going on */
++          return -1;
++       break;
++    } /* switch(cipher) */
++ 
++-   EVP_CIPHER_CTX_init(&ctx_dec);
++-   EVP_DecryptInit_ex(&ctx_dec, cipher_type, NULL, NULL, NULL);
+++   ctx_dec = EVP_CIPHER_CTX_new();
+++   EVP_CIPHER_CTX_init(ctx_dec);
+++   EVP_DecryptInit_ex(ctx_dec, cipher_type, NULL, NULL, NULL);
++    if (var_key)
++-      EVP_CIPHER_CTX_set_key_length(&ctx_dec, keysize);
++-   EVP_DecryptInit_ex(&ctx_dec, NULL, NULL, pkey, NULL);
++-   EVP_DecryptInit_ex(&ctx_dec, NULL, NULL, NULL, iv);
++-   EVP_CIPHER_CTX_set_padding(&ctx_dec, 0);
+++      EVP_CIPHER_CTX_set_key_length(ctx_dec, keysize);
+++   EVP_DecryptInit_ex(ctx_dec, NULL, NULL, pkey, NULL);
+++   EVP_DecryptInit_ex(ctx_dec, NULL, NULL, NULL, iv);
+++   EVP_CIPHER_CTX_set_padding(ctx_dec, 0);
++    if (dec_init_first_time)
++    {
++       sprintf(tmpstr,"%s decryption initialized", cipher_name);
++       vtun_syslog(LOG_INFO, tmpstr);
++       dec_init_first_time = 0;
++@@ -557,11 +561,11 @@
++          memset(iv,0,blocksize); free(iv); iv = NULL;
++          RAND_bytes(in_ptr, in - in_ptr);
++ 
++          in_ptr = in - blocksize*2;
++          outlen = blocksize*2;
++-         EVP_EncryptUpdate(&ctx_enc_ecb, in_ptr, 
+++         EVP_EncryptUpdate(ctx_enc_ecb, in_ptr, 
++             &outlen, in_ptr, blocksize*2);
++          *out = in_ptr;
++          len = outlen;
++          cipher_enc_state = CIPHER_SEQUENCE;
++       break;
++@@ -584,11 +588,11 @@
++    {
++       case CIPHER_INIT:
++          in_ptr = in;
++          iv = malloc(blocksize);
++          outlen = blocksize*2;
++-         EVP_DecryptUpdate(&ctx_dec_ecb, in_ptr, &outlen, in_ptr, blocksize*2);
+++         EVP_DecryptUpdate(ctx_dec_ecb, in_ptr, &outlen, in_ptr, blocksize*2);
++          
++          if ( !strncmp(in_ptr, "ivec", 4) )
++          {
++             memcpy(iv, in_ptr+4, blocksize);
++             cipher_dec_init(iv);
++@@ -627,11 +631,11 @@
++                   "Max. gibberish threshold reached");
++ #endif
++                if (cipher_enc_state != CIPHER_INIT)
++                {
++                   cipher_enc_state = CIPHER_INIT;
++-                  EVP_CIPHER_CTX_cleanup(&ctx_enc);
+++                  EVP_CIPHER_CTX_free(ctx_enc);
++ #ifdef LFD_ENCRYPT_DEBUG
++                   vtun_syslog(LOG_INFO, 
++                      "Forcing local encryptor re-init");
++ #endif
++                }
++@@ -708,11 +712,11 @@
++          *len -= blocksize;
++ 
++          if (cipher_enc_state != CIPHER_INIT)
++          {
++             cipher_enc_state = CIPHER_INIT;
++-            EVP_CIPHER_CTX_cleanup(&ctx_enc);
+++            EVP_CIPHER_CTX_free(ctx_enc);
++          }
++ #ifdef LFD_ENCRYPT_DEBUG
++          vtun_syslog(LOG_INFO, "Remote requests encryptor re-init");
++ #endif
++       }
++@@ -722,11 +726,11 @@
++ 
++          if (cipher_dec_state != CIPHER_INIT &&
++              cipher_enc_state != CIPHER_REQ_INIT &&
++              cipher_enc_state != CIPHER_INIT)
++          {
++-            EVP_CIPHER_CTX_cleanup (&ctx_dec);
+++            EVP_CIPHER_CTX_free (ctx_dec);
++             cipher_dec_state = CIPHER_INIT;
++             cipher_enc_state = CIPHER_REQ_INIT;
++          }
++ #ifdef LFD_ENCRYPT_DEBUG
++          vtun_syslog(LOG_INFO, "Local decryptor out of sync");
+diff --git a/package/vtun/vtun.hash b/package/vtun/vtun.hash
+index baa6381f70..363c980987 100644
+--- a/package/vtun/vtun.hash
++++ b/package/vtun/vtun.hash
+@@ -1,2 +1,6 @@
++# From https://sourceforge.net/projects/vtun/files/vtun/3.0.4/
++md5 f952c5895ae8f40235aaad9a8f41a4bd  vtun-3.0.4.tar.gz
++sha1 2335c21b56fadf9ce851dd7f342fb0ed4f522c47  vtun-3.0.4.tar.gz
+ # Locally computed:
+-sha256  69dcbe4f8c5ce7d91b4150a6309e536d03b61841169746ca5788413ac7edb9cb  vtun-3.0.3.tar.gz
++sha256 abf8df6b15e3febeaaeae2ce24ead7105eb1537ad4ec0d830c83cbb684fd98b9  vtun-3.0.4.tar.gz
++sha256 5692a9a69dc5abc1aa9cbc54899d114b65c4cefbd9d7fcecc304316a2f26ced3  README.OpenSSL
+diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
+index 9c46559fb8..86d452c0c2 100644
+--- a/package/vtun/vtun.mk
++++ b/package/vtun/vtun.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VTUN_VERSION = 3.0.3
++VTUN_VERSION = 3.0.4
+ VTUN_SITE = http://downloads.sourceforge.net/project/vtun/vtun/$(VTUN_VERSION)
+ VTUN_LICENSE = GPL-2.0+ with OpenSSL exception
+ VTUN_LICENSE_FILES = README.OpenSSL
 -- 
-http://autobuild.buildroot.net
+2.18.0
