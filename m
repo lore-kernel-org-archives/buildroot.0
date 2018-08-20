@@ -1,49 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 20:23:26 +0200
-Subject: [Buildroot] [PATCH 3/3] oracle-mysql: check for my.cnf before
- starting
-In-Reply-To: <20180820111304.22933-4-chrismcc@gmail.com>
-References: <20180820111304.22933-1-chrismcc@gmail.com>
- <20180820111304.22933-4-chrismcc@gmail.com>
-Message-ID: <20180820202326.26a15a07@windsurf>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Mon, 20 Aug 2018 20:33:51 +0200
+Subject: [Buildroot] [[PATCH v2 07/14] package/mender: select
+ BR2_PACKAGE_CA_CERTIFICATES
+In-Reply-To: <20180820165427.7f25b056@windsurf>
+References: <20180820130914.22377-1-mirza.krak@northern.tech>
+ <20180820130914.22377-8-mirza.krak@northern.tech>
+ <20180820165427.7f25b056@windsurf>
+Message-ID: <CADHdJwB=UQdmk8vVCPSc-gGBs8RKvAsztKRVYMZbCsSdJqBxRg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, Aug 20, 2018 at 4:54 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> On Mon, 20 Aug 2018 15:09:07 +0200, Mirza Krak wrote:
+>> Mender uses TLS to community with the management server,
+>> and if CA signed certificates are used we must have
+>> the ca-certificates package installed to be able to
+>> verify these.
+>>
+>> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+>
+> I am not sure we want to make this a mandatory dependency. If people
+> are using a management server that provides a CA signed certificate,
+> then they should add the ca-certificates package to their build.
+>
+> Perhaps this belongs more to a note in the Config.in help text. Or
+> maybe even Mender deserves a package/mender/readme.txt, which a bit like
+> boot/grub2/readme.txt, would give more details about Mender's
+> integration in Buildroot.
 
-On Mon, 20 Aug 2018 04:13:04 -0700, Christopher McCrory wrote:
-> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-> ---
->  package/oracle-mysql/S97mysqld | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/oracle-mysql/S97mysqld b/package/oracle-mysql/S97mysqld
-> index 110ca2cd12..9777ff7775 100644
-> --- a/package/oracle-mysql/S97mysqld
-> +++ b/package/oracle-mysql/S97mysqld
-> @@ -3,6 +3,7 @@
->  MYSQL_DIR="/var/mysql"
->  MYSQL_USER="mysql"
->  
-> +[ -r /etc/my.cnf ] || exit 0
+Makes sense.
 
-Actually my preference is to fail hard if the configuration file
-doesn't exist. I don't like those errors that are silently ignored, and
-I've been lobbying to drop those test from our init scripts, and I
-think most of the core contributors agreed with that.
+Thanks for the hint on creating a readme.txt. Will make so sure to do that.
 
-If an /etc/my.cnf is mandatory for mysqld to start, then I would
-suggest that we install an example/minimal /etc/my.cnf so that the
-mysqld server starts properly in an out of the box Buildroot
-installation.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Mirza Krak | Embedded Solutions Architect | https://mender.io
+
+ Northern.tech AS | @northerntechHQ
