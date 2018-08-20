@@ -1,61 +1,48 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Mon, 20 Aug 2018 05:41:43 -0700
-Subject: [Buildroot] [PATCH 04/18] perl-time-parsedate: new package
-In-Reply-To: <20180820142755.17fdb6b5@windsurf>
+Date: Mon, 20 Aug 2018 05:47:50 -0700
+Subject: [Buildroot] [PATCH 00/13] perl modules again
+In-Reply-To: <20180820142842.003ef9fa@windsurf>
 References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820115519.24046-5-chrismcc@gmail.com>
- <20180820135930.67c124db@windsurf>
- <CALURroRXJRkT3agrhjCniDUV608M06Tm+n_7ssFL=w2FiWpytg@mail.gmail.com>
- <20180820142755.17fdb6b5@windsurf>
-Message-ID: <CALURroQsU0NNQQyyH=O0+MJPXwCrDistn1Hzup-EvH4YndBSMQ@mail.gmail.com>
+ <20180820141037.5b4c40cb@windsurf>
+ <CALURroQZ6oZtCjC8ZFuHYhodhKNPMNAj=DtKLWERFXL-=5LaqA@mail.gmail.com>
+ <20180820142842.003ef9fa@windsurf>
+Message-ID: <CALURroQBXXmywB0T99OW7crwhZVOz52yDYoEHmw3FY7HG0pFTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 20, 2018 at 5:27 AM, Thomas Petazzoni <
+On Mon, Aug 20, 2018 at 5:28 AM, Thomas Petazzoni <
 thomas.petazzoni@bootlin.com> wrote:
 
 > Hello,
 >
-> On Mon, 20 Aug 2018 05:12:22 -0700, Christopher McCrory wrote:
+> On Mon, 20 Aug 2018 05:15:58 -0700, Christopher McCrory wrote:
 >
-> > It looks like I missed putting this in the cover leter
-> > 0013-perl-time-parsedate-add-license.patch has
-> >
-> >
-> > -PERL_TIME_PARSEDATE_LICENSE = unknown
-> > +# https://fedoraproject.org/wiki/Licensing/TPDL
-> > +PERL_TIME_PARSEDATE_LICENSE = Public Domain
+> > Copy and paste error, Oops. There are 18 patches
 >
-> Why is this change part of a separate patch ? It should be inside the
-> patch adding the perl-time-parsedate package.
->
-
-I wasn't sure what would be best.  It allows a followup patch to do the
-right thing.
-
-
-
->
-> Also, the license is not public domain. Fedora calls it TPDL, which
-> stands for Time Parse Date License.
+> It cannot be a copy/paste error if done right: the cover letter is
+> generated automatically by "git format-patch --cover".
 >
 >
-https://src.fedoraproject.org/rpms/perl-Time-ParseDate/blob/master/f/perl-Time-ParseDate.spec
+Something like:
 
-Summary:        Perl modules for parsing dates and times
-# See https://fedoraproject.org/wiki/Licensing/TPDL
-License:        TPDL and Public Domain
-URL:            https://metacpan.org/release/Time-ParseDate
+commit 13 patches
+git  format-patch  --cover-letter   -M -n -s -o perl origin/next
+edit perl/0000-cover-letter.patch
+commit more
+git  format-patch  --cover-letter   -M -n -s -o perl2 origin/next
+edit perl2/0000-cover-letter.patch
+copy in text from previous edit including subject
+
+:(
 
 
-Arg, that should have also been in the cover letter,  Somehow I missed it
-during copy and paste.
 
-
-Thomas
+Best regards,
+>
+> Thomas
 > --
 > Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 > Embedded Linux and Kernel engineering
@@ -71,4 +58,4 @@ To the pessimist, the glass is half empty.
 To the engineer, the glass is twice as big as it needs to be.
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180820/3585bf7f/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180820/46008ddd/attachment.html>
