@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 14:28:42 +0200
-Subject: [Buildroot] [PATCH 00/13] perl modules again
-In-Reply-To: <CALURroQZ6oZtCjC8ZFuHYhodhKNPMNAj=DtKLWERFXL-=5LaqA@mail.gmail.com>
-References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820141037.5b4c40cb@windsurf>
- <CALURroQZ6oZtCjC8ZFuHYhodhKNPMNAj=DtKLWERFXL-=5LaqA@mail.gmail.com>
-Message-ID: <20180820142842.003ef9fa@windsurf>
+Date: Mon, 20 Aug 2018 14:35:02 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/netsnmp: bump version to
+ 5.8
+In-Reply-To: <20180819065146.19958-1-bernd.kuhls@t-online.de>
+References: <20180819065146.19958-1-bernd.kuhls@t-online.de>
+Message-ID: <20180820143502.47d92ad4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,14 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 20 Aug 2018 05:15:58 -0700, Christopher McCrory wrote:
+On Sun, 19 Aug 2018 08:51:46 +0200, Bernd Kuhls wrote:
+> Removed patch, applied upstream, autoreconf is not needed anymore.
+> Added sha256 hashes for tarball and license file.
+> Switched _SITE to https.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...ate-the-hard-coded-libnl-3-include-p.patch | 300 ------------------
+>  package/netsnmp/netsnmp.hash                  |   9 +-
+>  package/netsnmp/netsnmp.mk                    |   5 +-
+>  3 files changed, 8 insertions(+), 306 deletions(-)
+>  delete mode 100644 package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
 
-> Copy and paste error, Oops. There are 18 patches
-
-It cannot be a copy/paste error if done right: the cover letter is
-generated automatically by "git format-patch --cover".
-
-Best regards,
+Applied to next, thanks.
 
 Thomas
 -- 
