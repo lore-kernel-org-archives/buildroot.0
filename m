@@ -1,37 +1,48 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Mon, 20 Aug 2018 14:05:15 -0700
-Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11
- toolchains
-In-Reply-To: <20180820042221.j4g6qgxw3r7fczvv@sapphire.tkos.co.il>
-References: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
- <bae2ff1f-ee13-489e-ba77-fedfbb023d54@mentor.com> <87k1oqopm3.fsf@tkos.co.il>
- <20180820042221.j4g6qgxw3r7fczvv@sapphire.tkos.co.il>
-Message-ID: <26762ba6-c4bd-49c4-56b5-c1fe949570e8@mentor.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Aug 2018 23:04:52 +0200
+Subject: [Buildroot] [git commit branch/next] package/pound: bump version to
+ 2.8
+Message-ID: <20180820205808.9DF168E02F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/19/2018 09:22 PM, Baruch Siach wrote:
-> Hi Hillis,
->
-> On Thu, Aug 16, 2018 at 08:19:16AM +0300, Baruch Siach wrote:
->> Hollis Blanchard writes:
->>> Worked for me.
->>>
->>> Tested-by: Hollis Blanchard <hollis_blanchard@mentor.com>
->> Thanks for the confirmation. I sent the patch upstream:
->>
->>    https://gitlab.com/cryptsetup/cryptsetup/merge_requests/49
->>
->> I'm not sure upstream would like the namespace pollution in this patch.
-> As I expected, Milan Broz, cryptsetup upstream developer, didn't like the
-> namespace violation that this patch introduces. But he is also unable to
-> reproduce the issue on his CentOS6 system. So we might end up with no upstream
-> acceptable solution. Can you help Milan in reproducing the build failure?
-Yes, I posted a comment to your merge request, and will try to help 
-further there.
+commit: https://git.buildroot.net/buildroot/commit/?id=1e4693fca64f294d88aec37f48d6ceee5f198a10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Hollis Blanchard
-Mentor Graphics Emulation Division
+Release notes:
+www.apsis.ch/pound/pound_list/archive/2018/2018-05/1526034164000
+
+Added license hash.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pound/pound.hash | 3 ++-
+ package/pound/pound.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/pound/pound.hash b/package/pound/pound.hash
+index 6908b9060c..7fbf01b89b 100644
+--- a/package/pound/pound.hash
++++ b/package/pound/pound.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256	cdfbf5a7e8dc8fbbe0d6c1e83cd3bd3f2472160aac65684bb01ef661c626a8e4	Pound-2.7.tgz
++sha256 a7fd8690de0fd390615e79fd0f4bfd56a544b8ef97dd6659c07ecd3207480c25  Pound-2.8.tgz
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL.txt
+diff --git a/package/pound/pound.mk b/package/pound/pound.mk
+index 6f7cc848f8..9a62cf7a58 100644
+--- a/package/pound/pound.mk
++++ b/package/pound/pound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POUND_VERSION = 2.7
++POUND_VERSION = 2.8
+ POUND_SITE = http://www.apsis.ch/pound
+ POUND_SOURCE = Pound-$(POUND_VERSION).tgz
+ POUND_LICENSE = GPL-3.0+
