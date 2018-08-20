@@ -1,43 +1,42 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 20 Aug 2018 18:25:26 -0500
-Subject: [Buildroot] [PATCH v4 2/2] support/testing/tests/core: SSP &
- hardening flags
-In-Reply-To: <20180821002037.200a2986@windsurf>
-References: <1534209477-11544-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1534209477-11544-2-git-send-email-matthew.weber@rockwellcollins.com>
- <20180821002037.200a2986@windsurf>
-Message-ID: <CANQCQpayN1thGivAo2aT0nmr7h28VbUpSUKQoXA-4Dc65uLzUg@mail.gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 20 Aug 2018 19:20:43 -0400
+Subject: [Buildroot] [PATCH 1/1] fwup: bump to v1.2.5
+Message-ID: <20180820232043.32268-1-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Also add a hash for the license file.
 
-On Mon, Aug 20, 2018 at 5:20 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Mon, 13 Aug 2018 20:17:57 -0500, Matt Weber wrote:
-> > Catch the commonly used options of SSP, Relro, and fortify.
-> >
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->
-> I can't really apply this one currently, because it depends on the
-> wrapper stuff I believe. Indeed the TestRelro test fails to build with:
->
-> /home/thomas/projets/outputs/TestRelro/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/6.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: -r and -pie may not be used together
-> collect2: error: ld returned 1 exit status
-> make[3]: *** [scripts/Makefile.build:264: applets/built-in.o] Error 1
-> make[2]: *** [Makefile:372: applets_dir] Error 2
-> make[1]: *** [package/pkg-generic.mk:232: /home/thomas/projets/outputs/TestRelro/build/busybox-1.29.1/.stamp_built]
-> Error 2
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/fwup/fwup.hash | 3 ++-
+ package/fwup/fwup.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Ah true, I removed busybox from the elf files I test but didn't set
-the build configuration to not build busybox.  It's probably not worth
-the time to fix this patch and instead to get the wrapper complete.
-I'll continue on the wrapper tonight and see where I get.
-
-Matt
+diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
+index 32398bf4d0..73bff448de 100644
+--- a/package/fwup/fwup.hash
++++ b/package/fwup/fwup.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 852e255bd65f9db473a06184abb3e94e3b6b86be7bf66169e8df8146d5966ae1  fwup-v0.15.4.tar.gz
++sha256 20302dc96cef88438034e15551e178bb0652c28d99aa7ca5260100cb3bebbc2a  fwup-v1.2.5.tar.gz
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index c6a18c291c..be0b1d13b8 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FWUP_VERSION = v0.15.4
++FWUP_VERSION = v1.2.5
+ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
+-- 
+2.17.1
