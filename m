@@ -1,32 +1,33 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 20 Aug 2018 19:33:48 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libsrtp: fix license hash
-Message-ID: <20180820173348.10155-1-bernd.kuhls@t-online.de>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Mon, 20 Aug 2018 20:39:38 +0300
+Subject: [Buildroot] [PATCH] synopsys/hsdk: Boot log cleanup
+Message-ID: <20180820173938.23761-1-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While bumping the package from 1.5.4 to 2.2.0 the license hash from
-version 1.6.0 was erroneously used.
+Remove duplicate messages in boot log on HSDK board.
+Console ttyS3 is already set in Linux bootargs.
 
-Fixes
-http://autobuild.buildroot.net/results/2d8/2d8344bab5b87d20156814b96cbbab1d5fc89586/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
 ---
- package/libsrtp/libsrtp.hash | 2 +-
+ board/synopsys/hsdk/uboot.env.txt | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
-index 0aa8a67497..1a88673c81 100644
---- a/package/libsrtp/libsrtp.hash
-+++ b/package/libsrtp/libsrtp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256 44fd7497bce78767e96b54a11bca520adb2ad32effd515f04bce602b60a1a50b  libsrtp-v2.2.0.tar.gz
--sha256 8defed37d52096ae14b60adc499c33d43975109bc265552ee67e9a888c634b93  LICENSE
-+sha256 8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
+diff --git a/board/synopsys/hsdk/uboot.env.txt b/board/synopsys/hsdk/uboot.env.txt
+index 6bcfb56a77..216f0c9043 100644
+--- a/board/synopsys/hsdk/uboot.env.txt
++++ b/board/synopsys/hsdk/uboot.env.txt
+@@ -1,5 +1,5 @@
+ baudrate=115200
+-bootargs=console=ttyS3,115200n8 root=/dev/mmcblk0p2 rootwait
++bootargs=root=/dev/mmcblk0p2 rootwait
+ bootcmd=fatload mmc 0:1; bootm
+ bootdelay=2
+ bootfile=uImage
 -- 
-2.18.0
+2.16.2
