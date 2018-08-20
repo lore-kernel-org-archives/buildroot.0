@@ -1,40 +1,36 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Mon, 20 Aug 2018 04:16:23 -0700
-Subject: [Buildroot] [PATCH 3/3] scancpan: support more licenses
-In-Reply-To: <20180820111623.23173-1-chrismcc@gmail.com>
-References: <20180820111623.23173-1-chrismcc@gmail.com>
-Message-ID: <20180820111623.23173-4-chrismcc@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Aug 2018 13:30:12 +0200
+Subject: [Buildroot] [PATCH v1] qt5base: fix double-conversion for or1k
+In-Reply-To: <20180818224236.2422-1-ps.report@gmx.net>
+References: <20180818224236.2422-1-ps.report@gmx.net>
+Message-ID: <20180820133012.63c1f860@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
----
- utils/scancpan | 7 +++++++
- 1 file changed, 7 insertions(+)
+Hello,
 
-diff --git a/utils/scancpan b/utils/scancpan
-index c83730fa13..5db4decc5e 100755
---- a/utils/scancpan
-+++ b/utils/scancpan
-@@ -702,9 +702,16 @@ while (my ($distname, $dist) = each %dist) {
-                     ? join q{ or }, @{$dist->{license}}
-                     : $dist->{license};
-         # BR requires license name as in http://spdx.org/licenses/
-+        $license =~ s|apache_1_1|Apache-1.1|;
-         $license =~ s|apache_2_0|Apache-2.0|;
-+        $license =~ s|artistic|Artistic-1.0|;
-         $license =~ s|artistic_2|Artistic-2.0|;
-+        $license =~ s|lgpl_2_1|LGPL-2.1|;
-+        $license =~ s|lgpl_3_0|LGPL-3.0|;
-+        $license =~ s|gpl_2|GPL-2.0|;
-+        $license =~ s|gpl_3|GPL-3.0|;
-         $license =~ s|mit|MIT|;
-+        $license =~ s|mozilla_1_1|Mozilla-1.1|;
-         $license =~ s|openssl|OpenSSL|;
-         $license =~ s|perl_5|Artistic or GPL-1.0+|;
-         my $license_files = join q{ }, keys %{$license_files{$distname}};
+On Sun, 19 Aug 2018 00:42:36 +0200, Peter Seiderer wrote:
+> Fixes [1]:
+> 
+>   ../3rdparty/double-conversion/include/double-conversion/utils.h:81:2: error: #error Target architecture was not detected as supported by Double-Conversion.
+>   #error Target architecture was not detected as supported by Double-Conversion.
+> 
+> [1] http://autobuild.buildroot.net/results/a3535cdf5e91df011a59a4b9f60d69195f5efdcb
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+
+Thanks a lot for this patch! Actually, we would need the same on
+Microblaze:
+
+  http://autobuild.buildroot.net/?arch=microblazeel&status=NOK&reason=qt5base%
+
+Thanks :-)
+
+Thomas
 -- 
-2.14.4
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
