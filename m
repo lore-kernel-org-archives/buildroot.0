@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 23:32:58 +0200
+Date: Mon, 20 Aug 2018 23:32:50 +0200
 Subject: [Buildroot] [git commit branch/next] package/botan: add optional
- dependency to xz
-Message-ID: <20180820212536.1F7AF8E06D@busybox.osuosl.org>
+ dependency to boost
+Message-ID: <20180820212536.06AE88E06D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fc8abde2b9bb46d44ee80c2bde4d0012672ef10
+commit: https://git.buildroot.net/buildroot/commit/?id=031f5c04d9de5a21d3bc49f3849af3e6593fa1a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -19,18 +19,18 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 984ecdc039..eb817f62d9 100644
+index 21a66adff1..e25bf5b52f 100644
 --- a/package/botan/botan.mk
 +++ b/package/botan/botan.mk
-@@ -60,6 +60,11 @@ BOTAN_DEPENDENCIES += sqlite
- BOTAN_CONF_OPTS += --with-sqlite
+@@ -40,6 +40,11 @@ else
+ BOTAN_CONF_OPTS += --without-stack-protector
  endif
  
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+BOTAN_DEPENDENCIES += xz
-+BOTAN_CONF_OPTS += --with-lzma
++ifeq ($(BR2_PACKAGE_BOOST),y)
++BOTAN_DEPENDENCIES += boost
++BOTAN_CONF_OPTS += --with-boost
 +endif
 +
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- BOTAN_DEPENDENCIES += zlib
- BOTAN_CONF_OPTS += --with-zlib
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ BOTAN_DEPENDENCIES += bzip2
+ BOTAN_CONF_OPTS += --with-bzip2
