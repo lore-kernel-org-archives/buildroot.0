@@ -1,42 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 20 Aug 2018 19:57:08 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/fmt: bump version to 5.1.0
-Message-ID: <20180820175708.631-1-bernd.kuhls@t-online.de>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Mon, 20 Aug 2018 18:13:15 +0000
+Subject: [Buildroot] [PATCH] synopsys/hsdk: Boot log cleanup
+In-Reply-To: <20180820194801.6cbb1bc8@windsurf>
+References: <20180820173938.23761-1-Evgeniy.Didin@synopsys.com>
+ <20180820194801.6cbb1bc8@windsurf>
+Message-ID: <635f39ab160206f29d9b15f142c7176679444aaf.camel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Hello Thomas,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/fmt/fmt.hash | 3 ++-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+On Mon, 2018-08-20 at 19:48 +0200, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 20 Aug 2018 20:39:38 +0300, Evgeniy Didin wrote:
+> > Remove duplicate messages in boot log on HSDK board.
+> > Console ttyS3 is already set in Linux bootargs.
+> > 
+> > Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: arc-buildroot at synopsys.com
+> > ---
+> >  board/synopsys/hsdk/uboot.env.txt | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/board/synopsys/hsdk/uboot.env.txt b/board/synopsys/hsdk/uboot.env.txt
+> > index 6bcfb56a77..216f0c9043 100644
+> > --- a/board/synopsys/hsdk/uboot.env.txt
+> > +++ b/board/synopsys/hsdk/uboot.env.txt
+> > @@ -1,5 +1,5 @@
+> >  baudrate=115200
+> > -bootargs=console=ttyS3,115200n8 root=/dev/mmcblk0p2 rootwait
+> > +bootargs=root=/dev/mmcblk0p2 rootwait
+> 
+> Well, *these* are the Linux bootargs.
+> 
+> Do you mean that something else is re-adding "console=ttyS3" to the
+> bootargs ?
+> 
+> Could you clarify ?
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 47087a4175..78665d2fa7 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 35300a0d356529447a79ed5ccf419239d8b34f916e5d4625f046fd37afa3650a  fmt-4.0.0.tar.gz
-+sha256 73d4cab4fa8a3482643d8703de4d9522d7a56981c938eca42d929106ff474b44  fmt-5.1.0.tar.gz
-+sha256 560d39617dfb4b4e4088597291a070ed6c3a8d67668114ed475c673430c3e49a  LICENSE.rst
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index c47b03e834..39fd7e22d9 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FMT_VERSION = 4.0.0
-+FMT_VERSION = 5.1.0
- FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
- FMT_LICENSE = BSD-2-Clause
- FMT_LICENSE_FILES = LICENSE.rst
--- 
-2.18.0
+For HSDK board we setup bootargs via device tree, see https://elixir.bootlin.com/linux/latest/source/arch/arc/boot/dts/hsdk.dts#L25
+"console=ttyS3" was mistakenly placed in u-boot bootargs which are appended to Kernel bootargs.
+
+> Thanks,
+> 
+> Thomas
+
+Best regards,
+Evgeniy Didin
