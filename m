@@ -1,32 +1,116 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Sun, 19 Aug 2018 22:42:30 -0300 (BRT)
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-08-18
-In-Reply-To: <20180819060011.E1CB320DE6@mail.bootlin.com>
-References: <20180819060011.E1CB320DE6@mail.bootlin.com>
-Message-ID: <2136484645.1515454.1534729350975.JavaMail.zimbra@datacom.com.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon, 20 Aug 2018 07:22:21 +0300
+Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11
+ toolchains
+In-Reply-To: <87k1oqopm3.fsf@tkos.co.il>
+References: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
+ <bae2ff1f-ee13-489e-ba77-fedfbb023d54@mentor.com>
+ <87k1oqopm3.fsf@tkos.co.il>
+Message-ID: <20180820042221.j4g6qgxw3r7fczvv@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-> To: "buildroot" <buildroot@buildroot.org>
-> Sent: Sunday, August 19, 2018 3:00:11 AM
-> Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-18
+Hi Hillis,
 
-[...]
-> Results for branch 'next'
-> =========================
-[...]
-> Detail of failures
-[...]
->      x86_64 | util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/064270b27d3c97852f0c9578b990610de641af42
+On Thu, Aug 16, 2018 at 08:19:16AM +0300, Baruch Siach wrote:
+> Hollis Blanchard writes:
+> > Worked for me.
+> >
+> > Tested-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+> 
+> Thanks for the confirmation. I sent the patch upstream:
+> 
+>   https://gitlab.com/cryptsetup/cryptsetup/merge_requests/49
+> 
+> I'm not sure upstream would like the namespace pollution in this patch.
 
-I was unable to reproduce this on Fedora 28 neither on CentOS 7.4.
+As I expected, Milan Broz, cryptsetup upstream developer, didn't like the 
+namespace violation that this patch introduces. But he is also unable to 
+reproduce the issue on his CentOS6 system. So we might end up with no upstream 
+acceptable solution. Can you help Milan in reproducing the build failure?
+
+Thanks,
+baruch
+
+> > On 08/15/2018 05:14 AM, Baruch Siach wrote:
+> >> Add a patch removing a redefined typedef. Redefinition of typedef, even
+> >> to the same type, used to be illegal before C11.
+> >>
+> >> Fixes:
+> >> http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
+> >> http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
+> >> http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
+> >>
+> >> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> >> ---
+> >> Hi Hollis,
+> >>
+> >> Can you git this a run on your autobuilder? I would like to verify that
+> >> it actually fixes the problem before I send the patch upstream.
+> >>
+> >> Thanks,
+> >> baruch
+> >> ---
+> >>   .../0001-Remove-json_object-typedef.patch     | 46 +++++++++++++++++++
+> >>   1 file changed, 46 insertions(+)
+> >>   create mode 100644 package/cryptsetup/0001-Remove-json_object-typedef.patch
+> >>
+> >> diff --git a/package/cryptsetup/0001-Remove-json_object-typedef.patch b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+> >> new file mode 100644
+> >> index 000000000000..fa865314a7da
+> >> --- /dev/null
+> >> +++ b/package/cryptsetup/0001-Remove-json_object-typedef.patch
+> >> @@ -0,0 +1,46 @@
+> >> +From 567e7f8664c621f8aeaa95d9f4ab4b590574f572 Mon Sep 17 00:00:00 2001
+> >> +From: Baruch Siach <baruch@tkos.co.il>
+> >> +Date: Wed, 15 Aug 2018 14:13:46 +0300
+> >> +Subject: [PATCH] Remove json_object typedef
+> >> +
+> >> +The json-c header already defines the same typedef. While C11 allows
+> >> +typedef redefinition to the same type, older versions of gcc disallow
+> >> +that.
+> >> +
+> >> +In file included from lib/luks2/luks2_internal.h:32,
+> >> +                 from lib/luks2/luks2_disk_metadata.c:24:
+> >> +lib/luks2/luks2.h:86: error: redefinition of typedef 'json_object'
+> >> +
+> >> +Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> >> +---
+> >> + lib/luks2/luks2.h | 1 -
+> >> + lib/setup.c       | 1 +
+> >> + 2 files changed, 1 insertion(+), 1 deletion(-)
+> >> +
+> >> +diff --git a/lib/luks2/luks2.h b/lib/luks2/luks2.h
+> >> +index ee57b41ba974..25e36190da45 100644
+> >> +--- a/lib/luks2/luks2.h
+> >> ++++ b/lib/luks2/luks2.h
+> >> +@@ -83,7 +83,6 @@ struct luks2_hdr_disk {
+> >> + /*
+> >> +  * LUKS2 header in-memory.
+> >> +  */
+> >> +-typedef struct json_object json_object;
+> >> + struct luks2_hdr {
+> >> + 	size_t		hdr_size;
+> >> + 	uint64_t	seqid;
+> >> +diff --git a/lib/setup.c b/lib/setup.c
+> >> +index fddbe7ef7897..856f6e80f465 100644
+> >> +--- a/lib/setup.c
+> >> ++++ b/lib/setup.c
+> >> +@@ -28,6 +28,7 @@
+> >> + #include <sys/utsname.h>
+> >> + #include <fcntl.h>
+> >> + #include <errno.h>
+> >> ++#include <json-c/json.h>
+> >> +
+> >> + #include "libcryptsetup.h"
+> >> + #include "luks.h"
+> >> +--
+> >> +2.18.0
 
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
