@@ -1,45 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 16:02:27 +0200
-Subject: [Buildroot] [git commit] linux: kconfig needs the toolchain
-Message-ID: <20180820140105.6AC208DEF9@busybox.osuosl.org>
+Date: Mon, 20 Aug 2018 16:08:12 +0200
+Subject: [Buildroot] [PATCH] package/pkg-download: quiet the dl-wrapper call
+Message-ID: <20180820140812.8153-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fc990a79834ce20992aca963817fcb6bf456171
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The download wrapper call is currently always being displayed, even
+without V=1, which is a bit annoying. It shows something like this:
 
-Starting with linux-4.18, the kconfig from the kernel can call
-to the compiler to test its capabilities; see:
+thomas at windsurf:~/projets/buildroot (master)$ make tslib-source
+>>> tslib 1.16 Downloading
+PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin" BR2_DL_DIR=/home/thomas/dl BUILD_DIR=/home/thomas/projets/buildroot/output/build O=/home/thomas/projets/buildroot/output flock /home/thomas/dl/tslib/ support/download/dl-wrapper -c '1.16' -d '/home/thomas/dl/tslib' -D '/home/thomas/dl' -f 'tslib-1.16.tar.xz' -H 'package/tslib//tslib.hash' -n 'tslib-1.16' -N 'tslib' -o '/home/thomas/dl/tslib/tslib-1.16.tar.xz'  -u https+https://github.com/kergoth/tslib/releases/download/1.16 -u http\|urlencode+http://sources.buildroot.net/tslib -u http\|urlencode+http://sources.buildroot.net  --
 
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/scripts/Kconfig.include
+Let's silence this dl-wrapper call by prepending with $(Q).
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Tested-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Reviewed-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/linux.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index d6b0853518..675e7906a8 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -71,6 +71,11 @@ LINUX_KCONFIG_DEPENDENCIES = \
- 	$(BR2_BISON_HOST_DEPENDENCY) \
- 	$(BR2_FLEX_HOST_DEPENDENCY)
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 2ca6ccf44d..bf93b9a08e 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -92,7 +92,7 @@ endif
  
-+# Starting with 4.18, the kconfig in the kernel calls the
-+# cross-compiler to check its capabilities. So we need the
-+# toolchain before we can call the configurators.
-+LINUX_KCONFIG_DEPENDENCIES += toolchain
-+
- # host tools needed for kernel compression
- ifeq ($(BR2_LINUX_KERNEL_LZ4),y)
- LINUX_DEPENDENCIES += host-lz4
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(PKG)_DL_DIR)
+-	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
++	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
+ 		-c '$($(PKG)_DL_VERSION)' \
+ 		-d '$($(PKG)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
+-- 
+2.14.4
