@@ -1,37 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 17:15:36 +0200
-Subject: [Buildroot] [[PATCH v2 11/14] package/mender: set version in go
- linker
-In-Reply-To: <20180820130914.22377-12-mirza.krak@northern.tech>
-References: <20180820130914.22377-1-mirza.krak@northern.tech>
- <20180820130914.22377-12-mirza.krak@northern.tech>
-Message-ID: <20180820171536.061f0597@windsurf>
+Date: Mon, 20 Aug 2018 17:16:03 +0200
+Subject: [Buildroot] [git commit branch/next] toolchain: add 4.18.x choice
+ for headers
+Message-ID: <20180820151132.172068DF6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7f62d8122bc42b84608cad34fb005b4870c143d5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 20 Aug 2018 15:09:11 +0200, Mirza Krak wrote:
-> This is used when calling the mender client with the
-> -version option and it says "unknown" if not set in
-> linker.
-> 
-> Now it displays the following:
-> 
->     # mender -version
->     1.4.0
->     runtime: go1.10.2
-> 
-> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-> ---
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ toolchain/Config.in                                                  | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 3a53a32a6d..1cba82af8e 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -340,10 +340,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+ 
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+ 	default "4.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 	default "4.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+ 	default "4.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 6a9921c149..4639232bfb 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -123,6 +123,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_18
++	bool "4.18.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_17
+ 	bool "4.17.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
