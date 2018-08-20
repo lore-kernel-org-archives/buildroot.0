@@ -1,60 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 23:49:38 +0200
-Subject: [Buildroot] [git commit] libssh: fix download location
-Message-ID: <20180820214226.F2F458E0D6@busybox.osuosl.org>
+Date: Mon, 20 Aug 2018 23:41:22 +0200
+Subject: [Buildroot] [git commit branch/next] package/libepoxy: bump version
+ to 1.5.2
+Message-ID: <20180820215044.9178C8E0EA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac26da5275af39e723547e0945de03752051e1ae
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=c0354fc5f6a2d1b672eec7a33a0d104b0fbd13bc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The current download location fails, and Buildroot falls back to
-sources.b.o:
-
---2018-08-20 23:41:39--  https://red.libssh.org/attachments/download/218/libssh-0.7.5.tar.xz
-Resolving red.libssh.org (red.libssh.org)... 78.46.80.163
-Connecting to red.libssh.org (red.libssh.org)|78.46.80.163|:443... connected.
-The certificate's owner does not match hostname ???red.libssh.org???
---2018-08-20 23:41:39--  http://sources.buildroot.net/libssh/libssh-0.7.5.tar.xz
-Resolving sources.buildroot.net (sources.buildroot.net)... 104.25.211.19, 104.25.210.19, 2400:cb00:2048:1::6819:d313, ...
-Connecting to sources.buildroot.net (sources.buildroot.net)|104.25.211.19|:80... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 351632 (343K) [application/x-xz]
-
-This commit fixes the download location:
-
---2018-08-20 23:43:04--  https://www.libssh.org/files/0.7/libssh-0.7.5.tar.xz
-Resolving www.libssh.org (www.libssh.org)... 87.98.168.187, 2001:41d0:2:f80c::4
-Connecting to www.libssh.org (www.libssh.org)|87.98.168.187|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 351632 (343K) [application/x-tar]
-
-This patch is extracted from a contribution from Bernd Kuhls who was
-also bumping the package at the same time
-(http://patchwork.ozlabs.org/patch/959192/).
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libssh/libssh.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/libepoxy/libepoxy.hash | 4 ++--
+ package/libepoxy/libepoxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 34716c502a..902865d73b 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,9 +4,10 @@
- #
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index 654d1675fd..dd1b13487b 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,5 +1,5 @@
+-# From ftp://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.0.sha256sum
+-sha256 4c94995398a6ebf691600dda2e9685a0cac261414175c2adf4645cdfab42a5d5  libepoxy-1.5.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.2.sha256sum
++sha256 a9562386519eb3fd7f03209f279f697a8cba520d3c155d6e253c3e138beca7d8  libepoxy-1.5.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index b9498b17b4..b1731a22c5 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBSSH_VERSION = 0.7.5
-+LIBSSH_VERSION_MAJOR = 0.7
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
--LIBSSH_SITE = https://red.libssh.org/attachments/download/218
-+LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
- LIBSSH_LICENSE_FILES = COPYING
- LIBSSH_INSTALL_STAGING = YES
+ LIBEPOXY_VERSION_MAJOR = 1.5
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).0
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).2
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
