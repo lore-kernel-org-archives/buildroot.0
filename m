@@ -1,30 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 23:22:02 +0200
-Subject: [Buildroot] [PATCH/next 3/3] package/live555: bump version to
- 2018.08.05
-In-Reply-To: <20180818182258.2936-3-bernd.kuhls@t-online.de>
-References: <20180818182258.2936-1-bernd.kuhls@t-online.de>
- <20180818182258.2936-3-bernd.kuhls@t-online.de>
-Message-ID: <20180820232202.2cc6bac8@windsurf>
+Date: Mon, 20 Aug 2018 23:32:58 +0200
+Subject: [Buildroot] [git commit branch/next] package/botan: add optional
+ dependency to xz
+Message-ID: <20180820212536.1F7AF8E06D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2fc8abde2b9bb46d44ee80c2bde4d0012672ef10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sat, 18 Aug 2018 20:22:58 +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/live555/live555.hash | 4 ++--
->  package/live555/live555.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/botan/botan.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 984ecdc039..eb817f62d9 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -60,6 +60,11 @@ BOTAN_DEPENDENCIES += sqlite
+ BOTAN_CONF_OPTS += --with-sqlite
+ endif
+ 
++ifeq ($(BR2_PACKAGE_XZ),y)
++BOTAN_DEPENDENCIES += xz
++BOTAN_CONF_OPTS += --with-lzma
++endif
++
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ BOTAN_DEPENDENCIES += zlib
+ BOTAN_CONF_OPTS += --with-zlib
