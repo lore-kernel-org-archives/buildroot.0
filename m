@@ -1,39 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 16:08:12 +0200
-Subject: [Buildroot] [PATCH] package/pkg-download: quiet the dl-wrapper call
-Message-ID: <20180820140812.8153-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 20 Aug 2018 16:10:15 +0200
+Subject: [Buildroot] [PATCH 0/7 v4] core/pkg-kconfig: ensure we have
+ necessary tools to run configurators
+In-Reply-To: <cover.1534522005.git.yann.morin.1998@free.fr>
+References: <cover.1534522005.git.yann.morin.1998@free.fr>
+Message-ID: <20180820161015.3e60c741@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The download wrapper call is currently always being displayed, even
-without V=1, which is a bit annoying. It shows something like this:
+Hello,
 
-thomas at windsurf:~/projets/buildroot (master)$ make tslib-source
->>> tslib 1.16 Downloading
-PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin" BR2_DL_DIR=/home/thomas/dl BUILD_DIR=/home/thomas/projets/buildroot/output/build O=/home/thomas/projets/buildroot/output flock /home/thomas/dl/tslib/ support/download/dl-wrapper -c '1.16' -d '/home/thomas/dl/tslib' -D '/home/thomas/dl' -f 'tslib-1.16.tar.xz' -H 'package/tslib//tslib.hash' -n 'tslib-1.16' -N 'tslib' -o '/home/thomas/dl/tslib/tslib-1.16.tar.xz'  -u https+https://github.com/kergoth/tslib/releases/download/1.16 -u http\|urlencode+http://sources.buildroot.net/tslib -u http\|urlencode+http://sources.buildroot.net  --
+On Fri, 17 Aug 2018 18:06:50 +0200, Yann E. MORIN wrote:
 
-Let's silence this dl-wrapper call by prepending with $(Q).
+> Yann E. MORIN (7):
+>       linux: explain why we need host-{flex,bison}
+>       support/dependencies: check for system-provided bison and flex
+>       core/pkg-kconfig: allow dependencies before configurators
+>       linux: kconfig may need host-{flex,bison} to build the configurators
+>       linux: host-{flex,bison} only needed for DTS
+>       linux: kconfig needs the toolchain
+>       boot/uboot: needs host-{flex,bison}
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pkg-download.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Series applied to master. Thanks!
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 2ca6ccf44d..bf93b9a08e 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -92,7 +92,7 @@ endif
- 
- define DOWNLOAD
- 	$(Q)mkdir -p $($(PKG)_DL_DIR)
--	$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
-+	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
- 		-c '$($(PKG)_DL_VERSION)' \
- 		-d '$($(PKG)_DL_DIR)' \
- 		-D '$(DL_DIR)' \
+Thomas
 -- 
-2.14.4
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
