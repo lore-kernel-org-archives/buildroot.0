@@ -1,35 +1,47 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 20 Aug 2018 11:09:23 -0500
-Subject: [Buildroot] uboot-tools autobuilder failure
-In-Reply-To: <20180820160226.gr4enwblhv3g5ds2@sapphire.tkos.co.il>
-References: <CANQCQpYFZMAwUs=moym1oc4GCjH6C8AHbDpOueL0r3+c3==BJw@mail.gmail.com>
- <20180820160226.gr4enwblhv3g5ds2@sapphire.tkos.co.il>
-Message-ID: <CANQCQpYXTK-LX+L9NU_qmwP7kyxG=wcEJeQC1LReYiMTCpoO1g@mail.gmail.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Mon, 20 Aug 2018 12:08:37 -0400
+Subject: [Buildroot] [PATCH 1/1] package/libconfuse: security bump to
+ version 3.2.2
+Message-ID: <20180820160837.12106-1-fhunleth@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,
+Fixes CVE-2018-14447: https://github.com/martinh/libconfuse/issues/109
 
-On Mon, Aug 20, 2018 at 11:02 AM Baruch Siach <baruch@tkos.co.il> wrote:
->
-> Hi Matt,
->
-> On Mon, Aug 20, 2018 at 10:57:54AM -0500, Matthew Weber wrote:
-> > Hollis, I don't have a machine old enough to debug this failure.
-> > What's weird is the target uboot-tools is being built with a GCC6/7
-> > which should support -std=gnu11, however we get a cc1: error:
-> > unrecognized command line option "-std=gnu11".
-> >
-> > http://autobuild.buildroot.net/?reason=uboot-tools-2018.07
->
-> These failures should be fixed in master by commit 03a808a099 (uboot-tools:
-> force host CFLAGS).
->
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
+---
+ package/libconfuse/libconfuse.hash | 6 +++---
+ package/libconfuse/libconfuse.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thanks!  I now notice that the master branch hasn't failed since the
-patch was applied on Aug 10th.  So we're good.
-
-Matt
+diff --git a/package/libconfuse/libconfuse.hash b/package/libconfuse/libconfuse.hash
+index fa77af9cd1..adc93f99a3 100644
+--- a/package/libconfuse/libconfuse.hash
++++ b/package/libconfuse/libconfuse.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/martinh/libconfuse/releases/download/v3.2.1/confuse-3.2.1.tar.xz.md5
+-md5  ebd66bb669cf43e62a23ed00d475ba67  confuse-3.2.1.tar.xz
++# From https://github.com/martinh/libconfuse/releases/download/v3.2.2/confuse-3.2.2.tar.xz.md5
++md5  978996e421e5005e6a9f6f84948fac44  confuse-3.2.2.tar.xz
+ # Locally computed
+-sha256  23c63272baf2ef4e2cbbafad2cf57de7eb81f006ec347c00b954819824add25e  confuse-3.2.1.tar.xz
++sha256  a9240b653d02e8cfc52db48e8c4224426e528e1faa09b65e8ca08a197fad210b  confuse-3.2.2.tar.xz
+ sha256  dc3ff4b62f851dd2e94a151061ffeb7d28ddfc880a442068dc5283dbaa927306  LICENSE
+diff --git a/package/libconfuse/libconfuse.mk b/package/libconfuse/libconfuse.mk
+index 9f265ae25f..b16bc9b7a7 100644
+--- a/package/libconfuse/libconfuse.mk
++++ b/package/libconfuse/libconfuse.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCONFUSE_VERSION = 3.2.1
++LIBCONFUSE_VERSION = 3.2.2
+ LIBCONFUSE_SOURCE = confuse-$(LIBCONFUSE_VERSION).tar.xz
+ LIBCONFUSE_SITE = https://github.com/martinh/libconfuse/releases/download/v$(LIBCONFUSE_VERSION)
+ LIBCONFUSE_INSTALL_STAGING = YES
+-- 
+2.17.1
