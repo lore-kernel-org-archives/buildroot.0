@@ -1,52 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 22:04:29 +0200
-Subject: [Buildroot] [[PATCH v2 05/14] package/mender: symlink
- /var/lib/mender -> /data/mender
-In-Reply-To: <CADHdJwC4ZJv7uAwX5OZfVr2xedHESE7en8TjSGrPKAt2qdsB3A@mail.gmail.com>
-References: <20180820130914.22377-1-mirza.krak@northern.tech>
- <20180820130914.22377-6-mirza.krak@northern.tech>
- <CADHdJwC4ZJv7uAwX5OZfVr2xedHESE7en8TjSGrPKAt2qdsB3A@mail.gmail.com>
-Message-ID: <20180820220429.1e67ba29@windsurf>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Mon, 20 Aug 2018 13:11:42 -0700
+Subject: [Buildroot] [PATCH 1/1] python-setuptools: bump to 40.0.0
+Message-ID: <20180820201142.20383-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Adam Duskett <aduskett@greenlots.com>
 
-On Mon, 20 Aug 2018 20:36:22 +0200, Mirza Krak wrote:
-> On Mon, Aug 20, 2018 at 3:09 PM, Mirza Krak <mirza.krak@northern.tech> wrote:
-> > The Mender client will use /var/lib/mender to access the persistent data
-> > partition and expect the link to be in place.
-> >
-> > By default it points to /data, but this can easily be overriden by
-> > overriding the link in overlay_fs
-> >
-> > Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-> > ---
-> >  package/mender/mender.mk | 2 ++
-> >  1 file changed, 2 insertions(+)  
-> 
-> Thanks Thomas for picking up my other patches.
-> 
-> Wondering if this one was missed or some other reason not to apply it?
+With the introduction of Python 3.7.0, setuptools also needs to be updated.
+Without the update, several packages will fail to build or install with a
+ValueError: bad marshal data (unknown type code).
 
-This one also relies on the assumption that /data is the persistent
-partition, which is the part I'm still not sure how to handle. So I've
-so far merged the things that I agree with, and that are OK for master.
+Updating setuptools to 40.0.0 version fixes this issue.
 
-The rest is either stuff that needs more discussion (persistent
-partition related stuff) or that isn't material for master because it
-doesn't fix any problem.
+Even though 40.1.0 is out, updating to 40.0.0 is recommended as it seems like
+40.1.0 breaks version detection on some python packages such as
+python-cryptography which will error out with a complaint that setuptools is too
+old, even though it's at 40.1.0. Using 40.0.0 fixes the issue.
 
-BTW, could you send a patch adding yourself as a developer for the
-mender package in the DEVELOPERS file ?
+Fixes:
+http://autobuild.buildroot.net/results/636/636da0febe02f991095965d52cc4a8b2da644777/
+http://autobuild.buildroot.net/results/5f6/5f659130a6a32a4c43d6ed2c3b559df77ae18249/
+Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+---
+ package/python-setuptools/python-setuptools.hash | 2 +-
+ package/python-setuptools/python-setuptools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks!
-
-Thomas
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index f116a69..c905d82 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  2599b4c452e77824bbd6da28d16b1fe8159c7a4c203d8d419d8b348fde7b9549  python-setuptools-v38.4.0.tar.gz
++sha256  327e232b1809c9481256408fe9233bcf6a27f9f63ddbbadc526f451e5027aad5  python-setuptools-v40.0.0.tar.gz
+ sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 004fc0d..8db8511 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SETUPTOOLS_VERSION = v38.4.0
++PYTHON_SETUPTOOLS_VERSION = v40.0.0
+ PYTHON_SETUPTOOLS_SITE = $(call github,pypa,setuptools,$(PYTHON_SETUPTOOLS_VERSION))
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.9.3
