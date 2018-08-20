@@ -1,37 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 22:42:58 +0200
-Subject: [Buildroot] [PATCH] package/pkg-download: quiet the dl-wrapper
- call
-In-Reply-To: <20180820140812.8153-1-thomas.petazzoni@bootlin.com>
-References: <20180820140812.8153-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180820224258.372a5fba@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 20 Aug 2018 22:49:53 +0200
+Subject: [Buildroot] [PATCH] core: detect and reject build paths which
+ contain an '@'
+Message-ID: <20180820204953.29566-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+gcc does not build when the srcdir path contains a '@', because that
+path is then substitued in a texi file as argument to an @include
+directive. But then, the '@' in the path will start a command evaluation
+of its own, thus breaking the build. For example, with a $(O) path set
+to /home/ymorin/dev/buildroot/O/to at ti :
 
-On Mon, 20 Aug 2018 16:08:12 +0200, Thomas Petazzoni wrote:
-> The download wrapper call is currently always being displayed, even
-> without V=1, which is a bit annoying. It shows something like this:
-> 
-> thomas at windsurf:~/projets/buildroot (master)$ make tslib-source
-> >>> tslib 1.16 Downloading  
-> PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin" BR2_DL_DIR=/home/thomas/dl BUILD_DIR=/home/thomas/projets/buildroot/output/build O=/home/thomas/projets/buildroot/output flock /home/thomas/dl/tslib/ support/download/dl-wrapper -c '1.16' -d '/home/thomas/dl/tslib' -D '/home/thomas/dl' -f 'tslib-1.16.tar.xz' -H 'package/tslib//tslib.hash' -n 'tslib-1.16' -N 'tslib' -o '/home/thomas/dl/tslib/tslib-1.16.tar.xz'  -u https+https://github.com/kergoth/tslib/releases/download/1.16 -u http\|urlencode+http://sources.buildroot.net/tslib -u http\|urlencode+http://sources.buildroot.net  --
-> 
-> Let's silence this dl-wrapper call by prepending with $(Q).
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/pkg-download.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+    perl ../../gcc/../contrib/texi2pod.pl ../../gcc/doc/invoke.texi > gcc.pod
+    ../../gcc/doc/invoke.texi:1678: unknown command `ti'
+    ../../gcc/doc/invoke.texi:1678: @include: could not find /home/ymorin/dev/buildroot/O/to/build/host-gcc-initial-7.3.0/build/gcc/../../gcc/../libiberty/at-file.texi
 
-Applied to master, thanks.
+Reported-by: c32 on IRC
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+---
+ Makefile | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thomas
+diff --git a/Makefile b/Makefile
+index d1ee9293a2..8a2b614b81 100644
+--- a/Makefile
++++ b/Makefile
+@@ -60,6 +60,11 @@ override O := $(patsubst %/,%,$(patsubst %.,%,$(O)))
+ # avoid empty CANONICAL_O in case on non-existing entry.
+ CANONICAL_O := $(shell mkdir -p $(O) >/dev/null 2>&1)$(realpath $(O))
+ 
++# gcc fails to build when the srcdir contains a '@'
++ifneq ($(CANONICAL_O),$(subst @,,$(CANONICAL_O)))
++$(error The build directory can not contain a '@')
++endif
++
+ CANONICAL_CURDIR = $(realpath $(CURDIR))
+ 
+ REQ_UMASK = 0022
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
