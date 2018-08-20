@@ -1,49 +1,36 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Mon, 20 Aug 2018 04:55:17 -0700
-Subject: [Buildroot] [PATCH 16/18] perl-template-toolkit: use new
- patch_sub_makefile
+Date: Mon, 20 Aug 2018 04:55:14 -0700
+Subject: [Buildroot] [PATCH 13/18] perl-time-parsedate: add license
 In-Reply-To: <20180820115519.24046-1-chrismcc@gmail.com>
 References: <20180820115519.24046-1-chrismcc@gmail.com>
-Message-ID: <20180820115519.24046-17-chrismcc@gmail.com>
+Message-ID: <20180820115519.24046-14-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Copyright (C) 1996-2010 David Muir Sharnoff. Copyright (C) 2011 Google, Inc.
+License hereby granted for anyone to use, modify or redistribute this module
+at their own risk. Please feed useful changes back to cpan at dave.sharnoff.org.
+
+https://fedoraproject.org/wiki/Licensing/TPDL
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
- package/perl-template-toolkit/perl-template-toolkit.mk | 18 ++++--------------
- 1 file changed, 4 insertions(+), 14 deletions(-)
+ package/perl-time-parsedate/perl-time-parsedate.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/perl-template-toolkit/perl-template-toolkit.mk b/package/perl-template-toolkit/perl-template-toolkit.mk
-index f65d685fa1..1307c72c1f 100644
---- a/package/perl-template-toolkit/perl-template-toolkit.mk
-+++ b/package/perl-template-toolkit/perl-template-toolkit.mk
-@@ -11,21 +11,11 @@ PERL_TEMPLATE_TOOLKIT_DEPENDENCIES = perl-appconfig
- PERL_TEMPLATE_TOOLKIT_LICENSE = Artistic or GPL-1.0+
- PERL_TEMPLATE_TOOLKIT_LICENSE_FILES = README
- 
--# There has got to be a better way... :(
--# Some arguments to Makefile.PL do not get propagated to subdirectories
--# similar to:
--# https://rt.cpan.org/Public/Bug/Display.html?id=28632
--define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
--	$(SED) "s:^AR = .*:AR = $(TARGET_AR):g" $(@D)/xs/Makefile
--	$(SED) "s:^FULL_AR = .*:FULL_AR = $(TARGET_AR):g" $(@D)/xs/Makefile
--	$(SED) "s:^CC = .*:CC = $(TARGET_CC):g" $(@D)/xs/Makefile
--	$(SED) "s:^CCFLAGS = .*:CCFLAGS = $(TARGET_CFLAGS):g" $(@D)/xs/Makefile
--	$(SED) "s:^LD = .*:LD = $(TARGET_CC):g" $(@D)/xs/Makefile
--	$(SED) "s:^LDDLFLAGS = .*:LDDLFLAGS = -shared $(TARGET_LDFLAGS):g" $(@D)/xs/Makefile
--	$(SED) "s:^LDLFLAGS = .*:LDLFLAGS = $(TARGET_LDFLAGS):g" $(@D)/xs/Makefile
--	$(SED) "s:^DESTDIR = .*:DESTDIR = $(TARGET_DIR):g" $(@D)/xs/Makefile
-+# Fix xs/Makefile so it will cross-compile
-+define PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SUB_MAKEFILE
-+	$(call patch_sub_makefile,$(@D)/xs/Makefile)
- endef
- 
--PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_HOOKS += PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SED
-+PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_HOOKS += PERL_TEMPLATE_TOOLKIT_POST_CONFIGURE_SUB_MAKEFILE
+diff --git a/package/perl-time-parsedate/perl-time-parsedate.mk b/package/perl-time-parsedate/perl-time-parsedate.mk
+index e866e0decc..85b8c0ae81 100644
+--- a/package/perl-time-parsedate/perl-time-parsedate.mk
++++ b/package/perl-time-parsedate/perl-time-parsedate.mk
+@@ -8,6 +8,7 @@ PERL_TIME_PARSEDATE_VERSION = 2015.103
+ PERL_TIME_PARSEDATE_SOURCE = Time-ParseDate-$(PERL_TIME_PARSEDATE_VERSION).tar.gz
+ PERL_TIME_PARSEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MU/MUIR/modules
+ PERL_TIME_PARSEDATE_LICENSE_FILES = README
+-PERL_TIME_PARSEDATE_LICENSE = unknown
++# https://fedoraproject.org/wiki/Licensing/TPDL
++PERL_TIME_PARSEDATE_LICENSE = Public Domain
  
  $(eval $(perl-package))
 -- 
