@@ -1,36 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 13:30:12 +0200
-Subject: [Buildroot] [PATCH v1] qt5base: fix double-conversion for or1k
-In-Reply-To: <20180818224236.2422-1-ps.report@gmx.net>
-References: <20180818224236.2422-1-ps.report@gmx.net>
-Message-ID: <20180820133012.63c1f860@windsurf>
+From: Christopher McCrory <chrismcc@gmail.com>
+Date: Mon, 20 Aug 2018 04:55:02 -0700
+Subject: [Buildroot] [PATCH 01/18] perl-dbi: add host package
+In-Reply-To: <20180820115519.24046-1-chrismcc@gmail.com>
+References: <20180820115519.24046-1-chrismcc@gmail.com>
+Message-ID: <20180820115519.24046-2-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+---
+ package/perl-dbi/perl-dbi.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Sun, 19 Aug 2018 00:42:36 +0200, Peter Seiderer wrote:
-> Fixes [1]:
-> 
->   ../3rdparty/double-conversion/include/double-conversion/utils.h:81:2: error: #error Target architecture was not detected as supported by Double-Conversion.
->   #error Target architecture was not detected as supported by Double-Conversion.
-> 
-> [1] http://autobuild.buildroot.net/results/a3535cdf5e91df011a59a4b9f60d69195f5efdcb
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-
-Thanks a lot for this patch! Actually, we would need the same on
-Microblaze:
-
-  http://autobuild.buildroot.net/?arch=microblazeel&status=NOK&reason=qt5base%
-
-Thanks :-)
-
-Thomas
+diff --git a/package/perl-dbi/perl-dbi.mk b/package/perl-dbi/perl-dbi.mk
+index f7ae6ca5a1..4ee9149f1f 100644
+--- a/package/perl-dbi/perl-dbi.mk
++++ b/package/perl-dbi/perl-dbi.mk
+@@ -11,3 +11,4 @@ PERL_DBI_LICENSE = Artistic or GPL-1.0+
+ PERL_DBI_LICENSE_FILES = LICENSE
+ 
+ $(eval $(perl-package))
++$(eval $(host-perl-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.4
