@@ -1,38 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 15:23:19 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/lynx: bump version to
- 2.8.9rel.1
-In-Reply-To: <20180819124400.455-1-bernd.kuhls@t-online.de>
-References: <20180819124400.455-1-bernd.kuhls@t-online.de>
-Message-ID: <20180820152319.2ee11973@windsurf>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Mon, 20 Aug 2018 15:35:06 +0200
+Subject: [Buildroot] [[PATCH v2 03/14] package/mender: create directory
+ structures required by the Mender client
+In-Reply-To: <20180820151531.095a087d@windsurf>
+References: <20180820130914.22377-1-mirza.krak@northern.tech>
+ <20180820130914.22377-4-mirza.krak@northern.tech>
+ <20180820151531.095a087d@windsurf>
+Message-ID: <CADHdJwDdevWF52TVmzUQ=PnU5Q7e45mKkwrNYRydYJpK0JEDuQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Mon, Aug 20, 2018 at 3:15 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> On Mon, 20 Aug 2018 15:09:03 +0200, Mirza Krak wrote:
+>> /uboot is a mount point for vfat boot partition.
+>> /data is a mount point for the persistent data partition.
+>>
+>> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+>> ---
+>>  package/mender/mender.mk | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+>> index deab0cb039..71f92ce048 100644
+>> --- a/package/mender/mender.mk
+>> +++ b/package/mender/mender.mk
+>> @@ -8,6 +8,10 @@ MENDER_VERSION = 1.4.0
+>>  MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
+>>
+>>  define MENDER_INSTALL_CONFIG_FILES
+>> +     $(INSTALL) -d -m 755 $(TARGET_DIR)/data/mender
+>> +     $(INSTALL) -d -m 755 $(TARGET_DIR)/data/uboot
+>> +     $(INSTALL) -d -m 755 $(TARGET_DIR)/uboot
+>
+> I am sorry, but despite the explanations, I still don't understand why
+> these *must* be /data and /uboot. Is Mender *enforcing* those locations
+> exactly ?
 
-On Sun, 19 Aug 2018 14:44:00 +0200, Bernd Kuhls wrote:
-> Changelog: http://lynx.invisible-island.net/current/CHANGES
-> 
-> Removed patch 0001, quoted from Changelog:
-> * when cross-compiling, trim LDFLAGS from makefile rule linking makeuctb,
->   because it is a build tool, which should generally use BUILD_LDFLAGS
->   (patch by Thomas Petazzoni)
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...-t-build-host-tools-with-target-LDFL.patch | 41 -------------------
->  package/lynx/lynx.hash                        |  2 +-
->  package/lynx/lynx.mk                          |  2 +-
->  3 files changed, 2 insertions(+), 43 deletions(-)
->  delete mode 100644 package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch
+/uboot, not really enforced, just aligned to other systems that
+integrate Mender. I could actually drop this.
 
-Applied to next, thanks.
+/data is not really enforced but the symlink /var/lib/mender must
+point to a valid location (normally it points to /data), because once
+the Mender daemon starts it will generate some initial files at that
+location and the service would fail if non-existent.
 
-Thomas
+List of files that are generated on "first start-up"
+
+-rw-------    1 root     root        2.4K Jan 28  2018 mender-agent.pem
+-rw-------    1 root     root        8.0K Jan 28  2018 mender-store
+-rw-------    1 root     root        8.0K Jan 28  2018 mender-store-lock
+
+Thank you.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Mirza Krak | Embedded Solutions Architect | https://mender.io
+
+ Northern.tech AS | @northerntechHQ
