@@ -1,9 +1,9 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Mon, 20 Aug 2018 04:55:03 -0700
-Subject: [Buildroot] [PATCH 02/18] perl-dbd-mysql: new package
+Date: Mon, 20 Aug 2018 04:55:04 -0700
+Subject: [Buildroot] [PATCH 03/18] perl-data-dump: new package
 In-Reply-To: <20180820115519.24046-1-chrismcc@gmail.com>
 References: <20180820115519.24046-1-chrismcc@gmail.com>
-Message-ID: <20180820115519.24046-3-chrismcc@gmail.com>
+Message-ID: <20180820115519.24046-4-chrismcc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,87 +14,79 @@ Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 ---
  DEVELOPERS                                 |  1 +
  package/Config.in                          |  1 +
- package/perl-dbd-mysql/Config.in           | 12 ++++++++++++
- package/perl-dbd-mysql/perl-dbd-mysql.hash |  6 ++++++
- package/perl-dbd-mysql/perl-dbd-mysql.mk   | 15 +++++++++++++++
- 5 files changed, 35 insertions(+)
- create mode 100644 package/perl-dbd-mysql/Config.in
- create mode 100644 package/perl-dbd-mysql/perl-dbd-mysql.hash
- create mode 100644 package/perl-dbd-mysql/perl-dbd-mysql.mk
+ package/perl-data-dump/Config.in           |  6 ++++++
+ package/perl-data-dump/perl-data-dump.hash |  6 ++++++
+ package/perl-data-dump/perl-data-dump.mk   | 13 +++++++++++++
+ 5 files changed, 27 insertions(+)
+ create mode 100644 package/perl-data-dump/Config.in
+ create mode 100644 package/perl-data-dump/perl-data-dump.hash
+ create mode 100644 package/perl-data-dump/perl-data-dump.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9a2576ddc7..75237eae3b 100644
+index 75237eae3b..023bddbce0 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -489,6 +489,7 @@ F:	package/perl-class-std-fast/
+@@ -486,6 +486,7 @@ F:	package/perl-appconfig/
+ F:	package/perl-astro-suntime/
+ F:	package/perl-class-std/
+ F:	package/perl-class-std-fast/
++F:	package/perl-data-dump/
  F:	package/perl-data-optlist/
  F:	package/perl-data-uuid/
  F:	package/perl-date-manip/
-+F:	package/perl-dbd-mysql/
- F:	package/perl-dbi/
- F:	package/perl-device-serialport/
- F:	package/perl-file-slurp/
 diff --git a/package/Config.in b/package/Config.in
-index eda0f698dc..b6e739dade 100644
+index b6e739dade..f412ff673b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -678,6 +678,7 @@ menu "Perl libraries/modules"
+@@ -674,6 +674,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-crypt-cbc/Config.in"
+ 	source "package/perl-crypt-openssl-random/Config.in"
+ 	source "package/perl-crypt-openssl-rsa/Config.in"
++	source "package/perl-data-dump/Config.in"
+ 	source "package/perl-data-optlist/Config.in"
  	source "package/perl-data-uuid/Config.in"
  	source "package/perl-date-manip/Config.in"
- 	source "package/perl-datetime-tiny/Config.in"
-+	source "package/perl-dbd-mysql/Config.in"
- 	source "package/perl-dbi/Config.in"
- 	source "package/perl-device-serialport/Config.in"
- 	source "package/perl-digest-hmac/Config.in"
-diff --git a/package/perl-dbd-mysql/Config.in b/package/perl-dbd-mysql/Config.in
+diff --git a/package/perl-data-dump/Config.in b/package/perl-data-dump/Config.in
 new file mode 100644
-index 0000000000..49e7ff99d6
+index 0000000000..a44291baae
 --- /dev/null
-+++ b/package/perl-dbd-mysql/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PERL_DBD_MYSQL
-+	bool "perl-dbd-mysql"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_DBI
-+	select BR2_PACKAGE_MYSQL
++++ b/package/perl-data-dump/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_DATA_DUMP
++	bool "perl-data-dump"
 +	help
-+	  A MySQL driver for the Perl5 Database Interface (DBI)
++	  Pretty printing of data structures
 +
-+	  http://dbi.perl.org/
-+
-+comment "perl-dbd-mysql needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-dbd-mysql/perl-dbd-mysql.hash b/package/perl-dbd-mysql/perl-dbd-mysql.hash
++	  https://metacpan.org/release/Data-Dump
+diff --git a/package/perl-data-dump/perl-data-dump.hash b/package/perl-data-dump/perl-data-dump.hash
 new file mode 100644
-index 0000000000..51de476095
+index 0000000000..87850326de
 --- /dev/null
-+++ b/package/perl-dbd-mysql/perl-dbd-mysql.hash
++++ b/package/perl-data-dump/perl-data-dump.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    bdf4f4d899b8af29ebd8ebfb7438d05f DBD-mysql-4.046.tar.gz
-+sha256 6165652ec959d05b97f5413fa3dff014b78a44cf6de21ae87283b28378daf1f7 DBD-mysql-4.046.tar.gz
++md5    762c111e525c82ff23d62c90821b26e9 Data-Dump-1.23.tar.gz
++sha256 af53b05ef1387b4cab4427e6789179283e4f0da8cf036e8db516ddb344512b65 Data-Dump-1.23.tar.gz
 +
 +# computed by scancpan
-+sha256 7a9ba29702b957805cfa8aa63bca43175625824263232dbade0010d385ab888c LICENSE
-diff --git a/package/perl-dbd-mysql/perl-dbd-mysql.mk b/package/perl-dbd-mysql/perl-dbd-mysql.mk
++sha256 31d1b6482bcc3db87a38ad02065554f9d3bc13321d4ef8e96042464045e2abcf README
+diff --git a/package/perl-data-dump/perl-data-dump.mk b/package/perl-data-dump/perl-data-dump.mk
 new file mode 100644
-index 0000000000..752bc199b1
+index 0000000000..7c5d46e08e
 --- /dev/null
-+++ b/package/perl-dbd-mysql/perl-dbd-mysql.mk
-@@ -0,0 +1,15 @@
++++ b/package/perl-data-dump/perl-data-dump.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-dbd-mysql
++# perl-data-dump
 +#
 +################################################################################
 +
-+PERL_DBD_MYSQL_VERSION = 4.046
-+PERL_DBD_MYSQL_SOURCE = DBD-mysql-$(PERL_DBD_MYSQL_VERSION).tar.gz
-+PERL_DBD_MYSQL_SITE = $(BR2_CPAN_MIRROR)/authors/id/C/CA/CAPTTOFU
-+PERL_DBD_MYSQL_DEPENDENCIES = host-perl-dbi perl-dbi mysql
-+PERL_DBD_MYSQL_CONF_OPTS += --mysql_config=$(STAGING_DIR)/usr/bin/mysql_config
-+PERL_DBD_MYSQL_LICENSE = Artistic or GPL-1.0+
-+PERL_DBD_MYSQL_LICENSE_FILES = LICENSE
++PERL_DATA_DUMP_VERSION = 1.23
++PERL_DATA_DUMP_SOURCE = Data-Dump-$(PERL_DATA_DUMP_VERSION).tar.gz
++PERL_DATA_DUMP_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
++PERL_DATA_DUMP_LICENSE = Artistic or GPL-1.0+
++PERL_DATA_DUMP_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
 -- 
