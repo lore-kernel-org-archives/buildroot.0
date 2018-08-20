@@ -1,41 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 23:06:18 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/trousers: bump version to
- 0.3.14
-In-Reply-To: <20180820054734.7709-1-bernd.kuhls@t-online.de>
-References: <20180820054734.7709-1-bernd.kuhls@t-online.de>
-Message-ID: <20180820230618.7b69ee64@windsurf>
+Date: Mon, 20 Aug 2018 23:06:32 +0200
+Subject: [Buildroot] [git commit branch/next] package/ustream-ssl: bump
+ version
+Message-ID: <20180820210050.E65708E03B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=25eb81d6ef5e1c2029ff1be4ac4ec894c4958177
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 20 Aug 2018 07:47:34 +0200, Bernd Kuhls wrote:
-> Removed patches 0001 & 0003, applied upstream.
-> Rebased patches 0002 & 0004 and renumbered them.
-> Added sha256 hashes for tarball and license file.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...r-understands-pie-and-relro-options.patch} | 17 ++--
->  ...-inline-for-read_data-and-write_data.patch | 94 -------------------
->  ...went_r-is-available-before-using-it.patch} |  8 +-
->  ...m-include-limits.h-to-fix-musl-build.patch | 29 ------
->  package/trousers/trousers.hash                |  9 +-
->  package/trousers/trousers.mk                  |  2 +-
->  6 files changed, 20 insertions(+), 139 deletions(-)
->  rename package/trousers/{0002-Check-if-the-compiler-understands-pie-and-relro-options.patch => 0001-Check-if-the-compiler-understands-pie-and-relro-options.patch} (97%)
->  delete mode 100644 package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
->  rename package/trousers/{0004-Check-that-getpwent_r-is-available-before-using-it.patch => 0002-Check-that-getpwent_r-is-available-before-using-it.patch} (93%)
->  delete mode 100644 package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch
+This release includes support for OpenSSL 1.1.x
 
-Applied to next, thanks.
+Added hashes for tarball and license file.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ustream-ssl/ustream-ssl.hash | 3 +++
+ package/ustream-ssl/ustream-ssl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/ustream-ssl/ustream-ssl.hash b/package/ustream-ssl/ustream-ssl.hash
+new file mode 100644
+index 0000000000..ba315f88dc
+--- /dev/null
++++ b/package/ustream-ssl/ustream-ssl.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 63ecc9d78ef83020a4539a89c8a3690657e7bbe7580ae02cc0e7b4267ffea5cd  ustream-ssl-23a3f2830341acd1db149175baf7315a33bd0edb.tar.gz
++sha256 90dd1590cf400a548438e2575e1ff46d8fb8cebae7d09f544aae7e059e30b6c5  ustream-ssl.h
+diff --git a/package/ustream-ssl/ustream-ssl.mk b/package/ustream-ssl/ustream-ssl.mk
+index 9b10788293..7804eb5d38 100644
+--- a/package/ustream-ssl/ustream-ssl.mk
++++ b/package/ustream-ssl/ustream-ssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-USTREAM_SSL_VERSION = 45ac93088bc6f2d8ef3b0512d8e1ddfd9c4ee9e5
++USTREAM_SSL_VERSION = 23a3f2830341acd1db149175baf7315a33bd0edb
+ USTREAM_SSL_SITE = git://git.openwrt.org/project/ustream-ssl.git
+ USTREAM_SSL_LICENSE = ISC
+ USTREAM_SSL_LICENSE_FILES = ustream-ssl.h
