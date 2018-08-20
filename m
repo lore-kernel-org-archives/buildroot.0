@@ -1,80 +1,117 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 Aug 2018 16:59:20 +0200
-Subject: [Buildroot] [PATCH v3 2/2] core/legal-info: Add package
- dependencies with licenses to the manifest
-In-Reply-To: <20180820141217.17322-2-sojkam1@fel.cvut.cz>
-References: <87h8jpcf9k.fsf@steelpick.2x.cz>
- <20180820141217.17322-1-sojkam1@fel.cvut.cz>
- <20180820141217.17322-2-sojkam1@fel.cvut.cz>
-Message-ID: <20180820145920.GI15347@scaer>
+Date: Mon, 20 Aug 2018 17:05:32 +0200
+Subject: [Buildroot] [PATCH] pv: fix build failures when building under
+ a path containing 'yes'
+In-Reply-To: <20180820142216.5904-1-peter@korsgaard.com>
+References: <20180820142216.5904-1-peter@korsgaard.com>
+Message-ID: <20180820150532.GJ15347@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michal, All,
+Peter, All,
 
-On 2018-08-20 16:12 +0200, Michal Sojka spake thusly:
-> From: Michal Sojka <sojka@merica.cz>
+On 2018-08-20 16:22 +0200, Peter Korsgaard spake thusly:
+> Depending on the configuration, the cpp output may contain the string 'yes'
+> in a comment if built under a path containing 'yes', confusing the _AIX
+> test:
+[--SNIP--]
+> Fix it by only matching on 'yes' on a line by itself.
 > 
-> This adds one column to the legal-info manifest table. It contains the
-> dependencies of the given package and their licenses. This information
-> is useful when assessing license compatibility of the packages and
-> their libraries.
+> As pv doesn't cleanly autoreconf (it doesn't use automake and configure.in
+> is located in subdir), instead directly patch configure.
 > 
-> An example of the content of the new column for the MPD package is
-> shown below:
-> 
->     "alsa-lib [LGPL-2.1+ (library), GPL-2.0+ (aserver)] boost
->     [BSL-1.0] libid3tag [GPL-2.0+] libmad [GPL-2.0+] libogg
->     [BSD-3-Clause] libvorbis [BSD-3-Clause] libzlib [Zlib]
->     skeleton-init-common [unknown] skeleton-init-sysv [unknown] sqlite
->     [Public domain] toolchain-external-linaro-arm [unknown]"
-> 
-> [Credits to Yann E. MORIN <yann.morin.1998@free.fr> for suggesting a
-> few simplifications.]
-> 
-> Signed-off-by: Michal Sojka <sojka@merica.cz>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Yet, a little comment, see below...
+A similar issue was reported recently on IRC, when the build directory
+$(O) contains an '@', which makes some package (gcc, IIRC?) fail to
+build.
 
-[--SNIP--]
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 8d5ea234e4..8add57cf32 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-[--SNIP--]
-> @@ -95,3 +95,12 @@ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-full
->  	} && \
->  	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
->  endef
-> +
-> +non-virtual-deps = $(foreach p,$(1),$(if $($(call UPPERCASE,$(p))_IS_VIRTUAL),,$(p)))
-> +
-> +# $1: package name, lowercase
-> +legal-deps = \
-
-It is not directly obvious what this macro does, so maybe a little bit
-of comment would be zelcome, something alomng the lines of:
-
-    # Returns the recursive list of dependencies and their licensing terms
-    # for the package specified in parameter. If that package is a target
-    # package, remove host packages from the list.
+I'll run a test here to find exactly what package fails, and I'll submit
+a patch refusing '@' in the build directory path.
 
 Regards,
 Yann E. MORIN.
 
-> +    $(foreach p,\
-> +        $(filter-out $(if $(1:host-%=),host-%),\
-> +            $(call non-virtual-deps,\
-> +                $($(call UPPERCASE,$(1))_FINAL_RECURSIVE_DEPENDENCIES))),$(p) [$($(call UPPERCASE,$(p))_LICENSE)])
-> -- 
-> 2.18.0
+> ---
+>  .../pv/0001-configure.in-tighten-AIX-test.patch    | 57 ++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 package/pv/0001-configure.in-tighten-AIX-test.patch
 > 
+> diff --git a/package/pv/0001-configure.in-tighten-AIX-test.patch b/package/pv/0001-configure.in-tighten-AIX-test.patch
+> new file mode 100644
+> index 0000000000..2e0d2af247
+> --- /dev/null
+> +++ b/package/pv/0001-configure.in-tighten-AIX-test.patch
+> @@ -0,0 +1,57 @@
+> +From cd7605723eb8e6d8231644f1cf62f1e80badf074 Mon Sep 17 00:00:00 2001
+> +From: Peter Korsgaard <peter@korsgaard.com>
+> +Date: Mon, 20 Aug 2018 15:57:22 +0200
+> +Subject: [PATCH] configure.in: tighten AIX test
+> +
+> +Depending on the configuration, the cpp output may contain the string 'yes'
+> +in a comment if built under a path containing 'yes', confusing the _AIX
+> +test:
+> +
+> +${CROSS}-cpp conftest.h
+> +\# 1 "conftest.h"
+> +\# 1 "<built-in>"
+> +\# 1 "<command-line>"
+> +\# 31 "<command-line>"
+> +\# 1 "/home/peko/source/buildroot/output-yes/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/stdc-predef.h" 1 3 4
+> +\# 32 "<command-line>" 2
+> +\# 1 "conftest.txt"
+> +
+> +Fix it by only matching on 'yes' on a line by itself.
+> +
+> +Upstream-status: submitted to author
+> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> +---
+> +
+> + autoconf/configure.in | 2 +-
+> + configure             | 2 +-
+> + 2 files changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/autoconf/configure.in b/autoconf/configure.in
+> +index bd45004..487c42b 100644
+> +--- a/autoconf/configure.in
+> ++++ b/autoconf/configure.in
+> +@@ -86,7 +86,7 @@ AC_PROG_MAKE_SET
+> + 
+> + dnl AIX needs -lc128
+> + dnl
+> +-AC_EGREP_CPP([yes], [#ifdef _AIX
+> ++AC_EGREP_CPP([^yes$], [#ifdef _AIX
+> + yes
+> + #endif
+> + ], [LIBS="$LIBS -lc128"])
+> +diff --git a/configure b/configure
+> +index 7c11be0..59267b9 100755
+> +--- a/configure
+> ++++ b/configure
+> +@@ -3377,7 +3377,7 @@ yes
+> + 
+> + _ACEOF
+> + if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+> +-  $EGREP "yes" >/dev/null 2>&1; then
+> ++  $EGREP "^yes$" >/dev/null 2>&1; then
+> +   LIBS="$LIBS -lc128"
+> + fi
+> + rm -f conftest*
+> +-- 
+> +2.11.0
+> +
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
