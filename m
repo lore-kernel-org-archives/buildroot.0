@@ -1,36 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 Aug 2018 17:20:39 +0200
-Subject: [Buildroot] [PATCH] gr-osmosdr: add host-python-cheetah
- dependency
-In-Reply-To: <20180820083933.26217-1-gwenj@trabucayre.com>
-References: <20180820083933.26217-1-gwenj@trabucayre.com>
-Message-ID: <20180820172039.20a4dfd6@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 20 Aug 2018 15:26:31 +0000
+Subject: [Buildroot] [Bug 11236] util-linux fails to build on Travis CI when
+ python also selected
+In-Reply-To: <bug-11236-163@https.bugs.busybox.net/>
+References: <bug-11236-163@https.bugs.busybox.net/>
+Message-ID: <bug-11236-163-oExvKTvqT1@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11236
 
-On Mon, 20 Aug 2018 10:39:33 +0200, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> Since b7f1b030413a51637323a755cbd985b06026990e host-python-cheetah is no more a
-> dependency for gnuradio. So this package must be explicitly added for
-> gr-osmosdr.
-> 
-> Fix : http://autobuild.buildroot.net/results/aa208a69996548c15d937fc7c97d267162a56c48/
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> ---
->  package/gr-osmosdr/gr-osmosdr.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #5 from Frank Vasquez <frankv@helium.com> ---
+I will try reconfiguring my Travis CI build with an Ubuntu 16.04 Docker image
+when I get a chance.
 
-Applied to master, thanks.
+Cheers,
+Frank
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
