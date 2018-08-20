@@ -1,47 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Aug 2018 00:12:57 +0200
-Subject: [Buildroot] [PATCH v2,2/2] boost: context needs C++11
-In-Reply-To: <20180820221257.1553-1-fontaine.fabrice@gmail.com>
-References: <20180820221257.1553-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180820221257.1553-2-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Aug 2018 00:20:37 +0200
+Subject: [Buildroot] [PATCH v4 2/2] support/testing/tests/core: SSP &
+ hardening flags
+In-Reply-To: <1534209477-11544-2-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1534209477-11544-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1534209477-11544-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180821002037.200a2986@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this flag, mutex is not always correctly detected with gcc 4.x
-or 5.x. As a result, boost_thread is wrongly selected by boost_context.
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.net/results/fb046c04fe18bec973d120e4ab33971f32ba5769
- - http://autobuild.buildroot.net/results/99f1a255b78a973faeb8bf3b94d78efc54426a8b
+On Mon, 13 Aug 2018 20:17:57 -0500, Matt Weber wrote:
+> Catch the commonly used options of SSP, Relro, and fortify.
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Update first patch to keep selection of boost-thread but lower gcc
-   version from 4.8 to 4.7
- - Update second patch to add -std=c++11 only if gcc >= 4.7
+I can't really apply this one currently, because it depends on the
+wrapper stuff I believe. Indeed the TestRelro test fails to build with:
 
- package/boost/boost.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+/home/thomas/projets/outputs/TestRelro/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/6.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: -r and -pie may not be used together
+collect2: error: ld returned 1 exit status
+make[3]: *** [scripts/Makefile.build:264: applets/built-in.o] Error 1
+make[2]: *** [Makefile:372: applets_dir] Error 2
+make[1]: *** [package/pkg-generic.mk:232: /home/thomas/projets/outputs/TestRelro/build/busybox-1.29.1/.stamp_built]
+Error 2
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 14f6162003..f4a44fa123 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -61,6 +61,11 @@ else
- BOOST_FLAGS += --without-icu
- endif
- 
-+# boost-context needs C++11
-+ifeq ($(BR2_PACKAGE_BOOST_CONTEXT)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),yy)
-+BOOST_TARGET_CXXFLAGS += -std=c++11
-+endif
-+
- ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
- BOOST_DEPENDENCIES += bzip2 zlib
- endif
+Best regards,
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
