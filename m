@@ -1,68 +1,68 @@
 From: Mirza Krak <mirza.krak@northern.tech>
-Date: Mon, 20 Aug 2018 15:09:01 +0200
-Subject: [Buildroot] [[PATCH v2 01/14] package/mender: fix install path for
- identity and inventory scripts
+Date: Mon, 20 Aug 2018 15:09:02 +0200
+Subject: [Buildroot] [[PATCH v2 02/14] package/mender: provide sane values
+ in mender.conf
 In-Reply-To: <20180820130914.22377-1-mirza.krak@northern.tech>
 References: <20180820130914.22377-1-mirza.krak@northern.tech>
-Message-ID: <20180820130914.22377-2-mirza.krak@northern.tech>
+Message-ID: <20180820130914.22377-3-mirza.krak@northern.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-These scripts are used to generate the device identity and to populate
-the the device inventory. The Mender client will call these and at least
-the mender-device-identity is required to be present at the correct
-location. Inventory scripts are there as an example and not
-actually required.
+The current values that are in mender.conf will actually
+cause the Mender client to fail to start because of invalid
+values.
 
-Example output from identity script:
+Provide sane default values that at least allow the Mender client
+to parse the configuration options and start running.
 
-    $ ./mender-device-identity
-    mac=de:ad:ca:fe:00:01
-    cpuid=1112233
+The values provided will actually work in a "Demo Environment",
+see https://docs.mender.io/getting-started/create-a-test-environment.
 
-Example output from inventory script:
+Though an entry is required in /etc/hosts to resolve the URL to the
+local IP address of the running demo server.
 
-    $ ./mender-inventory-network
-    mac_br-fbfdad18c33c=02:42:7e:74:96:85
-    network_interfaces=br-fbfdad18c33c
-    ipv4_br-fbfdad18c33c=172.21.0.1/16
-    mac_enp0s25=de:ad:be:ef:bb:05
-    network_interfaces=enp0s25
-    ipv4_enp0s25=123.22.0.197/16
-    ipv4_enp0s25=10.20.20.105/16
-    ipv6_enp0s25=fe80::2aad:beff:feef:bb05/64
+Example:
 
-Inventory and device identity data is presented on the Mender server
-front-end.
+    echo "192.168.0.10 docker.mender.io s3.docker.mender.io" >> \
+         /etc/hosts
+
+Above is required because the demo certificate
+(/etc/mender/server.crt) is created for https://docker.mender.io.
 
 Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
 ---
- package/mender/mender.mk | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/mender/mender.conf | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 695b5e7a91..deab0cb039 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -14,12 +14,13 @@ define MENDER_INSTALL_CONFIG_FILES
- 		$(TARGET_DIR)/etc/mender/tenant.conf
- 	$(INSTALL) -D -m 0644 package/mender/server.crt \
- 		$(TARGET_DIR)/etc/mender/server.crt
-+
- 	$(INSTALL) -D -m 0755 package/mender/mender-device-identity \
--		$(TARGET_DIR)/var/share/mender/identity/mender-device-identity
-+		$(TARGET_DIR)/usr/share/mender/identity/mender-device-identity
- 	$(INSTALL) -D -m 0755 package/mender/mender-inventory-network \
--		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-network
-+		$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-network
- 	$(INSTALL) -D -m 0755 package/mender/mender-inventory-hostinfo \
--		$(TARGET_DIR)/var/share/mender/inventory/mender-inventory-hostinfo
-+		$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-hostinfo
- endef
- 
- MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
+diff --git a/package/mender/mender.conf b/package/mender/mender.conf
+index a5c7c545c3..979f16aaf6 100644
+--- a/package/mender/mender.conf
++++ b/package/mender/mender.conf
+@@ -1,14 +1,10 @@
+ {
+-  "ClientProtocol": "http",
+-  "HttpsClient": {
+-    "Certificate": "",
+-    "Key": ""
+-  },
+-  "RootfsPartA": "@MENDER_ROOTFS_PART_A@",
+-  "RootfsPartB": "@MENDER_ROOTFS_PART_B@",
+-  "UpdatePollIntervalSeconds": @MENDER_UPDATE_POLL_INTERVAL_SECONDS@,
+-  "InventoryPollIntervalSeconds": @MENDER_INVENTORY_POLL_INTERVAL_SECONDS@,
+-  "RetryPollIntervalSeconds": @MENDER_RETRY_POLL_INTERVAL_SECONDS@,
+-  "ServerURL": "@MENDER_SERVER_URL@",
+-  "ServerCertificate": "@MENDER_CERT_LOCATION@"
++  "InventoryPollIntervalSeconds": 1800,
++  "UpdatePollIntervalSeconds": 1800,
++  "RetryPollIntervalSeconds": 300,
++  "RootfsPartA": "mmcblk0p2",
++  "RootfsPartB": "mmcblk0p3",
++  "ServerCertificate": "/etc/mender/server.crt",
++  "ServerURL": "https://docker.mender.io",
++  "TenantToken": "dummy"
+ }
 -- 
 2.11.0
