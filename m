@@ -1,61 +1,79 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Mon, 20 Aug 2018 05:47:50 -0700
-Subject: [Buildroot] [PATCH 00/13] perl modules again
-In-Reply-To: <20180820142842.003ef9fa@windsurf>
-References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820141037.5b4c40cb@windsurf>
- <CALURroQZ6oZtCjC8ZFuHYhodhKNPMNAj=DtKLWERFXL-=5LaqA@mail.gmail.com>
- <20180820142842.003ef9fa@windsurf>
-Message-ID: <CALURroQBXXmywB0T99OW7crwhZVOz52yDYoEHmw3FY7HG0pFTA@mail.gmail.com>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Mon, 20 Aug 2018 15:09:00 +0200
+Subject: [Buildroot] [[PATCH v2 00/14] various improvements to package/mender
+Message-ID: <20180820130914.22377-1-mirza.krak@northern.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 20, 2018 at 5:28 AM, Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+This patch series brings some improvements to the Mender package. So
+far the Mender client binary was compiled properly but it was lacking some
+configuration files to function properly, which this series hope to adress.
 
-> Hello,
->
-> On Mon, 20 Aug 2018 05:15:58 -0700, Christopher McCrory wrote:
->
-> > Copy and paste error, Oops. There are 18 patches
->
-> It cannot be a copy/paste error if done right: the cover letter is
-> generated automatically by "git format-patch --cover".
->
->
-Something like:
+The Mender client is only part one part of integrating Mender and the other
+parts (in short) are (generic & board specific):
 
-commit 13 patches
-git  format-patch  --cover-letter   -M -n -s -o perl origin/next
-edit perl/0000-cover-letter.patch
-commit more
-git  format-patch  --cover-letter   -M -n -s -o perl2 origin/next
-edit perl2/0000-cover-letter.patch
-copy in text from previous edit including subject
+Generic:
+- eMMC disk image with correct partition layout (A & B rootfs + data part)
+    - But this is board specific in Buildroot?
+- Mender artifact images (mender-artifact host tool)
 
-:(
+Board specific:
+- U-boot patches
+    - bootcmd, altbootcmd, BOOTCOUNT_LIMIT, BOOTCOUNT_ENV
+    - persistante storage of ENV
+    - redundant ENV
+- fw_printenv/fw_setenv configuration file
 
+But above are not covered in this series and will be handled separately.
 
+This series has been tested on a custom ATSAMA5D27 based board.
 
-Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
+Previous revisions of this series can be found here:
 
+    http://lists.busybox.net/pipermail/buildroot/2018-August/227822.html
 
+Changes in v2:
 
--- 
-Christopher McCrory
-To the optimist, the glass is half full.
-To the pessimist, the glass is half empty.
-To the engineer, the glass is twice as big as it needs to be.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180820/46008ddd/attachment.html>
+- Split up patches in more logical changes and the order them accordingly
+  - PATCH 1-5 - "Fixes" to make the mender client work, and work being defined
+    as the mender.service will start without errors.
+  - PATCH 6-12 - Clean-ups and improvements
+  - PATCH 13-14 - RFC status
+
+Mirza Krak (14):
+  package/mender: fix install path for identity and inventory scripts
+  package/mender: provide sane values in mender.conf
+  package/mender: create directory structures required by the Mender
+    client
+  package/mender: create directory containing Mender state script
+  package/mender: symlink /var/lib/mender -> /data/mender
+  package/mender: select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
+  package/mender: select BR2_PACKAGE_CA_CERTIFICATES
+  package/mender: remove tenant.conf
+  package/mender: use inventory and identity script from upstream source
+  package/mender: update legal info
+  package/mender: set version in go linker
+  package/mender: use MENDER_PKGDIR to access local files
+  package/mender: add BR2_PACKAGE_MENDER_ARTIFACT_NAME option
+  package/mender: add BR2_PACKAGE_MENDER_DEVICE_TYPE option
+
+ package/mender/Config.in                 | 27 ++++++++++++
+ package/mender/mender-device-identity    | 52 -----------------------
+ package/mender/mender-inventory-hostinfo | 21 ----------
+ package/mender/mender-inventory-network  | 47 ---------------------
+ package/mender/mender.conf               | 20 ++++-----
+ package/mender/mender.hash               | 39 ++++++++++++++++++
+ package/mender/mender.mk                 | 71 +++++++++++++++++++++++++++-----
+ package/mender/mender.service            |  1 -
+ package/mender/tenant.conf               |  0
+ 9 files changed, 134 insertions(+), 144 deletions(-)
+ delete mode 100644 package/mender/mender-device-identity
+ delete mode 100644 package/mender/mender-inventory-hostinfo
+ delete mode 100644 package/mender/mender-inventory-network
+ delete mode 100644 package/mender/tenant.conf
+
+--
+2.11.0
