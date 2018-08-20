@@ -1,35 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 00:31:50 +0200
-Subject: [Buildroot] [PATCH 2/2] qemu: add support for python 3.6
-In-Reply-To: <20180427154055.23272-2-aduskett@gmail.com>
-References: <20180427154055.23272-1-aduskett@gmail.com>
- <20180427154055.23272-2-aduskett@gmail.com>
-Message-ID: <20180821003150.677ad122@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 20 Aug 2018 18:25:26 -0500
+Subject: [Buildroot] [PATCH v4 2/2] support/testing/tests/core: SSP &
+ hardening flags
+In-Reply-To: <20180821002037.200a2986@windsurf>
+References: <1534209477-11544-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1534209477-11544-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180821002037.200a2986@windsurf>
+Message-ID: <CANQCQpayN1thGivAo2aT0nmr7h28VbUpSUKQoXA-4Dc65uLzUg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Fri, 27 Apr 2018 11:40:55 -0400, Adam Duskett wrote:
-> qemu 2.12.0 now supports building against python3.
-> see: https://wiki.qemu.org/ChangeLog/2.12#Build_Dependencies
-> 
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/qemu/qemu.mk | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
+On Mon, Aug 20, 2018 at 5:20 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Mon, 13 Aug 2018 20:17:57 -0500, Matt Weber wrote:
+> > Catch the commonly used options of SSP, Relro, and fortify.
+> >
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>
+> I can't really apply this one currently, because it depends on the
+> wrapper stuff I believe. Indeed the TestRelro test fails to build with:
+>
+> /home/thomas/projets/outputs/TestRelro/host/opt/ext-toolchain/bin/../lib/gcc/powerpc64-buildroot-linux-gnu/6.4.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: -r and -pie may not be used together
+> collect2: error: ld returned 1 exit status
+> make[3]: *** [scripts/Makefile.build:264: applets/built-in.o] Error 1
+> make[2]: *** [Makefile:372: applets_dir] Error 2
+> make[1]: *** [package/pkg-generic.mk:232: /home/thomas/projets/outputs/TestRelro/build/busybox-1.29.1/.stamp_built]
+> Error 2
 
-You posted this patch on April 27, and got some review on May 1 from
-Romain, but never replied. I am marking this patch as Changes
-Requested. Could you send an updated version when you have some time ?
+Ah true, I removed busybox from the elf files I test but didn't set
+the build configuration to not build busybox.  It's probably not worth
+the time to fix this patch and instead to get the wrapper complete.
+I'll continue on the wrapper tonight and see where I get.
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matt
