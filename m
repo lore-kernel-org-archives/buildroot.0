@@ -1,38 +1,74 @@
-From: Keith Mok <ek9852@gmail.com>
-Date: Mon, 20 Aug 2018 18:29:20 -0700
-Subject: [Buildroot] [PATCH 1/1] systemd: add optional dependency on elfutils
-Message-ID: <20180821012920.91804-1-ek9852@gmail.com>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Tue, 21 Aug 2018 13:20:06 +1000
+Subject: [Buildroot] [PATCH v4] busybox: Update udhcpc.script for
+ stateful DHCPv6
+In-Reply-To: <20180726013919.31268-1-sam@mendozajonas.com>
+References: <20180726013919.31268-1-sam@mendozajonas.com>
+Message-ID: <abe85708486429bcf5e46a41bc221f244fd7c81e.camel@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-systemd can use elfutils when available, so this commit adds the
-detection of this library.
+On Thu, 2018-07-26 at 11:39 +1000, Samuel Mendoza-Jonas wrote:
+> udhcpc6 will call the default script with the address set in the "ipv6"
+> variable. Set "ip" to this address if present.
+> 
+> udhcpc6 implements "stateful" DHCPv6 for explicitly requesting an address
+> and other configuration information. A major difference between DHCPv4
+> and DHCPv6 is that DHCPv6 does *not* advertise a default route; this is
+> determined by normal IPv6 autoconfiguration.
+> Included is a change from Rob, which if handling a DHCPv6 address waits
+> a moment for the IPv6 route to be configured; as above this doesn't come
+> from DHCPv6 but rather the IPv6 Router Advertisement (RA) which happens
+> independently from udhcpc6. The intent here is to try and ensure that
+> the interface is route-able upon the script's completion as it would be
+> if called from udhcpc.
+> 
+> (wait for IPv6 route)
+> From: Robert Lippert <rlippert@google.com>
+> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+> ---
+> v4: Expand description of stateful DHCPv6 in commit message
+> v3: Point out 'stateful' DHCPv6 in commit, send to the correct list...
+> v2: Avoid bashisms
 
-Signed-off-by: Keith Mok <ek9852@gmail.com>
----
- package/systemd/systemd.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Hi all, any more thoughts on this?
 
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index d7031ed21d..4813496670 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -65,6 +65,13 @@ else
- SYSTEMD_CONF_OPTS += -Daudit=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_ELFUTILS),y)
-+SYSTEMD_DEPENDENCIES += elfutils
-+SYSTEMD_CONF_OPTS += -Delfutils=true
-+else
-+SYSTEMD_CONF_OPTS += -Delfutils=false
-+endif
-+
- # Both options can't be selected at the same time so prefer libidn2
- ifeq ($(BR2_PACKAGE_LIBIDN2),y)
- SYSTEMD_DEPENDENCIES += libidn2
--- 
-2.15.2 (Apple Git-101.1)
+> 
+>  package/busybox/udhcpc.script | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+> index ad110d3a7f..65114b6cd0 100755
+> --- a/package/busybox/udhcpc.script
+> +++ b/package/busybox/udhcpc.script
+> @@ -8,6 +8,16 @@ RESOLV_CONF="/etc/resolv.conf"
+>  [ -e $RESOLV_CONF ] || touch $RESOLV_CONF
+>  [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
+>  [ -n "$subnet" ] && NETMASK="netmask $subnet"
+> +[ -n "$ipv6" ] && ip="$ipv6/128"
+> +
+> +wait_for_ipv6_default_route() {
+> +	attempts=10
+> +	while [ $attempts != 0 ] && [ -z "$(ip -6 route list | grep default)" ] ; do
+> +		sleep 1
+> +		attempts=$(($attempts-1))
+> +	done
+> +	[ $attempts = 0 ] && echo "failed to get default ipv6 route"
+> +}
+>  
+>  case "$1" in
+>  	deconfig)
+> @@ -37,6 +47,10 @@ case "$1" in
+>  			/usr/sbin/avahi-autoipd -k $interface
+>  		fi
+>  		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
+> +		if [ -n "$ipv6" ] ; then
+> +			echo "waiting for default ipv6 route set"
+> +			wait_for_ipv6_default_route
+> +		fi
+>  
+>  		if [ -n "$router" ] ; then
+>  			echo "deleting routers"
