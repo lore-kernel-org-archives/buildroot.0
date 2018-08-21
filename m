@@ -1,70 +1,56 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 21 Aug 2018 11:09:59 +0200
-Subject: [Buildroot] [PATCH v5 3/3] uboot: zynqmp: allow to use custom
- psu_init files
-In-Reply-To: <20180728193952.7094d45b@windsurf>
-References: <20180725143538.25268-1-luca@lucaceresoli.net>
- <20180725143538.25268-4-luca@lucaceresoli.net>
- <20180728193952.7094d45b@windsurf>
-Message-ID: <27b5ca04-bf4a-302a-a96f-114d464b6b07@lucaceresoli.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 21 Aug 2018 09:10:19 +0000
+Subject: [Buildroot] [Bug 11251] Util scanpypi failes when package change -
+ to _ in tar file (Trunk)
+In-Reply-To: <bug-11251-163@https.bugs.busybox.net/>
+References: <bug-11251-163@https.bugs.busybox.net/>
+Message-ID: <bug-11251-163-641pONon6s@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=11251
 
-On 28/07/2018 19:39, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 25 Jul 2018 16:35:38 +0200, Luca Ceresoli wrote:
-> 
->> +config BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE
->> +	string "Custom psu_init_gpl file"
->> +	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
->> +	help
->> +	  On ZynqMP the booloader is responsible for some basic
->> +	  initializations, such as enabling peripherals and
->> +	  configuring pinmuxes. The psu_init_gpl.c file (and,
->> +	  optionally, psu_init_gpl.h) contains the code for such
->> +	  initializations.
->> +
->> +	  Although U-Boot contains psu_init_gpl.c files for some
->> +	  boards, each of them describes only one specific
->> +	  configuration. Users of a different board, or needing a
->> +	  different configuration, can generate custom files using the
->> +	  Xilinx development tools.
->> +
->> +	  Set this variable to the path to your psu_init_gpl.c file
->> +	  (e.g. "board/myboard/psu_init_gpl.c"). psu_init_gpl.h, if
->> +	  needed, should be in the same directory. U-Boot will build
->> +	  and link the user-provided file instead of the built-in one.
->> +
->> +	  Leave empty to use the files provided by U-Boot.
-> 
-> I've also added a comment here that explains which U-Boot upstream
-> commit is necessary for this feature to work.
-> 
->> +UBOOT_ZYNQMP_PSU_INIT = $(call qstrip,$(BR2_TARGET_UBOOT_ZYNQMP_PSU_INIT_FILE))
->> +
->> +ifneq ($(UBOOT_ZYNQMP_PSU_INIT),)
->> +define UBOOT_ZYNQMP_KCONFIG_PSU_INIT
->> +	$(call KCONFIG_SET_OPT,CONFIG_XILINX_PS_INIT_FILE,"$(shell readlink -f $(UBOOT_ZYNQMP_PSU_INIT))", \
->> +           $(@D)/.config)
->> +endef
->> +endif
-> 
-> To be "consistent" with what I did for the PMU firmware, I introduced
-> an intermediate UBOOT_ZYNQMP_PSU_INIT_PATH variable.
-> 
-> Applied with those changes. Please don't hesitate to verify the
-> resulting commits to make sure I didn't screw up anything.
+--- Comment #2 from mzweerspenko+bugzilla at gmail.com ---
+Ok. My end goal was to add socketio-client-nexus. I got the error when scanpypi
+is resolving dependencies. I tried to keep my bug report as small as possible.
 
-Just build- and run-time tested, it works fine.
+I have made workaround. But python is new to me. 
 
-Thank you for the cleanups!
 
-Bye,
+    def load_setup(self):
+        """
+        Loads the corresponding setup and store its metadata
+        """
+        current_dir = os.getcwd()
+        self.tmp_extract =
+os.path.join(os.path.dirname(self.tmp_extract),self.filename.split(".tar")[0])
+        #print("MGZ: {0} {1}".format(self.tmp_extract,extract_dir))
+        os.chdir(self.tmp_extract)
+        sys.path.append(self.tmp_extract)
+        s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
+        setup = imp.load_module('setup', s_file, s_path, s_desc)
+        try:
+            self.setup_metadata = self.setup_args[self.metadata_name]
+        except KeyError:
+            # This means setup was not called which most likely mean that it is
+            # called through the if __name__ == '__main__' directive.
+            # In this case, we can only pray that it is called through a
+            # function called main() in setup.py.
+            setup.main()  # Will raise AttributeError if not found
+            self.setup_metadata = self.setup_args[self.metadata_name]
+        # Here we must remove the module the hard way.
+        # We must do this because of a very specific case: if a package calls
+        # setup from the __main__ but does not come with a 'main()' function,
+        # for some reason setup.main() will successfully call the main
+        # function of a previous package...
+        sys.modules.pop('setup', None)
+        del setup
+        os.chdir(current_dir)
+        sys.path.remove(self.tmp_extract)
+
 -- 
-Luca
+You are receiving this mail because:
+You are on the CC list for the bug.
