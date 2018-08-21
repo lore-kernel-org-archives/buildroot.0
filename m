@@ -1,71 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Aug 2018 23:25:47 +0200
-Subject: [Buildroot] [PATCH v3,1/1] boost: context needs C++11
-Message-ID: <20180821212547.14690-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Aug 2018 23:22:11 +0200
+Subject: [Buildroot] [git commit branch/next] btrfs-progs: add host package
+ variant
+Message-ID: <20180821211855.5F5E98E20F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without std=c++11, mutex is not always correctly detected with gcc 4.7,
-4.8 or even 5.x. As a result, boost_thread is wrongly selected by
-boost_context.
+commit: https://git.buildroot.net/buildroot/commit/?id=ed69859a7261ee86e71aa666d30a28e374769e15
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-mutex is available on gcc 4.7.x, the issue is that boost does not
-correctly detect it because -std=c++11 was missing.
-Keep thread select for gcc version lower or equal to 4.6. mutex is
-available since gcc 4.4 (with std=c++0x) but common buildroot practice
-for C++11 packages is to have a dependency on gcc 4.7, 4.8 or 4.9
-depending on the requested C++11 features.
+This adds a new option to build the btrfs toolset for the host, which
+can be useful to prepare a btrfs filesystem image for the target.
 
-Fixes:
- - http://autobuild.buildroot.net/results/fb046c04fe18bec973d120e4ab33971f32ba5769
- - http://autobuild.buildroot.net/results/99f1a255b78a973faeb8bf3b94d78efc54426a8b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Robert J. Heywood <robert.heywood@codethink.co.uk>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v2 -> v3 (after review of Thomas Petazzoni):
- - Merge both patches
- - Update commit message
+ package/Config.in.host             | 1 +
+ package/btrfs-progs/Config.in.host | 6 ++++++
+ package/btrfs-progs/btrfs-progs.mk | 4 ++++
+ 3 files changed, 11 insertions(+)
 
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Update first patch to keep selection of boost-thread but lower gcc
-   version from 4.8 to 4.7
- - Update second patch to add -std=c++11 only if gcc >= 4.7
-
- package/boost/Config.in | 2 +-
- package/boost/boost.mk  | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 965d198ebf..627cf2f356 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -83,7 +83,7 @@ config BR2_PACKAGE_BOOST_CONTEXT
- 	bool "boost-context"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 	help
- 	  C++11 context switching library.
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 0c21b11bd0..a3f852b3fc 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -2,6 +2,7 @@ menu "Host utilities"
  
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 14f6162003..f4a44fa123 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -61,6 +61,11 @@ else
- BOOST_FLAGS += --without-icu
- endif
- 
-+# boost-context needs C++11
-+ifeq ($(BR2_PACKAGE_BOOST_CONTEXT)$(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),yy)
-+BOOST_TARGET_CXXFLAGS += -std=c++11
-+endif
+ 	source "package/aespipe/Config.in.host"
+ 	source "package/android-tools/Config.in.host"
++	source "package/btrfs-progs/Config.in.host"
+ 	source "package/cargo/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+ 	source "package/checkpolicy/Config.in.host"
+diff --git a/package/btrfs-progs/Config.in.host b/package/btrfs-progs/Config.in.host
+new file mode 100644
+index 0000000000..cdcd2e4ec4
+--- /dev/null
++++ b/package/btrfs-progs/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_BTRFS_PROGS
++	bool "host btrfs-progs"
++	help
++	  Btrfs filesystem utilities
 +
- ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
- BOOST_DEPENDENCIES += bzip2 zlib
++	  https://btrfs.wiki.kernel.org/index.php/Main_Page
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index b4cc839352..3129ecc714 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -21,4 +21,8 @@ BTRFS_PROGS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
+ BTRFS_PROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
  endif
--- 
-2.14.1
+ 
++HOST_BTRFS_PROGS_DEPENDENCIES = host-e2fsprogs host-lzo host-zlib
++HOST_BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd --disable-python
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
