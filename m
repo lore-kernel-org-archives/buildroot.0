@@ -1,76 +1,61 @@
-From: Mikael Eliasson <mikael@robomagi.com>
-Date: Tue, 21 Aug 2018 22:20:32 +0200
-Subject: [Buildroot] [PATCH 1/1] libjwt: new package.
-In-Reply-To: <20180821195447.GO15347@scaer>
-References: <20180811202925.3547-1-mikael@robomagi.com>
- <20180812143902.5dde6618@windsurf>
- <CAMKz0Yp_0Ccwey=qKoRHFdNf55OL=ZA2GuuCA+SoBaAPNFbzuA@mail.gmail.com>
- <20180812192554.GA29650@scaer>
- <CAMKz0YrmQvWT+uHRhg_mYF6SEOkPn2jKXEySToy60U-s=rd7Cw@mail.gmail.com>
- <20180821195447.GO15347@scaer>
-Message-ID: <CAMKz0YoE0s8nNMoxy2-iHLeBKPkNOt7rGBq3gg4B8mxt_QQ5SA@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 21 Aug 2018 22:32:55 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/vlc: skins2 depends on qt5base
+Message-ID: <20180821203255.6527-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes
 
-2018-08-21 21:54 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+configure: error: The skins2 module depends on the Qt interface. Without
+it you will not be able to open any dialog box from the interface, which
+makes the skins2 interface rather useless. Install the Qt development
+package or alternatively you can also configure with: --disable-qt
+--disable-skins2.
 
-> Mikael, All,
->
-> On 2018-08-21 20:34 +0200, Mikael Eliasson spake thusly:
-> > Is there anything else you need me to do to include this package? I
-> > cannot see that it has been added in github yet.
->
-> Don;t worry, it is not lost, but:
->
->  1. There are currently 197 patches pending:
->         https://patchwork.ozlabs.org/project/buildroot/list/
->
->  2. We are in feature-freeze for the release scheduled by the end of the
->     month.
->
->  3. The Github repository is not the official tree; it is only a mirror.
->     The official tree is: https://git.buildroot.org/buildroot/
+http://autobuild.buildroot.net/results/ddb/ddb1ab48adb9705c44ed3d6d800b6d01ad52ac8c/
 
-OK. Just wanted to know if it was worth putting in the effort on the next
-patch I'm working on.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/vlc/vlc.mk | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
->
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.-
-> -------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
-> '------------------------------^-------^------------------^-
-> -------------------'
->
-
-/Thanks
-Mikael
-
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index c77c945a34..b69657d31f 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -473,8 +473,14 @@ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS)$(BR2_PACKAGE_QT5SVG),yy)
+ VLC_CONF_OPTS += --enable-qt
+ VLC_DEPENDENCIES += qt5base qt5svg
++ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
++VLC_CONF_OPTS += --enable-skins2
++VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
+ else
+-VLC_CONF_OPTS += --disable-qt
++VLC_CONF_OPTS += --disable-skins2
++endif
++else
++VLC_CONF_OPTS += --disable-qt --disable-skins2
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SDL_IMAGE),y)
+@@ -551,13 +557,6 @@ else
+ VLC_CONF_OPTS += --without-x
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
+-VLC_CONF_OPTS += --enable-skins2
+-VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
+-else
+-VLC_CONF_OPTS += --disable-skins2
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ VLC_DEPENDENCIES += zlib
+ endif
 -- 
-Mikael Eliasson
-Telefon:
-+46703900837
-Email:
-mikael at robomagi.com
-Adress:
-Robomagi AB
-T?ngringsgatan 26A 78430 Borl?nge
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/8d00b3cb/attachment.html>
+2.18.0
