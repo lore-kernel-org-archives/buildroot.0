@@ -1,48 +1,139 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 12:14:58 +0200
-Subject: [Buildroot] [PATCH] support/scripts/check-uniq-files: run with
- Python 2.6
-In-Reply-To: <33f2f5c9d9cdbb320e52.1532112144@cveaol6qa08.wv.mentorg.com>
-References: <33f2f5c9d9cdbb320e52.1532112144@cveaol6qa08.wv.mentorg.com>
-Message-ID: <20180821121458.69683413@windsurf>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Tue, 21 Aug 2018 12:06:46 +0100
+Subject: [Buildroot] [PATCH 1/1] Add support for building toolchains against
+ custom kernel headers.
+Message-ID: <20180821110646.5671-1-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Hollis,
+Allows the selection of a manual version, custom tarball or custom
+git repository for the toolchain kernel headers. This enables
+toolchains to be built against custom kernel headers without having
+to build a full kernel.
 
-On Fri, 20 Jul 2018 11:42:24 -0700, Hollis Blanchard wrote:
-> Support Python 2.6 by switching from argparse (introduced in Python 2.7) to
-> optparse. Python 2.6 is the version of Python in RHEL6.5.
-> 
-> optparse was deprecated in 2.7, but is still usable, so the script now runs in
-> more environments.
-> 
-> Backports of argparse to 2.6 are available, but can be impractical to require
-> on all hosts (e.g. hosts belonging to end-users who are unfamiliar with Python
-> package management, corporate-managed build hosts where installing packages is
-> difficult or impossible).
-> 
-> Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+---
+ package/linux-headers/Config.in.host   | 48 +++++++++++++++++++++++++-
+ package/linux-headers/linux-headers.mk | 18 +++++++---
+ 2 files changed, 61 insertions(+), 5 deletions(-)
 
-We had a bit of discussion about this on IRC today, and both Yann's
-feeling and mine is that optparse is long deprecated (since Python
-2.7), so it is really annoying to keep using it just for the sake of
-Python 2.6 users.
-
-Python 2.6 users can simply install the argparse module as a third
-party module, and use Buildroot. I think it's a reasonable trade-off
-between using modern APIs and keeping compatibility with older build
-systems.
-
-So I've marked this patch as Rejected in patchwork. Sorry :-/
-
-Best regards,
-
-Thomas
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 783cc7ea3a..df2e2263c4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -77,6 +77,31 @@ config BR2_KERNEL_HEADERS_4_17
+ 
+ config BR2_KERNEL_HEADERS_VERSION
+ 	bool "Manually specified Linux version"
++	help
++	  This option allows you to use a specific official version from
++	  kernel.org, like 2.6.x, 2.6.x.y, 3.x.y, ...
++
++	  Note: you cannot use this option to select a _longterm_ 2.6
++	  kernel, because these kernels are not located at the standard
++	  URL at kernel.org. Instead, select "Custom tarball" and
++	  specify the right URL directly.
++
++config BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++	bool "Custom tarball"
++	help
++	  This option allows you to specify a URL pointing to a kernel
++	  source tarball. This URL can use any protocol recognized by
++	  Buildroot, like http://, ftp://, file:// or scp://.
++
++	  When pointing to a local tarball using file://, you may want
++	  to use a make variable like $(TOPDIR) to reference the root of
++	  the Buildroot tree.
++
++config BR2_KERNEL_HEADERS_CUSTOM_GIT
++	bool "Custom Git repository"
++	help
++	  This option allows Buildroot to get the Linux kernel source
++	  code from a Git repository.
+ 
+ endchoice
+ 
+@@ -87,9 +112,27 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 	  Specify the version you want to use.
+ 	  E.G.: 3.6.10
+ 
++config BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION
++	string "URL of custom kernel tarball"
++	depends on BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++
++if BR2_KERNEL_HEADERS_CUSTOM_GIT
++
++config BR2_KERNEL_HEADERS_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by
++	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
++
++endif
++
+ choice
+ 	bool "Custom kernel headers series"
+-	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL
++	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
++		   BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
+ 	help
+ 	  Specify the kernel headers series you manually selected,
+ 	  above.
+@@ -269,3 +312,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+ 	default "4.17.17"	if BR2_KERNEL_HEADERS_4_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
++	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++		if BR2_KERNEL_HEADERS_CUSTOM_GIT
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 954c6b7978..3c2509e249 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -64,8 +64,18 @@ endef
+ 
+ LINUX_HEADERS_POST_PATCH_HOOKS += LINUX_HEADERS_APPLY_LOCAL_PATCHES
+ 
+-else # ! BR2_KERNEL_HEADERS_AS_KERNEL
+-
++else ifeq ($(BR2_KERNEL_HEADERS_CUSTOM_TARBALL),y)
++LINUX_HEADERS_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION))
++LINUX_HEADERS_SITE = $(patsubst %/,%,$(dir $(LINUX_HEADERS_TARBALL)))
++LINUX_HEADERS_SOURCE = $(notdir $(LINUX_HEADERS_TARBALL))
++BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
++else ifeq ($(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
++LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
++LINUX_HEADERS_SITE = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_REPO_URL))
++LINUX_HEADERS_SITE_METHOD = git
++LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
++BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
++else
+ LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
+ ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
+ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
+@@ -80,7 +90,7 @@ ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)
+ BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
+ endif
+ 
+-endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
++endif
+ 
+ # linux-headers really is the same as the linux package
+ LINUX_HEADERS_DL_SUBDIR = linux
+@@ -125,7 +135,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+ 			headers_install)
+ endef
+ 
+-ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
++ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
+ define LINUX_HEADERS_CHECK_VERSION
+ 	$(call check_kernel_headers_version,\
+ 		$(STAGING_DIR),\
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
