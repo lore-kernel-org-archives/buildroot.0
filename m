@@ -1,162 +1,65 @@
-From: Mikael Eliasson <mikael@robomagi.com>
-Date: Tue, 21 Aug 2018 20:34:34 +0200
-Subject: [Buildroot] [PATCH 1/1] libjwt: new package.
-In-Reply-To: <20180812192554.GA29650@scaer>
-References: <20180811202925.3547-1-mikael@robomagi.com>
- <20180812143902.5dde6618@windsurf>
- <CAMKz0Yp_0Ccwey=qKoRHFdNf55OL=ZA2GuuCA+SoBaAPNFbzuA@mail.gmail.com>
- <20180812192554.GA29650@scaer>
-Message-ID: <CAMKz0YrmQvWT+uHRhg_mYF6SEOkPn2jKXEySToy60U-s=rd7Cw@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 21 Aug 2018 20:52:45 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/luvi: bump version to 2.8.0
+In-Reply-To: <20180819120219.28721-1-bernd.kuhls@t-online.de>
+References: <20180819120219.28721-1-bernd.kuhls@t-online.de>
+Message-ID: <3c2105ff5b2fb60820f63e1d7851ddda2ec48355.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-2018-08-12 21:25 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
+Hi Bernd,
 
-> Mickael, All,
->
-> On 2018-08-12 18:08 +0200, Mikael Eliasson spake thusly:
-> > Hi Thomas,
-> > Not used to using mailing lists so this may not be the correct way to
-> send a follow up patch. It is attached.
->
-> Just send it again with git send-email.
->
-> Also, it is customary to not top-post like you did, but to reply in-line
-> (like I'm doing).
->
-> > I think I have made all the changes you requested. I had also missed
-> including package/Config.in.
-> > Tested with test-pkg -a:
-> > 47 builds, 0 skipped, 0 build failed, 0 legal-info failed
->
-> Great! :-)
->
-> Yet, I have a very small comment, see below...
->
-> [--SNIP--]
-> > diff --git a/package/libjwt/0001-Declare-project-C-only.patch
-> b/package/libjwt/0001-Declare-project-C-only.patch
-> > new file mode 100644
-> > index 0000000000..cfb3cc8425
-> > --- /dev/null
-> > +++ b/package/libjwt/0001-Declare-project-C-only.patch
-> > @@ -0,0 +1,16 @@
-> > +Declares project C only.
-> > +
-> > +Signed-off-by: Mikael Eliasson <mikael@robomagi.com>
-> > +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> > +index 5cd1910..aefb87d 100644
-> > +--- a/CMakeLists.txt
-> > ++++ b/CMakeLists.txt
-> > +@@ -4,7 +4,7 @@ if (MSVC)
-> > +     set (CMAKE_SYSTEM_VERSION 8.1 CACHE TYPE INTERNAL FORCE)
-> > + endif ()
-> > +
-> > +-project (jwt)
-> > ++project (jwt C)
->
-> It would be great if you were to send this change upstream, so that we
-> can drop this patch next time we update the package.
->
-> > + list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-> > +
-> [--SNIP--]
-> > diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
-> > new file mode 100644
-> > index 0000000000..8863fb436a
-> > --- /dev/null
-> > +++ b/package/libjwt/libjwt.mk
-> > @@ -0,0 +1,21 @@
-> > +###########################################################
-> #####################
-> > +#
-> > +# libjwt
-> > +#
-> > +###########################################################
-> #####################
-> > +
-> > +LIBJWT_VERSION = v1.9.0
-> > +LIBJWT_SITE = $(call github,benmcollins,libjwt,$(LIBJWT_VERSION))
-> > +LIBJWT_INSTALL_STAGING = YES
-> > +LIBJWT_DEPENDENCIES = jansson
-> > +LIBJWT_LICENSE = LGPL-3.0
-> > +LIBJWT_LICENSE_FILES = COPYING.LIB
->
-> I know there is no strongly documented ordering, but I like that the
-> descriptive metadata goes first, while the building metadata goes last,
-> with adequate spacing to separate the types of data, like so:
->
->     LIBJWT_VERSION = v1.9.0
->     LIBJWT_SITE = $(call github,benmcollins,libjwt,$(LIBJWT_VERSION))
->     LIBJWT_LICENSE = LGPL-3.0
->     LIBJWT_LICENSE_FILES = COPYING.LIB
->
->     LIBJWT_DEPENDENCIES = jansson
->
->     LIBJWT_INSTALL_STAGING = YES
->
-> It kind of follows some "logic": where to get it, what itslicensing is,
-> what it needs, what it provides, how we build it.
->
-> No need to re-send. If a maintainer agrees, he can re-reorder when
-> applying, or he can just apply it as-is if he believes that is OK as-is.
->
-Is there anything else you need me to do to include this package? I cannot
-see that it has been added in github yet.
+On Sun, 2018-08-19 at 14:02 +0200, Bernd Kuhls wrote:
+> Upstream does not provide a tarball including all submodules so we need
+> to checkout the git repo including the submodules ourselves.
+> 
+> Added license hash.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  package/luvi/luvi.hash | 3 ++-
+>  package/luvi/luvi.mk   | 7 ++++---
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+> index e2239b6171..d5716e0036 100644
+> --- a/package/luvi/luvi.hash
+> +++ b/package/luvi/luvi.hash
+> @@ -1,2 +1,3 @@
+>  # Locally calculated
+> -sha256  ce9a1fb762e61267618ddea9ea129170fd543bb918c382b71cb35985d0024c42  luvi-src-v2.7.6.tar.gz
+> +sha256 a18e138c7032ef8406fef6e2135a61fad713861742512f2073adc0b4ab6d8f8b  luvi-v2.8.0.tar.gz
+> +sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+> diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+> index a2bc218e77..8b3b7659b0 100644
+> --- a/package/luvi/luvi.mk
+> +++ b/package/luvi/luvi.mk
+> @@ -4,9 +4,10 @@
+>  #
+>  ################################################################################
+>  
+> -LUVI_VERSION = v2.7.6
+> -LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
+> -LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
+> +LUVI_VERSION = v2.8.0
+> +LUVI_SITE = https://github.com/luvit/luvi.git
+> +LUVI_SITE_METHOD = git
+> +LUVI_GIT_SUBMODULES = YES
+>  LUVI_LICENSE = Apache-2.0
+>  LUVI_LICENSE_FILES = LICENSE.txt
+>  LUVI_DEPENDENCIES = libuv luajit luv host-luajit
 
+I am not so happy about the version bump as version 2.8.0 does only
+updates the projects submodules, which we are not using at all.
+Instead, we always build luvi with dependencies provided as packages in
+Buildroot.
 
->
-> Regards,
-> Yann E. MORIN.
->
-> > +ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> > +LIBJWT_DEPENDENCIES += openssl
-> > +else
-> > +LIBJWT_DEPENDENCIES += gnutls
-> > +LIBJWT_CONF_OPTS += -DWITHOUT_OPENSSL=1
-> > +endif
-> > +
-> > +$(eval $(cmake-package))
-> > --
-> > 2.17.1
-> >
->
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
->
-> --
-> .-----------------.--------------------.------------------.-
-> -------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
-> '------------------------------^-------^------------------^-
-> -------------------'
->
+Bumping to version 2.8.0 has the drawback that fetching the package
+needs much longer now due to the git submodules than fetching the
+tarball and building against the packages provided by Buildroot.
 
-
-
--- 
-Mikael Eliasson
-Telefon:
-+46703900837
-Email:
-mikael at robomagi.com
-Adress:
-Robomagi AB
-T?ngringsgatan 26A 78430 Borl?nge
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/92ed0ce2/attachment.html>
+Best regards,
+J?rg Krause
