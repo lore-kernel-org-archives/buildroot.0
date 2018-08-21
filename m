@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
-Date: Tue, 21 Aug 2018 08:35:52 +0200
-Subject: [Buildroot] [PATCH 06/18] perl-sys-cpu: new package
-In-Reply-To: <20180820115519.24046-7-chrismcc@gmail.com>
+Date: Tue, 21 Aug 2018 08:40:03 +0200
+Subject: [Buildroot] [PATCH 07/18] perl-dist-checkconflicts: new package
+In-Reply-To: <20180820115519.24046-8-chrismcc@gmail.com>
 References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820115519.24046-7-chrismcc@gmail.com>
-Message-ID: <CAGhdn56NEiorxp+spyYFD3iEf__eu+-2dwffiU1Li3ewgsXr3w@mail.gmail.com>
+ <20180820115519.24046-8-chrismcc@gmail.com>
+Message-ID: <CAGhdn56j2JRW5TuY2t5EyttHPg4c3iufh_WM9HmRKh6wpzYbOw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,84 +18,95 @@ To: buildroot@busybox.net
 
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
-
-> ---
->  DEVELOPERS                             |  1 +
->  package/Config.in                      |  1 +
->  package/perl-sys-cpu/Config.in         |  5 +++++
->  package/perl-sys-cpu/perl-sys-cpu.hash |  2 ++
->  package/perl-sys-cpu/perl-sys-cpu.mk   | 13 +++++++++++++
->  5 files changed, 22 insertions(+)
->  create mode 100644 package/perl-sys-cpu/Config.in
->  create mode 100644 package/perl-sys-cpu/perl-sys-cpu.hash
->  create mode 100644 package/perl-sys-cpu/perl-sys-cpu.mk
+---
+>  DEVELOPERS                                                 |  1 +
+>  package/Config.in                                          |  1 +
+>  package/perl-dist-checkconflicts/Config.in                 |  7 +++++++
+>  .../perl-dist-checkconflicts/perl-dist-checkconflicts.hash |  6 ++++++
+>  .../perl-dist-checkconflicts/perl-dist-checkconflicts.mk   | 14
+> ++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/perl-dist-checkconflicts/Config.in
+>  create mode 100644 package/perl-dist-checkconflicts/perl-dist-
+> checkconflicts.hash
+>  create mode 100644 package/perl-dist-checkconflicts/perl-dist-
+> checkconflicts.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 410d01b02b..70879360f2 100644
+> index 70879360f2..0d20a77c6b 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -503,6 +503,7 @@ F:  package/perl-module-runtime/
->  F:     package/perl-number-bytes-human/
->  F:     package/perl-params-util/
->  F:     package/perl-sub-install/
-> +F:     package/perl-sys-cpu/
->  F:     package/perl-sys-meminfo/
->  F:     package/perl-sys-mmap/
->  F:     package/perl-time-parsedate/
+> @@ -493,6 +493,7 @@ F:  package/perl-date-manip/
+>  F:     package/perl-dbd-mysql/
+>  F:     package/perl-dbi/
+>  F:     package/perl-device-serialport/
+> +F:     package/perl-dist-checkconflicts/
+>  F:     package/perl-file-slurp/
+>  F:     package/perl-io-interface/
+>  F:     package/perl-io-socket-multicast/
 > diff --git a/package/Config.in b/package/Config.in
-> index c083f4e1bd..fcb67b7617 100644
+> index fcb67b7617..966748fc95 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -729,6 +729,7 @@ menu "Perl libraries/modules"
->         source "package/perl-params-util/Config.in"
->         source "package/perl-path-tiny/Config.in"
->         source "package/perl-sub-install/Config.in"
-> +       source "package/perl-sys-cpu/Config.in"
->         source "package/perl-sys-meminfo/Config.in"
->         source "package/perl-sys-mmap/Config.in"
->         source "package/perl-time-hires/Config.in"
-> diff --git a/package/perl-sys-cpu/Config.in b/package/perl-sys-cpu/Config.
-> in
+> @@ -685,6 +685,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-digest-hmac/Config.in"
+>         source "package/perl-digest-md5/Config.in"
+>         source "package/perl-digest-sha1/Config.in"
+> +       source "package/perl-dist-checkconflicts/Config.in"
+>         source "package/perl-encode-detect/Config.in"
+>         source "package/perl-encode-locale/Config.in"
+>         source "package/perl-file-listing/Config.in"
+> diff --git a/package/perl-dist-checkconflicts/Config.in
+> b/package/perl-dist-checkconflicts/Config.in
 > new file mode 100644
-> index 0000000000..d5fff5b849
+> index 0000000000..10f0944aa8
 > --- /dev/null
-> +++ b/package/perl-sys-cpu/Config.in
-> @@ -0,0 +1,5 @@
-> +config BR2_PACKAGE_PERL_SYS_CPU
-> +       bool "perl-sys-cpu"
+> +++ b/package/perl-dist-checkconflicts/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS
+> +       bool "perl-dist-checkconflicts"
+> +       select BR2_PACKAGE_PERL_MODULE_RUNTIME
 > +       help
-> +         perl-sys-cpu
+> +         declare version conflicts for your dist
 > +
-> diff --git a/package/perl-sys-cpu/perl-sys-cpu.hash
-> b/package/perl-sys-cpu/perl-sys-cpu.hash
+> +         http://metacpan.org/release/Dist-CheckConflicts
+> diff --git a/package/perl-dist-checkconflicts/perl-dist-checkconflicts.hash
+> b/package/perl-dist-checkconflicts/perl-dist-checkconflicts.hash
 > new file mode 100644
-> index 0000000000..0977606b1a
+> index 0000000000..5605fed4ae
 > --- /dev/null
-> +++ b/package/perl-sys-cpu/perl-sys-cpu.hash
-> @@ -0,0 +1,2 @@
-> +# locally computed
-> +sha256 ca0ec47ab24070e3040e5075337cfc69721362d9bef50f6992072efe644d4d26
-> Sys-CPU-0.52.tar.gz
-> diff --git a/package/perl-sys-cpu/perl-sys-cpu.mk b/package/perl-sys-cpu/
-> perl-sys-cpu.mk
+> +++ b/package/perl-dist-checkconflicts/perl-dist-checkconflicts.hash
+> @@ -0,0 +1,6 @@
+> +# retrieved by scancpan from http://cpan.metacpan.org/
+> +md5    c8725a92b9169708b0f63036812070f2 Dist-CheckConflicts-0.11.tar.gz
+> +sha256 ea844b9686c94d666d9d444321d764490b2cde2f985c4165b4c2c77665caedc4
+> Dist-CheckConflicts-0.11.tar.gz
+> +
+> +# computed by scancpan
+> +sha256 b4e0637ed96008ddcbf7e0ddeb73967df3d0b4dc62a6b7fdb86eac37018cb12e
+> LICENSE
+> diff --git a/package/perl-dist-checkconflicts/perl-dist-checkconflicts.mk
+> b/package/perl-dist-checkconflicts/perl-dist-checkconflicts.mk
 > new file mode 100644
-> index 0000000000..efc9ee814b
+> index 0000000000..4242b50ab2
 > --- /dev/null
-> +++ b/package/perl-sys-cpu/perl-sys-cpu.mk
-> @@ -0,0 +1,13 @@
+> +++ b/package/perl-dist-checkconflicts/perl-dist-checkconflicts.mk
+> @@ -0,0 +1,14 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-sys-cpu
+> +# perl-dist-checkconflicts
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_SYS_CPU_VERSION = 0.52
-> +PERL_SYS_CPU_SOURCE = Sys-CPU-$(PERL_SYS_CPU_VERSION).tar.gz
-> +PERL_SYS_CPU_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MK/MKODERER
-> +PERL_SYS_CPU_LICENSE = Artistic or GPL-1.0+ # as stated in README file
-> +PERL_SYS_CPU_LICENSE_FILES = README
+> +PERL_DIST_CHECKCONFLICTS_VERSION = 0.11
+> +PERL_DIST_CHECKCONFLICTS_SOURCE = Dist-CheckConflicts-$(PERL_
+> DIST_CHECKCONFLICTS_VERSION).tar.gz
+> +PERL_DIST_CHECKCONFLICTS_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY
+> +PERL_DIST_CHECKCONFLICTS_DEPENDENCIES = perl-module-runtime
+> +PERL_DIST_CHECKCONFLICTS_LICENSE = Artistic or GPL-1.0+
+> +PERL_DIST_CHECKCONFLICTS_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(perl-package))
 > --
@@ -108,4 +119,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/34f0c4d2/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/bbf2e148/attachment-0001.html>
