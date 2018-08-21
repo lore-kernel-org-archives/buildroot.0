@@ -1,11 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 22 Aug 2018 00:24:30 +0200
-Subject: [Buildroot] [PATCH] configs: solidrun_macchiatobin_marvell: fix
- u-boot build
-In-Reply-To: <20180816220045.0a74a6af@windsurf>
-References: <bc4ad6ef454508016634b1074fe83681946f4826.1534422853.git.baruch@tkos.co.il>
- <20180816220045.0a74a6af@windsurf>
-Message-ID: <6df7964c-0845-4619-4e5e-c79438986ad1@mind.be>
+Date: Wed, 22 Aug 2018 00:39:09 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: build default dtbs if no
+ specific source files given
+In-Reply-To: <0b7c3cae-e5e2-33a7-dd73-5f5d729cbab2@je-eigen-domein.nl>
+References: <1533313674-722-1-git-send-email-bos@je-eigen-domein.nl>
+ <20180816223444.41200c10@windsurf>
+ <0b7c3cae-e5e2-33a7-dd73-5f5d729cbab2@je-eigen-domein.nl>
+Message-ID: <38efc131-235a-e950-48be-cb97db1b6c63@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,47 +15,61 @@ To: buildroot@busybox.net
 
 
 
-On 16/08/2018 22:00, Thomas Petazzoni wrote:
-> Hello,
+On 16/08/2018 23:11, Floris Bos wrote:
+> Hi,
 > 
-> On Thu, 16 Aug 2018 15:34:13 +0300, Baruch Siach wrote:
->> U-Boot local libfdt headers conflict with host-dtc provided headers.
->> Disable host-dtc, and backport two upstream U-Boot patches to fix build
->> without external libfdt headers.
+> On 08/16/2018 10:34 PM, Thomas Petazzoni wrote:
+>> Hello Floris,
 >>
->> U-Boot build still fail when the host provides its own libfdt header
->> (e.g., Debian libfdt-dev package), or when BR2_PACKAGE_HOST_DTC is
->> enabled. Fixing that seems to require much more involved code changes.
->> Fix the common case for now.
+>> Thanks for this contribution. It definitely makes sense to support this.
 >>
->> Fixes partially:
->> https://gitlab.com/buildroot.org/buildroot/-/jobs/88314956
->>
->> Cc: Sergey Matyukevich <geomatsi@gmail.com>
->> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+>> On Fri,? 3 Aug 2018 18:27:54 +0200, Floris Bos wrote:
+>>> Currently if one wants to build dtbs, one has to specify which
+>>> dts source files to build exactly.
+>>> This is inconvenient, and some platforms use non-standard file
+>>> names that are currently not supported by buildroot.
+>>> (e.g. the overlay files in downstream Raspberry Pi kernel)
+>> Could you give some more specific example of those non-standard names ?
+>> Are we talking about .dtbo files ?
 > 
-> This issue is happening for 30-40 defconfigs. I don't think adding a
-> 4500 lines patch for each defconfig is really the right solution,
-> especially because it also doesn't fix the situation of someone
-> building U-Boot outside of a pre-existing defconfig.
+> Yes.
+> Name of source file doesn't match installed file.
+> 
+> overlays/dwc2-overlay.dts -> overlays/dwc2.dbto
+> 
+>> I see one problem with see: no all architecture that support building
+>> dtbs have the dtbs_install target.
+> 
+> Would consider that a bug in the architecture's Makefile.
 
- The problem is that building of U-Boot host tools is just broken between
-2017.03 (or maybe earlier) and 2018.03 (after commit b08c8c487083, which was
-triggered by a report from a certain Thomas Petazzoni).
+ powerpc is the oldest architecture using dtb, and it doesn't have it...
 
- I have experimented with changing the -isystem that we pass into HOSTCC with
-various other things, but nothing really works. I see no way to force the U-Boot
-build system to use its own libfdt.h and libfdt_env.h instead of the system- or
-buildroot-installed version.
+ The builddeb script has an explicit
+if grep -q dtbs_install "${srctree}/arch/$SRCARCH/Makefile"; then ...
 
- Something that _might_ work is to generate a libfdt.h and libfdt_env.h
-somewhere in the build directory, which contains nothing but
-#include "$(UBOOT_SRCDIR)/include/libfdt.h"
-and pass in -I to that directory in HOSTCC. That whole thing, of course, must be
-conditional on the existence of $(UBOOT_SRCDIR)/include/libfdt.h. Complicated...
+> 
+>> Can we install all *.dtb* for example ?
+> 
+> Don't think that will deal with the "-overlay" in my example.
+
+ Yes it will, because the binary to install will be called .dtbo so it matches
+the *.dtb* pattern.
 
  Regards,
  Arnout
+
+> 
+> 
+> 
+> Yours sincerely,
+> 
+> Floris Bos
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
 Arnout Vandecappelle                          arnout at mind be
 Senior Embedded Software Architect            +32-16-286500
