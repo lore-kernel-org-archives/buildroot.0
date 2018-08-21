@@ -1,139 +1,78 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Tue, 21 Aug 2018 12:06:46 +0100
-Subject: [Buildroot] [PATCH 1/1] Add support for building toolchains against
- custom kernel headers.
-Message-ID: <20180821110646.5671-1-mark.corbin@embecosm.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Aug 2018 12:27:44 +0200
+Subject: [Buildroot] [git commit] busybox: don't clobber dangling symlinks
+Message-ID: <20180821113358.CAC3B8E1BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allows the selection of a manual version, custom tarball or custom
-git repository for the toolchain kernel headers. This enables
-toolchains to be built against custom kernel headers without having
-to build a full kernel.
+commit: https://git.buildroot.net/buildroot/commit/?id=b1db9038ddaf89c4abf69e17993eb13646da7e8d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+We sometimes create dangling symlinks in the target directory. That is
+because we need canonical targets, as relative targets don't work well
+with BR2_ROOTFS_MERGED_USR. For example, the vim package installs the
+/bin/vi symlink to /usr/bin/vim. This symlink might be dangling when the
+build host has no vim installed there.
+
+Patch the busybox install.sh script to avoid clobber of dangling
+symlinks.
+
+Fixes:
+http://autobuild.buildroot.net/results/796/796107430db6545401d9926e84f19eaf2040b756/
+
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Carlos Santos <casantos@datacom.com.br>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-headers/Config.in.host   | 48 +++++++++++++++++++++++++-
- package/linux-headers/linux-headers.mk | 18 +++++++---
- 2 files changed, 61 insertions(+), 5 deletions(-)
+ ...nstall.sh-don-t-clobber-dangling-symlinks.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 783cc7ea3a..df2e2263c4 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -77,6 +77,31 @@ config BR2_KERNEL_HEADERS_4_17
- 
- config BR2_KERNEL_HEADERS_VERSION
- 	bool "Manually specified Linux version"
-+	help
-+	  This option allows you to use a specific official version from
-+	  kernel.org, like 2.6.x, 2.6.x.y, 3.x.y, ...
+diff --git a/package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch b/package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch
+new file mode 100644
+index 0000000000..b6fb5b9236
+--- /dev/null
++++ b/package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch
+@@ -0,0 +1,38 @@
++From c9f1a877f1b9e2602913600d769edb17ee41d15d Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Tue, 17 Jul 2018 13:18:09 +0300
++Subject: [PATCH] install.sh: don't clobber dangling symlinks
 +
-+	  Note: you cannot use this option to select a _longterm_ 2.6
-+	  kernel, because these kernels are not located at the standard
-+	  URL at kernel.org. Instead, select "Custom tarball" and
-+	  specify the right URL directly.
++Symlinks in a subdirectory that is to become target rootfs are sometimes
++dangling because they link to canonical file names that are not present
++on the host, but are present relative to the target rootfs root. Don't
++copy over dangling symlinks when noclobber is enabled
 +
-+config BR2_KERNEL_HEADERS_CUSTOM_TARBALL
-+	bool "Custom tarball"
-+	help
-+	  This option allows you to specify a URL pointing to a kernel
-+	  source tarball. This URL can use any protocol recognized by
-+	  Buildroot, like http://, ftp://, file:// or scp://.
++The -e test treats dangling symlinks as non-existent files. Add -h test
++that returns true for all symlinks.
 +
-+	  When pointing to a local tarball using file://, you may want
-+	  to use a make variable like $(TOPDIR) to reference the root of
-+	  the Buildroot tree.
++Cc: Yann E. MORIN <yann.morin.1998@free.fr>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: 
++http://lists.busybox.net/pipermail/busybox/2018-July/086555.html
 +
-+config BR2_KERNEL_HEADERS_CUSTOM_GIT
-+	bool "Custom Git repository"
-+	help
-+	  This option allows Buildroot to get the Linux kernel source
-+	  code from a Git repository.
- 
- endchoice
- 
-@@ -87,9 +112,27 @@ config BR2_DEFAULT_KERNEL_VERSION
- 	  Specify the version you want to use.
- 	  E.G.: 3.6.10
- 
-+config BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION
-+	string "URL of custom kernel tarball"
-+	depends on BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++ applets/install.sh | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+if BR2_KERNEL_HEADERS_CUSTOM_GIT
++diff --git a/applets/install.sh b/applets/install.sh
++index 9aede0f530e2..415896893e86 100755
++--- a/applets/install.sh
+++++ b/applets/install.sh
++@@ -83,7 +83,7 @@ install -m 755 busybox "$prefix/bin/busybox" || exit 1
++ for i in $h; do
++ 	appdir=`dirname "$i"`
++ 	app=`basename "$i"`
++-	if [ x"$noclobber" = x"1" ] && [ -e "$prefix/$i" ]; then
+++	if [ x"$noclobber" = x"1" ] && ([ -e "$prefix/$i" ] || [ -h "$prefix/$i" ]); then
++ 		echo "  $prefix/$i already exists"
++ 		continue
++ 	fi
++-- 
++2.18.0
 +
-+config BR2_KERNEL_HEADERS_CUSTOM_REPO_URL
-+	string "URL of custom repository"
-+
-+config BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION
-+	string "Custom repository version"
-+	help
-+	  Revision to use in the typical format used by
-+	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
-+
-+endif
-+
- choice
- 	bool "Custom kernel headers series"
--	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL
-+	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
-+		   BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
- 	help
- 	  Specify the kernel headers series you manually selected,
- 	  above.
-@@ -269,3 +312,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
- 	default "4.17.17"	if BR2_KERNEL_HEADERS_4_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
-+	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
-+	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-+		if BR2_KERNEL_HEADERS_CUSTOM_GIT
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 954c6b7978..3c2509e249 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -64,8 +64,18 @@ endef
- 
- LINUX_HEADERS_POST_PATCH_HOOKS += LINUX_HEADERS_APPLY_LOCAL_PATCHES
- 
--else # ! BR2_KERNEL_HEADERS_AS_KERNEL
--
-+else ifeq ($(BR2_KERNEL_HEADERS_CUSTOM_TARBALL),y)
-+LINUX_HEADERS_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION))
-+LINUX_HEADERS_SITE = $(patsubst %/,%,$(dir $(LINUX_HEADERS_TARBALL)))
-+LINUX_HEADERS_SOURCE = $(notdir $(LINUX_HEADERS_TARBALL))
-+BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
-+else ifeq ($(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
-+LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
-+LINUX_HEADERS_SITE = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_REPO_URL))
-+LINUX_HEADERS_SITE_METHOD = git
-+LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
-+BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
-+else
- LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
- ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
- LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
-@@ -80,7 +90,7 @@ ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)
- BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
- endif
- 
--endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
-+endif
- 
- # linux-headers really is the same as the linux package
- LINUX_HEADERS_DL_SUBDIR = linux
-@@ -125,7 +135,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
- 			headers_install)
- endef
- 
--ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
-+ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
- define LINUX_HEADERS_CHECK_VERSION
- 	$(call check_kernel_headers_version,\
- 		$(STAGING_DIR),\
--- 
-2.17.1
