@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 11:19:05 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/vlc: wayland support needs
- wayland-protocols
-In-Reply-To: <20180821050454.5793-1-bernd.kuhls@t-online.de>
-References: <20180821050454.5793-1-bernd.kuhls@t-online.de>
-Message-ID: <20180821111905.5ded85da@windsurf>
+Date: Tue, 21 Aug 2018 11:19:14 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libcpprestsdk: bump
+ version to 2.10.5
+In-Reply-To: <20180821055524.26377-1-bernd.kuhls@t-online.de>
+References: <20180821055524.26377-1-bernd.kuhls@t-online.de>
+Message-ID: <20180821111914.136bc17b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 21 Aug 2018 07:04:54 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/3db/3dbb17bc548aa7d5fecd857a9bbd761729d20d4f/
+On Tue, 21 Aug 2018 07:55:24 +0200, Bernd Kuhls wrote:
+> Removed patch applied upstream.
 > 
 > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/vlc/vlc.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  .../0002-fix-template-whitespace-syntax.patch | 75 -------------------
+>  package/libcpprestsdk/libcpprestsdk.hash      |  2 +-
+>  package/libcpprestsdk/libcpprestsdk.mk        |  2 +-
+>  3 files changed, 2 insertions(+), 77 deletions(-)
+>  delete mode 100644 package/libcpprestsdk/0002-fix-template-whitespace-syntax.patch
 
 Applied to next, thanks.
 
