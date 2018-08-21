@@ -1,50 +1,83 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Aug 2018 15:36:55 +0200
-Subject: [Buildroot] [PATCH 1/1] Add support for building toolchains
- against custom kernel headers.
-In-Reply-To: <da2cf4b2-2fdf-943e-3a7f-2cd6e89f0920@embecosm.com>
-References: <20180821110646.5671-1-mark.corbin@embecosm.com>
- <20180821140509.162e6c49@windsurf>
- <4f183641-61e2-37bb-d3af-3dfd002efbe9@embecosm.com>
- <20180821131105.GM15347@scaer>
- <da2cf4b2-2fdf-943e-3a7f-2cd6e89f0920@embecosm.com>
-Message-ID: <20180821133655.GN15347@scaer>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Tue, 21 Aug 2018 06:59:51 -0700
+Subject: [Buildroot] [PATCH v2 3/3] mariadb: bump version to 10.2.16
+In-Reply-To: <20180816232250.0e02d5fc@windsurf>
+References: <20180726163703.7598-1-bluemrp9@gmail.com>
+ <20180726163703.7598-3-bluemrp9@gmail.com> <20180816232250.0e02d5fc@windsurf>
+Message-ID: <d2ed2d47-33ae-1e39-5c66-b08d76913860@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark, All,
+Thomas,
 
-On 2018-08-21 14:28 +0100, Mark Corbin spake thusly:
-> On 21/08/18 14:11, Yann E. MORIN wrote:
-> > No, I'd prefer if we were to actualyl add a .hash file for linux-headers
-> > and for linux as well, btw, with the former being a symlink to the
-> > latter.
-> >
-> > So, when you respin, prepare a series that:
-> >
-> >  1. adds the help text alone,
-> >  2. adds a .hash for linux and a symlink to it from linux-headers
-> Does this need populating with just the hashes for the current 'default'
-> versions, i.e. 4.17.17, 4.16.18, 4.15.18, 4.14.65,...etc. or all
-> possible versions (!!!) from kernel.org?
 
-We indeed only want the ones we explicitly refer to from Config.in.
+On 8/16/2018 2:22 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Thu, 26 Jul 2018 09:37:03 -0700, Ryan Coe wrote:
+>> Release notes: https://mariadb.com/kb/en/mariadb-10216-release-notes/
+>> Changelog: https://mariadb.com/kb/en/mariadb-10216-changelog/
+>>
+>> Note that HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled has been changed to
+>> HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF in order to prevent the following
+>> configure error:
+>>
+>> CMake Error at /usr/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+>>    Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
+>>    (Required is at least version "3.3.24")
+>> Call Stack (most recent call first):
+>>    /usr/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+>>    /usr/share/cmake-3.11/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+>>    libmariadb/CMakeLists.txt:303 (FIND_PACKAGE)
+>>
+>> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> With this commit applied, the following defconfig fails to build:
+>
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2018.05.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_MYSQL=y
+> BR2_PACKAGE_MARIADB=y
+> BR2_PACKAGE_MARIADB_SERVER=y
+> # BR2_TARGET_ROOTFS_TAR is not set
+>
+> It fails with:
+>
+> /home/thomas/projets/buildroot/output/build/mariadb-10.2.16/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:327:38: error: field ?result? has incomplete type ?std::promise<rocksdb::BackupEngineImpl::CopyOrCreateResult>?
+>       std::promise<CopyOrCreateResult> result;
+>                                        ^
+> /home/thomas/projets/buildroot/output/build/mariadb-10.2.16/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:378:37: error: field ?result? has incomplete type ?std::future<rocksdb::BackupEngineImpl::CopyOrCreateResult>?
+>       std::future<CopyOrCreateResult> result;
+>                                       ^
+> /home/thomas/projets/buildroot/output/build/mariadb-10.2.16/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:425:37: error: field ?result? has incomplete type ?std::future<rocksdb::BackupEngineImpl::CopyOrCreateResult>?
+>       std::future<CopyOrCreateResult> result;
+>                                       ^
+> /home/thomas/projets/buildroot/output/build/mariadb-10.2.16/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc: In member function ?rocksdb::Status rocksdb::BackupEngineImpl::AddBackupFileWorkItem(std::unordered_set<std::basic_string<char> >&, std::vector<rocksdb::BackupEngineImpl::BackupAfterCopyOrCreateWorkItem>&, rocksdb::BackupID, bool, const string&, const string&, rocksdb::RateLimiter*, uint64_t, uint64_t, bool, std::function<void()>, const string&)?:
+> /home/thomas/projets/buildroot/output/build/mariadb-10.2.16/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:1366:38: error: aggregate ?std::promise<rocksdb::BackupEngineImpl::CopyOrCreateResult> promise_result? has incomplete type and cannot be defined
+>       std::promise<CopyOrCreateResult> promise_result;
+>                                        ^
+>
+> Could you have a look and send an updated patch ?
+>
+> Thanks!
+>
+> Thomas
 
-> I presume that custom versions will remain exempt via
-> 'BR_NO_CHECK_HASH_FOR' as originally intended?
+I have another patch ready.? I disabled building RocksDB to get rid of 
+the build error that was encountered.? Is that acceptable or should I 
+work on something else?? Thanks.
 
-Exactly, yes.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+-Ryan
