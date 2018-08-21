@@ -1,46 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 23:18:13 +0200
-Subject: [Buildroot] [git commit branch/next] configs/arm_juno: bump ATF to
- v1.3
-Message-ID: <20180821211047.E18C08E201@busybox.osuosl.org>
+Date: Tue, 21 Aug 2018 23:20:43 +0200
+Subject: [Buildroot] [PATCH v3] mariadb: bump version to 10.2.17
+In-Reply-To: <20180821155536.21178-1-bluemrp9@gmail.com>
+References: <20180821155536.21178-1-bluemrp9@gmail.com>
+Message-ID: <20180821232043.6320d87b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ddc039d0c044b3e574390ba27eb06ed0e845d2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-ATF in version 1.2 fails to build with:
+On Tue, 21 Aug 2018 08:55:36 -0700, Ryan Coe wrote:
+> Release notes: https://mariadb.com/kb/en/mariadb-10217-release-notes/
+> Changelog: https://mariadb.com/kb/en/mariadb-10217-changelog/
+> 
+> Note that HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled has been changed to
+> HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF in order to prevent the following
+> configure error:
+> 
+> CMake Error at /usr/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+>   Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
+>   (Required is at least version "3.3.24")
+> Call Stack (most recent call first):
+>   /usr/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+>   /usr/share/cmake-3.11/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+>   libmariadb/CMakeLists.txt:303 (FIND_PACKAGE)
+> 
+> RocksDB is also disabled to prevent the following build error in some
+> configurations:
+> 
+> ./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:327:38: error: field 'result' has incomplete type 'std::promise<rocksdb::BackupEngineImpl::CopyOrCreateResult>'
+>      std::promise<CopyOrCreateResult> result;
+> 
+> ./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:378:37: error: field 'result' has incomplete type 'std::future<rocksdb::BackupEngineImpl::CopyOrCreateResult>'
+>      std::future<CopyOrCreateResult> result;
+> 
+> ./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:425:37: error: field 'result' has incomplete type 'std::future<rocksdb::BackupEngineImpl::CopyOrCreateResult>'
+>      std::future<CopyOrCreateResult> result;
+> 
+> ./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc: In member function 'rocksdb::Status rocksdb::BackupEngineImpl::AddBackupFileWorkItem(std::unordered_set<std::basic_string<char> >&, std::vector<rocksdb::BackupEngineImpl::BackupAfterCopyOrCreateWorkItem>&, rocksdb::BackupID, bool, const string&, const string&, rocksdb::RateLimiter*, uint64_t, uint64_t, bool, std::function<void()>, const string&)':
+> ./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:1366:38: error: aggregate 'std::promise<rocksdb::BackupEngineImpl::CopyOrCreateResult> promise_result' has incomplete type and cannot be defined
+>      std::promise<CopyOrCreateResult> promise_result;
+> 
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+> Changes v2 - v3:
+>   - Bump version from 10.2.16 to 10.2.17
+>   - Fix build error by disabling RocksDB (discovered by Thomas Petazzoni)
+>   - Rebased against master
+> Changes v1 - v2:
+>   - No change
+> ---
+>  package/mariadb/mariadb.hash | 12 ++++++------
+>  package/mariadb/mariadb.mk   | 14 +++++++++++---
+>  2 files changed, 17 insertions(+), 9 deletions(-)
 
-./build/juno/release/bl1/context_mgmt.o: In function `cm_prepare_el3_exit':
-context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): undefined reference to `cm_set_next_context'
-context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): relocation truncated to fit: R_AARCH64_JUMP26 against undefined symbol `cm_set_next_context'
+Applied to next, thanks.
 
-This has been fixed in ATF v1.3. Even though there are even newer
-versions of ATF available, we take a conservative approach, and bump
-to the first version that has the build issue fixed.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/88314771
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/arm_juno_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
-index 54506d8061..98f257387d 100644
---- a/configs/arm_juno_defconfig
-+++ b/configs/arm_juno_defconfig
-@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1 arm/juno-r2"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.3"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
