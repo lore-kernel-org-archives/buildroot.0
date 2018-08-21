@@ -1,40 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 21 Aug 2018 23:00:13 +0200
-Subject: [Buildroot] [PATCH/next 2/3] package/perl-crypt-openssl-random:
- bump version to 0.15
-References: <20180819181558.15338-1-bernd.kuhls@t-online.de>
- <20180819181558.15338-2-bernd.kuhls@t-online.de>
- <20180819231557.62acd467@windsurf> <20180819232523.42a4635f@windsurf>
-Message-ID: <t3bu4fx95s.ln2@ID-313208.user.individual.net>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Aug 2018 22:58:11 +0200
+Subject: [Buildroot] [git commit branch/next] package/mariadb: security bump
+ to version 10.1.35
+Message-ID: <20180821211015.94DCE8E1F9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 19 Aug 2018 23:25:23 +0200 schrieb Thomas Petazzoni:
+commit: https://git.buildroot.net/buildroot/commit/?id=7c93d173d540e9616914504b6859c27528ee2d17
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> In fact, more serious question: figuring out the path to OpenSSL
-> libs/headers is something that is needed at build time. But you're
-> adding perl-crypt-openssl-guess as a target package. I don't understand
-> how it makes sense. Could you clarify ?
+Fixes CVE-2018-3064, CVE-2018-3063, CVE-2018-3058 & CVE-2018-3066:
+https://mariadb.com/kb/en/library/mariadb-10135-release-notes/
 
-Hi Thomas,
+Added all hashes provided by upstream.
 
-I did not forget about answering your question, was just busy with the 
-security bump for libX11 ;)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mariadb/mariadb.hash | 7 +++++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-In fact you were right about that only the host package is needed.
-I guess during the build tests I mixed up the target and host versions, 
-first I used the target package, which caused an error in the other 
-packages, then I tried the host package, which was broken as well (but I 
-kept its files in the host install of perl), then switched back to the 
-target package, still broken, and at last I added the "OPENSSL_PREFIX=" 
-hack to the target package which, together with the still installed host 
-files, produced working builds of perl-crypt-openssl-{random, rsa}. But I 
-did not notice that really the host files were, together with the hack, 
-were responsible for the sucessful build.
-
-Sorry for the confusion ;)
-
-Regards, Bernd
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 7eea62ab7b..e4736465e0 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,8 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.33/
+-sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.35/
++md5 935f401314ff08a4177beb70fed6055c  mariadb-10.1.35.tar.gz
++sha1 d322f0da17f4de475832dd534657eba5a936f77b  mariadb-10.1.35.tar.gz
++sha256 9e91d985ed4f662126e3e5791fe91ec8a2f44ec811113c2b6fbc72fa14553c4d  mariadb-10.1.35.tar.gz
++sha512 88e6049f3bbc3aa047e108f91a2c4f335758e80f25bfa2974b5f8c2e13f5758824d7835dece021b515c531e5641b9998e4de92256ad4b47b7f694da99bd471aa  mariadb-10.1.35.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index e395d387e5..23822187c3 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.1.33
++MARIADB_VERSION = 10.1.35
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
