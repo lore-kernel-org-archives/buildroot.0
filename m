@@ -1,45 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 17:29:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gettext-tiny: Add new package
-In-Reply-To: <87r2irvljb.fsf@tkos.co.il>
-References: <20180821142226.2309-1-vadim4j@gmail.com>
- <87r2irvljb.fsf@tkos.co.il>
-Message-ID: <20180821172913.1a7eb830@windsurf>
+Date: Tue, 21 Aug 2018 17:35:56 +0200
+Subject: [Buildroot] [PATCH v2 3/3] mariadb: bump version to 10.2.16
+In-Reply-To: <d2ed2d47-33ae-1e39-5c66-b08d76913860@gmail.com>
+References: <20180726163703.7598-1-bluemrp9@gmail.com>
+ <20180726163703.7598-3-bluemrp9@gmail.com>
+ <20180816232250.0e02d5fc@windsurf>
+ <d2ed2d47-33ae-1e39-5c66-b08d76913860@gmail.com>
+Message-ID: <20180821173556.7e6f7049@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, Vadim,
+Hello,
 
-On Tue, 21 Aug 2018 17:31:20 +0300, Baruch Siach wrote:
+On Tue, 21 Aug 2018 06:59:51 -0700, Ryan Coe wrote:
 
-> > gettext-tiny provides lightweight replacements for tools typically used
-> > from the GNU gettext suite, which is incredibly bloated and takes a lot
-> > of time to build (in the order of an hour on slow devices). the most
-> > notable component is msgfmt which is used to create binary translation
-> > files in the .mo format out of textual input files in .po format. this
-> > is the most important tool for building software from source, because it
-> > is used from the build processes of many software packages.  
-> 
-> Thanks. gettext is indeed a huge CPU cycles drain.
+> I have another patch ready.? I disabled building RocksDB to get rid of 
+> the build error that was encountered.? Is that acceptable or should I 
+> work on something else?? Thanks.
 
-Agreed, I was looking forward to someone taking over the task of
-packaging gettext-tiny. So thanks Vadim for taking on this task!
+I have no idea what RocksDB is. Google tells me: "RocksDB is an
+embeddable persistent key-value store for fast storage". Is this a new
+optional dependency of MariaDB ? According to
+https://mariadb.org/wp-content/uploads/2017/11/shenzhen2017-myrocks-in-mariadb.pdf
+it seems to be new in 10.2.
 
-However, packaging gettext-tiny requires a lot more than just creating
-a package for it. Indeed, how do you select whether you want to use
-gettext or gettext-tiny ? There should be some global knob that defines
-that, and which affects the TARGET_NLS_DEPENDENCIES variable.
-
-And then, there's the case of packages that need gettext even when NLS
-support is disabled.
-
-So: a big YES to adding gettext-tiny in Buildroot, but we want a proper
-clean integration, not just a separate package. Vadim: you can read
-https://buildroot.org/downloads/manual/manual.html#_gettext_integration_and_interaction_with_packages
-to learn a bit about the current gettext integration in Buildroot.
+So yes, this is a new thing, you can keep it disabled until someone
+else is interested enough to enable/fix it.
 
 Thanks!
 
