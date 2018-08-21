@@ -1,43 +1,54 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Aug 2018 22:01:15 +0200
-Subject: [Buildroot] [PATCH 1/1] xxhash: bump to version 0.6.5
-Message-ID: <20180821200115.13704-1-fontaine.fabrice@gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 21 Aug 2018 23:07:59 +0300
+Subject: [Buildroot] [PATCH 1/1] package/gettext-tiny: Add new package
+In-Reply-To: <20180821193616.5634b4dc@windsurf>
+References: <20180821142226.2309-1-vadim4j@gmail.com>
+ <87r2irvljb.fsf@tkos.co.il> <20180821172913.1a7eb830@windsurf>
+ <CAMw6YJ+FS=z0MQqWj3K-21QYR5m-20wE2RbfFHQnc1WdgrYwLA@mail.gmail.com>
+ <20180821193616.5634b4dc@windsurf>
+Message-ID: <CAMw6YJLASMAVyjqKs26zzzpxdpHV5ezQhaXu=nNyO3UwnQF-Yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Hi,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/xxhash/xxhash.hash | 4 +++-
- package/xxhash/xxhash.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+On Tue, Aug 21, 2018 at 8:36 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Tue, 21 Aug 2018 18:51:00 +0300, Vadim Kochan wrote:
+>
+> > I got the point, so it is not really useful to add gettext-tiny just as a
+> > package but integrate it
+> > as gettext alternative. So let me clarify - you expect to see this at least
+> > as series:
+> > 1) add package
+> > 2) integrate it as gettext alternative
+>
+> Yes, exactly. And as Baruch suggested, it would be excellent if we
+> could also use host-gettext-tiny as an alternative to host-gettext.
+>
+> This will raise a few questions:
+>
+>  - There are a few packages that unconditionally need host-gettext. Is
+>    this really true ?
+Not sure about this)
 
-diff --git a/package/xxhash/xxhash.hash b/package/xxhash/xxhash.hash
-index 31081c01d8..8a00a427f8 100644
---- a/package/xxhash/xxhash.hash
-+++ b/package/xxhash/xxhash.hash
-@@ -1,2 +1,4 @@
- # locally computed
--sha256  9743539ed787ea9bd5bb348265cebdd5adcbf820ad329bf44c28bc69ab4c7cd8  xxhash-r40.tar.gz
-+sha256  19030315f4fc1b4b2cdb9d7a317069a109f90e39d1fe4c9159b7aaa39030eb95  xxhash-v0.6.5.tar.gz
-+sha256  86ec6953794503942b70fcd4f35b565d44f63f703b7037ce44dad965c4aaae91  LICENSE
-+sha256  8e449f232e2cd984e1d286711653960b4a9a555d90b4dc05fe4f0d7a1838fe1b  xxhsum.c
-diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
-index 7e04066340..9bb259a280 100644
---- a/package/xxhash/xxhash.mk
-+++ b/package/xxhash/xxhash.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XXHASH_VERSION = r40
-+XXHASH_VERSION = v0.6.5
- XXHASH_SITE = $(call github,Cyan4973,xxHash,$(XXHASH_VERSION))
- XXHASH_LICENSE = BSD-2-Clause, GPL-2.0+
- XXHASH_LICENSE_FILES = LICENSE xxhsum.c
--- 
-2.14.1
+>
+>  - Some packages need host-gettext because of the AM_ICONV m4 macro
+>    provided by gettext.m4. Is gettext-tiny also providing the
+>    gettext-related m4 macros ?
+Yes it has some set of m4 macrosses, but it needs to be tested how it
+works for the buildroot.
+
+What if I will start from converting gettext package into the virtual
+one (with renaming the original
+gettext -> gettext-gnu)  ? And after I will try to add gettext-tiny as
+gettext provider.
+
+Regards,
+Vadim Kochan
