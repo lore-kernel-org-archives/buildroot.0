@@ -1,45 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 22:35:42 +0200
-Subject: [Buildroot] [git commit branch/next] xxhash: bump to version 0.6.5
-Message-ID: <20180821203409.B6B118E1E7@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 21 Aug 2018 22:41:32 +0200
+Subject: [Buildroot] [PATCH/next v2 1/3] package/perl-crypt-openssl-guess:
+ new package
+Message-ID: <20180821204134.2819-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0c5439a160a6aa9202f7c924198e894cc01fa71
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Needed for upcoming version bumps of perl-crypt-openssl-random and
+perl-crypt-openssl-rsa, only host-package is needed.
 
-Add hash for license file
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/xxhash/xxhash.hash | 4 +++-
- package/xxhash/xxhash.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+v2: switched to host package (Thomas)
 
-diff --git a/package/xxhash/xxhash.hash b/package/xxhash/xxhash.hash
-index 31081c01d8..8a00a427f8 100644
---- a/package/xxhash/xxhash.hash
-+++ b/package/xxhash/xxhash.hash
-@@ -1,2 +1,4 @@
- # locally computed
--sha256  9743539ed787ea9bd5bb348265cebdd5adcbf820ad329bf44c28bc69ab4c7cd8  xxhash-r40.tar.gz
-+sha256  19030315f4fc1b4b2cdb9d7a317069a109f90e39d1fe4c9159b7aaa39030eb95  xxhash-v0.6.5.tar.gz
-+sha256  86ec6953794503942b70fcd4f35b565d44f63f703b7037ce44dad965c4aaae91  LICENSE
-+sha256  8e449f232e2cd984e1d286711653960b4a9a555d90b4dc05fe4f0d7a1838fe1b  xxhsum.c
-diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
-index 7e04066340..9bb259a280 100644
---- a/package/xxhash/xxhash.mk
-+++ b/package/xxhash/xxhash.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XXHASH_VERSION = r40
-+XXHASH_VERSION = v0.6.5
- XXHASH_SITE = $(call github,Cyan4973,xxHash,$(XXHASH_VERSION))
- XXHASH_LICENSE = BSD-2-Clause, GPL-2.0+
- XXHASH_LICENSE_FILES = LICENSE xxhsum.c
+ DEVELOPERS                                          |  1 +
+ .../perl-crypt-openssl-guess.hash                   |  6 ++++++
+ .../perl-crypt-openssl-guess.mk                     | 13 +++++++++++++
+ 3 files changed, 20 insertions(+)
+ create mode 100644 package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+ create mode 100644 package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ccbc0a3b7a..154315fcfb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -330,6 +330,7 @@ F:	package/libyuv/
+ F:	package/mesa3d/
+ F:	package/minidlna/
+ F:	package/mjpg-streamer/
++F:	package/perl-crypt-openssl-guess/
+ F:	package/perl-crypt-openssl-random/
+ F:	package/perl-crypt-openssl-rsa/
+ F:	package/perl-digest-sha1/
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+new file mode 100644
+index 0000000000..327b06900a
+--- /dev/null
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    e768fe2c07826b0ac9ea604c79f93032 Crypt-OpenSSL-Guess-0.11.tar.gz
++sha256 aa6b18e38cb852cbad80a58cd90c395b40819d4d01e0ab37e7703149094d7167 Crypt-OpenSSL-Guess-0.11.tar.gz
++
++# computed by scancpan
++sha256 5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072 LICENSE
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+new file mode 100644
+index 0000000000..69d7a0ef8f
+--- /dev/null
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# perl-crypt-openssl-guess
++#
++################################################################################
++
++PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.11
++PERL_CRYPT_OPENSSL_GUESS_SOURCE = Crypt-OpenSSL-Guess-$(PERL_CRYPT_OPENSSL_GUESS_VERSION).tar.gz
++PERL_CRYPT_OPENSSL_GUESS_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AK/AKIYM
++PERL_CRYPT_OPENSSL_GUESS_LICENSE = Artistic or GPL-1.0+
++PERL_CRYPT_OPENSSL_GUESS_LICENSE_FILES = LICENSE
++
++$(eval $(host-perl-package))
+-- 
+2.18.0
