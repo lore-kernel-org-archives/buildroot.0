@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Aug 2018 21:54:32 +0200
-Subject: [Buildroot] [PATCH 06/25] glorytun: bump to version 0.0.99-mud
-Message-ID: <20180821195432.23125-1-fontaine.fabrice@gmail.com>
+Date: Tue, 21 Aug 2018 21:56:52 +0200
+Subject: [Buildroot] [PATCH v2,1/1] glorytun: bump to version 0.0.99-mud
+Message-ID: <20180821195652.1349-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,6 +10,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix incorrect patch's number/serie in title
+
  package/glorytun/glorytun.hash | 2 +-
  package/glorytun/glorytun.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
