@@ -1,64 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 22:50:55 +0200
-Subject: [Buildroot] [git commit branch/next] package/vlc: skins2 depends on
- qt5base
-Message-ID: <20180821204928.A9CBD8E1F1@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 21 Aug 2018 23:00:13 +0200
+Subject: [Buildroot] [PATCH/next 2/3] package/perl-crypt-openssl-random:
+ bump version to 0.15
+References: <20180819181558.15338-1-bernd.kuhls@t-online.de>
+ <20180819181558.15338-2-bernd.kuhls@t-online.de>
+ <20180819231557.62acd467@windsurf> <20180819232523.42a4635f@windsurf>
+Message-ID: <t3bu4fx95s.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f68d99a82384dda6ea7801f3f5ec905231c8fd2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Am Sun, 19 Aug 2018 23:25:23 +0200 schrieb Thomas Petazzoni:
 
-Fixes
+> In fact, more serious question: figuring out the path to OpenSSL
+> libs/headers is something that is needed at build time. But you're
+> adding perl-crypt-openssl-guess as a target package. I don't understand
+> how it makes sense. Could you clarify ?
 
-configure: error: The skins2 module depends on the Qt interface. Without
-it you will not be able to open any dialog box from the interface, which
-makes the skins2 interface rather useless. Install the Qt development
-package or alternatively you can also configure with: --disable-qt
---disable-skins2.
+Hi Thomas,
 
-http://autobuild.buildroot.net/results/ddb/ddb1ab48adb9705c44ed3d6d800b6d01ad52ac8c/
+I did not forget about answering your question, was just busy with the 
+security bump for libX11 ;)
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/vlc/vlc.mk | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+In fact you were right about that only the host package is needed.
+I guess during the build tests I mixed up the target and host versions, 
+first I used the target package, which caused an error in the other 
+packages, then I tried the host package, which was broken as well (but I 
+kept its files in the host install of perl), then switched back to the 
+target package, still broken, and at last I added the "OPENSSL_PREFIX=" 
+hack to the target package which, together with the still installed host 
+files, produced working builds of perl-crypt-openssl-{random, rsa}. But I 
+did not notice that really the host files were, together with the hack, 
+were responsible for the sucessful build.
 
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index c77c945a34..b69657d31f 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -473,8 +473,14 @@ endif
- ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS)$(BR2_PACKAGE_QT5SVG),yy)
- VLC_CONF_OPTS += --enable-qt
- VLC_DEPENDENCIES += qt5base qt5svg
-+ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
-+VLC_CONF_OPTS += --enable-skins2
-+VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
- else
--VLC_CONF_OPTS += --disable-qt
-+VLC_CONF_OPTS += --disable-skins2
-+endif
-+else
-+VLC_CONF_OPTS += --disable-qt --disable-skins2
- endif
- 
- ifeq ($(BR2_PACKAGE_SDL_IMAGE),y)
-@@ -551,13 +557,6 @@ else
- VLC_CONF_OPTS += --without-x
- endif
- 
--ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
--VLC_CONF_OPTS += --enable-skins2
--VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
--else
--VLC_CONF_OPTS += --disable-skins2
--endif
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- VLC_DEPENDENCIES += zlib
- endif
+Sorry for the confusion ;)
+
+Regards, Bernd
