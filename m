@@ -1,50 +1,88 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 14:20:51 +0200
-Subject: [Buildroot] [PATCH] busybox: don't clobber dangling symlinks
-In-Reply-To: <412a4a2df4b4bd31b183dba362dca4a326535624.1531825303.git.baruch@tkos.co.il>
-References: <412a4a2df4b4bd31b183dba362dca4a326535624.1531825303.git.baruch@tkos.co.il>
-Message-ID: <20180821142051.7020cd34@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Tue, 21 Aug 2018 07:40:00 -0500
+Subject: [Buildroot] [RFC 3/3] toolchain/toolchain-wrapper: add
+ BR2_RELRO_FULL support
+In-Reply-To: <c0c3bc68-6ce8-4ad7-a5a7-d10638de4a42@cesnet.cz>
+References: <1534220803-26737-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1534220803-26737-4-git-send-email-matthew.weber@rockwellcollins.com>
+ <c0c3bc68-6ce8-4ad7-a5a7-d10638de4a42@cesnet.cz>
+Message-ID: <CANQCQpY8=K8a-fWAy6X7C5-cRwJagQ-OiXecD4XxK69kq615XA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Jan,
+On Tue, Aug 21, 2018 at 2:53 AM Jan Kundr?t <jan.kundrat@cesnet.cz> wrote:
+>
+> On ?ter? 14. srpna 2018 6:26:43 CEST, Matt Weber wrote:
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> > ---
+> >  toolchain/toolchain-wrapper.c | 19 ++++++++++++++++++-
+> >  1 file changed, 18 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+> > index c5eb813..d36771c 100644
+> > --- a/toolchain/toolchain-wrapper.c
+> > +++ b/toolchain/toolchain-wrapper.c
+> > @@ -49,8 +49,9 @@ static char _date_[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
+> >   *   -D__TIME__=
+> >   *   -D__DATE__=
+> >   *   -Wno-builtin-macro-redefined
+> > + *      -fPIE
+>
+> nit: this looks like a whitespace error (one too many spaces)
+>
+> >   */
+> > -#define EXCLUSIVE_ARGS       6
+> > +#define EXCLUSIVE_ARGS       7
+> >
+> >  static char *predef_args[] = {
+> >  #ifdef BR_CCACHE
+> > @@ -363,6 +364,22 @@ int main(int argc, char **argv)
+> >               *cur++ = "-Wno-builtin-macro-redefined";
+> >       }
+> >
+> > +#ifdef BR2_RELRO_FULL
+> > +     /* Combinations of PIE and pic */
+> > +     for (i = 1; i < argc; i++) {
+> > +             if (!strcmp(argv[i], "-r") ||
+> > +                 !strcmp(argv[i], "-fpie") ||
+> > +                 !strcmp(argv[i], "-fPIE") ||
+> > +                 !strcmp(argv[i], "-fpic") ||
+> > +                 !strcmp(argv[i], "-fPIC") ||
+> > +                 !strcmp(argv[i], "-fno-pic"))
+> > +                     break;
+> > +     }
+> > +
+> > +     if (i == argc)
+> > +             *cur++ = "-fPIE";
+> > +#endif
+> > +
+> >       paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
+> >       if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
+> >               paranoid = 1;
+>
+> I needed some more patches to build with the following hardening settings:
+>
+> BR2_SSP_STRONG=y
+> BR2_RELRO_FULL=y
+> BR2_FORTIFY_SOURCE_2=y
+>
+> - https://patchwork.ozlabs.org/patch/865166/
+> - https://patchwork.ozlabs.org/patch/865168/ (this one need changes so that
+> it touches packages/libzlib/ now)
+>
+> Then my build failed when building util-linux, see the attached log.
 
-On Tue, 17 Jul 2018 14:01:43 +0300, Baruch Siach wrote:
-> We sometimes create dangling symlinks in the target directory. That is
-> because we need canonical targets, as relative targets don't work well
-> with BR2_ROOTFS_MERGED_USR. For example, the vim package installs the
-> /bin/vi symlink to /usr/bin/vim. This symlink might be dangling when the
-> build host has no vim installed there.
-> 
-> Patch the busybox install.sh script to avoid clobber of dangling
-> symlinks.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/796/796107430db6545401d9926e84f19eaf2040b756/
-> 
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Cc: Carlos Santos <casantos@datacom.com.br>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
->  ...l.sh-don-t-clobber-dangling-symlinks.patch | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch
+Thanks for the feedback.  Sorry this topic has some loose ends at this
+point with a couple un-applied patches and this RFC.
 
-Applied to master, thanks.
+I'll send out a full patchset this week once I get past some
+external/internal toolchain symlnk issues with *.br_real.
 
-Carlos: I know you disagreed with this patch, but since it has been
-merged by the upstream Busybox developers, I don't see the point of not
-merging it in Buildroot as well, since we will anyway get this behavior
-at the next Busybox version bump.
+If you wouldn't mind sharing your defconfig, I'll give it a test
+before I sent out the next series.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matt
