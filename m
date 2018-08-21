@@ -1,42 +1,61 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Aug 2018 21:56:52 +0200
-Subject: [Buildroot] [PATCH v2,1/1] glorytun: bump to version 0.0.99-mud
-Message-ID: <20180821195652.1349-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 21 Aug 2018 22:01:03 +0200
+Subject: [Buildroot] [PATCH 1/1] Add support for building toolchains
+ against custom kernel headers.
+In-Reply-To: <20180821131105.GM15347@scaer>
+References: <20180821110646.5671-1-mark.corbin@embecosm.com>
+ <20180821140509.162e6c49@windsurf>
+ <4f183641-61e2-37bb-d3af-3dfd002efbe9@embecosm.com>
+ <20180821131105.GM15347@scaer>
+Message-ID: <b9918318-ad23-fc20-7035-2784e698ecb4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Fix incorrect patch's number/serie in title
 
- package/glorytun/glorytun.hash | 2 +-
- package/glorytun/glorytun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
-index 891af2079e..59a5f09c0e 100644
---- a/package/glorytun/glorytun.hash
-+++ b/package/glorytun/glorytun.hash
-@@ -1,2 +1,2 @@
--sha256 76849b1568119cf0834749db56d4882966863d31351c21c1b22f373f0c97a498  glorytun-0.0.93-mud.tar.gz
-+sha256 5e23afad4592d6af27ffd2cb3c826cf0ea1b5166a05ef1ae5c77fb4e465bb735  glorytun-0.0.99-mud.tar.gz
- sha256 bd418f8ef7d62f2c89e3aa1e5dc41c7d7a6212eb1cdb4d39a26a5bd333e1b4a3  LICENSE
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index 233e1feaa9..f6d87c2605 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GLORYTUN_VERSION = 0.0.93-mud
-+GLORYTUN_VERSION = 0.0.99-mud
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
- GLORYTUN_LICENSE = BSD-2-clause
+On 21/08/2018 15:11, Yann E. MORIN wrote:
+> Mark, Thomas, All,
+> 
+> On 2018-08-21 13:51 +0100, Mark Corbin spake thusly:
+>> On 21/08/18 13:05, Thomas Petazzoni wrote:
+[snip]
+>>> First, I'm not sure why we bother updating the BR_NO_CHECK_HASH_FOR
+>>> variable. I know we already do it, but linux-headers doesn't have
+>>> a .hash file, so I don't see the point in doing this. Arnout, you
+>>> reworked this in commit 24f650aed2d9d92d8cabf0cb160fcf7964f9811e, why
+>>> didn't you just remove the BR_NO_CHECK_HASH_FOR ?
+>> I did wonder about this - I'll plan to remove it unless anybody objects.
+> 
+> No, I'd prefer if we were to actualyl add a .hash file for linux-headers
+> and for linux as well, btw, with the former being a symlink to the
+> latter.
+
+ I think that was actually the reason that I didn't remove it: the idea was to
+add a hash file for linux-headers.
+
+ Regards,
+ Arnout
+
+> So, when you respin, prepare a series that:
+> 
+>  1. adds the help text alone,
+>  2. adds a .hash for linux and a symlink to it from linux-headers
+>  3. refactors of the variables
+>  4. adds the custom locations
+> 
+> thanks! :-)
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
 -- 
-2.14.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
