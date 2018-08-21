@@ -1,70 +1,68 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 21 Aug 2018 22:41:32 +0200
-Subject: [Buildroot] [PATCH/next v2 1/3] package/perl-crypt-openssl-guess:
- new package
-Message-ID: <20180821204134.2819-1-bernd.kuhls@t-online.de>
+Date: Tue, 21 Aug 2018 22:41:34 +0200
+Subject: [Buildroot] [PATCH/next v2 3/3] package/perl-crypt-openssl-rsa:
+ bump version to 0.30
+In-Reply-To: <20180821204134.2819-1-bernd.kuhls@t-online.de>
+References: <20180821204134.2819-1-bernd.kuhls@t-online.de>
+Message-ID: <20180821204134.2819-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needed for upcoming version bumps of perl-crypt-openssl-random and
-perl-crypt-openssl-rsa, only host-package is needed.
+Changelog:
+https://metacpan.org/changes/distribution/Crypt-OpenSSL-RSA
+
+Added new build dependency to host-perl-crypt-openssl-guess and force
+it to search for openssl in STAGING_DIR. Added license hash. Updated
+_SITE according to scancpan.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: switched to host package (Thomas)
+v2: switched to host version of perl-crypt-openssl-guess (Thomas)
 
- DEVELOPERS                                          |  1 +
- .../perl-crypt-openssl-guess.hash                   |  6 ++++++
- .../perl-crypt-openssl-guess.mk                     | 13 +++++++++++++
- 3 files changed, 20 insertions(+)
- create mode 100644 package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
- create mode 100644 package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+ .../perl-crypt-openssl-rsa.hash                      |  7 +++++--
+ .../perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk | 12 +++++++++---
+ 2 files changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index ccbc0a3b7a..154315fcfb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -330,6 +330,7 @@ F:	package/libyuv/
- F:	package/mesa3d/
- F:	package/minidlna/
- F:	package/mjpg-streamer/
-+F:	package/perl-crypt-openssl-guess/
- F:	package/perl-crypt-openssl-random/
- F:	package/perl-crypt-openssl-rsa/
- F:	package/perl-digest-sha1/
-diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
-new file mode 100644
-index 0000000000..327b06900a
---- /dev/null
-+++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e768fe2c07826b0ac9ea604c79f93032 Crypt-OpenSSL-Guess-0.11.tar.gz
-+sha256 aa6b18e38cb852cbad80a58cd90c395b40819d4d01e0ab37e7703149094d7167 Crypt-OpenSSL-Guess-0.11.tar.gz
+diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
+index 6e060ce672..0d101d7bb8 100644
+--- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
++++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
+@@ -1,3 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    86217a5036fc63779c30420b5fd84129 Crypt-OpenSSL-RSA-0.28.tar.gz
+-sha256 5357f977464bb3a8184cf2d3341851a10d5515b4b2b0dfb88bf78995c0ded7be Crypt-OpenSSL-RSA-0.28.tar.gz
++md5    10bca2fc6d0ba1aa329f227424ae87d5 Crypt-OpenSSL-RSA-0.30.tar.gz
++sha256 23e13531397af102db4fd24bcf70137add7c85c23cca697c43aa71c2959a29ac Crypt-OpenSSL-RSA-0.30.tar.gz
 +
 +# computed by scancpan
-+sha256 5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072 LICENSE
-diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-new file mode 100644
-index 0000000000..69d7a0ef8f
---- /dev/null
-+++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-crypt-openssl-guess
-+#
-+################################################################################
++sha256 8a693ad3f52daeeb5ac5deceb1e1109c9c87095ed5ba6506d6d5c106e4066f5a LICENSE
+diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
+index b853d9953e..790af760c7 100644
+--- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
++++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
+@@ -4,11 +4,17 @@
+ #
+ ################################################################################
+ 
+-PERL_CRYPT_OPENSSL_RSA_VERSION = 0.28
++PERL_CRYPT_OPENSSL_RSA_VERSION = 0.30
+ PERL_CRYPT_OPENSSL_RSA_SOURCE = Crypt-OpenSSL-RSA-$(PERL_CRYPT_OPENSSL_RSA_VERSION).tar.gz
+-PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERLER
+-PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = perl-crypt-openssl-random
++PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
++PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = \
++	host-perl-crypt-openssl-guess \
++	perl-crypt-openssl-random
+ PERL_CRYPT_OPENSSL_RSA_LICENSE = Artistic or GPL-1.0+
+ PERL_CRYPT_OPENSSL_RSA_LICENSE_FILES = LICENSE
+ 
++# Try as hard as possible to remedy to the brain-damage their build-system
++# suffers from: don't search for openssl, they pick the host-system one.
++PERL_CRYPT_OPENSSL_RSA_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
 +
-+PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.11
-+PERL_CRYPT_OPENSSL_GUESS_SOURCE = Crypt-OpenSSL-Guess-$(PERL_CRYPT_OPENSSL_GUESS_VERSION).tar.gz
-+PERL_CRYPT_OPENSSL_GUESS_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AK/AKIYM
-+PERL_CRYPT_OPENSSL_GUESS_LICENSE = Artistic or GPL-1.0+
-+PERL_CRYPT_OPENSSL_GUESS_LICENSE_FILES = LICENSE
-+
-+$(eval $(host-perl-package))
+ $(eval $(perl-package))
 -- 
 2.18.0
