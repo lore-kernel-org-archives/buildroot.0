@@ -1,96 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2018 00:18:17 +0200
-Subject: [Buildroot] [PATCH next 4/4] btrfs-progs: make e2fsprogs an
- optional dependency
-In-Reply-To: <20180821215954.11971-5-thomas.petazzoni@bootlin.com>
-References: <20180821215954.11971-1-thomas.petazzoni@bootlin.com>
- <20180821215954.11971-5-thomas.petazzoni@bootlin.com>
-Message-ID: <20180821221817.GW15347@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 22 Aug 2018 00:24:30 +0200
+Subject: [Buildroot] [PATCH] configs: solidrun_macchiatobin_marvell: fix
+ u-boot build
+In-Reply-To: <20180816220045.0a74a6af@windsurf>
+References: <bc4ad6ef454508016634b1074fe83681946f4826.1534422853.git.baruch@tkos.co.il>
+ <20180816220045.0a74a6af@windsurf>
+Message-ID: <6df7964c-0845-4619-4e5e-c79438986ad1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
 
-On 2018-08-21 23:59 +0200, Thomas Petazzoni spake thusly:
-> e2fsprogs is only needed to build the btrfs-convert program, that
-> allows to convert an existing ext2 filesystem into a btrfs
-> filesystem. Not everybody needs to do that and making this dependency
-> optional is nicer, so this is what this patch does.
+
+On 16/08/2018 22:00, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Note that btrfs-progs also supports converting from reiserfs, which is
-> why the --with-convert option supports a list of filesystems. Since
-> Buildroot has no package for the reiserfs library, we for now only
-> support the ext2 case, with e2fsprogs as a dependency.
+> On Thu, 16 Aug 2018 15:34:13 +0300, Baruch Siach wrote:
+>> U-Boot local libfdt headers conflict with host-dtc provided headers.
+>> Disable host-dtc, and backport two upstream U-Boot patches to fix build
+>> without external libfdt headers.
+>>
+>> U-Boot build still fail when the host provides its own libfdt header
+>> (e.g., Debian libfdt-dev package), or when BR2_PACKAGE_HOST_DTC is
+>> enabled. Fixing that seems to require much more involved code changes.
+>> Fix the common case for now.
+>>
+>> Fixes partially:
+>> https://gitlab.com/buildroot.org/buildroot/-/jobs/88314956
+>>
+>> Cc: Sergey Matyukevich <geomatsi@gmail.com>
+>> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> This issue is happening for 30-40 defconfigs. I don't think adding a
+> 4500 lines patch for each defconfig is really the right solution,
+> especially because it also doesn't fix the situation of someone
+> building U-Boot outside of a pre-existing defconfig.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ The problem is that building of U-Boot host tools is just broken between
+2017.03 (or maybe earlier) and 2018.03 (after commit b08c8c487083, which was
+triggered by a report from a certain Thomas Petazzoni).
 
-Regards,
-Yann E. MORIN.
+ I have experimented with changing the -isystem that we pass into HOSTCC with
+various other things, but nothing really works. I see no way to force the U-Boot
+build system to use its own libfdt.h and libfdt_env.h instead of the system- or
+buildroot-installed version.
 
-> ---
->  package/btrfs-progs/Config.in      |  1 -
->  package/btrfs-progs/btrfs-progs.mk | 12 +++++++++++-
->  2 files changed, 11 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
-> index ad86bab580..35dfc39193 100644
-> --- a/package/btrfs-progs/Config.in
-> +++ b/package/btrfs-progs/Config.in
-> @@ -2,7 +2,6 @@ config BR2_PACKAGE_BTRFS_PROGS
->  	bool "btrfs-progs"
->  	depends on BR2_USE_MMU # util-linux
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
-> -	select BR2_PACKAGE_E2FSPROGS
->  	select BR2_PACKAGE_LZO
->  	select BR2_PACKAGE_UTIL_LINUX
->  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-> diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-> index 2f9f4127b6..33a6be324f 100644
-> --- a/package/btrfs-progs/btrfs-progs.mk
-> +++ b/package/btrfs-progs/btrfs-progs.mk
-> @@ -7,7 +7,7 @@
->  BTRFS_PROGS_VERSION = 4.16.1
->  BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
->  BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
-> -BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
-> +BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
->  BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd --disable-python
->  BTRFS_PROGS_LICENSE = GPL-2.0, LGPL-3.0+ (libbtrfsutil)
->  BTRFS_PROGS_LICENSE_FILES = COPYING libbtrfsutil/COPYING \
-> @@ -21,6 +21,16 @@ BTRFS_PROGS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
->  BTRFS_PROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
->  endif
->  
-> +# convert also supports conversion from reiserfs, which needs some
-> +# reiserfs libraries, but we have no package for them in Buildroot, so
-> +# we keep things simple and only handle ext2.
-> +ifeq ($(BR2_PACKAGE_E2FSPROGS),y)
-> +BTRFS_PROGS_CONF_OPTS += --enable-convert --with-convert=ext2
-> +BTRFS_PROGS_DEPENDENCIES += e2fsprogs
-> +else
-> +BTRFS_PROGS_CONF_OPTS += --disable-convert
-> +endif
-> +
->  HOST_BTRFS_PROGS_DEPENDENCIES = host-util-linux host-lzo host-zlib
->  HOST_BTRFS_PROGS_CONF_OPTS = \
->  	--disable-backtrace \
-> -- 
-> 2.14.4
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ Something that _might_ work is to generate a libfdt.h and libfdt_env.h
+somewhere in the build directory, which contains nothing but
+#include "$(UBOOT_SRCDIR)/include/libfdt.h"
+and pass in -I to that directory in HOSTCC. That whole thing, of course, must be
+conditional on the existence of $(UBOOT_SRCDIR)/include/libfdt.h. Complicated...
 
+ Regards,
+ Arnout
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
