@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 11:27:24 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/2] boost: context needs thread if gcc <= 4.6
-In-Reply-To: <20180820221257.1553-1-fontaine.fabrice@gmail.com>
-References: <20180820221257.1553-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180821112724.3835f7ae@windsurf>
+Date: Tue, 21 Aug 2018 11:47:16 +0200
+Subject: [Buildroot] [git commit branch/next] lvm2: host variant needs
+ host-libaio
+Message-ID: <20180821093949.0D2458E180@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1575512ad41e2118448daf566a6012714592aca7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 21 Aug 2018 00:12:56 +0200, Fabrice Fontaine wrote:
-> mutex is available on gcc 4.7.x, the issue is that boost does not
-> correctly detect it because -std=c++11 is missing.
+Since the bump of lvm2 to 2.02.180 in commit
+8e666bf29e762f3c7681a48d0ee350f8396d798f, lvm2 needs libaio. This was
+properly taken into account for the target lvm2 variant, but not the
+host lvm2 variant. This commit adds host-libaio as a dependency of
+host-lvm2.
 
-Where did you get the information that mutex is available since gcc
-4.7 ? Is it by testing gcc 4.6 and 4.7 ?
+Fixes:
 
-I couldn't get this information by looking at
-https://gcc.gnu.org/projects/cxx-status.html#cxx11.
+  http://autobuild.buildroot.net/results/f95dd353c17bdfd00fde6762e58aa32e6830b52b/
 
-Also, I am wondering if the two patches should really be separate.
-Aren't they in fact both intimately related, where std::mutex will only
-be visible in gcc >= 4.7 if std=c++11 is passed ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lvm2/lvm2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-To me, they are basically one single patch:
-
- - Below gcc 4.7, we don't have std::mutex, so boost-thread must be used
- - Above gcc 4.7, we have std::mutex, but we need to pass std=c++11 for
-   std::mutex to be visible/usable
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 2352f17af0..152381d65d 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
+@@ -59,7 +59,7 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+ LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
+ endif
+ 
+-HOST_LVM2_DEPENDENCIES = host-pkgconf
++HOST_LVM2_DEPENDENCIES = host-pkgconf host-libaio
+ HOST_LVM2_CONF_OPTS = \
+ 	--enable-write_install \
+ 	--enable-pkgconfig \
