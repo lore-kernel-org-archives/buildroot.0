@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
-Date: Tue, 21 Aug 2018 08:42:00 +0200
-Subject: [Buildroot] [PATCH 08/18] perl-package-stash: new package
-In-Reply-To: <20180820115519.24046-9-chrismcc@gmail.com>
+Date: Tue, 21 Aug 2018 08:43:26 +0200
+Subject: [Buildroot] [PATCH 09/18] perl-class-load: new package
+In-Reply-To: <20180820115519.24046-10-chrismcc@gmail.com>
 References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820115519.24046-9-chrismcc@gmail.com>
-Message-ID: <CAGhdn56Gx71mK8JJSX40tPy=F1cw4c5gfZ2qAXpCSHt1gi2rUw@mail.gmail.com>
+ <20180820115519.24046-10-chrismcc@gmail.com>
+Message-ID: <CAGhdn55XtzBJua3K0CPyKBtTypdOmPr8Gep4roAS+oj-R=m8Jg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,93 +20,100 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
 
 > ---
->  DEVELOPERS                                         |  1 +
->  package/Config.in                                  |  1 +
->  package/perl-package-stash/Config.in               |  8 ++++++++
->  package/perl-package-stash/perl-package-stash.hash |  6 ++++++
->  package/perl-package-stash/perl-package-stash.mk   | 14 ++++++++++++++
->  5 files changed, 30 insertions(+)
->  create mode 100644 package/perl-package-stash/Config.in
->  create mode 100644 package/perl-package-stash/perl-package-stash.hash
->  create mode 100644 package/perl-package-stash/perl-package-stash.mk
+>  DEVELOPERS                                   |  1 +
+>  package/Config.in                            |  1 +
+>  package/perl-class-load/Config.in            | 15 +++++++++++++++
+>  package/perl-class-load/perl-class-load.hash |  6 ++++++
+>  package/perl-class-load/perl-class-load.mk   | 14 ++++++++++++++
+>  5 files changed, 37 insertions(+)
+>  create mode 100644 package/perl-class-load/Config.in
+>  create mode 100644 package/perl-class-load/perl-class-load.hash
+>  create mode 100644 package/perl-class-load/perl-class-load.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0d20a77c6b..5cba9a231b 100644
+> index 5cba9a231b..bb43154698 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -502,6 +502,7 @@ F:  package/perl-mime-tools/
->  F:     package/perl-module-implementation/
->  F:     package/perl-module-runtime/
->  F:     package/perl-number-bytes-human/
-> +F:     package/perl-package-stash/
->  F:     package/perl-params-util/
->  F:     package/perl-sub-install/
->  F:     package/perl-sys-cpu/
+> @@ -484,6 +484,7 @@ F:  package/targetcli-fb/
+>  N:     Christopher McCrory <chrismcc@gmail.com>
+>  F:     package/perl-appconfig/
+>  F:     package/perl-astro-suntime/
+> +F:     package/perl-class-load/
+>  F:     package/perl-class-std/
+>  F:     package/perl-class-std-fast/
+>  F:     package/perl-data-dump/
 > diff --git a/package/Config.in b/package/Config.in
-> index 966748fc95..ecdf285dca 100644
+> index ecdf285dca..b4aa57ab19 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -727,6 +727,7 @@ menu "Perl libraries/modules"
->         source "package/perl-net-telnet/Config.in"
->         source "package/perl-netaddr-ip/Config.in"
->         source "package/perl-number-bytes-human/Config.in"
-> +       source "package/perl-package-stash/Config.in"
->         source "package/perl-params-util/Config.in"
->         source "package/perl-path-tiny/Config.in"
->         source "package/perl-sub-install/Config.in"
-> diff --git a/package/perl-package-stash/Config.in
-> b/package/perl-package-stash/Config.in
+> @@ -667,6 +667,7 @@ if BR2_PACKAGE_PERL
+>  menu "Perl libraries/modules"
+>         source "package/perl-appconfig/Config.in"
+>         source "package/perl-astro-suntime/Config.in"
+> +       source "package/perl-class-load/Config.in"
+>         source "package/perl-class-std/Config.in"
+>         source "package/perl-class-std-fast/Config.in"
+>         source "package/perl-convert-asn1/Config.in"
+> diff --git a/package/perl-class-load/Config.in b/package/perl-class-load/
+> Config.in
 > new file mode 100644
-> index 0000000000..755850f7b6
+> index 0000000000..fef9431e49
 > --- /dev/null
-> +++ b/package/perl-package-stash/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PERL_PACKAGE_STASH
-> +       bool "perl-package-stash"
-> +       select BR2_PACKAGE_PERL_DIST_CHECKCONFLICTS
+> +++ b/package/perl-class-load/Config.in
+> @@ -0,0 +1,15 @@
+> +config BR2_PACKAGE_PERL_CLASS_LOAD
+> +       bool "perl-class-load"
+> +       depends on !BR2_STATIC_LIBS
+> +       select BR2_PACKAGE_PERL_DATA_OPTLIST
 > +       select BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
+> +       select BR2_PACKAGE_PERL_MODULE_RUNTIME
+> +       select BR2_PACKAGE_PERL_PACKAGE_STASH
+> +       select BR2_PACKAGE_PERL_TRY_TINY
 > +       help
-> +         routines for manipulating stashes
+> +         A working (require "Class::Name") and more
 > +
-> +         http://metacpan.org/release/Package-Stash
-> diff --git a/package/perl-package-stash/perl-package-stash.hash
-> b/package/perl-package-stash/perl-package-stash.hash
+> +         https://github.com/moose/Class-Load
+> +
+> +comment "perl-class-load needs a toolchain w/ dynamic library"
+> +       depends on BR2_STATIC_LIBS
+> diff --git a/package/perl-class-load/perl-class-load.hash
+> b/package/perl-class-load/perl-class-load.hash
 > new file mode 100644
-> index 0000000000..4d9b202879
+> index 0000000000..c2900d6964
 > --- /dev/null
-> +++ b/package/perl-package-stash/perl-package-stash.hash
+> +++ b/package/perl-class-load/perl-class-load.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    7e47a8261312e1cf3d12bd2007916b66 Package-Stash-0.37.tar.gz
-> +sha256 06ab05388f9130cd377c0e1d3e3bafeed6ef6a1e22104571a9e1d7bfac787b2c
-> Package-Stash-0.37.tar.gz
+> +md5    e4c831c08df592ce8dfee0c7cfc12fd7 Class-Load-0.25.tar.gz
+> +sha256 2a48fa779b5297e56156380e8b32637c6c58decb4f4a7f3c7350523e11275f8f
+> Class-Load-0.25.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 b4e0637ed96008ddcbf7e0ddeb73967df3d0b4dc62a6b7fdb86eac37018cb12e
+> +sha256 dc030e63f20035291b90d09c2c40f296224e85878caf829ea981fc2f10910f9d
 > LICENSE
-> diff --git a/package/perl-package-stash/perl-package-stash.mk
-> b/package/perl-package-stash/perl-package-stash.mk
+> diff --git a/package/perl-class-load/perl-class-load.mk
+> b/package/perl-class-load/perl-class-load.mk
 > new file mode 100644
-> index 0000000000..28dad5ea35
+> index 0000000000..33a6288465
 > --- /dev/null
-> +++ b/package/perl-package-stash/perl-package-stash.mk
+> +++ b/package/perl-class-load/perl-class-load.mk
 > @@ -0,0 +1,14 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-package-stash
+> +# perl-class-load
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_PACKAGE_STASH_VERSION = 0.37
-> +PERL_PACKAGE_STASH_SOURCE = Package-Stash-$(PERL_PACKAGE_
-> STASH_VERSION).tar.gz
-> +PERL_PACKAGE_STASH_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DO/DOY
-> +PERL_PACKAGE_STASH_DEPENDENCIES = perl-dist-checkconflicts
-> perl-module-implementation
-> +PERL_PACKAGE_STASH_LICENSE = Artistic or GPL-1.0+
-> +PERL_PACKAGE_STASH_LICENSE_FILES = LICENSE
+> +PERL_CLASS_LOAD_VERSION = 0.25
+> +PERL_CLASS_LOAD_SOURCE = Class-Load-$(PERL_CLASS_LOAD_VERSION).tar.gz
+> +PERL_CLASS_LOAD_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
+> +PERL_CLASS_LOAD_DEPENDENCIES = perl-data-optlist
+> perl-module-implementation perl-module-runtime perl-package-stash
+> perl-try-tiny
+> +PERL_CLASS_LOAD_LICENSE = Artistic or GPL-1.0+
+> +PERL_CLASS_LOAD_LICENSE_FILES = LICENSE
 > +
 > +$(eval $(perl-package))
 > --
@@ -119,4 +126,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/32493785/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/66214673/attachment.html>
