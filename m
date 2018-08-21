@@ -1,36 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 11:16:00 +0200
-Subject: [Buildroot] [Bug 11251] Util scanpypi failes when package
- change - to _ in tar file (Trunk)
-In-Reply-To: <CAGm1_kvSUrWmhaY6mqgxE=F6uhGC2VoTrz53u-brPL+L3P8f2A@mail.gmail.com>
-References: <bug-11251-163@https.bugs.busybox.net/>
- <bug-11251-163-u9zWfJfZlA@https.bugs.busybox.net/>
- <CAGm1_kvSUrWmhaY6mqgxE=F6uhGC2VoTrz53u-brPL+L3P8f2A@mail.gmail.com>
-Message-ID: <20180821111600.7a1517e0@windsurf>
+Date: Tue, 21 Aug 2018 11:17:49 +0200
+Subject: [Buildroot] [git commit branch/next] package/vlc: wayland support
+ needs wayland-protocols
+Message-ID: <20180821091110.6CA9D8E145@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yegor,
+commit: https://git.buildroot.net/buildroot/commit/?id=3c052b089460bb98230c1957b0f66f42084e0639
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 21 Aug 2018 11:02:32 +0200, Yegor Yefremov wrote:
-> On Tue, Aug 21, 2018 at 10:40 AM,  <bugzilla@busybox.net> wrote:
-> > https://bugs.busybox.net/show_bug.cgi?id=11251
-> >
-> > --- Comment #1 from mzweerspenko+bugzilla at gmail.com ---
-> > I now notice that the tar file has the same _.  
-> 
-> Btw. this package (python-websocket-client) is already in BR.
+Fixes
+http://autobuild.buildroot.net/results/3db/3dbb17bc548aa7d5fecd857a9bbd761729d20d4f/
 
-Please reply in the bug tracker, not on the mailing list, otherwise the
-bug submitter will not get your messages.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vlc/vlc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index d4be8b0bf1..c77c945a34 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -519,9 +519,9 @@ else
+ VLC_CONF_OPTS += --disable-udev
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WAYLAND),y)
++ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_WAYLAND_PROTOCOLS),yy)
+ VLC_CONF_OPTS += --enable-wayland
+-VLC_DEPENDENCIES += wayland
++VLC_DEPENDENCIES += wayland wayland-protocols
+ else
+ VLC_CONF_OPTS += --disable-wayland
+ endif
