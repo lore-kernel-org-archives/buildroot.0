@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
-Date: Tue, 21 Aug 2018 08:23:12 +0200
-Subject: [Buildroot] [PATCH 05/18] perl-x10: new package
-In-Reply-To: <20180820115519.24046-6-chrismcc@gmail.com>
+Date: Tue, 21 Aug 2018 08:35:52 +0200
+Subject: [Buildroot] [PATCH 06/18] perl-sys-cpu: new package
+In-Reply-To: <20180820115519.24046-7-chrismcc@gmail.com>
 References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820115519.24046-6-chrismcc@gmail.com>
-Message-ID: <CAGhdn55BLOJ0GgKcAyRkk2ospGodiUeTcSRfnMg4vgyRSdXZPw@mail.gmail.com>
+ <20180820115519.24046-7-chrismcc@gmail.com>
+Message-ID: <CAGhdn56NEiorxp+spyYFD3iEf__eu+-2dwffiU1Li3ewgsXr3w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,99 +17,85 @@ To: buildroot@busybox.net
 >
 
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
-but depends on perl-time-parsedate
 
 
 > ---
->  DEVELOPERS                     |  1 +
->  package/Config.in              |  1 +
->  package/perl-x10/Config.in     | 13 +++++++++++++
->  package/perl-x10/perl-x10.hash |  6 ++++++
->  package/perl-x10/perl-x10.mk   | 14 ++++++++++++++
->  5 files changed, 35 insertions(+)
->  create mode 100644 package/perl-x10/Config.in
->  create mode 100644 package/perl-x10/perl-x10.hash
->  create mode 100644 package/perl-x10/perl-x10.mk
+>  DEVELOPERS                             |  1 +
+>  package/Config.in                      |  1 +
+>  package/perl-sys-cpu/Config.in         |  5 +++++
+>  package/perl-sys-cpu/perl-sys-cpu.hash |  2 ++
+>  package/perl-sys-cpu/perl-sys-cpu.mk   | 13 +++++++++++++
+>  5 files changed, 22 insertions(+)
+>  create mode 100644 package/perl-sys-cpu/Config.in
+>  create mode 100644 package/perl-sys-cpu/perl-sys-cpu.hash
+>  create mode 100644 package/perl-sys-cpu/perl-sys-cpu.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 105fae199c..410d01b02b 100644
+> index 410d01b02b..70879360f2 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -506,6 +506,7 @@ F:  package/perl-sub-install/
+> @@ -503,6 +503,7 @@ F:  package/perl-module-runtime/
+>  F:     package/perl-number-bytes-human/
+>  F:     package/perl-params-util/
+>  F:     package/perl-sub-install/
+> +F:     package/perl-sys-cpu/
 >  F:     package/perl-sys-meminfo/
 >  F:     package/perl-sys-mmap/
 >  F:     package/perl-time-parsedate/
-> +F:     package/perl-x10/
->
->  N:     Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
->  F:     package/audit/
 > diff --git a/package/Config.in b/package/Config.in
-> index 7629cf6c46..c083f4e1bd 100644
+> index c083f4e1bd..fcb67b7617 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -737,6 +737,7 @@ menu "Perl libraries/modules"
->         source "package/perl-try-tiny/Config.in"
->         source "package/perl-uri/Config.in"
->         source "package/perl-www-robotrules/Config.in"
-> +       source "package/perl-x10/Config.in"
->         source "package/perl-xml-libxml/Config.in"
->         source "package/perl-xml-namespacesupport/Config.in"
->         source "package/perl-xml-sax/Config.in"
-> diff --git a/package/perl-x10/Config.in b/package/perl-x10/Config.in
+> @@ -729,6 +729,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-params-util/Config.in"
+>         source "package/perl-path-tiny/Config.in"
+>         source "package/perl-sub-install/Config.in"
+> +       source "package/perl-sys-cpu/Config.in"
+>         source "package/perl-sys-meminfo/Config.in"
+>         source "package/perl-sys-mmap/Config.in"
+>         source "package/perl-time-hires/Config.in"
+> diff --git a/package/perl-sys-cpu/Config.in b/package/perl-sys-cpu/Config.
+> in
 > new file mode 100644
-> index 0000000000..984a561b05
+> index 0000000000..d5fff5b849
 > --- /dev/null
-> +++ b/package/perl-x10/Config.in
-> @@ -0,0 +1,13 @@
-> +config BR2_PACKAGE_PERL_X10
-> +       bool "perl-x10"
-> +       depends on !BR2_STATIC_LIBS
-> +       select BR2_PACKAGE_PERL_ASTRO_SUNTIME
-> +       select BR2_PACKAGE_PERL_DEVICE_SERIALPORT
-> +       select BR2_PACKAGE_PERL_TIME_PARSEDATE
+> +++ b/package/perl-sys-cpu/Config.in
+> @@ -0,0 +1,5 @@
+> +config BR2_PACKAGE_PERL_SYS_CPU
+> +       bool "perl-sys-cpu"
 > +       help
-> +         creates a server used to receive events from an x10 client
+> +         perl-sys-cpu
 > +
-> +         https://metacpan.org/release/X10
-> +
-> +comment "perl-x10 needs a toolchain w/ dynamic library"
-> +       depends on BR2_STATIC_LIBS
-> diff --git a/package/perl-x10/perl-x10.hash b/package/perl-x10/perl-x10.
-> hash
+> diff --git a/package/perl-sys-cpu/perl-sys-cpu.hash
+> b/package/perl-sys-cpu/perl-sys-cpu.hash
 > new file mode 100644
-> index 0000000000..5411390e3e
+> index 0000000000..0977606b1a
 > --- /dev/null
-> +++ b/package/perl-x10/perl-x10.hash
-> @@ -0,0 +1,6 @@
-> +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    20dcca2dfb978bfed3043276aa3481e5 X10-0.04.tar.gz
-> +sha256 3dcee9d95614b2db70de608e933d42817f93fccd5b1f2f782b0846af487d9134
-> X10-0.04.tar.gz
-> +
-> +# computed by scancpan
-> +sha256 e6f320afa82517d663be348dd2515ecb1454a7c851ba5590f13aca01d219be80
-> README
-> diff --git a/package/perl-x10/perl-x10.mk b/package/perl-x10/perl-x10.mk
+> +++ b/package/perl-sys-cpu/perl-sys-cpu.hash
+> @@ -0,0 +1,2 @@
+> +# locally computed
+> +sha256 ca0ec47ab24070e3040e5075337cfc69721362d9bef50f6992072efe644d4d26
+> Sys-CPU-0.52.tar.gz
+> diff --git a/package/perl-sys-cpu/perl-sys-cpu.mk b/package/perl-sys-cpu/
+> perl-sys-cpu.mk
 > new file mode 100644
-> index 0000000000..8f091b9509
+> index 0000000000..efc9ee814b
 > --- /dev/null
-> +++ b/package/perl-x10/perl-x10.mk
-> @@ -0,0 +1,14 @@
+> +++ b/package/perl-sys-cpu/perl-sys-cpu.mk
+> @@ -0,0 +1,13 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-x10
+> +# perl-sys-cpu
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_X10_VERSION = 0.04
-> +PERL_X10_SOURCE = X10-$(PERL_X10_VERSION).tar.gz
-> +PERL_X10_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RO/ROBF
-> +PERL_X10_DEPENDENCIES = perl-astro-suntime perl-device-serialport
-> perl-time-parsedate
-> +PERL_X10_LICENSE = GPL-3.0
-> +PERL_X10_LICENSE_FILES = README
+> +PERL_SYS_CPU_VERSION = 0.52
+> +PERL_SYS_CPU_SOURCE = Sys-CPU-$(PERL_SYS_CPU_VERSION).tar.gz
+> +PERL_SYS_CPU_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MK/MKODERER
+> +PERL_SYS_CPU_LICENSE = Artistic or GPL-1.0+ # as stated in README file
+> +PERL_SYS_CPU_LICENSE_FILES = README
 > +
 > +$(eval $(perl-package))
 > --
@@ -122,4 +108,4 @@ but depends on perl-time-parsedate
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/18d1781d/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/34f0c4d2/attachment.html>
