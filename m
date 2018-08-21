@@ -1,10 +1,10 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
-Date: Tue, 21 Aug 2018 08:19:14 +0200
-Subject: [Buildroot] [PATCH 03/18] perl-data-dump: new package
-In-Reply-To: <20180820115519.24046-4-chrismcc@gmail.com>
+Date: Tue, 21 Aug 2018 08:23:12 +0200
+Subject: [Buildroot] [PATCH 05/18] perl-x10: new package
+In-Reply-To: <20180820115519.24046-6-chrismcc@gmail.com>
 References: <20180820115519.24046-1-chrismcc@gmail.com>
- <20180820115519.24046-4-chrismcc@gmail.com>
-Message-ID: <CAGhdn578SxTRD7_NRw2SZqm7Scc28zrJ4GYdVeHAtmL_GRt+9g@mail.gmail.com>
+ <20180820115519.24046-6-chrismcc@gmail.com>
+Message-ID: <CAGhdn55BLOJ0GgKcAyRkk2ospGodiUeTcSRfnMg4vgyRSdXZPw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,91 +17,99 @@ To: buildroot@busybox.net
 >
 
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
+but depends on perl-time-parsedate
 
 
 > ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/perl-data-dump/Config.in           |  6 ++++++
->  package/perl-data-dump/perl-data-dump.hash |  6 ++++++
->  package/perl-data-dump/perl-data-dump.mk   | 13 +++++++++++++
->  5 files changed, 27 insertions(+)
->  create mode 100644 package/perl-data-dump/Config.in
->  create mode 100644 package/perl-data-dump/perl-data-dump.hash
->  create mode 100644 package/perl-data-dump/perl-data-dump.mk
+>  DEVELOPERS                     |  1 +
+>  package/Config.in              |  1 +
+>  package/perl-x10/Config.in     | 13 +++++++++++++
+>  package/perl-x10/perl-x10.hash |  6 ++++++
+>  package/perl-x10/perl-x10.mk   | 14 ++++++++++++++
+>  5 files changed, 35 insertions(+)
+>  create mode 100644 package/perl-x10/Config.in
+>  create mode 100644 package/perl-x10/perl-x10.hash
+>  create mode 100644 package/perl-x10/perl-x10.mk
 >
 > diff --git a/DEVELOPERS b/DEVELOPERS
-> index 75237eae3b..023bddbce0 100644
+> index 105fae199c..410d01b02b 100644
 > --- a/DEVELOPERS
 > +++ b/DEVELOPERS
-> @@ -486,6 +486,7 @@ F:  package/perl-appconfig/
->  F:     package/perl-astro-suntime/
->  F:     package/perl-class-std/
->  F:     package/perl-class-std-fast/
-> +F:     package/perl-data-dump/
->  F:     package/perl-data-optlist/
->  F:     package/perl-data-uuid/
->  F:     package/perl-date-manip/
+> @@ -506,6 +506,7 @@ F:  package/perl-sub-install/
+>  F:     package/perl-sys-meminfo/
+>  F:     package/perl-sys-mmap/
+>  F:     package/perl-time-parsedate/
+> +F:     package/perl-x10/
+>
+>  N:     Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+>  F:     package/audit/
 > diff --git a/package/Config.in b/package/Config.in
-> index b6e739dade..f412ff673b 100644
+> index 7629cf6c46..c083f4e1bd 100644
 > --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -674,6 +674,7 @@ menu "Perl libraries/modules"
->         source "package/perl-crypt-cbc/Config.in"
->         source "package/perl-crypt-openssl-random/Config.in"
->         source "package/perl-crypt-openssl-rsa/Config.in"
-> +       source "package/perl-data-dump/Config.in"
->         source "package/perl-data-optlist/Config.in"
->         source "package/perl-data-uuid/Config.in"
->         source "package/perl-date-manip/Config.in"
-> diff --git a/package/perl-data-dump/Config.in b/package/perl-data-dump/
-> Config.in
+> @@ -737,6 +737,7 @@ menu "Perl libraries/modules"
+>         source "package/perl-try-tiny/Config.in"
+>         source "package/perl-uri/Config.in"
+>         source "package/perl-www-robotrules/Config.in"
+> +       source "package/perl-x10/Config.in"
+>         source "package/perl-xml-libxml/Config.in"
+>         source "package/perl-xml-namespacesupport/Config.in"
+>         source "package/perl-xml-sax/Config.in"
+> diff --git a/package/perl-x10/Config.in b/package/perl-x10/Config.in
 > new file mode 100644
-> index 0000000000..a44291baae
+> index 0000000000..984a561b05
 > --- /dev/null
-> +++ b/package/perl-data-dump/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PERL_DATA_DUMP
-> +       bool "perl-data-dump"
+> +++ b/package/perl-x10/Config.in
+> @@ -0,0 +1,13 @@
+> +config BR2_PACKAGE_PERL_X10
+> +       bool "perl-x10"
+> +       depends on !BR2_STATIC_LIBS
+> +       select BR2_PACKAGE_PERL_ASTRO_SUNTIME
+> +       select BR2_PACKAGE_PERL_DEVICE_SERIALPORT
+> +       select BR2_PACKAGE_PERL_TIME_PARSEDATE
 > +       help
-> +         Pretty printing of data structures
+> +         creates a server used to receive events from an x10 client
 > +
-> +         https://metacpan.org/release/Data-Dump
-> diff --git a/package/perl-data-dump/perl-data-dump.hash
-> b/package/perl-data-dump/perl-data-dump.hash
+> +         https://metacpan.org/release/X10
+> +
+> +comment "perl-x10 needs a toolchain w/ dynamic library"
+> +       depends on BR2_STATIC_LIBS
+> diff --git a/package/perl-x10/perl-x10.hash b/package/perl-x10/perl-x10.
+> hash
 > new file mode 100644
-> index 0000000000..87850326de
+> index 0000000000..5411390e3e
 > --- /dev/null
-> +++ b/package/perl-data-dump/perl-data-dump.hash
+> +++ b/package/perl-x10/perl-x10.hash
 > @@ -0,0 +1,6 @@
 > +# retrieved by scancpan from http://cpan.metacpan.org/
-> +md5    762c111e525c82ff23d62c90821b26e9 Data-Dump-1.23.tar.gz
-> +sha256 af53b05ef1387b4cab4427e6789179283e4f0da8cf036e8db516ddb344512b65
-> Data-Dump-1.23.tar.gz
+> +md5    20dcca2dfb978bfed3043276aa3481e5 X10-0.04.tar.gz
+> +sha256 3dcee9d95614b2db70de608e933d42817f93fccd5b1f2f782b0846af487d9134
+> X10-0.04.tar.gz
 > +
 > +# computed by scancpan
-> +sha256 31d1b6482bcc3db87a38ad02065554f9d3bc13321d4ef8e96042464045e2abcf
+> +sha256 e6f320afa82517d663be348dd2515ecb1454a7c851ba5590f13aca01d219be80
 > README
-> diff --git a/package/perl-data-dump/perl-data-dump.mk
-> b/package/perl-data-dump/perl-data-dump.mk
+> diff --git a/package/perl-x10/perl-x10.mk b/package/perl-x10/perl-x10.mk
 > new file mode 100644
-> index 0000000000..7c5d46e08e
+> index 0000000000..8f091b9509
 > --- /dev/null
-> +++ b/package/perl-data-dump/perl-data-dump.mk
-> @@ -0,0 +1,13 @@
+> +++ b/package/perl-x10/perl-x10.mk
+> @@ -0,0 +1,14 @@
 > +###########################################################
 > #####################
 > +#
-> +# perl-data-dump
+> +# perl-x10
 > +#
 > +###########################################################
 > #####################
 > +
-> +PERL_DATA_DUMP_VERSION = 1.23
-> +PERL_DATA_DUMP_SOURCE = Data-Dump-$(PERL_DATA_DUMP_VERSION).tar.gz
-> +PERL_DATA_DUMP_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GAAS
-> +PERL_DATA_DUMP_LICENSE = Artistic or GPL-1.0+
-> +PERL_DATA_DUMP_LICENSE_FILES = README
+> +PERL_X10_VERSION = 0.04
+> +PERL_X10_SOURCE = X10-$(PERL_X10_VERSION).tar.gz
+> +PERL_X10_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RO/ROBF
+> +PERL_X10_DEPENDENCIES = perl-astro-suntime perl-device-serialport
+> perl-time-parsedate
+> +PERL_X10_LICENSE = GPL-3.0
+> +PERL_X10_LICENSE_FILES = README
 > +
 > +$(eval $(perl-package))
 > --
@@ -114,4 +122,4 @@ Acked-by: Francois Perrad <francois.perrad@gadz.org>
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/fba67f91/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/18d1781d/attachment.html>
