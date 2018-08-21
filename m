@@ -1,71 +1,162 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 Aug 2018 20:26:07 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/2] boost: context needs thread if gcc <= 4.6
-In-Reply-To: <20180821112724.3835f7ae@windsurf>
-References: <20180820221257.1553-1-fontaine.fabrice@gmail.com>
- <20180821112724.3835f7ae@windsurf>
-Message-ID: <CAPi7W80Ly9w5AqmBi=8aA4HnbjR=Jkck8n0fJ5ow+0fQxJyt_Q@mail.gmail.com>
+From: Mikael Eliasson <mikael@robomagi.com>
+Date: Tue, 21 Aug 2018 20:34:34 +0200
+Subject: [Buildroot] [PATCH 1/1] libjwt: new package.
+In-Reply-To: <20180812192554.GA29650@scaer>
+References: <20180811202925.3547-1-mikael@robomagi.com>
+ <20180812143902.5dde6618@windsurf>
+ <CAMKz0Yp_0Ccwey=qKoRHFdNf55OL=ZA2GuuCA+SoBaAPNFbzuA@mail.gmail.com>
+ <20180812192554.GA29650@scaer>
+Message-ID: <CAMKz0YrmQvWT+uHRhg_mYF6SEOkPn2jKXEySToy60U-s=rd7Cw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hi,
+2018-08-12 21:25 GMT+02:00 Yann E. MORIN <yann.morin.1998@free.fr>:
 
-Le mar. 21 ao?t 2018 ? 11:27, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+> Mickael, All,
+>
+> On 2018-08-12 18:08 +0200, Mikael Eliasson spake thusly:
+> > Hi Thomas,
+> > Not used to using mailing lists so this may not be the correct way to
+> send a follow up patch. It is attached.
+>
+> Just send it again with git send-email.
+>
+> Also, it is customary to not top-post like you did, but to reply in-line
+> (like I'm doing).
+>
+> > I think I have made all the changes you requested. I had also missed
+> including package/Config.in.
+> > Tested with test-pkg -a:
+> > 47 builds, 0 skipped, 0 build failed, 0 legal-info failed
+>
+> Great! :-)
+>
+> Yet, I have a very small comment, see below...
+>
+> [--SNIP--]
+> > diff --git a/package/libjwt/0001-Declare-project-C-only.patch
+> b/package/libjwt/0001-Declare-project-C-only.patch
+> > new file mode 100644
+> > index 0000000000..cfb3cc8425
+> > --- /dev/null
+> > +++ b/package/libjwt/0001-Declare-project-C-only.patch
+> > @@ -0,0 +1,16 @@
+> > +Declares project C only.
+> > +
+> > +Signed-off-by: Mikael Eliasson <mikael@robomagi.com>
+> > +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> > +index 5cd1910..aefb87d 100644
+> > +--- a/CMakeLists.txt
+> > ++++ b/CMakeLists.txt
+> > +@@ -4,7 +4,7 @@ if (MSVC)
+> > +     set (CMAKE_SYSTEM_VERSION 8.1 CACHE TYPE INTERNAL FORCE)
+> > + endif ()
+> > +
+> > +-project (jwt)
+> > ++project (jwt C)
+>
+> It would be great if you were to send this change upstream, so that we
+> can drop this patch next time we update the package.
+>
+> > + list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+> > +
+> [--SNIP--]
+> > diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
+> > new file mode 100644
+> > index 0000000000..8863fb436a
+> > --- /dev/null
+> > +++ b/package/libjwt/libjwt.mk
+> > @@ -0,0 +1,21 @@
+> > +###########################################################
+> #####################
+> > +#
+> > +# libjwt
+> > +#
+> > +###########################################################
+> #####################
+> > +
+> > +LIBJWT_VERSION = v1.9.0
+> > +LIBJWT_SITE = $(call github,benmcollins,libjwt,$(LIBJWT_VERSION))
+> > +LIBJWT_INSTALL_STAGING = YES
+> > +LIBJWT_DEPENDENCIES = jansson
+> > +LIBJWT_LICENSE = LGPL-3.0
+> > +LIBJWT_LICENSE_FILES = COPYING.LIB
+>
+> I know there is no strongly documented ordering, but I like that the
+> descriptive metadata goes first, while the building metadata goes last,
+> with adequate spacing to separate the types of data, like so:
+>
+>     LIBJWT_VERSION = v1.9.0
+>     LIBJWT_SITE = $(call github,benmcollins,libjwt,$(LIBJWT_VERSION))
+>     LIBJWT_LICENSE = LGPL-3.0
+>     LIBJWT_LICENSE_FILES = COPYING.LIB
+>
+>     LIBJWT_DEPENDENCIES = jansson
+>
+>     LIBJWT_INSTALL_STAGING = YES
+>
+> It kind of follows some "logic": where to get it, what itslicensing is,
+> what it needs, what it provides, how we build it.
+>
+> No need to re-send. If a maintainer agrees, he can re-reorder when
+> applying, or he can just apply it as-is if he believes that is OK as-is.
+>
+Is there anything else you need me to do to include this package? I cannot
+see that it has been added in github yet.
 
-> Hello,
->
-> On Tue, 21 Aug 2018 00:12:56 +0200, Fabrice Fontaine wrote:
-> > mutex is available on gcc 4.7.x, the issue is that boost does not
-> > correctly detect it because -std=c++11 is missing.
->
-> Where did you get the information that mutex is available since gcc
-> 4.7 ? Is it by testing gcc 4.6 and 4.7 ?
->
-I tested with 4.7. but std::mutex is very old, it exists since gcc 4.4 (see
-history of
-https://github.com/gcc-mirror/gcc/blob/gcc-4_7_0-release/libstdc%2B%2B-v3/include/std/mutex
-).
-As a result, it probably also works on gcc 4.4, 4.5 and 4.6 but we'll have
-to add std=c++0x instead of std=c++11. However, it seems that the current
-best practice in buildroot is to add a dependency on gcc 4.7 (poppler), 4.8
-(mongodb) or 4.9 (upmpdcli) for C+11 packages (depending on the C++11
-features required by the package). We're also adding std=c++11 for 6 C++11
-packages (flatbuffers, libcrossguid, libmediaart, libv4l, mosh, ...) but we
-never add std=c++0x (except for host-kodi).
 
 >
-> I couldn't get this information by looking at
-> https://gcc.gnu.org/projects/cxx-status.html#cxx11.
+> Regards,
+> Yann E. MORIN.
 >
-> Also, I am wondering if the two patches should really be separate.
-> Aren't they in fact both intimately related, where std::mutex will only
-> be visible in gcc >= 4.7 if std=c++11 is passed ?
+> > +ifeq ($(BR2_PACKAGE_OPENSSL),y)
+> > +LIBJWT_DEPENDENCIES += openssl
+> > +else
+> > +LIBJWT_DEPENDENCIES += gnutls
+> > +LIBJWT_CONF_OPTS += -DWITHOUT_OPENSSL=1
+> > +endif
+> > +
+> > +$(eval $(cmake-package))
+> > --
+> > 2.17.1
+> >
 >
-> To me, they are basically one single patch:
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
 >
->  - Below gcc 4.7, we don't have std::mutex, so boost-thread must be used
->  - Above gcc 4.7, we have std::mutex, but we need to pass std=c++11 for
->    std::mutex to be visible/usable
 >
-OK I will merge both patches.
-
->
-> Thanks,
->
-> Thomas
 > --
-> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> .-----------------.--------------------.------------------.-
+> -------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+> '------------------------------^-------^------------------^-
+> -------------------'
 >
-Best Regards,
 
-Fabrice
+
+
+-- 
+Mikael Eliasson
+Telefon:
++46703900837
+Email:
+mikael at robomagi.com
+Adress:
+Robomagi AB
+T?ngringsgatan 26A 78430 Borl?nge
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/77062737/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/92ed0ce2/attachment.html>
