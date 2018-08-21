@@ -1,49 +1,64 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 21 Aug 2018 22:53:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libX11: security bump to
- version 1.6.6
-Message-ID: <20180821205325.3551-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Aug 2018 22:50:55 +0200
+Subject: [Buildroot] [git commit branch/next] package/vlc: skins2 depends on
+ qt5base
+Message-ID: <20180821204928.A9CBD8E1F1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-14599, CVE-2018-14600 & CVE-2018-14598:
-https://lists.x.org/archives/xorg-announce/2018-August/002915.html
+commit: https://git.buildroot.net/buildroot/commit/?id=9f68d99a82384dda6ea7801f3f5ec905231c8fd2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Fixes
+
+configure: error: The skins2 module depends on the Qt interface. Without
+it you will not be able to open any dialog box from the interface, which
+makes the skins2 interface rather useless. Install the Qt development
+package or alternatively you can also configure with: --disable-qt
+--disable-skins2.
+
+http://autobuild.buildroot.net/results/ddb/ddb1ab48adb9705c44ed3d6d800b6d01ad52ac8c/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 9 +++++++--
- package/x11r7/xlib_libX11/xlib_libX11.mk   | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ package/vlc/vlc.mk | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index b1a87b18e1..4dc934177a 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-February/002777.html
--sha256 4d3890db2ba225ba8c55ca63c6409c1ebb078a2806de59fb16342768ae63435d  libX11-1.6.5.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2018-August/002916.html
-+md5 6b0f83e851b3b469dd660f3a95ac3e42  libX11-1.6.6.tar.bz2
-+sha1 b29cf4362b58188cb27fed2294788004af7428a9  libX11-1.6.6.tar.bz2
-+sha256 65fe181d40ec77f45417710c6a67431814ab252d21c2e85c75dd1ed568af414f  libX11-1.6.6.tar.bz2
-+sha512 9866dc6b158b15a96efe140b6fa68a775889a37e5565a126216211fee63868e02629a9f9f41816d590ef150560f43b8864010a77a6318c9109e76aec1d21b4d7  libX11-1.6.6.tar.bz2
-+# Locally computed
-+sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index e2266cdfad..9eafd47e7b 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index c77c945a34..b69657d31f 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -473,8 +473,14 @@ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS)$(BR2_PACKAGE_QT5SVG),yy)
+ VLC_CONF_OPTS += --enable-qt
+ VLC_DEPENDENCIES += qt5base qt5svg
++ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
++VLC_CONF_OPTS += --enable-skins2
++VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
+ else
+-VLC_CONF_OPTS += --disable-qt
++VLC_CONF_OPTS += --disable-skins2
++endif
++else
++VLC_CONF_OPTS += --disable-qt --disable-skins2
+ endif
  
--XLIB_LIBX11_VERSION = 1.6.5
-+XLIB_LIBX11_VERSION = 1.6.6
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
--- 
-2.18.0
+ ifeq ($(BR2_PACKAGE_SDL_IMAGE),y)
+@@ -551,13 +557,6 @@ else
+ VLC_CONF_OPTS += --without-x
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
+-VLC_CONF_OPTS += --enable-skins2
+-VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
+-else
+-VLC_CONF_OPTS += --disable-skins2
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ VLC_DEPENDENCIES += zlib
+ endif
