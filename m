@@ -1,119 +1,59 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Tue, 21 Aug 2018 08:55:36 -0700
-Subject: [Buildroot] [PATCH v3] mariadb: bump version to 10.2.17
-Message-ID: <20180821155536.21178-1-bluemrp9@gmail.com>
+From: Robert J. Heywood <robert.heywood@codethink.co.uk>
+Date: Tue, 21 Aug 2018 17:04:11 +0100
+Subject: [Buildroot] [PATCH 1/2] Adding btrfs-progs host package.
+Message-ID: <20180821160412.28757-1-robert.heywood@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://mariadb.com/kb/en/mariadb-10217-release-notes/
-Changelog: https://mariadb.com/kb/en/mariadb-10217-changelog/
+Adding a new option to build the btrfs toolset for the host.
 
-Note that HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled has been changed to
-HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF in order to prevent the following
-configure error:
-
-CMake Error at /usr/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
-  Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
-  (Required is at least version "3.3.24")
-Call Stack (most recent call first):
-  /usr/share/cmake-3.11/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
-  /usr/share/cmake-3.11/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
-  libmariadb/CMakeLists.txt:303 (FIND_PACKAGE)
-
-RocksDB is also disabled to prevent the following build error in some
-configurations:
-
-./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:327:38: error: field 'result' has incomplete type 'std::promise<rocksdb::BackupEngineImpl::CopyOrCreateResult>'
-     std::promise<CopyOrCreateResult> result;
-
-./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:378:37: error: field 'result' has incomplete type 'std::future<rocksdb::BackupEngineImpl::CopyOrCreateResult>'
-     std::future<CopyOrCreateResult> result;
-
-./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:425:37: error: field 'result' has incomplete type 'std::future<rocksdb::BackupEngineImpl::CopyOrCreateResult>'
-     std::future<CopyOrCreateResult> result;
-
-./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc: In member function 'rocksdb::Status rocksdb::BackupEngineImpl::AddBackupFileWorkItem(std::unordered_set<std::basic_string<char> >&, std::vector<rocksdb::BackupEngineImpl::BackupAfterCopyOrCreateWorkItem>&, rocksdb::BackupID, bool, const string&, const string&, rocksdb::RateLimiter*, uint64_t, uint64_t, bool, std::function<void()>, const string&)':
-./buildroot/output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:1366:38: error: aggregate 'std::promise<rocksdb::BackupEngineImpl::CopyOrCreateResult> promise_result' has incomplete type and cannot be defined
-     std::promise<CopyOrCreateResult> promise_result;
-
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Robert J. Heywood <robert.heywood@codethink.co.uk>
 ---
-Changes v2 - v3:
-  - Bump version from 10.2.16 to 10.2.17
-  - Fix build error by disabling RocksDB (discovered by Thomas Petazzoni)
-  - Rebased against master
-Changes v1 - v2:
-  - No change
----
- package/mariadb/mariadb.hash | 12 ++++++------
- package/mariadb/mariadb.mk   | 14 +++++++++++---
- 2 files changed, 17 insertions(+), 9 deletions(-)
+ package/Config.in.host             | 1 +
+ package/btrfs-progs/Config.in.host | 6 ++++++
+ package/btrfs-progs/btrfs-progs.mk | 4 ++++
+ 3 files changed, 11 insertions(+)
+ create mode 100644 package/btrfs-progs/Config.in.host
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index e4736465e0b76bd19b68a45da324ba9a0959512d..d44b4f35ab9aaca2f42a7bf59029d6a91c76c5d5 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,9 +1,9 @@
--# From https://downloads.mariadb.org/mariadb/10.1.35/
--md5 935f401314ff08a4177beb70fed6055c  mariadb-10.1.35.tar.gz
--sha1 d322f0da17f4de475832dd534657eba5a936f77b  mariadb-10.1.35.tar.gz
--sha256 9e91d985ed4f662126e3e5791fe91ec8a2f44ec811113c2b6fbc72fa14553c4d  mariadb-10.1.35.tar.gz
--sha512 88e6049f3bbc3aa047e108f91a2c4f335758e80f25bfa2974b5f8c2e13f5758824d7835dece021b515c531e5641b9998e4de92256ad4b47b7f694da99bd471aa  mariadb-10.1.35.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.2.17/
-+md5 97dac7c5c288dbbbdd97768972daeb2e  mariadb-10.2.17.tar.gz
-+sha1 38f2ba16297e14baa2f641d2273bbb92f56d0b94  mariadb-10.2.17.tar.gz
-+sha256 e7b3078f8de874a4d451242a8a3eed49bf6f916dcd52fc3efa55886f5f35be27  mariadb-10.2.17.tar.gz
-+sha512 9714f786abde43b418d8b5accbbd485de213b90db18c879625ce30777526d28fdafd3bdb43922ab6872b300cfa06895b5b3fad5eb0c0e804ad66a1fd1793a141  mariadb-10.2.17.tar.gz
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 7838ffc219..432597ed31 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -2,6 +2,7 @@ menu "Host utilities"
  
- # Hash for license files
--sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-+sha256 dec3c92fdc58070facec08db681aa6b9cb05fd21e463358161c1df92e1c0653f  README.md
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 23822187c3d2a0e2f6358d52200b440325c43e9d..075582288a4191defda17829b4cbe3b4cffc060a 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.35
-+MARIADB_VERSION = 10.2.17
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
- # https://jira.mariadb.org/browse/MDEV-12297
--MARIADB_LICENSE_FILES = README COPYING
-+MARIADB_LICENSE_FILES = README.md COPYING
- MARIADB_INSTALL_STAGING = YES
- MARIADB_PROVIDES = mysql
- 
-@@ -41,6 +41,14 @@ MARIADB_CONF_OPTS += -DSTACK_DIRECTION=-1
- # when it comes to cross-compilation we shall disable it and also disable TokuDB.
- MARIADB_CONF_OPTS += -DWITH_JEMALLOC=no -DWITHOUT_TOKUDB=1
- 
-+# RocksDB fails to build in some configurations with the following build error:
-+# ./output/build/mariadb-10.2.17/storage/rocksdb/rocksdb/utilities/backupable/backupable_db.cc:327:38:
-+# error: field 'result' has incomplete type 'std::promise<rocksdb::BackupEngineImpl::CopyOrCreateResult>'
-+#     std::promise<CopyOrCreateResult> result;
-+#
-+# To work around the issue, we disable RocksDB
-+MARIADB_CONF_OPTS += -DWITHOUT_ROCKSDB=1
+ 	source "package/aespipe/Config.in.host"
+ 	source "package/android-tools/Config.in.host"
++	source "package/btrfs-progs/Config.in.host"
+ 	source "package/cargo/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+ 	source "package/checkpolicy/Config.in.host"
+diff --git a/package/btrfs-progs/Config.in.host b/package/btrfs-progs/Config.in.host
+new file mode 100644
+index 0000000000..cdcd2e4ec4
+--- /dev/null
++++ b/package/btrfs-progs/Config.in.host
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_HOST_BTRFS_PROGS
++	bool "host btrfs-progs"
++	help
++	  Btrfs filesystem utilities
 +
- # Make it explicit that we are cross-compiling
- MARIADB_CONF_OPTS += -DCMAKE_CROSSCOMPILING=1
++	  https://btrfs.wiki.kernel.org/index.php/Main_Page
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index b4cc839352..3129ecc714 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -21,4 +21,8 @@ BTRFS_PROGS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
+ BTRFS_PROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
+ endif
  
-@@ -67,7 +75,7 @@ MARIADB_CONF_OPTS += \
- 	-DMYSQL_DATADIR=/var/lib/mysql \
- 	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
- 
--HOST_MARIADB_CONF_OPTS += -DWITH_SSL=bundled
-+HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
- 
- # Some helpers must be compiled for host in order to crosscompile mariadb for
- # the target. They are then included by import_executables.cmake which is
++HOST_BTRFS_PROGS_DEPENDENCIES = host-e2fsprogs host-lzo host-zlib
++HOST_BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd --disable-python
++
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-2.18.0
+2.11.0
