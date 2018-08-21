@@ -1,78 +1,117 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 12:27:44 +0200
-Subject: [Buildroot] [git commit] busybox: don't clobber dangling symlinks
-Message-ID: <20180821113358.CAC3B8E1BB@busybox.osuosl.org>
+Date: Tue, 21 Aug 2018 14:05:09 +0200
+Subject: [Buildroot] [PATCH 1/1] Add support for building toolchains
+ against custom kernel headers.
+In-Reply-To: <20180821110646.5671-1-mark.corbin@embecosm.com>
+References: <20180821110646.5671-1-mark.corbin@embecosm.com>
+Message-ID: <20180821140509.162e6c49@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1db9038ddaf89c4abf69e17993eb13646da7e8d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-We sometimes create dangling symlinks in the target directory. That is
-because we need canonical targets, as relative targets don't work well
-with BR2_ROOTFS_MERGED_USR. For example, the vim package installs the
-/bin/vi symlink to /usr/bin/vim. This symlink might be dangling when the
-build host has no vim installed there.
+On Tue, 21 Aug 2018 12:06:46 +0100, Mark Corbin wrote:
+> Allows the selection of a manual version, custom tarball or custom
+> git repository for the toolchain kernel headers. This enables
+> toolchains to be built against custom kernel headers without having
+> to build a full kernel.
+> 
+> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 
-Patch the busybox install.sh script to avoid clobber of dangling
-symlinks.
+Thanks for working on this! Looks good overall, but I have a few
+possible suggestions of improvement.
 
-Fixes:
-http://autobuild.buildroot.net/results/796/796107430db6545401d9926e84f19eaf2040b756/
+First, the commit title should be prefixed with the affected package,
+so something like:
 
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Carlos Santos <casantos@datacom.com.br>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...nstall.sh-don-t-clobber-dangling-symlinks.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+	linux-headers: add support for custom kernel headers
 
-diff --git a/package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch b/package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch
-new file mode 100644
-index 0000000000..b6fb5b9236
---- /dev/null
-+++ b/package/busybox/0003-install.sh-don-t-clobber-dangling-symlinks.patch
-@@ -0,0 +1,38 @@
-+From c9f1a877f1b9e2602913600d769edb17ee41d15d Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Tue, 17 Jul 2018 13:18:09 +0300
-+Subject: [PATCH] install.sh: don't clobber dangling symlinks
-+
-+Symlinks in a subdirectory that is to become target rootfs are sometimes
-+dangling because they link to canonical file names that are not present
-+on the host, but are present relative to the target rootfs root. Don't
-+copy over dangling symlinks when noclobber is enabled
-+
-+The -e test treats dangling symlinks as non-existent files. Add -h test
-+that returns true for all symlinks.
-+
-+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: 
-+http://lists.busybox.net/pipermail/busybox/2018-July/086555.html
-+
-+ applets/install.sh | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/applets/install.sh b/applets/install.sh
-+index 9aede0f530e2..415896893e86 100755
-+--- a/applets/install.sh
-++++ b/applets/install.sh
-+@@ -83,7 +83,7 @@ install -m 755 busybox "$prefix/bin/busybox" || exit 1
-+ for i in $h; do
-+ 	appdir=`dirname "$i"`
-+ 	app=`basename "$i"`
-+-	if [ x"$noclobber" = x"1" ] && [ -e "$prefix/$i" ]; then
-++	if [ x"$noclobber" = x"1" ] && ([ -e "$prefix/$i" ] || [ -h "$prefix/$i" ]); then
-+ 		echo "  $prefix/$i already exists"
-+ 		continue
-+ 	fi
-+-- 
-+2.18.0
-+
+or something like that.
+
+>  config BR2_KERNEL_HEADERS_VERSION
+>  	bool "Manually specified Linux version"
+> +	help
+> +	  This option allows you to use a specific official version from
+> +	  kernel.org, like 2.6.x, 2.6.x.y, 3.x.y, ...
+> +
+> +	  Note: you cannot use this option to select a _longterm_ 2.6
+> +	  kernel, because these kernels are not located at the standard
+> +	  URL at kernel.org. Instead, select "Custom tarball" and
+> +	  specify the right URL directly.
+
+Adding this help text is good, but somewhat unrelated. Could you do
+that as a separate, preliminary commit ?
+
+
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index 954c6b7978..3c2509e249 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -64,8 +64,18 @@ endef
+>  
+>  LINUX_HEADERS_POST_PATCH_HOOKS += LINUX_HEADERS_APPLY_LOCAL_PATCHES
+>  
+> -else # ! BR2_KERNEL_HEADERS_AS_KERNEL
+> -
+> +else ifeq ($(BR2_KERNEL_HEADERS_CUSTOM_TARBALL),y)
+> +LINUX_HEADERS_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION))
+> +LINUX_HEADERS_SITE = $(patsubst %/,%,$(dir $(LINUX_HEADERS_TARBALL)))
+> +LINUX_HEADERS_SOURCE = $(notdir $(LINUX_HEADERS_TARBALL))
+> +BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
+> +else ifeq ($(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
+> +LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
+> +LINUX_HEADERS_SITE = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_REPO_URL))
+> +LINUX_HEADERS_SITE_METHOD = git
+> +LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
+> +BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
+> +else
+>  LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
+>  ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
+>  LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
+> @@ -80,7 +90,7 @@ ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)
+>  BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
+>  endif
+
+First, I'm not sure why we bother updating the BR_NO_CHECK_HASH_FOR
+variable. I know we already do it, but linux-headers doesn't have
+a .hash file, so I don't see the point in doing this. Arnout, you
+reworked this in commit 24f650aed2d9d92d8cabf0cb160fcf7964f9811e, why
+didn't you just remove the BR_NO_CHECK_HASH_FOR ?
+
+Second, with your change there's quite a bit of duplication between the
+code to handle the "same headers as kernel" case and the "custom
+version" stuff you've added.
+
+Could you try something along the lines of:
+
+ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+LINUX_HEADERS_CUSTOM_TARBALL_LOCATION_KCONFIG_VAR = BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION
+LINUX_HEADERS_CUSTOM_REPO_URL_KCONFIG_VAR = BR2_LINUX_KERNEL_CUSTOM_REPO_URL
+else
+LINUX_HEADERS_CUSTOM_TARBALL_LOCATION_KCONFIG_VAR = BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION
+LINUX_HEADERS_CUSTOM_REPO_URL_KCONFIG_VAR = BR2_KERNEL_HEADERS_CUSTOM_REPO_URL
+endif
+
+and then use $($(LINUX_HEADERS_CUSTOM_TARBALL_LOCATION_KCONFIG_VAR))
+and $($(LINUX_HEADERS_CUSTOM_REPO_URL_KCONFIG_VAR)) to avoid
+duplicating all the logic testing if we have a tarball, or a Git repo,
+or, etc.
+
+Note that I haven't tried to refactor the code myself, perhaps there
+are some obstacles to achieve this, perhaps it makes the code uglier,
+but I think it is worth trying.
+
+Also, a few comments after the key "else" and "endif" would help figure
+out where each condition starts/stops, at least for the large
+conditions, where it's hard to know when they start/stop.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
