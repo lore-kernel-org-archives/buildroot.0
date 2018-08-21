@@ -1,65 +1,43 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 21 Aug 2018 20:52:45 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/luvi: bump version to 2.8.0
-In-Reply-To: <20180819120219.28721-1-bernd.kuhls@t-online.de>
-References: <20180819120219.28721-1-bernd.kuhls@t-online.de>
-Message-ID: <3c2105ff5b2fb60820f63e1d7851ddda2ec48355.camel@embedded.rocks>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 21 Aug 2018 21:54:47 +0200
+Subject: [Buildroot] [PATCH 1/1] libjwt: new package.
+In-Reply-To: <CAMKz0YrmQvWT+uHRhg_mYF6SEOkPn2jKXEySToy60U-s=rd7Cw@mail.gmail.com>
+References: <20180811202925.3547-1-mikael@robomagi.com>
+ <20180812143902.5dde6618@windsurf>
+ <CAMKz0Yp_0Ccwey=qKoRHFdNf55OL=ZA2GuuCA+SoBaAPNFbzuA@mail.gmail.com>
+ <20180812192554.GA29650@scaer>
+ <CAMKz0YrmQvWT+uHRhg_mYF6SEOkPn2jKXEySToy60U-s=rd7Cw@mail.gmail.com>
+Message-ID: <20180821195447.GO15347@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Mikael, All,
 
-On Sun, 2018-08-19 at 14:02 +0200, Bernd Kuhls wrote:
-> Upstream does not provide a tarball including all submodules so we need
-> to checkout the git repo including the submodules ourselves.
-> 
-> Added license hash.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/luvi/luvi.hash | 3 ++-
->  package/luvi/luvi.mk   | 7 ++++---
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
-> index e2239b6171..d5716e0036 100644
-> --- a/package/luvi/luvi.hash
-> +++ b/package/luvi/luvi.hash
-> @@ -1,2 +1,3 @@
->  # Locally calculated
-> -sha256  ce9a1fb762e61267618ddea9ea129170fd543bb918c382b71cb35985d0024c42  luvi-src-v2.7.6.tar.gz
-> +sha256 a18e138c7032ef8406fef6e2135a61fad713861742512f2073adc0b4ab6d8f8b  luvi-v2.8.0.tar.gz
-> +sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-> diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
-> index a2bc218e77..8b3b7659b0 100644
-> --- a/package/luvi/luvi.mk
-> +++ b/package/luvi/luvi.mk
-> @@ -4,9 +4,10 @@
->  #
->  ################################################################################
->  
-> -LUVI_VERSION = v2.7.6
-> -LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
-> -LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
-> +LUVI_VERSION = v2.8.0
-> +LUVI_SITE = https://github.com/luvit/luvi.git
-> +LUVI_SITE_METHOD = git
-> +LUVI_GIT_SUBMODULES = YES
->  LUVI_LICENSE = Apache-2.0
->  LUVI_LICENSE_FILES = LICENSE.txt
->  LUVI_DEPENDENCIES = libuv luajit luv host-luajit
+On 2018-08-21 20:34 +0200, Mikael Eliasson spake thusly:
+> Is there anything else you need me to do to include this package? I
+> cannot see that it has been added in github yet.
 
-I am not so happy about the version bump as version 2.8.0 does only
-updates the projects submodules, which we are not using at all.
-Instead, we always build luvi with dependencies provided as packages in
-Buildroot.
+Don;t worry, it is not lost, but:
 
-Bumping to version 2.8.0 has the drawback that fetching the package
-needs much longer now due to the git submodules than fetching the
-tarball and building against the packages provided by Buildroot.
+ 1. There are currently 197 patches pending:
+        https://patchwork.ozlabs.org/project/buildroot/list/
 
-Best regards,
-J?rg Krause
+ 2. We are in feature-freeze for the release scheduled by the end of the
+    month.
+
+ 3. The Github repository is not the official tree; it is only a mirror.
+    The official tree is: https://git.buildroot.org/buildroot/
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
