@@ -1,80 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 22:11:51 +0200
-Subject: [Buildroot] [git commit] toolchain: improve musl check to support
- static toolchains
-Message-ID: <20180821201616.2D0C98E1CA@busybox.osuosl.org>
+Date: Tue, 21 Aug 2018 22:25:35 +0200
+Subject: [Buildroot] [PATCH 1/1] libjwt: new package.
+In-Reply-To: <CAMKz0YoE0s8nNMoxy2-iHLeBKPkNOt7rGBq3gg4B8mxt_QQ5SA@mail.gmail.com>
+References: <20180811202925.3547-1-mikael@robomagi.com>
+ <20180812143902.5dde6618@windsurf>
+ <CAMKz0Yp_0Ccwey=qKoRHFdNf55OL=ZA2GuuCA+SoBaAPNFbzuA@mail.gmail.com>
+ <20180812192554.GA29650@scaer>
+ <CAMKz0YrmQvWT+uHRhg_mYF6SEOkPn2jKXEySToy60U-s=rd7Cw@mail.gmail.com>
+ <20180821195447.GO15347@scaer>
+ <CAMKz0YoE0s8nNMoxy2-iHLeBKPkNOt7rGBq3gg4B8mxt_QQ5SA@mail.gmail.com>
+Message-ID: <20180821222535.321cb4af@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d67cebcda0edb4ed598c0ed800d0425c4ae14c02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-The check_musl function currently builds a program and verifies if the
-program interpreter starts with /lib/ld-musl. While this works fine
-for dynamically linked programs, this obviously doesn't work for a
-purely static musl toolchain such as [1].
+On Tue, 21 Aug 2018 22:20:32 +0200, Mikael Eliasson wrote:
 
-There is no easy way to identify a toolchain as using the musl C
-library. For glibc, dynamic linking is always supported, so we look at
-the dynamic linker name. For uClibc, there is a distinctive
-uClibc_config.h header file. There is no such distinctive feature in
-musl.
+> > Don;t worry, it is not lost, but:
+> >
+> >  1. There are currently 197 patches pending:
+> >         https://patchwork.ozlabs.org/project/buildroot/list/
+> >
+> >  2. We are in feature-freeze for the release scheduled by the end of the
+> >     month.
+> >
+> >  3. The Github repository is not the official tree; it is only a mirror.
+> >     The official tree is: https://git.buildroot.org/buildroot/  
+> 
+> OK. Just wanted to know if it was worth putting in the effort on the next
+> patch I'm working on.
 
-We end up resorting to looking for the string MUSL_LOCPATH, which is
-used by musl locale_map.c source file. This string has been present in
-musl since 2014. It certainly isn't a very stable or convincing
-solution to identify the C library as being musl, but it's the best we
-could find.
+Yes, it is definitely worth the effort. The latency to get patches
+merged can be pretty high, but no patches gets forgotten, thanks to our
+patch tracking system.
 
-Note that we are sure there is a libc.a file, because the
-check_unusable_toolchain function checks that there is a such a file.
+New packages are rarely controversial (unless they have some
+significant complexity or strange things) and are very likely to be
+merged. But it does take some time.
 
-[1] http://autobuild.buildroot.net/toolchains/tarballs/br-arm-musl-static-2018.05.tar.bz2
+Thanks for your contributions!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- toolchain/helpers.mk                                   | 9 +++------
- toolchain/toolchain-external/pkg-toolchain-external.mk | 3 +--
- 2 files changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 1792286add..e5520c00c3 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -241,14 +241,11 @@ check_glibc = \
- # $2: cross-readelf path
- check_musl = \
- 	__CROSS_CC=$(strip $1) ; \
--	__CROSS_READELF=$(strip $2) ; \
--	echo 'void main(void) {}' | $${__CROSS_CC} -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - >/dev/null 2>&1; \
--	if ! $${__CROSS_READELF} -l $(BUILD_DIR)/.br-toolchain-test.tmp 2> /dev/null | grep 'program interpreter: /lib/ld-musl' -q; then \
--		rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*; \
-+	libc_a_path=`$${__CROSS_CC} -print-file-name=libc.a` ; \
-+	if ! strings $${libc_a_path} | grep -q MUSL_LOCPATH ; then \
- 		echo "Incorrect selection of the C library" ; \
- 		exit -1; \
--	fi ; \
--	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
-+	fi
- 
- #
- # Check the conformity of Buildroot configuration with regard to the
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 8b2c283654..02d992531d 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -557,8 +557,7 @@ define $(2)_CONFIGURE_CMDS
- 		$$(call check_uclibc,$$$${SYSROOT_DIR}) ; \
- 	elif test "$$(BR2_TOOLCHAIN_EXTERNAL_MUSL)" = "y" ; then \
- 		$$(call check_musl,\
--			"$$(TOOLCHAIN_EXTERNAL_CC) $$(TOOLCHAIN_EXTERNAL_CFLAGS)",\
--			$$(TOOLCHAIN_EXTERNAL_READELF)) ; \
-+			"$$(TOOLCHAIN_EXTERNAL_CC) $$(TOOLCHAIN_EXTERNAL_CFLAGS)") ; \
- 	else \
- 		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
- 	fi
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
