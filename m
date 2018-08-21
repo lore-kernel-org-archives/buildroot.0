@@ -1,74 +1,42 @@
-From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-Date: Tue, 21 Aug 2018 13:20:06 +1000
-Subject: [Buildroot] [PATCH v4] busybox: Update udhcpc.script for
- stateful DHCPv6
-In-Reply-To: <20180726013919.31268-1-sam@mendozajonas.com>
-References: <20180726013919.31268-1-sam@mendozajonas.com>
-Message-ID: <abe85708486429bcf5e46a41bc221f244fd7c81e.camel@mendozajonas.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 21 Aug 2018 06:16:40 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libsrtp: fix static build
+Message-ID: <20180821041640.14089-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2018-07-26 at 11:39 +1000, Samuel Mendoza-Jonas wrote:
-> udhcpc6 will call the default script with the address set in the "ipv6"
-> variable. Set "ip" to this address if present.
-> 
-> udhcpc6 implements "stateful" DHCPv6 for explicitly requesting an address
-> and other configuration information. A major difference between DHCPv4
-> and DHCPv6 is that DHCPv6 does *not* advertise a default route; this is
-> determined by normal IPv6 autoconfiguration.
-> Included is a change from Rob, which if handling a DHCPv6 address waits
-> a moment for the IPv6 route to be configured; as above this doesn't come
-> from DHCPv6 but rather the IPv6 Router Advertisement (RA) which happens
-> independently from udhcpc6. The intent here is to try and ensure that
-> the interface is route-able upon the script's completion as it would be
-> if called from udhcpc.
-> 
-> (wait for IPv6 route)
-> From: Robert Lippert <rlippert@google.com>
-> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-> ---
-> v4: Expand description of stateful DHCPv6 in commit message
-> v3: Point out 'stateful' DHCPv6 in commit, send to the correct list...
-> v2: Avoid bashisms
+The library name was updated upstream:
 
-Hi all, any more thoughts on this?
+Fixes
+make[1]: *** No rule to make target 'libsrtp.a'.  Stop.
 
-> 
->  package/busybox/udhcpc.script | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
-> index ad110d3a7f..65114b6cd0 100755
-> --- a/package/busybox/udhcpc.script
-> +++ b/package/busybox/udhcpc.script
-> @@ -8,6 +8,16 @@ RESOLV_CONF="/etc/resolv.conf"
->  [ -e $RESOLV_CONF ] || touch $RESOLV_CONF
->  [ -n "$broadcast" ] && BROADCAST="broadcast $broadcast"
->  [ -n "$subnet" ] && NETMASK="netmask $subnet"
-> +[ -n "$ipv6" ] && ip="$ipv6/128"
-> +
-> +wait_for_ipv6_default_route() {
-> +	attempts=10
-> +	while [ $attempts != 0 ] && [ -z "$(ip -6 route list | grep default)" ] ; do
-> +		sleep 1
-> +		attempts=$(($attempts-1))
-> +	done
-> +	[ $attempts = 0 ] && echo "failed to get default ipv6 route"
-> +}
->  
->  case "$1" in
->  	deconfig)
-> @@ -37,6 +47,10 @@ case "$1" in
->  			/usr/sbin/avahi-autoipd -k $interface
->  		fi
->  		/sbin/ifconfig $interface $ip $BROADCAST $NETMASK
-> +		if [ -n "$ipv6" ] ; then
-> +			echo "waiting for default ipv6 route set"
-> +			wait_for_ipv6_default_route
-> +		fi
->  
->  		if [ -n "$router" ] ; then
->  			echo "deleting routers"
+http://autobuild.buildroot.net/results/10e/10e4198e8d86eecb9c672db77cbaff1e8a592ad3/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/libsrtp/libsrtp.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
+index dd83dbc003..8af463928b 100644
+--- a/package/libsrtp/libsrtp.mk
++++ b/package/libsrtp/libsrtp.mk
+@@ -11,11 +11,11 @@ LIBSRTP_LICENSE = BSD-3-Clause
+ LIBSRTP_LICENSE_FILES = LICENSE
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-LIBSRTP_MAKE_OPTS = libsrtp.a
++LIBSRTP_MAKE_OPTS = libsrtp2.a
+ else ifeq ($(BR2_SHARED_LIBS),y)
+ LIBSRTP_MAKE_OPTS = shared_library
+ else
+-LIBSRTP_MAKE_OPTS = libsrtp.a shared_library
++LIBSRTP_MAKE_OPTS = libsrtp2.a shared_library
+ endif
+ 
+ # While libsrtp is not using pkg-config itself, it checks if
+-- 
+2.18.0
