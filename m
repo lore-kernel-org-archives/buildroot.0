@@ -1,74 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 21 Aug 2018 15:11:05 +0200
-Subject: [Buildroot] [PATCH 1/1] Add support for building toolchains
- against custom kernel headers.
-In-Reply-To: <4f183641-61e2-37bb-d3af-3dfd002efbe9@embecosm.com>
-References: <20180821110646.5671-1-mark.corbin@embecosm.com>
- <20180821140509.162e6c49@windsurf>
- <4f183641-61e2-37bb-d3af-3dfd002efbe9@embecosm.com>
-Message-ID: <20180821131105.GM15347@scaer>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <fperrad@gmail.com>
+Date: Tue, 21 Aug 2018 15:16:07 +0200
+Subject: [Buildroot] [PATCH 01/18] perl-dbi: add host package
+In-Reply-To: <20180820115519.24046-2-chrismcc@gmail.com>
+References: <20180820115519.24046-1-chrismcc@gmail.com>
+ <20180820115519.24046-2-chrismcc@gmail.com>
+Message-ID: <CAGhdn56y79pG4e43aWZqZ6iG-CivGMqG_6q_cMBwj4GtVpuD+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mark, Thomas, All,
+2018-08-20 13:55 GMT+02:00 Christopher McCrory <chrismcc@gmail.com>:
 
-On 2018-08-21 13:51 +0100, Mark Corbin spake thusly:
-> On 21/08/18 13:05, Thomas Petazzoni wrote:
-> > On Tue, 21 Aug 2018 12:06:46 +0100, Mark Corbin wrote:
-> >> Allows the selection of a manual version, custom tarball or custom
-> >> git repository for the toolchain kernel headers. This enables
-> >> toolchains to be built against custom kernel headers without having
-> >> to build a full kernel.
-[--SNIP--]
-> >>  config BR2_KERNEL_HEADERS_VERSION
-> >>  	bool "Manually specified Linux version"
-> >> +	help
-> >> +	  This option allows you to use a specific official version from
-> >> +	  kernel.org, like 2.6.x, 2.6.x.y, 3.x.y, ...
-> >> +
-> >> +	  Note: you cannot use this option to select a _longterm_ 2.6
-> >> +	  kernel, because these kernels are not located at the standard
-> >> +	  URL at kernel.org. Instead, select "Custom tarball" and
-> >> +	  specify the right URL directly.
-> > Adding this help text is good, but somewhat unrelated. Could you do
-> > that as a separate, preliminary commit ?
-> Do you mean just generate a separate patch?
+> Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+>
 
-Yes, a separate, first patch that adds this help text, and only that.
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
-[--SNIP--]
-> >> +BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
-[--SNIP--]
-> > First, I'm not sure why we bother updating the BR_NO_CHECK_HASH_FOR
-> > variable. I know we already do it, but linux-headers doesn't have
-> > a .hash file, so I don't see the point in doing this. Arnout, you
-> > reworked this in commit 24f650aed2d9d92d8cabf0cb160fcf7964f9811e, why
-> > didn't you just remove the BR_NO_CHECK_HASH_FOR ?
-> I did wonder about this - I'll plan to remove it unless anybody objects.
-
-No, I'd prefer if we were to actualyl add a .hash file for linux-headers
-and for linux as well, btw, with the former being a symlink to the
-latter.
-
-So, when you respin, prepare a series that:
-
- 1. adds the help text alone,
- 2. adds a .hash for linux and a symlink to it from linux-headers
- 3. refactors of the variables
- 4. adds the custom locations
-
-thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+---
+>  package/perl-dbi/perl-dbi.mk | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/package/perl-dbi/perl-dbi.mk b/package/perl-dbi/perl-dbi.mk
+> index f7ae6ca5a1..4ee9149f1f 100644
+> --- a/package/perl-dbi/perl-dbi.mk
+> +++ b/package/perl-dbi/perl-dbi.mk
+> @@ -11,3 +11,4 @@ PERL_DBI_LICENSE = Artistic or GPL-1.0+
+>  PERL_DBI_LICENSE_FILES = LICENSE
+>
+>  $(eval $(perl-package))
+> +$(eval $(host-perl-package))
+> --
+> 2.14.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180821/6f3574f0/attachment.html>
