@@ -1,42 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 21 Aug 2018 11:47:16 +0200
-Subject: [Buildroot] [git commit branch/next] lvm2: host variant needs
- host-libaio
-Message-ID: <20180821093949.0D2458E180@busybox.osuosl.org>
+Date: Tue, 21 Aug 2018 11:47:10 +0200
+Subject: [Buildroot] [git commit branch/next] libaio: add host variant
+Message-ID: <20180821093948.E42B58E180@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1575512ad41e2118448daf566a6012714592aca7
+commit: https://git.buildroot.net/buildroot/commit/?id=c2cbaa1babcdbde90527f38f41ee8ee42bdefd45
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Since the bump of lvm2 to 2.02.180 in commit
 8e666bf29e762f3c7681a48d0ee350f8396d798f, lvm2 needs libaio. This was
 properly taken into account for the target lvm2 variant, but not the
-host lvm2 variant. This commit adds host-libaio as a dependency of
-host-lvm2.
+host lvm2 variant. In order to build the host lvm2, we now need
+host-libaio, so this patch adds support for building libaio for the
+host.
 
-Fixes:
+Part of fixing:
 
   http://autobuild.buildroot.net/results/f95dd353c17bdfd00fde6762e58aa32e6830b52b/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lvm2/lvm2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libaio/libaio.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
-index 2352f17af0..152381d65d 100644
---- a/package/lvm2/lvm2.mk
-+++ b/package/lvm2/lvm2.mk
-@@ -59,7 +59,7 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
- LVM2_CONF_ENV += ac_cv_flag_HAVE_PIE=no
- endif
+diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
+index 03029d84d8..76e6937cc2 100644
+--- a/package/libaio/libaio.mk
++++ b/package/libaio/libaio.mk
+@@ -35,4 +35,13 @@ define LIBAIO_INSTALL_TARGET_CMDS
+ 	$(LIBAIO_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ endef
  
--HOST_LVM2_DEPENDENCIES = host-pkgconf
-+HOST_LVM2_DEPENDENCIES = host-pkgconf host-libaio
- HOST_LVM2_CONF_OPTS = \
- 	--enable-write_install \
- 	--enable-pkgconfig \
++define HOST_LIBAIO_BUILD_CMDS
++	$(HOST_CONFIGURE_OPTS) $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_LIBAIO_INSTALL_CMDS
++	$(HOST_CONFIGURE_OPTS) $(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) install
++endef
++
+ $(eval $(generic-package))
++$(eval $(host-generic-package))
