@@ -1,68 +1,42 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 21 Aug 2018 22:41:34 +0200
-Subject: [Buildroot] [PATCH/next v2 3/3] package/perl-crypt-openssl-rsa:
- bump version to 0.30
-In-Reply-To: <20180821204134.2819-1-bernd.kuhls@t-online.de>
-References: <20180821204134.2819-1-bernd.kuhls@t-online.de>
-Message-ID: <20180821204134.2819-3-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 Aug 2018 22:42:00 +0200
+Subject: [Buildroot] [git commit branch/next] glorytun: bump to version
+ 0.0.99-mud
+Message-ID: <20180821203802.20E9F8E1ED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
-https://metacpan.org/changes/distribution/Crypt-OpenSSL-RSA
+commit: https://git.buildroot.net/buildroot/commit/?id=becaafd056dbfbe58d8578c0f2991ab0de45938f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Added new build dependency to host-perl-crypt-openssl-guess and force
-it to search for openssl in STAGING_DIR. Added license hash. Updated
-_SITE according to scancpan.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-v2: switched to host version of perl-crypt-openssl-guess (Thomas)
+ package/glorytun/glorytun.hash | 2 +-
+ package/glorytun/glorytun.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- .../perl-crypt-openssl-rsa.hash                      |  7 +++++--
- .../perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk | 12 +++++++++---
- 2 files changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-index 6e060ce672..0d101d7bb8 100644
---- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-+++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-@@ -1,3 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    86217a5036fc63779c30420b5fd84129 Crypt-OpenSSL-RSA-0.28.tar.gz
--sha256 5357f977464bb3a8184cf2d3341851a10d5515b4b2b0dfb88bf78995c0ded7be Crypt-OpenSSL-RSA-0.28.tar.gz
-+md5    10bca2fc6d0ba1aa329f227424ae87d5 Crypt-OpenSSL-RSA-0.30.tar.gz
-+sha256 23e13531397af102db4fd24bcf70137add7c85c23cca697c43aa71c2959a29ac Crypt-OpenSSL-RSA-0.30.tar.gz
-+
-+# computed by scancpan
-+sha256 8a693ad3f52daeeb5ac5deceb1e1109c9c87095ed5ba6506d6d5c106e4066f5a LICENSE
-diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-index b853d9953e..790af760c7 100644
---- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-+++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-@@ -4,11 +4,17 @@
+diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
+index 891af2079e..59a5f09c0e 100644
+--- a/package/glorytun/glorytun.hash
++++ b/package/glorytun/glorytun.hash
+@@ -1,2 +1,2 @@
+-sha256 76849b1568119cf0834749db56d4882966863d31351c21c1b22f373f0c97a498  glorytun-0.0.93-mud.tar.gz
++sha256 5e23afad4592d6af27ffd2cb3c826cf0ea1b5166a05ef1ae5c77fb4e465bb735  glorytun-0.0.99-mud.tar.gz
+ sha256 bd418f8ef7d62f2c89e3aa1e5dc41c7d7a6212eb1cdb4d39a26a5bd333e1b4a3  LICENSE
+diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
+index 233e1feaa9..f6d87c2605 100644
+--- a/package/glorytun/glorytun.mk
++++ b/package/glorytun/glorytun.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_CRYPT_OPENSSL_RSA_VERSION = 0.28
-+PERL_CRYPT_OPENSSL_RSA_VERSION = 0.30
- PERL_CRYPT_OPENSSL_RSA_SOURCE = Crypt-OpenSSL-RSA-$(PERL_CRYPT_OPENSSL_RSA_VERSION).tar.gz
--PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERLER
--PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = perl-crypt-openssl-random
-+PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
-+PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = \
-+	host-perl-crypt-openssl-guess \
-+	perl-crypt-openssl-random
- PERL_CRYPT_OPENSSL_RSA_LICENSE = Artistic or GPL-1.0+
- PERL_CRYPT_OPENSSL_RSA_LICENSE_FILES = LICENSE
- 
-+# Try as hard as possible to remedy to the brain-damage their build-system
-+# suffers from: don't search for openssl, they pick the host-system one.
-+PERL_CRYPT_OPENSSL_RSA_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
-+
- $(eval $(perl-package))
--- 
-2.18.0
+-GLORYTUN_VERSION = 0.0.93-mud
++GLORYTUN_VERSION = 0.0.99-mud
+ GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
+ GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
+ GLORYTUN_LICENSE = BSD-2-clause
