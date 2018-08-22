@@ -1,50 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Aug 2018 13:31:45 +0200
-Subject: [Buildroot] [git commit branch/next] sunxi-mali-mainline:
- free-electrons is now bootlin
-Message-ID: <20180822112527.B29348E26A@busybox.osuosl.org>
+Date: Wed, 22 Aug 2018 13:34:00 +0200
+Subject: [Buildroot] [git commit branch/next] lzo: build shared library for
+ the host
+Message-ID: <20180822113133.87A1D8E24A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2faf80bbb0124ce86be40225fcc0d0cb157a0ba9
+commit: https://git.buildroot.net/buildroot/commit/?id=2d80864d2ba0e2eba7bf9188ff7967d51c825454
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Even though http://github.com/free-electrons/<foo>/ properly redirects
-to http://github.com/bootlin/<foo>/, it makes sense to use the
-bootlin/ URL directly.
+By default, the lzo package builds and installs only a static
+library. For the target variant, we pass the appropriate
+ENABLE_STATIC/ENABLE_SHARED options, but not for the host package, and
+therefore a static lzo library gets installed.
+
+However, on the host, our policy is to build shared libraries and not
+static libraries, as visible in the default configure options passed
+to host package in pkg-autotools.mk (--enable-shared
+--disable-static). Let's do the same with lzo.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sunxi-mali-mainline/Config.in              | 2 +-
- package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/lzo/lzo.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
-index a889864465..a2fb95bd79 100644
---- a/package/sunxi-mali-mainline/Config.in
-+++ b/package/sunxi-mali-mainline/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE
- 	help
- 	  Install userspace Allwinner OpenGL libraries.
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index 27ca459acf..0ead92725a 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -23,5 +23,7 @@ else
+ LZO_CONF_OPTS += -DENABLE_STATIC=OFF
+ endif
  
--	  https://github.com/free-electrons/mali-blobs
-+	  https://github.com/bootlin/mali-blobs
- 
- if BR2_PACKAGE_SUNXI_MALI_MAINLINE
- 
-diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-index 05b90f0bee..766bacf38d 100644
---- a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-+++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SUNXI_MALI_MAINLINE_VERSION = d691cb93884ca8ac67860502117bbec283dc19aa
--SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
-+SUNXI_MALI_MAINLINE_SITE = $(call github,bootlin,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
- SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
- SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
- 
++HOST_LZO_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
