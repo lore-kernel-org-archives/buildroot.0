@@ -1,33 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Aug 2018 15:32:55 +0200
-Subject: [Buildroot] [git commit branch/next] linux: bump default to version
+Date: Wed, 22 Aug 2018 15:33:19 +0200
+Subject: [Buildroot] [PATCH next 1/2] linux: bump default to version
  4.18.4
-Message-ID: <20180822132535.1482F8E2BD@busybox.osuosl.org>
+In-Reply-To: <1534941838-24924-1-git-send-email-festevam@gmail.com>
+References: <1534941838-24924-1-git-send-email-festevam@gmail.com>
+Message-ID: <20180822153319.40f5f434@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a3bd098356296dce56ec4db79d6e208d5d41a15a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, 22 Aug 2018 09:43:57 -0300, Fabio Estevam wrote:
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  linux/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3543008c88..13616d5d15 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.18.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.18.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
