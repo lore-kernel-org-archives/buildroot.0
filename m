@@ -1,44 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Aug 2018 11:40:13 +0200
-Subject: [Buildroot] [git commit branch/next] libssh: fix cross compile with
- older cmake
-Message-ID: <20180823093249.864178E2E6@busybox.osuosl.org>
+Date: Wed, 22 Aug 2018 15:53:10 +0200
+Subject: [Buildroot] [git commit branch/next]
+ package/perl-crypt-openssl-guess: new package
+Message-ID: <20180823093249.4922F8E2E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f34f33baa6f94137a78f15cafe0ee0e4ece59f97
+commit: https://git.buildroot.net/buildroot/commit/?id=9fa2629c6a504f549ad7743d51e645c52c22357e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Old version of cmake break cross-compilation when FindThreads is used
-because of a try_run call. Add a workaround that avoids try_run.
+Needed for upcoming version bumps of perl-crypt-openssl-random and
+perl-crypt-openssl-rsa, only host-package is needed.
 
-cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
-
-Should fix:
-http://autobuild.buildroot.net/results/8aa/8aa2bd894416a4508ca7140f8947ff46243f8b78/
-http://autobuild.buildroot.net/results/f2c/f2cc965bb134bf4fd9e625eb267b67c949c202fc/
-
-Cc: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libssh/libssh.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ DEVELOPERS                                                  |  1 +
+ .../perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash  |  6 ++++++
+ .../perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk    | 13 +++++++++++++
+ 3 files changed, 20 insertions(+)
 
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 4295aa42ee..635d72ad98 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -17,6 +17,9 @@ LIBSSH_CONF_OPTS = \
- 	-DWITH_SERVER=OFF \
- 	-DWITH_EXAMPLES=OFF
- 
-+# cmake older than 3.10 require this to avoid try_run() in FindThreads
-+LIBSSH_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cee19af880..481c74f9f2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -331,6 +331,7 @@ F:	package/libyuv/
+ F:	package/mesa3d/
+ F:	package/minidlna/
+ F:	package/mjpg-streamer/
++F:	package/perl-crypt-openssl-guess/
+ F:	package/perl-crypt-openssl-random/
+ F:	package/perl-crypt-openssl-rsa/
+ F:	package/perl-digest-sha1/
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+new file mode 100644
+index 0000000000..327b06900a
+--- /dev/null
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    e768fe2c07826b0ac9ea604c79f93032 Crypt-OpenSSL-Guess-0.11.tar.gz
++sha256 aa6b18e38cb852cbad80a58cd90c395b40819d4d01e0ab37e7703149094d7167 Crypt-OpenSSL-Guess-0.11.tar.gz
 +
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LIBSSH_CONF_OPTS += -DWITH_ZLIB=ON
- LIBSSH_DEPENDENCIES += zlib
++# computed by scancpan
++sha256 5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072 LICENSE
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+new file mode 100644
+index 0000000000..69d7a0ef8f
+--- /dev/null
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# perl-crypt-openssl-guess
++#
++################################################################################
++
++PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.11
++PERL_CRYPT_OPENSSL_GUESS_SOURCE = Crypt-OpenSSL-Guess-$(PERL_CRYPT_OPENSSL_GUESS_VERSION).tar.gz
++PERL_CRYPT_OPENSSL_GUESS_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AK/AKIYM
++PERL_CRYPT_OPENSSL_GUESS_LICENSE = Artistic or GPL-1.0+
++PERL_CRYPT_OPENSSL_GUESS_LICENSE_FILES = LICENSE
++
++$(eval $(host-perl-package))
