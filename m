@@ -1,32 +1,35 @@
-From: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-Date: Wed, 22 Aug 2018 15:35:00 +0200
-Subject: [Buildroot] [PATCH] DEVELOPERS: add Juno ARM maintainer
-Message-ID: <397868181394a89dad65a94a8f7ea68c88e45d36.1534944883.git.gustavo.pimentel@synopsys.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 22 Aug 2018 15:36:49 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/rtorrent: bump version to
+ 0.9.7
+In-Reply-To: <20180821213949.32148-1-bernd.kuhls@t-online.de>
+References: <20180821213949.32148-1-bernd.kuhls@t-online.de>
+Message-ID: <20180822153649.06549ff0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
----
- DEVELOPERS | 4 ++++
- 1 file changed, 4 insertions(+)
+Hello Bernd,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a6d76dd..7b4ae55 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -865,6 +865,10 @@ F:	arch/Config.in.csky
- F:	board/csky/
- F:	configs/csky_*
- 
-+N:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-+F:	configs/arm_juno_defconfig
-+F:	board/arm/juno/
-+
- N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
- F:	package/gnuradio/
- F:	package/gqrx/
+On Tue, 21 Aug 2018 23:39:49 +0200, Bernd Kuhls wrote:
+> Added license hash, rebased patch 0001.
+> 
+> Fixes
+> http://autobuild.buildroot.net/results/9c6/9c64888e96d59cb536dc7ccaa52f731118e69ce1/
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Why is this for next only ? rtorrent in master and next are both at
+0.9.6. What causes the build failure that makes it next-specific ? It
+is not immediately obvious reading the build failure, and it is not
+explained in your commit log.
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
