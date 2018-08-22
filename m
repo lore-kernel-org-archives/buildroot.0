@@ -1,46 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Aug 2018 13:34:04 +0200
-Subject: [Buildroot] [git commit branch/next] e2fsprogs: build shared
- library for the host
-Message-ID: <20180822113133.920BD8E24A@busybox.osuosl.org>
+Date: Wed, 22 Aug 2018 13:34:10 +0200
+Subject: [Buildroot] [git commit branch/next] btrfs-progs: drop dependency
+ on e2fsprogs by not building btrfs-convert
+Message-ID: <20180822113133.9BC958E24A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93acaa5a573865afc7a8c0912a7037965eb845a6
+commit: https://git.buildroot.net/buildroot/commit/?id=72bc28e0ddfb97a327a2bb5a2f98959abc88a612
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-By default, the e2fsprogs package builds and installs only static
-libraries, unless --enable-elf-shlibs is passed. For the target
-variant, we pass the appropriate
---enable-elf-shlibs/--disable-elf-shlibs options, but not for the host
-package, and therefore static e2fsprogs libraries get installed.
+The btrfs-convert tool is used to convert an existing ext2 or reiserfs
+filesystem into a btrfs filesystem. On the host, this is not really
+useful, so let's disable building this tool, which allows to drop the
+host-e2fsprogs dependency.
 
-However, on the host, our policy is to build shared libraries and not
-static libraries, as visible in the default configure options passed
-to host package in pkg-autotools.mk (--enable-shared
---disable-static). Let's do the same with e2fsprogs.
+The host-util-linux dependency becomes necessary: it was previously
+brought as a second-order dependency of host-e2fsprogs, but since we
+no longer depend on host-e2fsprogs, we now need to explicitly depend
+on host-util-linux.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/e2fsprogs/e2fsprogs.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/btrfs-progs/btrfs-progs.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index efc10d0e99..65f9774afb 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -27,7 +27,8 @@ HOST_E2FSPROGS_CONF_OPTS = \
- 	--disable-libblkid \
- 	--disable-libuuid \
- 	--enable-symlink-install \
--	--disable-testio-debug
-+	--disable-testio-debug \
-+	--enable-elf-shlibs
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 3129ecc714..2f9f4127b6 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -21,8 +21,12 @@ BTRFS_PROGS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
+ BTRFS_PROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
+ endif
  
- # Set the binary directories to "/bin" and "/sbin", as busybox does,
- # so that we do not end up with two versions of e2fs tools.
+-HOST_BTRFS_PROGS_DEPENDENCIES = host-e2fsprogs host-lzo host-zlib
+-HOST_BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd --disable-python
++HOST_BTRFS_PROGS_DEPENDENCIES = host-util-linux host-lzo host-zlib
++HOST_BTRFS_PROGS_CONF_OPTS = \
++	--disable-backtrace \
++	--disable-zstd \
++	--disable-python \
++	--disable-convert
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
