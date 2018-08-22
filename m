@@ -1,145 +1,103 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2018 19:24:11 +0200
-Subject: [Buildroot] [PATCH v4 2/2] core/legal-info: Add package
- dependencies with licenses to the manifest
-In-Reply-To: <20180822124014.23046-2-sojkam1@fel.cvut.cz>
-References: <20180822124014.23046-1-sojkam1@fel.cvut.cz>
- <20180822124014.23046-2-sojkam1@fel.cvut.cz>
-Message-ID: <20180822172411.GD2404@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 22 Aug 2018 20:01:53 +0200
+Subject: [Buildroot] [PATCH] package/brltty: fix cross-compilation
+In-Reply-To: <20180822082832.7497-1-yann.morin.1998@free.fr>
+References: <20180822082832.7497-1-yann.morin.1998@free.fr>
+Message-ID: <20180822200153.031820b8@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Michal, All,
+Hello Yann,
 
-On 2018-08-22 14:40 +0200, Michal Sojka spake thusly:
-> From: Michal Sojka <sojka@merica.cz>
-> 
-> This adds one column to the legal-info manifest table. It contains the
-> dependencies of the given package and their licenses. This information
-> is useful when assessing license compatibility of the packages and
-> their libraries.
-> 
-> An example of the content of the new column for the MPD package is
-> shown below:
-> 
->     "alsa-lib [LGPL-2.1+ (library), GPL-2.0+ (aserver)] boost
->     [BSL-1.0] libid3tag [GPL-2.0+] libmad [GPL-2.0+] libogg
->     [BSD-3-Clause] libvorbis [BSD-3-Clause] libzlib [Zlib]
->     skeleton-init-common [unknown] skeleton-init-sysv [unknown] sqlite
->     [Public domain] toolchain-external-linaro-arm [unknown]"
-> 
-> [Credits to Yann E. MORIN <yann.morin.1998@free.fr> for suggesting a
-> few simplifications.]
-> 
-> Signed-off-by: Michal Sojka <sojka@merica.cz>
-> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Wed, 22 Aug 2018 10:28:32 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-With the comment for the legal-deps macro nw added, this reviewed-by can
-be turned into an ACK when applying:
+> brltty has a very inventive buildsystem, where it internall runs
+> ./configure for the build machine In doing so, it generates a list
+> of make variables to define what the build machine supports, like
+> it does for the target.
+> 
+> However, the build variables are generated with a convoluted sed
+> script that scans the target list, and appends _FOR_BUILD to each
+> target variables. Then, both lists are included from the Makefile,
+> on the assumption that the build variables will not clash with the
+> target variables.
+> 
+> Where it gets interesting, is that that sed script considers the
+> variables names to match '[A-Za-z][A-Za-z0-9_]*'
 
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Minor nit: did you mean '[A-Za-z][A-Za-z_]*' here?
 
 Regards,
-Yann E. MORIN.
+Peter
 
+> 
+> And there we see why ATSPI2_PACKAGE does not match: it contains a
+> digit.
+> 
+> So, some build variables will inevitably override target ones.
+> 
+> Fix that by simply expanding the matching regexp to allow digits
+> in variable names.
+> 
+> Fixes:
+>     http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/
+>     http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Mario Lang <mlang@blind.guru>
+> Cc: Baruch Siach <baruch@tkos.co.il>
 > ---
->  Makefile               |  4 ++--
->  package/pkg-generic.mk | 10 +++++++++-
->  package/pkg-utils.mk   | 15 +++++++++++++--
->  3 files changed, 24 insertions(+), 5 deletions(-)
+>  .../0004-buildsys-fix-cross-compilation.patch      | 41 ++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 package/brltty/0004-buildsys-fix-cross-compilation.patch
 > 
-> Changes between v3 and v4:
-> * Added comment to legal-deps macro as suggested by Yann E. MORIN.
-> 
-> diff --git a/Makefile b/Makefile
-> index 3d8106e201..d6809642bd 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -781,8 +781,8 @@ legal-info-clean:
->  legal-info-prepare: $(LEGAL_INFO_DIR)
->  	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
->  	@$(call legal-license-file,buildroot,buildroot,support/legal-info,COPYING,COPYING,HOST)
-> -	@$(call legal-manifest,TARGET,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE)
-> -	@$(call legal-manifest,HOST,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE)
-> +	@$(call legal-manifest,TARGET,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSES)
-> +	@$(call legal-manifest,HOST,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSES)
->  	@$(call legal-manifest,HOST,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved)
->  	@$(call legal-warning,the Buildroot source code has not been saved)
->  	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 6c9592123d..a3bedb660f 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -609,6 +609,14 @@ $(2)_FINAL_ALL_DEPENDENCIES = \
->  		$$($(2)_FINAL_DEPENDENCIES) \
->  		$$($(2)_FINAL_EXTRACT_DEPENDENCIES) \
->  		$$($(2)_FINAL_PATCH_DEPENDENCIES))
-> +$(2)_FINAL_RECURSIVE_DEPENDENCIES = \
-> +	$$(sort \
-> +		$$(foreach p,\
-> +			$$($(2)_FINAL_ALL_DEPENDENCIES),\
-> +			$$(p)\
-> +			$$($$(call UPPERCASE,$$(p))_FINAL_RECURSIVE_DEPENDENCIES)\
-> +		)\
-> +	)
->  
->  $(2)_INSTALL_STAGING		?= NO
->  $(2)_INSTALL_IMAGES		?= NO
-> @@ -936,7 +944,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
->  endif # redistribute
->  
->  endif # other packages
-> -	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE))
-> +	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
->  endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
->  	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
->  
-> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> index 8d5ea234e4..e9666e2da7 100644
-> --- a/package/pkg-utils.mk
-> +++ b/package/pkg-utils.mk
-> @@ -79,8 +79,8 @@ define legal-warning-nosource # pkg, {local|override}
->  	$(call legal-warning-pkg,$(1),sources not saved ($(2) packages not handled))
->  endef
->  
-> -define legal-manifest # {HOST|TARGET}, pkg, version, license, license-files, source, url
-> -	echo '"$(2)","$(3)","$(4)","$(5)","$(6)","$(7)"' >>$(LEGAL_MANIFEST_CSV_$(1))
-> +define legal-manifest # {HOST|TARGET}, pkg, version, license, license-files, source, url, dependencies
-> +	echo '"$(2)","$(3)","$(4)","$(5)","$(6)","$(7)","$(8)"' >>$(LEGAL_MANIFEST_CSV_$(1))
->  endef
->  
->  define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
-> @@ -95,3 +95,14 @@ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-full
->  	} && \
->  	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
->  endef
+> diff --git a/package/brltty/0004-buildsys-fix-cross-compilation.patch b/package/brltty/0004-buildsys-fix-cross-compilation.patch
+> new file mode 100644
+> index 0000000000..9a10d46414
+> --- /dev/null
+> +++ b/package/brltty/0004-buildsys-fix-cross-compilation.patch
+> @@ -0,0 +1,41 @@
+> +From 088666535a045dae71bd2fcc6b3a1553023106ce Mon Sep 17 00:00:00 2001
+> +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +Date: Wed, 22 Aug 2018 10:10:19 +0200
+> +Subject: [PATCH] buildsys: fix cross-compilation
 > +
-> +non-virtual-deps = $(foreach p,$(1),$(if $($(call UPPERCASE,$(p))_IS_VIRTUAL),,$(p)))
+> +Some identifiers for includes and libs paths may contain digit, e.g.
+> +X11_PACKAGE or ATSPI2_PACKAGE or GLIB2_PACKAGE...
 > +
-> +# Returns the list of recursive dependencies and their licensing terms
-> +# for the package specified in parameter (in lowercase). If that
-> +# package is a target package, remove host packages from the list.
-> +legal-deps = \
-> +    $(foreach p,\
-> +        $(filter-out $(if $(1:host-%=),host-%),\
-> +            $(call non-virtual-deps,\
-> +                $($(call UPPERCASE,$(1))_FINAL_RECURSIVE_DEPENDENCIES))),$(p) [$($(call UPPERCASE,$(p))_LICENSE)])
-> -- 
-> 2.18.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> +Also detect those identifiers when doing cros-compilation, so that the
+> +_FOR_BUILD variants are really created and do not clash with the target
+> +variants.
+> +
+> +Fixes:
+> +    http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/build-end.log
+> +    http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/build-end.log
+> +    [...]
+> +
+> +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> +---
+> +Upstram status: submitted
+> +https://github.com/brltty/brltty/pull/142
+> +---
+> + mk4build | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/mk4build b/mk4build
+> +index db90c86a9..551283825 100755
+> +--- a/mk4build
+> ++++ b/mk4build
+> +@@ -112,7 +112,7 @@ fi
+> + 
+> + sedScript="${outputName}.${sedExtension}"
+> + sed -n -e '
+> +-s/^ *\([A-Za-z][A-Za-z_]*\) *=.*$/\1/
+> ++s/^ *\([A-Za-z][A-Za-z0-9_]*\) *=.*$/\1/
+> + t found
+> + d
+> + :found
+> +-- 
+> +2.14.1
+> +
