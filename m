@@ -1,130 +1,54 @@
-From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
-Date: Wed, 22 Aug 2018 09:20:02 +0200
-Subject: [Buildroot] [PATCH] libusbgx: fix build with glibc
-Message-ID: <20180822072002.23657-1-gwenj@trabucayre.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Aug 2018 09:29:49 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-08-07
+In-Reply-To: <87mutwb2se.fsf@tkos.co.il>
+References: <20180808060047.9CC13209AD@mail.bootlin.com>
+ <87mutwb2se.fsf@tkos.co.il>
+Message-ID: <20180822072949.GX15347@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Baruch,All,
 
-Without sys/sysmacros.h and with glibc build fails with error like:
-libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `minor'
-libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `major'
-libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `makedev'
+On 2018-08-09 07:08 +0300, Baruch Siach spake thusly:
+> Thomas Petazzoni writes:
+> > Results for branch 'master'
+> > ===========================
+> >
+> >       xtensa |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/55b271cceb5b749f911266ed96998c4ee730fb86 |     
+> >          sh4 |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/f8ff8c24d940113d7eb9729ae0b1b8e454cb4523 |     
+> >     mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/c1829952aec2356905a2d5559d77b3e79739ea21 |     
+> 
+> I could not reproduce this one here. The autobuilder indicates that it
+> only happens on the autobuilders of Yann, Romain and Richard:
+> 
+>   http://autobuild.buildroot.net/?reason=brltty-5.5
+> 
+> It looks like ATSPI2_INCLUDES and GLIB2_INCLUDES evaluate to empty
+> strings in Drivers/Screen/AtSpi2/Makefile.in on these
+> builders. config.log looks normal though.
+> 
+> Maybe one of you can take a look?
 
-backport and adapt pr #28 (https://github.com/libusbgx/libusbgx/pull/28)
+For the records, I'm still investigating this issue, and I found that
+there is a delta in generated files, that cause the build issue.
 
-fix:
-http://autobuild.buildroot.net/results/872e2ab084c0c9bf466265d2f66140fbba692ee6/
+Now, the buildsystem for brltty is sufficiently inventive that it is not
+trivial to pinpoint why the generated files differ.
 
-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
----
- .../0001-Add-include-of-sys-sysmacro.h.patch       | 94 ++++++++++++++++++++++
- 1 file changed, 94 insertions(+)
- create mode 100644 package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
+I'll be pursuing my investigations...
 
-diff --git a/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch b/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
-new file mode 100644
-index 0000000000..997cbf9a12
---- /dev/null
-+++ b/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
-@@ -0,0 +1,94 @@
-+Add include of sys/sysmacro.h.
-+
-+Without sys/sysmacros.h and with glibc build fails with error like:
-+
-+libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `minor'
-+libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `major'
-+libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `makedev'
-+
-+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-+Signed-off-by: Sid Spry <R030t1@gmail.com>
-+---
-+ examples/gadget-acm-ecm.c              | 1 +
-+ examples/gadget-import.c               | 1 +
-+ examples/gadget-ms.c                   | 1 +
-+ examples/show-gadgets.c                | 1 +
-+ examples/show-udcs.c                   | 1 +
-+ include/usbg/usbg_internal_libconfig.h | 1 +
-+ 6 files changed, 6 insertions(+)
-+
-+diff --git a/examples/gadget-acm-ecm.c b/examples/gadget-acm-ecm.c
-+index 1c5e2ca..29360da 100644
-+--- a/examples/gadget-acm-ecm.c
-++++ b/examples/gadget-acm-ecm.c
-+@@ -20,6 +20,7 @@
-+ 
-+ #include <errno.h>
-+ #include <stdio.h>
-++#include <sys/sysmacros.h>
-+ #include <linux/usb/ch9.h>
-+ #include <usbg/usbg.h>
-+ 
-+diff --git a/examples/gadget-import.c b/examples/gadget-import.c
-+index e684fdb..63df449 100644
-+--- a/examples/gadget-import.c
-++++ b/examples/gadget-import.c
-+@@ -25,6 +25,7 @@
-+ #include <errno.h>
-+ #include <string.h>
-+ #include <stdio.h>
-++#include <sys/sysmacros.h>
-+ #include <usbg/usbg.h>
-+ 
-+ int main(int argc, char **argv)
-+diff --git a/examples/gadget-ms.c b/examples/gadget-ms.c
-+index 478c370..a5c6681 100644
-+--- a/examples/gadget-ms.c
-++++ b/examples/gadget-ms.c
-+@@ -23,6 +23,7 @@
-+ 
-+ #include <errno.h>
-+ #include <stdio.h>
-++#include <sys/sysmacros.h>
-+ #include <linux/usb/ch9.h>
-+ #include <usbg/usbg.h>
-+ #include <usbg/function/ms.h>
-+diff --git a/examples/show-gadgets.c b/examples/show-gadgets.c
-+index 707d448..a2a21c8 100644
-+--- a/examples/show-gadgets.c
-++++ b/examples/show-gadgets.c
-+@@ -21,6 +21,7 @@
-+ #include <errno.h>
-+ #include <stdio.h>
-+ #include <string.h>
-++#include <sys/sysmacros.h>
-+ #include <netinet/ether.h>
-+ #include <usbg/usbg.h>
-+ #include <usbg/function/ms.h>
-+diff --git a/examples/show-udcs.c b/examples/show-udcs.c
-+index 66e950f..2f5cc45 100644
-+--- a/examples/show-udcs.c
-++++ b/examples/show-udcs.c
-+@@ -23,6 +23,7 @@
-+ 
-+ #include <errno.h>
-+ #include <stdio.h>
-++#include <sys/sysmacros.h>
-+ #include <usbg/usbg.h>
-+ 
-+ int main(void)
-+diff --git a/include/usbg/usbg_internal_libconfig.h b/include/usbg/usbg_internal_libconfig.h
-+index ac51758..3fa55c0 100644
-+--- a/include/usbg/usbg_internal_libconfig.h
-++++ b/include/usbg/usbg_internal_libconfig.h
-+@@ -12,6 +12,7 @@
-+ #ifndef USBG_INTERNAL_LIBCONFIG_H
-+ #define USBG_INTERNAL_LIBCONFIG_H
-+ 
-++#include <sys/sysmacros.h>
-+ #include <libconfig.h>
-+ #ifdef __cplusplus
-+ extern "C" {
-+-- 
-+2.16.4
-+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.16.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
