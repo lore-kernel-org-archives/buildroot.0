@@ -1,126 +1,130 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2018 23:10:55 +0200
-Subject: [Buildroot] [PATCH 2/5] download/git: re-run the backend with a
- lock to the git tree
+Date: Wed, 22 Aug 2018 23:10:57 +0200
+Subject: [Buildroot] [PATCH 4/5] core/download: add per-download timeout
 In-Reply-To: <cover.1534972250.git.yann.morin.1998@free.fr>
 References: <cover.1534972250.git.yann.morin.1998@free.fr>
-Message-ID: <b5a3123305e1d4cef3cbdb17985e73161d13f407.1534972250.git.yann.morin.1998@free.fr>
+Message-ID: <ae42dac572665985954d708489bb5474ccae3edc.1534972250.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The access-pattern to the git repository must be entirely atomic.
+In case an remote sitre is slow, or hangs for whatever reasons, of the
+backend is somehow stuck (e.g. locally waiting on a lock that is never
+released), the whole build can be stuck forever.
 
-This atomicity is currently guaranteed by the caller, from a higher
-level. But this is not optimum, and it is better that the backend does
-the locking it needs by itself, so that other backends from other builds
-can still download for the same package (e.g. another build uses a wget
-download for that package).
+But in such circumstances, it may happen that another download location
+(e.g. a mirror on the LAN) may already have the required tarball, and
+downloading from there would be faster and would succeed.
 
-One would think that, ideally, we'd have three atomic sections, and that
-we could release the lock in-between those sections:
-  - setting the remote URL and fetching,
-  - checking out, updating sub-modules, generating the archive,
-  - compressing the archive.
+Add an optional, configurable, per-backend timeout.
 
-However, this is not true, because another backend may acquire the lock
-right after our first section, and decide to entirely remove the
-repository (in the _on_error() trap), and thus, in the second section,
-the commits we had fetched in the first section may now have disapeared.
-
-So, in fact, the first two sections are really only one.
-
-Now, once we have generated the tarball, we could indeed release the
-lock, as we no longer need access to the repository. But releasing a
-lock acquired by flock(1) is not trivial: we don't know the
-filedescriptor that was used to open the directory, so we can't close
-it to release the lock...
-
-So, we just lock the whole backend: once we reach compressing the
-archive, we're almost done anyway.
-
-We do implement this locking policy by locking the git cache directory
-right after it got created, and before we do any git command in there.
-We do so by re-running the git backend under an flock(1), using a trick
-explained in the manpage (except we don't use the script as lockfile,
-but the git cache directory). Even though using an exclusive lock is the
-default, we do request it, to be sure.
-
-When running under the lock, we then know we have exclusive access to
-the repository, and we can do whatever we need in it.
-
-When the backend ends, its filesdecriptors are closed (by the kernel),
-thus freeing the lock for another to acquire.
+Note: all the FDs of a backend will be forcibly closed by the kernel
+when the backend 15-terminates or is 9-killed; any lock held on those
+FDs would be automatically released by the kernel, thus releasing any
+concurrent download.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Hollis Blanchard <hollis_blanchard@mentor.com>
 Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
----
- support/download/git | 30 +++++++++++++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/support/download/git b/support/download/git
-index 17ca04eb98..1a3d562605 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -25,6 +25,10 @@ declare -a OPTS=("${@}")
- # case an unexpected and unsupported situation arises with submodules
- # or uncommitted stuff (e.g. if the user manually mucked around in the
- # git cache).
-+#
-+# To be noted: this function is only called while we have the lock on
-+# the git cache directory, so we can't remove it.
-+#
- _on_error() {
-     local ret=${?}
+---
+Note: with the follow-up patch, this would probably fix build issues
+like the ones on Hollis' autobuilder:
+    http://autobuild.buildroot.org/results/ddb/ddbc96b24017f2a2b06c6091dea3e19520bf2dd1/
+---
+ Config.in                   | 14 ++++++++++++++
+ package/pkg-download.mk     |  1 +
+ support/download/dl-wrapper | 15 ++++++++++++---
+ 3 files changed, 27 insertions(+), 3 deletions(-)
+
+diff --git a/Config.in b/Config.in
+index 6b5b2b043c..654734855a 100644
+--- a/Config.in
++++ b/Config.in
+@@ -312,6 +312,20 @@ endif
  
-@@ -38,7 +42,10 @@ _on_error() {
-     printf "Removing it and starting afresh.\n" >&2
+ endmenu
  
-     popd >/dev/null
--    rm -rf "${git_cache}"
++config BR2_DL_TIMEOUT
++	string "Download timeout"
++	help
++	  Timeout after which a non-completed download will be considered
++	  failed. Suffix with 's' (or nothing), 'm', 'h', or 'd' for,
++	  respectively, seconds, minutes, hours, or days.
 +
-+    # Remove everything in the git cache, but the directory itself,
-+    # so as not to have to play tricks with the lock
-+    find "${git_cache}" -mindepth 1 -maxdepth 1 -exec rm -rf {} \;
++	  When a download times out, the next download location, if any, is
++	  attempted, which means that, if the primary site (if any) is too
++	  slow, then upstream will be used; if that is then still too slow,
++	  then the backup mirror, if any, is used.
++
++	  Leave empty for no timeout (the default).
++
+ config BR2_JLEVEL
+ 	int "Number of jobs to run simultaneously (0 for auto)"
+ 	default "0"
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index cd77ca5394..832346d3d5 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -92,6 +92,7 @@ endif
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(PKG)_DL_DIR)
+ 	$(Q)$(EXTRA_ENV) $(DL_WRAPPER) \
++		-t '$(call qstrip,$(BR2_DL_TIMEOUT))' \
+ 		-c '$($(PKG)_DL_VERSION)' \
+ 		-d '$($(PKG)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 723c89b7d5..fff27db497 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -23,11 +23,11 @@ export BR_BACKEND_DL_GETOPTS=":hc:d:o:n:N:H:ru:qf:e"
  
-     exec "${myname}" "${OPTS[@]}" || exit ${ret}
- }
-@@ -64,6 +71,21 @@ shift $((OPTIND-1)) # Get rid of our options
- # Create and cd into the directory that will contain the local git cache
- git_cache="${dl_dir}/git"
- mkdir -p "${git_cache}"
-+
-+# From now-on, we need exclusive access to repository. But this git
-+# backend is not concurrent-safe; others instances may have to touch
-+# the same git repository. So, we re-run under flock if not already
-+# the case, but only after we've created the cache dir, so that we
-+# only lock the cache, not the full dl-dir.
-+#
-+# Note that if this is our second-chance (see _on_error(), above), then
-+# we already have the lock, and won't try to reacquire it (BR_GIT_FLOCK
-+# is already set to the correct value).
-+if [ "${BR_GIT_FLOCK}" != "${git_cache}" ]; then
-+    export BR_GIT_FLOCK="${git_cache}"
-+    exec flock  --exclusive --no-fork "${git_cache}" "${0}" "${OPTS[@]}"
-+fi
-+
- pushd "${git_cache}" >/dev/null
+ main() {
+     local OPT OPTARG
+-    local backend output hfile recurse quiet rc
++    local backend output hfile recurse quiet rc timeout timeout_cmd
+     local -a uris
  
- # Any error now should try to recover
-@@ -193,6 +215,12 @@ LC_ALL=C sort <"${output}.list" >"${output}.list.sorted"
- tar cf - --transform="s#^\./#${basename}/#" \
-          --numeric-owner --owner=0 --group=0 --mtime="${date}" --format=gnu \
-          -T "${output}.list.sorted" >"${output}.tar"
-+
-+# From now on, we could very well release the lock we have on the git
-+# cache directory, but there is no simple solution for that (we don't
-+# know its filedescriptor). So, just go on with our business, we're
-+# almost done anyway...
-+
- gzip -6 -n <"${output}.tar" >"${output}"
+     # Parse our options; anything after '--' is for the backend
+-    while getopts ":hc:d:D:o:n:N:H:rf:u:q" OPT; do
++    while getopts ":hc:d:D:o:n:N:H:rf:u:t:q" OPT; do
+         case "${OPT}" in
+         h)  help; exit 0;;
+         c)  cset="${OPTARG}";;
+@@ -40,6 +40,7 @@ main() {
+         r)  recurse="-r";;
+         f)  filename="${OPTARG}";;
+         u)  uris+=( "${OPTARG}" );;
++        t)  timeout="${OPTARG}";;
+         q)  quiet="-q";;
+         :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+         \?) error "unknown option '%s'\n" "${OPTARG}";;
+@@ -53,6 +54,14 @@ main() {
+         error "no output specified, use -o\n"
+     fi
  
- rm -f "${output}.list"
++    if [ -n "${timeout}" ]; then
++        # Timeout after the specified delay; additionaly, leave
++        # 30 more seconds for the backend to properly terminate
++        # (e.g. to cleanup behind itself), after which forcibly
++        # kill the backend.
++        timeout_cmd="timeout --kill-after=30s ${timeout}"
++    fi
++
+     # Legacy handling: check if the file already exists in the global
+     # download directory. If it does, hard-link it. If it turns out it
+     # was an incorrect download, we'd still check it below anyway.
+@@ -123,7 +132,7 @@ main() {
+         # directory to remove all the cruft it may have left behind, and try
+         # the next URI until it succeeds. Once out of URI to try, we need to
+         # cleanup and exit.
+-        if ! "${OLDPWD}/support/download/${backend}" \
++        if ! ${timeout_cmd} "${OLDPWD}/support/download/${backend}" \
+                 $([ -n "${urlencode}" ] && printf %s '-e') \
+                 -c "${cset}" \
+                 -d "${dl_dir}" \
 -- 
 2.14.1
