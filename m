@@ -1,226 +1,167 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Aug 2018 00:27:19 +0200
-Subject: [Buildroot] [PATCH] libssh: fix cross compile with older cmake
-In-Reply-To: <20180822220952.GA9365@scaer>
-References: <9dce5a842ebb73937268fa66a3ee699785c5ae7c.1534975110.git.baruch@tkos.co.il>
- <20180822220952.GA9365@scaer>
-Message-ID: <20180822222719.GB9365@scaer>
+From: Samuel Voss <sam.voss@gmail.com>
+Date: Wed, 22 Aug 2018 14:04:32 -0500
+Subject: [Buildroot] [PATCH] rust: Modify Rust to be usable as host-tool
+ only
+In-Reply-To: <20180821220616.03e21ea4@windsurf>
+References: <20180717042953.23648-1-sam.voss@gmail.com>
+ <20180821220616.03e21ea4@windsurf>
+Message-ID: <CAK714xKEKhE=qP8Du=G+CUGWkbJuYXS4a1uUfHP6bXig-MhWeQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Hey Thomas!
 
-On 2018-08-23 00:09 +0200, Yann E. MORIN spake thusly:
-> On 2018-08-23 00:58 +0300, Baruch Siach spake thusly:
-> > Old version of cmake break cross-compilation when FindThreads is used
-> > because of a try_run call. Add a workaround that avoids try_run.
-> > 
-> > cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
-> > 
-> > Should fix:
-> > http://autobuild.buildroot.net/results/8aa/8aa2bd894416a4508ca7140f8947ff46243f8b78/
-> > http://autobuild.buildroot.net/results/f2c/f2cc965bb134bf4fd9e625eb267b67c949c202fc/
-> > 
-> > Cc: Scott Fan <fancp2007@gmail.com>
-> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> > Hi Peter, Yann,
-> > 
-> > Can one of you test this fix on one of the affected autobuilders?
-> > 
-> >   http://autobuild.buildroot.net/?reason=libssh-0.8.1
-> 
-> My autobuilder does not have cmake installed, so will use or own
-> host-cmake, as can be seen in the failure on my autobuilder:
->     http://autobuild.buildroot.net/results/f2c/f2cc965bb134bf4fd9e625eb267b67c949c202fc/build-end.log
-> 
->     [...] /home/buildroot/autobuild/run/instance-3/output/host/bin/cmake [...]
-> 
-> So I guess you can test on a machine that does not have cmake installed.
-> 
-> But I'll spin a test on my autobuilder in a moment, and report back...
+Thanks for putting some time into this, I was afraid it was going to
+sit forever because it's kind of a pain to test these kinds of
+changes.
 
-Here are the results of the configure step, using the config from my
-autobuilder referenced above, and running 'make libssh-depends' first:
+On Tue, Aug 21, 2018 at 3:06 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Sam,
+>
+> Thanks for taking the lead on this!
+>
+> On Mon, 16 Jul 2018 23:29:53 -0500, sam.voss at gmail.com wrote:
+> > From: Sam Voss <sam.voss@gmail.com>
+> >
+> > Modify host-rust virtual package to default to host-rust-bin when no
+> > other selection has been made, as long as the host supports rust. This
+> > allows host only tools to still use rust when the target architecture
+> > does not support it.
 
----8<---
+[snip]
 
-$ make libssh-configure
-umask 0022 && make -C /home/buildroot/dev/buildroot O=/home/buildroot/dev/O/. libssh-configure
-libssh-0.7.5.tar.xz: OK (md5: d3fc864208bf607ad87cdee836894feb)
-libssh-0.7.5.tar.xz: OK (sha256: 54e86dd5dc20e5367e58f3caab337ce37675f863f80df85b6b1614966a337095)
->>> libssh 0.7.5 Extracting
-xzcat /home/buildroot/src/libssh/libssh-0.7.5.tar.xz | tar --strip-components=1 -C /home/buildroot/dev/O/build/libssh-0.7.5   -xf -
->>> libssh 0.7.5 Patching
->>> libssh 0.7.5 Configuring
-(mkdir -p /home/buildroot/dev/O/build/libssh-0.7.5//buildroot-build && cd /home/buildroot/dev/O/build/libssh-0.7.5//buildroot-build && rm -f CMakeCache.txt && PATH="/home/buildroot/dev/O/host/bin:/home/buildroot/dev/O/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"  /home/buildroot/dev/O/host/bin/cmake /home/buildroot/dev/O/build/libssh-0.7.5/ -DCMAKE_TOOLCHAIN_FILE="/home/buildroot/dev/O/host/share/buildroot/toolchainfile.cmake" -DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON  -DWITH_STACK_PROTECTOR=OFF -DWITH_SERVER=OFF -DWITH_EXAMPLES=OFF -DTHREADS_PTHREAD_ARG=OFF -DWITH_ZLIB=ON -DWITH_GCRYPT=OFF )
--- The C compiler identification is GNU 6.4.0
--- Check for working C compiler: /home/buildroot/dev/O/host/bin/mipsel-linux-gcc
--- Check for working C compiler: /home/buildroot/dev/O/host/bin/mipsel-linux-gcc -- works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
--- Performing Test WITH_FPIC
--- Performing Test WITH_FPIC - Success
--- Found ZLIB: /home/buildroot/dev/O/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/libz.so (found version "1.2.11")
--- Found OpenSSL: /home/buildroot/dev/O/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so (found version "1.0.2p")
--- Looking for pthread.h
--- Looking for pthread.h - found
--- Looking for pthread_create
--- Looking for pthread_create - not found
--- Looking for pthread_create in pthreads
--- Looking for pthread_create in pthreads - not found
--- Looking for pthread_create in pthread
--- Looking for pthread_create in pthread - found
--- Found Threads: TRUE
--- Found PkgConfig: /home/buildroot/dev/O/host/bin/pkg-config (found version "0.28")
--- Checking for module 'heimdal-gssapi'
---   Package heimdal-gssapi was not found in the pkg-config search path.
-Perhaps you should add the directory containing `heimdal-gssapi.pc'
-to the PKG_CONFIG_PATH environment variable
-Package 'heimdal-gssapi', required by 'world', not found
--- Could NOT find GSSAPI (missing:  GSSAPI_LIBRARIES GSSAPI_INCLUDE_DIR)
--- Could NOT find NaCl (missing:  NACL_LIBRARIES NACL_INCLUDE_DIRS)
--- Performing Test WITH_VISIBILITY_HIDDEN
--- Performing Test WITH_VISIBILITY_HIDDEN - Success
--- Looking for argp.h
--- Looking for argp.h - found
--- Looking for pty.h
--- Looking for pty.h - found
--- Looking for utmp.h
--- Looking for utmp.h - found
--- Looking for termios.h
--- Looking for termios.h - found
--- Looking for unistd.h
--- Looking for unistd.h - found
--- Looking for util.h
--- Looking for util.h - not found
--- Looking for libutil.h
--- Looking for libutil.h - not found
--- Looking for sys/time.h
--- Looking for sys/time.h - found
--- Looking for sys/param.h
--- Looking for sys/param.h - found
--- Looking for arpa/inet.h
--- Looking for arpa/inet.h - found
--- Looking for byteswap.h
--- Looking for byteswap.h - found
--- Looking for openssl/des.h
--- Looking for openssl/des.h - found
--- Looking for openssl/aes.h
--- Looking for openssl/aes.h - found
--- Looking for openssl/blowfish.h
--- Looking for openssl/blowfish.h - found
--- Looking for openssl/ecdh.h
--- Looking for openssl/ecdh.h - found
--- Looking for openssl/ec.h
--- Looking for openssl/ec.h - found
--- Looking for openssl/ecdsa.h
--- Looking for openssl/ecdsa.h - found
--- Looking for isblank
--- Looking for isblank - found
--- Looking for strncpy
--- Looking for strncpy - found
--- Looking for strtoull
--- Looking for strtoull - found
--- Looking for vsnprintf
--- Looking for vsnprintf - found
--- Looking for snprintf
--- Looking for snprintf - found
--- Looking for poll
--- Looking for poll - found
--- Looking for select
--- Looking for select - found
--- Looking for getaddrinfo
--- Looking for getaddrinfo - found
--- Looking for ntohll
--- Looking for ntohll - not found
--- Looking for htonll
--- Looking for htonll - not found
--- Looking for clock_gettime in rt
--- Looking for clock_gettime in rt - found
--- Looking for forkpty in util
--- Looking for forkpty in util - found
--- Looking for cfmakeraw
--- Looking for cfmakeraw - found
--- Looking for __strtoull
--- Looking for __strtoull - not found
--- Performing Test HAVE_GCC_THREAD_LOCAL_STORAGE
--- Performing Test HAVE_GCC_THREAD_LOCAL_STORAGE - Success
--- Performing Test HAVE_MSC_THREAD_LOCAL_STORAGE
--- Performing Test HAVE_MSC_THREAD_LOCAL_STORAGE - Failed
--- Performing Test HAVE_GCC_VOLATILE_MEMORY_PROTECTION
--- Performing Test HAVE_GCC_VOLATILE_MEMORY_PROTECTION - Success
--- Performing Test HAVE_GCC_NARG_MACRO
--- Performing Test HAVE_GCC_NARG_MACRO - Success
--- Performing Test HAVE_COMPILER__FUNC__
--- Performing Test HAVE_COMPILER__FUNC__ - Success
--- Performing Test HAVE_COMPILER__FUNCTION__
--- Performing Test HAVE_COMPILER__FUNCTION__ - Failed
--- Check if the system is big endian
--- Searching 16 bit integer
--- Looking for sys/types.h
--- Looking for sys/types.h - found
--- Looking for stdint.h
--- Looking for stdint.h - found
--- Looking for stddef.h
--- Looking for stddef.h - found
--- Check size of unsigned short
--- Check size of unsigned short - done
--- Using unsigned short
--- Check if the system is big endian - little endian
--- Could NOT find Doxygen (missing:  DOXYGEN_EXECUTABLE)
--- Threads_FOUND=TRUE
--- threads library: Threads_FOUND=TRUE
--- libssh_threads_SRCS=pthread.c
--- ********************************************
--- ********** libssh build options : **********
--- zlib support: ON
--- libgcrypt support: OFF
--- libnacl support: OFF
--- SSH-1 support: OFF
--- SFTP support: ON
--- Server support : OFF
--- GSSAPI support : 0
--- Pcap debugging support : ON
--- With static library: OFF
--- Unit testing: OFF
--- Client code Unit testing: OFF
--- Public API documentation generation
--- Benchmarks: OFF
--- ********************************************
--- Configuring done
--- Generating done
-CMake Warning:
-  Manually-specified variables were not used by the project:
+> >  ifeq ($(BR2_PACKAGE_JEMALLOC),y)
+> >  HOST_RUST_DEPENDENCIES += jemalloc
+> >  HOST_RUST_JEMALLOC_ENABLED = true
+> > diff --git a/package/rustc/Config.in.host b/package/rustc/Config.in.host
+> > index 2ae8f89d3f..d7f0efcd3f 100644
+> > --- a/package/rustc/Config.in.host
+> > +++ b/package/rustc/Config.in.host
+> > @@ -14,6 +14,19 @@ config BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> >       depends on BR2_TOOLCHAIN_USES_GLIBC
+> >       depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
+>
+> I think you need to remove all the architecture dependencies here:
+> host-rust is always available, as long as the host architecture is
+> x86-64 or x86.
 
-    BUILD_DOC
-    BUILD_DOCS
-    BUILD_EXAMPLE
-    BUILD_EXAMPLES
-    BUILD_TEST
-    BUILD_TESTING
-    BUILD_TESTS
-    THREADS_PTHREAD_ARG
+Ah, defaulting -y instead of depending makes sense. Thanks for
+pointing this out.
 
+> The glibc dependency should also be removed, as we don't
+> have any way of expressing a "we depend on a host machine with glibc"
+> dependency today.
+>
+> > +config BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+> > +     bool
+> > +     default y if BR2_i386
+> > +     default y if BR2_x86_64
+> > +     default y if BR2_aarch64
+> > +     default y if BR2_arm && !BR2_ARM_CPU_ARMV4 && !BR2_ARM_CPU_ARMV5 \
+> > +             && !(BR2_ARM_CPU_ARMV7A && BR2_ARM_EABI)
+> > +     default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+> > +     default y if (BR2_mips || BR2_mipsel) && !BR2_MIPS_CPU_MIPS32R6
+> > +     default y if (BR2_mips64 || BR2_mips64el) && !BR2_MIPS_CPU_MIPS64R6 \
+> > +             && BR2_MIPS_NABI64
+>
+> The glibc dependency should be re-added here.
+>
+> > +     depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+> > +
+> >  config BR2_PACKAGE_HOST_RUSTC_ARCH
+> >       string
+> >       default "armv7"  if BR2_ARM_CPU_ARMV7A
+> > @@ -66,9 +79,11 @@ config BR2_PACKAGE_HOST_RUST_BIN
+> >
+> >  endchoice
+> >
+> > +endif
+> > +
+> >  config BR2_PACKAGE_PROVIDES_HOST_RUSTC
+> >       string
+> >       default "host-rust" if BR2_PACKAGE_HOST_RUST
+> > -     default "host-rust-bin" if BR2_PACKAGE_HOST_RUST_BIN
+> > -
+> > -endif
+> > +     # Default to host-rust-bin as long as host arch supports it
+> > +     default "host-rust-bin" if !BR2_PACKAGE_HOST_RUST
+> > +     depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+>
+> However, even with those changes, if I do:
+>
+> $ cat > .config <<EOF
+> BR2_nios2=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-nios2-full-2018.05.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_16=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_SSP is not set
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> # BR2_TARGET_ROOTFS_TAR is not set
+> EOF
+> $ make olddefconfig
+> $ make host-rustc
+>
+> Then I see:
+>
+> >>> host-rust-bin 1.27.1 Extracting
+> xzcat /home/thomas/dl/rust-bin/rustc-1.27.1-x86_64-unknown-linux-gnu.tar.xz | tar --strip-components=1 -C /home/thomas/projets/buildroot/output/build/host-rust-bin-1.27.1   -xf -
+> mkdir -p /home/thomas/projets/buildroot/output/build/host-rust-bin-1.27.1/std
+> xzcat /home/thomas/dl/rust-bin/rust-std-1.27.1-x86_64-unknown-linux-gnu.tar.xz | tar -C /home/thomas/projets/buildroot/output/build/host-rust-bin-1.27.1/std  -xf -
+> cd /home/thomas/projets/buildroot/output/build/host-rust-bin-1.27.1/rustc/lib/rustlib/x86_64-unknown-linux-gnu; ln -sf ../../../../std/rust-std-1.27.1-x86_64-unknown-linux-gnu/rust-std-x86_64-unknown-linux-gnu/lib/rustlib/x86_64-unknown-linux-gnu/lib
+> >>> host-rust-bin 1.27.1 Patching
+> >>> host-rust-bin 1.27.1 Configuring
+> >>> host-rust-bin 1.27.1 Building
+> >>> host-rust-bin 1.27.1 Installing to host directory
+>
+> And nothing gets installed in output/host. This is because
+> BR2_PACKAGE_HOST_RUST_BIN is false, and therefore rust-bin.mk doesn't
+> do much. I am not sure why rust-bin.mk has this condition:
+>
+> ifeq ($(BR2_PACKAGE_HOST_RUST_BIN),y)
+>
+> This condition shouldn't be necessary. So it should be removed, and
+> instead HOST_RUST_BIN_INSTALL_LIBSTD_TARGET should be put within ifeq
+> ($(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS),y).
+>
+> With this fixed, it does install a Rust compiler and host standard
+> library, and I can successfully build and run a host Rust program, even
+> if the NIOSII target architecture is not supported by Rust.
+>
+> Could you fix this issue and send an updated patch ?
+>
+> Note: I think your current patch is correct that the "host-rustc"
+> package should *NOT* appear in menuconfig when the target architecture
+> is not supported by Rust. Indeed, in such a case, Rust can only build
+> host programs, and it's therefore a mere build dependency of some other
+> package.
+>
+> Please add a comment above the definitions of
+> BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS that all packages that use
+> host-rustc to build host Rust programs should depend on this option.
+> And a comment above BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS to say
+> that all packages that use host-rustc to build target Rust programs
+> should depend on this option.
 
--- Build files have been written to: /home/buildroot/dev/O/build/libssh-0.7.5/buildroot-build
+Added
 
----8<---
+>
+> For the record, the current state of the patch I had after some fixes
+> is at http://code.bulix.org/pqww33-400669.
 
-The build step was then successfull, by the way...
+Fantastic, testing now and will send a rev 2 shortly
 
-Regards,
-Yann E. MORIN.
+Thanks!
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Sam
