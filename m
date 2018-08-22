@@ -1,59 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2018 10:30:42 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-08-07
-In-Reply-To: <20180822072949.GX15347@scaer>
-References: <20180808060047.9CC13209AD@mail.bootlin.com>
- <87mutwb2se.fsf@tkos.co.il> <20180822072949.GX15347@scaer>
-Message-ID: <20180822083042.GY15347@scaer>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 22 Aug 2018 13:00:00 +0300
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add Mirza Krak to mender
+ package
+In-Reply-To: <20180822080623.15435-1-mirza.krak@northern.tech>
+References: <20180822080623.15435-1-mirza.krak@northern.tech>
+Message-ID: <20180822100000.dc6di4qwh7je4fjg@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch,All,
+Hi Mirza,
 
-On 2018-08-22 09:29 +0200, Yann E. MORIN spake thusly:
-> On 2018-08-09 07:08 +0300, Baruch Siach spake thusly:
-> > Thomas Petazzoni writes:
-> > > Results for branch 'master'
-> > > ===========================
-> > >
-> > >       xtensa |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/55b271cceb5b749f911266ed96998c4ee730fb86 |     
-> > >          sh4 |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/f8ff8c24d940113d7eb9729ae0b1b8e454cb4523 |     
-> > >     mips64el |                     brltty-5.5 | NOK | http://autobuild.buildroot.net/results/c1829952aec2356905a2d5559d77b3e79739ea21 |     
-> > 
-> > I could not reproduce this one here. The autobuilder indicates that it
-> > only happens on the autobuilders of Yann, Romain and Richard:
-> > 
-> >   http://autobuild.buildroot.net/?reason=brltty-5.5
-> > 
-> > It looks like ATSPI2_INCLUDES and GLIB2_INCLUDES evaluate to empty
-> > strings in Drivers/Screen/AtSpi2/Makefile.in on these
-> > builders. config.log looks normal though.
-> > 
-> > Maybe one of you can take a look?
+On Wed, Aug 22, 2018 at 10:06:23AM +0200, Mirza Krak wrote:
+> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+> ---
+>  DEVELOPERS | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> For the records, I'm still investigating this issue, and I found that
-> there is a delta in generated files, that cause the build issue.
-> 
-> Now, the buildsystem for brltty is sufficiently inventive that it is not
-> trivial to pinpoint why the generated files differ.
-> 
-> I'll be pursuing my investigations...
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 215506c71c..f6426e5ebe 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -142,10 +142,13 @@ F:	package/rauc/
+>  N:	Andy Kennedy <andy.kennedy@adtran.com>
+>  F:	package/libunwind/
+>  
+> +N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> +N:	Mirza Krak <mirza.krak@northern.tech>
+> +F:	package/mender/
 
-Aha! I found it! Aha!
+As the name of this file suggests, this is a list of developer entries, not a 
+list of packages. The same package can appear in multiple entries. But there 
+is only one developer per entry.
 
-https://patchwork.ozlabs.org/patch/960852/
+So, create an entry for you (please keep alphabetic order), and list mender as 
+a package you are interested in.
 
-Regards,
-Yann E. MORIN.
+> +
+>  N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>  F:	package/corkscrew/
+>  F:	package/i2c-tools/
+> -F:	package/mender/
+>  F:	package/mono/
+>  F:	package/mono-gtksharp3/
+>  F:	package/monolite/
+
+baruch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
