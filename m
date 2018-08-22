@@ -1,21 +1,20 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2018 22:02:49 +0200
+Date: Wed, 22 Aug 2018 22:05:12 +0200
 Subject: [Buildroot] [PATCH] package/brltty: fix cross-compilation
-In-Reply-To: <20180822200153.031820b8@gmx.net>
+In-Reply-To: <20180822100415.dl7h3xvaahwtngut@sapphire.tkos.co.il>
 References: <20180822082832.7497-1-yann.morin.1998@free.fr>
- <20180822200153.031820b8@gmx.net>
-Message-ID: <20180822200249.GE2404@scaer>
+ <20180822100415.dl7h3xvaahwtngut@sapphire.tkos.co.il>
+Message-ID: <20180822200512.GF2404@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Bruch, All,
 
-On 2018-08-22 20:01 +0200, Peter Seiderer spake thusly:
-> On Wed, 22 Aug 2018 10:28:32 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> 
+On 2018-08-22 13:04 +0300, Baruch Siach spake thusly:
+> On Wed, Aug 22, 2018 at 10:28:32AM +0200, Yann E. MORIN wrote:
 > > brltty has a very inventive buildsystem, where it internall runs
 > > ./configure for the build machine In doing so, it generates a list
 > > of make variables to define what the build machine supports, like
@@ -29,17 +28,6 @@ On 2018-08-22 20:01 +0200, Peter Seiderer spake thusly:
 > > 
 > > Where it gets interesting, is that that sed script considers the
 > > variables names to match '[A-Za-z][A-Za-z0-9_]*'
-> 
-> Minor nit: did you mean '[A-Za-z][A-Za-z_]*' here?
-
-Indeed, that's right. I copied-pasted the fix regexp...
-
-Regards,
-Yann E. MORIN.
-
-> Regards,
-> Peter
-> 
 > > 
 > > And there we see why ATSPI2_PACKAGE does not match: it contains a
 > > digit.
@@ -48,7 +36,25 @@ Yann E. MORIN.
 > > 
 > > Fix that by simply expanding the matching regexp to allow digits
 > > in variable names.
-> > 
+> 
+> Thanks for fixing that.
+> 
+> Do you have any idea why it only fails on specific (older?) hosts? Does it 
+> depend on the sed version?
+
+I don;t know what the difference is. The sed version is probably not the
+culprit, because the generated file is the same on a working or on a
+failing system.
+
+So, I believe I fixed the real problem, but I dont know why it sometimes
+did not manifest itself on some systems, while it was visible on
+others...
+
+Regards,
+Yann E. MORIN.
+
+> baruch
+> 
 > > Fixes:
 > >     http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/
 > >     http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/
@@ -105,10 +111,11 @@ Yann E. MORIN.
 > > + t found
 > > + d
 > > + :found
-> > +-- 
-> > +2.14.1
-> > +
 > 
+> -- 
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
