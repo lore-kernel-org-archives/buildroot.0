@@ -1,33 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Aug 2018 15:34:13 +0200
-Subject: [Buildroot] [PATCH next 2/2] linux-headers: bump 4.{4, 9, 14, 17,
- 18}.x series
-In-Reply-To: <1534941838-24924-2-git-send-email-festevam@gmail.com>
-References: <1534941838-24924-1-git-send-email-festevam@gmail.com>
- <1534941838-24924-2-git-send-email-festevam@gmail.com>
-Message-ID: <20180822153413.0a775445@windsurf>
+From: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+Date: Wed, 22 Aug 2018 15:35:00 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: add Juno ARM maintainer
+Message-ID: <397868181394a89dad65a94a8f7ea68c88e45d36.1534944883.git.gustavo.pimentel@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+---
+ DEVELOPERS | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-On Wed, 22 Aug 2018 09:43:58 -0300, Fabio Estevam wrote:
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  package/linux-headers/Config.in.host | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-
-Please split this one into two: one for master, and one for next.
-Indeed, in master, we want to bump the 4.{9,14,17} versions, but we
-don't have 4.18 there.
-
-Thanks!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a6d76dd..7b4ae55 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -865,6 +865,10 @@ F:	arch/Config.in.csky
+ F:	board/csky/
+ F:	configs/csky_*
+ 
++N:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
++F:	configs/arm_juno_defconfig
++F:	board/arm/juno/
++
+ N:	Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+ F:	package/gnuradio/
+ F:	package/gqrx/
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
