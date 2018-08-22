@@ -1,60 +1,140 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2018 19:21:34 +0200
-Subject: [Buildroot] [PATCH 2/2] Adding btrfs rootfs option.
-In-Reply-To: <20180822165751.GB2404@scaer>
-References: <20180821160412.28757-1-robert.heywood@codethink.co.uk>
- <20180821160412.28757-2-robert.heywood@codethink.co.uk>
- <20180821202707.GP15347@scaer>
- <d8c27acc-81be-e5f2-08d1-c80a3f9d9a96@codethink.co.uk>
- <20180822165751.GB2404@scaer>
-Message-ID: <20180822172134.GC2404@scaer>
+Date: Wed, 22 Aug 2018 19:24:11 +0200
+Subject: [Buildroot] [PATCH v4 2/2] core/legal-info: Add package
+ dependencies with licenses to the manifest
+In-Reply-To: <20180822124014.23046-2-sojkam1@fel.cvut.cz>
+References: <20180822124014.23046-1-sojkam1@fel.cvut.cz>
+ <20180822124014.23046-2-sojkam1@fel.cvut.cz>
+Message-ID: <20180822172411.GD2404@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Robert, All,
+Michal, All,
 
-On 2018-08-22 18:57 +0200, Yann E. MORIN spake thusly:
-> On 2018-08-22 14:10 +0100, Robert Heywood spake thusly:
-> > On 21/08/18 21:27, Yann E. MORIN wrote:
-[--SNIP--]
-> > >Given that the filsystem is specifically made for the target that will
-> > >mount it, does it make sense to ffer that option at all? I.e. if the
-> > >target uses a 4KiB page size, does it make sense to generatea rootfs
-> > >that has a different secotr size, and thus not mountable on the target
-> > >at all?
-> > >
-> > >My suggestion: don't add that option.
-> > 
-> > On my system (building for a raspi0) it autodetects the sector size to be
-> > 4k, and the resulting image is bootable. However I'm worried the host won't
-> > be able to detect the correct value for the target. In such a case I can see
-> > why it would be useful to set the sector size explicitly.
+On 2018-08-22 14:40 +0200, Michal Sojka spake thusly:
+> From: Michal Sojka <sojka@merica.cz>
 > 
-> Well, basically all architectures have a 4K page size, so does your
-> x86_64 and so does the rpi (0/1/2/3), so the default for your host is
-> valid for your target.
+> This adds one column to the legal-info manifest table. It contains the
+> dependencies of the given package and their licenses. This information
+> is useful when assessing license compatibility of the packages and
+> their libraries.
 > 
-> What architectures have a page-size that is not 4K?
+> An example of the content of the new column for the MPD package is
+> shown below:
+> 
+>     "alsa-lib [LGPL-2.1+ (library), GPL-2.0+ (aserver)] boost
+>     [BSL-1.0] libid3tag [GPL-2.0+] libmad [GPL-2.0+] libogg
+>     [BSD-3-Clause] libvorbis [BSD-3-Clause] libzlib [Zlib]
+>     skeleton-init-common [unknown] skeleton-init-sysv [unknown] sqlite
+>     [Public domain] toolchain-external-linaro-arm [unknown]"
+> 
+> [Credits to Yann E. MORIN <yann.morin.1998@free.fr> for suggesting a
+> few simplifications.]
+> 
+> Signed-off-by: Michal Sojka <sojka@merica.cz>
+> Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-After discussing on IRC with Paul (Cc), it turns out that quite a few
-architectures can have a page size different from 4K, like mips, arc and
-a few others. Sometimes it is even configrable. Thanks Paul.
+With the comment for the legal-deps macro nw added, this reviewed-by can
+be turned into an ACK when applying:
 
-4K just happens to be the most common, but definitely not the only one.
-
-> > Is there another place where the sector size is specified? If so, it might
-> > be better to use the existing value instead.
-> I would also add a default here, to 4096. Users who want to change
-> that value would know what they would be doing.
-
-So yeah, just keep that option, and let set the default to 4K. People
-who have a non 4K arch or kernel option will know to change that value.
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  Makefile               |  4 ++--
+>  package/pkg-generic.mk | 10 +++++++++-
+>  package/pkg-utils.mk   | 15 +++++++++++++--
+>  3 files changed, 24 insertions(+), 5 deletions(-)
+> 
+> Changes between v3 and v4:
+> * Added comment to legal-deps macro as suggested by Yann E. MORIN.
+> 
+> diff --git a/Makefile b/Makefile
+> index 3d8106e201..d6809642bd 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -781,8 +781,8 @@ legal-info-clean:
+>  legal-info-prepare: $(LEGAL_INFO_DIR)
+>  	@$(call MESSAGE,"Buildroot $(BR2_VERSION_FULL) Collecting legal info")
+>  	@$(call legal-license-file,buildroot,buildroot,support/legal-info,COPYING,COPYING,HOST)
+> -	@$(call legal-manifest,TARGET,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE)
+> -	@$(call legal-manifest,HOST,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE)
+> +	@$(call legal-manifest,TARGET,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSES)
+> +	@$(call legal-manifest,HOST,PACKAGE,VERSION,LICENSE,LICENSE FILES,SOURCE ARCHIVE,SOURCE SITE,DEPENDENCIES WITH LICENSES)
+>  	@$(call legal-manifest,HOST,buildroot,$(BR2_VERSION_FULL),GPL-2.0+,COPYING,not saved,not saved)
+>  	@$(call legal-warning,the Buildroot source code has not been saved)
+>  	@cp $(BR2_CONFIG) $(LEGAL_INFO_DIR)/buildroot.config
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 6c9592123d..a3bedb660f 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -609,6 +609,14 @@ $(2)_FINAL_ALL_DEPENDENCIES = \
+>  		$$($(2)_FINAL_DEPENDENCIES) \
+>  		$$($(2)_FINAL_EXTRACT_DEPENDENCIES) \
+>  		$$($(2)_FINAL_PATCH_DEPENDENCIES))
+> +$(2)_FINAL_RECURSIVE_DEPENDENCIES = \
+> +	$$(sort \
+> +		$$(foreach p,\
+> +			$$($(2)_FINAL_ALL_DEPENDENCIES),\
+> +			$$(p)\
+> +			$$($$(call UPPERCASE,$$(p))_FINAL_RECURSIVE_DEPENDENCIES)\
+> +		)\
+> +	)
+>  
+>  $(2)_INSTALL_STAGING		?= NO
+>  $(2)_INSTALL_IMAGES		?= NO
+> @@ -936,7 +944,7 @@ ifeq ($$($(2)_REDISTRIBUTE),YES)
+>  endif # redistribute
+>  
+>  endif # other packages
+> -	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE))
+> +	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_LICENSE),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
+>  endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+>  	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
+>  
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index 8d5ea234e4..e9666e2da7 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -79,8 +79,8 @@ define legal-warning-nosource # pkg, {local|override}
+>  	$(call legal-warning-pkg,$(1),sources not saved ($(2) packages not handled))
+>  endef
+>  
+> -define legal-manifest # {HOST|TARGET}, pkg, version, license, license-files, source, url
+> -	echo '"$(2)","$(3)","$(4)","$(5)","$(6)","$(7)"' >>$(LEGAL_MANIFEST_CSV_$(1))
+> +define legal-manifest # {HOST|TARGET}, pkg, version, license, license-files, source, url, dependencies
+> +	echo '"$(2)","$(3)","$(4)","$(5)","$(6)","$(7)","$(8)"' >>$(LEGAL_MANIFEST_CSV_$(1))
+>  endef
+>  
+>  define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-fullpath, {HOST|TARGET}
+> @@ -95,3 +95,14 @@ define legal-license-file # pkgname, pkgname-pkgver, pkgdir, filename, file-full
+>  	} && \
+>  	cp $(5) $(LICENSE_FILES_DIR_$(6))/$(2)/$(4)
+>  endef
+> +
+> +non-virtual-deps = $(foreach p,$(1),$(if $($(call UPPERCASE,$(p))_IS_VIRTUAL),,$(p)))
+> +
+> +# Returns the list of recursive dependencies and their licensing terms
+> +# for the package specified in parameter (in lowercase). If that
+> +# package is a target package, remove host packages from the list.
+> +legal-deps = \
+> +    $(foreach p,\
+> +        $(filter-out $(if $(1:host-%=),host-%),\
+> +            $(call non-virtual-deps,\
+> +                $($(call UPPERCASE,$(1))_FINAL_RECURSIVE_DEPENDENCIES))),$(p) [$($(call UPPERCASE,$(p))_LICENSE)])
+> -- 
+> 2.18.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
