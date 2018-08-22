@@ -1,93 +1,73 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2018 22:54:11 +0200
-Subject: [Buildroot] [PATCH 1/1] mjpegtools: fix build on powerpc
- without altivec
-In-Reply-To: <20180822203008.3249-1-fontaine.fabrice@gmail.com>
-References: <20180822203008.3249-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180822205411.GH2404@scaer>
+Date: Wed, 22 Aug 2018 23:10:55 +0200
+Subject: [Buildroot] [PATCH 0/5] download: add a timeout and use a more
+ fine-grained locking heuristic
+Message-ID: <cover.1534972250.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+Hello All!
 
-On 2018-08-22 22:30 +0200, Fabrice Fontaine spake thusly:
-> mpjegtools fails to build on powerpc without altivec:
-> 
-> build_sub44_mests.c: In function 'build_sub44_mests_altivec':
-> build_sub44_mests.c:268:9: internal compiler error: Segmentation fault
->      vr1 = vec_ld(rowstride, (unsigned char*)s44blk);
-> 
-> It seems mpjegtools is wrongly detecting altivec support:
-> configure:   - PowerPC Optimizations:
-> configure:     - AltiVec enabled             : true
-> 
-> Fix this by adding BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT and setting
-> --enable-simd-accel / --disable-simd-accel
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/c9464712f43efb8954fd2e5460126ad193660353
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Currently, the dl-wrapper locks the package download directory,
+effectively serialising access to that directory.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+This is done to protect the git cache directory from being accessed by
+two concurrent Buildroot builds, because the access pattern to the git
+cache is not atomic.
 
-But see a little comment below...
+However, all the other download backends are atomic, as the download
+wrapper ensures they only ever work on temporary files and directories,
+with only the final rename being atomic by itself.
 
-> ---
->  package/mjpegtools/Config.in     | 5 +++++
->  package/mjpegtools/mjpegtools.mk | 6 ++++++
->  2 files changed, 11 insertions(+)
-> 
-> diff --git a/package/mjpegtools/Config.in b/package/mjpegtools/Config.in
-> index c486361a87..968f9e7d65 100644
-> --- a/package/mjpegtools/Config.in
-> +++ b/package/mjpegtools/Config.in
-> @@ -12,6 +12,11 @@ config BR2_PACKAGE_MJPEGTOOLS
->  
->  	  http://mjpeg.sourceforge.net
->  
-> +config BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT
-> +	bool
-> +	default y if BR2_X86_CPU_HAS_MMX
-> +	default y if BR2_POWERPC_CPU_HAS_ALTIVEC
+Thus, the current locking policy effectively prevents other downloads
+for that package from another Buildroot run, to run in parallel when
+they would perfectly be able to do so without issue.
 
-The commit log should have said that mjpegtools will use
---enable-simd-accel only to enable x86's MMX or ppc's altivec,
-and that it had no use for other archs.
+Furthermore, if the remote site is really damn slow, or blocks for
+whatever reason, or we can't acquire the lock for whatever other reason,
+the whole download can be stuck for, like, forever.
+
+This series moves the locking into the git backend and the download
+wrapper, to protect just what needs to be protected. Finally, a timeout
+is added, so that the next download method, if any, is attempted as a
+fallback.
+
 
 Regards,
 Yann E. MORIN.
 
->  comment "mjpegtools needs a toolchain w/ C++, threads"
->  	depends on BR2_USE_MMU
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-> diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
-> index c7392fa2b3..14713c868e 100644
-> --- a/package/mjpegtools/mjpegtools.mk
-> +++ b/package/mjpegtools/mjpegtools.mk
-> @@ -10,6 +10,12 @@ MJPEGTOOLS_DEPENDENCIES = host-pkgconf jpeg
->  MJPEGTOOLS_LICENSE = GPL-2.0+
->  MJPEGTOOLS_LICENSE_FILES = COPYING
->  
-> +ifeq ($(BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT),y)
-> +MJPEGTOOLS_CONF_OPTS += --enable-simd-accel
-> +else
-> +MJPEGTOOLS_CONF_OPTS += --disable-simd-accel
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBPNG),y)
->  MJPEGTOOLS_CONF_OPTS += --with-libpng
->  MJPEGTOOLS_DEPENDENCIES += libpng
-> -- 
-> 2.14.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+The following changes since commit b3c1f0869645b136b9399d7a93acca65957e0bfe
+
+  DEVELOPERS: add mender to Mirza Krak (2018-08-22 13:14:26 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 17a71c0c569e1b66a46ef40f14f07db8adf847b9
+
+  utils/genrandconfig: add a 30-minute timeout (2018-08-22 22:10:33 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (5):
+      download/git: fix code-style
+      download/git: re-run the backend with a lock to the git tree
+      download: move locking into download wrapper
+      core/download: add per-download timeout
+      utils/genrandconfig: add a 30-minute timeout
+
+ Config.in                   | 14 ++++++++++++++
+ package/pkg-download.mk     |  4 ++--
+ support/download/dl-wrapper | 31 +++++++++++++++++++++----------
+ support/download/git        | 32 ++++++++++++++++++++++++++++++--
+ utils/genrandconfig         |  3 +++
+ 5 files changed, 70 insertions(+), 14 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
