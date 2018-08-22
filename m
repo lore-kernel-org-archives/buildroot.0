@@ -1,48 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Aug 2018 13:13:39 +0200
-Subject: [Buildroot] [PATCH] libusbgx: fix build with glibc
-In-Reply-To: <20180822072002.23657-1-gwenj@trabucayre.com>
-References: <20180822072002.23657-1-gwenj@trabucayre.com>
-Message-ID: <20180822131339.49d4410e@windsurf>
+Date: Wed, 22 Aug 2018 13:14:26 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add mender to Mirza Krak
+Message-ID: <20180822110707.5C7C68E250@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Gwenhael,
+commit: https://git.buildroot.net/buildroot/commit/?id=b3c1f0869645b136b9399d7a93acca65957e0bfe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 22 Aug 2018 09:20:02 +0200, Gwenhael Goavec-Merou wrote:
-> From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> 
-> Without sys/sysmacros.h and with glibc build fails with error like:
-> libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `minor'
-> libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `major'
-> libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `makedev'
-> 
-> backport and adapt pr #28 (https://github.com/libusbgx/libusbgx/pull/28)
-> 
-> fix:
-> http://autobuild.buildroot.net/results/872e2ab084c0c9bf466265d2f66140fbba692ee6/
-> 
-> Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-This error only happened once so far, on the next branch. Is it related
-to the bump of glibc 2.28 or is it also needed with older glibc
-versions ?
-
-I'm trying to figure out if this fix should be applied to the next
-branch (where we have updated glibc to 2.28) or to master (where we
-have glibc 2.27).
-
-I would suspect it is related to glibc 2.28, otherwise the problem
-would have already popped up on master. If that is the case, then the
-commit log should say it's related to glibc 2.28.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 215506c71c..a6d76dd9c4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1437,6 +1437,9 @@ F:	package/libfribidi/
+ N:	Min Xu <xuminready@gmail.com>
+ F:	package/shadowsocks-libev/
+ 
++N:	Mirza Krak <mirza.krak@northern.tech>
++F:	package/mender/
++
+ N:	Morgan Delestre <m.delestre@sinters.fr>
+ F:	package/monkey/
+ 
