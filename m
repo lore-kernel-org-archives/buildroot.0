@@ -1,65 +1,122 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 22 Aug 2018 02:06:48 +0200
-Subject: [Buildroot] [PATCH v2 2/2] sunxi-mali-mainline-driver: bump version
- and add support for building on arm64(aarch64).
+Date: Wed, 22 Aug 2018 02:06:47 +0200
+Subject: [Buildroot] [PATCH v2 1/2] sunxi-mali-mainline: add support for
+ arm64(aarch64) architecture and r8p1 blob version.
 In-Reply-To: <20180822000648.23314-1-giulio.benetti@micronovasrl.com>
 References: <20180822000648.23314-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20180822000648.23314-3-giulio.benetti@micronovasrl.com>
+Message-ID: <20180822000648.23314-2-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Blobs for arm64(aarch64) are available at Bootlin Github and
-sunxi-mali-mainline package has been updated to support them.
+Blobs for arm64(aarch64) and r8p1 version are now available at Bootlin
+Github.
 
-Add support for building on arm64(aarch64):
+So:
 - Bump version to latest commit:
-For support H3 and H5 SoCs and r8p1 driver version.
+For arm64 architecture and r8p1 version.
 
-git shortlog --invert-grep --grep travis --no-merges 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5..
+git shortlog --no-merges cb3e8ece9b2c3a70cbeb3204cd6f30eceaa32023..
+Giulio Benetti (1):
+      Reorder folders splitting includes and libraries.
+
 Maxime Ripard (6):
-      Add r8p1 release
-      sunxi: Move the reset test to a function
-      sunxi: Add H3 support
-      sunxi: Add H5 support
-      sunxi: Remove generic compatible
-      sunxi: Set clock rate in the driver
+      Move binaries to an arch subfolder
+      Make x11 binaries path consistent
+      Add r6p2 arm wayland blobs
+      Add r6p2 arm64 blobs
+      Add r8p1 fbdev blobs
+      Add r8p1 arm64 fbdev blobs
 
-- Add ARCH=arm or ARCH=arm64 to SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS
-to build for the right architecture according to BR2_arm or BR2_aarch64.
+- Add support for them also under arm64(aarch64) architecture copying the
+right blobs according to architecture(arm or arm64) checking if BR2_arm
+or BR2_aarch64 is enabled.
+Only BR2_arm needs to provide BR2_ARM_EABIHF, so check must be done only
+in that case.
+- Mali-blobs repository folder layout has been reordered, so modify path
+when copying headers and libraries.
+- When copying libraries copy only *.so* files to avoid useless files to
+end into target folder.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- .../sunxi-mali-mainline-driver.mk                         | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/sunxi-mali-mainline/Config.in             |  6 ++++--
+ .../sunxi-mali-mainline/sunxi-mali-mainline.mk    | 15 ++++++++++-----
+ 2 files changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-index 24817b07c7..e7a5ed2079 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
+index 759bed86ba..a889864465 100644
+--- a/package/sunxi-mali-mainline/Config.in
++++ b/package/sunxi-mali-mainline/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_SUNXI_MALI_MAINLINE
+ 	bool "sunxi-mali-mainline"
+-	depends on BR2_arm
+-	depends on BR2_ARM_EABIHF
++	depends on BR2_aarch64 || (BR2_ARM_EABIHF && BR2_arm)
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_HAS_LIBEGL
+ 	select BR2_PACKAGE_HAS_LIBGLES
+@@ -26,12 +25,15 @@ choice
+ 
+ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
+ 	bool "r6p2"
++config BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1
++	bool "r8p1"
+ 
+ endchoice
+ 
+ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_REVISION
+ 	string
+ 	default "r6p2"	if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R6P2
++	default "r8p1"	if BR2_PACKAGE_SUNXI_MALI_MAINLINE_R8P1
+ 
+ endif
+ 
+diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+index 933e2beb0d..05b90f0bee 100644
+--- a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
++++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+@@ -4,20 +4,25 @@
  #
  ################################################################################
  
--SUNXI_MALI_MAINLINE_DRIVER_VERSION = 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5
-+SUNXI_MALI_MAINLINE_DRIVER_VERSION = 8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb
- SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
- SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+-SUNXI_MALI_MAINLINE_VERSION = cb3e8ece9b2c3a70cbeb3204cd6f30eceaa32023
++SUNXI_MALI_MAINLINE_VERSION = d691cb93884ca8ac67860502117bbec283dc19aa
+ SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
+ SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
+ SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
  
-@@ -13,6 +13,12 @@ SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS = \
- 	CROSS_COMPILE=$(TARGET_CROSS) \
- 	INSTALL_MOD_PATH=$(TARGET_DIR)
+ SUNXI_MALI_MAINLINE_REV = $(call qstrip,$(BR2_PACKAGE_SUNXI_MALI_MAINLINE_REVISION))
  
 +ifeq ($(BR2_arm),y)
-+SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS += ARCH=arm
++SUNXI_MALI_MAINLINE_ARCH=arm
 +else ifeq ($(BR2_aarch64),y)
-+SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS += ARCH=arm64
++SUNXI_MALI_MAINLINE_ARCH=arm64
 +endif
 +
- define SUNXI_MALI_MAINLINE_DRIVER_USE_APPLY_PATCHES
- 	ln -sf $(SUNXI_MALI_MAINLINE_REV)/series $(@D)/patches
- 	$(SED) 's|quilt push -a|$(TOPDIR)/support/scripts/apply-patches.sh . ../patches|' \
+ define SUNXI_MALI_MAINLINE_INSTALL_STAGING_CMDS
+ 	mkdir -p $(STAGING_DIR)/usr/lib $(STAGING_DIR)/usr/include
+ 
+-	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_REV)/fbdev/lib/lib_fb_dev/* \
++	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_REV)/$(SUNXI_MALI_MAINLINE_ARCH)/fbdev/*.so* \
+ 		$(STAGING_DIR)/usr/lib/
+-	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_REV)/fbdev/include/* \
+-		$(STAGING_DIR)/usr/include/
++	cp -rf $(@D)/include/fbdev/* $(STAGING_DIR)/usr/include/
+ 
+ 	$(INSTALL) -D -m 0644 package/sunxi-mali-mainline/egl.pc \
+ 		$(STAGING_DIR)/usr/lib/pkgconfig/egl.pc
+@@ -27,7 +32,7 @@ endef
+ 
+ define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib
+-	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_REV)/fbdev/lib/lib_fb_dev/* \
++	cp -rf $(@D)/$(SUNXI_MALI_MAINLINE_REV)/$(SUNXI_MALI_MAINLINE_ARCH)/fbdev/*.so* \
+ 		$(TARGET_DIR)/usr/lib/
+ endef
+ 
 -- 
 2.17.1
