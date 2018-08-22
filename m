@@ -1,55 +1,130 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Wed, 22 Aug 2018 10:02:46 +0300
-Subject: [Buildroot] [PATCH 1/1] package/gettext-tiny: Add new package
-In-Reply-To: <20180821221026.4fec5cf2@windsurf>
-References: <20180821142226.2309-1-vadim4j@gmail.com>
- <87r2irvljb.fsf@tkos.co.il> <20180821172913.1a7eb830@windsurf>
- <CAMw6YJ+FS=z0MQqWj3K-21QYR5m-20wE2RbfFHQnc1WdgrYwLA@mail.gmail.com>
- <20180821193616.5634b4dc@windsurf>
- <CAMw6YJLASMAVyjqKs26zzzpxdpHV5ezQhaXu=nNyO3UwnQF-Yw@mail.gmail.com>
- <20180821221026.4fec5cf2@windsurf>
-Message-ID: <CAMw6YJ+NAM8VXK8U5RSV-yLPEEsstOMJ_Hi3HwVWv-dTOxAvFA@mail.gmail.com>
+From: Gwenhael Goavec-Merou <gwenj@trabucayre.com>
+Date: Wed, 22 Aug 2018 09:20:02 +0200
+Subject: [Buildroot] [PATCH] libusbgx: fix build with glibc
+Message-ID: <20180822072002.23657-1-gwenj@trabucayre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+From: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 
-On Tue, Aug 21, 2018 at 11:10 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Vadim,
->
-> On Tue, 21 Aug 2018 23:07:59 +0300, Vadim Kochan wrote:
->
-> > >  - There are a few packages that unconditionally need host-gettext. Is
-> > >    this really true ?
-> > Not sure about this)
->
-> In this situation, we have:
->
->  - aumix
->  - host-guile
->  - host-intltool (perhaps legit ?)
->  - host-libglib2
->  - libv4l (for AM_ICONV m4 macro)
->  - linphone
->  - mediastreamer
->  - host-mono
->  - sysstat (which also uses TARGET_NLS_DEPENDENCIES... weird)
->  - tvheadend
->  - host-wine
->  - xkeyboard-config
->  - zbar (for AM_ICONV m4 macro)
+Without sys/sysmacros.h and with glibc build fails with error like:
+libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `minor'
+libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `major'
+libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `makedev'
 
-Meanwhile I did convert gettext -> gettext-gnu and made gettext as
-virtual package
-which selects gettext-gnu by default. I tested compilation of
-libglib2, sysstat, zbar, libv4l
-and linphone together with force selected gettext-tiny (as gettext provider)
-and the compilation was success.
+backport and adapt pr #28 (https://github.com/libusbgx/libusbgx/pull/28)
 
-Regards,
-Vadim Kochan
+fix:
+http://autobuild.buildroot.net/results/872e2ab084c0c9bf466265d2f66140fbba692ee6/
+
+Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+---
+ .../0001-Add-include-of-sys-sysmacro.h.patch       | 94 ++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
+ create mode 100644 package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
+
+diff --git a/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch b/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
+new file mode 100644
+index 0000000000..997cbf9a12
+--- /dev/null
++++ b/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
+@@ -0,0 +1,94 @@
++Add include of sys/sysmacro.h.
++
++Without sys/sysmacros.h and with glibc build fails with error like:
++
++libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `minor'
++libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `major'
++libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `makedev'
++
++Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
++Signed-off-by: Sid Spry <R030t1@gmail.com>
++---
++ examples/gadget-acm-ecm.c              | 1 +
++ examples/gadget-import.c               | 1 +
++ examples/gadget-ms.c                   | 1 +
++ examples/show-gadgets.c                | 1 +
++ examples/show-udcs.c                   | 1 +
++ include/usbg/usbg_internal_libconfig.h | 1 +
++ 6 files changed, 6 insertions(+)
++
++diff --git a/examples/gadget-acm-ecm.c b/examples/gadget-acm-ecm.c
++index 1c5e2ca..29360da 100644
++--- a/examples/gadget-acm-ecm.c
+++++ b/examples/gadget-acm-ecm.c
++@@ -20,6 +20,7 @@
++ 
++ #include <errno.h>
++ #include <stdio.h>
+++#include <sys/sysmacros.h>
++ #include <linux/usb/ch9.h>
++ #include <usbg/usbg.h>
++ 
++diff --git a/examples/gadget-import.c b/examples/gadget-import.c
++index e684fdb..63df449 100644
++--- a/examples/gadget-import.c
+++++ b/examples/gadget-import.c
++@@ -25,6 +25,7 @@
++ #include <errno.h>
++ #include <string.h>
++ #include <stdio.h>
+++#include <sys/sysmacros.h>
++ #include <usbg/usbg.h>
++ 
++ int main(int argc, char **argv)
++diff --git a/examples/gadget-ms.c b/examples/gadget-ms.c
++index 478c370..a5c6681 100644
++--- a/examples/gadget-ms.c
+++++ b/examples/gadget-ms.c
++@@ -23,6 +23,7 @@
++ 
++ #include <errno.h>
++ #include <stdio.h>
+++#include <sys/sysmacros.h>
++ #include <linux/usb/ch9.h>
++ #include <usbg/usbg.h>
++ #include <usbg/function/ms.h>
++diff --git a/examples/show-gadgets.c b/examples/show-gadgets.c
++index 707d448..a2a21c8 100644
++--- a/examples/show-gadgets.c
+++++ b/examples/show-gadgets.c
++@@ -21,6 +21,7 @@
++ #include <errno.h>
++ #include <stdio.h>
++ #include <string.h>
+++#include <sys/sysmacros.h>
++ #include <netinet/ether.h>
++ #include <usbg/usbg.h>
++ #include <usbg/function/ms.h>
++diff --git a/examples/show-udcs.c b/examples/show-udcs.c
++index 66e950f..2f5cc45 100644
++--- a/examples/show-udcs.c
+++++ b/examples/show-udcs.c
++@@ -23,6 +23,7 @@
++ 
++ #include <errno.h>
++ #include <stdio.h>
+++#include <sys/sysmacros.h>
++ #include <usbg/usbg.h>
++ 
++ int main(void)
++diff --git a/include/usbg/usbg_internal_libconfig.h b/include/usbg/usbg_internal_libconfig.h
++index ac51758..3fa55c0 100644
++--- a/include/usbg/usbg_internal_libconfig.h
+++++ b/include/usbg/usbg_internal_libconfig.h
++@@ -12,6 +12,7 @@
++ #ifndef USBG_INTERNAL_LIBCONFIG_H
++ #define USBG_INTERNAL_LIBCONFIG_H
++ 
+++#include <sys/sysmacros.h>
++ #include <libconfig.h>
++ #ifdef __cplusplus
++ extern "C" {
++-- 
++2.16.4
++
+-- 
+2.16.4
