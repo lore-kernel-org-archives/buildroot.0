@@ -1,53 +1,119 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Aug 2018 21:26:33 +0200
-Subject: [Buildroot] [PATCH v2 2/2] sunxi-mali-mainline-driver: bump
- version and add support for building on arm64(aarch64).
-In-Reply-To: <58c7d88b-dc45-5426-a328-89a58dc005b2@micronovasrl.com>
-References: <20180822000648.23314-1-giulio.benetti@micronovasrl.com>
- <20180822000648.23314-3-giulio.benetti@micronovasrl.com>
- <20180822132959.39640475@windsurf>
- <58c7d88b-dc45-5426-a328-89a58dc005b2@micronovasrl.com>
-Message-ID: <20180822212633.0a8a625e@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 22 Aug 2018 22:02:49 +0200
+Subject: [Buildroot] [PATCH] package/brltty: fix cross-compilation
+In-Reply-To: <20180822200153.031820b8@gmx.net>
+References: <20180822082832.7497-1-yann.morin.1998@free.fr>
+ <20180822200153.031820b8@gmx.net>
+Message-ID: <20180822200249.GE2404@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Peter, All,
 
-On Wed, 22 Aug 2018 20:37:13 +0200, Giulio Benetti wrote:
-
-> Also, it would be good to have patches
-> > adding license information for both of those packages. For the
-> > mali-blobs, there's a PDF containing the EULA.   
+On 2018-08-22 20:01 +0200, Peter Seiderer spake thusly:
+> On Wed, 22 Aug 2018 10:28:32 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 > 
-> Do you mean like odroid-mali package .mk?
-> I mean reporting:
-> SUNXI_MALI_MAINLINE_LICENSE = EULA
-> SUNXI_MALI_MAINLINE_LICENSE_FILES = EULA for Mali 400MP _AW.pdf
-> Right?
-
-Yes. Make sure "make legal-info" is working after this.
-
-> For the kernel driver, I
-> > didn't see a license file, but I didn't look everywhere. If there is
-> > none, could you check with Maxime to make sure a license file gets
-> > added ?  
+> > brltty has a very inventive buildsystem, where it internall runs
+> > ./configure for the build machine In doing so, it generates a list
+> > of make variables to define what the build machine supports, like
+> > it does for the target.
+> > 
+> > However, the build variables are generated with a convoluted sed
+> > script that scans the target list, and appends _FOR_BUILD to each
+> > target variables. Then, both lists are included from the Makefile,
+> > on the assumption that the build variables will not clash with the
+> > target variables.
+> > 
+> > Where it gets interesting, is that that sed script considers the
+> > variables names to match '[A-Za-z][A-Za-z0-9_]*'
 > 
-> I'm not an expert of licensing but as stated here:
-> https://developer.arm.com/products/software/mali-drivers/utgard-kernel
-> it is distributed under GPLv2 licence the base code,
-> so the added code should be too.
-> What do you all think?
+> Minor nit: did you mean '[A-Za-z][A-Za-z_]*' here?
 
-Yes, of course, it should be under GPLv2, but it would be nice to have
-a license file in the source code.
+Indeed, that's right. I copied-pasted the fix regexp...
 
-Best regards,
+Regards,
+Yann E. MORIN.
 
-Thomas
+> Regards,
+> Peter
+> 
+> > 
+> > And there we see why ATSPI2_PACKAGE does not match: it contains a
+> > digit.
+> > 
+> > So, some build variables will inevitably override target ones.
+> > 
+> > Fix that by simply expanding the matching regexp to allow digits
+> > in variable names.
+> > 
+> > Fixes:
+> >     http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/
+> >     http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/
+> > 
+> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > Cc: Mario Lang <mlang@blind.guru>
+> > Cc: Baruch Siach <baruch@tkos.co.il>
+> > ---
+> >  .../0004-buildsys-fix-cross-compilation.patch      | 41 ++++++++++++++++++++++
+> >  1 file changed, 41 insertions(+)
+> >  create mode 100644 package/brltty/0004-buildsys-fix-cross-compilation.patch
+> > 
+> > diff --git a/package/brltty/0004-buildsys-fix-cross-compilation.patch b/package/brltty/0004-buildsys-fix-cross-compilation.patch
+> > new file mode 100644
+> > index 0000000000..9a10d46414
+> > --- /dev/null
+> > +++ b/package/brltty/0004-buildsys-fix-cross-compilation.patch
+> > @@ -0,0 +1,41 @@
+> > +From 088666535a045dae71bd2fcc6b3a1553023106ce Mon Sep 17 00:00:00 2001
+> > +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > +Date: Wed, 22 Aug 2018 10:10:19 +0200
+> > +Subject: [PATCH] buildsys: fix cross-compilation
+> > +
+> > +Some identifiers for includes and libs paths may contain digit, e.g.
+> > +X11_PACKAGE or ATSPI2_PACKAGE or GLIB2_PACKAGE...
+> > +
+> > +Also detect those identifiers when doing cros-compilation, so that the
+> > +_FOR_BUILD variants are really created and do not clash with the target
+> > +variants.
+> > +
+> > +Fixes:
+> > +    http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/build-end.log
+> > +    http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/build-end.log
+> > +    [...]
+> > +
+> > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> > +---
+> > +Upstram status: submitted
+> > +https://github.com/brltty/brltty/pull/142
+> > +---
+> > + mk4build | 2 +-
+> > + 1 file changed, 1 insertion(+), 1 deletion(-)
+> > +
+> > +diff --git a/mk4build b/mk4build
+> > +index db90c86a9..551283825 100755
+> > +--- a/mk4build
+> > ++++ b/mk4build
+> > +@@ -112,7 +112,7 @@ fi
+> > + 
+> > + sedScript="${outputName}.${sedExtension}"
+> > + sed -n -e '
+> > +-s/^ *\([A-Za-z][A-Za-z_]*\) *=.*$/\1/
+> > ++s/^ *\([A-Za-z][A-Za-z0-9_]*\) *=.*$/\1/
+> > + t found
+> > + d
+> > + :found
+> > +-- 
+> > +2.14.1
+> > +
+> 
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
