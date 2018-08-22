@@ -1,37 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2018 17:34:34 +0200
-Subject: [Buildroot] [PATCH] package/brltty: fix cross-compilation
-In-Reply-To: <87lg8y3e2x.fsf@home.blind.guru>
-References: <20180822082832.7497-1-yann.morin.1998@free.fr>
- <87lg8y3e2x.fsf@home.blind.guru>
-Message-ID: <20180822153434.GA2404@scaer>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 22 Aug 2018 13:38:38 -0300
+Subject: [Buildroot] [PATCH master 1/2] linux: bump default to version
+ 4.17.18
+Message-ID: <1534955919-5889-1-git-send-email-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mario, All,
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2018-08-22 12:12 +0200, Mario Lang spake thusly:
-> "Yann E. MORIN" <yann.morin.1998@free.fr> writes:
-> > brltty has a very inventive buildsystem, where it internall runs
-> > ./configure for the build machine In doing so, it generates a list
-> > of make variables to define what the build machine supports, like
-> > it does for the target.
-[--SNIP--]
-> Thanks!  Forwarded to upstream.
-
-I had already sent it upstream, as PR #142, which has siunce been
-merged.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/linux/Config.in b/linux/Config.in
+index 26edc61..b7bee99 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.17.17" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.17.18" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
