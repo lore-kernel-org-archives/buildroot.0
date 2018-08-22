@@ -1,74 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Aug 2018 13:34:15 +0200
-Subject: [Buildroot] [git commit branch/next] btrfs-progs: make e2fsprogs an
- optional dependency
-Message-ID: <20180822113133.A40848E24A@busybox.osuosl.org>
+Date: Wed, 22 Aug 2018 13:46:27 +0200
+Subject: [Buildroot] [PATCH next 0/4] btrfs-progs related improvements
+In-Reply-To: <20180821215954.11971-1-thomas.petazzoni@bootlin.com>
+References: <20180821215954.11971-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180822134627.077c501d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=237c8d6b0ced7954ef64bd8b4d82a95d93443a88
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-e2fsprogs is only needed to build the btrfs-convert program, that
-allows to convert an existing ext2 filesystem into a btrfs
-filesystem. Not everybody needs to do that and making this dependency
-optional is nicer, so this is what this patch does.
+On Tue, 21 Aug 2018 23:59:50 +0200, Thomas Petazzoni wrote:
 
-Note that btrfs-progs also supports converting from reiserfs, which is
-why the --with-convert option supports a list of filesystems. Since
-Buildroot has no package for the reiserfs library, we for now only
-support the ext2 case, with e2fsprogs as a dependency.
+> Thomas Petazzoni (4):
+>   lzo: build shared library for the host
+>   e2fsprogs: build shared library for the host
+>   btrfs-progs: drop dependency on e2fsprogs by not building
+>     btrfs-convert
+>   btrfs-progs: make e2fsprogs an optional dependency
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/btrfs-progs/Config.in      |  1 -
- package/btrfs-progs/btrfs-progs.mk | 12 +++++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+All applied to next. Thanks Yann for the review!
 
-diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
-index ad86bab580..35dfc39193 100644
---- a/package/btrfs-progs/Config.in
-+++ b/package/btrfs-progs/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_BTRFS_PROGS
- 	bool "btrfs-progs"
- 	depends on BR2_USE_MMU # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_E2FSPROGS
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 2f9f4127b6..33a6be324f 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -7,7 +7,7 @@
- BTRFS_PROGS_VERSION = 4.16.1
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
--BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
-+BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
- BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd --disable-python
- BTRFS_PROGS_LICENSE = GPL-2.0, LGPL-3.0+ (libbtrfsutil)
- BTRFS_PROGS_LICENSE_FILES = COPYING libbtrfsutil/COPYING \
-@@ -21,6 +21,16 @@ BTRFS_PROGS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
- BTRFS_PROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
- endif
- 
-+# convert also supports conversion from reiserfs, which needs some
-+# reiserfs libraries, but we have no package for them in Buildroot, so
-+# we keep things simple and only handle ext2.
-+ifeq ($(BR2_PACKAGE_E2FSPROGS),y)
-+BTRFS_PROGS_CONF_OPTS += --enable-convert --with-convert=ext2
-+BTRFS_PROGS_DEPENDENCIES += e2fsprogs
-+else
-+BTRFS_PROGS_CONF_OPTS += --disable-convert
-+endif
-+
- HOST_BTRFS_PROGS_DEPENDENCIES = host-util-linux host-lzo host-zlib
- HOST_BTRFS_PROGS_CONF_OPTS = \
- 	--disable-backtrace \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
