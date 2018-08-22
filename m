@@ -1,9 +1,12 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 Aug 2018 13:46:27 +0200
-Subject: [Buildroot] [PATCH next 0/4] btrfs-progs related improvements
-In-Reply-To: <20180821215954.11971-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 22 Aug 2018 13:46:51 +0200
+Subject: [Buildroot] [PATCH next 2/4] e2fsprogs: build shared library
+ for the host
+In-Reply-To: <20180821221141.GU15347@scaer>
 References: <20180821215954.11971-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180822134627.077c501d@windsurf>
+ <20180821215954.11971-3-thomas.petazzoni@bootlin.com>
+ <20180821221141.GU15347@scaer>
+Message-ID: <20180822134651.64f35c4c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +15,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 21 Aug 2018 23:59:50 +0200, Thomas Petazzoni wrote:
+On Wed, 22 Aug 2018 00:11:41 +0200, Yann E. MORIN wrote:
 
-> Thomas Petazzoni (4):
->   lzo: build shared library for the host
->   e2fsprogs: build shared library for the host
->   btrfs-progs: drop dependency on e2fsprogs by not building
->     btrfs-convert
->   btrfs-progs: make e2fsprogs an optional dependency
+> I lknow this is not your fault, but I find it more readable when the
+> --disable are all grouped together, and the --enable ones as well.
+> 
+> It also helps spot potentialy issues when the ordering is the same btw
+> host and target variants.
 
-All applied to next. Thanks Yann for the review!
+I have pushed an additional commit fixing this for the host configure
+options.
+
+Thanks!
 
 Thomas
 -- 
