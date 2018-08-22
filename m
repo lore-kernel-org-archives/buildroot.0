@@ -1,126 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 22 Aug 2018 22:05:12 +0200
-Subject: [Buildroot] [PATCH] package/brltty: fix cross-compilation
-In-Reply-To: <20180822100415.dl7h3xvaahwtngut@sapphire.tkos.co.il>
-References: <20180822082832.7497-1-yann.morin.1998@free.fr>
- <20180822100415.dl7h3xvaahwtngut@sapphire.tkos.co.il>
-Message-ID: <20180822200512.GF2404@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 22 Aug 2018 22:30:08 +0200
+Subject: [Buildroot] [PATCH 1/1] mjpegtools: fix build on powerpc without
+ altivec
+Message-ID: <20180822203008.3249-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bruch, All,
+mpjegtools fails to build on powerpc without altivec:
 
-On 2018-08-22 13:04 +0300, Baruch Siach spake thusly:
-> On Wed, Aug 22, 2018 at 10:28:32AM +0200, Yann E. MORIN wrote:
-> > brltty has a very inventive buildsystem, where it internall runs
-> > ./configure for the build machine In doing so, it generates a list
-> > of make variables to define what the build machine supports, like
-> > it does for the target.
-> > 
-> > However, the build variables are generated with a convoluted sed
-> > script that scans the target list, and appends _FOR_BUILD to each
-> > target variables. Then, both lists are included from the Makefile,
-> > on the assumption that the build variables will not clash with the
-> > target variables.
-> > 
-> > Where it gets interesting, is that that sed script considers the
-> > variables names to match '[A-Za-z][A-Za-z0-9_]*'
-> > 
-> > And there we see why ATSPI2_PACKAGE does not match: it contains a
-> > digit.
-> > 
-> > So, some build variables will inevitably override target ones.
-> > 
-> > Fix that by simply expanding the matching regexp to allow digits
-> > in variable names.
-> 
-> Thanks for fixing that.
-> 
-> Do you have any idea why it only fails on specific (older?) hosts? Does it 
-> depend on the sed version?
+build_sub44_mests.c: In function 'build_sub44_mests_altivec':
+build_sub44_mests.c:268:9: internal compiler error: Segmentation fault
+     vr1 = vec_ld(rowstride, (unsigned char*)s44blk);
 
-I don;t know what the difference is. The sed version is probably not the
-culprit, because the generated file is the same on a working or on a
-failing system.
+It seems mpjegtools is wrongly detecting altivec support:
+configure:   - PowerPC Optimizations:
+configure:     - AltiVec enabled             : true
 
-So, I believe I fixed the real problem, but I dont know why it sometimes
-did not manifest itself on some systems, while it was visible on
-others...
+Fix this by adding BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT and setting
+--enable-simd-accel / --disable-simd-accel
 
-Regards,
-Yann E. MORIN.
+Fixes:
+ - http://autobuild.buildroot.net/results/c9464712f43efb8954fd2e5460126ad193660353
 
-> baruch
-> 
-> > Fixes:
-> >     http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/
-> >     http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/
-> > 
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Mario Lang <mlang@blind.guru>
-> > Cc: Baruch Siach <baruch@tkos.co.il>
-> > ---
-> >  .../0004-buildsys-fix-cross-compilation.patch      | 41 ++++++++++++++++++++++
-> >  1 file changed, 41 insertions(+)
-> >  create mode 100644 package/brltty/0004-buildsys-fix-cross-compilation.patch
-> > 
-> > diff --git a/package/brltty/0004-buildsys-fix-cross-compilation.patch b/package/brltty/0004-buildsys-fix-cross-compilation.patch
-> > new file mode 100644
-> > index 0000000000..9a10d46414
-> > --- /dev/null
-> > +++ b/package/brltty/0004-buildsys-fix-cross-compilation.patch
-> > @@ -0,0 +1,41 @@
-> > +From 088666535a045dae71bd2fcc6b3a1553023106ce Mon Sep 17 00:00:00 2001
-> > +From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > +Date: Wed, 22 Aug 2018 10:10:19 +0200
-> > +Subject: [PATCH] buildsys: fix cross-compilation
-> > +
-> > +Some identifiers for includes and libs paths may contain digit, e.g.
-> > +X11_PACKAGE or ATSPI2_PACKAGE or GLIB2_PACKAGE...
-> > +
-> > +Also detect those identifiers when doing cros-compilation, so that the
-> > +_FOR_BUILD variants are really created and do not clash with the target
-> > +variants.
-> > +
-> > +Fixes:
-> > +    http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/build-end.log
-> > +    http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/build-end.log
-> > +    [...]
-> > +
-> > +Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > +---
-> > +Upstram status: submitted
-> > +https://github.com/brltty/brltty/pull/142
-> > +---
-> > + mk4build | 2 +-
-> > + 1 file changed, 1 insertion(+), 1 deletion(-)
-> > +
-> > +diff --git a/mk4build b/mk4build
-> > +index db90c86a9..551283825 100755
-> > +--- a/mk4build
-> > ++++ b/mk4build
-> > +@@ -112,7 +112,7 @@ fi
-> > + 
-> > + sedScript="${outputName}.${sedExtension}"
-> > + sed -n -e '
-> > +-s/^ *\([A-Za-z][A-Za-z_]*\) *=.*$/\1/
-> > ++s/^ *\([A-Za-z][A-Za-z0-9_]*\) *=.*$/\1/
-> > + t found
-> > + d
-> > + :found
-> 
-> -- 
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mjpegtools/Config.in     | 5 +++++
+ package/mjpegtools/mjpegtools.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
+diff --git a/package/mjpegtools/Config.in b/package/mjpegtools/Config.in
+index c486361a87..968f9e7d65 100644
+--- a/package/mjpegtools/Config.in
++++ b/package/mjpegtools/Config.in
+@@ -12,6 +12,11 @@ config BR2_PACKAGE_MJPEGTOOLS
+ 
+ 	  http://mjpeg.sourceforge.net
+ 
++config BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT
++	bool
++	default y if BR2_X86_CPU_HAS_MMX
++	default y if BR2_POWERPC_CPU_HAS_ALTIVEC
++
+ comment "mjpegtools needs a toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
+index c7392fa2b3..14713c868e 100644
+--- a/package/mjpegtools/mjpegtools.mk
++++ b/package/mjpegtools/mjpegtools.mk
+@@ -10,6 +10,12 @@ MJPEGTOOLS_DEPENDENCIES = host-pkgconf jpeg
+ MJPEGTOOLS_LICENSE = GPL-2.0+
+ MJPEGTOOLS_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT),y)
++MJPEGTOOLS_CONF_OPTS += --enable-simd-accel
++else
++MJPEGTOOLS_CONF_OPTS += --disable-simd-accel
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ MJPEGTOOLS_CONF_OPTS += --with-libpng
+ MJPEGTOOLS_DEPENDENCIES += libpng
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
