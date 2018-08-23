@@ -1,107 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:28:18 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/samba4: bump
- version to 4.8.3
-Message-ID: <20180824063605.2A5518E4F7@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:29:36 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/samba4: Fix
+ uClibc build on 64bit platforms by including stdint.h
+Message-ID: <20180824063605.530A688791@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b93afe91337cb924e617378f739323aa21f8513
+commit: https://git.buildroot.net/buildroot/commit/?id=d3c8d500d686bd95abdd06658ddac3e1431cb118
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Removed patch applied upstream.
+Patch needed to be updated for samba-4.8.4
 
-Release notes: https://www.samba.org/samba/history/samba-4.8.3.html
+Fixes
+http://autobuild.buildroot.net/results/140/1404a594583ff192d70086ef590f924472465c89/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bcc3a15bafc2c708a464486dffad1b324a6f7795)
+(cherry picked from commit 6d3723147659542ec1cba4139981d75413d89edc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../samba4/0004-libgpo-fix-build-without-ads.patch | 49 ----------------------
- package/samba4/samba4.hash                         |  4 +-
- package/samba4/samba4.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 52 deletions(-)
+ ...build-on-64bit-platforms-by-including-std.patch | 24 ++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba4/0004-libgpo-fix-build-without-ads.patch b/package/samba4/0004-libgpo-fix-build-without-ads.patch
-deleted file mode 100644
-index 5e3af3c322..0000000000
---- a/package/samba4/0004-libgpo-fix-build-without-ads.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From a222b7506b53e689708834237f18877231dca589 Mon Sep 17 00:00:00 2001
--From: Volker Lendecke <vl@samba.org>
--Date: Sat, 3 Feb 2018 07:07:55 +0100
--Subject: [PATCH] libgpo: Fix the build --without-ads
--
--Signed-off-by: Volker Lendecke <vl@samba.org>
--Reviewed-by: David Disseldorp <ddiss@samba.org>
--
--Autobuild-User(master): David Disseldorp <ddiss@samba.org>
--Autobuild-Date(master): Tue Feb  6 15:36:01 CET 2018 on sn-devel-144
--
--Downloaded from upstream commit:
--https://git.samba.org/samba.git/?p=samba.git;a=commit;h=a222b7506b53e689708834237f18877231dca589
--
--Fixes https://bugzilla.samba.org/show_bug.cgi?id=13331
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- libgpo/pygpo.c | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/libgpo/pygpo.c b/libgpo/pygpo.c
--index 7a02a0dc2aa..b6b53b76212 100644
----- a/libgpo/pygpo.c
--+++ b/libgpo/pygpo.c
--@@ -319,6 +319,7 @@ static PyObject *py_gpo_get_sysvol_gpt_version(PyObject * self,
-- 	return result;
-- }
-- 
--+#ifdef HAVE_ADS
-- static ADS_STATUS find_samaccount(ADS_STRUCT *ads, TALLOC_CTX *mem_ctx,
-- 				  const char *samaccountname,
-- 				  uint32_t *uac_ret, const char **dn_ret)
--@@ -468,11 +469,15 @@ static PyObject *py_ads_get_gpo_list(ADS *self, PyObject *args, PyObject *kwds)
-- 	return ret;
-- }
-- 
--+#endif
--+
-- static PyMethodDef ADS_methods[] = {
-- 	{ "connect", (PyCFunction)py_ads_connect, METH_NOARGS,
-- 		"Connect to the LDAP server" },
--+#ifdef HAVE_ADS
-- 	{ "get_gpo_list", (PyCFunction)py_ads_get_gpo_list, METH_KEYWORDS,
-- 		NULL },
--+#endif
-- 	{ NULL }
-- };
-- 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index cadb88b260..4b1b1218ac 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
+diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+index 1256d1c969..0f174d5369 100644
+--- a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
++++ b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
 @@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.8.2.tar.asc
--sha256 62e552296d49e6ab44bb87d120a288813fa52e42435d53a1f71b77596512bf22  samba-4.8.2.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.8.3.tar.asc
-+sha256 e0569a8a605d5dfb49f1fdd11db796f4d36fe0351c4a7f21387ef253010b82ed  samba-4.8.3.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index f75b350375..52d59ffeb9 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-From 4a63f267efab2ef86adbeddda45909127135d7c8 Mon Sep 17 00:00:00 2001
++From 3d91847322eba55e97adc76c5c95570382af7059 Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Sun, 28 Jan 2018 11:57:11 +0100
+ Subject: [PATCH] Fix uClibc build on 64bit platforms by including stdint.h
+@@ -20,15 +20,19 @@ define uintptr_t, this patch includes stdint.h when needed.
+ Patch sent upstream:
+ https://lists.samba.org/archive/samba-technical/2018-January/125306.html
  
--SAMBA4_VERSION = 4.8.2
-+SAMBA4_VERSION = 4.8.3
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
++[updated for samba-4.8.4, v2 sent upstream
++ https://lists.samba.org/archive/samba-technical/2018-August/129732.html]
++
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  lib/ldb/tests/ldb_mod_op_test.c   | 1 +
+  lib/ldb/tests/ldb_msg.c           | 1 +
++ libcli/auth/tests/ntlm_check.c    | 1 +
+  libcli/smb/test_smb1cli_session.c | 1 +
+- 3 files changed, 3 insertions(+)
++ 4 files changed, 4 insertions(+)
+ 
+ diff --git a/lib/ldb/tests/ldb_mod_op_test.c b/lib/ldb/tests/ldb_mod_op_test.c
+-index cf2288c7bce..4690594186e 100644
++index c8b9c1aa9ff..4893dc3b38b 100644
+ --- a/lib/ldb/tests/ldb_mod_op_test.c
+ +++ b/lib/ldb/tests/ldb_mod_op_test.c
+ @@ -13,6 +13,7 @@
+@@ -51,6 +55,18 @@ index f8de418e0dc..31786a9a318 100644
+  #include <setjmp.h>
+  #include <cmocka.h>
+  
++diff --git a/libcli/auth/tests/ntlm_check.c b/libcli/auth/tests/ntlm_check.c
++index e87a0a276d4..65c7b086008 100644
++--- a/libcli/auth/tests/ntlm_check.c
+++++ b/libcli/auth/tests/ntlm_check.c
++@@ -40,6 +40,7 @@
++  */
++ #include <stdarg.h>
++ #include <stddef.h>
+++#include <stdint.h>
++ #include <setjmp.h>
++ #include <cmocka.h>
++ 
+ diff --git a/libcli/smb/test_smb1cli_session.c b/libcli/smb/test_smb1cli_session.c
+ index d1e21d5431e..6a526c96b61 100644
+ --- a/libcli/smb/test_smb1cli_session.c
+@@ -63,5 +79,5 @@ index d1e21d5431e..6a526c96b61 100644
+  #include <cmocka.h>
+  
+ -- 
+-2.11.0
++2.18.0
+ 
