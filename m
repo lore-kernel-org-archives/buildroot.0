@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Aug 2018 13:43:01 +0200
-Subject: [Buildroot] [PATCH 6/6] libb64: Fix integer overflow and
- uninitialized C++ objects.
-In-Reply-To: <20180823103930.5112-1-mikael@robomagi.com>
-References: <20180823103930.5112-1-mikael@robomagi.com>
-Message-ID: <20180823134301.3923e2b7@windsurf>
+Date: Thu, 23 Aug 2018 13:43:53 +0200
+Subject: [Buildroot] [PATCH 1/1] mjpegtools: fix build on powerpc
+ without altivec
+In-Reply-To: <20180822203008.3249-1-fontaine.fabrice@gmail.com>
+References: <20180822203008.3249-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180823134353.5c76e7b6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +13,32 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 23 Aug 2018 12:39:30 +0200, Mikael Eliasson wrote:
-> Signed-off-by: Mikael Eliasson <mikael@robomagi.com>
+On Wed, 22 Aug 2018 22:30:08 +0200, Fabrice Fontaine wrote:
+> mpjegtools fails to build on powerpc without altivec:
+> 
+> build_sub44_mests.c: In function 'build_sub44_mests_altivec':
+> build_sub44_mests.c:268:9: internal compiler error: Segmentation fault
+>      vr1 = vec_ld(rowstride, (unsigned char*)s44blk);
+> 
+> It seems mpjegtools is wrongly detecting altivec support:
+> configure:   - PowerPC Optimizations:
+> configure:     - AltiVec enabled             : true
+> 
+> Fix this by adding BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT and setting
+> --enable-simd-accel / --disable-simd-accel
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/c9464712f43efb8954fd2e5460126ad193660353
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Thanks Mikael for this patch. First of all, why is it PATCH 6/6 ? We
-did not receive anything else but this sixth patch. Did you had other
-patches in your series, or is this a mistake ?
-
-Also, could you provide some explanation in the commit log as to why we
-want those fixes ? Are there fixing security issues ? Runtime bugs ? A
-bit of context/explanation would be good to have.
-
-Also, since libb64 is maintained with Git (git clone
-https://git.code.sf.net/p/libb64/git libb64-git), could you use
-Git-formatted patches, for both patches (and therefore have both of
-them in package/, rather than download one from Debian, and have one in
-package/) ?
-
-Have these patches been submitted upstream ?
+I've applied to master, but it would have be nicer to figure out why
+the Altivec detection doesn't work properly. But OK, that's good enough
+for Buildroot with --enable/disable-simd-accel.
 
 Thanks!
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
