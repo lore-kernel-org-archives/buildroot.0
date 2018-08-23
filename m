@@ -1,43 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 22:12:09 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] ghostscript: set correct
- font path on target
-Message-ID: <20180823200521.AF6CE8E457@busybox.osuosl.org>
+Date: Thu, 23 Aug 2018 22:13:50 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] mariadb: move comments
+ outside of define block
+Message-ID: <20180823200614.A08258E45A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54d2e39bcaaf4706215d8db8403c9e45baec6a36
+commit: https://git.buildroot.net/buildroot/commit/?id=acd9e32dfe05b8bcf948196e57bf876cc1f907a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-GHOSTSCRIPT_FONTS_TARGET_DIR is set to $(TARGET_DIR)/usr/share/fonts/gs
-in ghostscript-fonts.mk. If we pass this full path to ghostscript, it
-will look for fonts in $(TARGET_DIR), which doesn't exist on the
-target.
+There are two comments inside the post install define block that show up in
+the build. Fix this by moving the comments outside the block.
 
-Instead of /usr/share/fonts/gs, use /usr/share/fonts so ghostscript can
-also access other fonts than the ones installed by ghostscript-fonts.
-
-Signed-off-by: Thomas Ehrhardt <tehrhardt@innovaphone.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit a76eab228f0bde8597bb6431733e3e1a8d25f806)
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d0a0d49c20b250a71e649268df1328fca139a879)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ghostscript/ghostscript.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/mariadb/mariadb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ghostscript/ghostscript.mk b/package/ghostscript/ghostscript.mk
-index aa3f63b26e..daf5bdad09 100644
---- a/package/ghostscript/ghostscript.mk
-+++ b/package/ghostscript/ghostscript.mk
-@@ -39,7 +39,7 @@ GHOSTSCRIPT_CONF_OPTS = \
- 	--disable-compile-inits \
- 	--disable-cups \
- 	--enable-fontconfig \
--	--with-fontpath=$(GHOSTSCRIPT_FONTS_TARGET_DIR) \
-+	--with-fontpath=/usr/share/fonts \
- 	--enable-freetype \
- 	--disable-gtk \
- 	--without-jbig2dec \
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index ce846d9cda..e395d387e5 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -104,13 +104,13 @@ define MARIADB_INSTALL_INIT_SYSTEMD
+ endef
+ endif
+ 
++# We don't need mysql_config on the target as it's only useful in staging
++# We also don't need the test suite on the target
+ define MARIADB_POST_INSTALL
+ 	mkdir -p $(TARGET_DIR)/var/lib/mysql
+ 	$(INSTALL) -D -m 644 $(TARGET_DIR)/usr/share/mysql/my-small.cnf \
+ 		$(TARGET_DIR)/etc/mysql/my.cnf
+-	# We don't need this on the target as it's only useful in staging
+ 	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
+-	# Remove test suite
+ 	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
+ endef
+ 
