@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:19:06 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] boot-wrapper-aarch64: use
+Date: Fri, 24 Aug 2018 00:19:16 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] boot-wrapper-aarch64: use
  SPDX identifier for 3 clause BSD
-Message-ID: <20180823221127.73CCB8E4F3@busybox.osuosl.org>
+Message-ID: <20180823221135.EABE68E4F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93bea331a90cef1f5eb1b85b1637865e0e31cc32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=14d53990f4701992057d25b47c025151ff1b3f60
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Use the correct SPDX identifier for the 3 clause BSD license, like we do
 elsewhere.
