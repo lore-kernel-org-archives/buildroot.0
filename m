@@ -1,49 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:28:13 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/samba4: bump
- version to 4.8.2
-Message-ID: <20180824063605.22CA08E50F@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:28:37 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/samba4: drop
+ patch numbering in patch 0003
+Message-ID: <20180824063605.3AD3C8E4F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=efe53add97ec3448a64214ab19c3ecd2e2b39421
+commit: https://git.buildroot.net/buildroot/commit/?id=636f818102f0e15a664f51f7639c3553595e50c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Release notes: https://www.samba.org/samba/history/samba-4.8.2.html
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 78e020726c8af031c9f38153d58aded4716b80d7)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 15045fba99a688977dc1aaca01f7f0d42250a4dc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 85d0e18b52..cadb88b260 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.8.1.tar.asc
--sha256 8ef7367507f16b7a5e2f6aed5bcdbd1143feca79aa2a07c9b21292b17d7f789d  samba-4.8.1.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.8.2.tar.asc
-+sha256 62e552296d49e6ab44bb87d120a288813fa52e42435d53a1f71b77596512bf22  samba-4.8.2.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index b03af34cd0..f75b350375 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+index 3b248e690d..1256d1c969 100644
+--- a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
++++ b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+@@ -1,7 +1,7 @@
+ From 4a63f267efab2ef86adbeddda45909127135d7c8 Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Sun, 28 Jan 2018 11:57:11 +0100
+-Subject: [PATCH 1/1] Fix uClibc build on 64bit platforms by including stdint.h
++Subject: [PATCH] Fix uClibc build on 64bit platforms by including stdint.h
  
--SAMBA4_VERSION = 4.8.1
-+SAMBA4_VERSION = 4.8.2
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ Fixes an error detected by buildroot autobuilders:
+ http://autobuild.buildroot.net/results/573/573e2268e205e10d1352fa81122d8f225fdb4575/build-end.log
