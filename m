@@ -1,86 +1,140 @@
 From: Mikael Eliasson <mikael@robomagi.com>
-Date: Thu, 23 Aug 2018 16:03:22 +0200
-Subject: [Buildroot] [PATCH 6/6] libb64: Fix integer overflow and
+Date: Thu, 23 Aug 2018 16:04:46 +0200
+Subject: [Buildroot] [PATCH 1/1] libb64: Fix integer overflow and
  uninitialized C++ objects.
-In-Reply-To: <20180823134301.3923e2b7@windsurf>
-References: <20180823103930.5112-1-mikael@robomagi.com>
- <20180823134301.3923e2b7@windsurf>
-Message-ID: <CAMKz0Yrfc6U1d1u21U=iWhBuEQ7HbwhOE794JW39VvV8+94+2A@mail.gmail.com>
+Message-ID: <20180823140446.6434-1-mikael@robomagi.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes a runtime bug on compilers where unsigned char is the default.
+Fixes a runtime bug where _state variable in the encoder and decoder 
+c++ objects where not initialized by the constructors.
 
-2018-08-23 13:43 GMT+02:00 Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+Signed-off-by: Mikael Eliasson <mikael@robomagi.com>
+---
+ package/libb64/0001-Integer-overflows.patch   | 68 +++++++++++++++++++
+ .../libb64/0002-Initialize-C++-objects.patch  | 35 ++++++++++
+ 2 files changed, 103 insertions(+)
+ create mode 100644 package/libb64/0001-Integer-overflows.patch
+ create mode 100644 package/libb64/0002-Initialize-C++-objects.patch
 
-> Hello,
->
-> On Thu, 23 Aug 2018 12:39:30 +0200, Mikael Eliasson wrote:
-> > Signed-off-by: Mikael Eliasson <mikael@robomagi.com>
->
-> Thanks Mikael for this patch. First of all, why is it PATCH 6/6 ? We
-> did not receive anything else but this sixth patch. Did you had other
-> patches in your series, or is this a mistake ?
->
-I was following the tutorial(git format-patch -M -n -s -o outgoing
-origin/master) and then it created patches for everything that has happened
-in the my master branch. Not just what happened in the branch for this
-patch. Thought that was weird but the official tutorial must be right. I
-will resubmit with just the change for this patch.
-
->
-> Also, could you provide some explanation in the commit log as to why we
-> want those fixes ? Are there fixing security issues ? Runtime bugs ? A
-> bit of context/explanation would be good to have.
->
-Will do.
-I will be using send-email to resend an updated patch.
-
->
-> Also, since libb64 is maintained with Git (git clone
-> https://git.code.sf.net/p/libb64/git libb64-git), could you use
-> Git-formatted patches, for both patches (and therefore have both of
-> them in package/, rather than download one from Debian, and have one in
-> package/) ?
->
-Will do.
-
->
-> Have these patches been submitted upstream ?
->
-The last change to the project was in 2013.
-
-The oldest debian patch is from 2012 and has not been incorporated. Even
-though the bug is quite serious.
-And people have have been asking for changes in 2016 related to some of
-these patches without a response.
-
-So I think that page can be declared dead.
-
-
-> Thanks!
->
-> Thomas Petazzoni
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
-
-
-
+diff --git a/package/libb64/0001-Integer-overflows.patch b/package/libb64/0001-Integer-overflows.patch
+new file mode 100644
+index 0000000000..fd323f172e
+--- /dev/null
++++ b/package/libb64/0001-Integer-overflows.patch
+@@ -0,0 +1,68 @@
++Fix integer overflows. Will not work on compilers with unsigned char as the default.
++Fetch from: https://sources.debian.org/patches/libb64/1.2-5/
++Combined "integer overflows.diff" and "off by one.diff" and adapted for version 1.2.1.
++
++Signed-off-by: Mikael Eliasson <mikael@robomagi.com>
++diff --git a/src/cdecode.c b/src/cdecode.c
++index a6c0a42..45da4e1 100644
++--- a/src/cdecode.c
+++++ b/src/cdecode.c
++@@ -9,10 +9,11 @@ For details, see http://sourceforge.net/projects/libb64
++ 
++ int base64_decode_value(char value_in)
++ {
++-	static const char decoding[] = {62,-1,-1,-1,63,52,53,54,55,56,57,58,59,60,61,-1,-1,-1,-2,-1,-1,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,-1,-1,-1,-1,-1,-1,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51};
+++	static const signed char decoding[] = {62,-1,-1,-1,63,52,53,54,55,56,57,58,59,60,61,-1,-1,-1,-2,-1,-1,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,-1,-1,-1,-1,-1,-1,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51};
++ 	static const char decoding_size = sizeof(decoding);
+++	if (value_in < 43) return -1;
++ 	value_in -= 43;
++-	if (value_in < 0 || value_in >= decoding_size) return -1;
+++	if (value_in >= decoding_size) return -1;
++ 	return decoding[(int)value_in];
++ }
++ 
++@@ -26,7 +27,7 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
++ {
++ 	const char* codechar = code_in;
++ 	char* plainchar = plaintext_out;
++-	char fragment;
+++	int fragment;
++ 	
++ 	*plainchar = state_in->plainchar;
++ 	
++@@ -42,7 +43,7 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
++ 					state_in->plainchar = *plainchar;
++ 					return plainchar - plaintext_out;
++ 				}
++-				fragment = (char)base64_decode_value(*codechar++);
+++				fragment = base64_decode_value(*codechar++);
++ 			} while (fragment < 0);
++ 			*plainchar    = (fragment & 0x03f) << 2;
++ 	case step_b:
++@@ -53,7 +54,7 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
++ 					state_in->plainchar = *plainchar;
++ 					return plainchar - plaintext_out;
++ 				}
++-				fragment = (char)base64_decode_value(*codechar++);
+++				fragment = base64_decode_value(*codechar++);
++ 			} while (fragment < 0);
++ 			*plainchar++ |= (fragment & 0x030) >> 4;
++ 			*plainchar    = (fragment & 0x00f) << 4;
++@@ -65,7 +66,7 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
++ 					state_in->plainchar = *plainchar;
++ 					return plainchar - plaintext_out;
++ 				}
++-				fragment = (char)base64_decode_value(*codechar++);
+++				fragment = base64_decode_value(*codechar++);
++ 			} while (fragment < 0);
++ 			*plainchar++ |= (fragment & 0x03c) >> 2;
++ 			*plainchar    = (fragment & 0x003) << 6;
++@@ -77,7 +78,7 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
++ 					state_in->plainchar = *plainchar;
++ 					return plainchar - plaintext_out;
++ 				}
++-				fragment = (char)base64_decode_value(*codechar++);
+++				fragment = base64_decode_value(*codechar++);
++ 			} while (fragment < 0);
++ 			*plainchar++   |= (fragment & 0x03f);
++ 		}
+diff --git a/package/libb64/0002-Initialize-C++-objects.patch b/package/libb64/0002-Initialize-C++-objects.patch
+new file mode 100644
+index 0000000000..3b3ecb029f
+--- /dev/null
++++ b/package/libb64/0002-Initialize-C++-objects.patch
+@@ -0,0 +1,35 @@
++Fixes uninitialized C++ encoder and decoder _state variable bug.
++Fetch from: https://sources.debian.org/patches/libb64/1.2-5/
++initialize-coder-state.diff patch without modifications.
++
++Signed-off-by: Mikael Eliasson <mikael@robomagi.com>
++diff --git a/include/b64/decode.h b/include/b64/decode.h
++index 12b16ea..d3f7d60 100644
++--- a/include/b64/decode.h
+++++ b/include/b64/decode.h
++@@ -24,7 +24,9 @@ namespace base64
++ 
++ 		decoder(int buffersize_in = BUFFERSIZE)
++ 		: _buffersize(buffersize_in)
++-		{}
+++		{
+++			base64_init_decodestate(&_state);
+++		}
++ 
++ 		int decode(char value_in)
++ 		{
++diff --git a/include/b64/encode.h b/include/b64/encode.h
++index 5d807d9..49aafdc 100644
++--- a/include/b64/encode.h
+++++ b/include/b64/encode.h
++@@ -24,7 +24,9 @@ namespace base64
++ 
++ 		encoder(int buffersize_in = BUFFERSIZE)
++ 		: _buffersize(buffersize_in)
++-		{}
+++		{
+++			base64_init_encodestate(&_state);
+++		}
++ 
++ 		int encode(char value_in)
++ 		{
 -- 
-Mikael Eliasson
-Telefon:
-+46703900837
-Email:
-mikael at robomagi.com
-Adress:
-Robomagi AB
-T?ngringsgatan 26A 78430 Borl?nge
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180823/b4fd84af/attachment.html>
+2.17.1
