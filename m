@@ -1,66 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Aug 2018 11:40:13 +0200
-Subject: [Buildroot] [git commit branch/next]
- package/perl-crypt-openssl-rsa: bump version to 0.30
-Message-ID: <20180823093249.6D30D8E2BC@busybox.osuosl.org>
+Date: Thu, 23 Aug 2018 11:45:53 +0200
+Subject: [Buildroot] [PATCH] libssh: fix cross compile with older cmake
+In-Reply-To: <6362092b-e799-47b1-9066-97b8118d27b5@cesnet.cz>
+References: <9dce5a842ebb73937268fa66a3ee699785c5ae7c.1534975110.git.baruch@tkos.co.il>
+ <6362092b-e799-47b1-9066-97b8118d27b5@cesnet.cz>
+Message-ID: <20180823114553.31dca123@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0bddd57fdde0e0e002087057ee6a6f68d40f640
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Changelog:
-https://metacpan.org/changes/distribution/Crypt-OpenSSL-RSA
+On Thu, 23 Aug 2018 11:24:47 +0200, Jan Kundr?t wrote:
 
-Added new build dependency to host-perl-crypt-openssl-guess and force
-it to search for openssl in STAGING_DIR. Added license hash. Updated
-_SITE according to scancpan.
+> Are you sure that this is a correct fix? From reading the 
+> FindThreads.cmake, passing OFF looks like it results in not feeding the 
+> -pthread option to the compiler. That breaks some scenarios such as ASAN, 
+> see [1] for details.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash |  7 +++++--
- package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk   | 12 +++++++++---
- 2 files changed, 14 insertions(+), 5 deletions(-)
+At least, we are doing it in a number of other packages:
 
-diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-index 6e060ce672..0d101d7bb8 100644
---- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-+++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.hash
-@@ -1,3 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    86217a5036fc63779c30420b5fd84129 Crypt-OpenSSL-RSA-0.28.tar.gz
--sha256 5357f977464bb3a8184cf2d3341851a10d5515b4b2b0dfb88bf78995c0ded7be Crypt-OpenSSL-RSA-0.28.tar.gz
-+md5    10bca2fc6d0ba1aa329f227424ae87d5 Crypt-OpenSSL-RSA-0.30.tar.gz
-+sha256 23e13531397af102db4fd24bcf70137add7c85c23cca697c43aa71c2959a29ac Crypt-OpenSSL-RSA-0.30.tar.gz
-+
-+# computed by scancpan
-+sha256 8a693ad3f52daeeb5ac5deceb1e1109c9c87095ed5ba6506d6d5c106e4066f5a LICENSE
-diff --git a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-index b853d9953e..790af760c7 100644
---- a/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-+++ b/package/perl-crypt-openssl-rsa/perl-crypt-openssl-rsa.mk
-@@ -4,11 +4,17 @@
- #
- ################################################################################
- 
--PERL_CRYPT_OPENSSL_RSA_VERSION = 0.28
-+PERL_CRYPT_OPENSSL_RSA_VERSION = 0.30
- PERL_CRYPT_OPENSSL_RSA_SOURCE = Crypt-OpenSSL-RSA-$(PERL_CRYPT_OPENSSL_RSA_VERSION).tar.gz
--PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PE/PERLER
--PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = perl-crypt-openssl-random
-+PERL_CRYPT_OPENSSL_RSA_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TODDR
-+PERL_CRYPT_OPENSSL_RSA_DEPENDENCIES = \
-+	host-perl-crypt-openssl-guess \
-+	perl-crypt-openssl-random
- PERL_CRYPT_OPENSSL_RSA_LICENSE = Artistic or GPL-1.0+
- PERL_CRYPT_OPENSSL_RSA_LICENSE_FILES = LICENSE
- 
-+# Try as hard as possible to remedy to the brain-damage their build-system
-+# suffers from: don't search for openssl, they pick the host-system one.
-+PERL_CRYPT_OPENSSL_RSA_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
-+
- $(eval $(perl-package))
+package/exiv2/exiv2.mk:EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+package/i2pd/i2pd.mk:I2PD_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+package/librtlsdr/librtlsdr.mk:LIBRTLSDR_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+package/rabbitmq-c/rabbitmq-c.mk:RABBITMQ_C_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+
+It doesn't mean it's correct, but at least that's how we are working
+around this problem at the moment. If it's not the correct way, then we
+should fix it globally :-)
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
