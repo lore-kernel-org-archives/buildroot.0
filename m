@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:18:13 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] linux: bump CIP to
+Date: Fri, 24 Aug 2018 00:17:44 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux: bump CIP to
  version v4.4.138-cip25
-Message-ID: <20180823221107.5E7F48E4EC@busybox.osuosl.org>
+Message-ID: <20180823221112.0126D8DF4A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c596f64d3e4b7fc7a5b65d09a7c8455c3a8041cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=10a3e2ea85f1fba6b454719f481f00291eb52d68
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 This patch bumps the CIP Linux kernel to version v4.4.138-cip25
 
@@ -23,11 +23,11 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index 58d2286685..6e13ebc2d8 100644
+index 6f5c0ea694..e931bd4136 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
 @@ -33,7 +33,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (4.16)"
+ 	bool "Latest version (4.15)"
  
  config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
 -	bool "Latest CIP SLTS version (v4.4.130-cip23)"
@@ -38,7 +38,7 @@ index 58d2286685..6e13ebc2d8 100644
 @@ -121,7 +121,7 @@ endif
  config BR2_LINUX_KERNEL_VERSION
  	string
- 	default "4.16.13" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "4.15.16" if BR2_LINUX_KERNEL_LATEST_VERSION
 -	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
 +	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
