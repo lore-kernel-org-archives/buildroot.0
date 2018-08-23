@@ -1,37 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 21:18:48 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] dmidecode: enable for
- aarch64
-Message-ID: <20180823191110.552828E37C@busybox.osuosl.org>
+Date: Thu, 23 Aug 2018 21:20:18 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/crda: update
+ website URL
+Message-ID: <20180823191237.CA8A38E367@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f037fd5ea888d0cd8123036c2cc99cee8516eb5
+commit: https://git.buildroot.net/buildroot/commit/?id=64c7c4b619b93e4ccdc699eec05588cb7cfc6c3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-arm64 systems support SMBIOS, so update the dmidecode config
-to allow building dmidecode for arm64.
+Now Linux wireless infos are on corresponding wiki.
 
-Signed-off-by: Geoff Levand <geoff@infradead.org>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6e00a671bc227a8e567f485df9ccdbefb9a1d5c6)
+(cherry picked from commit abc6db8b66ff451f41204de488756929657f0d8a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dmidecode/Config.in | 2 +-
+ package/crda/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dmidecode/Config.in b/package/dmidecode/Config.in
-index 22272ed294..58e7a785ce 100644
---- a/package/dmidecode/Config.in
-+++ b/package/dmidecode/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_DMIDECODE
- 	bool "dmidecode"
--	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_aarch64 || BR2_i386 || BR2_x86_64
- 	help
- 	  Dmidecode reports information about your system's hardware
- 	  as described in your system BIOS according to the SMBIOS/DMI
+diff --git a/package/crda/Config.in b/package/crda/Config.in
+index b9a2613f04..469fa77f6f 100644
+--- a/package/crda/Config.in
++++ b/package/crda/Config.in
+@@ -15,7 +15,7 @@ config BR2_PACKAGE_CRDA
+ 	  query and apply the regulatory domain settings wireless
+ 	  devices may operate within for a given location.
+ 
+-	  http://linuxwireless.org/en/developers/Regulatory/CRDA
++	  https://wireless.wiki.kernel.org/en/developers/regulatory/crda
+ 
+ comment "crda needs a toolchain w/ threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
