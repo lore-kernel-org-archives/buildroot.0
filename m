@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 23:58:36 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package: propagate
+Date: Thu, 23 Aug 2018 23:58:13 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package: propagate
  pulseaudio dependencies correctly
-Message-ID: <20180823215228.AA9048E4A9@busybox.osuosl.org>
+Message-ID: <20180823215237.E77E28A34F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e0db1a8800d8e1b0e391d2e8fdfaa02ec8af361
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f7d22603daa6caec5e9aebab9bd50b8f78395d5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 The BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC dependency of
 BR2_PACKAGE_PULSEAUDIO was not properly propagated to reverse
@@ -83,7 +83,7 @@ index e92cd0c5b2..3b2a99f5b4 100644
  config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
  	bool "souphttpsrc (http client)"
 diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 097f32d779..4f83d00a48 100644
+index eea3a3eda8..180696b11b 100644
 --- a/package/gstreamer1/gst1-plugins-good/Config.in
 +++ b/package/gstreamer1/gst1-plugins-good/Config.in
 @@ -321,13 +321,16 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
@@ -106,7 +106,7 @@ index 097f32d779..4f83d00a48 100644
  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
  	bool "souphttpsrc (http client)"
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 071c03d640..992b155f29 100644
+index d96d546bf9..5f9c95a7a0 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
 @@ -192,6 +192,7 @@ config BR2_PACKAGE_KODI_NONFREE
@@ -118,10 +118,10 @@ index 071c03d640..992b155f29 100644
  	# see FindPulseAudio.cmake. Kodi meets all dependencies of
  	# libglib2, so there is no need to propagate them here.
 diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 5991b6f4bb..31afb49602 100644
+index 857f212477..09101d2c44 100644
 --- a/package/mpd/Config.in
 +++ b/package/mpd/Config.in
-@@ -254,13 +254,19 @@ config BR2_PACKAGE_MPD_OSS
+@@ -266,13 +266,19 @@ config BR2_PACKAGE_MPD_OSS
  
  config BR2_PACKAGE_MPD_PULSEAUDIO
  	bool "pulseaudio"
