@@ -1,107 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:39:31 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/samba4: bump
- version to 4.8.3
-Message-ID: <20180824063612.6870B8E4BA@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:40:01 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/samba4: security
+ bump to version 4.8.4
+Message-ID: <20180824063612.8FD428E4BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0060ade136ef831b11ade29c887a6101714e8ddb
+commit: https://git.buildroot.net/buildroot/commit/?id=e998257b6861af2d60cc19e1153be96357275e1d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Removed patch applied upstream.
+Release notes: https://www.samba.org/samba/history/samba-4.8.4.html
 
-Release notes: https://www.samba.org/samba/history/samba-4.8.3.html
+Fixes
+
+o  CVE-2018-1139  (Weak authentication protocol allowed.)
+o  CVE-2018-1140  (Denial of Service Attack on DNS and LDAP server.)
+o  CVE-2018-10858 (Insufficient input validation on client directory
+                   listing in libsmbclient.)
+o  CVE-2018-10918 (Denial of Service Attack on AD DC DRSUAPI server.)
+o  CVE-2018-10919 (Confidential attribute disclosure from the AD LDAP
+                   server.)
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bcc3a15bafc2c708a464486dffad1b324a6f7795)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3d7ce0124aa6ab116f430604db72c99bcd7a299a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../samba4/0004-libgpo-fix-build-without-ads.patch | 49 ----------------------
- package/samba4/samba4.hash                         |  4 +-
- package/samba4/samba4.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 52 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/0004-libgpo-fix-build-without-ads.patch b/package/samba4/0004-libgpo-fix-build-without-ads.patch
-deleted file mode 100644
-index 5e3af3c322..0000000000
---- a/package/samba4/0004-libgpo-fix-build-without-ads.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From a222b7506b53e689708834237f18877231dca589 Mon Sep 17 00:00:00 2001
--From: Volker Lendecke <vl@samba.org>
--Date: Sat, 3 Feb 2018 07:07:55 +0100
--Subject: [PATCH] libgpo: Fix the build --without-ads
--
--Signed-off-by: Volker Lendecke <vl@samba.org>
--Reviewed-by: David Disseldorp <ddiss@samba.org>
--
--Autobuild-User(master): David Disseldorp <ddiss@samba.org>
--Autobuild-Date(master): Tue Feb  6 15:36:01 CET 2018 on sn-devel-144
--
--Downloaded from upstream commit:
--https://git.samba.org/samba.git/?p=samba.git;a=commit;h=a222b7506b53e689708834237f18877231dca589
--
--Fixes https://bugzilla.samba.org/show_bug.cgi?id=13331
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- libgpo/pygpo.c | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/libgpo/pygpo.c b/libgpo/pygpo.c
--index 7a02a0dc2aa..b6b53b76212 100644
----- a/libgpo/pygpo.c
--+++ b/libgpo/pygpo.c
--@@ -319,6 +319,7 @@ static PyObject *py_gpo_get_sysvol_gpt_version(PyObject * self,
-- 	return result;
-- }
-- 
--+#ifdef HAVE_ADS
-- static ADS_STATUS find_samaccount(ADS_STRUCT *ads, TALLOC_CTX *mem_ctx,
-- 				  const char *samaccountname,
-- 				  uint32_t *uac_ret, const char **dn_ret)
--@@ -468,11 +469,15 @@ static PyObject *py_ads_get_gpo_list(ADS *self, PyObject *args, PyObject *kwds)
-- 	return ret;
-- }
-- 
--+#endif
--+
-- static PyMethodDef ADS_methods[] = {
-- 	{ "connect", (PyCFunction)py_ads_connect, METH_NOARGS,
-- 		"Connect to the LDAP server" },
--+#ifdef HAVE_ADS
-- 	{ "get_gpo_list", (PyCFunction)py_ads_get_gpo_list, METH_KEYWORDS,
-- 		NULL },
--+#endif
-- 	{ NULL }
-- };
-- 
 diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index cadb88b260..4b1b1218ac 100644
+index 4b1b1218ac..00c8466078 100644
 --- a/package/samba4/samba4.hash
 +++ b/package/samba4/samba4.hash
 @@ -1,4 +1,4 @@
  # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.8.2.tar.asc
--sha256 62e552296d49e6ab44bb87d120a288813fa52e42435d53a1f71b77596512bf22  samba-4.8.2.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.8.3.tar.asc
-+sha256 e0569a8a605d5dfb49f1fdd11db796f4d36fe0351c4a7f21387ef253010b82ed  samba-4.8.3.tar.gz
+-# https://download.samba.org/pub/samba/stable/samba-4.8.3.tar.asc
+-sha256 e0569a8a605d5dfb49f1fdd11db796f4d36fe0351c4a7f21387ef253010b82ed  samba-4.8.3.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.8.4.tar.asc
++sha256 f5044d149e01894a08b1d114b8b69aed78171a7bb19608bd1fd771453b9a5406  samba-4.8.4.tar.gz
  sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
 diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index f75b350375..52d59ffeb9 100644
+index 52d59ffeb9..03ef6eeeb0 100644
 --- a/package/samba4/samba4.mk
 +++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.8.2
-+SAMBA4_VERSION = 4.8.3
+-SAMBA4_VERSION = 4.8.3
++SAMBA4_VERSION = 4.8.4
  SAMBA4_SITE = https://download.samba.org/pub/samba/stable
  SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
  SAMBA4_INSTALL_STAGING = YES
