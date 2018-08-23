@@ -1,19 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 21:12:22 +0200
-Subject: [Buildroot] [PATCH] package/cryptsetup: bump version to 2.0.3
-In-Reply-To: <20180725122838.20071-1-m.niestroj@grinn-global.com> (Marcin
- Niestroj's message of "Wed, 25 Jul 2018 14:28:38 +0200")
-References: <20180725122838.20071-1-m.niestroj@grinn-global.com>
-Message-ID: <87wosg523t.fsf@dell.be.48ers.dk>
+Date: Thu, 23 Aug 2018 21:12:45 +0200
+Subject: [Buildroot] [PATCH] cryptsetup: fix build with old host kernel
+ headers
+In-Reply-To: <0e566b4ae187c5bff93ce09cd73132ace0545664.1533639888.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 7 Aug 2018 14:04:48 +0300")
+References: <0e566b4ae187c5bff93ce09cd73132ace0545664.1533639888.git.baruch@tkos.co.il>
+Message-ID: <87sh345236.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+ > By default cryptsetup configure fails when the if_alg.h kernel header is
+ > not available. Kernels older than 2.6.38, like the one in RHEL 6 hosts,
+ > do not provide this header. Since we don't need the kernel crypto
+ > feature for host tools, just disable this feature to allow successful
+ > completion of the configure script.
+
+ > While at it, fix a typo in the --with-crypto_backend option (hyphen ->
+ > underscore).
+
+ > Should fix:
+ > http://autobuild.buildroot.net/results/ffd/ffda2579b215b53161025b7bc703091cb30ef95d/
+ > http://autobuild.buildroot.net/results/c48/c48015f76b13fec38f650f66824e7b986eb28572/
+ > http://autobuild.buildroot.net/results/be6/be621f71bf9da8719bf7fc943eccc9b4dc2cc43e/
+
+ > Cc: Martin Hicks <mort@bork.org>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
