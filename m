@@ -1,32 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 22:41:35 +0200
-Subject: [Buildroot] [PATCH 5/5 v2] package/attr: bump version
-In-Reply-To: <166f3279947186301770fa28116bb6d288ee8601.1530368468.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Sat, 30 Jun 2018 16:21:27 +0200")
-References: <cover.1530368468.git.yann.morin.1998@free.fr>
- <166f3279947186301770fa28116bb6d288ee8601.1530368468.git.yann.morin.1998@free.fr>
-Message-ID: <87sh34zugw.fsf@dell.be.48ers.dk>
+Date: Thu, 23 Aug 2018 22:42:30 +0200
+Subject: [Buildroot] [PATCH] stress-ng: fix build with kernel headers
+ v3.9
+In-Reply-To: <0f6a3acdfa31f852295e2f3be3701fdafc0f7256.1530555337.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Mon, 2 Jul 2018 21:15:37 +0300")
+References: <0f6a3acdfa31f852295e2f3be3701fdafc0f7256.1530555337.git.baruch@tkos.co.il>
+Message-ID: <87o9dszufd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > The current version of attr uses a canned custom buildsystem, that
- > is borked in quite a few ways (no support for static, overwrites
- > destination files without unlinking...)
+ > Add a patch correcting the kernel headers version test macro.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/cbf/cbfb80117840bddd5712bcda3caeaaff61745b0b/
+ > http://autobuild.buildroot.net/results/649/64941ac5b7dcd9c100bdc47cdfe73cce5f23c3d8/
+ > http://autobuild.buildroot.net/results/741/741f5881d3cb745d1003ede3f762c20eb72de0b5/
 
- > There has been a release recently-ish, with a complete overhaul of
- > the buildsystem. We can now drop all our patches.
-
- > The option to disable NLS has changed, so update accordingly.
-
- > Fixes: #10986
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Yegor Yefremov <yegorslists@googlemail.com>
+ > Cc: Romain Naour <romain.naour@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
