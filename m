@@ -1,43 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 21:46:39 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] lttng-tools: Install to
- staging
-Message-ID: <20180823194109.421928E427@busybox.osuosl.org>
+Date: Thu, 23 Aug 2018 21:45:36 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] lttng-modules: bump
+ version to 2.10.6
+Message-ID: <20180823194109.3B30E8E426@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e408c84368fc3627f04b80efddc0ad5dbffe004
+commit: https://git.buildroot.net/buildroot/commit/?id=078dd40b2f7aaa289c3d444dfc59db7f46e8d537
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Install the LTTng control library headers and shared objects
-to staging.
+This is needed for kernel 2.16.x compatiblity.
 
-The C interface to LTTng described here:
-https://lttng.org/docs/v2.10/#doc-liblttng-ctl-lttng
-requires including <lttng/lttng.h> and linking against liblttng-ctl,
-but those parts are not available unless this package does a staging
-install.
-
-Signed-off-by: John Faith <jfaith@impinj.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3466298b0fa334e66050fede0629ad0f35baf21e)
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit dda7a906248e7bed53055797222c69b449f02c47)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lttng-tools/lttng-tools.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/lttng-modules/lttng-modules.hash | 6 +++---
+ package/lttng-modules/lttng-modules.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
-index 59f64cc404..0898f09549 100644
---- a/package/lttng-tools/lttng-tools.mk
-+++ b/package/lttng-tools/lttng-tools.mk
-@@ -7,6 +7,7 @@
- LTTNG_TOOLS_VERSION = 2.10.1
- LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
- LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
-+LTTNG_TOOLS_INSTALL_STAGING = YES
- LTTNG_TOOLS_LICENSE = GPL-2.0+, LGPL-2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
- LTTNG_TOOLS_LICENSE_FILES = gpl-2.0.txt lgpl-2.1.txt LICENSE
- LTTNG_TOOLS_CONF_OPTS += --disable-man-pages
+diff --git a/package/lttng-modules/lttng-modules.hash b/package/lttng-modules/lttng-modules.hash
+index 7fa742dc11..8992cbce99 100644
+--- a/package/lttng-modules/lttng-modules.hash
++++ b/package/lttng-modules/lttng-modules.hash
+@@ -1,3 +1,3 @@
+-# From http://lttng.org/files/lttng-modules/lttng-modules-2.10.4.tar.bz2.{md5,sha1}
+-md5 832452b321a4df6836549e72d05b2ce9  lttng-modules-2.10.4.tar.bz2
+-sha1 1712f5d5c0ef9b028949693c5cf24c5a00b7f4ef  lttng-modules-2.10.4.tar.bz2
++# From http://lttng.org/files/lttng-modules/lttng-modules-2.10.6.tar.bz2.{md5,sha1}
++md5 8110099f4615fc89a74ffe9189b56cfc  lttng-modules-2.10.6.tar.bz2
++sha1 1126b29e055ebdb3fad9201edaf0ef27f88c9369  lttng-modules-2.10.6.tar.bz2
+diff --git a/package/lttng-modules/lttng-modules.mk b/package/lttng-modules/lttng-modules.mk
+index 4a4974d81d..8d48c37bac 100644
+--- a/package/lttng-modules/lttng-modules.mk
++++ b/package/lttng-modules/lttng-modules.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LTTNG_MODULES_VERSION = 2.10.4
++LTTNG_MODULES_VERSION = 2.10.6
+ LTTNG_MODULES_SITE = http://lttng.org/files/lttng-modules
+ LTTNG_MODULES_SOURCE = lttng-modules-$(LTTNG_MODULES_VERSION).tar.bz2
+ LTTNG_MODULES_LICENSE = LGPL-2.1/GPL-2.0 (kernel modules), MIT (lib/bitfield.h, lib/prio_heap/*)
