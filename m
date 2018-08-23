@@ -1,120 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 22:42:06 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] attr: build fix for GCC <
- 4.5
-Message-ID: <20180823214248.67CC88E47E@busybox.osuosl.org>
+Date: Thu, 23 Aug 2018 22:40:30 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/xorriso: fix to
+ use the system xattr header
+Message-ID: <20180823214248.3B1EA8E47E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cecdbb8e696b02e2e5af244467e1c041f373f20d
+commit: https://git.buildroot.net/buildroot/commit/?id=4245816f7a35334c528361d56d50fb5d941bc294
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-GCC 4.4 and before do not support a message associated to the
-"deprecated" gcc attribute. Since such messages are not that useful in
-the context of Buildroot, this commit adds a patch that removes them
-in the attr source code.
+We don't carry a git-formatted patch, because upstream is in fact a
+collection of git trees, while the release tarball is an aggregate
+of those repositories. Thus, the layout is different between the
+tarball and the SCM...
 
-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Steve Kenton <skenton@ou.edu>
+[Thomas:
+ - add host-pkgconf as a dependency of host-xorriso, since it's needed
+   for autoreconf to work
+ - drop HOST_XORRISO_AUTORECONF = YES, since it's implied by
+   XORRISO_AUTORECONF = YES.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f910320143c12b9bed27733640e4c5441afe0f32)
+
+(cherry picked from commit 798d1ec30936cc31e784d40af126f509e69d7b0d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/attr/0001-build-with-older-GCCs.patch | 87 +++++++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ package/xorriso/0001-use-sys-xattr.h.patch | 33 ++++++++++++++++++++++++++++++
+ package/xorriso/xorriso.mk                 | 13 ++++++++++++
+ 2 files changed, 46 insertions(+)
 
-diff --git a/package/attr/0001-build-with-older-GCCs.patch b/package/attr/0001-build-with-older-GCCs.patch
+diff --git a/package/xorriso/0001-use-sys-xattr.h.patch b/package/xorriso/0001-use-sys-xattr.h.patch
 new file mode 100644
-index 0000000000..22cfac2ce1
+index 0000000000..5ae1aae72e
 --- /dev/null
-+++ b/package/attr/0001-build-with-older-GCCs.patch
-@@ -0,0 +1,87 @@
-+From 3ac428794ea0f95c854166c9c0cffb0267c5e98b Mon Sep 17 00:00:00 2001
-+From: Hollis Blanchard <hollis_blanchard@mentor.com>
-+Date: Mon, 30 Jul 2018 14:17:21 -0700
-+Subject: [PATCH] Remove messages in "deprecated" gcc attributes
++++ b/package/xorriso/0001-use-sys-xattr.h.patch
+@@ -0,0 +1,33 @@
++Use system <sys/xattr.h>
 +
-+GCC versions up through 4.4.7 (which is used in RHEL 6) do not accept
-+any argument for the deprecated attribute. GCC 4.5 and later say the
-+"msg" argument is optional. We don't need the messages during
-+Buildroot builds anyways.
++The one from attr is no longer installed with latest version.
 +
-+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++
 +---
-+ include/attributes.h | 20 ++++++++++----------
-+ 1 file changed, 10 insertions(+), 10 deletions(-)
++Upstream status: alternate, more complex patch pending...
 +
-+diff --git a/include/attributes.h b/include/attributes.h
-+index 14beb8f..23c39c8 100644
-+--- a/include/attributes.h
-++++ b/include/attributes.h
-+@@ -127,10 +127,10 @@ typedef struct attr_multiop {
-+  */
-+ EXPORT int attr_get (const char *__path, const char *__attrname,
-+ 			char *__attrvalue, int *__valuelength, int __flags)
-+-	__attribute__ ((deprecated ("Use getxattr or lgetxattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_getf (int __fd, const char *__attrname, char *__attrvalue,
-+ 			int *__valuelength, int __flags)
-+-	__attribute__ ((deprecated ("Use fgetxattr instead")));
-++	__attribute__ ((deprecated));
++diff -durN xorriso-1.4.6.orig/configure.ac xorriso-1.4.6/configure.ac
++--- xorriso-1.4.6.orig/configure.ac	2016-09-16 15:51:33.000000000 +0200
+++++ xorriso-1.4.6/configure.ac	2018-05-06 23:45:38.377153069 +0200
++@@ -264,7 +264,7 @@
++ dnl Check whether there is the header for Linux xattr.
++ dnl If not, erase this macro which would enable use of listxattr and others
++         XATTR_DEF="-DLibisofs_with_aaip_xattR"
++-        AC_CHECK_HEADER(attr/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
+++        AC_CHECK_HEADER(sys/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
++                                                    XATTR_DEF= ), XATTR_DEF= )
++     fi
++ elif test x"$LIBBURNIA_SUPP_FATTR" = xextattr
++diff -durN xorriso-1.4.6.orig/libisofs/aaip-os-linux.c xorriso-1.4.6/libisofs/aaip-os-linux.c
++--- xorriso-1.4.6.orig/libisofs/aaip-os-linux.c	2016-09-16 15:51:34.000000000 +0200
+++++ xorriso-1.4.6/libisofs/aaip-os-linux.c	2018-05-06 23:47:25.764941583 +0200
++@@ -30,7 +30,7 @@
++ #endif
 + 
-+ /*
-+  * Set the value of an attribute, creating the attribute if necessary.
-+@@ -139,11 +139,11 @@ EXPORT int attr_getf (int __fd, const char *__attrname, char *__attrvalue,
-+ EXPORT int attr_set (const char *__path, const char *__attrname,
-+ 			const char *__attrvalue, const int __valuelength,
-+ 			int __flags)
-+-	__attribute__ ((deprecated ("Use setxattr or lsetxattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_setf (int __fd, const char *__attrname,
-+ 			const char *__attrvalue, const int __valuelength,
-+ 			int __flags)
-+-	__attribute__ ((deprecated ("Use fsetxattr instead")));
-++	__attribute__ ((deprecated));
++ #ifdef Libisofs_with_aaip_xattR
++-#include <attr/xattr.h>
+++#include <sys/xattr.h>
++ #endif
 + 
-+ /*
-+  * Remove an attribute.
-+@@ -151,9 +151,9 @@ EXPORT int attr_setf (int __fd, const char *__attrname,
-+  */
-+ EXPORT int attr_remove (const char *__path, const char *__attrname,
-+ 			int __flags)
-+-	__attribute__ ((deprecated ("Use removexattr or lremovexattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_removef (int __fd, const char *__attrname, int __flags)
-+-	__attribute__ ((deprecated ("Use fremovexattr instead")));
-++	__attribute__ ((deprecated));
 + 
-+ /*
-+  * List the names and sizes of the values of all the attributes of an object.
-+@@ -164,10 +164,10 @@ EXPORT int attr_removef (int __fd, const char *__attrname, int __flags)
-+  */
-+ EXPORT int attr_list(const char *__path, char *__buffer, const int __buffersize,
-+ 		int __flags, attrlist_cursor_t *__cursor)
-+-	__attribute__ ((deprecated ("Use listxattr or llistxattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_listf(int __fd, char *__buffer, const int __buffersize,
-+ 		int __flags, attrlist_cursor_t *__cursor)
-+-	__attribute__ ((deprecated ("Use flistxattr instead")));
-++	__attribute__ ((deprecated));
-+ 
-+ /*
-+  * Operate on multiple attributes of the same object simultaneously.
-+@@ -188,10 +188,10 @@ EXPORT int attr_listf(int __fd, char *__buffer, const int __buffersize,
-+  */
-+ EXPORT int attr_multi (const char *__path, attr_multiop_t *__oplist,
-+ 			int __count, int __flags)
-+-	__attribute__ ((deprecated ("Use getxattr, setxattr, listxattr, removexattr instead")));
-++	__attribute__ ((deprecated));
-+ EXPORT int attr_multif (int __fd, attr_multiop_t *__oplist,
-+ 			int __count, int __flags)
-+-	__attribute__ ((deprecated ("Use getxattr, setxattr, listxattr, removexattr instead")));
-++	__attribute__ ((deprecated));
-+ 
-+ #ifdef __cplusplus
-+ }
-+-- 
-+2.13.0
+diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
+index 1f095911f8..de431c3ab6 100644
+--- a/package/xorriso/xorriso.mk
++++ b/package/xorriso/xorriso.mk
+@@ -8,6 +8,19 @@ XORRISO_VERSION = 1.4.6
+ XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
+ XORRISO_LICENSE = GPL-3.0+
+ XORRISO_LICENSE_FILES = COPYING COPYRIGHT
 +
++# 0001-use-sys-xattr.h.patch
++XORRISO_DEPENDENCIES = host-pkgconf
++HOST_XORRISO_DEPENDENCIES = host-pkgconf
++XORRISO_AUTORECONF = YES
++
++# Make autoreconf happy
++define XORRISO_NEWS
++	touch $(@D)/NEWS
++endef
++XORRISO_POST_PATCH_HOOKS += XORRISO_NEWS
++HOST_XORRISO_POST_PATCH_HOOKS += XORRISO_NEWS
++
+ # Disable everything until we actually need those features, and add the correct
+ # host libraries
+ HOST_XORRISO_CONF_OPTS = \
