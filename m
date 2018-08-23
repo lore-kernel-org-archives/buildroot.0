@@ -1,98 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 23:49:37 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/xorriso: fix to
- use the system xattr header
-Message-ID: <20180823214243.60DA48E474@busybox.osuosl.org>
+Date: Thu, 23 Aug 2018 22:42:06 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] acl: build fix with GCC
+ 4.4.7
+Message-ID: <20180823214248.519808E47E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0db2a430ebdb2bb19f1c200dfa5d118217970dce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=44a440bfd3ecd7c300f65c430cdbb3851dfd0cf9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-We don't carry a git-formatted patch, because upstream is in fact a
-collection of git trees, while the release tarball is an aggregate
-of those repositories. Thus, the layout is different between the
-tarball and the SCM...
+The acl source code uses pragmas inside functions, which is not
+supported by gcc 4.4, still in use in older distributions. This commit
+adds a patch that drops such pragma. Indeed, this acl is not built
+with -Werror, the warning removals are not that important.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Steve Kenton <skenton@ou.edu>
-[Thomas:
- - add host-pkgconf as a dependency of host-xorriso, since it's needed
-   for autoreconf to work
- - drop HOST_XORRISO_AUTORECONF = YES, since it's implied by
-   XORRISO_AUTORECONF = YES.]
+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit 798d1ec30936cc31e784d40af126f509e69d7b0d)
+(cherry picked from commit a957cdfbb69d094cf17909eee64cd11dafdc84ab)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/xorriso/0001-use-sys-xattr.h.patch | 33 ++++++++++++++++++++++++++++++
- package/xorriso/xorriso.mk                 | 13 ++++++++++++
- 2 files changed, 46 insertions(+)
+ package/acl/0001-Build-with-old-GCC-versions.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/xorriso/0001-use-sys-xattr.h.patch b/package/xorriso/0001-use-sys-xattr.h.patch
+diff --git a/package/acl/0001-Build-with-old-GCC-versions.patch b/package/acl/0001-Build-with-old-GCC-versions.patch
 new file mode 100644
-index 0000000000..5ae1aae72e
+index 0000000000..a05ff5d9d3
 --- /dev/null
-+++ b/package/xorriso/0001-use-sys-xattr.h.patch
-@@ -0,0 +1,33 @@
-+Use system <sys/xattr.h>
++++ b/package/acl/0001-Build-with-old-GCC-versions.patch
+@@ -0,0 +1,32 @@
++From a42519dceef0493ece45538375ae1791313f16d3 Mon Sep 17 00:00:00 2001
++From: Hollis Blanchard <hollis_blanchard@mentor.com>
++Date: Mon, 30 Jul 2018 14:29:46 -0700
++Subject: [PATCH] Remove pragmas inside functions
 +
-+The one from attr is no longer installed with latest version.
++GCC 4.4.7, as found in RHEL6, reports:
++    libacl/acl_from_text.c:307: error: #pragma GCC diagnostic not allowed inside functions
 +
-+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-+
++Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
 +---
-+Upstream status: alternate, more complex patch pending...
++ libacl/acl_from_text.c | 3 ---
++ 1 file changed, 3 deletions(-)
 +
-+diff -durN xorriso-1.4.6.orig/configure.ac xorriso-1.4.6/configure.ac
-+--- xorriso-1.4.6.orig/configure.ac	2016-09-16 15:51:33.000000000 +0200
-++++ xorriso-1.4.6/configure.ac	2018-05-06 23:45:38.377153069 +0200
-+@@ -264,7 +264,7 @@
-+ dnl Check whether there is the header for Linux xattr.
-+ dnl If not, erase this macro which would enable use of listxattr and others
-+         XATTR_DEF="-DLibisofs_with_aaip_xattR"
-+-        AC_CHECK_HEADER(attr/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
-++        AC_CHECK_HEADER(sys/xattr.h, AC_CHECK_LIB(c, listxattr, X= ,
-+                                                    XATTR_DEF= ), XATTR_DEF= )
-+     fi
-+ elif test x"$LIBBURNIA_SUPP_FATTR" = xextattr
-+diff -durN xorriso-1.4.6.orig/libisofs/aaip-os-linux.c xorriso-1.4.6/libisofs/aaip-os-linux.c
-+--- xorriso-1.4.6.orig/libisofs/aaip-os-linux.c	2016-09-16 15:51:34.000000000 +0200
-++++ xorriso-1.4.6/libisofs/aaip-os-linux.c	2018-05-06 23:47:25.764941583 +0200
-+@@ -30,7 +30,7 @@
-+ #endif
++diff --git a/libacl/acl_from_text.c b/libacl/acl_from_text.c
++index 09790c9..fb6bc07 100644
++--- a/libacl/acl_from_text.c
+++++ b/libacl/acl_from_text.c
++@@ -304,11 +304,8 @@ parse_acl_entry(const char **text_p, acl_t *acl_p)
++ create_entry:
++ 	if (acl_create_entry(acl_p, &entry_d) != 0)
++ 		return -1;
++-#pragma GCC diagnostic push
++-#pragma GCC diagnostic ignored "-Waddress"
++ 	if (acl_copy_entry(entry_d, int2ext(&entry_obj)) != 0)
++ 		return -1;
++-#pragma GCC diagnostic pop
++ 	return 0;
 + 
-+ #ifdef Libisofs_with_aaip_xattR
-+-#include <attr/xattr.h>
-++#include <sys/xattr.h>
-+ #endif
-+ 
-+ 
-diff --git a/package/xorriso/xorriso.mk b/package/xorriso/xorriso.mk
-index 1f095911f8..de431c3ab6 100644
---- a/package/xorriso/xorriso.mk
-+++ b/package/xorriso/xorriso.mk
-@@ -8,6 +8,19 @@ XORRISO_VERSION = 1.4.6
- XORRISO_SITE = $(BR2_GNU_MIRROR)/xorriso
- XORRISO_LICENSE = GPL-3.0+
- XORRISO_LICENSE_FILES = COPYING COPYRIGHT
++ fail:
++-- 
++2.13.0
 +
-+# 0001-use-sys-xattr.h.patch
-+XORRISO_DEPENDENCIES = host-pkgconf
-+HOST_XORRISO_DEPENDENCIES = host-pkgconf
-+XORRISO_AUTORECONF = YES
-+
-+# Make autoreconf happy
-+define XORRISO_NEWS
-+	touch $(@D)/NEWS
-+endef
-+XORRISO_POST_PATCH_HOOKS += XORRISO_NEWS
-+HOST_XORRISO_POST_PATCH_HOOKS += XORRISO_NEWS
-+
- # Disable everything until we actually need those features, and add the correct
- # host libraries
- HOST_XORRISO_CONF_OPTS = \
