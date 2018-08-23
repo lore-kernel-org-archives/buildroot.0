@@ -1,52 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 18:34:29 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/gnutls: bump
- version to 3.5.19
-Message-ID: <20180823162651.AECC48D35B@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 23 Aug 2018 19:35:08 +0300
+Subject: [Buildroot] Package with dependency with another git
+In-Reply-To: <ea-mime-5b7ed395-49e5-1bbae393@www-1.netcourrier.com>
+References: <ea-mime-5b7ed395-49e5-1bbae393@www-1.netcourrier.com>
+Message-ID: <87a7pdujlv.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b13a1772b14eb305debf8a136564f8485b5bd142
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+Hi Louis-Paul,
 
-Release notes:
-https://lists.gnupg.org/pipermail/gnutls-devel/2018-July/008583.html
+lpdev at cordier.org writes:
+> Currently adding a new package to buildroot, I have a package "A" that
+> fetch its sources on git, and is a cmake-package. This package A also
+> require another git repo "B" to be fetched, and a CMake a path in
+> _CONF_OPTS that points to repo "B" must be added.
+>
+> My solution was to create a new package "B" on which package "A"
+> depends on, and use generic-package with no build rules. Buildroot is
+> taking care of fetching the sources automatically then.
+>
+> However I did not find any way to point on build directory of package
+> B from packagea.mk. Package build are named with the following:
+> package_name-version. I am currently pointing to the path manually in
+> my script like this:
+>
+> PACKAGEA_CONF_OPTS += -DREPOB_DIR=$(BUILD_DIR)/packageb-$(PACKAGEB_VERSION)/
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 08d64f47ebaf5b3e62e01ca78bbf968c88c32abf)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+You can use $(PACKAGEB_DIR) instead.
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index be2913e00f..bbcd5bd4de 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.18.tar.xz.sig
--sha256	ae2248d9e78747cf9c469dde81ff8f90b56838b707a0637f3f7d4eee90e80234	gnutls-3.5.18.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.19.tar.xz.sig
-+sha256	1936eb64f03aaefd6eb16cef0567457777618573826b94d03376bb6a4afadc44	gnutls-3.5.19.tar.xz
- # Locally calculated
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
- sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 6be7c6e27e..1cf1f281fa 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- GNUTLS_VERSION_MAJOR = 3.5
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).18
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).19
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+> My questions are:
+>
+> - Is it a good practice to do this?
+> - Is it a good practice to create a package that only fetch sources?
+
+Sometimes you have no other choice.
+
+> - Is there any variable to point to the build dir of a specific
+>   package?
+
+See above.
+
+> - Would it be better to add a pre-configure in packagea.mk hook that
+>   calls git and fetch the repo B?
+
+Don't do that. It would circumvent the Buildroot package download
+infrastructure.
+
+> Thank you for you help.
+
+You can see the example of the boot/mv-ddr-marvell package that is a
+source dependency of a certain version of arm-trusted-firmware. See
+boot/mv-ddr-marvell/mv-ddr-marvell.mk and
+boot/arm-trusted-firmware/arm-trusted-firmware.mk.
+
+baruch
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
