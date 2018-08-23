@@ -1,47 +1,102 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:09:13 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] vim: install /bin/vi as a
- relative symlink
-Message-ID: <20180823220133.2CAC08E4CE@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:10:26 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linuxptp: add patch to
+ fix no-thread/linuxthreads uClibc builds
+Message-ID: <20180823220252.A9AF78E4D0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3005bdece1d73302b7619b7c6c987a37cc6acc6e
+commit: https://git.buildroot.net/buildroot/commit/?id=d5fd16d2d41a2fd275c40a7e17e237ce99185bd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Prevent creating a dangling symlink when vim is not present on the host
-machine. With BR2_ROOTFS_MERGED_USR, just link to "vim", since they are
-on the same directory, otherwise link to "../usr/bin/vim".
+linuxptp missing.h header implements a replacement clock_nanosleep()
+function, which was used when the thread implementation was not NPTL,
+because uClibc failed to provide clock_nanosleep() in such
+configurations.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+However, uClibc-ng has fixed this problem upstream, and has backported
+this change in Buildroot in patch
+package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
+(the code is upstream and will be part of uClibc-ng 1.0.31). Due to
+this, there is now a conflicting definition of clock_nanosleep()
+between the C library and the linuxptp missing.h code, which manifests
+itself by the following build failure:
+
+missing.h:117:19: error: static declaration of 'clock_nanosleep' follows non-static declaration
+ static inline int clock_nanosleep(clockid_t clock_id, int flags,
+                   ^~~~~~~~~~~~~~~
+In file included from clockadj.h:24:0,
+                 from clockadj.c:24:
+
+This commit fixes that by adding a patch that removes the replacement
+clock_nanosleep() implementation from the linuxptp code base.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/bf400095a853f5beb28c77a50fcffefe52c3d769/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 52385d789af0d17bf12406e5c028651ccbd841f0)
+(cherry picked from commit ae2cae70b82bbb1c85307c5947e1b441567038fd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vim/vim.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ ...issing.h-drop-clock_nanosleep-replacement.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/package/vim/vim.mk b/package/vim/vim.mk
-index 5ee889882a..0cc6512599 100644
---- a/package/vim/vim.mk
-+++ b/package/vim/vim.mk
-@@ -65,9 +65,15 @@ define VIM_REMOVE_DOCS
- endef
- 
- # Avoid oopses with vipw/vigr, lack of $EDITOR and 'vi' command expectation
-+ifeq ($(BR2_ROOTFS_MERGED_USR),y)
- define VIM_INSTALL_VI_SYMLINK
--	ln -sf /usr/bin/vim $(TARGET_DIR)/bin/vi
-+	ln -sf vim $(TARGET_DIR)/usr/bin/vi
- endef
-+else
-+define VIM_INSTALL_VI_SYMLINK
-+	ln -sf ../usr/bin/vim $(TARGET_DIR)/bin/vi
-+endef
-+endif
- VIM_POST_INSTALL_TARGET_HOOKS += VIM_INSTALL_VI_SYMLINK
- 
- ifeq ($(BR2_PACKAGE_VIM_RUNTIME),y)
+diff --git a/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch b/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch
+new file mode 100644
+index 0000000000..54ef963ae4
+--- /dev/null
++++ b/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch
+@@ -0,0 +1,49 @@
++From 947bf03ec3d9eaa0bfc0269eed86b9364e94bc1a Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sun, 5 Aug 2018 15:25:53 +0200
++Subject: [PATCH] missing.h: drop clock_nanosleep() replacement
++
++Since uClibc-ng commits 68628fe7d463541bf3c33da6b214e63c0cc9feed
++("librt: declare clock_nanosleep not only for NPTL") and
++ddbb03e77ac1a48740688814b82f45c97ee81f37 ("librt: clock_nanosleep
++could be even used without threads"), clock_nanosleep() is always
++provided by uClibc, regardless of the thread implementation (none,
++linuxthreads, nptl). These commits will be part of the upcoming 1.0.31
++release of uClibc-ng.
++
++Thanks to this, we can drop the replacement clock_nanosleep()
++implementation added by linuxptp. Without this, linuxptp fails to
++build with:
++
++missing.h:117:19: error: static declaration of 'clock_nanosleep' follows non-static declaration
++ static inline int clock_nanosleep(clockid_t clock_id, int flags,
++                   ^~~~~~~~~~~~~~~
++In file included from clockadj.h:24:0,
++                 from clockadj.c:24:
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ missing.h | 7 -------
++ 1 file changed, 7 deletions(-)
++
++diff --git a/missing.h b/missing.h
++index 2f7adb9..60f89a3 100644
++--- a/missing.h
+++++ b/missing.h
++@@ -129,13 +129,6 @@ enum {
++ 
++ #define TFD_TIMER_ABSTIME (1 << 0)
++ 
++-static inline int clock_nanosleep(clockid_t clock_id, int flags,
++-				  const struct timespec *request,
++-				  struct timespec *remain)
++-{
++-	return syscall(__NR_clock_nanosleep, clock_id, flags, request, remain);
++-}
++-
++ static inline int timerfd_create(int clockid, int flags)
++ {
++ 	return syscall(__NR_timerfd_create, clockid, flags);
++-- 
++2.14.4
++
