@@ -1,43 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:16:33 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
- 9, 14, 17}.x series
-Message-ID: <20180823220902.B86F08E4EA@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:18:43 +0200
+Subject: [Buildroot] [PATCH] linux: bump CIP to version v4.4.138-cip25
+In-Reply-To: <1533624833-27416-1-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Tue, 7 Aug 2018 08:53:53 +0200")
+References: <1533624833-27416-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <877ekgpvzw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fe70325f5b1e31105010d26503273da6c2be0ac
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
-[Peter: drop 4.17.x change]
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ce1af4db2a9d927479d980bca654dad926c08f34)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ > This patch bumps the CIP Linux kernel to version v4.4.138-cip25
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 5b4bd04b66..96ae5e6bbd 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.145"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.116"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.146"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.118"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.59"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.61"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+Committed to 2018.02.x and 2018.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
