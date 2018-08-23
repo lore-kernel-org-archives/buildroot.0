@@ -1,55 +1,90 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 23 Aug 2018 15:38:17 +0300
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.17.1
-Message-ID: <8c998542bd25e65a58ebe3732dd74a4b7c434e2a.1535027897.git.baruch@tkos.co.il>
+Date: Thu, 23 Aug 2018 15:59:18 +0300
+Subject: [Buildroot] [PATCH] iproute2: bump to version 4.18.0
+Message-ID: <08e0ff62e715901343733bf0fd3e4c51c7518cb6.1535029158.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The configure script now detects toolchain support for the -std=gnu90
-flag. This fixes build with gcc older than 4.5.
+Drop upstream patch.
 
-Should fix:
-http://autobuild.buildroot.net/results/802/802dd4d7eec058c2eb23e033ed3a093b110f4eda/
-
-Cc: Robert J. Heywood <robert.heywood@codethink.co.uk>
+Cc: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
+ ...rdma-sync-some-IP-headers-with-glibc.patch | 39 -------------------
+ package/iproute2/iproute2.hash                |  2 +-
+ package/iproute2/iproute2.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
+ delete mode 100644 package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
 
-The autobuilders only show the failure only on next, because it adds
-host-btrfs-progs that builds using host gcc 4.4. If we also care about
-target gcc older than 4.5 then this should be applied to master. But I'm
-not sure it is worth it so close to release.
----
- package/btrfs-progs/btrfs-progs.hash | 2 +-
- package/btrfs-progs/btrfs-progs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
-index 71793d1c687d..07d55ec3325b 100644
---- a/package/btrfs-progs/btrfs-progs.hash
-+++ b/package/btrfs-progs/btrfs-progs.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
--sha256 013403fb67b17975b21408fa9eb7523b0ecf94f84f8a4397cf972e8e254d2246  btrfs-progs-v4.16.1.tar.xz
-+sha256 bf0b34f1538c0b6e88f959937b0419678cadbf2ba7044336dcbfb2bcdc28cd74  btrfs-progs-v4.17.1.tar.xz
- # Locally computed
- sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
- sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 33a6be324fd0..585dcf364cbe 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
+diff --git a/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch b/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
+deleted file mode 100644
+index f78a5d6b43b3..000000000000
+--- a/package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 5887ff0922a06d978d3271df9f01fcb04fadc75f Mon Sep 17 00:00:00 2001
+-From: Hoang Le <hoang.h.le@dektech.com.au>
+-Date: Wed, 13 Jun 2018 11:09:56 +0700
+-Subject: rdma: sync some IP headers with glibc
+-
+-In the commit 9a362cc71a45, new userspace header:
+-  (i.e rdma/rdma_user_cm.h -> linux/in6.h)
+-is included before the kernel space header:
+-  (i.e utils.h -> resolv.h -> netinet/in.h).
+-
+-This leads to unsynchronous some IP headers and compiler got failure
+-with error: redefinition of some structs IP.
+-
+-In this commit, just reorder this including to make them in-sync.
+-
+-Signed-off-by: Hoang Le <hoang.h.le@dektech.com.au>
+-Acked-by: Leon Romanovsky <leonro@mellanox.com>
+-Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from: https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=5887ff0922a06d978d3271df9f01fcb04fadc75f]
+----
+- rdma/rdma.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/rdma/rdma.h b/rdma/rdma.h
+-index fcaf9e6..d4b7ba1 100644
+---- a/rdma/rdma.h
+-+++ b/rdma/rdma.h
+-@@ -15,6 +15,7 @@
+- #include <string.h>
+- #include <errno.h>
+- #include <getopt.h>
+-+#include <netinet/in.h>
+- #include <libmnl/libmnl.h>
+- #include <rdma/rdma_netlink.h>
+- #include <rdma/rdma_user_cm.h>
+--- 
+-cgit v1.1
+-
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 48867f0a9952..672ea66d888f 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	6fa991b092315887775b9e47dc6a89af7ae09dd3ad4ccff754d055c566b4be6e	iproute2-4.17.0.tar.xz
++sha256	a9e6c70c95f513871c5e1f4e452c04fcb3c4d8a05be651bd794cd994a52daa45  iproute2-4.18.0.tar.xz
+ sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 48413401cd6e..b2bb33b8dc11 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--BTRFS_PROGS_VERSION = 4.16.1
-+BTRFS_PROGS_VERSION = 4.17.1
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
- BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
+-IPROUTE2_VERSION = 4.17.0
++IPROUTE2_VERSION = 4.18.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
 2.18.0
