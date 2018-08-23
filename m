@@ -1,243 +1,155 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 23 Aug 2018 06:42:33 +0300
-Subject: [Buildroot] [PATCH] libssh: fix cross compile with older cmake
-In-Reply-To: <20180822222719.GB9365@scaer>
-References: <9dce5a842ebb73937268fa66a3ee699785c5ae7c.1534975110.git.baruch@tkos.co.il>
- <20180822220952.GA9365@scaer> <20180822222719.GB9365@scaer>
-Message-ID: <87h8jlvjdi.fsf@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 23 Aug 2018 08:00:18 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-22
+Message-ID: <20180823060018.67F9820802@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hello,
 
-Yann E. MORIN writes:
-> On 2018-08-23 00:09 +0200, Yann E. MORIN spake thusly:
->> On 2018-08-23 00:58 +0300, Baruch Siach spake thusly:
->> > Old version of cmake break cross-compilation when FindThreads is used
->> > because of a try_run call. Add a workaround that avoids try_run.
->> >
->> > cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
->> >
->> > Should fix:
->> > http://autobuild.buildroot.net/results/8aa/8aa2bd894416a4508ca7140f8947ff46243f8b78/
->> > http://autobuild.buildroot.net/results/f2c/f2cc965bb134bf4fd9e625eb267b67c949c202fc/
->> >
->> > Cc: Scott Fan <fancp2007@gmail.com>
->> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
->> > ---
->> > Hi Peter, Yann,
->> >
->> > Can one of you test this fix on one of the affected autobuilders?
->> >
->> >   http://autobuild.buildroot.net/?reason=libssh-0.8.1
->>
->> My autobuilder does not have cmake installed, so will use or own
->> host-cmake, as can be seen in the failure on my autobuilder:
->>     http://autobuild.buildroot.net/results/f2c/f2cc965bb134bf4fd9e625eb267b67c949c202fc/build-end.log
->>
->>     [...] /home/buildroot/autobuild/run/instance-3/output/host/bin/cmake [...]
->>
->> So I guess you can test on a machine that does not have cmake
->> installed.
+Build statistics for 2018-08-22
+===============================
 
-Right. I assumed that Buildroot has the latest, newer than 3.10,
-cmake. But this is evidently not true. Commit log of 5b57ae7ad197
-(Revert "package/cmake: bump version to 3.10.0 and add license hash")
-seems to indicate that we'll have to wait a while for the next cmake
-version bump.
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  19 |   2 |   0 |  21 |
+   2018.05.x |  12 |   1 |   0 |  13 |
+      master | 156 |  21 |   2 | 179 |
+        next |  34 |  24 |   1 |  59 |
 
->> But I'll spin a test on my autobuilder in a moment, and report
->> back...
+Results for branch '2018.02.x'
+==============================
 
-Thanks.
+Classification of failures by reason
+------------------------------------
 
-> Here are the results of the configure step, using the config from my
-> autobuilder referenced above, and running 'make libssh-depends' first:
-
-You meant to say 'make libssh-configure' here, right?
-
-So I reproduced the build failure and the fix with host-cmake here as
-well.
-
-Thanks,
-baruch
-
-> ---8<---
->
-> $ make libssh-configure
-> umask 0022 && make -C /home/buildroot/dev/buildroot O=/home/buildroot/dev/O/. libssh-configure
-> libssh-0.7.5.tar.xz: OK (md5: d3fc864208bf607ad87cdee836894feb)
-> libssh-0.7.5.tar.xz: OK (sha256: 54e86dd5dc20e5367e58f3caab337ce37675f863f80df85b6b1614966a337095)
->>>> libssh 0.7.5 Extracting
-> xzcat /home/buildroot/src/libssh/libssh-0.7.5.tar.xz | tar --strip-components=1 -C /home/buildroot/dev/O/build/libssh-0.7.5   -xf -
->>>> libssh 0.7.5 Patching
->>>> libssh 0.7.5 Configuring
-> (mkdir -p /home/buildroot/dev/O/build/libssh-0.7.5//buildroot-build && cd /home/buildroot/dev/O/build/libssh-0.7.5//buildroot-build && rm -f CMakeCache.txt && PATH="/home/buildroot/dev/O/host/bin:/home/buildroot/dev/O/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"  /home/buildroot/dev/O/host/bin/cmake /home/buildroot/dev/O/build/libssh-0.7.5/ -DCMAKE_TOOLCHAIN_FILE="/home/buildroot/dev/O/host/share/buildroot/toolchainfile.cmake" -DCMAKE_INSTALL_PREFIX="/usr" -DCMAKE_COLOR_MAKEFILE=OFF -DBUILD_DOC=OFF -DBUILD_DOCS=OFF -DBUILD_EXAMPLE=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TEST=OFF -DBUILD_TESTS=OFF -DBUILD_TESTING=OFF -DBUILD_SHARED_LIBS=ON  -DWITH_STACK_PROTECTOR=OFF -DWITH_SERVER=OFF -DWITH_EXAMPLES=OFF -DTHREADS_PTHREAD_ARG=OFF -DWITH_ZLIB=ON -DWITH_GCRYPT=OFF )
-> -- The C compiler identification is GNU 6.4.0
-> -- Check for working C compiler: /home/buildroot/dev/O/host/bin/mipsel-linux-gcc
-> -- Check for working C compiler: /home/buildroot/dev/O/host/bin/mipsel-linux-gcc -- works
-> -- Detecting C compiler ABI info
-> -- Detecting C compiler ABI info - done
-> -- Detecting C compile features
-> -- Detecting C compile features - done
-> -- Performing Test WITH_FPIC
-> -- Performing Test WITH_FPIC - Success
-> -- Found ZLIB: /home/buildroot/dev/O/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/libz.so (found version "1.2.11")
-> -- Found OpenSSL: /home/buildroot/dev/O/host/mipsel-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so (found version "1.0.2p")
-> -- Looking for pthread.h
-> -- Looking for pthread.h - found
-> -- Looking for pthread_create
-> -- Looking for pthread_create - not found
-> -- Looking for pthread_create in pthreads
-> -- Looking for pthread_create in pthreads - not found
-> -- Looking for pthread_create in pthread
-> -- Looking for pthread_create in pthread - found
-> -- Found Threads: TRUE
-> -- Found PkgConfig: /home/buildroot/dev/O/host/bin/pkg-config (found version "0.28")
-> -- Checking for module 'heimdal-gssapi'
-> --   Package heimdal-gssapi was not found in the pkg-config search path.
-> Perhaps you should add the directory containing `heimdal-gssapi.pc'
-> to the PKG_CONFIG_PATH environment variable
-> Package 'heimdal-gssapi', required by 'world', not found
-> -- Could NOT find GSSAPI (missing:  GSSAPI_LIBRARIES GSSAPI_INCLUDE_DIR)
-> -- Could NOT find NaCl (missing:  NACL_LIBRARIES NACL_INCLUDE_DIRS)
-> -- Performing Test WITH_VISIBILITY_HIDDEN
-> -- Performing Test WITH_VISIBILITY_HIDDEN - Success
-> -- Looking for argp.h
-> -- Looking for argp.h - found
-> -- Looking for pty.h
-> -- Looking for pty.h - found
-> -- Looking for utmp.h
-> -- Looking for utmp.h - found
-> -- Looking for termios.h
-> -- Looking for termios.h - found
-> -- Looking for unistd.h
-> -- Looking for unistd.h - found
-> -- Looking for util.h
-> -- Looking for util.h - not found
-> -- Looking for libutil.h
-> -- Looking for libutil.h - not found
-> -- Looking for sys/time.h
-> -- Looking for sys/time.h - found
-> -- Looking for sys/param.h
-> -- Looking for sys/param.h - found
-> -- Looking for arpa/inet.h
-> -- Looking for arpa/inet.h - found
-> -- Looking for byteswap.h
-> -- Looking for byteswap.h - found
-> -- Looking for openssl/des.h
-> -- Looking for openssl/des.h - found
-> -- Looking for openssl/aes.h
-> -- Looking for openssl/aes.h - found
-> -- Looking for openssl/blowfish.h
-> -- Looking for openssl/blowfish.h - found
-> -- Looking for openssl/ecdh.h
-> -- Looking for openssl/ecdh.h - found
-> -- Looking for openssl/ec.h
-> -- Looking for openssl/ec.h - found
-> -- Looking for openssl/ecdsa.h
-> -- Looking for openssl/ecdsa.h - found
-> -- Looking for isblank
-> -- Looking for isblank - found
-> -- Looking for strncpy
-> -- Looking for strncpy - found
-> -- Looking for strtoull
-> -- Looking for strtoull - found
-> -- Looking for vsnprintf
-> -- Looking for vsnprintf - found
-> -- Looking for snprintf
-> -- Looking for snprintf - found
-> -- Looking for poll
-> -- Looking for poll - found
-> -- Looking for select
-> -- Looking for select - found
-> -- Looking for getaddrinfo
-> -- Looking for getaddrinfo - found
-> -- Looking for ntohll
-> -- Looking for ntohll - not found
-> -- Looking for htonll
-> -- Looking for htonll - not found
-> -- Looking for clock_gettime in rt
-> -- Looking for clock_gettime in rt - found
-> -- Looking for forkpty in util
-> -- Looking for forkpty in util - found
-> -- Looking for cfmakeraw
-> -- Looking for cfmakeraw - found
-> -- Looking for __strtoull
-> -- Looking for __strtoull - not found
-> -- Performing Test HAVE_GCC_THREAD_LOCAL_STORAGE
-> -- Performing Test HAVE_GCC_THREAD_LOCAL_STORAGE - Success
-> -- Performing Test HAVE_MSC_THREAD_LOCAL_STORAGE
-> -- Performing Test HAVE_MSC_THREAD_LOCAL_STORAGE - Failed
-> -- Performing Test HAVE_GCC_VOLATILE_MEMORY_PROTECTION
-> -- Performing Test HAVE_GCC_VOLATILE_MEMORY_PROTECTION - Success
-> -- Performing Test HAVE_GCC_NARG_MACRO
-> -- Performing Test HAVE_GCC_NARG_MACRO - Success
-> -- Performing Test HAVE_COMPILER__FUNC__
-> -- Performing Test HAVE_COMPILER__FUNC__ - Success
-> -- Performing Test HAVE_COMPILER__FUNCTION__
-> -- Performing Test HAVE_COMPILER__FUNCTION__ - Failed
-> -- Check if the system is big endian
-> -- Searching 16 bit integer
-> -- Looking for sys/types.h
-> -- Looking for sys/types.h - found
-> -- Looking for stdint.h
-> -- Looking for stdint.h - found
-> -- Looking for stddef.h
-> -- Looking for stddef.h - found
-> -- Check size of unsigned short
-> -- Check size of unsigned short - done
-> -- Using unsigned short
-> -- Check if the system is big endian - little endian
-> -- Could NOT find Doxygen (missing:  DOXYGEN_EXECUTABLE)
-> -- Threads_FOUND=TRUE
-> -- threads library: Threads_FOUND=TRUE
-> -- libssh_threads_SRCS=pthread.c
-> -- ********************************************
-> -- ********** libssh build options : **********
-> -- zlib support: ON
-> -- libgcrypt support: OFF
-> -- libnacl support: OFF
-> -- SSH-1 support: OFF
-> -- SFTP support: ON
-> -- Server support : OFF
-> -- GSSAPI support : 0
-> -- Pcap debugging support : ON
-> -- With static library: OFF
-> -- Unit testing: OFF
-> -- Client code Unit testing: OFF
-> -- Public API documentation generation
-> -- Benchmarks: OFF
-> -- ********************************************
-> -- Configuring done
-> -- Generating done
-> CMake Warning:
->   Manually-specified variables were not used by the project:
->
->     BUILD_DOC
->     BUILD_DOCS
->     BUILD_EXAMPLE
->     BUILD_EXAMPLES
->     BUILD_TEST
->     BUILD_TESTING
->     BUILD_TESTS
->     THREADS_PTHREAD_ARG
->
->
-> -- Build files have been written to: /home/buildroot/dev/O/build/libssh-0.7.5/buildroot-build
->
-> ---8<---
->
-> The build step was then successfull, by the way...
->
-> Regards,
-> Yann E. MORIN.
+                 mplayer-1.3.0 | 1 
+                     php-7.2.5 | 1 
 
 
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Detail of failures
+------------------
+
+   powerpc64 |                  mplayer-1.3.0 | NOK | http://autobuild.buildroot.net/results/e4fb1cdbdf440bc29f798e812ec0632ed65f143b |     
+         arm |                      php-7.2.5 | NOK | http://autobuild.buildroot.net/results/a103f7abc262bb2f494ae05ebb7424b20cfef247 | ORPH
+
+Results for branch '2018.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+            qt5location-5.10.1 | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |             qt5location-5.10.1 | NOK | http://autobuild.buildroot.net/results/61051dbd0c77a3be2752908de0d96ca300384b83 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                     php-7.2.9 | 9 
+               aircrack-ng-1.3 | 1 
+                host-libsodium | 1 
+                 host-rauc-0.4 | 1 
+                libmpeg2-0.5.1 | 1 
+            micropython-v1.9.3 | 1 
+               mono-5.12.0.226 | 1 
+          openpowerlink-V2.7.0 | 1 
+                    owfs-3.2p1 | 1 
+           python-numpy-1.13.3 | 1 
+                      qt-4.8.7 | 1 
+                qt5base-5.11.1 | 1 
+                        uhttpd | 1 
+              webkitgtk-2.18.6 | 1 
+              wireshark-2.2.16 | 1 
+
+
+Detail of failures
+------------------
+
+        i586 |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/b7362b69435e9ef6fb2aedc50743e88dbd7a5c72 |     
+         arc |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/f75a1fe41b75942bfb8fea1e8c77de373dd4a21c |     
+         arm |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/5c8b07e5fc44ea2a32c4f0ec0156a462a6fbc864 |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/ad4f1be6d0609ca23b75b8629631e0cebca9a1b7 | ORPH
+         arc |             micropython-v1.9.3 | NOK | http://autobuild.buildroot.net/results/9fc52ecce13e7a9ebb374a308ddc098e5db43a89 |     
+      x86_64 |                mono-5.12.0.226 | NOK | http://autobuild.buildroot.net/results/7b5dda59d2bb0a37075edda7a8b745f255ae9c98 |     
+      x86_64 |           openpowerlink-V2.7.0 | NOK | http://autobuild.buildroot.net/results/8fce53c8ee58b63472c944c6f5b0726b7248e4ba |     
+      x86_64 |                     owfs-3.2p1 | NOK | http://autobuild.buildroot.net/results/bf893f1ecabb9ecadceb5d56eaa5e4869832e330 |     
+microblazeel |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/2fdf44b6a69275797c9cedc528183d146d454c98 | ORPH
+         arm |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/01d8cc899e2747829f4cd9ab9bfb5f9b349f8249 | ORPH
+         arm |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/3751fda19010097a5ea06edaa42a8143b9feac46 | ORPH
+         arm |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/56b989d6efe522a12173d8cd1aecb0898f122fd3 | ORPH
+         arm |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/8bed8eecac2b98a0b75e3a29ebffeb59012fca5f | ORPH
+         arc |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/9a0651da5bc92e684506477fce6b129a48594f83 | ORPH
+      xtensa |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/e80efaceaa936d37de45499bf8b696cdc89b06ef | ORPH
+    mips64el |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/3d39ce0ae7df184673c8f4bb21b6bca538cb2306 | ORPH
+ powerpc64le |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/d20c4fce931fe7773be6f93bac6aa18ac4e6a1c7 | ORPH
+     aarch64 |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/e7b564b5a4ab780fc6110e1780f8e447abc5072d |     
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/a8c1175ae924b40577d665abc291db6660c10543 | ORPH
+  aarch64_be |                 qt5base-5.11.1 | NOK | http://autobuild.buildroot.net/results/3bc369d31a57e1dc27b2e9008f63326cf2810021 |     
+    mips64el |                         uhttpd | TIM | http://autobuild.buildroot.net/results/d11e1c27ff02d14e49d721f233a6b3d34225a7e1 |     
+      mipsel |               webkitgtk-2.18.6 | NOK | http://autobuild.buildroot.net/results/87912384185461d57a98f52d8e25628831ad77ad |     
+     powerpc |               wireshark-2.2.16 | NOK | http://autobuild.buildroot.net/results/7035fa8b906d13104dbcb99730e6caa9b701c942 | ORPH
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+            python-pyyaml-3.12 | 4 
+                   botan-2.7.0 | 3 
+             python-lxml-4.0.0 | 3 
+                       unknown | 3 
+                    ncmpc-0.30 | 2 
+               target-finalize | 2 
+               aircrack-ng-1.3 | 1 
+               asterisk-14.7.6 | 1 
+               azure-iot-sdk-c | 1 
+                  boost-1.68.0 | 1 
+       host-btrfs-progs-4.16.1 | 1 
+                 lvm2-2.02.180 | 1 
+           qt5serialbus-5.11.1 | 1 
+                  zeromq-4.2.5 | 1 
+
+
+Detail of failures
+------------------
+
+        i586 |                aircrack-ng-1.3 | NOK | http://autobuild.buildroot.net/results/425a15e7a8adbf158ee483b90523b974a225a35b |     
+     sparc64 |                asterisk-14.7.6 | NOK | http://autobuild.buildroot.net/results/1c266acc0bb0518219979e8e9922f31150716118 |     
+      x86_64 |                azure-iot-sdk-c | TIM | http://autobuild.buildroot.net/results/8291f4633d03145365b69feabdab9d414140202a |     
+         arm |                   boost-1.68.0 | NOK | http://autobuild.buildroot.net/results/f5e900e9b0368f9ba690e1f5851c047647d54078 |     
+         arm |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/b5c4d19e54f052803143a58755c7a556cf7a3564 |     
+        m68k |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/3930f69e031c6b94f824954061280d4dd21fc492 |     
+         arm |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/0779a52c5090278975676cd5ff917c854f63b70c |     
+         arm |        host-btrfs-progs-4.16.1 | NOK | http://autobuild.buildroot.net/results/802dd4d7eec058c2eb23e033ed3a093b110f4eda | ORPH
+         arc |                  lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/cb34f35eb4267d0a9f7872232d6406b5d1f0eef0 | ORPH
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/3d79505d68d13e8d501ded2f9b8ac6bd88969698 |     
+         arm |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/991273d2a919dd777e5dd1d609f8ac0be726fe6a |     
+        i586 |              python-lxml-4.0.0 | NOK | http://autobuild.buildroot.net/results/9342987c0fe0b3e4fc69a6039e38a6aff4d7ddf5 |     
+     powerpc |              python-lxml-4.0.0 | NOK | http://autobuild.buildroot.net/results/32f1f82815d08177195b5460a0f61ffc2c54be4c |     
+     powerpc |              python-lxml-4.0.0 | NOK | http://autobuild.buildroot.net/results/5d7a31d5a72c89f26072e656692fe73150bf490d |     
+         arm |             python-pyyaml-3.12 | NOK | http://autobuild.buildroot.net/results/4ad85a67b2a6f81344cbeaa53b3f4ab9b8d3b7dd |     
+microblazeel |             python-pyyaml-3.12 | NOK | http://autobuild.buildroot.net/results/cbc77fc2ac8cca6de73304b9c7a40bf5198098aa |     
+         arm |             python-pyyaml-3.12 | NOK | http://autobuild.buildroot.net/results/134de8ab9f42f0c93b988b719da1248f8334770e |     
+     sparc64 |             python-pyyaml-3.12 | NOK | http://autobuild.buildroot.net/results/4c7a276c30842adcdee0bbd74e1537ac8a66e6f7 |     
+    mips64el |            qt5serialbus-5.11.1 | NOK | http://autobuild.buildroot.net/results/163b24776baafe4282a23928bbd930b90fa748a5 |     
+         arm |                target-finalize | NOK | http://autobuild.buildroot.net/results/77e23f621c9e06b3cb28782f8e94584b51150749 |     
+      xtensa |                target-finalize | NOK | http://autobuild.buildroot.net/results/69573fa22ce337cbd2fb1677cfea167dbe2cd2f5 |     
+     powerpc |                        unknown | NOK | http://autobuild.buildroot.net/results/798a15a9a064d476927bb49bf534c427e9119c4e |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/be43983767e94ab5c64c3cb3de467840fd6635d2 |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/7244c23a0fbcf27547b5ea639d88033b5a7d9f39 |     
+        m68k |                   zeromq-4.2.5 | NOK | http://autobuild.buildroot.net/results/a42fdf0b990e38e49f423fb40708d158e823a8db |     
+
+
+-- 
+http://autobuild.buildroot.net
