@@ -1,41 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:05:50 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] docs/manual: update host
- gcc minimum required version
-Message-ID: <20180823215836.7CDF38E4C6@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:06:15 +0200
+Subject: [Buildroot] [PATCH] docs/manual: update host gcc minimum
+ required version
+In-Reply-To: <9d4d4477b77d5fea865f0b0e76982ac483665ac2.1533464011.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Sun, 5 Aug 2018 13:13:31 +0300")
+References: <9d4d4477b77d5fea865f0b0e76982ac483665ac2.1533464011.git.baruch@tkos.co.il>
+Message-ID: <87o9dspwko.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6059e4d6c5fbf4bf4163c9e378165d704c2dc9ea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-The oldest gcc that is known to work with current Buildroot is that of
-RHEL 6, version 4.4.
+ > The oldest gcc that is known to work with current Buildroot is that of
+ > RHEL 6, version 4.4.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 27797caf76b58aaa9ca0c4dc1044b328dbc6e829)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/prerequisite.txt | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/docs/manual/prerequisite.txt b/docs/manual/prerequisite.txt
-index 110fab41fd..66e1b88f16 100644
---- a/docs/manual/prerequisite.txt
-+++ b/docs/manual/prerequisite.txt
-@@ -23,8 +23,8 @@ between distributions).
- ** +make+ (version 3.81 or any later)
- ** +binutils+
- ** +build-essential+ (only for Debian based systems)
--** +gcc+ (version 2.95 or any later)
--** `g++` (version 2.95 or any later)
-+** +gcc+ (version 4.4 or any later)
-+** `g++` (version 4.4 or any later)
- ** +bash+
- ** +patch+
- ** +gzip+
+Committed to 2018.02.x and 2018.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
