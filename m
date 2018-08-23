@@ -1,29 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 22:42:30 +0200
-Subject: [Buildroot] [PATCH] stress-ng: fix build with kernel headers
- v3.9
-In-Reply-To: <0f6a3acdfa31f852295e2f3be3701fdafc0f7256.1530555337.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Mon, 2 Jul 2018 21:15:37 +0300")
-References: <0f6a3acdfa31f852295e2f3be3701fdafc0f7256.1530555337.git.baruch@tkos.co.il>
-Message-ID: <87o9dszufd.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 23 Aug 2018 22:49:23 +0200
+Subject: [Buildroot] [PATCH 1/2] i2c-tools: include LGPL-2.1+ license
+ for libi2c
+In-Reply-To: <1535055605-8974-2-git-send-email-brad@nextdimension.cc>
+References: <1535055605-8974-1-git-send-email-brad@nextdimension.cc>
+ <1535055605-8974-2-git-send-email-brad@nextdimension.cc>
+Message-ID: <20180823204923.GH9365@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+Brad, All,
 
- > Add a patch correcting the kernel headers version test macro.
- > Fixes:
- > http://autobuild.buildroot.net/results/cbf/cbfb80117840bddd5712bcda3caeaaff61745b0b/
- > http://autobuild.buildroot.net/results/649/64941ac5b7dcd9c100bdc47cdfe73cce5f23c3d8/
- > http://autobuild.buildroot.net/results/741/741f5881d3cb745d1003ede3f762c20eb72de0b5/
+On 2018-08-23 15:20 -0500, Brad Love spake thusly:
+> Extend i2c-tools SPDX identifiers to include the library license.
+> 
+> The ic2-tools readme states:
+> 
+> LICENSE
+> 
+> Check the documentation of individual tools for licensing information.
+> The library is released under the LGPL version 2.1 or later, while most
+> tools are released under the GPL version 2 or later, but there are a few
+> exceptions.
+> 
+> 
+> Signed-off-by: Brad Love <brad@nextdimension.cc>
 
- > Cc: Romain Naour <romain.naour@gmail.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Committed to 2018.02.x and 2018.05.x, thanks.
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/i2c-tools/i2c-tools.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+> index db26647..a346698 100644
+> --- a/package/i2c-tools/i2c-tools.mk
+> +++ b/package/i2c-tools/i2c-tools.mk
+> @@ -7,7 +7,7 @@
+>  I2C_TOOLS_VERSION = 4.0
+>  I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
+>  I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
+> -I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus)
+> +I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
+>  I2C_TOOLS_LICENSE_FILES = COPYING
+>  I2C_TOOLS_MAKE_OPTS = EXTRA=eeprog
+>  
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
