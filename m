@@ -1,150 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:39:52 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/samba4: disable
- build of manpages and documentation
-Message-ID: <20180824063612.852818E4BA@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:39:39 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/samba4: reformat
+ patch 0002 as Git-formatted patch
+Message-ID: <20180824063612.716758E4BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1dafc11c211061ce9d00caadea8962a6f6e3b55
+commit: https://git.buildroot.net/buildroot/commit/?id=f4579f94e850c211fb59558d9299a620f26bcd77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Fixes
-http://autobuild.buildroot.net/results/3f214cbb1fe2dc2c2cbfb630032e13eba81c1b5a/
-and many others
+This commit reformats
+0002-patch-source3__libads__kerberos_keytab.c.patch as a Git-formatted
+patch.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: reformat patch as Git formatted]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit f38c8d7ed64df008b3a36237d237082eb6ff8995)
+(cherry picked from commit 90b26f87640c0ebff53a304b15d168b1aca738dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sable-build-of-manpages-and-documentation.patch | 116 +++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+ ...mpilation-of-Samba-4.7.4-with-disabled-ADS.patch} | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch b/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
-new file mode 100644
-index 0000000000..41a06801c7
---- /dev/null
-+++ b/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
-@@ -0,0 +1,116 @@
-+From 3cd608170b99492bdd5fe3b7b8e7db61af199845 Mon Sep 17 00:00:00 2001
+diff --git a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
+similarity index 58%
+rename from package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
+rename to package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
+index 1213659c8d..45d3050a39 100644
+--- a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
++++ b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
+@@ -1,5 +1,7 @@
+-From: Timur I. Bakeyev <timur@freebsd.org>
+-Subject: Fix compilation of Samba 4.7.4 with disabled ADS
++From da2f2cf8e7a1dfcb661b707e4649cec1e8a0e79c Mon Sep 17 00:00:00 2001
 +From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Thu, 9 Aug 2018 09:59:06 +0200
-+Subject: [PATCH] Disable build of manpages and documentation
-+
-+This patch fixes a bug described in an upstream bug report
-+https://bugzilla.samba.org/show_bug.cgi?id=9515
-+which was closed as WONTFIX by disabling the build of manpages and
-+documentation.
-+
-+If installed on the host, samba4 uses the docbook-xsl package to build
-+parts of the documentation. This package is broken, on Debian for
-+example the bug reported to samba4 was fixed in the docbook-xsl package:
-+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=765567
-+
-+Since we do not provide a host version of docbook-xsl we need to disable
-+the build of manpages and documentation.
-+
-+Patch was downloaded from
-+https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/network/samba/patches/samba-950-no-man.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Thu, 9 Aug 2018 10:03:06 +0200
++Subject: [PATCH] Fix compilation of Samba 4.7.4 with disabled ADS
+ 
+ Downloaded from upstream mailinglist
+ https://lists.samba.org/archive/samba-technical/2017-December/124629.html
+@@ -8,9 +10,14 @@ Patch originates from FreeBSD:
+ https://svnweb.freebsd.org/ports/head/net/samba47/files/patch-source3__libads__kerberos_keytab.c?revision=457119&view=markup
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ buildtools/wafsamba/wafsamba.py | 10 +++++-----
-+ docs-xml/wscript_build          | 34 +++++++++++++++++-----------------
-+ source4/scripting/wscript_build |  4 ++--
-+ 3 files changed, 24 insertions(+), 24 deletions(-)
-+
-+diff --git a/buildtools/wafsamba/wafsamba.py b/buildtools/wafsamba/wafsamba.py
-+index 4bb19d070e2..a255d841111 100644
-+--- a/buildtools/wafsamba/wafsamba.py
-++++ b/buildtools/wafsamba/wafsamba.py
-+@@ -335,9 +335,9 @@ def SAMBA_LIBRARY(bld, libname, source,
-+         else:
-+             bld.PKG_CONFIG_FILES(pc_files, vnum=vnum)
-+ 
-+-    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
-+-        bld.env['XSLTPROC_MANPAGES']):
-+-        bld.MANPAGES(manpages, install)
-++#    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
-++#        bld.env['XSLTPROC_MANPAGES']):
-++#        bld.MANPAGES(manpages, install)
-+ 
-+ 
-+ Build.BuildContext.SAMBA_LIBRARY = SAMBA_LIBRARY
-+@@ -442,8 +442,8 @@ def SAMBA_BINARY(bld, binname, source,
-+         samba_ldflags  = pie_ldflags
-+         )
-+ 
-+-    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-+-        bld.MANPAGES(manpages, install)
-++#    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-++#        bld.MANPAGES(manpages, install)
-+ 
-+ Build.BuildContext.SAMBA_BINARY = SAMBA_BINARY
-+ 
-+diff --git a/docs-xml/wscript_build b/docs-xml/wscript_build
-+index 954c62a29bc..1169158fd57 100644
-+--- a/docs-xml/wscript_build
-++++ b/docs-xml/wscript_build
-+@@ -147,20 +147,20 @@ bld.SAMBA_GENERATOR(parameter_all,
-+                     rule=smbdotconf_generate_parameter_list,
-+                     dep_vars=bld.dynconfig_varnames())
-+ 
-+-def SMBDOTCONF_MANPAGE(bld, target):
-+-    ''' assemble and build smb.conf.5 manual page'''
-+-    bld.SAMBAMANPAGES(target, parameter_all)
-+-
-+-if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
-+-
-+-    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
-+-    bld.SAMBAMANPAGES(manpages)
-+-
-+-    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
-+-        bld.SAMBAMANPAGES(pam_winbind_manpages)
-+-
-+-    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
-+-        bld.SAMBAMANPAGES(krb5_locator_manpages)
-+-
-+-    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
-+-        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
-++#def SMBDOTCONF_MANPAGE(bld, target):
-++#    ''' assemble and build smb.conf.5 manual page'''
-++#    bld.SAMBAMANPAGES(target, parameter_all)
-++#
-++#if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
-++#
-++#    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
-++#    bld.SAMBAMANPAGES(manpages)
-++#
-++#    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
-++#        bld.SAMBAMANPAGES(pam_winbind_manpages)
-++#
-++#    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
-++#        bld.SAMBAMANPAGES(krb5_locator_manpages)
-++#
-++#    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
-++#        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
-+diff --git a/source4/scripting/wscript_build b/source4/scripting/wscript_build
-+index 2f53cce12b7..9841ae0a116 100644
-+--- a/source4/scripting/wscript_build
-++++ b/source4/scripting/wscript_build
-+@@ -12,8 +12,8 @@ if sbin_files:
-+     bld.INSTALL_FILES('${SBINDIR}',
-+                       sbin_files,
-+                       chmod=MODE_755, python_fixup=True, flat=True)
-+-    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-+-        bld.MANPAGES(man_files, True)
-++#    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-++#        bld.MANPAGES(man_files, True)
-+ 
-+ if bld.CONFIG_SET('AD_DC_BUILD_IS_ENABLED'):
-+     bld.INSTALL_FILES('${BINDIR}',
++ source3/libads/kerberos_keytab.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+---- a/source3/libads/kerberos_keytab.c.orig	2017-12-23 14:23:53.247467000 +0100
+-+++ b/source3/libads/kerberos_keytab.c	2017-12-23 18:57:07.135340000 +0100
++diff --git a/source3/libads/kerberos_keytab.c b/source3/libads/kerberos_keytab.c
++index 37ac7ba985e..71250962090 100644
++--- a/source3/libads/kerberos_keytab.c
+++++ b/source3/libads/kerberos_keytab.c
+ @@ -32,8 +32,6 @@
+  
+  #ifdef HAVE_KRB5
+@@ -20,7 +27,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  /* This MAX_NAME_LEN is a constant defined in krb5.h */
+  #ifndef MAX_KEYTAB_NAME_LEN
+  #define MAX_KEYTAB_NAME_LEN 1100
+-@@ -85,6 +83,8 @@
++@@ -85,6 +83,8 @@ out:
+  	return ret;
+  }
+  
+@@ -29,3 +36,6 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  /**********************************************************************
+   Adds a single service principal, i.e. 'host' to the system keytab
+  ***********************************************************************/
 +-- 
 +2.14.4
 +
