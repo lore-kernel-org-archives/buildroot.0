@@ -1,43 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Aug 2018 14:02:00 +0200
-Subject: [Buildroot] [git commit] linux-headers: bump 4.{4, 9, 14,
- 17}.x series
-Message-ID: <20180823115421.DE8F18E31C@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 23 Aug 2018 15:38:17 +0300
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.17.1
+Message-ID: <8c998542bd25e65a58ebe3732dd74a4b7c434e2a.1535027897.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59af8a3a223d2d5fdd6496ef59b79be38d957df5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The configure script now detects toolchain support for the -std=gnu90
+flag. This fixes build with gcc older than 4.5.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Should fix:
+http://autobuild.buildroot.net/results/802/802dd4d7eec058c2eb23e033ed3a093b110f4eda/
+
+Cc: Robert J. Heywood <robert.heywood@codethink.co.uk>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/linux-headers/Config.in.host | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 783cc7ea3a..adac3f6398 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -258,14 +258,14 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.150"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.122"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.151"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.123"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.65"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.66"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
--	default "4.17.17"	if BR2_KERNEL_HEADERS_4_17
-+	default "4.17.18"	if BR2_KERNEL_HEADERS_4_17
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+The autobuilders only show the failure only on next, because it adds
+host-btrfs-progs that builds using host gcc 4.4. If we also care about
+target gcc older than 4.5 then this should be applied to master. But I'm
+not sure it is worth it so close to release.
+---
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 71793d1c687d..07d55ec3325b 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 013403fb67b17975b21408fa9eb7523b0ecf94f84f8a4397cf972e8e254d2246  btrfs-progs-v4.16.1.tar.xz
++sha256 bf0b34f1538c0b6e88f959937b0419678cadbf2ba7044336dcbfb2bcdc28cd74  btrfs-progs-v4.17.1.tar.xz
+ # Locally computed
+ sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+ sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 33a6be324fd0..585dcf364cbe 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BTRFS_PROGS_VERSION = 4.16.1
++BTRFS_PROGS_VERSION = 4.17.1
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
+-- 
+2.18.0
