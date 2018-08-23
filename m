@@ -1,48 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 23 Aug 2018 13:23:57 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: vulkan with x11 needs dri3
-In-Reply-To: <20180823102029.GE9365@scaer>
-References: <20180823090827.4003-1-yann.morin.1998@free.fr>
- <20180823121152.30d51975@windsurf> <20180823102029.GE9365@scaer>
-Message-ID: <20180823132357.1dd3a730@windsurf>
+Date: Thu, 23 Aug 2018 12:14:38 +0200
+Subject: [Buildroot] [git commit] mjpegtools: fix build on powerpc without
+ altivec
+Message-ID: <20180823113130.3EC7C8E30C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0901b09a699ab3f54c193e3349d925b436c64642
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 23 Aug 2018 12:20:29 +0200, Yann E. MORIN wrote:
+mpjegtools fails to build on powerpc without altivec:
 
-> > Doesn't this requires a bit more rework to be clean ?  
-> 
-> Yes, I'll have a further look by the end of the day. I've marked it as
-> Changes Requested.
-> 
-> To be hnest, the whole of mesa3d may need a complete overhaul I think.
-> Theree dubious constructs here and there, like:
-> 
->     config BR2_PACKAGE_MESA3D_DRI_DRIVER
->         bool
->         select BR2_PACKAGE_MESA3D_DRIVER
->         select BR2_PACKAGE_XLIB_LIBXSHMFENCE if \
->                 (BR2_PACKAGE_XORG7 && BR2_TOOLCHAIN_HAS_SYNC_4)
-> 
-> So now I wonder if we shouldn't have something akin to this for Vulkan.
-> 
-> Really, mesa3d has become quite a nest of snakes. It's hard to follow
-> and understand the dependencies between each config options...
+build_sub44_mests.c: In function 'build_sub44_mests_altivec':
+build_sub44_mests.c:268:9: internal compiler error: Segmentation fault
+     vr1 = vec_ld(rowstride, (unsigned char*)s44blk);
 
-Yes, the mesa3d package is quite complicated. But I believe this (at
-least partially) reflects that the mesa3d configuration itself is quite
-complicated. There are lots of drivers, all having special dependencies.
+It seems mpjegtools is wrongly detecting altivec support:
+configure:   - PowerPC Optimizations:
+configure:     - AltiVec enabled             : true
 
-So, perhaps the Buildroot packaging can be improved (it would be
-nice!), but it will remain anyway a complex package.
+Fix this by adding BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT and setting
+--enable-simd-accel / --disable-simd-accel
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.net/results/c9464712f43efb8954fd2e5460126ad193660353
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mjpegtools/Config.in     | 5 +++++
+ package/mjpegtools/mjpegtools.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
+
+diff --git a/package/mjpegtools/Config.in b/package/mjpegtools/Config.in
+index c486361a87..968f9e7d65 100644
+--- a/package/mjpegtools/Config.in
++++ b/package/mjpegtools/Config.in
+@@ -12,6 +12,11 @@ config BR2_PACKAGE_MJPEGTOOLS
+ 
+ 	  http://mjpeg.sourceforge.net
+ 
++config BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT
++	bool
++	default y if BR2_X86_CPU_HAS_MMX
++	default y if BR2_POWERPC_CPU_HAS_ALTIVEC
++
+ comment "mjpegtools needs a toolchain w/ C++, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
+index c7392fa2b3..14713c868e 100644
+--- a/package/mjpegtools/mjpegtools.mk
++++ b/package/mjpegtools/mjpegtools.mk
+@@ -10,6 +10,12 @@ MJPEGTOOLS_DEPENDENCIES = host-pkgconf jpeg
+ MJPEGTOOLS_LICENSE = GPL-2.0+
+ MJPEGTOOLS_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_MJPEGTOOLS_SIMD_SUPPORT),y)
++MJPEGTOOLS_CONF_OPTS += --enable-simd-accel
++else
++MJPEGTOOLS_CONF_OPTS += --disable-simd-accel
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ MJPEGTOOLS_CONF_OPTS += --with-libpng
+ MJPEGTOOLS_DEPENDENCIES += libpng
