@@ -1,59 +1,239 @@
 From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Thu, 23 Aug 2018 17:19:29 +0100
-Subject: [Buildroot] [PATCH v2 2/3] linux: add hash file
+Date: Thu, 23 Aug 2018 17:19:30 +0100
+Subject: [Buildroot] [PATCH v2 3/3] package/linux-headers: add support for
+ custom headers
 In-Reply-To: <20180823161930.18461-1-mark.corbin@embecosm.com>
 References: <20180823161930.18461-1-mark.corbin@embecosm.com>
-Message-ID: <20180823161930.18461-2-mark.corbin@embecosm.com>
+Message-ID: <20180823161930.18461-3-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added a hash file for the Linux kernel. Hashes have been copied
-from the appropriate sha256sums.asc files on kernel.org.
-The Linux hash file is also shared with the linux-headers package
-via a symbolic link.
+Add support for building toolchains against custom headers. Allows
+the selection of a manual version, custom tarball or custom git
+repository for the kernel headers. This enables toolchains to be
+built against custom kernel headers without having to build a full
+kernel.
+
+This is particularly useful for new architectures, such as RISC-V
+where updated kernel headers may not have made it into the mainline
+kernel yet.
 
 Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 ---
-Changes v1 -> v2:
-  - use sha256 hashes from kernel.org instead of calculating values
-    locally (Baruch)
----
- linux/linux.hash                         | 14 ++++++++++++++
- package/linux-headers/linux-headers.hash |  1 +
- 2 files changed, 15 insertions(+)
- create mode 100644 linux/linux.hash
- create mode 120000 package/linux-headers/linux-headers.hash
+ package/linux-headers/Config.in.host   | 40 ++++++++++-
+ package/linux-headers/linux-headers.mk | 94 +++++++++++++++-----------
+ 2 files changed, 93 insertions(+), 41 deletions(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-new file mode 100644
-index 0000000000..5691d7f8af
---- /dev/null
-+++ b/linux/linux.hash
-@@ -0,0 +1,14 @@
-+# From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
-+sha256 4d8b5e3772771b60c9c6d875af8e59fbcd34d4291827c110501611da09b79b0f  linux-4.17.18.tar.xz
-+sha256 41026d713ba4f7a5e9d514b876ce4ed28a1d993c0c58b42b2a2597d6a0e83021  linux-4.16.18.tar.xz
-+sha256 3f89cd717e0d497ba4818e145a33002f4c15032e355c1ad6d3d7f31f122caf41  linux-4.15.18.tar.xz
-+sha256 a38061ca4c864d11a72beb3dc5918a99f13372fe9ee35508d004fdfabd460413  linux-4.14.66.tar.xz
-+sha256 b025f3fc40801aff1a2d3438d50be56502eb5bf51a7094e85b5205fa71bec731  linux-4.13.16.tar.xz
-+sha256 86ab3f45b1aff5f8a9ec72c232bccf5a314edb2a09fb8664c5902b03edacfd27  linux-4.12.14.tar.xz
-+sha256 2e37d4e18094f66b8bd632cac0a3c08a39a14a1ada4a1c78a5e336c4d3036192  linux-4.11.12.tar.xz
-+sha256 1ae7056b5b6a3fb653b065503afeb514afc870e103b0f857d0d13a6d06fd66ee  linux-4.10.17.tar.xz
-+sha256 8d12ceab9f8cbfd0555c881b35ed4384cf3ea8e223d894c030b04786005e5071  linux-4.9.123.tar.xz
-+sha256 5fea8c318626de61e99869eb6dde77e8af2419c5cf6f346280da4be1ab8089e8  linux-4.4.151.tar.xz
-+sha256 6ad9389e55e0ea57768eae173747058a4487fa3630e10a7999cfec9f945e559c  linux-4.1.52.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/v3.x/sha256sums.asc
-+sha256 ad96d797571496c969aa71bf5d08e9d2a8c84458090d29a120f1b2981185a99e  linux-3.2.102.tar.xz
-diff --git a/package/linux-headers/linux-headers.hash b/package/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..04970e97c1
---- /dev/null
-+++ b/package/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../../linux/linux.hash
-\ No newline at end of file
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 5c20c997f9..f8f78f90d1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -86,6 +86,23 @@ config BR2_KERNEL_HEADERS_VERSION
+ 	  URL at kernel.org. Instead, select "Custom tarball" and
+ 	  specify the right URL directly.
+ 
++config BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++	bool "Custom tarball"
++	help
++	  This option allows you to specify a URL pointing to a kernel
++	  source tarball. This URL can use any protocol recognized by
++	  Buildroot, like http://, ftp://, file:// or scp://.
++
++	  When pointing to a local tarball using file://, you may want
++	  to use a make variable like $(TOPDIR) to reference the root of
++	  the Buildroot tree.
++
++config BR2_KERNEL_HEADERS_CUSTOM_GIT
++	bool "Custom Git repository"
++	help
++	  This option allows Buildroot to get the Linux kernel source
++	  code from a Git repository.
++
+ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_VERSION
+@@ -95,9 +112,27 @@ config BR2_DEFAULT_KERNEL_VERSION
+ 	  Specify the version you want to use.
+ 	  E.G.: 3.6.10
+ 
++config BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION
++	string "URL of custom kernel tarball"
++	depends on BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++
++if BR2_KERNEL_HEADERS_CUSTOM_GIT
++
++config BR2_KERNEL_HEADERS_CUSTOM_REPO_URL
++	string "URL of custom repository"
++
++config BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION
++	string "Custom repository version"
++	help
++	  Revision to use in the typical format used by
++	  Git/Mercurial/Subversion E.G. a sha id, a tag, branch, ..
++
++endif
++
+ choice
+ 	bool "Custom kernel headers series"
+-	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL
++	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
++		   BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
+ 	help
+ 	  Specify the kernel headers series you manually selected,
+ 	  above.
+@@ -277,3 +312,6 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+ 	default "4.17.18"	if BR2_KERNEL_HEADERS_4_17
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
++	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++		if BR2_KERNEL_HEADERS_CUSTOM_GIT
+diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+index 954c6b7978..6bc60d8d74 100644
+--- a/package/linux-headers/linux-headers.mk
++++ b/package/linux-headers/linux-headers.mk
+@@ -7,27 +7,50 @@
+ # This package is used to provide Linux kernel headers for the
+ # internal toolchain backend.
+ 
++# Set variables depending on whether we are using headers from a kernel
++# build or a standalone header package.
+ ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+-
++LINUX_HEADERS_CUSTOM_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL))
++LINUX_HEADERS_CUSTOM_GIT = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_GIT))
++LINUX_HEADERS_CUSTOM_HG = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_HG))
++LINUX_HEADERS_CUSTOM_SVN = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_SVN))
+ LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
++LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = \
++$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
++LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
++else # ! BR2_KERNEL_HEADERS_AS_KERNEL
++LINUX_HEADERS_CUSTOM_TARBALL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL))
++LINUX_HEADERS_CUSTOM_GIT = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_GIT))
++LINUX_HEADERS_CUSTOM_HG =
++LINUX_HEADERS_CUSTOM_SVN =
++LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
++LINUX_HEADERS_CUSTOM_TARBALL_LOCATION = \
++$(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL_LOCATION))
++LINUX_HEADERS_REPO_URL = $(call qstrip,$(BR2_KERNEL_HEADERS_CUSTOM_REPO_URL))
++endif # BR2_KERNEL_HEADERS_AS_KERNEL
++
++# Configure tarball filenames.
++ifeq ($(LINUX_HEADERS_CUSTOM_TARBALL),y)
++LINUX_HEADERS_SOURCE = $(notdir $(LINUX_HEADERS_CUSTOM_TARBALL_LOCATION))
++else ifeq ($(LINUX_HEADERS_CUSTOM_GIT)$(LINUX_HEADERS_CUSTOM_HG)$(LINUX_HEADERS_CUSTOM_SVN),y)
++LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
++else
++LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
++endif
+ 
+-# Compute LINUX_HEADERS_SOURCE and LINUX_HEADERS_SITE from the configuration
+-ifeq ($(BR2_LINUX_KERNEL_CUSTOM_TARBALL),y)
+-LINUX_HEADERS_TARBALL = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION))
+-LINUX_HEADERS_SITE = $(patsubst %/,%,$(dir $(LINUX_HEADERS_TARBALL)))
+-LINUX_HEADERS_SOURCE = $(notdir $(LINUX_HEADERS_TARBALL))
+-else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_GIT),y)
+-LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
++# Configure the various kernel source locations.
++ifeq ($(LINUX_HEADERS_CUSTOM_TARBALL),y)
++LINUX_HEADERS_SITE = $(patsubst %/,%,$(dir $(LINUX_HEADERS_CUSTOM_TARBALL_LOCATION)))
++else ifeq ($(LINUX_HEADERS_CUSTOM_GIT),y)
++LINUX_HEADERS_SITE = $(LINUX_HEADERS_REPO_URL)
+ LINUX_HEADERS_SITE_METHOD = git
+-# use same git tarball as linux kernel
+-LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
+-else ifeq ($(BR2_LINUX_KERNEL_CUSTOM_HG),y)
+-LINUX_HEADERS_SITE = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_REPO_URL))
++else ifeq ($(LINUX_HEADERS_CUSTOM_HG),y)
++LINUX_HEADERS_SITE = $(LINUX_HEADERS_REPO_URL)
+ LINUX_HEADERS_SITE_METHOD = hg
+-# use same hg tarball as linux kernel
+-LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.gz
++else ifeq ($(LINUX_HEADERS_CUSTOM_SVN),y)
++LINUX_HEADERS_SITE = $(LINUX_HEADERS_REPO_URL)
++LINUX_HEADERS_SITE_METHOD = svn
+ else
+-LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
+ # In X.Y.Z, get X and Y. We replace dots and dashes by spaces in order
+ # to use the $(word) function. We support versions such as 4.0, 3.1,
+ # 2.6.32, 2.6.32-rc1, 3.0-rc6, etc.
+@@ -37,13 +60,16 @@ else ifeq ($(findstring x3.,x$(LINUX_HEADERS_VERSION)),x3.)
+ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
+ else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
+ LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
+-endif
++endif # x2.6
+ # release candidates are in testing/ subdir
+ ifneq ($(findstring -rc,$(LINUX_HEADERS_VERSION)),)
+ LINUX_HEADERS_SITE := $(LINUX_HEADERS_SITE)/testing
+ endif # -rc
+-endif
++endif # LINUX_HEADERS_CUSTOM_TARBALL
+ 
++# Apply any necessary patches if we are using the headers from a kernel
++# build.
++ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+ LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ 
+ # We rely on the generic package infrastructure to download and apply
+@@ -53,35 +79,23 @@ LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+ LINUX_HEADERS_PATCH = $(filter ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES))
+ 
+ define LINUX_HEADERS_APPLY_LOCAL_PATCHES
+-	for p in $(filter-out ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES)) ; do \
+-		if test -d $$p ; then \
+-			$(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
+-		else \
+-			$(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
+-		fi \
+-	done
++        for p in $(filter-out ftp://% http://% https://%,$(LINUX_HEADERS_PATCHES)) ; do \
++                if test -d $$p ; then \
++                        $(APPLY_PATCHES) $(@D) $$p \*.patch || exit 1 ; \
++                else \
++                        $(APPLY_PATCHES) $(@D) `dirname $$p` `basename $$p` || exit 1; \
++                fi \
++        done
+ endef
+ 
+ LINUX_HEADERS_POST_PATCH_HOOKS += LINUX_HEADERS_APPLY_LOCAL_PATCHES
++endif # BR2_KERNEL_HEADERS_AS_KERNEL
+ 
+-else # ! BR2_KERNEL_HEADERS_AS_KERNEL
+-
+-LINUX_HEADERS_VERSION = $(call qstrip,$(BR2_DEFAULT_KERNEL_HEADERS))
+-ifeq ($(findstring x2.6.,x$(LINUX_HEADERS_VERSION)),x2.6.)
+-LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v2.6
+-else ifeq ($(findstring x3.,x$(LINUX_HEADERS_VERSION)),x3.)
+-LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v3.x
+-else ifeq ($(findstring x4.,x$(LINUX_HEADERS_VERSION)),x4.)
+-LINUX_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v4.x
+-endif
+-LINUX_HEADERS_SOURCE = linux-$(LINUX_HEADERS_VERSION).tar.xz
+-
+-ifeq ($(BR2_KERNEL_HEADERS_VERSION),y)
++# Skip hash checking for custom kernel headers.
++ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
+ BR_NO_CHECK_HASH_FOR += $(LINUX_HEADERS_SOURCE)
+ endif
+ 
+-endif # ! BR2_KERNEL_HEADERS_AS_KERNEL
+-
+ # linux-headers really is the same as the linux package
+ LINUX_HEADERS_DL_SUBDIR = linux
+ 
+@@ -125,7 +139,7 @@ define LINUX_HEADERS_INSTALL_STAGING_CMDS
+ 			headers_install)
+ endef
+ 
+-ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL),y)
++ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
+ define LINUX_HEADERS_CHECK_VERSION
+ 	$(call check_kernel_headers_version,\
+ 		$(STAGING_DIR),\
 -- 
 2.17.1
