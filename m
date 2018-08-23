@@ -1,146 +1,61 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 23:58:13 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package: propagate
- pulseaudio dependencies correctly
-Message-ID: <20180823215237.E77E28A34F@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:01:54 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/lttng-tools: bump
+ version to 2.10.5
+Message-ID: <20180823215413.EF8468E468@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f7d22603daa6caec5e9aebab9bd50b8f78395d5e
+commit: https://git.buildroot.net/buildroot/commit/?id=9464052ed4d9819c6d5dee760baf83855777f182
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-The BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC dependency of
-BR2_PACKAGE_PULSEAUDIO was not properly propagated to reverse
-dependencies, causing the following kconfig warning:
+Added sha256 and license hashes, switched _SITE to https.
 
-warning: (BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO && BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE && BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE && BR2_PACKAGE_KODI_PULSEAUDIO && BR2_PACKAGE_MPD_PULSEAUDIO && BR2_PACKAGE_EFL_PULSEAUDIO) selects BR2_PACKAGE_PULSEAUDIO which has unmet direct dependencies (BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC && BR2_USE_WCHAR && BR2_TOOLCHAIN_HAS_THREADS && !BR2_STATIC_LIBS && BR2_USE_MMU)
+This bump includes
+https://github.com/lttng/lttng-tools/commit/b4cf0332cc1164684bbc708b6c46c1d69a15b847
+which fixes a musl build error:
+http://autobuild.buildroot.net/results/09d/09d6d5e2d1c50dbd6c026e12aa245fc90687eb19/
 
-This commit fixes that by propagating the dependency as it should have
-been done.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 68161802eb53f0af58a274904aebfa115988a468)
+(cherry picked from commit 81ea4a243b63d7bb1fec580910c553af4ae072c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/efl/Config.in                          |  5 +++++
- package/espeak/Config.in                       |  1 +
- package/gstreamer/gst-plugins-good/Config.in   |  7 +++++--
- package/gstreamer1/gst1-plugins-good/Config.in |  7 +++++--
- package/kodi/Config.in                         |  1 +
- package/mpd/Config.in                          | 12 +++++++++---
- 6 files changed, 26 insertions(+), 7 deletions(-)
+ package/lttng-tools/lttng-tools.hash | 11 ++++++++---
+ package/lttng-tools/lttng-tools.mk   |  4 ++--
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index cfb803c6df..aa5749db05 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -97,6 +97,11 @@ config BR2_PACKAGE_EFL_LIBSNDFILE
- config BR2_PACKAGE_EFL_PULSEAUDIO
- 	bool "Enable pulseaudio support (recommended)"
- 	default y
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_PULSEAUDIO
- 	help
- 	  The only audio output method supported by Ecore right now is
-diff --git a/package/espeak/Config.in b/package/espeak/Config.in
-index 5e46b17e32..5f9007a165 100644
---- a/package/espeak/Config.in
-+++ b/package/espeak/Config.in
-@@ -35,6 +35,7 @@ config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_ALSA
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index 9756570f90..f6c01b7dec 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,3 +1,8 @@
+-# From https://lttng.org/files/lttng-tools/lttng-tools-2.10.4.tar.bz2.{md5,sha1}
+-md5 fb053baad7f5dc888880386525294659  lttng-tools-2.10.4.tar.bz2
+-sha1 5cf77ad0d443a93d31ce54ceb3d64a7bb2b0db94  lttng-tools-2.10.4.tar.bz2
++# From https://lttng.org/files/lttng-tools/lttng-tools-2.10.5.tar.bz2.{md5,sha1}
++md5 50e07676d5eb5d6cf4ece804863a6f74  lttng-tools-2.10.5.tar.bz2
++sha1 68790d44529a3b29896c35bb2350e8a0e1226264  lttng-tools-2.10.5.tar.bz2
++# Locally computed
++sha256 a4868078ef961e83dc236c4f24fd848161bfa755344b064dece62c4c81a07411  lttng-tools-2.10.5.tar.bz2
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
++sha256 051be1f11b508ef7bb839994f6b58be19a827c56bd9bddfe36d77d3d4be55abe  lgpl-2.1.txt
++sha256 f07515677547da5f3ee2396bdf491affc1accd5e4765a5378b6e1e98392fd5e7  LICENSE
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 452c944f3d..ce07ce4b52 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_ESPEAK_AUDIO_BACKEND_PULSEAUDIO
- 	bool "pulseaudio"
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
- 	select BR2_PACKAGE_PULSEAUDIO
- 
- endchoice
-diff --git a/package/gstreamer/gst-plugins-good/Config.in b/package/gstreamer/gst-plugins-good/Config.in
-index e92cd0c5b2..3b2a99f5b4 100644
---- a/package/gstreamer/gst-plugins-good/Config.in
-+++ b/package/gstreamer/gst-plugins-good/Config.in
-@@ -205,11 +205,14 @@ config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_USE_MMU # pulseaudio
- 	depends on !BR2_STATIC_LIBS # pulseaudio
-+	depends on BR2_USE_WCHAR # pulseaudio
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 
--comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
-+comment "pulseaudio support needs a toolchain w/ threads, wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_GST_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index eea3a3eda8..180696b11b 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -321,13 +321,16 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
- 	depends on BR2_USE_MMU # pulseaudio
- 	depends on !BR2_STATIC_LIBS # pulseaudio
-+	depends on BR2_USE_WCHAR # pulseaudio
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC # pulseaudio
- 	select BR2_PACKAGE_PULSEAUDIO
- 	help
- 	  PulseAudio plugin library
- 
--comment "pulseaudio support needs a toolchain w/ threads, dynamic library"
-+comment "pulseaudio support needs a toolchain w/ threads, wchar, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SOUPHTTPSRC
- 	bool "souphttpsrc (http client)"
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index d96d546bf9..5f9c95a7a0 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -192,6 +192,7 @@ config BR2_PACKAGE_KODI_NONFREE
- 
- config BR2_PACKAGE_KODI_PULSEAUDIO
- 	bool "pulseaudio"
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
- 	# Pulseaudio support in kodi needs glib support in Pulseaudio,
- 	# see FindPulseAudio.cmake. Kodi meets all dependencies of
- 	# libglib2, so there is no need to propagate them here.
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 857f212477..09101d2c44 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -266,13 +266,19 @@ config BR2_PACKAGE_MPD_OSS
- 
- config BR2_PACKAGE_MPD_PULSEAUDIO
- 	bool "pulseaudio"
--	depends on !BR2_STATIC_LIBS # pulseaudio
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_PULSEAUDIO
- 	help
- 	  Enable pulseaudio output support.
- 
--comment "pulseaudio support needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
-+comment "pulseaudio support needs a toolchain w/ threads, wchar, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_PULSEAUDIO_HAS_ATOMIC
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_MPD_SHOUTCAST
- 	bool "shoutcast"
+-LTTNG_TOOLS_VERSION = 2.10.4
+-LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
++LTTNG_TOOLS_VERSION = 2.10.5
++LTTNG_TOOLS_SITE = https://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_INSTALL_STAGING = YES
+ LTTNG_TOOLS_LICENSE = GPL-2.0+, LGPL-2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
