@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 21:12:45 +0200
-Subject: [Buildroot] [PATCH] cryptsetup: fix build with old host kernel
- headers
-In-Reply-To: <0e566b4ae187c5bff93ce09cd73132ace0545664.1533639888.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 7 Aug 2018 14:04:48 +0300")
-References: <0e566b4ae187c5bff93ce09cd73132ace0545664.1533639888.git.baruch@tkos.co.il>
-Message-ID: <87sh345236.fsf@dell.be.48ers.dk>
+Date: Thu, 23 Aug 2018 21:13:51 +0200
+Subject: [Buildroot] [PATCH] cryptsetup: fix build with pre C11
+ toolchains
+In-Reply-To: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 15 Aug 2018 15:14:09 +0300")
+References: <efe392e11d8deb9334a1b567a010b9dae466143b.1534335249.git.baruch@tkos.co.il>
+Message-ID: <87o9ds521c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > By default cryptsetup configure fails when the if_alg.h kernel header is
- > not available. Kernels older than 2.6.38, like the one in RHEL 6 hosts,
- > do not provide this header. Since we don't need the kernel crypto
- > feature for host tools, just disable this feature to allow successful
- > completion of the configure script.
+ > Add a patch removing a redefined typedef. Redefinition of typedef, even
+ > to the same type, used to be illegal before C11.
 
- > While at it, fix a typo in the --with-crypto_backend option (hyphen ->
- > underscore).
+ > Fixes:
+ > http://autobuild.buildroot.net/results/93b/93b300a62f2ddbad66eab08e25fc3225969f224b/
+ > http://autobuild.buildroot.net/results/6c6/6c6092d633400498ee5b8090733a949a9632e473/
+ > http://autobuild.buildroot.net/results/f46/f46ef6123b5fa92753ff534b4ef7bea3f53ac388/
 
- > Should fix:
- > http://autobuild.buildroot.net/results/ffd/ffda2579b215b53161025b7bc703091cb30ef95d/
- > http://autobuild.buildroot.net/results/c48/c48015f76b13fec38f650f66824e7b986eb28572/
- > http://autobuild.buildroot.net/results/be6/be621f71bf9da8719bf7fc943eccc9b4dc2cc43e/
-
- > Cc: Martin Hicks <mort@bork.org>
  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
