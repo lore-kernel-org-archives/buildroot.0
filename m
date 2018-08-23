@@ -1,81 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:27:11 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] uclibc: ldso/arc: fix
- LD_DEBUG segv when printing R_ARC_NONE
-Message-ID: <20180823221944.94F5983C9F@busybox.osuosl.org>
+From: Robert Heywood <robert.heywood@codethink.co.uk>
+Date: Fri, 24 Aug 2018 00:20:45 +0100
+Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.17.1
+In-Reply-To: <8c998542bd25e65a58ebe3732dd74a4b7c434e2a.1535027897.git.baruch@tkos.co.il>
+References: <8c998542bd25e65a58ebe3732dd74a4b7c434e2a.1535027897.git.baruch@tkos.co.il>
+Message-ID: <5aa3d082-d90b-6727-881c-a218b763dbc6@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=838ed3710a14976887273fa075d710fa04ac8ea2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+Hi Baruch.
 
-Dynamic linker used to segfault on attempt to print info
-about R_ARC_NONE reloaction.
+The patch looks okay to me.
+Though I'm unsure how to test for the failure, I don't have a tool chain 
+available that's that old.
 
-The fix is already in upstream master [1],
-should be removed on uClibc version bump.
+Reviewed-by: "Robert J. Heywood" <robert.heywood@codethink.co.uk>
 
-[1] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=269a2a2a0f863e1b43dc02f2f4f0f3c50299456e
+Regards, rob.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d9c3f93f3f9e416930b3e72c6e22bd7f3f7f1c50)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ix-LD_DEBUG-segv-when-printing-R_ARC_NONE.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+On 23/08/18 13:38, Baruch Siach wrote:
+> The configure script now detects toolchain support for the -std=gnu90
+> flag. This fixes build with gcc older than 4.5.
+> 
+> Should fix:
+> http://autobuild.buildroot.net/results/802/802dd4d7eec058c2eb23e033ed3a093b110f4eda/
+> 
+> Cc: Robert J. Heywood <robert.heywood@codethink.co.uk>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> 
+> The autobuilders only show the failure only on next, because it adds
+> host-btrfs-progs that builds using host gcc 4.4. If we also care about
+> target gcc older than 4.5 then this should be applied to master. But I'm
+> not sure it is worth it so close to release.
+> ---
+>   package/btrfs-progs/btrfs-progs.hash | 2 +-
+>   package/btrfs-progs/btrfs-progs.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+> index 71793d1c687d..07d55ec3325b 100644
+> --- a/package/btrfs-progs/btrfs-progs.hash
+> +++ b/package/btrfs-progs/btrfs-progs.hash
+> @@ -1,5 +1,5 @@
+>   # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+> -sha256 013403fb67b17975b21408fa9eb7523b0ecf94f84f8a4397cf972e8e254d2246  btrfs-progs-v4.16.1.tar.xz
+> +sha256 bf0b34f1538c0b6e88f959937b0419678cadbf2ba7044336dcbfb2bcdc28cd74  btrfs-progs-v4.17.1.tar.xz
+>   # Locally computed
+>   sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+>   sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
+> diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+> index 33a6be324fd0..585dcf364cbe 100644
+> --- a/package/btrfs-progs/btrfs-progs.mk
+> +++ b/package/btrfs-progs/btrfs-progs.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -BTRFS_PROGS_VERSION = 4.16.1
+> +BTRFS_PROGS_VERSION = 4.17.1
+>   BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+>   BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+>   BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
+> 
 
-diff --git a/package/uclibc/0003-ldso-arc-fix-LD_DEBUG-segv-when-printing-R_ARC_NONE.patch b/package/uclibc/0003-ldso-arc-fix-LD_DEBUG-segv-when-printing-R_ARC_NONE.patch
-new file mode 100644
-index 0000000000..ad87698f53
---- /dev/null
-+++ b/package/uclibc/0003-ldso-arc-fix-LD_DEBUG-segv-when-printing-R_ARC_NONE.patch
-@@ -0,0 +1,45 @@
-+From 269a2a2a0f863e1b43dc02f2f4f0f3c50299456e Mon Sep 17 00:00:00 2001
-+From: Vineet Gupta <Vineet.Gupta1@synopsys.com>
-+Date: Tue, 26 Jun 2018 18:26:24 -0700
-+Subject: [PATCH] ldso/arc: fix LD_DEBUG segv when printing R_ARC_NONE
-+
-+Signed-off-by: Vineet Gupta <vgupta@synopsys.com>
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+---
-+ ldso/ldso/arc/elfinterp.c | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/ldso/ldso/arc/elfinterp.c b/ldso/ldso/arc/elfinterp.c
-+index 5a02bc234..a30c19bcb 100644
-+--- a/ldso/ldso/arc/elfinterp.c
-++++ b/ldso/ldso/arc/elfinterp.c
-+@@ -64,7 +64,7 @@ _dl_linux_resolver(struct elf_resolve *tpnt, unsigned int plt_pc)
-+ 	if (_dl_debug_bindings) {
-+ 		_dl_dprintf(_dl_debug_file, "\nresolve function: %s", symname);
-+ 		if (_dl_debug_detail)
-+-			_dl_dprintf(_dl_debug_file, "\n\tpatched %x ==> %pc @ %pl\n",
-++			_dl_dprintf(_dl_debug_file, "\n\tpatched %x ==> %pc @ %p\n",
-+ 					*got_addr, new_addr, got_addr);
-+ 	}
-+ 
-+@@ -178,7 +178,7 @@ _dl_do_reloc(struct elf_resolve *tpnt, struct r_scope_elem *scope,
-+ 
-+ log_entry:
-+ #if defined __SUPPORT_LD_DEBUG__
-+-	if (_dl_debug_detail)
-++	if (_dl_debug_detail && (reloc_type != R_ARC_NONE))
-+ 		_dl_dprintf(_dl_debug_file,"\tpatched: %x ==> %x @ %x",
-+ 				old_val, *reloc_addr, reloc_addr);
-+ #endif
-+@@ -214,7 +214,7 @@ _dl_do_lazy_reloc(struct elf_resolve *tpnt, struct r_scope_elem *scope,
-+ 	}
-+ 
-+ #if defined __SUPPORT_LD_DEBUG__
-+-	if (_dl_debug_reloc && _dl_debug_detail)
-++	if (_dl_debug_reloc && _dl_debug_detail && (reloc_type != R_ARC_NONE))
-+ 		_dl_dprintf(_dl_debug_file, "\tpatched: %x ==> %x @ %x\n",
-+ 				old_val, *reloc_addr, reloc_addr);
-+ #endif
-+-- 
-+2.16.2
-+
+-- 
+Robert Heywood, Bit Pusher, Codethink Ltd.
+<blink>Privacy policy; https://www.codethink.co.uk/privacy.html</blink>
