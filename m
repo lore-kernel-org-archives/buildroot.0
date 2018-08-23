@@ -1,71 +1,50 @@
-From: Raphael Jacob <r.jacob2002@gmail.com>
-Date: Thu, 23 Aug 2018 18:30:50 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x]
- package/wireless-regdb: bump version to 2018.05.31
-In-Reply-To: <87h8jl5c9n.fsf@dell.be.48ers.dk>
-References: <20180720221609.BE06A8A295@busybox.osuosl.org>
- <20180723142832.379d74fb@windsurf>
- <87h8jl5c9n.fsf@dell.be.48ers.dk>
-Message-ID: <CAKviCLYk9xCjX60U7s_sCh6ueXFa9-razeaxKmh6SmhJHfHkMA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 23 Aug 2018 17:51:26 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] gnutls: bump to version
+ 3.5.18
+Message-ID: <20180823162638.620AB8E337@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=f40f75cc81a3e02dd74bd41b21cf4bb39aaf94d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-no problem I solved the problem by cherry-picking the missing commit. I
-hope I can merge the new version without any merge conflicts.
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 16956889f7f172fdfb66402660748b1592733da7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Raphael
-
-Peter Korsgaard <peter@korsgaard.com> schrieb am Do., 23. Aug. 2018 um
-17:32 Uhr:
-
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->
-> Hi,
->
-> Sorry for the slow response - I only now found your mail while catching
-> up on buildroot mails received during my holidays.
->
->  > On Sat, 21 Jul 2018 00:20:58 +0200, Peter Korsgaard wrote:
->  >> commit:
-> https://git.buildroot.net/buildroot/commit/?id=eece13dcecdfc9dd283c068ec64000edb5fb09e4
->  >> branch:
-> https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
->  >>
->  >> Added license hash, updated project URL, old site is dead.
->  >>
->  >> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->  >> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->  >> (cherry picked from commit 54917abdd74158298fd848a58117c796c641a130)
->  >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
->
->  > I'm wondering why you backported this change. Indeed, the backport of
->  > "wireless-regdb: add  regulatory.db[.p7s] to /lib/firmware" broke the
->  > build of wireless-regdb on 2018.05.x, but perhaps the right thing to do
->  > was to revert rather than bump wireless-regdb ?
->
-> Yes. I don't remember the details, but I believe I backported the first
-> patch as it seemed simple and a nice improvement, and I only later
-> noticed that it depended on the version bump.
->
-> A better solution may indeed have been to revert the original patch
-> instead.
->
->  > In any case, the 2018.05.1 currently has a broken wireless-regdb
->  > package because of this: your backport of the wireless-regdb bump has
->  > been done after the 2018.05.1 tag.
->
-> Argh - I'll get 2018.05.2 released ASAP to fix that issue.
->
-> Sorry!
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180823/c9c33d87/attachment.html>
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 173cb40683..be2913e00f 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.17.tar.xz.sig
+-sha256	86b142afef587c118d63f72ccf307f3321dbc40357aae528202b65d913d20919	gnutls-3.5.17.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.18.tar.xz.sig
++sha256	ae2248d9e78747cf9c469dde81ff8f90b56838b707a0637f3f7d4eee90e80234	gnutls-3.5.18.tar.xz
+ # Locally calculated
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
+ sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 1ce7a742e3..6be7c6e27e 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.5
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).17
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).18
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
