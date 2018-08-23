@@ -1,51 +1,23 @@
-From: Brad Love <brad@nextdimension.cc>
-Date: Thu, 23 Aug 2018 15:18:05 -0500
-Subject: [Buildroot] [PATCH] gst1-plugins-good: enable jack plugins if jack2
- is on
-Message-ID: <1535055485-8704-1-git-send-email-brad@nextdimension.cc>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 23 Aug 2018 22:18:48 +0200
+Subject: [Buildroot] [PATCH v2 2/3] mariadb: needs dynamic library
+ support
+In-Reply-To: <20180726163703.7598-2-bluemrp9@gmail.com> (Ryan Coe's message of
+ "Thu, 26 Jul 2018 09:37:02 -0700")
+References: <20180726163703.7598-1-bluemrp9@gmail.com>
+ <20180726163703.7598-2-bluemrp9@gmail.com>
+Message-ID: <87efeo25w7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jack2 audio server is part of buildroot, but the jack gst plugins
-are disabled completely in gst1-plugins-good, whether or not jack2
-is selected. This changes the logic to where if the build system
-determines jack2 audio server is selected, then the jack plugins are
-enabled. If the plugins are enabled, then jack2 is also added as a
-dependency to gst1-plugins-good.
+>>>>> "Ryan" == Ryan Coe <bluemrp9@gmail.com> writes:
 
+ > Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
 
-Signed-off-by: Brad Love <brad@nextdimension.cc>
----
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Committed to 2018.02.x and 2018.05.x, thanks.
 
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index c1ed039..21a7668 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -25,13 +25,19 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
- 
- # Options which require currently unpackaged libraries
- GST1_PLUGINS_GOOD_CONF_OPTS += \
--	--disable-jack \
- 	--disable-libdv \
- 	--disable-dv1394 \
- 	--disable-shout2
- 
- GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
- 
-+ifeq ($(BR2_PACKAGE_JACK2),y)
-+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-jack
-+GST1_PLUGINS_GOOD_DEPENDENCIES += jack2
-+else
-+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-jack
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBV4L),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += --with-libv4l2
- GST1_PLUGINS_GOOD_DEPENDENCIES += libv4l
 -- 
-2.7.4
+Bye, Peter Korsgaard
