@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 21:25:01 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] mbedtls: bump to version
+Date: Thu, 23 Aug 2018 21:26:40 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] mbedtls: bump to version
  2.7.4
-Message-ID: <20180823191853.299AE8E384@busybox.osuosl.org>
+Message-ID: <20180823191901.BF6348E38E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fef353d6bc9ded833fcd083f28af5d8ff2071269
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8a2d7c15bc64b3f4b6fd93e20c8013bb8ce97253
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
