@@ -1,50 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 21:35:26 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/znc: bump version
- to 1.6.6
-Message-ID: <20180823193312.EB6C68E405@busybox.osuosl.org>
+Date: Thu, 23 Aug 2018 21:35:50 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/znc: python
+ support depends on icu
+Message-ID: <20180823193313.0B4B38E405@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d9d1f7c52c9f8ce296993a402a674638bc4ef363
+commit: https://git.buildroot.net/buildroot/commit/?id=fcb1e07ccd73d712f0b4aaaa5757dd464120cda4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Added license hash, switched _UPSTREAM to an upstream directory which
-also contains older release tarballs.
+Upstream checks for icu when build with python support:
+https://github.com/znc/znc/commit/4fe4a45dd62411ba9ede04750ca44f071e7d6cbb
+
+Fixes
+http://autobuild.buildroot.net/results/9e4/9e44159820789f1d25efcbd24318b0e05e132371/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 621363f5ac15713697edd9f1c176814db599f28d)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0f095a5318bb8c33d4435b5727283eb64d539e4c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/znc/znc.hash | 3 ++-
- package/znc/znc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/znc/znc.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/znc/znc.hash b/package/znc/znc.hash
-index b242933e9d..67c00ca217 100644
---- a/package/znc/znc.hash
-+++ b/package/znc/znc.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 2f0225d49c53a01f8d94feea4619a6fe92857792bb3401a4eb1edd65f0342aca  znc-1.6.5.tar.gz
-+sha256 7fb841bc71dc1749b1dc081e9eaf22ceb56ebb03c6b1d8804a4f9eb8bbd59525  znc-1.6.6.tar.gz
-+sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
 diff --git a/package/znc/znc.mk b/package/znc/znc.mk
-index 5783200ef6..79db580da2 100644
+index 33ac266dd3..2a04c66377 100644
 --- a/package/znc/znc.mk
 +++ b/package/znc/znc.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+@@ -32,7 +32,8 @@ else
+ ZNC_CONF_OPTS += --disable-zlib
+ endif
  
--ZNC_VERSION = 1.6.5
--ZNC_SITE = http://znc.in/releases
-+ZNC_VERSION = 1.6.6
-+ZNC_SITE = http://znc.in/releases/archive
- ZNC_LICENSE = Apache-2.0
- ZNC_LICENSE_FILES = LICENSE
- ZNC_DEPENDENCIES = host-pkgconf
+-ifeq ($(BR2_PACKAGE_PYTHON3),y)
++# python support depends on icu
++ifeq ($(BR2_PACKAGE_ICU)$(BR2_PACKAGE_PYTHON3),yy)
+ ZNC_DEPENDENCIES += python3 host-swig
+ ZNC_CONF_OPTS += --enable-python=python3
+ else
