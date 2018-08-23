@@ -1,142 +1,61 @@
-From: Robert J. Heywood <robert.heywood@codethink.co.uk>
-Date: Thu, 23 Aug 2018 23:01:56 +0100
-Subject: [Buildroot] [PATCH 2/2] fs/btrfs: Introducing btrfs rootfs support.
-Message-ID: <20180823220156.4173-1-robert.heywood@codethink.co.uk>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 24 Aug 2018 00:02:19 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/lttng-tools: bump
+ version to 2.10.5
+Message-ID: <20180823215443.196768E4A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch makes it possible to format the rootfs using btrfs.
-It introduces the option; BR2_TARGET_ROOTFS_BTRFS
+commit: https://git.buildroot.net/buildroot/commit/?id=565bcaa5465ccb969ffca4fa6d0dcd50d0183a8b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-When selected, the user is able to specify the filesystem size,
-label, options, and node and sector sizes.
-The new files are based on fs/ext2/{Config.in,ext2.mk}
+Added sha256 and license hashes, switched _SITE to https.
 
-Signed-off-by: Robert J. Heywood <robert.heywood@codethink.co.uk>
+This bump includes
+https://github.com/lttng/lttng-tools/commit/b4cf0332cc1164684bbc708b6c46c1d69a15b847
+which fixes a musl build error:
+http://autobuild.buildroot.net/results/09d/09d6d5e2d1c50dbd6c026e12aa245fc90687eb19/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 81ea4a243b63d7bb1fec580910c553af4ae072c1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/Config.in       |  1 +
- fs/btrfs/Config.in | 51 +++++++++++++++++++++++++++++++++++++++++++++++++++
- fs/btrfs/btrfs.mk  | 39 +++++++++++++++++++++++++++++++++++++++
- 3 files changed, 91 insertions(+)
- create mode 100644 fs/btrfs/Config.in
- create mode 100644 fs/btrfs/btrfs.mk
+ package/lttng-tools/lttng-tools.hash | 11 ++++++++---
+ package/lttng-tools/lttng-tools.mk   |  4 ++--
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/fs/Config.in b/fs/Config.in
-index c25b01c3de..24f22fd7e3 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -1,6 +1,7 @@
- menu "Filesystem images"
+diff --git a/package/lttng-tools/lttng-tools.hash b/package/lttng-tools/lttng-tools.hash
+index 9756570f90..f6c01b7dec 100644
+--- a/package/lttng-tools/lttng-tools.hash
++++ b/package/lttng-tools/lttng-tools.hash
+@@ -1,3 +1,8 @@
+-# From https://lttng.org/files/lttng-tools/lttng-tools-2.10.4.tar.bz2.{md5,sha1}
+-md5 fb053baad7f5dc888880386525294659  lttng-tools-2.10.4.tar.bz2
+-sha1 5cf77ad0d443a93d31ce54ceb3d64a7bb2b0db94  lttng-tools-2.10.4.tar.bz2
++# From https://lttng.org/files/lttng-tools/lttng-tools-2.10.5.tar.bz2.{md5,sha1}
++md5 50e07676d5eb5d6cf4ece804863a6f74  lttng-tools-2.10.5.tar.bz2
++sha1 68790d44529a3b29896c35bb2350e8a0e1226264  lttng-tools-2.10.5.tar.bz2
++# Locally computed
++sha256 a4868078ef961e83dc236c4f24fd848161bfa755344b064dece62c4c81a07411  lttng-tools-2.10.5.tar.bz2
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  gpl-2.0.txt
++sha256 051be1f11b508ef7bb839994f6b58be19a827c56bd9bddfe36d77d3d4be55abe  lgpl-2.1.txt
++sha256 f07515677547da5f3ee2396bdf491affc1accd5e4765a5378b6e1e98392fd5e7  LICENSE
+diff --git a/package/lttng-tools/lttng-tools.mk b/package/lttng-tools/lttng-tools.mk
+index 452c944f3d..ce07ce4b52 100644
+--- a/package/lttng-tools/lttng-tools.mk
++++ b/package/lttng-tools/lttng-tools.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- source "fs/axfs/Config.in"
-+source "fs/btrfs/Config.in"
- source "fs/cloop/Config.in"
- source "fs/cpio/Config.in"
- source "fs/cramfs/Config.in"
-diff --git a/fs/btrfs/Config.in b/fs/btrfs/Config.in
-new file mode 100644
-index 0000000000..52fbfd983a
---- /dev/null
-+++ b/fs/btrfs/Config.in
-@@ -0,0 +1,51 @@
-+config BR2_TARGET_ROOTFS_BTRFS
-+	bool "btrfs root filesystem"
-+	select BR2_PACKAGE_HOST_BTRFS_PROGS
-+	help
-+	  Build a btrfs root filesystem. If you enable this option, you
-+	  probably want to enable the btrfs-progs package too.
-+
-+
-+if BR2_TARGET_ROOTFS_BTRFS
-+
-+config BR2_TARGET_ROOTFS_BTRFS_LABEL
-+	string "filesystem label"
-+
-+config BR2_TARGET_ROOTFS_BTRFS_SIZE
-+	string "filesystem size"
-+	default "100m"
-+	help
-+	  The size of the filesystem image in bytes.
-+	  Suffix with k, m, g or t for power-of-two kilo-, mega-, giga-
-+	  or terabytes.
-+
-+config BR2_TARGET_ROOTFS_BTRFS_SIZE_SECTOR
-+	string "sector size"
-+	default 4096
-+	help
-+	  This value should be set to the page size in bytes. The default
-+	  value of 4096 is the the most common page size for most systems.
-+	  If the sectorsize differs from the page size, the created
-+	  filesystem may not be mountable by the kernel.
-+	  Therefore it is recommended to leave this value at 4096. Unless
-+	  you know that your kernel uses a different page size.
-+	  Suffix with k for power-of-two kilobytes.
-+
-+config BR2_TARGET_ROOTFS_BTRFS_SIZE_NODE
-+	string "btree node size"
-+	default 16384
-+	help
-+	  The tree block size in which btrfs stores metadata in bytes.
-+	  This must be a multiple of the sectorsize, but not larger than
-+	  64KiB (65536).
-+	  Suffix with k for power-of-two kilobytes.
-+
-+config BR2_TARGET_ROOTFS_BTRFS_FEATURES
-+	string "Filesystem Features"
-+	help
-+	  A comma separated string of features that can be enabled
-+	  during creation time.
-+	  For a list of available options, use:
-+	    `.../host/bin/mkfs.btrfs -O list-all`
-+
-+endif # BR2_TARGET_ROOTFS_BTRFS
-diff --git a/fs/btrfs/btrfs.mk b/fs/btrfs/btrfs.mk
-new file mode 100644
-index 0000000000..37b2937825
---- /dev/null
-+++ b/fs/btrfs/btrfs.mk
-@@ -0,0 +1,39 @@
-+################################################################################
-+#
-+# Build the btrfs root filesystem image
-+#
-+################################################################################
-+
-+BTRFS_SIZE = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_SIZE))
-+ifeq ($(BR2_TARGET_ROOTFS_BTRFS)-$(BTRFS_SIZE),y-)
-+$(error BR2_TARGET_ROOTFS_BTRFS_SIZE cannot be empty)
-+endif
-+
-+BTRFS_SIZE_NODE = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_SIZE_NODE))
-+BTRFS_SIZE_SECTOR = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_SIZE_SECTOR))
-+BTRFS_FEATURES = $(call qstrip,$(BR2_TARGET_ROOTFS_BTRFS_FEATURES))
-+# qstrip results in stripping consecutive spaces into a single one. So the
-+# variable is not qstrip-ed to preserve the integrity of the string value.
-+BTRFS_LABEL := $(subst ",,$(BR2_TARGET_ROOTFS_BTRFS_LABEL))
-+# ")
-+
-+BTRFS_OPTS = \
-+	-r '$(TARGET_DIR)' \
-+	-L '$(BTRFS_LABEL)' \
-+	$(if $(BTRFS_SIZE_NODE),--nodesize '$(BTRFS_SIZE_NODE)') \
-+	$(if $(BTRFS_SIZE_SECTOR),--sectorsize '$(BTRFS_SIZE_SECTOR)') \
-+	$(if $(BTRFS_FEATURES),--features '$(BTRFS_FEATURES)')
-+
-+ROOTFS_BTRFS_DEPENDENCIES = host-btrfs-progs
-+
-+define ROOTFS_BTRFS_CMD
-+	rm -f $@
-+	truncate -s $(BTRFS_SIZE) $@
-+	$(HOST_DIR)/bin/mkfs.btrfs $(BTRFS_OPTS) $@ \
-+	|| { ret=$$?; \
-+	     echo "*** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_BTRFS_SIZE)" 1>&2; \
-+	     exit $$ret; \
-+	}
-+endef
-+
-+$(eval $(rootfs))
--- 
-2.11.0
+-LTTNG_TOOLS_VERSION = 2.10.4
+-LTTNG_TOOLS_SITE = http://lttng.org/files/lttng-tools
++LTTNG_TOOLS_VERSION = 2.10.5
++LTTNG_TOOLS_SITE = https://lttng.org/files/lttng-tools
+ LTTNG_TOOLS_SOURCE = lttng-tools-$(LTTNG_TOOLS_VERSION).tar.bz2
+ LTTNG_TOOLS_INSTALL_STAGING = YES
+ LTTNG_TOOLS_LICENSE = GPL-2.0+, LGPL-2.1+ (include/lttng/*, src/lib/lttng-ctl/*)
