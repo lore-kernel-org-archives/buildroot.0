@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 21:20:18 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/crda: update
+Date: Thu, 23 Aug 2018 21:20:26 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/crda: update
  website URL
-Message-ID: <20180823191237.CA8A38E367@busybox.osuosl.org>
+Message-ID: <20180823191245.F3B8E8E383@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64c7c4b619b93e4ccdc699eec05588cb7cfc6c3f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7a38de3d8e3cf088246c59e9ac594af66849abb5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Now Linux wireless infos are on corresponding wiki.
 
