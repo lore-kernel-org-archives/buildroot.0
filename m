@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 23:51:57 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] gcc: Fix building on
+Date: Thu, 23 Aug 2018 23:54:04 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] gcc: Fix building on
  ppc64le GCC 8 host
-Message-ID: <20180823214504.559428E484@busybox.osuosl.org>
+Message-ID: <20180823214625.A155A8E494@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=24e8c76e71e33d860bf5c570e4c8efc55a864555
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ba86b6c0d7c55bb3df605f7ca141ae412708bbbe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 When building on a ppc64le host we see this error:
 
