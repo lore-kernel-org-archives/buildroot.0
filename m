@@ -1,33 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:13:50 +0200
-Subject: [Buildroot] [PATCH] libarchive: add upstream security patches
-In-Reply-To: <a154e047363347675abf5c0c172b4ca645bc7bf2.1533653722.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 7 Aug 2018 17:55:22 +0300")
-References: <a154e047363347675abf5c0c172b4ca645bc7bf2.1533653722.git.baruch@tkos.co.il>
-Message-ID: <87bm9spw81.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 00:13:26 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libarchive: add hash for
+ license file
+Message-ID: <20180823220615.2E66E8E4E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7213c2dc664e0820e103e60843e33626546614fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Add patches for the following security issues:
- > CVE-2017-14501 - An out-of-bounds read flaw exists in parse_file_info in
- > archive_read_support_format_iso9660.c when extracting a specially
- > crafted iso9660 iso file.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit a3f5bf52b96827a78ae1cb5dd6b92abf25c76c5d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libarchive/libarchive.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
- > CVE-2017-14502 - Off-by-one error for UTF-16 names in RAR archives,
- > leading to an out-of-bounds read in archive_read_format_rar_read_header.
-
- > CVE-2017-14503 - Out-of-bounds read within lha_read_data_none() in
- > archive_read_support_format_lha.c when extracting a specially crafted
- > lha archive.
-
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index 98a34ad36c..60ea0d1602 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  ed2dbd6954792b2c054ccf8ec4b330a54b85904a80cef477a1c74643ddafa0ce  libarchive-3.3.2.tar.gz
++sha256  ae6f35cc1979beb316e4d6431fc34c6fc59f0dd126b425c8552bb41c86e4825d  COPYING
