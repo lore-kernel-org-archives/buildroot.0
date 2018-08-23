@@ -1,102 +1,199 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:10:58 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] linuxptp: add patch to
- fix no-thread/linuxthreads uClibc builds
-Message-ID: <20180823220317.2C99B8E4D4@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:12:40 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libarchive: add upstream
+ security patches
+Message-ID: <20180823220511.63BC48E4D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a651fe20f711ec4ba0215c626ae4dfccacaffed0
+commit: https://git.buildroot.net/buildroot/commit/?id=1d08f5abaeb0705f71c51555efd860f7846791f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-linuxptp missing.h header implements a replacement clock_nanosleep()
-function, which was used when the thread implementation was not NPTL,
-because uClibc failed to provide clock_nanosleep() in such
-configurations.
+Add patches for the following security issues:
 
-However, uClibc-ng has fixed this problem upstream, and has backported
-this change in Buildroot in patch
-package/uclibc/0002-librt-declare-clock_nanosleep-independent-of-thread-.patch
-(the code is upstream and will be part of uClibc-ng 1.0.31). Due to
-this, there is now a conflicting definition of clock_nanosleep()
-between the C library and the linuxptp missing.h code, which manifests
-itself by the following build failure:
+CVE-2017-14501 - An out-of-bounds read flaw exists in parse_file_info in
+archive_read_support_format_iso9660.c when extracting a specially
+crafted iso9660 iso file.
 
-missing.h:117:19: error: static declaration of 'clock_nanosleep' follows non-static declaration
- static inline int clock_nanosleep(clockid_t clock_id, int flags,
-                   ^~~~~~~~~~~~~~~
-In file included from clockadj.h:24:0,
-                 from clockadj.c:24:
+CVE-2017-14502 - Off-by-one error for UTF-16 names in RAR archives,
+leading to an out-of-bounds read in archive_read_format_rar_read_header.
 
-This commit fixes that by adding a patch that removes the replacement
-clock_nanosleep() implementation from the linuxptp code base.
+CVE-2017-14503 - Out-of-bounds read within lha_read_data_none() in
+archive_read_support_format_lha.c when extracting a specially crafted
+lha archive.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/bf400095a853f5beb28c77a50fcffefe52c3d769/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ae2cae70b82bbb1c85307c5947e1b441567038fd)
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 760fbe789c77571b2baf1ddbb3b10207ece7fd7a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...issing.h-drop-clock_nanosleep-replacement.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ ...-iso9660-validate-directory-record-length.patch | 78 ++++++++++++++++++++++
+ ...d-off-by-one-error-for-UTF16-names-in-RAR.patch | 34 ++++++++++
+ ...ct-LHA-archive-entries-with-negative-size.patch | 32 +++++++++
+ 3 files changed, 144 insertions(+)
 
-diff --git a/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch b/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch
+diff --git a/package/libarchive/0002-iso9660-validate-directory-record-length.patch b/package/libarchive/0002-iso9660-validate-directory-record-length.patch
 new file mode 100644
-index 0000000000..54ef963ae4
+index 0000000000..8a0c34f257
 --- /dev/null
-+++ b/package/linuxptp/0001-missing.h-drop-clock_nanosleep-replacement.patch
-@@ -0,0 +1,49 @@
-+From 947bf03ec3d9eaa0bfc0269eed86b9364e94bc1a Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 5 Aug 2018 15:25:53 +0200
-+Subject: [PATCH] missing.h: drop clock_nanosleep() replacement
++++ b/package/libarchive/0002-iso9660-validate-directory-record-length.patch
+@@ -0,0 +1,78 @@
++From f9569c086ff29259c73790db9cbf39fe8fb9d862 Mon Sep 17 00:00:00 2001
++From: John Starks <jostarks@microsoft.com>
++Date: Wed, 25 Jul 2018 12:16:34 -0700
++Subject: [PATCH] iso9660: validate directory record length
 +
-+Since uClibc-ng commits 68628fe7d463541bf3c33da6b214e63c0cc9feed
-+("librt: declare clock_nanosleep not only for NPTL") and
-+ddbb03e77ac1a48740688814b82f45c97ee81f37 ("librt: clock_nanosleep
-+could be even used without threads"), clock_nanosleep() is always
-+provided by uClibc, regardless of the thread implementation (none,
-+linuxthreads, nptl). These commits will be part of the upcoming 1.0.31
-+release of uClibc-ng.
-+
-+Thanks to this, we can drop the replacement clock_nanosleep()
-+implementation added by linuxptp. Without this, linuxptp fails to
-+build with:
-+
-+missing.h:117:19: error: static declaration of 'clock_nanosleep' follows non-static declaration
-+ static inline int clock_nanosleep(clockid_t clock_id, int flags,
-+                   ^~~~~~~~~~~~~~~
-+In file included from clockadj.h:24:0,
-+                 from clockadj.c:24:
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ missing.h | 7 -------
-+ 1 file changed, 7 deletions(-)
++Upstream status: commit f9569c086ff
 +
-+diff --git a/missing.h b/missing.h
-+index 2f7adb9..60f89a3 100644
-+--- a/missing.h
-++++ b/missing.h
-+@@ -129,13 +129,6 @@ enum {
-+ 
-+ #define TFD_TIMER_ABSTIME (1 << 0)
-+ 
-+-static inline int clock_nanosleep(clockid_t clock_id, int flags,
-+-				  const struct timespec *request,
-+-				  struct timespec *remain)
-+-{
-+-	return syscall(__NR_clock_nanosleep, clock_id, flags, request, remain);
-+-}
-+-
-+ static inline int timerfd_create(int clockid, int flags)
++ .../archive_read_support_format_iso9660.c       | 17 +++++++++++------
++ 1 file changed, 11 insertions(+), 6 deletions(-)
++
++diff --git a/libarchive/archive_read_support_format_iso9660.c b/libarchive/archive_read_support_format_iso9660.c
++index f01d37bf682e..089bb7236cd1 100644
++--- a/libarchive/archive_read_support_format_iso9660.c
+++++ b/libarchive/archive_read_support_format_iso9660.c
++@@ -409,7 +409,8 @@ static int	next_entry_seek(struct archive_read *, struct iso9660 *,
++ 		    struct file_info **);
++ static struct file_info *
++ 		parse_file_info(struct archive_read *a,
++-		    struct file_info *parent, const unsigned char *isodirrec);
+++		    struct file_info *parent, const unsigned char *isodirrec,
+++		    size_t reclen);
++ static int	parse_rockridge(struct archive_read *a,
++ 		    struct file_info *file, const unsigned char *start,
++ 		    const unsigned char *end);
++@@ -1022,7 +1023,7 @@ read_children(struct archive_read *a, struct file_info *parent)
++ 			if (*(p + DR_name_len_offset) == 1
++ 			    && *(p + DR_name_offset) == '\001')
++ 				continue;
++-			child = parse_file_info(a, parent, p);
+++			child = parse_file_info(a, parent, p, b - p);
++ 			if (child == NULL) {
++ 				__archive_read_consume(a, skip_size);
++ 				return (ARCHIVE_FATAL);
++@@ -1112,7 +1113,7 @@ choose_volume(struct archive_read *a, struct iso9660 *iso9660)
++ 	 */
++ 	seenJoliet = iso9660->seenJoliet;/* Save flag. */
++ 	iso9660->seenJoliet = 0;
++-	file = parse_file_info(a, NULL, block);
+++	file = parse_file_info(a, NULL, block, vd->size);
++ 	if (file == NULL)
++ 		return (ARCHIVE_FATAL);
++ 	iso9660->seenJoliet = seenJoliet;
++@@ -1144,7 +1145,7 @@ choose_volume(struct archive_read *a, struct iso9660 *iso9660)
++ 			return (ARCHIVE_FATAL);
++ 		}
++ 		iso9660->seenJoliet = 0;
++-		file = parse_file_info(a, NULL, block);
+++		file = parse_file_info(a, NULL, block, vd->size);
++ 		if (file == NULL)
++ 			return (ARCHIVE_FATAL);
++ 		iso9660->seenJoliet = seenJoliet;
++@@ -1749,7 +1750,7 @@ archive_read_format_iso9660_cleanup(struct archive_read *a)
++  */
++ static struct file_info *
++ parse_file_info(struct archive_read *a, struct file_info *parent,
++-    const unsigned char *isodirrec)
+++    const unsigned char *isodirrec, size_t reclen)
 + {
-+ 	return syscall(__NR_timerfd_create, clockid, flags);
++ 	struct iso9660 *iso9660;
++ 	struct file_info *file, *filep;
++@@ -1763,7 +1764,11 @@ parse_file_info(struct archive_read *a, struct file_info *parent,
++ 
++ 	iso9660 = (struct iso9660 *)(a->format->data);
++ 
++-	dr_len = (size_t)isodirrec[DR_length_offset];
+++	if (reclen == 0 || reclen < (dr_len = (size_t)isodirrec[DR_length_offset])) {
+++		archive_set_error(&a->archive, ARCHIVE_ERRNO_MISC,
+++			"Invalid directory record length");
+++		return (NULL);
+++	}
++ 	name_len = (size_t)isodirrec[DR_name_len_offset];
++ 	location = archive_le32dec(isodirrec + DR_extent_offset);
++ 	fsize = toi(isodirrec + DR_size_offset, DR_size_size);
 +-- 
-+2.14.4
++2.18.0
++
+diff --git a/package/libarchive/0003-Avoid-a-read-off-by-one-error-for-UTF16-names-in-RAR.patch b/package/libarchive/0003-Avoid-a-read-off-by-one-error-for-UTF16-names-in-RAR.patch
+new file mode 100644
+index 0000000000..13a80d1fb3
+--- /dev/null
++++ b/package/libarchive/0003-Avoid-a-read-off-by-one-error-for-UTF16-names-in-RAR.patch
+@@ -0,0 +1,34 @@
++From 5562545b5562f6d12a4ef991fae158bf4ccf92b6 Mon Sep 17 00:00:00 2001
++From: Joerg Sonnenberger <joerg@bec.de>
++Date: Sat, 9 Sep 2017 17:47:32 +0200
++Subject: [PATCH] Avoid a read off-by-one error for UTF16 names in RAR
++ archives.
++
++Reported-By: OSS-Fuzz issue 573
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 5562545b5562
++
++ libarchive/archive_read_support_format_rar.c | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/libarchive/archive_read_support_format_rar.c b/libarchive/archive_read_support_format_rar.c
++index cbb14c32dc3b..751de6979ba5 100644
++--- a/libarchive/archive_read_support_format_rar.c
+++++ b/libarchive/archive_read_support_format_rar.c
++@@ -1496,7 +1496,11 @@ read_header(struct archive_read *a, struct archive_entry *entry,
++         return (ARCHIVE_FATAL);
++       }
++       filename[filename_size++] = '\0';
++-      filename[filename_size++] = '\0';
+++      /*
+++       * Do not increment filename_size here as the computations below
+++       * add the space for the terminating NUL explicitly.
+++       */
+++      filename[filename_size] = '\0';
++ 
++       /* Decoded unicode form is UTF-16BE, so we have to update a string
++        * conversion object for it. */
++-- 
++2.18.0
++
+diff --git a/package/libarchive/0004-Reject-LHA-archive-entries-with-negative-size.patch b/package/libarchive/0004-Reject-LHA-archive-entries-with-negative-size.patch
+new file mode 100644
+index 0000000000..628e74aed4
+--- /dev/null
++++ b/package/libarchive/0004-Reject-LHA-archive-entries-with-negative-size.patch
+@@ -0,0 +1,32 @@
++From 2c8c83b9731ff822fad6cc8c670ea5519c366a14 Mon Sep 17 00:00:00 2001
++From: Joerg Sonnenberger <joerg@bec.de>
++Date: Thu, 19 Jul 2018 21:14:53 +0200
++Subject: [PATCH] Reject LHA archive entries with negative size.
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 2c8c83b9731
++
++ libarchive/archive_read_support_format_lha.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/libarchive/archive_read_support_format_lha.c b/libarchive/archive_read_support_format_lha.c
++index b8ef4ae10ece..95c99bb1f31e 100644
++--- a/libarchive/archive_read_support_format_lha.c
+++++ b/libarchive/archive_read_support_format_lha.c
++@@ -701,6 +701,12 @@ archive_read_format_lha_read_header(struct archive_read *a,
++ 	 * Prepare variables used to read a file content.
++ 	 */
++ 	lha->entry_bytes_remaining = lha->compsize;
+++	if (lha->entry_bytes_remaining < 0) {
+++		archive_set_error(&a->archive,
+++		    ARCHIVE_ERRNO_FILE_FORMAT,
+++		    "Invalid LHa entry size");
+++		return (ARCHIVE_FATAL);
+++	}
++ 	lha->entry_offset = 0;
++ 	lha->entry_crc_calculated = 0;
++ 
++-- 
++2.18.0
 +
