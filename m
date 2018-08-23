@@ -1,26 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 08:43:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: Fix uClibc build on
- 64bit platforms by including stdint.h
-In-Reply-To: <20180818080801.15299-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 18 Aug 2018 10:08:01 +0200")
-References: <20180818080801.15299-1-bernd.kuhls@t-online.de>
-Message-ID: <874lfknu1q.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 00:38:59 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/samba4: bump
+ version to 4.8.1
+Message-ID: <20180824063612.5507C8E4BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=1ca3a38e9bbaa50e3991119794de9316dd544bd6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Patch needed to be updated for samba-4.8.4
- > Fixes
- > http://autobuild.buildroot.net/results/140/1404a594583ff192d70086ef590f924472465c89/
+Release notes: https://www.samba.org/samba/history/samba-4.8.1.html
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 62dca337fe72085d98b7603cfcff1279c48ba7d9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 36e2ff79be..85d0e18b52 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.8.0.tar.asc
+-sha256 87d9b585dbd8628e79aabb6e621a94bd20a072a00762e78e0899fad22fc18fb7  samba-4.8.0.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.8.1.tar.asc
++sha256 8ef7367507f16b7a5e2f6aed5bcdbd1143feca79aa2a07c9b21292b17d7f789d  samba-4.8.1.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index b775a9298e..b03af34cd0 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.8.0
++SAMBA4_VERSION = 4.8.1
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
