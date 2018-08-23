@@ -1,45 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 22:14:02 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] mariadb: move comments
- outside of define block
-Message-ID: <20180823200811.B978F8E449@busybox.osuosl.org>
+Date: Thu, 23 Aug 2018 22:15:47 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/mariadb: security
+ bump to version 10.1.35
+Message-ID: <20180823200811.C28D98E449@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8121acceaeb4dd779357b9905edb671d2a358dee
+commit: https://git.buildroot.net/buildroot/commit/?id=ce8a848ac4c4bd5fc0b820c8184034ae26b75982
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-There are two comments inside the post install define block that show up in
-the build. Fix this by moving the comments outside the block.
+Fixes CVE-2018-3064, CVE-2018-3063, CVE-2018-3058 & CVE-2018-3066:
+https://mariadb.com/kb/en/library/mariadb-10135-release-notes/
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Added all hashes provided by upstream.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d0a0d49c20b250a71e649268df1328fca139a879)
+(cherry picked from commit dbe8483b20ad3c42607878cfd8adfa723bc73bc4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mariadb/mariadb.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/mariadb/mariadb.hash | 7 +++++--
+ package/mariadb/mariadb.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index 7eea62ab7b..e4736465e0 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,5 +1,8 @@
+-# From https://downloads.mariadb.org/mariadb/10.1.33/
+-sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.1.35/
++md5 935f401314ff08a4177beb70fed6055c  mariadb-10.1.35.tar.gz
++sha1 d322f0da17f4de475832dd534657eba5a936f77b  mariadb-10.1.35.tar.gz
++sha256 9e91d985ed4f662126e3e5791fe91ec8a2f44ec811113c2b6fbc72fa14553c4d  mariadb-10.1.35.tar.gz
++sha512 88e6049f3bbc3aa047e108f91a2c4f335758e80f25bfa2974b5f8c2e13f5758824d7835dece021b515c531e5641b9998e4de92256ad4b47b7f694da99bd471aa  mariadb-10.1.35.tar.gz
+ 
+ # Hash for license files
+ sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
 diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index ce846d9cda..e395d387e5 100644
+index e395d387e5..23822187c3 100644
 --- a/package/mariadb/mariadb.mk
 +++ b/package/mariadb/mariadb.mk
-@@ -104,13 +104,13 @@ define MARIADB_INSTALL_INIT_SYSTEMD
- endef
- endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# We don't need mysql_config on the target as it's only useful in staging
-+# We also don't need the test suite on the target
- define MARIADB_POST_INSTALL
- 	mkdir -p $(TARGET_DIR)/var/lib/mysql
- 	$(INSTALL) -D -m 644 $(TARGET_DIR)/usr/share/mysql/my-small.cnf \
- 		$(TARGET_DIR)/etc/mysql/my.cnf
--	# We don't need this on the target as it's only useful in staging
- 	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
--	# Remove test suite
- 	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
- endef
- 
+-MARIADB_VERSION = 10.1.33
++MARIADB_VERSION = 10.1.35
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
