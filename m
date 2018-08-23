@@ -1,55 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 22:18:05 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] mariadb: needs dynamic
- library support
-Message-ID: <20180823201114.4ECCE8E46A@busybox.osuosl.org>
+From: Brad Love <brad@nextdimension.cc>
+Date: Thu, 23 Aug 2018 15:20:03 -0500
+Subject: [Buildroot] [PATCH 0/2] i2c-tools: license and staging installation
+ fixes
+Message-ID: <1535055605-8974-1-git-send-email-brad@nextdimension.cc>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c784f79224e2a8b3773ca01881f7137f87ab753
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+Patch 1/2 updates i2c-tools.mk to include the LGPL-2.1+ license which
+applies to the library libi2c.
 
-In a static-only configuration, mariadb fails to build because it
-tries to build a shared library:
+Patch 2/2 enables staging installation, using make targets to install
+the header and dynamic or static library for use by external packages.
 
-[ 18%] Linking CXX shared module ha_spider.so
-output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/bin/ld: output/host/opt/ext-toolchain/bin/../lib/gcc/arm-buildroot-linux-uclibcgnueabi/6.4.0/../../../../arm-buildroot-linux-uclibcgnueabi/lib/libstdc++.a(eh_globals.o)(.text.__cxa_get_globals_fast+0x14): R_ARM_TLS_LE32 relocation not permitted in shared object
 
-This is not detected by the autobuilders, because mariadb is part of a
-Config.in choice, and such choices are not randomized by our current
-testing infrastructure.
+Brad Love (2):
+  i2c-tools: include LGPL-2.1+ license for libi2c
+  i2c-tools: install library and header to staging
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 58cb24d883b106e7795c0cdbda906a3c6cbc80ed)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mysql/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/i2c-tools/i2c-tools.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/package/mysql/Config.in b/package/mysql/Config.in
-index 278dc73e57..2abf5daecb 100644
---- a/package/mysql/Config.in
-+++ b/package/mysql/Config.in
-@@ -17,6 +17,7 @@ choice
- config BR2_PACKAGE_MARIADB
- 	bool "mariadb"
- 	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBAIO
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_NCURSES
-@@ -30,6 +31,10 @@ config BR2_PACKAGE_MARIADB
- 
- 	  http://www.mariadb.org/
- 
-+comment "mariadb needs a toolchain w/ dynamic library"
-+	depends on BR2_PACKAGE_LIBAIO_ARCH_SUPPORTS
-+	depends on BR2_STATIC_LIBS
-+
- config BR2_PACKAGE_ORACLE_MYSQL
- 	bool "oracle mysql"
- 	select BR2_PACKAGE_NCURSES
+-- 
+2.7.4
