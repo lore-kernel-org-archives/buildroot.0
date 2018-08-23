@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 22:15:47 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/mariadb: security
+Date: Thu, 23 Aug 2018 22:16:03 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/mariadb: security
  bump to version 10.1.35
-Message-ID: <20180823200811.C28D98E449@busybox.osuosl.org>
+Message-ID: <20180823200823.B43C98E460@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce8a848ac4c4bd5fc0b820c8184034ae26b75982
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6f5a0c5622c77df0c16525980618e4a89c5f6dc4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes CVE-2018-3064, CVE-2018-3063, CVE-2018-3058 & CVE-2018-3066:
 https://mariadb.com/kb/en/library/mariadb-10135-release-notes/
