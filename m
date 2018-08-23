@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 21:39:50 +0200
-Subject: [Buildroot] [PATCH] znc: fix build without openssl
-In-Reply-To: <c809ed2649c492c5cd3bd30fd9d50c38858fe7c7.1528657762.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Sun, 10 Jun 2018 22:09:22 +0300")
-References: <c809ed2649c492c5cd3bd30fd9d50c38858fe7c7.1528657762.git.baruch@tkos.co.il>
-Message-ID: <87h8jk3m9l.fsf@dell.be.48ers.dk>
+Date: Thu, 23 Aug 2018 21:40:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/znc: security bump to 1.7.1
+In-Reply-To: <20180721120349.21308-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 21 Jul 2018 14:03:49 +0200")
+References: <20180721120349.21308-1-bernd.kuhls@t-online.de>
+Message-ID: <87d0u83m8k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Add a patch to include <memory> unconditionally.
- > Fixes:
- > http://autobuild.buildroot.net/results/4c3/4c3d9f6f5214052b7eda4c7bbfabe5b463080b12/
- > http://autobuild.buildroot.net/results/d06/d06176f00109ad0707032b0d76fe94f1d414106c/
+ > Fixes CVE-2018-14055 & CVE-2018-14056.
+ > Changelog: https://wiki.znc.in/ChangeLog/1.7.1
 
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > Removed 0001-Fix-build-without-SSL-support.patch, applied upstream:
+ > https://github.com/znc/znc/commit/e567f4cb73a1637141f7e4fc3b0ef44e79568048
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
