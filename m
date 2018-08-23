@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 17:51:31 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/gnutls: bump
+Date: Thu, 23 Aug 2018 18:34:29 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/gnutls: bump
  version to 3.5.19
-Message-ID: <20180823162638.6D0C08B669@busybox.osuosl.org>
+Message-ID: <20180823162651.AECC48D35B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c61f61b9096acd1c6d9d932d593182a1e1bbfd30
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b13a1772b14eb305debf8a136564f8485b5bd142
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Release notes:
 https://lists.gnupg.org/pipermail/gnutls-devel/2018-July/008583.html
