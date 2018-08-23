@@ -1,34 +1,75 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:28:37 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/samba4: drop
- patch numbering in patch 0003
-Message-ID: <20180824063605.3AD3C8E4F7@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:28:26 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/samba4: reformat
+ patch 0002 as Git-formatted patch
+Message-ID: <20180824063605.32E838E4F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=636f818102f0e15a664f51f7639c3553595e50c6
+commit: https://git.buildroot.net/buildroot/commit/?id=f3124bfc397d6a4b994c96d03d4c0a947e447821
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
+This commit reformats
+0002-patch-source3__libads__kerberos_keytab.c.patch as a Git-formatted
+patch.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 15045fba99a688977dc1aaca01f7f0d42250a4dc)
+(cherry picked from commit 90b26f87640c0ebff53a304b15d168b1aca738dd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch     | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...mpilation-of-Samba-4.7.4-with-disabled-ADS.patch} | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
-index 3b248e690d..1256d1c969 100644
---- a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
-+++ b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
-@@ -1,7 +1,7 @@
- From 4a63f267efab2ef86adbeddda45909127135d7c8 Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd.kuhls@t-online.de>
- Date: Sun, 28 Jan 2018 11:57:11 +0100
--Subject: [PATCH 1/1] Fix uClibc build on 64bit platforms by including stdint.h
-+Subject: [PATCH] Fix uClibc build on 64bit platforms by including stdint.h
+diff --git a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
+similarity index 58%
+rename from package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
+rename to package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
+index 1213659c8d..45d3050a39 100644
+--- a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
++++ b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
+@@ -1,5 +1,7 @@
+-From: Timur I. Bakeyev <timur@freebsd.org>
+-Subject: Fix compilation of Samba 4.7.4 with disabled ADS
++From da2f2cf8e7a1dfcb661b707e4649cec1e8a0e79c Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Thu, 9 Aug 2018 10:03:06 +0200
++Subject: [PATCH] Fix compilation of Samba 4.7.4 with disabled ADS
  
- Fixes an error detected by buildroot autobuilders:
- http://autobuild.buildroot.net/results/573/573e2268e205e10d1352fa81122d8f225fdb4575/build-end.log
+ Downloaded from upstream mailinglist
+ https://lists.samba.org/archive/samba-technical/2017-December/124629.html
+@@ -8,9 +10,14 @@ Patch originates from FreeBSD:
+ https://svnweb.freebsd.org/ports/head/net/samba47/files/patch-source3__libads__kerberos_keytab.c?revision=457119&view=markup
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ source3/libads/kerberos_keytab.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+---- a/source3/libads/kerberos_keytab.c.orig	2017-12-23 14:23:53.247467000 +0100
+-+++ b/source3/libads/kerberos_keytab.c	2017-12-23 18:57:07.135340000 +0100
++diff --git a/source3/libads/kerberos_keytab.c b/source3/libads/kerberos_keytab.c
++index 37ac7ba985e..71250962090 100644
++--- a/source3/libads/kerberos_keytab.c
+++++ b/source3/libads/kerberos_keytab.c
+ @@ -32,8 +32,6 @@
+  
+  #ifdef HAVE_KRB5
+@@ -20,7 +27,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  /* This MAX_NAME_LEN is a constant defined in krb5.h */
+  #ifndef MAX_KEYTAB_NAME_LEN
+  #define MAX_KEYTAB_NAME_LEN 1100
+-@@ -85,6 +83,8 @@
++@@ -85,6 +83,8 @@ out:
+  	return ret;
+  }
+  
+@@ -29,3 +36,6 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  /**********************************************************************
+   Adds a single service principal, i.e. 'host' to the system keytab
+  ***********************************************************************/
++-- 
++2.14.4
++
