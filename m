@@ -1,76 +1,212 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 23 Aug 2018 08:39:07 +0200
-Subject: [Buildroot] [PATCH] libssh: fix cross compile with older cmake
-In-Reply-To: <87h8jlvjdi.fsf@tkos.co.il>
-References: <9dce5a842ebb73937268fa66a3ee699785c5ae7c.1534975110.git.baruch@tkos.co.il>
- <20180822220952.GA9365@scaer> <20180822222719.GB9365@scaer>
- <87h8jlvjdi.fsf@tkos.co.il>
-Message-ID: <20180823063907.GC9365@scaer>
+Date: Thu, 23 Aug 2018 09:26:15 +0200
+Subject: [Buildroot] [PATCH next] package/asterisk: fix compilation with
+ libsrtp 2.2.0
+Message-ID: <20180823072615.32065-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, All,
+Since commit 54797f6489 (package/libsrtp: bump version to 2.2.0),
+asterisk now chokes when configured with support for libsrtp, when
+that one has also been linked against openssl.
 
-On 2018-08-23 06:42 +0300, Baruch Siach spake thusly:
-> Yann E. MORIN writes:
-> > On 2018-08-23 00:09 +0200, Yann E. MORIN spake thusly:
-> >> On 2018-08-23 00:58 +0300, Baruch Siach spake thusly:
-> >> > Old version of cmake break cross-compilation when FindThreads is used
-> >> > because of a try_run call. Add a workaround that avoids try_run.
-> >> >
-> >> > cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
-> >> >
-> >> > Should fix:
-> >> > http://autobuild.buildroot.net/results/8aa/8aa2bd894416a4508ca7140f8947ff46243f8b78/
-> >> > http://autobuild.buildroot.net/results/f2c/f2cc965bb134bf4fd9e625eb267b67c949c202fc/
-> >> >
-> >> > Cc: Scott Fan <fancp2007@gmail.com>
-> >> > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> >> > ---
-> >> > Hi Peter, Yann,
-> >> >
-> >> > Can one of you test this fix on one of the affected autobuilders?
-> >> >
-> >> >   http://autobuild.buildroot.net/?reason=libssh-0.8.1
-[--SNIP--]
-> > Here are the results of the configure step, using the config from my
-> > autobuilder referenced above, and running 'make libssh-depends' first:
-> 
-> You meant to say 'make libssh-configure' here, right?
+See:
+    https://issues.asterisk.org/jira/browse/ASTERISK-27356
 
-No I meant that I ran:
+Backport the upstream fix for that issue.
 
-    $ make libssh-depends
-    [...]
-    $ make libssh-configure
-    [...]
+Fixes:
+    http://autobuild.buildroot.org/results/4e3/4e3b0fd7c31814a8605c00f69cbd45d11800d9e3/
+    http://autobuild.buildroot.org/results/c4c/c4c241020d9e7b139b59429498b78243090245a7/
+    http://autobuild.buildroot.org/results/1c2/1c266acc0bb0518219979e8e9922f31150716118/
 
-And I only pasted starting with the second command.
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Gregory Dymarek <gregd72002@gmail.com>
+---
+ ...rtp-Add-support-for-libsrtp2-with-AES-GCM.patch | 171 +++++++++++++++++++++
+ 1 file changed, 171 insertions(+)
+ create mode 100644 package/asterisk/0007-res_srtp-Add-support-for-libsrtp2-with-AES-GCM.patch
 
-> So I reproduced the build failure and the fix with host-cmake here as
-> well.
-
-Thanks for finding the issue and fixing it. :-)
-
-[--SNIP--]
-> > CMake Warning:
-> >   Manually-specified variables were not used by the project:
-[--SNIP--]
-> >     THREADS_PTHREAD_ARG
-
-I find it weird that THREADS_PTHREAD_ARG is reported as unused, when it
-is actually it that fixes the issue... :-/
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/asterisk/0007-res_srtp-Add-support-for-libsrtp2-with-AES-GCM.patch b/package/asterisk/0007-res_srtp-Add-support-for-libsrtp2-with-AES-GCM.patch
+new file mode 100644
+index 0000000000..65ebe06582
+--- /dev/null
++++ b/package/asterisk/0007-res_srtp-Add-support-for-libsrtp2-with-AES-GCM.patch
+@@ -0,0 +1,171 @@
++From 95b45d1c46b35232ee0b9bdb3135b080c164c7c6 Mon Sep 17 00:00:00 2001
++From: Alexander Traud <pabstraud@compuserve.com>
++Date: Wed, 18 Oct 2017 10:30:25 +0200
++Subject: [PATCH] res_srtp: Add support for libsrtp2 with AES-GCM.
++
++Beside allowing AES-GCM again, this adds AES-192 again.
++
++ASTERISK-27356
++
++Change-Id: Ia97a435faf26300335d9552fa676b5d17e5f7233
++[yann.morin.1998 at free.fr: backport from upstream]
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++ configure              | 104 +++++++++++++++++++++++++++++++++++++++++++++++++
++ configure.ac           |   1 +
++ res/srtp/srtp_compat.h |  12 ++++++
++ 3 files changed, 117 insertions(+)
++
++diff --git a/configure b/configure
++index 59bc3b10b1..588fbfd0be 100755
++--- a/configure
+++++ b/configure
++@@ -33793,6 +33793,110 @@ fi
++ 
++ 
++ 
+++if test "x${PBX_SRTP_192}" != "x1" -a "${USE_SRTP_192}" != "no"; then
+++   pbxlibdir=""
+++   # if --with-SRTP_192=DIR has been specified, use it.
+++   if test "x${SRTP_192_DIR}" != "x"; then
+++      if test -d ${SRTP_192_DIR}/lib; then
+++         pbxlibdir="-L${SRTP_192_DIR}/lib"
+++      else
+++         pbxlibdir="-L${SRTP_192_DIR}"
+++      fi
+++   fi
+++   pbxfuncname="srtp_crypto_policy_set_aes_cm_192_hmac_sha1_80"
+++   if test "x${pbxfuncname}" = "x" ; then   # empty lib, assume only headers
+++      AST_SRTP_192_FOUND=yes
+++   else
+++      ast_ext_lib_check_save_CFLAGS="${CFLAGS}"
+++      CFLAGS="${CFLAGS} "
+++      as_ac_Lib=`$as_echo "ac_cv_lib_srtp2_${pbxfuncname}" | $as_tr_sh`
+++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ${pbxfuncname} in -lsrtp2" >&5
+++$as_echo_n "checking for ${pbxfuncname} in -lsrtp2... " >&6; }
+++if eval \${$as_ac_Lib+:} false; then :
+++  $as_echo_n "(cached) " >&6
+++else
+++  ac_check_lib_save_LIBS=$LIBS
+++LIBS="-lsrtp2 ${pbxlibdir}  $LIBS"
+++cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+++/* end confdefs.h.  */
+++
+++/* Override any GCC internal prototype to avoid an error.
+++   Use char because int might match the return type of a GCC
+++   builtin and then its argument prototype would still apply.  */
+++#ifdef __cplusplus
+++extern "C"
+++#endif
+++char ${pbxfuncname} ();
+++int
+++main ()
+++{
+++return ${pbxfuncname} ();
+++  ;
+++  return 0;
+++}
+++_ACEOF
+++if ac_fn_c_try_link "$LINENO"; then :
+++  eval "$as_ac_Lib=yes"
+++else
+++  eval "$as_ac_Lib=no"
+++fi
+++rm -f core conftest.err conftest.$ac_objext \
+++    conftest$ac_exeext conftest.$ac_ext
+++LIBS=$ac_check_lib_save_LIBS
+++fi
+++eval ac_res=\$$as_ac_Lib
+++	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+++$as_echo "$ac_res" >&6; }
+++if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+++  AST_SRTP_192_FOUND=yes
+++else
+++  AST_SRTP_192_FOUND=no
+++fi
+++
+++      CFLAGS="${ast_ext_lib_check_save_CFLAGS}"
+++   fi
+++
+++   # now check for the header.
+++   if test "${AST_SRTP_192_FOUND}" = "yes"; then
+++      SRTP_192_LIB="${pbxlibdir} -lsrtp2 "
+++      # if --with-SRTP_192=DIR has been specified, use it.
+++      if test "x${SRTP_192_DIR}" != "x"; then
+++         SRTP_192_INCLUDE="-I${SRTP_192_DIR}/include"
+++      fi
+++      SRTP_192_INCLUDE="${SRTP_192_INCLUDE} "
+++      if test "x" = "x" ; then	# no header, assume found
+++         SRTP_192_HEADER_FOUND="1"
+++      else				# check for the header
+++         ast_ext_lib_check_saved_CPPFLAGS="${CPPFLAGS}"
+++         CPPFLAGS="${CPPFLAGS} ${SRTP_192_INCLUDE}"
+++         ac_fn_c_check_header_mongrel "$LINENO" "" "ac_cv_header_" "$ac_includes_default"
+++if test "x$ac_cv_header_" = xyes; then :
+++  SRTP_192_HEADER_FOUND=1
+++else
+++  SRTP_192_HEADER_FOUND=0
+++fi
+++
+++
+++         CPPFLAGS="${ast_ext_lib_check_saved_CPPFLAGS}"
+++      fi
+++      if test "x${SRTP_192_HEADER_FOUND}" = "x0" ; then
+++         SRTP_192_LIB=""
+++         SRTP_192_INCLUDE=""
+++      else
+++         if test "x${pbxfuncname}" = "x" ; then		# only checking headers -> no library
+++            SRTP_192_LIB=""
+++         fi
+++         PBX_SRTP_192=1
+++         cat >>confdefs.h <<_ACEOF
+++#define HAVE_SRTP_192 1
+++_ACEOF
+++
+++      fi
+++   fi
+++fi
+++
+++
+++
++ if test "x${PBX_SRTP_GCM}" != "x1" -a "${USE_SRTP_GCM}" != "no"; then
++    pbxlibdir=""
++    # if --with-SRTP_GCM=DIR has been specified, use it.
++diff --git a/configure.ac b/configure.ac
++index 9f95786e11..c729b94aba 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2520,6 +2520,7 @@ AST_EXT_LIB_CHECK_SHARED([SRTP], [srtp2], [srtp_init], [srtp2/srtp.h], [], [], [
++ if test "x$PBX_SRTP" = x1;
++ then
++     AST_EXT_LIB_CHECK([SRTP_256], [srtp2], [srtp_crypto_policy_set_aes_cm_256_hmac_sha1_80])
+++    AST_EXT_LIB_CHECK([SRTP_192], [srtp2], [srtp_crypto_policy_set_aes_cm_192_hmac_sha1_80])
++     AST_EXT_LIB_CHECK([SRTP_GCM], [srtp2], [srtp_crypto_policy_set_aes_gcm_128_8_auth])
++     AST_EXT_LIB_CHECK([SRTP_SHUTDOWN], [srtp2], [srtp_shutdown], [srtp2/srtp.h])
++ 
++diff --git a/res/srtp/srtp_compat.h b/res/srtp/srtp_compat.h
++index 56ffca1cc2..dbd8ddee0f 100644
++--- a/res/srtp/srtp_compat.h
+++++ b/res/srtp/srtp_compat.h
++@@ -16,6 +16,18 @@
++ #define crypto_policy_set_aes_gcm_128_8_auth srtp_crypto_policy_set_aes_gcm_128_8_auth
++ #define crypto_policy_set_aes_gcm_256_8_auth srtp_crypto_policy_set_aes_gcm_256_8_auth
++ 
+++#if defined(SRTP_AES_GCM_128_KEY_LEN_WSALT)
+++#define AES_128_GCM_KEYSIZE_WSALT SRTP_AES_GCM_128_KEY_LEN_WSALT
+++#else
+++#define AES_128_GCM_KEYSIZE_WSALT SRTP_AES_128_GCM_KEYSIZE_WSALT
+++#endif
+++
+++#if defined(SRTP_AES_GCM_256_KEY_LEN_WSALT)
+++#define AES_256_GCM_KEYSIZE_WSALT SRTP_AES_GCM_256_KEY_LEN_WSALT
+++#else
+++#define AES_256_GCM_KEYSIZE_WSALT SRTP_AES_256_GCM_KEYSIZE_WSALT
+++#endif
+++
++ #define err_status_t srtp_err_status_t
++ #define err_status_ok srtp_err_status_ok
++ #define err_status_fail srtp_err_status_fail
++-- 
++2.14.1
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.14.1
