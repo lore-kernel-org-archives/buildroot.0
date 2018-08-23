@@ -1,150 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:28:47 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/samba4: disable
- build of manpages and documentation
-Message-ID: <20180824063605.433AB8E4F7@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 00:28:18 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/samba4: bump
+ version to 4.8.3
+Message-ID: <20180824063605.2A5518E4F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=394bef18c6b6f3566434500ff8ab5b4dd5e2b76a
+commit: https://git.buildroot.net/buildroot/commit/?id=9b93afe91337cb924e617378f739323aa21f8513
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Fixes
-http://autobuild.buildroot.net/results/3f214cbb1fe2dc2c2cbfb630032e13eba81c1b5a/
-and many others
+Removed patch applied upstream.
+
+Release notes: https://www.samba.org/samba/history/samba-4.8.3.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: reformat patch as Git formatted]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit f38c8d7ed64df008b3a36237d237082eb6ff8995)
+(cherry picked from commit bcc3a15bafc2c708a464486dffad1b324a6f7795)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sable-build-of-manpages-and-documentation.patch | 116 +++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+ .../samba4/0004-libgpo-fix-build-without-ads.patch | 49 ----------------------
+ package/samba4/samba4.hash                         |  4 +-
+ package/samba4/samba4.mk                           |  2 +-
+ 3 files changed, 3 insertions(+), 52 deletions(-)
 
-diff --git a/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch b/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
-new file mode 100644
-index 0000000000..41a06801c7
---- /dev/null
-+++ b/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
-@@ -0,0 +1,116 @@
-+From 3cd608170b99492bdd5fe3b7b8e7db61af199845 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Thu, 9 Aug 2018 09:59:06 +0200
-+Subject: [PATCH] Disable build of manpages and documentation
-+
-+This patch fixes a bug described in an upstream bug report
-+https://bugzilla.samba.org/show_bug.cgi?id=9515
-+which was closed as WONTFIX by disabling the build of manpages and
-+documentation.
-+
-+If installed on the host, samba4 uses the docbook-xsl package to build
-+parts of the documentation. This package is broken, on Debian for
-+example the bug reported to samba4 was fixed in the docbook-xsl package:
-+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=765567
-+
-+Since we do not provide a host version of docbook-xsl we need to disable
-+the build of manpages and documentation.
-+
-+Patch was downloaded from
-+https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/network/samba/patches/samba-950-no-man.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ buildtools/wafsamba/wafsamba.py | 10 +++++-----
-+ docs-xml/wscript_build          | 34 +++++++++++++++++-----------------
-+ source4/scripting/wscript_build |  4 ++--
-+ 3 files changed, 24 insertions(+), 24 deletions(-)
-+
-+diff --git a/buildtools/wafsamba/wafsamba.py b/buildtools/wafsamba/wafsamba.py
-+index 4bb19d070e2..a255d841111 100644
-+--- a/buildtools/wafsamba/wafsamba.py
-++++ b/buildtools/wafsamba/wafsamba.py
-+@@ -335,9 +335,9 @@ def SAMBA_LIBRARY(bld, libname, source,
-+         else:
-+             bld.PKG_CONFIG_FILES(pc_files, vnum=vnum)
-+ 
-+-    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
-+-        bld.env['XSLTPROC_MANPAGES']):
-+-        bld.MANPAGES(manpages, install)
-++#    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
-++#        bld.env['XSLTPROC_MANPAGES']):
-++#        bld.MANPAGES(manpages, install)
-+ 
-+ 
-+ Build.BuildContext.SAMBA_LIBRARY = SAMBA_LIBRARY
-+@@ -442,8 +442,8 @@ def SAMBA_BINARY(bld, binname, source,
-+         samba_ldflags  = pie_ldflags
-+         )
-+ 
-+-    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-+-        bld.MANPAGES(manpages, install)
-++#    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-++#        bld.MANPAGES(manpages, install)
-+ 
-+ Build.BuildContext.SAMBA_BINARY = SAMBA_BINARY
-+ 
-+diff --git a/docs-xml/wscript_build b/docs-xml/wscript_build
-+index 954c62a29bc..1169158fd57 100644
-+--- a/docs-xml/wscript_build
-++++ b/docs-xml/wscript_build
-+@@ -147,20 +147,20 @@ bld.SAMBA_GENERATOR(parameter_all,
-+                     rule=smbdotconf_generate_parameter_list,
-+                     dep_vars=bld.dynconfig_varnames())
-+ 
-+-def SMBDOTCONF_MANPAGE(bld, target):
-+-    ''' assemble and build smb.conf.5 manual page'''
-+-    bld.SAMBAMANPAGES(target, parameter_all)
-+-
-+-if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
-+-
-+-    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
-+-    bld.SAMBAMANPAGES(manpages)
-+-
-+-    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
-+-        bld.SAMBAMANPAGES(pam_winbind_manpages)
-+-
-+-    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
-+-        bld.SAMBAMANPAGES(krb5_locator_manpages)
-+-
-+-    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
-+-        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
-++#def SMBDOTCONF_MANPAGE(bld, target):
-++#    ''' assemble and build smb.conf.5 manual page'''
-++#    bld.SAMBAMANPAGES(target, parameter_all)
-++#
-++#if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
-++#
-++#    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
-++#    bld.SAMBAMANPAGES(manpages)
-++#
-++#    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
-++#        bld.SAMBAMANPAGES(pam_winbind_manpages)
-++#
-++#    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
-++#        bld.SAMBAMANPAGES(krb5_locator_manpages)
-++#
-++#    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
-++#        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
-+diff --git a/source4/scripting/wscript_build b/source4/scripting/wscript_build
-+index 2f53cce12b7..9841ae0a116 100644
-+--- a/source4/scripting/wscript_build
-++++ b/source4/scripting/wscript_build
-+@@ -12,8 +12,8 @@ if sbin_files:
-+     bld.INSTALL_FILES('${SBINDIR}',
-+                       sbin_files,
-+                       chmod=MODE_755, python_fixup=True, flat=True)
-+-    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-+-        bld.MANPAGES(man_files, True)
-++#    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-++#        bld.MANPAGES(man_files, True)
-+ 
-+ if bld.CONFIG_SET('AD_DC_BUILD_IS_ENABLED'):
-+     bld.INSTALL_FILES('${BINDIR}',
-+-- 
-+2.14.4
-+
+diff --git a/package/samba4/0004-libgpo-fix-build-without-ads.patch b/package/samba4/0004-libgpo-fix-build-without-ads.patch
+deleted file mode 100644
+index 5e3af3c322..0000000000
+--- a/package/samba4/0004-libgpo-fix-build-without-ads.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From a222b7506b53e689708834237f18877231dca589 Mon Sep 17 00:00:00 2001
+-From: Volker Lendecke <vl@samba.org>
+-Date: Sat, 3 Feb 2018 07:07:55 +0100
+-Subject: [PATCH] libgpo: Fix the build --without-ads
+-
+-Signed-off-by: Volker Lendecke <vl@samba.org>
+-Reviewed-by: David Disseldorp <ddiss@samba.org>
+-
+-Autobuild-User(master): David Disseldorp <ddiss@samba.org>
+-Autobuild-Date(master): Tue Feb  6 15:36:01 CET 2018 on sn-devel-144
+-
+-Downloaded from upstream commit:
+-https://git.samba.org/samba.git/?p=samba.git;a=commit;h=a222b7506b53e689708834237f18877231dca589
+-
+-Fixes https://bugzilla.samba.org/show_bug.cgi?id=13331
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- libgpo/pygpo.c | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/libgpo/pygpo.c b/libgpo/pygpo.c
+-index 7a02a0dc2aa..b6b53b76212 100644
+---- a/libgpo/pygpo.c
+-+++ b/libgpo/pygpo.c
+-@@ -319,6 +319,7 @@ static PyObject *py_gpo_get_sysvol_gpt_version(PyObject * self,
+- 	return result;
+- }
+- 
+-+#ifdef HAVE_ADS
+- static ADS_STATUS find_samaccount(ADS_STRUCT *ads, TALLOC_CTX *mem_ctx,
+- 				  const char *samaccountname,
+- 				  uint32_t *uac_ret, const char **dn_ret)
+-@@ -468,11 +469,15 @@ static PyObject *py_ads_get_gpo_list(ADS *self, PyObject *args, PyObject *kwds)
+- 	return ret;
+- }
+- 
+-+#endif
+-+
+- static PyMethodDef ADS_methods[] = {
+- 	{ "connect", (PyCFunction)py_ads_connect, METH_NOARGS,
+- 		"Connect to the LDAP server" },
+-+#ifdef HAVE_ADS
+- 	{ "get_gpo_list", (PyCFunction)py_ads_get_gpo_list, METH_KEYWORDS,
+- 		NULL },
+-+#endif
+- 	{ NULL }
+- };
+- 
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index cadb88b260..4b1b1218ac 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.8.2.tar.asc
+-sha256 62e552296d49e6ab44bb87d120a288813fa52e42435d53a1f71b77596512bf22  samba-4.8.2.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.8.3.tar.asc
++sha256 e0569a8a605d5dfb49f1fdd11db796f4d36fe0351c4a7f21387ef253010b82ed  samba-4.8.3.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index f75b350375..52d59ffeb9 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.8.2
++SAMBA4_VERSION = 4.8.3
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
