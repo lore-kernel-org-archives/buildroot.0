@@ -1,25 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:19:28 +0200
-Subject: [Buildroot] [PATCH] boot-wrapper-aarch64: use SPDX identifier
- for 3 clause BSD
-In-Reply-To: <20180807081228.20240-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 7 Aug 2018 10:12:28 +0200")
-References: <20180807081228.20240-1-peter@korsgaard.com>
-Message-ID: <8736v4pvyn.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 00:27:23 +0200
+Subject: [Buildroot] [PATCH] uclibc: ldso/arc: fix LD_DEBUG segv when
+ printing R_ARC_NONE
+In-Reply-To: <20180807173359.35041-1-abrodkin@synopsys.com> (Alexey Brodkin's
+ message of "Tue, 7 Aug 2018 20:33:59 +0300")
+References: <20180807173359.35041-1-abrodkin@synopsys.com>
+Message-ID: <87y3cwoh10.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
- > Use the correct SPDX identifier for the 3 clause BSD license, like we do
- > elsewhere.
+ > Dynamic linker used to segfault on attempt to print info
+ > about R_ARC_NONE reloaction.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > The fix is already in upstream master [1],
+ > should be removed on uClibc version bump.
 
-Committed to 2018.02.x and 2018.05.x, thanks.
+ > [1] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=269a2a2a0f863e1b43dc02f2f4f0f3c50299456e
+
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+
+Committed to 2018.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
