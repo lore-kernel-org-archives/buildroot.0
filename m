@@ -1,74 +1,120 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 22:38:00 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] stress-ng: fix build with
- kernel headers v3.9
-Message-ID: <20180823214248.320E18E47E@busybox.osuosl.org>
+Date: Thu, 23 Aug 2018 22:42:06 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] attr: build fix for GCC <
+ 4.5
+Message-ID: <20180823214248.67CC88E47E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2106720f3b31adb437a10983483834318414436c
+commit: https://git.buildroot.net/buildroot/commit/?id=cecdbb8e696b02e2e5af244467e1c041f373f20d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Add a patch correcting the kernel headers version test macro.
+GCC 4.4 and before do not support a message associated to the
+"deprecated" gcc attribute. Since such messages are not that useful in
+the context of Buildroot, this commit adds a patch that removes them
+in the attr source code.
 
-Fixes:
-http://autobuild.buildroot.net/results/cbf/cbfb80117840bddd5712bcda3caeaaff61745b0b/
-http://autobuild.buildroot.net/results/649/64941ac5b7dcd9c100bdc47cdfe73cce5f23c3d8/
-http://autobuild.buildroot.net/results/741/741f5881d3cb745d1003ede3f762c20eb72de0b5/
-
-Cc: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ca54f17a0ec7f3722e339eb2772c2f2e5e004bbd)
+(cherry picked from commit f910320143c12b9bed27733640e4c5441afe0f32)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...s-netlink-proc-fix-build-with-kernel-v3.9.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/attr/0001-build-with-older-GCCs.patch | 87 +++++++++++++++++++++++++++
+ 1 file changed, 87 insertions(+)
 
-diff --git a/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch b/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch
+diff --git a/package/attr/0001-build-with-older-GCCs.patch b/package/attr/0001-build-with-older-GCCs.patch
 new file mode 100644
-index 0000000000..6cbba5e729
+index 0000000000..22cfac2ce1
 --- /dev/null
-+++ b/package/stress-ng/0001-stress-netlink-proc-fix-build-with-kernel-v3.9.patch
-@@ -0,0 +1,38 @@
-+From f3aa381322a4b73b9ca4e7940f802d74324ef24b Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Mon, 2 Jul 2018 21:06:43 +0300
-+Subject: [PATCH] stress-netlink-proc: fix build with kernel v3.9
++++ b/package/attr/0001-build-with-older-GCCs.patch
+@@ -0,0 +1,87 @@
++From 3ac428794ea0f95c854166c9c0cffb0267c5e98b Mon Sep 17 00:00:00 2001
++From: Hollis Blanchard <hollis_blanchard@mentor.com>
++Date: Mon, 30 Jul 2018 14:17:21 -0700
++Subject: [PATCH] Remove messages in "deprecated" gcc attributes
 +
-+The PROC_EVENT_COREDUMP has been introduced in kernel version 3.10.
-+Don't use it with 3.9 headers.
++GCC versions up through 4.4.7 (which is used in RHEL 6) do not accept
++any argument for the deprecated attribute. GCC 4.5 and later say the
++"msg" argument is optional. We don't need the messages during
++Buildroot builds anyways.
 +
-+Fixes build failure:
-+
-+stress-netlink-proc.c: In function 'monitor':
-+stress-netlink-proc.c:108:8: error: 'PROC_EVENT_COREDUMP' undeclared (first use in this function)
-+   case PROC_EVENT_COREDUMP:
-+        ^
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
 +---
-+Upstream status: https://github.com/ColinIanKing/stress-ng/pull/24
++ include/attributes.h | 20 ++++++++++----------
++ 1 file changed, 10 insertions(+), 10 deletions(-)
 +
-+ stress-netlink-proc.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/stress-netlink-proc.c b/stress-netlink-proc.c
-+index 5845610dc816..6114a0b92af1 100644
-+--- a/stress-netlink-proc.c
-++++ b/stress-netlink-proc.c
-+@@ -104,7 +104,7 @@ static int monitor(const args_t *args, const int sock)
-+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)
-+ 		case PROC_EVENT_SID:
-+ #endif
-+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,0)
-++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,10,0)
-+ 		case PROC_EVENT_COREDUMP:
-+ #endif
-+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0)
++diff --git a/include/attributes.h b/include/attributes.h
++index 14beb8f..23c39c8 100644
++--- a/include/attributes.h
+++++ b/include/attributes.h
++@@ -127,10 +127,10 @@ typedef struct attr_multiop {
++  */
++ EXPORT int attr_get (const char *__path, const char *__attrname,
++ 			char *__attrvalue, int *__valuelength, int __flags)
++-	__attribute__ ((deprecated ("Use getxattr or lgetxattr instead")));
+++	__attribute__ ((deprecated));
++ EXPORT int attr_getf (int __fd, const char *__attrname, char *__attrvalue,
++ 			int *__valuelength, int __flags)
++-	__attribute__ ((deprecated ("Use fgetxattr instead")));
+++	__attribute__ ((deprecated));
++ 
++ /*
++  * Set the value of an attribute, creating the attribute if necessary.
++@@ -139,11 +139,11 @@ EXPORT int attr_getf (int __fd, const char *__attrname, char *__attrvalue,
++ EXPORT int attr_set (const char *__path, const char *__attrname,
++ 			const char *__attrvalue, const int __valuelength,
++ 			int __flags)
++-	__attribute__ ((deprecated ("Use setxattr or lsetxattr instead")));
+++	__attribute__ ((deprecated));
++ EXPORT int attr_setf (int __fd, const char *__attrname,
++ 			const char *__attrvalue, const int __valuelength,
++ 			int __flags)
++-	__attribute__ ((deprecated ("Use fsetxattr instead")));
+++	__attribute__ ((deprecated));
++ 
++ /*
++  * Remove an attribute.
++@@ -151,9 +151,9 @@ EXPORT int attr_setf (int __fd, const char *__attrname,
++  */
++ EXPORT int attr_remove (const char *__path, const char *__attrname,
++ 			int __flags)
++-	__attribute__ ((deprecated ("Use removexattr or lremovexattr instead")));
+++	__attribute__ ((deprecated));
++ EXPORT int attr_removef (int __fd, const char *__attrname, int __flags)
++-	__attribute__ ((deprecated ("Use fremovexattr instead")));
+++	__attribute__ ((deprecated));
++ 
++ /*
++  * List the names and sizes of the values of all the attributes of an object.
++@@ -164,10 +164,10 @@ EXPORT int attr_removef (int __fd, const char *__attrname, int __flags)
++  */
++ EXPORT int attr_list(const char *__path, char *__buffer, const int __buffersize,
++ 		int __flags, attrlist_cursor_t *__cursor)
++-	__attribute__ ((deprecated ("Use listxattr or llistxattr instead")));
+++	__attribute__ ((deprecated));
++ EXPORT int attr_listf(int __fd, char *__buffer, const int __buffersize,
++ 		int __flags, attrlist_cursor_t *__cursor)
++-	__attribute__ ((deprecated ("Use flistxattr instead")));
+++	__attribute__ ((deprecated));
++ 
++ /*
++  * Operate on multiple attributes of the same object simultaneously.
++@@ -188,10 +188,10 @@ EXPORT int attr_listf(int __fd, char *__buffer, const int __buffersize,
++  */
++ EXPORT int attr_multi (const char *__path, attr_multiop_t *__oplist,
++ 			int __count, int __flags)
++-	__attribute__ ((deprecated ("Use getxattr, setxattr, listxattr, removexattr instead")));
+++	__attribute__ ((deprecated));
++ EXPORT int attr_multif (int __fd, attr_multiop_t *__oplist,
++ 			int __count, int __flags)
++-	__attribute__ ((deprecated ("Use getxattr, setxattr, listxattr, removexattr instead")));
+++	__attribute__ ((deprecated));
++ 
++ #ifdef __cplusplus
++ }
 +-- 
-+2.18.0
++2.13.0
 +
