@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 Aug 2018 21:18:20 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] dmidecode: enable for
+Date: Thu, 23 Aug 2018 21:18:48 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] dmidecode: enable for
  aarch64
-Message-ID: <20180823191101.34D138E379@busybox.osuosl.org>
+Message-ID: <20180823191110.552828E37C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f470492c0fd3bee1e1702436166d45dbbc4f99a3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2f037fd5ea888d0cd8123036c2cc99cee8516eb5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 arm64 systems support SMBIOS, so update the dmidecode config
 to allow building dmidecode for arm64.
