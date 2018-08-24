@@ -1,36 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 23:24:11 +0200
-Subject: [Buildroot] [PATCH] gst1-plugins-good: enable jack plugins if
- jack2 is on
-In-Reply-To: <1535055485-8704-1-git-send-email-brad@nextdimension.cc>
-References: <1535055485-8704-1-git-send-email-brad@nextdimension.cc>
-Message-ID: <20180824232411.4d01043d@windsurf>
+Date: Fri, 24 Aug 2018 23:20:39 +0200
+Subject: [Buildroot] [git commit branch/next] libostree: bump to version
+ 2018.8
+Message-ID: <20180824211745.241D08E6C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Brad,
+commit: https://git.buildroot.net/buildroot/commit/?id=8dfbceb4360bd0169cda84d61fe848ccee7454c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 23 Aug 2018 15:18:05 -0500, Brad Love wrote:
-> Jack2 audio server is part of buildroot, but the jack gst plugins
-> are disabled completely in gst1-plugins-good, whether or not jack2
-> is selected. This changes the logic to where if the build system
-> determines jack2 audio server is selected, then the jack plugins are
-> enabled. If the plugins are enabled, then jack2 is also added as a
-> dependency to gst1-plugins-good.
-> 
-> 
-> Signed-off-by: Brad Love <brad@nextdimension.cc>
-> ---
->  package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libostree/libostree.hash | 2 +-
+ package/libostree/libostree.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libostree/libostree.hash b/package/libostree/libostree.hash
+index 2d501ccf93..d41016ed7a 100644
+--- a/package/libostree/libostree.hash
++++ b/package/libostree/libostree.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 483e359fd934f3fb1abde2cd8ff9c5bccb97e2a37d52ed8bedfa9ab1290883d9  libostree-2018.7.tar.xz
++sha256 beef6debb0065bf1dc7538cd036c5f0348ac102ca4ad6d8651feff146130a844  libostree-2018.8.tar.xz
+ sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libostree/libostree.mk b/package/libostree/libostree.mk
+index 349e6a0881..66c5e5b5b0 100644
+--- a/package/libostree/libostree.mk
++++ b/package/libostree/libostree.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOSTREE_VERSION = 2018.7
++LIBOSTREE_VERSION = 2018.8
+ LIBOSTREE_SOURCE = libostree-$(LIBOSTREE_VERSION).tar.xz
+ LIBOSTREE_SITE = https://github.com/ostreedev/ostree/releases/download/v$(LIBOSTREE_VERSION)
+ 
