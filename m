@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Aug 2018 00:04:56 +0200
-Subject: [Buildroot] [PATCH v3 2/2] i2c-tools: install library and
- header to staging
-In-Reply-To: <1535118847-21086-3-git-send-email-brad@nextdimension.cc>
-References: <1535118847-21086-1-git-send-email-brad@nextdimension.cc>
- <1535118847-21086-3-git-send-email-brad@nextdimension.cc>
-Message-ID: <20180825000456.313d8360@windsurf>
+Date: Sat, 25 Aug 2018 00:05:04 +0200
+Subject: [Buildroot] [PATCH] docs/manual: expand on why using a branch
+ name is not supported
+In-Reply-To: <20180823100433.15915-1-yann.morin.1998@free.fr>
+References: <20180823100433.15915-1-yann.morin.1998@free.fr>
+Message-ID: <20180825000504.0c98cf76@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +13,20 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 24 Aug 2018 08:54:07 -0500, Brad Love wrote:
-> When the dynamic/static library of i2c-tools is enabled it is installed
-> to the target destination. However, in order for external packages to
-> link against it, it must also be installed to staging.
+On Thu, 23 Aug 2018 12:04:33 +0200, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > 
-> Here, the flag is set to install the package to staging. The
-> INSTALL_STAGING command is included to complete the operation.
-> 
-> Signed-off-by: Brad Love <brad@nextdimension.cc>
 > ---
-> since v2:
-> - regen
+> Changes v1 -> v2
+>   - reference two users building the same thing  (Thomas)
+>   - typoes  (Thomas)
+> ---
+>  docs/manual/adding-packages-generic.txt | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
