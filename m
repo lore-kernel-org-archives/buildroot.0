@@ -1,35 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:59:42 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] php: use $() to reference
- make variables instead of ${}
-Message-ID: <20180824085214.83E3C81078@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 10:59:54 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/php: security
+ bump to version 7.2.9
+Message-ID: <20180824085214.99C357FA62@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42ab95458b84bc837f37e30459eb0e59c077a65a
+commit: https://git.buildroot.net/buildroot/commit/?id=d8fc62edbb4abd75b4283c7fe19cd63c4554b40c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit dba254cdf006e559ed61e1a136677843a3b4a94e)
+Version 7.2.8 fixed CVE-2018-12882, CVE-2018-14883 & CVE-2018-14851:
+http://www.php.net/ChangeLog-7.php#7.2.8
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit addd279d7328007455abec8334ab4d7aa7f80fe9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 4ddef44274..6e401dec00 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 af70a33b3f7a51510467199b39af151333fbbe4cc21923bad9c7cf64268cddb2  php-7.2.5.tar.xz
++sha256 3585c1222e00494efee4f5a65a8e03a1e6eca3dfb834814236ee7f02c5248ae0  php-7.2.9.tar.xz
+ 
+ # License file
+ sha256 00e567a8d50359d93ee1f9afdd9511277660c1e70a0cbf3229f84403aa9aebb1  LICENSE
 diff --git a/package/php/php.mk b/package/php/php.mk
-index 4c3a87118e..028fa6fc55 100644
+index 028fa6fc55..04a32283c8 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
-@@ -137,7 +137,7 @@ endif
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
- PHP_CONF_ENV += php_cv_libxml_build_works=yes
--PHP_CONF_OPTS += --enable-libxml --with-libxml-dir=${STAGING_DIR}/usr
-+PHP_CONF_OPTS += --enable-libxml --with-libxml-dir=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += libxml2
- endif
- 
+-PHP_VERSION = 7.2.5
++PHP_VERSION = 7.2.9
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
