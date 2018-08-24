@@ -1,32 +1,55 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 24 Aug 2018 20:41:32 +0200
-Subject: [Buildroot] [PATCH/next 2/3] linux: bump default to version 4.18.5
-In-Reply-To: <20180824184133.8508-1-bernd.kuhls@t-online.de>
-References: <20180824184133.8508-1-bernd.kuhls@t-online.de>
-Message-ID: <20180824184133.8508-2-bernd.kuhls@t-online.de>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 24 Aug 2018 21:10:56 +0200
+Subject: [Buildroot] [PATCH v2 2/2] sunxi-mali-mainline-driver: bump
+ version and add support for building on arm64(aarch64).
+In-Reply-To: <20180822212633.0a8a625e@windsurf>
+References: <20180822000648.23314-1-giulio.benetti@micronovasrl.com>
+ <20180822000648.23314-3-giulio.benetti@micronovasrl.com>
+ <20180822132959.39640475@windsurf>
+ <58c7d88b-dc45-5426-a328-89a58dc005b2@micronovasrl.com>
+ <20180822212633.0a8a625e@windsurf>
+Message-ID: <ac85c090-d43d-8415-5333-f8daf24e70a1@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- linux/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hello,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 13616d5d15..9ad11f1e39 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -120,7 +120,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.18.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.18.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.130-cip23" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
--- 
-2.18.0
+Il 22/08/2018 21:26, Thomas Petazzoni ha scritto:
+> Hello,
+> 
+> On Wed, 22 Aug 2018 20:37:13 +0200, Giulio Benetti wrote:
+> 
+>> Also, it would be good to have patches
+>>> adding license information for both of those packages. For the
+>>> mali-blobs, there's a PDF containing the EULA.
+>>
+>> Do you mean like odroid-mali package .mk?
+>> I mean reporting:
+>> SUNXI_MALI_MAINLINE_LICENSE = EULA
+>> SUNXI_MALI_MAINLINE_LICENSE_FILES = EULA for Mali 400MP _AW.pdf
+>> Right?
+> 
+> Yes. Make sure "make legal-info" is working after this.
+
+I'm getting problems with whitespaces in pdf filename.
+I couldn't find in Buildroot Documentation if it's allowed or not having 
+filenames containing spaces.
+I've tried using:
+'EULA for Mali 400MP _AW.pdf'
+"EULA for Mali 400MP _AW.pdf"
+etc.
+but with no luck.
+
+If it's not possible to have whitespaces, should I workaround it in 
+package changing filename before legal-info recipe?
+Like:
+EULA for Mali 400MP _AW.pdf
+becoming:
+EULA_for_Mali_400MP_AW.pdf
+?
+
+Thanks
+Giulio
