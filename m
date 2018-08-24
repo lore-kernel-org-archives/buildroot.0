@@ -1,104 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:36:41 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libselinux: add patch to
- fix build with gcc < 4.7
-Message-ID: <20180824083036.7F1F78E5CF@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 10:39:19 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
+ 9, 14, 17}.x series
+Message-ID: <20180824083145.685518E5D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=affa919039d19abbb1a835691a1846f8c4becf80
+commit: https://git.buildroot.net/buildroot/commit/?id=6d6bcb6b25fdc65dfff9d345f489cee80ec40c34
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-This commit adds a patch from Hollis Blanchard on libselinux to fix
-build on host machines that have gcc < 4.7.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/a82bb0c0b22ff24263ad7a7d165b21c0df7b3b1d/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 6288409642d8368104f916bd264d2cb042942dfa)
+[Peter: drop 4.17.x change]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 345a8eeda1cdb5d5d9a5c00a740e8143110e9f73)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...d-break-around-__atomic_-with-GCC-4.7.patch.txt | 70 ++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt b/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt
-new file mode 100644
-index 0000000000..85bd064066
---- /dev/null
-+++ b/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt
-@@ -0,0 +1,70 @@
-+From abe76789f8e7ce61b357f693eaed5b28feab5ce2 Mon Sep 17 00:00:00 2001
-+From: Hollis Blanchard <hollis_blanchard@mentor.com>
-+Date: Mon, 13 Aug 2018 12:11:33 -0700
-+Subject: [PATCH] Fix build break around __atomic_*() with GCC<4.7
-+
-+The __atomic_* GCC primitives were introduced in GCC 4.7, but Red Hat
-+Enterprise Linux 6.x (for example) provides GCC 4.4. Tweak the current code to
-+use the (most conservative) __sync_synchronize() primitive provided by those
-+older GCC versions.
-+
-+(Really, no __atomic or __sync operations are needed here at all, since POSIX
-+4.12 "Memory Synchronization" says pthread_mutex_lock() and
-+pthread_mutex_unlock() "synchronize memory with respect to other threads"...)
-+
-+Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
-+---
-+ libselinux/src/label_file.h | 18 ++++++++++++++++++
-+ 1 file changed, 18 insertions(+)
-+
-+diff --git a/libselinux/src/label_file.h b/libselinux/src/label_file.h
-+index 2fa85474..47859baf 100644
-+--- a/libselinux/src/label_file.h
-++++ b/libselinux/src/label_file.h
-+@@ -351,8 +351,14 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
-+ 	 * init_routine does not take a parameter, it's not possible
-+ 	 * to use, so we generate the same effect with atomics and a
-+ 	 * mutex */
-++#ifdef __ATOMIC_RELAXED
-+ 	regex_compiled =
-+ 		__atomic_load_n(&spec->regex_compiled, __ATOMIC_ACQUIRE);
-++#else
-++	/* GCC <4.7 */
-++	__sync_synchronize();
-++	regex_compiled = spec->regex_compiled;
-++#endif
-+ 	if (regex_compiled) {
-+ 		return 0; /* already done */
-+ 	}
-+@@ -360,8 +366,14 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
-+ 	__pthread_mutex_lock(&spec->regex_lock);
-+ 	/* Check if another thread compiled the regex while we waited
-+ 	 * on the mutex */
-++#ifdef __ATOMIC_RELAXED
-+ 	regex_compiled =
-+ 		__atomic_load_n(&spec->regex_compiled, __ATOMIC_ACQUIRE);
-++#else
-++	/* GCC <4.7 */
-++	__sync_synchronize();
-++	regex_compiled = spec->regex_compiled;
-++#endif
-+ 	if (regex_compiled) {
-+ 		__pthread_mutex_unlock(&spec->regex_lock);
-+ 		return 0;
-+@@ -404,7 +416,13 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
-+ 	}
-+ 
-+ 	/* Done. */
-++#ifdef __ATOMIC_RELAXED
-+ 	__atomic_store_n(&spec->regex_compiled, true, __ATOMIC_RELEASE);
-++#else
-++	/* GCC <4.7 */
-++	spec->regex_compiled = true;
-++	__sync_synchronize();
-++#endif
-+ 	__pthread_mutex_unlock(&spec->regex_lock);
-+ 	return 0;
-+ }
-+-- 
-+2.13.0
-+
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 31c1507e60..2a2803a1b4 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.147"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.119"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.148"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.120"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.62"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.63"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
