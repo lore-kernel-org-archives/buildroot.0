@@ -1,49 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:47:24 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] eigen: Fix pkg-config
- file prefix error
-Message-ID: <20180824083941.BB7968E606@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 10:47:40 +0200
+Subject: [Buildroot] [PATCH 1/1] eigen: Fix pkg-config file prefix error
+In-Reply-To: <20180816221620.30881-1-flatmax@flatmax.com> (Matt Flax's message
+ of "Fri, 17 Aug 2018 08:16:20 +1000")
+References: <20180816221620.30881-1-flatmax@flatmax.com>
+Message-ID: <87zhxci21f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec6d94bc9cf581fe0dacf9b6738c8a5b156ca163
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+>>>>> "Matt" == Matt Flax <flatmax@flatmax.com> writes:
 
-eigen generates	a pkg-config file which	has a broken prefix
-(@CMAKE_INSTALL_PREFIX@).  This broken prefix causes an incorrect path when
-other packages call pkg-config --cflags eigen.
+ > From: Matt Flax <flatmax@flatmax.org>
+ > eigen generates	a pkg-config file which	has a broken prefix. This broken
+ > prefix causes an incorrect path	when other packages call
+ > pkg-config --cflags eigen
 
-This patch fixes the prefix in the generated eigen pc file, so projects
-which depend on this pc file can now correctly find the eigen include
-directory at build time.
+ > This patch fixes the prefix in the generated eigen pc file and prjects
+ > which depend on	this pc	file can now path correctly to the eigen include
+ > directory at build time.
 
-Also correct the Cflags output to use the runtime prefix instead of the
-build time STAGING_DIR, like we do elsewhere.
+ > Signed-off-by: Matt Flax <flatmax@flatmax.org>
 
-[Peter: drop backslashes, tweak commit message]
-Signed-off-by: Matt Flax <flatmax@flatmax.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Committed to 2018.02.x and 2018.05.x, thanks.
 
-(cherry picked from commit e477dc19b5264c8fd01ff235dded4f148fde7a65)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/eigen/eigen.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 89f54fb948..27c4e212a9 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -23,7 +23,8 @@ endif
- # Generate the .pc file at build time
- define EIGEN_BUILD_CMDS
- 	sed -r -e 's,^Version: .*,Version: $(EIGEN_VERSION),' \
--		-e 's,^Cflags: .*,Cflags: -I$(EIGEN_DEST_DIR),' \
-+		-e 's,^Cflags: .*,Cflags: -I$$\{prefix\}/include/eigen3,' \
-+		-e 's,^prefix.*,prefix=/usr,' \
- 		$(@D)/eigen3.pc.in >$(@D)/eigen3.pc
- endef
- 
+-- 
+Bye, Peter Korsgaard
