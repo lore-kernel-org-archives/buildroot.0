@@ -1,30 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:32:20 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] lvm2: add license hashes
-Message-ID: <20180824082726.F3A658E5BA@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 10:35:05 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] bzip2: change upstream
+ site
+Message-ID: <20180824082727.189278E5BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92c8a5cd3c98e71f207097d751a527d82c3fb277
+commit: https://git.buildroot.net/buildroot/commit/?id=a4d7b285cf05fbe731e7fcf77d3ecc425432bce1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 70dc00e1c22626a57de383d534f1788a4d44ec47)
+The bzip.org website is down. Use the Buildroot backup download site.
+Remove the website link as there is no clear alternative upstream at
+this point.
+
+  https://lwn.net/Articles/762264/
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f45976b2c759b1630a2886e75312340b3b511f81)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lvm2/lvm2.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/bzip2/Config.in | 2 --
+ package/bzip2/bzip2.mk  | 2 +-
+ 2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
-index 9f7a6c6f51..b0dfcfcef3 100644
---- a/package/lvm2/lvm2.hash
-+++ b/package/lvm2/lvm2.hash
-@@ -1,2 +1,5 @@
- # From ftp://sources.redhat.com/pub/lvm2/releases/sha512.sum
- sha512 c2ea8beafe006abf9282f51ec98600fd0ebff816d53c10ecbb19bbf336ada4825135cf9c92ccd364afb18f8b1d7e163eff5bdec8dfdd70dfb9ba45db2f6bdd5e  LVM2.2.02.173.tgz
-+# Locally computed sha256 checksums
-+sha256 e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
-+sha256 5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
+diff --git a/package/bzip2/Config.in b/package/bzip2/Config.in
+index dbc82496df..ca447bbb2d 100644
+--- a/package/bzip2/Config.in
++++ b/package/bzip2/Config.in
+@@ -5,5 +5,3 @@ config BR2_PACKAGE_BZIP2
+ 	  It typically compresses files to within 10% to 15% of the best
+ 	  available techniques, while being around twice as fast at
+ 	  compression and six times faster at decompression.
+-
+-	  http://www.bzip.org
+diff --git a/package/bzip2/bzip2.mk b/package/bzip2/bzip2.mk
+index e43533072b..a3af322993 100644
+--- a/package/bzip2/bzip2.mk
++++ b/package/bzip2/bzip2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ BZIP2_VERSION = 1.0.6
+-BZIP2_SITE = http://www.bzip.org/$(BZIP2_VERSION)
++BZIP2_SITE = http://sources.buildroot.net
+ BZIP2_INSTALL_STAGING = YES
+ BZIP2_LICENSE = bzip2 license
+ BZIP2_LICENSE_FILES = LICENSE
