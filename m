@@ -1,40 +1,53 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 24 Aug 2018 06:46:53 +0300
-Subject: [Buildroot] [PATCH 1/5 v2] package/lua-flu: fix to use the
- system xattr header
-In-Reply-To: <876000253l.fsf@dell.be.48ers.dk>
-References: <cover.1530368468.git.yann.morin.1998@free.fr>
- <652be114258a3d7b5829303a5c9219a26bd62c08.1530368468.git.yann.morin.1998@free.fr>
- <876000253l.fsf@dell.be.48ers.dk>
-Message-ID: <878t4wv32q.fsf@tkos.co.il>
+Date: Fri, 24 Aug 2018 07:25:27 +0300
+Subject: [Buildroot] [PATCH 1/2] i2c-tools: include LGPL-2.1+ license
+ for libi2c
+In-Reply-To: <1535055605-8974-2-git-send-email-brad@nextdimension.cc>
+References: <1535055605-8974-1-git-send-email-brad@nextdimension.cc>
+ <1535055605-8974-2-git-send-email-brad@nextdimension.cc>
+Message-ID: <877ekgv1ag.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Hi Brad,
 
-Peter Korsgaard writes:
->>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Brad Love writes:
+> Extend i2c-tools SPDX identifiers to include the library license.
 >
->  > We can't carry a mercurial patch, because the luarocks package is not
->  > organised with the same layout as the upstream package source tree is.
+> The ic2-tools readme states:
 >
->  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
->  > Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
->  > Cc: Francois Perrad <francois.perrad@gadz.org>
+> LICENSE
 >
->  > ---
->  > Changes v1 -> v2:
->  >   - explain ENOATTR -> ENODATA conversion  (Thomas)
->  >   - explain why it's not a hg patch  (Thomas)
->  >   - reference upstream PR and commit
+> Check the documentation of individual tools for licensing information.
+> The library is released under the LGPL version 2.1 or later, while most
+> tools are released under the GPL version 2 or later, but there are a few
+> exceptions.
 >
-> Committed to 2018.05.x, thanks.
+>
+> Signed-off-by: Brad Love <brad@nextdimension.cc>
+> ---
+>  package/i2c-tools/i2c-tools.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
+> index db26647..a346698 100644
+> --- a/package/i2c-tools/i2c-tools.mk
+> +++ b/package/i2c-tools/i2c-tools.mk
+> @@ -7,7 +7,7 @@
+>  I2C_TOOLS_VERSION = 4.0
+>  I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
+>  I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
+> -I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus)
+> +I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
+>  I2C_TOOLS_LICENSE_FILES = COPYING
 
-Not in 2018.05.x as of 838ed3710a149 (uclibc: ldso/arc: fix LD_DEBUG
-segv when printing R_ARC_NONE).
+Please add COPYING.LGPL here as well. And while you are at it, I think
+adding README would also be good.
+
+>  I2C_TOOLS_MAKE_OPTS = EXTRA=eeprog
 
 baruch
 
