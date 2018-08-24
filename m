@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 11:04:02 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/bind: security
+Date: Fri, 24 Aug 2018 11:04:17 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/bind: security
  bump to version 9.11.4-P1
-Message-ID: <20180824085621.0D95B8E61B@busybox.osuosl.org>
+Message-ID: <20180824085635.0E3ED8E622@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26c6ce3a660e28b7de4420efce02488940ae6e03
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=61c4f41a785c1094a3dc51215c6e71b48f24bc00
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes CVE-2018-5740: https://ftp.isc.org/isc/bind9/9.11.4-P1/CHANGES
 
@@ -35,7 +35,7 @@ index 78f8015521..34d9891805 100644
 +sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
  sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
 diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index d478a7f6e1..0140041218 100644
+index 4249291536..5cefa5b804 100644
 --- a/package/bind/bind.mk
 +++ b/package/bind/bind.mk
 @@ -4,7 +4,7 @@
