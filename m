@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:45:29 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/m4: fix build on
+Date: Fri, 24 Aug 2018 10:45:39 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/m4: fix build on
  host with glibc-2.28
-Message-ID: <20180824083747.2626F8E5F6@busybox.osuosl.org>
+Message-ID: <20180824083756.760418E5F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cecfc3401e74906571d7f048d74db29e105b98b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e915aaa5f5620a1f997763337b5387b3d6f4ee3e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 glibc-2.28 did quite some lifting in their headers, which breaks the
 way some packages were detecting glibc, like gnulib.
