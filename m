@@ -1,49 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 24 Aug 2018 22:31:19 +0200
-Subject: [Buildroot] [PATCH/next 1/1] python-libconfig: fix python-3.7
- support
-Message-ID: <20180824203119.16807-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 24 Aug 2018 22:33:59 +0200
+Subject: [Buildroot] [git commit branch/next] linux-headers: bump 4.{4, 9, 14,
+ 17}.x series
+Message-ID: <20180824204817.AACDC8E690@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/32f/32f7e38895e7c491916bd69ed91bbe016e8b3ff6/
+commit: https://git.buildroot.net/buildroot/commit/?id=72acd691fa7e42255e81959246b396d1da796da4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...termine-boost_python-name-depending-on-current-Pyt.patch | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/linux-headers/Config.in.host | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-index 478bac76f6..ec7aec4072 100644
---- a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-+++ b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
-@@ -4,11 +4,13 @@ Date: Thu, 27 Jul 2017 09:46:07 +0200
- Subject: [PATCH] Determine boost_python name depending on current Python
-  version
- 
--Python2 requires boost_python27 and Python3 requires boost_python36
-+Python2 requires boost_python27 and Python3 requires boost_python37
- (since boost 1.67).
- 
- Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Bernd: adapted for python-3.7]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  setup.py | 6 +++++-
-  1 file changed, 5 insertions(+), 1 deletion(-)
-@@ -21,7 +23,7 @@ index fdf5c27..4b38569 100644
-  from setuptools import setup, find_packages, Extension
-  import sys, os
-  
--+boostlib = "boost_python36"
-++boostlib = "boost_python37"
- +if sys.version_info < (3, 0):
- +    boostlib = "boost_python27"
- +
--- 
-2.18.0
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index bd9c4827b3..67c06d3fdd 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -266,15 +266,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.145"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.116"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.151"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.123"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.59"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.66"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.17.11"	if BR2_KERNEL_HEADERS_4_17
++	default "4.17.18"	if BR2_KERNEL_HEADERS_4_17
+ 	default "4.18.3"	if BR2_KERNEL_HEADERS_4_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
