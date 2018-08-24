@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 09:18:04 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] linux-headers: bump 4.{4,
+Date: Fri, 24 Aug 2018 09:18:48 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
  9, 14, 17}.x series
-Message-ID: <20180824071030.7EC838E54E@busybox.osuosl.org>
+Message-ID: <20180824071144.5FC9A8E556@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d351261ee61c3914fb88d5e2cccc3bcaffcd927
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e98a08829190bde1c6caaaf95c938e7d65f609f1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 [Peter: drop 4.17.x change]
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
@@ -22,10 +22,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index fbba1be994..721a2d0f3a 100644
+index 96ae5e6bbd..31c1507e60 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -250,13 +250,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
+@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
  	string
  	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
  	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
@@ -40,5 +40,4 @@ index fbba1be994..721a2d0f3a 100644
 -	default "4.14.61"	if BR2_KERNEL_HEADERS_4_14
 +	default "4.14.62"	if BR2_KERNEL_HEADERS_4_14
  	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
