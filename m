@@ -1,42 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 23:27:54 +0200
-Subject: [Buildroot] [git commit] package/linux-headers: add help text for
- manual header selection
-Message-ID: <20180824212049.9FF308E6C7@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 23:28:58 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/linux-headers: add help text
+ for manual header selection
+In-Reply-To: <20180823161930.18461-1-mark.corbin@embecosm.com>
+References: <20180823161930.18461-1-mark.corbin@embecosm.com>
+Message-ID: <20180824232858.6e43fbd3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3beba26d7657840c07bf014e33f9e80b6f1b09af
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Add kconfig help text that explains how to manually specify an
-official Linux version to use for the kernel headers.
+On Thu, 23 Aug 2018 17:19:28 +0100, Mark Corbin wrote:
+> Add kconfig help text that explains how to manually specify an
+> official Linux version to use for the kernel headers.
+> 
+> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> ---
+>  package/linux-headers/Config.in.host | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/linux-headers/Config.in.host | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 400258f6f1..9f31bad9c3 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -77,6 +77,14 @@ config BR2_KERNEL_HEADERS_4_17
- 
- config BR2_KERNEL_HEADERS_VERSION
- 	bool "Manually specified Linux version"
-+	help
-+	  This option allows you to use a specific official version from
-+	  kernel.org, like 2.6.x, 2.6.x.y, 3.x.y, ...
-+
-+	  Note: you cannot use this option to select a _longterm_ 2.6
-+	  kernel, because these kernels are not located at the standard
-+	  URL at kernel.org. Instead, select "Custom tarball" and
-+	  specify the right URL directly.
- 
- endchoice
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
