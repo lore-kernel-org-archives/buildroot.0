@@ -1,51 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 23:07:59 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/samba4: security bump to
- version 4.8.4
-In-Reply-To: <20180824162744.11726-1-bernd.kuhls@t-online.de>
-References: <20180824162744.11726-1-bernd.kuhls@t-online.de>
-Message-ID: <20180824230759.097c0e18@windsurf>
+Date: Fri, 24 Aug 2018 23:09:17 +0200
+Subject: [Buildroot] [PATCH 1/1] git: Fix libintl linking if there is no
+ full gettext support
+In-Reply-To: <20180824132049.20330-1-vadim4j@gmail.com>
+References: <20180824132049.20330-1-vadim4j@gmail.com>
+Message-ID: <20180824230917.20aaff8e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Vadim,
 
-On Fri, 24 Aug 2018 18:27:43 +0200, Bernd Kuhls wrote:
-> Release notes: https://www.samba.org/samba/history/samba-4.8.4.html
+On Fri, 24 Aug 2018 16:20:49 +0300, Vadim Kochan wrote:
+> From: Vadim Kochan <vadim.kochan@petcube.com>
 > 
-> Fixes
+> Git could not resolve libntl_xxx symbols if toolchain does no provide
+> full gettext support but the gettext package is selected.
 > 
-> o  CVE-2018-1139  (Weak authentication protocol allowed.)
-> o  CVE-2018-1140  (Denial of Service Attack on DNS and LDAP server.)
-> o  CVE-2018-10858 (Insufficient input validation on client directory
->                    listing in libsmbclient.)
-> o  CVE-2018-10918 (Denial of Service Attack on AD DC DRSUAPI server.)
-> o  CVE-2018-10919 (Confidential attribute disclosure from the AD LDAP
->                    server.)
+> In case of ulibc/musl toolchain there is no full getttext support, but
+> they still provides libintl stub which makes git think there is full
+> gettext support hence -lintl is not passed to the linker.
 > 
-> Cherry-picked from master branch:
-> https://git.buildroot.net/buildroot/commit/?id=3d7ce0124aa6ab116f430604db72c99bcd7a299a
+> Added workaround which checks if toolchain provides full gettext
+> support, if no then -lintl will be added to EXTLIBS variable generated
+> within config.mak file.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/samba4/samba4.hash | 4 ++--
->  package/samba4/samba4.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Signed-off-by: Vadim Kochan <vadim.kochan@petcube.com>
 
-I've applied both to next (actually for the first patch, I did the
-cherry-pick myself). However, I also cherry-picked
-6d3723147659542ec1cba4139981d75413d89edc from master into next,
-otherwise we would be having the same build failures on next that
-6d3723147659542ec1cba4139981d75413d89edc was fixing.
+Could you give some minimal Buildroot configuration that exhibits the
+issue ?
 
 Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
