@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:44:29 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] dahdi-tools: unify
+Date: Fri, 24 Aug 2018 10:44:41 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] dahdi-tools: unify
  dependencies comments
-Message-ID: <20180824083650.CCA838E5E2@busybox.osuosl.org>
+Message-ID: <20180824083659.724A58E5EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=850e1d03a9a2626b585f977795cdcb47f82efc7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d49f42c3be71cd9de4f22a5e1e8d64bf20e83c87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 The threads dependency comment is currently shown even though the
 toolchain supports threads, only because kernel build is disabled.
