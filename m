@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:40:41 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/libopenssl:
+Date: Fri, 24 Aug 2018 10:40:56 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/libopenssl:
  security bump to version 1.0.2p
-Message-ID: <20180824083259.C7E2D8E5E0@busybox.osuosl.org>
+Message-ID: <20180824083315.979D388690@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=025bec38e9e059982ee8e32ce76558a84692e427
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=97e18877a61d06bade28c8df8d26f4a575a5e61e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes CVE-2018-0732 & CVE-2018-0737:
 https://www.openssl.org/news/vulnerabilities.html
