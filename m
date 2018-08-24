@@ -1,88 +1,63 @@
-From: Hollis Blanchard <hollis_blanchard@mentor.com>
-Date: Fri, 24 Aug 2018 16:45:52 -0700
-Subject: [Buildroot] Autobnuilders timeouts [was: Re: autobuilder flock
- hangs]
-In-Reply-To: <20180824070203.GK9365@scaer>
-References: <20180812060015.A385B207E5@mail.bootlin.com>
- <20180812223629.2bac8ebe@windsurf>
- <1a4b53ec-1ed3-7770-3a65-8d4f4f596918@mentor.com>
- <20180816111059.3a7f1b59@windsurf> <20180824070203.GK9365@scaer>
-Message-ID: <821f032d-836a-41c2-d50c-eaa4687c5b22@mentor.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 25 Aug 2018 01:47:52 +0200
+Subject: [Buildroot] [PATCH] sunxi-mali-mainline: add EULA license file
+Message-ID: <20180824234752.39453-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/24/2018 12:02 AM, Yann E. MORIN wrote:
-> Hollis, Julien, Matthew, Thomas, All,
->
-> On 2018-08-16 11:10 +0200, Thomas Petazzoni spake thusly:
->> On Mon, 13 Aug 2018 11:18:10 -0700, Hollis Blanchard wrote:
->>> flock was hanging. I don't know why; have you experienced anything like
->>> that?
->> This happened again:
->>    http://autobuild.buildroot.net/results/ddb/ddbc96b24017f2a2b06c6091dea3e19520bf2dd1/
-> I think we now can see a pattern in those timeouts from Hollis'
-> autobuilder: they only ever happen on a slect group of 4 packages that
-> are downloaded with git:
->    - linux-firmware      (kernel.org)
->    - f2fs-tools          (kernel.org)
->    - azure-iot-sdk-c     (github.com)
->    - uhttpd              (openwrt.org)
->
-> Could you try to download them manually from your autobuilder, and see
-> if that works or not, please?
->
-> Is there something on your network that systematically makes those
-> packages fail to download? Do you have firewalling restrictions or
-> extreme traffic shapping?
+sunxi-mali-mainline package has not license file at the moment.
 
-azure-iot-sdk-c takes just 26 seconds to clone by hand.
+License file is a pdf EULA, but its name contains whitespaces. This
+gives problems when passing filename to SUNXI_MALI_MAINLINE_LICENSE_FILES
+since it expects a list of files.
+Other attempts with \ or \\ to keep spaces were tried with no luck.
+Add a define to POST_PATCH_HOOKS to change pdf filename from
+'EULA for Mali 400MP _AW.pdf' to 'EULA_for_Mali_400MP_AW.pdf'.
+Add also related hash file.
 
-I stopped the autobuilder, then ran a br-reproduce job that took all 
-day, which ended up at the "rauc" error that y'all just fixed. So... I 
-guess it didn't time out.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/sunxi-mali-mainline/sunxi-mali-mainline.hash |  2 ++
+ package/sunxi-mali-mainline/sunxi-mali-mainline.mk   | 10 ++++++++++
+ 2 files changed, 12 insertions(+)
+ create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.hash
 
-
-While the autobuilder was still running, I did see some strange 
-processes though:
-
-init(1)-+
-         |-flock(3937)
-         |-flock(4688)
-         |-flock(4774)
-         |-flock(9733)
-         |-flock(10710)
-         |-flock(10885)---bash(10886)---bash(10889)---git(10898)---git-remote-http(10899)---git(10902)
-         |-flock(11942)
-         |-flock(13311)---bash(13312)---bash(13315)---git(13324)---git-remote-http(13325)---git(13328)
-         |-flock(13681)
-         |-flock(13915)
-         |-flock(14113)
-         |-flock(17018)
-         |-flock(18869)
-         |-flock(19152)---bash(19153)---bash(19156)---git(19227)---git-submodule(19228)---git-submodule(19329)---git-submodule(20382+
-         |-flock(19819)
-         |-flock(21944)
-         |-flock(22375)
-         |-flock(25233)
-         |-flock(25622)
-         |-flock(26921)
-         |-flock(28424)---bash(28425)---bash(28428)---git(28437)---git-remote-http(28438)---git(28441)
-         |-flock(30945)
-         |-flock(31269)
-         |-flock(31271)
-         |-flock(32627)
-         |-sh(20815)---bash(20816)---bash(20818)---git(20823)---git-remote-http(20824)---git(20826)
-
-They disappeared when I killed the autobuilder (which is surprising -- 
-seems like they're children of init, so why did they die?).
-
-I suspect a) something goes wrong with the buildroot job, b) it's killed 
-in a way that leaves a dangling flock, c) future buildroot jobs run 
-headlong into the lingering flock and triggers a timeout.
-
+diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+new file mode 100644
+index 0000000000..e3185efd26
+--- /dev/null
++++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 8a06bcae44a41a886f339b4338422415a786787f113e9ed6456ae117104a0b6a  EULA_for_Mali_400MP_AW.pdf
+diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+index 05b90f0bee..b5d28385a3 100644
+--- a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
++++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+@@ -8,6 +8,10 @@ SUNXI_MALI_MAINLINE_VERSION = d691cb93884ca8ac67860502117bbec283dc19aa
+ SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
+ SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
+ SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
++SUNXI_MALI_MAINLINE_LICENSE = Allwinner End User Licence Agreement
++SUNXI_MALI_MAINLINE_EULA_ORIGINAL = EULA\ for\ Mali\ 400MP\ _AW.pdf
++SUNXI_MALI_MAINLINE_EULA_NO_SPACES = EULA_for_Mali_400MP_AW.pdf
++SUNXI_MALI_MAINLINE_LICENSE_FILES = $(SUNXI_MALI_MAINLINE_EULA_NO_SPACES)
+ 
+ SUNXI_MALI_MAINLINE_REV = $(call qstrip,$(BR2_PACKAGE_SUNXI_MALI_MAINLINE_REVISION))
+ 
+@@ -36,4 +40,10 @@ define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
+ 		$(TARGET_DIR)/usr/lib/
+ endef
+ 
++define SUNXI_MALI_MAINLINE_EULA_DELETE_WHITESPACES
++	mv $(@D)/$(SUNXI_MALI_MAINLINE_EULA_ORIGINAL) $(@D)/$(SUNXI_MALI_MAINLINE_EULA_NO_SPACES)
++endef
++
++SUNXI_MALI_MAINLINE_POST_PATCH_HOOKS += SUNXI_MALI_MAINLINE_EULA_DELETE_WHITESPACES
++
+ $(eval $(generic-package))
 -- 
-Hollis Blanchard
-Mentor Graphics Emulation Division
+2.17.1
