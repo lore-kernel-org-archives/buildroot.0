@@ -1,48 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 09:38:22 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] uboot-tools: force host
- CFLAGS
-Message-ID: <20180824073040.89C21841EA@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Aug 2018 09:55:57 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-08-23
+In-Reply-To: <20180824060019.899B4207B1@mail.bootlin.com>
+References: <20180824060019.899B4207B1@mail.bootlin.com>
+Message-ID: <20180824075557.GL9365@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=416eed9540e0c94c573f898fe8407bba4e77c8de
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+Thomas, Hollis, All,
 
-U-Boot now adds -std=gnu11 when building its build utilities, like
-fixdep. This option is only supported since gcc version 4.7.
+On 2018-08-24 08:00 +0200, Thomas Petazzoni spake thusly:
+> Results for branch 'master'
+>         i586 |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/7e1cbeb458cb6536a36eae0d24cefb36edb22f55 |     
+>       x86_64 |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/1b32b5daf5d3e3cf77e6779af7d9b79ce7e6a8e5 |     
 
-  https://gcc.gnu.org/gcc-4.7/changes.html
+Those two occur on Hollis' autobuilder (again! ;-)), because the host
+has kernel headers v2.6.32, which are too old for rauc, which needs
+headers >= 3.0. However, we have no way to express this dependency on
+host headers, only for the target headers...
 
-Force usage of Buildroot HOST_CFLAGS, like we do already for
-host-uboot-tools, to avoid the -std=gnu11 option.
+(patch incoming to add that dependency for the target variant).
 
-Fixes:
-http://autobuild.buildroot.net/results/ea0/ea09b614a3c10d494939d9551c0c3bfca4626ece/
-http://autobuild.buildroot.net/results/f8e/f8efd9af4d86c51fe4f5afe44db9abf9adc5718f/
-http://autobuild.buildroot.net/results/c0a/c0ab35c3cb46f84863fe20c0ee92ecc2379578b6/
+Regards,
+Yann E. MORIN.
 
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 03a808a0999ac031a1e93000d9a3c50ffbcb64a4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/uboot-tools/uboot-tools.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index cc57ce84de..94648cc60d 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -19,6 +19,7 @@ endef
- UBOOT_TOOLS_MAKE_OPTS = CROSS_COMPILE="$(TARGET_CROSS)" \
- 	CFLAGS="$(TARGET_CFLAGS)" \
- 	LDFLAGS="$(TARGET_LDFLAGS)" \
-+	HOSTCFLAGS="$(HOST_CFLAGS)" \
- 	STRIP=$(TARGET_STRIP)
- 
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),y)
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
