@@ -1,49 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:57:53 +0200
-Subject: [Buildroot] [PATCH] ruby: security bump to version 2.4.4
-In-Reply-To: <20180817154418.19080-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 17 Aug 2018 17:44:18 +0200")
-References: <20180817154418.19080-1-peter@korsgaard.com>
-Message-ID: <87va80i1ke.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 10:59:42 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] php: use $() to reference
+ make variables instead of ${}
+Message-ID: <20180824085214.83E3C81078@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=42ab95458b84bc837f37e30459eb0e59c077a65a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Fixes the following security issues:
- > CVE-2017-17405: Command injection vulnerability in Net::FTP (2.4.3):
- > https://www.ruby-lang.org/en/news/2017/12/14/net-ftp-command-injection-cve-2017-17405/
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit dba254cdf006e559ed61e1a136677843a3b4a94e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/php.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > CVE-2017-17742: HTTP response splitting in WEBrick (2.4.4):
- > https://www.ruby-lang.org/en/news/2018/03/28/http-response-splitting-in-webrick-cve-2017-17742/
-
- > CVE-2018-6914: Unintentional file and directory creation with directory
- > traversal in tempfile and tmpdir (2.4.4):
- > https://www.ruby-lang.org/en/news/2018/03/28/unintentional-file-and-directory-creation-with-directory-traversal-cve-2018-6914/
-
- > CVE-2018-8777: DoS by large request in WEBrick (2.4.4):
- > https://www.ruby-lang.org/en/news/2018/03/28/large-request-dos-in-webrick-cve-2018-8777/
-
- > CVE-2018-8778: Buffer under-read in String#unpack (2.4.4):
- > https://www.ruby-lang.org/en/news/2018/03/28/buffer-under-read-unpack-cve-2018-8778/
-
- > CVE-2018-8779: Unintentional socket creation by poisoned NUL byte in
- > UNIXServer and UNIXSocket (2.4.4):
- > https://www.ruby-lang.org/en/news/2018/03/28/poisoned-nul-byte-unixsocket-cve-2018-8779/
-
- > CVE-2018-8780: Unintentional directory traversal by poisoned NUL byte in Dir
- > (2.4.4):
- > https://www.ruby-lang.org/en/news/2018/03/28/poisoned-nul-byte-dir-cve-2018-8780/
-
- > Multiple vulnerabilities in RubyGems (2.4.4):
- > https://www.ruby-lang.org/en/news/2018/02/17/multiple-vulnerabilities-in-rubygems/
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 4c3a87118e..028fa6fc55 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -137,7 +137,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_PHP_EXT_LIBXML2),y)
+ PHP_CONF_ENV += php_cv_libxml_build_works=yes
+-PHP_CONF_OPTS += --enable-libxml --with-libxml-dir=${STAGING_DIR}/usr
++PHP_CONF_OPTS += --enable-libxml --with-libxml-dir=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += libxml2
+ endif
+ 
