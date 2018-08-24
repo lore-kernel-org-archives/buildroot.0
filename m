@@ -1,48 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 09:35:43 +0200
-Subject: [Buildroot] [PATCH] ncurses: disable terminfo database install
- for host-ncurses
-In-Reply-To: <20180809145722.388-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 9 Aug 2018 16:57:22 +0200")
-References: <20180809145722.388-1-peter@korsgaard.com>
-Message-ID: <87a7pcmd2o.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 09:38:07 +0200
+Subject: [Buildroot] [PATCH] uboot-tools: force host CFLAGS
+In-Reply-To: <6c246971096ed5ace6c35e3102ca0649025c19fa.1533879441.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 10 Aug 2018 08:37:21 +0300")
+References: <6c246971096ed5ace6c35e3102ca0649025c19fa.1533879441.git.baruch@tkos.co.il>
+Message-ID: <876000mcyo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Since commit b35ad5d0b45e (ncurses: make host-ncurses use host terminfo), we
- > are now pointing host-ncurses to the host terminfo (typically) located in
- > /usr/share/terminfo.
+ > U-Boot now adds -std=gnu11 when building its build utilities, like
+ > fixdep. This option is only supported since gcc version 4.7.
 
- > With this change we are reusing the existing host terminfo database, so
- > there is no point in trying to install our own on top.  The user running
- > buildroot typically will have no write access to /usr/share/terminfo, but
- > tic in that case falls back to writing the database to $HOME/.terminfo.
- > Neither of which are desirable.
+ >   https://gcc.gnu.org/gcc-4.7/changes.html
 
- > In case $HOME/.terminfo also isn't writable, tic fails, breaking the install
- > step for host-ncurses:
+ > Force usage of Buildroot HOST_CFLAGS, like we do already for
+ > host-uboot-tools, to avoid the -std=gnu11 option.
 
- > ** Building terminfo database, please wait...
- > Running sh ./shlib tic to install /usr/share/terminfo ...
+ > Fixes:
+ > http://autobuild.buildroot.net/results/ea0/ea09b614a3c10d494939d9551c0c3bfca4626ece/
+ > http://autobuild.buildroot.net/results/f8e/f8efd9af4d86c51fe4f5afe44db9abf9adc5718f/
+ > http://autobuild.buildroot.net/results/c0a/c0ab35c3cb46f84863fe20c0ee92ecc2379578b6/
 
- >         You may see messages regarding extended capabilities, e.g., AX.
- >         These are extended terminal capabilities which are compiled
- >         using
- >                 tic -x
- >         If you have ncurses 4.2 applications, you should read the INSTALL
- >         document, and install the terminfo without the -x option.
-
- > "terminfo.tmp", line 21272, terminal 'v3220': /home/peko/.terminfo: permission denied (errno 30)
-
- > To fix all of this, simply disable the terminfo database install.
-
- > Suggested-by: Arnout Vandecappelle <arnout@mind.be>
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
