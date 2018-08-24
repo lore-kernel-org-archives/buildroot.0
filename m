@@ -1,75 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 00:39:39 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/samba4: reformat
- patch 0002 as Git-formatted patch
-Message-ID: <20180824063612.716758E4BA@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 08:49:12 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] wireshark: bump version
+ to 2.2.16 (security)
+Message-ID: <20180824064131.447278E52A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4579f94e850c211fb59558d9299a620f26bcd77
+commit: https://git.buildroot.net/buildroot/commit/?id=45cfb7dbd3dea796ae3a5a0e6541baa04fa7b412
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-This commit reformats
-0002-patch-source3__libads__kerberos_keytab.c.patch as a Git-formatted
-patch.
+Security fixes since 2.2.15:
 
+- wnpa-sec-2018-06
+  RPKI-Router infinite loop. Bug 14414. CVE-2018-7325.
+- wnpa-sec-2018-34
+  BGP dissector large loop. Bug 13741. CVE-2018-14342.
+- wnpa-sec-2018-35
+  ISMP dissector crash. Bug 14672. CVE-2018-14344.
+- wnpa-sec-2018-36
+  Multiple dissectors could crash. Bug 14675. CVE-2018-14340.
+- wnpa-sec-2018-37
+  ASN.1 BER dissector crash. Bug 14682. CVE-2018-14343.
+- wnpa-sec-2018-38
+  MMSE dissector infinite loop. Bug 14738. CVE-2018-14339.
+- wnpa-sec-2018-39
+  DICOM dissector crash. Bug 14742. CVE-2018-14341.
+- wnpa-sec-2018-40
+  Bazaar dissector infinite loop. Bug 14841.
+- wnpa-sec-2018-41
+  HTTP2 dissector crash. Bug 14869.
+
+Full release notes:
+
+  https://www.wireshark.org/docs/relnotes/wireshark-2.2.16.html
+
+Signed-off-by: Andr?? Hentschel <nerv@dawncrow.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 90b26f87640c0ebff53a304b15d168b1aca738dd)
+(cherry picked from commit 14d287098aa6932d3337927d366a7faa8df1f9e4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...mpilation-of-Samba-4.7.4-with-disabled-ADS.patch} | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ package/wireshark/wireshark.hash | 4 ++--
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
-similarity index 58%
-rename from package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
-rename to package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
-index 1213659c8d..45d3050a39 100644
---- a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
-+++ b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
-@@ -1,5 +1,7 @@
--From: Timur I. Bakeyev <timur@freebsd.org>
--Subject: Fix compilation of Samba 4.7.4 with disabled ADS
-+From da2f2cf8e7a1dfcb661b707e4649cec1e8a0e79c Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Thu, 9 Aug 2018 10:03:06 +0200
-+Subject: [PATCH] Fix compilation of Samba 4.7.4 with disabled ADS
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 4b9c646fa9..30b00b4dd0 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,4 +1,4 @@
+-# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.15.txt
+-sha256 d73583e9282d47c42b69fc3a1ac9cafb6047d1305f5027d4cf18e95922d11844  wireshark-2.2.15.tar.bz2
++# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-2.2.16.txt
++sha256 7dcc4e9f29ad8dd75849aa3b6f70b6ec82ab6899cb168096572775a6d97ced8a  wireshark-2.2.16.tar.bz2
+ # Locally calculated
+ sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index c9a4ef202d..3d729ae090 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Downloaded from upstream mailinglist
- https://lists.samba.org/archive/samba-technical/2017-December/124629.html
-@@ -8,9 +10,14 @@ Patch originates from FreeBSD:
- https://svnweb.freebsd.org/ports/head/net/samba47/files/patch-source3__libads__kerberos_keytab.c?revision=457119&view=markup
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ source3/libads/kerberos_keytab.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
- 
----- a/source3/libads/kerberos_keytab.c.orig	2017-12-23 14:23:53.247467000 +0100
--+++ b/source3/libads/kerberos_keytab.c	2017-12-23 18:57:07.135340000 +0100
-+diff --git a/source3/libads/kerberos_keytab.c b/source3/libads/kerberos_keytab.c
-+index 37ac7ba985e..71250962090 100644
-+--- a/source3/libads/kerberos_keytab.c
-++++ b/source3/libads/kerberos_keytab.c
- @@ -32,8 +32,6 @@
-  
-  #ifdef HAVE_KRB5
-@@ -20,7 +27,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  /* This MAX_NAME_LEN is a constant defined in krb5.h */
-  #ifndef MAX_KEYTAB_NAME_LEN
-  #define MAX_KEYTAB_NAME_LEN 1100
--@@ -85,6 +83,8 @@
-+@@ -85,6 +83,8 @@ out:
-  	return ret;
-  }
-  
-@@ -29,3 +36,6 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  /**********************************************************************
-   Adds a single service principal, i.e. 'host' to the system keytab
-  ***********************************************************************/
-+-- 
-+2.14.4
-+
+-WIRESHARK_VERSION = 2.2.15
++WIRESHARK_VERSION = 2.2.16
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.bz2
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
