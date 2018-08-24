@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:47:17 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] eigen: Fix pkg-config
+Date: Fri, 24 Aug 2018 10:47:24 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] eigen: Fix pkg-config
  file prefix error
-Message-ID: <20180824083934.F40B88E602@busybox.osuosl.org>
+Message-ID: <20180824083941.BB7968E606@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00d400f976c15d99a4a20f77771b3f0ff7644c94
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ec6d94bc9cf581fe0dacf9b6738c8a5b156ca163
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 eigen generates	a pkg-config file which	has a broken prefix
 (@CMAKE_INSTALL_PREFIX@).  This broken prefix causes an incorrect path when
