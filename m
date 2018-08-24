@@ -1,40 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 11:05:53 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-08-23
-In-Reply-To: <20180824075557.GL9365@scaer>
-References: <20180824060019.899B4207B1@mail.bootlin.com>
- <20180824075557.GL9365@scaer>
-Message-ID: <20180824110553.2121c1b2@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 24 Aug 2018 11:54:33 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
+ 9, 14, 17}.x series
+Message-ID: <20180824094718.DAE978E62A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a237f9dd638d9247003d2b7cb6e942ff18cc9ddd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-On Fri, 24 Aug 2018 09:55:57 +0200, Yann E. MORIN wrote:
+[Peter: drop 4.17.x change]
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d2965cbb7e435b1ba0fb3cc6d1996c05d18faa66)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-headers/Config.in.host | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> On 2018-08-24 08:00 +0200, Thomas Petazzoni spake thusly:
-> > Results for branch 'master'
-> >         i586 |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/7e1cbeb458cb6536a36eae0d24cefb36edb22f55 |     
-> >       x86_64 |                  host-rauc-0.4 | NOK | http://autobuild.buildroot.net/results/1b32b5daf5d3e3cf77e6779af7d9b79ce7e6a8e5 |       
-> 
-> Those two occur on Hollis' autobuilder (again! ;-)), because the host
-> has kernel headers v2.6.32, which are too old for rauc, which needs
-> headers >= 3.0. However, we have no way to express this dependency on
-> host headers, only for the target headers...
-> 
-> (patch incoming to add that dependency for the target variant).
-
-Rather than adding a dependency on >= 3.0 kernel headers, perhaps we
-can find a way to make the code not use the missing definitions when
-they are not available. This would avoid the >= 3.0 dependency for the
-target variant *and* solve the host build problem at the same time.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2a2803a1b4..1635cdcd70 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.148"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.120"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.150"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.122"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.63"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.65"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
