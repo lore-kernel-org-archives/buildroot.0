@@ -1,45 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:44:41 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] dahdi-tools: unify
- dependencies comments
-Message-ID: <20180824083659.724A58E5EC@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 10:44:56 +0200
+Subject: [Buildroot] [PATCH v2] dahdi-tools: unify dependencies comments
+In-Reply-To: <f00ac4110933271a8d0f4240b8ae257e31a027b7.1534498995.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 17 Aug 2018 12:43:15 +0300")
+References: <f00ac4110933271a8d0f4240b8ae257e31a027b7.1534498995.git.baruch@tkos.co.il>
+Message-ID: <87d0u8jgqf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d49f42c3be71cd9de4f22a5e1e8d64bf20e83c87
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-The threads dependency comment is currently shown even though the
-toolchain supports threads, only because kernel build is disabled.
+ > The threads dependency comment is currently shown even though the
+ > toolchain supports threads, only because kernel build is disabled.
 
-Merge the kernel and threads comments. This is similar to what we have
-in other packages that need the kernel.
+ > Merge the kernel and threads comments. This is similar to what we have
+ > in other packages that need the kernel.
 
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f70b13a7cb6eb01e9d78fddcb695b84a22e5699b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dahdi-tools/Config.in | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > ---
+ > v2: merge the two comments
 
-diff --git a/package/dahdi-tools/Config.in b/package/dahdi-tools/Config.in
-index 39042df041..a5f145dfe8 100644
---- a/package/dahdi-tools/Config.in
-+++ b/package/dahdi-tools/Config.in
-@@ -15,9 +15,5 @@ config BR2_PACKAGE_DAHDI_TOOLS
- 
- 	  http://www.asterisk.org/downloads/dahdi
- 
--# Two comments, otherwise it may not fit in menuconfig for narrow terminals
--comment "dahdi-tools needs a toolchain w/ threads"
-+comment "dahdi-tools needs a toolchain w/ threads and a Linux kernel to be built"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_LINUX_KERNEL
--
--comment "dahdi-tools needs a Linux kernel to be built"
--	depends on !BR2_LINUX_KERNEL
+Committed to 2018.02.x and 2018.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
