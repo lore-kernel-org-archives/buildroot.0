@@ -1,165 +1,458 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 23:32:42 +0200
-Subject: [Buildroot] [git commit] rauc: add patch to make it build with
- Linux < 3.0
-Message-ID: <20180824213613.449188E718@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Aug 2018 23:49:24 +0200
+Subject: [Buildroot] [PATCH v4 4/4] configs: add linux boot logo to a
+ selection of configs
+In-Reply-To: <1535118300-26815-4-git-send-email-angelo@amarulasolutions.com>
+References: <1535118300-26815-1-git-send-email-angelo@amarulasolutions.com>
+ <1535118300-26815-4-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180824214924.GW9365@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db756327f5c765457514b005f70624c6f81688cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+angelo, All,
 
-This commit adds a patch to RAUC that makes the eMMC boot partition
-support optional. This allows RAUC to build successfully on systems
-using Linux < 3.0.
+On 2018-08-24 15:45 +0200, Angelo Compagnucci spake thusly:
+> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> 
+> This patch adds the buildroot logo as a boot log to a selection of
+> defconfigs.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/7e1cbeb458cb6536a36eae0d24cefb36edb22f55/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
----
- ...make-eMMC-boot-partition-support-optional.patch | 116 +++++++++++++++++++++
- package/rauc/rauc.mk                               |   2 +
- 2 files changed, 118 insertions(+)
 
-diff --git a/package/rauc/0002-build-make-eMMC-boot-partition-support-optional.patch b/package/rauc/0002-build-make-eMMC-boot-partition-support-optional.patch
-new file mode 100644
-index 0000000000..f6177c9d54
---- /dev/null
-+++ b/package/rauc/0002-build-make-eMMC-boot-partition-support-optional.patch
-@@ -0,0 +1,116 @@
-+From d66502532fea652d8743bfb61f9843c796d305cf Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Fri, 24 Aug 2018 14:30:19 +0200
-+Subject: [PATCH] build: make eMMC boot partition support optional
-+
-+The eMMC boot partition support, added in commit
-+ea5cc7ff606c65536da218bd1ef6d0ca279c9b17 ("src/update_handler: add
-+support for updating eMMC boot partitions"), requires
-+<linux/mmc/ioctl.h>, only available starting from kernel headers 3.0.
-+
-+Even though it is pretty likely that people are going to use Linux >=
-+3.0 on their embedded systems these days, RAUC also needs to be built
-+natively on the build machine to produce update artifacts, and the
-+build machine is sometimes using an ancient Linux system, especially
-+in an enterprise contexts.
-+
-+In order to make sure that RAUC builds fine in this context, this
-+commit makes the eMMC boot partition support optional, by verifying
-+the availability of <linux/mmc/ioctl.h>.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ Makefile.am          | 5 ++++-
-+ configure.ac         | 6 ++++++
-+ src/update_handler.c | 6 ++++++
-+ 3 files changed, 16 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 23eb2d1..7b4682d 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -39,7 +39,6 @@ librauc_la_SOURCES = \
-+ 	src/checksum.c \
-+ 	src/config_file.c \
-+ 	src/context.c \
-+-	src/emmc.c \
-+ 	src/install.c \
-+ 	src/manifest.c \
-+ 	src/mark.c \
-+@@ -63,6 +62,10 @@ librauc_la_SOURCES = \
-+ 	include/update_handler.h \
-+ 	include/utils.h
-+ 
-++if WANT_EMMC_BOOT_SUPPORT
-++librauc_la_SOURCES += src/emmc.c
-++endif
-++
-+ if WANT_NETWORK
-+ librauc_la_SOURCES += src/network.c include/network.h
-+ endif
-+diff --git a/configure.ac b/configure.ac
-+index 2d6f940..1ec124b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -102,6 +102,12 @@ AC_SUBST(DBUS_SYSTEMSERVICEDIR)
-+ 
-+ # Checks for header files.
-+ 
-++AC_CHECK_HEADER([linux/mmc/ioctl.h],
-++	AC_DEFINE([ENABLE_EMMC_BOOT_SUPPORT], [1], [Define to 1 to enable eMMC boot support]),
-++	AC_DEFINE([ENABLE_EMMC_BOOT_SUPPORT], [0]))
-++
-++AM_CONDITIONAL([WANT_EMMC_BOOT_SUPPORT], [test x$ac_cv_header_linux_mmc_ioctl_h != xno])
-++
-+ # Checks for typedefs, structures, and compiler characteristics.
-+ 
-+ # Checks for library functions.
-+diff --git a/src/update_handler.c b/src/update_handler.c
-+index 62115ec..a9f233a 100644
-+--- a/src/update_handler.c
-++++ b/src/update_handler.c
-+@@ -57,6 +57,7 @@ out:
-+ 	return outstream;
-+ }
-+ 
-++#if ENABLE_EMMC_BOOT_SUPPORT == 1
-+ static gboolean clear_slot(RaucSlot *slot, GError **error)
-+ {
-+ 	GError *ierror = NULL;
-+@@ -99,6 +100,7 @@ out:
-+ 	g_clear_object(&outstream);
-+ 	return res;
-+ }
-++#endif
-+ 
-+ static gboolean ubifs_ioctl(RaucImage *image, int fd, GError **error)
-+ {
-+@@ -1085,6 +1087,7 @@ out:
-+ 	return res;
-+ }
-+ 
-++#if ENABLE_EMMC_BOOT_SUPPORT == 1
-+ static gboolean img_to_boot_emmc_handler(RaucImage *image, RaucSlot *dest_slot, const gchar *hook_name, GError **error)
-+ {
-+ 
-+@@ -1245,6 +1248,7 @@ out:
-+ 
-+ 	return res;
-+ }
-++#endif
-+ 
-+ static gboolean img_to_raw_handler(RaucImage *image, RaucSlot *dest_slot, const gchar *hook_name, GError **error)
-+ {
-+@@ -1329,7 +1333,9 @@ RaucUpdatePair updatepairs[] = {
-+ 	{"*.img", "nand", img_to_nand_handler},
-+ 	{"*.img", "ubivol", img_to_ubivol_handler},
-+ 	{"*.squashfs", "ubivol", img_to_ubivol_handler},
-++#if ENABLE_EMMC_BOOT_SUPPORT == 1
-+ 	{"*.img", "boot-emmc", img_to_boot_emmc_handler},
-++#endif
-+ 	{"*.img", "*", img_to_raw_handler}, /* fallback */
-+ 	{0}
-+ };
-+-- 
-+2.14.4
-+
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index f1705a8c33..36119c061d 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -9,6 +9,8 @@ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
- RAUC_DEPENDENCIES = host-pkgconf openssl libglib2
-+# 0002-build-make-eMMC-boot-partition-support-optional.patch
-+RAUC_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_RAUC_NETWORK),y)
- RAUC_CONF_OPTS += --enable-network
+However, two comments:
+
+  - of all the qemu defconfgis, I only looked that, for those for which
+    we have a custom linux defconfig, that config did enabled FB. For
+    the others, I only looked at a very few (arm) boards that he in-tree
+    defconfig did enable framebuffer;
+
+  - why only tweak the rpi3 and not the others?
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  configs/pc_x86_64_bios_defconfig           | 1 +
+>  configs/pc_x86_64_efi_defconfig            | 1 +
+>  configs/qemu_aarch64_virt_defconfig        | 1 +
+>  configs/qemu_arm_versatile_defconfig       | 2 ++
+>  configs/qemu_arm_versatile_nommu_defconfig | 1 +
+>  configs/qemu_arm_vexpress_defconfig        | 1 +
+>  configs/qemu_m68k_mcf5208_defconfig        | 1 +
+>  configs/qemu_m68k_q800_defconfig           | 1 +
+>  configs/qemu_microblazebe_mmu_defconfig    | 1 +
+>  configs/qemu_microblazeel_mmu_defconfig    | 1 +
+>  configs/qemu_mips32r2_malta_defconfig      | 1 +
+>  configs/qemu_mips32r2el_malta_defconfig    | 1 +
+>  configs/qemu_mips32r6_malta_defconfig      | 1 +
+>  configs/qemu_mips32r6el_malta_defconfig    | 1 +
+>  configs/qemu_mips64_malta_defconfig        | 1 +
+>  configs/qemu_mips64el_malta_defconfig      | 1 +
+>  configs/qemu_mips64r6_malta_defconfig      | 1 +
+>  configs/qemu_mips64r6el_malta_defconfig    | 1 +
+>  configs/qemu_nios2_10m50_defconfig         | 1 +
+>  configs/qemu_or1k_defconfig                | 1 +
+>  configs/qemu_ppc64_e5500_defconfig         | 1 +
+>  configs/qemu_ppc64_pseries_defconfig       | 1 +
+>  configs/qemu_ppc64le_pseries_defconfig     | 1 +
+>  configs/qemu_ppc_g3beige_defconfig         | 1 +
+>  configs/qemu_ppc_mpc8544ds_defconfig       | 1 +
+>  configs/qemu_ppc_virtex_ml507_defconfig    | 1 +
+>  configs/qemu_sh4_r2d_defconfig             | 1 +
+>  configs/qemu_sh4eb_r2d_defconfig           | 1 +
+>  configs/qemu_sparc64_sun4u_defconfig       | 1 +
+>  configs/qemu_sparc_ss10_defconfig          | 1 +
+>  configs/qemu_x86_64_defconfig              | 1 +
+>  configs/qemu_x86_defconfig                 | 1 +
+>  configs/qemu_xtensa_lx60_defconfig         | 1 +
+>  configs/qemu_xtensa_lx60_nommu_defconfig   | 1 +
+>  configs/raspberrypi3_defconfig             | 1 +
+>  35 files changed, 36 insertions(+)
+> 
+> diff --git a/configs/pc_x86_64_bios_defconfig b/configs/pc_x86_64_bios_defconfig
+> index 47787bc..65e9430 100644
+> --- a/configs/pc_x86_64_bios_defconfig
+> +++ b/configs/pc_x86_64_bios_defconfig
+> @@ -32,6 +32,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.8"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+>  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Firmware
+>  BR2_PACKAGE_LINUX_FIRMWARE=y
+> diff --git a/configs/pc_x86_64_efi_defconfig b/configs/pc_x86_64_efi_defconfig
+> index 67ba5bc..af036d2 100644
+> --- a/configs/pc_x86_64_efi_defconfig
+> +++ b/configs/pc_x86_64_efi_defconfig
+> @@ -35,6 +35,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.13.8"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/pc/linux.config"
+>  BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Firmware
+>  BR2_PACKAGE_LINUX_FIRMWARE=y
+> diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+> index 2706544..71e2f1b 100644
+> --- a/configs/qemu_aarch64_virt_defconfig
+> +++ b/configs/qemu_aarch64_virt_defconfig
+> @@ -20,3 +20,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+>  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_arm_versatile_defconfig b/configs/qemu_arm_versatile_defconfig
+> index 348b91b..7069e20 100644
+> --- a/configs/qemu_arm_versatile_defconfig
+> +++ b/configs/qemu_arm_versatile_defconfig
+> @@ -21,3 +21,5 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux.config"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> +
+> diff --git a/configs/qemu_arm_versatile_nommu_defconfig b/configs/qemu_arm_versatile_nommu_defconfig
+> index 910c382..7c5de6a 100644
+> --- a/configs/qemu_arm_versatile_nommu_defconfig
+> +++ b/configs/qemu_arm_versatile_nommu_defconfig
+> @@ -32,3 +32,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux-nommu.config"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_arm_vexpress_defconfig b/configs/qemu_arm_vexpress_defconfig
+> index 34a50aa..377db46 100644
+> --- a/configs/qemu_arm_vexpress_defconfig
+> +++ b/configs/qemu_arm_vexpress_defconfig
+> @@ -23,3 +23,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_m68k_mcf5208_defconfig b/configs/qemu_m68k_mcf5208_defconfig
+> index 8f8d0a0..449bd8e 100644
+> --- a/configs/qemu_m68k_mcf5208_defconfig
+> +++ b/configs/qemu_m68k_mcf5208_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-mcf5208/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Serial port config
+>  BR2_TARGET_GENERIC_GETTY=y
+> diff --git a/configs/qemu_m68k_q800_defconfig b/configs/qemu_m68k_q800_defconfig
+> index d9238b6..36cc33f 100644
+> --- a/configs/qemu_m68k_q800_defconfig
+> +++ b/configs/qemu_m68k_q800_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/m68k-q800/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Serial port config
+>  BR2_TARGET_GENERIC_GETTY=y
+> diff --git a/configs/qemu_microblazebe_mmu_defconfig b/configs/qemu_microblazebe_mmu_defconfig
+> index 3055a0f..b65cd26 100644
+> --- a/configs/qemu_microblazebe_mmu_defconfig
+> +++ b/configs/qemu_microblazebe_mmu_defconfig
+> @@ -21,3 +21,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazebe-mmu/linux.config"
+>  BR2_LINUX_KERNEL_LINUX_BIN=y
+>  BR2_LINUX_KERNEL_PATCH="board/qemu/microblazebe-mmu/xilinx-xemaclite.patch"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_microblazeel_mmu_defconfig b/configs/qemu_microblazeel_mmu_defconfig
+> index 073a717..74a1bc5 100644
+> --- a/configs/qemu_microblazeel_mmu_defconfig
+> +++ b/configs/qemu_microblazeel_mmu_defconfig
+> @@ -21,3 +21,4 @@ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/microblazeel-mmu/linux.config"
+>  BR2_LINUX_KERNEL_LINUX_BIN=y
+>  BR2_LINUX_KERNEL_PATCH="board/qemu/microblazeel-mmu/xilinx-xemaclite.patch"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_mips32r2_malta_defconfig b/configs/qemu_mips32r2_malta_defconfig
+> index d07bc11..70b5e6c 100644
+> --- a/configs/qemu_mips32r2_malta_defconfig
+> +++ b/configs/qemu_mips32r2_malta_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2-malta/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Serial port config
+>  BR2_TARGET_GENERIC_GETTY=y
+> diff --git a/configs/qemu_mips32r2el_malta_defconfig b/configs/qemu_mips32r2el_malta_defconfig
+> index 55e68b1..733756a 100644
+> --- a/configs/qemu_mips32r2el_malta_defconfig
+> +++ b/configs/qemu_mips32r2el_malta_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r2el-malta/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Serial port config
+>  BR2_TARGET_GENERIC_GETTY=y
+> diff --git a/configs/qemu_mips32r6_malta_defconfig b/configs/qemu_mips32r6_malta_defconfig
+> index 5802393..d286630 100644
+> --- a/configs/qemu_mips32r6_malta_defconfig
+> +++ b/configs/qemu_mips32r6_malta_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6-malta/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Compiler
+>  # linux >= 4.4 uses -mcompact-branches which is only available since gcc-6
+> diff --git a/configs/qemu_mips32r6el_malta_defconfig b/configs/qemu_mips32r6el_malta_defconfig
+> index 93e2a86..adad82e 100644
+> --- a/configs/qemu_mips32r6el_malta_defconfig
+> +++ b/configs/qemu_mips32r6el_malta_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips32r6el-malta/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Compiler
+>  # linux >= 4.4 uses -mcompact-branches which is only available since GCC 6.x
+> diff --git a/configs/qemu_mips64_malta_defconfig b/configs/qemu_mips64_malta_defconfig
+> index 99b457a..75c8eae 100644
+> --- a/configs/qemu_mips64_malta_defconfig
+> +++ b/configs/qemu_mips64_malta_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64-malta/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Serial port config
+>  BR2_TARGET_GENERIC_GETTY=y
+> diff --git a/configs/qemu_mips64el_malta_defconfig b/configs/qemu_mips64el_malta_defconfig
+> index f2dacbd..25642f6 100644
+> --- a/configs/qemu_mips64el_malta_defconfig
+> +++ b/configs/qemu_mips64el_malta_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64el-malta/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Serial port config
+>  BR2_TARGET_GENERIC_GETTY=y
+> diff --git a/configs/qemu_mips64r6_malta_defconfig b/configs/qemu_mips64r6_malta_defconfig
+> index d291213..8cce6aa 100644
+> --- a/configs/qemu_mips64r6_malta_defconfig
+> +++ b/configs/qemu_mips64r6_malta_defconfig
+> @@ -20,6 +20,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6-malta/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Compiler
+>  # linux >= 4.4 uses -mcompact-branches which is only available since gcc-6
+> diff --git a/configs/qemu_mips64r6el_malta_defconfig b/configs/qemu_mips64r6el_malta_defconfig
+> index 4740bde..a998d65 100644
+> --- a/configs/qemu_mips64r6el_malta_defconfig
+> +++ b/configs/qemu_mips64r6el_malta_defconfig
+> @@ -20,6 +20,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/mips64r6el-malta/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Compiler
+>  # linux >= 4.4 uses -mcompact-branches which is only available since gcc-6
+> diff --git a/configs/qemu_nios2_10m50_defconfig b/configs/qemu_nios2_10m50_defconfig
+> index cff2192..4cc4e75 100644
+> --- a/configs/qemu_nios2_10m50_defconfig
+> +++ b/configs/qemu_nios2_10m50_defconfig
+> @@ -4,6 +4,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_DEFCONFIG="10m50"
+>  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/nios2-10m50/linux.fragment"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  BR2_TARGET_ROOTFS_INITRAMFS=y
+>  
+>  # Linux headers same as kernel, a 4.16 series
+> diff --git a/configs/qemu_or1k_defconfig b/configs/qemu_or1k_defconfig
+> index 636a0d2..1952866 100644
+> --- a/configs/qemu_or1k_defconfig
+> +++ b/configs/qemu_or1k_defconfig
+> @@ -14,3 +14,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/or1k/linux.config"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
+> index 7a325a5..7af6d6f 100644
+> --- a/configs/qemu_ppc64_e5500_defconfig
+> +++ b/configs/qemu_ppc64_e5500_defconfig
+> @@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
+>  BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
+>  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Filesystem
+>  BR2_TARGET_ROOTFS_EXT2=y
+> diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
+> index d2d69f1..7979099 100644
+> --- a/configs/qemu_ppc64_pseries_defconfig
+> +++ b/configs/qemu_ppc64_pseries_defconfig
+> @@ -19,3 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_DEFCONFIG="pseries"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
+> index 9a85f76..dc283e4 100644
+> --- a/configs/qemu_ppc64le_pseries_defconfig
+> +++ b/configs/qemu_ppc64le_pseries_defconfig
+> @@ -19,3 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+> index 451a9b5..45823cc 100644
+> --- a/configs/qemu_ppc_g3beige_defconfig
+> +++ b/configs/qemu_ppc_g3beige_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Serial port config
+>  BR2_TARGET_GENERIC_GETTY=y
+> diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+> index 38e41a7..0b95db5 100644
+> --- a/configs/qemu_ppc_mpc8544ds_defconfig
+> +++ b/configs/qemu_ppc_mpc8544ds_defconfig
+> @@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Serial port config
+>  BR2_TARGET_GENERIC_GETTY=y
+> diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+> index 6824afc..997caf9 100644
+> --- a/configs/qemu_ppc_virtex_ml507_defconfig
+> +++ b/configs/qemu_ppc_virtex_ml507_defconfig
+> @@ -21,3 +21,4 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux.config"
+>  BR2_LINUX_KERNEL_VMLINUX=y
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_sh4_r2d_defconfig b/configs/qemu_sh4_r2d_defconfig
+> index ec4a91c..67f8771 100644
+> --- a/configs/qemu_sh4_r2d_defconfig
+> +++ b/configs/qemu_sh4_r2d_defconfig
+> @@ -21,3 +21,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4-r2d/linux.config"
+>  BR2_LINUX_KERNEL_ZIMAGE=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_sh4eb_r2d_defconfig b/configs/qemu_sh4eb_r2d_defconfig
+> index e7dbd46..b0fe41e 100644
+> --- a/configs/qemu_sh4eb_r2d_defconfig
+> +++ b/configs/qemu_sh4eb_r2d_defconfig
+> @@ -20,3 +20,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sh4eb-r2d/linux.config"
+>  BR2_LINUX_KERNEL_ZIMAGE=y
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_sparc64_sun4u_defconfig b/configs/qemu_sparc64_sun4u_defconfig
+> index baa8dbf..837ce00 100644
+> --- a/configs/qemu_sparc64_sun4u_defconfig
+> +++ b/configs/qemu_sparc64_sun4u_defconfig
+> @@ -18,3 +18,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc64-sun4u/linux.config"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_sparc_ss10_defconfig b/configs/qemu_sparc_ss10_defconfig
+> index 9943781..326a881 100644
+> --- a/configs/qemu_sparc_ss10_defconfig
+> +++ b/configs/qemu_sparc_ss10_defconfig
+> @@ -18,3 +18,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/sparc-ss10/linux.config"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_x86_64_defconfig b/configs/qemu_x86_64_defconfig
+> index 12b30bf..1103f42 100644
+> --- a/configs/qemu_x86_64_defconfig
+> +++ b/configs/qemu_x86_64_defconfig
+> @@ -18,3 +18,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_x86_defconfig b/configs/qemu_x86_defconfig
+> index 985ff32..04598d7 100644
+> --- a/configs/qemu_x86_defconfig
+> +++ b/configs/qemu_x86_defconfig
+> @@ -19,3 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+> index a735c99..239c4bd 100644
+> --- a/configs/qemu_xtensa_lx60_defconfig
+> +++ b/configs/qemu_xtensa_lx60_defconfig
+> @@ -23,3 +23,4 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux.config"
+>  BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+>  BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
+>  BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
+> index f4d6837..d8053eb 100644
+> --- a/configs/qemu_xtensa_lx60_nommu_defconfig
+> +++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+> @@ -27,3 +27,4 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-nommu.config"
+>  BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+>  BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
+>  BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+> diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
+> index 0ef9afe..97d8b25 100644
+> --- a/configs/raspberrypi3_defconfig
+> +++ b/configs/raspberrypi3_defconfig
+> @@ -13,6 +13,7 @@ BR2_LINUX_KERNEL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+>  BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,865ddc1393f558198e7e7ce70928ff2e49c4f7f6)/linux-865ddc1393f558198e7e7ce70928ff2e49c4f7f6.tar.gz"
+>  BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
+> +BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH="docs/images/logo_linux_clut224.png"
+>  
+>  # Build the DTB from the kernel sources
+>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
