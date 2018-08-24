@@ -1,36 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:27:58 +0200
-Subject: [Buildroot] [git commit] configs/arm_juno: bump ATF to v1.3
-In-Reply-To: <20180812144740.C664B813DF@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 12 Aug 2018 16:53:31 +0200")
-References: <20180812144740.C664B813DF@busybox.osuosl.org>
-Message-ID: <87ftz4kw35.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 10:30:14 +0200
+Subject: [Buildroot] [PATCH v2 1/1] lighttpd: Add systemd tmpfile to fix
+ lighttpd systemd boot
+In-Reply-To: <20180730102416.20507-1-laurent.hartanerot@gmail.com> (Laurent
+ Hartanerot's message of "Mon, 30 Jul 2018 12:24:16 +0200")
+References: <20180727213514.19361-1-laurent.hartanerot@gmail.com>
+ <20180730102416.20507-1-laurent.hartanerot@gmail.com>
+Message-ID: <87bm9skvzd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Laurent" == Laurent Hartanerot <laurent.hartanerot@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=395bc11dde5b4ef034118a9be568131f134daaa3
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > From: Laurent Hartanerot <laurent.hartanerot@atos.net>
+ > Problem starting lighttpd application with systemd.
 
- > ATF in version 1.2 fails to build with:
+ > /usr/sbin/lighttpd -D -f /etc/lighttpd/lighttpd.conf
+ > 2018-06-22 11:21:34: (server.c.733) opening errorlog '/var/log/lighttpd-error.log' failed: Permission denied
+ > 2018-06-22 11:21:34: (server.c.1420) Opening errorlog failed. Going down.
 
- > ./build/juno/release/bl1/context_mgmt.o: In function `cm_prepare_el3_exit':
- > context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): undefined reference to `cm_set_next_context'
- > context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): relocation truncated to fit: R_AARCH64_JUMP26 against undefined symbol `cm_set_next_context'
+ > Lighttpd can not write the 'lighttpd-access.log' and 'lighttpd-error.log' files
+ > to the directory '/var/log/'.
 
- > This has been fixed in ATF v1.3. Even though there are even newer
- > versions of ATF available, we take a conservative approach, and bump
- > to the first version that has the build issue fixed.
+ > When using systemd the directory '/var/log' does not allow the user www-data to
+ > write.
 
- > Fixes:
+ > To correct the problem, we add /usr/lib/tmpfiles.d/lighttpd.conf.
+ > This file create the 'lighttpd-access.log' and 'lighttpd-error.log' files  with
+ > the permission
 
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/88314771
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
