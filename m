@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:06:21 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] mtd: backport upstream
+Date: Fri, 24 Aug 2018 10:06:39 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] mtd: backport upstream
  bug fix
-Message-ID: <20180824075842.3E7D08E584@busybox.osuosl.org>
+Message-ID: <20180824075857.B84888E589@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5b020acf58cf394edfccbf438eacb0f52e5c4e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fb8c4deb1a5101a194333b9ec3779c932ba681b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 A regression in the mtd package prevents non-consecutive ubi volume
 IDs from working properly. This change backported from upstream
