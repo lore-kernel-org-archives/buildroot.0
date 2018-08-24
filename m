@@ -1,59 +1,43 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 24 Aug 2018 18:27:43 +0200
-Subject: [Buildroot] [PATCH/next 1/2] package/samba4: security bump to
- version 4.8.4
-Message-ID: <20180824162744.11726-1-bernd.kuhls@t-online.de>
+Date: Fri, 24 Aug 2018 20:41:31 +0200
+Subject: [Buildroot] [PATCH/next 1/3] linux-headers: bump 4.{4, 9, 14, 17,
+ 18}.x series
+Message-ID: <20180824184133.8508-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.8.4.html
-
-Fixes
-
-o  CVE-2018-1139  (Weak authentication protocol allowed.)
-o  CVE-2018-1140  (Denial of Service Attack on DNS and LDAP server.)
-o  CVE-2018-10858 (Insufficient input validation on client directory
-                   listing in libsmbclient.)
-o  CVE-2018-10918 (Denial of Service Attack on AD DC DRSUAPI server.)
-o  CVE-2018-10919 (Confidential attribute disclosure from the AD LDAP
-                   server.)
-
-Cherry-picked from master branch:
-https://git.buildroot.net/buildroot/commit/?id=3d7ce0124aa6ab116f430604db72c99bcd7a299a
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 4b1b1218ac..00c8466078 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.8.3.tar.asc
--sha256 e0569a8a605d5dfb49f1fdd11db796f4d36fe0351c4a7f21387ef253010b82ed  samba-4.8.3.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.8.4.tar.asc
-+sha256 f5044d149e01894a08b1d114b8b69aed78171a7bb19608bd1fd771453b9a5406  samba-4.8.4.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 52d59ffeb9..03ef6eeeb0 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.8.3
-+SAMBA4_VERSION = 4.8.4
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index bd9c4827b3..8ee91c3076 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -266,15 +266,15 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
+ 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
+-	default "4.4.145"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.116"	if BR2_KERNEL_HEADERS_4_9
++	default "4.4.152"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.124"	if BR2_KERNEL_HEADERS_4_9
+ 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
+ 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
+ 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
+ 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
+-	default "4.14.59"	if BR2_KERNEL_HEADERS_4_14
++	default "4.14.67"	if BR2_KERNEL_HEADERS_4_14
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+-	default "4.17.11"	if BR2_KERNEL_HEADERS_4_17
+-	default "4.18.3"	if BR2_KERNEL_HEADERS_4_18
++	default "4.17.19"	if BR2_KERNEL_HEADERS_4_17
++	default "4.18.5"	if BR2_KERNEL_HEADERS_4_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
 -- 
 2.18.0
