@@ -1,39 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 23:11:57 +0200
-Subject: [Buildroot] [PATCH/next 1/1] python-libconfig: fix python-3.7
- support
-In-Reply-To: <20180824203119.16807-1-bernd.kuhls@t-online.de>
-References: <20180824203119.16807-1-bernd.kuhls@t-online.de>
-Message-ID: <20180824231157.4c79f191@windsurf>
+Date: Fri, 24 Aug 2018 23:12:23 +0200
+Subject: [Buildroot] [git commit] mbedtls: security bump to version 2.7.5
+Message-ID: <20180824210442.C85778E6A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7a7a1591350c29538e86cedebcb251ffac3daecc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 24 Aug 2018 22:31:19 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/32f/32f7e38895e7c491916bd69ed91bbe016e8b3ff6/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Fixes the following security issues:
 
-Applied to next, thanks, however...
+- CVE-2018-0497: Remote plaintext recovery on use of CBC based ciphersuites
+  through a timing side-channel
 
-> -+boostlib = "boost_python36"
-> ++boostlib = "boost_python37"
->  +if sys.version_info < (3, 0):
->  +    boostlib = "boost_python27"
+- CVE-2018-0498: Plaintext recovery on use of CBC based ciphersuites through
+  a cache based side-channel
 
-Can we do better than this piece of code that we will forget to update
-pretty much every time we bump Python ? Yegor ? Fabrice ? Any idea
-here ?
+For more info, see the advisory:
+https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2018-02
 
-Thanks!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mbedtls/mbedtls.hash | 6 +++---
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index cf347d299f..47e446dd07 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.11.0-2.7.4-and-2.1.13-released
+-sha1	20394e353050992c5f9699da7c9a336bd2ed2dea	mbedtls-2.7.4-apache.tgz
+-sha256	34e164d49500e377970c5f6761a146078baae0e086ec88cdcfeb9c96878a38f5	mbedtls-2.7.4-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.12.0-2.7.5-and-2.1.14-released
++sha1	180ca49e2bb6df3826113781b793529a81427ce3	mbedtls-2.7.5-apache.tgz
++sha256	a1302ad9094aabb9880d2755927b466a6bac8e02b68e04dee77321f3859e9b40	mbedtls-2.7.5-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index ab415dd0b8..e07cc3d71c 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.7.4
++MBEDTLS_VERSION = 2.7.5
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
