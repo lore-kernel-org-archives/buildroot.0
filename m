@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 08:42:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.8.3
-In-Reply-To: <20180630112907.20702-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 30 Jun 2018 13:29:07 +0200")
-References: <20180630112907.20702-1-bernd.kuhls@t-online.de>
-Message-ID: <87pny8nu4m.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 08:42:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: Disable build of
+ manpages and documentation
+In-Reply-To: <20180808184155.1486-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Wed, 8 Aug 2018 20:41:55 +0200")
+References: <20180808184155.1486-1-bernd.kuhls@t-online.de>
+Message-ID: <87lg8wnu3o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,8 +14,9 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Removed patch applied upstream.
- > Release notes: https://www.samba.org/samba/history/samba-4.8.3.html
+ > Fixes
+ > http://autobuild.buildroot.net/results/3f2/3f214cbb1fe2dc2c2cbfb630032e13eba81c1b5a/
+ > and many others
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
