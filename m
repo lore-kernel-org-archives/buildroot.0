@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 23:51:37 +0200
-Subject: [Buildroot] [PATCH] btrfs-progs: bump to version 4.17.1
-In-Reply-To: <8c998542bd25e65a58ebe3732dd74a4b7c434e2a.1535027897.git.baruch@tkos.co.il>
-References: <8c998542bd25e65a58ebe3732dd74a4b7c434e2a.1535027897.git.baruch@tkos.co.il>
-Message-ID: <20180824235137.11234063@windsurf>
+Date: Fri, 24 Aug 2018 23:51:51 +0200
+Subject: [Buildroot] [PATCH] iproute2: bump to version 4.18.0
+In-Reply-To: <08e0ff62e715901343733bf0fd3e4c51c7518cb6.1535029158.git.baruch@tkos.co.il>
+References: <08e0ff62e715901343733bf0fd3e4c51c7518cb6.1535029158.git.baruch@tkos.co.il>
+Message-ID: <20180824235151.4868e46a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,17 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 23 Aug 2018 15:38:17 +0300, Baruch Siach wrote:
-> The configure script now detects toolchain support for the -std=gnu90
-> flag. This fixes build with gcc older than 4.5.
+On Thu, 23 Aug 2018 15:59:18 +0300, Baruch Siach wrote:
+> Drop upstream patch.
 > 
-> Should fix:
-> http://autobuild.buildroot.net/results/802/802dd4d7eec058c2eb23e033ed3a093b110f4eda/
-> 
-> Cc: Robert J. Heywood <robert.heywood@codethink.co.uk>
+> Cc: Petr Vorel <petr.vorel@gmail.com>
 > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
+>  ...rdma-sync-some-IP-headers-with-glibc.patch | 39 -------------------
+>  package/iproute2/iproute2.hash                |  2 +-
+>  package/iproute2/iproute2.mk                  |  2 +-
+>  3 files changed, 2 insertions(+), 41 deletions(-)
+>  delete mode 100644 package/iproute2/0001-rdma-sync-some-IP-headers-with-glibc.patch
 
 Applied to next, thanks.
 
