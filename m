@@ -1,57 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 23:04:41 +0200
-Subject: [Buildroot] [git commit] package/samba4: security bump to version
- 4.8.4
-Message-ID: <20180907111600.09E3280FBA@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 23:09:44 +0200
+Subject: [Buildroot] [git commit] python-libconfig: fix python-3.7 support
+Message-ID: <20180907111601.1841F80FBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f9c7dadad19a410423788c8e465968ba20fc66f4
+commit: https://git.buildroot.net/buildroot/commit/?id=bab65be1e7f7d8109e537f4a30cd261e3b4fcf61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://www.samba.org/samba/history/samba-4.8.4.html
-
 Fixes
-
-o  CVE-2018-1139  (Weak authentication protocol allowed.)
-o  CVE-2018-1140  (Denial of Service Attack on DNS and LDAP server.)
-o  CVE-2018-10858 (Insufficient input validation on client directory
-                   listing in libsmbclient.)
-o  CVE-2018-10918 (Denial of Service Attack on AD DC DRSUAPI server.)
-o  CVE-2018-10919 (Confidential attribute disclosure from the AD LDAP
-                   server.)
+http://autobuild.buildroot.net/results/32f/32f7e38895e7c491916bd69ed91bbe016e8b3ff6/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-Determine-boost_python-name-depending-on-current-Pyt.patch | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 4b1b1218ac..00c8466078 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.8.3.tar.asc
--sha256 e0569a8a605d5dfb49f1fdd11db796f4d36fe0351c4a7f21387ef253010b82ed  samba-4.8.3.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.8.4.tar.asc
-+sha256 f5044d149e01894a08b1d114b8b69aed78171a7bb19608bd1fd771453b9a5406  samba-4.8.4.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 52d59ffeb9..03ef6eeeb0 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
+index 478bac76f6..ec7aec4072 100644
+--- a/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
++++ b/package/python-libconfig/0001-Determine-boost_python-name-depending-on-current-Pyt.patch
+@@ -4,11 +4,13 @@ Date: Thu, 27 Jul 2017 09:46:07 +0200
+ Subject: [PATCH] Determine boost_python name depending on current Python
+  version
  
--SAMBA4_VERSION = 4.8.3
-+SAMBA4_VERSION = 4.8.4
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-Python2 requires boost_python27 and Python3 requires boost_python36
++Python2 requires boost_python27 and Python3 requires boost_python37
+ (since boost 1.67).
+ 
+ Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Bernd: adapted for python-3.7]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  setup.py | 6 +++++-
+  1 file changed, 5 insertions(+), 1 deletion(-)
+@@ -21,7 +23,7 @@ index fdf5c27..4b38569 100644
+  from setuptools import setup, find_packages, Extension
+  import sys, os
+  
+-+boostlib = "boost_python36"
+++boostlib = "boost_python37"
+ +if sys.version_info < (3, 0):
+ +    boostlib = "boost_python27"
+ +
