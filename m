@@ -1,24 +1,29 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:07:04 +0200
-Subject: [Buildroot] [PATCH] mtd: bump to version 2.0.2
-In-Reply-To: <98e041e9fca43ea6994cfe577e2a98202717c63c.1525978266.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Thu, 10 May 2018 21:51:06 +0300")
-References: <98e041e9fca43ea6994cfe577e2a98202717c63c.1525978266.git.baruch@tkos.co.il>
-Message-ID: <871saombmf.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 10:07:30 +0200
+Subject: [Buildroot] [PATCH 1/1] mtd: Allow holes in volume ID table
+In-Reply-To: <1532089807-97597-1-git-send-email-david.owens@rockwellcollins.com>
+ (David Owens's message of "Fri, 20 Jul 2018 07:30:07 -0500")
+References: <1532089807-97597-1-git-send-email-david.owens@rockwellcollins.com>
+Message-ID: <87wosgkx19.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+>>>>> "David" == David Owens <david.owens@rockwellcollins.com> writes:
 
- > Add license file hash.
- > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ > A regression in the mtd package prevents non-consecutive ubi volume IDs
+ > from working properly.  This change reverts the commit [0].  The issue
+ > was originally described on the mtd mailing list:
 
-Committed to 2018.02.x and 2018.05.x as it fixes a number of issues,
-thanks.
+ > http://lists.infradead.org/pipermail/linux-mtd/2018-June/081562.html
+
+ > [0] http://git.infradead.org/mtd-utils.git/commitdiff/dede98ffb706676309488d7cc660f569548d5930
+
+ > Signed-off-by: David Owens <david.owens@rockwellcollins.com>
+
+Committed to 2018.02.x and 2018.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
