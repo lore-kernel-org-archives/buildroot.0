@@ -1,45 +1,48 @@
-From: Brad Love <brad@nextdimension.cc>
-Date: Thu, 23 Aug 2018 14:56:26 -0500
-Subject: [Buildroot] [PATCH 1/2] i2c-tools: include LGPL-2.1+ license for
- libi2c
-In-Reply-To: <1535054187-6055-1-git-send-email-brad@nextdimension.cc>
-References: <1535054187-6055-1-git-send-email-brad@nextdimension.cc>
-Message-ID: <1535054187-6055-2-git-send-email-brad@nextdimension.cc>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Aug 2018 10:02:17 +0200
+Subject: [Buildroot] [PATCH] package/rauc: needs kernel headers >= 3.0
+Message-ID: <20180824080217.16181-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Extend i2c-tools SPDX identifiers to include the library license.
+rauc includes <linux/mmc/ioctl.h> which was introduced only in
+linux 3.0.
 
-The ic2-tools readme states:
+Also change order to have arch dependencies first.
 
-LICENSE
-
-Check the documentation of individual tools for licensing information.
-The library is released under the LGPL version 2.1 or later, while most
-tools are released under the GPL version 2 or later, but there are a few
-exceptions.
-
-
-Signed-off-by: Brad Love <brad@nextdimension.cc>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Andrey Yurovsky <yurovsky@gmail.com>
 ---
- package/i2c-tools/i2c-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rauc/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index db26647..a346698 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -7,7 +7,7 @@
- I2C_TOOLS_VERSION = 4.0
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
- I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
--I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus)
-+I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
- I2C_TOOLS_LICENSE_FILES = COPYING
- I2C_TOOLS_MAKE_OPTS = EXTRA=eeprog
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+index 6433b827d3..864aa6b9c6 100644
+--- a/package/rauc/Config.in
++++ b/package/rauc/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_RAUC
+ 	bool "rauc"
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_DBUS # run-time dependency
+@@ -32,6 +33,7 @@ config BR2_PACKAGE_RAUC_JSON
  
+ endif
+ 
+-comment "rauc needs a toolchain w/ wchar, threads"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++comment "rauc needs a toolchain w/ wchar, threads, headers >= 3.0"
+ 	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
 -- 
-2.7.4
+2.14.1
