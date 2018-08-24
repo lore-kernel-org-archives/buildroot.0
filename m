@@ -1,48 +1,49 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Aug 2018 10:02:17 +0200
-Subject: [Buildroot] [PATCH] package/rauc: needs kernel headers >= 3.0
-Message-ID: <20180824080217.16181-1-yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 24 Aug 2018 10:06:15 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] mtd: bump to version 2.0.2
+Message-ID: <20180824075842.3074A8E584@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-rauc includes <linux/mmc/ioctl.h> which was introduced only in
-linux 3.0.
+commit: https://git.buildroot.net/buildroot/commit/?id=1bf584187639ba24736385b320d32af8cf9920d7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Also change order to have arch dependencies first.
+Add license file hash.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Andrey Yurovsky <yurovsky@gmail.com>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ea7218774624d6d3dfe76d1e2f1e6a5dab446dce)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rauc/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ package/mtd/mtd.hash | 5 +++--
+ package/mtd/mtd.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/rauc/Config.in b/package/rauc/Config.in
-index 6433b827d3..864aa6b9c6 100644
---- a/package/rauc/Config.in
-+++ b/package/rauc/Config.in
-@@ -1,8 +1,9 @@
- config BR2_PACKAGE_RAUC
- 	bool "rauc"
--	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_DBUS # run-time dependency
-@@ -32,6 +33,7 @@ config BR2_PACKAGE_RAUC_JSON
+diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
+index c452654bfb..4bd0cda097 100644
+--- a/package/mtd/mtd.hash
++++ b/package/mtd/mtd.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.1.tar.bz2.asc
+-sha256	312baa0446e4e728ceb413c53533e41e547d1c13ffa0752b2f879fd289fc2f63	mtd-utils-2.0.1.tar.bz2
++# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.2.tar.bz2.asc
++sha256	fb3de61be8e932abb424e8ea3c30298f553d5f970ad158a737bb303bbf9660b8	mtd-utils-2.0.2.tar.bz2
++sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 7094aad89e..83bd6a6ae9 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
- 
--comment "rauc needs a toolchain w/ wchar, threads"
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+comment "rauc needs a toolchain w/ wchar, threads, headers >= 3.0"
- 	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
--- 
-2.14.1
+-MTD_VERSION = 2.0.1
++MTD_VERSION = 2.0.2
+ MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
+ MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
+ MTD_LICENSE = GPL-2.0
