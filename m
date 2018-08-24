@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:57:14 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] ruby: security bump to
+Date: Fri, 24 Aug 2018 10:57:33 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] ruby: security bump to
  version 2.4.4
-Message-ID: <20180824084931.8ADEC8E609@busybox.osuosl.org>
+Message-ID: <20180824084951.7FE6E8E60F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b166c85b5430841d491d1dbb3a70c13a7d571cfb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=392148e28fbe21a31f9a87144176084b09cc2266
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes the following security issues:
 
@@ -62,7 +62,7 @@ index d066186d56..dd4cfc202b 100644
  sha256 5cda9584acd5e1096276a375085b7e659fa67a072fd69ec2c3931e54f7f563bb  LEGAL
  sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
 diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 365b8cead2..b85ee9d069 100644
+index 4bf1a14cee..93c3170cf6 100644
 --- a/package/ruby/ruby.mk
 +++ b/package/ruby/ruby.mk
 @@ -5,7 +5,7 @@
