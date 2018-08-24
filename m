@@ -1,23 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 23:23:31 +0200
-Subject: [Buildroot] [PATCH] libostree: bump to version 2018.8
-In-Reply-To: <20180823185158.875-1-marcus.folkesson@gmail.com>
-References: <20180823185158.875-1-marcus.folkesson@gmail.com>
-Message-ID: <20180824232331.42907f17@windsurf>
+Date: Fri, 24 Aug 2018 23:24:11 +0200
+Subject: [Buildroot] [PATCH] gst1-plugins-good: enable jack plugins if
+ jack2 is on
+In-Reply-To: <1535055485-8704-1-git-send-email-brad@nextdimension.cc>
+References: <1535055485-8704-1-git-send-email-brad@nextdimension.cc>
+Message-ID: <20180824232411.4d01043d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Brad,
 
-On Thu, 23 Aug 2018 20:51:58 +0200, Marcus Folkesson wrote:
-> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+On Thu, 23 Aug 2018 15:18:05 -0500, Brad Love wrote:
+> Jack2 audio server is part of buildroot, but the jack gst plugins
+> are disabled completely in gst1-plugins-good, whether or not jack2
+> is selected. This changes the logic to where if the build system
+> determines jack2 audio server is selected, then the jack plugins are
+> enabled. If the plugins are enabled, then jack2 is also added as a
+> dependency to gst1-plugins-good.
+> 
+> 
+> Signed-off-by: Brad Love <brad@nextdimension.cc>
 > ---
->  package/libostree/libostree.hash | 2 +-
->  package/libostree/libostree.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
 Applied to next, thanks.
 
