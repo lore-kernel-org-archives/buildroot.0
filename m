@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:29:47 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] lighttpd: Add systemd
+Date: Fri, 24 Aug 2018 10:29:40 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] lighttpd: Add systemd
  tmpfile to fix lighttpd systemd boot
-Message-ID: <20180824082232.5BB2D8E5AC@busybox.osuosl.org>
+Message-ID: <20180824082237.035C98E5B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab22e87402d2f1cf0c87e63c38dbcb4065bbea9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=03fc685442e4d4727ccafa8294e40607e9517d69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Problem starting lighttpd application with systemd.
 
