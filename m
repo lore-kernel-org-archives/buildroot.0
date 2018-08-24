@@ -1,43 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 09:18:48 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] linux-headers: bump 4.{4,
- 9, 14, 17}.x series
-Message-ID: <20180824071144.5FC9A8E556@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 09:21:14 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/waylandpp: bump
+ version to 0.2.3
+Message-ID: <20180824071349.C13AB8DE6D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e98a08829190bde1c6caaaf95c938e7d65f609f1
+commit: https://git.buildroot.net/buildroot/commit/?id=2f694c9e607217a18c0674a60f207660501e3f7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-[Peter: drop 4.17.x change]
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8e1b07230ff9b2d4a51fc8d68334aa6f7f2b3598)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 10ddd8881ca6ffa64065761ec7d024d2b5a4453a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/waylandpp/waylandpp.hash | 2 +-
+ package/waylandpp/waylandpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 96ae5e6bbd..31c1507e60 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -242,12 +242,12 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.146"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.118"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.147"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.119"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.61"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.62"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+diff --git a/package/waylandpp/waylandpp.hash b/package/waylandpp/waylandpp.hash
+index 3a580bf963..1b14814c47 100644
+--- a/package/waylandpp/waylandpp.hash
++++ b/package/waylandpp/waylandpp.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 e0c9012f3a5fb69922d5ecabdfbef739f1e0db3e68048b3f63537468ad5c4acd  waylandpp-0.2.2.tar.gz
++sha256 ebd4a8447bb65f288cad0e04538f6ec704e155213fc2b9cc1a851534c70aacac  waylandpp-0.2.3.tar.gz
+ sha256 49aa6d728fd13226952c9e3a5a9cae46379b2a501010064760172b5ce7cd94bb  LICENSE
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  scanner/gpl-3.0.txt
+diff --git a/package/waylandpp/waylandpp.mk b/package/waylandpp/waylandpp.mk
+index 5c9c96b379..ff17c35c1e 100644
+--- a/package/waylandpp/waylandpp.mk
++++ b/package/waylandpp/waylandpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WAYLANDPP_VERSION = 0.2.2
++WAYLANDPP_VERSION = 0.2.3
+ WAYLANDPP_SITE = $(call github,NilsBrause,waylandpp,$(WAYLANDPP_VERSION))
+ WAYLANDPP_LICENSE = MIT, GPL-3.0+ (wayland_scanner)
+ WAYLANDPP_LICENSE_FILES = LICENSE scanner/gpl-3.0.txt
