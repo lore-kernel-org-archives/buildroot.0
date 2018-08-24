@@ -1,39 +1,76 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 24 Aug 2018 10:51:08 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-08-23
-In-Reply-To: <20180824081706.GM9365@scaer>
-References: <20180824060019.899B4207B1@mail.bootlin.com>
- <20180824085219.3e493d23@x230.trabucayre.com>
- <20180824081706.GM9365@scaer>
-Message-ID: <20180824085108.GN9365@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 24 Aug 2018 10:57:14 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] ruby: security bump to
+ version 2.4.4
+Message-ID: <20180824084931.8ADEC8E609@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gwenhael, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=b166c85b5430841d491d1dbb3a70c13a7d571cfb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-On 2018-08-24 10:17 +0200, Yann E. MORIN spake thusly:
-> On 2018-08-24 08:52 +0200, Gwenhael Goavec-Merou spake thusly:
-> > On Fri, 24 Aug 2018 08:00:19 +0200 (CEST)
-> > Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> > > Results for branch 'master'
-> > > | aarch64 |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/29737d2fdd94a74fe38672a4edf03167be5dfb45
-> > I'm unable to reproduce this failure.
-> It occured on my autobuilder; I'll take a look.
+Fixes the following security issues:
 
-So I was also unable to reproduce the error on the autobuilder either...
-Dang... :-/
+CVE-2017-17405: Command injection vulnerability in Net::FTP (2.4.3):
+https://www.ruby-lang.org/en/news/2017/12/14/net-ftp-command-injection-cve-2017-17405/
 
-Regards,
-Yann E. MORIN.
+CVE-2017-17742: HTTP response splitting in WEBrick (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/http-response-splitting-in-webrick-cve-2017-17742/
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+CVE-2018-6914: Unintentional file and directory creation with directory
+traversal in tempfile and tmpdir (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/unintentional-file-and-directory-creation-with-directory-traversal-cve-2018-6914/
+
+CVE-2018-8777: DoS by large request in WEBrick (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/large-request-dos-in-webrick-cve-2018-8777/
+
+CVE-2018-8778: Buffer under-read in String#unpack (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/buffer-under-read-unpack-cve-2018-8778/
+
+CVE-2018-8779: Unintentional socket creation by poisoned NUL byte in
+UNIXServer and UNIXSocket (2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/poisoned-nul-byte-unixsocket-cve-2018-8779/
+
+CVE-2018-8780: Unintentional directory traversal by poisoned NUL byte in Dir
+(2.4.4):
+https://www.ruby-lang.org/en/news/2018/03/28/poisoned-nul-byte-dir-cve-2018-8780/
+
+Multiple vulnerabilities in RubyGems (2.4.4):
+https://www.ruby-lang.org/en/news/2018/02/17/multiple-vulnerabilities-in-rubygems/
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 46cfed78b10a8e17d3d2c35e38b8fb5bf80dd282)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index d066186d56..dd4cfc202b 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# From https://www.ruby-lang.org/en/news/2017/09/14/ruby-2-4-2-released/
+-sha256 748a8980d30141bd1a4124e11745bb105b436fb1890826e0d2b9ea31af27f735  ruby-2.4.2.tar.xz
++# From https://www.ruby-lang.org/en/news/2018/03/28/ruby-2-4-4-released/
++sha256 1d0034071d675193ca769f64c91827e5f54cb3a7962316a41d5217c7bc6949f0  ruby-2.4.4.tar.xz
+ # License files, Locally calculated
+ sha256 5cda9584acd5e1096276a375085b7e659fa67a072fd69ec2c3931e54f7f563bb  LEGAL
+ sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index 365b8cead2..b85ee9d069 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ RUBY_VERSION_MAJOR = 2.4
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
+ RUBY_VERSION_EXT = 2.4.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
