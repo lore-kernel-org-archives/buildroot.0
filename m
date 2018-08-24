@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 11:56:17 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/ipsec-tools: add
+Date: Fri, 24 Aug 2018 11:56:58 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/ipsec-tools: add
  security patch to fix CVE-2016-10396
-Message-ID: <20180824094858.2EC8388697@busybox.osuosl.org>
+Message-ID: <20180824094916.942568E636@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fc8410c546a214c53369a84ce7ecd4b032caba2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7ec02006bf0bf3488725766e608dc72132042697
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
