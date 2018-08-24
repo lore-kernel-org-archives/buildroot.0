@@ -1,140 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 22:55:30 +0200
-Subject: [Buildroot] [git commit] linux-headers: drop old unsupported 4.{10,
- 11, 12, 13, 15} versions
-Message-ID: <20180907111559.779907FD5D@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 23:04:48 +0200
+Subject: [Buildroot] [git commit] package/samba4: Fix uClibc build on 64bit
+ platforms by including stdint.h
+Message-ID: <20180907111600.5E86F7FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2d44ec6bf127cbf80b9bd292465c8825456e227
+commit: https://git.buildroot.net/buildroot/commit/?id=734ea21eb31ee67a93f7e6a8d8f56bf2f779a923
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-These versions received their last updated more than three months ago
-and are no longer supported according to
-https://www.kernel.org/category/releases.html, so drop them and add
-legacy entries.
+Patch needed to be updated for samba-4.8.4
+
+Fixes
+http://autobuild.buildroot.net/results/140/1404a594583ff192d70086ef590f924472465c89/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: select an older kernel headers (4.9) rather than a newer one
-(4.14) in the legacy handling of 4.10, 4.11, 4.12 and 4.13.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                     | 53 ++++++++++++++++++++++++++++++++++++
- package/linux-headers/Config.in.host | 25 -----------------
- 2 files changed, 53 insertions(+), 25 deletions(-)
+ ...build-on-64bit-platforms-by-including-std.patch | 24 ++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 29d5b6adcc..aae8d28e13 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -142,6 +142,59 @@ comment "unpredictable ways.                                 "
- comment "----------------------------------------------------"
- endif
+diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+index 1256d1c969..0f174d5369 100644
+--- a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
++++ b/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+@@ -1,4 +1,4 @@
+-From 4a63f267efab2ef86adbeddda45909127135d7c8 Mon Sep 17 00:00:00 2001
++From 3d91847322eba55e97adc76c5c95570382af7059 Mon Sep 17 00:00:00 2001
+ From: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Date: Sun, 28 Jan 2018 11:57:11 +0100
+ Subject: [PATCH] Fix uClibc build on 64bit platforms by including stdint.h
+@@ -20,15 +20,19 @@ define uintptr_t, this patch includes stdint.h when needed.
+ Patch sent upstream:
+ https://lists.samba.org/archive/samba-technical/2018-January/125306.html
  
-+###############################################################################
-+comment "Legacy options removed in 2018.11"
++[updated for samba-4.8.4, v2 sent upstream
++ https://lists.samba.org/archive/samba-technical/2018-August/129732.html]
 +
-+config BR2_KERNEL_HEADERS_4_10
-+	bool "kernel headers version 4.10.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_9
-+	select BR2_LEGACY
-+	help
-+	  Version 4.10.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.14.x of the headers have been automatically
-+	  selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_4_11
-+	bool "kernel headers version 4.11.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_9
-+	select BR2_LEGACY
-+	help
-+	  Version 4.11.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.14.x of the headers have been automatically
-+	  selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_4_12
-+	bool "kernel headers version 4.12.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_19
-+	select BR2_LEGACY
-+	help
-+	  Version 4.12.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.14.x of the headers have been automatically
-+	  selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_4_13
-+	bool "kernel headers version 4.13.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_19
-+	select BR2_LEGACY
-+	help
-+	  Version 4.13.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.14.x of the headers have been automatically
-+	  selected in your configuration.
-+
-+config BR2_KERNEL_HEADERS_4_15
-+	bool "kernel headers version 4.15.x are no longer supported"
-+	select BR2_KERNEL_HEADERS_4_14
-+	select BR2_LEGACY
-+	help
-+	  Version 4.15.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed. As an alternative,
-+	  version 4.14.x of the headers have been automatically
-+	  selected in your configuration.
-+
- ###############################################################################
- comment "Legacy options removed in 2018.08"
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  lib/ldb/tests/ldb_mod_op_test.c   | 1 +
+  lib/ldb/tests/ldb_msg.c           | 1 +
++ libcli/auth/tests/ntlm_check.c    | 1 +
+  libcli/smb/test_smb1cli_session.c | 1 +
+- 3 files changed, 3 insertions(+)
++ 4 files changed, 4 insertions(+)
  
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b6bc44c93e..ee3b033be3 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -43,30 +43,10 @@ config BR2_KERNEL_HEADERS_4_9
- 	bool "Linux 4.9.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
+ diff --git a/lib/ldb/tests/ldb_mod_op_test.c b/lib/ldb/tests/ldb_mod_op_test.c
+-index cf2288c7bce..4690594186e 100644
++index c8b9c1aa9ff..4893dc3b38b 100644
+ --- a/lib/ldb/tests/ldb_mod_op_test.c
+ +++ b/lib/ldb/tests/ldb_mod_op_test.c
+ @@ -13,6 +13,7 @@
+@@ -51,6 +55,18 @@ index f8de418e0dc..31786a9a318 100644
+  #include <setjmp.h>
+  #include <cmocka.h>
+  
++diff --git a/libcli/auth/tests/ntlm_check.c b/libcli/auth/tests/ntlm_check.c
++index e87a0a276d4..65c7b086008 100644
++--- a/libcli/auth/tests/ntlm_check.c
+++++ b/libcli/auth/tests/ntlm_check.c
++@@ -40,6 +40,7 @@
++  */
++ #include <stdarg.h>
++ #include <stddef.h>
+++#include <stdint.h>
++ #include <setjmp.h>
++ #include <cmocka.h>
++ 
+ diff --git a/libcli/smb/test_smb1cli_session.c b/libcli/smb/test_smb1cli_session.c
+ index d1e21d5431e..6a526c96b61 100644
+ --- a/libcli/smb/test_smb1cli_session.c
+@@ -63,5 +79,5 @@ index d1e21d5431e..6a526c96b61 100644
+  #include <cmocka.h>
+  
+ -- 
+-2.11.0
++2.18.0
  
--config BR2_KERNEL_HEADERS_4_10
--	bool "Linux 4.10.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
--
--config BR2_KERNEL_HEADERS_4_11
--	bool "Linux 4.11.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11
--
--config BR2_KERNEL_HEADERS_4_12
--	bool "Linux 4.12.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12
--
--config BR2_KERNEL_HEADERS_4_13
--	bool "Linux 4.13.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_13
--
- config BR2_KERNEL_HEADERS_4_14
- 	bool "Linux 4.14.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
- 
--config BR2_KERNEL_HEADERS_4_15
--	bool "Linux 4.15.x kernel headers"
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
--
- config BR2_KERNEL_HEADERS_4_16
- 	bool "Linux 4.16.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
-@@ -268,12 +248,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
- 	default "4.4.151"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.123"	if BR2_KERNEL_HEADERS_4_9
--	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
--	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
--	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
--	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
- 	default "4.14.66"	if BR2_KERNEL_HEADERS_4_14
--	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
- 	default "4.17.18"	if BR2_KERNEL_HEADERS_4_17
- 	default "4.18.5"	if BR2_KERNEL_HEADERS_4_18
