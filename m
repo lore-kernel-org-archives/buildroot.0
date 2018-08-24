@@ -1,58 +1,104 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:36:49 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] libselinux: use correct
- name and content for patch 0004
-Message-ID: <20180824083036.885068E5CF@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 10:36:41 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libselinux: add patch to
+ fix build with gcc < 4.7
+Message-ID: <20180824083036.7F1F78E5CF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61909a06cd4190c62bb6e4f31cdb5f1f1eca6d5c
+commit: https://git.buildroot.net/buildroot/commit/?id=affa919039d19abbb1a835691a1846f8c4becf80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Commit 6288409642d8368104f916bd264d2cb042942dfa ("libselinux: add
-patch to fix build with gcc < 4.7") introduced a patch, but its file
-name was incorrect, so it was never applied. In addition, the patch
-was generated against the Git repository of SELinux, which includes
-all projects, and therefore it doesn't apply to the libselinux source
-code extracted from the tarball: the "libselinux/" component path
-needs to be removed from the patch.
+This commit adds a patch from Hollis Blanchard on libselinux to fix
+build on host machines that have gcc < 4.7.
 
-This commit fixes both problems, which should finally and really fix:
+Fixes:
 
-  http://autobuild.buildroot.net/results/c3272566bb808e43bb77ec59cfe596f7e0fe9a64/
+  http://autobuild.buildroot.net/results/a82bb0c0b22ff24263ad7a7d165b21c0df7b3b1d/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cb8d1743cab1449b91afbabe38c64cbb85bef6ba)
+(cherry picked from commit 6288409642d8368104f916bd264d2cb042942dfa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...t => 0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch} | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ ...d-break-around-__atomic_-with-GCC-4.7.patch.txt | 70 ++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt b/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
-similarity index 91%
-rename from package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt
-rename to package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
-index 85bd064066..88e3a79332 100644
---- a/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt
-+++ b/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
-@@ -14,13 +14,13 @@ pthread_mutex_unlock() "synchronize memory with respect to other threads"...)
- 
- Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
- ---
-- libselinux/src/label_file.h | 18 ++++++++++++++++++
-+ src/label_file.h | 18 ++++++++++++++++++
-  1 file changed, 18 insertions(+)
- 
--diff --git a/libselinux/src/label_file.h b/libselinux/src/label_file.h
-+diff --git a/src/label_file.h b/src/label_file.h
- index 2fa85474..47859baf 100644
----- a/libselinux/src/label_file.h
--+++ b/libselinux/src/label_file.h
-+--- a/src/label_file.h
-++++ b/src/label_file.h
- @@ -351,8 +351,14 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
-  	 * init_routine does not take a parameter, it's not possible
-  	 * to use, so we generate the same effect with atomics and a
+diff --git a/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt b/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt
+new file mode 100644
+index 0000000000..85bd064066
+--- /dev/null
++++ b/package/libselinux/0004-Fix-build-break-around-__atomic_-with-GCC-4.7.patch.txt
+@@ -0,0 +1,70 @@
++From abe76789f8e7ce61b357f693eaed5b28feab5ce2 Mon Sep 17 00:00:00 2001
++From: Hollis Blanchard <hollis_blanchard@mentor.com>
++Date: Mon, 13 Aug 2018 12:11:33 -0700
++Subject: [PATCH] Fix build break around __atomic_*() with GCC<4.7
++
++The __atomic_* GCC primitives were introduced in GCC 4.7, but Red Hat
++Enterprise Linux 6.x (for example) provides GCC 4.4. Tweak the current code to
++use the (most conservative) __sync_synchronize() primitive provided by those
++older GCC versions.
++
++(Really, no __atomic or __sync operations are needed here at all, since POSIX
++4.12 "Memory Synchronization" says pthread_mutex_lock() and
++pthread_mutex_unlock() "synchronize memory with respect to other threads"...)
++
++Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
++---
++ libselinux/src/label_file.h | 18 ++++++++++++++++++
++ 1 file changed, 18 insertions(+)
++
++diff --git a/libselinux/src/label_file.h b/libselinux/src/label_file.h
++index 2fa85474..47859baf 100644
++--- a/libselinux/src/label_file.h
+++++ b/libselinux/src/label_file.h
++@@ -351,8 +351,14 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
++ 	 * init_routine does not take a parameter, it's not possible
++ 	 * to use, so we generate the same effect with atomics and a
++ 	 * mutex */
+++#ifdef __ATOMIC_RELAXED
++ 	regex_compiled =
++ 		__atomic_load_n(&spec->regex_compiled, __ATOMIC_ACQUIRE);
+++#else
+++	/* GCC <4.7 */
+++	__sync_synchronize();
+++	regex_compiled = spec->regex_compiled;
+++#endif
++ 	if (regex_compiled) {
++ 		return 0; /* already done */
++ 	}
++@@ -360,8 +366,14 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
++ 	__pthread_mutex_lock(&spec->regex_lock);
++ 	/* Check if another thread compiled the regex while we waited
++ 	 * on the mutex */
+++#ifdef __ATOMIC_RELAXED
++ 	regex_compiled =
++ 		__atomic_load_n(&spec->regex_compiled, __ATOMIC_ACQUIRE);
+++#else
+++	/* GCC <4.7 */
+++	__sync_synchronize();
+++	regex_compiled = spec->regex_compiled;
+++#endif
++ 	if (regex_compiled) {
++ 		__pthread_mutex_unlock(&spec->regex_lock);
++ 		return 0;
++@@ -404,7 +416,13 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
++ 	}
++ 
++ 	/* Done. */
+++#ifdef __ATOMIC_RELAXED
++ 	__atomic_store_n(&spec->regex_compiled, true, __ATOMIC_RELEASE);
+++#else
+++	/* GCC <4.7 */
+++	spec->regex_compiled = true;
+++	__sync_synchronize();
+++#endif
++ 	__pthread_mutex_unlock(&spec->regex_lock);
++ 	return 0;
++ }
++-- 
++2.13.0
++
