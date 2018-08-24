@@ -1,49 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 11:04:17 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/bind: security
- bump to version 9.11.4-P1
-Message-ID: <20180824085635.0E3ED8E622@busybox.osuosl.org>
+Date: Fri, 24 Aug 2018 11:04:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bind: security bump to version
+ 9.11.4-P1
+In-Reply-To: <20180818220013.7733-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 19 Aug 2018 00:00:13 +0200")
+References: <20180818220013.7733-1-bernd.kuhls@t-online.de>
+Message-ID: <87in40i194.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61c4f41a785c1094a3dc51215c6e71b48f24bc00
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Fixes CVE-2018-5740: https://ftp.isc.org/isc/bind9/9.11.4-P1/CHANGES
+ > Fixes CVE-2018-5740: https://ftp.isc.org/isc/bind9/9.11.4-P1/CHANGES
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 21d0077a2d1e6b8afba0812708d07a99e2738fc6)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Committed to 2018.02.x and 2018.05.x, thanks.
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 78f8015521..34d9891805 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.4/bind-9.11.4.tar.gz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.4-P1/bind-9.11.4-P1.tar.gz.asc
- # with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
--sha256 595070b031f869f8939656b5a5d11b121211967f15f6afeafa895df745279617 bind-9.11.4.tar.gz
-+sha256 b0e0dc3c8bf26989b1cad53f90d44a48e39404afc68f65c45bae79b446f0fe23 bind-9.11.4-P1.tar.gz
- sha256 336f3c40e37a1a13690efb4c63e20908faa4c40498cc02f3579fb67d3a1933a5 COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 4249291536..5cefa5b804 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.4
-+BIND_VERSION = 9.11.4-P1
- BIND_SITE = http://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-- 
+Bye, Peter Korsgaard
