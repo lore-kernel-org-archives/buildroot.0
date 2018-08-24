@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:27:29 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] configs/arm_juno: bump
+Date: Fri, 24 Aug 2018 10:27:46 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] configs/arm_juno: bump
  ATF to v1.3
-Message-ID: <20180824081954.38B888E5A6@busybox.osuosl.org>
+Message-ID: <20180824082003.D40398E5A7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a85a2cc8acc976b256ad877b7056ea7217ca02d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=150ee50dbf95e90b4f6250adf9dc57b08440ec9d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 ATF in version 1.2 fails to build with:
 
