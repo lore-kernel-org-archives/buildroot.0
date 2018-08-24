@@ -1,24 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 08:42:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: Disable build of
- manpages and documentation
-In-Reply-To: <20180808184155.1486-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Wed, 8 Aug 2018 20:41:55 +0200")
-References: <20180808184155.1486-1-bernd.kuhls@t-online.de>
-Message-ID: <87lg8wnu3o.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 08:42:46 +0200
+Subject: [Buildroot] [git commit] package/samba4: drop patch numbering
+ in patch 0003
+In-Reply-To: <20180809080121.1C8158B67E@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Thu, 9 Aug 2018 10:06:50 +0200")
+References: <20180809080121.1C8158B67E@busybox.osuosl.org>
+Message-ID: <87h8jknu3d.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Fixes
- > http://autobuild.buildroot.net/results/3f2/3f214cbb1fe2dc2c2cbfb630032e13eba81c1b5a/
- > and many others
+ > commit: https://git.buildroot.net/buildroot/commit/?id=15045fba99a688977dc1aaca01f7f0d42250a4dc
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2018.02.x and 2018.05.x, thanks.
 
