@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:46:29 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] python-django: security
+Date: Fri, 24 Aug 2018 10:46:41 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] python-django: security
  bump to version 1.11.15
-Message-ID: <20180824083847.C30008E5FC@busybox.osuosl.org>
+Message-ID: <20180824083859.4077E8E5FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d821aa976b5c92220bbc9dde6fbca7babb1d4c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c0ddd9dd072f7becfd08d9f396ca1e7a9355f5b3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Bump to the latest release of the 1.11.x LTS series as 1.10.x is no longer
 supported upstream:
