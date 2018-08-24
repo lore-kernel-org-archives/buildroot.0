@@ -1,27 +1,88 @@
-From: Niall Parker <stuff@npengineering.ca>
-Date: Fri, 24 Aug 2018 15:48:06 -0700
-Subject: [Buildroot] do config fragments work ?
-Message-ID: <e123e7b0-718c-d403-d7c2-ba9e571b6596@npengineering.ca>
+From: Hollis Blanchard <hollis_blanchard@mentor.com>
+Date: Fri, 24 Aug 2018 16:45:52 -0700
+Subject: [Buildroot] Autobnuilders timeouts [was: Re: autobuilder flock
+ hangs]
+In-Reply-To: <20180824070203.GK9365@scaer>
+References: <20180812060015.A385B207E5@mail.bootlin.com>
+ <20180812223629.2bac8ebe@windsurf>
+ <1a4b53ec-1ed3-7770-3a65-8d4f4f596918@mentor.com>
+ <20180816111059.3a7f1b59@windsurf> <20180824070203.GK9365@scaer>
+Message-ID: <821f032d-836a-41c2-d50c-eaa4687c5b22@mentor.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 08/24/2018 12:02 AM, Yann E. MORIN wrote:
+> Hollis, Julien, Matthew, Thomas, All,
+>
+> On 2018-08-16 11:10 +0200, Thomas Petazzoni spake thusly:
+>> On Mon, 13 Aug 2018 11:18:10 -0700, Hollis Blanchard wrote:
+>>> flock was hanging. I don't know why; have you experienced anything like
+>>> that?
+>> This happened again:
+>>    http://autobuild.buildroot.net/results/ddb/ddbc96b24017f2a2b06c6091dea3e19520bf2dd1/
+> I think we now can see a pattern in those timeouts from Hollis'
+> autobuilder: they only ever happen on a slect group of 4 packages that
+> are downloaded with git:
+>    - linux-firmware      (kernel.org)
+>    - f2fs-tools          (kernel.org)
+>    - azure-iot-sdk-c     (github.com)
+>    - uhttpd              (openwrt.org)
+>
+> Could you try to download them manually from your autobuilder, and see
+> if that works or not, please?
+>
+> Is there something on your network that systematically makes those
+> packages fail to download? Do you have firewalling restrictions or
+> extreme traffic shapping?
 
-I'm trying to apply some minor tweaks to the default config for uboot 
-and using fragments seemed the best approach however the changes don't 
-appear to make it into the final .config used for the build. For 
-example, using a fragment containing CONFIG_BOOTDELAY? 1 still results 
-in the binary using the default bootdelay of 2 (of course I can make 
-uboot-menuconfig and set the boot delay there and it will stick but I 
-was hoping to clump the config customizations into a simple fragment).
+azure-iot-sdk-c takes just 26 seconds to clone by hand.
 
-Not much documentation I've found on using fragments, maybe I'm not 
-using them correctly (though the build log does recognize the fragment 
-is selected and indicates it is merged).
+I stopped the autobuilder, then ran a br-reproduce job that took all 
+day, which ended up at the "rauc" error that y'all just fixed. So... I 
+guess it didn't time out.
 
-Any help appreciated, thanks.
 
- ??? ??? ??? ... Niall
+While the autobuilder was still running, I did see some strange 
+processes though:
+
+init(1)-+
+         |-flock(3937)
+         |-flock(4688)
+         |-flock(4774)
+         |-flock(9733)
+         |-flock(10710)
+         |-flock(10885)---bash(10886)---bash(10889)---git(10898)---git-remote-http(10899)---git(10902)
+         |-flock(11942)
+         |-flock(13311)---bash(13312)---bash(13315)---git(13324)---git-remote-http(13325)---git(13328)
+         |-flock(13681)
+         |-flock(13915)
+         |-flock(14113)
+         |-flock(17018)
+         |-flock(18869)
+         |-flock(19152)---bash(19153)---bash(19156)---git(19227)---git-submodule(19228)---git-submodule(19329)---git-submodule(20382+
+         |-flock(19819)
+         |-flock(21944)
+         |-flock(22375)
+         |-flock(25233)
+         |-flock(25622)
+         |-flock(26921)
+         |-flock(28424)---bash(28425)---bash(28428)---git(28437)---git-remote-http(28438)---git(28441)
+         |-flock(30945)
+         |-flock(31269)
+         |-flock(31271)
+         |-flock(32627)
+         |-sh(20815)---bash(20816)---bash(20818)---git(20823)---git-remote-http(20824)---git(20826)
+
+They disappeared when I killed the autobuilder (which is surprising -- 
+seems like they're children of init, so why did they die?).
+
+I suspect a) something goes wrong with the buildroot job, b) it's killed 
+in a way that leaves a dangling flock, c) future buildroot jobs run 
+headlong into the lingering flock and triggers a timeout.
+
+-- 
+Hollis Blanchard
+Mentor Graphics Emulation Division
