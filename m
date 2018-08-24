@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 09:32:26 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] chrony: backport upstream
+Date: Fri, 24 Aug 2018 09:33:18 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] chrony: backport upstream
  patch to fix blocking on getrandom() at startup with recent kernels
-Message-ID: <20180824072511.DD93D8E55C@busybox.osuosl.org>
+Message-ID: <20180824072544.A0BF08E567@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3eaa7fda477cede299a6f1cc3070a0d62e5da99e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9cfa7578f7bd1f3828b26ad5249b90be1c35a1a3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 chrony calls getrandom() at startup if available, so it needs a workaround
 for the blocking behaviour on recent (4.14.39+), similar to what was done
