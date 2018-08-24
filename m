@@ -1,30 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:47:40 +0200
-Subject: [Buildroot] [PATCH 1/1] eigen: Fix pkg-config file prefix error
-In-Reply-To: <20180816221620.30881-1-flatmax@flatmax.com> (Matt Flax's message
- of "Fri, 17 Aug 2018 08:16:20 +1000")
-References: <20180816221620.30881-1-flatmax@flatmax.com>
-Message-ID: <87zhxci21f.fsf@dell.be.48ers.dk>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 24 Aug 2018 10:51:08 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-08-23
+In-Reply-To: <20180824081706.GM9365@scaer>
+References: <20180824060019.899B4207B1@mail.bootlin.com>
+ <20180824085219.3e493d23@x230.trabucayre.com>
+ <20180824081706.GM9365@scaer>
+Message-ID: <20180824085108.GN9365@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Matt" == Matt Flax <flatmax@flatmax.com> writes:
+Gwenhael, All,
 
- > From: Matt Flax <flatmax@flatmax.org>
- > eigen generates	a pkg-config file which	has a broken prefix. This broken
- > prefix causes an incorrect path	when other packages call
- > pkg-config --cflags eigen
+On 2018-08-24 10:17 +0200, Yann E. MORIN spake thusly:
+> On 2018-08-24 08:52 +0200, Gwenhael Goavec-Merou spake thusly:
+> > On Fri, 24 Aug 2018 08:00:19 +0200 (CEST)
+> > Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> > > Results for branch 'master'
+> > > | aarch64 |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/29737d2fdd94a74fe38672a4edf03167be5dfb45
+> > I'm unable to reproduce this failure.
+> It occured on my autobuilder; I'll take a look.
 
- > This patch fixes the prefix in the generated eigen pc file and prjects
- > which depend on	this pc	file can now path correctly to the eigen include
- > directory at build time.
+So I was also unable to reproduce the error on the autobuilder either...
+Dang... :-/
 
- > Signed-off-by: Matt Flax <flatmax@flatmax.org>
-
-Committed to 2018.02.x and 2018.05.x, thanks.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
