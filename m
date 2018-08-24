@@ -1,54 +1,44 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri, 24 Aug 2018 16:20:49 +0300
-Subject: [Buildroot] [PATCH 1/1] git: Fix libintl linking if there is no
- full gettext support
-Message-ID: <20180824132049.20330-1-vadim4j@gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Fri, 24 Aug 2018 15:44:57 +0200
+Subject: [Buildroot] [PATCH v4 1/4] package/imagemagick: add host package
+Message-ID: <1535118300-26815-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vadim Kochan <vadim.kochan@petcube.com>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-Git could not resolve libntl_xxx symbols if toolchain does no provide
-full gettext support but the gettext package is selected.
+This patch adds the host package for imagemagick.
+It comes with a minimal selection of configure options to
+compile fast cause it is used only to convert
+the image files for the custom linux logo.
 
-In case of ulibc/musl toolchain there is no full getttext support, but
-they still provides libintl stub which makes git think there is full
-gettext support hence -lintl is not passed to the linker.
-
-Added workaround which checks if toolchain provides full gettext
-support, if no then -lintl will be added to EXTLIBS variable generated
-within config.mak file.
-
-Signed-off-by: Vadim Kochan <vadim.kochan@petcube.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/git/git.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/imagemagick/imagemagick.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/git/git.mk b/package/git/git.mk
-index ac7b8f2e8c..2d3c3cc2c1 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -63,8 +63,18 @@ endif
- 
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
- GIT_MAKE_OPTS += NO_GETTEXT=1
-+else
-+ifeq ($(BR2_TOOLCHAIN_HAS_FULL_GETTEXT),)
-+GIT_EXTLIBS += -lintl
-+endif
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 4aa9d56..0eb94b7 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -143,4 +143,15 @@ else
+ IMAGEMAGICK_CONF_OPTS += --without-bzlib
  endif
  
-+define GIT_GEN_EXT_CONFIG_CMDS
-+	echo "EXTLIBS = $(GIT_EXTLIBS)" >> $(@D)/config.mak
-+endef
++HOST_IMAGEMAGICK_CONF_OPTS = \
++	--with-jpeg \
++	--with-png \
++	--with-zlib
 +
-+GIT_POST_CONFIGURE_HOOKS += GIT_GEN_EXT_CONFIG_CMDS
++HOST_IMAGEMAGICK_DEPENDENCIES = \
++	host-libjpeg \
++	host-libpng \
++	host-zlib
 +
- GIT_INSTALL_TARGET_OPTS = $(GIT_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
- 
- # assume yes for these tests, configure will bail out otherwise
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-2.14.1
+2.7.4
