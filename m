@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 09:02:50 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/wpa_supplicant:
+Date: Fri, 24 Aug 2018 09:01:18 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/wpa_supplicant:
  add upstream security fix
-Message-ID: <20180824070824.C15C98E53B@busybox.osuosl.org>
+Message-ID: <20180824070839.548568E548@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ade3c11f2e2751ebd8e3c4dee00ffb46cce9689
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7274a028922198c65dd523eecbd2ad8a8ecdc0cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Fixes CVE-2018-14526:
 http://w1.fi/security/2018-1/unauthenticated-eapol-key-decryption.txt
