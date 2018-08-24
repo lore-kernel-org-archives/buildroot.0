@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 08:49:12 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] wireshark: bump version
+Date: Fri, 24 Aug 2018 08:49:35 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] wireshark: bump version
  to 2.2.16 (security)
-Message-ID: <20180824064131.447278E52A@busybox.osuosl.org>
+Message-ID: <20180824064154.4F72E8E531@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45cfb7dbd3dea796ae3a5a0e6541baa04fa7b412
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7be93c147733037d1053601a4997b0b4ea064a22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Security fixes since 2.2.15:
 
