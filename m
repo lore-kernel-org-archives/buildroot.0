@@ -1,44 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 Aug 2018 10:46:56 +0200
-Subject: [Buildroot] [PATCH] python-django: security bump to version
- 1.11.15
-In-Reply-To: <20180817144736.18889-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 17 Aug 2018 16:47:36 +0200")
-References: <20180817144736.18889-1-peter@korsgaard.com>
-Message-ID: <874lfkjgn3.fsf@dell.be.48ers.dk>
+Date: Fri, 24 Aug 2018 10:47:17 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] eigen: Fix pkg-config
+ file prefix error
+Message-ID: <20180824083934.F40B88E602@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=00d400f976c15d99a4a20f77771b3f0ff7644c94
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
- > Bump to the latest release of the 1.11.x LTS series as 1.10.x is no longer
- > supported upstream:
+eigen generates	a pkg-config file which	has a broken prefix
+(@CMAKE_INSTALL_PREFIX@).  This broken prefix causes an incorrect path when
+other packages call pkg-config --cflags eigen.
 
- > https://www.djangoproject.com/download/
+This patch fixes the prefix in the generated eigen pc file, so projects
+which depend on this pc file can now correctly find the eigen include
+directory at build time.
 
- > Fixes the following security issues:
+Also correct the Cflags output to use the runtime prefix instead of the
+build time STAGING_DIR, like we do elsewhere.
 
- > - CVE-2017-12794: Possible XSS in traceback section of technical 500 debug
- >   page (1.11.5)
+[Peter: drop backslashes, tweak commit message]
+Signed-off-by: Matt Flax <flatmax@flatmax.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- > - CVE-2018-6188: Information leakage in AuthenticationForm (1.11.10)
+(cherry picked from commit e477dc19b5264c8fd01ff235dded4f148fde7a65)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/eigen/eigen.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- > - CVE-2018-7536: Denial-of-service possibility in urlize and urlizetrunc
- >   template filters (1.11.11)
-
- > - CVE-2018-7537: Denial-of-service possibility in truncatechars_html and
- >   truncatewords_html template filters (1.11.11)
-
- > - CVE-2018-14574: Open redirect possibility in CommonMiddleware (1.11.15)
-
- > Also add a hash for the license file.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
+index 89f54fb948..27c4e212a9 100644
+--- a/package/eigen/eigen.mk
++++ b/package/eigen/eigen.mk
+@@ -23,7 +23,8 @@ endif
+ # Generate the .pc file at build time
+ define EIGEN_BUILD_CMDS
+ 	sed -r -e 's,^Version: .*,Version: $(EIGEN_VERSION),' \
+-		-e 's,^Cflags: .*,Cflags: -I$(EIGEN_DEST_DIR),' \
++		-e 's,^Cflags: .*,Cflags: -I$$\{prefix\}/include/eigen3,' \
++		-e 's,^prefix.*,prefix=/usr,' \
+ 		$(@D)/eigen3.pc.in >$(@D)/eigen3.pc
+ endef
+ 
