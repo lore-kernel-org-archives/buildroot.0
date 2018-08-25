@@ -1,54 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 25 Aug 2018 15:31:16 +0200
-Subject: [Buildroot] Autobnuilders timeouts [was: Re: autobuilder flock
- hangs]
-In-Reply-To: <CANQCQpb6Cgt+YoniwLCd8jGhLdrzCCJDcAyXjcSAWbETrZ=mUQ@mail.gmail.com>
-References: <20180812060015.A385B207E5@mail.bootlin.com>
- <20180812223629.2bac8ebe@windsurf>
- <1a4b53ec-1ed3-7770-3a65-8d4f4f596918@mentor.com>
- <20180816111059.3a7f1b59@windsurf> <20180824070203.GK9365@scaer>
- <CANQCQpb6Cgt+YoniwLCd8jGhLdrzCCJDcAyXjcSAWbETrZ=mUQ@mail.gmail.com>
-Message-ID: <20180825133116.GC2419@scaer>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 25 Aug 2018 15:38:42 +0200
+Subject: [Buildroot] [PATCH 1/2] sunxi-mali-mainline: add hash file for
+ tarball
+Message-ID: <20180825133843.116694-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Matthew, Julien, All,
+sunxi-mali-mainline package has not hash file.
 
-On 2018-08-24 18:54 -0500, Matthew Weber spake thusly:
-> On Fri, Aug 24, 2018 at 2:02 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > Now, I also had a look at all the timeouts, and I also noticed a single
-> > other pattern. Julien's and Matthew's autobuilder would always choke on
-> > host-libsodium, and it happens only on those two autobuilders:
-> >     http://autobuild.buildroot.org/?reason=host-libsodium
-> > All failing at the same point:
-> >     checking whether segmentation violations can be caught when using the C compiler...
-> 
-> Tried a few things...
-> 1) Setup this config and did a make host-libsodium.  No hang.
-> 2) Took the test code from that configure test and could execute it without hang
-> 3) Doing a full build now and we'll see if there is a sequencing/file
-> configuration driving this.
-> 
-> Any other ideas?
+Add hash file with sha256sum for tarball resulting from git download.
 
-I found the commit that added this check:
-    https://github.com/jedisct1/libsodium/commit/c3045e2cb02dc1dae29cdb0dafd6cdb6469b8de8
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/sunxi-mali-mainline/sunxi-mali-mainline.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.hash
 
-So, does your host compiler runs asan by default? If so, do you have
-ASAN_OPTIONS set in your environment?
-
-(just throwing random guesses at it to see if any sticks...)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+new file mode 100644
+index 0000000000..5d9d1a52b4
+--- /dev/null
++++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 72969ecf470b9e5ce787c2f8f36242926e1e892af0891924ee59a2cd206de39f  sunxi-mali-mainline-d691cb93884ca8ac67860502117bbec283dc19aa.tar.gz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
