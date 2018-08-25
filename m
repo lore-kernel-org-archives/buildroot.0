@@ -1,147 +1,66 @@
-From: Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com>
-Date: Sat, 25 Aug 2018 22:21:34 +0200
-Subject: [Buildroot] Analysis of defconfig build failures
-In-Reply-To: <CAAXf6LX52KbkJ3AHfvG4ZMZvRHtpcqUHfo98JeTjFnuWWfMWNg@mail.gmail.com>
-References: <20180812170138.0b51be07@windsurf>
- <87600bbg68.fsf@dell.be.48ers.dk>
- <20180815213421.08e0a3b6@windsurf> <87ftzf9v7u.fsf@dell.be.48ers.dk>
- <20180816001829.3f7a1436@windsurf>
- <CAAXf6LVNs8470+VwKJCM68cHdp+ZgD-JxEpCbUpMXte4JYm68Q@mail.gmail.com>
- <20180816220655.37fbff34@windsurf>
- <CAAXf6LX52KbkJ3AHfvG4ZMZvRHtpcqUHfo98JeTjFnuWWfMWNg@mail.gmail.com>
-Message-ID: <CAAXf6LW1V3FLD8B=BQ=nGO3guTfR6Xsk2JtRFc5aei-ZP=hbcQ@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 25 Aug 2018 22:44:02 +0200
+Subject: [Buildroot] [PATCH/next/RFC 1/2] package/mariadb: handle missing
+ ucontext_t
+Message-ID: <20180825204403.11324-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Small update:
+On some archs uclibc does not provide ucontext_t, for details see
+https://git.buildroot.net/buildroot/commit/?id=f1cbfeea95e6287c7a666aafc182ffa318eff262
 
-El jue., 23 ago. 2018 a las 21:49, Thomas De Schampheleire
-(<patrickdepinguin+buildroot@gmail.com>) escribi?:
->
-> Hi,
-> El jue., 16 ago. 2018 a las 22:06, Thomas Petazzoni
-> (<thomas.petazzoni@bootlin.com>) escribi?:
-> >
-> > Hello,
-> >
-> > On Thu, 16 Aug 2018 21:52:25 +0200, Thomas De Schampheleire wrote:
-> >
-> > > > I don't think it's related to building with new compilers. It's just
-> > > > some U-Boot versions that are broken if libfdt headers are already
-> > > > available in the include path.
-> > >
-> > > I can try to have a look somewhere next week.
-> >
-> > OK, thanks.
-> >
-> > > From the previous solution, I have a feeling that we can only go so
-> > > far in trying to solve the issue from Buildroot. We did already one
-> > > thing, and it seems insufficient for some u-boot versions.
-> > > There is a risk that what we do to fix these new failures, may break
-> > > some of those that work today.
-> > > We could implement some kind of detection to see how we need to solve
-> > > the issue depending on the u-boot at hand, but it could be cumbersome.
-> >
-> > Indeed.
-> >
-> > > An alternative solution is to document the known solution to this
-> > > problem (the patches). We can apply these patches to the defconfigs
-> > > inside buildroot, and let users with custom u-boots apply the patches
-> > > themselves (i.e. make them aware from release notes or documentation
-> > > but don't solve it automatically).
-> >
-> > That would be an option yes, but not the nicest one. But still better
-> > than having all the defconfigs failing like they are today :/
-> >
->
->
-> I did an analysis of the first defconfig () and came to following
-> patch that fixes the problem:
->
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index bddafe234d..4d34c55827 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -197,6 +197,9 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
->  define UBOOT_FIXUP_LIBFDT_INCLUDE
->      if [ -d $(@D)/scripts/dtc/libfdt ]; then \
->          $(SED)
-> 's%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%'
-> $(@D)/tools/Makefile; \
-> +    elif [ -f $(@D)/include/libfdt_env.h ]; then \
-> +        $(SED) '\%#define _LIBFDT_ENV_H%a\
-> +        #define LIBFDT_ENV_H' $(@D)/include/libfdt_env.h; \
->      fi
->  endef
->  UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
->
+Mariadb uses ucontext_t optionally, its use can be disabled by the
+corresponding cmake option. Instead of copying the Config.in code from
+libsigsegv we shamelessly use its ARCH_SUPPORTS option while thinking
+that a more general approach might be needed for ucontext_t support so
+please consider this patch a RFC.
 
-Above patch works for engicam_imx6qdl_icore_qt5_defconfig.
-I extended the patch to apply the same fixup to libfdt.h to fix the
-second defconfig, at91sam9x5ek_mmc_dev_defconfig.
+This patch fixes a build error
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index bddafe234d..af977a99a5 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -197,6 +197,11 @@ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
- define UBOOT_FIXUP_LIBFDT_INCLUDE
-        if [ -d $(@D)/scripts/dtc/libfdt ]; then \
-                $(SED)
-'s%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%'
-$(@D)/tools/Makefile; \
-+       elif [ -f $(@D)/include/libfdt_env.h ]; then \
-+               $(SED) '\%#define _LIBFDT_ENV_H%a\
-+               #define LIBFDT_ENV_H' $(@D)/include/libfdt_env.h; \
-+               $(SED) '\%#define _LIBFDT_H%a\
-+               #define LIBFDT_H' $(@D)/include/libfdt.h; \
-        fi
- endef
- UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
+In file included from /home/bernd/buildroot/output/build/mariadb-10.2.17/libmariadb/plugins/pvio/pvio_socket.c:32:0:
+/home/bernd/buildroot/output/build/mariadb-10.2.17/libmariadb/include/ma_context.h:62:3: error: unknown type name ?ucontext_t?
+   ucontext_t base_context;
+   ^~~~~~~~~~
 
+using this defconfig:
 
-Sadly, for the third defconfig, a problem arises:
-atmel_sama5d4_xplained_mmc_dev_defconfig
-Error now is:
+BR2_arcle=y
+BR2_archs38=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2018.02-926-gb393c24.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_MYSQL=y
+BR2_PACKAGE_MARIADB=y
+BR2_PACKAGE_MARIADB_SERVER=y
 
-dtc  -O dtb -o arch/arm/dts/at91-sama5d4_xplained.dtb -b 0 -i
-arch/arm/dts/ -Wno-unit_address_vs_reg -d
-arch/arm/dts/.at91-sama5d4_xplained.dtb.d.dtc.tmp
-arch/arm/dts/.at91-sama5d4_xplained.dtb.dts.tmp
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mariadb/mariadb.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-arch/arm/dts/at91-sama5d4_xplained.dtb: Warning (unit_address_format):
-/sram at 00210000: unit name should not have leading 0s
-arch/arm/dts/at91-sama5d4_xplained.dtb: Warning (unit_address_format):
-/ahb/gadget at 00400000: unit name should not have leading 0s
-arch/arm/dts/at91-sama5d4_xplained.dtb: Warning (unit_address_format):
-/ahb/ohci at 00500000: unit name should not have leading 0s
-arch/arm/dts/at91-sama5d4_xplained.dtb: Warning (unit_address_format):
-/ahb/ehci at 00600000: unit name should not have leading 0s
-arch/arm/dts/at91-sama5d4_xplained.dtb: Warning (unit_address_format):
-/ahb/cache-controller at 00a00000: unit name should not have leading 0s
-arch/arm/dts/at91-sama5d4_xplained.dtb: Warning (unique_unit_address):
-/ahb/apb/gpio at fc06a000: duplicate unit-address (also used in node
-/ahb/apb/pinctrl at fc06a000)
-dtc: livetree.c:438: propval_cell: Assertion `prop->val.len ==
-sizeof(cell_t)' failed.
-fish: '../../host/bin/dtc  -O dtb -o a?' terminated by signal SIGABRT (Abort)
-
-
-The 'dtc' in question is the one from output/host/bin/dtc.
-If I change the command to use 'dtc' from my host, there is no error.
-There must be an issue in using the header files from one thing but
-then executing a dtc that was compiled against other header files.
-Bweeuh.
-
-So (this) uboot has some local fdt header files, but expects dtc to be
-available externally. And when we force the usage of the local header
-files, we get errors.
-
-Not sure how to proceed yet... Either try to force usage of the
-include files from output/host/  but they may not always be available,
-plus I think that in some cases exactly this caused troubles.
-
-/Thomas
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 075582288a..7074e3510e 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -61,6 +61,11 @@ else
+ MARIADB_CONF_OPTS += -DWITHOUT_SERVER=ON
+ endif
+ 
++# hack: do we need a ucontext-specific option?
++ifeq ($(BR2_PACKAGE_LIBSIGSEGV_ARCH_SUPPORTS),)
++MARIADB_CONF_OPTS += -DHAVE_UCONTEXT_H=0
++endif
++
+ MARIADB_CONF_OPTS += \
+ 	-DINSTALL_DOCDIR=share/doc/mariadb-$(MARIADB_VERSION) \
+ 	-DINSTALL_DOCREADMEDIR=share/doc/mariadb-$(MARIADB_VERSION) \
+-- 
+2.18.0
