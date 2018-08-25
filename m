@@ -1,396 +1,181 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Aug 2018 11:16:57 +0200
-Subject: [Buildroot] [PATCH/next 2/7] package/ibrcommon: add openssl 1.1
- compatibility
+Date: Sat, 25 Aug 2018 11:16:59 +0200
+Subject: [Buildroot] [PATCH/next 4/7] package/liboauth: Fix build with
+ OpenSSL 1.1.x
 In-Reply-To: <20180825091702.28471-1-bernd.kuhls@t-online.de>
 References: <20180825091702.28471-1-bernd.kuhls@t-online.de>
-Message-ID: <20180825091702.28471-3-bernd.kuhls@t-online.de>
+Message-ID: <20180825091702.28471-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hashes.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...-added-openssl-1.1-compatibility-264.patch | 357 ++++++++++++++++++
- package/ibrcommon/ibrcommon.hash              |   2 +
- 2 files changed, 359 insertions(+)
- create mode 100644 package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch
+ package/liboauth/0001-openssl-1.1.0.patch | 154 ++++++++++++++++++++++
+ 1 file changed, 154 insertions(+)
+ create mode 100644 package/liboauth/0001-openssl-1.1.0.patch
 
-diff --git a/package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch b/package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch
+diff --git a/package/liboauth/0001-openssl-1.1.0.patch b/package/liboauth/0001-openssl-1.1.0.patch
 new file mode 100644
-index 0000000000..90e5147f54
+index 0000000000..a33ac0a20b
 --- /dev/null
-+++ b/package/ibrcommon/0002-ibrcommon-added-openssl-1.1-compatibility-264.patch
-@@ -0,0 +1,357 @@
-+From a801d10a081e3130e24042256a43190c9eb6c112 Mon Sep 17 00:00:00 2001
-+From: Eneas Queiroz <35331380+cotequeiroz@users.noreply.github.com>
-+Date: Wed, 23 May 2018 03:09:02 -0300
-+Subject: [PATCH] ibrcommon: added openssl 1.1 compatibility (#264)
++++ b/package/liboauth/0001-openssl-1.1.0.patch
+@@ -0,0 +1,154 @@
++Submitted by:            DJ Lucas (dj_AT_linuxfromscratch_DOT_org)
++Date:                    2017-05-27
++Initial Package Version: 1.0.3
++Update by:               Bruce Dubbs
++Date:                    2017-06-14
++Upstream Status:         Submitted
++Origin:                  https://github.com/x42/liboauth/issues/9
++Description:             Fixes build issue with OpenSSL-1.1.0.
++Update:                  Additional fix from upstream.  Three lines changed.
 +
-+This patch adds compatibility to openssl 1.1.0.
++Downloaded from
++http://www.linuxfromscratch.org/patches/blfs/svn/liboauth-1.0.3-openssl-1.1.0-2.patch
 +
-+Backported from master branch:
-+https://github.com/ibrdtn/ibrdtn/commit/a801d10a081e3130e24042256a43190c9eb6c112
++Patch was sent upstream: https://github.com/x42/liboauth/issues/9
 +
-+Signed-off-by: Eneas U de Queiroz <cote2004-github@yahoo.com>
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ ibrcommon/ibrcommon/ssl/HMacStream.cpp      | 11 +++---
-+ ibrcommon/ibrcommon/ssl/HMacStream.h        |  2 +-
-+ ibrcommon/ibrcommon/ssl/RSASHA256Stream.cpp | 28 +++++++------
-+ ibrcommon/ibrcommon/ssl/RSASHA256Stream.h   |  2 +-
-+ ibrcommon/ibrcommon/ssl/iostreamBIO.cpp     | 44 ++++++++++++++++-----
-+ ibrcommon/ibrcommon/ssl/openssl_compat.h    | 38 ++++++++++++++++++
-+ 6 files changed, 95 insertions(+), 30 deletions(-)
-+ create mode 100644 ibrcommon/ibrcommon/ssl/openssl_compat.h
 +
-+diff --git a/ibrcommon/ssl/HMacStream.cpp b/ibrcommon/ssl/HMacStream.cpp
-+index e5d317e3..66d8ce42 100644
-+--- a/ibrcommon/ssl/HMacStream.cpp
-++++ b/ibrcommon/ssl/HMacStream.cpp
-+@@ -20,29 +20,30 @@
-+  */
++diff -Naurp liboauth-1.0.3-orig/src/hash.c liboauth-1.0.3/src/hash.c
++--- liboauth-1.0.3-orig/src/hash.c	2013-10-04 08:02:50.000000000 -0500
+++++ liboauth-1.0.3/src/hash.c	2017-05-27 00:51:04.708633351 -0500
++@@ -362,6 +362,11 @@ looser:
++ #include "oauth.h" // base64 encode fn's.
++ #include <openssl/hmac.h>
 + 
-+ #include "ibrcommon/ssl/HMacStream.h"
-++#include "openssl_compat.h"
-+ 
-+ namespace ibrcommon
-+ {
-+ 	HMacStream::HMacStream(const unsigned char * const key, const int key_size)
-+ 	 : HashStream(EVP_MAX_MD_SIZE, BUFF_SIZE), key_(key), key_size_(key_size)
-+ 	{
-+-		HMAC_CTX_init(&ctx_);
-+-		HMAC_Init_ex(&ctx_, key_, key_size_, EVP_sha1(), NULL);
-++		ctx_ = HMAC_CTX_new();
-++		HMAC_Init_ex(ctx_, key_, key_size_, EVP_sha1(), NULL);
-+ 	}
-+ 
-+ 	HMacStream::~HMacStream()
-+ 	{
-+-		HMAC_CTX_cleanup(&ctx_);
-++		HMAC_CTX_free(ctx_);
-+ 	}
-+ 
-+ 	void HMacStream::update(char *buf, const size_t size)
-+ 	{
-+ 		// hashing
-+-		HMAC_Update(&ctx_, (unsigned char*)buf, size);
-++		HMAC_Update(ctx_, (unsigned char*)buf, size);
-+ 	}
-+ 
-+ 	void HMacStream::finalize(char * hash, unsigned int &size)
-+ 	{
-+-		HMAC_Final(&ctx_, (unsigned char*)hash, &size);
-++		HMAC_Final(ctx_, (unsigned char*)hash, &size);
-+ 	}
-+ }
-+diff --git a/ibrcommon/ssl/HMacStream.h b/ibrcommon/ssl/HMacStream.h
-+index 7dcea168..d04bceb8 100644
-+--- a/ibrcommon/ssl/HMacStream.h
-++++ b/ibrcommon/ssl/HMacStream.h
-+@@ -44,7 +44,7 @@ namespace ibrcommon
-+ 		const unsigned char * const key_;
-+ 		const int key_size_;
-+ 
-+-		HMAC_CTX ctx_;
-++		HMAC_CTX* ctx_;
-+ 	};
-+ }
-+ 
-+diff --git a/ibrcommon/ssl/RSASHA256Stream.cpp b/ibrcommon/ssl/RSASHA256Stream.cpp
-+index d94430ed..d25c5d2f 100644
-+--- a/ibrcommon/ssl/RSASHA256Stream.cpp
-++++ b/ibrcommon/ssl/RSASHA256Stream.cpp
-+@@ -21,6 +21,7 @@
-+ 
-+ #include "ibrcommon/ssl/RSASHA256Stream.h"
-+ #include "ibrcommon/Logger.h"
-++#include "openssl_compat.h"
-+ #include <openssl/err.h>
-+ 
-+ namespace ibrcommon
-+@@ -30,11 +31,11 @@ namespace ibrcommon
-+ 	{
-+ 		// Initialize get pointer.  This should be zero so that underflow is called upon first read.
-+ 		setp(&out_buf_[0], &out_buf_[BUFF_SIZE - 1]);
-+-		EVP_MD_CTX_init(&_ctx);
-++		_ctx = EVP_MD_CTX_new();
-+ 
-+ 		if (!_verify)
-+ 		{
-+-			if (!EVP_SignInit_ex(&_ctx, EVP_sha256(), NULL))
-++			if (!EVP_SignInit_ex(_ctx, EVP_sha256(), NULL))
-+ 			{
-+ 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to initialize the signature function" << IBRCOMMON_LOGGER_ENDL;
-+ 				ERR_print_errors_fp(stderr);
-+@@ -42,7 +43,7 @@ namespace ibrcommon
-+ 		}
-+ 		else
-+ 		{
-+-			if (!EVP_VerifyInit_ex(&_ctx, EVP_sha256(), NULL))
-++			if (!EVP_VerifyInit_ex(_ctx, EVP_sha256(), NULL))
-+ 			{
-+ 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to initialize the verification function" << IBRCOMMON_LOGGER_ENDL;
-+ 				ERR_print_errors_fp(stderr);
-+@@ -52,18 +53,19 @@ namespace ibrcommon
-+ 
-+ 	RSASHA256Stream::~RSASHA256Stream()
-+ 	{
-+-		EVP_MD_CTX_cleanup(&_ctx);
-++		EVP_MD_CTX_free(_ctx);
-+ 	}
-+ 
-+ 	void RSASHA256Stream::reset()
-+ 	{
-+-		EVP_MD_CTX_cleanup(&_ctx);
-+-
-+-		EVP_MD_CTX_init(&_ctx);
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++		EVP_MD_CTX_cleanup(_ctx);
+++#if OPENSSL_VERSION_NUMBER < 0x10100000
+++#define EVP_MD_CTX_new EVP_MD_CTX_create
+++#define EVP_MD_CTX_free EVP_MD_CTX_destroy
 ++#endif
-++		EVP_MD_CTX_init(_ctx);
+++
++ char *oauth_sign_hmac_sha1 (const char *m, const char *k) {
++   return(oauth_sign_hmac_sha1_raw (m, strlen(m), k, strlen(k)));
++ }
++@@ -386,7 +391,7 @@ char *oauth_sign_rsa_sha1 (const char *m
++   unsigned char *sig = NULL;
++   unsigned char *passphrase = NULL;
++   unsigned int len=0;
++-  EVP_MD_CTX md_ctx;
+++  EVP_MD_CTX *md_ctx;
 + 
-+ 		if (!_verify)
-+ 		{
-+-			if (!EVP_SignInit_ex(&_ctx, EVP_sha256(), NULL))
-++			if (!EVP_SignInit_ex(_ctx, EVP_sha256(), NULL))
-+ 			{
-+ 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to initialize the signature function" << IBRCOMMON_LOGGER_ENDL;
-+ 				ERR_print_errors_fp(stderr);
-+@@ -71,7 +73,7 @@ namespace ibrcommon
-+ 		}
-+ 		else
-+ 		{
-+-			if (!EVP_VerifyInit_ex(&_ctx, EVP_sha256(), NULL))
-++			if (!EVP_VerifyInit_ex(_ctx, EVP_sha256(), NULL))
-+ 			{
-+ 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to initialize the verfication function" << IBRCOMMON_LOGGER_ENDL;
-+ 				ERR_print_errors_fp(stderr);
-+@@ -91,7 +93,7 @@ namespace ibrcommon
-+ 			std::vector<unsigned char> sign(EVP_PKEY_size(_pkey));
-+ 			unsigned int size = EVP_PKEY_size(_pkey);
++   EVP_PKEY *pkey;
++   BIO *in;
++@@ -399,24 +404,31 @@ char *oauth_sign_rsa_sha1 (const char *m
++     return xstrdup("liboauth/OpenSSL: can not read private key");
++   }
 + 
-+-			_return_code = EVP_SignFinal(&_ctx, &sign[0], &size, _pkey);
-++			_return_code = EVP_SignFinal(_ctx, &sign[0], &size, _pkey);
+++  md_ctx = EVP_MD_CTX_new();
+++  if (md_ctx == NULL) {
+++          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
+++  }
+++
++   len = EVP_PKEY_size(pkey);
++   sig = (unsigned char*)xmalloc((len+1)*sizeof(char));
 + 
-+ 			_sign = std::string((const char*)&sign[0], size);
++-  EVP_SignInit(&md_ctx, EVP_sha1());
++-  EVP_SignUpdate(&md_ctx, m, strlen(m));
++-  if (EVP_SignFinal (&md_ctx, sig, &len, pkey)) {
+++  EVP_SignInit(md_ctx, EVP_sha1());
+++  EVP_SignUpdate(md_ctx, m, strlen(m));
+++  if (EVP_SignFinal (md_ctx, sig, &len, pkey)) {
++     char *tmp;
++     sig[len] = '\0';
++     tmp = oauth_encode_base64(len,sig);
++     OPENSSL_free(sig);
++     EVP_PKEY_free(pkey);
+++    EVP_MD_CTX_free(md_ctx);
++     return tmp;
++   }
+++  EVP_MD_CTX_free(md_ctx);
++   return xstrdup("liboauth/OpenSSL: rsa-sha1 signing failed");
++ }
 + 
-+@@ -107,7 +109,7 @@ namespace ibrcommon
-+ 		if (!_sign_valid)
-+ 		{
-+ 			sync();
-+-			_return_code = EVP_VerifyFinal(&_ctx, reinterpret_cast<const unsigned char *>(their_sign.c_str()), static_cast<unsigned int>(their_sign.size()), _pkey);
-++			_return_code = EVP_VerifyFinal(_ctx, reinterpret_cast<const unsigned char *>(their_sign.c_str()), static_cast<unsigned int>(their_sign.size()), _pkey);
-+ 			_sign_valid = true;
-+ 		}
-+ 		return _return_code;
-+@@ -145,7 +147,7 @@ namespace ibrcommon
-+ 		if (!_verify)
-+ 			// hashing
-+ 		{
-+-			if (!EVP_SignUpdate(&_ctx, &out_buf_[0], iend - ibegin))
-++			if (!EVP_SignUpdate(_ctx, &out_buf_[0], iend - ibegin))
-+ 			{
-+ 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to feed data into the signature function" << IBRCOMMON_LOGGER_ENDL;
-+ 				ERR_print_errors_fp(stderr);
-+@@ -153,7 +155,7 @@ namespace ibrcommon
-+ 		}
-+ 		else
-+ 		{
-+-			if (!EVP_VerifyUpdate(&_ctx, &out_buf_[0], iend - ibegin))
-++			if (!EVP_VerifyUpdate(_ctx, &out_buf_[0], iend - ibegin))
-+ 			{
-+ 				IBRCOMMON_LOGGER_TAG("RSASHA256Stream", critical) << "failed to feed data into the verification function" << IBRCOMMON_LOGGER_ENDL;
-+ 				ERR_print_errors_fp(stderr);
-+diff --git a/ibrcommon/ssl/RSASHA256Stream.h b/ibrcommon/ssl/RSASHA256Stream.h
-+index 344f8e10..6f3a1168 100644
-+--- a/ibrcommon/ssl/RSASHA256Stream.h
-++++ b/ibrcommon/ssl/RSASHA256Stream.h
-+@@ -106,7 +106,7 @@ namespace ibrcommon
++ int oauth_verify_rsa_sha1 (const char *m, const char *c, const char *s) {
++-  EVP_MD_CTX md_ctx;
+++  EVP_MD_CTX *md_ctx;
++   EVP_PKEY *pkey;
++   BIO *in;
++   X509 *cert = NULL;
++@@ -437,13 +449,18 @@ int oauth_verify_rsa_sha1 (const char *m
++     return -2;
++   }
 + 
-+ 		/** the context in which the streamed data will be feed into for
-+ 		calculation of the hash/signature */
-+-		EVP_MD_CTX _ctx;
-++		EVP_MD_CTX * _ctx;
-+ 
-+ 		/** tells if the context needs to be finalized to get a valid signature or
-+ 		verification */
-+diff --git a/ibrcommon/ssl/iostreamBIO.cpp b/ibrcommon/ssl/iostreamBIO.cpp
-+index 18c1b55c..ea6c63eb 100644
-+--- a/ibrcommon/ssl/iostreamBIO.cpp
-++++ b/ibrcommon/ssl/iostreamBIO.cpp
-+@@ -23,6 +23,7 @@
-+ 
-+ #include "ibrcommon/Logger.h"
-+ 
-++#include "openssl_compat.h"
-+ #include <openssl/err.h>
-+ 
-+ namespace ibrcommon
-+@@ -42,7 +43,20 @@ static int create(BIO *bio);
-+ //static int destroy(BIO *bio);
-+ //static long (*callback_ctrl)(BIO *, int, bio_info_cb *);
-+ 
-+-
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++BIO_METHOD * BIO_iostream_method()
-++{
-++	static BIO_METHOD *iostream_method = NULL;
-++	if (iostream_method) {
-++		iostream_method = BIO_meth_new(iostreamBIO::type, iostreamBIO::name);
-++		BIO_meth_set_write(iostream_method, bwrite);
-++		BIO_meth_set_read(iostream_method, bread);
-++		BIO_meth_set_ctrl(iostream_method, ctrl);
-++		BIO_meth_set_create(iostream_method, create);
+++	md_ctx = EVP_MD_CTX_new();
+++	if (md_ctx == NULL) {
+++		return -2;
 ++	}
-++	return iostream_method;
-++}
-++#else
-+ static BIO_METHOD iostream_method =
-+ {
-+ 		iostreamBIO::type,
-+@@ -56,12 +70,17 @@ static BIO_METHOD iostream_method =
-+ 		NULL,//destroy,
-+ 		NULL//callback_ctrl
-+ };
-++BIO_METHOD * BIO_iostream_method()
-++{
-++	return &iostream_method;
-++}
-++#endif
+++
++   b64d= (unsigned char*) xmalloc(sizeof(char)*strlen(s));
++   slen = oauth_decode_base64(b64d, s);
 + 
-+ iostreamBIO::iostreamBIO(iostream *stream)
-+ 	:	_stream(stream)
-+ {
-+ 	/* create BIO */
-+-	_bio = BIO_new(&iostream_method);
-++	_bio = BIO_new(BIO_iostream_method());
-+ 	if(!_bio){
-+ 		/* creation failed, throw exception */
-+ 		char err_buf[ERR_BUF_SIZE];
-+@@ -72,7 +91,7 @@ iostreamBIO::iostreamBIO(iostream *stream)
-+ 	}
++-  EVP_VerifyInit(&md_ctx, EVP_sha1());
++-  EVP_VerifyUpdate(&md_ctx, m, strlen(m));
++-  err = EVP_VerifyFinal(&md_ctx, b64d, slen, pkey);
++-  EVP_MD_CTX_cleanup(&md_ctx);
+++  EVP_VerifyInit(md_ctx, EVP_sha1());
+++  EVP_VerifyUpdate(md_ctx, m, strlen(m));
+++  err = EVP_VerifyFinal(md_ctx, b64d, slen, pkey);
+++  EVP_MD_CTX_free(pkey);
++   EVP_PKEY_free(pkey);
++   xfree(b64d);
++   return (err);
++@@ -455,35 +472,41 @@ int oauth_verify_rsa_sha1 (const char *m
++  */
++ char *oauth_body_hash_file(char *filename) {
++   unsigned char fb[BUFSIZ];
++-  EVP_MD_CTX ctx;
+++  EVP_MD_CTX *ctx;
++   size_t len=0;
++   unsigned char *md;
++   FILE *F= fopen(filename, "r");
++   if (!F) return NULL;
 + 
-+ 	/* save the iostream in the bio object */
-+-	_bio->ptr = stream;
-++	BIO_set_data(_bio, (void *) stream);
++-  EVP_MD_CTX_init(&ctx);
++-  EVP_DigestInit(&ctx,EVP_sha1());
+++  ctx = EVP_MD_CTX_new();
+++  if (ctx == NULL) {
+++          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
+++  }
+++  EVP_DigestInit(ctx,EVP_sha1());
++   while (!feof(F) && (len=fread(fb,sizeof(char),BUFSIZ, F))>0) {
++-    EVP_DigestUpdate(&ctx, fb, len);
+++    EVP_DigestUpdate(ctx, fb, len);
++   }
++   fclose(F);
++   len=0;
++   md=(unsigned char*) xcalloc(EVP_MD_size(EVP_sha1()),sizeof(unsigned char));
++-  EVP_DigestFinal(&ctx, md,(unsigned int*) &len);
++-  EVP_MD_CTX_cleanup(&ctx);
+++  EVP_DigestFinal(ctx, md,(unsigned int*) &len);
+++  EVP_MD_CTX_free(ctx);
++   return oauth_body_hash_encode(len, md);
 + }
 + 
-+ BIO * iostreamBIO::getBIO(){
-+@@ -81,10 +100,10 @@ BIO * iostreamBIO::getBIO(){
-+ 
-+ static int create(BIO *bio)
-+ {
-+-	bio->ptr = NULL;
-+-	/* (from openssl memory bio) */
-+-	bio->shutdown=1;
-+-	bio->init=1;
-++	BIO_set_data(bio, NULL);
-++	BIO_set_shutdown(bio, 1);
-++	BIO_set_init(bio, 1);
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-+ 	/* from bss_mem.c (openssl):
-+ 	 * bio->num is used to hold the value to return on 'empty', if it is
-+ 	 * 0, should_retry is not set
-+@@ -93,6 +112,7 @@ static int create(BIO *bio)
-+ 	 * it is set to 0 since the underlying stream is blocking
-+ 	 */
-+ 	bio->num= 0;
-++#endif
-+ 
-+ 	return 1;
++ char *oauth_body_hash_data(size_t length, const char *data) {
++-  EVP_MD_CTX ctx;
+++  EVP_MD_CTX *ctx;
++   size_t len=0;
++   unsigned char *md;
++   md=(unsigned char*) xcalloc(EVP_MD_size(EVP_sha1()),sizeof(unsigned char));
++-  EVP_MD_CTX_init(&ctx);
++-  EVP_DigestInit(&ctx,EVP_sha1());
++-  EVP_DigestUpdate(&ctx, data, length);
++-  EVP_DigestFinal(&ctx, md,(unsigned int*) &len);
++-  EVP_MD_CTX_cleanup(&ctx);
+++  ctx = EVP_MD_CTX_new();
+++  if (ctx == NULL) {
+++          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
+++  }
+++  EVP_DigestInit(ctx,EVP_sha1());
+++  EVP_DigestUpdate(ctx, data, length);
+++  EVP_DigestFinal(ctx, md,(unsigned int*) &len);
+++  EVP_MD_CTX_free(ctx);
++   return oauth_body_hash_encode(len, md);
 + }
-+@@ -102,7 +122,7 @@ static int create(BIO *bio)
-+ static long ctrl(BIO *bio, int cmd, long  num, void *)
-+ {
-+ 	long ret;
-+-	iostream *stream = reinterpret_cast<iostream*>(bio->ptr);
-++	iostream *stream = reinterpret_cast<iostream*>(BIO_get_data(bio));
 + 
-+ 	IBRCOMMON_LOGGER_DEBUG_TAG("iostreamBIO", 90) << "ctrl called, cmd: " << cmd << ", num: " << num << "." << IBRCOMMON_LOGGER_ENDL;
-+ 
-+@@ -147,8 +167,12 @@ static long ctrl(BIO *bio, int cmd, long  num, void *)
-+ 
-+ static int bread(BIO *bio, char *buf, int len)
-+ {
-+-	iostream *stream = reinterpret_cast<iostream*>(bio->ptr);
-++	iostream *stream = reinterpret_cast<iostream*>(BIO_get_data(bio));
-++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
-++	int num_bytes = 0;
-++#else
-+ 	int num_bytes = bio->num;
-++#endif
-+ 
-+ 	try{
-+ 		/* make sure to read at least 1 byte and then read as much as we can */
-+@@ -170,7 +194,7 @@ static int bwrite(BIO *bio, const char *buf, int len)
-+ 	if(len == 0){
-+ 		return 0;
-+ 	}
-+-	iostream *stream = reinterpret_cast<iostream*>(bio->ptr);
-++	iostream *stream = reinterpret_cast<iostream*>(BIO_get_data(bio));
-+ 
-+ 	/* write the data */
-+ 	try{
-+diff --git a/ibrcommon/ssl/openssl_compat.h b/ibrcommon/ssl/openssl_compat.h
-+new file mode 100644
-+index 00000000..e491677f
-+--- /dev/null
-++++ b/ibrcommon/ssl/openssl_compat.h
-+@@ -0,0 +1,38 @@
-++#ifndef OPENSSL_COMPAT_H
-++#define OPENSSL_COMPAT_H
-++
-++#include <openssl/crypto.h>
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++
-++#include <openssl/evp.h>
-++#include <openssl/hmac.h>
-++
-++static inline EVP_MD_CTX * EVP_MD_CTX_new()
-++{
-++	EVP_MD_CTX *ctx;
-++
-++	ctx = (EVP_MD_CTX *) OPENSSL_malloc(sizeof(EVP_MD_CTX));
-++	EVP_MD_CTX_init(ctx);
-++        return ctx;
-++}
-++#define EVP_MD_CTX_free(c) if (c != NULL) OPENSSL_free(c)
-++
-++static inline HMAC_CTX * HMAC_CTX_new()
-++{
-++        HMAC_CTX *ctx;
-++
-++        ctx = (HMAC_CTX *) OPENSSL_malloc(sizeof(HMAC_CTX));
-++        HMAC_CTX_init(ctx);
-++        return ctx;
-++}
-++#define HMAC_CTX_free(c) if (c != NULL) OPENSSL_free(c)
-++
-++#define BIO_get_data(b) b->ptr
-++#define BIO_set_data(b, v) b->ptr=v
-++#define BIO_set_shutdown(b, v) b->shutdown=v
-++#define BIO_set_init(b, v) b->init=v
-++
-++#endif /* OPENSSL_VERSION_NUMBER */
-++
-++#endif /* OPENSSL_COMPAT_H */
-++
-+-- 
-+2.18.0
-+
-diff --git a/package/ibrcommon/ibrcommon.hash b/package/ibrcommon/ibrcommon.hash
-index 21a0ec6f19..9d13f06d38 100644
---- a/package/ibrcommon/ibrcommon.hash
-+++ b/package/ibrcommon/ibrcommon.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
- sha256	  9c457c1ebc01e6216524636628c647bef34ab11bd96f0e0788be8749374fdc20	ibrcommon-1.0.1.tar.gz
-+sha256	  1a0b57773a46d9d4cc2f0d1780a17acc38af506bb1e0234aaa85f8ccd6dc0b92	COPYING
-+sha256	  9b8a430c2136ebcf76bd37f50da7d7a80ede413ec6604cc4694ea536e779854c	README
 -- 
 2.18.0
