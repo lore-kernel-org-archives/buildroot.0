@@ -1,32 +1,44 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Aug 2018 19:45:07 +0200
-Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.4.2
-In-Reply-To: <20180825154737.18531-1-asafka7@gmail.com>
-References: <20180825154737.18531-1-asafka7@gmail.com>
-Message-ID: <20180825194507.41e813a0@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 25 Aug 2018 19:47:14 +0200
+Subject: [Buildroot] [PATCH] fs/btrfs: remove destination file before
+ generation
+Message-ID: <20180825174714.23634-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+btrfs will happily use an existing destination file if it
+already exists, increasing its size if needed. Hoever, it
+will never decrease the size, even if the requested size
+is smaller than the existing file.
 
-On Sat, 25 Aug 2018 18:47:37 +0300, Asaf Kahlon wrote:
-> Update license info, and remove the patch since it's already on upstream.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  ...t-to-sysroot-option-to-relative-path.patch | 43 -------------------
->  package/ccache/ccache.hash                    |  7 +--
->  package/ccache/ccache.mk                      |  8 ++--
->  3 files changed, 8 insertions(+), 50 deletions(-)
->  delete mode 100644 package/ccache/0001-Convert-argument-to-sysroot-option-to-relative-path.patch
+So, remove any previously existing destination file before
+generating the new filesystem.
 
-Applied to next, thanks.
+Note: the original submission by Robert did that, but as
+this case was not obvious, the removal was dropped by a
+refactoring when the patch was initially applied.
 
-Thomas
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Robert J. Heywood <robert.heywood@codethink.co.uk>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ fs/btrfs/btrfs.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/btrfs/btrfs.mk b/fs/btrfs/btrfs.mk
+index ad00153c26..94bc499084 100644
+--- a/fs/btrfs/btrfs.mk
++++ b/fs/btrfs/btrfs.mk
+@@ -29,6 +29,7 @@ BTRFS_OPTS = \
+ ROOTFS_BTRFS_DEPENDENCIES = host-btrfs-progs
+ 
+ define ROOTFS_BTRFS_CMD
++	rm -f $(@)
+ 	$(HOST_DIR)/bin/mkfs.btrfs $(BTRFS_OPTS) $@
+ endef
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.1
