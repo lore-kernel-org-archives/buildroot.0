@@ -1,106 +1,120 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Aug 2018 09:31:15 +0200
-Subject: [Buildroot] [PATCH/next v3 4/7] package/mediastreamer: Fix build
- with FFmpeg 4.0
+Date: Sat, 25 Aug 2018 09:31:17 +0200
+Subject: [Buildroot] [PATCH/next v3 6/7] package/squeezelite: Fix build with
+ FFmpeg 4.0
 In-Reply-To: <20180825073118.14980-1-bernd.kuhls@t-online.de>
 References: <20180825073118.14980-1-bernd.kuhls@t-online.de>
-Message-ID: <20180825073118.14980-4-bernd.kuhls@t-online.de>
+Message-ID: <20180825073118.14980-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash.
+Git-formatted patch 0003, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v3: re-integrated in ffmpeg bump series
-v2: split patch from v1 series, git-formatted patch,
-    added license hash
+v2: split patch from v1, git-formatted patches 3 & 4, added license hash
 
- ...FER_PADDING_SIZE-to-determine-paddin.patch | 64 +++++++++++++++++++
- package/mediastreamer/mediastreamer.hash      |  1 +
- 2 files changed, 65 insertions(+)
- create mode 100644 package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
+ ... 0003-Replace-deprecated-FFmpeg-API.patch} | 26 ++++++++++------
+ .../0004-Fix-FTBFS-with-FFmpeg-4.0.patch      | 31 +++++++++++++++++++
+ package/squeezelite/squeezelite.hash          |  1 +
+ 3 files changed, 49 insertions(+), 9 deletions(-)
+ rename package/squeezelite/{0003-ffmpeg_2_9.patch => 0003-Replace-deprecated-FFmpeg-API.patch} (80%)
+ create mode 100644 package/squeezelite/0004-Fix-FTBFS-with-FFmpeg-4.0.patch
 
-diff --git a/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch b/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
-new file mode 100644
-index 0000000000..792c3eeb44
---- /dev/null
-+++ b/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
-@@ -0,0 +1,64 @@
-+From 84b1919124884232e0fa30b30458470db27c73fc Mon Sep 17 00:00:00 2001
-+From: James Cowgill <jcowgill@debian.org>
-+Date: Sat, 18 Aug 2018 12:56:38 +0200
-+Subject: [PATCH] Use AV_INPUT_BUFFER_PADDING_SIZE to determine padding
-+ size
+diff --git a/package/squeezelite/0003-ffmpeg_2_9.patch b/package/squeezelite/0003-Replace-deprecated-FFmpeg-API.patch
+similarity index 80%
+rename from package/squeezelite/0003-ffmpeg_2_9.patch
+rename to package/squeezelite/0003-Replace-deprecated-FFmpeg-API.patch
+index f69b829b38..74d8f1be55 100644
+--- a/package/squeezelite/0003-ffmpeg_2_9.patch
++++ b/package/squeezelite/0003-Replace-deprecated-FFmpeg-API.patch
+@@ -1,17 +1,22 @@
+-Fix compilation with ffmpeg >= 2.9
++From cce6a0378ac319b87d2545d73f593d440bf686f5 Mon Sep 17 00:00:00 2001
++From: Andreas Cadhalpun <Andreas.Cadhalpun@googlemail.com>
++Date: Sat, 18 Aug 2018 13:25:23 +0200
++Subject: [PATCH] Replace deprecated FFmpeg API
 +
-+Hardcoding the value for FF_INPUT_BUFFER_PADDING_SIZE is not safe
-+because  upstream FFmpeg might change it (as they did in FFmpeg 4.0).
-+
-+Instead, use FFmpeg's AV_INPUT_BUFFER_PADDING_SIZE if available and
-+only hardcode a value if FFmpeg is disabled (in which case the value
-+doesn't particularly matter anyway). For compatibility with older
-+FFmpeg versions, define AV_INPUT_BUFFER_PADDING_SIZE if hasn't been
-+defined yet.
-+
-+Downloaded from
-+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=901735
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++Fixes compilation with ffmpeg >= 2.9.
+ 
+ Downloaded from Debian:
+-https://sources.debian.net/src/squeezelite/1.8-3/debian/patches/ffmpeg_2.9.patch/
++https://sources.debian.org/src/squeezelite/1.8-4.1/debian/patches/ffmpeg_2.9.patch/
+ 
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ src/utils/ffmpeg-priv.h     | 4 ++++
-+ src/videofilters/nowebcam.c | 4 ++--
-+ 2 files changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/utils/ffmpeg-priv.h b/src/utils/ffmpeg-priv.h
-+index c0745a9a..d59ea0e1 100644
-+--- a/src/utils/ffmpeg-priv.h
-++++ b/src/utils/ffmpeg-priv.h
-+@@ -102,6 +102,10 @@ static inline int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
-+ #endif
-+ #endif
-+ 
-++#ifndef AV_INPUT_BUFFER_PADDING_SIZE
-++#define AV_INPUT_BUFFER_PADDING_SIZE FF_INPUT_BUFFER_PADDING_SIZE
-++#endif
-++
-+ #ifndef HAVE_FUN_avcodec_encode_video2
-+ int avcodec_encode_video2 (AVCodecContext *avctx, AVPacket *avpkt, const AVFrame *frame, int *got_packet_ptr);
-+ #endif
-+diff --git a/src/videofilters/nowebcam.c b/src/videofilters/nowebcam.c
-+index bd2ca838..4783de05 100644
-+--- a/src/videofilters/nowebcam.c
-++++ b/src/videofilters/nowebcam.c
-+@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-+ #ifndef NO_FFMPEG
-+ #include "ffmpeg-priv.h"
-+ #else
-+-#define FF_INPUT_BUFFER_PADDING_SIZE 32
-++#define AV_INPUT_BUFFER_PADDING_SIZE 32
-+ #endif
-+ 
-+ #if TARGET_OS_IPHONE
-+@@ -248,7 +248,7 @@ static mblk_t *_ms_load_jpeg_as_yuv(const char *jpgpath, MSVideoSize *reqsize){
-+ 			ms_error("Cannot load %s",jpgpath);
-+ 			return NULL;
-+ 		}
-+-		jpgbuf=(uint8_t*)ms_malloc0(statbuf.st_size + FF_INPUT_BUFFER_PADDING_SIZE);
-++		jpgbuf=(uint8_t*)ms_malloc0(statbuf.st_size + AV_INPUT_BUFFER_PADDING_SIZE);
-+ 		if (jpgbuf==NULL)
-+ 		{
-+ 			close(fd);
++ ffmpeg.c | 14 +++++++-------
++ 1 file changed, 7 insertions(+), 7 deletions(-)
+ 
+-
+-Description: Replace deprecated FFmpeg API
+-Author: Andreas Cadhalpun <Andreas.Cadhalpun@googlemail.com>
+-Last-Update: <2015-11-02>
+-
+---- squeezelite-1.8.orig/ffmpeg.c
+-+++ squeezelite-1.8/ffmpeg.c
++diff --git a/ffmpeg.c b/ffmpeg.c
++index 279f31d..bc9136c 100644
++--- a/ffmpeg.c
+++++ b/ffmpeg.c
+ @@ -52,8 +52,8 @@ struct ff_s {
+  	unsigned (* avcodec_version)(void);
+  	AVCodec * (* avcodec_find_decoder)(int);
+@@ -55,3 +60,6 @@ Last-Update: <2015-11-02>
+  	ff->avcodec_decode_audio4 = dlsym(handle_codec, "avcodec_decode_audio4");
+  	ff->av_init_packet = dlsym(handle_codec, "av_init_packet");
+  	ff->av_free_packet = dlsym(handle_codec, "av_free_packet");
 +-- 
 +2.18.0
 +
-diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
-index 5f26b54bff..8ebf64af09 100644
---- a/package/mediastreamer/mediastreamer.hash
-+++ b/package/mediastreamer/mediastreamer.hash
+diff --git a/package/squeezelite/0004-Fix-FTBFS-with-FFmpeg-4.0.patch b/package/squeezelite/0004-Fix-FTBFS-with-FFmpeg-4.0.patch
+new file mode 100644
+index 0000000000..25a5db3cae
+--- /dev/null
++++ b/package/squeezelite/0004-Fix-FTBFS-with-FFmpeg-4.0.patch
+@@ -0,0 +1,31 @@
++From 4ad37284447e768d641768c7c8a69c4640c83181 Mon Sep 17 00:00:00 2001
++From: James Cowgill <jcowgill@debian.org>
++Date: Sat, 18 Aug 2018 13:26:59 +0200
++Subject: [PATCH] Fix FTBFS with FFmpeg 4.0
++
++Bug-Debian: https://bugs.debian.org/888335
++
++Downloaded from Debian:
++https://sources.debian.org/src/squeezelite/1.8-4.1/debian/patches/ffmpeg4.0.patch/
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ ffmpeg.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/ffmpeg.c b/ffmpeg.c
++index bc9136c..d51b08e 100644
++--- a/ffmpeg.c
+++++ b/ffmpeg.c
++@@ -264,7 +264,7 @@ static decode_state ff_decode(void) {
++ 		ff->mmsh_bytes_left = ff->mmsh_bytes_pad = ff->mmsh_packet_len = 0;
++ 
++ 		if (!ff->readbuf) {
++-			ff->readbuf = AV(ff, malloc, READ_SIZE +  FF_INPUT_BUFFER_PADDING_SIZE);
+++			ff->readbuf = AV(ff, malloc, READ_SIZE +  AV_INPUT_BUFFER_PADDING_SIZE);
++ 		}
++ 
++ 		avio = AVIO(ff, alloc_context, ff->readbuf, READ_SIZE, 0, NULL, _read_data, NULL, NULL);
++-- 
++2.18.0
++
+diff --git a/package/squeezelite/squeezelite.hash b/package/squeezelite/squeezelite.hash
+index 1dbb4c155a..d56f5da665 100644
+--- a/package/squeezelite/squeezelite.hash
++++ b/package/squeezelite/squeezelite.hash
 @@ -1,2 +1,3 @@
  # Locally calculated
- sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
-+sha256  ba9ed2269151ad63b922598f3c5c19ddf781b2bbb6cb843ed9f085ecd1679c5d  COPYING
+ sha256 0c844e7714d3f15325629c59ee75e6309763116e61a6b73486b502e2e5cce5fd squeezelite-v1.8.tar.gz
++sha256 3e4379e1f34b8c5da00e545cfe94369b94a57745902c5d12be43b6332c34c04e LICENSE.txt
 -- 
 2.18.0
