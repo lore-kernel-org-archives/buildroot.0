@@ -1,99 +1,106 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Aug 2018 09:31:18 +0200
-Subject: [Buildroot] [PATCH/next v3 7/7] package/ffmpeg: bump version to
- 4.0.2
+Date: Sat, 25 Aug 2018 09:31:15 +0200
+Subject: [Buildroot] [PATCH/next v3 4/7] package/mediastreamer: Fix build
+ with FFmpeg 4.0
 In-Reply-To: <20180825073118.14980-1-bernd.kuhls@t-online.de>
 References: <20180825073118.14980-1-bernd.kuhls@t-online.de>
-Message-ID: <20180825073118.14980-7-bernd.kuhls@t-online.de>
+Message-ID: <20180825073118.14980-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-ffserver was removed upstream:
-http://git.videolan.org/?p=ffmpeg.git;a=commitdiff;h=6b35a83214f1bc3fb38c9ea9c2cd3676f28709fa
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v3: initial version
+v3: re-integrated in ffmpeg bump series
+v2: split patch from v1 series, git-formatted patch,
+    added license hash
 
- Config.in.legacy           | 6 ++++++
- package/ffmpeg/Config.in   | 6 ------
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 8 +-------
- 4 files changed, 8 insertions(+), 14 deletions(-)
+ ...FER_PADDING_SIZE-to-determine-paddin.patch | 64 +++++++++++++++++++
+ package/mediastreamer/mediastreamer.hash      |  1 +
+ 2 files changed, 65 insertions(+)
+ create mode 100644 package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index aae8d28e13..3aa82aa5fe 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -145,6 +145,12 @@ endif
- ###############################################################################
- comment "Legacy options removed in 2018.11"
- 
-+config BR2_PACKAGE_FFMPEG_FFSERVER
-+	bool "ffserver was removed"
-+	select BR2_LEGACY
-+	help
-+	  ffserver was removed upstream
+diff --git a/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch b/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
+new file mode 100644
+index 0000000000..792c3eeb44
+--- /dev/null
++++ b/package/mediastreamer/0002-Use-AV_INPUT_BUFFER_PADDING_SIZE-to-determine-paddin.patch
+@@ -0,0 +1,64 @@
++From 84b1919124884232e0fa30b30458470db27c73fc Mon Sep 17 00:00:00 2001
++From: James Cowgill <jcowgill@debian.org>
++Date: Sat, 18 Aug 2018 12:56:38 +0200
++Subject: [PATCH] Use AV_INPUT_BUFFER_PADDING_SIZE to determine padding
++ size
 +
- config BR2_KERNEL_HEADERS_4_10
- 	bool "kernel headers version 4.10.x are no longer supported"
- 	select BR2_KERNEL_HEADERS_4_9
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index 2d94c5712a..eec7ce0f6b 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -63,12 +63,6 @@ config BR2_PACKAGE_FFMPEG_FFPLAY
- comment "ffplay needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
- 
--config BR2_PACKAGE_FFMPEG_FFSERVER
--	bool "Build ffserver"
--	depends on BR2_USE_MMU # fork()
--	help
--	  FFserver is a streaming server for both audio and video.
--
- config BR2_PACKAGE_FFMPEG_FFPROBE
- 	bool "Build ffprobe"
- 	help
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index 7d64d8441c..ff6b8ffcb5 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
++Hardcoding the value for FF_INPUT_BUFFER_PADDING_SIZE is not safe
++because  upstream FFmpeg might change it (as they did in FFmpeg 4.0).
++
++Instead, use FFmpeg's AV_INPUT_BUFFER_PADDING_SIZE if available and
++only hardcode a value if FFmpeg is disabled (in which case the value
++doesn't particularly matter anyway). For compatibility with older
++FFmpeg versions, define AV_INPUT_BUFFER_PADDING_SIZE if hasn't been
++defined yet.
++
++Downloaded from
++https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=901735
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/utils/ffmpeg-priv.h     | 4 ++++
++ src/videofilters/nowebcam.c | 4 ++--
++ 2 files changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/utils/ffmpeg-priv.h b/src/utils/ffmpeg-priv.h
++index c0745a9a..d59ea0e1 100644
++--- a/src/utils/ffmpeg-priv.h
+++++ b/src/utils/ffmpeg-priv.h
++@@ -102,6 +102,10 @@ static inline int avcodec_decode_video2(AVCodecContext *avctx, AVFrame *picture,
++ #endif
++ #endif
++ 
+++#ifndef AV_INPUT_BUFFER_PADDING_SIZE
+++#define AV_INPUT_BUFFER_PADDING_SIZE FF_INPUT_BUFFER_PADDING_SIZE
+++#endif
+++
++ #ifndef HAVE_FUN_avcodec_encode_video2
++ int avcodec_encode_video2 (AVCodecContext *avctx, AVPacket *avpkt, const AVFrame *frame, int *got_packet_ptr);
++ #endif
++diff --git a/src/videofilters/nowebcam.c b/src/videofilters/nowebcam.c
++index bd2ca838..4783de05 100644
++--- a/src/videofilters/nowebcam.c
+++++ b/src/videofilters/nowebcam.c
++@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
++ #ifndef NO_FFMPEG
++ #include "ffmpeg-priv.h"
++ #else
++-#define FF_INPUT_BUFFER_PADDING_SIZE 32
+++#define AV_INPUT_BUFFER_PADDING_SIZE 32
++ #endif
++ 
++ #if TARGET_OS_IPHONE
++@@ -248,7 +248,7 @@ static mblk_t *_ms_load_jpeg_as_yuv(const char *jpgpath, MSVideoSize *reqsize){
++ 			ms_error("Cannot load %s",jpgpath);
++ 			return NULL;
++ 		}
++-		jpgbuf=(uint8_t*)ms_malloc0(statbuf.st_size + FF_INPUT_BUFFER_PADDING_SIZE);
+++		jpgbuf=(uint8_t*)ms_malloc0(statbuf.st_size + AV_INPUT_BUFFER_PADDING_SIZE);
++ 		if (jpgbuf==NULL)
++ 		{
++ 			close(fd);
++-- 
++2.18.0
++
+diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
+index 5f26b54bff..8ebf64af09 100644
+--- a/package/mediastreamer/mediastreamer.hash
++++ b/package/mediastreamer/mediastreamer.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256 386f7601e865df6bddde05bb6927119b5a853f0b92e2e9834f59c125a17d3fc6  ffmpeg-3.4.4.tar.xz
-+sha256 a95c0cc9eb990e94031d2183f2e6e444cc61c99f6f182d1575c433d62afb2f97  ffmpeg-4.0.2.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index cf9abeb102..4071e1ccef 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FFMPEG_VERSION = 3.4.4
-+FFMPEG_VERSION = 4.0.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
-@@ -84,12 +84,6 @@ else
- FFMPEG_CONF_OPTS += --disable-ffplay
- endif
- 
--ifeq ($(BR2_PACKAGE_FFMPEG_FFSERVER),y)
--FFMPEG_CONF_OPTS += --enable-ffserver
--else
--FFMPEG_CONF_OPTS += --disable-ffserver
--endif
--
- ifeq ($(BR2_PACKAGE_FFMPEG_AVRESAMPLE),y)
- FFMPEG_CONF_OPTS += --enable-avresample
- else
+ sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
++sha256  ba9ed2269151ad63b922598f3c5c19ddf781b2bbb6cb843ed9f085ecd1679c5d  COPYING
 -- 
 2.18.0
