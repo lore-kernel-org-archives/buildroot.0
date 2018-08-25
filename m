@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Aug 2018 11:17:00 +0200
-Subject: [Buildroot] [PATCH/next 5/7] package/libtorrent: Fix build with
- OpenSSL 1.1.x
+Date: Sat, 25 Aug 2018 11:17:01 +0200
+Subject: [Buildroot] [PATCH/next 6/7] package/pound: Fix build with OpenSSL
+ 1.1.x
 In-Reply-To: <20180825091702.28471-1-bernd.kuhls@t-online.de>
 References: <20180825091702.28471-1-bernd.kuhls@t-online.de>
-Message-ID: <20180825091702.28471-6-bernd.kuhls@t-online.de>
+Message-ID: <20180825091702.28471-7-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,124 +13,346 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libtorrent/0002-openssl110.patch | 109 +++++++++++++++++++++++
- 1 file changed, 109 insertions(+)
- create mode 100644 package/libtorrent/0002-openssl110.patch
+ package/pound/0002-fix-openssl-1.1.0.patch | 331 +++++++++++++++++++++
+ 1 file changed, 331 insertions(+)
+ create mode 100644 package/pound/0002-fix-openssl-1.1.0.patch
 
-diff --git a/package/libtorrent/0002-openssl110.patch b/package/libtorrent/0002-openssl110.patch
+diff --git a/package/pound/0002-fix-openssl-1.1.0.patch b/package/pound/0002-fix-openssl-1.1.0.patch
 new file mode 100644
-index 0000000000..b0cfc2deef
+index 0000000000..a94a6386b7
 --- /dev/null
-+++ b/package/libtorrent/0002-openssl110.patch
-@@ -0,0 +1,109 @@
-+From 7b29b6bd2547e72e22b9b7981df27092842d2a10 Mon Sep 17 00:00:00 2001
-+From: rakshasa <sundell.software@gmail.com>
-+Date: Tue, 20 Dec 2016 19:51:02 +0900
-+Subject: [PATCH] Added support for openssl 1.1.
++++ b/package/pound/0002-fix-openssl-1.1.0.patch
+@@ -0,0 +1,331 @@
++From a2c9dde4d055ea8942afb150b7fc3a807d4e5d60 Mon Sep 17 00:00:00 2001
++From: Sergey Poznyakoff <gray@gnu.org>
++Date: Wed, 28 Feb 2018 13:44:01 +0000
++Subject: [PATCH] Support for Openssl 1.1
 +
-+Downloaded from upstream commit
-+https://github.com/rakshasa/libtorrent/commit/7b29b6bd2547e72e22b9b7981df27092842d2a10
++Downloaded from github fork:
++https://github.com/graygnuorg/pound/commit/a2c9dde4d055ea8942afb150b7fc3a807d4e5d60
++
++This patch was announced on the upstream mailinglist:
++http://www.apsis.ch/pound/pound_list/archive/2018/2018-03/1519920322000
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ configure.ac                |  4 ++++
-+ src/utils/diffie_hellman.cc | 36 ++++++++++++++++++++++++++++++++++--
-+ 2 files changed, 38 insertions(+), 2 deletions(-)
++ .gitignore |  15 ++++++++
++ config.c   |  17 +++++++--
++ http.c     |  12 ++++++-
++ pound.h    |   4 ++-
++ svc.c      | 101 +++++++++++++++++++++++++++++++++++++++++++----------
++ 5 files changed, 125 insertions(+), 24 deletions(-)
++ create mode 100644 .gitignore
 +
-+diff --git a/configure.ac b/configure.ac
-+index 5b1ea237..b885714d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -71,12 +71,15 @@ AC_ARG_ENABLE(openssl,
-+   [  --disable-openssl       Don't use OpenSSL's SHA1 implementation.],
-+   [
-+     if test "$enableval" = "yes"; then
-++dnl move to scripts.
-+       PKG_CHECK_MODULES(OPENSSL, libcrypto,
-+         CXXFLAGS="$CXXFLAGS $OPENSSL_CFLAGS";
-+         LIBS="$LIBS $OPENSSL_LIBS")
-+ 
-+       AC_DEFINE(USE_OPENSSL, 1, Using OpenSSL.)
-+       AC_DEFINE(USE_OPENSSL_SHA, 1, Using OpenSSL's SHA1 implementation.)
-++      AC_CHECK_LIB([crypto], [DH_set0_pqg], [AC_DEFINE(USE_OPENSSL_1_1, 1, Using OpenSSL 1.1.)])
-++
-+     else
-+       AC_DEFINE(USE_NSS_SHA, 1, Using Mozilla's SHA1 implementation.)
-+     fi
-+@@ -87,6 +90,7 @@ AC_ARG_ENABLE(openssl,
-+ 
-+     AC_DEFINE(USE_OPENSSL, 1, Using OpenSSL.)
-+     AC_DEFINE(USE_OPENSSL_SHA, 1, Using OpenSSL's SHA1 implementation.)
-++    AC_CHECK_LIB([crypto], [DH_set0_pqg], [AC_DEFINE(USE_OPENSSL_1_1, 1, Using OpenSSL 1.1.)])
-+   ]
-+ )
-+ 
-+diff --git a/src/utils/diffie_hellman.cc b/src/utils/diffie_hellman.cc
-+index aa653d45..7ec13165 100644
-+--- a/src/utils/diffie_hellman.cc
-++++ b/src/utils/diffie_hellman.cc
-+@@ -54,11 +54,23 @@ DiffieHellman::DiffieHellman(const unsigned char *prime, int primeLength,
-+   m_secret(NULL), m_size(0) {
-+ 
-+ #ifdef USE_OPENSSL
-++
-+   m_dh = DH_new();
-++
-++#ifdef USE_OPENSSL_1_1
-++  BIGNUM * const dh_p = BN_bin2bn(prime, primeLength, NULL);
-++  BIGNUM * const dh_g = BN_bin2bn(generator, generatorLength, NULL);
-++
-++  if (dh_p == NULL || dh_g == NULL ||
-++      !DH_set0_pqg(m_dh, dh_p, NULL, dh_g))
-++	  throw internal_error("Could not generate Diffie-Hellman parameters");
-++#else
-+   m_dh->p = BN_bin2bn(prime, primeLength, NULL);
-+   m_dh->g = BN_bin2bn(generator, generatorLength, NULL);
-++#endif
-+ 
-+   DH_generate_key(m_dh);
-++
-+ #else
-+   throw internal_error("Compiled without encryption support.");
-+ #endif
-+@@ -74,7 +86,19 @@ DiffieHellman::~DiffieHellman() {
-+ bool
-+ DiffieHellman::is_valid() const {
-+ #ifdef USE_OPENSSL
-++  if (m_dh == NULL)
-++    return false;
-++
-++#ifdef USE_OPENSSL_1_1
-++  const BIGNUM *pub_key;
-++
-++  DH_get0_key(m_dh, &pub_key, NULL);
-++
-++  return pub_key != NULL;
-++#else
-+   return m_dh != NULL && m_dh->pub_key != NULL;
-++#endif
-++
-+ #else
-+   return false;
-+ #endif
-+@@ -103,8 +127,16 @@ DiffieHellman::store_pub_key(unsigned char* dest, unsigned int length) {
-+ #ifdef USE_OPENSSL
-+   std::memset(dest, 0, length);
-+ 
-+-  if ((int)length >= BN_num_bytes(m_dh->pub_key))
-+-    BN_bn2bin(m_dh->pub_key, dest + length - BN_num_bytes(m_dh->pub_key));
-++  const BIGNUM *pub_key;
-++
-++#ifdef USE_OPENSSL_1_1
-++  DH_get0_key(m_dh, &pub_key, NULL);
-++#else
-++  pub_key = m_dh->pub_key;
-++#endif
-++
-++  if ((int)length >= BN_num_bytes(pub_key))
-++    BN_bn2bin(pub_key, dest + length - BN_num_bytes(pub_key));
-+ #endif
++diff --git a/config.c b/config.c
++index d41a3ee..e8fec0f 100644
++--- a/config.c
+++++ b/config.c
++@@ -174,6 +174,16 @@ conf_fgets(char *buf, const int max)
++     }
 + }
 + 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++# define general_name_string(n) \
+++	strndup(ASN1_STRING_get0_data(n->d.dNSName),	\
+++	        ASN1_STRING_length(n->d.dNSName) + 1)
+++#else
+++# define general_name_string(n) \
+++	strndup(ASN1_STRING_data(n->d.dNSName),	\
+++	       ASN1_STRING_length(n->d.dNSName) + 1)
+++#endif
+++
++ unsigned char **
++ get_subjectaltnames(X509 *x509, unsigned int *count)
++ {
++@@ -194,8 +204,7 @@ get_subjectaltnames(X509 *x509, unsigned int *count)
++         name = sk_GENERAL_NAME_pop(san_stack);
++         switch(name->type) {
++             case GEN_DNS:
++-                temp[local_count] = strndup(ASN1_STRING_data(name->d.dNSName), ASN1_STRING_length(name->d.dNSName)
++-                                    + 1);
+++ 	        temp[local_count] = general_name_string(name);
++                 if(temp[local_count] == NULL)
++                     conf_err("out of memory");
++                 local_count++;
++@@ -565,7 +574,9 @@ parse_service(const char *svc_name)
++     pthread_mutex_init(&res->mut, NULL);
++     if(svc_name)
++         strncpy(res->name, svc_name, KEY_SIZE);
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((res->sessions = lh_TABNODE_new(t_hash, t_cmp)) == NULL)    
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((res->sessions = LHM_lh_new(TABNODE, t)) == NULL)
++ #else
++     if((res->sessions = lh_new(LHASH_HASH_FN(t_hash), LHASH_COMP_FN(t_cmp))) == NULL)
++diff --git a/http.c b/http.c
++index dd211e4..c8e756a 100644
++--- a/http.c
+++++ b/http.c
++@@ -527,12 +527,22 @@ log_bytes(char *res, const LONG cnt)
++ 
++ /* Cleanup code. This should really be in the pthread_cleanup_push, except for bugs in some implementations */
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++# define clear_error()
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
+++# define clear_error() \
+++	if(ssl != NULL) { ERR_clear_error(); ERR_remove_thread_state(NULL); }
+++#else
+++# define clear_error() \
+++	if(ssl != NULL) { ERR_clear_error(); ERR_remove_state(0); }
+++#endif
+++
++ #define clean_all() {   \
++     if(ssl != NULL) { BIO_ssl_shutdown(cl); } \
++     if(be != NULL) { BIO_flush(be); BIO_reset(be); BIO_free_all(be); be = NULL; } \
++     if(cl != NULL) { BIO_flush(cl); BIO_reset(cl); BIO_free_all(cl); cl = NULL; } \
++     if(x509 != NULL) { X509_free(x509); x509 = NULL; } \
++-    if(ssl != NULL) { ERR_clear_error(); ERR_remove_state(0); } \
+++    clear_error(); \
++ }
++ 
++ /*
++diff --git a/pound.h b/pound.h
++index fa22c36..9603b91 100644
++--- a/pound.h
+++++ b/pound.h
++@@ -344,7 +344,9 @@ typedef struct _tn {
++ /* maximal session key size */
++ #define KEY_SIZE    127
++ 
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++  DEFINE_LHASH_OF(TABNODE);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++ DECLARE_LHASH_OF(TABNODE);
++ #endif
++ 
++diff --git a/svc.c b/svc.c
++index 60ba488..063b92c 100644
++--- a/svc.c
+++++ b/svc.c
++@@ -27,10 +27,17 @@
++ 
++ #include    "pound.h"
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++# define TABNODE_GET_DOWN_LOAD(t) lh_TABNODE_get_down_load(t)
+++# define TABNODE_SET_DOWN_LOAD(t,n) lh_TABNODE_set_down_load(t,n)
+++#else
++ #ifndef LHASH_OF
++ #define LHASH_OF(x) LHASH
++ #define CHECKED_LHASH_OF(type, h) h
++ #endif
+++# define TABNODE_GET_DOWN_LOAD(t) (CHECKED_LHASH_OF(TABNODE, t)->down_load)
+++# define TABNODE_SET_DOWN_LOAD(t,n) (CHECKED_LHASH_OF(TABNODE, t)->down_load = n)
+++#endif
++ 
++ /*
++  * Add a new key/content pair to a hash table
++@@ -58,7 +65,9 @@ t_add(LHASH_OF(TABNODE) *const tab, const char *key, const void *content, const
++     }
++     memcpy(t->content, content, cont_len);
++     t->last_acc = time(NULL);
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((old = lh_TABNODE_insert(tab, t)) != NULL) {
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((old = LHM_lh_insert(TABNODE, tab, t)) != NULL) {
++ #else
++     if((old = (TABNODE *)lh_insert(tab, t)) != NULL) {
++@@ -82,7 +91,9 @@ t_find(LHASH_OF(TABNODE) *const tab, char *const key)
++     TABNODE t, *res;
++ 
++     t.key = key;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((res = lh_TABNODE_retrieve(tab, &t)) != NULL) {
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((res = (TABNODE *)LHM_lh_retrieve(TABNODE, tab, &t)) != NULL) {
++ #else
++     if((res = (TABNODE *)lh_retrieve(tab, &t)) != NULL) {
++@@ -102,7 +113,9 @@ t_remove(LHASH_OF(TABNODE) *const tab, char *const key)
++     TABNODE t, *res;
++ 
++     t.key = key;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    if((res = lh_TABNODE_delete(tab, &t)) != NULL) {    
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     if((res = LHM_lh_delete(TABNODE, tab, &t)) != NULL) {
++ #else
++     if((res = (TABNODE *)lh_delete(tab, &t)) != NULL) {
++@@ -127,7 +140,9 @@ t_old_doall_arg(TABNODE *t, ALL_ARG *a)
++     TABNODE *res;
++ 
++     if(t->last_acc < a->lim)
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++        if((res = lh_TABNODE_delete(a->tab, t)) != NULL) {	    
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++         if((res = LHM_lh_delete(TABNODE, a->tab, t)) != NULL) {
++ #else
++         if((res = lh_delete(a->tab, t)) != NULL) {
++@@ -145,6 +160,10 @@ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE, ALL_ARG)
++ IMPLEMENT_LHASH_DOALL_ARG_FN(t_old, TABNODE *, ALL_ARG *)
++ #endif
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++IMPLEMENT_LHASH_DOALL_ARG(TABNODE,ALL_ARG);
+++#endif
+++
++ /*
++  * Expire all old nodes
++  */
++@@ -156,14 +175,16 @@ t_expire(LHASH_OF(TABNODE) *const tab, const time_t lim)
++ 
++     a.tab = tab;
++     a.lim = lim;
++-    down_load = CHECKED_LHASH_OF(TABNODE, tab)->down_load;
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = 0;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++    down_load = TABNODE_GET_DOWN_LOAD(tab);
+++    TABNODE_SET_DOWN_LOAD(tab, 0);
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    lh_TABNODE_doall_ALL_ARG(tab, t_old_doall_arg, &a);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_old), ALL_ARG, &a);
++ #else
++     lh_doall_arg(tab, LHASH_DOALL_ARG_FN(t_old), &a);
++ #endif
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = down_load;
+++    TABNODE_SET_DOWN_LOAD(tab, down_load);
++     return;
++ }
++ 
++@@ -173,7 +194,9 @@ t_cont_doall_arg(TABNODE *t, ALL_ARG *arg)
++     TABNODE *res;
++ 
++     if(memcmp(t->content, arg->content, arg->cont_len) == 0)
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++        if((res = lh_TABNODE_delete(arg->tab, t)) != NULL) {
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++         if((res = LHM_lh_delete(TABNODE, arg->tab, t)) != NULL) {
++ #else
++         if((res = lh_delete(arg->tab, t)) != NULL) {
++@@ -203,15 +226,16 @@ t_clean(LHASH_OF(TABNODE) *const tab, void *const content, const size_t cont_len
++     a.tab = tab;
++     a.content = content;
++     a.cont_len = cont_len;
++-    down_load = CHECKED_LHASH_OF(TABNODE, tab)->down_load;
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = 0;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++    down_load = TABNODE_GET_DOWN_LOAD(tab);
+++    TABNODE_SET_DOWN_LOAD(tab, 0);
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    lh_TABNODE_doall_ALL_ARG(tab, t_cont_doall_arg, &a);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     LHM_lh_doall_arg(TABNODE, tab, LHASH_DOALL_ARG_FN(t_cont), ALL_ARG, &a);
++ #else
++     lh_doall_arg(tab, LHASH_DOALL_ARG_FN(t_cont), &a);
++ #endif
++-    CHECKED_LHASH_OF(TABNODE, tab)->down_load = down_load;
++-    return;
+++    TABNODE_SET_DOWN_LOAD(tab, down_load);
++ }
++ 
++ /*
++@@ -1262,6 +1286,31 @@ RSA_tmp_callback(/* not used */SSL *ssl, /* not used */int is_export, int keylen
++     return res;
++ }
++ 
+++static int
+++generate_key(RSA **ret_rsa, unsigned long bits)
+++{
+++#if OPENSSL_VERSION_NUMBER > 0x00908000L
+++    int rc = 0;
+++    RSA *rsa;
+++
+++    rsa = RSA_new();
+++    if (rsa) {
+++	BIGNUM *bne = BN_new();
+++	if (BN_set_word(bne, RSA_F4))
+++	    rc = RSA_generate_key_ex(rsa, bits, bne, NULL);
+++	BN_free(bne);
+++	if (rc)
+++	    *ret_rsa = rsa;
+++	else
+++	    RSA_free(rsa);
+++    }
+++    return rc;
+++#else
+++    *ret_rsa = RSA_generate_key(bits, RSA_F4, NULL, NULL);
+++    return *ret_rsa != NULL;
+++#endif
+++}
+++
++ /*
++  * Periodically regenerate ephemeral RSA keys
++  * runs every T_RSA_KEYS seconds
++@@ -1274,8 +1323,9 @@ do_RSAgen(void)
++     RSA *t_RSA1024_keys[N_RSA_KEYS];
++ 
++     for(n = 0; n < N_RSA_KEYS; n++) {
++-        t_RSA512_keys[n] = RSA_generate_key(512, RSA_F4, NULL, NULL);
++-        t_RSA1024_keys[n] = RSA_generate_key(1024, RSA_F4, NULL, NULL);
+++        /* FIXME: Error handling */
+++        generate_key(&t_RSA512_keys[n], 512);
+++	generate_key(&t_RSA1024_keys[n], 1024);
++     }
++     if(ret_val = pthread_mutex_lock(&RSA_mut))
++         logmsg(LOG_WARNING, "thr_RSAgen() lock: %s", strerror(ret_val));
++@@ -1329,11 +1379,11 @@ init_timer(void)
++      * Pre-generate ephemeral RSA keys
++      */
++     for(n = 0; n < N_RSA_KEYS; n++) {
++-        if((RSA512_keys[n] = RSA_generate_key(512, RSA_F4, NULL, NULL)) == NULL) {
+++        if(!generate_key(&RSA512_keys[n], 512)) {
++             logmsg(LOG_WARNING,"RSA_generate(%d, 512) failed", n);
++             return;
++         }
++-        if((RSA1024_keys[n] = RSA_generate_key(1024, RSA_F4, NULL, NULL)) == NULL) {
+++        if(!generate_key(&RSA1024_keys[n], 1024)) {
++             logmsg(LOG_WARNING,"RSA_generate(%d, 1024) failed", n);
++             return;
++         }
++@@ -1420,6 +1470,10 @@ IMPLEMENT_LHASH_DOALL_ARG_FN(t_dump, TABNODE, DUMP_ARG)
++ IMPLEMENT_LHASH_DOALL_ARG_FN(t_dump, TABNODE *, DUMP_ARG *)
++ #endif
++ 
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++IMPLEMENT_LHASH_DOALL_ARG(TABNODE,DUMP_ARG);
+++#endif
+++	
++ /*
++  * write sessions to the control socket
++  */
++@@ -1430,7 +1484,9 @@ dump_sess(const int control_sock, LHASH_OF(TABNODE) *const sess, BACKEND *const
++ 
++     a.control_sock = control_sock;
++     a.backends = backends;
++-#if OPENSSL_VERSION_NUMBER >= 0x10000000L
+++#if OPENSSL_VERSION_NUMBER >= 0x10100000L
+++    lh_TABNODE_doall_DUMP_ARG(sess, t_dump_doall_arg, &a);
+++#elif OPENSSL_VERSION_NUMBER >= 0x10000000L
++     LHM_lh_doall_arg(TABNODE, sess, LHASH_DOALL_ARG_FN(t_dump), DUMP_ARG, &a);
++ #else
++     lh_doall_arg(sess, LHASH_DOALL_ARG_FN(t_dump), &a);
++@@ -1664,6 +1720,13 @@ thr_control(void *arg)
++     }
++ }
++ 
+++#ifndef SSL3_ST_SR_CLNT_HELLO_A
+++# define SSL3_ST_SR_CLNT_HELLO_A (0x110|SSL_ST_ACCEPT)
+++#endif
+++#ifndef SSL23_ST_SR_CLNT_HELLO_A
+++# define SSL23_ST_SR_CLNT_HELLO_A (0x210|SSL_ST_ACCEPT)
+++#endif
+++		
++ void
++ SSLINFO_callback(const SSL *ssl, int where, int rc)
++ {
 -- 
 2.18.0
