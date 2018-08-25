@@ -1,22 +1,25 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 25 Aug 2018 18:47:37 +0300
-Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.4.2
-Message-ID: <20180825154737.18531-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Aug 2018 19:34:06 +0200
+Subject: [Buildroot] [git commit branch/next] ccache: bump to version 3.4.2
+Message-ID: <20180825172802.83BD38E675@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=b743cb408a357a330f76410c82c8f2fcaa850a6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
 Update license info, and remove the patch since it's already on upstream.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...t-to-sysroot-option-to-relative-path.patch | 43 -------------------
- package/ccache/ccache.hash                    |  7 +--
- package/ccache/ccache.mk                      |  8 ++--
+ ...gument-to-sysroot-option-to-relative-path.patch | 43 ----------------------
+ package/ccache/ccache.hash                         |  7 ++--
+ package/ccache/ccache.mk                           |  8 ++--
  3 files changed, 8 insertions(+), 50 deletions(-)
- delete mode 100644 package/ccache/0001-Convert-argument-to-sysroot-option-to-relative-path.patch
 
 diff --git a/package/ccache/0001-Convert-argument-to-sysroot-option-to-relative-path.patch b/package/ccache/0001-Convert-argument-to-sysroot-option-to-relative-path.patch
 deleted file mode 100644
@@ -108,5 +111,3 @@ index 9a11d46d30..851939ebda 100644
  endef
  
  HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
--- 
-2.17.1
