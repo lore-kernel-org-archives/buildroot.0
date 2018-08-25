@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Aug 2018 11:17:02 +0200
-Subject: [Buildroot] [PATCH/next 7/7] package/rdesktop: Fix build with
+Date: Sat, 25 Aug 2018 11:17:00 +0200
+Subject: [Buildroot] [PATCH/next 5/7] package/libtorrent: Fix build with
  OpenSSL 1.1.x
 In-Reply-To: <20180825091702.28471-1-bernd.kuhls@t-online.de>
 References: <20180825091702.28471-1-bernd.kuhls@t-online.de>
-Message-ID: <20180825091702.28471-8-bernd.kuhls@t-online.de>
+Message-ID: <20180825091702.28471-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,145 +13,124 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/rdesktop/0002-openssl11.patch | 130 ++++++++++++++++++++++++++
- 1 file changed, 130 insertions(+)
- create mode 100644 package/rdesktop/0002-openssl11.patch
+ package/libtorrent/0002-openssl110.patch | 109 +++++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
+ create mode 100644 package/libtorrent/0002-openssl110.patch
 
-diff --git a/package/rdesktop/0002-openssl11.patch b/package/rdesktop/0002-openssl11.patch
+diff --git a/package/libtorrent/0002-openssl110.patch b/package/libtorrent/0002-openssl110.patch
 new file mode 100644
-index 0000000000..050d6f6903
+index 0000000000..b0cfc2deef
 --- /dev/null
-+++ b/package/rdesktop/0002-openssl11.patch
-@@ -0,0 +1,130 @@
-+From bd6aa6acddf0ba640a49834807872f4cc0d0a773 Mon Sep 17 00:00:00 2001
-+From: Jani Hakala <jjhakala@gmail.com>
-+Date: Thu, 16 Jun 2016 14:28:15 +0300
-+Subject: [PATCH] Fix OpenSSL 1.1 compability issues
-+
-+Some data types have been made opaque in OpenSSL version 1.1 so
-+stack allocation and accessing struct fields directly does not work.
++++ b/package/libtorrent/0002-openssl110.patch
+@@ -0,0 +1,109 @@
++From 7b29b6bd2547e72e22b9b7981df27092842d2a10 Mon Sep 17 00:00:00 2001
++From: rakshasa <sundell.software@gmail.com>
++Date: Tue, 20 Dec 2016 19:51:02 +0900
++Subject: [PATCH] Added support for openssl 1.1.
 +
 +Downloaded from upstream commit
-+https://github.com/rdesktop/rdesktop/commit/bd6aa6acddf0ba640a49834807872f4cc0d0a773
++https://github.com/rakshasa/libtorrent/commit/7b29b6bd2547e72e22b9b7981df27092842d2a10
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 +---
-+ ssl.c | 65 ++++++++++++++++++++++++++++++++++++-----------------------
-+ 1 file changed, 40 insertions(+), 25 deletions(-)
++ configure.ac                |  4 ++++
++ src/utils/diffie_hellman.cc | 36 ++++++++++++++++++++++++++++++++++--
++ 2 files changed, 38 insertions(+), 2 deletions(-)
 +
-+diff --git a/ssl.c b/ssl.c
-+index 48751255..032e9b9e 100644
-+--- a/ssl.c
-++++ b/ssl.c
-+@@ -88,7 +88,7 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
-+ 		  uint8 * exponent)
-+ {
-+ 	BN_CTX *ctx;
-+-	BIGNUM mod, exp, x, y;
-++	BIGNUM *mod, *exp, *x, *y;
-+ 	uint8 inr[SEC_MAX_MODULUS_SIZE];
-+ 	int outlen;
++diff --git a/configure.ac b/configure.ac
++index 5b1ea237..b885714d 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -71,12 +71,15 @@ AC_ARG_ENABLE(openssl,
++   [  --disable-openssl       Don't use OpenSSL's SHA1 implementation.],
++   [
++     if test "$enableval" = "yes"; then
+++dnl move to scripts.
++       PKG_CHECK_MODULES(OPENSSL, libcrypto,
++         CXXFLAGS="$CXXFLAGS $OPENSSL_CFLAGS";
++         LIBS="$LIBS $OPENSSL_LIBS")
 + 
-+@@ -98,24 +98,24 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
-+ 	reverse(inr, len);
++       AC_DEFINE(USE_OPENSSL, 1, Using OpenSSL.)
++       AC_DEFINE(USE_OPENSSL_SHA, 1, Using OpenSSL's SHA1 implementation.)
+++      AC_CHECK_LIB([crypto], [DH_set0_pqg], [AC_DEFINE(USE_OPENSSL_1_1, 1, Using OpenSSL 1.1.)])
+++
++     else
++       AC_DEFINE(USE_NSS_SHA, 1, Using Mozilla's SHA1 implementation.)
++     fi
++@@ -87,6 +90,7 @@ AC_ARG_ENABLE(openssl,
 + 
-+ 	ctx = BN_CTX_new();
-+-	BN_init(&mod);
-+-	BN_init(&exp);
-+-	BN_init(&x);
-+-	BN_init(&y);
-+-
-+-	BN_bin2bn(modulus, modulus_size, &mod);
-+-	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, &exp);
-+-	BN_bin2bn(inr, len, &x);
-+-	BN_mod_exp(&y, &x, &exp, &mod, ctx);
-+-	outlen = BN_bn2bin(&y, out);
-++	mod = BN_new();
-++	exp = BN_new();
-++	x = BN_new();
-++	y = BN_new();
-++
-++	BN_bin2bn(modulus, modulus_size, mod);
-++	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, exp);
-++	BN_bin2bn(inr, len, x);
-++	BN_mod_exp(y, x, exp, mod, ctx);
-++	outlen = BN_bn2bin(y, out);
-+ 	reverse(out, outlen);
-+ 	if (outlen < (int) modulus_size)
-+ 		memset(out + outlen, 0, modulus_size - outlen);
++     AC_DEFINE(USE_OPENSSL, 1, Using OpenSSL.)
++     AC_DEFINE(USE_OPENSSL_SHA, 1, Using OpenSSL's SHA1 implementation.)
+++    AC_CHECK_LIB([crypto], [DH_set0_pqg], [AC_DEFINE(USE_OPENSSL_1_1, 1, Using OpenSSL 1.1.)])
++   ]
++ )
 + 
-+-	BN_free(&y);
-+-	BN_clear_free(&x);
-+-	BN_free(&exp);
-+-	BN_free(&mod);
-++	BN_free(y);
-++	BN_clear_free(x);
-++	BN_free(exp);
-++	BN_free(mod);
-+ 	BN_CTX_free(ctx);
-+ }
++diff --git a/src/utils/diffie_hellman.cc b/src/utils/diffie_hellman.cc
++index aa653d45..7ec13165 100644
++--- a/src/utils/diffie_hellman.cc
+++++ b/src/utils/diffie_hellman.cc
++@@ -54,11 +54,23 @@ DiffieHellman::DiffieHellman(const unsigned char *prime, int primeLength,
++   m_secret(NULL), m_size(0) {
 + 
-+@@ -146,12 +146,20 @@ rdssl_cert_to_rkey(RDSSL_CERT * cert, uint32 * key_len)
-+ 
-+ 	   Kudos to Richard Levitte for the following (. intiutive .) 
-+ 	   lines of code that resets the OID and let's us extract the key. */
-+-	nid = OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
++ #ifdef USE_OPENSSL
 ++
-++	X509_PUBKEY *key = NULL;
-++	X509_ALGOR *algor = NULL;
++   m_dh = DH_new();
 ++
-++	key = X509_get_X509_PUBKEY(cert);
-++	algor = X509_PUBKEY_get0_param(NULL, NULL, 0, &algor, key);
+++#ifdef USE_OPENSSL_1_1
+++  BIGNUM * const dh_p = BN_bin2bn(prime, primeLength, NULL);
+++  BIGNUM * const dh_g = BN_bin2bn(generator, generatorLength, NULL);
 ++
-++	nid = OBJ_obj2nid(algor->algorithm);
-++
-+ 	if ((nid == NID_md5WithRSAEncryption) || (nid == NID_shaWithRSAEncryption))
-+ 	{
-+ 		DEBUG_RDP5(("Re-setting algorithm type to RSA in server certificate\n"));
-+-		ASN1_OBJECT_free(cert->cert_info->key->algor->algorithm);
-+-		cert->cert_info->key->algor->algorithm = OBJ_nid2obj(NID_rsaEncryption);
-++		X509_PUBKEY_set0_param(key, OBJ_nid2obj(NID_rsaEncryption),
-++				       0, NULL, NULL, 0);
-+ 	}
-+ 	epk = X509_get_pubkey(cert);
-+ 	if (NULL == epk)
-+@@ -201,14 +209,24 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
-+ {
-+ 	int len;
-+ 
-+-	if ((BN_num_bytes(rkey->e) > (int) max_exp_len) ||
-+-	    (BN_num_bytes(rkey->n) > (int) max_mod_len))
-++	BIGNUM *e = NULL;
-++	BIGNUM *n = NULL;
-++
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++	e = rkey->e;
-++	n = rkey->n;
+++  if (dh_p == NULL || dh_g == NULL ||
+++      !DH_set0_pqg(m_dh, dh_p, NULL, dh_g))
+++	  throw internal_error("Could not generate Diffie-Hellman parameters");
 ++#else
-++	RSA_get0_key(rkey, &e, &n, NULL);
++   m_dh->p = BN_bin2bn(prime, primeLength, NULL);
++   m_dh->g = BN_bin2bn(generator, generatorLength, NULL);
+++#endif
++ 
++   DH_generate_key(m_dh);
+++
++ #else
++   throw internal_error("Compiled without encryption support.");
++ #endif
++@@ -74,7 +86,19 @@ DiffieHellman::~DiffieHellman() {
++ bool
++ DiffieHellman::is_valid() const {
++ #ifdef USE_OPENSSL
+++  if (m_dh == NULL)
+++    return false;
+++
+++#ifdef USE_OPENSSL_1_1
+++  const BIGNUM *pub_key;
+++
+++  DH_get0_key(m_dh, &pub_key, NULL);
+++
+++  return pub_key != NULL;
+++#else
++   return m_dh != NULL && m_dh->pub_key != NULL;
 ++#endif
 ++
-++	if ((BN_num_bytes(e) > (int) max_exp_len) ||
-++	    (BN_num_bytes(n) > (int) max_mod_len))
-+ 	{
-+ 		return 1;
-+ 	}
-+-	len = BN_bn2bin(rkey->e, exponent);
-++	len = BN_bn2bin(e, exponent);
-+ 	reverse(exponent, len);
-+-	len = BN_bn2bin(rkey->n, modulus);
-++	len = BN_bn2bin(n, modulus);
-+ 	reverse(modulus, len);
-+ 	return 0;
++ #else
++   return false;
++ #endif
++@@ -103,8 +127,16 @@ DiffieHellman::store_pub_key(unsigned char* dest, unsigned int length) {
++ #ifdef USE_OPENSSL
++   std::memset(dest, 0, length);
++ 
++-  if ((int)length >= BN_num_bytes(m_dh->pub_key))
++-    BN_bn2bin(m_dh->pub_key, dest + length - BN_num_bytes(m_dh->pub_key));
+++  const BIGNUM *pub_key;
+++
+++#ifdef USE_OPENSSL_1_1
+++  DH_get0_key(m_dh, &pub_key, NULL);
+++#else
+++  pub_key = m_dh->pub_key;
+++#endif
+++
+++  if ((int)length >= BN_num_bytes(pub_key))
+++    BN_bn2bin(pub_key, dest + length - BN_num_bytes(pub_key));
++ #endif
 + }
-+@@ -229,8 +247,5 @@ void
-+ rdssl_hmac_md5(const void *key, int key_len, const unsigned char *msg, int msg_len,
-+ 	       unsigned char *md)
-+ {
-+-	HMAC_CTX ctx;
-+-	HMAC_CTX_init(&ctx);
-+ 	HMAC(EVP_md5(), key, key_len, msg, msg_len, md, NULL);
-+-	HMAC_CTX_cleanup(&ctx);
-+ }
++ 
 -- 
 2.18.0
