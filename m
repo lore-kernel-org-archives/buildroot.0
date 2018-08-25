@@ -1,28 +1,35 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Aug 2018 08:37:59 +0200
-Subject: [Buildroot] [RFC v3 2/3] openssh: add patch to fix
- openssl-1.1.0h compile
-References: <20180508195431.19944-1-ps.report@gmx.net>
- <20180508195431.19944-2-ps.report@gmx.net>
-Message-ID: <73a75fx6k1.ln2@ID-313208.user.individual.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 25 Aug 2018 09:03:07 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] chrony: backport
+ upstream patch to fix blocking on getrandom() at startup with recent
+ kernels
+In-Reply-To: <1535134708.2283.420.camel@impinj.com> (Trent Piepho's message of
+ "Fri, 24 Aug 2018 18:18:29 +0000")
+References: <20180824072511.DD93D8E55C@busybox.osuosl.org>
+ <1535134708.2283.420.camel@impinj.com>
+Message-ID: <87lg8vapxw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 08 May 2018 21:54:30 +0200 schrieb Peter Seiderer:
+>>>>> "Trent" == Trent Piepho <tpiepho@impinj.com> writes:
 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Changes v2 -> v3:
->   - no changes
-> 
-> Changes v1 -> v2:
->   - no changes
+Hi,
 
-Hi Peter,
+ > Why it's true the non-fully-initialized urandom is less secure, it's
+ > not any different than the previous getrandom() behavior when it didn't
+ > block but now will.
 
-this patch does not apply anymore on openssh-7.8.
+ > So this really restores the previous level of security, rather than
+ > making things worse.  The kernel change to getrandom(), in this case,
+ > has provided no net improvement in security and make user space more
+ > complex with deal the behavior.
 
-Regards, Bernd
+Yeah, I also dislike all the fallout from the getrandom() behaviour
+changes in the (stable!) kernel upgrades :/
+
+
+-- 
+Bye, Peter Korsgaard
