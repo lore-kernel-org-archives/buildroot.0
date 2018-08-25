@@ -1,48 +1,74 @@
-From: Richard Kunze <richard.kunze@web.de>
-Date: Sat, 25 Aug 2018 22:07:51 +0200
-Subject: [Buildroot] [PATCH] package/squashfs: fix build on hosts with glibc
- >= 2.28
-Message-ID: <20180825200751.28097-1-richard.kunze@web.de>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Sat, 25 Aug 2018 23:15:31 +0300
+Subject: [Buildroot] [PATCH v2 1/1] git: Fix libintl linking if there is
+ no full gettext support
+In-Reply-To: <20180825194042.41917ea0@windsurf>
+References: <20180825131027.6048-1-vadim4j@gmail.com>
+ <20180825194042.41917ea0@windsurf>
+Message-ID: <CAMw6YJJVo16zKQqpiBcbH98cnRwHXEysAPhm=vRoyRW5vTTegw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since glibc 2.28, sys/sysmacros.h is no longer included from sys/types.h
-This patch fixes the resulting build error by explicitly including
-sys/sysmacros.h
+On Sat, Aug 25, 2018 at 8:40 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Sat, 25 Aug 2018 16:10:27 +0300, Vadim Kochan wrote:
+> > From: Vadim Kochan <vadim.kochan@petcube.com>
+>
+> Thanks for this new iteration.
+>
+> > Git could not resolve libntl_xxx symbols if toolchain does no provide
+> > full gettext support but the gettext package is selected.
+> >
+> > Steps to reproduce:
+> >     1) make menuconfig
+> >     2) Toolchain -> Sele> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.comct WCHAR
+> >     3) System -> select NLS
+> >     4) Target packages -> Development -> select git
+>
+> Instead of this, it is often simpler to include a minimal defconfig
+> that exhibits the problem. I.e, when you have your .config that shows
+> the problem, run "make savedefconfig", and look at the generated
+> "defconfig" file. It shows only the values that are different from the
+> default ones, so for an example like what you gave above, it would be
+> just three lines of configuration.
+>
+> > In case of ulibc/musl toolchain there is no full getttext support, but
+> > they still provides libintl stub which makes git think there is full
+> > gettext support hence -lintl is not passed to the linker.
+>
+> Are you sure this is what is happening ? The stub in uclibc and musl
+> provide all the gettext functions, that's the whole point of the stub.
+>
+> However, when you have the full gettext support enabled, the libintl.h
+> header installed is the one from the full gettext, and it redefines the
+> gettext functions with a different name, and that different name is
+> only provided by the full-blown gettext libintl library.
+>
+> Could you double check this ?
+>
+As I understood, in case of non-glibc toolchain the gettext macroses calls
+libintl functions with libintl_ prefix (_INTL_REDIRECT_MACROS in
+gettext sources).
+And because there is no such in the uclibc/musl, the git can't resolve them
+because the '-lintl' is not passed to be linked with shared library
+(gettext version).
 
-Signed-off-by: Richard Kunze <richard.kunze@web.de>
----
- package/squashfs/0001-include-sysmacros.patch | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 package/squashfs/0001-include-sysmacros.patch
-
-diff --git a/package/squashfs/0001-include-sysmacros.patch b/package/squashfs/0001-include-sysmacros.patch
-new file mode 100644
-index 0000000000..56d9a742e7
---- /dev/null
-+++ b/package/squashfs/0001-include-sysmacros.patch
-@@ -0,0 +1,19 @@
-+--- a/squashfs-tools/mksquashfs.c       2018-02-15 14:11:24.661930637 +0100
-++++ b/squashfs-tools/mksquashfs.c       2018-02-15 14:12:28.218412025 +0100
-+@@ -44,6 +44,7 @@
-+ #include <setjmp.h>
-+ #include <sys/types.h>
-++#include <sys/sysmacros.h>
-+ #include <sys/mman.h>
-+ #include <pthread.h>
-+ #include <regex.h>
-+ #include <sys/wait.h>
-+--- a/squashfs-tools/unsquashfs.c       2018-02-15 14:25:34.608263881 +0100
-++++ b/squashfs-tools/unsquashfs.c       2018-02-15 14:26:01.376410327 +0100
-+@@ -36,6 +36,7 @@
-+ #include <sys/types.h>
-++#include <sys/sysmacros.h>
-+ #include <sys/time.h>
-+ #include <sys/resource.h>
-+ #include <limits.h>
-+ #include <ctype.h>
--- 
-2.18.0
+Regards,
