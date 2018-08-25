@@ -1,31 +1,39 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Aug 2018 22:44:02 +0200
-Subject: [Buildroot] [PATCH/next/RFC 1/2] package/mariadb: handle missing
- ucontext_t
-Message-ID: <20180825204403.11324-1-bernd.kuhls@t-online.de>
+Date: Sat, 25 Aug 2018 22:44:03 +0200
+Subject: [Buildroot] [PATCH/next 2/2] package/mariadb: bump version to 10.3.9
+In-Reply-To: <20180825204403.11324-1-bernd.kuhls@t-online.de>
+References: <20180825204403.11324-1-bernd.kuhls@t-online.de>
+Message-ID: <20180825204403.11324-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some archs uclibc does not provide ucontext_t, for details see
-https://git.buildroot.net/buildroot/commit/?id=f1cbfeea95e6287c7a666aafc182ffa318eff262
+From: Peter Seiderer <ps.report@gmx.net>
 
-Mariadb uses ucontext_t optionally, its use can be disabled by the
-corresponding cmake option. Instead of copying the Config.in code from
-libsigsegv we shamelessly use its ARCH_SUPPORTS option while thinking
-that a more general approach might be needed for ucontext_t support so
-please consider this patch a RFC.
+Release notes: https://mariadb.com/kb/en/mariadb-1039-release-notes/
+Changelog: https://mariadb.com/kb/en/mariadb-1039-changelog/
 
-This patch fixes a build error
+- change WITH_SSL for host build from bundled to system (and add
+  host-openssl dependency) to avoid the following configure failure:
 
-In file included from /home/bernd/buildroot/output/build/mariadb-10.2.17/libmariadb/plugins/pvio/pvio_socket.c:32:0:
-/home/bernd/buildroot/output/build/mariadb-10.2.17/libmariadb/include/ma_context.h:62:3: error: unknown type name ?ucontext_t?
-   ucontext_t base_context;
-   ^~~~~~~~~~
+  CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:137 (message):
+    Could NOT find GnuTLS (missing: GNUTLS_LIBRARY GNUTLS_INCLUDE_DIR)
+    (Required is at least version "3.3.24")
+  Call Stack (most recent call first):
+    /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)
+    /usr/share/cmake/Modules/FindGnuTLS.cmake:54 (FIND_PACKAGE_HANDLE_STANDARD_ARGS)
+    libmariadb/CMakeLists.txt:298 (FIND_PACKAGE)
 
-using this defconfig:
+This bump also fixes broken atomic support for
+BR2_TOOLCHAIN_HAS_LIBATOMIC=y with mariadb-10.2:
+
+[ 59%] Linking CXX executable mariabackup
+../../storage/innobase/libinnobase.a(handler0alter.cc.o): In function `my_atomic_add64':
+/home/bernd/buildroot/output/build/mariadb-10.2.17/include/my_atomic.h:274: undefined reference to `__sync_fetch_and_add_8'
+
+with this defconfig
 
 BR2_arcle=y
 BR2_archs38=y
@@ -41,26 +49,104 @@ BR2_PACKAGE_MYSQL=y
 BR2_PACKAGE_MARIADB=y
 BR2_PACKAGE_MARIADB_SERVER=y
 
+Adding "-latomic" to CXXFLAGS and/or adding -DHAVE_GCC_ATOMIC_BUILTINS=1
+to CONF_OPTS, like we do for mariadb-10.3, does not fix the build error
+with mariadb-10.2. There the build would stop even earlier without these
+options:
+
+/home/bernd/buildroot/output/build/mariadb-10.2.17/include/my_atomic.h:138:2:
+ error: #error atomic ops for this platform are not implemented
+ #error atomic ops for this platform are not implemented
+
+Mariadb-10.3 contains improved atomic support, this build error does
+not occur here.
+
+To prevent adding "depends on BR2_TOOLCHAIN_HAS_SYNC_8" to mariadb-10.2
+and then removing it now we bump and fix the atomic problem in one
+commit instead.
+
+Updated license hash of README.md after upstream commits:
+https://github.com/MariaDB/server/commits/10.3/README.md
+
+my-small.cnf.sh is not provided anymore by upstream:
+https://github.com/MariaDB/server/commit/7fee164faf8fce7be4ebe322d2178efd3d075eae
+
+[Peter Seiderer: bumped to version 10.3.7]
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+[Bernd: bumped to version 10.3.9, fixed atomic support,
+ fixed my-small.cnf.sh, updated license hash]
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mariadb/mariadb.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/mariadb/mariadb.hash | 12 ++++++------
+ package/mariadb/mariadb.mk   | 14 ++++++++++----
+ 2 files changed, 16 insertions(+), 10 deletions(-)
 
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index d44b4f35ab..41e60037be 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,9 +1,9 @@
+-# From https://downloads.mariadb.org/mariadb/10.2.17/
+-md5 97dac7c5c288dbbbdd97768972daeb2e  mariadb-10.2.17.tar.gz
+-sha1 38f2ba16297e14baa2f641d2273bbb92f56d0b94  mariadb-10.2.17.tar.gz
+-sha256 e7b3078f8de874a4d451242a8a3eed49bf6f916dcd52fc3efa55886f5f35be27  mariadb-10.2.17.tar.gz
+-sha512 9714f786abde43b418d8b5accbbd485de213b90db18c879625ce30777526d28fdafd3bdb43922ab6872b300cfa06895b5b3fad5eb0c0e804ad66a1fd1793a141  mariadb-10.2.17.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.3.9
++md5 39c871e65134aabbc12c856691912435  mariadb-10.3.9.tar.gz
++sha1 51e9870847daa76f1e82ade97d9cf60a31df7656  mariadb-10.3.9.tar.gz
++sha256 561c6969bbd24dbb22d1d196a6b037665389b91e6dab881f39c5616389f156f4  mariadb-10.3.9.tar.gz
++sha512 7c7a678fb0c85da64b6df3df17b8cf7f2ccf862e27dcf8535f7403f8693c76b3b1a912f4b6ca876a591ada60a99577a947bfe7a63c602f754332e1e4f689e6e7  mariadb-10.3.9.tar.gz
+ 
+ # Hash for license files
+-sha256 dec3c92fdc58070facec08db681aa6b9cb05fd21e463358161c1df92e1c0653f  README.md
++sha256 5baa5057c525cacc9f7814215582ac150e5bb0b0007aa8f6ebc50a5c1b7a496d  README.md
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
 diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index 075582288a..7074e3510e 100644
+index 7074e3510e..f3c8ed4081 100644
 --- a/package/mariadb/mariadb.mk
 +++ b/package/mariadb/mariadb.mk
-@@ -61,6 +61,11 @@ else
- MARIADB_CONF_OPTS += -DWITHOUT_SERVER=ON
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.2.17
++MARIADB_VERSION = 10.3.9
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
+@@ -66,7 +66,14 @@ ifeq ($(BR2_PACKAGE_LIBSIGSEGV_ARCH_SUPPORTS),)
+ MARIADB_CONF_OPTS += -DHAVE_UCONTEXT_H=0
  endif
  
-+# hack: do we need a ucontext-specific option?
-+ifeq ($(BR2_PACKAGE_LIBSIGSEGV_ARCH_SUPPORTS),)
-+MARIADB_CONF_OPTS += -DHAVE_UCONTEXT_H=0
++MARIADB_CXXFLAGS = $(TARGET_CXXFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++MARIADB_CXXFLAGS += -latomic
 +endif
 +
  MARIADB_CONF_OPTS += \
++	-DCMAKE_CXX_FLAGS="$(MARIADB_CXXFLAGS)" \
  	-DINSTALL_DOCDIR=share/doc/mariadb-$(MARIADB_VERSION) \
  	-DINSTALL_DOCREADMEDIR=share/doc/mariadb-$(MARIADB_VERSION) \
+ 	-DINSTALL_MANDIR=share/man \
+@@ -80,7 +87,8 @@ MARIADB_CONF_OPTS += \
+ 	-DMYSQL_DATADIR=/var/lib/mysql \
+ 	-DMYSQL_UNIX_ADDR=$(MYSQL_SOCKET)
+ 
+-HOST_MARIADB_CONF_OPTS += -DWITH_SSL=OFF
++HOST_MARIADB_DEPENDENCIES = host-openssl
++HOST_MARIADB_CONF_OPTS += -DWITH_SSL=system
+ 
+ # Some helpers must be compiled for host in order to crosscompile mariadb for
+ # the target. They are then included by import_executables.cmake which is
+@@ -121,8 +129,6 @@ endif
+ # We also don't need the test suite on the target
+ define MARIADB_POST_INSTALL
+ 	mkdir -p $(TARGET_DIR)/var/lib/mysql
+-	$(INSTALL) -D -m 644 $(TARGET_DIR)/usr/share/mysql/my-small.cnf \
+-		$(TARGET_DIR)/etc/mysql/my.cnf
+ 	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
+ 	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
+ endef
 -- 
 2.18.0
