@@ -1,67 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Aug 2018 23:46:07 +0200
-Subject: [Buildroot] [PATCH] openpowerlink: add patch to fix musl build
-Message-ID: <20180825214607.20387-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Aug 2018 23:52:14 +0200
+Subject: [Buildroot] [PATCH v3 1/1] Python3: Bump to 3.7.0
+In-Reply-To: <20180817184607.27639-1-aduskett@gmail.com>
+References: <20180817184607.27639-1-aduskett@gmail.com>
+Message-ID: <20180825235214.4fa77098@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a one-liner patch that fixes the build with musl of
-the openpowerlink package, caused by a missing <sys/types.h>
-include. The patch has been submitted upstream.
+Hello Adam,
 
-Fixes:
+On Fri, 17 Aug 2018 11:46:07 -0700, Adam Duskett wrote:
+> From: Adam Duskett <aduskett@greenlots.com>
+> 
+>   Other changes include:
+> 
+>   - Refreshing all necessary patches for 3.7.0
 
-  http://autobuild.buildroot.net/results/8aff5f6d7bcab616129368c1fb22026bb164e454/
+We have more Python 3.7.0 issues:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ernel-edrv-edrv-rawsock_linux.c-add-missi.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
+  python-lxml-4.0.0
+  http://autobuild.buildroot.net/results/d8e/d8e3a9aae0e84fb1b3b8093986ec3a4ce7ca0663/build-end.log
 
-diff --git a/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch b/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
-new file mode 100644
-index 0000000000..4e00ecdb67
---- /dev/null
-+++ b/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
-@@ -0,0 +1,35 @@
-+From 710e2b8ba2ecf51057a89de24e6f0d387614ea53 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 25 Aug 2018 23:36:39 +0200
-+Subject: [PATCH] stack/src/kernel/edrv/edrv-rawsock_linux.c: add missing
-+ <sys/types.h> include
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This is necessary to get the definition of the u_char type, otherwise
-+the build fails with the musl C library with:
-+
-+stack/src/kernel/edrv/edrv-rawsock_linux.c:373:46: error: ?u_char? undeclared (first use in this function)
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Upstream: https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/371
-+---
-+ stack/src/kernel/edrv/edrv-rawsock_linux.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/stack/src/kernel/edrv/edrv-rawsock_linux.c b/stack/src/kernel/edrv/edrv-rawsock_linux.c
-+index f8e0216f..e5230a52 100644
-+--- a/stack/src/kernel/edrv/edrv-rawsock_linux.c
-++++ b/stack/src/kernel/edrv/edrv-rawsock_linux.c
-+@@ -59,6 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+ #include <arpa/inet.h>
-+ #include <ifaddrs.h>
-+ #include <linux/if_packet.h>
-++#include <sys/types.h>
-+ 
-+ //============================================================================//
-+ //            G L O B A L   D E F I N I T I O N S                             //
-+-- 
-+2.14.4
-+
+  python-pyyaml-3.12
+  http://autobuild.buildroot.net/results/e71/e715a7dc8b6856b4aba0b9b4568d61420c52a5c8/build-end.log
+
+Could you have a look ?
+
+Thanks!
+
+Thomas
 -- 
-2.14.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
