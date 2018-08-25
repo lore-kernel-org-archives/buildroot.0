@@ -1,31 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 25 Aug 2018 09:50:30 +0200
-Subject: [Buildroot] [git commit] package/lua-flu: fix to use the system
- xattr header
-In-Reply-To: <20180630163737.3ED7D80235@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sat, 30 Jun 2018 18:40:44 +0200")
-References: <20180630163737.3ED7D80235@busybox.osuosl.org>
-Message-ID: <87h8jic2bd.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 25 Aug 2018 09:51:31 +0200
+Subject: [Buildroot] [PATCH] sunxi-mali-mainline: add EULA license file
+In-Reply-To: <f4eab7a8-6eff-889e-ff8f-636c83cfbe8a@micronovasrl.com>
+References: <20180824234752.39453-1-giulio.benetti@micronovasrl.com>
+ <f4eab7a8-6eff-889e-ff8f-636c83cfbe8a@micronovasrl.com>
+Message-ID: <20180825095131.14ca9459@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello Giulio,
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=27e0cad2da0acbaeeb9fd840eaa2a46b294e6e09
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 25 Aug 2018 02:22:50 +0200, Giulio Benetti wrote:
 
- > We can't carry a mercurial patch, because the luarocks package is not
- > organised with the same layout as the upstream package source tree is.
+> Even if it could be acceptable(maybe?), I would like to make the best.
+> Did I have also in this case split into 2 different commits?
+> One for package and one for hash file?
+> Because thinking about bisection,
+> even if I apply them one by one, it builds ok,
+> except for warning if there is not hash file.
+> So maybe I should do 2 patches in these order:
+> - sunxi-mali-mainline: add EULA license file
+> - sunxi-mali-mainline: add hash file
 
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Marcin Niestroj <m.niestroj@grinn-global.com>
- > Cc: Francois Perrad <francois.perrad@gadz.org>
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Do it the other way around:
 
-Committed to 2018.05.x, thanks.
+ - Add the hash file, without the hash for the EULA file, just for the
+   tarball.
 
+ - Add the license file information + the hash of the license file.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
