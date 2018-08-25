@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 25 Aug 2018 11:16:59 +0200
-Subject: [Buildroot] [PATCH/next 4/7] package/liboauth: Fix build with
+Date: Sat, 25 Aug 2018 11:17:02 +0200
+Subject: [Buildroot] [PATCH/next 7/7] package/rdesktop: Fix build with
  OpenSSL 1.1.x
 In-Reply-To: <20180825091702.28471-1-bernd.kuhls@t-online.de>
 References: <20180825091702.28471-1-bernd.kuhls@t-online.de>
-Message-ID: <20180825091702.28471-5-bernd.kuhls@t-online.de>
+Message-ID: <20180825091702.28471-8-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,169 +13,145 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/liboauth/0001-openssl-1.1.0.patch | 154 ++++++++++++++++++++++
- 1 file changed, 154 insertions(+)
- create mode 100644 package/liboauth/0001-openssl-1.1.0.patch
+ package/rdesktop/0002-openssl11.patch | 130 ++++++++++++++++++++++++++
+ 1 file changed, 130 insertions(+)
+ create mode 100644 package/rdesktop/0002-openssl11.patch
 
-diff --git a/package/liboauth/0001-openssl-1.1.0.patch b/package/liboauth/0001-openssl-1.1.0.patch
+diff --git a/package/rdesktop/0002-openssl11.patch b/package/rdesktop/0002-openssl11.patch
 new file mode 100644
-index 0000000000..a33ac0a20b
+index 0000000000..050d6f6903
 --- /dev/null
-+++ b/package/liboauth/0001-openssl-1.1.0.patch
-@@ -0,0 +1,154 @@
-+Submitted by:            DJ Lucas (dj_AT_linuxfromscratch_DOT_org)
-+Date:                    2017-05-27
-+Initial Package Version: 1.0.3
-+Update by:               Bruce Dubbs
-+Date:                    2017-06-14
-+Upstream Status:         Submitted
-+Origin:                  https://github.com/x42/liboauth/issues/9
-+Description:             Fixes build issue with OpenSSL-1.1.0.
-+Update:                  Additional fix from upstream.  Three lines changed.
++++ b/package/rdesktop/0002-openssl11.patch
+@@ -0,0 +1,130 @@
++From bd6aa6acddf0ba640a49834807872f4cc0d0a773 Mon Sep 17 00:00:00 2001
++From: Jani Hakala <jjhakala@gmail.com>
++Date: Thu, 16 Jun 2016 14:28:15 +0300
++Subject: [PATCH] Fix OpenSSL 1.1 compability issues
 +
-+Downloaded from
-+http://www.linuxfromscratch.org/patches/blfs/svn/liboauth-1.0.3-openssl-1.1.0-2.patch
++Some data types have been made opaque in OpenSSL version 1.1 so
++stack allocation and accessing struct fields directly does not work.
 +
-+Patch was sent upstream: https://github.com/x42/liboauth/issues/9
++Downloaded from upstream commit
++https://github.com/rdesktop/rdesktop/commit/bd6aa6acddf0ba640a49834807872f4cc0d0a773
 +
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ ssl.c | 65 ++++++++++++++++++++++++++++++++++++-----------------------
++ 1 file changed, 40 insertions(+), 25 deletions(-)
 +
-+diff -Naurp liboauth-1.0.3-orig/src/hash.c liboauth-1.0.3/src/hash.c
-+--- liboauth-1.0.3-orig/src/hash.c	2013-10-04 08:02:50.000000000 -0500
-++++ liboauth-1.0.3/src/hash.c	2017-05-27 00:51:04.708633351 -0500
-+@@ -362,6 +362,11 @@ looser:
-+ #include "oauth.h" // base64 encode fn's.
-+ #include <openssl/hmac.h>
++diff --git a/ssl.c b/ssl.c
++index 48751255..032e9b9e 100644
++--- a/ssl.c
+++++ b/ssl.c
++@@ -88,7 +88,7 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
++ 		  uint8 * exponent)
++ {
++ 	BN_CTX *ctx;
++-	BIGNUM mod, exp, x, y;
+++	BIGNUM *mod, *exp, *x, *y;
++ 	uint8 inr[SEC_MAX_MODULUS_SIZE];
++ 	int outlen;
 + 
-++#if OPENSSL_VERSION_NUMBER < 0x10100000
-++#define EVP_MD_CTX_new EVP_MD_CTX_create
-++#define EVP_MD_CTX_free EVP_MD_CTX_destroy
++@@ -98,24 +98,24 @@ rdssl_rsa_encrypt(uint8 * out, uint8 * in, int len, uint32 modulus_size, uint8 *
++ 	reverse(inr, len);
++ 
++ 	ctx = BN_CTX_new();
++-	BN_init(&mod);
++-	BN_init(&exp);
++-	BN_init(&x);
++-	BN_init(&y);
++-
++-	BN_bin2bn(modulus, modulus_size, &mod);
++-	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, &exp);
++-	BN_bin2bn(inr, len, &x);
++-	BN_mod_exp(&y, &x, &exp, &mod, ctx);
++-	outlen = BN_bn2bin(&y, out);
+++	mod = BN_new();
+++	exp = BN_new();
+++	x = BN_new();
+++	y = BN_new();
+++
+++	BN_bin2bn(modulus, modulus_size, mod);
+++	BN_bin2bn(exponent, SEC_EXPONENT_SIZE, exp);
+++	BN_bin2bn(inr, len, x);
+++	BN_mod_exp(y, x, exp, mod, ctx);
+++	outlen = BN_bn2bin(y, out);
++ 	reverse(out, outlen);
++ 	if (outlen < (int) modulus_size)
++ 		memset(out + outlen, 0, modulus_size - outlen);
++ 
++-	BN_free(&y);
++-	BN_clear_free(&x);
++-	BN_free(&exp);
++-	BN_free(&mod);
+++	BN_free(y);
+++	BN_clear_free(x);
+++	BN_free(exp);
+++	BN_free(mod);
++ 	BN_CTX_free(ctx);
++ }
++ 
++@@ -146,12 +146,20 @@ rdssl_cert_to_rkey(RDSSL_CERT * cert, uint32 * key_len)
++ 
++ 	   Kudos to Richard Levitte for the following (. intiutive .) 
++ 	   lines of code that resets the OID and let's us extract the key. */
++-	nid = OBJ_obj2nid(cert->cert_info->key->algor->algorithm);
+++
+++	X509_PUBKEY *key = NULL;
+++	X509_ALGOR *algor = NULL;
+++
+++	key = X509_get_X509_PUBKEY(cert);
+++	algor = X509_PUBKEY_get0_param(NULL, NULL, 0, &algor, key);
+++
+++	nid = OBJ_obj2nid(algor->algorithm);
+++
++ 	if ((nid == NID_md5WithRSAEncryption) || (nid == NID_shaWithRSAEncryption))
++ 	{
++ 		DEBUG_RDP5(("Re-setting algorithm type to RSA in server certificate\n"));
++-		ASN1_OBJECT_free(cert->cert_info->key->algor->algorithm);
++-		cert->cert_info->key->algor->algorithm = OBJ_nid2obj(NID_rsaEncryption);
+++		X509_PUBKEY_set0_param(key, OBJ_nid2obj(NID_rsaEncryption),
+++				       0, NULL, NULL, 0);
++ 	}
++ 	epk = X509_get_pubkey(cert);
++ 	if (NULL == epk)
++@@ -201,14 +209,24 @@ rdssl_rkey_get_exp_mod(RDSSL_RKEY * rkey, uint8 * exponent, uint32 max_exp_len,
++ {
++ 	int len;
++ 
++-	if ((BN_num_bytes(rkey->e) > (int) max_exp_len) ||
++-	    (BN_num_bytes(rkey->n) > (int) max_mod_len))
+++	BIGNUM *e = NULL;
+++	BIGNUM *n = NULL;
+++
+++#if OPENSSL_VERSION_NUMBER < 0x10100000L
+++	e = rkey->e;
+++	n = rkey->n;
+++#else
+++	RSA_get0_key(rkey, &e, &n, NULL);
 ++#endif
 ++
-+ char *oauth_sign_hmac_sha1 (const char *m, const char *k) {
-+   return(oauth_sign_hmac_sha1_raw (m, strlen(m), k, strlen(k)));
+++	if ((BN_num_bytes(e) > (int) max_exp_len) ||
+++	    (BN_num_bytes(n) > (int) max_mod_len))
++ 	{
++ 		return 1;
++ 	}
++-	len = BN_bn2bin(rkey->e, exponent);
+++	len = BN_bn2bin(e, exponent);
++ 	reverse(exponent, len);
++-	len = BN_bn2bin(rkey->n, modulus);
+++	len = BN_bn2bin(n, modulus);
++ 	reverse(modulus, len);
++ 	return 0;
 + }
-+@@ -386,7 +391,7 @@ char *oauth_sign_rsa_sha1 (const char *m
-+   unsigned char *sig = NULL;
-+   unsigned char *passphrase = NULL;
-+   unsigned int len=0;
-+-  EVP_MD_CTX md_ctx;
-++  EVP_MD_CTX *md_ctx;
-+ 
-+   EVP_PKEY *pkey;
-+   BIO *in;
-+@@ -399,24 +404,31 @@ char *oauth_sign_rsa_sha1 (const char *m
-+     return xstrdup("liboauth/OpenSSL: can not read private key");
-+   }
-+ 
-++  md_ctx = EVP_MD_CTX_new();
-++  if (md_ctx == NULL) {
-++          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
-++  }
-++
-+   len = EVP_PKEY_size(pkey);
-+   sig = (unsigned char*)xmalloc((len+1)*sizeof(char));
-+ 
-+-  EVP_SignInit(&md_ctx, EVP_sha1());
-+-  EVP_SignUpdate(&md_ctx, m, strlen(m));
-+-  if (EVP_SignFinal (&md_ctx, sig, &len, pkey)) {
-++  EVP_SignInit(md_ctx, EVP_sha1());
-++  EVP_SignUpdate(md_ctx, m, strlen(m));
-++  if (EVP_SignFinal (md_ctx, sig, &len, pkey)) {
-+     char *tmp;
-+     sig[len] = '\0';
-+     tmp = oauth_encode_base64(len,sig);
-+     OPENSSL_free(sig);
-+     EVP_PKEY_free(pkey);
-++    EVP_MD_CTX_free(md_ctx);
-+     return tmp;
-+   }
-++  EVP_MD_CTX_free(md_ctx);
-+   return xstrdup("liboauth/OpenSSL: rsa-sha1 signing failed");
++@@ -229,8 +247,5 @@ void
++ rdssl_hmac_md5(const void *key, int key_len, const unsigned char *msg, int msg_len,
++ 	       unsigned char *md)
++ {
++-	HMAC_CTX ctx;
++-	HMAC_CTX_init(&ctx);
++ 	HMAC(EVP_md5(), key, key_len, msg, msg_len, md, NULL);
++-	HMAC_CTX_cleanup(&ctx);
 + }
-+ 
-+ int oauth_verify_rsa_sha1 (const char *m, const char *c, const char *s) {
-+-  EVP_MD_CTX md_ctx;
-++  EVP_MD_CTX *md_ctx;
-+   EVP_PKEY *pkey;
-+   BIO *in;
-+   X509 *cert = NULL;
-+@@ -437,13 +449,18 @@ int oauth_verify_rsa_sha1 (const char *m
-+     return -2;
-+   }
-+ 
-++	md_ctx = EVP_MD_CTX_new();
-++	if (md_ctx == NULL) {
-++		return -2;
-++	}
-++
-+   b64d= (unsigned char*) xmalloc(sizeof(char)*strlen(s));
-+   slen = oauth_decode_base64(b64d, s);
-+ 
-+-  EVP_VerifyInit(&md_ctx, EVP_sha1());
-+-  EVP_VerifyUpdate(&md_ctx, m, strlen(m));
-+-  err = EVP_VerifyFinal(&md_ctx, b64d, slen, pkey);
-+-  EVP_MD_CTX_cleanup(&md_ctx);
-++  EVP_VerifyInit(md_ctx, EVP_sha1());
-++  EVP_VerifyUpdate(md_ctx, m, strlen(m));
-++  err = EVP_VerifyFinal(md_ctx, b64d, slen, pkey);
-++  EVP_MD_CTX_free(pkey);
-+   EVP_PKEY_free(pkey);
-+   xfree(b64d);
-+   return (err);
-+@@ -455,35 +472,41 @@ int oauth_verify_rsa_sha1 (const char *m
-+  */
-+ char *oauth_body_hash_file(char *filename) {
-+   unsigned char fb[BUFSIZ];
-+-  EVP_MD_CTX ctx;
-++  EVP_MD_CTX *ctx;
-+   size_t len=0;
-+   unsigned char *md;
-+   FILE *F= fopen(filename, "r");
-+   if (!F) return NULL;
-+ 
-+-  EVP_MD_CTX_init(&ctx);
-+-  EVP_DigestInit(&ctx,EVP_sha1());
-++  ctx = EVP_MD_CTX_new();
-++  if (ctx == NULL) {
-++          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
-++  }
-++  EVP_DigestInit(ctx,EVP_sha1());
-+   while (!feof(F) && (len=fread(fb,sizeof(char),BUFSIZ, F))>0) {
-+-    EVP_DigestUpdate(&ctx, fb, len);
-++    EVP_DigestUpdate(ctx, fb, len);
-+   }
-+   fclose(F);
-+   len=0;
-+   md=(unsigned char*) xcalloc(EVP_MD_size(EVP_sha1()),sizeof(unsigned char));
-+-  EVP_DigestFinal(&ctx, md,(unsigned int*) &len);
-+-  EVP_MD_CTX_cleanup(&ctx);
-++  EVP_DigestFinal(ctx, md,(unsigned int*) &len);
-++  EVP_MD_CTX_free(ctx);
-+   return oauth_body_hash_encode(len, md);
-+ }
-+ 
-+ char *oauth_body_hash_data(size_t length, const char *data) {
-+-  EVP_MD_CTX ctx;
-++  EVP_MD_CTX *ctx;
-+   size_t len=0;
-+   unsigned char *md;
-+   md=(unsigned char*) xcalloc(EVP_MD_size(EVP_sha1()),sizeof(unsigned char));
-+-  EVP_MD_CTX_init(&ctx);
-+-  EVP_DigestInit(&ctx,EVP_sha1());
-+-  EVP_DigestUpdate(&ctx, data, length);
-+-  EVP_DigestFinal(&ctx, md,(unsigned int*) &len);
-+-  EVP_MD_CTX_cleanup(&ctx);
-++  ctx = EVP_MD_CTX_new();
-++  if (ctx == NULL) {
-++          return xstrdup("liboauth/OpenSSL: failed to allocate EVP_MD_CTX");
-++  }
-++  EVP_DigestInit(ctx,EVP_sha1());
-++  EVP_DigestUpdate(ctx, data, length);
-++  EVP_DigestFinal(ctx, md,(unsigned int*) &len);
-++  EVP_MD_CTX_free(ctx);
-+   return oauth_body_hash_encode(len, md);
-+ }
-+ 
 -- 
 2.18.0
