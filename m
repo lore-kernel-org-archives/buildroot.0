@@ -1,44 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Aug 2018 23:39:58 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/mariadb: bump version to
- 10.3.9
-In-Reply-To: <o5u85fxpst.ln2@ID-313208.user.individual.net>
-References: <20180825204403.11324-1-bernd.kuhls@t-online.de>
- <20180825204403.11324-2-bernd.kuhls@t-online.de>
- <20180825230514.1f0264dd@windsurf>
- <o5u85fxpst.ln2@ID-313208.user.individual.net>
-Message-ID: <20180825233958.29369922@windsurf>
+Date: Sat, 25 Aug 2018 23:46:07 +0200
+Subject: [Buildroot] [PATCH] openpowerlink: add patch to fix musl build
+Message-ID: <20180825214607.20387-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This commit adds a one-liner patch that fixes the build with musl of
+the openpowerlink package, caused by a missing <sys/types.h>
+include. The patch has been submitted upstream.
 
-On Sat, 25 Aug 2018 23:26:48 +0200, Bernd Kuhls wrote:
+Fixes:
 
-> In unpatched next branch the build on arc fails with
-> "error atomic ops for this platform are not implemented", no cxxflags nor 
-> CONF_OPTS will solve that.
-> 
-> Only when bumping to 10.3 you get past this build error just to see the 
-> "undefined reference to `__sync_fetch_and_add_8'" error later on.
-> To solve this the changes in this patch are needed.
+  http://autobuild.buildroot.net/results/8aff5f6d7bcab616129368c1fb22026bb164e454/
 
-So it still needs some atomic intrinsics, so the package should:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ernel-edrv-edrv-rawsock_linux.c-add-missi.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
 
-	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_4
-
-Indeed, atomic intrinsics are not always available, even when you link
-with -latomic: gcc versions before gcc 4.8 did not have libatomic.
-Build a SPARC gcc 4.7 toolchain, and try to build this package, you'll
-be surprised :-)
-
-Best regards,
-
-Thomas
+diff --git a/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch b/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
+new file mode 100644
+index 0000000000..4e00ecdb67
+--- /dev/null
++++ b/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
+@@ -0,0 +1,35 @@
++From 710e2b8ba2ecf51057a89de24e6f0d387614ea53 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 25 Aug 2018 23:36:39 +0200
++Subject: [PATCH] stack/src/kernel/edrv/edrv-rawsock_linux.c: add missing
++ <sys/types.h> include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This is necessary to get the definition of the u_char type, otherwise
++the build fails with the musl C library with:
++
++stack/src/kernel/edrv/edrv-rawsock_linux.c:373:46: error: ?u_char? undeclared (first use in this function)
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/371
++---
++ stack/src/kernel/edrv/edrv-rawsock_linux.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/stack/src/kernel/edrv/edrv-rawsock_linux.c b/stack/src/kernel/edrv/edrv-rawsock_linux.c
++index f8e0216f..e5230a52 100644
++--- a/stack/src/kernel/edrv/edrv-rawsock_linux.c
+++++ b/stack/src/kernel/edrv/edrv-rawsock_linux.c
++@@ -59,6 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ #include <arpa/inet.h>
++ #include <ifaddrs.h>
++ #include <linux/if_packet.h>
+++#include <sys/types.h>
++ 
++ //============================================================================//
++ //            G L O B A L   D E F I N I T I O N S                             //
++-- 
++2.14.4
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.4
