@@ -1,42 +1,90 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 24 Aug 2018 18:54:15 -0500
-Subject: [Buildroot] Autobnuilders timeouts [was: Re: autobuilder flock
- hangs]
-In-Reply-To: <20180824070203.GK9365@scaer>
-References: <20180812060015.A385B207E5@mail.bootlin.com>
- <20180812223629.2bac8ebe@windsurf>
- <1a4b53ec-1ed3-7770-3a65-8d4f4f596918@mentor.com>
- <20180816111059.3a7f1b59@windsurf> <20180824070203.GK9365@scaer>
-Message-ID: <CANQCQpb6Cgt+YoniwLCd8jGhLdrzCCJDcAyXjcSAWbETrZ=mUQ@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 25 Aug 2018 02:22:50 +0200
+Subject: [Buildroot] [PATCH] sunxi-mali-mainline: add EULA license file
+In-Reply-To: <20180824234752.39453-1-giulio.benetti@micronovasrl.com>
+References: <20180824234752.39453-1-giulio.benetti@micronovasrl.com>
+Message-ID: <f4eab7a8-6eff-889e-ff8f-636c83cfbe8a@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
-On Fri, Aug 24, 2018 at 2:02 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Hollis, Julien, Matthew, Thomas, All,
->
-> On 2018-08-16 11:10 +0200, Thomas Petazzoni spake thusly:
-[snip]
-> Now, I also had a look at all the timeouts, and I also noticed a single
-> other pattern. Julien's and Matthew's autobuilder would always choke on
-> host-libsodium, and it happens only on those two autobuilders:
->
->     http://autobuild.buildroot.org/?reason=host-libsodium
->
-> All failing at the same point:
->
->     checking whether segmentation violations can be caught when using the C compiler...
->
+Hello Thomas,
 
-Tried a few things...
-1) Setup this config and did a make host-libsodium.  No hang.
-2) Took the test code from that configure test and could execute it without hang
-3) Doing a full build now and we'll see if there is a sequencing/file
-configuration driving this.
+Il 25/08/2018 01:47, Giulio Benetti ha scritto:
+> sunxi-mali-mainline package has not license file at the moment.
+> 
+> License file is a pdf EULA, but its name contains whitespaces. This
+> gives problems when passing filename to SUNXI_MALI_MAINLINE_LICENSE_FILES
+> since it expects a list of files.
+> Other attempts with \ or \\ to keep spaces were tried with no luck.
+> Add a define to POST_PATCH_HOOKS to change pdf filename from
+> 'EULA for Mali 400MP _AW.pdf' to 'EULA_for_Mali_400MP_AW.pdf'.
+> Add also related hash file.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>   package/sunxi-mali-mainline/sunxi-mali-mainline.hash |  2 ++
+>   package/sunxi-mali-mainline/sunxi-mali-mainline.mk   | 10 ++++++++++
+>   2 files changed, 12 insertions(+)
+>   create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+> 
+> diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+> new file mode 100644
+> index 0000000000..e3185efd26
+> --- /dev/null
+> +++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256 8a06bcae44a41a886f339b4338422415a786787f113e9ed6456ae117104a0b6a  EULA_for_Mali_400MP_AW.pdf
+> diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> index 05b90f0bee..b5d28385a3 100644
+> --- a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> +++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
+> @@ -8,6 +8,10 @@ SUNXI_MALI_MAINLINE_VERSION = d691cb93884ca8ac67860502117bbec283dc19aa
+>   SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
+>   SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
+>   SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
+> +SUNXI_MALI_MAINLINE_LICENSE = Allwinner End User Licence Agreement
+> +SUNXI_MALI_MAINLINE_EULA_ORIGINAL = EULA\ for\ Mali\ 400MP\ _AW.pdf
+> +SUNXI_MALI_MAINLINE_EULA_NO_SPACES = EULA_for_Mali_400MP_AW.pdf
+> +SUNXI_MALI_MAINLINE_LICENSE_FILES = $(SUNXI_MALI_MAINLINE_EULA_NO_SPACES)
+>   
+>   SUNXI_MALI_MAINLINE_REV = $(call qstrip,$(BR2_PACKAGE_SUNXI_MALI_MAINLINE_REVISION))
+>   
+> @@ -36,4 +40,10 @@ define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
+>   		$(TARGET_DIR)/usr/lib/
+>   endef
+>   
+> +define SUNXI_MALI_MAINLINE_EULA_DELETE_WHITESPACES
+> +	mv $(@D)/$(SUNXI_MALI_MAINLINE_EULA_ORIGINAL) $(@D)/$(SUNXI_MALI_MAINLINE_EULA_NO_SPACES)
+> +endef
+> +
+> +SUNXI_MALI_MAINLINE_POST_PATCH_HOOKS += SUNXI_MALI_MAINLINE_EULA_DELETE_WHITESPACES
+> +
+>   $(eval $(generic-package))
+> 
 
-Any other ideas?
-Matt
+Even if it could be acceptable(maybe?), I would like to make the best.
+Did I have also in this case split into 2 different commits?
+One for package and one for hash file?
+Because thinking about bisection,
+even if I apply them one by one, it builds ok,
+except for warning if there is not hash file.
+So maybe I should do 2 patches in these order:
+- sunxi-mali-mainline: add EULA license file
+- sunxi-mali-mainline: add hash file
+
+Then:
+- apply first
+- make legal-info
+- get warnings on hash file not present
+- apply second
+- get no warnings
+
+Right?
+If yes I modify and resend v2 as patchset.
+
+Thanks
+Giulio
