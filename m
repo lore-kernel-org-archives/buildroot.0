@@ -1,53 +1,112 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 25 Aug 2018 17:34:28 +0200
-Subject: [Buildroot] [2/2] package/glibc: bump to version 2.28
-In-Reply-To: <87wosra1an.fsf@dell.be.48ers.dk>
-References: <20180803181425.18106-2-romain.naour@gmail.com>
- <87tvnwnoc6.fsf@tkos.co.il> <20180815134041.74b55316@windsurf>
- <87wosra1an.fsf@dell.be.48ers.dk>
-Message-ID: <c917ff05-bc4f-1912-235c-07b5a993ce27@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 25 Aug 2018 18:47:37 +0300
+Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.4.2
+Message-ID: <20180825154737.18531-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch, Peter,
+Update license info, and remove the patch since it's already on upstream.
 
-Le 15/08/2018 ? 21:16, Peter Korsgaard a ?crit?:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> 
->  > Hello,
->  > On Wed, 15 Aug 2018 09:19:53 +0300, Baruch Siach wrote:
-> 
->  >> Romain Naour writes:
->  >> > https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html  
->  >> 
->  >> This announcement says:
->  >> 
->  >> GNU make 4.0 or later is now required to build glibc.
->  >> 
->  >> autobuilders now show that:
->  >> 
->  >> http://autobuild.buildroot.net/?reason=glibc-glibc-2.28
->  >> 
->  >> Since glibc is a fundamental package, does that mean we need to bump the
->  >> make version requirement to 4.0 (current requirement is 3.81)? Maybe
->  >> build host-make on older hosts?
-> 
->  > Building host-make on machines that don't have make >= 4.0 sounds like
->  > a good approach to me. And of course, we only do this as a dependency
->  > of glibc.
-> 
-> Agreed, it is imho too early to require make >= 4.0 globally.
-> 
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ ...t-to-sysroot-option-to-relative-path.patch | 43 -------------------
+ package/ccache/ccache.hash                    |  7 +--
+ package/ccache/ccache.mk                      |  8 ++--
+ 3 files changed, 8 insertions(+), 50 deletions(-)
+ delete mode 100644 package/ccache/0001-Convert-argument-to-sysroot-option-to-relative-path.patch
 
-Thanks Baruch for noticing this new dependency added by [1].
-
-I'll take a look how to do this.
-
-Best regards,
-Romain
-
-[1]
-https://sourceware.org/git/?p=glibc.git;a=commit;h=f2873d2da0ac9802e0b570e8e0b9e7e04a82bf55
+diff --git a/package/ccache/0001-Convert-argument-to-sysroot-option-to-relative-path.patch b/package/ccache/0001-Convert-argument-to-sysroot-option-to-relative-path.patch
+deleted file mode 100644
+index 33db7d480f..0000000000
+--- a/package/ccache/0001-Convert-argument-to-sysroot-option-to-relative-path.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From fe42d6f7b739e8d42811bf46bcccfafa728847a2 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Mathias=20De=20Mar=C3=A9?= <mathias.de_mare@nokia.com>
+-Date: Mon, 19 Sep 2016 10:38:13 +0200
+-Subject: [PATCH] Convert argument to '--sysroot' option to relative path
+-
+-Previously, only the argument to '--sysroot=' was converted.
+-This changeset adds support for '--sysroot'.
+-
+-Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+----
+- ccache.c | 15 +++++++++++++++
+- 1 file changed, 15 insertions(+)
+-
+-diff --git a/ccache.c b/ccache.c
+-index 8ffadcc..76139b9 100644
+---- a/ccache.c
+-+++ b/ccache.c
+-@@ -2407,6 +2407,21 @@ cc_process_args(struct args *args, struct args **preprocessor_args,
+- 			free(option);
+- 			continue;
+- 		}
+-+		// Alternate form of specifying sysroot without =
+-+		if (str_eq(argv[i], "--sysroot")) {
+-+			if (i == argc-1) {
+-+				cc_log("Missing argument to %s", argv[i]);
+-+				stats_update(STATS_ARGS);
+-+				result = false;
+-+				goto out;
+-+			}
+-+			args_add(stripped_args, argv[i]);
+-+			char *relpath = make_relative_path(x_strdup(argv[i+1]));
+-+			args_add(stripped_args, relpath);
+-+			i++;
+-+			free(relpath);
+-+			continue;
+-+		}
+- 		if (str_startswith(argv[i], "-Wp,")) {
+- 			if (str_eq(argv[i], "-Wp,-P")
+- 			    || strstr(argv[i], ",-P,")
+--- 
+-2.8.3
+-
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index c22394b13b..5ed5037ed0 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,3 +1,4 @@
+-# Verified key https://samba.org/ftp/ccache/ccache-3.3.4.tar.xz.asc - sha256 computed locally
+-sha256  24f15bf389e38c41548c9c259532187774ec0cb9686c3497bbb75504c8dc404f  ccache-3.3.4.tar.xz
+-sha256  190576a6e938760ec8113523e6fd380141117303e90766cc4802e770422b30c6  ccache-3.3.5.tar.xz
++# sha256 computed locally
++sha256  18a8b14367d63d3d37fb6c33cba60e1b7fcd7a63d608df97c9771ae0d234fee2  ccache-3.4.2.tar.xz
++sha256  ec6b1a326ff93b2cc21df88a697ae470ff6927a55b8929e7e491b315e1563361  GPL-3.0.txt
++sha256  853e071acb730ca933860a0acf4e44e5dc4bffed6b09503bbcf878e343addcc5  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 9a11d46d30..851939ebda 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -4,11 +4,11 @@
+ #
+ ################################################################################
+ 
+-CCACHE_VERSION = 3.3.5
++CCACHE_VERSION = 3.4.2
+ CCACHE_SITE = https://www.samba.org/ftp/ccache
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
+-CCACHE_LICENSE_FILES = LICENSE.txt GPL-3.0.txt
++CCACHE_LICENSE_FILES = LICENSE.adoc GPL-3.0.txt
+ 
+ # Force ccache to use its internal zlib. The problem is that without
+ # this, ccache would link against the zlib of the build system, but we
+@@ -38,8 +38,8 @@ HOST_CCACHE_CONF_ENV = \
+ HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,\%s/%,$(BR_CACHE_DIR))
+ 
+ define HOST_CCACHE_PATCH_CONFIGURATION
+-	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/ccache.c
+-	sed -i 's,"%s/.ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/conf.c
++	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/src/ccache.c
++	sed -i 's,"%s/.ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/conf.c
+ endef
+ 
+ HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
+-- 
+2.17.1
