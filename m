@@ -1,10 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 25 Aug 2018 19:40:42 +0200
-Subject: [Buildroot] [PATCH v2 1/1] git: Fix libintl linking if there is
- no full gettext support
-In-Reply-To: <20180825131027.6048-1-vadim4j@gmail.com>
-References: <20180825131027.6048-1-vadim4j@gmail.com>
-Message-ID: <20180825194042.41917ea0@windsurf>
+Date: Sat, 25 Aug 2018 19:45:07 +0200
+Subject: [Buildroot] [PATCH 1/1] ccache: bump to version 3.4.2
+In-Reply-To: <20180825154737.18531-1-asafka7@gmail.com>
+References: <20180825154737.18531-1-asafka7@gmail.com>
+Message-ID: <20180825194507.41e813a0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,45 +12,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 25 Aug 2018 16:10:27 +0300, Vadim Kochan wrote:
-> From: Vadim Kochan <vadim.kochan@petcube.com>
-
-Thanks for this new iteration.
-
-> Git could not resolve libntl_xxx symbols if toolchain does no provide
-> full gettext support but the gettext package is selected.
+On Sat, 25 Aug 2018 18:47:37 +0300, Asaf Kahlon wrote:
+> Update license info, and remove the patch since it's already on upstream.
 > 
-> Steps to reproduce:
->     1) make menuconfig
->     2) Toolchain -> Select WCHAR
->     3) System -> select NLS
->     4) Target packages -> Development -> select git
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  ...t-to-sysroot-option-to-relative-path.patch | 43 -------------------
+>  package/ccache/ccache.hash                    |  7 +--
+>  package/ccache/ccache.mk                      |  8 ++--
+>  3 files changed, 8 insertions(+), 50 deletions(-)
+>  delete mode 100644 package/ccache/0001-Convert-argument-to-sysroot-option-to-relative-path.patch
 
-Instead of this, it is often simpler to include a minimal defconfig
-that exhibits the problem. I.e, when you have your .config that shows
-the problem, run "make savedefconfig", and look at the generated
-"defconfig" file. It shows only the values that are different from the
-default ones, so for an example like what you gave above, it would be
-just three lines of configuration.
-
-> In case of ulibc/musl toolchain there is no full getttext support, but
-> they still provides libintl stub which makes git think there is full
-> gettext support hence -lintl is not passed to the linker.
-
-Are you sure this is what is happening ? The stub in uclibc and musl
-provide all the gettext functions, that's the whole point of the stub.
-
-However, when you have the full gettext support enabled, the libintl.h
-header installed is the one from the full gettext, and it redefines the
-gettext functions with a different name, and that different name is
-only provided by the full-blown gettext libintl library.
-
-Could you double check this ?
-
-Best regards,
+Applied to next, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
 https://bootlin.com
