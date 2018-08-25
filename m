@@ -1,15 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 Aug 2018 00:01:38 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/mariadb: bump version to
- 10.3.9
-In-Reply-To: <2pv85fxpst.ln2@ID-313208.user.individual.net>
-References: <20180825204403.11324-1-bernd.kuhls@t-online.de>
- <20180825204403.11324-2-bernd.kuhls@t-online.de>
- <20180825230514.1f0264dd@windsurf>
- <o5u85fxpst.ln2@ID-313208.user.individual.net>
- <20180825233958.29369922@windsurf>
- <2pv85fxpst.ln2@ID-313208.user.individual.net>
-Message-ID: <20180826000138.1a2d8328@windsurf>
+Date: Sun, 26 Aug 2018 00:02:24 +0200
+Subject: [Buildroot] [PATCH] fs/btrfs: remove destination file before
+ generation
+In-Reply-To: <20180825174714.23634-1-yann.morin.1998@free.fr>
+References: <20180825174714.23634-1-yann.morin.1998@free.fr>
+Message-ID: <20180826000224.68d90856@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,17 +13,16 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 25 Aug 2018 23:54:10 +0200, Bernd Kuhls wrote:
+On Sat, 25 Aug 2018 19:47:14 +0200, Yann E. MORIN wrote:
 
-> ok, will also do that. Where can I get such a toolchain? Could you please 
-> point me to a defconfig?
+>  define ROOTFS_BTRFS_CMD
+> +	rm -f $(@)
 
-I don't have anything like that readily available, unfortunately. You'd
-have to pick a Buildroot version that is old enough to still support
-gcc 4.7, or see if Crosstool-NG can help here.
+I changed to use $(RM) instead of rm, and $@ instead of $(@), since we
+use $@ everywhere.
 
-Unfortunately, due to the autobuild.b.o server crash in October 2017, I
-lost all pre-built toolchains I had built before that :-/
+With those changes: applied to next. Thanks for noticing this mistake
+in my changes to Robert's patch!
 
 Best regards,
 
