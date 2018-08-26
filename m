@@ -1,26 +1,97 @@
-From: Niall Parker <stuff@npengineering.ca>
-Date: Sun, 26 Aug 2018 14:19:34 -0700
-Subject: [Buildroot] do config fragments work ?
-In-Reply-To: <e123e7b0-718c-d403-d7c2-ba9e571b6596@npengineering.ca>
-References: <e123e7b0-718c-d403-d7c2-ba9e571b6596@npengineering.ca>
-Message-ID: <e4186b12-39a1-7910-228b-2e5830c7d916@npengineering.ca>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 Aug 2018 23:23:07 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/brltty: fix
+ cross-compilation
+Message-ID: <20180826211513.5F0D48E787@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2018-08-24 03:48 PM, Niall Parker wrote:
-> I'm trying to apply some minor tweaks to the default config for uboot 
-> and using fragments seemed the best approach however the changes don't 
-> appear to make it into the final .config used for the build. For 
-> example, using a fragment containing CONFIG_BOOTDELAY? 1 still results 
-> in the binary using the default bootdelay of 2 (of course I can make 
-> uboot-menuconfig and set the boot delay there and it will stick but I 
-> was hoping to clump the config customizations into a simple fragment).
+commit: https://git.buildroot.net/buildroot/commit/?id=743fd976892234f515538af8b72e0c92982dd641
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Turns out I had the syntax of the fragments wrong.
+brltty has a very inventive buildsystem, where it internall runs
+./configure for the build machine In doing so, it generates a list
+of make variables to define what the build machine supports, like
+it does for the target.
 
-CONFIG_BOOTDELAY=1
+However, the build variables are generated with a convoluted sed
+script that scans the target list, and appends _FOR_BUILD to each
+target variables. Then, both lists are included from the Makefile,
+on the assumption that the build variables will not clash with the
+target variables.
 
-works.
+Where it gets interesting, is that that sed script considers the
+variables names to match '[A-Za-z][A-Za-z0-9_]*'
+
+And there we see why ATSPI2_PACKAGE does not match: it contains a
+digit.
+
+So, some build variables will inevitably override target ones.
+
+Fix that by simply expanding the matching regexp to allow digits
+in variable names.
+
+Fixes:
+    http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/
+    http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Mario Lang <mlang@blind.guru>
+Cc: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 8909897ab357c433cf688243cbfa1154cc63a7a3)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0004-buildsys-fix-cross-compilation.patch      | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/package/brltty/0004-buildsys-fix-cross-compilation.patch b/package/brltty/0004-buildsys-fix-cross-compilation.patch
+new file mode 100644
+index 0000000000..9a10d46414
+--- /dev/null
++++ b/package/brltty/0004-buildsys-fix-cross-compilation.patch
+@@ -0,0 +1,41 @@
++From 088666535a045dae71bd2fcc6b3a1553023106ce Mon Sep 17 00:00:00 2001
++From: "Yann E. MORIN" <yann.morin.1998@free.fr>
++Date: Wed, 22 Aug 2018 10:10:19 +0200
++Subject: [PATCH] buildsys: fix cross-compilation
++
++Some identifiers for includes and libs paths may contain digit, e.g.
++X11_PACKAGE or ATSPI2_PACKAGE or GLIB2_PACKAGE...
++
++Also detect those identifiers when doing cros-compilation, so that the
++_FOR_BUILD variants are really created and do not clash with the target
++variants.
++
++Fixes:
++    http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/build-end.log
++    http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/build-end.log
++    [...]
++
++Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
++---
++Upstram status: submitted
++https://github.com/brltty/brltty/pull/142
++---
++ mk4build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mk4build b/mk4build
++index db90c86a9..551283825 100755
++--- a/mk4build
+++++ b/mk4build
++@@ -112,7 +112,7 @@ fi
++ 
++ sedScript="${outputName}.${sedExtension}"
++ sed -n -e '
++-s/^ *\([A-Za-z][A-Za-z_]*\) *=.*$/\1/
+++s/^ *\([A-Za-z][A-Za-z0-9_]*\) *=.*$/\1/
++ t found
++ d
++ :found
++-- 
++2.14.1
++
