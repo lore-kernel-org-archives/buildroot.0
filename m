@@ -1,44 +1,43 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 Aug 2018 17:20:57 +0000
-Subject: [Buildroot] [Bug 11256] Add python-falcon and python-mimeparse
- packages
-In-Reply-To: <bug-11256-163@https.bugs.busybox.net/>
-References: <bug-11256-163@https.bugs.busybox.net/>
-Message-ID: <bug-11256-163-K5r7xYyEan@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 26 Aug 2018 19:23:12 +0200
+Subject: [Buildroot] [PATCH/next,1/2] jpeg-turbo: fix static build
+Message-ID: <20180826172313.19644-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11256
+Set ENABLE_STATIC and ENABLE_SHARED depending on
+BR2_PACKAGE_STATIC_LIBS, BR2_SHARED_SHARED_STATIC_LIBS and
+BR2_SHARED_SHARED_LIBS
 
-Yann E. MORIN <yann.morin.1998@free.fr> changed:
+Fixes:
+ - http://autobuild.buildroot.net/results/7e1500405a0f102dd6a48ef9337ffe4d7de73df3
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-                 CC|                            |yann.morin.1998 at free.fr
-         Resolution|---                         |INVALID
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/jpeg-turbo/jpeg-turbo.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
---- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
-Grzegorz, All,
-
-Thanks for your contribution. :-)
-
-However, we do not take patches in the bug-tracker. Instead, please send them
-to
-the mailing list. You may consult the manual if you need directions to do so:
-
-    https://buildroot.org/downloads/manual/manual.html#submitting-patches
-
-Consequently, I'm closing this bug report.
-
-Thank you! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 0fe2fcda72..1807cc294e 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -15,6 +15,14 @@ JPEG_TURBO_DEPENDENCIES = host-pkgconf
+ 
+ JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
++else ifeq ($(BR2_SHARED_LIBS),y)
++JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
++endif
++
+ ifeq ($(BR2_PACKAGE_JPEG_SIMD_SUPPORT),y)
+ JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=ON
+ # x86 simd support needs nasm
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.14.1
