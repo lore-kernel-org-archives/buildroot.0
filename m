@@ -1,32 +1,50 @@
-From: Peter Thompson <peter.macleod.thompson@gmail.com>
-Date: Sun, 26 Aug 2018 05:11:37 -0600
-Subject: [Buildroot] SDL2+directfb combo does not work as built by
- buildroot-2018.02.3
-Message-ID: <CAGrGpJDVHStp8MUZaGb1=ZfWud-k4fQP=piwsc-QfftCDFyKog@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 26 Aug 2018 13:29:59 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/botan: fix altivec support
+Message-ID: <20180826112959.22790-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I cannot get directfb + SDL2 working on Beaglebone Black  (see Bugzilla
-#4232 and SDL forums)
-    https://bugzilla.libsdl.org/show_bug.cgi?id=4232
-    https://discourse.libsdl.org/u/PeterThompson/activity
+configure.py only supports --disable-altivec.
 
-I do not want to use X windows for the video driver.  I tried adding OpenGL
-ES to the rootfs but for that I need efl which in turn needs the kernel
-built by Buildroot.  I have a working kernel which I want to work on
-separately to attach a new display and prefer not to be forced to always
-build it through Buildroot.
+Fixes
+http://autobuild.buildroot.net/results/318/3187afa3eea77e5de0e0fe14717bfc080da08117/
 
-Suggestions?
+Added license hash URL.
 
-Note: SDL2+directfb combo used to work on igepv2 buildroot-2015.08.1.   I
-am just trying to migrate to the beaglebone black.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 4 +---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-
-Peter Thompson
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180826/5bf3a581/attachment.html>
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index df804bc1ef..eeb94145b9 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking pgp signature
++# From https://botan.randombit.net/releases/sha256sums.txt
+ sha256 e42df91556317588c6ca0e41bf796f9bd5ec5c70e0668e6c97c608c697c24a90  Botan-2.7.0.tgz
+ # Locally computed
+ sha256 40cfd35a9e34d18463806f57553c968fdbaf254a2e2a636d1d8e32ff6b698495  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index eb817f62d9..39a2c4c72b 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -70,9 +70,7 @@ BOTAN_DEPENDENCIES += zlib
+ BOTAN_CONF_OPTS += --with-zlib
+ endif
+ 
+-ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+-BOTAN_CONF_OPTS += --enable-altivec
+-else
++ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
+ BOTAN_CONF_OPTS += --disable-altivec
+ endif
+ 
+-- 
+2.18.0
