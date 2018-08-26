@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Aug 2018 23:23:07 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] package/brltty: fix
+Date: Sun, 26 Aug 2018 23:23:16 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] package/brltty: fix
  cross-compilation
-Message-ID: <20180826211513.5F0D48E787@busybox.osuosl.org>
+Message-ID: <20180826211527.2C0528E78B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=743fd976892234f515538af8b72e0c92982dd641
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e9283c49b11b6adf81c5ec366bb1e0f603076abc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 brltty has a very inventive buildsystem, where it internall runs
 ./configure for the build machine In doing so, it generates a list
