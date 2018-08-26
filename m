@@ -1,55 +1,26 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Aug 2018 23:19:03 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] docs/manual: expand on
- why using a branch name is not supported
-Message-ID: <20180826211109.95C5C8E784@busybox.osuosl.org>
+From: Niall Parker <stuff@npengineering.ca>
+Date: Sun, 26 Aug 2018 14:19:34 -0700
+Subject: [Buildroot] do config fragments work ?
+In-Reply-To: <e123e7b0-718c-d403-d7c2-ba9e571b6596@npengineering.ca>
+References: <e123e7b0-718c-d403-d7c2-ba9e571b6596@npengineering.ca>
+Message-ID: <e4186b12-39a1-7910-228b-2e5830c7d916@npengineering.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26e71e9d942e67549d2003da7709be3b8798d186
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+On 2018-08-24 03:48 PM, Niall Parker wrote:
+> I'm trying to apply some minor tweaks to the default config for uboot 
+> and using fragments seemed the best approach however the changes don't 
+> appear to make it into the final .config used for the build. For 
+> example, using a fragment containing CONFIG_BOOTDELAY? 1 still results 
+> in the binary using the default bootdelay of 2 (of course I can make 
+> uboot-menuconfig and set the boot delay there and it will stick but I 
+> was hoping to clump the config customizations into a simple fragment).
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a2e00031412ec0c0968539bc1e0adb7fb9b0cd67)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/adding-packages-generic.txt | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+Turns out I had the syntax of the fragments wrong.
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index cc91e894bd..7be1754f54 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -200,11 +200,24 @@ information is (assuming the package name is +libfoo+) :
-   package. Note that if +HOST_LIBFOO_VERSION+ doesn't exist, it is
-   assumed to be the same as +LIBFOO_VERSION+. It can also be a
-   revision number or a tag for packages that are fetched directly
--  from their version control system. Do not use a branch name as
--  version; it does not work. Examples:
-+  from their version control system. Examples:
-   ** a version for a release tarball: +LIBFOO_VERSION = 0.1.2+
-   ** a sha1 for a git tree: +LIBFOO_VERSION = cb9d6aa9429e838f0e54faa3d455bcbab5eef057+
-   ** a tag for a git tree +LIBFOO_VERSION = v0.1.2+
-++
-+.Note:
-+Using a branch name as +FOO_VERSION+ is not supported, because it does
-+not and can not work as people would expect it should:
-++
-+  1. due to local caching, Buildroot will not re-fetch the repository,
-+     so people who expect to be able to follow the remote repository
-+     would be quite surprised and disappointed;
-+  2. because two builds can never be perfectly simultaneous, and because
-+     the remote repository may get new commits on the branch anytime,
-+     two users, using the same Buildroot tree and building the same
-+     configuration, may get different source, thus rendering the build
-+     non reproducible, and people would be quite surprised and
-+     disappointed.
- 
- * +LIBFOO_SOURCE+ may contain the name of the tarball of the package,
-   which Buildroot will use to download the tarball from
+CONFIG_BOOTDELAY=1
+
+works.
