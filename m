@@ -1,167 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Aug 2018 23:12:44 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] rauc: add patch to make
- it build with Linux < 3.0
-Message-ID: <20180826210546.7AED98E775@busybox.osuosl.org>
+Date: Sun, 26 Aug 2018 23:15:01 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] mbedtls: security bump to
+ version 2.7.5
+Message-ID: <20180826210707.0A3A28E778@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67954a4e07c2255e7f9598fc2fb788eccd3c656e
+commit: https://git.buildroot.net/buildroot/commit/?id=8b19cb5445229731a4f4a03c9a90854b8b8b4c7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-This commit adds a patch to RAUC that makes the eMMC boot partition
-support optional. This allows RAUC to build successfully on systems
-using Linux < 3.0.
+Fixes the following security issues:
 
-Fixes:
+- CVE-2018-0497: Remote plaintext recovery on use of CBC based ciphersuites
+  through a timing side-channel
 
-  http://autobuild.buildroot.net/results/7e1cbeb458cb6536a36eae0d24cefb36edb22f55/
+- CVE-2018-0498: Plaintext recovery on use of CBC based ciphersuites through
+  a cache based side-channel
 
+For more info, see the advisory:
+https://tls.mbed.org/tech-updates/security-advisories/mbedtls-security-advisory-2018-02
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-(cherry picked from commit db756327f5c765457514b005f70624c6f81688cf)
+(cherry picked from commit 7a7a1591350c29538e86cedebcb251ffac3daecc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...make-eMMC-boot-partition-support-optional.patch | 116 +++++++++++++++++++++
- package/rauc/rauc.mk                               |   2 +
- 2 files changed, 118 insertions(+)
+ package/mbedtls/mbedtls.hash | 6 +++---
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rauc/0002-build-make-eMMC-boot-partition-support-optional.patch b/package/rauc/0002-build-make-eMMC-boot-partition-support-optional.patch
-new file mode 100644
-index 0000000000..f6177c9d54
---- /dev/null
-+++ b/package/rauc/0002-build-make-eMMC-boot-partition-support-optional.patch
-@@ -0,0 +1,116 @@
-+From d66502532fea652d8743bfb61f9843c796d305cf Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Fri, 24 Aug 2018 14:30:19 +0200
-+Subject: [PATCH] build: make eMMC boot partition support optional
-+
-+The eMMC boot partition support, added in commit
-+ea5cc7ff606c65536da218bd1ef6d0ca279c9b17 ("src/update_handler: add
-+support for updating eMMC boot partitions"), requires
-+<linux/mmc/ioctl.h>, only available starting from kernel headers 3.0.
-+
-+Even though it is pretty likely that people are going to use Linux >=
-+3.0 on their embedded systems these days, RAUC also needs to be built
-+natively on the build machine to produce update artifacts, and the
-+build machine is sometimes using an ancient Linux system, especially
-+in an enterprise contexts.
-+
-+In order to make sure that RAUC builds fine in this context, this
-+commit makes the eMMC boot partition support optional, by verifying
-+the availability of <linux/mmc/ioctl.h>.
-+
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ Makefile.am          | 5 ++++-
-+ configure.ac         | 6 ++++++
-+ src/update_handler.c | 6 ++++++
-+ 3 files changed, 16 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 23eb2d1..7b4682d 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -39,7 +39,6 @@ librauc_la_SOURCES = \
-+ 	src/checksum.c \
-+ 	src/config_file.c \
-+ 	src/context.c \
-+-	src/emmc.c \
-+ 	src/install.c \
-+ 	src/manifest.c \
-+ 	src/mark.c \
-+@@ -63,6 +62,10 @@ librauc_la_SOURCES = \
-+ 	include/update_handler.h \
-+ 	include/utils.h
-+ 
-++if WANT_EMMC_BOOT_SUPPORT
-++librauc_la_SOURCES += src/emmc.c
-++endif
-++
-+ if WANT_NETWORK
-+ librauc_la_SOURCES += src/network.c include/network.h
-+ endif
-+diff --git a/configure.ac b/configure.ac
-+index 2d6f940..1ec124b 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -102,6 +102,12 @@ AC_SUBST(DBUS_SYSTEMSERVICEDIR)
-+ 
-+ # Checks for header files.
-+ 
-++AC_CHECK_HEADER([linux/mmc/ioctl.h],
-++	AC_DEFINE([ENABLE_EMMC_BOOT_SUPPORT], [1], [Define to 1 to enable eMMC boot support]),
-++	AC_DEFINE([ENABLE_EMMC_BOOT_SUPPORT], [0]))
-++
-++AM_CONDITIONAL([WANT_EMMC_BOOT_SUPPORT], [test x$ac_cv_header_linux_mmc_ioctl_h != xno])
-++
-+ # Checks for typedefs, structures, and compiler characteristics.
-+ 
-+ # Checks for library functions.
-+diff --git a/src/update_handler.c b/src/update_handler.c
-+index 62115ec..a9f233a 100644
-+--- a/src/update_handler.c
-++++ b/src/update_handler.c
-+@@ -57,6 +57,7 @@ out:
-+ 	return outstream;
-+ }
-+ 
-++#if ENABLE_EMMC_BOOT_SUPPORT == 1
-+ static gboolean clear_slot(RaucSlot *slot, GError **error)
-+ {
-+ 	GError *ierror = NULL;
-+@@ -99,6 +100,7 @@ out:
-+ 	g_clear_object(&outstream);
-+ 	return res;
-+ }
-++#endif
-+ 
-+ static gboolean ubifs_ioctl(RaucImage *image, int fd, GError **error)
-+ {
-+@@ -1085,6 +1087,7 @@ out:
-+ 	return res;
-+ }
-+ 
-++#if ENABLE_EMMC_BOOT_SUPPORT == 1
-+ static gboolean img_to_boot_emmc_handler(RaucImage *image, RaucSlot *dest_slot, const gchar *hook_name, GError **error)
-+ {
-+ 
-+@@ -1245,6 +1248,7 @@ out:
-+ 
-+ 	return res;
-+ }
-++#endif
-+ 
-+ static gboolean img_to_raw_handler(RaucImage *image, RaucSlot *dest_slot, const gchar *hook_name, GError **error)
-+ {
-+@@ -1329,7 +1333,9 @@ RaucUpdatePair updatepairs[] = {
-+ 	{"*.img", "nand", img_to_nand_handler},
-+ 	{"*.img", "ubivol", img_to_ubivol_handler},
-+ 	{"*.squashfs", "ubivol", img_to_ubivol_handler},
-++#if ENABLE_EMMC_BOOT_SUPPORT == 1
-+ 	{"*.img", "boot-emmc", img_to_boot_emmc_handler},
-++#endif
-+ 	{"*.img", "*", img_to_raw_handler}, /* fallback */
-+ 	{0}
-+ };
-+-- 
-+2.14.4
-+
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index f1705a8c33..36119c061d 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -9,6 +9,8 @@ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
- RAUC_DEPENDENCIES = host-pkgconf openssl libglib2
-+# 0002-build-make-eMMC-boot-partition-support-optional.patch
-+RAUC_AUTORECONF = YES
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index cf347d299f..47e446dd07 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.11.0-2.7.4-and-2.1.13-released
+-sha1	20394e353050992c5f9699da7c9a336bd2ed2dea	mbedtls-2.7.4-apache.tgz
+-sha256	34e164d49500e377970c5f6761a146078baae0e086ec88cdcfeb9c96878a38f5	mbedtls-2.7.4-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.12.0-2.7.5-and-2.1.14-released
++sha1	180ca49e2bb6df3826113781b793529a81427ce3	mbedtls-2.7.5-apache.tgz
++sha256	a1302ad9094aabb9880d2755927b466a6bac8e02b68e04dee77321f3859e9b40	mbedtls-2.7.5-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index ab415dd0b8..e07cc3d71c 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_RAUC_NETWORK),y)
- RAUC_CONF_OPTS += --enable-network
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.7.4
++MBEDTLS_VERSION = 2.7.5
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
