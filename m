@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Aug 2018 23:18:30 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] docs/manual: expand on
+Date: Sun, 26 Aug 2018 23:19:03 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] docs/manual: expand on
  why using a branch name is not supported
-Message-ID: <20180826211058.D3AA08E781@busybox.osuosl.org>
+Message-ID: <20180826211109.95C5C8E784@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70ea0f84219b30f065ec51bb70915aa990f91960
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=26e71e9d942e67549d2003da7709be3b8798d186
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -23,10 +23,10 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 15 insertions(+), 2 deletions(-)
 
 diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index ff8de69d0f..1e9557c0bc 100644
+index cc91e894bd..7be1754f54 100644
 --- a/docs/manual/adding-packages-generic.txt
 +++ b/docs/manual/adding-packages-generic.txt
-@@ -198,11 +198,24 @@ information is (assuming the package name is +libfoo+) :
+@@ -200,11 +200,24 @@ information is (assuming the package name is +libfoo+) :
    package. Note that if +HOST_LIBFOO_VERSION+ doesn't exist, it is
    assumed to be the same as +LIBFOO_VERSION+. It can also be a
    revision number or a tag for packages that are fetched directly
