@@ -1,98 +1,68 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Sun, 26 Aug 2018 21:23:46 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-falcon: New package
-In-Reply-To: <20180826192346.5590-1-grzegorz@blach.pl>
-References: <20180826192346.5590-1-grzegorz@blach.pl>
-Message-ID: <20180826192346.5590-2-grzegorz@blach.pl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Aug 2018 00:25:41 +0200
+Subject: [Buildroot] [git commit] openpowerlink: add patch to fix musl build
+Message-ID: <20180826221803.34CF48E7A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Falcon is a bare-metal Python web API framework
-for building very fast app backends and microservices.
+commit: https://git.buildroot.net/buildroot/commit/?id=f0f680d6736aa69ea11ecd7d0a0577fb14bc6d22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://falconframework.org/
+This commit adds a one-liner patch that fixes the build with musl of
+the openpowerlink package, caused by a missing <sys/types.h>
+include. The patch has been submitted upstream.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Fixes:
+
+  http://autobuild.buildroot.net/results/8aff5f6d7bcab616129368c1fb22026bb164e454/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                               |  1 +
- package/Config.in                        |  1 +
- package/python-falcon/Config.in          |  9 +++++++++
- package/python-falcon/python-falcon.hash |  2 ++
- package/python-falcon/python-falcon.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
- create mode 100644 package/python-falcon/Config.in
- create mode 100644 package/python-falcon/python-falcon.hash
- create mode 100644 package/python-falcon/python-falcon.mk
+ ...ernel-edrv-edrv-rawsock_linux.c-add-missi.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a9d5942adb..af039cc2ff 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -851,6 +851,7 @@ F:	package/libwebsock/
- F:	package/sofia-sip/
- 
- N:	Grzegorz Blach <grzegorz@blach.pl>
-+F:	package/python-falcon
- F:	package/python-mimeparse
- 
- N:	Guillaume Gardet <guillaume.gardet@oliseo.fr>
-diff --git a/package/Config.in b/package/Config.in
-index 0640a399bb..e243db552e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -799,6 +799,7 @@ menu "External python modules"
- 	source "package/python-engineio/Config.in"
- 	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
-+	source "package/python-falcon/Config.in"
- 	source "package/python-flask/Config.in"
- 	source "package/python-flask-cors/Config.in"
- 	source "package/python-flask-babel/Config.in"
-diff --git a/package/python-falcon/Config.in b/package/python-falcon/Config.in
+diff --git a/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch b/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
 new file mode 100644
-index 0000000000..f7c8601e07
+index 0000000000..4e00ecdb67
 --- /dev/null
-+++ b/package/python-falcon/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_FALCON
-+	bool "python-falcon"
-+	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_MIMEPARSE # runtime
-+	help
-+          Falcon is a bare-metal Python web API framework for building
-+          very fast app backends and microservices.
++++ b/package/openpowerlink/0004-stack-src-kernel-edrv-edrv-rawsock_linux.c-add-missi.patch
+@@ -0,0 +1,35 @@
++From 710e2b8ba2ecf51057a89de24e6f0d387614ea53 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 25 Aug 2018 23:36:39 +0200
++Subject: [PATCH] stack/src/kernel/edrv/edrv-rawsock_linux.c: add missing
++ <sys/types.h> include
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+	  https://falconframework.org/
-diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
-new file mode 100644
-index 0000000000..d31c959f98
---- /dev/null
-+++ b/package/python-falcon/python-falcon.hash
-@@ -0,0 +1,2 @@
-+# Copied from https://pypi.org/project/falcon
-+sha256	3981f609c0358a9fcdb25b0e7fab3d9e23019356fb429c635ce4133135ae1bc4  falcon-1.4.1.tar.gz
-diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
-new file mode 100644
-index 0000000000..106387f96f
---- /dev/null
-+++ b/package/python-falcon/python-falcon.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-falcon
-+#
-+################################################################################
++This is necessary to get the definition of the u_char type, otherwise
++the build fails with the musl C library with:
 +
-+PYTHON_FALCON_VERSION = 1.4.1
-+PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
-+PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/2f/e6/5045da9df509b9259037f065d15608930fd6c997ee930ad230f9fbfecf15
-+PYTHON_FALCON_SETUP_TYPE = setuptools
-+PYTHON_FALCON_LICENSE = Apache-2.0
-+PYTHON_FALCON_LICENSE_FILES = LICENSE
++stack/src/kernel/edrv/edrv-rawsock_linux.c:373:46: error: ???u_char??? undeclared (first use in this function)
 +
-+$(eval $(python-package))
--- 
-2.17.1
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream: https://github.com/OpenAutomationTechnologies/openPOWERLINK_V2/pull/371
++---
++ stack/src/kernel/edrv/edrv-rawsock_linux.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/stack/src/kernel/edrv/edrv-rawsock_linux.c b/stack/src/kernel/edrv/edrv-rawsock_linux.c
++index f8e0216f..e5230a52 100644
++--- a/stack/src/kernel/edrv/edrv-rawsock_linux.c
+++++ b/stack/src/kernel/edrv/edrv-rawsock_linux.c
++@@ -59,6 +59,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ #include <arpa/inet.h>
++ #include <ifaddrs.h>
++ #include <linux/if_packet.h>
+++#include <sys/types.h>
++ 
++ //============================================================================//
++ //            G L O B A L   D E F I N I T I O N S                             //
++-- 
++2.14.4
++
