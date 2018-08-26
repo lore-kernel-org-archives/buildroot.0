@@ -1,7 +1,7 @@
 From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Sun, 26 Aug 2018 21:23:45 +0200
+Date: Sun, 26 Aug 2018 20:45:55 +0200
 Subject: [Buildroot] [PATCH 1/2] package/python-mimeparse: New package
-Message-ID: <20180826192346.5590-1-grzegorz@blach.pl>
+Message-ID: <20180826184556.5070-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
