@@ -1,50 +1,35 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 26 Aug 2018 13:29:59 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/botan: fix altivec support
-Message-ID: <20180826112959.22790-1-bernd.kuhls@t-online.de>
+Date: Sun, 26 Aug 2018 13:48:59 +0200
+Subject: [Buildroot] [PATCH/next 2/2] package/mariadb: bump version to
+ 10.3.9
+References: <20180825204403.11324-1-bernd.kuhls@t-online.de>
+ <20180825204403.11324-2-bernd.kuhls@t-online.de>
+ <20180825230514.1f0264dd@windsurf>
+ <o5u85fxpst.ln2@ID-313208.user.individual.net>
+ <20180825233958.29369922@windsurf>
+Message-ID: <bmga5fxcsc.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-configure.py only supports --disable-altivec.
+Am Sat, 25 Aug 2018 23:39:58 +0200 schrieb Thomas Petazzoni:
 
-Fixes
-http://autobuild.buildroot.net/results/318/3187afa3eea77e5de0e0fe14717bfc080da08117/
+> Hello,
+> 
+> On Sat, 25 Aug 2018 23:26:48 +0200, Bernd Kuhls wrote:
+> 
+>> Only when bumping to 10.3 you get past this build error just to see the
+>> "undefined reference to `__sync_fetch_and_add_8'" error later on.
+>> To solve this the changes in this patch are needed.
+> 
+> So it still needs some atomic intrinsics, so the package should:
+> 
+> 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_4
 
-Added license hash URL.
+Hi Thomas,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 4 +---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+why "BR2_TOOLCHAIN_HAS_SYNC_4" and not "BR2_TOOLCHAIN_HAS_SYNC_8"?
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index df804bc1ef..eeb94145b9 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking pgp signature
-+# From https://botan.randombit.net/releases/sha256sums.txt
- sha256 e42df91556317588c6ca0e41bf796f9bd5ec5c70e0668e6c97c608c697c24a90  Botan-2.7.0.tgz
- # Locally computed
- sha256 40cfd35a9e34d18463806f57553c968fdbaf254a2e2a636d1d8e32ff6b698495  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index eb817f62d9..39a2c4c72b 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -70,9 +70,7 @@ BOTAN_DEPENDENCIES += zlib
- BOTAN_CONF_OPTS += --with-zlib
- endif
- 
--ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
--BOTAN_CONF_OPTS += --enable-altivec
--else
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
- BOTAN_CONF_OPTS += --disable-altivec
- endif
- 
--- 
-2.18.0
+Regards, Bernd
