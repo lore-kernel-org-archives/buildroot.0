@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Aug 2018 23:15:01 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] mbedtls: security bump to
+Date: Sun, 26 Aug 2018 23:15:10 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] mbedtls: security bump to
  version 2.7.5
-Message-ID: <20180826210707.0A3A28E778@busybox.osuosl.org>
+Message-ID: <20180826210715.641988E77C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b19cb5445229731a4f4a03c9a90854b8b8b4c7f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4f09ed89b3ea7e63d1fcc3e3298c6187102bba29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes the following security issues:
 
