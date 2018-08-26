@@ -1,78 +1,32 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 26 Aug 2018 13:04:52 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/vlc: also use AC_PATH_PROG to
- check for wayland-scanner
-Message-ID: <20180826110452.18151-1-bernd.kuhls@t-online.de>
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+Date: Sun, 26 Aug 2018 05:11:37 -0600
+Subject: [Buildroot] SDL2+directfb combo does not work as built by
+ buildroot-2018.02.3
+Message-ID: <CAGrGpJDVHStp8MUZaGb1=ZfWud-k4fQP=piwsc-QfftCDFyKog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/a6b/a6b5e5677efc2b46af85837637f2832eefdfed1d/
+I cannot get directfb + SDL2 working on Beaglebone Black  (see Bugzilla
+#4232 and SDL forums)
+    https://bugzilla.libsdl.org/show_bug.cgi?id=4232
+    https://discourse.libsdl.org/u/PeterThompson/activity
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...o-use-AC_PATH_PROG-to-check-for-wayl.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
+I do not want to use X windows for the video driver.  I tried adding OpenGL
+ES to the rootfs but for that I need efl which in turn needs the kernel
+built by Buildroot.  I have a working kernel which I want to work on
+separately to attach a new display and prefer not to be forced to always
+build it through Buildroot.
 
-diff --git a/package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch b/package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-new file mode 100644
-index 0000000000..2b74fe0d39
---- /dev/null
-+++ b/package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
-@@ -0,0 +1,50 @@
-+From 27635f902831fac898586f1f3dc98369f12582c9 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sun, 26 Aug 2018 12:51:04 +0200
-+Subject: [PATCH] configure.ac: also use AC_PATH_PROG to check for
-+ wayland-scanner
-+
-+When cross-compiling the .pc file might point to the wrong
-+wayland-scanner binary (target rather than host) resulting in a
-+non-executable and wrong scanner.
-+Try searching the PATH first, and if that fails fall back into
-+pkg-config.
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ configure.ac | 19 +++++++++++--------
-+ 1 file changed, 11 insertions(+), 8 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 4808b8becf..a18641ed23 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -3140,14 +3140,17 @@ AS_IF([test "${enable_wayland}" != "no"], [
-+       AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors 'wayland-protocols >= 1.4')])
-+     ])
-+ 
-+-    AC_MSG_CHECKING([for the Wayland scanner])
-+-    PKG_CHECK_EXISTS([wayland-scanner], [
-+-      WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
-+-      AC_MSG_RESULT([${WAYLAND_SCANNER}])
-+-    ], [
-+-      AC_MSG_RESULT([not found])
-+-      AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
-+-    ])
-++    AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
-++    if test "x$WAYLAND_SCANNER" = x; then
-++        AC_MSG_CHECKING([for the Wayland scanner])
-++        PKG_CHECK_EXISTS([wayland-scanner], [
-++          WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
-++          AC_MSG_RESULT([${WAYLAND_SCANNER}])
-++        ], [
-++          AC_MSG_RESULT([not found])
-++          AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
-++        ])
-++    fi
-+ 
-+     have_wayland="yes"
-+ 
-+-- 
-+2.18.0
-+
--- 
-2.18.0
+Suggestions?
+
+Note: SDL2+directfb combo used to work on igepv2 buildroot-2015.08.1.   I
+am just trying to migrate to the beaglebone black.
+
+
+Peter Thompson
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180826/5bf3a581/attachment.html>
