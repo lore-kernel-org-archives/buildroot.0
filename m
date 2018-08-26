@@ -1,49 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 Aug 2018 23:23:37 +0200
-Subject: [Buildroot] [PATCH] package/brltty: fix cross-compilation
-In-Reply-To: <20180822082832.7497-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Wed, 22 Aug 2018 10:28:32 +0200")
-References: <20180822082832.7497-1-yann.morin.1998@free.fr>
-Message-ID: <87zhx8akkm.fsf@dell.be.48ers.dk>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun, 26 Aug 2018 23:36:49 +0200
+Subject: [Buildroot] [PATCH v2 2/2] sunxi-mali-mainline-driver: bump
+ version and add support for building on arm64(aarch64).
+In-Reply-To: <20180822212633.0a8a625e@windsurf>
+References: <20180822000648.23314-1-giulio.benetti@micronovasrl.com>
+ <20180822000648.23314-3-giulio.benetti@micronovasrl.com>
+ <20180822132959.39640475@windsurf>
+ <58c7d88b-dc45-5426-a328-89a58dc005b2@micronovasrl.com>
+ <20180822212633.0a8a625e@windsurf>
+Message-ID: <edf036c3-8a99-cbf2-a5ff-d756b6483297@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello Maxime,
 
- > brltty has a very inventive buildsystem, where it internall runs
- > ./configure for the build machine In doing so, it generates a list
- > of make variables to define what the build machine supports, like
- > it does for the target.
+Il 22/08/2018 21:26, Thomas Petazzoni ha scritto:
+> Hello,
+> 
+> On Wed, 22 Aug 2018 20:37:13 +0200, Giulio Benetti wrote:
+> 
+>> Also, it would be good to have patches
+>>> adding license information for both of those packages. For the
+>>> mali-blobs, there's a PDF containing the EULA.
+>>
+>> Do you mean like odroid-mali package .mk?
+>> I mean reporting:
+>> SUNXI_MALI_MAINLINE_LICENSE = EULA
+>> SUNXI_MALI_MAINLINE_LICENSE_FILES = EULA for Mali 400MP _AW.pdf
+>> Right?
+> 
+> Yes. Make sure "make legal-info" is working after this.
+> 
+>> For the kernel driver, I
+>>> didn't see a license file, but I didn't look everywhere. If there is
+>>> none, could you check with Maxime to make sure a license file gets
+>>> added ?
+>>
+>> I'm not an expert of licensing but as stated here:
+>> https://developer.arm.com/products/software/mali-drivers/utgard-kernel
+>> it is distributed under GPLv2 licence the base code,
+>> so the added code should be too.
+>> What do you all think?
+> 
+> Yes, of course, it should be under GPLv2, but it would be nice to have
+> a license file in the source code.
 
- > However, the build variables are generated with a convoluted sed
- > script that scans the target list, and appends _FOR_BUILD to each
- > target variables. Then, both lists are included from the Makefile,
- > on the assumption that the build variables will not clash with the
- > target variables.
+Is there a way to add a license into sunxi-mali repository?
+Is it enough using a classic GPLv2 COPYING file taken from elsewhere and 
+put it in sunxi-mali root folder?
+If yes I can contribute to your repo and open a PR.
 
- > Where it gets interesting, is that that sed script considers the
- > variables names to match '[A-Za-z][A-Za-z0-9_]*'
+Thanks
 
- > And there we see why ATSPI2_PACKAGE does not match: it contains a
- > digit.
-
- > So, some build variables will inevitably override target ones.
-
- > Fix that by simply expanding the matching regexp to allow digits
- > in variable names.
-
- > Fixes:
- >     http://autobuild.buildroot.org/results/a37/a37782b3cfc1a96cc129db8fade20a36a7b2d470/
- >     http://autobuild.buildroot.org/results/97e/97edc6a47d2140968e84b409cdc960604e5896f2/
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Mario Lang <mlang@blind.guru>
- > Cc: Baruch Siach <baruch@tkos.co.il>
-
-Committed to 2018.02.x and 2018.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+Giulio Benetti
