@@ -1,37 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Aug 2018 18:07:01 +0200
-Subject: [Buildroot] [PATCH] acpid: drop x86 architecture dependency
-Message-ID: <20180827160701.13990-1-peter@korsgaard.com>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Mon, 27 Aug 2018 18:31:53 +0200
+Subject: [Buildroot] Autobnuilders timeouts [was: Re: autobuilder flock
+ hangs]
+In-Reply-To: <20180824070203.GK9365@scaer>
+References: <20180812060015.A385B207E5@mail.bootlin.com>
+ <20180812223629.2bac8ebe@windsurf>
+ <1a4b53ec-1ed3-7770-3a65-8d4f4f596918@mentor.com>
+ <20180816111059.3a7f1b59@windsurf> <20180824070203.GK9365@scaer>
+Message-ID: <68fc2553-681c-2d7c-8b32-e425073964b6@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Closes #11241
+Hello all,
 
-While ACPI is historically exclusively a x86 feature, ia64 and (some) arm64
-server platforms also use it.  Furthermore, even if the firmware does not
-provide an ACPI interface and/or the kernel is not built with ACPI support,
-acpid can still be used to command an orderly shutdown of the system as it
-also listens for KEY_POWER / KEY_SUSPEND events from the input subsystem
-(and calls shutdown by default).
+Yann,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/acpid/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+thanks for investigating autobuilder issues.
 
-diff --git a/package/acpid/Config.in b/package/acpid/Config.in
-index 2bd83ea8b9..b74e9d2262 100644
---- a/package/acpid/Config.in
-+++ b/package/acpid/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_ACPID
- 	bool "acpid"
--	depends on BR2_x86_64 || BR2_i386
- 	help
- 	  Advanced Configuration and Power Interface event daemon.
- 
--- 
-2.11.0
+On 24/08/2018 09:02, Yann E. MORIN wrote:
+> Hollis, Julien, Matthew, Thomas, All,
+>
+> On 2018-08-16 11:10 +0200, Thomas Petazzoni spake thusly:
+>> On Mon, 13 Aug 2018 11:18:10 -0700, Hollis Blanchard wrote:
+>>> flock was hanging. I don't know why; have you experienced anything like 
+>>> that?
+>> This happened again:
+>>   http://autobuild.buildroot.net/results/ddb/ddbc96b24017f2a2b06c6091dea3e19520bf2dd1/
+> I think we now can see a pattern in those timeouts from Hollis'
+> autobuilder: they only ever happen on a slect group of 4 packages that
+> are downloaded with git:
+>   - linux-firmware      (kernel.org)
+>   - f2fs-tools          (kernel.org)
+>   - azure-iot-sdk-c     (github.com)
+>   - uhttpd              (openwrt.org)
+>
+> Could you try to download them manually from your autobuilder, and see
+> if that works or not, please?
+>
+> Is there something on your network that systematically makes those
+> packages fail to download? Do you have firewalling restrictions or
+> extreme traffic shapping?
+>
+> Note that the size of those packages ranges from ~150KiB for uhttpd,
+> which is not really big, to 195MiB for linux-firmware, which is rather
+> large but nothing compared to a kernel tree. So we can probably rule
+> out the actual size of the package...
+>
+>
+> Now, I also had a look at all the timeouts, and I also noticed a single
+> other pattern. Julien's and Matthew's autobuilder would always choke on
+> host-libsodium, and it happens only on those two autobuilders:
+>
+>     http://autobuild.buildroot.org/?reason=host-libsodium
+>
+> All failing at the same point:
+>
+>     checking whether segmentation violations can be caught when using the C compiler...
+>
+> Matthew, Julien, could you have a look at what is causing those on your
+> autobuilders?
+
+I already signaled this problem on BR IRC chan. ;-)
+When occurring, my autobuilder is stuck with a "conftest" process
+consuming 100% of the CPU, indefinitely.
+
+When building host-libsodium alone, all is fine.
+
+When it fails with 100% CPU usage I can only kill the process and don't
+see what is happening. I would say this problem is quite recent (3
+months ?).
+
+What can I do to look further ?
+
+Best regards,
+Julien
