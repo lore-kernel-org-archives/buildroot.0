@@ -1,30 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Aug 2018 11:16:06 +0200
-Subject: [Buildroot] [PATCH] dropbear: add upstream security fix for
- CVE-2018-15599
-In-Reply-To: <20180826214037.5025-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 26 Aug 2018 23:40:37 +0200")
-References: <20180826214037.5025-1-peter@korsgaard.com>
-Message-ID: <87a7p89nl5.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 Aug 2018 11:18:19 +0200
+Subject: [Buildroot] [PATCH v4 3/3] minicom: add license
+In-Reply-To: <01b4239a-15ce-0176-11e0-9f9eee51a9fd@micronovasrl.com>
+References: <89c54af3-3000-d0c5-ab7f-f6d4f4c092eb@micronovasrl.com>
+ <20180826122308.90382-1-giulio.benetti@micronovasrl.com>
+ <20180826122308.90382-4-giulio.benetti@micronovasrl.com>
+ <01b4239a-15ce-0176-11e0-9f9eee51a9fd@micronovasrl.com>
+Message-ID: <20180827111819.661a3f6f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hello,
 
- > dropbear is affected by an user enumeration vulnerability similar to the
- > recent issue in openssh (CVE-2018-15473).  Add an upstream patch fixing the
- > issue.
+On Sun, 26 Aug 2018 17:10:16 +0200, Giulio Benetti wrote:
 
- > For more details, see the discussion on the mailing list:
- > http://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2018q3/002110.html
+> > diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+> > index 0e94e566e7..14998edee1 100644
+> > --- a/package/minicom/minicom.hash
+> > +++ b/package/minicom/minicom.hash
+> > @@ -1,2 +1,3 @@
+> >   # Locally calculated
+> >   sha256 3bd58b594ac66545649c13ab2b728a4df0f78612eb030680d4152f7627d1f177  minicom-19ab49422f3431102c31fea01549121385113f80.tar.gz
+> > +sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
+> > \ No newline at end of file  
+> 
+> I've just realized this breaks make legal-info.
+> Do I need to resend patchset as v5?
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Could you resend with the following order:
 
-Committed to 2018.05.x, thanks (2018.02.x will need dropbear bumped
-first).
+ 1. Add hash file
+ 2. Add license information
+ 3. Bump to new Git version
 
+This way, we can apply (1) and (2) to the master branch, and (3) to the
+next branch.
+
+Thanks,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
