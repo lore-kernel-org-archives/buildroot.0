@@ -1,48 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Aug 2018 11:18:19 +0200
-Subject: [Buildroot] [PATCH v4 3/3] minicom: add license
-In-Reply-To: <01b4239a-15ce-0176-11e0-9f9eee51a9fd@micronovasrl.com>
-References: <89c54af3-3000-d0c5-ab7f-f6d4f4c092eb@micronovasrl.com>
- <20180826122308.90382-1-giulio.benetti@micronovasrl.com>
- <20180826122308.90382-4-giulio.benetti@micronovasrl.com>
- <01b4239a-15ce-0176-11e0-9f9eee51a9fd@micronovasrl.com>
-Message-ID: <20180827111819.661a3f6f@windsurf>
+Date: Mon, 27 Aug 2018 11:19:12 +0200
+Subject: [Buildroot] [git commit branch/next] package/botan: fix altivec
+ support
+Message-ID: <20180827091118.BFB588E7CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c845b295bd074c8ec6b9649ed2414dc820323060
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 26 Aug 2018 17:10:16 +0200, Giulio Benetti wrote:
+configure.py only supports --disable-altivec.
 
-> > diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-> > index 0e94e566e7..14998edee1 100644
-> > --- a/package/minicom/minicom.hash
-> > +++ b/package/minicom/minicom.hash
-> > @@ -1,2 +1,3 @@
-> >   # Locally calculated
-> >   sha256 3bd58b594ac66545649c13ab2b728a4df0f78612eb030680d4152f7627d1f177  minicom-19ab49422f3431102c31fea01549121385113f80.tar.gz
-> > +sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
-> > \ No newline at end of file  
-> 
-> I've just realized this breaks make legal-info.
-> Do I need to resend patchset as v5?
+Fixes
+http://autobuild.buildroot.net/results/318/3187afa3eea77e5de0e0fe14717bfc080da08117/
 
-Could you resend with the following order:
+Added license hash URL.
 
- 1. Add hash file
- 2. Add license information
- 3. Bump to new Git version
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/botan/botan.hash | 2 +-
+ package/botan/botan.mk   | 4 +---
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-This way, we can apply (1) and (2) to the master branch, and (3) to the
-next branch.
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index df804bc1ef..eeb94145b9 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking pgp signature
++# From https://botan.randombit.net/releases/sha256sums.txt
+ sha256 e42df91556317588c6ca0e41bf796f9bd5ec5c70e0668e6c97c608c697c24a90  Botan-2.7.0.tgz
+ # Locally computed
+ sha256 40cfd35a9e34d18463806f57553c968fdbaf254a2e2a636d1d8e32ff6b698495  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index eb817f62d9..39a2c4c72b 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -70,9 +70,7 @@ BOTAN_DEPENDENCIES += zlib
+ BOTAN_CONF_OPTS += --with-zlib
+ endif
+ 
+-ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
+-BOTAN_CONF_OPTS += --enable-altivec
+-else
++ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
+ BOTAN_CONF_OPTS += --disable-altivec
+ endif
+ 
