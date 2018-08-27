@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Aug 2018 11:37:38 +0200
-Subject: [Buildroot] [V4 1/2] dropbear: bump to version 2018.76
-In-Reply-To: <20180428174941.711ad03b@windsurf> (Thomas Petazzoni's message of
- "Sat, 28 Apr 2018 17:49:41 +0200")
-References: <20180328083827.31540-1-francois.perrad@gadz.org>
- <20180428174941.711ad03b@windsurf>
-Message-ID: <87sh30880t.fsf@dell.be.48ers.dk>
+Date: Mon, 27 Aug 2018 11:38:04 +0200
+Subject: [Buildroot] [git commit] dropbear: fix build with non-SSP
+ capable toolchain
+In-Reply-To: <20180428154800.1D6B57FF68@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sat, 28 Apr 2018 17:37:43 +0200")
+References: <20180428154800.1D6B57FF68@busybox.osuosl.org>
+Message-ID: <87o9do8803.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +14,22 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Hello,
- > On Wed, 28 Mar 2018 10:38:26 +0200, Francois Perrad wrote:
- >> with this new version:
- >> - "configure --enable-static" should now be used instead of
- >> "make STATIC=1"
- >> - any customised options should be put in localoptions.h
- >> 
- >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- >> ---
- >> package/dropbear/dropbear.hash |  2 +-
- >> package/dropbear/dropbear.mk   | 31 ++++++++++++++-----------------
- >> 2 files changed, 15 insertions(+), 18 deletions(-)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=b0aafef6198ee292c4f426295e92cc9b601c2338
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > I've applied to master, after doing some minor changes:
+ > By default, Dropbear's configure script enables hardening
+ > flags. Unfortunately, the check for SSP only uses AC_COMPILE_IFELSE(),
+ > and therefore doesn't properly test for the availability of libssp,
+ > visible only at link time.
 
- >  - DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH was moved
- >    closer to where DROPBEAR_SVR_PASSWORD_AUTH is defined
+ > In addition, Buildroot passes its own hardening flags, depending on
+ > various global options. So, we simply disable hardening flags in
+ > Dropbear.
 
- >  - A comment was added on top of DROPBEAR_SVR_PASSWORD_AUTH to explain
- >    why we're doing this.
+ > This fixes a build failure with non-SSP capable toolchains happening
+ > since the bump to 2018.76.
 
- > In addition, after applying/pushing your commit, I had a build failure
- > with non-SSP toolchains, so I made a separate commit to fix this:
- > https://git.buildroot.org/buildroot/commit/?id=b0aafef6198ee292c4f426295e92cc9b601c2338
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2018.02.x, thanks.
 
