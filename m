@@ -1,15 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Aug 2018 11:04:19 +0200
-Subject: [Buildroot] [PATCH/next 2/2] package/mariadb: bump version to
- 10.3.9
-In-Reply-To: <bmga5fxcsc.ln2@ID-313208.user.individual.net>
-References: <20180825204403.11324-1-bernd.kuhls@t-online.de>
- <20180825204403.11324-2-bernd.kuhls@t-online.de>
- <20180825230514.1f0264dd@windsurf>
- <o5u85fxpst.ln2@ID-313208.user.individual.net>
- <20180825233958.29369922@windsurf>
- <bmga5fxcsc.ln2@ID-313208.user.individual.net>
-Message-ID: <20180827110419.126067bf@windsurf>
+Date: Mon, 27 Aug 2018 11:05:35 +0200
+Subject: [Buildroot] [PATCH v4 3/4] docs/images: adding default
+ buildroot linux logo
+In-Reply-To: <1535118300-26815-3-git-send-email-angelo@amarulasolutions.com>
+References: <1535118300-26815-1-git-send-email-angelo@amarulasolutions.com>
+ <1535118300-26815-3-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20180827110535.431744f8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,20 +14,18 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Aug 2018 13:48:59 +0200, Bernd Kuhls wrote:
-
-> > So it still needs some atomic intrinsics, so the package should:
-> > 
-> > 	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_4  
+On Fri, 24 Aug 2018 15:44:59 +0200, Angelo Compagnucci wrote:
+> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 > 
-> Hi Thomas,
+> This patch adds a default buildroot linux boot up logo that can
+> be used in all buildroot defconfigs as a buildroot watermark.
 > 
-> why "BR2_TOOLCHAIN_HAS_SYNC_4" and not "BR2_TOOLCHAIN_HAS_SYNC_8"?
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> ---
+>  docs/website/images/logo_linux_clut224.png | Bin 0 -> 6825 bytes
 
-I misread the error message you pasted. Indeed it should be
-BR2_TOOLCHAIN_HAS_SYNC_8. Sorry about that :-/
-
-Best regards,
+Is docs/website/images/ really the right place for this ? Shouldn't
+this go in linux/ instead ?
 
 Thomas
 -- 
