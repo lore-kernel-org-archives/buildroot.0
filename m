@@ -1,47 +1,270 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Aug 2018 11:08:10 +0200
-Subject: [Buildroot] [PATCH v4 4/4] configs: add linux boot logo to a
- selection of configs
-In-Reply-To: <1535118300-26815-4-git-send-email-angelo@amarulasolutions.com>
-References: <1535118300-26815-1-git-send-email-angelo@amarulasolutions.com>
- <1535118300-26815-4-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20180827110810.1cdea92c@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Aug 2018 11:12:40 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] dropbear: add upstream
+ security fix for CVE-2018-15599
+Message-ID: <20180827090444.CB60C8E7C7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=e07bd3c43d8c918b06942df8a4df07abd4fb37ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-On Fri, 24 Aug 2018 15:45:00 +0200, Angelo Compagnucci wrote:
-> From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> 
-> This patch adds the buildroot logo as a boot log to a selection of
-> defconfigs.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+dropbear is affected by an user enumeration vulnerability similar to the
+recent issue in openssh (CVE-2018-15473).  Add an upstream patch fixing the
+issue.
 
-I won't oppose to this very strongly, but I wanted to voice my opinion
-that I am not sure it is very useful to adjust all those defconfigs to
-make them use the "Buildroot Linux logo".
+For more details, see the discussion on the mailing list:
+http://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2018q3/002110.html
 
-One aspect of Buildroot that I like a lot is that we don't try to do a
-lot of "integration": we use upstream stuff as-is, and leave it up to
-the Buildroot user to do all the polishing/integration. Having a
-default logo with Buildroot branding goes a bit against this principle.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4a3b0ba38fde05e8f8c3512d516d86803efa44c0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0002-Wait-to-fail-invalid-usernames.patch      | 236 +++++++++++++++++++++
+ 1 file changed, 236 insertions(+)
 
-We'll have a random set of defconfigs using the logo, another random
-set not using the logo. This really doesn't had much value overall.
-
-So I'm very fine with PATCH 1/4 and 2/4 to help people customizing the
-logo. Perhaps 3/4 to have an example logo (but not even sure it is
-that useful), but I'm more skeptical about PATCH 4/4.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dropbear/0002-Wait-to-fail-invalid-usernames.patch b/package/dropbear/0002-Wait-to-fail-invalid-usernames.patch
+new file mode 100644
+index 0000000000..958ac9921e
+--- /dev/null
++++ b/package/dropbear/0002-Wait-to-fail-invalid-usernames.patch
+@@ -0,0 +1,236 @@
++From 52adbb34c32d3e2e1bcdb941e20a6f81138b8248 Mon Sep 17 00:00:00 2001
++From: Matt Johnston <matt@ucc.asn.au>
++Date: Thu, 23 Aug 2018 23:43:12 +0800
++Subject: [PATCH] Wait to fail invalid usernames
++
++[hg: https://secure.ucc.asn.au/hg/dropbear/rev/5d2d1021ca00]
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ auth.h           |  6 +++---
++ svr-auth.c       | 19 +++++--------------
++ svr-authpam.c    | 26 ++++++++++++++++++++++----
++ svr-authpasswd.c | 27 ++++++++++++++-------------
++ svr-authpubkey.c | 11 ++++++++++-
++ 5 files changed, 54 insertions(+), 35 deletions(-)
++
++diff --git a/auth.h b/auth.h
++index da498f5..98f5468 100644
++--- a/auth.h
+++++ b/auth.h
++@@ -37,9 +37,9 @@ void recv_msg_userauth_request(void);
++ void send_msg_userauth_failure(int partial, int incrfail);
++ void send_msg_userauth_success(void);
++ void send_msg_userauth_banner(const buffer *msg);
++-void svr_auth_password(void);
++-void svr_auth_pubkey(void);
++-void svr_auth_pam(void);
+++void svr_auth_password(int valid_user);
+++void svr_auth_pubkey(int valid_user);
+++void svr_auth_pam(int valid_user);
++ 
++ #if DROPBEAR_SVR_PUBKEY_OPTIONS_BUILT
++ int svr_pubkey_allows_agentfwd(void);
++diff --git a/svr-auth.c b/svr-auth.c
++index c19c090..edde86b 100644
++--- a/svr-auth.c
+++++ b/svr-auth.c
++@@ -149,10 +149,8 @@ void recv_msg_userauth_request() {
++ 		if (methodlen == AUTH_METHOD_PASSWORD_LEN &&
++ 				strncmp(methodname, AUTH_METHOD_PASSWORD,
++ 					AUTH_METHOD_PASSWORD_LEN) == 0) {
++-			if (valid_user) {
++-				svr_auth_password();
++-				goto out;
++-			}
+++			svr_auth_password(valid_user);
+++			goto out;
++ 		}
++ 	}
++ #endif
++@@ -164,10 +162,8 @@ void recv_msg_userauth_request() {
++ 		if (methodlen == AUTH_METHOD_PASSWORD_LEN &&
++ 				strncmp(methodname, AUTH_METHOD_PASSWORD,
++ 					AUTH_METHOD_PASSWORD_LEN) == 0) {
++-			if (valid_user) {
++-				svr_auth_pam();
++-				goto out;
++-			}
+++			svr_auth_pam(valid_user);
+++			goto out;
++ 		}
++ 	}
++ #endif
++@@ -177,12 +173,7 @@ void recv_msg_userauth_request() {
++ 	if (methodlen == AUTH_METHOD_PUBKEY_LEN &&
++ 			strncmp(methodname, AUTH_METHOD_PUBKEY,
++ 				AUTH_METHOD_PUBKEY_LEN) == 0) {
++-		if (valid_user) {
++-			svr_auth_pubkey();
++-		} else {
++-			/* pubkey has no failure delay */
++-			send_msg_userauth_failure(0, 0);
++-		}
+++		svr_auth_pubkey(valid_user);
++ 		goto out;
++ 	}
++ #endif
++diff --git a/svr-authpam.c b/svr-authpam.c
++index 05e4f3e..d201bc9 100644
++--- a/svr-authpam.c
+++++ b/svr-authpam.c
++@@ -178,13 +178,14 @@ pamConvFunc(int num_msg,
++  * Keyboard interactive would be a lot nicer, but since PAM is synchronous, it
++  * gets very messy trying to send the interactive challenges, and read the
++  * interactive responses, over the network. */
++-void svr_auth_pam() {
+++void svr_auth_pam(int valid_user) {
++ 
++ 	struct UserDataS userData = {NULL, NULL};
++ 	struct pam_conv pamConv = {
++ 		pamConvFunc,
++ 		&userData /* submitted to pamvConvFunc as appdata_ptr */ 
++ 	};
+++	const char* printable_user = NULL;
++ 
++ 	pam_handle_t* pamHandlep = NULL;
++ 
++@@ -204,12 +205,23 @@ void svr_auth_pam() {
++ 
++ 	password = buf_getstring(ses.payload, &passwordlen);
++ 
+++	/* We run the PAM conversation regardless of whether the username is valid
+++	in case the conversation function has an inherent delay.
+++	Use ses.authstate.username rather than ses.authstate.pw_name.
+++	After PAM succeeds we then check the valid_user flag too */
+++
++ 	/* used to pass data to the PAM conversation function - don't bother with
++ 	 * strdup() etc since these are touched only by our own conversation
++ 	 * function (above) which takes care of it */
++-	userData.user = ses.authstate.pw_name;
+++	userData.user = ses.authstate.username;
++ 	userData.passwd = password;
++ 
+++	if (ses.authstate.pw_name) {
+++		printable_user = ses.authstate.pw_name;
+++	} else {
+++		printable_user = "<invalid username>";
+++	}
+++
++ 	/* Init pam */
++ 	if ((rc = pam_start("sshd", NULL, &pamConv, &pamHandlep)) != PAM_SUCCESS) {
++ 		dropbear_log(LOG_WARNING, "pam_start() failed, rc=%d, %s", 
++@@ -242,7 +254,7 @@ void svr_auth_pam() {
++ 				rc, pam_strerror(pamHandlep, rc));
++ 		dropbear_log(LOG_WARNING,
++ 				"Bad PAM password attempt for '%s' from %s",
++-				ses.authstate.pw_name,
+++				printable_user,
++ 				svr_ses.addrstring);
++ 		send_msg_userauth_failure(0, 1);
++ 		goto cleanup;
++@@ -253,12 +265,18 @@ void svr_auth_pam() {
++ 				rc, pam_strerror(pamHandlep, rc));
++ 		dropbear_log(LOG_WARNING,
++ 				"Bad PAM password attempt for '%s' from %s",
++-				ses.authstate.pw_name,
+++				printable_user,
++ 				svr_ses.addrstring);
++ 		send_msg_userauth_failure(0, 1);
++ 		goto cleanup;
++ 	}
++ 
+++	if (!valid_user) {
+++		/* PAM auth succeeded but the username isn't allowed in for another reason
+++		(checkusername() failed) */
+++		send_msg_userauth_failure(0, 1);
+++	}
+++
++ 	/* successful authentication */
++ 	dropbear_log(LOG_NOTICE, "PAM password auth succeeded for '%s' from %s",
++ 			ses.authstate.pw_name,
++diff --git a/svr-authpasswd.c b/svr-authpasswd.c
++index bdee2aa..69c7d8a 100644
++--- a/svr-authpasswd.c
+++++ b/svr-authpasswd.c
++@@ -48,22 +48,14 @@ static int constant_time_strcmp(const char* a, const char* b) {
++ 
++ /* Process a password auth request, sending success or failure messages as
++  * appropriate */
++-void svr_auth_password() {
+++void svr_auth_password(int valid_user) {
++ 	
++ 	char * passwdcrypt = NULL; /* the crypt from /etc/passwd or /etc/shadow */
++ 	char * testcrypt = NULL; /* crypt generated from the user's password sent */
++-	char * password;
+++	char * password = NULL;
++ 	unsigned int passwordlen;
++-
++ 	unsigned int changepw;
++ 
++-	passwdcrypt = ses.authstate.pw_passwd;
++-
++-#ifdef DEBUG_HACKCRYPT
++-	/* debugging crypt for non-root testing with shadows */
++-	passwdcrypt = DEBUG_HACKCRYPT;
++-#endif
++-
++ 	/* check if client wants to change password */
++ 	changepw = buf_getbool(ses.payload);
++ 	if (changepw) {
++@@ -73,12 +65,21 @@ void svr_auth_password() {
++ 	}
++ 
++ 	password = buf_getstring(ses.payload, &passwordlen);
++-
++-	/* the first bytes of passwdcrypt are the salt */
++-	testcrypt = crypt(password, passwdcrypt);
+++	if (valid_user) {
+++		/* the first bytes of passwdcrypt are the salt */
+++		passwdcrypt = ses.authstate.pw_passwd;
+++		testcrypt = crypt(password, passwdcrypt);
+++	}
++ 	m_burn(password, passwordlen);
++ 	m_free(password);
++ 
+++	/* After we have got the payload contents we can exit if the username
+++	is invalid. Invalid users have already been logged. */
+++	if (!valid_user) {
+++		send_msg_userauth_failure(0, 1);
+++		return;
+++	}
+++
++ 	if (testcrypt == NULL) {
++ 		/* crypt() with an invalid salt like "!!" */
++ 		dropbear_log(LOG_WARNING, "User account '%s' is locked",
++diff --git a/svr-authpubkey.c b/svr-authpubkey.c
++index aa6087c..ff481c8 100644
++--- a/svr-authpubkey.c
+++++ b/svr-authpubkey.c
++@@ -79,7 +79,7 @@ static int checkfileperm(char * filename);
++ 
++ /* process a pubkey auth request, sending success or failure message as
++  * appropriate */
++-void svr_auth_pubkey() {
+++void svr_auth_pubkey(int valid_user) {
++ 
++ 	unsigned char testkey; /* whether we're just checking if a key is usable */
++ 	char* algo = NULL; /* pubkey algo */
++@@ -102,6 +102,15 @@ void svr_auth_pubkey() {
++ 	keybloblen = buf_getint(ses.payload);
++ 	keyblob = buf_getptr(ses.payload, keybloblen);
++ 
+++	if (!valid_user) {
+++		/* Return failure once we have read the contents of the packet
+++		required to validate a public key. 
+++		Avoids blind user enumeration though it isn't possible to prevent
+++		testing for user existence if the public key is known */
+++		send_msg_userauth_failure(0, 0);
+++		goto out;
+++	}
+++
++ 	/* check if the key is valid */
++ 	if (checkpubkey(algo, algolen, keyblob, keybloblen) == DROPBEAR_FAILURE) {
++ 		send_msg_userauth_failure(0, 0);
++-- 
++2.11.0
++
