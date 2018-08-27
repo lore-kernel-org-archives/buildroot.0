@@ -1,61 +1,155 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Mon, 27 Aug 2018 06:23:55 -0700
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2018-08-26
-In-Reply-To: <87ftz082x7.fsf@dell.be.48ers.dk>
-References: <20180827060019.5834E20789@mail.bootlin.com>
- <CALURroSFJESgnrW-ErTQo-A7QhiupELvgsBveWTSOhddXT9UQg@mail.gmail.com>
- <87ftz082x7.fsf@dell.be.48ers.dk>
-Message-ID: <CALURroR1KKg-cqL1WUJG0NzkZ=mKeZN_M_t3W76FAT4C7dTnug@mail.gmail.com>
+From: Ryan Coe <bluemrp9@gmail.com>
+Date: Mon, 27 Aug 2018 06:33:45 -0700
+Subject: [Buildroot] [PATCH/next v2 2/2] package/mariadb: bump version
+ to 10.3.9
+In-Reply-To: <20180826170326.18743-2-bernd.kuhls@t-online.de>
+References: <20180826170326.18743-1-bernd.kuhls@t-online.de>
+ <20180826170326.18743-2-bernd.kuhls@t-online.de>
+Message-ID: <966410f8-2bba-54d8-4471-c667a9bbd915@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 27, 2018 at 4:27 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+Bernd, Peter, All,
 
-> >>>>> "Christopher" == Christopher McCrory <chrismcc@gmail.com> writes:
+On 8/26/2018 10:03 AM, Bernd Kuhls wrote:
+> From: Peter Seiderer <ps.report@gmx.net>
 >
-> Hi,
->  > php compile breaks with:
+> Release notes: https://mariadb.com/kb/en/mariadb-1039-release-notes/
+> Changelog: https://mariadb.com/kb/en/mariadb-1039-changelog/
 >
+> This bump also fixes broken atomic support for
+> BR2_TOOLCHAIN_HAS_LIBATOMIC=y with mariadb-10.2:
 >
-<snip>
-
-
->  > --- a/package/php/Config.ext
->  > +++ b/package/php/Config.ext
->  > @@ -113,6 +113,7 @@ endif
+> [ 59%] Linking CXX executable mariabackup
+> ../../storage/innobase/libinnobase.a(handler0alter.cc.o): In function `my_atomic_add64':
+> /home/bernd/buildroot/output/build/mariadb-10.2.17/include/my_atomic.h:274: undefined reference to `__sync_fetch_and_add_8'
 >
->  >  config BR2_PACKAGE_PHP_EXT_MYSQLI
->  >         bool "Mysqli"
->  > +       select BR2_PACKAGE_PHP_EXT_HASH
->  >         help
->  >           MySQL Improved extension support
+> with this defconfig
 >
->  > fixes it on buildroot in the short term
+> BR2_arcle=y
+> BR2_archs38=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2018.02-926-gb393c24.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_PACKAGE_MYSQL=y
+> BR2_PACKAGE_MARIADB=y
+> BR2_PACKAGE_MARIADB_SERVER=y
 >
-> Great, care to send a real patch with your signed-off-by for this?
-> Thanks!
+> Adding "-latomic" to CXXFLAGS and/or adding -DHAVE_GCC_ATOMIC_BUILTINS=1
+> to CONF_OPTS, like we do for mariadb-10.3, does not fix the build error
+> with mariadb-10.2. There the build would stop even earlier without these
+> options:
 >
-
-Currently I don't have the best history with sending patches :) , but I
-gave it a shot.
-
-
-
-
-> --
-> Bye, Peter Korsgaard
+> /home/bernd/buildroot/output/build/mariadb-10.2.17/include/my_atomic.h:138:2:
+>   error: #error atomic ops for this platform are not implemented
+>   #error atomic ops for this platform are not implemented
 >
-
-
--- 
-Christopher McCrory
-To the optimist, the glass is half full.
-To the pessimist, the glass is half empty.
-To the engineer, the glass is twice as big as it needs to be.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180827/aba0adfe/attachment.html>
+> Mariadb-10.3 contains improved atomic support, this build error does
+> not occur here.
+>
+> Updated license hash of README.md after upstream commits:
+> https://github.com/MariaDB/server/commits/10.3/README.md
+>
+> my-small.cnf.sh is not provided anymore by upstream:
+> https://github.com/MariaDB/server/commit/7fee164faf8fce7be4ebe322d2178efd3d075eae
+>
+> [Peter Seiderer: bumped to version 10.3.7]
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> [Bernd: bumped to version 10.3.9, fixed atomic support,
+>   fixed my-small.cnf.sh, updated license hash]
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+> v2: - removed WITH_SSL change (Thomas)
+>      - added atomic dependencies to Config.in (Thomas)
+>
+>   package/mariadb/mariadb.hash | 12 ++++++------
+>   package/mariadb/mariadb.mk   | 11 ++++++++---
+>   package/mysql/Config.in      |  2 ++
+>   3 files changed, 16 insertions(+), 9 deletions(-)
+>
+> diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+> index d44b4f35ab..41e60037be 100644
+> --- a/package/mariadb/mariadb.hash
+> +++ b/package/mariadb/mariadb.hash
+> @@ -1,9 +1,9 @@
+> -# From https://downloads.mariadb.org/mariadb/10.2.17/
+> -md5 97dac7c5c288dbbbdd97768972daeb2e  mariadb-10.2.17.tar.gz
+> -sha1 38f2ba16297e14baa2f641d2273bbb92f56d0b94  mariadb-10.2.17.tar.gz
+> -sha256 e7b3078f8de874a4d451242a8a3eed49bf6f916dcd52fc3efa55886f5f35be27  mariadb-10.2.17.tar.gz
+> -sha512 9714f786abde43b418d8b5accbbd485de213b90db18c879625ce30777526d28fdafd3bdb43922ab6872b300cfa06895b5b3fad5eb0c0e804ad66a1fd1793a141  mariadb-10.2.17.tar.gz
+> +# From https://downloads.mariadb.org/mariadb/10.3.9
+> +md5 39c871e65134aabbc12c856691912435  mariadb-10.3.9.tar.gz
+> +sha1 51e9870847daa76f1e82ade97d9cf60a31df7656  mariadb-10.3.9.tar.gz
+> +sha256 561c6969bbd24dbb22d1d196a6b037665389b91e6dab881f39c5616389f156f4  mariadb-10.3.9.tar.gz
+> +sha512 7c7a678fb0c85da64b6df3df17b8cf7f2ccf862e27dcf8535f7403f8693c76b3b1a912f4b6ca876a591ada60a99577a947bfe7a63c602f754332e1e4f689e6e7  mariadb-10.3.9.tar.gz
+>   
+>   # Hash for license files
+> -sha256 dec3c92fdc58070facec08db681aa6b9cb05fd21e463358161c1df92e1c0653f  README.md
+> +sha256 5baa5057c525cacc9f7814215582ac150e5bb0b0007aa8f6ebc50a5c1b7a496d  README.md
+>   sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+> index e061cc53a8..bc22ff6c59 100644
+> --- a/package/mariadb/mariadb.mk
+> +++ b/package/mariadb/mariadb.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -MARIADB_VERSION = 10.2.17
+> +MARIADB_VERSION = 10.3.9
+>   MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+>   MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+>   # Tarball no longer contains LGPL license text
+> @@ -70,7 +70,14 @@ MARIADB_CONF_OPTS += -DHAVE_UCONTEXT_H=0
+>   endif
+>   endif
+>   
+> +MARIADB_CXXFLAGS = $(TARGET_CXXFLAGS)
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +MARIADB_CXXFLAGS += -latomic
+> +endif
+> +
+>   MARIADB_CONF_OPTS += \
+> +	-DCMAKE_CXX_FLAGS="$(MARIADB_CXXFLAGS)" \
+>   	-DINSTALL_DOCDIR=share/doc/mariadb-$(MARIADB_VERSION) \
+>   	-DINSTALL_DOCREADMEDIR=share/doc/mariadb-$(MARIADB_VERSION) \
+>   	-DINSTALL_MANDIR=share/man \
+> @@ -125,8 +132,6 @@ endif
+>   # We also don't need the test suite on the target
+>   define MARIADB_POST_INSTALL
+>   	mkdir -p $(TARGET_DIR)/var/lib/mysql
+> -	$(INSTALL) -D -m 644 $(TARGET_DIR)/usr/share/mysql/my-small.cnf \
+> -		$(TARGET_DIR)/etc/mysql/my.cnf
+>   	$(RM) $(TARGET_DIR)/usr/bin/mysql_config
+>   	$(RM) -r $(TARGET_DIR)/usr/share/mysql/test
+>   endef
+> diff --git a/package/mysql/Config.in b/package/mysql/Config.in
+> index ccc014e272..6409c8b806 100644
+> --- a/package/mysql/Config.in
+> +++ b/package/mysql/Config.in
+> @@ -17,6 +17,7 @@ choice
+>   config BR2_PACKAGE_MARIADB
+>   	bool "mariadb"
+>   	depends on !BR2_STATIC_LIBS
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+>   	select BR2_PACKAGE_LIBAIO
+>   	select BR2_PACKAGE_LIBXML2
+>   	select BR2_PACKAGE_NCURSES
+> @@ -32,6 +33,7 @@ config BR2_PACKAGE_MARIADB
+>   
+>   comment "mariadb needs a toolchain w/ dynamic library"
+>   	depends on BR2_STATIC_LIBS
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC || BR2_TOOLCHAIN_HAS_SYNC_8
+>   
+>   config BR2_PACKAGE_ORACLE_MYSQL
+>   	bool "oracle mysql"
