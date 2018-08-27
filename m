@@ -1,52 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Aug 2018 17:30:39 +0200
-Subject: [Buildroot] [git commit] php: fix build with mysqli
-Message-ID: <20180827153149.805B78E80D@busybox.osuosl.org>
+Date: Mon, 27 Aug 2018 18:07:01 +0200
+Subject: [Buildroot] [PATCH] acpid: drop x86 architecture dependency
+Message-ID: <20180827160701.13990-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65f96452636b96c01ea3f00db6e4e7a240837101
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Closes #11241
 
-This fixes autobuild failures like
-http://autobuild.buildroot.net/results/3288b742cee650ee47a41c5b4d6aaef1fe67bff1
+While ACPI is historically exclusively a x86 feature, ia64 and (some) arm64
+server platforms also use it.  Furthermore, even if the firmware does not
+provide an ACPI interface and/or the kernel is not built with ACPI support,
+acpid can still be used to command an orderly shutdown of the system as it
+also listens for KEY_POWER / KEY_SUSPEND events from the input subsystem
+(and calls shutdown by default).
 
-php compile breaks with:
-
-ext/mysqlnd/mysqlnd_auth.o: In function `php_mysqlnd_scramble_sha2':
-mysqlnd_auth.c:(.text+0x1054): undefined reference to `PHP_SHA256Init'
-mysqlnd_auth.c:(.text+0x1064): undefined reference to `PHP_SHA256Update'
-mysqlnd_auth.c:(.text+0x1070): undefined reference to `PHP_SHA256Final'
-mysqlnd_auth.c:(.text+0x1078): undefined reference to `PHP_SHA256Init'
-mysqlnd_auth.c:(.text+0x1088): undefined reference to `PHP_SHA256Update'
-mysqlnd_auth.c:(.text+0x1094): undefined reference to `PHP_SHA256Final'
-mysqlnd_auth.c:(.text+0x109c): undefined reference to `PHP_SHA256Init'
-mysqlnd_auth.c:(.text+0x10ac): undefined reference to `PHP_SHA256Update'
-mysqlnd_auth.c:(.text+0x10bc): undefined reference to `PHP_SHA256Update'
-mysqlnd_auth.c:(.text+0x10c8): undefined reference to `PHP_SHA256Final'
-
-It looks like the php mysqli extension needs the hash extension to work.  This
-seems to be a php Make dependany bug.  This patch works around it until the
-upstream maintainers can fix it.
-
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/Config.ext | 1 +
- 1 file changed, 1 insertion(+)
+ package/acpid/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 6b3d86925d..60ef1aee7c 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -113,6 +113,7 @@ endif
- 
- config BR2_PACKAGE_PHP_EXT_MYSQLI
- 	bool "Mysqli"
-+	select BR2_PACKAGE_PHP_EXT_HASH
+diff --git a/package/acpid/Config.in b/package/acpid/Config.in
+index 2bd83ea8b9..b74e9d2262 100644
+--- a/package/acpid/Config.in
++++ b/package/acpid/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_ACPID
+ 	bool "acpid"
+-	depends on BR2_x86_64 || BR2_i386
  	help
- 	  MySQL Improved extension support
+ 	  Advanced Configuration and Power Interface event daemon.
  
+-- 
+2.11.0
