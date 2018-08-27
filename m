@@ -1,103 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Aug 2018 11:30:22 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] dropbear: bump to version
- 2018.76
-Message-ID: <20180827093022.C8A718E7F5@busybox.osuosl.org>
+Date: Mon, 27 Aug 2018 11:31:28 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] dropbear: Do not build
+ static binary
+Message-ID: <20180827093022.ECE198E7F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7fc3403bb9d486dd443b9d8069a3cbc5226237b
+commit: https://git.buildroot.net/buildroot/commit/?id=25c079de0e523206a82719569b66cc38f054a5b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-with this new version:
-  - "configure --enable-static" should now be used instead of
-    "make STATIC=1"
-  - any customised options should be put in localoptions.h
+Dropbear 2018.76 now uses the --enable-static option to indicate that a static
+binary should be built. This will incorrectly pick up the generic buildroot
+option intended for building static libraries, causing an unwanted static
+binary build with BR2_SHARED_STATIC_LIBS.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fix by appending an --disable-static configure flag, overriding the buildroot
+default.
+
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+Reviewed-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2e035a9aecc37b87a277fd53f84743a18a6f03a7)
+(cherry picked from commit c9922a4d2fc79e1d17f85e6f74c1e6ece9c91092)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dropbear/dropbear.hash |  2 +-
- package/dropbear/dropbear.mk   | 31 ++++++++++++++-----------------
- 2 files changed, 15 insertions(+), 18 deletions(-)
+ package/dropbear/dropbear.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index 98776e7179..ef2011d907 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,2 +1,2 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256 6cbc1dcb1c9709d226dff669e5604172a18cf5dbf9a201474d5618ae4465098c dropbear-2017.75.tar.bz2
-+sha256 f2fb9167eca8cf93456a5fc1d4faf709902a3ab70dd44e352f3acbc3ffdaea65 dropbear-2018.76.tar.bz2
 diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 01a1a07b76..236f9b4762 100644
+index 1da1a559a3..fc41a84c1f 100644
 --- a/package/dropbear/dropbear.mk
 +++ b/package/dropbear/dropbear.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DROPBEAR_VERSION = 2017.75
-+DROPBEAR_VERSION = 2018.76
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
-@@ -23,32 +23,30 @@ DROPBEAR_MAKE = \
+@@ -27,8 +27,11 @@ DROPBEAR_MAKE = \
+ 	$(MAKE) MULTI=1 SCPPROGRESS=1 \
  	PROGRAMS="$(DROPBEAR_PROGRAMS)"
  
- ifeq ($(BR2_STATIC_LIBS),y)
--DROPBEAR_MAKE += STATIC=1
-+DROPBEAR_CONF_OPTS += --enable-static
+-ifeq ($(BR2_STATIC_LIBS),y)
+-DROPBEAR_CONF_OPTS += --enable-static
++# With BR2_SHARED_STATIC_LIBS=y the generic infrastructure adds a
++# --enable-static flags causing dropbear to be built as a static
++# binary. Adding a --disable-static reverts this
++ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++DROPBEAR_CONF_OPTS += --disable-static
  endif
  
--define DROPBEAR_FIX_XAUTH
--	$(SED) 's,^#define XAUTH_COMMAND.*/xauth,#define XAUTH_COMMAND "/usr/bin/xauth,g' $(@D)/options.h
-+# Ensure that dropbear doesn't use crypt() when it's not available
-+define DROPBEAR_SVR_PASSWORD_AUTH
-+	echo '#if !HAVE_CRYPT'                          >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_SVR_PASSWORD_AUTH 0'     >> $(@D)/localoptions.h
-+	echo '#endif'                                   >> $(@D)/localoptions.h
- endef
--
--DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_FIX_XAUTH
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_SVR_PASSWORD_AUTH
- 
- define DROPBEAR_ENABLE_REVERSE_DNS
--	$(SED) 's:.*\(#define DO_HOST_LOOKUP\).*:\1:' $(@D)/options.h
--endef
--
--define DROPBEAR_BUILD_SMALL
--	$(SED) 's:.*\(#define NO_FAST_EXPTMOD\).*:\1:' $(@D)/options.h
-+	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
- endef
- 
- define DROPBEAR_BUILD_FEATURED
--	$(SED) 's:^#define DROPBEAR_SMALL_CODE::' $(@D)/options.h
--	$(SED) 's:.*\(#define DROPBEAR_BLOWFISH\).*:\1:' $(@D)/options.h
--	$(SED) 's:.*\(#define DROPBEAR_TWOFISH128\).*:\1:' $(@D)/options.h
--	$(SED) 's:.*\(#define DROPBEAR_TWOFISH256\).*:\1:' $(@D)/options.h
-+	echo '#define DROPBEAR_SMALL_CODE 0'            >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_BLOWFISH 1'              >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_TWOFISH128 1'            >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_TWOFISH256 1'            >> $(@D)/localoptions.h
- endef
- 
- define DROPBEAR_DISABLE_STANDALONE
--	$(SED) 's:\(#define NON_INETD_MODE\):/*\1 */:' $(@D)/options.h
-+	echo '#define NON_INETD_MODE 0'                 >> $(@D)/localoptions.h
- endef
- 
- define DROPBEAR_INSTALL_INIT_SYSTEMD
-@@ -73,7 +71,6 @@ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
- endif
- 
- ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
--DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_SMALL
- DROPBEAR_CONF_OPTS += --disable-zlib
- else
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
+ # Ensure that dropbear doesn't use crypt() when it's not available
