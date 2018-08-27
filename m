@@ -1,270 +1,153 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Aug 2018 11:32:38 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] dropbear: add upstream
- security fix for CVE-2018-15599
-Message-ID: <20180827093023.00EB38E7F5@busybox.osuosl.org>
+Date: Mon, 27 Aug 2018 11:31:16 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] dropbear: Fix host key
+ loading with 521 bit ecdsa keys
+Message-ID: <20180827093022.E3D968E7F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e2dd4549b3fdb538325d08d29bbf935a4ddd1af
+commit: https://git.buildroot.net/buildroot/commit/?id=c354b1edb5d3ab3dae979010cd7a204580ec8dd4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-dropbear is affected by an user enumeration vulnerability similar to the
-recent issue in openssh (CVE-2018-15473).  Add an upstream patch fixing the
-issue.
+Dropbear 2018.76 changed the default ecdsa host key size form 521 to 256
+bits, but this breaks systems with an existing 521 bit key, blocking ssh
+logins.
 
-For more details, see the discussion on the mailing list:
-http://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2018q3/002110.html
+Apply the upstream fix from https://secure.ucc.asn.au/hg/dropbear/rev/0dc3103a5900 :
 
+  Only advertise a single server ecdsa key when -R (generate as required) is
+  specified. Fixes -R now that default ecdsa key size has changed.
+
+[Peter: apply-patches.sh does not like suffix-less filename, so include
+	patch in Buildroot]
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4a3b0ba38fde05e8f8c3512d516d86803efa44c0)
+
+(cherry picked from commit 8a38d7cc9a0b934997c5b7f3de924aae01c0741f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-Wait-to-fail-invalid-usernames.patch      | 236 +++++++++++++++++++++
- 1 file changed, 236 insertions(+)
+ ...se-single-server-ecdsa-key-when-R-is-used.patch | 113 +++++++++++++++++++++
+ 1 file changed, 113 insertions(+)
 
-diff --git a/package/dropbear/0002-Wait-to-fail-invalid-usernames.patch b/package/dropbear/0002-Wait-to-fail-invalid-usernames.patch
+diff --git a/package/dropbear/0001-only-advertise-single-server-ecdsa-key-when-R-is-used.patch b/package/dropbear/0001-only-advertise-single-server-ecdsa-key-when-R-is-used.patch
 new file mode 100644
-index 0000000000..958ac9921e
+index 0000000000..1467e3bc2d
 --- /dev/null
-+++ b/package/dropbear/0002-Wait-to-fail-invalid-usernames.patch
-@@ -0,0 +1,236 @@
-+From 52adbb34c32d3e2e1bcdb941e20a6f81138b8248 Mon Sep 17 00:00:00 2001
-+From: Matt Johnston <matt@ucc.asn.au>
-+Date: Thu, 23 Aug 2018 23:43:12 +0800
-+Subject: [PATCH] Wait to fail invalid usernames
++++ b/package/dropbear/0001-only-advertise-single-server-ecdsa-key-when-R-is-used.patch
+@@ -0,0 +1,113 @@
++# HG changeset patch
++# User Matt Johnston <matt@ucc.asn.au>
++# Date 1520519133 -28800
++# Node ID 0dc3103a5900971d1d06d9101e062ddbd1112436
++# Parent  0f149d63068d90705db7fb52c8dea15ff32eedd7
++Only advertise a single server ecdsa key when -R (generate as required) is
++specified. Fixes -R now that default ecdsa key size has changed.
 +
-+[hg: https://secure.ucc.asn.au/hg/dropbear/rev/5d2d1021ca00]
++Upstream-URL: https://secure.ucc.asn.au/hg/dropbear/rev/0dc3103a5900
 +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ auth.h           |  6 +++---
-+ svr-auth.c       | 19 +++++--------------
-+ svr-authpam.c    | 26 ++++++++++++++++++++++----
-+ svr-authpasswd.c | 27 ++++++++++++++-------------
-+ svr-authpubkey.c | 11 ++++++++++-
-+ 5 files changed, 54 insertions(+), 35 deletions(-)
-+
-+diff --git a/auth.h b/auth.h
-+index da498f5..98f5468 100644
-+--- a/auth.h
-++++ b/auth.h
-+@@ -37,9 +37,9 @@ void recv_msg_userauth_request(void);
-+ void send_msg_userauth_failure(int partial, int incrfail);
-+ void send_msg_userauth_success(void);
-+ void send_msg_userauth_banner(const buffer *msg);
-+-void svr_auth_password(void);
-+-void svr_auth_pubkey(void);
-+-void svr_auth_pam(void);
-++void svr_auth_password(int valid_user);
-++void svr_auth_pubkey(int valid_user);
-++void svr_auth_pam(int valid_user);
++diff -r 0f149d63068d -r 0dc3103a5900 svr-runopts.c
++--- a/svr-runopts.c	Thu Mar 08 22:22:11 2018 +0800
+++++ b/svr-runopts.c	Thu Mar 08 22:25:33 2018 +0800
++@@ -526,8 +526,10 @@
 + 
-+ #if DROPBEAR_SVR_PUBKEY_OPTIONS_BUILT
-+ int svr_pubkey_allows_agentfwd(void);
-+diff --git a/svr-auth.c b/svr-auth.c
-+index c19c090..edde86b 100644
-+--- a/svr-auth.c
-++++ b/svr-auth.c
-+@@ -149,10 +149,8 @@ void recv_msg_userauth_request() {
-+ 		if (methodlen == AUTH_METHOD_PASSWORD_LEN &&
-+ 				strncmp(methodname, AUTH_METHOD_PASSWORD,
-+ 					AUTH_METHOD_PASSWORD_LEN) == 0) {
-+-			if (valid_user) {
-+-				svr_auth_password();
-+-				goto out;
-+-			}
-++			svr_auth_password(valid_user);
-++			goto out;
-+ 		}
-+ 	}
++ void load_all_hostkeys() {
++ 	int i;
++-	int disable_unset_keys = 1;
++ 	int any_keys = 0;
+++#ifdef DROPBEAR_ECDSA
+++	int loaded_any_ecdsa = 0;
+++#endif
++ 
++ 	svr_opts.hostkey = new_sign_key();
++ 
++@@ -552,14 +554,8 @@
 + #endif
-+@@ -164,10 +162,8 @@ void recv_msg_userauth_request() {
-+ 		if (methodlen == AUTH_METHOD_PASSWORD_LEN &&
-+ 				strncmp(methodname, AUTH_METHOD_PASSWORD,
-+ 					AUTH_METHOD_PASSWORD_LEN) == 0) {
-+-			if (valid_user) {
-+-				svr_auth_pam();
-+-				goto out;
-+-			}
-++			svr_auth_pam(valid_user);
-++			goto out;
-+ 		}
-+ 	}
-+ #endif
-+@@ -177,12 +173,7 @@ void recv_msg_userauth_request() {
-+ 	if (methodlen == AUTH_METHOD_PUBKEY_LEN &&
-+ 			strncmp(methodname, AUTH_METHOD_PUBKEY,
-+ 				AUTH_METHOD_PUBKEY_LEN) == 0) {
-+-		if (valid_user) {
-+-			svr_auth_pubkey();
-+-		} else {
-+-			/* pubkey has no failure delay */
-+-			send_msg_userauth_failure(0, 0);
-+-		}
-++		svr_auth_pubkey(valid_user);
-+ 		goto out;
-+ 	}
-+ #endif
-+diff --git a/svr-authpam.c b/svr-authpam.c
-+index 05e4f3e..d201bc9 100644
-+--- a/svr-authpam.c
-++++ b/svr-authpam.c
-+@@ -178,13 +178,14 @@ pamConvFunc(int num_msg,
-+  * Keyboard interactive would be a lot nicer, but since PAM is synchronous, it
-+  * gets very messy trying to send the interactive challenges, and read the
-+  * interactive responses, over the network. */
-+-void svr_auth_pam() {
-++void svr_auth_pam(int valid_user) {
-+ 
-+ 	struct UserDataS userData = {NULL, NULL};
-+ 	struct pam_conv pamConv = {
-+ 		pamConvFunc,
-+ 		&userData /* submitted to pamvConvFunc as appdata_ptr */ 
-+ 	};
-++	const char* printable_user = NULL;
-+ 
-+ 	pam_handle_t* pamHandlep = NULL;
-+ 
-+@@ -204,12 +205,23 @@ void svr_auth_pam() {
-+ 
-+ 	password = buf_getstring(ses.payload, &passwordlen);
-+ 
-++	/* We run the PAM conversation regardless of whether the username is valid
-++	in case the conversation function has an inherent delay.
-++	Use ses.authstate.username rather than ses.authstate.pw_name.
-++	After PAM succeeds we then check the valid_user flag too */
-++
-+ 	/* used to pass data to the PAM conversation function - don't bother with
-+ 	 * strdup() etc since these are touched only by our own conversation
-+ 	 * function (above) which takes care of it */
-+-	userData.user = ses.authstate.pw_name;
-++	userData.user = ses.authstate.username;
-+ 	userData.passwd = password;
-+ 
-++	if (ses.authstate.pw_name) {
-++		printable_user = ses.authstate.pw_name;
-++	} else {
-++		printable_user = "<invalid username>";
-++	}
-++
-+ 	/* Init pam */
-+ 	if ((rc = pam_start("sshd", NULL, &pamConv, &pamHandlep)) != PAM_SUCCESS) {
-+ 		dropbear_log(LOG_WARNING, "pam_start() failed, rc=%d, %s", 
-+@@ -242,7 +254,7 @@ void svr_auth_pam() {
-+ 				rc, pam_strerror(pamHandlep, rc));
-+ 		dropbear_log(LOG_WARNING,
-+ 				"Bad PAM password attempt for '%s' from %s",
-+-				ses.authstate.pw_name,
-++				printable_user,
-+ 				svr_ses.addrstring);
-+ 		send_msg_userauth_failure(0, 1);
-+ 		goto cleanup;
-+@@ -253,12 +265,18 @@ void svr_auth_pam() {
-+ 				rc, pam_strerror(pamHandlep, rc));
-+ 		dropbear_log(LOG_WARNING,
-+ 				"Bad PAM password attempt for '%s' from %s",
-+-				ses.authstate.pw_name,
-++				printable_user,
-+ 				svr_ses.addrstring);
-+ 		send_msg_userauth_failure(0, 1);
-+ 		goto cleanup;
 + 	}
 + 
-++	if (!valid_user) {
-++		/* PAM auth succeeded but the username isn't allowed in for another reason
-++		(checkusername() failed) */
-++		send_msg_userauth_failure(0, 1);
-++	}
-++
-+ 	/* successful authentication */
-+ 	dropbear_log(LOG_NOTICE, "PAM password auth succeeded for '%s' from %s",
-+ 			ses.authstate.pw_name,
-+diff --git a/svr-authpasswd.c b/svr-authpasswd.c
-+index bdee2aa..69c7d8a 100644
-+--- a/svr-authpasswd.c
-++++ b/svr-authpasswd.c
-+@@ -48,22 +48,14 @@ static int constant_time_strcmp(const char* a, const char* b) {
-+ 
-+ /* Process a password auth request, sending success or failure messages as
-+  * appropriate */
-+-void svr_auth_password() {
-++void svr_auth_password(int valid_user) {
-+ 	
-+ 	char * passwdcrypt = NULL; /* the crypt from /etc/passwd or /etc/shadow */
-+ 	char * testcrypt = NULL; /* crypt generated from the user's password sent */
-+-	char * password;
-++	char * password = NULL;
-+ 	unsigned int passwordlen;
-+-
-+ 	unsigned int changepw;
-+ 
-+-	passwdcrypt = ses.authstate.pw_passwd;
-+-
-+-#ifdef DEBUG_HACKCRYPT
-+-	/* debugging crypt for non-root testing with shadows */
-+-	passwdcrypt = DEBUG_HACKCRYPT;
++-#if DROPBEAR_DELAY_HOSTKEY
++-	if (svr_opts.delay_hostkey) {
++-		disable_unset_keys = 0;
++-	}
 +-#endif
 +-
-+ 	/* check if client wants to change password */
-+ 	changepw = buf_getbool(ses.payload);
-+ 	if (changepw) {
-+@@ -73,12 +65,21 @@ void svr_auth_password() {
++ #if DROPBEAR_RSA
++-	if (disable_unset_keys && !svr_opts.hostkey->rsakey) {
+++	if (!svr_opts.delay_hostkey && !svr_opts.hostkey->rsakey) {
++ 		disablekey(DROPBEAR_SIGNKEY_RSA);
++ 	} else {
++ 		any_keys = 1;
++@@ -567,39 +563,54 @@
++ #endif
++ 
++ #if DROPBEAR_DSS
++-	if (disable_unset_keys && !svr_opts.hostkey->dsskey) {
+++	if (!svr_opts.delay_hostkey && !svr_opts.hostkey->dsskey) {
++ 		disablekey(DROPBEAR_SIGNKEY_DSS);
++ 	} else {
++ 		any_keys = 1;
 + 	}
++ #endif
 + 
-+ 	password = buf_getstring(ses.payload, &passwordlen);
+++#if DROPBEAR_ECDSA
+++	/* We want to advertise a single ecdsa algorithm size.
+++	- If there is a ecdsa hostkey at startup we choose that that size.
+++	- If we generate at runtime we choose the default ecdsa size.
+++	- Otherwise no ecdsa keys will be advertised */
++ 
++-#if DROPBEAR_ECDSA
+++	/* check if any keys were loaded at startup */
+++	loaded_any_ecdsa = 
+++		0
++ #if DROPBEAR_ECC_256
++-	if ((disable_unset_keys || ECDSA_DEFAULT_SIZE != 256)
++-		&& !svr_opts.hostkey->ecckey256) {
+++		|| svr_opts.hostkey->ecckey256
+++#endif
+++#if DROPBEAR_ECC_384
+++		|| svr_opts.hostkey->ecckey384
+++#endif
+++#if DROPBEAR_ECC_521
+++		|| svr_opts.hostkey->ecckey521
+++#endif
+++		;
+++	any_keys |= loaded_any_ecdsa;
+++
+++	/* Or an ecdsa key could be generated at runtime */
+++	any_keys |= svr_opts.delay_hostkey;
+++
+++	/* At most one ecdsa key size will be left enabled */
+++#if DROPBEAR_ECC_256
+++	if (!svr_opts.hostkey->ecckey256
+++		&& (!svr_opts.delay_hostkey || loaded_any_ecdsa || ECDSA_DEFAULT_SIZE != 256 )) {
++ 		disablekey(DROPBEAR_SIGNKEY_ECDSA_NISTP256);
++-	} else {
++-		any_keys = 1;
++ 	}
++ #endif
 +-
-+-	/* the first bytes of passwdcrypt are the salt */
-+-	testcrypt = crypt(password, passwdcrypt);
-++	if (valid_user) {
-++		/* the first bytes of passwdcrypt are the salt */
-++		passwdcrypt = ses.authstate.pw_passwd;
-++		testcrypt = crypt(password, passwdcrypt);
-++	}
-+ 	m_burn(password, passwordlen);
-+ 	m_free(password);
-+ 
-++	/* After we have got the payload contents we can exit if the username
-++	is invalid. Invalid users have already been logged. */
-++	if (!valid_user) {
-++		send_msg_userauth_failure(0, 1);
-++		return;
-++	}
-++
-+ 	if (testcrypt == NULL) {
-+ 		/* crypt() with an invalid salt like "!!" */
-+ 		dropbear_log(LOG_WARNING, "User account '%s' is locked",
-+diff --git a/svr-authpubkey.c b/svr-authpubkey.c
-+index aa6087c..ff481c8 100644
-+--- a/svr-authpubkey.c
-++++ b/svr-authpubkey.c
-+@@ -79,7 +79,7 @@ static int checkfileperm(char * filename);
-+ 
-+ /* process a pubkey auth request, sending success or failure message as
-+  * appropriate */
-+-void svr_auth_pubkey() {
-++void svr_auth_pubkey(int valid_user) {
-+ 
-+ 	unsigned char testkey; /* whether we're just checking if a key is usable */
-+ 	char* algo = NULL; /* pubkey algo */
-+@@ -102,6 +102,15 @@ void svr_auth_pubkey() {
-+ 	keybloblen = buf_getint(ses.payload);
-+ 	keyblob = buf_getptr(ses.payload, keybloblen);
-+ 
-++	if (!valid_user) {
-++		/* Return failure once we have read the contents of the packet
-++		required to validate a public key. 
-++		Avoids blind user enumeration though it isn't possible to prevent
-++		testing for user existence if the public key is known */
-++		send_msg_userauth_failure(0, 0);
-++		goto out;
-++	}
-++
-+ 	/* check if the key is valid */
-+ 	if (checkpubkey(algo, algolen, keyblob, keybloblen) == DROPBEAR_FAILURE) {
-+ 		send_msg_userauth_failure(0, 0);
-+-- 
-+2.11.0
++ #if DROPBEAR_ECC_384
++-	if ((disable_unset_keys || ECDSA_DEFAULT_SIZE != 384)
++-		&& !svr_opts.hostkey->ecckey384) {
+++	if (!svr_opts.hostkey->ecckey384
+++		&& (!svr_opts.delay_hostkey || loaded_any_ecdsa || ECDSA_DEFAULT_SIZE != 384 )) {
++ 		disablekey(DROPBEAR_SIGNKEY_ECDSA_NISTP384);
++-	} else {
++-		any_keys = 1;
++ 	}
++ #endif
++-
++ #if DROPBEAR_ECC_521
++-	if ((disable_unset_keys || ECDSA_DEFAULT_SIZE != 521)
++-		&& !svr_opts.hostkey->ecckey521) {
+++	if (!svr_opts.hostkey->ecckey521
+++		&& (!svr_opts.delay_hostkey || loaded_any_ecdsa || ECDSA_DEFAULT_SIZE != 521 )) {
++ 		disablekey(DROPBEAR_SIGNKEY_ECDSA_NISTP521);
++-	} else {
++-		any_keys = 1;
++ 	}
++ #endif
++ #endif /* DROPBEAR_ECDSA */
 +
