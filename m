@@ -1,28 +1,105 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Aug 2018 00:09:18 +0200
-Subject: [Buildroot] [PATCH 1/1] libkcapi: bump to version 1.1.3
-In-Reply-To: <20180827214323.17876-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 27 Aug 2018 23:43:23 +0200")
-References: <20180827214323.17876-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pny37981.fsf@dell.be.48ers.dk>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 27 Aug 2018 18:14:27 -0500
+Subject: [Buildroot] [PATCH 1/2] package/aircrack-ng: powerpc support
+ optional ALTIVEC
+Message-ID: <1535411668-36286-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+This patch adds support for the powerpc arch to conditionally
+check if an arch provies altivec accelerator support, similar
+to other SIMD on ARM/x86.
 
- > Remove patch (already in version)
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
-[snip]
+Upstream issue: aircrack-ng/aircrack-ng#1941
 
- > -LIBKCAPI_VERSION = 1.1.0
- > +LIBKCAPI_VERSION = 1.1.3
+Fixes
+http://autobuild.buildroot.net/results/87e82a5e8d0b1c1ff10ec3e59d25bcd56b329075
 
-Is this meant for master or next? E.G. does this fix any significant
-issues?
+Tested against both a e6500 with Altivec and a e500 target.
 
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+ ...1-autotools-Fix-optional-SIMD-on-PPC-arch.patch | 69 ++++++++++++++++++++++
+ 1 file changed, 69 insertions(+)
+ create mode 100644 package/aircrack-ng/0001-autotools-Fix-optional-SIMD-on-PPC-arch.patch
+
+diff --git a/package/aircrack-ng/0001-autotools-Fix-optional-SIMD-on-PPC-arch.patch b/package/aircrack-ng/0001-autotools-Fix-optional-SIMD-on-PPC-arch.patch
+new file mode 100644
+index 0000000..1156852
+--- /dev/null
++++ b/package/aircrack-ng/0001-autotools-Fix-optional-SIMD-on-PPC-arch.patch
+@@ -0,0 +1,69 @@
++From 7cf680386de051cb8308510680299aef810fe743 Mon Sep 17 00:00:00 2001
++From: Joseph Benden <joe@benden.us>
++Date: Fri, 17 Aug 2018 13:23:39 -0700
++Subject: [PATCH] autotools: Fix optional SIMD on PPC arch
++
++Resolves:
++https://github.com/aircrack-ng/aircrack-ng/issues/1941
++
++Upstream (applied to their master, not yet in a release): (squashed together)
++https://github.com/aircrack-ng/aircrack-ng/commit/97838c6b903d33c8403a4bdcae60b8619fad7538
++https://github.com/aircrack-ng/aircrack-ng/commit/efc0b2718f4afd9582419902d205b242e546b9ab
++
++Signed-off-by: Joseph Benden <joe@benden.us>
++Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com
++---
++ build/m4/aircrack_ng_simd.m4    | 4 ++++
++ src/aircrack-crypto/Makefile.am | 7 ++++++-
++ 2 files changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/build/m4/aircrack_ng_simd.m4 b/build/m4/aircrack_ng_simd.m4
++index 29c3816..2bcc41f 100644
++--- a/build/m4/aircrack_ng_simd.m4
+++++ b/build/m4/aircrack_ng_simd.m4
++@@ -132,6 +132,7 @@ then
++     AX_CHECK_COMPILE_FLAG([-maltivec], [
++         AX_APPEND_FLAG(-maltivec, [ppc_altivec_[]_AC_LANG_ABBREV[]flags])
++         AC_SUBST(ppc_altivec_[]_AC_LANG_ABBREV[]flags)
+++        ALTIVEC_FOUND=1
++     ])
++ 
++     AX_CHECK_COMPILE_FLAG([-mabi=altivec], [
++@@ -147,6 +148,7 @@ then
++     AX_CHECK_COMPILE_FLAG([-mpower8-vector], [
++         AX_APPEND_FLAG(-mpower8-vector, [ppc_altivec_[]_AC_LANG_ABBREV[]flags])
++         AC_SUBST(ppc_altivec_[]_AC_LANG_ABBREV[]flags)
+++        POWER8_FOUND=1
++     ])
++ fi
++ 
++@@ -258,6 +260,8 @@ AM_CONDITIONAL([ARM], [test "$IS_ARM" = 1])
++ AM_CONDITIONAL([PPC], [test "$IS_PPC" = 1])
++ AM_CONDITIONAL([NEON], [test "$NEON_FOUND" = 1])
++ AM_CONDITIONAL([AVX512F], [test "$AVX512F_FOUND" = 1])
+++AM_CONDITIONAL([ALTIVEC], [test "$ALTIVEC_FOUND" = 1])
+++AM_CONDITIONAL([POWER8], [test "$POWER8_FOUND" = 1])
++ ])
++ 
++ AC_DEFUN([AIRCRACK_NG_SIMD_C], [
++diff --git a/src/aircrack-crypto/Makefile.am b/src/aircrack-crypto/Makefile.am
++index 8cc685d..a1664a5 100644
++--- a/src/aircrack-crypto/Makefile.am
+++++ b/src/aircrack-crypto/Makefile.am
++@@ -131,7 +131,12 @@ lib_LTLIBRARIES += libaircrack-crypto-arm-neon.la
++ endif
++ endif
++ if PPC
++-lib_LTLIBRARIES += libaircrack-crypto-ppc-altivec.la libaircrack-crypto-ppc-power8.la
+++if ALTIVEC
+++lib_LTLIBRARIES += libaircrack-crypto-ppc-altivec.la
+++endif
+++if POWER8
+++lib_LTLIBRARIES += libaircrack-crypto-ppc-power8.la
+++endif
++ endif
++ if X86
++ if AVX512F
++-- 
++1.9.1
++
 -- 
-Bye, Peter Korsgaard
+1.9.1
