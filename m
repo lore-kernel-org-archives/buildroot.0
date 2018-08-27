@@ -1,43 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 27 Aug 2018 18:41:02 +0200
-Subject: [Buildroot] [PATCH 1/1] cutelyst: link with libatomic when needed
-Message-ID: <20180827164102.21147-1-fontaine.fabrice@gmail.com>
+Date: Mon, 27 Aug 2018 18:54:04 +0200
+Subject: [Buildroot] [PATCH 1/1] cutelyst: depends on C++11
+Message-ID: <20180827165404.22151-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On some architectures, atomic binutils are provided by the libatomic
-library from gcc. Linking with libatomic is therefore necessary,
-otherwise the build fails with:
-
-sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
-
-This is often for example the case on sparcv8 32 bit.
+thread-local storage is a C++11 feature available since gcc 4.8:
+https://gcc.gnu.org/projects/cxx-status.html#cxx11
 
 Fixes:
- - http://autobuild.buildroot.net/results/9e307ab9c7067b26d7b33a572204394808e25772
+ - http://autobuild.buildroot.net/results/2963bd55cd7c33ded3e5a75fc86079acfae844c1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cutelyst/cutelyst.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/cutelyst/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-index e8695a7b3a..1f1a5249be 100644
---- a/package/cutelyst/cutelyst.mk
-+++ b/package/cutelyst/cutelyst.mk
-@@ -16,6 +16,10 @@ CUTELYST_CONF_OPTS += \
- 	-DPLUGIN_CSRFPROTECTION=ON \
- 	-DPLUGIN_VIEW_GRANTLEE=OFF
+diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
+index 5a3974a454..91b559bd18 100644
+--- a/package/cutelyst/Config.in
++++ b/package/cutelyst/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_CUTELYST
+ 	bool "cutelyst"
+ 	depends on BR2_PACKAGE_QT5
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	help
+@@ -8,3 +10,7 @@ config BR2_PACKAGE_CUTELYST
+ 	  the simple approach of Catalyst (Perl) framework.
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+CUTELYST_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
+ 	  https://cutelyst.org
 +
- ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
- CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=ON
- CUTELYST_DEPENDENCIES += libpwquality
++comment "cutelyst needs a toolchain w/ C++, gcc >= 4.8"
++	depends on BR2_PACKAGE_QT5
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
 -- 
 2.14.1
