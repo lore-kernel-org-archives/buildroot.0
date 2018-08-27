@@ -1,37 +1,105 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Mon, 27 Aug 2018 17:32:30 -0300 (BRT)
-Subject: [Buildroot] Flashing EFI on internal SSD
-In-Reply-To: <1535397652.local-c4538192-4736-v1.4.1-b1028ad4@getmailspring.com>
-References: <1535397652.local-c4538192-4736-v1.4.1-b1028ad4@getmailspring.com>
-Message-ID: <368434519.3074792.1535401950870.JavaMail.zimbra@datacom.com.br>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 27 Aug 2018 22:40:40 +0200
+Subject: [Buildroot] [PATCH 1/1] aircrack-ng: fix build with mmx
+Message-ID: <20180827204040.22578-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "LP C" <lpdev@cordier.org>
-> To: "buildroot" <buildroot@busybox.net>
-> Sent: Monday, August 27, 2018 4:27:23 PM
-> Subject: [Buildroot] Flashing EFI on internal SSD
+Commit 39387fc80f90f3a9ac9ef9f3aa32da5776a0721e removed mmx support
+however aircrack-ng fails to build on platforms with mmx because an
+error is raised if __MMX__ is defined.
 
-> Hi,
+Fixes:
+ - http://autobuild.buildroot.net/results/b7362b69435e9ef6fb2aedc50743e88dbd7a5c72
 
-> Simple question here. I have generated an .img file using the
-> pc_x86_64_efi_defconfig. My embedded system is an Intel Computestick. Now I
-> would like to flash the internal SSD drive of the computestick.
-> I tried to load a live distro (ubuntu) and tried to dd's the .img directly on
-> the SSD block device and rebooted. Unfortunately the system says that no boot
-> device has been detected.
+[Upstream status: merged
+(https://github.com/aircrack-ng/aircrack-ng/pull/1943)]
 
-> Secure boot has been disabled in the bios, and UEFI is enabled.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/aircrack-ng/0001-Fix-build-with-mmx.patch | 71 +++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/aircrack-ng/0001-Fix-build-with-mmx.patch
 
-> Any clues on this?
-
-You must create an UEFI boot entry, either interactively via BIOS menu
-(depends on the BIOS vendor), or running efibootmgr on the command line.
-
+diff --git a/package/aircrack-ng/0001-Fix-build-with-mmx.patch b/package/aircrack-ng/0001-Fix-build-with-mmx.patch
+new file mode 100644
+index 0000000000..620d806d88
+--- /dev/null
++++ b/package/aircrack-ng/0001-Fix-build-with-mmx.patch
+@@ -0,0 +1,71 @@
++From 37078a46346f01141cc13026bb5ad426bb98f3a0 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 22 Aug 2018 20:01:07 +0200
++Subject: [PATCH] Fix build with mmx
++
++Commit 39387fc80f90f3a9ac9ef9f3aa32da5776a0721e removed mmx support
++however aircrack-ng fails to build on platforms with mmx because an
++error is raised if __MMX__ is defined.
++
++Fixes:
++ - http://autobuild.buildroot.net/results/b7362b69435e9ef6fb2aedc50743e88dbd7a5c72
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: merged (https://github.com/aircrack-ng/aircrack-ng/pull/1943)]
++---
++ src/aircrack-crypto/arch.h              | 3 ---
++ src/aircrack-crypto/memory.h            | 3 ---
++ src/aircrack-crypto/pseudo_intrinsics.h | 9 ---------
++ 3 files changed, 15 deletions(-)
++
++diff --git a/src/aircrack-crypto/arch.h b/src/aircrack-crypto/arch.h
++index 1a19ddd6..78b9e619 100644
++--- a/src/aircrack-crypto/arch.h
+++++ b/src/aircrack-crypto/arch.h
++@@ -357,9 +357,6 @@
++ #elif __SSE2__
++ #define SIMD_COEF_32 4
++ #define SIMD_COEF_64 2
++-#elif __MMX__
++-#define SIMD_COEF_32 2
++-#define SIMD_COEF_64 1
++ #endif
++ 
++ /*
++diff --git a/src/aircrack-crypto/memory.h b/src/aircrack-crypto/memory.h
++index 83b048f0..24b1c95b 100644
++--- a/src/aircrack-crypto/memory.h
+++++ b/src/aircrack-crypto/memory.h
++@@ -70,9 +70,6 @@
++ #elif __SSE2__
++ #define SIMD_COEF_32 4
++ #define SIMD_COEF_64 2
++-#elif __MMX__
++-#define SIMD_COEF_32 2
++-#define SIMD_COEF_64 1
++ #endif
++ 
++ /*
++diff --git a/src/aircrack-crypto/pseudo_intrinsics.h b/src/aircrack-crypto/pseudo_intrinsics.h
++index dd0ca379..f5527bdd 100644
++--- a/src/aircrack-crypto/pseudo_intrinsics.h
+++++ b/src/aircrack-crypto/pseudo_intrinsics.h
++@@ -658,15 +658,6 @@ _inline __m128i _mm_set1_epi64(long long a)
++ 	(vtype)(vtype64) { x0, x1 }
++ #endif
++ 
++-/******************************** MMX *********************************/
++-
++-#elif __MMX__
++-#include <mmintrin.h>
++-
++-typedef __m64i vtype;
++-
++-#error MMX intrinsics not implemented (contributions are welcome!)
++-
++ #endif /* __SIMD__ elif __SIMD__ elif __SIMD__ */
++ 
++ /************************* COMMON STUFF BELOW *************************/
++-- 
++2.14.1
++
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.14.1
