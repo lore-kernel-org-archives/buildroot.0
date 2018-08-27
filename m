@@ -1,49 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Aug 2018 11:31:28 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] dropbear: Do not build
- static binary
-Message-ID: <20180827093022.ECE198E7F5@busybox.osuosl.org>
+Date: Mon, 27 Aug 2018 11:30:57 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] dropbear: unbundle
+ libtomath & libtomcrypt
+Message-ID: <20180827093022.DA77A8E7F5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25c079de0e523206a82719569b66cc38f054a5b0
+commit: https://git.buildroot.net/buildroot/commit/?id=2450968021e8d4799eecbf3feeecec76c774a68b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Dropbear 2018.76 now uses the --enable-static option to indicate that a static
-binary should be built. This will incorrectly pick up the generic buildroot
-option intended for building static libraries, causing an unwanted static
-binary build with BR2_SHARED_STATIC_LIBS.
+DROPBEAR_SMALL_CODE could be only honored with bundled libtomcrypt
 
-Fix by appending an --disable-static configure flag, overriding the buildroot
-default.
-
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-Reviewed-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c9922a4d2fc79e1d17f85e6f74c1e6ece9c91092)
+(cherry picked from commit cf9b5522d1f8488b1c7e74822eff9f3ac69d8821)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dropbear/dropbear.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/dropbear/Config.in   | 1 +
+ package/dropbear/dropbear.mk | 5 +++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 6700778161..5d6b83b6d1 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_DROPBEAR
+ 	bool "dropbear"
+ 	select BR2_PACKAGE_ZLIB if !BR2_PACKAGE_DROPBEAR_SMALL
++	select BR2_PACKAGE_LIBTOMCRYPT if !BR2_PACKAGE_DROPBEAR_SMALL
+ 	help
+ 	  A small SSH 2 server designed for small memory environments.
+ 
 diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index 1da1a559a3..fc41a84c1f 100644
+index 10cb99b5e4..1da1a559a3 100644
 --- a/package/dropbear/dropbear.mk
 +++ b/package/dropbear/dropbear.mk
-@@ -27,8 +27,11 @@ DROPBEAR_MAKE = \
- 	$(MAKE) MULTI=1 SCPPROGRESS=1 \
- 	PROGRAMS="$(DROPBEAR_PROGRAMS)"
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--DROPBEAR_CONF_OPTS += --enable-static
-+# With BR2_SHARED_STATIC_LIBS=y the generic infrastructure adds a
-+# --enable-static flags causing dropbear to be built as a static
-+# binary. Adding a --disable-static reverts this
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+DROPBEAR_CONF_OPTS += --disable-static
+@@ -76,10 +76,11 @@ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_REVERSE_DNS
  endif
  
- # Ensure that dropbear doesn't use crypt() when it's not available
+ ifeq ($(BR2_PACKAGE_DROPBEAR_SMALL),y)
+-DROPBEAR_CONF_OPTS += --disable-zlib
++DROPBEAR_CONF_OPTS += --disable-zlib --enable-bundled-libtom
+ else
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_BUILD_FEATURED
+-DROPBEAR_DEPENDENCIES += zlib
++DROPBEAR_DEPENDENCIES += zlib libtomcrypt
++DROPBEAR_CONF_OPTS += --disable-bundled-libtom
+ endif
+ 
+ ifneq ($(BR2_PACKAGE_DROPBEAR_WTMP),y)
