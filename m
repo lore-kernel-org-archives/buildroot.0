@@ -1,48 +1,135 @@
 From: Mirza Krak <mirza.krak@northern.tech>
-Date: Mon, 27 Aug 2018 13:37:26 +0200
-Subject: [Buildroot] [[PATCH v2 0/2] mender-artifact support
-Message-ID: <20180827113728.20856-1-mirza.krak@northern.tech>
+Date: Mon, 27 Aug 2018 13:37:27 +0200
+Subject: [Buildroot] [[PATCH v2 1/2] package/pkg-golang: add support for
+ building host packages
+In-Reply-To: <20180827113728.20856-1-mirza.krak@northern.tech>
+References: <20180827113728.20856-1-mirza.krak@northern.tech>
+Message-ID: <20180827113728.20856-2-mirza.krak@northern.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-First patch adds "host" support in pkg-golang.mk.
+With this you can add:
 
-Second patch adds a new package, mender-artifact. This is a host tool
-to generate update images in Mender Artifact format compatible with
-Mender client and the Mender server. More information about the Mender
-artifact format can be found here:
+    $(eval $(host-golang-package))
 
-    https://github.com/mendersoftware/mender-artifact/blob/master/Documentation/artifact-format.md
+to a package .mk file to build for host.
 
-Patch 2 depends on:
-
-    package/pkg-golang: add support for building host packages
-
-All changes are based on review from Thomas Petazzoni, thank you for the review!
+Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+---
 
 Changes in v2:
-    - "fixup" patch 3 (DEVELOPERS update) in to patch 2.
+    - Added entry in Buildroot manual
+    - Install to $(HOST_DIR)/bin instead of $(HOST_DIR)/usr/bin
+    - Created "GO_COMMON_ENV" to be shared between GO_TARGET_ENV and GO_HOST_ENV
+    - Dropped accidental change of comment
+    - Removed a empty line
 
-See individual patches for more info on updates from v1 -> v2
+ docs/manual/adding-packages-golang.txt |  5 +++--
+ package/pkg-golang.mk                  | 37 +++++++++++++++++++++++++++++++---
+ 2 files changed, 37 insertions(+), 5 deletions(-)
 
-Mirza Krak (2):
-  package/pkg-golang: add support for building host packages
-  package/mender-artifact: initial support
+diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+index efcf696867..94520480ce 100644
+--- a/docs/manual/adding-packages-golang.txt
++++ b/docs/manual/adding-packages-golang.txt
+@@ -50,8 +50,9 @@ and +BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ because Buildroot will
+ automatically add a dependency on +host-go+ to such packages.
 
- DEVELOPERS                                   |  1 +
- docs/manual/adding-packages-golang.txt       |  5 ++--
- package/Config.in.host                       |  1 +
- package/mender-artifact/Config.in.host       | 20 +++++++++++++++
- package/mender-artifact/mender-artifact.hash | 28 +++++++++++++++++++++
- package/mender-artifact/mender-artifact.mk   | 21 ++++++++++++++++
- package/pkg-golang.mk                        | 37 +++++++++++++++++++++++++---
- 7 files changed, 108 insertions(+), 5 deletions(-)
- create mode 100644 package/mender-artifact/Config.in.host
- create mode 100644 package/mender-artifact/mender-artifact.hash
- create mode 100644 package/mender-artifact/mender-artifact.mk
+ The main macro of the Go package infrastructure is
+-+golang-package+. It is similar to the +generic-package+ macro. Only
+-target packages are supported with +golang-package+.
+++golang-package+. It is similar to the +generic-package+ macro. The
++ability to build host packages is also available, with the
+++host-golang-package+ macro.
 
+ Just like the generic infrastructure, the Go infrastructure works
+ by defining a number of variables before calling the +golang-package+.
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 6eacd14180..878228ce74 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -25,12 +25,18 @@ GO_BIN = $(HOST_DIR)/bin/go
+
+ # We pass an empty GOBIN, otherwise "go install: cannot install
+ # cross-compiled binaries when GOBIN is set"
+-GO_TARGET_ENV = \
+-	$(HOST_GO_TARGET_ENV) \
++GO_COMMON_ENV = \
+ 	PATH=$(BR_PATH) \
+ 	GOBIN= \
+ 	CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
+
++GO_TARGET_ENV = \
++	$(HOST_GO_TARGET_ENV) \
++	$(GO_COMMON_ENV)
++
++GO_HOST_ENV = \
++	$(GO_COMMON_ENV)
++
+ ################################################################################
+ # inner-golang-package -- defines how the configuration, compilation and
+ # installation of a Go package should be done, implements a few hooks to tune
+@@ -44,7 +50,6 @@ GO_TARGET_ENV = \
+ #             packages
+ #  argument 4 is the type (target or host)
+ #
+-# NOTE Only type target is supported at the moment
+ ################################################################################
+
+ define inner-golang-package
+@@ -96,6 +101,8 @@ endif
+ # Build step. Only define it if not already defined by the package .mk
+ # file.
+ ifndef $(2)_BUILD_CMDS
++ifeq ($(4),target)
++# Build package for target
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+ 		cd $$($(2)_SRC_PATH); \
+@@ -107,6 +114,20 @@ define $(2)_BUILD_CMDS
+ 			./$$(d)
+ 	)
+ endef
++else
++# Build package for host
++define $(2)_BUILD_CMDS
++	$$(foreach d,$$($(2)_BUILD_TARGETS),\
++		cd $$($(2)_SRC_PATH); \
++		$$(GO_HOST_ENV) \
++			GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
++			$$($(2)_GO_ENV) \
++			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
++			-o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
++			./$$(d)
++	)
++endef
++endif
+ endif
+
+ # Target installation step. Only define it if not already defined by the
+@@ -119,6 +140,15 @@ define $(2)_INSTALL_TARGET_CMDS
+ endef
+ endif
+
++# Host installation step
++ifndef $(2)_INSTALL_CMDS
++define $(2)_INSTALL_CMDS
++	$$(foreach d,$$($(2)_INSTALL_BINS),\
++		$(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(HOST_DIR)/bin/$$(d)
++	)
++endef
++endif
++
+ # Call the generic package infrastructure to generate the necessary make
+ # targets
+ $(call inner-generic-package,$(1),$(2),$(3),$(4))
+@@ -130,3 +160,4 @@ endef # inner-golang-package
+ ################################################################################
+
+ golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
++host-golang-package = $(call inner-golang-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
 --
 2.11.0
