@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Aug 2018 23:57:21 +0200
-Subject: [Buildroot] [PATCH 1/1] aircrack-ng: fix build with mmx
-In-Reply-To: <20180827204040.22578-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 27 Aug 2018 22:40:40 +0200")
-References: <20180827204040.22578-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736uz8oce.fsf@dell.be.48ers.dk>
+Date: Tue, 28 Aug 2018 00:00:11 +0200
+Subject: [Buildroot] [PATCH 1/1] cutelyst: link with libatomic when
+ needed
+In-Reply-To: <20180827164102.21147-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 27 Aug 2018 18:41:02 +0200")
+References: <20180827164102.21147-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y3cr79n8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,19 +14,35 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Commit 39387fc80f90f3a9ac9ef9f3aa32da5776a0721e removed mmx support
- > however aircrack-ng fails to build on platforms with mmx because an
- > error is raised if __MMX__ is defined.
+ > On some architectures, atomic binutils are provided by the libatomic
+ > library from gcc. Linking with libatomic is therefore necessary,
+ > otherwise the build fails with:
+
+ > sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
+
+ > This is often for example the case on sparcv8 32 bit.
 
  > Fixes:
- >  - http://autobuild.buildroot.net/results/b7362b69435e9ef6fb2aedc50743e88dbd7a5c72
-
- > [Upstream status: merged
- > (https://github.com/aircrack-ng/aircrack-ng/pull/1943)]
+ >  - http://autobuild.buildroot.net/results/9e307ab9c7067b26d7b33a572204394808e25772
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/cutelyst/cutelyst.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
 
-Committed, thanks.
+ > diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
+ > index e8695a7b3a..1f1a5249be 100644
+ > --- a/package/cutelyst/cutelyst.mk
+ > +++ b/package/cutelyst/cutelyst.mk
+ > @@ -16,6 +16,10 @@ CUTELYST_CONF_OPTS += \
+ >  	-DPLUGIN_CSRFPROTECTION=ON \
+ >  	-DPLUGIN_VIEW_GRANTLEE=OFF
+ 
+ > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ > +CUTELYST_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+
+I know we are doing this elsewhere as well, but doesn't this override
+TARGET_LDFLAGS then?
 
 -- 
 Bye, Peter Korsgaard
