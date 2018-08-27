@@ -1,53 +1,61 @@
 From: Christopher McCrory <chrismcc@gmail.com>
-Date: Mon, 27 Aug 2018 06:21:27 -0700
-Subject: [Buildroot] [PATCH 1/1] php: fix build with mysqli
-Message-ID: <20180827132127.20658-1-chrismcc@gmail.com>
+Date: Mon, 27 Aug 2018 06:23:55 -0700
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2018-08-26
+In-Reply-To: <87ftz082x7.fsf@dell.be.48ers.dk>
+References: <20180827060019.5834E20789@mail.bootlin.com>
+ <CALURroSFJESgnrW-ErTQo-A7QhiupELvgsBveWTSOhddXT9UQg@mail.gmail.com>
+ <87ftz082x7.fsf@dell.be.48ers.dk>
+Message-ID: <CALURroR1KKg-cqL1WUJG0NzkZ=mKeZN_M_t3W76FAT4C7dTnug@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes autobuild failures like
-http://autobuild.buildroot.net/results/3288b742cee650ee47a41c5b4d6aaef1fe67bff1
+On Mon, Aug 27, 2018 at 4:27 AM Peter Korsgaard <peter@korsgaard.com> wrote:
 
-php compile breaks with:
+> >>>>> "Christopher" == Christopher McCrory <chrismcc@gmail.com> writes:
+>
+> Hi,
+>  > php compile breaks with:
+>
+>
+<snip>
 
-ext/mysqlnd/mysqlnd_auth.o: In function `php_mysqlnd_scramble_sha2':
-mysqlnd_auth.c:(.text+0x1054): undefined reference to `PHP_SHA256Init'
-mysqlnd_auth.c:(.text+0x1064): undefined reference to `PHP_SHA256Update'
-mysqlnd_auth.c:(.text+0x1070): undefined reference to `PHP_SHA256Final'
-mysqlnd_auth.c:(.text+0x1078): undefined reference to `PHP_SHA256Init'
-mysqlnd_auth.c:(.text+0x1088): undefined reference to `PHP_SHA256Update'
-mysqlnd_auth.c:(.text+0x1094): undefined reference to `PHP_SHA256Final'
-mysqlnd_auth.c:(.text+0x109c): undefined reference to `PHP_SHA256Init'
-mysqlnd_auth.c:(.text+0x10ac): undefined reference to `PHP_SHA256Update'
-mysqlnd_auth.c:(.text+0x10bc): undefined reference to `PHP_SHA256Update'
-mysqlnd_auth.c:(.text+0x10c8): undefined reference to `PHP_SHA256Final'
 
-It looks like the php mysqli extension needs the hash extension to work.  This
-seems to be a php Make dependany bug.  This patch works around it until the
-upstream maintainers can fix it.
+>  > --- a/package/php/Config.ext
+>  > +++ b/package/php/Config.ext
+>  > @@ -113,6 +113,7 @@ endif
+>
+>  >  config BR2_PACKAGE_PHP_EXT_MYSQLI
+>  >         bool "Mysqli"
+>  > +       select BR2_PACKAGE_PHP_EXT_HASH
+>  >         help
+>  >           MySQL Improved extension support
+>
+>  > fixes it on buildroot in the short term
+>
+> Great, care to send a real patch with your signed-off-by for this?
+> Thanks!
+>
 
---
-I'm OK with modifing the above at commit time.
+Currently I don't have the best history with sending patches :) , but I
+gave it a shot.
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
----
- package/php/Config.ext | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 6b3d86925d..60ef1aee7c 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -113,6 +113,7 @@ endif
- 
- config BR2_PACKAGE_PHP_EXT_MYSQLI
- 	bool "Mysqli"
-+	select BR2_PACKAGE_PHP_EXT_HASH
- 	help
- 	  MySQL Improved extension support
- 
+
+
+> --
+> Bye, Peter Korsgaard
+>
+
+
 -- 
-2.14.4
+Christopher McCrory
+To the optimist, the glass is half full.
+To the pessimist, the glass is half empty.
+To the engineer, the glass is twice as big as it needs to be.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180827/aba0adfe/attachment.html>
