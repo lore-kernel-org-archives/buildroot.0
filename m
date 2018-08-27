@@ -1,125 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 Aug 2018 23:16:42 +0200
-Subject: [Buildroot] [PATCH] mbedtls: fix x86 PIC build with GCC < 5
-Message-ID: <20180827211642.1599-1-peter@korsgaard.com>
+Date: Mon, 27 Aug 2018 23:19:45 +0200
+Subject: [Buildroot] Analysis of defconfig build failures
+In-Reply-To: <CAAXf6LUwdkE_DGPV88Xma5LqJkYpr=+0Xhyg50hFhnQXEhkmrw@mail.gmail.com>
+ (Thomas De Schampheleire's message of "Mon, 27 Aug 2018 23:01:18
+ +0200")
+References: <20180812170138.0b51be07@windsurf>
+ <87600bbg68.fsf@dell.be.48ers.dk> <20180815213421.08e0a3b6@windsurf>
+ <87ftzf9v7u.fsf@dell.be.48ers.dk> <20180816001829.3f7a1436@windsurf>
+ <CAAXf6LVNs8470+VwKJCM68cHdp+ZgD-JxEpCbUpMXte4JYm68Q@mail.gmail.com>
+ <20180816220655.37fbff34@windsurf>
+ <CAAXf6LX52KbkJ3AHfvG4ZMZvRHtpcqUHfo98JeTjFnuWWfMWNg@mail.gmail.com>
+ <CAAXf6LW1V3FLD8B=BQ=nGO3guTfR6Xsk2JtRFc5aei-ZP=hbcQ@mail.gmail.com>
+ <CAAXf6LVAjPadPVB1Ubq_M=i1s8746fVAWNDvYm8dK_ZTBMbQgQ@mail.gmail.com>
+ <87in3w9qjj.fsf@dell.be.48ers.dk> <20180827102815.23605ecd@windsurf>
+ <87efek9ozo.fsf@dell.be.48ers.dk>
+ <CAAXf6LUwdkE_DGPV88Xma5LqJkYpr=+0Xhyg50hFhnQXEhkmrw@mail.gmail.com>
+Message-ID: <877ekb8q32.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/d6d/d6dc9a640aa1f6650a3e7b9397f2fe2ae3433f4d/
-http://autobuild.buildroot.net/results/ab5/ab5a58ea7845f9f378454ee1aa7e872448618ba9/
+>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
 
-ebx was recently added to the x86 inline asm MULADDC_STOP clobber list to
-fix #1550, but this causes the build to fail with GCC < 5 when building in
-PIC mode with errors like:
+Hi,
 
-include/mbedtls/bn_mul.h:46:13: error: PIC register clobbered by ?ebx? in ?asm?
+ > Backtrace from a quick gdb session:
 
-This is because older GCC versions treated the x86 ebx register (which is
-used for the GOT) as a fixed reserved register when building as PIC.
+ > Program received signal SIGABRT, Aborted.
+ > 0x00007ffff7a4b010 in raise () from /lib64/libc.so.6
+ > (gdb) bt
+ > #0  0x00007ffff7a4b010 in raise () from /lib64/libc.so.6
+ > #1  0x00007ffff7a4cc0d in abort () from /lib64/libc.so.6
+ > #2  0x00007ffff7a427e7 in ?? () from /lib64/libc.so.6
+ > #3  0x00007ffff7a428a2 in __assert_fail () from /lib64/libc.so.6
+ > #4  0x0000555555560a6f in propval_cell ()
+ > #5  0x000055555555b536 in check_graph_child_address ()
+ > #6  0x0000555555558dc8 in check_nodes_props ()
+ > #7  0x0000555555558df6 in check_nodes_props ()
+ > #8  0x000055555555a4d7 in run_check ()
+ > #9  0x000055555555c2cf in process_checks ()
+ > #10 0x0000555555558797 in main ()
 
-This is fixed by an improved register allocator in GCC 5+.  From the release
-notes:
+ > I haven't dug deeper. It could be that some patching is needed in
+ > host-dtc itself, to solve the above error.
 
-Register allocation improvements: Reuse of the PIC hard register, instead of
-using a fixed register, was implemented on x86/x86-64 targets.  This
-improves generated PIC code performance as more hard registers can be used.
+Thanks for investigating. This again seems to confirm that reverting the
+dtc bump will be a solution for 2018.08.
 
-https://www.gnu.org/software/gcc/gcc-5/changes.html
-
-As a workaround, add a patch to detect this situation and disable the inline
-assembly, similar to the MULADDC_CANNOT_USE_R7 logic.
-
-Patch submitted upstream: https://github.com/ARMmbed/mbedtls/pull/1986
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...x-x86-PIC-inline-ASM-compilation-with-GCC.patch | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
-
-diff --git a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch b/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
-new file mode 100644
-index 0000000000..60bf53f6e4
---- /dev/null
-+++ b/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
-@@ -0,0 +1,74 @@
-+From a0ae2ba37ca479c6edddec8634b25686be965e0d Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Mon, 27 Aug 2018 22:50:57 +0200
-+Subject: [PATCH] bn_mul.h: fix x86 PIC inline ASM compilation with GCC < 5
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes #1910
-+
-+With ebx added to the MULADDC_STOP clobber list to fix #1550, the inline
-+assembly fails to build with GCC < 5 in PIC mode with the following error:
-+
-+include/mbedtls/bn_mul.h:46:13: error: PIC register clobbered by ?ebx? in ?asm?
-+
-+This is because older GCC versions treated the x86 ebx register (which is
-+used for the GOT) as a fixed reserved register when building as PIC.
-+
-+This is fixed by an improved register allocator in GCC 5+.  From the release
-+notes:
-+
-+Register allocation improvements: Reuse of the PIC hard register, instead of
-+using a fixed register, was implemented on x86/x86-64 targets.  This
-+improves generated PIC code performance as more hard registers can be used.
-+
-+https://www.gnu.org/software/gcc/gcc-5/changes.html
-+
-+As a workaround, detect this situation and disable the inline assembly,
-+similar to the MULADDC_CANNOT_USE_R7 logic.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+Upstream: https://github.com/ARMmbed/mbedtls/pull/1986
-+---
-+ include/mbedtls/bn_mul.h | 18 +++++++++++++++++-
-+ 1 file changed, 17 insertions(+), 1 deletion(-)
-+
-+diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
-+index b587317d9..74a2d29be 100644
-+--- a/include/mbedtls/bn_mul.h
-++++ b/include/mbedtls/bn_mul.h
-+@@ -50,13 +50,29 @@
-+ #if defined(__GNUC__) && \
-+     ( !defined(__ARMCC_VERSION) || __ARMCC_VERSION >= 6000000 )
-+ 
-++/*
-++ * GCC < 5.0 treated the x86 ebx (which is used for the GOT) as a
-++ * fixed reserved register when building as PIC, leading to errors
-++ * like: bn_mul.h:46:13: error: PIC register clobbered by ?ebx? in ?asm?
-++ *
-++ * This is fixed by an improved register allocator in GCC 5+. From the
-++ * release notes:
-++ * Register allocation improvements: Reuse of the PIC hard register,
-++ * instead of using a fixed register, was implemented on x86/x86-64
-++ * targets. This improves generated PIC code performance as more hard
-++ * registers can be used.
-++ */
-++#if defined(__GNUC__) && __GNUC__ < 5 && defined(__PIC__)
-++#define MULADDC_CANNOT_USE_EBX
-++#endif
-++
-+ /*
-+  * Disable use of the i386 assembly code below if option -O0, to disable all
-+  * compiler optimisations, is passed, detected with __OPTIMIZE__
-+  * This is done as the number of registers used in the assembly code doesn't
-+  * work with the -O0 option.
-+  */
-+-#if defined(__i386__) && defined(__OPTIMIZE__)
-++#if defined(__i386__) && defined(__OPTIMIZE__) && !defined(MULADDC_CANNOT_USE_EBX)
-+ 
-+ #define MULADDC_INIT                        \
-+     asm(                                    \
-+-- 
-+2.11.0
-+
 -- 
-2.11.0
+Bye, Peter Korsgaard
