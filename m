@@ -1,41 +1,33 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 27 Aug 2018 10:49:01 +0200
-Subject: [Buildroot] [PATCH 1/3] sunxi-mali-mainline-driver: bump version
-Message-ID: <20180827084903.111735-1-giulio.benetti@micronovasrl.com>
+Date: Mon, 27 Aug 2018 10:49:03 +0200
+Subject: [Buildroot] [PATCH 3/3] sunxi-mali-mainline-driver: add hash file
+ for git tarball
+In-Reply-To: <20180827084903.111735-1-giulio.benetti@micronovasrl.com>
+References: <20180827084903.111735-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20180827084903.111735-3-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For support H3 and H5 SoCs and r8p1 driver version.
+There is not hash file in sunxi-mali-mainline-driver package.
 
-git shortlog --invert-grep --grep travis --no-merges 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5..
-Maxime Ripard (6):
-      Add r8p1 release
-      sunxi: Move the reset test to a function
-      sunxi: Add H3 support
-      sunxi: Add H5 support
-      sunxi: Remove generic compatible
-      sunxi: Set clock rate in the driver
+Create sunxi-mali-mainline-driver.hash and add sha256 for git tarball.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash  | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-index 24817b07c7..fcaeb81efe 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUNXI_MALI_MAINLINE_DRIVER_VERSION = 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5
-+SUNXI_MALI_MAINLINE_DRIVER_VERSION = 8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb
- SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
- SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
- 
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+new file mode 100644
+index 0000000000..bcc794743d
+--- /dev/null
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 9f479f8ac5e013e33568901b942baf6797464ea9b7f340ee38cd469b4fd2b038  sunxi-mali-mainline-driver-8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb.tar.gz
 -- 
 2.17.1
