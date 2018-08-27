@@ -1,44 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Aug 2018 11:14:29 +0200
-Subject: [Buildroot] [PATCH 3/3] DEVELOPERS: add mender-artifact to
- Mirza Krak
-In-Reply-To: <20180826214146.28328-4-mirza.krak@northern.tech>
-References: <20180826214146.28328-1-mirza.krak@northern.tech>
- <20180826214146.28328-4-mirza.krak@northern.tech>
-Message-ID: <20180827111429.11659d13@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 27 Aug 2018 11:16:06 +0200
+Subject: [Buildroot] [PATCH] dropbear: add upstream security fix for
+ CVE-2018-15599
+In-Reply-To: <20180826214037.5025-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 26 Aug 2018 23:40:37 +0200")
+References: <20180826214037.5025-1-peter@korsgaard.com>
+Message-ID: <87a7p89nl5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Sun, 26 Aug 2018 23:41:46 +0200, Mirza Krak wrote:
-> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+ > dropbear is affected by an user enumeration vulnerability similar to the
+ > recent issue in openssh (CVE-2018-15473).  Add an upstream patch fixing the
+ > issue.
 
-This should be merged into PATCH 2/3.
+ > For more details, see the discussion on the mailing list:
+ > http://lists.ucc.gu.uwa.edu.au/pipermail/dropbear/2018q3/002110.html
 
-> ---
->  DEVELOPERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a6d76dd9c4..b69a75fdfd 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1439,6 +1439,7 @@ F:	package/shadowsocks-libev/
->  
->  N:	Mirza Krak <mirza.krak@northern.tech>
->  F:	package/mender/
-> +F:  package/mender-artifact/
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Please respect the indentation of the file.
+Committed to 2018.05.x, thanks (2018.02.x will need dropbear bumped
+first).
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
