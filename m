@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Aug 2018 11:14:02 +0200
-Subject: [Buildroot] [PATCH 2/3] package/mender-artifact: initial support
-In-Reply-To: <20180826214146.28328-3-mirza.krak@northern.tech>
+Date: Mon, 27 Aug 2018 11:14:29 +0200
+Subject: [Buildroot] [PATCH 3/3] DEVELOPERS: add mender-artifact to
+ Mirza Krak
+In-Reply-To: <20180826214146.28328-4-mirza.krak@northern.tech>
 References: <20180826214146.28328-1-mirza.krak@northern.tech>
- <20180826214146.28328-3-mirza.krak@northern.tech>
-Message-ID: <20180827111402.1543a8d2@windsurf>
+ <20180826214146.28328-4-mirza.krak@northern.tech>
+Message-ID: <20180827111429.11659d13@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,54 +14,26 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 26 Aug 2018 23:41:45 +0200, Mirza Krak wrote:
-> mender-artifact is a host tool to generate update images
-> in the Mender artifact file format.
-> 
-> See https://github.com/mendersoftware/mender-artifact for more
-> information about the format and the tool.
-> 
+On Sun, 26 Aug 2018 23:41:46 +0200, Mirza Krak wrote:
 > Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
 
-Great to see this being packaged!
+This should be merged into PATCH 2/3.
 
-> diff --git a/package/mender-artifact/Config.in.host b/package/mender-artifact/Config.in.host
-> new file mode 100644
-> index 0000000000..bb03e96018
-> --- /dev/null
-> +++ b/package/mender-artifact/Config.in.host
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_HOST_MENDER_ARTIFACT
-> +    depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +    depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +    depends on BR2_TOOLCHAIN_HAS_THREADS
-> +    bool "host mender-artifact"
-> +    help
-> +      Mender image artifact tool
+> ---
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index a6d76dd9c4..b69a75fdfd 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1439,6 +1439,7 @@ F:	package/shadowsocks-libev/
+>  
+>  N:	Mirza Krak <mirza.krak@northern.tech>
+>  F:	package/mender/
+> +F:  package/mender-artifact/
 
-Please run ./utils/check-package on this new package. You will notice
-that the indentation is not good, and that the "depends on" lines
-should go after the "bool" line.
-
-Please add an upstream URL in the Config.in help text (see other
-packages).
-
-> diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-> new file mode 100644
-> index 0000000000..af003fe7de
-> --- /dev/null
-> +++ b/package/mender-artifact/mender-artifact.hash
-> @@ -0,0 +1,29 @@
-> +# Locally computed:
-> +sha256 2a0322d8707c8ea7cada12c8f96144382264c898cadc35e8058bb9ea6bf8b041 mender-artifact-2.2.0.tar.gz
-> +
-> +# License, locally computed
-> +
-
-This comment feels a bit lonely, no ? Is it here to say that among the
-below license hashes, the hash of "LICENSE" was locally computed, while
-the hashes for the licenses in vendor/ were extracted from
-LIC_FILES_CHKSUM.sha256 ?
+Please respect the indentation of the file.
 
 Thanks,
 
