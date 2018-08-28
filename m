@@ -1,9 +1,14 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 22:37:03 +0200
-Subject: [Buildroot] [PATCH] python-lxml: bump to version 4.2.4
-In-Reply-To: <20180828101413.21747-1-yegorslists@googlemail.com>
-References: <20180828101413.21747-1-yegorslists@googlemail.com>
-Message-ID: <20180828223703.689e192a@windsurf.home>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 28 Aug 2018 22:37:32 +0200
+Subject: [Buildroot] [PATCH next v2] atop: fix minor() major() build
+ failure
+In-Reply-To: <20180828223555.5f865609@windsurf.home>
+References: <87k1oay87h.fsf@tkos.co.il>
+ <20180828125258.9285-1-giulio.benetti@micronovasrl.com>
+ <20180828151621.77022940@windsurf.home>
+ <064ecbe3-ef13-1feb-9f65-83151bc5ce4a@micronovasrl.com>
+ <20180828223555.5f865609@windsurf.home>
+Message-ID: <2292f4c4-b508-8bfb-fe14-47280005aeb2@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,24 +17,23 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 28 Aug 2018 12:14:13 +0200, yegorslists at googlemail.com wrote:
-> From: Yegor Yefremov <yegorslists@googlemail.com>
+Il 28/08/2018 22:35, Thomas Petazzoni ha scritto:
+> Hello,
 > 
-> Fix zlib dependency.
+> On Tue, 28 Aug 2018 15:26:45 +0200, Giulio Benetti wrote:
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/d8e/d8e3a9aae0e84fb1b3b8093986ec3a4ce7ca0663
+>>> We need your Signed-off-by here, i.e inside the patch you are
+>>> backporting.
+>>
+>> Ok, I've confused Signed-off-by in that patch as "stealing" Authorship,
+>> instead the Authorship is defined in "From:" field.
 > 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by are here to track the "merging" path of the patch. You're
+> taking a patch from somewhere and adding it to Buildroot, you add your
+> SoB to it. If the original author had a SoB, you would have kept it,
+> and added yours below it. This is not stealing the authorship, but
+> documenting who took the patch and added it in Buildroot.
 
-It would have been nice to mention explicitly that this patch was for
-the next branch, and perhaps that the build issue being fixed is
-related to the Python 3.7.0 bump.
+Thanks for clarifying.
 
-But anyway, I've applied to next. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio
