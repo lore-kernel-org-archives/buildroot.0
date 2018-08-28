@@ -1,88 +1,65 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 28 Aug 2018 15:31:31 +0200
-Subject: [Buildroot] [PATCH next v3] atop: fix minor() major() build failure
-Message-ID: <20180828133131.32838-1-giulio.benetti@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Aug 2018 15:42:59 +0200
+Subject: [Buildroot] [git commit] libsoup: add upstream security fix
+Message-ID: <20180828134339.C3D988144C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On arm / cortex-a8 Arch/Subarch sys/types.h doesn't include
-sys/sysmacros.h which contains minor() and major() macros.
+commit: https://git.buildroot.net/buildroot/commit/?id=8a4536b2dddf7006da46706d1c133f4b0521457f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add patch to directly include <sys/sysmacros.h> into photosyst.c where
-minor() and major() macros are used.
+Fixes CVE-2018-12910: The get_cookies function in soup-cookie-jar.c in
+libsoup 2.63.2 allows attackers to have unspecified impact via an empty
+hostname.
 
-Patch has been taken from atop upstream pull request:
-https://github.com/Atoptool/atop/pull/35
-
-Fixes
-http://autobuild.buildroot.net/results/3fc/3fc0f18ed94697c404e7ff3751781789170c4fe5//
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ysmacros.h-to-compile-with-newer-gcc.patch | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
+ ...e-jar-bail-if-hostname-is-an-empty-string.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch b/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
+diff --git a/package/libsoup/0001-cookie-jar-bail-if-hostname-is-an-empty-string.patch b/package/libsoup/0001-cookie-jar-bail-if-hostname-is-an-empty-string.patch
 new file mode 100644
-index 0000000000..a80be7b736
+index 0000000000..46c7cb4fd8
 --- /dev/null
-+++ b/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
-@@ -0,0 +1,52 @@
-+From 414127c03669b4eedc85778a7bff80cf601311d8 Mon Sep 17 00:00:00 2001
-+From: SjonHortensius <SjonHortensius@users.noreply.github.com>
-+Date: Fri, 24 Aug 2018 18:26:58 +0200
-+Subject: [PATCH] Include sysmacros.h to compile with newer gcc
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/libsoup/0001-cookie-jar-bail-if-hostname-is-an-empty-string.patch
+@@ -0,0 +1,35 @@
++From 3f5635028bbad44287511fcd3c99f2a2fddf01cd Mon Sep 17 00:00:00 2001
++From: Michael Catanzaro <mcatanzaro@igalia.com>
++Date: Sun, 24 Jun 2018 19:46:19 -0500
++Subject: [PATCH] cookie-jar: bail if hostname is an empty string
 +
-+Older gcc throws a warning
-+```
-+photosyst.c: In function 'lvmmapname':
-+photosyst.c:1465:13: warning: In the GNU C Library, "major" is defined
-+ by <sys/sysmacros.h>. For historical compatibility, it is
-+ currently defined by <sys/types.h> as well, but we plan to
-+ remove this soon. To use "major", include <sys/sysmacros.h>
-+ directly. If you did not intend to use a system-defined macro
-+ "major", you should undefine it after including <sys/types.h>.
-+     dmp->major  = major(statbuf.st_rdev);
-+```
++There are several other ways to fix the problem with this function, but
++skipping over all of the code is probably the simplest.
 +
-+Newer gcc throws an error:
++Fixes #3
 +
-+```
-+photosyst.c: In function ?lvmmapname?:
-+photosyst.c:1482:19: error: called object ?major? is not a function or function pointer
-+     dmp->major  = major(statbuf.st_rdev);
-+                   ^~~~~
-+photosyst.c:1437:25: note: declared here
-+ lvmmapname(unsigned int major, unsigned int minor,
-+            ~~~~~~~~~~~~~^~~~~
-+```
 +
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++(cherry picked from commit db2b0d5809d5f8226d47312b40992cadbcde439f)
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 +---
-+ photosyst.c | 1 +
-+ 1 file changed, 1 insertion(+)
++Upstream status: commit db2b0d5809d
 +
-+diff --git a/photosyst.c b/photosyst.c
-+index 19cbbe1..50841a1 100644
-+--- a/photosyst.c
-++++ b/photosyst.c
-+@@ -152,6 +152,7 @@
-+ static const char rcsid[] = "$Id: photosyst.c,v 1.38 2010/11/19 07:40:40 gerlof Exp $";
++ libsoup/soup-cookie-jar.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libsoup/soup-cookie-jar.c b/libsoup/soup-cookie-jar.c
++index d12bc85a8e60..365da6abf9f4 100644
++--- a/libsoup/soup-cookie-jar.c
+++++ b/libsoup/soup-cookie-jar.c
++@@ -306,7 +306,7 @@ get_cookies (SoupCookieJar *jar, SoupURI *uri, gboolean for_http, gboolean copy_
 + 
-+ #include <sys/types.h>
-++#include <sys/sysmacros.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+ #include <unistd.h>
++ 	priv = SOUP_COOKIE_JAR_GET_PRIVATE (jar);
++ 
++-	if (!uri->host)
+++	if (!uri->host || !uri->host[0])
++ 		return NULL;
++ 
++ 	/* The logic here is a little weird, but the plan is that if
 +-- 
-+2.17.1
++2.18.0
 +
--- 
-2.17.1
