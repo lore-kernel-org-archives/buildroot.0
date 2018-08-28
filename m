@@ -1,15 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Aug 2018 15:42:59 +0200
-Subject: [Buildroot] [git commit] libsoup: add upstream security fix
-Message-ID: <20180828134339.C3D988144C@busybox.osuosl.org>
+Date: Tue, 28 Aug 2018 15:44:00 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] libsoup: add upstream
+ security fix
+Message-ID: <20180828134400.E51918144F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a4536b2dddf7006da46706d1c133f4b0521457f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=d10a7742148eb3f8c0e8033bdf8e21796701011b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Fixes CVE-2018-12910: The get_cookies function in soup-cookie-jar.c in
 libsoup 2.63.2 allows attackers to have unspecified impact via an empty
@@ -17,6 +18,8 @@ hostname.
 
 Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8a4536b2dddf7006da46706d1c133f4b0521457f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  ...e-jar-bail-if-hostname-is-an-empty-string.patch | 35 ++++++++++++++++++++++
