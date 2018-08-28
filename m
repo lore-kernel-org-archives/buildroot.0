@@ -1,125 +1,108 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Aug 2018 09:53:50 +0200
-Subject: [Buildroot] [git commit] mbedtls: fix x86 PIC build with GCC < 5
-Message-ID: <20180828075412.1FC908E83A@busybox.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 28 Aug 2018 09:55:44 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-mimeparse: New package
+In-Reply-To: <20180826192346.5590-1-grzegorz@blach.pl>
+References: <20180826192346.5590-1-grzegorz@blach.pl>
+Message-ID: <CAGm1_kuuYw17nW2C-5mDDwvXqBp=EvWj+kGjnchA-y4wDcteZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11241ac656af569894ead9561ebf53abb5d5f18d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, Aug 26, 2018 at 9:40 PM Grzegorz Blach <grzegorz@blach.pl> wrote:
+>
+> Mimeparse provides basic functions for parsing mime-type names
+> and matching them against a list of media-ranges.
+>
+> https://github.com/dbtsai/python-mimeparse
+>
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 
-Fixes:
-http://autobuild.buildroot.net/results/d6d/d6dc9a640aa1f6650a3e7b9397f2fe2ae3433f4d/
-http://autobuild.buildroot.net/results/ab5/ab5a58ea7845f9f378454ee1aa7e872448618ba9/
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-ebx was recently added to the x86 inline asm MULADDC_STOP clobber list to
-fix #1550, but this causes the build to fail with GCC < 5 when building in
-PIC mode with errors like:
-
-include/mbedtls/bn_mul.h:46:13: error: PIC register clobbered by ???ebx??? in ???asm???
-
-This is because older GCC versions treated the x86 ebx register (which is
-used for the GOT) as a fixed reserved register when building as PIC.
-
-This is fixed by an improved register allocator in GCC 5+.  From the release
-notes:
-
-Register allocation improvements: Reuse of the PIC hard register, instead of
-using a fixed register, was implemented on x86/x86-64 targets.  This
-improves generated PIC code performance as more hard registers can be used.
-
-https://www.gnu.org/software/gcc/gcc-5/changes.html
-
-As a workaround, add a patch to detect this situation and disable the inline
-assembly, similar to the MULADDC_CANNOT_USE_R7 logic.
-
-Patch submitted upstream: https://github.com/ARMmbed/mbedtls/pull/1986
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...x-x86-PIC-inline-ASM-compilation-with-GCC.patch | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
-
-diff --git a/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch b/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
-new file mode 100644
-index 0000000000..60bf53f6e4
---- /dev/null
-+++ b/package/mbedtls/0001-bn_mul.h-fix-x86-PIC-inline-ASM-compilation-with-GCC.patch
-@@ -0,0 +1,74 @@
-+From a0ae2ba37ca479c6edddec8634b25686be965e0d Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Mon, 27 Aug 2018 22:50:57 +0200
-+Subject: [PATCH] bn_mul.h: fix x86 PIC inline ASM compilation with GCC < 5
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes #1910
-+
-+With ebx added to the MULADDC_STOP clobber list to fix #1550, the inline
-+assembly fails to build with GCC < 5 in PIC mode with the following error:
-+
-+include/mbedtls/bn_mul.h:46:13: error: PIC register clobbered by ???ebx??? in ???asm???
-+
-+This is because older GCC versions treated the x86 ebx register (which is
-+used for the GOT) as a fixed reserved register when building as PIC.
-+
-+This is fixed by an improved register allocator in GCC 5+.  From the release
-+notes:
-+
-+Register allocation improvements: Reuse of the PIC hard register, instead of
-+using a fixed register, was implemented on x86/x86-64 targets.  This
-+improves generated PIC code performance as more hard registers can be used.
-+
-+https://www.gnu.org/software/gcc/gcc-5/changes.html
-+
-+As a workaround, detect this situation and disable the inline assembly,
-+similar to the MULADDC_CANNOT_USE_R7 logic.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+Upstream: https://github.com/ARMmbed/mbedtls/pull/1986
-+---
-+ include/mbedtls/bn_mul.h | 18 +++++++++++++++++-
-+ 1 file changed, 17 insertions(+), 1 deletion(-)
-+
-+diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
-+index b587317d9..74a2d29be 100644
-+--- a/include/mbedtls/bn_mul.h
-++++ b/include/mbedtls/bn_mul.h
-+@@ -50,13 +50,29 @@
-+ #if defined(__GNUC__) && \
-+     ( !defined(__ARMCC_VERSION) || __ARMCC_VERSION >= 6000000 )
-+ 
-++/*
-++ * GCC < 5.0 treated the x86 ebx (which is used for the GOT) as a
-++ * fixed reserved register when building as PIC, leading to errors
-++ * like: bn_mul.h:46:13: error: PIC register clobbered by ???ebx??? in ???asm???
-++ *
-++ * This is fixed by an improved register allocator in GCC 5+. From the
-++ * release notes:
-++ * Register allocation improvements: Reuse of the PIC hard register,
-++ * instead of using a fixed register, was implemented on x86/x86-64
-++ * targets. This improves generated PIC code performance as more hard
-++ * registers can be used.
-++ */
-++#if defined(__GNUC__) && __GNUC__ < 5 && defined(__PIC__)
-++#define MULADDC_CANNOT_USE_EBX
-++#endif
-++
-+ /*
-+  * Disable use of the i386 assembly code below if option -O0, to disable all
-+  * compiler optimisations, is passed, detected with __OPTIMIZE__
-+  * This is done as the number of registers used in the assembly code doesn't
-+  * work with the -O0 option.
-+  */
-+-#if defined(__i386__) && defined(__OPTIMIZE__)
-++#if defined(__i386__) && defined(__OPTIMIZE__) && !defined(MULADDC_CANNOT_USE_EBX)
-+ 
-+ #define MULADDC_INIT                        \
-+     asm(                                    \
-+-- 
-+2.11.0
-+
+> ---
+>  DEVELOPERS                                     |  3 +++
+>  package/Config.in                              |  1 +
+>  package/python-mimeparse/Config.in             |  7 +++++++
+>  package/python-mimeparse/python-mimeparse.hash |  2 ++
+>  package/python-mimeparse/python-mimeparse.mk   | 14 ++++++++++++++
+>  5 files changed, 27 insertions(+)
+>  create mode 100644 package/python-mimeparse/Config.in
+>  create mode 100644 package/python-mimeparse/python-mimeparse.hash
+>  create mode 100644 package/python-mimeparse/python-mimeparse.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index a6d76dd9c4..a9d5942adb 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -850,6 +850,9 @@ F:  package/libsrtp/
+>  F:     package/libwebsock/
+>  F:     package/sofia-sip/
+>
+> +N:     Grzegorz Blach <grzegorz@blach.pl>
+> +F:     package/python-mimeparse
+> +
+>  N:     Guillaume Gardet <guillaume.gardet@oliseo.fr>
+>  F:     package/c-icap/
+>  F:     package/c-icap-modules/
+> diff --git a/package/Config.in b/package/Config.in
+> index f5a17492c7..0640a399bb 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -850,6 +850,7 @@ menu "External python modules"
+>         source "package/python-markupsafe/Config.in"
+>         source "package/python-mbstrdecoder/Config.in"
+>         source "package/python-meld3/Config.in"
+> +       source "package/python-mimeparse/Config.in"
+>         source "package/python-mistune/Config.in"
+>         source "package/python-more-itertools/Config.in"
+>         source "package/python-msgpack/Config.in"
+> diff --git a/package/python-mimeparse/Config.in b/package/python-mimeparse/Config.in
+> new file mode 100644
+> index 0000000000..4d0148e582
+> --- /dev/null
+> +++ b/package/python-mimeparse/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_MIMEPARSE
+> +       bool "python-mimeparse"
+> +       help
+> +          This module provides basic functions for parsing mime-type names
+> +          and matching them against a list of media-ranges.
+> +
+> +         https://github.com/dbtsai/python-mimeparse
+> diff --git a/package/python-mimeparse/python-mimeparse.hash b/package/python-mimeparse/python-mimeparse.hash
+> new file mode 100644
+> index 0000000000..bc7ed67cf5
+> --- /dev/null
+> +++ b/package/python-mimeparse/python-mimeparse.hash
+> @@ -0,0 +1,2 @@
+> +# Copied from https://pypi.org/project/python-mimeparse
+> +sha256 76e4b03d700a641fd7761d3cd4fdbbdcd787eade1ebfac43f877016328334f78  python-mimeparse-1.6.0.tar.gz
+> diff --git a/package/python-mimeparse/python-mimeparse.mk b/package/python-mimeparse/python-mimeparse.mk
+> new file mode 100644
+> index 0000000000..dc796988d2
+> --- /dev/null
+> +++ b/package/python-mimeparse/python-mimeparse.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-mimeparse
+> +#
+> +################################################################################
+> +
+> +PYTHON_MIMEPARSE_VERSION = 1.6.0
+> +PYTHON_MIMEPARSE_SOURCE = python-mimeparse-$(PYTHON_MIMEPARSE_VERSION).tar.gz
+> +PYTHON_MIMEPARSE_SITE = https://files.pythonhosted.org/packages/0f/40/ac5f9e44a55b678c3cd881b4c3376e5b002677dbeab6fb3a50bac5d50d29
+> +PYTHON_MIMEPARSE_SETUP_TYPE = setuptools
+> +PYTHON_MIMEPARSE_LICENSE = MIT
+> +PYTHON_MIMEPARSE_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.17.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
