@@ -1,58 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Aug 2018 17:02:15 +0200
-Subject: [Buildroot] [git commit] Update for 2018.05.2
-Message-ID: <20180828150711.2143B814B9@busybox.osuosl.org>
+Date: Tue, 28 Aug 2018 17:06:55 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2018.05.2
+Message-ID: <20180828150711.2B4F5814B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b914fbdc1fa6cdf55b208b97857bb650a7e04341
+commit: https://git.buildroot.net/buildroot/commit/?id=511309cdbf69d13ac759fbaf237b8298c87a9e22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[Peter: drop Makefile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4b8deaf34cca1a1c0196ab7e91ceb9720923d6aa)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index d0744353bc..7ab40770d2 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -97,6 +97,32 @@
- 	#11121: statfs call corrupts memory struct statfs  too small
- 	#11181: Switching toolchain does not work
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 4e8a40f6ce..5e8b98b67f 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
-+2018.05.2, Released August 28th, 2018
-+
-+	Important / security related fixes.
-+
-+	Defconfigs: Raspberrypi2: Bump rootfs size, T7680: Fix
-+	genimage.cfg issue, ARM Juno: Bump ATF to v1.3 to fix build
-+	issue.
-+
-+	Updated/fixed packages: acl, attr, apache, bind,
-+	boot-wrapper-aarch64, brltty, bzip2, chrony, crda, cryptsetup,
-+	dahdi-tools, dmidecode, dropbear, eigen, ffmpeg, gawk, gcc,
-+	ghostscript, gnutls, imx-gpu-viv, ipsec-tools, libarchive,
-+	libfuse, libglib2, libopenssl, libselinux, libsoup, lighttpd,
-+	linuxptp, lttng-modules, lttng-tools, lua-flu, lvm2, m4,
-+	makedevs, mariadb, mbedtls, mesa3d-heders, mtd, ncurses,
-+	nodejs, openssh, php, python-django, rauc, ruby, samba4,
-+	stress-ng, ti-utils, uboot-tools, uclibc, vim, waylandpp,
-+	wireless_tools, wireless-regdb, wireshark, wpa_supplicant,
-+	xorriso, znc
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#10781: cryptsetup luksOpen container_file container causes..
-+	#10986: Installing package attr when already supplied by..
-+	#11191: xattr and check-package issue
-+
- 2018.05.1, Released July 20th, 2018
+-      <h3 style="text-align: center;">Latest stable release: <b>2018.05.1</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2018.05.2</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.05.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2018.05.1.tar.gz">buildroot-2018.05.1.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.05.1.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.05.2.tar.gz">buildroot-2018.05.2.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2018.05.2.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2018.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2018.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2018.05.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2018.05.1.tar.bz2">buildroot-2018.05.1.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2018.05.1.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2018.05.2.tar.bz2">buildroot-2018.05.2.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2018.05.2.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 7461d3f5ea..3b0776ef17 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2018.05.2 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>28 August 2018</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2018.05.2 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2018.05.1 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.05.2">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-August/229355.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2018.05.2.tar.bz2">2018.05.2 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
