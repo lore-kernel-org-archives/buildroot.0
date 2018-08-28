@@ -1,44 +1,81 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Aug 2018 16:35:55 +0200
-Subject: [Buildroot] SDL2+directfb combo does not work as built by
- buildroot-2018.02.3
-In-Reply-To: <CAGrGpJCe67xHWAceYw6-oD=iPoL0be8-ZhRgmWfhQRuG0GwxeA@mail.gmail.com>
- (Peter Thompson's message of "Tue, 28 Aug 2018 08:17:33 -0600")
-References: <CAGrGpJDVHStp8MUZaGb1=ZfWud-k4fQP=piwsc-QfftCDFyKog@mail.gmail.com>
- <CAGrGpJA=Kk0fGjMPfH3R1ZbyJbonPNPQoyC_tpjaF9Ua92BNNg@mail.gmail.com>
- <878t4q7vqu.fsf@dell.be.48ers.dk>
- <CAGrGpJCe67xHWAceYw6-oD=iPoL0be8-ZhRgmWfhQRuG0GwxeA@mail.gmail.com>
-Message-ID: <87a7p65zjo.fsf@dell.be.48ers.dk>
+Date: Tue, 28 Aug 2018 16:50:42 +0200
+Subject: [Buildroot] Buildroot 2018.05.2 released
+Message-ID: <875zzu5yv1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Thompson <peter.macleod.thompson@gmail.com> writes:
+Hi,
 
- > Hi Peter
- > My original plan was to wait for the next SDL2 release thereby allowing
- > SDL2 to fix itself before updating the SDL2_VERSION in  buildroot.
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
- > Otherwise we have to change buildroot SDL2_VERSION to  point to the
- > temporary patched SDL2 source for download:
- > http://www.libsdl.org/tmp/SDL-2.0.zip
- > OR
- > somehow change buildroot to download this patch and apply it to the
- > downloaded SDL2-2.0.8 before compiling (I am not sure how to do this in
- > buildroot).
+Buildroot 2018.05.2 is released - Go download it at:
 
-.. Or simply include the hg commit as a .patch file in the package.
+http://buildroot.org/downloads/buildroot-2018.05.2.tar.gz
 
- > Then we would need to re-change this all back when the new release of SDL2
- > incorporates this patch.
+or
 
-Correct.
+http://buildroot.org/downloads/buildroot-2018.05.2.tar.bz2
 
-Do you know when sdl2-2.0.9 is planned? 2.0.8 is what we are using both
-for 2018.02 (the current long term support version), 2018.05 (the
-current release) and master (what will very soon become 2018.08).
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2018.05.2 is a bugfix release, fixing a number of important /
+security related issues discovered since the 2018.05.1 release.
+
+- Security fixes for apache, bind, dropbear, ipsec-tools, libarchive,
+  libfuse, libopenssl, libsoup, mariadb, mbedtls, nodejs, openssh, php,
+  python-django, ruby, samba4, wireshark, wpa_supplicant, znc
+
+- Fixes for download/compilation/runtime issues in acl, attr, brltty,
+  bzip2, chrony, cryptsetup, eigen, ffmpeg, gcc, ghostscript, gnutls,
+  imx-gpu-viv, libglib2, libselinux, lighttpd, linuxptp, lttng-modules,
+  lttng-tools, lua-flu, lvm2, m4, makedevs, mesa3d-headers, mtd,
+  ncurses, rauc, stress-ng, uboot-tools, uclibc, waylandpp,
+  wireless_tools, wireless-regdb, xorriso
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.05.2
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2018.05.1..
+
+    27  Bernd Kuhls
+    12  Baruch Siach
+    11  Peter Korsgaard
+    11  Thomas Petazzoni
+     8  Yann E. MORIN
+     3  Hollis Blanchard
+     3  Ricardo Martincoski
+     2  Carlos Santos
+     2  Fabio Estevam
+     2  Julien BOIBESSOT
+     2  Laurent Hartanerot
+     2  Marcin Niestroj
+     2  Ryan Coe
+     2  Trent Piepho
+     1  Alexey Brodkin
+     1  Andr? Hentschel
+     1  Angelo Compagnucci
+     1  Arnout Vandecappelle (Essensium/Mind)
+     1  Christopher McCrory
+     1  David Owens
+     1  Fabrice Fontaine
+     1  Geoff Levand
+     1  Joel Stanley
+     1  John Faith
+     1  Matt Flax
+     1  Thomas Ehrhardt
+     1  Vadim Kochan
 
 -- 
 Bye, Peter Korsgaard
