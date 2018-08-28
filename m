@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Aug 2018 15:44:00 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] libsoup: add upstream
+Date: Tue, 28 Aug 2018 15:44:10 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] libsoup: add upstream
  security fix
-Message-ID: <20180828134400.E51918144F@busybox.osuosl.org>
+Message-ID: <20180828134408.E705081455@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d10a7742148eb3f8c0e8033bdf8e21796701011b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=309269ca910558bcc30d1469530872f540dcc9a0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Fixes CVE-2018-12910: The get_cookies function in soup-cookie-jar.c in
 libsoup 2.63.2 allows attackers to have unspecified impact via an empty
