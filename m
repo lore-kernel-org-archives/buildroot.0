@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 23:09:26 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] cutelyst: link with libatomic when needed
-In-Reply-To: <20180828205924.21830-1-fontaine.fabrice@gmail.com>
-References: <20180828205924.21830-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180828230926.1288e252@windsurf.home>
+Date: Tue, 28 Aug 2018 23:15:52 +0200
+Subject: [Buildroot] [PATCH 1/3] configs/zynq_zed: uboot: bump to
+ xilinx-v2018.2 (fixes build)
+In-Reply-To: <20180828080059.21788-1-luca@lucaceresoli.net>
+References: <20180828080059.21788-1-luca@lucaceresoli.net>
+Message-ID: <20180828231552.1c693ee1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Luca, Peter,
 
-On Tue, 28 Aug 2018 22:59:24 +0200, Fabrice Fontaine wrote:
-> On some architectures, atomic binutils are provided by the libatomic
-> library from gcc. Linking with libatomic is therefore necessary,
-> otherwise the build fails with:
+On Tue, 28 Aug 2018 10:00:57 +0200, Luca Ceresoli wrote:
+> Bump to the most recent Xilinx release.
 > 
-> sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
-> 
-> This is often for example the case on sparcv8 32 bit.
-> 
-> This atomic dependency is due to Qt >= 5.8, pkconfig can't be used as
-> Qt5 pc files does not mention this dependency
-
-Perhaps this should be fixed some day :)
-
 > Fixes:
->  - http://autobuild.buildroot.net/results/9e307ab9c7067b26d7b33a572204394808e25772
+>   .../output/host/include/libfdt_env.h:71:30: error: conflicting types for ?fdt64_t?
+>   .../output/host/include/libfdt_env.h:91:24: error: expected ?)? before ?x?
+>   .../output/host/include/libfdt.h:150:21: error: redefinition of ?fdt_offset_ptr_w?
+> ...and many, many other similar errors.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> [Run-time tested]
+> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+>  configs/zynq_zed_defconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-But anyway: applied to master. Thanks!
+I am not sure we want to apply these updates to master, because we need
+a more general solution, and this more general solution will also fix
+the Zynq configurations.
 
-Best regards,
+So I would suggest that we take those patches into next, and
+implemented the more general solution in master (which could very well
+be reverting dtc).
+
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
 https://bootlin.com
