@@ -1,10 +1,10 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 28 Aug 2018 10:02:22 +0200
-Subject: [Buildroot] [PATCH 2/2] package/python-falcon: New package
-In-Reply-To: <20180826192346.5590-2-grzegorz@blach.pl>
+Date: Tue, 28 Aug 2018 10:03:12 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-mimeparse: New package
+In-Reply-To: <CAGm1_kuuYw17nW2C-5mDDwvXqBp=EvWj+kGjnchA-y4wDcteZA@mail.gmail.com>
 References: <20180826192346.5590-1-grzegorz@blach.pl>
- <20180826192346.5590-2-grzegorz@blach.pl>
-Message-ID: <CAGm1_ks7o+WeR_hwDefquG4dt_hJ0toxmZJXkPXx75QKrLfLfA@mail.gmail.com>
+ <CAGm1_kuuYw17nW2C-5mDDwvXqBp=EvWj+kGjnchA-y4wDcteZA@mail.gmail.com>
+Message-ID: <CAGm1_ktoZ9k1kKkva_8+nZGLS_zEWyMJMsyixbrBuPs+FkruFw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,99 +13,106 @@ To: buildroot@busybox.net
 
 Hi Grzegorz,
 
-On Sun, Aug 26, 2018 at 11:52 PM Grzegorz Blach <grzegorz@blach.pl> wrote:
+On Tue, Aug 28, 2018 at 9:55 AM Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
 >
-> Falcon is a bare-metal Python web API framework
-> for building very fast app backends and microservices.
+> On Sun, Aug 26, 2018 at 9:40 PM Grzegorz Blach <grzegorz@blach.pl> wrote:
+> >
+> > Mimeparse provides basic functions for parsing mime-type names
+> > and matching them against a list of media-ranges.
+> >
+> > https://github.com/dbtsai/python-mimeparse
+> >
+> > Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 >
-> https://falconframework.org/
->
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  DEVELOPERS                               |  1 +
->  package/Config.in                        |  1 +
->  package/python-falcon/Config.in          |  9 +++++++++
->  package/python-falcon/python-falcon.hash |  2 ++
->  package/python-falcon/python-falcon.mk   | 14 ++++++++++++++
->  5 files changed, 27 insertions(+)
->  create mode 100644 package/python-falcon/Config.in
->  create mode 100644 package/python-falcon/python-falcon.hash
->  create mode 100644 package/python-falcon/python-falcon.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index a9d5942adb..af039cc2ff 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -851,6 +851,7 @@ F:  package/libwebsock/
->  F:     package/sofia-sip/
->
->  N:     Grzegorz Blach <grzegorz@blach.pl>
-> +F:     package/python-falcon
->  F:     package/python-mimeparse
->
->  N:     Guillaume Gardet <guillaume.gardet@oliseo.fr>
-> diff --git a/package/Config.in b/package/Config.in
-> index 0640a399bb..e243db552e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -799,6 +799,7 @@ menu "External python modules"
->         source "package/python-engineio/Config.in"
->         source "package/python-enum/Config.in"
->         source "package/python-enum34/Config.in"
-> +       source "package/python-falcon/Config.in"
->         source "package/python-flask/Config.in"
->         source "package/python-flask-cors/Config.in"
->         source "package/python-flask-babel/Config.in"
-> diff --git a/package/python-falcon/Config.in b/package/python-falcon/Config.in
-> new file mode 100644
-> index 0000000000..f7c8601e07
-> --- /dev/null
-> +++ b/package/python-falcon/Config.in
-> @@ -0,0 +1,9 @@
-> +config BR2_PACKAGE_PYTHON_FALCON
-> +       bool "python-falcon"
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       select BR2_PACKAGE_PYTHON_MIMEPARSE # runtime
-> +       help
-> +          Falcon is a bare-metal Python web API framework for building
-> +          very fast app backends and microservices.
-> +
-> +         https://falconframework.org/
-> diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
-> new file mode 100644
-> index 0000000000..d31c959f98
-> --- /dev/null
-> +++ b/package/python-falcon/python-falcon.hash
-> @@ -0,0 +1,2 @@
-> +# Copied from https://pypi.org/project/falcon
-> +sha256 3981f609c0358a9fcdb25b0e7fab3d9e23019356fb429c635ce4133135ae1bc4  falcon-1.4.1.tar.gz
-> diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
-> new file mode 100644
-> index 0000000000..106387f96f
-> --- /dev/null
-> +++ b/package/python-falcon/python-falcon.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-falcon
-> +#
-> +################################################################################
-> +
-> +PYTHON_FALCON_VERSION = 1.4.1
-> +PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
-> +PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/2f/e6/5045da9df509b9259037f065d15608930fd6c997ee930ad230f9fbfecf15
-> +PYTHON_FALCON_SETUP_TYPE = setuptools
-> +PYTHON_FALCON_LICENSE = Apache-2.0
-> +PYTHON_FALCON_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
+> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Patch title should be "python-falcon: new package". Btw why don't you
-use utils/scanpypi? This script would also add hash for the licence
-file. Other than that everything looks good.
+See my comments to the second patch.
 
-Please resend both patches after regenerating them with scanpypi and
-don't forget to install spdx_lookup before invoking scanpypi.
-
-Regards,
 Yegor
+
+> > ---
+> >  DEVELOPERS                                     |  3 +++
+> >  package/Config.in                              |  1 +
+> >  package/python-mimeparse/Config.in             |  7 +++++++
+> >  package/python-mimeparse/python-mimeparse.hash |  2 ++
+> >  package/python-mimeparse/python-mimeparse.mk   | 14 ++++++++++++++
+> >  5 files changed, 27 insertions(+)
+> >  create mode 100644 package/python-mimeparse/Config.in
+> >  create mode 100644 package/python-mimeparse/python-mimeparse.hash
+> >  create mode 100644 package/python-mimeparse/python-mimeparse.mk
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index a6d76dd9c4..a9d5942adb 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -850,6 +850,9 @@ F:  package/libsrtp/
+> >  F:     package/libwebsock/
+> >  F:     package/sofia-sip/
+> >
+> > +N:     Grzegorz Blach <grzegorz@blach.pl>
+> > +F:     package/python-mimeparse
+> > +
+> >  N:     Guillaume Gardet <guillaume.gardet@oliseo.fr>
+> >  F:     package/c-icap/
+> >  F:     package/c-icap-modules/
+> > diff --git a/package/Config.in b/package/Config.in
+> > index f5a17492c7..0640a399bb 100644
+> > --- a/package/Config.in
+> > +++ b/package/Config.in
+> > @@ -850,6 +850,7 @@ menu "External python modules"
+> >         source "package/python-markupsafe/Config.in"
+> >         source "package/python-mbstrdecoder/Config.in"
+> >         source "package/python-meld3/Config.in"
+> > +       source "package/python-mimeparse/Config.in"
+> >         source "package/python-mistune/Config.in"
+> >         source "package/python-more-itertools/Config.in"
+> >         source "package/python-msgpack/Config.in"
+> > diff --git a/package/python-mimeparse/Config.in b/package/python-mimeparse/Config.in
+> > new file mode 100644
+> > index 0000000000..4d0148e582
+> > --- /dev/null
+> > +++ b/package/python-mimeparse/Config.in
+> > @@ -0,0 +1,7 @@
+> > +config BR2_PACKAGE_PYTHON_MIMEPARSE
+> > +       bool "python-mimeparse"
+> > +       help
+> > +          This module provides basic functions for parsing mime-type names
+> > +          and matching them against a list of media-ranges.
+> > +
+> > +         https://github.com/dbtsai/python-mimeparse
+> > diff --git a/package/python-mimeparse/python-mimeparse.hash b/package/python-mimeparse/python-mimeparse.hash
+> > new file mode 100644
+> > index 0000000000..bc7ed67cf5
+> > --- /dev/null
+> > +++ b/package/python-mimeparse/python-mimeparse.hash
+> > @@ -0,0 +1,2 @@
+> > +# Copied from https://pypi.org/project/python-mimeparse
+> > +sha256 76e4b03d700a641fd7761d3cd4fdbbdcd787eade1ebfac43f877016328334f78  python-mimeparse-1.6.0.tar.gz
+> > diff --git a/package/python-mimeparse/python-mimeparse.mk b/package/python-mimeparse/python-mimeparse.mk
+> > new file mode 100644
+> > index 0000000000..dc796988d2
+> > --- /dev/null
+> > +++ b/package/python-mimeparse/python-mimeparse.mk
+> > @@ -0,0 +1,14 @@
+> > +################################################################################
+> > +#
+> > +# python-mimeparse
+> > +#
+> > +################################################################################
+> > +
+> > +PYTHON_MIMEPARSE_VERSION = 1.6.0
+> > +PYTHON_MIMEPARSE_SOURCE = python-mimeparse-$(PYTHON_MIMEPARSE_VERSION).tar.gz
+> > +PYTHON_MIMEPARSE_SITE = https://files.pythonhosted.org/packages/0f/40/ac5f9e44a55b678c3cd881b4c3376e5b002677dbeab6fb3a50bac5d50d29
+> > +PYTHON_MIMEPARSE_SETUP_TYPE = setuptools
+> > +PYTHON_MIMEPARSE_LICENSE = MIT
+> > +PYTHON_MIMEPARSE_LICENSE_FILES = LICENSE
+> > +
+> > +$(eval $(python-package))
+> > --
+> > 2.17.1
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
