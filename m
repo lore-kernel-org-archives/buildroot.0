@@ -1,63 +1,59 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 28 Aug 2018 12:36:08 -0400
-Subject: [Buildroot] [PATCH 1/1] postgresql: security bump to 10.5
-In-Reply-To: <20180828163127.9989-1-aduskett@gmail.com>
-References: <20180828163127.9989-1-aduskett@gmail.com>
-Message-ID: <CAFSsvmpkvmmF-DbbJ8Uj=JUyJ=dg8AFwPg7K21Za=ao98N2nNw@mail.gmail.com>
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+Date: Tue, 28 Aug 2018 10:56:12 -0600
+Subject: [Buildroot] SDL2+directfb combo does not work as built by
+ buildroot-2018.02.3
+In-Reply-To: <87a7p65zjo.fsf@dell.be.48ers.dk>
+References: <CAGrGpJDVHStp8MUZaGb1=ZfWud-k4fQP=piwsc-QfftCDFyKog@mail.gmail.com>
+ <CAGrGpJA=Kk0fGjMPfH3R1ZbyJbonPNPQoyC_tpjaF9Ua92BNNg@mail.gmail.com>
+ <878t4q7vqu.fsf@dell.be.48ers.dk>
+ <CAGrGpJCe67xHWAceYw6-oD=iPoL0be8-ZhRgmWfhQRuG0GwxeA@mail.gmail.com>
+ <87a7p65zjo.fsf@dell.be.48ers.dk>
+Message-ID: <CAGrGpJBNF=NejuNA5hBg5oet=iJxEjRLBXgog30y4xm0GrFFjA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All;
+I checked with Sam - this is his note back...
 
-I didn't realize that 2018.02 also has 10.3, I assumed (my mistake)
-that 2018.02 had the v9 series and
-I had planned on making a separate patch for that as well.
+"I'm not sure, but I think we're going to start on it soon. We have a bunch
+of good improvements in 2.0.9 for folks."
 
-I would recommend that this patch should be applied to master, next,
-and 2018.02.x
 
-Thanks!
-Adam
 
-On Tue, Aug 28, 2018 at 12:31 PM Adam Duskett <aduskett@gmail.com> wrote:
+On Tue, Aug 28, 2018 at 8:35 AM, Peter Korsgaard <peter@korsgaard.com>
+wrote:
+
+> >>>>> "Peter" == Peter Thompson <peter.macleod.thompson@gmail.com> writes:
 >
-> Fixes CVE-2018-10915 & CVE-2018-10925
+>  > Hi Peter
+>  > My original plan was to wait for the next SDL2 release thereby allowing
+>  > SDL2 to fix itself before updating the SDL2_VERSION in  buildroot.
 >
-> Changelog: https://www.postgresql.org/docs/10/static/release-10-5.html
-> Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> ---
->  package/postgresql/postgresql.hash | 4 ++--
->  package/postgresql/postgresql.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  > Otherwise we have to change buildroot SDL2_VERSION to  point to the
+>  > temporary patched SDL2 source for download:
+>  > http://www.libsdl.org/tmp/SDL-2.0.zip
+>  > OR
+>  > somehow change buildroot to download this patch and apply it to the
+>  > downloaded SDL2-2.0.8 before compiling (I am not sure how to do this in
+>  > buildroot).
 >
-> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-> index 533c398d59..a9cc93c76c 100644
-> --- a/package/postgresql/postgresql.hash
-> +++ b/package/postgresql/postgresql.hash
-> @@ -1,5 +1,5 @@
-> -# From https://ftp.postgresql.org/pub/source/v10.3/postgresql-10.3.tar.bz2.sha256
-> -sha256 6ea268780ee35e88c65cdb0af7955ad90b7d0ef34573867f223f14e43467931a        postgresql-10.3.tar.bz2
-> +# From https://ftp.postgresql.org/pub/source/v10.5/postgresql-10.5.tar.bz2.sha256
-> +sha256 6c8e616c91a45142b85c0aeb1f29ebba4a361309e86469e0fb4617b6a73c4011        postgresql-10.5.tar.bz2
+> .. Or simply include the hg commit as a .patch file in the package.
 >
->  # License file, Locally calculated
->  sha256 24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e        COPYRIGHT
-> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-> index 0940873686..540e1540ca 100644
-> --- a/package/postgresql/postgresql.mk
-> +++ b/package/postgresql/postgresql.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+>  > Then we would need to re-change this all back when the new release of
+> SDL2
+>  > incorporates this patch.
 >
-> -POSTGRESQL_VERSION = 10.3
-> +POSTGRESQL_VERSION = 10.5
->  POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
->  POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
->  POSTGRESQL_LICENSE = PostgreSQL
+> Correct.
+>
+> Do you know when sdl2-2.0.9 is planned? 2.0.8 is what we are using both
+> for 2018.02 (the current long term support version), 2018.05 (the
+> current release) and master (what will very soon become 2018.08).
+>
 > --
-> 2.17.1
+> Bye, Peter Korsgaard
 >
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180828/9793e410/attachment.html>
