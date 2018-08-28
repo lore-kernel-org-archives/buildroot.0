@@ -1,46 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 23:15:52 +0200
-Subject: [Buildroot] [PATCH 1/3] configs/zynq_zed: uboot: bump to
- xilinx-v2018.2 (fixes build)
-In-Reply-To: <20180828080059.21788-1-luca@lucaceresoli.net>
-References: <20180828080059.21788-1-luca@lucaceresoli.net>
-Message-ID: <20180828231552.1c693ee1@windsurf.home>
+Date: Tue, 28 Aug 2018 23:17:11 +0200
+Subject: [Buildroot] [git commit] Revert "package/aircrack-ng: powerpc arch
+ requires altivec"
+Message-ID: <20180828213103.3BD658140F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Luca, Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=d012b4d0f02452d49c7800b659bb1e9fb1f6d82b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 28 Aug 2018 10:00:57 +0200, Luca Ceresoli wrote:
-> Bump to the most recent Xilinx release.
-> 
-> Fixes:
->   .../output/host/include/libfdt_env.h:71:30: error: conflicting types for ?fdt64_t?
->   .../output/host/include/libfdt_env.h:91:24: error: expected ?)? before ?x?
->   .../output/host/include/libfdt.h:150:21: error: redefinition of ?fdt_offset_ptr_w?
-> ...and many, many other similar errors.
-> 
-> [Run-time tested]
-> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
-> ---
->  configs/zynq_zed_defconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+This reverts commit 1f3f1fb8c7324c9a50383b1cafcbd2f9d74a91f9.
 
-I am not sure we want to apply these updates to master, because we need
-a more general solution, and this more general solution will also fix
-the Zynq configurations.
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/aircrack-ng/Config.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-So I would suggest that we take those patches into next, and
-implemented the more general solution in master (which could very well
-be reverting dtc).
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+index d821c5a0a2..f3e2bc4ef1 100644
+--- a/package/aircrack-ng/Config.in
++++ b/package/aircrack-ng/Config.in
+@@ -4,9 +4,6 @@ config BR2_PACKAGE_AIRCRACK_NG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+-	# https://github.com/aircrack-ng/aircrack-ng/issues/1941
+-	depends on BR2_POWERPC_CPU_HAS_ALTIVEC || \
+-		!(BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le)
+ 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_LIBGCRYPT
+ 	help
+ 	  A set of tools for auditing wireless networks
