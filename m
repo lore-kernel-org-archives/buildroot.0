@@ -1,42 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 22:22:03 +0200
-Subject: [Buildroot] [git commit] package/spi-tools: bump version to 0.8.3
-Message-ID: <20180907111604.6982380FBA@busybox.osuosl.org>
+Date: Tue, 28 Aug 2018 22:29:58 +0200
+Subject: [Buildroot] [git commit] libyaml: bump to version 0.2.1
+Message-ID: <20180907111604.7050380FBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=254197612d0a4644d3ef63a234cd4a1deec0049b
+commit: https://git.buildroot.net/buildroot/commit/?id=a4633a53ae1592ad2f4ea6f931c061382cf44b7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/spi-tools/spi-tools.hash | 3 ++-
- package/spi-tools/spi-tools.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libyaml/libyaml.hash | 2 +-
+ package/libyaml/libyaml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/spi-tools/spi-tools.hash b/package/spi-tools/spi-tools.hash
-index 25c73814ba..8fe2d3e6b3 100644
---- a/package/spi-tools/spi-tools.hash
-+++ b/package/spi-tools/spi-tools.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
--sha256	72a6c4a9d13011addc61bc3906543cd06f76f567270ae4b6ca4d0115fd6a9538 spi-tools-0.8.1.tar.gz
-+sha256  1f29548187c5a57ca5902d260b01ca9ce04d93e4406ff77f317e1d6423ed3610 spi-tools-0.8.3.tar.gz
-+sha256  a01259a1b522cf0de95824f9860613b453153eebac468e96196d5d7dba84786c LICENSE
-diff --git a/package/spi-tools/spi-tools.mk b/package/spi-tools/spi-tools.mk
-index e5f3774b53..d21e4d64dd 100644
---- a/package/spi-tools/spi-tools.mk
-+++ b/package/spi-tools/spi-tools.mk
+diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
+index d4a0c335c3..755ea7bbd8 100644
+--- a/package/libyaml/libyaml.hash
++++ b/package/libyaml/libyaml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 8088e457264a98ba451a90b8661fcb4f9d6f478f7265d48322a196cec2480729  yaml-0.1.7.tar.gz
++sha256 78281145641a080fb32d6e7a87b9c0664d611dcb4d542e90baf731f51cbb59cd  yaml-0.2.1.tar.gz
+ sha256 d0d8b09800a45cd982e9568fc7669d9c1a4c330e275a821bbe24d54366d16fe9  LICENSE
+diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
+index bc8d6951bd..26e318736c 100644
+--- a/package/libyaml/libyaml.mk
++++ b/package/libyaml/libyaml.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SPI_TOOLS_VERSION = 0.8.1
-+SPI_TOOLS_VERSION = 0.8.3
- SPI_TOOLS_SITE = $(call github,cpb-,spi-tools,$(SPI_TOOLS_VERSION))
- # autoreconf must be run as specified in package documentation
- SPI_TOOLS_AUTORECONF = YES
+-LIBYAML_VERSION = 0.1.7
++LIBYAML_VERSION = 0.2.1
+ LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
+ LIBYAML_SITE = http://pyyaml.org/download/libyaml
+ LIBYAML_INSTALL_STAGING = YES
