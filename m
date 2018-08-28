@@ -1,60 +1,30 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 28 Aug 2018 19:26:53 +0200
-Subject: [Buildroot] [PATCH] mender: fix ioctl build failure on
- powerpc64le / power8
-In-Reply-To: <CADHdJwDAnbFAe3bGTQswK1OdfQzN+JCCwCPLGhLy1MCmz0bBTQ@mail.gmail.com>
-References: <20180828170153.42156-1-giulio.benetti@micronovasrl.com>
- <CADHdJwDAnbFAe3bGTQswK1OdfQzN+JCCwCPLGhLy1MCmz0bBTQ@mail.gmail.com>
-Message-ID: <fa955ebd-e988-0bb2-f506-ca164477b34f@micronovasrl.com>
+From: Niall Parker <stuff@npengineering.ca>
+Date: Tue, 28 Aug 2018 11:22:34 -0700
+Subject: [Buildroot] [[PATCH v2 13/14] package/mender: add
+ BR2_PACKAGE_MENDER_ARTIFACT_NAME option
+Message-ID: <a8305da7-cb25-8fdb-d087-3618ee239f98@npengineering.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hoping that the subject will associate this comment with the original 
+email to the list, my digest archive doesn't go back far enough to reply 
+directly.
 
-Il 28/08/2018 19:12, Mirza Krak ha scritto:
-> On Tue, Aug 28, 2018 at 7:01 PM, Giulio Benetti
-> <giulio.benetti@micronovasrl.com> wrote:
->> Build fails due to missing // +build ppc64le in ioctl_64_bit.go
->>
->> Add patch to append ppc64le to // +build list.
->>
->> Fixes
->> http://autobuild.buildroot.net/results/f22/f222b4389f9308363c386da25ec22a0919bc29fb//
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->> ---
->>   ...001-ioctl-allow-building-for-ppc64le.patch | 31 +++++++++++++++++++
->>   1 file changed, 31 insertions(+)
->>   create mode 100644 package/mender/0001-ioctl-allow-building-for-ppc64le.patch
->>
->> diff --git a/package/mender/0001-ioctl-allow-building-for-ppc64le.patch b/package/mender/0001-ioctl-allow-building-for-ppc64le.patch
-> 
-> Note that the 1.5.0 release of Mender also contains this patch [1],
-> and updating the package to 1.5.0 will also fix the build problem on
-> ppc64le.
+I understand the BR2_PACKAGE_MENDER_ARTIFACT_NAME and 
+BR2_PACKAGE_MENDER_DEVICE_TYPE patches haven't been accepted yet as they 
+may be enforcing too much structure on the generated image (files in 
+/data/mender etc.) ... mender does need some structure to work with and 
+for now I am implementing it with custom post- scripts. It would be 
+helpful if the mender package still collected values for the above 
+config options even if they are not written till the post- steps.
 
-Oh, I've missed that patch.
-I've found this PR:
-https://github.com/mendersoftware/mender/pull/302
-and so I've created a new patch.
+I understand one suggestion was to just apply the customization in the 
+rootfs overlay ... doable but awkward, especially when separating the 
+rootfs (updateable) and data (persistent) partitions. Though maybe 
+maintaining the dual partitions as separate skeletons makes the most 
+sense, have to think about that further.
 
-> Note that there will soon (1-2 weeks) be a new Mender release (1.6.0)
-> that also contains this patch and updating to that will also fix the
-> build problem on pppc64le.
-
-Ok, but I don't know if it will be pushed to master or next.
-I wanted to avoid NOK on:
-http://autobuild.buildroot.net/?reason=mender-1.4.0
-
-> 
-> [1]. https://github.com/mendersoftware/mender/commit/d7064c82c66cb7e4093c71c44b2c976c0caac8a2
-> 
-
-If this makes sense I can resend this patch using the patch you've 
-pointed me to.
-
-Thanks
-Giulio
+ ??? ??? ??? ??? ... Niall
