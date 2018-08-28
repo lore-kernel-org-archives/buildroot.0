@@ -1,88 +1,36 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 28 Aug 2018 14:52:58 +0200
-Subject: [Buildroot] [PATCH next v2] atop: fix minor() major() build failure
-In-Reply-To: <87k1oay87h.fsf@tkos.co.il>
-References: <87k1oay87h.fsf@tkos.co.il>
-Message-ID: <20180828125258.9285-1-giulio.benetti@micronovasrl.com>
+From: Carlos Santos <casantos@datacom.com.br>
+Date: Tue, 28 Aug 2018 09:57:59 -0300 (BRT)
+Subject: [Buildroot] genimage with GPT partition
+In-Reply-To: <ea-mime-5b8531d1-607c-3c8a0ad5@www-1.netcourrier.com>
+References: <ea-mime-5b8531d1-607c-3c8a0ad5@www-1.netcourrier.com>
+Message-ID: <271051188.3137571.1535461079163.JavaMail.zimbra@datacom.com.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On arm / cortex-a8 Arch/Subarch sys/types.h doesn't include
-sys/sysmacros.h which contains minor() and major() macros.
+> From: "LP" <lpdev@cordier.org>
+> To: "DATACOM" <casantos@datacom.com.br>
+> Cc: "buildroot" <buildroot@busybox.net>
+> Sent: Tuesday, August 28, 2018 8:28:17 AM
+> Subject: Re: [Buildroot] genimage with GPT partition
 
-Add patch to directly include <sys/sysmacros.h> into photosyst.c where
-minor() and major() macros are used.
+> Hi again,
 
-Patch has been taken from atop upstream pull request:
-https://github.com/Atoptool/atop/pull/35
+> I think support for GPT would be a useful feature to add to the back log.
+> Carlos, would it be possible for you to share your custom script? It would save
+> me a lot of time not doing it from scratch.
 
-Fixes
-http://autobuild.buildroot.net/results/3fc/3fc0f18ed94697c404e7ff3751781789170c4fe5//
+[...]
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- ...ysmacros.h-to-compile-with-newer-gcc.patch | 50 +++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
+>> genimage does not create GPT partitions. In my current project I made a
+>> tricky post-image script which uses sfdisk, mcopy and mkfs to craft a
+>> disk image with the required partitions. It's beautifully horrendous.
 
-diff --git a/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch b/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
-new file mode 100644
-index 0000000000..8e612fe2b3
---- /dev/null
-+++ b/package/atop/0001-Include-sysmacros.h-to-compile-with-newer-gcc.patch
-@@ -0,0 +1,50 @@
-+From 414127c03669b4eedc85778a7bff80cf601311d8 Mon Sep 17 00:00:00 2001
-+From: SjonHortensius <SjonHortensius@users.noreply.github.com>
-+Date: Fri, 24 Aug 2018 18:26:58 +0200
-+Subject: [PATCH] Include sysmacros.h to compile with newer gcc
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Older gcc throws a warning
-+```
-+photosyst.c: In function 'lvmmapname':
-+photosyst.c:1465:13: warning: In the GNU C Library, "major" is defined
-+ by <sys/sysmacros.h>. For historical compatibility, it is
-+ currently defined by <sys/types.h> as well, but we plan to
-+ remove this soon. To use "major", include <sys/sysmacros.h>
-+ directly. If you did not intend to use a system-defined macro
-+ "major", you should undefine it after including <sys/types.h>.
-+     dmp->major  = major(statbuf.st_rdev);
-+```
-+
-+Newer gcc throws an error:
-+
-+```
-+photosyst.c: In function ?lvmmapname?:
-+photosyst.c:1482:19: error: called object ?major? is not a function or function pointer
-+     dmp->major  = major(statbuf.st_rdev);
-+                   ^~~~~
-+photosyst.c:1437:25: note: declared here
-+ lvmmapname(unsigned int major, unsigned int minor,
-+            ~~~~~~~~~~~~~^~~~~
-+```
-+---
-+ photosyst.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/photosyst.c b/photosyst.c
-+index 19cbbe1..50841a1 100644
-+--- a/photosyst.c
-++++ b/photosyst.c
-+@@ -152,6 +152,7 @@
-+ static const char rcsid[] = "$Id: photosyst.c,v 1.38 2010/11/19 07:40:40 gerlof Exp $";
-+ 
-+ #include <sys/types.h>
-++#include <sys/sysmacros.h>
-+ #include <stdio.h>
-+ #include <string.h>
-+ #include <unistd.h>
-+-- 
-+2.17.1
-+
+I will make a simplified (and readable) version and post it somewhere.
+
 -- 
-2.17.1
+Carlos Santos (Casantos) - DATACOM, P&D
+?Marched towards the enemy, spear upright, armed with the certainty
+that only the ignorant can have.? ? Epitaph of a volunteer
