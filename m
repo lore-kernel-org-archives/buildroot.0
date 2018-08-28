@@ -1,10 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 23:52:40 +0200
-Subject: [Buildroot] [PATCH 1/2] package/aircrack-ng: powerpc support
- optional ALTIVEC
-In-Reply-To: <1535411668-36286-1-git-send-email-matthew.weber@rockwellcollins.com>
+Date: Tue, 28 Aug 2018 23:53:20 +0200
+Subject: [Buildroot] [PATCH 2/2] Revert "package/aircrack-ng: powerpc
+ arch requires altivec"
+In-Reply-To: <1535411668-36286-2-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1535411668-36286-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <20180828235240.39d7dc05@windsurf.home>
+ <1535411668-36286-2-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <20180828235320.79831d3a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,28 +14,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon, 27 Aug 2018 18:14:27 -0500, Matt Weber wrote:
-> This patch adds support for the powerpc arch to conditionally
-> check if an arch provies altivec accelerator support, similar
-> to other SIMD on ARM/x86.
+On Mon, 27 Aug 2018 18:14:28 -0500, Matt Weber wrote:
+> This reverts commit 1f3f1fb8c7324c9a50383b1cafcbd2f9d74a91f9.
 > 
-> Upstream issue: aircrack-ng/aircrack-ng#1941
-> 
-> Fixes
-> http://autobuild.buildroot.net/results/87e82a5e8d0b1c1ff10ec3e59d25bcd56b329075
-> 
-> Tested against both a e6500 with Altivec and a e500 target.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 > ---
->  ...1-autotools-Fix-optional-SIMD-on-PPC-arch.patch | 69 ++++++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 package/aircrack-ng/0001-autotools-Fix-optional-SIMD-on-PPC-arch.patch
+>  package/aircrack-ng/Config.in | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/package/aircrack-ng/Config.in b/package/aircrack-ng/Config.in
+> index d821c5a..f3e2bc4 100644
+> --- a/package/aircrack-ng/Config.in
+> +++ b/package/aircrack-ng/Config.in
+> @@ -4,9 +4,6 @@ config BR2_PACKAGE_AIRCRACK_NG
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_INSTALL_LIBSTDCPP
+>  	depends on !BR2_STATIC_LIBS # dlfcn.h
+> -	# https://github.com/aircrack-ng/aircrack-ng/issues/1941
+> -	depends on BR2_POWERPC_CPU_HAS_ALTIVEC || \
+> -		!(BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le)
 
-Both applied to master. Thanks!
+This revert made me realize that the commit itself was wrong: this
+architecture dependency had not been propagated to the Config.in
+comment in the same file.
+
+But with the revert, this is obviously no longer relevant.
+
+Best regards,
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
