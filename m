@@ -1,113 +1,49 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 28 Aug 2018 11:23:45 +0200
-Subject: [Buildroot] [PATCH] package/shairport-sync: add upstream patch to
- fix build issue with soxr
-Message-ID: <20180828092345.18443-1-joerg.krause@embedded.rocks>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 28 Aug 2018 12:27:26 +0300
+Subject: [Buildroot] [PATCH] libsoup: security bump to version 2.62.3
+Message-ID: <b3371f0ae3c4c91fc17182950ecaf97879d7da34.1535448446.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch to fix build issue detected by the Buildroot autobuilder:
+Fixes CVE-2018-12910: The get_cookies function in soup-cookie-jar.c in
+libsoup 2.63.2 allows attackers to have unspecified impact via an empty
+hostname.
 
-```
-arm-buildroot-linux-uclibcgnueabi/sysroot/usr//lib/libsoxr.a(soxr.c.o): In function `soxr_create':
-soxr.c:(.text+0xd4c): undefined reference to `av_get_cpu_flags'
-collect2: error: ld returned 1 exit status
-```
-
-A quick look at the soxr source code shows that `soxr_create()` might use
-`av_get_cpu_flags()` depending on the architecture.
-
-For the sake of simplicity link with `-lavutil` if it is found when using soxr.
-
-Even better, as soxr provides a pkg-config file, this should be prefered.
-
-Upstream issue: https://github.com/mikebrady/shairport-sync/issues/733
-Upstream status: 5101ab2d13e2b89ea3c1276df5fb7413634eeccd
-
-Fixes:
-http://autobuild.buildroot.net/results/53d/53d21686780aa2485745b59e812b6280dd39f1c5
-http://autobuild.buildroot.net/results/605/60576363adfca404c3a7883d5d46e8a4a9ee8171
-http://autobuild.buildroot.net/results/806/806867ab1c6f42ad1b34d44844efc57272d48235
-http://autobuild.buildroot.net/results/840/840810601fbb8a7957ea9dae175b959a7f9b7491
-.. and more.
-
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- ...ibsoxr-is-built-to-rely-on-libavutil.patch | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
+ package/libsoup/libsoup.hash | 4 ++--
+ package/libsoup/libsoup.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch b/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
-new file mode 100644
-index 0000000000..32c52add33
---- /dev/null
-+++ b/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
-@@ -0,0 +1,63 @@
-+From 5101ab2d13e2b89ea3c1276df5fb7413634eeccd Mon Sep 17 00:00:00 2001
-+From: Mike Brady <mikebrady@eircom.net>
-+Date: Sat, 25 Aug 2018 13:08:37 +0100
-+Subject: [PATCH] Sometimes libsoxr is built to rely on libavutil. If libavutil
-+ is detected, link to it when building libsoxr. Add pgk_config support to soxr
-+ selection.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The Buildroot autobuilder detected a build issue [0] when building
-+shairport-sync statically:
-+
-+```
-+arm-buildroot-linux-uclibcgnueabi/sysroot/usr//lib/libsoxr.a(soxr.c.o): In function `soxr_create':
-+soxr.c:(.text+0xd4c): undefined reference to `av_get_cpu_flags'
-+collect2: error: ld returned 1 exit status
-+```
-+
-+A quick look at the soxr source code shows that `soxr_create()` might use
-+`av_get_cpu_flags()` depending on the architecture.
-+
-+For the sake of simplicity link with `-lavutil` if it is found when using soxr.
-+
-+Even better, as soxr provides a pkg-config file, this should be prefered.
-+
-+[0] http://autobuild.buildroot.org/results/53d/53d21686780aa2485745b59e812b6280dd39f1c5
-+
-+Upstream status: 5101ab2d13e2b89ea3c1276df5fb7413634eeccd
-+
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ configure.ac | 15 ++++++++++++++-
-+ 1 file changed, 14 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0c917a4..2b6fddb 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -176,7 +176,20 @@ AC_ARG_WITH(ssl, [ choose --with-ssl=openssl, --with-ssl=mbedtls or --with-ssl=p
-+ # Look for soxr flag
-+ AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation], [
-+   AC_MSG_RESULT(>>Including support for soxr-based interpolation)
-+-  AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!))], )
-++  if  test "x${with_pkg_config}" = xyes ; then
-++    PKG_CHECK_MODULES(
-++        [SOXR], [soxr],
-++        [LIBS="${SOXR_LIBS} ${LIBS}"])
-++  else
-++    AC_CHECK_LIB([avutil],[av_get_cpu_flags])
-++    if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
-++      # soxr may link against libavutil, depending on the architecture, but for the sake of simplicity link with it if it is found
-++      AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!), [-lavutil])
-++    else
-++      AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!))
-++    fi
-++  fi
-++], )
-+ 
-+ # Look for metadata flag -- set flag for conditional compilation
-+ AC_ARG_WITH(metadata, [  --with-metadata = include support for a metadata feed], [
-+-- 
-+2.18.0
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index 6e1ff428afc0..666bbc278bf5 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
+@@ -1,4 +1,4 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.56/libsoup-2.56.1.sha256sum
+-sha256	c32a46d77b4da433b51d8fd09a57a44b198e03bdc93e5219afcc687c7948eac3  libsoup-2.56.1.tar.xz
++# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.62/libsoup-2.62.3.sha256sum
++sha256	d312ade547495c2093ff8bda61f9b9727a98cfdae339f3263277dd39c0451172  libsoup-2.62.3.tar.xz
+ # Locally calculated
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index a3ce686aa7d7..95bd68201065 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSOUP_VERSION_MAJOR = 2.56
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).1
++LIBSOUP_VERSION_MAJOR = 2.62
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).3
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPL-2.0+
 -- 
 2.18.0
