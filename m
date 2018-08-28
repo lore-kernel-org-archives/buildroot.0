@@ -1,59 +1,54 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 28 Aug 2018 10:07:30 +0200
-Subject: [Buildroot] Analysis of defconfig build failures
-In-Reply-To: <877ekb8q32.fsf@dell.be.48ers.dk>
-References: <20180812170138.0b51be07@windsurf>
- <87600bbg68.fsf@dell.be.48ers.dk> <20180815213421.08e0a3b6@windsurf>
- <87ftzf9v7u.fsf@dell.be.48ers.dk> <20180816001829.3f7a1436@windsurf>
- <CAAXf6LVNs8470+VwKJCM68cHdp+ZgD-JxEpCbUpMXte4JYm68Q@mail.gmail.com>
- <20180816220655.37fbff34@windsurf>
- <CAAXf6LX52KbkJ3AHfvG4ZMZvRHtpcqUHfo98JeTjFnuWWfMWNg@mail.gmail.com>
- <CAAXf6LW1V3FLD8B=BQ=nGO3guTfR6Xsk2JtRFc5aei-ZP=hbcQ@mail.gmail.com>
- <CAAXf6LVAjPadPVB1Ubq_M=i1s8746fVAWNDvYm8dK_ZTBMbQgQ@mail.gmail.com>
- <87in3w9qjj.fsf@dell.be.48ers.dk> <20180827102815.23605ecd@windsurf>
- <87efek9ozo.fsf@dell.be.48ers.dk>
- <CAAXf6LUwdkE_DGPV88Xma5LqJkYpr=+0Xhyg50hFhnQXEhkmrw@mail.gmail.com>
- <877ekb8q32.fsf@dell.be.48ers.dk>
-Message-ID: <ec4d8edd-945b-60d1-12c1-e9050b2e290d@lucaceresoli.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Aug 2018 10:10:52 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] php: fix build with mysqli
+Message-ID: <20180828081210.4CDF48138C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5e35bacdf35567581c1c56086655eda7e3dfc36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-On 27/08/2018 23:19, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
-> 
-> Hi,
-> 
->  > Backtrace from a quick gdb session:
-> 
->  > Program received signal SIGABRT, Aborted.
->  > 0x00007ffff7a4b010 in raise () from /lib64/libc.so.6
->  > (gdb) bt
->  > #0  0x00007ffff7a4b010 in raise () from /lib64/libc.so.6
->  > #1  0x00007ffff7a4cc0d in abort () from /lib64/libc.so.6
->  > #2  0x00007ffff7a427e7 in ?? () from /lib64/libc.so.6
->  > #3  0x00007ffff7a428a2 in __assert_fail () from /lib64/libc.so.6
->  > #4  0x0000555555560a6f in propval_cell ()
->  > #5  0x000055555555b536 in check_graph_child_address ()
->  > #6  0x0000555555558dc8 in check_nodes_props ()
->  > #7  0x0000555555558df6 in check_nodes_props ()
->  > #8  0x000055555555a4d7 in run_check ()
->  > #9  0x000055555555c2cf in process_checks ()
->  > #10 0x0000555555558797 in main ()
-> 
->  > I haven't dug deeper. It could be that some patching is needed in
->  > host-dtc itself, to solve the above error.
-> 
-> Thanks for investigating. This again seems to confirm that reverting the
-> dtc bump will be a solution for 2018.08.
+This fixes autobuild failures like
+http://autobuild.buildroot.net/results/3288b742cee650ee47a41c5b4d6aaef1fe67bff1
 
-At any rate, I just sent a small series to upgrade U-Boot for 3 zynq
-boards. Even with the dtc bump revert they shouldn't hurt.
+php compile breaks with:
 
-Regards,
--- 
-Luca
+ext/mysqlnd/mysqlnd_auth.o: In function `php_mysqlnd_scramble_sha2':
+mysqlnd_auth.c:(.text+0x1054): undefined reference to `PHP_SHA256Init'
+mysqlnd_auth.c:(.text+0x1064): undefined reference to `PHP_SHA256Update'
+mysqlnd_auth.c:(.text+0x1070): undefined reference to `PHP_SHA256Final'
+mysqlnd_auth.c:(.text+0x1078): undefined reference to `PHP_SHA256Init'
+mysqlnd_auth.c:(.text+0x1088): undefined reference to `PHP_SHA256Update'
+mysqlnd_auth.c:(.text+0x1094): undefined reference to `PHP_SHA256Final'
+mysqlnd_auth.c:(.text+0x109c): undefined reference to `PHP_SHA256Init'
+mysqlnd_auth.c:(.text+0x10ac): undefined reference to `PHP_SHA256Update'
+mysqlnd_auth.c:(.text+0x10bc): undefined reference to `PHP_SHA256Update'
+mysqlnd_auth.c:(.text+0x10c8): undefined reference to `PHP_SHA256Final'
+
+It looks like the php mysqli extension needs the hash extension to work.  This
+seems to be a php Make dependany bug.  This patch works around it until the
+upstream maintainers can fix it.
+
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 65f96452636b96c01ea3f00db6e4e7a240837101)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/Config.ext | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 6b3d86925d..60ef1aee7c 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -113,6 +113,7 @@ endif
+ 
+ config BR2_PACKAGE_PHP_EXT_MYSQLI
+ 	bool "Mysqli"
++	select BR2_PACKAGE_PHP_EXT_HASH
+ 	help
+ 	  MySQL Improved extension support
+ 
