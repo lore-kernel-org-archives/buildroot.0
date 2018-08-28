@@ -1,38 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 22:29:28 +0200
-Subject: [Buildroot] [PATCH 1/1] postgresql: security bump to 10.5
-In-Reply-To: <CAFSsvmpkvmmF-DbbJ8Uj=JUyJ=dg8AFwPg7K21Za=ao98N2nNw@mail.gmail.com>
-References: <20180828163127.9989-1-aduskett@gmail.com>
- <CAFSsvmpkvmmF-DbbJ8Uj=JUyJ=dg8AFwPg7K21Za=ao98N2nNw@mail.gmail.com>
-Message-ID: <20180828222928.0b8c1fb3@windsurf.home>
+Date: Tue, 28 Aug 2018 22:29:58 +0200
+Subject: [Buildroot] [git commit branch/next] libyaml: bump to version 0.2.1
+Message-ID: <20180828203130.8446E814FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=a4633a53ae1592ad2f4ea6f931c061382cf44b7f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 28 Aug 2018 12:36:08 -0400, Adam Duskett wrote:
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libyaml/libyaml.hash | 2 +-
+ package/libyaml/libyaml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> I would recommend that this patch should be applied to master, next,
-> and 2018.02.x
-
-In fact, it goes just to master.
-
-next will be merged back into master as soon as 2018.08 is released. We
-don't apply changes to both master and next, unless it is needed to
-resolve conflicts. master takes all the bug/build/security fixes, next
-takes all the rest of the development.
-
-The patch will be applied on 2018.02.x and 2018.05.x by Peter as part
-of his process of reviewing all commits that were made in master, and
-deciding which ones are relevant for our stable branches.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
+index d4a0c335c3..755ea7bbd8 100644
+--- a/package/libyaml/libyaml.hash
++++ b/package/libyaml/libyaml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 8088e457264a98ba451a90b8661fcb4f9d6f478f7265d48322a196cec2480729  yaml-0.1.7.tar.gz
++sha256 78281145641a080fb32d6e7a87b9c0664d611dcb4d542e90baf731f51cbb59cd  yaml-0.2.1.tar.gz
+ sha256 d0d8b09800a45cd982e9568fc7669d9c1a4c330e275a821bbe24d54366d16fe9  LICENSE
+diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
+index bc8d6951bd..26e318736c 100644
+--- a/package/libyaml/libyaml.mk
++++ b/package/libyaml/libyaml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBYAML_VERSION = 0.1.7
++LIBYAML_VERSION = 0.2.1
+ LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
+ LIBYAML_SITE = http://pyyaml.org/download/libyaml
+ LIBYAML_INSTALL_STAGING = YES
