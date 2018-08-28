@@ -1,44 +1,30 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Aug 2018 14:17:42 +0300
-Subject: [Buildroot] [PATCH next] git-crypt: disable for gcc affected by bug
- #64735
-Message-ID: <3ba001ca8c4a2e548c47bdb7b52573b4ab2803a8.1535455062.git.baruch@tkos.co.il>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Aug 2018 13:18:58 +0200
+Subject: [Buildroot] [PATCH] libsoup: security bump to version 2.62.3
+In-Reply-To: <b3371f0ae3c4c91fc17182950ecaf97879d7da34.1535448446.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 28 Aug 2018 12:27:26 +0300")
+References: <b3371f0ae3c4c91fc17182950ecaf97879d7da34.1535448446.git.baruch@tkos.co.il>
+Message-ID: <87zhx668nx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-git-crypt needs exception_ptr. gcc older than 7 don't provide that on
-all architectures due to gcc bug #64735.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/2a7/2a76ce39bc639b4f17ff33f8447d9094215e68d8/
+ > Fixes CVE-2018-12910: The get_cookies function in soup-cookie-jar.c in
+ > libsoup 2.63.2 allows attackers to have unspecified impact via an empty
+ > hostname.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/git-crypt/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
-diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
-index bb86219cf89f..9a270b8f9d07 100644
---- a/package/git-crypt/Config.in
-+++ b/package/git-crypt/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_GIT_CRYPT
- 	bool "git-crypt"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
- 	depends on BR2_USE_MMU # git
- 	select BR2_PACKAGE_GIT # runtime
- 	select BR2_PACKAGE_OPENSSL
-@@ -15,3 +16,7 @@ comment "git-crypt needs a toolchain w/ C++, gcc >= 4.9"
- 	depends on !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
-+
-+comment "git-crypt needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+Thanks! I started looking at this myself, but got sidetracked.
+
+Is 2.62.x the first release containing this fix? Should we also cherry
+pick this for 2018.02.x / 2018.05.x or is there a smaller patch that
+could be applied instead?
+
 -- 
-2.18.0
+Bye, Peter Korsgaard
