@@ -1,13 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 22:35:55 +0200
-Subject: [Buildroot] [PATCH next v2] atop: fix minor() major() build
- failure
-In-Reply-To: <064ecbe3-ef13-1feb-9f65-83151bc5ce4a@micronovasrl.com>
-References: <87k1oay87h.fsf@tkos.co.il>
- <20180828125258.9285-1-giulio.benetti@micronovasrl.com>
- <20180828151621.77022940@windsurf.home>
- <064ecbe3-ef13-1feb-9f65-83151bc5ce4a@micronovasrl.com>
-Message-ID: <20180828223555.5f865609@windsurf.home>
+Date: Tue, 28 Aug 2018 22:36:16 +0200
+Subject: [Buildroot] [PATCH 1/2] libyaml: bump to version 0.2.1
+In-Reply-To: <20180828093631.7290-1-yegorslists@googlemail.com>
+References: <20180828093631.7290-1-yegorslists@googlemail.com>
+Message-ID: <20180828223616.0d6e45dc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,24 +12,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 28 Aug 2018 15:26:45 +0200, Giulio Benetti wrote:
-
-> > We need your Signed-off-by here, i.e inside the patch you are
-> > backporting.  
+On Tue, 28 Aug 2018 11:36:30 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Ok, I've confused Signed-off-by in that patch as "stealing" Authorship,
-> instead the Authorship is defined in "From:" field.
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/libyaml/libyaml.hash | 2 +-
+>  package/libyaml/libyaml.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by are here to track the "merging" path of the patch. You're
-taking a patch from somewhere and adding it to Buildroot, you add your
-SoB to it. If the original author had a SoB, you would have kept it,
-and added yours below it. This is not stealing the authorship, but
-documenting who took the patch and added it in Buildroot.
-
-Best regards,
+Both applied to next. Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
 Embedded Linux and Kernel engineering
 https://bootlin.com
