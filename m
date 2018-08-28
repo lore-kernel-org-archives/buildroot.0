@@ -1,103 +1,59 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 28 Aug 2018 10:05:51 +0200
-Subject: [Buildroot] [PATCH 1/1] python-fire: new package
-In-Reply-To: <20180824191650.4200-1-asafka7@gmail.com>
-References: <20180824191650.4200-1-asafka7@gmail.com>
-Message-ID: <CAGm1_ks5Aw_3MR01D+BJ4mDG8a6i6wCbY42Frca+E9Yd+gBhqw@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Tue, 28 Aug 2018 10:07:30 +0200
+Subject: [Buildroot] Analysis of defconfig build failures
+In-Reply-To: <877ekb8q32.fsf@dell.be.48ers.dk>
+References: <20180812170138.0b51be07@windsurf>
+ <87600bbg68.fsf@dell.be.48ers.dk> <20180815213421.08e0a3b6@windsurf>
+ <87ftzf9v7u.fsf@dell.be.48ers.dk> <20180816001829.3f7a1436@windsurf>
+ <CAAXf6LVNs8470+VwKJCM68cHdp+ZgD-JxEpCbUpMXte4JYm68Q@mail.gmail.com>
+ <20180816220655.37fbff34@windsurf>
+ <CAAXf6LX52KbkJ3AHfvG4ZMZvRHtpcqUHfo98JeTjFnuWWfMWNg@mail.gmail.com>
+ <CAAXf6LW1V3FLD8B=BQ=nGO3guTfR6Xsk2JtRFc5aei-ZP=hbcQ@mail.gmail.com>
+ <CAAXf6LVAjPadPVB1Ubq_M=i1s8746fVAWNDvYm8dK_ZTBMbQgQ@mail.gmail.com>
+ <87in3w9qjj.fsf@dell.be.48ers.dk> <20180827102815.23605ecd@windsurf>
+ <87efek9ozo.fsf@dell.be.48ers.dk>
+ <CAAXf6LUwdkE_DGPV88Xma5LqJkYpr=+0Xhyg50hFhnQXEhkmrw@mail.gmail.com>
+ <877ekb8q32.fsf@dell.be.48ers.dk>
+Message-ID: <ec4d8edd-945b-60d1-12c1-e9050b2e290d@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 24, 2018 at 9:16 PM Asaf Kahlon <asafka7@gmail.com> wrote:
->
-> A library for automatically generating command line interfaces.
->
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Hi,
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+On 27/08/2018 23:19, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas De Schampheleire <patrickdepinguin+buildroot@gmail.com> writes:
+> 
+> Hi,
+> 
+>  > Backtrace from a quick gdb session:
+> 
+>  > Program received signal SIGABRT, Aborted.
+>  > 0x00007ffff7a4b010 in raise () from /lib64/libc.so.6
+>  > (gdb) bt
+>  > #0  0x00007ffff7a4b010 in raise () from /lib64/libc.so.6
+>  > #1  0x00007ffff7a4cc0d in abort () from /lib64/libc.so.6
+>  > #2  0x00007ffff7a427e7 in ?? () from /lib64/libc.so.6
+>  > #3  0x00007ffff7a428a2 in __assert_fail () from /lib64/libc.so.6
+>  > #4  0x0000555555560a6f in propval_cell ()
+>  > #5  0x000055555555b536 in check_graph_child_address ()
+>  > #6  0x0000555555558dc8 in check_nodes_props ()
+>  > #7  0x0000555555558df6 in check_nodes_props ()
+>  > #8  0x000055555555a4d7 in run_check ()
+>  > #9  0x000055555555c2cf in process_checks ()
+>  > #10 0x0000555555558797 in main ()
+> 
+>  > I haven't dug deeper. It could be that some patching is needed in
+>  > host-dtc itself, to solve the above error.
+> 
+> Thanks for investigating. This again seems to confirm that reverting the
+> dtc bump will be a solution for 2018.08.
 
-> ---
->  DEVELOPERS                           |  1 +
->  package/Config.in                    |  1 +
->  package/python-fire/Config.in        |  8 ++++++++
->  package/python-fire/python-fire.hash |  5 +++++
->  package/python-fire/python-fire.mk   | 14 ++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-fire/Config.in
->  create mode 100644 package/python-fire/python-fire.hash
->  create mode 100644 package/python-fire/python-fire.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 481c74f9f2..4832b004f5 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -199,6 +199,7 @@ F:  package/stress/
->
->  N:     Asaf Kahlon <asafka7@gmail.com>
->  F:     package/libuv/
-> +F:     package/python-fire/
->  F:     package/python-jsonmodels/
->  F:     package/python-reentry/
->  F:     package/python-subprocess32/
-> diff --git a/package/Config.in b/package/Config.in
-> index eda0f698dc..653f8259a7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -820,6 +820,7 @@ menu "External python modules"
->         source "package/python-engineio/Config.in"
->         source "package/python-enum/Config.in"
->         source "package/python-enum34/Config.in"
-> +       source "package/python-fire/Config.in"
->         source "package/python-flask/Config.in"
->         source "package/python-flask-cors/Config.in"
->         source "package/python-flask-babel/Config.in"
-> diff --git a/package/python-fire/Config.in b/package/python-fire/Config.in
-> new file mode 100644
-> index 0000000000..2c6e55ab6b
-> --- /dev/null
-> +++ b/package/python-fire/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_PYTHON_FIRE
-> +       bool "python-fire"
-> +       select BR2_PACKAGE_PYTHON_SIX # runtime
-> +       help
-> +         A library for automatically generating command line
-> +         interfaces.
-> +
-> +         https://github.com/google/python-fire
-> diff --git a/package/python-fire/python-fire.hash b/package/python-fire/python-fire.hash
-> new file mode 100644
-> index 0000000000..d6304369d5
-> --- /dev/null
-> +++ b/package/python-fire/python-fire.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/fire/json
-> +md5    44c51c634b61acc7ed42a413a64de38a  fire-0.1.3.tar.gz
-> +sha256 c299d16064ff81cbb649b65988300d4a28b71ecfb789d1fb74d99ea98ae4d2eb  fire-0.1.3.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 a5de77b62266bca0bb97bf058992f0b0f308a83a8ca55ee10fbf6bd8ed8f7ed0  LICENSE
-> diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
-> new file mode 100644
-> index 0000000000..bdb5ee191c
-> --- /dev/null
-> +++ b/package/python-fire/python-fire.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-fire
-> +#
-> +################################################################################
-> +
-> +PYTHON_FIRE_VERSION = 0.1.3
-> +PYTHON_FIRE_SOURCE = fire-$(PYTHON_FIRE_VERSION).tar.gz
-> +PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/5a/b7/205702f348aab198baecd1d8344a90748cb68f53bdcd1cc30cbc08e47d3e
-> +PYTHON_FIRE_SETUP_TYPE = setuptools
-> +PYTHON_FIRE_LICENSE = Apache-2.0
-> +PYTHON_FIRE_LICENSE_FILES = LICENSE
-> +
-> +$(eval $(python-package))
-> --
-> 2.17.1
->
+At any rate, I just sent a small series to upgrade U-Boot for 3 zynq
+boards. Even with the dtc bump revert they shouldn't hurt.
+
+Regards,
+-- 
+Luca
