@@ -1,51 +1,122 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 22:38:10 +0200
-Subject: [Buildroot] [git commit] libsoup: security bump to version 2.62.3
-Message-ID: <20180907111604.87C0A7FEB5@busybox.osuosl.org>
+Date: Tue, 28 Aug 2018 23:53:57 +0200
+Subject: [Buildroot] [git commit] librtlsdr: bump to version 0.6.0
+Message-ID: <20180907111604.CCE507FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91d65f300016517eee95cc7f0bdf719a124a2af5
+commit: https://git.buildroot.net/buildroot/commit/?id=4641677fdcfa9a131a0b9e467ae71bde9aec267c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2018-12910: The get_cookies function in soup-cookie-jar.c in
-libsoup 2.63.2 allows attackers to have unspecified impact via an empty
-hostname.
+Remove second patch (already in version even if PR has not been closed):
+see
+https://github.com/steve-m/librtlsdr/commit/9047eef701f50d8bc4748233a31d65a0519ed86c
 
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsoup/libsoup.hash | 4 ++--
- package/libsoup/libsoup.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...x-builds-with-newer-compilers-C-standards.patch | 68 ----------------------
+ package/librtlsdr/librtlsdr.hash                   |  2 +-
+ package/librtlsdr/librtlsdr.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 70 deletions(-)
 
-diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
-index 6e1ff428af..666bbc278b 100644
---- a/package/libsoup/libsoup.hash
-+++ b/package/libsoup/libsoup.hash
+diff --git a/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch b/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
+deleted file mode 100644
+index b663d08b9f..0000000000
+--- a/package/librtlsdr/0002-fix-builds-with-newer-compilers-C-standards.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From ea6a86d8e792430faa3a8161ee99f2bc392875d1 Mon Sep 17 00:00:00 2001
+-From: Mike Frysinger <vapier@chromium.org>
+-Date: Fri, 3 Feb 2017 15:44:18 -1000
+-Subject: [PATCH] fix builds with newer compilers & C standards
+-
+-The meaning of "inline" has changed when "static" is not used.
+-Since none of these functions are used outside of their respective
+-files, mark them as static to avoid build errors where funcs are
+-not inlined (based on compiler flags too).
+-
+-Upstream status: pull request #38
+-
+-Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+----
+- src/rtl_adsb.c  | 8 ++++----
+- src/rtl_power.c | 2 +-
+- 2 files changed, 5 insertions(+), 5 deletions(-)
+-
+-diff --git a/src/rtl_adsb.c b/src/rtl_adsb.c
+-index e611e78..a3bfa7f 100644
+---- a/src/rtl_adsb.c
+-+++ b/src/rtl_adsb.c
+-@@ -182,7 +182,7 @@ int magnitute(uint8_t *buf, int len)
+- 	return len/2;
+- }
+- 
+--inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
+-+static inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
+- /* takes 4 consecutive real samples, return 0 or 1, BADSAMPLE on error */
+- {
+- 	int bit, bit_p;
+-@@ -223,17 +223,17 @@ inline uint16_t single_manchester(uint16_t a, uint16_t b, uint16_t c, uint16_t d
+- 	return BADSAMPLE;
+- }
+- 
+--inline uint16_t min16(uint16_t a, uint16_t b)
+-+static inline uint16_t min16(uint16_t a, uint16_t b)
+- {
+- 	return a<b ? a : b;
+- }
+- 
+--inline uint16_t max16(uint16_t a, uint16_t b)
+-+static inline uint16_t max16(uint16_t a, uint16_t b)
+- {
+- 	return a>b ? a : b;
+- }
+- 
+--inline int preamble(uint16_t *buf, int i)
+-+static inline int preamble(uint16_t *buf, int i)
+- /* returns 0/1 for preamble at index i */
+- {
+- 	int i2;
+-diff --git a/src/rtl_power.c b/src/rtl_power.c
+-index aa7a138..a7a43bb 100644
+---- a/src/rtl_power.c
+-+++ b/src/rtl_power.c
+-@@ -249,7 +249,7 @@ void sine_table(int size)
+- 	}
+- }
+- 
+--inline int16_t FIX_MPY(int16_t a, int16_t b)
+-+static inline int16_t FIX_MPY(int16_t a, int16_t b)
+- /* fixed point multiply and scale */
+- {
+- 	int c = ((int)a * (int)b) >> 14;
+--- 
+-2.13.0
+-
+diff --git a/package/librtlsdr/librtlsdr.hash b/package/librtlsdr/librtlsdr.hash
+index 9184196d9a..e7b0e84f4a 100644
+--- a/package/librtlsdr/librtlsdr.hash
++++ b/package/librtlsdr/librtlsdr.hash
 @@ -1,4 +1,4 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.56/libsoup-2.56.1.sha256sum
--sha256	c32a46d77b4da433b51d8fd09a57a44b198e03bdc93e5219afcc687c7948eac3  libsoup-2.56.1.tar.xz
-+# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.62/libsoup-2.62.3.sha256sum
-+sha256	d312ade547495c2093ff8bda61f9b9727a98cfdae339f3263277dd39c0451172  libsoup-2.62.3.tar.xz
  # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
-index a3ce686aa7..95bd682010 100644
---- a/package/libsoup/libsoup.mk
-+++ b/package/libsoup/libsoup.mk
-@@ -4,8 +4,8 @@
+-sha256 6fd0d298c1a18fc8005b0c2f6199b08bc15e3fb4f4312f551eea2ae269c940c5  librtlsdr-v0.5.4.tar.gz
++sha256 80a5155f3505bca8f1b808f8414d7dcd7c459b662a1cde84d3a2629a6e72ae55  librtlsdr-0.6.0.tar.gz
+ # License file, locally calculated
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/librtlsdr/librtlsdr.mk b/package/librtlsdr/librtlsdr.mk
+index dd1feacc03..500ccc5d17 100644
+--- a/package/librtlsdr/librtlsdr.mk
++++ b/package/librtlsdr/librtlsdr.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSOUP_VERSION_MAJOR = 2.56
--LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).1
-+LIBSOUP_VERSION_MAJOR = 2.62
-+LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).3
- LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
- LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
- LIBSOUP_LICENSE = LGPL-2.0+
+-LIBRTLSDR_VERSION = v0.5.4
++LIBRTLSDR_VERSION = 0.6.0
+ LIBRTLSDR_SITE = $(call github,steve-m,librtlsdr,$(LIBRTLSDR_VERSION))
+ LIBRTLSDR_LICENSE = GPL-2.0+
+ LIBRTLSDR_LICENSE_FILES = COPYING
