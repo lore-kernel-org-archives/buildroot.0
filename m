@@ -1,43 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 Aug 2018 17:12:46 +0200
-Subject: [Buildroot] [git commit] json-c: needs host-autoconf
-Message-ID: <20180828151326.EB8DA814BE@busybox.osuosl.org>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 28 Aug 2018 12:31:27 -0400
+Subject: [Buildroot] [PATCH 1/1] postgresql: security bump to 10.5
+Message-ID: <20180828163127.9989-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a3601fe583f937f433e03f954f1ee93ac01b537
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes CVE-2018-10915 & CVE-2018-10925
 
-The json-c configure script uses the autoheader utility. Use the
-host-autoconf provided autoheader, as this tool is not always installed
-on the host.
-
-Fixes:
-http://autobuild.buildroot.net/results/030/030fddceda4f5bc6379f7bfcc405e92d2e24184a/
-http://autobuild.buildroot.net/results/e48/e482f174b8124ace0690a26bb7daf073fe5fcd75/
-http://autobuild.buildroot.net/results/482/4829425c38c58d9844aa07108532a93d47191d23/
-
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Changelog: https://www.postgresql.org/docs/10/static/release-10-5.html
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
 ---
- package/json-c/json-c.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index 57d8c35dd5..bee57577ce 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -10,5 +10,9 @@ JSON_C_INSTALL_STAGING = YES
- JSON_C_LICENSE = MIT
- JSON_C_LICENSE_FILES = COPYING
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 533c398d59..a9cc93c76c 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v10.3/postgresql-10.3.tar.bz2.sha256
+-sha256	6ea268780ee35e88c65cdb0af7955ad90b7d0ef34573867f223f14e43467931a	postgresql-10.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v10.5/postgresql-10.5.tar.bz2.sha256
++sha256	6c8e616c91a45142b85c0aeb1f29ebba4a361309e86469e0fb4617b6a73c4011	postgresql-10.5.tar.bz2
  
-+# configure requires autoheader
-+JSON_C_DEPENDENCIES = host-autoconf
-+HOST_JSON_C_DEPENDENCIES = host-autoconf
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ # License file, Locally calculated
+ sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 0940873686..540e1540ca 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 10.3
++POSTGRESQL_VERSION = 10.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
+-- 
+2.17.1
