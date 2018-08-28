@@ -1,44 +1,69 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Aug 2018 14:29:34 +0300
-Subject: [Buildroot] [PATCH] libsoup: security bump to version 2.62.3
-In-Reply-To: <87zhx668nx.fsf@dell.be.48ers.dk>
-References: <b3371f0ae3c4c91fc17182950ecaf97879d7da34.1535448446.git.baruch@tkos.co.il>
- <87zhx668nx.fsf@dell.be.48ers.dk>
-Message-ID: <87mut6ybj5.fsf@tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 28 Aug 2018 13:31:51 +0200
+Subject: [Buildroot] [PATCH 1/1] cutelyst: link with libatomic when
+ needed
+In-Reply-To: <20180828115858.51e36981@windsurf.home>
+References: <20180827164102.21147-1-fontaine.fabrice@gmail.com>
+ <20180828115858.51e36981@windsurf.home>
+Message-ID: <CAPi7W83BKqvoN5Uj_W3ZRYudKUuzcG=LYBAOy2SK-hbda+j8yw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Dear Thomas,
 
-Peter Korsgaard writes:
+Le mar. 28 ao?t 2018 ? 11:59, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
->>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+> Hello,
 >
->  > Fixes CVE-2018-12910: The get_cookies function in soup-cookie-jar.c in
->  > libsoup 2.63.2 allows attackers to have unspecified impact via an empty
->  > hostname.
+> On Mon, 27 Aug 2018 18:41:02 +0200, Fabrice Fontaine wrote:
+> > On some architectures, atomic binutils are provided by the libatomic
+> > library from gcc. Linking with libatomic is therefore necessary,
+> > otherwise the build fails with:
+> >
+> > sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding
+> symbols: DSO missing from command line
+> >
+> > This is often for example the case on sparcv8 32 bit.
+> >
+> > Fixes:
+> >  -
+> http://autobuild.buildroot.net/results/9e307ab9c7067b26d7b33a572204394808e25772
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 >
->  > Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> If this package unconditionally needs atomic intrinsics, then it also
+> needs to depends on BR2_TOOLCHAIN_HAS_ATOMIC. Indeed, libatomic is not
+> available in gcc < 4.8.
 >
-> Thanks! I started looking at this myself, but got sidetracked.
+cutelyst does not directly depends on atomic, this dependency is linked to
+Qt 5.8.
+Here is an extrat of qt5base.mk:
+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC)$(BR2_PACKAGE_QT5_VERSION_LATEST),yy)
+# Qt 5.8 needs atomics, which on various architectures are in -latomic
+define QT5BASE_CONFIGURE_ARCH_CONFIG
+        printf 'LIBS += -latomic\n' >$(QT5BASE_ARCH_CONFIG_FILE)
+endef
+
+So what should we do?
+Should we add a dependency to BR2_TOOLCHAIN_HAS_ATOMIC if
+BR2_PACKAGE_QT5_VERSION_LATEST in qt5/Config.in?
+
 >
-> Is 2.62.x the first release containing this fix? Should we also cherry
-> pick this for 2018.02.x / 2018.05.x or is there a smaller patch that
-> could be applied instead?
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+Best Regards,
 
-The upstream fix from the (stable) gnome-3-28 branch is:
-
-  https://gitlab.gnome.org/GNOME/libsoup/commit/c5c41ad1d36c1efb3226a74ac8ea591419882892
-
-You can cherry pick it to the gnome-3-22 branch that carries 2.56.x.
-
-baruch
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180828/67037aa0/attachment.html>
