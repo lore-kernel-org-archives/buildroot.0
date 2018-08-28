@@ -1,30 +1,63 @@
-From: Niall Parker <stuff@npengineering.ca>
-Date: Tue, 28 Aug 2018 11:22:34 -0700
-Subject: [Buildroot] [[PATCH v2 13/14] package/mender: add
- BR2_PACKAGE_MENDER_ARTIFACT_NAME option
-Message-ID: <a8305da7-cb25-8fdb-d087-3618ee239f98@npengineering.ca>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 28 Aug 2018 21:35:57 +0200
+Subject: [Buildroot] [PATCH] json-c: needs host-autoconf
+In-Reply-To: <49134bd0971955402d38a456443d4fb8dba45957.1535468087.git.baruch@tkos.co.il>
+References: <49134bd0971955402d38a456443d4fb8dba45957.1535468087.git.baruch@tkos.co.il>
+Message-ID: <20180828213557.069e855e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hoping that the subject will associate this comment with the original 
-email to the list, my digest archive doesn't go back far enough to reply 
-directly.
+Hello,
 
-I understand the BR2_PACKAGE_MENDER_ARTIFACT_NAME and 
-BR2_PACKAGE_MENDER_DEVICE_TYPE patches haven't been accepted yet as they 
-may be enforcing too much structure on the generated image (files in 
-/data/mender etc.) ... mender does need some structure to work with and 
-for now I am implementing it with custom post- scripts. It would be 
-helpful if the mender package still collected values for the above 
-config options even if they are not written till the post- steps.
+On Tue, 28 Aug 2018 17:54:47 +0300, Baruch Siach wrote:
+> The json-c configure script uses the autoheader utility. Use the
+> host-autoconf provided autoheader, as this tool is not always installed
+> on the host.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/030/030fddceda4f5bc6379f7bfcc405e92d2e24184a/
+> http://autobuild.buildroot.net/results/e48/e482f174b8124ace0690a26bb7daf073fe5fcd75/
+> http://autobuild.buildroot.net/results/482/4829425c38c58d9844aa07108532a93d47191d23/
+> 
+> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+>  package/json-c/json-c.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+> index 57d8c35dd5e3..bee57577ceec 100644
+> --- a/package/json-c/json-c.mk
+> +++ b/package/json-c/json-c.mk
+> @@ -10,5 +10,9 @@ JSON_C_INSTALL_STAGING = YES
+>  JSON_C_LICENSE = MIT
+>  JSON_C_LICENSE_FILES = COPYING
+>  
+> +# configure requires autoheader
+> +JSON_C_DEPENDENCIES = host-autoconf
+> +HOST_JSON_C_DEPENDENCIES = host-autoconf
 
-I understand one suggestion was to just apply the customization in the 
-rootfs overlay ... doable but awkward, especially when separating the 
-rootfs (updateable) and data (persistent) partitions. Though maybe 
-maintaining the dual partitions as separate skeletons makes the most 
-sense, have to think about that further.
+Wait, wait, why is this needed? This is a standard autotools package,
+it shouldn't need autoheader at build time.
 
- ??? ??? ??? ??? ... Niall
+Isn't it that there is a bogus timestamp or something like that forces
+some files to be re-generated ?
+
+This problem only appears on Joseph's machine:
+http://autobuild.buildroot.net/?reason=json-glib%.
+
+It doesn't happen on my autobuilder, even though it doesn't have
+autoheader installed system-wide.
+
+So I'm skeptical about this fix.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
