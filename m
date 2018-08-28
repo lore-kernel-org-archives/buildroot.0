@@ -1,51 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 22:30:03 +0200
-Subject: [Buildroot] [git commit branch/next] python-pyyaml: bump to version
- 3.13
-Message-ID: <20180828203130.8C13E814FD@busybox.osuosl.org>
+Date: Tue, 28 Aug 2018 22:32:14 +0200
+Subject: [Buildroot] [git commit branch/next] python-lxml: bump to version
+ 4.2.4
+Message-ID: <20180828203220.B213281508@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fbe289f1450c3a20ade5444b40b03c1d6d074ded
+commit: https://git.buildroot.net/buildroot/commit/?id=82b3ad97f12f7b26f88ad1c636dcca1928fedb5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Fix zlib dependency.
+
 Fixes:
-http://autobuild.buildroot.net/results/e71/e715a7dc8b6856b4aba0b9b4568d61420c52a5c8
+http://autobuild.buildroot.net/results/d8e/d8e3a9aae0e84fb1b3b8093986ec3a4ce7ca0663
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pyyaml/python-pyyaml.hash | 6 +++---
- package/python-pyyaml/python-pyyaml.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-lxml/Config.in        | 3 ++-
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
-index 209ab27e53..47a379ce6a 100644
---- a/package/python-pyyaml/python-pyyaml.hash
-+++ b/package/python-pyyaml/python-pyyaml.hash
-@@ -1,3 +1,3 @@
--# md5 from https://pypi.python.org/pypi/pyyaml/json, sha256 locally computed
--md5 4c129761b661d181ebf7ff4eb2d79950 PyYAML-3.12.tar.gz
--sha256 592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab PyYAML-3.12.tar.gz
-+# md5, sha256 from https://pypi.python.org/pypi/pyyaml/json
-+md5 b78b96636d68ac581c0e2f38158c224f PyYAML-3.13.tar.gz
-+sha256 3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf PyYAML-3.13.tar.gz
-diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
-index beeaf88e96..cbf8df7b2d 100644
---- a/package/python-pyyaml/python-pyyaml.mk
-+++ b/package/python-pyyaml/python-pyyaml.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-lxml/Config.in b/package/python-lxml/Config.in
+index 1ccaa5e387..fcb30d56ee 100644
+--- a/package/python-lxml/Config.in
++++ b/package/python-lxml/Config.in
+@@ -2,7 +2,8 @@ config BR2_PACKAGE_PYTHON_LXML
+ 	bool "python-lxml"
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_LIBXSLT
+-	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+ 	help
+ 	  The lxml XML toolkit is a Pythonic binding for the C libraries
+ 	  libxml2 and libxslt.
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 38607e1b84..9b75a26280 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  f7bc9f702500e205b1560d620f14015fec76dcd6f9e889a946a2ddcc3c344fd0  lxml-4.0.0.tgz
++sha256  e2afbe403090f5893e254958d02875e0732975e73c4c0cdd33c1f009a61963ca  lxml-4.2.4.tgz
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index 7f1692d1b0..80c04c0055 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PYYAML_VERSION = 3.12
-+PYTHON_PYYAML_VERSION = 3.13
- PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
--PYTHON_PYYAML_SITE = https://pypi.python.org/packages/4a/85/db5a2df477072b2902b0eb892feb37d88ac635d36245a72a6a69b23b383a
-+PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/9e/a3/1d13970c3f36777c583f136c136f804d70f500168edc1edea6daa7200769
- PYTHON_PYYAML_SETUP_TYPE = distutils
- PYTHON_PYYAML_LICENSE = MIT
- PYTHON_PYYAML_LICENSE_FILES = LICENSE
+-PYTHON_LXML_VERSION = 4.0.0
++PYTHON_LXML_VERSION = 4.2.4
+ PYTHON_LXML_SITE = http://lxml.de/files
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
+ 
