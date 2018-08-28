@@ -1,35 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 21:41:30 +0200
-Subject: [Buildroot] [git commit] python-mimeparse: remove SOURCE variable
-Message-ID: <20180907111607.92F0D7FEB5@busybox.osuosl.org>
+Date: Tue, 28 Aug 2018 22:30:03 +0200
+Subject: [Buildroot] [git commit] python-pyyaml: bump to version 3.13
+Message-ID: <20180907111604.779087FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15ec125d3db327233d7a293ad38a8964cc163600
+commit: https://git.buildroot.net/buildroot/commit/?id=fbe289f1450c3a20ade5444b40b03c1d6d074ded
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The SOURCE variable has the default value, so it is not necessary, as
-reported by check-package:
+Fixes:
+http://autobuild.buildroot.net/results/e71/e715a7dc8b6856b4aba0b9b4568d61420c52a5c8
 
-package/python-mimeparse/python-mimeparse.mk:8: remove default value of _SOURCE variable
-
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-mimeparse/python-mimeparse.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/python-pyyaml/python-pyyaml.hash | 6 +++---
+ package/python-pyyaml/python-pyyaml.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-mimeparse/python-mimeparse.mk b/package/python-mimeparse/python-mimeparse.mk
-index dc796988d2..00bb1cf8f4 100644
---- a/package/python-mimeparse/python-mimeparse.mk
-+++ b/package/python-mimeparse/python-mimeparse.mk
-@@ -5,7 +5,6 @@
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index 209ab27e53..47a379ce6a 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
+@@ -1,3 +1,3 @@
+-# md5 from https://pypi.python.org/pypi/pyyaml/json, sha256 locally computed
+-md5 4c129761b661d181ebf7ff4eb2d79950 PyYAML-3.12.tar.gz
+-sha256 592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab PyYAML-3.12.tar.gz
++# md5, sha256 from https://pypi.python.org/pypi/pyyaml/json
++md5 b78b96636d68ac581c0e2f38158c224f PyYAML-3.13.tar.gz
++sha256 3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf PyYAML-3.13.tar.gz
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index beeaf88e96..cbf8df7b2d 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- PYTHON_MIMEPARSE_VERSION = 1.6.0
--PYTHON_MIMEPARSE_SOURCE = python-mimeparse-$(PYTHON_MIMEPARSE_VERSION).tar.gz
- PYTHON_MIMEPARSE_SITE = https://files.pythonhosted.org/packages/0f/40/ac5f9e44a55b678c3cd881b4c3376e5b002677dbeab6fb3a50bac5d50d29
- PYTHON_MIMEPARSE_SETUP_TYPE = setuptools
- PYTHON_MIMEPARSE_LICENSE = MIT
+-PYTHON_PYYAML_VERSION = 3.12
++PYTHON_PYYAML_VERSION = 3.13
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://pypi.python.org/packages/4a/85/db5a2df477072b2902b0eb892feb37d88ac635d36245a72a6a69b23b383a
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/9e/a3/1d13970c3f36777c583f136c136f804d70f500168edc1edea6daa7200769
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
