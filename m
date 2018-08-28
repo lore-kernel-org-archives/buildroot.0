@@ -1,46 +1,124 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 28 Aug 2018 12:31:27 -0400
-Subject: [Buildroot] [PATCH 1/1] postgresql: security bump to 10.5
-Message-ID: <20180828163127.9989-1-aduskett@gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Tue, 28 Aug 2018 09:34:56 -0700
+Subject: [Buildroot] [PATCH 2/2] python-falcon: new package
+In-Reply-To: <20180828101618.4746-2-grzegorz@blach.pl>
+References: <20180828101618.4746-1-grzegorz@blach.pl>
+ <20180828101618.4746-2-grzegorz@blach.pl>
+Message-ID: <CAMWSM7jvM=oqzCns6RAx32RDDdnFF0ikvhMjXdDCPRoB_d27cA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-10915 & CVE-2018-10925
+Hi Grzegorz,
 
-Changelog: https://www.postgresql.org/docs/10/static/release-10-5.html
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Tue, Aug 28, 2018 at 3:52 AM Grzegorz Blach <grzegorz@blach.pl> wrote:
+>
+> An unladen web framework for building APIs and app backends.
+>
+> http://falconframework.org
+>
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+> ---
+>  DEVELOPERS                               |  1 +
+>  package/Config.in                        |  1 +
+>  package/python-falcon/Config.in          |  9 +++++++++
+>  package/python-falcon/python-falcon.hash |  5 +++++
+>  package/python-falcon/python-falcon.mk   | 13 +++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/python-falcon/Config.in
+>  create mode 100644 package/python-falcon/python-falcon.hash
+>  create mode 100644 package/python-falcon/python-falcon.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index a9d5942adb..af039cc2ff 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -851,6 +851,7 @@ F:  package/libwebsock/
+>  F:     package/sofia-sip/
+>
+>  N:     Grzegorz Blach <grzegorz@blach.pl>
+> +F:     package/python-falcon
+>  F:     package/python-mimeparse
+>
+>  N:     Guillaume Gardet <guillaume.gardet@oliseo.fr>
+> diff --git a/package/Config.in b/package/Config.in
+> index 0640a399bb..e243db552e 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -799,6 +799,7 @@ menu "External python modules"
+>         source "package/python-engineio/Config.in"
+>         source "package/python-enum/Config.in"
+>         source "package/python-enum34/Config.in"
+> +       source "package/python-falcon/Config.in"
+>         source "package/python-flask/Config.in"
+>         source "package/python-flask-cors/Config.in"
+>         source "package/python-flask-babel/Config.in"
+> diff --git a/package/python-falcon/Config.in b/package/python-falcon/Config.in
+> new file mode 100644
+> index 0000000000..ffd66eec1b
+> --- /dev/null
+> +++ b/package/python-falcon/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_FALCON
+> +       bool "python-falcon"
+> +       select BR2_PACKAGE_PYTHON_SIX # runtime
+> +       select BR2_PACKAGE_PYTHON_MIMEPARSE # runtime
+> +       help
+> +         An unladen web framework for building APIs and app
+> +         backends.
+> +
+> +         http://falconframework.org
+> diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
+> new file mode 100644
+> index 0000000000..7f6ee6ea3d
+> --- /dev/null
+> +++ b/package/python-falcon/python-falcon.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/falcon/json
+> +md5    3cb880665ee2cd52143cf8a7790a35e6  falcon-1.4.1.tar.gz
+> +sha256 3981f609c0358a9fcdb25b0e7fab3d9e23019356fb429c635ce4133135ae1bc4  falcon-1.4.1.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 e9e7f1a7ba764f042e56afce6f3563c2be9c4fffbb1404b20f8050ae051f577c  LICENSE
+> diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
+> new file mode 100644
+> index 0000000000..52911c5428
+> --- /dev/null
+> +++ b/package/python-falcon/python-falcon.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# python-falcon
+> +#
+> +################################################################################
+> +
+> +PYTHON_FALCON_VERSION = 1.4.1
+> +PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
+> +PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/2f/e6/5045da9df509b9259037f065d15608930fd6c997ee930ad230f9fbfecf15
+> +PYTHON_FALCON_SETUP_TYPE = setuptools
+> +PYTHON_FALCON_LICENSE_FILES = LICENSE
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 533c398d59..a9cc93c76c 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,5 +1,5 @@
--# From https://ftp.postgresql.org/pub/source/v10.3/postgresql-10.3.tar.bz2.sha256
--sha256	6ea268780ee35e88c65cdb0af7955ad90b7d0ef34573867f223f14e43467931a	postgresql-10.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v10.5/postgresql-10.5.tar.bz2.sha256
-+sha256	6c8e616c91a45142b85c0aeb1f29ebba4a361309e86469e0fb4617b6a73c4011	postgresql-10.5.tar.bz2
- 
- # License file, Locally calculated
- sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 0940873686..540e1540ca 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 10.3
-+POSTGRESQL_VERSION = 10.5
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
--- 
-2.17.1
+I know python-falcon supports compiling itself using Cython, would it
+be helpful to do something like:
+
+ifeq ($(BR2_PACKAGE_HOST_PYTHON_CYTHON),y)
+PYTHON_FALCON_DEPENDENCIES += host-cython
+endif
+
+So that if host-cython is selected, python-falcon will utilize it during setup?
+
+It might also be helpful to mention in the help text that the package
+will optionally compile with Cython for enhanced performance, though
+I'm not sure if that's the Buildroot way of doing things, maybe
+someone else can chime in.
+
+> +
+> +$(eval $(python-package))
+> --
+> 2.17.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
