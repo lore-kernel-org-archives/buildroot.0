@@ -1,68 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 28 Aug 2018 08:52:55 +0200
-Subject: [Buildroot] [PATCH 1/1] cutelyst: link with libatomic when
- needed
-In-Reply-To: <87y3cr79n8.fsf@dell.be.48ers.dk>
-References: <20180827164102.21147-1-fontaine.fabrice@gmail.com>
- <87y3cr79n8.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W8145BW4JwaHX6pzFTF5pEjR73FAgT4b7RjajXmAmswzZg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 28 Aug 2018 09:54:05 +0200
+Subject: [Buildroot] [PATCH] mbedtls: fix x86 PIC build with GCC < 5
+In-Reply-To: <20180827211642.1599-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 27 Aug 2018 23:16:42 +0200")
+References: <20180827211642.1599-1-peter@korsgaard.com>
+Message-ID: <87lg8r6i5e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Le mar. 28 ao?t 2018 ? 00:00, Peter Korsgaard <peter@korsgaard.com> a
-?crit :
+ > Fixes:
+ > http://autobuild.buildroot.net/results/d6d/d6dc9a640aa1f6650a3e7b9397f2fe2ae3433f4d/
+ > http://autobuild.buildroot.net/results/ab5/ab5a58ea7845f9f378454ee1aa7e872448618ba9/
 
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > On some architectures, atomic binutils are provided by the libatomic
->  > library from gcc. Linking with libatomic is therefore necessary,
->  > otherwise the build fails with:
->
->  > sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding
-> symbols: DSO missing from command line
->
->  > This is often for example the case on sparcv8 32 bit.
->
->  > Fixes:
->  >  -
-> http://autobuild.buildroot.net/results/9e307ab9c7067b26d7b33a572204394808e25772
->
->  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  > ---
->  >  package/cutelyst/cutelyst.mk | 4 ++++
->  >  1 file changed, 4 insertions(+)
->
->  > diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/
-> cutelyst.mk
->  > index e8695a7b3a..1f1a5249be 100644
->  > --- a/package/cutelyst/cutelyst.mk
->  > +++ b/package/cutelyst/cutelyst.mk
->  > @@ -16,6 +16,10 @@ CUTELYST_CONF_OPTS += \
->  >      -DPLUGIN_CSRFPROTECTION=ON \
->  >      -DPLUGIN_VIEW_GRANTLEE=OFF
->
->  > +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
->  > +CUTELYST_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
->
-> I know we are doing this elsewhere as well, but doesn't this override
-> TARGET_LDFLAGS then?
->
-Indeed, we're already doing this for gnuradio but you're right, I will
-update my patch to use CMAKE_CXX_FLAGS.
+ > ebx was recently added to the x86 inline asm MULADDC_STOP clobber list to
+ > fix #1550, but this causes the build to fail with GCC < 5 when building in
+ > PIC mode with errors like:
 
->
-> --
-> Bye, Peter Korsgaard
->
+ > include/mbedtls/bn_mul.h:46:13: error: PIC register clobbered by ?ebx? in ?asm?
 
-Best Regards,
+ > This is because older GCC versions treated the x86 ebx register (which is
+ > used for the GOT) as a fixed reserved register when building as PIC.
 
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180828/1d9ec552/attachment.html>
+ > This is fixed by an improved register allocator in GCC 5+.  From the release
+ > notes:
+
+ > Register allocation improvements: Reuse of the PIC hard register, instead of
+ > using a fixed register, was implemented on x86/x86-64 targets.  This
+ > improves generated PIC code performance as more hard registers can be used.
+
+ > https://www.gnu.org/software/gcc/gcc-5/changes.html
+
+ > As a workaround, add a patch to detect this situation and disable the inline
+ > assembly, similar to the MULADDC_CANNOT_USE_R7 logic.
+
+ > Patch submitted upstream: https://github.com/ARMmbed/mbedtls/pull/1986
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
