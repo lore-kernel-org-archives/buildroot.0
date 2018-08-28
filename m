@@ -1,42 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 22:29:58 +0200
-Subject: [Buildroot] [git commit branch/next] libyaml: bump to version 0.2.1
-Message-ID: <20180828203130.8446E814FD@busybox.osuosl.org>
+Date: Tue, 28 Aug 2018 22:30:03 +0200
+Subject: [Buildroot] [git commit branch/next] python-pyyaml: bump to version
+ 3.13
+Message-ID: <20180828203130.8C13E814FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4633a53ae1592ad2f4ea6f931c061382cf44b7f
+commit: https://git.buildroot.net/buildroot/commit/?id=fbe289f1450c3a20ade5444b40b03c1d6d074ded
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Fixes:
+http://autobuild.buildroot.net/results/e71/e715a7dc8b6856b4aba0b9b4568d61420c52a5c8
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libyaml/libyaml.hash | 2 +-
- package/libyaml/libyaml.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pyyaml/python-pyyaml.hash | 6 +++---
+ package/python-pyyaml/python-pyyaml.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
-index d4a0c335c3..755ea7bbd8 100644
---- a/package/libyaml/libyaml.hash
-+++ b/package/libyaml/libyaml.hash
+diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
+index 209ab27e53..47a379ce6a 100644
+--- a/package/python-pyyaml/python-pyyaml.hash
++++ b/package/python-pyyaml/python-pyyaml.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 8088e457264a98ba451a90b8661fcb4f9d6f478f7265d48322a196cec2480729  yaml-0.1.7.tar.gz
-+sha256 78281145641a080fb32d6e7a87b9c0664d611dcb4d542e90baf731f51cbb59cd  yaml-0.2.1.tar.gz
- sha256 d0d8b09800a45cd982e9568fc7669d9c1a4c330e275a821bbe24d54366d16fe9  LICENSE
-diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
-index bc8d6951bd..26e318736c 100644
---- a/package/libyaml/libyaml.mk
-+++ b/package/libyaml/libyaml.mk
-@@ -4,7 +4,7 @@
+-# md5 from https://pypi.python.org/pypi/pyyaml/json, sha256 locally computed
+-md5 4c129761b661d181ebf7ff4eb2d79950 PyYAML-3.12.tar.gz
+-sha256 592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab PyYAML-3.12.tar.gz
++# md5, sha256 from https://pypi.python.org/pypi/pyyaml/json
++md5 b78b96636d68ac581c0e2f38158c224f PyYAML-3.13.tar.gz
++sha256 3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf PyYAML-3.13.tar.gz
+diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
+index beeaf88e96..cbf8df7b2d 100644
+--- a/package/python-pyyaml/python-pyyaml.mk
++++ b/package/python-pyyaml/python-pyyaml.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBYAML_VERSION = 0.1.7
-+LIBYAML_VERSION = 0.2.1
- LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
- LIBYAML_SITE = http://pyyaml.org/download/libyaml
- LIBYAML_INSTALL_STAGING = YES
+-PYTHON_PYYAML_VERSION = 3.12
++PYTHON_PYYAML_VERSION = 3.13
+ PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
+-PYTHON_PYYAML_SITE = https://pypi.python.org/packages/4a/85/db5a2df477072b2902b0eb892feb37d88ac635d36245a72a6a69b23b383a
++PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/9e/a3/1d13970c3f36777c583f136c136f804d70f500168edc1edea6daa7200769
+ PYTHON_PYYAML_SETUP_TYPE = distutils
+ PYTHON_PYYAML_LICENSE = MIT
+ PYTHON_PYYAML_LICENSE_FILES = LICENSE
