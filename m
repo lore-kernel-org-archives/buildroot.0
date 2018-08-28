@@ -1,33 +1,33 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 Aug 2018 15:41:22 +0300
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 28 Aug 2018 14:44:18 +0200
 Subject: [Buildroot] [PATCH next] atop: fix minor() major() build failure
 In-Reply-To: <20180828123213.6560-1-giulio.benetti@micronovasrl.com>
 References: <20180828123213.6560-1-giulio.benetti@micronovasrl.com>
-Message-ID: <87k1oay87h.fsf@tkos.co.il>
+Message-ID: <7121e762-99e5-8cad-1f5c-418fb2734c39@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Giulio,
+Hello,
 
-Giulio Benetti writes:
+Il 28/08/2018 14:32, Giulio Benetti ha scritto:
 > On arm / cortex-a8 Arch/Subarch sys/types.h doesn't include
 > sys/sysmacros.h which contains minor() and major() macros.
->
+> 
 > Add patch to directly include <sys/sysmacros.h> into photosyst.c where
 > minor() and major() macros are used.
->
+> 
 > Fixes
 > http://autobuild.buildroot.net/results/3fc/3fc0f18ed94697c404e7ff3751781789170c4fe5//
->
+> 
 > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 > ---
->  .../0001-Fix-major-minor-build-failure.patch  | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 package/atop/0001-Fix-major-minor-build-failure.patch
->
+>   .../0001-Fix-major-minor-build-failure.patch  | 32 +++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+>   create mode 100644 package/atop/0001-Fix-major-minor-build-failure.patch
+> 
 > diff --git a/package/atop/0001-Fix-major-minor-build-failure.patch b/package/atop/0001-Fix-major-minor-build-failure.patch
 > new file mode 100644
 > index 0000000000..d46302dedc
@@ -48,14 +48,6 @@ Giulio Benetti writes:
 > +
 > +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 > +---
-
-Please add a reference to the upstream pull request in the patch
-description:
-
-  https://github.com/Atoptool/atop/pull/35
-
-baruch
-
 > + photosyst.c | 1 +
 > + 1 file changed, 1 insertion(+)
 > +
@@ -68,13 +60,16 @@ baruch
 > + #include <sys/ipc.h>
 > + #include <sys/shm.h>
 > ++#include <sys/sysmacros.h>
-> + 
+> +
 > + #include "atop.h"
 > + #include "photosyst.h"
-> +-- 
+> +--
 > +2.17.1
+> +
+> 
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+I was sure I had checked on atop git. There there is already a patch 
+solving this.
+So I resend this using the already existing patch.
+
+Giulio
