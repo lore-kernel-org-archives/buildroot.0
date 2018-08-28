@@ -1,10 +1,8 @@
 From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Tue, 28 Aug 2018 10:00:59 +0200
-Subject: [Buildroot] [PATCH 3/3] configs/zynq_microzed: uboot: bump to
+Date: Tue, 28 Aug 2018 10:00:57 +0200
+Subject: [Buildroot] [PATCH 1/3] configs/zynq_zed: uboot: bump to
  xilinx-v2018.2 (fixes build)
-In-Reply-To: <20180828080059.21788-1-luca@lucaceresoli.net>
-References: <20180828080059.21788-1-luca@lucaceresoli.net>
-Message-ID: <20180828080059.21788-3-luca@lucaceresoli.net>
+Message-ID: <20180828080059.21788-1-luca@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,24 +17,24 @@ Fixes:
   .../output/host/include/libfdt.h:150:21: error: redefinition of ?fdt_offset_ptr_w?
 ...and many, many other similar errors.
 
-[Build-tested only]
+[Run-time tested]
 Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 ---
- configs/zynq_microzed_defconfig | 2 +-
+ configs/zynq_zed_defconfig | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index c89b4e6d9dcd..1bb11fee7ee3 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index 676366bc5c9a..a215695b541b 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
 @@ -20,7 +20,7 @@ BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_GIT=y
  BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
 -BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2017.3"
 +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2018.2"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_microzed"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zed"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 -- 
