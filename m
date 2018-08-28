@@ -1,11 +1,13 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 28 Aug 2018 22:35:46 +0200
-Subject: [Buildroot] [PATCH next v3] atop: fix minor() major() build
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 28 Aug 2018 22:35:55 +0200
+Subject: [Buildroot] [PATCH next v2] atop: fix minor() major() build
  failure
-In-Reply-To: <1964680083.3199118.1535473027893.JavaMail.zimbra@datacom.com.br>
-References: <20180828133131.32838-1-giulio.benetti@micronovasrl.com>
- <1964680083.3199118.1535473027893.JavaMail.zimbra@datacom.com.br>
-Message-ID: <621d3a24-7e53-6839-5276-7867682eb2c5@micronovasrl.com>
+In-Reply-To: <064ecbe3-ef13-1feb-9f65-83151bc5ce4a@micronovasrl.com>
+References: <87k1oay87h.fsf@tkos.co.il>
+ <20180828125258.9285-1-giulio.benetti@micronovasrl.com>
+ <20180828151621.77022940@windsurf.home>
+ <064ecbe3-ef13-1feb-9f65-83151bc5ce4a@micronovasrl.com>
+Message-ID: <20180828223555.5f865609@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,39 +16,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-Il 28/08/2018 18:17, Ricardo Martincoski ha scritto:
-> Hello,
-> 
-> Giulio Benetti wrote:
-> 
->> On arm / cortex-a8 Arch/Subarch sys/types.h doesn't include
->> sys/sysmacros.h which contains minor() and major() macros.
->>
->> Add patch to directly include <sys/sysmacros.h> into photosyst.c where
->> minor() and major() macros are used.
->>
->> Patch has been taken from atop upstream pull request:
->> https://github.com/Atoptool/atop/pull/35
->>
->> Fixes
->> http://autobuild.buildroot.net/results/3fc/3fc0f18ed94697c404e7ff3751781789170c4fe5//
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> 
-> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-> 
-> 
-> Regards,
-> --
-> Ricardo Martincoski
-> DATACOM
-> Ethernet Switches
-> Rua Am?rica, 1000 - Eldorado do Sul, RS - 92990-000 - Brasil
-> +55 51 3933 3000 - Ramal 3307
-> ricardo.martincoski at datacom.com.br
-> www.datacom.com.br
-> 
+On Tue, 28 Aug 2018 15:26:45 +0200, Giulio Benetti wrote:
 
-Thanks for reviewing.
+> > We need your Signed-off-by here, i.e inside the patch you are
+> > backporting.  
+> 
+> Ok, I've confused Signed-off-by in that patch as "stealing" Authorship,
+> instead the Authorship is defined in "From:" field.
 
-Giulio Benetti
+Signed-off-by are here to track the "merging" path of the patch. You're
+taking a patch from somewhere and adding it to Buildroot, you add your
+SoB to it. If the original author had a SoB, you would have kept it,
+and added yours below it. This is not stealing the authorship, but
+documenting who took the patch and added it in Buildroot.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
