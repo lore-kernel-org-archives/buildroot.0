@@ -1,37 +1,44 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Tue, 28 Aug 2018 08:18:59 -0300 (BRT)
-Subject: [Buildroot] genimage with GPT partition
-In-Reply-To: <ea-mime-5b851227-2313-3c034151@www-1.netcourrier.com>
-References: <ea-mime-5b851227-2313-3c034151@www-1.netcourrier.com>
-Message-ID: <1201350910.3105921.1535455139614.JavaMail.zimbra@datacom.com.br>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 28 Aug 2018 14:17:42 +0300
+Subject: [Buildroot] [PATCH next] git-crypt: disable for gcc affected by bug
+ #64735
+Message-ID: <3ba001ca8c4a2e548c47bdb7b52573b4ab2803a8.1535455062.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> From: "LP" <lpdev@cordier.org>
-> To: "buildroot" <buildroot@busybox.net>
-> Sent: Tuesday, August 28, 2018 6:13:11 AM
-> Subject: [Buildroot] genimage with GPT partition
+git-crypt needs exception_ptr. gcc older than 7 don't provide that on
+all architectures due to gcc bug #64735.
 
-> Hi,
+Fixes:
+http://autobuild.buildroot.net/results/2a7/2a76ce39bc639b4f17ff33f8447d9094215e68d8/
 
-> After successfully booting an EFI-generated distro, I am now looking for an
-> easy-to-install steps for my image file. (using the pc_x86_64_efi_defconfig).
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/git-crypt/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> I first tried to flash directly the .img file on my device, and actually it does
-> not boot. The reason is because the generated .img file is containing mbr
-> partition instead of gpt.
-
-> Is it a limitation of genimage? Is there any way to generate a gpt-compatible
-> .img file?
-
-genimage does not create GPT partitions. In my current project I made a
-tricky post-image script which uses sfdisk, mcopy and mkfs to craft a
-disk image with the required partitions. It's beautifully horrendous. 
-
+diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
+index bb86219cf89f..9a270b8f9d07 100644
+--- a/package/git-crypt/Config.in
++++ b/package/git-crypt/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_GIT_CRYPT
+ 	bool "git-crypt"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	depends on BR2_USE_MMU # git
+ 	select BR2_PACKAGE_GIT # runtime
+ 	select BR2_PACKAGE_OPENSSL
+@@ -15,3 +16,7 @@ comment "git-crypt needs a toolchain w/ C++, gcc >= 4.9"
+ 	depends on !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
++
++comment "git-crypt needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
-Carlos Santos (Casantos) - DATACOM, P&D
-?Marched towards the enemy, spear upright, armed with the certainty
-that only the ignorant can have.? ? Epitaph of a volunteer
+2.18.0
