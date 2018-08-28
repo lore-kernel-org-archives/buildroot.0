@@ -1,118 +1,103 @@
 From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 28 Aug 2018 10:03:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-mimeparse: New package
-In-Reply-To: <CAGm1_kuuYw17nW2C-5mDDwvXqBp=EvWj+kGjnchA-y4wDcteZA@mail.gmail.com>
-References: <20180826192346.5590-1-grzegorz@blach.pl>
- <CAGm1_kuuYw17nW2C-5mDDwvXqBp=EvWj+kGjnchA-y4wDcteZA@mail.gmail.com>
-Message-ID: <CAGm1_ktoZ9k1kKkva_8+nZGLS_zEWyMJMsyixbrBuPs+FkruFw@mail.gmail.com>
+Date: Tue, 28 Aug 2018 10:05:51 +0200
+Subject: [Buildroot] [PATCH 1/1] python-fire: new package
+In-Reply-To: <20180824191650.4200-1-asafka7@gmail.com>
+References: <20180824191650.4200-1-asafka7@gmail.com>
+Message-ID: <CAGm1_ks5Aw_3MR01D+BJ4mDG8a6i6wCbY42Frca+E9Yd+gBhqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Grzegorz,
-
-On Tue, Aug 28, 2018 at 9:55 AM Yegor Yefremov
-<yegorslists@googlemail.com> wrote:
+On Fri, Aug 24, 2018 at 9:16 PM Asaf Kahlon <asafka7@gmail.com> wrote:
 >
-> On Sun, Aug 26, 2018 at 9:40 PM Grzegorz Blach <grzegorz@blach.pl> wrote:
-> >
-> > Mimeparse provides basic functions for parsing mime-type names
-> > and matching them against a list of media-ranges.
-> >
-> > https://github.com/dbtsai/python-mimeparse
-> >
-> > Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+> A library for automatically generating command line interfaces.
 >
-> Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-See my comments to the second patch.
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Yegor
-
-> > ---
-> >  DEVELOPERS                                     |  3 +++
-> >  package/Config.in                              |  1 +
-> >  package/python-mimeparse/Config.in             |  7 +++++++
-> >  package/python-mimeparse/python-mimeparse.hash |  2 ++
-> >  package/python-mimeparse/python-mimeparse.mk   | 14 ++++++++++++++
-> >  5 files changed, 27 insertions(+)
-> >  create mode 100644 package/python-mimeparse/Config.in
-> >  create mode 100644 package/python-mimeparse/python-mimeparse.hash
-> >  create mode 100644 package/python-mimeparse/python-mimeparse.mk
-> >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index a6d76dd9c4..a9d5942adb 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -850,6 +850,9 @@ F:  package/libsrtp/
-> >  F:     package/libwebsock/
-> >  F:     package/sofia-sip/
-> >
-> > +N:     Grzegorz Blach <grzegorz@blach.pl>
-> > +F:     package/python-mimeparse
-> > +
-> >  N:     Guillaume Gardet <guillaume.gardet@oliseo.fr>
-> >  F:     package/c-icap/
-> >  F:     package/c-icap-modules/
-> > diff --git a/package/Config.in b/package/Config.in
-> > index f5a17492c7..0640a399bb 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -850,6 +850,7 @@ menu "External python modules"
-> >         source "package/python-markupsafe/Config.in"
-> >         source "package/python-mbstrdecoder/Config.in"
-> >         source "package/python-meld3/Config.in"
-> > +       source "package/python-mimeparse/Config.in"
-> >         source "package/python-mistune/Config.in"
-> >         source "package/python-more-itertools/Config.in"
-> >         source "package/python-msgpack/Config.in"
-> > diff --git a/package/python-mimeparse/Config.in b/package/python-mimeparse/Config.in
-> > new file mode 100644
-> > index 0000000000..4d0148e582
-> > --- /dev/null
-> > +++ b/package/python-mimeparse/Config.in
-> > @@ -0,0 +1,7 @@
-> > +config BR2_PACKAGE_PYTHON_MIMEPARSE
-> > +       bool "python-mimeparse"
-> > +       help
-> > +          This module provides basic functions for parsing mime-type names
-> > +          and matching them against a list of media-ranges.
-> > +
-> > +         https://github.com/dbtsai/python-mimeparse
-> > diff --git a/package/python-mimeparse/python-mimeparse.hash b/package/python-mimeparse/python-mimeparse.hash
-> > new file mode 100644
-> > index 0000000000..bc7ed67cf5
-> > --- /dev/null
-> > +++ b/package/python-mimeparse/python-mimeparse.hash
-> > @@ -0,0 +1,2 @@
-> > +# Copied from https://pypi.org/project/python-mimeparse
-> > +sha256 76e4b03d700a641fd7761d3cd4fdbbdcd787eade1ebfac43f877016328334f78  python-mimeparse-1.6.0.tar.gz
-> > diff --git a/package/python-mimeparse/python-mimeparse.mk b/package/python-mimeparse/python-mimeparse.mk
-> > new file mode 100644
-> > index 0000000000..dc796988d2
-> > --- /dev/null
-> > +++ b/package/python-mimeparse/python-mimeparse.mk
-> > @@ -0,0 +1,14 @@
-> > +################################################################################
-> > +#
-> > +# python-mimeparse
-> > +#
-> > +################################################################################
-> > +
-> > +PYTHON_MIMEPARSE_VERSION = 1.6.0
-> > +PYTHON_MIMEPARSE_SOURCE = python-mimeparse-$(PYTHON_MIMEPARSE_VERSION).tar.gz
-> > +PYTHON_MIMEPARSE_SITE = https://files.pythonhosted.org/packages/0f/40/ac5f9e44a55b678c3cd881b4c3376e5b002677dbeab6fb3a50bac5d50d29
-> > +PYTHON_MIMEPARSE_SETUP_TYPE = setuptools
-> > +PYTHON_MIMEPARSE_LICENSE = MIT
-> > +PYTHON_MIMEPARSE_LICENSE_FILES = LICENSE
-> > +
-> > +$(eval $(python-package))
-> > --
-> > 2.17.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+> ---
+>  DEVELOPERS                           |  1 +
+>  package/Config.in                    |  1 +
+>  package/python-fire/Config.in        |  8 ++++++++
+>  package/python-fire/python-fire.hash |  5 +++++
+>  package/python-fire/python-fire.mk   | 14 ++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/python-fire/Config.in
+>  create mode 100644 package/python-fire/python-fire.hash
+>  create mode 100644 package/python-fire/python-fire.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 481c74f9f2..4832b004f5 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -199,6 +199,7 @@ F:  package/stress/
+>
+>  N:     Asaf Kahlon <asafka7@gmail.com>
+>  F:     package/libuv/
+> +F:     package/python-fire/
+>  F:     package/python-jsonmodels/
+>  F:     package/python-reentry/
+>  F:     package/python-subprocess32/
+> diff --git a/package/Config.in b/package/Config.in
+> index eda0f698dc..653f8259a7 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -820,6 +820,7 @@ menu "External python modules"
+>         source "package/python-engineio/Config.in"
+>         source "package/python-enum/Config.in"
+>         source "package/python-enum34/Config.in"
+> +       source "package/python-fire/Config.in"
+>         source "package/python-flask/Config.in"
+>         source "package/python-flask-cors/Config.in"
+>         source "package/python-flask-babel/Config.in"
+> diff --git a/package/python-fire/Config.in b/package/python-fire/Config.in
+> new file mode 100644
+> index 0000000000..2c6e55ab6b
+> --- /dev/null
+> +++ b/package/python-fire/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_FIRE
+> +       bool "python-fire"
+> +       select BR2_PACKAGE_PYTHON_SIX # runtime
+> +       help
+> +         A library for automatically generating command line
+> +         interfaces.
+> +
+> +         https://github.com/google/python-fire
+> diff --git a/package/python-fire/python-fire.hash b/package/python-fire/python-fire.hash
+> new file mode 100644
+> index 0000000000..d6304369d5
+> --- /dev/null
+> +++ b/package/python-fire/python-fire.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/fire/json
+> +md5    44c51c634b61acc7ed42a413a64de38a  fire-0.1.3.tar.gz
+> +sha256 c299d16064ff81cbb649b65988300d4a28b71ecfb789d1fb74d99ea98ae4d2eb  fire-0.1.3.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 a5de77b62266bca0bb97bf058992f0b0f308a83a8ca55ee10fbf6bd8ed8f7ed0  LICENSE
+> diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
+> new file mode 100644
+> index 0000000000..bdb5ee191c
+> --- /dev/null
+> +++ b/package/python-fire/python-fire.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-fire
+> +#
+> +################################################################################
+> +
+> +PYTHON_FIRE_VERSION = 0.1.3
+> +PYTHON_FIRE_SOURCE = fire-$(PYTHON_FIRE_VERSION).tar.gz
+> +PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/5a/b7/205702f348aab198baecd1d8344a90748cb68f53bdcd1cc30cbc08e47d3e
+> +PYTHON_FIRE_SETUP_TYPE = setuptools
+> +PYTHON_FIRE_LICENSE = Apache-2.0
+> +PYTHON_FIRE_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
+> --
+> 2.17.1
+>
