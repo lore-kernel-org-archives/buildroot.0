@@ -1,52 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 Aug 2018 11:19:12 +0200
-Subject: [Buildroot] [git commit] package/botan: fix altivec support
-Message-ID: <20180907111604.625A980FBA@busybox.osuosl.org>
+Date: Tue, 28 Aug 2018 22:38:10 +0200
+Subject: [Buildroot] [git commit] libsoup: security bump to version 2.62.3
+Message-ID: <20180907111604.87C0A7FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c845b295bd074c8ec6b9649ed2414dc820323060
+commit: https://git.buildroot.net/buildroot/commit/?id=91d65f300016517eee95cc7f0bdf719a124a2af5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-configure.py only supports --disable-altivec.
+Fixes CVE-2018-12910: The get_cookies function in soup-cookie-jar.c in
+libsoup 2.63.2 allows attackers to have unspecified impact via an empty
+hostname.
 
-Fixes
-http://autobuild.buildroot.net/results/318/3187afa3eea77e5de0e0fe14717bfc080da08117/
-
-Added license hash URL.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/botan/botan.hash | 2 +-
- package/botan/botan.mk   | 4 +---
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ package/libsoup/libsoup.hash | 4 ++--
+ package/libsoup/libsoup.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index df804bc1ef..eeb94145b9 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
+diff --git a/package/libsoup/libsoup.hash b/package/libsoup/libsoup.hash
+index 6e1ff428af..666bbc278b 100644
+--- a/package/libsoup/libsoup.hash
++++ b/package/libsoup/libsoup.hash
 @@ -1,4 +1,4 @@
--# Locally calculated after checking pgp signature
-+# From https://botan.randombit.net/releases/sha256sums.txt
- sha256 e42df91556317588c6ca0e41bf796f9bd5ec5c70e0668e6c97c608c697c24a90  Botan-2.7.0.tgz
- # Locally computed
- sha256 40cfd35a9e34d18463806f57553c968fdbaf254a2e2a636d1d8e32ff6b698495  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index eb817f62d9..39a2c4c72b 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -70,9 +70,7 @@ BOTAN_DEPENDENCIES += zlib
- BOTAN_CONF_OPTS += --with-zlib
- endif
+-# From http://ftp.gnome.org/pub/gnome/sources/libsoup/2.56/libsoup-2.56.1.sha256sum
+-sha256	c32a46d77b4da433b51d8fd09a57a44b198e03bdc93e5219afcc687c7948eac3  libsoup-2.56.1.tar.xz
++# From https://ftp.gnome.org/pub/GNOME/sources/libsoup/2.62/libsoup-2.62.3.sha256sum
++sha256	d312ade547495c2093ff8bda61f9b9727a98cfdae339f3263277dd39c0451172  libsoup-2.62.3.tar.xz
+ # Locally calculated
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index a3ce686aa7..95bd682010 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),y)
--BOTAN_CONF_OPTS += --enable-altivec
--else
-+ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
- BOTAN_CONF_OPTS += --disable-altivec
- endif
- 
+-LIBSOUP_VERSION_MAJOR = 2.56
+-LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).1
++LIBSOUP_VERSION_MAJOR = 2.62
++LIBSOUP_VERSION = $(LIBSOUP_VERSION_MAJOR).3
+ LIBSOUP_SOURCE = libsoup-$(LIBSOUP_VERSION).tar.xz
+ LIBSOUP_SITE = http://ftp.gnome.org/pub/gnome/sources/libsoup/$(LIBSOUP_VERSION_MAJOR)
+ LIBSOUP_LICENSE = LGPL-2.0+
