@@ -1,40 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 11:58:58 +0200
-Subject: [Buildroot] [PATCH 1/1] cutelyst: link with libatomic when
- needed
-In-Reply-To: <20180827164102.21147-1-fontaine.fabrice@gmail.com>
-References: <20180827164102.21147-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180828115858.51e36981@windsurf.home>
+From: yegorslists at googlemail.com <yegorslists@googlemail.com>
+Date: Tue, 28 Aug 2018 11:36:30 +0200
+Subject: [Buildroot] [PATCH 1/2] libyaml: bump to version 0.2.1
+Message-ID: <20180828093631.7290-1-yegorslists@googlemail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-On Mon, 27 Aug 2018 18:41:02 +0200, Fabrice Fontaine wrote:
-> On some architectures, atomic binutils are provided by the libatomic
-> library from gcc. Linking with libatomic is therefore necessary,
-> otherwise the build fails with:
-> 
-> sparc-buildroot-linux-uclibc/sysroot/lib/libatomic.so.1: error adding symbols: DSO missing from command line
-> 
-> This is often for example the case on sparcv8 32 bit.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/9e307ab9c7067b26d7b33a572204394808e25772
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/libyaml/libyaml.hash | 2 +-
+ package/libyaml/libyaml.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-If this package unconditionally needs atomic intrinsics, then it also
-needs to depends on BR2_TOOLCHAIN_HAS_ATOMIC. Indeed, libatomic is not
-available in gcc < 4.8.
-
-Best regards,
-
-Thomas
+diff --git a/package/libyaml/libyaml.hash b/package/libyaml/libyaml.hash
+index d4a0c335c3..755ea7bbd8 100644
+--- a/package/libyaml/libyaml.hash
++++ b/package/libyaml/libyaml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 8088e457264a98ba451a90b8661fcb4f9d6f478f7265d48322a196cec2480729  yaml-0.1.7.tar.gz
++sha256 78281145641a080fb32d6e7a87b9c0664d611dcb4d542e90baf731f51cbb59cd  yaml-0.2.1.tar.gz
+ sha256 d0d8b09800a45cd982e9568fc7669d9c1a4c330e275a821bbe24d54366d16fe9  LICENSE
+diff --git a/package/libyaml/libyaml.mk b/package/libyaml/libyaml.mk
+index bc8d6951bd..26e318736c 100644
+--- a/package/libyaml/libyaml.mk
++++ b/package/libyaml/libyaml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBYAML_VERSION = 0.1.7
++LIBYAML_VERSION = 0.2.1
+ LIBYAML_SOURCE = yaml-$(LIBYAML_VERSION).tar.gz
+ LIBYAML_SITE = http://pyyaml.org/download/libyaml
+ LIBYAML_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.0
