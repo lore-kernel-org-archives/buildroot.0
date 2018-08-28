@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 22:36:16 +0200
-Subject: [Buildroot] [PATCH 1/2] libyaml: bump to version 0.2.1
-In-Reply-To: <20180828093631.7290-1-yegorslists@googlemail.com>
-References: <20180828093631.7290-1-yegorslists@googlemail.com>
-Message-ID: <20180828223616.0d6e45dc@windsurf.home>
+Date: Tue, 28 Aug 2018 22:37:03 +0200
+Subject: [Buildroot] [PATCH] python-lxml: bump to version 4.2.4
+In-Reply-To: <20180828101413.21747-1-yegorslists@googlemail.com>
+References: <20180828101413.21747-1-yegorslists@googlemail.com>
+Message-ID: <20180828223703.689e192a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,19 +12,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 28 Aug 2018 11:36:30 +0200, yegorslists at googlemail.com wrote:
+On Tue, 28 Aug 2018 12:14:13 +0200, yegorslists at googlemail.com wrote:
 > From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
+> Fix zlib dependency.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/d8e/d8e3a9aae0e84fb1b3b8093986ec3a4ce7ca0663
+> 
 > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/libyaml/libyaml.hash | 2 +-
->  package/libyaml/libyaml.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Both applied to next. Thanks!
+It would have been nice to mention explicitly that this patch was for
+the next branch, and perhaps that the build issue being fixed is
+related to the Python 3.7.0 bump.
+
+But anyway, I've applied to next. Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
