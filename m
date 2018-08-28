@@ -1,53 +1,37 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 27 Aug 2018 18:17:44 -0500
-Subject: [Buildroot] [PATCH v2] package/aircrack-ng: powerpc arch
- requires altivec
-In-Reply-To: <20180814155327.24b7f14a@windsurf>
-References: <20180814133832.5658-1-matthew.weber@rockwellcollins.com>
- <20180814155327.24b7f14a@windsurf>
-Message-ID: <CANQCQpbGiuyDere-co_g2M969iDau_9Gs_Hp=axP_AYHip=3Fg@mail.gmail.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 27 Aug 2018 21:23:26 -0400
+Subject: [Buildroot] [PATCH 1/1] ccache: fix initial setup failure
+Message-ID: <1535419406-2407-1-git-send-email-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter/Thomas,
+The BR2_CCACHE_INITIAL_SETUP can fail if CCACHE_DISABLE is defined in the
+environment, because ccache refuses to create a ccache.conf file when
+caching is disabled.  To avoid this failure, we unset CCACHE_DISABLE prior
+to doing any initial cache setup, just on the call setting up the initial
+config.  The rest of the build can proceed with CCACHE_DISABLE set, if the
+user wishes it so.
 
-On Tue, Aug 14, 2018 at 8:53 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Tue, 14 Aug 2018 08:38:32 -0500, Matt Weber wrote:
-> > The powerpc support in this package currently requires an arch with
-> > altivec accelerator support. This is a bug and the the powerpc arch
-> > should have a non-simd option like ARM/x86.
-> >
-> > Upstream issue: https://github.com/aircrack-ng/aircrack-ng/issues/1941
-> >
-> > Fixes
-> > http://autobuild.buildroot.net/results/87e82a5e8d0b1c1ff10ec3e59d25bcd56b329075
-> >
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > --
-> > Changes
-> > v1 -> v2
-> > [Thomas
-> >  - Add issue link to Config.in
-> >  - Reworded description above to note this is a bug
-> > ---
-> >  package/aircrack-ng/Config.in | 3 +++
-> >  1 file changed, 3 insertions(+)
->
-> Applied to master, thanks.
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+---
+ package/ccache/ccache.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Just sent patches to properly fix this issue.  They won't apply to
-'next' as the revert is against a master commit.  I'm assuming the
-series would be applied prior to this release or is the timeline to
-close?
-
-http://patchwork.ozlabs.org/patch/962684/
-http://patchwork.ozlabs.org/patch/962683/
-
-Matt
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index 9a11d46..6c83a1c 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
+@@ -55,7 +55,7 @@ BR_CCACHE_INITIAL_SETUP = $(call qstrip,$(BR2_CCACHE_INITIAL_SETUP))
+ ifneq ($(BR_CCACHE_INITIAL_SETUP),)
+ define HOST_CCACHE_DO_INITIAL_SETUP
+ 	@$(call MESSAGE,"Applying initial settings")
+-	$(CCACHE) $(BR_CCACHE_INITIAL_SETUP)
++	unset CCACHE_DISABLE; $(CCACHE) $(BR_CCACHE_INITIAL_SETUP)
+ 	$(CCACHE) -s
+ endef
+ 
+-- 
+2.7.4
