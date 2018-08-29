@@ -1,62 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 Aug 2018 23:58:18 +0200
-Subject: [Buildroot] [git commit] i2c-tools: include LGPL-2.1+ license for
- libi2c
-Message-ID: <20180907111603.F03F5807D1@busybox.osuosl.org>
+Date: Wed, 29 Aug 2018 21:41:30 +0200
+Subject: [Buildroot] [git commit] python-mimeparse: remove SOURCE variable
+Message-ID: <20180907111607.92F0D7FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2095b596c9c0d8b955e606fb820a94d0f25ceaaa
+commit: https://git.buildroot.net/buildroot/commit/?id=15ec125d3db327233d7a293ad38a8964cc163600
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Extend i2c-tools SPDX identifiers to include the library license.
-Also include COPYING.LGPL and README to license files.
+The SOURCE variable has the default value, so it is not necessary, as
+reported by check-package:
 
-The ic2-tools readme states:
+package/python-mimeparse/python-mimeparse.mk:8: remove default value of _SOURCE variable
 
-LICENSE
-
-Check the documentation of individual tools for licensing information.
-The library is released under the LGPL version 2.1 or later, while most
-tools are released under the GPL version 2 or later, but there are a few
-exceptions.
-
-Signed-off-by: Brad Love <brad@nextdimension.cc>
-[Thomas: add hashes for COPYING.LGPL and README.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/i2c-tools/i2c-tools.hash | 4 +++-
- package/i2c-tools/i2c-tools.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/python-mimeparse/python-mimeparse.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/i2c-tools/i2c-tools.hash b/package/i2c-tools/i2c-tools.hash
-index 3475d20657..37563074fc 100644
---- a/package/i2c-tools/i2c-tools.hash
-+++ b/package/i2c-tools/i2c-tools.hash
-@@ -1,5 +1,7 @@
- # Locally computed
- sha256 d900ca1c11c51ea20caa50b096f948008b8a7ad832311b23353e21baa7af28d6  i2c-tools-4.0.tar.xz
+diff --git a/package/python-mimeparse/python-mimeparse.mk b/package/python-mimeparse/python-mimeparse.mk
+index dc796988d2..00bb1cf8f4 100644
+--- a/package/python-mimeparse/python-mimeparse.mk
++++ b/package/python-mimeparse/python-mimeparse.mk
+@@ -5,7 +5,6 @@
+ ################################################################################
  
--# License file
-+# License files
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-+sha256 158abc6886c2c6e2dec7e9cb11b46fd41cb13a015c5057c2a587ef581f9142f8  README
-diff --git a/package/i2c-tools/i2c-tools.mk b/package/i2c-tools/i2c-tools.mk
-index db26647eb5..ec06c73325 100644
---- a/package/i2c-tools/i2c-tools.mk
-+++ b/package/i2c-tools/i2c-tools.mk
-@@ -7,8 +7,8 @@
- I2C_TOOLS_VERSION = 4.0
- I2C_TOOLS_SOURCE = i2c-tools-$(I2C_TOOLS_VERSION).tar.xz
- I2C_TOOLS_SITE = https://www.kernel.org/pub/software/utils/i2c-tools
--I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus)
--I2C_TOOLS_LICENSE_FILES = COPYING
-+I2C_TOOLS_LICENSE = GPL-2.0+, GPL-2.0 (py-smbus), LGPL-2.1+ (libi2c)
-+I2C_TOOLS_LICENSE_FILES = COPYING COPYING.LGPL README
- I2C_TOOLS_MAKE_OPTS = EXTRA=eeprog
- 
- ifeq ($(BR2_PACKAGE_PYTHON),y)
+ PYTHON_MIMEPARSE_VERSION = 1.6.0
+-PYTHON_MIMEPARSE_SOURCE = python-mimeparse-$(PYTHON_MIMEPARSE_VERSION).tar.gz
+ PYTHON_MIMEPARSE_SITE = https://files.pythonhosted.org/packages/0f/40/ac5f9e44a55b678c3cd881b4c3376e5b002677dbeab6fb3a50bac5d50d29
+ PYTHON_MIMEPARSE_SETUP_TYPE = setuptools
+ PYTHON_MIMEPARSE_LICENSE = MIT
