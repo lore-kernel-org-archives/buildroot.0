@@ -1,47 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Aug 2018 07:21:36 +0200
-Subject: [Buildroot] [git commit] json-c: drop host-autoconf dependency
-Message-ID: <20180829052145.EA199815F0@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Wed, 29 Aug 2018 07:44:37 +0200
+Subject: [Buildroot] [PATCH] mender: fix ioctl build failure on
+ powerpc64le / power8
+In-Reply-To: <451277c2-effe-1d73-f2b3-9c2daf59c2c0@micronovasrl.com>
+References: <20180828170153.42156-1-giulio.benetti@micronovasrl.com>
+ <CADHdJwDAnbFAe3bGTQswK1OdfQzN+JCCwCPLGhLy1MCmz0bBTQ@mail.gmail.com>
+ <fa955ebd-e988-0bb2-f506-ca164477b34f@micronovasrl.com>
+ <20180828215714.5e2c7c84@windsurf.home>
+ <451277c2-effe-1d73-f2b3-9c2daf59c2c0@micronovasrl.com>
+Message-ID: <CA+_SqVZ0B7mH+fou8=V9b4PfWbxeN-WFRtuaG=-GAWDGXLoe6Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98af0fa066fd0afedd94350027980b1988e5c670
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Giulio
 
-It turns out that the configure script attempts to run autoheader
-because the configure.ac timestamp is slightly later than that of
-config.h.in. Update the config.h.in timestamp after tarball extract to
-avoid autoheader run. With that we can drop the host-autoconf
-dependency.
+On Tue, Aug 28, 2018 at 10:35 PM, Giulio Benetti
+<giulio.benetti@micronovasrl.com> wrote:
+> Hello,
+>
+> Il 28/08/2018 21:57, Thomas Petazzoni ha scritto:
+>>
+>> Hello,
+>>
+>> On Tue, 28 Aug 2018 19:26:53 +0200, Giulio Benetti wrote:
+>>
+>>> If this makes sense I can resend this patch using the patch you've
+>>> pointed me to.
+>>
+>>
+>> Yes, if there is already the same patch committed upstream, we want to
+>> backport the upstream patch. Thanks!
+>
+>
+> Sure, I will use the upstream one I've missed when searching.
 
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/json-c/json-c.mk | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Mizra, one of the authors of Mender is releasing a bump of the package
+with other fixes. We agreed on waiting on the package bump to fix the
+error instead of carrying a patch in buildroot that will bu useful
+only for a short period of time.
 
-diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
-index bee57577ce..2788fe563b 100644
---- a/package/json-c/json-c.mk
-+++ b/package/json-c/json-c.mk
-@@ -10,9 +10,13 @@ JSON_C_INSTALL_STAGING = YES
- JSON_C_LICENSE = MIT
- JSON_C_LICENSE_FILES = COPYING
- 
--# configure requires autoheader
--JSON_C_DEPENDENCIES = host-autoconf
--HOST_JSON_C_DEPENDENCIES = host-autoconf
-+# update config.h.in timestamp to avoid autoheader run
-+define JSON_C_UPDATE_CONFIG_TIMESTAMP
-+	touch $(@D)/config.h.in
-+endef
-+
-+JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
-+HOST_JSON_C_POST_EXTRACT_HOOKS += JSON_C_UPDATE_CONFIG_TIMESTAMP
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+Sincerely, Angelo
+
+>
+> Thanks
+> Giulio Benetti
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
