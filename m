@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Aug 2018 07:47:55 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] package/shairport-sync:
+Date: Wed, 29 Aug 2018 07:58:35 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] package/shairport-sync:
  add upstream patch to fix build issue with soxr
-Message-ID: <20180829055816.7E917815FC@busybox.osuosl.org>
+Message-ID: <20180829055831.CEA0C81600@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72f10180f5cbc6f4f3914e4a142d25e13c322f08
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2aafa0366f0fe73afdf97a9a52917b2f1dbdf392
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Add upstream patch to fix build issue detected by the Buildroot autobuilder:
 
