@@ -1,86 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Aug 2018 18:21:10 +0200
-Subject: [Buildroot] Buildroot 2018.02.5 released
-Message-ID: <87y3cp2lft.fsf@dell.be.48ers.dk>
+Date: Wed, 29 Aug 2018 18:23:57 +0200
+Subject: [Buildroot] [git commit] Update for 2018.02.5
+Message-ID: <20180829162649.BDD8A817D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=8b3b8d876ce77d871ae2d717327c515e2a23584d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Buildroot is a simple tool for creating complete embedded Linux systems
-(http://buildroot.org).
+[Peter: drop Makefile changes]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit b07116644d617a0365d70eaae57c68ca273e6183)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Buildroot 2018.02.5 is released - Go download it at:
-
-http://buildroot.org/downloads/buildroot-2018.02.5.tar.gz
-
-or
-
-http://buildroot.org/downloads/buildroot-2018.02.5.tar.bz2
-
-Or get it from Git:
-
-git://git.buildroot.org/buildroot
-
-Buildroot 2018.02.5 is a bugfix release on the current long term
-release, fixing a number of important / security related issues
-discovered since the 2018.02.4 release.
-
-- Security fixes for apache, bind, dropbear, ipsec-tools, libarchive,
-  libfuse, libopenssl, libsoup, mariadb, mbedtls, nodejs, openssh, php,
-  postgresql, python-django, ruby, samba4, wireshark, wpa_supplicant,
-  znc
-
-- Fixes for download/compilation/runtime issues in acl, attr, brltty,
-  bzip2, chrony, cryptsetup, eigen, erlang, ffmpeg, gcc, ghostscript,
-  gnutls, libglib2, libselinux, lighttpd, linuxptp, lttng-modules,
-  lttng-tools, lua-flu, lvm2, m4, makedevs, mesa3d-headers, mtd,
-  ncurses, qt5xmlpatterns, shairport-sync, stress-ng, uboot-tools,
-  uclibc, waylandpp, wireless_tools, xorriso
-
-For more details, see the CHANGES file:
-
-https://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.5
-
-Users of the affected packages are strongly encouraged to upgrade.
-
-Many thanks to all the people contributing to this release:
-
-git shortlog -sn 2018.02.4..
-    32  Bernd Kuhls
-    15  Baruch Siach
-    11  Peter Korsgaard
-    11  Thomas Petazzoni
-     8  Yann E. MORIN
-     4  Fabrice Fontaine
-     3  Julien BOIBESSOT
-     3  Ricardo Martincoski
-     2  Carlos Santos
-     2  Fabio Estevam
-     2  Francois Perrad
-     2  Hollis Blanchard
-     2  Marcin Niestroj
-     2  Ryan Coe
-     2  Stefan S?rensen
-     2  Trent Piepho
-     1  Adam Duskett
-     1  Andr? Hentschel
-     1  Angelo Compagnucci
-     1  Arnout Vandecappelle (Essensium/Mind)
-     1  Christopher McCrory
-     1  David Owens
-     1  Geoff Levand
-     1  Joel Stanley
-     1  John Faith
-     1  J?rg Krause
-     1  Laurent Hartanerot
-     1  Matt Flax
-     1  S?bastien Szymanski
-     1  Thomas Ehrhardt
-     1  Vadim Kochan
-
--- 
-Bye, Peter Korsgaard
+diff --git a/CHANGES b/CHANGES
+index 7ab40770d2..c1cecb8023 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -351,6 +351,32 @@
+ 	#10961: Grub2 fails to build for x86_64 when BR2_SSP_ALL is
+ 		enabled
+ 
++2018.02.5, Released August 29th, 2018
++
++	Important / security related fixes.
++
++	Defconfigs: Raspberrypi2: Bump rootfs size, T7680: Fix
++	genimage.cfg issue, ARM Juno: Bump ATF to v1.3 to fix build
++	issue.
++
++	Updated/fixed packages: acl, apache, attr, bind,
++	boot-wrapper-aarch64, brltty, bzip2, chrony, crda, cryptsetup,
++	dahdi-tools, dmidecode, dropbear, eigen, erlang, ffmpeg, gawk,
++	gcc, ghostscript, gnutls, ipsec-tools, libarchive, libfuse,
++	libopenssl, libselinux, libsoup, lighttpd, linuxptp,
++	lttng-modules, lttng-tools, lua-flu, lvm2, m4, makedevs,
++	mariadb, mbedtls, mesa3d-headers, mtd, ncurses, nodejs,
++	openssh, php, postgresql, python-django, qt5xmlpatterns, ruby,
++	samba4, shairport-sync, stress-ng, ti-utils, uboot-tools, vim,
++	waylandpp, wireless_tools, wireshark, wpa_supplicant, xorriso,
++	znc
++
++	Issues resolved (http://bugs.uclibc.org):
++
++	#10781: cryptsetup luksOpen container_file container causes..
++	#10986: Installing package attr when already supplied by..
++	#11191: xattr and check-package issue
++
+ 2018.02.4, Released July 21th, 2018
+ 
+ 	Important / security related fixes.
