@@ -1,56 +1,37 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Wed, 29 Aug 2018 22:25:30 +0200
-Subject: [Buildroot] [PATCH 2/2] python-falcon: new package
-In-Reply-To: <20180829214758.718d5e7f@windsurf>
-References: <20180828101618.4746-1-grzegorz@blach.pl>
- <20180828101618.4746-2-grzegorz@blach.pl>
- <CAMWSM7jvM=oqzCns6RAx32RDDdnFF0ikvhMjXdDCPRoB_d27cA@mail.gmail.com>
- <20180829214758.718d5e7f@windsurf>
-Message-ID: <32a0a4a5-a2c4-c42b-50b4-5e618eaf73ef@blach.pl>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 29 Aug 2018 22:37:47 +0200
+Subject: [Buildroot] [git commit] qt5quickcontrols: update license file
+ names for Qt 5.6 version
+Message-ID: <20180829204411.8294881DE8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/29/2018 09:47 PM, Thomas Petazzoni wrote:
-> Hello Joseph,
-> 
-> On Tue, 28 Aug 2018 09:34:56 -0700, Joseph Kogut wrote:
-> 
->> I know python-falcon supports compiling itself using Cython, would it
->> be helpful to do something like:
->>
->> ifeq ($(BR2_PACKAGE_HOST_PYTHON_CYTHON),y)
->> PYTHON_FALCON_DEPENDENCIES += host-cython
->> endif
-> 
-> I am not very familiar with Cython. How does that work, what does that
-> do ? Is it sufficient for Cython to be installed in $(HOST_DIR) to
-> allow python-falcon to detect it and use it ?
-> 
+commit: https://git.buildroot.net/buildroot/commit/?id=83d33f76f6bb94e0a91285ae4c3f8aa072c1dd8f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-If BR2_PACKAGE_HOST_PYTHON_CYTHON is enabled in config, Falcon uses 
-Cython to compile own code.  Cython on target is not required in this 
-case.  Settings PYTHON_FALCON_DEPENDENCIES += host-python-cython
-in python-falcon/Config.in also is not required, but may be usable to 
-guarantee, that host-python-cython is always installed
-before python-falcon.
+Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
->> So that if host-cython is selected, python-falcon will utilize it during setup?
->>
->> It might also be helpful to mention in the help text that the package
->> will optionally compile with Cython for enhanced performance, though
->> I'm not sure if that's the Buildroot way of doing things, maybe
->> someone else can chime in.
-> 
-> Yes, if there are some optional dependencies, we can mention them in
-> the package Config.in help text.
-> 
-> Could you provide a follow-up adding this Cython support in
-> python-falcon ?
-> 
-> Thanks!
-> 
-> Thomas
-> 
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+index 6e551d5a27..3e0c5effb3 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+@@ -11,7 +11,12 @@ QT5QUICKCONTROLS_DEPENDENCIES = qt5base qt5declarative
+ QT5QUICKCONTROLS_INSTALL_STAGING = YES
+ 
+ QT5QUICKCONTROLS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)
++
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.LGPL3 LICENSE.FDL
++else
++QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
++endif
+ 
+ define QT5QUICKCONTROLS_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
