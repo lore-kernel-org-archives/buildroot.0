@@ -1,45 +1,57 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 29 Aug 2018 22:03:18 +0200
-Subject: [Buildroot] [PATCH 1/2] python-mimeparse: new package
-In-Reply-To: <20180829214603.1bc17321@windsurf>
-References: <20180828101618.4746-1-grzegorz@blach.pl>
- <20180829214603.1bc17321@windsurf>
-Message-ID: <CAGm1_kvP=qy6DJGv6KVxngN8FEeTjqfj-yGSkbC6umHSnuN8vQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 29 Aug 2018 22:04:38 +0200
+Subject: [Buildroot] [PATCH/next] qemu: add an option to enable user
+ mode networking (SLIRP)
+In-Reply-To: <20180827201501.24224-1-casantos@datacom.com.br>
+References: <20180827201501.24224-1-casantos@datacom.com.br>
+Message-ID: <20180829220438.5a5c71ce@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Aug 29, 2018 at 9:46 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Another small nit that I realized afterwards and fixed, see below.
->
-> On Tue, 28 Aug 2018 12:16:17 +0200, Grzegorz Blach wrote:
->
-> > +PYTHON_MIMEPARSE_SOURCE = python-mimeparse-$(PYTHON_MIMEPARSE_VERSION).tar.gz
->
-> This is the default value of the _SOURCE variable, defined by the
-> python-package infrastructure when _SOURCE is not provided. Therefore,
-> there is no need to specify the _SOURCE variable in this case. This is
-> detected by our check-package checker:
->
-> package/python-mimeparse/python-mimeparse.mk:8: remove default value of _SOURCE variable
->
-> Yegor: scanpypi should be fixed to not emit the _SOURCE variable in
-> this case.
+Hello,
 
-OK.
+On Mon, 27 Aug 2018 17:15:01 -0300, Carlos Santos wrote:
+> User mode networking is a useful feature that does not depend on other
+> packages. Add an option to enable it but keep it disabled by default,
+> for backwards compatibility.
+> 
+> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
 
-Yegor
+I've applied to next, with some minor tweaks, see below.
 
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+
+> +config BR2_PACKAGE_QEMU_SLIRP
+> +	bool "Keep user mode networking (SLIRP)"
+
+I understand you want to use "Keep" because SLIRP is normally enabled
+by default in Qemu, and enabling this option allows to "keep" it.
+
+However, I don't think such details really need to surface up to the
+Config.in option prompts, so I've changed "Keep" to "Enable".
+
+Indeed, if the option is selected, SLIRP support is enabled, if the
+option is not selected SLIRP support is disabled.
+
+> +	help
+> +	  Keep user mode network stack, which is the default networking
+
+I've changed Keep to Enable here as well.
+
+
+> +# There is no "--enable-slirp"
+> +ifneq ($(BR2_PACKAGE_QEMU_SLIRP),y)
+
+and used positive logic here:
+
+ifeq ($(BR2_PACKAGE_QEMU_SLIRP),)
+
+Applied to next with those changes. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
