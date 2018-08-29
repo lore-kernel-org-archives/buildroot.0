@@ -1,85 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 21:49:16 +0200
-Subject: [Buildroot] [git commit branch/next] qemu: add an option to enable
- user mode networking (SLIRP)
-Message-ID: <20180829194919.95D19819EA@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 29 Aug 2018 21:49:59 +0200
+Subject: [Buildroot] [PATCH] package/squashfs: fix build on hosts with
+ glibc >= 2.28
+In-Reply-To: <20180827063731.m3xm4jamqyugxfwm@sapphire.tkos.co.il>
+References: <20180825200751.28097-1-richard.kunze@web.de>
+ <20180827063731.m3xm4jamqyugxfwm@sapphire.tkos.co.il>
+Message-ID: <fe0218a6-d535-f476-c44a-4891d979d56d@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37c49cf2f4a511fbf937dcf67efe73cca0fec9c0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Richard,
 
-User mode networking is a useful feature that does not depend on other
-packages. Add an option to enable it but keep it disabled by default,
-for backwards compatibility.
+Il 27/08/2018 08:37, baruch at tkos.co.il (Baruch Siach) ha scritto:
+> Hi Richard,
+> 
+> Thanks for your contribution. Please find a few comments below.
+> 
+> On Sat, Aug 25, 2018 at 10:07:51PM +0200, Richard Kunze wrote:
+>> Since glibc 2.28, sys/sysmacros.h is no longer included from sys/types.h
+>> This patch fixes the resulting build error by explicitly including
+>> sys/sysmacros.h
+>>
+>> Signed-off-by: Richard Kunze <richard.kunze@web.de>
+>> ---
+>>   package/squashfs/0001-include-sysmacros.patch | 19 +++++++++++++++++++
+>>   1 file changed, 19 insertions(+)
+>>   create mode 100644 package/squashfs/0001-include-sysmacros.patch
+>>
+>> diff --git a/package/squashfs/0001-include-sysmacros.patch b/package/squashfs/0001-include-sysmacros.patch
+>> new file mode 100644
+>> index 0000000000..56d9a742e7
+>> --- /dev/null
+>> +++ b/package/squashfs/0001-include-sysmacros.patch
+> 
+> Patches should have a description and sign-off. See the patches chapter in the
+> Buildroot manual:
+> 
+>    https://buildroot.org/downloads/manual/manual.html#patch-policy
+> 
+> It would also be nice to add a note about the upstream status of this patch.
 
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qemu/Config.in | 25 +++++++++++++++++++++++--
- package/qemu/qemu.mk   |  6 +++++-
- 2 files changed, 28 insertions(+), 3 deletions(-)
+I've faced the same issue(glibc 2.28 sys/sysmacros.h) on atop package.
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 13b615bfba..61a2a1072e 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -54,8 +54,29 @@ config BR2_PACKAGE_QEMU_CUSTOM_TARGETS
- 	    x86_64-softmmu        | sparc-bsd-user
- 	    ...                   | ...
- 
--config QEMU_FOO
--	bool # To break the indentation
-+comment "Networking options"
-+
-+config BR2_PACKAGE_QEMU_SLIRP
-+	bool "Enable user mode networking (SLIRP)"
-+	help
-+	  Enable user mode network stack, which is the default
-+	  networking backend. It requires no administrator privileges
-+	  and generally is the easiest to use but has some
-+	  limitations:
-+
-+	  - there is a lot of overhead so the performance is poor;
-+	  - in general ICMP does not work (can't ping from/to a guest)
-+	  - on Linux hosts, ping does work from within the guest, but it
-+	    needs initial setup by root (once per host)
-+	  - the guest is not directly accessible from the host or the
-+	    external network
-+
-+	  User Networking is implemented using "slirp", which provides a
-+	  full TCP/IP stack within QEMU and uses that stack to implement
-+	  a virtual NAT'd network.
-+
-+	  Notice that this option does not disable other networking
-+	  modes.
- 
- if BR2_PACKAGE_QEMU_CUSTOM_TARGETS = ""
- 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index aec803c1ae..afb2aa92f6 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -55,6 +55,11 @@ endif
- 
- endif
- 
-+# There is no "--enable-slirp"
-+ifeq ($(BR2_PACKAGE_QEMU_SLIRP),)
-+QEMU_OPTS += --disable-slirp
-+endif
-+
- ifeq ($(BR2_PACKAGE_QEMU_SDL),y)
- QEMU_OPTS += --enable-sdl
- QEMU_DEPENDENCIES += sdl
-@@ -101,7 +106,6 @@ define QEMU_CONFIGURE_CMDS
- 			--enable-vhost-net \
- 			--disable-bsd-user \
- 			--disable-xen \
--			--disable-slirp \
- 			--disable-vnc \
- 			--disable-virtfs \
- 			--disable-brlapi \
+I point you the commit so you can inspire to that:
+https://github.com/buildroot/buildroot/commit/4ffde065d2829d90cddc70f7c2e8f5775e59cbe9
+
+Thomas Petazzoni helped me to write that commit log and improved it.
+
+Sorry if there's some problem with e-mail answer but I've lost this 
+e-mail and took it from archive by hand.
+
+Giulio Benetti
