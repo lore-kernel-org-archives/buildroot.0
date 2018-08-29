@@ -1,34 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 15:21:25 +0200
-Subject: [Buildroot] Buildroot Developers Meeting @ ELCE 2018: reminder
-Message-ID: <20180829152125.7f5d0ba1@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Aug 2018 15:39:35 +0200
+Subject: [Buildroot] SDL2+directfb combo does not work as built by
+ buildroot-2018.02.3
+In-Reply-To: <CAGrGpJBb5QSj6utj46840=bKhHEg5npdt23+NCrU87Ta-Yv7Qw@mail.gmail.com>
+ (Peter Thompson's message of "Wed, 29 Aug 2018 03:21:59 -0600")
+References: <CAGrGpJDVHStp8MUZaGb1=ZfWud-k4fQP=piwsc-QfftCDFyKog@mail.gmail.com>
+ <CAGrGpJA=Kk0fGjMPfH3R1ZbyJbonPNPQoyC_tpjaF9Ua92BNNg@mail.gmail.com>
+ <878t4q7vqu.fsf@dell.be.48ers.dk>
+ <CAGrGpJCe67xHWAceYw6-oD=iPoL0be8-ZhRgmWfhQRuG0GwxeA@mail.gmail.com>
+ <87a7p65zjo.fsf@dell.be.48ers.dk>
+ <CAGrGpJBNF=NejuNA5hBg5oet=iJxEjRLBXgog30y4xm0GrFFjA@mail.gmail.com>
+ <CAGrGpJBb5QSj6utj46840=bKhHEg5npdt23+NCrU87Ta-Yv7Qw@mail.gmail.com>
+Message-ID: <87ftyx47hk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Thompson <peter.macleod.thompson@gmail.com> writes:
 
-This is a reminder that the next Buildroot Developers Meeting will take
-place on October 20-21 in Edinburgh (UK), right before ELCE.
+ > Now that I see how easy it is ... add file containing Sam's patch called
+ > 0001-hg-libsdl-org-SDL-raw-rev-751cdc74d55c.patch
+ > to the SDL2 package
 
-At this time, we have six participants registered:
-https://elinux.org/Buildroot:DeveloperDaysELCE2018. Since we are trying
-to organize a meeting room, we would like to know if the number of
-participants will remain about the same, or if there are other people
-that are still considering attending the meeting, but have not yet
-registered.
+ > ... I can easily submit a proper patch with signed-of-by to buildroot
 
-I know that both Romain Naour and Yann E. Morin may be attending but
-are not yet sure at this point. Are there other people in this
-situation ? Or are there others who know they will be attending, but
-simply overlooked to register ?
+Yes, please do! Thanks.
 
-Thanks a lot for your participation!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
