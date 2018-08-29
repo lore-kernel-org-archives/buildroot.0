@@ -1,100 +1,54 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Aug 2018 18:26:35 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2018.02.5
-Message-ID: <20180829162649.D3712817D5@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 29 Aug 2018 18:53:12 +0200
+Subject: [Buildroot] [PATCH 1/1] domoticz: do not use static version of
+ openssl
+Message-ID: <20180829165312.22948-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e058075189b0484a3808f127c08246c3e4d083a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Due to the dependency on mosquitto, domoticz depends on !BR2_STATIC_LIBS
+so set USE_OPENSSL_STATIC to OFF (default value is ON)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+This could fix this non reproducible failure:
+ - http://autobuild.buildroot.net/results/b1b84b8c12d31b9242b5732fcdd1eb76b1217366
+
+Indeed, domoticz finds the static version of openssl:
+
+-- Found OpenSSL:
+/home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a (found version "1.0.2p")
+-- OPENSSL_LIBRARIES:
+/home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a;/home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a
+
+But fails to link with the shared version:
+
+/home/test/autobuild/run/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/6.4.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld:
+CMakeFiles/domoticz.dir/hardware/plugins/PluginTransports.cpp.o: undefined reference to symbol 'SSL_get_error'
+/home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libssl.so.1.0.0: error adding symbols: DSO missing from command line
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ package/domoticz/domoticz.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 5e8b98b67f..34c3221f51 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 3d6cae4746..7f094d0976 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -19,8 +19,10 @@ DOMOTICZ_DEPENDENCIES = \
+ 	zlib
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.4</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2018.02.5</b></h3>
+ # Due to the dependency on mosquitto, domoticz depends on
+-# !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
+-DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
++# !BR2_STATIC_LIBS so set USE_STATIC_BOOST and USE_OPENSSL_STATIC to OFF
++DOMOTICZ_CONF_OPTS += \
++	-DUSE_STATIC_BOOST=OFF \
++	-DUSE_OPENSSL_STATIC=OFF
  
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.5.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2018.02.4.tar.gz">buildroot-2018.02.4.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.4.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.5.tar.gz">buildroot-2018.02.5.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.5.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2018.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2018.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2018.02.5.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2018.02.4.tar.bz2">buildroot-2018.02.4.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2018.02.4.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2018.02.5.tar.bz2">buildroot-2018.02.5.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2018.02.5.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 3b0776ef17..4bd18e91a3 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2018.02.5 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>29 August 2018</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2018.02.5 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2018.02.4 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.02.5">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2018-August/229453.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2018.02.5.tar.bz2">2018.02.5 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ # Do not use any built-in libraries which are enabled by default for
+ # lua, sqlite and mqtt
+-- 
+2.14.1
