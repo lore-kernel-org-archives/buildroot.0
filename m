@@ -1,54 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 29 Aug 2018 18:53:12 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: do not use static version of
- openssl
-Message-ID: <20180829165312.22948-1-fontaine.fabrice@gmail.com>
+Date: Wed, 29 Aug 2018 19:11:54 +0200
+Subject: [Buildroot] [PATCH 1/1] expat: bump to version 2.2.6
+Message-ID: <20180829171154.25333-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to the dependency on mosquitto, domoticz depends on !BR2_STATIC_LIBS
-so set USE_OPENSSL_STATIC to OFF (default value is ON)
-
-This could fix this non reproducible failure:
- - http://autobuild.buildroot.net/results/b1b84b8c12d31b9242b5732fcdd1eb76b1217366
-
-Indeed, domoticz finds the static version of openssl:
-
--- Found OpenSSL:
-/home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a (found version "1.0.2p")
--- OPENSSL_LIBRARIES:
-/home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a;/home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a
-
-But fails to link with the shared version:
-
-/home/test/autobuild/run/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/6.4.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld:
-CMakeFiles/domoticz.dir/hardware/plugins/PluginTransports.cpp.o: undefined reference to symbol 'SSL_get_error'
-/home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libssl.so.1.0.0: error adding symbols: DSO missing from command line
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/domoticz/domoticz.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/expat/expat.hash | 8 ++++----
+ package/expat/expat.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 3d6cae4746..7f094d0976 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -19,8 +19,10 @@ DOMOTICZ_DEPENDENCIES = \
- 	zlib
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 945e102342..6c55972f69 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.2.5/
+-md5	789e297f547980fc9ecc036f9a070d49		expat-2.2.5.tar.bz2
+-sha1	490659abd7d6c6d4cb4e60c945a15fbf081564f6	expat-2.2.5.tar.bz2
++# From https://sourceforge.net/projects/expat/files/expat/2.2.6/
++md5	ca047ae951b40020ac831c28859161b2		expat-2.2.6.tar.bz2
++sha1	c8947fc3119a797b55485f2f7bdaaeb49cc9df01	expat-2.2.6.tar.bz2
  
- # Due to the dependency on mosquitto, domoticz depends on
--# !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
--DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
-+# !BR2_STATIC_LIBS so set USE_STATIC_BOOST and USE_OPENSSL_STATIC to OFF
-+DOMOTICZ_CONF_OPTS += \
-+	-DUSE_STATIC_BOOST=OFF \
-+	-DUSE_OPENSSL_STATIC=OFF
+ # Locally calculated
+-sha256	d9dc32efba7e74f788fcc4f212a43216fc37cf5f23f4c2339664d473353aedf6	expat-2.2.5.tar.bz2
++sha256	17b43c2716d521369f82fc2dc70f359860e90fa440bea65b3b85f0b246ea81f2	expat-2.2.6.tar.bz2
+ sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 69c457da3d..61f3176312 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Do not use any built-in libraries which are enabled by default for
- # lua, sqlite and mqtt
+-EXPAT_VERSION = 2.2.5
++EXPAT_VERSION = 2.2.6
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
+ EXPAT_INSTALL_STAGING = YES
 -- 
 2.14.1
