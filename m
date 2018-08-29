@@ -1,73 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 22:32:42 +0200
-Subject: [Buildroot] [PATCH v2 1/1] qt5webengine: update chromium
- license file names
-In-Reply-To: <20180829105124.14758-1-laurent.hartanerot@gmail.com>
-References: <20180829063034.10766-1-laurent.hartanerot@gmail.com>
- <20180829105124.14758-1-laurent.hartanerot@gmail.com>
-Message-ID: <20180829223242.31c40388@windsurf>
+Date: Wed, 29 Aug 2018 22:37:01 +0200
+Subject: [Buildroot] [PATCH 2/2] python-falcon: new package
+In-Reply-To: <32a0a4a5-a2c4-c42b-50b4-5e618eaf73ef@blach.pl>
+References: <20180828101618.4746-1-grzegorz@blach.pl>
+ <20180828101618.4746-2-grzegorz@blach.pl>
+ <CAMWSM7jvM=oqzCns6RAx32RDDdnFF0ikvhMjXdDCPRoB_d27cA@mail.gmail.com>
+ <20180829214758.718d5e7f@windsurf>
+ <32a0a4a5-a2c4-c42b-50b4-5e618eaf73ef@blach.pl>
+Message-ID: <20180829223701.7a5a0299@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Laurent,
+Hello,
 
-On Wed, 29 Aug 2018 12:51:24 +0200, Laurent Hartanerot wrote:
-> From: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> 
-> Add license file name for qt5webengine-5.6
-> 
-> Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+On Wed, 29 Aug 2018 22:25:30 +0200, Grzegorz Blach wrote:
 
-Thanks for this new iteration. Unfortunately, I still see a number of
-problems, some of them dating back from the origin of the qt5webengine
-package (so Ga?l if you're around, your feedback/help would be nice).
+> If BR2_PACKAGE_HOST_PYTHON_CYTHON is enabled in config, Falcon uses 
+> Cython to compile own code.  Cython on target is not required in this 
+> case.
 
-Laurent, the first issue is that when your patch is applied, legal-info
-still doesn't work when the build wasn't done, i.e if you do "make
-clean; make legal-info", it will fail with:
+OK.
 
-cp: cannot stat '/home/thomas/projets/buildroot/output/build/qt5webengine-5.6.3/src/3rdparty/chromium/third_party/WebKit/Source/build/scripts/license.pyc': No such file or directory
+> Settings PYTHON_FALCON_DEPENDENCIES += host-python-cython
+> in python-falcon/Config.in also is not required, but may be usable to 
+> guarantee, that host-python-cython is always installed
+> before python-falcon.
 
-This is because you have added the license.pyc file in the list of
-license files, but this file only gets created at build time. And
-anyway, since it's Python byte-code, it's not very useful.
+Actually our policy is that when a package A can optionally be used by
+package B, then package B should have a dependency on package A when
+package A is enabled, which is what Joseph was suggesting.
 
-How was this list of license files generated ? It seems like all files
-containing "copying" or "license" in their name were taken. But does it
-make sense to include those license.py files ?
+This ensures that package B gets the additional feature
+provided/enabled by package A, regardless of the package build order,
+and generally makes sure that the features provided by package A
+benefits all package that can make use of it.
 
-Another problem is that the legal-info for qt5webengine in version 5.11
-is also broken:
-
-cp: cannot stat '/home/thomas/projets/buildroot/output/build/qt5webengine-5.11.1/src/3rdparty/chromium/buildtools/third_party/libc++abi/trunk/LICENSE.TXT': No such file or directory
-
-> +CHROMIUM_LICENSE_FILES = \
-
-Another problem is the name of this variable: if we ever have a package
-called "chromium" (which is not unlikely, as it was submitted in
-https://patchwork.ozlabs.org/patch/942284/), then this
-CHROMIUM_LICENSE_FILES variable internal to qt5webengine will clash
-with the CHROMIUM_LICENSE_FILES of the legitimate chromium package.
-
-So the naming of this variable should be changed to
-QT5WEBENGINE_CHROMIUM_LICENSE_FILES or something like this.
-
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->  include package/qt5/qt5webengine/chromium.inc
-
-Perhaps this file should be renamed chromium-latest.inc
-
-> +else
-> +include package/qt5/qt5webengine/chromium.5.6.inc
-
-and this one chromium-lts.inc ?
-
-Could you send a couple of separate patches to fix those issues ?
-
-Thanks!
+Best regards,
 
 Thomas
 -- 
