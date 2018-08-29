@@ -1,47 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 21:13:34 +0200
-Subject: [Buildroot] [git commit] board/freescale/imx8mqevk: remove hardware
+Date: Wed, 29 Aug 2018 21:14:53 +0200
+Subject: [Buildroot] [PATCH] board/freescale/imx8mqevk: remove hardware
  support section from readme
-Message-ID: <20180829191348.599DB8184C@busybox.osuosl.org>
+In-Reply-To: <20180829151554.8966-1-gary.bisson@boundarydevices.com>
+References: <20180829151554.8966-1-gary.bisson@boundarydevices.com>
+Message-ID: <20180829211453.0c67b78f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f57d68a229c4d71ef3c8d94ae155092ff26683b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-At first the support for i.MX8MQ processors was minimal, hence this
-section in the readme file.
+On Wed, 29 Aug 2018 17:15:54 +0200, Gary Bisson wrote:
+> At first the support for i.MX8MQ processors was minimal, hence this
+> section in the readme file.
+> 
+> Since then, GPU support was added [1] in master and VPU in next [2].
+> 
+> So drop this section as it is confusing people and no one maintains it.
+> 
+> [1] https://git.buildroot.net/buildroot/commit/?id=84afda9c
+> [2] https://git.buildroot.net/buildroot/commit/?id=82732071
+> 
+> Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 
-Since then, GPU support was added [1] in master and VPU in next [2].
+I've applied to master, thanks.
 
-So drop this section as it is confusing people and no one maintains it.
+> Can this patch be included for 2018.08 release?
+> 
+> Also, would it be possible to update the release text [1] to mention
+> i.MX8MQ graphics support? Something like:
+> - i.MX Vivante graphics version bumped to 6.2.4.p1.2 adding support for
+>   Wayland and i.MX8MQ platforms
 
-[1] https://git.buildroot.net/buildroot/commit/?id=84afda9c
-[2] https://git.buildroot.net/buildroot/commit/?id=82732071
+Peter: what do you think about this? Do we change the 2018.08-rc1
+release details after the fact ? Do we include this in the 2018.08
+final announcement, even if it was already there in 2018.08-rc1 ?
 
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/freescale/imx8mqevk/readme.txt | 6 ------
- 1 file changed, 6 deletions(-)
+Best regards,
 
-diff --git a/board/freescale/imx8mqevk/readme.txt b/board/freescale/imx8mqevk/readme.txt
-index 1840290edb..a32c122f91 100644
---- a/board/freescale/imx8mqevk/readme.txt
-+++ b/board/freescale/imx8mqevk/readme.txt
-@@ -5,12 +5,6 @@ Freescale i.MX8MQ EVK board
- This file documents the Buildroot support for the Freescale i.MX8MQ
- EVK board.
- 
--Hardware support
--================
--
--Currently only basic support for hardware is available, currently no
--support for GPU, VPU and other HW features.
--
- Build
- =====
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
