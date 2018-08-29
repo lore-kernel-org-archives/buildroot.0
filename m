@@ -1,98 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 21:15:51 +0200
-Subject: [Buildroot] [git commit branch/next] python-mimeparse: new package
-Message-ID: <20180829191555.9255B81898@busybox.osuosl.org>
+Date: Wed, 29 Aug 2018 21:17:03 +0200
+Subject: [Buildroot] [PATCH 1/2] python-mimeparse: new package
+In-Reply-To: <20180828101618.4746-1-grzegorz@blach.pl>
+References: <20180828101618.4746-1-grzegorz@blach.pl>
+Message-ID: <20180829211703.46279726@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab7e57124072abf0d85c1ea68f4686eb0d9c1e0f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-This module provides basic functions for parsing mime-type names
-and matching them against a list of media-ranges.
+On Tue, 28 Aug 2018 12:16:17 +0200, Grzegorz Blach wrote:
+> This module provides basic functions for parsing mime-type names
+> and matching them against a list of media-ranges.
+> 
+> https://github.com/dbtsai/python-mimeparse
+> 
+> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
 
-https://github.com/dbtsai/python-mimeparse
+Thanks for this contribution, I've applied to next with a minor fix
+(see below). And thanks Yegor for your review!
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                     |  3 +++
- package/Config.in                              |  1 +
- package/python-mimeparse/Config.in             |  7 +++++++
- package/python-mimeparse/python-mimeparse.hash |  5 +++++
- package/python-mimeparse/python-mimeparse.mk   | 14 ++++++++++++++
- 5 files changed, 30 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 481c74f9f2..e58fd05cd5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -876,6 +876,9 @@ F:	package/libsrtp/
- F:	package/libwebsock/
- F:	package/sofia-sip/
- 
-+N:	Grzegorz Blach <grzegorz@blach.pl>
-+F:	package/python-mimeparse/
-+
- N:	Guillaume Gardet <guillaume.gardet@oliseo.fr>
- F:	package/c-icap/
- F:	package/c-icap-modules/
-diff --git a/package/Config.in b/package/Config.in
-index eda0f698dc..cd17f0e709 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -871,6 +871,7 @@ menu "External python modules"
- 	source "package/python-markupsafe/Config.in"
- 	source "package/python-mbstrdecoder/Config.in"
- 	source "package/python-meld3/Config.in"
-+	source "package/python-mimeparse/Config.in"
- 	source "package/python-mistune/Config.in"
- 	source "package/python-more-itertools/Config.in"
- 	source "package/python-msgpack/Config.in"
-diff --git a/package/python-mimeparse/Config.in b/package/python-mimeparse/Config.in
-new file mode 100644
-index 0000000000..2437c3665b
---- /dev/null
-+++ b/package/python-mimeparse/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_MIMEPARSE
-+	bool "python-mimeparse"
-+	help
-+	  A module provides basic functions for parsing mime-type
-+	  names and matching them against a list of media-ranges.
-+
-+	  https://github.com/dbtsai/python-mimeparse
-diff --git a/package/python-mimeparse/python-mimeparse.hash b/package/python-mimeparse/python-mimeparse.hash
-new file mode 100644
-index 0000000000..9721c5fa0c
---- /dev/null
-+++ b/package/python-mimeparse/python-mimeparse.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/python-mimeparse/json
-+md5	a32ae1df93be1ddb581d1c0fa124bab4  python-mimeparse-1.6.0.tar.gz
-+sha256	76e4b03d700a641fd7761d3cd4fdbbdcd787eade1ebfac43f877016328334f78  python-mimeparse-1.6.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSE
-diff --git a/package/python-mimeparse/python-mimeparse.mk b/package/python-mimeparse/python-mimeparse.mk
-new file mode 100644
-index 0000000000..dc796988d2
---- /dev/null
-+++ b/package/python-mimeparse/python-mimeparse.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-mimeparse
-+#
-+################################################################################
-+
-+PYTHON_MIMEPARSE_VERSION = 1.6.0
-+PYTHON_MIMEPARSE_SOURCE = python-mimeparse-$(PYTHON_MIMEPARSE_VERSION).tar.gz
-+PYTHON_MIMEPARSE_SITE = https://files.pythonhosted.org/packages/0f/40/ac5f9e44a55b678c3cd881b4c3376e5b002677dbeab6fb3a50bac5d50d29
-+PYTHON_MIMEPARSE_SETUP_TYPE = setuptools
-+PYTHON_MIMEPARSE_LICENSE = MIT
-+PYTHON_MIMEPARSE_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+> +N:	Grzegorz Blach <grzegorz@blach.pl>
+> +F:	package/python-mimeparse
+
+There should have been a final / in package/python-mimeparse/ in the
+DEVELOPERS file. As I said, I fixed that when applying. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
