@@ -1,49 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 22:50:01 +0200
-Subject: [Buildroot] [PATCH v2 1/1] qt5quickcontrols: update license
- file names
-In-Reply-To: <20180829110517.15151-1-laurent.hartanerot@gmail.com>
-References: <20180829061813.9348-1-laurent.hartanerot@gmail.com>
- <20180829110517.15151-1-laurent.hartanerot@gmail.com>
-Message-ID: <20180829225001.576248e1@windsurf>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 29 Aug 2018 16:20:50 -0500
+Subject: [Buildroot] [PATCH 0/5] Hardening Wrapper Updates and Test
+Message-ID: <1535577655-9583-1-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Laurent,
+This series looks to complete the implementation and migration of
+hardening related options to the compiler and (new) linker wrapper.
 
-On Wed, 29 Aug 2018 13:05:17 +0200, Laurent Hartanerot wrote:
-> From: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> 
-> Update license file name for qt5quickcontrols-5.6
-> 
-> Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+The series provides runtime testing for RELRO/SSP/FORTIFY.
 
-I have applied your patch to the master branch, after doing two
-additional tweaks, see below.
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+CC: Jan Kundr?t <jan.kundrat@cesnet.cz>
+CC: Stefan S?rensen <stefan.sorensen@spectralink.com>
 
 
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->  QT5QUICKCONTROLS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)
->  QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.LGPL3 LICENSE.FDL
-> +else
-> +QT5QUICKCONTROLS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)
+Matt Weber (5):
+  toolchain/toolchain-wrapper: add link wrapper
+  toolchain/toolchain-wrapper: add BR2_RELRO_FULL support
+  toolchain/toolchain-wrapper: add BR2_SSP_* support
+  toolchain/toolchain-wrapper: add BR2_FORTIFY_SOURCE_* support
+  support/testing/tests/core: SSP & hardening flags
 
-The LICENSE variable was the same in both cases, so I moved it outside
-of the version condition.
+ .gitlab-ci.yml                                     |   6 +
+ package/Makefile.in                                |  19 +-
+ package/gcc/gcc.mk                                 |  12 +-
+ support/testing/tests/core/test_hardening.py       | 110 +++++++++
+ .../toolchain-external/pkg-toolchain-external.mk   |  12 +-
+ toolchain/toolchain-wrapper-linker.c               | 268 +++++++++++++++++++++
+ toolchain/toolchain-wrapper.c                      |  55 ++++-
+ toolchain/toolchain-wrapper.mk                     |  24 ++
+ 8 files changed, 487 insertions(+), 19 deletions(-)
+ create mode 100644 support/testing/tests/core/test_hardening.py
+ create mode 100644 toolchain/toolchain-wrapper-linker.c
 
-> +QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.FDL LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3
-
-I moved LICENSE.FDL to the end of the list, so that the license files
-are in the same order in both versions. It doesn't change anything
-functionally speaking, but is a bit more consistent.
-
-Thanks!
-
-Thomas Petazzoni
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+1.9.1
