@@ -1,35 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Aug 2018 09:35:32 +0200
-Subject: [Buildroot] [PATCH] mender: fix ioctl build failure on
- powerpc64le / power8
-In-Reply-To: <CA+_SqVZ0B7mH+fou8=V9b4PfWbxeN-WFRtuaG=-GAWDGXLoe6Q@mail.gmail.com>
- (Angelo Compagnucci's message of "Wed, 29 Aug 2018 07:44:37 +0200")
-References: <20180828170153.42156-1-giulio.benetti@micronovasrl.com>
- <CADHdJwDAnbFAe3bGTQswK1OdfQzN+JCCwCPLGhLy1MCmz0bBTQ@mail.gmail.com>
- <fa955ebd-e988-0bb2-f506-ca164477b34f@micronovasrl.com>
- <20180828215714.5e2c7c84@windsurf.home>
- <451277c2-effe-1d73-f2b3-9c2daf59c2c0@micronovasrl.com>
- <CA+_SqVZ0B7mH+fou8=V9b4PfWbxeN-WFRtuaG=-GAWDGXLoe6Q@mail.gmail.com>
-Message-ID: <87o9dl4ocb.fsf@dell.be.48ers.dk>
+Date: Wed, 29 Aug 2018 08:38:52 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] postgresql: security bump
+ to 10.5
+Message-ID: <20180829075440.D4FD881765@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4e4472670a7ceed7415b0188185383a45313d990
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-Hi,
+Fixes CVE-2018-10915 & CVE-2018-10925
 
- >> Sure, I will use the upstream one I've missed when searching.
+Changelog: https://www.postgresql.org/docs/10/static/release-10-5.html
 
- > Mizra, one of the authors of Mender is releasing a bump of the package
- > with other fixes. We agreed on waiting on the package bump to fix the
- > error instead of carrying a patch in buildroot that will bu useful
- > only for a short period of time.
+Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 81ccf146a79983f52c055b734c57c8ab1e69c936)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Ok, if it indeed is a "short time", we are very close to releasing
-2018.08.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index 533c398d59..a9cc93c76c 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,5 +1,5 @@
+-# From https://ftp.postgresql.org/pub/source/v10.3/postgresql-10.3.tar.bz2.sha256
+-sha256	6ea268780ee35e88c65cdb0af7955ad90b7d0ef34573867f223f14e43467931a	postgresql-10.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v10.5/postgresql-10.5.tar.bz2.sha256
++sha256	6c8e616c91a45142b85c0aeb1f29ebba4a361309e86469e0fb4617b6a73c4011	postgresql-10.5.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256	24cfc70cf16b3a23242c49ffce39510683bdd48cbedb8a46fe03976ee5f5c21e	COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index c6b689a146..f6dad978e3 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 10.3
++POSTGRESQL_VERSION = 10.5
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
