@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Aug 2018 23:22:16 +0200
-Subject: [Buildroot] [git commit branch/2018.05.x] pv: fix build failures
+Date: Wed, 29 Aug 2018 23:22:37 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] pv: fix build failures
  when building under a path containing 'yes'
-Message-ID: <20180829212221.9CC1E81DFA@busybox.osuosl.org>
+Message-ID: <20180829212229.4B68181E02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ff5c66f4a728e345e8a51b0b5a1dc5e89e905ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2b407a984f18754b8133477143574bd8999f1cf8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
 Depending on the configuration, the cpp output may contain the string 'yes'
 in a comment if built under a path containing 'yes', confusing the _AIX
