@@ -1,78 +1,41 @@
-From: Peter Thompson <peter.macleod.thompson@gmail.com>
-Date: Wed, 29 Aug 2018 03:21:59 -0600
-Subject: [Buildroot] SDL2+directfb combo does not work as built by
- buildroot-2018.02.3
-In-Reply-To: <CAGrGpJBNF=NejuNA5hBg5oet=iJxEjRLBXgog30y4xm0GrFFjA@mail.gmail.com>
-References: <CAGrGpJDVHStp8MUZaGb1=ZfWud-k4fQP=piwsc-QfftCDFyKog@mail.gmail.com>
- <CAGrGpJA=Kk0fGjMPfH3R1ZbyJbonPNPQoyC_tpjaF9Ua92BNNg@mail.gmail.com>
- <878t4q7vqu.fsf@dell.be.48ers.dk>
- <CAGrGpJCe67xHWAceYw6-oD=iPoL0be8-ZhRgmWfhQRuG0GwxeA@mail.gmail.com>
- <87a7p65zjo.fsf@dell.be.48ers.dk>
- <CAGrGpJBNF=NejuNA5hBg5oet=iJxEjRLBXgog30y4xm0GrFFjA@mail.gmail.com>
-Message-ID: <CAGrGpJBb5QSj6utj46840=bKhHEg5npdt23+NCrU87Ta-Yv7Qw@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 29 Aug 2018 11:39:42 +0200
+Subject: [Buildroot] [PATCH] mender: fix ioctl build failure on
+ powerpc64le / power8
+In-Reply-To: <87o9dl4ocb.fsf@dell.be.48ers.dk>
+References: <20180828170153.42156-1-giulio.benetti@micronovasrl.com>
+ <CADHdJwDAnbFAe3bGTQswK1OdfQzN+JCCwCPLGhLy1MCmz0bBTQ@mail.gmail.com>
+ <fa955ebd-e988-0bb2-f506-ca164477b34f@micronovasrl.com>
+ <20180828215714.5e2c7c84@windsurf.home>
+ <451277c2-effe-1d73-f2b3-9c2daf59c2c0@micronovasrl.com>
+ <CA+_SqVZ0B7mH+fou8=V9b4PfWbxeN-WFRtuaG=-GAWDGXLoe6Q@mail.gmail.com>
+ <87o9dl4ocb.fsf@dell.be.48ers.dk>
+Message-ID: <d58ec644-5421-bfcc-d209-1ba11e6d3f87@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that I see how easy it is ... add file containing Sam's patch called
+Hi,
 
-0001-hg-libsdl-org-SDL-raw-rev-751cdc74d55c.patch
-to the SDL2 package
+Il 29/08/2018 09:35, Peter Korsgaard ha scritto:
+>>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+> 
+> Hi,
+> 
+>   >> Sure, I will use the upstream one I've missed when searching.
+> 
+>   > Mizra, one of the authors of Mender is releasing a bump of the package
+>   > with other fixes. We agreed on waiting on the package bump to fix the
+>   > error instead of carrying a patch in buildroot that will bu useful
+>   > only for a short period of time.
+> 
+> Ok, if it indeed is a "short time", we are very close to releasing
+> 2018.08.
+> 
 
-... I can easily submit a proper patch with signed-of-by to buildroot
+So can I send v2 patch? Sorry, I'm new and I don't understand.
 
-Let me know what you would like.....
-<https://hg.libsdl.org/SDL/raw-rev/751cdc74d55c>
-Peter
-
-
-On Tue, Aug 28, 2018 at 10:56 AM, Peter Thompson <
-peter.macleod.thompson@gmail.com> wrote:
-
-> I checked with Sam - this is his note back...
->
-> "I'm not sure, but I think we're going to start on it soon. We have a
-> bunch of good improvements in 2.0.9 for folks."
->
->
->
-> On Tue, Aug 28, 2018 at 8:35 AM, Peter Korsgaard <peter@korsgaard.com>
-> wrote:
->
->> >>>>> "Peter" == Peter Thompson <peter.macleod.thompson@gmail.com>
->> writes:
->>
->>  > Hi Peter
->>  > My original plan was to wait for the next SDL2 release thereby allowing
->>  > SDL2 to fix itself before updating the SDL2_VERSION in  buildroot.
->>
->>  > Otherwise we have to change buildroot SDL2_VERSION to  point to the
->>  > temporary patched SDL2 source for download:
->>  > http://www.libsdl.org/tmp/SDL-2.0.zip
->>  > OR
->>  > somehow change buildroot to download this patch and apply it to the
->>  > downloaded SDL2-2.0.8 before compiling (I am not sure how to do this in
->>  > buildroot).
->>
->> .. Or simply include the hg commit as a .patch file in the package.
->>
->>  > Then we would need to re-change this all back when the new release of
->> SDL2
->>  > incorporates this patch.
->>
->> Correct.
->>
->> Do you know when sdl2-2.0.9 is planned? 2.0.8 is what we are using both
->> for 2018.02 (the current long term support version), 2018.05 (the
->> current release) and master (what will very soon become 2018.08).
->>
->> --
->> Bye, Peter Korsgaard
->>
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180829/9dac281e/attachment.html>
+Thanks
+Giulio
