@@ -1,24 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 29 Aug 2018 13:17:19 +0000
-Subject: [Buildroot] [Bug 11066] x11r7 X11 S40xorg leads to a black screen
- on QEMU x86 but startx works
-In-Reply-To: <bug-11066-163@https.bugs.busybox.net/>
-References: <bug-11066-163@https.bugs.busybox.net/>
-Message-ID: <bug-11066-163-j71V6vSHGF@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 29 Aug 2018 15:21:25 +0200
+Subject: [Buildroot] Buildroot Developers Meeting @ ELCE 2018: reminder
+Message-ID: <20180829152125.7f5d0ba1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11066
+Hello,
 
-David De Grave <david.degrave@mind.be> changed:
+This is a reminder that the next Buildroot Developers Meeting will take
+place on October 20-21 in Edinburgh (UK), right before ELCE.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-            Version|2018.02.1                   |unspecified
+At this time, we have six participants registered:
+https://elinux.org/Buildroot:DeveloperDaysELCE2018. Since we are trying
+to organize a meeting room, we would like to know if the number of
+participants will remain about the same, or if there are other people
+that are still considering attending the meeting, but have not yet
+registered.
 
+I know that both Romain Naour and Yann E. Morin may be attending but
+are not yet sure at this point. Are there other people in this
+situation ? Or are there others who know they will be attending, but
+simply overlooked to register ?
+
+Thanks a lot for your participation!
+
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
