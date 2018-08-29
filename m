@@ -1,183 +1,113 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 29 Aug 2018 16:20:55 -0500
-Subject: [Buildroot] [PATCH 5/5] support/testing/tests/core: SSP & hardening
- flags
-In-Reply-To: <1535577655-9583-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1535577655-9583-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1535577655-9583-6-git-send-email-matthew.weber@rockwellcollins.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 29 Aug 2018 23:22:16 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] pv: fix build failures
+ when building under a path containing 'yes'
+Message-ID: <20180829212221.9CC1E81DFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Catch the commonly used options of SSP, Relro, and fortify.
+commit: https://git.buildroot.net/buildroot/commit/?id=4ff5c66f4a728e345e8a51b0b5a1dc5e89e905ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Depending on the configuration, the cpp output may contain the string 'yes'
+in a comment if built under a path containing 'yes', confusing the _AIX
+test:
 
+${CROSS}-cpp conftest.h
+\# 1 "conftest.h"
+\# 1 "<built-in>"
+\# 1 "<command-line>"
+\# 31 "<command-line>"
+\# 1 "/home/peko/source/buildroot/output-yes/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/stdc-predef.h"
+\# 32 "<command-line>" 2
+\# 1 "conftest.txt"
+
+If misdetected, the configure script adds -lc128 to LIBS, causing the
+AC_CHECKS_FUNCS check for stat64 to fail, which in turn causes compilation
+errors about redefinition of symbols:
+
+In file included from ./src/include/pv-internal.h:9:0,
+                 from src/pv/file.c:5:
+./src/include/config.h:76:18: error: redefinition of 'struct stat'
+  #  define stat64 stat
+                   ^
+Fix it by only matching on 'yes' on a line by itself.
+
+As pv doesn't cleanly autoreconf (it doesn't use automake and configure.in
+is located in subdir), instead directly patch configure.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 994a47649b4c95c2338d41d34144ebfb9639b717)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes
-Original v4 -> v1 of link wrapper patchset
- - Added back in busybox test case
+ .../pv/0001-configure.in-tighten-AIX-test.patch    | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-v3 -> v4
- - Removed commented out lines I missed when I removed busybox
- - Removed duplicate fortify assertion test
-
-v2 -> v3
-[Matt
- - Removed the busybox target as without the link time
-   wrapper/specfile being merged the build will fail.
-   Link time conflict between use of 'r' and pie.
-
-[Thomas
- - Add clarificaion of what checksec can test
- - Reworked using inheritance
- - Relocated json load (removed duplication)
-
-v1 -> v2
-[Ricardo
- - Fix flake8 warnings
- - Added missing busyfox pie assertions
- - Updated the yml to include new test cases
----
- .gitlab-ci.yml                               |   6 ++
- support/testing/tests/core/test_hardening.py | 110 +++++++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
- create mode 100644 support/testing/tests/core/test_hardening.py
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 3fc9b06..c271c05 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -261,6 +261,12 @@ zynqmp_zcu106_defconfig: *defconfig
- tests.boot.test_atf.TestATFAllwinner: *runtime_test
- tests.boot.test_atf.TestATFMarvell: *runtime_test
- tests.boot.test_atf.TestATFVexpress: *runtime_test
-+tests.core.test_hardening.TestFortifyConserv: *runtime_test
-+tests.core.test_hardening.TestFortifyNone: *runtime_test
-+tests.core.test_hardening.TestRelro: *runtime_test
-+tests.core.test_hardening.TestRelroPartial: *runtime_test
-+tests.core.test_hardening.TestSspNone: *runtime_test
-+tests.core.test_hardening.TestSspStrong: *runtime_test
- tests.core.test_post_scripts.TestPostScripts: *runtime_test
- tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
- tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
-diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+diff --git a/package/pv/0001-configure.in-tighten-AIX-test.patch b/package/pv/0001-configure.in-tighten-AIX-test.patch
 new file mode 100644
-index 0000000..9f26962
+index 0000000000..2e0d2af247
 --- /dev/null
-+++ b/support/testing/tests/core/test_hardening.py
-@@ -0,0 +1,110 @@
-+import os
-+import subprocess
-+import json
++++ b/package/pv/0001-configure.in-tighten-AIX-test.patch
+@@ -0,0 +1,57 @@
++From cd7605723eb8e6d8231644f1cf62f1e80badf074 Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Mon, 20 Aug 2018 15:57:22 +0200
++Subject: [PATCH] configure.in: tighten AIX test
 +
-+import infra.basetest
++Depending on the configuration, the cpp output may contain the string 'yes'
++in a comment if built under a path containing 'yes', confusing the _AIX
++test:
 +
++${CROSS}-cpp conftest.h
++\# 1 "conftest.h"
++\# 1 "<built-in>"
++\# 1 "<command-line>"
++\# 31 "<command-line>"
++\# 1 "/home/peko/source/buildroot/output-yes/host/x86_64-buildroot-linux-gnu/sysroot/usr/include/stdc-predef.h" 1 3 4
++\# 32 "<command-line>" 2
++\# 1 "conftest.txt"
 +
-+class TestHardeningBase(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_powerpc64=y
-+        BR2_powerpc_e5500=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-+        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        BR2_PACKAGE_LIGHTTPD=y
-+        BR2_PACKAGE_HOST_CHECKSEC=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
++Fix it by only matching on 'yes' on a line by itself.
 +
-+    checksec_files = ["usr/sbin/lighttpd","bin/busybox"]
++Upstream-status: submitted to author
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
 +
-+    def checksec_run(self, target_file):
-+        filepath = os.path.join(self.builddir, "target", target_file)
-+        cmd = ["host/bin/checksec", "--output", "json", "--file", filepath]
-+        # Checksec is being used for elf file analysis only.  There are no
-+        # assumptions of target/run-time checks as part of this testing.
-+        ret = subprocess.check_output(cmd,
-+                                      stderr=open(os.devnull, "w"),
-+                                      cwd=self.builddir,
-+                                      env={"LANG": "C"})
-+        return json.loads(ret)
++ autoconf/configure.in | 2 +-
++ configure             | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
++diff --git a/autoconf/configure.in b/autoconf/configure.in
++index bd45004..487c42b 100644
++--- a/autoconf/configure.in
+++++ b/autoconf/configure.in
++@@ -86,7 +86,7 @@ AC_PROG_MAKE_SET
++ 
++ dnl AIX needs -lc128
++ dnl
++-AC_EGREP_CPP([yes], [#ifdef _AIX
+++AC_EGREP_CPP([^yes$], [#ifdef _AIX
++ yes
++ #endif
++ ], [LIBS="$LIBS -lc128"])
++diff --git a/configure b/configure
++index 7c11be0..59267b9 100755
++--- a/configure
+++++ b/configure
++@@ -3377,7 +3377,7 @@ yes
++ 
++ _ACEOF
++ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
++-  $EGREP "yes" >/dev/null 2>&1; then
+++  $EGREP "^yes$" >/dev/null 2>&1; then
++   LIBS="$LIBS -lc128"
++ fi
++ rm -f conftest*
++-- 
++2.11.0
 +
-+class TestRelro(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_RELRO_FULL=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["relro"], "full")
-+            self.assertEqual(out["file"]["pie"], "yes")
-+
-+
-+class TestRelroPartial(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_RELRO_PARTIAL=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["relro"], "partial")
-+            self.assertEqual(out["file"]["pie"], "no")
-+
-+
-+class TestSspNone(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_SSP_NONE=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["canary"], "no")
-+
-+
-+class TestSspStrong(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_SSP_STRONG=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["canary"], "yes")
-+
-+
-+class TestFortifyNone(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_FORTIFY_SOURCE_NONE=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["fortified"], "0")
-+
-+
-+class TestFortifyConserv(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_FORTIFY_SOURCE_1=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertNotEqual(out["file"]["fortified"], "0")
--- 
-1.9.1
