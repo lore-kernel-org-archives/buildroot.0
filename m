@@ -1,73 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 21:05:45 +0200
-Subject: [Buildroot] [PATCH 1/1] qt: fix build on powerpc_e500mc
-In-Reply-To: <20180829173654.25751-1-fontaine.fabrice@gmail.com>
-References: <20180829173654.25751-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180829210545.44e98407@windsurf>
+Date: Wed, 29 Aug 2018 21:10:42 +0200
+Subject: [Buildroot] [git commit] libkcapi: bump to version 1.1.3
+Message-ID: <20180829191122.9EFB381842@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=12d70ebce673ab606c15f516dd81e808ef157e2f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for looking into these annoying remaining build failures, much
-appreciated!
+Remove patch (already in version). This version bump only contains a
+limited set of bug fixes:
 
-On Wed, 29 Aug 2018 19:36:54 +0200, Fabrice Fontaine wrote:
-> gcc bug internal compiler error: in validate_condition_mode, at
-> config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.2.
-> Workaround is to set -mno-isel, see
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
-> https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/9b9d11b3281a72c8f54fc675408acb96d24d8e7e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/qt/qt.mk | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-> index 1dcb05d6af..24ebbfdfdb 100644
-> --- a/package/qt/qt.mk
-> +++ b/package/qt/qt.mk
-> @@ -32,6 +32,15 @@ QT_LDFLAGS = $(TARGET_LDFLAGS)
->  # use an older c++ standard to prevent build failure
->  QT_CXXFLAGS += -std=gnu++98
->  
-> +# gcc bug internal compiler error: in validate_condition_mode, at
-> +# config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.2.
-> +# Workaround is to set -mno-isel, see
-> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
-> +# https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
-> +ifeq ($(BR2_powerpc_e500mc):$(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y:)
-> +QT_CXXFLAGS += -mno-isel
-> +endif
+Changes 1.1.3
+ * Fix: default location of FIPS 140-2 HMAC control file is .<orig file>.hmac
+   (was accidentally moved to <orig file>.hmac with 1.1.2)
 
-This looks good, but are you sure the problem is limited to e500mc ?
-The e-mail at https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
-that you point says:
+Changes 1.1.2
+ * Fix: Bug fixes for GCC 8.1.0 regarding string length checks by
+	Krzysztof Kozlowski
+ * Enhancement: ensure that tests execute on architectures other than X86
+	by Ondrej Mosn????ek
+ * Fix: Bug fix to initialize FDs at the correct time in kcapi-kernel-if.c
+	by Ondrej Mosn????ek
+ * Test fix: Support test execution outside build environment by
+	Ondrej Mosn????ek
 
-""
-Target: e500v2 (I was able to reproduce with e500mc, e5500 targets as well).
-""
+Changes 1.1.1
+ * Fix: Bug fixes for kcapi_hasher by Ondrej Mosn????ek
 
-So it would seem like e500mc is not the only affected target. So your
-patch will fix the specific autobuilder failure because we happen to be
-testing e500mc, but what about e500v2 (BR2_powerpc_8548) or
-BR2_powerpc_e5500 ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Fix-getrandom-call-in-kcapi-rng.c.patch   | 31 ----------------------
+ package/libkcapi/libkcapi.hash                     |  2 +-
+ package/libkcapi/libkcapi.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 33 deletions(-)
 
-Interestingly, the last comment in
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 says that the patch
-has been backported to gcc 6.x.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libkcapi/0001-Fix-getrandom-call-in-kcapi-rng.c.patch b/package/libkcapi/0001-Fix-getrandom-call-in-kcapi-rng.c.patch
+deleted file mode 100644
+index d83edd9261..0000000000
+--- a/package/libkcapi/0001-Fix-getrandom-call-in-kcapi-rng.c.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 581717cfb0e35c041246da0c0c591a6e9f7a40e5 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 2 May 2018 21:03:45 +0200
+-Subject: [PATCH] Fix getrandom call in kcapi-rng.c
+-
+-_GNU_SOURCE must be defined and unistd.h must be included to be able to
+-use getrandom
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-[Upstream status: https://github.com/smuellerDD/libkcapi/pull/56]
+----
+- lib/kcapi-rng.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/lib/kcapi-rng.c b/lib/kcapi-rng.c
+-index 45f4d18..9ceabd4 100644
+---- a/lib/kcapi-rng.c
+-+++ b/lib/kcapi-rng.c
+-@@ -18,6 +18,8 @@
+-  * DAMAGE.
+-  */
+- 
+-+#define _GNU_SOURCE
+-+#include <unistd.h>
+- #include <linux/random.h>
+- #ifdef HAVE_GETRANDOM
+- #include <sys/random.h>
+--- 
+-2.14.1
+-
+diff --git a/package/libkcapi/libkcapi.hash b/package/libkcapi/libkcapi.hash
+index 9cb1e80ccb..b340ea84b6 100644
+--- a/package/libkcapi/libkcapi.hash
++++ b/package/libkcapi/libkcapi.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 ac80211317750f6a545b1e5547cfb6ae450b37c11acb6d24982a581705eb5250	libkcapi-1.1.0.tar.xz
++sha256 19c044310eda0bf5403fae8df2eeffcfef33b67cb5b01def5f440d41ff16b55f	libkcapi-1.1.3.tar.xz
+ sha256 b0336f8f07a6abf8b0a59d961f53601d7c4a7c09a8137805b730a34a976039f8	COPYING
+ sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING.gplv2
+ sha256 13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239	COPYING.bsd
+diff --git a/package/libkcapi/libkcapi.mk b/package/libkcapi/libkcapi.mk
+index 1a45f4f996..1557d2017a 100644
+--- a/package/libkcapi/libkcapi.mk
++++ b/package/libkcapi/libkcapi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBKCAPI_VERSION = 1.1.0
++LIBKCAPI_VERSION = 1.1.3
+ LIBKCAPI_SOURCE = libkcapi-$(LIBKCAPI_VERSION).tar.xz
+ LIBKCAPI_SITE = http://www.chronox.de/libkcapi
+ LIBKCAPI_AUTORECONF = YES
