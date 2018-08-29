@@ -1,32 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 29 Aug 2018 15:39:35 +0200
-Subject: [Buildroot] SDL2+directfb combo does not work as built by
- buildroot-2018.02.3
-In-Reply-To: <CAGrGpJBb5QSj6utj46840=bKhHEg5npdt23+NCrU87Ta-Yv7Qw@mail.gmail.com>
- (Peter Thompson's message of "Wed, 29 Aug 2018 03:21:59 -0600")
-References: <CAGrGpJDVHStp8MUZaGb1=ZfWud-k4fQP=piwsc-QfftCDFyKog@mail.gmail.com>
- <CAGrGpJA=Kk0fGjMPfH3R1ZbyJbonPNPQoyC_tpjaF9Ua92BNNg@mail.gmail.com>
- <878t4q7vqu.fsf@dell.be.48ers.dk>
- <CAGrGpJCe67xHWAceYw6-oD=iPoL0be8-ZhRgmWfhQRuG0GwxeA@mail.gmail.com>
- <87a7p65zjo.fsf@dell.be.48ers.dk>
- <CAGrGpJBNF=NejuNA5hBg5oet=iJxEjRLBXgog30y4xm0GrFFjA@mail.gmail.com>
- <CAGrGpJBb5QSj6utj46840=bKhHEg5npdt23+NCrU87Ta-Yv7Qw@mail.gmail.com>
-Message-ID: <87ftyx47hk.fsf@dell.be.48ers.dk>
+Date: Wed, 29 Aug 2018 15:43:21 +0200
+Subject: [Buildroot] [PATCH v2] mender: fix ioctl build failure on
+ powerpc64le / power8
+In-Reply-To: <20180829115405.59305-1-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Wed, 29 Aug 2018 13:54:05 +0200")
+References: <20180829115405.59305-1-giulio.benetti@micronovasrl.com>
+Message-ID: <878t4p47ba.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Thompson <peter.macleod.thompson@gmail.com> writes:
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
- > Now that I see how easy it is ... add file containing Sam's patch called
- > 0001-hg-libsdl-org-SDL-raw-rev-751cdc74d55c.patch
- > to the SDL2 package
+ > Build fails due to missing // +build ppc64le in ioctl_64_bit.go
+ > Add patch to append ppc64le to // +build list.
 
- > ... I can easily submit a proper patch with signed-of-by to buildroot
+ > Fixes
+ > http://autobuild.buildroot.net/results/f22/f222b4389f9308363c386da25ec22a0919bc29fb//
 
-Yes, please do! Thanks.
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
