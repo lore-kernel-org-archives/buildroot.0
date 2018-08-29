@@ -1,61 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 Aug 2018 22:32:14 +0200
-Subject: [Buildroot] [git commit] python-lxml: bump to version 4.2.4
-Message-ID: <20180907111604.7F7C37FEB5@busybox.osuosl.org>
+Date: Wed, 29 Aug 2018 22:05:11 +0200
+Subject: [Buildroot] [git commit] acpid: drop x86 architecture dependency
+Message-ID: <20180907111607.A15087FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=82b3ad97f12f7b26f88ad1c636dcca1928fedb5a
+commit: https://git.buildroot.net/buildroot/commit/?id=1bcc6e87410c76efb2f4bdd9714916acef84b7d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fix zlib dependency.
+Closes #11241
 
-Fixes:
-http://autobuild.buildroot.net/results/d8e/d8e3a9aae0e84fb1b3b8093986ec3a4ce7ca0663
+While ACPI is historically exclusively a x86 feature, ia64 and (some) arm64
+server platforms also use it.  Furthermore, even if the firmware does not
+provide an ACPI interface and/or the kernel is not built with ACPI support,
+acpid can still be used to command an orderly shutdown of the system as it
+also listens for KEY_POWER / KEY_SUSPEND events from the input subsystem
+(and calls shutdown by default).
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-lxml/Config.in        | 3 ++-
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 2 +-
- 3 files changed, 4 insertions(+), 3 deletions(-)
+ package/acpid/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/python-lxml/Config.in b/package/python-lxml/Config.in
-index 1ccaa5e387..fcb30d56ee 100644
---- a/package/python-lxml/Config.in
-+++ b/package/python-lxml/Config.in
-@@ -2,7 +2,8 @@ config BR2_PACKAGE_PYTHON_LXML
- 	bool "python-lxml"
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBXSLT
--	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_PYTHON_ZLIB if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3
+diff --git a/package/acpid/Config.in b/package/acpid/Config.in
+index 2bd83ea8b9..b74e9d2262 100644
+--- a/package/acpid/Config.in
++++ b/package/acpid/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_ACPID
+ 	bool "acpid"
+-	depends on BR2_x86_64 || BR2_i386
  	help
- 	  The lxml XML toolkit is a Pythonic binding for the C libraries
- 	  libxml2 and libxslt.
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 38607e1b84..9b75a26280 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  f7bc9f702500e205b1560d620f14015fec76dcd6f9e889a946a2ddcc3c344fd0  lxml-4.0.0.tgz
-+sha256  e2afbe403090f5893e254958d02875e0732975e73c4c0cdd33c1f009a61963ca  lxml-4.2.4.tgz
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index 7f1692d1b0..80c04c0055 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_LXML_VERSION = 4.0.0
-+PYTHON_LXML_VERSION = 4.2.4
- PYTHON_LXML_SITE = http://lxml.de/files
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tgz
+ 	  Advanced Configuration and Power Interface event daemon.
  
