@@ -1,93 +1,43 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 29 Aug 2018 23:26:52 +0200
-Subject: [Buildroot] [PATCH 1/1] domoticz: do not use static version of
- openssl
-In-Reply-To: <20180829213941.2953f99a@windsurf>
-References: <20180829165312.22948-1-fontaine.fabrice@gmail.com>
- <20180829213941.2953f99a@windsurf>
-Message-ID: <CAPi7W80nTJSznQ6xwv9w7A4gEzhRPHfXBGHnQSY3qhCWinF2Cg@mail.gmail.com>
+Date: Wed, 29 Aug 2018 23:48:05 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for some packages
+Message-ID: <20180829214805.29274-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Add my entry for expat, libv4l and minizip
 
-Le mer. 29 ao?t 2018 ? 21:39, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> Hello,
->
-> On Wed, 29 Aug 2018 18:53:12 +0200, Fabrice Fontaine wrote:
-> > Due to the dependency on mosquitto, domoticz depends on !BR2_STATIC_LIBS
-> > so set USE_OPENSSL_STATIC to OFF (default value is ON)
-> >
-> > This could fix this non reproducible failure:
-> >  -
-> http://autobuild.buildroot.net/results/b1b84b8c12d31b9242b5732fcdd1eb76b1217366
-> >
-> > Indeed, domoticz finds the static version of openssl:
-> >
-> > -- Found OpenSSL:
-> >
-> /home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a
-> (found version "1.0.2p")
-> > -- OPENSSL_LIBRARIES:
-> >
-> /home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libssl.a;/home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libcrypto.a
-> >
-> > But fails to link with the shared version:
-> >
-> >
-> /home/test/autobuild/run/instance-0/output/host/opt/ext-toolchain/bin/../lib/gcc/mipsel-buildroot-linux-uclibc/6.4.0/../../../../mipsel-buildroot-linux-uclibc/bin/ld:
-> > CMakeFiles/domoticz.dir/hardware/plugins/PluginTransports.cpp.o:
-> undefined reference to symbol 'SSL_get_error'
-> >
-> /home/test/autobuild/run/instance-0/output/host/mipsel-buildroot-linux-uclibc/sysroot/usr/lib/libssl.so.1.0.0:
-> error adding symbols: DSO missing from command line
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
-> Hum. So I guess reading the wording of your commit message that you
-> didn't manage to reproduce the problem, nor verify that the patch was
-> fixing it ?
->
-Thats's right, I was not able to reproduce it.
-
->
-> Looking at http://autobuild.buildroot.net/?reason=domoticz%, the
-> problem clearly started suddenly appearing on July 4th.
->
-> The previous failure of domoticz was on March 1st, then no failures for
-> several months, and then suddenly on July 4th, we start to see this
-> failure, which was not seen before it seems.
->
-> The "bump to version 4.9700" was committed on June 27. Is it possible
-> that it is the reason for the new build failure ? So it means this case
-> would not have been tested between June 27 and July 4 ? Possible.
->
-It shoud be noted that the USE_OPENSSL_STATIC option was added in 4.9700:
-https://github.com/domoticz/domoticz/commit/2ae1d315d16962ff1c22f539aa5ddc708b95241a.
-Before this version, openssl was not statically linked by default.
-
-> I'm running right now a build of one specific build failure to see if I
-> can reproduce and get more details about what's going.
->
-Thanks for your help.
-
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180829/143bdb28/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a6d76dd9c4..3f1f491fb7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -693,6 +693,7 @@ F:	package/alljoyn-tcl/
+ F:	package/alljoyn-tcl-base/
+ F:	package/boinc/
+ F:	package/cairo/
++F:	package/expat/
+ F:	package/flatbuffers/
+ F:	package/gtksourceview/
+ F:	package/gssdp/
+@@ -734,9 +735,11 @@ F:	package/libsoup/
+ F:	package/libsoxr/
+ F:	package/libupnp/
+ F:	package/libupnp18/
++F:	package/libv4l/
+ F:	package/libxslt/
+ F:	package/mbedtls/
+ F:	package/minissdpd/
++F:	package/minizip/
+ F:	package/motion/
+ F:	package/mutt/
+ F:	package/ncmpc/
+-- 
+2.14.1
