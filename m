@@ -1,28 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 08:59:36 +0200
-Subject: [Buildroot] [PATCH] json-c: needs host-autoconf
-In-Reply-To: <87ftyxyfr5.fsf@tkos.co.il>
-References: <49134bd0971955402d38a456443d4fb8dba45957.1535468087.git.baruch@tkos.co.il>
- <20180828213557.069e855e@windsurf.home>
- <20180828213742.12bef8e7@windsurf.home> <87ftyxyfr5.fsf@tkos.co.il>
-Message-ID: <20180829085936.765bec16@windsurf>
+Date: Wed, 29 Aug 2018 09:12:54 +0200
+Subject: [Buildroot] [PATCH] mender: fix ioctl build failure on
+ powerpc64le / power8
+In-Reply-To: <CA+_SqVZ0B7mH+fou8=V9b4PfWbxeN-WFRtuaG=-GAWDGXLoe6Q@mail.gmail.com>
+References: <20180828170153.42156-1-giulio.benetti@micronovasrl.com>
+ <CADHdJwDAnbFAe3bGTQswK1OdfQzN+JCCwCPLGhLy1MCmz0bBTQ@mail.gmail.com>
+ <fa955ebd-e988-0bb2-f506-ca164477b34f@micronovasrl.com>
+ <20180828215714.5e2c7c84@windsurf.home>
+ <451277c2-effe-1d73-f2b3-9c2daf59c2c0@micronovasrl.com>
+ <CA+_SqVZ0B7mH+fou8=V9b4PfWbxeN-WFRtuaG=-GAWDGXLoe6Q@mail.gmail.com>
+Message-ID: <20180829091254.0b825ad3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Angelo,
 
-On Wed, 29 Aug 2018 07:10:38 +0300, Baruch Siach wrote:
+On Wed, 29 Aug 2018 07:44:37 +0200, Angelo Compagnucci wrote:
 
-> You are right. Updating the config.h.in timestamp is enough to avoid
-> autoheader. I sent an updated patch.
+> Mizra, one of the authors of Mender is releasing a bump of the package
+> with other fixes. We agreed on waiting on the package bump to fix the
+> error instead of carrying a patch in buildroot that will bu useful
+> only for a short period of time.
 
-Thanks a lot for looking deeper into this. Perhaps this issue should be
-reported upstream, because it's really a bug in upstream's tarball.
+Hum, not really. I suppose your bump will include plenty of other
+changes. At this time, "master" is frozen in terms of version bumps: we
+only do version bumps for security fixes. The other version bumps are
+only done on the next branch, but we still want to fix build failures
+on master.
 
-Thanks again!
+If the Mender version bump that is coming really only bug fixes, then
+we sometimes make exceptions and merge such version bumps in master.
+But as a general rule, after -rc1 is released, version bumps go in
+next, and therefore build issues may need to be fixed by backporting
+patches from upstream.
+
+Best regards,
 
 Thomas
 -- 
