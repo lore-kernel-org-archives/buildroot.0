@@ -1,55 +1,78 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 29 Aug 2018 12:01:25 +0300
-Subject: [Buildroot] [PATCH 1/1] encfs: new package
-In-Reply-To: <1535532457.29191.12.camel@tkos.co.il>
-References: <1535517151-26179-1-git-send-email-yairba@tkos.co.il>
- <87efehya1l.fsf@tkos.co.il> <1535532457.29191.12.camel@tkos.co.il>
-Message-ID: <87a7p5y2ai.fsf@tkos.co.il>
+From: Peter Thompson <peter.macleod.thompson@gmail.com>
+Date: Wed, 29 Aug 2018 03:21:59 -0600
+Subject: [Buildroot] SDL2+directfb combo does not work as built by
+ buildroot-2018.02.3
+In-Reply-To: <CAGrGpJBNF=NejuNA5hBg5oet=iJxEjRLBXgog30y4xm0GrFFjA@mail.gmail.com>
+References: <CAGrGpJDVHStp8MUZaGb1=ZfWud-k4fQP=piwsc-QfftCDFyKog@mail.gmail.com>
+ <CAGrGpJA=Kk0fGjMPfH3R1ZbyJbonPNPQoyC_tpjaF9Ua92BNNg@mail.gmail.com>
+ <878t4q7vqu.fsf@dell.be.48ers.dk>
+ <CAGrGpJCe67xHWAceYw6-oD=iPoL0be8-ZhRgmWfhQRuG0GwxeA@mail.gmail.com>
+ <87a7p65zjo.fsf@dell.be.48ers.dk>
+ <CAGrGpJBNF=NejuNA5hBg5oet=iJxEjRLBXgog30y4xm0GrFFjA@mail.gmail.com>
+Message-ID: <CAGrGpJBb5QSj6utj46840=bKhHEg5npdt23+NCrU87Ta-Yv7Qw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yair,
+Now that I see how easy it is ... add file containing Sam's patch called
 
-Yair Ben Avraham writes:
-> I will post a second version of the patch. Two questions below,
+0001-hg-libsdl-org-SDL-raw-rev-751cdc74d55c.patch
+to the SDL2 package
+
+... I can easily submit a proper patch with signed-of-by to buildroot
+
+Let me know what you would like.....
+<https://hg.libsdl.org/SDL/raw-rev/751cdc74d55c>
+Peter
+
+
+On Tue, Aug 28, 2018 at 10:56 AM, Peter Thompson <
+peter.macleod.thompson@gmail.com> wrote:
+
+> I checked with Sam - this is his note back...
 >
-> On Wed, 2018-08-29 at 09:13 +0300, Baruch Siach wrote:
->> > +ENCFS_VERSION = 1.9.5
->> > +ENCFS_SOURCE = encfs-$(ENCFS_VERSION).zip
->> > +ENCFS_SITE = $(call github,vgough,encfs,v$(ENCFS_VERSION))
->> Upstream provides a proper tarball:
->> 
->>  https://github.com/vgough/encfs/releases/download/v1.9.5/encfs-1.9.
->> 5.tar.gz
->> 
->> Please use that instead of the github helper.
+> "I'm not sure, but I think we're going to start on it soon. We have a
+> bunch of good improvements in 2.0.9 for folks."
 >
-> tarball is prior to zip archive with github helper?
-
-tarballs are generally preferred over using the github helper. We only
-use the github helper when there is no upstream provided tarball. In
-this case the tarball is even more preferable since it is signed by the
-upstream maintainer.
-
->> > +-DRUNTIME_OUTPUT_DIRECTORY=$(BUILD_DIR) \
->> > +-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$(BUILD_DIR)/usr/bin \
->> These are only used for the bundled libxml2. If you use the Buildroot
->> package, this would not be needed.
 >
-> If not using the above *RUNTIME_OUTPUT_DIRECTORY variables, I'm getting
-> during linking the CXX executables:
-> arm-buildroot-linux-uclibcgnueabihf/bin/ld: cannot open output file
-> encfs: Is a directory
-
-OK. Please add a comment about that. Would also be nice to report
-upstream. I'm far from a cmake expert, but it looks like a bug.
-
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+>
+> On Tue, Aug 28, 2018 at 8:35 AM, Peter Korsgaard <peter@korsgaard.com>
+> wrote:
+>
+>> >>>>> "Peter" == Peter Thompson <peter.macleod.thompson@gmail.com>
+>> writes:
+>>
+>>  > Hi Peter
+>>  > My original plan was to wait for the next SDL2 release thereby allowing
+>>  > SDL2 to fix itself before updating the SDL2_VERSION in  buildroot.
+>>
+>>  > Otherwise we have to change buildroot SDL2_VERSION to  point to the
+>>  > temporary patched SDL2 source for download:
+>>  > http://www.libsdl.org/tmp/SDL-2.0.zip
+>>  > OR
+>>  > somehow change buildroot to download this patch and apply it to the
+>>  > downloaded SDL2-2.0.8 before compiling (I am not sure how to do this in
+>>  > buildroot).
+>>
+>> .. Or simply include the hg commit as a .patch file in the package.
+>>
+>>  > Then we would need to re-change this all back when the new release of
+>> SDL2
+>>  > incorporates this patch.
+>>
+>> Correct.
+>>
+>> Do you know when sdl2-2.0.9 is planned? 2.0.8 is what we are using both
+>> for 2018.02 (the current long term support version), 2018.05 (the
+>> current release) and master (what will very soon become 2018.08).
+>>
+>> --
+>> Bye, Peter Korsgaard
+>>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180829/9dac281e/attachment.html>
