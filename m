@@ -1,47 +1,34 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 30 Aug 2018 18:38:26 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] domoticz: do not use static version of openssl
-Message-ID: <20180830163826.5397-1-fontaine.fabrice@gmail.com>
+Date: Thu, 30 Aug 2018 18:46:16 +0200
+Subject: [Buildroot] [PATCH 1/1] expat: disable docbook
+Message-ID: <20180830164616.6288-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Due to the dependency on mosquitto, domoticz depends on !BR2_STATIC_LIBS
-so set USE_OPENSSL_STATIC to OFF (default value is ON)
-
-This parameter has been added in release 4.9700.
-
 Fixes:
- - http://autobuild.buildroot.net/results/b1b84b8c12d31b9242b5732fcdd1eb76b1217366
+ - http://autobuild.buildroot.net/results/3a351ddd9b42b090e4a69ac480b7a16397699f6c
+ - http://autobuild.buildroot.net/results/41402af8bd102b35083e34c53c5f2e8a266dc63e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Update commit message: build failure was reproduced and this patch is
-   correctly fixing it
+ package/expat/expat.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
- package/domoticz/domoticz.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 3d6cae4746..7f094d0976 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -19,8 +19,10 @@ DOMOTICZ_DEPENDENCIES = \
- 	zlib
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 61f3176312..548ec826a0 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -13,5 +13,8 @@ HOST_EXPAT_DEPENDENCIES = host-pkgconf
+ EXPAT_LICENSE = MIT
+ EXPAT_LICENSE_FILES = COPYING
  
- # Due to the dependency on mosquitto, domoticz depends on
--# !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
--DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
-+# !BR2_STATIC_LIBS so set USE_STATIC_BOOST and USE_OPENSSL_STATIC to OFF
-+DOMOTICZ_CONF_OPTS += \
-+	-DUSE_STATIC_BOOST=OFF \
-+	-DUSE_OPENSSL_STATIC=OFF
- 
- # Do not use any built-in libraries which are enabled by default for
- # lua, sqlite and mqtt
++EXPAT_CONF_OPTS = --without-docbook
++HOST_EXPAT_CONF_OPTS = --without-docbook
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.14.1
