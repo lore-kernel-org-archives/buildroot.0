@@ -1,45 +1,47 @@
-From: Carlos Santos <casantos@datacom.com.br>
-Date: Thu, 30 Aug 2018 10:21:20 -0300
-Subject: [Buildroot] [PATCH/next] acpid: use shutdown for poweroff,
- if available, not /sbin/poweroff
-Message-ID: <20180830132120.10889-1-casantos@datacom.com.br>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu, 30 Aug 2018 16:42:20 +0300
+Subject: [Buildroot] [PATCH 1/1] libtorrent: refactor openssl optional
+ dependency
+Message-ID: <20180830134220.9545-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It's preferable to use "shutdown -hP now" to ensure that the runlevel is
-known, preventing this message on the system console and log:
-
-  WARNING: could not determine runlevel - doing soft poweroff
-    (it's better to use shutdown instead of poweroff from the command line)
-
-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/acpid/acpid.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/libtorrent/libtorrent.mk | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/acpid/acpid.mk b/package/acpid/acpid.mk
-index 2141a1a9e0..87378d8106 100644
---- a/package/acpid/acpid.mk
-+++ b/package/acpid/acpid.mk
-@@ -15,9 +15,15 @@ define ACPID_INSTALL_INIT_SYSV
- 		$(TARGET_DIR)/etc/init.d/S02acpid
- endef
+diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
+index 8d74addaf7..de964b45ae 100644
+--- a/package/libtorrent/libtorrent.mk
++++ b/package/libtorrent/libtorrent.mk
+@@ -6,15 +6,20 @@
  
-+ifeq ($(BR2_INIT_SYSV)$(BR2_INIT_SYSTEMD),y)
-+ACPID_POWEROFF_CMD = /sbin/shutdown -hP now
+ LIBTORRENT_VERSION = 0.13.7
+ LIBTORRENT_SITE = http://rtorrent.net/downloads
+-LIBTORRENT_DEPENDENCIES = host-pkgconf zlib \
+-	$(if $(BR2_PACKAGE_OPENSSL),openssl)
++LIBTORRENT_DEPENDENCIES = host-pkgconf zlib
+ LIBTORRENT_CONF_OPTS = --enable-aligned \
+ 	--disable-instrumentation \
+-	--with-zlib=$(STAGING_DIR)/usr \
+-	$(if $(BR2_PACKAGE_OPENSSL),--enable-openssl,--disable-openssl)
++	--with-zlib=$(STAGING_DIR)/usr
+ LIBTORRENT_INSTALL_STAGING = YES
+ LIBTORRENT_AUTORECONF = YES
+ LIBTORRENT_LICENSE = GPL-2.0
+ LIBTORRENT_LICENSE_FILES = COPYING
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++LIBTORRENT_CONF_OPTS += --enable-openssl
++LIBTORRENT_DEPENDENCIES += openssl
 +else
-+ACPID_POWEROFF_CMD = /sbin/poweroff
++LIBTORRENT_CONF_OPTS += --disable-openssl
 +endif
 +
- define ACPID_SET_EVENTS
- 	mkdir -p $(TARGET_DIR)/etc/acpi/events
--	printf "event=button[ /]power\naction=/sbin/poweroff\n" \
-+	printf 'event=button[ /]power\naction=%s\n' '$(ACPID_POWEROFF_CMD)' \
- 		>$(TARGET_DIR)/etc/acpi/events/powerbtn
- endef
- 
+ $(eval $(autotools-package))
 -- 
-2.14.4
+2.17.1
