@@ -1,57 +1,43 @@
-From: Laurent Hartanerot <laurent.hartanerot@gmail.com>
-Date: Thu, 30 Aug 2018 12:07:03 +0200
-Subject: [Buildroot] [PATCH v3 3/3] qt5webengine: Rename internal variable
- to qt5webengine
-In-Reply-To: <20180829063034.10766-1-laurent.hartanerot@gmail.com>
-References: <20180829063034.10766-1-laurent.hartanerot@gmail.com>
-Message-ID: <20180830100703.11153-1-laurent.hartanerot@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu, 30 Aug 2018 13:14:30 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libsoup: needs host-python3
+Message-ID: <20180830101430.14862-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Laurent Hartanerot <laurent.hartanerot@atos.net>
+The tld-parser script in libsoup is now written in Python,
+and needs python3 to run.
 
-Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
+Fixes:
+http://autobuild.buildroot.net/results/91c2d6a1ca011787130db06695d6cd9e882f7258
+http://autobuild.buildroot.net/results/a318e595f02937534b3f8698ef4c04194a8b34af
+
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+
 ---
- package/qt5/qt5webengine/chromium-latest.inc | 2 +-
- package/qt5/qt5webengine/chromium-lts.inc    | 2 +-
- package/qt5/qt5webengine/qt5webengine.mk     | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5webengine/chromium-latest.inc b/package/qt5/qt5webengine/chromium-latest.inc
-index 3e98052b38..671b2383a3 100644
---- a/package/qt5/qt5webengine/chromium-latest.inc
-+++ b/package/qt5/qt5webengine/chromium-latest.inc
-@@ -1,4 +1,4 @@
--CHROMIUM_LICENSE_FILES = \
-+QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/url/third_party/mozilla/LICENSE.txt \
- 	src/3rdparty/chromium/tools/symsrc/COPYING-pefile \
- 	src/3rdparty/chromium/tools/win/ChromeDebug/ChromeDebug/LICENSE \
-diff --git a/package/qt5/qt5webengine/chromium-lts.inc b/package/qt5/qt5webengine/chromium-lts.inc
-index bff7931656..d45e9692de 100644
---- a/package/qt5/qt5webengine/chromium-lts.inc
-+++ b/package/qt5/qt5webengine/chromium-lts.inc
-@@ -1,4 +1,4 @@
--CHROMIUM_LICENSE_FILES = \
-+QT5WEBENGINE_CHROMIUM_LICENSE_FILES = \
- 	src/3rdparty/chromium/url/third_party/mozilla/LICENSE.txt \
- 	src/3rdparty/chromium/sdch/open-vcdiff/COPYING \
- 	src/3rdparty/chromium/tools/gyp/LICENSE \
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index c4ae961126..a3cfcec26e 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -19,7 +19,7 @@ include package/qt5/qt5webengine/chromium-lts.inc
- endif
- QT5WEBENGINE_LICENSE = GPL-2.0 or LGPL-3.0 or GPL-3.0 or GPL-3.0 with exception
- QT5WEBENGINE_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.GPL3-EXCEPT \
--	LICENSE.GPLv3 LICENSE.LGPL3 $(CHROMIUM_LICENSE_FILES)
-+	LICENSE.GPLv3 LICENSE.LGPL3 $(QT5WEBENGINE_CHROMIUM_LICENSE_FILES)
+Maybe this specific script can run even with python2, but I don't think patchting the
+"/usr/bin/env python3" line would be the right solution, especially considering
+the fact that they already have python3-only code in recent commits.
+---
+ package/libsoup/libsoup.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libsoup/libsoup.mk b/package/libsoup/libsoup.mk
+index 95bd682010..ef17f27fcd 100644
+--- a/package/libsoup/libsoup.mk
++++ b/package/libsoup/libsoup.mk
+@@ -14,7 +14,7 @@ LIBSOUP_INSTALL_STAGING = YES
+ LIBSOUP_CONF_ENV = ac_cv_path_GLIB_GENMARSHAL=$(LIBGLIB2_HOST_BINARY)
+ LIBSOUP_CONF_OPTS = --disable-glibtest --enable-vala=no --with-gssapi=no
+ LIBSOUP_DEPENDENCIES = host-pkgconf host-libglib2 \
+-	libglib2 libxml2 sqlite host-intltool
++	libglib2 libxml2 sqlite host-intltool host-python3
  
- ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
- QT5WEBENGINE_DEPENDENCIES += xlib_libXScrnSaver xlib_libXcomposite \
+ ifeq ($(BR2_PACKAGE_LIBSOUP_GNOME),y)
+ LIBSOUP_CONF_OPTS += --with-gnome
 -- 
-2.11.0
+2.17.1
