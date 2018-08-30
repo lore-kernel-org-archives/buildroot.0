@@ -1,183 +1,75 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 29 Aug 2018 22:34:45 -0500
-Subject: [Buildroot] [PATCH v2 5/5] support/testing/tests/core: SSP &
- hardening flags
+Date: Wed, 29 Aug 2018 22:34:44 -0500
+Subject: [Buildroot] [PATCH v2 4/5] toolchain/toolchain-wrapper: add
+ BR2_FORTIFY_SOURCE_* support
 In-Reply-To: <1535600085-31526-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1535600085-31526-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1535600085-31526-6-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1535600085-31526-5-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Catch the commonly used options of SSP, Relro, and fortify.
+Migrate the fortify flag management into the wrapper.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-
 ---
-Changes
-Original v4 -> v1 of link wrapper patchset
- - Added back in busybox test case
+ package/Makefile.in            | 6 ------
+ toolchain/toolchain-wrapper.c  | 6 ++++++
+ toolchain/toolchain-wrapper.mk | 6 ++++++
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
-v3 -> v4
- - Removed commented out lines I missed when I removed busybox
- - Removed duplicate fortify assertion test
-
-v2 -> v3
-[Matt
- - Removed the busybox target as without the link time
-   wrapper/specfile being merged the build will fail.
-   Link time conflict between use of 'r' and pie.
-
-[Thomas
- - Add clarificaion of what checksec can test
- - Reworked using inheritance
- - Relocated json load (removed duplication)
-
-v1 -> v2
-[Ricardo
- - Fix flake8 warnings
- - Added missing busyfox pie assertions
- - Updated the yml to include new test cases
----
- .gitlab-ci.yml                               |   6 ++
- support/testing/tests/core/test_hardening.py | 110 +++++++++++++++++++++++++++
- 2 files changed, 116 insertions(+)
- create mode 100644 support/testing/tests/core/test_hardening.py
-
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 3fc9b06..c271c05 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -261,6 +261,12 @@ zynqmp_zcu106_defconfig: *defconfig
- tests.boot.test_atf.TestATFAllwinner: *runtime_test
- tests.boot.test_atf.TestATFMarvell: *runtime_test
- tests.boot.test_atf.TestATFVexpress: *runtime_test
-+tests.core.test_hardening.TestFortifyConserv: *runtime_test
-+tests.core.test_hardening.TestFortifyNone: *runtime_test
-+tests.core.test_hardening.TestRelro: *runtime_test
-+tests.core.test_hardening.TestRelroPartial: *runtime_test
-+tests.core.test_hardening.TestSspNone: *runtime_test
-+tests.core.test_hardening.TestSspStrong: *runtime_test
- tests.core.test_post_scripts.TestPostScripts: *runtime_test
- tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
- tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
-diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
-new file mode 100644
-index 0000000..9f26962
---- /dev/null
-+++ b/support/testing/tests/core/test_hardening.py
-@@ -0,0 +1,110 @@
-+import os
-+import subprocess
-+import json
+diff --git a/package/Makefile.in b/package/Makefile.in
+index ed6fd0d..d1f9789 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -155,12 +155,6 @@ TARGET_HARDENED += $(TARGET_CFLAGS_RELRO_FULL)
+ TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO_FULL) -DBR_SET_PIE
+ endif
+ 
+-ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+-TARGET_HARDENED += -D_FORTIFY_SOURCE=1
+-else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
+-TARGET_HARDENED += -D_FORTIFY_SOURCE=2
+-endif
+-
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+ TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)
+ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
+index 6c5ea1a..a2d5f1d 100644
+--- a/toolchain/toolchain-wrapper.c
++++ b/toolchain/toolchain-wrapper.c
+@@ -106,6 +106,12 @@ static char *predef_args[] = {
+ #ifdef BR_SSP_ALL
+ 	"-fstack-protector-all",
+ #endif
++#ifdef BR_FORTIFY_SOURCE_1
++	"-D_FORTIFY_SOURCE=1",
++#endif
++#ifdef BR_FORTIFY_SOURCE_2
++	"-D_FORTIFY_SOURCE=2",
++#endif
+ #ifdef BR_ADDITIONAL_CFLAGS
+ 	BR_ADDITIONAL_CFLAGS
+ #endif
+diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
+index 15f1a74..8b8db8b 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -57,6 +57,12 @@ else ifeq ($(BR2_SSP_ALL),y)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_SSP_ALL
+ endif
+ 
++ifeq ($(BR2_FORTIFY_SOURCE_1),y)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_FORTIFY_SOURCE_1
++else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
++TOOLCHAIN_WRAPPER_ARGS += -DBR_FORTIFY_SOURCE_2
++endif
 +
-+import infra.basetest
-+
-+
-+class TestHardeningBase(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_powerpc64=y
-+        BR2_powerpc_e5500=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-+        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        BR2_PACKAGE_LIGHTTPD=y
-+        BR2_PACKAGE_HOST_CHECKSEC=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    checksec_files = ["usr/sbin/lighttpd","bin/busybox"]
-+
-+    def checksec_run(self, target_file):
-+        filepath = os.path.join(self.builddir, "target", target_file)
-+        cmd = ["host/bin/checksec", "--output", "json", "--file", filepath]
-+        # Checksec is being used for elf file analysis only.  There are no
-+        # assumptions of target/run-time checks as part of this testing.
-+        ret = subprocess.check_output(cmd,
-+                                      stderr=open(os.devnull, "w"),
-+                                      cwd=self.builddir,
-+                                      env={"LANG": "C"})
-+        return json.loads(ret)
-+
-+
-+class TestRelro(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_RELRO_FULL=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["relro"], "full")
-+            self.assertEqual(out["file"]["pie"], "yes")
-+
-+
-+class TestRelroPartial(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_RELRO_PARTIAL=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["relro"], "partial")
-+            self.assertEqual(out["file"]["pie"], "no")
-+
-+
-+class TestSspNone(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_SSP_NONE=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["canary"], "no")
-+
-+
-+class TestSspStrong(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_SSP_STRONG=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["canary"], "yes")
-+
-+
-+class TestFortifyNone(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_FORTIFY_SOURCE_NONE=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertEqual(out["file"]["fortified"], "0")
-+
-+
-+class TestFortifyConserv(TestHardeningBase):
-+    config = TestHardeningBase.config + \
-+        """
-+        BR2_FORTIFY_SOURCE_1=y
-+        """
-+
-+    def test_run(self):
-+        for f in self.checksec_files:
-+            out = self.checksec_run(f)
-+            self.assertNotEqual(out["file"]["fortified"], "0")
+ define TOOLCHAIN_WRAPPER_BUILD
+ 	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
+ 		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
 -- 
 1.9.1
