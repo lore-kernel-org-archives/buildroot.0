@@ -1,37 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 30 Aug 2018 17:10:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsoup: needs host-python3
-In-Reply-To: <20180830101430.14862-1-asafka7@gmail.com>
-References: <20180830101430.14862-1-asafka7@gmail.com>
-Message-ID: <20180830171024.6d200527@windsurf>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 30 Aug 2018 18:38:18 +0300
+Subject: [Buildroot] [PATCH] coreutils: Bump version to 8.30
+Message-ID: <20180830153818.15409-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Among other things this is required to build aginst Glibc 2.28+,
+see:
+https://github.com/coreutils/gnulib/commit/4af4a4a71827c0bc5e0ec67af23edef4f15cee8e
 
-On Thu, 30 Aug 2018 13:14:30 +0300, Asaf Kahlon wrote:
-> The tld-parser script in libsoup is now written in Python,
-> and needs python3 to run.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/91c2d6a1ca011787130db06695d6cd9e882f7258
-> http://autobuild.buildroot.net/results/a318e595f02937534b3f8698ef4c04194a8b34af
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> 
-> ---
-> 
-> Maybe this specific script can run even with python2, but I don't think patchting the
-> "/usr/bin/env python3" line would be the right solution, especially considering
-> the fact that they already have python3-only code in recent commits.
+Otherwise it fails on build like that:
+----------------------->8------------------------
+  CC       lib/fts.o
+lib/freadptr.c: In function 'freadptr':
+lib/freadptr.c:119:3: error: #error "Please port gnulib freadptr.c to your platform! Look at the definition of fflush, fread, getc, getc_unlocked on your system, then report this to bug-gnulib."
+ #error "Please port gnulib freadptr.c to your platform! Look at the definition of fflush, fread, getc, getc_unlocked on your system, then report this to bug-gnulib."
+  ^~~~~
+----------------------->8------------------------
 
-Meh, I was hoping we could avoid the host-python3 dependency :-/
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+---
+ package/coreutils/coreutils.hash | 2 +-
+ package/coreutils/coreutils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
+diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
+index 472cab55f5..d55e25a86f 100644
+--- a/package/coreutils/coreutils.hash
++++ b/package/coreutils/coreutils.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking pgp signature
+-sha256 8891d349ee87b9ff7870f52b6d9312a9db672d2439d289bc57084771ca21656b  coreutils-8.27.tar.xz
++sha256 e831b3a86091496cdba720411f9748de81507798f6130adeaef872d206e1b057  coreutils-8.30.tar.xz
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 7e7251ff73..3e8efbf047 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-COREUTILS_VERSION = 8.27
++COREUTILS_VERSION = 8.30
+ COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
+ COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
+ COREUTILS_LICENSE = GPL-3.0+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.16.2
