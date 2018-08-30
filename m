@@ -1,52 +1,55 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 30 Aug 2018 18:38:18 +0300
-Subject: [Buildroot] [PATCH] coreutils: Bump version to 8.30
-Message-ID: <20180830153818.15409-1-abrodkin@synopsys.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 30 Aug 2018 18:31:46 +0200
+Subject: [Buildroot] [PATCH v2,1/1] qt: fix build on powerpc_e500mc
+Message-ID: <20180830163146.4952-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Among other things this is required to build aginst Glibc 2.28+,
-see:
-https://github.com/coreutils/gnulib/commit/4af4a4a71827c0bc5e0ec67af23edef4f15cee8e
+gcc bug internal compiler error: in validate_condition_mode, at
+config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.
+Workaround is to set -mno-isel, see
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
+https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
 
-Otherwise it fails on build like that:
------------------------>8------------------------
-  CC       lib/fts.o
-lib/freadptr.c: In function 'freadptr':
-lib/freadptr.c:119:3: error: #error "Please port gnulib freadptr.c to your platform! Look at the definition of fflush, fread, getc, getc_unlocked on your system, then report this to bug-gnulib."
- #error "Please port gnulib freadptr.c to your platform! Look at the definition of fflush, fread, getc, getc_unlocked on your system, then report this to bug-gnulib."
-  ^~~~~
------------------------>8------------------------
+This bug is also raised on BR2_powerpc_8540, BR2_powerpc_8548 and
+BR2_powerpc_e5500.
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/9b9d11b3281a72c8f54fc675408acb96d24d8e7e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/coreutils/coreutils.hash | 2 +-
- package/coreutils/coreutils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - apply workaround for BR2_powerpc_8540, BR2_powerpc_8548 and
+   BR2_powerpc_e5500
+ - There is no build failure with gcc 7.x toolchain so replace
+   BR2_TOOLCHAIN_GCC_AT_LEAST_8 by BR2_TOOLCHAIN_GCC_AT_LEAST_7
 
-diff --git a/package/coreutils/coreutils.hash b/package/coreutils/coreutils.hash
-index 472cab55f5..d55e25a86f 100644
---- a/package/coreutils/coreutils.hash
-+++ b/package/coreutils/coreutils.hash
-@@ -1,2 +1,2 @@
- # Locally calculated after checking pgp signature
--sha256 8891d349ee87b9ff7870f52b6d9312a9db672d2439d289bc57084771ca21656b  coreutils-8.27.tar.xz
-+sha256 e831b3a86091496cdba720411f9748de81507798f6130adeaef872d206e1b057  coreutils-8.30.tar.xz
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 7e7251ff73..3e8efbf047 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/qt/qt.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 1dcb05d6af..921ff13d29 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -32,6 +32,15 @@ QT_LDFLAGS = $(TARGET_LDFLAGS)
+ # use an older c++ standard to prevent build failure
+ QT_CXXFLAGS += -std=gnu++98
  
--COREUTILS_VERSION = 8.27
-+COREUTILS_VERSION = 8.30
- COREUTILS_SITE = $(BR2_GNU_MIRROR)/coreutils
- COREUTILS_SOURCE = coreutils-$(COREUTILS_VERSION).tar.xz
- COREUTILS_LICENSE = GPL-3.0+
++# gcc bug internal compiler error: in validate_condition_mode, at
++# config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.
++# Workaround is to set -mno-isel, see
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
++# https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
++ifeq ($(BR2_powerpc_8540)$(BR2_powerpc_8548)$(BR2_powerpc_e500mc)$(BR2_powerpc_e5500):$(BR2_TOOLCHAIN_GCC_AT_LEAST_7),y:)
++QT_CXXFLAGS += -mno-isel
++endif
++
+ # Qt has some assembly function that are not present in thumb1 mode:
+ # Error: selected processor does not support Thumb mode `swp r3,r7,[r4]'
+ # so, we desactivate thumb mode
 -- 
-2.16.2
+2.14.1
