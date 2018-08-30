@@ -1,45 +1,52 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 30 Aug 2018 07:48:43 -0500
-Subject: [Buildroot] [PATCH v2 1/5] toolchain/toolchain-wrapper: add
- link wrapper
-In-Reply-To: <20180830095349.1247fe54@windsurf>
-References: <1535600085-31526-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1535600085-31526-2-git-send-email-matthew.weber@rockwellcollins.com>
- <20180830095349.1247fe54@windsurf>
-Message-ID: <CANQCQpY-BCYRmU-RHqh0UqCqhW4fR9XqtLc=V6V-qu=dYqb8Ew@mail.gmail.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Thu, 30 Aug 2018 15:01:39 +0200
+Subject: [Buildroot] [PATCH 1/3] configs/zynq_zed: uboot: bump to
+ xilinx-v2018.2 (fixes build)
+In-Reply-To: <20180828231552.1c693ee1@windsurf.home>
+References: <20180828080059.21788-1-luca@lucaceresoli.net>
+ <20180828231552.1c693ee1@windsurf.home>
+Message-ID: <96b399ad-506f-4a2e-7dce-18190137721a@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
-On Thu, Aug 30, 2018 at 2:54 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Matt,
->
-> On Wed, 29 Aug 2018 22:34:41 -0500, Matt Weber wrote:
-> >  - Updates symlink creation int/ext toolchain
-> >  - Adds new source file for link wrapper with build/install
-> >
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
->
-> I think this commit log should contain a detailed explanation of why
-> wrapping the linker is necessary. Could you provide an example of a
-> package that absolutely needs the linker to be wrapped ? I'd like to do
-> a bit of testing, because I'm still not entirely convinced that we want
-> to wrap the linker. Perhaps we need to do this, but I'd like to spend a
-> bit of time looking at a specific example of a package that makes this
-> necessary. Could you provide such an example ?
->
+Hi,
 
-Definitely. I can put together a few scenarios.
+On 28/08/2018 23:15, Thomas Petazzoni wrote:
+> Luca, Peter,
+> 
+> On Tue, 28 Aug 2018 10:00:57 +0200, Luca Ceresoli wrote:
+>> Bump to the most recent Xilinx release.
+>>
+>> Fixes:
+>>   .../output/host/include/libfdt_env.h:71:30: error: conflicting types for ?fdt64_t?
+>>   .../output/host/include/libfdt_env.h:91:24: error: expected ?)? before ?x?
+>>   .../output/host/include/libfdt.h:150:21: error: redefinition of ?fdt_offset_ptr_w?
+>> ...and many, many other similar errors.
+>>
+>> [Run-time tested]
+>> Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> ---
+>>  configs/zynq_zed_defconfig | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> I am not sure we want to apply these updates to master, because we need
+> a more general solution, and this more general solution will also fix
+> the Zynq configurations.
+> 
+> So I would suggest that we take those patches into next, and
+> implemented the more general solution in master (which could very well
+> be reverting dtc).
 
-Right now the v2 series has an issue found by my night run of tests
-and I'll have to respin.  I'll include something in the v3 series.
+No problem.
 
-All, if anyone build tests this, the v2 change to preserve -fPIC has
-broken busybox individual binaries mode.
+I had started preparing these patches when the outcome of the dtc issue
+was totally unclear. Since they were working I thought I'd send them
+anyway. I'm OK with committing them to master or next or even after 2018.08.
 
-Matt
+Bye,
+-- 
+Luca
