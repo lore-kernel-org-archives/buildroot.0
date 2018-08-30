@@ -1,185 +1,183 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 29 Aug 2018 22:34:42 -0500
-Subject: [Buildroot] [PATCH v2 2/5] toolchain/toolchain-wrapper: add
- BR2_RELRO_FULL support
+Date: Wed, 29 Aug 2018 22:34:45 -0500
+Subject: [Buildroot] [PATCH v2 5/5] support/testing/tests/core: SSP &
+ hardening flags
 In-Reply-To: <1535600085-31526-1-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1535600085-31526-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1535600085-31526-3-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <1535600085-31526-6-git-send-email-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Catch the commonly used options of SSP, Relro, and fortify.
+
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
 ---
 Changes
-v1 -> v2
- - Reworked handling of pie/pic/shared to replace each time they
-   occur with a dummy string and then insert the right combination
-   when rebuilding the exec string.
- - Fixed mix of tabs and spaces
- - Swapped order of shared and pie.  Coded it backwards.
----
- package/Makefile.in                  |  5 +++--
- toolchain/toolchain-wrapper-linker.c | 27 +++++++++++++++++++++-
- toolchain/toolchain-wrapper.c        | 43 +++++++++++++++++++++++++++++++++++-
- toolchain/toolchain-wrapper.mk       |  4 ++++
- 4 files changed, 75 insertions(+), 4 deletions(-)
+Original v4 -> v1 of link wrapper patchset
+ - Added back in busybox test case
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 14b3bbd..2e885bf 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -158,8 +158,9 @@ ifeq ($(BR2_RELRO_PARTIAL),y)
- TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
- TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
- else ifeq ($(BR2_RELRO_FULL),y)
--TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
--TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
-+TARGET_HARDENED += $(TARGET_CFLAGS_RELRO_FULL)
-+# -DBR_SET_PIE is used by the GCC wrapper to tell when linking
-+TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO_FULL) -DBR_SET_PIE
- endif
- 
- ifeq ($(BR2_FORTIFY_SOURCE_1),y)
-diff --git a/toolchain/toolchain-wrapper-linker.c b/toolchain/toolchain-wrapper-linker.c
-index b587fea..32e8156 100644
---- a/toolchain/toolchain-wrapper-linker.c
-+++ b/toolchain/toolchain-wrapper-linker.c
-@@ -33,8 +33,10 @@ static char path[PATH_MAX];
-  * one to the real compiler if the inverse option isn't in the argument list.
-  * This specifies the worst case number of extra arguments we might pass
-  * Currently, we may have:
-+ * 	-pie
-+ * 	-shared
-  */
--#define EXCLUSIVE_ARGS	0
-+#define EXCLUSIVE_ARGS	2
- 
- static char *predef_args[] = {
- 	path
-@@ -126,6 +128,7 @@ int main(int argc, char **argv)
- 	char *paranoid_wrapper;
- 	int paranoid;
- 	int ret, i, count = 0, debug;
-+	unsigned int found_shared = 0;
- 
- 	/* Calculate the relative paths */
- 	basename = strrchr(progpath, '/');
-@@ -185,6 +188,28 @@ int main(int argc, char **argv)
- 	memcpy(cur, predef_args, sizeof(predef_args));
- 	cur += sizeof(predef_args) / sizeof(predef_args[0]);
- 
-+#ifdef BR2_RELRO_FULL
-+	for (i = 1; i < argc; i++) {
-+		if (!strcmp(argv[i], "-static") ||
-+		    !strcmp(argv[i], "-r"))
-+			break;
+v3 -> v4
+ - Removed commented out lines I missed when I removed busybox
+ - Removed duplicate fortify assertion test
+
+v2 -> v3
+[Matt
+ - Removed the busybox target as without the link time
+   wrapper/specfile being merged the build will fail.
+   Link time conflict between use of 'r' and pie.
+
+[Thomas
+ - Add clarificaion of what checksec can test
+ - Reworked using inheritance
+ - Relocated json load (removed duplication)
+
+v1 -> v2
+[Ricardo
+ - Fix flake8 warnings
+ - Added missing busyfox pie assertions
+ - Updated the yml to include new test cases
+---
+ .gitlab-ci.yml                               |   6 ++
+ support/testing/tests/core/test_hardening.py | 110 +++++++++++++++++++++++++++
+ 2 files changed, 116 insertions(+)
+ create mode 100644 support/testing/tests/core/test_hardening.py
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 3fc9b06..c271c05 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -261,6 +261,12 @@ zynqmp_zcu106_defconfig: *defconfig
+ tests.boot.test_atf.TestATFAllwinner: *runtime_test
+ tests.boot.test_atf.TestATFMarvell: *runtime_test
+ tests.boot.test_atf.TestATFVexpress: *runtime_test
++tests.core.test_hardening.TestFortifyConserv: *runtime_test
++tests.core.test_hardening.TestFortifyNone: *runtime_test
++tests.core.test_hardening.TestRelro: *runtime_test
++tests.core.test_hardening.TestRelroPartial: *runtime_test
++tests.core.test_hardening.TestSspNone: *runtime_test
++tests.core.test_hardening.TestSspStrong: *runtime_test
+ tests.core.test_post_scripts.TestPostScripts: *runtime_test
+ tests.core.test_rootfs_overlay.TestRootfsOverlay: *runtime_test
+ tests.core.test_timezone.TestGlibcAllTimezone: *runtime_test
+diff --git a/support/testing/tests/core/test_hardening.py b/support/testing/tests/core/test_hardening.py
+new file mode 100644
+index 0000000..9f26962
+--- /dev/null
++++ b/support/testing/tests/core/test_hardening.py
+@@ -0,0 +1,110 @@
++import os
++import subprocess
++import json
 +
-+		if( !strcmp(argv[i], "-shared") ) {
-+		    /* Setting the value to something so that the compiler
-+		       doesn't error on a empty '' when -share is removed */
-+		    argv[i] = "-DBR_REMOVED_-shared";
-+		    found_shared = 1;
-+		}
-+	}
++import infra.basetest
 +
-+	if (i == argc) {
-+		*cur++ = "-pie";
 +
-+		if( found_shared )
-+		    *cur++ = "-shared";
-+	}
-+#endif
++class TestHardeningBase(infra.basetest.BRTest):
++    config = \
++        """
++        BR2_powerpc64=y
++        BR2_powerpc_e5500=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
++        BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/powerpc64-e5500/tarballs/powerpc64-e5500--glibc--stable-2018.02-2.tar.bz2"
++        BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
++        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
++        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
++        BR2_TOOLCHAIN_EXTERNAL_CXX=y
++        BR2_PACKAGE_LIGHTTPD=y
++        BR2_PACKAGE_HOST_CHECKSEC=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
- 	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
- 	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
- 		paranoid = 1;
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index c5eb813..4649091 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -49,8 +49,11 @@ static char _date_[sizeof("-D__DATE__=\"MMM DD YYYY\"")];
-  * 	-D__TIME__=
-  * 	-D__DATE__=
-  * 	-Wno-builtin-macro-redefined
-+ * 	-fPIE
-+ * 	-shared (if linking)
-+ * 	-pie  (if linking)
-  */
--#define EXCLUSIVE_ARGS	6
-+#define EXCLUSIVE_ARGS	9
- 
- static char *predef_args[] = {
- #ifdef BR_CCACHE
-@@ -237,6 +240,7 @@ int main(int argc, char **argv)
- 	char *paranoid_wrapper;
- 	int paranoid;
- 	int ret, i, count = 0, debug;
-+	unsigned int gcc_using_link_flags = 0, found_shared = 0;
- 
- 	/* Calculate the relative paths */
- 	basename = strrchr(progpath, '/');
-@@ -363,6 +367,43 @@ int main(int argc, char **argv)
- 		*cur++ = "-Wno-builtin-macro-redefined";
- 	}
- 
-+#ifdef BR2_RELRO_FULL
-+	/* Must handle combinations of compiler/link options */
-+	for (i = 1; i < argc; i++) {
-+		if (!strcmp(argv[i], "-r") ||
-+		    !strcmp(argv[i], "-static") ||
-+		    !strcmp(argv[i], "-fno-pic"))
-+			break;
++    checksec_files = ["usr/sbin/lighttpd","bin/busybox"]
 +
-+		/* Setting the value to something for each of these so
-+		   that the compiler doesn't error on a empty '' */
-+		if (!strcmp(argv[i], "-fpie"))
-+		    argv[i] = "-DBR_REMOVED_-fpie";
-+		if (!strcmp(argv[i], "-fPIE"))
-+		    argv[i] = "-DBR_REMOVED_-fPIE";
-+		if (!strcmp(argv[i], "-fPIC"))
-+		    argv[i] = "-DBR_REMOVED_-fPIC";
-+		if( !strcmp(argv[i], "-shared") ) {
-+		    argv[i] = "-DBR_REMOVED_-shared";
-+		    found_shared = 1;
-+		}
++    def checksec_run(self, target_file):
++        filepath = os.path.join(self.builddir, "target", target_file)
++        cmd = ["host/bin/checksec", "--output", "json", "--file", filepath]
++        # Checksec is being used for elf file analysis only.  There are no
++        # assumptions of target/run-time checks as part of this testing.
++        ret = subprocess.check_output(cmd,
++                                      stderr=open(os.devnull, "w"),
++                                      cwd=self.builddir,
++                                      env={"LANG": "C"})
++        return json.loads(ret)
 +
-+		/* Find the define identifing LDFLAGS were provided */
-+		if( !strcmp(argv[i], "-DBR_SET_PIE") )
-+		    gcc_using_link_flags = 1;
-+	}
 +
-+	if (i == argc) {
-+		*cur++ = "-fPIE";
++class TestRelro(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_RELRO_FULL=y
++        """
 +
-+		/* Handle case where gcc is linking with LDFlags */
-+		if( gcc_using_link_flags )
-+		    *cur++ = "-pie";
-+		if( found_shared )
-+		    *cur++ = "-shared";
-+	}
-+#endif
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["relro"], "full")
++            self.assertEqual(out["file"]["pie"], "yes")
 +
- 	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
- 	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
- 		paranoid = 1;
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index 3a4cbcd..b0e44b3 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -45,6 +45,10 @@ ifeq ($(BR2_CCACHE_USE_BASEDIR),y)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_CCACHE_BASEDIR='"$(BASE_DIR)"'
- endif
- 
-+ifeq ($(BR2_RELRO_FULL),y)
-+TOOLCHAIN_WRAPPER_ARGS += -DBR2_RELRO_FULL
-+endif
 +
- define TOOLCHAIN_WRAPPER_BUILD
- 	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
- 		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
++class TestRelroPartial(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_RELRO_PARTIAL=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["relro"], "partial")
++            self.assertEqual(out["file"]["pie"], "no")
++
++
++class TestSspNone(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_SSP_NONE=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["canary"], "no")
++
++
++class TestSspStrong(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_SSP_STRONG=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["canary"], "yes")
++
++
++class TestFortifyNone(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_FORTIFY_SOURCE_NONE=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertEqual(out["file"]["fortified"], "0")
++
++
++class TestFortifyConserv(TestHardeningBase):
++    config = TestHardeningBase.config + \
++        """
++        BR2_FORTIFY_SOURCE_1=y
++        """
++
++    def test_run(self):
++        for f in self.checksec_files:
++            out = self.checksec_run(f)
++            self.assertNotEqual(out["file"]["fortified"], "0")
 -- 
 1.9.1
