@@ -1,56 +1,45 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Thu, 30 Aug 2018 12:20:41 +0200
-Subject: [Buildroot] [PATCH 2/2] python-falcon: new package
-In-Reply-To: <20180830093128.5d1f5837@windsurf>
-References: <20180828101618.4746-1-grzegorz@blach.pl>
- <20180828101618.4746-2-grzegorz@blach.pl>
- <CAMWSM7jvM=oqzCns6RAx32RDDdnFF0ikvhMjXdDCPRoB_d27cA@mail.gmail.com>
- <20180829214758.718d5e7f@windsurf>
- <CAMWSM7gW28RJsfcBOFO4dGE4sEVncv4GRvxa3n_X8YQfXa_wDw@mail.gmail.com>
- <20180830093128.5d1f5837@windsurf>
-Message-ID: <39837a67-fd6e-4df5-6678-2781ca7ca475@blach.pl>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 30 Aug 2018 07:48:43 -0500
+Subject: [Buildroot] [PATCH v2 1/5] toolchain/toolchain-wrapper: add
+ link wrapper
+In-Reply-To: <20180830095349.1247fe54@windsurf>
+References: <1535600085-31526-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1535600085-31526-2-git-send-email-matthew.weber@rockwellcollins.com>
+ <20180830095349.1247fe54@windsurf>
+Message-ID: <CANQCQpY-BCYRmU-RHqh0UqCqhW4fR9XqtLc=V6V-qu=dYqb8Ew@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 08/30/2018 09:31 AM, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Wed, 29 Aug 2018 14:58:34 -0700, Joseph Kogut wrote:
-> 
->> Cython allows Python modules to be written using a mix of Python and C
->> or C++ syntax with optional static typing. During setup, Cython
->> modules are transpiled to C or C++ and compiled normally as Python
->> extensions. Most projects that use Cython, including Falcon, have
->> implementations in vanilla Python, as well as Cython.
->>
->> Based on my experience porting Kivy, having Cython available on the
->> host should be enough to compile the extensions.
-> 
-> Thanks for the explanation/introduction about Cython!
-> 
->> As I noted in my message after this one, I can't think of a reason to
->> not *always* depend on host-cython here. Compiling the extensions is
->> essentially an optimization step.
->>
->> The only reason I can think of to not compile the extensions is if
->> performance isn't a concern, and you don't have the requisite build
->> environment during setup.
-> 
-> A principle in Buildroot is to avoid adding mandatory dependencies if
-> they are optional. So if people want the extra optimizations provided
-> by Cython, they should enable Cython, and python-falcon should
-> optionally depend on it.
-> 
-> Will you send a patch doing this ?
+Thomas,
+On Thu, Aug 30, 2018 at 2:54 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Matt,
+>
+> On Wed, 29 Aug 2018 22:34:41 -0500, Matt Weber wrote:
+> >  - Updates symlink creation int/ext toolchain
+> >  - Adds new source file for link wrapper with build/install
+> >
+> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+>
+> I think this commit log should contain a detailed explanation of why
+> wrapping the linker is necessary. Could you provide an example of a
+> package that absolutely needs the linker to be wrapped ? I'd like to do
+> a bit of testing, because I'm still not entirely convinced that we want
+> to wrap the linker. Perhaps we need to do this, but I'd like to spend a
+> bit of time looking at a specific example of a package that makes this
+> necessary. Could you provide such an example ?
+>
 
-I've just sent a patch.
+Definitely. I can put together a few scenarios.
 
+Right now the v2 series has an issue found by my night run of tests
+and I'll have to respin.  I'll include something in the v3 series.
 
-> 
-> Thanks!
-> 
-> Thomas
-> 
+All, if anyone build tests this, the v2 change to preserve -fPIC has
+broken busybox individual binaries mode.
+
+Matt
