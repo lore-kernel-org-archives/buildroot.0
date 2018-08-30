@@ -1,48 +1,114 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 30 Aug 2018 09:31:28 +0200
-Subject: [Buildroot] [PATCH 2/2] python-falcon: new package
-In-Reply-To: <CAMWSM7gW28RJsfcBOFO4dGE4sEVncv4GRvxa3n_X8YQfXa_wDw@mail.gmail.com>
-References: <20180828101618.4746-1-grzegorz@blach.pl>
- <20180828101618.4746-2-grzegorz@blach.pl>
- <CAMWSM7jvM=oqzCns6RAx32RDDdnFF0ikvhMjXdDCPRoB_d27cA@mail.gmail.com>
- <20180829214758.718d5e7f@windsurf>
- <CAMWSM7gW28RJsfcBOFO4dGE4sEVncv4GRvxa3n_X8YQfXa_wDw@mail.gmail.com>
-Message-ID: <20180830093128.5d1f5837@windsurf>
+Date: Thu, 30 Aug 2018 09:52:03 +0200
+Subject: [Buildroot] [PATCH v4 1/1] python-kivy: new package
+In-Reply-To: <20180830033305.10193-1-joseph.kogut@gmail.com>
+References: <20180830033305.10193-1-joseph.kogut@gmail.com>
+Message-ID: <20180830095203.4262ebdc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Joseph,
 
-On Wed, 29 Aug 2018 14:58:34 -0700, Joseph Kogut wrote:
+On Wed, 29 Aug 2018 20:33:05 -0700, Joseph Kogut wrote:
 
-> Cython allows Python modules to be written using a mix of Python and C
-> or C++ syntax with optional static typing. During setup, Cython
-> modules are transpiled to C or C++ and compiled normally as Python
-> extensions. Most projects that use Cython, including Falcon, have
-> implementations in vanilla Python, as well as Cython.
-> 
-> Based on my experience porting Kivy, having Cython available on the
-> host should be enough to compile the extensions.
+> Changes v3 -> v4:
+> - Remove dependency on glibc (tested on aarch64 w/ musl and X11 window
+>   provider, sdl2 still segfaults)
 
-Thanks for the explanation/introduction about Cython!
+segfault at runtime or build time ?
 
-> As I noted in my message after this one, I can't think of a reason to
-> not *always* depend on host-cython here. Compiling the extensions is
-> essentially an optimization step.
-> 
-> The only reason I can think of to not compile the extensions is if
-> performance isn't a concern, and you don't have the requisite build
-> environment during setup.
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index bd8095bd20..1792af78fb 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1,4 +1,4 @@
+> -# Syntax:
+> +	# Syntax:
 
-A principle in Buildroot is to avoid adding mandatory dependencies if
-they are optional. So if people want the extra optimizations provided
-by Cython, they should enable Cython, and python-falcon should
-optionally depend on it.
+Spurious change.
 
-Will you send a patch doing this ?
+>  #
+>  # N:	Firstname Lastname <email>
+>  # F:	file pattern or directory
+> @@ -1027,6 +1027,16 @@ F:	package/pdbg/
+>  F:	board/qemu/ppc64le-pseries/
+>  F:	configs/qemu_ppc64le_pseries_defconfig
+>  
+> +N:	Joseph Kogut <joseph.kogut@gmail.com>
+> +F:	package/gconf/
+> +F:	package/libnss/
+> +F:	package/python-cython/
+> +F:	package/python-kivy/
+> +F:	package/python-raven/
+> +F:	package/python-schedule/
+> +F:	package/python-websockets/
+> +F:	package/python-xlib/
+
+Lots of unrelated changes in here. In this commit, you should only be
+adding an entry for package/python-kivy/. If you want to appear in the
+DEVELOPERS file for other packages, send a separate patch for that.
+
+
+> diff --git a/package/python-kivy/Config.in b/package/python-kivy/Config.in
+> new file mode 100644
+> index 0000000000..e4b89a74c1
+> --- /dev/null
+> +++ b/package/python-kivy/Config.in
+> @@ -0,0 +1,16 @@
+> +config BR2_PACKAGE_PYTHON_KIVY
+> +	bool "python-kivy"
+> +	depends on BR2_PACKAGE_HAS_LIBGL
+> +	select BR2_PACKAGE_HOST_PYTHON_CYTHON
+
+Is Cython a mandatory dependency, or an optional one like with
+python-falcon ?
+
+> +	select BR2_PACKAGE_LIBPNG # runtime
+> +	select BR2_PACKAGE_MTDEV # runtime
+
+Are you sure these are really runtime dependencies ? They are dlopen'ed
+at runtime ?
+
+> diff --git a/package/python-kivy/python-kivy.hash b/package/python-kivy/python-kivy.hash
+> new file mode 100644
+> index 0000000000..8949bc643f
+> --- /dev/null
+> +++ b/package/python-kivy/python-kivy.hash
+> @@ -0,0 +1,4 @@
+> +# sha256 locally computed
+> +sha256	794e45cc7bcc7882f7cd95f1673bc6701f3215a20a54c915cac0c5e46a449b4c  python-kivy-1.10.1.tar.gz
+> +# License file, locally calculated
+> +sha256	282b3d8735ef6cbdcf8cc480947d50e0aea4ad1cc931d41f3f6a6bc23956f2d6  LICENSE
+> diff --git a/package/python-kivy/python-kivy.mk b/package/python-kivy/python-kivy.mk
+> new file mode 100644
+> index 0000000000..fbb80c59cd
+> --- /dev/null
+> +++ b/package/python-kivy/python-kivy.mk
+> @@ -0,0 +1,48 @@
+> +################################################################################
+> +#
+> +# python-kivy
+> +#
+> +################################################################################
+> +
+> +PYTHON_KIVY_VERSION = 1.10.1
+> +PYTHON_KIVY_SITE = $(call github,kivy,kivy,$(PYTHON_KIVY_VERSION))
+> +PYTHON_KIVY_SETUP_TYPE = distutils
+> +PYTHON_KIVY_LICENSE = MIT
+> +PYTHON_KIVY_LICENSE_FILES = LICENSE
+> +PYTHON_KIVY_DEPENDENCIES = host-python-cython libgl
+> +
+> +ifeq ($(BR2_PACKAGE_GSTREAMER),y)
+> +PYTHON_KIVY_DEPENDENCIES += gstreamer
+> +PYTHON_KIVY_ENV += USE_GSTREAMER=1
+> +endif
+
+Perhaps an explicit USE_GSTREAMER=0 in an "else" condition would be
+good. Ditto for all other options: we generally try to explicitly
+disable features.
 
 Thanks!
 
