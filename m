@@ -1,81 +1,168 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 29 Aug 2018 22:20:17 -0500
-Subject: [Buildroot] [PATCH 2/5] toolchain/toolchain-wrapper: add
- BR2_RELRO_FULL support
-In-Reply-To: <1535577655-9583-3-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1535577655-9583-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1535577655-9583-3-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CANQCQpaqvNZB1p-ytHCa8J4xHQ8DPLohtQK-MNXQnqzAFiBrRw@mail.gmail.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Wed, 29 Aug 2018 20:33:05 -0700
+Subject: [Buildroot] [PATCH v4 1/1] python-kivy: new package
+Message-ID: <20180830033305.10193-1-joseph.kogut@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+---
+Changes v3 -> v4:
+- Remove dependency on glibc (tested on aarch64 w/ musl and X11 window
+  provider, sdl2 still segfaults)
+- Fix dependency on xlib_libX11 and xlib_libXrender
 
-On Wed, Aug 29, 2018 at 4:20 PM Matt Weber
-<matthew.weber@rockwellcollins.com> wrote:
->
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
->  package/Makefile.in                  |  5 +++--
->  toolchain/toolchain-wrapper-linker.c | 22 +++++++++++++++++++-
->  toolchain/toolchain-wrapper.c        | 40 +++++++++++++++++++++++++++++++++++-
->  toolchain/toolchain-wrapper.mk       |  4 ++++
->  4 files changed, 67 insertions(+), 4 deletions(-)
->
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 14b3bbd..2e885bf 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -158,8 +158,9 @@ ifeq ($(BR2_RELRO_PARTIAL),y)
->  TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
->  TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
->  else ifeq ($(BR2_RELRO_FULL),y)
-> -TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
-> -TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
-> +TARGET_HARDENED += $(TARGET_CFLAGS_RELRO_FULL)
-> +# -DBR_SET_PIE is used by the GCC wrapper to tell when linking
-> +TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO_FULL) -DBR_SET_PIE
->  endif
->
->  ifeq ($(BR2_FORTIFY_SOURCE_1),y)
-> diff --git a/toolchain/toolchain-wrapper-linker.c b/toolchain/toolchain-wrapper-linker.c
-> index b587fea..5e94e11 100644
-> --- a/toolchain/toolchain-wrapper-linker.c
-> +++ b/toolchain/toolchain-wrapper-linker.c
-> @@ -33,8 +33,10 @@ static char path[PATH_MAX];
->   * one to the real compiler if the inverse option isn't in the argument list.
->   * This specifies the worst case number of extra arguments we might pass
->   * Currently, we may have:
-> + *     -pie
-> + *     -shared
->   */
-> -#define EXCLUSIVE_ARGS 0
-> +#define EXCLUSIVE_ARGS 2
->
->  static char *predef_args[] = {
->         path
-> @@ -185,6 +187,24 @@ int main(int argc, char **argv)
->         memcpy(cur, predef_args, sizeof(predef_args));
->         cur += sizeof(predef_args) / sizeof(predef_args[0]);
->
-> +#ifdef BR2_RELRO_FULL
-> +       for (i = 1; i < argc; i++) {
-> +               if (!strcmp(argv[i], "-static") ||
-> +                   !strcmp(argv[i], "-r"))
-> +                       break;
-> +
-> +               if( !strcmp(argv[i], "-shared") ) {
-> +                    /* Setting the value to something so that the compiler
-> +                       doesn't error on a empty '' when -share is removed */
-> +                   argv[i] = "-DBR_moved_shared_before_pie";
-> +                    *cur++ = "-shared";
-> +                }
 
-This logic for handling shared only works if there is a single shared.
-Will send a v2 with both the linker and cc wrapper updated to scrub
-multiple pie and shared args before rebuilding the string.
+Changes v2 -> v3:
+- Bump version to 1.10.1
+- Remove upstreamed patch to remove getconf dependency
+- Split config comments for OpenGL and glibc deps
+- check-packages fixes
 
-Matt
+
+Changes v1 -> v2:
+- Remove unnecessary build dependencies (suggested by Yegor)
+- Require toolchain w/ glibc, as Kivy builds with others, but
+  seems to segfault with (at least) musl.
+
+---
+ DEVELOPERS                           | 12 ++++++-
+ package/Config.in                    |  1 +
+ package/python-kivy/Config.in        | 16 ++++++++++
+ package/python-kivy/python-kivy.hash |  4 +++
+ package/python-kivy/python-kivy.mk   | 48 ++++++++++++++++++++++++++++
+ 5 files changed, 80 insertions(+), 1 deletion(-)
+ create mode 100644 package/python-kivy/Config.in
+ create mode 100644 package/python-kivy/python-kivy.hash
+ create mode 100644 package/python-kivy/python-kivy.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index bd8095bd20..1792af78fb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1,4 +1,4 @@
+-# Syntax:
++	# Syntax:
+ #
+ # N:	Firstname Lastname <email>
+ # F:	file pattern or directory
+@@ -1027,6 +1027,16 @@ F:	package/pdbg/
+ F:	board/qemu/ppc64le-pseries/
+ F:	configs/qemu_ppc64le_pseries_defconfig
+ 
++N:	Joseph Kogut <joseph.kogut@gmail.com>
++F:	package/gconf/
++F:	package/libnss/
++F:	package/python-cython/
++F:	package/python-kivy/
++F:	package/python-raven/
++F:	package/python-schedule/
++F:	package/python-websockets/
++F:	package/python-xlib/
++
+ N:	Johan Derycke <johanderycke@gmail.com>
+ F:	package/python-libconfig/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 66f303ec58..1f873bf3b0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -859,6 +859,7 @@ menu "External python modules"
+ 	source "package/python-jsonschema/Config.in"
+ 	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
++	source "package/python-kivy/Config.in"
+ 	source "package/python-libconfig/Config.in"
+ 	source "package/python-libusb1/Config.in"
+ 	source "package/python-lmdb/Config.in"
+diff --git a/package/python-kivy/Config.in b/package/python-kivy/Config.in
+new file mode 100644
+index 0000000000..e4b89a74c1
+--- /dev/null
++++ b/package/python-kivy/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_PYTHON_KIVY
++	bool "python-kivy"
++	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_HOST_PYTHON_CYTHON
++	select BR2_PACKAGE_LIBPNG # runtime
++	select BR2_PACKAGE_MTDEV # runtime
++	select BR2_PACKAGE_PYTHON_DOCUTILS # runtime
++	select BR2_PACKAGE_PYTHON_PYGMENTS # runtime
++	help
++	  A software library for rapid development of
++	  hardware-accelerated multitouch applications.
++
++	  http://kivy.org
++
++comment "python-kivy needs an OpenGL provider"
++	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/python-kivy/python-kivy.hash b/package/python-kivy/python-kivy.hash
+new file mode 100644
+index 0000000000..8949bc643f
+--- /dev/null
++++ b/package/python-kivy/python-kivy.hash
+@@ -0,0 +1,4 @@
++# sha256 locally computed
++sha256	794e45cc7bcc7882f7cd95f1673bc6701f3215a20a54c915cac0c5e46a449b4c  python-kivy-1.10.1.tar.gz
++# License file, locally calculated
++sha256	282b3d8735ef6cbdcf8cc480947d50e0aea4ad1cc931d41f3f6a6bc23956f2d6  LICENSE
+diff --git a/package/python-kivy/python-kivy.mk b/package/python-kivy/python-kivy.mk
+new file mode 100644
+index 0000000000..fbb80c59cd
+--- /dev/null
++++ b/package/python-kivy/python-kivy.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# python-kivy
++#
++################################################################################
++
++PYTHON_KIVY_VERSION = 1.10.1
++PYTHON_KIVY_SITE = $(call github,kivy,kivy,$(PYTHON_KIVY_VERSION))
++PYTHON_KIVY_SETUP_TYPE = distutils
++PYTHON_KIVY_LICENSE = MIT
++PYTHON_KIVY_LICENSE_FILES = LICENSE
++PYTHON_KIVY_DEPENDENCIES = host-python-cython libgl
++
++ifeq ($(BR2_PACKAGE_GSTREAMER),y)
++PYTHON_KIVY_DEPENDENCIES += gstreamer
++PYTHON_KIVY_ENV += USE_GSTREAMER=1
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
++PYTHON_KIVY_DEPENDENCIES += libegl
++PYTHON_KIVY_ENV += USE_EGL=1
++endif
++
++ifeq ($(BR2_PACKAGE_SDL2)$(BR2_PACKAGE_SDL2_X11)$(BR2_PACKAGE_SDL2_IMAGE)$(BR2_PACKAGE_SDL2_MIXER)$(BR2_PACKAGE_SDL2_TTF),yyyyy)
++PYTHON_KIVY_DEPENDENCIES += sdl2 sdl2_image sdl2_mixer sdl2_ttf
++PYTHON_KIVY_ENV += USE_SDL2=1
++PYTHON_KIVY_ENV += KIVY_SDL2_PATH=$(STAGING_DIR)/usr/include/SDL2
++else
++PYTHON_KIVY_ENV += USE_SDL2=0
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++PYTHON_KIVY_DEPENDENCIES += wayland
++PYTHON_KIVY_ENV += USE_WAYLAND=1
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBXRENDER),yy)
++PYTHON_KIVY_DEPENDENCIES += xlib_libX11 xlib_libXrender
++PYTHON_KIVY_ENV += USE_X11=1
++endif
++
++define PYTHON_KIVY_REMOVE_EXAMPLES
++	rm -rf $(TARGET_DIR)/usr/share/kivy-examples
++endef
++
++PYTHON_KIVY_POST_INSTALL_TARGET_HOOKS += PYTHON_KIVY_REMOVE_EXAMPLES
++
++$(eval $(python-package))
+-- 
+2.18.0
