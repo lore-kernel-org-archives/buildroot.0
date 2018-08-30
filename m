@@ -1,34 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 Aug 2018 08:32:00 +0200
-Subject: [Buildroot] [git commit] CHANGES: add note about Vivante graphics /
- i.MX8MQ support for 2018.08-rc1
-Message-ID: <20180830063355.01FC281EAD@busybox.osuosl.org>
+Date: Thu, 30 Aug 2018 08:34:08 +0200
+Subject: [Buildroot] [PATCH] board/freescale/imx8mqevk: remove hardware
+ support section from readme
+In-Reply-To: <20180829211453.0c67b78f@windsurf> (Thomas Petazzoni's message of
+ "Wed, 29 Aug 2018 21:14:53 +0200")
+References: <20180829151554.8966-1-gary.bisson@boundarydevices.com>
+ <20180829211453.0c67b78f@windsurf>
+Message-ID: <87in3s2win.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=827b4bb117bd22c8a02d561b59b6c8e863d9d540
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-As requested by Gary Bisson.
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 2 ++
- 1 file changed, 2 insertions(+)
+ >> Also, would it be possible to update the release text [1] to mention
+ >> i.MX8MQ graphics support? Something like:
+ >> - i.MX Vivante graphics version bumped to 6.2.4.p1.2 adding support for
+ >> Wayland and i.MX8MQ platforms
 
-diff --git a/CHANGES b/CHANGES
-index c1cecb8023..36bcfe0bb3 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -54,6 +54,8 @@
- 	- X.org server bumped to 1.20, and all X.org proto packages
- 	  replaced by the single xorgproto package
- 	- i.MX6 support packages bumped to 6.2.4
-+	- i.MX Vivante graphics version bumped to 6.2.4.p1.2,
-+	  adding support for Wayland and i.MX8MQ platforms
- 
- 	Linux: bumped to 4.17 by default.
- 
+ > Peter: what do you think about this? Do we change the 2018.08-rc1
+ > release details after the fact ? Do we include this in the 2018.08
+ > final announcement, even if it was already there in 2018.08-rc1 ?
+
+I've added a note to the CHANGES for 2018.08-rc1.
+
+-- 
+Bye, Peter Korsgaard
