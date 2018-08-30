@@ -1,372 +1,137 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 29 Aug 2018 22:34:41 -0500
-Subject: [Buildroot] [PATCH v2 1/5] toolchain/toolchain-wrapper: add link
- wrapper
-In-Reply-To: <1535600085-31526-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1535600085-31526-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <1535600085-31526-2-git-send-email-matthew.weber@rockwellcollins.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 30 Aug 2018 08:00:15 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-29
+Message-ID: <20180830060015.669EF207B1@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- - Updates symlink creation int/ext toolchain
- - Adds new source file for link wrapper with build/install
+Hello,
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
- package/gcc/gcc.mk                                 |  12 +-
- .../toolchain-external/pkg-toolchain-external.mk   |  12 +-
- toolchain/toolchain-wrapper-linker.c               | 248 +++++++++++++++++++++
- toolchain/toolchain-wrapper.mk                     |   6 +
- 4 files changed, 276 insertions(+), 2 deletions(-)
- create mode 100644 toolchain/toolchain-wrapper-linker.c
+Build statistics for 2018-08-29
+===============================
 
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 1ae9b7e..2b4ce33 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -262,7 +262,9 @@ HOST_GCC_COMMON_CONF_OPTS += \
- 	--with-long-double-128
- endif
- 
--HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += -DBR_CROSS_PATH_SUFFIX='".br_real"'
-+HOST_GCC_COMMON_TOOLCHAIN_WRAPPER_ARGS += \
-+	-DBR_CROSS_PATH_SUFFIX='".br_real"' \
-+	-DBR_CROSS_PATH_LD_SUFFIX='".br_real"'
- 
- # For gcc-initial, we need to tell gcc that the C library will be
- # providing the ssp support, as it can't guess it since the C library
-@@ -334,6 +336,14 @@ define HOST_GCC_INSTALL_WRAPPER_AND_SIMPLE_SYMLINKS
- 			ln -sf toolchain-wrapper $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
- 			ln -snf $$i.br_real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.br_real; \
- 			;; \
-+		*ld) \
-+			if [ ! -e $$i.br_real ] ; then \
-+				mv $$i $$i.br_real; \
-+				ln -sf toolchain-wrapper-linker $$i; \
-+				ln -sf toolchain-wrapper-linker $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
-+				ln -snf $$i.br_real $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}.br_real; \
-+			fi; \
-+			;; \
- 		*) \
- 			ln -snf $$i $(ARCH)-linux$${i##$(GNU_TARGET_NAME)}; \
- 			;; \
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 8b2c283..99eea68 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -90,10 +90,16 @@ endif
- TOOLCHAIN_EXTERNAL_SUFFIX = \
- 	$(if $(wildcard $(TOOLCHAIN_EXTERNAL_BIN)/*.br_real),.br_real)
- 
-+# Handle the case where there are bootlin toolchain's without ld wrappers which
-+# would not have a .br_real defined.
-+TOOLCHAIN_EXTERNAL_LD_SUFFIX = \
-+	$(if $(wildcard $(TOOLCHAIN_EXTERNAL_BIN)/*ld.br_real),.br_real)
-+
- TOOLCHAIN_EXTERNAL_CROSS = $(TOOLCHAIN_EXTERNAL_BIN)/$(TOOLCHAIN_EXTERNAL_PREFIX)-
- TOOLCHAIN_EXTERNAL_CC = $(TOOLCHAIN_EXTERNAL_CROSS)gcc$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_CXX = $(TOOLCHAIN_EXTERNAL_CROSS)g++$(TOOLCHAIN_EXTERNAL_SUFFIX)
- TOOLCHAIN_EXTERNAL_FC = $(TOOLCHAIN_EXTERNAL_CROSS)gfortran$(TOOLCHAIN_EXTERNAL_SUFFIX)
-+TOOLCHAIN_EXTERNAL_LD = $(TOOLCHAIN_EXTERNAL_CROSS)ld$(TOOLCHAIN_EXTERNAL_LD_SUFFIX)
- TOOLCHAIN_EXTERNAL_READELF = $(TOOLCHAIN_EXTERNAL_CROSS)readelf
- 
- # Normal handling of downloaded toolchain tarball extraction.
-@@ -229,7 +235,8 @@ TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_SOFTFLOAT=1
- endif
- 
- TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += \
--	-DBR_CROSS_PATH_SUFFIX='"$(TOOLCHAIN_EXTERNAL_SUFFIX)"'
-+	-DBR_CROSS_PATH_SUFFIX='"$(TOOLCHAIN_EXTERNAL_SUFFIX)"' \
-+	-DBR_CROSS_PATH_LD_SUFFIX='"$(TOOLCHAIN_EXTERNAL_LD_SUFFIX)"' \
- 
- ifeq ($(filter $(HOST_DIR)/%,$(TOOLCHAIN_EXTERNAL_BIN)),)
- # TOOLCHAIN_EXTERNAL_BIN points outside HOST_DIR => absolute path
-@@ -274,6 +281,9 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
- 				ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
- 			fi \
- 			;; \
-+		*ld) \
-+			ln -sf toolchain-wrapper-linker $$base; \
-+			;; \
- 		*) \
- 			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
- 			;; \
-diff --git a/toolchain/toolchain-wrapper-linker.c b/toolchain/toolchain-wrapper-linker.c
-new file mode 100644
-index 0000000..b587fea
---- /dev/null
-+++ b/toolchain/toolchain-wrapper-linker.c
-@@ -0,0 +1,248 @@
-+/**
-+ * Buildroot wrapper for toolchains. This simply executes the real toolchain
-+ * with a number of arguments hardcoded, to ensure the toolchain uses the
-+ * correct configuration.
-+
-+ * This file is based on the original wrapper code but updated for the linker.
-+ *
-+ * (C) 2011 Peter Korsgaard <jacmet@sunsite.dk>
-+ * (C) 2011 Daniel Nystr?m <daniel.nystrom@timeterminal.se>
-+ * (C) 2012 Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-+ * (C) 2013 Spenser Gilliland <spenser@gillilanding.com>
-+ *
-+ * This file is licensed under the terms of the GNU General Public License
-+ * version 2.  This program is licensed "as is" without any warranty of any
-+ * kind, whether express or implied.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <string.h>
-+#include <limits.h>
-+#include <unistd.h>
-+#include <stdlib.h>
-+#include <errno.h>
-+#include <time.h>
-+#include <stdbool.h>
-+
-+static char path[PATH_MAX];
-+
-+/**
-+ * GCC linker errors out with certain combinations of arguments (examples are
-+ * static/shared/r/pie, so we have to ensure that we only pass the predefined
-+ * one to the real compiler if the inverse option isn't in the argument list.
-+ * This specifies the worst case number of extra arguments we might pass
-+ * Currently, we may have:
-+ */
-+#define EXCLUSIVE_ARGS	0
-+
-+static char *predef_args[] = {
-+	path
-+};
-+
-+
-+
-+/* A {string,length} tuple, to avoid computing strlen() on constants.
-+ *  - str must be a \0-terminated string
-+ *  - len does not account for the terminating '\0'
-+ */
-+struct str_len_s {
-+	const char *str;
-+	size_t     len;
-+};
-+
-+/* Define a {string,length} tuple. Takes an unquoted constant string as
-+ * parameter. sizeof() on a string literal includes the terminating \0,
-+ * but we don't want to count it.
-+ */
-+#define STR_LEN(s) { #s, sizeof(#s)-1 }
-+
-+/* List of paths considered unsafe for cross-compilation.
-+ *
-+ * An unsafe path is one that points to a directory with libraries or
-+ * headers for the build machine, which are not suitable for the target.
-+ */
-+static const struct str_len_s unsafe_paths[] = {
-+	STR_LEN(/lib),
-+	STR_LEN(/usr/include),
-+	STR_LEN(/usr/lib),
-+	STR_LEN(/usr/local/include),
-+	STR_LEN(/usr/local/lib),
-+	{ NULL, 0 },
-+};
-+
-+/* Unsafe options are options that specify a potentialy unsafe path,
-+ * that will be checked by check_unsafe_path(), below.
-+ */
-+static const struct str_len_s unsafe_opts[] = {
-+	STR_LEN(-I),
-+	STR_LEN(-idirafter),
-+	STR_LEN(-iquote),
-+	STR_LEN(-isystem),
-+	STR_LEN(-L),
-+	{ NULL, 0 },
-+};
-+
-+/* Check if path is unsafe for cross-compilation. Unsafe paths are those
-+ * pointing to the standard native include or library paths.
-+ *
-+ * We print the arguments leading to the failure. For some options, gcc
-+ * accepts the path to be concatenated to the argument (e.g. -I/foo/bar)
-+ * or separated (e.g. -I /foo/bar). In the first case, we need only print
-+ * the argument as it already contains the path (arg_has_path), while in
-+ * the second case we need to print both (!arg_has_path).
-+ *
-+ * If paranoid, exit in error instead of just printing a warning.
-+ */
-+static void check_unsafe_path(const char *arg,
-+			      const char *path,
-+			      int paranoid,
-+			      int arg_has_path)
-+{
-+	const struct str_len_s *p;
-+
-+	for (p=unsafe_paths; p->str; p++) {
-+		if (strncmp(path, p->str, p->len))
-+			continue;
-+		fprintf(stderr,
-+			"%s: %s: unsafe header/library path used in cross-compilation: '%s%s%s'\n",
-+			program_invocation_short_name,
-+			paranoid ? "ERROR" : "WARNING",
-+			arg,
-+			arg_has_path ? "" : "' '", /* close single-quote, space, open single-quote */
-+			arg_has_path ? "" : path); /* so that arg and path are properly quoted. */
-+		if (paranoid)
-+			exit(1);
-+	}
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	char **args, **cur, **exec_args;
-+	char *relbasedir, *absbasedir;
-+	char *progpath = argv[0];
-+	char *basename;
-+	char *env_debug;
-+	char *paranoid_wrapper;
-+	int paranoid;
-+	int ret, i, count = 0, debug;
-+
-+	/* Calculate the relative paths */
-+	basename = strrchr(progpath, '/');
-+	if (basename) {
-+		*basename = '\0';
-+		basename++;
-+		relbasedir = malloc(strlen(progpath) + 7);
-+		if (relbasedir == NULL) {
-+			perror(__FILE__ ": malloc");
-+			return 2;
-+		}
-+		sprintf(relbasedir, "%s/..", argv[0]);
-+		absbasedir = realpath(relbasedir, NULL);
-+	} else {
-+		basename = progpath;
-+		absbasedir = malloc(PATH_MAX + 1);
-+		ret = readlink("/proc/self/exe", absbasedir, PATH_MAX);
-+		if (ret < 0) {
-+			perror(__FILE__ ": readlink");
-+			return 2;
-+		}
-+		absbasedir[ret] = '\0';
-+		for (i = ret; i > 0; i--) {
-+			if (absbasedir[i] == '/') {
-+				absbasedir[i] = '\0';
-+				if (++count == 2)
-+					break;
-+			}
-+		}
-+	}
-+	if (absbasedir == NULL) {
-+		perror(__FILE__ ": realpath");
-+		return 2;
-+	}
-+
-+	/* Fill in the relative paths */
-+#ifdef BR_CROSS_PATH_REL
-+	ret = snprintf(path, sizeof(path), "%s/" BR_CROSS_PATH_REL "/%s" BR_CROSS_PATH_LD_SUFFIX, absbasedir, basename);
-+#elif defined(BR_CROSS_PATH_ABS)
-+	ret = snprintf(path, sizeof(path), BR_CROSS_PATH_ABS "/%s" BR_CROSS_PATH_LD_SUFFIX, basename);
-+#else
-+	ret = snprintf(path, sizeof(path), "%s/bin/%s" BR_CROSS_PATH_LD_SUFFIX, absbasedir, basename);
-+#endif
-+	if (ret >= sizeof(path)) {
-+		perror(__FILE__ ": overflow");
-+		return 3;
-+	}
-+
-+	cur = args = malloc(sizeof(predef_args) +
-+			    (sizeof(char *) * (argc + EXCLUSIVE_ARGS)));
-+	if (args == NULL) {
-+		perror(__FILE__ ": malloc");
-+		return 2;
-+	}
-+
-+	/* start with predefined args */
-+	memcpy(cur, predef_args, sizeof(predef_args));
-+	cur += sizeof(predef_args) / sizeof(predef_args[0]);
-+
-+	paranoid_wrapper = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
-+	if (paranoid_wrapper && strlen(paranoid_wrapper) > 0)
-+		paranoid = 1;
-+	else
-+		paranoid = 0;
-+
-+	/* Check for unsafe library and header paths */
-+	for (i = 1; i < argc; i++) {
-+		const struct str_len_s *opt;
-+		for (opt=unsafe_opts; opt->str; opt++ ) {
-+			/* Skip any non-unsafe option. */
-+			if (strncmp(argv[i], opt->str, opt->len))
-+				continue;
-+
-+			/* Handle both cases:
-+			 *  - path is a separate argument,
-+			 *  - path is concatenated with option.
-+			 */
-+			if (argv[i][opt->len] == '\0') {
-+				i++;
-+				if (i == argc)
-+					break;
-+				check_unsafe_path(argv[i-1], argv[i], paranoid, 0);
-+			} else
-+				check_unsafe_path(argv[i], argv[i] + opt->len, paranoid, 1);
-+		}
-+	}
-+
-+	/* append forward args */
-+	memcpy(cur, &argv[1], sizeof(char *) * (argc - 1));
-+	cur += argc - 1;
-+
-+	/* finish with NULL termination */
-+	*cur = NULL;
-+
-+	exec_args = args;
-+
-+	/* Debug the wrapper to see actual arguments passed to
-+	 * the compiler:
-+	 * unset, empty, or 0: do not trace
-+	 * set to 1          : trace all arguments on a single line
-+	 * set to 2          : trace one argument per line
-+	 */
-+	if ((env_debug = getenv("BR2_DEBUG_WRAPPER"))) {
-+		debug = atoi(env_debug);
-+		if (debug > 0) {
-+			fprintf(stderr, "Toolchain wrapper executing:");
-+			for (i = 0; exec_args[i]; i++)
-+				fprintf(stderr, "%s'%s'",
-+					(debug == 2) ? "\n    " : " ", exec_args[i]);
-+			fprintf(stderr, "\n");
-+		}
-+	}
-+
-+	if (execv(exec_args[0], exec_args))
-+		perror(path);
-+
-+	free(args);
-+
-+	return 2;
-+}
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index b8074ef..3a4cbcd 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -50,9 +50,15 @@ define TOOLCHAIN_WRAPPER_BUILD
- 		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
- 		toolchain/toolchain-wrapper.c \
- 		-o $(@D)/toolchain-wrapper
-+	$(HOSTCC) $(HOST_CFLAGS) $(TOOLCHAIN_WRAPPER_ARGS) \
-+		-s -Wl,--hash-style=$(TOOLCHAIN_WRAPPER_HASH_STYLE) \
-+		toolchain/toolchain-wrapper-linker.c \
-+		-o $(@D)/toolchain-wrapper-linker
- endef
- 
- define TOOLCHAIN_WRAPPER_INSTALL
- 	$(INSTALL) -D -m 0755 $(@D)/toolchain-wrapper \
- 		$(HOST_DIR)/bin/toolchain-wrapper
-+	$(INSTALL) -D -m 0755 $(@D)/toolchain-wrapper-linker \
-+		$(HOST_DIR)/bin/toolchain-wrapper-linker
- endef
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  26 |   0 |   1 |  27 |
+   2018.05.x |  19 |   0 |   0 |  19 |
+      master | 196 |   7 |   0 | 203 |
+        next |  21 |  46 |   0 |  67 |
+
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                host-libsodium | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/51887e138b6c9a32c1e6a3dedc110c878464373c |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+               domoticz-4.9700 | 2 
+                libmpeg2-0.5.1 | 2 
+                  boost-1.67.0 | 1 
+                      qt-4.8.7 | 1 
+               qt5webkit-5.9.1 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/a027e8081f8018b66497a836e6c01515a3f3d088 |     
+   powerpc64 |                domoticz-4.9700 | NOK | http://autobuild.buildroot.net/results/414ee412f690534f7a7a79aea5e390169517fec5 |     
+      mipsel |                domoticz-4.9700 | NOK | http://autobuild.buildroot.net/results/b1b84b8c12d31b9242b5732fcdd1eb76b1217366 |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/686768c386a464a445fba77d86d05f715a70d6d6 | ORPH
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/edc53016f03b94a05704e2e17b65d7b0a311c0b9 | ORPH
+     powerpc |                       qt-4.8.7 | NOK | http://autobuild.buildroot.net/results/9b9d11b3281a72c8f54fc675408acb96d24d8e7e | ORPH
+      x86_64 |                qt5webkit-5.9.1 | NOK | http://autobuild.buildroot.net/results/8afc8771741f62da3b2117d2124d1c6f2d941903 |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+         host-e2fsprogs-1.44.2 | 5 
+                libsoup-2.62.3 | 5 
+            libyaml-legal-info | 5 
+              ptpd2-ptpd-2.3.1 | 5 
+           python-pyzmq-16.0.2 | 4 
+               target-finalize | 4 
+                    ncmpc-0.30 | 3 
+                rtorrent-0.9.6 | 3 
+                 lvm2-2.02.180 | 2 
+ Makefile:708: target-finalize | 2 
+             util-linux-2.32.1 | 2 
+                  boost-1.68.0 | 1 
+                   botan-2.7.0 | 1 
+                   libiio-0.14 | 1 
+      libusbgx-libusbgx-v0.2.0 | 1 
+package/libyaml/libyaml.mk:... | 1 
+                     vlc-3.0.3 | 1 
+
+
+Detail of failures
+------------------
+
+      mipsel |                   boost-1.68.0 | NOK | http://autobuild.buildroot.net/results/a3d8cd0245467bd6b90ddd2b3f5eff6248a463ae |     
+      x86_64 |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/d036f5805ebc2b8c32baaabb8b58955bcfb05fb4 |     
+      mipsel |          host-e2fsprogs-1.44.2 | NOK | http://autobuild.buildroot.net/results/7efe015ecd5c894cb358fb530ca3c2b39e86533f | ORPH
+     aarch64 |          host-e2fsprogs-1.44.2 | NOK | http://autobuild.buildroot.net/results/74a92847352bd56fecfccc1db920f38857b76c67 | ORPH
+microblazeel |          host-e2fsprogs-1.44.2 | NOK | http://autobuild.buildroot.net/results/a1fa842395f1994e3bc3592685f2dbf44be92266 | ORPH
+     powerpc |          host-e2fsprogs-1.44.2 | NOK | http://autobuild.buildroot.net/results/5f1d31963e1918fccba69ade9e3adf649ea448d1 | ORPH
+         arc |          host-e2fsprogs-1.44.2 | NOK | http://autobuild.buildroot.net/results/4a9bb548bc75262cd60aa2c021a23aba8c0ebe5d | ORPH
+         arc |                    libiio-0.14 | NOK | http://autobuild.buildroot.net/results/1d1fee8385575c5f97b8039fa1db850cc80607f3 |     
+        mips |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/91c2d6a1ca011787130db06695d6cd9e882f7258 |     
+         arc |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/505dc2da1784edadebc5aa85266485b600d88383 |     
+         arm |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/a091bc8fac6c9b3d8a70e3e6d8b74dfda4bb9f7f |     
+microblazeel |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/a318e595f02937534b3f8698ef4c04194a8b34af |     
+         arm |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/868375d08d73ce2dcf391d839b5b5ab81d318fc5 |     
+         arm |       libusbgx-libusbgx-v0.2.0 | NOK | http://autobuild.buildroot.net/results/2add25597dc722abcd7ea8784e023ed3c4567afe |     
+         arm |             libyaml-legal-info | NOK | http://autobuild.buildroot.net/results/c66ddb56fecf1570a8669bd9d8824cd2132f9776 | ORPH
+         arm |             libyaml-legal-info | NOK | http://autobuild.buildroot.net/results/c10baf6e9bae92d515264b677eeb1ce6c98c793d | ORPH
+         arc |             libyaml-legal-info | NOK | http://autobuild.buildroot.net/results/1672615b9b685686d8ffc7a3ec52d011571ba0ca | ORPH
+        i586 |             libyaml-legal-info | NOK | http://autobuild.buildroot.net/results/e2ad685038d3cf3985cc917f17d1d4931b1cd9af | ORPH
+         arm |             libyaml-legal-info | NOK | http://autobuild.buildroot.net/results/84e9530aff0c981a009416f31470133fb2114421 | ORPH
+         arc |                  lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/26052eaa82de77cb467091de4cc85b14b3aef901 | ORPH
+         arc |                  lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/2f0e8a669845593dc3bcc7a8de16011ad3992886 | ORPH
+      mipsel |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/ea9062a605c52c64cc4d1e872ba91d147449c284 |     
+        i686 |  Makefile:708: target-finalize | NOK | http://autobuild.buildroot.net/results/f96188789da97e5955f28fc1500ea56b48cb31b7 |     
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/696090333c058a6921c70e8282a28dfe5e6d7b98 |     
+        mips |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/40cd76d58bea30ae16dc700d526ed715c01897ea |     
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/70ce27ffc2d6fe85a8a7c532716aab961bcd45f5 |     
+         sh4 | package/libyaml/libyaml.mk:... | NOK | http://autobuild.buildroot.net/results/9734e8a201940f099f923811235faf4ee51d3fe8 |     
+         arm |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/159ee23c5afa8452da24c7692c8afaa957c8877c | ORPH
+      xtensa |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/572d3c97df1ab90feb49b9949aa41e4c748ed668 | ORPH
+microblazeel |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/eec613880873093209847af46aa2db2a75f61f3d | ORPH
+    mips64el |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/68d7266becbcb560cac854171b27d559424bff7b | ORPH
+        m68k |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/0e520c0ed1d62e576be066baae6ea2cf0c8d3ae4 | ORPH
+    mips64el |            python-pyzmq-16.0.2 | NOK | http://autobuild.buildroot.net/results/076fc1d5b6c40102ab9dff66aacad9af097330b5 |     
+         arm |            python-pyzmq-16.0.2 | NOK | http://autobuild.buildroot.net/results/51d5fab750c44c2e5d947e744e0fda7eaaa62f0e |     
+      xtensa |            python-pyzmq-16.0.2 | NOK | http://autobuild.buildroot.net/results/b0173ecf02eb9f3e71d8a10153a21d3ce1c0e771 |     
+         arm |            python-pyzmq-16.0.2 | NOK | http://autobuild.buildroot.net/results/836423effc43f1a6d9c7c98a79411222c909ef64 |     
+     sparc64 |                 rtorrent-0.9.6 | NOK | http://autobuild.buildroot.net/results/972eeaf32cfa65582363bd907acb4924c59bedf5 | ORPH
+      x86_64 |                 rtorrent-0.9.6 | NOK | http://autobuild.buildroot.net/results/df520aa83938ac90cb0bbbae0ba812b607ed081a | ORPH
+        m68k |                 rtorrent-0.9.6 | NOK | http://autobuild.buildroot.net/results/c280570f726ad52233b0d7d5c460e31a07b9e093 | ORPH
+      xtensa |                target-finalize | NOK | http://autobuild.buildroot.net/results/57edcb6be7098855e9d87e5dea17aef69fa044e6 |     
+         arm |                target-finalize | NOK | http://autobuild.buildroot.net/results/8fed93795c9acc4bd074d193fa6724543e4d2995 |     
+microblazeel |                target-finalize | NOK | http://autobuild.buildroot.net/results/0c5bc9f41f80f4958b93e1ca0f54b53367601e06 |     
+        or1k |                target-finalize | NOK | http://autobuild.buildroot.net/results/24c622fdb1e19b42dd4fbce3cc06ed3e55b3d777 |     
+    mips64el |              util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/04f40654cbf5439feef80e96da900578f2e1de83 |     
+      mipsel |              util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/d99bb9aa1a333186fe42bdf6635a897a911d6b94 |     
+      mipsel |                      vlc-3.0.3 | NOK | http://autobuild.buildroot.net/results/76ec2af21bf8571925b4f8d32d8178fdd52d1637 |     
+
+
 -- 
-1.9.1
+http://autobuild.buildroot.net
