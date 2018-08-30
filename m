@@ -1,96 +1,47 @@
-From: sam at gpsm.co.uk <sam@gpsm.co.uk>
-Date: Thu, 30 Aug 2018 17:28:07 +0100
-Subject: [Buildroot] [PATCH 1/1] package/delve: new package
-Message-ID: <20180830162807.1721-1-sam@gpsm.co.uk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 30 Aug 2018 18:38:26 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] domoticz: do not use static version of openssl
+Message-ID: <20180830163826.5397-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Sam Lancia <sam@gpsm.co.uk>
+Due to the dependency on mosquitto, domoticz depends on !BR2_STATIC_LIBS
+so set USE_OPENSSL_STATIC to OFF (default value is ON)
 
-Including "Delve", the debugger for Go applications.
+This parameter has been added in release 4.9700.
 
-Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
+Fixes:
+ - http://autobuild.buildroot.net/results/b1b84b8c12d31b9242b5732fcdd1eb76b1217366
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/Config.in        |  1 +
- package/delve/Config.in  | 18 ++++++++++++++++++
- package/delve/delve.hash |  2 ++
- package/delve/delve.mk   | 19 +++++++++++++++++++
- 4 files changed, 40 insertions(+)
- create mode 100644 package/delve/Config.in
- create mode 100644 package/delve/delve.hash
- create mode 100644 package/delve/delve.mk
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Update commit message: build failure was reproduced and this patch is
+   correctly fixing it
 
-diff --git a/package/Config.in b/package/Config.in
-index f5a17492c7..dbf609b29d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -83,6 +83,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
-+        source "package/delve/Config.in"
- 	source "package/dhrystone/Config.in"
- 	source "package/dieharder/Config.in"
- 	source "package/dmalloc/Config.in"
-diff --git a/package/delve/Config.in b/package/delve/Config.in
-new file mode 100644
-index 0000000000..5c6045513c
---- /dev/null
-+++ b/package/delve/Config.in
-@@ -0,0 +1,18 @@
-+config BR2_PACKAGE_DELVE
-+	bool "delve"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	help
-+          Delve is a debugger for the Go programming language.
-+          The goal of the project is to provide a simple, full featured debugging tool for Go.
-+          Delve should be easy to invoke and easy to use.
-+          Chances are if you're using a debugger, things aren't going your way.
-+          With that in mind, Delve should stay out of your way as much as possible.
-+
-+          https://github.com/derekparker/delve
-+
-+comment "delve needs a toolchain w/ threads"
-+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS && \
-+		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/delve/delve.hash b/package/delve/delve.hash
-new file mode 100644
-index 0000000000..37fad79c3d
---- /dev/null
-+++ b/package/delve/delve.hash
-@@ -0,0 +1,2 @@
-+# Locally computed:
-+sha256  de023318accf33ffe7cbb393f5a301551390111db8c0849fe5f4002b6c476583  delve-v1.1.0.tar.gz
-diff --git a/package/delve/delve.mk b/package/delve/delve.mk
-new file mode 100644
-index 0000000000..d4da282e2a
---- /dev/null
-+++ b/package/delve/delve.mk
-@@ -0,0 +1,19 @@
-+
-+################################################################################
-+#
-+# delve
-+#
-+################################################################################
-+
-+DELVE_VERSION = v1.1.0
-+DELVE_SITE = $(call github,derekparker,delve,$(DELVE_VERSION))
-+
-+DELVE_LICENSE = MIT
-+DELVE_LICENSE_FILES = LICENSE
-+
-+DELVE_DEPENDENCIES = host-go host-pkgconf
-+
-+DELVE_BUILD_TARGETS = cmd/dlv
-+DELVE_INSTALL_BINS = dlv
-+
-+$(eval $(golang-package))
+ package/domoticz/domoticz.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 3d6cae4746..7f094d0976 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -19,8 +19,10 @@ DOMOTICZ_DEPENDENCIES = \
+ 	zlib
+ 
+ # Due to the dependency on mosquitto, domoticz depends on
+-# !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
+-DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
++# !BR2_STATIC_LIBS so set USE_STATIC_BOOST and USE_OPENSSL_STATIC to OFF
++DOMOTICZ_CONF_OPTS += \
++	-DUSE_STATIC_BOOST=OFF \
++	-DUSE_OPENSSL_STATIC=OFF
+ 
+ # Do not use any built-in libraries which are enabled by default for
+ # lua, sqlite and mqtt
 -- 
-2.17.1
+2.14.1
