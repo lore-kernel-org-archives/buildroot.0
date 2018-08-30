@@ -1,55 +1,96 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 30 Aug 2018 18:31:46 +0200
-Subject: [Buildroot] [PATCH v2,1/1] qt: fix build on powerpc_e500mc
-Message-ID: <20180830163146.4952-1-fontaine.fabrice@gmail.com>
+From: sam at gpsm.co.uk <sam@gpsm.co.uk>
+Date: Thu, 30 Aug 2018 17:28:07 +0100
+Subject: [Buildroot] [PATCH 1/1] package/delve: new package
+Message-ID: <20180830162807.1721-1-sam@gpsm.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gcc bug internal compiler error: in validate_condition_mode, at
-config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.
-Workaround is to set -mno-isel, see
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
-https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
+From: Sam Lancia <sam@gpsm.co.uk>
 
-This bug is also raised on BR2_powerpc_8540, BR2_powerpc_8548 and
-BR2_powerpc_e5500.
+Including "Delve", the debugger for Go applications.
 
-Fixes:
- - http://autobuild.buildroot.net/results/9b9d11b3281a72c8f54fc675408acb96d24d8e7e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - apply workaround for BR2_powerpc_8540, BR2_powerpc_8548 and
-   BR2_powerpc_e5500
- - There is no build failure with gcc 7.x toolchain so replace
-   BR2_TOOLCHAIN_GCC_AT_LEAST_8 by BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ package/Config.in        |  1 +
+ package/delve/Config.in  | 18 ++++++++++++++++++
+ package/delve/delve.hash |  2 ++
+ package/delve/delve.mk   | 19 +++++++++++++++++++
+ 4 files changed, 40 insertions(+)
+ create mode 100644 package/delve/Config.in
+ create mode 100644 package/delve/delve.hash
+ create mode 100644 package/delve/delve.mk
 
- package/qt/qt.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/package/qt/qt.mk b/package/qt/qt.mk
-index 1dcb05d6af..921ff13d29 100644
---- a/package/qt/qt.mk
-+++ b/package/qt/qt.mk
-@@ -32,6 +32,15 @@ QT_LDFLAGS = $(TARGET_LDFLAGS)
- # use an older c++ standard to prevent build failure
- QT_CXXFLAGS += -std=gnu++98
- 
-+# gcc bug internal compiler error: in validate_condition_mode, at
-+# config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.
-+# Workaround is to set -mno-isel, see
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
-+# https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
-+ifeq ($(BR2_powerpc_8540)$(BR2_powerpc_8548)$(BR2_powerpc_e500mc)$(BR2_powerpc_e5500):$(BR2_TOOLCHAIN_GCC_AT_LEAST_7),y:)
-+QT_CXXFLAGS += -mno-isel
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index f5a17492c7..dbf609b29d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -83,6 +83,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/blktrace/Config.in"
+ 	source "package/bonnie/Config.in"
+ 	source "package/cache-calibrator/Config.in"
++        source "package/delve/Config.in"
+ 	source "package/dhrystone/Config.in"
+ 	source "package/dieharder/Config.in"
+ 	source "package/dmalloc/Config.in"
+diff --git a/package/delve/Config.in b/package/delve/Config.in
+new file mode 100644
+index 0000000000..5c6045513c
+--- /dev/null
++++ b/package/delve/Config.in
+@@ -0,0 +1,18 @@
++config BR2_PACKAGE_DELVE
++	bool "delve"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++          Delve is a debugger for the Go programming language.
++          The goal of the project is to provide a simple, full featured debugging tool for Go.
++          Delve should be easy to invoke and easy to use.
++          Chances are if you're using a debugger, things aren't going your way.
++          With that in mind, Delve should stay out of your way as much as possible.
 +
- # Qt has some assembly function that are not present in thumb1 mode:
- # Error: selected processor does not support Thumb mode `swp r3,r7,[r4]'
- # so, we desactivate thumb mode
++          https://github.com/derekparker/delve
++
++comment "delve needs a toolchain w/ threads"
++	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS && \
++		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/delve/delve.hash b/package/delve/delve.hash
+new file mode 100644
+index 0000000000..37fad79c3d
+--- /dev/null
++++ b/package/delve/delve.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  de023318accf33ffe7cbb393f5a301551390111db8c0849fe5f4002b6c476583  delve-v1.1.0.tar.gz
+diff --git a/package/delve/delve.mk b/package/delve/delve.mk
+new file mode 100644
+index 0000000000..d4da282e2a
+--- /dev/null
++++ b/package/delve/delve.mk
+@@ -0,0 +1,19 @@
++
++################################################################################
++#
++# delve
++#
++################################################################################
++
++DELVE_VERSION = v1.1.0
++DELVE_SITE = $(call github,derekparker,delve,$(DELVE_VERSION))
++
++DELVE_LICENSE = MIT
++DELVE_LICENSE_FILES = LICENSE
++
++DELVE_DEPENDENCIES = host-go host-pkgconf
++
++DELVE_BUILD_TARGETS = cmd/dlv
++DELVE_INSTALL_BINS = dlv
++
++$(eval $(golang-package))
 -- 
-2.14.1
+2.17.1
