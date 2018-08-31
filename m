@@ -1,41 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 30 Sep 2018 23:49:23 +0200
-Subject: [Buildroot] [git commit] sqlite: fix build without threads
-Message-ID: <20180930214943.6E6338A4FA@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 1 Sep 2018 00:10:01 +0200
+Subject: [Buildroot] socket.AF_BLUETOOTH in python3 and circular
+ dependencies
+In-Reply-To: <e1bda375-e70b-94aa-5e90-c96a48217e87@blach.pl>
+References: <e1bda375-e70b-94aa-5e90-c96a48217e87@blach.pl>
+Message-ID: <20180901001001.60b1762c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3143409ac99609c160bd3d53250bcebe09fe975
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-If threads are not available, set SQLITE_THREADSAFE to 0.
-Indeed, since version 3.25.0, the following line:
-THREADSAFE_FLAGS=-DSQLITE_THREADSAFE=0
-has been removed from configure.ac
-As a result, SQLITE_THREADSAFE will be set to a default value of 1 even
-if --disable-threadsafe is set
+On Thu, 30 Aug 2018 21:21:23 +0200, Grzegorz Blach wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/70b1582edcb787746e4483e80b27f86ac781f0fa
+> But unfortunately this patch makes a circular dependencies:
+> 
+> $ make python3-graph-depends
+> Recursion detected for  : bluez5_utils
+> which is a dependency of: python3
+> which is a dependency of: util-linux
+> which is a dependency of: libglib2
+> which is a dependency of: bluez5_utils
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sqlite/sqlite.mk | 1 +
- 1 file changed, 1 insertion(+)
+[...]
 
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index cb4bd58c47..34a0b9538e 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -54,6 +54,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- SQLITE_CONF_OPTS += --enable-threadsafe
- else
- SQLITE_CONF_OPTS += --disable-threadsafe
-+SQLITE_CFLAGS += -DSQLITE_THREADSAFE=0
- endif
- 
- ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_READLINE),yy)
+> Can someone point me how to fix circular dependencies without disabling 
+> python support in util-linux?
+
+Arghh, this is annoying :-/
+
+I don't see a good solution here. Possible options that I see at this
+point:
+
+ (1) Change Python in Modules/socketmodule.c to not require
+     bluetooth.h. It doesn't seem to link with any Bluetooth library,
+     only to need bluetooth.h, so perhaps just like they do for
+     FreeBSD/NetBSD, we could add the necessary definitions directly in
+     socketmodule.c to avoid the bluetooth.h dependency ?
+
+ (2) Create a python-util-linux package that would be responsible for
+     building the util-linux Python bindings. This would remove Python
+     from being a dependency of util-linux, and break the circular
+     dependency.
+
+     However, it is not clear that it will be easy to tell
+     python-util-linux to *only* build the Python bindings and use the
+     existing libraries built by the util-linux package, rather than
+     rebuilding them again.
+
+ (3) Add an explicit Config.in option for util-linux Python support,
+     and make it conflict with Bluetooth support in Python.
+
+For the record, OpenEmbedded doesn't support Bluetooth in Python socket
+module, they pass:
+
+  ac_cv_header_bluetooth_bluetooth_h=no ac_cv_header_bluetooth_h=no
+
+to the Python configure script.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
