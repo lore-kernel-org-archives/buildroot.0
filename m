@@ -1,104 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 Aug 2018 22:56:35 +0200
-Subject: [Buildroot] [PATCH/next/RFC v2 1/2] package/mariadb: handle
- missing ucontext_t
-In-Reply-To: <20180826170326.18743-1-bernd.kuhls@t-online.de>
-References: <20180826170326.18743-1-bernd.kuhls@t-online.de>
-Message-ID: <20180831225635.5dd4d83d@windsurf>
+Date: Fri, 31 Aug 2018 23:11:34 +0200
+Subject: [Buildroot] [PATCH] imx-vpu: bump to version 5.4.38
+In-Reply-To: <8767305f-2849-6fc9-49e0-422fa43e82eb@gmail.com>
+References: <8767305f-2849-6fc9-49e0-422fa43e82eb@gmail.com>
+Message-ID: <20180831231134.1429323d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+Hello Dan,
 
-+Waldemar in Cc, since there is (in my opinion) something not really
-good going on in uClibc-ng, see below.
-
-On Sun, 26 Aug 2018 19:03:25 +0200, Bernd Kuhls wrote:
-> On some archs uclibc does not provide ucontext_t, for details see
-> https://git.buildroot.net/buildroot/commit/?id=f1cbfeea95e6287c7a666aafc182ffa318eff262
+On Fri, 31 Aug 2018 13:44:08 -0400, Dan Riegsecker wrote:
+> This patch is based on what was released by NXP with image version
+> 4.9.88-2.0.0.
 > 
-> Mariadb uses ucontext_t optionally, its use can be disabled by the
-> corresponding cmake option. Instead of copying the Config.in code from
-> libsigsegv we shamelessly use its ARCH_SUPPORTS option while thinking
-> that a more general approach might be needed for ucontext_t support so
-> please consider this patch a RFC.
+> This patch also corresponds with the Yocto equivalent:
+> https://github.com/Freescale/meta-freescale/commit/1594c64
 
-Indeed, hijacking the libsigsegv Config.in symbol is not really nice.
-Having a global BR2_TOOLCHAIN_HAS_UCONTEXT symbol would be OK, but I
-believe in the case of mariadb, it shouldn't be needed.
+Thanks for this contribution, but we are already using imx-vpu 5.4.38.
+Perhaps you missed it because this update is only in our "next" branch,
+which will be merged back into the master branch after Buildroot
+2018.08 is released.
 
-Indeed, MariaDB configure.cmake contains this:
+See
+https://git.buildroot.org/buildroot/commit/package/freescale-imx/imx-vpu?h=next&id=ea9efdf5675df29e6b4b7e48616a4f5da922c22f
 
-CHECK_INCLUDE_FILE(ucontext.h HAVE_UCONTEXT_H)
-IF(NOT HAVE_UCONTEXT_H)
-  CHECK_INCLUDE_FILE(sys/ucontext.h HAVE_UCONTEXT_H)
-ENDIF()
-IF(HAVE_UCONTEXT_H)
-  CHECK_FUNCTION_EXISTS(makecontext HAVE_UCONTEXT_H)
-ENDIF()
+> diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash 
+> b/package/freescale-imx/imx-vpu/imx-vpu.hash
+> index 0ac0f3d0c2..34abdc099c 100644
+> --- a/package/freescale-imx/imx-vpu/imx-vpu.hash
+> +++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
+> @@ -1,2 +1,2 @@
+>  ?# Locally computed
+> -sha256 ee265e88d17c7369bd9cb917e7cce035b8c7ee2ba4491645fdab9f382f54beb0 
+> imx-vpu-5.4.37.bin
+> +sha256 34bed0ddf6c797f444bddfa5d5495adc751ff268b6431d8beb48129c89c9e47f 
+> imx-vpu-5.4.38.bin
 
-Which should do the following:
-
- - Check if ucontext.h exists, and if so, define HAVE_UCONTEXT_H
-
- - If HAVE_UCONTEXT_H is still not defined, check if sys/ucontext.h
-   exists, and if it's the case, define HAVE_UCONTEXT_H
-
- - If HAVE_UCONTEXT_H is defined, test if makecontext exists, and store
-   the result in HAVE_UCONTEXT_H.
-
-So in our case, because makecontext() is not implemented, mariadb
-should not use ucontext support.
-
-But this doesn't work, because that's not how CHECK_FUNCTION_EXISTS()
-work. If the variable passed is already defined to one, then it does
-nothing.
-
-So, can you change to something like this:
-
-CHECK_INCLUDE_FILE(ucontext.h HAVE_UCONTEXT_H)
-IF(NOT HAVE_UCONTEXT_H)
-  CHECK_INCLUDE_FILE(sys/ucontext.h HAVE_UCONTEXT_H)
-ENDIF()
-CHECK_FUNCTION_EXISTS(makecontext HAVE_MAKECONTEXT)
-IF(NOT HAVE_MAKECONTEXT)
-  UNSET(HAVE_UCONTEXT_H)
-ENDIF()
-
-it should work a bit better. Beware that there are two locations where
-ucontext.h is tested:
-
- - in configure.cmake
- - in libmariadb/cmake/CheckIncludeFiles.cmake
-
-Side note for Waldemar: uClibc-ng approach here is a bit unclean: it
-installs <ucontext.h> even if the architecture doesn't support the
-context functions. And this <ucontext.h> does basically nothing,
-because its entire contents are enclosed in an
-__UCLIBC_HAS_CONTEXT_FUNCS__ condition. Waldemar: perhaps this should
-be fixed in uClibc-ng ?
-
-> Musl also does not provide ucontext functions:
-> https://wiki.musl-libc.org/open-issues.html
-
-This is interesting, because it shows that the comment in
-libsigsegv/Config.in is not correct:
-
-        # with glibc/musl, ucontext is available for all supported
-        # architectures
-        default y if BR2_TOOLCHAIN_USES_GLIBC
-        default y if BR2_TOOLCHAIN_USES_MUSL
-
-What is available for all architectures is ucontext.h, but the context
-functions are not available for any architecture. So, libsigsegv needs
-ucontext.h, not the context functions.
-
-Could you have a look at fixing the CMake logic in MariaDB to rely on
-the presence of makecontext() to decide automatically if ucontext
-should be used or not ?
+Your patch anyway couldn't be applied: it is line-wrapped. You should
+use "git send-email" to send your patches, and not Thunderbird.
 
 Thanks!
 
