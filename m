@@ -1,57 +1,49 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Thu, 30 Aug 2018 21:21:23 +0200
-Subject: [Buildroot] socket.AF_BLUETOOTH in python3 and circular dependencies
-Message-ID: <e1bda375-e70b-94aa-5e90-c96a48217e87@blach.pl>
+From: Matt Flax <flatmax@flatmax.org>
+Date: Fri, 31 Aug 2018 10:37:57 +1000
+Subject: [Buildroot] [PATCH 1/1] swig: Add Config.in.host
+Message-ID: <20180831003757.19520-1-flatmax@flatmax.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+This patch make select BR2_PACKAGE_HOST_SWIG work.
 
-I need support for socket.AF_BLUETOOTH in python3. Python3 is compiled 
-with bluetooth support when bluez5_utils is installed on target, so I 
-created a simple patch:
+The patch adds the package/swig/Config.in.host file and adds this path
+to the package/Config.in.host file.
 
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -256,6 +256,11 @@ endif
-  # Provided to other packages
-  PYTHON3_PATH = $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/
+Signed-off-by: Matt Flax <flatmax@flatmax.org>
+---
+ package/Config.in.host      | 1 +
+ package/swig/Config.in.host | 7 +++++++
+ 2 files changed, 8 insertions(+)
+ create mode 100644 package/swig/Config.in.host
 
-+# Support for socket.AF_BLUETOOTH
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
-+    PYTHON3_DEPENDENCIES += bluez5_utils
-+endif
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 38543e7390..0bd30ab58b 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -55,6 +55,7 @@ menu "Host utilities"
+ 	source "package/sam-ba/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
++	source "package/swig/Config.in.host"
+ 	source "package/tegrarcm/Config.in.host"
+ 	source "package/ti-cgt-pru/Config.in.host"
+ 	source "package/uboot-tools/Config.in.host"
+diff --git a/package/swig/Config.in.host b/package/swig/Config.in.host
+new file mode 100644
+index 0000000000..f4cdfcd7b3
+--- /dev/null
++++ b/package/swig/Config.in.host
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_HOST_SWIG
++	bool "host swig"
++	help
++	  swig is a software development tool that connects programs written in C and
++		C++ with a variety of high-level programming languages.
 +
-
-But unfortunately this patch makes a circular dependencies:
-
-$ make python3-graph-depends
-Recursion detected for  : bluez5_utils
-which is a dependency of: python3
-which is a dependency of: util-linux
-which is a dependency of: libglib2
-which is a dependency of: bluez5_utils
-
-To temporary solve this problem I must python support in util-linux package:
-
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -203,9 +203,9 @@ HOST_UTIL_LINUX_CONF_OPTS += --disable-all-programs
-  endif
-
-  # Install libmount Python bindings
--ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-+ifeq ($(BR2_PACKAGE_PYTHON),y)
-  UTIL_LINUX_CONF_OPTS += --with-python
--UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-+UTIL_LINUX_DEPENDENCIES += python
-  ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBMOUNT),y)
-  UTIL_LINUX_CONF_OPTS += --enable-pylibmount
-  else
-
-
-Can someone point me how to fix circular dependencies without disabling 
-python support in util-linux?
++	  http://www.swig.org/
+-- 
+2.17.1
