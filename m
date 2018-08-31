@@ -1,32 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 Aug 2018 23:32:43 +0200
-Subject: [Buildroot] [git commit] minicom: add COPYING sha256 to hash
-Message-ID: <20180907111607.C35EF7F9D6@busybox.osuosl.org>
+Date: Fri, 31 Aug 2018 23:29:25 +0200
+Subject: [Buildroot] [git commit] swig: add visible Config.in option for
+ host variant
+Message-ID: <20180907111607.BC66A7F9D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6edfa41a0a472401a87f7f2ef354b041a7c2c797
+commit: https://git.buildroot.net/buildroot/commit/?id=4f018b26fc2572de53fb9d62a5954f64af722535
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In minicom package hash file lacks sha256 entry for COPYING file even if
-it is added to MINICOM_LICENSE_FILES.
+The patch adds the package/swig/Config.in.host file and adds this path
+to the package/Config.in.host file.
 
-Add COPYING sha256 entry to minicom.hash file.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Matt Flax <flatmax@flatmax.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/minicom/minicom.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/Config.in.host      | 1 +
+ package/swig/Config.in.host | 8 ++++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-index ca3087160b..f49e430c67 100644
---- a/package/minicom/minicom.hash
-+++ b/package/minicom/minicom.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 532f836b7a677eb0cb1dca8d70302b73729c3d30df26d58368d712e5cca041f1  minicom-2.7.1.tar.gz
-+sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
+diff --git a/package/Config.in.host b/package/Config.in.host
+index a3f852b3fc..3a3578ceeb 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -57,6 +57,7 @@ menu "Host utilities"
+ 	source "package/sam-ba/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
++	source "package/swig/Config.in.host"
+ 	source "package/tegrarcm/Config.in.host"
+ 	source "package/ti-cgt-pru/Config.in.host"
+ 	source "package/uboot-tools/Config.in.host"
+diff --git a/package/swig/Config.in.host b/package/swig/Config.in.host
+new file mode 100644
+index 0000000000..fd2049d30a
+--- /dev/null
++++ b/package/swig/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_SWIG
++	bool "host swig"
++	help
++	  swig is a software development tool that connects programs
++	  written in C and C++ with a variety of high-level
++	  programming languages.
++
++	  http://www.swig.org/
