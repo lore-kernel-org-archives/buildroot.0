@@ -1,115 +1,60 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Fri, 31 Aug 2018 15:38:53 +0100
-Subject: [Buildroot] [PATCH 1/1] configs/qemu: add
- qemu_riscv64_virt_defconfig
-Message-ID: <20180831143853.24340-1-mark.corbin@embecosm.com>
+From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
+Date: Fri, 31 Aug 2018 16:51:31 +0200
+Subject: [Buildroot] [PATCH v3 1/2] package/lvm2: Fix runtime crash when
+ using uclibc
+In-Reply-To: <20180814224717.02d57e06@windsurf>
+References: <20180726171524.479-1-m.niestroj@grinn-global.com>
+ <20180814224717.02d57e06@windsurf>
+Message-ID: <877ek6fv2k.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add RISC-V 64-bit defconfig for QEMU virt machine.
 
-Tested with QEMU 2.12.1
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
----
- board/qemu/riscv64-virt/linux.config | 24 ++++++++++++++++++++++++
- board/qemu/riscv64-virt/readme.txt   | 22 ++++++++++++++++++++++
- configs/qemu_riscv64_virt_defconfig  | 24 ++++++++++++++++++++++++
- 3 files changed, 70 insertions(+)
- create mode 100644 board/qemu/riscv64-virt/linux.config
- create mode 100644 board/qemu/riscv64-virt/readme.txt
- create mode 100644 configs/qemu_riscv64_virt_defconfig
+> Hello Marcin,
+>
+> Once again, thanks for this work!
+>
+> On Thu, 26 Jul 2018 19:15:23 +0200, Marcin Niestroj wrote:
+>> When using uclibc libdevmapper.so was calling dm_task_get_info_base()
+>> function recursively, leading to segmentation fault. This was
+>> happening because uclibc linker loader just takes first existing
+>> 'dm_task_get_info' (which is 'dm_task_get_info_base') symbol in elf
+>> binary, instead of default version.
+>> 
+>> Add upstreamable lvm2 patch [1], which introduces
+>> --enable-symvers[=STYLE] switch. Use that switch to disable symbol
+>> versions, as we do not plan to support binaries compiled against
+>> old libdevmapper library.
+>> 
+>> [1] https://www.redhat.com/archives/dm-devel/2018-July/msg00187.html
+>> 
+>> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+>> ---
+>> Changes v2 -> v3: none
+>
+> I have added a reference to the Buildroot bug report being fixed by
+> this, and I've applied to master.
+>
+> Two questions:
+>
+>  (1) Could you try to push this forward in terms of upstreaming
+>      acceptance ? I know you have submitted the patch, but I looked
+>      today and apparently you haven't received any feedback.
+>
+>  (2) It would be nicer if the availability of symbol versioning could
+>      be auto-detected. Is there a compile-time test that can be done to
+>      verify if symbol versioning is available ? This would perhaps help
+>      make the patch even more acceptable upstream.
+>
+> Thanks!
+>
+> Thomas
 
-diff --git a/board/qemu/riscv64-virt/linux.config b/board/qemu/riscv64-virt/linux.config
-new file mode 100644
-index 0000000000..bf9f4f5ab7
---- /dev/null
-+++ b/board/qemu/riscv64-virt/linux.config
-@@ -0,0 +1,24 @@
-+CONFIG_ARCH_RV64I=y
-+CONFIG_SMP=y
-+CONFIG_NR_CPUS=8
-+CONFIG_PCI=y
-+CONFIG_SYSVIPC=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+# CONFIG_WIRELESS is not set
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+# CONFIG_ETHERNET is not set
-+# CONFIG_WLAN is not set
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_VIRT_DRIVERS=y
-+CONFIG_VIRTIO_MMIO=y
-+CONFIG_EXT2_FS=y
-+CONFIG_EXT4_FS=y
-+CONFIG_TMPFS=y
-+
-diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
-new file mode 100644
-index 0000000000..be563c969e
---- /dev/null
-+++ b/board/qemu/riscv64-virt/readme.txt
-@@ -0,0 +1,22 @@
-+Run the emulation with:
-+
-+  qemu-system-riscv64 -M virt -kernel <path-to-bl>/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=<path-to-buildroot>/output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
-+
-+The Buildroot generated vmlinux image will need to be combined with the Berkeley Boot Loader (BBL) as follows:
-+
-+  export RISCV=<path-to-buildroot>/output/host
-+  export PATH=$PATH:$RISCV/bin
-+  git clone https://github.com/riscv/riscv-pk
-+  cd riscv-pk
-+  mkdir build
-+  cd build
-+  ../configure \
-+    --host=riscv64-buildroot-linux-gnu \
-+    --with-payload=<path-to-buildroot>/output/images/vmlinux
-+  make
-+
-+The resulting 'bbl' file can then be used with the qemu command above.
-+  
-+The login prompt will appear in the terminal that started Qemu.
-+
-+Tested with QEMU 2.12.92
-diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
-new file mode 100644
-index 0000000000..387bf3b4c4
---- /dev/null
-+++ b/configs/qemu_riscv64_virt_defconfig
-@@ -0,0 +1,24 @@
-+# Architecture
-+BR2_riscv64=y
-+
-+# System
-+BR2_SYSTEM_DHCP="eth0"
-+
-+# Filesystem
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+
-+# Linux headers same as kernel, a 4.15 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="riscv-linux-4.15"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv64-virt/linux.config"
-+
-+# Binutils configuration
-+BR2_BINUTILS_VERSION_2_30_X=y
+
 -- 
-2.17.1
+Marcin Niestr?j
