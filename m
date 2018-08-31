@@ -1,51 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 Aug 2018 23:11:34 +0200
-Subject: [Buildroot] [PATCH] imx-vpu: bump to version 5.4.38
-In-Reply-To: <8767305f-2849-6fc9-49e0-422fa43e82eb@gmail.com>
-References: <8767305f-2849-6fc9-49e0-422fa43e82eb@gmail.com>
-Message-ID: <20180831231134.1429323d@windsurf>
+Date: Fri, 31 Aug 2018 23:12:40 +0200
+Subject: [Buildroot] [PATCH 2/2] e2fsprogs: simplify handling of ldconfig
+ for target variant
+In-Reply-To: <20180831211240.20322-1-thomas.petazzoni@bootlin.com>
+References: <20180831211240.20322-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20180831211240.20322-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Dan,
+e2fsprogs now has a proper autoconf check for ldconfig, so we can
+simply pass the apropriate ac_cv_path_LDCONFIG variable at configure
+time, and it gets used at build/install time without having to force
+LDCONFIG=true at every step.
 
-On Fri, 31 Aug 2018 13:44:08 -0400, Dan Riegsecker wrote:
-> This patch is based on what was released by NXP with image version
-> 4.9.88-2.0.0.
-> 
-> This patch also corresponds with the Yocto equivalent:
-> https://github.com/Freescale/meta-freescale/commit/1594c64
+Since the E2FSPROGS_INSTALL_TARGET_OPTS become the default, we can get
+rid of them entirely.
 
-Thanks for this contribution, but we are already using imx-vpu 5.4.38.
-Perhaps you missed it because this update is only in our "next" branch,
-which will be merged back into the master branch after Buildroot
-2018.08 is released.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/e2fsprogs/e2fsprogs.mk | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-See
-https://git.buildroot.org/buildroot/commit/package/freescale-imx/imx-vpu?h=next&id=ea9efdf5675df29e6b4b7e48616a4f5da922c22f
-
-> diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash 
-> b/package/freescale-imx/imx-vpu/imx-vpu.hash
-> index 0ac0f3d0c2..34abdc099c 100644
-> --- a/package/freescale-imx/imx-vpu/imx-vpu.hash
-> +++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
-> @@ -1,2 +1,2 @@
->  ?# Locally computed
-> -sha256 ee265e88d17c7369bd9cb917e7cce035b8c7ee2ba4491645fdab9f382f54beb0 
-> imx-vpu-5.4.37.bin
-> +sha256 34bed0ddf6c797f444bddfa5d5495adc751ff268b6431d8beb48129c89c9e47f 
-> imx-vpu-5.4.38.bin
-
-Your patch anyway couldn't be applied: it is line-wrapped. You should
-use "git send-email" to send your patches, and not Thunderbird.
-
-Thanks!
-
-Thomas
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 5fe1ff8e68..4de469216e 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -64,7 +64,9 @@ endif
+ # the configure script (i.e with the cross-compiler). Help them by
+ # saying that <sys/stat.h> is available on the host, which is needed
+ # for util/subst.c to build properly.
+-E2FSPROGS_CONF_ENV += BUILD_CFLAGS="-DHAVE_SYS_STAT_H"
++E2FSPROGS_CONF_ENV += \
++	BUILD_CFLAGS="-DHAVE_SYS_STAT_H" \
++	ac_cv_path_LDCONFIG=true
+ 
+ # Disable use of the host magic.h, as on older hosts (e.g. RHEL 5)
+ # it doesn't provide definitions expected by e2fsprogs support lib.
+@@ -73,18 +75,10 @@ HOST_E2FSPROGS_CONF_ENV += \
+ 	ac_cv_lib_magic_magic_file=no \
+ 	ac_cv_path_LDCONFIG=true
+ 
+-E2FSPROGS_MAKE_OPTS = LDCONFIG=true
+-
+ E2FSPROGS_INSTALL_STAGING_OPTS = \
+ 	DESTDIR=$(STAGING_DIR) \
+-	LDCONFIG=true \
+ 	install-libs
+ 
+-E2FSPROGS_INSTALL_TARGET_OPTS = \
+-	DESTDIR=$(TARGET_DIR) \
+-	LDCONFIG=true \
+-	install
+-
+ define HOST_E2FSPROGS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
+ endef
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.4
