@@ -1,62 +1,115 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 31 Aug 2018 16:23:41 +0200
-Subject: [Buildroot] [PATCH next] squid: fix build failure on nios2
-In-Reply-To: <20180831141735.32773-1-giulio.benetti@micronovasrl.com>
-References: <20180831141735.32773-1-giulio.benetti@micronovasrl.com>
-Message-ID: <d4890a27-5985-8536-d926-b63881480534@micronovasrl.com>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Fri, 31 Aug 2018 15:38:53 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/qemu: add
+ qemu_riscv64_virt_defconfig
+Message-ID: <20180831143853.24340-1-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add RISC-V 64-bit defconfig for QEMU virt machine.
 
-Il 31/08/2018 16:17, Giulio Benetti ha scritto:
-> libstdc++ can have ATOMIC_INT_LOCK_FREE < 2, this way exception_ptr.h
-> containing current_exception() function won't be included causing build
-> failure.
-> 
-> Add a patch to replace current_exception() with uncaught_exception()
-> function. current_exception() is only used to check if there is a pending
-> exception, uncaught_exception() does the same and does not rely on
-> ATOMIC_INT_LOCK_FREE >= 2.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->   ...place-current_exception-with-uncaugh.patch | 32 +++++++++++++++++++
->   1 file changed, 32 insertions(+)
->   create mode 100644 package/squid/0003-TextException-replace-current_exception-with-uncaugh.patch
-> 
-> diff --git a/package/squid/0003-TextException-replace-current_exception-with-uncaugh.patch b/package/squid/0003-TextException-replace-current_exception-with-uncaugh.patch
-> new file mode 100644
-> index 0000000000..acd18a6f4f
-> --- /dev/null
-> +++ b/package/squid/0003-TextException-replace-current_exception-with-uncaugh.patch
-> @@ -0,0 +1,32 @@
-> +From 14666035700bbabe699bdae4164d292cb04ca556 Mon Sep 17 00:00:00 2001
-> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> +Date: Fri, 31 Aug 2018 15:54:21 +0200
-> +Subject: [PATCH] TextException: replace current_exception() with
-> + uncaught_exception()
-> +
-> +If libstdc++ has ATOMIC_INT_LOCK_FREE < 2 current_exception() is not supported.
-> +
-> +Since current_exception() is needed only to check if there are pending
-> +exceptions, let's use uncaught_exception() instead.
-> +
+Tested with QEMU 2.12.1
 
-Sorry I've forgot to add:
-"
-Fixes:
-http://autobuild.buildroot.net/results/273/273556771e957f109a1fbf446a5193aac49b72af/
-http://autobuild.buildroot.net/results/9d2/9d2cde8494f69fedf0afc460d8e540d769a79212/
-http://autobuild.buildroot.net/results/a71/a71db790ae3a3ea1836760edad504a92ea005cf7/
-"
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+---
+ board/qemu/riscv64-virt/linux.config | 24 ++++++++++++++++++++++++
+ board/qemu/riscv64-virt/readme.txt   | 22 ++++++++++++++++++++++
+ configs/qemu_riscv64_virt_defconfig  | 24 ++++++++++++++++++++++++
+ 3 files changed, 70 insertions(+)
+ create mode 100644 board/qemu/riscv64-virt/linux.config
+ create mode 100644 board/qemu/riscv64-virt/readme.txt
+ create mode 100644 configs/qemu_riscv64_virt_defconfig
 
-And failure happens with arm / arm926ej-s too, not only nios2.
-
-I wait for any comments before resending patch as v2.
-
-Thank you all
-Giulio Benetti
+diff --git a/board/qemu/riscv64-virt/linux.config b/board/qemu/riscv64-virt/linux.config
+new file mode 100644
+index 0000000000..bf9f4f5ab7
+--- /dev/null
++++ b/board/qemu/riscv64-virt/linux.config
+@@ -0,0 +1,24 @@
++CONFIG_ARCH_RV64I=y
++CONFIG_SMP=y
++CONFIG_NR_CPUS=8
++CONFIG_PCI=y
++CONFIG_SYSVIPC=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++# CONFIG_WIRELESS is not set
++CONFIG_VIRTIO_BLK=y
++CONFIG_NETDEVICES=y
++CONFIG_VIRTIO_NET=y
++# CONFIG_ETHERNET is not set
++# CONFIG_WLAN is not set
++CONFIG_SERIAL_8250=y
++CONFIG_SERIAL_8250_CONSOLE=y
++CONFIG_SERIAL_OF_PLATFORM=y
++CONFIG_VIRT_DRIVERS=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_EXT2_FS=y
++CONFIG_EXT4_FS=y
++CONFIG_TMPFS=y
++
+diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
+new file mode 100644
+index 0000000000..be563c969e
+--- /dev/null
++++ b/board/qemu/riscv64-virt/readme.txt
+@@ -0,0 +1,22 @@
++Run the emulation with:
++
++  qemu-system-riscv64 -M virt -kernel <path-to-bl>/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=<path-to-buildroot>/output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
++
++The Buildroot generated vmlinux image will need to be combined with the Berkeley Boot Loader (BBL) as follows:
++
++  export RISCV=<path-to-buildroot>/output/host
++  export PATH=$PATH:$RISCV/bin
++  git clone https://github.com/riscv/riscv-pk
++  cd riscv-pk
++  mkdir build
++  cd build
++  ../configure \
++    --host=riscv64-buildroot-linux-gnu \
++    --with-payload=<path-to-buildroot>/output/images/vmlinux
++  make
++
++The resulting 'bbl' file can then be used with the qemu command above.
++  
++The login prompt will appear in the terminal that started Qemu.
++
++Tested with QEMU 2.12.92
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+new file mode 100644
+index 0000000000..387bf3b4c4
+--- /dev/null
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -0,0 +1,24 @@
++# Architecture
++BR2_riscv64=y
++
++# System
++BR2_SYSTEM_DHCP="eth0"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++
++# Linux headers same as kernel, a 4.15 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_GIT=y
++BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="riscv-linux-4.15"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv64-virt/linux.config"
++
++# Binutils configuration
++BR2_BINUTILS_VERSION_2_30_X=y
+-- 
+2.17.1
