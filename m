@@ -1,50 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 Aug 2018 23:29:25 +0200
-Subject: [Buildroot] [git commit branch/next] swig: add visible Config.in
- option for host variant
-Message-ID: <20180831212921.11CD881F5F@busybox.osuosl.org>
+Date: Fri, 31 Aug 2018 23:31:28 +0200
+Subject: [Buildroot] [PATCH 1/1] swig: Add Config.in.host
+In-Reply-To: <20180831003757.19520-1-flatmax@flatmax.org>
+References: <20180831003757.19520-1-flatmax@flatmax.org>
+Message-ID: <20180831233128.613d3ec1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f018b26fc2572de53fb9d62a5954f64af722535
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-The patch adds the package/swig/Config.in.host file and adds this path
-to the package/Config.in.host file.
+On Fri, 31 Aug 2018 10:37:57 +1000, Matt Flax wrote:
+> This patch make select BR2_PACKAGE_HOST_SWIG work.
 
-Signed-off-by: Matt Flax <flatmax@flatmax.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in.host      | 1 +
- package/swig/Config.in.host | 8 ++++++++
- 2 files changed, 9 insertions(+)
+Actually, "select BR2_PACKAGE_HOST_SWIG" does not need to work. If you
+need host-swig from another package, add "host-swig" to this package
+<pkg>_DEPENDENCIES variable. Doing a "select BR2_PACKAGE_HOST_SWIG"
+will not give you anything, because it won't guarantee that host-swig
+is built before your package.
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index a3f852b3fc..3a3578ceeb 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -57,6 +57,7 @@ menu "Host utilities"
- 	source "package/sam-ba/Config.in.host"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
-+	source "package/swig/Config.in.host"
- 	source "package/tegrarcm/Config.in.host"
- 	source "package/ti-cgt-pru/Config.in.host"
- 	source "package/uboot-tools/Config.in.host"
-diff --git a/package/swig/Config.in.host b/package/swig/Config.in.host
-new file mode 100644
-index 0000000000..fd2049d30a
---- /dev/null
-+++ b/package/swig/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_SWIG
-+	bool "host swig"
-+	help
-+	  swig is a software development tool that connects programs
-+	  written in C and C++ with a variety of high-level
-+	  programming languages.
-+
-+	  http://www.swig.org/
+But anyway, I believe that swig may be needed when doing application
+development around Buildroot, so I'm fine with having a visible
+menuconfig option for this. I applied your patch with a reworked commit
+log.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
