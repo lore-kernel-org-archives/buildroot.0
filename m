@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 Aug 2018 23:12:39 +0200
-Subject: [Buildroot] [PATCH 1/2] e2fsprogs: do not use ldconfig when
- building the host variant
-Message-ID: <20180831211240.20322-1-thomas.petazzoni@bootlin.com>
+Date: Fri, 31 Aug 2018 23:12:57 +0200
+Subject: [Buildroot] [git commit branch/next] scanpypi: place a warning into
+ *.mk file if licence id couldn't be detected
+Message-ID: <20180831211249.04F3A81F02@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 93acaa5a573865afc7a8c0912a7037965eb845a6 ("e2fsprogs:
-build shared library for the host"), we are building shared libraries
-in host-e2fsprogs instead of static libraries. A consequence of this
-is that the e2fsprogs build system tries to run ldconfig on the host,
-which fails when running as non-root:
+commit: https://git.buildroot.net/buildroot/commit/?id=0101ac62c81e468ba7fd47b991972a722cf1b43c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-/usr/sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
-make[3]: [Makefile:441: install-shlibs] Error 1 (ignored)
+If a license file could be found, but license id couldn't be detected place
+following warning into *.mk file:
 
-Tell the configure script to use "true" as ldconfig in order to avoid
-this problem.
+FOO_LICENSE = FIXME: license id couldn't be detected
 
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/e2fsprogs/e2fsprogs.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ utils/scanpypi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index fecef118ac..5fe1ff8e68 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -70,7 +70,8 @@ E2FSPROGS_CONF_ENV += BUILD_CFLAGS="-DHAVE_SYS_STAT_H"
- # it doesn't provide definitions expected by e2fsprogs support lib.
- HOST_E2FSPROGS_CONF_ENV += \
- 	ac_cv_header_magic_h=no \
--	ac_cv_lib_magic_magic_file=no
-+	ac_cv_lib_magic_magic_file=no \
-+	ac_cv_path_LDCONFIG=true
+diff --git a/utils/scanpypi b/utils/scanpypi
+index 12c96b842e..31e242e3db 100755
+--- a/utils/scanpypi
++++ b/utils/scanpypi
+@@ -444,6 +444,8 @@ class BuildrootPackage():
+                     match = liclookup.match(lic_file.read())
+                 if match is not None and match.confidence >= 90.0:
+                     license_names.append(match.license.id)
++                else:
++                    license_names.append("FIXME: license id couldn't be detected")
  
- E2FSPROGS_MAKE_OPTS = LDCONFIG=true
- 
--- 
-2.14.4
+             if len(license_names) > 0:
+                 license_line = ('{name}_LICENSE ='
