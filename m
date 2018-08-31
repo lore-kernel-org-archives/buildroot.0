@@ -1,39 +1,62 @@
-From: David De Grave (Essensium/Mind) <david.degrave@mind.be>
-Date: Fri, 31 Aug 2018 16:20:24 +0200
-Subject: [Buildroot] [PATCH 3/3] boot/uboot/uboot.mk: substitution for '-I/'
- to '-isystem /' no longer needed
-In-Reply-To: <20180831142024.27548-1-david.degrave@mind.be>
-References: <20180831142024.27548-1-david.degrave@mind.be>
-Message-ID: <20180831142024.27548-3-david.degrave@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 31 Aug 2018 16:23:41 +0200
+Subject: [Buildroot] [PATCH next] squid: fix build failure on nios2
+In-Reply-To: <20180831141735.32773-1-giulio.benetti@micronovasrl.com>
+References: <20180831141735.32773-1-giulio.benetti@micronovasrl.com>
+Message-ID: <d4890a27-5985-8536-d926-b63881480534@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As the '-isystem' is now used globally, the uboot's substitution to define
-HOSTCC is no longer needed too.
+Hello,
 
-This reverts commit 0bf80e4bcd5277e3ad935e03c632deba4c7316f2
-         and commit baae5156ce37e8b2775f04710f7d1c8e97e4114c
+Il 31/08/2018 16:17, Giulio Benetti ha scritto:
+> libstdc++ can have ATOMIC_INT_LOCK_FREE < 2, this way exception_ptr.h
+> containing current_exception() function won't be included causing build
+> failure.
+> 
+> Add a patch to replace current_exception() with uncaught_exception()
+> function. current_exception() is only used to check if there is a pending
+> exception, uncaught_exception() does the same and does not rely on
+> ATOMIC_INT_LOCK_FREE >= 2.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>   ...place-current_exception-with-uncaugh.patch | 32 +++++++++++++++++++
+>   1 file changed, 32 insertions(+)
+>   create mode 100644 package/squid/0003-TextException-replace-current_exception-with-uncaugh.patch
+> 
+> diff --git a/package/squid/0003-TextException-replace-current_exception-with-uncaugh.patch b/package/squid/0003-TextException-replace-current_exception-with-uncaugh.patch
+> new file mode 100644
+> index 0000000000..acd18a6f4f
+> --- /dev/null
+> +++ b/package/squid/0003-TextException-replace-current_exception-with-uncaugh.patch
+> @@ -0,0 +1,32 @@
+> +From 14666035700bbabe699bdae4164d292cb04ca556 Mon Sep 17 00:00:00 2001
+> +From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> +Date: Fri, 31 Aug 2018 15:54:21 +0200
+> +Subject: [PATCH] TextException: replace current_exception() with
+> + uncaught_exception()
+> +
+> +If libstdc++ has ATOMIC_INT_LOCK_FREE < 2 current_exception() is not supported.
+> +
+> +Since current_exception() is needed only to check if there are pending
+> +exceptions, let's use uncaught_exception() instead.
+> +
 
-Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
----
- boot/uboot/uboot.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sorry I've forgot to add:
+"
+Fixes:
+http://autobuild.buildroot.net/results/273/273556771e957f109a1fbf446a5193aac49b72af/
+http://autobuild.buildroot.net/results/9d2/9d2cde8494f69fedf0afc460d8e540d769a79212/
+http://autobuild.buildroot.net/results/a71/a71db790ae3a3ea1836760edad504a92ea005cf7/
+"
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index bddafe234d..7cb9859565 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -132,7 +132,7 @@ endif
- UBOOT_MAKE_OPTS += \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	ARCH=$(UBOOT_ARCH) \
--	HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS)))" \
-+	HOSTCC="$(HOSTCC) $(HOST_CFLAGS)" \
- 	HOSTLDFLAGS="$(HOST_LDFLAGS)"
- 
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
--- 
-2.13.6
+And failure happens with arm / arm926ej-s too, not only nios2.
+
+I wait for any comments before resending patch as v2.
+
+Thank you all
+Giulio Benetti
