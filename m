@@ -1,35 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 Aug 2018 23:31:28 +0200
-Subject: [Buildroot] [PATCH 1/1] swig: Add Config.in.host
-In-Reply-To: <20180831003757.19520-1-flatmax@flatmax.org>
-References: <20180831003757.19520-1-flatmax@flatmax.org>
-Message-ID: <20180831233128.613d3ec1@windsurf>
+Date: Fri, 31 Aug 2018 23:32:32 +0200
+Subject: [Buildroot] [git commit] minicom: add COPYING sha256 to hash
+Message-ID: <20180831213214.01BC3820E3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=db619da8d5a49b7971192be0279adacfb7dea842
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 31 Aug 2018 10:37:57 +1000, Matt Flax wrote:
-> This patch make select BR2_PACKAGE_HOST_SWIG work.
+In minicom package hash file lacks sha256 entry for COPYING file even if
+it is added to MINICOM_LICENSE_FILES.
 
-Actually, "select BR2_PACKAGE_HOST_SWIG" does not need to work. If you
-need host-swig from another package, add "host-swig" to this package
-<pkg>_DEPENDENCIES variable. Doing a "select BR2_PACKAGE_HOST_SWIG"
-will not give you anything, because it won't guarantee that host-swig
-is built before your package.
+Add COPYING sha256 entry to minicom.hash file.
 
-But anyway, I believe that swig may be needed when doing application
-development around Buildroot, so I'm fine with having a visible
-menuconfig option for this. I applied your patch with a reworked commit
-log.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/minicom/minicom.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+index ca3087160b..f49e430c67 100644
+--- a/package/minicom/minicom.hash
++++ b/package/minicom/minicom.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 532f836b7a677eb0cb1dca8d70302b73729c3d30df26d58368d712e5cca041f1  minicom-2.7.1.tar.gz
++sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
