@@ -1,49 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 Aug 2018 20:57:33 +0200
-Subject: [Buildroot] [git commit] expat: bump to version 2.2.6
-Message-ID: <20180907111606.911EF7F9D6@busybox.osuosl.org>
+Date: Fri, 31 Aug 2018 23:32:43 +0200
+Subject: [Buildroot] [git commit] minicom: add COPYING sha256 to hash
+Message-ID: <20180907111607.C35EF7F9D6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba65ca804edbafab783ee6c2d3023abed65731d6
+commit: https://git.buildroot.net/buildroot/commit/?id=6edfa41a0a472401a87f7f2ef354b041a7c2c797
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In minicom package hash file lacks sha256 entry for COPYING file even if
+it is added to MINICOM_LICENSE_FILES.
+
+Add COPYING sha256 entry to minicom.hash file.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/expat/expat.hash | 8 ++++----
- package/expat/expat.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/minicom/minicom.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 945e102342..6c55972f69 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.5/
--md5	789e297f547980fc9ecc036f9a070d49		expat-2.2.5.tar.bz2
--sha1	490659abd7d6c6d4cb4e60c945a15fbf081564f6	expat-2.2.5.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.6/
-+md5	ca047ae951b40020ac831c28859161b2		expat-2.2.6.tar.bz2
-+sha1	c8947fc3119a797b55485f2f7bdaaeb49cc9df01	expat-2.2.6.tar.bz2
- 
+diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+index ca3087160b..f49e430c67 100644
+--- a/package/minicom/minicom.hash
++++ b/package/minicom/minicom.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256	d9dc32efba7e74f788fcc4f212a43216fc37cf5f23f4c2339664d473353aedf6	expat-2.2.5.tar.bz2
-+sha256	17b43c2716d521369f82fc2dc70f359860e90fa440bea65b3b85f0b246ea81f2	expat-2.2.6.tar.bz2
- sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 69c457da3d..61f3176312 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.2.5
-+EXPAT_VERSION = 2.2.6
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
+ sha256 532f836b7a677eb0cb1dca8d70302b73729c3d30df26d58368d712e5cca041f1  minicom-2.7.1.tar.gz
++sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
