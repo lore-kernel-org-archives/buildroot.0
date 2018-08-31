@@ -1,43 +1,52 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri, 31 Aug 2018 06:23:30 +0300
-Subject: [Buildroot] [PATCH/next] configs/pc: fix grub-efi.cfg
- permissions
-In-Reply-To: <249674226.3791227.1535683915719.JavaMail.zimbra@datacom.com.br>
-References: <20180831022412.2182-1-casantos@datacom.com.br>
- <249674226.3791227.1535683915719.JavaMail.zimbra@datacom.com.br>
-Message-ID: <87tvnbw765.fsf@tkos.co.il>
+Date: Fri, 31 Aug 2018 06:30:28 +0300
+Subject: [Buildroot] [PATCH 1/1] python-pyzmq: bump to version 17.1.2
+In-Reply-To: <20180830190333.27732-1-asafka7@gmail.com>
+References: <20180830190333.27732-1-asafka7@gmail.com>
+Message-ID: <87sh2vw6uj.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Carlos,
+Hi Asaf,
 
-Carlos Santos writes:
->> From: "DATACOM" <casantos@datacom.com.br>
->> To: "buildroot" <buildroot@buildroot.org>
->> Sent: Thursday, August 30, 2018 11:24:12 PM
->> Subject: [Buildroot] [PATCH/next] configs/pc: fix grub-efi.cfg permissions
+Asaf Kahlon writes:
+> Adjust the first patch to the new version, and remove the second
+> patch since it's not needed anymore.
 >
->> It does not need the execute bits.
->> 
->> Signed-off-by: Carlos Santos <casantos@datacom.com.br>
->> ---
->> board/pc/grub-efi.cfg | 0
->> 1 file changed, 0 insertions(+), 0 deletions(-)
->> mode change 100755 => 100644 board/pc/grub-efi.cfg
->> 
->> diff --git a/board/pc/grub-efi.cfg b/board/pc/grub-efi.cfg
->> old mode 100755
->> new mode 100644
->> --
->> 2.17.1
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
 >
-> I could not find this one on patchwork. Got lost?
+> This patch should solve some of the build issues of pyzmq.
+> I didn't run it through all configs, but checked locally on some.
+> ---
+>  ...ldroot-zmq-version-instead-of-detect.patch | 14 ++--
+>  ...pile_and_run-with-compile_and_forget.patch | 76 -------------------
+>  package/python-pyzmq/python-pyzmq.hash        |  4 +-
+>  package/python-pyzmq/python-pyzmq.mk          |  4 +-
+>  4 files changed, 11 insertions(+), 87 deletions(-)
+>  delete mode 100644 package/python-pyzmq/0002-replace-compile_and_run-with-compile_and_forget.patch
+>
+> diff --git a/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch b/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch
+> index cb52eaf6de..90e6f23c65 100644
+> --- a/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch
+> +++ b/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch
+> @@ -12,22 +12,22 @@ host, possibly returning a wrong version number.
+>  Instead of trying to run the compiled test program to get the version
+>  dynamically, return the version of the buildroot environment.
+>  
+> -Written by Michael Rommel, modified for version 16.0.2 by Lionel
+> -Flandrin.
+> +Written by Michael Rommel, modified for version 17.1.2 by Asaf
+> +Kahlon.
+>  
+> -Signed-off-by: Lionel Flandrin <lionel@svkt.org>
+> +Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-There is a known issue with patchwork not catching rename or mode change
-only patches.
+Please keep existing credit log comment and sign-off. You should add
+your sign-off below the existing one.
 
 baruch
 
