@@ -1,56 +1,91 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 31 Aug 2018 10:42:01 +0200
-Subject: [Buildroot] [PATCH v2,1/1] qt: fix build on powerpc_e500mc
-In-Reply-To: <20180831100951.1f66c797@windsurf>
-References: <20180830163146.4952-1-fontaine.fabrice@gmail.com>
- <20180831100951.1f66c797@windsurf>
-Message-ID: <CAPi7W83HUM9wpHtP11N0UoS4-QPWPSWHjyArYRrnXyXSn8s=mQ@mail.gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 31 Aug 2018 11:12:03 +0200
+Subject: [Buildroot] [PATCH] python-zeroconf: new package
+In-Reply-To: <20180830135853.31515-1-yegorslists@googlemail.com>
+References: <20180830135853.31515-1-yegorslists@googlemail.com>
+Message-ID: <CAGm1_kvxv-CWiwWSdVkcfFQkdNroma2WHnoCRo8tZhWCi6xQyQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
-
-Le ven. 31 ao?t 2018 ? 10:10, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
-
-> Hello Fabrice,
+On Thu, Aug 30, 2018 at 3:59 PM <yegorslists@googlemail.com> wrote:
 >
-> Thanks for this new iteration!
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 >
-> On Thu, 30 Aug 2018 18:31:46 +0200, Fabrice Fontaine wrote:
-> > gcc bug internal compiler error: in validate_condition_mode, at
-> > config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.
-> > Workaround is to set -mno-isel, see
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
-> > https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
-> >
-> > This bug is also raised on BR2_powerpc_8540, BR2_powerpc_8548 and
-> > BR2_powerpc_e5500.
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Looks like this version is for Python 3 only. I'll send v2.
+
+Yegor
+
+>  package/Config.in                            |  1 +
+>  package/python-zeroconf/Config.in            |  8 ++++++++
+>  package/python-zeroconf/python-zeroconf.hash |  5 +++++
+>  package/python-zeroconf/python-zeroconf.mk   | 14 ++++++++++++++
+>  4 files changed, 28 insertions(+)
+>  create mode 100644 package/python-zeroconf/Config.in
+>  create mode 100644 package/python-zeroconf/python-zeroconf.hash
+>  create mode 100644 package/python-zeroconf/python-zeroconf.mk
 >
-> Just curious, how did you figure out that list of affected platforms ?
->
-As mentioned in your last email, the link was giving this list:
-Target: e500v2 (I was able to reproduce with e500mc, e5500 targets as well).
-
-So I tested these additional architectures and I confirm that they're
-affected by this bug.
-I also checked e500v1 (8540) and it failed.
-There was no issue with e6500 so I think the bug is only affecting e5xxx
-but I haven't tested all the powerpc architectures.
-
-
-> Thomas
+> diff --git a/package/Config.in b/package/Config.in
+> index 66f303ec58..db9a54974c 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1025,6 +1025,7 @@ menu "External python modules"
+>         source "package/python-xlwt/Config.in"
+>         source "package/python-xmltodict/Config.in"
+>         source "package/python-yieldfrom/Config.in"
+> +       source "package/python-zeroconf/Config.in"
+>         source "package/python-zope-interface/Config.in"
+>  endmenu
+>  endif
+> diff --git a/package/python-zeroconf/Config.in b/package/python-zeroconf/Config.in
+> new file mode 100644
+> index 0000000000..47c2a5563f
+> --- /dev/null
+> +++ b/package/python-zeroconf/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_PYTHON_ZEROCONF
+> +       bool "python-zeroconf"
+> +       select BR2_PACKAGE_PYTHON_NETIFACES # runtime
+> +       help
+> +         Pure Python Multicast DNS Service Discovery Library
+> +         (Bonjour/Avahi compatible).
+> +
+> +         https://github.com/jstasiak/python-zeroconf
+> diff --git a/package/python-zeroconf/python-zeroconf.hash b/package/python-zeroconf/python-zeroconf.hash
+> new file mode 100644
+> index 0000000000..1677affa11
+> --- /dev/null
+> +++ b/package/python-zeroconf/python-zeroconf.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/zeroconf/json
+> +md5    23124285dbdfcf3cb9cca11b98216cf7  zeroconf-0.20.0.tar.gz
+> +sha256 6e3f1e7b5871e3d1410ac29b9fb85aafc1e2d661ed596b07a6f84559a475efcb  zeroconf-0.20.0.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 bb117c0fbd7f57f64170b690285d7df07c2371b578e3b3cd3aa2e1155ef461a0  COPYING
+> diff --git a/package/python-zeroconf/python-zeroconf.mk b/package/python-zeroconf/python-zeroconf.mk
+> new file mode 100644
+> index 0000000000..b7a30326a9
+> --- /dev/null
+> +++ b/package/python-zeroconf/python-zeroconf.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-zeroconf
+> +#
+> +################################################################################
+> +
+> +PYTHON_ZEROCONF_VERSION = 0.20.0
+> +PYTHON_ZEROCONF_SOURCE = zeroconf-$(PYTHON_ZEROCONF_VERSION).tar.gz
+> +PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/20/d7/418ff6c684ace0f5855ec56c66cfa99ec50443c41693b91e9abcccfa096c
+> +PYTHON_ZEROCONF_SETUP_TYPE = setuptools
+> +PYTHON_ZEROCONF_LICENSE = LGPL-2.1
+> +PYTHON_ZEROCONF_LICENSE_FILES = COPYING
+> +
+> +$(eval $(python-package))
 > --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
-Best Regards,
-
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180831/ae3ed4bc/attachment.html>
+> 2.17.0
+>
