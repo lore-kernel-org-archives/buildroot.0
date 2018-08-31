@@ -1,174 +1,133 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 31 Aug 2018 07:35:43 +0300
-Subject: [Buildroot] [PATCH v2 1/1] python-pyzmq: bump to version 17.1.2
-Message-ID: <20180831043543.6538-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 Aug 2018 08:00:16 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-08-30
+Message-ID: <20180831060016.8033420728@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adjust the first patch to the new version, and remove the second
-patch since it's not needed anymore.
+Hello,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
-v1 -> v2: keep current existing log and sign-off, and add mine.
+Build statistics for 2018-08-30
+===============================
 
-This patch should solve some of the build issues of pyzmq.
-I didn't run it through all configs, but checked locally on some.
----
- ...ldroot-zmq-version-instead-of-detect.patch | 11 ++-
- ...pile_and_run-with-compile_and_forget.patch | 76 -------------------
- package/python-pyzmq/python-pyzmq.hash        |  4 +-
- package/python-pyzmq/python-pyzmq.mk          |  4 +-
- 4 files changed, 11 insertions(+), 84 deletions(-)
- delete mode 100644 package/python-pyzmq/0002-replace-compile_and_run-with-compile_and_forget.patch
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  25 |   3 |   0 |  28 |
+   2018.05.x |  19 |   1 |   0 |  20 |
+      master | 171 |   4 |   0 | 175 |
+        next |  15 |  30 |   0 |  45 |
 
-diff --git a/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch b/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch
-index cb52eaf6de..461ef4e5fe 100644
---- a/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch
-+++ b/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch
-@@ -15,19 +15,22 @@ dynamically, return the version of the buildroot environment.
- Written by Michael Rommel, modified for version 16.0.2 by Lionel
- Flandrin.
- 
-+Modified for version 17.1.2 by Asaf Kahlon.
-+
- Signed-off-by: Lionel Flandrin <lionel@svkt.org>
-+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
- ---
-  buildutils/detect.py | 14 ++++++++------
-  1 file changed, 8 insertions(+), 6 deletions(-)
- 
- diff --git a/buildutils/detect.py b/buildutils/detect.py
--index 9520da7..823144f 100644
-+index cb14a8d..b33a3b5 100644
- --- a/buildutils/detect.py
- +++ b/buildutils/detect.py
--@@ -117,13 +117,15 @@ def detect_zmq(basedir, compiler=None, **compiler_attrs):
-+@@ -116,13 +116,15 @@ def detect_zmq(basedir, compiler=None, **compiler_attrs):
-      
-      cc = get_compiler(compiler=compiler, **compiler_attrs)
--     efile = test_compilation(cfile, compiler=cc)
-+     efile = test_compilation(cfile, compiler=cc, **compiler_attrs)
- -    patch_lib_paths(efile, cc.library_dirs)
- +    #patch_lib_paths(efile, cc.library_dirs)
-      
-@@ -47,5 +50,5 @@ index 9520da7..823144f 100644
-      handlers = {'vers':  lambda val: tuple(int(v) for v in val.split('.'))}
-  
- -- 
--2.11.0
-+2.17.1
- 
-diff --git a/package/python-pyzmq/0002-replace-compile_and_run-with-compile_and_forget.patch b/package/python-pyzmq/0002-replace-compile_and_run-with-compile_and_forget.patch
-deleted file mode 100644
-index 278e939e0e..0000000000
---- a/package/python-pyzmq/0002-replace-compile_and_run-with-compile_and_forget.patch
-+++ /dev/null
-@@ -1,76 +0,0 @@
--detect.py: replace compile_and_run with compile_and_forget
--
--This function is only used in setup.py to detect the availability of
--sys/un.h by compiling and running a small test program. Since we're
--cross-compiling we can't run the generated program, however if the
--header is missing the test will fail at the compilation step so
--running the test in unnecessary.
--
--Signed-off-by: Lionel Flandrin <lionel@svkt.org>
-----
-- buildutils/detect.py | 16 ++++++++--------
-- setup.py             |  4 ++--
-- 2 files changed, 10 insertions(+), 10 deletions(-)
--
--diff --git a/buildutils/detect.py b/buildutils/detect.py
--index 7a6c115..9520da7 100644
----- a/buildutils/detect.py
--+++ b/buildutils/detect.py
--@@ -58,7 +58,7 @@ def test_compilation(cfile, compiler=None, **compiler_attrs):
--     cc.link_executable(objs, efile, extra_preargs=lpreargs)
--     return efile
-- 
---def compile_and_run(basedir, src, compiler=None, **compiler_attrs):
--+def compile_and_forget(basedir, src, compiler=None, **compiler_attrs):
--     if not os.path.exists(basedir):
--         os.makedirs(basedir)
--     cfile = pjoin(basedir, os.path.basename(src))
--@@ -66,16 +66,16 @@ def compile_and_run(basedir, src, compiler=None, **compiler_attrs):
--     try:
--         cc = get_compiler(compiler, **compiler_attrs)
--         efile = test_compilation(cfile, compiler=cc)
---        patch_lib_paths(efile, cc.library_dirs)
---        result = Popen(efile, stdout=PIPE, stderr=PIPE)
---        so, se = result.communicate()
---        # for py3k:
---        so = so.decode()
---        se = se.decode()
--+        # patch_lib_paths(efile, cc.library_dirs)
--+        # result = Popen(efile, stdout=PIPE, stderr=PIPE)
--+        # so, se = result.communicate()
--+        # # for py3k:
--+        # so = so.decode()
--+        # se = se.decode()
--     finally:
--         shutil.rmtree(basedir)
--     
---    return result.returncode, so, se
--+    return None
--     
--     
-- def detect_zmq(basedir, compiler=None, **compiler_attrs):
--diff --git a/setup.py b/setup.py
--index c3a2879..b8b0aaf 100755
----- a/setup.py
--+++ b/setup.py
--@@ -54,7 +54,7 @@ from buildutils import (
--     info, warn, fatal, debug, line, copy_and_patch_libzmq, localpath,
--     fetch_libzmq, stage_platform_hpp,
--     bundled_version, customize_mingw,
---    compile_and_run,
--+    compile_and_forget,
--     patch_lib_paths,
--     )
-- 
--@@ -327,7 +327,7 @@ class Configure(build_ext):
--             except Exception:
--                 pass
--             try:
---                compile_and_run(self.tempdir,
--+                compile_and_forget(self.tempdir,
--                     pjoin('buildutils', 'check_sys_un.c'),
--                     **minus_zmq
--                 )
---- 
--2.11.0
--
-diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
-index 6cdd0b9f18..eb8cf0923b 100644
---- a/package/python-pyzmq/python-pyzmq.hash
-+++ b/package/python-pyzmq/python-pyzmq.hash
-@@ -1,3 +1,3 @@
- # md5 from https://pypi.python.org/pypi/pyzmq/json, sha256 locally computed
--md5  9a8768b00a566a400d70318f8c359cfe  pyzmq-16.0.2.tar.gz
--sha256  0322543fff5ab6f87d11a8a099c4c07dd8a1719040084b6ce9162bcdf5c45c9d  pyzmq-16.0.2.tar.gz
-+md5  6f5d77cb5ec1617ce9b6e5ad7c6174fb  pyzmq-17.1.2.tar.gz
-+sha256  a72b82ac1910f2cf61a49139f4974f994984475f771b0faa730839607eeedddf  pyzmq-17.1.2.tar.gz
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index c34c5af265..1f7cb5d613 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYZMQ_VERSION = 16.0.2
-+PYTHON_PYZMQ_VERSION = 17.1.2
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
--PYTHON_PYZMQ_SITE = https://pypi.python.org/packages/af/37/8e0bf3800823bc247c36715a52e924e8f8fd5d1432f04b44b8cd7a5d7e55
-+PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/b9/6a/bc9277b78f5c3236e36b8c16f4d2701a7fd4fa2eb697159d3e0a3a991573
- PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
+Results for branch '2018.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.66.0 | 1 
+linuxptp-303b08cbf55096aba5... | 1 
+                     php-7.2.9 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                   boost-1.66.0 | NOK | http://autobuild.buildroot.net/results/1b38089fa44e173fccbee2ae06130ff41160ad86 |     
+microblazeel | linuxptp-303b08cbf55096aba5... | NOK | http://autobuild.buildroot.net/results/3e08537cef9e250e01660fa3547010ed955bec6f |     
+         arc |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/f6e16362b13f3e0ef95f989a5dd3958581807e4a | ORPH
+
+Results for branch '2018.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                     php-7.2.9 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/cee41dc410866f4a409b3feff8f74398f0b38910 | ORPH
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.67.0 | 2 
+                   mpd-0.20.20 | 1 
+                     php-7.2.9 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/a26b1c063d33651646e148a54a7d7382ba902c29 |     
+         arm |                   boost-1.67.0 | NOK | http://autobuild.buildroot.net/results/9bee54f73de2c9641c2ed61a68ae6f4a033d5c0b |     
+    mips64el |                    mpd-0.20.20 | NOK | http://autobuild.buildroot.net/results/30d1586481abee6a9bb5f10efcd475d16d4cb018 |     
+      x86_64 |                      php-7.2.9 | NOK | http://autobuild.buildroot.net/results/c568edc4b7a41ccc21c40ede901c5a3e67f5e922 | ORPH
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                libsoup-2.62.3 | 7 
+              host-expat-2.2.6 | 4 
+                   botan-2.7.0 | 3 
+                  acpid-2.0.30 | 2 
+                rtorrent-0.9.6 | 2 
+               target-finalize | 2 
+                blktrace-1.1.0 | 1 
+                  boost-1.68.0 | 1 
+                   expat-2.2.6 | 1 
+         host-e2fsprogs-1.44.2 | 1 
+                    ncmpc-0.30 | 1 
+                   netsnmp-5.8 | 1 
+           python-pyzmq-16.0.2 | 1 
+                    sox-14.4.2 | 1 
+                     squid-4.2 | 1 
+             util-linux-2.32.1 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                   acpid-2.0.30 | NOK | http://autobuild.buildroot.net/results/d873a8ec2faa00b66882b342fc5b5f4b956f956b | ORPH
+        m68k |                   acpid-2.0.30 | NOK | http://autobuild.buildroot.net/results/4edc8e975f66eee8202e3cf3d12cc9ec4f75d76f | ORPH
+         arc |                 blktrace-1.1.0 | NOK | http://autobuild.buildroot.net/results/925384eadc74fae113e0c0a1c53a15e8883a0fbe | ORPH
+         arm |                   boost-1.68.0 | NOK | http://autobuild.buildroot.net/results/a7280f17a245f1d06d98a01e8f3cc149c7c23921 |     
+    mips64el |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/c7fa59eb180cfab2a366d5a4635daebc97ecb30e |     
+     powerpc |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/1b748ef7a8537e18a0e875203ff1ebe795c72485 |     
+         arm |                    botan-2.7.0 | NOK | http://autobuild.buildroot.net/results/7585bc57f6f2093bb1b43eff2fa3fcf2bfa04951 |     
+         arm |                    expat-2.2.6 | NOK | http://autobuild.buildroot.net/results/3a351ddd9b42b090e4a69ac480b7a16397699f6c | ORPH
+         arm |          host-e2fsprogs-1.44.2 | NOK | http://autobuild.buildroot.net/results/8dc4d5d51cf68e5f7db0859d96b5f2f25d0fafeb | ORPH
+       nios2 |               host-expat-2.2.6 | NOK | http://autobuild.buildroot.net/results/41402af8bd102b35083e34c53c5f2e8a266dc63e | ORPH
+        m68k |               host-expat-2.2.6 | NOK | http://autobuild.buildroot.net/results/166c9cfff259ae17bd946bad953eb12272161ab1 | ORPH
+        or1k |               host-expat-2.2.6 | NOK | http://autobuild.buildroot.net/results/1e2a6fe9acfcf8c7d823efb9aaa085d5f2449baf | ORPH
+  aarch64_be |               host-expat-2.2.6 | NOK | http://autobuild.buildroot.net/results/f656e390a5b172fac257e98e1f7bd5ae7a5ce46f | ORPH
+        or1k |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/b4e53c0941588d00e5a70dbc414dc5f6f40041bf |     
+     sparc64 |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/2e16c0b678289f043e687e600ffb5ec4ae3a9658 |     
+         sh4 |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/d30953da03735326489686f584013437e5193556 |     
+     sparc64 |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/f401fb2f7e41e8240f5f672bd827bcb7ed96750e |     
+         arm |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/30f436cd176b5920dbcc9620a587068e8443417d |     
+         arc |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/f25190e513cf2f478e2b4d7c6fd5dd17d2b6bc99 |     
+    mips64el |                 libsoup-2.62.3 | NOK | http://autobuild.buildroot.net/results/101f0191a80ae152af07fcf4dc51e4b4c0294ca7 |     
+    mips64el |                     ncmpc-0.30 | NOK | http://autobuild.buildroot.net/results/d0eac087bc8222da91edfab9bc10a0c8f7aeec01 |     
+         arm |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/57b3f4663058d728987ef848e4b346656cae21d4 | ORPH
+        i686 |            python-pyzmq-16.0.2 | NOK | http://autobuild.buildroot.net/results/ced36c8290cbc3a4f5dbfb76f7b24f7ddbb50921 |     
+    mips64el |                 rtorrent-0.9.6 | NOK | http://autobuild.buildroot.net/results/753b11ebd4a6c8d151cca17d40b2806c52f021bc | ORPH
+   powerpc64 |                 rtorrent-0.9.6 | NOK | http://autobuild.buildroot.net/results/54686a42e1028177905106e75c722ac6cff7bd47 | ORPH
+        m68k |                     sox-14.4.2 | NOK | http://autobuild.buildroot.net/results/e9555a6ce34fc735771fed835840e14b0248f0f7 | ORPH
+       nios2 |                      squid-4.2 | NOK | http://autobuild.buildroot.net/results/273556771e957f109a1fbf446a5193aac49b72af | ORPH
+         sh4 |                target-finalize | NOK | http://autobuild.buildroot.net/results/6685945dd1a9fb485eb119f7e0184f053df92b65 |     
+         arc |                target-finalize | NOK | http://autobuild.buildroot.net/results/e75fd276ad2709e3c15abd6c8659f2687584f07f |     
+         arm |              util-linux-2.32.1 | NOK | http://autobuild.buildroot.net/results/c8e34d661098e96e3f627d7c022fdcf3efa40805 |     
+
+
 -- 
-2.17.1
+http://autobuild.buildroot.net
