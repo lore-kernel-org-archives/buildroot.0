@@ -1,34 +1,63 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sat, 1 Sep 2018 00:29:21 +0200
-Subject: [Buildroot] [PATCH v2 2/2] minicom: bump version
-In-Reply-To: <20180831234720.253153a7@windsurf>
-References: <20180831141332.2ceca29c@windsurf>
- <20180831133819.127966-1-giulio.benetti@micronovasrl.com>
- <20180831133819.127966-2-giulio.benetti@micronovasrl.com>
- <20180831234720.253153a7@windsurf>
-Message-ID: <8e38ea87-b639-b89d-4cd0-5eadf431ed7c@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 01 Sep 2018 00:34:21 +0200
+Subject: [Buildroot] Buildroot 2018.08-rc3 released
+Message-ID: <87k1o65fo2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi,
 
-Il 31/08/2018 23:47, Thomas Petazzoni ha scritto:
-> To be honest, this commit log containing the entire "git shortlog" of
-> the project was a bit too verbose.
+Buildroot 2018.08-rc3 is released - Go download it at:
 
-Ok, so for these situations is it ok using a brief log such
-the one on the top?
-Like:
-Main changes:
-- RS485 support
-- NLS support
-- various fixes
+http://buildroot.net/downloads/buildroot-2018.08-rc3.tar.gz
 
-Or maybe something more?
+or
 
-Thanks for applying anyway.
+http://buildroot.net/downloads/buildroot-2018.08-rc3.tar.bz2
 
-Giulio Benetti
+Or get it from Git:
+
+git://git.buildroot.net/buildroot
+
+Another week, another release candidate.
+
+Please give it a spin and report any problems to the mailing list or
+bug tracker. Many thanks to the people contributing to this release:
+
+git shortlog -sn 2018.08-rc2..
+    10  Peter Korsgaard
+     9  Mirza Krak
+     9  Yann E. MORIN
+     7  Fabrice Fontaine
+     5  Baruch Siach
+     5  Thomas Petazzoni
+     4  Bernd Kuhls
+     2  Christopher McCrory
+     2  Fabio Estevam
+     2  Giulio Benetti
+     2  Matt Weber
+     1  Adam Duskett
+     1  Brad Love
+     1  Carlos Santos
+     1  Frank Hunleth
+     1  Gary Bisson
+     1  Gwenhael Goavec-Merou
+     1  Hollis Blanchard
+     1  J?rg Krause
+     1  Keith Mok
+     1  Laurent Hartanerot
+     1  Mark Corbin
+     1  Peter Seiderer
+
+For more details, see the CHANGES file:
+
+http://git.buildroot.net/buildroot/plain/CHANGES?id=2018.08-rc3
+
+There are unfortunately still some unresolved issues related to U-Boot
+and host-dtc (libfdt), but expect the final 2018.08 release soon.
+
+-- 
+Bye, Peter Korsgaard
