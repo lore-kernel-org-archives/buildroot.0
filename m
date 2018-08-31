@@ -1,41 +1,21 @@
 From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
-Date: Fri, 31 Aug 2018 16:51:31 +0200
+Date: Fri, 31 Aug 2018 17:00:52 +0200
 Subject: [Buildroot] [PATCH v3 1/2] package/lvm2: Fix runtime crash when
  using uclibc
 In-Reply-To: <20180814224717.02d57e06@windsurf>
 References: <20180726171524.479-1-m.niestroj@grinn-global.com>
  <20180814224717.02d57e06@windsurf>
-Message-ID: <877ek6fv2k.fsf@grinn-global.com>
+Message-ID: <875zzqfumz.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Thomas,
 
 Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-
-> Hello Marcin,
->
-> Once again, thanks for this work!
->
-> On Thu, 26 Jul 2018 19:15:23 +0200, Marcin Niestroj wrote:
->> When using uclibc libdevmapper.so was calling dm_task_get_info_base()
->> function recursively, leading to segmentation fault. This was
->> happening because uclibc linker loader just takes first existing
->> 'dm_task_get_info' (which is 'dm_task_get_info_base') symbol in elf
->> binary, instead of default version.
->> 
->> Add upstreamable lvm2 patch [1], which introduces
->> --enable-symvers[=STYLE] switch. Use that switch to disable symbol
->> versions, as we do not plan to support binaries compiled against
->> old libdevmapper library.
->> 
->> [1] https://www.redhat.com/archives/dm-devel/2018-July/msg00187.html
->> 
->> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
->> ---
->> Changes v2 -> v3: none
+> <snip>
 >
 > I have added a reference to the Buildroot bug report being fixed by
 > this, and I've applied to master.
@@ -45,16 +25,32 @@ Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 >  (1) Could you try to push this forward in terms of upstreaming
 >      acceptance ? I know you have submitted the patch, but I looked
 >      today and apparently you haven't received any feedback.
+
+I was not available to do it earlier. I will take care of pushing it
+forward.
+
 >
 >  (2) It would be nicer if the availability of symbol versioning could
 >      be auto-detected. Is there a compile-time test that can be done to
 >      verify if symbol versioning is available ? This would perhaps help
 >      make the patch even more acceptable upstream.
+
+Unfortunately I don't know how to check that. Symbol versioning is
+something that runtime linker is aware of (glibc) or not (uclibc). So in
+case of cross-compiling we are not able to check if library loads
+properly. I have also not found any flags in libc libraries that
+enable/disable symbol versioning, so external compiled against them
+would know if that is supported.
+
+For glibc and uclibc we could write some logic around __GLIBC__ and
+__UCLIBC__ macros, but musl on the other hand does not allow to detect
+it with any macro (which is done on purpose in musl).
+
 >
 > Thanks!
 >
 > Thomas
 
-
 -- 
-Marcin Niestr?j
+Regards,
+Marcin
