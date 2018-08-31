@@ -1,38 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 Aug 2018 23:12:57 +0200
-Subject: [Buildroot] [git commit branch/next] scanpypi: place a warning into
- *.mk file if licence id couldn't be detected
-Message-ID: <20180831211249.04F3A81F02@busybox.osuosl.org>
+Date: Fri, 31 Aug 2018 23:13:15 +0200
+Subject: [Buildroot] [PATCH] scanpypi: place a warning into *.mk file if
+ licence id couldn't be detected
+In-Reply-To: <20180831150746.1804-1-yegorslists@googlemail.com>
+References: <20180831150746.1804-1-yegorslists@googlemail.com>
+Message-ID: <20180831231315.30d83172@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0101ac62c81e468ba7fd47b991972a722cf1b43c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-If a license file could be found, but license id couldn't be detected place
-following warning into *.mk file:
+On Fri, 31 Aug 2018 17:07:46 +0200, yegorslists at googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> If a license file could be found, but license id couldn't be detected place
+> following warning into *.mk file:
+> 
+> FOO_LICENSE = FIXME: license id couldn't be detected
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  utils/scanpypi | 2 ++
+>  1 file changed, 2 insertions(+)
 
-FOO_LICENSE = FIXME: license id couldn't be detected
+Applied to next, thanks.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- utils/scanpypi | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 12c96b842e..31e242e3db 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -444,6 +444,8 @@ class BuildrootPackage():
-                     match = liclookup.match(lic_file.read())
-                 if match is not None and match.confidence >= 90.0:
-                     license_names.append(match.license.id)
-+                else:
-+                    license_names.append("FIXME: license id couldn't be detected")
- 
-             if len(license_names) > 0:
-                 license_line = ('{name}_LICENSE ='
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
