@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 Aug 2018 23:52:04 +0200
-Subject: [Buildroot] [PATCH] coreutils: Bump version to 8.30
-In-Reply-To: <20180830153818.15409-1-abrodkin@synopsys.com>
-References: <20180830153818.15409-1-abrodkin@synopsys.com>
-Message-ID: <20180831235204.6e0d3d08@windsurf>
+Date: Fri, 31 Aug 2018 23:53:00 +0200
+Subject: [Buildroot] [git commit branch/next] expat: disable docbook
+Message-ID: <20180831215242.35C44821C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=5f540c9109b75d6daf8491b3e374905e59dbfcd4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 30 Aug 2018 18:38:18 +0300, Alexey Brodkin wrote:
-> Among other things this is required to build aginst Glibc 2.28+,
-> see:
-> https://github.com/coreutils/gnulib/commit/4af4a4a71827c0bc5e0ec67af23edef4f15cee8e
-> 
-> Otherwise it fails on build like that:
-> ----------------------->8------------------------  
->   CC       lib/fts.o
-> lib/freadptr.c: In function 'freadptr':
-> lib/freadptr.c:119:3: error: #error "Please port gnulib freadptr.c to your platform! Look at the definition of fflush, fread, getc, getc_unlocked on your system, then report this to bug-gnulib."
->  #error "Please port gnulib freadptr.c to your platform! Look at the definition of fflush, fread, getc, getc_unlocked on your system, then report this to bug-gnulib."
->   ^~~~~
-> ----------------------->8------------------------  
+Fixes:
+ - http://autobuild.buildroot.net/results/3a351ddd9b42b090e4a69ac480b7a16397699f6c
+ - http://autobuild.buildroot.net/results/41402af8bd102b35083e34c53c5f2e8a266dc63e
 
-Applied to next, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/expat/expat.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 61f3176312..548ec826a0 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -13,5 +13,8 @@ HOST_EXPAT_DEPENDENCIES = host-pkgconf
+ EXPAT_LICENSE = MIT
+ EXPAT_LICENSE_FILES = COPYING
+ 
++EXPAT_CONF_OPTS = --without-docbook
++HOST_EXPAT_CONF_OPTS = --without-docbook
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
