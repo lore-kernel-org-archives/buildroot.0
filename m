@@ -1,37 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Sep 2018 14:49:08 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] domoticz: do not use static version of openssl
-In-Reply-To: <20180830163826.5397-1-fontaine.fabrice@gmail.com>
-References: <20180830163826.5397-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180901144908.6a560c4a@windsurf>
+Date: Sat, 1 Sep 2018 14:49:37 +0200
+Subject: [Buildroot] [git commit] qt: fix build on powerpc_e500mc
+Message-ID: <20180901124917.C80BB8229C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=75f975f8ad7b9f8dee8f1de9ce3243d69763637b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Aug 2018 18:38:26 +0200, Fabrice Fontaine wrote:
-> Due to the dependency on mosquitto, domoticz depends on !BR2_STATIC_LIBS
-> so set USE_OPENSSL_STATIC to OFF (default value is ON)
-> 
-> This parameter has been added in release 4.9700.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/b1b84b8c12d31b9242b5732fcdd1eb76b1217366
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Update commit message: build failure was reproduced and this patch is
->    correctly fixing it
+gcc bug internal compiler error: in validate_condition_mode, at
+config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.
+Workaround is to set -mno-isel, see
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
+https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
 
-Applied to master, thanks.
+This bug is also raised on BR2_powerpc_8540, BR2_powerpc_8548 and
+BR2_powerpc_e5500.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.net/results/9b9d11b3281a72c8f54fc675408acb96d24d8e7e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt/qt.mk | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/package/qt/qt.mk b/package/qt/qt.mk
+index 1dcb05d6af..921ff13d29 100644
+--- a/package/qt/qt.mk
++++ b/package/qt/qt.mk
+@@ -32,6 +32,15 @@ QT_LDFLAGS = $(TARGET_LDFLAGS)
+ # use an older c++ standard to prevent build failure
+ QT_CXXFLAGS += -std=gnu++98
+ 
++# gcc bug internal compiler error: in validate_condition_mode, at
++# config/rs6000/rs6000.c:180744. Bug is fixed since gcc 7.
++# Workaround is to set -mno-isel, see
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60818 and
++# https://gcc.gnu.org/ml/gcc-patches/2016-02/msg01036.html
++ifeq ($(BR2_powerpc_8540)$(BR2_powerpc_8548)$(BR2_powerpc_e500mc)$(BR2_powerpc_e5500):$(BR2_TOOLCHAIN_GCC_AT_LEAST_7),y:)
++QT_CXXFLAGS += -mno-isel
++endif
++
+ # Qt has some assembly function that are not present in thumb1 mode:
+ # Error: selected processor does not support Thumb mode `swp r3,r7,[r4]'
+ # so, we desactivate thumb mode
