@@ -1,130 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Sep 2018 15:05:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/delve: new package
-In-Reply-To: <20180830162807.1721-1-sam@gpsm.co.uk>
-References: <20180830162807.1721-1-sam@gpsm.co.uk>
-Message-ID: <20180901150549.56db064b@windsurf>
+Date: Sat, 1 Sep 2018 15:49:46 +0200
+Subject: [Buildroot] [git commit branch/next] libsoup: add patch to fix
+ build on hosts without Python 3.x
+Message-ID: <20180901135127.1917582532@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sam,
+commit: https://git.buildroot.net/buildroot/commit/?id=cd7e62cf4ed6e760b14d6e34c71ff8db1f214be4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Thanks for this contribution! A few comments/questions below.
+For no reason, the tld-parser.py script was changed from using
+"python" to using "python3" in upstream commit
+4b924e573da307436169d5ef7e04c0ab85b36ef9. This patch reverts this
+change to fix the build of libsoup on systems that don't have Python
+3.x installed. It avoids the need to add host-python3 as a dependency.
 
-On Thu, 30 Aug 2018 17:28:07 +0100, sam at gpsm.co.uk wrote:
-> From: Sam Lancia <sam@gpsm.co.uk>
-> 
-> Including "Delve", the debugger for Go applications.
-> 
-> Signed-off-by: Sam Lancia <sam@gpsm.co.uk>
+Furthermore, the tld-parser.py script has anyway been removed
+upstream, and replaced by a dependency on a separate library providing
+TLD information. Therefore, there is no risk of this particular script
+becoming Python 3 only.
 
-Could you explain a bit how Delve is going to be used in the context of
-Buildroot. Indeed, you're packaging it as a target package, which means
-the delve debugger runs on the target. However, a quick read of
-https://github.com/derekparker/delve/blob/master/Documentation/cli/getting_started.md
-shows that:
+Fixes:
 
- (1) It needs access to the source code of the Go application being
-     debugged. In the context of Buildroot, the code is generally not on
-     the target.
+  http://autobuild.buildroot.net/results/91c2d6a1ca011787130db06695d6cd9e882f7258
+  http://autobuild.buildroot.net/results/a318e595f02937534b3f8698ef4c04194a8b34af
 
- (2) It apparently also builds the application, because it does it in a
-     way that makes it more suitable for debugging than a normal build.
-     In the context of Buildroot, I don't think we have support for
-     having a Go compiler on the target.
+Thanks to Asaf Kahlon <asafka7@gmail.com> for some initial
+work/research on this build issue.
 
-With this in mind, could you explain how you are using delve with
-Buildroot ?
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Revert-tld-parser-use-Python-3.patch      | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-Besides these fundamental questions, I'm doing a regular review below.
-First, you need to add an entry in the DEVELOPERS file for this new
-package.
-
-> diff --git a/package/Config.in b/package/Config.in
-> index f5a17492c7..dbf609b29d 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -83,6 +83,7 @@ menu "Debugging, profiling and benchmark"
->  	source "package/blktrace/Config.in"
->  	source "package/bonnie/Config.in"
->  	source "package/cache-calibrator/Config.in"
-> +        source "package/delve/Config.in"
-
-Obvious indentation problem here.
-
->  	source "package/dhrystone/Config.in"
->  	source "package/dieharder/Config.in"
->  	source "package/dmalloc/Config.in"
-> diff --git a/package/delve/Config.in b/package/delve/Config.in
-> new file mode 100644
-> index 0000000000..5c6045513c
-> --- /dev/null
-> +++ b/package/delve/Config.in
-> @@ -0,0 +1,18 @@
-> +config BR2_PACKAGE_DELVE
-> +	bool "delve"
-> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
-> +	help
-> +          Delve is a debugger for the Go programming language.
-> +          The goal of the project is to provide a simple, full featured debugging tool for Go.
-> +          Delve should be easy to invoke and easy to use.
-> +          Chances are if you're using a debugger, things aren't going your way.
-> +          With that in mind, Delve should stay out of your way as much as possible.
-
-Lines are too long, please wrap at 72 characters. You can
-use ./utils/check-package to verify such coding style issues before
-submitting a new version.
-
-> diff --git a/package/delve/delve.hash b/package/delve/delve.hash
-> new file mode 100644
-> index 0000000000..37fad79c3d
-> --- /dev/null
-> +++ b/package/delve/delve.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed:
-> +sha256  de023318accf33ffe7cbb393f5a301551390111db8c0849fe5f4002b6c476583  delve-v1.1.0.tar.gz
-
-Please add the hash of the LICENSE file as well here.
-
-> diff --git a/package/delve/delve.mk b/package/delve/delve.mk
-> new file mode 100644
-> index 0000000000..d4da282e2a
-> --- /dev/null
-> +++ b/package/delve/delve.mk
-> @@ -0,0 +1,19 @@
-> +
-> +################################################################################
-> +#
-> +# delve
-> +#
-> +################################################################################
-> +
-> +DELVE_VERSION = v1.1.0
-> +DELVE_SITE = $(call github,derekparker,delve,$(DELVE_VERSION))
-> +
-> +DELVE_LICENSE = MIT
-> +DELVE_LICENSE_FILES = LICENSE
-> +
-> +DELVE_DEPENDENCIES = host-go host-pkgconf
-
-You're using the golang-package infrastructure, so there is no need for
-an explicit host-go dependencies: the golang-package infrastructure
-adds it for you.
-
-All in all, this looks pretty good. If I didn't had the fundamental
-questions mentioned at the beginning of this e-mail, I would have
-applied and fixed the minor details. But since I have those questions,
-I thought you could also fixup the minor details :-)
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libsoup/0001-Revert-tld-parser-use-Python-3.patch b/package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
+new file mode 100644
+index 0000000000..c27ee986c6
+--- /dev/null
++++ b/package/libsoup/0001-Revert-tld-parser-use-Python-3.patch
+@@ -0,0 +1,27 @@
++From 015926c80fa3e9704f05cbc1ad17f0a877f8de09 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 1 Sep 2018 15:39:04 +0200
++Subject: [PATCH] Revert "tld-parser: use Python 3"
++
++This reverts commit 4b924e573da307436169d5ef7e04c0ab85b36ef9. The
++script runs just fine with Python 2.x, there is no reason to enforce
++using Python 3.x.
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ libsoup/tld-parser.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libsoup/tld-parser.py b/libsoup/tld-parser.py
++index a743471a..5d9d2ba5 100755
++--- a/libsoup/tld-parser.py
+++++ b/libsoup/tld-parser.py
++@@ -1,4 +1,4 @@
++-#!/usr/bin/env python3
+++#!/usr/bin/env python
++ 
++ # Generate tld rules
++ # Copyright (C) 2012 Red Hat, Inc.
++-- 
++2.14.4
++
