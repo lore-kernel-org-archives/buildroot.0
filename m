@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Sep 2018 14:46:55 +0200
-Subject: [Buildroot] [PATCH v3 2/3] qt5webengine: update chromium
- license file names for qt-latest
-In-Reply-To: <20180830100647.11098-1-laurent.hartanerot@gmail.com>
+Date: Sat, 1 Sep 2018 14:47:42 +0200
+Subject: [Buildroot] [PATCH v3 3/3] qt5webengine: Rename internal
+ variable to qt5webengine
+In-Reply-To: <20180830100703.11153-1-laurent.hartanerot@gmail.com>
 References: <20180829063034.10766-1-laurent.hartanerot@gmail.com>
- <20180830100647.11098-1-laurent.hartanerot@gmail.com>
-Message-ID: <20180901144655.1401bbef@windsurf>
+ <20180830100703.11153-1-laurent.hartanerot@gmail.com>
+Message-ID: <20180901144742.303ce80f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,23 +14,21 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 30 Aug 2018 12:06:47 +0200, Laurent Hartanerot wrote:
+On Thu, 30 Aug 2018 12:07:03 +0200, Laurent Hartanerot wrote:
 > From: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> 
-> Update license file name for qt5webengine-5.11
 > 
 > Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
 > ---
->  package/qt5/qt5webengine/chromium-latest.inc | 431 +++++++++++++++++++++++++++
->  package/qt5/qt5webengine/chromium.inc        | 310 -------------------
->  package/qt5/qt5webengine/qt5webengine.mk     |   2 +-
->  3 files changed, 432 insertions(+), 311 deletions(-)
->  create mode 100644 package/qt5/qt5webengine/chromium-latest.inc
->  delete mode 100644 package/qt5/qt5webengine/chromium.inc
+>  package/qt5/qt5webengine/chromium-latest.inc | 2 +-
+>  package/qt5/qt5webengine/chromium-lts.inc    | 2 +-
+>  package/qt5/qt5webengine/qt5webengine.mk     | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-This should have been split into two patches: one remaining the file
-and one fixing the contents. So I've split it into two, and applied to
-master. Also, I've improved the commit logs along the way.
+There should have been a non-empty commit log, so I've added some
+details, and applied to master.
+
+Please remember that commit logs should document why we are doing the
+change, so an empty commit log is almost always wrong.
 
 Thanks!
 
