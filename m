@@ -1,29 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Sep 2018 15:53:57 +0200
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add myself for some packages
-In-Reply-To: <20180829214805.29274-1-fontaine.fabrice@gmail.com>
-References: <20180829214805.29274-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180901155357.08f70741@windsurf>
+From: Richard Kunze <richard.kunze@web.de>
+Date: Sat, 01 Sep 2018 16:55:03 +0200
+Subject: [Buildroot] [PATCH] package/squashfs: fix build on hosts with
+ glibc >= 2.28
+In-Reply-To: <20180827063731.m3xm4jamqyugxfwm@sapphire.tkos.co.il>
+References: <20180825200751.28097-1-richard.kunze@web.de>
+ <20180827063731.m3xm4jamqyugxfwm@sapphire.tkos.co.il>
+Message-ID: <a178b07f64674107d4db38b4fc4eb21c2e44bfe1.camel@web.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Baruch,
 
-On Wed, 29 Aug 2018 23:48:05 +0200, Fabrice Fontaine wrote:
-> Add my entry for expat, libv4l and minizip
+thanks for your comments, I'll do a V2. But I'm not altogether sure how
+to go about it - see below.
+
+Am Montag, den 27.08.2018, 09:37 +0300 schrieb Baruch Siach:
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  DEVELOPERS | 3 +++
->  1 file changed, 3 insertions(+)
+> Patches should have a description and sign-off. See the patches
+> chapter in the 
+> Buildroot manual:
+> 
+>   https://buildroot.org/downloads/manual/manual.html#patch-policy
+> 
+> It would also be nice to add a note about the upstream status of this
+> patch.
 
-Applied to master, thanks.
+The problem here is I don't really know how to contact upstream.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The Buildroot makefile references 
+https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git but that
+has no bug tracker or contact information for patches. The original (?)
+site at sourceforge.net seems pretty much dead. 
+
+I finally found https://github.com/plougher/squashfs-tools which seems
+at least somewhat active, and there is already a pull request for the
+same problem: https://github.com/plougher/squashfs-tools/pull/52
+
+Would it be OK to take the buildroot patch from this pull request as
+per Buildroot manual section 18.4?
+
+Richard
