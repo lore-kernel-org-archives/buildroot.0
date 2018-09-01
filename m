@@ -1,40 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  1 Sep 2018 22:22:37 +0200
-Subject: [Buildroot] [PATCH/next 1/1] log4cplus: bump to version 2.0.2
-Message-ID: <20180901202237.21010-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 01 Sep 2018 23:16:06 +0200
+Subject: [Buildroot] [PATCH] package/squashfs: fix build on hosts with
+ glibc >= 2.28
+In-Reply-To: <a178b07f64674107d4db38b4fc4eb21c2e44bfe1.camel@web.de> (Richard
+ Kunze's message of "Sat, 01 Sep 2018 16:55:03 +0200")
+References: <20180825200751.28097-1-richard.kunze@web.de>
+ <20180827063731.m3xm4jamqyugxfwm@sapphire.tkos.co.il>
+ <a178b07f64674107d4db38b4fc4eb21c2e44bfe1.camel@web.de>
+Message-ID: <87ftys6hrd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/log4cplus/log4cplus.hash | 2 +-
- package/log4cplus/log4cplus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>>>>> "Richard" == Richard Kunze <richard.kunze@web.de> writes:
 
-diff --git a/package/log4cplus/log4cplus.hash b/package/log4cplus/log4cplus.hash
-index 2f1d24a855..9bea814d6f 100644
---- a/package/log4cplus/log4cplus.hash
-+++ b/package/log4cplus/log4cplus.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  8c85e769c3dbec382ed4db91f15e5bc24ba979f810262723781f2fc596339bf4  log4cplus-2.0.0.tar.xz
-+sha256  8ff4055be749f17f3648694bd5778bfd86d33158cceaa616a50c0299d6035b41  log4cplus-2.0.2.tar.xz
- sha256  91d7e42ff80e74c4c94e5ad353375fa0358cd0abbf43f5fe957097cdbd4e2c4d  LICENSE
-diff --git a/package/log4cplus/log4cplus.mk b/package/log4cplus/log4cplus.mk
-index 890d2ee8f5..22efde2fd6 100644
---- a/package/log4cplus/log4cplus.mk
-+++ b/package/log4cplus/log4cplus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LOG4CPLUS_VERSION = 2.0.0
-+LOG4CPLUS_VERSION = 2.0.2
- LOG4CPLUS_SOURCE = log4cplus-$(LOG4CPLUS_VERSION).tar.xz
- LOG4CPLUS_SITE = http://downloads.sourceforge.net/project/log4cplus/log4cplus-stable/$(LOG4CPLUS_VERSION)
- LOG4CPLUS_LICENSE = Apache-2.0, BSD-2-Clause, BSD-like (threadpool)
+Hi,
+
+ >> It would also be nice to add a note about the upstream status of this
+ >> patch.
+
+ > The problem here is I don't really know how to contact upstream.
+
+ > The Buildroot makefile references 
+ > https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git but that
+ > has no bug tracker or contact information for patches. The original (?)
+ > site at sourceforge.net seems pretty much dead. 
+
+ > I finally found https://github.com/plougher/squashfs-tools which seems
+ > at least somewhat active, and there is already a pull request for the
+ > same problem: https://github.com/plougher/squashfs-tools/pull/52
+
+ > Would it be OK to take the buildroot patch from this pull request as
+ > per Buildroot manual section 18.4?
+
+Yes, I believe so. plougher sounds like Phillip Lougher, the original
+author of squashfs, and patrickdepinguin (Thomas) is a regular buildroot
+contributor.
+
+Will you send a patch? Thanks!
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
