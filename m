@@ -1,39 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Sep 2018 14:47:42 +0200
-Subject: [Buildroot] [PATCH v3 3/3] qt5webengine: Rename internal
- variable to qt5webengine
-In-Reply-To: <20180830100703.11153-1-laurent.hartanerot@gmail.com>
-References: <20180829063034.10766-1-laurent.hartanerot@gmail.com>
- <20180830100703.11153-1-laurent.hartanerot@gmail.com>
-Message-ID: <20180901144742.303ce80f@windsurf>
+Date: Sat, 1 Sep 2018 14:48:54 +0200
+Subject: [Buildroot] [git commit] domoticz: do not use static version of
+ openssl
+Message-ID: <20180901124840.3E6D9813EC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=19b04d844277467fcd9c605f6b7ee57d979a630a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Aug 2018 12:07:03 +0200, Laurent Hartanerot wrote:
-> From: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> 
-> Signed-off-by: Laurent Hartanerot <laurent.hartanerot@atos.net>
-> ---
->  package/qt5/qt5webengine/chromium-latest.inc | 2 +-
->  package/qt5/qt5webengine/chromium-lts.inc    | 2 +-
->  package/qt5/qt5webengine/qt5webengine.mk     | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+Due to the dependency on mosquitto, domoticz depends on !BR2_STATIC_LIBS
+so set USE_OPENSSL_STATIC to OFF (default value is ON)
 
-There should have been a non-empty commit log, so I've added some
-details, and applied to master.
+This parameter has been added in release 4.9700.
 
-Please remember that commit logs should document why we are doing the
-change, so an empty commit log is almost always wrong.
+Fixes:
+ - http://autobuild.buildroot.net/results/b1b84b8c12d31b9242b5732fcdd1eb76b1217366
 
-Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/domoticz/domoticz.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 3d6cae4746..7f094d0976 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -19,8 +19,10 @@ DOMOTICZ_DEPENDENCIES = \
+ 	zlib
+ 
+ # Due to the dependency on mosquitto, domoticz depends on
+-# !BR2_STATIC_LIBS so set USE_STATIC_BOOST to OFF
+-DOMOTICZ_CONF_OPTS += -DUSE_STATIC_BOOST=OFF
++# !BR2_STATIC_LIBS so set USE_STATIC_BOOST and USE_OPENSSL_STATIC to OFF
++DOMOTICZ_CONF_OPTS += \
++	-DUSE_STATIC_BOOST=OFF \
++	-DUSE_OPENSSL_STATIC=OFF
+ 
+ # Do not use any built-in libraries which are enabled by default for
+ # lua, sqlite and mqtt
