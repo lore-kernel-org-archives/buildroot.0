@@ -1,36 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Sep 2018 15:53:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsoup: needs host-python3
-In-Reply-To: <20180830101430.14862-1-asafka7@gmail.com>
-References: <20180830101430.14862-1-asafka7@gmail.com>
-Message-ID: <20180901155329.726eb504@windsurf>
+Date: Sat, 1 Sep 2018 15:53:44 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add myself for some packages
+Message-ID: <20180901135324.86AC28255C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=bedbef936fcb7166ba0be13b9f4514588028e927
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 30 Aug 2018 13:14:30 +0300, Asaf Kahlon wrote:
+Add my entry for expat, libv4l and minizip
 
-> Maybe this specific script can run even with python2, but I don't think patchting the
-> "/usr/bin/env python3" line would be the right solution, especially considering
-> the fact that they already have python3-only code in recent commits.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I disagree: the tld-parser.py script was changed from python to python3
-with no reason other than "hey, let's use Python 3", and the script
-works fine with Python 2. Plus in newer versions of libsoup, the script
-has been removed entirely, and libsoup relies on a separate library to
-provide TLD information.
-
-So for now, I've committed a change that simply reverts the script to
-use "python".
-
-Thanks for your initial research on this topic!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a6d76dd9c4..3f1f491fb7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -693,6 +693,7 @@ F:	package/alljoyn-tcl/
+ F:	package/alljoyn-tcl-base/
+ F:	package/boinc/
+ F:	package/cairo/
++F:	package/expat/
+ F:	package/flatbuffers/
+ F:	package/gtksourceview/
+ F:	package/gssdp/
+@@ -734,9 +735,11 @@ F:	package/libsoup/
+ F:	package/libsoxr/
+ F:	package/libupnp/
+ F:	package/libupnp18/
++F:	package/libv4l/
+ F:	package/libxslt/
+ F:	package/mbedtls/
+ F:	package/minissdpd/
++F:	package/minizip/
+ F:	package/motion/
+ F:	package/mutt/
+ F:	package/ncmpc/
