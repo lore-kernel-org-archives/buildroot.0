@@ -1,45 +1,88 @@
-From: Richard Kunze <richard.kunze@web.de>
-Date: Sat, 01 Sep 2018 16:55:03 +0200
-Subject: [Buildroot] [PATCH] package/squashfs: fix build on hosts with
- glibc >= 2.28
-In-Reply-To: <20180827063731.m3xm4jamqyugxfwm@sapphire.tkos.co.il>
-References: <20180825200751.28097-1-richard.kunze@web.de>
- <20180827063731.m3xm4jamqyugxfwm@sapphire.tkos.co.il>
-Message-ID: <a178b07f64674107d4db38b4fc4eb21c2e44bfe1.camel@web.de>
+From: David De Grave <david.degrave@mind.be>
+Date: Sat, 1 Sep 2018 21:02:51 +0200
+Subject: [Buildroot] [PATCH 1/1] linux/linux.mk: Use '-isystem' instead
+ of '-I' in HOST_CFLAGS
+In-Reply-To: <20180901095517.6ad46a12@windsurf>
+References: <20180830095748.30297-1-david.degrave@mind.be>
+ <20180901095517.6ad46a12@windsurf>
+Message-ID: <CAD6XyYzY50VotsjxNO8ZJjh+ZNdqtC2M+eO+cp5_pq44qZCWWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Baruch,
+Hi Thomas,
 
-thanks for your comments, I'll do a V2. But I'm not altogether sure how
-to go about it - see below.
+Indeed the series can replace that one... Thanks.
 
-Am Montag, den 27.08.2018, 09:37 +0300 schrieb Baruch Siach:
-> 
-> Patches should have a description and sign-off. See the patches
-> chapter in the 
-> Buildroot manual:
-> 
->   https://buildroot.org/downloads/manual/manual.html#patch-policy
-> 
-> It would also be nice to add a note about the upstream status of this
-> patch.
+Regards,
+David.
 
-The problem here is I don't really know how to contact upstream.
 
-The Buildroot makefile references 
-https://git.kernel.org/pub/scm/fs/squashfs/squashfs-tools.git but that
-has no bug tracker or contact information for patches. The original (?)
-site at sourceforge.net seems pretty much dead. 
+On Sat, Sep 1, 2018 at 9:55 AM, Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-I finally found https://github.com/plougher/squashfs-tools which seems
-at least somewhat active, and there is already a pull request for the
-same problem: https://github.com/plougher/squashfs-tools/pull/52
+> Hello,
+>
+> On Thu, 30 Aug 2018 11:57:48 +0200, David De Grave (Essensium/Mind)
+> wrote:
+> > Since the last update of the DTC package, linux build breaks at some
+> point
+> > with the following error:
+> >
+> >     In file included from {output}/host/include/libfdt.h:54:0,
+> >                      from scripts/dtc/libfdt/fdt.c:54:
+> >     {output}/host/include/libfdt_env.h:82:24: error: redefinition of \
+> >     ?fdt16_to_cpu?
+> >      static inline uint16_t fdt16_to_cpu(fdt16_t x)
+> >                             ^~~~~~~~~~~~
+> >     In file included from scripts/dtc/libfdt/fdt.c:51:0:
+> >     scripts/dtc/libfdt/libfdt_env.h:81:24: note: previous definition of
+> \
+> >     ?fdt16_to_cpu? was here
+> >
+> > This is because the HOST_CFLAGS is added before Linux's makefile add it's
+> > own local ones (-Iscripts/dtc/libfdt), resulting in a mix of local and
+> host
+> > headers beeing used.
+> >
+> > So, to fix this the '-I' is substituted by '-isystem' to let it search
+> for
+> > the headers in the right location first.
+> >
+> > Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
+> > ---
+> >  linux/linux.mk | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> I suspect this one is superseded by your new patch series
+> http://patchwork.ozlabs.org/project/buildroot/list/?series=63524, so
+> I've marked this patch as Changes Requested.
+>
+> Note that
+> http://patchwork.ozlabs.org/project/buildroot/list/?series=63524
+> doesn't contain PATCH 2/3 due to a patchwork issue when associating
+> patches to series, but PATCH 2/3 has been recorded by patchwork.
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
 
-Would it be OK to take the buildroot patch from this pull request as
-per Buildroot manual section 18.4?
 
-Richard
+
+-- 
+
+*David De Grave*
+Senior Embedded Software Developer
+Gsm : +32(0)496.364.960 | Tel : +32-16-28.65.00 | Fax : +32-16-28a.65.01
+Essensium-Mind <https://www.mind.be/> - Gaston Geenslaan 9, B-3001 Leuven,
+Belgium
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180901/0006c9ec/attachment.html>
