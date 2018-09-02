@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 2 Sep 2018 21:40:24 +0200
-Subject: [Buildroot] [PATCH 1/1] arch: add support for RISC-V 64-bit
- (riscv64) architecture
-In-Reply-To: <20180831091154.22530-1-mark.corbin@embecosm.com>
-References: <20180831091154.22530-1-mark.corbin@embecosm.com>
-Message-ID: <20180902214024.464f8a25@windsurf>
+Date: Sun, 2 Sep 2018 21:47:55 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/qemu: add
+ qemu_riscv64_virt_defconfig
+In-Reply-To: <20180831143853.24340-1-mark.corbin@embecosm.com>
+References: <20180831143853.24340-1-mark.corbin@embecosm.com>
+Message-ID: <20180902214755.139a1b23@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,231 +13,99 @@ To: buildroot@busybox.net
 
 Hello Mark,
 
-On Fri, 31 Aug 2018 10:11:54 +0100, Mark Corbin wrote:
-> This enables a riscv64 system to be built with a Buildroot generated
-> toolchain (gcc >= 7.x, binutils >= 2.30, glibc only).
+On Fri, 31 Aug 2018 15:38:53 +0100, Mark Corbin wrote:
+> Add RISC-V 64-bit defconfig for QEMU virt machine.
 > 
-> This configuration has been used to successfully build a qemu-bootable
-> riscv-linux-4.15 kernel (https://github.com/riscv/riscv-linux.git).
-> 
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> Tested with QEMU 2.12.1
 
-Thanks for this work on adding RISC-V support in Buildroot! As I
-already said on another patch, it would really, really be helpful if
-you sent a complete patch series instead of individual patches. Your
-patch series should include:
+Here you say 2.12.1, in the readme.txt file you say 2.12.92. I assume
+one or the other has a typo :-)
 
- - The preliminary patches to support specifying a custom version of
-   the kernel headers
- - This patch adding the RISC-V support
- - The patch adding the qemu defconfig
+>  board/qemu/riscv64-virt/linux.config | 24 ++++++++++++++++++++++++
+>  board/qemu/riscv64-virt/readme.txt   | 22 ++++++++++++++++++++++
+>  configs/qemu_riscv64_virt_defconfig  | 24 ++++++++++++++++++++++++
+>  3 files changed, 70 insertions(+)
 
-This way, the dependencies between the patches are clearly visible.
+Please add an entry in the DEVELOPERS file. When you will do a patch
+series with the base RISC-V support:
 
-Could you add an entry in the DEVELOPERS file as well, listing all the
-files you're adding under your name/e-mail?
+ - The patch introducing the RISC-V support should add an entry in the
+   DEVELOPERS file for you, the arch/Config.in.riscv file and other
+   files introduced by this first patch.
 
-> +config BR2_riscv64
-> +	bool "RISCV64"
-> +	select BR2_ARCH_IS_64
-> +	select BR2_ARCH_HAS_MMU_OPTIONAL
+ - The patch introducing the RISC-V qemu defconfig should add more
+   items to the DEVELOPERS file entry, to list the files related to
+   this defconfig.
 
-Does your patch support the situation where the MMU is not used? I.e,
-does the RISC-V toolchain support noMMU RISC-V ?
-
-> diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+> diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
 > new file mode 100644
-> index 0000000000..0bee422581
+> index 0000000000..be563c969e
 > --- /dev/null
-> +++ b/arch/Config.in.riscv
-> @@ -0,0 +1,104 @@
-> +# RISC-V CPU ISA extensions.
+> +++ b/board/qemu/riscv64-virt/readme.txt
+> @@ -0,0 +1,22 @@
+> +Run the emulation with:
 > +
-> +config BR2_RISCV_ISA_RVI
-> +	bool
-> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-
-Why is this select here instead of on the BR2_riscv64 option, since
-anyway there is not support at all for riscv64 before gcc 7.x ?
-
-
-> +choice
-> +	prompt "Target ABI"
-> +	default BR2_RISCV_ABI_LP64
+> +  qemu-system-riscv64 -M virt -kernel <path-to-bl>/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=<path-to-buildroot>/output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
 > +
-> +config BR2_RISCV_ABI_LP64
-> +	bool "lp64"
-> +	depends on BR2_ARCH_IS_64
+> +The Buildroot generated vmlinux image will need to be combined with the Berkeley Boot Loader (BBL) as follows:
 > +
-> +config BR2_RISCV_ABI_LP64F
-> +	bool "lp64f"
-> +	depends on BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVF
+> +  export RISCV=<path-to-buildroot>/output/host
+> +  export PATH=$PATH:$RISCV/bin
+> +  git clone https://github.com/riscv/riscv-pk
+> +  cd riscv-pk
+> +  mkdir build
+> +  cd build
+> +  ../configure \
+> +    --host=riscv64-buildroot-linux-gnu \
+> +    --with-payload=<path-to-buildroot>/output/images/vmlinux
+> +  make
+
+Then we want to create a package for the BBL, in boot/riscv-pk/. See
+boot/boot-wrapper-aarch64/ for an example of bootloader wraps the
+kernel image. It depends on the kernel build in Config.in:
+
+config BR2_TARGET_BOOT_WRAPPER_AARCH64
+        bool "boot-wrapper-aarch64"
+        depends on BR2_aarch64
+        depends on BR2_LINUX_KERNEL
+
+And then in the .mk file, we ensure the Linux kernel is built before:
+
+BOOT_WRAPPER_AARCH64_DEPENDENCIES = linux
+
+And we pass the path to the kernel tree (which it needs to get the
+kernel image):
+
+BOOT_WRAPPER_AARCH64_CONF_OPTS = \
+        --with-kernel-dir=$(LINUX_DIR) \
+
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_GENERIC_GETTY=y
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
 > +
-> +config BR2_RISCV_ABI_LP64D
-> +	bool "lp64d"
-> +	depends on BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVD
-
-The BR2_ARCH_IS_64 conditions don't seem to be very useful, since only
-riscv64 is supported for now... and it is always 64-bit.
-
-> +endchoice
+> +# Linux headers same as kernel, a 4.15 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
 > +
-> +config BR2_ARCH
-> +	default "riscv64"
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/riscv/riscv-linux.git"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="riscv-linux-4.15"
+
+This is a branch, so its contents can change anytime. Please use a tag,
+of if there's not tag, a full SHA1 designating a specific commit.
+
+> +BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/riscv64-virt/linux.config"
 > +
-> +config BR2_ENDIAN
-> +	default "LITTLE"
-> +
-> +config BR2_GCC_TARGET_ARCH
-> +#	Instruction set extension characters are appended by arch/arch.mk.riscv
-> +	default "rv64i"
-> +
-> +config BR2_GCC_TARGET_ABI
-> +	default "lp64" if BR2_RISCV_ABI_LP64
-> +	default "lp64f" if BR2_RISCV_ABI_LP64F
-> +	default "lp64d" if BR2_RISCV_ABI_LP64D
-> +
-> +config BR2_READELF_ARCH_NAME
-> +	default "RISC-V"
-> +
-> diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
-> new file mode 100644
-> index 0000000000..ad2e26903b
-> --- /dev/null
-> +++ b/arch/arch.mk.riscv
-> @@ -0,0 +1,24 @@
-> +#
-> +# Append the appropriate RISC-V ISA extensions to the
-> +# BR2_GCC_TARGET_ARCH variable.
-> +#
-> +
-> +BR2_RISCV_GCC_ARCH = $(call qstrip,$(BR2_GCC_TARGET_ARCH))
-> +
-> +ifeq ($(BR2_RISCV_ISA_RVM),y)
-> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)m
-> +endif
-> +ifeq ($(BR2_RISCV_ISA_RVA),y)
-> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)a
-> +endif
-> +ifeq ($(BR2_RISCV_ISA_RVF),y)
-> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)f
-> +endif
-> +ifeq ($(BR2_RISCV_ISA_RVD),y)
-> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)d
-> +endif
-> +ifeq ($(BR2_RISCV_ISA_RVC),y)
-> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)c
-> +endif
-> +
-> +BR2_GCC_TARGET_ARCH := $(patsubst %,"%",$(BR2_RISCV_GCC_ARCH))
+> +# Binutils configuration
+> +BR2_BINUTILS_VERSION_2_30_X=y
 
-So, this is probably the part I'm the least happy with. I think it is
-the only occurrence where make logic would tweak BR2_* variables. I'm
-not sure I want to set a precedent for this, as it could become
-"strange" to see values of BR2_* options that don't match what is
-visible in the .config file.
+This should not be needed, because you prevent using binutils 2.28 and
+2.29 anyway.
 
-So, I think this will require a bit more rework. The solution I would
-propose is to introduce arch/arch.mk, which does:
-
-GCC_TARGET_ARCH = $(call qstrip,$(BR2_GCC_TARGET_ARCH))
-GCC_TARGET_ABI  = $(call qstrip,$(BR2_GCC_TARGET_ABI))
-GCC_TARGET_NAN  = $(call qstrip,$(BR2_GCC_TARGET_NAN))
-# etc. for all BR2_GCC_TARGET_* options listed in arch/Config.in
-
--include $(sort $(wildcard arch/arch.mk.*))
-
-Then, in the main Makefile, you include arch/arch.mk instead of
-wildcard arch/arch.mk.*.
-
-Then, in arch/arch.mk.riscv, you can override GCC_TARGET_ARCH and al.
-
-Of course, every place where BR2_GCC_TARGET_ARCH was used needs to be
-changed to use GCC_TARGET_ARCH.
-
-Let me know if this proposal is clear or not. If it's not, I can cook
-up a quick patch to show you the direction.
-
-> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-> index 21dc84e498..747bac57ed 100644
-> --- a/package/binutils/Config.in.host
-> +++ b/package/binutils/Config.in.host
-> @@ -6,15 +6,18 @@ choice
->  	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB2
->  	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
->  	default BR2_BINUTILS_VERSION_ARC if BR2_arc
-> +	default BR2_BINUTILS_VERSION_2_30_X if BR2_riscv64
-
-This is not really needed, since the first selectable entry is the one
-chosen by default.
-
->  	help
->  	  Select the version of binutils you wish to use.
->  
->  config BR2_BINUTILS_VERSION_2_28_X
->  	bool "binutils 2.28.1"
->  	depends on !BR2_arc
-> +	depends on !BR2_riscv64
->  
->  config BR2_BINUTILS_VERSION_2_29_X
->  	bool "binutils 2.29.1"
-> +	depends on !BR2_riscv64
->  
->  config BR2_BINUTILS_VERSION_2_30_X
->  	bool "binutils 2.30"
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index 75e8191f46..6798448bda 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -23,7 +23,7 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
->  choice
->  	prompt "C library"
->  	default BR2_TOOLCHAIN_BUILDROOT_UCLIBC
-> -	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_powerpc64
-> +	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_powerpc64 || BR2_riscv64
-
-Ditto: since only glibc is supported on riscv64, it will automatically
-be the default selection.
-
->  
->  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
->  	bool "uClibc-ng"
-> @@ -46,14 +46,16 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
->  		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
->  		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
->  		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
-> -		   BR2_sh          || BR2_sparc64    || BR2_x86_64 || \
-> -		   BR2_microblaze  || BR2_nios2      || BR2_archs38
-> +		   BR2_riscv64     || BR2_sh         || BR2_sparc64     || \
-> +		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
-> +		   BR2_archs38
->  	depends on BR2_USE_MMU
->  	depends on !BR2_STATIC_LIBS
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
->  	depends on !BR2_powerpc_SPE
-> +	depends on BR2_RISCV_ISA_RVA || !BR2_riscv64
->  	select BR2_TOOLCHAIN_USES_GLIBC
->  	# our glibc.mk enables RPC support
->  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-> @@ -77,6 +79,10 @@ comment "glibc on MIPS w/ NAN2008 needs a toolchain w/ headers >= 4.5"
->  	depends on BR2_MIPS_NAN_2008
->  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
->  
-> +comment "glibc needs ISA extension A on riscv64"
-> +	depends on BR2_riscv64
-> +	depends on !BR2_RISCV_ISA_RVA
-
-So, if the user selects a "Custom architecture", and then doesn't
-enable BR2_RISCV_ISA_CUSTOM_RVA, he won't have any C library available
-to build a toolchain for riscv64.
-
-Provided this, I think we should not allow enabling/disabling RVA: we
-should assume it's always enabled.
-
-Could you fix those comments, and resubmit a new complete patch series,
-with all patches you need for RISC-V 64 support ?
+Could you fix those comments, and send an updated version?
 
 Thanks a lot!
 
