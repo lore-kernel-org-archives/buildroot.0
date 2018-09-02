@@ -1,110 +1,70 @@
-From: Christopher McCrory <chrismcc@gmail.com>
-Date: Sun, 2 Sep 2018 08:09:50 -0700
-Subject: [Buildroot] [PATCH 1/1] configs/qemu: add
- qemu_riscv64_virt_defconfig
-In-Reply-To: <20180831143853.24340-1-mark.corbin@embecosm.com>
-References: <20180831143853.24340-1-mark.corbin@embecosm.com>
-Message-ID: <CALURroTrVJq20uNXSsxsCEwZjYYEvGF0-KZyEeKokxw1p4FdKA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  2 Sep 2018 18:23:40 +0200
+Subject: [Buildroot] [PATCH 1/1] chipmunk: fix build on musl
+Message-ID: <20180902162340.24253-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 31, 2018 at 7:40 AM Mark Corbin <mark.corbin@embecosm.com>
-wrote:
+Build fails on:
+/home/test/autobuild/run/instance-0/output/build/chipmunk-7.0.2/src/cpHastySpace.c:11:24: fatal error: sys/sysctl.h: No such file or directory
 
-> Add RISC-V 64-bit defconfig for QEMU virt machine.
->
-> Tested with QEMU 2.12.1
->
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-> ---
->  board/qemu/riscv64-virt/linux.config | 24 ++++++++++++++++++++++++
->  board/qemu/riscv64-virt/readme.txt   | 22 ++++++++++++++++++++++
->  configs/qemu_riscv64_virt_defconfig  | 24 ++++++++++++++++++++++++
->  3 files changed, 70 insertions(+)
->  create mode 100644 board/qemu/riscv64-virt/linux.config
->  create mode 100644 board/qemu/riscv64-virt/readme.txt
->  create mode 100644 configs/qemu_riscv64_virt_defconfig
->
->
-<snip>
+Indeed, sys/sysctl.h is not available on musl so include this header
+only if __APPLE__ is defined as sysctlbyname is only used in this case.
 
-I've been using the Raspberry pi platform,  but I recently saw the HiFive1
-[1] and want to try it out. So this patch came at at fortuitous time.
+Fixes:
+ - http://autobuild.buildroot.org/results/e5be2f8eb9315a9054e1c8d854dec37cbb28eed7
 
-the defconfig as is works and boots up in qemu !
-# cat /etc/os-release
-NAME=Buildroot
-VERSION=2018.08-rc3-00002-gf478e82db1
-ID=buildroot
-VERSION_ID=2018.08-rc3
-PRETTY_NAME="Buildroot 2018.08-rc3"
-# uname -a
-Linux buildroot 4.15.0 #1 SMP Sat Sep 1 02:17:41 PDT 2018 riscv64 GNU/Linux
-# cat /proc/cpuinfo
-hart    : 0
-isa    : rv64imafdcsu
-mmu    : sv48
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-Fix-build-failure-on-musl.patch      | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/chipmunk/0001-Fix-build-failure-on-musl.patch
 
-# dmesg
-OF: fdt: Ignoring memory range 0x80000000 - 0x80200000
-Linux version 4.15.0 (chrismcc at wednesday) (gcc version 7.3.0 (Buildroot
-2018.08-rc3-00002-gf478e82db1)) #1 SMP Sat Sep 1 02:17:41 PDT 2018
-
-So:
-
-Tested-by: Christopher McCrory <chrismcc@gmail.com>
-
-
-
-I then added some more packeges, most failed loading libraries
-
-perl works!
-# perl -E "say 'Hello World!'"
-Hello World!
-
-# bash
-bash: error while loading shared libraries: libreadline.so.7: cannot open
-shared object file: No such file or directory
-
-# ps ax
-ps: error while loading shared libraries: libprocps.so.7: cannot open
-shared object file: No such file or directory
-# vim /tmp/foo
-vim: error while loading shared libraries: libncurses.so.6: cannot open
-shared object file: No such file or directory
-# httpd -V
-httpd: error while loading shared libraries: libpcre.so.1: cannot open
-shared object file: No such file or directory
-
-# lsmod
-lsmod: error while loading shared libraries: libz.so.1: cannot open shared
-object file: No such file or directory
-# busybox lsmod
-lsmod: /proc/modules: No such file or directory
-Module                  Size  Used by    Not tainted
-
-# tcpdump
-tcpdump: error while loading shared libraries: libpcap.so.1: cannot open
-shared object file: No such file or directory
-# sudo pwd
-sudo: error in /etc/sudo.conf, line 0 while loading plugin "sudoers_policy"
-sudo: unable to load /usr/libexec/sudo/sudoers.so: libz.so.1: cannot open
-shared object file: No such file or directory
-sudo: fatal error, unable to load plugins
-
-
-
-[1] https://www.sifive.com/products/hifive1/
-
-
+diff --git a/package/chipmunk/0001-Fix-build-failure-on-musl.patch b/package/chipmunk/0001-Fix-build-failure-on-musl.patch
+new file mode 100644
+index 0000000000..4485e937ca
+--- /dev/null
++++ b/package/chipmunk/0001-Fix-build-failure-on-musl.patch
+@@ -0,0 +1,37 @@
++From 231c1fb97785290aaac89ed74d7cb24eaa74b363 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 2 Sep 2018 12:05:22 +0200
++Subject: [PATCH] Fix build failure on musl
++
++Build fails on:
++/home/test/autobuild/run/instance-0/output/build/chipmunk-7.0.2/src/cpHastySpace.c:11:24: fatal error: sys/sysctl.h: No such file or directory
++
++Indeed, sys/sysctl.h is not available on musl so include this header
++only if __APPLE__ is defined as sysctlbyname is only used in this case.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e5be2f8eb9315a9054e1c8d854dec37cbb28eed7
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/slembcke/Chipmunk2D/pull/171]
++---
++ src/cpHastySpace.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/src/cpHastySpace.c b/src/cpHastySpace.c
++index 8dca425..e087df8 100644
++--- a/src/cpHastySpace.c
+++++ b/src/cpHastySpace.c
++@@ -8,7 +8,9 @@
++ 
++ //#include <sys/param.h >
++ #ifndef _WIN32
+++#ifdef __APPLE__
++ #include <sys/sysctl.h>
+++#endif
++ #include <pthread.h>
++ #else
++ #ifndef WIN32_LEAN_AND_MEAN
++-- 
++2.17.1
++
 -- 
-Christopher McCrory
-To the optimist, the glass is half full.
-To the pessimist, the glass is half empty.
-To the engineer, the glass is twice as big as it needs to be.
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180902/0ab6a031/attachment.html>
+2.17.1
