@@ -1,70 +1,116 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  2 Sep 2018 18:23:40 +0200
-Subject: [Buildroot] [PATCH 1/1] chipmunk: fix build on musl
-Message-ID: <20180902162340.24253-1-fontaine.fabrice@gmail.com>
+Date: Sun, 2 Sep 2018 19:09:33 +0200
+Subject: [Buildroot] Analysis of build results for 2018-09-01
+In-Reply-To: <20180902161152.394d55d8@windsurf>
+References: <20180902060016.0253C2071E@mail.bootlin.com>
+ <20180902161152.394d55d8@windsurf>
+Message-ID: <CAPi7W82ZVt_1L52Y23_L7Ck6tmHh7bfpoYJrfgfQxJSmFJg15Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build fails on:
-/home/test/autobuild/run/instance-0/output/build/chipmunk-7.0.2/src/cpHastySpace.c:11:24: fatal error: sys/sysctl.h: No such file or directory
+Dear Thomas,
 
-Indeed, sys/sysctl.h is not available on musl so include this header
-only if __APPLE__ is defined as sysctlbyname is only used in this case.
+Le dim. 2 sept. 2018 ? 16:11, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-Fixes:
- - http://autobuild.buildroot.org/results/e5be2f8eb9315a9054e1c8d854dec37cbb28eed7
+> Hello,
+>
+> On Sun,  2 Sep 2018 08:00:16 +0200 (CEST), Thomas Petazzoni wrote:
+>
+> >       branch |  OK | NOK | TIM | TOT |
+> >    2018.02.x |  10 |   0 |   0 |  10 |
+> >    2018.05.x |  16 |   0 |   0 |  16 |
+> >       master | 158 |   4 |   1 | 163 |
+>
+> Wow, results over the last few days on the master branch are pretty
+> amazing: http://autobuild.buildroot.net/stats.php. Four build failures
+> per day, on a total of 150-170 build successes. Nice!
+>
+> Let's have a look at the build failures for yesterday.
+>
+> >          arm |                   boost-1.67.0 | NOK |
+> http://autobuild.buildroot.net/results/808d1690240a4395cb0d953b77425fe31a85aeaf
+> |
+>
+> This is another instance of:
+>
+> libboost_atomic shouldn't have been installed: missing select in
+> boost/Config.in
+>
+> This is happening on ARM Cortex-M4. Fabrice: there are still a few
+> patches on Boost from you in patchwork. Is one of them fixing this ?
+>
+Nope, I didn't succeed in fixing this issue yet. libboost_atomic is
+selected because boost wrongly assumes that lock-free atomic ints are not
+available. However, I don't understand why the detection fails.
+This seems to happen only when statically linking on ARM Cortex M4 but also
+on atom (
+http://autobuild.buildroot.net/results/2163706e22c994c2e1fb6f73db3697703ebefe3e),
+mips64 (
+http://autobuild.buildroot.net/results/aeedc994f6a451e441b389375dc47e637d16e3b3),
+arc700 ...
+I will continue to work on this.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-Fix-build-failure-on-musl.patch      | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/chipmunk/0001-Fix-build-failure-on-musl.patch
+However, in patchwork, I would advise to apply or comment the patch 960723
+which is fixing another issue linked to the wrong selection of
+boost_thread/boost_chrono by boost_context.
 
-diff --git a/package/chipmunk/0001-Fix-build-failure-on-musl.patch b/package/chipmunk/0001-Fix-build-failure-on-musl.patch
-new file mode 100644
-index 0000000000..4485e937ca
---- /dev/null
-+++ b/package/chipmunk/0001-Fix-build-failure-on-musl.patch
-@@ -0,0 +1,37 @@
-+From 231c1fb97785290aaac89ed74d7cb24eaa74b363 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 2 Sep 2018 12:05:22 +0200
-+Subject: [PATCH] Fix build failure on musl
-+
-+Build fails on:
-+/home/test/autobuild/run/instance-0/output/build/chipmunk-7.0.2/src/cpHastySpace.c:11:24: fatal error: sys/sysctl.h: No such file or directory
-+
-+Indeed, sys/sysctl.h is not available on musl so include this header
-+only if __APPLE__ is defined as sysctlbyname is only used in this case.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e5be2f8eb9315a9054e1c8d854dec37cbb28eed7
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/slembcke/Chipmunk2D/pull/171]
-+---
-+ src/cpHastySpace.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/cpHastySpace.c b/src/cpHastySpace.c
-+index 8dca425..e087df8 100644
-+--- a/src/cpHastySpace.c
-++++ b/src/cpHastySpace.c
-+@@ -8,7 +8,9 @@
-+ 
-+ //#include <sys/param.h >
-+ #ifndef _WIN32
-++#ifdef __APPLE__
-+ #include <sys/sysctl.h>
-++#endif
-+ #include <pthread.h>
-+ #else
-+ #ifndef WIN32_LEAN_AND_MEAN
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+> >     mips64el |                domoticz-4.9700 | NOK |
+> http://autobuild.buildroot.net/results/9428b0aaae95288cf1d1cce0ca2492ae06b77960
+> |
+>
+> Fixed by:
+>
+>
+> https://git.buildroot.org/buildroot/commit/package/domoticz?id=19b04d844277467fcd9c605f6b7ee57d979a630a
+>
+> >       x86_64 |                 host-libsodium | TIM |
+> http://autobuild.buildroot.net/results/83ece99f846bbb6398b9f2cf6a4cccbae595e86e
+> |
+>
+> Ah, it's the timeout occurring on Julien's machine during the configure
+> step of this package. Weird.
+>
+> >         m68k |                      php-7.2.9 | NOK |
+> http://autobuild.buildroot.net/results/69cf9326539c8df8fa50c5e7acb2ce3bb985ede2
+> | ORPH
+>
+> Fixed by:
+>
+>
+> https://git.buildroot.org/buildroot/commit/?id=45215ffc8a75377228a477bebbf2ad9c78d40a35
+>
+> >      powerpc |                       qt-4.8.7 | NOK |
+> http://autobuild.buildroot.net/results/fcf04ffdc27bb73fdeca0cc70a0dc09bcf3ec0d5
+> | ORPH
+>
+> Fixed by:
+>
+>
+> https://git.buildroot.org/buildroot/commit/?id=75f975f8ad7b9f8dee8f1de9ce3243d69763637b
+>
+> Conclusion: on 4 build failures and one timeout:
+>
+>  - 3 build failures are already fixed
+>
+>  - 1 build failure on Boost remains to be fixed
+>
+>  - the timeout is really mysterious.
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180902/ac9045d3/attachment.html>
