@@ -1,48 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 2 Sep 2018 22:51:52 +0200
-Subject: [Buildroot] [for-next: 2/2] dependencies: host-make version
- check
-In-Reply-To: <20180830203054.7373-2-romain.naour@gmail.com>
-References: <20180830203054.7373-1-romain.naour@gmail.com>
- <20180830203054.7373-2-romain.naour@gmail.com>
-Message-ID: <20180902225152.3e9a6c1c@windsurf>
+From: Enoch W. <ixew@hotmail.com>
+Date: Sun, 2 Sep 2018 21:04:32 +0000
+Subject: [Buildroot] patch buildroot/package/dtc
+Message-ID: <CO2PR01MB1976EB656E93F73EA89B8FFECC0D0@CO2PR01MB1976.prod.exchangelabs.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Since Linux 14.4 kernel has its own libfdt_env.h, grep:
+beagleboard/linux/scripts/dtc/libfdt/fdt.c:#include "libfdt_env.h"
 
-On Thu, 30 Aug 2018 22:30:54 +0200, Romain Naour wrote:
+We need to reject the almost identical file from the host tools, find:
+output/host/include/libfdt_env.h
 
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 399cf395ce..fd9e394f92 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -28,7 +28,8 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
->  
->  # Before glibc is configured, we must have the first stage
->  # cross-compiler and the kernel headers
-> -GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk
-> +GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
-> +	$(BR2_MAKE_HOST_DEPENDENCY)
+Or otherwise have fdt16_to_cpu etc. redefinition errors.
 
-As discussed on IRC, this is not sufficient, because you need to set
-GLIBC_MAKE to the correct value, otherwise package/pkg-autotools.mk
-uses $(MAKE), which points to /usr/bin/make.
+The fix is trivial.
 
-Due to this, the make built by Buildroot is in fact not used.
+Thanks, Enoch.
 
-Also, perhaps you could split this patch into to: one patch adding the
-support/dependencies/ logic, and another tweaking the glibc package.
 
-Could you look into this?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: 0001-Linux-14.4-kernel-has-libfdt_env.h-of-its-own.patch
+Type: text/x-patch
+Size: 644 bytes
+Desc: 0001-Linux-14.4-kernel-has-libfdt_env.h-of-its-own.patch
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180902/2deddfdc/attachment.bin>
