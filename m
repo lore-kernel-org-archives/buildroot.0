@@ -1,116 +1,248 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 2 Sep 2018 19:09:33 +0200
-Subject: [Buildroot] Analysis of build results for 2018-09-01
-In-Reply-To: <20180902161152.394d55d8@windsurf>
-References: <20180902060016.0253C2071E@mail.bootlin.com>
- <20180902161152.394d55d8@windsurf>
-Message-ID: <CAPi7W82ZVt_1L52Y23_L7Ck6tmHh7bfpoYJrfgfQxJSmFJg15Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 2 Sep 2018 21:40:24 +0200
+Subject: [Buildroot] [PATCH 1/1] arch: add support for RISC-V 64-bit
+ (riscv64) architecture
+In-Reply-To: <20180831091154.22530-1-mark.corbin@embecosm.com>
+References: <20180831091154.22530-1-mark.corbin@embecosm.com>
+Message-ID: <20180902214024.464f8a25@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Thomas,
+Hello Mark,
 
-Le dim. 2 sept. 2018 ? 16:11, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+On Fri, 31 Aug 2018 10:11:54 +0100, Mark Corbin wrote:
+> This enables a riscv64 system to be built with a Buildroot generated
+> toolchain (gcc >= 7.x, binutils >= 2.30, glibc only).
+> 
+> This configuration has been used to successfully build a qemu-bootable
+> riscv-linux-4.15 kernel (https://github.com/riscv/riscv-linux.git).
+> 
+> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 
-> Hello,
->
-> On Sun,  2 Sep 2018 08:00:16 +0200 (CEST), Thomas Petazzoni wrote:
->
-> >       branch |  OK | NOK | TIM | TOT |
-> >    2018.02.x |  10 |   0 |   0 |  10 |
-> >    2018.05.x |  16 |   0 |   0 |  16 |
-> >       master | 158 |   4 |   1 | 163 |
->
-> Wow, results over the last few days on the master branch are pretty
-> amazing: http://autobuild.buildroot.net/stats.php. Four build failures
-> per day, on a total of 150-170 build successes. Nice!
->
-> Let's have a look at the build failures for yesterday.
->
-> >          arm |                   boost-1.67.0 | NOK |
-> http://autobuild.buildroot.net/results/808d1690240a4395cb0d953b77425fe31a85aeaf
-> |
->
-> This is another instance of:
->
-> libboost_atomic shouldn't have been installed: missing select in
-> boost/Config.in
->
-> This is happening on ARM Cortex-M4. Fabrice: there are still a few
-> patches on Boost from you in patchwork. Is one of them fixing this ?
->
-Nope, I didn't succeed in fixing this issue yet. libboost_atomic is
-selected because boost wrongly assumes that lock-free atomic ints are not
-available. However, I don't understand why the detection fails.
-This seems to happen only when statically linking on ARM Cortex M4 but also
-on atom (
-http://autobuild.buildroot.net/results/2163706e22c994c2e1fb6f73db3697703ebefe3e),
-mips64 (
-http://autobuild.buildroot.net/results/aeedc994f6a451e441b389375dc47e637d16e3b3),
-arc700 ...
-I will continue to work on this.
+Thanks for this work on adding RISC-V support in Buildroot! As I
+already said on another patch, it would really, really be helpful if
+you sent a complete patch series instead of individual patches. Your
+patch series should include:
 
-However, in patchwork, I would advise to apply or comment the patch 960723
-which is fixing another issue linked to the wrong selection of
-boost_thread/boost_chrono by boost_context.
+ - The preliminary patches to support specifying a custom version of
+   the kernel headers
+ - This patch adding the RISC-V support
+ - The patch adding the qemu defconfig
 
-> >     mips64el |                domoticz-4.9700 | NOK |
-> http://autobuild.buildroot.net/results/9428b0aaae95288cf1d1cce0ca2492ae06b77960
-> |
->
-> Fixed by:
->
->
-> https://git.buildroot.org/buildroot/commit/package/domoticz?id=19b04d844277467fcd9c605f6b7ee57d979a630a
->
-> >       x86_64 |                 host-libsodium | TIM |
-> http://autobuild.buildroot.net/results/83ece99f846bbb6398b9f2cf6a4cccbae595e86e
-> |
->
-> Ah, it's the timeout occurring on Julien's machine during the configure
-> step of this package. Weird.
->
-> >         m68k |                      php-7.2.9 | NOK |
-> http://autobuild.buildroot.net/results/69cf9326539c8df8fa50c5e7acb2ce3bb985ede2
-> | ORPH
->
-> Fixed by:
->
->
-> https://git.buildroot.org/buildroot/commit/?id=45215ffc8a75377228a477bebbf2ad9c78d40a35
->
-> >      powerpc |                       qt-4.8.7 | NOK |
-> http://autobuild.buildroot.net/results/fcf04ffdc27bb73fdeca0cc70a0dc09bcf3ec0d5
-> | ORPH
->
-> Fixed by:
->
->
-> https://git.buildroot.org/buildroot/commit/?id=75f975f8ad7b9f8dee8f1de9ce3243d69763637b
->
-> Conclusion: on 4 build failures and one timeout:
->
->  - 3 build failures are already fixed
->
->  - 1 build failure on Boost remains to be fixed
->
->  - the timeout is really mysterious.
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
-Best Regards,
+This way, the dependencies between the patches are clearly visible.
 
-Fabrice
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180902/ac9045d3/attachment.html>
+Could you add an entry in the DEVELOPERS file as well, listing all the
+files you're adding under your name/e-mail?
+
+> +config BR2_riscv64
+> +	bool "RISCV64"
+> +	select BR2_ARCH_IS_64
+> +	select BR2_ARCH_HAS_MMU_OPTIONAL
+
+Does your patch support the situation where the MMU is not used? I.e,
+does the RISC-V toolchain support noMMU RISC-V ?
+
+> diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+> new file mode 100644
+> index 0000000000..0bee422581
+> --- /dev/null
+> +++ b/arch/Config.in.riscv
+> @@ -0,0 +1,104 @@
+> +# RISC-V CPU ISA extensions.
+> +
+> +config BR2_RISCV_ISA_RVI
+> +	bool
+> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+
+Why is this select here instead of on the BR2_riscv64 option, since
+anyway there is not support at all for riscv64 before gcc 7.x ?
+
+
+> +choice
+> +	prompt "Target ABI"
+> +	default BR2_RISCV_ABI_LP64
+> +
+> +config BR2_RISCV_ABI_LP64
+> +	bool "lp64"
+> +	depends on BR2_ARCH_IS_64
+> +
+> +config BR2_RISCV_ABI_LP64F
+> +	bool "lp64f"
+> +	depends on BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVF
+> +
+> +config BR2_RISCV_ABI_LP64D
+> +	bool "lp64d"
+> +	depends on BR2_ARCH_IS_64 && BR2_RISCV_ISA_RVD
+
+The BR2_ARCH_IS_64 conditions don't seem to be very useful, since only
+riscv64 is supported for now... and it is always 64-bit.
+
+> +endchoice
+> +
+> +config BR2_ARCH
+> +	default "riscv64"
+> +
+> +config BR2_ENDIAN
+> +	default "LITTLE"
+> +
+> +config BR2_GCC_TARGET_ARCH
+> +#	Instruction set extension characters are appended by arch/arch.mk.riscv
+> +	default "rv64i"
+> +
+> +config BR2_GCC_TARGET_ABI
+> +	default "lp64" if BR2_RISCV_ABI_LP64
+> +	default "lp64f" if BR2_RISCV_ABI_LP64F
+> +	default "lp64d" if BR2_RISCV_ABI_LP64D
+> +
+> +config BR2_READELF_ARCH_NAME
+> +	default "RISC-V"
+> +
+> diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
+> new file mode 100644
+> index 0000000000..ad2e26903b
+> --- /dev/null
+> +++ b/arch/arch.mk.riscv
+> @@ -0,0 +1,24 @@
+> +#
+> +# Append the appropriate RISC-V ISA extensions to the
+> +# BR2_GCC_TARGET_ARCH variable.
+> +#
+> +
+> +BR2_RISCV_GCC_ARCH = $(call qstrip,$(BR2_GCC_TARGET_ARCH))
+> +
+> +ifeq ($(BR2_RISCV_ISA_RVM),y)
+> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)m
+> +endif
+> +ifeq ($(BR2_RISCV_ISA_RVA),y)
+> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)a
+> +endif
+> +ifeq ($(BR2_RISCV_ISA_RVF),y)
+> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)f
+> +endif
+> +ifeq ($(BR2_RISCV_ISA_RVD),y)
+> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)d
+> +endif
+> +ifeq ($(BR2_RISCV_ISA_RVC),y)
+> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)c
+> +endif
+> +
+> +BR2_GCC_TARGET_ARCH := $(patsubst %,"%",$(BR2_RISCV_GCC_ARCH))
+
+So, this is probably the part I'm the least happy with. I think it is
+the only occurrence where make logic would tweak BR2_* variables. I'm
+not sure I want to set a precedent for this, as it could become
+"strange" to see values of BR2_* options that don't match what is
+visible in the .config file.
+
+So, I think this will require a bit more rework. The solution I would
+propose is to introduce arch/arch.mk, which does:
+
+GCC_TARGET_ARCH = $(call qstrip,$(BR2_GCC_TARGET_ARCH))
+GCC_TARGET_ABI  = $(call qstrip,$(BR2_GCC_TARGET_ABI))
+GCC_TARGET_NAN  = $(call qstrip,$(BR2_GCC_TARGET_NAN))
+# etc. for all BR2_GCC_TARGET_* options listed in arch/Config.in
+
+-include $(sort $(wildcard arch/arch.mk.*))
+
+Then, in the main Makefile, you include arch/arch.mk instead of
+wildcard arch/arch.mk.*.
+
+Then, in arch/arch.mk.riscv, you can override GCC_TARGET_ARCH and al.
+
+Of course, every place where BR2_GCC_TARGET_ARCH was used needs to be
+changed to use GCC_TARGET_ARCH.
+
+Let me know if this proposal is clear or not. If it's not, I can cook
+up a quick patch to show you the direction.
+
+> diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+> index 21dc84e498..747bac57ed 100644
+> --- a/package/binutils/Config.in.host
+> +++ b/package/binutils/Config.in.host
+> @@ -6,15 +6,18 @@ choice
+>  	default BR2_BINUTILS_VERSION_2_28_X if BR2_ARM_INSTRUCTIONS_THUMB2
+>  	default BR2_BINUTILS_VERSION_2_29_X if !BR2_arc
+>  	default BR2_BINUTILS_VERSION_ARC if BR2_arc
+> +	default BR2_BINUTILS_VERSION_2_30_X if BR2_riscv64
+
+This is not really needed, since the first selectable entry is the one
+chosen by default.
+
+>  	help
+>  	  Select the version of binutils you wish to use.
+>  
+>  config BR2_BINUTILS_VERSION_2_28_X
+>  	bool "binutils 2.28.1"
+>  	depends on !BR2_arc
+> +	depends on !BR2_riscv64
+>  
+>  config BR2_BINUTILS_VERSION_2_29_X
+>  	bool "binutils 2.29.1"
+> +	depends on !BR2_riscv64
+>  
+>  config BR2_BINUTILS_VERSION_2_30_X
+>  	bool "binutils 2.30"
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index 75e8191f46..6798448bda 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -23,7 +23,7 @@ config BR2_TOOLCHAIN_BUILDROOT_VENDOR
+>  choice
+>  	prompt "C library"
+>  	default BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+> -	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_powerpc64
+> +	default BR2_TOOLCHAIN_BUILDROOT_GLIBC if BR2_powerpc64 || BR2_riscv64
+
+Ditto: since only glibc is supported on riscv64, it will automatically
+be the default selection.
+
+>  
+>  config BR2_TOOLCHAIN_BUILDROOT_UCLIBC
+>  	bool "uClibc-ng"
+> @@ -46,14 +46,16 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>  		   BR2_aarch64_be  || BR2_i386       || BR2_mips    || \
+>  		   BR2_mipsel      || BR2_mips64     || BR2_mips64el|| \
+>  		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+> -		   BR2_sh          || BR2_sparc64    || BR2_x86_64 || \
+> -		   BR2_microblaze  || BR2_nios2      || BR2_archs38
+> +		   BR2_riscv64     || BR2_sh         || BR2_sparc64     || \
+> +		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+> +		   BR2_archs38
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_10 || !BR2_powerpc64le
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5 || !BR2_MIPS_NAN_2008
+>  	depends on !BR2_powerpc_SPE
+> +	depends on BR2_RISCV_ISA_RVA || !BR2_riscv64
+>  	select BR2_TOOLCHAIN_USES_GLIBC
+>  	# our glibc.mk enables RPC support
+>  	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
+> @@ -77,6 +79,10 @@ comment "glibc on MIPS w/ NAN2008 needs a toolchain w/ headers >= 4.5"
+>  	depends on BR2_MIPS_NAN_2008
+>  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_5
+>  
+> +comment "glibc needs ISA extension A on riscv64"
+> +	depends on BR2_riscv64
+> +	depends on !BR2_RISCV_ISA_RVA
+
+So, if the user selects a "Custom architecture", and then doesn't
+enable BR2_RISCV_ISA_CUSTOM_RVA, he won't have any C library available
+to build a toolchain for riscv64.
+
+Provided this, I think we should not allow enabling/disabling RVA: we
+should assume it's always enabled.
+
+Could you fix those comments, and resubmit a new complete patch series,
+with all patches you need for RISC-V 64 support ?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
