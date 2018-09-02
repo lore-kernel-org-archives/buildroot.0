@@ -1,49 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Sep 2018 14:59:05 +0200
-Subject: [Buildroot] [git commit] libtorrent: refactor openssl optional
- dependency
-Message-ID: <20180907111607.EF7DC7FEB5@busybox.osuosl.org>
+Date: Sun, 2 Sep 2018 22:53:05 +0200
+Subject: [Buildroot] [git commit] jpeg-turbo: fix static build
+Message-ID: <20180907111608.102E97FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=131ac0b41ba849daa1f9d92553a7646f087ac961
+commit: https://git.buildroot.net/buildroot/commit/?id=ce359b1b4abb0cd9b2dace9a9c65204e5c36ea9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Set ENABLE_STATIC and ENABLE_SHARED depending on
+BR2_PACKAGE_STATIC_LIBS, BR2_SHARED_SHARED_STATIC_LIBS and
+BR2_SHARED_SHARED_LIBS
+
+Fixes:
+ - http://autobuild.buildroot.net/results/7e1500405a0f102dd6a48ef9337ffe4d7de73df3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtorrent/libtorrent.mk | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ package/jpeg-turbo/jpeg-turbo.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
-index 8d74addaf7..de964b45ae 100644
---- a/package/libtorrent/libtorrent.mk
-+++ b/package/libtorrent/libtorrent.mk
-@@ -6,15 +6,20 @@
+diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
+index 0fe2fcda72..1807cc294e 100644
+--- a/package/jpeg-turbo/jpeg-turbo.mk
++++ b/package/jpeg-turbo/jpeg-turbo.mk
+@@ -15,6 +15,14 @@ JPEG_TURBO_DEPENDENCIES = host-pkgconf
  
- LIBTORRENT_VERSION = 0.13.7
- LIBTORRENT_SITE = http://rtorrent.net/downloads
--LIBTORRENT_DEPENDENCIES = host-pkgconf zlib \
--	$(if $(BR2_PACKAGE_OPENSSL),openssl)
-+LIBTORRENT_DEPENDENCIES = host-pkgconf zlib
- LIBTORRENT_CONF_OPTS = --enable-aligned \
- 	--disable-instrumentation \
--	--with-zlib=$(STAGING_DIR)/usr \
--	$(if $(BR2_PACKAGE_OPENSSL),--enable-openssl,--disable-openssl)
-+	--with-zlib=$(STAGING_DIR)/usr
- LIBTORRENT_INSTALL_STAGING = YES
- LIBTORRENT_AUTORECONF = YES
- LIBTORRENT_LICENSE = GPL-2.0
- LIBTORRENT_LICENSE_FILES = COPYING
+ JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+LIBTORRENT_CONF_OPTS += --enable-openssl
-+LIBTORRENT_DEPENDENCIES += openssl
-+else
-+LIBTORRENT_CONF_OPTS += --disable-openssl
++ifeq ($(BR2_STATIC_LIBS),y)
++JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
++else ifeq ($(BR2_SHARED_LIBS),y)
++JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
 +endif
 +
- $(eval $(autotools-package))
+ ifeq ($(BR2_PACKAGE_JPEG_SIMD_SUPPORT),y)
+ JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=ON
+ # x86 simd support needs nasm
