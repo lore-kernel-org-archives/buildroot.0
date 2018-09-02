@@ -1,40 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Sep 2018 10:07:15 +0200
-Subject: [Buildroot] [PATCH/next 3/3] linux-headers: drop old
- unsupported 4.x versions
-In-Reply-To: <pkc75fx6k1.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Sat, 25 Aug 2018 09:21:29 +0200")
-References: <20180824184133.8508-1-bernd.kuhls@t-online.de>
- <20180824184133.8508-3-bernd.kuhls@t-online.de>
- <20180824230233.7a7e0a24@windsurf>
- <pkc75fx6k1.ln2@ID-313208.user.individual.net>
-Message-ID: <87pnxw491o.fsf@dell.be.48ers.dk>
+Date: Sun,  2 Sep 2018 10:33:21 +0200
+Subject: [Buildroot] [PATCH] imagemagick: security bump to version 7.0.7-39
+Message-ID: <20180902083321.29329-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+From the release notes:
 
- > Am Fri, 24 Aug 2018 23:02:33 +0200 schrieb Thomas Petazzoni:
- >> I think it makes more sense to automatically select some *older* kernel
- >> headers. Indeed, if the user was using 4.10 kernel headers, presumably
- >> he is using some 4.10/4.11/4.12 kernel, so if we upgrade the kernel
- >> headers to 4.14... the new build may not work at runtime, the kernel
- >> headers being more recent than the running kernel.
+2018-06-06  7.0.7-39  <quetzlzacatenango@image...>
+  * Fixed numerous use of uninitialized values, integer overflow, memory
+    exceeded, and timeouts (credit to OSS Fuzz).
 
- > Hi Thomas,
+The most critical of these are:
+https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8772
+https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8782
 
- > when preparing this patch I searched for previous removals of kernel 
- > versions for orientation on how to handle the legacy options and found 
- > this patch/commit by Peter where he upgraded the versions:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > https://git.buildroot.net/buildroot/commit/?
- > id=2a9b7b8a1ec0f200c6b82641512325284dee9a54
-
-Hmm, that was a mistake. I must have missed that we still had an entry
-for 3.2.
-
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index cf529b597c..9d5a39567e 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 ac957ef303fb870cb92331947ebcdcef5b553e80c7897c0aec866889f35e1a23  7.0.7-38.tar.gz
++sha256 e7c1b19923bb97ed456c78b63b3259b809ebc8e3967c6d086450370c67eedf06  7.0.7-39.tar.gz
+ sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 4aa9d56db2..b75d65375b 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.0.7-38
++IMAGEMAGICK_VERSION = 7.0.7-39
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
 -- 
-Bye, Peter Korsgaard
+2.11.0
