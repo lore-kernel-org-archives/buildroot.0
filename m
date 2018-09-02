@@ -1,37 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Sep 2018 15:28:34 +0200
-Subject: [Buildroot] [git commit] php: pdo mysql extension needs hash as well
-Message-ID: <20180902133011.730DE825F8@busybox.osuosl.org>
+Date: Sun, 2 Sep 2018 15:29:00 +0200
+Subject: [Buildroot] [git commit] imagemagick: security bump to version
+ 7.0.7-39
+Message-ID: <20180902133011.78A518257B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=45215ffc8a75377228a477bebbf2ad9c78d40a35
+commit: https://git.buildroot.net/buildroot/commit/?id=811734ef9044bbdfc067da76358153061fae2031
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-http://autobuild.buildroot.net/results/69cf9326539c8df8fa50c5e7acb2ce3bb985ede2/
+From the release notes:
 
-The PDO mysql extension also needs the hash extension - so select it,
-similar to how it was done for the mysqli extension in commit 65f96452636
-(php: fix build with mysqli).
+2018-06-06  7.0.7-39  <quetzlzacatenango@image...>
+  * Fixed numerous use of uninitialized values, integer overflow, memory
+    exceeded, and timeouts (credit to OSS Fuzz).
+
+The most critical of these are:
+https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8772
+https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8782
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/Config.ext | 1 +
- 1 file changed, 1 insertion(+)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/php/Config.ext b/package/php/Config.ext
-index 60ef1aee7c..51dcbbf4a4 100644
---- a/package/php/Config.ext
-+++ b/package/php/Config.ext
-@@ -132,6 +132,7 @@ if BR2_PACKAGE_PHP_EXT_PDO
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index cf529b597c..9d5a39567e 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 ac957ef303fb870cb92331947ebcdcef5b553e80c7897c0aec866889f35e1a23  7.0.7-38.tar.gz
++sha256 e7c1b19923bb97ed456c78b63b3259b809ebc8e3967c6d086450370c67eedf06  7.0.7-39.tar.gz
+ sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index 4aa9d56db2..b75d65375b 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
- 	bool "MySQL"
-+	select BR2_PACKAGE_PHP_EXT_HASH
- 	help
- 	  PDO driver for MySQL
- 
+-IMAGEMAGICK_VERSION = 7.0.7-38
++IMAGEMAGICK_VERSION = 7.0.7-39
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
