@@ -1,65 +1,60 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 2 Sep 2018 14:25:49 +0200
-Subject: [Buildroot] [for-next: 1/2] package/make: add host variant
-In-Reply-To: <20180902093918.3cd04d18@windsurf>
-References: <20180830203054.7373-1-romain.naour@gmail.com>
- <20180901145103.63ea583b@windsurf>
- <0bf99c93-5726-9b67-cce0-d4f02549f83e@gmail.com>
- <20180902093918.3cd04d18@windsurf>
-Message-ID: <3523002c-076c-e61c-31d2-6dd5bb291728@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 2 Sep 2018 15:25:32 +0200
+Subject: [Buildroot] [[PATCH v2 0/2] mender-artifact support
+In-Reply-To: <20180827113728.20856-1-mirza.krak@northern.tech>
+References: <20180827113728.20856-1-mirza.krak@northern.tech>
+Message-ID: <20180902152532.6ae013a8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Mirza,
 
-Le 02/09/2018 ? 09:39, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Sat, 1 Sep 2018 21:20:36 +0200, Romain Naour wrote:
-> 
->> From [1]:
->> AC_CHECK_PROG_VER(MAKE, gnumake gmake make, --version,
->>   [GNU Make[^0-9]*\([0-9][0-9.]*\)],
->>   [3.79* | 3.[89]* | [4-9].* | [1-9][0-9]*], critic_missing="$critic_missing make")
->>
->> On your host (Fedora) you have a symlink to make named gmake (gmake -> make)
->>
->> You can verify that glibc is using gmake instead of make by looking at config.log.
->>
->> configure:4672: checking for gnumake
->> configure:4702: result: no
->> configure:4672: checking for gmake
->> configure:4688: found /usr/bin/gmake
->> configure:4699: result: gmake
->> configure:4714: checking version of gmake
->> configure:4724: result: 4.2.1, ok
-> 
-> OK.
-> 
->> We can verify that glibc build-system is really using gmake:
->> ac_cv_prog_MAKE=gmake
->>
->> So if we want glibc build system to use the make binary provided by Buildroot we
->> must create gnumake and gmake symlink in $(HOST_DIR)/bin when installing host-make.
-> 
-> Or we can pass ac_cv_prog_MAKE=make. But OK, perhaps doing the symlinks
-> is better.
+On Mon, 27 Aug 2018 13:37:26 +0200, Mirza Krak wrote:
 
-Indeed (I tried with this solution) but I believe that creating gnumake and
-gmake symlinks in HOST_DIR is more bulletproof. I don't know if another package
-is trying to use gnumake or gmake.
+> Mirza Krak (2):
+>   package/pkg-golang: add support for building host packages
+>   package/mender-artifact: initial support
 
-> 
-> Thanks for the explanation!
+Thanks for this patch series. It looks mostly good from a review
+perspective, except one aspect on PATCH 2/2, to which I'll reply
+separately.
 
-You're welcome!
+However, the host-mender-artifact package doesn't build here. With the
+following deconfig:
 
-Best regards,
-Romain
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2018.05.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_MENDER_ARTIFACT=y
 
-> 
-> Thomas
-> 
+I get the following error:
+
+>>> host-mender-artifact 2.2.0 Building
+cd /home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/_gopath/src///; PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin" GOBIN= CGO_ENABLED=1 GOPATH="/home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/_gopath"  /home/thomas/projets/buildroot/output/host/bin/go build -v -ldflags "" -tags "" -o /home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/bin/host-mender-artifact ./.
+can't load package: package .: no Go files in /home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/_gopath/src
+make[1]: *** [package/pkg-generic.mk:232: /home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/.stamp_built] Error 1
+make: *** [Makefile:79: _all] Error 2
+
+Could you have a look into this ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
