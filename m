@@ -1,53 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 2 Sep 2018 09:39:18 +0200
-Subject: [Buildroot] [for-next: 1/2] package/make: add host variant
-In-Reply-To: <0bf99c93-5726-9b67-cce0-d4f02549f83e@gmail.com>
-References: <20180830203054.7373-1-romain.naour@gmail.com>
- <20180901145103.63ea583b@windsurf>
- <0bf99c93-5726-9b67-cce0-d4f02549f83e@gmail.com>
-Message-ID: <20180902093918.3cd04d18@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Sep 2018 09:47:05 +0200
+Subject: [Buildroot] Including example applications to target
+In-Reply-To: <SYCPR01MB344072FCAF83E300F7033CC0CB0D0@SYCPR01MB3440.ausprd01.prod.outlook.com>
+ (Bassem Fahmy's message of "Sun, 2 Sep 2018 02:33:42 +0000")
+References: <SYCPR01MB344072FCAF83E300F7033CC0CB0D0@SYCPR01MB3440.ausprd01.prod.outlook.com>
+Message-ID: <87tvn849za.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Bassem" == Bassem Fahmy <t_fahmy_bassem@hotmail.com> writes:
 
-On Sat, 1 Sep 2018 21:20:36 +0200, Romain Naour wrote:
+ > Hi,
 
-> From [1]:
-> AC_CHECK_PROG_VER(MAKE, gnumake gmake make, --version,
->   [GNU Make[^0-9]*\([0-9][0-9.]*\)],
->   [3.79* | 3.[89]* | [4-9].* | [1-9][0-9]*], critic_missing="$critic_missing make")
-> 
-> On your host (Fedora) you have a symlink to make named gmake (gmake -> make)
-> 
-> You can verify that glibc is using gmake instead of make by looking at config.log.
-> 
-> configure:4672: checking for gnumake
-> configure:4702: result: no
-> configure:4672: checking for gmake
-> configure:4688: found /usr/bin/gmake
-> configure:4699: result: gmake
-> configure:4714: checking version of gmake
-> configure:4724: result: 4.2.1, ok
+ > I'm trying to add a new cmake package (aws-iot-devic-sck-cpp) to
+ > buildroot. I managed to integrate it and the shared object is added to
+ > the target /usr/lib folder. The build also produces a bunch of sample
+ > applications (and unit tests). These are not however added to the
+ > target (cmake install step doesn't include them in the first
+ > place). What is the best approach to add these sample applications to
+ > the final image. My two thinkings are:
 
-OK.
 
-> We can verify that glibc build-system is really using gmake:
-> ac_cv_prog_MAKE=gmake
-> 
-> So if we want glibc build system to use the make binary provided by Buildroot we
-> must create gnumake and gmake symlink in $(HOST_DIR)/bin when installing host-make.
+ > - Add a post install package step to copy those samples (and certificates) to target
 
-Or we can pass ac_cv_prog_MAKE=make. But OK, perhaps doing the symlinks
-is better.
+ > - Add a patch to the CMakeLists.txt file to add them in the install step.
 
-Thanks for the explanation!
+You probably want to make installing the example conditional on a sub
+option (like E.G. BR2_PACKAGE_QT_EXAMPLES), so the first option sounds
+simplest.
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
