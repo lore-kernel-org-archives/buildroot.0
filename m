@@ -1,52 +1,106 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Sep 2018 15:29:00 +0200
-Subject: [Buildroot] [git commit] imagemagick: security bump to version
- 7.0.7-39
-Message-ID: <20180902133011.78A518257B@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 2 Sep 2018 15:47:34 +0200
+Subject: [Buildroot] [[PATCH v2 2/2] package/mender-artifact: initial
+ support
+In-Reply-To: <20180827113728.20856-3-mirza.krak@northern.tech>
+References: <20180827113728.20856-1-mirza.krak@northern.tech>
+ <20180827113728.20856-3-mirza.krak@northern.tech>
+Message-ID: <20180902154734.4f5a7f40@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=811734ef9044bbdfc067da76358153061fae2031
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Mirza,
 
-From the release notes:
+Overall it looks good, except for one aspect, which will require a bit
+of discussion.
 
-2018-06-06  7.0.7-39  <quetzlzacatenango@image...>
-  * Fixed numerous use of uninitialized values, integer overflow, memory
-    exceeded, and timeouts (credit to OSS Fuzz).
+On Mon, 27 Aug 2018 13:37:28 +0200, Mirza Krak wrote:
 
-The most critical of these are:
-https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8772
-https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8782
+> diff --git a/package/mender-artifact/Config.in.host b/package/mender-artifact/Config.in.host
+> new file mode 100644
+> index 0000000000..d2deabc783
+> --- /dev/null
+> +++ b/package/mender-artifact/Config.in.host
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_HOST_MENDER_ARTIFACT
+> +	bool "host mender-artifact"
+> +	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+> +	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I am not happy about those dependencies, because they are dependencies
+meant to be used for *target* packages, not for *host* packages.
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index cf529b597c..9d5a39567e 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 ac957ef303fb870cb92331947ebcdcef5b553e80c7897c0aec866889f35e1a23  7.0.7-38.tar.gz
-+sha256 e7c1b19923bb97ed456c78b63b3259b809ebc8e3967c6d086450370c67eedf06  7.0.7-39.tar.gz
- sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 4aa9d56db2..b75d65375b 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.7-38
-+IMAGEMAGICK_VERSION = 7.0.7-39
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
+BR2_TOOLCHAIN_HAS_THREADS is easy: it's not needed for host packages,
+as we assume the build machine has thread support.
+
+For the other dependencies, it's a bit more complicated, but I believe
+somewhat similar to the situation we have with the Rust support.
+
+Right now, BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS indicates if the
+currently selected target architecture is supported by Go. This is fine
+for target packages.
+
+But apparently, host-go provides really two things:
+
+ (1) A Go compiler capable of building code for the host machine.
+
+ (2) A Go compiler capable of building code for the target machine.
+
+For Go target packages, We are currently using (2), and for packages
+that rely on (2), using BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS make sense.
+
+However, with your support for host packages, what we rely on is (1).
+And for that BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS doesn't make a lot of
+sense.
+
+For example, BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS says that Go is not
+available on the ARC architecture. But for building a host package, we
+really don't care about this: what matters is that Go is capable of
+building code for the x86 or x86-64 build machine.
+
+Therefore, we should probably use the same strategy as Rust, which is
+proposed in patch http://patchwork.ozlabs.org/patch/961158/:
+
+ - The BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS is changed to only indicate if
+   Go supports the host/build system architecture. In our case, it
+   should probably just be:
+
+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_ARCH_SUPPORTS
+
+   All host Go packages should depend on this option.
+
+ - A new BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS that indicates if Go
+   supports the target system architecture. It should be:
+
+	depends on BR2_PACKAGE_HOST_GO_ARCH_SUPPORTS
+        depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+                || BR2_i386 || BR2_x86_64 || BR2_powerpc64le \
+                || BR2_mips64 || BR2_mips64el
+        depends on !BR2_ARM_CPU_ARMV4
+        # MIPS R6 support in Go has not yet been developed.
+        depends on !BR2_MIPS_CPU_MIPS64R6
+
+Of course we can only do this if host-go builds correctly regardless of
+whether the target architecture is supported or not. What Rust does is:
+
+ - If the target is architecture is supported by Rust, it installs
+   support for building code for both the host and the target
+   architectures.
+
+ - If the target is architecture is not supported by Rust, it only
+   installs support for building code for the host architecture.
+
+Do you know how Go supports this ? I have no idea how Go is told to
+support this or that architecture. Could you investigate this ?
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
