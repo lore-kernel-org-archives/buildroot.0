@@ -1,79 +1,30 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Sep 2018 00:20:04 +0200
-Subject: [Buildroot] [git commit] package/squashfs: fix build on hosts with
- glibc >= 2.28
-Message-ID: <20180901222257.6F50F8257D@busybox.osuosl.org>
+From: Bassem Fahmy <t_fahmy_bassem@hotmail.com>
+Date: Sun, 2 Sep 2018 02:33:42 +0000
+Subject: [Buildroot] Including example applications to target
+Message-ID: <SYCPR01MB344072FCAF83E300F7033CC0CB0D0@SYCPR01MB3440.ausprd01.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed0e55675eaf91e61d8004128169cb195a4fb72a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since glibc 2.28, sys/sysmacros.h is no longer included from sys/types.h
-This patch fixes the resulting build error by explicitly including
-sys/sysmacros.h
+Hi,
 
-See also https://github.com/plougher/squashfs-tools/pull/52
+I'm trying to add a new cmake package (aws-iot-devic-sck-cpp) to buildroot. I managed to integrate it and the shared object is added to the target /usr/lib folder. The build also produces a bunch of sample applications (and unit tests). These are not however added to the target (cmake install step doesn't include them in the first place). What is the best approach to add these sample applications to the final image. My two thinkings are:
 
-Signed-off-by: Richard Kunze <richard.kunze@web.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/squashfs/0001-include-sysmacros.patch | 47 +++++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
 
-diff --git a/package/squashfs/0001-include-sysmacros.patch b/package/squashfs/0001-include-sysmacros.patch
-new file mode 100644
-index 0000000000..d794836c04
---- /dev/null
-+++ b/package/squashfs/0001-include-sysmacros.patch
-@@ -0,0 +1,47 @@
-+From 968aa53dd6d2c0831a9af01873441767c06b88d0 Mon Sep 17 00:00:00 2001
-+From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+Date: Wed, 1 Aug 2018 12:17:10 +0200
-+Subject: [PATCH] mksquashfs/unsquashfs: fix compilation with glibc 2.25+
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+From glibc 2.25 release notes:
-+https://sourceware.org/ml/libc-alpha/2017-02/msg00079.html
-+"* The inclusion of <sys/sysmacros.h> by <sys/types.h> is deprecated.
-+  This means that in a future release, the macros ???major???, ???minor???, and
-+  ???makedev??? will only be available from <sys/sysmacros.h>."
-+
-+See glibc bug https://sourceware.org/bugzilla/show_bug.cgi?id=19239 .
-+
-+Fetch from: https://github.com/plougher/squashfs-tools/pull/52.patch
-+Signed-off-by: Richard Kunze <richard.kunze@web.de>
-+---
-+ squashfs-tools/mksquashfs.c | 1 +
-+ squashfs-tools/unsquashfs.c | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
-+index d696a51..8d57c3e 100644
-+--- a/squashfs-tools/mksquashfs.c
-++++ b/squashfs-tools/mksquashfs.c
-+@@ -35,6 +35,7 @@
-+ #include <stddef.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-++#include <sys/sysmacros.h>
-+ #include <fcntl.h>
-+ #include <errno.h>
-+ #include <dirent.h>
-+diff --git a/squashfs-tools/unsquashfs.c b/squashfs-tools/unsquashfs.c
-+index a57f85c..a492b27 100644
-+--- a/squashfs-tools/unsquashfs.c
-++++ b/squashfs-tools/unsquashfs.c
-+@@ -33,6 +33,7 @@
-+ #include "fnmatch_compat.h"
-+ 
-+ #include <sys/sysinfo.h>
-++#include <sys/sysmacros.h>
-+ #include <sys/types.h>
-+ #include <sys/time.h>
-+ #include <sys/resource.h>
+- Add a post install package step to copy those samples (and certificates) to target
+
+- Add a patch to the CMakeLists.txt file to add them in the install step.
+
+
+Regards,
+
+Bassem
+
+
+Sent from Outlook<http://aka.ms/weboutlook>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180902/0cb19c75/attachment.html>
