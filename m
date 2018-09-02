@@ -1,31 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Sep 2018 15:29:13 +0200
-Subject: [Buildroot] [PATCH] imagemagick: security bump to version
- 7.0.7-39
-In-Reply-To: <20180902083321.29329-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 2 Sep 2018 10:33:21 +0200")
-References: <20180902083321.29329-1-peter@korsgaard.com>
-Message-ID: <87d0tw3u52.fsf@dell.be.48ers.dk>
+Date: Sun, 2 Sep 2018 15:28:34 +0200
+Subject: [Buildroot] [git commit] php: pdo mysql extension needs hash as well
+Message-ID: <20180902133011.730DE825F8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=45215ffc8a75377228a477bebbf2ad9c78d40a35
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From the release notes:
- > 2018-06-06  7.0.7-39  <quetzlzacatenango@image...>
- >   * Fixed numerous use of uninitialized values, integer overflow, memory
- >     exceeded, and timeouts (credit to OSS Fuzz).
+Fixes:
+http://autobuild.buildroot.net/results/69cf9326539c8df8fa50c5e7acb2ce3bb985ede2/
 
- > The most critical of these are:
- > https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8772
- > https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=8782
+The PDO mysql extension also needs the hash extension - so select it,
+similar to how it was done for the mysqli extension in commit 65f96452636
+(php: fix build with mysqli).
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/Config.ext | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/Config.ext b/package/php/Config.ext
+index 60ef1aee7c..51dcbbf4a4 100644
+--- a/package/php/Config.ext
++++ b/package/php/Config.ext
+@@ -132,6 +132,7 @@ if BR2_PACKAGE_PHP_EXT_PDO
+ 
+ config BR2_PACKAGE_PHP_EXT_PDO_MYSQL
+ 	bool "MySQL"
++	select BR2_PACKAGE_PHP_EXT_HASH
+ 	help
+ 	  PDO driver for MySQL
+ 
