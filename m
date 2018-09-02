@@ -1,60 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 2 Sep 2018 15:25:32 +0200
-Subject: [Buildroot] [[PATCH v2 0/2] mender-artifact support
-In-Reply-To: <20180827113728.20856-1-mirza.krak@northern.tech>
-References: <20180827113728.20856-1-mirza.krak@northern.tech>
-Message-ID: <20180902152532.6ae013a8@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Sep 2018 15:29:06 +0200
+Subject: [Buildroot] [PATCH] php: pdo mysql extension needs hash as well
+In-Reply-To: <20180902075735.8010-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 2 Sep 2018 09:57:35 +0200")
+References: <20180902075735.8010-1-peter@korsgaard.com>
+Message-ID: <87h8j83u59.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Mirza,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Mon, 27 Aug 2018 13:37:26 +0200, Mirza Krak wrote:
+ > Fixes:
+ > http://autobuild.buildroot.net/results/69cf9326539c8df8fa50c5e7acb2ce3bb985ede2/
 
-> Mirza Krak (2):
->   package/pkg-golang: add support for building host packages
->   package/mender-artifact: initial support
+ > The PDO mysql extension also needs the hash extension - so select it,
+ > similar to how it was done for the mysqli extension in commit 65f96452636
+ > (php: fix build with mysqli).
 
-Thanks for this patch series. It looks mostly good from a review
-perspective, except one aspect on PATCH 2/2, to which I'll reply
-separately.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-However, the host-mender-artifact package doesn't build here. With the
-following deconfig:
+Committed, thanks.
 
-BR2_arm=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2018.05.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_1=y
-BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_PACKAGE_HOST_MENDER_ARTIFACT=y
-
-I get the following error:
-
->>> host-mender-artifact 2.2.0 Building
-cd /home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/_gopath/src///; PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/home/thomas/.rvm/bin:/usr/local/sbin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin" GOBIN= CGO_ENABLED=1 GOPATH="/home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/_gopath"  /home/thomas/projets/buildroot/output/host/bin/go build -v -ldflags "" -tags "" -o /home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/bin/host-mender-artifact ./.
-can't load package: package .: no Go files in /home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/_gopath/src
-make[1]: *** [package/pkg-generic.mk:232: /home/thomas/projets/buildroot/output/build/host-mender-artifact-2.2.0/.stamp_built] Error 1
-make: *** [Makefile:79: _all] Error 2
-
-Could you have a look into this ?
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
