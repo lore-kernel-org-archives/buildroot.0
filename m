@@ -1,41 +1,65 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 02 Sep 2018 12:31:28 +0200
-Subject: [Buildroot] Including example applications to target
-In-Reply-To: <SYCPR01MB3440F757740F1CD405B561EECB0D0@SYCPR01MB3440.ausprd01.prod.outlook.com>
- (Bassem Fahmy's message of "Sun, 2 Sep 2018 10:09:22 +0000")
-References: <SYCPR01MB344072FCAF83E300F7033CC0CB0D0@SYCPR01MB3440.ausprd01.prod.outlook.com>
- <87tvn849za.fsf@dell.be.48ers.dk>
- <SYCPR01MB3440F757740F1CD405B561EECB0D0@SYCPR01MB3440.ausprd01.prod.outlook.com>
-Message-ID: <87lg8k42db.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 2 Sep 2018 14:25:49 +0200
+Subject: [Buildroot] [for-next: 1/2] package/make: add host variant
+In-Reply-To: <20180902093918.3cd04d18@windsurf>
+References: <20180830203054.7373-1-romain.naour@gmail.com>
+ <20180901145103.63ea583b@windsurf>
+ <0bf99c93-5726-9b67-cce0-d4f02549f83e@gmail.com>
+ <20180902093918.3cd04d18@windsurf>
+Message-ID: <3523002c-076c-e61c-31d2-6dd5bb291728@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bassem" == Bassem Fahmy <t_fahmy_bassem@hotmail.com> writes:
+Hi Thomas,
 
- >> You probably want to make installing the example conditional on a sub
- >> option (like E.G. BR2_PACKAGE_QT_EXAMPLES), so the first option sounds
- >> simplest.
+Le 02/09/2018 ? 09:39, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Sat, 1 Sep 2018 21:20:36 +0200, Romain Naour wrote:
+> 
+>> From [1]:
+>> AC_CHECK_PROG_VER(MAKE, gnumake gmake make, --version,
+>>   [GNU Make[^0-9]*\([0-9][0-9.]*\)],
+>>   [3.79* | 3.[89]* | [4-9].* | [1-9][0-9]*], critic_missing="$critic_missing make")
+>>
+>> On your host (Fedora) you have a symlink to make named gmake (gmake -> make)
+>>
+>> You can verify that glibc is using gmake instead of make by looking at config.log.
+>>
+>> configure:4672: checking for gnumake
+>> configure:4702: result: no
+>> configure:4672: checking for gmake
+>> configure:4688: found /usr/bin/gmake
+>> configure:4699: result: gmake
+>> configure:4714: checking version of gmake
+>> configure:4724: result: 4.2.1, ok
+> 
+> OK.
+> 
+>> We can verify that glibc build-system is really using gmake:
+>> ac_cv_prog_MAKE=gmake
+>>
+>> So if we want glibc build system to use the make binary provided by Buildroot we
+>> must create gnumake and gmake symlink in $(HOST_DIR)/bin when installing host-make.
+> 
+> Or we can pass ac_cv_prog_MAKE=make. But OK, perhaps doing the symlinks
+> is better.
 
- > Thanks for the reply.
- > Following on this I have another question. The sample applications are
- > built in the aws build folder
- > (buildroot/output/build/aws-iot-device-sdk-cpp-master/buildroot-build/bin). How
- > should I reference this?
- > Is it ok to reference buildroot-build directly or is there a variable that references it.
+Indeed (I tried with this solution) but I believe that creating gnumake and
+gmake symlinks in HOST_DIR is more bulletproof. I don't know if another package
+is trying to use gnumake or gmake.
 
- > cp -dpfr $(@D)/buildroot-build/bin/* $(TARGET_DIR)/aws-iot-device-sdk-cpp
+> 
+> Thanks for the explanation!
 
-$(@D) is the build directory for the package, so that is fine.
+You're welcome!
 
-I notice you have 'master' as the version in
-aws-iot-device-sdk-cpp-master, which sounds like a branch name and not a
-tag. The package version must refer to a tag (or vcs revision hash). See
-the manual for details:
+Best regards,
+Romain
 
-http://nightly.buildroot.org/manual.html#generic-package-reference
-
--- 
-Bye, Peter Korsgaard
+> 
+> Thomas
+> 
