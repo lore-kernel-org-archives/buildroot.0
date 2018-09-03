@@ -1,45 +1,52 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Mon, 3 Sep 2018 13:05:50 +0530
-Subject: [Buildroot] [PATCH v4 1/2] board: amarula: Add A64-Relic support
-In-Reply-To: <CAMty3ZCa0x9K9mEYAL_Yz4gkZMNsNO8n8zkhUxSvuuFEe17F6Q@mail.gmail.com>
-References: <20180701140026.2261-1-jagan@amarulasolutions.com>
- <CAMty3ZCa0x9K9mEYAL_Yz4gkZMNsNO8n8zkhUxSvuuFEe17F6Q@mail.gmail.com>
-Message-ID: <CAMty3ZBA3wvYVNhwYxC_gpn7X7hySk8FPZRSZQrPzBj9nvecPA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 3 Sep 2018 10:26:55 +0200
+Subject: [Buildroot] [PATCH] synergy: change upstream location to fix
+ download issues
+In-Reply-To: <871sab3v4l.fsf@dell.be.48ers.dk>
+References: <20180902204505.30928-1-thomas.petazzoni@bootlin.com>
+ <871sab3v4l.fsf@dell.be.48ers.dk>
+Message-ID: <20180903102655.6f7f8df4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Aug 7, 2018 at 11:33 AM, Jagan Teki <jagan@amarulasolutions.com> wrote:
-> On Sun, Jul 1, 2018 at 7:30 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
->> Add initial support for Amarula A64-Relic board
->> with below features:
->> - U-Boot 2018.07-rc1
->> - Linux 4.17.0-rc6
->> - Default packages from buildroot
->>
->> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
->> ---
->> Changes for v4:
->> - remove sdcard.img image creation
->> - on readme 'cd output/images' not output/images
->> - add 'sudo' for fastboot commands on readme.txt
->> Changes for v3:
->> - Use 4.17 kernel headers
->> - Add wiki link
->> - Add BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT
->> - Update comments on readme.txt suggested by Thomas
->> Changes for v2:
->> - Use mainline U-Boot
->> - Drop uboot.fragment since the UMS used for developement,
->>   so note it on readme.txt how to use.
->> - format the 'Write eMMC' steps suggested by Arnout.
->> - fix fastboot steps in readme.txt
->> - add offset in genimage.cfg for boot partition instead of size
->
-> Any further comments on this?
+Hello,
 
-Any response on this?
+On Mon, 03 Sep 2018 09:20:10 +0200, Peter Korsgaard wrote:
 
-Jagan.
+>  >  SYNERGY_VERSION = v1.8.8-stable
+>  > -SYNERGY_SITE = $(call github,symless,synergy,$(SYNERGY_VERSION))
+>  > +SYNERGY_SITE = $(call github,symless,synergy-core,$(SYNERGY_VERSION))  
+> 
+> So is the idea to apply this to next or to master? If we change the hash
+> for the 1.8.8 version, then this will break download for the 2018.02.x /
+> 2018.05.x releases.
+
+My idea was to have it on master and next, but indeed I did not think
+about 2018.02.x/2018.05.x being broken :-/
+
+> Looking at the synergy git history, a hack could be to bump the version
+> to the commit just after v1.8.8 together with changing the URL so we end
+> up with a new tarball name:
+> 
+> commit ec56ac4485ef8e3cf986107b8456949b5aec3527
+> Author: Andrew Nelless <andrew@symless.com>
+> Date:   Fri Mar 3 14:51:23 2017 +0000
+> 
+>     Fix version number in Changelog
+
+Or perhaps we simply don't fix it in master, and only in next ? The big
+downside I see with not fixing in master is that people who look at
+their build log will see the upstream download fail due to the hash
+mismatch, and the fallback to sources.buildroot.net. A
+security-conscious user could rightfully think that Buildroot is trying
+to sneak in a backdoor in the synergy code by providing a different
+version on sources.buildroot.net than what upstream provides.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
