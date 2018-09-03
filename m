@@ -1,82 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Sep 2018 00:30:49 +0200
-Subject: [Buildroot] [PATCH 1/1] linux/linux.mk: Use '-isystem' instead
- of '-I' in HOST_CFLAGS
-In-Reply-To: <20180901095517.6ad46a12@windsurf>
-References: <20180830095748.30297-1-david.degrave@mind.be>
- <20180901095517.6ad46a12@windsurf>
-Message-ID: <e1ff0364-111b-c495-796a-e9de584a5f43@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 03 Sep 2018 22:47:56 +0000
+Subject: [Buildroot] [Bug 11261] ccache using wrong cached objects
+In-Reply-To: <bug-11261-163@https.bugs.busybox.net/>
+References: <bug-11261-163@https.bugs.busybox.net/>
+Message-ID: <bug-11261-163-3kwe0ORqT8@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=11261
 
+Arnout Vandecappelle <arnout@mind.be> changed:
 
-On 01/09/2018 09:55, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Thu, 30 Aug 2018 11:57:48 +0200, David De Grave (Essensium/Mind)
-> wrote:
->> Since the last update of the DTC package, linux build breaks at some point
->> with the following error:
->>
->>     In file included from {output}/host/include/libfdt.h:54:0,
->>                      from scripts/dtc/libfdt/fdt.c:54:
->>     {output}/host/include/libfdt_env.h:82:24: error: redefinition of \
->>     ?fdt16_to_cpu?
->>      static inline uint16_t fdt16_to_cpu(fdt16_t x)
->>                             ^~~~~~~~~~~~
->>     In file included from scripts/dtc/libfdt/fdt.c:51:0:
->>     scripts/dtc/libfdt/libfdt_env.h:81:24: note: previous definition of \
->>     ?fdt16_to_cpu? was here
->>
->> This is because the HOST_CFLAGS is added before Linux's makefile add it's
->> own local ones (-Iscripts/dtc/libfdt), resulting in a mix of local and host
->> headers beeing used.
->>
->> So, to fix this the '-I' is substituted by '-isystem' to let it search for
->> the headers in the right location first.
->>
->> Signed-off-by: David De Grave (Essensium/Mind) <david.degrave@mind.be>
->> ---
->>  linux/linux.mk | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> I suspect this one is superseded by your new patch series
-> http://patchwork.ozlabs.org/project/buildroot/list/?series=63524, so
-> I've marked this patch as Changes Requested.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WORKSFORME
 
- Actually, the idea was to apply this patch on master because it fixes a bug,
-and the series on next because it is more invasive.
+--- Comment #3 from Arnout Vandecappelle <arnout@mind.be> ---
+Unfortunately, I was not able to reproduce the issue. We wiped the ccache and
+that solved the problem. I thought that I knew the cause (and thus would be
+able to reproduce), but apparently I didn't...
 
- It turns out, however, that the problem only occurs for the beaglebone kernel
-on github, because that one builds its fdtoverlay host tool. "Normal" kernels
-don't build libfdt at all for the host, so the error reported doesn't occur.
+The issue was detected while David investigated the libfdt.h issue that was
+ultimately fixed by replacing -I$(HOST_DIR)/include with -isystem
+$(HOST_DIR)/include. Before that, he had developed a patch for the kernel that
+would fix it by changing the libfdt.h in the kernel to match the one in dtc
+itself. On one build machine, that patch worked perfectly fine; on another one,
+it apparently had no effect - until the ccache was removed.
 
-> 
-> Note that
-> http://patchwork.ozlabs.org/project/buildroot/list/?series=63524
-> doesn't contain PATCH 2/3 due to a patchwork issue when associating
-> patches to series, but PATCH 2/3 has been recorded by patchwork.
+In retrospect, it may be possible that this was caused by ccache installed on
+the host (so not our own ccache). But even with that added in the mix I
+couldn't reproduce.
 
- Patch 2/3 actually doesn't apply, it's a revert of this patch... So I've marked
-that one as N/A.
+I also thought at the time that I understood what was going wrong (I thought it
+was due to CCACHE_BASEDIR), but I've investigated that option further and it
+was a dead end.
 
- Regards,
- Arnout
-
-> 
-> Best regards,
-> 
-> Thomas
-> 
+So, with nothing more to go on, I'm closing this as WORKSFORME. Pity, because
+unreliable ccache is really painful.
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+You are receiving this mail because:
+You are on the CC list for the bug.
