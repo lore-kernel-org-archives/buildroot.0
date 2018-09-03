@@ -1,37 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 3 Sep 2018 10:43:38 +0200
-Subject: [Buildroot] [PATCH v2 1/3] leveldb: install memenv static
- library and header
-In-Reply-To: <20180903072528.15744-2-gael.portay@savoirfairelinux.com>
-References: <20180903072528.15744-1-gael.portay@savoirfairelinux.com>
- <20180903072528.15744-2-gael.portay@savoirfairelinux.com>
-Message-ID: <20180903104338.54d7b1d5@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Sep 2018 10:54:26 +0200
+Subject: [Buildroot] [PATCH] synergy: change upstream location to fix
+ download issues
+In-Reply-To: <20180903102655.6f7f8df4@windsurf> (Thomas Petazzoni's message of
+ "Mon, 3 Sep 2018 10:26:55 +0200")
+References: <20180902204505.30928-1-thomas.petazzoni@bootlin.com>
+ <871sab3v4l.fsf@dell.be.48ers.dk> <20180903102655.6f7f8df4@windsurf>
+Message-ID: <87sh2r2c71.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-On Mon,  3 Sep 2018 03:25:26 -0400, Ga?l PORTAY wrote:
+ > Hello,
+ > On Mon, 03 Sep 2018 09:20:10 +0200, Peter Korsgaard wrote:
 
-> +ifdef BR2_PACKAGE_LEVELDB_MEMENV
+ >> >  SYNERGY_VERSION = v1.8.8-stable
+ >> > -SYNERGY_SITE = $(call github,symless,synergy,$(SYNERGY_VERSION))
+ >> > +SYNERGY_SITE = $(call github,symless,synergy-core,$(SYNERGY_VERSION))  
+ >> 
+ >> So is the idea to apply this to next or to master? If we change the hash
+ >> for the 1.8.8 version, then this will break download for the 2018.02.x /
+ >> 2018.05.x releases.
 
-Too much vacations here! :-) You have forgotten how Buildroot does this
-normally:
+ > My idea was to have it on master and next, but indeed I did not think
+ > about 2018.02.x/2018.05.x being broken :-/
 
-ifeq ($(BR2_PACKAGE_LEVELDB_MEMENV),y)
+ >> Looking at the synergy git history, a hack could be to bump the version
+ >> to the commit just after v1.8.8 together with changing the URL so we end
+ >> up with a new tarball name:
+ >> 
+ >> commit ec56ac4485ef8e3cf986107b8456949b5aec3527
+ >> Author: Andrew Nelless <andrew@symless.com>
+ >> Date:   Fri Mar 3 14:51:23 2017 +0000
+ >> 
+ >> Fix version number in Changelog
 
-> +define LEVELDB_INSTALL_MEMENV
-> +	$(INSTALL) -m 0644 $(@D)/out-static/libmemenv.a $(STAGING_DIR)/usr/lib
+ > Or perhaps we simply don't fix it in master, and only in next ? The big
+ > downside I see with not fixing in master is that people who look at
+ > their build log will see the upstream download fail due to the hash
+ > mismatch, and the fallback to sources.buildroot.net. A
+ > security-conscious user could rightfully think that Buildroot is trying
+ > to sneak in a backdoor in the synergy code by providing a different
+ > version on sources.buildroot.net than what upstream provides.
 
--D option and full destination path please.
+s/not fixing in master/not fixing in master and 2018.0{2,5}.x/.
 
-Thanks!
+I guess the best solution is to bump to the git hash just after the
+1.8.8 at the new upstream location (perhaps with a comment that this is
+1.8.8) and apply that to all 3 branches.
 
-Thomas
+I will do a last release of 2018.05.x in a week or 2 and mark it as EOL.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
