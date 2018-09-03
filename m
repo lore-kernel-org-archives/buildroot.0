@@ -1,58 +1,54 @@
-From: Luca Ceresoli <luca@lucaceresoli.net>
-Date: Mon, 3 Sep 2018 16:43:30 +0200
-Subject: [Buildroot] [PATCH 4/4] configs: bpi-m64: bump linux, uboot
-In-Reply-To: <1535963172-6664-4-git-send-email-jagan@amarulasolutions.com>
-References: <1535963172-6664-1-git-send-email-jagan@amarulasolutions.com>
- <1535963172-6664-4-git-send-email-jagan@amarulasolutions.com>
-Message-ID: <d1f2efbe-c686-a13e-6efb-788c8a859bab@lucaceresoli.net>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 3 Sep 2018 10:29:46 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-08-30
+In-Reply-To: <241764101.4041403.1535918222698.JavaMail.zimbra@datacom.com.br>
+References: <20180831060016.342FF22A3A@mail.bootlin.com>
+ <241764101.4041403.1535918222698.JavaMail.zimbra@datacom.com.br>
+Message-ID: <CANQCQpZxci70YBUJAfJ12RTjDtPBeD8M-3H4b_6EVMUe+oB9jQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jagan,
+Carlos,
 
-On 03/09/2018 10:26, Jagan Teki wrote:
-> - Uboot to 2017.15
-> - Linux to 4.17
-> 
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
->  configs/bananapi_m64_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
-> index db39903..b071230 100644
-> --- a/configs/bananapi_m64_defconfig
-> +++ b/configs/bananapi_m64_defconfig
-> @@ -2,8 +2,8 @@ BR2_aarch64=y
->  BR2_cortex_a53=y
->  BR2_ARM_FPU_VFPV4=y
->  
-> -# Linux headers same as kernel, a 4.14 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-> +# Linux headers same as kernel, a 4.17 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
->  
->  # Firmware
->  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> @@ -17,7 +17,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.15"
+On Sun, Sep 2, 2018 at 2:56 PM Carlos Santos <casantos@datacom.com.br> wrote:
+>
+> > From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> > To: "DATACOM" <casantos@datacom.com.br>
+> > Sent: Friday, August 31, 2018 3:00:16 AM
+> > Subject: [autobuild.buildroot.net] Your build results for 2018-08-30
+>
+> > Hello,
+> >
+> > This is the list of Buildroot build failures that occured on
+> > 2018-08-30, and for which you are a registered architecture developer
+> > or package developer. Please help us improving the quality of
+> > Buildroot by investigating those build failures and sending patches to
+> > fix them. Thanks!
+> >
+> > Results for the 'next' branch
+> > =============================
+> >
+> > Build failures related to your packages:
+> >
+> >         arm |              util-linux-2.32.1 |
+> >         http://autobuild.buildroot.net/results/c8e34d661098e96e3f627d7c022fdcf3efa40805
+> >
+> > --
+> > http://autobuild.buildroot.net
+>
+> I'm still unable to reproduce these "SELinux selected but libselinux
+> not found or too old" errors.
 
-I don't think version 2017.15 really exists. I tested, just in case, and
-got a 404.
+I haven't dug to much, was there a bump of util-linux in "next"?
+Maybe if it's using pkgconfig for that test, the latest libselinux
+bump isn't updating its pkgconfig entry or the version its at is not
+compatible now?
 
-Also, out of personal taste, I would put the whole defconfig name in the
-patch subject, to be more grep-friendly:
+Could be the test is checking the local system too....  I'll see if I
+can reproduce but all my machines have selinux.
 
-- [PATCH 4/4] configs: bpi-m64: bump linux, uboot
-+ [PATCH 4/4] configs: bananapi_m64: bump linux, uboot
-
-Regards,
--- 
-Luca
+Matt
