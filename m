@@ -1,117 +1,59 @@
-From: =?UTF-8?q?I=C3=B1igo=20Huguet?= <inigohuguet@fanamoel.com>
-Date: Mon,  3 Sep 2018 09:14:00 +0200
-Subject: [Buildroot] [PATCH v3] gst1-plugins-good: add option for qmlgl
- plugin (qt5 plugin)
-In-Reply-To: <20180815210249.5e11df4d@gmx.net>
-References: <20180815210249.5e11df4d@gmx.net>
-Message-ID: <1535958840-4452-1-git-send-email-inigohuguet@fanamoel.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 03 Sep 2018 09:20:10 +0200
+Subject: [Buildroot] [PATCH] synergy: change upstream location to fix
+ download issues
+In-Reply-To: <20180902204505.30928-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Sun, 2 Sep 2018 22:45:05 +0200")
+References: <20180902204505.30928-1-thomas.petazzoni@bootlin.com>
+Message-ID: <871sab3v4l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gst1-plugins-good is built with --disable-qt option, so qmlgl plugin
-is disabled. Added option to enable it, allowing to use elements
-qmlglsrc and qmlglsink.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
+ > The Github repository at https://github.com/symless/synergy no longer
+ > exists, it has apparently been moved to
+ > https://github.com/symless/synergy-core.
 
----
-Changes v2 -> v3:
-  - select qt5 widgets to enable host uic command (suggested by Peter Seiderer)
-  - added patch to fix QT QPA detection (provided by Peter Seiderer)
-  - fixed file formatting
+ > On master as of 811734ef9044bbdfc067da76358153061fae2031, we use
+ > v1.8.8, which fails to download from github.com, so we fallback to
+ > sources.buildroot.net, which has the tarball.
 
-Changes v1 -> v2:
-  - select packages instead of depending (suggested by Arnout Vandecappelle)
-  - nested ifeq in makefile (suggested by Arnout Vandecappelle)
+ > However, on next as of 7da2748c9ef4e67a060ea7eb6ff23275da235daa, we
+ > use v2.1.0, which completely fails to download, as we don't have a
+ > backup tarball on sources.buildroot.net.
 
----
- .../0001-configure-fix-qt-qpa-detection.patch           | 14 ++++++++++++++
- package/gstreamer1/gst1-plugins-good/Config.in          | 17 +++++++++++++++++
- .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 13 +++++++++++--
- 3 files changed, 42 insertions(+), 2 deletions(-)
- create mode 100644 package/gstreamer1/gst1-plugins-good/0001-configure-fix-qt-qpa-detection.patch
+ > This commit fixes that by using the new upstream
+ > location. Unfortunately, the hash changes, because the prefix in the
+ > tarball is changed from synergy-1.8.8-stable/ to
+ > synergy-core-1.8.8-stable/. There are no other changes. This means
+ > that people having existing tarballs locally we'll see them being
+ > re-downloaded because the hash has changed.
 
-diff --git a/package/gstreamer1/gst1-plugins-good/0001-configure-fix-qt-qpa-detection.patch b/package/gstreamer1/gst1-plugins-good/0001-configure-fix-qt-qpa-detection.patch
-new file mode 100644
-index 0000000..d755354
---- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-good/0001-configure-fix-qt-qpa-detection.patch
-@@ -0,0 +1,14 @@
-+configure: fix QT QPA detection
-+
-+Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
-+
-+--- gst1-plugins-good-1.14.2/configure_orig	2018-08-15 19:42:48.065311007 +0200
-++++ gst1-plugins-good-1.14.2/configure	2018-08-15 19:42:58.665528543 +0200
-+@@ -35924,7 +35924,7 @@
-+       else
-+         HAVE_QT="yes"
-+         HAVE_QT_WINDOWING="no"
-+-        QT_VERSION="`$PKG_CONFIG --define-prefix --modversion Qt5Core`"
-++        QT_VERSION="`$PKG_CONFIG --modversion Qt5Core`"
-+         QPA_INCLUDE_PATH=`$PKG_CONFIG --variable=includedir Qt5Core`/QtGui/${QT_VERSION}/QtGui
-+         if test -f "$PKG_CONFIG_SYSROOT_DIR/$QPA_INCLUDE_PATH/qpa/qplatformnativeinterface.h"; then :
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index afb9a41..30a4876 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -283,6 +283,23 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_OSS4
- 	help
- 	  Open Sound System (OSS) version 4 support for GStreamer
- 
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL
-+	bool "qmlgl (qt5)"
-+	depends on BR2_PACKAGE_QT5
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
-+	depends on BR2_PACKAGE_QT5_GL_AVAILABLE || BR2_PACKAGE_QT5_VERSION_LATEST # qt5declarative-quick
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5DECLARATIVE
-+	select BR2_PACKAGE_QT5DECLARATIVE_QUICK
-+	select BR2_PACKAGE_QT5X11EXTRAS if BR2_PACKAGE_QT5BASE_XCB
-+	help
-+	  QT5 plugin which includes elements qmlglsrc and qmlglsink
-+
-+comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
-+	depends on BR2_PACKAGE_QT5
-+	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-+	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
- 	bool "v4l2"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index c1ed039..ef28f2d 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -20,8 +20,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
- 	--disable-osx_video \
- 	--disable-aalib \
- 	--disable-aalibtest \
--	--disable-libcaca \
--	--disable-qt
-+	--disable-libcaca
- 
- # Options which require currently unpackaged libraries
- GST1_PLUGINS_GOOD_CONF_OPTS += \
-@@ -328,6 +327,16 @@ else
- GST1_PLUGINS_GOOD_CONF_OPTS += --disable-oss4
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_QMLGL),y)
-+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-qt
-+GST1_PLUGINS_GOOD_DEPENDENCIES += qt5declarative
-+ifeq ($(BR2_PACKAGE_QT5BASE_XCB),y)
-+GST1_PLUGINS_GOOD_DEPENDENCIES += qt5x11extras
-+endif
-+else
-+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
- else
+ > Fixes (once applied to next):
+
+ >   http://autobuild.buildroot.net/results/82ae9a378b70a3d27e78e1d80a63495b37329e16/
+
+ >  SYNERGY_VERSION = v1.8.8-stable
+ > -SYNERGY_SITE = $(call github,symless,synergy,$(SYNERGY_VERSION))
+ > +SYNERGY_SITE = $(call github,symless,synergy-core,$(SYNERGY_VERSION))
+
+So is the idea to apply this to next or to master? If we change the hash
+for the 1.8.8 version, then this will break download for the 2018.02.x /
+2018.05.x releases.
+
+Looking at the synergy git history, a hack could be to bump the version
+to the commit just after v1.8.8 together with changing the URL so we end
+up with a new tarball name:
+
+commit ec56ac4485ef8e3cf986107b8456949b5aec3527
+Author: Andrew Nelless <andrew@symless.com>
+Date:   Fri Mar 3 14:51:23 2017 +0000
+
+    Fix version number in Changelog
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
