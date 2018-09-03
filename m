@@ -1,50 +1,70 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  3 Sep 2018 21:19:33 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/glibc: allow to specify host-make
-In-Reply-To: <20180903191933.26080-1-romain.naour@gmail.com>
-References: <20180903191933.26080-1-romain.naour@gmail.com>
-Message-ID: <20180903191933.26080-3-romain.naour@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 3 Sep 2018 14:49:24 -0500
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-08-30
+In-Reply-To: <CANQCQpZxci70YBUJAfJ12RTjDtPBeD8M-3H4b_6EVMUe+oB9jQ@mail.gmail.com>
+References: <20180831060016.342FF22A3A@mail.bootlin.com>
+ <241764101.4041403.1535918222698.JavaMail.zimbra@datacom.com.br>
+ <CANQCQpZxci70YBUJAfJ12RTjDtPBeD8M-3H4b_6EVMUe+oB9jQ@mail.gmail.com>
+Message-ID: <CANQCQpbSwyZXQZyOgG2-kcPFS0HcJENhzZWg9oCjaDRx5FWwYA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use host-make package if GNU make from the host machine is too old.
+All,
 
-Use the newly introduced BR2_MAKE_HOST_DEPENDENCY and BR2_MAKE to
-provide respectively, host-make dependency and the path to the GNU
-make binary to use for building glibc.
+On Mon, Sep 3, 2018 at 10:29 AM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Carlos,
+>
+> On Sun, Sep 2, 2018 at 2:56 PM Carlos Santos <casantos@datacom.com.br> wrote:
+> >
+> > > From: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> > > To: "DATACOM" <casantos@datacom.com.br>
+> > > Sent: Friday, August 31, 2018 3:00:16 AM
+> > > Subject: [autobuild.buildroot.net] Your build results for 2018-08-30
+> >
+> > > Hello,
+> > >
+> > > This is the list of Buildroot build failures that occured on
+> > > 2018-08-30, and for which you are a registered architecture developer
+> > > or package developer. Please help us improving the quality of
+> > > Buildroot by investigating those build failures and sending patches to
+> > > fix them. Thanks!
+> > >
+> > > Results for the 'next' branch
+> > > =============================
+> > >
+> > > Build failures related to your packages:
+> > >
+> > >         arm |              util-linux-2.32.1 |
+> > >         http://autobuild.buildroot.net/results/c8e34d661098e96e3f627d7c022fdcf3efa40805
+> > >
+> > > --
+> > > http://autobuild.buildroot.net
+> >
+> > I'm still unable to reproduce these "SELinux selected but libselinux
+> > not found or too old" errors.
+>
+> I haven't dug to much, was there a bump of util-linux in "next"?
+> Maybe if it's using pkgconfig for that test, the latest libselinux
+> bump isn't updating its pkgconfig entry or the version its at is not
+> compatible now?
+>
+> Could be the test is checking the local system too....  I'll see if I
+> can reproduce but all my machines have selinux.
+>
 
-Fixes:
-http://autobuild.buildroot.net/results/576/5760ea2635d9aecc9c789494a8b2cc73a1af1ceb
-http://autobuild.buildroot.net/results/583/58347b94884eee2db28740486eda280e8c08e22f
-http://autobuild.buildroot.net/results/dc7/dc7c8cd548409864ab0055e196c0280457a5fb5f
+Figured it out, the python3 bump and the addition of the python uuid
+dependency on util-linux, created a circular dependency making
+libselinux and util-linux build out of order.
+(6e7e733f3bb)
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Baruch Siach <baruch@tkos.co.il>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/glibc/glibc.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Adam, would you mind taking a look to see if there is another option
+for that new dependency?  Maybe conditionally enabling that uuid
+option only when util-linux is selected?
 
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 399cf395ce..a2eb8714b1 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -28,7 +28,12 @@ GLIBC_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- # Before glibc is configured, we must have the first stage
- # cross-compiler and the kernel headers
--GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk
-+GLIBC_DEPENDENCIES = host-gcc-initial linux-headers host-bison host-gawk \
-+	$(BR2_MAKE_HOST_DEPENDENCY)
-+
-+# glibc requires make >= 4.0 since 2.28 release.
-+# https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
-+GLIBC_MAKE = $(BR2_MAKE)
- 
- GLIBC_SUBDIR = build
- 
--- 
-2.14.4
+Matt
