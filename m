@@ -1,67 +1,59 @@
 From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon,  3 Sep 2018 08:37:45 -0400
-Subject: [Buildroot] [PATCH v1 2/4] qt5virtualkeyboard: fix target install
- issue with 5.6
+Date: Mon,  3 Sep 2018 08:37:47 -0400
+Subject: [Buildroot] [PATCH v1 4/4] qt5virtualkeyboard: add hashes of
+ 3rd-party licenses
 In-Reply-To: <20180903123747.5234-1-gael.portay@savoirfairelinux.com>
 References: <20180903123747.5234-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180903123747.5234-3-gael.portay@savoirfairelinux.com>
+Message-ID: <20180903123747.5234-5-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-qt5virtualkeyboard 2.0 (shipped with Qt 5.6) installs the QML plugin
-under the directory Enterprise while the later versions install it
-without that directory.
+Add missing license hashes for those three third-parties:
 
-Differentiate installation to target of the QML plugin according to the
-Qt major version in use.
+	- src/virtualkeyboard/3rdparty/openwnn/NOTICE
+	- src/virtualkeyboard/3rdparty/pinyin/NOTICE
+	- src/virtualkeyboard/3rdparty/tcime/COPYING
 
 Fixes:
 
-	>>> qt5virtualkeyboard 2.0 Installing to target
-	mkdir -p /home/gportay/src/buildroot/output/target/usr/lib/qt/plugins/platforminputcontexts
-	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so /home/gportay/src/buildroot/output/target/usr/lib/qt/plugins/platforminputcontexts
-	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/qml/QtQuick/VirtualKeyboard /home/gportay/src/buildroot/output/target/usr/qml/QtQuick
-	cp: cannot stat '/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/qml/QtQuick/VirtualKeyboard': No such file or directory
-	package/pkg-generic.mk:310: recipe for target '/home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/.stamp_target_installed' failed
-	make: *** [/home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/.stamp_target_installed] Error 1
+	>>> qt5virtualkeyboard 5.11.1 Collecting legal info
+	LICENSE.GPL3: OK (sha256: 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903)
+	ERROR: No hash found for src/virtualkeyboard/3rdparty/openwnn/NOTICE
+	ERROR: No hash found for src/virtualkeyboard/3rdparty/pinyin/NOTICE
+	ERROR: No hash found for src/virtualkeyboard/3rdparty/tcime/COPYING
+	src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt: OK (sha256: 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10)
 
 Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
 ---
- package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ package/qt5/qt5virtualkeyboard/2.0/qt5virtualkeyboard.hash | 5 +++++
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash     | 3 +++
+ 2 files changed, 8 insertions(+)
+ create mode 100644 package/qt5/qt5virtualkeyboard/2.0/qt5virtualkeyboard.hash
 
-diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-index cbe24d27dc..a4c9492a91 100644
---- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-+++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-@@ -65,6 +65,16 @@ define QT5VIRTUALKEYBOARD_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
- 
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Entreprise/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
-+endef
-+else
-+define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- define QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/virtualkeyboard $(TARGET_DIR)/usr/lib/qt/examples/
-@@ -75,7 +85,7 @@ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so \
- 		$(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
--	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
-+	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_QML)
- 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS)
- 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES)
- endef
+diff --git a/package/qt5/qt5virtualkeyboard/2.0/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/2.0/qt5virtualkeyboard.hash
+new file mode 100644
+index 0000000000..266fc3b695
+--- /dev/null
++++ b/package/qt5/qt5virtualkeyboard/2.0/qt5virtualkeyboard.hash
+@@ -0,0 +1,5 @@
++# Hashes for license files:
++sha256 6148d2793ca4e62ba3935a27bd3e46971a5d7c871dbe8f2687a867bd2c2589fb src/virtualkeyboard/3rdparty/lipi-toolkit/license.txt
++sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1 src/virtualkeyboard/3rdparty/openwnn/NOTICE
++sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986 src/virtualkeyboard/3rdparty/pinyin/NOTICE
++sha256 ca3dd653e13c4a935622cfce00dc4e2d7a8295b64da99bd1d4f2a8ddb6b0956e src/virtualkeyboard/3rdparty/tcime/COPYING
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
+index bb916c06d3..9270366b93 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
+@@ -7,3 +7,6 @@ sha256 5b330dcc770976a2cfb8d85711d72a57c9764c1a9efb889c91e81f6071bbbf9b  qtvirtu
+ # Hashes for license files:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+ sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10 src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
++sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1 src/virtualkeyboard/3rdparty/openwnn/NOTICE
++sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986 src/virtualkeyboard/3rdparty/pinyin/NOTICE
++sha256 9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6 src/virtualkeyboard/3rdparty/tcime/COPYING
 -- 
 2.11.0
