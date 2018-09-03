@@ -1,51 +1,58 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 3 Sep 2018 15:50:34 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/squid: depends on
- current_exception
-In-Reply-To: <20180824200107.22849-1-bernd.kuhls@t-online.de>
-References: <20180824200107.22849-1-bernd.kuhls@t-online.de>
-Message-ID: <c64fb4d0-a760-da50-621f-e47b1d470994@micronovasrl.com>
+From: Luca Ceresoli <luca@lucaceresoli.net>
+Date: Mon, 3 Sep 2018 16:43:30 +0200
+Subject: [Buildroot] [PATCH 4/4] configs: bpi-m64: bump linux, uboot
+In-Reply-To: <1535963172-6664-4-git-send-email-jagan@amarulasolutions.com>
+References: <1535963172-6664-1-git-send-email-jagan@amarulasolutions.com>
+ <1535963172-6664-4-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <d1f2efbe-c686-a13e-6efb-788c8a859bab@lucaceresoli.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 24/08/2018 22:01, bernd.kuhls at t-online.de (Bernd Kuhls) ha scritto:
-> Fixes build error
-> 
-> TextException.cc: In function 'std::ostream& CurrentException(std::ostream&)':
-> TextException.cc:64:9: error: 'current_exception' is not a member of 'std'
->       if (std::current_exception()) {
-> 
-> using this defconfig
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv5-ctng-linux-gnueabi"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_PACKAGE_GNUTLS=y
-> BR2_PACKAGE_OPENSSL=y
-> BR2_PACKAGE_LIBKRB5=y
-> 
-> According to http://www.squid-cache.org/Versions/v4/RELEASENOTES.html#ss1.1
-> squid-4.2 depends on C++11, but adding -std=c++11 did not fix the build
-> error.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Tested-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Hi Jagan,
 
-Fixes:
-http://autobuild.buildroot.net/results/273/273556771e957f109a1fbf446a5193aac49b72af/
-http://autobuild.buildroot.net/results/9d2/9d2cde8494f69fedf0afc460d8e540d769a79212/
-http://autobuild.buildroot.net/results/a71/a71db790ae3a3ea1836760edad504a92ea005cf7/
-http://autobuild.buildroot.net/results/6fc/6fc05e2bb90120f43b19aace436837aafd82d999/
+On 03/09/2018 10:26, Jagan Teki wrote:
+> - Uboot to 2017.15
+> - Linux to 4.17
+> 
+> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+> ---
+>  configs/bananapi_m64_defconfig | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/configs/bananapi_m64_defconfig b/configs/bananapi_m64_defconfig
+> index db39903..b071230 100644
+> --- a/configs/bananapi_m64_defconfig
+> +++ b/configs/bananapi_m64_defconfig
+> @@ -2,8 +2,8 @@ BR2_aarch64=y
+>  BR2_cortex_a53=y
+>  BR2_ARM_FPU_VFPV4=y
+>  
+> -# Linux headers same as kernel, a 4.14 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+> +# Linux headers same as kernel, a 4.17 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+>  
+>  # Firmware
+>  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> @@ -17,7 +17,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+>  BR2_TARGET_UBOOT=y
+>  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+>  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.15"
 
-Best regards.
-Giulio Benetti
+I don't think version 2017.15 really exists. I tested, just in case, and
+got a 404.
+
+Also, out of personal taste, I would put the whole defconfig name in the
+patch subject, to be more grep-friendly:
+
+- [PATCH 4/4] configs: bpi-m64: bump linux, uboot
++ [PATCH 4/4] configs: bananapi_m64: bump linux, uboot
+
+Regards,
+-- 
+Luca
