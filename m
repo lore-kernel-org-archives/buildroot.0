@@ -1,94 +1,45 @@
-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-Date: Mon,  3 Sep 2018 03:25:27 -0400
-Subject: [Buildroot] [PATCH v2 2/3] leveldb: generate pic for static
- libraries
-In-Reply-To: <20180903072528.15744-1-gael.portay@savoirfairelinux.com>
-References: <20180903072528.15744-1-gael.portay@savoirfairelinux.com>
-Message-ID: <20180903072528.15744-3-gael.portay@savoirfairelinux.com>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Mon, 3 Sep 2018 13:05:50 +0530
+Subject: [Buildroot] [PATCH v4 1/2] board: amarula: Add A64-Relic support
+In-Reply-To: <CAMty3ZCa0x9K9mEYAL_Yz4gkZMNsNO8n8zkhUxSvuuFEe17F6Q@mail.gmail.com>
+References: <20180701140026.2261-1-jagan@amarulasolutions.com>
+ <CAMty3ZCa0x9K9mEYAL_Yz4gkZMNsNO8n8zkhUxSvuuFEe17F6Q@mail.gmail.com>
+Message-ID: <CAMty3ZBA3wvYVNhwYxC_gpn7X7hySk8FPZRSZQrPzBj9nvecPA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The project's static libraries are not compiled with the -fPIC compiler
-flag that prevents any libraries to link against those libraries.
+On Tue, Aug 7, 2018 at 11:33 AM, Jagan Teki <jagan@amarulasolutions.com> wrote:
+> On Sun, Jul 1, 2018 at 7:30 PM, Jagan Teki <jagannadh.teki@gmail.com> wrote:
+>> Add initial support for Amarula A64-Relic board
+>> with below features:
+>> - U-Boot 2018.07-rc1
+>> - Linux 4.17.0-rc6
+>> - Default packages from buildroot
+>>
+>> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
+>> ---
+>> Changes for v4:
+>> - remove sdcard.img image creation
+>> - on readme 'cd output/images' not output/images
+>> - add 'sudo' for fastboot commands on readme.txt
+>> Changes for v3:
+>> - Use 4.17 kernel headers
+>> - Add wiki link
+>> - Add BR2_PACKAGE_HOST_ANDROID_TOOLS_FASTBOOT
+>> - Update comments on readme.txt suggested by Thomas
+>> Changes for v2:
+>> - Use mainline U-Boot
+>> - Drop uboot.fragment since the UMS used for developement,
+>>   so note it on readme.txt how to use.
+>> - format the 'Write eMMC' steps suggested by Arnout.
+>> - fix fastboot steps in readme.txt
+>> - add offset in genimage.cfg for boot partition instead of size
+>
+> Any further comments on this?
 
-This commit adds a patch that sets the -fPIC compiler flag to the list of
-CFLAGS/CXXFLAGS.
+Any response on this?
 
-The project now generates position independant code for all of its
-outputs (i.e. not limited anymore to its shared libraries).
-
-Fixes:
-
-	/home/gportay/src/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-amd-linux-gnu/6.2.0/../../../../x86_64-amd-linux-gnu/bin/ld: /home/gportay/src/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libmemenv.a(memenv.o): relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
-	/home/gportay/src/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libmemenv.a: error adding symbols: Bad value
-	collect2: error: ld returned 1 exit status
-
-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
----
- ...sition-independant-code-for-static-librar.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
- create mode 100644 package/leveldb/0001-Generate-position-independant-code-for-static-librar.patch
-
-diff --git a/package/leveldb/0001-Generate-position-independant-code-for-static-librar.patch b/package/leveldb/0001-Generate-position-independant-code-for-static-librar.patch
-new file mode 100644
-index 0000000000..dce06ec725
---- /dev/null
-+++ b/package/leveldb/0001-Generate-position-independant-code-for-static-librar.patch
-@@ -0,0 +1,52 @@
-+From 6ed1b57ef6bcee0d497c181730710b2b0fafbfb3 Mon Sep 17 00:00:00 2001
-+From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
-+Date: Fri, 31 Aug 2018 12:23:46 -0400
-+Subject: [PATCH] Generate position independant code for static library
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=utf-8
-+Content-Transfer-Encoding: 8bit
-+
-+Currently, only shared libraries are using the PIC flag.
-+
-+Generalize this flag for static libraries in order to let them linkable
-+by dynamic libraries.
-+
-+Fixes:
-+
-+	/home/gportay/src/buildroot/output/host/opt/ext-toolchain/bin/../lib/gcc/x86_64-amd-linux-gnu/6.2.0/../../../../x86_64-amd-linux-gnu/bin/ld: /home/gportay/src/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libmemenv.a(memenv.o): relocation R_X86_64_32S against `.rodata' can not be used when making a shared object; recompile with -fPIC
-+	/home/gportay/src/buildroot/output/host/x86_64-buildroot-linux-gnu/sysroot/usr/lib/libmemenv.a: error adding symbols: Bad value
-+	collect2: error: ld returned 1 exit status
-+
-+Upstream-Status: Inappropriate [upstream has migrated to cmake]
-+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-+---
-+ build_detect_platform | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/build_detect_platform b/build_detect_platform
-+index d2a20ce..4839444 100755
-+--- a/build_detect_platform
-++++ b/build_detect_platform
-+@@ -55,8 +55,8 @@ fi
-+ 
-+ COMMON_FLAGS=
-+ CROSS_COMPILE=
-+-PLATFORM_CCFLAGS=
-+-PLATFORM_CXXFLAGS=
-++PLATFORM_CCFLAGS="-fPIC"
-++PLATFORM_CXXFLAGS="-fPIC"
-+ PLATFORM_LDFLAGS=
-+ PLATFORM_LIBS=
-+ PLATFORM_SHARED_EXT="so"
-+@@ -197,7 +197,7 @@ else
-+ EOF
-+     if [ "$?" = 0 ]; then
-+         COMMON_FLAGS="$COMMON_FLAGS -DLEVELDB_PLATFORM_POSIX -DLEVELDB_ATOMIC_PRESENT"
-+-        PLATFORM_CXXFLAGS="-std=c++0x"
-++        PLATFORM_CXXFLAGS="$PLATFORM_CXXFLAGS -std=c++0x"
-+     else
-+         COMMON_FLAGS="$COMMON_FLAGS -DLEVELDB_PLATFORM_POSIX"
-+     fi
-+-- 
-+2.18.0
-+
--- 
-2.11.0
+Jagan.
