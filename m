@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Sep 2018 09:22:28 +0200
-Subject: [Buildroot] [git commit branch/2018.02.x] php: pdo mysql extension
+Date: Mon, 3 Sep 2018 09:22:47 +0200
+Subject: [Buildroot] [git commit branch/2018.05.x] php: pdo mysql extension
  needs hash as well
-Message-ID: <20180903072209.66B22826DF@busybox.osuosl.org>
+Message-ID: <20180903072218.4E3CD81DF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6caa2dc3baabcfc7fec2c261087b0d292b2c2a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dc589d21fa268c345cf910f6fa7165240ca8105d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.05.x
 
 Fixes:
 http://autobuild.buildroot.net/results/69cf9326539c8df8fa50c5e7acb2ce3bb985ede2/
