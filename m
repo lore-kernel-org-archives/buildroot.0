@@ -1,88 +1,77 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  5 Sep 2018 00:28:20 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] boost: fix static detection of lock-free atomic ints
-Message-ID: <20180904222820.22186-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 5 Sep 2018 00:43:32 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2018-08-30
+In-Reply-To: <20180904114512.153df013@windsurf>
+References: <20180831060016.342FF22A3A@mail.bootlin.com>
+ <241764101.4041403.1535918222698.JavaMail.zimbra@datacom.com.br>
+ <CANQCQpZxci70YBUJAfJ12RTjDtPBeD8M-3H4b_6EVMUe+oB9jQ@mail.gmail.com>
+ <CANQCQpbSwyZXQZyOgG2-kcPFS0HcJENhzZWg9oCjaDRx5FWwYA@mail.gmail.com>
+ <20180904114512.153df013@windsurf>
+Message-ID: <a9927d39-0d18-8d49-7ac6-07ac9dfb4daa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When build statically, boost is unable to detect lock-free atomics ints
-because it tries to link dynamically, see
-output/build/boost-1.67.0/bin.v2/config.log (with -d5 option):
 
-Using shell: /bin/sh -c
-    argv[0] = '/bin/sh'
-    argv[1] = '-c'
-    argv[2] = '
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
-'
-gcc.compile.c++ bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o
 
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
+On 04/09/2018 11:45, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Mon, 3 Sep 2018 14:49:24 -0500, Matthew Weber wrote:
+> 
+>> Figured it out, the python3 bump and the addition of the python uuid
+>> dependency on util-linux, created a circular dependency making
+>> libselinux and util-linux build out of order.
+>> (6e7e733f3bb)
+> 
+> So, if I get it right, the circular dependency is:
+> 
+>  util-linux -> libselinux -> python3 -> util-linux
+> 
+> But wait, I realize that there is worse, with the Python libuuid thing,
+> we have the following circular dependency as well:
+> 
+>  util-linux -> python3 -> util-linux
+> 
+> So that last one we can fix by introducing python-util-linux, as I was
+> suggesting to also solve the BlueZ related circular:
+> 
+>   http://lists.busybox.net/pipermail/buildroot/2018-August/229558.html
+> 
+> But that first one is different, because it won't be solved by moving
+> the util-linux Python bindings to a separate package. To solve:
+> 
+>  util-linux -> libselinux -> python3 -> util-linux
+> 
+> then we need to create python-libselinux, which will build/install the
+> python bindings of libselinux. This way util-linux -> libselinux will
+> not pull in a python3 dependency. This should be doable, because
+> libselinux has separate make targets for building/installing the python
+> bindings.
+> 
+> These circular dependencies are annoying.
 
-0.033561 sec system; 0.126314 sec user; 288.682473 sec clock
-gcc.compile.c++ bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o
+ I checked how Fedora solves it. They don't - the spec file for python3 has a
+BuildRequires of libuuid-devel, and util-linux has a BuildRequires of
+python3-devel. I guess it's no longer possible to bootstrap Fedora from source...
 
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g  -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1  -I"." -c -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o" "libs/system/src/error_code.cpp"
+ So what does gentoo do? They simply don't have a dependency on util-linux in
+the python3.7.0.ebuild. Indeed, it turns out that the _uuid module is entirely
+optional. It is only used to access the uuid_generate_time_safe() function, but
+the uuid.py module can also get this function through ctypes (i.e. dlopen()). So
+perhaps a simpler solution is to just remove the build-time python3 ->
+util-linux dependency? Runtime is still needed to support the dlopen path.
 
-0.084060 sec system; 0.644133 sec user; 8.858824 sec clock
-SEM: <s>gcc-link-semaphore now used by <pbin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi>libboost_system.so.1.67.0
-Using shell: /bin/sh -c
-    argv[0] = '/bin/sh'
-    argv[1] = '-c'
-    argv[2] = '
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
-'
-gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0
+ Regards,
+ Arnout
 
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
-
-ld (ld-elf2flt): -shared used without passing a shared library ID
-collect2: error: ld a retourn? le statut de sortie 1
-0.003123 sec system; 0.004732 sec user; 15.646509 sec clock
-...failed gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0...
-
-Due to this wrong detection, boost_atomic is wrongly selected by
-boost_thread which cause a build failure on missing select
-
-Add a hack to fix this behavior in libs/thread/build/Jamfile.v2
-as I'm not sufficiently knowledgeable in bjam to know why the
-configuration is not correctly passed
-
-Fixes:
- - http://autobuild.buildroot.org/results/f46d38991385cbc2a4fa14eb31074e770cd79803
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - Fix URL of build failure
-
- package/boost/boost.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index b2605a70b7..fe986edb00 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -106,6 +106,16 @@ endif
- # variants. Override that if we want static only or shared only.
- ifeq ($(BR2_STATIC_LIBS),y)
- BOOST_OPTS += link=static runtime-link=static
-+
-+# When detecting features such as lockfree atomic ints, boost does not take into
-+# account the configuration provided by the user. Indeed, boost does not specify
-+# any value and as a result the default value (shared) is used
-+define BOOST_FIX_STATIC_FEATURES_DETECTION
-+$(SED) 's/has_atomic_flag_lockfree_test.cpp/has_atomic_flag_lockfree_test.cpp : <link>static <runtime-link>static/g;' \
-+		$(@D)/libs/thread/build/Jamfile.v2
-+endef
-+
-+BOOST_PRE_CONFIGURE_HOOKS += BOOST_FIX_STATIC_FEATURES_DETECTION
- else ifeq ($(BR2_SHARED_LIBS),y)
- BOOST_OPTS += link=shared runtime-link=shared
- endif
 -- 
-2.17.1
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
