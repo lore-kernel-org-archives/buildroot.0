@@ -1,101 +1,84 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Tue, 4 Sep 2018 14:10:47 +0100
-Subject: [Buildroot] [PATCH 1/1] arch: add support for RISC-V 64-bit
- (riscv64) architecture
-In-Reply-To: <804d638c-2b7c-1a12-894f-fa79094d2456@mind.be>
-References: <20180831091154.22530-1-mark.corbin@embecosm.com>
- <804d638c-2b7c-1a12-894f-fa79094d2456@mind.be>
-Message-ID: <cba3cfaf-bd46-f41d-0392-40f6ffc5f6d8@embecosm.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue,  4 Sep 2018 15:12:51 +0200
+Subject: [Buildroot] [PATCH v3] mediastreamer: fix avcodec functions conflict
+Message-ID: <20180904131251.30724-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout
+Autotools miss avcodec function check leading to conflicts between local
+functions and avcodec functions.
 
-On 04/09/18 00:00, Arnout Vandecappelle wrote:
->
-> On 31/08/2018 11:11, Mark Corbin wrote:
->> This enables a riscv64 system to be built with a Buildroot generated
->> toolchain (gcc >= 7.x, binutils >= 2.30, glibc only).
->>
->> This configuration has been used to successfully build a qemu-bootable
->> riscv-linux-4.15 kernel (https://github.com/riscv/riscv-linux.git).
->>
->> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
->> ---
->>  Makefile                                |   1 +
->>  arch/Config.in                          |  15 ++++
->>  arch/Config.in.riscv                    | 104 ++++++++++++++++++++++++
->>  arch/arch.mk.riscv                      |  24 ++++++
->>  package/binutils/Config.in.host         |   3 +
->>  toolchain/toolchain-buildroot/Config.in |  12 ++-
->  One more thing that is missing: in package/linux-headers/Config.in.host, you
-> have to exclude all the linux versions that don't support riscv yet (i.e.
-> everything before 4.15).
-Is it worth doing this when you actually have to select a custom version
-of headers anyway? This makes more sense to me when the necessary riscv
-support makes it upstream. I think that it would be a bit messy at the
-moment as I should add a restriction to stop you choosing *any* mainline
-kernel version...
+Add patch to swap $FFMPEG_LIBS and -lavutil which are checked when
+AC_CHECK_LIB on avcodec_* functions. $FFMPEG_LIBS contain -ldrm that must
+be listed after -lavutil.
 
-config BR2_KERNEL_HEADERS_4_1
-??????? bool "Linux 4.1.x kernel headers"
-??????? select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
-??????? depends !BR2_riscv
-.
-.
-etc.
+Fixes:
+http://autobuild.buildroot.net/results/394/3945e06ea0dd1e16013184fbab5b67b3561c87ce/
+http://autobuild.buildroot.net/results/576/576c7d71313c45753848462717200b2b8ff5bb0e/
+http://autobuild.buildroot.net/results/f33/f339ac6ea30815eeb8ecb144c971f56c06a9f995
 
-...and also restrict your choice of versions for custom headers pre-4.15...
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+Changes V2->V3:
+* don't append -ldrm, swap $FFMPEG_LIBS with -lavutil
 
-config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14
-??????? bool "4.14.x"
-??????? select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
-??????? depends on !BR2_riscv
+Changes V1->V2:
+* merge -ldrm into FFMPEG_LIBS instead of repeating it thrice.
 
-.
-.
-etc.
+ ...ffmpeg-and-avcodec-function-conflict.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/mediastreamer/0002-m4-fix-local-ffmpeg-and-avcodec-function-conflict.patch
 
-Quite happy to do this if that is what is wanted.
-
->
->  To simplify that job, you first might want (in separate patches) some
-> deprecated versions: 4.10, 4.11, 4.12, 4.13.
-I'm not sure that I'd want to start deprecating header versions that
-might still be being used by people.
-
-Regards
-
-Mark
-
->  Regards,
->  Arnout
->
-
+diff --git a/package/mediastreamer/0002-m4-fix-local-ffmpeg-and-avcodec-function-conflict.patch b/package/mediastreamer/0002-m4-fix-local-ffmpeg-and-avcodec-function-conflict.patch
+new file mode 100644
+index 0000000000..cdaa0fab24
+--- /dev/null
++++ b/package/mediastreamer/0002-m4-fix-local-ffmpeg-and-avcodec-function-conflict.patch
+@@ -0,0 +1,42 @@
++From d12e74a559602b3dff9a6bf38fcbb139535c9c9c Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Mon, 3 Sep 2018 20:27:00 +0200
++Subject: [PATCH] m4: fix local ffmpeg and avcodec function conflict
++
++Autotools miss avcodec function check.
++This is due to linker library list order, -ldrm is appended too early
++respect to -lavutil. This results in missing drm library functions for
++avcodec functions:
++- drmGetVersion()
++- drmFreeVersion()
++So these functions:
++- avcodec_get_context_defaults3
++- avcodec_open2
++- avcodec_encode_video2
++can't link correctly during check and they seem not to be present.
++Then macros HAVE_FUN_avcodec_* are not defined in mediastreamer-config.h
++So local avcodec functions conflict with real avcodec library functions.
++
++In acinclude.m4 file, swap $FFMPEG_LIBS and -lavutil if avcodec is found.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ acinclude.m4 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index 6c31ed82..89ff6643 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -110,7 +110,7 @@ AC_DEFUN([MS_CHECK_VIDEO],[
++ 			if test x$avcodec_found = xno ; then
++ 			   AC_MSG_WARN([Could not find libavcodec (from ffmpeg) headers and library.])
++ 			else
++-			   FFMPEG_LIBS="$FFMPEG_LIBS -lavutil"
+++			   FFMPEG_LIBS="-lavutil $FFMPEG_LIBS"
++ 			fi
++ 			
++ 			
++-- 
++2.17.1
++
 -- 
-
-*Mark Corbin*
-Embedded Operating Systems Lead
-Phone: +44 1590 610184?????Mobile: +44 7765 703479
-Email: mark.corbin at embecosm.com
-<mailto:mark.corbin@embecosm.com>?????Web: https://www.embecosm.com
-
-Embecosm Logo
-
-Embecosm Ltd., Palamos House #208, 66/67 High Street, Lymington, SO41
-9AL, UK
-Company No. 6577021 (England & Wales).
---
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180904/7b005ba0/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: logo.png
-Type: image/png
-Size: 8442 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180904/7b005ba0/attachment.png>
+2.17.1
