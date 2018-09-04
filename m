@@ -1,59 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 4 Sep 2018 11:45:12 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-08-30
-In-Reply-To: <CANQCQpbSwyZXQZyOgG2-kcPFS0HcJENhzZWg9oCjaDRx5FWwYA@mail.gmail.com>
-References: <20180831060016.342FF22A3A@mail.bootlin.com>
- <241764101.4041403.1535918222698.JavaMail.zimbra@datacom.com.br>
- <CANQCQpZxci70YBUJAfJ12RTjDtPBeD8M-3H4b_6EVMUe+oB9jQ@mail.gmail.com>
- <CANQCQpbSwyZXQZyOgG2-kcPFS0HcJENhzZWg9oCjaDRx5FWwYA@mail.gmail.com>
-Message-ID: <20180904114512.153df013@windsurf>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Tue, 4 Sep 2018 11:03:22 +0100
+Subject: [Buildroot] [PATCH 1/1] arch: add support for RISC-V 64-bit
+ (riscv64) architecture
+In-Reply-To: <20180902214024.464f8a25@windsurf>
+References: <20180831091154.22530-1-mark.corbin@embecosm.com>
+ <20180902214024.464f8a25@windsurf>
+Message-ID: <6c81203c-261c-8525-1fda-5da1074db56e@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas
 
-On Mon, 3 Sep 2018 14:49:24 -0500, Matthew Weber wrote:
+On 02/09/18 20:40, Thomas Petazzoni wrote:
+>
+>> +endchoice
+>> +
+>> +config BR2_ARCH
+>> +	default "riscv64"
+>> +
+>> +config BR2_ENDIAN
+>> +	default "LITTLE"
+>> +
+>> +config BR2_GCC_TARGET_ARCH
+>> +#	Instruction set extension characters are appended by arch/arch.mk.riscv
+>> +	default "rv64i"
+>> +
+>> +config BR2_GCC_TARGET_ABI
+>> +	default "lp64" if BR2_RISCV_ABI_LP64
+>> +	default "lp64f" if BR2_RISCV_ABI_LP64F
+>> +	default "lp64d" if BR2_RISCV_ABI_LP64D
+>> +
+>> +config BR2_READELF_ARCH_NAME
+>> +	default "RISC-V"
+>> +
+>> diff --git a/arch/arch.mk.riscv b/arch/arch.mk.riscv
+>> new file mode 100644
+>> index 0000000000..ad2e26903b
+>> --- /dev/null
+>> +++ b/arch/arch.mk.riscv
+>> @@ -0,0 +1,24 @@
+>> +#
+>> +# Append the appropriate RISC-V ISA extensions to the
+>> +# BR2_GCC_TARGET_ARCH variable.
+>> +#
+>> +
+>> +BR2_RISCV_GCC_ARCH = $(call qstrip,$(BR2_GCC_TARGET_ARCH))
+>> +
+>> +ifeq ($(BR2_RISCV_ISA_RVM),y)
+>> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)m
+>> +endif
+>> +ifeq ($(BR2_RISCV_ISA_RVA),y)
+>> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)a
+>> +endif
+>> +ifeq ($(BR2_RISCV_ISA_RVF),y)
+>> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)f
+>> +endif
+>> +ifeq ($(BR2_RISCV_ISA_RVD),y)
+>> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)d
+>> +endif
+>> +ifeq ($(BR2_RISCV_ISA_RVC),y)
+>> +BR2_RISCV_GCC_ARCH := $(BR2_RISCV_GCC_ARCH)c
+>> +endif
+>> +
+>> +BR2_GCC_TARGET_ARCH := $(patsubst %,"%",$(BR2_RISCV_GCC_ARCH))
+> So, this is probably the part I'm the least happy with. I think it is
+> the only occurrence where make logic would tweak BR2_* variables. I'm
+> not sure I want to set a precedent for this, as it could become
+> "strange" to see values of BR2_* options that don't match what is
+> visible in the .config file.
+>
+> So, I think this will require a bit more rework. The solution I would
+> propose is to introduce arch/arch.mk, which does:
+>
+> GCC_TARGET_ARCH = $(call qstrip,$(BR2_GCC_TARGET_ARCH))
+> GCC_TARGET_ABI  = $(call qstrip,$(BR2_GCC_TARGET_ABI))
+> GCC_TARGET_NAN  = $(call qstrip,$(BR2_GCC_TARGET_NAN))
+> # etc. for all BR2_GCC_TARGET_* options listed in arch/Config.in
+There is a name clash with using GCC_TARGET_* - some of these names are
+already used in packages/gcc/gcc.mk.
 
-> Figured it out, the python3 bump and the addition of the python uuid
-> dependency on util-linux, created a circular dependency making
-> libselinux and util-linux build out of order.
-> (6e7e733f3bb)
+GCC_TARGET_FPU = $(call qstrip,$(BR2_GCC_TARGET_FPU))
+ifneq ($(GCC_TARGET_FPU),)
+HOST_GCC_COMMON_CONF_OPTS += --with-fpu=$(GCC_TARGET_FPU)
+endif
 
-So, if I get it right, the circular dependency is:
+GCC_TARGET_FLOAT_ABI = $(call qstrip,$(BR2_GCC_TARGET_FLOAT_ABI))
+ifneq ($(GCC_TARGET_FLOAT_ABI),)
+HOST_GCC_COMMON_CONF_OPTS += --with-float=$(GCC_TARGET_FLOAT_ABI)
+endif
 
- util-linux -> libselinux -> python3 -> util-linux
+GCC_TARGET_MODE = $(call qstrip,$(BR2_GCC_TARGET_MODE))
+ifneq ($(GCC_TARGET_MODE),)
+HOST_GCC_COMMON_CONF_OPTS += --with-mode=$(GCC_TARGET_MODE)
+endif
 
-But wait, I realize that there is worse, with the Python libuuid thing,
-we have the following circular dependency as well:
+Anybody have any thoughts for a new prefix for either set of variables?
 
- util-linux -> python3 -> util-linux
+Thanks
 
-So that last one we can fix by introducing python-util-linux, as I was
-suggesting to also solve the BlueZ related circular:
+Mark
 
-  http://lists.busybox.net/pipermail/buildroot/2018-August/229558.html
 
-But that first one is different, because it won't be solved by moving
-the util-linux Python bindings to a separate package. To solve:
-
- util-linux -> libselinux -> python3 -> util-linux
-
-then we need to create python-libselinux, which will build/install the
-python bindings of libselinux. This way util-linux -> libselinux will
-not pull in a python3 dependency. This should be doable, because
-libselinux has separate make targets for building/installing the python
-bindings.
-
-These circular dependencies are annoying.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Mark Corbin
+Embecosm Ltd.
+https://www.embecosm.com
