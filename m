@@ -1,47 +1,73 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue,  4 Sep 2018 12:44:27 -0400
-Subject: [Buildroot] [PATCH 1/1] glibmm: bump version to 2.56.0
-Message-ID: <20180904164427.22730-1-aduskett@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 04 Sep 2018 17:15:30 +0000
+Subject: [Buildroot] [Bug 11271] New: utils/check-package fails with
+ exception depending on path prefix
+Message-ID: <bug-11271-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also add hashes for the license files.
+https://bugs.busybox.net/show_bug.cgi?id=11271
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
----
- package/glibmm/glibmm.hash | 7 +++++--
- package/glibmm/glibmm.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+            Bug ID: 11271
+           Summary: utils/check-package fails with exception depending on
+                    path prefix
+           Product: buildroot
+           Version: 2018.05.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: lotorev at gmail.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
-index 570192e2f8..6131f9dcaf 100644
---- a/package/glibmm/glibmm.hash
-+++ b/package/glibmm/glibmm.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.54/glibmm-2.54.1.sha256sum
--sha256	7cc28c732b04d70ed34f0c923543129083cfb90580ea4a2b4be5b38802bf6a4a glibmm-2.54.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.56/glibmm-2.56.0.sha256sum
-+sha256	6e74fcba0d245451c58fc8a196e9d103789bc510e1eee1a9b1e816c5209e79a9 glibmm-2.56.0.tar.xz
-+# License files, locally calculated
-+sha256	3ea7fa7c5d9a3a113e950eca9cfb85107f096270d8e4dd99daa9d8abdebc60e7 COPYING
-+sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 COPYING.tools
-diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
-index 7fa13f21a2..71f1dfd36f 100644
---- a/package/glibmm/glibmm.mk
-+++ b/package/glibmm/glibmm.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GLIBMM_VERSION_MAJOR = 2.54
--GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).1
-+GLIBMM_VERSION_MAJOR = 2.56
-+GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).0
- GLIBMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GLIBMM_LICENSE_FILES = COPYING COPYING.tools
- GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.xz
+Prepare simple external tree:
+
+$ tree=$(mktemp --directory $(pwd)/br2-external-XXXX)
+$ pushd $tree
+$ touch external.mk
+
+Run the check-package from Buildroot:
+
+$ utils/check-package --br2-external external.mk
+
+Traceback (most recent call last):
+  File
+"/home/vlotorev/projects/production-vip1-sd-fc/tmp/util-aoiU/utils/check-package",
+line 177, in <module>
+    __main__()
+  File
+"/home/vlotorev/projects/production-vip1-sd-fc/tmp/util-aoiU/utils/check-package",
+line 162, in __main__
+    nwarnings, nlines = check_file_using_lib(fname)
+  File
+"/home/vlotorev/projects/production-vip1-sd-fc/tmp/util-aoiU/utils/check-package",
+line 129, in check_file_using_lib
+    nwarnings += print_warnings(cf.before())
+  File
+"/home/vlotorev/projects/production-vip1-sd-fc/tmp/util-aoiU/utils/checkpackagelib/lib_mk.py",
+line 106, in before
+    package = self.PACKAGE_NAME.search(self.filename).group(1)
+AttributeError: 'NoneType' object has no attribute 'group'
+
+Note once './' is added to path check finishes without errors:
+
+$ utils/check-package --br2-external ./external.mk
+0 lines processed
+0 warnings generated
+
+The same exception raises when non-empty and meaningful package files are
+processed.
+
+Checked on commit
+https://git.buildroot.net/buildroot/commit/?id=2989e3c87a1123350728904fd789ad513e76b073
+
 -- 
-2.17.1
+You are receiving this mail because:
+You are on the CC list for the bug.
