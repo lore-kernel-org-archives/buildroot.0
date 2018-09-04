@@ -1,48 +1,83 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 4 Sep 2018 23:34:13 +0200
-Subject: [Buildroot] [PATCH v3] mediastreamer: fix avcodec functions
- conflict
-In-Reply-To: <87va7lasjf.fsf@dell.be.48ers.dk>
-References: <20180904131251.30724-1-giulio.benetti@micronovasrl.com>
- <87va7lasjf.fsf@dell.be.48ers.dk>
-Message-ID: <735a4c9f-42c2-9744-6889-921bf720d167@micronovasrl.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 Sep 2018 23:39:52 +0200
+Subject: [Buildroot] [PATCH 1/1] boost: fix static detection of
+ lock-free atomic ints
+In-Reply-To: <20180904192734.27206-1-fontaine.fabrice@gmail.com>
+References: <20180904192734.27206-1-fontaine.fabrice@gmail.com>
+Message-ID: <a6fb2f98-aae0-e959-4dac-b8bd3180a67a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+ Hi Fabrice,
 
-Il 04/09/2018 22:58, Peter Korsgaard ha scritto:
->>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
-> 
->   > Autotools miss avcodec function check leading to conflicts between local
->   > functions and avcodec functions.
-> 
->   > Add patch to swap $FFMPEG_LIBS and -lavutil which are checked when
->   > AC_CHECK_LIB on avcodec_* functions. $FFMPEG_LIBS contain -ldrm that must
->   > be listed after -lavutil.
-> 
->   > Fixes:
->   > http://autobuild.buildroot.net/results/394/3945e06ea0dd1e16013184fbab5b67b3561c87ce/
->   > http://autobuild.buildroot.net/results/576/576c7d71313c45753848462717200b2b8ff5bb0e/
->   > http://autobuild.buildroot.net/results/f33/f339ac6ea30815eeb8ecb144c971f56c06a9f995
-> 
->   > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->   > ---
->   > Changes V2->V3:
->   > * don't append -ldrm, swap $FFMPEG_LIBS with -lavutil
-> 
->   > Changes V1->V2:
->   > * merge -ldrm into FFMPEG_LIBS instead of repeating it thrice.
-> 
-> Committed after extending the commit message to clarify that this is
-> about static linking, thanks.
-> 
 
-Sorry for my ignorance, so library order during linking is an issue only
-with static libraries?
+On 04/09/2018 21:27, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.net/results/bfc004ba10b50d4294be5ccd0abef7c00ed074d5
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/boost/boost.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+> index b2605a70b7..fe986edb00 100644
+> --- a/package/boost/boost.mk
+> +++ b/package/boost/boost.mk
+> @@ -106,6 +106,16 @@ endif
+>  # variants. Override that if we want static only or shared only.
+>  ifeq ($(BR2_STATIC_LIBS),y)
 
-Best regards
-Giulio Benetti
+ Ahem, the autobuild failure you refer to actually has BR2_SHARED_LIBS=y, so how
+can this fix the issue?
+
+ Looking at the failing command (from your commit log):
+
+    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o
+"bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0"
+-Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group
+"bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"
+-Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt
+-static
+
+ It's doing a link without TARGET_LDFLAGS, and TARGET_LDFLAGS contains the
+-mid-shared-library -mshared-library-id=0 that is needed to link a shared
+library on FLT.
+
+ And it makes sense that TARGET_LDFLAGS are not used, because we only pass that
+*after* bootstrap.sh (I assume this stuff is evaluated by bootstrap.sh, and not
+when running bjam itself?) Or, if it is evaluated by bjam, somehow bjam is
+ignoring the linkflags we pass in user-config.jam.
+
+>  BOOST_OPTS += link=static runtime-link=static
+> +
+> +# When detecting features such as lockfree atomic ints, boost does not take into
+> +# account the configuration provided by the user. Indeed, boost does not specify
+> +# any value and as a result the default value (shared) is used
+> +define BOOST_FIX_STATIC_FEATURES_DETECTION
+> +$(SED) 's/has_atomic_flag_lockfree_test.cpp/has_atomic_flag_lockfree_test.cpp : <link>static <runtime-link>static/g;' \
+> +		$(@D)/libs/thread/build/Jamfile.v2
+
+ If such a change is needed for has_atomic_flag_lockfree, isn't it also needed
+for the other build-time tests? has_iconv, has_icu, native_syslog, ...
+
+
+ Since I believe this patch cannot work, I've marked it as Changes Requested.
+
+ Regards,
+ Arnout
+
+> +endef
+> +
+> +BOOST_PRE_CONFIGURE_HOOKS += BOOST_FIX_STATIC_FEATURES_DETECTION
+
+-- 
+Arnout Vandecappelle                          arnout at mind be
+Senior Embedded Software Architect            +32-16-286500
+Essensium/Mind                                http://www.mind.be
+G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
+LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
+GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
