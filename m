@@ -1,48 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Sep 2018 01:00:51 +0200
-Subject: [Buildroot] [PATCH 1/1] arch: add support for RISC-V 64-bit
- (riscv64) architecture
-In-Reply-To: <20180831091154.22530-1-mark.corbin@embecosm.com>
-References: <20180831091154.22530-1-mark.corbin@embecosm.com>
-Message-ID: <804d638c-2b7c-1a12-894f-fa79094d2456@mind.be>
+From: Cam Hutchison <cam@camh.ch>
+Date: Tue, 4 Sep 2018 10:10:03 +1000
+Subject: [Buildroot] [PATCH v2 2/3] dependencies: host-make version check
+In-Reply-To: <20180903191933.26080-2-romain.naour@gmail.com>
+References: <20180903191933.26080-1-romain.naour@gmail.com>
+ <20180903191933.26080-2-romain.naour@gmail.com>
+Message-ID: <CABa6e=pwvwN3oob6q8y7-6KxCXbjcByPWWAztEOWPfOBWNbwqw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On 4 September 2018 at 05:19, Romain Naour <romain.naour@gmail.com> wrote:
 
+[snip]
 
-On 31/08/2018 11:11, Mark Corbin wrote:
-> This enables a riscv64 system to be built with a Buildroot generated
-> toolchain (gcc >= 7.x, binutils >= 2.30, glibc only).
-> 
-> This configuration has been used to successfully build a qemu-bootable
-> riscv-linux-4.15 kernel (https://github.com/riscv/riscv-linux.git).
-> 
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-> ---
->  Makefile                                |   1 +
->  arch/Config.in                          |  15 ++++
->  arch/Config.in.riscv                    | 104 ++++++++++++++++++++++++
->  arch/arch.mk.riscv                      |  24 ++++++
->  package/binutils/Config.in.host         |   3 +
->  toolchain/toolchain-buildroot/Config.in |  12 ++-
+> diff --git a/support/dependencies/check-host-make.sh b/support/dependencies/check-host-make.sh
+> new file mode 100755
+> index 0000000000..9c31f4a415
+> --- /dev/null
+> +++ b/support/dependencies/check-host-make.sh
+> @@ -0,0 +1,42 @@
+> +#!/bin/sh
+> +
+> +# prevent shift error
+> +[ $# -lt 2 ] && exit 1
+> +
+> +major_min="${1%.*}"
+> +minor_min="${1#*.}"
+> +
+> +shift
+> +
+> +# The host make program is already checked by dependencies.sh but we
+> +# want to check the version number even if Buildroot is able to use
+> +# GNU make >= 3.81 but some packages may require a more recent version.
+> +make="$1"
+> +
+> +# Output of 'make --version' examples:
+> +# GNU Make 4.2.1
+> +# GNU Make 4.0
+> +# GNU Make 3.81
+> +version=`$make --version 2>&1 | sed -e 's/^.* \([0-9\.]\)/\1/g' -e 's/[-\
+> +].*//g' -e '1q'`
+> +
+> +major=`echo "$version" | cut -d. -f1`
+> +minor=`echo "$version" | cut -d. -f2`
+> +bugfix=`echo "$version" | cut -d. -f3`
+> +
+> +if [ -z "${bugfix}" ] ; then
+> +       bugfix=0
+> +fi
+> +
+> +if [ $major -lt $major_min ]; then
+> +       # echo nothing: no suitable make found
+> +       exit 1
+> +fi
+> +
+> +if [ $major -eq $major_min -a $minor -lt $minor_min ]; then
+> +       # echo nothing: no suitable make found
+> +       exit 1
+> +fi
 
- One more thing that is missing: in package/linux-headers/Config.in.host, you
-have to exclude all the linux versions that don't support riscv yet (i.e.
-everything before 4.15).
+Rather than parsing version strings, I've had good success with using sort -V:
 
- To simplify that job, you first might want (in separate patches) some
-deprecated versions: 4.10, 4.11, 4.12, 4.13.
+if [ "$(printf '%s\n' "${minver}" "${makever}" | sort -V | head -n 1)"
+!= "${minver}" ]; then
+  exit 1
+fi
 
- Regards,
- Arnout
+sort -V was added to GNU sort in coreutils 7.0 released 2008-10-05
 
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+> +
+> +# valid
+> +echo $make
+> --
+> 2.14.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
