@@ -1,79 +1,58 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Sep 2018 22:17:58 +0200
-Subject: [Buildroot] Fwd: Beginner help: Compilation errors for bison,
- ncurses and arm-buildroot-linux-uclibcgnueabihf
-In-Reply-To: <CAL8qisnNqN9Mn1wM2FiMmgs3phgke4RF4xNCxprm3s-i4VAkqw@mail.gmail.com>
-References: <CAL8qis=5F5kDuMjpsZJZLbnAkFKBVaH_V1CcV6uuK5Lu1ooPAw@mail.gmail.com>
- <20180904102005.1d63cc85@windsurf>
- <CAL8qisnsRCYbC5+x8GAT+wZ_qiB=6EGBUVkK=GRk0JHy-T4ifA@mail.gmail.com>
- <CAL8qisnNqN9Mn1wM2FiMmgs3phgke4RF4xNCxprm3s-i4VAkqw@mail.gmail.com>
-Message-ID: <2e07e3d7-26f8-3ae2-1f19-26f60210cb36@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 4 Sep 2018 22:45:20 +0200
+Subject: [Buildroot] [git commit branch/2018.02.x] qt5quickcontrols: correct
+ license files for 5.9.x version
+Message-ID: <20180904204456.D17CF827A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Faisal,
+commit: https://git.buildroot.net/buildroot/commit/?id=6f9e4e637fd4047823cda7f11437e90ff6a3dbb5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2018.02.x
 
-On 04/09/2018 17:32, Faisal Mehmood wrote:
-> ---------- Forwarded message ---------
-> From: Faisal Mehmood <f.m3hm00d@gmail.com>
-> Date: Tue, Sep 4, 2018 at 3:31 PM
-> Subject: Re: [Buildroot] Beginner help: Compilation errors for bison,
-> ncurses and arm-buildroot-linux-uclibcgnueabihf
-> To: <thomas.petazzoni@bootlin.com>
-> 
-> 
-> On Tue, Sep 4, 2018 at 8:20 AM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello,
->>
->> On Tue, 4 Sep 2018 11:24:53 +0000, Faisal Mehmood wrote:
->>
->>> ################################1#1#1#1#1#1#1#1#1#1########################
->>>
->>> /home/kenobi/projects/zero/rootfs/buildroot-2018.02.5/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/Scrt1.o:
->>> In function `_start':
->>> (.text+0x54): undefined reference to `main'
->>> collect2: error: ld returned 1 exit status
->>> make[2]: *** [Makefile:850: ../lib/libncurses.so.6.0] Error 1
+Fixes:
+http://autobuild.buildroot.net/results/9326cb85c8ce4f98aa9d0a1238ffdab3e9829637/
 
- As Thomas mentioned, for some reason you don't seem to be able to build a
-shared library.
+Similar in spirit to commit 83d33f76 (qt5quickcontrols: update license file
+names for Qt 5.6 version), but on 2018.02.x the list of files was correct
+for the 5.6 version but not the 5.9 version.
 
- To debug this, could you re-run (without cleaning) with BR2_DEBUG_WRAPPER=1 in
-the environment? And also make it verbose, with V=1. And disable parallel build. So
+Also add hashes for these licese files.
 
-BR2_DEBUG_WRAPPER=1 make V=1 BR2_JLEVEL=1
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash | 3 +++
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk   | 5 +++++
+ 2 files changed, 8 insertions(+)
 
- If you haven't cleaned, the entire output is relevant (it would contain just
-the commands that are run leading up to the failure).
-
-[snip]
->>  - Your Buildroot .config file
-
- To make it smaller, you can run 'make savedefconfig' and include that in the mail.
-
- But anyway, the interesting bit is
-
-BR2_RELRO_FULL=y
-
-Full relro is currently broken. See the bug report [1] and the patches to fix it
-[2].
-
- Regards,
- Arnout
-
-[1] https://bugs.busybox.net/show_bug.cgi?id=11206
-[2] http://patchwork.ozlabs.org/project/buildroot/list/?series=63203
-
-
--- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
+index c437073de0..37ddd00573 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
+@@ -8,4 +8,7 @@ sha256 da4dd353802197c2bb53c92a36cf7749c7d9dc29b4acc919b692683e9c1c3313  qtquick
+ sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
+ sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
+ sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 LICENSE.GPL2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
++sha256 da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768 LICENSE.LGPL3
+ sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+index 88e767bcf9..87b855937a 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+@@ -11,7 +11,12 @@ QT5QUICKCONTROLS_DEPENDENCIES = qt5base qt5declarative
+ QT5QUICKCONTROLS_INSTALL_STAGING = YES
+ 
+ QT5QUICKCONTROLS_LICENSE = GPL-2.0 or GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)
++
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.GPL2 LICENSE.GPL3 LICENSE.LGPL3 LICENSE.FDL
++else
+ QT5QUICKCONTROLS_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
++endif
+ 
+ define QT5QUICKCONTROLS_CONFIGURE_CMDS
+ 	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
