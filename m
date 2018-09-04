@@ -1,46 +1,51 @@
-From: Dan Riegsecker <1baldgeek@gmail.com>
-Date: Tue,  4 Sep 2018 17:28:22 -0400
-Subject: [Buildroot] [PATCH] imx-lib: bump to version used in 4.9.88-2.0.0_ga
-Message-ID: <20180904212822.48852-1-1baldgeek@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  4 Sep 2018 23:32:11 +0200
+Subject: [Buildroot] [PATCH 1/1] moarvm: fix build on powerpc64 / powerpc64le
+Message-ID: <20180904213211.17204-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In the latest release from NXP, Yocto Rocko 4.9.88-2.0.0_ga,
-imx-lib was switched from a specific branch or tag release to the
-master branch and a specific commit. See the link below for
-reference.
+Build fails with:
+ In file included from dyncall_callback.c:35:0:
+dyncall_callback_ppc64.c: In function 'dcbNewCallback':
+dyncall_callback_ppc64.c:42:13: warning: implicit declaration of function 'dcAllocWX' [-Wimplicit-function-declaration]
+   int err = dcAllocWX(sizeof(DCCallback), (void**) &pcb);
+             ^~~~~~~~~
+dyncall_callback_ppc64.c: In function 'dcbFreeCallback':
+dyncall_callback_ppc64.c:53:3: warning: implicit declaration of function 'dcFreeWX' [-Wimplicit-function-declaration]
+   dcFreeWX(pcb, sizeof(DCCallback));
+   ^~~~~~~~
+dyncall_callback_ppc64.S: Assembler messages:
+dyncall_callback_ppc64.S:180: Error: operand out of range (3 is not between 0 and 1)
 
-https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/commit/?h=rocko-4.9.88-2.0.0_ga&id=ded1a9ea3d723c56058524fc9ebd420a3510ae05
+So select BR2_PACKAGE_LIBFFI for BR2_powerpc64 and BR2_powerpc64le as it
+is already done for MIPS
 
-Signed-off-by: Dan Riegsecker <1baldgeek@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/97b53a74d9847c07f26178daeb1daff3b6c24813
+ - http://autobuild.buildroot.org/results/c35ac4bbc5fb04aabf5a719eddeedf55f7f1f4eb
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/freescale-imx/imx-lib/imx-lib.hash | 2 +-
- package/freescale-imx/imx-lib/imx-lib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/moarvm/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/imx-lib/imx-lib.hash b/package/freescale-imx/imx-lib/imx-lib.hash
-index b3fce59d53..abbf017459 100644
---- a/package/freescale-imx/imx-lib/imx-lib.hash
-+++ b/package/freescale-imx/imx-lib/imx-lib.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256 245ace9b2c50d6c13a804d9c4492a5a850c626e7537f0d0bad81670b2824892f  imx-lib-rel_imx_4.9.x_1.0.0_ga.tar.gz
-+sha256 ced5ad0a179887ef1dd93e8103a9ab7372017cc1c241d28cded164cdece4b918  imx-lib-3f777974c0c146817e2ff5cb0340ca66a1f99e57.tar.gz
-diff --git a/package/freescale-imx/imx-lib/imx-lib.mk b/package/freescale-imx/imx-lib/imx-lib.mk
-index e82368588d..721c20e5f8 100644
---- a/package/freescale-imx/imx-lib/imx-lib.mk
-+++ b/package/freescale-imx/imx-lib/imx-lib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_LIB_VERSION = rel_imx_4.9.x_1.0.0_ga
-+IMX_LIB_VERSION = 3f777974c0c146817e2ff5cb0340ca66a1f99e57
- IMX_LIB_SITE = https://source.codeaurora.org/external/imx/imx-lib
- IMX_LIB_SITE_METHOD = git
- IMX_LIB_LICENSE = LGPL-2.1+
+diff --git a/package/moarvm/Config.in b/package/moarvm/Config.in
+index 3ff4f827e0..c966b25738 100644
+--- a/package/moarvm/Config.in
++++ b/package/moarvm/Config.in
+@@ -12,7 +12,8 @@ config BR2_PACKAGE_MOARVM
+ 	select BR2_PACKAGE_LIBATOMIC_OPS
+ 	# dyncall does not work on MIPS; libffi needs to be used.
+ 	# See: https://github.com/MoarVM/MoarVM/issues/222
+-	select BR2_PACKAGE_LIBFFI if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	# dyncall does not work also on powerpc64 and powerpc64le
++	select BR2_PACKAGE_LIBFFI if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el || BR2_powerpc64 | BR2_powerpc64le
+ 	help
+ 	  Short for "Metamodel On A Runtime", MoarVM is a virtual
+ 	  machine built especially for Rakudo Perl 6 and the NQP
 -- 
-2.11.0
+2.17.1
