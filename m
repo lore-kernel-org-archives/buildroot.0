@@ -1,31 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Sep 2018 23:10:46 +0200
-Subject: [Buildroot] [PATCH 3/3] qt5webkit: select leveldb package
-In-Reply-To: <20180831202204.28093-4-gael.portay@savoirfairelinux.com>
-References: <20180831202204.28093-1-gael.portay@savoirfairelinux.com>
- <20180831202204.28093-4-gael.portay@savoirfairelinux.com>
-Message-ID: <01e51af4-335b-7b8b-7c03-c8c00960eb20@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 04 Sep 2018 23:17:20 +0200
+Subject: [Buildroot] Problmes with eth0 on Raspberry Pi 3B+
+In-Reply-To: <1560ed39-cf1b-046e-9855-c35dde778374@green-communications.fr>
+ (Nicolas Cavallari's message of "Tue, 4 Sep 2018 14:31:46 +0200")
+References: <CALtfCQYbuFj8HMLNpk4t=M4FeZF4_=wXjNw7YcQPcN=iGYsR7Q@mail.gmail.com>
+ <1560ed39-cf1b-046e-9855-c35dde778374@green-communications.fr>
+Message-ID: <87musxarof.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Nicolas" == Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr> writes:
 
+ > On 9/4/18 12:58 PM, Oscar Gomez Fuente wrote:
+ >> auto eth0
+ >> iface eth0 inet manual
+ >> wait-delay 10
+ >> pre-up ifconfig eth0 up
+ >> pre-up /sbin/udhcpc -R -b -p /var/run/udhcpc.eth0.pid -i eth0
+ >> pre-up /etc/network/nfs_check
+ >> post-down kill -9 $(cat /var/run/udhcpc.eth0.pid)
+ >> post-down ifconfig eth0 down
 
-On 31/08/2018 22:22, Ga?l PORTAY wrote:
-> +	depends on BR2_INSTALL_LIBSTDCPP # leveldb
+ > pre-up will run before the wait_iface hook.  For things that are actually
+ > configuring the interface, you should use up.
+ > (and ifconfig is a bid deprecated these days)
 
- I don't think we need to propagate this particular dependency - qt5webkit
-already depends on libstdcpp indirectly through Qt5.
-
- Regards,
- Arnout
+Correct. In addition to that, what is the reason why you manually run
+udhcpc instead of just using 'iface eth0 inet dhcp'?
 
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+Bye, Peter Korsgaard
