@@ -1,13 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 4 Sep 2018 10:03:50 +0200
-Subject: [Buildroot] [PATCH] synergy: change upstream location to fix
- download issues
-In-Reply-To: <1262e995-3152-4014-dad5-770f2e83a4ac@mind.be>
-References: <20180902204505.30928-1-thomas.petazzoni@bootlin.com>
- <871sab3v4l.fsf@dell.be.48ers.dk>
- <20180903102655.6f7f8df4@windsurf>
- <1262e995-3152-4014-dad5-770f2e83a4ac@mind.be>
-Message-ID: <20180904100350.15acb6fc@windsurf>
+Date: Tue, 4 Sep 2018 10:20:05 +0200
+Subject: [Buildroot] Beginner help: Compilation errors for bison,
+ ncurses and arm-buildroot-linux-uclibcgnueabihf
+In-Reply-To: <CAL8qis=5F5kDuMjpsZJZLbnAkFKBVaH_V1CcV6uuK5Lu1ooPAw@mail.gmail.com>
+References: <CAL8qis=5F5kDuMjpsZJZLbnAkFKBVaH_V1CcV6uuK5Lu1ooPAw@mail.gmail.com>
+Message-ID: <20180904102005.1d63cc85@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,44 +13,69 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 4 Sep 2018 00:25:27 +0200, Arnout Vandecappelle wrote:
+On Tue, 4 Sep 2018 11:24:53 +0000, Faisal Mehmood wrote:
 
-> > My idea was to have it on master and next, but indeed I did not think
-> > about 2018.02.x/2018.05.x being broken :-/  
+> ################################1#1#1#1#1#1#1#1#1#1########################
 > 
->  Wait, how are these broken? Quoting the commit message:
+> /home/kenobi/projects/zero/rootfs/buildroot-2018.02.5/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/Scrt1.o:
+> In function `_start':
+> (.text+0x54): undefined reference to `main'
+> collect2: error: ld returned 1 exit status
+> make[2]: *** [Makefile:850: ../lib/libncurses.so.6.0] Error 1
+> make[2]: Leaving directory
+> '/home/kenobi/projects/zero/rootfs/buildroot-2018.02.5/output/build/ncurses-6.0/ncurses'
+> make[1]: *** [Makefile:114: all] Error 2
+> make[1]: Leaving directory
+> '/home/kenobi/projects/zero/rootfs/buildroot-2018.02.5/output/build/ncurses-6.0'
+> make: *** [package/pkg-generic.mk:226:
+> /home/kenobi/projects/zero/rootfs/buildroot-2018.02.5/output/build/ncurses-6.0/.stamp_built]
+> Error 2
 > 
->    On master as of 811734ef9044bbdfc067da76358153061fae2031, we use
->    v1.8.8, which fails to download from github.com, so we fallback to
->    sources.buildroot.net, which has the tarball.
+> ################################1#1#1#1#1#1#1#1#1#1########################
 
-synergy is using version 1.8.8 since commit
-caa16c13e0fef18ae1142f502ee39d2af8f5172e, which was merged in 2017.05.
+This one looks a bit weird. Are you sure you are getting this after a
+full rebuild, i.e "make clean all" ?
 
-> >> Looking at the synergy git history, a hack could be to bump the version
-> >> to the commit just after v1.8.8 together with changing the URL so we end
-> >> up with a new tarball name:
-> >>
-> >> commit ec56ac4485ef8e3cf986107b8456949b5aec3527
-> >> Author: Andrew Nelless <andrew@symless.com>
-> >> Date:   Fri Mar 3 14:51:23 2017 +0000
-> >>
-> >>     Fix version number in Changelog  
-> > 
-> > Or perhaps we simply don't fix it in master, and only in next ? The big
-> > downside I see with not fixing in master is that people who look at
-> > their build log will see the upstream download fail due to the hash
-> > mismatch, and the fallback to sources.buildroot.net.  
-> 
->  It's not a hash mismatch, it's a 404. So in my book, that's fine.
+> lib/fseterr.c: In function 'fseterr':
+> lib/fseterr.c:77:3: error: #error "Please port gnulib fseterr.c to
+> your platform! Look at the definitions of ferror and clearerr on your
+> system, then report this to bug-gnulib."
+>   #error "Please port gnulib fseterr.c to your platform! Look at the
+> definitions of ferror and clearerr on your system, then report this to
+> bug-gnulib."
+>    ^~~~~
 
-True. But if people fix to use the new upstream, then the hash becomes
-different. But perhaps that's OK.
+What is your host system ? I guess it's a pretty new one, which uses
+glibc-2.28. This issue has been fixed in master in commit
+373ac58b82d2430b745e90c7c8b39e319949882a, but it hasn't been backported
+yet to our 2018.02.x branch. It will be backported soon by Peter
+Korsgaard, who maintains the 2018.02.x branch.
 
-So all in all, you're saying that we should keep it as-is in
-master/2018.02.x/2018.05.x, and simply change in next ?
+> ##############################3#3#3#3#3#3#3#3#3#3#3#3#######################
+> /home/kenobi/Downloads/buildroot-2018.08-rc3/output/host/bin/arm-buildroot-linux-uclibcgnueabihf-gcc
+> -shared -Wl,-soname,libz.so.1,--version-script,zlib.map -fPIE
+> -Wl,-z,now -Wl,-z,relro -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+> -D_FILE_OFFSET_BITS=64  -Os  -fPIC -fPIC -D_LARGEFILE64_SOURCE=1
+> -DHAVE_HIDDEN -o libz.so.1.2.11 adler32.lo crc32.lo deflate.lo
+> infback.lo inffast.lo inflate.lo inftrees.lo trees.lo zutil.lo
+> compress.lo uncompr.lo gzclose.lo gzlib.lo gzread.lo gzwrite.lo  -lc
+> -pie
+> /home/kenobi/Downloads/buildroot-2018.08-rc3/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/Scrt1.o:
+> In function `_start':
+> (.text+0x54): undefined reference to `main'
+> collect2: error: ld returned 1 exit status
 
-Best regards,
+Same issue as for ncurses, building shared libraries doesn't work.
+Again, are you sure this happens after a full rebuild, i.e "make clean
+all".
+
+If that happens after a full rebuild, could you provide:
+
+ - Details on your host system
+
+ - Your Buildroot .config file
+
+Thanks!
 
 Thomas
 -- 
