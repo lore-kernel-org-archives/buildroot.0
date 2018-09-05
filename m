@@ -1,67 +1,138 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  5 Sep 2018 19:26:44 +0200
-Subject: [Buildroot] [PATCH 1/1] screen: fix rare build failure on T_N
- undeclared
-Message-ID: <20180905172644.1871-1-fontaine.fabrice@gmail.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Wed, 05 Sep 2018 20:47:08 +0300
+Subject: [Buildroot] [PATCH v2 1/1] qemu: add support for python3
+In-Reply-To: <CAFSsvmqufw-w8+ywf0McNBq=kvLqR+-0qPvA-oP726CvWFe+CA@mail.gmail.com>
+References: <20180904183934.12291-1-aduskett@gmail.com>
+ <87efe9cd6u.fsf@tkos.co.il>
+ <CAFSsvmo00eY8yv5PmPQ31KJGprg4HSpM6mqB-hs=8Xn_r1Gz7w@mail.gmail.com>
+ <20180905035954.7sio4o56gviyyb5a@sapphire.tkos.co.il>
+ <CAFSsvmqufw-w8+ywf0McNBq=kvLqR+-0qPvA-oP726CvWFe+CA@mail.gmail.com>
+Message-ID: <87bm9bdeg3.fsf@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/arm-none-linux-gnueabi-gcc -c -I. -I.  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DETCSCREENRC='"/usr/etc/screenrc"' -DSCREENENCODINGS='"/usr/share/screen/utf8encodings"' -DHAVE_CONFIG_H -DGIT_REV=\"\" \
-     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_GNU_SOURCE list_display.c
-In file included from screen.h:150:0,
-                 from list_display.c:36:
-display.h:154:19: error: 'T_N' undeclared here (not in a function)
-   union tcu d_tcs[T_N];  /* terminal capabilities */
+Hi Adam,
 
-Macro T_N is defined in header file term.h but it may not be created
-then fails. Backport patch to make sure term.h is created before compile
-other source codes.
+Adam Duskett writes:
+> How would I test this? I am used to having BuildRoot handle the paths
+> for such dependencies.
 
-Fixes:
- - http://autobuild.buildroot.org/results/a62bea1fd32246526d59f029df3dca60f1cd710f
+Just send RFC patch that you tested on your host with whatever Python
+version you have installed. There are a number of participants in this
+list that have access to hosts running RHEL6 or its derivatives.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0010-comm-h-now-depends-on-term-h.patch   | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/screen/0010-comm-h-now-depends-on-term-h.patch
+With host installed Python being used there might be no need to
+explicitly set the path of the Python executable, isn't it?
 
-diff --git a/package/screen/0010-comm-h-now-depends-on-term-h.patch b/package/screen/0010-comm-h-now-depends-on-term-h.patch
-new file mode 100644
-index 0000000000..6ff6f3da0b
---- /dev/null
-+++ b/package/screen/0010-comm-h-now-depends-on-term-h.patch
-@@ -0,0 +1,28 @@
-+From 39c5f1c76f1fcef4b5958bf828a63f53426b6984 Mon Sep 17 00:00:00 2001
-+From: Mike Gerwitz <mike@mikegerwitz.com>
-+Date: Tue, 24 Dec 2013 22:16:31 -0500
-+Subject: comm.h now depends on term.h
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Patch retrieved and updated from:
-+http://git.savannah.gnu.org/cgit/screen.git/commit/?id=39c5f1c]
-+---
-+ src/Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index e791e79..d4f7c0b 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -113,7 +113,7 @@ term.h: term.c term.sh
-+ 
-+ kmapdef.c: term.h
-+ 
-+-comm.h: comm.c comm.sh config.h
-++comm.h: comm.c comm.sh config.h term.h
-+ 	AWK=$(AWK) CC="$(CC) $(CFLAGS)" srcdir=${srcdir} sh $(srcdir)/comm.sh
-+ 
-+ docs:
-+-- 
-+cgit v1.0-41-gc330
-+
--- 
-2.17.1
+baruch
+
+> On Tue, Sep 4, 2018 at 11:59 PM Baruch Siach <baruch@tkos.co.il> wrote:
+>> Hi Adam,
+>>
+>> On Tue, Sep 04, 2018 at 03:09:26PM -0400, Adam Duskett wrote:
+>> > I'm not sure;
+>> >
+>> > We support Distributions as old as CentOS6, which have very very old
+>> > versions of Python...
+>>
+>> Buildroot requires Python version 2.6 or newer:
+>>
+>>   https://buildroot.org/downloads/manual/manual.html#requirement-mandatory
+>>
+>> Can Python 2.6 build qemu?
+>>
+>> baruch
+>>
+>> > On Tue, Sep 4, 2018 at 2:47 PM Baruch Siach <baruch@tkos.co.il> wrote:
+>> > > Adam Duskett writes:
+>> > > > qemu 2.12.0 now supports building against python3.
+>> > > > see: https://wiki.qemu.org/ChangeLog/2.12#Build_Dependencies
+>> > > >
+>> > > > Signed-off-by: Adam Duskett <aduskett@gmail.com>
+>> > > > ---
+>> > > > Changes v1 -> v2:
+>> > > >   - Split the python version check into two seperate checks for
+>> > > >     readability, one for the target, one for the host.
+>> > > >   - Fix location of the python version check for target and host.
+>> > > >
+>> > > >  package/qemu/qemu.mk | 27 ++++++++++++++++++++++-----
+>> > > >  1 file changed, 22 insertions(+), 5 deletions(-)
+>> > > >
+>> > > > diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+>> > > > index afb2aa92f6..6dd9ce4a62 100644
+>> > > > --- a/package/qemu/qemu.mk
+>> > > > +++ b/package/qemu/qemu.mk
+>> > > > @@ -16,7 +16,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
+>> > > >  #-------------------------------------------------------------
+>> > > >  # Target-qemu
+>> > > >
+>> > > > -QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib pixman
+>> > > > +QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman
+>> > > >
+>> > > >  # Need the LIBS variable because librt and libm are
+>> > > >  # not automatically pulled. :-(
+>> > > > @@ -25,9 +25,19 @@ QEMU_LIBS = -lrt -lm
+>> > > >  QEMU_OPTS =
+>> > > >
+>> > > >  QEMU_VARS = \
+>> > > > -     LIBTOOL=$(HOST_DIR)/bin/libtool \
+>> > > > -     PYTHON=$(HOST_DIR)/bin/python2 \
+>> > > > +     LIBTOOL=$(HOST_DIR)/bin/libtool
+>> > > > +
+>> > > > +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>> > > > +QEMU_DEPENDENCIES += host-python3
+>> > > > +QEMU_VARS += \
+>> > > > +     PYTHON=$(HOST_DIR)/bin/python3 \
+>> > > > +     PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
+>> > > > +else
+>> > > > +QEMU_DEPENDENCIES += host-python
+>> > > > +QEMU_VARS += \
+>> > > > +     PYTHON=$(HOST_DIR)/bin/python \
+>> > > >       PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
+>> > > > +endif
+>> > >
+>> > > Can't we use the host installed python? Python is already a dependency
+>> > > of Buildroot.
+>> > >
+>> > > baruch
+>> > >
+>> > > >  # If we want to specify only a subset of targets, we must still enable all
+>> > > >  # of them, so that QEMU properly builds its list of default targets, from
+>> > > > @@ -150,7 +160,7 @@ $(eval $(generic-package))
+>> > > >  #-------------------------------------------------------------
+>> > > >  # Host-qemu
+>> > > >
+>> > > > -HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
+>> > > > +HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
+>> > > >
+>> > > >  #       BR ARCH         qemu
+>> > > >  #       -------         ----
+>> > > > @@ -263,12 +273,19 @@ define HOST_QEMU_CONFIGURE_CMDS
+>> > > >               --interp-prefix=$(STAGING_DIR) \
+>> > > >               --cc="$(HOSTCC)" \
+>> > > >               --host-cc="$(HOSTCC)" \
+>> > > > -             --python=$(HOST_DIR)/bin/python2 \
+>> > > >               --extra-cflags="$(HOST_CFLAGS)" \
+>> > > >               --extra-ldflags="$(HOST_LDFLAGS)" \
+>> > > >               $(HOST_QEMU_OPTS)
+>> > > >  endef
+>> > > >
+>> > > > +ifeq ($(BR2_PACKAGE_PYTHON3),y)
+>> > > > +HOST_QEMU_DEPENDENCIES += host-python3
+>> > > > +HOST_QEMU_CONFIGURE_CMDS += --python=$(HOST_DIR)/bin/python3
+>> > > > +else
+>> > > > +HOST_QEMU_DEPENDENCIES += host-python
+>> > > > +HOST_QEMU_CONFIGURE_CMDS += --python=$(HOST_DIR)/bin/python2
+>> > > > +endif
+>> > > > +
+>> > > >  define HOST_QEMU_BUILD_CMDS
+>> > > >       $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+>> > > >  endef
+
+--
+     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
