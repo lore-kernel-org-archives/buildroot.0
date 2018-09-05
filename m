@@ -1,103 +1,87 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Wed,  5 Sep 2018 13:39:30 +0200
-Subject: [Buildroot] [PATCH 1/2] bluez5_utils-headers: new package
-Message-ID: <20180905113931.6703-1-grzegorz@blach.pl>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 5 Sep 2018 15:02:46 +0200
+Subject: [Buildroot] [PATCH v2] qt5location: fix build failure due to
+ missing qt5base gui dependency
+In-Reply-To: <20180905141843.566f9769@windsurf>
+References: <20180905090307.89484-1-giulio.benetti@micronovasrl.com>
+ <20180905135307.051cd136@windsurf>
+ <3dc3c769-4128-d00e-7833-31d73bf5d514@micronovasrl.com>
+ <20180905141843.566f9769@windsurf>
+Message-ID: <de067f44-0e19-78ea-e65f-70e06c6f8e43@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Header files from bluez utils version 5.x.
+Hello,
 
-Separated headers are required to break circular dependencies
-when python3 is build with bluetooth support.
+Il 05/09/2018 14:18, Thomas Petazzoni ha scritto:
+> Hello,
+> 
+> On Wed, 5 Sep 2018 14:06:40 +0200, Giulio Benetti wrote:
+> 
+>> The problem is that its configure.json depends on it
+>> https://github.com/qt/qtlocation/blob/5.11/src/location/configure.json#L3
+> 
+> OK, so it needs GUI support.
+> 
+>> to check feature.opengl
+>> https://github.com/qt/qtlocation/blob/5.11/src/location/configure.json#L44
+> 
+> but OpenGL support is optional.
+> 
+>> Also Qt Location is for creating mapping solutions:
+>> http://doc.qt.io/qt-5/qtlocation-index.html
+>> check i.e. examples:
+>> http://doc.qt.io/qt-5/qtlocation-examples.html
+>>
+>> So in the end, it seems it makes sense.
+>> In the beginning I thought it was a submodule to only get location
+>> parameters only.
+> 
+> Yes, indeed.
+> 
+>>> Also, having BR2_PACKAGE_QT5BASE_GUI does not guarantee that OpenGL
+>>> support is available, so I'm not sure this is going to fix the error in
+>>> all cases.
+>>
+>> I'm executing test-pkg -a right now, I'm on 3/47 passed, need some hour.
+> 
+> Doing a test-pkg -a with the same configuration won't give any useful
+> result here. Remember that test-pkg is only testing different
+> *toolchain* configurations. It is not testing random configurations
+> with/without OpenGL.
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/bluez5_utils-headers/Config.in        |  7 +++++++
- .../bluez5_utils_headers.hash                 |  4 ++++
- .../bluez5_utils_headers.mk                   | 21 +++++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/bluez5_utils-headers/Config.in
- create mode 100644 package/bluez5_utils-headers/bluez5_utils_headers.hash
- create mode 100644 package/bluez5_utils-headers/bluez5_utils_headers.mk
+Oops, you're right.
+Need to test with and without OpenGL package enabled.
+Anyway what takes care of opengl is exactly feature.opengl:
+https://github.com/qt/qtlocation/blob/5.11/src/location/configure.json#L44
+So it should work for every case.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index bd8095bd20..8ea433e930 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -877,6 +877,7 @@ F:	package/libwebsock/
- F:	package/sofia-sip/
- 
- N:	Grzegorz Blach <grzegorz@blach.pl>
-+F:	package/bluez5_utils-headers/
- F:	package/python-falcon/
- F:	package/python-mimeparse/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 66f303ec58..a1b9300f8b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1427,6 +1427,7 @@ menu "Networking"
- 	source "package/azmq/Config.in"
- 	source "package/azure-iot-sdk-c/Config.in"
- 	source "package/batman-adv/Config.in"
-+	source "package/bluez5_utils-headers/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/canfestival/Config.in"
- 	source "package/cgic/Config.in"
-diff --git a/package/bluez5_utils-headers/Config.in b/package/bluez5_utils-headers/Config.in
-new file mode 100644
-index 0000000000..7ae42af930
---- /dev/null
-+++ b/package/bluez5_utils-headers/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_BLUEZ5_UTILS_HEADERS
-+	bool "bluez5_utils-headers 5.x"
-+	help
-+	  Header files from bluez utils version 5.x
-+
-+	  http://www.bluez.org
-+	  http://www.kernel.org/pub/linux/bluetooth
-diff --git a/package/bluez5_utils-headers/bluez5_utils_headers.hash b/package/bluez5_utils-headers/bluez5_utils_headers.hash
-new file mode 100644
-index 0000000000..b965708559
---- /dev/null
-+++ b/package/bluez5_utils-headers/bluez5_utils_headers.hash
-@@ -0,0 +1,4 @@
-+# From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
-+sha256  5ffcaae18bbb6155f1591be8c24898dc12f062075a40b538b745bfd477481911  bluez-5.50.tar.xz
-+sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-+sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/bluez5_utils-headers/bluez5_utils_headers.mk b/package/bluez5_utils-headers/bluez5_utils_headers.mk
-new file mode 100644
-index 0000000000..9bc463432c
---- /dev/null
-+++ b/package/bluez5_utils-headers/bluez5_utils_headers.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# bluez5_utils-headers
-+#
-+################################################################################
-+
-+BLUEZ5_UTILS_HEADERS_VERSION = 5.50
-+BLUEZ5_UTILS_HEADERS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
-+BLUEZ5_UTILS_HEADERS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
-+BLUEZ5_UTILS_HEADERS_LICENSE = GPL-2.0+, LGPL-2.1+
-+BLUEZ5_UTILS_HEADERS_LICENSE_FILES = COPYING COPYING.LIB
-+
-+BLUEZ5_UTILS_HEADERS_INSTALL_STAGING = YES
-+BLUEZ5_UTILS_HEADERS_INSTALL_TARGET = NO
-+
-+define BLUEZ5_UTILS_HEADERS_INSTALL_STAGING_CMDS
-+	$(INSTALL) -d $(STAGING_DIR)/usr/include/bluetooth/
-+	$(INSTALL) -m 644 $(@D)/lib/*.h $(STAGING_DIR)/usr/include/bluetooth/
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.17.1
+> 
+> For a change like this, a test-pkg -a is totally useless, however, a
+> test with just:
+> 
+> BR2_PACKAGE_QT5BASE=y
+> BR2_PACKAGE_QT5LOCATION=y
+
+In this case it doesn't fail, it provides automatically 
+BR2_PACKAGE_QT5BASE_GUI=y
+
+> 
+> which should fail, and then a test with just:
+> 
+> BR2_PACKAGE_QT5BASE=y
+> BR2_PACKAGE_QT5BASE_GUI=y
+> BR2_PACKAGE_QT5LOCATION=y
+> 
+> should work, with no other options selected (so no OpenGL support).
+> 
+
+Yes, it should, but I've done a mistake: I didn't take care about Qt 
+version. So need to rework the patch.
+For the rest it seems to be ok to me, what do you think?
+
+Best regards
+Giulio Benetti
