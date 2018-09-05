@@ -1,72 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Sep 2018 14:18:43 +0200
-Subject: [Buildroot] [PATCH v2] qt5location: fix build failure due to
- missing qt5base gui dependency
-In-Reply-To: <3dc3c769-4128-d00e-7833-31d73bf5d514@micronovasrl.com>
-References: <20180905090307.89484-1-giulio.benetti@micronovasrl.com>
- <20180905135307.051cd136@windsurf>
- <3dc3c769-4128-d00e-7833-31d73bf5d514@micronovasrl.com>
-Message-ID: <20180905141843.566f9769@windsurf>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Wed,  5 Sep 2018 13:22:36 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: Set MAKE_ENV for kconfig build
+ system
+Message-ID: <20180905122236.26364-1-thomas.preston@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+U-Boot fails to build in a GitLab CI context because the kconfig-package
+build stage is unable to find bison or flex even though they are
+installed in HOST_DIR.
 
-On Wed, 5 Sep 2018 14:06:40 +0200, Giulio Benetti wrote:
+To fix this, set UBOOT_MAKE_ENV so that UBOOT_KCONFIG_MAKE uses the
+correct PATH.
 
-> The problem is that its configure.json depends on it
-> https://github.com/qt/qtlocation/blob/5.11/src/location/configure.json#L3
+Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+---
+ boot/uboot/uboot.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-OK, so it needs GUI support.
-
-> to check feature.opengl
-> https://github.com/qt/qtlocation/blob/5.11/src/location/configure.json#L44
-
-but OpenGL support is optional.
-
-> Also Qt Location is for creating mapping solutions:
-> http://doc.qt.io/qt-5/qtlocation-index.html
-> check i.e. examples:
-> http://doc.qt.io/qt-5/qtlocation-examples.html
-> 
-> So in the end, it seems it makes sense.
-> In the beginning I thought it was a submodule to only get location 
-> parameters only.
-
-Yes, indeed.
-
-> > Also, having BR2_PACKAGE_QT5BASE_GUI does not guarantee that OpenGL
-> > support is available, so I'm not sure this is going to fix the error in
-> > all cases.  
-> 
-> I'm executing test-pkg -a right now, I'm on 3/47 passed, need some hour.
-
-Doing a test-pkg -a with the same configuration won't give any useful
-result here. Remember that test-pkg is only testing different
-*toolchain* configurations. It is not testing random configurations
-with/without OpenGL.
-
-For a change like this, a test-pkg -a is totally useless, however, a
-test with just:
-
-BR2_PACKAGE_QT5BASE=y
-BR2_PACKAGE_QT5LOCATION=y
-
-which should fail, and then a test with just:
-
-BR2_PACKAGE_QT5BASE=y
-BR2_PACKAGE_QT5BASE_GUI=y
-BR2_PACKAGE_QT5LOCATION=y
-
-should work, with no other options selected (so no OpenGL support).
-
-Best regards,
-
-Thomas
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index bddafe234d..a19cb72458 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -449,6 +449,7 @@ endif # BR2_TARGET_UBOOT && BR_BUILDING
+ ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
+ $(eval $(generic-package))
+ else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
++UBOOT_MAKE_ENV = $(TARGET_MAKE_ENV)
+ UBOOT_KCONFIG_DEPENDENCIES = \
+ 	$(BR2_BISON_HOST_DEPENDENCY) \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
