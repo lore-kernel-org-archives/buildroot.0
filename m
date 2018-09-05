@@ -1,138 +1,129 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 05 Sep 2018 20:47:08 +0300
-Subject: [Buildroot] [PATCH v2 1/1] qemu: add support for python3
-In-Reply-To: <CAFSsvmqufw-w8+ywf0McNBq=kvLqR+-0qPvA-oP726CvWFe+CA@mail.gmail.com>
-References: <20180904183934.12291-1-aduskett@gmail.com>
- <87efe9cd6u.fsf@tkos.co.il>
- <CAFSsvmo00eY8yv5PmPQ31KJGprg4HSpM6mqB-hs=8Xn_r1Gz7w@mail.gmail.com>
- <20180905035954.7sio4o56gviyyb5a@sapphire.tkos.co.il>
- <CAFSsvmqufw-w8+ywf0McNBq=kvLqR+-0qPvA-oP726CvWFe+CA@mail.gmail.com>
-Message-ID: <87bm9bdeg3.fsf@tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  5 Sep 2018 20:23:20 +0200
+Subject: [Buildroot] [PATCH/next v2,1/1] duktape: new package
+Message-ID: <20180905182320.7181-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Adam,
+Duktape is an embeddable Javascript engine, with a focus on
+portability and compact footprint.
 
-Adam Duskett writes:
-> How would I test this? I am used to having BuildRoot handle the paths
-> for such dependencies.
+Duktape is easy to integrate into a C/C++ project: add duktape.c,
+duktape.h, and duk_config.h to your build, and use the Duktape API
+to call Ecmascript functions from C code and vice versa.
 
-Just send RFC patch that you tested on your host with whatever Python
-version you have installed. There are a number of participants in this
-list that have access to hosts running RHEL6 or its derivatives.
+http://www.duktape.org
 
-With host installed Python being used there might be no need to
-explicitly set the path of the Python executable, isn't it?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Use latest version
+ - Remove both patches (first one already in version, second one
+   abandonned)
+ - Depends on !BR2_STATIC_LIBS as upstream does not support static
+   linking
+ - Fix Config.in so lines are less than 72 characters
 
-baruch
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/duktape/Config.in    | 16 ++++++++++++++++
+ package/duktape/duktape.hash |  3 +++
+ package/duktape/duktape.mk   | 27 +++++++++++++++++++++++++++
+ 5 files changed, 48 insertions(+)
+ create mode 100644 package/duktape/Config.in
+ create mode 100644 package/duktape/duktape.hash
+ create mode 100644 package/duktape/duktape.mk
 
-> On Tue, Sep 4, 2018 at 11:59 PM Baruch Siach <baruch@tkos.co.il> wrote:
->> Hi Adam,
->>
->> On Tue, Sep 04, 2018 at 03:09:26PM -0400, Adam Duskett wrote:
->> > I'm not sure;
->> >
->> > We support Distributions as old as CentOS6, which have very very old
->> > versions of Python...
->>
->> Buildroot requires Python version 2.6 or newer:
->>
->>   https://buildroot.org/downloads/manual/manual.html#requirement-mandatory
->>
->> Can Python 2.6 build qemu?
->>
->> baruch
->>
->> > On Tue, Sep 4, 2018 at 2:47 PM Baruch Siach <baruch@tkos.co.il> wrote:
->> > > Adam Duskett writes:
->> > > > qemu 2.12.0 now supports building against python3.
->> > > > see: https://wiki.qemu.org/ChangeLog/2.12#Build_Dependencies
->> > > >
->> > > > Signed-off-by: Adam Duskett <aduskett@gmail.com>
->> > > > ---
->> > > > Changes v1 -> v2:
->> > > >   - Split the python version check into two seperate checks for
->> > > >     readability, one for the target, one for the host.
->> > > >   - Fix location of the python version check for target and host.
->> > > >
->> > > >  package/qemu/qemu.mk | 27 ++++++++++++++++++++++-----
->> > > >  1 file changed, 22 insertions(+), 5 deletions(-)
->> > > >
->> > > > diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
->> > > > index afb2aa92f6..6dd9ce4a62 100644
->> > > > --- a/package/qemu/qemu.mk
->> > > > +++ b/package/qemu/qemu.mk
->> > > > @@ -16,7 +16,7 @@ QEMU_LICENSE_FILES = COPYING COPYING.LIB
->> > > >  #-------------------------------------------------------------
->> > > >  # Target-qemu
->> > > >
->> > > > -QEMU_DEPENDENCIES = host-pkgconf host-python libglib2 zlib pixman
->> > > > +QEMU_DEPENDENCIES = host-pkgconf libglib2 zlib pixman
->> > > >
->> > > >  # Need the LIBS variable because librt and libm are
->> > > >  # not automatically pulled. :-(
->> > > > @@ -25,9 +25,19 @@ QEMU_LIBS = -lrt -lm
->> > > >  QEMU_OPTS =
->> > > >
->> > > >  QEMU_VARS = \
->> > > > -     LIBTOOL=$(HOST_DIR)/bin/libtool \
->> > > > -     PYTHON=$(HOST_DIR)/bin/python2 \
->> > > > +     LIBTOOL=$(HOST_DIR)/bin/libtool
->> > > > +
->> > > > +ifeq ($(BR2_PACKAGE_PYTHON3),y)
->> > > > +QEMU_DEPENDENCIES += host-python3
->> > > > +QEMU_VARS += \
->> > > > +     PYTHON=$(HOST_DIR)/bin/python3 \
->> > > > +     PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages
->> > > > +else
->> > > > +QEMU_DEPENDENCIES += host-python
->> > > > +QEMU_VARS += \
->> > > > +     PYTHON=$(HOST_DIR)/bin/python \
->> > > >       PYTHONPATH=$(TARGET_DIR)/usr/lib/python$(PYTHON_VERSION_MAJOR)/site-packages
->> > > > +endif
->> > >
->> > > Can't we use the host installed python? Python is already a dependency
->> > > of Buildroot.
->> > >
->> > > baruch
->> > >
->> > > >  # If we want to specify only a subset of targets, we must still enable all
->> > > >  # of them, so that QEMU properly builds its list of default targets, from
->> > > > @@ -150,7 +160,7 @@ $(eval $(generic-package))
->> > > >  #-------------------------------------------------------------
->> > > >  # Host-qemu
->> > > >
->> > > > -HOST_QEMU_DEPENDENCIES = host-pkgconf host-python host-zlib host-libglib2 host-pixman
->> > > > +HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
->> > > >
->> > > >  #       BR ARCH         qemu
->> > > >  #       -------         ----
->> > > > @@ -263,12 +273,19 @@ define HOST_QEMU_CONFIGURE_CMDS
->> > > >               --interp-prefix=$(STAGING_DIR) \
->> > > >               --cc="$(HOSTCC)" \
->> > > >               --host-cc="$(HOSTCC)" \
->> > > > -             --python=$(HOST_DIR)/bin/python2 \
->> > > >               --extra-cflags="$(HOST_CFLAGS)" \
->> > > >               --extra-ldflags="$(HOST_LDFLAGS)" \
->> > > >               $(HOST_QEMU_OPTS)
->> > > >  endef
->> > > >
->> > > > +ifeq ($(BR2_PACKAGE_PYTHON3),y)
->> > > > +HOST_QEMU_DEPENDENCIES += host-python3
->> > > > +HOST_QEMU_CONFIGURE_CMDS += --python=$(HOST_DIR)/bin/python3
->> > > > +else
->> > > > +HOST_QEMU_DEPENDENCIES += host-python
->> > > > +HOST_QEMU_CONFIGURE_CMDS += --python=$(HOST_DIR)/bin/python2
->> > > > +endif
->> > > > +
->> > > >  define HOST_QEMU_BUILD_CMDS
->> > > >       $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
->> > > >  endef
-
---
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3f1f491fb7..4e966727aa 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -693,6 +693,7 @@ F:	package/alljoyn-tcl/
+ F:	package/alljoyn-tcl-base/
+ F:	package/boinc/
+ F:	package/cairo/
++F:	package/duktape/
+ F:	package/expat/
+ F:	package/flatbuffers/
+ F:	package/gtksourceview/
+diff --git a/package/Config.in b/package/Config.in
+index f5a17492c7..0e0186c7ac 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1293,6 +1293,7 @@ menu "External AngularJS plugins"
+ endmenu
+ endif
+ 	source "package/bootstrap/Config.in"
++	source "package/duktape/Config.in"
+ 	source "package/explorercanvas/Config.in"
+ 	source "package/flot/Config.in"
+ 	source "package/jquery/Config.in"
+diff --git a/package/duktape/Config.in b/package/duktape/Config.in
+new file mode 100644
+index 0000000000..5dad5c3e7c
+--- /dev/null
++++ b/package/duktape/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_DUKTAPE
++	bool "duktape"
++	depends on !BR2_STATIC_LIBS
++	help
++	  Duktape is an embeddable Javascript engine, with a focus on
++	  portability and compact footprint.
++
++	  Duktape is easy to integrate into a C/C++ project: add
++	  duktape.c, duktape.h, and duk_config.h to your build, and use
++	  the Duktape API to call Ecmascript functions from C code and
++	  vice versa.
++
++	  http://www.duktape.org
++
++comment "duktape needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
+new file mode 100644
+index 0000000000..0a819b4739
+--- /dev/null
++++ b/package/duktape/duktape.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256	0df1c0a9d40bfae31733e5c44f0eabaeae59e0a2ebf7693ff68bbabd49aae331	duktape-v2.3.0.tar.gz
++sha256	5358498534dac625c89a69c10becf3dcc40f9af58e6b69ee358ebdf6934f49c6	LICENSE.txt
+diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
+new file mode 100644
+index 0000000000..97b51f94b1
+--- /dev/null
++++ b/package/duktape/duktape.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# duktape
++#
++################################################################################
++
++DUKTAPE_VERSION = v2.3.0
++DUKTAPE_SITE = $(call github,svaarala,duktape-releases,$(DUKTAPE_VERSION))
++DUKTAPE_LICENSE = MIT
++DUKTAPE_LICENSE_FILES = LICENSE.txt
++DUKTAPE_INSTALL_STAGING = YES
++
++define DUKTAPE_BUILD_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f Makefile.sharedlibrary
++endef
++
++define DUKTAPE_INSTALL_STAGING_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f Makefile.sharedlibrary \
++		INSTALL_PREFIX=$(STAGING_DIR)/usr install
++endef
++
++define DUKTAPE_INSTALL_TARGET_CMDS
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f Makefile.sharedlibrary \
++		INSTALL_PREFIX=$(TARGET_DIR)/usr install
++endef
++
++$(eval $(generic-package))
+-- 
+2.17.1
