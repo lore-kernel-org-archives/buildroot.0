@@ -1,129 +1,68 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  5 Sep 2018 20:23:20 +0200
-Subject: [Buildroot] [PATCH/next v2,1/1] duktape: new package
-Message-ID: <20180905182320.7181-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Sep 2018 21:13:52 +0200
+Subject: [Buildroot] [git commit] screen: fix rare build failure on T_N
+ undeclared
+Message-ID: <20180905191313.DE4BF8280F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Duktape is an embeddable Javascript engine, with a focus on
-portability and compact footprint.
+commit: https://git.buildroot.net/buildroot/commit/?id=d496329a19c1989856cd5cef80f0d05255a27445
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Duktape is easy to integrate into a C/C++ project: add duktape.c,
-duktape.h, and duk_config.h to your build, and use the Duktape API
-to call Ecmascript functions from C code and vice versa.
+/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/arm-none-linux-gnueabi-gcc -c -I. -I.  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DETCSCREENRC='"/usr/etc/screenrc"' -DSCREENENCODINGS='"/usr/share/screen/utf8encodings"' -DHAVE_CONFIG_H -DGIT_REV=\"\" \
+     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_GNU_SOURCE list_display.c
+In file included from screen.h:150:0,
+                 from list_display.c:36:
+display.h:154:19: error: 'T_N' undeclared here (not in a function)
+   union tcu d_tcs[T_N];  /* terminal capabilities */
 
-http://www.duktape.org
+Macro T_N is defined in header file term.h but it may not be created
+then fails. Backport patch to make sure term.h is created before compile
+other source codes.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a62bea1fd32246526d59f029df3dca60f1cd710f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> v2:
- - Use latest version
- - Remove both patches (first one already in version, second one
-   abandonned)
- - Depends on !BR2_STATIC_LIBS as upstream does not support static
-   linking
- - Fix Config.in so lines are less than 72 characters
+ .../screen/0010-comm-h-now-depends-on-term-h.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/duktape/Config.in    | 16 ++++++++++++++++
- package/duktape/duktape.hash |  3 +++
- package/duktape/duktape.mk   | 27 +++++++++++++++++++++++++++
- 5 files changed, 48 insertions(+)
- create mode 100644 package/duktape/Config.in
- create mode 100644 package/duktape/duktape.hash
- create mode 100644 package/duktape/duktape.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3f1f491fb7..4e966727aa 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -693,6 +693,7 @@ F:	package/alljoyn-tcl/
- F:	package/alljoyn-tcl-base/
- F:	package/boinc/
- F:	package/cairo/
-+F:	package/duktape/
- F:	package/expat/
- F:	package/flatbuffers/
- F:	package/gtksourceview/
-diff --git a/package/Config.in b/package/Config.in
-index f5a17492c7..0e0186c7ac 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1293,6 +1293,7 @@ menu "External AngularJS plugins"
- endmenu
- endif
- 	source "package/bootstrap/Config.in"
-+	source "package/duktape/Config.in"
- 	source "package/explorercanvas/Config.in"
- 	source "package/flot/Config.in"
- 	source "package/jquery/Config.in"
-diff --git a/package/duktape/Config.in b/package/duktape/Config.in
+diff --git a/package/screen/0010-comm-h-now-depends-on-term-h.patch b/package/screen/0010-comm-h-now-depends-on-term-h.patch
 new file mode 100644
-index 0000000000..5dad5c3e7c
+index 0000000000..6ff6f3da0b
 --- /dev/null
-+++ b/package/duktape/Config.in
-@@ -0,0 +1,16 @@
-+config BR2_PACKAGE_DUKTAPE
-+	bool "duktape"
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  Duktape is an embeddable Javascript engine, with a focus on
-+	  portability and compact footprint.
++++ b/package/screen/0010-comm-h-now-depends-on-term-h.patch
+@@ -0,0 +1,28 @@
++From 39c5f1c76f1fcef4b5958bf828a63f53426b6984 Mon Sep 17 00:00:00 2001
++From: Mike Gerwitz <mike@mikegerwitz.com>
++Date: Tue, 24 Dec 2013 22:16:31 -0500
++Subject: comm.h now depends on term.h
 +
-+	  Duktape is easy to integrate into a C/C++ project: add
-+	  duktape.c, duktape.h, and duk_config.h to your build, and use
-+	  the Duktape API to call Ecmascript functions from C code and
-+	  vice versa.
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Patch retrieved and updated from:
++http://git.savannah.gnu.org/cgit/screen.git/commit/?id=39c5f1c]
++---
++ src/Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+	  http://www.duktape.org
++diff --git a/Makefile.in b/Makefile.in
++index e791e79..d4f7c0b 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -113,7 +113,7 @@ term.h: term.c term.sh
++ 
++ kmapdef.c: term.h
++ 
++-comm.h: comm.c comm.sh config.h
+++comm.h: comm.c comm.sh config.h term.h
++ 	AWK=$(AWK) CC="$(CC) $(CFLAGS)" srcdir=${srcdir} sh $(srcdir)/comm.sh
++ 
++ docs:
++-- 
++cgit v1.0-41-gc330
 +
-+comment "duktape needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
-new file mode 100644
-index 0000000000..0a819b4739
---- /dev/null
-+++ b/package/duktape/duktape.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256	0df1c0a9d40bfae31733e5c44f0eabaeae59e0a2ebf7693ff68bbabd49aae331	duktape-v2.3.0.tar.gz
-+sha256	5358498534dac625c89a69c10becf3dcc40f9af58e6b69ee358ebdf6934f49c6	LICENSE.txt
-diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
-new file mode 100644
-index 0000000000..97b51f94b1
---- /dev/null
-+++ b/package/duktape/duktape.mk
-@@ -0,0 +1,27 @@
-+################################################################################
-+#
-+# duktape
-+#
-+################################################################################
-+
-+DUKTAPE_VERSION = v2.3.0
-+DUKTAPE_SITE = $(call github,svaarala,duktape-releases,$(DUKTAPE_VERSION))
-+DUKTAPE_LICENSE = MIT
-+DUKTAPE_LICENSE_FILES = LICENSE.txt
-+DUKTAPE_INSTALL_STAGING = YES
-+
-+define DUKTAPE_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f Makefile.sharedlibrary
-+endef
-+
-+define DUKTAPE_INSTALL_STAGING_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f Makefile.sharedlibrary \
-+		INSTALL_PREFIX=$(STAGING_DIR)/usr install
-+endef
-+
-+define DUKTAPE_INSTALL_TARGET_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) -f Makefile.sharedlibrary \
-+		INSTALL_PREFIX=$(TARGET_DIR)/usr install
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.17.1
