@@ -1,71 +1,146 @@
-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Date: Wed,  5 Sep 2018 16:28:54 +0200
-Subject: [Buildroot] [PATCH] busybox: add patch to fix 'head -n -1'
-Message-ID: <20180905142854.24825-1-thomas.de_schampheleire@nokia.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Wed, 5 Sep 2018 17:26:55 +0200
+Subject: [Buildroot] [[PATCH v2 1/2] package/pkg-golang: add support for
+ building host packages
+In-Reply-To: <20180827113728.20856-2-mirza.krak@northern.tech>
+References: <20180827113728.20856-1-mirza.krak@northern.tech>
+ <20180827113728.20856-2-mirza.krak@northern.tech>
+Message-ID: <CA+_SqVauZc02JnUZ5iP-gnQVz2K6rZAkb_+tEYNWJjtQLXbXcA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Busybox 1.29.0 introduces a regression causing head to fail with negative
-'-n' parameters, e.g. 'head -n -1'. Instead of showing all but the last one
-line, no lines are printed whatsoever.
+On Mon, Aug 27, 2018 at 1:37 PM, Mirza Krak <mirza.krak@northern.tech> wrote:
+> With this you can add:
+>
+>     $(eval $(host-golang-package))
+>
+> to a package .mk file to build for host.
+>
+> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+> ---
 
-The issue was reported with
-http://lists.busybox.net/pipermail/busybox/2018-August/086617.html . This
-commit backports the revert applied upstream.
+Acked-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- ...b-remove-unnecessary-variable-in-xmalloc_.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/busybox/0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch
-
-diff --git a/package/busybox/0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch b/package/busybox/0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch
-new file mode 100644
-index 0000000000..ba2d214c29
---- /dev/null
-+++ b/package/busybox/0003-Revert-libbb-remove-unnecessary-variable-in-xmalloc_.patch
-@@ -0,0 +1,39 @@
-+From 0d598ab9f03dbf320f7b81c05e4a94cb303dfbc7 Mon Sep 17 00:00:00 2001
-+From: Denys Vlasenko <vda.linux@googlemail.com>
-+Date: Sun, 2 Sep 2018 18:35:29 +0200
-+Subject: [PATCH] Revert "libbb: remove unnecessary variable in xmalloc_fgets"
-+
-+The variable is in fact necessary.
-+
-+    commit 2da9724b56169f00bd7fb6b9a11c9409a7620981
-+    Author: Quentin Rameau <quinq@fifth.space>
-+    Date:   Sun Apr 1 17:05:35 2018 +0200
-+        libbb: remove unnecessary variable in xmalloc_fgets
-+
-+Signed-off-by: Denys Vlasenko <vda.linux@googlemail.com>
-+[Thomas De Schampheleire: added to unbreak 'head -n -1',
-+see http://lists.busybox.net/pipermail/busybox/2018-August/086617.html ]
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+
-+---
-+ libbb/get_line_from_file.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/libbb/get_line_from_file.c b/libbb/get_line_from_file.c
-+index f3d6c6203..49ef093c2 100644
-+--- a/libbb/get_line_from_file.c
-++++ b/libbb/get_line_from_file.c
-+@@ -47,7 +47,9 @@ char* FAST_FUNC bb_get_chunk_from_file(FILE *file, size_t *end)
-+ /* Get line, including trailing \n if any */
-+ char* FAST_FUNC xmalloc_fgets(FILE *file)
-+ {
-+-	return bb_get_chunk_from_file(file, NULL);
-++	int i;
-++
-++	return bb_get_chunk_from_file(file, &i);
-+ }
-+ /* Get line.  Remove trailing \n */
-+ char* FAST_FUNC xmalloc_fgetline(FILE *file)
-+-- 
-+2.16.4
-+
--- 
-2.16.4
+>
+> Changes in v2:
+>     - Added entry in Buildroot manual
+>     - Install to $(HOST_DIR)/bin instead of $(HOST_DIR)/usr/bin
+>     - Created "GO_COMMON_ENV" to be shared between GO_TARGET_ENV and GO_HOST_ENV
+>     - Dropped accidental change of comment
+>     - Removed a empty line
+>
+>  docs/manual/adding-packages-golang.txt |  5 +++--
+>  package/pkg-golang.mk                  | 37 +++++++++++++++++++++++++++++++---
+>  2 files changed, 37 insertions(+), 5 deletions(-)
+>
+> diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
+> index efcf696867..94520480ce 100644
+> --- a/docs/manual/adding-packages-golang.txt
+> +++ b/docs/manual/adding-packages-golang.txt
+> @@ -50,8 +50,9 @@ and +BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ because Buildroot will
+>  automatically add a dependency on +host-go+ to such packages.
+>
+>  The main macro of the Go package infrastructure is
+> -+golang-package+. It is similar to the +generic-package+ macro. Only
+> -target packages are supported with +golang-package+.
+> ++golang-package+. It is similar to the +generic-package+ macro. The
+> +ability to build host packages is also available, with the
+> ++host-golang-package+ macro.
+>
+>  Just like the generic infrastructure, the Go infrastructure works
+>  by defining a number of variables before calling the +golang-package+.
+> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+> index 6eacd14180..878228ce74 100644
+> --- a/package/pkg-golang.mk
+> +++ b/package/pkg-golang.mk
+> @@ -25,12 +25,18 @@ GO_BIN = $(HOST_DIR)/bin/go
+>
+>  # We pass an empty GOBIN, otherwise "go install: cannot install
+>  # cross-compiled binaries when GOBIN is set"
+> -GO_TARGET_ENV = \
+> -       $(HOST_GO_TARGET_ENV) \
+> +GO_COMMON_ENV = \
+>         PATH=$(BR_PATH) \
+>         GOBIN= \
+>         CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
+>
+> +GO_TARGET_ENV = \
+> +       $(HOST_GO_TARGET_ENV) \
+> +       $(GO_COMMON_ENV)
+> +
+> +GO_HOST_ENV = \
+> +       $(GO_COMMON_ENV)
+> +
+>  ################################################################################
+>  # inner-golang-package -- defines how the configuration, compilation and
+>  # installation of a Go package should be done, implements a few hooks to tune
+> @@ -44,7 +50,6 @@ GO_TARGET_ENV = \
+>  #             packages
+>  #  argument 4 is the type (target or host)
+>  #
+> -# NOTE Only type target is supported at the moment
+>  ################################################################################
+>
+>  define inner-golang-package
+> @@ -96,6 +101,8 @@ endif
+>  # Build step. Only define it if not already defined by the package .mk
+>  # file.
+>  ifndef $(2)_BUILD_CMDS
+> +ifeq ($(4),target)
+> +# Build package for target
+>  define $(2)_BUILD_CMDS
+>         $$(foreach d,$$($(2)_BUILD_TARGETS),\
+>                 cd $$($(2)_SRC_PATH); \
+> @@ -107,6 +114,20 @@ define $(2)_BUILD_CMDS
+>                         ./$$(d)
+>         )
+>  endef
+> +else
+> +# Build package for host
+> +define $(2)_BUILD_CMDS
+> +       $$(foreach d,$$($(2)_BUILD_TARGETS),\
+> +               cd $$($(2)_SRC_PATH); \
+> +               $$(GO_HOST_ENV) \
+> +                       GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
+> +                       $$($(2)_GO_ENV) \
+> +                       $$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+> +                       -o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
+> +                       ./$$(d)
+> +       )
+> +endef
+> +endif
+>  endif
+>
+>  # Target installation step. Only define it if not already defined by the
+> @@ -119,6 +140,15 @@ define $(2)_INSTALL_TARGET_CMDS
+>  endef
+>  endif
+>
+> +# Host installation step
+> +ifndef $(2)_INSTALL_CMDS
+> +define $(2)_INSTALL_CMDS
+> +       $$(foreach d,$$($(2)_INSTALL_BINS),\
+> +               $(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(HOST_DIR)/bin/$$(d)
+> +       )
+> +endef
+> +endif
+> +
+>  # Call the generic package infrastructure to generate the necessary make
+>  # targets
+>  $(call inner-generic-package,$(1),$(2),$(3),$(4))
+> @@ -130,3 +160,4 @@ endef # inner-golang-package
+>  ################################################################################
+>
+>  golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
+> +host-golang-package = $(call inner-golang-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+> --
+> 2.11.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
