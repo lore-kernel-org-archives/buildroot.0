@@ -1,88 +1,89 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Sep 2018 22:51:58 +0200
-Subject: [Buildroot] [PATCH v1 2/4] qt5virtualkeyboard: fix target
- install issue with 5.6
-In-Reply-To: <20180903123747.5234-3-gael.portay@savoirfairelinux.com>
-References: <20180903123747.5234-1-gael.portay@savoirfairelinux.com>
- <20180903123747.5234-3-gael.portay@savoirfairelinux.com>
-Message-ID: <20180905225158.19fb21c2@windsurf>
+Date: Wed, 5 Sep 2018 22:58:02 +0200
+Subject: [Buildroot] [git commit] qt5virtualkeyboard: fix legal-info with 5.6
+Message-ID: <20180905205801.14939828C3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ga?l,
+commit: https://git.buildroot.net/buildroot/commit/?id=b63fb1de164e728983d5eb2ab3446e7ec4e90cf9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  3 Sep 2018 08:37:45 -0400, Ga?l PORTAY wrote:
-> qt5virtualkeyboard 2.0 (shipped with Qt 5.6) installs the QML plugin
-> under the directory Enterprise while the later versions install it
-> without that directory.
-> 
-> Differentiate installation to target of the QML plugin according to the
-> Qt major version in use.
-> 
-> Fixes:
-> 
-> 	>>> qt5virtualkeyboard 2.0 Installing to target  
-> 	mkdir -p /home/gportay/src/buildroot/output/target/usr/lib/qt/plugins/platforminputcontexts
-> 	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so /home/gportay/src/buildroot/output/target/usr/lib/qt/plugins/platforminputcontexts
-> 	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/qml/QtQuick/VirtualKeyboard /home/gportay/src/buildroot/output/target/usr/qml/QtQuick
-> 	cp: cannot stat '/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/qml/QtQuick/VirtualKeyboard': No such file or directory
-> 	package/pkg-generic.mk:310: recipe for target '/home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/.stamp_target_installed' failed
-> 	make: *** [/home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/.stamp_target_installed] Error 1
-> 
-> Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
-> ---
->  package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> index cbe24d27dc..a4c9492a91 100644
-> --- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> @@ -65,6 +65,16 @@ define QT5VIRTUALKEYBOARD_INSTALL_STAGING_CMDS
->  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
->  endef
->  
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> +define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Entreprise/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
-> +endef
-> +else
-> +define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
-> +endef
-> +endif
+qt5virtualkeyboard 2.0 (shipped with Qt 5.6) doesn't contain any
+"main" license files with the GPLv3 license text.
 
-Here you are doing exactly the opposite of what your commit log says:
-you are installing from /usr/qml/QtQuick/Entreprise/VirtualKeyboard for
-the latest Qt 5.11 version, and from /usr/qml/QtQuick/VirtualKeyboard
-for the older Qt 5.6 version.
+Conditionally remove LICENSE.GPL3 from QT5VIRTUALKEYBOARD_LICENSE_FILES
+when Qt major version is set to 5.6.
 
-This also doesn't match the build failure: the build failure happens
-with qt5virtualkeyboard 2.0, which is used with Qt 5.6, and your patch
-proposes to use exactly the same command for the old Qt as the one that
-is unconditionally used today.
+Fixes:
 
-I.e:
+	>>> qt5virtualkeyboard 2.0 Collecting legal info
+	sha256sum: /home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/LICENSE.GPL3: No such file or directory
+	ERROR: LICENSE.GPL3 has wrong sha256 hash:
+	ERROR: expected: 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
+	ERROR: got     :
+	ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-> +else
-> +define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
-> +endef
+Also, the lipi-toolkit has a different filename between both supported
+Qt major version (5.6 and latest).
 
-is exactly the same as:
+Conditionally set the license in QT5VIRTUALKEYBOARD_LICENSE_FILES for
+lipi-toolkit according to the Qt major version used.
 
-> -	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
+Fixes:
+	>>> qt5virtualkeyboard 2.0 Collecting legal info
+	ERROR: No hash found for src/virtualkeyboard/3rdparty/openwnn/NOTICE
+	ERROR: No hash found for src/virtualkeyboard/3rdparty/pinyin/NOTICE
+	ERROR: No hash found for src/virtualkeyboard/3rdparty/tcime/COPYING
+	sha256sum: /home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt: No such file or directory
+	ERROR: src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt has wrong sha256 hash:
+	ERROR: expected: 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10
+	ERROR: got     :
+	ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
-So I guess your condition is inverted, and the patch was not
-sufficiently tested ? :-)
+Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
+[Thomas: add hash for lipi-toolkit license file, tweak commit log.]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash | 1 +
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
+index bb916c06d3..8d70cd803d 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
+@@ -7,3 +7,4 @@ sha256 5b330dcc770976a2cfb8d85711d72a57c9764c1a9efb889c91e81f6071bbbf9b  qtvirtu
+ # Hashes for license files:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+ sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10 src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
++sha256 6148d2793ca4e62ba3935a27bd3e46971a5d7c871dbe8f2687a867bd2c2589fb src/virtualkeyboard/3rdparty/lipi-toolkit/license.txt
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index cbe24d27dc..8d26394c96 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -16,7 +16,9 @@ QT5VIRTUALKEYBOARD_DEPENDENCIES = qt5base qt5declarative qt5svg
+ QT5VIRTUALKEYBOARD_INSTALL_STAGING = YES
+ 
+ QT5VIRTUALKEYBOARD_LICENSE = GPL-3.0
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5VIRTUALKEYBOARD_LICENSE_FILES = LICENSE.GPL3
++endif
+ 
+ QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS = $(call qstrip,$(BR2_PACKAGE_QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS))
+ ifneq ($(strip $(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+@@ -44,8 +46,12 @@ ifeq ($(BR2_PACKAGE_QT5VIRTUALKEYBOARD_HANDWRITING),y)
+ QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
+ QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+=handwriting
+ QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), MIT (lipi-toolkit)
++ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
++QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/license.txt
++else
+ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
+ endif
++endif
+ 
+ ifdef QT5VIRTUALKEYBOARD_3RDPARTY_PARTS
+ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS
