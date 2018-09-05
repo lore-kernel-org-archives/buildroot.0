@@ -1,53 +1,140 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 5 Sep 2018 13:42:23 +0300
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: Set MAKE_ENV for kconfig
- build system
-In-Reply-To: <20180905094940.24461-1-thomas.preston@codethink.co.uk>
-References: <20180905094940.24461-1-thomas.preston@codethink.co.uk>
-Message-ID: <20180905104223.3pyf6rdoaptg34rm@sapphire.tkos.co.il>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 5 Sep 2018 12:50:24 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] boost: fix static detection of lock-free atomic ints
+In-Reply-To: <20180905091910.535af5d3@windsurf>
+References: <20180904222820.22186-1-fontaine.fabrice@gmail.com>
+ <20180905091910.535af5d3@windsurf>
+Message-ID: <CAPi7W83yovHfBUXr9Z+MmSzd8uraeVYvMz=LAXVVS++dA432LQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Dear Thomas,
+Le mer. 5 sept. 2018 ? 09:19, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-On Wed, Sep 05, 2018 at 10:49:40AM +0100, Thomas Preston wrote:
-> U-Boot fails to build in gitlab CI context because the kconfig-package
-> build stage is unable to find bison for flex even though they are
-> installed in BR_BINARIES_DIR.
-> 
-> To fix this, set UBOOT_MAKE_ENV so that UBOOT_KCONFIG_MAKE uses the
-> correct PATH.
-> 
-> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
-> ---
->  boot/uboot/uboot.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index bddafe234d..36428e65fe 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -449,6 +449,9 @@ endif # BR2_TARGET_UBOOT && BR_BUILDING
->  ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
->  $(eval $(generic-package))
->  else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
-> +UBOOT_MAKE_ENV = \
-> +	$(TARGET_MAKE_ENV) \
-> +	BR_BINARIES_DIR=$(BINARIES_DIR)
+> Hello,
+>
+> Thanks for investigating this issue, I know what it takes to dive into
+> the Boost build system, however, I am a bit confused by what's
+> happening.
+>
+> On Wed,  5 Sep 2018 00:28:20 +0200, Fabrice Fontaine wrote:
+> > When build statically, boost is unable to detect lock-free atomics ints
+> > because it tries to link dynamically, see
+> > output/build/boost-1.67.0/bin.v2/config.log (with -d5 option):
+> >
+> > Using shell: /bin/sh -c
+> >     argv[0] = '/bin/sh'
+> >     argv[1] = '-c'
+> >     argv[2] = '
+> >     "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"
+>  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
+>  -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline
+> -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter
+> -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1
+> -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o
+> "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o"
+> "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
+> > '
+> > gcc.compile.c++
+> bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o
+> >
+> >     "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"
+>  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
+>  -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline
+> -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter
+> -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1
+> -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o
+> "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o"
+> "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
+>
+> So here, it is compiling (no linking) the
+> has_atomic_flag_lockfree_test.cpp test file into its corresponding
+> object file. It does not use -shared at this point.
+>
+> > 0.033561 sec system; 0.126314 sec user; 288.682473 sec clock
+> > gcc.compile.c++
+> bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o
+> >
+> >     "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"
+>  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os
+>  -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline
+> -Wall -pedantic -g  -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1  -I"."
+> -c -o
+> "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"
+> "libs/system/src/error_code.cpp"
+>
+> Here, it also compiles error_code.cpp into error_code.o, which I'm not
+> sure how it is related to the atomic stuff.
 
-I can't find any reference to BR_BINARIES_DIR in U-Boot related Buildroot 
-makefile code, or in current U-Boot source tree. How is this going to work?
 
-baruch
+> > 0.084060 sec system; 0.644133 sec user; 8.858824 sec clock
+> > SEM: <s>gcc-link-semaphore now used by
+> <pbin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi>libboost_system.so.1.67.0
+> > Using shell: /bin/sh -c
+> >     argv[0] = '/bin/sh'
+> >     argv[1] = '-c'
+> >     argv[2] = '
+> >     "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o
+> "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0"
+> -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group
+> "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"
+> -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g
+> -Wl,-elf2flt -static
+>
+> And here it tries to produce a shared library,
+> libboost_system.so.1.67.0, which just the error_code.o object file in
+> it ?
+>
 
->  UBOOT_KCONFIG_DEPENDENCIES = \
->  	$(BR2_BISON_HOST_DEPENDENCY) \
->  	$(BR2_FLEX_HOST_DEPENDENCY)
+> Questions:
+>
+>  - Why is Boost trying to _produce_ a shared library ?
+>
+From my understanding and thanks to your helpfull comments, I think I
+understand better the issue.
+The exe directive is after the "project boost/thread" statement in
+libs/thread/build/Jamfile.v2, so bjam assumes that boost_system is needed
+and tries to build it even if I don't know why it uses the default shared
+linking mode (perhaps because the exe statement is executed before
+boost/thread retrieve the user configuration).
+So I tried to move the exe directive in the beginning of the file as
+boost_system is not needed to check atomics and it seems to work, I will
+send a v3 and get the feedback from the upstream project.
 
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+>   - How is producing a shared library from the error_code.o object file
+>    related to testing the availability of lock-free atomics ?
+>
+> > +# When detecting features such as lockfree atomic ints, boost does not
+> take into
+> > +# account the configuration provided by the user. Indeed, boost does
+> not specify
+> > +# any value and as a result the default value (shared) is used
+> > +define BOOST_FIX_STATIC_FEATURES_DETECTION
+> > +$(SED)
+> 's/has_atomic_flag_lockfree_test.cpp/has_atomic_flag_lockfree_test.cpp :
+> <link>static <runtime-link>static/g;' \
+> > +             $(@D)/libs/thread/build/Jamfile.v2
+> > +endef
+>
+> Have you reported the issue upstream to see what they have to say ?
+
+
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+Best Regards,
+
+Fabrice
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180905/214695ba/attachment.html>
