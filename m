@@ -1,64 +1,94 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Sep 2018 23:44:55 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: Fix file order list maintained
- by me
-Message-ID: <20180905214426.C3B3A82971@busybox.osuosl.org>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Wed, 5 Sep 2018 23:45:47 +0200
+Subject: [Buildroot] [PATCH v3 1/3] Makefile: add tainting support
+In-Reply-To: <20180905213727.56f5fecc@windsurf>
+References: <1536163596-5310-1-git-send-email-angelo@amarulasolutions.com>
+ <1536163596-5310-2-git-send-email-angelo@amarulasolutions.com>
+ <20180905213727.56f5fecc@windsurf>
+Message-ID: <CA+_SqVZcTc2m4A9NiumRtPAd3B7cyZ7Od0Xf_SfQ9dcUqgXTvg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f0372f9ca8f3c362c9def3ef03dc73e9ee741b0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Files list maintained by me in DEVELOPERS file is not
-in proper order, fix it with ascending order.
+On Wed, Sep 5, 2018 at 9:37 PM, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> Hello,
+>
+> +Yann/Arnout in Cc.
+>
+> On Wed,  5 Sep 2018 18:06:34 +0200, Angelo Compagnucci wrote:
+>
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index 91b61c6..bcb4acd 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -551,6 +551,10 @@ ifndef $(2)_REDISTRIBUTE
+>>   endif
+>>  endif
+>>
+>> +ifdef $(2)_TAINTS
+>> +BR2_TAINTED_BY+=$$($(2)_RAWNAME)
+>> +endif
+>
+> I was almost going to apply and push this, but then I found a fairly
+> major problem. With your implementation, as soon as a package sets
+> <pkg>_TAINTS = YES, it will be part of the BR2_TAINTED_BY list,
+> regardless of whether the package is enabled or not.
+>
+> It happens to work OK with nodejs, because the NODEJS_TAINTS = YES is
+> inside a condition that NODEJS_MODULES_LIST != "". However, if you put
+> NODEJS_TAINTS = YES outside of that condition in nodejs.mk, you will
+> see that the build is always tainted by nodejs, regardless of whether
+> nodejs is enabled or not. Not good.
 
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Thank you so much for finding this.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3f1f491fb7..2a5c8dc786 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -904,8 +904,6 @@ F:	board/amarula/
- F:	board/asus/
- F:	board/bananapi/
- F:	board/engicam/
--F:	configs/amarula_vyasa_rk3288_defconfig
--F:	configs/asus_tinker_rk3288_defconfig
- F:	board/friendlyarm/nanopi-a64/
- F:	board/friendlyarm/nanopi-neo2/
- F:	board/olimex/a64-olinuxino/
-@@ -914,8 +912,15 @@ F:	board/orangepi/orangepi-prime/
- F:	board/orangepi/orangepi-win/
- F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
-+F:	configs/amarula_vyasa_rk3288_defconfig
-+F:	configs/asus_tinker_rk3288_defconfig
- F:	configs/bananapi_m1_defconfig
- F:	configs/bananapi_m64_defconfig
-+F:	configs/engicam_imx6qdl_icore_defconfig
-+F:	configs/engicam_imx6qdl_icore_qt5_defconfig
-+F:	configs/engicam_imx6qdl_icore_rqs_defconfig
-+F:	configs/engicam_imx6ul_geam_defconfig
-+F:	configs/engicam_imx6ul_isiot_defconfig
- F:	configs/friendlyarm_nanopi_a64_defconfig
- F:	configs/friendlyarm_nanopi_neo2_defconfig
- F:	configs/olimex_a64_olinuxino_defconfig
-@@ -925,11 +930,6 @@ F:	configs/orangepi_win_defconfig
- F:	configs/orangepi_zero_plus2_defconfig
- F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
--F:	configs/engicam_imx6qdl_icore_defconfig
--F:	configs/engicam_imx6qdl_icore_qt5_defconfig
--F:	configs/engicam_imx6qdl_icore_rqs_defconfig
--F:	configs/engicam_imx6ul_geam_defconfig
--F:	configs/engicam_imx6ul_isiot_defconfig
- 
- N:	James Knight <james.knight@rockwellcollins.com>
- F:	package/atkmm/
+> This can easily be fixed by moving the BR2_TAINTED_BY += line inside
+> the:
+>
+>   ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+>
+> condition, which is true only when the package is really enabled.
+
+Yes, it works like a charm!
+
+> However, this only works for target packages. What about host
+> packages ? Can they taint the build ? If so, how do we handle that ?
+>
+> When I was about to apply, I had added something like this in
+> pkg-generic.mk:
+>
+> ifndef $(2)_TAINTS
+>  ifdef $(3)_TAINTS
+>   $(2)_TAINTS = $$($(3)_TAINTS)
+>  endif
+> endif
+>
+> so that HOST_<pkg>_TAINTS is automatically defined to the same value as
+> <pkg>_TAINTS. However, we have no way to know if a host package is
+> enabled or not, since most host packages don't have any
+> corresponding Config.in option.
+>
+> So: do we care about host packages for "tainting" ? If we do care, how
+> do we handle this ?
+
+I think we can demand the decision to when we will have a host package
+that needs tainting support.
+
+Moreover, I don't think the demand for host packages that needs
+tainting support will be high in the future.
+
+I'll send an updated patch.
+
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
