@@ -1,51 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Sep 2018 23:11:34 +0200
-Subject: [Buildroot] [PATCH v1 3/4] qt5virtualkeyboard: fix legal-info
- with 5.6
-In-Reply-To: <20180903123747.5234-4-gael.portay@savoirfairelinux.com>
-References: <20180903123747.5234-1-gael.portay@savoirfairelinux.com>
- <20180903123747.5234-4-gael.portay@savoirfairelinux.com>
-Message-ID: <20180905231134.46b70011@windsurf>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 5 Sep 2018 16:27:17 -0500
+Subject: [Buildroot] [PATCH] package/xen: disable tools/qemu-xen/ opengl
+In-Reply-To: <CANQCQpaDnVs9tGEcHiM4c22tTH6wNQEE1S6spTxT-fbC6X1yvw@mail.gmail.com>
+References: <20180904191347.13857-1-matthew.weber@rockwellcollins.com>
+ <87r2i9asam.fsf@dell.be.48ers.dk>
+ <CANQCQpaDnVs9tGEcHiM4c22tTH6wNQEE1S6spTxT-fbC6X1yvw@mail.gmail.com>
+Message-ID: <CANQCQpaCg0z1vcTXOrsiHQEZ0dQc5V70ixz8fQuoYymVRam1tg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ga?l,
+Thomas,
 
-On Mon,  3 Sep 2018 08:37:46 -0400, Ga?l PORTAY wrote:
-> qt5virtualkeyboard 2.0 (shipped with Qt 5.6) doesn't contain any license
-> files.
 
-"any license files" is not true, because there's the lipi-toolkit
-license file. However, there is no "main" license file with the GPLv3
-text. I've fixed that up.
+On Tue, Sep 4, 2018 at 10:43 PM Matthew Weber
+<matthew.weber@rockwellcollins.com> wrote:
+>
+> Peter,
+> On Tue, Sep 4, 2018 at 4:04 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+> >
+> > >>>>> "Matt" == Matt Weber <matthew.weber@rockwellcollins.com> writes:
+> >
+> >  > Resolves:
+> >  > http://autobuild.buildroot.net/results/a7f2bf387458c2f0db6a4b555c51004f321f9320
+> >
+> >  > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> >
+> > Committed, thanks.
+> >
+> > It looks like we have a similar issue for qemu:
+> >
+> > http://autobuild.buildroot.net/results/827/827864f987cb5e82786e0a74be831aaad4d26610/build-end.log
+>
+> I can't reproduce that one.  I tried on a Ubuntu 14 and 16 machine.
+>
 
-> Conditionally remove LICENSE.GPL3 from QT5VIRTUALKEYBOARD_LICENSE_FILES
-> when Qt major version is set to 5.6.
-
-Do we have any indication that the license is GPLv3 for the 2.0 version
-of qt5virtualkeyboard ?
-
-> Also, the lipi-toolkit has a different filename between both supported
-> Qt major version (5.6 and latest).
-> 
-> Conditionally set the license in QT5VIRTUALKEYBOARD_LICENSE_FILES for
-> lipi-toolkit according to the Qt major version used.
-
-You forgot to add the hash for this license file.
-
-I've fixed the commit log and added the hash for the 2.0 version of the
-lipi-toolkit license file, and applied to master.
-
-It would be nice to get some confirmation that the license is really
-GPLv3.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Would you mind checking on your builder?
