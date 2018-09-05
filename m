@@ -1,58 +1,93 @@
-From: Thomas Preston <thomas.preston@codethink.co.uk>
-Date: Wed, 5 Sep 2018 12:03:07 +0100
-Subject: [Buildroot] [PATCH 1/1] boot/uboot: Set MAKE_ENV for kconfig
- build system
-In-Reply-To: <20180905104223.3pyf6rdoaptg34rm@sapphire.tkos.co.il>
-References: <20180905094940.24461-1-thomas.preston@codethink.co.uk>
- <20180905104223.3pyf6rdoaptg34rm@sapphire.tkos.co.il>
-Message-ID: <0cf1465d-dab8-000a-0739-20d4ff5fee00@codethink.co.uk>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed,  5 Sep 2018 13:07:19 +0200
+Subject: [Buildroot] [PATCH] qt5location: fix build failure due to GCC < 5.x
+ bug in implicit casts
+Message-ID: <20180905110719.31743-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 05/09/18 11:42, Baruch Siach wrote:
-> Hi Thomas,
-> 
-> On Wed, Sep 05, 2018 at 10:49:40AM +0100, Thomas Preston wrote:
->> U-Boot fails to build in gitlab CI context because the kconfig-package
->> build stage is unable to find bison for flex even though they are
->> installed in BR_BINARIES_DIR.
->>
->> To fix this, set UBOOT_MAKE_ENV so that UBOOT_KCONFIG_MAKE uses the
->> correct PATH.
->>
->> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
->> ---
->>   boot/uboot/uboot.mk | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
->> index bddafe234d..36428e65fe 100644
->> --- a/boot/uboot/uboot.mk
->> +++ b/boot/uboot/uboot.mk
->> @@ -449,6 +449,9 @@ endif # BR2_TARGET_UBOOT && BR_BUILDING
->>   ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
->>   $(eval $(generic-package))
->>   else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
->> +UBOOT_MAKE_ENV = \
->> +	$(TARGET_MAKE_ENV) \
->> +	BR_BINARIES_DIR=$(BINARIES_DIR)
-> 
-> I can't find any reference to BR_BINARIES_DIR in U-Boot related Buildroot
-> makefile code, or in current U-Boot source tree. How is this going to work?
-> 
+GCC < 5.x has some bug in implicit casts, this leads to build failure.
+In particular QPointer<QGeoMap> in m_map QDeclarativeGeoMap class, when
+passed to connect(m_map, ...) should directly cast to m_map.data().
 
-Ah, it is TARGET_MAKE_ENV which provides the PATH fix, BR_BINARIES_DIR was added by mistake (I copied it from the linux/linux.mk). Should I resubmit?
+Add reworked patch referred on QTBUG-69512:
+https://bugreports.qt.io/browse/QTBUG-69512
 
-You should be able to reproduce the error with:
+Fixes:
+http://autobuild.buildroot.org/results/dc5/dc5c354f3aae54b77dad74ad44aca6d12425a457/
+http://autobuild.buildroot.org/results/3ab/3ab6f79a36543fa677555bc9ec3500baa46ab0f8/
+http://autobuild.buildroot.org/results/8b5/8b5531e44c4f4258c950902b2cd92d1ac8a8491e/
+http://autobuild.buildroot.org/results/089/089d03ab14a7c70e465cce891506a082049f2998/
+http://autobuild.buildroot.org/results/da8/da87ca470b22d599bb25998af8f25136921f35a7/
+http://autobuild.buildroot.org/results/5fe/5fe91fd762c5d4eda01378947b13f7ffc084a8be/
+http://autobuild.buildroot.org/results/a84/a84182145122935c8f10105818dbf0e3aa23fd11/
+http://autobuild.buildroot.org/results/5b9/5b9106351a04646f42697215ed497e09c62c12fa/
+http://autobuild.buildroot.org/results/397/397acc3f5d4998a8d632749ef7d21533c35d501a/
+http://autobuild.buildroot.org/results/b18/b186ec0e297d6857a9e0a6a063e476b5049ccf93/
+http://autobuild.buildroot.org/results/bf2/bf241beeb1ce10eec99d247cdd331870c08e0ac8/
 
-	$ docker run -u1002 -v $PWD:/home/br-user -it buildroot/base make V=1 uboot
-	...
-	  bison -oscripts/kconfig/zconf.tab.c -t -l scripts/kconfig/zconf.y
-	/bin/sh: 1: bison: not found
-	scripts/Makefile.lib:228: recipe for target 'scripts/kconfig/zconf.tab.c' failed
-	...
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ ...tivegeomap-fix-building-with-GCC-5.x.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/qt5/qt5location/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
 
-The above patch adds `PATH="/home/br-user/output/host/bin`, which fixes the error.
+diff --git a/package/qt5/qt5location/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch b/package/qt5/qt5location/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
+new file mode 100644
+index 0000000000..f893c33d50
+--- /dev/null
++++ b/package/qt5/qt5location/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
+@@ -0,0 +1,48 @@
++From ad78b1a671edac369ede86bff376ec8af2cafbf2 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Wed, 5 Sep 2018 12:51:41 +0200
++Subject: [PATCH] qdeclarativegeomap: fix building with GCC < 5.x
++
++With GCC < 5.x implicit casts don't work as expected, in particular
++QPointer<QGeoMap> in m_map QDeclarativeGeoMap class when passed to
++connect(m_map, ...) should directly cast to m_map.data().
++
++Workaround this using connect(m_map.data(), ...).
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ src/location/declarativemaps/qdeclarativegeomap.cpp | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/location/declarativemaps/qdeclarativegeomap.cpp b/src/location/declarativemaps/qdeclarativegeomap.cpp
++index 09f9d01c..dc5a32ed 100644
++--- a/src/location/declarativemaps/qdeclarativegeomap.cpp
+++++ b/src/location/declarativemaps/qdeclarativegeomap.cpp
++@@ -694,11 +694,11 @@ void QDeclarativeGeoMap::mappingManagerInitialized()
++     QImage copyrightImage;
++     if (!m_initialized && width() > 0 && height() > 0) {
++         QMetaObject::Connection copyrightStringCatcherConnection =
++-                connect(m_map,
+++                connect(m_map.data(),
++                         QOverload<const QString &>::of(&QGeoMap::copyrightsChanged),
++                         [&copyrightString](const QString &copy){ copyrightString = copy; });
++         QMetaObject::Connection copyrightImageCatcherConnection =
++-                connect(m_map,
+++                connect(m_map.data(),
++                         QOverload<const QImage &>::of(&QGeoMap::copyrightsChanged),
++                         [&copyrightImage](const QImage &copy){ copyrightImage = copy; });
++         m_map->setViewportSize(QSize(width(), height()));
++@@ -719,8 +719,8 @@ void QDeclarativeGeoMap::mappingManagerInitialized()
++         emit m_map->copyrightsChanged(copyrightImage);
++ 
++ 
++-    connect(m_map, &QGeoMap::sgNodeChanged, this, &QQuickItem::update);
++-    connect(m_map, &QGeoMap::cameraCapabilitiesChanged, this, &QDeclarativeGeoMap::onCameraCapabilitiesChanged);
+++    connect(m_map.data(), &QGeoMap::sgNodeChanged, this, &QQuickItem::update);
+++    connect(m_map.data(), &QGeoMap::cameraCapabilitiesChanged, this, &QDeclarativeGeoMap::onCameraCapabilitiesChanged);
++ 
++     // This prefetches a buffer around the map
++     m_map->prefetchData();
++-- 
++2.17.1
++
+-- 
+2.17.1
