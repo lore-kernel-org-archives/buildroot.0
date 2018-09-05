@@ -1,37 +1,37 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed,  5 Sep 2018 18:06:33 +0200
-Subject: [Buildroot] [PATCH v3 0/3] Add tainting support to buildroot
-Message-ID: <1536163596-5310-1-git-send-email-angelo@amarulasolutions.com>
+Date: Wed,  5 Sep 2018 18:06:36 +0200
+Subject: [Buildroot] [PATCH v3 3/3] package/nodejs: taint the build on
+ external modules
+In-Reply-To: <1536163596-5310-1-git-send-email-angelo@amarulasolutions.com>
+References: <1536163596-5310-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <1536163596-5310-4-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Packages that need to resolve dependencies internally
-and use a package manager would harm the reproducibility
-of a build, moreover they escape the legal infrastructure
-not giving enough informations on licensing.
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-This patch adds a tainting mechanism in the form of a
-variable FOO_TAINTS that can be used to signal that
-a package harms the reproducibility or licensing under
-certain conditions.
+This patch enables the tainting of the build when an
+external module is added.
 
-This opens the door to include per language dependency
-managers in buildroot.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ package/nodejs/nodejs.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Angelo Compagnucci (3):
-  Makefile: add tainting support
-  docs/manual: adding infos about tainting
-  package/nodejs: taint the build on external modules
-
- Makefile                                | 10 ++++++++++
- docs/manual/adding-packages-generic.txt |  6 ++++++
- docs/manual/legal-notice.txt            | 12 ++++++++++++
- package/nodejs/nodejs.mk                |  1 +
- package/pkg-generic.mk                  |  8 ++++++++
- 5 files changed, 37 insertions(+)
-
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index e2c94ba..322a1ec 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -160,6 +160,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
+ # We can only call NPM if there's something to install.
+ #
+ ifneq ($(NODEJS_MODULES_LIST),)
++NODEJS_TAINTS = YES
+ define NODEJS_INSTALL_MODULES
+ 	# If you're having trouble with module installation, adding -d to the
+ 	# npm install call below and setting npm_config_rollback=false can both
 -- 
 2.7.4
