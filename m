@@ -1,36 +1,45 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu,  6 Sep 2018 00:00:08 +0200
-Subject: [Buildroot] [PATCH v4 3/3] package/nodejs: taint the build on
- external modules
-In-Reply-To: <1536184808-9085-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1536184808-9085-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1536184808-9085-4-git-send-email-angelo.compagnucci@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 6 Sep 2018 00:01:05 +0200
+Subject: [Buildroot] [PATCH v3 1/3] Makefile: add tainting support
+In-Reply-To: <CA+_SqVZcTc2m4A9NiumRtPAd3B7cyZ7Od0Xf_SfQ9dcUqgXTvg@mail.gmail.com>
+References: <1536163596-5310-1-git-send-email-angelo@amarulasolutions.com>
+ <1536163596-5310-2-git-send-email-angelo@amarulasolutions.com>
+ <20180905213727.56f5fecc@windsurf>
+ <CA+_SqVZcTc2m4A9NiumRtPAd3B7cyZ7Od0Xf_SfQ9dcUqgXTvg@mail.gmail.com>
+Message-ID: <20180906000105.021f9ccc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch enables the tainting of the build when an
-external module is added.
+Hello,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
- package/nodejs/nodejs.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, 5 Sep 2018 23:45:47 +0200, Angelo Compagnucci wrote:
 
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index e2c94ba..322a1ec 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -160,6 +160,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
- # We can only call NPM if there's something to install.
- #
- ifneq ($(NODEJS_MODULES_LIST),)
-+NODEJS_TAINTS = YES
- define NODEJS_INSTALL_MODULES
- 	# If you're having trouble with module installation, adding -d to the
- 	# npm install call below and setting npm_config_rollback=false can both
+> > So: do we care about host packages for "tainting" ? If we do care, how
+> > do we handle this ?  
+> 
+> I think we can demand the decision to when we will have a host package
+> that needs tainting support.
+> 
+> Moreover, I don't think the demand for host packages that needs
+> tainting support will be high in the future.
+
+Then we need to make that explicit:
+
+ifeq ($$($(2)_TYPE),host)
+ifneq ($$($(2)_TAINTS),)
+$$(error "Host package $(1) has $(2)_TAINTS set: not supported)
+endif
+endif
+
+of course, please check that this really works as expected.
+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
