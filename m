@@ -1,93 +1,65 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed,  5 Sep 2018 13:07:19 +0200
-Subject: [Buildroot] [PATCH] qt5location: fix build failure due to GCC < 5.x
- bug in implicit casts
-Message-ID: <20180905110719.31743-1-giulio.benetti@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Sep 2018 13:53:07 +0200
+Subject: [Buildroot] [PATCH v2] qt5location: fix build failure due to
+ missing qt5base gui dependency
+In-Reply-To: <20180905090307.89484-1-giulio.benetti@micronovasrl.com>
+References: <20180905090307.89484-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20180905135307.051cd136@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GCC < 5.x has some bug in implicit casts, this leads to build failure.
-In particular QPointer<QGeoMap> in m_map QDeclarativeGeoMap class, when
-passed to connect(m_map, ...) should directly cast to m_map.data().
+Hello,
 
-Add reworked patch referred on QTBUG-69512:
-https://bugreports.qt.io/browse/QTBUG-69512
+On Wed,  5 Sep 2018 11:03:07 +0200, Giulio Benetti wrote:
+> qt5location fails to build due to missing Qt5 Gui module.
+> In configure.json features.opengl is referred, but it is available only
+> if qt5base gui submodule is built.
+> 
+> Add BR2_PACKAGE_QT5BASE_GUI to qt5location Config.in to assure gui
+> submodule is built before qt5location.
+> 
+> Fixes:
+> http://autobuild.buildroot.org/results/1e1/1e12a819750c677c9ef204a324c8bf06212e5135/
+> http://autobuild.buildroot.org/results/223/223ec6565beba1ca73d4ff488296feec53656b40/
+> http://autobuild.buildroot.org/results/84f/84fe1c84e3537167ee3791e83c9fe2cc2805ccb5/
+> http://autobuild.buildroot.org/results/9c9/9c96d2106222e623a379f9995bd059725eb27769/
+> http://autobuild.buildroot.org/results/fa0/fa01513d28d896ca8819966c5b1ed5c35283e92f/
+> http://autobuild.buildroot.org/results/5d7/5d7333470c31b83c697218382dc77f74af86c666/
+> http://autobuild.buildroot.org/results/db7/db7b4c61bb41d32e0f7960c194588cd1559ff3f7/
+> http://autobuild.buildroot.org/results/2b7/2b71f186b8d67c4805393c9c016d641893d46220/
+> http://autobuild.buildroot.org/results/1e1/1e12a819750c677c9ef204a324c8bf06212e5135/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+> Changes V1->V2:
+> * add missing Fixes: list in commit log
+> 
+>  package/qt5/qt5location/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/qt5/qt5location/Config.in b/package/qt5/qt5location/Config.in
+> index e1778182a0..7c39979eff 100644
+> --- a/package/qt5/qt5location/Config.in
+> +++ b/package/qt5/qt5location/Config.in
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_QT5LOCATION
+>  	bool "qt5location"
+>  	select BR2_PACKAGE_QT5BASE
+> +	select BR2_PACKAGE_QT5BASE_GUI
 
-Fixes:
-http://autobuild.buildroot.org/results/dc5/dc5c354f3aae54b77dad74ad44aca6d12425a457/
-http://autobuild.buildroot.org/results/3ab/3ab6f79a36543fa677555bc9ec3500baa46ab0f8/
-http://autobuild.buildroot.org/results/8b5/8b5531e44c4f4258c950902b2cd92d1ac8a8491e/
-http://autobuild.buildroot.org/results/089/089d03ab14a7c70e465cce891506a082049f2998/
-http://autobuild.buildroot.org/results/da8/da87ca470b22d599bb25998af8f25136921f35a7/
-http://autobuild.buildroot.org/results/5fe/5fe91fd762c5d4eda01378947b13f7ffc084a8be/
-http://autobuild.buildroot.org/results/a84/a84182145122935c8f10105818dbf0e3aa23fd11/
-http://autobuild.buildroot.org/results/5b9/5b9106351a04646f42697215ed497e09c62c12fa/
-http://autobuild.buildroot.org/results/397/397acc3f5d4998a8d632749ef7d21533c35d501a/
-http://autobuild.buildroot.org/results/b18/b186ec0e297d6857a9e0a6a063e476b5049ccf93/
-http://autobuild.buildroot.org/results/bf2/bf241beeb1ce10eec99d247cdd331870c08e0ac8/
+To me, it looks weird that the location services need the GUI support.
+Isn't it just the qt5location examples that need GUI support, or
+something like that ?
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- ...tivegeomap-fix-building-with-GCC-5.x.patch | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/qt5/qt5location/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
+Also, having BR2_PACKAGE_QT5BASE_GUI does not guarantee that OpenGL
+support is available, so I'm not sure this is going to fix the error in
+all cases.
 
-diff --git a/package/qt5/qt5location/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch b/package/qt5/qt5location/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
-new file mode 100644
-index 0000000000..f893c33d50
---- /dev/null
-+++ b/package/qt5/qt5location/0001-qdeclarativegeomap-fix-building-with-GCC-5.x.patch
-@@ -0,0 +1,48 @@
-+From ad78b1a671edac369ede86bff376ec8af2cafbf2 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+Date: Wed, 5 Sep 2018 12:51:41 +0200
-+Subject: [PATCH] qdeclarativegeomap: fix building with GCC < 5.x
-+
-+With GCC < 5.x implicit casts don't work as expected, in particular
-+QPointer<QGeoMap> in m_map QDeclarativeGeoMap class when passed to
-+connect(m_map, ...) should directly cast to m_map.data().
-+
-+Workaround this using connect(m_map.data(), ...).
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+ src/location/declarativemaps/qdeclarativegeomap.cpp | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/location/declarativemaps/qdeclarativegeomap.cpp b/src/location/declarativemaps/qdeclarativegeomap.cpp
-+index 09f9d01c..dc5a32ed 100644
-+--- a/src/location/declarativemaps/qdeclarativegeomap.cpp
-++++ b/src/location/declarativemaps/qdeclarativegeomap.cpp
-+@@ -694,11 +694,11 @@ void QDeclarativeGeoMap::mappingManagerInitialized()
-+     QImage copyrightImage;
-+     if (!m_initialized && width() > 0 && height() > 0) {
-+         QMetaObject::Connection copyrightStringCatcherConnection =
-+-                connect(m_map,
-++                connect(m_map.data(),
-+                         QOverload<const QString &>::of(&QGeoMap::copyrightsChanged),
-+                         [&copyrightString](const QString &copy){ copyrightString = copy; });
-+         QMetaObject::Connection copyrightImageCatcherConnection =
-+-                connect(m_map,
-++                connect(m_map.data(),
-+                         QOverload<const QImage &>::of(&QGeoMap::copyrightsChanged),
-+                         [&copyrightImage](const QImage &copy){ copyrightImage = copy; });
-+         m_map->setViewportSize(QSize(width(), height()));
-+@@ -719,8 +719,8 @@ void QDeclarativeGeoMap::mappingManagerInitialized()
-+         emit m_map->copyrightsChanged(copyrightImage);
-+ 
-+ 
-+-    connect(m_map, &QGeoMap::sgNodeChanged, this, &QQuickItem::update);
-+-    connect(m_map, &QGeoMap::cameraCapabilitiesChanged, this, &QDeclarativeGeoMap::onCameraCapabilitiesChanged);
-++    connect(m_map.data(), &QGeoMap::sgNodeChanged, this, &QQuickItem::update);
-++    connect(m_map.data(), &QGeoMap::cameraCapabilitiesChanged, this, &QDeclarativeGeoMap::onCameraCapabilitiesChanged);
-+ 
-+     // This prefetches a buffer around the map
-+     m_map->prefetchData();
-+-- 
-+2.17.1
-+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
