@@ -1,156 +1,58 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  5 Sep 2018 12:51:27 +0200
-Subject: [Buildroot] [PATCH v3,
- 1/1] boost: fix static detection of lock-free atomic ints
-Message-ID: <20180905105127.31591-1-fontaine.fabrice@gmail.com>
+From: Thomas Preston <thomas.preston@codethink.co.uk>
+Date: Wed, 5 Sep 2018 12:03:07 +0100
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: Set MAKE_ENV for kconfig
+ build system
+In-Reply-To: <20180905104223.3pyf6rdoaptg34rm@sapphire.tkos.co.il>
+References: <20180905094940.24461-1-thomas.preston@codethink.co.uk>
+ <20180905104223.3pyf6rdoaptg34rm@sapphire.tkos.co.il>
+Message-ID: <0cf1465d-dab8-000a-0739-20d4ff5fee00@codethink.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When build statically, boost is unable to detect lock-free atomics ints
-because it tries to link dynamically, see
-output/build/boost-1.67.0/bin.v2/config.log (with -d5 option):
+On 05/09/18 11:42, Baruch Siach wrote:
+> Hi Thomas,
+> 
+> On Wed, Sep 05, 2018 at 10:49:40AM +0100, Thomas Preston wrote:
+>> U-Boot fails to build in gitlab CI context because the kconfig-package
+>> build stage is unable to find bison for flex even though they are
+>> installed in BR_BINARIES_DIR.
+>>
+>> To fix this, set UBOOT_MAKE_ENV so that UBOOT_KCONFIG_MAKE uses the
+>> correct PATH.
+>>
+>> Signed-off-by: Thomas Preston <thomas.preston@codethink.co.uk>
+>> ---
+>>   boot/uboot/uboot.mk | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+>> index bddafe234d..36428e65fe 100644
+>> --- a/boot/uboot/uboot.mk
+>> +++ b/boot/uboot/uboot.mk
+>> @@ -449,6 +449,9 @@ endif # BR2_TARGET_UBOOT && BR_BUILDING
+>>   ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_LEGACY),y)
+>>   $(eval $(generic-package))
+>>   else ifeq ($(BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG),y)
+>> +UBOOT_MAKE_ENV = \
+>> +	$(TARGET_MAKE_ENV) \
+>> +	BR_BINARIES_DIR=$(BINARIES_DIR)
+> 
+> I can't find any reference to BR_BINARIES_DIR in U-Boot related Buildroot
+> makefile code, or in current U-Boot source tree. How is this going to work?
+> 
 
-Using shell: /bin/sh -c
-    argv[0] = '/bin/sh'
-    argv[1] = '-c'
-    argv[2] = '
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
-'
-gcc.compile.c++ bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o
+Ah, it is TARGET_MAKE_ENV which provides the PATH fix, BR_BINARIES_DIR was added by mistake (I copied it from the linux/linux.mk). Should I resubmit?
 
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
+You should be able to reproduce the error with:
 
-0.033561 sec system; 0.126314 sec user; 288.682473 sec clock
-gcc.compile.c++ bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o
+	$ docker run -u1002 -v $PWD:/home/br-user -it buildroot/base make V=1 uboot
+	...
+	  bison -oscripts/kconfig/zconf.tab.c -t -l scripts/kconfig/zconf.y
+	/bin/sh: 1: bison: not found
+	scripts/Makefile.lib:228: recipe for target 'scripts/kconfig/zconf.tab.c' failed
+	...
 
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g  -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1  -I"." -c -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o" "libs/system/src/error_code.cpp"
-
-0.084060 sec system; 0.644133 sec user; 8.858824 sec clock
-SEM: <s>gcc-link-semaphore now used by <pbin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi>libboost_system.so.1.67.0
-Using shell: /bin/sh -c
-    argv[0] = '/bin/sh'
-    argv[1] = '-c'
-    argv[2] = '
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
-'
-gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0
-
-    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
-
-ld (ld-elf2flt): -shared used without passing a shared library ID
-collect2: error: ld a retourn? le statut de sortie 1
-0.003123 sec system; 0.004732 sec user; 15.646509 sec clock
-...failed gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0...
-
-Due to this wrong detection, boost_atomic is wrongly selected by
-boost_thread which cause a build failure on missing select
-
-To fix this, move the exe statement before the boost/thread project
-
-Fixes:
- - http://autobuild.buildroot.org/results/f46d38991385cbc2a4fa14eb31074e770cd79803
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v2 -> v3 (after review of Thomas Petazzoni):
- - Replace hack by a patch movin exe statement in the beginning of 
-   libs/thread/build/Jamfile.v2
-
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - Fix URL of build failure
-
- ...c-detection-of-lock-free-atomic-ints.patch | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
- create mode 100644 package/boost/0005-fix-static-detection-of-lock-free-atomic-ints.patch
-
-diff --git a/package/boost/0005-fix-static-detection-of-lock-free-atomic-ints.patch b/package/boost/0005-fix-static-detection-of-lock-free-atomic-ints.patch
-new file mode 100644
-index 0000000000..580a298056
---- /dev/null
-+++ b/package/boost/0005-fix-static-detection-of-lock-free-atomic-ints.patch
-@@ -0,0 +1,80 @@
-+From 48be99d20753ecab8817b030b95a7f1260aa777f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 5 Sep 2018 12:04:15 +0200
-+Subject: [PATCH 17/17] fix static detection of lock-free atomic ints
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+When build statically, boost is unable to detect lock-free atomics ints
-+because it tries to link dynamically with boost_system, see
-+output/build/boost-1.67.0/bin.v2/config.log (with -d5 option):
-+
-+Using shell: /bin/sh -c
-+    argv[0] = '/bin/sh'
-+    argv[1] = '-c'
-+    argv[2] = '
-+    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
-+'
-+gcc.compile.c++ bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o
-+
-+    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g -Wextra -Wno-long-long -Wno-unused-parameter -Wunused-function -pedantic -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1 -DBOOST_THREAD_BUILD_DLL=1  -I"." -c -o "bin.v2/libs/thread/build/gcc-6.4.0/debug/threading-multi/has_atomic_flag_lockfree_test.o" "libs/thread/src/../build/has_atomic_flag_lockfree_test.cpp"
-+
-+0.033561 sec system; 0.126314 sec user; 288.682473 sec clock
-+gcc.compile.c++ bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o
-+
-+    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -Wl,-elf2flt -static  -Wl,-elf2flt -static -fPIC -pthread -O0 -fno-inline -Wall -pedantic -g  -DBOOST_ALL_NO_LIB=1 -DBOOST_SYSTEM_DYN_LINK=1  -I"." -c -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o" "libs/system/src/error_code.cpp"
-+
-+0.084060 sec system; 0.644133 sec user; 8.858824 sec clock
-+SEM: <s>gcc-link-semaphore now used by <pbin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi>libboost_system.so.1.67.0
-+Using shell: /bin/sh -c
-+    argv[0] = '/bin/sh'
-+    argv[1] = '-c'
-+    argv[2] = '
-+    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
-+'
-+gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0
-+
-+    "/home/fabrice/buildroot/output/host/bin/arm-linux-g++"    -o "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0" -Wl,-h -Wl,libboost_system.so.1.67.0 -shared -Wl,--start-group "bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/error_code.o"  -Wl,-Bstatic  -Wl,-Bdynamic -lrt -Wl,--end-group -fPIC -pthread -g  -Wl,-elf2flt -static
-+
-+ld (ld-elf2flt): -shared used without passing a shared library ID
-+collect2: error: ld a retourn? le statut de sortie 1
-+0.003123 sec system; 0.004732 sec user; 15.646509 sec clock
-+...failed gcc.link.dll bin.v2/libs/system/build/gcc-6.4.0/debug/threading-multi/libboost_system.so.1.67.0...
-+
-+To fix this, move the exe statement before the boost/thread project
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/f46d38991385cbc2a4fa14eb31074e770cd79803
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/boostorg/thread/pull/231]
-+---
-+ build/Jamfile.v2 | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/libs/thread/build/Jamfile.v2 b/build/Jamfile.v2
-+index ce8c7f47..26d8b9c3 100644
-+--- a/libs/thread/build/Jamfile.v2
-++++ b/libs/thread/build/Jamfile.v2
-+@@ -38,6 +38,8 @@ import path ;
-+ import configure ; 
-+ import threadapi-feature ;
-+ 
-++exe has_atomic_flag_lockfree : ../build/has_atomic_flag_lockfree_test.cpp ;
-++
-+ project boost/thread
-+     : source-location ../src
-+     : requirements <threading>multi
-+@@ -141,8 +143,6 @@ project boost/thread
-+       <library>/boost/system//boost_system
-+     ;
-+ 
-+-exe has_atomic_flag_lockfree : ../build/has_atomic_flag_lockfree_test.cpp ; 
-+-
-+ rule tag ( name : type ? : property-set )
-+ {
-+     local result = $(name) ;
-+-- 
-+2.17.1
-+
--- 
-2.17.1
+The above patch adds `PATH="/home/br-user/output/host/bin`, which fixes the error.
