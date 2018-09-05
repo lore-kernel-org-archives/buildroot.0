@@ -1,94 +1,33 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 5 Sep 2018 23:45:47 +0200
-Subject: [Buildroot] [PATCH v3 1/3] Makefile: add tainting support
-In-Reply-To: <20180905213727.56f5fecc@windsurf>
-References: <1536163596-5310-1-git-send-email-angelo@amarulasolutions.com>
- <1536163596-5310-2-git-send-email-angelo@amarulasolutions.com>
- <20180905213727.56f5fecc@windsurf>
-Message-ID: <CA+_SqVZcTc2m4A9NiumRtPAd3B7cyZ7Od0Xf_SfQ9dcUqgXTvg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Sep 2018 23:46:32 +0200
+Subject: [Buildroot] [PATCH 1/4] DEVELOPERS: Fix file order list
+ maintained by me
+In-Reply-To: <1535963172-6664-1-git-send-email-jagan@amarulasolutions.com>
+References: <1535963172-6664-1-git-send-email-jagan@amarulasolutions.com>
+Message-ID: <20180905234632.31088798@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello Jagan,
 
-On Wed, Sep 5, 2018 at 9:37 PM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> +Yann/Arnout in Cc.
->
-> On Wed,  5 Sep 2018 18:06:34 +0200, Angelo Compagnucci wrote:
->
->> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
->> index 91b61c6..bcb4acd 100644
->> --- a/package/pkg-generic.mk
->> +++ b/package/pkg-generic.mk
->> @@ -551,6 +551,10 @@ ifndef $(2)_REDISTRIBUTE
->>   endif
->>  endif
->>
->> +ifdef $(2)_TAINTS
->> +BR2_TAINTED_BY+=$$($(2)_RAWNAME)
->> +endif
->
-> I was almost going to apply and push this, but then I found a fairly
-> major problem. With your implementation, as soon as a package sets
-> <pkg>_TAINTS = YES, it will be part of the BR2_TAINTED_BY list,
-> regardless of whether the package is enabled or not.
->
-> It happens to work OK with nodejs, because the NODEJS_TAINTS = YES is
-> inside a condition that NODEJS_MODULES_LIST != "". However, if you put
-> NODEJS_TAINTS = YES outside of that condition in nodejs.mk, you will
-> see that the build is always tainted by nodejs, regardless of whether
-> nodejs is enabled or not. Not good.
+On Mon,  3 Sep 2018 10:26:09 +0200, Jagan Teki wrote:
 
-Thank you so much for finding this.
+> -F:	configs/amarula_a64_relic_defconfig
 
-> This can easily be fixed by moving the BR2_TAINTED_BY += line inside
-> the:
->
->   ifeq ($$($$($(2)_KCONFIG_VAR)),y)
->
-> condition, which is true only when the package is really enabled.
+The support for this board is not merged yet. If you send patches that
+depend on other patches, you should send them all in a patch series.
 
-Yes, it works like a charm!
+But in this case, you should have rather based this patch series on
+master or next, and not on your branch that contains some unrelated
+work such as the Amarula A64 Relic board support.
 
-> However, this only works for target packages. What about host
-> packages ? Can they taint the build ? If so, how do we handle that ?
->
-> When I was about to apply, I had added something like this in
-> pkg-generic.mk:
->
-> ifndef $(2)_TAINTS
->  ifdef $(3)_TAINTS
->   $(2)_TAINTS = $$($(3)_TAINTS)
->  endif
-> endif
->
-> so that HOST_<pkg>_TAINTS is automatically defined to the same value as
-> <pkg>_TAINTS. However, we have no way to know if a host package is
-> enabled or not, since most host packages don't have any
-> corresponding Config.in option.
->
-> So: do we care about host packages for "tainting" ? If we do care, how
-> do we handle this ?
+Anyway, I've fixed this up, and applied to master. Thanks!
 
-I think we can demand the decision to when we will have a host package
-that needs tainting support.
-
-Moreover, I don't think the demand for host packages that needs
-tainting support will be high in the future.
-
-I'll send an updated patch.
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
