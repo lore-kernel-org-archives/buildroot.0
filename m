@@ -1,45 +1,67 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  5 Sep 2018 18:59:22 +0200
-Subject: [Buildroot] [PATCH/next 1/1] libidn2: bump to version 2.0.5
-Message-ID: <20180905165922.15363-1-fontaine.fabrice@gmail.com>
+Date: Wed,  5 Sep 2018 19:26:44 +0200
+Subject: [Buildroot] [PATCH 1/1] screen: fix rare build failure on T_N
+ undeclared
+Message-ID: <20180905172644.1871-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix a small typo in the first comment line of libidn2.hash
+/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/arm-none-linux-gnueabi-gcc -c -I. -I.  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DETCSCREENRC='"/usr/etc/screenrc"' -DSCREENENCODINGS='"/usr/share/screen/utf8encodings"' -DHAVE_CONFIG_H -DGIT_REV=\"\" \
+     -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  -D_GNU_SOURCE list_display.c
+In file included from screen.h:150:0,
+                 from list_display.c:36:
+display.h:154:19: error: 'T_N' undeclared here (not in a function)
+   union tcu d_tcs[T_N];  /* terminal capabilities */
+
+Macro T_N is defined in header file term.h but it may not be created
+then fails. Backport patch to make sure term.h is created before compile
+other source codes.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a62bea1fd32246526d59f029df3dca60f1cd710f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libidn2/libidn2.hash | 4 ++--
- package/libidn2/libidn2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0010-comm-h-now-depends-on-term-h.patch   | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/screen/0010-comm-h-now-depends-on-term-h.patch
 
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-index 980f78f50d..4afb634e86 100644
---- a/package/libidn2/libidn2.hash
-+++ b/package/libidn2/libidn2.hash
-@@ -1,5 +1,5 @@
--# From Calculated locally after checking signature
--sha256	644b6b03b285fb0ace02d241d59483d98bc462729d8bb3608d5cad5532f3d2f0	libidn2-2.0.4.tar.gz
-+# Calculated locally after checking signature
-+sha256	53f69170886f1fa6fa5b332439c7a77a7d22626a82ef17e2c1224858bb4ca2b8	libidn2-2.0.5.tar.gz
- 
- # Hash for license files:
- sha256	4fa501e804195b4136c9cec4bc510365b8cbaf4bc075d6401a77ae0213370457	COPYING
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index d47913b2eb..8e01fba1c4 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIDN2_VERSION = 2.0.4
-+LIBIDN2_VERSION = 2.0.5
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE := GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+diff --git a/package/screen/0010-comm-h-now-depends-on-term-h.patch b/package/screen/0010-comm-h-now-depends-on-term-h.patch
+new file mode 100644
+index 0000000000..6ff6f3da0b
+--- /dev/null
++++ b/package/screen/0010-comm-h-now-depends-on-term-h.patch
+@@ -0,0 +1,28 @@
++From 39c5f1c76f1fcef4b5958bf828a63f53426b6984 Mon Sep 17 00:00:00 2001
++From: Mike Gerwitz <mike@mikegerwitz.com>
++Date: Tue, 24 Dec 2013 22:16:31 -0500
++Subject: comm.h now depends on term.h
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Patch retrieved and updated from:
++http://git.savannah.gnu.org/cgit/screen.git/commit/?id=39c5f1c]
++---
++ src/Makefile.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/Makefile.in b/Makefile.in
++index e791e79..d4f7c0b 100644
++--- a/Makefile.in
+++++ b/Makefile.in
++@@ -113,7 +113,7 @@ term.h: term.c term.sh
++ 
++ kmapdef.c: term.h
++ 
++-comm.h: comm.c comm.sh config.h
+++comm.h: comm.c comm.sh config.h term.h
++ 	AWK=$(AWK) CC="$(CC) $(CFLAGS)" srcdir=${srcdir} sh $(srcdir)/comm.sh
++ 
++ docs:
++-- 
++cgit v1.0-41-gc330
++
 -- 
 2.17.1
