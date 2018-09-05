@@ -1,162 +1,45 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Wed,  5 Sep 2018 09:48:39 -0700
-Subject: [Buildroot] [PATCH] package/gcc: xtensa: fix atomic NAND code
- generation
-Message-ID: <20180905164839.14360-1-jcmvbkbc@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  5 Sep 2018 18:59:22 +0200
+Subject: [Buildroot] [PATCH/next 1/1] libidn2: bump to version 2.0.5
+Message-ID: <20180905165922.15363-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xtensa gcc incorrectly generates code for atomic NAND operation as
-~a1 & a2 instead of ~(a1 & a2). Fix that.
+Fix a small typo in the first comment line of libidn2.hash
 
-Backported from: r264087
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...nsa-fix-NAND-code-in-xtensa_expand_atomic.patch | 39 ++++++++++++++++++++++
- ...nsa-fix-NAND-code-in-xtensa_expand_atomic.patch | 39 ++++++++++++++++++++++
- ...nsa-fix-NAND-code-in-xtensa_expand_atomic.patch | 39 ++++++++++++++++++++++
- 3 files changed, 117 insertions(+)
- create mode 100644 package/gcc/6.4.0/872-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
- create mode 100644 package/gcc/7.3.0/0003-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
- create mode 100644 package/gcc/8.2.0/0004-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
+ package/libidn2/libidn2.hash | 4 ++--
+ package/libidn2/libidn2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gcc/6.4.0/872-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch b/package/gcc/6.4.0/872-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
-new file mode 100644
-index 000000000000..d62d7c156631
---- /dev/null
-+++ b/package/gcc/6.4.0/872-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
-@@ -0,0 +1,39 @@
-+From 6765eecde2ed8d4be0fc217408b9e9b92a840aff Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 4 Sep 2018 00:39:32 -0700
-+Subject: [PATCH] gcc: xtensa: fix NAND code in xtensa_expand_atomic
-+
-+NAND is ~(a1 & a2), but xtensa_expand_atomic does ~a1 & a2.
-+That fixes libatomic tests atomic-op-{1,2}.
-+
-+gcc/
-+2018-09-04  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.c (xtensa_expand_atomic): Reorder AND and
-+	XOR operations in NAND case.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Backported from: r264087
-+---
-+ gcc/config/xtensa/xtensa.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 7cfe64d42895..080bb4ad765d 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -1614,9 +1614,9 @@ xtensa_expand_atomic (enum rtx_code code, rtx target, rtx mem, rtx val,
-+       break;
-+ 
-+     case MULT: /* NAND */
-+-      tmp = expand_simple_binop (SImode, XOR, old, ac.modemask,
-++      tmp = expand_simple_binop (SImode, AND, old, val,
-+ 				 NULL_RTX, 1, OPTAB_DIRECT);
-+-      tmp = expand_simple_binop (SImode, AND, tmp, val,
-++      tmp = expand_simple_binop (SImode, XOR, tmp, ac.modemask,
-+ 				 new_rtx, 1, OPTAB_DIRECT);
-+       break;
-+ 
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/7.3.0/0003-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch b/package/gcc/7.3.0/0003-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
-new file mode 100644
-index 000000000000..d62d7c156631
---- /dev/null
-+++ b/package/gcc/7.3.0/0003-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
-@@ -0,0 +1,39 @@
-+From 6765eecde2ed8d4be0fc217408b9e9b92a840aff Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 4 Sep 2018 00:39:32 -0700
-+Subject: [PATCH] gcc: xtensa: fix NAND code in xtensa_expand_atomic
-+
-+NAND is ~(a1 & a2), but xtensa_expand_atomic does ~a1 & a2.
-+That fixes libatomic tests atomic-op-{1,2}.
-+
-+gcc/
-+2018-09-04  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.c (xtensa_expand_atomic): Reorder AND and
-+	XOR operations in NAND case.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Backported from: r264087
-+---
-+ gcc/config/xtensa/xtensa.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 7cfe64d42895..080bb4ad765d 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -1614,9 +1614,9 @@ xtensa_expand_atomic (enum rtx_code code, rtx target, rtx mem, rtx val,
-+       break;
-+ 
-+     case MULT: /* NAND */
-+-      tmp = expand_simple_binop (SImode, XOR, old, ac.modemask,
-++      tmp = expand_simple_binop (SImode, AND, old, val,
-+ 				 NULL_RTX, 1, OPTAB_DIRECT);
-+-      tmp = expand_simple_binop (SImode, AND, tmp, val,
-++      tmp = expand_simple_binop (SImode, XOR, tmp, ac.modemask,
-+ 				 new_rtx, 1, OPTAB_DIRECT);
-+       break;
-+ 
-+-- 
-+2.11.0
-+
-diff --git a/package/gcc/8.2.0/0004-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch b/package/gcc/8.2.0/0004-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
-new file mode 100644
-index 000000000000..d62d7c156631
---- /dev/null
-+++ b/package/gcc/8.2.0/0004-gcc-xtensa-fix-NAND-code-in-xtensa_expand_atomic.patch
-@@ -0,0 +1,39 @@
-+From 6765eecde2ed8d4be0fc217408b9e9b92a840aff Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Tue, 4 Sep 2018 00:39:32 -0700
-+Subject: [PATCH] gcc: xtensa: fix NAND code in xtensa_expand_atomic
-+
-+NAND is ~(a1 & a2), but xtensa_expand_atomic does ~a1 & a2.
-+That fixes libatomic tests atomic-op-{1,2}.
-+
-+gcc/
-+2018-09-04  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/xtensa/xtensa.c (xtensa_expand_atomic): Reorder AND and
-+	XOR operations in NAND case.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+Backported from: r264087
-+---
-+ gcc/config/xtensa/xtensa.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/gcc/config/xtensa/xtensa.c b/gcc/config/xtensa/xtensa.c
-+index 7cfe64d42895..080bb4ad765d 100644
-+--- a/gcc/config/xtensa/xtensa.c
-++++ b/gcc/config/xtensa/xtensa.c
-+@@ -1614,9 +1614,9 @@ xtensa_expand_atomic (enum rtx_code code, rtx target, rtx mem, rtx val,
-+       break;
-+ 
-+     case MULT: /* NAND */
-+-      tmp = expand_simple_binop (SImode, XOR, old, ac.modemask,
-++      tmp = expand_simple_binop (SImode, AND, old, val,
-+ 				 NULL_RTX, 1, OPTAB_DIRECT);
-+-      tmp = expand_simple_binop (SImode, AND, tmp, val,
-++      tmp = expand_simple_binop (SImode, XOR, tmp, ac.modemask,
-+ 				 new_rtx, 1, OPTAB_DIRECT);
-+       break;
-+ 
-+-- 
-+2.11.0
-+
+diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
+index 980f78f50d..4afb634e86 100644
+--- a/package/libidn2/libidn2.hash
++++ b/package/libidn2/libidn2.hash
+@@ -1,5 +1,5 @@
+-# From Calculated locally after checking signature
+-sha256	644b6b03b285fb0ace02d241d59483d98bc462729d8bb3608d5cad5532f3d2f0	libidn2-2.0.4.tar.gz
++# Calculated locally after checking signature
++sha256	53f69170886f1fa6fa5b332439c7a77a7d22626a82ef17e2c1224858bb4ca2b8	libidn2-2.0.5.tar.gz
+ 
+ # Hash for license files:
+ sha256	4fa501e804195b4136c9cec4bc510365b8cbaf4bc075d6401a77ae0213370457	COPYING
+diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
+index d47913b2eb..8e01fba1c4 100644
+--- a/package/libidn2/libidn2.mk
++++ b/package/libidn2/libidn2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBIDN2_VERSION = 2.0.4
++LIBIDN2_VERSION = 2.0.5
+ LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN2_LICENSE := GPL-2.0+ or LGPL-3.0+ (library)
+ LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
 -- 
-2.11.0
+2.17.1
