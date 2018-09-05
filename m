@@ -1,93 +1,66 @@
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Thu,  6 Sep 2018 00:00:06 +0200
-Subject: [Buildroot] [PATCH v4 1/3] Makefile: add tainting support
+Date: Thu,  6 Sep 2018 00:00:07 +0200
+Subject: [Buildroot] [PATCH v4 2/3] docs/manual: adding infos about tainting
 In-Reply-To: <1536184808-9085-1-git-send-email-angelo.compagnucci@gmail.com>
 References: <1536184808-9085-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <1536184808-9085-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <1536184808-9085-3-git-send-email-angelo.compagnucci@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Packages who harms the build reproducibility or licensing can declare
-FOO_TAINTS variable. If a package taints the build it will be added
-to a list of tainting packages. The build ends with a warning if the
-tainting packages list is not empty. Moreover, legal info will show
-a warning in presence of a tainting package.
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Angelo Compagnucci <angelo@amarulasolutions.com>
+Adding documentation about the usage of LIBFOO_TAINTS and
+"make check-tainted".
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- Makefile               | 10 ++++++++++
- package/pkg-generic.mk | 12 ++++++++++++
- 2 files changed, 22 insertions(+)
+ docs/manual/adding-packages-generic.txt |  6 ++++++
+ docs/manual/legal-notice.txt            | 12 ++++++++++++
+ 2 files changed, 18 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index 9d66bba..ad61130 100644
---- a/Makefile
-+++ b/Makefile
-@@ -758,12 +758,21 @@ endif
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 7be1754..6495157 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -445,6 +445,12 @@ not and can not work as people would expect it should:
+   to let you know, and +not saved+ will appear in the +license files+ field
+   of the manifest file for this package.
  
- 	touch $(TARGET_DIR)/usr
- 
-+.PHONY: check-tainted
-+check-tainted:
-+ifneq ($(BR2_TAINTED_BY),)
-+	$(error Your buildroot configuration is tainted by: $(BR2_TAINTED_BY))
-+else
-+	@echo "Your buildroot configuration is not tainted"
-+endif
++* +LIBFOO_TAINTS+ shoud be set to YES if a package taints a Buildroot
++  configuration. A Buildroot configuration is tainted when a packages uses
++  external dependencies for which Buildroot cannot clearly recover licensing
++  informations. If a configuration is tainted, it means that the licensing
++  information produced by +make legal-info+ could not be accurate.
 +
- .PHONY: target-post-image
- target-post-image: $(TARGETS_ROOTFS) target-finalize
- 	@rm -f $(ROOTFS_COMMON_TAR)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
- 		$(EXTRA_ENV) $(s) $(BINARIES_DIR) $(call qstrip,$(BR2_ROOTFS_POST_SCRIPT_ARGS))$(sep))
-+	$(if $(BR2_TAINTED_BY), at echo "WARNING: Your buildroot configuration is tainted by: $(BR2_TAINTED_BY).")
+ * +LIBFOO_ACTUAL_SOURCE_TARBALL+ only applies to packages whose
+   +LIBFOO_SITE+ / +LIBTOO_SOURCE+ pair points to an archive that does
+   not actually contain source code, but binary code. This a very
+diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+index 6975328..7fde09a 100644
+--- a/docs/manual/legal-notice.txt
++++ b/docs/manual/legal-notice.txt
+@@ -73,6 +73,18 @@ distribution is required).
+ When you run +make legal-info+, Buildroot produces warnings in the +README+
+ file to inform you of relevant material that could not be saved.
  
- .PHONY: source
- source: $(foreach p,$(PACKAGES),$(p)-all-source)
-@@ -1070,6 +1079,7 @@ help:
- 	@echo '  source                 - download all sources needed for offline-build'
- 	@echo '  external-deps          - list external packages used'
- 	@echo '  legal-info             - generate info about license compliance'
-+	@echo '  check-tainted          - check if any selected package harms build reproducibility or licensing'
- 	@echo '  printvars              - dump all the internal variables'
- 	@echo
- 	@echo '  make V=0|1             - 0 => quiet build (default), 1 => verbose build'
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 91b61c6..5bb0b25 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -870,6 +870,12 @@ else
- $(2)_KCONFIG_VAR = BR2_PACKAGE_$(2)
- endif
- 
-+ifdef $(2)_TAINTS
-+ifeq ($$($$($(2)_KCONFIG_VAR)),y)
-+BR2_TAINTED_BY+=$$($(2)_RAWNAME)
-+endif
-+endif
++Furthermore, a Buildroot configuration could be tainted from a package that uses
++some custom external dependencies from the Buildroot tree. An example could be
++a package manager for a software stack that downloads the required dependencies
++during the building of a package. In such cases, Buildroot cannot check the
++licensing of the downloaded software and thus giving accurate licensing
++informations.
++To check if your configuration is tainted, run:
 +
- # legal-info: declare dependencies and set values used later for the manifest
- ifneq ($$($(2)_LICENSE_FILES),)
- $(2)_MANIFEST_LICENSE_FILES = $$($(2)_LICENSE_FILES)
-@@ -909,6 +915,12 @@ else
- 	$(Q)$$(foreach F,$$($(2)_LICENSE_FILES),$$(call legal-license-file,$$($(2)_RAWNAME),$$($(2)_BASENAME_RAW),$$($(2)_PKGDIR),$$(F),$$($(2)_DIR)/$$(F),$$(call UPPERCASE,$(4)))$$(sep))
- endif # license files
- 
-+ifeq ($$(call qstrip,$$($(2)_TAINTS)),YES)
-+ifeq ($$($$($(2)_KCONFIG_VAR)),y)
-+	$(Q)$$(call legal-warning-pkg,$$($(2)_RAWNAME),unknown license for additional modules or dependencies)
-+endif
-+endif
++--------------------
++make check-tainted
++--------------------
 +
- ifeq ($$($(2)_SITE_METHOD),local)
- # Packages without a tarball: don't save and warn
- 	@$$(call legal-warning-nosource,$$($(2)_RAWNAME),local)
+ Finally, keep in mind that the output of +make legal-info+ is based on
+ declarative statements in each of the packages recipes. The Buildroot
+ developers try to do their best to keep those declarative statements as
 -- 
 2.7.4
