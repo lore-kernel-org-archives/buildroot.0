@@ -1,15 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Sep 2018 08:49:27 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2018-08-30
-In-Reply-To: <a9927d39-0d18-8d49-7ac6-07ac9dfb4daa@mind.be>
-References: <20180831060016.342FF22A3A@mail.bootlin.com>
- <241764101.4041403.1535918222698.JavaMail.zimbra@datacom.com.br>
- <CANQCQpZxci70YBUJAfJ12RTjDtPBeD8M-3H4b_6EVMUe+oB9jQ@mail.gmail.com>
- <CANQCQpbSwyZXQZyOgG2-kcPFS0HcJENhzZWg9oCjaDRx5FWwYA@mail.gmail.com>
- <20180904114512.153df013@windsurf>
- <a9927d39-0d18-8d49-7ac6-07ac9dfb4daa@mind.be>
-Message-ID: <20180905084927.2a3fa35c@windsurf>
+Date: Wed, 5 Sep 2018 08:53:18 +0200
+Subject: [Buildroot] [PATCH 3/3] qt5webkit: select leveldb package
+In-Reply-To: <01e51af4-335b-7b8b-7c03-c8c00960eb20@mind.be>
+References: <20180831202204.28093-1-gael.portay@savoirfairelinux.com>
+ <20180831202204.28093-4-gael.portay@savoirfairelinux.com>
+ <01e51af4-335b-7b8b-7c03-c8c00960eb20@mind.be>
+Message-ID: <20180905085318.4ae7a818@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,26 +14,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 5 Sep 2018 00:43:32 +0200, Arnout Vandecappelle wrote:
+On Tue, 4 Sep 2018 23:10:46 +0200, Arnout Vandecappelle wrote:
+> On 31/08/2018 22:22, Ga?l PORTAY wrote:
+> > +	depends on BR2_INSTALL_LIBSTDCPP # leveldb  
+> 
+>  I don't think we need to propagate this particular dependency - qt5webkit
+> already depends on libstdcpp indirectly through Qt5.
 
->  So what does gentoo do? They simply don't have a dependency on util-linux in
-> the python3.7.0.ebuild. Indeed, it turns out that the _uuid module is entirely
-> optional. It is only used to access the uuid_generate_time_safe() function, but
-> the uuid.py module can also get this function through ctypes (i.e. dlopen()). So
-> perhaps a simpler solution is to just remove the build-time python3 ->
-> util-linux dependency? Runtime is still needed to support the dlopen path.
+I think we need at some point to define a real policy for this. When a
+dependency is redundant, should we:
 
-Aaah, seems like a very good idea. This would solve all the circular
-dependencies we're seeing, with essentially no additional complexity.
+ (1) Avoid duplicating it, to simplify things, but with the risk that
+     if we remove the dependency at a higher-level, we forget to re-add
+     back to the sub-options.
 
-The only downside is that the python3 util-linux support would not work
-in static-linking scenarios, because in such cases dlopen() is not
-available. But python3 anyway has "depends on !BR2_STATIC_LIBS", so
-we're good :-)
+ (2) Always duplicate them, even if they are useless right now, so
+     that we don't forget them in the future if the higher-level option
+     drops this dependency. Drawback of this solution is that such
+     dependencies don't get "exercised" by autobuilder testing so they
+     are often wrong.
 
-Adam: could you look at implementing this solution, and do a runtime
-check that the uuid-related feature of Python 3 are working as
-expected ?
+I don't have a strong opinion, but we're doing (1) or (2) depending on
+the package developer and/or situation, and this isn't really nice.
 
 Best regards,
 
