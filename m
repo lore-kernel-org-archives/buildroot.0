@@ -1,146 +1,37 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 5 Sep 2018 17:26:55 +0200
-Subject: [Buildroot] [[PATCH v2 1/2] package/pkg-golang: add support for
- building host packages
-In-Reply-To: <20180827113728.20856-2-mirza.krak@northern.tech>
-References: <20180827113728.20856-1-mirza.krak@northern.tech>
- <20180827113728.20856-2-mirza.krak@northern.tech>
-Message-ID: <CA+_SqVauZc02JnUZ5iP-gnQVz2K6rZAkb_+tEYNWJjtQLXbXcA@mail.gmail.com>
+Date: Wed,  5 Sep 2018 18:06:33 +0200
+Subject: [Buildroot] [PATCH v3 0/3] Add tainting support to buildroot
+Message-ID: <1536163596-5310-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Aug 27, 2018 at 1:37 PM, Mirza Krak <mirza.krak@northern.tech> wrote:
-> With this you can add:
->
->     $(eval $(host-golang-package))
->
-> to a package .mk file to build for host.
->
-> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-> ---
+Packages that need to resolve dependencies internally
+and use a package manager would harm the reproducibility
+of a build, moreover they escape the legal infrastructure
+not giving enough informations on licensing.
 
-Acked-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+This patch adds a tainting mechanism in the form of a
+variable FOO_TAINTS that can be used to signal that
+a package harms the reproducibility or licensing under
+certain conditions.
 
->
-> Changes in v2:
->     - Added entry in Buildroot manual
->     - Install to $(HOST_DIR)/bin instead of $(HOST_DIR)/usr/bin
->     - Created "GO_COMMON_ENV" to be shared between GO_TARGET_ENV and GO_HOST_ENV
->     - Dropped accidental change of comment
->     - Removed a empty line
->
->  docs/manual/adding-packages-golang.txt |  5 +++--
->  package/pkg-golang.mk                  | 37 +++++++++++++++++++++++++++++++---
->  2 files changed, 37 insertions(+), 5 deletions(-)
->
-> diff --git a/docs/manual/adding-packages-golang.txt b/docs/manual/adding-packages-golang.txt
-> index efcf696867..94520480ce 100644
-> --- a/docs/manual/adding-packages-golang.txt
-> +++ b/docs/manual/adding-packages-golang.txt
-> @@ -50,8 +50,9 @@ and +BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS+ because Buildroot will
->  automatically add a dependency on +host-go+ to such packages.
->
->  The main macro of the Go package infrastructure is
-> -+golang-package+. It is similar to the +generic-package+ macro. Only
-> -target packages are supported with +golang-package+.
-> ++golang-package+. It is similar to the +generic-package+ macro. The
-> +ability to build host packages is also available, with the
-> ++host-golang-package+ macro.
->
->  Just like the generic infrastructure, the Go infrastructure works
->  by defining a number of variables before calling the +golang-package+.
-> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-> index 6eacd14180..878228ce74 100644
-> --- a/package/pkg-golang.mk
-> +++ b/package/pkg-golang.mk
-> @@ -25,12 +25,18 @@ GO_BIN = $(HOST_DIR)/bin/go
->
->  # We pass an empty GOBIN, otherwise "go install: cannot install
->  # cross-compiled binaries when GOBIN is set"
-> -GO_TARGET_ENV = \
-> -       $(HOST_GO_TARGET_ENV) \
-> +GO_COMMON_ENV = \
->         PATH=$(BR_PATH) \
->         GOBIN= \
->         CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
->
-> +GO_TARGET_ENV = \
-> +       $(HOST_GO_TARGET_ENV) \
-> +       $(GO_COMMON_ENV)
-> +
-> +GO_HOST_ENV = \
-> +       $(GO_COMMON_ENV)
-> +
->  ################################################################################
->  # inner-golang-package -- defines how the configuration, compilation and
->  # installation of a Go package should be done, implements a few hooks to tune
-> @@ -44,7 +50,6 @@ GO_TARGET_ENV = \
->  #             packages
->  #  argument 4 is the type (target or host)
->  #
-> -# NOTE Only type target is supported at the moment
->  ################################################################################
->
->  define inner-golang-package
-> @@ -96,6 +101,8 @@ endif
->  # Build step. Only define it if not already defined by the package .mk
->  # file.
->  ifndef $(2)_BUILD_CMDS
-> +ifeq ($(4),target)
-> +# Build package for target
->  define $(2)_BUILD_CMDS
->         $$(foreach d,$$($(2)_BUILD_TARGETS),\
->                 cd $$($(2)_SRC_PATH); \
-> @@ -107,6 +114,20 @@ define $(2)_BUILD_CMDS
->                         ./$$(d)
->         )
->  endef
-> +else
-> +# Build package for host
-> +define $(2)_BUILD_CMDS
-> +       $$(foreach d,$$($(2)_BUILD_TARGETS),\
-> +               cd $$($(2)_SRC_PATH); \
-> +               $$(GO_HOST_ENV) \
-> +                       GOPATH="$$(@D)/$$($(2)_WORKSPACE)" \
-> +                       $$($(2)_GO_ENV) \
-> +                       $$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
-> +                       -o $$(@D)/bin/$$(or $$($(2)_BIN_NAME),$$(notdir $$(d))) \
-> +                       ./$$(d)
-> +       )
-> +endef
-> +endif
->  endif
->
->  # Target installation step. Only define it if not already defined by the
-> @@ -119,6 +140,15 @@ define $(2)_INSTALL_TARGET_CMDS
->  endef
->  endif
->
-> +# Host installation step
-> +ifndef $(2)_INSTALL_CMDS
-> +define $(2)_INSTALL_CMDS
-> +       $$(foreach d,$$($(2)_INSTALL_BINS),\
-> +               $(INSTALL) -D -m 0755 $$(@D)/bin/$$(d) $(HOST_DIR)/bin/$$(d)
-> +       )
-> +endef
-> +endif
-> +
->  # Call the generic package infrastructure to generate the necessary make
->  # targets
->  $(call inner-generic-package,$(1),$(2),$(3),$(4))
-> @@ -130,3 +160,4 @@ endef # inner-golang-package
->  ################################################################################
->
->  golang-package = $(call inner-golang-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
-> +host-golang-package = $(call inner-golang-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
-> --
-> 2.11.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+This opens the door to include per language dependency
+managers in buildroot.
+
+Angelo Compagnucci (3):
+  Makefile: add tainting support
+  docs/manual: adding infos about tainting
+  package/nodejs: taint the build on external modules
+
+ Makefile                                | 10 ++++++++++
+ docs/manual/adding-packages-generic.txt |  6 ++++++
+ docs/manual/legal-notice.txt            | 12 ++++++++++++
+ package/nodejs/nodejs.mk                |  1 +
+ package/pkg-generic.mk                  |  8 ++++++++
+ 5 files changed, 37 insertions(+)
+
+-- 
+2.7.4
