@@ -1,46 +1,53 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 5 Sep 2018 08:29:36 +0200
-Subject: [Buildroot] [PATCH v3] mediastreamer: fix avcodec functions
- conflict
-In-Reply-To: <767b037d-9ff3-9392-25ca-3656a400be30@mind.be>
-References: <20180904131251.30724-1-giulio.benetti@micronovasrl.com>
- <87va7lasjf.fsf@dell.be.48ers.dk>
- <735a4c9f-42c2-9744-6889-921bf720d167@micronovasrl.com>
- <87in3lapvk.fsf@dell.be.48ers.dk>
- <767b037d-9ff3-9392-25ca-3656a400be30@mind.be>
-Message-ID: <3482c2e2-35f1-854d-608e-65f1ab3c4871@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 5 Sep 2018 08:45:51 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/qemu: add
+ qemu_riscv64_virt_defconfig
+In-Reply-To: <cd1fb718-2f8e-571e-d217-1d37ebc73b28@mind.be>
+References: <20180831143853.24340-1-mark.corbin@embecosm.com>
+ <20180902214755.139a1b23@windsurf>
+ <6b529ca2-bfeb-227e-e76b-0465e52d8bf0@embecosm.com>
+ <cd1fb718-2f8e-571e-d217-1d37ebc73b28@mind.be>
+Message-ID: <20180905084551.0e4d3e6c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+Hello,
 
-Il 05/09/2018 00:10, Arnout Vandecappelle ha scritto:
+On Tue, 4 Sep 2018 21:57:11 +0200, Arnout Vandecappelle wrote:
+> On 04/09/2018 17:14, Mark Corbin wrote:
+> > I had been reluctant to add riscv-pk to Buildroot as a bootloader, as I
+> > see it as an interim solution until riscv support makes it into UBoot or
+> > Barebox.  
 > 
-> 
-> On 04/09/2018 23:56, Peter Korsgaard wrote:
->>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
->>
->> Hi,
->>
->>   >> Committed after extending the commit message to clarify that this is
->>   >> about static linking, thanks.
->>
->>   > Sorry for my ignorance, so library order during linking is an issue only
->>   > with static libraries?
->>
->> Yes, when statically linking ld will only pull in the object files
->> containing referenced symbols, so you need to list the libraries in the
->> dependency order (E.G. if you call a function in library a that in turn
->> calls a function in library b then you must use -la -b).
->>
->> For details, see
->> E.G. https://eli.thegreenplace.net/2013/07/09/library-order-in-static-linking
-> 
->   Note the explanation of --start-group/--end-group, which is sometimes the
-> easiest way to fix a linking order issue.
+>  If riscv-pk/bbl offers all the features you need, why would you use U-Boot or
+> Barebox?
 
-Thank you that clarified me a lot.
-Giulio
+For the same reason that you use U-Boot or Barebox on real hardware,
+rather than a completely dumb "kernel loader": shell, environment
+variables, scripting, etc. I'm not saying this is always needed, but it
+seems like some people like those features :-)
+
+> > I do have a preliminary riscv-pk package working based on your helpful
+> > pointers to boot-wrapper-aarch64. Do people prefer to add it as
+> > 'risc-pk' when it is only the Berkeley Boot Loader part that is
+> > significant? I would have added it as 'bbl', but I can see the potential
+> > confusion when the package/repository is 'riscv-pk'.  
+> 
+>  Unless there is some convincing reason for it, we prefer to stick with the
+> upstream name.
+
+I agree. It's true that besides the BBL, there is not much in the
+riscv-pk repo that would be useful in the context of Buildroot, but
+riscv-pk is just as good as riscv-bbl, and riscv-pk has the advantage
+of matching the upstream name.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
