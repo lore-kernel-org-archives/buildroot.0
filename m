@@ -1,95 +1,56 @@
-From: Joel Carlson <joelsoncarl@gmail.com>
-Date: Thu,  6 Sep 2018 15:11:29 -0600
-Subject: [Buildroot] [PATCH/next v2] flatcc: conditionally require c++ in
- cmake
-Message-ID: <1536268289-23275-1-git-send-email-JoelsonCarl@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 6 Sep 2018 23:27:49 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/squid: depends on
+ current_exception
+In-Reply-To: <20180824200107.22849-1-bernd.kuhls@t-online.de>
+References: <20180824200107.22849-1-bernd.kuhls@t-online.de>
+Message-ID: <20180906232749.6fbfd857@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Patches CMake files in flatcc to conditionally set c++ as a required
-language depending on if FLATCC_TEST option is set, as only the tests
-include a c++ file.
+Hello,
 
-Fixes
-http://autobuild.buildroot.net/results/8fb0447eed1d55b7687f657530e31695cf77ce5c/
+On Fri, 24 Aug 2018 22:01:07 +0200, Bernd Kuhls wrote:
+> Fixes build error
+> 
+> TextException.cc: In function 'std::ostream& CurrentException(std::ostream&)':
+> TextException.cc:64:9: error: 'current_exception' is not a member of 'std'
+>      if (std::current_exception()) {
+> 
+> using this defconfig
+> 
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv5-ctng-linux-gnueabi"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_PACKAGE_GNUTLS=y
+> BR2_PACKAGE_OPENSSL=y
+> BR2_PACKAGE_LIBKRB5=y
+> 
+> According to http://www.squid-cache.org/Versions/v4/RELEASENOTES.html#ss1.1
+> squid-4.2 depends on C++11, but adding -std=c++11 did not fix the build
+> error.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
----
-Changes v1 -> v2:
-  - patch CMake files to not require C++ when we don't build the tests,
-    instead of making flatcc package require C++
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Original patch was accidentally to master instead of next, and different subject
-https://patchwork.ozlabs.org/patch/967100/
----
- ...txt-conditionally-require-C-based-on-FLAT.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch
+I have indeed verified that std::current_exception() is made available
+to all platforms when the bug 64375 is fixed in gcc.
 
-diff --git a/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch b/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch
-new file mode 100644
-index 0000000..7d76d6c
---- /dev/null
-+++ b/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch
-@@ -0,0 +1,56 @@
-+From 878d51187bbc1ad490b4cd15e3741bc0bd11b6b2 Mon Sep 17 00:00:00 2001
-+From: Joel Carlson <JoelsonCarl@gmail.com>
-+Date: Thu, 6 Sep 2018 14:53:20 -0600
-+Subject: [PATCH] CMakeLists.txt: conditionally require C++ based on
-+ FLATCC_TEST (#94)
-+
-+C++ is only used when building the tests, so only include it as a
-+language via project() when FLATCC_TEST is enabled. This allows
-+toolchains that don't have C++ to build flatcc.
-+
-+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-+---
-+Upstream commit 878d51187bbc1ad490b4cd15e3741bc0bd11b6b2
-+---
-+ CMakeLists.txt | 18 ++++++++++++------
-+ 1 file changed, 12 insertions(+), 6 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index b39a3d1..5df5161 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -4,7 +4,18 @@
-+ #cmake_minimum_required (VERSION 2.8.11)
-+ cmake_minimum_required (VERSION 2.8)
-+ 
-+-project (FlatCC C CXX)
-++# Disable build of tests and samples. Due to custom build step
-++# dependency on flatcc tool, some custom build configurations may
-++# experience issues, and this option can then help.
-++option(FLATCC_TEST "enable tests" ON)
-++
-++# Conditionally set project languages based on FLATCC_TEST, as C++ is
-++# only necessary if building the tests.
-++if (FLATCC_TEST)
-++    project (FlatCC C CXX)
-++else()
-++    project (FlatCC C)
-++endif()
-+ 
-+ #
-+ # NOTE: when changing build options, clean the build using on of:
-+@@ -35,11 +46,6 @@ option(FLATCC_RTONLY "enable build of runtime library only" OFF)
-+ # cmake -DBUILD_SHARED_LIBS=on can override.
-+ option(FLATCC_INSTALL "enable build of runtime library only" OFF)
-+ 
-+-# Disable build of tests and samples. Due to custom build step
-+-# dependency on flatcc tool, some custom build configurations may
-+-# experience issues, and this option can then help.
-+-option(FLATCC_TEST "enable tests" ON)
-+-
-+ # Use with debug build with testing enabled only. Enables generation
-+ # of coverage information during build and run. Adds target "coverage"
-+ # which collects data and makes HTML report in build directory
-+-- 
-+2.7.4
-+
+Best regards,
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
