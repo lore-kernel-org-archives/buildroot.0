@@ -1,28 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 20:53:00 +0200
-Subject: [Buildroot] [PATCH 1/1] python-websockets: bump version to 6.0
-In-Reply-To: <20180905232953.23273-1-joseph.kogut@gmail.com>
-References: <20180905232953.23273-1-joseph.kogut@gmail.com>
-Message-ID: <20180906205300.2c233e6b@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 06 Sep 2018 20:53:49 +0200
+Subject: [Buildroot] [PATCH] cutelyst: Add dependency on Kernel headers
+ >= 3.3
+In-Reply-To: <20180906165132.24690-1-dantti12@gmail.com> (Daniel Nicoletti's
+ message of "Thu, 6 Sep 2018 13:51:32 -0300")
+References: <20180906165132.24690-1-dantti12@gmail.com>
+Message-ID: <875zzi8nk2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Daniel" == Daniel Nicoletti <dantti12@gmail.com> writes:
 
-On Wed,  5 Sep 2018 16:29:53 -0700, Joseph Kogut wrote:
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-> ---
->  package/python-websockets/python-websockets.hash | 4 ++--
->  package/python-websockets/python-websockets.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+ > Cutelyst-WSGI module uses SO_REUSEPORT
+ > Fixes:
 
-Applied to next, thanks.
+ > http://autobuild.buildroot.net/results/d38411eda9edf16e2c40d8931bcfc889faae43dc/
 
-Thomas
+ > Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
