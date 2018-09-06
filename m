@@ -1,71 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 20:58:05 +0200
-Subject: [Buildroot] [git commit] qt5virtualkeyboard: fix target install
- issue with Qt 5.6
-Message-ID: <20180906185744.3547382AFD@busybox.osuosl.org>
+Date: Thu, 6 Sep 2018 21:00:14 +0200
+Subject: [Buildroot] [PATCH] imx-lib: bump to version used in
+ 4.9.88-2.0.0_ga
+In-Reply-To: <20180904212822.48852-1-1baldgeek@gmail.com>
+References: <20180904212822.48852-1-1baldgeek@gmail.com>
+Message-ID: <20180906210014.0b2f0f55@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0a0e1d72b5222843d24013504f3933f04538c51
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Gary,
 
-qt5virtualkeyboard 2.0 (shipped with Qt 5.6) installs the QML plugin
-under the directory Enterprise while the later versions install it
-without that directory.
+On Tue,  4 Sep 2018 17:28:22 -0400, Dan Riegsecker wrote:
+> In the latest release from NXP, Yocto Rocko 4.9.88-2.0.0_ga,
+> imx-lib was switched from a specific branch or tag release to the
+> master branch and a specific commit. See the link below for
+> reference.
+> 
+> https://source.codeaurora.org/external/imx/meta-fsl-bsp-release/commit/?h=rocko-4.9.88-2.0.0_ga&id=ded1a9ea3d723c56058524fc9ebd420a3510ae05
+> 
+> Signed-off-by: Dan Riegsecker <1baldgeek@gmail.com>
 
-Differentiate installation to target of the QML plugin according to
-the Qt major version in use.
+Could you please comment/review/ack this patch ?
 
-Also, make sure the /usr/qml/QtQuick directory exists before the copy.
+Thanks!
 
-Fixes:
+Best regards,
 
-	>>> qt5virtualkeyboard 2.0 Installing to target
-	mkdir -p /home/gportay/src/buildroot/output/target/usr/lib/qt/plugins/platforminputcontexts
-	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so /home/gportay/src/buildroot/output/target/usr/lib/qt/plugins/platforminputcontexts
-	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/qml/QtQuick/VirtualKeyboard /home/gportay/src/buildroot/output/target/usr/qml/QtQuick
-	cp: cannot stat '/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/qml/QtQuick/VirtualKeyboard': No such file or directory
-	package/pkg-generic.mk:310: recipe for target '/home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/.stamp_target_installed' failed
-	make: *** [/home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/.stamp_target_installed] Error 1
-
-Signed-off-by: Ga??l PORTAY <gael.portay@savoirfairelinux.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-index 8d26394c96..4aa5fc9575 100644
---- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-+++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-@@ -71,6 +71,18 @@ define QT5VIRTUALKEYBOARD_INSTALL_STAGING_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
- 
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
-+define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
-+	mkdir -p $(TARGET_DIR)/usr/qml/QtQuick/Enterprise
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Enterprise/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick/Enterprise/
-+endef
-+else
-+define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
-+	mkdir -p $(TARGET_DIR)/usr/qml/QtQuick
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick/
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
- define QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/virtualkeyboard $(TARGET_DIR)/usr/lib/qt/examples/
-@@ -81,7 +93,7 @@ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so \
- 		$(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
--	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
-+	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML)
- 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS)
- 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES)
- endef
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
