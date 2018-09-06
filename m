@@ -1,51 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 23:41:49 +0200
-Subject: [Buildroot] [PATCH next] libusbgx: fix build with glibc-2.28
-In-Reply-To: <20180822135234.20670-1-gwenj@trabucayre.com>
-References: <20180822135234.20670-1-gwenj@trabucayre.com>
-Message-ID: <20180906234149.3af458dc@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu,  6 Sep 2018 23:42:20 +0200
+Subject: [Buildroot] [PATCH 1/1] mongoose: fix hash
+Message-ID: <20180906214220.854-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+When bumping to version 6.7, hash was not updated
 
-On Wed, 22 Aug 2018 15:52:34 +0200, Gwenhael Goavec-Merou wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/599920bc0a5821fd3fb0a028574a25a22e12430f
 
-> diff --git a/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch b/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
-> new file mode 100644
-> index 0000000000..997cbf9a12
-> --- /dev/null
-> +++ b/package/libusbgx/0001-Add-include-of-sys-sysmacro.h.patch
-> @@ -0,0 +1,94 @@
-> +Add include of sys/sysmacro.h.
-> +
-> +Without sys/sysmacros.h and with glibc build fails with error like:
-> +
-> +libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `minor'
-> +libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `major'
-> +libusbgx-libusbgx-v0.2.0/src/.libs/libusbgx.so: undefined reference to `makedev'
-> +
-> +Signed-off-by: Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
-> +Signed-off-by: Sid Spry <R030t1@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mongoose/mongoose.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The order of the SoB should be the opposite: first the original author,
-then you.
-
-Also, please use a Git-formatted patch.
-
-Could you submit a new version with those minor nits fixed?
-
-Also, could you submit a new pull request upstream, because it seems
-that Sid Spry is not going to resubmit a proper patch that takes into
-account the comments made by upstream.
-
-Thanks!
-
-Thomas
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index d5252eb687..049cd74885 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256	ccc971298db70963d3f13766c3246a3c36ae7e388acfab7ba2180149d9c8c64f  mongoose-6.7.tar.gz
++sha256	7033c4c9ad0aac2aaa53864ff0bee5468a327a78a3218fb753d55a426a791189  mongoose-6.7.tar.gz
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
