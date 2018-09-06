@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 20:52:49 +0200
-Subject: [Buildroot] [PATCH] tslib: update to 1.17
-In-Reply-To: <20180906093550.29541-1-martink@posteo.de>
-References: <20180906093550.29541-1-martink@posteo.de>
-Message-ID: <20180906205249.24bd877c@windsurf>
+Date: Thu, 6 Sep 2018 20:53:00 +0200
+Subject: [Buildroot] [PATCH 1/1] python-websockets: bump version to 6.0
+In-Reply-To: <20180905232953.23273-1-joseph.kogut@gmail.com>
+References: <20180905232953.23273-1-joseph.kogut@gmail.com>
+Message-ID: <20180906205300.2c233e6b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  6 Sep 2018 11:35:50 +0200, Martin Kepplinger wrote:
-> For some background see the changelog summary:
-> https://github.com/kergoth/tslib/releases
-> 
-> Signed-off-by: Martin Kepplinger <martink@posteo.de>
+On Wed,  5 Sep 2018 16:29:53 -0700, Joseph Kogut wrote:
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 > ---
->  package/tslib/tslib.hash | 4 ++--
->  package/tslib/tslib.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  package/python-websockets/python-websockets.hash | 4 ++--
+>  package/python-websockets/python-websockets.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to next, thanks.
 
