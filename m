@@ -1,45 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 23:04:00 +0200
-Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: add support
- for building on arm64
-Message-ID: <20180907111608.841AA7FEB5@busybox.osuosl.org>
+Date: Thu, 6 Sep 2018 17:52:19 +0200
+Subject: [Buildroot] [git commit] tslib: update to 1.17
+Message-ID: <20180907111608.4BD3581170@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0523856d6ca5f7c63a187891ae2ffec2d7e4e4b
+commit: https://git.buildroot.net/buildroot/commit/?id=2e4cb1ce0a859daf8c5104405d8917ce1ecbb600
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Blobs for ARM64 are now available at Bootlin Github and
-sunxi-mali-mainline package has been updated to support them.
+For some background see the changelog summary:
+https://github.com/kergoth/tslib/releases
 
-This commit updates the <pkg>_MAKE_OPTS variable by substituting
-CROSS_COMPILE and INSTALL_MOD_PATH with
-LINUX_MAKE_FLAGS. LINUX_MAKE_FLAGS already includes CROSS_COMPILE and
-INSTALL_MOD_PAT, but also includes the ARCH variable, which is needed
-to select the appropriate architecture when building the Mali driver.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-index fcaeb81efe..f69765ebb2 100644
---- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
-@@ -9,9 +9,8 @@ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_
- SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index 76cd79516b..c5fc836d64 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/kergoth/tslib/releases/download/1.16/tslib-1.16.tar.xz.sha256
+-sha256  c9a54651337a701a66b074c603c313225579995a7910e519bbc7b1dcdab9a755  tslib-1.16.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.17/tslib-1.17.tar.xz.sha256
++sha256  9fdd33e66976bf9cc799be33824ba66672f892826e9b22de12b14df15cb0fddc  tslib-1.17.tar.xz
  
- SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS = \
--	KDIR=$(LINUX_DIR) \
--	CROSS_COMPILE=$(TARGET_CROSS) \
--	INSTALL_MOD_PATH=$(TARGET_DIR)
-+	$(LINUX_MAKE_FLAGS) \
-+	KDIR=$(LINUX_DIR)
+ # Locally computed
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 0d8b31863b..bd5311b93b 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define SUNXI_MALI_MAINLINE_DRIVER_USE_APPLY_PATCHES
- 	ln -sf $(SUNXI_MALI_MAINLINE_REV)/series $(@D)/patches
+-TSLIB_VERSION = 1.16
++TSLIB_VERSION = 1.17
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
