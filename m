@@ -1,70 +1,43 @@
-From: Joel Carlson <joelsoncarl@gmail.com>
-Date: Thu, 6 Sep 2018 13:58:15 -0600
-Subject: [Buildroot] [PATCH] flatcc: add dependency on C++11
-In-Reply-To: <87sh2m7745.fsf@dell.be.48ers.dk>
-References: <1536261611-13825-1-git-send-email-JoelsonCarl@gmail.com>
- <87sh2m7745.fsf@dell.be.48ers.dk>
-Message-ID: <CAAjKBV9WAQQwxCzqTGYFaAgZ+gwRU8SDNuwWKJmp3=MpQFT+Yg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 06 Sep 2018 21:59:49 +0200
+Subject: [Buildroot] [PATCH v2] qt5location: fix build failure due to
+ missing qt5base gui dependency
+In-Reply-To: <20180905090307.89484-1-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Wed, 5 Sep 2018 11:03:07 +0200")
+References: <20180905090307.89484-1-giulio.benetti@micronovasrl.com>
+Message-ID: <87lg8e75xm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
-On Thu, Sep 6, 2018 at 1:34 PM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Joel" == Joel Carlson <joelsoncarl@gmail.com> writes:
->
->  > Some of the components built by flatcc require C++. Also, while older
->  > toolchains may work, C11/C++11 is the reference that is expected to
->  > always work.
->
->  > Fixes
->  > http://autobuild.buildroot.net/results/8fb0447eed1d55b7687f657530e31695cf77ce5c/
->
-> This is an autobuilder on the next branch. Does this mean that only
-> 0.5.2 is affected and not 0.5.1 (the verison on master)?
+ > qt5location fails to build due to missing Qt5 Gui module.
+ > In configure.json features.opengl is referred, but it is available only
+ > if qt5base gui submodule is built.
 
-Sorry, I failed to pay attention to the branches.  This is appropriate
-for next, not master.  It looks like some CXX stuff was added into the
-CMake files after 0.5.1.
+ > Add BR2_PACKAGE_QT5BASE_GUI to qt5location Config.in to assure gui
+ > submodule is built before qt5location.
 
->
->  > Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
->  > ---
->  >  package/flatcc/Config.in | 7 +++++++
->  >  1 file changed, 7 insertions(+)
->
->  > diff --git a/package/flatcc/Config.in b/package/flatcc/Config.in
->  > index 6273f2b..557bd9b 100644
->  > --- a/package/flatcc/Config.in
->  > +++ b/package/flatcc/Config.in
->  > @@ -1,8 +1,15 @@
->  >  config BR2_PACKAGE_FLATCC
->  >      bool "flatcc"
->  > +    # Some components require C++, and C11/C++11 is the reference
->  > +    # expected to always work
->  > +    depends on BR2_INSTALL_LIBSTDCPP
->  > +    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
->  >      help
->  >        flatcc is C language implementation of Google Flatbuffers. It
->  >        consists of both a library for the target as well as a
->  >        flatbuffer compiler tool for the host.
->
-> It is a bit odd that a "C language implementation" really needs C++. Are
-> you sure this isn't just for some kind of optional C++ binding?
+ > Fixes:
+ > http://autobuild.buildroot.org/results/1e1/1e12a819750c677c9ef204a324c8bf06212e5135/
+ > http://autobuild.buildroot.org/results/223/223ec6565beba1ca73d4ff488296feec53656b40/
+ > http://autobuild.buildroot.org/results/84f/84fe1c84e3537167ee3791e83c9fe2cc2805ccb5/
+ > http://autobuild.buildroot.org/results/9c9/9c96d2106222e623a379f9995bd059725eb27769/
+ > http://autobuild.buildroot.org/results/fa0/fa01513d28d896ca8819966c5b1ed5c35283e92f/
+ > http://autobuild.buildroot.org/results/5d7/5d7333470c31b83c697218382dc77f74af86c666/
+ > http://autobuild.buildroot.org/results/db7/db7b4c61bb41d32e0f7960c194588cd1559ff3f7/
+ > http://autobuild.buildroot.org/results/2b7/2b71f186b8d67c4805393c9c016d641893d46220/
+ > http://autobuild.buildroot.org/results/1e1/1e12a819750c677c9ef204a324c8bf06212e5135/
 
-I will dig into this a bit deeper.  The immediate thing I had noticed
-was that CMakeLists.txt changed:
-- project (FlatCC C)
-+ project (FlatCC C CXX)
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+ > ---
+ > Changes V1->V2:
+ > * add missing Fixes: list in commit log
 
-I only see a single .cpp file, which is in a tests folder.  I will see
-if I can pass/set some options so that C++ isn't necessary, and will
-send a new patch if I find that to be the case.
+Committed, thanks.
 
->
-> --
-> Bye, Peter Korsgaard
+-- 
+Bye, Peter Korsgaard
