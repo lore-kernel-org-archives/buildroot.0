@@ -1,54 +1,55 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Thu, 6 Sep 2018 09:46:30 +0200
-Subject: [Buildroot] [PATCH v5 1/3] Makefile: add tainting support
-In-Reply-To: <20180906094451.44df8776@windsurf>
-References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
- <1536186133-9933-2-git-send-email-angelo.compagnucci@gmail.com>
- <20180906094451.44df8776@windsurf>
-Message-ID: <CA+_SqVakdaqx9e2aY8FjgJAgih_2QWuT7nj0tmv65qHH-PddPA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 6 Sep 2018 09:50:48 +0200
+Subject: [Buildroot] [PATCH v2 1/1] qemu: add support for python3
+In-Reply-To: <87bm9bdeg3.fsf@tkos.co.il>
+References: <20180904183934.12291-1-aduskett@gmail.com>
+ <87efe9cd6u.fsf@tkos.co.il>
+ <CAFSsvmo00eY8yv5PmPQ31KJGprg4HSpM6mqB-hs=8Xn_r1Gz7w@mail.gmail.com>
+ <20180905035954.7sio4o56gviyyb5a@sapphire.tkos.co.il>
+ <CAFSsvmqufw-w8+ywf0McNBq=kvLqR+-0qPvA-oP726CvWFe+CA@mail.gmail.com>
+ <87bm9bdeg3.fsf@tkos.co.il>
+Message-ID: <20180906095048.44a886a1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Sep 6, 2018 at 9:44 AM, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
-> Hello,
->
-> On Thu,  6 Sep 2018 00:22:11 +0200, Angelo Compagnucci wrote:
->> Packages who harms the build reproducibility or licensing can declare
->> FOO_TAINTS variable. If a package taints the build it will be added
->> to a list of tainting packages. The build ends with a warning if the
->> tainting packages list is not empty. Moreover, legal info will show
->> a warning in presence of a tainting package.
->>
->> Tainting of host packages is not supported right now.
->>
->> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
->> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
->
-> Why two SoBs ? Just one matching the From: is good enough.
->
->> +ifdef $(2)_TAINTS
->> +ifeq ($$($$($(2)_KCONFIG_VAR)),y)
->> +BR2_TAINTED_BY+=$$($(2)_RAWNAME)
->
-> Spaces around +=
->
-> No need to resend just for that. Just explain why you have two SoB, if
-> I can keep just one, I can fix that up when applying.
+Hello,
 
-Sorry Thomas, I was on another pc and forget about different git
-configuration. You can keep angelo at amarulasolutions.com one please.
++Hollis, Matt.
 
-Thanks!
+On Wed, 05 Sep 2018 20:47:08 +0300, Baruch Siach wrote:
 
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> Adam Duskett writes:
+> > How would I test this? I am used to having BuildRoot handle the paths
+> > for such dependencies.  
+> 
+> Just send RFC patch that you tested on your host with whatever Python
+> version you have installed. There are a number of participants in this
+> list that have access to hosts running RHEL6 or its derivatives.
+
+It would actually be useful if Hollis (or Matt ?) could provide a
+Docker container to easily access a RHEL6.5 system, so that people can
+try out what happens on such an old system. I guess RHEL6.5 itself is
+not easy to access because it's only for Redhat customers, but perhaps
+there is an equivalent version of CentOS that would do the job ?
+
+https://hub.docker.com/_/centos/ has a CentOS 6.6 docker image, but not
+CentOS 6.5. However, CentOS 6.6 also has Python 2.6 by default:
+
+$ sudo docker run -i -t centos:6.6 /bin/bash
+[...]
+[root at f7e0f2f6d7af /]# python
+Python 2.6.6 (r266:84292, Jan 22 2014, 09:42:36) 
+[GCC 4.4.7 20120313 (Red Hat 4.4.7-4)] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> 
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
