@@ -1,25 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Sep 2018 09:35:26 +0200
-Subject: [Buildroot] [PATCH] libcurl: security bump to version 7.61.1
-In-Reply-To: <20180905214049.31790-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 5 Sep 2018 23:40:49 +0200")
-References: <20180905214049.31790-1-peter@korsgaard.com>
-Message-ID: <871sa7axj5.fsf@dell.be.48ers.dk>
+Date: Thu, 6 Sep 2018 09:35:21 +0200
+Subject: [Buildroot] [git commit] libcurl: security bump to version 7.61.1
+Message-ID: <20180906073445.9BB8182A73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=87d58cccf19039fdca30ad5274ed75030919656d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes CVE-2018-14618: NTLM password overflow via integer overflow
- > For more details, see the advisory:
- > https://curl.haxx.se/docs/CVE-2018-14618.html
+Fixes CVE-2018-14618: NTLM password overflow via integer overflow
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+For more details, see the advisory:
+https://curl.haxx.se/docs/CVE-2018-14618.html
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 9a57153d2b..395307653d 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.61.0.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.61.1.tar.xz.asc
+ # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 ef6e55192d04713673b4409ccbcb4cb6cd723137d6e10ca45b0c593a454e1720  curl-7.61.0.tar.xz
++sha256 3d5913d6a39bd22e68e34dff697fd6e4c3c81563f580c76fca2009315cd81891  curl-7.61.1.tar.xz
+ sha256 5f3849ec38ddb927e79f514bf948890c41b8d1407286a49609b8fb1585931095  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index e0ecb081b7..c3da8aa3e5 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.61.0
++LIBCURL_VERSION = 7.61.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
