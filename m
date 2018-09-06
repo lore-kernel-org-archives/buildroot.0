@@ -1,33 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 21:40:17 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/vlc: also use AC_PATH_PROG
- to check for wayland-scanner
-In-Reply-To: <20180826110452.18151-1-bernd.kuhls@t-online.de>
-References: <20180826110452.18151-1-bernd.kuhls@t-online.de>
-Message-ID: <20180906214017.17e3c869@windsurf>
+Date: Thu, 6 Sep 2018 21:40:54 +0200
+Subject: [Buildroot] [git commit branch/next] sunxi-mali-mainline: add hash
+ file for tarball
+Message-ID: <20180906194808.19F4682B81@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d5f5d8b730cf40976cc6266845b21e11875f42c0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 26 Aug 2018 13:04:52 +0200, Bernd Kuhls wrote:
-> Fixes
-> http://autobuild.buildroot.net/results/a6b/a6b5e5677efc2b46af85837637f2832eefdfed1d/
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...o-use-AC_PATH_PROG-to-check-for-wayl.patch | 50 +++++++++++++++++++
->  1 file changed, 50 insertions(+)
->  create mode 100644 package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
+sunxi-mali-mainline package has not hash file.
 
-Applied to next, thanks. Please don't forget to submit the patch
-upstream. Thanks!
+Add hash file with sha256sum for tarball resulting from git download.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sunxi-mali-mainline/sunxi-mali-mainline.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+new file mode 100644
+index 0000000000..5d9d1a52b4
+--- /dev/null
++++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 72969ecf470b9e5ce787c2f8f36242926e1e892af0891924ee59a2cd206de39f  sunxi-mali-mainline-d691cb93884ca8ac67860502117bbec283dc19aa.tar.gz
