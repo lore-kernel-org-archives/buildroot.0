@@ -1,30 +1,70 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  6 Sep 2018 23:42:20 +0200
-Subject: [Buildroot] [PATCH 1/1] mongoose: fix hash
-Message-ID: <20180906214220.854-1-fontaine.fabrice@gmail.com>
+From: Daniel Nicoletti <dantti12@gmail.com>
+Date: Thu, 6 Sep 2018 19:29:35 -0300
+Subject: [Buildroot] [PATCH] cutelyst: Add dependency on Kernel headers
+ >= 3.3
+In-Reply-To: <CAOf5uw=n7vjnn-q0ZEQ-oNdudPtiukdB13-Pvss-TSJjLcwhHA@mail.gmail.com>
+References: <20180906165132.24690-1-dantti12@gmail.com>
+ <875zzi8nk2.fsf@dell.be.48ers.dk> <87h8j275s4.fsf@dell.be.48ers.dk>
+ <CAOf5uw=n7vjnn-q0ZEQ-oNdudPtiukdB13-Pvss-TSJjLcwhHA@mail.gmail.com>
+Message-ID: <CACo8zOdsVm5UfLT_gB21Ha6C2EXB_JJ_6kursB_cmMtnAMYaAg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When bumping to version 6.7, hash was not updated
+Sorry, my bad, was on rush due lunch time :(
+Em qui, 6 de set de 2018 ?s 17:16, Michael Nazzareno Trimarchi
+<michael@amarulasolutions.com> escreveu:
+>
+> Hi
+>
+> I have sent already the fix
+>
+> Michael
+> On Thu, Sep 6, 2018 at 10:03 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+> >
+> > >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+> >
+> > >>>>> "Daniel" == Daniel Nicoletti <dantti12@gmail.com> writes:
+> >  >> Cutelyst-WSGI module uses SO_REUSEPORT
+> >  >> Fixes:
+> >
+> >  >> http://autobuild.buildroot.net/results/d38411eda9edf16e2c40d8931bcfc889faae43dc/
+> >
+> >  >> Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
+> >
+> >  > Committed, thanks.
+> >
+> > Hmm, this cannot have been tested:
+> >
+> > make menuconfig
+> > package/cutelyst/Config.in:19: syntax error
+> > package/cutelyst/Config.in:18: invalid option
+> > Makefile:900: recipe for target 'menuconfig' failed
+> >
+> > The syntax is 'depends on FOO', not just 'depends FOO'.
+> >
+> > I've pushed a fix for that now, but please be more careful.
+> >
+> > --
+> > Bye, Peter Korsgaard
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+>
+>
+>
+> --
+> | Michael Nazzareno Trimarchi                     Amarula Solutions BV |
+> | COO  -  Founder                                      Cruquiuskade 47 |
+> | +31(0)851119172                                 Amsterdam 1018 AM NL |
+> |                  [`as] http://www.amarulasolutions.com               |
 
-Fixes:
- - http://autobuild.buildroot.org/results/599920bc0a5821fd3fb0a028574a25a22e12430f
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/mongoose/mongoose.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index d5252eb687..049cd74885 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,2 +1,2 @@
- # Locally computed:
--sha256	ccc971298db70963d3f13766c3246a3c36ae7e388acfab7ba2180149d9c8c64f  mongoose-6.7.tar.gz
-+sha256	7033c4c9ad0aac2aaa53864ff0bee5468a327a78a3218fb753d55a426a791189  mongoose-6.7.tar.gz
 -- 
-2.17.1
+Daniel Nicoletti
+
+KDE Developer - http://dantti.wordpress.com
