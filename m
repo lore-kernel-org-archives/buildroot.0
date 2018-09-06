@@ -1,41 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Sep 2018 21:17:01 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain: add 4.18.x choice for headers
-In-Reply-To: <20180906100534.6fe06c24@windsurf> (Thomas Petazzoni's message of
- "Thu, 6 Sep 2018 10:05:34 +0200")
-References: <20180906074216.32688-1-jerome.forissier@linaro.org>
- <20180906100534.6fe06c24@windsurf>
-Message-ID: <871sa68mhe.fsf@dell.be.48ers.dk>
+Date: Thu, 6 Sep 2018 21:17:09 +0200
+Subject: [Buildroot] [git commit] cutelyst: Add dependency on Kernel headers
+ >= 3.3
+Message-ID: <20180906191648.31C8682B36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cb3c56e3557cd57be806ba599baa461452f07bef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hello J?r?me,
- > On Thu,  6 Sep 2018 09:42:16 +0200, Jerome Forissier wrote:
- >> Signed-off-by: Jerome Forissier <jerome.forissier@linaro.org>
- >> ---
- >> toolchain/Config.in                                                  | 5 +++++
- >> .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
- >> 2 files changed, 9 insertions(+)
- >> 
- >> FYI, this is needed in order to use the GCC 8.2.x recently published by
- >> Arm [1] as an external toolchain.
- >> 
- >> [1] https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads
+Cutelyst-WSGI module uses SO_REUSEPORT
 
- > Thanks for this patch. In fact, we already have this in our "next"
- > branch:
+Fixes:
 
- >   https://git.buildroot.org/buildroot/commit/toolchain?h=next&id=7f62d8122bc42b84608cad34fb005b4870c143d5
+http://autobuild.buildroot.net/results/d38411eda9edf16e2c40d8931bcfc889faae43dc/
 
- > But we could indeed have it in the master branch, so that the most
- > recent toolchains can be used even with our upcoming 2018.08 release.
+Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cutelyst/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I've now cherry picked this commit for master.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
+index 91b559bd18..b2b48baa69 100644
+--- a/package/cutelyst/Config.in
++++ b/package/cutelyst/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_CUTELYST
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	help
+@@ -11,6 +12,7 @@ config BR2_PACKAGE_CUTELYST
+ 
+ 	  https://cutelyst.org
+ 
+-comment "cutelyst needs a toolchain w/ C++, gcc >= 4.8"
++comment "cutelyst needs a toolchain w/ C++, gcc >= 4.8, headers >= 3.3"
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
