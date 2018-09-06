@@ -1,49 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Sep 2018 23:43:36 +0200
-Subject: [Buildroot] [git commit] glibmm: bump version to 2.56.0
-Message-ID: <20180907111608.366687F9D6@busybox.osuosl.org>
+Date: Thu, 6 Sep 2018 21:30:54 +0200
+Subject: [Buildroot] [git commit] configs/zynq_microzed: uboot: bump to
+ xilinx-v2018.2 (fixes build)
+Message-ID: <20180907111608.5F4D47FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acb198abd089afe56f76e646ea156fcdbab6d56a
+commit: https://git.buildroot.net/buildroot/commit/?id=014e970324656d81973668dbf92a6381ba6fc975
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hashes for the license files.
+Bump to the most recent Xilinx release.
 
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Fixes:
+  .../output/host/include/libfdt_env.h:71:30: error: conflicting types for ???fdt64_t???
+  .../output/host/include/libfdt_env.h:91:24: error: expected ???)??? before ???x???
+  .../output/host/include/libfdt.h:150:21: error: redefinition of ???fdt_offset_ptr_w???
+...and many, many other similar errors.
+
+[Build-tested only]
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glibmm/glibmm.hash | 7 +++++--
- package/glibmm/glibmm.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ configs/zynq_microzed_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/glibmm/glibmm.hash b/package/glibmm/glibmm.hash
-index 570192e2f8..6131f9dcaf 100644
---- a/package/glibmm/glibmm.hash
-+++ b/package/glibmm/glibmm.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.54/glibmm-2.54.1.sha256sum
--sha256	7cc28c732b04d70ed34f0c923543129083cfb90580ea4a2b4be5b38802bf6a4a glibmm-2.54.1.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/glibmm/2.56/glibmm-2.56.0.sha256sum
-+sha256	6e74fcba0d245451c58fc8a196e9d103789bc510e1eee1a9b1e816c5209e79a9 glibmm-2.56.0.tar.xz
-+# License files, locally calculated
-+sha256	3ea7fa7c5d9a3a113e950eca9cfb85107f096270d8e4dd99daa9d8abdebc60e7 COPYING
-+sha256	ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6 COPYING.tools
-diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
-index 7fa13f21a2..71f1dfd36f 100644
---- a/package/glibmm/glibmm.mk
-+++ b/package/glibmm/glibmm.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--GLIBMM_VERSION_MAJOR = 2.54
--GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).1
-+GLIBMM_VERSION_MAJOR = 2.56
-+GLIBMM_VERSION = $(GLIBMM_VERSION_MAJOR).0
- GLIBMM_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
- GLIBMM_LICENSE_FILES = COPYING COPYING.tools
- GLIBMM_SOURCE = glibmm-$(GLIBMM_VERSION).tar.xz
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index c89b4e6d9d..1bb11fee7e 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2017.3"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2018.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_microzed"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
