@@ -1,35 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Sep 2018 21:39:14 +0200
-Subject: [Buildroot] [git commit] systemd: enable on the ARC architecture
-Message-ID: <20180907111608.25E007F9D6@busybox.osuosl.org>
+Date: Thu, 6 Sep 2018 21:39:55 +0200
+Subject: [Buildroot] [git commit] package/vlc: also use AC_PATH_PROG to
+ check for wayland-scanner
+Message-ID: <20180907111608.667417FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f93596d8ba82354efb545fe91449627e6c896ce1
+commit: https://git.buildroot.net/buildroot/commit/?id=c60b6df0a428a0c8b79d79e7c0c62813e2b3e8ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ARC port was merged in v234, see
-https://github.com/systemd/systemd/commit/27b09f1f1ed29edb9c52ad8414c2344974a07a23
+Fixes
+http://autobuild.buildroot.net/results/a6b/a6b5e5677efc2b46af85837637f2832eefdfed1d/
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/systemd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...c-also-use-AC_PATH_PROG-to-check-for-wayl.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 1cc0021b87..c858d89c05 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -5,7 +5,7 @@ config BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 		BR2_mipsel || BR2_powerpc || BR2_powerpc64 || \
- 		BR2_powerpc64le || BR2_sh4 || BR2_sh4eb || \
- 		BR2_sh4a || BR2_sh4aeb || BR2_sparc || BR2_x86_64 || \
--		BR2_aarch64 || BR2_m68k
-+		BR2_aarch64 || BR2_m68k || BR2_arc
- 
- menuconfig BR2_PACKAGE_SYSTEMD
- 	bool "systemd"
+diff --git a/package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch b/package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
+new file mode 100644
+index 0000000000..2b74fe0d39
+--- /dev/null
++++ b/package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
+@@ -0,0 +1,50 @@
++From 27635f902831fac898586f1f3dc98369f12582c9 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 26 Aug 2018 12:51:04 +0200
++Subject: [PATCH] configure.ac: also use AC_PATH_PROG to check for
++ wayland-scanner
++
++When cross-compiling the .pc file might point to the wrong
++wayland-scanner binary (target rather than host) resulting in a
++non-executable and wrong scanner.
++Try searching the PATH first, and if that fails fall back into
++pkg-config.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ configure.ac | 19 +++++++++++--------
++ 1 file changed, 11 insertions(+), 8 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 4808b8becf..a18641ed23 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -3140,14 +3140,17 @@ AS_IF([test "${enable_wayland}" != "no"], [
++       AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors 'wayland-protocols >= 1.4')])
++     ])
++ 
++-    AC_MSG_CHECKING([for the Wayland scanner])
++-    PKG_CHECK_EXISTS([wayland-scanner], [
++-      WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
++-      AC_MSG_RESULT([${WAYLAND_SCANNER}])
++-    ], [
++-      AC_MSG_RESULT([not found])
++-      AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
++-    ])
+++    AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
+++    if test "x$WAYLAND_SCANNER" = x; then
+++        AC_MSG_CHECKING([for the Wayland scanner])
+++        PKG_CHECK_EXISTS([wayland-scanner], [
+++          WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
+++          AC_MSG_RESULT([${WAYLAND_SCANNER}])
+++        ], [
+++          AC_MSG_RESULT([not found])
+++          AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
+++        ])
+++    fi
++ 
++     have_wayland="yes"
++ 
++-- 
++2.18.0
++
