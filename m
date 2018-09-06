@@ -1,43 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 21:30:54 +0200
-Subject: [Buildroot] [git commit] configs/zynq_microzed: uboot: bump to
- xilinx-v2018.2 (fixes build)
-Message-ID: <20180907111608.5F4D47FEB5@busybox.osuosl.org>
+Date: Thu, 6 Sep 2018 23:04:00 +0200
+Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: add support
+ for building on arm64
+Message-ID: <20180907111608.841AA7FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=014e970324656d81973668dbf92a6381ba6fc975
+commit: https://git.buildroot.net/buildroot/commit/?id=c0523856d6ca5f7c63a187891ae2ffec2d7e4e4b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to the most recent Xilinx release.
+Blobs for ARM64 are now available at Bootlin Github and
+sunxi-mali-mainline package has been updated to support them.
 
-Fixes:
-  .../output/host/include/libfdt_env.h:71:30: error: conflicting types for ???fdt64_t???
-  .../output/host/include/libfdt_env.h:91:24: error: expected ???)??? before ???x???
-  .../output/host/include/libfdt.h:150:21: error: redefinition of ???fdt_offset_ptr_w???
-...and many, many other similar errors.
+This commit updates the <pkg>_MAKE_OPTS variable by substituting
+CROSS_COMPILE and INSTALL_MOD_PATH with
+LINUX_MAKE_FLAGS. LINUX_MAKE_FLAGS already includes CROSS_COMPILE and
+INSTALL_MOD_PAT, but also includes the ARCH variable, which is needed
+to select the appropriate architecture when building the Mali driver.
 
-[Build-tested only]
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/zynq_microzed_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index c89b4e6d9d..1bb11fee7e 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -20,7 +20,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2017.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2018.2"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_microzed"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index fcaeb81efe..f69765ebb2 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -9,9 +9,8 @@ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+ 
+ SUNXI_MALI_MAINLINE_DRIVER_MAKE_OPTS = \
+-	KDIR=$(LINUX_DIR) \
+-	CROSS_COMPILE=$(TARGET_CROSS) \
+-	INSTALL_MOD_PATH=$(TARGET_DIR)
++	$(LINUX_MAKE_FLAGS) \
++	KDIR=$(LINUX_DIR)
+ 
+ define SUNXI_MALI_MAINLINE_DRIVER_USE_APPLY_PATCHES
+ 	ln -sf $(SUNXI_MALI_MAINLINE_REV)/series $(@D)/patches
