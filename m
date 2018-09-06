@@ -1,56 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 23:27:49 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/squid: depends on
- current_exception
-In-Reply-To: <20180824200107.22849-1-bernd.kuhls@t-online.de>
-References: <20180824200107.22849-1-bernd.kuhls@t-online.de>
-Message-ID: <20180906232749.6fbfd857@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 06 Sep 2018 21:36:17 +0000
+Subject: [Buildroot] [Bug 11286] python-rpi-gpio only should depend on
+ BR2_arm || BR2_aarch64
+In-Reply-To: <bug-11286-163@https.bugs.busybox.net/>
+References: <bug-11286-163@https.bugs.busybox.net/>
+Message-ID: <bug-11286-163-mrmLAdAeMK@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11286
 
-On Fri, 24 Aug 2018 22:01:07 +0200, Bernd Kuhls wrote:
-> Fixes build error
-> 
-> TextException.cc: In function 'std::ostream& CurrentException(std::ostream&)':
-> TextException.cc:64:9: error: 'current_exception' is not a member of 'std'
->      if (std::current_exception()) {
-> 
-> using this defconfig
-> 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv5-ctng-linux-gnueabi"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_PACKAGE_GNUTLS=y
-> BR2_PACKAGE_OPENSSL=y
-> BR2_PACKAGE_LIBKRB5=y
-> 
-> According to http://www.squid-cache.org/Versions/v4/RELEASENOTES.html#ss1.1
-> squid-4.2 depends on C++11, but adding -std=c++11 did not fix the build
-> error.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
 
-I have indeed verified that std::current_exception() is made available
-to all platforms when the bug 64375 is fixed in gcc.
+--- Comment #2 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+So, in other words, upstream never tested/supported using on AArch64 it seems,
+so there is no point in enabling this package on AArch64 in Buildroot at the
+moment. So, I'll mark the bug as INVALID. You can take this up with the
+upstream project, and then update the package in Buildroot. Thanks!
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
