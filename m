@@ -1,46 +1,75 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Wed,  5 Sep 2018 16:29:53 -0700
-Subject: [Buildroot] [PATCH 1/1] python-websockets: bump version to 6.0
-Message-ID: <20180905232953.23273-1-joseph.kogut@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu,  6 Sep 2018 08:00:14 +0200 (CEST)
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2018-09-05
+Message-ID: <20180906060014.747752072F@mail.bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
----
- package/python-websockets/python-websockets.hash | 4 ++--
- package/python-websockets/python-websockets.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Hello,
 
-diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
-index 0fbe144173..4939c7834f 100644
---- a/package/python-websockets/python-websockets.hash
-+++ b/package/python-websockets/python-websockets.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/websockets/json
--md5	cd2f92f07bca588acd9238b18f6cfbcf  websockets-5.0.1.tar.gz
--sha256	a49d315db5a7a19d55422e1678e8a1c3b9661d7296bef3179fa620cf80b12674  websockets-5.0.1.tar.gz
-+md5	76cf931a525a3415f5a4f59c133e89c3  websockets-6.0.tar.gz
-+sha256	8f3b956d11c5b301206382726210dc1d3bee1a9ccf7aadf895aaf31f71c3716c  websockets-6.0.tar.gz
- # Locally computed sha256 checksums
- sha256	2cd4d416e432ca7fda2c103b38b852f8d3cb327d70c3db44410b9fe97e6c4d73  LICENSE
-diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
-index 0e225b90f1..4d547ada81 100644
---- a/package/python-websockets/python-websockets.mk
-+++ b/package/python-websockets/python-websockets.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_WEBSOCKETS_VERSION = 5.0.1
-+PYTHON_WEBSOCKETS_VERSION = 6.0
- PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
--PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/4b/c6/026da2eeed75a49dd0b72a0c7ed6ee5cb2943e396ca9753eabff7359b27b
-+PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/4e/2a/56e60bb4c3696bc736998cc13c3fa1a36210609d7e1a3f2519857b420245
- PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
- PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
- PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
+Build statistics for 2018-09-05
+===============================
+
+      branch |  OK | NOK | TIM | TOT |
+   2018.02.x |  16 |   0 |   0 |  16 |
+   2018.05.x |  10 |   0 |   0 |  10 |
+      master |  98 |   1 |   3 | 102 |
+        next |  14 |  11 |   0 |  25 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                host-libsodium | 2 
+                libmpeg2-0.5.1 | 1 
+                 libreplaygain | 1 
+
+
+Detail of failures
+------------------
+
+        i586 |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/98aad6f70545ae50458810a13b006945b010f7d3 |     
+       nios2 |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/1e856a4fe45b0841d265cc6792714b5c3c464c08 |     
+     powerpc |                 libmpeg2-0.5.1 | NOK | http://autobuild.buildroot.net/results/0b59d7324848c0dcac5aa767a09cec125451324c | ORPH
+microblazeel |                  libreplaygain | TIM | http://autobuild.buildroot.net/results/bd3439588fe5788832107d1b1e047843dc57ab23 |     
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                  boost-1.68.0 | 2 
+               target-finalize | 2 
+                 flatcc-v0.5.2 | 1 
+                 gadgetfs-test | 1 
+         host-e2fsprogs-1.44.2 | 1 
+                 lvm2-2.02.180 | 1 
+              ptpd2-ptpd-2.3.1 | 1 
+           python-numpy-1.13.3 | 1 
+                rtorrent-0.9.6 | 1 
+
+
+Detail of failures
+------------------
+
+       nios2 |                   boost-1.68.0 | NOK | http://autobuild.buildroot.net/results/c24a02d66932cef887397ed1d3182824782da869 |     
+         arm |                   boost-1.68.0 | NOK | http://autobuild.buildroot.net/results/d72f18080f60284b7fa464f531b2b18d88315fd0 |     
+         arm |                  flatcc-v0.5.2 | NOK | http://autobuild.buildroot.net/results/8fb0447eed1d55b7687f657530e31695cf77ce5c |     
+         arc |                  gadgetfs-test | NOK | http://autobuild.buildroot.net/results/5ebe6dd1ebc451a55d71dfbb23b9abc0c7d254de |     
+  aarch64_be |          host-e2fsprogs-1.44.2 | NOK | http://autobuild.buildroot.net/results/b204fbb0df6fd927b4ff597639e260338f957f5f | ORPH
+         arc |                  lvm2-2.02.180 | NOK | http://autobuild.buildroot.net/results/0bdd9203edba73c00b3a9a560de32857a298ec95 | ORPH
+   powerpc64 |               ptpd2-ptpd-2.3.1 | NOK | http://autobuild.buildroot.net/results/6be3f62acc08a20d8d67edcb3660f30fe13a2f6c | ORPH
+         arm |            python-numpy-1.13.3 | NOK | http://autobuild.buildroot.net/results/5ada9cb57b745d4c306242f39c9495a0447c4a5b |     
+    mips64el |                 rtorrent-0.9.6 | NOK | http://autobuild.buildroot.net/results/019d24dab561b50b9f0bc5df4acfc2d534c29869 | ORPH
+         arm |                target-finalize | NOK | http://autobuild.buildroot.net/results/e9aa29117865a09bed09d1deac03f38670465e58 |     
+        mips |                target-finalize | NOK | http://autobuild.buildroot.net/results/46e90b611a0db218191379d090befaaaed90f4b4 |     
+
+
 -- 
-2.18.0
+http://autobuild.buildroot.net
