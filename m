@@ -1,38 +1,45 @@
-From: Fabio Estevam <fabio.estevam@nxp.com>
-Date: Thu,  6 Sep 2018 13:33:57 -0300
-Subject: [Buildroot] [PATCH] inux-headers: bump 4.{4, 9, 14}.x series
-Message-ID: <1536251637-19928-1-git-send-email-fabio.estevam@nxp.com>
+From: Daniel Nicoletti <dantti12@gmail.com>
+Date: Thu,  6 Sep 2018 13:51:32 -0300
+Subject: [Buildroot] [PATCH] cutelyst: Add dependency on Kernel headers >=
+ 3.3
+Message-ID: <20180906165132.24690-1-dantti12@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
----
- package/linux-headers/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Cutelyst-WSGI module uses SO_REUSEPORT
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 065ea17..132cf6a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -266,13 +266,13 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "3.2.102"	if BR2_KERNEL_HEADERS_3_2
- 	default "4.1.52"	if BR2_KERNEL_HEADERS_4_1
--	default "4.4.153"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.124"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.4.154"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.125"	if BR2_KERNEL_HEADERS_4_9
- 	default "4.10.17"	if BR2_KERNEL_HEADERS_4_10
- 	default "4.11.12"	if BR2_KERNEL_HEADERS_4_11
- 	default "4.12.14"	if BR2_KERNEL_HEADERS_4_12
- 	default "4.13.16"	if BR2_KERNEL_HEADERS_4_13
--	default "4.14.67"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.14.68"	if BR2_KERNEL_HEADERS_4_14
- 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
- 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
- 	default "4.17.19"	if BR2_KERNEL_HEADERS_4_17
+Fixes:
+
+http://autobuild.buildroot.net/results/d38411eda9edf16e2c40d8931bcfc889faae43dc/
+
+Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
+---
+ package/cutelyst/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
+index 91b559bd18..b2b48baa69 100644
+--- a/package/cutelyst/Config.in
++++ b/package/cutelyst/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_CUTELYST
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	help
+@@ -11,6 +12,7 @@ config BR2_PACKAGE_CUTELYST
+ 
+ 	  https://cutelyst.org
+ 
+-comment "cutelyst needs a toolchain w/ C++, gcc >= 4.8"
++comment "cutelyst needs a toolchain w/ C++, gcc >= 4.8, headers >= 3.3"
+ 	depends on BR2_PACKAGE_QT5
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
 -- 
-2.7.4
+2.17.1
