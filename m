@@ -1,53 +1,46 @@
-From: Jerome Forissier <jerome.forissier@linaro.org>
-Date: Thu, 6 Sep 2018 10:26:21 +0200
-Subject: [Buildroot] [PATCH 1/1] toolchain: add 4.18.x choice for headers
-In-Reply-To: <20180906100534.6fe06c24@windsurf>
-References: <20180906074216.32688-1-jerome.forissier@linaro.org>
- <20180906100534.6fe06c24@windsurf>
-Message-ID: <a6dfad19-be6b-254e-7b95-a67eec49b28c@linaro.org>
+From: Martin Kepplinger <martink@posteo.de>
+Date: Thu,  6 Sep 2018 11:35:50 +0200
+Subject: [Buildroot] [PATCH] tslib: update to 1.17
+Message-ID: <20180906093550.29541-1-martink@posteo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 09/06/2018 10:05 AM, Thomas Petazzoni wrote:
-> Hello J?r?me,
-> 
-> On Thu,  6 Sep 2018 09:42:16 +0200, Jerome Forissier wrote:
->> Signed-off-by: Jerome Forissier <jerome.forissier@linaro.org>
->> ---
->>  toolchain/Config.in                                                  | 5 +++++
->>  .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
->>  2 files changed, 9 insertions(+)
->>
->> FYI, this is needed in order to use the GCC 8.2.x recently published by
->> Arm [1] as an external toolchain.
->>
->> [1] https://developer.arm.com/open-source/gnu-toolchain/gnu-a/downloads
-> 
-> Thanks for this patch. In fact, we already have this in our "next"
-> branch:
-> 
->   https://git.buildroot.org/buildroot/commit/toolchain?h=next&id=7f62d8122bc42b84608cad34fb005b4870c143d5
+For some background see the changelog summary:
+https://github.com/kergoth/tslib/releases
 
-Ah, sorry for missing it. In fact I did not know about the existence of
-the "next" branch. Would you consider a patch to mention it in
-docs/manual/contribute.txt? I also got bitten by the fact that you need
-to be subscribed to the ML for patches to go through. Maybe another
-thing that {c,sh}ould be mentioned in the doc?
+Signed-off-by: Martin Kepplinger <martink@posteo.de>
+---
+ package/tslib/tslib.hash | 4 ++--
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> 
-> But we could indeed have it in the master branch, so that the most
-> recent toolchains can be used even with our upcoming 2018.08 release.
-
-Yes, that would help indeed.
-
-Thanks,
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index 76cd79516b..c5fc836d64 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,5 +1,5 @@
+-# https://github.com/kergoth/tslib/releases/download/1.16/tslib-1.16.tar.xz.sha256
+-sha256  c9a54651337a701a66b074c603c313225579995a7910e519bbc7b1dcdab9a755  tslib-1.16.tar.xz
++# https://github.com/kergoth/tslib/releases/download/1.17/tslib-1.17.tar.xz.sha256
++sha256  9fdd33e66976bf9cc799be33824ba66672f892826e9b22de12b14df15cb0fddc  tslib-1.17.tar.xz
+ 
+ # Locally computed
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index 0d8b31863b..bd5311b93b 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TSLIB_VERSION = 1.16
++TSLIB_VERSION = 1.17
+ TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
 -- 
-Jerome
-
-> Best regards,
-> 
-> Thomas
-> 
+2.18.0
