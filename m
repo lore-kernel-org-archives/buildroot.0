@@ -1,41 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 09:42:42 +0200
-Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
-In-Reply-To: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
-References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20180906094242.7c07b6b3@windsurf>
+From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@savoirfairelinux.com>
+Date: Thu, 6 Sep 2018 03:43:59 -0400
+Subject: [Buildroot] [PATCH v1 3/4] qt5virtualkeyboard: fix legal-info
+ with 5.6
+In-Reply-To: <20180906093631.2fc13f1e@windsurf>
+References: <20180903123747.5234-1-gael.portay@savoirfairelinux.com>
+ <20180903123747.5234-4-gael.portay@savoirfairelinux.com>
+ <20180905231134.46b70011@windsurf>
+ <20180906073221.6f75uwcwlrbhxyy3@archlinux>
+ <20180906093631.2fc13f1e@windsurf>
+Message-ID: <20180906074358.puen25byqrukxoiq@archlinux>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Thu,  6 Sep 2018 00:22:10 +0200, Angelo Compagnucci wrote:
-> Packages that need to resolve dependencies internally
-> and use a package manager would harm the reproducibility
-> of a build, moreover they escape the legal infrastructure
-> not giving enough informations on licensing.
+On Thu, Sep 06, 2018 at 09:36:31AM +0200, Thomas Petazzoni wrote:
+> Hello,
 > 
-> This patch adds a tainting mechanism in the form of a
-> variable FOO_TAINTS that can be used to signal that
-> a package harms the reproducibility or licensing under
-> certain conditions.
+> On Thu, 6 Sep 2018 03:32:21 -0400, Ga?l PORTAY wrote:
 > 
-> This opens the door to include per language dependency
-> managers in buildroot.
+> > I found this [1]. I also asked to Qt and I am waiting for their
+> > response.
+> > 
+> > I guess this Qt5 module is available in Open license since 5.7;
 > 
-> Angelo Compagnucci (3):
->   Makefile: add tainting support
->   docs/manual: adding infos about tainting
->   package/nodejs: taint the build on external modules
+> What do you call the "Open license" ?
+> 
 
-It would be good to include a changelog of what has been changed
-between the different iterations of your series.
+I wanted to say that Qt VirtualKeyboard is available under GPLv3 since
+5.7.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+So I guess the version 2.0 is available only under the Qt Commercial
+license.
+
+> > thus 2.0 (5.6) is available only under their Commercial license.
+> 
+> So the source code would be freely available, but can't be used without
+> having their Commercial license ?
+> 
+
+I do not know yet. I asked and I will tell you once I get a response
+from them.
+
+Ga?l
