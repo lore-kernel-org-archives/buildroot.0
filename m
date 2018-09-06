@@ -1,51 +1,79 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 6 Sep 2018 21:35:07 +0200
-Subject: [Buildroot] [PATCH v2] qt5location: fix build failure due to
- GCC < 5.x bug in implicit casts
-In-Reply-To: <87wory779g.fsf@dell.be.48ers.dk>
-References: <20180905141946.130225-1-giulio.benetti@micronovasrl.com>
- <87wory779g.fsf@dell.be.48ers.dk>
-Message-ID: <00263800-0b27-a048-94d9-8c6cabf428c2@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 6 Sep 2018 21:39:55 +0200
+Subject: [Buildroot] [git commit branch/next] package/vlc: also use
+ AC_PATH_PROG to check for wayland-scanner
+Message-ID: <20180906193916.6B4BA82B73@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+commit: https://git.buildroot.net/buildroot/commit/?id=c60b6df0a428a0c8b79d79e7c0c62813e2b3e8ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Il 06/09/2018 21:31, Peter Korsgaard ha scritto:
->>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
-> 
->   > GCC < 5.x has some bug in implicit casts, this leads to build failure.
->   > In particular QPointer<QGeoMap> in m_map QDeclarativeGeoMap class, when
->   > passed to connect(m_map, ...) should directly cast to m_map.data().
-> 
->   > Add reworked patch referred on QTBUG-69512:
->   > https://bugreports.qt.io/browse/QTBUG-69512
-> 
->   > Fixes:
->   > http://autobuild.buildroot.org/results/dc5/dc5c354f3aae54b77dad74ad44aca6d12425a457/
->   > http://autobuild.buildroot.org/results/3ab/3ab6f79a36543fa677555bc9ec3500baa46ab0f8/
->   > http://autobuild.buildroot.org/results/8b5/8b5531e44c4f4258c950902b2cd92d1ac8a8491e/
->   > http://autobuild.buildroot.org/results/089/089d03ab14a7c70e465cce891506a082049f2998/
->   > http://autobuild.buildroot.org/results/da8/da87ca470b22d599bb25998af8f25136921f35a7/
->   > http://autobuild.buildroot.org/results/5fe/5fe91fd762c5d4eda01378947b13f7ffc084a8be/
->   > http://autobuild.buildroot.org/results/a84/a84182145122935c8f10105818dbf0e3aa23fd11/
->   > http://autobuild.buildroot.org/results/5b9/5b9106351a04646f42697215ed497e09c62c12fa/
->   > http://autobuild.buildroot.org/results/397/397acc3f5d4998a8d632749ef7d21533c35d501a/
->   > http://autobuild.buildroot.org/results/b18/b186ec0e297d6857a9e0a6a063e476b5049ccf93/
->   > http://autobuild.buildroot.org/results/bf2/bf241beeb1ce10eec99d247cdd331870c08e0ac8/
-> 
->   > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->   > ---
->   > Changes V1->V2:
->   > * move patch to qt5location/5.11.1 folder since it's specific to 5.11.1 version
-> 
-> So the 5.6 version doesn't need to be patched?
+Fixes
+http://autobuild.buildroot.net/results/a6b/a6b5e5677efc2b46af85837637f2832eefdfed1d/
 
-No, it doesn't need, it fails building instead if trying to patch it.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...c-also-use-AC_PATH_PROG-to-check-for-wayl.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-Thank for reviewing and applying.
-
-Giulio Benetti
+diff --git a/package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch b/package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
+new file mode 100644
+index 0000000000..2b74fe0d39
+--- /dev/null
++++ b/package/vlc/0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch
+@@ -0,0 +1,50 @@
++From 27635f902831fac898586f1f3dc98369f12582c9 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sun, 26 Aug 2018 12:51:04 +0200
++Subject: [PATCH] configure.ac: also use AC_PATH_PROG to check for
++ wayland-scanner
++
++When cross-compiling the .pc file might point to the wrong
++wayland-scanner binary (target rather than host) resulting in a
++non-executable and wrong scanner.
++Try searching the PATH first, and if that fails fall back into
++pkg-config.
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ configure.ac | 19 +++++++++++--------
++ 1 file changed, 11 insertions(+), 8 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 4808b8becf..a18641ed23 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -3140,14 +3140,17 @@ AS_IF([test "${enable_wayland}" != "no"], [
++       AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors 'wayland-protocols >= 1.4')])
++     ])
++ 
++-    AC_MSG_CHECKING([for the Wayland scanner])
++-    PKG_CHECK_EXISTS([wayland-scanner], [
++-      WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
++-      AC_MSG_RESULT([${WAYLAND_SCANNER}])
++-    ], [
++-      AC_MSG_RESULT([not found])
++-      AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
++-    ])
+++    AC_PATH_PROG([WAYLAND_SCANNER], [wayland-scanner])
+++    if test "x$WAYLAND_SCANNER" = x; then
+++        AC_MSG_CHECKING([for the Wayland scanner])
+++        PKG_CHECK_EXISTS([wayland-scanner], [
+++          WAYLAND_SCANNER="$(${PKG_CONFIG} wayland-scanner --variable wayland_scanner)"
+++          AC_MSG_RESULT([${WAYLAND_SCANNER}])
+++        ], [
+++          AC_MSG_RESULT([not found])
+++          AC_MSG_ERROR([$(${PKG_CONFIG} --print-errors wayland-scanner)])
+++        ])
+++    fi
++ 
++     have_wayland="yes"
++ 
++-- 
++2.18.0
++
