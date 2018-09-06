@@ -1,65 +1,75 @@
-From: Daniel Nicoletti <dantti12@gmail.com>
-Date: Thu, 6 Sep 2018 09:20:36 -0300
-Subject: [Buildroot] [PATCH v2] package/cutelyst: Fix build dependencies
-In-Reply-To: <20180906113202.18749-1-dantti12@gmail.com>
-References: <20180906113202.18749-1-dantti12@gmail.com>
-Message-ID: <CACo8zOeQYepMaFdvt-4Xsw7-x3-+R5_LTHBV7A5uVZwFtYNR8Q@mail.gmail.com>
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+Date: Thu,  6 Sep 2018 08:42:29 -0400
+Subject: [Buildroot] [PATCH v2] qt5virtualkeyboard: fix target install issue
+ with 5.6
+Message-ID: <20180906124229.24417-1-gael.portay@savoirfairelinux.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hmm I think I push the wrong commit... sorry
-Em qui, 6 de set de 2018 ?s 08:32, Daniel Nicoletti
-<dantti12@gmail.com> escreveu:
->
-> Add missing optional dependencies need when
-> the dependency was available, disabling Grantlee
-> plugin for now as it failed to build.
->
-> Fixes:
->
-> http://autobuild.buildroot.net/results/90c56e4e001daa71efd92c926fe3a5dc5ec759e7/
->
-> Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
-> ---
->  package/cutelyst/cutelyst.mk | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
->
-> diff --git a/package/cutelyst/cutelyst.mk b/package/cutelyst/cutelyst.mk
-> index 438ac091c6..2d1c9b1532 100644
-> --- a/package/cutelyst/cutelyst.mk
-> +++ b/package/cutelyst/cutelyst.mk
-> @@ -15,20 +15,16 @@ CUTELYST_DEPENDENCIES = qt5base
->  CUTELYST_CONF_OPTS += \
->         -DPLUGIN_CSRFPROTECTION=ON
->
-> -ifeq ($(BR2_PACKAGE_GRANTLEE),y)
-> -CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=ON
-> -else
-> -CUTELYST_CONF_OPTS += -DPLUGIN_VIEW_GRANTLEE=OFF
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_LIBPWQUALITY),y)
->  CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=ON
-> +CUTELYST_DEPENDENCIES += libpwquality
->  else
->  CUTELYST_CONF_OPTS += -DPLUGIN_VALIDATOR_PWQUALITY=OFF
->  endif
->
->  ifeq ($(BR2_PACKAGE_JEMALLOC),y)
->  CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=ON
-> +CUTELYST_DEPENDENCIES += jemalloc
->  else
->  CUTELYST_CONF_OPTS += -DUSE_JEMALLOC=OFF
->  endif
-> --
-> 2.17.1
->
+qt5virtualkeyboard 2.0 (shipped with Qt 5.6) installs the QML plugin
+under the directory Enterprise while the later versions install it
+without that directory.
 
+Differentiate installation to target of the QML plugin according to the
+Qt major version in use.
 
+Also, make sure the /usr/qml/QtQuick directory exist before the copy.
+
+Fixes:
+
+	>>> qt5virtualkeyboard 2.0 Installing to target
+	mkdir -p /home/gportay/src/buildroot/output/target/usr/lib/qt/plugins/platforminputcontexts
+	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so /home/gportay/src/buildroot/output/target/usr/lib/qt/plugins/platforminputcontexts
+	cp -dpfr /home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/qml/QtQuick/VirtualKeyboard /home/gportay/src/buildroot/output/target/usr/qml/QtQuick
+	cp: cannot stat '/home/gportay/src/buildroot/output/host/arm-buildroot-linux-gnueabi/sysroot/usr/qml/QtQuick/VirtualKeyboard': No such file or directory
+	package/pkg-generic.mk:310: recipe for target '/home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/.stamp_target_installed' failed
+	make: *** [/home/gportay/src/buildroot/output/build/qt5virtualkeyboard-2.0/.stamp_target_installed] Error 1
+
+Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+---
+Changes since v1:
+ - fix condition order (5.6 <-> latest)
+ - fix define name (QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML without 3RDPARTY)
+ - fix missing destination directory (Enterprise)
+ - make sure directory exist before the copy (mkdir before cp)
+
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index 8d26394c96..4aa5fc9575 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -71,6 +71,18 @@ define QT5VIRTUALKEYBOARD_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
+ endef
+ 
++ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
++define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
++	mkdir -p $(TARGET_DIR)/usr/qml/QtQuick/Enterprise
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/Enterprise/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick/Enterprise/
++endef
++else
++define QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML
++	mkdir -p $(TARGET_DIR)/usr/qml/QtQuick
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick/
++endef
++endif
++
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/virtualkeyboard $(TARGET_DIR)/usr/lib/qt/examples/
+@@ -81,7 +93,7 @@ define QT5VIRTUALKEYBOARD_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so \
+ 		$(TARGET_DIR)/usr/lib/qt/plugins/platforminputcontexts
+-	cp -dpfr $(STAGING_DIR)/usr/qml/QtQuick/VirtualKeyboard $(TARGET_DIR)/usr/qml/QtQuick
++	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_QML)
+ 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_3RDPARTY_PARTS)
+ 	$(QT5VIRTUALKEYBOARD_INSTALL_TARGET_EXAMPLES)
+ endef
 -- 
-Daniel Nicoletti
-
-KDE Developer - http://dantti.wordpress.com
+2.11.0
