@@ -1,28 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 23:04:01 +0200
+Date: Thu, 6 Sep 2018 23:03:55 +0200
 Subject: [Buildroot] [git commit branch/next] sunxi-mali-mainline-driver:
- add hash file for git tarball
-Message-ID: <20180906210326.1AC6E82DB9@busybox.osuosl.org>
+ bump version
+Message-ID: <20180906210326.0B47582DB8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cec266ee1f708f11cc679cb4f81613fa4186003c
+commit: https://git.buildroot.net/buildroot/commit/?id=a92275e33c8774abb4a1fc1459a8cd44c5e4e2ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+For support H3 and H5 SoCs and r8p1 driver version.
+
+git shortlog --invert-grep --grep travis --no-merges 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5..
+Maxime Ripard (6):
+      Add r8p1 release
+      sunxi: Move the reset test to a function
+      sunxi: Add H3 support
+      sunxi: Add H5 support
+      sunxi: Remove generic compatible
+      sunxi: Set clock rate in the driver
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-new file mode 100644
-index 0000000000..bcc794743d
---- /dev/null
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 9f479f8ac5e013e33568901b942baf6797464ea9b7f340ee38cd469b4fd2b038  sunxi-mali-mainline-driver-8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb.tar.gz
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index 24817b07c7..fcaeb81efe 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_MALI_MAINLINE_DRIVER_VERSION = 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = 8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb
+ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+ 
