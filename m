@@ -1,31 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Sep 2018 22:52:43 +0200
-Subject: [Buildroot] [git commit] Kickoff 2018.11 cycle
-Message-ID: <20180906205218.2675A82DA6@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 6 Sep 2018 22:53:47 +0200
+Subject: [Buildroot] [PATCH v2 1/2] sunxi-mali-mainline: add hash file
+ for tarball
+In-Reply-To: <20180825135211.123743-1-giulio.benetti@micronovasrl.com>
+References: <20180825135211.123743-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20180906225347.532165ae@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89920e9735cb561dccf1e1f81d35788fd10a655b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Sat, 25 Aug 2018 15:52:10 +0200, Giulio Benetti wrote:
+> sunxi-mali-mainline package has not hash file.
+> 
+> Add hash file with sha256sum for tarball resulting from git download.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  package/sunxi-mali-mainline/sunxi-mali-mainline.hash | 2 ++
+>  1 file changed, 2 insertions(+)
+>  create mode 100644 package/sunxi-mali-mainline/sunxi-mali-mainline.hash
 
-diff --git a/Makefile b/Makefile
-index 3e1319c1ea..1c1467d482 100644
---- a/Makefile
-+++ b/Makefile
-@@ -87,7 +87,7 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2018.08
-+export BR2_VERSION := 2018.11-git
- # Actual time the release is cut (for reproducible builds)
- BR2_VERSION_EPOCH = 1536263000
- 
+Both applied to next. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
