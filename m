@@ -1,38 +1,23 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 23:04:27 +0200
-Subject: [Buildroot] [PATCH 1/3] sunxi-mali-mainline-driver: bump version
-In-Reply-To: <20180827084903.111735-1-giulio.benetti@micronovasrl.com>
-References: <20180827084903.111735-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20180906230427.3b524b53@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 06 Sep 2018 21:09:07 +0000
+Subject: [Buildroot] [Bug 11286] python-rpi-gpio only should depend on
+ BR2_arm || BR2_aarch64
+In-Reply-To: <bug-11286-163@https.bugs.busybox.net/>
+References: <bug-11286-163@https.bugs.busybox.net/>
+Message-ID: <bug-11286-163-BTsD78GVdU@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11286
 
-On Mon, 27 Aug 2018 10:49:01 +0200, Giulio Benetti wrote:
-> For support H3 and H5 SoCs and r8p1 driver version.
-> 
-> git shortlog --invert-grep --grep travis --no-merges 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5..
-> Maxime Ripard (6):
->       Add r8p1 release
->       sunxi: Move the reset test to a function
->       sunxi: Add H3 support
->       sunxi: Add H5 support
->       sunxi: Remove generic compatible
->       sunxi: Set clock rate in the driver
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #1 from Yuntian Zhang <yuntian.zh@gmail.com> ---
+After testing with this dependency the python-rpi-gpio is included in the
+sdcard.img for 3_64_defconfig. However /proc/cpuinfo doesn't match the output
+of 3_defconfig, which fails rpi.gpio/source/cpuinfo.c:get_rpi_info() test.
 
-Series applied to next. Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
