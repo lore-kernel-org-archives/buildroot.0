@@ -1,43 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 21:30:50 +0200
-Subject: [Buildroot] [git commit] configs/zynq_zc706: uboot: bump to
- xilinx-v2018.2 (fixes build)
-Message-ID: <20180907111608.58F757FEB5@busybox.osuosl.org>
+Date: Thu, 6 Sep 2018 23:03:55 +0200
+Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: bump version
+Message-ID: <20180907111608.7BBC57FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6fc6948b65123379c041dd6205d439fb64cf6fe
+commit: https://git.buildroot.net/buildroot/commit/?id=a92275e33c8774abb4a1fc1459a8cd44c5e4e2ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to the most recent Xilinx release.
+For support H3 and H5 SoCs and r8p1 driver version.
 
-Fixes:
-  .../output/host/include/libfdt_env.h:71:30: error: conflicting types for ???fdt64_t???
-  .../output/host/include/libfdt_env.h:91:24: error: expected ???)??? before ???x???
-  .../output/host/include/libfdt.h:150:21: error: redefinition of ???fdt_offset_ptr_w???
-...and many, many other similar errors.
+git shortlog --invert-grep --grep travis --no-merges 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5..
+Maxime Ripard (6):
+      Add r8p1 release
+      sunxi: Move the reset test to a function
+      sunxi: Add H3 support
+      sunxi: Add H5 support
+      sunxi: Remove generic compatible
+      sunxi: Set clock rate in the driver
 
-[Build-tested only]
-Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
-Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/zynq_zc706_defconfig | 2 +-
+ package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index 758069b30f..e8019177d2 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -20,7 +20,7 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2017.3"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2018.2"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zc706"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+index 24817b07c7..fcaeb81efe 100644
+--- a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
++++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SUNXI_MALI_MAINLINE_DRIVER_VERSION = 52ef1c5e133cc5fd791ca636239dc5e7b19c26d5
++SUNXI_MALI_MAINLINE_DRIVER_VERSION = 8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb
+ SUNXI_MALI_MAINLINE_DRIVER_SITE = $(call github,mripard,sunxi-mali,$(SUNXI_MALI_MAINLINE_DRIVER_VERSION))
+ SUNXI_MALI_MAINLINE_DRIVER_DEPENDENCIES = linux
+ 
