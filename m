@@ -1,65 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 21:45:16 +0200
-Subject: [Buildroot] [git commit branch/next] sunxi-mali-mainline: add EULA
- license file
-Message-ID: <20180906194808.2390082B8F@busybox.osuosl.org>
+From: Joel Carlson <joelsoncarl@gmail.com>
+Date: Thu, 6 Sep 2018 13:58:15 -0600
+Subject: [Buildroot] [PATCH] flatcc: add dependency on C++11
+In-Reply-To: <87sh2m7745.fsf@dell.be.48ers.dk>
+References: <1536261611-13825-1-git-send-email-JoelsonCarl@gmail.com>
+ <87sh2m7745.fsf@dell.be.48ers.dk>
+Message-ID: <CAAjKBV9WAQQwxCzqTGYFaAgZ+gwRU8SDNuwWKJmp3=MpQFT+Yg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e1640e0996cda3d9519494dea578daacd187f44
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-sunxi-mali-mainline package has not license file at the moment.
+On Thu, Sep 6, 2018 at 1:34 PM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Joel" == Joel Carlson <joelsoncarl@gmail.com> writes:
+>
+>  > Some of the components built by flatcc require C++. Also, while older
+>  > toolchains may work, C11/C++11 is the reference that is expected to
+>  > always work.
+>
+>  > Fixes
+>  > http://autobuild.buildroot.net/results/8fb0447eed1d55b7687f657530e31695cf77ce5c/
+>
+> This is an autobuilder on the next branch. Does this mean that only
+> 0.5.2 is affected and not 0.5.1 (the verison on master)?
 
-License file is a pdf EULA, but its name contains whitespaces. This
-gives problems when passing filename to SUNXI_MALI_MAINLINE_LICENSE_FILES
-since it expects a list of files.
-Other attempts with \ or \\ to keep spaces were tried with no luck.
-Add a define to POST_PATCH_HOOKS to change pdf filename from
-'EULA for Mali 400MP _AW.pdf' to 'EULA_for_Mali_400MP_AW.pdf'.
-Add EULA file to hash.
+Sorry, I failed to pay attention to the branches.  This is appropriate
+for next, not master.  It looks like some CXX stuff was added into the
+CMake files after 0.5.1.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sunxi-mali-mainline/sunxi-mali-mainline.hash |  1 +
- package/sunxi-mali-mainline/sunxi-mali-mainline.mk   | 10 ++++++++++
- 2 files changed, 11 insertions(+)
+>
+>  > Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+>  > ---
+>  >  package/flatcc/Config.in | 7 +++++++
+>  >  1 file changed, 7 insertions(+)
+>
+>  > diff --git a/package/flatcc/Config.in b/package/flatcc/Config.in
+>  > index 6273f2b..557bd9b 100644
+>  > --- a/package/flatcc/Config.in
+>  > +++ b/package/flatcc/Config.in
+>  > @@ -1,8 +1,15 @@
+>  >  config BR2_PACKAGE_FLATCC
+>  >      bool "flatcc"
+>  > +    # Some components require C++, and C11/C++11 is the reference
+>  > +    # expected to always work
+>  > +    depends on BR2_INSTALL_LIBSTDCPP
+>  > +    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>  >      help
+>  >        flatcc is C language implementation of Google Flatbuffers. It
+>  >        consists of both a library for the target as well as a
+>  >        flatbuffer compiler tool for the host.
+>
+> It is a bit odd that a "C language implementation" really needs C++. Are
+> you sure this isn't just for some kind of optional C++ binding?
 
-diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
-index 5d9d1a52b4..978be01024 100644
---- a/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
-+++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 72969ecf470b9e5ce787c2f8f36242926e1e892af0891924ee59a2cd206de39f  sunxi-mali-mainline-d691cb93884ca8ac67860502117bbec283dc19aa.tar.gz
-+sha256 8a06bcae44a41a886f339b4338422415a786787f113e9ed6456ae117104a0b6a  EULA_for_Mali_400MP_AW.pdf
-diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-index 766bacf38d..701a1fbbb4 100644
---- a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-+++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-@@ -8,6 +8,10 @@ SUNXI_MALI_MAINLINE_VERSION = d691cb93884ca8ac67860502117bbec283dc19aa
- SUNXI_MALI_MAINLINE_SITE = $(call github,bootlin,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
- SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
- SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
-+SUNXI_MALI_MAINLINE_LICENSE = Allwinner End User Licence Agreement
-+SUNXI_MALI_MAINLINE_EULA_ORIGINAL = EULA\ for\ Mali\ 400MP\ _AW.pdf
-+SUNXI_MALI_MAINLINE_EULA_NO_SPACES = EULA_for_Mali_400MP_AW.pdf
-+SUNXI_MALI_MAINLINE_LICENSE_FILES = $(SUNXI_MALI_MAINLINE_EULA_NO_SPACES)
- 
- SUNXI_MALI_MAINLINE_REV = $(call qstrip,$(BR2_PACKAGE_SUNXI_MALI_MAINLINE_REVISION))
- 
-@@ -36,4 +40,10 @@ define SUNXI_MALI_MAINLINE_INSTALL_TARGET_CMDS
- 		$(TARGET_DIR)/usr/lib/
- endef
- 
-+define SUNXI_MALI_MAINLINE_FIXUP_LICENSE_FILE
-+	mv $(@D)/$(SUNXI_MALI_MAINLINE_EULA_ORIGINAL) $(@D)/$(SUNXI_MALI_MAINLINE_EULA_NO_SPACES)
-+endef
-+
-+SUNXI_MALI_MAINLINE_POST_PATCH_HOOKS += SUNXI_MALI_MAINLINE_FIXUP_LICENSE_FILE
-+
- $(eval $(generic-package))
+I will dig into this a bit deeper.  The immediate thing I had noticed
+was that CMakeLists.txt changed:
+- project (FlatCC C)
++ project (FlatCC C CXX)
+
+I only see a single .cpp file, which is in a tests folder.  I will see
+if I can pass/set some options so that C++ isn't necessary, and will
+send a new patch if I find that to be the case.
+
+>
+> --
+> Bye, Peter Korsgaard
