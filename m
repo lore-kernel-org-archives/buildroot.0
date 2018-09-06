@@ -1,48 +1,45 @@
-From: =?utf-8?B?R2HDq2w=?= PORTAY <gael.portay@savoirfairelinux.com>
-Date: Thu, 6 Sep 2018 03:43:59 -0400
-Subject: [Buildroot] [PATCH v1 3/4] qt5virtualkeyboard: fix legal-info
- with 5.6
-In-Reply-To: <20180906093631.2fc13f1e@windsurf>
-References: <20180903123747.5234-1-gael.portay@savoirfairelinux.com>
- <20180903123747.5234-4-gael.portay@savoirfairelinux.com>
- <20180905231134.46b70011@windsurf>
- <20180906073221.6f75uwcwlrbhxyy3@archlinux>
- <20180906093631.2fc13f1e@windsurf>
-Message-ID: <20180906074358.puen25byqrukxoiq@archlinux>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 6 Sep 2018 09:44:51 +0200
+Subject: [Buildroot] [PATCH v5 1/3] Makefile: add tainting support
+In-Reply-To: <1536186133-9933-2-git-send-email-angelo.compagnucci@gmail.com>
+References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
+ <1536186133-9933-2-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20180906094451.44df8776@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Hello,
 
-On Thu, Sep 06, 2018 at 09:36:31AM +0200, Thomas Petazzoni wrote:
-> Hello,
+On Thu,  6 Sep 2018 00:22:11 +0200, Angelo Compagnucci wrote:
+> Packages who harms the build reproducibility or licensing can declare
+> FOO_TAINTS variable. If a package taints the build it will be added
+> to a list of tainting packages. The build ends with a warning if the
+> tainting packages list is not empty. Moreover, legal info will show
+> a warning in presence of a tainting package.
 > 
-> On Thu, 6 Sep 2018 03:32:21 -0400, Ga?l PORTAY wrote:
+> Tainting of host packages is not supported right now.
 > 
-> > I found this [1]. I also asked to Qt and I am waiting for their
-> > response.
-> > 
-> > I guess this Qt5 module is available in Open license since 5.7;
-> 
-> What do you call the "Open license" ?
-> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 
-I wanted to say that Qt VirtualKeyboard is available under GPLv3 since
-5.7.
+Why two SoBs ? Just one matching the From: is good enough.
 
-So I guess the version 2.0 is available only under the Qt Commercial
-license.
+> +ifdef $(2)_TAINTS
+> +ifeq ($$($$($(2)_KCONFIG_VAR)),y)
+> +BR2_TAINTED_BY+=$$($(2)_RAWNAME)
 
-> > thus 2.0 (5.6) is available only under their Commercial license.
-> 
-> So the source code would be freely available, but can't be used without
-> having their Commercial license ?
-> 
+Spaces around +=
 
-I do not know yet. I asked and I will tell you once I get a response
-from them.
+No need to resend just for that. Just explain why you have two SoB, if
+I can keep just one, I can fix that up when applying.
 
-Ga?l
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
