@@ -1,45 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 2 Sep 2018 22:53:05 +0200
-Subject: [Buildroot] [git commit] jpeg-turbo: fix static build
-Message-ID: <20180907111608.102E97FEB5@busybox.osuosl.org>
+Date: Thu, 6 Sep 2018 21:30:47 +0200
+Subject: [Buildroot] [git commit] configs/zynq_zed: uboot: bump to
+ xilinx-v2018.2 (fixes build)
+Message-ID: <20180907111608.524277FEB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce359b1b4abb0cd9b2dace9a9c65204e5c36ea9a
+commit: https://git.buildroot.net/buildroot/commit/?id=cc2ce5996f17eeef0357d79347a8a9fff3ee3aa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Set ENABLE_STATIC and ENABLE_SHARED depending on
-BR2_PACKAGE_STATIC_LIBS, BR2_SHARED_SHARED_STATIC_LIBS and
-BR2_SHARED_SHARED_LIBS
+Bump to the most recent Xilinx release.
 
 Fixes:
- - http://autobuild.buildroot.net/results/7e1500405a0f102dd6a48ef9337ffe4d7de73df3
+  .../output/host/include/libfdt_env.h:71:30: error: conflicting types for ???fdt64_t???
+  .../output/host/include/libfdt_env.h:91:24: error: expected ???)??? before ???x???
+  .../output/host/include/libfdt.h:150:21: error: redefinition of ???fdt_offset_ptr_w???
+...and many, many other similar errors.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Run-time tested]
+Tested-by: Luca Ceresoli <luca@lucaceresoli.net>
+Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jpeg-turbo/jpeg-turbo.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ configs/zynq_zed_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 0fe2fcda72..1807cc294e 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
-@@ -15,6 +15,14 @@ JPEG_TURBO_DEPENDENCIES = host-pkgconf
- 
- JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=OFF
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=ON -DENABLE_SHARED=ON
-+else ifeq ($(BR2_SHARED_LIBS),y)
-+JPEG_TURBO_CONF_OPTS += -DENABLE_STATIC=OFF -DENABLE_SHARED=ON
-+endif
-+
- ifeq ($(BR2_PACKAGE_JPEG_SIMD_SUPPORT),y)
- JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=ON
- # x86 simd support needs nasm
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index 676366bc5c..a215695b54 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -20,7 +20,7 @@ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/Xilinx/u-boot-xlnx.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2017.3"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="xilinx-v2018.2"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="zynq_zed"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
