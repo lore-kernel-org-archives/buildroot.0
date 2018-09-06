@@ -1,47 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Thu, 6 Sep 2018 21:17:09 +0200
-Subject: [Buildroot] [git commit] cutelyst: Add dependency on Kernel headers
- >= 3.3
-Message-ID: <20180906191648.31C8682B36@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: add 4.18.x choice for headers
+Message-ID: <20180906191648.3872382AFC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb3c56e3557cd57be806ba599baa461452f07bef
+commit: https://git.buildroot.net/buildroot/commit/?id=c59c6c162e2ce516506b71f238b7976a70536505
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cutelyst-WSGI module uses SO_REUSEPORT
-
-Fixes:
-
-http://autobuild.buildroot.net/results/d38411eda9edf16e2c40d8931bcfc889faae43dc/
-
-Signed-off-by: Daniel Nicoletti <dantti12@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7f62d8122bc42b84608cad34fb005b4870c143d5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cutelyst/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ toolchain/Config.in                                                  | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/cutelyst/Config.in b/package/cutelyst/Config.in
-index 91b559bd18..b2b48baa69 100644
---- a/package/cutelyst/Config.in
-+++ b/package/cutelyst/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_CUTELYST
- 	depends on BR2_PACKAGE_QT5
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	help
-@@ -11,6 +12,7 @@ config BR2_PACKAGE_CUTELYST
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index ad02af5215..c2192a52b1 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -357,10 +357,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
  
- 	  https://cutelyst.org
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+ 	default "4.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 	default "4.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+ 	default "4.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 6a9921c149..4639232bfb 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -123,6 +123,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
  
--comment "cutelyst needs a toolchain w/ C++, gcc >= 4.8"
-+comment "cutelyst needs a toolchain w/ C++, gcc >= 4.8, headers >= 3.3"
- 	depends on BR2_PACKAGE_QT5
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_18
++	bool "4.18.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_17
+ 	bool "4.17.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
