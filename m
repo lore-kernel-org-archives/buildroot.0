@@ -1,28 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:04 -0000
-Subject: [Buildroot] [git commit] package/gcc: fix build of gcc-6.4.0 with
+Date: Fri, 07 Sep 2018 11:16:05 -0000
+Subject: [Buildroot] [git commit] package/gcc: fix build of gcc-7.3.0 with
  glibc-2.28
-Message-ID: <20180907111501.7DC868019E@busybox.osuosl.org>
+Message-ID: <20180907111501.363247F950@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e8cae29584246a9a18beed6c22816d4cdcb8120
+commit: https://git.buildroot.net/buildroot/commit/?id=b9db27a03c272914f3efcde0bc86dc86e159e0a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0003-libsanitizer-Use-pre-computed-size.patch  | 72 ++++++++++++++++++++++
+ .../0004-libsanitizer-Use-pre-computed-size.patch  | 72 ++++++++++++++++++++++
  1 file changed, 72 insertions(+)
 
-diff --git a/package/gcc/6.4.0/0003-libsanitizer-Use-pre-computed-size.patch b/package/gcc/6.4.0/0003-libsanitizer-Use-pre-computed-size.patch
+diff --git a/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch b/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
 new file mode 100644
 index 0000000000..6e73331eae
 --- /dev/null
-+++ b/package/gcc/6.4.0/0003-libsanitizer-Use-pre-computed-size.patch
++++ b/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
 @@ -0,0 +1,72 @@
 +From 61f38c64c01a15560026115a157b7021ec67bd3b Mon Sep 17 00:00:00 2001
 +From: hjl <hjl@138bc75d-0d04-0410-961f-82ee72b054a4>
