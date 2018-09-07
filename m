@@ -1,98 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:05 -0000
-Subject: [Buildroot] [git commit] package/gcc: fix build of gcc-7.3.0 with
- glibc-2.28
-Message-ID: <20180907111501.363247F950@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vlc: add optional dependency to
+ gst1-plugins-base
+Message-ID: <20180907111513.896B380DE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9db27a03c272914f3efcde0bc86dc86e159e0a9
+commit: https://git.buildroot.net/buildroot/commit/?id=74255f8339cbe3106ede9eb145ca18d698c6cfc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0004-libsanitizer-Use-pre-computed-size.patch  | 72 ++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+ package/vlc/vlc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch b/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
-new file mode 100644
-index 0000000000..6e73331eae
---- /dev/null
-+++ b/package/gcc/7.3.0/0004-libsanitizer-Use-pre-computed-size.patch
-@@ -0,0 +1,72 @@
-+From 61f38c64c01a15560026115a157b7021ec67bd3b Mon Sep 17 00:00:00 2001
-+From: hjl <hjl@138bc75d-0d04-0410-961f-82ee72b054a4>
-+Date: Thu, 24 May 2018 20:21:54 +0000
-+Subject: [PATCH] libsanitizer: Use pre-computed size of struct ustat for Linux
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 91e96516ac..6643d6fd8d 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -59,7 +59,6 @@ VLC_CONF_OPTS += \
+ 	--disable-fluidsynth \
+ 	--disable-gme \
+ 	--disable-goom \
+-	--disable-gst-decode \
+ 	--disable-harfbuzz \
+ 	--disable-jack \
+ 	--disable-jpeg \
+@@ -181,6 +180,13 @@ else
+ VLC_CONF_OPTS += --disable-freerdp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
++VLC_CONF_OPTS += --enable-gst-decode
++VLC_DEPENDENCIES += gst1-plugins-base
++else
++VLC_CONF_OPTS += --disable-gst-decode
++endif
 +
-+Cherry-pick compiler-rt revision 333213:
-+
-+<sys/ustat.h> has been removed from glibc 2.28 by:
-+
-+commit cf2478d53ad7071e84c724a986b56fe17f4f4ca7
-+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
-+Date:   Sun Mar 18 11:28:59 2018 +0800
-+
-+    Deprecate ustat syscall interface
-+
-+This patch uses pre-computed size of struct ustat for Linux.
-+
-+	PR sanitizer/85835
-+	* sanitizer_common/sanitizer_platform_limits_posix.cc: Don't
-+	include <sys/ustat.h> for Linux.
-+	(SIZEOF_STRUCT_USTAT): New.
-+	(struct_ustat_sz): Use SIZEOF_STRUCT_USTAT for Linux.
-+
-+
-+
-+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/branches/gcc-7-branch at 260688 138bc75d-0d04-0410-961f-82ee72b054a4
-+
-+Downloaded from upstream commit
-+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=61f38c64c01a15560026115a157b7021ec67bd3b
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ libsanitizer/ChangeLog                                    |  8 ++++++++
-+ .../sanitizer_common/sanitizer_platform_limits_posix.cc   | 15 +++++++++++++--
-+ 2 files changed, 21 insertions(+), 2 deletions(-)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
-+index 31a5e69..8017afd 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cc
-+@@ -154,7 +154,6 @@ typedef struct user_fpregs elf_fpregset_t;
-+ # include <sys/procfs.h>
-+ #endif
-+ #include <sys/user.h>
-+-#include <sys/ustat.h>
-+ #include <linux/cyclades.h>
-+ #include <linux/if_eql.h>
-+ #include <linux/if_plip.h>
-+@@ -247,7 +246,19 @@ namespace __sanitizer {
-+ #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
-+ 
-+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
-+-  unsigned struct_ustat_sz = sizeof(struct ustat);
-++  // Use pre-computed size of struct ustat to avoid <sys/ustat.h> which
-++  // has been removed from glibc 2.28.
-++#if defined(__aarch64__) || defined(__s390x__) || defined (__mips64) \
-++  || defined(__powerpc64__) || defined(__arch64__) || defined(__sparcv9) \
-++  || defined(__x86_64__)
-++#define SIZEOF_STRUCT_USTAT 32
-++#elif defined(__arm__) || defined(__i386__) || defined(__mips__) \
-++  || defined(__powerpc__) || defined(__s390__)
-++#define SIZEOF_STRUCT_USTAT 20
-++#else
-++#error Unknown size of struct ustat
-++#endif
-++  unsigned struct_ustat_sz = SIZEOF_STRUCT_USTAT;
-+   unsigned struct_rlimit64_sz = sizeof(struct rlimit64);
-+   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
-+ #endif // SANITIZER_LINUX && !SANITIZER_ANDROID
-+-- 
-+2.9.3
-+
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+ VLC_DEPENDENCIES += libgl
+ endif
