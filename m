@@ -1,41 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:37 -0000
-Subject: [Buildroot] [git commit] glorytun: bump to version 0.0.99-mud
-Message-ID: <20180907111545.3934E7F981@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vlc: skins2 depends on qt5base
+Message-ID: <20180907111545.7B9F07F981@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=becaafd056dbfbe58d8578c0f2991ab0de45938f
+commit: https://git.buildroot.net/buildroot/commit/?id=9f68d99a82384dda6ea7801f3f5ec905231c8fd2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes
+
+configure: error: The skins2 module depends on the Qt interface. Without
+it you will not be able to open any dialog box from the interface, which
+makes the skins2 interface rather useless. Install the Qt development
+package or alternatively you can also configure with: --disable-qt
+--disable-skins2.
+
+http://autobuild.buildroot.net/results/ddb/ddb1ab48adb9705c44ed3d6d800b6d01ad52ac8c/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glorytun/glorytun.hash | 2 +-
- package/glorytun/glorytun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/vlc/vlc.mk | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
-index 891af2079e..59a5f09c0e 100644
---- a/package/glorytun/glorytun.hash
-+++ b/package/glorytun/glorytun.hash
-@@ -1,2 +1,2 @@
--sha256 76849b1568119cf0834749db56d4882966863d31351c21c1b22f373f0c97a498  glorytun-0.0.93-mud.tar.gz
-+sha256 5e23afad4592d6af27ffd2cb3c826cf0ea1b5166a05ef1ae5c77fb4e465bb735  glorytun-0.0.99-mud.tar.gz
- sha256 bd418f8ef7d62f2c89e3aa1e5dc41c7d7a6212eb1cdb4d39a26a5bd333e1b4a3  LICENSE
-diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
-index 233e1feaa9..f6d87c2605 100644
---- a/package/glorytun/glorytun.mk
-+++ b/package/glorytun/glorytun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index c77c945a34..b69657d31f 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -473,8 +473,14 @@ endif
+ ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS)$(BR2_PACKAGE_QT5SVG),yy)
+ VLC_CONF_OPTS += --enable-qt
+ VLC_DEPENDENCIES += qt5base qt5svg
++ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
++VLC_CONF_OPTS += --enable-skins2
++VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
+ else
+-VLC_CONF_OPTS += --disable-qt
++VLC_CONF_OPTS += --disable-skins2
++endif
++else
++VLC_CONF_OPTS += --disable-qt --disable-skins2
+ endif
  
--GLORYTUN_VERSION = 0.0.93-mud
-+GLORYTUN_VERSION = 0.0.99-mud
- GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
- GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
- GLORYTUN_LICENSE = BSD-2-clause
+ ifeq ($(BR2_PACKAGE_SDL_IMAGE),y)
+@@ -551,13 +557,6 @@ else
+ VLC_CONF_OPTS += --without-x
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
+-VLC_CONF_OPTS += --enable-skins2
+-VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
+-else
+-VLC_CONF_OPTS += --disable-skins2
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ VLC_DEPENDENCIES += zlib
+ endif
