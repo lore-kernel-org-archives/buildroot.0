@@ -1,50 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:41 -0000
-Subject: [Buildroot] [git commit] sunxi-mali-mainline: free-electrons is now
- bootlin
-Message-ID: <20180907111548.DF669826DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] cryptsetup: fix build with old host kernel
+ headers
+Message-ID: <20180907111522.C475D7FBE7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2faf80bbb0124ce86be40225fcc0d0cb157a0ba9
+commit: https://git.buildroot.net/buildroot/commit/?id=b44d4e0b09f661f2672a3d9d7ec8cf8fce7916c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though http://github.com/free-electrons/<foo>/ properly redirects
-to http://github.com/bootlin/<foo>/, it makes sense to use the
-bootlin/ URL directly.
+By default cryptsetup configure fails when the if_alg.h kernel header is
+not available. Kernels older than 2.6.38, like the one in RHEL 6 hosts,
+do not provide this header. Since we don't need the kernel crypto
+feature for host tools, just disable this feature to allow successful
+completion of the configure script.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+While at it, fix a typo in the --with-crypto_backend option (hyphen ->
+underscore).
+
+Should fix:
+http://autobuild.buildroot.net/results/ffd/ffda2579b215b53161025b7bc703091cb30ef95d/
+http://autobuild.buildroot.net/results/c48/c48015f76b13fec38f650f66824e7b986eb28572/
+http://autobuild.buildroot.net/results/be6/be621f71bf9da8719bf7fc943eccc9b4dc2cc43e/
+
+Cc: Martin Hicks <mort@bork.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sunxi-mali-mainline/Config.in              | 2 +-
- package/sunxi-mali-mainline/sunxi-mali-mainline.mk | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cryptsetup/cryptsetup.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/sunxi-mali-mainline/Config.in b/package/sunxi-mali-mainline/Config.in
-index a889864465..a2fb95bd79 100644
---- a/package/sunxi-mali-mainline/Config.in
-+++ b/package/sunxi-mali-mainline/Config.in
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE
- 	help
- 	  Install userspace Allwinner OpenGL libraries.
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index d5ab022b77..d81aa7b341 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -36,7 +36,8 @@ HOST_CRYPTSETUP_DEPENDENCIES = \
+ 	host-json-c \
+ 	host-openssl
  
--	  https://github.com/free-electrons/mali-blobs
-+	  https://github.com/bootlin/mali-blobs
+-HOST_CRYPTSETUP_CONF_OPTS = --with-crypto-backend=openssl
++HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
++	--disable-kernel_crypto
  
- if BR2_PACKAGE_SUNXI_MALI_MAINLINE
- 
-diff --git a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-index 05b90f0bee..766bacf38d 100644
---- a/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-+++ b/package/sunxi-mali-mainline/sunxi-mali-mainline.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- SUNXI_MALI_MAINLINE_VERSION = d691cb93884ca8ac67860502117bbec283dc19aa
--SUNXI_MALI_MAINLINE_SITE = $(call github,free-electrons,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
-+SUNXI_MALI_MAINLINE_SITE = $(call github,bootlin,mali-blobs,$(SUNXI_MALI_MAINLINE_VERSION))
- SUNXI_MALI_MAINLINE_INSTALL_STAGING = YES
- SUNXI_MALI_MAINLINE_PROVIDES = libegl libgles
- 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
