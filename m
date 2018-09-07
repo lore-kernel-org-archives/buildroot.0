@@ -1,74 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:48 -0000
-Subject: [Buildroot] [git commit] btrfs-progs: make e2fsprogs an optional
- dependency
-Message-ID: <20180907111550.E86CA7F981@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:49 -0000
+Subject: [Buildroot] [git commit] libssh: fix cross compile with older cmake
+Message-ID: <20180907111557.A088280239@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=237c8d6b0ced7954ef64bd8b4d82a95d93443a88
+commit: https://git.buildroot.net/buildroot/commit/?id=f34f33baa6f94137a78f15cafe0ee0e4ece59f97
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-e2fsprogs is only needed to build the btrfs-convert program, that
-allows to convert an existing ext2 filesystem into a btrfs
-filesystem. Not everybody needs to do that and making this dependency
-optional is nicer, so this is what this patch does.
+Old version of cmake break cross-compilation when FindThreads is used
+because of a try_run call. Add a workaround that avoids try_run.
 
-Note that btrfs-progs also supports converting from reiserfs, which is
-why the --with-convert option supports a list of filesystems. Since
-Buildroot has no package for the reiserfs library, we for now only
-support the ext2 case, with e2fsprogs as a dependency.
+cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Should fix:
+http://autobuild.buildroot.net/results/8aa/8aa2bd894416a4508ca7140f8947ff46243f8b78/
+http://autobuild.buildroot.net/results/f2c/f2cc965bb134bf4fd9e625eb267b67c949c202fc/
+
+Cc: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/btrfs-progs/Config.in      |  1 -
- package/btrfs-progs/btrfs-progs.mk | 12 +++++++++++-
- 2 files changed, 11 insertions(+), 2 deletions(-)
+ package/libssh/libssh.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
-index ad86bab580..35dfc39193 100644
---- a/package/btrfs-progs/Config.in
-+++ b/package/btrfs-progs/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_BTRFS_PROGS
- 	bool "btrfs-progs"
- 	depends on BR2_USE_MMU # util-linux
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_E2FSPROGS
- 	select BR2_PACKAGE_LZO
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
-index 2f9f4127b6..33a6be324f 100644
---- a/package/btrfs-progs/btrfs-progs.mk
-+++ b/package/btrfs-progs/btrfs-progs.mk
-@@ -7,7 +7,7 @@
- BTRFS_PROGS_VERSION = 4.16.1
- BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
- BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
--BTRFS_PROGS_DEPENDENCIES = host-pkgconf e2fsprogs lzo util-linux zlib
-+BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
- BTRFS_PROGS_CONF_OPTS = --disable-backtrace --disable-zstd --disable-python
- BTRFS_PROGS_LICENSE = GPL-2.0, LGPL-3.0+ (libbtrfsutil)
- BTRFS_PROGS_LICENSE_FILES = COPYING libbtrfsutil/COPYING \
-@@ -21,6 +21,16 @@ BTRFS_PROGS_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-static
- BTRFS_PROGS_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) install-static
- endif
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index 4295aa42ee..635d72ad98 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -17,6 +17,9 @@ LIBSSH_CONF_OPTS = \
+ 	-DWITH_SERVER=OFF \
+ 	-DWITH_EXAMPLES=OFF
  
-+# convert also supports conversion from reiserfs, which needs some
-+# reiserfs libraries, but we have no package for them in Buildroot, so
-+# we keep things simple and only handle ext2.
-+ifeq ($(BR2_PACKAGE_E2FSPROGS),y)
-+BTRFS_PROGS_CONF_OPTS += --enable-convert --with-convert=ext2
-+BTRFS_PROGS_DEPENDENCIES += e2fsprogs
-+else
-+BTRFS_PROGS_CONF_OPTS += --disable-convert
-+endif
++# cmake older than 3.10 require this to avoid try_run() in FindThreads
++LIBSSH_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
 +
- HOST_BTRFS_PROGS_DEPENDENCIES = host-util-linux host-lzo host-zlib
- HOST_BTRFS_PROGS_CONF_OPTS = \
- 	--disable-backtrace \
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ LIBSSH_CONF_OPTS += -DWITH_ZLIB=ON
+ LIBSSH_DEPENDENCIES += zlib
