@@ -1,153 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:28 -0000
-Subject: [Buildroot] [git commit] package/botan: bump version to 2.7.0
-Message-ID: <20180907111535.EA7E880030@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/live555: Add a pkg-config file for
+ the shared libraries
+Message-ID: <20180907111534.432C18078F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70ff2eec598070f3c8221a69e41a7273ebc5ce66
+commit: https://git.buildroot.net/buildroot/commit/?id=13f7959e8d99468ab6718f037210c972120ea775
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Depends on gcc >= 4.8:
-https://github.com/randombit/botan/blob/master/readme.rst
-
-Rebased patch 0001, added license hash and updated license path.
-
-Updated configure options for shared/static libraries after commit
-https://github.com/randombit/botan/commit/299119f02c09e7d3e657b13e1706cb653eff560c
-
-Added configure for ssp support after commit
-https://github.com/randombit/botan/commit/ebeae68aba0d3384a00fddde77a561bb0cd88102
-This fixes a build error with toolchains without ssp support.
-
-Removed dependency to gmp:
-https://github.com/randombit/botan/issues/719
+Needed for vlc to fix linking issue.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../botan/0001-remove-mips64-explicit-mabi.patch   | 10 +++++---
- package/botan/Config.in                            |  6 +++--
- package/botan/botan.hash                           |  4 ++-
- package/botan/botan.mk                             | 30 +++++++++++++++-------
- 4 files changed, 34 insertions(+), 16 deletions(-)
+ ...-pkg-config-file-for-the-shared-libraries.patch | 66 ++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-diff --git a/package/botan/0001-remove-mips64-explicit-mabi.patch b/package/botan/0001-remove-mips64-explicit-mabi.patch
-index 3fddd54e9a..9c9317755a 100644
---- a/package/botan/0001-remove-mips64-explicit-mabi.patch
-+++ b/package/botan/0001-remove-mips64-explicit-mabi.patch
-@@ -3,15 +3,17 @@ Remove explicit mips64 -mabi parameter
- This breaks when building for n32 ABI on mips64.
- 
- Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+[Bernd: rebased for botan-2.7.0]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
- 
- diff -Nuar Botan-1.10.8-orig/src/build-data/cc/gcc.txt Botan-1.10.8/src/build-data/cc/gcc.txt
- --- Botan-1.10.8-orig/src/build-data/cc/gcc.txt	2014-04-10 17:11:44.000000000 +0300
- +++ Botan-1.10.8/src/build-data/cc/gcc.txt	2014-10-23 09:20:34.506722323 +0300
--@@ -92,7 +92,6 @@
-- # The 'linking' bit means "use this for both compiling *and* linking"
-- <mach_abi_linking>
-- x86_64  -> "-m64"
-+@@ -83,7 +83,6 @@
-+ 
-+ openmp  -> "-fopenmp"
-+ 
- -mips64  -> "-mabi=64"
-  s390    -> "-m31"
-  s390x   -> "-m64"
-diff --git a/package/botan/Config.in b/package/botan/Config.in
-index 733dc8965a..db2b33dfbe 100644
---- a/package/botan/Config.in
-+++ b/package/botan/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
- config BR2_PACKAGE_BOTAN
- 	bool "botan"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
- 	help
-@@ -15,6 +16,7 @@ config BR2_PACKAGE_BOTAN
- 
- 	  http://botan.randombit.net
- 
--comment "botan needs a toolchain w/ C++, threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-+comment "botan needs a toolchain w/ C++, threads,gcc >= 4.8"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
-diff --git a/package/botan/botan.hash b/package/botan/botan.hash
-index 3d46a13584..df804bc1ef 100644
---- a/package/botan/botan.hash
-+++ b/package/botan/botan.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256 6c5472401d06527e87adcb53dd270f3c9b1fb688703b04dd7a7cfb86289efe52  Botan-1.10.16.tgz
-+sha256 e42df91556317588c6ca0e41bf796f9bd5ec5c70e0668e6c97c608c697c24a90  Botan-2.7.0.tgz
-+# Locally computed
-+sha256 40cfd35a9e34d18463806f57553c968fdbaf254a2e2a636d1d8e32ff6b698495  license.txt
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index e42bb61cbe..21a66adff1 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--BOTAN_VERSION = 1.10.16
-+BOTAN_VERSION = 2.7.0
- BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tgz
- BOTAN_SITE = http://botan.randombit.net/releases
- BOTAN_LICENSE = BSD-2-Clause
--BOTAN_LICENSE_FILES = doc/license.txt
-+BOTAN_LICENSE_FILES = license.txt
- 
- BOTAN_INSTALL_STAGING = YES
- 
-@@ -19,8 +19,25 @@ BOTAN_CONF_OPTS = \
- 	--cc-bin="$(TARGET_CXX)" \
- 	--prefix=/usr
- 
--ifeq ($(BR2_STATIC_LIBS),y)
--BOTAN_CONF_OPTS += --disable-shared --no-autoload
-+ifeq ($(BR2_SHARED_LIBS),y)
-+BOTAN_CONF_OPTS += \
-+	--disable-static-library \
-+	--enable-shared-library
-+else ifeq ($(BR2_STATIC_LIBS),y)
-+BOTAN_CONF_OPTS += \
-+	--disable-shared-library \
-+	--enable-static-library \
-+	--no-autoload
-+else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+BOTAN_CONF_OPTS += \
-+	--enable-shared-library \
-+	--enable-static-library
-+endif
+diff --git a/package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch b/package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch
+new file mode 100644
+index 0000000000..a2ae1c183a
+--- /dev/null
++++ b/package/live555/0001-Add-a-pkg-config-file-for-the-shared-libraries.patch
+@@ -0,0 +1,66 @@
++From: Benjamin Drung <bdrung@debian.org>
++Date: Sat, 16 Sep 2017 11:22:03 +0200
++Subject: Add a pkg-config file for the shared libraries
 +
-+ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
-+BOTAN_CONF_OPTS += --with-stack-protector
-+else
-+BOTAN_CONF_OPTS += --without-stack-protector
- endif
- 
- ifeq ($(BR2_PACKAGE_BZIP2),y)
-@@ -28,11 +45,6 @@ BOTAN_DEPENDENCIES += bzip2
- BOTAN_CONF_OPTS += --with-bzip2
- endif
- 
--ifeq ($(BR2_PACKAGE_GMP),y)
--BOTAN_DEPENDENCIES += gmp
--BOTAN_CONF_OPTS += --with-gnump
--endif
--
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- BOTAN_DEPENDENCIES += openssl
- BOTAN_CONF_OPTS += --with-openssl
++This patch was downloaded from Debian
++https://sources.debian.org/src/liblivemedia/2018.08.05-1/debian/patches/0002-Add-a-pkg-config-file-for-the-shared-libraries.patch/
++
++The local/ part of PREXIX and LIBDIR was removed to fit into buildroot.
++
++A similar version of this patch is part of the vlc source repo:
++http://git.videolan.org/?p=vlc.git;a=blob;f=contrib/src/live555/add-pkgconfig-file.patch;hb=HEAD
++
++Upstream status: Rejected
++http://lists.live555.com/pipermail/live-devel/2013-January/016374.html
++http://lists.live555.com/pipermail/live-devel/2013-January/016375.html
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ Makefile.head | 3 +++
++ Makefile.tail | 7 ++++++-
++ live555.pc.in | 9 +++++++++
++ 3 files changed, 18 insertions(+), 1 deletion(-)
++ create mode 100644 live555.pc.in
++
++diff --git a/Makefile.head b/Makefile.head
++index 458c54c..1571037 100644
++--- a/Makefile.head
+++++ b/Makefile.head
++@@ -1 +1,4 @@
+++PREFIX = /usr
+++LIBDIR = /usr/lib
+++VERSION = $(shell grep LIVEMEDIA_LIBRARY_VERSION_STRING liveMedia/include/liveMedia_version.hh | sed 's/.*"\([^"]*\)".*/\1/')
++ ##### Change the following for your environment:
++diff --git a/Makefile.tail b/Makefile.tail
++index fc594ea..a20a527 100644
++--- a/Makefile.tail
+++++ b/Makefile.tail
++@@ -22,7 +22,12 @@ all:
++ 	@echo
++ 	@echo "For more information about this source code (including your obligations under the LGPL), please see our FAQ at http://live555.com/liveMedia/faq.html"
++ 
++-install:
+++install_shared_libraries:
+++	install -d $(DESTDIR)$(LIBDIR)/pkgconfig
+++	sed "s#@PREFIX@#$(PREFIX)#;s#@LIBDIR@#$(LIBDIR)#;s#@VERSION@#$(VERSION)#" live555.pc.in > $(DESTDIR)$(LIBDIR)/pkgconfig/live555.pc
+++	chmod 644 $(DESTDIR)$(LIBDIR)/pkgconfig/live555.pc
+++
+++install: $(INSTALL2)
++ 	cd $(LIVEMEDIA_DIR) ; $(MAKE) install
++ 	cd $(GROUPSOCK_DIR) ; $(MAKE) install
++ 	cd $(USAGE_ENVIRONMENT_DIR) ; $(MAKE) install
++diff --git a/live555.pc.in b/live555.pc.in
++new file mode 100644
++index 0000000..3736944
++--- /dev/null
+++++ b/live555.pc.in
++@@ -0,0 +1,9 @@
+++prefix=@PREFIX@
+++libdir=@LIBDIR@
+++includedir=${prefix}/include
+++
+++Name: live555
+++Description: multimedia RTSP streaming library
+++Version: @VERSION@
+++Cflags: -I${includedir}/liveMedia -I${includedir}/groupsock -I${includedir}/BasicUsageEnvironment -I${includedir}/UsageEnvironment
+++Libs: -L${libdir} -lliveMedia -lgroupsock -lBasicUsageEnvironment -lUsageEnvironment
