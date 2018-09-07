@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:30 -0000
-Subject: [Buildroot] [git commit] package/vlc: add optional dependency to
- libva
-Message-ID: <20180907111515.0C8CD80DE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vlc: add optional support for
+ skins2
+Message-ID: <20180907111516.B4BF77FB4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1ff252506735a4e97cb846ccc87528ab2d65678
+commit: https://git.buildroot.net/buildroot/commit/?id=6191737cfc54a277445673ea86d564ea48d51318
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/vlc/vlc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index a15bda3204..af500cba33 100644
+index 53a2b61633..ed682e60b3 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -64,7 +64,6 @@ VLC_CONF_OPTS += \
- 	--disable-kate \
- 	--disable-kva \
- 	--disable-libplacebo \
--	--disable-libva \
- 	--disable-linsys \
- 	--disable-mfx \
- 	--disable-microdns \
-@@ -378,6 +377,14 @@ else
- VLC_CONF_OPTS += --disable-upnp
+@@ -74,7 +74,6 @@ VLC_CONF_OPTS += \
+ 	--disable-schroedinger \
+ 	--disable-shine \
+ 	--disable-shout \
+-	--disable-skins2 \
+ 	--disable-sndio \
+ 	--disable-spatialaudio \
+ 	--disable-srt \
+@@ -560,6 +559,13 @@ else
+ VLC_CONF_OPTS += --without-x
  endif
  
-+# libva support depends on ffmpeg
-+ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_LIBVA),yy)
-+VLC_CONF_OPTS += --enable-libva
-+VLC_DEPENDENCIES += libva
++ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT)$(BR2_PACKAGE_XLIB_LIBXINERAMA)$(BR2_PACKAGE_XLIB_LIBXPM),yyy)
++VLC_CONF_OPTS += --enable-skins2
++VLC_DEPENDENCIES += xlib_libXext xlib_libXinerama xlib_libXpm
 +else
-+VLC_CONF_OPTS += --disable-libva
++VLC_CONF_OPTS += --disable-skins2
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBVNCSERVER),y)
- VLC_CONF_OPTS += --enable-vnc
- VLC_DEPENDENCIES += libvncserver
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ VLC_DEPENDENCIES += zlib
+ endif
