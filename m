@@ -1,51 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:44 -0000
-Subject: [Buildroot] [git commit] package/python-pillow: bump to version
- 5.2.0
-Message-ID: <20180907111447.3FD8381DED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] imx-parser: bump version to 4.3.5
+Message-ID: <20180907111450.E23417FB8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a799d4757dde8d6e6d6ca7084379ad58c35edb1
+commit: https://git.buildroot.net/buildroot/commit/?id=3a60fbd4a91e46a2bac227f1d6a569ff2e5060a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps python-pillow to version 5.2.0 and adds the hash for
-license file.
+Added COPYING hash to track license changes.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+No changelog provided by NXP for v4.3.5.
+
+Changelog for v4.3.4:
+- Fix crash issue when parse index list.
+- Add mett atom in mp4 parser.
+- MP4 PARSER 06.13.00 add interface PARSER_API_GET_TEXT_TRACK_MIME
+to get mime type from mett atom.
+- Add protection for contentDescriptionObject in case the size is not
+correct and larger than qwSize.
+
+Changelog for v4.3.2:
+- Fix creating parser error
+When the variable value is negetive, if(bytesToRead) will return true,
+modify this condition to if(bytesToRead > 0).
+- FLAC PARSER 03.00.07
+Check read actual length in case of parser reach eos.
+- MP4 PARSER 06.12.11
+Fix crash issue when parse id3 metadata.
+- MPG2 PARSER 04.05.16
+Fix parser return wrong frame size after fastforward.
+- ASFPARSER_01.00.55
+Update for HEVC tag and audio AC3 support.
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+[Thomas: add hash for EULA file.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-pillow/python-pillow.hash | 6 ++++--
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+ package/freescale-imx/imx-parser/imx-parser.hash | 4 +++-
+ package/freescale-imx/imx-parser/imx-parser.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 463b5620ce..0f90a0be18 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
+diff --git a/package/freescale-imx/imx-parser/imx-parser.hash b/package/freescale-imx/imx-parser/imx-parser.hash
+index 3266f48110..017d2c2f91 100644
+--- a/package/freescale-imx/imx-parser/imx-parser.hash
++++ b/package/freescale-imx/imx-parser/imx-parser.hash
 @@ -1,2 +1,4 @@
--# sha256 from https://pypi.org/project/Pillow/5.1.0/#files
--sha256 cee9bc75bff455d317b6947081df0824a8f118de2786dc3d74a3503fd631f4ef  Pillow-5.1.0.tar.gz
-+# sha256 for python-pillow from https://pypi.org/project/Pillow/5.2.0/#files
-+# sha256 for LICENSE locally computed
-+sha256 f8b3d413c5a8f84b12cd4c5df1d8e211777c9852c6be3ee9c094b626644d3eab  Pillow-5.2.0.tar.gz
-+sha256 4960fc18becc286be839c8ff17bd70cd5222533f761129142153443718a25199  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index c9b3e316f9..c3a3d13315 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
+ # locally computed
+-sha256	36d3ae7285f3a83a87abf680b8a52b3c07df869d2443de844fb5f0ff528ca862  imx-parser-4.2.1.bin
++sha256  9cd8c49a0bb1050afcfbcc7a677a348443fda4ecacb621cc6e38897619e27c67  imx-parser-4.3.5.bin
++sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
++sha256  fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
+diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
+index 11536e5024..fc4376f04b 100644
+--- a/package/freescale-imx/imx-parser/imx-parser.mk
++++ b/package/freescale-imx/imx-parser/imx-parser.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 5.1.0
-+PYTHON_PILLOW_VERSION = 5.2.0
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/89/b8/2f49bf71cbd0e9485bb36f72d438421b69b7356180695ae10bd4fd3066f5
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/d3/c4/b45b9c0d549f482dd072055e2d3ced88f3b977f7b87c7a990228b20e7da1
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+-IMX_PARSER_VERSION = 4.2.1
++IMX_PARSER_VERSION = 4.3.5
+ IMX_PARSER_SITE = $(FREESCALE_IMX_SITE)
+ IMX_PARSER_SOURCE = imx-parser-$(IMX_PARSER_VERSION).bin
+ IMX_PARSER_INSTALL_STAGING = YES
