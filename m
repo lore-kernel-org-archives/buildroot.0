@@ -1,47 +1,40 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri,  7 Sep 2018 21:36:47 +0300
-Subject: [Buildroot] [PATCH 1/1] python-engineio: bump to version 2.2.0
-Message-ID: <20180907183647.1166-1-asafka7@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  7 Sep 2018 20:43:50 +0200
+Subject: [Buildroot] [PATCH 1/1] botan: needs std::future
+Message-ID: <20180907184350.7272-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-engineio/python-engineio.hash | 9 +++++----
- package/python-engineio/python-engineio.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 6 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/d63f70340d1297ad96c20144e658f0e4587a90ca
 
-diff --git a/package/python-engineio/python-engineio.hash b/package/python-engineio/python-engineio.hash
-index b2c0669bcc..484f6aaac3 100644
---- a/package/python-engineio/python-engineio.hash
-+++ b/package/python-engineio/python-engineio.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/python-engineio/json
--md5	9b0075dbbb25d7a302eba99dd9ba4af8  python-engineio-0.9.2.tar.gz
--# sha256 calculated by scanpypi
--sha256	c53282415ed9bc3cb4e7beafb2a1ce5c369af95dcf8f968061e5bc7572b60867  python-engineio-0.9.2.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/python-engineio/json
-+md5	cf8868acedc242b30ad3d24060a8d8e1  python-engineio-2.2.0.tar.gz
-+sha256	d35c50db73bf372f82975dc87f18f1cbfab7d5bed2dfc2553ae784579502a461  python-engineio-2.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
-diff --git a/package/python-engineio/python-engineio.mk b/package/python-engineio/python-engineio.mk
-index 61d5da9aff..b222da38e9 100644
---- a/package/python-engineio/python-engineio.mk
-+++ b/package/python-engineio/python-engineio.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/botan/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/botan/Config.in b/package/botan/Config.in
+index 6fe818bc6d..3632a1a1c2 100644
+--- a/package/botan/Config.in
++++ b/package/botan/Config.in
+@@ -11,6 +11,7 @@ config BR2_PACKAGE_BOTAN
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	help
+ 	  Botan is a crypto library for C++
  
--PYTHON_ENGINEIO_VERSION = 0.9.2
--PYTHON_ENGINEIO_SITE = https://pypi.python.org/packages/c3/8f/0e066fc7a7029893b96b1d68a0cd5e75f6410f154fa4079b2be4991f5ae0
-+PYTHON_ENGINEIO_VERSION = 2.2.0
-+PYTHON_ENGINEIO_SITE = https://files.pythonhosted.org/packages/07/09/682c70c33e727aac028fca7216bb0b6efcd276e67118d1df417f778a3af1
- PYTHON_ENGINEIO_SETUP_TYPE = setuptools
- PYTHON_ENGINEIO_LICENSE = MIT
- PYTHON_ENGINEIO_LICENSE_FILES = LICENSE
+@@ -20,3 +21,7 @@ comment "botan needs a toolchain w/ C++, threads, gcc >= 4.8"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
++
++comment "botan needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
 -- 
 2.17.1
