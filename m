@@ -1,94 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:45 -0000
-Subject: [Buildroot] [git commit] perl-appconfig: new package
-Message-ID: <20180907111451.E07FD7FB8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/infra: rm extra log flush
+ in builder.py
+Message-ID: <20180907111449.706E37FB8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71ad5eeb9a725a6e4593d817be135fe284246c5b
+commit: https://git.buildroot.net/buildroot/commit/?id=b25c39ebd98b824a5e3aba0ee4a73f3179b40c5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
+While integrating proxy support in builder.py, a log flush
+was left in the code.  This commit cleans/removes that code.
+
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  3 +++
- package/Config.in                          |  1 +
- package/perl-appconfig/Config.in           |  7 +++++++
- package/perl-appconfig/perl-appconfig.hash |  6 ++++++
- package/perl-appconfig/perl-appconfig.mk   | 13 +++++++++++++
- 5 files changed, 30 insertions(+)
+ support/testing/infra/builder.py | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e0e37a031a..1b0af622c4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -480,6 +480,9 @@ F:	package/python-rtslib-fb/
- F:	package/python-urwid/
- F:	package/targetcli-fb/
- 
-+N:	Christopher McCrory <chrismcc@gmail.com>
-+F:	package/perl-appconfig/
-+
- N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
- F:	package/audit/
- F:	package/checkpolicy/
-diff --git a/package/Config.in b/package/Config.in
-index bc6df3a3b0..d3b7c5b0d7 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -665,6 +665,7 @@ endif
- 	source "package/perl/Config.in"
- if BR2_PACKAGE_PERL
- menu "Perl libraries/modules"
-+	source "package/perl-appconfig/Config.in"
- 	source "package/perl-convert-asn1/Config.in"
- 	source "package/perl-crypt-blowfish/Config.in"
- 	source "package/perl-crypt-cbc/Config.in"
-diff --git a/package/perl-appconfig/Config.in b/package/perl-appconfig/Config.in
-new file mode 100644
-index 0000000000..0c40abb9ef
---- /dev/null
-+++ b/package/perl-appconfig/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PERL_APPCONFIG
-+	bool "perl-appconfig"
-+	help
-+	  AppConfig is a bundle of Perl5 modules for reading
-+	  configuration files and parsing command line arguments.
-+
-+	  https://metacpan.org/release/AppConfig
-diff --git a/package/perl-appconfig/perl-appconfig.hash b/package/perl-appconfig/perl-appconfig.hash
-new file mode 100644
-index 0000000000..151a2e903f
---- /dev/null
-+++ b/package/perl-appconfig/perl-appconfig.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    7747d9241561ed5567d5e134b8648707 AppConfig-1.71.tar.gz
-+sha256 1177027025ecb09ee64d9f9f255615c04db5e14f7536c344af632032eb887b0f AppConfig-1.71.tar.gz
-+
-+# computed by scancpan
-+sha256 0b22dd532e4123a511d14989c4169ed56b7316cf844c29c7897a1638a4616868 LICENSE
-diff --git a/package/perl-appconfig/perl-appconfig.mk b/package/perl-appconfig/perl-appconfig.mk
-new file mode 100644
-index 0000000000..7a553e330b
---- /dev/null
-+++ b/package/perl-appconfig/perl-appconfig.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-appconfig
-+#
-+################################################################################
-+
-+PERL_APPCONFIG_VERSION = 1.71
-+PERL_APPCONFIG_SOURCE = AppConfig-$(PERL_APPCONFIG_VERSION).tar.gz
-+PERL_APPCONFIG_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NE/NEILB
-+PERL_APPCONFIG_LICENSE = Artistic or GPL-1.0+
-+PERL_APPCONFIG_LICENSE_FILES = LICENSE
-+
-+$(eval $(perl-package))
+diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
+index 30230fdb17..fc318fe26e 100644
+--- a/support/testing/infra/builder.py
++++ b/support/testing/infra/builder.py
+@@ -38,7 +38,6 @@ class Builder(object):
+         if "http_proxy" in os.environ:
+             self.logfile.write("Using system proxy: " +
+                                os.environ["http_proxy"] + "\n")
+-            self.logfile.flush()
+             env['http_proxy'] = os.environ["http_proxy"]
+             env['https_proxy'] = os.environ["http_proxy"]
+         cmd = ["make", "-C", self.builddir]
