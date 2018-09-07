@@ -1,69 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:15:44 -0000
-Subject: [Buildroot] [git commit] imx-parser: bump version to 4.3.5
-Message-ID: <20180907111450.E23417FB8F@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:15:45 -0000
+Subject: [Buildroot] [git commit] perl-appconfig: new package
+Message-ID: <20180907111451.E07FD7FB8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a60fbd4a91e46a2bac227f1d6a569ff2e5060a0
+commit: https://git.buildroot.net/buildroot/commit/?id=71ad5eeb9a725a6e4593d817be135fe284246c5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added COPYING hash to track license changes.
-
-No changelog provided by NXP for v4.3.5.
-
-Changelog for v4.3.4:
-- Fix crash issue when parse index list.
-- Add mett atom in mp4 parser.
-- MP4 PARSER 06.13.00 add interface PARSER_API_GET_TEXT_TRACK_MIME
-to get mime type from mett atom.
-- Add protection for contentDescriptionObject in case the size is not
-correct and larger than qwSize.
-
-Changelog for v4.3.2:
-- Fix creating parser error
-When the variable value is negetive, if(bytesToRead) will return true,
-modify this condition to if(bytesToRead > 0).
-- FLAC PARSER 03.00.07
-Check read actual length in case of parser reach eos.
-- MP4 PARSER 06.12.11
-Fix crash issue when parse id3 metadata.
-- MPG2 PARSER 04.05.16
-Fix parser return wrong frame size after fastforward.
-- ASFPARSER_01.00.55
-Update for HEVC tag and audio AC3 support.
-
-Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
-[Thomas: add hash for EULA file.]
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-parser/imx-parser.hash | 4 +++-
- package/freescale-imx/imx-parser/imx-parser.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ DEVELOPERS                                 |  3 +++
+ package/Config.in                          |  1 +
+ package/perl-appconfig/Config.in           |  7 +++++++
+ package/perl-appconfig/perl-appconfig.hash |  6 ++++++
+ package/perl-appconfig/perl-appconfig.mk   | 13 +++++++++++++
+ 5 files changed, 30 insertions(+)
 
-diff --git a/package/freescale-imx/imx-parser/imx-parser.hash b/package/freescale-imx/imx-parser/imx-parser.hash
-index 3266f48110..017d2c2f91 100644
---- a/package/freescale-imx/imx-parser/imx-parser.hash
-+++ b/package/freescale-imx/imx-parser/imx-parser.hash
-@@ -1,2 +1,4 @@
- # locally computed
--sha256	36d3ae7285f3a83a87abf680b8a52b3c07df869d2443de844fb5f0ff528ca862  imx-parser-4.2.1.bin
-+sha256  9cd8c49a0bb1050afcfbcc7a677a348443fda4ecacb621cc6e38897619e27c67  imx-parser-4.3.5.bin
-+sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
-+sha256  fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
-diff --git a/package/freescale-imx/imx-parser/imx-parser.mk b/package/freescale-imx/imx-parser/imx-parser.mk
-index 11536e5024..fc4376f04b 100644
---- a/package/freescale-imx/imx-parser/imx-parser.mk
-+++ b/package/freescale-imx/imx-parser/imx-parser.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e0e37a031a..1b0af622c4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -480,6 +480,9 @@ F:	package/python-rtslib-fb/
+ F:	package/python-urwid/
+ F:	package/targetcli-fb/
  
--IMX_PARSER_VERSION = 4.2.1
-+IMX_PARSER_VERSION = 4.3.5
- IMX_PARSER_SITE = $(FREESCALE_IMX_SITE)
- IMX_PARSER_SOURCE = imx-parser-$(IMX_PARSER_VERSION).bin
- IMX_PARSER_INSTALL_STAGING = YES
++N:	Christopher McCrory <chrismcc@gmail.com>
++F:	package/perl-appconfig/
++
+ N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ F:	package/audit/
+ F:	package/checkpolicy/
+diff --git a/package/Config.in b/package/Config.in
+index bc6df3a3b0..d3b7c5b0d7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -665,6 +665,7 @@ endif
+ 	source "package/perl/Config.in"
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
++	source "package/perl-appconfig/Config.in"
+ 	source "package/perl-convert-asn1/Config.in"
+ 	source "package/perl-crypt-blowfish/Config.in"
+ 	source "package/perl-crypt-cbc/Config.in"
+diff --git a/package/perl-appconfig/Config.in b/package/perl-appconfig/Config.in
+new file mode 100644
+index 0000000000..0c40abb9ef
+--- /dev/null
++++ b/package/perl-appconfig/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_APPCONFIG
++	bool "perl-appconfig"
++	help
++	  AppConfig is a bundle of Perl5 modules for reading
++	  configuration files and parsing command line arguments.
++
++	  https://metacpan.org/release/AppConfig
+diff --git a/package/perl-appconfig/perl-appconfig.hash b/package/perl-appconfig/perl-appconfig.hash
+new file mode 100644
+index 0000000000..151a2e903f
+--- /dev/null
++++ b/package/perl-appconfig/perl-appconfig.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    7747d9241561ed5567d5e134b8648707 AppConfig-1.71.tar.gz
++sha256 1177027025ecb09ee64d9f9f255615c04db5e14f7536c344af632032eb887b0f AppConfig-1.71.tar.gz
++
++# computed by scancpan
++sha256 0b22dd532e4123a511d14989c4169ed56b7316cf844c29c7897a1638a4616868 LICENSE
+diff --git a/package/perl-appconfig/perl-appconfig.mk b/package/perl-appconfig/perl-appconfig.mk
+new file mode 100644
+index 0000000000..7a553e330b
+--- /dev/null
++++ b/package/perl-appconfig/perl-appconfig.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# perl-appconfig
++#
++################################################################################
++
++PERL_APPCONFIG_VERSION = 1.71
++PERL_APPCONFIG_SOURCE = AppConfig-$(PERL_APPCONFIG_VERSION).tar.gz
++PERL_APPCONFIG_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NE/NEILB
++PERL_APPCONFIG_LICENSE = Artistic or GPL-1.0+
++PERL_APPCONFIG_LICENSE_FILES = LICENSE
++
++$(eval $(perl-package))
