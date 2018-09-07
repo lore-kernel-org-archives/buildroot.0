@@ -1,87 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:15:47 -0000
-Subject: [Buildroot] [git commit] Makefile: introduce check-package target
-Message-ID: <20180907111451.C12627FF08@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:15:48 -0000
+Subject: [Buildroot] [git commit] perl-astro-suntime: new package
+Message-ID: <20180907111452.1B4D8815AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1290241dc694b5435c47cb7065affbfa687d98cc
+commit: https://git.buildroot.net/buildroot/commit/?id=fdda32a0087f3733b19f237cba5aded03d7d0376
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The snippet of code that runs a check-package on all
-.mk/.hash/Config.in files is currently only available within
-.gitlab-ci.yml, and isn't immediately and easily usable by Buildroot
-users. In order to simplify this, this commit introduces a top-level
-"check-package" make target that implements the same logic. The
-.gitlab-ci.yml file is changed to use "make check-package".
-
-Since this target is oriented towards Buildroot developers, we
-intentionally do not clutter the already noisy "make help" text with
-this additional make target.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Tested-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+[Thomas: use SPDX tag for license.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml    | 3 +--
- .gitlab-ci.yml.in | 3 +--
- Makefile          | 6 +++++-
- 3 files changed, 7 insertions(+), 5 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/perl-astro-suntime/Config.in               |  6 ++++++
+ package/perl-astro-suntime/perl-astro-suntime.hash |  6 ++++++
+ package/perl-astro-suntime/perl-astro-suntime.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index a0dc0ffa21..3fc9b06a34 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -43,8 +43,7 @@ check-flake8:
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1b0af622c4..a7530b312d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -482,6 +482,7 @@ F:	package/targetcli-fb/
  
- check-package:
-     script:
--        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \)
--            -exec ./utils/check-package {} +
-+        - make check-package
+ N:	Christopher McCrory <chrismcc@gmail.com>
+ F:	package/perl-appconfig/
++F:	package/perl-astro-suntime/
  
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index fb2650c5ce..38e24c8d01 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -43,8 +43,7 @@ check-flake8:
- 
- check-package:
-     script:
--        - find . -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \)
--            -exec ./utils/check-package {} +
-+        - make check-package
- 
- .defconfig: &defconfig
-     # Running the defconfigs for every push is too much, so limit to
-diff --git a/Makefile b/Makefile
-index f79d39fd26..c4ed45837d 100644
---- a/Makefile
-+++ b/Makefile
-@@ -130,7 +130,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
- noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
- 	defconfig %_defconfig allyesconfig allnoconfig alldefconfig silentoldconfig release \
- 	randpackageconfig allyespackageconfig allnopackageconfig \
--	print-version olddefconfig distclean manual manual-%
-+	print-version olddefconfig distclean manual manual-% check-package
- 
- # Some global targets do not trigger a build, but are used to collect
- # metadata, or do various checks. When such targets are triggered,
-@@ -1125,6 +1125,10 @@ release:
- print-version:
- 	@echo $(BR2_VERSION_FULL)
- 
-+check-package:
-+	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
-+		-exec ./utils/check-package {} +
+ N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
+ F:	package/audit/
+diff --git a/package/Config.in b/package/Config.in
+index d3b7c5b0d7..1092c692c7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -666,6 +666,7 @@ endif
+ if BR2_PACKAGE_PERL
+ menu "Perl libraries/modules"
+ 	source "package/perl-appconfig/Config.in"
++	source "package/perl-astro-suntime/Config.in"
+ 	source "package/perl-convert-asn1/Config.in"
+ 	source "package/perl-crypt-blowfish/Config.in"
+ 	source "package/perl-crypt-cbc/Config.in"
+diff --git a/package/perl-astro-suntime/Config.in b/package/perl-astro-suntime/Config.in
+new file mode 100644
+index 0000000000..22e2cb1aa2
+--- /dev/null
++++ b/package/perl-astro-suntime/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_ASTRO_SUNTIME
++	bool "perl-astro-suntime"
++	help
++	  A functional module for calculating sunrise/sunset times
 +
- .PHONY: .gitlab-ci.yml
- .gitlab-ci.yml: .gitlab-ci.yml.in
- 	cp $< $@
++	  https://metacpan.org/release/Astro-SunTime
+diff --git a/package/perl-astro-suntime/perl-astro-suntime.hash b/package/perl-astro-suntime/perl-astro-suntime.hash
+new file mode 100644
+index 0000000000..e75293d4fb
+--- /dev/null
++++ b/package/perl-astro-suntime/perl-astro-suntime.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    42cb8c94de8a111ed652196925c22a45 Astro-SunTime-0.06.tar.gz
++sha256 b4a44fddfc055cc42ee67bfd8939354793da7512ea04f30578d42dc6a701112a Astro-SunTime-0.06.tar.gz
++
++# computed by scancpan
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE
+diff --git a/package/perl-astro-suntime/perl-astro-suntime.mk b/package/perl-astro-suntime/perl-astro-suntime.mk
+new file mode 100644
+index 0000000000..3bd421eec5
+--- /dev/null
++++ b/package/perl-astro-suntime/perl-astro-suntime.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# perl-astro-suntime
++#
++################################################################################
++
++PERL_ASTRO_SUNTIME_VERSION = 0.06
++PERL_ASTRO_SUNTIME_SOURCE = Astro-SunTime-$(PERL_ASTRO_SUNTIME_VERSION).tar.gz
++PERL_ASTRO_SUNTIME_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RO/ROBF
++PERL_ASTRO_SUNTIME_DEPENDENCIES = host-perl-module-build
++PERL_ASTRO_SUNTIME_LICENSE = GPL-3.0
++PERL_ASTRO_SUNTIME_LICENSE_FILES = LICENSE
++
++$(eval $(perl-package))
