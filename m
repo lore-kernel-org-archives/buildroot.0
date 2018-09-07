@@ -1,44 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:52 -0000
-Subject: [Buildroot] [git commit] package/libsrtp: fix static build
-Message-ID: <20180907111540.E28577F981@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libepoxy: bump version to 1.5.2
+Message-ID: <20180907111537.ECF6E80F5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=058202102aae858f9624738988db0939dc0554d3
+commit: https://git.buildroot.net/buildroot/commit/?id=c0354fc5f6a2d1b672eec7a33a0d104b0fbd13bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The library name was updated upstream:
-
-Fixes
-make[1]: *** No rule to make target 'libsrtp.a'.  Stop.
-
-http://autobuild.buildroot.net/results/10e/10e4198e8d86eecb9c672db77cbaff1e8a592ad3/
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsrtp/libsrtp.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libepoxy/libepoxy.hash | 4 ++--
+ package/libepoxy/libepoxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index dd83dbc003..8af463928b 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
-@@ -11,11 +11,11 @@ LIBSRTP_LICENSE = BSD-3-Clause
- LIBSRTP_LICENSE_FILES = LICENSE
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index 654d1675fd..dd1b13487b 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,5 +1,5 @@
+-# From ftp://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.0.sha256sum
+-sha256 4c94995398a6ebf691600dda2e9685a0cac261414175c2adf4645cdfab42a5d5  libepoxy-1.5.0.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.2.sha256sum
++sha256 a9562386519eb3fd7f03209f279f697a8cba520d3c155d6e253c3e138beca7d8  libepoxy-1.5.2.tar.xz
  
- ifeq ($(BR2_STATIC_LIBS),y)
--LIBSRTP_MAKE_OPTS = libsrtp.a
-+LIBSRTP_MAKE_OPTS = libsrtp2.a
- else ifeq ($(BR2_SHARED_LIBS),y)
- LIBSRTP_MAKE_OPTS = shared_library
- else
--LIBSRTP_MAKE_OPTS = libsrtp.a shared_library
-+LIBSRTP_MAKE_OPTS = libsrtp2.a shared_library
- endif
+ # Hashes for license files:
+ sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index b9498b17b4..b1731a22c5 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- # While libsrtp is not using pkg-config itself, it checks if
+ LIBEPOXY_VERSION_MAJOR = 1.5
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).0
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).2
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
