@@ -1,49 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:41 -0000
-Subject: [Buildroot] [git commit] cryptsetup: fix build with old host kernel
- headers
-Message-ID: <20180907111522.C475D7FBE7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: free-electrons
+ is now bootlin
+Message-ID: <20180907111549.9F4347FCA1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b44d4e0b09f661f2672a3d9d7ec8cf8fce7916c3
+commit: https://git.buildroot.net/buildroot/commit/?id=cf9106fe559cc9ea9f742c21713fe95f176b84b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-By default cryptsetup configure fails when the if_alg.h kernel header is
-not available. Kernels older than 2.6.38, like the one in RHEL 6 hosts,
-do not provide this header. Since we don't need the kernel crypto
-feature for host tools, just disable this feature to allow successful
-completion of the configure script.
+Even though http://github.com/free-electrons/<foo>/ properly redirects
+to http://github.com/bootlin/<foo>/, it makes sense to use the
+bootlin/ URL directly.
 
-While at it, fix a typo in the --with-crypto_backend option (hyphen ->
-underscore).
-
-Should fix:
-http://autobuild.buildroot.net/results/ffd/ffda2579b215b53161025b7bc703091cb30ef95d/
-http://autobuild.buildroot.net/results/c48/c48015f76b13fec38f650f66824e7b986eb28572/
-http://autobuild.buildroot.net/results/be6/be621f71bf9da8719bf7fc943eccc9b4dc2cc43e/
-
-Cc: Martin Hicks <mort@bork.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cryptsetup/cryptsetup.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/sunxi-mali-mainline-driver/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index d5ab022b77..d81aa7b341 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -36,7 +36,8 @@ HOST_CRYPTSETUP_DEPENDENCIES = \
- 	host-json-c \
- 	host-openssl
+diff --git a/package/sunxi-mali-mainline-driver/Config.in b/package/sunxi-mali-mainline-driver/Config.in
+index c939d2a957..057f20db66 100644
+--- a/package/sunxi-mali-mainline-driver/Config.in
++++ b/package/sunxi-mali-mainline-driver/Config.in
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER
+ 	  Linux kernels (>= 4.4). Note that it should be installed
+ 	  together with the corresponding userspace OpenGL libraries,
+ 	  which are provided as binaries only at:
+-	  https://github.com/free-electrons/mali-blobs
++	  https://github.com/bootlin/mali-blobs
  
--HOST_CRYPTSETUP_CONF_OPTS = --with-crypto-backend=openssl
-+HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
-+	--disable-kernel_crypto
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ 	  sunxi-mali-mainline-driver requires a Linux kernel >= 4.4
+ 	  with the following options enabled:
