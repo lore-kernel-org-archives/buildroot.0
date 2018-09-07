@@ -1,69 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:36 -0000
-Subject: [Buildroot] [git commit] package/mono: bump to version 5.14.0.177
-Message-ID: <20180907111443.8CE107FF08@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iperf3: bump version to 3.6
+Message-ID: <20180907111443.EF3788103C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10cb36ce95b602837cf9100b38a91868edc3b3ad
+commit: https://git.buildroot.net/buildroot/commit/?id=64821629d6fc9099dc3f89d060856d764417cddb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch bumps mono to version 5.14.0.177
+Added license hash, switched _SITE to https.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Iperf 3.2 added optional ssl support, build-tested with libressl,
+run-time tested with openssl.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mono/mono.hash         | 2 +-
- package/mono/mono.mk           | 2 +-
- package/monolite/monolite.hash | 2 +-
- package/monolite/monolite.mk   | 2 +-
- 4 files changed, 4 insertions(+), 4 deletions(-)
+ package/iperf3/iperf3.hash |  6 ++++--
+ package/iperf3/iperf3.mk   | 11 +++++++++--
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/package/mono/mono.hash b/package/mono/mono.hash
-index b4911a6de6..db7ce52c97 100644
---- a/package/mono/mono.hash
-+++ b/package/mono/mono.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256 100d4ea7ac3e4a26740e0f284344272d6c5dcfef5c6e21e500d59b64814dcfbf  mono-5.12.0.301.tar.bz2
-+sha256 d4f5fa2e8188d66fbc8054f4145711e45c1faa6d070e63600efab93d1d189498  mono-5.14.0.177.tar.bz2
- sha256 3b40a54878b5ac2767a764bd082f8772ab27c03b9da9c7328c4c4935725556f7  LICENSE
- sha256 fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
- sha256 2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
-diff --git a/package/mono/mono.mk b/package/mono/mono.mk
-index bb851d5932..62eaeaf8b4 100644
---- a/package/mono/mono.mk
-+++ b/package/mono/mono.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 3e34f98eb6..06dae42149 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,2 +1,4 @@
+-# From http://software.es.net/iperf/news.html
+-sha256 a4ef73406fe92250602b8da2ae89ec53211f805df97a1d1d629db5a14043734f  iperf-3.1.7.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.6.tar.gz.sha256
++sha256 de5d51e46dc460cc590fb4d44f95e7cad54b74fea1eba7d6ebd6f8887d75946e  iperf-3.6.tar.gz
++# Locally computed
++sha256 52c42914d7d79fe5e95d0d1b821556d9f06bf756ac910fe085a46d238a33e594  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index cc4e72427b..0080bd8c6c 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,12 +4,19 @@
  #
  ################################################################################
  
--MONO_VERSION = 5.12.0.301
-+MONO_VERSION = 5.14.0.177
- MONO_SITE = http://download.mono-project.com/sources/mono
- MONO_SOURCE = mono-$(MONO_VERSION).tar.bz2
- MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
-diff --git a/package/monolite/monolite.hash b/package/monolite/monolite.hash
-index 77810a9511..cf72916855 100644
---- a/package/monolite/monolite.hash
-+++ b/package/monolite/monolite.hash
-@@ -1,2 +1,2 @@
- # sha256 locally computed
--sha256 fece21adc06118fa5d79d3621a5fc702ec354abf83be29a36f8718645a2dc058  monolite-linux-1051200002-latest.tar.gz
-+sha256 bb4b3b12b9ff04b219ad00dcea78145475d756a1c22ad84e0db978a8eee8c654  monolite-linux-1051400005-latest.tar.gz
-diff --git a/package/monolite/monolite.mk b/package/monolite/monolite.mk
-index 4e1d548994..2e1e54a549 100644
---- a/package/monolite/monolite.mk
-+++ b/package/monolite/monolite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-IPERF3_VERSION = 3.1.7
+-IPERF3_SITE = http://downloads.es.net/pub/iperf
++IPERF3_VERSION = 3.6
++IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+ IPERF3_LICENSE_FILES = LICENSE
  
--MONOLITE_VERSION = 1051200002
-+MONOLITE_VERSION = 1051400005
- MONOLITE_SITE = http://download.mono-project.com/monolite
- MONOLITE_SOURCE = monolite-linux-$(MONOLITE_VERSION)-latest.tar.gz
- MONOLITE_LICENSE = LGPL-2.0 or commercial
+ IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
++ifeq ($(BR2_PACKAGE_OPENSSL),y)
++IPERF3_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
++IPERF3_DEPENDENCIES += openssl
++else
++IPERF3_CONF_OPTS += --without-openssl
++endif
++
+ $(eval $(autotools-package))
