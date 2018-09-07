@@ -1,97 +1,127 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:56 -0000
-Subject: [Buildroot] [git commit] perl-io-socket-multicast: new package
-Message-ID: <20180907111458.735B980F7F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] tini: new package
+Message-ID: <20180907111503.E62A87F950@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=252b4aa1b82254cbb808654cb0962685d12ab174
+commit: https://git.buildroot.net/buildroot/commit/?id=6098d2e498f8b76858e78cb0b10ae475ea14c96f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Tini is a minimal init process to act as PID 1 for containers.
+
+Note: it is not necessary to compile Tini statically for many
+non-docker container environments, and Docker now statically links to
+Tini internally (as of 1.13).
+
+Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Christian Stewart <christian@paral.in>
+[Thomas: add entry to DEVELOPERS file.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/perl-io-socket-multicast/Config.in                 | 11 +++++++++++
- .../perl-io-socket-multicast/perl-io-socket-multicast.hash |  6 ++++++
- .../perl-io-socket-multicast/perl-io-socket-multicast.mk   | 14 ++++++++++++++
- 5 files changed, 33 insertions(+)
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/tini/Config.in | 16 ++++++++++++++++
+ package/tini/tini.hash |  3 +++
+ package/tini/tini.mk   | 35 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 56 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 60b2f2da1a..0831f962e2 100644
+index f96a18a5f7..f530158c21 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -492,6 +492,7 @@ F:	package/perl-dbi/
- F:	package/perl-device-serialport/
- F:	package/perl-file-slurp/
- F:	package/perl-io-interface/
-+F:	package/perl-io-socket-multicast/
- F:	package/perl-json-maybexs/
- F:	package/perl-module-runtime/
- F:	package/perl-number-bytes-human/
+@@ -471,6 +471,7 @@ F:	package/docker-proxy/
+ F:	package/mosh/
+ F:	package/rtl8821au/
+ F:	package/runc/
++F:	package/tini/
+ 
+ N:	Christophe Vu-Brugier <cvubrugier@fastmail.fm>
+ F:	package/drbd-utils/
 diff --git a/package/Config.in b/package/Config.in
-index c9bc7bec42..fba6d1116b 100644
+index 7a7142802a..7b4637900f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -700,6 +700,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-http-negotiate/Config.in"
- 	source "package/perl-io-html/Config.in"
- 	source "package/perl-io-interface/Config.in"
-+	source "package/perl-io-socket-multicast/Config.in"
- 	source "package/perl-io-socket-ssl/Config.in"
- 	source "package/perl-json-maybexs/Config.in"
- 	source "package/perl-json-tiny/Config.in"
-diff --git a/package/perl-io-socket-multicast/Config.in b/package/perl-io-socket-multicast/Config.in
+@@ -2019,6 +2019,7 @@ comment "Utilities"
+ 	source "package/sudo/Config.in"
+ 	source "package/terminology/Config.in"
+ 	source "package/time/Config.in"
++	source "package/tini/Config.in"
+ 	source "package/tmux/Config.in"
+ 	source "package/which/Config.in"
+ 	source "package/xmlstarlet/Config.in"
+diff --git a/package/tini/Config.in b/package/tini/Config.in
 new file mode 100644
-index 0000000000..f63a4e1bf9
+index 0000000000..235fc1a8fb
 --- /dev/null
-+++ b/package/perl-io-socket-multicast/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_PERL_IO_SOCKET_MULTICAST
-+	bool "perl-io-socket-multicast"
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_PERL_IO_INTERFACE
++++ b/package/tini/Config.in
+@@ -0,0 +1,16 @@
++config BR2_PACKAGE_TINI
++	bool "tini"
 +	help
-+	  Send and receive multicast messages
++	  tini is a simple but valid init binary to
++	  act as PID 1 for containers.
 +
-+	  https://metacpan.org/release/IO-Socket-Multicast
++	  https://github.com/krallin/tini
 +
-+comment "perl-io-socket-multicast needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-io-socket-multicast/perl-io-socket-multicast.hash b/package/perl-io-socket-multicast/perl-io-socket-multicast.hash
++if BR2_PACKAGE_TINI
++
++config BR2_PACKAGE_TINI_MINIMAL
++	bool "build minimal variant"
++	help
++	  Disables argument parsing and verbose output.
++
++endif
+diff --git a/package/tini/tini.hash b/package/tini/tini.hash
 new file mode 100644
-index 0000000000..c12da12c41
+index 0000000000..34f919f068
 --- /dev/null
-+++ b/package/perl-io-socket-multicast/perl-io-socket-multicast.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    c96e6cbb367b1d11ffe7bb9fbd833540 IO-Socket-Multicast-1.12.tar.gz
-+sha256 70e8af4aa21d19bab5edd9f43a6b3d6277748a65145d46ff0ea2ae4c59495c72 IO-Socket-Multicast-1.12.tar.gz
-+
-+# computed by scancpan
-+sha256 ea33bda0e2ec6734e29895a37cd1fc005d86f2abbe7e9943e0213ae64844a697 README
-diff --git a/package/perl-io-socket-multicast/perl-io-socket-multicast.mk b/package/perl-io-socket-multicast/perl-io-socket-multicast.mk
++++ b/package/tini/tini.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256	e5f46bca81266bdd511cf08018d66866870531794569c04f9b45f50dd23c28b0	LICENSE
++sha256	1097675352d6317b547e73f9dc7c6839fd0bb0d96dafc2e5c95506bb324049a2  tini-v0.18.0.tar.gz
+diff --git a/package/tini/tini.mk b/package/tini/tini.mk
 new file mode 100644
-index 0000000000..41e4fe404c
+index 0000000000..132bfc99dd
 --- /dev/null
-+++ b/package/perl-io-socket-multicast/perl-io-socket-multicast.mk
-@@ -0,0 +1,14 @@
++++ b/package/tini/tini.mk
+@@ -0,0 +1,35 @@
 +################################################################################
 +#
-+# perl-io-socket-multicast
++# tini
 +#
 +################################################################################
 +
-+PERL_IO_SOCKET_MULTICAST_VERSION = 1.12
-+PERL_IO_SOCKET_MULTICAST_SOURCE = IO-Socket-Multicast-$(PERL_IO_SOCKET_MULTICAST_VERSION).tar.gz
-+PERL_IO_SOCKET_MULTICAST_SITE = $(BR2_CPAN_MIRROR)/authors/id/B/BR/BRAMBLE
-+PERL_IO_SOCKET_MULTICAST_DEPENDENCIES = perl-io-interface
-+PERL_IO_SOCKET_MULTICAST_LICENSE = Artistic or GPL-1.0+
-+PERL_IO_SOCKET_MULTICAST_LICENSE_FILES = README
++TINI_VERSION = v0.18.0
++TINI_SITE = $(call github,krallin,tini,$(TINI_VERSION))
++TINI_LICENSE = MIT
++TINI_LICENSE_FILES = LICENSE
 +
-+$(eval $(perl-package))
++TINI_CFLAGS = $(TARGET_CFLAGS) \
++	-DTINI_VERSION=\"$(TINI_VERSION)\" \
++	-DTINI_GIT=\"\"
++
++ifeq ($(BR2_PACKAGE_TINI_MINIMAL),y)
++TINI_CFLAGS += -DTINI_MINIMAL
++endif
++
++define TINI_CONFIGURE_CMDS
++	printf "#pragma once\n" > $(@D)/src/tiniConfig.h
++endef
++
++define TINI_BUILD_CMDS
++	mkdir -p $(@D)/bin
++	$(TARGET_CC) $(TINI_CFLAGS) \
++		-o $(@D)/bin/tini $(@D)/src/tini.c
++endef
++
++define TINI_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/tini $(TARGET_DIR)/usr/bin/tini
++endef
++
++# Tini's CMakeLists.txt is not suitable for Buildroot.
++$(eval $(generic-package))
