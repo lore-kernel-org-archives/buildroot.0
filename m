@@ -1,84 +1,82 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Fri, 7 Sep 2018 14:03:49 +0200
-Subject: [Buildroot] ADEOS patch and kernel override
-In-Reply-To: <20180907133121.29434851@windsurf.home>
-References: <CAOf5uwmrFw_fKozkMn+5gVoehBig8g2PhE-ivg0GSv+PNcHfsA@mail.gmail.com>
- <20180907133121.29434851@windsurf.home>
-Message-ID: <CAOf5uwnMCSK=NHTK3ewcKXOyF5ZfeCDx7cnTENOi9SYM2ztA-A@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri,  7 Sep 2018 15:09:23 +0300
+Subject: [Buildroot] [PATCH 1/1] rtorrent: bump to version 0.9.7
+Message-ID: <20180907120923.19642-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
+Add hash for COPYING, and adjust the patch to the new version.
 
-On Fri, Sep 7, 2018 at 1:31 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Michael,
->
-> On Fri, 7 Sep 2018 12:44:43 +0200, Michael Nazzareno Trimarchi wrote:
->
-> > I'm trying to understand if I can override the kernel and let apply
-> > the adeos patch on top of it. Seems that PREHOOK is not called
-> > in the linux kernel override directory. Is there some semantic to use?
->
-> When you said "override the kernel", I will assume you talking about
-> using LINUX_OVERRIDE_SRCDIR. If that is the case, then no, Buildroot
-> will not patch it for you.
->
-> Let me give a few more details about this, and explain why it is done
-> like this.
->
-> In a normal situation (i.e without OVERRIDE_SRCDIR), a package goes
-> through the following steps:
->
->  (1) download
->  (2) extract
->  (3) patch
->  (4) configure
->  (5) build
->  (6) install
->
-> When you switch to using OVERRIDE_SRCDIR for that package, the first
-> three steps are skipped and replaced by a "rsync" step, while the three
-> last steps remain the same:
->
->  (1) rsync
->  (2) configure
->  (3) build
->  (4) install
->
-> The reason is that if you do an override source directory:
->
->  * Buildroot has no idea what is the state of the source code in here,
->    so it has no idea if the patches it has will apply. Most likely not.
->
->  * More importantly, it means that you own/control the source code,
->    so you can simply apply whatever changes are needed on the source
->    code located in the OVERRIDE_SRCDIR location.
->
-> Does that help ?
->
-Thomas is perfect description and I can see from the Makefile and make
-sense. So patch should be done as a script over the kernel override. I
-will proceed this way
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-Michael
+---
 
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+This bump should fix the build problems with current rtorrent version.
+---
+ package/rtorrent/0001-cross_compile.patch | 17 +++--------------
+ package/rtorrent/rtorrent.hash            |  3 ++-
+ package/rtorrent/rtorrent.mk              |  2 +-
+ 3 files changed, 6 insertions(+), 16 deletions(-)
 
-
-
+diff --git a/package/rtorrent/0001-cross_compile.patch b/package/rtorrent/0001-cross_compile.patch
+index a8ad696e6d..a57131b1ff 100644
+--- a/package/rtorrent/0001-cross_compile.patch
++++ b/package/rtorrent/0001-cross_compile.patch
+@@ -4,27 +4,16 @@ Date: Mon, 5 Oct 2015 00:52:26 +0100
+ Subject: [PATCH] Fix cross compilation, based on OpenWRT patch.
+ 
+ [Vincent: tweak the patch for version 0.9.6]
++[Asaf: adjust for version 0.9.7]
+ 
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+ ---
+- configure.ac      |    1 -
+  scripts/checks.m4 |    2 +-
+  scripts/common.m4 |    4 ++--
+- 3 files changed, 3 insertions(+), 4 deletions(-)
++ 2 files changed, 3 insertions(+), 3 deletions(-)
+ 
+-diff --git a/configure.ac b/configure.ac
+-index ba5bbf2..0821d4e 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -4,7 +4,6 @@ AC_DEFINE(API_VERSION, 9, api version)
+- 
+- AM_INIT_AUTOMAKE
+- AC_CONFIG_HEADERS(config.h)
+--AM_PATH_CPPUNIT(1.9.6)
+- 
+- AC_PROG_CXX
+- AC_PROG_LIBTOOL
+ diff --git a/scripts/checks.m4 b/scripts/checks.m4
+ index 598f39b..0e5abe0 100644
+ --- a/scripts/checks.m4
+diff --git a/package/rtorrent/rtorrent.hash b/package/rtorrent/rtorrent.hash
+index 15257acf43..9f5ef2b4fc 100644
+--- a/package/rtorrent/rtorrent.hash
++++ b/package/rtorrent/rtorrent.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 1e69c24f1f26f8f07d58d673480dc392bfc4317818c1115265b08a7813ff5b0e  rtorrent-0.9.6.tar.gz
++sha256 5d9842fe48c9582fbea2c7bf9f51412c1ccbba07d059b257039ad53b863fe8bb  rtorrent-0.9.7.tar.gz
++sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/rtorrent/rtorrent.mk b/package/rtorrent/rtorrent.mk
+index 51dc9eecc9..aaf86be647 100644
+--- a/package/rtorrent/rtorrent.mk
++++ b/package/rtorrent/rtorrent.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RTORRENT_VERSION = 0.9.6
++RTORRENT_VERSION = 0.9.7
+ RTORRENT_SITE = http://rtorrent.net/downloads
+ RTORRENT_DEPENDENCIES = host-pkgconf libcurl libtorrent ncurses
+ RTORRENT_AUTORECONF = YES
 -- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+2.17.1
