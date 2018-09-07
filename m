@@ -1,101 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:48 -0000
-Subject: [Buildroot] [git commit] perl-data-uuid: new package
-Message-ID: <20180907111452.ABF597FB8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] perl-module-runtime: new package
+Message-ID: <20180907111455.0D3407F950@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70ea9665573184d2d8943929534f5d7a5fe52fe4
+commit: https://git.buildroot.net/buildroot/commit/?id=8e09dc05c2d07b8334101c3f80cf02c767efd5f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
-[Thomas: license is not "bsd", but some variant of MIT.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                 |  1 +
- package/Config.in                          |  1 +
- package/perl-data-uuid/Config.in           | 10 ++++++++++
- package/perl-data-uuid/perl-data-uuid.hash |  6 ++++++
- package/perl-data-uuid/perl-data-uuid.mk   | 18 ++++++++++++++++++
- 5 files changed, 36 insertions(+)
+ DEVELOPERS                                           |  1 +
+ package/Config.in                                    |  1 +
+ package/perl-module-runtime/Config.in                |  6 ++++++
+ package/perl-module-runtime/perl-module-runtime.hash |  6 ++++++
+ package/perl-module-runtime/perl-module-runtime.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 35c21817c7..fc2ce25eea 100644
+index e88f951274..91659b364b 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -484,6 +484,7 @@ N:	Christopher McCrory <chrismcc@gmail.com>
- F:	package/perl-appconfig/
- F:	package/perl-astro-suntime/
- F:	package/perl-class-std/
-+F:	package/perl-data-uuid/
+@@ -491,6 +491,7 @@ F:	package/perl-device-serialport/
+ F:	package/perl-file-slurp/
+ F:	package/perl-io-interface/
+ F:	package/perl-json-maybexs/
++F:	package/perl-module-runtime/
  
  N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
  F:	package/audit/
 diff --git a/package/Config.in b/package/Config.in
-index ab54bf5968..f5ad068b6f 100644
+index 32a567ca23..4a6fd22238 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -673,6 +673,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-crypt-cbc/Config.in"
- 	source "package/perl-crypt-openssl-random/Config.in"
- 	source "package/perl-crypt-openssl-rsa/Config.in"
-+	source "package/perl-data-uuid/Config.in"
- 	source "package/perl-datetime-tiny/Config.in"
- 	source "package/perl-digest-hmac/Config.in"
- 	source "package/perl-digest-md5/Config.in"
-diff --git a/package/perl-data-uuid/Config.in b/package/perl-data-uuid/Config.in
+@@ -707,6 +707,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-mailtools/Config.in"
+ 	source "package/perl-mime-base64-urlsafe/Config.in"
+ 	source "package/perl-mime-base64/Config.in"
++	source "package/perl-module-runtime/Config.in"
+ 	source "package/perl-mojolicious-plugin-authentication/Config.in"
+ 	source "package/perl-mojolicious/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+diff --git a/package/perl-module-runtime/Config.in b/package/perl-module-runtime/Config.in
 new file mode 100644
-index 0000000000..e0752c44ab
+index 0000000000..fca29f66df
 --- /dev/null
-+++ b/package/perl-data-uuid/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_DATA_UUID
-+	bool "perl-data-uuid"
-+	depends on !BR2_STATIC_LIBS
++++ b/package/perl-module-runtime/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_MODULE_RUNTIME
++	bool "perl-module-runtime"
 +	help
-+	  Globally/Universally Unique Identifiers (GUIDs/UUIDs)
++	  runtime module handling
 +
-+	  https://metacpan.org/release/Data-UUID
-+
-+comment "perl-data-uuid needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-data-uuid/perl-data-uuid.hash b/package/perl-data-uuid/perl-data-uuid.hash
++	  https://metacpan.org/release/Module-Runtime
+diff --git a/package/perl-module-runtime/perl-module-runtime.hash b/package/perl-module-runtime/perl-module-runtime.hash
 new file mode 100644
-index 0000000000..5086936d4e
+index 0000000000..c52cb75504
 --- /dev/null
-+++ b/package/perl-data-uuid/perl-data-uuid.hash
++++ b/package/perl-module-runtime/perl-module-runtime.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    7619929e8fe205a7fb83bc1c29ecbf99 Data-UUID-1.221.tar.gz
-+sha256 3cc7b2a3a7b74b45a059e013f7fd878078500ea4b7269036f84556b022078667 Data-UUID-1.221.tar.gz
++md5    d3d47222fa2e3dfcb4526f6cc8437b20 Module-Runtime-0.016.tar.gz
++sha256 68302ec646833547d410be28e09676db75006f4aa58a11f3bdb44ffe99f0f024 Module-Runtime-0.016.tar.gz
 +
 +# computed by scancpan
-+sha256 0560c8eea8e1fb8173faa6c2e9b7e9f8728b8ae8250a814709a53c30b778d5fb LICENSE
-diff --git a/package/perl-data-uuid/perl-data-uuid.mk b/package/perl-data-uuid/perl-data-uuid.mk
++sha256 ad1761020436687e8493208336ef53e84589fdba212da59b05b8111cca75ddc1 README
+diff --git a/package/perl-module-runtime/perl-module-runtime.mk b/package/perl-module-runtime/perl-module-runtime.mk
 new file mode 100644
-index 0000000000..8e612913d9
+index 0000000000..5ba95f7056
 --- /dev/null
-+++ b/package/perl-data-uuid/perl-data-uuid.mk
-@@ -0,0 +1,18 @@
++++ b/package/perl-module-runtime/perl-module-runtime.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-data-uuid
++# perl-module-runtime
 +#
 +################################################################################
 +
-+PERL_DATA_UUID_VERSION = 1.221
-+PERL_DATA_UUID_SOURCE = Data-UUID-$(PERL_DATA_UUID_VERSION).tar.gz
-+PERL_DATA_UUID_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RJ/RJBS
-+# The license is documented at
-+# https://fedoraproject.org/wiki/Licensing:MIT#HP_Variant as the "HP
-+# Variant" of the MIT license. There is no official SPDX tag for this
-+# license, but the other MIT variants are prefixed with "MIT-", so we
-+# do the same here.
-+PERL_DATA_UUID_LICENSE = MIT-HP
-+PERL_DATA_UUID_LICENSE_FILES = LICENSE
++PERL_MODULE_RUNTIME_VERSION = 0.016
++PERL_MODULE_RUNTIME_SOURCE = Module-Runtime-$(PERL_MODULE_RUNTIME_VERSION).tar.gz
++PERL_MODULE_RUNTIME_SITE = $(BR2_CPAN_MIRROR)/authors/id/Z/ZE/ZEFRAM
++PERL_MODULE_RUNTIME_DEPENDENCIES = host-perl-module-build
++PERL_MODULE_RUNTIME_LICENSE = Artistic or GPL-1.0+
++PERL_MODULE_RUNTIME_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
