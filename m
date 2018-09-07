@@ -1,55 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:35 -0000
-Subject: [Buildroot] [git commit] rust: bump version to 1.27.2
-Message-ID: <20180907111442.31E177FB8F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/c-periphery: bump to 1.1.3
+Message-ID: <20180907111443.19E357FF08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=831271b90101ae3961be9c547f15c245f7fd1a16
+commit: https://git.buildroot.net/buildroot/commit/?id=62df8bfc4463f6970d9c8c894b4dfe76a2262e86
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump version to 1.27.2 and force use of "stable" channel when configuring.
+Specific areas of bugfixes:
+- serial: 8th bit being stripped when using parity
+- gpio: add retry loop waiting for exported gpio dir
+- i2c: update i2c supported functions query for 64-bit
+- add support for building with C++
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Sam Voss <sam.voss@rockwellcollins.com>
+Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rust/rust.hash | 4 ++--
- package/rust/rust.mk   | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/c-periphery/c-periphery.hash | 3 ++-
+ package/c-periphery/c-periphery.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/rust/rust.hash b/package/rust/rust.hash
-index 6e6b0d9b6f..51b736be6d 100644
---- a/package/rust/rust.hash
-+++ b/package/rust/rust.hash
-@@ -1,5 +1,5 @@
--# From https://static.rust-lang.org/dist/rustc-1.27.1-src.tar.xz.sha256
--sha256 948e2645057960ee1c03d9f0e8f78133a5f73d9ca9a24bc56126e395a212d25c  rustc-1.27.1-src.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.27.2-src.tar.xz.sha256
-+sha256 bf0228072ad60abd89dd81c8e25ae1e7b4b31e00e73612e7f4985e3144ad5bda  rustc-1.27.2-src.tar.xz
- # Locally generated
- sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 74df7d234a..541e49d43d 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
+diff --git a/package/c-periphery/c-periphery.hash b/package/c-periphery/c-periphery.hash
+index 524925ff97..745e44a71c 100644
+--- a/package/c-periphery/c-periphery.hash
++++ b/package/c-periphery/c-periphery.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 c6cfaae7496ff6500b747106571de6b4ca7d80a383297e592ffcfa3413b66321  c-periphery-v1.1.1.tar.gz
++sha256 50665a4f298b30e4cc8f7dbd38362fd860cc3746803d00325cb04806674e3166  c-periphery-v1.1.3.tar.gz
++sha256 6b5669a90260126f0600aae98cb10fb5e219269dc9cbd0137f63927b96d5c31d  LICENSE
+diff --git a/package/c-periphery/c-periphery.mk b/package/c-periphery/c-periphery.mk
+index 359c860e89..df26105541 100644
+--- a/package/c-periphery/c-periphery.mk
++++ b/package/c-periphery/c-periphery.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUST_VERSION = 1.27.1
-+RUST_VERSION = 1.27.2
- RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
- RUST_SITE = https://static.rust-lang.org/dist
- RUST_LICENSE = Apache-2.0 or MIT
-@@ -61,6 +61,7 @@ define HOST_RUST_CONFIGURE_CMDS
- 		echo 'prefix = "$(HOST_DIR)"'; \
- 		echo '[rust]'; \
- 		echo 'use-jemalloc = $(HOST_RUST_JEMALLOC_ENABLED)'; \
-+		echo 'channel = "stable"'; \
- 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
- 		echo 'cc = "$(TARGET_CROSS)gcc"'; \
- 		echo $(HOST_RUST_JEMALLOC_CONF); \
+-C_PERIPHERY_VERSION = v1.1.1
++C_PERIPHERY_VERSION = v1.1.3
+ C_PERIPHERY_SITE = $(call github,vsergeev,c-periphery,$(C_PERIPHERY_VERSION))
+ C_PERIPHERY_INSTALL_STAGING = YES
+ # only a static library
