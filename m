@@ -1,46 +1,100 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:55 -0000
-Subject: [Buildroot] [git commit] libunistring: bump to version 0.9.10
-Message-ID: <20180907111459.4CC248019E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5base: fix statx support
+ with glibc >= 2.28
+Message-ID: <20180907111502.E55457FB34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d480277b6425005e0b0357fe1665aa3e7cff1c8
+commit: https://git.buildroot.net/buildroot/commit/?id=ec935bd635cd8b66011fd7561fc3dbbbc40c64e2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libunistring/libunistring.hash | 4 ++--
- package/libunistring/libunistring.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0003-Fix-qmake-build-with-glibc-2.28.patch     | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
-diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
-index 8a5da7782d..2e4595b17d 100644
---- a/package/libunistring/libunistring.hash
-+++ b/package/libunistring/libunistring.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.9.tar.xz.sig
--sha256	a4d993ecfce16cf503ff7579f5da64619cee66226fb3b998dafb706190d9a833	libunistring-0.9.9.tar.xz
-+# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz.sig
-+sha256	eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7	libunistring-0.9.10.tar.xz
- # Locally calculated
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
- sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LIB
-diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
-index 929b52ebd5..fa51447170 100644
---- a/package/libunistring/libunistring.mk
-+++ b/package/libunistring/libunistring.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUNISTRING_VERSION = 0.9.9
-+LIBUNISTRING_VERSION = 0.9.10
- LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
- LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
- LIBUNISTRING_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch b/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
+new file mode 100644
+index 0000000000..6d8bb28992
+--- /dev/null
++++ b/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
+@@ -0,0 +1,74 @@
++From 25feee4e061b99edab79503d81f5bd045c6c8e3d Mon Sep 17 00:00:00 2001
++From: Thiago Macieira <thiago.macieira@intel.com>
++Date: Tue, 7 Aug 2018 09:38:42 -0700
++Subject: [PATCH] Fix qmake build with glibc 2.28
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++We haven't yet run the configure checks to see if statx and renameat2
++are present in glibc, so this fails when we redefine the structures and
++functions.
++
++linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
++bits/statx.h:25:8: note: previous definition of 'struct statx_timestamp'
++qfilesystemengine_unix.cpp:110:12: error: 'int renameat2(int, const char*, int, const char*, unsigned int)' was declared 'extern' and later 'static' [-fpermissive]
++
++Change-Id: Ia741b559c24d46c78fb2fffd1548a792d22e3368
++Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
++Reviewed-by: J??ri Valdmann <juri.valdmann@qt.io>
++
++Downloaded from upstream commit
++http://code.qt.io/cgit/qt/qtbase.git/commit/?id=25feee4e061b99edab79503d81f5bd045c6c8e3d
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/corelib/global/qconfig-bootstrapped.h | 12 ++++++++++--
++ src/corelib/io/qfilesystemengine_unix.cpp |  2 +-
++ 2 files changed, 11 insertions(+), 3 deletions(-)
++
++diff --git a/src/corelib/global/qconfig-bootstrapped.h b/src/corelib/global/qconfig-bootstrapped.h
++index 3469ebe5e6..c5585ea32a 100644
++--- a/src/corelib/global/qconfig-bootstrapped.h
+++++ b/src/corelib/global/qconfig-bootstrapped.h
++@@ -98,10 +98,18 @@
++ #define QT_NO_QOBJECT
++ #define QT_FEATURE_process -1
++ #define QT_FEATURE_regularexpression -1
++-#define QT_FEATURE_renameat2 -1
+++#ifdef __GLIBC_PREREQ
+++# define QT_FEATURE_renameat2 (__GLIBC_PREREQ(2, 28) ? 1 : -1)
+++#else
+++# define QT_FEATURE_renameat2 -1
+++#endif
++ #define QT_FEATURE_sharedmemory -1
++ #define QT_FEATURE_slog2 -1
++-#define QT_FEATURE_statx -1
+++#ifdef __GLIBC_PREREQ
+++# define QT_FEATURE_statx (__GLIBC_PREREQ(2, 28) ? 1 : -1)
+++#else
+++# define QT_FEATURE_statx -1
+++#endif
++ #define QT_FEATURE_syslog -1
++ #define QT_NO_SYSTEMLOCALE
++ #define QT_FEATURE_systemsemaphore -1
++diff --git a/src/corelib/io/qfilesystemengine_unix.cpp b/src/corelib/io/qfilesystemengine_unix.cpp
++index 0c9cdb8667..deb4a9f220 100644
++--- a/src/corelib/io/qfilesystemengine_unix.cpp
+++++ b/src/corelib/io/qfilesystemengine_unix.cpp
++@@ -91,7 +91,6 @@ extern "C" NSString *NSTemporaryDirectory();
++ #  include <sys/syscall.h>
++ #  include <sys/sendfile.h>
++ #  include <linux/fs.h>
++-#  include <linux/stat.h>
++ 
++ // in case linux/fs.h is too old and doesn't define it:
++ #ifndef FICLONE
++@@ -112,6 +111,7 @@ static int renameat2(int oldfd, const char *oldpath, int newfd, const char *newp
++ #    endif
++ 
++ #    if !QT_CONFIG(statx) && defined(SYS_statx)
+++#      include <linux/stat.h>
++ static int statx(int dirfd, const char *pathname, int flag, unsigned mask, struct statx *statxbuf)
++ { return syscall(SYS_statx, dirfd, pathname, flag, mask, statxbuf); }
++ #    elif !QT_CONFIG(statx) && !defined(SYS_statx)
