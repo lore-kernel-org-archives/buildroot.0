@@ -1,95 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:51 -0000
-Subject: [Buildroot] [git commit] perl-module-implementation: new package
-Message-ID: <20180907111458.9B2A17F950@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] perl-class-std-fast: new package
+Message-ID: <20180907111457.88CE48019E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84e9a557f1978d8356f9928a90faff933de8e51c
+commit: https://git.buildroot.net/buildroot/commit/?id=b434dc40baf9836331fbafd1e91aa602f90e37ea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/perl-module-implementation/Config.in               |  9 +++++++++
- .../perl-module-implementation.hash                        |  6 ++++++
- .../perl-module-implementation.mk                          | 14 ++++++++++++++
- 5 files changed, 31 insertions(+)
+ DEVELOPERS                                           |  1 +
+ package/Config.in                                    |  1 +
+ package/perl-class-std-fast/Config.in                |  7 +++++++
+ package/perl-class-std-fast/perl-class-std-fast.hash |  6 ++++++
+ package/perl-class-std-fast/perl-class-std-fast.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 6d0e3ecceb..f96a18a5f7 100644
+index 4379b24da1..46c0f06637 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -495,6 +495,7 @@ F:	package/perl-io-interface/
- F:	package/perl-io-socket-multicast/
- F:	package/perl-json-maybexs/
- F:	package/perl-mime-tools/
-+F:	package/perl-module-implementation/
- F:	package/perl-module-runtime/
- F:	package/perl-number-bytes-human/
- F:	package/perl-params-util/
+@@ -484,6 +484,7 @@ N:	Christopher McCrory <chrismcc@gmail.com>
+ F:	package/perl-appconfig/
+ F:	package/perl-astro-suntime/
+ F:	package/perl-class-std/
++F:	package/perl-class-std-fast/
+ F:	package/perl-data-uuid/
+ F:	package/perl-date-manip/
+ F:	package/perl-dbi/
 diff --git a/package/Config.in b/package/Config.in
-index 85046ae56e..7a7142802a 100644
+index a50eb2d561..858b781251 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -711,6 +711,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mime-base64-urlsafe/Config.in"
- 	source "package/perl-mime-base64/Config.in"
- 	source "package/perl-mime-tools/Config.in"
-+	source "package/perl-module-implementation/Config.in"
- 	source "package/perl-module-runtime/Config.in"
- 	source "package/perl-mojolicious-plugin-authentication/Config.in"
- 	source "package/perl-mojolicious/Config.in"
-diff --git a/package/perl-module-implementation/Config.in b/package/perl-module-implementation/Config.in
+@@ -668,6 +668,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-appconfig/Config.in"
+ 	source "package/perl-astro-suntime/Config.in"
+ 	source "package/perl-class-std/Config.in"
++	source "package/perl-class-std-fast/Config.in"
+ 	source "package/perl-convert-asn1/Config.in"
+ 	source "package/perl-crypt-blowfish/Config.in"
+ 	source "package/perl-crypt-cbc/Config.in"
+diff --git a/package/perl-class-std-fast/Config.in b/package/perl-class-std-fast/Config.in
 new file mode 100644
-index 0000000000..354197649d
+index 0000000000..10b1e0d786
 --- /dev/null
-+++ b/package/perl-module-implementation/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PERL_MODULE_IMPLEMENTATION
-+	bool "perl-module-implementation"
-+	select BR2_PACKAGE_PERL_MODULE_RUNTIME
-+	select BR2_PACKAGE_PERL_TRY_TINY
++++ b/package/perl-class-std-fast/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_CLASS_STD_FAST
++	bool "perl-class-std-fast"
++	select BR2_PACKAGE_PERL_CLASS_STD
 +	help
-+	  Loads one of several alternate underlying implementations
-+	  for a module
++	  faster but less secure than Class::Std
 +
-+	  http://metacpan.org/release/Module-Implementation
-diff --git a/package/perl-module-implementation/perl-module-implementation.hash b/package/perl-module-implementation/perl-module-implementation.hash
++	  https://metacpan.org/release/Class-Std-Fast
+diff --git a/package/perl-class-std-fast/perl-class-std-fast.hash b/package/perl-class-std-fast/perl-class-std-fast.hash
 new file mode 100644
-index 0000000000..caf365c024
+index 0000000000..07e830a5ee
 --- /dev/null
-+++ b/package/perl-module-implementation/perl-module-implementation.hash
++++ b/package/perl-class-std-fast/perl-class-std-fast.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    52e3fe0ca6b1eff0488d59b7aacc0667 Module-Implementation-0.09.tar.gz
-+sha256 c15f1a12f0c2130c9efff3c2e1afe5887b08ccd033bd132186d1e7d5087fd66d Module-Implementation-0.09.tar.gz
++md5    d06d084cb84f295b0aabf2eee78ef746 Class-Std-Fast-v0.0.8.tar.gz
++sha256 1bd43763c6a373183097a30e787f5d6713b0db27511c52d533266b59d2cfa780 Class-Std-Fast-v0.0.8.tar.gz
 +
 +# computed by scancpan
-+sha256 dd34e4dbcadfaa3db992201873e1cbb4b4f4c18e9bf000821d5c768e66d7ff0b LICENSE
-diff --git a/package/perl-module-implementation/perl-module-implementation.mk b/package/perl-module-implementation/perl-module-implementation.mk
++sha256 aa1ab90c498aee078076e9a1f83e5f14bbfd841509582795ab5a9571428c0c38 README
+diff --git a/package/perl-class-std-fast/perl-class-std-fast.mk b/package/perl-class-std-fast/perl-class-std-fast.mk
 new file mode 100644
-index 0000000000..50ee8610a5
+index 0000000000..7c008622dd
 --- /dev/null
-+++ b/package/perl-module-implementation/perl-module-implementation.mk
++++ b/package/perl-class-std-fast/perl-class-std-fast.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# perl-module-implementation
++# perl-class-std-fast
 +#
 +################################################################################
 +
-+PERL_MODULE_IMPLEMENTATION_VERSION = 0.09
-+PERL_MODULE_IMPLEMENTATION_SOURCE = Module-Implementation-$(PERL_MODULE_IMPLEMENTATION_VERSION).tar.gz
-+PERL_MODULE_IMPLEMENTATION_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DR/DROLSKY
-+PERL_MODULE_IMPLEMENTATION_DEPENDENCIES = perl-module-runtime perl-try-tiny
-+PERL_MODULE_IMPLEMENTATION_LICENSE = Artistic-2.0
-+PERL_MODULE_IMPLEMENTATION_LICENSE_FILES = LICENSE
++PERL_CLASS_STD_FAST_VERSION = v0.0.8
++PERL_CLASS_STD_FAST_SOURCE = Class-Std-Fast-$(PERL_CLASS_STD_FAST_VERSION).tar.gz
++PERL_CLASS_STD_FAST_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AC/ACID
++PERL_CLASS_STD_FAST_DEPENDENCIES = perl-class-std
++PERL_CLASS_STD_FAST_LICENSE = Artistic or GPL-1.0+
++PERL_CLASS_STD_FAST_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
