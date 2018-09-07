@@ -1,43 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:49 -0000
-Subject: [Buildroot] [git commit] libssh: fix cross compile with older cmake
-Message-ID: <20180907111557.A088280239@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:50 -0000
+Subject: [Buildroot] [git commit] package/ustream-ssl: bump version
+Message-ID: <20180907111533.485E58078F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f34f33baa6f94137a78f15cafe0ee0e4ece59f97
+commit: https://git.buildroot.net/buildroot/commit/?id=25eb81d6ef5e1c2029ff1be4ac4ec894c4958177
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Old version of cmake break cross-compilation when FindThreads is used
-because of a try_run call. Add a workaround that avoids try_run.
+This release includes support for OpenSSL 1.1.x
 
-cmake bug report: https://gitlab.kitware.com/cmake/cmake/issues/16920
+Added hashes for tarball and license file.
 
-Should fix:
-http://autobuild.buildroot.net/results/8aa/8aa2bd894416a4508ca7140f8947ff46243f8b78/
-http://autobuild.buildroot.net/results/f2c/f2cc965bb134bf4fd9e625eb267b67c949c202fc/
-
-Cc: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libssh/libssh.mk | 3 +++
- 1 file changed, 3 insertions(+)
+ package/ustream-ssl/ustream-ssl.hash | 3 +++
+ package/ustream-ssl/ustream-ssl.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 4295aa42ee..635d72ad98 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -17,6 +17,9 @@ LIBSSH_CONF_OPTS = \
- 	-DWITH_SERVER=OFF \
- 	-DWITH_EXAMPLES=OFF
+diff --git a/package/ustream-ssl/ustream-ssl.hash b/package/ustream-ssl/ustream-ssl.hash
+new file mode 100644
+index 0000000000..ba315f88dc
+--- /dev/null
++++ b/package/ustream-ssl/ustream-ssl.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 63ecc9d78ef83020a4539a89c8a3690657e7bbe7580ae02cc0e7b4267ffea5cd  ustream-ssl-23a3f2830341acd1db149175baf7315a33bd0edb.tar.gz
++sha256 90dd1590cf400a548438e2575e1ff46d8fb8cebae7d09f544aae7e059e30b6c5  ustream-ssl.h
+diff --git a/package/ustream-ssl/ustream-ssl.mk b/package/ustream-ssl/ustream-ssl.mk
+index 9b10788293..7804eb5d38 100644
+--- a/package/ustream-ssl/ustream-ssl.mk
++++ b/package/ustream-ssl/ustream-ssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# cmake older than 3.10 require this to avoid try_run() in FindThreads
-+LIBSSH_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
-+
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LIBSSH_CONF_OPTS += -DWITH_ZLIB=ON
- LIBSSH_DEPENDENCIES += zlib
+-USTREAM_SSL_VERSION = 45ac93088bc6f2d8ef3b0512d8e1ddfd9c4ee9e5
++USTREAM_SSL_VERSION = 23a3f2830341acd1db149175baf7315a33bd0edb
+ USTREAM_SSL_SITE = git://git.openwrt.org/project/ustream-ssl.git
+ USTREAM_SSL_LICENSE = ISC
+ USTREAM_SSL_LICENSE_FILES = ustream-ssl.h
