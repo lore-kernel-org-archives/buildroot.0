@@ -1,46 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:04 -0000
 Subject: [Buildroot] [git commit] package/vlc: add optional dependency to
- libsamplerate
-Message-ID: <20180907111512.711127FB4E@busybox.osuosl.org>
+ libdvdread
+Message-ID: <20180907111512.B976C80DE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70858702a7aabd8a6162c5e15be214a0bce2aecb
+commit: https://git.buildroot.net/buildroot/commit/?id=06a68723f3566af6866bb955d1139d9f42dfe94d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/vlc/vlc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index edd0c36372..9e1dc6b92e 100644
+index 9e1dc6b92e..928b3fabb8 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -51,7 +51,6 @@ VLC_CONF_OPTS += \
- 	--disable-mmal-vout \
- 	--disable-mtp \
- 	--disable-projectm \
--	--disable-samplerate \
- 	--disable-schroedinger \
- 	--disable-shout \
- 	--disable-twolame \
-@@ -262,6 +261,13 @@ else
- VLC_CONF_OPTS += --disable-svg --disable-svgdec
+@@ -206,6 +206,13 @@ else
+ VLC_CONF_OPTS += --disable-dvbpsi
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
-+VLC_CONF_OPTS += --enable-samplerate
-+VLC_DEPENDENCIES += libsamplerate
++ifeq ($(BR2_PACKAGE_LIBDVDREAD),y)
++VLC_CONF_OPTS += --enable-dvdread
++VLC_DEPENDENCIES += libdvdread
 +else
-+VLC_CONF_OPTS += --disable-samplerate
++VLC_CONF_OPTS += --disable-dvdread
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBSSH2),y)
- VLC_CONF_OPTS += --enable-sftp
- VLC_DEPENDENCIES += libssh2
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ VLC_CONF_OPTS += --enable-libgcrypt
+ VLC_DEPENDENCIES += libgcrypt
