@@ -1,147 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:52 -0000
-Subject: [Buildroot] [git commit] package/samba4: disable build of manpages
- and documentation
-Message-ID: <20180907111500.4002F7F950@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/misc: updating Vagrantfile to
+ ubuntu 18.04
+Message-ID: <20180907111455.A936E8158A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05e6967924ab2dc9a4d0c8e55028b5b952d1f6fb
+commit: https://git.buildroot.net/buildroot/commit/?id=8511a66fc1d16014703e76ce0d5bf3ca3b010bdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-http://autobuild.buildroot.net/results/3f214cbb1fe2dc2c2cbfb630032e13eba81c1b5a/
-and many others
+This patch updates the vagrant box to ubuntu bionic 64 and switches back
+to the official ubuntu image cause the issues with the official image
+are now solved.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-[Thomas: reformat patch as Git formatted]
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...sable-build-of-manpages-and-documentation.patch | 116 +++++++++++++++++++++
- 1 file changed, 116 insertions(+)
+ support/misc/Vagrantfile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch b/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
-new file mode 100644
-index 0000000000..41a06801c7
---- /dev/null
-+++ b/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
-@@ -0,0 +1,116 @@
-+From 3cd608170b99492bdd5fe3b7b8e7db61af199845 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Thu, 9 Aug 2018 09:59:06 +0200
-+Subject: [PATCH] Disable build of manpages and documentation
-+
-+This patch fixes a bug described in an upstream bug report
-+https://bugzilla.samba.org/show_bug.cgi?id=9515
-+which was closed as WONTFIX by disabling the build of manpages and
-+documentation.
-+
-+If installed on the host, samba4 uses the docbook-xsl package to build
-+parts of the documentation. This package is broken, on Debian for
-+example the bug reported to samba4 was fixed in the docbook-xsl package:
-+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=765567
-+
-+Since we do not provide a host version of docbook-xsl we need to disable
-+the build of manpages and documentation.
-+
-+Patch was downloaded from
-+https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/network/samba/patches/samba-950-no-man.patch
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ buildtools/wafsamba/wafsamba.py | 10 +++++-----
-+ docs-xml/wscript_build          | 34 +++++++++++++++++-----------------
-+ source4/scripting/wscript_build |  4 ++--
-+ 3 files changed, 24 insertions(+), 24 deletions(-)
-+
-+diff --git a/buildtools/wafsamba/wafsamba.py b/buildtools/wafsamba/wafsamba.py
-+index 4bb19d070e2..a255d841111 100644
-+--- a/buildtools/wafsamba/wafsamba.py
-++++ b/buildtools/wafsamba/wafsamba.py
-+@@ -335,9 +335,9 @@ def SAMBA_LIBRARY(bld, libname, source,
-+         else:
-+             bld.PKG_CONFIG_FILES(pc_files, vnum=vnum)
-+ 
-+-    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
-+-        bld.env['XSLTPROC_MANPAGES']):
-+-        bld.MANPAGES(manpages, install)
-++#    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
-++#        bld.env['XSLTPROC_MANPAGES']):
-++#        bld.MANPAGES(manpages, install)
-+ 
-+ 
-+ Build.BuildContext.SAMBA_LIBRARY = SAMBA_LIBRARY
-+@@ -442,8 +442,8 @@ def SAMBA_BINARY(bld, binname, source,
-+         samba_ldflags  = pie_ldflags
-+         )
-+ 
-+-    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-+-        bld.MANPAGES(manpages, install)
-++#    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-++#        bld.MANPAGES(manpages, install)
-+ 
-+ Build.BuildContext.SAMBA_BINARY = SAMBA_BINARY
-+ 
-+diff --git a/docs-xml/wscript_build b/docs-xml/wscript_build
-+index 954c62a29bc..1169158fd57 100644
-+--- a/docs-xml/wscript_build
-++++ b/docs-xml/wscript_build
-+@@ -147,20 +147,20 @@ bld.SAMBA_GENERATOR(parameter_all,
-+                     rule=smbdotconf_generate_parameter_list,
-+                     dep_vars=bld.dynconfig_varnames())
-+ 
-+-def SMBDOTCONF_MANPAGE(bld, target):
-+-    ''' assemble and build smb.conf.5 manual page'''
-+-    bld.SAMBAMANPAGES(target, parameter_all)
-+-
-+-if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
-+-
-+-    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
-+-    bld.SAMBAMANPAGES(manpages)
-+-
-+-    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
-+-        bld.SAMBAMANPAGES(pam_winbind_manpages)
-+-
-+-    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
-+-        bld.SAMBAMANPAGES(krb5_locator_manpages)
-+-
-+-    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
-+-        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
-++#def SMBDOTCONF_MANPAGE(bld, target):
-++#    ''' assemble and build smb.conf.5 manual page'''
-++#    bld.SAMBAMANPAGES(target, parameter_all)
-++#
-++#if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
-++#
-++#    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
-++#    bld.SAMBAMANPAGES(manpages)
-++#
-++#    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
-++#        bld.SAMBAMANPAGES(pam_winbind_manpages)
-++#
-++#    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
-++#        bld.SAMBAMANPAGES(krb5_locator_manpages)
-++#
-++#    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
-++#        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
-+diff --git a/source4/scripting/wscript_build b/source4/scripting/wscript_build
-+index 2f53cce12b7..9841ae0a116 100644
-+--- a/source4/scripting/wscript_build
-++++ b/source4/scripting/wscript_build
-+@@ -12,8 +12,8 @@ if sbin_files:
-+     bld.INSTALL_FILES('${SBINDIR}',
-+                       sbin_files,
-+                       chmod=MODE_755, python_fixup=True, flat=True)
-+-    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-+-        bld.MANPAGES(man_files, True)
-++#    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
-++#        bld.MANPAGES(man_files, True)
-+ 
-+ if bld.CONFIG_SET('AD_DC_BUILD_IS_ENABLED'):
-+     bld.INSTALL_FILES('${BINDIR}',
-+-- 
-+2.14.4
-+
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index cca0a3db3d..acfc8abfc8 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -12,7 +12,7 @@ VM_MEMORY=2048
+ VM_CORES=1
+ 
+ Vagrant.configure('2') do |config|
+-	config.vm.box = 'bento/ubuntu-16.04'
++	config.vm.box = 'ubuntu/bionic64'
+ 
+ 	config.vm.provider :vmware_fusion do |v, override|
+ 		v.vmx['memsize'] = VM_MEMORY
