@@ -1,52 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:28 -0000
-Subject: [Buildroot] [git commit] package/ipmiutil: bump version to 3.1.2
-Message-ID: <20180907111528.3D93D7FCD0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/luvi: bump version to 2.8.0
+Message-ID: <20180907111529.6B00E82A6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e291ca354df0ec918627eaa76ce6b6a1799668b2
+commit: https://git.buildroot.net/buildroot/commit/?id=ac6fedda6b43996545ff498cd19a781698a96050
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added md5 hash provided by upstream and license hash, switched _SITE to
-https.
+Upstream does not provide a tarball including all submodules so we need
+to checkout the git repo including the submodules ourselves.
+
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ipmiutil/ipmiutil.hash | 8 +++++---
- package/ipmiutil/ipmiutil.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/luvi/luvi.hash | 3 ++-
+ package/luvi/luvi.mk   | 7 ++++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/ipmiutil/ipmiutil.hash b/package/ipmiutil/ipmiutil.hash
-index f9d086b67a..e09511f96f 100644
---- a/package/ipmiutil/ipmiutil.hash
-+++ b/package/ipmiutil/ipmiutil.hash
-@@ -1,4 +1,6 @@
--# From http://sourceforge.net/projects/ipmiutil/files/?source=navbar
--sha1	f423a77a374b6a37a16496844f1e6e363e7d63fe	ipmiutil-2.9.9.tar.gz
-+# From https://sourceforge.net/projects/ipmiutil/files/
-+md5 ee90387f8a14dea3f867167865c7c968  ipmiutil-3.1.2.tar.gz
-+sha1 9453db110bffab3111d6ff4047243a34084e5878  ipmiutil-3.1.2.tar.gz
- # Locally computed
--sha256	beace08386a002c6a4bbbf894bda9899ea34fae4c2181c89f29fb1fa136925f6	ipmiutil-2.9.9.tar.gz
-+sha256 768053b3e3adfe1bf656e2848b2805ede87e429c10d282929a7c4ceeebc24703  ipmiutil-3.1.2.tar.gz
-+sha256 7e0ec8238aa1431e95a4950032a4483fe33fec3fac348eaade5856cdc5ae3e39  COPYING
-diff --git a/package/ipmiutil/ipmiutil.mk b/package/ipmiutil/ipmiutil.mk
-index a5a6b49314..5d8c45665d 100644
---- a/package/ipmiutil/ipmiutil.mk
-+++ b/package/ipmiutil/ipmiutil.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/luvi/luvi.hash b/package/luvi/luvi.hash
+index e2239b6171..d5716e0036 100644
+--- a/package/luvi/luvi.hash
++++ b/package/luvi/luvi.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256  ce9a1fb762e61267618ddea9ea129170fd543bb918c382b71cb35985d0024c42  luvi-src-v2.7.6.tar.gz
++sha256 a18e138c7032ef8406fef6e2135a61fad713861742512f2073adc0b4ab6d8f8b  luvi-v2.8.0.tar.gz
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/luvi/luvi.mk b/package/luvi/luvi.mk
+index a2bc218e77..8b3b7659b0 100644
+--- a/package/luvi/luvi.mk
++++ b/package/luvi/luvi.mk
+@@ -4,9 +4,10 @@
  #
  ################################################################################
  
--IPMIUTIL_VERSION = 2.9.9
--IPMIUTIL_SITE = http://sourceforge.net/projects/ipmiutil/files
-+IPMIUTIL_VERSION = 3.1.2
-+IPMIUTIL_SITE = https://sourceforge.net/projects/ipmiutil/files
- IPMIUTIL_LICENSE = BSD-3-Clause
- IPMIUTIL_LICENSE_FILES = COPYING
- # We're patching configure.ac
+-LUVI_VERSION = v2.7.6
+-LUVI_SOURCE = luvi-src-$(LUVI_VERSION).tar.gz
+-LUVI_SITE = https://github.com/luvit/luvi/releases/download/$(LUVI_VERSION)
++LUVI_VERSION = v2.8.0
++LUVI_SITE = https://github.com/luvit/luvi.git
++LUVI_SITE_METHOD = git
++LUVI_GIT_SUBMODULES = YES
+ LUVI_LICENSE = Apache-2.0
+ LUVI_LICENSE_FILES = LICENSE.txt
+ LUVI_DEPENDENCIES = libuv luajit luv host-luajit
