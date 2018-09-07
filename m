@@ -1,368 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:21 -0000
-Subject: [Buildroot] [git commit] package/netsnmp: bump version to 5.8
-Message-ID: <20180907111527.8F7167FBD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/git-crypt: bump version to 0.6.0
+Message-ID: <20180907111527.C2FF382A6C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fe32e837597ac23bcc52f121257d1de126fb5c2
+commit: https://git.buildroot.net/buildroot/commit/?id=58b7005be1845f6f5c15da46e6bb95d769773c6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch, applied upstream, autoreconf is not needed anymore.
-Added sha256 hashes for tarball and license file.
-Switched _SITE to https.
+Quoting from release notes:
+https://www.agwa.name/git/git-crypt.git/raw/master/NEWS
+
+"v0.6.0 (2017-11-26)
+  * Add support for OpenSSL 1.1 (still works with OpenSSL 1.0).
+  * Switch to C++11 (gcc 4.9 or higher now required to build).
+ [...]"
+
+Added license hashes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...liminate-the-hard-coded-libnl-3-include-p.patch | 300 ---------------------
- package/netsnmp/netsnmp.hash                       |   9 +-
- package/netsnmp/netsnmp.mk                         |   5 +-
- 3 files changed, 8 insertions(+), 306 deletions(-)
+ package/git-crypt/Config.in      | 6 ++++--
+ package/git-crypt/git-crypt.hash | 7 +++++--
+ package/git-crypt/git-crypt.mk   | 2 +-
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch b/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
-deleted file mode 100644
-index cf0592233e..0000000000
---- a/package/netsnmp/0001-configure-Eliminate-the-hard-coded-libnl-3-include-p.patch
-+++ /dev/null
-@@ -1,300 +0,0 @@
--From 57d6c3d36045aab8957ffeb7324728bf17faf8bd Mon Sep 17 00:00:00 2001
--From: Bart Van Assche <bvanassche@acm.org>
--Date: Mon, 2 Feb 2015 20:31:29 +0100
--Subject: [PATCH] configure: Eliminate the hard-coded libnl-3 include path
--
--See also commit 3dde41998625fe0e24119a2e1f4509ba3ba2fd9a.
--
--(cherry picked from commit 852dcd644cfe4cfc7177649eaec163d6221f2be1)
--
--Original commit included modifications to configure script.
--Do not keep these modifications, since they caused lots of conflicts, and
--configure script is meant to be automatically generated.
--
--Signed-off-by: Julien Floret <julien.floret@6wind.com>
--
--Conflicts:
--	configure
-----
-- aclocal.m4                  |   1 +
-- configure.d/config_os_libs2 |  30 ++++++-
-- m4/pkg.m4                   | 214 ++++++++++++++++++++++++++++++++++++++++++++
-- 3 files changed, 243 insertions(+), 2 deletions(-)
-- create mode 100644 m4/pkg.m4
--
--diff --git a/aclocal.m4 b/aclocal.m4
--index cd80c7486f2f..45e3608ed480 100644
----- a/aclocal.m4
--+++ b/aclocal.m4
--@@ -22,3 +22,4 @@ m4_include([m4/ltversion.m4])
-- m4_include([m4/lt~obsolete.m4])
-- m4_include([m4/netsnmp_arg.m4])
-- m4_include([m4/netsnmp_search_libs.m4])
--+m4_include([m4/pkg.m4])
--diff --git a/configure.d/config_os_libs2 b/configure.d/config_os_libs2
--index 47491e24ce0a..10bd414b879e 100644
----- a/configure.d/config_os_libs2
--+++ b/configure.d/config_os_libs2
--@@ -225,11 +225,37 @@ fi
-- if test "x$with_nl" != "xno"; then
--     case $target_os in
--     linux*) # Check for libnl (linux)
--+        # The test below verifies whether the libnl-3 package been installed.
--+        # This test works as follows:
--+        # - If pkg-config was not installed at the time autogen.sh was run,
--+        #   the definition of the PKG_CHECK_EXISTS() macro will not be found by
--+        #   autogen.sh. Augogen.sh will generate a configure script that prints
--+        #   a warning about pkg-config and proceeds as if libnl-3 has not been
--+        #   installed.
--+        # - If pkg-config was installed at the time autogen.sh was run,
--+        #   the generated configure script will try to detect the presence of
--+        #   the libnl-3 library by looking up compile and linker flags in the
--+        #   file called libnl-3.pc.
--+        # - pkg-config settings can be overridden via the configure variables
--+        #   LIBNL3_CFLAGS and LIBNL3_LIBS (added by the pkg-config m4 macro's to
--+        #   the configure script -- see also ./configure --help).
--+        # - The LIBNL3_CFLAGS and LIBNL3_LIBS configure variables can be used
--+        #   even if the pkg-config executable is not present on the system on
--+        #   which the configure script is run.
--+        ifdef(
--+          [PKG_CHECK_EXISTS],
--+          [PKG_CHECK_EXISTS([libnl-3.0],
--+            [PKG_CHECK_MODULES([LIBNL3], [libnl-3.0])])
--+          ],
--+          AC_MSG_WARN([pkg-config has not been installed or is too old.])
--+          AC_MSG_WARN([Detection of libnl-3.0 will be skipped.])
--+        )
--+
--         netsnmp_save_CPPFLAGS="$CPPFLAGS"
---        CPPFLAGS="-I/usr/include/libnl3 $CPPFLAGS"
--+        CPPFLAGS="${LIBNL3_CFLAGS} $CPPFLAGS"
--         NETSNMP_SEARCH_LIBS(nl_connect, nl-3,
--             [AC_CHECK_HEADERS(netlink/netlink.h)
---            EXTERNAL_MIBGROUP_INCLUDES="$EXTERNAL_MIBGROUP_INCLUDES -I/usr/include/libnl3"],
--+            EXTERNAL_MIBGROUP_INCLUDES="$EXTERNAL_MIBGROUP_INCLUDES ${LIBNL3_CFLAGS}"],
--             [CPPFLAGS="$netsnmp_save_CPPFLAGS"], [], [], [LMIBLIBS])
--         if test "x$ac_cv_header_netlink_netlink_h" != xyes; then
--             NETSNMP_SEARCH_LIBS(nl_connect, nl, [
--diff --git a/m4/pkg.m4 b/m4/pkg.m4
--new file mode 100644
--index 000000000000..c5b26b52e6cd
----- /dev/null
--+++ b/m4/pkg.m4
--@@ -0,0 +1,214 @@
--+# pkg.m4 - Macros to locate and utilise pkg-config.            -*- Autoconf -*-
--+# serial 1 (pkg-config-0.24)
--+# 
--+# Copyright ?? 2004 Scott James Remnant <scott@netsplit.com>.
--+#
--+# This program is free software; you can redistribute it and/or modify
--+# it under the terms of the GNU General Public License as published by
--+# the Free Software Foundation; either version 2 of the License, or
--+# (at your option) any later version.
--+#
--+# This program is distributed in the hope that it will be useful, but
--+# WITHOUT ANY WARRANTY; without even the implied warranty of
--+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
--+# General Public License for more details.
--+#
--+# You should have received a copy of the GNU General Public License
--+# along with this program; if not, write to the Free Software
--+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
--+#
--+# As a special exception to the GNU General Public License, if you
--+# distribute this file as part of a program that contains a
--+# configuration script generated by Autoconf, you may include it under
--+# the same distribution terms that you use for the rest of that program.
--+
--+# PKG_PROG_PKG_CONFIG([MIN-VERSION])
--+# ----------------------------------
--+AC_DEFUN([PKG_PROG_PKG_CONFIG],
--+[m4_pattern_forbid([^_?PKG_[A-Z_]+$])
--+m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
--+m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
--+AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])
--+AC_ARG_VAR([PKG_CONFIG_PATH], [directories to add to pkg-config's search path])
--+AC_ARG_VAR([PKG_CONFIG_LIBDIR], [path overriding pkg-config's built-in search path])
--+
--+if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
--+	AC_PATH_TOOL([PKG_CONFIG], [pkg-config])
--+fi
--+if test -n "$PKG_CONFIG"; then
--+	_pkg_min_version=m4_default([$1], [0.9.0])
--+	AC_MSG_CHECKING([pkg-config is at least version $_pkg_min_version])
--+	if $PKG_CONFIG --atleast-pkgconfig-version $_pkg_min_version; then
--+		AC_MSG_RESULT([yes])
--+	else
--+		AC_MSG_RESULT([no])
--+		PKG_CONFIG=""
--+	fi
--+fi[]dnl
--+])# PKG_PROG_PKG_CONFIG
--+
--+# PKG_CHECK_EXISTS(MODULES, [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
--+#
--+# Check to see whether a particular set of modules exists.  Similar
--+# to PKG_CHECK_MODULES(), but does not set variables or print errors.
--+#
--+# Please remember that m4 expands AC_REQUIRE([PKG_PROG_PKG_CONFIG])
--+# only at the first occurence in configure.ac, so if the first place
--+# it's called might be skipped (such as if it is within an "if", you
--+# have to call PKG_CHECK_EXISTS manually
--+# --------------------------------------------------------------
--+AC_DEFUN([PKG_CHECK_EXISTS],
--+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
--+if test -n "$PKG_CONFIG" && \
--+    AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
--+  m4_default([$2], [:])
--+m4_ifvaln([$3], [else
--+  $3])dnl
--+fi])
--+
--+# _PKG_CONFIG([VARIABLE], [COMMAND], [MODULES])
--+# ---------------------------------------------
--+m4_define([_PKG_CONFIG],
--+[if test -n "$$1"; then
--+    pkg_cv_[]$1="$$1"
--+ elif test -n "$PKG_CONFIG"; then
--+    PKG_CHECK_EXISTS([$3],
--+                     [pkg_cv_[]$1=`$PKG_CONFIG --[]$2 "$3" 2>/dev/null`
--+		      test "x$?" != "x0" && pkg_failed=yes ],
--+		     [pkg_failed=yes])
--+ else
--+    pkg_failed=untried
--+fi[]dnl
--+])# _PKG_CONFIG
--+
--+# _PKG_SHORT_ERRORS_SUPPORTED
--+# -----------------------------
--+AC_DEFUN([_PKG_SHORT_ERRORS_SUPPORTED],
--+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])
--+if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
--+        _pkg_short_errors_supported=yes
--+else
--+        _pkg_short_errors_supported=no
--+fi[]dnl
--+])# _PKG_SHORT_ERRORS_SUPPORTED
--+
--+
--+# PKG_CHECK_MODULES(VARIABLE-PREFIX, MODULES, [ACTION-IF-FOUND],
--+# [ACTION-IF-NOT-FOUND])
--+#
--+#
--+# Note that if there is a possibility the first call to
--+# PKG_CHECK_MODULES might not happen, you should be sure to include an
--+# explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
--+#
--+#
--+# --------------------------------------------------------------
--+AC_DEFUN([PKG_CHECK_MODULES],
--+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
--+AC_ARG_VAR([$1][_CFLAGS], [C compiler flags for $1, overriding pkg-config])dnl
--+AC_ARG_VAR([$1][_LIBS], [linker flags for $1, overriding pkg-config])dnl
--+
--+pkg_failed=no
--+AC_MSG_CHECKING([for $1])
--+
--+_PKG_CONFIG([$1][_CFLAGS], [cflags], [$2])
--+_PKG_CONFIG([$1][_LIBS], [libs], [$2])
--+
--+m4_define([_PKG_TEXT], [Alternatively, you may set the environment variables $1[]_CFLAGS
--+and $1[]_LIBS to avoid the need to call pkg-config.
--+See the pkg-config man page for more details.])
--+
--+if test $pkg_failed = yes; then
--+   	AC_MSG_RESULT([no])
--+        _PKG_SHORT_ERRORS_SUPPORTED
--+        if test $_pkg_short_errors_supported = yes; then
--+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
--+        else 
--+	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
--+        fi
--+	# Put the nasty error message in config.log where it belongs
--+	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
--+
--+	m4_default([$4], [AC_MSG_ERROR(
--+[Package requirements ($2) were not met:
--+
--+$$1_PKG_ERRORS
--+
--+Consider adjusting the PKG_CONFIG_PATH environment variable if you
--+installed software in a non-standard prefix.
--+
--+_PKG_TEXT])[]dnl
--+        ])
--+elif test $pkg_failed = untried; then
--+     	AC_MSG_RESULT([no])
--+	m4_default([$4], [AC_MSG_FAILURE(
--+[The pkg-config script could not be found or is too old.  Make sure it
--+is in your PATH or set the PKG_CONFIG environment variable to the full
--+path to pkg-config.
--+
--+_PKG_TEXT
--+
--+To get pkg-config, see <http://pkg-config.freedesktop.org/>.])[]dnl
--+        ])
--+else
--+	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
--+	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
--+        AC_MSG_RESULT([yes])
--+	$3
--+fi[]dnl
--+])# PKG_CHECK_MODULES
--+
--+
--+# PKG_INSTALLDIR(DIRECTORY)
--+# -------------------------
--+# Substitutes the variable pkgconfigdir as the location where a module
--+# should install pkg-config .pc files. By default the directory is
--+# $libdir/pkgconfig, but the default can be changed by passing
--+# DIRECTORY. The user can override through the --with-pkgconfigdir
--+# parameter.
--+AC_DEFUN([PKG_INSTALLDIR],
--+[m4_pushdef([pkg_default], [m4_default([$1], ['${libdir}/pkgconfig'])])
--+m4_pushdef([pkg_description],
--+    [pkg-config installation directory @<:@]pkg_default[@:>@])
--+AC_ARG_WITH([pkgconfigdir],
--+    [AS_HELP_STRING([--with-pkgconfigdir], pkg_description)],,
--+    [with_pkgconfigdir=]pkg_default)
--+AC_SUBST([pkgconfigdir], [$with_pkgconfigdir])
--+m4_popdef([pkg_default])
--+m4_popdef([pkg_description])
--+]) dnl PKG_INSTALLDIR
--+
--+
--+# PKG_NOARCH_INSTALLDIR(DIRECTORY)
--+# -------------------------
--+# Substitutes the variable noarch_pkgconfigdir as the location where a
--+# module should install arch-independent pkg-config .pc files. By
--+# default the directory is $datadir/pkgconfig, but the default can be
--+# changed by passing DIRECTORY. The user can override through the
--+# --with-noarch-pkgconfigdir parameter.
--+AC_DEFUN([PKG_NOARCH_INSTALLDIR],
--+[m4_pushdef([pkg_default], [m4_default([$1], ['${datadir}/pkgconfig'])])
--+m4_pushdef([pkg_description],
--+    [pkg-config arch-independent installation directory @<:@]pkg_default[@:>@])
--+AC_ARG_WITH([noarch-pkgconfigdir],
--+    [AS_HELP_STRING([--with-noarch-pkgconfigdir], pkg_description)],,
--+    [with_noarch_pkgconfigdir=]pkg_default)
--+AC_SUBST([noarch_pkgconfigdir], [$with_noarch_pkgconfigdir])
--+m4_popdef([pkg_default])
--+m4_popdef([pkg_description])
--+]) dnl PKG_NOARCH_INSTALLDIR
--+
--+
--+# PKG_CHECK_VAR(VARIABLE, MODULE, CONFIG-VARIABLE,
--+# [ACTION-IF-FOUND], [ACTION-IF-NOT-FOUND])
--+# -------------------------------------------
--+# Retrieves the value of the pkg-config variable for the given module.
--+AC_DEFUN([PKG_CHECK_VAR],
--+[AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
--+AC_ARG_VAR([$1], [value of $3 for $2, overriding pkg-config])dnl
--+
--+_PKG_CONFIG([$1], [variable="][$3]["], [$2])
--+AS_VAR_COPY([$1], [pkg_cv_][$1])
--+
--+AS_VAR_IF([$1], [""], [$5], [$4])dnl
--+])# PKG_CHECK_VAR
---- 
--2.1.0
--
-diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
-index fc77926023..d05a7de9da 100644
---- a/package/netsnmp/netsnmp.hash
-+++ b/package/netsnmp/netsnmp.hash
-@@ -1,3 +1,6 @@
--# From http://sourceforge.net/projects/net-snmp/files/net-snmp/5.7.3/
--md5	d4a3459e1577d0efa8d96ca70a885e53	net-snmp-5.7.3.tar.gz
--sha1	97dc25077257680815de44e34128d365c76bd839	net-snmp-5.7.3.tar.gz
-+# From http://sourceforge.net/projects/net-snmp/files/net-snmp/5.8/
-+md5	63bfc65fbb86cdb616598df1aff6458a		net-snmp-5.8.tar.gz
-+sha1	78f70731df9dcdb13fe8f60eb7d80d7583da4d2c	net-snmp-5.8.tar.gz
-+# Locally computed
-+sha256 b2fc3500840ebe532734c4786b0da4ef0a5f67e51ef4c86b3345d697e4976adf  net-snmp-5.8.tar.gz
-+sha256 ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 742fa6e3b3..6c712ae075 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
+index 362fe9a600..bb86219cf8 100644
+--- a/package/git-crypt/Config.in
++++ b/package/git-crypt/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_GIT_CRYPT
+ 	bool "git-crypt"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+ 	depends on BR2_USE_MMU # git
+ 	select BR2_PACKAGE_GIT # runtime
+ 	select BR2_PACKAGE_OPENSSL
+@@ -10,6 +11,7 @@ config BR2_PACKAGE_GIT_CRYPT
+ 
+ 	  https://www.agwa.name/projects/git-crypt/
+ 
+-comment "git-crypt needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
++comment "git-crypt needs a toolchain w/ C++, gcc >= 4.9"
++	depends on !BR2_INSTALL_LIBSTDCPP \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
+index 8589f03f71..973432d7d0 100644
+--- a/package/git-crypt/git-crypt.hash
++++ b/package/git-crypt/git-crypt.hash
+@@ -1,2 +1,5 @@
+-# Hash from: https://lists.cloudmutt.com/pipermail/git-crypt-announce/2015-May/000003.html
+-sha256 0a8f92c0a0a125bf768d0c054d947ca4e4b8d6556454b0e7e87fb907ee17cf06 git-crypt-0.5.0.tar.gz
++# Locally calculated after checking pgp signature
++sha256 6d30fcd99442d50f4b3c8d554067ff1d980cdf9f3120ee774131172dba98fd6f  git-crypt-0.6.0.tar.gz
++# Locally calculated
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256 506657e7a381165550e6c33e35b3b03bbef3e1feb68ba5529e264bd75ed2dc64  parse_options.hpp
+diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
+index 6cae456fd3..507534c139 100644
+--- a/package/git-crypt/git-crypt.mk
++++ b/package/git-crypt/git-crypt.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETSNMP_VERSION = 5.7.3
--NETSNMP_SITE = http://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
-+NETSNMP_VERSION = 5.8
-+NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
- NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
- NETSNMP_LICENSE = Various BSD-like
- NETSNMP_LICENSE_FILES = COPYING
-@@ -36,7 +36,6 @@ NETSNMP_INSTALL_STAGING_OPTS = DESTDIR=$(STAGING_DIR) LIB_LDCONFIG_CMD=true inst
- NETSNMP_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) LIB_LDCONFIG_CMD=true install
- NETSNMP_MAKE = $(MAKE1)
- NETSNMP_CONFIG_SCRIPTS = net-snmp-config
--NETSNMP_AUTORECONF = YES
- 
- ifeq ($(BR2_ENDIAN),"BIG")
- NETSNMP_CONF_OPTS += --with-endianness=big
+-GIT_CRYPT_VERSION = 0.5.0
++GIT_CRYPT_VERSION = 0.6.0
+ GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
+ GIT_CRYPT_DEPENDENCIES = host-pkgconf openssl
+ GIT_CRYPT_LICENSE = GPL-3.0+, MIT
