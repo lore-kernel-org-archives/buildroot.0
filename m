@@ -1,50 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:31 -0000
-Subject: [Buildroot] [git commit] package/libssh: bump version to 0.8.1
-Message-ID: <20180907111539.ACB5180DAE@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:32 -0000
+Subject: [Buildroot] [git commit] package/botan: add optional dependency to
+ boost
+Message-ID: <20180907111536.71754811CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23430a63a789dccd635d58d699bfa6416340da8a
+commit: https://git.buildroot.net/buildroot/commit/?id=031f5c04d9de5a21d3bc49f3849af3e6593fa1a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixed broken _SITE, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libssh/libssh.hash | 8 +++-----
- package/libssh/libssh.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 7 deletions(-)
+ package/botan/botan.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index 009a335e3b..7220c337cf 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
-@@ -1,5 +1,3 @@
--# from https://red.libssh.org/projects/libssh/files/
--md5	d3fc864208bf607ad87cdee836894feb	libssh-0.7.5.tar.xz
--# Locally calculated after checking signature on uncompressed libssh-0.7.5.tar
--# https://red.libssh.org/attachments/download/217/libssh-0.7.5.tar.asc
--sha256	54e86dd5dc20e5367e58f3caab337ce37675f863f80df85b6b1614966a337095  libssh-0.7.5.tar.xz
-+# Locally calculated after checking pgp signature
-+sha256 d17f1267b4a5e46c0fbe66d39a3e702b8cefe788928f2eb6e339a18bb00b1924  libssh-0.8.1.tar.xz
-+sha256 468cf08f784ef6fd3b3705b60dd8111e2b70fbb8f6549cd503665a6bbb3bc625  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 902865d73b..4295aa42ee 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index 21a66adff1..e25bf5b52f 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
+@@ -40,6 +40,11 @@ else
+ BOTAN_CONF_OPTS += --without-stack-protector
+ endif
  
--LIBSSH_VERSION_MAJOR = 0.7
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).5
-+LIBSSH_VERSION_MAJOR = 0.8
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).1
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
++ifeq ($(BR2_PACKAGE_BOOST),y)
++BOTAN_DEPENDENCIES += boost
++BOTAN_CONF_OPTS += --with-boost
++endif
++
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ BOTAN_DEPENDENCIES += bzip2
+ BOTAN_CONF_OPTS += --with-bzip2
