@@ -1,46 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:15:37 -0000
-Subject: [Buildroot] [git commit] package/glibc: bump to version 2.28
-Message-ID: <20180907111445.3CFA67FB8F@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 07 Sep 2018 11:15:39 -0000
+Subject: [Buildroot] [git commit] gzip: bump to version 1.9
+Message-ID: <20180907111446.DE7B181293@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7b17989d27f36afc06a00cedcd289a5ea82787a
+commit: https://git.buildroot.net/buildroot/commit/?id=05c23d35429ec4ec5eb318655a3c95c6a9c58458
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://www.sourceware.org/ml/libc-alpha/2018-08/msg00003.html
+Add reference to tarball signature and key.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Add license file hash.
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/glibc/glibc.hash | 2 +-
- package/glibc/glibc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gzip/gzip.hash | 6 +++++-
+ package/gzip/gzip.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index 81dd5ad5ed..85afd6fd6b 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
-@@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  33189b3f10c88730a1f686fac794bc01f31765f12ffd75bc5e8a0f2a690d217a     glibc-glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e.tar.gz
-+sha256  877c7b4741501d1762af8ef1a2518bdf2d722947d2e8d48b203e2d83cc600bca     glibc-glibc-2.28.tar.gz
- # Locally calculated (fetched from Github)
- sha256  e08ab67b2db2d0f0e8f3311d23c54fb8f6d4c1ef6fa0b4047fd5da400e3ce9de     glibc-arc-2018.03-release.tar.gz
+diff --git a/package/gzip/gzip.hash b/package/gzip/gzip.hash
+index 466f846e12..632176c2b6 100644
+--- a/package/gzip/gzip.hash
++++ b/package/gzip/gzip.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated after checking pgp signature
+-sha256 ff1767ec444f71e5daf8972f6f8bf68cfcca1d2f76c248eb18e8741fc91dbbd3  gzip-1.8.tar.xz
++# https://ftp.gnu.org/gnu/gzip/gzip-1.9.tar.xz.sig
++# using key 155D3FC500C834486D1EEA677FD9FCCB000BEEEE
++sha256 ae506144fc198bd8f81f1f4ad19ce63d5a2d65e42333255977cf1dcf1479089a  gzip-1.9.tar.xz
++# Locally calculated
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gzip/gzip.mk b/package/gzip/gzip.mk
+index d69215a850..d48cb1aa15 100644
+--- a/package/gzip/gzip.mk
++++ b/package/gzip/gzip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index d34b42b831..399cf395ce 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -10,7 +10,7 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
- else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master
--GLIBC_VERSION = glibc-2.27-57-g6c99e37f6fb640a50a3113b2dbee5d5389843c1e
-+GLIBC_VERSION = glibc-2.28
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
+-GZIP_VERSION = 1.8
++GZIP_VERSION = 1.9
+ GZIP_SOURCE = gzip-$(GZIP_VERSION).tar.xz
+ GZIP_SITE = $(BR2_GNU_MIRROR)/gzip
+ # Some other tools expect it to be in /bin
