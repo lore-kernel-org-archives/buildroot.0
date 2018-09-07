@@ -1,54 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:44 -0000
-Subject: [Buildroot] [git commit] package/mariadb: security bump to version
- 10.1.35
-Message-ID: <20180907111545.EE0327FCA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] e2fsprogs: group disable and enable
+ together
+Message-ID: <20180907111551.BAF187FCAD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c93d173d540e9616914504b6859c27528ee2d17
+commit: https://git.buildroot.net/buildroot/commit/?id=9613674df42eb8f124fd38dde6f80409a295a667
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2018-3064, CVE-2018-3063, CVE-2018-3058 & CVE-2018-3066:
-https://mariadb.com/kb/en/library/mariadb-10135-release-notes/
+As reported by Yann E. Morin, it is more readable when all disable
+options are grouped together, and all enable options are grouped
+together. Fix this in e2fsprogs.mk.
 
-Added all hashes provided by upstream.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mariadb/mariadb.hash | 7 +++++--
- package/mariadb/mariadb.mk   | 2 +-
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 7eea62ab7b..e4736465e0 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,5 +1,8 @@
--# From https://downloads.mariadb.org/mariadb/10.1.33/
--sha256 94312c519f2c0c25e1964c64e22aff0036fb22dfb2685638f43a6b2211395d2d  mariadb-10.1.33.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.1.35/
-+md5 935f401314ff08a4177beb70fed6055c  mariadb-10.1.35.tar.gz
-+sha1 d322f0da17f4de475832dd534657eba5a936f77b  mariadb-10.1.35.tar.gz
-+sha256 9e91d985ed4f662126e3e5791fe91ec8a2f44ec811113c2b6fbc72fa14553c4d  mariadb-10.1.35.tar.gz
-+sha512 88e6049f3bbc3aa047e108f91a2c4f335758e80f25bfa2974b5f8c2e13f5758824d7835dece021b515c531e5641b9998e4de92256ad4b47b7f694da99bd471aa  mariadb-10.1.35.tar.gz
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 65f9774afb..fecef118ac 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -26,8 +26,8 @@ HOST_E2FSPROGS_CONF_OPTS = \
+ 	--disable-fuse2fs \
+ 	--disable-libblkid \
+ 	--disable-libuuid \
+-	--enable-symlink-install \
+ 	--disable-testio-debug \
++	--enable-symlink-install \
+ 	--enable-elf-shlibs
  
- # Hash for license files
- sha256 69ce89a0cadbe35a858398c258be93c388715e84fc0ca04e5a1fd1aa9770dd3a  README
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index e395d387e5..23822187c3 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.1.33
-+MARIADB_VERSION = 10.1.35
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
+ # Set the binary directories to "/bin" and "/sbin", as busybox does,
