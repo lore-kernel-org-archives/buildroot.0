@@ -1,28 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 6 Sep 2018 23:04:01 +0200
-Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: add hash file
- for git tarball
-Message-ID: <20180907111608.8B1427FEB5@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:17:10 -0000
+Subject: [Buildroot] [git commit] package/tini: needs MMU
+Message-ID: <20180907111558.037AA7FD5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cec266ee1f708f11cc679cb4f81613fa4186003c
+commit: https://git.buildroot.net/buildroot/commit/?id=8974192b7486f9d404f471d970eb802a4c1ce258
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+tini uses fork(), so needs an MMU.
+
+Fixes:
+    http://autobuild.buildroot.org/results/410/410ad9ea6a6652a7db691f537acb38db279b996a/
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Matt Weber <matthew.weber@rockwellcollins.com>
+Cc: Christian Stewart <christian@paral.in>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/tini/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-new file mode 100644
-index 0000000000..bcc794743d
---- /dev/null
-+++ b/package/sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256 9f479f8ac5e013e33568901b942baf6797464ea9b7f340ee38cd469b4fd2b038  sunxi-mali-mainline-driver-8e6b7d25b13089d53dbfc1ebd9e8737b0dc809cb.tar.gz
+diff --git a/package/tini/Config.in b/package/tini/Config.in
+index 235fc1a8fb..719e1e1f22 100644
+--- a/package/tini/Config.in
++++ b/package/tini/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_TINI
+ 	bool "tini"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  tini is a simple but valid init binary to
+ 	  act as PID 1 for containers.
