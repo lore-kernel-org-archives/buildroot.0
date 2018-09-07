@@ -1,45 +1,68 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:58 -0000
-Subject: [Buildroot] [git commit] configs/arm_juno: bump ATF to v1.3
-Message-ID: <20180907111547.001F37F981@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:59 -0000
+Subject: [Buildroot] [git commit] package/perl-crypt-openssl-guess: new
+ package
+Message-ID: <20180907111553.56F5B80225@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ddc039d0c044b3e574390ba27eb06ed0e845d2b
+commit: https://git.buildroot.net/buildroot/commit/?id=9fa2629c6a504f549ad7743d51e645c52c22357e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ATF in version 1.2 fails to build with:
+Needed for upcoming version bumps of perl-crypt-openssl-random and
+perl-crypt-openssl-rsa, only host-package is needed.
 
-./build/juno/release/bl1/context_mgmt.o: In function `cm_prepare_el3_exit':
-context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): undefined reference to `cm_set_next_context'
-context_mgmt.c:(.text.cm_prepare_el3_exit+0x54): relocation truncated to fit: R_AARCH64_JUMP26 against undefined symbol `cm_set_next_context'
-
-This has been fixed in ATF v1.3. Even though there are even newer
-versions of ATF available, we take a conservative approach, and bump
-to the first version that has the build issue fixed.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/88314771
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/arm_juno_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ DEVELOPERS                                                  |  1 +
+ .../perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash  |  6 ++++++
+ .../perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk    | 13 +++++++++++++
+ 3 files changed, 20 insertions(+)
 
-diff --git a/configs/arm_juno_defconfig b/configs/arm_juno_defconfig
-index 54506d8061..98f257387d 100644
---- a/configs/arm_juno_defconfig
-+++ b/configs/arm_juno_defconfig
-@@ -12,7 +12,7 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="arm/juno arm/juno-r1 arm/juno-r2"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware.git"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.2"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v1.3"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="juno"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+diff --git a/DEVELOPERS b/DEVELOPERS
+index cee19af880..481c74f9f2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -331,6 +331,7 @@ F:	package/libyuv/
+ F:	package/mesa3d/
+ F:	package/minidlna/
+ F:	package/mjpg-streamer/
++F:	package/perl-crypt-openssl-guess/
+ F:	package/perl-crypt-openssl-random/
+ F:	package/perl-crypt-openssl-rsa/
+ F:	package/perl-digest-sha1/
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+new file mode 100644
+index 0000000000..327b06900a
+--- /dev/null
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    e768fe2c07826b0ac9ea604c79f93032 Crypt-OpenSSL-Guess-0.11.tar.gz
++sha256 aa6b18e38cb852cbad80a58cd90c395b40819d4d01e0ab37e7703149094d7167 Crypt-OpenSSL-Guess-0.11.tar.gz
++
++# computed by scancpan
++sha256 5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072 LICENSE
+diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+new file mode 100644
+index 0000000000..69d7a0ef8f
+--- /dev/null
++++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# perl-crypt-openssl-guess
++#
++################################################################################
++
++PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.11
++PERL_CRYPT_OPENSSL_GUESS_SOURCE = Crypt-OpenSSL-Guess-$(PERL_CRYPT_OPENSSL_GUESS_VERSION).tar.gz
++PERL_CRYPT_OPENSSL_GUESS_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AK/AKIYM
++PERL_CRYPT_OPENSSL_GUESS_LICENSE = Artistic or GPL-1.0+
++PERL_CRYPT_OPENSSL_GUESS_LICENSE_FILES = LICENSE
++
++$(eval $(host-perl-package))
