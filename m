@@ -1,62 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:15:36 -0000
-Subject: [Buildroot] [git commit] package/iperf3: bump version to 3.6
-Message-ID: <20180907111443.EF3788103C@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:15:37 -0000
+Subject: [Buildroot] [git commit] support/download: remove help from wrapper
+Message-ID: <20180907111444.D7D6C80279@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64821629d6fc9099dc3f89d060856d764417cddb
+commit: https://git.buildroot.net/buildroot/commit/?id=4dc6c43703fc4eb0721a0d34ad5eeebf57527b44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added license hash, switched _SITE to https.
+The download wrapper is a purely internal helper, and is not supposed to
+be callable manually. No need to offer some help.
 
-Iperf 3.2 added optional ssl support, build-tested with libressl,
-run-time tested with openssl.
+Besides, the help text was way out-dated.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iperf3/iperf3.hash |  6 ++++--
- package/iperf3/iperf3.mk   | 11 +++++++++--
- 2 files changed, 13 insertions(+), 4 deletions(-)
+ support/download/dl-wrapper | 47 +--------------------------------------------
+ 1 file changed, 1 insertion(+), 46 deletions(-)
 
-diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
-index 3e34f98eb6..06dae42149 100644
---- a/package/iperf3/iperf3.hash
-+++ b/package/iperf3/iperf3.hash
-@@ -1,2 +1,4 @@
--# From http://software.es.net/iperf/news.html
--sha256 a4ef73406fe92250602b8da2ae89ec53211f805df97a1d1d629db5a14043734f  iperf-3.1.7.tar.gz
-+# From https://downloads.es.net/pub/iperf/iperf-3.6.tar.gz.sha256
-+sha256 de5d51e46dc460cc590fb4d44f95e7cad54b74fea1eba7d6ebd6f8887d75946e  iperf-3.6.tar.gz
-+# Locally computed
-+sha256 52c42914d7d79fe5e95d0d1b821556d9f06bf756ac910fe085a46d238a33e594  LICENSE
-diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
-index cc4e72427b..0080bd8c6c 100644
---- a/package/iperf3/iperf3.mk
-+++ b/package/iperf3/iperf3.mk
-@@ -4,12 +4,19 @@
- #
- ################################################################################
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 4059c37ebc..742bbd5428 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -4,8 +4,6 @@
+ # Its role is to ensure atomicity when saving downloaded files
+ # back to BR2_DL_DIR, and not clutter BR2_DL_DIR with partial,
+ # failed downloads.
+-#
+-# Call it with -h to see some help.
  
--IPERF3_VERSION = 3.1.7
--IPERF3_SITE = http://downloads.es.net/pub/iperf
-+IPERF3_VERSION = 3.6
-+IPERF3_SITE = https://downloads.es.net/pub/iperf
- IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
- IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
- IPERF3_LICENSE_FILES = LICENSE
+ # To avoid cluttering BR2_DL_DIR, we download to a trashable
+ # location, namely in $(BUILD_DIR).
+@@ -27,9 +25,8 @@ main() {
+     local -a uris
  
- IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+     # Parse our options; anything after '--' is for the backend
+-    while getopts ":hc:d:D:o:n:N:H:rf:u:q" OPT; do
++    while getopts ":c:d:D:o:n:N:H:rf:u:q" OPT; do
+         case "${OPT}" in
+-        h)  help; exit 0;;
+         c)  cset="${OPTARG}";;
+         d)  dl_dir="${OPTARG}";;
+         D)  old_dl_dir="${OPTARG}";;
+@@ -212,48 +209,6 @@ main() {
+     return ${rc}
+ }
  
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+IPERF3_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
-+IPERF3_DEPENDENCIES += openssl
-+else
-+IPERF3_CONF_OPTS += --without-openssl
-+endif
-+
- $(eval $(autotools-package))
+-help() {
+-    cat <<_EOF_
+-NAME
+-    ${my_name} - download wrapper for Buildroot
+-
+-SYNOPSIS
+-    ${my_name} [OPTION]... -- [BACKEND OPTION]...
+-
+-DESCRIPTION
+-    Wrapper script around different download mechanisms. Ensures that
+-    concurrent downloads do not conflict, that partial downloads are
+-    properly evicted without leaving temporary files, and that access
+-    rights are maintained.
+-
+-    -h  This help text.
+-
+-    -u URIs
+-        The URI to get the file from, the URI must respect the format given in
+-        the example.
+-        You may give as many '-u URI' as you want, the script will stop@the
+-        frist successful download.
+-
+-        Example: backend+URI; git+http://example.com or http+http://example.com
+-
+-    -o FILE
+-        Store the downloaded archive in FILE.
+-
+-    -H FILE
+-        Use FILE to read hashes from, and check them against the downloaded
+-        archive.
+-
+-  Exit status:
+-    0   if OK
+-    !0  in case of error
+-
+-ENVIRONMENT
+-
+-    BUILD_DIR
+-        The path to Buildroot's build dir
+-_EOF_
+-}
+-
+ trace()  { local msg="${1}"; shift; printf "%s: ${msg}" "${my_name}" "${@}"; }
+ warn()   { trace "${@}" >&2; }
+ errorN() { local ret="${1}"; shift; warn "${@}"; exit ${ret}; }
