@@ -1,43 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:54 -0000
-Subject: [Buildroot] [git commit] scancpan: warn on undefined LICENSE
-Message-ID: <20180907111502.90E648019E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] qt5base: fix double-conversion compile for
+ aarch64_be
+Message-ID: <20180907111502.A75E07F950@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd87d05f7792647d49694087f14e0307ba5b1be6
+commit: https://git.buildroot.net/buildroot/commit/?id=579b37972be95c1ca66d01dfe0d6aa5318beb8a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes [1]:
+
+  ../3rdparty/double-conversion/include/double-conversion/utils.h:81:2: error: #error Target architecture was not detected as supported by Double-Conversion.
+  #error Target architecture was not detected as supported by Double-Conversion.
+
+[1] http://autobuild.buildroot.net/results/1fe2be0f26e5b92db57a5cfb5646dd253b731a5c
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/scancpan | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ ...2-double-conversion-enable-for-aarch64_be.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/utils/scancpan b/utils/scancpan
-index fa31dfdeab..8f47521692 100755
---- a/utils/scancpan
-+++ b/utils/scancpan
-@@ -705,6 +705,10 @@ while (my ($distname, $dist) = each %dist) {
-         $license =~ s|openssl|OpenSSL|;
-         $license =~ s|perl_5|Artistic or GPL-1.0+|;
-         my $license_files = join q{ }, keys %{$license_files{$distname}};
-+        if ($license_files && (!$license || $license eq q{unknown})) {
-+            push @info, qq{[$distname] undefined LICENSE, see $license_files};
-+            $license = q{???};
-+        }
-         say qq{write ${mkname}} unless $quiet;
-         open my $fh, q{>}, $mkname;
-         say {$fh} qq{################################################################################};
-@@ -718,7 +722,7 @@ while (my ($distname, $dist) = each %dist) {
-         say {$fh} qq{${brname}_SITE = \$(BR2_CPAN_MIRROR)${directories}};
-         say {$fh} qq{${brname}_DEPENDENCIES = ${dependencies}} if $need_target{$distname} && $dependencies;
-         say {$fh} qq{HOST_${brname}_DEPENDENCIES = ${host_dependencies}} if $need_host{$distname} && $host_dependencies;
--        say {$fh} qq{${brname}_LICENSE = ${license}} if $license && $license ne q{unknown};
-+        say {$fh} qq{${brname}_LICENSE = ${license}} if $license;
-         say {$fh} qq{${brname}_LICENSE_FILES = ${license_files}} if $license_files;
-         say {$fh} qq{};
-         foreach (sort @{$deps_optional{$distname}}) {
+diff --git a/package/qt5/qt5base/5.11.1/0002-double-conversion-enable-for-aarch64_be.patch b/package/qt5/qt5base/5.11.1/0002-double-conversion-enable-for-aarch64_be.patch
+new file mode 100644
+index 0000000000..838f4dd7ad
+--- /dev/null
++++ b/package/qt5/qt5base/5.11.1/0002-double-conversion-enable-for-aarch64_be.patch
+@@ -0,0 +1,26 @@
++From e81ba4e0de16ff741417ae7ed7dfe7b5a83d66e2 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 13 Aug 2018 20:15:05 +0200
++Subject: [PATCH] double-conversion: enable for aarch64_be
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ .../double-conversion/include/double-conversion/utils.h         | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/3rdparty/double-conversion/include/double-conversion/utils.h b/src/3rdparty/double-conversion/include/double-conversion/utils.h
++index 20bfd36c84..77baa2861a 100644
++--- a/src/3rdparty/double-conversion/include/double-conversion/utils.h
+++++ b/src/3rdparty/double-conversion/include/double-conversion/utils.h
++@@ -65,7 +65,7 @@
++     defined(__sparc__) || defined(__sparc) || defined(__s390__) || \
++     defined(__SH4__) || defined(__alpha__) || \
++     defined(_MIPS_ARCH_MIPS32R2) || \
++-    defined(__AARCH64EL__)
+++    defined(__AARCH64EL__) || defined(__AARCH64EB__)
++ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
++ #elif defined(_M_IX86) || defined(__i386__) || defined(__i386)
++ #if defined(_WIN32)
++-- 
++2.18.0
++
