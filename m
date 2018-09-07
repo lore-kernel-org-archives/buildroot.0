@@ -1,48 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:26 -0000
-Subject: [Buildroot] [git commit] package/sylpheed: bump version to 3.7.0
-Message-ID: <20180907111526.C68227FBD5@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:27 -0000
+Subject: [Buildroot] [git commit] package/live555: bump version to 2018.08.05
+Message-ID: <20180907111535.B911B80F5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a869884f498274588adaf8076ff6b1d8efe0ac0f
+commit: https://git.buildroot.net/buildroot/commit/?id=e305ae1c1b7b2b68f28842eaf8aed7a81d07a90a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added license hashes, switched to xz tarball.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sylpheed/sylpheed.hash | 4 +++-
- package/sylpheed/sylpheed.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/live555/live555.hash | 4 ++--
+ package/live555/live555.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sylpheed/sylpheed.hash b/package/sylpheed/sylpheed.hash
-index 39c0927735..08a5d0a221 100644
---- a/package/sylpheed/sylpheed.hash
-+++ b/package/sylpheed/sylpheed.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	4aeb7c6436ad485a2cc101dd68a1fb84abcad4c6471ed9ddefec65e482e5b2b1	sylpheed-3.2.0.tar.bz2
-+sha256 0d6bc5eb46f5d0a463757c62bc80b00d219b294b3c3662840e4540f6db2e3e49  sylpheed-3.7.0.tar.xz
-+sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
-+sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
-diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
-index 14107f0a6a..0453fba521 100644
---- a/package/sylpheed/sylpheed.mk
-+++ b/package/sylpheed/sylpheed.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/live555/live555.hash b/package/live555/live555.hash
+index 66a7b7d74c..d74d674c7a 100644
+--- a/package/live555/live555.hash
++++ b/package/live555/live555.hash
+@@ -1,5 +1,5 @@
+ # From http://live555.com/liveMedia/public/live555-latest-md5.txt
+-md5 a5acd14c4fa7b50f7270304d3b4a70ae live.2017.10.28.tar.gz
++md5 93c65b0f55f37835c727bbf65c1b61b4 live.2018.08.05.tar.gz
+ # Locally generated
+-sha256 d8eaec9ded34321aa655d3c9007217dd447218c54cb48c97827e58ecd5edb338  live.2017.10.28.tar.gz
++sha256 c309fb6d499557250b4db8371243715b9ee2cdaa7ccacaf254bcc62e97566ae4  live.2018.08.05.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/live555/live555.mk b/package/live555/live555.mk
+index 0507ee9b1b..a5479d6d7c 100644
+--- a/package/live555/live555.mk
++++ b/package/live555/live555.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYLPHEED_VERSION_MAJOR = 3.2
-+SYLPHEED_VERSION_MAJOR = 3.7
- SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).0
--SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
-+SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.xz
- SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
- SYLPHEED_LICENSE = GPL-2.0+ (executables), LGPL-2.1+ (library, attachment plugin)
- SYLPHEED_LICENSE_FILES = COPYING COPYING.LIB
+-LIVE555_VERSION = 2017.10.28
++LIVE555_VERSION = 2018.08.05
+ LIVE555_SOURCE = live.$(LIVE555_VERSION).tar.gz
+ LIVE555_SITE = http://www.live555.com/liveMedia/public
+ LIVE555_LICENSE = LGPL-2.1+
