@@ -1,97 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:48 -0000
-Subject: [Buildroot] [git commit] perl-io-interface: new package
-Message-ID: <20180907111454.6E8938158A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] perl-json-maybexs: new package
+Message-ID: <20180907111454.B7F897FF08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c1defe10459568758410ec6740a519492455f89
+commit: https://git.buildroot.net/buildroot/commit/?id=bb3f80f2dea6f71719f521f511c47f049b02493e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
-[Thomas: fix LICENSE variable.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  DEVELOPERS                                       |  1 +
  package/Config.in                                |  1 +
- package/perl-io-interface/Config.in              | 10 ++++++++++
- package/perl-io-interface/perl-io-interface.hash |  6 ++++++
- package/perl-io-interface/perl-io-interface.mk   | 14 ++++++++++++++
- 5 files changed, 32 insertions(+)
+ package/perl-json-maybexs/Config.in              |  6 ++++++
+ package/perl-json-maybexs/perl-json-maybexs.hash |  6 ++++++
+ package/perl-json-maybexs/perl-json-maybexs.mk   | 13 +++++++++++++
+ 5 files changed, 27 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8348ce102f..ed5ca12991 100644
+index ed5ca12991..e88f951274 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -489,6 +489,7 @@ F:	package/perl-date-manip/
- F:	package/perl-dbi/
+@@ -490,6 +490,7 @@ F:	package/perl-dbi/
  F:	package/perl-device-serialport/
  F:	package/perl-file-slurp/
-+F:	package/perl-io-interface/
+ F:	package/perl-io-interface/
++F:	package/perl-json-maybexs/
  
  N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
  F:	package/audit/
 diff --git a/package/Config.in b/package/Config.in
-index ba5b0e1699..ac145b3a0f 100644
+index ac145b3a0f..32a567ca23 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -697,6 +697,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-http-message/Config.in"
- 	source "package/perl-http-negotiate/Config.in"
+@@ -699,6 +699,7 @@ menu "Perl libraries/modules"
  	source "package/perl-io-html/Config.in"
-+	source "package/perl-io-interface/Config.in"
+ 	source "package/perl-io-interface/Config.in"
  	source "package/perl-io-socket-ssl/Config.in"
++	source "package/perl-json-maybexs/Config.in"
  	source "package/perl-json-tiny/Config.in"
  	source "package/perl-libwww-perl/Config.in"
-diff --git a/package/perl-io-interface/Config.in b/package/perl-io-interface/Config.in
+ 	source "package/perl-lwp-mediatypes/Config.in"
+diff --git a/package/perl-json-maybexs/Config.in b/package/perl-json-maybexs/Config.in
 new file mode 100644
-index 0000000000..7aa7064ec0
+index 0000000000..1db82c3684
 --- /dev/null
-+++ b/package/perl-io-interface/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_IO_INTERFACE
-+	bool "perl-io-interface"
-+	depends on !BR2_STATIC_LIBS
++++ b/package/perl-json-maybexs/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_JSON_MAYBEXS
++	bool "perl-json-maybexs"
 +	help
-+	  Access and modify network interface card configuration
++	  Use Cpanel::JSON::XS with a fallback to JSON::XS and JSON::PP
 +
-+	  https://metacpan.org/release/IO-Interface
-+
-+comment "perl-io-interface needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-io-interface/perl-io-interface.hash b/package/perl-io-interface/perl-io-interface.hash
++	  https://metacpan.org/release/JSON-MaybeXS
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.hash b/package/perl-json-maybexs/perl-json-maybexs.hash
 new file mode 100644
-index 0000000000..75e572f918
+index 0000000000..c8bf172aaa
 --- /dev/null
-+++ b/package/perl-io-interface/perl-io-interface.hash
++++ b/package/perl-json-maybexs/perl-json-maybexs.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    806f97aff5a7361b6f54cd494f4cc9fd IO-Interface-1.09.tar.gz
-+sha256 e63e81c52eb1e0e60ec2d983f5552d2493e117179925c96757f23c4bd9fa713a IO-Interface-1.09.tar.gz
++md5    db61fb5515f8e2f19709a317e26dde42 JSON-MaybeXS-1.004000.tar.gz
++sha256 59bda02e8f4474c73913723c608b539e2452e16c54ed7f0150c01aad06e0a126 JSON-MaybeXS-1.004000.tar.gz
 +
 +# computed by scancpan
-+sha256 b5a5bf59bd1be13f7f498e5aa2ea5c0c603c04a095dcf03a06aa5b83bbccf921 LICENSE
-diff --git a/package/perl-io-interface/perl-io-interface.mk b/package/perl-io-interface/perl-io-interface.mk
++sha256 d972e00126c5337e88d81d64fc349a3f4c54841075f4180a1145441d30c86f83 README
+diff --git a/package/perl-json-maybexs/perl-json-maybexs.mk b/package/perl-json-maybexs/perl-json-maybexs.mk
 new file mode 100644
-index 0000000000..c0b399ace8
+index 0000000000..b4eaccddcb
 --- /dev/null
-+++ b/package/perl-io-interface/perl-io-interface.mk
-@@ -0,0 +1,14 @@
++++ b/package/perl-json-maybexs/perl-json-maybexs.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-io-interface
++# perl-json-maybexs
 +#
 +################################################################################
 +
-+PERL_IO_INTERFACE_VERSION = 1.09
-+PERL_IO_INTERFACE_SOURCE = IO-Interface-$(PERL_IO_INTERFACE_VERSION).tar.gz
-+PERL_IO_INTERFACE_SITE = $(BR2_CPAN_MIRROR)/authors/id/L/LD/LDS
-+PERL_IO_INTERFACE_DEPENDENCIES = host-perl-module-build
-+PERL_IO_INTERFACE_LICENSE = Artistic-2.0
-+PERL_IO_INTERFACE_LICENSE_FILES = LICENSE
++PERL_JSON_MAYBEXS_VERSION = 1.004000
++PERL_JSON_MAYBEXS_SOURCE = JSON-MaybeXS-$(PERL_JSON_MAYBEXS_VERSION).tar.gz
++PERL_JSON_MAYBEXS_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
++PERL_JSON_MAYBEXS_LICENSE = Artistic or GPL-1.0+
++PERL_JSON_MAYBEXS_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
