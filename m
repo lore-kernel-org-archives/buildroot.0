@@ -1,64 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 5 Sep 2018 23:46:47 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: Fix file order list maintained
- by me
-Message-ID: <20180907111608.3D97081170@busybox.osuosl.org>
+Date: Fri, 7 Sep 2018 13:31:21 +0200
+Subject: [Buildroot] ADEOS patch and kernel override
+In-Reply-To: <CAOf5uwmrFw_fKozkMn+5gVoehBig8g2PhE-ivg0GSv+PNcHfsA@mail.gmail.com>
+References: <CAOf5uwmrFw_fKozkMn+5gVoehBig8g2PhE-ivg0GSv+PNcHfsA@mail.gmail.com>
+Message-ID: <20180907133121.29434851@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e5a96e98a181f99a08b9d6814491df2292a9f4d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Michael,
 
-Files list maintained by me in DEVELOPERS file is not
-in proper order, fix it with ascending order.
+On Fri, 7 Sep 2018 12:44:43 +0200, Michael Nazzareno Trimarchi wrote:
 
-Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+> I'm trying to understand if I can override the kernel and let apply
+> the adeos patch on top of it. Seems that PREHOOK is not called
+> in the linux kernel override directory. Is there some semantic to use?
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e58f125d6f..826831c5e7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -932,8 +932,6 @@ F:	board/amarula/
- F:	board/asus/
- F:	board/bananapi/
- F:	board/engicam/
--F:	configs/amarula_vyasa_rk3288_defconfig
--F:	configs/asus_tinker_rk3288_defconfig
- F:	board/friendlyarm/nanopi-a64/
- F:	board/friendlyarm/nanopi-neo2/
- F:	board/olimex/a64-olinuxino/
-@@ -942,8 +940,15 @@ F:	board/orangepi/orangepi-prime/
- F:	board/orangepi/orangepi-win/
- F:	board/orangepi/orangepi-zero-plus2/
- F:	board/pine64/
-+F:	configs/amarula_vyasa_rk3288_defconfig
-+F:	configs/asus_tinker_rk3288_defconfig
- F:	configs/bananapi_m1_defconfig
- F:	configs/bananapi_m64_defconfig
-+F:	configs/engicam_imx6qdl_icore_defconfig
-+F:	configs/engicam_imx6qdl_icore_qt5_defconfig
-+F:	configs/engicam_imx6qdl_icore_rqs_defconfig
-+F:	configs/engicam_imx6ul_geam_defconfig
-+F:	configs/engicam_imx6ul_isiot_defconfig
- F:	configs/friendlyarm_nanopi_a64_defconfig
- F:	configs/friendlyarm_nanopi_neo2_defconfig
- F:	configs/olimex_a64_olinuxino_defconfig
-@@ -953,11 +958,6 @@ F:	configs/orangepi_win_defconfig
- F:	configs/orangepi_zero_plus2_defconfig
- F:	configs/pine64_defconfig
- F:	configs/pine64_sopine_defconfig
--F:	configs/engicam_imx6qdl_icore_defconfig
--F:	configs/engicam_imx6qdl_icore_qt5_defconfig
--F:	configs/engicam_imx6qdl_icore_rqs_defconfig
--F:	configs/engicam_imx6ul_geam_defconfig
--F:	configs/engicam_imx6ul_isiot_defconfig
- 
- N:	James Knight <james.knight@rockwellcollins.com>
- F:	package/atkmm/
+When you said "override the kernel", I will assume you talking about
+using LINUX_OVERRIDE_SRCDIR. If that is the case, then no, Buildroot
+will not patch it for you.
+
+Let me give a few more details about this, and explain why it is done
+like this.
+
+In a normal situation (i.e without OVERRIDE_SRCDIR), a package goes
+through the following steps:
+
+ (1) download
+ (2) extract
+ (3) patch
+ (4) configure
+ (5) build
+ (6) install
+
+When you switch to using OVERRIDE_SRCDIR for that package, the first
+three steps are skipped and replaced by a "rsync" step, while the three
+last steps remain the same:
+
+ (1) rsync
+ (2) configure
+ (3) build
+ (4) install
+
+The reason is that if you do an override source directory:
+
+ * Buildroot has no idea what is the state of the source code in here,
+   so it has no idea if the patches it has will apply. Most likely not.
+
+ * More importantly, it means that you own/control the source code,
+   so you can simply apply whatever changes are needed on the source
+   code located in the OVERRIDE_SRCDIR location.
+
+Does that help ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
