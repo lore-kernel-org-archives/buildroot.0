@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:30 -0000
-Subject: [Buildroot] [git commit] package/libsrtp: fix license hash
-Message-ID: <20180907111532.4E9747FE3E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/git-crypt: fix build with gcc-4.9
+Message-ID: <20180907111531.A36818074E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22b89ffe42ddba393ad5b36195c3bbb8cffcb1a0
+commit: https://git.buildroot.net/buildroot/commit/?id=995fb9a4ebca3acb5dc6eb22edee039b67bf5303
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-While bumping the package from 1.5.4 to 2.2.0 the license hash from
-version 1.6.0 was erroneously used.
-
 Fixes
-http://autobuild.buildroot.net/results/2d8/2d8344bab5b87d20156814b96cbbab1d5fc89586/
+
+In file included from commands.cpp:32:0:
+crypto.hpp:60:7: error: 'unique_ptr' in namespace 'std' does not name a template type
+  std::unique_ptr<Aes_impl> impl;
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsrtp/libsrtp.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/git-crypt/git-crypt.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
-index 0aa8a67497..1a88673c81 100644
---- a/package/libsrtp/libsrtp.hash
-+++ b/package/libsrtp/libsrtp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256 44fd7497bce78767e96b54a11bca520adb2ad32effd515f04bce602b60a1a50b  libsrtp-v2.2.0.tar.gz
--sha256 8defed37d52096ae14b60adc499c33d43975109bc265552ee67e9a888c634b93  LICENSE
-+sha256 8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
+diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
+index 507534c139..37e3d885a9 100644
+--- a/package/git-crypt/git-crypt.mk
++++ b/package/git-crypt/git-crypt.mk
+@@ -14,7 +14,8 @@ GIT_CRYPT_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ 
+ define GIT_CRYPT_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
+-		LDFLAGS="$(TARGET_LDFLAGS) $(GIT_CRYPT_LIBS)" PREFIX=/usr
++		LDFLAGS="$(TARGET_LDFLAGS) $(GIT_CRYPT_LIBS)" \
++		CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" PREFIX=/usr
+ endef
+ 
+ define GIT_CRYPT_INSTALL_TARGET_CMDS
