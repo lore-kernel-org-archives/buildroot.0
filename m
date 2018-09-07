@@ -1,78 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:25 -0000
-Subject: [Buildroot] [git commit] cryptsetup: bump to version 2.0.4
-Message-ID: <20180907111523.5BD1B7FD98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/shellinabox: bump version to 2.20
+Message-ID: <20180907111525.851E57FD98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae83389eedbd60895274956220d82fd80877e615
+commit: https://git.buildroot.net/buildroot/commit/?id=6210596b761511b62e132df79e0a6bf8ec61276e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libblkid is a new optional dependency. Upstream "strongly discourages"
-build without libblkid support. So enable libblkid unconditionally.
+Removed patch 0002, applied upstream, which also added --disable-utmp
+for musl:
+https://github.com/shellinabox/shellinabox/commit/05b2d3630c48dc9bca678d8158fce486c583c26b
 
-Cc: Martin Hicks <mort@bork.org>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Added license hashes.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/cryptsetup/Config.in       | 1 +
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 6 ++++--
- 3 files changed, 6 insertions(+), 3 deletions(-)
+ ...0002-launcher.c-include-sys-ttydefaults.h.patch | 27 ----------------------
+ package/shellinabox/shellinabox.hash               |  6 +++--
+ package/shellinabox/shellinabox.mk                 |  4 ++--
+ 3 files changed, 6 insertions(+), 31 deletions(-)
 
-diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
-index e4500b1cf2..831435628c 100644
---- a/package/cryptsetup/Config.in
-+++ b/package/cryptsetup/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_CRYPTSETUP
- 	select BR2_PACKAGE_LVM2
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-+	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
- 	select BR2_PACKAGE_JSON_C
- 	help
- 	  This tool helps manipulate dm-crypt and luks partitions for
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index 1573d53080..38e8ff9a8a 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/sha256sums.asc
--sha256 4d6cca04c1f5ff4a68d045d190efb2623087eda0274ded92f92a4b6911e501d4  cryptsetup-2.0.3.tar.xz
-+sha256 9d3a3c7033293e0c97f0ad0501fd5b4d4913ae497cbf70cca06633ccc54b5734  cryptsetup-2.0.4.tar.xz
- sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index d81aa7b341..dd1ef2e9e0 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch b/package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch
+deleted file mode 100644
+index caa5456609..0000000000
+--- a/package/shellinabox/0002-launcher.c-include-sys-ttydefaults.h.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From c8d9df500b1ca83ad6da9b6055549adaba6ee0d3 Mon Sep 17 00:00:00 2001
+-From: Olivier Singla <olivier.singla@gmail.com>
+-Date: Thu, 4 Aug 2016 22:05:08 +0200
+-Subject: [PATCH] launcher.c: include <sys/ttydefaults.h>
+-
+-This include is needed to get the definition of TTYDEF_*.
+-
+-Signed-off-by: Olivier Singla <olivier.singla@gmail.com>
+----
+- shellinabox/launcher.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/shellinabox/launcher.c b/shellinabox/launcher.c
+-index 2bac171..c8ba6cb 100644
+---- a/shellinabox/launcher.c
+-+++ b/shellinabox/launcher.c
+-@@ -66,6 +66,7 @@
+- #include <sys/types.h>
+- #include <sys/wait.h>
+- #include <sys/utsname.h>
+-+#include <sys/ttydefaults.h>
+- #include <termios.h>
+- #include <unistd.h>
+- 
+--- 
+-2.7.4
+-
+diff --git a/package/shellinabox/shellinabox.hash b/package/shellinabox/shellinabox.hash
+index 4bc110385a..6e19207066 100644
+--- a/package/shellinabox/shellinabox.hash
++++ b/package/shellinabox/shellinabox.hash
+@@ -1,2 +1,4 @@
+-# Locally calculated after checking pgp signature
+-sha256	d25ba9f72f04471fc1a8a564c65ef466c4553280ff3eeb365ed9c897d05ed2da	shellinabox-v2.19.tar.gz
++# Locally calculated
++sha256 27a5ec6c3439f87aee238c47cc56e7357a6249e5ca9ed0f044f0057ef389d81e  shellinabox-v2.20.tar.gz
++sha256 04ef60ab9b83cde6f0862ea18474454477efb34c52ebce1f8d8260a398a39362  COPYING
++sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  GPL-2
+diff --git a/package/shellinabox/shellinabox.mk b/package/shellinabox/shellinabox.mk
+index 1db62e609a..70db551e3c 100644
+--- a/package/shellinabox/shellinabox.mk
++++ b/package/shellinabox/shellinabox.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- CRYPTSETUP_VERSION_MAJOR = 2.0
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c \
-@@ -14,6 +14,7 @@ CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
- CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
- CRYPTSETUP_INSTALL_STAGING = YES
- CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
-+CRYPTSETUP_CONF_OPTS += --enable-blkid
- 
- # cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
- # or kernel crypto modules instead
-@@ -37,7 +38,8 @@ HOST_CRYPTSETUP_DEPENDENCIES = \
- 	host-openssl
- 
- HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
--	--disable-kernel_crypto
-+	--disable-kernel_crypto \
-+	--enable-blkid
+-SHELLINABOX_VERSION = v2.19
++SHELLINABOX_VERSION = v2.20
+ SHELLINABOX_SITE = $(call github,shellinabox,shellinabox,$(SHELLINABOX_VERSION))
+ SHELLINABOX_LICENSE = GPL-2.0 with OpenSSL exception
+ SHELLINABOX_LICENSE_FILES = COPYING GPL-2
+@@ -23,7 +23,7 @@ SHELLINABOX_CONF_OPTS = \
+ # musl's implementation of utmpx is a dummy one, and some aspects of
+ # it cause build failures in shellinabox
+ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-SHELLINABOX_CONF_ENV += ac_cv_header_utmpx_h=no
++SHELLINABOX_CONF_OPTS += --disable-utmp
+ endif
  
  $(eval $(autotools-package))
- $(eval $(host-autotools-package))
