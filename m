@@ -1,73 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:15:54 -0000
-Subject: [Buildroot] [git commit] package/samba4: reformat patch 0002 as
- Git-formatted patch
-Message-ID: <20180907111459.9B9368116F@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:15:55 -0000
+Subject: [Buildroot] [git commit] scancpan: warn on suspicious host
+ dependencies
+Message-ID: <20180907111502.6C96A7FB34@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6e4f2357fb719ddd27a30e3073e0276abc0abd57
+commit: https://git.buildroot.net/buildroot/commit/?id=a96680891a7c23c31d07e5a32896f808c20e453c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit reformats
-0002-patch-source3__libads__kerberos_keytab.c.patch as a Git-formatted
-patch.
-
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...mpilation-of-Samba-4.7.4-with-disabled-ADS.patch} | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ utils/scancpan | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
-similarity index 58%
-rename from package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
-rename to package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
-index 1213659c8d..45d3050a39 100644
---- a/package/samba4/0002-patch-source3__libads__kerberos_keytab.c.patch
-+++ b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
-@@ -1,5 +1,7 @@
--From: Timur I. Bakeyev <timur@freebsd.org>
--Subject: Fix compilation of Samba 4.7.4 with disabled ADS
-+From da2f2cf8e7a1dfcb661b707e4649cec1e8a0e79c Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Thu, 9 Aug 2018 10:03:06 +0200
-+Subject: [PATCH] Fix compilation of Samba 4.7.4 with disabled ADS
+diff --git a/utils/scancpan b/utils/scancpan
+index da8e7b91ac..fa31dfdeab 100755
+--- a/utils/scancpan
++++ b/utils/scancpan
+@@ -526,6 +526,12 @@ my $mirror = 'http://cpan.metacpan.org';        # a CPAN mirror
+ my $mcpan = MetaCPAN::API::Tiny->new(base_url => 'http://fastapi.metacpan.org/v1');
+ my $ua = HTTP::Tiny->new();
  
- Downloaded from upstream mailinglist
- https://lists.samba.org/archive/samba-technical/2017-December/124629.html
-@@ -8,9 +10,14 @@ Patch originates from FreeBSD:
- https://svnweb.freebsd.org/ports/head/net/samba47/files/patch-source3__libads__kerberos_keytab.c?revision=457119&view=markup
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ source3/libads/kerberos_keytab.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
- 
----- a/source3/libads/kerberos_keytab.c.orig	2017-12-23 14:23:53.247467000 +0100
--+++ b/source3/libads/kerberos_keytab.c	2017-12-23 18:57:07.135340000 +0100
-+diff --git a/source3/libads/kerberos_keytab.c b/source3/libads/kerberos_keytab.c
-+index 37ac7ba985e..71250962090 100644
-+--- a/source3/libads/kerberos_keytab.c
-++++ b/source3/libads/kerberos_keytab.c
- @@ -32,8 +32,6 @@
-  
-  #ifdef HAVE_KRB5
-@@ -20,7 +27,7 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  /* This MAX_NAME_LEN is a constant defined in krb5.h */
-  #ifndef MAX_KEYTAB_NAME_LEN
-  #define MAX_KEYTAB_NAME_LEN 1100
--@@ -85,6 +83,8 @@
-+@@ -85,6 +83,8 @@ out:
-  	return ret;
-  }
-  
-@@ -29,3 +36,6 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-  /**********************************************************************
-   Adds a single service principal, i.e. 'host' to the system keytab
-  ***********************************************************************/
-+-- 
-+2.14.4
++my %white_list = (
++    'Module-Build' => 1,
++    'Module-Build-Tiny' => 1,
++);
++my @info = ();
 +
+ sub get_checksum {
+     my ($url) = @_;
+     my ($path) = $url =~ m|^[^:/?#]+://[^/?#]*([^?#]*)|;
+@@ -607,6 +613,8 @@ sub fetch {
+             }
+             else { # configure, build
+                 $build{$distname} = 1;
++                push @info, qq{[$name] suspicious dependency on $distname}
++                    unless exists $white_list{$distname};
+             }
+         }
+         $deps_build{$name} = [keys %build];
+@@ -765,6 +773,8 @@ foreach my $distname (keys %need_target) {
+ say qq{${cfgname} must contain the following lines:};
+ say join qq{\n}, sort keys %pkg;
+ 
++say join qq{\n}, @info;
++
+ __END__
+ 
+ =head1 NAME
