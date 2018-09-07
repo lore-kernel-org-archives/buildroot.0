@@ -1,148 +1,63 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:57 -0000
-Subject: [Buildroot] [git commit] core/sdk: generate the SDK tarball
- ourselves
-Message-ID: <20180907111504.5901F8019E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] uboot: add option to depend on host-lzop
+Message-ID: <20180907111505.101167F950@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c32ad51cbf2a9161f08880109099c78f6eab9116
+commit: https://git.buildroot.net/buildroot/commit/?id=13eeeb4684d7916f9024381dc8d241e5b2d24a92
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the wording in the manual instructs the user to generate a
-tarball from "the contents of the +output/host+ directory".
+Some U-Boot configurations use lzop, which may not be available on the
+build machine since it's not a mandatory dependency of Buildroot.
 
-This is pretty confusing, because taken literally, this would amount to
-running a command like:
+To solve this, a new option BR2_TARGET_UBOOT_NEEDS_LZOP is introduced,
+and handled in a similar way to the existing
+BR2_TARGET_UBOOT_NEEDS_OPENSSL option.
 
-    tar cf my-sdk.tar -C output/host/ .
+This fixes the build of the dra7xx_evm U-Boot defconfig as of U-Boot
+2018.07, on a build machine without lzop installed.
 
-This creates a tarbomb [0], which is very bad practice, because when
-extracted, it creates multiple files in the current directory.
-
-What one really wants to do, is create a tarball of the host/ directory,
-with something like:
-
-    tar cf my-sdk.tar -C output host/
-
-However, this is not much better, because the top-most directory would
-have a very common name, host/, which is pretty easy to get conflict
-with when it gets extracted.
-
-So, we fix that mess by giving the top-most directory a recognisable
-name, based on the target tuple, which we also use as the name of the
-archive (suffixed with the usual +.tar.gz+.) We offer the user the
-possibility to override that default by specifying the +BR2_SDK_PREFIX+
-variable on the command line.
-
-Since this is an output file, we place it in the images/ directory.
-
-As some users expressed a very strong feeling that they do not want to
-generate a tarball at all, and that doing so would badly hurt their
-workflows [1], we actually prepare the SDK as was previously done, but
-under the new, intermediate rule 'prepare-sdk'. The existing 'sdk' rule
-obviously depend on that before generating the tarball.
-
-We choose to make the existing rule to generate the tarball, and
-introduce a new rule to just prepare the SDK, rather than keep the
-existing rule as-is and introduce a new one to generate the tarball,
-because it makes sense to have the simplest rule do the correct thing,
-leaving advanced, power users use the longest command. If someone
-already had a wrapper that called 'sdk' and expected just the host
-directory to be prepared, then this is not broken; it just takes a bit
-longer (gzip is pretty fast).
-
-Update the manual accordingly.
-
-[0] https://en.wikipedia.org/wiki/Tar_(computing)#Tarbomb
-[1] http://lists.busybox.net/pipermail/buildroot/2018-June/thread.html#223377
-    and some messages in the ensuing thread...
-
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Wolfgang Grandegger <wg@grandegger.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Stefan Becker <chemobejk@gmail.com>
-Cc: Trent Piepho <tpiepho@impinj.com>
-Signed-off-by: &quot;Yann E. MORIN&quot; &lt;<a href="mailto:yann.morin.1998@free.fr" target="_blank">yann.morin.1998 at free.fr</a>&gt;<br>
-Reviewed-by: Stefan Becker <chemobejk@gmail.com>
-Signed-off-by: &quot;Yann E. MORIN&quot; &lt;<a href="mailto:yann.morin.1998@free.fr" target="_blank">yann.morin.1998 at free.fr</a>&gt;<br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Makefile                                  | 15 +++++++++++++--
- docs/manual/using-buildroot-toolchain.txt | 26 +++++++++++++++++---------
- 2 files changed, 30 insertions(+), 11 deletions(-)
+ boot/uboot/Config.in | 8 ++++++++
+ boot/uboot/uboot.mk  | 4 ++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/Makefile b/Makefile
-index c4ed45837d..0115c4dfcc 100644
---- a/Makefile
-+++ b/Makefile
-@@ -573,8 +573,8 @@ prepare: $(BUILD_DIR)/buildroot-config/auto.conf
- .PHONY: world
- world: target-post-image
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 8e369cec04..9e40c11fa1 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -159,6 +159,14 @@ config BR2_TARGET_UBOOT_NEEDS_OPENSSL
+ 	  typically the case when the board configuration has
+ 	  CONFIG_FIT_SIGNATURE enabled.
  
--.PHONY: sdk
--sdk: world
-+.PHONY: prepare-sdk
-+prepare-sdk: world
- 	@$(call MESSAGE,"Rendering the SDK relocatable")
- 	$(TOPDIR)/support/scripts/fix-rpath host
- 	$(TOPDIR)/support/scripts/fix-rpath staging
-@@ -582,6 +582,17 @@ sdk: world
- 	mkdir -p $(HOST_DIR)/share/buildroot
- 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
- 
-+BR2_SDK_PREFIX ?= $(GNU_TARGET_NAME)_sdk-buildroot
-+.PHONY: sdk
-+sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
-+	@$(call MESSAGE,"Generating SDK tarball")
-+	$(if $(BR2_SDK_PREFIX),,$(error BR2_SDK_PREFIX can not be empty))
-+	$(Q)mkdir -p $(BINARIES_DIR)
-+	$(TAR) czf "$(BINARIES_DIR)/$(BR2_SDK_PREFIX).tar.gz" \
-+		--owner=0 --group=0 --numeric-owner \
-+		--transform='s#^\.#$(BR2_SDK_PREFIX)#' \
-+		-C $(HOST_DIR) "."
++config BR2_TARGET_UBOOT_NEEDS_LZOP
++	bool "U-Boot needs lzop"
++	help
++	  Select this option if your U-Boot board configuration
++	  requires lzop to be available on the host. This is typically
++	  the case when the board configuration has CONFIG_SPL_LZO
++	  enabled.
 +
- # Populating the staging with the base directories is handled by the skeleton package
- $(STAGING_DIR):
- 	@mkdir -p $(STAGING_DIR)
-diff --git a/docs/manual/using-buildroot-toolchain.txt b/docs/manual/using-buildroot-toolchain.txt
-index 3246dc2411..0c0c35fced 100644
---- a/docs/manual/using-buildroot-toolchain.txt
-+++ b/docs/manual/using-buildroot-toolchain.txt
-@@ -12,15 +12,23 @@ The toolchain generated by Buildroot is located by default in
- +output/host/bin/+ to your PATH environment variable and then to
- use +ARCH-linux-gcc+, +ARCH-linux-objdump+, +ARCH-linux-ld+, etc.
+ config BR2_TARGET_UBOOT_NEEDS_ATF_BL31
+ 	bool "U-Boot needs ATF BL31"
+ 	depends on BR2_TARGET_ARM_TRUSTED_FIRMWARE
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 04c759be34..3e05f38046 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -152,6 +152,10 @@ ifeq ($(BR2_TARGET_UBOOT_NEEDS_OPENSSL),y)
+ UBOOT_DEPENDENCIES += host-openssl
+ endif
  
--It is possible to relocate the toolchain, this allows to distribute
--the toolchain to other developers to build applications for your
--target. To achieve this:
-+Alternatively, Buildroot can also export the toolchain and the development
-+files of all selected packages, as an SDK, by running the command
-++make sdk+. This generates a tarball of the content of the host directory
-++output/host/+, named +<TARGET-TUPLE>_sdk-buildroot.tar.gz+ (which can be
-+overriden by setting the environment variable +BR2_SDK_PREFIX+) and
-+located in the output directory +output/images/+.
- 
--* run +make sdk+, which prepares the toolchain to be relocatable;
--* tarball the contents of the +output/host+ directory;
--* distribute the resulting tarball.
-+This tarball can then be distributed to application developers, when
-+they want to develop their applications that are not (yet) packaged as
-+a Buildroot package.
- 
--Once the toolchain is installed to the new location, the user must run
--the +relocate-sdk.sh+ script to make sure all paths are updated with
--the new location.
-+Upon extracting the SDK tarball, the user must run the script
-++relocate-sdk.sh+ (located at the top directory of the SDK), to make
-+sure all paths are updated with the new location.
- 
-+Alternatively, if you just want to prepare the SDK without generating
-+the tarball (e.g. because you will just be moving the +host+ directory,
-+or will be generating the tarball on your own), Buildroot also allows
-+you to just prepare the SDK with +make prepare-sdk+ without actually
-+generating a tarball.
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_LZOP),y)
++UBOOT_DEPENDENCIES += host-lzop
++endif
++
+ # prior to u-boot 2013.10 the license info was in COPYING. Copy it so
+ # legal-info finds it
+ define UBOOT_COPY_OLD_LICENSE_FILE
