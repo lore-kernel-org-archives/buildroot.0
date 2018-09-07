@@ -1,38 +1,74 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:40 -0000
-Subject: [Buildroot] [git commit] Revert "package/mono: remove target mips
- architecture"
-Message-ID: <20180907111448.59B6C81293@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/Makefile.in: Do not use CPPFLAGS
+ for hardening options
+Message-ID: <20180907111448.792FE7FB8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5cb6b99ec7d0c7b38332c6f83b21e7e492680e3
+commit: https://git.buildroot.net/buildroot/commit/?id=d4f5801027f3329fb6c2cd096f3396d3cd067390
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This reverts commit 0f96073561badde3c7abdf338abca7d00dba56dd cause the
-newly released mono version (5.14.0.177) fixed the bug upstream.
+The hardening options are compiler flags, not pure pre-processor flags, so
+put them in CFLAGS, not CPPFLAGS.
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+This fixes build errors where -D_FORTIFY_SOURCE=2 whas put in CPPFLAGS and
+then applied to configure tests which could fail since the required -O2 is
+only in CFLAGS.
+
+Originally submitted as
+http://patchwork.ozlabs.org/patch/904057/
+
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mono/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/Makefile.in | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/mono/Config.in b/package/mono/Config.in
-index a375a98448..63208fef49 100644
---- a/package/mono/Config.in
-+++ b/package/mono/Config.in
-@@ -5,8 +5,8 @@ config BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
+diff --git a/package/Makefile.in b/package/Makefile.in
+index f2962767cc..5e0ff8c841 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -147,29 +147,29 @@ TARGET_CFLAGS_RELRO_FULL = -Wl,-z,now $(TARGET_CFLAGS_RELRO)
+ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
  
- config BR2_PACKAGE_MONO_ARCH_SUPPORTS
- 	bool
--	default y if (BR2_arm || BR2_armeb || BR2_i386 || \
--		      BR2_powerpc || BR2_x86_64)
-+	default y if (BR2_arm || BR2_armeb || BR2_i386 || BR2_mips || \
-+		      BR2_mipsel || BR2_powerpc || BR2_x86_64)
- 	depends on BR2_PACKAGE_HOST_MONO_ARCH_SUPPORTS
+ ifeq ($(BR2_SSP_REGULAR),y)
+-TARGET_CPPFLAGS += -fstack-protector
++TARGET_HARDENED += -fstack-protector
+ else ifeq ($(BR2_SSP_STRONG),y)
+-TARGET_CPPFLAGS += -fstack-protector-strong
++TARGET_HARDENED += -fstack-protector-strong
+ else ifeq ($(BR2_SSP_ALL),y)
+-TARGET_CPPFLAGS += -fstack-protector-all
++TARGET_HARDENED += -fstack-protector-all
+ endif
  
- config BR2_PACKAGE_MONO
+ ifeq ($(BR2_RELRO_PARTIAL),y)
+-TARGET_CPPFLAGS += $(TARGET_CFLAGS_RELRO)
++TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
+ TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
+ else ifeq ($(BR2_RELRO_FULL),y)
+-TARGET_CPPFLAGS += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
++TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
+ TARGET_LDFLAGS += -pie
+ endif
+ 
+ ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+-TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=1
++TARGET_HARDENED += -D_FORTIFY_SOURCE=1
+ else ifeq ($(BR2_FORTIFY_SOURCE_2),y)
+-TARGET_CPPFLAGS += -D_FORTIFY_SOURCE=2
++TARGET_HARDENED += -D_FORTIFY_SOURCE=2
+ endif
+ 
+ TARGET_CPPFLAGS += -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
+-TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
++TARGET_CFLAGS = $(TARGET_CPPFLAGS) $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING) $(TARGET_HARDENED)
+ TARGET_CXXFLAGS = $(TARGET_CFLAGS)
+ TARGET_FCFLAGS = $(TARGET_ABI) $(TARGET_OPTIMIZATION) $(TARGET_DEBUGGING)
+ 
