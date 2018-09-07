@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:34 -0000
-Subject: [Buildroot] [git commit] libaio: add host variant
-Message-ID: <20180907111543.151E97F981@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] fwup: bump to v1.2.5
+Message-ID: <20180907111542.7A06D80F5F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2cbaa1babcdbde90527f38f41ee8ee42bdefd45
+commit: https://git.buildroot.net/buildroot/commit/?id=d9b061f1f82bc6cdd7771bb84b9ef64ee3a33774
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump of lvm2 to 2.02.180 in commit
-8e666bf29e762f3c7681a48d0ee350f8396d798f, lvm2 needs libaio. This was
-properly taken into account for the target lvm2 variant, but not the
-host lvm2 variant. In order to build the host lvm2, we now need
-host-libaio, so this patch adds support for building libaio for the
-host.
+Also add a hash for the license file.
 
-Part of fixing:
-
-  http://autobuild.buildroot.net/results/f95dd353c17bdfd00fde6762e58aa32e6830b52b/
-
+Signed-off-by: Frank Hunleth <fhunleth@troodon-software.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libaio/libaio.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/fwup/fwup.hash | 3 ++-
+ package/fwup/fwup.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-index 03029d84d8..76e6937cc2 100644
---- a/package/libaio/libaio.mk
-+++ b/package/libaio/libaio.mk
-@@ -35,4 +35,13 @@ define LIBAIO_INSTALL_TARGET_CMDS
- 	$(LIBAIO_CONFIGURE_OPTS) $(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
- endef
+diff --git a/package/fwup/fwup.hash b/package/fwup/fwup.hash
+index 32398bf4d0..73bff448de 100644
+--- a/package/fwup/fwup.hash
++++ b/package/fwup/fwup.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 852e255bd65f9db473a06184abb3e94e3b6b86be7bf66169e8df8146d5966ae1  fwup-v0.15.4.tar.gz
++sha256 20302dc96cef88438034e15551e178bb0652c28d99aa7ca5260100cb3bebbc2a  fwup-v1.2.5.tar.gz
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/fwup/fwup.mk b/package/fwup/fwup.mk
+index c6a18c291c..be0b1d13b8 100644
+--- a/package/fwup/fwup.mk
++++ b/package/fwup/fwup.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+define HOST_LIBAIO_BUILD_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_LIBAIO_INSTALL_CMDS
-+	$(HOST_CONFIGURE_OPTS) $(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) install
-+endef
-+
- $(eval $(generic-package))
-+$(eval $(host-generic-package))
+-FWUP_VERSION = v0.15.4
++FWUP_VERSION = v1.2.5
+ FWUP_SITE = $(call github,fhunleth,fwup,$(FWUP_VERSION))
+ FWUP_LICENSE = Apache-2.0
+ FWUP_LICENSE_FILES = LICENSE
