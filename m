@@ -1,92 +1,87 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Fri, 07 Sep 2018 11:15:35 -0000
-Subject: [Buildroot] [git commit] python-pip: new package
-Message-ID: <20180907111443.D203180279@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package: add python-semver
+Message-ID: <20180907111443.379448103C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f5e2de1fd7a05b53d1775c1b710983a4204dd852
+commit: https://git.buildroot.net/buildroot/commit/?id=fa680e2903e8f9e8c2ed26c5f5ce7bb005c3be6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A useful tool for managing and installing python packages.
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                         |  1 +
- package/Config.in                  |  1 +
- package/python-pip/Config.in       |  6 ++++++
- package/python-pip/python-pip.hash |  5 +++++
- package/python-pip/python-pip.mk   | 14 ++++++++++++++
- 5 files changed, 27 insertions(+)
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-semver/Config.in          |  6 ++++++
+ package/python-semver/python-semver.hash |  3 +++
+ package/python-semver/python-semver.mk   | 14 ++++++++++++++
+ 5 files changed, 25 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 67adc08b9a..e0e37a031a 100644
+index 215506c71c..67adc08b9a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -53,6 +53,7 @@ F:	package/nginx-naxsi/
- F:	package/policycoreutils/
- F:	package/python-flask-sqlalchemy/
- F:	package/python-mutagen/
-+F:	package/python-pip/
- F:	package/python-psycopg2/
- F:	package/python-sqlalchemy/
- F:	package/python-visitor/
+@@ -1557,6 +1557,7 @@ F:	package/python-ipaddr/
+ F:	package/python-pam/
+ F:	package/python-psutil/
+ F:	package/python-request-id/
++F:	package/python-semver/
+ F:	package/python-texttable/
+ F:	package/python-validators/
+ F:	package/python-webob/
 diff --git a/package/Config.in b/package/Config.in
-index 18813b3965..bc6df3a3b0 100644
+index f5a17492c7..18813b3965 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -874,6 +874,7 @@ menu "External python modules"
- 	source "package/python-pexpect/Config.in"
- 	source "package/python-pickleshare/Config.in"
- 	source "package/python-pillow/Config.in"
-+	source "package/python-pip/Config.in"
- 	source "package/python-portend/Config.in"
- 	source "package/python-posix-ipc/Config.in"
- 	source "package/python-priority/Config.in"
-diff --git a/package/python-pip/Config.in b/package/python-pip/Config.in
+@@ -940,6 +940,7 @@ menu "External python modules"
+ 	source "package/python-sdnotify/Config.in"
+ 	source "package/python-secretstorage/Config.in"
+ 	source "package/python-see/Config.in"
++	source "package/python-semver/Config.in"
+ 	source "package/python-serial/Config.in"
+ 	source "package/python-service-identity/Config.in"
+ 	source "package/python-setproctitle/Config.in"
+diff --git a/package/python-semver/Config.in b/package/python-semver/Config.in
 new file mode 100644
-index 0000000000..4fcd55e5ab
+index 0000000000..c66231a730
 --- /dev/null
-+++ b/package/python-pip/Config.in
++++ b/package/python-semver/Config.in
 @@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_PIP
-+	bool "python-pip"
++config BR2_PACKAGE_PYTHON_SEMVER
++	bool "python-semver"
 +	help
-+	  The PyPA recommended tool for installing Python packages.
++	  Python helper for Semantic Versioning (http://semver.org/).
 +
-+	  https://pip.pypa.io/
-diff --git a/package/python-pip/python-pip.hash b/package/python-pip/python-pip.hash
++	  https://github.com/k-bx/python-semver
+diff --git a/package/python-semver/python-semver.hash b/package/python-semver/python-semver.hash
 new file mode 100644
-index 0000000000..c9b574a6dd
+index 0000000000..e18cc1c672
 --- /dev/null
-+++ b/package/python-pip/python-pip.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pip/json
-+md5	52f75ceb21e96c258f289859a2996b60  pip-18.0.tar.gz
-+sha256	a0e11645ee37c90b40c46d607070c4fd583e2cd46231b1c06e389c5e814eed76  pip-18.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	391a8784e319dae5431477d4cc9bc504fc5d71fd9e89e1c80f1cd3855f5d7cfa  LICENSE.txt
-diff --git a/package/python-pip/python-pip.mk b/package/python-pip/python-pip.mk
++++ b/package/python-semver/python-semver.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/semver/json
++md5	dc579ba9d0bb2137bad5324d4bdb7e40  semver-2.8.1.tar.gz
++sha256	5b09010a66d9a3837211bb7ae5a20d10ba88f8cb49e92cb139a69ef90d5060d8  semver-2.8.1.tar.gz
+diff --git a/package/python-semver/python-semver.mk b/package/python-semver/python-semver.mk
 new file mode 100644
-index 0000000000..0a0dce5bca
+index 0000000000..afdd34564e
 --- /dev/null
-+++ b/package/python-pip/python-pip.mk
++++ b/package/python-semver/python-semver.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pip
++# python-semver
 +#
 +################################################################################
 +
-+PYTHON_PIP_VERSION = 18.0
-+PYTHON_PIP_SOURCE = pip-$(PYTHON_PIP_VERSION).tar.gz
-+PYTHON_PIP_SITE = https://files.pythonhosted.org/packages/69/81/52b68d0a4de760a2f1979b0931ba7889202f302072cc7a0d614211bc7579
-+PYTHON_PIP_SETUP_TYPE = setuptools
-+PYTHON_PIP_LICENSE = MIT
-+PYTHON_PIP_LICENSE_FILES = LICENSE.txt
++PYTHON_SEMVER_VERSION = 2.8.1
++PYTHON_SEMVER_SOURCE = semver-$(PYTHON_SEMVER_VERSION).tar.gz
++PYTHON_SEMVER_SITE = https://files.pythonhosted.org/packages/47/13/8ae74584d6dd33a1d640ea27cd656a9f718132e75d759c09377d10d64595
++PYTHON_SEMVER_SETUP_TYPE = setuptools
++# no license file in tarball, but available in git
++PYTHON_SEMVER_LICENSE = BSD-3-Clause
 +
 +$(eval $(python-package))
