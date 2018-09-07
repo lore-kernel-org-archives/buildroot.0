@@ -1,40 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:43 -0000
-Subject: [Buildroot] [git commit] package/Makefile.in: Add missing options
- to LDFLAGS for full RELRO build
-Message-ID: <20180907111448.BD663815AC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iperf3: fix openssl detection
+Message-ID: <20180907111451.6E51C815AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01d8a0a9455f9408819d7f135fba5139f0672507
+commit: https://git.buildroot.net/buildroot/commit/?id=6ca73d671e55ef06b752640d20af15b4c661268d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The options for a full RELRO build should also be added to LDFLAGS.
+Searching for openssl uses the AC_ARG_WITH macro:
 
-Originally submitted as
-http://patchwork.ozlabs.org/patch/904034/
+https://github.com/esnet/iperf/blob/master/config/ax_check_openssl.m4#L40
 
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Pkgconf is only used when --with-openssl is not used at all as
+configure parameter because it was placed in the "action-if-not-given"
+part of the AC_ARG_WITH macro:
+https://github.com/esnet/iperf/blob/master/config/ax_check_openssl.m4#L52
+
+The current CONF_OPTS contain --with-openssl which causes OPENSSL_LIBS
+not be filled by pkgconf but with default values "-lssl -lcrypto":
+https://github.com/esnet/iperf/blob/master/config/ax_check_openssl.m4#L82
+
+This breaks openssl detection for static builds because -lz is missing:
+http://autobuild.buildroot.net/results/ba5/ba56d132c5994486066c304fa1f3872bb0f3ee32//iperf3-3.6/config.log
+
+/home/buildroot/build/instance-0/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libcrypto.a(c_zlib.o):
+ In function `zlib_stateful_expand_block':
+  c_zlib.c:(.text+0x54): undefined reference to `inflate'
+
+This patch removes --with-openssl and adds host-pkgconf as dependency
+to let the configure script auto-detect openssl, this fixes
+
+http://autobuild.buildroot.net/results/ba5/ba56d132c5994486066c304fa1f3872bb0f3ee32/
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+[Thomas: add comment in the code to explain why we don't pass
+--with-openssl.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/iperf3/iperf3.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 5e0ff8c841..14b3bbd243 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -159,7 +159,7 @@ TARGET_HARDENED += $(TARGET_CFLAGS_RELRO)
- TARGET_LDFLAGS += $(TARGET_CFLAGS_RELRO)
- else ifeq ($(BR2_RELRO_FULL),y)
- TARGET_HARDENED += -fPIE $(TARGET_CFLAGS_RELRO_FULL)
--TARGET_LDFLAGS += -pie
-+TARGET_LDFLAGS += -pie $(TARGET_CFLAGS_RELRO_FULL)
- endif
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 0080bd8c6c..8ac4b078c4 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -13,8 +13,10 @@ IPERF3_LICENSE_FILES = LICENSE
+ IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
  
- ifeq ($(BR2_FORTIFY_SOURCE_1),y)
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-IPERF3_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+-IPERF3_DEPENDENCIES += openssl
++# We intentionally don't pass --with-openssl, otherwise pkg-config is
++# not used, and indirect libraries are not picked up when static
++# linking.
++IPERF3_DEPENDENCIES += host-pkgconf openssl
+ else
+ IPERF3_CONF_OPTS += --without-openssl
+ endif
