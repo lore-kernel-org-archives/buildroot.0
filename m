@@ -1,42 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:24 -0000
-Subject: [Buildroot] [git commit] package/x264: bump version
-Message-ID: <20180907111524.691F581583@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:25 -0000
+Subject: [Buildroot] [git commit] cryptsetup: bump to version 2.0.4
+Message-ID: <20180907111523.5BD1B7FD98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d193b0f88b8001b8158bed419de65544e439692f
+commit: https://git.buildroot.net/buildroot/commit/?id=ae83389eedbd60895274956220d82fd80877e615
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+libblkid is a new optional dependency. Upstream "strongly discourages"
+build without libblkid support. So enable libblkid unconditionally.
+
+Cc: Martin Hicks <mort@bork.org>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x264/x264.hash | 2 +-
- package/x264/x264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cryptsetup/Config.in       | 1 +
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 6 ++++--
+ 3 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index 920f3b74eb..dd84794366 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 cdae4489e0306938a46429824aa3511e7ec2a43f71fee8b4aa46ceea46d15888  x264-7d0ff22e8c96de126be9d3de4952edd6d1b75a8c.tar.gz
-+sha256 0c43680b516f76fe3b9ecbe0efc7c2a763987213051c16c248f506851aebe6c7  x264-303c484ec828ed0d8bfe743500e70314d026c3bd.tar.gz
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index f2fb10c41c..31304b9eae 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/cryptsetup/Config.in b/package/cryptsetup/Config.in
+index e4500b1cf2..831435628c 100644
+--- a/package/cryptsetup/Config.in
++++ b/package/cryptsetup/Config.in
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_CRYPTSETUP
+ 	select BR2_PACKAGE_LVM2
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
++	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	select BR2_PACKAGE_JSON_C
+ 	help
+ 	  This tool helps manipulate dm-crypt and luks partitions for
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 1573d53080..38e8ff9a8a 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.0/sha256sums.asc
+-sha256 4d6cca04c1f5ff4a68d045d190efb2623087eda0274ded92f92a4b6911e501d4  cryptsetup-2.0.3.tar.xz
++sha256 9d3a3c7033293e0c97f0ad0501fd5b4d4913ae497cbf70cca06633ccc54b5734  cryptsetup-2.0.4.tar.xz
+ sha256 45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256 8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index d81aa7b341..dd1ef2e9e0 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--X264_VERSION = 7d0ff22e8c96de126be9d3de4952edd6d1b75a8c
-+X264_VERSION = 303c484ec828ed0d8bfe743500e70314d026c3bd
- X264_SITE = git://git.videolan.org/x264.git
- X264_LICENSE = GPL-2.0+
- X264_DEPENDENCIES = host-pkgconf
+ CRYPTSETUP_VERSION_MAJOR = 2.0
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).4
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = lvm2 popt util-linux host-pkgconf json-c \
+@@ -14,6 +14,7 @@ CRYPTSETUP_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (library)
+ CRYPTSETUP_LICENSE_FILES = COPYING COPYING.LGPL
+ CRYPTSETUP_INSTALL_STAGING = YES
+ CRYPTSETUP_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)"
++CRYPTSETUP_CONF_OPTS += --enable-blkid
+ 
+ # cryptsetup uses libgcrypt by default, but can be configured to use OpenSSL
+ # or kernel crypto modules instead
+@@ -37,7 +38,8 @@ HOST_CRYPTSETUP_DEPENDENCIES = \
+ 	host-openssl
+ 
+ HOST_CRYPTSETUP_CONF_OPTS = --with-crypto_backend=openssl \
+-	--disable-kernel_crypto
++	--disable-kernel_crypto \
++	--enable-blkid
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
