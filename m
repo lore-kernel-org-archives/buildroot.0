@@ -1,117 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Sep 2018 21:26:27 +0200
-Subject: [Buildroot] [PATCH 1/1] arch: add support for RISC-V 64-bit
- (riscv64) architecture
-In-Reply-To: <25bfcad8-e853-a85c-fd2c-2cf7e3145df1@embecosm.com>
-References: <20180831091154.22530-1-mark.corbin@embecosm.com>
- <804d638c-2b7c-1a12-894f-fa79094d2456@mind.be>
- <cba3cfaf-bd46-f41d-0392-40f6ffc5f6d8@embecosm.com>
- <84101d8e-388f-0fd4-20b6-8e1e1765de62@mind.be>
- <25bfcad8-e853-a85c-fd2c-2cf7e3145df1@embecosm.com>
-Message-ID: <122dc971-a3b5-5c64-d61b-4048be12eb25@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  7 Sep 2018 21:31:55 +0200
+Subject: [Buildroot] [PATCH 1/1] libmpdclient: bump to version 2.15
+Message-ID: <20180907193155.13892-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libmpdclient/libmpdclient.hash | 4 ++--
+ package/libmpdclient/libmpdclient.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-
-On 05/09/2018 12:09, Mark Corbin wrote:
-> Hello Arnout
-> 
-> On 04/09/18 22:03, Arnout Vandecappelle wrote:
->>
->> On 04/09/2018 15:10, Mark Corbin wrote:
->>> Hello Arnout
->>>
->>> On 04/09/18 00:00, Arnout Vandecappelle wrote:
->>>> On 31/08/2018 11:11, Mark Corbin wrote:
->>>>> This enables a riscv64 system to be built with a Buildroot generated
->>>>> toolchain (gcc >= 7.x, binutils >= 2.30, glibc only).
->>>>>
->>>>> This configuration has been used to successfully build a qemu-bootable
->>>>> riscv-linux-4.15 kernel (https://github.com/riscv/riscv-linux.git).
->>>>>
->>>>> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
->>>>> ---
->>>>>  Makefile                                |   1 +
->>>>>  arch/Config.in                          |  15 ++++
->>>>>  arch/Config.in.riscv                    | 104 ++++++++++++++++++++++++
->>>>>  arch/arch.mk.riscv                      |  24 ++++++
->>>>>  package/binutils/Config.in.host         |   3 +
->>>>>  toolchain/toolchain-buildroot/Config.in |  12 ++-
->>>>  One more thing that is missing: in package/linux-headers/Config.in.host, you
->>>> have to exclude all the linux versions that don't support riscv yet (i.e.
->>>> everything before 4.15).
->>> Is it worth doing this when you actually have to select a custom version of
->>> headers anyway?
->>  In that case, you have to disable *all* choices except for _AS_KERNEL and _VERSION.
->>
->>  I didn't realise that upstream riscv support was broken. I saw that Linus added
->> riscv in v4.15 so I assumed that it could be used.
->>
->>  So I pulled a diff, the differences between upstream and riscv in uapi are
->> really minor. And there are no longer any differences between v4.18.5 and the
->> riscv-linux-4.18 branch. So I would tend to say that the upstream v4.15 should
->> work as well. Of course, I haven't tried...
-> 
-> I couldn't get the upstream 4.15 and 4.17 kernels to boot under qemu, so
-> I asked about the status of kernel support on the riscv sw-dev mailing
-> list. Apparently the existing upstream kernels do not support qemu
-> (which is the first target that I am adding). The developers are
-> expecting the necessary changes to make it into the 4.19 kernel release.
-
- Yes, you do not want to use the upstream 4.15 *kernel*. But that doesn't mean
-you should exclude the upstream 4.15 *headers*.
-
-> In this case I think it makes sense for me to disable all choices except
-> _AS_KERNEL, _CUSTOM_TARBALL and CUSTOM_GIT.
-> 
->>
->>> This makes more sense to me when the necessary riscv support
->>> makes it upstream. I think that it would be a bit messy at the moment as I
->>> should add a restriction to stop you choosing *any* mainline kernel version...
->>>
->>> config BR2_KERNEL_HEADERS_4_1
->>> ??????? bool "Linux 4.1.x kernel headers"
->>> ??????? select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_1
->>> ??????? depends !BR2_riscv
->>> .
->>> .
->>> etc.
->>>
->>> ...and also restrict your choice of versions for custom headers pre-4.15...
->>>
->>> config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14
->>> ??????? bool "4.14.x"
->>> ??????? select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
->>> ??????? depends on !BR2_riscv
->>  If you look at the existing code, you'll see that we do add the exclusions for
->> the upstream headers choice, but not for the custom headers. That's because the
->> custom headers is supposed to be used for a vendor fork which *does* support
->> that arch already. Case in point: you'd exclude the upstream 4.15 choice, but
->> you'd still want to be able to build with the riscv-linux-4.15 tree.
-> 
-> So should I allow any version of custom headers to be selected even
-> though only 4.15 is relevant for riscv?
-
- Yes. In other words, don't add dependencies at all for the custom choices. We
-don't do it for any of the other architectures either.
-
- Regards,
- Arnout
-
-> 
-> Regards
-> 
-> Mark
-> 
-
+diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
+index eb32786419..61ee5be6a3 100644
+--- a/package/libmpdclient/libmpdclient.hash
++++ b/package/libmpdclient/libmpdclient.hash
+@@ -1,3 +1,3 @@
+-# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.14.tar.xz.sig, sha256 locally computed
+-sha256  0a84e2791bfe3077cf22ee1784c805d5bb550803dffe56a39aa3690a38061372  libmpdclient-2.14.tar.xz
++# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.15.tar.xz.sig, sha256 locally computed
++sha256  b4dbf6f9fd99e8e7c183cb3b7de75ee4ac14d92ca43e9a99bef09168b20246d1  libmpdclient-2.15.tar.xz
+ sha256  9574c3b0a9c31723cc3d5f32af4655a015fff5ec6ec8115b7906cd7d9623cf32  COPYING
+diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
+index c04536eb88..b812e63cdf 100644
+--- a/package/libmpdclient/libmpdclient.mk
++++ b/package/libmpdclient/libmpdclient.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBMPDCLIENT_VERSION_MAJOR = 2
+-LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).14
++LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).15
+ LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
+ LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
+ LIBMPDCLIENT_INSTALL_STAGING = YES
 -- 
-Arnout Vandecappelle                          arnout at mind be
-Senior Embedded Software Architect            +32-16-286500
-Essensium/Mind                                http://www.mind.be
-G.Geenslaan 9, 3001 Leuven, Belgium           BE 872 984 063 RPR Leuven
-LinkedIn profile: http://www.linkedin.com/in/arnoutvandecappelle
-GPG fingerprint:  7493 020B C7E3 8618 8DEC 222C 82EB F404 F9AC 0DDF
+2.17.1
