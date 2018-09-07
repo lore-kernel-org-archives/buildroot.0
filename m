@@ -1,39 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:30 -0000
-Subject: [Buildroot] [git commit] package/git-crypt: fix build with gcc-4.9
-Message-ID: <20180907111531.A36818074E@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:31 -0000
+Subject: [Buildroot] [git commit] package/fmt: bump version to 5.1.0
+Message-ID: <20180907111532.83A148109E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=995fb9a4ebca3acb5dc6eb22edee039b67bf5303
+commit: https://git.buildroot.net/buildroot/commit/?id=ccbe0e5992036200b473d1ee8a99a0e99c71ed44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes
-
-In file included from commands.cpp:32:0:
-crypto.hpp:60:7: error: 'unique_ptr' in namespace 'std' does not name a template type
-  std::unique_ptr<Aes_impl> impl;
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/git-crypt/git-crypt.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/fmt/fmt.hash | 3 ++-
+ package/fmt/fmt.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
-index 507534c139..37e3d885a9 100644
---- a/package/git-crypt/git-crypt.mk
-+++ b/package/git-crypt/git-crypt.mk
-@@ -14,7 +14,8 @@ GIT_CRYPT_LIBS = `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
+index 47087a4175..78665d2fa7 100644
+--- a/package/fmt/fmt.hash
++++ b/package/fmt/fmt.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 35300a0d356529447a79ed5ccf419239d8b34f916e5d4625f046fd37afa3650a  fmt-4.0.0.tar.gz
++sha256 73d4cab4fa8a3482643d8703de4d9522d7a56981c938eca42d929106ff474b44  fmt-5.1.0.tar.gz
++sha256 560d39617dfb4b4e4088597291a070ed6c3a8d67668114ed475c673430c3e49a  LICENSE.rst
+diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
+index c47b03e834..39fd7e22d9 100644
+--- a/package/fmt/fmt.mk
++++ b/package/fmt/fmt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define GIT_CRYPT_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) \
--		LDFLAGS="$(TARGET_LDFLAGS) $(GIT_CRYPT_LIBS)" PREFIX=/usr
-+		LDFLAGS="$(TARGET_LDFLAGS) $(GIT_CRYPT_LIBS)" \
-+		CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11" PREFIX=/usr
- endef
- 
- define GIT_CRYPT_INSTALL_TARGET_CMDS
+-FMT_VERSION = 4.0.0
++FMT_VERSION = 5.1.0
+ FMT_SITE = $(call github,fmtlib,fmt,$(FMT_VERSION))
+ FMT_LICENSE = BSD-2-Clause
+ FMT_LICENSE_FILES = LICENSE.rst
