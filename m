@@ -1,95 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:48 -0000
-Subject: [Buildroot] [git commit] perl-params-util: new package
-Message-ID: <20180907111456.1D3807F950@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] perl-number-bytes-human: new package
+Message-ID: <20180907111455.D13B07FF08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=276c59c7c526906b1a902b919402b8d74a53d6bc
+commit: https://git.buildroot.net/buildroot/commit/?id=c1c0bc1f56518f1db52365aca195c50d73ceeaab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/perl-params-util/Config.in             | 10 ++++++++++
- package/perl-params-util/perl-params-util.hash |  6 ++++++
- package/perl-params-util/perl-params-util.mk   | 13 +++++++++++++
- 5 files changed, 31 insertions(+)
+ DEVELOPERS                                                  |  1 +
+ package/Config.in                                           |  1 +
+ package/perl-number-bytes-human/Config.in                   |  6 ++++++
+ .../perl-number-bytes-human/perl-number-bytes-human.hash    |  6 ++++++
+ package/perl-number-bytes-human/perl-number-bytes-human.mk  | 13 +++++++++++++
+ 5 files changed, 27 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3b55b679c3..95611897c0 100644
+index 91659b364b..3b55b679c3 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -493,6 +493,7 @@ F:	package/perl-io-interface/
+@@ -492,6 +492,7 @@ F:	package/perl-file-slurp/
+ F:	package/perl-io-interface/
  F:	package/perl-json-maybexs/
  F:	package/perl-module-runtime/
- F:	package/perl-number-bytes-human/
-+F:	package/perl-params-util/
++F:	package/perl-number-bytes-human/
  
  N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
  F:	package/audit/
 diff --git a/package/Config.in b/package/Config.in
-index feaa289aa0..ccc79090d7 100644
+index 4a6fd22238..feaa289aa0 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -719,6 +719,7 @@ menu "Perl libraries/modules"
+@@ -718,6 +718,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-net-ssleay/Config.in"
  	source "package/perl-net-telnet/Config.in"
  	source "package/perl-netaddr-ip/Config.in"
- 	source "package/perl-number-bytes-human/Config.in"
-+	source "package/perl-params-util/Config.in"
++	source "package/perl-number-bytes-human/Config.in"
  	source "package/perl-path-tiny/Config.in"
  	source "package/perl-time-hires/Config.in"
  	source "package/perl-timedate/Config.in"
-diff --git a/package/perl-params-util/Config.in b/package/perl-params-util/Config.in
+diff --git a/package/perl-number-bytes-human/Config.in b/package/perl-number-bytes-human/Config.in
 new file mode 100644
-index 0000000000..b155899b06
+index 0000000000..ca43873d49
 --- /dev/null
-+++ b/package/perl-params-util/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_PARAMS_UTIL
-+	bool "perl-params-util"
-+	depends on !BR2_STATIC_LIBS
++++ b/package/perl-number-bytes-human/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PERL_NUMBER_BYTES_HUMAN
++	bool "perl-number-bytes-human"
 +	help
-+	  Simple, compact and correct param-checking functions
++	  Convert byte count to human readable format
 +
-+	  https://metacpan.org/release/Params-Util
-+
-+comment "perl-params-util needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-params-util/perl-params-util.hash b/package/perl-params-util/perl-params-util.hash
++	  https://metacpan.org/release/Number-Bytes-Human
+diff --git a/package/perl-number-bytes-human/perl-number-bytes-human.hash b/package/perl-number-bytes-human/perl-number-bytes-human.hash
 new file mode 100644
-index 0000000000..0c247ebfe5
+index 0000000000..af7a6b65a1
 --- /dev/null
-+++ b/package/perl-params-util/perl-params-util.hash
++++ b/package/perl-number-bytes-human/perl-number-bytes-human.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    02db120c0eef87aae1830cc62bdec37b Params-Util-1.07.tar.gz
-+sha256 30f1ec3f2cf9ff66ae96f973333f23c5f558915bb6266881eac7423f52d7c76c Params-Util-1.07.tar.gz
++md5    43d2c86a55924aa71535a41de0311efd Number-Bytes-Human-0.11.tar.gz
++sha256 5fc79c49b0b40df780479c43696381343e2b6ad1fe52859f60bc65b66ebe6f2c Number-Bytes-Human-0.11.tar.gz
 +
 +# computed by scancpan
-+sha256 71b5fb95de1ba013a517c926feaa2a7d0fb0e8f132818e8529e0da5ec01187cd LICENSE
-diff --git a/package/perl-params-util/perl-params-util.mk b/package/perl-params-util/perl-params-util.mk
++sha256 d42143fe4b63cb5d488d65a44e6c55769b098ea447462ff33316b33a837b7cf9 README
+diff --git a/package/perl-number-bytes-human/perl-number-bytes-human.mk b/package/perl-number-bytes-human/perl-number-bytes-human.mk
 new file mode 100644
-index 0000000000..71868ddff4
+index 0000000000..e10c550eed
 --- /dev/null
-+++ b/package/perl-params-util/perl-params-util.mk
++++ b/package/perl-number-bytes-human/perl-number-bytes-human.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-params-util
++# perl-number-bytes-human
 +#
 +################################################################################
 +
-+PERL_PARAMS_UTIL_VERSION = 1.07
-+PERL_PARAMS_UTIL_SOURCE = Params-Util-$(PERL_PARAMS_UTIL_VERSION).tar.gz
-+PERL_PARAMS_UTIL_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AD/ADAMK
-+PERL_PARAMS_UTIL_LICENSE = Artistic or GPL-1.0+
-+PERL_PARAMS_UTIL_LICENSE_FILES = LICENSE
++PERL_NUMBER_BYTES_HUMAN_VERSION = 0.11
++PERL_NUMBER_BYTES_HUMAN_SOURCE = Number-Bytes-Human-$(PERL_NUMBER_BYTES_HUMAN_VERSION).tar.gz
++PERL_NUMBER_BYTES_HUMAN_SITE = $(BR2_CPAN_MIRROR)/authors/id/F/FE/FERREIRA
++PERL_NUMBER_BYTES_HUMAN_LICENSE = Artistic or GPL-1.0+
++PERL_NUMBER_BYTES_HUMAN_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
