@@ -1,42 +1,89 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:13 -0000
-Subject: [Buildroot] [git commit] libuv: bump to version 1.23.0
-Message-ID: <20180907111520.6775F7FD98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] meson: bump version to 0.47.1
+Message-ID: <20180907111517.1A3E87FB4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90a97097963e4b23921a6221026c977f655fd9a7
+commit: https://git.buildroot.net/buildroot/commit/?id=a03f46ca6e9f43028003aedc92f1a1204ae7480f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+- delete legacy patch 0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+  (no complains from support/scripts/check-host-rpath even without the patch)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index c9f6565ef3..e687450d53 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c72f0401e1298f948daf310abafce38373a926fb9438464d1bf7fe90784544e0  libuv-v1.22.0.tar.gz
-+sha256  8c8eff0bec85306aae508392b395e8bb0e1e34daad2a4e3bec308ced0c92bfaa  libuv-v1.23.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 85e8dccb63..90818ad789 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Acked-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Tested-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...y-fix-RPATH-if-install_rpath-is-not-empty.patch | 32 ----------------------
+ package/meson/meson.hash                           |  6 ++--
+ package/meson/meson.mk                             |  2 +-
+ 3 files changed, 4 insertions(+), 36 deletions(-)
+
+diff --git a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch b/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+deleted file mode 100644
+index 03c1944258..0000000000
+--- a/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 53e4920038d5562b7b672fec8b9469fc02eef4ad Mon Sep 17 00:00:00 2001
+-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+-Date: Thu, 10 May 2018 21:57:49 +0200
+-Subject: [PATCH] Only fix RPATH if install_rpath is not empty
+-
+-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+----
+- mesonbuild/scripts/meson_install.py | 8 +++++++-
+- 1 file changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/mesonbuild/scripts/meson_install.py b/mesonbuild/scripts/meson_install.py
+-index 013f2a00..f7ff1dcc 100644
+---- a/mesonbuild/scripts/meson_install.py
+-+++ b/mesonbuild/scripts/meson_install.py
+-@@ -368,7 +368,13 @@ def install_targets(d):
+-                     printed_symlink_error = True
+-         if os.path.isfile(outname):
+-             try:
+--                depfixer.fix_rpath(outname, install_rpath, False)
+-+                # Buildroot check-host-rpath script expects RPATH
+-+                # But if install_rpath is empty, it will stripped.
+-+                # So, preserve it in this case
+-+                if install_rpath:
+-+                    depfixer.fix_rpath(outname, install_rpath, False)
+-+                else:
+-+                    print("Skipping RPATH fixing")
+-             except SystemExit as e:
+-                 if isinstance(e.code, int) and e.code == 0:
+-                     pass
+--- 
+-2.14.3
+-
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index bd9e4114ff..4a4923bd12 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.46.1/meson-0.46.1.tar.gz.asc
+-sha256 19497a03e7e5b303d8d11f98789a79aba59b5ad4a81bd00f4d099be0212cee78  meson-0.46.1.tar.gz
+-sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	COPYING
++# https://github.com/mesonbuild/meson/releases/download/0.47.1/meson-0.47.1.tar.gz.asc
++sha256 d673de79f7bab064190a5ea06140eaa8415efb386d0121ba549f6d66c555ada6 meson-0.47.1.tar.gz
++sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 28c9e6f202..d110e594f5 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBUV_VERSION = v1.22.0
-+LIBUV_VERSION = v1.23.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-MESON_VERSION = 0.46.1
++MESON_VERSION = 0.47.1
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
