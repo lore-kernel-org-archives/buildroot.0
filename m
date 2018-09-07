@@ -1,172 +1,78 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:15:41 -0000
-Subject: [Buildroot] [git commit] qemu: bump to 2.12.0
-Message-ID: <20180907111449.41DD77FB8F@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:15:42 -0000
+Subject: [Buildroot] [git commit] imx-vpu: bump version to 5.4.38
+Message-ID: <20180907111450.290687FF08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06e3957c16ae58745a29c56436c537170e246ea2
+commit: https://git.buildroot.net/buildroot/commit/?id=ea9efdf5675df29e6b4b7e48616a4f5da922c22f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In addition:
-  - Update 0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-    with new line numbers and file location.
-  - Remove upstream 0002-memfd-fix-configure-test.patch
-  - Add new options found in 2.12.0 in qemu.mk as disabled.
-  - Remove --with-system-pixman as it's no longer optional.
+No changelog provided by NXP.
+Added COPYING hash value to track license changes.
+Reworked the help text to specify which CPU has Chips&Media VPU.
+Also removed the dependency on BR2_arm as
+BR2_PACKAGE_FREESCALE_IMX_HAS_VPU is sufficient.
 
-Tested with test-pkg:
-
-./utils/test-pkg -p qemu -c configs/qemu_min_defconfig
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: SKIPPED
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                armv5-ctng-linux-gnueabi [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed
-
-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+[Thomas: add hash for EULA file.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch |  8 +--
- package/qemu/0002-memfd-fix-configure-test.patch   | 58 ----------------------
- package/qemu/qemu.hash                             |  2 +-
- package/qemu/qemu.mk                               | 13 ++++-
- 4 files changed, 16 insertions(+), 65 deletions(-)
+ package/freescale-imx/imx-vpu/Config.in    | 13 +++++--------
+ package/freescale-imx/imx-vpu/imx-vpu.hash |  4 +++-
+ package/freescale-imx/imx-vpu/imx-vpu.mk   |  2 +-
+ 3 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-index 6d6d024d9d..a0c4a6203c 100644
---- a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-+++ b/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-@@ -17,11 +17,11 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-  user-exec.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/package/freescale-imx/imx-vpu/Config.in b/package/freescale-imx/imx-vpu/Config.in
+index 779717f5ed..dd3507eb96 100644
+--- a/package/freescale-imx/imx-vpu/Config.in
++++ b/package/freescale-imx/imx-vpu/Config.in
+@@ -1,17 +1,14 @@
+ comment "imx-vpu needs an i.MX platform with VPU support"
+-	depends on BR2_arm
+ 	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
  
--diff --git a/user-exec.c b/user-exec.c
-+diff --git a/accel/tcg/user-exec.c b/accel/tcg/user-exec.c
- index 6db0758..2b3d116 100644
----- a/user-exec.c
--+++ b/user-exec.c
--@@ -409,7 +409,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
-+--- a/accel/tcg/user-exec.c
-++++ b/accel/tcg/user-exec.c
-+@@ -463,7 +463,7 @@ int cpu_signal_handler(int host_signum, void *pinfo,
-  
-  #if defined(__NetBSD__)
-      pc = uc->uc_mcontext.__gregs[_REG_R15];
-diff --git a/package/qemu/0002-memfd-fix-configure-test.patch b/package/qemu/0002-memfd-fix-configure-test.patch
-deleted file mode 100644
-index 3e06c0e932..0000000000
---- a/package/qemu/0002-memfd-fix-configure-test.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From 75e5b70e6b5dcc4f2219992d7cffa462aa406af0 Mon Sep 17 00:00:00 2001
--From: Paolo Bonzini <pbonzini@redhat.com>
--Date: Tue, 28 Nov 2017 11:51:27 +0100
--Subject: [PATCH] memfd: fix configure test
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Recent glibc added memfd_create in sys/mman.h.  This conflicts with
--the definition in util/memfd.c:
--
--    /builddir/build/BUILD/qemu-2.11.0-rc1/util/memfd.c:40:12: error: static declaration of memfd_create follows non-static declaration
--
--Fix the configure test, and remove the sys/memfd.h inclusion since the
--file actually does not exist---it is a typo in the memfd_create(2) man
--page.
--
--Cc: Marc-Andr?? Lureau <marcandre.lureau@redhat.com>
--Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: commit 75e5b70e6b5
--
-- configure    | 2 +-
-- util/memfd.c | 4 +---
-- 2 files changed, 2 insertions(+), 4 deletions(-)
--
--diff --git a/configure b/configure
--index 9c8aa5a98bd4..99ccc1725ace 100755
----- a/configure
--+++ b/configure
--@@ -3923,7 +3923,7 @@ fi
-- # check if memfd is supported
-- memfd=no
-- cat > $TMPC << EOF
---#include <sys/memfd.h>
--+#include <sys/mman.h>
-- 
-- int main(void)
-- {
--diff --git a/util/memfd.c b/util/memfd.c
--index 4571d1aba866..412e94a405fc 100644
----- a/util/memfd.c
--+++ b/util/memfd.c
--@@ -31,9 +31,7 @@
-- 
-- #include "qemu/memfd.h"
-- 
---#ifdef CONFIG_MEMFD
---#include <sys/memfd.h>
---#elif defined CONFIG_LINUX
--+#if defined CONFIG_LINUX && !defined CONFIG_MEMFD
-- #include <sys/syscall.h>
-- #include <asm/unistd.h>
-- 
---- 
--2.16.2
--
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 1173c1bf3d..fc0b4e87bf 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256 fcfdaa1ecdaac8aead616fe811bfb8fe4a8f2cd59796aa446c5175b5af0e829f  qemu-2.10.2.tar.xz
-+sha256 e69301f361ff65bf5dabd8a19196aeaa5613c1b5ae1678f0823bdf50e7d5c6fc  qemu-2.12.0.tar.xz
- sha256 6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256 48ffe9fc7f1d5462dbd19340bc4dd1d8a9e37c61ed535813e614cbe4a5f0d4df  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 0a6a6c0609..aec803c1ae 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
+ config BR2_PACKAGE_IMX_VPU
+ 	bool "imx-vpu"
+-	depends on BR2_arm # Only relevant for i.MX
+ 	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
+ 	select BR2_PACKAGE_FIRMWARE_IMX
+ 	help
+-	  Library of userspace helpers specific for the Freescale i.MX
+-	  platform. It wraps the kernel interfaces for the i.MX platform
+-	  Video Processing Unit (VPU) driver. It requires a kernel that
+-	  includes the i.MX specific headers to be built.
++	  Library of userspace helpers specific for the NXP i.MX SoC
++	  integrating a Chips&Media CODA Video Processing Unit (VPU)
++	  such as the i.MX27/i.MX5x/i.MX6x.
+ 
+-	  This library is provided by Freescale as-is and doesn't have
+-	  an upstream.
++	  This library is provided by NXP as-is and doesn't have an
++	  upstream.
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
+index 0ac0f3d0c2..5fa93d8055 100644
+--- a/package/freescale-imx/imx-vpu/imx-vpu.hash
++++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
+@@ -1,2 +1,4 @@
+ # Locally computed
+-sha256	ee265e88d17c7369bd9cb917e7cce035b8c7ee2ba4491645fdab9f382f54beb0  imx-vpu-5.4.37.bin
++sha256  34bed0ddf6c797f444bddfa5d5495adc751ff268b6431d8beb48129c89c9e47f  imx-vpu-5.4.38.bin
++sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
++sha256  fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
+diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
+index 2bcfe53eba..e30237508e 100644
+--- a/package/freescale-imx/imx-vpu/imx-vpu.mk
++++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QEMU_VERSION = 2.10.2
-+QEMU_VERSION = 2.12.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
-@@ -95,7 +95,6 @@ define QEMU_CONFIGURE_CMDS
- 		./configure \
- 			--prefix=/usr \
- 			--cross-prefix=$(TARGET_CROSS) \
--			--with-system-pixman \
- 			--audio-drv-list= \
- 			--enable-kvm \
- 			--enable-attr \
-@@ -120,6 +119,16 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-strip \
- 			--disable-seccomp \
- 			--disable-sparse \
-+			--disable-mpath \
-+			--disable-sanitizers \
-+			--disable-hvf \
-+			--disable-whpx \
-+			--disable-malloc-trim \
-+			--disable-membarrier \
-+			--disable-vhost-crypto \
-+			--disable-libxml2 \
-+			--disable-capstone \
-+			--disable-git-update \
- 			$(QEMU_OPTS) \
- 	)
- endef
+-IMX_VPU_VERSION = 5.4.37
++IMX_VPU_VERSION = 5.4.38
+ IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
+ IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
+ 
