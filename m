@@ -1,99 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:55 -0000
-Subject: [Buildroot] [git commit] htop: bump to version 2.2.0
-Message-ID: <20180907111500.69ADC8019E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] libunistring: bump to version 0.9.10
+Message-ID: <20180907111459.4CC248019E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=acee9564b7bb8fb398d0247027bcf0099fcd5c82
+commit: https://git.buildroot.net/buildroot/commit/?id=7d480277b6425005e0b0357fe1665aa3e7cff1c8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...2-MakeHeader-open-files-using-binary-mode.patch | 50 ----------------------
- package/htop/htop.hash                             |  2 +-
- package/htop/htop.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 52 deletions(-)
+ package/libunistring/libunistring.hash | 4 ++--
+ package/libunistring/libunistring.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch b/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
-deleted file mode 100644
-index bcc3e6564c..0000000000
---- a/package/htop/0002-MakeHeader-open-files-using-binary-mode.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 1a83a3e6ae0841a0dc4c7eb08a1a71930e99666c Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Sun, 18 Mar 2018 21:57:54 +0100
--Subject: [PATCH] MakeHeader: open files using binary mode
--
--By default, open(sys.argv[1]) use Unicode mode.
--The readlines() will try to convert with the default codec
--(which depends on the i18n settings, so 'ascii' under
--LC_ALL=C)
--
--Open files using binary mode so no conversion will be done
--by readlines(). But then, normal strings can't be used in
--the rest of the code; either all strings have to be prefixed
--with b'' or (simpler) the read line has to be converted to
--a unicode string by calling decode() on it.
--
--http://lists.busybox.net/pipermail/buildroot/2018-February/214373.html
--
--Fixes:
--http://autobuild.buildroot.net/results/9ce/9ce2ef5ef694253b9759016c9702c5c6be7849a1
--
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
-----
-- scripts/MakeHeader.py | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/scripts/MakeHeader.py b/scripts/MakeHeader.py
--index 4841bda..dd0798c 100755
----- a/scripts/MakeHeader.py
--+++ b/scripts/MakeHeader.py
--@@ -16,7 +16,7 @@ SKIPONE=4
-- state = ANY
-- static = 0
-- 
---file = open(sys.argv[1])
--+file = open(sys.argv[1], 'rb')
-- name = sys.argv[1][:-2]
-- 
-- out = StringIO()
--@@ -31,6 +31,7 @@ out.write( "#define HEADER_" + os.path.basename(name) + "\n")
-- is_blank = False
-- for line in file.readlines():
--    line = line[:-1]
--+   line = line.decode('utf-8')
--    if state == ANY:
--       if line == '/*{':
--          state = COPY
---- 
--2.14.3
--
-diff --git a/package/htop/htop.hash b/package/htop/htop.hash
-index 5419d767a3..e764644a0b 100644
---- a/package/htop/htop.hash
-+++ b/package/htop/htop.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libunistring/libunistring.hash b/package/libunistring/libunistring.hash
+index 8a5da7782d..2e4595b17d 100644
+--- a/package/libunistring/libunistring.hash
++++ b/package/libunistring/libunistring.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.9.tar.xz.sig
+-sha256	a4d993ecfce16cf503ff7579f5da64619cee66226fb3b998dafb706190d9a833	libunistring-0.9.9.tar.xz
++# https://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz.sig
++sha256	eb8fb2c3e4b6e2d336608377050892b54c3c983b646c561836550863003c05d7	libunistring-0.9.10.tar.xz
  # Locally calculated
--sha256  3260be990d26e25b6b49fc9d96dbc935ad46e61083c0b7f6df413e513bf80748  htop-2.1.0.tar.gz
-+sha256  d9d6826f10ce3887950d709b53ee1d8c1849a70fa38e91d5896ad8cbc6ba3c57  htop-2.2.0.tar.gz
- sha256  70466e76443cb5b68144d9fcedca9584e7bfdb6c50859daa5a0290ea27c58aad  COPYING
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 71889557ca..dc84e32708 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
+ sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LIB
+diff --git a/package/libunistring/libunistring.mk b/package/libunistring/libunistring.mk
+index 929b52ebd5..fa51447170 100644
+--- a/package/libunistring/libunistring.mk
++++ b/package/libunistring/libunistring.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HTOP_VERSION = 2.1.0
-+HTOP_VERSION = 2.2.0
- HTOP_SITE = http://hisham.hm/htop/releases/$(HTOP_VERSION)
- HTOP_DEPENDENCIES = ncurses
- # Prevent htop build system from searching the host paths
+-LIBUNISTRING_VERSION = 0.9.9
++LIBUNISTRING_VERSION = 0.9.10
+ LIBUNISTRING_SITE = $(BR2_GNU_MIRROR)/libunistring
+ LIBUNISTRING_SOURCE = libunistring-$(LIBUNISTRING_VERSION).tar.xz
+ LIBUNISTRING_INSTALL_STAGING = YES
