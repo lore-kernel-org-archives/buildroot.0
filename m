@@ -1,100 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:15:55 -0000
-Subject: [Buildroot] [git commit] package/qt5/qt5base: fix statx support
- with glibc >= 2.28
-Message-ID: <20180907111502.E55457FB34@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:15:56 -0000
+Subject: [Buildroot] [git commit] perl-io-socket-multicast: new package
+Message-ID: <20180907111458.735B980F7F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec935bd635cd8b66011fd7561fc3dbbbc40c64e2
+commit: https://git.buildroot.net/buildroot/commit/?id=252b4aa1b82254cbb808654cb0962685d12ab174
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0003-Fix-qmake-build-with-glibc-2.28.patch     | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ DEVELOPERS                                                 |  1 +
+ package/Config.in                                          |  1 +
+ package/perl-io-socket-multicast/Config.in                 | 11 +++++++++++
+ .../perl-io-socket-multicast/perl-io-socket-multicast.hash |  6 ++++++
+ .../perl-io-socket-multicast/perl-io-socket-multicast.mk   | 14 ++++++++++++++
+ 5 files changed, 33 insertions(+)
 
-diff --git a/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch b/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 60b2f2da1a..0831f962e2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -492,6 +492,7 @@ F:	package/perl-dbi/
+ F:	package/perl-device-serialport/
+ F:	package/perl-file-slurp/
+ F:	package/perl-io-interface/
++F:	package/perl-io-socket-multicast/
+ F:	package/perl-json-maybexs/
+ F:	package/perl-module-runtime/
+ F:	package/perl-number-bytes-human/
+diff --git a/package/Config.in b/package/Config.in
+index c9bc7bec42..fba6d1116b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -700,6 +700,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-http-negotiate/Config.in"
+ 	source "package/perl-io-html/Config.in"
+ 	source "package/perl-io-interface/Config.in"
++	source "package/perl-io-socket-multicast/Config.in"
+ 	source "package/perl-io-socket-ssl/Config.in"
+ 	source "package/perl-json-maybexs/Config.in"
+ 	source "package/perl-json-tiny/Config.in"
+diff --git a/package/perl-io-socket-multicast/Config.in b/package/perl-io-socket-multicast/Config.in
 new file mode 100644
-index 0000000000..6d8bb28992
+index 0000000000..f63a4e1bf9
 --- /dev/null
-+++ b/package/qt5/qt5base/5.11.1/0003-Fix-qmake-build-with-glibc-2.28.patch
-@@ -0,0 +1,74 @@
-+From 25feee4e061b99edab79503d81f5bd045c6c8e3d Mon Sep 17 00:00:00 2001
-+From: Thiago Macieira <thiago.macieira@intel.com>
-+Date: Tue, 7 Aug 2018 09:38:42 -0700
-+Subject: [PATCH] Fix qmake build with glibc 2.28
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/perl-io-socket-multicast/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PERL_IO_SOCKET_MULTICAST
++	bool "perl-io-socket-multicast"
++	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_PERL_IO_INTERFACE
++	help
++	  Send and receive multicast messages
 +
-+We haven't yet run the configure checks to see if statx and renameat2
-+are present in glibc, so this fails when we redefine the structures and
-+functions.
++	  https://metacpan.org/release/IO-Socket-Multicast
 +
-+linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
-+bits/statx.h:25:8: note: previous definition of 'struct statx_timestamp'
-+qfilesystemengine_unix.cpp:110:12: error: 'int renameat2(int, const char*, int, const char*, unsigned int)' was declared 'extern' and later 'static' [-fpermissive]
++comment "perl-io-socket-multicast needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/perl-io-socket-multicast/perl-io-socket-multicast.hash b/package/perl-io-socket-multicast/perl-io-socket-multicast.hash
+new file mode 100644
+index 0000000000..c12da12c41
+--- /dev/null
++++ b/package/perl-io-socket-multicast/perl-io-socket-multicast.hash
+@@ -0,0 +1,6 @@
++# retrieved by scancpan from http://cpan.metacpan.org/
++md5    c96e6cbb367b1d11ffe7bb9fbd833540 IO-Socket-Multicast-1.12.tar.gz
++sha256 70e8af4aa21d19bab5edd9f43a6b3d6277748a65145d46ff0ea2ae4c59495c72 IO-Socket-Multicast-1.12.tar.gz
 +
-+Change-Id: Ia741b559c24d46c78fb2fffd1548a792d22e3368
-+Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
-+Reviewed-by: J??ri Valdmann <juri.valdmann@qt.io>
++# computed by scancpan
++sha256 ea33bda0e2ec6734e29895a37cd1fc005d86f2abbe7e9943e0213ae64844a697 README
+diff --git a/package/perl-io-socket-multicast/perl-io-socket-multicast.mk b/package/perl-io-socket-multicast/perl-io-socket-multicast.mk
+new file mode 100644
+index 0000000000..41e4fe404c
+--- /dev/null
++++ b/package/perl-io-socket-multicast/perl-io-socket-multicast.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# perl-io-socket-multicast
++#
++################################################################################
 +
-+Downloaded from upstream commit
-+http://code.qt.io/cgit/qt/qtbase.git/commit/?id=25feee4e061b99edab79503d81f5bd045c6c8e3d
++PERL_IO_SOCKET_MULTICAST_VERSION = 1.12
++PERL_IO_SOCKET_MULTICAST_SOURCE = IO-Socket-Multicast-$(PERL_IO_SOCKET_MULTICAST_VERSION).tar.gz
++PERL_IO_SOCKET_MULTICAST_SITE = $(BR2_CPAN_MIRROR)/authors/id/B/BR/BRAMBLE
++PERL_IO_SOCKET_MULTICAST_DEPENDENCIES = perl-io-interface
++PERL_IO_SOCKET_MULTICAST_LICENSE = Artistic or GPL-1.0+
++PERL_IO_SOCKET_MULTICAST_LICENSE_FILES = README
 +
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/corelib/global/qconfig-bootstrapped.h | 12 ++++++++++--
-+ src/corelib/io/qfilesystemengine_unix.cpp |  2 +-
-+ 2 files changed, 11 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/corelib/global/qconfig-bootstrapped.h b/src/corelib/global/qconfig-bootstrapped.h
-+index 3469ebe5e6..c5585ea32a 100644
-+--- a/src/corelib/global/qconfig-bootstrapped.h
-++++ b/src/corelib/global/qconfig-bootstrapped.h
-+@@ -98,10 +98,18 @@
-+ #define QT_NO_QOBJECT
-+ #define QT_FEATURE_process -1
-+ #define QT_FEATURE_regularexpression -1
-+-#define QT_FEATURE_renameat2 -1
-++#ifdef __GLIBC_PREREQ
-++# define QT_FEATURE_renameat2 (__GLIBC_PREREQ(2, 28) ? 1 : -1)
-++#else
-++# define QT_FEATURE_renameat2 -1
-++#endif
-+ #define QT_FEATURE_sharedmemory -1
-+ #define QT_FEATURE_slog2 -1
-+-#define QT_FEATURE_statx -1
-++#ifdef __GLIBC_PREREQ
-++# define QT_FEATURE_statx (__GLIBC_PREREQ(2, 28) ? 1 : -1)
-++#else
-++# define QT_FEATURE_statx -1
-++#endif
-+ #define QT_FEATURE_syslog -1
-+ #define QT_NO_SYSTEMLOCALE
-+ #define QT_FEATURE_systemsemaphore -1
-+diff --git a/src/corelib/io/qfilesystemengine_unix.cpp b/src/corelib/io/qfilesystemengine_unix.cpp
-+index 0c9cdb8667..deb4a9f220 100644
-+--- a/src/corelib/io/qfilesystemengine_unix.cpp
-++++ b/src/corelib/io/qfilesystemengine_unix.cpp
-+@@ -91,7 +91,6 @@ extern "C" NSString *NSTemporaryDirectory();
-+ #  include <sys/syscall.h>
-+ #  include <sys/sendfile.h>
-+ #  include <linux/fs.h>
-+-#  include <linux/stat.h>
-+ 
-+ // in case linux/fs.h is too old and doesn't define it:
-+ #ifndef FICLONE
-+@@ -112,6 +111,7 @@ static int renameat2(int oldfd, const char *oldpath, int newfd, const char *newp
-+ #    endif
-+ 
-+ #    if !QT_CONFIG(statx) && defined(SYS_statx)
-++#      include <linux/stat.h>
-+ static int statx(int dirfd, const char *pathname, int flag, unsigned mask, struct statx *statxbuf)
-+ { return syscall(SYS_statx, dirfd, pathname, flag, mask, statxbuf); }
-+ #    elif !QT_CONFIG(statx) && !defined(SYS_statx)
++$(eval $(perl-package))
