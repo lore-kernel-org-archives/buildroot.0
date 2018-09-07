@@ -1,68 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:59 -0000
-Subject: [Buildroot] [git commit] package/perl-crypt-openssl-guess: new
- package
-Message-ID: <20180907111553.56F5B80225@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-crypt-openssl-random: bump
+ version to 0.15
+Message-ID: <20180907111553.CC82C80FBF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fa2629c6a504f549ad7743d51e645c52c22357e
+commit: https://git.buildroot.net/buildroot/commit/?id=a061f62c4f7b6926685bb26508d07011ee4e9090
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Needed for upcoming version bumps of perl-crypt-openssl-random and
-perl-crypt-openssl-rsa, only host-package is needed.
+Changelog:
+https://metacpan.org/changes/distribution/Crypt-OpenSSL-Random
+
+Added new build dependency to host-perl-crypt-openssl-guess and force
+it to search for openssl in STAGING_DIR. Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                  |  1 +
- .../perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash  |  6 ++++++
- .../perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk    | 13 +++++++++++++
- 3 files changed, 20 insertions(+)
+ .../perl-crypt-openssl-random/perl-crypt-openssl-random.hash   |  7 +++++--
+ package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk | 10 ++++++++--
+ 2 files changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cee19af880..481c74f9f2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -331,6 +331,7 @@ F:	package/libyuv/
- F:	package/mesa3d/
- F:	package/minidlna/
- F:	package/mjpg-streamer/
-+F:	package/perl-crypt-openssl-guess/
- F:	package/perl-crypt-openssl-random/
- F:	package/perl-crypt-openssl-rsa/
- F:	package/perl-digest-sha1/
-diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
-new file mode 100644
-index 0000000000..327b06900a
---- /dev/null
-+++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.hash
-@@ -0,0 +1,6 @@
-+# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e768fe2c07826b0ac9ea604c79f93032 Crypt-OpenSSL-Guess-0.11.tar.gz
-+sha256 aa6b18e38cb852cbad80a58cd90c395b40819d4d01e0ab37e7703149094d7167 Crypt-OpenSSL-Guess-0.11.tar.gz
+diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
+index caacdc9015..57677e3445 100644
+--- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
++++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
+@@ -1,3 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    5d71337503e0356ce1ce1481504e5885 Crypt-OpenSSL-Random-0.11.tar.gz
+-sha256 bb8c81c6a39b9b13a22d818ee9a746242f136f0fadceb6b9776ae615e7524c7a Crypt-OpenSSL-Random-0.11.tar.gz
++md5    bcde8d5a822c91376deda3c4f0c75fbe Crypt-OpenSSL-Random-0.15.tar.gz
++sha256 f0876faa1ba3111e39b86aa730c603211eff2905e460c72a57b61e8cf475cef4 Crypt-OpenSSL-Random-0.15.tar.gz
 +
 +# computed by scancpan
-+sha256 5c739f181ce7aa31d739277996ff230067dad39332e5597c0dffd36e5d784072 LICENSE
-diff --git a/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-new file mode 100644
-index 0000000000..69d7a0ef8f
---- /dev/null
-+++ b/package/perl-crypt-openssl-guess/perl-crypt-openssl-guess.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# perl-crypt-openssl-guess
-+#
-+################################################################################
++sha256 fdaba2134145d3e252c5930180b2bcb13b5367ad5a8713d6868f014cd25c496f LICENSE
+diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
+index de029e9af0..1e1d7c1112 100644
+--- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
++++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
+@@ -4,11 +4,17 @@
+ #
+ ################################################################################
+ 
+-PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.11
++PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.15
+ PERL_CRYPT_OPENSSL_RANDOM_SOURCE = Crypt-OpenSSL-Random-$(PERL_CRYPT_OPENSSL_RANDOM_VERSION).tar.gz
+ PERL_CRYPT_OPENSSL_RANDOM_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+-PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = openssl
++PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = \
++	host-perl-crypt-openssl-guess \
++	openssl
+ PERL_CRYPT_OPENSSL_RANDOM_LICENSE = Artistic or GPL-1.0+
+ PERL_CRYPT_OPENSSL_RANDOM_LICENSE_FILES = LICENSE
+ 
++# Try as hard as possible to remedy to the brain-damage their build-system
++# suffers from: don't search for openssl, they pick the host-system one.
++PERL_CRYPT_OPENSSL_RANDOM_CONF_ENV = OPENSSL_PREFIX=$(STAGING_DIR)/usr
 +
-+PERL_CRYPT_OPENSSL_GUESS_VERSION = 0.11
-+PERL_CRYPT_OPENSSL_GUESS_SOURCE = Crypt-OpenSSL-Guess-$(PERL_CRYPT_OPENSSL_GUESS_VERSION).tar.gz
-+PERL_CRYPT_OPENSSL_GUESS_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AK/AKIYM
-+PERL_CRYPT_OPENSSL_GUESS_LICENSE = Artistic or GPL-1.0+
-+PERL_CRYPT_OPENSSL_GUESS_LICENSE_FILES = LICENSE
-+
-+$(eval $(host-perl-package))
+ $(eval $(perl-package))
