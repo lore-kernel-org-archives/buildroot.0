@@ -1,78 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:42 -0000
-Subject: [Buildroot] [git commit] imx-vpu: bump version to 5.4.38
-Message-ID: <20180907111450.290687FF08@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] imx-codec: bump version to 4.3.5
+Message-ID: <20180907111450.B61A8815AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea9efdf5675df29e6b4b7e48616a4f5da922c22f
+commit: https://git.buildroot.net/buildroot/commit/?id=10313180180a0e5ad7b3c157a33e836566ca92f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-No changelog provided by NXP.
-Added COPYING hash value to track license changes.
-Reworked the help text to specify which CPU has Chips&Media VPU.
-Also removed the dependency on BR2_arm as
-BR2_PACKAGE_FREESCALE_IMX_HAS_VPU is sufficient.
+No changelog provided by NXP for v4.3.5.
+
+Added COPYING hash to track license change.
+
+Changelog for v4.3.4
+1. Add INSANE_SKIP for file-rdeps to fix QA Issue
+2. Update mp3_enc version to 02.03.01
+3. Fix crash in lib_mp3_enc_arm12_elinux.so
+This crash error is caused by division by zero
+in noOfElements_mp3e() function When encoding 0
+size file by using unit test
+so before performing a division operation, need to
+check whether divisor is zero or not to fix it.
+
+Changelog for v4.3.2
+1. Upgrade EULA to v20
+2. Add i.MX8 support
+3. Bugfix/Optimization
+   - Remove video codec in imx-codec package.
+   - Fix logically dead code issue for aac_dec.
+   - Fix wrong sizeof argument for flac_dec.
+   - Cancel unused code in nb_amr/wb_amr/flac_dec/bsac_dec.
 
 Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
 [Thomas: add hash for EULA file.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freescale-imx/imx-vpu/Config.in    | 13 +++++--------
- package/freescale-imx/imx-vpu/imx-vpu.hash |  4 +++-
- package/freescale-imx/imx-vpu/imx-vpu.mk   |  2 +-
- 3 files changed, 9 insertions(+), 10 deletions(-)
+ package/freescale-imx/imx-codec/imx-codec.hash | 4 +++-
+ package/freescale-imx/imx-codec/imx-codec.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/freescale-imx/imx-vpu/Config.in b/package/freescale-imx/imx-vpu/Config.in
-index 779717f5ed..dd3507eb96 100644
---- a/package/freescale-imx/imx-vpu/Config.in
-+++ b/package/freescale-imx/imx-vpu/Config.in
-@@ -1,17 +1,14 @@
- comment "imx-vpu needs an i.MX platform with VPU support"
--	depends on BR2_arm
- 	depends on !BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
- 
- config BR2_PACKAGE_IMX_VPU
- 	bool "imx-vpu"
--	depends on BR2_arm # Only relevant for i.MX
- 	depends on BR2_PACKAGE_FREESCALE_IMX_HAS_VPU
- 	select BR2_PACKAGE_FIRMWARE_IMX
- 	help
--	  Library of userspace helpers specific for the Freescale i.MX
--	  platform. It wraps the kernel interfaces for the i.MX platform
--	  Video Processing Unit (VPU) driver. It requires a kernel that
--	  includes the i.MX specific headers to be built.
-+	  Library of userspace helpers specific for the NXP i.MX SoC
-+	  integrating a Chips&Media CODA Video Processing Unit (VPU)
-+	  such as the i.MX27/i.MX5x/i.MX6x.
- 
--	  This library is provided by Freescale as-is and doesn't have
--	  an upstream.
-+	  This library is provided by NXP as-is and doesn't have an
-+	  upstream.
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.hash b/package/freescale-imx/imx-vpu/imx-vpu.hash
-index 0ac0f3d0c2..5fa93d8055 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.hash
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.hash
+diff --git a/package/freescale-imx/imx-codec/imx-codec.hash b/package/freescale-imx/imx-codec/imx-codec.hash
+index 53d8f71c39..8dab5a5c4c 100644
+--- a/package/freescale-imx/imx-codec/imx-codec.hash
++++ b/package/freescale-imx/imx-codec/imx-codec.hash
 @@ -1,2 +1,4 @@
- # Locally computed
--sha256	ee265e88d17c7369bd9cb917e7cce035b8c7ee2ba4491645fdab9f382f54beb0  imx-vpu-5.4.37.bin
-+sha256  34bed0ddf6c797f444bddfa5d5495adc751ff268b6431d8beb48129c89c9e47f  imx-vpu-5.4.38.bin
+ # locally computed
+-sha256	20d3f9b4187fcd9e7007c94558a00bab1191513eee74b6f0d8c7b43f874e06ed  imx-codec-4.2.1.bin
++sha256  6bb54f91c3ca18567e14d95d3858022dc9be00dc86e9edfdb544d1240a3b2b04  imx-codec-4.3.5.bin
 +sha256  78696664f7afe7f2b081c99af60082d6403fab935b1b10056ed41aec123ff7fa  COPYING
 +sha256  fc93f26e4197b9240c327ce26ae6e02123f022423d4704c7b0448a37372cf2a2  EULA
-diff --git a/package/freescale-imx/imx-vpu/imx-vpu.mk b/package/freescale-imx/imx-vpu/imx-vpu.mk
-index 2bcfe53eba..e30237508e 100644
---- a/package/freescale-imx/imx-vpu/imx-vpu.mk
-+++ b/package/freescale-imx/imx-vpu/imx-vpu.mk
+diff --git a/package/freescale-imx/imx-codec/imx-codec.mk b/package/freescale-imx/imx-codec/imx-codec.mk
+index 784c1fa4a9..1ec701d2f1 100644
+--- a/package/freescale-imx/imx-codec/imx-codec.mk
++++ b/package/freescale-imx/imx-codec/imx-codec.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMX_VPU_VERSION = 5.4.37
-+IMX_VPU_VERSION = 5.4.38
- IMX_VPU_SITE = $(FREESCALE_IMX_SITE)
- IMX_VPU_SOURCE = imx-vpu-$(IMX_VPU_VERSION).bin
- 
+-IMX_CODEC_VERSION = 4.2.1
++IMX_CODEC_VERSION = 4.3.5
+ IMX_CODEC_SITE = $(FREESCALE_IMX_SITE)
+ IMX_CODEC_SOURCE = imx-codec-$(IMX_CODEC_VERSION).bin
+ IMX_CODEC_INSTALL_STAGING = YES
