@@ -1,78 +1,91 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:15:59 -0000
-Subject: [Buildroot] [git commit] jpeg-turbo: bump to version 2.0.0
-Message-ID: <20180907111507.1268481384@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:00 -0000
+Subject: [Buildroot] [git commit] package/sysdig: bump to version 0.23.1
+Message-ID: <20180907111508.14A8480ADA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b354383ce7dc369edf212fec6776438b24a4b66
+commit: https://git.buildroot.net/buildroot/commit/?id=b7143338d0a9935cb1978c31cd7ba9135edf384f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Move to cmake-infrastructure
-- Update hash of license files: minor updates and clarifications
+This patch bumps sysdig to version 0.23.1, adds a new dependency on
+elfutils and adds hash for the license file.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+[Thomas: fix Config.in comment dependencies.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/jpeg-turbo/jpeg-turbo.hash | 12 ++++++------
- package/jpeg-turbo/jpeg-turbo.mk   | 10 +++++-----
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ package/sysdig/Config.in   | 10 +++++++---
+ package/sysdig/sysdig.hash |  5 +++--
+ package/sysdig/sysdig.mk   |  4 ++--
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/package/jpeg-turbo/jpeg-turbo.hash b/package/jpeg-turbo/jpeg-turbo.hash
-index df1c053005..f0fc5396ef 100644
---- a/package/jpeg-turbo/jpeg-turbo.hash
-+++ b/package/jpeg-turbo/jpeg-turbo.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/libjpeg-turbo/files/1.5.3/
--sha1 87ebf4cab2bb27fcb8e7ccb18ec4eb680e1f2c2d  libjpeg-turbo-1.5.3.tar.gz
--md5 7c82f0f6a3130ec06b8a4d0b321cbca3  libjpeg-turbo-1.5.3.tar.gz
-+# From https://sourceforge.net/projects/libjpeg-turbo/files/2.0.0/
-+sha1 fe49aea935617748c21ecbe46c986d6c1b98f39b  libjpeg-turbo-2.0.0.tar.gz
-+md5 b12a3fcf1d078db38410f27718a91b83  libjpeg-turbo-2.0.0.tar.gz
- # Locally computed
--sha256 b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523  libjpeg-turbo-1.5.3.tar.gz
--sha256 5c08657eda60b7946a913ee22ac73603335a468a6aa95204506a1586a8d677ee  LICENSE.md
--sha256 53a3e3c299e08856964f4c5986e242c3695837b73c64625092f70c774e8af5d2  README.ijg
-+sha256 778876105d0d316203c928fd2a0374c8c01f755d0a00b12a1c8934aeccff8868  libjpeg-turbo-2.0.0.tar.gz
-+sha256 8412238c5ad95965cf3c3197791e9dea8b5fae505d133449e33ee2fa754fe61e  LICENSE.md
-+sha256 82fece2bff2669c476495f0fe70096b154e8bc5b40916a64e99836d9a01c3110  README.ijg
-diff --git a/package/jpeg-turbo/jpeg-turbo.mk b/package/jpeg-turbo/jpeg-turbo.mk
-index 2b5d876928..0fe2fcda72 100644
---- a/package/jpeg-turbo/jpeg-turbo.mk
-+++ b/package/jpeg-turbo/jpeg-turbo.mk
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 6ccb706a5a..672c44d211 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -4,7 +4,9 @@ config BR2_PACKAGE_SYSDIG
+ 	depends on BR2_INSTALL_LIBSTDCPP # libjson
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+-	depends on !BR2_STATIC_LIBS # luajit
++	depends on !BR2_STATIC_LIBS # luajit, elfutils
++	depends on BR2_USE_WCHAR # elfutils
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC # elfutils
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_PACKAGE_LUAJIT
+ 	select BR2_PACKAGE_JSONCPP
+@@ -13,6 +15,7 @@ config BR2_PACKAGE_SYSDIG
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_JQ
+ 	select BR2_PACKAGE_LIBB64
++	select BR2_PACKAGE_ELFUTILS
+ 	help
+ 	  Sysdig is open source, system-level exploration:
+ 	  capture system state and activity from a running Linux
+@@ -22,7 +25,8 @@ config BR2_PACKAGE_SYSDIG
+ 
+ 	  http://sysdig.org
+ 
+-comment "sysdig needs a toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
++comment "sysdig needs a glibc or uclibc toolchain w/ C++, gcc >= 4.8, dynamic library and a Linux kernel to be built"
+ 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
++		|| !(BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_GLIBC)
+ 	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
+diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
+index 63a9e385d8..565b1e9828 100644
+--- a/package/sysdig/sysdig.hash
++++ b/package/sysdig/sysdig.hash
+@@ -1,2 +1,3 @@
+-# locally computed
+-sha256  480d5d8fd7e7373c08008c30bd8e2c7595d5c45d710bf07bd15a522021b560f6  sysdig-0.19.1.tar.gz
++# sha256 locally computed
++sha256  57d5b713b875eba35546a1408bf3f20c2703904a17d956be115ee55272db4cfa  sysdig-0.23.1.tar.gz
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index a9c9f21bb5..9ac990e3e2 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JPEG_TURBO_VERSION = 1.5.3
-+JPEG_TURBO_VERSION = 2.0.0
- JPEG_TURBO_SOURCE = libjpeg-turbo-$(JPEG_TURBO_VERSION).tar.gz
- JPEG_TURBO_SITE = https://downloads.sourceforge.net/project/libjpeg-turbo/$(JPEG_TURBO_VERSION)
- JPEG_TURBO_LICENSE = IJG (libjpeg), BSD-3-Clause (TurboJPEG), Zlib (SIMD)
-@@ -13,14 +13,14 @@ JPEG_TURBO_INSTALL_STAGING = YES
- JPEG_TURBO_PROVIDES = jpeg
- JPEG_TURBO_DEPENDENCIES = host-pkgconf
+-SYSDIG_VERSION = 0.19.1
++SYSDIG_VERSION = 0.23.1
+ SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
+ SYSDIG_LICENSE = GPL-2.0
+ SYSDIG_LICENSE_FILES = COPYING
+@@ -12,7 +12,7 @@ SYSDIG_CONF_OPTS = -DUSE_BUNDLED_LUAJIT=OFF -DUSE_BUNDLED_ZLIB=OFF \
+ 	-DUSE_BUNDLED_JSONCPP=OFF -DENABLE_DKMS=OFF -DUSE_BUNDLED_CURL=OFF \
+ 	-DUSE_BUNDLED_NCURSES=OFF -DUSE_BUNDLED_OPENSSL=OFF \
+ 	-DUSE_BUNDLED_JQ=OFF -DUSE_BUNDLED_B64=OFF
+-SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64
++SYSDIG_DEPENDENCIES = zlib luajit jsoncpp libcurl ncurses openssl jq libb64 elfutils
+ SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
  
--JPEG_TURBO_CONF_OPTS = --with-jpeg8
-+JPEG_TURBO_CONF_OPTS = -DWITH_JPEG8=ON
- 
- ifeq ($(BR2_PACKAGE_JPEG_SIMD_SUPPORT),y)
--JPEG_TURBO_CONF_OPTS += --with-simd
-+JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=ON
- # x86 simd support needs nasm
- JPEG_TURBO_DEPENDENCIES += $(if $(BR2_X86_CPU_HAS_MMX),host-nasm)
- else
--JPEG_TURBO_CONF_OPTS += --without-simd
-+JPEG_TURBO_CONF_OPTS += -DWITH_SIMD=OFF
- endif
- 
- define JPEG_TURBO_REMOVE_USELESS_TOOLS
-@@ -29,4 +29,4 @@ endef
- 
- JPEG_TURBO_POST_INSTALL_TARGET_HOOKS += JPEG_TURBO_REMOVE_USELESS_TOOLS
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+ # sysdig creates the module Makefile from a template, which contains a
