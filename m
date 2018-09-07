@@ -1,36 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:29 -0000
-Subject: [Buildroot] [git commit] package/botan: add optional dependency to
- xz
-Message-ID: <20180907111537.05D46811CD@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:30 -0000
+Subject: [Buildroot] [git commit] package/vlc: add optional dependency to
+ wayland
+Message-ID: <20180907111516.330697FB4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2fc8abde2b9bb46d44ee80c2bde4d0012672ef10
+commit: https://git.buildroot.net/buildroot/commit/?id=07d3f1d99f8dd8d191dc5e5f40391d87dd5dfa3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/botan/botan.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/vlc/vlc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 984ecdc039..eb817f62d9 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -60,6 +60,11 @@ BOTAN_DEPENDENCIES += sqlite
- BOTAN_CONF_OPTS += --with-sqlite
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 3dbaac1757..53a2b61633 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
+@@ -84,7 +84,6 @@ VLC_CONF_OPTS += \
+ 	--disable-vdpau \
+ 	--disable-vsxu \
+ 	--disable-wasapi \
+-	--disable-wayland \
+ 	--disable-x262 \
+ 	--disable-zvbi \
+ 	--enable-run-as-root
+@@ -529,6 +528,13 @@ else
+ VLC_CONF_OPTS += --disable-udev
  endif
  
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+BOTAN_DEPENDENCIES += xz
-+BOTAN_CONF_OPTS += --with-lzma
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++VLC_CONF_OPTS += --enable-wayland
++VLC_DEPENDENCIES += wayland
++else
++VLC_CONF_OPTS += --disable-wayland
 +endif
 +
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- BOTAN_DEPENDENCIES += zlib
- BOTAN_CONF_OPTS += --with-zlib
+ ifeq ($(BR2_PACKAGE_X264),y)
+ VLC_CONF_OPTS += --enable-x264
+ VLC_DEPENDENCIES += x264
