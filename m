@@ -1,37 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  7 Sep 2018 21:17:36 +0200
-Subject: [Buildroot] [PATCH 1/1] botan: fix build on arm without neon
-Message-ID: <20180907191736.19192-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 07 Sep 2018 19:25:13 +0000
+Subject: [Buildroot] [Bug 11116] Buildroot should set PYTHON_EGG_CACHE
+ instead of writing files to ~/.python-eggs
+In-Reply-To: <bug-11116-163@https.bugs.busybox.net/>
+References: <bug-11116-163@https.bugs.busybox.net/>
+Message-ID: <bug-11116-163-Y4Yok0GCJy@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-configure.py only supports --disable-neon
+https://bugs.busybox.net/show_bug.cgi?id=11116
 
-Fixes:
- - http://autobuild.buildroot.org/results/26eec7e20795068613616a7312681853232ec764
+Vitaliy Lotorev <lotorev@gmail.com> changed:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/botan/botan.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|---                         |INVALID
+             Status|NEW                         |RESOLVED
 
-diff --git a/package/botan/botan.mk b/package/botan/botan.mk
-index 39a2c4c72b..e352fab6c9 100644
---- a/package/botan/botan.mk
-+++ b/package/botan/botan.mk
-@@ -74,6 +74,10 @@ ifeq ($(BR2_POWERPC_CPU_HAS_ALTIVEC),)
- BOTAN_CONF_OPTS += --disable-altivec
- endif
- 
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),)
-+BOTAN_CONF_OPTS += --disable-neon
-+endif
-+
- define BOTAN_CONFIGURE_CMDS
- 	(cd $(@D); $(TARGET_MAKE_ENV) ./configure.py $(BOTAN_CONF_OPTS))
- endef
+--- Comment #2 from Vitaliy Lotorev <lotorev@gmail.com> ---
+> If I understand correctly, the problem is not that building a Python package will write something to $HOME/.python-eggs (because as far as I can see, it doesn't),
+
+It does on my side, it appears I was using custom python-serial package that
+used distutils instead of setuptools (which is used in recent Buildroot
+versions). After switching to stock Buildroot package no writing is done to
+$HOME/.python-egss directory anymore.
+
 -- 
-2.17.1
+You are receiving this mail because:
+You are on the CC list for the bug.
