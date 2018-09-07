@@ -1,198 +1,204 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:20 -0000
-Subject: [Buildroot] [git commit] package/squid: bump version to 4.2
-Message-ID: <20180907111526.604BB81583@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/synergy: bump version to
+ 2.0.12-beta
+Message-ID: <20180907111527.1B7B27FD98@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edbc6042677c59d42a1774016d48bad429dfe11f
+commit: https://git.buildroot.net/buildroot/commit/?id=0ccb8d005d4d5e5a83304f471341b61f2f8e5295
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added dependency for libxml2:
-http://www.squid-cache.org/Versions/v4/RELEASENOTES.html#ss2.9
+Normally we do not use beta versions but 1.x versions are incompatible
+with openssl-1.1.x and openssl support was dropped in synergy with
+version 2.0.4: https://github.com/symless/synergy-core/releases
 
-Rebased patch 0001, removed patches 0002 & 0003 after being applied
-upstream. Added sha256 hash for tarball.
+Also libcurl is not needed anymore since version 2.0.12.
+
+Added license hash, removed all patches since they fixed bugs which do
+not exist anymore.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/squid/0001-assume-get-certificate-ok.patch | 18 ++++++-----
- ...e-sure-endofName-never-exceeds-tagEnd-130.patch | 35 ----------------------
- ...t-IP-logging-for-transactions-without-a-c.patch | 31 -------------------
- package/squid/Config.in                            |  1 +
- package/squid/squid.hash                           |  9 +++---
- package/squid/squid.mk                             |  8 ++---
- 6 files changed, 21 insertions(+), 81 deletions(-)
+ ...1-allow-building-of-synergy-without-tests.patch | 86 ----------------------
+ ...change-output-path-when-building-in-debug.patch | 33 ---------
+ package/synergy/Config.in                          |  2 -
+ package/synergy/synergy.hash                       |  3 +-
+ package/synergy/synergy.mk                         |  4 +-
+ 5 files changed, 4 insertions(+), 124 deletions(-)
 
-diff --git a/package/squid/0001-assume-get-certificate-ok.patch b/package/squid/0001-assume-get-certificate-ok.patch
-index e26b50d7bb..d3c075a59a 100644
---- a/package/squid/0001-assume-get-certificate-ok.patch
-+++ b/package/squid/0001-assume-get-certificate-ok.patch
-@@ -2,16 +2,20 @@ The openssl get_certificate working test isn't cross compile friendly.
- Just assume it works ok since we're using a modern OpenSSL version.
- 
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
-+[Bernd: Rebased for 4.2]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- 
- diff -Nura squid-3.5.1.orig/configure.ac squid-3.5.1/configure.ac
- --- squid-3.5.1.orig/configure.ac	2015-01-27 11:09:15.035711981 -0300
- +++ squid-3.5.1/configure.ac	2015-01-27 11:09:25.829084482 -0300
--@@ -1342,7 +1342,7 @@
--     AC_DEFINE(USE_OPENSSL,1,[OpenSSL support is available])
-+@@ -1377,10 +1377,6 @@
-+       ])
-+     SQUID_STATE_ROLLBACK(check_SSL_CTX_get0_certificate)
-  
--     # check for other specific broken implementations
---    SQUID_CHECK_OPENSSL_GETCERTIFICATE_WORKS
--+    #SQUID_CHECK_OPENSSL_GETCERTIFICATE_WORKS
-+-    # check for other specific broken implementations
-+-    if test "x$missing_SSL_CTX_get0_certificate" = "xyes"; then
-+-      SQUID_CHECK_OPENSSL_GETCERTIFICATE_WORKS
-+-    fi
-      SQUID_CHECK_OPENSSL_CONST_SSL_METHOD
--     SQUID_CHECK_OPENSSL_TXTDB
--     SQUID_CHECK_OPENSSL_HELLO_OVERWRITE_HACK
-+     SQUID_CHECK_OPENSSL_CONST_CRYPTO_EX_DATA
-+     SQUID_CHECK_OPENSSL_CONST_SSL_SESSION_CB_ARG
-diff --git a/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch b/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
+diff --git a/package/synergy/0001-allow-building-of-synergy-without-tests.patch b/package/synergy/0001-allow-building-of-synergy-without-tests.patch
 deleted file mode 100644
-index 6e71677a19..0000000000
---- a/package/squid/0003-ESI-make-sure-endofName-never-exceeds-tagEnd-130.patch
+index 0c550eec16..0000000000
+--- a/package/synergy/0001-allow-building-of-synergy-without-tests.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From eb2db98a676321b814fc4a51c4fb7928a8bb45d9 Mon Sep 17 00:00:00 2001
--From: Amos Jeffries <yadij@users.noreply.github.com>
--Date: Fri, 19 Jan 2018 13:54:14 +1300
--Subject: [PATCH] ESI: make sure endofName never exceeds tagEnd (#130)
+@@ -1,86 +0,0 @@
+-From cb6b00947ea125c3246654bb3dd3986b64e974d4 Mon Sep 17 00:00:00 2001
+-From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+-Date: Mon, 27 Mar 2017 21:51:59 +0200
+-Subject: [PATCH] allow building of synergy without tests
 -
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Upstream status: https://github.com/symless/synergy/pull/5943
+-
+-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
 ----
-- src/esi/CustomParser.cc | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
+- CMakeLists.txt                             | 2 ++
+- src/CMakeLists.txt                         | 2 +-
+- src/lib/synergy/KeyMap.h                   | 4 ++++
+- src/test/unittests/synergy/KeyMapTests.cpp | 2 ++
+- 4 files changed, 9 insertions(+), 1 deletion(-)
 -
--diff --git a/src/esi/CustomParser.cc b/src/esi/CustomParser.cc
--index d86d2d309..db634d921 100644
----- a/src/esi/CustomParser.cc
--+++ b/src/esi/CustomParser.cc
--@@ -121,7 +121,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 94c474e..cceac45 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -39,6 +39,8 @@ endif()
+- # First, declare project (important for prerequisite checks).
+- project(synergy C CXX)
 - 
--             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
+-+option(BUILD_TESTS "Override building of tests" ON)
+-+
+- # put binaries in a different dir to make them easier to find.
+- set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+- set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+-index 237ba48..96dadd2 100644
+---- a/src/CMakeLists.txt
+-+++ b/src/CMakeLists.txt
+-@@ -50,6 +50,6 @@ add_subdirectory(lib)
+- add_subdirectory(cmd)
+- add_subdirectory(micro)
 - 
---            if (endofName > tagEnd)
--+            if (!endofName || endofName > tagEnd)
--                 endofName = const_cast<char *>(tagEnd);
+--if (NOT ${CMAKE_SYSTEM_NAME} MATCHES "IRIX")
+-+if (BUILD_TESTS AND NOT ${CMAKE_SYSTEM_NAME} MATCHES "IRIX")
+- 	add_subdirectory(test)
+- endif()
+-diff --git a/src/lib/synergy/KeyMap.h b/src/lib/synergy/KeyMap.h
+-index de869e6..51e7e07 100644
+---- a/src/lib/synergy/KeyMap.h
+-+++ b/src/lib/synergy/KeyMap.h
+-@@ -24,7 +24,9 @@
+- #include "common/stdset.h"
+- #include "common/stdvector.h"
 - 
--             *endofName = '\0';
--@@ -214,7 +214,7 @@ ESICustomParser::parse(char const *dataToParse, size_t const lengthOfData, bool
+-+#ifdef TEST_ENV
+- #include "gtest/gtest_prod.h"
+-+#endif
 - 
--             char * endofName = strpbrk(const_cast<char *>(tag), w_space);
+- namespace synergy {
 - 
---            if (endofName > tagEnd)
--+            if (!endofName || endofName > tagEnd)
--                 endofName = const_cast<char *>(tagEnd);
+-@@ -326,6 +328,7 @@ public:
 - 
--             *endofName = '\0';
+- 	//@}
+- 
+-+#ifdef TEST_ENV
+- private:
+- 	FRIEND_TEST(KeyMapTests,
+- 				findBestKey_requiredDown_matchExactFirstItem);
+-@@ -340,6 +343,7 @@ private:
+- 	FRIEND_TEST(KeyMapTests,
+- 				findBestKey_onlyOneRequiredDown_matchTwoRequiredChangesItem);
+- 	FRIEND_TEST(KeyMapTests, findBestKey_noRequiredDown_cannotMatch);
+-+#endif
+- 
+- private:
+- 	//! Ways to synthesize a key
+-diff --git a/src/test/unittests/synergy/KeyMapTests.cpp b/src/test/unittests/synergy/KeyMapTests.cpp
+-index 1a195af..fe2a5e4 100644
+---- a/src/test/unittests/synergy/KeyMapTests.cpp
+-+++ b/src/test/unittests/synergy/KeyMapTests.cpp
+-@@ -15,6 +15,8 @@
+-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-  */
+- 
+-+#define TEST_ENV
+-+
+- #include "synergy/KeyMap.h"
+- 
+- #include "test/global/gtest.h"
 --- 
--2.11.0
+-2.7.4
 -
-diff --git a/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch b/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
+diff --git a/package/synergy/0002-do-not-change-output-path-when-building-in-debug.patch b/package/synergy/0002-do-not-change-output-path-when-building-in-debug.patch
 deleted file mode 100644
-index 51fff30034..0000000000
---- a/package/squid/0004-Fix-indirect-IP-logging-for-transactions-without-a-c.patch
+index a261b6b10c..0000000000
+--- a/package/synergy/0002-do-not-change-output-path-when-building-in-debug.patch
 +++ /dev/null
-@@ -1,31 +0,0 @@
--From 8232b83d3fa47a1399f155cb829db829369fbae9 Mon Sep 17 00:00:00 2001
--From: squidadm <squidadm@users.noreply.github.com>
--Date: Sun, 21 Jan 2018 08:07:08 +1300
--Subject: [PATCH] Fix indirect IP logging for transactions without a client
-- connection (#129) (#136)
+@@ -1,33 +0,0 @@
+-From 2868add1b7375ef4e2427edb85e27759c5ee226b Mon Sep 17 00:00:00 2001
+-From: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+-Date: Fri, 31 Mar 2017 20:05:30 +0200
+-Subject: [PATCH] do not change output path when building in debug
 -
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
 ----
-- src/client_side_request.cc | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
+- CMakeLists.txt | 9 ---------
+- 1 file changed, 9 deletions(-)
 -
--diff --git a/src/client_side_request.cc b/src/client_side_request.cc
--index be124f355..203f89d46 100644
----- a/src/client_side_request.cc
--+++ b/src/client_side_request.cc
--@@ -488,9 +488,9 @@ clientFollowXForwardedForCheck(allow_t answer, void *data)
--         * Ensure that the access log shows the indirect client
--         * instead of the direct client.
--         */
---        ConnStateData *conn = http->getConn();
---        conn->log_addr = request->indirect_client_addr;
---        http->al->cache.caddr = conn->log_addr;
--+        http->al->cache.caddr = request->indirect_client_addr;
--+        if (ConnStateData *conn = http->getConn())
--+            conn->log_addr = request->indirect_client_addr;
--     }
--     request->x_forwarded_for_iterator.clean();
--     request->flags.done_follow_x_forwarded_for = true;
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 94c474e..1080e41 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -43,15 +43,6 @@ project(synergy C CXX)
+- set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+- set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+- 
+--# for unix, put debug files in a separate bin "debug" dir.
+--# release bin files should stay in the root of the bin dir.
+--if (CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+--	if (CMAKE_BUILD_TYPE STREQUAL Debug)
+--		set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/debug)
+--		set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/debug)
+--	endif()
+--endif()
+--
+- # Set some easy to type variables.
+- set(root_dir ${CMAKE_SOURCE_DIR})
+- set(cmake_dir ${root_dir}/res)
 --- 
--2.11.0
+-2.7.4
 -
-diff --git a/package/squid/Config.in b/package/squid/Config.in
-index 141a5029d2..c1eb25c6b9 100644
---- a/package/squid/Config.in
-+++ b/package/squid/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_SQUID
- 	# needs fork()
- 	depends on BR2_USE_MMU
- 	select BR2_PACKAGE_LIBCAP
-+	select BR2_PACKAGE_LIBXML2
+diff --git a/package/synergy/Config.in b/package/synergy/Config.in
+index 3bb8b8e98c..6005363dcb 100644
+--- a/package/synergy/Config.in
++++ b/package/synergy/Config.in
+@@ -4,8 +4,6 @@ config BR2_PACKAGE_SYNERGY
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_LIBCURL
+-	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_XLIB_LIBX11
+ 	select BR2_PACKAGE_XLIB_LIBXTST
  	help
- 	  Caching proxy for the Web supporting HTTP, HTTPS, FTP, and
- 	  more.
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 8787cb25ef..47c7e1bb21 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,5 +1,6 @@
--# From http://www.squid-cache.org/Versions/v3/3.5/squid-3.5.27.tar.xz.asc
--md5 39ef8199675d48a314b540f92c00c545 squid-3.5.27.tar.xz
--sha1 1e69c96d13cd49844da3bcf33a0b428fbe7b6f77 squid-3.5.27.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.2.tar.xz.asc
-+md5 2cf3f5f183d04322d798f98ea5ead43f squid-4.2.tar.xz
-+sha1 77fd6f06e6028780faf85ba7e7e9aef0922e9dc0 squid-4.2.tar.xz
- # Locally calculated
--sha256 58f5d05257af1fb964fde20e134d660fac9afa86b6fd8c70d63ead63068378fa COPYING
-+sha256 994807762c59991b32449caf29418fd0ec9d2329746b18eb19bd930b6806d208 squid-4.2.tar.xz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 2d21ad8858..6675cab790 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,15 +4,14 @@
+diff --git a/package/synergy/synergy.hash b/package/synergy/synergy.hash
+index 52f9d74d6b..664855fa33 100644
+--- a/package/synergy/synergy.hash
++++ b/package/synergy/synergy.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256  85c388f93881d741981ce3c675e840a52a76883cb2cea1da306c0c453c5d7d9b  synergy-v1.8.8-stable.tar.gz
++sha256 06d1cb1d43251b0b624212652e9c0ab2657d124ac4f7e7d0c7f3e448c953c2a8  synergy-v2.0.12-beta.tar.gz
++sha256 4921009cd76e7d38a8e873c362b25dbaf032c320bbb36a40dec775ddbdcbe1d8  LICENSE
+diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
+index 76a4004f06..d357415689 100644
+--- a/package/synergy/synergy.mk
++++ b/package/synergy/synergy.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--SQUID_VERSION_MAJOR = 3.5
--SQUID_VERSION = $(SQUID_VERSION_MAJOR).27
-+SQUID_VERSION = 4.2
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
--SQUID_SITE = http://www.squid-cache.org/Versions/v3/$(SQUID_VERSION_MAJOR)
-+SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
- SQUID_LICENSE_FILES = COPYING
- # For 0001-assume-get-certificate-ok.patch
- SQUID_AUTORECONF = YES
--SQUID_DEPENDENCIES = libcap host-libcap host-pkgconf \
-+SQUID_DEPENDENCIES = libcap host-libcap libxml2 host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
- SQUID_CONF_ENV = \
- 	ac_cv_epoll_works=yes \
-@@ -21,6 +20,7 @@ SQUID_CONF_ENV = \
- 	ac_cv_func___va_copy=yes \
- 	ac_cv_func_strnstr=no \
- 	ac_cv_have_squid=yes \
-+	ac_cv_libxml2_include="-I$(STAGING_DIR)/usr/include/libxml2" \
- 	BUILDCXX="$(HOSTCXX)" \
- 	BUILDCXXFLAGS="$(HOST_CXXFLAGS)"
- SQUID_CONF_OPTS = \
+-SYNERGY_VERSION = v1.8.8-stable
++SYNERGY_VERSION = v2.0.12-beta
+ SYNERGY_SITE = $(call github,symless,synergy,$(SYNERGY_VERSION))
+ SYNERGY_LICENSE = GPL-2.0
+ SYNERGY_LICENSE_FILES = LICENSE
+-SYNERGY_DEPENDENCIES = libcurl openssl xlib_libX11 xlib_libXtst
++SYNERGY_DEPENDENCIES = xlib_libX11 xlib_libXtst
+ 
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
+ SYNERGY_DEPENDENCIES += xlib_libXext
