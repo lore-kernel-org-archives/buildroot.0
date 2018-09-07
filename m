@@ -1,95 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:15:47 -0000
-Subject: [Buildroot] [git commit] perl-dbi: new package
-Message-ID: <20180907111452.E84E18019E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] perl-file-slurp: new package
+Message-ID: <20180907111453.9C52A7FF08@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=741bae2fe584820806dd2abf6677f9d8b62068bf
+commit: https://git.buildroot.net/buildroot/commit/?id=61bc823035249da55d37364c56c79fae278be4ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Christopher McCrory <chrismcc@gmail.com>
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/perl-dbi/Config.in     | 10 ++++++++++
- package/perl-dbi/perl-dbi.hash |  6 ++++++
- package/perl-dbi/perl-dbi.mk   | 13 +++++++++++++
- 5 files changed, 31 insertions(+)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/perl-file-slurp/Config.in            |  7 +++++++
+ package/perl-file-slurp/perl-file-slurp.hash |  6 ++++++
+ package/perl-file-slurp/perl-file-slurp.mk   | 13 +++++++++++++
+ 5 files changed, 28 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ab25a63677..3c80c20cf0 100644
+index a1c037aedb..8348ce102f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -486,6 +486,7 @@ F:	package/perl-astro-suntime/
- F:	package/perl-class-std/
- F:	package/perl-data-uuid/
+@@ -488,6 +488,7 @@ F:	package/perl-data-uuid/
  F:	package/perl-date-manip/
-+F:	package/perl-dbi/
+ F:	package/perl-dbi/
+ F:	package/perl-device-serialport/
++F:	package/perl-file-slurp/
  
  N:	Clayton Shotwell <clayton.shotwell@rockwellcollins.com>
  F:	package/audit/
 diff --git a/package/Config.in b/package/Config.in
-index 461a004ef3..8d80c41560 100644
+index 23a5628f50..ba5b0e1699 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -676,6 +676,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-data-uuid/Config.in"
- 	source "package/perl-date-manip/Config.in"
- 	source "package/perl-datetime-tiny/Config.in"
-+	source "package/perl-dbi/Config.in"
- 	source "package/perl-digest-hmac/Config.in"
- 	source "package/perl-digest-md5/Config.in"
- 	source "package/perl-digest-sha1/Config.in"
-diff --git a/package/perl-dbi/Config.in b/package/perl-dbi/Config.in
+@@ -684,6 +684,7 @@ menu "Perl libraries/modules"
+ 	source "package/perl-encode-detect/Config.in"
+ 	source "package/perl-encode-locale/Config.in"
+ 	source "package/perl-file-listing/Config.in"
++	source "package/perl-file-slurp/Config.in"
+ 	source "package/perl-file-util/Config.in"
+ 	source "package/perl-gd/Config.in"
+ 	source "package/perl-gdgraph/Config.in"
+diff --git a/package/perl-file-slurp/Config.in b/package/perl-file-slurp/Config.in
 new file mode 100644
-index 0000000000..069669b9bc
+index 0000000000..69a8871717
 --- /dev/null
-+++ b/package/perl-dbi/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PERL_DBI
-+	bool "perl-dbi"
-+	depends on !BR2_STATIC_LIBS
++++ b/package/perl-file-slurp/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PERL_FILE_SLURP
++	bool "perl-file-slurp"
 +	help
-+	  Database independent interface for Perl
++	  Simple and Efficient Reading/Writing/Modifying of Complete
++	  Files
 +
-+	  http://dbi.perl.org/
-+
-+comment "perl-dbi needs a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-diff --git a/package/perl-dbi/perl-dbi.hash b/package/perl-dbi/perl-dbi.hash
++	  https://metacpan.org/release/File-Slurp
+diff --git a/package/perl-file-slurp/perl-file-slurp.hash b/package/perl-file-slurp/perl-file-slurp.hash
 new file mode 100644
-index 0000000000..1d0b7e9ad5
+index 0000000000..18f9e65ced
 --- /dev/null
-+++ b/package/perl-dbi/perl-dbi.hash
++++ b/package/perl-file-slurp/perl-file-slurp.hash
 @@ -0,0 +1,6 @@
 +# retrieved by scancpan from http://cpan.metacpan.org/
-+md5    e77fd37fcf77fc88fde029c1b75ded54 DBI-1.641.tar.gz
-+sha256 5509e532cdd0e3d91eda550578deaac29e2f008a12b64576e8c261bb92e8c2c1 DBI-1.641.tar.gz
++md5    7d584cd15c4f8b9547765eff8c4ef078 File-Slurp-9999.19.tar.gz
++sha256 ce29ebe995097ebd6e9bc03284714cdfa0c46dc94f6b14a56980747ea3253643 File-Slurp-9999.19.tar.gz
 +
 +# computed by scancpan
-+sha256 33453c8b0d8d474a42669ac702a13c20f39c91a34b3df4e6ca778fc2f0f711c7 LICENSE
-diff --git a/package/perl-dbi/perl-dbi.mk b/package/perl-dbi/perl-dbi.mk
++sha256 17e638d011c04b1d39b300c07ccd0c57d7857b9ccdb9fe7abce1b15f0e7b0c20 README
+diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
 new file mode 100644
-index 0000000000..f7ae6ca5a1
+index 0000000000..32773ddbbc
 --- /dev/null
-+++ b/package/perl-dbi/perl-dbi.mk
++++ b/package/perl-file-slurp/perl-file-slurp.mk
 @@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# perl-dbi
++# perl-file-slurp
 +#
 +################################################################################
 +
-+PERL_DBI_VERSION = 1.641
-+PERL_DBI_SOURCE = DBI-$(PERL_DBI_VERSION).tar.gz
-+PERL_DBI_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TI/TIMB
-+PERL_DBI_LICENSE = Artistic or GPL-1.0+
-+PERL_DBI_LICENSE_FILES = LICENSE
++PERL_FILE_SLURP_VERSION = 9999.19
++PERL_FILE_SLURP_SOURCE = File-Slurp-$(PERL_FILE_SLURP_VERSION).tar.gz
++PERL_FILE_SLURP_SITE = $(BR2_CPAN_MIRROR)/authors/id/U/UR/URI
++PERL_FILE_SLURP_LICENSE = Artistic or GPL-1.0+
++PERL_FILE_SLURP_LICENSE_FILES = README
 +
 +$(eval $(perl-package))
