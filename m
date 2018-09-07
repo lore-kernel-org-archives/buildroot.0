@@ -1,449 +1,267 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:36 -0000
-Subject: [Buildroot] [git commit] package/vtun: bump version to 3.0.4
-Message-ID: <20180907111534.0155D7FFA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/trousers: bump version to 0.3.14
+Message-ID: <20180907111533.2A6087FE3E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2074e11ed555770f036eb60a111f38967fe0633
+commit: https://git.buildroot.net/buildroot/commit/?id=ece420b121713cfb414a8beb35b89beeaafc686b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch 0003, upstream fixes configure.in.
-Added patch from Fedora to fix OpenSSL 1.1.x. build.
-Added upstream hashes and license hash.
+Removed patches 0001 & 0003, applied upstream.
+Rebased patches 0002 & 0004 and renumbered them.
+Added sha256 hashes for tarball and license file.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vtun/0003-fixup-configure.in.patch |  92 ---------
- package/vtun/0003-openssl11.patch          | 294 +++++++++++++++++++++++++++++
- package/vtun/vtun.hash                     |   6 +-
- package/vtun/vtun.mk                       |   2 +-
- 4 files changed, 300 insertions(+), 94 deletions(-)
+ ...mpiler-understands-pie-and-relro-options.patch} | 17 ++--
+ ...emove-inline-for-read_data-and-write_data.patch | 94 ----------------------
+ ...-getpwent_r-is-available-before-using-it.patch} |  8 +-
+ ..._param-include-limits.h-to-fix-musl-build.patch | 29 -------
+ package/trousers/trousers.hash                     |  9 ++-
+ package/trousers/trousers.mk                       |  2 +-
+ 6 files changed, 20 insertions(+), 139 deletions(-)
 
-diff --git a/package/vtun/0003-fixup-configure.in.patch b/package/vtun/0003-fixup-configure.in.patch
-deleted file mode 100644
-index cb2ac67aa2..0000000000
---- a/package/vtun/0003-fixup-configure.in.patch
-+++ /dev/null
-@@ -1,92 +0,0 @@
--configure.in: minimal syntax fixup for autoreconf
--
--This is the strictly minimal syntax fixups to make autoreconf happy...
--
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
-----
--Note: configure.in is still full of incorrect syntax, but fixing it is
--a task for another day, and would have to be upstreamed. But upstream
--looks to be moribund at best, if not dead... :-(
--
--So, keep it for ourselves for now... Too bad, vtun is really helpfull.
--
----- vtun-3.0.3.orig/configure.in	2013-02-16 23:54:52.582451817 +0100
--+++ vtun-3.0.3/configure.in	2013-02-17 00:03:13.640887353 +0100
--@@ -110,10 +110,10 @@
-- AC_SEARCH_LIBS(nanosleep, rt posix4)
-- 
-- dnl Check for setproctitle in libutil
---AC_SEARCH_LIBS(setproctitle, util bsd, AC_DEFINE(HAVE_SETPROC_TITLE) )
--+AC_SEARCH_LIBS(setproctitle, util bsd, AC_DEFINE([HAVE_SETPROC_TITLE],[],[Define to set title in /proc]) )
-- 
-- if test "$SHAPER" = "yes"; then
---   AC_DEFINE(HAVE_SHAPER)
--+   AC_DEFINE([HAVE_SHAPER],[],[Define to use shapper])
-- fi
-- 
-- if test "$ZLIB" = "yes"; then
--@@ -121,7 +121,7 @@
--    AC_CHECKING( for ZLIB Library and Header files ... )
--    AC_CHECK_LIB(z, deflate,
-- 	LIBS="$LIBS -lz"
---	AC_DEFINE(HAVE_ZLIB),
--+	AC_DEFINE([HAVE_ZLIB],[],[Define to use ZLIB]),
-- 	AC_MSG_ERROR( Zlib library not found.)
--    )
-- fi
--@@ -148,7 +148,7 @@
-- 	    AC_CHECK_LIB($I, lzo1x_decompress,
-- 	    [
-- 	          LIBS="$LIBS -l"$I
---	       AC_DEFINE(HAVE_LZO)
--+	       AC_DEFINE([HAVE_LZO],[],[Define to use LZO])
-- 	          havelzo=1
-- 	      ]
-- 	    )
--@@ -180,8 +180,8 @@
-- 	AC_CHECK_LIB(crypto, BF_set_key,
-- 	    [
-- 	       LIBS="$LIBS -lcrypto"
---	       AC_DEFINE(HAVE_SSL)
---	       AC_DEFINE(HAVE_SSL_BLOWFISH)
--+	       AC_DEFINE([HAVE_SSL],[],[Define to use SSL])
--+	       AC_DEFINE([HAVE_SSL_BLOWFISH],[],[Define to use blowfish])
-- 	    ],
-- 	    AC_MSG_ERROR( SSL library not found. )
-- 	),
--@@ -196,7 +196,7 @@
--     $SSL_HDR_DIR ,
-- 	AC_CHECK_LIB(crypto, AES_set_encrypt_key,
-- 	    [
---	       AC_DEFINE(HAVE_SSL_AES)
--+	       AC_DEFINE([HAVE_SSL_AES],[],[Define to use AES])
-- 	    ],
-- 	    AC_MSG_ERROR( AES library not found. )
-- 	),
--@@ -211,7 +211,7 @@
--     $SSL_HDR_DIR ,
-- 	AC_CHECK_LIB(crypto, EVP_EncryptInit,
-- 	    [
---	       AC_DEFINE(HAVE_SSL_EVP)
--+	       AC_DEFINE([HAVE_SSL_EVP],[],Define to use EVP)
-- 	    ],
-- 	    AC_MSG_ERROR( EVP library not found. )
-- 	),
--@@ -220,7 +220,7 @@
-- fi
-- 
-- if test "$NATHACK" = "yes"; then
---   AC_DEFINE(ENABLE_NAT_HACK)
--+   AC_DEFINE([ENABLE_NAT_HACK],[],[Define to use NAT hack])
-- fi
-- 
-- if test "$SOCKS" = "yes"; then
--@@ -274,6 +274,6 @@
-- REL=`echo 'BRANCH-3_X' | tr -d '$: \-' | sed 's/^[A-Za-z]*//' | sed 's/\_/\./'`
-- changequote([,])
-- 
---AC_DEFINE_UNQUOTED(VTUN_VER, "$REL `date '+%m/%d/%Y'`")
--+AC_DEFINE_UNQUOTED([VTUN_VER], ["$REL `date '+%m/%d/%Y'`"], [vtun version])
-- 
-- AC_OUTPUT(Makefile)
-diff --git a/package/vtun/0003-openssl11.patch b/package/vtun/0003-openssl11.patch
-new file mode 100644
-index 0000000000..2c6bb812fc
---- /dev/null
-+++ b/package/vtun/0003-openssl11.patch
-@@ -0,0 +1,294 @@
-+Fix build with OpenSSL 1.1.x
-+
-+Extracted vtun-openssl.patch from
-+http://dl.fedoraproject.org/pub/fedora/linux/releases/27/Everything/source/tree/Packages/v/vtun-3.0.4-4.fc27.src.rpm
-+
+diff --git a/package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch b/package/trousers/0001-Check-if-the-compiler-understands-pie-and-relro-options.patch
+similarity index 97%
+rename from package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch
+rename to package/trousers/0001-Check-if-the-compiler-understands-pie-and-relro-options.patch
+index 3275b76a2c..b1179eb4aa 100644
+--- a/package/trousers/0002-Check-if-the-compiler-understands-pie-and-relro-options.patch
++++ b/package/trousers/0001-Check-if-the-compiler-understands-pie-and-relro-options.patch
+@@ -8,8 +8,10 @@ executables, and -Wl,-z,relro turns on read-only relocation support in gcc.
+ Add checks to ensure that the compiler and linker understand these options.
+ 
+ Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
++[Bernd: Rebased for version 0.3.14]
 +Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+
-+diff -NarU5 a/lfd_encrypt.c b/lfd_encrypt.c
-+--- a/lfd_encrypt.c	2016-10-01 17:27:51.000000000 -0400
-++++ b/lfd_encrypt.c	2017-03-20 08:43:48.013308435 -0400
-+@@ -93,15 +93,15 @@
-+ static int dec_init_first_time;
-+ static unsigned long sequence_num;
-+ static char * pkey;
-+ static char * iv_buf;
-+ 
-+-static EVP_CIPHER_CTX ctx_enc;	/* encrypt */
-+-static EVP_CIPHER_CTX ctx_dec;	/* decrypt */
-++static EVP_CIPHER_CTX *ctx_enc;	/* encrypt */
-++static EVP_CIPHER_CTX *ctx_dec;	/* decrypt */
-+ 
-+-static EVP_CIPHER_CTX ctx_enc_ecb;	/* sideband ecb encrypt */
-+-static EVP_CIPHER_CTX ctx_dec_ecb;	/* sideband ecb decrypt */
-++static EVP_CIPHER_CTX *ctx_enc_ecb;	/* sideband ecb encrypt */
-++static EVP_CIPHER_CTX *ctx_dec_ecb;	/* sideband ecb decrypt */
-+ 
-+ static int send_msg(int len, char *in, char **out);
-+ static int recv_msg(int len, char *in, char **out);
-+ static int send_ib_mesg(int *len, char **in);
-+ static int recv_ib_mesg(int *len, char **in);
-+@@ -180,37 +180,37 @@
-+       case VTUN_ENC_AES256CBC:
-+          blocksize = 16;
-+          keysize = 32;
-+          sb_init = 1;
-+          cipher_type = EVP_aes_256_ecb();
-+-         pctx_enc = &ctx_enc_ecb;
-+-         pctx_dec = &ctx_dec_ecb;
-++         pctx_enc = ctx_enc_ecb;
-++         pctx_dec = ctx_dec_ecb;
-+       break;
-+       
-+       case VTUN_ENC_AES256ECB:
-+          blocksize = 16;
-+          keysize = 32;
-+-         pctx_enc = &ctx_enc;
-+-         pctx_dec = &ctx_dec;
-++         pctx_enc = ctx_enc;
-++         pctx_dec = ctx_dec;
-+          cipher_type = EVP_aes_256_ecb();
-+          strcpy(cipher_name,"AES-256-ECB");
-+       break;      
-+       case VTUN_ENC_AES128OFB:
-+       case VTUN_ENC_AES128CFB:
-+       case VTUN_ENC_AES128CBC:
-+          blocksize = 16;
-+          keysize = 16;
-+          sb_init=1;
-+          cipher_type = EVP_aes_128_ecb();
-+-         pctx_enc = &ctx_enc_ecb;
-+-         pctx_dec = &ctx_dec_ecb;
-++         pctx_enc = ctx_enc_ecb;
-++         pctx_dec = ctx_dec_ecb;
-+       break;
-+       case VTUN_ENC_AES128ECB:
-+          blocksize = 16;
-+          keysize = 16;
-+-         pctx_enc = &ctx_enc;
-+-         pctx_dec = &ctx_dec;
-++         pctx_enc = ctx_enc;
-++         pctx_dec = ctx_dec;
-+          cipher_type = EVP_aes_128_ecb();
-+          strcpy(cipher_name,"AES-128-ECB");
-+       break;
-+ 
-+       case VTUN_ENC_BF256OFB:
-+@@ -219,20 +219,20 @@
-+          blocksize = 8;
-+          keysize = 32;
-+          var_key = 1;
-+          sb_init = 1;
-+          cipher_type = EVP_bf_ecb();
-+-         pctx_enc = &ctx_enc_ecb;
-+-         pctx_dec = &ctx_dec_ecb;
-++         pctx_enc = ctx_enc_ecb;
-++         pctx_dec = ctx_dec_ecb;
-+       break;
-+ 
-+       case VTUN_ENC_BF256ECB:
-+          blocksize = 8;
-+          keysize = 32;
-+          var_key = 1;
-+-         pctx_enc = &ctx_enc;
-+-         pctx_dec = &ctx_dec;
-++         pctx_enc = ctx_enc;
-++         pctx_dec = ctx_dec;
-+          cipher_type = EVP_bf_ecb();
-+          strcpy(cipher_name,"Blowfish-256-ECB");
-+       break;
-+ 
-+       case VTUN_ENC_BF128OFB:
-+@@ -241,26 +241,28 @@
-+          blocksize = 8;
-+          keysize = 16;
-+          var_key = 1;
-+          sb_init = 1;
-+          cipher_type = EVP_bf_ecb();
-+-         pctx_enc = &ctx_enc_ecb;
-+-         pctx_dec = &ctx_dec_ecb;
-++         pctx_enc = ctx_enc_ecb;
-++         pctx_dec = ctx_dec_ecb;
-+       break;
-+       case VTUN_ENC_BF128ECB: /* blowfish 128 ecb is the default */
-+       default:
-+          blocksize = 8;
-+          keysize = 16;
-+          var_key = 1;
-+-         pctx_enc = &ctx_enc;
-+-         pctx_dec = &ctx_dec;
-++         pctx_enc = ctx_enc;
-++         pctx_dec = ctx_dec;
-+          cipher_type = EVP_bf_ecb();
-+          strcpy(cipher_name,"Blowfish-128-ECB");
-+       break;
-+    } /* switch(host->cipher) */
-+ 
-+    if (prep_key(&pkey, keysize, host) != 0) return -1;
-++   pctx_enc = EVP_CIPHER_CTX_new();
-++   pctx_dec = EVP_CIPHER_CTX_new();
-+    EVP_CIPHER_CTX_init(pctx_enc);
-+    EVP_CIPHER_CTX_init(pctx_dec);
-+    EVP_EncryptInit_ex(pctx_enc, cipher_type, NULL, NULL, NULL);
-+    EVP_DecryptInit_ex(pctx_dec, cipher_type, NULL, NULL, NULL);
-+    if (var_key)
-+@@ -292,14 +294,14 @@
-+    free_key(pkey); pkey = NULL;
-+ 
-+    lfd_free(enc_buf); enc_buf = NULL;
-+    lfd_free(dec_buf); dec_buf = NULL;
-+ 
-+-   EVP_CIPHER_CTX_cleanup(&ctx_enc);
-+-   EVP_CIPHER_CTX_cleanup(&ctx_dec);
-+-   EVP_CIPHER_CTX_cleanup(&ctx_enc_ecb);
-+-   EVP_CIPHER_CTX_cleanup(&ctx_dec_ecb);
-++   EVP_CIPHER_CTX_free(ctx_enc);
-++   EVP_CIPHER_CTX_free(ctx_dec);
-++   EVP_CIPHER_CTX_free(ctx_enc_ecb);
-++   EVP_CIPHER_CTX_free(ctx_dec_ecb);
-+ 
-+    return 0;
-+ }
-+ 
-+ static int encrypt_buf(int len, char *in, char **out)
-+@@ -321,11 +323,11 @@
-+    
-+    memset(in_ptr+len, pad, pad);
-+    outlen=len+pad;
-+    if (pad == blocksize)
-+       RAND_bytes(in_ptr+len, blocksize-1);
-+-   EVP_EncryptUpdate(&ctx_enc, out_ptr, &outlen, in_ptr, len+pad);
-++   EVP_EncryptUpdate(ctx_enc, out_ptr, &outlen, in_ptr, len+pad);
-+    *out = enc_buf;
-+ 
-+    sequence_num++;
-+ 
-+    return outlen+msg_len;
-+@@ -341,11 +343,11 @@
-+    in = *out;
-+    in_ptr = in;
-+ 
-+    outlen=len;
-+    if (!len) return 0;
-+-   EVP_DecryptUpdate(&ctx_dec, out_ptr, &outlen, in_ptr, len);
-++   EVP_DecryptUpdate(ctx_dec, out_ptr, &outlen, in_ptr, len);
-+    recv_ib_mesg(&outlen, &out_ptr);
-+    if (!outlen) return 0;
-+    tmp_ptr = out_ptr + outlen; tmp_ptr--;
-+    pad = *tmp_ptr;
-+    if (pad < 1 || pad > blocksize) {
-+@@ -429,17 +431,18 @@
-+       /* if we're here, something weird's going on */
-+          return -1;
-+       break;
-+    } /* switch(cipher) */
-+ 
-+-   EVP_CIPHER_CTX_init(&ctx_enc);
-+-   EVP_EncryptInit_ex(&ctx_enc, cipher_type, NULL, NULL, NULL);
-++   ctx_enc = EVP_CIPHER_CTX_new();
-++   EVP_CIPHER_CTX_init(ctx_enc);
-++   EVP_EncryptInit_ex(ctx_enc, cipher_type, NULL, NULL, NULL);
-+    if (var_key)
-+-      EVP_CIPHER_CTX_set_key_length(&ctx_enc, keysize);
-+-   EVP_EncryptInit_ex(&ctx_enc, NULL, NULL, pkey, NULL);
-+-   EVP_EncryptInit_ex(&ctx_enc, NULL, NULL, NULL, iv);
-+-   EVP_CIPHER_CTX_set_padding(&ctx_enc, 0);
-++      EVP_CIPHER_CTX_set_key_length(ctx_enc, keysize);
-++   EVP_EncryptInit_ex(ctx_enc, NULL, NULL, pkey, NULL);
-++   EVP_EncryptInit_ex(ctx_enc, NULL, NULL, NULL, iv);
-++   EVP_CIPHER_CTX_set_padding(ctx_enc, 0);
-+    if (enc_init_first_time)
-+    {
-+       sprintf(tmpstr,"%s encryption initialized", cipher_name);
-+       vtun_syslog(LOG_INFO, tmpstr);
-+       enc_init_first_time = 0;
-+@@ -519,17 +522,18 @@
-+       /* if we're here, something weird's going on */
-+          return -1;
-+       break;
-+    } /* switch(cipher) */
-+ 
-+-   EVP_CIPHER_CTX_init(&ctx_dec);
-+-   EVP_DecryptInit_ex(&ctx_dec, cipher_type, NULL, NULL, NULL);
-++   ctx_dec = EVP_CIPHER_CTX_new();
-++   EVP_CIPHER_CTX_init(ctx_dec);
-++   EVP_DecryptInit_ex(ctx_dec, cipher_type, NULL, NULL, NULL);
-+    if (var_key)
-+-      EVP_CIPHER_CTX_set_key_length(&ctx_dec, keysize);
-+-   EVP_DecryptInit_ex(&ctx_dec, NULL, NULL, pkey, NULL);
-+-   EVP_DecryptInit_ex(&ctx_dec, NULL, NULL, NULL, iv);
-+-   EVP_CIPHER_CTX_set_padding(&ctx_dec, 0);
-++      EVP_CIPHER_CTX_set_key_length(ctx_dec, keysize);
-++   EVP_DecryptInit_ex(ctx_dec, NULL, NULL, pkey, NULL);
-++   EVP_DecryptInit_ex(ctx_dec, NULL, NULL, NULL, iv);
-++   EVP_CIPHER_CTX_set_padding(ctx_dec, 0);
-+    if (dec_init_first_time)
-+    {
-+       sprintf(tmpstr,"%s decryption initialized", cipher_name);
-+       vtun_syslog(LOG_INFO, tmpstr);
-+       dec_init_first_time = 0;
-+@@ -557,11 +561,11 @@
-+          memset(iv,0,blocksize); free(iv); iv = NULL;
-+          RAND_bytes(in_ptr, in - in_ptr);
-+ 
-+          in_ptr = in - blocksize*2;
-+          outlen = blocksize*2;
-+-         EVP_EncryptUpdate(&ctx_enc_ecb, in_ptr, 
-++         EVP_EncryptUpdate(ctx_enc_ecb, in_ptr, 
-+             &outlen, in_ptr, blocksize*2);
-+          *out = in_ptr;
-+          len = outlen;
-+          cipher_enc_state = CIPHER_SEQUENCE;
-+       break;
-+@@ -584,11 +588,11 @@
-+    {
-+       case CIPHER_INIT:
-+          in_ptr = in;
-+          iv = malloc(blocksize);
-+          outlen = blocksize*2;
-+-         EVP_DecryptUpdate(&ctx_dec_ecb, in_ptr, &outlen, in_ptr, blocksize*2);
-++         EVP_DecryptUpdate(ctx_dec_ecb, in_ptr, &outlen, in_ptr, blocksize*2);
-+          
-+          if ( !strncmp(in_ptr, "ivec", 4) )
-+          {
-+             memcpy(iv, in_ptr+4, blocksize);
-+             cipher_dec_init(iv);
-+@@ -627,11 +631,11 @@
-+                   "Max. gibberish threshold reached");
-+ #endif
-+                if (cipher_enc_state != CIPHER_INIT)
-+                {
-+                   cipher_enc_state = CIPHER_INIT;
-+-                  EVP_CIPHER_CTX_cleanup(&ctx_enc);
-++                  EVP_CIPHER_CTX_free(ctx_enc);
-+ #ifdef LFD_ENCRYPT_DEBUG
-+                   vtun_syslog(LOG_INFO, 
-+                      "Forcing local encryptor re-init");
-+ #endif
-+                }
-+@@ -708,11 +712,11 @@
-+          *len -= blocksize;
-+ 
-+          if (cipher_enc_state != CIPHER_INIT)
-+          {
-+             cipher_enc_state = CIPHER_INIT;
-+-            EVP_CIPHER_CTX_cleanup(&ctx_enc);
-++            EVP_CIPHER_CTX_free(ctx_enc);
-+          }
-+ #ifdef LFD_ENCRYPT_DEBUG
-+          vtun_syslog(LOG_INFO, "Remote requests encryptor re-init");
-+ #endif
-+       }
-+@@ -722,11 +726,11 @@
-+ 
-+          if (cipher_dec_state != CIPHER_INIT &&
-+              cipher_enc_state != CIPHER_REQ_INIT &&
-+              cipher_enc_state != CIPHER_INIT)
-+          {
-+-            EVP_CIPHER_CTX_cleanup (&ctx_dec);
-++            EVP_CIPHER_CTX_free (ctx_dec);
-+             cipher_dec_state = CIPHER_INIT;
-+             cipher_enc_state = CIPHER_REQ_INIT;
-+          }
-+ #ifdef LFD_ENCRYPT_DEBUG
-+          vtun_syslog(LOG_INFO, "Local decryptor out of sync");
-diff --git a/package/vtun/vtun.hash b/package/vtun/vtun.hash
-index baa6381f70..363c980987 100644
---- a/package/vtun/vtun.hash
-+++ b/package/vtun/vtun.hash
-@@ -1,2 +1,6 @@
-+# From https://sourceforge.net/projects/vtun/files/vtun/3.0.4/
-+md5 f952c5895ae8f40235aaad9a8f41a4bd  vtun-3.0.4.tar.gz
-+sha1 2335c21b56fadf9ce851dd7f342fb0ed4f522c47  vtun-3.0.4.tar.gz
- # Locally computed:
--sha256  69dcbe4f8c5ce7d91b4150a6309e536d03b61841169746ca5788413ac7edb9cb  vtun-3.0.3.tar.gz
-+sha256 abf8df6b15e3febeaaeae2ce24ead7105eb1537ad4ec0d830c83cbb684fd98b9  vtun-3.0.4.tar.gz
-+sha256 5692a9a69dc5abc1aa9cbc54899d114b65c4cefbd9d7fcecc304316a2f26ced3  README.OpenSSL
-diff --git a/package/vtun/vtun.mk b/package/vtun/vtun.mk
-index 9c46559fb8..86d452c0c2 100644
---- a/package/vtun/vtun.mk
-+++ b/package/vtun/vtun.mk
+ ---
+- configure.in                |  5 +++
++ configure.ac                |  5 +++
+  m4/ax_check_compile_flag.m4 | 72 ++++++++++++++++++++++++++++++++++++
+  m4/ax_check_link_flag.m4    | 71 +++++++++++++++++++++++++++++++++++
+  src/tcsd/Makefile.am        |  4 +-
+@@ -19,12 +21,12 @@ Signed-off-by: Lada Trimasova <ltrimas@synopsys.com>
+ 
+ diff --git a/configure.in b/configure.in
+ index add23dc..9603353 100644
+---- a/configure.in
+-+++ b/configure.in
++--- a/configure.ac
+++++ b/configure.ac
+ @@ -12,6 +12,7 @@ TSS_VER_MINOR=3
+  # compute $target
+  AC_CANONICAL_TARGET
+- AM_INIT_AUTOMAKE([foreign 1.6])
++ AM_INIT_AUTOMAKE([foreign subdir-objects 1.6])
+ +AC_CONFIG_MACRO_DIR([m4])
+  
+  # Debugging support
+@@ -205,11 +207,8 @@ index 2210734..6640ab2 100644
+ -tcsd_CFLAGS=-DAPPID=\"TCSD\" -DVAR_PREFIX=\"@localstatedir@\" -DETC_PREFIX=\"@sysconfdir@\" -I${top_srcdir}/src/include -fPIE -DPIE
+ +tcsd_CFLAGS=-DAPPID=\"TCSD\" -DVAR_PREFIX=\"@localstatedir@\" -DETC_PREFIX=\"@sysconfdir@\" -I${top_srcdir}/src/include $(PIE_CFLAGS)
+  tcsd_LDADD=${top_builddir}/src/tcs/libtcs.a ${top_builddir}/src/tddl/libtddl.a -lpthread @CRYPTOLIB@
+--tcsd_LDFLAGS=-pie -Wl,-z,relro -Wl,-z,now
++-tcsd_LDFLAGS=@TCSD_LDFLAGS@
+ +tcsd_LDFLAGS=$(PIE_LDFLAGS) $(RELRO_LDFLAGS)
+- 
+  tcsd_SOURCES=svrside.c tcsd_conf.c tcsd_threads.c platform.c
+  
+--- 
+-2.5.0
+-
++ if TSS_BUILD_PS
+diff --git a/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch b/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
+deleted file mode 100644
+index b0db70b49b..0000000000
+--- a/package/trousers/0001-Remove-inline-for-read_data-and-write_data.patch
++++ /dev/null
+@@ -1,94 +0,0 @@
+-From f03c7987c234a81f7e4274b26bab07318357a2a5 Mon Sep 17 00:00:00 2001
+-From: Sergio Prado <sergio.prado@e-labworks.com>
+-Date: Fri, 25 Dec 2015 20:09:21 -0200
+-Subject: [PATCH] Remove inline for read_data and write_data
+-
+-read_data and write_data functions are declared with inline, but
+-their definition is not in a .h file. This is causing errors when
+-linking:
+-
+-tcsps.c:(.text+0x4ac): undefined reference to `read_data'
+-tcsps.c:(.text+0x1888): undefined reference to `write_data'
+-...
+-
+-Partial backport of upstream commit
+-3297fcdf5ac0df868778e976b8b59e35542c1ee2.
+-
+-Signed-off-by: Sergio Prado <sergio.prado@e-labworks.com>
+----
+- src/include/tcsps.h    | 5 -----
+- src/tcs/ps/ps_utils.c  | 8 --------
+- src/tspi/ps/ps_utils.c | 4 ++--
+- 3 files changed, 2 insertions(+), 15 deletions(-)
+-
+-diff --git a/src/include/tcsps.h b/src/include/tcsps.h
+-index 87542965877d..dcd5db469822 100644
+---- a/src/include/tcsps.h
+-+++ b/src/include/tcsps.h
+-@@ -23,13 +23,8 @@ int		   get_file();
+- int		   put_file(int);
+- void		   close_file(int);
+- void		   ps_destroy();
+--#ifdef SOLARIS
+- TSS_RESULT  read_data(int, void *, UINT32);
+- TSS_RESULT  write_data(int, void *, UINT32);
+--#else
+--inline TSS_RESULT  read_data(int, void *, UINT32);
+--inline TSS_RESULT  write_data(int, void *, UINT32);
+--#endif
+- int		   write_key_init(int, UINT32, UINT32, UINT32);
+- TSS_RESULT	   cache_key(UINT32, UINT16, TSS_UUID *, TSS_UUID *, UINT16, UINT32, UINT32);
+- TSS_RESULT	   UnloadBlob_KEY_PS(UINT16 *, BYTE *, TSS_KEY *);
+-diff --git a/src/tcs/ps/ps_utils.c b/src/tcs/ps/ps_utils.c
+-index 2e7f502b9599..35ac89f8fc12 100644
+---- a/src/tcs/ps/ps_utils.c
+-+++ b/src/tcs/ps/ps_utils.c
+-@@ -42,11 +42,7 @@
+- struct key_disk_cache *key_disk_cache_head = NULL;
+-
+-
+--#ifdef SOLARIS
+- TSS_RESULT
+--#else
+--inline TSS_RESULT
+--#endif
+- read_data(int fd, void *data, UINT32 size)
+- {
+-	int rc;
+-@@ -64,11 +60,7 @@ read_data(int fd, void *data, UINT32 size)
+- }
+-
+-
+--#ifdef SOLARIS
+- TSS_RESULT
+--#else
+--inline TSS_RESULT
+--#endif
+- write_data(int fd, void *data, UINT32 size)
+- {
+-	int rc;
+-diff --git a/src/tspi/ps/ps_utils.c b/src/tspi/ps/ps_utils.c
+-index aac40a147314..83259141d375 100644
+---- a/src/tspi/ps/ps_utils.c
+-+++ b/src/tspi/ps/ps_utils.c
+-@@ -22,7 +22,7 @@
+- #include "tspps.h"
+- #include "tsplog.h"
+-
+--inline TSS_RESULT
+-+TSS_RESULT
+- read_data(int fd, void *data, UINT32 size)
+- {
+-	int rc;
+-@@ -39,7 +39,7 @@ read_data(int fd, void *data, UINT32 size)
+-	return TSS_SUCCESS;
+- }
+-
+--inline TSS_RESULT
+-+TSS_RESULT
+- write_data(int fd, void *data, UINT32 size)
+- {
+-	int rc;
+---
+-1.9.1
+-
+diff --git a/package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch b/package/trousers/0002-Check-that-getpwent_r-is-available-before-using-it.patch
+similarity index 93%
+rename from package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch
+rename to package/trousers/0002-Check-that-getpwent_r-is-available-before-using-it.patch
+index 7014ad7afb..ab2418c7c5 100644
+--- a/package/trousers/0004-Check-that-getpwent_r-is-available-before-using-it.patch
++++ b/package/trousers/0002-Check-that-getpwent_r-is-available-before-using-it.patch
+@@ -6,15 +6,17 @@ Subject: [PATCH] Check that getpwent_r is available before using it
+ This fixes building trousers with musl
+ 
+ Signed-off-by: No?? Rubinstein <nrubinstein@aldebaran.com>
++[Bernd: Rebased for version 0.3.14]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+- configure.in        |  4 ++++
++ configure.ac        |  4 ++++
+  src/tspi/ps/tspps.c | 10 +++++-----
+  2 files changed, 9 insertions(+), 5 deletions(-)
+ 
+ diff --git a/configure.in b/configure.in
+ index fd3f5f1..e3d7acf 100644
+---- a/configure.in
+-+++ b/configure.in
++--- a/configure.ac
+++++ b/configure.ac
+ @@ -145,6 +145,10 @@ else
+  	AC_MSG_ERROR(["gtk", "openssl" and "none" are the only supported gui options for trousers])
+  fi
+diff --git a/package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch b/package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch
+deleted file mode 100644
+index f88e47ac27..0000000000
+--- a/package/trousers/0003-tsp_tcsi_param-include-limits.h-to-fix-musl-build.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 66bbe0a87818a1e3c721780dc33b2d81fdf4a774 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@gmail.com>
+-Date: Sun, 21 Aug 2016 23:32:10 +0200
+-Subject: [PATCH] tsp_tcsi_param: include limits.h to fix musl build
+-
+-The musl libc doesn't provide <bits/local_lim.h>, use <limits.h>
+-instead.
+-
+-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+----
+- src/tspi/tsp_tcsi_param.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/tspi/tsp_tcsi_param.c b/src/tspi/tsp_tcsi_param.c
+-index 670f86f..8f2b4e4 100644
+---- a/src/tspi/tsp_tcsi_param.c
+-+++ b/src/tspi/tsp_tcsi_param.c
+-@@ -11,7 +11,7 @@
+- #include <stdlib.h>
+- #include <string.h>
+- #include <stdio.h>
+--#include <bits/local_lim.h>
+-+#include <limits.h>
+- #include "trousers/tss.h"
+- #include "trousers/trousers.h"
+- #include "trousers_types.h"
+--- 
+-2.5.5
+-
+diff --git a/package/trousers/trousers.hash b/package/trousers/trousers.hash
+index 997cfa97c1..20c65c450e 100644
+--- a/package/trousers/trousers.hash
++++ b/package/trousers/trousers.hash
+@@ -1,3 +1,6 @@
+-# http://sourceforge.net/projects/trousers/files/trousers/0.3.13/
+-sha1 d23f1a3df4febffc4174f5cca7d1c54230477bb2 trousers-0.3.13.tar.gz
+-md5  ad508f97b406f6e48cd90e85d78e7ca8         trousers-0.3.13.tar.gz
++# http://sourceforge.net/projects/trousers/files/trousers/0.3.14/
++sha1 9ca2cc9e1179465f6c5d9055e2b855e25031b85a trousers-0.3.14.tar.gz
++md5  4a476b4f036dd20a764fb54fc24edbec         trousers-0.3.14.tar.gz
++# Locally computed
++sha256 ce50713a261d14b735ec9ccd97609f0ad5ce69540af560e8c3ce9eb5f2d28f47  trousers-0.3.14.tar.gz
++sha256 1ad596d12e7471549663c03e280b5b5d084a2e853fb86e4d766109818f9d7dae  LICENSE
+diff --git a/package/trousers/trousers.mk b/package/trousers/trousers.mk
+index e49c2ac141..1d5364959c 100644
+--- a/package/trousers/trousers.mk
++++ b/package/trousers/trousers.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VTUN_VERSION = 3.0.3
-+VTUN_VERSION = 3.0.4
- VTUN_SITE = http://downloads.sourceforge.net/project/vtun/vtun/$(VTUN_VERSION)
- VTUN_LICENSE = GPL-2.0+ with OpenSSL exception
- VTUN_LICENSE_FILES = README.OpenSSL
+-TROUSERS_VERSION = 0.3.13
++TROUSERS_VERSION = 0.3.14
+ TROUSERS_SITE = http://downloads.sourceforge.net/project/trousers/trousers/$(TROUSERS_VERSION)
+ TROUSERS_LICENSE = BSD-3-Clause
+ TROUSERS_LICENSE_FILES = LICENSE
