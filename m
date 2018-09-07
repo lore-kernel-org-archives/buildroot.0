@@ -1,97 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:22 -0000
-Subject: [Buildroot] [git commit] package/lynx: bump version to 2.8.9rel.1
-Message-ID: <20180907111530.013AD7FBD5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux-headers: bump to 4.18.3 kernel
+ version
+Message-ID: <20180907111530.9F8E68124C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=563246b262bc513c650fb8f14383da02adda71d1
+commit: https://git.buildroot.net/buildroot/commit/?id=ce7ba57062113f06e36832a2ad5465c35a0ea636
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Changelog: http://lynx.invisible-island.net/current/CHANGES
-
-Removed patch 0001, quoted from Changelog:
-* when cross-compiling, trim LDFLAGS from makefile rule linking makeuctb,
-  because it is a build tool, which should generally use BUILD_LDFLAGS
-  (patch by Thomas Petazzoni)
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...s-don-t-build-host-tools-with-target-LDFL.patch | 41 ----------------------
- package/lynx/lynx.hash                             |  2 +-
- package/lynx/lynx.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 43 deletions(-)
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch b/package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch
-deleted file mode 100644
-index cc057cee13..0000000000
---- a/package/lynx/0001-src-chrtrans-don-t-build-host-tools-with-target-LDFL.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From bb47abe9e7996147f6b7b325f5c9b2143abf8f13 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Mon, 7 May 2018 22:00:52 +0200
--Subject: [PATCH] src/chrtrans: don't build host tools with target LDFLAGS
--
--In a cross-compilation context, the LDFLAGS variable contains linker
--flags used when building things for the target. However, the makeuctb
--tool is built for the host machine, and therefore should not use the
--same LDFLAGS as the target, which is why BUILD_LDFLAGS exist.
--
--Using LDFLAGS when building a tool for the host can cause problems
--when some flags in LDFLAGS are not supported by the host machine. For
--example, if you're linking statically lynx for the target, but the
--build machine does not support static linking:
--
--gcc -I../.. -I../../src -I../../src/chrtrans -I../../WWW/Library/Implementation -I../../     -static  -o makeuctb makeuctb.o
--/usr/bin/ld: cannot find -lc
--collect2: error: ld returned 1 exit status
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream-status: submitted on the mailing list
-----
-- src/chrtrans/makefile.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/chrtrans/makefile.in b/src/chrtrans/makefile.in
--index aab358f..6e0ef03 100644
----- a/src/chrtrans/makefile.in
--+++ b/src/chrtrans/makefile.in
--@@ -123,7 +123,7 @@ OBJS		= makeuctb$o
-- C_SRC		= $(OBJS:$o=.c)
-- 
-- $(MAKEUCTB) : $(OBJS)
---	$(BUILD_CC) $(CC_OPTS) $(LDFLAGS) $(BUILD_LDFLAGS) -o $@ $(OBJS) $(INTLLIB) $(BUILD_LIBS)
--+	$(BUILD_CC) $(CC_OPTS) $(BUILD_LDFLAGS) -o $@ $(OBJS) $(INTLLIB) $(BUILD_LIBS)
-- 
-- makeuctb$o : $(srcdir)/UCkd.h $(srcdir)/makeuctb.c
-- 
---- 
--2.14.3
--
-diff --git a/package/lynx/lynx.hash b/package/lynx/lynx.hash
-index c39475aa23..76d7614a7c 100644
---- a/package/lynx/lynx.hash
-+++ b/package/lynx/lynx.hash
-@@ -1,3 +1,3 @@
- # Locally calculated:
--sha256  04318a100b052d079d0018fa371aa28cfb41ab68db3a959f3b75c2170eea1bc8  lynx2.8.9dev.16.tar.bz2
-+sha256  387f193d7792f9cfada14c60b0e5c0bff18f227d9257a39483e14fa1aaf79595  lynx2.8.9rel.1.tar.bz2
- sha256  8406a30ff3134ec23cf752d1ceda92ddaabbe41b4f2dc07ea3cfa139de12d6d6  COPYING
-diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
-index a95326a14a..735d5b317f 100644
---- a/package/lynx/lynx.mk
-+++ b/package/lynx/lynx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 4383466af1..bd9c4827b3 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_4_17
++	default BR2_KERNEL_HEADERS_4_18
+ 	help
+ 	  Select the kernel version to get headers from.
  
--LYNX_VERSION = 2.8.9dev.16
-+LYNX_VERSION = 2.8.9rel.1
- LYNX_SOURCE = lynx$(LYNX_VERSION).tar.bz2
- LYNX_SITE = ftp://ftp.invisible-island.net/lynx/tarballs
- LYNX_LICENSE = GPL-2.0
+@@ -75,6 +75,10 @@ config BR2_KERNEL_HEADERS_4_17
+ 	bool "Linux 4.17.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 
++config BR2_KERNEL_HEADERS_4_18
++	bool "Linux 4.18.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
++
+ config BR2_KERNEL_HEADERS_VERSION
+ 	bool "Manually specified Linux version"
+ 
+@@ -97,6 +101,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18
++	bool "4.18.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17
+ 	bool "4.17.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+@@ -268,4 +276,5 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.15.18"	if BR2_KERNEL_HEADERS_4_15
+ 	default "4.16.18"	if BR2_KERNEL_HEADERS_4_16
+ 	default "4.17.11"	if BR2_KERNEL_HEADERS_4_17
++	default "4.18.3"	if BR2_KERNEL_HEADERS_4_18
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
