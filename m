@@ -1,63 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:26 -0000
-Subject: [Buildroot] [git commit] package/alljoyn: use builtin crypto
-Message-ID: <20180907111534.1FA137FE3E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sylpheed: bump version to 3.7.0
+Message-ID: <20180907111526.C68227FBD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51c68847735c7747cc84f0833789a98ab277d0e5
+commit: https://git.buildroot.net/buildroot/commit/?id=a869884f498274588adaf8076ff6b1d8efe0ac0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support for OpenSSL 1.1 is broken, use builtin crypto for now like
-Debian does:
-
-https://salsa.debian.org/debian-iot-team/alljoyn/alljoyn-core-1504/commit/09d9f916ecb3e0256c5b24ef46af28cdceb4ed1b#8756c63497c8dc39f7773438edf53b220c773f67_27_26
+Added license hashes, switched to xz tarball.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/alljoyn/Config.in  | 1 -
- package/alljoyn/alljoyn.mk | 6 ++----
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ package/sylpheed/sylpheed.hash | 4 +++-
+ package/sylpheed/sylpheed.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/alljoyn/Config.in b/package/alljoyn/Config.in
-index 6eb417daf8..781d91bbe9 100644
---- a/package/alljoyn/Config.in
-+++ b/package/alljoyn/Config.in
-@@ -7,7 +7,6 @@ config BR2_PACKAGE_ALLJOYN
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_LIBCAP
--	select BR2_PACKAGE_OPENSSL
- 	help
- 	  The AllJoyn framework defines a common way for devices and
- 	  apps to communicate with one another regardless of brands,
-diff --git a/package/alljoyn/alljoyn.mk b/package/alljoyn/alljoyn.mk
-index 69d5dedc41..1281674e38 100644
---- a/package/alljoyn/alljoyn.mk
-+++ b/package/alljoyn/alljoyn.mk
-@@ -11,11 +11,9 @@ ALLJOYN_SITE = https://mirrors.kernel.org/allseenalliance/alljoyn/$(ALLJOYN_REV)
- # See https://allseenalliance.org/alliance/ip-policy
- ALLJOYN_LICENSE = ISC
+diff --git a/package/sylpheed/sylpheed.hash b/package/sylpheed/sylpheed.hash
+index 39c0927735..08a5d0a221 100644
+--- a/package/sylpheed/sylpheed.hash
++++ b/package/sylpheed/sylpheed.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	4aeb7c6436ad485a2cc101dd68a1fb84abcad4c6471ed9ddefec65e482e5b2b1	sylpheed-3.2.0.tar.bz2
++sha256 0d6bc5eb46f5d0a463757c62bc80b00d219b294b3c3662840e4540f6db2e3e49  sylpheed-3.7.0.tar.xz
++sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
++sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+diff --git a/package/sylpheed/sylpheed.mk b/package/sylpheed/sylpheed.mk
+index 14107f0a6a..0453fba521 100644
+--- a/package/sylpheed/sylpheed.mk
++++ b/package/sylpheed/sylpheed.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--ALLJOYN_DEPENDENCIES = host-scons libcap openssl
-+ALLJOYN_DEPENDENCIES = host-scons libcap
- ALLJOYN_INSTALL_STAGING = YES
- 
--ALLJOYN_CRYPTO = openssl
--
- # AllJoyn can be compiled in debug or release mode. By default, AllJoyn is built
- # in debug mode.
- ALLJOYN_VARIANT = release
-@@ -39,7 +37,7 @@ ALLJOYN_SCONS_OPTS = \
- 	CPU=$(ALLJOYN_CPU) \
- 	VARIANT=$(ALLJOYN_VARIANT) \
- 	BR=off \
--	CRYPTO=$(ALLJOYN_CRYPTO) \
-+	CRYPTO=builtin \
- 	BINDINGS=$(ALLJOYN_BINDINGS) \
- 	TARGET_CFLAGS="$(TARGET_CFLAGS)" \
- 	TARGET_CPPFLAGS="$(TARGET_CPPFLAGS)" \
+-SYLPHEED_VERSION_MAJOR = 3.2
++SYLPHEED_VERSION_MAJOR = 3.7
+ SYLPHEED_VERSION = $(SYLPHEED_VERSION_MAJOR).0
+-SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.bz2
++SYLPHEED_SOURCE = sylpheed-$(SYLPHEED_VERSION).tar.xz
+ SYLPHEED_SITE = http://sylpheed.sraoss.jp/sylpheed/v$(SYLPHEED_VERSION_MAJOR)
+ SYLPHEED_LICENSE = GPL-2.0+ (executables), LGPL-2.1+ (library, attachment plugin)
+ SYLPHEED_LICENSE_FILES = COPYING COPYING.LIB
