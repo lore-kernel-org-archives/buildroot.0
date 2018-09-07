@@ -1,45 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:37 -0000
-Subject: [Buildroot] [git commit] xxhash: bump to version 0.6.5
-Message-ID: <20180907111544.B8B3B7FCA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] glorytun: bump to version 0.0.99-mud
+Message-ID: <20180907111545.3934E7F981@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0c5439a160a6aa9202f7c924198e894cc01fa71
+commit: https://git.buildroot.net/buildroot/commit/?id=becaafd056dbfbe58d8578c0f2991ab0de45938f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/xxhash/xxhash.hash | 4 +++-
- package/xxhash/xxhash.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/glorytun/glorytun.hash | 2 +-
+ package/glorytun/glorytun.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xxhash/xxhash.hash b/package/xxhash/xxhash.hash
-index 31081c01d8..8a00a427f8 100644
---- a/package/xxhash/xxhash.hash
-+++ b/package/xxhash/xxhash.hash
-@@ -1,2 +1,4 @@
- # locally computed
--sha256  9743539ed787ea9bd5bb348265cebdd5adcbf820ad329bf44c28bc69ab4c7cd8  xxhash-r40.tar.gz
-+sha256  19030315f4fc1b4b2cdb9d7a317069a109f90e39d1fe4c9159b7aaa39030eb95  xxhash-v0.6.5.tar.gz
-+sha256  86ec6953794503942b70fcd4f35b565d44f63f703b7037ce44dad965c4aaae91  LICENSE
-+sha256  8e449f232e2cd984e1d286711653960b4a9a555d90b4dc05fe4f0d7a1838fe1b  xxhsum.c
-diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
-index 7e04066340..9bb259a280 100644
---- a/package/xxhash/xxhash.mk
-+++ b/package/xxhash/xxhash.mk
+diff --git a/package/glorytun/glorytun.hash b/package/glorytun/glorytun.hash
+index 891af2079e..59a5f09c0e 100644
+--- a/package/glorytun/glorytun.hash
++++ b/package/glorytun/glorytun.hash
+@@ -1,2 +1,2 @@
+-sha256 76849b1568119cf0834749db56d4882966863d31351c21c1b22f373f0c97a498  glorytun-0.0.93-mud.tar.gz
++sha256 5e23afad4592d6af27ffd2cb3c826cf0ea1b5166a05ef1ae5c77fb4e465bb735  glorytun-0.0.99-mud.tar.gz
+ sha256 bd418f8ef7d62f2c89e3aa1e5dc41c7d7a6212eb1cdb4d39a26a5bd333e1b4a3  LICENSE
+diff --git a/package/glorytun/glorytun.mk b/package/glorytun/glorytun.mk
+index 233e1feaa9..f6d87c2605 100644
+--- a/package/glorytun/glorytun.mk
++++ b/package/glorytun/glorytun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XXHASH_VERSION = r40
-+XXHASH_VERSION = v0.6.5
- XXHASH_SITE = $(call github,Cyan4973,xxHash,$(XXHASH_VERSION))
- XXHASH_LICENSE = BSD-2-Clause, GPL-2.0+
- XXHASH_LICENSE_FILES = LICENSE xxhsum.c
+-GLORYTUN_VERSION = 0.0.93-mud
++GLORYTUN_VERSION = 0.0.99-mud
+ GLORYTUN_SITE = https://github.com/angt/glorytun/releases/download/v$(GLORYTUN_VERSION)
+ GLORYTUN_DEPENDENCIES = libsodium host-pkgconf
+ GLORYTUN_LICENSE = BSD-2-clause
