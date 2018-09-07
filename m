@@ -1,46 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:33 -0000
-Subject: [Buildroot] [git commit] package/vlc: use pkgconf to find live555
- libraries
-Message-ID: <20180907111535.38C9B7FFA5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/vlc: wayland support needs
+ wayland-protocols
+Message-ID: <20180907111541.5EEE480DAE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b824253913c0360e1b8ab9be60d8041b59337b3e
+commit: https://git.buildroot.net/buildroot/commit/?id=3c052b089460bb98230c1957b0f66f42084e0639
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some live555 libraries were missing in LIVE555_LIBS.
-Instead of maintaining the list of live555 library files we use pkgconf
-instead.
-
 Fixes
-http://autobuild.buildroot.net/results/744/7445bdc2fdcb28aa7f58c0249653329414e447df/
+http://autobuild.buildroot.net/results/3db/3dbb17bc548aa7d5fecd857a9bbd761729d20d4f/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.mk | 8 --------
- 1 file changed, 8 deletions(-)
+ package/vlc/vlc.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index ed682e60b3..d4be8b0bf1 100644
+index d4be8b0bf1..c77c945a34 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -427,14 +427,6 @@ endif
- ifeq ($(BR2_PACKAGE_LIVE555),y)
- VLC_CONF_OPTS += --enable-live555
- VLC_DEPENDENCIES += live555
--VLC_CONF_ENV += \
--	LIVE555_CFLAGS="\
--		-I$(STAGING_DIR)/usr/include/BasicUsageEnvironment \
--		-I$(STAGING_DIR)/usr/include/groupsock \
--		-I$(STAGING_DIR)/usr/include/liveMedia \
--		-I$(STAGING_DIR)/usr/include/UsageEnvironment \
--		" \
--	LIVE555_LIBS="-L$(STAGING_DIR)/usr/lib -lliveMedia"
+@@ -519,9 +519,9 @@ else
+ VLC_CONF_OPTS += --disable-udev
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_WAYLAND),y)
++ifeq ($(BR2_PACKAGE_WAYLAND)$(BR2_PACKAGE_WAYLAND_PROTOCOLS),yy)
+ VLC_CONF_OPTS += --enable-wayland
+-VLC_DEPENDENCIES += wayland
++VLC_DEPENDENCIES += wayland wayland-protocols
  else
- VLC_CONF_OPTS += --disable-live555
+ VLC_CONF_OPTS += --disable-wayland
  endif
