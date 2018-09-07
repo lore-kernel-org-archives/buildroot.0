@@ -1,35 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:04 -0000
 Subject: [Buildroot] [git commit] package/vlc: add optional dependency to
- libidn
-Message-ID: <20180907111512.0D3D480DE3@busybox.osuosl.org>
+ libsamplerate
+Message-ID: <20180907111512.711127FB4E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3db1612981f78c65b09affa5e8a4148866c70abc
+commit: https://git.buildroot.net/buildroot/commit/?id=70858702a7aabd8a6162c5e15be214a0bce2aecb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/vlc/vlc.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index b8c47582dc..edd0c36372 100644
+index edd0c36372..9e1dc6b92e 100644
 --- a/package/vlc/vlc.mk
 +++ b/package/vlc/vlc.mk
-@@ -216,6 +216,10 @@ else
- VLC_CONF_OPTS += --disable-libgcrypt
+@@ -51,7 +51,6 @@ VLC_CONF_OPTS += \
+ 	--disable-mmal-vout \
+ 	--disable-mtp \
+ 	--disable-projectm \
+-	--disable-samplerate \
+ 	--disable-schroedinger \
+ 	--disable-shout \
+ 	--disable-twolame \
+@@ -262,6 +261,13 @@ else
+ VLC_CONF_OPTS += --disable-svg --disable-svgdec
  endif
  
-+ifeq ($(BR2_PACKAGE_LIBIDN),y)
-+VLC_DEPENDENCIES += libidn
++ifeq ($(BR2_PACKAGE_LIBSAMPLERATE),y)
++VLC_CONF_OPTS += --enable-samplerate
++VLC_DEPENDENCIES += libsamplerate
++else
++VLC_CONF_OPTS += --disable-samplerate
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBMAD),y)
- VLC_CONF_OPTS += --enable-mad
- VLC_DEPENDENCIES += libmad
+ ifeq ($(BR2_PACKAGE_LIBSSH2),y)
+ VLC_CONF_OPTS += --enable-sftp
+ VLC_DEPENDENCIES += libssh2
