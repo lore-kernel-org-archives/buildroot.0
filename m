@@ -1,79 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:22 -0000
-Subject: [Buildroot] [git commit] package/libtorrent: bump version to 0.13.7
-Message-ID: <20180907111529.29DD58130C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: add 4.18.x choice for headers
+Message-ID: <20180907111530.4E056811F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07673dd6eb2565468abb5730fa3ca9334df683fc
+commit: https://git.buildroot.net/buildroot/commit/?id=7f62d8122bc42b84608cad34fb005b4870c143d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtorrent/0001-cross_compile.patch | 14 ++------------
- package/libtorrent/libtorrent.hash          |  3 ++-
- package/libtorrent/libtorrent.mk            |  2 +-
- 3 files changed, 5 insertions(+), 14 deletions(-)
+ toolchain/Config.in                                                  | 5 +++++
+ .../toolchain-external/toolchain-external-custom/Config.in.options   | 4 ++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/package/libtorrent/0001-cross_compile.patch b/package/libtorrent/0001-cross_compile.patch
-index abb243820c..9febfa7f3c 100644
---- a/package/libtorrent/0001-cross_compile.patch
-+++ b/package/libtorrent/0001-cross_compile.patch
-@@ -4,27 +4,17 @@ Date: Mon, 5 Oct 2015 00:40:25 +0100
- Subject: [PATCH] Fix cross compilation, based on OpenWRT patch.
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 3a53a32a6d..1cba82af8e 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -340,10 +340,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
  
- [Vincent: tweak the patch for version 0.13.6]
-+[Bernd: tweak the patch for version 0.13.7]
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "4.18" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
+ 	default "4.17" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+ 	default "4.16" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_16
+ 	default "4.15" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 6a9921c149..4639232bfb 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -123,6 +123,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
  
- Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
- Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- ---
-  configure.ac      |    1 -
-  scripts/checks.m4 |    2 +-
-  scripts/common.m4 |    4 ++--
-  3 files changed, 3 insertions(+), 4 deletions(-)
- 
--diff --git a/configure.ac b/configure.ac
--index ba994ee..7696466 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -19,7 +19,6 @@ AC_SUBST(LIBTORRENT_INTERFACE_VERSION_NO)
-- 
-- AM_INIT_AUTOMAKE
-- AC_CONFIG_HEADERS(config.h)
---AM_PATH_CPPUNIT(1.9.6)
-- 
-- AC_PROG_CXX
-- 
- diff --git a/scripts/checks.m4 b/scripts/checks.m4
- index 598f39b..0e5abe0 100644
- --- a/scripts/checks.m4
-diff --git a/package/libtorrent/libtorrent.hash b/package/libtorrent/libtorrent.hash
-index 73753e94ce..8e0bc1caa4 100644
---- a/package/libtorrent/libtorrent.hash
-+++ b/package/libtorrent/libtorrent.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 2838a08c96edfd936aff8fbf99ecbb930c2bfca3337dd1482eb5fccdb80d5a04  libtorrent-0.13.6.tar.gz
-+sha256 c738f60f4d7b6879cd2745fb4310bf24c9287219c1fd619706a9d5499ca7ecc1  libtorrent-0.13.7.tar.gz
-+sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
-index fbd332e379..8d74addaf7 100644
---- a/package/libtorrent/libtorrent.mk
-+++ b/package/libtorrent/libtorrent.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTORRENT_VERSION = 0.13.6
-+LIBTORRENT_VERSION = 0.13.7
- LIBTORRENT_SITE = http://rtorrent.net/downloads
- LIBTORRENT_DEPENDENCIES = host-pkgconf zlib \
- 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_18
++	bool "4.18.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_17
+ 	bool "4.17.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
