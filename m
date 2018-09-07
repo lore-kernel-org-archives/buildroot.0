@@ -1,36 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:41 -0000
-Subject: [Buildroot] [git commit] sunxi-mali-mainline-driver: free-electrons
- is now bootlin
-Message-ID: <20180907111549.9F4347FCA1@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:42 -0000
+Subject: [Buildroot] [git commit] lzo: build shared library for the host
+Message-ID: <20180907111550.1058C7F981@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf9106fe559cc9ea9f742c21713fe95f176b84b5
+commit: https://git.buildroot.net/buildroot/commit/?id=2d80864d2ba0e2eba7bf9188ff7967d51c825454
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even though http://github.com/free-electrons/<foo>/ properly redirects
-to http://github.com/bootlin/<foo>/, it makes sense to use the
-bootlin/ URL directly.
+By default, the lzo package builds and installs only a static
+library. For the target variant, we pass the appropriate
+ENABLE_STATIC/ENABLE_SHARED options, but not for the host package, and
+therefore a static lzo library gets installed.
+
+However, on the host, our policy is to build shared libraries and not
+static libraries, as visible in the default configure options passed
+to host package in pkg-autotools.mk (--enable-shared
+--disable-static). Let's do the same with lzo.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sunxi-mali-mainline-driver/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lzo/lzo.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/sunxi-mali-mainline-driver/Config.in b/package/sunxi-mali-mainline-driver/Config.in
-index c939d2a957..057f20db66 100644
---- a/package/sunxi-mali-mainline-driver/Config.in
-+++ b/package/sunxi-mali-mainline-driver/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_SUNXI_MALI_MAINLINE_DRIVER
- 	  Linux kernels (>= 4.4). Note that it should be installed
- 	  together with the corresponding userspace OpenGL libraries,
- 	  which are provided as binaries only at:
--	  https://github.com/free-electrons/mali-blobs
-+	  https://github.com/bootlin/mali-blobs
+diff --git a/package/lzo/lzo.mk b/package/lzo/lzo.mk
+index 27ca459acf..0ead92725a 100644
+--- a/package/lzo/lzo.mk
++++ b/package/lzo/lzo.mk
+@@ -23,5 +23,7 @@ else
+ LZO_CONF_OPTS += -DENABLE_STATIC=OFF
+ endif
  
- 	  sunxi-mali-mainline-driver requires a Linux kernel >= 4.4
- 	  with the following options enabled:
++HOST_LZO_CONF_OPTS += -DENABLE_SHARED=ON -DENABLE_STATIC=OFF
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
