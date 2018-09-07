@@ -1,112 +1,447 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Fri, 07 Sep 2018 11:16:23 -0000
-Subject: [Buildroot] [git commit] kmod: bump to 25
-Message-ID: <20180907111531.55EB38074E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsrtp: bump version to 2.2.0
+Message-ID: <20180907111528.77F597FBD5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68a29508974cf1de56b73bcf400944b2e6e2a705
+commit: https://git.buildroot.net/buildroot/commit/?id=54797f64891abec8f2a15eb32a62195943c20d2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With the introduction of Python 3.7.0 in commit
-6e7e733f3bbd8669e02f097ad5a49ba565e1718e, kmod needs to be bumped to
-version 25.
+Removed patch applied upstream, added license hash.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/5ba7f2e9d0802890e275f7da160ad0aad87b6f56/
-
-Signed-off-by: Adam Duskett <aduskett@greenlots.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ....c-assert_cc-can-only-be-used-inside-func.patch | 56 ----------------------
- package/kmod/kmod.hash                             |  2 +-
- package/kmod/kmod.mk                               |  2 +-
- 3 files changed, 2 insertions(+), 58 deletions(-)
+ ...-functions-to-avoid-conflicts-with-downst.patch | 396 ---------------------
+ package/libsrtp/libsrtp.hash                       |   3 +-
+ package/libsrtp/libsrtp.mk                         |   2 +-
+ 3 files changed, 3 insertions(+), 398 deletions(-)
 
-diff --git a/package/kmod/0002-shared-util.c-assert_cc-can-only-be-used-inside-func.patch b/package/kmod/0002-shared-util.c-assert_cc-can-only-be-used-inside-func.patch
+diff --git a/package/libsrtp/0001-Rename-SHA1-functions-to-avoid-conflicts-with-downst.patch b/package/libsrtp/0001-Rename-SHA1-functions-to-avoid-conflicts-with-downst.patch
 deleted file mode 100644
-index 09fe252420..0000000000
---- a/package/kmod/0002-shared-util.c-assert_cc-can-only-be-used-inside-func.patch
+index 60a123eccd..0000000000
+--- a/package/libsrtp/0001-Rename-SHA1-functions-to-avoid-conflicts-with-downst.patch
 +++ /dev/null
-@@ -1,56 +0,0 @@
--From 7cd698eb31059012305d8bb7516577c8cd383e32 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 3 Jun 2017 16:52:37 +0200
--Subject: [PATCH] shared/util.c: assert_cc() can only be used inside functions
+@@ -1,396 +0,0 @@
+-From f76eb65d008d0c8e06698e4a63a776e91b80155b Mon Sep 17 00:00:00 2001
+-From: jfigus <foleyj@cisco.com>
+-Date: Tue, 4 Nov 2014 14:54:02 -0500
+-Subject: [PATCH] Rename SHA1 functions to avoid conflicts with downstream
+- packages.
 -
--shared/macro.h has two versions of assert_cc, one that uses gcc
--_Static_assert(), which requires recent enough gcc versions, and one
--that uses a fake array to trigger a build error. The latter can only
--work inside functions, so assert_cc() should only be used inside
--functions.
+-Backported from upstream commit c270245a94ae9a007202754eb8f7ce9e48f97007
+-and tweaked to apply on top of v1.5.4.
 -
--Fixes the following build failure when building kmod with old gcc
--versions such as gcc 4.3.x:
--
--shared/util.c:52: error: expected identifier or '(' before 'do'
--shared/util.c:52: error: expected identifier or '(' before 'while'
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
 ----
-- shared/util.c | 6 ++++--
-- 1 file changed, 4 insertions(+), 2 deletions(-)
+- crypto/hash/hmac.c        | 20 ++++++++++----------
+- crypto/hash/hmac_ossl.c   | 18 +++++++++---------
+- crypto/hash/sha1.c        | 32 ++++++++++++++++----------------
+- crypto/include/hmac.h     |  4 ++--
+- crypto/include/sha1.h     | 34 +++++++++++++++++-----------------
+- crypto/test/sha1_driver.c |  8 ++++----
+- 6 files changed, 58 insertions(+), 58 deletions(-)
 -
--diff --git a/shared/util.c b/shared/util.c
--index 9de080a..fd2028d 100644
----- a/shared/util.c
--+++ b/shared/util.c
--@@ -49,8 +49,6 @@ static const struct kmod_ext {
-- 	{ }
-- };
+-diff --git a/crypto/hash/hmac.c b/crypto/hash/hmac.c
+-index ddb75ea..4bed61e 100644
+---- a/crypto/hash/hmac.c
+-+++ b/crypto/hash/hmac.c
+-@@ -141,11 +141,11 @@ hmac_init(hmac_ctx_t *state, const uint8_t *key, int key_len) {
+-   debug_print(mod_hmac, "ipad: %s", octet_string_hex_string(ipad, 64));
+-   
+-   /* initialize sha1 context */
+--  sha1_init(&state->init_ctx);
+-+  srtp_sha1_init(&state->init_ctx);
 - 
---assert_cc(EAGAIN == EWOULDBLOCK);
---
-- /* string handling functions and memory allocations                         */
-- /* ************************************************************************ */
+-   /* hash ipad ^ key */
+--  sha1_update(&state->init_ctx, ipad, 64);
+--  memcpy(&state->ctx, &state->init_ctx, sizeof(sha1_ctx_t)); 
+-+  srtp_sha1_update(&state->init_ctx, ipad, 64);
+-+  memcpy(&state->ctx, &state->init_ctx, sizeof(srtp_sha1_ctx_t)); 
 - 
--@@ -201,6 +199,8 @@ ssize_t read_str_safe(int fd, char *buf, size_t buflen)
-- 	size_t todo = buflen - 1;
-- 	size_t done = 0;
+-   return err_status_ok;
+- }
+-@@ -153,7 +153,7 @@ hmac_init(hmac_ctx_t *state, const uint8_t *key, int key_len) {
+- err_status_t
+- hmac_start(hmac_ctx_t *state) {
+-     
+--  memcpy(&state->ctx, &state->init_ctx, sizeof(sha1_ctx_t));
+-+  memcpy(&state->ctx, &state->init_ctx, sizeof(srtp_sha1_ctx_t));
 - 
--+	assert_cc(EAGAIN == EWOULDBLOCK);
--+
-- 	do {
-- 		ssize_t r = read(fd, buf + done, todo);
+-   return err_status_ok;
+- }
+-@@ -165,7 +165,7 @@ hmac_update(hmac_ctx_t *state, const uint8_t *message, int msg_octets) {
+- 	      octet_string_hex_string(message, msg_octets));
+-   
+-   /* hash message into sha1 context */
+--  sha1_update(&state->ctx, message, msg_octets);
+-+  srtp_sha1_update(&state->ctx, message, msg_octets);
 - 
--@@ -226,6 +226,8 @@ ssize_t write_str_safe(int fd, const char *buf, size_t buflen)
-- 	size_t todo = buflen;
-- 	size_t done = 0;
+-   return err_status_ok;
+- }
+-@@ -183,7 +183,7 @@ hmac_compute(hmac_ctx_t *state, const void *message,
+-   
+-   /* hash message, copy output into H */
+-   hmac_update(state, (const uint8_t*)message, msg_octets);
+--  sha1_final(&state->ctx, H);
+-+  srtp_sha1_final(&state->ctx, H);
 - 
--+	assert_cc(EAGAIN == EWOULDBLOCK);
--+
-- 	do {
-- 		ssize_t r = write(fd, buf + done, todo);
+-   /*
+-    * note that we don't need to debug_print() the input, since the
+-@@ -193,16 +193,16 @@ hmac_compute(hmac_ctx_t *state, const void *message,
+- 	      octet_string_hex_string((uint8_t *)H, 20));
 - 
+-   /* re-initialize hash context */
+--  sha1_init(&state->ctx);
+-+  srtp_sha1_init(&state->ctx);
+-   
+-   /* hash opad ^ key  */
+--  sha1_update(&state->ctx, (uint8_t *)state->opad, 64);
+-+  srtp_sha1_update(&state->ctx, (uint8_t *)state->opad, 64);
+- 
+-   /* hash the result of the inner hash */
+--  sha1_update(&state->ctx, (uint8_t *)H, 20);
+-+  srtp_sha1_update(&state->ctx, (uint8_t *)H, 20);
+-   
+-   /* the result is returned in the array hash_value[] */
+--  sha1_final(&state->ctx, hash_value);
+-+  srtp_sha1_final(&state->ctx, hash_value);
+- 
+-   /* copy hash_value to *result */
+-   for (i=0; i < tag_len; i++)    
+-diff --git a/crypto/hash/hmac_ossl.c b/crypto/hash/hmac_ossl.c
+-index f62ce57..2ec8350 100644
+---- a/crypto/hash/hmac_ossl.c
+-+++ b/crypto/hash/hmac_ossl.c
+-@@ -163,11 +163,11 @@ hmac_init (hmac_ctx_t *state, const uint8_t *key, int key_len)
+-     debug_print(mod_hmac, "ipad: %s", octet_string_hex_string(ipad, sizeof(ipad)));
+- 
+-     /* initialize sha1 context */
+--    sha1_init(&state->init_ctx);
+-+    srtp_sha1_init(&state->init_ctx);
+-     state->init_ctx_initialized = 1;
+- 
+-     /* hash ipad ^ key */
+--    sha1_update(&state->init_ctx, ipad, sizeof(ipad));
+-+    srtp_sha1_update(&state->init_ctx, ipad, sizeof(ipad));
+-     return (hmac_start(state));
+- }
+- 
+-@@ -192,7 +192,7 @@ hmac_update (hmac_ctx_t *state, const uint8_t *message, int msg_octets)
+-                 octet_string_hex_string(message, msg_octets));
+- 
+-     /* hash message into sha1 context */
+--    sha1_update(&state->ctx, message, msg_octets);
+-+    srtp_sha1_update(&state->ctx, message, msg_octets);
+- 
+-     return err_status_ok;
+- }
+-@@ -211,8 +211,8 @@ hmac_compute (hmac_ctx_t *state, const void *message,
+-     }
+- 
+-     /* hash message, copy output into H */
+--    sha1_update(&state->ctx, message, msg_octets);
+--    sha1_final(&state->ctx, H);
+-+    srtp_sha1_update(&state->ctx, message, msg_octets);
+-+    srtp_sha1_final(&state->ctx, H);
+- 
+-     /*
+-      * note that we don't need to debug_print() the input, since the
+-@@ -222,16 +222,16 @@ hmac_compute (hmac_ctx_t *state, const void *message,
+-                 octet_string_hex_string((uint8_t*)H, sizeof(H)));
+- 
+-     /* re-initialize hash context */
+--    sha1_init(&state->ctx);
+-+    srtp_sha1_init(&state->ctx);
+- 
+-     /* hash opad ^ key  */
+--    sha1_update(&state->ctx, (uint8_t*)state->opad, sizeof(state->opad));
+-+    srtp_sha1_update(&state->ctx, (uint8_t*)state->opad, sizeof(state->opad));
+- 
+-     /* hash the result of the inner hash */
+--    sha1_update(&state->ctx, (uint8_t*)H, sizeof(H));
+-+    srtp_sha1_update(&state->ctx, (uint8_t*)H, sizeof(H));
+- 
+-     /* the result is returned in the array hash_value[] */
+--    sha1_final(&state->ctx, hash_value);
+-+    srtp_sha1_final(&state->ctx, hash_value);
+- 
+-     /* copy hash_value to *result */
+-     for (i = 0; i < tag_len; i++) {
+-diff --git a/crypto/hash/sha1.c b/crypto/hash/sha1.c
+-index c200437..29c2e62 100644
+---- a/crypto/hash/sha1.c
+-+++ b/crypto/hash/sha1.c
+-@@ -77,17 +77,17 @@ uint32_t SHA_K2 = 0x8F1BBCDC;   /* Kt for 40 <= t <= 59 */
+- uint32_t SHA_K3 = 0xCA62C1D6;   /* Kt for 60 <= t <= 79 */
+- 
+- void
+--sha1(const uint8_t *msg,  int octets_in_msg, uint32_t hash_value[5]) {
+--  sha1_ctx_t ctx;
+-+srtp_sha1(const uint8_t *msg,  int octets_in_msg, uint32_t hash_value[5]) {
+-+  srtp_sha1_ctx_t ctx;
+- 
+--  sha1_init(&ctx);
+--  sha1_update(&ctx, msg, octets_in_msg);
+--  sha1_final(&ctx, hash_value);
+-+  srtp_sha1_init(&ctx);
+-+  srtp_sha1_update(&ctx, msg, octets_in_msg);
+-+  srtp_sha1_final(&ctx, hash_value);
+- 
+- }
+- 
+- /*
+-- *  sha1_core(M, H) computes the core compression function, where M is
+-+ *  srtp_sha1_core(M, H) computes the core compression function, where M is
+-  *  the next part of the message (in network byte order) and H is the
+-  *  intermediate state { H0, H1, ...} (in host byte order)
+-  *
+-@@ -99,7 +99,7 @@ sha1(const uint8_t *msg,  int octets_in_msg, uint32_t hash_value[5]) {
+-  */
+- 
+- void
+--sha1_core(const uint32_t M[16], uint32_t hash_value[5]) {
+-+srtp_sha1_core(const uint32_t M[16], uint32_t hash_value[5]) {
+-   uint32_t H0;
+-   uint32_t H1;
+-   uint32_t H2;
+-@@ -186,7 +186,7 @@ sha1_core(const uint32_t M[16], uint32_t hash_value[5]) {
+- }
+- 
+- void
+--sha1_init(sha1_ctx_t *ctx) {
+-+srtp_sha1_init(srtp_sha1_ctx_t *ctx) {
+- 
+-   /* initialize state vector */
+-   ctx->H[0] = 0x67452301;
+-@@ -204,7 +204,7 @@ sha1_init(sha1_ctx_t *ctx) {
+- }
+- 
+- void
+--sha1_update(sha1_ctx_t *ctx, const uint8_t *msg, int octets_in_msg) {
+-+srtp_sha1_update(srtp_sha1_ctx_t *ctx, const uint8_t *msg, int octets_in_msg) {
+-   int i;
+-   uint8_t *buf = (uint8_t *)ctx->M;
+- 
+-@@ -227,13 +227,13 @@ sha1_update(sha1_ctx_t *ctx, const uint8_t *msg, int octets_in_msg) {
+- 
+-       /* process a whole block */
+- 
+--      debug_print(mod_sha1, "(update) running sha1_core()", NULL);
+-+      debug_print(mod_sha1, "(update) running srtp_sha1_core()", NULL);
+- 
+--      sha1_core(ctx->M, ctx->H);
+-+      srtp_sha1_core(ctx->M, ctx->H);
+- 
+-     } else {
+- 
+--      debug_print(mod_sha1, "(update) not running sha1_core()", NULL);
+-+      debug_print(mod_sha1, "(update) not running srtp_sha1_core()", NULL);
+- 
+-       for (i=ctx->octets_in_buffer; 
+- 	   i < (ctx->octets_in_buffer + octets_in_msg); i++)
+-@@ -247,12 +247,12 @@ sha1_update(sha1_ctx_t *ctx, const uint8_t *msg, int octets_in_msg) {
+- }
+- 
+- /*
+-- * sha1_final(ctx, output) computes the result for ctx and copies it
+-+ * srtp_sha1_final(ctx, output) computes the result for ctx and copies it
+-  * into the twenty octets located at *output
+-  */
+- 
+- void
+--sha1_final(sha1_ctx_t *ctx, uint32_t *output) {
+-+srtp_sha1_final(srtp_sha1_ctx_t *ctx, uint32_t *output) {
+-   uint32_t A, B, C, D, E, TEMP;
+-   uint32_t W[80];  
+-   int i, t;
+-@@ -339,11 +339,11 @@ sha1_final(sha1_ctx_t *ctx, uint32_t *output) {
+- 
+-   }
+- 
+--  debug_print(mod_sha1, "(final) running sha1_core()", NULL);
+-+  debug_print(mod_sha1, "(final) running srtp_sha1_core()", NULL);
+- 
+-   if (ctx->octets_in_buffer >= 56) {
+- 
+--    debug_print(mod_sha1, "(final) running sha1_core() again", NULL);
+-+    debug_print(mod_sha1, "(final) running srtp_sha1_core() again", NULL);
+- 
+-     /* we need to do one final run of the compression algo */
+- 
+-diff --git a/crypto/include/hmac.h b/crypto/include/hmac.h
+-index 875f45c..9fc664e 100644
+---- a/crypto/include/hmac.h
+-+++ b/crypto/include/hmac.h
+-@@ -51,8 +51,8 @@
+- 
+- typedef struct {
+-   uint8_t    opad[64];
+--  sha1_ctx_t ctx;
+--  sha1_ctx_t init_ctx;
+-+  srtp_sha1_ctx_t ctx;
+-+  srtp_sha1_ctx_t init_ctx;
+- #ifdef OPENSSL
+-   int ctx_initialized;
+-   int init_ctx_initialized;
+-diff --git a/crypto/include/sha1.h b/crypto/include/sha1.h
+-index f1744ce..e177af6 100644
+---- a/crypto/include/sha1.h
+-+++ b/crypto/include/sha1.h
+-@@ -56,15 +56,15 @@
+- #include <openssl/evp.h>
+- #include <stdint.h>
+- 
+--typedef EVP_MD_CTX sha1_ctx_t;
+-+typedef EVP_MD_CTX srtp_sha1_ctx_t;
+- 
+- /*
+-- * sha1_init(&ctx) initializes the SHA1 context ctx
+-+ * srtp_sha1_init(&ctx) initializes the SHA1 context ctx
+-  *
+-- * sha1_update(&ctx, msg, len) hashes the len octets starting at msg
+-+ * srtp_sha1_update(&ctx, msg, len) hashes the len octets starting at msg
+-  * into the SHA1 context
+-  *
+-- * sha1_final(&ctx, output) performs the final processing of the SHA1
+-+ * srtp_sha1_final(&ctx, output) performs the final processing of the SHA1
+-  * context and writes the result to the 20 octets at output
+-  *
+-  * Return values are ignored on the EVP functions since all three
+-@@ -72,18 +72,18 @@ typedef EVP_MD_CTX sha1_ctx_t;
+-  *
+-  */
+- 
+--static inline void sha1_init (sha1_ctx_t *ctx)
+-+static inline void srtp_sha1_init (srtp_sha1_ctx_t *ctx)
+- {
+-     EVP_MD_CTX_init(ctx);
+-     EVP_DigestInit(ctx, EVP_sha1());
+- }
+- 
+--static inline void sha1_update (sha1_ctx_t *ctx, const uint8_t *M, int octets_in_msg)
+-+static inline void srtp_sha1_update (srtp_sha1_ctx_t *ctx, const uint8_t *M, int octets_in_msg)
+- {
+-     EVP_DigestUpdate(ctx, M, octets_in_msg);
+- }
+- 
+--static inline void sha1_final (sha1_ctx_t *ctx, uint32_t *output)
+-+static inline void srtp_sha1_final (srtp_sha1_ctx_t *ctx, uint32_t *output)
+- {
+-     unsigned int len = 0;
+- 
+-@@ -97,7 +97,7 @@ typedef struct {
+-   uint32_t M[16];            /* message buffer                  */
+-   int octets_in_buffer;      /* octets of message in buffer     */
+-   uint32_t num_bits_in_msg;  /* total number of bits in message */
+--} sha1_ctx_t;
+-+} srtp_sha1_ctx_t;
+- 
+- /*
+-  * sha1(&ctx, msg, len, output) hashes the len octets starting at msg
+-@@ -110,33 +110,33 @@ void
+- sha1(const uint8_t *message,  int octets_in_msg, uint32_t output[5]);
+- 
+- /*
+-- * sha1_init(&ctx) initializes the SHA1 context ctx
+-+ * srtp_sha1_init(&ctx) initializes the SHA1 context ctx
+-  * 
+-- * sha1_update(&ctx, msg, len) hashes the len octets starting at msg
+-+ * srtp_sha1_update(&ctx, msg, len) hashes the len octets starting at msg
+-  * into the SHA1 context
+-  * 
+-- * sha1_final(&ctx, output) performs the final processing of the SHA1
+-+ * srtp_sha1_final(&ctx, output) performs the final processing of the SHA1
+-  * context and writes the result to the 20 octets at output
+-  *
+-  */
+- 
+- void
+--sha1_init(sha1_ctx_t *ctx);
+-+srtp_sha1_init(srtp_sha1_ctx_t *ctx);
+- 
+- void
+--sha1_update(sha1_ctx_t *ctx, const uint8_t *M, int octets_in_msg);
+-+srtp_sha1_update(srtp_sha1_ctx_t *ctx, const uint8_t *M, int octets_in_msg);
+- 
+- void
+--sha1_final(sha1_ctx_t *ctx, uint32_t output[5]);
+-+srtp_sha1_final(srtp_sha1_ctx_t *ctx, uint32_t output[5]);
+- 
+- /*
+-- * The sha1_core function is INTERNAL to SHA-1, but it is declared
+-+ * The srtp_sha1_core function is INTERNAL to SHA-1, but it is declared
+-  * here because it is also used by the cipher SEAL 3.0 in its key
+-  * setup algorithm.  
+-  */
+- 
+- /*
+-- *  sha1_core(M, H) computes the core sha1 compression function, where M is
+-+ *  srtp_sha1_core(M, H) computes the core sha1 compression function, where M is
+-  *  the next part of the message and H is the intermediate state {H0,
+-  *  H1, ...}
+-  *
+-@@ -145,7 +145,7 @@ sha1_final(sha1_ctx_t *ctx, uint32_t output[5]);
+-  */
+- 
+- void
+--sha1_core(const uint32_t M[16], uint32_t hash_value[5]);
+-+srtp_sha1_core(const uint32_t M[16], uint32_t hash_value[5]);
+- 
+- #endif /* else OPENSSL */
+-      
+-diff --git a/crypto/test/sha1_driver.c b/crypto/test/sha1_driver.c
+-index 6adfad1..2e19479 100644
+---- a/crypto/test/sha1_driver.c
+-+++ b/crypto/test/sha1_driver.c
+-@@ -102,7 +102,7 @@ hash_test_case_add(hash_test_case_t **list_ptr,
+- 
+- err_status_t
+- sha1_test_case_validate(const hash_test_case_t *test_case) {
+--  sha1_ctx_t ctx;
+-+  srtp_sha1_ctx_t ctx;
+-   uint32_t hash_value[5];
+- 
+-   if (test_case == NULL)
+-@@ -113,9 +113,9 @@ sha1_test_case_validate(const hash_test_case_t *test_case) {
+-   if (test_case->data_len > MAX_HASH_DATA_LEN)
+-     return err_status_bad_param;
+- 
+--  sha1_init(&ctx);
+--  sha1_update(&ctx, test_case->data, test_case->data_len);
+--  sha1_final(&ctx, hash_value);
+-+  srtp_sha1_init(&ctx);
+-+  srtp_sha1_update(&ctx, test_case->data, test_case->data_len);
+-+  srtp_sha1_final(&ctx, hash_value);
+-   if (0 == memcmp(test_case->hash, hash_value, 20)) {
+- #if VERBOSE
+-     printf("PASSED: reference value: %s\n", 
 --- 
--2.7.4
+-2.7.3
 -
-diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
-index be350c423a..0e8f034e06 100644
---- a/package/kmod/kmod.hash
-+++ b/package/kmod/kmod.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
--sha256 610b8d1df172acc39a4fdf1eaa47a57b04873c82f32152e7a62e29b6ff9cb397  kmod-24.tar.xz
-+sha256 7165e6496656159dcb909a91ed708a0fe273a4b128b4b1dc997ccb5189eef1cd  kmod-25.tar.xz
-diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
-index 7c796ab19f..c165ea3020 100644
---- a/package/kmod/kmod.mk
-+++ b/package/kmod/kmod.mk
+diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
+index cb060d27b9..0aa8a67497 100644
+--- a/package/libsrtp/libsrtp.hash
++++ b/package/libsrtp/libsrtp.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 56a7b521c25134f48faff26b0b1e3d4378a14986a2d3d7bc6fefb48987304ff0 libsrtp-v1.5.4.tar.gz
++sha256 44fd7497bce78767e96b54a11bca520adb2ad32effd515f04bce602b60a1a50b  libsrtp-v2.2.0.tar.gz
++sha256 8defed37d52096ae14b60adc499c33d43975109bc265552ee67e9a888c634b93  LICENSE
+diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
+index 9e72856c43..dd83dbc003 100644
+--- a/package/libsrtp/libsrtp.mk
++++ b/package/libsrtp/libsrtp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KMOD_VERSION = 24
-+KMOD_VERSION = 25
- KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
- KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
- KMOD_INSTALL_STAGING = YES
+-LIBSRTP_VERSION = v1.5.4
++LIBSRTP_VERSION = v2.2.0
+ LIBSRTP_SITE = $(call github,cisco,libsrtp,$(LIBSRTP_VERSION))
+ LIBSRTP_INSTALL_STAGING = YES
+ LIBSRTP_LICENSE = BSD-3-Clause
