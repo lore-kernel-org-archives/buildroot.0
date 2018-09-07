@@ -1,78 +1,79 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 07 Sep 2018 11:16:21 -0000
-Subject: [Buildroot] [git commit] package/git-crypt: bump version to 0.6.0
-Message-ID: <20180907111527.C2FF382A6C@busybox.osuosl.org>
+Date: Fri, 07 Sep 2018 11:16:22 -0000
+Subject: [Buildroot] [git commit] package/libtorrent: bump version to 0.13.7
+Message-ID: <20180907111529.29DD58130C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58b7005be1845f6f5c15da46e6bb95d769773c6a
+commit: https://git.buildroot.net/buildroot/commit/?id=07673dd6eb2565468abb5730fa3ca9334df683fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Quoting from release notes:
-https://www.agwa.name/git/git-crypt.git/raw/master/NEWS
-
-"v0.6.0 (2017-11-26)
-  * Add support for OpenSSL 1.1 (still works with OpenSSL 1.0).
-  * Switch to C++11 (gcc 4.9 or higher now required to build).
- [...]"
-
-Added license hashes.
+Added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/git-crypt/Config.in      | 6 ++++--
- package/git-crypt/git-crypt.hash | 7 +++++--
- package/git-crypt/git-crypt.mk   | 2 +-
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ package/libtorrent/0001-cross_compile.patch | 14 ++------------
+ package/libtorrent/libtorrent.hash          |  3 ++-
+ package/libtorrent/libtorrent.mk            |  2 +-
+ 3 files changed, 5 insertions(+), 14 deletions(-)
 
-diff --git a/package/git-crypt/Config.in b/package/git-crypt/Config.in
-index 362fe9a600..bb86219cf8 100644
---- a/package/git-crypt/Config.in
-+++ b/package/git-crypt/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GIT_CRYPT
- 	bool "git-crypt"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_USE_MMU # git
- 	select BR2_PACKAGE_GIT # runtime
- 	select BR2_PACKAGE_OPENSSL
-@@ -10,6 +11,7 @@ config BR2_PACKAGE_GIT_CRYPT
+diff --git a/package/libtorrent/0001-cross_compile.patch b/package/libtorrent/0001-cross_compile.patch
+index abb243820c..9febfa7f3c 100644
+--- a/package/libtorrent/0001-cross_compile.patch
++++ b/package/libtorrent/0001-cross_compile.patch
+@@ -4,27 +4,17 @@ Date: Mon, 5 Oct 2015 00:40:25 +0100
+ Subject: [PATCH] Fix cross compilation, based on OpenWRT patch.
  
- 	  https://www.agwa.name/projects/git-crypt/
+ [Vincent: tweak the patch for version 0.13.6]
++[Bernd: tweak the patch for version 0.13.7]
  
--comment "git-crypt needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "git-crypt needs a toolchain w/ C++, gcc >= 4.9"
-+	depends on !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
-diff --git a/package/git-crypt/git-crypt.hash b/package/git-crypt/git-crypt.hash
-index 8589f03f71..973432d7d0 100644
---- a/package/git-crypt/git-crypt.hash
-+++ b/package/git-crypt/git-crypt.hash
-@@ -1,2 +1,5 @@
--# Hash from: https://lists.cloudmutt.com/pipermail/git-crypt-announce/2015-May/000003.html
--sha256 0a8f92c0a0a125bf768d0c054d947ca4e4b8d6556454b0e7e87fb907ee17cf06 git-crypt-0.5.0.tar.gz
-+# Locally calculated after checking pgp signature
-+sha256 6d30fcd99442d50f4b3c8d554067ff1d980cdf9f3120ee774131172dba98fd6f  git-crypt-0.6.0.tar.gz
-+# Locally calculated
-+sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256 506657e7a381165550e6c33e35b3b03bbef3e1feb68ba5529e264bd75ed2dc64  parse_options.hpp
-diff --git a/package/git-crypt/git-crypt.mk b/package/git-crypt/git-crypt.mk
-index 6cae456fd3..507534c139 100644
---- a/package/git-crypt/git-crypt.mk
-+++ b/package/git-crypt/git-crypt.mk
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ ---
+  configure.ac      |    1 -
+  scripts/checks.m4 |    2 +-
+  scripts/common.m4 |    4 ++--
+  3 files changed, 3 insertions(+), 4 deletions(-)
+ 
+-diff --git a/configure.ac b/configure.ac
+-index ba994ee..7696466 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -19,7 +19,6 @@ AC_SUBST(LIBTORRENT_INTERFACE_VERSION_NO)
+- 
+- AM_INIT_AUTOMAKE
+- AC_CONFIG_HEADERS(config.h)
+--AM_PATH_CPPUNIT(1.9.6)
+- 
+- AC_PROG_CXX
+- 
+ diff --git a/scripts/checks.m4 b/scripts/checks.m4
+ index 598f39b..0e5abe0 100644
+ --- a/scripts/checks.m4
+diff --git a/package/libtorrent/libtorrent.hash b/package/libtorrent/libtorrent.hash
+index 73753e94ce..8e0bc1caa4 100644
+--- a/package/libtorrent/libtorrent.hash
++++ b/package/libtorrent/libtorrent.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 2838a08c96edfd936aff8fbf99ecbb930c2bfca3337dd1482eb5fccdb80d5a04  libtorrent-0.13.6.tar.gz
++sha256 c738f60f4d7b6879cd2745fb4310bf24c9287219c1fd619706a9d5499ca7ecc1  libtorrent-0.13.7.tar.gz
++sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/libtorrent/libtorrent.mk b/package/libtorrent/libtorrent.mk
+index fbd332e379..8d74addaf7 100644
+--- a/package/libtorrent/libtorrent.mk
++++ b/package/libtorrent/libtorrent.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GIT_CRYPT_VERSION = 0.5.0
-+GIT_CRYPT_VERSION = 0.6.0
- GIT_CRYPT_SITE = https://www.agwa.name/projects/git-crypt/downloads
- GIT_CRYPT_DEPENDENCIES = host-pkgconf openssl
- GIT_CRYPT_LICENSE = GPL-3.0+, MIT
+-LIBTORRENT_VERSION = 0.13.6
++LIBTORRENT_VERSION = 0.13.7
+ LIBTORRENT_SITE = http://rtorrent.net/downloads
+ LIBTORRENT_DEPENDENCIES = host-pkgconf zlib \
+ 	$(if $(BR2_PACKAGE_OPENSSL),openssl)
