@@ -1,41 +1,48 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  7 Sep 2018 21:31:55 +0200
-Subject: [Buildroot] [PATCH 1/1] libmpdclient: bump to version 2.15
-Message-ID: <20180907193155.13892-1-fontaine.fabrice@gmail.com>
+Date: Fri,  7 Sep 2018 21:36:10 +0200
+Subject: [Buildroot] [PATCH 1/1] libidn: bump to version 1.35
+Message-ID: <20180907193610.30388-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove sha1 (no announcement made on
+http://lists.nongnu.org/archive/html/help-libidn/)
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libmpdclient/libmpdclient.hash | 4 ++--
- package/libmpdclient/libmpdclient.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libidn/libidn.hash | 6 ++----
+ package/libidn/libidn.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/libmpdclient/libmpdclient.hash b/package/libmpdclient/libmpdclient.hash
-index eb32786419..61ee5be6a3 100644
---- a/package/libmpdclient/libmpdclient.hash
-+++ b/package/libmpdclient/libmpdclient.hash
-@@ -1,3 +1,3 @@
--# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.14.tar.xz.sig, sha256 locally computed
--sha256  0a84e2791bfe3077cf22ee1784c805d5bb550803dffe56a39aa3690a38061372  libmpdclient-2.14.tar.xz
-+# Verified against http://www.musicpd.org/download/libmpdclient/2/libmpdclient-2.15.tar.xz.sig, sha256 locally computed
-+sha256  b4dbf6f9fd99e8e7c183cb3b7de75ee4ac14d92ca43e9a99bef09168b20246d1  libmpdclient-2.15.tar.xz
- sha256  9574c3b0a9c31723cc3d5f32af4655a015fff5ec6ec8115b7906cd7d9623cf32  COPYING
-diff --git a/package/libmpdclient/libmpdclient.mk b/package/libmpdclient/libmpdclient.mk
-index c04536eb88..b812e63cdf 100644
---- a/package/libmpdclient/libmpdclient.mk
-+++ b/package/libmpdclient/libmpdclient.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libidn/libidn.hash b/package/libidn/libidn.hash
+index 0d03342447..f5ba311e90 100644
+--- a/package/libidn/libidn.hash
++++ b/package/libidn/libidn.hash
+@@ -1,7 +1,5 @@
+-# From http://lists.nongnu.org/archive/html/help-libidn/2018-03/msg00006.html
+-sha1	8701e3d01df25431802ce483756ecad698156835	libidn-1.34.tar.gz
+-# Calculated based on the hash above
+-sha256	3719e2975f2fb28605df3479c380af2cf4ab4e919e1506527e4c7670afff6e3c	libidn-1.34.tar.gz
++# Locally computed:
++sha256	f11af1005b46b7b15d057d7f107315a1ad46935c7fcdf243c16e46ec14f0fe1e	libidn-1.35.tar.gz
+ 
+ # Hash for license files:
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
+diff --git a/package/libidn/libidn.mk b/package/libidn/libidn.mk
+index 77733edaa9..601edcb57d 100644
+--- a/package/libidn/libidn.mk
++++ b/package/libidn/libidn.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBMPDCLIENT_VERSION_MAJOR = 2
--LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).14
-+LIBMPDCLIENT_VERSION = $(LIBMPDCLIENT_VERSION_MAJOR).15
- LIBMPDCLIENT_SOURCE = libmpdclient-$(LIBMPDCLIENT_VERSION).tar.xz
- LIBMPDCLIENT_SITE = http://www.musicpd.org/download/libmpdclient/$(LIBMPDCLIENT_VERSION_MAJOR)
- LIBMPDCLIENT_INSTALL_STAGING = YES
+-LIBIDN_VERSION = 1.34
++LIBIDN_VERSION = 1.35
+ LIBIDN_SITE = $(BR2_GNU_MIRROR)/libidn
+ LIBIDN_INSTALL_STAGING = YES
+ LIBIDN_CONF_ENV = EMACS="no" MAKEINFO=true
 -- 
 2.17.1
