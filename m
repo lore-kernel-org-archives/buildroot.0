@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 21:35:37 +0200
-Subject: [Buildroot] [PATCH] lua: remove 5.2.x version
-In-Reply-To: <20180908161118.4493-1-francois.perrad@gadz.org>
-References: <20180908161118.4493-1-francois.perrad@gadz.org>
-Message-ID: <20180908213537.72485d66@windsurf.home>
+Date: Sat, 8 Sep 2018 21:36:01 +0200
+Subject: [Buildroot] [PATCH 1/1] libminiupnpc: fix hash for license file
+In-Reply-To: <20180908175903.4561-1-asafka7@gmail.com>
+References: <20180908175903.4561-1-asafka7@gmail.com>
+Message-ID: <20180908213601.5d7a0dfb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,15 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat,  8 Sep 2018 18:11:18 +0200, Francois Perrad wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+On Sat,  8 Sep 2018 20:59:03 +0300, Asaf Kahlon wrote:
+> Fixes:
+> http://autobuild.buildroot.org/results/51d/51dde9a1a7f60899a1befa24af379d204acb0d22/
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-Could you give some justification in the commit log ?
+What are the changes between the previous and new license files ?
 
-Why remove 5.2 and remove 5.1 ?
-
-We already said it numerous time: an empty commit log is never good!
-
-Thanks!
+Thanks,
 
 Thomas
 -- 
