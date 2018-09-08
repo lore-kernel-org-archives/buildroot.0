@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 15:47:03 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/vlc: bump version to 3.0.4
-In-Reply-To: <20180906201841.17047-1-bernd.kuhls@t-online.de>
-References: <20180906201841.17047-1-bernd.kuhls@t-online.de>
-Message-ID: <20180908154703.2ad4ca89@windsurf.home>
+Date: Sat, 8 Sep 2018 15:47:20 +0200
+Subject: [Buildroot] [PATCH/next v2] flatcc: conditionally require c++
+ in cmake
+In-Reply-To: <1536268289-23275-1-git-send-email-JoelsonCarl@gmail.com>
+References: <1536268289-23275-1-git-send-email-JoelsonCarl@gmail.com>
+Message-ID: <20180908154720.2fb09991@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,31 +13,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu,  6 Sep 2018 22:18:41 +0200, Bernd Kuhls wrote:
-> Removed patch 0004, applied upstream.
-> Renumbered remaining patches.
+On Thu,  6 Sep 2018 15:11:29 -0600, Joel Carlson wrote:
+> Patches CMake files in flatcc to conditionally set c++ as a required
+> language depending on if FLATCC_TEST option is set, as only the tests
+> include a c++ file.
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Fixes
+> http://autobuild.buildroot.net/results/8fb0447eed1d55b7687f657530e31695cf77ce5c/
+> 
+> Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
 > ---
->  ...e-name-of-the-vorbis-and-ogg-librar.patch} |  0
->  .../0004-qt-fix-build-against-Qt-5.11.patch   | 33 -------------------
->  ...-using-uClibc-by-adding-sys-types.h.patch} |  0
->  ...on-t-assume-strerror_l-is-available.patch} |  0
->  ...ent-run-time-fallback-to-real-time-.patch} |  0
->  ...build-support-and-fix-10bit-support.patch} |  0
->  ...ch => 0009-Add-support-for-freerdp2.patch} |  0
->  ...-use-AC_PATH_PROG-to-check-for-wayl.patch} |  0
->  package/vlc/vlc.hash                          | 12 +++----
->  package/vlc/vlc.mk                            |  2 +-
->  10 files changed, 7 insertions(+), 40 deletions(-)
->  rename package/vlc/{0005-Don-t-hardcode-the-name-of-the-vorbis-and-ogg-librar.patch => 0004-Don-t-hardcode-the-name-of-the-vorbis-and-ogg-librar.patch} (100%)
->  delete mode 100644 package/vlc/0004-qt-fix-build-against-Qt-5.11.patch
->  rename package/vlc/{0006-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch => 0005-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch} (100%)
->  rename package/vlc/{0007-Don-t-assume-strerror_l-is-available.patch => 0006-Don-t-assume-strerror_l-is-available.patch} (100%)
->  rename package/vlc/{0008-posix-remove-ancient-run-time-fallback-to-real-time-.patch => 0007-posix-remove-ancient-run-time-fallback-to-real-time-.patch} (100%)
->  rename package/vlc/{0009-x264-drop-148-build-support-and-fix-10bit-support.patch => 0008-x264-drop-148-build-support-and-fix-10bit-support.patch} (100%)
->  rename package/vlc/{0010-Add-support-for-freerdp2.patch => 0009-Add-support-for-freerdp2.patch} (100%)
->  rename package/vlc/{0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch => 0010-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch} (100%)
+> Changes v1 -> v2:
+>   - patch CMake files to not require C++ when we don't build the tests,
+>     instead of making flatcc package require C++
 
 Applied to master, thanks.
 
