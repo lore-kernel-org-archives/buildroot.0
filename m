@@ -1,56 +1,129 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 22:07:52 +0200
-Subject: [Buildroot] [PATCH v3] gst1-plugins-good: add option for qmlgl
- plugin (qt5 plugin)
-In-Reply-To: <1535958840-4452-1-git-send-email-inigohuguet@fanamoel.com>
-References: <20180815210249.5e11df4d@gmx.net>
- <1535958840-4452-1-git-send-email-inigohuguet@fanamoel.com>
-Message-ID: <20180908220752.4254ec4c@windsurf.home>
+Date: Sat,  8 Sep 2018 22:34:31 +0200
+Subject: [Buildroot] [PATCH] circus: fix build with Python 3.7.0
+Message-ID: <20180908203431.19594-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello I?igo,
+Python 3.7.0 makes 'async' a reserved keyword, but circus uses it as a
+method argument. This commit adds a patch to the circus package, which
+has been submitted upstream, to resolve this issue.
 
-On Mon,  3 Sep 2018 09:14:00 +0200, I?igo Huguet wrote:
-> gst1-plugins-good is built with --disable-qt option, so qmlgl plugin
-> is disabled. Added option to enable it, allowing to use elements
-> qmlglsrc and qmlglsink.
-> 
-> Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
+Fixes:
 
-Thanks for this new iteration!
+  http://autobuild.buildroot.net/results/8122a00644810722b827cd5e0b90181996dc5657/
 
-> diff --git a/package/gstreamer1/gst1-plugins-good/0001-configure-fix-qt-qpa-detection.patch b/package/gstreamer1/gst1-plugins-good/0001-configure-fix-qt-qpa-detection.patch
-> new file mode 100644
-> index 0000000..d755354
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-plugins-good/0001-configure-fix-qt-qpa-detection.patch
-> @@ -0,0 +1,14 @@
-> +configure: fix QT QPA detection
-> +
-> +Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
-> +
-> +--- gst1-plugins-good-1.14.2/configure_orig	2018-08-15 19:42:48.065311007 +0200
-> ++++ gst1-plugins-good-1.14.2/configure	2018-08-15 19:42:58.665528543 +0200
-> +@@ -35924,7 +35924,7 @@
-> +       else
-> +         HAVE_QT="yes"
-> +         HAVE_QT_WINDOWING="no"
-> +-        QT_VERSION="`$PKG_CONFIG --define-prefix --modversion Qt5Core`"
-> ++        QT_VERSION="`$PKG_CONFIG --modversion Qt5Core`"
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...s-rename-async-argument-of-_create_circus.patch | 97 ++++++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 package/circus/0001-circus-tests-rename-async-argument-of-_create_circus.patch
 
-I think patching GStreamer is not the right approach here. Could you
-instead apply http://patchwork.ozlabs.org/patch/967653/, which updates
-our pkgconf package to use a newer version that supports the
---define-prefix option ?
-
-Thanks!
-
-Thomas
+diff --git a/package/circus/0001-circus-tests-rename-async-argument-of-_create_circus.patch b/package/circus/0001-circus-tests-rename-async-argument-of-_create_circus.patch
+new file mode 100644
+index 0000000000..6af8d87254
+--- /dev/null
++++ b/package/circus/0001-circus-tests-rename-async-argument-of-_create_circus.patch
+@@ -0,0 +1,97 @@
++From 7fd0495cf3520508fb1cca301ad3d792b56b5656 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 8 Sep 2018 22:24:24 +0200
++Subject: [PATCH] circus/tests: rename async argument of _create_circus() to
++ use_async
++
++In Python 3.7.0, 'async' is now a reserved keyword of the language, so
++it cannot be used as an method argument name. When used, it causes the
++following byte-compilation failure:
++
++Traceback (most recent call last):
++  File "/home/thomas/projets/buildroot/output/host/lib/python3.7/py_compile.py", line 136, in compile
++    _optimize=optimize)
++  File "<frozen importlib._bootstrap_external>", line 763, in source_to_code
++  File "<frozen importlib._bootstrap>", line 219, in _call_with_frames_removed
++  File "usr/lib/python3.7/site-packages/circus/tests/support.py", line 210
++    debug=debug, async=True, **kw)
++                     ^
++SyntaxError: invalid syntax
++
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Upstream-status: https://github.com/circus-tent/circus/pull/1079
++---
++ circus/tests/support.py      | 6 +++---
++ circus/tests/test_client.py  | 2 +-
++ circus/tests/test_watcher.py | 4 ++--
++ 3 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/circus/tests/support.py b/circus/tests/support.py
++index 38964cc..794a9c7 100644
++--- a/circus/tests/support.py
+++++ b/circus/tests/support.py
++@@ -217,7 +217,7 @@ class TestCircus(AsyncTestCase):
++                       stdout_stream=None, debug=True, **kw):
++         testfile, arbiter = self._create_circus(
++             cmd, stdout_stream=stdout_stream,
++-            debug=debug, async=True, **kw)
+++            debug=debug, use_async=True, **kw)
++         self.test_file = testfile
++         self.arbiter = arbiter
++         self.arbiters.append(arbiter)
++@@ -265,7 +265,7 @@ class TestCircus(AsyncTestCase):
++ 
++     @classmethod
++     def _create_circus(cls, callable_path, plugins=None, stats=False,
++-                       async=False, arbiter_kw=None, **kw):
+++                       use_async=False, arbiter_kw=None, **kw):
++         fd, testfile = mkstemp()
++         os.close(fd)
++         wdir = os.path.dirname(os.path.dirname(os.path.dirname(
++@@ -292,7 +292,7 @@ class TestCircus(AsyncTestCase):
++             arbiter_kw['stats_endpoint'] = "tcp://127.0.0.1:%d" % _gp()
++             arbiter_kw['statsd_close_outputs'] = not debug
++ 
++-        if async:
+++        if use_async:
++             arbiter_kw['background'] = False
++             arbiter_kw['loop'] = get_ioloop()
++         else:
++diff --git a/circus/tests/test_client.py b/circus/tests/test_client.py
++index 9a56a11..a0cfca0 100644
++--- a/circus/tests/test_client.py
+++++ b/circus/tests/test_client.py
++@@ -90,7 +90,7 @@ class TestWithHook(TestCircus):
++         self.stream = QueueStream()
++         self.errstream = QueueStream()
++         dummy_process = 'circus.tests.support.run_process'
++-        return self._create_circus(dummy_process, async=True,
+++        return self._create_circus(dummy_process, use_async=True,
++                                    stdout_stream={'stream': self.stream},
++                                    stderr_stream={'stream': self.errstream},
++                                    hooks=hooks)
++diff --git a/circus/tests/test_watcher.py b/circus/tests/test_watcher.py
++index 5dd857c..4299ed1 100644
++--- a/circus/tests/test_watcher.py
+++++ b/circus/tests/test_watcher.py
++@@ -376,7 +376,7 @@ class TestWatcherHooks(TestCircus):
++         return self._create_circus(dummy_process,
++                                    stdout_stream=stdout_stream,
++                                    stderr_stream=stderr_stream,
++-                                   hooks=hooks, debug=True, async=True)
+++                                   hooks=hooks, debug=True, use_async=True)
++ 
++     @tornado.gen.coroutine
++     def _stop(self):
++@@ -601,7 +601,7 @@ class RespawnTest(TestCircus):
++     def test_not_respawning(self):
++         oneshot_process = 'circus.tests.test_watcher.oneshot_process'
++         testfile, arbiter = self._create_circus(oneshot_process,
++-                                                respawn=False, async=True)
+++                                                respawn=False, use_async=True)
++         yield arbiter.start()
++         watcher = arbiter.watchers[-1]
++         try:
++-- 
++2.14.4
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.14.4
