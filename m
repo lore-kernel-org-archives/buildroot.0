@@ -1,53 +1,59 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sat,  8 Sep 2018 13:25:06 +0200
-Subject: [Buildroot] [PATCH v2] dvdrw-tools: fix minor()/major() build
- failure due to glibc 2.28
-Message-ID: <20180908112506.26647-1-giulio.benetti@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 8 Sep 2018 14:36:52 +0200
+Subject: [Buildroot] Sponsoring needed for the Buildroot Developers Meeting
+Message-ID: <20180908143652.5965f7eb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
-and therefore <sys/sysmacros.h> must be included explicitly when
-major()/minor() are used.
+Hello,
 
-This commit adds a patch to directly include <sys/sysmacros.h> into
-growisofs.c where minor() and major() macros are used.
+As already announced on the mailing list, we are going to have a
+Buildroot Developers Meeting on October 20-21 in Edinburgh. This
+meeting is really important, as it allows a number of core Buildroot
+developers to work together during two days, and spend this time
+reviewing pending patches and discussing current topics/issues in
+Buildroot.
 
-Fixes:
-http://autobuild.buildroot.net/results/763/763879f845ffd43343a7b4d548b1eba991d572bd//
+  https://elinux.org/Buildroot:DeveloperDaysELCE2018
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
-Changes V1->V2:
-* remove #include <sys/sysmacros.h> from transport.hxx, it's useless, only
-  growisofs.c needs it.
+We have this meeting next to ELCE every year, and most of the time, we
+manage to find a meeting location for free, often in a hackerspace or
+company.
 
- ...ude-sysmacros.h-to-compile-with-newer-gcc.patch | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
- create mode 100644 package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch
+However, for the Edinburgh edition, despite lots of effort, we haven't
+been able to find a meeting location free of charge, and meeting rooms
+to rent were either expensive or offered limited opening hours (or
+both).
 
-diff --git a/package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch b/package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch
-new file mode 100644
-index 0000000000..e1b893d0be
---- /dev/null
-+++ b/package/dvdrw-tools/0002-Include-sysmacros.h-to-compile-with-newer-gcc.patch
-@@ -0,0 +1,14 @@
-+growisofs.c: include sysmacros.h to compile with newer gcc
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+
-+diff -urpN dvd+rw-tools-7.1.orig/growisofs.c dvd+rw-tools-7.1/growisofs.c
-+--- dvd+rw-tools-7.1.orig/growisofs.c	2018-09-08 01:56:11.686656819 +0200
-++++ dvd+rw-tools-7.1/growisofs.c	2018-09-08 02:11:45.868778471 +0200
-+@@ -441,6 +441,7 @@
-+ #include <fcntl.h>
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-++#include <sys/sysmacros.h>
-+ #include <assert.h>
-+ #include "mp.h"
+Therefore, we booked an Airbnb place that is sufficiently large to host
+the meetinng during the two days. The cost is 683 EUR, see the receipt
+at http://thomas.enix.org/airbnb-buildroot-meeting-oct2018.png.
+
+In order to offset the cost of renting this place, we are looking for
+companies willing to make a donation to sponsor this event. We have a
+legal entity called "Buildroot Association" in France with a bank
+account, so we can issue a bill and receive a wire transfer.
+Considering the overall cost, even two sponsors at 200-250 EUR would be
+sufficient. It is a very small cost compared to the amount of work that
+is done by volunteer developers on their spare time during this meeting.
+
+Of course, donations from individuals are also welcome, but considering
+the number of companies using Buildroot, we believe it should be
+possible to find 2/3 small companies willing to help the project.
+
+Of course, companies who sponsor the event will be visible on
+https://buildroot.org/sponsors.html, and will be thanked in the next
+release announcement e-mail.
+
+Do not hesitate to contact me for additional details.
+
+Thanks a lot for your support,
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
