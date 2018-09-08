@@ -1,42 +1,66 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 23:38:03 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/glibc: allow to specify
- host-make
-In-Reply-To: <20180903191933.26080-3-romain.naour@gmail.com>
-References: <20180903191933.26080-1-romain.naour@gmail.com>
- <20180903191933.26080-3-romain.naour@gmail.com>
-Message-ID: <20180908233803.1d7f81c0@windsurf.home>
+Date: Sat, 8 Sep 2018 23:39:04 +0200
+Subject: [Buildroot] [git commit] package/squid: depends on current_exception
+Message-ID: <20180908213812.CACF6837A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=c52e1475e2d7c4c179d01d95a5822d09c4ce6039
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon,  3 Sep 2018 21:19:33 +0200, Romain Naour wrote:
-> Use host-make package if GNU make from the host machine is too old.
-> 
-> Use the newly introduced BR2_MAKE_HOST_DEPENDENCY and BR2_MAKE to
-> provide respectively, host-make dependency and the path to the GNU
-> make binary to use for building glibc.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/576/5760ea2635d9aecc9c789494a8b2cc73a1af1ceb
-> http://autobuild.buildroot.net/results/583/58347b94884eee2db28740486eda280e8c08e22f
-> http://autobuild.buildroot.net/results/dc7/dc7c8cd548409864ab0055e196c0280457a5fb5f
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Baruch Siach <baruch@tkos.co.il>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/glibc/glibc.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+Fixes build error
 
-Applied to master, thanks.
+TextException.cc: In function 'std::ostream& CurrentException(std::ostream&)':
+TextException.cc:64:9: error: 'current_exception' is not a member of 'std'
+     if (std::current_exception()) {
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+using this defconfig
+
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/armv5-ctng-linux-gnueabi.tar.xz"
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="armv5-ctng-linux-gnueabi"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_8=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_3_12=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_GNUTLS=y
+BR2_PACKAGE_OPENSSL=y
+BR2_PACKAGE_LIBKRB5=y
+
+According to http://www.squid-cache.org/Versions/v4/RELEASENOTES.html#ss1.1
+squid-4.2 depends on C++11, but adding -std=c++11 did not fix the build
+error.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Tested-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/squid/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/squid/Config.in b/package/squid/Config.in
+index c1eb25c6b9..aeffbc6579 100644
+--- a/package/squid/Config.in
++++ b/package/squid/Config.in
+@@ -1,10 +1,12 @@
+-comment "squid needs a toolchain w/ C++"
++comment "squid needs a toolchain w/ C++ not affected by GCC bug 64735"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
++		!BR2_INSTALL_LIBSTDCPP
+ 
+ config BR2_PACKAGE_SQUID
+ 	bool "squid"
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
+ 	# needs fork()
+ 	depends on BR2_USE_MMU
+ 	select BR2_PACKAGE_LIBCAP
