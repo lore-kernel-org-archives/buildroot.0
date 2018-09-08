@@ -1,49 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 15:32:07 +0200
-Subject: [Buildroot] [git commit] python-autobahn: bump to version 18.9.1
-Message-ID: <20180908133537.2D7278365B@busybox.osuosl.org>
+Date: Sat, 8 Sep 2018 15:32:00 +0200
+Subject: [Buildroot] [git commit] lftp: bump to version 4.8.4
+Message-ID: <20180908133537.2231280030@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8a5501cda50a65ed9d85b220b93150265f81e49
+commit: https://git.buildroot.net/buildroot/commit/?id=28bd5ab5f14554db77d3b01587be92d2f48b8c3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-autobahn/python-autobahn.hash | 7 ++++---
- package/python-autobahn/python-autobahn.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/lftp/lftp.hash | 6 +++---
+ package/lftp/lftp.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
-index 32c99167e9..f2d4993ddf 100644
---- a/package/python-autobahn/python-autobahn.hash
-+++ b/package/python-autobahn/python-autobahn.hash
-@@ -1,4 +1,5 @@
--# md5 from https://pypi.python.org/pypi/autobahn/json, sha256 locally computed
--md5	f8c8d74bf73644719b751e6fb11dc4a3  autobahn-17.10.1.tar.gz
--sha256	8cf74132a18da149c5ea3dcbb5e055f6f4fe5a0238b33258d29e89bd276a8078  autobahn-17.10.1.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/autobahn/json
-+md5    efddc3394c4e11f85bfa108c12a9346c  autobahn-18.9.1.tar.gz
-+sha256 829fbeb08b7e0f7e8cd14d9d169043a861075c3f6e5e2739d564dc985b5e7015  autobahn-18.9.1.tar.gz
-+# Locally computed
- sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
-diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
-index 3ba91c5e14..31bd99e783 100644
---- a/package/python-autobahn/python-autobahn.mk
-+++ b/package/python-autobahn/python-autobahn.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/lftp/lftp.hash b/package/lftp/lftp.hash
+index 7828cca9c1..64aba12b24 100644
+--- a/package/lftp/lftp.hash
++++ b/package/lftp/lftp.hash
+@@ -1,7 +1,7 @@
+-# From http://lftp.yar.ru/ftp/lftp-4.8.3.md5sum
+-md5 8beb3d814d60f52ac70cffd6dff23d85  lftp-4.8.3.tar.xz
++# From http://lftp.yar.ru/ftp/lftp-4.8.4.md5sum
++md5 b75c43797e817529d486be640232d708  lftp-4.8.4.tar.xz
+ # Locally calculated after checking gpg signature
+-sha256 de7aee451afaa1aa391f7076b5f602922c2da0e05524a8d8fea413eda83cc78b  lftp-4.8.3.tar.xz
++sha256 4ebc271e9e5cea84a683375a0f7e91086e5dac90c5d51bb3f169f75386107a62  lftp-4.8.4.tar.xz
+ 
+ # Hash for license file:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/lftp/lftp.mk b/package/lftp/lftp.mk
+index 68f3dfce2c..93a0bf5c32 100644
+--- a/package/lftp/lftp.mk
++++ b/package/lftp/lftp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_AUTOBAHN_VERSION = 17.10.1
-+PYTHON_AUTOBAHN_VERSION = 18.9.1
- PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
--PYTHON_AUTOBAHN_SITE = https://pypi.python.org/packages/e4/2e/01a64212b1eb580d601fa20f146c962235e3493795f46e3b254597ec635d
-+PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3e/21/2074cfca5addf4f0c7e422798c50c85255ee5963889ee8b32edb06e47221
- PYTHON_AUTOBAHN_LICENSE = MIT
- PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
- PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
+-LFTP_VERSION = 4.8.3
++LFTP_VERSION = 4.8.4
+ LFTP_SOURCE = lftp-$(LFTP_VERSION).tar.xz
+ LFTP_SITE = http://lftp.yar.ru/ftp
+ LFTP_LICENSE = GPL-3.0+
