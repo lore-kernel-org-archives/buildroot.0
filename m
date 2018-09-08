@@ -1,76 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 23:23:31 +0200
-Subject: [Buildroot] [PATCH/next v3 3/7] package/gstreamer1/gst1-libav:
- Fix build with FFmpeg 4.0
-In-Reply-To: <20180825073118.14980-3-bernd.kuhls@t-online.de>
-References: <20180825073118.14980-1-bernd.kuhls@t-online.de>
- <20180825073118.14980-3-bernd.kuhls@t-online.de>
-Message-ID: <20180908232331.0a5a634b@windsurf.home>
+Date: Sat, 8 Sep 2018 23:24:18 +0200
+Subject: [Buildroot] [git commit] package/motion: fix build with FFmpeg 4.0
+Message-ID: <20180908212338.A122983712@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=0b1794cb43ab2c67ea619b69717f6499dcd410ee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 25 Aug 2018 09:31:14 +0200, Bernd Kuhls wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Fix-build-errors-with-FFmpeg-4.0.patch    | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-> diff --git a/package/gstreamer1/gst1-libav/0001-Fix-build-with-ffmpeg-4.0.patch b/package/gstreamer1/gst1-libav/0001-Fix-build-with-ffmpeg-4.0.patch
-> new file mode 100644
-> index 0000000000..2d750e2345
-> --- /dev/null
-> +++ b/package/gstreamer1/gst1-libav/0001-Fix-build-with-ffmpeg-4.0.patch
-> @@ -0,0 +1,676 @@
-> +From 257963d93ce6a8ce08c3f3771e3a1b7ebb71dc2e Mon Sep 17 00:00:00 2001
-> +From: Ulenrich <eulenreich@gmx.de>
-> +Date: Thu, 16 Aug 2018 22:43:18 +0200
-> +Subject: [PATCH] Fix build with ffmpeg 4.0
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +Instead of using the ffmpeg copy included by this package we use a patch
-> +from the Gentoo bug tracker to fix the build with ffmpeg 4.0.
-> +
-> +Upstream included support for ffmpeg 4.0 in the upcoming 1.16.x release
-> +of gstreamer:
-> +https://bugzilla.gnome.org/show_bug.cgi?id=792900
-> +
-> +NEWS mentions that the fixes "won?t be backported to the 1.14 branch as
-> +it is rather intrusive":
-> +https://github.com/GStreamer/gst-libav/commit/8886a016fce625e1c25a4902be4021196a6784a2#diff-ff4e2dc4962dc25a1512353299992c8dR1400
-> +
-> +Downloaded from https://bugs.gentoo.org/654628#c11
-
-I am a bit worried about this patch, see below.
-
-> +-  params.padding = FF_INPUT_BUFFER_PADDING_SIZE;
-> ++  params.padding = AV_INPUT_BUFFER_PADDING_SIZE;
-
-Is AV_INPUT_BUFFER_PADDING_SIZE defined in ffmpeg 3.x that we
-currently have ? If not, then this change is going to break the build.
-
-In other packages, what is done is:
-
-++#ifndef AV_INPUT_BUFFER_PADDING_SIZE
-++#define AV_INPUT_BUFFER_PADDING_SIZE FF_INPUT_BUFFER_PADDING_SIZE
+diff --git a/package/motion/0001-Fix-build-errors-with-FFmpeg-4.0.patch b/package/motion/0001-Fix-build-errors-with-FFmpeg-4.0.patch
+new file mode 100644
+index 0000000000..e738809a74
+--- /dev/null
++++ b/package/motion/0001-Fix-build-errors-with-FFmpeg-4.0.patch
+@@ -0,0 +1,58 @@
++From 9b93a417e37e1f0fef58d1582a7e98e4c05d3b42 Mon Sep 17 00:00:00 2001
++From: James Cowgill <jcowgill@users.noreply.github.com>
++Date: Sun, 25 Feb 2018 20:13:57 +0000
++Subject: [PATCH] Fix build errors with FFmpeg 4.0
++
++Backported from upstream commit
++https://github.com/Motion-Project/motion/commit/9b93a417e37e1f0fef58d1582a7e98e4c05d3b42
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ ffmpeg.c | 19 ++++++++++++++++---
++ 1 file changed, 16 insertions(+), 3 deletions(-)
++
++diff --git a/ffmpeg.c b/ffmpeg.c
++index 1e6cdf6..4299ba3 100644
++--- a/ffmpeg.c
+++++ b/ffmpeg.c
++@@ -67,6 +67,19 @@
++ 
++ #endif
++ 
+++/*********************************************/
+++#if (LIBAVCODEC_VERSION_MAJOR >= 57)
+++
+++#define MY_CODEC_FLAG_GLOBAL_HEADER AV_CODEC_FLAG_GLOBAL_HEADER
+++#define MY_CODEC_FLAG_QSCALE        AV_CODEC_FLAG_QSCALE
+++
+++#else
+++
+++#define MY_CODEC_FLAG_GLOBAL_HEADER CODEC_FLAG_GLOBAL_HEADER
+++#define MY_CODEC_FLAG_QSCALE        CODEC_FLAG_QSCALE
+++
 ++#endif
-
-Which to me, implies that AV_INPUT_BUFFER_PADDING_SIZE is not defined
-in older versions of ffmpeg.
-
-> ++#if 0
-> +   pspec = g_param_spec_float ("rc-qsquish", "Ratecontrol Limiting Method",
-> +       "0 means limit by clipping, otherwise use nice continuous function",
-> +       0, 99.0f, 1.0f, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-> +   gst_ffmpeg_add_pspec (pspec, config.rc_qsquish, FALSE, mpeg, NULL);
-> ++#endif
-
-Is it OK to just remove all this code ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+++
++ /*********************************************/
++ AVFrame *my_frame_alloc(void){
++     AVFrame *pic;
++@@ -548,7 +561,7 @@ static int ffmpeg_set_quality(struct ffmpeg *ffmpeg){
++         /* The selection of 8000 is a subjective number based upon viewing output files */
++         if (ffmpeg->vbr > 0){
++             ffmpeg->vbr =(int)(((100-ffmpeg->vbr)*(100-ffmpeg->vbr)*(100-ffmpeg->vbr) * 8000) / 1000000) + 1;
++-            ffmpeg->ctx_codec->flags |= CODEC_FLAG_QSCALE;
+++            ffmpeg->ctx_codec->flags |= MY_CODEC_FLAG_QSCALE;
++             ffmpeg->ctx_codec->global_quality=ffmpeg->vbr;
++         }
++     }
++@@ -673,7 +686,7 @@ static int ffmpeg_set_codec(struct ffmpeg *ffmpeg){
++       ffmpeg->ctx_codec->strict_std_compliance = -2;
++       ffmpeg->ctx_codec->level = 3;
++     }
++-    ffmpeg->ctx_codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
+++    ffmpeg->ctx_codec->flags |= MY_CODEC_FLAG_GLOBAL_HEADER;
++ 
++     retcd = ffmpeg_set_quality(ffmpeg);
++     if (retcd < 0){
++-- 
++2.18.0
++
