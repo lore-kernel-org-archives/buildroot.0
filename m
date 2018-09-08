@@ -1,110 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 15:31:56 +0200
-Subject: [Buildroot] [git commit] libminiupnpc: bump to version 2.1
-Message-ID: <20180908133537.0A6C88365A@busybox.osuosl.org>
+Date: Sat, 8 Sep 2018 15:32:07 +0200
+Subject: [Buildroot] [git commit] python-autobahn: bump to version 18.9.1
+Message-ID: <20180908133537.2D7278365B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fef8b457e960893e3e29ce29963a0feb15c94045
+commit: https://git.buildroot.net/buildroot/commit/?id=a8a5501cda50a65ed9d85b220b93150265f81e49
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove patch (already in version)
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-miniupnpc-Fix-CVE-2017-8798.patch         | 59 ----------------------
- package/libminiupnpc/libminiupnpc.hash             |  2 +-
- package/libminiupnpc/libminiupnpc.mk               |  2 +-
- 3 files changed, 2 insertions(+), 61 deletions(-)
+ package/python-autobahn/python-autobahn.hash | 7 ++++---
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch b/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
-deleted file mode 100644
-index 25591fc4a4..0000000000
---- a/package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From f0f1f4b22d6a98536377a1bb07e7c20e4703d229 Mon Sep 17 00:00:00 2001
--From: Thomas Bernard <miniupnp@free.fr>
--Date: Tue, 9 May 2017 12:00:47 +0200
--Subject: [PATCH] miniupnpc: Fix CVE-2017-8798
--
--Thanks to tin/Team OSTStrom
--
--[Peter: drop Changelog.txt modification, convert to -p1 format]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- miniupnpc/miniwget.c    | 12 +++++++-----
-- 1 file changed, 9 insertions(+), 5 deletions(-)
--
--diff --git a/miniwget.c b/miniwget.c
--index 37cb47b7..1eda57c5 100644
----- a/miniwget.c
--+++ b/miniwget.c
--@@ -284,11 +284,12 @@ getHTTPResponse(int s, int * size, int * status_code)
-- 							goto end_of_stream;
-- 						}
-- 					}
---					bytestocopy = ((int)chunksize < (n - i))?chunksize:(unsigned int)(n - i);
--+					/* it is guaranteed that (n >= i) */
--+					bytestocopy = (chunksize < (unsigned int)(n - i))?chunksize:(unsigned int)(n - i);
-- 					if((content_buf_used + bytestocopy) > content_buf_len)
-- 					{
-- 						char * tmp;
---						if(content_length >= (int)(content_buf_used + bytestocopy)) {
--+						if((content_length >= 0) && ((unsigned int)content_length >= (content_buf_used + bytestocopy))) {
-- 							content_buf_len = content_length;
-- 						} else {
-- 							content_buf_len = content_buf_used + bytestocopy;
--@@ -313,14 +314,15 @@ getHTTPResponse(int s, int * size, int * status_code)
-- 			{
-- 				/* not chunked */
-- 				if(content_length > 0
---				   && (int)(content_buf_used + n) > content_length) {
--+				   && (content_buf_used + n) > (unsigned int)content_length) {
-- 					/* skipping additional bytes */
-- 					n = content_length - content_buf_used;
-- 				}
-- 				if(content_buf_used + n > content_buf_len)
-- 				{
-- 					char * tmp;
---					if(content_length >= (int)(content_buf_used + n)) {
--+					if(content_length >= 0
--+					   && (unsigned int)content_length >= (content_buf_used + n)) {
-- 						content_buf_len = content_length;
-- 					} else {
-- 						content_buf_len = content_buf_used + n;
--@@ -340,7 +342,7 @@ getHTTPResponse(int s, int * size, int * status_code)
-- 			}
-- 		}
-- 		/* use the Content-Length header value if available */
---		if(content_length > 0 && (int)content_buf_used >= content_length)
--+		if(content_length > 0 && content_buf_used >= (unsigned int)content_length)
-- 		{
-- #ifdef DEBUG
-- 			printf("End of HTTP content\n");
-diff --git a/package/libminiupnpc/libminiupnpc.hash b/package/libminiupnpc/libminiupnpc.hash
-index c83b38aa60..b35e7f045d 100644
---- a/package/libminiupnpc/libminiupnpc.hash
-+++ b/package/libminiupnpc/libminiupnpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 d434ceb8986efbe199c5ca53f90ed53eab290b1e6d0530b717eb6fa49d61f93b  miniupnpc-2.0.tar.gz
-+sha256 e19fb5e01ea5a707e2a8cb96f537fbd9f3a913d53d804a3265e3aeab3d2064c6  miniupnpc-2.1.tar.gz
- sha256 4025f2214fa46ad40c156605b83d66e8faf45823e67eb3337af3869716e6d7dd  LICENSE
-diff --git a/package/libminiupnpc/libminiupnpc.mk b/package/libminiupnpc/libminiupnpc.mk
-index 66b08b4e8a..5a4c8fc693 100644
---- a/package/libminiupnpc/libminiupnpc.mk
-+++ b/package/libminiupnpc/libminiupnpc.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 32c99167e9..f2d4993ddf 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/autobahn/json, sha256 locally computed
+-md5	f8c8d74bf73644719b751e6fb11dc4a3  autobahn-17.10.1.tar.gz
+-sha256	8cf74132a18da149c5ea3dcbb5e055f6f4fe5a0238b33258d29e89bd276a8078  autobahn-17.10.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/autobahn/json
++md5    efddc3394c4e11f85bfa108c12a9346c  autobahn-18.9.1.tar.gz
++sha256 829fbeb08b7e0f7e8cd14d9d169043a861075c3f6e5e2739d564dc985b5e7015  autobahn-18.9.1.tar.gz
++# Locally computed
+ sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 3ba91c5e14..31bd99e783 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBMINIUPNPC_VERSION = 2.0
-+LIBMINIUPNPC_VERSION = 2.1
- LIBMINIUPNPC_SOURCE = miniupnpc-$(LIBMINIUPNPC_VERSION).tar.gz
- LIBMINIUPNPC_SITE = http://miniupnp.free.fr/files
- LIBMINIUPNPC_INSTALL_STAGING = YES
+-PYTHON_AUTOBAHN_VERSION = 17.10.1
++PYTHON_AUTOBAHN_VERSION = 18.9.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://pypi.python.org/packages/e4/2e/01a64212b1eb580d601fa20f146c962235e3493795f46e3b254597ec635d
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3e/21/2074cfca5addf4f0c7e422798c50c85255ee5963889ee8b32edb06e47221
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
