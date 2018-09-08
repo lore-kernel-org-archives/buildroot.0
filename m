@@ -1,88 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 15:46:14 +0200
-Subject: [Buildroot] [git commit] flatcc: conditionally require c++ in cmake
-Message-ID: <20180908134526.C93FD8366F@busybox.osuosl.org>
+Date: Sat, 8 Sep 2018 15:47:03 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/vlc: bump version to 3.0.4
+In-Reply-To: <20180906201841.17047-1-bernd.kuhls@t-online.de>
+References: <20180906201841.17047-1-bernd.kuhls@t-online.de>
+Message-ID: <20180908154703.2ad4ca89@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56296d51bef2ad97487602150871541c25107b8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Patches CMake files in flatcc to conditionally set c++ as a required
-language depending on if FLATCC_TEST option is set, as only the tests
-include a c++ file.
+On Thu,  6 Sep 2018 22:18:41 +0200, Bernd Kuhls wrote:
+> Removed patch 0004, applied upstream.
+> Renumbered remaining patches.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...e-name-of-the-vorbis-and-ogg-librar.patch} |  0
+>  .../0004-qt-fix-build-against-Qt-5.11.patch   | 33 -------------------
+>  ...-using-uClibc-by-adding-sys-types.h.patch} |  0
+>  ...on-t-assume-strerror_l-is-available.patch} |  0
+>  ...ent-run-time-fallback-to-real-time-.patch} |  0
+>  ...build-support-and-fix-10bit-support.patch} |  0
+>  ...ch => 0009-Add-support-for-freerdp2.patch} |  0
+>  ...-use-AC_PATH_PROG-to-check-for-wayl.patch} |  0
+>  package/vlc/vlc.hash                          | 12 +++----
+>  package/vlc/vlc.mk                            |  2 +-
+>  10 files changed, 7 insertions(+), 40 deletions(-)
+>  rename package/vlc/{0005-Don-t-hardcode-the-name-of-the-vorbis-and-ogg-librar.patch => 0004-Don-t-hardcode-the-name-of-the-vorbis-and-ogg-librar.patch} (100%)
+>  delete mode 100644 package/vlc/0004-qt-fix-build-against-Qt-5.11.patch
+>  rename package/vlc/{0006-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch => 0005-Fix-build-error-using-uClibc-by-adding-sys-types.h.patch} (100%)
+>  rename package/vlc/{0007-Don-t-assume-strerror_l-is-available.patch => 0006-Don-t-assume-strerror_l-is-available.patch} (100%)
+>  rename package/vlc/{0008-posix-remove-ancient-run-time-fallback-to-real-time-.patch => 0007-posix-remove-ancient-run-time-fallback-to-real-time-.patch} (100%)
+>  rename package/vlc/{0009-x264-drop-148-build-support-and-fix-10bit-support.patch => 0008-x264-drop-148-build-support-and-fix-10bit-support.patch} (100%)
+>  rename package/vlc/{0010-Add-support-for-freerdp2.patch => 0009-Add-support-for-freerdp2.patch} (100%)
+>  rename package/vlc/{0011-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch => 0010-configure.ac-also-use-AC_PATH_PROG-to-check-for-wayl.patch} (100%)
 
-Fixes
-http://autobuild.buildroot.net/results/8fb0447eed1d55b7687f657530e31695cf77ce5c/
+Applied to master, thanks.
 
-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...txt-conditionally-require-C-based-on-FLAT.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
-
-diff --git a/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch b/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch
-new file mode 100644
-index 0000000000..7d76d6caf1
---- /dev/null
-+++ b/package/flatcc/0001-CMakeLists.txt-conditionally-require-C-based-on-FLAT.patch
-@@ -0,0 +1,56 @@
-+From 878d51187bbc1ad490b4cd15e3741bc0bd11b6b2 Mon Sep 17 00:00:00 2001
-+From: Joel Carlson <JoelsonCarl@gmail.com>
-+Date: Thu, 6 Sep 2018 14:53:20 -0600
-+Subject: [PATCH] CMakeLists.txt: conditionally require C++ based on
-+ FLATCC_TEST (#94)
-+
-+C++ is only used when building the tests, so only include it as a
-+language via project() when FLATCC_TEST is enabled. This allows
-+toolchains that don't have C++ to build flatcc.
-+
-+Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
-+---
-+Upstream commit 878d51187bbc1ad490b4cd15e3741bc0bd11b6b2
-+---
-+ CMakeLists.txt | 18 ++++++++++++------
-+ 1 file changed, 12 insertions(+), 6 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index b39a3d1..5df5161 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -4,7 +4,18 @@
-+ #cmake_minimum_required (VERSION 2.8.11)
-+ cmake_minimum_required (VERSION 2.8)
-+ 
-+-project (FlatCC C CXX)
-++# Disable build of tests and samples. Due to custom build step
-++# dependency on flatcc tool, some custom build configurations may
-++# experience issues, and this option can then help.
-++option(FLATCC_TEST "enable tests" ON)
-++
-++# Conditionally set project languages based on FLATCC_TEST, as C++ is
-++# only necessary if building the tests.
-++if (FLATCC_TEST)
-++    project (FlatCC C CXX)
-++else()
-++    project (FlatCC C)
-++endif()
-+ 
-+ #
-+ # NOTE: when changing build options, clean the build using on of:
-+@@ -35,11 +46,6 @@ option(FLATCC_RTONLY "enable build of runtime library only" OFF)
-+ # cmake -DBUILD_SHARED_LIBS=on can override.
-+ option(FLATCC_INSTALL "enable build of runtime library only" OFF)
-+ 
-+-# Disable build of tests and samples. Due to custom build step
-+-# dependency on flatcc tool, some custom build configurations may
-+-# experience issues, and this option can then help.
-+-option(FLATCC_TEST "enable tests" ON)
-+-
-+ # Use with debug build with testing enabled only. Enables generation
-+ # of coverage information during build and run. Adds target "coverage"
-+ # which collects data and makes HTML report in build directory
-+-- 
-+2.7.4
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
