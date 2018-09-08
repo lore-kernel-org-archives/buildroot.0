@@ -1,63 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat,  8 Sep 2018 22:42:33 +0200
-Subject: [Buildroot] [PATCH] musl: bump to 1.1.20
-Message-ID: <20180908204233.21208-1-thomas.petazzoni@bootlin.com>
+Date: Sat, 8 Sep 2018 23:02:12 +0200
+Subject: [Buildroot] [git commit] package/aubio: fix build with FFmpeg 4.0
+Message-ID: <20180908210220.B84C283706@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From the upstream release announcement:
+commit: https://git.buildroot.net/buildroot/commit/?id=f46d73adf14c171fac0cfd83c5c4e1bec8786f11
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-"""
-This release introduces the ability to replace/interpose the allocator
-(malloc) subject to certain restrictions, adds an experimental m68k
-port, and makes notable improvements to stdio (application-provided
-buffers), getaddrinfo (AI_ADDRCONFIG, support for IPv4-only kernel
-configurations), the dynamic linker (safety against dlopen of
-libraries using initial-exec TLS model, reclaiming unused memory on
-FDPIC archs, better dladdr results), and handling of default thread
-stack size (pthread_setattr_default_np now works more reliably).
-
-Many bugs have been fixed, including potentially dangerous regressions
-in iconv (only for new conversions to legacy encodings) and visibly
-incorrect behavior in printf on non-x86 archs (%a format with
-precision specifier), in getopt_long_only when short options are a
-prefix for a long option, in complex arc-trig/hyperbolic functions, in
-strftime and mktime (timezone-specific issues), and numerous
-less-obvious places.
-"""
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/musl/musl.hash | 4 ++--
- package/musl/musl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/aubio/0001-Fix-build-with-FFmpeg-4.0.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index c011bbb711..f7cc05bcce 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# http://www.musl-libc.org/releases/musl-1.1.19.tar.gz.asc
--sha256  db59a8578226b98373f5b27e61f0dd29ad2456f4aa9cec587ba8c24508e4c1d9  musl-1.1.19.tar.gz
-+# http://www.musl-libc.org/releases/musl-1.1.20.tar.gz.asc
-+sha256  44be8771d0e6c6b5f82dd15662eb2957c9a3173a19a8b49966ac0542bbd40d61  musl-1.1.20.tar.gz
- sha256  15d9afbf84041872b4d840ed7d165d3eee786ff3f97e703b10467c259ff4e7d9  COPYRIGHT
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index fa775d1e78..058a362922 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MUSL_VERSION = 1.1.19
-+MUSL_VERSION = 1.1.20
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
--- 
-2.14.4
+diff --git a/package/aubio/0001-Fix-build-with-FFmpeg-4.0.patch b/package/aubio/0001-Fix-build-with-FFmpeg-4.0.patch
+new file mode 100644
+index 0000000000..40ff2dfb89
+--- /dev/null
++++ b/package/aubio/0001-Fix-build-with-FFmpeg-4.0.patch
+@@ -0,0 +1,32 @@
++From 5690daf759b473b9d13b4547ef37adc2695cf524 Mon Sep 17 00:00:00 2001
++From: James Cowgill <jcowgill@jcowgill.uk>
++Date: Sun, 25 Feb 2018 14:23:25 +0000
++Subject: [PATCH] Fix build with FFmpeg 4.0
++
++Downloaded from upstream commit
++https://git.aubio.org/?p=aubio.git;a=commitdiff;h=5690daf759b473b9d13b4547ef37adc2695cf524
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/io/source_avcodec.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/io/source_avcodec.c b/src/io/source_avcodec.c
++index ccdce807..8197445c 100644
++--- a/src/io/source_avcodec.c
+++++ b/src/io/source_avcodec.c
++@@ -58,7 +58,11 @@
++ #include "fmat.h"
++ #include "source_avcodec.h"
++ 
+++#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT(56, 56, 0)
++ #define AUBIO_AVCODEC_MAX_BUFFER_SIZE FF_MIN_BUFFER_SIZE
+++#else
+++#define AUBIO_AVCODEC_MAX_BUFFER_SIZE AV_INPUT_BUFFER_MIN_SIZE
+++#endif
++ 
++ struct _aubio_source_avcodec_t {
++   uint_t hop_size;
++-- 
++2.14.4
++
