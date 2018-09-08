@@ -1,191 +1,123 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 8 Sep 2018 15:17:07 +0200
-Subject: [Buildroot] [PATCH] SSP: disable ssp support on microblaze
-In-Reply-To: <20180907092607.027fc274@windsurf.home>
-References: <20180610163300.6440-1-romain.naour@gmail.com>
- <20180701145522.3f8d670c@windsurf.home>
- <20180907092607.027fc274@windsurf.home>
-Message-ID: <8383696d-1a5f-03fe-befc-1e65c59f5582@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 8 Sep 2018 15:28:26 +0200
+Subject: [Buildroot] [git commit] python-numpy: bump to version 1.15.1
+Message-ID: <20180908132800.12D057FFBA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=bddccc6f2663ea96c87591f63b4d7f3ca17b8ff8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 07/09/2018 ? 09:26, Thomas Petazzoni a ?crit?:
-> Romain,
-> 
-> I was wondering if you had the chance to work on this topic ?
+Fixes the build with Python 3.7.0, and therefore fixes:
 
-Thanks for the reminder.
+  http://autobuild.buildroot.net/results/c6f145c7150c6738ba627be7a3383dfd73bd7877/
 
-I'll take a look.
+Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-numpy/0002-Add-support-of-ARC.patch | 68 ----------------------
+ package/python-numpy/python-numpy.hash             |  4 +-
+ package/python-numpy/python-numpy.mk               |  2 +-
+ 3 files changed, 3 insertions(+), 71 deletions(-)
 
-Best regards,
-Romain
-
-> 
-> Thanks,
-> 
-> Thomas
-> 
-> On Sun, 1 Jul 2018 14:55:22 +0200, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Sun, 10 Jun 2018 18:33:00 +0200, Romain Naour wrote:
->>> As reported by [1], SSP support is missing in the Buildroot toolchain
->>> for microblaze even if it's requested by selecting
->>> BR2_TOOLCHAIN_HAS_SSP config option.
->>>
->>> In Buildroot, we are using libssp provided by the C library (Glibc,
->>> musl, uClibc-ng) when available. We are not using libssp from gcc.
->>>
->>> So for a microblaze glibc based toolchain, the SSP support is enabled
->>> unconditionally by a select BR2_TOOLCHAIN_HAS_SSP.
->>>
->>> BR2_microblazeel=y
->>> BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
->>> BR2_KERNEL_HEADERS_4_14=y
->>> BR2_BINUTILS_VERSION_2_30_X=y
->>> BR2_GCC_VERSION_8_X=y
->>> BR2_TOOLCHAIN_BUILDROOT_CXX=y
->>>
->>> While building the toolchain, we are building host-binutils which
->>> provide "as" (assembler) and host-gcc-initial wich provide a
->>> minimal cross gcc (C only cross-compiler without any C library).
->>> When SSP support is requested, gcc_cv_libc_provides_ssp=yes is
->>> added to the make command line (see [2] for full details)
->>>
->>> With this setting, the SSP support is requested but it's not available
->>> in the end and the toochain build succeed.
->>>
->>> When the microblaze toolchain is imported to Biuldroot (2018.05) as
->>> external toolchain with BR2_TOOLCHAIN_EXTERNAL_HAS_SSP set, the build
->>> stop with :
->>> "SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP"
->>>
->>> The test is doing the following command line:
->>>
->>> echo 'void main(){}' | [...]/host/bin/microblazeel-linux-gcc.br_real -Werror -fstack-protector -x c - -o [...]/build/.br-toolchain-test.tmp
->>> cc1: error: -fstack-protector not supported for this target [-Werror]
->>>
->>> When we look at the gcc-final log file (config.log) we can see this
->>> error several time when using the minimal gcc (from host-gcc-initial).
->>> So Why the minimal gcc doesn't support SSP?
->>>
->>> When we look at the gcc-initial log file (config.log) we can see an
->>> error with 'as':
->>>
->>> configure:23194: checking assembler for cfi directives
->>> configure:23209: [...]microblazeel-buildroot-linux-gnu/bin/as    -o conftest.o conftest.s >&5
->>> conftest.s: Assembler messages:
->>> conftest.s:2: Error: CFI is not supported for this target
->>> conftest.s:3: Error: CFI is not supported for this target
->>> conftest.s:4: Error: CFI is not supported for this target
->>> conftest.s:5: Error: CFI is not supported for this target
->>> conftest.s:6: Error: CFI is not supported for this target
->>> conftest.s:7: Error: CFI is not supported for this target
->>> configure:23212: $? = 1
->>> configure: failed program was
->>>     .text
->>>     .cfi_startproc
->>>     .cfi_offset 0, 0
->>>     .cfi_same_value 1
->>>     .cfi_def_cfa 1, 2
->>>     .cfi_escape 1, 2, 3, 4, 5
->>>     .cfi_endproc
->>>
->>> This is the only relevant difference compared to a nios2 toolchain where
->>> libssp is enabled and available (nios2 is an example).
->>>
->>> "CFI" stand for "Control Flow Integrity" and it seems that SSP support
->>> requires CFI target support (see [3] for some explanation).
->>>
->>> The SSP support seems to depends on CFI support, but the toolchain
->>> infrastructure is not detailed enough to handle the CFI dependency.
->>>
->>> In the other hand, microblaze is the only architecture where CFI support
->>> is missing.
->>>
->>> Disable SSP support for microblaze entirely.
->>>
->>> Fixes:
->>> https://gitlab.com/free-electrons/toolchains-builder/-/jobs/72006389
->>>
->>> [1] https://gitlab.com/free-electrons/toolchains-builder/issues/1
->>> [2] https://git.buildroot.net/buildroot/tree/package/gcc/gcc.mk?h=2018.05#n275
->>> [3] https://grsecurity.net/rap_faq.php
->>>
->>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>  
->>
->> Thanks for working on this. Based on this explanation, I think I'd
->> prefer to see something like this in package/binutils/Config.in.host
->>
->> config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
->> 	default y
->> 	depends on !BR2_microblaze
->>
->>> diff --git a/package/glibc/Config.in b/package/glibc/Config.in
->>> index 57a2e833d2..7adf76699d 100644
->>> --- a/package/glibc/Config.in
->>> +++ b/package/glibc/Config.in
->>> @@ -4,6 +4,7 @@ config BR2_PACKAGE_GLIBC
->>>  	bool
->>>  	default y
->>>  	select BR2_PACKAGE_LINUX_HEADERS
->>> -	select BR2_TOOLCHAIN_HAS_SSP
->>> +	# SSP not supported on microblaze
->>> +	select BR2_TOOLCHAIN_HAS_SSP if !BR2_microblaze  
->>
->> 	select BR2_TOOLCHAIN_HAS_SSP if BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
->>
->>> diff --git a/package/musl/Config.in b/package/musl/Config.in
->>> index bedc50cd45..4e0d6f4ef1 100644
->>> --- a/package/musl/Config.in
->>> +++ b/package/musl/Config.in
->>> @@ -4,6 +4,7 @@ config BR2_PACKAGE_MUSL
->>>  	depends on BR2_TOOLCHAIN_USES_MUSL
->>>  	select BR2_PACKAGE_LINUX_HEADERS
->>>  	# SSP broken on i386/ppc: http://www.openwall.com/lists/musl/2016/12/04/2
->>> -	select BR2_TOOLCHAIN_HAS_SSP if !(BR2_i386 || BR2_powerpc)
->>> +	# SSP not supported on microblaze
->>> +	select BR2_TOOLCHAIN_HAS_SSP if !(BR2_i386 || BR2_microblaze || BR2_powerpc)  
->>
->> 	select BR2_TOOLCHAIN_HAS_SSP if BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI && !(BR2_i386 || BR2_powerpc)
->>
->>>  config BR2_TOOLCHAIN_BUILDROOT_USE_SSP
->>>  	bool "Enable stack protection support"
->>> +	depends on !BR2_microblaze # SSP not supported on microblaze  
->>
->> 	depends on BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
->>
->>>  	select BR2_TOOLCHAIN_HAS_SSP
->>>  	help
->>>  	  Enable stack smashing protection support using GCCs
->>> diff --git a/toolchain/Config.in b/toolchain/Config.in
->>> index 3a53a32a6d..1bf71a6d52 100644
->>> --- a/toolchain/Config.in
->>> +++ b/toolchain/Config.in
->>> @@ -122,6 +122,9 @@ config BR2_TOOLCHAIN_HAS_THREADS_NPTL
->>>  
->>>  config BR2_TOOLCHAIN_HAS_SSP
->>>  	bool
->>> +	# SSP support require CFI architecture support.
->>> +	# https://gitlab.com/free-electrons/toolchains-builder/issues/1
->>> +	depends on !BR2_microblaze # missing CFI support in "gas"  
->>
->> And this change is not necessary. Really BR2_TOOLCHAIN_HAS_SSP
->> is a blind option that indicates if the toolchain has SSP support or
->> not, it's not meant to handle the dependencies of SSP. support.
->>
->> Could you rework your patch accordingly if you agree with the proposal ?
->>
->> Thanks!
->>
->> Thomas
-> 
-> 
-> 
+diff --git a/package/python-numpy/0002-Add-support-of-ARC.patch b/package/python-numpy/0002-Add-support-of-ARC.patch
+deleted file mode 100644
+index c022487c7f..0000000000
+--- a/package/python-numpy/0002-Add-support-of-ARC.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From 9a225e7d4fb1de5c99c6b5b17cae2fc4c2d1c59a Mon Sep 17 00:00:00 2001
+-From: Alexey Brodkin <abrodkin@synopsys.com>
+-Date: Fri, 15 Sep 2017 11:59:14 +0300
+-Subject: [PATCH] Add support of ARC
+-
+-Synopsys DesignWare ARC Processors are a family of 32-bit CPUs
+-which in some configurations may run Linux kernel and full stack
+-of applications on top of it. Among other things is Python.
+-
+-With that change we allow building and usage of Numpy on ARC.
+-
+-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+----
+- numpy/core/include/numpy/npy_cpu.h    | 6 ++++++
+- numpy/core/include/numpy/npy_endian.h | 6 ++++--
+- 2 files changed, 10 insertions(+), 2 deletions(-)
+-
+-diff --git a/numpy/core/include/numpy/npy_cpu.h b/numpy/core/include/numpy/npy_cpu.h
+-index 60abae4e0b0e..84653ea183ce 100644
+---- a/numpy/core/include/numpy/npy_cpu.h
+-+++ b/numpy/core/include/numpy/npy_cpu.h
+-@@ -15,6 +15,8 @@
+-  *              NPY_CPU_ARMEB
+-  *              NPY_CPU_SH_LE
+-  *              NPY_CPU_SH_BE
+-+ *              NPY_CPU_ARCEL
+-+ *              NPY_CPU_ARCEB
+-  */
+- #ifndef _NPY_CPUARCH_H_
+- #define _NPY_CPUARCH_H_
+-@@ -76,6 +78,10 @@
+-     #define NPY_CPU_AARCH64
+- #elif defined(__mc68000__)
+-     #define NPY_CPU_M68K
+-+#elif defined(__arc__) && defined(__LITTLE_ENDIAN__)
+-+    #define NPY_CPU_ARCEL
+-+#elif defined(__arc__) && defined(__BIG_ENDIAN__)
+-+    #define NPY_CPU_ARCEB
+- #else
+-     #error Unknown CPU, please report this to numpy maintainers with \
+-     information about your platform (OS, CPU and compiler)
+-diff --git a/numpy/core/include/numpy/npy_endian.h b/numpy/core/include/numpy/npy_endian.h
+-index e34b1d97e655..1a42121db92e 100644
+---- a/numpy/core/include/numpy/npy_endian.h
+-+++ b/numpy/core/include/numpy/npy_endian.h
+-@@ -45,7 +45,8 @@
+-             || defined(NPY_CPU_AARCH64) \
+-             || defined(NPY_CPU_SH_LE)   \
+-             || defined(NPY_CPU_MIPSEL)  \
+--            || defined(NPY_CPU_PPC64LE)
+-+            || defined(NPY_CPU_PPC64LE) \
+-+            || defined(NPY_CPU_ARCEL)
+-         #define NPY_BYTE_ORDER NPY_LITTLE_ENDIAN
+-     #elif defined(NPY_CPU_PPC)          \
+-             || defined(NPY_CPU_SPARC)   \
+-@@ -56,7 +57,8 @@
+-             || defined(NPY_CPU_SH_BE)   \
+-             || defined(NPY_CPU_MIPSEB)  \
+-             || defined(NPY_CPU_OR1K)    \
+--            || defined(NPY_CPU_M68K)
+-+            || defined(NPY_CPU_M68K)    \
+-+            || defined(NPY_CPU_ARCEB)
+-         #define NPY_BYTE_ORDER NPY_BIG_ENDIAN
+-     #else
+-         #error Unknown CPU: can not set endianness
+--- 
+-2.7.5
+-
+diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+index 854f202297..055eb29f6f 100644
+--- a/package/python-numpy/python-numpy.hash
++++ b/package/python-numpy/python-numpy.hash
+@@ -1,4 +1,4 @@
+-# Copied from https://github.com/numpy/numpy/releases/tag/v1.13.3
+-sha256	4c6b4eef790528bebb7ec9590d74cc193868940fe68e4109a91c196df72d8094	numpy-1.13.3.tar.gz
++# Copied from https://github.com/numpy/numpy/releases/tag/v1.15.1
++sha256	3c1ccce5d935ef8df16ae0595b459ef08a5cdb05aee195ebc04b9d89a72be7fa	numpy-1.15.1.tar.gz
+ # License files, locally calculated
+ sha256	94eebc7c8f86a287c1e9146ed52ebcde88183806d848d8c66e0e52d1aebf3b13	LICENSE.txt
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index d0d38371a3..bd5fe7e6a9 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PYTHON_NUMPY_VERSION = 1.13.3
++PYTHON_NUMPY_VERSION = 1.15.1
+ PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+ PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+ PYTHON_NUMPY_LICENSE = BSD-3-Clause
