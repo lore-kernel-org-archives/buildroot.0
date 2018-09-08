@@ -1,9 +1,9 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 15:36:53 +0200
-Subject: [Buildroot] [PATCH 1/1] libminiupnpc: bump to version 2.1
-In-Reply-To: <20180907204022.20328-1-fontaine.fabrice@gmail.com>
-References: <20180907204022.20328-1-fontaine.fabrice@gmail.com>
-Message-ID: <20180908153653.2538a5a4@windsurf.home>
+Date: Sat, 8 Sep 2018 15:36:56 +0200
+Subject: [Buildroot] [PATCH 1/1] lftp: bump to version 4.8.4
+In-Reply-To: <20180907205213.19796-1-fontaine.fabrice@gmail.com>
+References: <20180907205213.19796-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180908153656.061c4cfd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,16 +12,12 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri,  7 Sep 2018 22:40:22 +0200, Fabrice Fontaine wrote:
-> Remove patch (already in version)
-> 
+On Fri,  7 Sep 2018 22:52:13 +0200, Fabrice Fontaine wrote:
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  .../0001-miniupnpc-Fix-CVE-2017-8798.patch    | 59 -------------------
->  package/libminiupnpc/libminiupnpc.hash        |  2 +-
->  package/libminiupnpc/libminiupnpc.mk          |  2 +-
->  3 files changed, 2 insertions(+), 61 deletions(-)
->  delete mode 100644 package/libminiupnpc/0001-miniupnpc-Fix-CVE-2017-8798.patch
+>  package/lftp/lftp.hash | 6 +++---
+>  package/lftp/lftp.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
