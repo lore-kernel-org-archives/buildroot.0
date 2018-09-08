@@ -1,174 +1,47 @@
-From: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
-Date: Sat,  8 Sep 2018 03:24:52 +0300
-Subject: [Buildroot] [PATCH v2 1/1] board: resurrect support for RIoTboard
-Message-ID: <20180908002452.11011-1-nikolay.dimitrov@retrohub.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat,  8 Sep 2018 08:24:07 +0300
+Subject: [Buildroot] [PATCH 1/1] python-autobahn: bump to version 18.9.1
+Message-ID: <20180908052407.9167-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Resurrect support for RIoTboard after 2018.02.x deprecation.
-
-Signed-off-by: Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
-Changes v1 -> v2:
- - Add board's manufacturer website for more info
- - Switch to genimage sdcard image generation, update install steps in
-   readme.txt
- - Switch from uImage to zImage
- - Switch rootfs to BR2_TARGET_ROOTFS_EXT2_4
- - Update u-boot to v2018.07
- - Update kernel to v4.18
- - Add myself in DEVELOPERS for riotboard
----
- DEVELOPERS                                         |  4 +++
- board/embest/riotboard/genimage.cfg                | 17 +++++++++
- board/embest/riotboard/readme.txt                  | 34 ++++++++++++++++++
- .../rootfs_overlay/boot/extlinux/extlinux.conf     |  6 ++++
- configs/riotboard_defconfig                        | 41 ++++++++++++++++++++++
- 5 files changed, 102 insertions(+)
- create mode 100644 board/embest/riotboard/genimage.cfg
- create mode 100644 board/embest/riotboard/readme.txt
- create mode 100644 board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
- create mode 100644 configs/riotboard_defconfig
+ package/python-autobahn/python-autobahn.hash | 7 ++++---
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 826831c5e7..53463ae2f4 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1500,6 +1500,10 @@ F:	package/exiv2/
- F:	package/nvidia-tegra23/nvidia-tegra23-binaries/
- F:	package/nvidia-tegra23/nvidia-tegra23-codecs/
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 32c99167e9..f2d4993ddf 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/autobahn/json, sha256 locally computed
+-md5	f8c8d74bf73644719b751e6fb11dc4a3  autobahn-17.10.1.tar.gz
+-sha256	8cf74132a18da149c5ea3dcbb5e055f6f4fe5a0238b33258d29e89bd276a8078  autobahn-17.10.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/autobahn/json
++md5    efddc3394c4e11f85bfa108c12a9346c  autobahn-18.9.1.tar.gz
++sha256 829fbeb08b7e0f7e8cd14d9d169043a861075c3f6e5e2739d564dc985b5e7015  autobahn-18.9.1.tar.gz
++# Locally computed
+ sha256  0387eefce570453daaa60633f28676003731eeca28b2d0a0071c628e3a0004ef  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index 3ba91c5e14..31bd99e783 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+N:	Nikolay Dimitrov <nikolay.dimitrov@retrohub.org>
-+F:	board/embest/riotboard/
-+F:	configs/riotboard_defconfig
-+
- N:	Nimai Mahajan <nimaim@gmail.com>
- F:	package/libucl/
- 
-diff --git a/board/embest/riotboard/genimage.cfg b/board/embest/riotboard/genimage.cfg
-new file mode 100644
-index 0000000000..1221c83b9a
---- /dev/null
-+++ b/board/embest/riotboard/genimage.cfg
-@@ -0,0 +1,17 @@
-+image sdcard.img {
-+    hdimage {
-+    }
-+
-+    partition u-boot {
-+        in-partition-table = "no"
-+        image = "u-boot.imx"
-+        offset = 1024
-+    }
-+
-+    partition rootfs {
-+        partition-type = 0x83
-+        image = "rootfs.ext2"
-+        offset = 1M
-+        size = 60M
-+    }
-+}
-diff --git a/board/embest/riotboard/readme.txt b/board/embest/riotboard/readme.txt
-new file mode 100644
-index 0000000000..04360a3c63
---- /dev/null
-+++ b/board/embest/riotboard/readme.txt
-@@ -0,0 +1,34 @@
-+Buildroot for Embest RIoTboard
-+==============================
-+This is a small development board, based on Freescale IMX6 Solo SoC (single
-+core ARM Cortex-A9).
-+
-+More details about the board can be found here:
-+- http://www.embest-tech.com/riotboard
-+
-+1. Compiling buildroot
-+----------------------
-+
-+make riotboard_defconfig
-+make
-+
-+2. Installing buildroot
-+-----------------------
-+
-+Prepare an SD-card and plug it into your card reader. Always double check the
-+block device before writing to it, as writing to the wrong block device can
-+cause irrecoverable data loss. Now you can write the image to your SD-card:
-+
-+sudo dd if=output/images/sdcard.img of=/dev/<sdcard-block-device> bs=1M
-+
-+3. Running buildroot
-+--------------------
-+
-+Position the board so you can read the label "RIoTboard" on the right side of
-+SW1 DIP switches. Configure the SW1 swiches like this:
-+
-+1   0  1   0   0  1   0  1
-+ON OFF ON OFF OFF ON OFF ON
-+
-+Now plug your prepared SD-card in slot J6. Connect a serial console (115200, 8,
-+N, 1) to header J18. Connect a 5V/1A power supply to the board and enjoy.
-diff --git a/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf b/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..23e48a0da7
---- /dev/null
-+++ b/board/embest/riotboard/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,6 @@
-+default buildroot
-+
-+label buildroot
-+kernel /boot/zImage
-+devicetree /boot/imx6dl-riotboard.dtb
-+append console=ttymxc1,115200 root=/dev/mmcblk1p1 rw
-diff --git a/configs/riotboard_defconfig b/configs/riotboard_defconfig
-new file mode 100644
-index 0000000000..6a37e64f8c
---- /dev/null
-+++ b/configs/riotboard_defconfig
-@@ -0,0 +1,41 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a9=y
-+BR2_ARM_ENABLE_NEON=y
-+BR2_ARM_ENABLE_VFP=y
-+BR2_ARM_FPU_VFPV3=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
-+BR2_TARGET_UBOOT_BOARDNAME="riotboard"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+
-+# Linux headers same as kernel, a 4.18 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_18=y
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.18"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6dl-riotboard"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+
-+# required tools to create the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# rootfs
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_ROOTFS_OVERLAY="board/embest/riotboard/rootfs_overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/embest/riotboard/genimage.cfg"
+-PYTHON_AUTOBAHN_VERSION = 17.10.1
++PYTHON_AUTOBAHN_VERSION = 18.9.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://pypi.python.org/packages/e4/2e/01a64212b1eb580d601fa20f146c962235e3493795f46e3b254597ec635d
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/3e/21/2074cfca5addf4f0c7e422798c50c85255ee5963889ee8b32edb06e47221
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_SETUP_TYPE = setuptools
 -- 
-2.11.0
+2.17.1
