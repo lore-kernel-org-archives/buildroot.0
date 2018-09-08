@@ -1,42 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 8 Sep 2018 14:48:19 +0200
-Subject: [Buildroot] [git commit] botan: needs std::future
-Message-ID: <20180908124730.8B5BA7FEE6@busybox.osuosl.org>
+Date: Sat, 8 Sep 2018 14:49:24 +0200
+Subject: [Buildroot] [PATCH 1/1] botan: fix build on arm without neon
+In-Reply-To: <20180907191736.19192-1-fontaine.fabrice@gmail.com>
+References: <20180907191736.19192-1-fontaine.fabrice@gmail.com>
+Message-ID: <20180908144924.7ba70ca3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfdfd97e107545e67277bb96ddd1d0af00039cef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/d63f70340d1297ad96c20144e658f0e4587a90ca
+On Fri,  7 Sep 2018 21:17:36 +0200, Fabrice Fontaine wrote:
+> configure.py only supports --disable-neon
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/26eec7e20795068613616a7312681853232ec764
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/botan/botan.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/botan/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/botan/Config.in b/package/botan/Config.in
-index 6fe818bc6d..3632a1a1c2 100644
---- a/package/botan/Config.in
-+++ b/package/botan/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_BOTAN
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	help
- 	  Botan is a crypto library for C++
- 
-@@ -20,3 +21,7 @@ comment "botan needs a toolchain w/ C++, threads, gcc >= 4.8"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
-+
-+comment "botan needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_BOTAN_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Embedded Linux and Kernel engineering
+https://bootlin.com
