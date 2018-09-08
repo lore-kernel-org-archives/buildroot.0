@@ -1,40 +1,33 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 8 Sep 2018 22:43:12 +0300
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 8 Sep 2018 21:48:47 +0200
 Subject: [Buildroot] [PATCH 1/1] libminiupnpc: fix hash for license file
-In-Reply-To: <20180908213601.5d7a0dfb@windsurf.home>
+In-Reply-To: <CALFsTFWp749gJPo4U-fODmquKzdwQtd=CM8d7MishAWLSsy2Tw@mail.gmail.com>
 References: <20180908175903.4561-1-asafka7@gmail.com>
  <20180908213601.5d7a0dfb@windsurf.home>
-Message-ID: <CALFsTFWp749gJPo4U-fODmquKzdwQtd=CM8d7MishAWLSsy2Tw@mail.gmail.com>
+ <CALFsTFWp749gJPo4U-fODmquKzdwQtd=CM8d7MishAWLSsy2Tw@mail.gmail.com>
+Message-ID: <20180908214847.27eb3a59@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-They just replaced the year 2015 with 2016...
+Hello,
 
-On Sat, Sep 8, 2018 at 10:36 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+On Sat, 8 Sep 2018 22:43:12 +0300, Asaf Kahlon wrote:
 
-> Hello,
->
-> On Sat,  8 Sep 2018 20:59:03 +0300, Asaf Kahlon wrote:
-> > Fixes:
-> >
-> http://autobuild.buildroot.org/results/51d/51dde9a1a7f60899a1befa24af379d204acb0d22/
-> >
-> > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
->
-> What are the changes between the previous and new license files ?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20180908/0434d90e/attachment.html>
+> They just replaced the year 2015 with 2016...
+
+This should be mentioned in the commit log, so that we know that
+someone has verified what the changes were. That's the whole point of
+having hashes for license files: detecting when the license file
+contents are changed. So if we just blindly update the hash, it
+completely defeats the purpose of having those hashes.
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
