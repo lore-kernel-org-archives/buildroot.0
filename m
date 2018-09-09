@@ -1,121 +1,112 @@
-From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-Date: Sun, 9 Sep 2018 09:24:18 +0200
-Subject: [Buildroot] ADEOS patch and kernel override
-In-Reply-To: <CAOf5uwnMCSK=NHTK3ewcKXOyF5ZfeCDx7cnTENOi9SYM2ztA-A@mail.gmail.com>
-References: <CAOf5uwmrFw_fKozkMn+5gVoehBig8g2PhE-ivg0GSv+PNcHfsA@mail.gmail.com>
- <20180907133121.29434851@windsurf.home>
- <CAOf5uwnMCSK=NHTK3ewcKXOyF5ZfeCDx7cnTENOi9SYM2ztA-A@mail.gmail.com>
-Message-ID: <CAOf5uw==rhkwr-FdVFL_-+xxnUaV3V=8vfNH2N1pGCkeUNWmgg@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Sep 2018 09:36:16 +0200
+Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
+In-Reply-To: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
+References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20180909073616.GC2841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas
+Angelo, Thomas, All,
 
-On Fri, Sep 7, 2018 at 2:03 PM Michael Nazzareno Trimarchi
-<michael@amarulasolutions.com> wrote:
->
-> Hi
->
-> On Fri, Sep 7, 2018 at 1:31 PM Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
-> >
-> > Hello Michael,
-> >
-> > On Fri, 7 Sep 2018 12:44:43 +0200, Michael Nazzareno Trimarchi wrote:
-> >
-> > > I'm trying to understand if I can override the kernel and let apply
-> > > the adeos patch on top of it. Seems that PREHOOK is not called
-> > > in the linux kernel override directory. Is there some semantic to use?
-> >
-> > When you said "override the kernel", I will assume you talking about
-> > using LINUX_OVERRIDE_SRCDIR. If that is the case, then no, Buildroot
-> > will not patch it for you.
-> >
+On 2018-09-06 00:22 +0200, Angelo Compagnucci spake thusly:
+> Packages that need to resolve dependencies internally
+> and use a package manager would harm the reproducibility
+> of a build, moreover they escape the legal infrastructure
+> not giving enough informations on licensing.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 675e790..085801d 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -351,6 +351,10 @@ define LINUX_KCONFIG_FIXUP_CMDS
-                $(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
- endef
+So, I am not in favour of having support for such package managers in
+Buildroot, to begin with.
 
-+ifneq ($(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH),)
-+LINUX_DEPENDENCIES += xenomai
-+endif
-+
- ifeq ($(BR2_LINUX_KERNEL_DTS_SUPPORT),y)
- # Starting with 4.17, the generated dtc parser code is no longer
- # shipped with the kernel sources, so we need flex and bison. For
+As you say, the reproducibility of a build, as offered by Buildroot, is
+really a very important point. In my opinion, reproducibility is even
+paramount. Whatever gets in the way should be banned.
 
-Is this fit anyway? I mean if I have a kernel patched with xenomai and
-I'm working with it I need to tell that xenomai is needed.
-Now another problem is that xenomai create symlink to the linux kernel
-source. Another idea is to make both part of overlay development.
+> This patch adds a tainting mechanism in the form of a
+> variable FOO_TAINTS that can be used to signal that
+> a package harms the reproducibility or licensing under
+> certain conditions.
 
-Michael
-> > Let me give a few more details about this, and explain why it is done
-> > like this.
-> >
-> > In a normal situation (i.e without OVERRIDE_SRCDIR), a package goes
-> > through the following steps:
-> >
-> >  (1) download
-> >  (2) extract
-> >  (3) patch
-> >  (4) configure
-> >  (5) build
-> >  (6) install
-> >
-> > When you switch to using OVERRIDE_SRCDIR for that package, the first
-> > three steps are skipped and replaced by a "rsync" step, while the three
-> > last steps remain the same:
-> >
-> >  (1) rsync
-> >  (2) configure
-> >  (3) build
-> >  (4) install
-> >
-> > The reason is that if you do an override source directory:
-> >
-> >  * Buildroot has no idea what is the state of the source code in here,
-> >    so it has no idea if the patches it has will apply. Most likely not.
-> >
-> >  * More importantly, it means that you own/control the source code,
-> >    so you can simply apply whatever changes are needed on the source
-> >    code located in the OVERRIDE_SRCDIR location.
-> >
-> > Does that help ?
-> >
-> Thomas is perfect description and I can see from the Makefile and make
-> sense. So patch should be done as a script over the kernel override. I
-> will proceed this way
->
-> Michael
->
-> > Best regards,
-> >
-> > Thomas
-> > --
-> > Thomas Petazzoni, CTO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
->
->
->
-> --
-> | Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-> | COO  -  Founder                                      Cruquiuskade 47 |
-> | +31(0)851119172                                 Amsterdam 1018 AM NL |
-> |                  [`as] http://www.amarulasolutions.com               |
+When I read that, it comes that the tainting mechanism serves two
+purposes: first, mark (non-)reproducibility, and second, mark incorrect
+and/or incomplete licensing information.
 
+This does not sound nice to me.
 
+For the licensing information, I would just rely on the existing
+licensing infra, and be done with it, i.e. add :
+
+    ifneq ($(FOO_NON_REPRODUCIBLE_EXTERNAL_DATA),)
+    FOO_LICENSE += Unknown (non reproducible external data)
+    endif
+
+I.e., no need for the tainting mechanism to represent the licensing
+problem, as we already have what is needed to cover it.
+
+Now, what would be the purpose for this "tainted" flag? I understand
+clearly what it provides, indeed, technically, but what would it serve
+to the user?
+
+If I were to use a non-reproduible set of data ffor;, say, nodejs, then
+I know that this is not handled by Buildroot, and thus it is not
+reproducible. I don't need to be told it, escept maybe as a note in the
+manual: "If you use external data from npm/pypi, cpan, whatnot, then
+your build is not reproducible; that will be hurting kittens."
+
+Instead, I am more in favour of packaging such external stuff as
+Buildroot packages, like we've been doing for erlang, lua, perl, and
+python, even if we have to add new infrastructures for thos (npm, I'm
+looking at you!)
+
+Besides, you're missing a big piece of potential non-reproducibility
+source: br2-external trees. If we ever were to have such a tainting
+mechanism, we should mark the build as tainted as soon as there is a
+br2-external tree.
+
+Ditto as soon as we have a FOO_OVERRIDE_SRCDIR set, which should mark
+the build as tainted. Except we already use FOO_OVERRIDE_SRCDIR when
+FOO_SITE = local...
+
+> This opens the door to include per language dependency
+> managers in buildroot.
+
+Instead, why not provide a helper script (or enhance the existing ones
+if need be), than generated buildroot packages for those external packge
+managers?
+
+Sorry, this is not the technical review you may have expected. Instead,
+it is a position statement on my part.
+
+Regards,
+Yann E. MORIN.
+
+> Angelo Compagnucci (3):
+>   Makefile: add tainting support
+>   docs/manual: adding infos about tainting
+>   package/nodejs: taint the build on external modules
+> 
+>  Makefile                                | 10 ++++++++++
+>  docs/manual/adding-packages-generic.txt |  6 ++++++
+>  docs/manual/legal-notice.txt            | 12 ++++++++++++
+>  package/nodejs/nodejs.mk                |  1 +
+>  package/pkg-generic.mk                  | 15 +++++++++++++++
+>  5 files changed, 44 insertions(+)
+> 
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
-| COO  -  Founder                                      Cruquiuskade 47 |
-| +31(0)851119172                                 Amsterdam 1018 AM NL |
-|                  [`as] http://www.amarulasolutions.com               |
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
