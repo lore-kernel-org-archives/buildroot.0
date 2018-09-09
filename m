@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Sep 2018 16:25:34 +0200
-Subject: [Buildroot] [PATCH 3/3] package/ibrcommon: add license hashes
+Date: Sun,  9 Sep 2018 16:25:33 +0200
+Subject: [Buildroot] [PATCH 2/3] package/squeezelite: add license hash
 In-Reply-To: <20180909142534.6931-1-bernd.kuhls@t-online.de>
 References: <20180909142534.6931-1-bernd.kuhls@t-online.de>
-Message-ID: <20180909142534.6931-3-bernd.kuhls@t-online.de>
+Message-ID: <20180909142534.6931-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,17 +12,16 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/ibrcommon/ibrcommon.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/squeezelite/squeezelite.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ibrcommon/ibrcommon.hash b/package/ibrcommon/ibrcommon.hash
-index 21a0ec6f19..9d13f06d38 100644
---- a/package/ibrcommon/ibrcommon.hash
-+++ b/package/ibrcommon/ibrcommon.hash
-@@ -1,2 +1,4 @@
+diff --git a/package/squeezelite/squeezelite.hash b/package/squeezelite/squeezelite.hash
+index 1dbb4c155a..d56f5da665 100644
+--- a/package/squeezelite/squeezelite.hash
++++ b/package/squeezelite/squeezelite.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
- sha256	  9c457c1ebc01e6216524636628c647bef34ab11bd96f0e0788be8749374fdc20	ibrcommon-1.0.1.tar.gz
-+sha256	  1a0b57773a46d9d4cc2f0d1780a17acc38af506bb1e0234aaa85f8ccd6dc0b92	COPYING
-+sha256	  9b8a430c2136ebcf76bd37f50da7d7a80ede413ec6604cc4694ea536e779854c	README
+ sha256 0c844e7714d3f15325629c59ee75e6309763116e61a6b73486b502e2e5cce5fd squeezelite-v1.8.tar.gz
++sha256 3e4379e1f34b8c5da00e545cfe94369b94a57745902c5d12be43b6332c34c04e LICENSE.txt
 -- 
 2.18.0
