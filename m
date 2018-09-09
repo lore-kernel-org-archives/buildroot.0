@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 9 Sep 2018 09:49:08 +0200
-Subject: [Buildroot] [PATCH v5 3/3] package/nodejs: taint the build on
- external modules
-In-Reply-To: <1536186133-9933-4-git-send-email-angelo.compagnucci@gmail.com>
+Date: Sun, 9 Sep 2018 10:00:59 +0200
+Subject: [Buildroot] [PATCH v5 2/3] docs/manual: adding infos about
+ tainting
+In-Reply-To: <1536186133-9933-3-git-send-email-angelo.compagnucci@gmail.com>
 References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
- <1536186133-9933-4-git-send-email-angelo.compagnucci@gmail.com>
-Message-ID: <20180909074908.GD2841@scaer>
+ <1536186133-9933-3-git-send-email-angelo.compagnucci@gmail.com>
+Message-ID: <20180909080059.GE2841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,57 +15,77 @@ To: buildroot@busybox.net
 Angelo, All,
 
 On 2018-09-06 00:22 +0200, Angelo Compagnucci spake thusly:
-> This patch enables the tainting of the build when an
-> external module is added.
+> From: Angelo Compagnucci <angelo@amarulasolutions.com>
+> 
+> Adding documentation about the usage of LIBFOO_TAINTS and
+> "make check-tainted".
 > 
 > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 > Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 > ---
->  package/nodejs/nodejs.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  docs/manual/adding-packages-generic.txt |  6 ++++++
+>  docs/manual/legal-notice.txt            | 12 ++++++++++++
+>  2 files changed, 18 insertions(+)
 > 
-> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-> index e2c94ba..322a1ec 100644
-> --- a/package/nodejs/nodejs.mk
-> +++ b/package/nodejs/nodejs.mk
-> @@ -160,6 +160,7 @@ NPM = $(TARGET_CONFIGURE_OPTS) \
->  # We can only call NPM if there's something to install.
->  #
->  ifneq ($(NODEJS_MODULES_LIST),)
-> +NODEJS_TAINTS = YES
+> diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+> index 7be1754..6495157 100644
+> --- a/docs/manual/adding-packages-generic.txt
+> +++ b/docs/manual/adding-packages-generic.txt
+> @@ -445,6 +445,12 @@ not and can not work as people would expect it should:
+>    to let you know, and +not saved+ will appear in the +license files+ field
+>    of the manifest file for this package.
+>  
+> +* +LIBFOO_TAINTS+ shoud be set to YES if a package taints a Buildroot
+> +  configuration. A Buildroot configuration is tainted when a packages uses
+> +  external dependencies for which Buildroot cannot clearly recover licensing
+> +  informations. If a configuration is tainted, it means that the licensing
+> +  information produced by +make legal-info+ could not be accurate.
 
-That is not even true.
+In your cover-letter, you said:
 
-If I have a Buildroot .config that contains:
+    FOO_TAINTS [...] can be used to signal that a package harms the
+    reproducibility or licensing under certain conditions.
 
-    BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="http://myserver/node-mods/VERSION/foo"
+But here, you only consider the licensing problem.
 
-Then this is 100% reproducible, because *I* manage and guarantee that it
-is, as this is *my* repository.
+As I already explained in my reply to the cover letter, I believe the
+licensing problem is already covered by the existing licensing
+infrastructure:
 
-I could even have:
+    FOO_LICENSE := $(FOO_LICENSE), Unknown (unreproducible external data)
 
-    BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="$(BR2_EXTERANL_MY_TREE_PATH)/mods/foo"
-
-which is also reproducible, by way of being in my git-versioned br2-external
-tree.
-
-And if you were to have:
-
-    BR2_PACKAGE_NODEJS_MODULES_ADDITIONAL="foo at 1.2.3"
-
-then it would also be preproducible, because the version is specified.
-
-So, no, we can't set the tainted flag as soon as an external set of npm
-modules are used; this would be plain wrong for people that already do
-the "right thing".
+(which is a bit different but better than what I suggested in the cover
+letter.)
 
 Regards,
 Yann E. MORIN.
 
->  define NODEJS_INSTALL_MODULES
->  	# If you're having trouble with module installation, adding -d to the
->  	# npm install call below and setting npm_config_rollback=false can both
+>  * +LIBFOO_ACTUAL_SOURCE_TARBALL+ only applies to packages whose
+>    +LIBFOO_SITE+ / +LIBTOO_SOURCE+ pair points to an archive that does
+>    not actually contain source code, but binary code. This a very
+> diff --git a/docs/manual/legal-notice.txt b/docs/manual/legal-notice.txt
+> index 6975328..7fde09a 100644
+> --- a/docs/manual/legal-notice.txt
+> +++ b/docs/manual/legal-notice.txt
+> @@ -73,6 +73,18 @@ distribution is required).
+>  When you run +make legal-info+, Buildroot produces warnings in the +README+
+>  file to inform you of relevant material that could not be saved.
+>  
+> +Furthermore, a Buildroot configuration could be tainted from a package that uses
+> +some custom external dependencies from the Buildroot tree. An example could be
+> +a package manager for a software stack that downloads the required dependencies
+> +during the building of a package. In such cases, Buildroot cannot check the
+> +licensing of the downloaded software and thus giving accurate licensing
+> +informations.
+> +To check if your configuration is tainted, run:
+> +
+> +--------------------
+> +make check-tainted
+> +--------------------
+> +
+>  Finally, keep in mind that the output of +make legal-info+ is based on
+>  declarative statements in each of the packages recipes. The Buildroot
+>  developers try to do their best to keep those declarative statements as
 > -- 
 > 2.7.4
 > 
