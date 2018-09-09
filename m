@@ -1,61 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:22:02 +0200
-Subject: [Buildroot] [git commit] e2fsprogs: simplify handling of ldconfig
- for target variant
-Message-ID: <20180909132111.39187838CE@busybox.osuosl.org>
+Date: Sun, 9 Sep 2018 15:21:59 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: do not use ldconfig when
+ building the host variant
+Message-ID: <20180909132111.316B4838CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2a065bc135f044b54f0c31890cc5218ab307dd7
+commit: https://git.buildroot.net/buildroot/commit/?id=64d4b3407376f9fc8bed1934a2c49ecd5d8838fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-e2fsprogs now has a proper autoconf check for ldconfig, so we can
-simply pass the apropriate ac_cv_path_LDCONFIG variable at configure
-time, and it gets used at build/install time without having to force
-LDCONFIG=true at every step.
+Since commit 93acaa5a573865afc7a8c0912a7037965eb845a6 ("e2fsprogs:
+build shared library for the host"), we are building shared libraries
+in host-e2fsprogs instead of static libraries. A consequence of this
+is that the e2fsprogs build system tries to run ldconfig on the host,
+which fails when running as non-root:
 
-Since the E2FSPROGS_INSTALL_TARGET_OPTS become the default, we can get
-rid of them entirely.
+/usr/sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
+make[3]: [Makefile:441: install-shlibs] Error 1 (ignored)
+
+Tell the configure script to use "true" as ldconfig in order to avoid
+this problem.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/e2fsprogs/e2fsprogs.mk | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ package/e2fsprogs/e2fsprogs.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index 659df8062e..98001c3c99 100644
+index 2c5098883a..659df8062e 100644
 --- a/package/e2fsprogs/e2fsprogs.mk
 +++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -64,7 +64,9 @@ endif
- # the configure script (i.e with the cross-compiler). Help them by
- # saying that <sys/stat.h> is available on the host, which is needed
- # for util/subst.c to build properly.
--E2FSPROGS_CONF_ENV += BUILD_CFLAGS="-DHAVE_SYS_STAT_H"
-+E2FSPROGS_CONF_ENV += \
-+	BUILD_CFLAGS="-DHAVE_SYS_STAT_H" \
+@@ -70,7 +70,8 @@ E2FSPROGS_CONF_ENV += BUILD_CFLAGS="-DHAVE_SYS_STAT_H"
+ # it doesn't provide definitions expected by e2fsprogs support lib.
+ HOST_E2FSPROGS_CONF_ENV += \
+ 	ac_cv_header_magic_h=no \
+-	ac_cv_lib_magic_magic_file=no
++	ac_cv_lib_magic_magic_file=no \
 +	ac_cv_path_LDCONFIG=true
  
- # Disable use of the host magic.h, as on older hosts (e.g. RHEL 5)
- # it doesn't provide definitions expected by e2fsprogs support lib.
-@@ -73,18 +75,10 @@ HOST_E2FSPROGS_CONF_ENV += \
- 	ac_cv_lib_magic_magic_file=no \
- 	ac_cv_path_LDCONFIG=true
+ E2FSPROGS_MAKE_OPTS = LDCONFIG=true
  
--E2FSPROGS_MAKE_OPTS = LDCONFIG=true
--
- E2FSPROGS_INSTALL_STAGING_OPTS = \
- 	DESTDIR=$(STAGING_DIR) \
--	LDCONFIG=true \
- 	install-libs
- 
--E2FSPROGS_INSTALL_TARGET_OPTS = \
--	DESTDIR=$(TARGET_DIR) \
--	LDCONFIG=true \
--	install
--
- define HOST_E2FSPROGS_INSTALL_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
- endef
