@@ -1,63 +1,50 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sun,  9 Sep 2018 21:33:43 +0200
-Subject: [Buildroot] [PATCH] motion: fix build failure due to missing
- drmGetVersion() and drmFreeVersion()
-Message-ID: <20180909193343.117159-1-giulio.benetti@micronovasrl.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  9 Sep 2018 21:50:23 +0200
+Subject: [Buildroot] [PATCH 1/1] fio: fix license
+Message-ID: <20180909195023.23907-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During static linking -ldrm is listed too early respect -lavutil.
-This cause build failure.
+fio does not have any special conditions since version 2.2.6 indeed
+MORAL-LICENSE has been updated to replace "promising" by "encouraged"
+and "must" by "should":
+https://github.com/axboe/fio/commit/67f4822ce3dc6af76b963c6ac467a8f0471a7faf
 
-Append extra -ldrm at the tail of $(LIBS) list.
+So fix LICENSE, add MORAL-LICENSE to LICENSE_FILES and add hash for both
+licenses
 
-Fixes:
-http://autobuild.buildroot.net/results/395/395be1a9cab824b82ef34c2ebd84d54243029b33//
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-fix-static-linking-for-ldrm-library.patch | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch
+ package/fio/fio.hash | 2 ++
+ package/fio/fio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch b/package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch
-new file mode 100644
-index 0000000000..591cca66eb
---- /dev/null
-+++ b/package/motion/0002-Makefile.in-fix-static-linking-for-ldrm-library.patch
-@@ -0,0 +1,30 @@
-+From 7098dafaf297d70bb73a5320bdc522b66c456a56 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+Date: Sun, 9 Sep 2018 20:30:33 +0200
-+Subject: [PATCH] Makefile.in: fix static linking for -ldrm library
-+
-+While linking statically -ldrm library is listed too early than -lavutil.
-+
-+Append additional -ldrm entry to linker $(LIBS) list.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+ Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile.in b/Makefile.in
-+index 94c7d40..5cfb490 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -39,7 +39,7 @@ CFLAGS       = @CFLAGS@ -Wall \
-+ 	 -DMOTIONDOCDIR=\"$(DESTDIR)$(docdir)\"    \
-+ 	 @FFMPEG_CFLAGS@ @MMAL_CFLAGS@
-+ LDFLAGS      = @LDFLAGS@
-+-LIBS         = @LIBS@  @MMAL_LIBS@ @FFMPEG_LIBS@
-++LIBS         = @LIBS@ @FFMPEG_LIBS@ @MMAL_LIBS@ -ldrm
-+ OBJ          = motion.o logger.o conf.o draw.o jpegutils.o \
-+ 			   video_loopback.o video_v4l2.o video_common.o video_bktr.o \
-+ 			   netcam.o netcam_http.o netcam_ftp.o netcam_jpeg.o netcam_wget.o \
-+-- 
-+2.17.1
-+
+diff --git a/package/fio/fio.hash b/package/fio/fio.hash
+index 7eb08140c5..d136fd595b 100644
+--- a/package/fio/fio.hash
++++ b/package/fio/fio.hash
+@@ -1,2 +1,4 @@
+ # Locally computed
+ sha256 1952db4d534221e6e8454f851dfcc38328b0ed4a3f499ea25a51ca2b5ccc8136  fio-fio-2.20.tar.gz
++sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
++sha256 8a240c1ad13d1fe3e58588643d81d0695899be4a669fe6d8fafa76ca6a89db2c  MORAL-LICENSE
+diff --git a/package/fio/fio.mk b/package/fio/fio.mk
+index c109f0795c..aabdff9925 100644
+--- a/package/fio/fio.mk
++++ b/package/fio/fio.mk
+@@ -6,8 +6,8 @@
+ 
+ FIO_VERSION = fio-2.20
+ FIO_SITE = git://git.kernel.dk/fio.git
+-FIO_LICENSE = GPL-2.0 + special obligations
+-FIO_LICENSE_FILES = COPYING
++FIO_LICENSE = GPL-2.0
++FIO_LICENSE_FILES = COPYING MORAL-LICENSE
+ 
+ ifeq ($(BR2_PACKAGE_LIBAIO),y)
+ FIO_DEPENDENCIES += libaio
 -- 
 2.17.1
