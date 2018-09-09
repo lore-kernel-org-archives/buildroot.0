@@ -1,34 +1,34 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 09 Sep 2018 23:00:59 +0000
-Subject: [Buildroot] [Bug 11291] New: Hacked By KingSkrupellos CyBeRiZM.OrG
+Date: Sun, 09 Sep 2018 23:03:41 +0000
+Subject: [Buildroot] [Bug 11311] New: Hacked By KingSkrupellos CyBeRiZM.OrG
  Digital Security Technological Turkish Moslem Army
-Message-ID: <bug-11291-163@https.bugs.busybox.net/>
+Message-ID: <bug-11311-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11291
+https://bugs.busybox.net/show_bug.cgi?id=11311
 
-            Bug ID: 11291
+            Bug ID: 11311
            Summary: Hacked By KingSkrupellos CyBeRiZM.OrG Digital Security
                     Technological Turkish Moslem Army
            Product: buildroot
-           Version: unspecified
+           Version: 2018.05.2
           Hardware: All
                 OS: Linux
             Status: NEW
           Severity: normal
           Priority: P5
-         Component: Other
+         Component: Outdated package
           Assignee: unassigned at buildroot.uclibc.org
           Reporter: xvryhkw at gmail.com
                 CC: buildroot at uclibc.org
   Target Milestone: ---
 
-Created attachment 7736
-  --> https://bugs.busybox.net/attachment.cgi?id=7736&action=edit
+Created attachment 7756
+  --> https://bugs.busybox.net/attachment.cgi?id=7756&action=edit
 Hacked By KingSkrupellos CyBeRiZM.OrG Digital Security Technological Turkish
 Moslem Army
 
