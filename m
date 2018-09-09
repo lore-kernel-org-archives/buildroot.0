@@ -1,40 +1,39 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun,  9 Sep 2018 11:17:50 +0200
-Subject: [Buildroot] [PATCH] mpd: bump to version 0.20.21
-Message-ID: <20180909091750.32490-1-joerg.krause@embedded.rocks>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sun,  9 Sep 2018 11:27:17 +0200
+Subject: [Buildroot] [PATCH] pkg-perl: move PERL_INC in configure step
+Message-ID: <20180909092717.19375-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/mpd/mpd.hash | 2 +-
- package/mpd/mpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+this workaround for old ExtUtils-MakeMaker is now useless
 
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index 6eb384e763..f48782be39 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  a9e458c6e07cdf62649de7722e1e5a7f13aa82eeb397bfbbebc07cf5cf273584  mpd-0.20.20.tar.xz
-+sha256  8322764dc265c20f05c8c8fdfdd578b0722e74626bef56fcd8eebfb01acc58dc  mpd-0.20.21.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index a0bbc7222a..b61a4627d2 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.20
--MPD_VERSION = $(MPD_VERSION_MAJOR).20
-+MPD_VERSION = $(MPD_VERSION_MAJOR).21
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = http://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf boost
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/pkg-perl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index b0d5789ac..2888872dc 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -102,6 +102,7 @@ define $(2)_CONFIGURE_CMDS
+ 			LD="$$(TARGET_CC)" \
+ 			LDDLFLAGS="-shared $$(TARGET_LDFLAGS)" \
+ 			LDFLAGS="$$(TARGET_LDFLAGS)" \
++			PERL_INC=$$(STAGING_DIR)/usr/lib/$$(PERL_INSTALL_NAME)/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
+ 			DESTDIR=$$(TARGET_DIR) \
+ 			INSTALLDIRS=vendor \
+ 			INSTALLVENDORLIB=/usr/lib/perl5/site_perl/$$(PERL_VERSION) \
+@@ -147,7 +148,6 @@ define $(2)_BUILD_CMDS
+ 		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
+ 	else \
+ 		$$(MAKE1) \
+-			PERL_INC=$$(STAGING_DIR)/usr/lib/perl5/$$(PERL_VERSION)/$$(PERL_ARCHNAME)/CORE \
+ 			FIXIN=: \
+ 			$$($(2)_BUILD_OPTS) pure_all; \
+ 	fi
 -- 
-2.18.0
+2.17.1
