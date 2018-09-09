@@ -1,36 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:21:25 +0200
-Subject: [Buildroot] [PATCH] circus: fix build with Python 3.7.0
-In-Reply-To: <20180908203431.19594-1-thomas.petazzoni@bootlin.com>
-References: <20180908203431.19594-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20180909152125.533d8c7a@windsurf.home>
+Date: Sun, 9 Sep 2018 15:22:02 +0200
+Subject: [Buildroot] [git commit] e2fsprogs: simplify handling of ldconfig
+ for target variant
+Message-ID: <20180909132111.39187838CE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=d2a065bc135f044b54f0c31890cc5218ab307dd7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  8 Sep 2018 22:34:31 +0200, Thomas Petazzoni wrote:
-> Python 3.7.0 makes 'async' a reserved keyword, but circus uses it as a
-> method argument. This commit adds a patch to the circus package, which
-> has been submitted upstream, to resolve this issue.
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/8122a00644810722b827cd5e0b90181996dc5657/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  ...s-rename-async-argument-of-_create_circus.patch | 97 ++++++++++++++++++++++
->  1 file changed, 97 insertions(+)
->  create mode 100644 package/circus/0001-circus-tests-rename-async-argument-of-_create_circus.patch
+e2fsprogs now has a proper autoconf check for ldconfig, so we can
+simply pass the apropriate ac_cv_path_LDCONFIG variable at configure
+time, and it gets used at build/install time without having to force
+LDCONFIG=true at every step.
 
-Applied to master, thanks.
+Since the E2FSPROGS_INSTALL_TARGET_OPTS become the default, we can get
+rid of them entirely.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/e2fsprogs/e2fsprogs.mk | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 659df8062e..98001c3c99 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -64,7 +64,9 @@ endif
+ # the configure script (i.e with the cross-compiler). Help them by
+ # saying that <sys/stat.h> is available on the host, which is needed
+ # for util/subst.c to build properly.
+-E2FSPROGS_CONF_ENV += BUILD_CFLAGS="-DHAVE_SYS_STAT_H"
++E2FSPROGS_CONF_ENV += \
++	BUILD_CFLAGS="-DHAVE_SYS_STAT_H" \
++	ac_cv_path_LDCONFIG=true
+ 
+ # Disable use of the host magic.h, as on older hosts (e.g. RHEL 5)
+ # it doesn't provide definitions expected by e2fsprogs support lib.
+@@ -73,18 +75,10 @@ HOST_E2FSPROGS_CONF_ENV += \
+ 	ac_cv_lib_magic_magic_file=no \
+ 	ac_cv_path_LDCONFIG=true
+ 
+-E2FSPROGS_MAKE_OPTS = LDCONFIG=true
+-
+ E2FSPROGS_INSTALL_STAGING_OPTS = \
+ 	DESTDIR=$(STAGING_DIR) \
+-	LDCONFIG=true \
+ 	install-libs
+ 
+-E2FSPROGS_INSTALL_TARGET_OPTS = \
+-	DESTDIR=$(TARGET_DIR) \
+-	LDCONFIG=true \
+-	install
+-
+ define HOST_E2FSPROGS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install install-libs
+ endef
