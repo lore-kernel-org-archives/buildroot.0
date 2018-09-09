@@ -1,7 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  9 Sep 2018 16:25:32 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mediastreamer: add license hash
-Message-ID: <20180909142534.6931-1-bernd.kuhls@t-online.de>
+Date: Sun,  9 Sep 2018 16:34:12 +0200
+Subject: [Buildroot] [PATCH 2/2] linux: bump default to version 4.18.7
+In-Reply-To: <20180909143412.27004-1-bernd.kuhls@t-online.de>
+References: <20180909143412.27004-1-bernd.kuhls@t-online.de>
+Message-ID: <20180909143412.27004-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,16 +12,21 @@ To: buildroot@busybox.net
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mediastreamer/mediastreamer.hash | 1 +
- 1 file changed, 1 insertion(+)
+ linux/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/mediastreamer/mediastreamer.hash b/package/mediastreamer/mediastreamer.hash
-index 5f26b54bff..8ebf64af09 100644
---- a/package/mediastreamer/mediastreamer.hash
-+++ b/package/mediastreamer/mediastreamer.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256  1144849c0c96abafb1153adf56109f0f195a9e4a53cf28cb611bbca7a9012c1a  mediastreamer-2.14.0.tar.gz
-+sha256  ba9ed2269151ad63b922598f3c5c19ddf781b2bbb6cb843ed9f085ecd1679c5d  COPYING
+diff --git a/linux/Config.in b/linux/Config.in
+index 0c05e8bdcd..6a944b6731 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -120,7 +120,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "4.18.5" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "4.18.7" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.4.138-cip25" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 -- 
 2.18.0
