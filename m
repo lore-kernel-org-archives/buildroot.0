@@ -1,38 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:32:21 +0200
-Subject: [Buildroot] [PATCH 1/3] package/Makefile.in: Use '-isystem'
- instead of '-I' in HOST_CFLAGS globally
-In-Reply-To: <20180831142024.27548-1-david.degrave@mind.be>
-References: <20180831142024.27548-1-david.degrave@mind.be>
-Message-ID: <20180909153221.6b803c9f@windsurf.home>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Sep 2018 15:33:41 +0200
+Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
+In-Reply-To: <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
+References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
+ <20180909073616.GC2841@scaer>
+ <20180909141037.69b16e95@windsurf.home>
+ <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
+Message-ID: <20180909133341.GJ2841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello David,
+Angelo, Thomas, All,
 
-On Fri, 31 Aug 2018 16:20:22 +0200, David De Grave (Essensium/Mind)
-wrote:
->  As the $(HOST_DIR) is the buildroot's system install directory, and that
-> all the builds should use that one in priority (it's even mandatory for
-> uboot and linux), it make sense to use '-isystem' to ensure it is searched
-> right before the system directories and still let the possibility for the
-> packages to use specific ones using '-I'.
+On 2018-09-09 13:25 +0100, Angelo Compagnucci spake thusly:
+> On Sun, Sep 9, 2018 at 1:10 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+[--SNIP--]
+> Thomas said evrithing exceptionally well, but I would like to
+> underling another thing: automated building infrastructures like
+> continuos integration.
+> 
+> If a project hasa nedd of reproducibility, the countinous integration
+> could check if a random developer introduced something not
+> reproducible and mark the build as invalid. I think this is really a
+> big plus of this solution.
 
-Could you give a few more details about the motivation for this change.
-Is it just because it is "cleaner" to refer to Buildroot
-$(HOST_DIR)/include using -isystem, or does this fix some actual
-problem/build issue ?
+I do understand the concern, trust me, I do.
 
-Doing such a change is pretty invasive, it could potentially cause
-some build failures, so I'd like to understand the motivation.
+What I am saying is that the solution you propose will not allow that,
+because there is no way to decide whether a specific .config is or is
+not reproducible, as per the examples I provided in the nodejs case.
 
-Thanks!
+If a build is imprperly marked as tainted, then users will just
+disregard that information and never consult it, and just not use it in
+their automated buildsystemsd (jenkins, gitlab-ci, whatever). And even
+if they do have a job doing the check, that job can detect a change from
+"not tainted" to "tainted" because the job will always report "tainted".
 
-Thomas
+So, your solution does not even cover your automated builds use-case
+either.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
