@@ -1,115 +1,69 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Sun, 9 Sep 2018 17:58:09 +0100
-Subject: [Buildroot] [PATCH v5 0/3] Add tainting support to buildroot
-In-Reply-To: <20180909142019.GK2841@scaer>
-References: <1536186133-9933-1-git-send-email-angelo.compagnucci@gmail.com>
- <20180909073616.GC2841@scaer> <20180909141037.69b16e95@windsurf.home>
- <CA+_SqVbJqv2On+9UPE4pcoyiK1wfDZp=t1h1yMdfVB-CQGp91g@mail.gmail.com>
- <20180909133341.GJ2841@scaer>
- <CA+_SqVafj+DAsaBtSPJkf2bwbmh_3JojRjBrzG0oT6GduKTG4g@mail.gmail.com>
- <20180909142019.GK2841@scaer>
-Message-ID: <CA+_SqVZ8-qKU9AxV+kAo6ch4QGKtPJWKS_jOGKMGPjsVTTp5mA@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun,  9 Sep 2018 19:29:17 +0200
+Subject: [Buildroot] [PATCH] parted: fix minor()/major() build failure due
+ to glibc 2.28
+Message-ID: <20180909172917.55169-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All
-On Sun, Sep 9, 2018 at 3:20 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Angelo, All,
->
-> On 2018-09-09 14:44 +0100, Angelo Compagnucci spake thusly:
-> > On Sun, Sep 9, 2018 at 2:33 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > On 2018-09-09 13:25 +0100, Angelo Compagnucci spake thusly:
-> > > > On Sun, Sep 9, 2018 at 1:10 PM Thomas Petazzoni
-> > > > <thomas.petazzoni@bootlin.com> wrote:
-> > > [--SNIP--]
-> > > > Thomas said evrithing exceptionally well, but I would like to
-> > > > underling another thing: automated building infrastructures like
-> > > > continuos integration.
-> > > >
-> > > > If a project hasa nedd of reproducibility, the countinous integration
-> > > > could check if a random developer introduced something not
-> > > > reproducible and mark the build as invalid. I think this is really a
-> > > > big plus of this solution.
-> > >
-> > > I do understand the concern, trust me, I do.
-> > >
-> > > What I am saying is that the solution you propose will not allow that,
-> > > because there is no way to decide whether a specific .config is or is
-> > > not reproducible, as per the examples I provided in the nodejs case.
-> > >
-> > > If a build is imprperly marked as tainted, then users will just
-> > > disregard that information and never consult it, and just not use it in
-> > > their automated buildsystemsd (jenkins, gitlab-ci, whatever). And even
-> > > if they do have a job doing the check, that job can detect a change from
-> > > "not tainted" to "tainted" because the job will always report "tainted".
-> >
-> > My concern here is that you start from a reproducible build, add your
-> > packages right and so maintain your build reproducible, buildroot will
-> > work as before.
->
-> So you are, like I am, in fact arguing that we should have actual packages
-> for such external modules? ;-)
+glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
+and therefore <sys/sysmacros.h> must be included explicitly when
+major()/minor() are used.
 
-I can't see any value on having hundreds of npm packages probably
-outdated at wich you should add hundreds of php composer packages, go
-modules, cargo packages and so on.
+This commit adds a patch to directly include <sys/sysmacros.h> into
+libparted/arch/linux.c files where minor() and major() macros are used.
 
->> > As soon you use a package manager tainting will be
-> > signaled.
->
-> This is where I disagree.
->
-> Using such package managers does not imply that the build is tainted.
-> This is a false dichotomy.
+Fixes:
+http://autobuild.buildroot.net/results/d3a/d3a3cd9963e5a2be1cec8fb553f5b20fc2e3c85c//
+http://autobuild.buildroot.net/results/ecf/ecfb634b5e6dac2c88b399fc1f1adc68ca42504c//
 
-Probably it is but my experience says not, anyway, if you are dealing
-with a complex php software for example you can:
-* call php composer manually on the modules you are sure being
-reproducible in your .mk and live happy
-* use the package host-composer distributed with buildroot asking it
-to do a "composer install" living with the fact that it could do
-anything and you build will be tainted.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ ...e-sys-sysmacros.h-to-compile-with-gl.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/parted/0005-libparted-include-sys-sysmacros.h-to-compile-with-gl.patch
 
-> > Taint is mean to signal that there is a potential problem, and if you
-> > don't want to slip into it, you can always do the right thing and
-> > package your software and packaging also it's dependencies.
->
-> And what I am saying is that the heuristic you suggest to decide whether
-> a build should be considered tainted or not is incorrect.
-
-It's not an heuristic, it's a rule: you ask to a package manager to
-resolve your dependencies, your build _could_ be tainted. You want to
-be sure: you write your own rule.
-If you write a clean mk that does everything right you shouldn't add
-FOO_TAINTS, that's it.
-
-I can agree with you that some packages could be considered first
-class citizens, the others based on package managers could not be as
-good as first ones. But at least, you give the tools to developers who
-wants to add a non trivial web package or similar to buildroot.
-
-What I'm saying here is that we don't have such a rule we simply
-cannot add any time soon any software based on package managers.
-
-Probably there is some other smarter way to do it that I cannot see ...
-
-I'm open to suggestions!
-
->
-> > As soon as you do this, the taint disappear. I thin it could even be a
-> > deterrent to package the software randomly!
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+diff --git a/package/parted/0005-libparted-include-sys-sysmacros.h-to-compile-with-gl.patch b/package/parted/0005-libparted-include-sys-sysmacros.h-to-compile-with-gl.patch
+new file mode 100644
+index 0000000000..63dda4c4ff
+--- /dev/null
++++ b/package/parted/0005-libparted-include-sys-sysmacros.h-to-compile-with-gl.patch
+@@ -0,0 +1,33 @@
++From 715e3e937536326af272c45a86cc3765f00297f7 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Sun, 9 Sep 2018 19:19:19 +0200
++Subject: [PATCH] libparted: include <sys/sysmacros.h> to compile with
++ glibc-2.28
++
++glibc 2.28 no longer includes <sys/sysmacros.h> from <sys/types.h>,
++and therefore <sys/sysmacros.h> must be included explicitly when
++major()/minor() are used.
++
++Include <sys/sysmacros.h> into libparted/arch/linux.c where minor() and
++major() macros are used.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ libparted/arch/linux.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/libparted/arch/linux.c b/libparted/arch/linux.c
++index 0f18904..b302d63 100644
++--- a/libparted/arch/linux.c
+++++ b/libparted/arch/linux.c
++@@ -37,6 +37,7 @@
++ #include <dirent.h>
++ #include <sys/ioctl.h>
++ #include <sys/stat.h>
+++#include <sys/sysmacros.h>
++ #include <sys/types.h>
++ #include <sys/utsname.h>        /* for uname() */
++ #include <scsi/scsi.h>
++-- 
++2.17.1
++
+-- 
+2.17.1
