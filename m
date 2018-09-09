@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 9 Sep 2018 15:09:40 +0200
-Subject: [Buildroot] [PATCH] pkg-perl: move PERL_INC in configure step
-In-Reply-To: <20180909092717.19375-1-francois.perrad@gadz.org>
-References: <20180909092717.19375-1-francois.perrad@gadz.org>
-Message-ID: <20180909150940.3d9df005@windsurf.home>
+Date: Sun, 9 Sep 2018 15:13:44 +0200
+Subject: [Buildroot] [PATCH] shairport-sync: add upstream patch to fix
+ soxr configure issue
+In-Reply-To: <20180909094317.10873-1-joerg.krause@embedded.rocks>
+References: <20180909094317.10873-1-joerg.krause@embedded.rocks>
+Message-ID: <20180909151344.2eadead8@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,18 +13,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun,  9 Sep 2018 11:27:17 +0200, Francois Perrad wrote:
-> this workaround for old ExtUtils-MakeMaker is now useless
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/pkg-perl.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Sun,  9 Sep 2018 11:43:17 +0200, J?rg Krause wrote:
+> Commit b06639cf7a adds an upstream patch to fix a build issue with soxr.
 
-Applied to master, thanks.
+I don't have any commit with the hash b06639cf7a in Buildroot. Are you
+talking about e047dee241fe0660d92311a124757065c6c4c93d instead ?
+
+> Should be committed to 2018.02.x and 2018.05.x, too.
+
+Well e047dee241fe0660d92311a124757065c6c4c93d was not backported to
+2018.02.x and 2018.05.x. Are you sure 2018.02.x and 2018.05.x are
+affected by the soxr build issue that
+e047dee241fe0660d92311a124757065c6c4c93d is fixing ? Indeed, I don't
+see any autobuilder failure:
+http://autobuild.buildroot.net/?reason=shairport%.
+
+Thanks,
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin (formerly Free Electrons)
+Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
 https://bootlin.com
