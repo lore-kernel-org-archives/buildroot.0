@@ -1,45 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  9 Sep 2018 12:06:30 +0200
-Subject: [Buildroot] [PATCH 1/1] libatomic_ops: bump to version 7.6.6
-Message-ID: <20180909100630.18763-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 9 Sep 2018 12:20:28 +0200
+Subject: [Buildroot] [PATCH 1/1] mongoose: fix hash
+In-Reply-To: <20180907091210.6ad78022@windsurf.home>
+References: <20180906214220.854-1-fontaine.fabrice@gmail.com>
+ <87musu3rpi.fsf@tkos.co.il> <20180907091210.6ad78022@windsurf.home>
+Message-ID: <20180909102028.GF2841@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update COPYING hash: sync with FSF's gpl-2.0.txt (see
-https://github.com/ivmai/libatomic_ops/commit/aed079e7ce21a033dd7ccb8fa5808d76e4ecb8d5)
+Fabrice, Thomas, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libatomic_ops/libatomic_ops.hash | 4 ++--
- package/libatomic_ops/libatomic_ops.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2018-09-07 09:12 +0200, Thomas Petazzoni spake thusly:
+> On Fri, 07 Sep 2018 06:35:21 +0300, Baruch Siach wrote:
+> > But the current github download is indeed different. Not sure what went
+> > wrong here, but this description is not correct.
+> I saw Yann and Peter talking about github tarballs having changed again:
+> 
+> 18:29 < Jacmet> hmm, looks like github tarballs again changed content :/
+> 18:29 < Jacmet> http://autobuild.buildroot.net/results/599/599920bc0a5821fd3fb0a028574a25a22e12430f/build-end.log
+> 18:42 < y_morin> Jacmet: At the same time, the fallback to s.b.o timeout, so maybe it is not a github issue either?
+> 18:43 < Jacmet> y_morin: well, it did get a tarball from github and the hash didn't match
+> 18:43 < y_morin> Jacmet: Arg, indeed. I even had another sha256 than the one in the report.
+> 18:44 < Jacmet> y_morin: and downloading it from github here I also get the same (wrong) hash
 
-diff --git a/package/libatomic_ops/libatomic_ops.hash b/package/libatomic_ops/libatomic_ops.hash
-index 90af18dc38..a913023e21 100644
---- a/package/libatomic_ops/libatomic_ops.hash
-+++ b/package/libatomic_ops/libatomic_ops.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 7ee6a1772a49d02711b97c600bd214bd86ba8a31bd7c6d6e850b502780de367c  libatomic_ops-v7.4.10.tar.gz
-+sha256 61754aa60bb8052ea64175794df2afae8baacca5420e06eb150230681e71ff5e  libatomic_ops-v7.6.6.tar.gz
- sha256 f0e630c0ca489767033da5a0c869fb4231db522c5ff479ce55a853a923a00f69  doc/LICENSING.txt
--sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/libatomic_ops/libatomic_ops.mk b/package/libatomic_ops/libatomic_ops.mk
-index dff62c51b0..100ad70257 100644
---- a/package/libatomic_ops/libatomic_ops.mk
-+++ b/package/libatomic_ops/libatomic_ops.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBATOMIC_OPS_VERSION = v7.4.10
-+LIBATOMIC_OPS_VERSION = v7.6.6
- LIBATOMIC_OPS_SITE = $(call github,ivmai,libatomic_ops,$(LIBATOMIC_OPS_VERSION))
- LIBATOMIC_OPS_AUTORECONF = YES
- 
+That does not happen for all archives, though... :-/
+
+And I can see that indeed the generated tarball is different from the
+one on s.b.o.: it slightly differ in the way directory entries are
+stored... Except for that, the actual content is the same.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 223 225 172 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
